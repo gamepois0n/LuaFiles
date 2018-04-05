@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_manufacture.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_manufacture.luac 
 
 -- params : ...
 -- function num : 0
@@ -161,8 +161,12 @@ SLOT_POSITION[4] = {
 local _manufactureText = (UI.getChildControl)(Panel_Manufacture, "StaticText_CircleName")
 _manufactureText:SetShow(false)
 local _uiButtonManufacture = (UI.getChildControl)(Panel_Manufacture, "Button_Manufacture")
-_uiButtonManufacture:addInputEvent("Mouse_LUp", "Manufacture_RepeatAction()")
+_uiButtonManufacture:addInputEvent("Mouse_LUp", "Manufacture_RepeatAction(false)")
 _uiButtonManufacture:addInputEvent("Mouse_On", "Manufacture_Mouse_On()")
+local _uiButtonMassManufacture = (UI.getChildControl)(Panel_Manufacture, "Button_MassManufacture")
+_uiButtonMassManufacture:addInputEvent("Mouse_LUp", "Manufacture_RepeatAction(true)")
+_uiButtonMassManufacture:addInputEvent("Mouse_On", "Manufacture_Mouse_On()")
+_uiButtonMassManufacture:SetShow(false)
 local _uiButtonClose = (UI.getChildControl)(Panel_Manufacture, "Button_Close")
 _uiButtonClose:addInputEvent("Mouse_LUp", "Manufacture_Close()")
 local _buttonQuestion = (UI.getChildControl)(Panel_Manufacture, "Button_Question")
@@ -228,6 +232,7 @@ local _uiKnowledgeDesc = (UI.getChildControl)(_frameContent, "StaticText_Knowled
 _uiKnowledgeDesc:SetAutoResize(true)
 local _uiKnowledgeIcon = (UI.getChildControl)(Panel_Manufacture, "Static_KnoeledgeIcon")
 local _startKnowledgeIndex = 0
+local _isMassManufacture = false
 local SHAKE_MENTALTHEMEKEY = 30200
 local DRY_MENTALTHEMEKEY = 30300
 local THINNING_MENTALTHEMEKEY = 30400
@@ -368,12 +373,12 @@ ManufactureControlInit = function()
     _listAction[13] = manufactureAction14
     _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 195)
     list2:SetSize(list2:GetSizeX(), 360)
-    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 597)
+    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 600)
   else
     manufactureAction14._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action14")
     ;
     (manufactureAction14._radioBtn):SetShow(false)
-    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 540)
+    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 543)
     _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 133)
     list2:SetSize(list2:GetSizeX(), 300)
   end
@@ -572,6 +577,7 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
   if Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
+  ClothInventory_Close()
   local noticeText = ""
   invenShow = showType
   StopManufactureAction()
@@ -674,6 +680,7 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
               ((_listAction[12])._radioBtn):SetIgnore(true)
               ;
               ((_listAction[12])._radioBtn):SetMonoTone(true)
+              Manufacture_SetShowMassManufacture(false)
               _frameManufactureDesc:UpdateContentPos()
             end
           end
@@ -691,13 +698,14 @@ Manufacture_Close = function()
   Panel_Manufacture:CloseUISubApp()
   Inventory_SetFunctor(nil, nil, nil, nil)
   Warehouse_SetFunctor(nil, nil)
-  if invenShow == true then
+  if invenShow == true and not FGlobal_InventoryIsClosing() then
     Panel_Equipment:SetShow(true)
     Panel_Window_Inventory:SetShow(true)
     invenShow = false
   else
     EquipmentWindow_Close()
     InventoryWindow_Close()
+    ClothInventory_Close()
     HelpMessageQuestion_Out()
   end
   TooltipSimple_Hide()
@@ -1089,8 +1097,34 @@ Manufacture_RepeatManufacture = function()
   end
 end
 
+Manufacture_RefreshIsMassCheckButton = function(actionIndex)
+  -- function num : 0_25
+  if actionIndex < 0 or actionIndex > 5 then
+    local enableMassActionIndex = _ContentsGroup_LifeStatManufacturing ~= true
+    local isManufactureMassItemEquip = false
+    local itemWrapper = ToClient_getEquipmentItem((CppEnums.EquipSlotNoClient).eEquipSlotNoSubTool)
+    do
+      do
+        if itemWrapper ~= nil then
+          local itemSSW = itemWrapper:getStaticStatus()
+          if __ePlayerLifeStatType_Manufacturing == itemSSW:getLifeStatMainType() and actionIndex + 1 == itemSSW:getLifeStatSubType() then
+            isManufactureMassItemEquip = true
+          end
+        end
+        if enableMassActionIndex == true and isManufactureMassItemEquip == true then
+          Manufacture_SetShowMassManufacture(true)
+        else
+          Manufacture_SetShowMassManufacture(false)
+        end
+        Manufacture_SetShowMassManufacture(false)
+        -- DECOMPILER ERROR: 5 unprocessed JMP targets
+      end
+    end
+  end
+end
+
 Manufacture_ContinueGrindJewel = function()
-  -- function num : 0_25 , upvalues : materialItemWhereType, noneStackItemList, noneStackItemCheck, hasNoneStackItem, waypointKey_ByWareHouse, targetWarehouseSlotNo
+  -- function num : 0_26 , upvalues : materialItemWhereType, noneStackItemList, noneStackItemCheck, hasNoneStackItem, waypointKey_ByWareHouse, targetWarehouseSlotNo
   -- DECOMPILER ERROR at PC24: Unhandled construct in 'MakeBoolean' P1
 
   if ((CppEnums.ItemWhereType).eInventory == materialItemWhereType or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType) and #noneStackItemList ~= nil and #noneStackItemList > 0 and noneStackItemCheck == true then
@@ -1124,8 +1158,22 @@ Manufacture_ContinueGrindJewel = function()
   end
 end
 
+local checkManufactureFailCount = function(currentFailCount)
+  -- function num : 0_27 , upvalues : _isMassManufacture, _actionIndex
+  local defaultFailCount = 30
+  if _isMassManufacture == false or _actionIndex < 0 then
+    if defaultFailCount < currentFailCount then
+      return true
+    else
+      return false
+    end
+  else
+    return ToClient_CheckIsManufactureFail(_actionIndex + 1, defaultFailCount, currentFailCount)
+  end
+end
+
 Manufacture_ResponseResultItem = function(itemDynamicListWrapper, failReason)
-  -- function num : 0_26 , upvalues : Manufacture_Notify, materialItemWhereType, waypointKey_ByWareHouse, noneStackItemList, noneStackItemCheck, hasNoneStackItem
+  -- function num : 0_28 , upvalues : Manufacture_Notify, materialItemWhereType, waypointKey_ByWareHouse, noneStackItemList, noneStackItemCheck, hasNoneStackItem, checkManufactureFailCount
   local size = itemDynamicListWrapper:getSize()
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -1273,6 +1321,10 @@ Manufacture_ResponseResultItem = function(itemDynamicListWrapper, failReason)
             message = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WP_IS_LACK")
             Manufacture_ClearValues()
             Manufacture_Response()
+          else
+            if failReason == 11 then
+              message = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_FAILREASON_MASS")
+            end
           end
         end
       end
@@ -1280,12 +1332,13 @@ Manufacture_ResponseResultItem = function(itemDynamicListWrapper, failReason)
     if failReason ~= 6 and message ~= nil then
       Proc_ShowMessage_Ack(message)
     end
-    -- DECOMPILER ERROR at PC326: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC335: Confused about usage of register: R4 in 'UnsetPending'
 
     Manufacture_Notify._failCount = Manufacture_Notify._failCount + 1
-    if Manufacture_Notify._failCount >= 30 then
+    local isFailManufacture = checkManufactureFailCount(Manufacture_Notify._failCount)
+    if isFailManufacture == true then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_DONT_THIS_WAY"))
-      -- DECOMPILER ERROR at PC339: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC350: Confused about usage of register: R5 in 'UnsetPending'
 
       Manufacture_Notify._failCount = 0
       Manufacture_Response()
@@ -1294,7 +1347,7 @@ Manufacture_ResponseResultItem = function(itemDynamicListWrapper, failReason)
 end
 
 Manufacture_Reset_ContinueGrindJewel = function()
-  -- function num : 0_27 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn
+  -- function num : 0_29 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn
   noneStackItemList = (Array.new)()
   noneStackItemCheck = false
   hasNoneStackItem = false
@@ -1306,7 +1359,7 @@ Manufacture_Reset_ContinueGrindJewel = function()
 end
 
 Manufacture_ToggleWindow = function(installationType, isClear)
-  -- function num : 0_28
+  -- function num : 0_30
   if Panel_Manufacture:GetShow() then
     Manufacture_Close()
   else
@@ -1317,7 +1370,7 @@ Manufacture_ToggleWindow = function(installationType, isClear)
 end
 
 Manufacture_Mouse_LUp = function()
-  -- function num : 0_29 , upvalues : _actionIndex, _listAction, materialItemWhereType, waypointKey_ByWareHouse, Manufacture_Notify, _usingItemSlotCount, _materialSlotNoList, _materialSlotNoListItemIn, _whiteCircle, CURRENT_ACTIONNAME, _usingInstallationType
+  -- function num : 0_31 , upvalues : _actionIndex, _listAction, materialItemWhereType, waypointKey_ByWareHouse, Manufacture_Notify, _usingItemSlotCount, _materialSlotNoList, _materialSlotNoListItemIn, _isMassManufacture, _whiteCircle, CURRENT_ACTIONNAME, _usingInstallationType
   if _actionIndex == -1 then
     return 
   end
@@ -1375,100 +1428,117 @@ Manufacture_Mouse_LUp = function()
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_INVENTORY_WEIGHTOVER"))
         return 
       end
-      do
-        local sum_MaterialSlot = {}
-        Manufacture_Notify:clear()
-        for index = 0, _usingItemSlotCount - 1 do
-          _PA_LOG("�\128창욱", "체크 : " .. index .. "/" .. tostring(_materialSlotNoList[index] <= size) .. "/" .. _materialSlotNoList[index] .. ":" .. size)
-          if _materialSlotNoListItemIn[index] == true and _materialSlotNoList[index] <= size then
-            sum_MaterialSlot[#sum_MaterialSlot + 1] = _materialSlotNoList[index]
-            local itemWrapper = nil
-            if (CppEnums.ItemWhereType).eInventory == materialItemWhereType or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType then
-              local curentInventoryType = Inventory_GetCurrentInventoryType()
-              itemWrapper = getInventoryItemByType(curentInventoryType, _materialSlotNoList[index])
-            else
-              local warehouseWrapper = warehouse_get(waypointKey_ByWareHouse)
-              itemWrapper = warehouseWrapper:getItem(_materialSlotNoList[index])
-            end
-            local itemStaticWrapper = itemWrapper:getStaticStatus()
-            local idx = #Manufacture_Notify._data_Resource + 1
-            -- DECOMPILER ERROR at PC251: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            (Manufacture_Notify._data_Resource)[idx] = {}
-            -- DECOMPILER ERROR at PC257: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._slotNo = _materialSlotNoList[index]
-            -- DECOMPILER ERROR at PC264: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._key = (itemStaticWrapper:get())._key
-            -- DECOMPILER ERROR at PC270: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._name = itemStaticWrapper:getName()
-            -- DECOMPILER ERROR at PC278: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._iconPath = "Icon/" .. itemStaticWrapper:getIconPath()
-            -- DECOMPILER ERROR at PC288: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._originalCnt = Int64toInt32((itemWrapper:get()):getCount_s64())
-            -- DECOMPILER ERROR at PC296: Confused about usage of register: R30 in 'UnsetPending'
-
-            ;
-            ((Manufacture_Notify._data_Resource)[idx])._currentCnt = ((Manufacture_Notify._data_Resource)[idx])._originalCnt
-          end
-        end
-        if #sum_MaterialSlot == 0 then
-          if _actionIndex == 0 or _actionIndex == 5 then
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SLOT_LEAST_ONE"))
+      local sum_MaterialSlot = {}
+      Manufacture_Notify:clear()
+      local doHaveNonStackableItem = false
+      for index = 0, _usingItemSlotCount - 1 do
+        _PA_LOG("�\128창욱", "체크 : " .. index .. "/" .. tostring(_materialSlotNoList[index] <= size) .. "/" .. _materialSlotNoList[index] .. ":" .. size)
+        if _materialSlotNoListItemIn[index] == true and _materialSlotNoList[index] <= size then
+          sum_MaterialSlot[#sum_MaterialSlot + 1] = _materialSlotNoList[index]
+          local itemWrapper = nil
+          if (CppEnums.ItemWhereType).eInventory == materialItemWhereType or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType then
+            local curentInventoryType = Inventory_GetCurrentInventoryType()
+            itemWrapper = getInventoryItemByType(curentInventoryType, _materialSlotNoList[index])
           else
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SLOT_EMPTY"))
+            local warehouseWrapper = warehouse_get(waypointKey_ByWareHouse)
+            itemWrapper = warehouseWrapper:getItem(_materialSlotNoList[index])
           end
-          return 
+          local itemStaticWrapper = itemWrapper:getStaticStatus()
+          local idx = #Manufacture_Notify._data_Resource + 1
+          -- DECOMPILER ERROR at PC252: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          (Manufacture_Notify._data_Resource)[idx] = {}
+          -- DECOMPILER ERROR at PC258: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._slotNo = _materialSlotNoList[index]
+          -- DECOMPILER ERROR at PC265: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._key = (itemStaticWrapper:get())._key
+          -- DECOMPILER ERROR at PC271: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._name = itemStaticWrapper:getName()
+          -- DECOMPILER ERROR at PC279: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._iconPath = "Icon/" .. itemStaticWrapper:getIconPath()
+          -- DECOMPILER ERROR at PC289: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._originalCnt = Int64toInt32((itemWrapper:get()):getCount_s64())
+          -- DECOMPILER ERROR at PC297: Confused about usage of register: R31 in 'UnsetPending'
+
+          ;
+          ((Manufacture_Notify._data_Resource)[idx])._currentCnt = ((Manufacture_Notify._data_Resource)[idx])._originalCnt
+          if itemStaticWrapper:isStackable() == false then
+            doHaveNonStackableItem = true
+          end
         end
-        Panel_Window_Warehouse:SetShow(false)
-        _whiteCircle:AddEffect("UI_ItemInstall_Spin", true, 0, 0)
-        if _actionIndex == 7 then
-          for key,value in pairs(sum_MaterialSlot) do
-            local rv = repair_RepairItemBySelf(value)
-            if rv == 0 then
-              break
+      end
+      do
+        do
+          if _isMassManufacture == true and doHaveNonStackableItem == true then
+            local message = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_MASSMANUFACTURE_BTN_TOOLTIP")
+            Proc_ShowMessage_Ack(message)
+            return 
+          end
+          if #sum_MaterialSlot == 0 then
+            if _actionIndex == 0 or _actionIndex == 5 then
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SLOT_LEAST_ONE"))
+            else
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SLOT_EMPTY"))
+            end
+            return 
+          end
+          Panel_Window_Warehouse:SetShow(false)
+          _whiteCircle:AddEffect("UI_ItemInstall_Spin", true, 0, 0)
+          if _actionIndex == 7 then
+            for key,value in pairs(sum_MaterialSlot) do
+              local rv = repair_RepairItemBySelf(value)
+              if rv == 0 then
+                break
+              end
+            end
+          else
+            if (CppEnums.ItemWhereType).eWarehouse == materialItemWhereType then
+              FGlobal_HideDialog()
+            end
+            if _ContentsGroup_LifeStatManufacturing == true and _isMassManufacture == true then
+              CURRENT_ACTIONNAME = (_listAction[_actionIndex])._actionName
+              CURRENT_ACTIONNAME = CURRENT_ACTIONNAME .. "_MASS"
+              Manufacture_Do(_usingInstallationType, CURRENT_ACTIONNAME, materialItemWhereType, _materialSlotNoList[0], _materialSlotNoList[1], _materialSlotNoList[2], _materialSlotNoList[3], _materialSlotNoList[4])
+            else
+              CURRENT_ACTIONNAME = (_listAction[_actionIndex])._actionName
+              local rv = Manufacture_Do(_usingInstallationType, CURRENT_ACTIONNAME, materialItemWhereType, _materialSlotNoList[0], _materialSlotNoList[1], _materialSlotNoList[2], _materialSlotNoList[3], _materialSlotNoList[4])
             end
           end
-        else
-          if (CppEnums.ItemWhereType).eWarehouse == materialItemWhereType then
-            FGlobal_HideDialog()
-          end
-          CURRENT_ACTIONNAME = (_listAction[_actionIndex])._actionName
-          local rv = Manufacture_Do(_usingInstallationType, CURRENT_ACTIONNAME, materialItemWhereType, _materialSlotNoList[0], _materialSlotNoList[1], _materialSlotNoList[2], _materialSlotNoList[3], _materialSlotNoList[4])
+          audioPostEvent_SystemUi(0, 0)
+          -- DECOMPILER ERROR at PC434: Confused about usage of register: R24 in 'UnsetPending'
+
+          Manufacture_Notify._failCount = 0
+          -- DECOMPILER ERROR at PC436: Confused about usage of register: R24 in 'UnsetPending'
+
+          Manufacture_Notify._successCount = 0
+          Manufacture_Close()
+          Interaction_Close()
+          audioPostEvent_SystemUi(13, 11)
+          -- DECOMPILER ERROR: 15 unprocessed JMP targets
         end
-        audioPostEvent_SystemUi(0, 0)
-        -- DECOMPILER ERROR at PC383: Confused about usage of register: R23 in 'UnsetPending'
-
-        Manufacture_Notify._failCount = 0
-        -- DECOMPILER ERROR at PC385: Confused about usage of register: R23 in 'UnsetPending'
-
-        Manufacture_Notify._successCount = 0
-        Manufacture_Close()
-        Interaction_Close()
-        audioPostEvent_SystemUi(13, 11)
-        -- DECOMPILER ERROR: 13 unprocessed JMP targets
       end
     end
   end
 end
 
 Manufacture_Mouse_On = function()
-  -- function num : 0_30
+  -- function num : 0_32
   audioPostEvent_SystemUi(1, 13)
 end
 
 Manufacture_UpdateRepairTime = function()
-  -- function num : 0_31 , upvalues : _materialSlotNoList, _manufactureText
+  -- function num : 0_33 , upvalues : _materialSlotNoList, _manufactureText
   local repairTime = repair_getRepairTime(_materialSlotNoList[0])
   if toUint64(0, 0) < repairTime then
     local tempString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_REPAIR_TOTAL_TIME") .. " : " .. convertStringFromMillisecondtime(repairTime)
@@ -1477,7 +1547,7 @@ Manufacture_UpdateRepairTime = function()
 end
 
 Material_Mouse_RUp = function(index)
-  -- function num : 0_32 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn, _usingItemSlotCount, _materialSlotNoList, _defaultSlotNo, _materialSlotNoListItemIn, materialItemWhereType
+  -- function num : 0_34 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn, _usingItemSlotCount, _materialSlotNoList, _defaultSlotNo, _materialSlotNoListItemIn, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1522,7 +1592,7 @@ Material_Mouse_RUp = function(index)
 end
 
 Material_Mouse_On = function(index)
-  -- function num : 0_33 , upvalues : materialItemWhereType, _materialSlotNoList, _slotList
+  -- function num : 0_35 , upvalues : materialItemWhereType, _materialSlotNoList, _slotList
   local itemWrapper = nil
   if materialItemWhereType == (CppEnums.ItemWhereType).eInventory or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType then
     local curentInventoryType = Inventory_GetCurrentInventoryType()
@@ -1537,12 +1607,12 @@ Material_Mouse_On = function(index)
 end
 
 Material_Mouse_Out = function(index)
-  -- function num : 0_34
+  -- function num : 0_36
   Panel_Tooltip_Item_hideTooltip()
 end
 
 Manufacture_Button_LUp_Shake = function(isClear)
-  -- function num : 0_35 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, SHAKE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_37 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, SHAKE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1585,10 +1655,11 @@ Manufacture_Button_LUp_Shake = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Grind = function(isClear)
-  -- function num : 0_36 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GRIND_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_38 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GRIND_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1631,10 +1702,11 @@ Manufacture_Button_LUp_Grind = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_FireWood = function(isClear)
-  -- function num : 0_37 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, FIREWOOD_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_39 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, FIREWOOD_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1677,10 +1749,11 @@ Manufacture_Button_LUp_FireWood = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Dry = function(isClear)
-  -- function num : 0_38 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, DRY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_40 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, DRY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1723,10 +1796,11 @@ Manufacture_Button_LUp_Dry = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Thinning = function(isClear)
-  -- function num : 0_39 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, THINNING_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_41 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, THINNING_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1769,10 +1843,11 @@ Manufacture_Button_LUp_Thinning = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Heat = function(isClear)
-  -- function num : 0_40 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, HEAT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_42 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, HEAT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1815,10 +1890,11 @@ Manufacture_Button_LUp_Heat = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Rainwater = function(isClear)
-  -- function num : 0_41 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, RAINWATER_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_43 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, RAINWATER_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1860,10 +1936,11 @@ Manufacture_Button_LUp_Rainwater = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_RepairItem = function(isClear)
-  -- function num : 0_42 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_44 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1903,10 +1980,11 @@ Manufacture_Button_LUp_RepairItem = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Alchemy = function(isClear)
-  -- function num : 0_43 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_45 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1948,10 +2026,11 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Cook = function(isClear)
-  -- function num : 0_44 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, COOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_46 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, COOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2005,10 +2084,11 @@ Manufacture_Button_LUp_Cook = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_RGCook = function(isClear)
-  -- function num : 0_45 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALCOOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_47 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALCOOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2050,10 +2130,11 @@ Manufacture_Button_LUp_RGCook = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_RGAlchemy = function(isClear)
-  -- function num : 0_46 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_48 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2095,10 +2176,11 @@ Manufacture_Button_LUp_RGAlchemy = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_GuildManufacture = function(isClear)
-  -- function num : 0_47 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GUILDMANUFACTURE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_49 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GUILDMANUFACTURE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2145,10 +2227,11 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_Button_LUp_Craft = function(isClear)
-  -- function num : 0_48 , upvalues : enableCraft, _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, CRAFT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_50 , upvalues : enableCraft, _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, CRAFT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2193,10 +2276,11 @@ Manufacture_Button_LUp_Craft = function(isClear)
     Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
     Warehouse_updateSlotData()
   end
+  Manufacture_RefreshIsMassCheckButton(_actionIndex)
 end
 
 Manufacture_KnowledgeList_SelectKnowledge = function(index)
-  -- function num : 0_49 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, _frameScroll, _frameManufactureDesc, selectIndex, list2
+  -- function num : 0_51 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, _frameScroll, _frameManufactureDesc, selectIndex, list2
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2233,7 +2317,7 @@ Manufacture_KnowledgeList_SelectKnowledge = function(index)
 end
 
 Manufacture_KnowledgeList_Tooltip = function(isShow, index)
-  -- function num : 0_50 , upvalues : _startKnowledgeIndex
+  -- function num : 0_52 , upvalues : _startKnowledgeIndex
   local knowledgeIndex = _startKnowledgeIndex + index
   local mentalCardStaticWrapper = getAlchemyKnowledge(knowledgeIndex)
   -- DECOMPILER ERROR at PC13: Unhandled construct in 'MakeBoolean' P1
@@ -2252,7 +2336,7 @@ Manufacture_KnowledgeList_Tooltip = function(isShow, index)
 end
 
 ManufactureKnowledge_UpdateList = function()
-  -- function num : 0_51 , upvalues : list2, selectIndex, _startKnowledgeIndex
+  -- function num : 0_53 , upvalues : list2, selectIndex, _startKnowledgeIndex
   (list2:getElementManager()):clearKey()
   selectIndex = -1
   ManufactureKnowledge_ClearList()
@@ -2263,7 +2347,7 @@ ManufactureKnowledge_UpdateList = function()
 end
 
 ManufactureKnowledge_ShowList = function(isShow)
-  -- function num : 0_52 , upvalues : _defaultMSG1, _defaultMSG2, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
+  -- function num : 0_54 , upvalues : _defaultMSG1, _defaultMSG2, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   if isShow then
     _defaultMSG1:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_1"))
     _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_2"))
@@ -2285,7 +2369,7 @@ ManufactureKnowledge_ShowList = function(isShow)
 end
 
 ManufactureKnowledge_ClearList = function()
-  -- function num : 0_53 , upvalues : _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
+  -- function num : 0_55 , upvalues : _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   _uiKnowledgeIcon:ReleaseTexture()
   _uiKnowledgeIcon:SetShow(true)
   _uiKnowledgeDesc:SetText("")
@@ -2294,7 +2378,7 @@ ManufactureKnowledge_ClearList = function()
 end
 
 Note_Mouse_LUp = function()
-  -- function num : 0_54
+  -- function num : 0_56
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2302,14 +2386,14 @@ Note_Mouse_LUp = function()
 end
 
 Note_Mouse_On = function()
-  -- function num : 0_55
+  -- function num : 0_57
   audioPostEvent_SystemUi(1, 13)
 end
 
 ManufactureControlInit()
 Manufacture_Reset_ContinueGrindJewel()
 Material_Update = function(slotCount)
-  -- function num : 0_56 , upvalues : _materialSlotNoList, _slotList
+  -- function num : 0_58 , upvalues : _materialSlotNoList, _slotList
   local inventory = ((getSelfPlayer()):get()):getInventory()
   local invenSize = inventory:size()
   for ii = 0, slotCount - 1 do
@@ -2324,7 +2408,7 @@ Material_Update = function(slotCount)
 end
 
 Manufacture_Notify.Init = function(self)
-  -- function num : 0_57
+  -- function num : 0_59
   for key,value in pairs(self._templat) do
     value:SetShow(false)
   end
@@ -2337,7 +2421,7 @@ end
 
 Manufacture_Notify:Init()
 Manufacture_Notify.createResultControl = function(self, index)
-  -- function num : 0_58
+  -- function num : 0_60
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Result)[index] == nil or (self._icon_ResultBG)[index] == nil or (self._icon_Result)[index] == nil then
@@ -2367,7 +2451,7 @@ Manufacture_Notify.createResultControl = function(self, index)
 end
 
 Manufacture_Notify.createResourceControl = function(self, index)
-  -- function num : 0_59
+  -- function num : 0_61
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Resource)[index] == nil or (self._icon_ResourceBG)[index] == nil or (self._icon_Resource)[index] == nil then
@@ -2397,7 +2481,7 @@ Manufacture_Notify.createResourceControl = function(self, index)
 end
 
 Manufacture_Notify.clear = function(self)
-  -- function num : 0_60 , upvalues : Manufacture_Notify
+  -- function num : 0_62 , upvalues : Manufacture_Notify
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   Manufacture_Notify._data_Resource = {}
@@ -2429,13 +2513,13 @@ Manufacture_Notify.clear = function(self)
 end
 
 Manufacture_Notify.SetPos = function(self)
-  -- function num : 0_61
+  -- function num : 0_63
   local gapCnt = #self._data_Resource
   Panel_Manufacture_Notify:SetSpanSize((Panel_Manufacture_Notify:GetSpanSize()).x, self._defalutSpanY + self._gapY * gapCnt)
 end
 
 Manufacture_Progress_Update = function(materialItemWhereType)
-  -- function num : 0_62 , upvalues : Manufacture_Notify
+  -- function num : 0_64 , upvalues : Manufacture_Notify
   local progressRate = 0
   local currentInventoryType = Inventory_GetCurrentInventoryType()
   for key,value in pairs(Manufacture_Notify._data_Resource) do
@@ -2506,7 +2590,7 @@ Manufacture_Progress_Update = function(materialItemWhereType)
 end
 
 Manufacture_Tooltip_Item_Show = function(index, isResult)
-  -- function num : 0_63 , upvalues : Manufacture_Notify
+  -- function num : 0_65 , upvalues : Manufacture_Notify
   local itemKey, uiBase = nil
   if isResult then
     itemKey = ((Manufacture_Notify._data_Result)[index])._key
@@ -2525,7 +2609,7 @@ Manufacture_Tooltip_Item_Show = function(index, isResult)
 end
 
 IsManufacture_Chk = function(variableName, value)
-  -- function num : 0_64 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType
+  -- function num : 0_66 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType
   if variableName == "IsManufactureChk" then
     if value == 0 then
       Panel_Manufacture_Notify:SetShow(false)
@@ -2545,14 +2629,14 @@ IsManufacture_Chk = function(variableName, value)
 end
 
 Manufacture_Notify_Check = function()
-  -- function num : 0_65 , upvalues : Manufacture_Notify
+  -- function num : 0_67 , upvalues : Manufacture_Notify
   if Panel_Manufacture_Notify:GetShow() == true and #Manufacture_Notify._data_Resource == 0 then
     Panel_Manufacture_Notify:SetShow(false)
   end
 end
 
 Manufacture_Full_Check = function()
-  -- function num : 0_66 , upvalues : _usingItemSlotCount, _defaultSlotNo, _materialSlotNoList
+  -- function num : 0_68 , upvalues : _usingItemSlotCount, _defaultSlotNo, _materialSlotNoList
   local useSlotCount = 0
   for ii = 0, _usingItemSlotCount - 1 do
     if _defaultSlotNo ~= _materialSlotNoList[ii] then
@@ -2566,7 +2650,7 @@ Manufacture_Full_Check = function()
 end
 
 ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
-  -- function num : 0_67 , upvalues : _actionIndex, _listAction
+  -- function num : 0_69 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2594,7 +2678,7 @@ ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
 end
 
 ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
-  -- function num : 0_68 , upvalues : _actionIndex, _listAction
+  -- function num : 0_70 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2627,7 +2711,7 @@ ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
 end
 
 manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2, isType)
-  -- function num : 0_69
+  -- function num : 0_71
   if isType > 11 then
     uiBase:ChangeTextureInfoName("new_ui_common_forlua/window/manufacture/manufacture_01.dds")
   else
@@ -2641,7 +2725,7 @@ manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2, isType)
 end
 
 manufacture_ShowIconToolTip = function(isShow, idx)
-  -- function num : 0_70 , upvalues : isEnableMsg, _listAction
+  -- function num : 0_72 , upvalues : isEnableMsg, _listAction
   local name, desc = nil
   if isShow == true then
     audioPostEvent_SystemUi(1, 13)
@@ -2725,17 +2809,18 @@ manufacture_ShowIconToolTip = function(isShow, idx)
 end
 
 noneStackItemCheckBT = function()
-  -- function num : 0_71 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
+  -- function num : 0_73 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
   if Panel_Manufacture:GetShow() then
     noneStackItemCheck = noneStackItem_ChkBtn:IsCheck()
   end
 end
 
-Manufacture_RepeatAction = function()
-  -- function num : 0_72 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
+Manufacture_RepeatAction = function(isMassManufacture)
+  -- function num : 0_74 , upvalues : _isMassManufacture, noneStackItemList, noneStackItemCheck, hasNoneStackItem
   if Panel_Win_System:GetShow() then
     return 
   end
+  _isMassManufacture = isMassManufacture
   if (#noneStackItemList ~= nil and #noneStackItemList > 0 and noneStackItemCheck == true) or hasNoneStackItem == true and noneStackItemCheck == true then
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CONTINUEGRIND_MSGBOX_DESC"), functionYes = Manufacture_Mouse_LUp, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
@@ -2748,7 +2833,7 @@ Manufacture_RepeatAction = function()
 end
 
 registEventHandler = function()
-  -- function num : 0_73 , upvalues : MAX_ACTION_BTN, _listAction
+  -- function num : 0_75 , upvalues : MAX_ACTION_BTN, _listAction
   for i = 0, MAX_ACTION_BTN - 1 do
     ((_listAction[i])._radioBtn):addInputEvent("Mouse_On", "manufacture_ShowIconToolTip( true, " .. i .. " )")
     ;
@@ -2757,7 +2842,7 @@ registEventHandler = function()
 end
 
 FontSize_SetPos = function()
-  -- function num : 0_74 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
+  -- function num : 0_76 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
   if getUiFontSize() ~= 0 then
     _currentActionIcon:SetPosY(iconPosY - 5)
     _textDesc:SetPosY(textDescPosY - 8)
@@ -2772,7 +2857,7 @@ FontSize_SetPos = function()
 end
 
 Manufacture_ListControlCreate = function(content, key)
-  -- function num : 0_75 , upvalues : selectIndex, UI_color, limitTextTooltip, IsLimitText
+  -- function num : 0_77 , upvalues : selectIndex, UI_color, limitTextTooltip, IsLimitText
   local index = Int64toInt32(key)
   local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
   local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
@@ -2821,12 +2906,31 @@ Manufacture_ListControlCreate = function(content, key)
 end
 
 ManufactureLimitTextTooptip = function(isShow, index)
-  -- function num : 0_76 , upvalues : IsLimitText, limitTextTooltip
+  -- function num : 0_78 , upvalues : IsLimitText, limitTextTooltip
   if isShow == false or IsLimitText[index] == false then
     TooltipSimple_Hide()
     return 
   end
   TooltipSimple_Show(Panel_Manufacture, limitTextTooltip[index])
+end
+
+Manufacture_SetShowMassManufacture = function(isShow)
+  -- function num : 0_79 , upvalues : _uiButtonMassManufacture, _uiButtonManufacture, noneStackItem_ChkBtn
+  if _ContentsGroup_LifeStatManufacturing == false then
+    isShow = false
+  end
+  _uiButtonMassManufacture:SetShow(isShow)
+  if isShow == true then
+    _uiButtonManufacture:SetPosY(141)
+    noneStackItem_ChkBtn:SetPosY(109)
+  else
+    _uiButtonManufacture:SetPosY(178)
+    noneStackItem_ChkBtn:SetPosY(146)
+  end
+end
+
+Manufacture_SetEnableMassManufacture = function(isEnable)
+  -- function num : 0_80
 end
 
 registerEvent("onScreenResize", "manufacture_Repos")

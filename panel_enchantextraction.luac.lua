@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\enchant\panel_enchantextraction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\enchant\panel_enchantextraction.luac 
 
 -- params : ...
 -- function num : 0
@@ -185,7 +185,7 @@ Panel_EnchantExtraction_Close = function()
     return 
   end
   if _ContentsGroup_isUsedNewEnchant == true then
-    PaGlobal_Enchant:didShowEnchantTab()
+    PaGlobal_Enchant:didShowEnchantTab(false)
   else
     PaGlobal_Enchant:enchantFailCount()
   end

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\camp\panel_window_camp.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\camp\panel_window_camp.luac 
 
 -- params : ...
 -- function num : 0
@@ -143,6 +143,7 @@ end
 PaGlobal_Camp.functionOpen = function(self, slotIndex)
   -- function num : 0_8
   local isSetItem = ((self._config)._isSetItem)[slotIndex]
+  ClothInventory_Close()
   if isSetItem then
     if slotIndex == 3 then
       ToClient_requestCampingInventoryOpen()

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_alchemy.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_alchemy.luac 
 
 -- params : ...
 -- function num : 0
@@ -195,6 +195,14 @@ Alchemy_InvenFilter = function(slotNo, itemWrapper)
   end
   if isFilter then
     return isFilter
+  end
+  local itemType = (itemWrapper:getStaticStatus()):getItemType()
+  if (CppEnums.ItemType).Equip == itemType then
+    return true
+  end
+  local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+  if isCash then
+    return true
   end
 end
 

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap_grand\grand_worldmap_mainpanel.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap_grand\grand_worldmap_mainpanel.luac 
 
 -- params : ...
 -- function num : 0
@@ -15,6 +15,7 @@ local currentTownMode = false
 local eWorldmapState = CppEnums.WorldMapState
 local eCheckState = CppEnums.WorldMapCheckState
 local isEnableBattle = ToClient_IsContentsGroupOpen("21")
+local isEnablePlunderGame = ToClient_IsContentsGroupOpen("360")
 local worldmapGrand = {
 ui = {ModeBG = (UI.getChildControl)(Panel_WorldMap_Main, "Mode_Bg"), filterBg = (UI.getChildControl)(Panel_WorldMap_Main, "Static_FilterBg"), filterArrow = (UI.getChildControl)(Panel_WorldMap_Main, "Static_FilterArrow"), filterTitle = (UI.getChildControl)(Panel_WorldMap_Main, "StaticText_FilterTitle"), buttonBlackSpirit = (UI.getChildControl)(Panel_WorldMap_Main, "Button_BlackSpirit"), buttonTutorial_1 = (UI.getChildControl)(Panel_WorldMap_Main, "Button_Tutorial_1"), buttonTutorial_2 = (UI.getChildControl)(Panel_WorldMap_Main, "Button_Tutorial_2"), buttonTutorial_3 = (UI.getChildControl)(Panel_WorldMap_Main, "Button_Tutorial_3"), MainMenuBG = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Bg"), edit_NodeName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Edit_NodeName"), btn_SearchNodeName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Button_NodeSearch"), edit_ItemName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Edit_ItemName"), btn_SearchItemName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Button_ItemSearch"), edit_UseType = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Edit_UseType"), btn_SearchUseType = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Button_UseTypeSearch"), edit_GuildName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Edit_GuildType"), btn_SearchGuildName = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Button_GuildTypeSearch"), searchPartLine = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Static_Partline"), explorePointBG = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Bg"), explorePointIcon = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_ExplorePoint_Icon"), explorePointValue = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_StaticText_ExplorePoint_Value"), explorePointProgressBG = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Progress_BG"), explorePointProgress = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Progress"), explorePointHelp = (UI.getChildControl)(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Help"), ListBG = (UI.getChildControl)(Panel_WorldMap_Main, "List_Bg"), list_Title = (UI.getChildControl)(Panel_WorldMap_Main, "List_Title"), list_KeyWord = (UI.getChildControl)(Panel_WorldMap_Main, "List_KeyWord"), list_SearchBG = (UI.getChildControl)(Panel_WorldMap_Main, "List_SearchListBG"), list_scroll = (UI.getChildControl)(Panel_WorldMap_Main, "Scroll_List"), daySelectBg = (UI.getChildControl)(Panel_WorldMap_Main, "Static_SelectDayBg"), daySelectTitle = (UI.getChildControl)(Panel_WorldMap_Main, "StaticText_SelectDayTitle"), comboBox_DaySelect = (UI.getChildControl)(Panel_WorldMap_Main, "Combobox_SelectDay"), comboBox_TaxGrade = (UI.getChildControl)(Panel_WorldMap_Main, "Combobox_SelectTaxGrade"), nodeSelectBg = (UI.getChildControl)(Panel_WorldMap_Main, "Static_SelectTerritoryBg"), nodeSelectTitle = (UI.getChildControl)(Panel_WorldMap_Main, "StaticText_SelectTerritoryTitle"), comboBox_TerritorySelect = (UI.getChildControl)(Panel_WorldMap_Main, "Combobox_SelectTerritory"), comboBox_NodeType = (UI.getChildControl)(Panel_WorldMap_Main, "Combobox_SelectNodeType")}
 , 
@@ -24,7 +25,7 @@ template = {templateButton = (UI.getChildControl)(Panel_WorldMap_Main, "Mode_But
 , 
 config = {searchingResultMaxCount = 6, searchingResultCount = 0, searchType = 0, selectNodeType = 0, scrollStartIdx = 0, searchDefaultNodeName = PAGetString(Defines.StringSheet_GAME, "LUA_GRANDWORLDMAP_SEARCHDEFAULT_NODENAME"), searchDefaultItemName = PAGetString(Defines.StringSheet_GAME, "LUA_GRANDWORLDMAP_SEARCHDEFAULT_ITEMNAME"), searchDefaultGuildName = PAGetString(Defines.StringSheet_GAME, "LUA_GRANDWORLDMAP_SEARCHDEFAULT_GUILDTYPE"), searchDefaultUseType = PAGetString(Defines.StringSheet_GAME, "LUA_GRANDWORLDMAP_SEARCHDEFAULT_USETYPE")}
 , _isAllowTutorialPanelShow = false}
--- DECOMPILER ERROR at PC310: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC313: Confused about usage of register: R14 in 'UnsetPending'
 
 ;
 (worldmapGrand.ui).list_scrollBtn = (UI.getChildControl)((worldmapGrand.ui).list_scroll, "Scroll_CtrlButton")
@@ -640,14 +641,16 @@ PrevNodeType_Set = function()
   end
 end
 
-local territoryString = {[-1] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_ALL"), [0] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_4")}
+local territoryString = {[-1] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_ALL"), [0] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYSTRING_4"), [5] = "�\143 항구", [6] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7")}
 WorldMap_TerritorySelect_Show = function()
   -- function num : 0_29 , upvalues : worldmapGrand, territoryString
   ((worldmapGrand.ui).comboBox_TerritorySelect):DeleteAllItem()
   local count = 0
   for index = -1, #territoryString do
-    ((worldmapGrand.ui).comboBox_TerritorySelect):AddItem(territoryString[index])
-    count = count + 1
+    if index ~= 5 then
+      ((worldmapGrand.ui).comboBox_TerritorySelect):AddItem(territoryString[index])
+      count = count + 1
+    end
   end
   ;
   (((worldmapGrand.ui).comboBox_TerritorySelect):GetListControl()):SetSize(((worldmapGrand.ui).comboBox_TerritorySelect):GetSizeX(), (count) * 18)
@@ -658,6 +661,9 @@ end
 TerritorySelect_Set = function()
   -- function num : 0_30 , upvalues : worldmapGrand, territoryString, _selectTerritory, _selectNodeType, worldMapNodeTypeIndex
   local selectIndex = ((worldmapGrand.ui).comboBox_TerritorySelect):GetSelectIndex()
+  if selectIndex > 5 then
+    selectIndex = selectIndex + 1
+  end
   ;
   ((worldmapGrand.ui).comboBox_TerritorySelect):SetText(territoryString[selectIndex - 1])
   _selectTerritory = selectIndex - 1
@@ -1175,6 +1181,7 @@ local guildWar_Filter_Init = function()
   ((worldmapGrand.ui).comboBox_TaxGrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SELECTTAXGRADE"))
   ToClient_resetVisibleVillageSiegeType()
   ToClient_resetVisibleVillageSiegeTaxLevel()
+  FGlobal_ApprovalRating_SetShow(false)
 end
 
 local productNode_Filter_Init = function()
@@ -1201,7 +1208,7 @@ local productNode_Filter_Init = function()
 end
 
 FGlobal_WorldMapOpenForMain = function()
-  -- function num : 0_52 , upvalues : AlignButtonPosition, worldmapGrand_OpenSet, worldMapCheckStateInMode, worldMapCheckState, eWorldmapState, eCheckState, _currentRenderMode, worldMapNodeListType, worldMapNodeType, CheckStateByChangeMode, worldMapState, worldmapGrand, guildWar_Filter_Init, productNode_Filter_Init
+  -- function num : 0_52 , upvalues : AlignButtonPosition, worldmapGrand_OpenSet, worldMapCheckStateInMode, worldMapCheckState, eWorldmapState, eCheckState, _currentRenderMode, worldMapNodeListType, worldMapNodeType, CheckStateByChangeMode, worldMapState, worldmapGrand, guildWar_Filter_Init, productNode_Filter_Init, isEnablePlunderGame
   AlignButtonPosition()
   worldmapGrand_OpenSet()
   Panel_WorldMap_Main:SetShow(true, false)
@@ -1211,7 +1218,7 @@ FGlobal_WorldMapOpenForMain = function()
         checkArray[checkIndex] = ToClient_isWorldmapCheckState(checkIndex)
       else
         if index == eWorldmapState.eWMS_GUILD_WAR then
-          if checkIndex == eCheckState.eCheck_Node then
+          if checkIndex == eCheckState.eCheck_Node or checkIndex == eCheckState.eCheck_Postions then
             checkArray[checkIndex] = true
           else
             checkArray[checkIndex] = false
@@ -1249,7 +1256,7 @@ FGlobal_WorldMapOpenForMain = function()
     FGlobal_WorldmapGrand_Bottom_MenuSet()
     ;
     ((worldmapGrand.ui).list_scroll):SetControlPos(0)
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC119: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (worldmapGrand.config).scrollStartIdx = 0
@@ -1264,6 +1271,9 @@ FGlobal_WorldMapOpenForMain = function()
       ((worldmapGrand.ui).comboBox_DaySelect):SetShow(true)
       ;
       ((worldmapGrand.ui).comboBox_TaxGrade):SetShow(true)
+      if isEnablePlunderGame == true then
+        FGlobal_ApprovalRating_SetShow(true)
+      end
     elseif _currentRenderMode == eWorldmapState.eWMS_PRODUCT_NODE then
       ((worldmapGrand.ui).nodeSelectBg):SetShow(true)
       ;
@@ -1309,7 +1319,7 @@ FGlobal_WorldMapStateMaintain = function()
 end
 
 WorldMapStateChange = function(state)
-  -- function num : 0_57 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, CheckStateByChangeMode, worldMapState, worldMapCheckState
+  -- function num : 0_57 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, isEnablePlunderGame, CheckStateByChangeMode, worldMapState, worldMapCheckState
   guildWar_Filter_Init()
   productNode_Filter_Init()
   _currentRenderMode = state
@@ -1328,6 +1338,9 @@ WorldMapStateChange = function(state)
       ((worldmapGrand.ui).comboBox_DaySelect):SetShow(true)
       ;
       ((worldmapGrand.ui).comboBox_TaxGrade):SetShow(true)
+      if isEnablePlunderGame == true then
+        FGlobal_ApprovalRating_SetShow(true)
+      end
       _isGuildWarMode = true
     else
       if eWorldmapState.eWMS_PRODUCT_NODE == state then

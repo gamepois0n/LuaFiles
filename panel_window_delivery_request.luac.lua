@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\delivery\panel_window_delivery_request.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\delivery\panel_window_delivery_request.luac 
 
 -- params : ...
 -- function num : 0
@@ -222,6 +222,7 @@ DeliveryRequest_PushPackingItem = function(warehouseSlotNo, s64_count)
     return 
   end
   local self = deliveryRequest
+  warehouse_requestInfo(DeliveryInformation_WaypointKey())
   delivery_pushPack(warehouseSlotNo, s64_count)
   self:update()
   FromClient_WarehouseUpdate()
@@ -385,6 +386,7 @@ DeliveryRequestWindow_Open = function()
   self:clearSlot()
   self:updateDestination()
   self:update()
+  FGlobal_WarehouseTownListCheck()
 end
 
 DeliveryRequestWindow_Close = function()
@@ -398,6 +400,7 @@ DeliveryRequestWindow_Close = function()
     Panel_Window_Delivery_Request:SetShow(false, IsAniUse())
     FromClient_WarehouseUpdate()
   end
+  FGlobal_WarehouseTownListCheck()
 end
 
 ShowInformationWindow = function()

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\tutorial\panel_webcontrol.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\tutorial\panel_webcontrol.luac 
 
 -- params : ...
 -- function num : 0
@@ -41,28 +41,20 @@ Panel_WebHelper_ShowToggle = function(helpType)
           (MessageBox.showMessageBox)(messageBoxData)
           return false
         end
-        do
-          if isGameTypeSA() then
-            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_MSGBOX_COMMON_READY"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-            ;
-            (MessageBox.showMessageBox)(messageBoxData)
-            return false
-          end
-          if isGameTypeKR2() then
-            return false
-          end
-          if Panel_Login == nil then
-            if Panel_WorldMap:GetShow() then
-              WorldMapPopupManager:push(Panel_WebControl, true)
-            else
-              Panel_WebControl:SetShow(true, true)
-            end
+        if isGameTypeKR2() then
+          return false
+        end
+        if Panel_Login == nil then
+          if Panel_WorldMap:GetShow() then
+            WorldMapPopupManager:push(Panel_WebControl, true)
           else
             Panel_WebControl:SetShow(true, true)
           end
-          Panel_WebControl_TakeAndShow(helpType)
-          do return true end
+        else
+          Panel_WebControl:SetShow(true, true)
         end
+        Panel_WebControl_TakeAndShow(helpType)
+        do return true end
       end
     end
   end
@@ -149,6 +141,16 @@ else
       if isGameTypeID() then
         countryType = "_ID"
         isIME = true
+      else
+        if isGameTypeSA() then
+          if (CppEnums.ServiceResourceType).eServiceResourceType_SA == getGameServiceResType() then
+            countryType = "_SA"
+          else
+            if (CppEnums.ServiceResourceType).eServiceResourceType_PT == getGameServiceResType() then
+              countryType = "_PT"
+            end
+          end
+        end
       end
     end
   end
@@ -362,7 +364,7 @@ Panel_WebControl_TakeAndShow = function(helpType)
                                                                                                                                           html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_MAILSEND" .. countryType))
                                                                                                                                         else
                                                                                                                                           if helpType == "Update" then
-                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, "http://blackigwiki.daum.net/wiki/%EC%9D%B4%EB%B2%88_%EC%A3%BC")
+                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_UPDATE" .. countryType))
                                                                                                                                           else
                                                                                                                                             if helpType == "Fairy" then
                                                                                                                                               html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FAIRY" .. countryType))

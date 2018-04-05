@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\personalbattle\panel_window_personalbattle.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\personalbattle\panel_window_personalbattle.luac 
 
 -- params : ...
 -- function num : 0
@@ -328,25 +328,19 @@ FGlobal_PersonalBattle_ListUpdate = function(contents, key)
             personalBattleListJoinBtn:SetClickFontColor((Defines.Color).C_FFF26A6A)
             personalBattleListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
             personalBattleListJoinBtn:SetIgnore(true)
-            if ToClient_GuildBattle_GetNoMasterState() == true then
-              local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_MASTER_OUT"), sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
-              Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 78, false)
-            end
           end
         end
       end
     end
-    do
-      if not isAdmission then
-        personalBattleListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
-        personalBattleListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ISADMISSION_LIMIT"))
-        personalBattleListJoinBtn:SetIgnore(true)
-      end
-      personalBattleListServer:SetText(channelName)
-      personalBattleListJoinMember:SetText(getJoinMemberCount)
-      personalBattleListStatus:SetText(isCurrentState)
-      personalBattleListJoinBtn:addInputEvent("Mouse_LUp", "PaGlobal_PersonalBattle:join(" .. idx .. ")")
+    if not isAdmission then
+      personalBattleListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+      personalBattleListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ISADMISSION_LIMIT"))
+      personalBattleListJoinBtn:SetIgnore(true)
     end
+    personalBattleListServer:SetText(channelName)
+    personalBattleListJoinMember:SetText(getJoinMemberCount)
+    personalBattleListStatus:SetText(isCurrentState)
+    personalBattleListJoinBtn:addInputEvent("Mouse_LUp", "PaGlobal_PersonalBattle:join(" .. idx .. ")")
   end
 end
 

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap_grand\new_worldmap_knowledge.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap_grand\new_worldmap_knowledge.luac 
 
 -- params : ...
 -- function num : 0
@@ -164,6 +164,8 @@ local __extraMentalInfo = {
 , 
 [1156] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 112, x2 = 363, y2 = 148}
 , 
+[1234] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 112, x2 = 363, y2 = 148}
+, 
 [593] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
 , 
 [628] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
@@ -208,6 +210,12 @@ local __extraMentalInfo = {
 , 
 [1165] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
 , 
+[1241] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1257] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1286] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
 [587] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
 , 
 [622] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
@@ -217,6 +225,8 @@ local __extraMentalInfo = {
 [669] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
 , 
 [671] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
+, 
+[1235] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
 , 
 [582] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 38, x2 = 363, y2 = 74}
 , 

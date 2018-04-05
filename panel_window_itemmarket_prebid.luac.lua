@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarket_prebid.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarket_prebid.luac 
 
 -- params : ...
 -- function num : 0
@@ -56,12 +56,12 @@ end
 ItemMarketPreBid.updateSilver = function(self)
   -- function num : 0_3
   local invenMoney = (((getSelfPlayer()):get()):getInventory()):getMoney_s64()
-  local wareHouseMoney = warehouse_moneyFromNpcShop_s64()
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
+  local wareHouseMoney = warehouse_moneyByCurrentRegionMainTown_s64(true)
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self.value).invenMoney = invenMoney
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self.value).wareHouseMoney = wareHouseMoney
@@ -345,13 +345,28 @@ HandleClicked_ItemMarketPreBid_Confirm = function()
       local reservationPrice = tonumber64((string.gsub)(((ItemMarketPreBid.ui).value_02_Edit):GetEditText(), ",", ""))
       local itemCount = ((ItemMarketPreBid.ui).value_03_Edit):GetEditText()
       local itemSumPrice = reservationPrice * tonumber64(itemCount)
+      local itemAlertPrice = tonumber64((string.gsub)(((ItemMarketPreBid.ui).value_01):GetText(), ",", "")) * tonumber64(3)
       local doRegistItem = function()
     -- function num : 0_12_0 , upvalues : fromWhereType, itemEnchantKeyRaw, reservationPrice, itemCount
     ToClient_RequestReservationAtItemMarket(fromWhereType, itemEnchantKeyRaw, reservationPrice, itemCount)
   end
 
-      local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_PREBID_SUMPRICE_MESSAGE_MEMO", "itemSumPrice", makeDotMoney(itemSumPrice))
+      local doAlertItem = function()
+    -- function num : 0_12_1 , upvalues : itemAlertPrice, reservationPrice, doRegistItem
+    if itemAlertPrice <= reservationPrice then
+      local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ALERT_PRICE", "count", tostring(3))
       local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = doRegistItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    else
+      do
+        doRegistItem()
+      end
+    end
+  end
+
+      local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_PREBID_SUMPRICE_MESSAGE_MEMO", "itemSumPrice", makeDotMoney(itemSumPrice))
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = doAlertItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageBoxData)
     end
@@ -381,6 +396,7 @@ end
 FGlobal_ItemMarketPreBid_Open = function(enchantItemKey, openType)
   -- function num : 0_14 , upvalues : ItemMarketPreBid
   ItemMarketPreBid:Open(enchantItemKey, openType)
+  Panel_Window_ItemMarket_RClickMenu:SetShow(false)
 end
 
 FGlobal_ItemMarketPreBid_Close = function()
@@ -398,20 +414,8 @@ FGlobal_ItemMarketPreBid_Check_OpenType = function()
   return (ItemMarketPreBid.config).openType
 end
 
-FromClient_NotifySellByreservation = function(characterName, enchantItemKey)
-  -- function num : 0_18 , upvalues : ItemMarketPreBid, penelOpenType
-  -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
-
-  (ItemMarketPreBid.config).buyingName = characterName
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
-
-  ;
-  (ItemMarketPreBid.config).alarmEnchantKey = enchantItemKey
-  ItemMarketPreBid:Open(enchantItemKey, penelOpenType.alarm)
-end
-
 ItemMarketPreBid_CheckRestoreFlush = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_19 , upvalues : ItemMarketPreBid, penelOpenType
+  -- function num : 0_18 , upvalues : ItemMarketPreBid, penelOpenType
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -422,7 +426,7 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "ItemMarketPreBid_CheckRestoreFlush")
 ItemMarketPreBid.registEventHandler = function(self)
-  -- function num : 0_20
+  -- function num : 0_19
   ((self.ui).btn_Confirm):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketPreBid_Confirm()")
   ;
   ((self.ui).btn_Cancel):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketPreBid_Close()")
@@ -433,8 +437,7 @@ ItemMarketPreBid.registEventHandler = function(self)
 end
 
 ItemMarketPreBid.registMessageHandler = function(self)
-  -- function num : 0_21
-  registerEvent("FromClient_NotifySellByreservation", "FromClient_NotifySellByreservation")
+  -- function num : 0_20
 end
 
 ItemMarketPreBid:Init()

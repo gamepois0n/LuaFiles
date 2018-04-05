@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\righttopicons\panel_personalicon_npcnavigation.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\righttopicons\panel_personalicon_npcnavigation.luac 
 
 -- params : ...
 -- function num : 0
@@ -16,8 +16,9 @@ local IM = CppEnums.EProcessorInputMode
 local _math_AddVectorToVector = (Util.Math).AddVectorToVector
 local _math_MulNumberToVector = (Util.Math).MulNumberToVector
 local UILink = {treeView = (UI.getChildControl)(Panel_NpcNavi, "Tree_View"), closeNpcNavi = (UI.getChildControl)(Panel_NpcNavi, "Button_Win_Close"), staticSearchBack = (UI.getChildControl)(Panel_NpcNavi, "StaticSearchBack"), editSearchText = (UI.getChildControl)(Panel_NpcNavi, "EditSearchText"), btnSearch = (UI.getChildControl)(Panel_NpcNavi, "BtnSearch"), textSubject = (UI.getChildControl)(Panel_NpcNavi, "StaticText_Subject"), errorMessage = (UI.getChildControl)(Panel_NpcNavi, "StaticText_ErrorNotice"), tooltip = Panel_Tooltip_NpcNavigation, tooltip_NpcName = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Tooltip_NpcName"), tooltip_text = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Tooltip_NpcDescription"), tooltip_itemName = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_ItemName"), tooltip_Icon = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_Icon"), tooltip_NeedExplorePoint = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_NeedExplorePoint"), tooltip_Description = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_Description"), tooltip_NotFind = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_NotFound"), tooltip_ProgressBG = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_ProgressBG"), tooltip_CircularProgress = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "CircularProgress_Current"), tooltip_FruitageValue = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_Fruitage_Value"), tooltip_GiftIcon = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_GiftIcon"), initPosX = Panel_NpcNavi:GetPosX(), initPosY = Panel_NpcNavi:GetPosY()}
+local _scroll = (UI.getChildControl)(UILink.treeView, "Tree_1_Scroll")
 local townBg = (UI.getChildControl)(Panel_NpcNavi, "Static_Bg3")
-local townNavi = {[5] = (UI.getChildControl)(townBg, "Button_1"), [32] = (UI.getChildControl)(townBg, "Button_2"), [77] = (UI.getChildControl)(townBg, "Button_3"), [202] = (UI.getChildControl)(townBg, "Button_4"), [701] = (UI.getChildControl)(townBg, "Button_6")}
+local townNavi = {[5] = (UI.getChildControl)(townBg, "Button_1"), [32] = (UI.getChildControl)(townBg, "Button_2"), [77] = (UI.getChildControl)(townBg, "Button_3"), [202] = (UI.getChildControl)(townBg, "Button_4"), [701] = (UI.getChildControl)(townBg, "Button_6"), [873] = (UI.getChildControl)(townBg, "Button_7")}
 local territoryTownData = {
 [5] = {_x = 8489.57, _y = -7818.84, _z = 82973.3, _cardKey = 3001, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_1"), _isOpen = true}
 , 
@@ -28,6 +29,8 @@ local territoryTownData = {
 [202] = {_x = 364177, _y = -4957.73, _z = -74140.1, _cardKey = 3188, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_4"), _isOpen = ToClient_IsContentsGroupOpen("3")}
 , 
 [701] = {_x = -514130, _y = 8984.42, _z = -455421, _cardKey = 3454, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_6"), _isOpen = ToClient_IsContentsGroupOpen("5")}
+, 
+[873] = {_x = -46455.86, _y = 22008.5, _z = -403908.03, _cardKey = 1234, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_7"), _isOpen = ToClient_IsContentsGroupOpen("6")}
 }
 local resizingGap = {treeGap = Panel_NpcNavi:GetSizeX() - (UILink.treeView):GetSizeX(), tooltipDescExplorePointGap = (UILink.tooltip_NeedExplorePoint):GetPosY() - (UILink.tooltip_Description):GetPosY() - (UILink.tooltip_Description):GetTextSizeY(), tooltipExplorePointPanelGap = Panel_Tooltip_NpcNavigation:GetSizeY() - (UILink.tooltip_NeedExplorePoint):GetPosY() - (UILink.tooltip_NeedExplorePoint):GetTextSizeY()}
 local naviDesc = (UI.getChildControl)(Panel_NpcNavi, "StaticText_NpcNavi_Desc")
@@ -831,7 +834,7 @@ NpcListUpdate_EventExplorePointUpdate = function()
 end
 
 NpcListUpdate = function()
-  -- function num : 0_40 , upvalues : sortComparer, stringMatching, filterText, getCharacterString, insertTreeRoot, treeGroupData, preLoadTextureKey_territory, UI_color, insertTreeVertex, createListElement, UILink, checkIsNewAdd, errorMessageShow, selectIndex, isFirstUpdate, AddEffectList
+  -- function num : 0_40 , upvalues : sortComparer, stringMatching, filterText, getCharacterString, insertTreeRoot, treeGroupData, preLoadTextureKey_territory, UI_color, insertTreeVertex, createListElement, UILink, checkIsNewAdd, errorMessageShow, selectIndex, isFirstUpdate, AddEffectList, _scroll
   local newList = {}
   local regionInfoCount = getRegionInfoCount()
   local regionInfoList = {}
@@ -946,6 +949,7 @@ NpcListUpdate = function()
       ;
       (UILink.treeView):ResetSelectItem()
     end
+    _scroll:SetControlTop()
     -- DECOMPILER ERROR: 20 unprocessed JMP targets
   end
 end

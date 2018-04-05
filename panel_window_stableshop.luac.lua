@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\stable\panel_window_stableshop.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\stable\panel_window_stableshop.luac 
 
 -- params : ...
 -- function num : 0
@@ -204,6 +204,9 @@ end
 
 StableShop_UpdateMoney = function()
   -- function num : 0_5 , upvalues : stableShop
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_StableShop:GetShow() == false then
+    return 
+  end
   local self = stableShop
   ;
   (self.buttonBuy):SetEnable(true)

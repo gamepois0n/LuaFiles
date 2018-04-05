@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\interaction\panel_interaction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\interaction\panel_interaction.luac 
 
 -- params : ...
 -- function num : 0
@@ -614,19 +614,42 @@ Interaction_ButtonPushed = function(interactionType)
               end
             else
               do
+                -- DECOMPILER ERROR at PC106: Unhandled construct in 'MakeBoolean' P1
+
                 if (CppEnums.InteractionType).InteractionType_InstallationMode == interactionType and getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode then
                   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOT_ENTER_HOUSINGMODE_CHATMODE"))
                   return 
                 end
-                if isTakedownCannon then
-                  local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
-                  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
-                  local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                  ;
-                  (MessageBox.showMessageBox)(messageBoxData)
-                else
-                  do
-                    interaction_processInteraction(interactionType)
+                if (CppEnums.InteractionType).InteractionType_Collect == interactionType then
+                  local actorWrapper = interaction_getInteractable()
+                  if actorWrapper ~= nil then
+                    local charWrapper = actorWrapper:getCharacterStaticStatusWrapper()
+                    if charWrapper ~= nil then
+                      local charAttr = charWrapper:getAttr()
+                      if __eAttrHoeMiniGame == charAttr and getSelfPlayer() ~= nil then
+                        local playerWp = (getSelfPlayer()):getWp()
+                        local needWp = ToClient_CheckMiniGameFindWp(charWrapper:getCharacterKey())
+                        if playerWp < needWp then
+                          local charName = charWrapper:getName()
+                          local failMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MINIGAMEFIND_WPHELP", "name", charName, "wp", needWp)
+                          Proc_ShowMessage_Ack(failMsg)
+                          return 
+                        end
+                      end
+                    end
+                  end
+                end
+                do
+                  if isTakedownCannon then
+                    local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
+                    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
+                    local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    ;
+                    (MessageBox.showMessageBox)(messageBoxData)
+                  else
+                    do
+                      interaction_processInteraction(interactionType)
+                    end
                   end
                 end
               end

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\trademarket\panel_tradeeventnotice_renewal.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\trademarket\panel_tradeeventnotice_renewal.luac 
 
 -- params : ...
 -- function num : 0
@@ -21,7 +21,7 @@ _staticTextSupplyItemNameList = {}
 , 
 _ETabState = {_icon = 0, _name = 1}
 , 
-_ETerritory = {_balenos = 0, _serendia = 1, _calpheon = 2, _media = 3, _valencia = 4, _margoria = 5, _kamasylvia = 6}
+_ETerritory = {_balenos = 0, _serendia = 1, _calpheon = 2, _media = 3, _valencia = 4, _margoria = 5, _kamasylvia = 6, _drigan = 7}
 , 
 _itemSlotConfig = {createIcon = true, createBorder = true, createCount = true}
 , 
@@ -35,12 +35,12 @@ _supplyItemCount = {}
 , 
 _supplyItemKeyList = {}
 }
--- DECOMPILER ERROR at PC140: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.Initialize = function(self)
   -- function num : 0_0
-  self._supplyNpcRegionKey = {[(self._ETerritory)._balenos] = 5, [(self._ETerritory)._serendia] = 32, [(self._ETerritory)._calpheon] = 310, [(self._ETerritory)._media] = 202, [(self._ETerritory)._valencia] = 229, [(self._ETerritory)._margoria] = 821, [(self._ETerritory)._kamasylvia] = 735}
-  self._territoryName = {[(self._ETerritory)._balenos] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_1"), [(self._ETerritory)._serendia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_2"), [(self._ETerritory)._calpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_3"), [(self._ETerritory)._media] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_4"), [(self._ETerritory)._valencia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_5"), [(self._ETerritory)._margoria] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_ROTPORT"), [(self._ETerritory)._kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_KAMASYLVIA")}
+  self._supplyNpcRegionKey = {[(self._ETerritory)._balenos] = 5, [(self._ETerritory)._serendia] = 32, [(self._ETerritory)._calpheon] = 310, [(self._ETerritory)._media] = 202, [(self._ETerritory)._valencia] = 229, [(self._ETerritory)._margoria] = 821, [(self._ETerritory)._kamasylvia] = 735, [(self._ETerritory)._drigan] = 873}
+  self._territoryName = {[(self._ETerritory)._balenos] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_1"), [(self._ETerritory)._serendia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_2"), [(self._ETerritory)._calpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_3"), [(self._ETerritory)._media] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_4"), [(self._ETerritory)._valencia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_5"), [(self._ETerritory)._margoria] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_ROTPORT"), [(self._ETerritory)._kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_KAMASYLVIA"), [(self._ETerritory)._drigan] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_DRIGAN")}
   self._prevTab = (self._ETabState)._icon
   Panel_TradeEventNotice_Renewal:RegisterShowEventFunc(true, "PaGlobal_TradeEventNotice_Renewal:ShowAni()")
   Panel_TradeEventNotice_Renewal:RegisterShowEventFunc(false, "PaGlobal_TradeEventNotice_Renewal:HideAni()")
@@ -48,7 +48,7 @@ PaGlobal_TradeEventNotice_Renewal.Initialize = function(self)
   PaGlobal_TradeEventNotice_Renewal:InitializeUI()
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.InitializeUI = function(self)
   -- function num : 0_1
@@ -114,7 +114,7 @@ PaGlobal_TradeEventNotice_Renewal.InitializeUI = function(self)
   PaGlobal_TradeEventNotice_Renewal:InitializeCreateUI()
 end
 
--- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC147: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.InitializeCreateUI = function(self)
   -- function num : 0_2
@@ -206,7 +206,7 @@ PaGlobal_TradeEventNotice_Renewal.InitializeCreateUI = function(self)
   ((self._ui)._staticTextSupplyTown):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC150: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.UpdateTradeEventInfo = function(self)
   -- function num : 0_3
@@ -234,7 +234,7 @@ PaGlobal_TradeEventNotice_Renewal.UpdateTradeEventInfo = function(self)
   Panel_TradeEventNotice_Renewal:SetSize(Panel_TradeEventNotice_Renewal:GetSizeX(), ((self._ui)._staticTradeEventDown):GetPosY() + ((self._ui)._staticTradeEventDown):GetSizeY())
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.UpdateSupplyInfo = function(self)
   -- function num : 0_4
@@ -305,7 +305,7 @@ PaGlobal_TradeEventNotice_Renewal.UpdateSupplyInfo = function(self)
   Panel_TradeEventNotice_Renewal:SetSize(Panel_TradeEventNotice_Renewal:GetSizeX(), ((self._ui)._staticTradeEventDown):GetPosY() + ((self._ui)._staticTradeEventDown):GetSizeY())
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.ShowItemToolTip = function(self, terrIndex, itemIndex, tabState)
   -- function num : 0_5
@@ -324,7 +324,7 @@ PaGlobal_TradeEventNotice_Renewal.ShowItemToolTip = function(self, terrIndex, it
   end
 end
 
--- DECOMPILER ERROR at PC158: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.SetItem = function(self, terrIndex, itemIndex)
   -- function num : 0_6
@@ -349,7 +349,7 @@ PaGlobal_TradeEventNotice_Renewal.SetItem = function(self, terrIndex, itemIndex)
   end
 end
 
--- DECOMPILER ERROR at PC161: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC162: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.Show = function(self)
   -- function num : 0_7
@@ -368,7 +368,7 @@ PaGlobal_TradeEventNotice_Renewal.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC164: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.Close = function(self)
   -- function num : 0_8
@@ -381,7 +381,7 @@ PaGlobal_TradeEventNotice_Renewal.Close = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC167: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.PopUp = function(self)
   -- function num : 0_9
@@ -393,7 +393,7 @@ PaGlobal_TradeEventNotice_Renewal.PopUp = function(self)
   TooltipSimple_Hide()
 end
 
--- DECOMPILER ERROR at PC170: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.ShowPopUpToolTip = function(self)
   -- function num : 0_10
@@ -407,7 +407,7 @@ PaGlobal_TradeEventNotice_Renewal.ShowPopUpToolTip = function(self)
   TooltipSimple_Show((self._ui)._btnCheckBoxPopUp, name, desc)
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC174: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.ShowRadioButtonSimpleToolTip = function(self, tabState)
   -- function num : 0_11
@@ -423,7 +423,7 @@ PaGlobal_TradeEventNotice_Renewal.ShowRadioButtonSimpleToolTip = function(self, 
   end
 end
 
--- DECOMPILER ERROR at PC176: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.HandleClicked_Tab = function(self, tabState)
   -- function num : 0_12
@@ -454,7 +454,7 @@ PaGlobal_TradeEventNotice_Renewal.HandleClicked_Tab = function(self, tabState)
   end
 end
 
--- DECOMPILER ERROR at PC179: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC180: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.GetTerritorySupplyNpcName = function(self, territory)
   -- function num : 0_13
@@ -466,7 +466,7 @@ PaGlobal_TradeEventNotice_Renewal.GetTerritorySupplyNpcName = function(self, ter
   end
 end
 
--- DECOMPILER ERROR at PC182: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC183: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.SupplyNPCNaviStart = function(self, territory)
   -- function num : 0_14
@@ -480,7 +480,7 @@ PaGlobal_TradeEventNotice_Renewal.SupplyNPCNaviStart = function(self, territory)
   end
 end
 
--- DECOMPILER ERROR at PC185: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC186: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.TradeEventNPCNaviStart = function(self)
   -- function num : 0_15
@@ -495,7 +495,7 @@ PaGlobal_TradeEventNotice_Renewal.TradeEventNPCNaviStart = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC188: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC189: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.GetTerritorySupplyIndex = function(self, itemKey)
   -- function num : 0_16
@@ -512,7 +512,7 @@ PaGlobal_TradeEventNotice_Renewal.GetTerritorySupplyIndex = function(self, itemK
   return nil
 end
 
--- DECOMPILER ERROR at PC191: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC192: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.Resize = function(self)
   -- function num : 0_17
@@ -520,7 +520,7 @@ PaGlobal_TradeEventNotice_Renewal.Resize = function(self)
   Panel_TradeEventNotice_Renewal:SetPosY(getScreenSizeY() / 2 - Panel_TradeEventNotice_Renewal:GetSizeY() / 2)
 end
 
--- DECOMPILER ERROR at PC194: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC195: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.ShowAni = function(self)
   -- function num : 0_18
@@ -529,7 +529,7 @@ PaGlobal_TradeEventNotice_Renewal.ShowAni = function(self)
   (UIAni.AlphaAnimation)(1, Panel_TradeEventNotice_Renewal, 0, 0.3)
 end
 
--- DECOMPILER ERROR at PC197: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC198: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.HideAni = function(self)
   -- function num : 0_19
@@ -537,26 +537,30 @@ PaGlobal_TradeEventNotice_Renewal.HideAni = function(self)
   ani:SetHideAtEnd(true)
 end
 
--- DECOMPILER ERROR at PC200: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC201: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TradeEventNotice_Renewal.SetTerritoryCount = function(self)
   -- function num : 0_20
-  if ToClient_IsContentsGroupOpen("260") then
-    self._territoryCount = 7
+  if ToClient_IsContentsGroupOpen("6") then
+    self._territoryCount = 8
   else
-    if ToClient_IsContentsGroupOpen("83") then
-      self._territoryCount = 6
+    if ToClient_IsContentsGroupOpen("260") then
+      self._territoryCount = 7
     else
-      if ToClient_IsContentsGroupOpen("4") then
-        self._territoryCount = 5
+      if ToClient_IsContentsGroupOpen("83") then
+        self._territoryCount = 6
       else
-        if ToClient_IsContentsGroupOpen("3") then
-          self._territoryCount = 4
+        if ToClient_IsContentsGroupOpen("4") then
+          self._territoryCount = 5
         else
-          if ToClient_IsContentsGroupOpen("2") then
-            self._territoryCount = 3
+          if ToClient_IsContentsGroupOpen("3") then
+            self._territoryCount = 4
           else
-            self._territoryCount = 2
+            if ToClient_IsContentsGroupOpen("2") then
+              self._territoryCount = 3
+            else
+              self._territoryCount = 2
+            end
           end
         end
       end

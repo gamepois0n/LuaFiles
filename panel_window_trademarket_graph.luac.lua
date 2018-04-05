@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\trademarket\panel_window_trademarket_graph.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\trademarket\panel_window_trademarket_graph.luac 
 
 -- params : ...
 -- function num : 0
@@ -66,17 +66,17 @@ _buttonTerritory = {}
 (tradeGraph._staticText_EnableSupplyCount):addInputEvent("Mouse_Out", "TradeSupply_EnableCount_Tooltip(false)")
 TradeSupply_EnableCount_Tooltip = function(isShow)
   -- function num : 0_0 , upvalues : tradeGraph
-  local uiControl = tradeGraph._staticText_EnableSupplyCount
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
   local name = ""
   local desc = PAGetString(Defines.StringSheet_GAME, "Lua_TradeMarketGraph_DailySupplyCountDesc")
-  if isShow then
-    TooltipSimple_Show(uiControl, name, desc)
-  else
-    TooltipSimple_Hide()
-  end
+  local uiControl = tradeGraph._staticText_EnableSupplyCount
+  TooltipSimple_Show(uiControl, name, desc)
 end
 
-local territoryCount = 5
+local territoryCount = 8
 for countIndex = 1, territoryCount do
   -- DECOMPILER ERROR at PC461: Confused about usage of register: R11 in 'UnsetPending'
 
@@ -1265,7 +1265,7 @@ trendTradeItemInfoInShop = function()
   end
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R0 in 'UnsetPending'
 
-  tradeGraph._territoryCount = 5
+  tradeGraph._territoryCount = 8
   resetTrendGraphButton(true)
   Panel_Trade_Market_Graph_Window:SetEnableArea(-30000, -30000, 30000, 30000)
   commerceGraphInitialize()

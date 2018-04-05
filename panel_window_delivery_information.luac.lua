@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\delivery\panel_window_delivery_information.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\delivery\panel_window_delivery_information.luac 
 
 -- params : ...
 -- function num : 0
@@ -219,6 +219,7 @@ DeliveryInformationWindow_Open = function()
   (self.radiobutton_trans_list):SetCheck(true)
   ;
   (self.radiobutton_alltrans_list):SetCheck(false)
+  FGlobal_WarehouseTownListCheck()
 end
 
 DeliveryInformationWindow_Close = function()
@@ -229,6 +230,7 @@ DeliveryInformationWindow_Close = function()
   if Panel_Window_Delivery_Information:GetShow() then
     Panel_Window_Delivery_Information:ChangeSpecialTextureInfoName("")
     Panel_Window_Delivery_Information:SetShow(false, false)
+    WorldMapPopupManager:pop()
   end
   local self = deliveryInformation
   ;
@@ -238,6 +240,7 @@ DeliveryInformationWindow_Close = function()
   (self.radiobutton_trans_list):SetCheck(true)
   ;
   (self.radiobutton_alltrans_list):SetCheck(false)
+  FGlobal_WarehouseTownListCheck()
 end
 
 DeliveryInformation_Refresh = function(_type)
@@ -250,8 +253,10 @@ DeliveryInformation_OpenPanelFromWorldmap = function(waypointKey)
   -- function num : 0_12 , upvalues : deliveryInformation
   local self = deliveryInformation
   self.currentWaypointKey = waypointKey
-  WorldMapPopupManager:increaseLayer(true)
-  WorldMapPopupManager:push(Panel_Window_Delivery_Information, true)
+  if ToClient_WorldMapIsShow() then
+    WorldMapPopupManager:increaseLayer(true)
+    WorldMapPopupManager:push(Panel_Window_Delivery_Information, true)
+  end
   DeliveryInformationWindow_Open()
 end
 

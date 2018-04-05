@@ -1,9 +1,8 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_bodybone.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_bodybone.luac 
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local StaticText_DefaultControl = (UI.getChildControl)(Panel_CustomizationTransformBody, "StaticText_DefaultControl")
 local RadioButton_Bone_Scale = (UI.getChildControl)(Panel_CustomizationTransformBody, "RadioButton_Bone_Scale")
 local StaticText_ScaleX = (UI.getChildControl)(Panel_CustomizationTransformBody, "StaticText_ScaleX")
@@ -135,39 +134,19 @@ UpdateBodyBoneScale = function()
 end
 
 OpenBodyShapeUi = function(classType, uiId)
-  -- function num : 0_7 , upvalues : UI_GroupType, Button_Slider_ScaleX, Button_Slider_ScaleY, Button_Slider_ScaleZ, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset, Button_Slider_Height, Button_Slider_Weight, currentclassType, currentuiId, selectedClassType
-  if historyapply == nil then
-    Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-    ClearAll_CustomizationUIGroup(0)
-    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
-    Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 3)
-    local maxcountx = 2
-    local maxcountx = 7
-    Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcountx, Button_Slider_ScaleX)
-    Add_CustomizationUIControl(0, 0, 0, 1, maxcountx, maxcountx, Button_Slider_ScaleY)
-    Add_CustomizationUIControl(0, 0, 0, 2, maxcountx, maxcountx, Button_Slider_ScaleZ)
-    Add_CustomizationUIControl(0, 0, 0, 3, maxcountx, maxcountx, CheckButton_ControlPart)
-    Add_CustomizationUIControl(0, 0, 0, 4, maxcountx, maxcountx, Button_Part_Reset)
-    Add_CustomizationUIControl(0, 0, 1, 4, maxcountx, maxcountx, Button_All_Reset)
-    Add_CustomizationUIControl(0, 0, 0, 5, maxcountx, maxcountx, Button_Slider_Height)
-    Add_CustomizationUIControl(0, 0, 0, 6, maxcountx, maxcountx, Button_Slider_Weight)
-  end
-  do
-    globalcurrentclassType = classType
-    globalcurrentuiId = uiId
-    currentclassType = classType
-    currentuiId = uiId
-    selectedClassType = classType
-    startBodyPickingMode()
-    EnableBodySlide(false)
-    ShowBodyBoneEditor()
-    if CheckButton_ControlPart:IsCheck() then
-      showBoneControlPart(true)
-    else
-      showBoneControlPart(false)
-    end
+  -- function num : 0_7 , upvalues : currentclassType, currentuiId, selectedClassType, CheckButton_ControlPart
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  selectedClassType = classType
+  startBodyPickingMode()
+  EnableBodySlide(false)
+  ShowBodyBoneEditor()
+  if CheckButton_ControlPart:IsCheck() then
+    showBoneControlPart(true)
+  else
+    showBoneControlPart(false)
   end
 end
 

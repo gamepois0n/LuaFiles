@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\cash_customization\panel_cash_customization.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\cash_customization\panel_cash_customization.luac 
 
 -- params : ...
 -- function num : 0
@@ -767,11 +767,4 @@ FromClient_NotifyCustomizingChange = function()
 end
 
 registerEvent("FromClient_NotifyCustomizingChange", "FromClient_NotifyCustomizingChange")
-FGlobal_CashCustomization_ConsoleAdd = function()
-  -- function num : 0_21 , upvalues : CashCustomization
-  Add_CustomizationUIGroup(0, 4, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-  Add_CustomizationUIControl(0, 4, 0, 0, 1, 2, CashCustomization.BTN_Apply)
-  Add_CustomizationUIControl(0, 4, 0, 1, 1, 2, CashCustomization.BTN_Close)
-end
-
 

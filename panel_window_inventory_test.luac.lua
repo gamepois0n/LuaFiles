@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\inventory\panel_window_inventory_test.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\inventory\panel_window_inventory_test.luac 
 
 -- params : ...
 -- function num : 0
@@ -3064,6 +3064,7 @@ Inventory_ManufactureBTN = function()
         Manufacture_Show(nil, (CppEnums.ItemWhereType).eInventory, true, true)
         if Panel_Manufacture:GetShow() then
           Panel_Equipment:SetShow(false)
+          ClothInventory_Close()
         end
       end
     end

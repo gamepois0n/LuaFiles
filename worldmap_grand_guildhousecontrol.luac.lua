@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap_grand\wordmap_craft\worldmap_grand_guildhousecontrol.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap_grand\wordmap_craft\worldmap_grand_guildhousecontrol.luac 
 
 -- params : ...
 -- function num : 0
@@ -103,7 +103,7 @@ end
 
 HouseUseTypeState_Control:Init()
 WorkList_Control.Init = function(self)
-  -- function num : 0_3
+  -- function num : 0_3 , upvalues : HouseInfo_Control
   for titleIdx = 0, self.maxPoolNo - 1 do
     -- DECOMPILER ERROR at PC15: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -159,6 +159,14 @@ WorkList_Control.Init = function(self)
   (self._controlBG):addInputEvent("Mouse_UpScroll", "GuildHouse_WorkList_ScrollEvent( true )")
   ;
   (self._controlBG):addInputEvent("Mouse_DownScroll", "GuildHouse_WorkList_ScrollEvent( false )")
+  local nameSizeY = (HouseInfo_Control._UseType_Name):GetTextSizeY()
+  local descSizeY = (HouseInfo_Control._UseType_Desc):GetTextSizeY()
+  local bgSizeY = (HouseInfo_Control._BG):GetSizeY()
+  if bgSizeY < nameSizeY + descSizeY then
+    (HouseInfo_Control._UseType_Name):SetPosY((HouseInfo_Control._UseType_Name):GetPosY() - (nameSizeY + descSizeY - bgSizeY))
+    ;
+    (HouseInfo_Control._UseType_Desc):SetPosY((HouseInfo_Control._UseType_Desc):GetPosY() - (nameSizeY + descSizeY - bgSizeY))
+  end
 end
 
 WorkList_Control:Init()
@@ -219,21 +227,13 @@ GuildHouse_WorkList_SetData = function()
 end
 
 GuildHouse_WorkList_Update = function(houseKeyRaw, _recipeKeyRaw)
-  -- function num : 0_7 , upvalues : WorkList_Control, HouseInfo_Control, WorkDataRow, isMyGuildHouse
+  -- function num : 0_7 , upvalues : WorkList_Control, WorkDataRow, isMyGuildHouse
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
   WorkList_Control._selecthouseKeyRaw = houseKeyRaw
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R2 in 'UnsetPending'
 
   WorkList_Control._selectRecipeKeyRaw = _recipeKeyRaw
-  local nameSizeY = (HouseInfo_Control._UseType_Name):GetTextSizeY()
-  local descSizeY = (HouseInfo_Control._UseType_Desc):GetTextSizeY()
-  local bgSizeY = (HouseInfo_Control._BG):GetSizeY()
-  if bgSizeY < nameSizeY + descSizeY then
-    (HouseInfo_Control._UseType_Name):SetPosY((HouseInfo_Control._UseType_Name):GetPosY() - (nameSizeY + descSizeY - bgSizeY))
-    ;
-    (HouseInfo_Control._UseType_Desc):SetPosY((HouseInfo_Control._UseType_Desc):GetPosY() - (nameSizeY + descSizeY - bgSizeY))
-  end
   local guildHouseInfoSSW = ToClient_GetGuildHouseInfoStaticStatusWrapper(WorkList_Control._selecthouseKeyRaw)
   GuildHouse_WorkList_SetData()
   for titleIdx = 0, WorkList_Control.maxPoolNo - 1 do
@@ -316,7 +316,7 @@ GuildHouse_WorkList_Update = function(houseKeyRaw, _recipeKeyRaw)
     do
       do
         uiSlotNo = uiSlotNo + 1
-        -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC235: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end

@@ -1,11 +1,9 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\messagebox\messagebox.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\messagebox\messagebox.luac 
 
 -- params : ...
 -- function num : 0
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
-Panel_Win_System:setUsableConsolePanel(true)
 Panel_Win_System:RegisterShowEventFunc(true, "MessageBox_ShowAni()")
 Panel_Win_System:RegisterShowEventFunc(false, "MessageBox_HideAni()")
 Panel_Win_System:SetShow(false, false)
@@ -51,9 +49,7 @@ local functionYes, list = nil, nil
 local elapsedTime = 0
 local _currentMessageBoxData = nil
 setCurrentMessageData = function(currentData, position)
-  -- function num : 0_0 , upvalues : UI_GroupType, buttonYes, buttonApply, buttonNo, buttonIgnore, buttonCancel, buttonClose, textTitle, textContent, UI_TM, globalButtonShowCount, _currentMessageBoxData
-  Panel_Win_System:clearGruop()
-  local group = Panel_Win_System:addConsoleUIGroup(0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  -- function num : 0_0 , upvalues : buttonYes, buttonApply, buttonNo, buttonIgnore, buttonCancel, buttonClose, textTitle, textContent, UI_TM, globalButtonShowCount, _currentMessageBoxData
   if currentData ~= nil then
     buttonYes:SetShow(false)
     buttonApply:SetShow(false)
@@ -83,18 +79,15 @@ setCurrentMessageData = function(currentData, position)
     if currentData.functionYes ~= nil then
       buttonYes:SetShow(true)
       buttonShowCount = buttonShowCount + 1
-      group:addControl(0, 0, 2, 1, buttonYes)
     else
       if currentData.functionApply ~= nil then
         buttonApply:SetShow(true)
         buttonShowCount = buttonShowCount + 1
-        group:addControl(0, 0, 2, 1, buttonApply)
       end
     end
     if currentData.functionNo ~= nil then
       buttonNo:SetShow(true)
       buttonShowCount = buttonShowCount + 1
-      group:addControl(1, 0, 2, 1, buttonNo)
     else
       if currentData.functionIgnore ~= nil then
         buttonIgnore:SetShow(true)
@@ -139,7 +132,7 @@ setCurrentMessageData = function(currentData, position)
   end
 end
 
--- DECOMPILER ERROR at PC228: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC221: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
   -- function num : 0_1 , upvalues : list, functionKeyUse, elapsedTime, textBG, static_Beginner_BG, static_BeginnerTitleBG, staticText_BeginnerTxt1, staticText_BeginnerTxt2, textContent, blockBG
@@ -286,7 +279,7 @@ allClearMessageData = function()
   end
 end
 
--- DECOMPILER ERROR at PC252: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC245: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.doHaveMessageBoxData = function(title)
   -- function num : 0_5 , upvalues : list
@@ -302,14 +295,14 @@ MessageBox.doHaveMessageBoxData = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC255: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC248: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.isPopUp = function()
   -- function num : 0_6
   return Panel_Win_System:IsShow()
 end
 
--- DECOMPILER ERROR at PC259: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC252: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.isCurrentOpen = function(title)
   -- function num : 0_7 , upvalues : _currentMessageBoxData
@@ -319,7 +312,7 @@ MessageBox.isCurrentOpen = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC264: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC257: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.keyProcessEnter = function()
   -- function num : 0_8 , upvalues : functionKeyUse, list
@@ -349,7 +342,7 @@ MessageBox.keyProcessEnter = function()
   end
 end
 
--- DECOMPILER ERROR at PC269: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC262: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.keyProcessEscape = function()
   -- function num : 0_9 , upvalues : functionKeyUse, list

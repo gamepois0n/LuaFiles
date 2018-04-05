@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\panel_logo.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\panel_logo.luac 
 
 -- params : ...
 -- function num : 0
@@ -40,7 +40,7 @@ Panel_Logo_Init = function()
         staticText_Warning:SetShow(false)
       else
         do
-          if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+          if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
             static_Grade:SetSize(130, 129)
             static_Grade:ChangeTextureInfoName("GameGradeIcon18.dds")
             local x1, y1, x2, y2 = setTextureUV_Func(static_Grade, 0, 0, 130, 129)
@@ -173,7 +173,7 @@ else
       aniInfo2:SetEndColor((Defines.Color).C_FFFFFFFF)
     else
       do
-        if isGameTypeTaiwan() then
+        if isGameTypeTaiwan() or ToClient_isXBox() then
           local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
           aniInfo11:SetStartColor((Defines.Color).C_00FFFFFF)
           aniInfo11:SetEndColor((Defines.Color).C_FFFFFFFF)

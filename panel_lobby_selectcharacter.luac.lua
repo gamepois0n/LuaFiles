@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\lobby\panel_lobby_selectcharacter.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\lobby\panel_lobby_selectcharacter.luac 
 
 -- params : ...
 -- function num : 0
@@ -476,8 +476,15 @@ local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpe
           setWeatherTime(8, 2)
           viewCharacterFov(0.55)
         else
-          viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
-          viewCharacterPitchRoll(3.14, 0)
+          if classType == UI_Class.ClassType_Orange then
+            viewCharacter(index, -20, -20, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
+            viewCharacterPitchRoll(0, 0)
+            setWeatherTime(8, 2)
+            viewCharacterFov(0.55)
+          else
+            viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
+            viewCharacterPitchRoll(3.14, 0)
+          end
         end
       end
     end
@@ -742,19 +749,37 @@ local ChangeTexture_Class = function(control, classType)
                                                                 (control:getClickTexture()):setUV(x1, y1, x2, y2)
                                                               else
                                                                 do
-                                                                  control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
-                                                                  ;
-                                                                  (control:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                  control:setRenderTexture(control:getBaseTexture())
-                                                                  control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
-                                                                  ;
-                                                                  (control:getOnTexture()):setUV(x1, y1, x2, y2)
-                                                                  control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
-                                                                  ;
-                                                                  (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                                  if classType == UI_Class.ClassType_Orange then
+                                                                    control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                    local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                                    ;
+                                                                    (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                    control:setRenderTexture(control:getBaseTexture())
+                                                                    control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                    local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                                    ;
+                                                                    (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                                    control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                    local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                                    ;
+                                                                    (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                                  else
+                                                                    do
+                                                                      control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                                      ;
+                                                                      (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                      control:setRenderTexture(control:getBaseTexture())
+                                                                      control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                                      ;
+                                                                      (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                                      control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                                      ;
+                                                                      (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                                    end
+                                                                  end
                                                                 end
                                                               end
                                                             end

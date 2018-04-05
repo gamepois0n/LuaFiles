@@ -1,179 +1,273 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\warehouse\panel_window_searchmenuwarehouse.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\warehouse\panel_window_searchmenuwarehouse.luac 
 
 -- params : ...
 -- function num : 0
-Panel_Window_SearchMenuWareHouse:SetShow(false, false)
-Panel_Window_SearchMenuWareHouse:setMaskingChild(true)
-Panel_Window_SearchMenuWareHouse:ActiveMouseEventEffect(true)
-Panel_Window_SearchMenuWareHouse:setGlassBackground(true)
-Panel_Window_SearchMenuWareHouse:RegisterShowEventFunc(true, "SearchMenuWarehouseShowAni()")
-Panel_Window_SearchMenuWareHouse:RegisterShowEventFunc(false, "SearchMenuWarehouseHideAni()")
 local UI_color = Defines.Color
-SearchMenuWarehouseShowAni = function()
-  -- function num : 0_0
-  Panel_Window_SearchMenuWareHouse:SetAlpha(0)
-  ;
-  (UIAni.AlphaAnimation)(1, Panel_Window_SearchMenuWareHouse, 0, 0.15)
-  audioPostEvent_SystemUi(1, 0)
-end
-
-SearchMenuWarehouseShowAni = function()
-  -- function num : 0_1 , upvalues : UI_color
-  Panel_Window_SearchMenuWareHouse:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
-  local aniInfo1 = Panel_Window_SearchMenuWareHouse:addColorAnimation(0, 0.15, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
-  aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
-  aniInfo1:SetStartIntensity(3)
-  aniInfo1:SetEndIntensity(1)
-  aniInfo1.IsChangeChild = true
-  aniInfo1:SetHideAtEnd(true)
-  aniInfo1:SetDisableWhileAni(true)
-  audioPostEvent_SystemUi(1, 0)
-end
-
-local searchmenuwarehouse = {
-ui = {ListBG = (UI.getChildControl)(Panel_Window_SearchMenuWareHouse, "List_Bg"), list_Title = (UI.getChildControl)(Panel_Window_SearchMenuWareHouse, "List_Title"), list_KeyWord = (UI.getChildControl)(Panel_Window_SearchMenuWareHouse, "List_KeyWord"), list_SearchBG = (UI.getChildControl)(Panel_Window_SearchMenuWareHouse, "List_SearchListBG"), list_scroll = (UI.getChildControl)(Panel_Window_SearchMenuWareHouse, "Scroll_List")}
+PaGlobal_SearchMenuWarehouse = {
+_ui = {part_SearchMenuWarehouse = (UI.getChildControl)(Panel_Window_Warehouse, "Static_SelectWarehouse")}
 , 
-warehouseButton = {}
-, btnMaxCount = 6, scrollStartIdx = 0, warehouseMaxCount = 0}
--- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
+_warehouseInfo = {_territoryCount = 0, 
+_territoryGroup = {}
+}
+, 
+_territoryNameInfo = {}
+, _currentTerritoryKey = -1, _maxTerritoryKeyCount = 10, _separatorNumber = 100, _selectWaypointKey = -1}
+-- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
-;
-(searchmenuwarehouse.ui).list_scrollBtn = (UI.getChildControl)((searchmenuwarehouse.ui).list_scroll, "Scroll_CtrlButton")
-searchmenuwarehouse.Init = function(self)
-  -- function num : 0_2 , upvalues : searchmenuwarehouse
-  searchmenuwarehouse:MakeSearchMenuWareHouseButton()
-end
+PaGlobal_SearchMenuWarehouse.Init = function(self)
+  -- function num : 0_0
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
-searchmenuwarehouse.UpdateList = function(self)
-  -- function num : 0_3
-  if self.warehouseMaxCount == 0 then
-    self.warehouseMaxCount = ToClient_getWareHouseCount()
-    ;
-    (UIScroll.SetButtonSize)((self.ui).list_scroll, self.btnMaxCount, self.warehouseMaxCount)
-    ;
-    ((self.ui).list_KeyWord):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_NODETYPEKEYWORD", "keyword", PAGetString(Defines.StringSheet_RESOURCE, "WAREHOUSE_TXT_TITLE"), "count", self.warehouseMaxCount))
-  end
-  for idx = 0, self.btnMaxCount - 1 do
-    ((self.warehouseButton)[idx]):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
-    ;
-    ((self.warehouseButton)[idx]):SetText("")
-    ;
-    ((self.warehouseButton)[idx]):SetShow(false)
-    ;
-    ((self.warehouseButton)[idx]):addInputEvent("Mouse_LUp", "")
-  end
-  local btnCount = 0
-  for idx = self.scrollStartIdx, self.warehouseMaxCount - 1 do
-    if self.btnMaxCount <= btnCount then
-      break
-    end
-    local resultString = ToClient_getWareHouseName(idx)
-    local slot = (self.warehouseButton)[btnCount]
-    slot:addInputEvent("Mouse_LUp", "HandleClicked_ViewWareHouse( " .. idx .. " )")
-    slot:addInputEvent("Mouse_UpScroll", "SearchMenuWareHouse_Scroll( true )")
-    slot:addInputEvent("Mouse_DownScroll", "SearchMenuWareHouse_Scroll( false )")
-    slot:SetText(resultString)
-    slot:SetShow(true)
-    btnCount = btnCount + 1
-  end
-end
-
-HandleClicked_ViewWareHouse = function(idx)
-  -- function num : 0_4
-  local waypointKey = ToClient_getWareHouseWaypointKey(idx)
-  Warehouse_OpenPanelFromWorldmap(waypointKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Worldmap)
-  if Panel_Window_Inventory:GetShow() then
-    Panel_Window_Inventory:SetShow(false, false)
-  end
-end
-
-SearchMenuWareHouse_Scroll = function(isUp)
-  -- function num : 0_5 , upvalues : searchmenuwarehouse
+  (self._ui).list_Title = (UI.getChildControl)((self._ui).part_SearchMenuWarehouse, "List_Title")
   -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
 
-  searchmenuwarehouse.scrollStartIdx = (UIScroll.ScrollEvent)((searchmenuwarehouse.ui).list_scroll, isUp, searchmenuwarehouse.btnMaxCount, searchmenuwarehouse.warehouseMaxCount, searchmenuwarehouse.scrollStartIdx, 1)
-  searchmenuwarehouse:UpdateList()
+  ;
+  (self._ui).btn_MyWarehouse = (UI.getChildControl)((self._ui).part_SearchMenuWarehouse, "RadioButton_Tab_MyWarehouse")
+  -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).list_KeyWord = (UI.getChildControl)((self._ui).part_SearchMenuWarehouse, "List_KeyWord")
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._list2 = (UI.getChildControl)((self._ui).part_SearchMenuWarehouse, "List2_Warehouse")
+  ;
+  ((self._ui)._list2):changeAnimationSpeed(10)
+  ;
+  ((self._ui)._list2):setMinScrollBtnSize(float2(10, 50))
+  ;
+  ((self._ui)._list2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "PaGlobal_SearchMenuWarehouse_UpdateList")
+  ;
+  ((self._ui)._list2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
+  ;
+  ((self._ui).list_KeyWord):SetShow(false)
+  ;
+  ((self._ui).btn_MyWarehouse):addInputEvent("Mouse_LUp", "PaGlobal_SearchMenuWarehouse:ClickCurrentTownsWareHouse()")
+  self._selectIndex = -1
+  ;
+  ((self._ui).btn_MyWarehouse):SetCheck(true)
+  ;
+  ((self._ui).part_SearchMenuWarehouse):SetShow(false)
 end
 
-HandleClicked_SearchMenuWareHouse_ScrollPress = function()
-  -- function num : 0_6 , upvalues : searchmenuwarehouse
-  local scrollPos = ((searchmenuwarehouse.ui).list_scroll):GetControlPos()
-  local resultCount = searchmenuwarehouse.warehouseMaxCount
-  local maxViewCount = searchmenuwarehouse.btnMaxCount
-  -- DECOMPILER ERROR at PC15: Confused about usage of register: R3 in 'UnsetPending'
-
-  searchmenuwarehouse.scrollStartIdx = (math.ceil)((resultCount - maxViewCount) * scrollPos)
-  searchmenuwarehouse:UpdateList()
+PaGlobal_SearchMenuWarehouse_UpdateList = function(contents, key)
+  -- function num : 0_1
+  local self = PaGlobal_SearchMenuWarehouse
+  local idx = Int64toInt32(key)
+  local radioButton = (UI.getChildControl)(contents, "RadioButton_Territory")
+  local warehouseName = (UI.getChildControl)(contents, "RadioButton_WarehouseName")
+  local count = (UI.getChildControl)(contents, "StaticText_Count")
+  radioButton:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  warehouseName:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  radioButton:SetPosX(5)
+  warehouseName:SetPosX(15)
+  warehouseName:SetShow(false)
+  count:SetShow(false)
+  if idx < self._separatorNumber then
+    local territoryName = (self._territoryNameInfo)[idx]
+    local territoryWarehouseCount = (((self._warehouseInfo)._territoryGroup)[idx])._count
+    radioButton:SetText(territoryName .. "(" .. territoryWarehouseCount .. ")")
+    radioButton:addInputEvent("Mouse_LUp", "FGlobal_SearchMenuWarehouse_TerritoryOpen(" .. idx .. ")")
+    radioButton:SetShow(true)
+    warehouseName:SetShow(false)
+    count:SetShow(false)
+    radioButton:SetCheck(idx == self._selectIndex)
+  else
+    radioButton:SetShow(false)
+    warehouseName:SetShow(true)
+    local waypointKey = idx - self._separatorNumber
+    warehouse_requestInfo(waypointKey)
+    if waypointKey == self._selectWaypointKey then
+      warehouseName:SetFontColor((Defines.Color).C_FFACE400)
+      warehouseName:SetCheck(true)
+    else
+      warehouseName:SetFontColor((Defines.Color).C_FFC4BEBE)
+      warehouseName:SetCheck(false)
+    end
+    local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(waypointKey)
+    warehouseName:SetText(regionInfoWrapper:getAreaName())
+    local warehouseWrapper = warehouse_get(waypointKey)
+    if warehouseWrapper == nil then
+      return 
+    end
+    local itemCount = warehouseWrapper:getSize()
+    local useMaxCount = warehouseWrapper:getUseMaxCount()
+    count:SetText("(" .. itemCount .. "/" .. useMaxCount - 1 .. ")")
+    count:SetShow(true)
+    warehouseName:addInputEvent("Mouse_LUp", "PaGlobal_SearchMenuWarehouse:ClickOtherTownsWareHouse(" .. waypointKey .. ")")
+  end
+  -- DECOMPILER ERROR: 6 unprocessed JMP targets
 end
 
-searchmenuwarehouse.MakeSearchMenuWareHouseButton = function(self)
-  -- function num : 0_7
-  for idx = 0, self.btnMaxCount - 1 do
-    -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
-
-    (self.warehouseButton)[idx] = (UI.createAndCopyBasePropertyControl)(Panel_Window_SearchMenuWareHouse, "List_itemName", (self.ui).list_SearchBG, "WorldmapGrand_SearchResultList_" .. idx)
-    ;
-    ((self.warehouseButton)[idx]):SetPosX(4)
-    ;
-    ((self.warehouseButton)[idx]):SetPosY(5 + (((self.warehouseButton)[idx]):GetSizeY() + 3) * idx)
-    ;
-    ((self.warehouseButton)[idx]):SetText("")
-    ;
-    ((self.warehouseButton)[idx]):SetShow(false)
+FGlobal_SearchMenuWarehouse_TerritoryOpen = function(territoryKey, isFirstOpen)
+  -- function num : 0_2
+  local self = PaGlobal_SearchMenuWarehouse
+  ;
+  (((self._ui)._list2):getElementManager()):clearKey()
+  for index = 0, self._maxTerritoryKeyCount - 1 do
+    if ((self._warehouseInfo)._territoryGroup)[index] ~= nil then
+      (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, index))
+      if index == territoryKey then
+        if self._selectIndex == territoryKey then
+          self._selectIndex = -2
+        else
+          local maxTerritoryWarehouseCount = (((self._warehouseInfo)._territoryGroup)[index])._count
+          for wIndex = 1, maxTerritoryWarehouseCount do
+            local waypointKey = (((self._warehouseInfo)._territoryGroup)[index])[wIndex] + self._separatorNumber
+            ;
+            (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, waypointKey))
+          end
+          self._selectIndex = territoryKey
+        end
+      end
+    end
+  end
+  do
+    if isFirstOpen then
+      local currentWaypointKey = getCurrentWaypointKey()
+      self._selectWaypointKey = currentWaypointKey
+      PaGlobal_SearchMenuWarehouse:ClickOtherTownsWareHouse(currentWaypointKey)
+      return 
+    end
+    if self._selectIndex >= 0 then
+      self._selectWaypointKey = (((self._warehouseInfo)._territoryGroup)[self._selectIndex])[1]
+      PaGlobal_SearchMenuWarehouse:ClickOtherTownsWareHouse(self._selectWaypointKey)
+    end
   end
 end
 
-searchmenuwarehouse.Open = function(self)
-  -- function num : 0_8 , upvalues : searchmenuwarehouse
-  ToClient_FindWareHouse(getCurrentWaypointKey())
-  self.scrollStartIdx = 0
+-- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_SearchMenuWarehouse.ClickOtherTownsWareHouse = function(self, waypointKey)
+  -- function num : 0_3
+  local isCurrentTownsWarehouse = waypointKey == getCurrentWaypointKey()
+  if isCurrentTownsWarehouse then
+    Warehouse_OpenPanelFromDialog()
+  else
+    Warehouse_OpenPanelFromWorldmap(waypointKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Worldmap)
+    Panel_Window_Inventory:SetShow(false)
+  end
+  do
+    local beforeWaypointKey = self._selectWaypointKey
+    self._selectWaypointKey = waypointKey
+    if beforeWaypointKey > 0 then
+      ((self._ui)._list2):requestUpdateByKey(toInt64(0, beforeWaypointKey + self._separatorNumber))
+    end
+    ;
+    ((self._ui)._list2):requestUpdateByKey(toInt64(0, waypointKey + self._separatorNumber))
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  end
+end
+
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_SearchMenuWarehouse.ClickCurrentTownsWareHouse = function(self)
+  -- function num : 0_4
+  self._selectIndex = -1
+  self._selectWaypointKey = -1
+  Warehouse_OpenPanelFromDialog()
+end
+
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_SearchMenuWarehouse.Open = function(self)
+  -- function num : 0_5
+  if ((self._ui).part_SearchMenuWarehouse):GetShow() == true or not _ContentsGroup_isAllWarehouse then
+    return 
+  end
   ;
-  ((self.ui).list_scroll):SetControlTop()
+  ((self._ui).part_SearchMenuWarehouse):SetShow(true)
+  local warehouseCount = ToClient_FindWareHouse(getCurrentWaypointKey())
+  if warehouseCount == 0 then
+    return 
+  end
+  local currentWaypointKey = getCurrentWaypointKey()
+  local currnetRegionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(currentWaypointKey)
+  local currentTerritoryKey = currnetRegionInfoWrapper:getTerritoryKeyRaw()
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R5 in 'UnsetPending'
+
   ;
-  ((self.ui).list_scroll):SetControlPos(0)
-  Panel_Window_SearchMenuWareHouse:SetShow(true, false)
-  searchmenuwarehouse:UpdateList()
-end
+  (self._warehouseInfo)._territoryCount = 0
+  -- DECOMPILER ERROR at PC33: Confused about usage of register: R5 in 'UnsetPending'
 
-searchmenuwarehouse.Close = function(self)
-  -- function num : 0_9
-  Panel_Window_SearchMenuWareHouse:SetShow(false, false)
-  self.warehouseMaxCount = 0
-end
-
-FGlobal_SearchMenuWareHouse_Open = function()
-  -- function num : 0_10 , upvalues : searchmenuwarehouse
-  searchmenuwarehouse:Open()
-end
-
-FGlobal_SearchMenuWareHouse_Close = function()
-  -- function num : 0_11 , upvalues : searchmenuwarehouse
-  searchmenuwarehouse:Close()
-end
-
-FGlobal_SearchMenuWareHouse_Show = function(isShow)
-  -- function num : 0_12
-  Panel_Window_SearchMenuWareHouse:SetShow(isShow, false)
-end
-
-searchmenuwarehouse.RegistEventHandler = function(self)
-  -- function num : 0_13
-  ((self.ui).ListBG):addInputEvent("Mouse_UpScroll", "SearchMenuWareHouse_Scroll( true )")
   ;
-  ((self.ui).ListBG):addInputEvent("Mouse_DownScroll", "SearchMenuWareHouse_Scroll( false )")
+  (self._warehouseInfo)._territoryGroup = {}
+  for index = 0, warehouseCount - 1 do
+    local waypointKey = ToClient_getWareHouseWaypointKey(index)
+    local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(waypointKey)
+    local territoryKey = regionInfoWrapper:getTerritoryKeyRaw()
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R12 in 'UnsetPending'
+
+    if ((self._warehouseInfo)._territoryGroup)[territoryKey] == nil then
+      (self._warehouseInfo)._territoryCount = (self._warehouseInfo)._territoryCount + 1
+      -- DECOMPILER ERROR at PC59: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      ((self._warehouseInfo)._territoryGroup)[territoryKey] = {}
+      -- DECOMPILER ERROR at PC63: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      (((self._warehouseInfo)._territoryGroup)[territoryKey])._count = 1
+      -- DECOMPILER ERROR at PC67: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      (((self._warehouseInfo)._territoryGroup)[territoryKey])[1] = waypointKey
+      -- DECOMPILER ERROR at PC71: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      (self._territoryNameInfo)[territoryKey] = regionInfoWrapper:getTerritoryName()
+    else
+      -- DECOMPILER ERROR at PC81: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      (((self._warehouseInfo)._territoryGroup)[territoryKey])._count = (((self._warehouseInfo)._territoryGroup)[territoryKey])._count + 1
+      -- DECOMPILER ERROR at PC89: Confused about usage of register: R12 in 'UnsetPending'
+
+      ;
+      (((self._warehouseInfo)._territoryGroup)[territoryKey])[(((self._warehouseInfo)._territoryGroup)[territoryKey])._count] = waypointKey
+    end
+  end
+  self._selectIndex = -1
+  self._selectWaypointKey = -1
   ;
-  ((self.ui).list_scrollBtn):addInputEvent("Mouse_LPress", "HandleClicked_SearchMenuWareHouse_ScrollPress()")
+  (((self._ui)._list2):getElementManager()):clearKey()
+  for index = 0, self._maxTerritoryKeyCount - 1 do
+    if ((self._warehouseInfo)._territoryGroup)[index] ~= nil then
+      (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, index))
+    end
+  end
+  FGlobal_SearchMenuWarehouse_TerritoryOpen(currentTerritoryKey, true)
   ;
-  ((self.ui).list_scroll):addInputEvent("Mouse_LUp", "HandleClicked_SearchMenuWareHouse_ScrollPress()")
+  ((self._ui).btn_MyWarehouse):SetCheck(true)
+  ;
+  ((self._ui).part_SearchMenuWarehouse):ComputePos()
 end
 
-searchmenuwarehouse.RegistMessageHandler = function(self)
-  -- function num : 0_14
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_SearchMenuWarehouse.Close = function(self)
+  -- function num : 0_6
+  if ((self._ui).part_SearchMenuWarehouse):GetShow() == false then
+    return 
+  end
+  ;
+  ((self._ui).part_SearchMenuWarehouse):SetShow(false)
 end
 
-searchmenuwarehouse:Init()
-searchmenuwarehouse:RegistEventHandler()
-searchmenuwarehouse:RegistMessageHandler()
+FGlobal_WarehouseTownListCheck = function()
+  -- function num : 0_7
+  if ToClient_WorldMapIsShow() then
+    return 
+  end
+  local self = PaGlobal_SearchMenuWarehouse
+  if Panel_Window_Delivery_Information:GetShow() or Panel_Window_Delivery_Request:GetShow() or not _ContentsGroup_isAllWarehouse then
+    ((self._ui).part_SearchMenuWarehouse):SetShow(false)
+  else
+    ;
+    ((self._ui).part_SearchMenuWarehouse):SetShow(true)
+  end
+end
+
+PaGlobal_SearchMenuWarehouse:Init()
 

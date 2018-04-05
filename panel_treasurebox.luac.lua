@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\goldentreasurebox\panel_treasurebox.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\goldentreasurebox\panel_treasurebox.luac 
 
 -- params : ...
 -- function num : 0
@@ -45,47 +45,66 @@ Panel_GoldenTreasureBox_HideAni = function()
   aniInfo1:SetDisableWhileAni(true)
 end
 
-local treasureBox = {_fromWhereType, _fromSlotNo, materialWhereType; btnClose = (UI.getChildControl)(Panel_GoldenTreasureBox, "Button_CloseIcon"), closeBox_Head = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_CloseBox_Head"), closeBox_Body = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_CloseBox_Body"), openBox = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_OpenBox"), txt_Title = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_PartLine"), boxBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_BoxBg"), radioBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_RadioBtnBg"), radioBtn_NormalKey = (UI.getChildControl)(Panel_GoldenTreasureBox, "RadioButton_GoldenKey"), radioBtn_CashKey = (UI.getChildControl)(Panel_GoldenTreasureBox, "RadioButton_GoldenCashKey"), descBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_DescBg"), txt_Desc = (UI.getChildControl)(Panel_GoldenTreasureBox, "StaticText_1"), btn_Open = (UI.getChildControl)(Panel_GoldenTreasureBox, "Button_Open"), normalKeyCount = 0, cashKeyCount = 0, keyContentsEventType = 50, 
+local treasureBox = {_fromWhereType, _fromSlotNo, materialWhereType; btnClose = (UI.getChildControl)(Panel_GoldenTreasureBox, "Button_CloseIcon"), closeBox_Head = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_CloseBox_Head"), closeBox_Body = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_CloseBox_Body"), openBox = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_OpenBox"), windowTitle = (UI.getChildControl)(Panel_GoldenTreasureBox, "StaticText_Title"), txt_Title = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_PartLine"), boxBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_BoxBg"), radioBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_RadioBtnBg"), radioBtn_NormalKey = (UI.getChildControl)(Panel_GoldenTreasureBox, "RadioButton_GoldenKey"), radioBtn_CashKey = (UI.getChildControl)(Panel_GoldenTreasureBox, "RadioButton_GoldenCashKey"), descBG = (UI.getChildControl)(Panel_GoldenTreasureBox, "Static_DescBg"), txt_Desc = (UI.getChildControl)(Panel_GoldenTreasureBox, "StaticText_1"), btn_Open = (UI.getChildControl)(Panel_GoldenTreasureBox, "Button_Open"), normalKeyCount = 0, cashKeyCount = 0, keyContentsEventType = 50, 
 materialSlotNo = {[0] = nil, [1] = nil}
-}
+, _driganBoxItemKey = 750041, _driganKeyItemKey = 750042}
 ;
 (treasureBox.btnClose):addInputEvent("Mouse_LUp", "Panel_GoldenTreasureBox_Close()")
 ;
 (treasureBox.btn_Open):addInputEvent("Mouse_LUp", "GoldenTreasureBox_Open()")
-GoldenTreasureData_Init = function()
+GoldenTreasureData_Init = function(isDrigan)
   -- function num : 0_2 , upvalues : treasureBox, UI_TM
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   treasureBox.normalKeyCount = 0
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
 
   treasureBox.cashKeyCount = 0
-  -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (treasureBox.materialSlotNo)[0] = nil
-  -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (treasureBox.materialSlotNo)[1] = nil
-  GoldenKey_CheckInventory()
+  GoldenKey_CheckInventory(isDrigan)
   ;
   (treasureBox.radioBtn_NormalKey):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TREASUREBOX_GOLDKEY", "count", treasureBox.normalKeyCount))
   ;
   (treasureBox.radioBtn_CashKey):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TREASUREBOX_GOLDENKEY", "count", treasureBox.cashKeyCount))
   local checkBtnTextSizeX = (math.max)((treasureBox.radioBtn_NormalKey):GetTextSizeX(), (treasureBox.radioBtn_CashKey):GetTextSizeX())
-  if (treasureBox.radioBG):GetSizeX() < (treasureBox.radioBtn_NormalKey):GetPosX() + checkBtnTextSizeX + 20 then
-    (treasureBox.radioBtn_NormalKey):SetPosX((treasureBox.radioBG):GetSizeX() - checkBtnTextSizeX - 20)
-    ;
-    (treasureBox.radioBtn_CashKey):SetPosX((treasureBox.radioBG):GetSizeX() - checkBtnTextSizeX - 20)
-  end
+  ;
+  (treasureBox.radioBtn_NormalKey):SetPosX((treasureBox.radioBG):GetSizeX() / 2 - checkBtnTextSizeX / 2 - 10)
+  ;
+  (treasureBox.radioBtn_CashKey):SetPosX((treasureBox.radioBG):GetSizeX() / 2 - checkBtnTextSizeX / 2 - 10)
   ;
   (treasureBox.txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  if isDrigan then
+    (treasureBox.radioBtn_NormalKey):SetPosY(432)
+    ;
+    (treasureBox.radioBtn_CashKey):SetShow(false)
+    ;
+    (treasureBox.windowTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TREASUREBOX_DRIGANTITLE"))
+    ;
+    (treasureBox.radioBtn_NormalKey):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TREASUREBOX_DRIGANGOLDKEY", "count", treasureBox.normalKeyCount))
+    ;
+    (treasureBox.txt_Desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TREASUREBOX_DRIGANDESC"))
+  else
+    ;
+    (treasureBox.radioBtn_NormalKey):SetPosY(445)
+    ;
+    (treasureBox.radioBtn_CashKey):SetShow(true)
+    ;
+    (treasureBox.windowTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GOLDENTREASUREBOX_TITLE"))
+    ;
+    (treasureBox.txt_Desc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GOLDENTREASUREBOX_DESC"))
+  end
   ;
-  (treasureBox.txt_Desc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GOLDENTREASUREBOX_DESC"))
-  ;
-  (treasureBox.descBG):SetSize((treasureBox.descBG):GetSizeX(), (treasureBox.txt_Desc):GetTextSizeY() + 15)
+  (treasureBox.descBG):SetSize((treasureBox.descBG):GetSizeX(), (treasureBox.txt_Desc):GetTextSizeY() + 20)
   Panel_GoldenTreasureBox:SetSize(Panel_GoldenTreasureBox:GetSizeX(), (treasureBox.txt_Title):GetSizeY() + (treasureBox.boxBG):GetSizeY() + (treasureBox.radioBG):GetSizeY() + (treasureBox.txt_Desc):GetTextSizeY() + 100)
+  ;
+  (treasureBox.btn_Open):ComputePos()
 end
 
 FromClient_RequestUseSealItemBox = function(fromWhereType, fromSlotNo)
@@ -96,37 +115,81 @@ FromClient_RequestUseSealItemBox = function(fromWhereType, fromSlotNo)
   (treasureBox.radioBtn_NormalKey):SetCheck(true)
   ;
   (treasureBox.radioBtn_CashKey):SetCheck(false)
-  GoldenTreasureData_Init()
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC18: Confused about usage of register: R2 in 'UnsetPending'
 
   treasureBox._fromWhereType = fromWhereType
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
 
   treasureBox._fromSlotNo = fromSlotNo
+  local isDrigan = treasureBox:CheckDriganBox(fromWhereType, fromSlotNo)
+  GoldenTreasureData_Init(isDrigan)
 end
 
-GoldenKey_CheckInventory = function()
+treasureBox.CheckDriganBox = function(self, fromWhereType, fromSlotNo)
   -- function num : 0_4 , upvalues : treasureBox
+  local itemWrapper = getInventoryItemByType(fromWhereType, fromSlotNo)
+  do
+    if itemWrapper ~= nil then
+      local itemKey = (((itemWrapper:getStaticStatus()):get())._key):getItemKey()
+      if treasureBox._driganBoxItemKey == itemKey then
+        return true
+      end
+    end
+    return false
+  end
+end
+
+GoldenKey_CheckInventory = function(isDrigan)
+  -- function num : 0_5 , upvalues : treasureBox
   local self = treasureBox
   local inventory = Inventory_GetCurrentInventory()
   local invenMaxSize = inventory:sizeXXX()
-  for index = 1, invenMaxSize - 1 do
-    local itemWrapper = getInventoryItemByType(0, index)
-    if itemWrapper ~= nil and self.keyContentsEventType == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
-      self.normalKeyCount = self.normalKeyCount + Int64toInt32((itemWrapper:get()):getCount_s64())
-      -- DECOMPILER ERROR at PC38: Confused about usage of register: R8 in 'UnsetPending'
+  if isDrigan then
+    for index = 1, invenMaxSize - 1 do
+      local itemWrapper = getInventoryItemByType(0, index)
+      if itemWrapper ~= nil and self.keyContentsEventType == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
+        local itemKey = (((itemWrapper:getStaticStatus()):get())._key):getItemKey()
+        if treasureBox._driganKeyItemKey == itemKey then
+          self.normalKeyCount = self.normalKeyCount + Int64toInt32((itemWrapper:get()):getCount_s64())
+          -- DECOMPILER ERROR at PC51: Confused about usage of register: R10 in 'UnsetPending'
 
-      if (self.materialSlotNo)[0] == nil then
-        (self.materialSlotNo)[0] = index
+          if (self.materialSlotNo)[0] == nil then
+            (self.materialSlotNo)[0] = index
+            break
+          end
+        end
       end
     end
-    local cashItemWrapper = getInventoryItemByType(17, index)
-    if cashItemWrapper ~= nil and self.keyContentsEventType == ((cashItemWrapper:getStaticStatus()):get()):getContentsEventType() then
-      self.cashKeyCount = self.cashKeyCount + Int64toInt32((cashItemWrapper:get()):getCount_s64())
-      -- DECOMPILER ERROR at PC68: Confused about usage of register: R9 in 'UnsetPending'
+  else
+    do
+      for index = 1, invenMaxSize - 1 do
+        local itemWrapper = getInventoryItemByType(0, index)
+        do
+          if itemWrapper ~= nil and self.keyContentsEventType == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
+            local itemKey = (((itemWrapper:getStaticStatus()):get())._key):getItemKey()
+            if treasureBox._driganKeyItemKey ~= itemKey then
+              self.normalKeyCount = self.normalKeyCount + Int64toInt32((itemWrapper:get()):getCount_s64())
+              -- DECOMPILER ERROR at PC99: Confused about usage of register: R10 in 'UnsetPending'
 
-      if (self.materialSlotNo)[1] == nil then
-        (self.materialSlotNo)[1] = index
+              if (self.materialSlotNo)[0] == nil then
+                (self.materialSlotNo)[0] = index
+              end
+            end
+          end
+          do
+            local cashItemWrapper = getInventoryItemByType(17, index)
+            if cashItemWrapper ~= nil and self.keyContentsEventType == ((cashItemWrapper:getStaticStatus()):get()):getContentsEventType() then
+              self.cashKeyCount = self.cashKeyCount + Int64toInt32((cashItemWrapper:get()):getCount_s64())
+              -- DECOMPILER ERROR at PC129: Confused about usage of register: R10 in 'UnsetPending'
+
+              if (self.materialSlotNo)[1] == nil then
+                (self.materialSlotNo)[1] = index
+              end
+            end
+            -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out DO_STMT
+
+          end
+        end
       end
     end
   end
@@ -135,13 +198,18 @@ end
 local isAni = false
 local _time = 0
 GoldenTreasureBox_Open = function()
-  -- function num : 0_5 , upvalues : treasureBox, isAni, _time
+  -- function num : 0_6 , upvalues : treasureBox, isAni, _time
   local self = treasureBox
+  local isDrigan = self:CheckDriganBox(self._fromWhereType, self._fromSlotNo)
   local normalKeyUse = ((self.radioBtn_NormalKey):IsCheck())
   local materialWhereType, materialSlotNo = nil, nil
   if normalKeyUse then
     if self.normalKeyCount <= 0 then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TREASUREBOX_NEEDGOLDKEY"))
+      if isDrigan then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TREASUREBOX_NEEDDRIGANGOLDKEY"))
+      else
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TREASUREBOX_NEEDGOLDKEY"))
+      end
       return 
     end
     materialWhereType = 0
@@ -171,7 +239,7 @@ GoldenTreasureBox_Open = function()
 end
 
 GoldenTreasureBox_Animation = function(deltaTime)
-  -- function num : 0_6 , upvalues : isAni, _time, treasureBox
+  -- function num : 0_7 , upvalues : isAni, _time, treasureBox
   if not isAni then
     return 
   end
@@ -190,7 +258,7 @@ GoldenTreasureBox_Animation = function(deltaTime)
 end
 
 isTreasureBoxCheck = function()
-  -- function num : 0_7 , upvalues : treasureBox
+  -- function num : 0_8 , upvalues : treasureBox
   local itemWrapper = getInventoryItemByType(treasureBox._fromWhereType, treasureBox._fromSlotNo)
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -204,20 +272,21 @@ isTreasureBoxCheck = function()
 end
 
 FromClient_ResponseSealItemBox = function(itemKey)
-  -- function num : 0_8
-  GoldenTreasureData_Init()
+  -- function num : 0_9 , upvalues : treasureBox
+  local isDrigan = treasureBox:CheckDriganBox(treasureBox._fromWhereType, treasureBox._fromSlotNo)
+  GoldenTreasureData_Init(isDrigan)
   local itemESSW = getItemEnchantStaticStatus(ItemEnchantKey(itemKey))
   local sendMsg = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GACHA_ROULETTE_GETITEM", "getName", itemESSW:getName()), sub = "", addMsg = ""}
   Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(sendMsg, 3.5, 17)
 end
 
 Panel_GoldenTreasureBox_Close = function()
-  -- function num : 0_9
+  -- function num : 0_10
   Panel_GoldenTreasureBox:SetShow(false, true)
 end
 
 Panel_TresureBox_RePos = function()
-  -- function num : 0_10 , upvalues : treasureBox
+  -- function num : 0_11 , upvalues : treasureBox
   Panel_GoldenTreasureBox:SetPosX(getScreenSizeX() / 2 - Panel_GoldenTreasureBox:GetSizeX() / 2)
   Panel_GoldenTreasureBox:SetPosY(getScreenSizeY() / 2 - Panel_GoldenTreasureBox:GetSizeY() / 2)
   local strNormalKey = (treasureBox.radioBtn_NormalKey):GetTextSizeX()

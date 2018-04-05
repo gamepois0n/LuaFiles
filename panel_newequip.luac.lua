@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\newequip\panel_newequip.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\newequip\panel_newequip.luac 
 
 -- params : ...
 -- function num : 0
@@ -250,7 +250,8 @@ Panel_NewEquip_EffectLastUpdate = function()
     end
   end
   Panel_NewEquip:SetShow(isPanelShow)
-  PaGlobal_TutorialMenu:setShow(PaGlobal_TutorialMenu:checkShowCondition(), true)
+  local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+  PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
   FromClient_questWidget_ResetPosition()
 end
 

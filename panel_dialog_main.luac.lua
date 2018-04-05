@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\dialogue\panel_dialog_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\dialogue\panel_dialog_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -589,6 +589,7 @@ local PreclosePanel_OpenDialog = function()
   end
   if dialogShowCheck_Once == false then
     InventoryWindow_Close()
+    ClothInventory_Close()
   end
   if Panel_Dialog_Search:IsShow() then
     searchView_Close()
@@ -978,12 +979,10 @@ Dialog_intimacyValueUpdate = function()
   end
 end
 
-FromClient_VaryIntimacy_Dialog = function(actorKeyRaw, tendencyValue)
+FromClient_VaryIntimacy_Dialog = function()
   -- function num : 0_26
-  if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() and Panel_Window_NpcShop:GetShow() == true then
+  if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() then
     Dialog_intimacyValueUpdate()
-    NpcShop_UpdateContent()
-    Dialog_updateButtons(true)
   end
 end
 
@@ -2319,211 +2318,240 @@ Dialog_updateButtons = function(isVisible)
                                                                                                                                             ((_uiFuncButton[index]):getClickTexture()):setUV(x1, y1, x2, y2)
                                                                                                                                             ;
                                                                                                                                             (_uiFuncButton[index]):SetMonoTone(false)
-                                                                                                                                          end
-                                                                                                                                          do
+                                                                                                                                          else
                                                                                                                                             do
-                                                                                                                                              ;
-                                                                                                                                              (_uiFuncButton[index]):SetShow(false)
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              if funcButtonType == (CppEnums.ContentsType).Contents_WeakenEnchant then
+                                                                                                                                                (_uiFuncButton[index]):ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
+                                                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 236, 155, 268)
+                                                                                                                                                ;
+                                                                                                                                                ((_uiFuncButton[index]):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                                                ;
+                                                                                                                                                (_uiFuncButton[index]):setRenderTexture((_uiFuncButton[index]):getBaseTexture())
+                                                                                                                                                ;
+                                                                                                                                                (_uiFuncButton[index]):ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
+                                                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 236, 310, 268)
+                                                                                                                                                ;
+                                                                                                                                                ((_uiFuncButton[index]):getOnTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                                                ;
+                                                                                                                                                (_uiFuncButton[index]):ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
+                                                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 236, 465, 268)
+                                                                                                                                                ;
+                                                                                                                                                ((_uiFuncButton[index]):getClickTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                                                ;
+                                                                                                                                                (_uiFuncButton[index]):SetMonoTone(false)
+                                                                                                                                              end
+                                                                                                                                              do
+                                                                                                                                                do
+                                                                                                                                                  ;
+                                                                                                                                                  (_uiFuncButton[index]):SetShow(false)
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4785: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
 
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                                                                                                                                  -- DECOMPILER ERROR at PC4874: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                                                                end
+                                                                                                                                              end
                                                                                                                                             end
                                                                                                                                           end
                                                                                                                                         end
@@ -2742,7 +2770,7 @@ Dialog_updateButtons = function(isVisible)
               for i = 0, 5 do
                 if true == handleClickedQuestComplete and true == nextQuestFunctionBtnClick[i] then
                   handleClickedQuestComplete = false
-                  -- DECOMPILER ERROR at PC5554: Confused about usage of register: R41 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC5643: Confused about usage of register: R41 in 'UnsetPending'
 
                   nextQuestFunctionBtnClick[i] = false
                   Dialog_clickFuncButtonReq(i)
@@ -3158,6 +3186,8 @@ HandleClickedFuncButton = function(index)
   Panel_Exchange_Item_Hide()
   Panel_Window_ReinforceSkill_Close()
   Panel_SkillReinforce_Close()
+  FGlobal_NpcGift_Close()
+  PaGlobal_Purification_Close()
   if Panel_Window_Enchant:GetShow() then
     PaGlobal_Enchant:enchantClose()
   end
@@ -3397,11 +3427,15 @@ HandleClickedFuncButton = function(index)
                                   FGlobal_KnowledgeManagementShow()
                                 elseif (CppEnums.ContentsType).Contents_Join == funcButtonType then
                                   Panel_Join_Show()
+                                elseif (CppEnums.ContentsType).Contents_NpcGift == funcButtonType then
+                                  FGlobal_NpcGift_Open()
+                                elseif (CppEnums.ContentsType).Contents_WeakenEnchant == funcButtonType then
+                                  PuriManager:Open()
                                 end
                                 PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
                                 Dialog_clickFuncButtonReq(index)
                                 Panel_Interest_Knowledge_Hide()
-                                -- DECOMPILER ERROR: 53 unprocessed JMP targets
+                                -- DECOMPILER ERROR: 55 unprocessed JMP targets
                               end
                             end
                           end
@@ -4303,6 +4337,16 @@ Dialog_MouseToolTips = function(isShow, tipType, index)
                                                                 if tipType == (CppEnums.ContentsType).Contents_Improve then
                                                                   name = funcButton:getText()
                                                                   control = _uiFuncButton[index]
+                                                                else
+                                                                  if tipType == (CppEnums.ContentsType).Contents_NpcGift then
+                                                                    name = funcButton:getText()
+                                                                    control = _uiFuncButton[index]
+                                                                  else
+                                                                    if tipType == (CppEnums.ContentsType).Contents_WeakenEnchant then
+                                                                      name = funcButton:getText()
+                                                                      control = _uiFuncButton[index]
+                                                                    end
+                                                                  end
                                                                 end
                                                               end
                                                             end
@@ -4540,6 +4584,7 @@ registerEvent("FromClient_CloseNpcTalkForDead", "FGlobal_HideDialog")
 registerEvent("FromClient_CloseNpcTradeMarketTalkForDead", "FGlobal_CloseNpcDialogForDetail")
 registerEvent("FromClient_CloseAllPanelWhenNpcGoHome", "FromClient_CloseAllPanelWhenNpcGoHome")
 registerEvent("FromClient_ShowFilterButton", "FromClient_ShowFilterButton")
+registerEvent("FromClient_VaryIntimacy_Dialog", "FromClient_VaryIntimacy_Dialog")
 registerEvent("onScreenResize", "FromClient_Dialog_onScreenResize")
 RenderMode_DialogListClose = function()
   -- function num : 0_85

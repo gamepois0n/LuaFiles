@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\potencialup\panel_potencial_up_new.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\potencialup\panel_potencial_up_new.luac 
 
 -- params : ...
 -- function num : 0
@@ -144,49 +144,49 @@ Compare_Potencial = function(currentPotencial)
       if i == 0 then
         (Poten_UI._attackSpeedText):SetShow(true)
         ;
-        (Poten_UI._attackSpeedText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+        (Poten_UI._attackSpeedText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
         ;
         (Poten_UI._attackSpeedText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
       else
         if i == 1 then
           (Poten_UI._castingSpeedText):SetShow(true)
           ;
-          (Poten_UI._castingSpeedText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+          (Poten_UI._castingSpeedText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
           ;
           (Poten_UI._castingSpeedText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
         else
           if i == 2 then
             (Poten_UI._moveSpeedText):SetShow(true)
             ;
-            (Poten_UI._moveSpeedText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+            (Poten_UI._moveSpeedText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
             ;
             (Poten_UI._moveSpeedText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
           else
             if i == 3 then
               (Poten_UI._criticalRateText):SetShow(true)
               ;
-              (Poten_UI._criticalRateText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+              (Poten_UI._criticalRateText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
               ;
               (Poten_UI._criticalRateText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
             else
               if i == 4 then
                 (Poten_UI._fishingRateText):SetShow(true)
                 ;
-                (Poten_UI._fishingRateText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+                (Poten_UI._fishingRateText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
                 ;
                 (Poten_UI._fishingRateText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
               else
                 if i == 5 then
                   (Poten_UI._gatheringRateText):SetShow(true)
                   ;
-                  (Poten_UI._gatheringRateText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+                  (Poten_UI._gatheringRateText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
                   ;
                   (Poten_UI._gatheringRateText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
                 else
                   if i == 6 then
                     (Poten_UI._dropItemRateText):SetShow(true)
                     ;
-                    (Poten_UI._dropItemRateText):SetText(titleTable[i] .. " : " .. potenUpgrade .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_1") .. " ( " .. maxPotencial[i] .. PAGetString(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_2") .. " )")
+                    (Poten_UI._dropItemRateText):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_POTENCIAL_UP_FULL_MSG", "title", titleTable[i], "potenStep", potenUpgrade, "maxPoten", maxPotencial[i]))
                     ;
                     (Poten_UI._dropItemRateText):SetPosY((Poten_UI._attackSpeedText):GetPosY() + gap * potenCount)
                   end

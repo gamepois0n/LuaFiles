@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\inventory\panel_window_clothinventory.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\inventory\panel_window_clothinventory.luac 
 
 -- params : ...
 -- function num : 0
@@ -198,6 +198,9 @@ ClothInven_Filter = function(slotNo, itemWrapper, count, inventoryType)
   if not (itemSSW:get()):checkToPushToInventoryBag() then
     return true
   end
+  if not ToClient_CheckToPushToInventoryBag(self.fromWhereType, self.fromSlotNo, self.fromWhereType, slotNo) then
+    return true
+  end
   if self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Misc or self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash then
     return false
   end
@@ -276,11 +279,13 @@ end
 
 ClothInventory_Close = function()
   -- function num : 0_9 , upvalues : clothInven
-  for index = 0, clothInven.bagSize - 1 do
-    ((clothInven.slot)[index]):destroyChild()
+  if Panel_Window_ClothInventory:GetShow() then
+    for index = 0, clothInven.bagSize - 1 do
+      ((clothInven.slot)[index]):destroyChild()
+    end
+    Panel_Window_ClothInventory:SetShow(false, false)
+    Inventory_SetFunctor()
   end
-  Panel_Window_ClothInventory:SetShow(false, false)
-  Inventory_SetFunctor()
 end
 
 ;

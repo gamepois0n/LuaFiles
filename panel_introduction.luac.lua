@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\introduction\panel_introduction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\introduction\panel_introduction.luac 
 
 -- params : ...
 -- function num : 0
@@ -40,6 +40,8 @@ local classPicture = {
 [UI_classType.ClassType_CombattantWomen] = {385, 291, 480, 435}
 , 
 [UI_classType.ClassType_Lahn] = {97, 1, 192, 145}
+, 
+[UI_classType.ClassType_Orange] = {97, 1, 192, 145}
 }
 local tooltip = {_bg = (UI.getChildControl)(Panel_Introduction, "Static_TooltipBG"), _pic = (UI.getChildControl)(Panel_Introduction, "Static_CharacterPic"), _name = (UI.getChildControl)(Panel_Introduction, "StaticText_FamilyName"), _level = (UI.getChildControl)(Panel_Introduction, "StaticText_CharacterLv"), _desc = (UI.getChildControl)(Panel_Introduction, "StaticText_SelfIntro"), _close = (UI.getChildControl)(Panel_Introduction, "Button_Close")}
 ;
@@ -97,7 +99,7 @@ FGlobal_Introduction_TooltipShow = function(uiControl, name, desc, isClose, acto
       local playerClass = playerActorProxyWrapper:getClassType()
       ;
       (tooltip._level):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTRODUCTIONMYSELF_SUBINFO", "class", replaceClassType(playerClass), "level", charLevel))
-      if UI_classType.ClassType_Lahn == playerClass then
+      if UI_classType.ClassType_Lahn == playerClass or UI_classType.ClassType_Orange == playerClass then
         (tooltip._pic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_01.dds")
       else
         ;

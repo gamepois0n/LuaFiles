@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_guild.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_guild.luac 
 
 -- params : ...
 -- function num : 0
@@ -294,7 +294,7 @@ end
 
 HandleClickedChangeMark_Continue = function()
   -- function num : 0_8
-  guildMarkUpdate()
+  guildMarkUpdate(false)
 end
 
 HandleClickedOpenSiegeGate = function()
@@ -1378,6 +1378,7 @@ GuildManager.initialize = function(self)
   self.mainBtn_Recruitment = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_Recruitment")
   self.mainBtn_CraftInfo = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_CraftInfo")
   self.mainBtn_GuildBattle = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_GuildBattle")
+  self.mainBtn_GuildManufacture = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_GuildManufacture")
   self.closeButton = (UI.getChildControl)(Panel_Window_Guild, "Button_Close")
   self._buttonQuestion = (UI.getChildControl)(Panel_Window_Guild, "Button_Question")
   ;
@@ -1398,6 +1399,8 @@ GuildManager.initialize = function(self)
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 6 )")
   ;
   (self.mainBtn_GuildBattle):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 7 )")
+  ;
+  (self.mainBtn_GuildManufacture):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 8 )")
   ;
   (self.closeButton):addInputEvent("Mouse_LUp", "HandleClickedGuildHideButton()")
   ;
@@ -1425,6 +1428,8 @@ GuildManager.initialize = function(self)
   ;
   (self.mainBtn_GuildBattle):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 12, true )")
   ;
+  (self.mainBtn_GuildManufacture):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 13, true )")
+  ;
   (self.mainBtn_Main):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 99, false )")
   ;
   (self.mainBtn_History):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 5, false )")
@@ -1442,6 +1447,14 @@ GuildManager.initialize = function(self)
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 11, false )")
   ;
   (self.mainBtn_GuildBattle):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 12, false )")
+  ;
+  (self.mainBtn_GuildManufacture):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 13, false )")
+  if _ContentsGroup_GuildManufacture == true then
+    (self.mainBtn_GuildManufacture):SetShow(true)
+  else
+    ;
+    (self.mainBtn_GuildManufacture):SetShow(false)
+  end
   GuildInfoPage:initialize()
   GuildLetsWarPage:initialize()
   GuildWarInfoPage:initialize()
@@ -1540,10 +1553,16 @@ Panel_Guild_Tab_ToolTip_Func = function(tabNo, isOn, inPut_index)
                               name = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE")
                               desc = nil
                             else
-                              if tabNo == 99 then
-                                uiControl = GuildManager.mainBtn_Main
-                                name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE")
+                              if tabNo == 13 then
+                                uiControl = GuildManager.mainBtn_GuildManufacture
+                                name = "ê¸¸ë“œ ê°\128ê³\181"
                                 desc = nil
+                              else
+                                if tabNo == 99 then
+                                  uiControl = GuildManager.mainBtn_Main
+                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE")
+                                  desc = nil
+                                end
                               end
                             end
                           end
@@ -1665,10 +1684,13 @@ GuildManager.TabToggle = function(self, index)
   (self.mainBtn_CraftInfo):SetCheck(index == 6)
   ;
   (self.mainBtn_GuildBattle):SetCheck(index == 7)
+  ;
+  (self.mainBtn_GuildManufacture):SetCheck(index == 8)
   if ((getSelfPlayer()):get()):isGuildMaster() and ((getSelfPlayer()):get()):isGuildSubMaster() then
     FGlobal_ClearCandidate()
     _Web:ResetUrl()
   end
+  PaGlobal_Guild_Manufacture:SetShow(false)
   if index == 0 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDHISTORY"), 92, 1, 104, 15)
     FGlobal_GuildHistory_Show(true)
@@ -1826,11 +1848,25 @@ GuildManager.TabToggle = function(self, index)
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
     tabNumber = 7
+  elseif index == 8 then
+    self:ChangeTab("ê¸¸ë“œ ê°\128ê³\181", 122, 1, 134, 15)
+    FGlobal_GuildHistory_Show(false)
+    GuildMainInfo_Hide()
+    GuildListInfoPage:Hide()
+    GuildQuestInfoPage:Hide()
+    GuildWarfareInfoPage:Hide()
+    GuildSkillFrame_Hide()
+    Guild_Recruitment_Close()
+    btn_GuildMasterMandateBG:SetShow(false)
+    btn_GuildMasterMandate:SetShow(false)
+    FGlobal_GuildBattle_Close()
+    PaGlobal_Guild_Manufacture:SetShow(true)
+    tabNumber = 8
   end
   FGlobal_Guild_CraftInfo_Open(index == 6)
   FGlobal_GuildMenuButtonHide()
   _index = index
-  -- DECOMPILER ERROR: 35 unprocessed JMP targets
+  -- DECOMPILER ERROR: 37 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC406: Confused about usage of register: R47 in 'UnsetPending'
@@ -1843,6 +1879,7 @@ GuildManager.Hide = function(self)
   if Panel_Window_Guild:IsUISubApp() then
     return 
   end
+  PaGlobal_Guild_UseGuildFunds:ShowToggle(nil, false)
   Panel_Window_Guild:SetShow(false, true)
   FGlobal_ShowRewardList(false)
   HelpMessageQuestion_Out()

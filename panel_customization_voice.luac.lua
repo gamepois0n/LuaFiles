@@ -1,9 +1,8 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_voice.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_voice.luac 
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local Button_Close = (UI.getChildControl)(Panel_CustomizationVoice, "Button_Close")
 local static_Frame = (UI.getChildControl)(Panel_CustomizationVoice, "Static_Frame")
 local Frame_ContentImage = (UI.getChildControl)(Panel_CustomizationVoice, "Frame_Content_Image")
@@ -158,10 +157,7 @@ Initialize = function()
 end
 
 createVoiceList = function(inGameMode, classType)
-  -- function num : 0_4 , upvalues : UI_GroupType, clearContentList, selectedInGameMode, selectedClassType, VoiceCount, Button_Close, ColumnCount, columIndex, Frame_ContentImage, voiceCountText, Static_PayMark, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, NoCashType, NoCashVoice, columMaxIndex, ContentImage, ContentCount, Slider_Voice_Btn, Const_UsebleMotionbyServiceArea, InitMotionindex, MotionTable, social, Frame_Content, Frame_ContentMotionImage, textureColumnCount, MotionColumnWidth, MotionContentsOffsetX, MotionColumnHeight, MotionContentsOffsetY, ContentMotionImage, selectMotionItemIndex, combat, static_Frame_Motion
-  Set_CustomizationUIPanel(0, Panel_CustomizationVoice, 10)
-  ClearAll_CustomizationUIGroup(0)
-  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+  -- function num : 0_4 , upvalues : clearContentList, selectedInGameMode, selectedClassType, VoiceCount, columIndex, ColumnCount, Frame_ContentImage, voiceCountText, Static_PayMark, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, NoCashType, NoCashVoice, columMaxIndex, ContentImage, ContentCount, Const_UsebleMotionbyServiceArea, InitMotionindex, MotionTable, social, Frame_Content, Frame_ContentMotionImage, textureColumnCount, MotionColumnWidth, MotionContentsOffsetX, MotionColumnHeight, MotionContentsOffsetY, ContentMotionImage, selectMotionItemIndex, combat, static_Frame_Motion
   clearContentList()
   selectedInGameMode = inGameMode
   selectedClassType = classType
@@ -172,16 +168,6 @@ createVoiceList = function(inGameMode, classType)
     VoiceCount = 1
   else
     VoiceCount = getClassVoiceCount()
-  end
-  local maxcountx = 50
-  local maxcounty = 50
-  Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, Button_Close)
-  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 1)
-  local currentHeight = 1
-  local countx = ColumnCount
-  local county = (math.floor)(VoiceCount / ColumnCount)
-  if VoiceCount / ColumnCount ~= 0 then
-    county = county + 1
   end
   for itemIdx = 0, VoiceCount - 1 do
     columIndex = (math.ceil)((itemIdx + 1) / ColumnCount)
@@ -212,16 +198,13 @@ createVoiceList = function(inGameMode, classType)
     if columMaxIndex * ColumnCount <= itemIdx then
       tempContentImage:SetShow(false)
     end
-    -- DECOMPILER ERROR at PC210: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC165: Confused about usage of register: R12 in 'UnsetPending'
 
     ContentImage[itemIdx] = tempContentImage
-    -- DECOMPILER ERROR at PC212: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC167: Confused about usage of register: R12 in 'UnsetPending'
 
     ContentCount[itemIdx] = tempVoiceCount
-    Add_CustomizationUIControl(0, 0, itemIdx % countx, itemIdx / countx + currentHeight, maxcountx, maxcounty, ContentImage[itemIdx])
   end
-  currentHeight = currentHeight + (county)
-  Add_CustomizationUIControl(0, 0, 0, currentHeight, maxcountx, maxcounty, Slider_Voice_Btn)
   Voice_SetSize(columMaxIndex)
   check_ServiceArea()
   if Const_UsebleMotionbyServiceArea then
@@ -231,11 +214,6 @@ createVoiceList = function(inGameMode, classType)
     local textureName = getMotionTextureName(selectedClassType)
     local texSize = 48.25
     local createIndex = 0
-    countx = ColumnCount
-    county = (math.floor)(count / ColumnCount)
-    if count / ColumnCount ~= 0 then
-      county = county + 1
-    end
     for itemIdx = 0, count - 1 do
       if MotionTable[itemIdx] == social then
         local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_MotionImage_" .. createIndex)
@@ -256,11 +234,10 @@ createVoiceList = function(inGameMode, classType)
         tempContentImage:SetPosY((math.floor)(createIndex / ColumnCount) * MotionColumnHeight + MotionContentsOffsetY)
         tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
         tempContentImage:SetShow(true)
-        -- DECOMPILER ERROR at PC366: Confused about usage of register: R28 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC288: Confused about usage of register: R23 in 'UnsetPending'
 
         ContentMotionImage[itemIdx] = tempContentImage
         lastSocialControl = tempContentImage
-        Add_CustomizationUIControl(0, 0, createIndex % ColumnCount, currentHeight + createIndex / ColumnCount, maxcountx, maxcounty, ContentMotionImage[itemIdx])
         createIndex = createIndex + 1
         if InitMotionindex == false then
           selectMotionItemIndex = itemIdx
@@ -291,11 +268,10 @@ createVoiceList = function(inGameMode, classType)
         tempContentImage:SetPosY((math.floor)((createIndex) / ColumnCount) * MotionColumnHeight + MotionContentsOffsetY)
         tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
         tempContentImage:SetShow(true)
-        -- DECOMPILER ERROR at PC503: Confused about usage of register: R28 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC412: Confused about usage of register: R23 in 'UnsetPending'
 
         ContentMotionImage[itemIdx] = tempContentImage
         lastCombatControl = tempContentImage
-        Add_CustomizationUIControl(0, 0, (createIndex) % ColumnCount, currentHeight + (createIndex) / ColumnCount, maxcountx, maxcounty, ContentMotionImage[itemIdx])
         createIndex = createIndex + 1
       end
     end
@@ -394,9 +370,6 @@ closeVoiceUI = function()
     CustomizationMainUIShow(true)
     selectPoseControl(0)
   end
-  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 10)
-  ClearAll_CustomizationUIGroup(0)
-  CustomizationMain_SettingConsoleUI()
 end
 
 updatePitchSlider = function()

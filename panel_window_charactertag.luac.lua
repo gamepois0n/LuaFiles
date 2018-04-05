@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\charactertag\panel_window_charactertag.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\charactertag\panel_window_charactertag.luac 
 
 -- params : ...
 -- function num : 0
@@ -45,9 +45,18 @@ CharacterTag.Initialize = function(self)
   local descBg = (UI.getChildControl)(Panel_CharacterTag, "Static_DescBg")
   selfUI._StaticText_Desc = (UI.getChildControl)(descBg, "StaticText_Desc")
   ;
+  (selfUI._StaticText_Desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
   (selfUI._StaticText_Desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_DESC"))
   ;
   (selfUI._StaticText_Desc):SetShow(true)
+  local textSizeY = (selfUI._StaticText_Desc):GetTextSizeY()
+  local sumSizeY = textSizeY + 10 - descBg:GetSizeY()
+  descBg:SetSize(descBg:GetSizeX(), textSizeY + 10)
+  Panel_CharacterTag:SetSize(Panel_CharacterTag:GetSizeX(), Panel_CharacterTag:GetSizeY() + sumSizeY)
+  descBg:ComputePos()
+  ;
+  (selfUI._StaticText_Desc):ComputePos()
   local templateCharacterList = (UI.getChildControl)(Panel_CharacterTag, "Static_TemPleate_CharacterImageBorder")
   local templateImage = (UI.getChildControl)(templateCharacterList, "Static_Image")
   local templateLevel = (UI.getChildControl)(templateCharacterList, "StaticText_Level")
@@ -57,7 +66,7 @@ CharacterTag.Initialize = function(self)
   mainBg:addInputEvent("Mouse_DownScroll", "PaGlobal_CharacterTag_ScrollEvent(false)")
   self._maxCharacterCount = getCharacterDataCount()
   for index = 0, 11 do
-    -- DECOMPILER ERROR at PC154: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC187: Confused about usage of register: R15 in 'UnsetPending'
 
     (selfUI._Static_CharacterList)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CharacterTag, "Static_CharacterList_" .. index)
     CopyBaseProperty(templateCharacterList, (selfUI._Static_CharacterList)[index])

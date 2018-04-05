@@ -1,13 +1,13 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_recentcook_new.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_recentcook_new.luac 
 
 -- params : ...
 -- function num : 0
 local UseRecordFailReasons = {NoError = 0, InvalidRecord = 1, NoMaterial = 2, NoMaterialCount = 3}
 PaGlobal_RecentCook = {_isCook = false, _maxRecordCount = 10, 
-_ui = {}
+_ui = {_title = (UI.getChildControl)(Panel_RecentCook, "StaticText_Title")}
 }
--- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.initialize = function(self)
   -- function num : 0_0
@@ -66,7 +66,7 @@ _staticMaterialIcon = {}
   self:clearAlchemyRecord()
 end
 
--- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.showPanel = function(self, knowledgeIndex, isCook, posX, posY)
   -- function num : 0_1
@@ -76,17 +76,24 @@ PaGlobal_RecentCook.showPanel = function(self, knowledgeIndex, isCook, posX, pos
   Panel_RecentCook:SetShow(true)
   Panel_RecentCook:SetPosXY(posX, posY)
   Panel_RecentCook:ComputePos()
+  if isCook then
+    ((self._ui)._title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_RECENTCOOKTITLE"))
+  else
+    ;
+    ((self._ui)._title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_RECENTALCHEMYTITLE"))
+  end
 end
 
--- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.closePanel = function(self)
   -- function num : 0_2
   Panel_RecentCook:SetShow(false)
   Panel_Tooltip_Item_hideTooltip()
+  Panel_Alchemy:ComputePos()
 end
 
--- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC28: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.clearAlchemyRecord = function(self)
   -- function num : 0_3
@@ -108,7 +115,7 @@ PaGlobal_RecentCook.clearAlchemyRecord = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.updateAlchemyRecord = function(self)
   -- function num : 0_4
@@ -138,7 +145,7 @@ PaGlobal_RecentCook.updateAlchemyRecord = function(self)
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.selectAlchemyRecord = function(self, recordIndex)
   -- function num : 0_5 , upvalues : UseRecordFailReasons
@@ -166,7 +173,7 @@ PaGlobal_RecentCook.selectAlchemyRecord = function(self, recordIndex)
   end
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.handleMouseOn_MaterialIcon = function(self, recordIndex, materialIndex)
   -- function num : 0_6
@@ -182,7 +189,7 @@ PaGlobal_RecentCook.handleMouseOn_MaterialIcon = function(self, recordIndex, mat
   Panel_Tooltip_Item_Show(itemStaticWrapper, icon, true, false, nil)
 end
 
--- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecentCook.handleMouseOut_MaterialIcon = function(self)
   -- function num : 0_7

@@ -1,15 +1,12 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_charactercreation_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_charactercreation_main.luac 
 
 -- params : ...
 -- function num : 0
 local UI_classType = CppEnums.ClassType
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 Panel_CustomizationMain:setFlushAble(false)
 Panel_CustomizationStatic:setFlushAble(false)
 Panel_CustomizationMessage:setFlushAble(false)
-Panel_Customization_ConsoleKeyGuide:SetShow(false)
-Set_CustomizationUIPanel(0, Panel_CustomizationMain, 3)
 local Line_Template = (UI.getChildControl)(Panel_CustomizationMain, "Static_LineTemplate1")
 local Static_Large_Point = (UI.getChildControl)(Panel_CustomizationMain, "Static_Large_Point")
 local Static_Small_Point = (UI.getChildControl)(Panel_CustomizationMain, "Static_Small_Point")
@@ -18,11 +15,6 @@ local Button_Group = (UI.getChildControl)(Panel_CustomizationMain, "Button_Group
 local StaticText_Main = (UI.getChildControl)(Panel_CustomizationMain, "StaticText_Main")
 local RadioButton_HistoryTemp = (UI.getChildControl)(Panel_CustomizationMain, "RadioButton_HistoryTemp")
 local Button_SaveHistory = (UI.getChildControl)(Panel_CustomizationMain, "Button_SaveHistory")
-local groupItemWeather = {}
-local groupItemCustom = {}
-local groupItemPose = {}
-local groupItemZodiac = {}
-local groupItemHistory = {}
 local staticMainImage = {}
 staticMainImage[1] = (UI.getChildControl)(Panel_CustomizationMain, "Static_Weather")
 staticMainImage[2] = (UI.getChildControl)(Panel_CustomizationMain, "Static_Customization")
@@ -76,10 +68,6 @@ local CheckButton_ImagePreset_Title = (UI.getChildControl)(Panel_CustomizationSt
 local Button_ScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShot")
 local Button_ScreenShotFolder_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShotFolder")
 local Button_ProfileScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ProfileScreenShot")
-local consoleModeTitle = (UI.getChildControl)(Panel_Customization_ConsoleKeyGuide, "StaticText_ConsoleModeTitle")
-local consoleModeGroup = (UI.getChildControl)(Panel_Customization_ConsoleKeyGuide, "Static_ConsoleModeBg")
-local cursorModeTitle = (UI.getChildControl)(Panel_Customization_ConsoleKeyGuide, "StaticText_CursorModeTitle")
-local cursorModeGroup = (UI.getChildControl)(Panel_Customization_ConsoleKeyGuide, "Static_CursorModeBg")
 local isShowScreenShot = true
 Button_ScreenShot:SetShow(isShowScreenShot)
 Button_ScreenShotFolder:SetShow(isShowScreenShot)
@@ -307,7 +295,7 @@ end
 end
 
         local createWeatherGroup = function(groupInfo)
-  -- function num : 0_5 , upvalues : Line_Template, Button_Group, staticWeatherImage, groupItemWeather
+  -- function num : 0_5 , upvalues : Line_Template, Button_Group, staticWeatherImage
   local count = getWeatherCount()
   ;
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 9, math.pi + math.pi / 8)
@@ -323,15 +311,11 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
-    Add_CustomizationUIControl(0, 0, count + 1 - ii, 0, count + 1, 1, groupItem.control)
-    -- DECOMPILER ERROR at PC76: Confused about usage of register: R9 in 'UnsetPending'
-
-    groupItemWeather[ii] = groupItem.control
   end
 end
 
         local createCustomizationGroup = function(groupInfo)
-  -- function num : 0_6 , upvalues : Line_Template, Button_Group, staticCustom, mainButtonNum, groupItemCustom
+  -- function num : 0_6 , upvalues : Line_Template, Button_Group, staticCustom
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 5, -math.pi / 2)
   for ii = 1, 4 do
     local groupItem = nil
@@ -350,19 +334,11 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
-    if mainButtonNum == 5 then
-      Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItem.control)
-    else
-      Add_CustomizationUIControl(0, 1, ii, 0, 5, 1, groupItem.control)
-    end
-    -- DECOMPILER ERROR at PC94: Confused about usage of register: R8 in 'UnsetPending'
-
-    groupItemCustom[ii] = groupItem.control
   end
 end
 
         local createPoseGroup = function(groupInfo)
-  -- function num : 0_7 , upvalues : Line_Template, Button_Group, staticPoseImage, mainButtonNum, groupItemPose
+  -- function num : 0_7 , upvalues : Line_Template, Button_Group, staticPoseImage
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 5, -math.pi / 5)
   for ii = 1, 2 do
     local groupItem = (groupInfo.treeItem):addItem(Button_Group, "TREE_BUTTON_" .. ii, staticPoseImage[ii])
@@ -380,14 +356,6 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
-    if mainButtonNum == 5 then
-      Add_CustomizationUIControl(0, 3, ii, 0, 5, 1, groupItem.control)
-    else
-      Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItem.control)
-    end
-    -- DECOMPILER ERROR at PC95: Confused about usage of register: R8 in 'UnsetPending'
-
-    groupItemPose[ii] = groupItem.control
   end
 end
 
@@ -434,7 +402,7 @@ end
 end
 
         local createZodiacGroup = function(groupInfo)
-  -- function num : 0_10 , upvalues : Static_ZodiacIcon, Line_Template, Button_Group, groupItemZodiac
+  -- function num : 0_10 , upvalues : Static_ZodiacIcon, Line_Template, Button_Group
   local tempStatic_ZodiacIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "StaticText_Zodiac_Copied")
   CopyBaseProperty(Static_ZodiacIcon, tempStatic_ZodiacIcon)
   Line_Template:SetSize(Line_Template:GetSizeX(), 53)
@@ -461,27 +429,21 @@ end
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton_Zodiac(\"" .. parentName .. "\",\"" .. name .. "\",\"" .. ii - 1 .. "\"" .. ")")
     ;
     (groupItem.control):addInputEvent("Mouse_Out", "outSubButton_Zodiac(\"" .. ii - 1 .. "\"" .. ")")
-    Add_CustomizationUIControl(0, 1, ii, 0, count + 1, 1, groupItem.control)
-    -- DECOMPILER ERROR at PC122: Confused about usage of register: R12 in 'UnsetPending'
-
-    groupItemZodiac[ii] = groupItem.control
   end
 end
 
         local createUI = function()
-  -- function num : 0_11 , upvalues : mainButtonNum, mainButtonInfo, Button_MainButton, Static_Large_Point, Line_Template, Static_Small_Point, staticMainImage, StaticText_Main, mainText, UI_GroupType, createCustomizationGroup, createWeatherGroup, createPoseGroup, createZodiacGroup
-  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 5)
-  ClearAll_CustomizationUIGroup(0)
+  -- function num : 0_11 , upvalues : mainButtonNum, mainButtonInfo, Button_MainButton, Static_Large_Point, Line_Template, Static_Small_Point, staticMainImage, StaticText_Main, mainText, createCustomizationGroup, createWeatherGroup, createPoseGroup, createZodiacGroup
   for idx = 1, mainButtonNum do
-    -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC73: Confused about usage of register: R4 in 'UnsetPending'
 
     if idx ~= 3 then
       mainButtonInfo[idx] = {line = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_LINE_" .. idx), point = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_POINT_" .. idx), smallPoint = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_SMALL_POINT_" .. idx), tree = (TreeMenu.new_Button)("TreeMenu_Button" .. idx, Panel_CustomizationMain), static = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_IMAGE_" .. idx), staticText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_CustomizationMain, "STATICTEXT_MAIN_" .. idx), isOpen = true, button = nil}
-      -- DECOMPILER ERROR at PC89: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).treeItem = ((mainButtonInfo[idx]).tree):getRootItem()
-      -- DECOMPILER ERROR at PC96: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC88: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).button = ((mainButtonInfo[idx]).treeItem).control
@@ -506,41 +468,23 @@ end
       ;
       ((mainButtonInfo[idx]).staticText):SetShow(true)
       if idx == 2 then
-        if mainButtonNum == 5 then
-          Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-          Add_CustomizationUIControl(0, 2, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
-        else
-          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-          Add_CustomizationUIControl(0, 1, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
-        end
         createCustomizationGroup(mainButtonInfo[idx])
       else
         if idx == 1 then
-          Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-          Add_CustomizationUIControl(0, 0, 0, 0, getWeatherCount() + 1, 1, (mainButtonInfo[idx]).button)
           createWeatherGroup(mainButtonInfo[idx])
         else
           if idx == 4 then
-            if mainButtonNum == 5 then
-              Add_CustomizationUIGroup(0, 3, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-              Add_CustomizationUIControl(0, 3, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
-            else
-              Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-              Add_CustomizationUIControl(0, 2, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
-            end
             createPoseGroup(mainButtonInfo[idx])
           else
           end
         end
       end
       if idx ~= 3 or idx == 5 then
-        Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-        Add_CustomizationUIControl(0, 1, 0, 0, getZodiacCount() + 1, 1, (mainButtonInfo[idx]).button)
         createZodiacGroup(mainButtonInfo[idx])
       end
       ;
       ((mainButtonInfo[idx]).tree):collapseAll()
-      -- DECOMPILER ERROR at PC338: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC210: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).isOpen = false
@@ -705,7 +649,6 @@ end
     isShow_CashCustom = Panel_Cash_Customization:GetShow()
     Panel_Cash_Customization:SetShow(false)
   end
-  Panel_Customization_ConsoleKeyGuide:SetShow(false)
 end
 
         local _takeScreenShot = function()
@@ -1046,8 +989,6 @@ end
 
         SelectCustomizationGroup = function(idx)
   -- function num : 0_33
-  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-  ClearAll_CustomizationUIGroup(0)
   selectCustomizationControlGroup(idx)
   CustomizationMainUIShow(false)
   closeExplorer()
@@ -1079,13 +1020,6 @@ end
   if initialized == false then
     createUI()
     initialized = true
-    if FGlobal_CashCustomization_ConsoleAdd ~= nil then
-      FGlobal_CashCustomization_ConsoleAdd()
-    end
-  else
-    Set_CustomizationUIPanel(0, Panel_CustomizationMain, 4)
-    ClearAll_CustomizationUIGroup(0)
-    CustomizationMain_SettingConsoleUI()
   end
   updateComputePos()
   CreateHistoryButton()
@@ -1166,9 +1100,6 @@ end
         else
           if InGameMode == true and Panel_Cash_Customization:IsShow() == false then
             CashCustomization_Open()
-            if ToClient_isUIDATA2() == true then
-              Panel_Customization_KeyGuideShow(true)
-            end
           end
           Panel_CustomizationMain:SetShow(true)
           Panel_CustomizationMain:SetAlpha(0)
@@ -1235,33 +1166,8 @@ end
   StaticText_CustomizationMessage:SetShow(true)
 end
 
-        Panel_Customization_KeyGuideShow = function(isFirstOpen)
-  -- function num : 0_45 , upvalues : consoleModeTitle, consoleModeGroup, cursorModeTitle, cursorModeGroup
-  Panel_CustomizationMessage:SetShow(false)
-  if Panel_Customization_ConsoleKeyGuide:GetShow() == true then
-    Panel_Customization_ConsoleKeyGuide:SetShow(false)
-    return 
-  end
-  Panel_Customization_ConsoleKeyGuide:SetShow(true)
-  Panel_Customization_ConsoleKeyGuide:SetPosX(getScreenSizeX() - Panel_Customization_ConsoleKeyGuide:GetSizeX() - 10)
-  Panel_Customization_ConsoleKeyGuide:SetPosY(550)
-  local isConsoleMode = ToClient_isConsoleUIMode()
-  if isFirstOpen then
-    isConsoleMode = true
-  end
-  consoleModeTitle:SetShow(isConsoleMode)
-  consoleModeGroup:SetShow(isConsoleMode)
-  cursorModeTitle:SetShow(not isConsoleMode)
-  cursorModeGroup:SetShow(not isConsoleMode)
-  if isConsoleMode then
-    Panel_Customization_ConsoleKeyGuide:SetSize(Panel_Customization_ConsoleKeyGuide:GetSizeX(), 380)
-  else
-    Panel_Customization_ConsoleKeyGuide:SetSize(Panel_Customization_ConsoleKeyGuide:GetSizeX(), 345)
-  end
-end
-
         showStaticUI = function(show)
-  -- function num : 0_46 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, Button_ScreenShot, isShowScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
+  -- function num : 0_45 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, Button_ScreenShot, isShowScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
   if show == true then
     Panel_CustomizationStatic:SetShow(true, false)
     CheckButton_CameraLook:SetShow(true)
@@ -1318,15 +1224,15 @@ end
 
         local currentCameraIndex = -1
         SetPresetCamNext = function()
-  -- function num : 0_47
+  -- function num : 0_46
 end
 
         SetPresetCam = function(index)
-  -- function num : 0_48
+  -- function num : 0_47
 end
 
         SetPresetCamText = function(index)
-  -- function num : 0_49 , upvalues : CheckButton_ImagePreset
+  -- function num : 0_48 , upvalues : CheckButton_ImagePreset
   if index == -1 then
     CheckButton_ImagePreset:SetText("user")
   else
@@ -1353,7 +1259,7 @@ end
 end
 
         CustomizationMessage = function(message)
-  -- function num : 0_50 , upvalues : StaticText_CustomizationMessage
+  -- function num : 0_49 , upvalues : StaticText_CustomizationMessage
   if message ~= nil then
     StaticText_CustomizationMessage:SetText(message)
     StaticText_CustomizationMessage:SetSize(StaticText_CustomizationMessage:GetTextSizeX() + 10 + (StaticText_CustomizationMessage:GetSpanSize()).x, 30)
@@ -1366,13 +1272,7 @@ end
 end
 
         CreateHistoryButton = function()
-  -- function num : 0_51 , upvalues : UI_GroupType, Button_SaveHistory, groupItemHistory, historyButtons, RadioButton_HistoryTemp
-  Clear_CustomizationUIGroup(0, 3)
-  Add_CustomizationUIGroup(0, 3, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-  Add_CustomizationUIControl(0, 3, 0, 0, 11, 1, Button_SaveHistory)
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
-
-  groupItemHistory[#groupItemHistory + 1] = Button_SaveHistory
+  -- function num : 0_50 , upvalues : historyButtons, Button_SaveHistory, RadioButton_HistoryTemp
   for _,v in pairs(historyButtons) do
     v:SetShow(false)
     ;
@@ -1399,14 +1299,10 @@ end
     end
     do
       do
-        -- DECOMPILER ERROR at PC119: Confused about usage of register: R8 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC93: Confused about usage of register: R8 in 'UnsetPending'
 
         historyButtons[index + 1] = tempButton
-        Add_CustomizationUIControl(0, 3, index + 1, 0, 11, 1, historyButtons[index + 1])
-        -- DECOMPILER ERROR at PC138: Confused about usage of register: R8 in 'UnsetPending'
-
-        groupItemHistory[#groupItemHistory + 1] = historyButtons[index + 1]
-        -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -1415,7 +1311,7 @@ end
 
         local historyIndex = 0
         HandleClicked_ApplyHistory = function(index)
-  -- function num : 0_52 , upvalues : historyIndex
+  -- function num : 0_51 , upvalues : historyIndex
   historyIndex = index
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MESSAGEBOX_APPLY")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = ApplyHistory, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1424,18 +1320,18 @@ end
 end
 
         ApplyHistory = function()
-  -- function num : 0_53 , upvalues : historyIndex
+  -- function num : 0_52 , upvalues : historyIndex
   applyHistory(historyIndex)
 end
 
         CustomizationAddHistory = function()
-  -- function num : 0_54
+  -- function num : 0_53
   addHistory()
   CreateHistoryButton()
 end
 
         HandleClicked_CustomizationAddHistory = function()
-  -- function num : 0_55
+  -- function num : 0_54
   if getHistoryCount() > 9 then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MESSAGEBOX_ADD_PRESET")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = CustomizationAddHistory, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1449,7 +1345,7 @@ end
 end
 
         CloseCharacterCustomization = function()
-  -- function num : 0_56 , upvalues : closeCustomizationMode, CheckButton_ToggleUi, isFristAddHistory
+  -- function num : 0_55 , upvalues : closeCustomizationMode, CheckButton_ToggleUi, isFristAddHistory
   closeCustomizationMode = true
   CheckButton_ToggleUi:SetCheck(false)
   if Panel_CustomizationCloth:GetShow() then
@@ -1464,13 +1360,12 @@ end
     end
   end
   Panel_CustomizationMain:SetShow(false)
-  Panel_Customization_ConsoleKeyGuide:SetShow(false)
   historyTableClose()
   isFristAddHistory = false
 end
 
         ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
-  -- function num : 0_57 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
+  -- function num : 0_56 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
   closeCustomizationMode = false
   InGameMode = isInGame
   _classIndex = classIndex
@@ -1569,7 +1464,7 @@ end
 end
 
         HandleClicked_NationalOption = function(isType)
-  -- function num : 0_58
+  -- function num : 0_57
   local linkURL = ""
   if isType == 0 then
     if isGameTypeTH() then
@@ -1590,23 +1485,23 @@ end
 end
 
         HandleClicked_JapanEventExecute = function()
-  -- function num : 0_59
+  -- function num : 0_58
   applyPreSetCustomizationParams()
 end
 
         EventApplyDefaultParams = function()
-  -- function num : 0_60
+  -- function num : 0_59
   applyDefaultCustomizationParams()
 end
 
         EventSelectClass = function()
-  -- function num : 0_61
+  -- function num : 0_60
   restoreUIScale()
   changeCreateCharacterMode_SelectClass(FGlobal_getIsSpecialCharacter())
 end
 
         EventSelectBack = function()
-  -- function num : 0_62
+  -- function num : 0_61
   showStaticUI(false)
   Panel_CustomizationMain:SetShow(false)
   restoreUIScale()
@@ -1615,7 +1510,7 @@ end
 end
 
         HandleClicked_CustomizationMain_applyDefaultCustomizationParams = function()
-  -- function num : 0_63
+  -- function num : 0_62
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_APPLYDEFAULTPARAMS")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventApplyDefaultParams, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1623,7 +1518,7 @@ end
 end
 
         HandleClicked_CustomizationMain_SelectClass = function()
-  -- function num : 0_64
+  -- function num : 0_63
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_CANCEL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventSelectClass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1633,7 +1528,7 @@ end
 end
 
         HandleClicked_CustomizationMain_Back = function()
-  -- function num : 0_65
+  -- function num : 0_64
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_CANCEL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventSelectBack, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1643,12 +1538,12 @@ end
 end
 
         HandleClicked_saveCustomizationData = function()
-  -- function num : 0_66
+  -- function num : 0_65
   OpenExplorerSaveCustomizing()
 end
 
         HandleClicked_RuleShow = function()
-  -- function num : 0_67
+  -- function num : 0_66
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN")
   if isGameTypeTR() then
     messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR")
@@ -1667,7 +1562,7 @@ end
 end
 
         HandleClicked_RandomBeautyMSG = function()
-  -- function num : 0_68
+  -- function num : 0_67
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MAIN_RANDOMBEAUTY_MSG")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = HandleClicked_RandomBeauty, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1675,7 +1570,7 @@ end
 end
 
         HandleClicked_RandomBeauty = function()
-  -- function num : 0_69 , upvalues : _web_RandomBeauty
+  -- function num : 0_68 , upvalues : _web_RandomBeauty
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   _web_RandomBeauty:SetIgnore(true)
@@ -1702,22 +1597,22 @@ end
 end
 
         HandleClicked_loadCustomizationData = function()
-  -- function num : 0_70
+  -- function num : 0_69
   OpenExplorerLoadCustomizing()
 end
 
         CustomizationAuthorName = function(authorName)
-  -- function num : 0_71 , upvalues : StaticText_AuthorName
+  -- function num : 0_70 , upvalues : StaticText_AuthorName
   StaticText_AuthorName:SetText(authorName)
 end
 
         isShowCustomizationMain = function()
-  -- function num : 0_72
+  -- function num : 0_71
   return Panel_CustomizationMain:GetShow()
 end
 
         CustomizationMain_PanelResize_ByFontSize = function()
-  -- function num : 0_73 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_72 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   StaticText_CustomizationInfo:SetSize((math.max)(210, StaticText_CustomizationInfo:GetTextSizeX() + 10), StaticText_CustomizationInfo:GetSizeY())
   Button_SaveHistory:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
   Button_SaveCustomization:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -1738,7 +1633,7 @@ end
 end
 
         CustomizationMain_ButtonTooltip = function(_type)
-  -- function num : 0_74 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_73 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   if _type == nil then
     TooltipSimple_Hide()
     return 
@@ -1768,24 +1663,23 @@ end
 
         CustomizationMain_PanelResize_ByFontSize()
         FromClient_CustomizationHistoryApplyUpdate = function()
-  -- function num : 0_75
+  -- function num : 0_74
   HairShapeHistoryApplyUpdate()
   MeshHistoryApplyUpdate()
   BodyBoneHistoryApplyUpdate()
   CommonDecorationHistoryApplyUpdate()
   FaceBoneHistoryApplyUpdate()
   SkinHistoryApplyUpdate()
+  faceHairCustomUpdate(false)
 end
 
         FromClient_customzationGamePadInput = function(currentScene, moveScene)
-  -- function num : 0_76
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    _PA_LOG("광운", "currentScene : " .. tostring(currentScene))
-    _PA_LOG("광운", "currentScene : " .. tostring(moveScene))
-  end
-  -- DECOMPILER ERROR at PC36: Unhandled construct in 'MakeBoolean' P1
+  -- function num : 0_75
+  -- DECOMPILER ERROR at PC20: Unhandled construct in 'MakeBoolean' P1
 
-  if currentScene == 1 and (moveScene ~= true or moveScene == false) then
+  -- DECOMPILER ERROR at PC20: Unhandled construct in 'MakeBoolean' P1
+
+  if (CppEnums.CountryType).DEV == getGameServiceType() and currentScene == 1 and (moveScene ~= true or moveScene == false) then
     if currentScene == 2 then
       if moveScene == true then
         changeCreateCharacterMode()
@@ -1802,113 +1696,7 @@ end
   end
 end
 
-        CustomizationMain_SettingConsoleUI = function()
-  -- function num : 0_77 , upvalues : mainButtonNum, UI_GroupType, mainButtonInfo, groupItemCustom, groupItemWeather, groupItemPose, groupItemZodiac, groupItemHistory
-  for idx = 1, mainButtonNum do
-    if idx == 2 then
-      if mainButtonNum == 5 then
-        Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-        Add_CustomizationUIControl(0, 2, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
-        for ii = 1, 4 do
-          Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItemCustom[ii])
-        end
-      else
-        do
-          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-          Add_CustomizationUIControl(0, 1, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
-          for ii = 1, 4 do
-            Add_CustomizationUIControl(0, 1, ii, 0, 5, 1, groupItemCustom[ii])
-          end
-          do
-            if idx == 1 then
-              Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-              Add_CustomizationUIControl(0, 0, 0, 0, getWeatherCount() + 1, 1, (mainButtonInfo[idx]).button)
-              local count = getWeatherCount()
-              for ii = 1, count do
-                Add_CustomizationUIControl(0, 0, ii, 0, count + 1, 1, groupItemWeather[ii])
-              end
-            else
-              do
-                if idx == 4 then
-                  if mainButtonNum == 5 then
-                    Add_CustomizationUIGroup(0, 3, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-                    Add_CustomizationUIControl(0, 3, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
-                    for ii = 1, 2 do
-                      Add_CustomizationUIControl(0, 3, ii, 0, 3, 1, groupItemPose[ii])
-                    end
-                  else
-                    do
-                      Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-                      Add_CustomizationUIControl(0, 2, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
-                      for ii = 1, 2 do
-                        Add_CustomizationUIControl(0, 2, ii, 0, 3, 1, groupItemPose[ii])
-                      end
-                      do
-                        if idx == 5 then
-                          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-                          Add_CustomizationUIControl(0, 1, 0, 0, getZodiacCount() + 1, 1, (mainButtonInfo[idx]).button)
-                          for ii = 1, getZodiacCount() do
-                            Add_CustomizationUIControl(0, 1, ii, 0, getZodiacCount() + 1, 1, groupItemZodiac[ii])
-                          end
-                        end
-                        do
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
-
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  local groupNum = 3
-  if mainButtonNum == 5 then
-    groupNum = 4
-  end
-  Add_CustomizationUIGroup(0, groupNum, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
-  for index = 1, #groupItemHistory do
-    Add_CustomizationUIControl(0, groupNum, index - 1, 0, #groupItemHistory, 1, groupItemHistory[index])
-  end
-  if FGlobal_CashCustomization_ConsoleAdd ~= nil then
-    FGlobal_CashCustomization_ConsoleAdd()
-  end
-end
-
         registerEvent("FromClient_customzationGamePadInput", "FromClient_customzationGamePadInput")
-        registerEvent("FromClient_onPanelFocusingEvent", "Panel_Customization_KeyGuideShow")
       end
     end
   end

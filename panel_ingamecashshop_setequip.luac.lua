@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ingamecashshop\panel_ingamecashshop_setequip.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ingamecashshop\panel_ingamecashshop_setequip.luac 
 
 -- params : ...
 -- function num : 0
@@ -9,6 +9,7 @@ local UI_color = Defines.Color
 local UI_classType = CppEnums.ClassType
 local UI_PreviewType = CppEnums.InGameCashShopPreviewType
 local CT = CppEnums.ClassType
+local UI_CCC = CppEnums.CashProductCategory
 Panel_IngameCashShop_SetEquip:SetShow(false)
 local awakenWeaponContentsOpen = ToClient_IsContentsGroupOpen("901")
 local isCouponOpen = ToClient_IsContentsGroupOpen("224")
@@ -839,34 +840,23 @@ CashShopController.Close = function(self)
 end
 
 local tabIndexList = (Array.new)()
-FGlobal_CashShop_SetEquip_BGToggle = function(tabType)
-  -- function num : 0_24 , upvalues : CashShopController, tabIndexList
+FGlobal_CashShop_SetEquip_BGToggle = function(tabindex)
+  -- function num : 0_24 , upvalues : CashShopController, tabIndexList, UI_CCC
   local self = CashShopController
   ;
   (self.cameraControlBG):SetSpanSize(17, 60)
-  for dd = 1, getCashMainCategorySize() do
-    local mainTabInfo = ToClient_GetMainCategoryStaticStatusWrapperByKeyRaw(dd)
-    -- DECOMPILER ERROR at PC29: Confused about usage of register: R7 in 'UnsetPending'
-
-    if mainTabInfo ~= nil then
-      tabIndexList[dd] = {mainTabInfo:getDisplayOrder(), mainTabInfo:getNoRaw(), mainTabInfo:getTabImageNo(), mainTabInfo:getIconPath(), mainTabInfo:getCategoryType()}
-    end
-  end
+  tabIndexList = FGlobal_CashShop_tabInfo_Return()
   local realno = nil
-  for dd = 1, getCashMainCategorySize() do
-    if (tabIndexList[dd])[1] == tabType then
-      realno = (tabIndexList[dd])[5]
-    end
-  end
+  realno = (tabIndexList[tabindex])[5]
   self.savedTabType = realno
-  if realno == 7 then
+  if UI_CCC.eCashProductCategory_Pet == realno then
     (self.cameraControlBG):SetSpanSize(17, 60)
     ;
     (self.petLookBG):SetShow(false)
     ;
     (self.static_SetOptionBG):SetShow(false)
   else
-    if realno == 4 then
+    if UI_CCC.eCashProductCategory_Costumes == realno then
       (self.static_SetOptionBG):SetShow(true)
       ;
       (self.petLookBG):SetShow(false)

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarket_itemset.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarket_itemset.luac 
 
 -- params : ...
 -- function num : 0
@@ -58,7 +58,7 @@ local currentMyTerritoryKey = function()
   return regionInfoWrapper:getTerritoryKeyRaw()
 end
 
-local territoryKey = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
+local territoryKey = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))}
 ItemMarketItemSet.Initialize = function(self)
   -- function num : 0_3 , upvalues : UI_TM
   (self.panelBG):setGlassBackground(true)
@@ -347,7 +347,7 @@ ItemmarketItemSet_ListUpdate = function(contents, key)
         local _territoryKey = (myItemInfo:getTerritoryKey())
         local registTerritoryName = nil
         registTerritoryName = ""
-        for i = 0, 6 do
+        for i = 0, 7 do
           if i == _territoryKey then
             registTerritoryName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_TEXT_REGISTTERRITORY", "territoryKey", territoryKey[i])
           end
@@ -665,6 +665,8 @@ ItemMarketSetItem_GetAllItem = function()
       end
     end
   end
+  requestItemMarketMyItems(false, false)
+  ItemMarketItemSet:Update()
 end
 
 HandleClicked_ItemMarketItemSet_ItemSettlement = function(itemEnchantKeyRaw, index)
@@ -700,7 +702,9 @@ HandleClicked_ItemMarketItemSet_ItemSettlement = function(itemEnchantKeyRaw, ind
     if (ItemMarketItemSet.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
       toWhereType = (CppEnums.ItemWhereType).eWarehouse
     end
-    requestCancelRegistedItemAndWithdrawMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
+    requestWithdrawSellingItemMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
+    requestItemMarketMyItems(false, false)
+    ItemMarketItemSet:Update()
   end
 
   if isPremiumUser == false and not (iess:get()):isCash() then
@@ -832,12 +836,8 @@ FGlobal_ItemMarketItemSet_Open = function()
   (self.btn_Warehouse):SetCheck(true)
   ;
   (self.btn_RegistItem):SetShow(true)
-  if ToClient_IsDevelopment() == true then
-    (self.btn_GetAll):SetShow(true)
-  else
-    ;
-    (self.btn_GetAll):SetShow(false)
-  end
+  ;
+  (self.btn_GetAll):SetShow(true)
   self:SetPosition()
   self:Open()
 end
@@ -912,6 +912,10 @@ end
 
 ItemMarketItemSet_UpdateMoneyByWarehouse = function()
   -- function num : 0_27 , upvalues : ItemMarketItemSet
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_ItemMarket_ItemSet:GetShow() == false then
+    return 
+  end
+  ;
   (ItemMarketItemSet.invenMoney):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
   ;
   (ItemMarketItemSet.warehouseMoney):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))

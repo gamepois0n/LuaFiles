@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\minigame\minigame_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\minigame\minigame_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -80,6 +80,7 @@ ActionMiniGame_Main = function(gameIndex)
     end
   end
   lastUIMode = GetUIMode()
+  FGlobal_CloseWorldmapForLuaKeyHandling()
   SetUIMode((Defines.UIMode).eUIMode_MiniGame)
   currentMiniGame = gameIndex
 end

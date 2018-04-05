@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\characterinfo\ui_lua_selfcharacterinfo.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\characterinfo\ui_lua_selfcharacterinfo.luac 
 
 -- params : ...
 -- function num : 0
@@ -946,6 +946,9 @@ end
 
 SelfCharacterInfo_UpdateWeight = function()
   -- function num : 0_16 , upvalues : CharacterInfo
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_CharInfo_Status:GetShow() == false then
+    return 
+  end
   local player = getSelfPlayer()
   if player == nil then
     return 

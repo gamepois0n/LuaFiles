@@ -1,14 +1,12 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_guildbattle_point.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_guildbattle_point.luac 
 
 -- params : ...
 -- function num : 0
-local BattleStates = {Idle = 0, Join = 1, SelectEntry = 2, SelectAttend = 3, Ready = 4, Fight = 5, End = 6, Teleport = 7}
-local BattleModes = {Normal = 0, OneOne = 1, All = 2}
 PaGlobal_GuildBattlePoint = {_guildAName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Left"), _guildBName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Right"), _oneonePointBg = (UI.getChildControl)(Panel_GuidlBattle_Point, "Static_OneOneScore"), _txt_TeamBlack = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_MyTeamBlack"), _txt_TeamRed = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_MyTeamRed"), _txt_RingoutCheck = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_RingoutTimeCheck"), _guildAPoint = nil, _guildBPoint = nil, 
 _round = {}
 , _perFrmaeTimer = 0, _nextStateTime = 0, _maxTime = 0, _timerPause = false}
--- DECOMPILER ERROR at PC61: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.initilize = function(self)
   -- function num : 0_0
@@ -48,7 +46,7 @@ PaGlobal_GuildBattlePoint.initilize = function(self)
   self:setAttendName(1)
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.ShowSurvivorCount = function(self, isShow)
   -- function num : 0_1
@@ -57,14 +55,14 @@ PaGlobal_GuildBattlePoint.ShowSurvivorCount = function(self, isShow)
   (self._guildBSurvivorCount):SetShow(isShow)
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.ShowOneOnePoint = function(self, isShow)
   -- function num : 0_2
   (self._oneonePointBg):SetShow(isShow)
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.UpdateRemainTime = function(self)
   -- function num : 0_3
@@ -86,10 +84,10 @@ PaGlobal_GuildBattlePoint.UpdateRemainTime = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC75: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
-  -- function num : 0_4 , upvalues : BattleStates, BattleModes
+  -- function num : 0_4
   local battleState = ToClient_GuildBattle_GetCurrentState()
   local battleMode = ToClient_GuildBattle_GetCurrentMode()
   local round = ToClient_GuildBattle_GetBattleCurrentRound()
@@ -102,40 +100,40 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
   (self._txt_TeamRed):SetShow(false)
   ;
   ((self._round)._staticText_BattleStateDetail):SetShow(false)
-  if battleState == BattleStates.Idle then
+  if battleState == __eGuildBattleState_Idle then
     ((self._round)._bg):SetText("")
   else
-    if battleState == BattleStates.Join then
+    if battleState == __eGuildBattleState_Join then
       ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLESTATE_JOIN"))
     else
-      if battleState == BattleStates.Ready then
+      if battleState == __eGuildBattleState_Ready then
         ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
         ;
         ((self._round)._staticText_BattleStateDetail):SetShow(true)
         ;
         ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_READYSTATE_SHORT"))
       else
-        if battleState == BattleStates.SelectEntry then
+        if battleState == __eGuildBattleState_SelectEntry then
           ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
           ;
           ((self._round)._staticText_BattleStateDetail):SetShow(true)
           ;
           ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SELECTENTRY_SHORT"))
         else
-          if battleState == BattleStates.SelectAttend then
+          if battleState == __eGuildBattleState_SelectAttend then
             ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
             ;
             ((self._round)._staticText_BattleStateDetail):SetShow(true)
             ;
             ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SELECTATTEND_SHORT"))
           else
-            if battleState == BattleStates.Fight then
+            if battleState == __eGuildBattleState_Fight then
               ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
             else
-              if battleState == BattleStates.End then
+              if battleState == __eGuildBattleState_End then
                 ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
               else
-                if battleState == BattleStates.Teleport then
+                if battleState == __eGuildBattleState_Teleport then
                   ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLESTATE_TELEPORT"))
                 else
                   ;
@@ -150,15 +148,15 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
   end
   ;
   ((self._round)._staticText_BattleMode):SetShow(false)
-  if battleState == BattleStates.Fight or battleState == BattleStates.SelectEntry or battleState == BattleStates.SelectAttend or battleState == BattleStates.Ready then
+  if battleState == __eGuildBattleState_Fight or battleState == __eGuildBattleState_SelectEntry or battleState == __eGuildBattleState_SelectAttend or battleState == __eGuildBattleState_Ready then
     ((self._round)._staticText_BattleMode):SetShow(true)
-    if battleMode == BattleModes.Normal then
+    if battleMode == __eGuildBattleMode_Normal then
       ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_NORMAL"))
     else
-      if battleMode == BattleModes.OneOne then
+      if battleMode == __eGuildBattleMode_OneOne then
         ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ONEONE"))
       else
-        if battleMode == BattleModes.All then
+        if battleMode == __eGuildBattleMode_All then
           ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ALL"))
         else
           ;
@@ -199,9 +197,9 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
       (self._guildAPoint):SetText(guildA:winPoint())
       ;
       (self._guildBPoint):SetText(guildB:winPoint())
-      -- DECOMPILER ERROR at PC353: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC336: Unhandled construct in 'MakeBoolean' P1
 
-      if battleMode == BattleModes.Normal and battleState == BattleStates.Fight then
+      if battleMode == __eGuildBattleMode_Normal and battleState == __eGuildBattleState_Fight then
         (self._guildASurvivorCount):SetShow(true)
         ;
         (self._guildBSurvivorCount):SetShow(true)
@@ -214,16 +212,16 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
       end
     end
     do
-      -- DECOMPILER ERROR at PC410: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC388: Unhandled construct in 'MakeBoolean' P1
 
-      if battleMode == BattleModes.OneOne and (battleState == BattleStates.Fight or battleState == BattleStates.Ready or battleState == BattleStates.Teleport or battleState == BattleStates.SelectAttend) then
+      if battleMode == __eGuildBattleMode_OneOne and (battleState == __eGuildBattleState_Fight or battleState == __eGuildBattleState_Ready or battleState == __eGuildBattleState_Teleport or battleState == __eGuildBattleState_SelectAttend) then
         (self._oneonePointBg):SetShow(true)
         ;
         (self._guildAOneOnePoint):SetText(guildA:getModeWinScore())
         ;
         (self._guildBOneOnePoint):SetText(guildB:getModeWinScore())
       end
-      if battleMode == BattleModes.All and battleState == BattleStates.Fight then
+      if battleMode == __eGuildBattleMode_All and battleState == __eGuildBattleState_Fight then
         (self._guildASurvivorCount):SetShow(true)
         ;
         (self._guildBSurvivorCount):SetShow(true)
@@ -249,7 +247,7 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC78: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.Show = function(self, isShow)
   -- function num : 0_5
@@ -259,14 +257,14 @@ PaGlobal_GuildBattlePoint.Show = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC81: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.IsShow = function(self)
   -- function num : 0_6
   return Panel_GuidlBattle_Point:GetShow()
 end
 
--- DECOMPILER ERROR at PC84: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.clearAttendName = function(self)
   -- function num : 0_7
@@ -279,7 +277,7 @@ PaGlobal_GuildBattlePoint.clearAttendName = function(self)
   (self._guildB_AttendName):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.setAttendName = function(self, teamNo)
   -- function num : 0_8

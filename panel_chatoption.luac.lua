@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\chatting\panel_chatoption.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\chatting\panel_chatoption.luac 
 
 -- params : ...
 -- function num : 0
@@ -562,7 +562,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ;
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFFF973A)
         ;
-        ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
+        ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SERVERGROUP"))
         ;
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;

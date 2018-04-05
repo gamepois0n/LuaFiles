@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\tutorial\tutorial_phase1_basicmove.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\tutorial\tutorial_phase1_basicmove.luac 
 
 -- params : ...
 -- function num : 0
@@ -328,7 +328,7 @@ PaGlobal_TutorialPhase_BasicMove.updateBasicMove = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC201: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC210: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_Warrior] = {"TUTORIAL_MOVE_WARRIOR_TALK1", "TUTORIAL_MOVE_WARRIOR_TALK2", "TUTORIAL_MOVE_WARRIOR_TALK3"}
@@ -362,5 +362,7 @@ PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_CombattantWomen] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 , 
 [(CppEnums.ClassType).ClassType_Lahn] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
+, 
+[(CppEnums.ClassType).ClassType_Orange] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 }
 

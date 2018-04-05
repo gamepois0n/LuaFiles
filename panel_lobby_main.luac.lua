@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\lobby\panel_lobby_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\lobby\panel_lobby_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -13,7 +13,7 @@ local UCT_BUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON
 local UCT_RADIOBUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON
 local UCT_STATICTEXT = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT
 local UCT_STATIC = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC
-local isAwakenOpen = {[UI_Class.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [UI_Class.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [UI_Class.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [UI_Class.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [UI_Class.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [UI_Class.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [UI_Class.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [UI_Class.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [UI_Class.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [UI_Class.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [UI_Class.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [UI_Class.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [UI_Class.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [UI_Class.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914"), [UI_Class.ClassType_CombattantWomen] = ToClient_IsContentsGroupOpen("918"), [UI_Class.ClassType_Lahn] = ToClient_IsContentsGroupOpen("916"), [UI_Class.ClassType_Temp1] = false, [UI_Class.ClassType_Temp2] = false, [UI_Class.ClassType_ShyWomen] = false, [UI_Class.ClassType_Shy] = false, [UI_Class.ClassType_Temp] = false}
+local isAwakenOpen = {[UI_Class.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [UI_Class.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [UI_Class.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [UI_Class.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [UI_Class.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [UI_Class.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [UI_Class.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [UI_Class.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [UI_Class.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [UI_Class.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [UI_Class.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [UI_Class.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [UI_Class.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [UI_Class.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914"), [UI_Class.ClassType_CombattantWomen] = ToClient_IsContentsGroupOpen("918"), [UI_Class.ClassType_Lahn] = ToClient_IsContentsGroupOpen("916"), [UI_Class.ClassType_Orange] = ToClient_IsContentsGroupOpen("943"), [UI_Class.ClassType_Temp1] = false, [UI_Class.ClassType_Temp2] = false, [UI_Class.ClassType_ShyWomen] = false, [UI_Class.ClassType_Shy] = false, [UI_Class.ClassType_Temp] = false}
 Panel_CharacterSelect:SetShow(false, false)
 local CCSC_Frame = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Frame_CharacterSelect")
 local _frameContents = (UI.getChildControl)(CCSC_Frame, "Frame_1_Content")
@@ -28,258 +28,270 @@ ClassNames = {}
 ClassStatus = {}
 }
 local txt_BottomDesc = (UI.getChildControl)(_frameBottomDesc, "StaticText_Desc")
--- DECOMPILER ERROR at PC164: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Warrior] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Warrior")
--- DECOMPILER ERROR at PC172: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Ranger] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Ranger")
--- DECOMPILER ERROR at PC180: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC185: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Sorcerer] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Sorcer")
--- DECOMPILER ERROR at PC188: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC193: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Giant] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Giant")
--- DECOMPILER ERROR at PC196: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC201: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Tamer] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Tamer")
--- DECOMPILER ERROR at PC204: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC209: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_BladeMaster] = (UI.getChildControl)(_frameContents, "RadioButton_Select_BladeMaster")
--- DECOMPILER ERROR at PC212: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC217: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_BladeMasterWomen] = (UI.getChildControl)(_frameContents, "RadioButton_Select_BladeMasterWomen")
--- DECOMPILER ERROR at PC220: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC225: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Valkyrie] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Valkyrie")
--- DECOMPILER ERROR at PC228: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC233: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Wizard] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Wizard")
--- DECOMPILER ERROR at PC236: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC241: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_WizardWomen] = (UI.getChildControl)(_frameContents, "RadioButton_Select_WizardWomen")
--- DECOMPILER ERROR at PC244: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC249: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_NinjaWomen] = (UI.getChildControl)(_frameContents, "RadioButton_Select_NinjaWomen")
--- DECOMPILER ERROR at PC252: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC257: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_NinjaMan] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Kunoichi")
--- DECOMPILER ERROR at PC260: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC265: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_ShyWomen] = (UI.getChildControl)(_frameContents, "RadioButton_Select_ShyWomen")
--- DECOMPILER ERROR at PC268: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC273: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Shy] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Shy")
--- DECOMPILER ERROR at PC276: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC281: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Temp] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Temp")
--- DECOMPILER ERROR at PC284: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC289: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_DarkElf] = (UI.getChildControl)(_frameContents, "RadioButton_Select_DarkElf")
--- DECOMPILER ERROR at PC292: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC297: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Temp1] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Temp1")
--- DECOMPILER ERROR at PC300: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC305: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Temp2] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Temp2")
--- DECOMPILER ERROR at PC308: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC313: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Lahn] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Angle")
--- DECOMPILER ERROR at PC316: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC321: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Combattant] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Combattant")
--- DECOMPILER ERROR at PC324: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC329: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_CombattantWomen] = (UI.getChildControl)(_frameContents, "RadioButton_Select_CombattantWomen")
--- DECOMPILER ERROR at PC332: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC337: Confused about usage of register: R18 in 'UnsetPending'
+
+;
+(Panel_Lobby_ClassUI.ClassButtons)[UI_Class.ClassType_Orange] = (UI.getChildControl)(_frameContents, "RadioButton_Select_Orange")
+-- DECOMPILER ERROR at PC345: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Warrior] = (UI.getChildControl)(_frameContents, "StaticText_WarriorName")
--- DECOMPILER ERROR at PC340: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC353: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Ranger] = (UI.getChildControl)(_frameContents, "StaticText_RangerName")
--- DECOMPILER ERROR at PC348: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC361: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Sorcerer] = (UI.getChildControl)(_frameContents, "StaticText_SorcerName")
--- DECOMPILER ERROR at PC356: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC369: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Giant] = (UI.getChildControl)(_frameContents, "StaticText_GiantName")
--- DECOMPILER ERROR at PC364: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC377: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Tamer] = (UI.getChildControl)(_frameContents, "StaticText_TamerName")
--- DECOMPILER ERROR at PC372: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC385: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_BladeMaster] = (UI.getChildControl)(_frameContents, "StaticText_BladeMasterName")
--- DECOMPILER ERROR at PC380: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC393: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_BladeMasterWomen] = (UI.getChildControl)(_frameContents, "StaticText_BladeMasterWomenName")
--- DECOMPILER ERROR at PC388: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC401: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Valkyrie] = (UI.getChildControl)(_frameContents, "StaticText_ValkyrieName")
--- DECOMPILER ERROR at PC396: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC409: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Wizard] = (UI.getChildControl)(_frameContents, "StaticText_WizardName")
--- DECOMPILER ERROR at PC404: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC417: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_WizardWomen] = (UI.getChildControl)(_frameContents, "StaticText_WizardWomenName")
--- DECOMPILER ERROR at PC412: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC425: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_NinjaWomen] = (UI.getChildControl)(_frameContents, "StaticText_NinjaWomenName")
--- DECOMPILER ERROR at PC420: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC433: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_NinjaMan] = (UI.getChildControl)(_frameContents, "StaticText_KunoichiName")
--- DECOMPILER ERROR at PC428: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC441: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_ShyWomen] = (UI.getChildControl)(_frameContents, "StaticText_ShyWomenName")
--- DECOMPILER ERROR at PC436: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC449: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Shy] = (UI.getChildControl)(_frameContents, "StaticText_ShyName")
--- DECOMPILER ERROR at PC444: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC457: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp] = (UI.getChildControl)(_frameContents, "StaticText_TempName")
--- DECOMPILER ERROR at PC452: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC465: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_DarkElf] = (UI.getChildControl)(_frameContents, "StaticText_DarkElfName")
--- DECOMPILER ERROR at PC460: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC473: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp1] = (UI.getChildControl)(_frameContents, "StaticText_Temp1Name")
--- DECOMPILER ERROR at PC468: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC481: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp2] = (UI.getChildControl)(_frameContents, "StaticText_Temp2Name")
--- DECOMPILER ERROR at PC476: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC489: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Lahn] = (UI.getChildControl)(_frameContents, "StaticText_AngleName")
--- DECOMPILER ERROR at PC484: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC497: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Combattant] = (UI.getChildControl)(_frameContents, "StaticText_CombattantName")
--- DECOMPILER ERROR at PC492: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC505: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_CombattantWomen] = (UI.getChildControl)(_frameContents, "StaticText_CombattantWomenName")
--- DECOMPILER ERROR at PC500: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC513: Confused about usage of register: R18 in 'UnsetPending'
+
+;
+(Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Orange] = (UI.getChildControl)(_frameContents, "StaticText_OrangeName")
+-- DECOMPILER ERROR at PC521: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Warrior] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Warrior")
--- DECOMPILER ERROR at PC508: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC529: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Ranger] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Ranger")
--- DECOMPILER ERROR at PC516: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC537: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Sorcerer] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Sorcerer")
--- DECOMPILER ERROR at PC524: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC545: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Giant] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Giant")
--- DECOMPILER ERROR at PC532: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC553: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Tamer] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_BeastMaster")
--- DECOMPILER ERROR at PC540: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC561: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_BladeMaster] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_BladerMaster")
--- DECOMPILER ERROR at PC548: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC569: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_BladeMasterWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_BladerMasterWomen")
--- DECOMPILER ERROR at PC556: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC577: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Valkyrie] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Valkyrie")
--- DECOMPILER ERROR at PC564: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC585: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Wizard] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Wizard")
--- DECOMPILER ERROR at PC572: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC593: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_WizardWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Wizard")
--- DECOMPILER ERROR at PC580: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC601: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_NinjaWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_NinjaWomen")
--- DECOMPILER ERROR at PC588: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC609: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_NinjaMan] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_NinjaWomen")
--- DECOMPILER ERROR at PC596: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC617: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_ShyWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_NinjaWomen")
--- DECOMPILER ERROR at PC604: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC625: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Shy] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_NinjaWomen")
--- DECOMPILER ERROR at PC612: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC633: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp")
--- DECOMPILER ERROR at PC620: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC641: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_DarkElf] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_DarkElf")
--- DECOMPILER ERROR at PC628: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC649: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Combattant] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Striker")
--- DECOMPILER ERROR at PC636: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC657: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp1] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp1")
--- DECOMPILER ERROR at PC644: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC665: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp2] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp2")
--- DECOMPILER ERROR at PC652: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC673: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Lahn] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Angle")
--- DECOMPILER ERROR at PC660: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC681: Confused about usage of register: R18 in 'UnsetPending'
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_CombattantWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp5")
+-- DECOMPILER ERROR at PC689: Confused about usage of register: R18 in 'UnsetPending'
+
+;
+(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Orange] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Orange")
 local Panel_Lobby_UI = {CC_CharacterCreateText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CharacterCreate"), CC_CharacterNameEdit = (UI.getChildControl)(Panel_CharacterCreate, "Edit_CharacterName"), CC_CreateButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_CharacterCreateStart"), CC_BackButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_Back"), CC_DumiText1 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_1"), CC_characterCreateBG = (UI.getChildControl)(Panel_CharacterCreate, "Static_BG"), CC_DumiText3 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_3"), CC_DumiText4 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_4"), CC_FrameHead = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Head"), CC_FrameHead_Content = nil, CC_FrameHead_Content_Image = nil, CC_FrameHead_Scroll = nil, CC_FrameHair = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Hair"), CC_FrameHair_Content = nil, CC_FrameHair_Content_Image = nil, CC_FrameHair_Scroll = nil, CC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_SelectClass"), CC_CBTText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CBT"), CCSC_CreateTitle = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Title"), CCSC_ClassName = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_ClassName"), CCSC_PartLine = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_PartLine"), CCSC_ClassDescBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Desc_BG"), CCSC_ClassDesc = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Description"), CCSC_CreateButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_CharacterCreateStart"), CCSC_CreateBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_BG"), CCSC_RadioNormalMovie = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "RadioButton_Normal"), CCSC_RadioAwakenMovie = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "RadioButton_Awaken"), CCSC_ClassMovie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_CharacterCreateSelectClass, "Static_ClassMovie"), CCSC_BackButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_Back"), CCSC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_SelectClass"), CCSC_NoMovie = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_NoMovie"), CM_StaticText_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "StaticText_CharacterName"), CM_Edit_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "Edit_CharacterName")}
 local Character_Status = {_stat_Ctrl = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Ctrl"), _stat_Att = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Att"), _stat_Def = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Def"), _stat_Evd = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Evd"), _stat_Cmb = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Cmb")}
 local Panel_Lobby_Global_Variable = {
@@ -440,6 +452,8 @@ local Panel_Lobby_Function_Initialize = function()
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Lahn]):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Orange]):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Warrior]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_WARRIOR"))
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Ranger]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_RANGER"))
@@ -481,15 +495,17 @@ local Panel_Lobby_Function_Initialize = function()
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_CombattantWomen]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Lahn]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN"))
+  ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Orange]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COUNT"))
   for index = 0, UI_Class.ClassType_Count - 1 do
     if (Panel_Lobby_ClassUI.ClassButtons)[index] ~= nil then
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC730 .. ", true)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC751 .. ", true)")
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC730 .. ", true)")
-      -- DECOMPILER ERROR at PC748: Overwrote pending register: R8 in 'AssignReg'
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC751 .. ", true)")
+      -- DECOMPILER ERROR at PC769: Overwrote pending register: R8 in 'AssignReg'
 
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC730 .. ", false)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC751 .. ", false)")
     end
   end
   local count = getPossibleClassCount()
@@ -497,49 +513,49 @@ local Panel_Lobby_Function_Initialize = function()
     local classType = getPossibleClassTypeFromIndex(index)
     local classButton = (Panel_Lobby_ClassUI.ClassButtons)[classType]
     local className = (Panel_Lobby_ClassUI.ClassNames)[classType]
-    -- DECOMPILER ERROR at PC770: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC791: Overwrote pending register: R8 in 'AssignReg'
 
     if classButton ~= nil then
-      R8_PC730 = R8_PC730(classButton)
-      if R8_PC730 then
-        R8_PC730(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
-        -- DECOMPILER ERROR at PC787: Overwrote pending register: R8 in 'AssignReg'
+      R8_PC751 = R8_PC751(classButton)
+      if R8_PC751 then
+        R8_PC751(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
+        -- DECOMPILER ERROR at PC808: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC730(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
-        -- DECOMPILER ERROR at PC798: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC751(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
+        -- DECOMPILER ERROR at PC819: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC730(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
-        -- DECOMPILER ERROR at PC811: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC751(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
+        -- DECOMPILER ERROR at PC832: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC730(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
-        -- DECOMPILER ERROR at PC822: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC751(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
+        -- DECOMPILER ERROR at PC843: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC824: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC845: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC827: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC848: Overwrote pending register: R8 in 'AssignReg'
 
-        if R8_PC730 == 0 then
-          columnCount = R8_PC730
-          -- DECOMPILER ERROR at PC829: Overwrote pending register: R8 in 'AssignReg'
+        if R8_PC751 == 0 then
+          columnCount = R8_PC751
+          -- DECOMPILER ERROR at PC850: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC830: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC851: Overwrote pending register: R8 in 'AssignReg'
 
-          rowCount = R8_PC730
+          rowCount = R8_PC751
         else
-          -- DECOMPILER ERROR at PC833: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC854: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC834: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC855: Overwrote pending register: R8 in 'AssignReg'
 
-          columnCount = R8_PC730
+          columnCount = R8_PC751
         end
-        -- DECOMPILER ERROR at PC836: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC857: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC837: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC858: Overwrote pending register: R8 in 'AssignReg'
 
-        sortCharacterCount = R8_PC730
-        -- DECOMPILER ERROR at PC839: Overwrote pending register: R8 in 'AssignReg'
+        sortCharacterCount = R8_PC751
+        -- DECOMPILER ERROR at PC860: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC730(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
+        R8_PC751(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
       end
     end
   end
@@ -578,18 +594,18 @@ local Panel_Lobby_Function_Initialize = function()
     (Panel_Lobby_UI.CCSC_NoMovie):SetSpanSize(-1, 0)
     ;
     (Panel_Lobby_UI.CCSC_RadioNormalMovie):addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
-    -- DECOMPILER ERROR at PC947: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC968: Overwrote pending register: R8 in 'AssignReg'
 
     ;
-    (Panel_Lobby_UI.CCSC_RadioNormalMovie):addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. R8_PC730 .. ")")
+    (Panel_Lobby_UI.CCSC_RadioNormalMovie):addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. R8_PC751 .. ")")
     ;
     (Panel_Lobby_UI.CCSC_RadioNormalMovie):addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
     ;
     (Panel_Lobby_UI.CCSC_RadioAwakenMovie):addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
-    -- DECOMPILER ERROR at PC968: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC989: Overwrote pending register: R8 in 'AssignReg'
 
     ;
-    (Panel_Lobby_UI.CCSC_RadioAwakenMovie):addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. R8_PC730 .. ")")
+    (Panel_Lobby_UI.CCSC_RadioAwakenMovie):addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. R8_PC751 .. ")")
     ;
     (Panel_Lobby_UI.CCSC_RadioAwakenMovie):addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
     -- DECOMPILER ERROR: 24 unprocessed JMP targets

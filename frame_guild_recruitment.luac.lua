@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\frame_guild_recruitment.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\frame_guild_recruitment.luac 
 
 -- params : ...
 -- function num : 0
@@ -52,6 +52,8 @@ local classPicture = {
 [UI_classType.ClassType_CombattantWomen] = {385, 291, 480, 435}
 , 
 [UI_classType.ClassType_Lahn] = {97, 1, 192, 145}
+, 
+[UI_classType.ClassType_Orange] = {97, 1, 192, 145}
 }
 Guild_Recruitment_Initialize = function()
   -- function num : 0_0 , upvalues : GuildRecruitment, UI_TM, defaultFrameBG_Recruitment
@@ -156,7 +158,7 @@ GuildRecruitment.Update = function(self)
       local slot = (self.slotPool)[realIndex]
       ;
       (slot.bg):SetShow(true)
-      if (CppEnums.ClassType).ClassType_Lahn == playerClass then
+      if (CppEnums.ClassType).ClassType_Lahn == playerClass or (CppEnums.ClassType).ClassType_Orange == playerClass then
         (slot.charPic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_01.dds")
       else
         ;

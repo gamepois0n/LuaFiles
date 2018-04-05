@@ -1,19 +1,21 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\fairyinfo\panel_window_fairysetting_renew.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\fairyinfo\panel_window_fairysetting_renew.luac 
 
 -- params : ...
 -- function num : 0
 Panel_Window_FairySetting:SetShow(false)
 local ClassType_Valkiry = 24
 local UI_TM = CppEnums.TextMode
-local spiritClass = {12, 19, 20, 21, 23, 26, 30, 11; [0] = 0}
-local fairyMainPotionData = {513, 514, 517, 518, 519, 524, 525, 528, 529, 530, 538, 551, 552, 553, 554, 555, 17568, 17569, 19932, 19933, 19934, 19935; [0] = 502}
+local spiritClass = {12, 19, 20, 21, 23, 26, 30, 11, 25; [0] = 0}
+local fairyMainPotionData = {
+[0] = {502, 513, 514, 517, 518, 519, 524, 525, 528, 529, 530, 538, 551, 552, 553, 554, 555, 17568, 17569, 19932, 19933, 19934, 19935, 566, 567, 568, 578, 17679, 17684, 580, 583, 18853, 56090, 56093, 17681, 17682, 17683}
+}
 local fairySubPotionData = {
-[1] = {520, 521, 522, 526, 527, 515, 516, 531, 532, 533, 810, 17570, 17571, 17680, 17685, 17686, 17687, 17688, 18854, 19936, 19937, 19938; [0] = 503}
+[1] = {520, 521, 522, 526, 527, 515, 516, 531, 532, 533, 17570, 17571, 17680, 17685, 17686, 17687, 17688, 18854, 19936, 19937, 19938, 569, 570, 571, 582, 561, 562, 563, 564, 565, 18857, 579, 56092, 56091, 56094, 581, 584; [0] = 503}
 , 
-[2] = {592, 593, 594, 810, 827, 828, 829, 830, 16334, 17707, 17708, 17709, 17710; [0] = 591}
+[2] = {592, 593, 594, 827, 828, 829, 830, 17707, 17708, 17709, 17710, 569, 570, 571, 582, 18857, 579, 56092; [0] = 591}
 , 
-[3] = {596, 597, 598, 810, 831, 832, 833, 834, 17711, 17712, 17713, 17714; [0] = 595}
+[3] = {596, 597, 598, 831, 832, 833, 834, 17711, 17712, 17713, 17714, 569, 570, 571, 582, 18857, 579, 56092; [0] = 595}
 }
 local subPotionStr = {[1] = PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_MPREGEN"), [2] = PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_FPREGEN"), [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_SETTING_GPREGEN")}
 local _Static_MainBG = (UI.getChildControl)(Panel_Window_FairySetting, "Static_SettingMainBG")
@@ -203,8 +205,8 @@ end
 
 FairySetting_ReNew.SetPos = function(self)
   -- function num : 0_6
-  Panel_Window_FairySetting:SetPosX(Panel_FairyInfo:GetPosX() + Panel_FairyInfo:GetSizeX())
-  Panel_Window_FairySetting:SetPosY(Panel_FairyInfo:GetPosY())
+  Panel_Window_FairySetting:SetPosX(Panel_FairyInfo:GetPosX() + Panel_FairyInfo:GetSizeX() / 2 - Panel_Window_FairySetting:GetSizeX() / 2)
+  Panel_Window_FairySetting:SetPosY(Panel_FairyInfo:GetPosY() + 20)
 end
 
 PaGlobal_FairySetting_Request = function()
@@ -289,7 +291,7 @@ PaGlobal_Fairy_FileterForSetting = function(slotNo, notUse_itemWrappers, whereTy
       return false
     end
   end
-  for index,value in pairs(fairyMainPotionData) do
+  for index,value in pairs(fairyMainPotionData[0]) do
     if value == itemKey then
       return false
     end
@@ -335,7 +337,7 @@ end
 PaGlobal_FairyList_IsHp = function(hpKeyStr)
   -- function num : 0_13 , upvalues : fairyMainPotionData
   local key = tonumber(hpKeyStr)
-  for idx,value in pairs(fairyMainPotionData) do
+  for idx,value in pairs(fairyMainPotionData[0]) do
     if key == value then
       return true
     end

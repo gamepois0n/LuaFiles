@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap\unknowitemselect\ui_new_unknowitemselect.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap\unknowitemselect\ui_new_unknowitemselect.luac 
 
 -- params : ...
 -- function num : 0
@@ -270,7 +270,12 @@ end
 FromClient_UpdateRandomShopKeepTime = function(u16_year, u16_month, u16_day, u16_hour, u16_minute)
   -- function num : 0_15 , upvalues : _reserveTime
   local tempStr = {[0] = tostring(u16_minute) .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_TIME_MINUTE"), [1] = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_HOUR", "hour", tostring(u16_hour)), [2] = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_DAY", "day", tostring(u16_day)), [3] = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_MONTH", "month", tostring(u16_month)), [4] = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_YEAR", "year", tostring(u16_year))}
-  local resultString = tempStr[4] .. "" .. tempStr[3] .. "" .. tempStr[2] .. "" .. tempStr[1] .. "" .. tempStr[0]
+  local resultString = ""
+  if isGameServiceTypeTurkey() == true then
+    resultString = tempStr[2] .. "" .. tempStr[3] .. "" .. tempStr[4] .. "" .. tempStr[1] .. "" .. tempStr[0]
+  else
+    resultString = tempStr[4] .. "" .. tempStr[3] .. "" .. tempStr[2] .. "" .. tempStr[1] .. "" .. tempStr[0]
+  end
   _reserveTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENDTIME_RANDOMSHOPITEM") .. resultString)
 end
 

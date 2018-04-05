@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\globalmanual\panel_global_manual.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\globalmanual\panel_global_manual.luac 
 
 -- params : ...
 -- function num : 0
@@ -1139,8 +1139,38 @@ local MiniGame_Diving_2 = function()
   (ui._purposeText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DIVING_DESC_2"))
 end
 
-local MiniGame_SummerEventCannon_1 = function()
+local Tutorial_Ilezra_0 = function()
   -- function num : 0_46 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText2):SetShow(true)
+  ;
+  (ui._purposeText2):SetSize(800, 70)
+  ;
+  (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TUTORIAL_ILEZRA_0"))
+end
+
+local Tutorial_Ilezra_1 = function()
+  -- function num : 0_47 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText2):SetShow(true)
+  ;
+  (ui._purposeText2):SetSize(800, 70)
+  ;
+  (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TUTORIAL_ILEZRA_1"))
+end
+
+local MiniGame_SummerEventCannon_1 = function()
+  -- function num : 0_48 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1155,7 +1185,7 @@ local MiniGame_SummerEventCannon_1 = function()
 end
 
 local KeyGuide_Squat = function()
-  -- function num : 0_47
+  -- function num : 0_49
   if getSelfPlayer() == nil then
     return 
   end
@@ -1177,7 +1207,7 @@ local KeyGuide_Squat = function()
 end
 
 local KeyGuide_Down = function()
-  -- function num : 0_48
+  -- function num : 0_50
   if getSelfPlayer() == nil then
     return 
   end
@@ -1199,7 +1229,7 @@ local KeyGuide_Down = function()
 end
 
 local KeyGuide_InWater = function()
-  -- function num : 0_49
+  -- function num : 0_51
   if getSelfPlayer() == nil then
     return 
   end
@@ -1217,7 +1247,7 @@ local KeyGuide_InWater = function()
 end
 
 local KeyGuide_InWaterUnset = function()
-  -- function num : 0_50
+  -- function num : 0_52
   if getSelfPlayer() == nil then
     return 
   end
@@ -1235,8 +1265,11 @@ local KeyGuide_InWaterUnset = function()
 end
 
 local KeyGuide_Walk = function()
-  -- function num : 0_51
+  -- function num : 0_53
   if getSelfPlayer() == nil then
+    return 
+  end
+  if keyCustom_IsPressed_Action((CppEnums.ActionInputType).ActionInputType_WalkMode) then
     return 
   end
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
@@ -1253,7 +1286,7 @@ local KeyGuide_Walk = function()
 end
 
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_52 , upvalues : uiPress, ui_Value, isCartRace
+  -- function num : 0_54 , upvalues : uiPress, ui_Value, isCartRace
   if isSelf == false then
     return 
   end
@@ -1351,7 +1384,7 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_53 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_55 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
@@ -1398,6 +1431,8 @@ ActionChartEventBindFunction(411, KeyGuide_Down)
 ActionChartEventBindFunction(412, KeyGuide_InWater)
 ActionChartEventBindFunction(413, KeyGuide_Walk)
 ActionChartEventBindFunction(414, KeyGuide_InWaterUnset)
+ActionChartEventBindFunction(501, Tutorial_Ilezra_0)
+ActionChartEventBindFunction(502, Tutorial_Ilezra_1)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

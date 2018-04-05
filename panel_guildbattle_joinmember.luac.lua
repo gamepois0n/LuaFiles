@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_guildbattle_joinmember.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_guildbattle_joinmember.luac 
 
 -- params : ...
 -- function num : 0
@@ -26,6 +26,11 @@ end
 PaGlobal_GuildBattle_JoinMember.Update = function(self)
   -- function num : 0_1
   if ToClient_isPersonalBattle() == false then
+    Panel_GuildBattle_JoinMember:SetShow(false)
+    return 
+  end
+  if __eGuildBattleGameMode_Count == ToClient_GuildBattle_GetCurrentMode() then
+    Panel_GuildBattle_JoinMember:SetShow(false)
     return 
   end
   if ToClient_GuildBattle_GetCurrentState() ~= 0 then
@@ -36,6 +41,7 @@ PaGlobal_GuildBattle_JoinMember.Update = function(self)
   end
   local curChannelData = getCurrentChannelServerData()
   if curChannelData == nil then
+    Panel_GuildBattle_JoinMember:SetShow(false)
     return 
   end
   local inMyChannelName = getChannelName(curChannelData._worldNo, curChannelData._serverNo)

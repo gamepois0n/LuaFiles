@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\panel_serverselect.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\panel_serverselect.luac 
 
 -- params : ...
 -- function num : 0
@@ -311,7 +311,7 @@ PKChannelInfo_Init = function()
           PKChannelInfo_Show()
           warInfo_Show()
         else
-          if isGameTypeSA() or isGameTypeTR() then
+          if isGameTypeSA() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
             SpeedChannelInfo_Hide()
             ChannelSelectInfo_Show()
             warInfo_Show()
@@ -374,7 +374,7 @@ local bgManager = {
 , 
 [bgIndex.kamasilvia2] = {isOpen = ToClient_IsContentsGroupOpen("260"), imageCount = 3, iconPath = "bgKamasilvia2_Server_"}
 , 
-[bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 0, iconPath = "bgDragan_"}
+[bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 1, iconPath = "bgDraganServer_"}
 , 
 [bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 1, iconPath = "bgXmas_"}
 , 
@@ -1415,7 +1415,7 @@ warInfo_onScreenResize = function()
   local scrX = getScreenSizeX()
   ;
   (self._uiWarInfo):SetPosX(scrX - (FRAME_SERVERLIST:GetSizeX() + (self._uiWarInfo):GetSizeX() + 55))
-  if isGameTypeSA() or isGameTypeTR() then
+  if isGameTypeSA() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     (self._uiWarInfo):SetPosY((channelSelectInfo._mainBG):GetPosY() + (channelSelectInfo._mainBG):GetSizeY() + 10)
   else
     if isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() then

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\option\gameoptionheader.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\option\gameoptionheader.luac 
 
 -- params : ...
 -- function num : 0
@@ -120,7 +120,11 @@ GuideLinePartyMemberEffect = {_defaultValue = false, _controlType = CONTROL.PA_U
 , 
 PetRender = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
+FairyRender = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
 RenderHitEffect = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+, 
+DamageMeter = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
 ShowComboGuide = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
@@ -132,7 +136,7 @@ WorldMapOpenType = {_defaultValue = 3, _controlType = CONTROL.PA_UI_CONTROL_RADI
 , 
 WorldmapCameraPitchType = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-TextureQuality = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _isPictureTooltipOn = true}
+TextureQuality = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _isPictureTooltipOn = true}
 , 
 GraphicOption = {_defaultValue = 2, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
@@ -224,6 +228,8 @@ GamePadSensitivityX = {_defaultValue = 0.473684, _controlType = CONTROL.PA_UI_CO
 , 
 GamePadSensitivityY = {_defaultValue = 0.315789, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
+ConsolePadKeyType = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
 ScreenShotQuality = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 ScreenShotFormat = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
@@ -278,6 +284,8 @@ EnableTraySoundOnOff = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONT
 , 
 BattleSoundType = {_defaultValue = 2, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _settingRightNow = true}
 , 
+EnableAudioFairy = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
 VolumeMaster = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
 VolumeMusic = {_defaultValue = 0.62, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
@@ -293,6 +301,8 @@ VolumeHitFxVolume = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLI
 VolumeHitFxWeight = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
 VolumeOtherPlayer = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
+, 
+VolumeFairy = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
 AlertNormalTrade = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
@@ -418,7 +428,7 @@ ActionComplicated2 = {actionInputType = 41, _controlType = CONTROL.PA_UI_CONTROL
 , 
 ActionComplicated3 = {actionInputType = 42, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-ActionWalkMode = {actionInputType = 43, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ActionAutoMoveWalkMode = {actionInputType = 43, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 ActionCameraUp = {actionInputType = 44, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
@@ -431,6 +441,8 @@ ActionCameraRight = {actionInputType = 47, _controlType = CONTROL.PA_UI_CONTROL_
 ActionCameraRotateGameMode = {actionInputType = 48, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 ActionPushToTalk = {actionInputType = 49, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
+ActionWalkMode = {actionInputType = 50, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 UiCursorOnOff = {uiInputType = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
@@ -513,8 +525,17 @@ _findStrings = {}
 , _keyCustomPadMode = nil, _keyCustomInputType = nil, _resetCheck = nil, _availableResolutionList = nil, _screenResolutionCount = nil, 
 _fpsTextControl = {}
 }
+-- DECOMPILER ERROR at PC1874: Confused about usage of register: R1 in 'UnsetPending'
+
+if true == ToClient_isXBox() then
+  ((PaGlobal_Option._elements).TextureQuality)._defaultValue = 0
+  -- DECOMPILER ERROR at PC1879: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  ((PaGlobal_Option._elements).ConsolePadKeyType)._defaultValue = 2
+end
 isChecked_SkillCommand = true
--- DECOMPILER ERROR at PC1819: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1885: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Option.Get = function(self, optionName)
   -- function num : 0_0
@@ -532,7 +553,7 @@ PaGlobal_Option.Get = function(self, optionName)
   return value
 end
 
--- DECOMPILER ERROR at PC1823: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1889: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AimAssist = function(value)
@@ -540,7 +561,7 @@ end
   setAimAssist(value)
 end
 
--- DECOMPILER ERROR at PC1827: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1893: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseNewQuickSlot = function(value)
@@ -548,7 +569,7 @@ end
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot, value, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
--- DECOMPILER ERROR at PC1831: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1897: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableSimpleUI = function(value)
@@ -565,7 +586,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1835: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1901: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsOnScreenSaver = function(value)
@@ -573,7 +594,7 @@ end
   setIsOnScreenSaver(value)
 end
 
--- DECOMPILER ERROR at PC1839: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1905: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UIFontSizeType = function(value)
@@ -634,7 +655,7 @@ end
   (ToClient_getFontWrapper("BaseFont_26_Glow")):changeCurrentFontSizeBeMore(addFontSize)
 end
 
--- DECOMPILER ERROR at PC1843: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1909: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowNavPathEffectType = function(value)
@@ -642,7 +663,7 @@ end
   setShowNavPathEffectType(value)
 end
 
--- DECOMPILER ERROR at PC1847: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1913: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RefuseRequests = function(value)
@@ -650,7 +671,7 @@ end
   setRefuseRequests(value)
 end
 
--- DECOMPILER ERROR at PC1851: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1917: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsPvpRefuse = function(value)
@@ -658,7 +679,7 @@ end
   setIsPvpRefuse(value)
 end
 
--- DECOMPILER ERROR at PC1855: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1921: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsExchangeRefuse = function(value)
@@ -666,7 +687,7 @@ end
   setIsExchangeRefuse(value)
 end
 
--- DECOMPILER ERROR at PC1859: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1925: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RotateRadarMode = function(value)
@@ -674,7 +695,7 @@ end
   setRotateRadarMode(value)
 end
 
--- DECOMPILER ERROR at PC1863: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1929: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).HideWindowByAttacked = function(value)
@@ -682,7 +703,7 @@ end
   setHideWindowByAttacked(value)
 end
 
--- DECOMPILER ERROR at PC1868: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1934: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoRunCamera = function(value)
@@ -690,7 +711,7 @@ end
   setAutoRunCamera(value)
 end
 
--- DECOMPILER ERROR at PC1873: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1939: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoRunCameraRotation = function(value)
@@ -698,7 +719,7 @@ end
   setAutoRunCameraRotation(value)
 end
 
--- DECOMPILER ERROR at PC1877: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1943: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AudioResourceType = function(value)
@@ -706,7 +727,7 @@ end
   setAudioResourceType(PaGlobal_Option:radioButtonMapping_AudioResourceType(value))
 end
 
--- DECOMPILER ERROR at PC1881: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1947: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ServiceResourceType = function(value)
@@ -717,7 +738,7 @@ end
   ToClient_saveServiceResourceType(PaGlobal_Option:radioButtonMapping_ServiceResourceType(value))
 end
 
--- DECOMPILER ERROR at PC1885: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1951: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseChattingFilter = function(value)
@@ -725,7 +746,7 @@ end
   setUseChattingFilter(value)
 end
 
--- DECOMPILER ERROR at PC1889: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1955: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ChatChannelType = function(value)
@@ -736,7 +757,7 @@ end
   ToClient_saveChatChannelType(PaGlobal_Option:radioButtonMapping_ChatChannelType(value))
 end
 
--- DECOMPILER ERROR at PC1893: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1959: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SelfPlayerNameTagVisible = function(value)
@@ -744,7 +765,7 @@ end
   setSelfPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1897: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1963: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).OtherPlayerNameTagVisible = function(value)
@@ -757,7 +778,7 @@ end
   setOtherPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1901: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1967: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PartyPlayerNameTagVisible = function(value)
@@ -770,7 +791,7 @@ end
   setPartyPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1905: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1971: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuildPlayerNameTagVisible = function(value)
@@ -783,7 +804,7 @@ end
   setGuildPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1909: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1975: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RankingPlayerNameTagVisible = function(value)
@@ -796,7 +817,7 @@ end
   setRankingPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1913: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1979: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineZoneChange = function(value)
@@ -804,7 +825,7 @@ end
   setRenderPlayerColor("ZoneChange", value)
 end
 
--- DECOMPILER ERROR at PC1917: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1983: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineQuestNPC = function(value)
@@ -812,7 +833,7 @@ end
   setShowQuestActorColor(value)
 end
 
--- DECOMPILER ERROR at PC1921: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1987: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineNpcIntimacy = function(value)
@@ -820,7 +841,7 @@ end
   setShowHumanRelation(value)
 end
 
--- DECOMPILER ERROR at PC1925: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1991: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineWarAlly = function(value)
@@ -828,7 +849,7 @@ end
   setRenderPlayerColor("WarAlly", value)
 end
 
--- DECOMPILER ERROR at PC1929: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1995: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineNonWarPlayer = function(value)
@@ -836,7 +857,7 @@ end
   setRenderPlayerColor("NonWarPlayer", value)
 end
 
--- DECOMPILER ERROR at PC1933: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1999: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineEnemy = function(value)
@@ -844,7 +865,7 @@ end
   setRenderPlayerColor("Enemy", value)
 end
 
--- DECOMPILER ERROR at PC1937: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2003: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineGuild = function(value)
@@ -852,7 +873,7 @@ end
   setRenderPlayerColor("Guild", value)
 end
 
--- DECOMPILER ERROR at PC1941: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2007: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineParty = function(value)
@@ -860,7 +881,7 @@ end
   setRenderPlayerColor("Party", value)
 end
 
--- DECOMPILER ERROR at PC1945: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2011: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLinePartyMemberEffect = function(value)
@@ -868,7 +889,7 @@ end
   (ToClient_getGameOptionControllerWrapper()):setRenderHitEffectParty(value)
 end
 
--- DECOMPILER ERROR at PC1949: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2015: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PetRender = function(value)
@@ -876,94 +897,114 @@ end
   setPetRender(value)
 end
 
--- DECOMPILER ERROR at PC1953: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2019: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).FairyRender = function(value)
+  -- function num : 0_33
+  if value == 0 then
+    setFairyRender(true)
+  else
+    setFairyRender(false)
+  end
+end
+
+-- DECOMPILER ERROR at PC2023: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RenderHitEffect = function(value)
-  -- function num : 0_33
+  -- function num : 0_34
   setRenderHitEffect(value)
 end
 
--- DECOMPILER ERROR at PC1957: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2027: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).DamageMeter = function(value)
+  -- function num : 0_35
+  setOnDamageMeter(value)
+end
+
+-- DECOMPILER ERROR at PC2031: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowComboGuide = function(value)
-  -- function num : 0_34
+  -- function num : 0_36
   setShowComboGuide(value)
   if Panel_MovieTheater_320 ~= nil then
     Panel_MovieTheater320_JustClose()
   end
 end
 
--- DECOMPILER ERROR at PC1961: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2035: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).HideMastOnCarrier = function(value)
-  -- function num : 0_35
+  -- function num : 0_37
   setHideMastOnCarrier(value)
 end
 
--- DECOMPILER ERROR at PC1965: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2039: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorkerVisible = function(value)
-  -- function num : 0_36
+  -- function num : 0_38
   ToClient_setWorkerVisible(value)
 end
 
--- DECOMPILER ERROR at PC1969: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2043: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorldMapOpenType = function(value)
-  -- function num : 0_37
+  -- function num : 0_39
   setWorldmapOpenType(value)
 end
 
--- DECOMPILER ERROR at PC1973: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2047: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorldmapCameraPitchType = function(value)
-  -- function num : 0_38
+  -- function num : 0_40
   setWorldMapCameraPitchType(value)
 end
 
--- DECOMPILER ERROR at PC1977: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2051: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).TextureQuality = function(value)
-  -- function num : 0_39
+  -- function num : 0_41
   setTextureQuality(PaGlobal_Option:radioButtonMapping_TextureQuality(value))
 end
 
--- DECOMPILER ERROR at PC1981: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2055: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GraphicOption = function(value)
-  -- function num : 0_40
+  -- function num : 0_42
   setGraphicOption(PaGlobal_Option:radioButtonMapping_GraphicOption(value))
 end
 
--- DECOMPILER ERROR at PC1985: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2059: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AntiAliasing = function(value)
-  -- function num : 0_41
+  -- function num : 0_43
   setAntiAliasing(value)
 end
 
--- DECOMPILER ERROR at PC1989: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2063: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SSAO = function(value)
-  -- function num : 0_42
+  -- function num : 0_44
   setSSAO(value)
 end
 
--- DECOMPILER ERROR at PC1993: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2067: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PostFilter = function(value)
-  -- function num : 0_43
+  -- function num : 0_45
   if value == true then
     setPostFilter(2)
   else
@@ -971,59 +1012,59 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1997: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2071: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Tessellation = function(value)
-  -- function num : 0_44
+  -- function num : 0_46
   setTessellation(value)
 end
 
--- DECOMPILER ERROR at PC2001: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2075: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GraphicUltra = function(value)
-  -- function num : 0_45
+  -- function num : 0_47
   setGraphicUltra(value)
 end
 
--- DECOMPILER ERROR at PC2005: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2079: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Dof = function(value)
-  -- function num : 0_46
+  -- function num : 0_48
   setDof(value)
 end
 
--- DECOMPILER ERROR at PC2009: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2083: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Representative = function(value)
-  -- function num : 0_47
+  -- function num : 0_49
   setRepresentative(value)
 end
 
--- DECOMPILER ERROR at PC2013: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2087: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CharacterEffect = function(value)
-  -- function num : 0_48
+  -- function num : 0_50
   setCharacterEffect(value)
 end
 
--- DECOMPILER ERROR at PC2017: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2091: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SnowPoolOnlyInSafeZone = function(value)
-  -- function num : 0_49
+  -- function num : 0_51
   setSnowPoolOnlyInSafeZone(value)
 end
 
--- DECOMPILER ERROR at PC2021: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2095: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BloodEffect = function(value)
-  -- function num : 0_50
+  -- function num : 0_52
   if value == true then
     setBloodEffect(2)
   else
@@ -1031,27 +1072,27 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2025: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2099: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).LensBlood = function(value)
-  -- function num : 0_51
+  -- function num : 0_53
   setLensBlood(value)
 end
 
--- DECOMPILER ERROR at PC2029: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2103: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoOptimization = function(value)
-  -- function num : 0_52
+  -- function num : 0_54
   setAutoOptimization(value)
 end
 
--- DECOMPILER ERROR at PC2033: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2107: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoOptimizationFrameLimit = function(value)
-  -- function num : 0_53
+  -- function num : 0_55
   local convertedFrame = (math.ceil)(value * 60)
   local autoOptimization = (PaGlobal_Option._elements).AutoOptimization
   local check = autoOptimization._initValue
@@ -1067,35 +1108,35 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2037: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2111: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UpscaleEnable = function(value)
-  -- function num : 0_54
+  -- function num : 0_56
   setUpscaleEnable(value)
 end
 
--- DECOMPILER ERROR at PC2041: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2115: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PresentLock = function(value)
-  -- function num : 0_55
+  -- function num : 0_57
   setPresentLock(value)
 end
 
--- DECOMPILER ERROR at PC2045: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2119: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseEffectFrameOptimization = function(value)
-  -- function num : 0_56
+  -- function num : 0_58
   setUseOptimizationEffectFrame(value)
 end
 
--- DECOMPILER ERROR at PC2049: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2123: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EffectFrameOptimization = function(value)
-  -- function num : 0_57
+  -- function num : 0_59
   local convertedFrame = value * 24.9 + 0.1
   local useEffectFrameOptimization = (PaGlobal_Option._elements).UseEffectFrameOptimization
   local check = useEffectFrameOptimization._initValue
@@ -1111,19 +1152,19 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2053: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2127: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UsePlayerEffectDistOptimization = function(value)
-  -- function num : 0_58
+  -- function num : 0_60
   setUsePlayerOptimizationEffectFrame(value)
 end
 
--- DECOMPILER ERROR at PC2057: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2131: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PlayerEffectDistOptimization = function(value)
-  -- function num : 0_59
+  -- function num : 0_61
   local convertedFrame = value * 40 + 10
   local usePlayerEffectDistOptimization = (PaGlobal_Option._elements).UsePlayerEffectDistOptimization
   local check = usePlayerEffectDistOptimization._initValue
@@ -1139,233 +1180,243 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2061: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2135: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseCharacterUpdateFrameOptimize = function(value)
-  -- function num : 0_60
+  -- function num : 0_62
   setUseCharacterDistUpdate(value)
 end
 
--- DECOMPILER ERROR at PC2065: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2139: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseOtherPlayerUpdate = function(value)
-  -- function num : 0_61
+  -- function num : 0_63
   FromClient_OtherPlayeUpdate(value, true)
 end
 
--- DECOMPILER ERROR at PC2069: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2143: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Fov = function(value)
-  -- function num : 0_62
+  -- function num : 0_64
   value = value * 30 + 40
   setFov(value)
 end
 
--- DECOMPILER ERROR at PC2073: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2147: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraEffectMaster = function(value)
-  -- function num : 0_63
+  -- function num : 0_65
   setCameraMasterPower(value)
 end
 
--- DECOMPILER ERROR at PC2077: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2151: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraShakePower = function(value)
-  -- function num : 0_64
+  -- function num : 0_66
   setCameraShakePower(value)
 end
 
--- DECOMPILER ERROR at PC2081: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2155: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MotionBlurPower = function(value)
-  -- function num : 0_65
+  -- function num : 0_67
   setMotionBlurPower(value)
 end
 
--- DECOMPILER ERROR at PC2085: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2159: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraTranslatePower = function(value)
-  -- function num : 0_66
+  -- function num : 0_68
   setCameraTranslatePower(value)
 end
 
--- DECOMPILER ERROR at PC2089: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2163: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraFovPower = function(value)
-  -- function num : 0_67
+  -- function num : 0_69
   setCameraFovPower(value)
 end
 
--- DECOMPILER ERROR at PC2093: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2167: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseInvertX = function(value)
-  -- function num : 0_68
+  -- function num : 0_70
   setMouseInvertX(value)
 end
 
--- DECOMPILER ERROR at PC2097: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2171: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseInvertY = function(value)
-  -- function num : 0_69
+  -- function num : 0_71
   setMouseInvertY(value)
 end
 
--- DECOMPILER ERROR at PC2101: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2175: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseSensitivityX = function(value)
-  -- function num : 0_70
+  -- function num : 0_72
   local convertedValue = value * 1.9 + 0.1
   setMouseSensitivityX(convertedValue)
 end
 
--- DECOMPILER ERROR at PC2105: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2179: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseSensitivityY = function(value)
-  -- function num : 0_71
+  -- function num : 0_73
   local convertedValue = value * 1.9 + 0.1
   setMouseSensitivityY(convertedValue)
 end
 
--- DECOMPILER ERROR at PC2109: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2183: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GameMouseMode = function(value)
-  -- function num : 0_72
+  -- function num : 0_74
   setGameMouseMode(value)
 end
 
--- DECOMPILER ERROR at PC2113: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2187: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsUIModeMouseLock = function(value)
-  -- function num : 0_73
+  -- function num : 0_75
   setIsUIModeMouseLock(value)
 end
 
--- DECOMPILER ERROR at PC2117: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2191: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadEnable = function(value)
-  -- function num : 0_74
+  -- function num : 0_76
   setGamePadEnable(value)
 end
 
--- DECOMPILER ERROR at PC2121: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2195: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadVibration = function(value)
-  -- function num : 0_75
+  -- function num : 0_77
   setGamePadVibration(value)
 end
 
--- DECOMPILER ERROR at PC2125: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2199: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadInvertX = function(value)
-  -- function num : 0_76
+  -- function num : 0_78
   setGamePadInvertX(value)
 end
 
--- DECOMPILER ERROR at PC2129: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2203: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadInvertY = function(value)
-  -- function num : 0_77
+  -- function num : 0_79
   setGamePadInvertY(value)
 end
 
--- DECOMPILER ERROR at PC2133: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2207: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadSensitivityX = function(value)
-  -- function num : 0_78
+  -- function num : 0_80
   local convertedValue = value * 1.9 + 0.1
   setGamePadSensitivityX(convertedValue)
 end
 
--- DECOMPILER ERROR at PC2137: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2211: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadSensitivityY = function(value)
-  -- function num : 0_79
+  -- function num : 0_81
   local convertedValue = value * 1.9 + 0.1
   setGamePadSensitivityY(convertedValue)
 end
 
--- DECOMPILER ERROR at PC2141: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2215: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).ConsolePadKeyType = function(value)
+  -- function num : 0_82
+  if _ContentsGroup_isConsoleTest == true then
+    setConsoleKeyType(value)
+  end
+end
+
+-- DECOMPILER ERROR at PC2219: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenShotQuality = function(value)
-  -- function num : 0_80
+  -- function num : 0_83
   setScreenShotQuality(value)
 end
 
--- DECOMPILER ERROR at PC2145: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2223: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenShotFormat = function(value)
-  -- function num : 0_81
+  -- function num : 0_84
   setScreenShotFormat(value)
 end
 
--- DECOMPILER ERROR at PC2149: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2227: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkAlpha = function(value)
-  -- function num : 0_82
+  -- function num : 0_85
   setWatermarkAlpha(value)
 end
 
--- DECOMPILER ERROR at PC2153: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2231: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkScale = function(value)
-  -- function num : 0_83
+  -- function num : 0_86
   setWatermarkScale(value)
 end
 
--- DECOMPILER ERROR at PC2157: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2235: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkPosition = function(value)
-  -- function num : 0_84
+  -- function num : 0_87
   setWatermarkPosition(value)
 end
 
--- DECOMPILER ERROR at PC2161: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2239: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkService = function(value)
-  -- function num : 0_85
+  -- function num : 0_88
   setWatermarkService(value)
 end
 
--- DECOMPILER ERROR at PC2165: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2244: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenMode = function(value)
-  -- function num : 0_86
+  -- function num : 0_89
   setScreenMode(value)
   ischangedeplay = true
 end
 
--- DECOMPILER ERROR at PC2169: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2249: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenResolution = function(value)
-  -- function num : 0_87
+  -- function num : 0_90
   local width = 1280
   local height = 720
   if value == -1 then
@@ -1378,19 +1429,19 @@ end
   setScreenResolution(width, height)
 end
 
--- DECOMPILER ERROR at PC2174: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2254: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeEnable = function(value)
-  -- function num : 0_88
+  -- function num : 0_91
   setCropModeEnable(value)
 end
 
--- DECOMPILER ERROR at PC2179: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2259: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeScaleX = function(value)
-  -- function num : 0_89
+  -- function num : 0_92
   local convertedScale = 0.5 + value * 0.5
   local cropModeEnable = PaGlobal_Option:Get("CropModeEnable")
   local cropModeScaleX = convertedScale
@@ -1403,11 +1454,11 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2184: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2264: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeScaleY = function(value)
-  -- function num : 0_90
+  -- function num : 0_93
   local convertedScale = 0.5 + value * 0.5
   local cropModeEnable = PaGlobal_Option:Get("CropModeEnable")
   local cropModeScaleX = PaGlobal_Option:Get("CropModeScaleX")
@@ -1420,56 +1471,56 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC2189: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2269: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UIScale = function(value)
-  -- function num : 0_91
+  -- function num : 0_94
   local interval = ((PaGlobal_Option._elements).UIScale)._sliderValueMax - ((PaGlobal_Option._elements).UIScale)._sliderValueMin
   local convertedValue = (((PaGlobal_Option._elements).UIScale)._sliderValueMin + interval * value) * 0.01
   convertedValue = (math.floor)((convertedValue + 0.002) * 100) / 100
   setUIScale(convertedValue)
 end
 
--- DECOMPILER ERROR at PC2194: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2274: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GammaValue = function(value)
-  -- function num : 0_92
+  -- function num : 0_95
   setGammaValue(value)
 end
 
--- DECOMPILER ERROR at PC2199: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2279: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ContrastValue = function(value)
-  -- function num : 0_93
+  -- function num : 0_96
   setContrastValue(value)
 end
 
--- DECOMPILER ERROR at PC2204: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2284: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EffectAlpha = function(value)
-  -- function num : 0_94
+  -- function num : 0_97
   value = PaGlobal_Option:FromSliderValueToRealValue(value, ((PaGlobal_Option._elements).EffectAlpha)._sliderValueMin, ((PaGlobal_Option._elements).EffectAlpha)._sliderValueMax)
   value = value * 0.01
   setEffectAlpha(value)
 end
 
--- DECOMPILER ERROR at PC2209: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2289: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SkillPostEffect = function(value)
-  -- function num : 0_95
+  -- function num : 0_98
   setSkillPostEffect(value)
 end
 
--- DECOMPILER ERROR at PC2214: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2294: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ColorBlind = function(value)
-  -- function num : 0_96
+  -- function num : 0_99
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode, value, (CppEnums.VariableStorageType).eVariableStorageType_User)
   ToClient_ChangeColorBlindMode(value)
   FGlobal_Rador_SetColorBlindMode()
@@ -1478,43 +1529,43 @@ end
   UIMain_QuestUpdate()
 end
 
--- DECOMPILER ERROR at PC2219: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2299: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BlackSpiritNotice = function(value)
-  -- function num : 0_97
+  -- function num : 0_100
   setBlackSpiritNotice(value)
 end
 
--- DECOMPILER ERROR at PC2224: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2304: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowCashAlert = function(value)
-  -- function num : 0_98
+  -- function num : 0_101
   setShowCashAlert(not value)
 end
 
--- DECOMPILER ERROR at PC2229: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2309: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowGuildLoginMessage = function(value)
-  -- function num : 0_99
+  -- function num : 0_102
   setShowGuildLoginMessage(value)
 end
 
--- DECOMPILER ERROR at PC2233: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2313: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).LUT = function(LUT)
-  -- function num : 0_100
+  -- function num : 0_103
   setCameraLUTFilter(LUT)
 end
 
--- DECOMPILER ERROR at PC2239: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2319: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 ((PaGlobal_Option._elements).LUT).GetButtonText = function(self, LUT)
-  -- function num : 0_101
+  -- function num : 0_104
   local filterName = getCameraLUTFilterName(LUT)
   local filterString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_PHOTOFILTER_" .. filterName)
   if filterName == LUTRecommandationName or filterName == LUTRecommandationName2 then
@@ -1523,273 +1574,297 @@ end
   return filterString
 end
 
--- DECOMPILER ERROR at PC2244: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2325: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+((PaGlobal_Option._elements).LUT).GetButtonListSize = function(self, value)
+  -- function num : 0_105
+  return getCameraLUTFilterSize()
+end
+
+-- DECOMPILER ERROR at PC2330: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableMusic = function(value)
-  -- function num : 0_102
+  -- function num : 0_106
   setEnableSoundMusic(value)
 end
 
--- DECOMPILER ERROR at PC2249: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2335: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableSound = function(value)
-  -- function num : 0_103
+  -- function num : 0_107
   setEnableSoundFx(value)
 end
 
--- DECOMPILER ERROR at PC2254: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2340: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableEnv = function(value)
-  -- function num : 0_104
+  -- function num : 0_108
   setEnableSoundEnv(value)
 end
 
--- DECOMPILER ERROR at PC2259: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2345: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableRidingSound = function(value)
-  -- function num : 0_105
+  -- function num : 0_109
   setEnableRidingSound(value)
 end
 
--- DECOMPILER ERROR at PC2264: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2350: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableWhisperMusic = function(value)
-  -- function num : 0_106
+  -- function num : 0_110
   setEnableSoundWhisper(value)
 end
 
--- DECOMPILER ERROR at PC2269: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2355: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableTraySoundOnOff = function(value)
-  -- function num : 0_107
+  -- function num : 0_111
   setEnableSoundTray(value)
 end
 
--- DECOMPILER ERROR at PC2274: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2360: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BattleSoundType = function(value)
-  -- function num : 0_108
+  -- function num : 0_112
   setEnableBattleSoundType(value)
 end
 
--- DECOMPILER ERROR at PC2279: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2365: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).EnableAudioFairy = function(value)
+  -- function num : 0_113
+  setEnableFairySound(value)
+end
+
+-- DECOMPILER ERROR at PC2370: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeMaster = function(value)
-  -- function num : 0_109
+  -- function num : 0_114
   setVolumeParamMaster(value * 100)
 end
 
--- DECOMPILER ERROR at PC2284: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2375: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeMusic = function(value)
-  -- function num : 0_110
+  -- function num : 0_115
   setVolumeParamMusic(value * 100)
 end
 
--- DECOMPILER ERROR at PC2289: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2380: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeFx = function(value)
-  -- function num : 0_111
+  -- function num : 0_116
   setVolumeParamFx(value * 100)
 end
 
--- DECOMPILER ERROR at PC2294: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2385: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeEnv = function(value)
-  -- function num : 0_112
+  -- function num : 0_117
   setVolumeParamEnv(value * 100)
 end
 
--- DECOMPILER ERROR at PC2299: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2390: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeDlg = function(value)
-  -- function num : 0_113
+  -- function num : 0_118
   setVolumeParamDialog(value * 100)
 end
 
--- DECOMPILER ERROR at PC2304: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2395: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeHitFxVolume = function(value)
-  -- function num : 0_114
-  setVolumeParamHitFxVolume(value * 100)
-end
-
--- DECOMPILER ERROR at PC2309: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).VolumeHitFxWeight = function(value)
-  -- function num : 0_115
-  setVolumeParamHitFxWeight(value * 100)
-end
-
--- DECOMPILER ERROR at PC2314: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).VolumeOtherPlayer = function(value)
-  -- function num : 0_116
-  setVolumeParamOtherPlayer(value * 100)
-end
-
--- DECOMPILER ERROR at PC2319: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertNormalTrade = function(value)
-  -- function num : 0_117
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NormalTrade, not value)
-end
-
--- DECOMPILER ERROR at PC2324: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertRoyalTrade = function(value)
-  -- function num : 0_118
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).RoyalTrade, not value)
-end
-
--- DECOMPILER ERROR at PC2329: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertOtherPlayerGetItem = function(value)
   -- function num : 0_119
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherPlayerGetItem, not value)
-end
-
--- DECOMPILER ERROR at PC2334: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertLifeLevelUp = function(value)
-  -- function num : 0_120
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).LifeLevelUp, not value)
-end
-
--- DECOMPILER ERROR at PC2339: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertItemMarket = function(value)
-  -- function num : 0_121
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ItemMarket, not value)
-end
-
--- DECOMPILER ERROR at PC2344: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertOtherMarket = function(value)
-  -- function num : 0_122
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherMarket, not value)
-end
-
--- DECOMPILER ERROR at PC2349: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertChangeRegion = function(value)
-  -- function num : 0_123
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ChangeRegion, not value)
-end
-
--- DECOMPILER ERROR at PC2354: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertFitnessLevelUp = function(value)
-  -- function num : 0_124
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).FitnessLevelUp, not value)
-end
-
--- DECOMPILER ERROR at PC2359: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertTerritoryWar = function(value)
-  -- function num : 0_125
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).TerritoryWar, not value)
-end
-
--- DECOMPILER ERROR at PC2364: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertGuildWar = function(value)
-  -- function num : 0_126
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildWar, not value)
-end
-
--- DECOMPILER ERROR at PC2369: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertEnchantSuccess = function(value)
-  -- function num : 0_127
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantSuccess, not value)
-end
-
--- DECOMPILER ERROR at PC2374: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertEnchantFail = function(value)
-  -- function num : 0_128
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantFail, not value)
-end
-
--- DECOMPILER ERROR at PC2379: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertGuildQuestMessage = function(value)
-  -- function num : 0_129
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildQuestMessage, not value)
-end
-
--- DECOMPILER ERROR at PC2384: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertNearMonster = function(value)
-  -- function num : 0_130
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NearMonster, not value)
-end
-
--- DECOMPILER ERROR at PC2388: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).SelfPlayerOnlyEffect = function(value)
-  -- function num : 0_131
-  setSelfPlayerOnlyEffect(value)
-end
-
--- DECOMPILER ERROR at PC2392: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).NearestPlayerOnlyEffect = function(value)
-  -- function num : 0_132
-  setNearestPlayerOnlyEffect(value)
-end
-
--- DECOMPILER ERROR at PC2396: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).SelfPlayerOnlyLantern = function(value)
-  -- function num : 0_133
-  setSelfPlayerOnlyLantern(value)
+  setVolumeParamHitFxVolume(value * 100)
 end
 
 -- DECOMPILER ERROR at PC2400: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).ShowHpRular = function(value)
+(PaGlobal_Option._functions).VolumeHitFxWeight = function(value)
+  -- function num : 0_120
+  setVolumeParamHitFxWeight(value * 100)
+end
+
+-- DECOMPILER ERROR at PC2405: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).VolumeOtherPlayer = function(value)
+  -- function num : 0_121
+  setVolumeParamOtherPlayer(value * 100)
+end
+
+-- DECOMPILER ERROR at PC2410: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).VolumeFairy = function(value)
+  -- function num : 0_122
+  setVolumeFairy(value * 100)
+end
+
+-- DECOMPILER ERROR at PC2415: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertNormalTrade = function(value)
+  -- function num : 0_123
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NormalTrade, not value)
+end
+
+-- DECOMPILER ERROR at PC2420: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertRoyalTrade = function(value)
+  -- function num : 0_124
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).RoyalTrade, not value)
+end
+
+-- DECOMPILER ERROR at PC2425: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertOtherPlayerGetItem = function(value)
+  -- function num : 0_125
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherPlayerGetItem, not value)
+end
+
+-- DECOMPILER ERROR at PC2430: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertLifeLevelUp = function(value)
+  -- function num : 0_126
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).LifeLevelUp, not value)
+end
+
+-- DECOMPILER ERROR at PC2435: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertItemMarket = function(value)
+  -- function num : 0_127
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ItemMarket, not value)
+end
+
+-- DECOMPILER ERROR at PC2440: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertOtherMarket = function(value)
+  -- function num : 0_128
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherMarket, not value)
+end
+
+-- DECOMPILER ERROR at PC2445: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertChangeRegion = function(value)
+  -- function num : 0_129
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ChangeRegion, not value)
+end
+
+-- DECOMPILER ERROR at PC2450: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertFitnessLevelUp = function(value)
+  -- function num : 0_130
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).FitnessLevelUp, not value)
+end
+
+-- DECOMPILER ERROR at PC2455: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertTerritoryWar = function(value)
+  -- function num : 0_131
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).TerritoryWar, not value)
+end
+
+-- DECOMPILER ERROR at PC2460: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertGuildWar = function(value)
+  -- function num : 0_132
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildWar, not value)
+end
+
+-- DECOMPILER ERROR at PC2465: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertEnchantSuccess = function(value)
+  -- function num : 0_133
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantSuccess, not value)
+end
+
+-- DECOMPILER ERROR at PC2470: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertEnchantFail = function(value)
   -- function num : 0_134
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantFail, not value)
+end
+
+-- DECOMPILER ERROR at PC2475: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertGuildQuestMessage = function(value)
+  -- function num : 0_135
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildQuestMessage, not value)
+end
+
+-- DECOMPILER ERROR at PC2480: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertNearMonster = function(value)
+  -- function num : 0_136
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NearMonster, not value)
+end
+
+-- DECOMPILER ERROR at PC2484: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).SelfPlayerOnlyEffect = function(value)
+  -- function num : 0_137
+  setSelfPlayerOnlyEffect(value)
+end
+
+-- DECOMPILER ERROR at PC2488: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).NearestPlayerOnlyEffect = function(value)
+  -- function num : 0_138
+  setNearestPlayerOnlyEffect(value)
+end
+
+-- DECOMPILER ERROR at PC2492: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).SelfPlayerOnlyLantern = function(value)
+  -- function num : 0_139
+  setSelfPlayerOnlyLantern(value)
+end
+
+-- DECOMPILER ERROR at PC2496: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).ShowHpRular = function(value)
+  -- function num : 0_140
   GameOptionApply_CharacterNameTag_Ruler(value)
   setShowHpRular(value)
 end
 
 ConsolePadType = function(value)
-  -- function num : 0_135
+  -- function num : 0_141
   selfPlayerSetConsolePadType(value)
 end
 

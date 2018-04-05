@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\competitiongame\panel_competitiongameteamui.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\competitiongame\panel_competitiongameteamui.luac 
 
 -- params : ...
 -- function num : 0
@@ -47,6 +47,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_CombattantWomen] = {451, 251, 480, 280}
 , 
 [(CppEnums.ClassType).ClassType_Lahn] = {481, 251, 510, 280}
+, 
+[(CppEnums.ClassType).ClassType_Orange] = {481, 251, 510, 280}
 }
 , 
 [team2] = {
@@ -81,6 +83,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_CombattantWomen] = {451, 219, 480, 248}
 , 
 [(CppEnums.ClassType).ClassType_Lahn] = {481, 219, 510, 248}
+, 
+[(CppEnums.ClassType).ClassType_Orange] = {481, 219, 510, 248}
 }
 }
 , 
@@ -119,7 +123,13 @@ CompetitionGame_TeamUi_Create = function()
   if ToClient_CompetitionMatchType() == 0 then
     CompetitionGame_TeamUi_Round()
   else
-    CompetitionGame_TeamUi_FreeForAll()
+    if ToClient_CompetitionMatchType() == 1 then
+      CompetitionGame_TeamUi_FreeForAll()
+    else
+      if ToClient_CompetitionMatchType() == 2 then
+        CompetitionGame_TeamUi_Personal()
+      end
+    end
   end
 end
 
@@ -148,7 +158,7 @@ CompetitionGame_StatSlotSetShow = function(teamIndex, userIndex, isVisible, isFr
     (((teamMemberUi[teamIndex])[userIndex])._name):SetShow(isVisible)
     ;
     (((teamMemberUi[teamIndex])[userIndex])._leftUserCount):SetShow(isVisible)
-    if ToClient_CompetitionMatchType() == 1 then
+    if ToClient_CompetitionMatchType() == 1 or ToClient_CompetitionMatchType() == 2 then
       (((teamMemberUi[teamIndex])[userIndex])._skillIcon1):SetShow(false)
       ;
       (((teamMemberUi[teamIndex])[userIndex])._skillIcon2):SetShow(false)
@@ -483,17 +493,185 @@ CompetitionGame_TeamUi_FreeForAll = function()
   CompetitionGameTeamUI_Open()
 end
 
+CompetitionGame_TeamUi_Personal = function()
+  -- function num : 0_5 , upvalues : teamMember, teamMemberBg, controlTexture, teamMemberUi
+  _PA_LOG("아르샤의�\189", "CompetitionGame_TeamUi_Personal")
+  ;
+  (teamMember._myBorder):SetShow(true)
+  ;
+  (teamMember._classIcon):SetShow(true)
+  ;
+  (teamMember._level):SetShow(true)
+  ;
+  (teamMember._hpProgress):SetShow(true)
+  ;
+  (teamMember._hpNumber):SetShow(true)
+  teamMemberBg:SetShow(true)
+  ;
+  (teamMember._progressBg):SetShow(true)
+  ;
+  (teamMember._name):SetShow(true)
+  ;
+  (teamMember._leftUserCount):SetShow(true)
+  ;
+  (teamMember._skillIcon1):SetShow(true)
+  ;
+  (teamMember._skillIcon2):SetShow(true)
+  ;
+  (teamMember._skillIcon3):SetShow(true)
+  ;
+  (teamMember._skillIcon4):SetShow(true)
+  ;
+  (teamMember._skillIcon5):SetShow(true)
+  ;
+  (teamMember._gaugeBlackBG):SetShow(true)
+  ;
+  (teamMember._gaugeBlack):SetShow(true)
+  ;
+  (teamMember._gaugeRate):SetShow(true)
+  CompetitionGameTeamUI_StatSlotClose_Personal()
+  for teamNo = 1, 2 do
+    local teamInfo = ToClient_GetArshaTeamInfo(teamNo)
+    local textureIndex = 1
+    local userIndex = 0
+    local Index = teamNo - 1
+    if teamNo == 1 then
+      textureIndex = 0
+    else
+      if teamNo == 2 then
+        textureIndex = 1
+      end
+    end
+    local temp = {}
+    temp._teamBg = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CompetitionGame_TeamUi, "CompetitionGame_TeamBg_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMemberBg, temp._teamBg)
+    ;
+    (temp._teamBg):SetPosY((teamMemberBg:GetSizeY() + 5) * userIndex)
+    ;
+    (temp._teamBg):SetPosX((teamMemberBg:GetSizeX() + 5) * Index)
+    ;
+    (temp._teamBg):ChangeTextureInfoName(controlTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(temp._teamBg, ((controlTexture.teamBg)[textureIndex])[1], ((controlTexture.teamBg)[textureIndex])[2], ((controlTexture.teamBg)[textureIndex])[3], ((controlTexture.teamBg)[textureIndex])[4])
+    ;
+    ((temp._teamBg):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (temp._teamBg):setRenderTexture((temp._teamBg):getBaseTexture())
+    temp._classIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, temp._teamBg, "CompetitionGame_TeamClassIcon_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._classIcon, temp._classIcon)
+    temp._gaugeBlackBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, temp._teamBg, "CompetitionGame_gaugeBlackBG_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._gaugeBlackBG, temp._gaugeBlackBG)
+    temp._gaugeBlack = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_CIRCULAR_PROGRESS, temp._teamBg, "CompetitionGame_gaugeBlack_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._gaugeBlack, temp._gaugeBlack)
+    temp._progressBg = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, temp._teamBg, "CompetitionGame_TeamClassProgressBg_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._progressBg, temp._progressBg)
+    ;
+    (temp._progressBg):ChangeTextureInfoName(controlTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(temp._progressBg, ((controlTexture.progressBg)[textureIndex])[1], ((controlTexture.progressBg)[textureIndex])[2], ((controlTexture.progressBg)[textureIndex])[3], ((controlTexture.progressBg)[textureIndex])[4])
+    ;
+    ((temp._progressBg):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (temp._progressBg):setRenderTexture((temp._progressBg):getBaseTexture())
+    temp._progress = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_PROGRESS2, temp._teamBg, "CompetitionGame_TeamClassProgress_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._hpProgress, temp._progress)
+    ;
+    (temp._progress):ChangeTextureInfoName(controlTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(temp._progress, ((controlTexture.progress)[textureIndex])[1], ((controlTexture.progress)[textureIndex])[2], ((controlTexture.progress)[textureIndex])[3], ((controlTexture.progress)[textureIndex])[4])
+    ;
+    ((temp._progress):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (temp._progress):setRenderTexture((temp._progress):getBaseTexture())
+    ;
+    (temp._progress):SetProgressRate(100)
+    temp._hpNumber = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_HPNumber_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._hpNumber, temp._hpNumber)
+    ;
+    (temp._hpNumber):SetText("100%")
+    temp._level = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassLevel_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._level, temp._level)
+    temp._name = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassName_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._name, temp._name)
+    temp._leftUserCount = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_LeftUserCount_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._leftUserCount, temp._leftUserCount)
+    temp._skillIcon1 = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_skillIcon1_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._skillIcon1, temp._skillIcon1)
+    temp._skillIcon2 = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_skillIcon2_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._skillIcon2, temp._skillIcon2)
+    temp._skillIcon3 = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_skillIcon3_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._skillIcon3, temp._skillIcon3)
+    temp._skillIcon4 = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_skillIcon4_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._skillIcon4, temp._skillIcon4)
+    temp._skillIcon5 = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_skillIcon5_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._skillIcon5, temp._skillIcon5)
+    temp._gaugeRate = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_gaugeBlackRate_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._gaugeRate, temp._gaugeRate)
+    temp._border = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, temp._teamBg, "CompetitionGame_TeamClassBorder_" .. Index .. "_" .. userIndex)
+    CopyBaseProperty(teamMember._myBorder, temp._border)
+    ;
+    (temp._border):ChangeTextureInfoName(controlTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(temp._border, ((controlTexture.border)[textureIndex])[1], ((controlTexture.border)[textureIndex])[2], ((controlTexture.border)[textureIndex])[3], ((controlTexture.border)[textureIndex])[4])
+    ;
+    ((temp._border):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (temp._border):setRenderTexture((temp._border):getBaseTexture())
+    -- DECOMPILER ERROR at PC596: Confused about usage of register: R25 in 'UnsetPending'
+
+    ;
+    (teamMemberUi[teamNo - 1])[userIndex] = temp
+    CompetitionGame_TeamUI_Setting(teamNo, 0)
+  end
+  ;
+  (teamMember._myBorder):SetShow(false)
+  ;
+  (teamMember._classIcon):SetShow(false)
+  ;
+  (teamMember._level):SetShow(false)
+  ;
+  (teamMember._hpProgress):SetShow(false)
+  ;
+  (teamMember._hpNumber):SetShow(false)
+  teamMemberBg:SetShow(false)
+  ;
+  (teamMember._progressBg):SetShow(false)
+  ;
+  (teamMember._name):SetShow(false)
+  ;
+  (teamMember._leftUserCount):SetShow(false)
+  ;
+  (teamMember._skillIcon1):SetShow(false)
+  ;
+  (teamMember._skillIcon2):SetShow(false)
+  ;
+  (teamMember._skillIcon3):SetShow(false)
+  ;
+  (teamMember._skillIcon4):SetShow(false)
+  ;
+  (teamMember._skillIcon5):SetShow(false)
+  ;
+  (teamMember._gaugeBlackBG):SetShow(false)
+  ;
+  (teamMember._gaugeBlack):SetShow(false)
+  ;
+  (teamMember._gaugeRate):SetShow(false)
+  CompetitionGameTeamUI_Open()
+end
+
 CompetitionGame_TeamUI_Setting = function(teamNo, userCount)
-  -- function num : 0_5
+  -- function num : 0_6
   if ToClient_CompetitionMatchType() == 0 then
     CompetitionGame_TeamUI_Setting_Round(teamNo, userCount)
   else
-    CompetitionGame_TeamUI_Setting_FreeForAll(teamNo)
+    if ToClient_CompetitionMatchType() == 1 then
+      CompetitionGame_TeamUI_Setting_FreeForAll(teamNo)
+    else
+      if ToClient_CompetitionMatchType() == 2 then
+        COmpetitionGame_TeamUI_Setting_Personal(teamNo)
+      end
+    end
   end
 end
 
 CompetitionGame_TeamUI_Setting_Round = function(teamNo, userCount)
-  -- function num : 0_6 , upvalues : teamMemberUi, controlTexture, UI_color
+  -- function num : 0_7 , upvalues : teamMemberUi, controlTexture, UI_color
   local myTeamNo = (getSelfPlayer()):getCompetitionTeamNo()
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local teamIndex = teamNo - 1
@@ -528,7 +706,7 @@ CompetitionGame_TeamUI_Setting_Round = function(teamNo, userCount)
       ((userSlot._gaugeBlack):getBaseTexture()):setUV(x1, y1, x2, y2)
       ;
       (userSlot._gaugeBlack):setRenderTexture((userSlot._gaugeBlack):getBaseTexture())
-      hpPercent = userInfo:getHP() / userInfo:getMaxHP() * 100
+      hpPercent = 100
       adrenalinPoint = userInfo:getAP()
       ;
       (userSlot._level):SetShow(true)
@@ -589,7 +767,7 @@ CompetitionGame_TeamUI_Setting_Round = function(teamNo, userCount)
 end
 
 CompetitionGame_TeamUI_Setting_FreeForAll = function(teamNo)
-  -- function num : 0_7 , upvalues : teamMemberUi, teamMember, UI_color
+  -- function num : 0_8 , upvalues : teamMemberUi, teamMember, UI_color
   local myTeamNo = (getSelfPlayer()):getCompetitionTeamNo()
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local teamIndex = teamNo - 1
@@ -642,17 +820,118 @@ CompetitionGame_TeamUI_Setting_FreeForAll = function(teamNo)
   end
 end
 
+COmpetitionGame_TeamUI_Setting_Personal = function(teamNo)
+  -- function num : 0_9 , upvalues : teamMemberUi, controlTexture, UI_color
+  _PA_LOG("아르샤의�\189", "COmpetitionGame_TeamUI_Setting_Personal")
+  local myTeamNo = (getSelfPlayer()):getCompetitionTeamNo()
+  local myUserNo = ((getSelfPlayer()):get()):getUserNo()
+  local teamIndex = teamNo - 1
+  local textureIndex = 0
+  if teamNo == 1 then
+    textureIndex = 0
+  else
+    if teamNo == 2 then
+      textureIndex = 1
+    end
+  end
+  local hpPercent = 0
+  local adrenalinPoint = 0
+  local userSlot = (teamMemberUi[teamIndex])[0]
+  local userInfo = ToClient_GetArshaAttendUserInfo(teamNo)
+  if userInfo ~= nil and userSlot ~= nil then
+    local classType = userInfo:getCharacterClass()
+    ;
+    (userSlot._classIcon):SetShow(true)
+    ;
+    (userSlot._classIcon):ChangeTextureInfoName(controlTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(userSlot._classIcon, (((controlTexture.classIcon)[textureIndex])[classType])[1], (((controlTexture.classIcon)[textureIndex])[classType])[2], (((controlTexture.classIcon)[textureIndex])[classType])[3], (((controlTexture.classIcon)[textureIndex])[classType])[4])
+    ;
+    ((userSlot._classIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (userSlot._classIcon):setRenderTexture((userSlot._classIcon):getBaseTexture())
+    ;
+    (userSlot._gaugeBlack):ChangeTextureInfoName(controlTexture.path3)
+    local x1, y1, x2, y2 = setTextureUV_Func(userSlot._gaugeBlack, ((controlTexture.teamBlack)[textureIndex])[1], ((controlTexture.teamBlack)[textureIndex])[2], ((controlTexture.teamBlack)[textureIndex])[3], ((controlTexture.teamBlack)[textureIndex])[4])
+    ;
+    ((userSlot._gaugeBlack):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (userSlot._gaugeBlack):setRenderTexture((userSlot._gaugeBlack):getBaseTexture())
+    hpPercent = 100
+    adrenalinPoint = userInfo:getAP()
+    ;
+    (userSlot._level):SetShow(true)
+    ;
+    (userSlot._level):SetText(userInfo:getCharacterLevel())
+    ;
+    (userSlot._progress):SetProgressRate(hpPercent)
+    ;
+    (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
+    ;
+    (userSlot._name):SetText(userInfo:getCharacterName())
+    ;
+    (userSlot._name):SetFontColor(UI_color.C_FFEFEFEF)
+    ;
+    (userSlot._leftUserCount):SetShow(false)
+    ;
+    (userSlot._skillIcon1):SetShow(false)
+    ;
+    (userSlot._skillIcon2):SetShow(false)
+    ;
+    (userSlot._skillIcon3):SetShow(false)
+    ;
+    (userSlot._skillIcon4):SetShow(false)
+    ;
+    (userSlot._skillIcon5):SetShow(false)
+    if myTeamNo == teamNo or myTeamNo == 0 then
+      (userSlot._gaugeBlackBG):SetShow(true)
+      ;
+      (userSlot._gaugeBlack):SetShow(true)
+      ;
+      (userSlot._gaugeBlack):SetProgressRate(adrenalinPoint)
+      ;
+      (userSlot._gaugeRate):SetShow(true)
+      ;
+      (userSlot._gaugeRate):SetText(tostring(adrenalinPoint) .. "%")
+    else
+      ;
+      (userSlot._gaugeBlackBG):SetShow(false)
+      ;
+      (userSlot._gaugeBlack):SetShow(false)
+      ;
+      (userSlot._gaugeBlack):SetProgressRate(0)
+      ;
+      (userSlot._gaugeRate):SetShow(false)
+      ;
+      (userSlot._gaugeRate):SetText("")
+    end
+    if userInfo:getUserNo() == myUserNo then
+      (userSlot._border):SetShow(true)
+    else
+      ;
+      (userSlot._border):SetShow(false)
+    end
+    ;
+    (userSlot._teamBg):addInputEvent("Mouse_LUp", "CompetitionGame_CameraControl(" .. tostring(userInfo:getUserNo()) .. ")")
+  end
+end
+
 FromClient_UpdateUserHP = function()
-  -- function num : 0_8
+  -- function num : 0_10
   if ToClient_CompetitionMatchType() == 0 then
     FromClient_UpdateUserHP_Round()
   else
-    FromClient_UpdateUserHP_FreeForAll()
+    if ToClient_CompetitionMatchType() == 1 then
+      FromClient_UpdateUserHP_FreeForAll()
+    else
+      if ToClient_CompetitionMatchType() == 2 then
+        FromClient_UpdateUserHP_Personal()
+      end
+    end
   end
 end
 
 FromClient_UpdateUserHP_Round = function()
-  -- function num : 0_9 , upvalues : teamMemberUi, UI_color
+  -- function num : 0_11 , upvalues : teamMemberUi, UI_color
   local myTeamNo = (getSelfPlayer()):getCompetitionTeamNo()
   local hpPercent = 0
   local teamUserCount = 0
@@ -784,7 +1063,7 @@ FromClient_UpdateUserHP_Round = function()
 end
 
 FromClient_UpdateUserHP_FreeForAll = function()
-  -- function num : 0_10 , upvalues : teamMember, teamMemberUi, UI_color
+  -- function num : 0_12 , upvalues : teamMember, teamMemberUi, UI_color
   local hpPercent = 0
   local teamNo = 0
   local teamIndex = 0
@@ -838,8 +1117,60 @@ FromClient_UpdateUserHP_FreeForAll = function()
   end
 end
 
+FromClient_UpdateUserHP_Personal = function()
+  -- function num : 0_13 , upvalues : teamMemberUi, UI_color
+  _PA_LOG("아르샤의�\189", "FromClient_UpdateUserHP_Personal")
+  local myTeamNo = (getSelfPlayer()):getCompetitionTeamNo()
+  local hpPercent = 0
+  local teamUserCount = 0
+  local teamIndex = 0
+  local teamNo = 0
+  local teamInfo = nil
+  for Index = 1, 2 do
+    teamInfo = ToClient_GetArshaTeamInfo(Index)
+    teamNo = teamInfo:getTeamNo()
+    teamIndex = teamNo - 1
+    local userSlot = (teamMemberUi[teamIndex])[0]
+    local userInfo = ToClient_GetArshaAttendUserInfo(teamNo)
+    if userSlot == nil then
+      _PA_LOG("아르샤의�\189", "createUserSlot")
+      CompetitionGame_TeamUi_Create()
+      userSlot = (teamMemberUi[teamIndex])[0]
+    end
+    if userInfo ~= nil and userSlot ~= nil then
+      hpPercent = userInfo:getHP() / userInfo:getMaxHP() * 100
+      ;
+      (userSlot._progress):SetProgressRate(hpPercent)
+      ;
+      (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
+      ;
+      (userSlot._name):SetText(userInfo:getCharacterName())
+      if hpPercent <= 0 then
+        (userSlot._name):SetFontColor(UI_color.C_FFC4BEBE)
+      end
+      local actorKey = userInfo:getActorKey()
+      local adrenalin = 0
+      local skillNo = 0
+      local remainTime = 0
+      if myTeamNo == teamNo or myTeamNo == 0 then
+        adrenalin = userInfo:getAP()
+        ;
+        (userSlot._gaugeBlack):SetProgressRate(adrenalin)
+        ;
+        (userSlot._gaugeBlack):SetPosX(3)
+        ;
+        (userSlot._gaugeBlack):SetPosY(3)
+        ;
+        (userSlot._gaugeRate):SetText(tostring(adrenalin) .. "%")
+      end
+      ;
+      (userSlot._teamBg):addInputEvent("Mouse_LUp", "CompetitionGame_CameraControl(" .. tostring(userInfo:getUserNo()) .. ")")
+    end
+  end
+end
+
 CompetitionGameTeamUI_StatSlotClose_Round = function()
-  -- function num : 0_11 , upvalues : teamMemberUi
+  -- function num : 0_14 , upvalues : teamMemberUi
   local teamUserCount = 0
   local teamIndex = 0
   local teamNo = 0
@@ -859,7 +1190,7 @@ CompetitionGameTeamUI_StatSlotClose_Round = function()
 end
 
 CompetitionGameTeamUI_StatSlotClose_FreeForAll = function()
-  -- function num : 0_12 , upvalues : teamMember
+  -- function num : 0_15 , upvalues : teamMember
   local teamNo = 0
   local teamIndex = 0
   local teamInfo = nil
@@ -888,13 +1219,23 @@ CompetitionGameTeamUI_StatSlotClose_FreeForAll = function()
   end
 end
 
+CompetitionGameTeamUI_StatSlotClose_Personal = function()
+  -- function num : 0_16
+  local teamIndex = 0
+  for teamNo = 1, 2 do
+    teamIndex = teamNo - 1
+    CompetitionGame_StatSlotSetShow(teamIndex, 0, false, false)
+  end
+end
+
 CompetitionGame_CameraControl = function(teamNo)
-  -- function num : 0_13
+  -- function num : 0_17
   ToClient_ForceChangeScreenModeActor(toInt64(0, teamNo))
 end
 
 CompetitionGameTeamUI_Open = function()
-  -- function num : 0_14
+  -- function num : 0_18
+  _PA_LOG("아르샤의�\189", "CompetitionGameTeamUI_Open")
   Panel_CompetitionGame_TeamUi:SetShow(true)
   local selfActorKeyRaw = (getSelfPlayer()):getActorKey()
   if (getSelfPlayer()):isPartyMemberActorKey(selfActorKeyRaw) == true then
@@ -903,7 +1244,7 @@ CompetitionGameTeamUI_Open = function()
 end
 
 CompetitionGameTeamUI_Close = function()
-  -- function num : 0_15
+  -- function num : 0_19
   Panel_CompetitionGame_TeamUi:SetShow(false)
   local selfActorKeyRaw = (getSelfPlayer()):getActorKey()
   if (getSelfPlayer()):isPartyMemberActorKey(selfActorKeyRaw) == true then
@@ -912,7 +1253,13 @@ CompetitionGameTeamUI_Close = function()
   if ToClient_CompetitionMatchType() == 0 then
     CompetitionGameTeamUI_StatSlotClose_Round()
   else
-    CompetitionGameTeamUI_StatSlotClose_FreeForAll()
+    if ToClient_CompetitionMatchType() == 1 then
+      CompetitionGameTeamUI_StatSlotClose_FreeForAll()
+    else
+      if ToClient_CompetitionMatchType() == 2 then
+        CompetitionGameTeamUI_StatSlotClose_Personal()
+      end
+    end
   end
 end
 

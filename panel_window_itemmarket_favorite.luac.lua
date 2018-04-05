@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarket_favorite.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarket_favorite.luac 
 
 -- params : ...
 -- function num : 0
@@ -70,7 +70,7 @@ ItemMarket_FavoriteItem_Init = function()
   (self._notifyText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_FAVORITE_NOTIFY"))
   do
     if (self._notifyBG):GetSizeY() < (self._notifyText):GetTextSizeY() + 10 then
-      local sizeY = (self._notifyText):GetTextSizeY() - (self._notifyBG):GetSizeY() + 10
+      local sizeY = (self._notifyText):GetTextSizeY() - (self._notifyBG):GetSizeY() + 15
       Panel_Window_ItemMarket_Favorite:SetSize(Panel_Window_ItemMarket_Favorite:GetSizeX(), Panel_Window_ItemMarket_Favorite:GetSizeY() + sizeY)
       ;
       (self._notifyBG):SetSize((self._notifyBG):GetSizeX(), (self._notifyBG):GetSizeY() + sizeY)

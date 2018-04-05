@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\guildwharf\panel_window_guildwharffunction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\guildwharf\panel_window_guildwharffunction.luac 
 
 -- params : ...
 -- function num : 0
@@ -86,6 +86,7 @@ GuildWharfFunction_RegisterAck = function()
     return 
   end
   Inventory_SetFunctor(nil)
+  InventoryWindow_Close()
   GuildWharfRegister_Close()
   local self = guildWharfFunction
 end

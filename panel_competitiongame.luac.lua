@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\competitiongame\panel_competitiongame.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\competitiongame\panel_competitiongame.luac 
 
 -- params : ...
 -- function num : 0
@@ -356,7 +356,6 @@ end
 
 FromClient_RoundReady = function(currentRound, countDown)
   -- function num : 0_28
-  _PA_LOG("정태�\164", "이벤�\184")
   if countDown == 0 then
     return 
   end

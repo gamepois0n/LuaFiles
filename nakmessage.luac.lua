@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\nakmessage\nakmessage.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\nakmessage\nakmessage.luac 
 
 -- params : ...
 -- function num : 0
@@ -12,12 +12,20 @@ local curIndex = 0
 local processIndex = 0
 local animationEndTime = 2.3
 local elapsedTime = 2.3
+local positionAdjust = {_originX = 0, _originY = 180}
 local _text_Msg = (UI.getChildControl)(Panel_NakMessage, "MsgText")
 Panel_NakMessage:setFlushAble(false)
-Proc_ShowMessage_Ack = function(message, showRate)
-  -- function num : 0_0
+Proc_ShowMessage_Ack = function(message, showRate, posX, posY)
+  -- function num : 0_0 , upvalues : positionAdjust
   Proc_ShowMessage_Ack_WithOut_ChattingMessage(message, showRate)
   chatting_sendMessage("", message, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).Undefine)
+  if posX == nil or posY == nil then
+    Panel_NakMessage:SetPosX(positionAdjust._originX)
+    Panel_NakMessage:SetPosY(positionAdjust._originY)
+  else
+    Panel_NakMessage:SetPosX(posX)
+    Panel_NakMessage:SetPosY(posY)
+  end
 end
 
 Proc_ShowMessage_Ack_With_ChatType = function(message, showRate, chatType, chatSystemType)
@@ -136,8 +144,12 @@ NakMessagePanel_Reset = function()
 end
 
 NakMessagePanel_Resize = function()
-  -- function num : 0_8
-  Panel_NakMessage:SetPosX((getScreenSizeX() - Panel_NakMessage:GetSizeX()) * 0.5)
+  -- function num : 0_8 , upvalues : positionAdjust
+  local val = (getScreenSizeX() - Panel_NakMessage:GetSizeX()) * 0.5
+  Panel_NakMessage:SetPosX(val)
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+
+  positionAdjust._originX = val
 end
 
 renderModeChange_NakMessagePostRestoreFunction = function(prevRenderModeList, nextRenderModeList)

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap_grand\new_wroldmap_tradenpciteminfo.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap_grand\new_wroldmap_tradenpciteminfo.luac 
 
 -- params : ...
 -- function num : 0
@@ -16,8 +16,8 @@ local _buttonClose = (UI.getChildControl)(Panel_TradeNpcItemInfo, "Button_Close"
 local slotBG = (UI.getChildControl)(Panel_TradeNpcItemInfo, "Static_SlotBG")
 local nodeNpc = (UI.getChildControl)(Panel_TradeNpcItemInfo, "nodeMenu_nodeNpc")
 local territoryValue = (UI.getChildControl)(Panel_TradeNpcItemInfo, "nodeMenu_nodeName")
-local territoryName = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
-local npcName = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_6"))}
+local territoryName = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))}
+local npcName = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYSUPPLY_NPC_7"))}
 initialize_TradeNpcInfoUI = function()
   -- function num : 0_0 , upvalues : _basePanel, maxCount, _itemStatic, slotBG, _slotBG, slotConfig, _slot, _buttonClose
   local miniSizeY = _basePanel:GetSizeY()

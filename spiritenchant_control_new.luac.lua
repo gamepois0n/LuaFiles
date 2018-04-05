@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\enchant\spiritenchant_control_new.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\enchant\spiritenchant_control_new.luac 
 
 -- params : ...
 -- function num : 0
@@ -52,6 +52,7 @@ PaGlobal_Enchant.enchantClose = function(self)
   Equipment_PosLoadMemory()
   InventoryWindow_Close()
   Panel_Equipment:SetShow(false, false)
+  ClothInventory_Close()
   ToClient_BlackspiritEnchantClose()
   PaGlobal_TutorialManager:handleCloseEnchantWindow()
   Panel_EnchantExtraction_Close()
@@ -64,19 +65,21 @@ end
 PaGlobal_Enchant.showEnchantTab = function(self)
   -- function num : 0_4
   self:init_EnchantFrame()
-  self:didShowEnchantTab()
+  self:didShowEnchantTab(true)
 end
 
 -- DECOMPILER ERROR at PC17: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.didShowEnchantTab = function(self)
+PaGlobal_Enchant.didShowEnchantTab = function(self, setButtonApply)
   -- function num : 0_5
   if self._enchantInfo == nil then
     return 
   end
   self._screctExtractIvenType = (self._enchantInfo):ToClient_getVaildSecretExtractionIvenType()
   self:setEnchantFailCount()
-  self:setEnable_button_Apply(false)
+  if setButtonApply == true then
+    self:setEnable_button_Apply(false)
+  end
   self:showScretExtractButton(self._screctExtractIvenType ~= (CppEnums.ItemWhereType).eCount)
   Inventory_SetFunctor(FGlobal_Enchant_FileterForEnchantTarget, FGlobal_Enchant_RClickForTargetItem, closeForEnchant, nil)
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
@@ -120,11 +123,11 @@ end
 
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
+PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone, isRadioClick)
   -- function num : 0_7
   local enchantType = (self._enchantInfo):ToClient_getEnchantType()
   local needCountForPerfectEnchant_s64 = (self._enchantInfo):ToClient_getNeedCountForPerfectEnchant_s64()
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._strForEnchantInfo)._notChecked = self:getStr_EnchantInfo((self._enchantInfo):ToClient_getCurMaxEndura(), (self._enchantInfo):ToClient_getDecMaxEndura(), enchantType)
@@ -138,7 +141,7 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
     self:setEnable_CheckboxUseCron(true)
     self:setText_NumOfCron((self._enchantInfo):ToClient_getCountProtecMaterial_s64(), (self._enchantInfo):ToClient_getNeedCountForProtect_s64())
     local enduranceDesc = self:getStr_EnchantInfo((self._enchantInfo):ToClient_getCurMaxEndura(), (self._enchantInfo):ToClient_getDecMaxEndura(), enchantType, true)
-    -- DECOMPILER ERROR at PC65: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC65: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     (self._strForEnchantInfo)._cronChecked = enduranceDesc .. self:getStr_EnchantProtectInfo(enchantType)
@@ -149,7 +152,7 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
       if toInt64(0, 0) < needCountForPerfectEnchant_s64 then
         self:setEnable_CheckboxForcedEnchant(true)
         local enduranceDesc = self:getStr_EnchantInfo((self._enchantInfo):ToClient_getCurMaxEndura(), (self._enchantInfo):ToClient_getDecMaxEndura(), enchantType, true)
-        -- DECOMPILER ERROR at PC102: Confused about usage of register: R8 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC102: Confused about usage of register: R9 in 'UnsetPending'
 
         ;
         (self._strForEnchantInfo)._forcedChecked = enduranceDesc .. self:getStr_PerfectEnchantInfo(needCountForPerfectEnchant_s64, (self._enchantInfo):ToClient_getDecMaxEnduraPerfect())
@@ -164,7 +167,9 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
           if ((self._ui)._checkbox_ForcedEnchant):IsCheck() then
             self:setText_EnchantInfo(((self._ui)._checkbox_ForcedEnchant):GetShow())
             self:showNoticeEnchantApply(enchantType)
-            self:setEnchantMaterial(isMonotone)
+            if isRadioClick == nil then
+              self:setEnchantMaterial(isMonotone)
+            end
             self:showDifficulty(self._grantItemWhereType, self._grantItemSlotNo)
           end
         end
@@ -202,10 +207,14 @@ end
 
 PaGlobal_Enchant.willStartEnchant = function(self)
   -- function num : 0_10
+  -- DECOMPILER ERROR at PC17: Unhandled construct in 'MakeBoolean' P1
+
   if ((self._ui)._checkbox_UseCron):IsCheck() and (self._enchantInfo):ToClient_setPreventDownGradeItem() ~= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_NOT_ENOUGH_CRONESTONE"))
     return 
   end
+  ;
+  (self._enchantInfo):ToClient_clearPreventDownGradeItem()
   if not ((self._ui)._checkbox_skipEffect):IsCheck() then
     self:startEnchantAnimation()
   else
@@ -813,6 +822,12 @@ PaGlobal_Enchant.handleLUpForcedEnchantCheckBox = function(self)
   -- function num : 0_53
   self:setText_EnchantInfo(((self._ui)._checkbox_ForcedEnchant):IsCheck())
   self:showDifficulty(self._grantItemWhereType, self._grantItemSlotNo)
+  if ((self._ui)._checkbox_ForcedEnchant):IsCheck() == true then
+    ((self._ui)._statictext_noticeApplyButton):SetShow(false)
+  else
+    ;
+    ((self._ui)._statictext_noticeApplyButton):SetShow(self._isShowNoticeApplyButton)
+  end
 end
 
 -- DECOMPILER ERROR at PC155: Confused about usage of register: R0 in 'UnsetPending'
@@ -849,6 +864,9 @@ PaGlobal_Enchant.handleLUpEnchantApplyButton = function(self)
         do
           if enchantLevel > 15 then
             enchantAlert = true
+          end
+          if ((self._ui)._checkbox_ForcedEnchant):IsCheck() == true then
+            enchantAlert = false
           end
           if enchantAlert then
             local goEnchant = function()

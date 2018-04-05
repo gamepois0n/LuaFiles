@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\panel_loading.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\panel_loading.luac 
 
 -- params : ...
 -- function num : 0
@@ -20,11 +20,12 @@ local progressHead = (UI.getChildControl)(progressRate, "Progress2_Bar_Head")
 local staticBack = (UI.getChildControl)(Panel_Loading, "Static_Progress_Back")
 local goblinRun = (UI.getChildControl)(Panel_Loading, "Static_GoblinRun")
 local backGroundEvnetImage = (UI.getChildControl)(Panel_Loading, "Static_BackImage")
-local isBgOpen = false
-local bgImageTexture = {}
+local isDraganOpen = ToClient_IsContentsGroupOpen("6")
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
+local isBgOpen = isDraganOpen
+local bgImageTexture = {}
 if isBgOpen then
-  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/User_01.dds", [1] = "New_UI_Common_ForLua/Window/Loading/User_02.dds", [2] = "New_UI_Common_ForLua/Window/Loading/User_03.dds", count = 3}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/Dragan_01.dds", [1] = "New_UI_Common_ForLua/Window/Loading/Dragan_02.dds", [2] = "New_UI_Common_ForLua/Window/Loading/Dragan_03.dds", [3] = "New_UI_Common_ForLua/Window/Loading/Dragan_04.dds", [4] = "New_UI_Common_ForLua/Window/Loading/Dragan_05.dds", [5] = "New_UI_Common_ForLua/Window/Loading/Dragan_06.dds", count = 6}
 end
 if isGameTypeJapan() then
   isBgOpen = false

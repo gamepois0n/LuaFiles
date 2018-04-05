@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\enduarance\weight_control.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\enduarance\weight_control.luac 
 
 -- params : ...
 -- function num : 0
@@ -60,7 +60,8 @@ FGlobal_Inventory_WeightCheck = function()
     (self.weight):SetAlpha(0.8)
     ;
     (self.weight):SetText(totalWeight .. "%")
-    PaGlobal_TutorialMenu:setShow(PaGlobal_TutorialMenu:checkShowCondition(), true)
+    local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+    PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
     if sumtotalWeight >= 100 then
       (self.weight):SetFontColor((Defines.Color).C_FFF26A6A)
     else
@@ -69,21 +70,26 @@ FGlobal_Inventory_WeightCheck = function()
       end
     end
   else
-    ;
-    (self.weight):SetShow(false)
-    ;
-    (self.weightText):SetShow(false)
-    PaGlobal_TutorialMenu:setShow(PaGlobal_TutorialMenu:checkShowCondition(), true)
-  end
-  if sumtotalWeight >= 100 and isOnEffect == false then
-    (self.weight):EraseAllEffect()
-    ;
-    (self.weight):AddEffect("fUI_Weight_01A", true, -0.5, -1.3)
-    isOnEffect = true
-  else
-    if sumtotalWeight < 100 then
-      (self.weight):EraseAllEffect()
-      isOnEffect = false
+    do
+      ;
+      (self.weight):SetShow(false)
+      ;
+      (self.weightText):SetShow(false)
+      do
+        local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+        PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+        if sumtotalWeight >= 100 and isOnEffect == false then
+          (self.weight):EraseAllEffect()
+          ;
+          (self.weight):AddEffect("fUI_Weight_01A", true, -0.5, -1.3)
+          isOnEffect = true
+        else
+          if sumtotalWeight < 100 then
+            (self.weight):EraseAllEffect()
+            isOnEffect = false
+          end
+        end
+      end
     end
   end
 end

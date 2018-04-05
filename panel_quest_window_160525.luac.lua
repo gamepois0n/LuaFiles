@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\quest\panel_quest_window_160525.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\quest\panel_quest_window_160525.luac 
 
 -- params : ...
 -- function num : 0
@@ -82,8 +82,8 @@ local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 ;
 ((QuestWindow.ui).contentBG):SetIgnore(false)
 local useArray = {}
-local regionString = {[QuestRegionType.eQuestRegionType_None] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_99"), [QuestRegionType.eQuestRegionType_Balenos] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_1"), [QuestRegionType.eQuestRegionType_Serendia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_2"), [QuestRegionType.eQuestRegionType_NorthCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_3"), [QuestRegionType.eQuestRegionType_CalpheonBigCity] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_4"), [QuestRegionType.eQuestRegionType_Keplan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_5"), [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_6"), [QuestRegionType.eQuestRegionType_Media] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_7"), [QuestRegionType.eQuestRegionType_Valencia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_8"), [QuestRegionType.eQuestRegionType_Kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_9")}
-local regionOpen = {[QuestRegionType.eQuestRegionType_None] = true, [QuestRegionType.eQuestRegionType_Balenos] = true, [QuestRegionType.eQuestRegionType_Serendia] = true, [QuestRegionType.eQuestRegionType_NorthCalpheon] = true, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = true, [QuestRegionType.eQuestRegionType_Keplan] = true, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = true, [QuestRegionType.eQuestRegionType_Media] = true, [QuestRegionType.eQuestRegionType_Valencia] = true, [QuestRegionType.eQuestRegionType_Kamasylvia] = true, [QuestRegionType.eQuestRegionType_Count] = false}
+local regionString = {[QuestRegionType.eQuestRegionType_None] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_99"), [QuestRegionType.eQuestRegionType_Balenos] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_1"), [QuestRegionType.eQuestRegionType_Serendia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_2"), [QuestRegionType.eQuestRegionType_NorthCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_3"), [QuestRegionType.eQuestRegionType_CalpheonBigCity] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_4"), [QuestRegionType.eQuestRegionType_Keplan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_5"), [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_6"), [QuestRegionType.eQuestRegionType_Media] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_7"), [QuestRegionType.eQuestRegionType_Valencia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_8"), [QuestRegionType.eQuestRegionType_Kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_9"), [QuestRegionType.eQuestRegionType_Drigan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_10")}
+local regionOpen = {[QuestRegionType.eQuestRegionType_None] = true, [QuestRegionType.eQuestRegionType_Balenos] = true, [QuestRegionType.eQuestRegionType_Serendia] = true, [QuestRegionType.eQuestRegionType_NorthCalpheon] = true, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = true, [QuestRegionType.eQuestRegionType_Keplan] = true, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = true, [QuestRegionType.eQuestRegionType_Media] = true, [QuestRegionType.eQuestRegionType_Valencia] = true, [QuestRegionType.eQuestRegionType_Kamasylvia] = true, [QuestRegionType.eQuestRegionType_Drigan] = true, [QuestRegionType.eQuestRegionType_Count] = false}
 local questType = {black = 0, story = 1, town = 2, adv = 3, trade = 4, craft = 5, rep = 6, count = 7}
 local questSelectType = {story = 0, hunt = 1, life = 2, fish = 3, adv = 4, etc = 5}
 local typeString = {[QuestType.eQuestType_BlackSpirit] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_1"), [QuestType.eQuestType_Story] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_2"), [QuestType.eQuestType_Town] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_3"), [QuestType.eQuestType_Adventure] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_4"), [QuestType.eQuestType_Trade] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_5"), [QuestType.eQuestType_Craft] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_6"), [QuestType.eQuestType_Repetition] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_7"), [QuestType.eQuestType_Guild] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_8")}
@@ -112,10 +112,12 @@ local questSortArrayRegion = {
 [QuestRegionType.eQuestRegionType_Valencia] = {}
 , 
 [QuestRegionType.eQuestRegionType_Kamasylvia] = {}
+, 
+[QuestRegionType.eQuestRegionType_Drigan] = {}
 }
-local questArrayRegionCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0}
-local questArrayRegionProgressCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0}
-local questArrayRegionSort = {[0] = QuestRegionType.eQuestRegionType_Balenos, [1] = QuestRegionType.eQuestRegionType_Serendia, [2] = QuestRegionType.eQuestRegionType_NorthCalpheon, [3] = QuestRegionType.eQuestRegionType_CalpheonBigCity, [4] = QuestRegionType.eQuestRegionType_Keplan, [5] = QuestRegionType.eQuestRegionType_SouthWestCalpheon, [6] = QuestRegionType.eQuestRegionType_Media, [7] = QuestRegionType.eQuestRegionType_Valencia, [8] = QuestRegionType.eQuestRegionType_Kamasylvia, [9] = QuestRegionType.eQuestRegionType_None}
+local questArrayRegionCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0, [QuestRegionType.eQuestRegionType_Drigan] = 0}
+local questArrayRegionProgressCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0, [QuestRegionType.eQuestRegionType_Drigan] = 0}
+local questArrayRegionSort = {[0] = QuestRegionType.eQuestRegionType_Balenos, [1] = QuestRegionType.eQuestRegionType_Serendia, [2] = QuestRegionType.eQuestRegionType_NorthCalpheon, [3] = QuestRegionType.eQuestRegionType_CalpheonBigCity, [4] = QuestRegionType.eQuestRegionType_Keplan, [5] = QuestRegionType.eQuestRegionType_SouthWestCalpheon, [6] = QuestRegionType.eQuestRegionType_Media, [7] = QuestRegionType.eQuestRegionType_Valencia, [8] = QuestRegionType.eQuestRegionType_Kamasylvia, [9] = QuestRegionType.eQuestRegionType_Drigan, [10] = QuestRegionType.eQuestRegionType_None}
 local questSortArrayType = {
 [QuestType.eQuestType_BlackSpirit] = {}
 , 
@@ -362,6 +364,8 @@ QuestWindow.init = function(self)
   ;
   ((self.ui).templateGroupBG):SetShow(false)
   ;
+  ((self.ui).templateGroupBG):SetIgnore(true)
+  ;
   ((self.ui).templateListBG):SetShow(false)
   ;
   ((self.ui).tabProgress):SetCheck(true)
@@ -524,10 +528,12 @@ QuestWindow.ResetDataArray = function(self)
 [QuestRegionType.eQuestRegionType_Valencia] = {}
 , 
 [QuestRegionType.eQuestRegionType_Kamasylvia] = {}
+, 
+[QuestRegionType.eQuestRegionType_Drigan] = {}
 }
-  questArrayRegionCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0}
-  questArrayRegionProgressCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0}
-  questArrayRegionSort = {[0] = QuestRegionType.eQuestRegionType_Balenos, [1] = QuestRegionType.eQuestRegionType_Serendia, [2] = QuestRegionType.eQuestRegionType_NorthCalpheon, [3] = QuestRegionType.eQuestRegionType_CalpheonBigCity, [4] = QuestRegionType.eQuestRegionType_Keplan, [5] = QuestRegionType.eQuestRegionType_SouthWestCalpheon, [6] = QuestRegionType.eQuestRegionType_Media, [7] = QuestRegionType.eQuestRegionType_Valencia, [8] = QuestRegionType.eQuestRegionType_Kamasylvia, [9] = QuestRegionType.eQuestRegionType_None}
+  questArrayRegionCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0, [QuestRegionType.eQuestRegionType_Drigan] = 0}
+  questArrayRegionProgressCount = {[QuestRegionType.eQuestRegionType_None] = 0, [QuestRegionType.eQuestRegionType_Balenos] = 0, [QuestRegionType.eQuestRegionType_Serendia] = 0, [QuestRegionType.eQuestRegionType_NorthCalpheon] = 0, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = 0, [QuestRegionType.eQuestRegionType_Keplan] = 0, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = 0, [QuestRegionType.eQuestRegionType_Media] = 0, [QuestRegionType.eQuestRegionType_Valencia] = 0, [QuestRegionType.eQuestRegionType_Kamasylvia] = 0, [QuestRegionType.eQuestRegionType_Drigan] = 0}
+  questArrayRegionSort = {[0] = QuestRegionType.eQuestRegionType_Balenos, [1] = QuestRegionType.eQuestRegionType_Serendia, [2] = QuestRegionType.eQuestRegionType_NorthCalpheon, [3] = QuestRegionType.eQuestRegionType_CalpheonBigCity, [4] = QuestRegionType.eQuestRegionType_Keplan, [5] = QuestRegionType.eQuestRegionType_SouthWestCalpheon, [6] = QuestRegionType.eQuestRegionType_Media, [7] = QuestRegionType.eQuestRegionType_Valencia, [8] = QuestRegionType.eQuestRegionType_Kamasylvia, [9] = QuestRegionType.eQuestRegionType_Drigan, [10] = QuestRegionType.eQuestRegionType_None}
   questSortArrayType = {
 [QuestType.eQuestType_BlackSpirit] = {}
 , 
@@ -569,7 +575,7 @@ QuestWindow.GetProgressingActiveTab = function(self)
 end
 
 QuestWindow.MakeDataArray = function(self)
-  -- function num : 0_10 , upvalues : QuestWindow, QuestTabType, questArrayRegionCount, questSortArrayRegion, questArrayTypeCount, questSortArrayType, QuestRegionType, questArrayRegionProgressCount, questArrayTypeProgressCount, useArray, questArrayRegionSort, isContentsEnableMedia, isContentsEnableValencia, isContentsEnableKamasilvia, regionString, regionOpen, questType, typeString, typeOpen, questArrayGroupCount, questArrayGroupCompleteCount, repetitiveQuestGroupOpen
+  -- function num : 0_10 , upvalues : QuestWindow, QuestTabType, questArrayRegionCount, questSortArrayRegion, questArrayTypeCount, questSortArrayType, QuestRegionType, questArrayRegionProgressCount, questArrayTypeProgressCount, useArray, questArrayRegionSort, isContentsEnableMedia, isContentsEnableValencia, isContentsEnableKamasilvia, isContentsEnableDragan, regionString, regionOpen, questType, typeString, typeOpen, questArrayGroupCount, questArrayGroupCompleteCount, repetitiveQuestGroupOpen
   local progressingActiveTab = QuestWindow:GetProgressingActiveTab()
   local questListInfo = (ToClient_GetQuestList())
   local questGroupCount = nil
@@ -639,7 +645,7 @@ QuestWindow.MakeDataArray = function(self)
                     for questIdx = startIdx, questCount - 1 do
                       local uiQuestInfo = questGroupInfo:getQuestAt(questIdx)
                       local dataRegionIdx = uiQuestInfo:getQuestRegion()
-                      if QuestRegionType.eQuestRegionType_Kamasylvia < dataRegionIdx or dataRegionIdx < QuestRegionType.eQuestRegionType_None then
+                      if QuestRegionType.eQuestRegionType_Drigan < dataRegionIdx or dataRegionIdx < QuestRegionType.eQuestRegionType_None then
                         dataRegionIdx = QuestRegionType.eQuestRegionType_None
                       end
                       local regionIdx = questArrayRegionCount[dataRegionIdx]
@@ -671,7 +677,7 @@ QuestWindow.MakeDataArray = function(self)
                   end
                   local uiQuestInfo = questGroupInfo:getQuestAt(0)
                   local dataRegionIdx = uiQuestInfo:getQuestRegion()
-                  if QuestRegionType.eQuestRegionType_Kamasylvia < dataRegionIdx or dataRegionIdx < QuestRegionType.eQuestRegionType_None then
+                  if QuestRegionType.eQuestRegionType_Drigan < dataRegionIdx or dataRegionIdx < QuestRegionType.eQuestRegionType_None then
                     dataRegionIdx = QuestRegionType.eQuestRegionType_None
                   end
                   local regionIdx = questArrayRegionCount[dataRegionIdx]
@@ -737,7 +743,7 @@ QuestWindow.MakeDataArray = function(self)
         local regionIdx = questArrayRegionSort[index]
         local count = questArrayRegionCount[regionIdx]
         local doInsertData = function()
-    -- function num : 0_10_0 , upvalues : isContentsEnableMedia, QuestRegionType, index, isContentsEnableValencia, isContentsEnableKamasilvia, useArray, arrayIdx, regionIdx, regionString, regionOpen, count, questSortArrayRegion
+    -- function num : 0_10_0 , upvalues : isContentsEnableMedia, QuestRegionType, index, isContentsEnableValencia, isContentsEnableKamasilvia, isContentsEnableDragan, useArray, arrayIdx, regionIdx, regionString, regionOpen, count, questSortArrayRegion
     if not isContentsEnableMedia and QuestRegionType.eQuestRegionType_Media - 1 == index then
       return 
     end
@@ -747,13 +753,16 @@ QuestWindow.MakeDataArray = function(self)
     if not isContentsEnableKamasilvia and QuestRegionType.eQuestRegionType_Kamasylvia - 1 == index then
       return 
     end
-    -- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
+    if not isContentsEnableDragan and QuestRegionType.eQuestRegionType_Drigan - 1 == index then
+      return 
+    end
+    -- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
     useArray[arrayIdx] = {isQuest = false, isNext = false, isCleared = false, questRegion = regionIdx, questType = nil, title = regionString[regionIdx], gruopNo = nil, questNo = nil, conditionComp = nil, isShowWidget = nil, groupIdx = nil, isGroupQuest = nil, groupCount = nil, resetTime = nil, repeatTime = nil, isSubQuest = nil}
     arrayIdx = arrayIdx + 1
     if regionOpen[regionIdx] and count > 0 then
       for questIdx = 0, count - 1 do
-        -- DECOMPILER ERROR at PC176: Confused about usage of register: R4 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC186: Confused about usage of register: R4 in 'UnsetPending'
 
         useArray[arrayIdx] = {isQuest = true, isNext = ((questSortArrayRegion[regionIdx])[questIdx]).isNext, isCleared = ((questSortArrayRegion[regionIdx])[questIdx]).isCleared, questRegion = ((questSortArrayRegion[regionIdx])[questIdx]).questRegion, questType = ((questSortArrayRegion[regionIdx])[questIdx]).questType, title = ((questSortArrayRegion[regionIdx])[questIdx]).questTitle, gruopNo = ((questSortArrayRegion[regionIdx])[questIdx]).gruopNo, questNo = ((questSortArrayRegion[regionIdx])[questIdx]).questNo, posCount = ((questSortArrayRegion[regionIdx])[questIdx]).posCount, conditionComp = ((questSortArrayRegion[regionIdx])[questIdx]).conditionComp, completeCount = ((questSortArrayRegion[regionIdx])[questIdx]).completeCount, isShowWidget = ((questSortArrayRegion[regionIdx])[questIdx]).isShowWidget, groupIdx = ((questSortArrayRegion[regionIdx])[questIdx]).groupIdx, isGroupQuest = ((questSortArrayRegion[regionIdx])[questIdx]).isGroupQuest, groupCount = ((questSortArrayRegion[regionIdx])[questIdx]).groupCount, resetTime = ((questSortArrayRegion[regionIdx])[questIdx]).resetTime, repeatTime = ((questSortArrayRegion[regionIdx])[questIdx]).repeatTime, isSubQuest = ((questSortArrayRegion[regionIdx])[questIdx]).isSubQuest}
         arrayIdx = arrayIdx + 1
@@ -761,7 +770,7 @@ QuestWindow.MakeDataArray = function(self)
     end
   end
 
-        -- DECOMPILER ERROR at PC547: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC548: Unhandled construct in 'MakeBoolean' P1
 
         if emptyHide and count > 0 then
           doInsertData()
@@ -788,7 +797,7 @@ QuestWindow.MakeDataArray = function(self)
     end
   end
 
-        -- DECOMPILER ERROR at PC577: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC578: Unhandled construct in 'MakeBoolean' P1
 
         if emptyHide and count > 0 then
           doInsertData()
@@ -1609,7 +1618,7 @@ end
 HandleClicked_QuestWindow_FindWay_Prepare = function(gruopNo, questNo, questCondition, isAuto)
   -- function num : 0_22
   local QuestStatic = questList_getQuestStatic(gruopNo, questNo)
-  if QuestStatic ~= nil and ToClient_getTutorialLimitLevel() <= ((getSelfPlayer()):get()):getLevel() then
+  if QuestStatic ~= nil then
     local selectQuestType = QuestStatic:getSelectType()
     if selectQuestType ~= 0 then
       local QuestListInfo = ToClient_GetQuestList()
@@ -2002,6 +2011,54 @@ Panel_Window_QuestNew_PopUp_ShowIconToolTip = function(isShow)
       TooltipSimple_Hide()
     end
   end
+end
+
+Toggle_QuestInfoTabProgress_forPadEventFunc = function()
+  -- function num : 0_41 , upvalues : QuestWindow
+  ((QuestWindow.ui).tabProgress):SetCheck(true)
+  ;
+  ((QuestWindow.ui).tabImportant):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabRepeat):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabMain):SetCheck(false)
+  HandleClick_QuestWindow_Update()
+end
+
+Toggle_QuestInfoTabMain_forPadEventFunc = function()
+  -- function num : 0_42 , upvalues : QuestWindow
+  ((QuestWindow.ui).tabProgress):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabImportant):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabRepeat):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabMain):SetCheck(true)
+  HandleClick_QuestWindow_Update()
+end
+
+Toggle_QuestInfoTabImportant_forPadEventFunc = function()
+  -- function num : 0_43 , upvalues : QuestWindow
+  ((QuestWindow.ui).tabProgress):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabImportant):SetCheck(true)
+  ;
+  ((QuestWindow.ui).tabRepeat):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabMain):SetCheck(false)
+  HandleClick_QuestWindow_Update()
+end
+
+Toggle_QuestInfoTabRepeat_forPadEventFunc = function()
+  -- function num : 0_44 , upvalues : QuestWindow
+  ((QuestWindow.ui).tabProgress):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabImportant):SetCheck(false)
+  ;
+  ((QuestWindow.ui).tabRepeat):SetCheck(true)
+  ;
+  ((QuestWindow.ui).tabMain):SetCheck(false)
+  HandleClick_QuestWindow_Update()
 end
 
 QuestWindow:init()

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_alchemystone.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_alchemystone.luac 
 
 -- params : ...
 -- function num : 0
@@ -1306,6 +1306,7 @@ FGlobal_AlchemyStone_Open = function()
   end
   if Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
+    ClothInventory_Close()
   end
   InventoryWindow_Show()
   Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)

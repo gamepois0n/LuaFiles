@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ingamecashshop\panel_ingamecashshop_goodsdetailinfo.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ingamecashshop\panel_ingamecashshop_goodsdetailinfo.luac 
 
 -- params : ...
 -- function num : 0
@@ -239,7 +239,7 @@ end
       end
     end
     ;
-    (self._staticText_PurchaseLimit):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_PURCHASELIMIT", "typeString", typeString, "limitCount", limitCount, "mylimitCount", mylimitCount))
+    (self._staticText_PurchaseLimit):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_PURCHASELIMIT", "typeString", typeString, "limitCount", limitCount, "mylimitCount", mylimitCount) .. " (" .. cashProduct:getLimitedTypeDesc() .. ")")
     ;
     (self._staticText_PurchaseLimit):SetFontColor(UI_color.C_FFF26A6A)
     ;

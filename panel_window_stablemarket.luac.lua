@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\stable\panel_window_stablemarket.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\stable\panel_window_stablemarket.luac 
 
 -- params : ...
 -- function num : 0
@@ -818,6 +818,9 @@ end
 
 StableMarket_UpdateMoney = function()
   -- function num : 0_12 , upvalues : stableMarket
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_StableMarket:GetShow() == false then
+    return 
+  end
   local self = stableMarket
   ;
   (self._staticInven):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))

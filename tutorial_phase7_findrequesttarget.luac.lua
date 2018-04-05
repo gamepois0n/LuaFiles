@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\tutorial\tutorial_phase7_findrequesttarget.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\tutorial\tutorial_phase7_findrequesttarget.luac 
 
 -- params : ...
 -- function num : 0
@@ -105,7 +105,7 @@ PaGlobal_TutorialPhase_FindRequestTarget.startPhaseXXX = function(self, stepNo)
   FGlobal_Panel_MainStatus_User_Bar_Show()
   FGlobal_ClassResource_SetShowControl(true)
   Panel_CheckedQuest:SetShow(true, false)
-  Panel_MainQuest:SetShow(false, false)
+  Panel_MainQuest:SetShow(true, true)
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
 end

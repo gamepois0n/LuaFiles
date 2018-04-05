@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\search\panel_dialog_search.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\search\panel_dialog_search.luac 
 
 -- params : ...
 -- function num : 0
@@ -204,8 +204,32 @@ searchView_ZoomOut = function()
   check_searchObject()
 end
 
+searchView_CheckDistance = function()
+  -- function num : 0_13 , upvalues : moveCameraDistance, var_UI
+  if moveCameraDistance < 1200 then
+    (var_UI.btn_ZoomOut):SetShow(true)
+    ;
+    (var_UI.StaticText_E):SetShow(true)
+  else
+    ;
+    (var_UI.btn_ZoomOut):SetShow(false)
+    ;
+    (var_UI.StaticText_E):SetShow(false)
+  end
+  if moveCameraDistance > 300 then
+    (var_UI.btn_ZoomIn):SetShow(true)
+    ;
+    (var_UI.StaticText_Q):SetShow(true)
+  else
+    ;
+    (var_UI.btn_ZoomIn):SetShow(false)
+    ;
+    (var_UI.StaticText_Q):SetShow(false)
+  end
+end
+
 searchViewMode_ShowToggle = function(isShow)
-  -- function num : 0_13 , upvalues : variable, var_UI
+  -- function num : 0_14 , upvalues : variable, var_UI
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   if isShow == nil then
@@ -221,7 +245,7 @@ searchViewMode_ShowToggle = function(isShow)
 end
 
 local Alpha_Rate_Setting = function(alpha)
-  -- function num : 0_14 , upvalues : var_UI
+  -- function num : 0_15 , upvalues : var_UI
   for k,v in pairs(var_UI) do
     v:SetAlpha(alpha)
     if k ~= "panel" then
@@ -231,7 +255,7 @@ local Alpha_Rate_Setting = function(alpha)
 end
 
 local initialize = function()
-  -- function num : 0_15 , upvalues : var_UI
+  -- function num : 0_16 , upvalues : var_UI
   Panel_Dialog_Search:SetShow(false, false)
   searchView_ScreenResize()
   registerEvent("onScreenResize", "searchView_ScreenResize")

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\competitiongame\panel_competitiongame_joindesc.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\competitiongame\panel_competitiongame_joindesc.luac 
 
 -- params : ...
 -- function num : 0
@@ -15,10 +15,10 @@ Panel_CompetitionGame_JoinDesc_Init = function()
   (self.txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (self.txt_Desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_ESCMENUDESC"))
-  local resizeTextX = (self.txt_Desc):GetTextSizeY() + (self.btn_Join):GetSizeY()
-  Panel_CompetitionGame_JoinDesc:SetSize(Panel_CompetitionGame_JoinDesc:GetSizeX(), resizeTextX + 100)
+  local resizeTextY = (self.txt_Desc):GetTextSizeY() + (self.btn_Join):GetSizeY()
+  Panel_CompetitionGame_JoinDesc:SetSize(Panel_CompetitionGame_JoinDesc:GetSizeX(), resizeTextY + 110)
   ;
-  (self.descBG):SetSize((self.descBG):GetSizeX(), resizeTextX)
+  (self.descBG):SetSize((self.descBG):GetSizeX(), resizeTextY + 5)
   ;
   (self.btn_Join):ComputePos()
   ;

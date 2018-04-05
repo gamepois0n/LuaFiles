@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\ingamecustomize\ingamecustomize.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\ingamecustomize\ingamecustomize.luac 
 
 -- params : ...
 -- function num : 0
@@ -76,6 +76,7 @@ IngameCustomize_Hide = function()
       end
       gameExitPhoto = false
       characterInfoPhoto = false
+      faceHairCustomUpdate(false)
     end
   end
 end

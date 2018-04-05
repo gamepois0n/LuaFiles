@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\rader\radar_globalvalue.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\rader\radar_globalvalue.luac 
 
 -- params : ...
 -- function num : 0
@@ -31,7 +31,7 @@ actorIcons = {}
 monsterIcons = {}
 , iconPool = (Array.new)(), iconCreateCount = 0, 
 areaQuests = {}
-, questIconPool = (Array.new)(), questCreateCount = 0, regionTypeValue = (CppEnums.RegionType).eRegionType_MinorTown, scaleRateWidth = 1, scaleRateHeight = 1, isRotateMode = false}
+, questIconPool = (Array.new)(), questCreateCount = 0, regionTypeValue = (CppEnums.RegionType).eRegionType_MinorTown, scaleRateWidth = 1, scaleRateHeight = 1, isRotateMode = (ToClient_getGameOptionControllerWrapper()):getRadarRotateMode()}
 FGlobal_Panel_Radar_Show_AddEffect = function()
   -- function num : 0_0 , upvalues : radar_Background
   Panel_Radar:SetShow(true)

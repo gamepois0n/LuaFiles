@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\tooltip\panel_tooltip_item.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\tooltip\panel_tooltip_item.luac 
 
 -- params : ...
 -- function num : 0
@@ -384,8 +384,9 @@ Panel_Tooltip_Item_Show_ForChattingLinkedItem = function(itemStaticStatus, uiBas
 end
 
 local clothBagSlotNo = nil
+local bagInWarehouse = false
 Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
-  -- function num : 0_8 , upvalues : Panel_Tooltip_Item_DataObject, EquipItem_Lock, clothBagSlotNo, normalTooltip, equippedTooltip
+  -- function num : 0_8 , upvalues : Panel_Tooltip_Item_DataObject, EquipItem_Lock, clothBagSlotNo, bagInWarehouse, normalTooltip, equippedTooltip
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.itemMarket = nil
@@ -396,6 +397,7 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
     return 
   end
   clothBagSlotNo = nil
+  bagInWarehouse = slotType == "WareHouse"
   local slot = ((Panel_Tooltip_Item_DataObject.slotData)[slotType])[slotNo]
   local parent = false
   local inven = false
@@ -405,7 +407,7 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
     end
     parent = true
   else
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC42: Confused about usage of register: R7 in 'UnsetPending'
 
     if slotType == "inventory" then
       Panel_Tooltip_Item_DataObject.inventory = true
@@ -425,468 +427,348 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
       end
       parent = true
       inven = true
-    else
-      do
-        if slotType == "Auction" then
-          local myAuctionInfo = RequestGetAuctionInfo()
-          local auctionType = myAuctionInfo:getAuctionType()
-          local itemCount = 0
-          if auctionType == 0 then
-            itemCount = myAuctionInfo:getItemAuctionListCount()
-          else
-            if auctionType == 4 then
-              itemCount = myAuctionInfo:getMySellingItemAuctionCount()
-            else
-              if auctionType == 6 then
-                itemCount = myAuctionInfo:getMyItemBidListCount()
-              end
-            end
-          end
-          if itemCount < slotNo then
-            return 
-          end
-        end
-        do
-          local itemWrapper = nil
-          local isEquipOn = false
-          local isServantEquipOn = false
-          local DeliveryItemNo = nil
-          if slotType == "servant_inventory" then
-            itemWrapper = getServantInventoryItemBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo)
-          else
-            if slotType == "QuickSlot" then
-              local quickSlotInfo = getQuickSlotItem(slotNo)
-              if quickSlotInfo == nil then
-                return 
-              end
-              local selfPlayerWrapper = getSelfPlayer()
-              if selfPlayerWrapper == nil then
-                return 
-              end
-              local selfPlayer = selfPlayerWrapper:get()
-              if selfPlayer == nil then
-                return 
-              end
-              local whereType = QuickSlot_GetInventoryTypeFrom(quickSlotInfo._type)
-              local inventory = selfPlayer:getInventoryByType(whereType)
-              local invenSlotNo = inventory:getSlot(quickSlotInfo._itemKey)
-              if inventory:sizeXXX() <= invenSlotNo then
-                return 
-              end
-              itemWrapper = getInventoryItemByType(whereType, invenSlotNo)
-              if (CppEnums.ContentsEventType).ContentsType_InventoryBag == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
-                invenSlotNo = ToClient_GetItemNoByInventory(whereType, quickSlotInfo._itemNo_s64)
-                itemWrapper = getInventoryItemByType(whereType, invenSlotNo)
-                clothBagSlotNo = invenSlotNo
-              end
-            else
-              do
-                if slotType == "inventory" then
-                  itemWrapper = Inventory_GetToopTipItem()
-                else
-                  if slotType == "Enchant" then
-                    if slotNo == 0 then
-                      itemWrapper = PaGlobal_Enchant:enchantItem_ToItemWrapper()
-                    else
-                      itemWrapper = PaGlobal_Enchant:enchantItem_FromItemWrapper()
-                    end
-                  else
-                    if slotType == "SocketItem" then
-                      itemWrapper = SocketItem_FromItemWrapper()
-                      isEquipOn = true
-                    else
-                      if slotType == "WareHouse" then
-                        itemWrapper = Warehouse_GetToopTipItem()
-                        parent = true
-                        inven = true
-                      else
-                        if slotType == "looting" then
-                          itemWrapper = looting_getItem(slotNo)
-                        else
-                          if slotType == "equipment" then
-                            itemWrapper = ToClient_getEquipmentItem(slotNo)
-                            isEquipOn = true
-                            parent = true
-                            inven = true
-                            -- DECOMPILER ERROR at PC221: Confused about usage of register: R11 in 'UnsetPending'
-
-                            EquipItem_Lock.equipment = true
-                            -- DECOMPILER ERROR at PC227: Confused about usage of register: R11 in 'UnsetPending'
-
-                            EquipItem_Lock.itemLock = ToClient_EquipSlot_CheckItemLock(slotNo, 1)
-                          else
-                            if slotType == "disassemble_source" then
-                              itemWrapper = disassemble_GetSourceItem(slotNo)
-                            else
-                              if slotType == "disassemble_result" then
-                                itemWrapper = disassemble_GetResultItem(slotNo)
-                              else
-                                if slotType == "product_recipe" then
-                                  itemWrapper = product_GetRecipeItem(0)
-                                else
-                                  if slotType == "product_result" then
-                                    itemWrapper = product_GetResultItem(slotNo)
-                                  else
-                                    if slotType == "ServantEquipment" then
-                                      local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
-                                      if servantWrapper ~= nil then
-                                        itemWrapper = servantWrapper:getEquipItem(slotNo)
-                                      end
-                                      isEquipOn = true
-                                      isServantEquipOn = false
-                                    else
-                                      do
-                                        if slotType == "ServantShipEquipment" then
-                                          local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
-                                          if servantWrapper ~= nil then
-                                            itemWrapper = servantWrapper:getEquipItem(slotNo)
-                                          end
-                                          isEquipOn = true
-                                          isServantEquipOn = true
-                                        else
-                                          do
-                                            if slotType == "StableEquipment" then
-                                              local servantInfo = stable_getServant(StableList_SelectSlotNo())
-                                              if servantInfo ~= nil then
-                                                itemWrapper = servantInfo:getEquipItem(slotNo)
-                                              end
-                                            else
-                                              do
-                                                if slotType == "LinkedHorseEquip" then
-                                                  local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
-                                                  local servantInfo = stable_getServantFromOwnerServant(servantWrapper:getServantNo(), FGlobal_LinkedHorse_SelectedIndex())
-                                                  if servantInfo ~= nil then
-                                                    itemWrapper = servantInfo:getEquipItem(slotNo)
-                                                  end
-                                                else
-                                                  do
-                                                    if slotType == "exchangeOther" then
-                                                      itemWrapper = tradePC_GetOtherItem(slotNo)
-                                                    else
-                                                      if slotType == "tradeMarket_Sell" then
-                                                        itemWrapper = npcShop_getItemWrapperByShopSlotNo(slotNo)
-                                                      else
-                                                        if slotType == "tradeMarket_VehicleSell" then
-                                                          itemWrapper = npcShop_getVehicleItemWrapper(slotNo)
-                                                        else
-                                                          if slotType == "exchangeSelf" then
-                                                            itemWrapper = tradePC_GetMyItem(slotNo)
-                                                          else
-                                                            if slotType == "DeliveryInformation" then
-                                                              local deliverySlotNo = DeliveryInformation_SlotIndex(slotNo)
-                                                              local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
-                                                              if deliveryList ~= nil and deliverySlotNo < deliveryList:size() then
-                                                                local deliveryInfo = deliveryList:atPointer(deliverySlotNo)
-                                                                if deliveryInfo ~= nil then
-                                                                  itemWrapper = deliveryInfo:getItemWrapper(deliverySlotNo)
-                                                                end
-                                                              end
-                                                            else
-                                                              do
-                                                                if slotType == "DeliveryCarriageInformation" then
-                                                                  local deliverySlotNo = DeliveryCarriageInformation_SlotIndex(slotNo)
-                                                                  local deliveryList = deliveryCarriage_dlieveryList(DeliveryCarriageInformation_ObjectID())
-                                                                  if deliveryList ~= nil and deliverySlotNo < deliveryList:size() then
-                                                                    local deliveryInfo = deliveryList:atPointer(deliverySlotNo)
-                                                                    if deliveryInfo ~= nil then
-                                                                      itemWrapper = deliveryInfo:getItemWrapper(deliverySlotNo)
-                                                                      DeliveryItemNo = deliveryInfo:getItemNo()
-                                                                    end
-                                                                  end
-                                                                else
-                                                                  do
-                                                                    if slotType == "DeliveryRequest" then
-                                                                      itemWrapper = delivery_packItem(slotNo)
-                                                                    else
-                                                                      if slotType == "Auction" then
-                                                                        local myAuctionInfo = RequestGetAuctionInfo()
-                                                                        local auctionType = (myAuctionInfo:getAuctionType())
-                                                                        local itemAuctionData = nil
-                                                                        if auctionType == 0 then
-                                                                          itemAuctionData = myAuctionInfo:getItemAuctionListAt(slotNo - 1)
-                                                                        else
-                                                                          if auctionType == 4 then
-                                                                            itemAuctionData = myAuctionInfo:getMySellingItemAuctionAt(slotNo - 1)
-                                                                          else
-                                                                            if auctionType == 6 then
-                                                                              itemAuctionData = myAuctionInfo:getMyItemBidListAt(slotNo - 1)
-                                                                            end
-                                                                          end
-                                                                        end
-                                                                        if itemAuctionData ~= nil then
-                                                                          itemWrapper = itemAuctionData:getItem()
-                                                                        end
-                                                                      else
-                                                                        do
-                                                                          if slotType == "AuctionRegister" then
-                                                                            slotNo = Auction_GetSeletedItemSlot()
-                                                                            if slotNo ~= -1 then
-                                                                              itemWrapper = getInventoryItem(slotNo)
-                                                                            end
-                                                                          else
-                                                                            if slotType == "Socket" then
-                                                                              slotNo = Socket_GetSlotNo()
-                                                                              if slotNo ~= -1 then
-                                                                                itemWrapper = getInventoryItem(slotNo)
-                                                                              end
-                                                                            else
-                                                                              if slotType == "HousingMode" then
-                                                                                local realSlotNo = Panel_Housing_SlotNo(slotNo)
-                                                                                if realSlotNo ~= -1 then
-                                                                                  itemWrapper = getInventoryItem(realSlotNo)
-                                                                                end
-                                                                              else
-                                                                                do
-                                                                                  if slotType == "FixEquip" then
-                                                                                    local slotNumber = 0
-                                                                                    if slotNo == 0 then
-                                                                                      slotNumber = PaGlobal_FixEquip:fixEquip_GetMainSlotNo()
-                                                                                      if slotNumber ~= nil then
-                                                                                        itemWrapper = getInventoryItem(slotNumber)
-                                                                                      end
-                                                                                    else
-                                                                                      slotNumber = PaGlobal_FixEquip:fixEquip_GetSubSlotNo()
-                                                                                      if slotNumber ~= nil then
-                                                                                        itemWrapper = getInventoryItem(slotNumber)
-                                                                                      end
-                                                                                    end
-                                                                                  else
-                                                                                    do
-                                                                                      if slotType == "DailyStamp" then
-                                                                                        itemWrapper = ToClient_getRewardItem(slotNo)
-                                                                                      else
-                                                                                        if slotType == "clothExtraction" then
-                                                                                          itemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, slotNo)
-                                                                                        else
-                                                                                          if slotType == "CampEquip" then
-                                                                                            local actorKeyRaw = PaGlobal_Camp:getActorKeyRaw()
-                                                                                            local servantWrapper = getServantInfoFromActorKey(actorKeyRaw)
-                                                                                            if servantWrapper ~= nil then
-                                                                                              itemWrapper = servantWrapper:getEquipItem(slotNo)
-                                                                                            end
-                                                                                            if itemWrapper ~= nil then
-                                                                                              isEquipOn = true
-                                                                                              isServantEquipOn = true
-                                                                                            end
-                                                                                          else
-                                                                                            do
-                                                                                              ;
-                                                                                              (UI.ASSERT)(false, "showTooltip(normal)으로 정의되지 않은 slot�\128�\133(" .. slotType .. ")�\180 들어왔습니다. 확인해주세요.")
-                                                                                              do return  end
-                                                                                              if itemWrapper == nil then
-                                                                                                return 
-                                                                                              end
-                                                                                              local itemNamingStr = nil
-                                                                                              if isEquipOn and slotType ~= "SocketItem" then
-                                                                                                itemNamingStr = getItemNaming(getTItemNoBySlotNo((itemWrapper:getStaticStatus()):getEquipSlotNo(), true))
-                                                                                              else
-                                                                                                if slotType == "Enchant" then
-                                                                                                  itemNamingStr = getItemNaming(PaGlobal_Enchant:enchantItem_ToItemNo())
-                                                                                                else
-                                                                                                  if slotType == "WareHouse" then
-                                                                                                    local warehouseItemNo = Warehouse_GetToolTipItemNo()
-                                                                                                    if warehouseItemNo ~= nil then
-                                                                                                      itemNamingStr = getItemNaming(warehouseItemNo)
-                                                                                                    end
-                                                                                                  else
-                                                                                                    do
-                                                                                                      if slotType == "servant_inventory" then
-                                                                                                        itemNamingStr = getItemNaming(servantInventory_getItemNoBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo))
-                                                                                                      else
-                                                                                                        if slotType == "SocketItem" then
-                                                                                                          itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNo, false))
-                                                                                                        else
-                                                                                                          if slotType == "FixEquip" then
-                                                                                                            slotNumber = PaGlobal_FixEquip:fixEquip_GetMainSlotNo()
-                                                                                                            if slotNumber ~= nil then
-                                                                                                              itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNumber, false))
-                                                                                                            end
-                                                                                                          else
-                                                                                                            if slotType == "DeliveryRequest" then
-                                                                                                              itemNamingStr = getItemNaming(delivery_packItemNoByIndex(slotNo))
-                                                                                                            else
-                                                                                                              -- DECOMPILER ERROR at PC642: Unhandled construct in 'MakeBoolean' P1
-
-                                                                                                              if slotType == "DeliveryCarriageInformation" and DeliveryItemNo ~= nil then
-                                                                                                                itemNamingStr = getItemNaming(DeliveryItemNo)
-                                                                                                              end
-                                                                                                            end
-                                                                                                          end
-                                                                                                        end
-                                                                                                      end
-                                                                                                      itemNamingStr = getItemNaming(getTItemNoBySlotNo(getInventory_RealSlotNo(slotNo), false))
-                                                                                                      local isEquipalbeItem = false
-                                                                                                      local servantItem = false
-                                                                                                      local skillKey = SkillKey()
-                                                                                                      -- DECOMPILER ERROR at PC658: Confused about usage of register: R15 in 'UnsetPending'
-
-                                                                                                      Panel_Tooltip_Item_DataObject.isSkill = false
-                                                                                                      -- DECOMPILER ERROR at PC667: Confused about usage of register: R15 in 'UnsetPending'
-
-                                                                                                      if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
-                                                                                                        Panel_Tooltip_Item_DataObject.skillSlot = slot
-                                                                                                        Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
-                                                                                                        -- DECOMPILER ERROR at PC676: Confused about usage of register: R15 in 'UnsetPending'
-
-                                                                                                        Panel_Tooltip_Item_DataObject.isSkill = true
-                                                                                                        return 
-                                                                                                      else
-                                                                                                        if not isEquipOn then
-                                                                                                          local itemSSW = itemWrapper:getStaticStatus()
-                                                                                                          if not itemSSW:isEquipable() then
-                                                                                                            isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
-                                                                                                          else
-                                                                                                            -- DECOMPILER ERROR at PC708: Overwrote pending register: R13 in 'AssignReg'
-
-                                                                                                            isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
-                                                                                                          end
-                                                                                                        else
-                                                                                                          do
-                                                                                                            showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
-                                                                                                            if isEquipalbeItem and not isEquipOn then
-                                                                                                              local equipItemWrapper, campingItemWrapper = nil, nil
-                                                                                                              if servantItem or isServantEquipOn then
-                                                                                                                local temporaryWrapper = getTemporaryInformationWrapper()
-                                                                                                                if temporaryWrapper ~= nil then
-                                                                                                                  local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
-                                                                                                                  if campingWrapper ~= nil then
-                                                                                                                    local servantKind = campingWrapper:getServantKind()
-                                                                                                                    if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                                      campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                    end
-                                                                                                                  else
-                                                                                                                    do
-                                                                                                                      local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-                                                                                                                      do
-                                                                                                                        if servantWrapper ~= nil then
-                                                                                                                          local servantKind = servantWrapper:getServantKind()
-                                                                                                                          if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                                            equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                          end
-                                                                                                                        end
-                                                                                                                        do
-                                                                                                                          local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-                                                                                                                          -- DECOMPILER ERROR at PC790: Confused about usage of register: R18 in 'UnsetPending'
-
-                                                                                                                          if accSlotNo ~= nil then
-                                                                                                                            EquipItem_Lock.itemAccNo = accSlotNo
-                                                                                                                            equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
-                                                                                                                          else
-                                                                                                                            -- DECOMPILER ERROR at PC797: Confused about usage of register: R18 in 'UnsetPending'
-
-                                                                                                                            EquipItem_Lock.itemAccNo = -1
-                                                                                                                            equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                          end
-                                                                                                                          if equipItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                            local equipNamingStr = ""
-                                                                                                                            equipNamingStr = getItemNaming(getTItemNoBySlotNo((equipItemWrapper:getStaticStatus()):getEquipSlotNo(), true))
-                                                                                                                            showTooltip_Item(equippedTooltip, equipItemWrapper, false, true, nil, nil, nil, nil, equipNamingStr)
-                                                                                                                            ;
-                                                                                                                            (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                            local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                                            ;
-                                                                                                                            ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                            ;
-                                                                                                                            (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                                          end
-                                                                                                                          do
-                                                                                                                            if campingItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                              showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
-                                                                                                                              ;
-                                                                                                                              (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                              local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                                              ;
-                                                                                                                              ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                              ;
-                                                                                                                              (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                                            end
-                                                                                                                            do
-                                                                                                                              if slotType == "Enchant" then
-                                                                                                                                local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
-                                                                                                                                if isCash == false then
-                                                                                                                                  showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true, nil, itemNamingStr)
-                                                                                                                                end
-                                                                                                                                ;
-                                                                                                                                (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
-                                                                                                                                ;
-                                                                                                                                ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                                ;
-                                                                                                                                (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                                              end
-                                                                                                                              do
-                                                                                                                                if ((slot.icon):getParent()):IsUISubApp() then
-                                                                                                                                  Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
-                                                                                                                                  ;
-                                                                                                                                  (equippedTooltip.mainPanel):OpenUISubApp()
-                                                                                                                                  if not isEquipOn then
-                                                                                                                                    (normalTooltip.mainPanel):OpenUISubApp()
-                                                                                                                                  end
-                                                                                                                                else
-                                                                                                                                  Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
-                                                                                                                                end
-                                                                                                                              end
-                                                                                                                            end
-                                                                                                                          end
-                                                                                                                        end
-                                                                                                                      end
-                                                                                                                    end
-                                                                                                                  end
-                                                                                                                end
-                                                                                                              end
-                                                                                                            end
-                                                                                                          end
-                                                                                                        end
-                                                                                                      end
-                                                                                                    end
-                                                                                                  end
-                                                                                                end
-                                                                                              end
-                                                                                            end
-                                                                                          end
-                                                                                        end
-                                                                                      end
-                                                                                    end
-                                                                                  end
-                                                                                end
-                                                                              end
-                                                                            end
-                                                                          end
-                                                                        end
-                                                                      end
-                                                                    end
-                                                                  end
-                                                                end
-                                                              end
-                                                            end
-                                                          end
-                                                        end
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
+    elseif slotType == "Auction" then
+      local myAuctionInfo = RequestGetAuctionInfo()
+      local auctionType = myAuctionInfo:getAuctionType()
+      local itemCount = 0
+      if auctionType == 0 then
+        itemCount = myAuctionInfo:getItemAuctionListCount()
+      elseif auctionType == 4 then
+        itemCount = myAuctionInfo:getMySellingItemAuctionCount()
+      elseif auctionType == 6 then
+        itemCount = myAuctionInfo:getMyItemBidListCount()
+      end
+      if itemCount < slotNo then
+        return 
       end
     end
+  end
+  local itemWrapper = nil
+  local isEquipOn = false
+  local isServantEquipOn = false
+  local DeliveryItemNo = nil
+  if slotType == "servant_inventory" then
+    itemWrapper = getServantInventoryItemBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo)
+  elseif slotType == "QuickSlot" then
+    local quickSlotInfo = getQuickSlotItem(slotNo)
+    if quickSlotInfo == nil then
+      return 
+    end
+    local selfPlayerWrapper = getSelfPlayer()
+    if selfPlayerWrapper == nil then
+      return 
+    end
+    local selfPlayer = selfPlayerWrapper:get()
+    if selfPlayer == nil then
+      return 
+    end
+    local whereType = QuickSlot_GetInventoryTypeFrom(quickSlotInfo._type)
+    local inventory = selfPlayer:getInventoryByType(whereType)
+    local invenSlotNo = inventory:getSlot(quickSlotInfo._itemKey)
+    if inventory:sizeXXX() <= invenSlotNo then
+      return 
+    end
+    itemWrapper = getInventoryItemByType(whereType, invenSlotNo)
+    if (CppEnums.ContentsEventType).ContentsType_InventoryBag == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
+      invenSlotNo = ToClient_GetItemNoByInventory(whereType, quickSlotInfo._itemNo_s64)
+      itemWrapper = getInventoryItemByType(whereType, invenSlotNo)
+      clothBagSlotNo = invenSlotNo
+    end
+  elseif slotType == "inventory" then
+    itemWrapper = Inventory_GetToopTipItem()
+  elseif slotType == "Enchant" then
+    if slotNo == 0 then
+      itemWrapper = PaGlobal_Enchant:enchantItem_ToItemWrapper()
+    else
+      itemWrapper = PaGlobal_Enchant:enchantItem_FromItemWrapper()
+    end
+  elseif slotType == "SocketItem" then
+    itemWrapper = SocketItem_FromItemWrapper()
+    isEquipOn = true
+  elseif slotType == "WareHouse" then
+    itemWrapper = Warehouse_GetToopTipItem()
+    if itemWrapper and (CppEnums.ContentsEventType).ContentsType_InventoryBag == ((itemWrapper:getStaticStatus()):get()):getContentsEventType() then
+      clothBagSlotNo = FGlobal_Warehouse_GetToolTipItemSlotNo()
+    end
+    parent = true
+    inven = true
+  elseif slotType == "looting" then
+    itemWrapper = looting_getItem(slotNo)
+  elseif slotType == "equipment" then
+    itemWrapper = ToClient_getEquipmentItem(slotNo)
+    isEquipOn = true
+    parent = true
+    inven = true
+    -- DECOMPILER ERROR at PC242: Confused about usage of register: R11 in 'UnsetPending'
+
+    EquipItem_Lock.equipment = true
+    -- DECOMPILER ERROR at PC248: Confused about usage of register: R11 in 'UnsetPending'
+
+    EquipItem_Lock.itemLock = ToClient_EquipSlot_CheckItemLock(slotNo, 1)
+  elseif slotType == "disassemble_source" then
+    itemWrapper = disassemble_GetSourceItem(slotNo)
+  elseif slotType == "disassemble_result" then
+    itemWrapper = disassemble_GetResultItem(slotNo)
+  elseif slotType == "product_recipe" then
+    itemWrapper = product_GetRecipeItem(0)
+  elseif slotType == "product_result" then
+    itemWrapper = product_GetResultItem(slotNo)
+  elseif slotType == "ServantEquipment" then
+    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    if servantWrapper ~= nil then
+      itemWrapper = servantWrapper:getEquipItem(slotNo)
+    end
+    isEquipOn = true
+    isServantEquipOn = false
+  elseif slotType == "ServantShipEquipment" then
+    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    if servantWrapper ~= nil then
+      itemWrapper = servantWrapper:getEquipItem(slotNo)
+    end
+    isEquipOn = true
+    isServantEquipOn = true
+  elseif slotType == "StableEquipment" then
+    local servantInfo = stable_getServant(StableList_SelectSlotNo())
+    if servantInfo ~= nil then
+      itemWrapper = servantInfo:getEquipItem(slotNo)
+    end
+  elseif slotType == "LinkedHorseEquip" then
+    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    local servantInfo = stable_getServantFromOwnerServant(servantWrapper:getServantNo(), FGlobal_LinkedHorse_SelectedIndex())
+    if servantInfo ~= nil then
+      itemWrapper = servantInfo:getEquipItem(slotNo)
+    end
+  elseif slotType == "exchangeOther" then
+    itemWrapper = tradePC_GetOtherItem(slotNo)
+  elseif slotType == "tradeMarket_Sell" then
+    itemWrapper = npcShop_getItemWrapperByShopSlotNo(slotNo)
+  elseif slotType == "tradeMarket_VehicleSell" then
+    itemWrapper = npcShop_getVehicleItemWrapper(slotNo)
+  elseif slotType == "exchangeSelf" then
+    itemWrapper = tradePC_GetMyItem(slotNo)
+  elseif slotType == "DeliveryInformation" then
+    local deliverySlotNo = DeliveryInformation_SlotIndex(slotNo)
+    local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+    if deliveryList ~= nil and deliverySlotNo < deliveryList:size() then
+      local deliveryInfo = deliveryList:atPointer(deliverySlotNo)
+      if deliveryInfo ~= nil then
+        itemWrapper = deliveryInfo:getItemWrapper(deliverySlotNo)
+      end
+    end
+  elseif slotType == "DeliveryCarriageInformation" then
+    local deliverySlotNo = DeliveryCarriageInformation_SlotIndex(slotNo)
+    local deliveryList = deliveryCarriage_dlieveryList(DeliveryCarriageInformation_ObjectID())
+    if deliveryList ~= nil and deliverySlotNo < deliveryList:size() then
+      local deliveryInfo = deliveryList:atPointer(deliverySlotNo)
+      if deliveryInfo ~= nil then
+        itemWrapper = deliveryInfo:getItemWrapper(deliverySlotNo)
+        DeliveryItemNo = deliveryInfo:getItemNo()
+      end
+    end
+  elseif slotType == "DeliveryRequest" then
+    itemWrapper = delivery_packItem(slotNo)
+  elseif slotType == "Auction" then
+    local myAuctionInfo = RequestGetAuctionInfo()
+    local auctionType = (myAuctionInfo:getAuctionType())
+    local itemAuctionData = nil
+    if auctionType == 0 then
+      itemAuctionData = myAuctionInfo:getItemAuctionListAt(slotNo - 1)
+    elseif auctionType == 4 then
+      itemAuctionData = myAuctionInfo:getMySellingItemAuctionAt(slotNo - 1)
+    elseif auctionType == 6 then
+      itemAuctionData = myAuctionInfo:getMyItemBidListAt(slotNo - 1)
+    end
+    if itemAuctionData ~= nil then
+      itemWrapper = itemAuctionData:getItem()
+    end
+  elseif slotType == "AuctionRegister" then
+    slotNo = Auction_GetSeletedItemSlot()
+    if slotNo ~= -1 then
+      itemWrapper = getInventoryItem(slotNo)
+    end
+  elseif slotType == "Socket" then
+    slotNo = Socket_GetSlotNo()
+    if slotNo ~= -1 then
+      itemWrapper = getInventoryItem(slotNo)
+    end
+  elseif slotType == "HousingMode" then
+    local realSlotNo = Panel_Housing_SlotNo(slotNo)
+    if realSlotNo ~= -1 then
+      itemWrapper = getInventoryItem(realSlotNo)
+    end
+  elseif slotType == "FixEquip" then
+    local slotNumber = 0
+    if slotNo == 0 then
+      slotNumber = PaGlobal_FixEquip:fixEquip_GetMainSlotNo()
+      if slotNumber ~= nil then
+        itemWrapper = getInventoryItem(slotNumber)
+      end
+    else
+      slotNumber = PaGlobal_FixEquip:fixEquip_GetSubSlotNo()
+      if slotNumber ~= nil then
+        itemWrapper = getInventoryItem(slotNumber)
+      end
+    end
+  elseif slotType == "DailyStamp" then
+    itemWrapper = ToClient_getRewardItem(slotNo)
+  elseif slotType == "clothExtraction" then
+    itemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, slotNo)
+  elseif slotType == "CampEquip" then
+    local actorKeyRaw = PaGlobal_Camp:getActorKeyRaw()
+    local servantWrapper = getServantInfoFromActorKey(actorKeyRaw)
+    if servantWrapper ~= nil then
+      itemWrapper = servantWrapper:getEquipItem(slotNo)
+    end
+    if itemWrapper ~= nil then
+      isEquipOn = true
+      isServantEquipOn = true
+    end
+  else
+    (UI.ASSERT)(false, "showTooltip(normal)으로 정의되지 않은 slot�\128�\133(" .. slotType .. ")�\180 들어왔습니다. 확인해주세요.")
+    return 
+  end
+  if itemWrapper == nil then
+    return 
+  end
+  local itemNamingStr = nil
+  if isEquipOn and slotType ~= "SocketItem" then
+    itemNamingStr = getItemNaming(getTItemNoBySlotNo((itemWrapper:getStaticStatus()):getEquipSlotNo(), true))
+  elseif slotType == "Enchant" then
+    itemNamingStr = getItemNaming(PaGlobal_Enchant:enchantItem_ToItemNo())
+  elseif slotType == "WareHouse" then
+    local warehouseItemNo = Warehouse_GetToolTipItemNo()
+    if warehouseItemNo ~= nil then
+      itemNamingStr = getItemNaming(warehouseItemNo)
+    end
+  elseif slotType == "servant_inventory" then
+    itemNamingStr = getItemNaming(servantInventory_getItemNoBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo))
+  elseif slotType == "SocketItem" then
+    itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNo, false))
+  elseif slotType == "FixEquip" then
+    slotNumber = PaGlobal_FixEquip:fixEquip_GetMainSlotNo()
+    if slotNumber ~= nil then
+      itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNumber, false))
+    end
+  elseif slotType == "DeliveryRequest" then
+    itemNamingStr = getItemNaming(delivery_packItemNoByIndex(slotNo))
+  else
+    -- DECOMPILER ERROR at PC663: Unhandled construct in 'MakeBoolean' P1
+
+    if slotType == "DeliveryCarriageInformation" and DeliveryItemNo ~= nil then
+      itemNamingStr = getItemNaming(DeliveryItemNo)
+    end
+  end
+  itemNamingStr = getItemNaming(getTItemNoBySlotNo(getInventory_RealSlotNo(slotNo), false))
+  local isEquipalbeItem = false
+  local servantItem = false
+  do
+    local skillKey = SkillKey()
+    -- DECOMPILER ERROR at PC679: Confused about usage of register: R15 in 'UnsetPending'
+
+    Panel_Tooltip_Item_DataObject.isSkill = false
+    -- DECOMPILER ERROR at PC688: Confused about usage of register: R15 in 'UnsetPending'
+
+    if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
+      Panel_Tooltip_Item_DataObject.skillSlot = slot
+      Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
+      -- DECOMPILER ERROR at PC697: Confused about usage of register: R15 in 'UnsetPending'
+
+      Panel_Tooltip_Item_DataObject.isSkill = true
+      return 
+    elseif not isEquipOn then
+      local itemSSW = itemWrapper:getStaticStatus()
+      if not itemSSW:isEquipable() then
+        isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+      else
+        -- DECOMPILER ERROR at PC729: Overwrote pending register: R13 in 'AssignReg'
+
+        isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
+      end
+    else
+      showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+    end
+    if isEquipalbeItem and not isEquipOn then
+      local equipItemWrapper, campingItemWrapper = nil, nil
+      if servantItem or isServantEquipOn then
+        local temporaryWrapper = getTemporaryInformationWrapper()
+        if temporaryWrapper ~= nil then
+          local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
+          if campingWrapper ~= nil then
+            local servantKind = campingWrapper:getServantKind()
+            if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+              campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+            end
+          else
+            local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+            if servantWrapper ~= nil then
+              local servantKind = servantWrapper:getServantKind()
+              if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+              end
+            end
+          end
+        end
+      else
+        local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
+        -- DECOMPILER ERROR at PC811: Confused about usage of register: R18 in 'UnsetPending'
+
+        if accSlotNo ~= nil then
+          EquipItem_Lock.itemAccNo = accSlotNo
+          equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
+        else
+          -- DECOMPILER ERROR at PC818: Confused about usage of register: R18 in 'UnsetPending'
+
+          EquipItem_Lock.itemAccNo = -1
+          equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+        end
+      end
+      if equipItemWrapper ~= nil and slotType ~= "Enchant" then
+        local equipNamingStr = ""
+        equipNamingStr = getItemNaming(getTItemNoBySlotNo((equipItemWrapper:getStaticStatus()):getEquipSlotNo(), true))
+        showTooltip_Item(equippedTooltip, equipItemWrapper, false, true, nil, nil, nil, nil, equipNamingStr)
+        ;
+        (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+        ;
+        ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+      end
+      if campingItemWrapper ~= nil and slotType ~= "Enchant" then
+        showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
+        ;
+        (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+        ;
+        ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+      end
+      if slotType == "Enchant" then
+        local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+        if isCash == false then
+          showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true, nil, itemNamingStr)
+        end
+        ;
+        (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
+        ;
+        ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+      end
+    end
+    if ((slot.icon):getParent()):IsUISubApp() then
+      Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
+      ;
+      (equippedTooltip.mainPanel):OpenUISubApp()
+      if not isEquipOn then
+        (normalTooltip.mainPanel):OpenUISubApp()
+      end
+    else
+      Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+    end
+    -- DECOMPILER ERROR: 81 unprocessed JMP targets
   end
 end
 
@@ -1264,8 +1146,10 @@ Panel_Tooltip_Item_Set_Position_UISubApp = function(positionData, parent, inven)
   if not isLeft then
     if parent and inven then
       posX = (positionData:getParent()):GetSizeX() + posX
-    else
+    elseif positionData:getParent() ~= nil then
       posX = posX + (positionData:getParent()):GetSizeX() + positionData:GetSizeX()
+    else
+      posX = posX + positionData:GetSizeX()
     end
   end
   if Panel_Tooltip_Item:GetShow() then
@@ -1309,7 +1193,7 @@ Panel_Tooltip_Item_Set_Position_UISubApp = function(positionData, parent, inven)
                   ;
                   (equippedTooltip.arrow_L):SetShow(false)
                 end
-                -- DECOMPILER ERROR: 16 unprocessed JMP targets
+                -- DECOMPILER ERROR: 17 unprocessed JMP targets
               end
             end
           end
@@ -1497,7 +1381,7 @@ _toolTip_ChangeDyeInfoTexture = function(target, bEmpty, dyeingPart_Index, dyein
 end
 
 Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper, chattingLinkedItem, index, isNextEnchantInfo, invenSlotNo, itemNamingStr)
-  -- function num : 0_18 , upvalues : equippedTooltip, clothBagSlotNo, normalTooltip, UI_color, UI_TM, isMaxEnchanterEnable, isExtractionCommon, isExtractionJapan, isCronStone, Panel_Tooltip_Item_DataObject, isItemLock, EquipItem_Lock, servantKindTypeString, isGrowthContents, isTotemContents, isQuestBookContents, chattingLinkedItemTooltip, chattingLinkedItemClickTooltip, GetBottomPos
+  -- function num : 0_18 , upvalues : equippedTooltip, clothBagSlotNo, normalTooltip, bagInWarehouse, UI_color, UI_TM, isMaxEnchanterEnable, isExtractionCommon, isExtractionJapan, isCronStone, Panel_Tooltip_Item_DataObject, isItemLock, EquipItem_Lock, servantKindTypeString, isGrowthContents, isTotemContents, isQuestBookContents, chattingLinkedItemTooltip, chattingLinkedItemClickTooltip, GetBottomPos
   (target.expireIcon_white):SetShow(false)
   ;
   (target.expireIcon_red):SetShow(false)
@@ -1558,22 +1442,34 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
         (normalTooltip.equipmentInBag):SetShow(false)
         if (CppEnums.ContentsEventType).ContentsType_InventoryBag == (itemSSW:get()):getContentsEventType() and clothBagSlotNo ~= nil then
           local bagSize = itemSSW:getContentsEventParam2()
-          local whereType = (CppEnums.ItemWhereType).eInventory
-          if (itemSSW:get()):isCash() then
-            whereType = (CppEnums.ItemWhereType).eCashInventory
-          end
           ;
           (normalTooltip.bagSize):SetShow(true)
           ;
           (normalTooltip.bagSize):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_BAGSIZE", "size", bagSize))
           local itemNameinBag = ""
           for index = 0, bagSize - 1 do
-            local bagItemWrapper = getInventoryBagItemByType(whereType, clothBagSlotNo, index)
-            if bagItemWrapper ~= nil then
-              if itemNameinBag == "" then
-                itemNameinBag = tostring((bagItemWrapper:getStaticStatus()):getName())
-              else
-                itemNameinBag = itemNameinBag .. "\n" .. tostring((bagItemWrapper:getStaticStatus()):getName())
+            local bagItemWrapper = nil
+            if bagInWarehouse then
+              bagItemWrapper = (Warehouse_GetWarehouseWarpper()):getItemInBag(clothBagSlotNo, index)
+            else
+              local whereType = (CppEnums.ItemWhereType).eInventory
+              if (itemSSW:get()):isCash() then
+                whereType = (CppEnums.ItemWhereType).eCashInventory
+              end
+              _PA_LOG("cylee", "panel_tooltip_item_showinfo() wheretype:" .. tostring(whereType))
+              bagItemWrapper = getInventoryBagItemByType(whereType, clothBagSlotNo, index)
+            end
+            do
+              do
+                if bagItemWrapper ~= nil then
+                  if itemNameinBag == "" then
+                    itemNameinBag = tostring((bagItemWrapper:getStaticStatus()):getName())
+                  else
+                    itemNameinBag = itemNameinBag .. "\n" .. tostring((bagItemWrapper:getStaticStatus()):getName())
+                  end
+                end
+                -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
+
               end
             end
           end
@@ -2012,7 +1908,7 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                         end
                         ;
                         (target.personalTrade):SetShow(false)
-                        if isUsePcExchangeInLocalizingValue() or (CppEnums.CountryType).DEV == getGameServiceType() then
+                        if isUsePcExchangeInLocalizingValue() and (CppEnums.CountryType).DEV ~= getGameServiceType() then
                           (target.personalTrade):SetShow(true)
                           if itemWrapper ~= nil then
                             if itemSSW:isPersonalTrade() and not (itemWrapper:get()):isVested() then
@@ -2222,9 +2118,9 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                   (target.cronStoneProgress):SetProgressRate(currentEnchantFailCount / lastCount * 100)
                                   ;
                                   (target.itemLock):SetShow(false)
-                                  if Panel_Tooltip_Item_DataObject.inventory == true and isItemLock == true and not Panel_Tooltip_Item_equipped:GetShow() then
+                                  if Panel_Tooltip_Item_DataObject.inventory == true and true == isItemLock and not Panel_Tooltip_Item_equipped:GetShow() then
                                     local itemSSW = itemWrapper:getStaticStatus()
-                                    if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) and (itemSSW:get()):isCash() == false then
+                                    if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) and false == (itemSSW:get()):isCash() then
                                       (target.itemLock):SetShow(true)
                                       ;
                                       (target.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
@@ -2334,11 +2230,11 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                                       _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
                                                       ;
                                                       ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
-                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out DO_STMT
+                                                      -- DECOMPILER ERROR at PC2466: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                      -- DECOMPILER ERROR at PC2466: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out IF_STMT
+                                                      -- DECOMPILER ERROR at PC2466: LeaveBlock: unexpected jumping out IF_STMT
 
                                                     end
                                                   end
@@ -2462,7 +2358,7 @@ extendedSlotInfoArray = {}
                                                         local compareSlot = {}
                                                         for i = 1, slotNoMax do
                                                           local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                          -- DECOMPILER ERROR at PC2982: Confused about usage of register: R63 in 'UnsetPending'
+                                                          -- DECOMPILER ERROR at PC3012: Confused about usage of register: R63 in 'UnsetPending'
 
                                                           if slotNoMax ~= extendSlotNo then
                                                             (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2480,7 +2376,7 @@ extendedSlotInfoArray = {}
                                                         end
                                                         if 1 == equip.checkExtendedSlot then
                                                           local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                          -- DECOMPILER ERROR at PC3017: Confused about usage of register: R59 in 'UnsetPending'
+                                                          -- DECOMPILER ERROR at PC3047: Confused about usage of register: R59 in 'UnsetPending'
 
                                                           ;
                                                           (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2502,7 +2398,7 @@ extendedSlotInfoArray = {}
                                                               if nil ~= servantKindType then
                                                                 for i = 1, slotNoMax do
                                                                   local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                                  -- DECOMPILER ERROR at PC3072: Confused about usage of register: R64 in 'UnsetPending'
+                                                                  -- DECOMPILER ERROR at PC3102: Confused about usage of register: R64 in 'UnsetPending'
 
                                                                   if slotNoMax ~= extendSlotNo then
                                                                     (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2522,7 +2418,7 @@ extendedSlotInfoArray = {}
                                                               do
                                                                 if 1 == equip.checkExtendedSlot then
                                                                   local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                                  -- DECOMPILER ERROR at PC3107: Confused about usage of register: R60 in 'UnsetPending'
+                                                                  -- DECOMPILER ERROR at PC3137: Confused about usage of register: R60 in 'UnsetPending'
 
                                                                   ;
                                                                   (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2979,9 +2875,9 @@ extendedSlotInfoArray = {}
                                                                                                                 else
                                                                                                                   buffList = buffList .. " / " .. desc
                                                                                                                 end
-                                                                                                                -- DECOMPILER ERROR at PC4426: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                -- DECOMPILER ERROR at PC4456: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                -- DECOMPILER ERROR at PC4426: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                -- DECOMPILER ERROR at PC4456: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                               end
                                                                                                             end
@@ -3010,21 +2906,21 @@ extendedSlotInfoArray = {}
                                                                                                             ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                                             ;
                                                                                                             ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4547: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                           end
                                                                                                         end
@@ -3345,11 +3241,11 @@ extendedSlotInfoArray = {}
                                                                                                 local elementgap = 2
                                                                                                 local TooltipYPos = 10
                                                                                                 if target.mainPanel == Panel_Tooltip_Item_equipped then
+                                                                                                  (chattingLinkedItemTooltip.itemType):ComputePos()
+                                                                                                  ;
+                                                                                                  (chattingLinkedItemClickTooltip.itemType):ComputePos()
+                                                                                                  ;
                                                                                                   (target.itemType):SetPosY(8)
-                                                                                                  ;
-                                                                                                  (chattingLinkedItemTooltip.itemType):SetPosX(175)
-                                                                                                  ;
-                                                                                                  (chattingLinkedItemClickTooltip.itemType):SetPosX(175)
                                                                                                   ;
                                                                                                   (target.dying):SetPosY(50 + (changeItemNamePos))
                                                                                                   local showPosisionSetting = function(target, attackShow, defenseShow, hitShow, dvShow, pvShow)

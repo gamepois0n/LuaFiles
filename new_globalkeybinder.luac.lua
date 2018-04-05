@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\globalkeybinder\new_globalkeybinder.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\globalkeybinder\new_globalkeybinder.luac 
 
 -- params : ...
 -- function num : 0
@@ -43,6 +43,7 @@ PaGlobal_GlobalKeyBinder.Init = function(self)
   self:Register(UIMode.eUIMode_Default, self.Process_UIMode_SkillkeyBinder, checkCustomCondition_CommonWindow)
   self:Register(UIMode.eUIMode_Default, self.Process_UiModeNotInput, checkCustomCondition_NotChattingMode)
   self:Register(UIMode.eUIMode_Default, self.Process_ChattingMacro)
+  self:Register(UIMode.eUIMode_Default, self.Process_ConsoleQuickMenu)
   self:Register(UIMode.eUIMode_Housing, self.Process_UIMode_Housing)
   self:Register(UIMode.eUIMode_Mental, self.Process_UIMode_Mental)
   self:Register(UIMode.eUIMode_MentalGame, self.Process_UIMode_MentalGame)
@@ -132,21 +133,18 @@ PaGlobal_GlobalKeyBinder.Register = function(self, uiMode, func, customCondition
   if ((self._uiMode)[uiMode])._keyBinderData == nil then
     ((self._uiMode)[uiMode])._keyBinderData = {}
   end
-  do
-    if customCondition == nil then
-      local defaultCondition = function()
+  if customCondition == nil then
+    customCondition = function()
     -- function num : 0_2_0
     return true
   end
 
-      customCondition = defaultCondition
-    end
-    local idx = #((self._uiMode)[uiMode])._keyBinderData + 1
-    -- DECOMPILER ERROR at PC31: Confused about usage of register: R5 in 'UnsetPending'
-
-    ;
-    (((self._uiMode)[uiMode])._keyBinderData)[idx] = {_ProcessFunc = func, _CustomCondition = customCondition}
   end
+  local idx = #((self._uiMode)[uiMode])._keyBinderData + 1
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R5 in 'UnsetPending'
+
+  ;
+  (((self._uiMode)[uiMode])._keyBinderData)[idx] = {_ProcessFunc = func, _CustomCondition = customCondition}
 end
 
 -- DECOMPILER ERROR at PC34: Confused about usage of register: R7 in 'UnsetPending'

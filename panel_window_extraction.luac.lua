@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\extraction\panel_window_extraction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\extraction\panel_window_extraction.luac 
 
 -- params : ...
 -- function num : 0
@@ -139,6 +139,7 @@ PaGlobal_Extraction.openPanel = function(self, isShow)
     InventoryWindow_Close()
     Equipment_PosLoadMemory()
     Panel_Equipment:SetShow(false, false)
+    ClothInventory_Close()
   end
   Panel_Npc_Dialog:SetShow(not isShow)
   Panel_Window_Extraction:SetShow(isShow, false)

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\panel_onlyperframeused.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\panel_onlyperframeused.luac 
 
 -- params : ...
 -- function num : 0
@@ -66,14 +66,14 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if Auto_FrameMove ~= nil then
       Auto_FrameMove(deltaTime)
     end
-    if (CppEnums.CountryType).DEV == getGameServiceType() and ConsoleUISimplifyPerFrameUpdate ~= nil then
-      ConsoleUISimplifyPerFrameUpdate(deltaTime)
-    end
     if FGlobal_GuildBattle_UpdatePerFrame ~= nil then
       FGlobal_GuildBattle_UpdatePerFrame(deltaTime)
     end
     if UpdateFunc_FairyRegisterAni ~= nil then
       UpdateFunc_FairyRegisterAni(deltaTime)
+    end
+    if ToClient_isXBox() then
+      FGlobal_KeyGuideTypeCheck(deltaTime)
     end
   end
 end
@@ -83,9 +83,6 @@ FromClient_luaLoadComplete_OnlyPerframeUsed = function()
   -- function num : 0_3
   Panel_OnlyPerframeUsed:SetShow(true)
   Panel_OnlyPerframeUsed:RegisterUpdateFunc("Panel_OnlyPerframeUsedFunction")
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    Panel_OnlyPerframeUsed:setConsoleUIPanelType(3)
-  end
 end
 
 

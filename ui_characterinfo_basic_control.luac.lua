@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\characterinfo\ui_characterinfo_basic_control.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\characterinfo\ui_characterinfo_basic_control.luac 
 
 -- params : ...
 -- function num : 0
@@ -251,27 +251,27 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
     return 
   end
   local LifeIcon = {
-[UI_LifeType.gather] = {"new_ui_common_forlua/default/default_etc_02.dds", 159, 1, 169, 11}
+[UI_LifeType.gather] = {"new_ui_common_forlua/default/default_etc_04.dds", 116, 1, 137, 22}
 , 
-[UI_LifeType.fishing] = {"new_ui_common_forlua/default/default_etc_02.dds", 214, 1, 224, 11}
+[UI_LifeType.fishing] = {"new_ui_common_forlua/default/default_etc_04.dds", 116, 23, 137, 44}
 , 
-[UI_LifeType.hunting] = {"new_ui_common_forlua/default/default_etc_02.dds", 225, 1, 235, 11}
+[UI_LifeType.hunting] = {"new_ui_common_forlua/default/default_etc_04.dds", 116, 45, 137, 66}
 , 
-[UI_LifeType.cooking] = {"new_ui_common_forlua/default/default_etc_02.dds", 181, 1, 191, 11}
+[UI_LifeType.cooking] = {"new_ui_common_forlua/default/default_etc_04.dds", 116, 67, 137, 88}
 , 
-[UI_LifeType.alchemy] = {"new_ui_common_forlua/default/default_etc_02.dds", 203, 1, 213, 11}
+[UI_LifeType.alchemy] = {"new_ui_common_forlua/default/default_etc_04.dds", 138, 1, 159, 22}
 , 
-[UI_LifeType.manufacture] = {"new_ui_common_forlua/default/default_etc_02.dds", 170, 1, 180, 11}
+[UI_LifeType.manufacture] = {"new_ui_common_forlua/default/default_etc_04.dds", 138, 23, 159, 44}
 , 
-[UI_LifeType.training] = {"new_ui_common_forlua/default/default_etc_02.dds", 192, 1, 202, 11}
+[UI_LifeType.training] = {"new_ui_common_forlua/default/default_etc_04.dds", 138, 45, 159, 66}
 , 
-[UI_LifeType.trade] = {"new_ui_common_forlua/default/default_etc_02.dds", 236, 1, 246, 11}
+[UI_LifeType.trade] = {"new_ui_common_forlua/default/default_etc_04.dds", 138, 67, 159, 88}
 , 
-[UI_LifeType.growth] = {"new_ui_common_forlua/default/default_etc_02.dds", 159, 12, 169, 22}
+[UI_LifeType.growth] = {"new_ui_common_forlua/default/default_etc_04.dds", 160, 1, 181, 22}
 }
   local isSailOpen = ToClient_IsContentsGroupOpen("83")
   if isSailOpen then
-    LifeIcon[UI_LifeType.sail] = {"new_ui_common_forlua/default/default_etc_02.dds", 170, 12, 180, 22}
+    LifeIcon[UI_LifeType.sail] = {"new_ui_common_forlua/default/default_etc_04.dds", 160, 23, 181, 44}
   end
   for index = 0, #LifeIcon + 1 do
     local tableIdx = index + 1
@@ -316,11 +316,42 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
     ;
     (((self._ui)._staticCraftIcon)[tableIdx]):setRenderTexture((((self._ui)._staticCraftIcon)[tableIdx]):getBaseTexture())
     ;
-    (((self._ui)._staticTextCraft_Title)[tableIdx]):SetText(UI_LifeString[crafType])
+    (((self._ui)._staticCraftIcon)[tableIdx]):SetSize(21, 21)
+    ;
+    (((self._ui)._staticCraftIcon)[tableIdx]):addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_Tooltip(true, " .. crafType .. ", " .. tableIdx .. ")")
+    ;
+    (((self._ui)._staticCraftIcon)[tableIdx]):addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_Tooltip(false)")
+    ;
+    (((self._ui)._staticTextCraft_Title)[tableIdx]):SetText("")
     ;
     (((self._ui)._staticTextCraft_Level)[tableIdx]):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(((self._craftTable)[tableIdx])._level))
     ;
     (((self._ui)._staticTextCraft_Level)[tableIdx]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._craftTable)[tableIdx])._level))
+    ;
+    (((self._ui)._progress2Craft)[tableIdx]):SetSize(120, 3)
+    ;
+    (((self._ui)._progress2Craft)[tableIdx]):SetSpanSize(30, 15)
+    ;
+    (((self._ui)._progress2CraftBG)[tableIdx]):SetSize(120, 3)
+    ;
+    (((self._ui)._progress2CraftBG)[tableIdx]):SetSpanSize(30, 15)
+    if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+      (((self._ui)._staticTextCraft_Title)[tableIdx]):SetText(UI_LifeString[crafType])
+      ;
+      (((self._ui)._staticCraftIcon)[tableIdx]):SetSize(10, 10)
+      ;
+      (((self._ui)._progress2Craft)[tableIdx]):SetSize(150, 3)
+      ;
+      (((self._ui)._progress2CraftBG)[tableIdx]):SetSize(150, 3)
+      ;
+      (((self._ui)._progress2CraftBG)[tableIdx]):SetSpanSize(0, 15)
+      ;
+      (((self._ui)._progress2Craft)[tableIdx]):SetSpanSize(0, 15)
+      ;
+      (((self._ui)._staticCraftIcon)[tableIdx]):addInputEvent("Mouse_On", "")
+      ;
+      (((self._ui)._staticCraftIcon)[tableIdx]):addInputEvent("Mouse_Out", "")
+    end
     local ExpRate = Int64toInt32(((self._craftTable)[tableIdx])._exp * toInt64(0, 100) / ((self._craftTable)[tableIdx])._maxExp)
     ;
     (((self._ui)._progress2Craft)[tableIdx]):SetProgressRate(ExpRate)
@@ -328,7 +359,7 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetText(ExpRate .. "%")
     ;
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._craftTable)[tableIdx])._level))
-    if isGameTypeTH() or isGameTypeID() then
+    if not isGameTypeKorea() and not isGameTypeTaiwan() then
       (((self._ui)._staticTextCraft_Level)[tableIdx]):SetSpanSize(80, -3)
       ;
       (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetShow(false)
@@ -355,7 +386,7 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
   (((self._ui)._staticTextCraft_Percent)[0]):SetText(ExpRate .. "%")
   ;
   (((self._ui)._staticTextCraft_Percent)[0]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._sortCraftTable)[1])._level))
-  -- DECOMPILER ERROR at PC460: Confused about usage of register: R8 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC596: Confused about usage of register: R8 in 'UnsetPending'
 
   self._requestRank = true
 end
@@ -403,11 +434,13 @@ FromClient_UI_CharacterInfo_Basic_PotentialChanged = function()
         ((((self._ui)._staticPotencialPlusGrade)[index])[slotIndex]):SetShow(slotIndex < currentData[index])
       end
     end
-    if isGameTypeTH() or isGameTypeID() then
+    if isGameTypeKorea() or isGameTypeTaiwan() then
+      (((self._ui)._staticTextPotential_Value)[index]):SetShow(true)
+    else
       (((self._ui)._staticTextPotential_Value)[index]):SetShow(false)
     end
   end
-  -- DECOMPILER ERROR: 6 unprocessed JMP targets
+  -- DECOMPILER ERROR: 7 unprocessed JMP targets
 end
 
 FromClient_UI_CharacterInfo_Basic_FitnessChanged = function(addSp, addWeight, addHp, addMp)
@@ -427,6 +460,11 @@ FromClient_UI_CharacterInfo_Basic_FitnessChanged = function(addSp, addWeight, ad
     return 
   end
   local titleString = {[(self._fitness)._stamina] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STAMINA_TITLE"), [(self._fitness)._strength] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STRENGTH_TITLE"), [(self._fitness)._health] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_HEALTH_TITLE")}
+  if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+    titleString = {[(self._fitness)._stamina] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STAMINA_TITLE"), [(self._fitness)._strength] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STRENGTH_TITLE"), [(self._fitness)._health] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_HEALTH_TITLE")}
+  else
+    titleString = {[(self._fitness)._stamina] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STAMINA_TITLE_ONE"), [(self._fitness)._strength] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STRENGTH_TITLE_ONE"), [(self._fitness)._health] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_HEALTH_TITLE_ONE")}
+  end
   for key,index in pairs(self._fitness) do
     local current = Int64toInt32((self._playerGet):getCurrFitnessExperiencePoint(index))
     local max = Int64toInt32((self._playerGet):getDemandFItnessExperiencePoint(index))
@@ -437,10 +475,19 @@ FromClient_UI_CharacterInfo_Basic_FitnessChanged = function(addSp, addWeight, ad
     ;
     (((self._ui)._staticTextFitness_Level)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_CRAFTLEVEL") .. tostring(level))
     if index ~= (self._fitness)._strength then
-      (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index)))
+      if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+        (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index)))
+      else
+        ;
+        (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index])
+      end
     else
-      ;
-      (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index) / 10000))
+      if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+        (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index) / 10000))
+      else
+        ;
+        (((self._ui)._staticTextFitness_Title)[index]):SetText(titleString[index])
+      end
     end
   end
 end
@@ -523,11 +570,11 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_FacePhotoButton = function(self, isS
   if self:checkToolTip(isShow) == false then
     return 
   end
-  local uiControl, name, desc = nil, nil, nil
-  uiControl = (self._ui)._buttonFacePhoto
+  local control, name, desc = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_FACEPHOTO_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_FACEPHOTO_TOOLTIP_DESC")
-  TooltipSimple_Show(uiControl, name, desc)
+  control = (self._ui)._buttonFacePhoto
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC93: Confused about usage of register: R10 in 'UnsetPending'
@@ -546,11 +593,10 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_FamilyPoints = function(self, isShow
 , 
 [(self._familyPoint)._etc] = {"LUA_FAMILYPOINTS_ETC_TOOLTIP_TITLE", "LUA_FAMILYPOINTS_ETC_TOOLTIP_DESC"}
 }
-  local uiControl = ((self._ui)._staticTextFamilyPoints)[tipType]
   local name = PAGetString(Defines.StringSheet_GAME, (string[tipType])[1])
   local desc = PAGetString(Defines.StringSheet_GAME, (string[tipType])[2])
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  local control = ((self._ui)._staticTextFamilyPoints)[tipType]
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC96: Confused about usage of register: R10 in 'UnsetPending'
@@ -560,18 +606,17 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_NormalStack = function(self, default
   if self:checkToolTip(isShow) == false then
     return 
   end
-  local uiControl, name, desc, isValksItemCheck = nil, nil, nil, nil
+  local control, name, desc, isValksItemCheck = nil, nil, nil, nil
   local isValksItem = ToClient_IsContentsGroupOpen("47")
   if isValksItem == false then
     isValksItemCheck = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_ENCHANTCOUNT_TOOLTIP_ADDCOUNT_NONE", "defaultCount", tostring(defaultCount))
   else
     isValksItemCheck = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GAMEEXIT_ENCHANTCOUNT_TOOLTIP", "defaultCount", tostring(defaultCount), "valksCount", tostring(valksCount))
   end
-  uiControl = (self._ui)._staticTextNormalStack
   name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NORMALSTACK_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NORMALSTACK_TOOLTIP_DESC") .. isValksItemCheck
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  control = (self._ui)._staticTextNormalStack
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC99: Confused about usage of register: R10 in 'UnsetPending'
@@ -590,12 +635,11 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Regist = function(self, isShow, tipT
 , 
 [(self._regist)._knockBack] = {"LUA_CHARACTERINFO_TXT_REGIST_KNOCKBACK_TOOLTIP_NAME", "LUA_CHARACTERINFO_TXT_REGIST_KNOCKBACK_TOOLTIP_DESC"}
 }
-  local uiControl, name, desc = nil, nil, nil
-  uiControl = ((self._ui)._staticTextResist_Title)[tipType]
+  local control, name, desc = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, (string[tipType])[1])
   desc = PAGetString(Defines.StringSheet_GAME, (string[tipType])[2])
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  control = ((self._ui)._staticTextResist_Title)[tipType]
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC102: Confused about usage of register: R10 in 'UnsetPending'
@@ -605,25 +649,24 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Fitness = function(self, isShow, _ti
   if self:checkToolTip(isShow) == false then
     return 
   end
-  local uiControl, name, desc = nil, nil, nil
+  local control, name, desc = nil, nil, nil
   if (self._fitness)._stamina == _tipType then
-    uiControl = ((self._ui)._staticTextFitness_Title)[(self._fitness)._stamina]
+    control = ((self._ui)._staticTextFitness_Title)[(self._fitness)._stamina]
     name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_STAMINA_MSG", "type", tostring(ToClient_GetFitnessLevelStatus(_tipType)))
   else
     if (self._fitness)._strength == _tipType then
-      uiControl = ((self._ui)._staticTextFitness_Title)[(self._fitness)._strength]
+      control = ((self._ui)._staticTextFitness_Title)[(self._fitness)._strength]
       name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_STRENGTH_MSG", "type", tostring(ToClient_GetFitnessLevelStatus(_tipType) / 10000))
     else
       if (self._fitness)._health == _tipType then
-        uiControl = ((self._ui)._staticTextFitness_Title)[(self._fitness)._health]
+        control = ((self._ui)._staticTextFitness_Title)[(self._fitness)._health]
         name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_HEALTH_MSG", "type", tostring(ToClient_GetFitnessLevelStatus(_tipType)))
       else
         return 
       end
     end
   end
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC106: Confused about usage of register: R10 in 'UnsetPending'
@@ -635,11 +678,10 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Potential = function(self, isShow, _
   end
   local classType = (self._player):getClassType()
   local string = {[(self._potential)._attackSpeed] = "LUA_CHARACTERINFO_TXT_DESC_" .. Class_BattleSpeed[classType], [(self._potential)._moveSpeed] = "LUA_CHARACTERINFO_TXT_DESC_2", [(self._potential)._critical] = "LUA_CHARACTERINFO_TXT_DESC_3", [(self._potential)._fishTime] = "LUA_CHARACTERINFO_TXT_DESC_4", [(self._potential)._product] = "LUA_CHARACTERINFO_TXT_DESC_5", [(self._potential)._dropChance] = "LUA_CHARACTERINFO_TXT_DESC_6"}
-  local uiControl, name, desc = nil, nil, nil
-  uiControl = ((self._ui)._staticTextPotential_Title)[_tipType]
+  local control, name, desc = nil, nil, nil
+  control = ((self._ui)._staticTextPotential_Title)[_tipType]
   name = PAGetString(Defines.StringSheet_GAME, string[_tipType])
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC110: Confused about usage of register: R10 in 'UnsetPending'
@@ -649,8 +691,8 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_CharInfomation = function(self, isSh
   if self:checkToolTip(isShow) == false then
     return 
   end
-  local uiControl, name, desc = nil, nil, nil
-  uiControl = ((self._ui)._staticStatus_Title)[_tipType]
+  local control, name, desc = nil, nil, nil
+  control = ((self._ui)._staticStatus_Title)[_tipType]
   if (self._status)._health == _tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_HPREGEN") .. " : " .. tostring((self._playerGet):getRegenHp())
   else
@@ -676,17 +718,16 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_CharInfomation = function(self, isSh
         if (self._status)._weight == _tipType then
           name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_WEIGHT_TOOLTIP")
         end
-        registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-        TooltipSimple_Show(uiControl, name, desc)
+        TooltipSimple_Show(control, name, desc)
       end
     end
   end
 end
 
--- DECOMPILER ERROR at PC114: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC115: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_Craft = function(self, isShow, _slotNo)
-  -- function num : 0_29 , upvalues : UI_LifeToolTip
+  -- function num : 0_29 , upvalues : UI_LifeString, UI_LifeToolTip
   if self:checkToolTip(isShow) == false then
     return 
   end
@@ -694,33 +735,56 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Craft = function(self, isShow, _slot
     return 
   end
   local tableNo = _slotNo + 1
-  local uiControl, name, desc = nil, nil, nil
-  uiControl = ((self._ui)._staticTextCraft_Title)[_slotNo]
-  name = UI_LifeToolTip[((self._craftTable)[_slotNo])._type]
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
+  local control, name, desc = nil, nil, nil
+  local expRate = ((self._craftTable)[_slotNo])._exp * toInt64(0, 100) / ((self._craftTable)[_slotNo])._maxExp
+  name = UI_LifeString[((self._craftTable)[_slotNo])._type]
+  desc = UI_LifeToolTip[((self._craftTable)[_slotNo])._type] .. "\n<PAColor0xFFFFF3AF>" .. PAGetString(Defines.StringSheet_RESOURCE, "SERVANT_INFO_TEXT_EXP") .. " : " .. tostring(expRate) .. "%<PAOldColor>"
+  control = ((self._ui)._staticTextCraft_Title)[_slotNo]
+  TooltipSimple_Show(control, name, desc)
 end
 
--- DECOMPILER ERROR at PC117: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R10 in 'UnsetPending'
+
+PaGlobal_CharacterInfoBasic.handleMouseOver_Tooltip = function(self, isShow, tipType, controlIndex)
+  -- function num : 0_30 , upvalues : UI_LifeString
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  if tipType == nil then
+    TooltipSimple_Hide()
+    return 
+  end
+  if controlIndex == nil then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  name = UI_LifeString[tipType]
+  control = ((self._ui)._staticCraftIcon)[controlIndex]
+  TooltipSimple_Show(control, name, desc)
+end
+
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.showWindow = function(self)
-  -- function num : 0_30
+  -- function num : 0_31
   self:showIntroduce(false)
   self:update()
 end
 
--- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.hideWindow = function(self)
-  -- function num : 0_31
+  -- function num : 0_32
   TooltipSimple_Hide()
   self._toolTipCount = 0
 end
 
--- DECOMPILER ERROR at PC123: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC128: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.showIntroduce = function(self, isShow)
-  -- function num : 0_32
+  -- function num : 0_33
   ((self._ui)._staticIntroduceBG):SetShow(isShow)
   if not isShow then
     (UI.ClearFocusEdit)()
@@ -731,10 +795,10 @@ PaGlobal_CharacterInfoBasic.showIntroduce = function(self, isShow)
   ((self._ui)._multilineEdit):SetEditText(msg)
 end
 
--- DECOMPILER ERROR at PC126: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC131: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.checkToolTip = function(self, isShow)
-  -- function num : 0_33
+  -- function num : 0_34
   if isShow == false then
     self._toolTipCount = self._toolTipCount - 1
     if self._toolTipCount < 1 then
@@ -748,10 +812,10 @@ PaGlobal_CharacterInfoBasic.checkToolTip = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC135: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.updateFacePhoto = function(self)
-  -- function num : 0_34 , upvalues : UI_DefaultFaceTexture
+  -- function num : 0_35 , upvalues : UI_DefaultFaceTexture
   local classType = (self._player):getClassType()
   local TextureName = ToClient_GetCharacterFaceTexturePath((self._player):getCharacterNo_64())
   local isCaptureExist = ((self._ui)._staticCharSlot):ChangeTextureInfoNameNotDDS(TextureName, classType, true)

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\remotecontrol\panel_remoteinventory.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\remotecontrol\panel_remoteinventory.luac 
 
 -- params : ...
 -- function num : 0
@@ -450,6 +450,9 @@ end
 
 RemoteInven_updateSlotData = function()
   -- function num : 0_14 , upvalues : remoteInven
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_RemoteInventory:GetShow() == false then
+    return 
+  end
   remoteInven:Update()
 end
 

@@ -1,9 +1,8 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_skin.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_skin.luac 
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local FrameTemplateColor = (UI.getChildControl)(Panel_CustomizationSkin, "Frame_Template_Color")
 local SliderText = (UI.getChildControl)(Panel_CustomizationSkin, "StaticText_Slider_1")
 local SliderControl = (UI.getChildControl)(Panel_CustomizationSkin, "Slider_R_Controller")
@@ -26,15 +25,8 @@ local sliderValueOffset = 10
 local sliderHeight = SliderText:GetSizeY()
 local currentclassType = -1
 local currentuiId = -1
-OpenSkinUi = function(classType, uiId, historyapply)
-  -- function num : 0_0 , upvalues : UI_GroupType, currentclassType, currentuiId, selectedClassType, selectedUiId, contentsStartY, controlOffset, FrameTemplateColor, Static_Collision, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControl, Button_Slider, SliderText, sliderOffset, Static_CurrentValue, sliderValueOffset, sliderHeight
-  if historyapply == nil then
-    Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-    ClearAll_CustomizationUIGroup(0)
-    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
-  end
+OpenSkinUi = function(classType, uiId)
+  -- function num : 0_0 , upvalues : currentclassType, currentuiId, selectedClassType, selectedUiId, contentsStartY, controlOffset, FrameTemplateColor, Static_Collision, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControl, Button_Slider, SliderText, sliderOffset, Static_CurrentValue, sliderValueOffset, sliderHeight
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
@@ -83,7 +75,6 @@ OpenSkinUi = function(classType, uiId, historyapply)
       Static_CurrentValue:SetPosY(controlPosY + sliderValueOffset)
       Static_CurrentValue:SetShow(true)
       controlPosY = controlPosY + sliderHeight
-      Add_CustomizationUIControl(0, 0, 0, 8, 50, 50, Button_Slider)
     end
     do
       Panel_CustomizationSkin:SetSize(Panel_CustomizationSkin:GetSizeX(), controlPosY + controlOffset)
@@ -114,7 +105,7 @@ SkinHistoryApplyUpdate = function()
   if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
     return 
   end
-  OpenSkinUi(currentclassType, currentuiId, true)
+  OpenSkinUi(currentclassType, currentuiId)
 end
 
 

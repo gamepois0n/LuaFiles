@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\tooltip\panel_tooltip_skill.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\tooltip\panel_tooltip_skill.luac 
 
 -- params : ...
 -- function num : 0
@@ -377,7 +377,7 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
       local self = selfPlayerStatusBar
       local playerWrapper = getSelfPlayer()
       local player = playerWrapper:get()
-      if UI_classType.ClassType_Ranger == playerWrapper:getClassType() then
+      if UI_classType.ClassType_Ranger == playerWrapper:getClassType() or UI_classType.ClassType_Orange == playerWrapper:getClassType() then
         (target.needMP):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedEP"))
       elseif UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType() then
         (target.needMP):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedFP"))
@@ -442,9 +442,9 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
           local awakeningDataCount = activeSkillSS:getSkillAwakenInfoCount() - 1
           local realCount = 0
           for idx = 0, awakeningDataCount do
-            local skillInfo = activeSkillSS:getSkillAwakenInfo(R41_PC613)
+            local skillInfo = activeSkillSS:getSkillAwakenInfo(R41_PC619)
             if skillInfo ~= "" then
-              awakeInfo = awakeInfo .. R41_PC613 .. skillInfo
+              awakeInfo = awakeInfo .. R41_PC619 .. skillInfo
               realCount = realCount + 1
             end
           end
@@ -497,52 +497,52 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
       end
       local skillIconPosY = (target.skillIcon):GetPosY()
       local skillIconSizeY = (target.skillIcon):GetSizeY()
-      -- DECOMPILER ERROR at PC740: Overwrote pending register: R41 in 'AssignReg'
+      -- DECOMPILER ERROR at PC746: Overwrote pending register: R41 in 'AssignReg'
 
       ;
       (target.skillDescription):SetPosY(skillIconPosY)
-      -- DECOMPILER ERROR at PC744: Overwrote pending register: R41 in 'AssignReg'
+      -- DECOMPILER ERROR at PC750: Overwrote pending register: R41 in 'AssignReg'
 
       do
         local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
-        -- DECOMPILER ERROR at PC750: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC756: Overwrote pending register: R41 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC751: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC757: Overwrote pending register: R41 in 'AssignReg'
 
         if iconBottom < skillDescriptionBottom then
-          R41_PC613 = R41_PC613(R41_PC613, target.skillDescription)
-          TooltipYPos = R41_PC613 + elementgap
+          R41_PC619 = R41_PC619(R41_PC619, target.skillDescription)
+          TooltipYPos = R41_PC619 + elementgap
         else
-          R41_PC613 = Tooltip_SkillData
-          R41_PC613 = R41_PC613(R41_PC613, target.skillIcon)
-          TooltipYPos = R41_PC613 + elementgap
+          R41_PC619 = Tooltip_SkillData
+          R41_PC619 = R41_PC619(R41_PC619, target.skillIcon)
+          TooltipYPos = R41_PC619 + elementgap
         end
-        R41_PC613 = target.useMethod
-        R41_PC613(R41_PC613, TooltipYPos + 9)
-        -- DECOMPILER ERROR at PC765: Overwrote pending register: R41 in 'AssignReg'
+        R41_PC619 = target.useMethod
+        R41_PC619(R41_PC619, TooltipYPos + 9)
+        -- DECOMPILER ERROR at PC771: Overwrote pending register: R41 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC766: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC772: Overwrote pending register: R41 in 'AssignReg'
 
-        R41_PC613 = R41_PC613(R41_PC613, target.useMethod)
-        TooltipYPos = R41_PC613 + elementgap
+        R41_PC619 = R41_PC619(R41_PC619, target.useMethod)
+        TooltipYPos = R41_PC619 + elementgap
         if isNextLvWidget then
-          R41_PC613 = target.learnRequirement_category
-          R41_PC613(R41_PC613, TooltipYPos - 5)
-          -- DECOMPILER ERROR at PC776: Overwrote pending register: R41 in 'AssignReg'
+          R41_PC619 = target.learnRequirement_category
+          R41_PC619(R41_PC619, TooltipYPos - 5)
+          -- DECOMPILER ERROR at PC782: Overwrote pending register: R41 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC777: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC783: Overwrote pending register: R41 in 'AssignReg'
 
-          R41_PC613 = R41_PC613(R41_PC613, target.learnRequirement_category)
-          R41_PC613 = R41_PC613 + elementgap
-          TooltipYPos = R41_PC613 - elementBiggap
-          R41_PC613 = target.learnRequirement_panel
-          R41_PC613(R41_PC613, TooltipYPos)
-          -- DECOMPILER ERROR at PC786: Overwrote pending register: R41 in 'AssignReg'
+          R41_PC619 = R41_PC619(R41_PC619, target.learnRequirement_category)
+          R41_PC619 = R41_PC619 + elementgap
+          TooltipYPos = R41_PC619 - elementBiggap
+          R41_PC619 = target.learnRequirement_panel
+          R41_PC619(R41_PC619, TooltipYPos)
+          -- DECOMPILER ERROR at PC792: Overwrote pending register: R41 in 'AssignReg'
 
-          TooltipYPos = TooltipYPos + R41_PC613
-          -- DECOMPILER ERROR at PC788: Overwrote pending register: R41 in 'AssignReg'
+          TooltipYPos = TooltipYPos + R41_PC619
+          -- DECOMPILER ERROR at PC794: Overwrote pending register: R41 in 'AssignReg'
 
-          local isLevelShow = R41_PC613
+          local isLevelShow = R41_PC619
           ;
           (target.requireLevel):SetShow(isLevelShow)
           ;
@@ -579,7 +579,7 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
           (target.learnRequirement_panel):SetSize((target.learnRequirement_panel):GetSizeX(), TooltipYPos - (target.learnRequirement_panel):GetPosY() + elementBiggap)
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_panel)
         end
-        -- DECOMPILER ERROR at PC892: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC898: Overwrote pending register: R41 in 'AssignReg'
 
         if isShowNeedHp or isShowNeedMp or isShowNeedSp or isShowNeedItem or isShowReuseCycle then
           isLevelShow:SetPosY(TooltipYPos - 5)
@@ -726,7 +726,7 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
         (ToolTipSkillUI_learning.reservation_helpMsg):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_RESERVATIONCANCEL"))
         ;
         (ToolTipSkillUI_learning.reservation_helpMsg):SetSize((ToolTipSkillUI_learning.reservation_helpMsg):GetSizeX(), (ToolTipSkillUI_learning.reservation_helpMsg):GetSizeY() + 5)
-        -- DECOMPILER ERROR: 67 unprocessed JMP targets
+        -- DECOMPILER ERROR: 68 unprocessed JMP targets
       end
     end
   end

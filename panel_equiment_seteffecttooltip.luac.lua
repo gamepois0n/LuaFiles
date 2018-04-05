@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\equipment\panel_equiment_seteffecttooltip.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\equipment\panel_equiment_seteffecttooltip.luac 
 
 -- params : ...
 -- function num : 0
@@ -244,16 +244,21 @@ PaGlobal_EquipmentTooltip.updateInfoUI = function(self)
         groupTitle:SetPosY(35)
       end
       prevControl = groupTitle
-      partTitlePrevControl = prevControl
+      local reservedpartTitlePrevControl = prevControl
       for _,pointInfo in ipairs(skillInfo.pointInfo) do
-        do
-          if (skillInfo.appliedPoint <= pointInfo.point and pointInfo.isApplied) or self._isDetail then
-            local partTitle = self:usePartTitleUI()
-            partTitle:SetText(pointInfo.descTitle)
-            partTitle:SetPosY(partTitlePrevControl:GetPosY() + partTitlePrevControl:GetTextSizeY() + 7)
-            partTitle:SetShow(true)
-            partTitlePrevControl = partTitle
+        if (skillInfo.appliedPoint <= pointInfo.point and pointInfo.isApplied) or self._isDetail then
+          local partTitle = self:usePartTitleUI()
+          partTitle:SetText(pointInfo.descTitle)
+          local partTitlePrevControl = nil
+          if self._isDetail then
+            partTitlePrevControl = prevControl
+          else
+            partTitlePrevControl = reservedpartTitlePrevControl
           end
+          partTitle:SetPosY(partTitlePrevControl:GetPosY() + partTitlePrevControl:GetTextSizeY() + 7)
+          partTitle:SetShow(true)
+        end
+        do
           do
             if pointInfo.isApplied or self._isDetail then
               local partDesc = self:usePartDescUI()
@@ -267,7 +272,7 @@ PaGlobal_EquipmentTooltip.updateInfoUI = function(self)
               partDesc:SetShow(true)
               prevControl = partDesc
             end
-            -- DECOMPILER ERROR at PC104: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out DO_STMT
 
           end
         end

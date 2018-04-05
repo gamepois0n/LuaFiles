@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\inventory\panel_window_servantinventory.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\inventory\panel_window_servantinventory.luac 
 
 -- params : ...
 -- function num : 0
@@ -536,6 +536,7 @@ ServantInventory_OpenAll = function()
   if Panel_Window_ServantInventory:GetShow() then
     Inventory_SetFunctor(nil, FGlobal_PopupMoveItem_InitByInventory, nil, nil)
   end
+  ClothInventory_Close()
 end
 
 ServantInventory_Open = function()

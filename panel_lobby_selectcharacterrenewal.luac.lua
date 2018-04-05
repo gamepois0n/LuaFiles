@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\lobby\panel_lobby_selectcharacterrenewal.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\lobby\panel_lobby_selectcharacterrenewal.luac 
 
 -- params : ...
 -- function num : 0
@@ -943,10 +943,8 @@ scrollTotalCount = function()
   return maxCount
 end
 
-local group_0 = nil
-local isconsoleGroupSet = false
 local CharacterList_Update = function(isChangeSpecialTab)
-  -- function num : 0_12 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, isconsoleGroupSet, group_0, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now, isGhostMode
+  -- function num : 0_12 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now, isGhostMode
   local scrSizeY = getScreenSizeY()
   local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - SelectCharacter.premiumPcRoomSizeY - 35
   local btnSizeY = (SelectCharacter.btn_CharacterSlot):GetSizeY()
@@ -1016,12 +1014,6 @@ local CharacterList_Update = function(isChangeSpecialTab)
   ;
   (SelectCharacter.radioBtnBG):SetSize((SelectCharacter.radioBtnBG):GetSizeX(), (SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((((configData.slotUiPool)[0])._btn_Slot):GetSizeY() + 5) * maxCharacter - 31)
   local iii = 0
-  if not isconsoleGroupSet then
-    Panel_CharacterSelectNew:deleteConsoleUIGroup(0)
-    group_0 = Panel_CharacterSelectNew:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
-    group_0:setConsoleKeyEventForLUA("SelectCharacter_ScrollEvent_Up", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
-    group_0:setConsoleKeyEventForLUA("SelectCharacter_ScrollEvent_Down", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
-  end
   for slotIdx = configData._startIndex, maxCharacter + configData._startIndex - 1 do
     local slot = (configData.slotUiPool)[iii]
     iii = iii + 1
@@ -1048,96 +1040,74 @@ local CharacterList_Update = function(isChangeSpecialTab)
       local regionInfo = nil
       local removeTime = getCharacterDataRemoveTime(slotIdx, isSpecialCharacter)
       if removeTime ~= nil then
-        ChangeTexture_Class(slot._ClassIcon, classType)
-        ;
-        (slot._btn_Slot):SetText(characterName)
-        ;
-        (slot._ChaLev):SetText(characterLevel)
-        if configData.selectCaracterIdx == slotIdx then
-          CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter, isChangeSpecialTab)
-          ;
-          (slot._btn_Slot):SetCheck(true)
-        else
-          ;
-          (slot._btn_Slot):SetCheck(false)
-        end
-        ;
-        (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
-        ;
-        (slot._btnStart):addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
-        ;
-        (slot._btnDelCancel):addInputEvent("Mouse_LUp", "CharacterSelect_DeleteCancelCharacter( " .. slotIdx .. " )")
-        ;
-        (slot._btnUp):addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", true )")
-        ;
-        (slot._btnDown):addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", false )")
-        ;
-        (slot._btn_Slot):SetShow(true)
-        ;
-        (slot._ClassIcon):SetShow(true)
-        ;
-        (slot._ChaStat):SetShow(false)
-        ;
-        (slot._ContStat):SetShow(false)
-        ;
-        (slot._ChaLev):SetShow(true)
-        ;
-        (slot._Status):SetShow(true)
-        ;
-        (slot._btnCreate):SetShow(false)
-        if removeTime ~= nil then
-          (slot._btnStart):SetShow(false)
-          ;
-          (slot._btnDelCancel):SetShow(true)
-        else
-          if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Pre then
-            (slot._btnStart):SetShow(false)
-            ;
-            (slot._btnDelCancel):SetShow(false)
-          else
-            if (SelectCharacter.btn_ChangeLocate):IsCheck() then
-              (slot._btnUp):SetShow(true)
-              ;
-              (slot._btnDown):SetShow(true)
-            else
-              ;
-              (slot._btnUp):SetShow(false)
-              ;
-              (slot._btnDown):SetShow(false)
-            end
-            ;
-            (slot._btnStart):SetShow(true)
-            ;
-            (slot._btnDelCancel):SetShow(false)
-          end
-        end
-        ;
-        (slot._btn_Slot):SetIgnore(false)
-        What_R_U_Doing_Now(isSpecialCharacter, slotIdx)
         do
           do
-            if not isconsoleGroupSet then
-              local count = 1
-              if (slot._btnStart):GetShow() or (slot._btnDelCancel):GetShow() then
-                count = count + 1
-              end
-              if (SelectCharacter.btn_ChangeLocate):IsCheck() then
-                count = 3
-              end
-              if (SelectCharacter.btn_ChangeLocate):IsCheck() then
-                group_0:addControl(0, iii - 1, count, _btnCount, slot._btnUp)
-                group_0:addControl(1, iii - 1, count, _btnCount, slot._btnDown)
-                group_0:addControl(2, iii - 1, count, _btnCount, slot._btn_Slot)
+            ChangeTexture_Class(slot._ClassIcon, classType)
+            ;
+            (slot._btn_Slot):SetText(characterName)
+            ;
+            (slot._ChaLev):SetText(characterLevel)
+            if configData.selectCaracterIdx == slotIdx then
+              CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter, isChangeSpecialTab)
+              ;
+              (slot._btn_Slot):SetCheck(true)
+            else
+              ;
+              (slot._btn_Slot):SetCheck(false)
+            end
+            ;
+            (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
+            ;
+            (slot._btnStart):addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
+            ;
+            (slot._btnDelCancel):addInputEvent("Mouse_LUp", "CharacterSelect_DeleteCancelCharacter( " .. slotIdx .. " )")
+            ;
+            (slot._btnUp):addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", true )")
+            ;
+            (slot._btnDown):addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", false )")
+            ;
+            (slot._btn_Slot):SetShow(true)
+            ;
+            (slot._ClassIcon):SetShow(true)
+            ;
+            (slot._ChaStat):SetShow(false)
+            ;
+            (slot._ContStat):SetShow(false)
+            ;
+            (slot._ChaLev):SetShow(true)
+            ;
+            (slot._Status):SetShow(true)
+            ;
+            (slot._btnCreate):SetShow(false)
+            if removeTime ~= nil then
+              (slot._btnStart):SetShow(false)
+              ;
+              (slot._btnDelCancel):SetShow(true)
+            else
+              if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Pre then
+                (slot._btnStart):SetShow(false)
+                ;
+                (slot._btnDelCancel):SetShow(false)
               else
-                group_0:addControl(0, iii - 1, count, _btnCount, slot._btn_Slot)
-                if (slot._btnStart):GetShow() then
-                  group_0:addControl(1, iii - 1, count, _btnCount, slot._btnStart)
+                if (SelectCharacter.btn_ChangeLocate):IsCheck() then
+                  (slot._btnUp):SetShow(true)
+                  ;
+                  (slot._btnDown):SetShow(true)
+                else
+                  ;
+                  (slot._btnUp):SetShow(false)
+                  ;
+                  (slot._btnDown):SetShow(false)
                 end
-                if (slot._btnDelCancel):GetShow() then
-                  group_0:addControl(1, iii - 1, count, _btnCount, slot._btnDelCancel)
-                end
+                ;
+                (slot._btnStart):SetShow(true)
+                ;
+                (slot._btnDelCancel):SetShow(false)
               end
             end
+            ;
+            (slot._btn_Slot):SetIgnore(false)
+            What_R_U_Doing_Now(isSpecialCharacter, slotIdx)
             ;
             (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_CreateNewCharacter()")
             ;
@@ -1192,10 +1162,6 @@ local CharacterList_Update = function(isChangeSpecialTab)
                 (slot._btn_Slot):SetText("")
                 ;
                 (slot._btnCreate):SetShow(false)
-              else
-                if not isconsoleGroupSet then
-                  group_0:addControl(0, iii - 1, 1, _btnCount, slot._btn_Slot)
-                end
               end
             else
               if configData.freeCount <= slotIdx and configData.useAbleCount <= slotIdx then
@@ -1211,27 +1177,23 @@ local CharacterList_Update = function(isChangeSpecialTab)
               (slot._btn_Slot):SetMonoTone(true)
               ;
               (slot._btnCreate):SetShow(false)
-              if not isconsoleGroupSet then
-                group_0:addControl(0, iii - 1, 1, _btnCount, slot._btn_Slot)
-              end
             end
             scrollListIndex = scrollListIndex + 1
-            -- DECOMPILER ERROR at PC713: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC713: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC713: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC713: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC713: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
       end
     end
   end
-  isconsoleGroupSet = true
   ;
   (UIScroll.SetButtonSize)(SelectCharacter._scroll, configData.maxScrollCount, scrollTotalCount())
   local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
@@ -1248,11 +1210,10 @@ local CharacterList_Update = function(isChangeSpecialTab)
 end
 
 CharacterSelect_ChangeLocate = function()
-  -- function num : 0_13 , upvalues : SelectCharacter, isconsoleGroupSet, CharacterList_Update
+  -- function num : 0_13 , upvalues : SelectCharacter, CharacterList_Update
   if not (SelectCharacter.btn_ChangeLocate):IsCheck() then
     ToClient_SaveClientCacheData()
   end
-  isconsoleGroupSet = false
   CharacterList_Update(false)
 end
 
@@ -1350,13 +1311,12 @@ CharacterSelect_PlayGame = function(index)
 end
 
 CharacterSelect_ChangeCharacterPosition = function(index, isUp)
-  -- function num : 0_17 , upvalues : isconsoleGroupSet, CharacterList_Update
+  -- function num : 0_17 , upvalues : CharacterList_Update
   if index == nil and isUp == nil then
     return 
   end
   ToClient_ChangeCharacterListOrder(index, isUp)
   ToClient_SaveClientCacheData()
-  isconsoleGroupSet = false
   CharacterList_Update(false)
 end
 
@@ -1382,7 +1342,7 @@ CharacterSelect_SelectEnterToGame = function()
 end
 
 CharacterSelect_Open = function(characterIndex)
-  -- function num : 0_19 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, isconsoleGroupSet, CharacterList_Update
+  -- function num : 0_19 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, CharacterList_Update
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   if characterIndex == -1 or configData.haveCount <= characterIndex then
@@ -1404,7 +1364,6 @@ CharacterSelect_Open = function(characterIndex)
   configData._startIndex = 0
   ;
   (SelectCharacter.btn_ChangeLocate):SetCheck(false)
-  isconsoleGroupSet = false
   CharacterList_Update(false)
   ;
   (SelectCharacter._scroll):SetControlPos(0)
@@ -1850,35 +1809,24 @@ UpdateSpecialCharacterTab = function()
   RadioButton_Click(0)
 end
 
-ConsoleGroupCreate_CharacterSelectNew = function()
-  -- function num : 0_38 , upvalues : SelectCharacter
-  local self = SelectCharacter
-  local group_1 = Panel_CharacterSelectNew:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_1:addControl(0, 0, 2, 2, self.btn_ChangeLocate)
-  group_1:addControl(1, 0, 2, 2, self.btn_ChaInfoDelete)
-  group_1:addControl(0, 1, 2, 2, self.btn_EndGame)
-  group_1:addControl(1, 1, 2, 2, self.btn_ServerSelect)
-end
-
 SelectCharacter_ScrollEvent_Up = function()
-  -- function num : 0_39
+  -- function num : 0_38
   SelectCharacter_ScrollEvent(true)
 end
 
 SelectCharacter_ScrollEvent_Down = function()
-  -- function num : 0_40
+  -- function num : 0_39
   SelectCharacter_ScrollEvent(false)
 end
 
 SelectCharacter_Init()
-ConsoleGroupCreate_CharacterSelectNew()
 registerEvent("EventChangeLobbyStageToCharacterSelect", "CharacterSelect_Open")
 registerEvent("FromClient_UpdateSpecialCharacterTab", "UpdateSpecialCharacterTab")
 registerEvent("EventCancelEnterWating", "cancelEnterWaitingLine")
 registerEvent("EventReceiveEnterWating", "receiveEnterWaiting")
 registerEvent("EventSetEnterWating", "setEnterWaitingUserCount")
 setFocusingPanelLobby = function()
-  -- function num : 0_41
+  -- function num : 0_40
   Panel_CharacterSelectNew:SetShow(false)
   Panel_CharacterSelectNew:SetShow(true)
 end

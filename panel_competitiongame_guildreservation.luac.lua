@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\competitiongame\panel_competitiongame_guildreservation.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\competitiongame\panel_competitiongame_guildreservation.luac 
 
 -- params : ...
 -- function num : 0
@@ -23,7 +23,7 @@ Panel_CompetitionGame_GuildReservation_Init = function()
     temp._slot_BG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CompetitionGame_GuildReservation, "CompetitionReservation_SlotBg_" .. Index)
     CopyBaseProperty(reservationSlot._slot_BG, temp._slot_BG)
     ;
-    (temp._slot_BG):SetPosY(47 + ((reservationSlot._slot_BG):GetSizeY() + 5) * Index)
+    (temp._slot_BG):SetPosY(52 + ((reservationSlot._slot_BG):GetSizeY() + 5) * Index)
     temp._slot_txt_DayOfWeek = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._slot_BG, "CompetitionReservation_SlotDayOfWeek_" .. Index)
     CopyBaseProperty(reservationSlot._slot_txt_DayOfWeek, temp._slot_txt_DayOfWeek)
     ;
@@ -127,7 +127,6 @@ FGlobal_RefreshReservationInfo = function()
   -- function num : 0_4
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
-  _PA_LOG("LUA_COMPETITION", "ToClient_RequestArshaReservationList 호출")
   ToClient_RequestArshaReservationList()
 end
 
@@ -216,18 +215,17 @@ Panel_CompetitionGame_GuildReservation_Event = function()
   for index = 0, #reservationSlotArr do
     if reservationSlotArr[index] ~= nil then
       local value = index
-      _PA_LOG("COMPETITION_LUA", "RESERVATION_ARSHA_VALUE" .. tostring(value))
       ;
       ((reservationSlotArr[index])._slot_btn_Reserve):addInputEvent("Mouse_LUp", "FGlobal_Panel_CompetitionGame_ReservationArsha(" .. value .. ")")
     else
       do
         do
-          _PA_LOG("COMPETITION_LUA", "RESERVATION_ARSHA" .. tostring(index))
-          -- DECOMPILER ERROR at PC48: LeaveBlock: unexpected jumping out DO_STMT
+          _PA_LOG("정태�\164", "여기�\188 들어오면 안된�\164!!!!!! 코드 �\128증해주세�\148!")
+          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC48: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC48: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

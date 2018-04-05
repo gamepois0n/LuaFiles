@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_guildbattle_selectattend.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_guildbattle_selectattend.luac 
 
 -- params : ...
 -- function num : 0
@@ -299,23 +299,6 @@ FromClient_GuildBattle_SelectAttendResult = function(isSuccess)
   end
 end
 
-FromClient_UpdateUnjoinAttend = function()
-  -- function num : 0_14
-  local ui = PaGlobal_GuildBattle_SelectAttend._ui
-  local entryCount = 0
-  if ToClient_isPersonalBattle() == true then
-    entryCount = ToClient_getPersonalBattleMemberCount()
-  else
-    entryCount = ToClient_GuildBattle_GetEntryCount()
-  end
-  local memberListElementManager = (ui._list_GuildMembers):getElementManager()
-  memberListElementManager:clearKey()
-  for i = 1, entryCount do
-    memberListElementManager:pushKey(i - 1)
-  end
-end
-
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_GuildBattle_SelectAttend")
 registerEvent("FromClient_selectAttendResult", "FromClient_GuildBattle_SelectAttendResult")
-registerEvent("FromClient_GuildBattle_OurMemberUnjoined", "FromClient_UpdateUnjoinAttend")
 

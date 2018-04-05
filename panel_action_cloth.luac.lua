@@ -1,9 +1,8 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_action_cloth.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_action_cloth.luac 
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local Frame_ContentImage = (UI.getChildControl)(Panel_CustomizationCloth, "Frame_Content_Image")
 local Static_Frame = (UI.getChildControl)(Panel_CustomizationCloth, "Static_Frame")
 local StaticText_Title = (UI.getChildControl)(Panel_CustomizationCloth, "StaticText_Title")
@@ -57,20 +56,9 @@ local clearContentList = function()
 end
 
 createClothList = function()
-  -- function num : 0_3 , upvalues : clearContentList, UI_GroupType, selectedClassType, ColumnCount, Button_Close, Frame_ContentImage, textureColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, contentsGap, frameStartY, CheckButton_ShowHelmet, StaticText_ShowHelmet, Static_Frame
+  -- function num : 0_3 , upvalues : clearContentList, selectedClassType, Frame_ContentImage, textureColumnCount, ColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, contentsGap, frameStartY, CheckButton_ShowHelmet, StaticText_ShowHelmet, Static_Frame
   clearContentList()
-  Set_CustomizationUIPanel(0, Panel_CustomizationCloth, 10)
-  ClearAll_CustomizationUIGroup(0)
-  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOFRAMEGRAPE)
-  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 1)
   local count = getClothCount(selectedClassType)
-  local countx = ColumnCount
-  local county = (math.floor)(count / ColumnCount)
-  if count % ColumnCount ~= 0 then
-    county = county + 1
-  end
-  county = county + 2
-  Add_CustomizationUIControl(0, 0, 0, 0, countx, county, Button_Close)
   local textureName = getClothTextureName(selectedClassType)
   local texSize = 48.25
   for itemIdx = 0, count - 1 do
@@ -92,10 +80,9 @@ createClothList = function()
     tempContentImage:SetPosY((math.floor)(itemIdx / ColumnCount) * columnHeight + contentsOffsetY)
     tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
     tempContentImage:SetShow(true)
-    -- DECOMPILER ERROR at PC145: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC104: Confused about usage of register: R15 in 'UnsetPending'
 
     ContentImage[itemIdx] = tempContentImage
-    Add_CustomizationUIControl(0, 0, itemIdx % countx, itemIdx / countx + 1, countx, county, ContentImage[itemIdx])
   end
   local totalImageHeight = contentsGap + ((math.floor)((count - 1) / ColumnCount) + 1) * columnHeight
   local showHelmetStartY = frameStartY + totalImageHeight
@@ -104,7 +91,6 @@ createClothList = function()
   local FrameSizeY = totalImageHeight + CheckButton_ShowHelmet:GetSizeY() + contentsGap
   Static_Frame:SetSize(Static_Frame:GetSizeX(), FrameSizeY)
   Panel_CustomizationCloth:SetSize(Panel_CustomizationCloth:GetSizeX(), frameStartY + FrameSizeY + contentsGap)
-  Add_CustomizationUIControl(0, 0, 0, county - 1, countx, county, CheckButton_ShowHelmet)
 end
 
 openClothUI = function(classType, showHelmet)
@@ -131,9 +117,6 @@ closeClothUI = function()
   clearContentList()
   CustomizationMainUIShow(true)
   selectPoseControl(0)
-  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 10)
-  ClearAll_CustomizationUIGroup(0)
-  CustomizationMain_SettingConsoleUI()
 end
 
 ShowHelmet = function()

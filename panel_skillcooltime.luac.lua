@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\quickslot\panel_skillcooltime.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\quickslot\panel_skillcooltime.luac 
 
 -- params : ...
 -- function num : 0
@@ -286,17 +286,25 @@ skillCooltime.registEventHandler = function(self)
   Panel_SkillCooltime:RegisterUpdateFunc("SkillCooltime_UpdatePerFrame")
 end
 
-skillCooltime.registMessageHandler = function(self)
+FromClient_SkillCoolTime_luaLoadComplete = function()
   -- function num : 0_10
+  if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_SkillCoolTime, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+    Panel_SkillCooltime:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_SkillCoolTime, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+  end
+end
+
+skillCooltime.registMessageHandler = function(self)
+  -- function num : 0_11
   registerEvent("EventSkillCooltime", "SkillCooltime_Add")
   registerEvent("onScreenResize", "SkillCooltime_OnResize")
+  registerEvent("FromClient_luaLoadComplete", "FromClient_SkillCoolTime_luaLoadComplete")
 end
 
 SkillCooltime_Reload()
 skillCooltime:registEventHandler()
 skillCooltime:registMessageHandler()
 Panel_SkillCooltime_ShowToggle = function()
-  -- function num : 0_11 , upvalues : showToggle
+  -- function num : 0_12 , upvalues : showToggle
   local isShow = Panel_SkillCooltime:IsShow()
   if isShow then
     showToggle = false

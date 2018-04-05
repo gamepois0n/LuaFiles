@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarket_alarm.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarket_alarm.luac 
 
 -- params : ...
 -- function num : 0
@@ -203,35 +203,13 @@ HandleClicked_ItemMarketAlarm_Cancel = function()
   ItemMarketAlarm:Close()
 end
 
-FGlobal_ItemMarketAlarm_Open = function(enchantItemKey)
-  -- function num : 0_8 , upvalues : ItemMarketAlarm
-  local hasList = false
-  local myCount = toClient_GetItemMarketFavoriteItemListSize()
-  if myCount > 0 then
-    for idx = 0, myCount - 1 do
-      local myEnchantItemKey = toClient_GetItemMarketFavoriteItem(idx)
-      local compareKey = myEnchantItemKey:get()
-      local inputKey = enchantItemKey:get()
-      if compareKey == inputKey then
-        hasList = true
-        break
-      end
-    end
-    do
-      if hasList == true then
-        ItemMarketAlarm:Open(enchantItemKey)
-      end
-    end
-  end
-end
-
 FGlobal_ItemMarketAlarm_Close = function()
-  -- function num : 0_9 , upvalues : ItemMarketAlarm
+  -- function num : 0_8 , upvalues : ItemMarketAlarm
   ItemMarketAlarm:Close()
 end
 
 ItemMarketAlarm_CheckRestoreFlush = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_10 , upvalues : ItemMarketAlarm
+  -- function num : 0_9 , upvalues : ItemMarketAlarm
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -242,14 +220,14 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "ItemMarketAlarm_CheckRestoreFlush")
 ItemMarketAlarm.registEventHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_10
   ((self.ui).btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketAlarm_Close()")
   ;
   ((self.ui).btn_AlarmCancel):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketAlarm_Cancel()")
 end
 
 ItemMarketAlarm.registMessageHandler = function(self)
-  -- function num : 0_12
+  -- function num : 0_11
 end
 
 ItemMarketAlarm:registEventHandler()

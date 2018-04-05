@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\repair\fixequip_control.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\repair\fixequip_control.luac 
 
 -- params : ...
 -- function num : 0
@@ -87,8 +87,12 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
         if (self._slotSub).itemKey == 44195 then
           (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(self._memoryFlagRecoveryCount)))
         else
-          ;
-          (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(10)))
+          if (self._slotSub).itemKey == 9750 then
+            (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(5)))
+          else
+            ;
+            (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(10)))
+          end
         end
         if self._moneyItemCheck then
           local fixEquipPrice = itemWrapper:getMoneyToRepairItemMaxEndurance((self._slotMain).itemKey)
@@ -118,7 +122,7 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
               (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
             else
               ;
-              (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6, 1 )")
+              (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 7 )")
             end
             local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
             if isReady == true then
@@ -143,7 +147,7 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
                 (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
               else
                 ;
-                (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6,1 )")
+                (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 7 )")
               end
               PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(true, "Panel_FixEquip_InteractortionFromInventory")
             else
@@ -184,6 +188,12 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
   (PaGlobal_FixEquip._uiTxtInven):SetText(makeDotMoney(invenMoney))
   ;
   (PaGlobal_FixEquip._uiTxtWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  if (self._slotMain).whereType == nil then
+    return 
+  end
+  if (self._slotMain).slotNo == nil then
+    return 
+  end
   local itemWrapper = getInventoryItemByType((self._slotMain).whereType, (self._slotMain).slotNo)
   if itemWrapper == nil then
     (self._enduranceText):SetShow(false)
@@ -323,13 +333,14 @@ PaGlobal_FixEquip.fixEquip_ApplyButton = function(self, isHelpRepair)
         ;
         (self._uiButtonApplyCash):SetAlpha(0.85)
         ;
-        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 6, 1 )")
+        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 7 )")
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_USECASHALL"))
         return 
       end
       local itemWrapper = getInventoryItemByType((self._slotMain).whereType, (self._slotMain).slotNo)
       local memoryFlagRecoveryCount = ((itemWrapper:getStaticStatus()):get())._repairEnduranceCount
       local isMemoryFlag = (self._slotSub).itemKey == 44195
+      local isDriganFlag = (self._slotSub).itemKey == 9750
       local maxEndurance = nil
       local currentEndurance = (itemWrapper:get()):getEndurance()
       if ((itemWrapper:getStaticStatus()):get()):isUnbreakable() == false then
@@ -340,6 +351,10 @@ PaGlobal_FixEquip.fixEquip_ApplyButton = function(self, isHelpRepair)
           contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount * 4)
         elseif isMemoryFlag and isHelpRepair == false then
           contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount)
+        elseif isDriganFlag and isHelpRepair == true then
+          contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(20))
+        elseif isDriganFlag and isHelpRepair == false then
+          contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(5))
         elseif isHelpRepair then
           contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERY_FIX_COUNT_30")
         else
@@ -358,7 +373,7 @@ PaGlobal_FixEquip.fixEquip_ApplyButton = function(self, isHelpRepair)
     else
       PaGlobal_FixEquip:fGlobal_closeFix()
     end
-    -- DECOMPILER ERROR: 10 unprocessed JMP targets
+    -- DECOMPILER ERROR: 13 unprocessed JMP targets
   end
 end
 

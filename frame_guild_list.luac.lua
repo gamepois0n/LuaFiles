@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\frame_guild_list.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\frame_guild_list.luac 
 
 -- params : ...
 -- function num : 0
@@ -20,7 +20,7 @@ local _constCollectionY = 80
 local _selectIndex = 0
 local _onlineGuildMember = 0
 local _initMoney = false
-local _UI_Menu_Button = {Type_Whisper = 0, Type_AppointCommander = 1, Type_CancelAppoint = 2, Type_ChangeMaster = 3, Type_ProtectMember = 4, Type_CancelProtectMember = 5, Type_PartyInvite = 6, Type_Supply = 7, Type_Deportation = 8, Type_Count = 9}
+local _UI_Menu_Button = {Type_Whisper = 0, Type_AppointCommander = 1, Type_CancelAppoint = 2, Type_ChangeMaster = 3, Type_ProtectMember = 4, Type_CancelProtectMember = 5, Type_PartyInvite = 6, Type_Supply = 7, Type_Deportation = 8, Type_PriceLimit = 9, Type_Count = 10}
 local numberKeyCode = {VCK.KeyCode_0, VCK.KeyCode_1, VCK.KeyCode_2, VCK.KeyCode_3, VCK.KeyCode_4, VCK.KeyCode_5, VCK.KeyCode_6, VCK.KeyCode_7, VCK.KeyCode_8, VCK.KeyCode_9, VCK.KeyCode_NUMPAD0, VCK.KeyCode_NUMPAD1, VCK.KeyCode_NUMPAD2, VCK.KeyCode_NUMPAD3, VCK.KeyCode_NUMPAD4, VCK.KeyCode_NUMPAD5, VCK.KeyCode_NUMPAD6, VCK.KeyCode_NUMPAD7, VCK.KeyCode_NUMPAD8, VCK.KeyCode_NUMPAD9}
 local inputGuildDepositNum_s64 = toInt64(0, 0)
 local inputGuildDepositMaxNum_s64 = toInt64(0, 0)
@@ -155,6 +155,7 @@ _guildListInfoPage_MandateTooltipShow = function(isShow, titleType, controlIdx)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   local channelName = getChannelName(worldNo, myGuildMemberInfo:getServerNo())
+  local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local memberChannel = ""
   if myGuildMemberInfo:isOnline() then
     lastLogin = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ONLINE_MEMBER")
@@ -177,6 +178,23 @@ _guildListInfoPage_MandateTooltipShow = function(isShow, titleType, controlIdx)
         control = ((GuildListInfoPage._list)[controlIdx])._contractBtn
         name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_CONTRACT_TITLE")
         desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_TITLETYPE4_DESC") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LASTLOGOUT", "lastLogin", lastLogin) .. memberChannel
+      end
+    end
+  end
+  local memberIsLimit = myGuildMemberInfo:getIsPriceLimit()
+  local memberIsGrade = myGuildMemberInfo:getGrade()
+  if myGuildMemberInfo:isSelf() and memberIsGrade > 0 then
+    if memberIsLimit == true then
+      desc = desc .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICE", "limitprice", makeDotMoney(myGuildMemberInfo:getPriceLimit()))
+    else
+      desc = desc .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICE", "limitprice", PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICE_NO"))
+    end
+  else
+    if isGuildMaster and memberIsGrade > 0 then
+      if memberIsLimit == true then
+        desc = desc .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICEOTHER", "limitprice", makeDotMoney(myGuildMemberInfo:getPriceLimit()))
+      else
+        desc = desc .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICEOTHER", "limitprice", PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_TOOLTIP_LIMITPRICE_NO"))
       end
     end
   end
@@ -207,7 +225,7 @@ GuildLogoutTimeConvert = function(s64_datetime)
   return strDate
 end
 
--- DECOMPILER ERROR at PC455: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC456: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.initialize = function(self)
   -- function num : 0_3 , upvalues : UI_TM, UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
@@ -246,8 +264,14 @@ GuildListInfoPage.initialize = function(self)
   -- DECOMPILER ERROR at PC120: Confused about usage of register: R13 in 'UnsetPending'
 
   GuildListInfoPage.decoIcon_Clan = (UI.getChildControl)(self._contentGuildList, "Static_DecoIcon_Clan")
-  ;
-  (GuildListInfoPage._btnGiveIncentive):addInputEvent("Mouse_LUp", "HandleCLicked_IncentiveOption()")
+  if __Guild_LimitPrice == true then
+    (GuildListInfoPage._btnGiveIncentive):addInputEvent("Mouse_LUp", "PaGlobal_Guild_ChoiseTheMoney:Open()")
+  else
+    ;
+    (GuildListInfoPage._btnGiveIncentive):SetText(PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_INCENTIVE"))
+    ;
+    (GuildListInfoPage._btnGiveIncentive):addInputEvent("Mouse_LUp", "HandleCLicked_IncentiveOption()")
+  end
   ;
   (GuildListInfoPage._btnDeposit):addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Deposit()")
   ;
@@ -530,12 +554,12 @@ GuildListInfoPage.initialize = function(self)
   ;
   (self._buttonListBG):addInputEvent("Mouse_Out", "MouseOutGuildMenuButton()")
   for index = 0, _constGuildListMaxCount - 1 do
-    -- DECOMPILER ERROR at PC375: Confused about usage of register: R29 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC394: Confused about usage of register: R29 in 'UnsetPending'
 
     (self._list)[index] = createListInfo(index)
   end
   for index = 0, _UI_Menu_Button.Type_Count - 1 do
-    -- DECOMPILER ERROR at PC387: Confused about usage of register: R29 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC406: Confused about usage of register: R29 in 'UnsetPending'
 
     (self._buttonList)[index] = createListInfoButton(index)
     ;
@@ -565,6 +589,8 @@ GuildListInfoPage.initialize = function(self)
   ((GuildListInfoPage._buttonList)[7]):SetText(PAGetString(Defines.StringSheet_GAME, "GULD_BUTTON7"))
   ;
   ((GuildListInfoPage._buttonList)[8]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_1"))
+  ;
+  ((GuildListInfoPage._buttonList)[_UI_Menu_Button.Type_PriceLimit]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_USEGUILDFUNDS_TITLE"))
   ;
   (UI.deleteControl)(_copyGrade)
   ;
@@ -606,7 +632,7 @@ GuildListInfoPage.initialize = function(self)
 end
 
 authorityCheck = function(memberType, gradeType, buttonType, isProtect)
-  -- function num : 0_4
+  -- function num : 0_4 , upvalues : _UI_Menu_Button
   local returnValue = false
   if memberType == 0 then
     if gradeType == 0 then
@@ -667,21 +693,24 @@ authorityCheck = function(memberType, gradeType, buttonType, isProtect)
         returnValue = true
       end
     end
+    if _UI_Menu_Button.Type_PriceLimit == buttonType then
+      returnValue = true
+    end
   else
-    -- DECOMPILER ERROR at PC91: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC96: Unhandled construct in 'MakeBoolean' P1
 
-    -- DECOMPILER ERROR at PC91: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC96: Unhandled construct in 'MakeBoolean' P1
 
     if memberType == 1 and gradeType == 0 and (buttonType == 6 or buttonType == 0) then
       returnValue = true
     end
   end
-  -- DECOMPILER ERROR at PC99: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC104: Unhandled construct in 'MakeBoolean' P1
 
   if gradeType == 1 and (buttonType == 0 or buttonType == 6) then
     returnValue = true
   end
-  -- DECOMPILER ERROR at PC109: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC114: Unhandled construct in 'MakeBoolean' P1
 
   if gradeType == 2 and (buttonType == 0 or buttonType == 6 or buttonType == 8) then
     returnValue = true
@@ -1105,9 +1134,14 @@ HandleClickedGuildMenuButton = function(index)
                               PaGlobal_ChattingInput_SendWhisper(characterName, targetName)
                               return 
                             else
-                              ;
-                              (UI.ASSERT)(false, "작업해야합니�\164!")
-                              return 
+                              if _UI_Menu_Button.Type_PriceLimit == index then
+                                PaGlobal_Guild_UseGuildFunds:ShowToggle(_selectIndex, true)
+                                return 
+                              else
+                                ;
+                                (UI.ASSERT)(false, "작업해야합니�\164!")
+                                return 
+                              end
                             end
                           end
                           ;
@@ -1301,7 +1335,7 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC572: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC574: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
   -- function num : 0_32 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
@@ -1314,7 +1348,7 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC576: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC578: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
   -- function num : 0_33 , upvalues : tempGuildList
@@ -1564,7 +1598,7 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC617: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC619: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
   -- function num : 0_42 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
@@ -1577,7 +1611,7 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC629: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC631: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
   -- function num : 0_43 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
@@ -1610,7 +1644,7 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC643: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC645: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
   -- function num : 0_44 , upvalues : _initMoney, contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
@@ -1757,6 +1791,10 @@ GuildListInfoPage.UpdateData = function(self)
                                                 else
                                                   if UI_Class.ClassType_Lahn == classType then
                                                     (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN"))
+                                                  else
+                                                    if UI_Class.ClassType_Orange == classType then
+                                                      (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN") .. "동묘")
+                                                    end
                                                   end
                                                 end
                                               end
@@ -1901,47 +1939,47 @@ GuildListInfoPage.UpdateData = function(self)
                                   end
                                   contentSizeY = contentSizeY + (((self._list)[index])._charName):GetSizeY() + 2
                                   btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1050: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1067: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -2018,7 +2056,7 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC649: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC651: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
   -- function num : 0_46 , upvalues : tempGuildUserNolist
@@ -2137,7 +2175,7 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC661: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC663: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
   -- function num : 0_50 , upvalues : _selectSortType, listening_Volume
@@ -2156,7 +2194,7 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC664: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC666: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
   -- function num : 0_51
@@ -2261,10 +2299,10 @@ end
 _GuildDeposit_InputCheck_BackSpaceCommand = function()
   -- function num : 0_61 , upvalues : inputGuildDepositNum_s64, incentive_InputMoney
   local str = tostring(inputGuildDepositNum_s64)
-  local length = strlen(str)
+  local length = (string.len)(str)
   local newStr = ""
   if length > 1 then
-    newStr = substring(str, 1, length - 1)
+    newStr = (string.sub)(str, 1, length - 1)
     inputGuildDepositNum_s64 = tonumber64(newStr)
   else
     newStr = "0"

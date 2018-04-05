@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\deadmessage\deadmessage.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\deadmessage\deadmessage.luac 
 
 -- params : ...
 -- function num : 0
@@ -690,21 +690,36 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_GuildSpawn:SetShow(false)
       _useCashItemBG:SetShow(false)
       _checkBoxUseCache:SetShow(false)
-      _button_Immediate:SetShow(false)
-      _checkBoxUseFairy:SetShow(false)
-      _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
-      _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
-      _text_ImmediateCount:SetShow(false)
-      _button_LocalWar:SetShow(false)
-      if PaGlobal_GuildBattle:isOneOneMode() == true then
+      if attackerActorProxyWrapper == nil then
+        _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
+      else
+        if isMilitia then
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA")))
+        else
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        end
+      end
+      if ToClient_GuildBattle_GetCurrentState() == 0 then
+        _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+        _button_Immediate:SetShow(true)
+        _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
+        _text_ImmediateCount:SetShow(true)
         _button_ObserverMode:SetShow(false)
       else
-        _button_ObserverMode:SetShow(true)
+        _button_Immediate:SetShow(false)
+        _text_ImmediateCount:SetShow(false)
+        if PaGlobal_GuildBattle:isOneOneMode() == true then
+          _button_ObserverMode:SetShow(false)
+        else
+          _button_ObserverMode:SetShow(true)
+        end
       end
+      _checkBoxUseFairy:SetShow(false)
+      _button_LocalWar:SetShow(false)
       _button_SavageOut:SetShow(false)
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
-      ResurrectionTime = revivalTime
+      ResurrectionTime = 0
       Panel_DeadMessage:SetShow(true, false)
       deadMessage_Animation()
       return 
@@ -950,6 +965,10 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
                         local temporaryWrapper = getTemporaryInformationWrapper()
                         local fortressSize = temporaryWrapper:getMyFortressSize()
                         if isMyChannelSiegeBeing == true then
+                          _checkBoxUseFairy:SetShow(false)
+                          local buttonSizeY = _button_Immediate:GetSizeY()
+                          _useCashItemBG:SetPosY(screenY / 2 + buttonSizeY * 2.4)
+                          _useCashItemBG:SetSize(_checkBoxUseCache:GetTextSizeX() + 40, 25)
                           if deadMessage_isInSiegeBattle() == true then
                             _button_Immediate:SetShow(false)
                             _text_ImmediateCount:SetShow(false)
@@ -1216,7 +1235,7 @@ deadMessage_ExpDown = function()
 end
 
 deadMessage_ButtonPushed_MoveToVillage = function()
-  -- function num : 0_14 , upvalues : _checkBoxUseCache, isHasRestoreExperience, deadMessage_ClearDropItems
+  -- function num : 0_14 , upvalues : _checkBoxUseCache, _checkBoxUseFairy, isHasRestoreExperience, deadMessage_ClearDropItems
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -1234,6 +1253,7 @@ deadMessage_ButtonPushed_MoveToVillage = function()
     isBadPlayer = true
   end
   local isCheck = _checkBoxUseCache:IsCheck()
+  local isFairyCheck = _checkBoxUseFairy:IsCheck()
   local isArena = (regionInfo:get()):isArenaArea()
   local freeRevivalLevel = FromClient_getFreeRevivalLevel()
   local isFreeArea = (regionInfo:get()):isFreeRevivalArea()
@@ -1241,10 +1261,10 @@ deadMessage_ButtonPushed_MoveToVillage = function()
     useCheckCacheItem(enRespawnType.respawnType_NearTown)
   else
     local contentString = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_RESPAWN_TO_VILLAGE")
-    -- DECOMPILER ERROR at PC96: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC101: Unhandled construct in 'MakeBoolean' P1
 
     if isSiegeBeing and isKingOrLordWarZone ~= true then
-      if (isVillageWarZone == true and isHasRestoreExperience) or currentExp < prevExp then
+      if ((isVillageWarZone == true and isHasRestoreExperience) or currentExp < prevExp) and isFairyCheck == false then
         contentString = contentString .. "\n" .. PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_EXP_DOWN")
       end
       if ToClient_IsOpendDesertPK() and isBadPlayer == true and regionInfo:getVillainRespawnWaypointKey() ~= 0 then
@@ -1261,8 +1281,8 @@ deadMessage_ButtonPushed_MoveToVillage = function()
 end
 
 deadMessage_RevivalVillage_Confirm = function()
-  -- function num : 0_15
-  deadMessage_Revival(enRespawnType.respawnType_NearTown, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+  -- function num : 0_15 , upvalues : _checkBoxUseFairy
+  deadMessage_Revival(enRespawnType.respawnType_NearTown, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0), _checkBoxUseFairy:IsCheck())
   SetUIMode((Defines.UIMode).eUIMode_Default)
 end
 
@@ -1273,7 +1293,7 @@ deadMessage_ButtonPushed_Volunteer = function()
 end
 
 deadMessage_ButtonPushed_MoveExploration = function()
-  -- function num : 0_17 , upvalues : _checkBoxUseCache, isHasRestoreExperience, deadMessage_ClearDropItems
+  -- function num : 0_17 , upvalues : _checkBoxUseCache, _checkBoxUseFairy, isHasRestoreExperience, deadMessage_ClearDropItems
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -1286,6 +1306,7 @@ deadMessage_ButtonPushed_MoveExploration = function()
   local prevExp = (selfProxy:get()):getPrevExp_s64()
   local currentExp = (selfProxy:get()):getExp_s64()
   local isCheck = _checkBoxUseCache:IsCheck()
+  local isFairyCheck = _checkBoxUseFairy:IsCheck()
   local freeRevivalLevel = FromClient_getFreeRevivalLevel()
   local isFreeArea = (regionInfo:get()):isFreeRevivalArea()
   local isArena = (regionInfo:get()):isArenaArea()
@@ -1293,7 +1314,7 @@ deadMessage_ButtonPushed_MoveExploration = function()
     useCheckCacheItem(enRespawnType.respawnType_Exploration)
   else
     local contentString = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_RESPAWN_TO_EXPLORE")
-    if not isSiegeBeing or ((isVillageWarZone == true and isHasRestoreExperience) or currentExp < prevExp) then
+    if (not isSiegeBeing or ((isVillageWarZone ~= true or not isHasRestoreExperience) and currentExp >= prevExp) or isFairyCheck == false) then
       contentString = contentString .. "\n" .. PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_EXP_DOWN")
     end
     local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_RESPAWN_MB_TITLE"), content = contentString, functionYes = deadMessage_RevivalExploration_Confirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_1}
@@ -1306,8 +1327,8 @@ deadMessage_ButtonPushed_MoveExploration = function()
 end
 
 deadMessage_RevivalExploration_Confirm = function()
-  -- function num : 0_18
-  deadMessage_Revival(enRespawnType.respawnType_Exploration, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+  -- function num : 0_18 , upvalues : _checkBoxUseFairy
+  deadMessage_Revival(enRespawnType.respawnType_Exploration, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0), _checkBoxUseFairy:IsCheck())
   SetUIMode((Defines.UIMode).eUIMode_Default)
 end
 
@@ -1327,7 +1348,7 @@ deadMessage_ButtonPushed_Immediate = function()
   local freeRevivalLevel = FromClient_getFreeRevivalLevel()
   local isFreeArea = (regionInfo:get()):isFreeRevivalArea()
   if isGuildBattle then
-    deadMessage_Revival(enRespawnType.respawnType_GuildBatle, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+    deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
   else
     if isArena == true then
       deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
@@ -1493,7 +1514,7 @@ useCheckFairy = function(respawnType)
   if isArena == true and respawnType == enRespawnType.respawnType_Immediate then
     deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0), false)
   else
-    deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0), true)
+    deadMessage_Revival(respawnType, 255, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0), true)
   end
 end
 

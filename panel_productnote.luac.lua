@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\productnote\panel_productnote.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\productnote\panel_productnote.luac 
 
 -- params : ...
 -- function num : 0
@@ -38,7 +38,6 @@ Panel_ProductNote_HideAni = function()
 end
 
 local _btn_Close = (UI.getChildControl)(Panel_ProductNote, "Button_Close")
-local _btn_CloseWindow = (UI.getChildControl)(Panel_ProductNote, "Button_CloseWindow")
 local _btn_PopUp = (UI.getChildControl)(Panel_ProductNote, "CheckButton_PopUp")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 _btn_PopUp:SetShow(isPopUpContentsEnable)
@@ -54,8 +53,9 @@ Panel_ProductNote_Initialize = function()
   -- function num : 0_2 , upvalues : _productWeb
   _productWeb = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_ProductNote, "WebControl_ProductNote")
   _productWeb:SetShow(true)
-  _productWeb:SetPosX(43)
-  _productWeb:SetPosY(63)
+  _productWeb:SetHorizonCenter()
+  _productWeb:SetVerticalTop()
+  _productWeb:SetSpanSize(0, 62)
   _productWeb:SetSize(700, 558)
   _productWeb:ResetUrl()
 end
@@ -154,6 +154,5 @@ ProductNote_PopUp_ShowIconToolTip = function(isShow)
 end
 
 _btn_Close:addInputEvent("Mouse_LUp", "Panel_ProductNote_ShowToggle()")
-_btn_CloseWindow:addInputEvent("Mouse_LUp", "Panel_ProductNote_ShowToggle()")
 registerEvent("onScreenResize", "ProductNote_onScreenResize")
 

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_window_guildbattle.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_window_guildbattle.luac 
 
 -- params : ...
 -- function num : 0
@@ -12,8 +12,7 @@ _joinProgressTimer = {}
 _guildAinfo = {}
 , _edit_PriceInput = (UI.getChildControl)(Panel_Window_GuildBattle, "Edit_PriceInput")}
 , _battingPrice = 0, _CanCancel = true, _cancelAnotherGuild = false}
-local BattleStates = {Idle = 0, Join = 1, SelectEntry = 2, SelectAttend = 3, Ready = 4, Fight = 5, End = 6, Teleport = 7}
--- DECOMPILER ERROR at PC102: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Initialize = function(self)
   -- function num : 0_0
@@ -83,7 +82,7 @@ PaGlobal_GuildBattle.Initialize = function(self)
   self:turnOffAllControl()
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetProgressServer = function(self, cancel)
   -- function num : 0_1
@@ -122,7 +121,7 @@ PaGlobal_GuildBattle.SetProgressServer = function(self, cancel)
   end
 end
 
--- DECOMPILER ERROR at PC108: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.turnOffAllControl = function(self)
   -- function num : 0_2
@@ -153,7 +152,7 @@ PaGlobal_GuildBattle.turnOffAllControl = function(self)
   ((self._ui)._txt_BottomDesc):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetGuildMark = function(self, guildNo, mark)
   -- function num : 0_3
@@ -173,7 +172,7 @@ PaGlobal_GuildBattle.SetGuildMark = function(self, guildNo, mark)
   end
 end
 
--- DECOMPILER ERROR at PC114: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetGuildInfoOneReserved = function(self, guildBattleInfo)
   -- function num : 0_4
@@ -188,7 +187,7 @@ PaGlobal_GuildBattle.SetGuildInfoOneReserved = function(self, guildBattleInfo)
   (((self._ui)._guildAinfo)._rating):SetText(tostring(guildBattleInfo:getRating()) .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_POINT"))
 end
 
--- DECOMPILER ERROR at PC117: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetGuildInfoBothReserved = function(self, index, guildBattleInfo)
   -- function num : 0_5
@@ -219,10 +218,10 @@ PaGlobal_GuildBattle.SetGuildInfoBothReserved = function(self, index, guildBattl
   end
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
-  -- function num : 0_6 , upvalues : BattleStates
+  -- function num : 0_6
   local guildA = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(0)
   local guildB = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(1)
   if not ((getSelfPlayer()):get()):isGuildMaster() then
@@ -311,22 +310,22 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
           ((self._ui)._txt_progress):useGlowFont(true, "BaseFont_10_Glow", 4279004349)
           ;
           ((self._ui)._txt_progress):SetShow(true)
-          if BattleStates.Idle == battleState then
+          if __eGuildBattleState_Idle == battleState then
             ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_MATCHING"))
           else
-            if BattleStates.Join == battleState then
+            if __eGuildBattleState_Join == battleState then
               ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLESTATE_JOIN"))
             else
-              if BattleStates.End == battleState then
+              if __eGuildBattleState_End == battleState then
                 ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLESTATE_END"))
               else
-                if battleMode == 0 then
+                if __eGuildBattleGameMode_Normal == battleMode then
                   ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_NORMAL") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
                 else
-                  if battleMode == 1 then
+                  if __eGuildBattleGameMode_OneOne == battleMode then
                     ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ONEONE") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
                   else
-                    if battleMode == 2 then
+                    if __eGuildBattleGameMode_All == battleMode then
                       ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ALL") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
                     end
                   end
@@ -334,7 +333,7 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
               end
             end
           end
-          if isCurrentGuildServer == true and BattleStates.Join == battleState then
+          if isCurrentGuildServer == true and __eGuildBattleState_Join == battleState then
             (((self._ui)._joinBothGuild)._CompleteBG):SetShow(false)
             ;
             (((self._ui)._joinProgressTimer)._bg):SetShow(true)
@@ -387,7 +386,7 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
               end
             end
           end
-          if didIJoinGuildBattle == false and battleState ~= BattleStates.Idle and battleState ~= BattleStates.Join then
+          if didIJoinGuildBattle == false and battleState ~= __eGuildBattleState_Idle and battleState ~= __eGuildBattleState_Join then
             ((self._ui)._txt_progress):SetText(PaGlobal_GuildBattle:GetTitle() .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
           end
         end
@@ -399,18 +398,18 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.isOneOneMode = function(self)
   -- function num : 0_7
   do
     local gamemode = ToClient_GuildBattle_GetCurrentMode()
-    do return gamemode == 1 end
+    do return __eGuildBattleGameMode_OneOne == gamemode end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.notifyJoinGuildBattle = function(self)
   -- function num : 0_8
@@ -419,13 +418,13 @@ PaGlobal_GuildBattle.notifyJoinGuildBattle = function(self)
   ToClient_GuildBattle_UpdateGuildBattleInfo()
 end
 
--- DECOMPILER ERROR at PC130: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.ModeChangeRequest = function(self, mode)
   -- function num : 0_9
 end
 
--- DECOMPILER ERROR at PC133: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC123: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Open = function(self)
   -- function num : 0_10
@@ -439,7 +438,7 @@ FGlobal_GuildBattle_Open = function()
   PaGlobal_GuildBattle:Open()
 end
 
--- DECOMPILER ERROR at PC138: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC128: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Close = function(self)
   -- function num : 0_12
@@ -451,7 +450,7 @@ FGlobal_GuildBattle_Close = function()
   PaGlobal_GuildBattle:Close()
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.IsShow = function(self)
   -- function num : 0_14
@@ -463,7 +462,7 @@ FGlobal_GuildBattle_IsOpen = function()
   return PaGlobal_GuildBattle:IsShow()
 end
 
--- DECOMPILER ERROR at PC148: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UpdateRemainTime = function(self)
   -- function num : 0_16
@@ -480,21 +479,21 @@ PaGlobal_GuildBattle.UpdateRemainTime = function(self)
   (((self._ui)._joinProgressTimer)._progressBar):SetProgressRate(remainTime * 100 / remainTimeOriginal)
 end
 
--- DECOMPILER ERROR at PC151: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Reservation = function(self)
   -- function num : 0_17
   ToClient_GuildBattle_ReserveGuildBattle(self._battingPrice)
 end
 
--- DECOMPILER ERROR at PC154: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Reservation_Cancel = function(self)
   -- function num : 0_18
   ToClient_GuildBattle_CancelGuildBattle()
 end
 
--- DECOMPILER ERROR at PC157: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC147: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Join = function(self)
   -- function num : 0_19
@@ -505,14 +504,14 @@ PaGlobal_GuildBattle.Join = function(self)
   ToClient_GuildBattle_JoinGuildBattle()
 end
 
--- DECOMPILER ERROR at PC160: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC150: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UnJoin = function(self)
   -- function num : 0_20
   ToClient_GuildBattle_UnjoinGuildBattle()
 end
 
--- DECOMPILER ERROR at PC163: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Start = function(self)
   -- function num : 0_21
@@ -520,14 +519,14 @@ PaGlobal_GuildBattle.Start = function(self)
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WE_ARE_READY_SHORT"))
 end
 
--- DECOMPILER ERROR at PC166: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UseFreeCam = function(self)
   -- function num : 0_22
   ToClient_GuildBattle_SetFreeCamMode()
 end
 
--- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetPrice = function(self)
   -- function num : 0_23
@@ -544,7 +543,7 @@ PaGlobal_GuildBattle.SetPrice = function(self)
   Panel_NumberPad_Show(true, getGuildMoney, 0, setEditText)
 end
 
--- DECOMPILER ERROR at PC172: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC162: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.GetTitle = function(self)
   -- function num : 0_24
@@ -555,7 +554,7 @@ PaGlobal_GuildBattle.GetTitle = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC175: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.registMessageHandler = function(self)
   -- function num : 0_25

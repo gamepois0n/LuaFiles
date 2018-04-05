@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\warinfomessage\panel_territorywar_alert.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\warinfomessage\panel_territorywar_alert.luac 
 
 -- params : ...
 -- function num : 0
@@ -9,6 +9,9 @@ Panel_TerritoryWar_Caution:RegisterShowEventFunc(false, "TerritoryWar_CautionHid
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
 local UI_color = Defines.Color
+local desc = (UI.getChildControl)(Panel_TerritoryWar_Caution, "StaticText_Desc1")
+local descText = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TERRITORYWAR_CAUTION_DESC_1") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TERRITORYWAR_CAUTION_DESC_2") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TERRITORYWAR_CAUTION_DESC3")
+desc:SetText(descText)
 TerritoryWar_CautionShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV, UI_TT
   Panel_TerritoryWar_Caution:ChangeSpecialTextureInfoName("new_ui_common_forlua/Default/Mask_MidHorizon.dds")

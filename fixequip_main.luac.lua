@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\repair\fixequip_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\repair\fixequip_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -121,6 +121,18 @@ PaGlobal_FixEquip.fixEquip_clearData = function(self)
   (self._uiButtonApplyCash):SetMonoTone(true)
   ;
   (self._uiButtonApplyCash):SetAlpha(0.85)
+  ;
+  (self._enduranceText):SetShow(false)
+  ;
+  (self._enduranceGauge):SetShow(false)
+  ;
+  (self._enduranceMax):SetShow(false)
+  ;
+  (self._enduranceGaugeValue):SetShow(false)
+  ;
+  (self._enduranceValue):SetShow(false)
+  ;
+  (self._enduranceIcon):SetShow(false)
   PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
 end
 
@@ -378,7 +390,7 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
       (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
     else
       ;
-      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 6, 1)")
+      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 7 )")
     end
   else
     ;
@@ -395,7 +407,7 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
       (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
     else
       ;
-      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6,1)")
+      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(7)")
     end
     ;
     (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
@@ -439,7 +451,7 @@ PaGlobal_FixEquip.fixEquipContinue = function(self, slotNo)
         ;
         (self._uiButtonApplyCash):SetAlpha(0.85)
         ;
-        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6, 1)")
+        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(7)")
         return 
       end
     end

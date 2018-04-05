@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\characterinfo\ui_characterinfo_basic_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\characterinfo\ui_characterinfo_basic_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -65,9 +65,11 @@ _staticTextCraft_Level = {}
 _staticTextCraft_Percent = {}
 , 
 _progress2Craft = {}
+, 
+_progress2CraftBG = {}
 }
 }
--- DECOMPILER ERROR at PC269: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC271: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initialize = function(self)
   -- function num : 0_0 , upvalues : Class_BattleSpeed, BattleSpeed, UI_Symbol, CombatType, UI_Class
@@ -140,7 +142,7 @@ PaGlobal_CharacterInfoBasic.initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC272: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC274: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initializeControl = function(self)
   -- function num : 0_1
@@ -339,11 +341,15 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
     -- DECOMPILER ERROR at PC567: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
+    ((self._ui)._progress2CraftBG)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "Static_GaugeBG")
+    -- DECOMPILER ERROR at PC577: Confused about usage of register: R9 in 'UnsetPending'
+
+    ;
     ((self._ui)._progress2Craft)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "Progress2_Gauge")
   end
 end
 
--- DECOMPILER ERROR at PC275: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC277: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.update = function(self)
   -- function num : 0_2
@@ -384,7 +390,7 @@ PaGlobal_CharacterInfoBasic.update = function(self)
   FromClient_UI_CharacterInfo_Basic_NormalStackChanged()
 end
 
--- DECOMPILER ERROR at PC278: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC280: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
   -- function num : 0_3
@@ -438,7 +444,7 @@ PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
   ((self._ui)._buttonFacePhoto):addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:handleClicked_FacePhotoButton()")
 end
 
--- DECOMPILER ERROR at PC281: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC283: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registMessageHandler = function(self)
   -- function num : 0_4

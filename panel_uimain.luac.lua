@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\uicontrolbar\panel_uimain.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\uicontrolbar\panel_uimain.luac 
 
 -- params : ...
 -- function num : 0
@@ -75,6 +75,10 @@ if ToClient_GetAttendanceInfoWrapper(0) ~= nil then
   dailyStampAlert:addInputEvent("Mouse_On", "ShowTooltip_DailyStampIcon( true )")
   dailyStampAlert:addInputEvent("Mouse_Out", "ShowTooltip_DailyStampIcon()")
 end
+local itemMarketIcon = (UI.getChildControl)(Panel_ItemMarket_Alert, "Static_Icon")
+local itemMarketAlarmCount = (UI.getChildControl)(Panel_ItemMarket_Alert, "StaticText_Number")
+itemMarketIcon:addInputEvent("Mouse_LUp", "FGlobal_ItemMarketAlarmList_New_Open()")
+itemMarketIcon:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
 UIMain_DailyStmp_SetAttendanceAll = function()
   -- function num : 0_3
   FGlobal_DailyStamp_SetAttendanceAll()
@@ -645,12 +649,37 @@ FromClient_RegisterCoupon = function()
     Panel_Coupon_Alert:SetShow(isCouponOpen)
     couponIcon:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_Open()")
     couponCount:SetText(count)
-    couponIcon:AddEffect("fUI_Coupon_01A", true, 0, 0)
+    couponIcon:AddEffect("fUI_Coupon_01A", true, 2, 2)
+  end
+  if Panel_ItemMarket_Alert:GetShow() then
+    Panel_ItemMarket_Alert:SetSpanSize(iconPosX, 10)
+    iconPosX = iconPosX + (Panel_Coupon_Alert:GetSpanSize()).x + 5
+  end
+end
+
+FGlobal_ItemMarket_AlarmIcon_Show = function()
+  -- function num : 0_28
+  Panel_ItemMarket_Alert:SetShow(true)
+  FGlobal_ItemMarket_SetCount()
+  FromClient_RegisterCoupon()
+end
+
+FGlobal_ItemMarket_SetCount = function()
+  -- function num : 0_29 , upvalues : itemMarketAlarmCount, itemMarketIcon
+  do
+    local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
+    itemMarketAlarmCount:SetText(alarmCount)
+    itemMarketAlarmCount:SetShow(alarmCount > 0)
+    itemMarketIcon:EraseAllEffect()
+    if alarmCount > 0 then
+      itemMarketIcon:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
+    end
+    -- DECOMPILER ERROR: 2 unprocessed JMP targets
   end
 end
 
 FGlobal_RightBottomIconReposition = function()
-  -- function num : 0_28
+  -- function num : 0_30
   FromClient_RegisterCoupon()
 end
 

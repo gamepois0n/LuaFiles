@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\stable\panel_window_stablelist.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\stable\panel_window_stablelist.luac 
 
 -- params : ...
 -- function num : 0
@@ -1380,6 +1380,9 @@ StableList_SupplyToNpc = function()
   local resultMoney = makeDotMoney(servantInfo:getSellCost_s64())
   local title = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_SUPPLY")
   local content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABLE_SUPPLY", "resultMoney", resultMoney) .. servantInvenAlert
+  if ToClient_IsContentsGroupOpen("1067") then
+    content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABLE_SUPPLYEVENT", "resultMoney", resultMoney) .. servantInvenAlert
+  end
   Servant_Confirm(title, content, StableList_SellToNpcXXX, MessageBox_Empty_function)
 end
 

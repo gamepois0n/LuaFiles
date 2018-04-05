@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\panel_login.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\panel_login.luac 
 
 -- params : ...
 -- function num : 0
@@ -50,7 +50,7 @@ local bgManager = {
 , 
 [bgIndex.kamasilvia2] = {isOpen = ToClient_IsContentsGroupOpen("260"), imageCount = 2, iconPath = "bgKamasilvia2_"}
 , 
-[bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 0, iconPath = "bgDragan_"}
+[bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 3, iconPath = "bgDragan_"}
 , 
 [bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 1, iconPath = "bgXmas_"}
 , 
@@ -112,7 +112,7 @@ for _,value in ipairs(bgManager) do
   end
 end
 tempBg:SetShow(false)
-local bgStartIndex = getRandomValue(startIndex, endIndex)
+local bgStartIndex = startIndex
 if isLoginIDShow() == false then
   Edit_ID:SetShow(false)
   _loginBG:SetShow(false)
@@ -176,7 +176,7 @@ LogInPanel_Resize = function()
             Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
           else
             do
-              if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+              if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
                 Static_DaumCI:SetShow(false)
                 Static_CI:SetSpanSize(10, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
               else

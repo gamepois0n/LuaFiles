@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\trademarket\panel_window_trademarket.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\trademarket\panel_window_trademarket.luac 
 
 -- params : ...
 -- function num : 0
@@ -967,10 +967,13 @@ end
 
 TradeShopMoneyRefresh = function()
   -- function num : 0_32 , upvalues : npcTradeShop, currentTradeSlot, const_64
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Npc_Trade_Market:GetShow() == false then
+    return 
+  end
   if global_IsTrading == true then
     if npcTradeShop._buyRequest == true then
       currentTradeSlot = 1
-      -- DECOMPILER ERROR at PC14: Confused about usage of register: R0 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
 
       npcTradeShop._numpadNumber = toInt64(0, 1)
       npcTradeShop:InitTradeMarket()
@@ -981,7 +984,7 @@ TradeShopMoneyRefresh = function()
     local selfPlayer = selfPlayerWrapper:get()
     local selfPlayerPossessableWeigh = selfPlayer:getPossessableWeight_s64()
     local selfPlayerCurrentWeigh = selfPlayer:getCurrentWeight_s64()
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC42: Confused about usage of register: R4 in 'UnsetPending'
 
     npcTradeShop._myRemainWeight = selfPlayerPossessableWeigh - selfPlayerCurrentWeigh
     local itemWeightDiv100 = selfPlayerPossessableWeigh / const_64.s64_100

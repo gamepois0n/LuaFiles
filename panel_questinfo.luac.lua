@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\questlist\panel_questinfo.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\questlist\panel_questinfo.luac 
 
 -- params : ...
 -- function num : 0
@@ -565,17 +565,25 @@ rewardTooltip_ForQuestWidgetInfo = function(type, show, questtype, index, mental
       if type == "SkillExp" then
         expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP"))
       else
-        if type == "ProductExp" then
-          expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_PRODUCTEXP"))
+        if type == "ExpGrade" then
+          expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP_GRADE"))
         else
-          if type == "Intimacy" then
-            expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_INTIMACY"))
+          if type == "SkillExpGrade" then
+            expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP_GRADE"))
           else
-            if type == "Knowledge" then
-              local mentalCardSSW = ToClinet_getMentalCardStaticStatus(mentalCardKey)
-              local mentalCardName = mentalCardSSW:getName()
-              local mentalCardDesc = mentalCardSSW:getDesc()
-              expTooltip:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARD_TOOLTIP_KNOWLEDGE", "mentalCardName", mentalCardName, "mentalCardName2", mentalCardName))
+            if type == "ProductExp" then
+              expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_PRODUCTEXP"))
+            else
+              if type == "Intimacy" then
+                expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_INTIMACY"))
+              else
+                if type == "Knowledge" then
+                  local mentalCardSSW = ToClinet_getMentalCardStaticStatus(mentalCardKey)
+                  local mentalCardName = mentalCardSSW:getName()
+                  local mentalCardDesc = mentalCardSSW:getDesc()
+                  expTooltip:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARD_TOOLTIP_KNOWLEDGE", "mentalCardName", mentalCardName, "mentalCardName2", mentalCardName))
+                end
+              end
             end
           end
         end
@@ -598,7 +606,7 @@ end
 local setReward = function(uiSlot, reward, index, questType)
   -- function num : 0_9
   uiSlot._type = reward._type
-  if __eRewardExp == reward._type or __eRewardExpGrade == reward._type then
+  if __eRewardExp == reward._type then
     (uiSlot.count):SetText("")
     ;
     (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -607,7 +615,7 @@ local setReward = function(uiSlot, reward, index, questType)
     ;
     (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Exp\", false, \"" .. questType .. "\", " .. index .. " )")
   else
-    if __eRewardSkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
+    if __eRewardSkillExp == reward._type then
       (uiSlot.count):SetText("")
       ;
       (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")
@@ -616,57 +624,77 @@ local setReward = function(uiSlot, reward, index, questType)
       ;
       (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"SkillExp\", false, \"" .. questType .. "\", " .. index .. " )")
     else
-      if __eRewardLifeExp == reward._type then
+      if __eRewardExpGrade == reward._type then
         (uiSlot.count):SetText("")
         ;
-        (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
+        (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/ExpGrade.dds")
         ;
-        (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"ProductExp\", true, \"" .. questType .. "\", " .. index .. " )")
+        (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"ExpGrade\", true, \"" .. questType .. "\", " .. index .. " )")
         ;
-        (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"ProductExp\", false, \"" .. questType .. "\", " .. index .. " )")
+        (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"ExpGrade\", false, \"" .. questType .. "\", " .. index .. " )")
       else
-        if __eRewardItem == reward._type then
-          local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward._item))
-          uiSlot:setItemByStaticStatus(itemStatic, reward._count)
-          uiSlot._item = reward._item
-          if questType == "main" then
-            (uiSlot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",true)")
-            ;
-            (uiSlot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",false)")
-          else
-            ;
-            (uiSlot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Select\",true)")
-            ;
-            (uiSlot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Select\",false)")
-          end
-          return reward._isEquipable
+        if __eRewardSkillExpGrade == reward._type then
+          (uiSlot.count):SetText("")
+          ;
+          (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExpGrade.dds")
+          ;
+          (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"SkillExpGrade\", true, \"" .. questType .. "\", " .. index .. " )")
+          ;
+          (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"SkillExpGrade\", false, \"" .. questType .. "\", " .. index .. " )")
         else
-          do
-            if __eRewardIntimacy == reward._type then
-              (uiSlot.count):SetText(tostring(reward._value))
-              ;
-              (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
-              ;
-              (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"Intimacy\", true, \"" .. questType .. "\", " .. index .. " )")
-              ;
-              (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Intimacy\", false, \"" .. questType .. "\", " .. index .. " )")
-            else
-              if __eRewardKnowledge == reward._type then
-                (uiSlot.count):SetText("")
+          if __eRewardLifeExp == reward._type then
+            (uiSlot.count):SetText("")
+            ;
+            (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
+            ;
+            (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"ProductExp\", true, \"" .. questType .. "\", " .. index .. " )")
+            ;
+            (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"ProductExp\", false, \"" .. questType .. "\", " .. index .. " )")
+          else
+            if __eRewardItem == reward._type then
+              local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward._item))
+              uiSlot:setItemByStaticStatus(itemStatic, reward._count)
+              uiSlot._item = reward._item
+              if questType == "main" then
+                (uiSlot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",true)")
                 ;
-                (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/00000000_know_icon.dds")
-                ;
-                (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"Knowledge\", true, \"" .. questType .. "\", " .. index .. "," .. reward._mentalCard .. " )")
-                ;
-                (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Knowledge\", false, \"" .. questType .. "\", " .. index .. "," .. reward._mentalCard .. " )")
+                (uiSlot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",false)")
               else
                 ;
-                (uiSlot.icon):addInputEvent("Mouse_On", "")
+                (uiSlot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Select\",true)")
                 ;
-                (uiSlot.icon):addInputEvent("Mouse_Out", "")
+                (uiSlot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Select\",false)")
+              end
+              return reward._isEquipable
+            else
+              do
+                if __eRewardIntimacy == reward._type then
+                  (uiSlot.count):SetText(tostring(reward._value))
+                  ;
+                  (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
+                  ;
+                  (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"Intimacy\", true, \"" .. questType .. "\", " .. index .. " )")
+                  ;
+                  (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Intimacy\", false, \"" .. questType .. "\", " .. index .. " )")
+                else
+                  if __eRewardKnowledge == reward._type then
+                    (uiSlot.count):SetText("")
+                    ;
+                    (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/00000000_know_icon.dds")
+                    ;
+                    (uiSlot.icon):addInputEvent("Mouse_On", "rewardTooltip_ForQuestWidgetInfo( \"Knowledge\", true, \"" .. questType .. "\", " .. index .. "," .. reward._mentalCard .. " )")
+                    ;
+                    (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Knowledge\", false, \"" .. questType .. "\", " .. index .. "," .. reward._mentalCard .. " )")
+                  else
+                    ;
+                    (uiSlot.icon):addInputEvent("Mouse_On", "")
+                    ;
+                    (uiSlot.icon):addInputEvent("Mouse_Out", "")
+                  end
+                end
+                return false
               end
             end
-            return false
           end
         end
       end

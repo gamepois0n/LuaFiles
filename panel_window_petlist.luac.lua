@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\petinfo\panel_window_petlist.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\petinfo\panel_window_petlist.luac 
 
 -- params : ...
 -- function num : 0
@@ -1433,7 +1433,7 @@ FGlobal_PetListNew_NoPet = function()
 end
 
 PetListControlCreate = function(control, key)
-  -- function num : 0_53 , upvalues : isPlayOpen, PetList, UI_TM, composePetTier, petComposeNo, petCompose, petRaceCount
+  -- function num : 0_53 , upvalues : isPlayOpen, PetList, UI_TM, petComposeNo, composePetTier, petCompose, petRaceCount
   local bg = (UI.getChildControl)(control, "Template_Static_ListContentBG")
   local iconBg = (UI.getChildControl)(control, "Template_Static_IconPetBG")
   local icon = (UI.getChildControl)(control, "Template_Static_IconPet")
@@ -1717,110 +1717,124 @@ PetListControlCreate = function(control, key)
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. y1)
   else
     do
-      local unsealPetIndex = -1
-      for index = 0, sealPetCount - 1 do
-        local pcPetData = ToClient_getPetSealedDataByIndex(index)
-        if pcPetData ~= nil and key == pcPetData._petNo then
-          petStaticStatus = pcPetData:getPetStaticStatus()
-          iconPath = pcPetData:getIconPath()
-          petNo_s64 = pcPetData._petNo
-          petName = pcPetData:getName()
-          petLevel = pcPetData._level
-          petLovely = pcPetData._lovely
-          pethungry = pcPetData._hungry
-          petState = pcPetData._petState
-          petMaxLevel = petStaticStatus._maxLevel
-          petMaxHungry = petStaticStatus._maxHungry
-          petRace = petStaticStatus:getPetRace()
-          petTier = petStaticStatus:getPetTier() + 1
-          if pcPetData:getSkillParam(1) ~= nil then
-            skillType = (pcPetData:getSkillParam(1))._type
-            isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
-          end
-          local hungryPercent = pethungry / petMaxHungry * 100
-          -- DECOMPILER ERROR at PC989: Overwrote pending register: R60 in 'AssignReg'
-
-          hungryProgress:SetProgressRate(x2)
-          -- DECOMPILER ERROR at PC994: Overwrote pending register: R61 in 'AssignReg'
-
-          hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
-          groupIndexBtn1:SetShow(true)
-          groupIndexBtn2:SetShow(true)
-          groupIndexBtn3:SetShow(true)
-          groupIndexBtn1:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 1 )")
-          groupIndexBtn2:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 2 )")
-          groupIndexBtn3:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 3 )")
-          groupIndexBtn1:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 1))
-          groupIndexBtn2:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 2))
-          groupIndexBtn3:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 3))
-          -- DECOMPILER ERROR at PC1060: Confused about usage of register: R58 in 'UnsetPending'
-
-          ;
-          ((PetList.orderList)._follow)[petNo_s64] = true
-          -- DECOMPILER ERROR at PC1064: Confused about usage of register: R58 in 'UnsetPending'
-
-          ;
-          ((PetList.orderList)._find)[petNo_s64] = isPassive
-          -- DECOMPILER ERROR at PC1068: Confused about usage of register: R58 in 'UnsetPending'
-
-          ;
-          ((PetList.orderList)._getItem)[petNo_s64] = true
-          name:SetTextMode(UI_TM.eTextMode_LimitText)
-          name:SetText(petName)
-          if name:IsLimitText() then
-            name:addInputEvent("Mouse_On", "PetListNew_NameSimpleTooltip( true,\t" .. index .. ", " .. tostring(false) .. ", " .. tostring(key) .. ")")
-            name:addInputEvent("Mouse_Out", "PetListNew_NameSimpleTooltip( false,\t" .. index .. ", " .. tostring(false) .. ", " .. tostring(key) .. ")")
-          else
-            name:addInputEvent("Mouse_On", "")
-            name:addInputEvent("Mouse_Out", "")
-          end
-          unsealPetIndex = index
-          btnUp:addInputEvent("Mouse_LUp", "PetList_ChangePosition(true," .. index .. ")")
-          btnDown:addInputEvent("Mouse_LUp", "PetList_ChangePosition(false," .. index .. ")")
-          btnUp:SetShow(true)
-          btnDown:SetShow(true)
-          btnUnseal:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 0 .. ")")
-          btnUnseal:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          hungryProgress:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 1 .. ")")
-          hungryProgress:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          hungryPercentText:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 2 .. ")")
-          hungryPercentText:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          hungryIcon:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 3 .. ")")
-          hungryIcon:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          btnUp:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 4 .. ")")
-          btnUp:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          btnDown:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 5 .. ")")
-          btnDown:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          groupIndexBtn1:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 6 .. ")")
-          groupIndexBtn1:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          groupIndexBtn2:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 7 .. ")")
-          groupIndexBtn2:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          groupIndexBtn3:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 8 .. ")")
-          groupIndexBtn3:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-          btnFusion:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 9 .. ")")
-          btnFusion:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
-        end
-      end
-      btnInfo:SetShow(false)
-      btnUnseal:SetShow(true)
-      btnSeal:SetShow(false)
-      btnUnsealAll:SetShow(false)
-      btnFusion:SetShow(false)
-      btnFeed:SetShow(false)
-      orderFollow:SetShow(false)
-      orderWait:SetShow(false)
-      orderFind:SetShow(false)
-      orderGetItem:SetShow(false)
-      orderPlay:SetShow(false)
       do
         do
-          local petComposable = (math.abs)(petTier - composePetTier) >= 2 and ((petRace == 99 and petTier))
-          if petComposeNo[1] ~= nil then
-            btnFusion:SetShow(false)
-          elseif petNo_s64 ~= petComposeNo[0] and petComposeNo[0] ~= nil and (petCompose._race == petRace or petRace == 99) and petComposable then
-            btnFusion:SetShow(true)
-          elseif petComposeNo[0] == nil and CheckCompose() == true and petRace <= #petRaceCount and petRace ~= 99 then
-            btnFusion:SetShow(true)
+          local unsealPetIndex = -1
+          for index = 0, sealPetCount - 1 do
+            local pcPetData = ToClient_getPetSealedDataByIndex(index)
+            if pcPetData ~= nil and key == pcPetData._petNo then
+              petStaticStatus = pcPetData:getPetStaticStatus()
+              iconPath = pcPetData:getIconPath()
+              petNo_s64 = pcPetData._petNo
+              petName = pcPetData:getName()
+              petLevel = pcPetData._level
+              petLovely = pcPetData._lovely
+              pethungry = pcPetData._hungry
+              petState = pcPetData._petState
+              petMaxLevel = petStaticStatus._maxLevel
+              petMaxHungry = petStaticStatus._maxHungry
+              petRace = petStaticStatus:getPetRace()
+              petTier = petStaticStatus:getPetTier() + 1
+              if pcPetData:getSkillParam(1) ~= nil then
+                skillType = (pcPetData:getSkillParam(1))._type
+                isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
+              end
+              local hungryPercent = pethungry / petMaxHungry * 100
+              -- DECOMPILER ERROR at PC989: Overwrote pending register: R60 in 'AssignReg'
+
+              hungryProgress:SetProgressRate(x2)
+              -- DECOMPILER ERROR at PC994: Overwrote pending register: R61 in 'AssignReg'
+
+              hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
+              groupIndexBtn1:SetShow(true)
+              groupIndexBtn2:SetShow(true)
+              groupIndexBtn3:SetShow(true)
+              groupIndexBtn1:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 1 )")
+              groupIndexBtn2:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 2 )")
+              groupIndexBtn3:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ", 3 )")
+              groupIndexBtn1:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 1))
+              groupIndexBtn2:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 2))
+              groupIndexBtn3:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 3))
+              -- DECOMPILER ERROR at PC1060: Confused about usage of register: R58 in 'UnsetPending'
+
+              ;
+              ((PetList.orderList)._follow)[petNo_s64] = true
+              -- DECOMPILER ERROR at PC1064: Confused about usage of register: R58 in 'UnsetPending'
+
+              ;
+              ((PetList.orderList)._find)[petNo_s64] = isPassive
+              -- DECOMPILER ERROR at PC1068: Confused about usage of register: R58 in 'UnsetPending'
+
+              ;
+              ((PetList.orderList)._getItem)[petNo_s64] = true
+              name:SetTextMode(UI_TM.eTextMode_LimitText)
+              name:SetText(petName)
+              if name:IsLimitText() then
+                name:addInputEvent("Mouse_On", "PetListNew_NameSimpleTooltip( true,\t" .. index .. ", " .. tostring(false) .. ", " .. tostring(key) .. ")")
+                name:addInputEvent("Mouse_Out", "PetListNew_NameSimpleTooltip( false,\t" .. index .. ", " .. tostring(false) .. ", " .. tostring(key) .. ")")
+              else
+                name:addInputEvent("Mouse_On", "")
+                name:addInputEvent("Mouse_Out", "")
+              end
+              unsealPetIndex = index
+              btnUp:addInputEvent("Mouse_LUp", "PetList_ChangePosition(true," .. index .. ")")
+              btnDown:addInputEvent("Mouse_LUp", "PetList_ChangePosition(false," .. index .. ")")
+              btnUp:SetShow(true)
+              btnDown:SetShow(true)
+              btnUnseal:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 0 .. ")")
+              btnUnseal:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              hungryProgress:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 1 .. ")")
+              hungryProgress:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              hungryPercentText:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 2 .. ")")
+              hungryPercentText:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              hungryIcon:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 3 .. ")")
+              hungryIcon:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              btnUp:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 4 .. ")")
+              btnUp:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              btnDown:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 5 .. ")")
+              btnDown:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              groupIndexBtn1:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 6 .. ")")
+              groupIndexBtn1:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              groupIndexBtn2:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 7 .. ")")
+              groupIndexBtn2:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              groupIndexBtn3:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 8 .. ")")
+              groupIndexBtn3:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+              btnFusion:addInputEvent("Mouse_On", "PetListNew_SimpleTooltipBTN(true, " .. index .. ", " .. 9 .. ")")
+              btnFusion:addInputEvent("Mouse_Out", "PetListNew_SimpleTooltipBTN(false)")
+            end
+          end
+          btnInfo:SetShow(false)
+          btnUnseal:SetShow(true)
+          btnSeal:SetShow(false)
+          btnUnsealAll:SetShow(false)
+          btnFusion:SetShow(false)
+          btnFeed:SetShow(false)
+          orderFollow:SetShow(false)
+          orderWait:SetShow(false)
+          orderFind:SetShow(false)
+          orderGetItem:SetShow(false)
+          orderPlay:SetShow(false)
+          if ToClient_IsContentsGroupOpen("378") == true then
+            if petComposeNo[1] ~= nil then
+              btnFusion:SetShow(false)
+            else
+              if petNo_s64 ~= petComposeNo[0] and petComposeNo[0] ~= nil then
+                btnFusion:SetShow(true)
+              else
+                if petComposeNo[0] == nil and CheckCompose() == true then
+                  btnFusion:SetShow(true)
+                end
+              end
+            end
+          else
+            local petComposable = (math.abs)(petTier - composePetTier) >= 2 and ((petRace == 99 and petTier))
+            if petComposeNo[1] ~= nil then
+              btnFusion:SetShow(false)
+            elseif petNo_s64 ~= petComposeNo[0] and petComposeNo[0] ~= nil and (petCompose._race == petRace or petRace == 99) and petComposable then
+              btnFusion:SetShow(true)
+            elseif petComposeNo[0] == nil and CheckCompose() == true and petRace <= #petRaceCount and petRace ~= 99 then
+              btnFusion:SetShow(true)
+            end
           end
           btnInfo:addInputEvent("Mouse_LUp", "sealPetListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
           btnUnseal:addInputEvent("Mouse_LUp", "petListNew_UnSeal( \"" .. tostring(petNo_s64) .. "\" , false )")
@@ -2269,6 +2283,9 @@ end
 
 FromClient_PetList_UpdateFeedUi = function()
   -- function num : 0_68 , upvalues : PetList
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_PetListNew:GetShow() == false then
+    return 
+  end
   PetList:updateFeedUi()
   PetList:updateFeedAllUi()
 end

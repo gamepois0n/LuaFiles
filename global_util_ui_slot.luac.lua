@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\include\global_util_ui_slot.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\include\global_util_ui_slot.luac 
 
 -- params : ...
 -- function num : 0
@@ -460,7 +460,7 @@ end
 
 -- DECOMPILER ERROR at PC124: Confused about usage of register: R2 in 'UnsetPending'
 
-SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
+SlotItem.setItem = function(self, itemWrapper, slotNo, equipment, warehouse)
   -- function num : 0_4
   local itemExpiration = itemWrapper:getExpirationDate()
   local expirationIndex = -1
@@ -547,19 +547,30 @@ SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
                       local itemSSW = itemWrapper:getStaticStatus()
                       if (CppEnums.ContentsEventType).ContentsType_InventoryBag == (itemSSW:get()):getContentsEventType() then
                         local bagSize = itemSSW:getContentsEventParam2()
-                        local whereType = (CppEnums.ItemWhereType).eInventory
-                        if (itemSSW:get()):isCash() then
-                          whereType = (CppEnums.ItemWhereType).eCashInventory
-                        end
                         for index = 0, bagSize - 1 do
-                          local bagItemWrapper = getInventoryBagItemByType(whereType, slotNo, index)
-                          if bagItemWrapper ~= nil then
-                            local iconPath = (bagItemWrapper:getStaticStatus()):getIconPath()
-                            ;
-                            (self.bagIcon):ChangeTextureInfoName("icon/" .. iconPath)
-                            ;
-                            (self.bagIcon):SetShow(true)
-                            break
+                          local bagItemWrapper = nil
+                          if warehouse then
+                            bagItemWrapper = warehouse:getItemInBag(slotNo, index)
+                          else
+                            local whereType = (CppEnums.ItemWhereType).eInventory
+                            if (itemSSW:get()):isCash() then
+                              whereType = (CppEnums.ItemWhereType).eCashInventory
+                            end
+                            bagItemWrapper = getInventoryBagItemByType(whereType, slotNo, index)
+                          end
+                          do
+                            do
+                              if bagItemWrapper ~= nil then
+                                local iconPath = (bagItemWrapper:getStaticStatus()):getIconPath()
+                                ;
+                                (self.bagIcon):ChangeTextureInfoName("icon/" .. iconPath)
+                                ;
+                                (self.bagIcon):SetShow(true)
+                                break
+                              end
+                              -- DECOMPILER ERROR at PC323: LeaveBlock: unexpected jumping out DO_STMT
+
+                            end
                           end
                         end
                       end

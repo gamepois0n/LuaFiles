@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\mainstatus\panel_selfplayerexpgage.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\mainstatus\panel_selfplayerexpgage.luac 
 
 -- params : ...
 -- function num : 0
@@ -42,6 +42,7 @@ local _contribute_progress_Head = (UI.getChildControl)(_contribute_progress, "Pr
 local _contribute_txt = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_ContributeP")
 local _contribute_Main = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_Contribute_Main")
 local _contribute_helpMsg = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_ContributeHelpMsg")
+local _contribute_Icon = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_ContributeP")
 local _close_ExpGauge = ((UI.getChildControl)(Panel_SelfPlayerExpGage, "Button_Win_Close"))
 local localNodeName = nil
 local localNodeInvestment = false
@@ -476,7 +477,7 @@ end
   local isFirstExplore = false
   Panel_Expgauge_MyContributeValue = 0
   contributePoint_UpdateFunc = function()
-  -- function num : 0_17 , upvalues : _contribute_Main, _contribute_progress, _contribute_txt, isFirstExplore, lastRemainExplorePoint, lastExplorePoint, lastContRate, _contribute_progress_Head
+  -- function num : 0_17 , upvalues : _contribute_Main, _contribute_progress, _contribute_txt, isFirstExplore, lastRemainExplorePoint, lastExplorePoint, lastContRate, _contribute_progress_Head, _contribute_Icon
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   if explorePoint == nil then
@@ -520,7 +521,7 @@ end
   if lastExplorePoint ~= nowExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
     _contribute_Main:EraseAllEffect()
-    _contribute_Main:AddEffect("UI_LevelUP_Skill", false, -88, 0)
+    _contribute_Icon:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end
   _contribute_Main:SetFontColor(4294899677)
   _contribute_Main:useGlowFont(true, "BaseFont_Glow", 4289951243)

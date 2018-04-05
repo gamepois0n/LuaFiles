@@ -1,11 +1,9 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\preloadui.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\preloadui.luac 
 
 -- params : ...
 -- function num : 0
-if ToClient_isConsoleUIOption() then
-  __GLOBAL_DEFINE_CONSOLE_UI = isGameServiceTypeDev()
-  convertUIFontTypeToUIFontSize = function(fontType)
+convertUIFontTypeToUIFontSize = function(fontType)
   -- function num : 0_0
   local addSize = 0
   if fontType == (CppEnums.UIFontSizeType).eUIFontSizeType_Normal then
@@ -22,7 +20,7 @@ if ToClient_isConsoleUIOption() then
   return addSize
 end
 
-  preloadUI_cahngeUIFontSize = function(fontRaiseSize)
+preloadUI_cahngeUIFontSize = function(fontRaiseSize)
   -- function num : 0_1
   if isGameServiceTypeDev() or isGameTypeTaiwan() or isGameTypeKorea() or isGameTypeJapan() then
     local addFontSize = convertUIFontTypeToUIFontSize(fontRaiseSize)
@@ -81,5 +79,4 @@ end
   end
 end
 
-end
 

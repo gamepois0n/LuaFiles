@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\globalpreloadui.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\globalpreloadui.luac 
 
 -- params : ...
 -- function num : 0
@@ -39,7 +39,7 @@ end
 
 CursorUIEffect_UpdateCursorPos = function()
   -- function num : 0_1 , upvalues : _voidCursor, _consoleCursor, currentModeCache, posX, posY
-  if ToClient_isConsoleUIMode() == false or ToClient_isUIDATA2() == false then
+  if ToClient_isUsablePanelSnapping() == false or ToClient_isGamePadUISnapping() == false then
     _voidCursor:SetShow(true)
     _consoleCursor:SetShow(false)
     if currentModeCache then

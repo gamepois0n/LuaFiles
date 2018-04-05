@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\quickslot\panel_newquickslot.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\quickslot\panel_newquickslot.luac 
 
 -- params : ...
 -- function num : 0
@@ -492,21 +492,16 @@ HandleOnOut_NewQuickSlot_ItemTooltip = function(isShow, panelIdx)
     local quickSlotInfo = getQuickSlotItem(panelIdx)
     local itemStaticWrapper = getItemEnchantStaticStatus(quickSlotInfo._itemKey)
     registTooltipControl((slot.item).icon, Panel_Tooltip_Item)
-    if (CppEnums.ContentsEventType).ContentsType_InventoryBag == (itemStaticWrapper:get()):getContentsEventType() then
-      local inventoryType = QuickSlot_GetInventoryTypeFrom(quickSlotInfo._type)
-      local invenSlotNo = ToClient_GetItemNoByInventory(inventoryType, quickSlotInfo._itemNo_s64)
-      local itemWrapper = getInventoryItemByType(inventoryType, invenSlotNo)
-      if itemWrapper ~= nil then
-        Panel_Tooltip_Item_Show(itemWrapper, (slot.item).icon, false, true, nil, nil, nil, invenSlotNo)
-      end
-    else
-      do
-        do
-          Panel_Tooltip_Item_Show(itemStaticWrapper, (slot.item).icon, true, false, nil, nil, nil)
-          Panel_Tooltip_Item_hideTooltip()
-          HandleOnOut_NewQuickSlot_ShowHandle(isShow, panelIdx)
-        end
-      end
+    local inventoryType = QuickSlot_GetInventoryTypeFrom(quickSlotInfo._type)
+    local invenSlotNo = ToClient_GetItemNoByInventory(inventoryType, quickSlotInfo._itemNo_s64)
+    local itemWrapper = getInventoryItemByType(inventoryType, invenSlotNo)
+    if itemWrapper ~= nil then
+      Panel_Tooltip_Item_Show(itemWrapper, (slot.item).icon, false, true, nil, nil, nil, invenSlotNo)
+    end
+  else
+    do
+      Panel_Tooltip_Item_hideTooltip()
+      HandleOnOut_NewQuickSlot_ShowHandle(isShow, panelIdx)
     end
   end
 end
@@ -805,6 +800,9 @@ end
 
 FromClient_NewQuickSlot_Update = function()
   -- function num : 0_28 , upvalues : NewQuickSlot
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_NewQuickSlot:GetShow() == false then
+    return 
+  end
   NewQuickSlot:UpdateMain()
 end
 

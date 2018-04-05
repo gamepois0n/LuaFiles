@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\dialogue\panel_window_npcshop.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\dialogue\panel_window_npcshop.luac 
 
 -- params : ...
 -- function num : 0
@@ -20,7 +20,7 @@ template = {panel = (UI.getChildControl)(Panel_Window_NpcShop, "blackpanel"), bu
 slots = {}
 , 
 radioButtons = {(UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Tab_Sell"), (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Tab_Repurchase"); [0] = (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Tab_Buy")}
-, windowTitle = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Title"), buttonClose = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Win_Close"), buttonQuestion = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Question"), buttonBuy = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Command"), buttonBuySome = (UI.getChildControl)(Panel_Window_NpcShop, "Button_BuySome"), buttonSellAll = (UI.getChildControl)(Panel_Window_NpcShop, "Button_SellAll"), scroll = (UI.getChildControl)(Panel_Window_NpcShop, "Scroll_Slot_List"), staticMoney = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Money"), staticWarehouseMoney = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Money2"), checkButton_Inventory = (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Money"), checkButton_Warehouse = (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Money2"), _isCamping = false}
+, windowTitle = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Title"), buttonClose = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Win_Close"), buttonQuestion = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Question"), buttonBuy = (UI.getChildControl)(Panel_Window_NpcShop, "Button_Command"), buttonBuySome = (UI.getChildControl)(Panel_Window_NpcShop, "Button_BuySome"), buttonSellAll = (UI.getChildControl)(Panel_Window_NpcShop, "Button_SellAll"), scroll = (UI.getChildControl)(Panel_Window_NpcShop, "Scroll_Slot_List"), staticMoney = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Money"), staticWarehouseMoney = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Money2"), myGuildPriceLimitValue = (UI.getChildControl)(Panel_Window_NpcShop, "Static_Text_Money3"), myGuildMoneyValue = (UI.getChildControl)(Panel_Window_NpcShop, "StaticText_GuildMoney"), checkButton_Inventory = (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Money"), checkButton_Warehouse = (UI.getChildControl)(Panel_Window_NpcShop, "RadioButton_Money2"), _isCamping = false}
 local orgButtonBuySome = (UI.getChildControl)(Panel_Window_NpcShop, "Button_BuySome")
 local floor = math.floor
 local _npcShopHelp_BG = (UI.getChildControl)(Panel_Window_NpcShop, "Static_NpcShopDesc_BG")
@@ -29,7 +29,7 @@ local inventxt = (UI.getChildControl)(Panel_Window_NpcShop, "StaticText_Inven")
 local warehousetxt = (UI.getChildControl)(Panel_Window_NpcShop, "StaticText_Warehouse")
 local npcShop_BuyBtn_PosX = ((npcShop.radioButtons)[npcShop.tabIndexBuy]):GetPosX()
 local npcShop_SellBtn_PosX = ((npcShop.radioButtons)[npcShop.tabIndexSell]):GetPosX()
--- DECOMPILER ERROR at PC266: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC278: Confused about usage of register: R10 in 'UnsetPending'
 
 Panel_Window_NpcShop.npcShop = npcShop
 FGlobal_NpcShop_GetNpcShop = function()
@@ -37,7 +37,7 @@ FGlobal_NpcShop_GetNpcShop = function()
   return npcShop
 end
 
--- DECOMPILER ERROR at PC273: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC285: Confused about usage of register: R10 in 'UnsetPending'
 
 npcShop.init = function(self)
   -- function num : 0_1 , upvalues : UI_TM, _npcShopHelp
@@ -91,7 +91,7 @@ npcShop.init = function(self)
 end
 
 local _const = Defines.s64_const
--- DECOMPILER ERROR at PC281: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC293: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.createSlot = function(self)
   -- function num : 0_2 , upvalues : _const, UI_TM, UI_color
@@ -393,7 +393,7 @@ BuySome_ShowToggle = function()
   end
 end
 
--- DECOMPILER ERROR at PC291: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC303: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.controlInit = function(self)
   -- function num : 0_5 , upvalues : npcShop_BuyBtn_PosX, npcShop_SellBtn_PosX, _npcShopHelp
@@ -439,7 +439,11 @@ npcShop.controlInit = function(self)
         ;
         ((self.radioButtons)[self.tabIndexBuy]):SetPosX(npcShop_SellBtn_PosX)
       end
-      _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC"))
+      if npcShop_isGuildShopContents() then
+        _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC_GUILD"))
+      else
+        _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC"))
+      end
     end
   else
     do
@@ -464,7 +468,7 @@ npcShop.controlInit = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC296: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC308: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.updateContent = function(self, updateForce)
   -- function num : 0_6 , upvalues : _const, UI_color
@@ -846,11 +850,16 @@ NpcShop_UpdateContent = function()
     Inventory_SetFunctor(Panel_NpcShop_InvenFilter_IsExchangeItem, Panel_NpcShop_InvenRClick, NpcShop_WindowClose, nil)
     NpcShop_UpdateMoney()
     NpcShop_UpdateMoneyWarehouse()
+    UpdateGuildPriceLimit()
   end
 end
 
 NpcShop_UpdateMoney = function()
   -- function num : 0_13
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_NpcShop:GetShow() == false then
+    return 
+  end
+  ;
   (npcShop.buttonBuy):SetEnable(true)
   ;
   (npcShop.buttonBuy):SetMonoTone(false)
@@ -861,9 +870,13 @@ NpcShop_UpdateMoney = function()
     ;
     (npcShop.checkButton_Warehouse):SetShow(false)
     ;
-    (npcShop.checkButton_Warehouse):SetShow(true)
+    (npcShop.checkButton_Warehouse):SetShow(false)
     ;
-    (npcShop.staticWarehouseMoney):SetShow(true)
+    (npcShop.staticWarehouseMoney):SetShow(false)
+    ;
+    (npcShop.myGuildPriceLimitValue):SetShow(true)
+    ;
+    (npcShop.myGuildMoneyValue):SetShow(true)
   else
     ;
     (npcShop.staticMoney):SetShow(true)
@@ -877,6 +890,10 @@ NpcShop_UpdateMoney = function()
       (npcShop.checkButton_Warehouse):SetShow(false)
       ;
       (npcShop.staticWarehouseMoney):SetShow(false)
+      ;
+      (npcShop.myGuildPriceLimitValue):SetShow(false)
+      ;
+      (npcShop.myGuildMoneyValue):SetShow(false)
     else
       ;
       (npcShop.checkButton_Warehouse):SetShow(true)
@@ -884,6 +901,10 @@ NpcShop_UpdateMoney = function()
       (npcShop.checkButton_Warehouse):SetEnableArea(0, 0, 230, (npcShop.checkButton_Warehouse):GetSizeY())
       ;
       (npcShop.staticWarehouseMoney):SetShow(true)
+      ;
+      (npcShop.myGuildPriceLimitValue):SetShow(false)
+      ;
+      (npcShop.myGuildMoneyValue):SetShow(false)
     end
   end
 end
@@ -891,29 +912,31 @@ end
 NpcShop_UpdateMoneyWarehouse = function()
   -- function num : 0_14
   if npcShop_isGuildShopContents() then
-    (npcShop.checkButton_Warehouse):SetShow(true)
-    ;
-    (npcShop.checkButton_Warehouse):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_GUILDMONEY"))
+    (npcShop.myGuildMoneyValue):SetShow(true)
     local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
     if myGuildListInfo == nil then
-      (npcShop.staticWarehouseMoney):SetText(": 0")
+      (npcShop.myGuildMoneyValue):SetText("")
       return 
     end
     ;
-    (npcShop.staticWarehouseMoney):SetShow(true)
+    (npcShop.myGuildMoneyValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_GUILDMONEY") .. " : " .. makeDotMoney(myGuildListInfo:getGuildBusinessFunds_s64()))
     ;
-    (npcShop.staticWarehouseMoney):SetText(makeDotMoney(myGuildListInfo:getGuildBusinessFunds_s64()))
+    (npcShop.myGuildPriceLimitValue):SetShow(true)
   else
     do
       if not ToClient_HasWareHouseFromNpc() then
         (npcShop.checkButton_Warehouse):SetShow(false)
         ;
         (npcShop.staticWarehouseMoney):SetShow(false)
+        ;
+        (npcShop.myGuildPriceLimitValue):SetShow(false)
       else
         ;
         (npcShop.checkButton_Warehouse):SetShow(true)
         ;
         (npcShop.staticWarehouseMoney):SetShow(true)
+        ;
+        (npcShop.myGuildPriceLimitValue):SetShow(false)
       end
       ;
       (npcShop.checkButton_Warehouse):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_WAREHOUSE_IN_MONEY"))
@@ -923,8 +946,28 @@ NpcShop_UpdateMoneyWarehouse = function()
   end
 end
 
-NpcShop_BuyOrSellItem = function()
+UpdateGuildPriceLimit = function()
   -- function num : 0_15
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  if ToClient_GetMyGuildInfoWrapper() == nil then
+    (npcShop.myGuildPriceLimitValue):SetShow(false)
+    return 
+  end
+  if selfPlayer ~= nil and (npcShop.myGuildPriceLimitValue):GetShow() == true then
+    if (selfPlayer:get()):isGuildMaster() == false and (selfPlayer:get()):getGuildIsPriceLimit() == true then
+      (npcShop.myGuildPriceLimitValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WINDOW_NPCSHOP_GUILDPRICELIMITED_VALUE", "price", makeDotMoney((selfPlayer:get()):getGuildPriceLimit())))
+    else
+      ;
+      (npcShop.myGuildPriceLimitValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_NPCSHOP_GUILDPRICEUNLIMITED"))
+    end
+  end
+end
+
+NpcShop_BuyOrSellItem = function()
+  -- function num : 0_16
   local self = npcShop
   if self.selectedSlotIndex ~= nil then
     local slot = (self.slots)[self.selectedSlotIndex]
@@ -948,77 +991,87 @@ NpcShop_BuyOrSellItem = function()
             if not npcShop_GuildCheckByBuy() then
               return 
             end
+            local selfPlayer = getSelfPlayer()
+            if selfPlayer ~= nil and (selfPlayer:get()):isGuildMaster() == false then
+              local isPriceLimit = (selfPlayer:get()):getGuildIsPriceLimit()
+              local myGuildPriceLimit = (selfPlayer:get()):getGuildPriceLimit()
+              if isPriceLimit == true and myGuildPriceLimit < shopItemPrice then
+                Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_NPCSHOP_GUILDPRICELIMITED_NOMONEY"))
+                return 
+              end
+            end
           end
-          npcShop_doBuy(slot.slotNo, 1, fromWhereType, 0, self._isCamping)
-          local shopItemKey = (((shopItemWrapper:getStaticStatus()):get())._key):getItemKey()
-          if shopItemKey >= 30000 and shopItemKey < 40000 then
-            local self = slot
-            if (npcShop.checkButton_Inventory):IsCheck() and shopItemPrice < myInvenMoney then
-              (self.button):SetIgnore(true)
-              ;
-              ((self.icon).icon):SetMonoTone(true)
-              ;
-              (self.trend):SetMonoTone(true)
-              ;
-              (self.price):SetMonoTone(true)
-              ;
-              (self.remainCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ALREADYHASINTIMACY"))
-            else
-              if (npcShop.checkButton_Warehouse):IsCheck() and shopItemPrice < myWarehouseMoney then
-                do
-                  (self.button):SetIgnore(true)
-                  ;
-                  ((self.icon).icon):SetMonoTone(true)
-                  ;
-                  (self.trend):SetMonoTone(true)
-                  ;
-                  (self.price):SetMonoTone(true)
-                  ;
-                  (self.remainCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ALREADYHASINTIMACY"))
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          do
+            local rv = 0
+            rv = npcShop_doBuy(slot.slotNo, 1, fromWhereType, 0, self._isCamping)
+            local shopItemKey = (((shopItemWrapper:getStaticStatus()):get())._key):getItemKey()
+            if shopItemKey >= 30000 and shopItemKey < 40000 and rv == 0 then
+              local self = slot
+              if (npcShop.checkButton_Inventory):IsCheck() and shopItemPrice < myInvenMoney then
+                (self.button):SetIgnore(true)
+                ;
+                ((self.icon).icon):SetMonoTone(true)
+                ;
+                (self.trend):SetMonoTone(true)
+                ;
+                (self.price):SetMonoTone(true)
+                ;
+                (self.remainCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ALREADYHASINTIMACY"))
+              else
+                if (npcShop.checkButton_Warehouse):IsCheck() and shopItemPrice < myWarehouseMoney then
+                  do
+                    (self.button):SetIgnore(true)
+                    ;
+                    ((self.icon).icon):SetMonoTone(true)
+                    ;
+                    (self.trend):SetMonoTone(true)
+                    ;
+                    (self.price):SetMonoTone(true)
+                    ;
+                    (self.remainCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ALREADYHASINTIMACY"))
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC140: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out IF_STMT
 
+                  end
                 end
               end
             end
           end
-        end
-      else
-        if self.tabIndexSell == self.lastTabIndex then
-          local shopItemWrapper = npcShop_getItemSell(slot.slotNo)
-          local shopItem = shopItemWrapper:get()
-          local shopItemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
-          local shopItemEndurance = (shopItemSSW:get()):getEndurance()
-          local pricePiece = Int64toInt32(shopItemSSW:getSellPriceCalculate(shopItem:getItemPriceOption()))
-          local toWhereType = 0
-          if (self.checkButton_Warehouse):IsCheck() then
-            toWhereType = 2
-          end
-          if npcShop_isGuildShopContents() then
-            if not npcShop_GuildCheckByBuy() then
-              return 
-            end
-            toWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
-          else
-            if (self.checkButton_Warehouse):IsCheck() or pricePiece >= 500000 and ToClient_HasWareHouseFromNpc() then
+          if self.tabIndexSell == self.lastTabIndex then
+            local shopItemWrapper = npcShop_getItemSell(slot.slotNo)
+            local shopItem = shopItemWrapper:get()
+            local shopItemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
+            local shopItemEndurance = (shopItemSSW:get()):getEndurance()
+            local pricePiece = Int64toInt32(shopItemSSW:getSellPriceCalculate(shopItem:getItemPriceOption()))
+            local toWhereType = 0
+            if (self.checkButton_Warehouse):IsCheck() then
               toWhereType = 2
             end
-          end
-          local sellDoit = function()
-    -- function num : 0_15_0 , upvalues : slot, toWhereType, self, pricePiece
+            if npcShop_isGuildShopContents() then
+              if not npcShop_GuildCheckByBuy() then
+                return 
+              end
+              toWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
+            else
+              if (self.checkButton_Warehouse):IsCheck() or pricePiece >= 500000 and ToClient_HasWareHouseFromNpc() then
+                toWhereType = 2
+              end
+            end
+            local sellDoit = function()
+    -- function num : 0_16_0 , upvalues : slot, toWhereType, self, pricePiece
     local itemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_15_0_0 , upvalues : slot, toWhereType, self
+      -- function num : 0_16_0_0 , upvalues : slot, toWhereType, self
       npcShop_doSellByItemNo(slot.slotNo, 1, toWhereType, self._isCamping)
     end
 
@@ -1031,7 +1084,7 @@ NpcShop_BuyOrSellItem = function()
     end
     if isSocketed == true then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_1")
-      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = donSell, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageBoxData)
     else
@@ -1052,42 +1105,43 @@ NpcShop_BuyOrSellItem = function()
     end
   end
 
-          local itemKeyForTradeInfo = (((shopItemWrapper:getStaticStatus()):get())._key):get()
-          local tradeMasterInfo = getItemMarketMasterByItemEnchantKey(itemKeyForTradeInfo)
-          if tradeMasterInfo ~= nil and shopItemEndurance ~= 0 then
-            local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
-            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellDoit, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-            ;
-            (MessageBox.showMessageBox)(messageBoxData)
-          else
-            do
+            local itemKeyForTradeInfo = (((shopItemWrapper:getStaticStatus()):get())._key):get()
+            local tradeMasterInfo = getItemMarketMasterByItemEnchantKey(itemKeyForTradeInfo)
+            if tradeMasterInfo ~= nil and shopItemEndurance ~= 0 then
+              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
+              local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellDoit, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              ;
+              (MessageBox.showMessageBox)(messageBoxData)
+            else
               do
-                sellDoit()
-                if self.tabIndexRepurchase == self.lastTabIndex then
-                  do
-                    local fromWhereType = 0
-                    if (self.checkButton_Warehouse):IsCheck() then
-                      fromWhereType = 2
-                    end
-                    if npcShop_isGuildShopContents() then
-                      fromWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
-                      if not npcShop_GuildCheckByBuy() then
-                        return 
+                do
+                  sellDoit()
+                  if self.tabIndexRepurchase == self.lastTabIndex then
+                    do
+                      local fromWhereType = 0
+                      if (self.checkButton_Warehouse):IsCheck() then
+                        fromWhereType = 2
                       end
+                      if npcShop_isGuildShopContents() then
+                        fromWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
+                        if not npcShop_GuildCheckByBuy() then
+                          return 
+                        end
+                      end
+                      npcShop_doRepurchase(slot.slotNo, fromWhereType, self._isCamping)
+                      ;
+                      (self.buttonBuy):SetEnable(false)
+                      ;
+                      (self.buttonBuy):SetMonoTone(false)
+                      -- DECOMPILER ERROR at PC313: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                      -- DECOMPILER ERROR at PC313: LeaveBlock: unexpected jumping out IF_STMT
+
                     end
-                    npcShop_doRepurchase(slot.slotNo, fromWhereType, self._isCamping)
-                    ;
-                    (self.buttonBuy):SetEnable(false)
-                    ;
-                    (self.buttonBuy):SetMonoTone(false)
-                    -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                    -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_STMT
-
                   end
                 end
+                DragManager:clearInfo()
               end
-              DragManager:clearInfo()
             end
           end
         end
@@ -1097,7 +1151,7 @@ NpcShop_BuyOrSellItem = function()
 end
 
 NpcShop_SellItemAll = function()
-  -- function num : 0_16
+  -- function num : 0_17
   local self = npcShop
   if self.selectedSlotIndex ~= nil then
     local slot = (self.slots)[self.selectedSlotIndex]
@@ -1112,7 +1166,7 @@ NpcShop_SellItemAll = function()
       local toWhereType = 0
       local sellPrice = pricePiece * itemCount
       local sellAllDoit = function()
-    -- function num : 0_16_0 , upvalues : toWhereType, self, sellPrice, slot
+    -- function num : 0_17_0 , upvalues : toWhereType, self, sellPrice, slot
     if npcShop_isGuildShopContents() then
       toWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
     else
@@ -1124,7 +1178,7 @@ NpcShop_SellItemAll = function()
     local shopItemEndurance = (itemSSW:get()):getEndurance()
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_16_0_0 , upvalues : slot, toWhereType, self
+      -- function num : 0_17_0_0 , upvalues : slot, toWhereType, self
       npcShop_doSellAll(slot.keyValue, toWhereType, self._isCamping)
     end
 
@@ -1137,7 +1191,7 @@ NpcShop_SellItemAll = function()
     end
     if isSocketed == true then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_1")
-      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = donSell, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageBoxData)
     else
@@ -1187,7 +1241,7 @@ NpcShop_SellItemAll = function()
 end
 
 NpcShop_BuySome = function()
-  -- function num : 0_17
+  -- function num : 0_18
   local self = npcShop
   local shopItemWrapper = npcShop_getItemBuy(self._startSlotIndex + self.selectedSlotIndex - 1)
   local shopItem = shopItemWrapper:get()
@@ -1238,7 +1292,7 @@ NpcShop_BuySome = function()
 end
 
 NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
-  -- function num : 0_18
+  -- function num : 0_19
   local self = npcShop
   self._inputNumber = inputNumber
   local slot = (self.slots)[self.selectedSlotIndex]
@@ -1247,12 +1301,6 @@ NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
   if (self.checkButton_Warehouse):IsCheck() then
     fromWhereType = (CppEnums.ItemWhereType).eWarehouse
   end
-  if npcShop_isGuildShopContents() then
-    fromWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
-    if not npcShop_GuildCheckByBuy() then
-      return 
-    end
-  end
   local shopItemWrapper = npcShop_getItemBuy(slot.slotNo)
   local shopItem = shopItemWrapper:get()
   local selectItem = (shopItemWrapper:getStaticStatus()):getName()
@@ -1260,19 +1308,36 @@ NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_BUY_ALERT_TITLE")
   local contentString = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_NPCSHOP_BUY_ALERT_1", "item", tostring(selectItem), "number", tostring(self._inputNumber), "price", makeDotMoney(totalPrice))
   local messageboxData = {title = titleString, content = contentString, functionYes = NpcShop_BuySome_Do, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-  if toInt64(0, 499) < self._inputNumber or toInt64(0, 99999) < totalPrice then
-    (MessageBox.showMessageBox)(messageboxData)
-  else
-    npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, self._isCamping)
+  if npcShop_isGuildShopContents() then
+    fromWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
+    if not npcShop_GuildCheckByBuy() then
+      return 
+    end
+    local selfPlayer = getSelfPlayer()
+    if selfPlayer ~= nil and (selfPlayer:get()):isGuildMaster() == false then
+      local isPriceLimit = (selfPlayer:get()):getGuildIsPriceLimit()
+      local myGuildPriceLimit = (selfPlayer:get()):getGuildPriceLimit()
+      if isPriceLimit == true and myGuildPriceLimit < totalPrice then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_NPCSHOP_GUILDPRICELIMITED_NOMONEY"))
+        return 
+      end
+    end
   end
-  ;
-  (self.buttonBuy):SetEnable(false)
-  ;
-  (self.buttonBuy):SetMonoTone(true)
+  do
+    if toInt64(0, 499) < self._inputNumber or toInt64(0, 99999) < totalPrice then
+      (MessageBox.showMessageBox)(messageboxData)
+    else
+      npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, self._isCamping)
+    end
+    ;
+    (self.buttonBuy):SetEnable(false)
+    ;
+    (self.buttonBuy):SetMonoTone(true)
+  end
 end
 
 NpcShop_BuySome_Do = function()
-  -- function num : 0_19
+  -- function num : 0_20
   local self = npcShop
   local buyCount = self._inputNumber
   local slot = (self.slots)[self.selectedSlotIndex]
@@ -1289,10 +1354,10 @@ NpcShop_BuySome_Do = function()
   npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, self._isCamping)
 end
 
--- DECOMPILER ERROR at PC326: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC340: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.registEventHandler = function(self)
-  -- function num : 0_20
+  -- function num : 0_21
   (self.buttonClose):addInputEvent("Mouse_LUp", "handleClickedNpcShow_WindowClose()")
   ;
   (self.buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"NpcShop\" )")
@@ -1328,17 +1393,17 @@ npcShop.registEventHandler = function(self)
 end
 
 CheckButton_Inventory_ShowText = function()
-  -- function num : 0_21 , upvalues : inventxt
+  -- function num : 0_22 , upvalues : inventxt
   inventxt:SetShow(true)
 end
 
 CheckButton_Inventory_HideText = function()
-  -- function num : 0_22 , upvalues : inventxt
+  -- function num : 0_23 , upvalues : inventxt
   inventxt:SetShow(false)
 end
 
 CheckButton_Warehouse_ShowText = function()
-  -- function num : 0_23 , upvalues : warehousetxt
+  -- function num : 0_24 , upvalues : warehousetxt
   if npcShop_isGuildShopContents() then
     warehousetxt:SetShow(false)
   else
@@ -1347,12 +1412,12 @@ CheckButton_Warehouse_ShowText = function()
 end
 
 CheckButton_Warehouse_HideText = function()
-  -- function num : 0_24 , upvalues : warehousetxt
+  -- function num : 0_25 , upvalues : warehousetxt
   warehousetxt:SetShow(false)
 end
 
 NpcShop_WindowClose = function()
-  -- function num : 0_25
+  -- function num : 0_26
   if Panel_Window_NpcShop:GetShow() then
     Panel_Window_NpcShop:SetShow(false, false)
     InventoryWindow_Close()
@@ -1366,7 +1431,7 @@ NpcShop_WindowClose = function()
 end
 
 handleClickedNpcShow_WindowClose = function()
-  -- function num : 0_26
+  -- function num : 0_27
   if Panel_Window_NpcShop:GetShow() then
     Panel_Window_NpcShop:SetShow(false, false)
     InventoryWindow_Close()
@@ -1381,7 +1446,7 @@ handleClickedNpcShow_WindowClose = function()
 end
 
 NpcShop_WindowShow = function()
-  -- function num : 0_27
+  -- function num : 0_28
   if not Panel_Window_NpcShop:GetShow() then
     npcShop:controlInit()
     InventoryWindow_Show()
@@ -1391,7 +1456,7 @@ NpcShop_WindowShow = function()
 end
 
 Panel_NpcShop_InvenFilter_IsExchangeItem = function(slotNo, itemWrapper)
-  -- function num : 0_28
+  -- function num : 0_29
   if itemWrapper == nil then
     return true
   end
@@ -1415,7 +1480,7 @@ end
 
 local itemCount = nil
 Panel_NpcShop_InvenRClick = function(slotNo)
-  -- function num : 0_29 , upvalues : itemCount
+  -- function num : 0_30 , upvalues : itemCount
   local itemWrapper = getInventoryItem(slotNo)
   if itemWrapper ~= nil then
     itemCount = (itemWrapper:get()):getCount_s64()
@@ -1427,10 +1492,10 @@ Panel_NpcShop_InvenRClick = function(slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC353: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC367: Confused about usage of register: R12 in 'UnsetPending'
 
 PaGlobal_NpcShop.Simpletooltips = function(self, isShow, tipType)
-  -- function num : 0_30
+  -- function num : 0_31
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1455,7 +1520,7 @@ PaGlobal_NpcShop.Simpletooltips = function(self, isShow, tipType)
 end
 
 Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
-  -- function num : 0_31
+  -- function num : 0_32
   local self = npcShop
   local playerWrapper = getSelfPlayer()
   if playerWrapper == nil then
@@ -1484,10 +1549,10 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
     end
   end
   local sellDoit = function()
-    -- function num : 0_31_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, self, itemWrapper, sellPrice
+    -- function num : 0_32_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, self, itemWrapper, sellPrice
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_31_0_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, self
+      -- function num : 0_32_0_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, self
       (playerWrapper:get()):requestSellItem(slotNo, itemCount, fromWhereType, toWhereType, self._isCamping)
     end
 
@@ -1500,7 +1565,7 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
     end
     if isSocketed == true then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_1")
-      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = donSell, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"), content = messageBoxMemo, functionYes = sellConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageBoxData)
     else
@@ -1545,17 +1610,18 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC358: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC372: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.registMessageHandler = function(self)
-  -- function num : 0_32
+  -- function num : 0_33
   registerEvent("EventNpcShopUpdate", "NpcShop_UpdateContent")
   registerEvent("FromClient_InventoryUpdate", "NpcShop_UpdateMoney")
   registerEvent("EventWarehouseUpdate", "NpcShop_UpdateMoneyWarehouse")
+  registerEvent("UpdateGuildPriceLimit", "UpdateGuildPriceLimit")
 end
 
 NpcShop_CheckInit = function()
-  -- function num : 0_33
+  -- function num : 0_34
   local self = npcShop
   if (self.checkButton_Inventory):IsCheck() then
     return 
@@ -1575,11 +1641,15 @@ NpcShop_CheckInit = function()
     (self.checkButton_Warehouse):SetShow(true)
     ;
     (self.staticWarehouseMoney):SetShow(true)
+    ;
+    (self.myGuildPriceLimitValue):SetShow(true)
   else
     ;
     (self.checkButton_Warehouse):SetShow(false)
     ;
     (self.staticWarehouseMoney):SetShow(false)
+    ;
+    (self.myGuildPriceLimitValue):SetShow(false)
     ;
     (self.checkButton_Inventory):SetCheck(true)
     ;
@@ -1588,7 +1658,7 @@ NpcShop_CheckInit = function()
 end
 
 NpcShop_CheckFromMoney = function(check)
-  -- function num : 0_34
+  -- function num : 0_35
   local self = npcShop
   if check == 0 then
     if (self.checkButton_Inventory):IsCheck() then
@@ -1611,7 +1681,7 @@ NpcShop_CheckFromMoney = function(check)
 end
 
 npcShop_GuildCheckByBuy = function()
-  -- function num : 0_35
+  -- function num : 0_36
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildInfo == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DIALOGUE_NPCSHOP_GUILD1"))
@@ -1628,10 +1698,10 @@ npcShop_GuildCheckByBuy = function()
   return true
 end
 
--- DECOMPILER ERROR at PC367: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC381: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.setIsCamping = function(self, isCamping)
-  -- function num : 0_36
+  -- function num : 0_37
   self._isCamping = isCamping
 end
 

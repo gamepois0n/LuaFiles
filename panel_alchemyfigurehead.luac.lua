@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_alchemyfigurehead.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_alchemyfigurehead.luac 
 
 -- params : ...
 -- function num : 0
@@ -499,6 +499,7 @@ FGlobal_AlchemyFigureHead_Open = function()
   if Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
+  ClothInventory_Close()
   InventoryWindow_Show()
   Inventory_SetFunctor(AlchemyFigureHead_FigureHeadFilter, AlchemyFigureHead_FigureHeadRfunction, nil, nil)
 end

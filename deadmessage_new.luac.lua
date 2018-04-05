@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\deadmessage\deadmessage_new.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\deadmessage\deadmessage_new.luac 
 
 -- params : ...
 -- function num : 0
@@ -382,50 +382,6 @@ deadMessage_ButtonSetPos = function()
 
     isButtonShow._button_GuildSpawn = true
     showCount = showCount + 1
-  end
-  Panel_DeadMessage:deleteConsoleUIGroup(0)
-  local consoleGroup = Panel_DeadMessage:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  local buttonCount = showCount - 1
-  local buttonIndex = 0
-  if _button_ObserverMode:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_ObserverMode)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_Immediate:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_Immediate)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_SiegeIng:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_SiegeIng)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_LocalWar:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_LocalWar)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_SavageOut:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_SavageOut)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_MoveTown:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_MoveTown)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_MoveExploration:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_MoveExploration)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_Volunteer:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_Volunteer)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_AdvancedBase:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_AdvancedBase)
-    buttonIndex = buttonIndex + 1
-  end
-  if _button_GuildSpawn:GetShow() then
-    consoleGroup:addControl(0, buttonIndex, 1, buttonCount, _button_GuildSpawn)
-    buttonIndex = buttonIndex + 1
   end
 end
 
@@ -1708,18 +1664,15 @@ deadmessage_RevivalItemShow = function(respawnType)
   end
   CashRevivalDataCount = #CashRevivalData + 1
   _text_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TITLE_2"))
-  Panel_DeadMessage:deleteConsoleUIGroup(0)
-  local consoleGroup = Panel_DeadMessage:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, CashRevivalDataCount - 1 do
     (revivalItemControl[index]):SetShow(true)
     ;
     (revivalItemControl[index]):SetText((CashRevivalData[index]).name .. "(" .. tostring((CashRevivalData[index]).count) .. ")")
     ;
-    (revivalItemControl[index]):addInputEvent("Mouse_LUp", "deadMessage_PopMessageBox(" .. respawnType .. "," .. index .. ")")
+    (revivalItemControl[index]):addInputEvent("Mouse_LUp", "deadMessage_PopMessageBox(" .. respawnType .. "," .. R14_PC139 .. ")")
     ;
     (revivalItemControl[index]):SetPosX(getScreenSizeX() / 2 - (revivalItemControl[index]):GetSizeX() / 2)
     deadMessage_ButtonShowAni(revivalItemControl[index])
-    consoleGroup:addControl(0, index, 1, CashRevivalDataCount + 1, revivalItemControl[index])
     ;
     (revivalItemIcon[index]):ChangeTextureInfoName("Icon/" .. (CashRevivalData[index]).path)
   end
@@ -1729,7 +1682,6 @@ deadmessage_RevivalItemShow = function(respawnType)
     _button_Back:SetShow(true)
     deadMessage_BackButtonShowAni()
   end
-  consoleGroup:addControl(0, CashRevivalDataCount, 1, CashRevivalDataCount + 1, _button_Back)
   _text_ImmediateCount:SetShow(false)
 end
 
@@ -1825,12 +1777,6 @@ deadMessage_ButtonPushed = function(_type)
     deadMessage_BackButtonShowAni()
   end
   _text_ImmediateCount:SetShow(true)
-  Panel_DeadMessage:deleteConsoleUIGroup(0)
-  local consoleGroup = Panel_DeadMessage:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NORANGE)
-  consoleGroup:addControl(0, 0, 2, 2, _button_ItemRevival)
-  consoleGroup:addControl(1, 0, 2, 2, _button_NormalRevival)
-  consoleGroup:addControl(0, 1, 2, 2, _button_Back)
-  consoleGroup:addFakeControl(1, 1, 2, 2, 0, 1)
 end
 
 deadMessage_PkPenaltyShow = function()

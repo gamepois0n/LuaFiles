@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ingamecashshop\panel_ingamecashshop_coupon.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ingamecashshop\panel_ingamecashshop_coupon.luac 
 
 -- params : ...
 -- function num : 0
@@ -117,7 +117,7 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
           if isDiscountPearl == false then
             txt_Rate:SetText(couponRate / 10000 .. "%")
           else
-            txt_Rate:SetText(tostring(couponPearl) .. "P")
+            txt_Rate:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_COUPON_COUPONPEARL", "couponPearl", tostring(couponPearl)))
           end
           txt_Rate:SetPosX(315)
           txt_Rate:SetPosY(75)
@@ -199,7 +199,7 @@ IngameCashShopCoupon_ListUpdate_Unused = function(contents, key)
     if isDiscountPearl == false then
       txt_Rate:SetText(couponRate / 10000 .. "%")
     else
-      txt_Rate:SetText(tostring(couponPearl) .. "P")
+      txt_Rate:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_COUPON_COUPONPEARL", "couponPearl", tostring(couponPearl)))
     end
     txt_Rate:SetPosX(225)
     txt_Rate:SetPosY(7)
@@ -213,11 +213,11 @@ IngameCashShopCoupon_ListUpdate_Unused = function(contents, key)
     txt_Date:SetPosY(37)
     txt_Desc:setLineCountByLimitAutoWrap(2)
     txt_Desc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
-    txt_Desc:SetText("최대 할인 : " .. tostring(couponMaxDiscount))
+    txt_Desc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_COUPON_MAXDISCOUNT", "maxDiscount", tostring(couponMaxDiscount)))
     txt_Desc:SetPosX(25)
     txt_Desc:SetPosY(52)
     btn_CouponDelete:SetShow(true)
-    btn_CouponDelete:SetText("삭제")
+    btn_CouponDelete:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_NEWCART_DELETEITEM"))
     btn_CouponDelete:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_Delete( " .. tostring(couponNo) .. ")")
   end
 end

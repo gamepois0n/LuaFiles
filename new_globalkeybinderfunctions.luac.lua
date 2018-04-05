@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\globalkeybinder\new_globalkeybinderfunctions.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\globalkeybinder\new_globalkeybinderfunctions.luac 
 
 -- params : ...
 -- function num : 0
@@ -199,6 +199,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog = function(deltaTime)
             end
           end
         end
+        searchView_CheckDistance()
       end
       if Panel_Window_ItemMarket_RegistItem:GetShow() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE)) then
         FGlobal_ItemMarketRegistItem_RegistDO()
@@ -405,6 +406,9 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_DeadMessage = function(deltaTime)
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
           if Panel_DeadMessage:GetShow() then
             GuildManager:Hide()
+          end
+          if ToClient_isXBox() and (isPadUp(__eJoyPadInputType_Y) or isPadUp(__eJoyPadInputType_A)) then
+            deadMessage_ButtonPushed_Immediate()
           end
         end
       end
@@ -711,16 +715,19 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_Extraction = function(deltaTime)
       ExtractionCloth_WindowClose()
       InventoryWindow_Close()
       EquipmentWindow_Close()
+      ClothInventory_Close()
     else
       if Panel_Window_Extraction_Crystal:GetShow() then
         Socket_ExtractionCrystal_WindowClose()
         InventoryWindow_Close()
         EquipmentWindow_Close()
+        ClothInventory_Close()
       else
         if Panel_Window_Extraction_EnchantStone:GetShow() then
           ExtractionEnchantStone_WindowClose()
           InventoryWindow_Close()
           EquipmentWindow_Close()
+          ClothInventory_Close()
         else
           PaGlobal_Extraction:openPanel(false)
         end
@@ -805,10 +812,14 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCashShop = function(delataTime)
                 if Panel_IngameCashShop_Coupon:GetShow() then
                   IngameCashShopCoupon_Close()
                 else
-                  if (getGameDanceEditor()):isShow() then
-                    (getGameDanceEditor()):hide()
+                  if Panel_IngameCashShop_EventCart:GetShow() then
+                    IngameCashShopEventCart_Close()
                   else
-                    InGameShop_Close()
+                    if (getGameDanceEditor()):isShow() then
+                      (getGameDanceEditor()):hide()
+                    else
+                      InGameShop_Close()
+                    end
                   end
                 end
               end
@@ -886,6 +897,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
                     FGolbal_ItemMarketNew_Close()
                     InventoryWindow_Close()
                     Equipment_SetShow(false)
+                    ClothInventory_Close()
                   end
                 else
                   FGolbal_ItemMarket_Function_Close()
@@ -927,6 +939,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
     if Panel_Window_Inventory:IsShow() then
       InventoryWindow_Close()
       Equipment_SetShow(false)
+      ClothInventory_Close()
     else
       FGlobal_ItemmarketNew_OpenInventory()
       Equipment_SetShow(true)
@@ -1163,7 +1176,7 @@ end
 
 PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
   -- function num : 0_40 , upvalues : VCK, IM, UIMode
-  if _ContentsGroup_isConsoleTest ~= true or (MessageBox.isPopUp)() then
+  if (MessageBox.isPopUp)() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
       (MessageBox.keyProcessEnter)()
       setUiInputProcessed(VCK.KeyCode_RETURN)
@@ -1370,6 +1383,10 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
           FGlobal_PearlStamp_Close()
           return true
         end
+        if Panel_Window_MacroCheckQuizKeyPad:GetShow() == true and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          PaGlobal_MacroCheckQuizkeyPadClose()
+          return true
+        end
         if Panel_RecentMemory:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
           RecentMemory_Close()
           return true
@@ -1388,6 +1405,14 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
         end
         if Panel_SavageDefenceShop:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
           SavageDefenceShop_CloseByKey()
+          return true
+        end
+        if Panel_Window_ItemMarketAlarmList_New:GetShow() and not Panel_Window_ItemMarketAlarmList_New:IsUISubApp() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          ItemMarket_AlarmList_Close()
+          return true
+        end
+        if Panel_Purification:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          PuriManager:Close()
           return true
         end
         return false
@@ -1451,47 +1476,50 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
               end
               return true
             else
+              -- DECOMPILER ERROR at PC136: Unhandled construct in 'MakeBoolean' P1
+
+              if ChatInput_CheckCurrentUiEdit(uiEdit) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) and _ContentsGroup_isConsoleTest == true then
+                ChatInput_PressedEnter()
+              end
             end
           end
         end
       end
     end
   end
-  if ChatInput_CheckCurrentUiEdit(uiEdit) then
-    if not GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_UP) then
-      if ToClient_isComposition() then
-        return 
-      end
-      ChatInput_PressedUp()
+  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_UP) then
+    if ToClient_isComposition() then
+      return 
+    end
+    ChatInput_PressedUp()
+  else
+    if isKeyPressed(VCK.KeyCode_MENU) then
+      ChatInput_CheckReservedKey()
     else
-      if isKeyPressed(VCK.KeyCode_MENU) then
-        ChatInput_CheckReservedKey()
+      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_TAB) then
+        ChatInput_ChangeInputFocus()
       else
-        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_TAB) then
-          ChatInput_ChangeInputFocus()
+        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          if ToClient_isComposition() then
+            return 
+          end
+          ChatInput_CancelAction()
+          ChatInput_CancelMessage()
+          ChatInput_Close()
+          ClearFocusEdit()
+          friend_clickAddFriendClose()
         else
-          if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-            if ToClient_isComposition() then
-              return 
-            end
-            ChatInput_CancelAction()
-            ChatInput_CancelMessage()
-            ChatInput_Close()
-            ClearFocusEdit()
-            friend_clickAddFriendClose()
+          if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
+            ChatInput_CheckInstantCommand()
           else
-            if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
-              ChatInput_CheckInstantCommand()
+            if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) or isKeyPressed(VCK.KeyCode_BACK) then
+              ChatInput_CheckRemoveLinkedItem()
             else
-              if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) or isKeyPressed(VCK.KeyCode_BACK) then
-                ChatInput_CheckRemoveLinkedItem()
+              if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ChatTabNext) then
+                moveChatTab(true)
               else
-                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ChatTabNext) then
-                  moveChatTab(true)
-                else
-                  if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ChatTabPrev) then
-                    moveChatTab(false)
-                  end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ChatTabPrev) then
+                  moveChatTab(false)
                 end
               end
             end
@@ -1499,133 +1527,132 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
         end
       end
     end
+  end
+  if AddFriendInput_CheckCurrentUiEdit(uiEdit) then
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      friend_clickAddFriendClose()
+    end
+    return true
   else
-    if AddFriendInput_CheckCurrentUiEdit(uiEdit) then
+    if FriendMessanger_CheckCurrentUiEdit(uiEdit) then
       if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-        friend_clickAddFriendClose()
+        friend_killFocusMessangerByKey()
       end
       return true
     else
-      if FriendMessanger_CheckCurrentUiEdit(uiEdit) then
+      if FGlobal_CheckCurrentVendingMachineUiEdit(uiEdit) then
         if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-          friend_killFocusMessangerByKey()
+          FGlobal_VendingMachineClearFocusEdit(uiEdit)
         end
         return true
       else
-        if FGlobal_CheckCurrentVendingMachineUiEdit(uiEdit) then
+        if FGlobal_CheckCurrentConsignmentSaleUiEdit(uiEdit) then
           if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-            FGlobal_VendingMachineClearFocusEdit(uiEdit)
+            FGlobal_ConsignmentSaleClearFocusEdit()
           end
           return true
         else
-          if FGlobal_CheckCurrentConsignmentSaleUiEdit(uiEdit) then
+          if FGlobal_CheckGuildLetsWarUiEdit(uiEdit) then
             if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-              FGlobal_ConsignmentSaleClearFocusEdit()
+              FGlobal_GuildLetsWarClearFocusEdit()
             end
             return true
           else
-            if FGlobal_CheckGuildLetsWarUiEdit(uiEdit) then
+            if FGlobal_CheckGuildNoticeUiEdit(uiEdit) then
               if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                FGlobal_GuildLetsWarClearFocusEdit()
+                FGlobal_GuildNoticeClearFocusEdit()
               end
               return true
             else
-              if FGlobal_CheckGuildNoticeUiEdit(uiEdit) then
+              if FGlobal_CheckGuildIncentiveUiEdit(uiEdit) then
                 if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                  FGlobal_GuildNoticeClearFocusEdit()
+                  FGlobal_GuildIncentiveClearFocusEdit()
                 end
                 return true
               else
-                if FGlobal_CheckGuildIncentiveUiEdit(uiEdit) then
+                if FGlobal_CheckArshaPvpUiEdit(uiEdit) then
                   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                    FGlobal_GuildIncentiveClearFocusEdit()
+                    FGlobal_ArshaPvPClearFocusEdit()
                   end
                   return true
                 else
-                  if FGlobal_CheckArshaPvpUiEdit(uiEdit) then
+                  if FGlobal_CheckArshaNameUiEdit_A(uiEdit) then
                     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                      FGlobal_ArshaPvPClearFocusEdit()
+                      FGlobal_ArshaNameClearFocusEdit_A()
                     end
                     return true
                   else
-                    if FGlobal_CheckArshaNameUiEdit_A(uiEdit) then
+                    if FGlobal_CheckArshaNameUiEdit_B(uiEdit) then
                       if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                        FGlobal_ArshaNameClearFocusEdit_A()
+                        FGlobal_ArshaNameClearFocusEdit_B()
                       end
                       return true
                     else
-                      if FGlobal_CheckArshaNameUiEdit_B(uiEdit) then
+                      if FGlobal_CheckGuildIntroduceUiEdit(uiEdit) then
                         if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                          FGlobal_ArshaNameClearFocusEdit_B()
+                          FGlobal_GuildIntroduceClearFocusEdit()
                         end
                         return true
                       else
-                        if FGlobal_CheckGuildIntroduceUiEdit(uiEdit) then
+                        if FGlobal_ChattingFilter_UiEdit(uiEdit) then
                           if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                            FGlobal_GuildIntroduceClearFocusEdit()
+                            FGlobal_ChattingFilter_ClearFocusEdit()
                           end
                           return true
                         else
-                          if FGlobal_ChattingFilter_UiEdit(uiEdit) then
+                          if FGlobal_CheckPartyListUiEdit(uiEdit) then
                             if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                              FGlobal_ChattingFilter_ClearFocusEdit()
+                              FGlobal_PartyListClearFocusEdit()
+                            end
+                            if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+                              FGlobal_PartyListClearFocusEdit()
+                              HandleClicked_PartyList_DoSearch()
                             end
                             return true
                           else
-                            if FGlobal_CheckPartyListUiEdit(uiEdit) then
+                            if FGlobal_CheckPartyListRecruiteUiEdit(uiEdit) then
                               if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
                                 FGlobal_PartyListClearFocusEdit()
                               end
-                              if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-                                FGlobal_PartyListClearFocusEdit()
-                                HandleClicked_PartyList_DoSearch()
-                              end
                               return true
                             else
-                              if FGlobal_CheckPartyListRecruiteUiEdit(uiEdit) then
+                              if Panel_Knowledge_CheckCurrentUiEdit(uiEdit) then
                                 if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                  FGlobal_PartyListClearFocusEdit()
+                                  Panel_Knowledge_OutInputMode(false)
                                 end
                                 return true
                               else
-                                if Panel_Knowledge_CheckCurrentUiEdit(uiEdit) then
+                                if GlobalSwitch_UseOldAlchemy == false and FGlobal_Alchemy_CheckEditBox(uiEdit) then
                                   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                    Panel_Knowledge_OutInputMode(false)
+                                    FGlobal_Alchemy_ClearEditFocus()
                                   end
                                   return true
                                 else
-                                  if GlobalSwitch_UseOldAlchemy == false and FGlobal_Alchemy_CheckEditBox(uiEdit) then
+                                  if _ContentsGroup_isMemoOpen == true and FGlobal_Memo_CheckUiEdit(uiEdit) then
                                     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                      FGlobal_Alchemy_ClearEditFocus()
+                                      PaGlobal_Memo:Save()
                                     end
                                     return true
                                   else
-                                    if _ContentsGroup_isMemoOpen == true and FGlobal_Memo_CheckUiEdit(uiEdit) then
+                                    if _ContentsGroup_isNewOption == true and FGlobal_Option_CheckUiEdit(uiEdit) == true then
                                       if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                        PaGlobal_Memo:Save()
+                                        ClearFocusEdit()
+                                      else
+                                        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+                                          PaGlobal_Option:ClickedSeachOption()
+                                        end
                                       end
                                       return true
                                     else
-                                      if _ContentsGroup_isNewOption == true and FGlobal_Option_CheckUiEdit(uiEdit) == true then
+                                      if FGlobal_ButtonShortcuts_CheckUiEdit(uiEdit) == true then
                                         if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
                                           ClearFocusEdit()
                                         else
                                           if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-                                            PaGlobal_Option:ClickedSeachOption()
+                                            PaGlobal_ButtonShortcuts:ClickedSearch()
                                           end
                                         end
                                         return true
-                                      else
-                                        if FGlobal_ButtonShortcuts_CheckUiEdit(uiEdit) == true then
-                                          if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                            ClearFocusEdit()
-                                          else
-                                            if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-                                              PaGlobal_ButtonShortcuts:ClickedSearch()
-                                            end
-                                          end
-                                          return true
-                                        end
                                       end
                                     end
                                   end
@@ -1707,49 +1734,41 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
         end
         return 
       end
-      if Panel_Interaction:IsShow() then
-        local buttonCount = FGlobal_InteractionButtonCount()
-        local isInteraction = false
-        if ToClient_IsDevelopment() == false then
-          isInteraction = keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction)
-        elseif ToClient_isAvailableInteraction() == true then
-          isInteraction = keyCustom_IsUp_Action((CppEnums.ActionInputType).ActionInputType_Intelligent)
-        else
-          isInteraction = keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction)
-        end
-        if isInteraction == true then
-          local camBlur = getCameraBlur()
-          local interactableActor = interaction_getInteractable()
-          if interactableActor ~= nil and (not (interactableActor:get()):isPlayer() or (interactableActor:get()):isSelfPlayer()) and camBlur <= 0 then
-            local interactionType = interactableActor:getSettedFirstInteractionType()
-            if InteractionCheck(interactionType) then
-              return 
-            end
-            Interaction_ButtonPushed(interactionType)
-            DragManager:clearInfo()
-            return 
-          elseif interactableActor ~= nil and (interactableActor:get()):isPlayer() and camBlur <= 0 then
-            local interactionType = interactableActor:getSettedFirstInteractionType()
-            if InteractionCheck(interactionType) then
-              return 
-            end
-            Interaction_ButtonPushed(interactionType)
-            DragManager:clearInfo()
-            return 
-          end
-        else
-          -- DECOMPILER ERROR at PC222: Unhandled construct in 'MakeBoolean' P1
-
-          if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_1) and buttonCount >= 2 then
-            FGlobal_InteractionButtonActionRun(1)
-            DragManager:clearInfo()
-            setUiInputProcessed(VCK.KeyCode_F5)
-            return 
-          end
-        end
-      end
       do
-        -- DECOMPILER ERROR at PC243: Unhandled construct in 'MakeBoolean' P1
+        if Panel_Interaction:IsShow() then
+          local buttonCount = FGlobal_InteractionButtonCount()
+          if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) == true then
+            local camBlur = getCameraBlur()
+            local interactableActor = interaction_getInteractable()
+            if interactableActor ~= nil and (not (interactableActor:get()):isPlayer() or (interactableActor:get()):isSelfPlayer()) and camBlur <= 0 then
+              local interactionType = interactableActor:getSettedFirstInteractionType()
+              if InteractionCheck(interactionType) then
+                return 
+              end
+              Interaction_ButtonPushed(interactionType)
+              DragManager:clearInfo()
+              return 
+            elseif interactableActor ~= nil and (interactableActor:get()):isPlayer() and camBlur <= 0 then
+              local interactionType = interactableActor:getSettedFirstInteractionType()
+              if InteractionCheck(interactionType) then
+                return 
+              end
+              Interaction_ButtonPushed(interactionType)
+              DragManager:clearInfo()
+              return 
+            end
+          else
+            -- DECOMPILER ERROR at PC198: Unhandled construct in 'MakeBoolean' P1
+
+            if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_1) and buttonCount >= 2 then
+              FGlobal_InteractionButtonActionRun(1)
+              DragManager:clearInfo()
+              setUiInputProcessed(VCK.KeyCode_F5)
+              return 
+            end
+          end
+        end
+        -- DECOMPILER ERROR at PC219: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_2) and buttonCount >= 3 then
           FGlobal_InteractionButtonActionRun(2)
@@ -1757,7 +1776,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F6)
           return 
         end
-        -- DECOMPILER ERROR at PC264: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC240: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_3) and buttonCount >= 4 then
           FGlobal_InteractionButtonActionRun(3)
@@ -1765,7 +1784,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F7)
           return 
         end
-        -- DECOMPILER ERROR at PC285: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC261: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_4) and buttonCount >= 5 then
           FGlobal_InteractionButtonActionRun(4)
@@ -1773,7 +1792,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F8)
           return 
         end
-        -- DECOMPILER ERROR at PC306: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC282: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_5) and buttonCount >= 6 then
           FGlobal_InteractionButtonActionRun(5)
@@ -1818,13 +1837,13 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           ;
           (QuestInfoData.questDescHideWindow)()
         end
-        -- DECOMPILER ERROR at PC457: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC433: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           FGlobal_Panel_WebHelper_ShowToggle()
         end
         do return  end
-        -- DECOMPILER ERROR at PC475: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC451: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           Panel_ProductNote_ShowToggle()
@@ -1881,7 +1900,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC622: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC598: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -1934,6 +1953,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             audioPostEvent_SystemUi(1, 15)
             InventoryWindow_Close()
             ServantInventory_Close()
+            ClothInventory_Close()
             TooltipSimple_Hide()
           end
           return 
@@ -2026,7 +2046,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             return 
           end
           do
-            -- DECOMPILER ERROR at PC1010: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC988: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               local isMailMain = Panel_Mail_Main:IsShow()
@@ -2041,7 +2061,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             do return  end
             if _ContentsGroup_isMemoOpen == true then
               do
-                -- DECOMPILER ERROR at PC1042: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC1020: Unhandled construct in 'MakeBoolean' P1
 
                 if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Memo) and Panel_Memo_List ~= nil then
                   local isMemoList = Panel_Memo_List:IsShow()
@@ -2056,7 +2076,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                 do return  end
                 do
                   do
-                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P1
+                    -- DECOMPILER ERROR at PC1051: Unhandled construct in 'MakeBoolean' P1
 
                     if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
                       local isFriendList = Panel_FriendList:IsShow()
@@ -2147,7 +2167,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                     end
                     ;
                     (PaGlobal_GlobalKeyBinder.Process_CheckEscape)()
-                    -- DECOMPILER ERROR: 110 unprocessed JMP targets
+                    -- DECOMPILER ERROR: 107 unprocessed JMP targets
                   end
                 end
               end
@@ -2335,6 +2355,34 @@ PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
         Panel_Menu_ShowToggle()
       end
     end
+  end
+end
+
+-- DECOMPILER ERROR at PC180: Confused about usage of register: R6 in 'UnsetPending'
+
+PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu = function(deltaTime)
+  -- function num : 0_45
+  if _ContentsGroup_isConsoleTest == false or getGamePadEnable() == false then
+    return 
+  end
+  if PaGlobal_Option ~= nil and PaGlobal_Option:Get("ConsolePadKeyType") == 0 then
+    return 
+  end
+  if FGlobal_ConsoleQuickMenuCustom_IsShow() == true then
+    FromClient_ConsoleQuickMenu_OpenCustomPage(ToClient_checkQuickMenuCurrentGroup())
+    return 
+  end
+  if getInputMode() ~= (CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode then
+    if FGlobal_ConsoleQuickMenu_IsShow() == true then
+      FromClient_ConsoleQuickMenu_Quit(__eQuickMenuGroup_Count)
+    end
+    return 
+  end
+  if FGlobal_ConsoleQuickMenu_IsShow() == false then
+    ToClient_checkAndOpenQuickMenu()
+  else
+    local position = ToClient_checkAndRunQuickMenu()
+    FGlobal_ConsoleQuickMenu_Update(position)
   end
 end
 

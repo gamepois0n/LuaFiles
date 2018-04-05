@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\quickslot\panel_quickslot.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\quickslot\panel_quickslot.luac 
 
 -- params : ...
 -- function num : 0
@@ -18,17 +18,6 @@ isUseNewQuickSlot = function()
 end
 
 local UI_TM = CppEnums.TextMode
-local consoleSlotIndex, consoleSlotUseIndex, consoleSlotCount, consoleQuickSlotCursor = nil, nil, nil, nil
-if _ContentsGroup_isConsoleTest == true then
-  consoleSlotIndex = 0
-  consoleSlotUseIndex = 1
-  consoleSlotCount = 2
-  consoleQuickSlotCursor = (UI.getChildControl)(Panel_QuickSlot, "Static_ConsoleCursor")
-else
-  consoleQuickSlotCursor = (UI.getChildControl)(Panel_QuickSlot, "Static_ConsoleCursor")
-  consoleQuickSlotCursor:SetShow(false)
-  consoleQuickSlotCursor = nil
-end
 Panel_QuickSlot:RegisterShowEventFunc(true, "QuickSlot_ShowAni()")
 Panel_QuickSlot:RegisterShowEventFunc(false, "QuickSlot_HideAni()")
 Panel_CoolTime_Effect_Item_Slot:RegisterShowEventFunc(true, "QuickSlot_ItemCoolTimeEffect_HideAni()")
@@ -58,7 +47,7 @@ numberNames = {"Static_No_1", "Static_No_2", "Static_No_3", "Static_No_4", "Stat
 skillToggle = {"Static_SkillToggle_1", "Static_SkillToggle_2", "Static_SkillToggle_3", "Static_SkillToggle_4", "Static_SkillToggle_5", "Static_SkillToggle_6", "Static_SkillToggle_7", "Static_SkillToggle_8", "Static_SkillToggle_9", "Static_SkillToggle_10"}
 , quickSlotInit = false, initPosX = Panel_QuickSlot:GetPosX(), initPosY = Panel_QuickSlot:GetPosY()}
 PaGlobal_QuickSlot = {}
--- DECOMPILER ERROR at PC177: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC153: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.addSlotEffectForTutorial = function(self, itemSlot, effectString, isLoop, posX, posY)
   -- function num : 0_1
@@ -67,7 +56,7 @@ PaGlobal_QuickSlot.addSlotEffectForTutorial = function(self, itemSlot, effectStr
   (PaGlobal_TutorialUiManager:getUiMasking()):showQuickSlotMasking(((itemSlot.item).icon):GetPosX(), ((itemSlot.item).icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.eraseSlotEffectForTutorial = function(self, itemSlot)
   -- function num : 0_2
@@ -78,7 +67,7 @@ PaGlobal_QuickSlot.eraseSlotEffectForTutorial = function(self, itemSlot)
   end
 end
 
--- DECOMPILER ERROR at PC184: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC160: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.getSlotByIndex = function(self, slotIndex)
   -- function num : 0_3 , upvalues : quickSlot
@@ -658,15 +647,9 @@ quickSlot.createSlot = function(self)
     end
   end
 
-      slot.isEmpty = function(self)
-    -- function num : 0_9_5
-    do return self.item == nil and self.skill == nil end
-    -- DECOMPILER ERROR: 1 unprocessed JMP targets
-  end
-
       slot:setPos(slot.posX, slot.posY)
       slot:rearrangeControl()
-      -- DECOMPILER ERROR at PC95: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
 
       ;
       (self.slots)[ii] = slot
@@ -816,7 +799,6 @@ end
 
 QuickSlot_Click = function(slotIndex)
   -- function num : 0_12 , upvalues : quickSlot
-  _PA_LOG("정태�\164", "slotIndex : " .. tostring(slotIndex))
   if slotIndex == nil then
     return 
   end
@@ -1220,7 +1202,7 @@ FGlobal_QuickSlot_CheckDefaultQuickSlotShowAble = function()
 end
 
 QuickSlot_UpdateData = function()
-  -- function num : 0_22 , upvalues : quickSlot, consoleSlotUseIndex, consoleQuickSlotCursor
+  -- function num : 0_22 , upvalues : quickSlot
   if FGlobal_QuickSlot_CheckDefaultQuickSlotShowAble() == false then
     Panel_QuickSlot:SetShow(false, false)
     return 
@@ -1265,10 +1247,6 @@ QuickSlot_UpdateData = function()
                 (slot.icon):SetEnable(false)
               end
             end
-          end
-          if _ContentsGroup_isConsoleTest == true and idx == consoleSlotUseIndex and slot.background ~= nil then
-            consoleQuickSlotCursor:SetPosX((slot.background):GetPosX() + 12)
-            consoleQuickSlotCursor:SetPosY((slot.background):GetPosY() - 20)
           end
         end
         if Panel_Tooltip_Item_GetCurrentSlotType() == "QuickSlot" then
@@ -1644,25 +1622,4 @@ FromClient_luaLoadComplete_QuickSlot = function()
   registerEvent("FromClient_RenderModeChangeState", "renderModeChange_QuickSlot_OnscreenResize")
 end
 
-FGlobal_QuickSlot_Console_SetIndex = function(isRight)
-  -- function num : 0_43 , upvalues : consoleSlotUseIndex
-  if isRight ~= nil then
-    if isRight == true then
-      consoleSlotUseIndex = (consoleSlotUseIndex + 1) % 10
-    else
-      consoleSlotUseIndex = (consoleSlotUseIndex - 1) % 10
-    end
-  end
-  QuickSlot_UpdateData()
-end
-
-FGlobal_QuickSlot_Console_UseItem = function()
-  -- function num : 0_44 , upvalues : consoleSlotUseIndex
-  QuickSlot_Click((consoleSlotUseIndex - 1) % 10)
-end
-
-if _ContentsGroup_isConsoleTest == false then
-  FGlobal_QuickSlot_Console_SetIndex = nil
-  FGlobal_QuickSlot_Console_UseItem = nil
-end
 

@@ -1,13 +1,10 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\panel_guildbattle_control.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\panel_guildbattle_control.luac 
 
 -- params : ...
 -- function num : 0
 local isShowGuildBattleCam = true
 PaGlobal_GuildBattle_Control = {_elapsedTime = 0}
-local BattleModes = {Normal = 0, OneOne = 1, All = 2}
-local BattleStates = {Idle = 0, Join = 1, SelectEntry = 2, SelectAttend = 3, Ready = 4, Fight = 5, End = 6, Teleport = 7}
-local GuildBattleWinStates = {Win = 0, Lose = 1, Draw = 2}
 local HideIfShowing = function(panel)
   -- function num : 0_0
   if panel:IsShow() == true then
@@ -29,16 +26,16 @@ FGlobal_GuildBattle_IsOpen = function()
 end
 
 local UpdatePanelsVisibility = function()
-  -- function num : 0_3 , upvalues : BattleStates, HideIfShowing, ShowIfNotShowing
+  -- function num : 0_3 , upvalues : HideIfShowing, ShowIfNotShowing
   local isMaster = ToClient_GuildBattle_AmIMasterForThisBattle()
   local battleState = ToClient_GuildBattle_GetCurrentState()
-  if BattleStates.Idle == battleState then
+  if __eGuildBattleState_Idle == battleState then
     HideIfShowing(PaGlobal_GuildBattlePoint)
     HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
     HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
     ShowIfNotShowing(PaGlobal_GuildBattle_JoinMember)
   else
-    if BattleStates.Join == battleState then
+    if __eGuildBattleState_Join == battleState then
       if ToClient_getJoinGuildBattle() == true then
         ShowIfNotShowing(PaGlobal_GuildBattlePoint)
       else
@@ -48,7 +45,7 @@ local UpdatePanelsVisibility = function()
       HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
       HideIfShowing(PaGlobal_GuildBattle_JoinMember)
     else
-      if BattleStates.SelectEntry == battleState then
+      if __eGuildBattleState_SelectEntry == battleState then
         ShowIfNotShowing(PaGlobal_GuildBattlePoint)
         if ToClient_isPersonalBattle() == false then
           ShowIfNotShowing(PaGlobal_GuildBattle_SelectEntry)
@@ -56,7 +53,7 @@ local UpdatePanelsVisibility = function()
         HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
         HideIfShowing(PaGlobal_GuildBattle_JoinMember)
       else
-        if BattleStates.SelectAttend == battleState then
+        if __eGuildBattleState_SelectAttend == battleState then
           ShowIfNotShowing(PaGlobal_GuildBattlePoint)
           HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
           if isMaster == true or ToClient_isPersonalBattle() == true then
@@ -64,25 +61,25 @@ local UpdatePanelsVisibility = function()
           end
           HideIfShowing(PaGlobal_GuildBattle_JoinMember)
         else
-          if BattleStates.Ready == battleState then
+          if __eGuildBattleState_Ready == battleState then
             ShowIfNotShowing(PaGlobal_GuildBattlePoint)
             HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
             HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
             HideIfShowing(PaGlobal_GuildBattle_JoinMember)
           else
-            if BattleStates.Fight == battleState then
+            if __eGuildBattleState_Fight == battleState then
               ShowIfNotShowing(PaGlobal_GuildBattlePoint)
               HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
               HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
               HideIfShowing(PaGlobal_GuildBattle_JoinMember)
             else
-              if BattleStates.End == battleState then
+              if __eGuildBattleState_End == battleState then
                 ShowIfNotShowing(PaGlobal_GuildBattlePoint)
                 HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
                 HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
                 HideIfShowing(PaGlobal_GuildBattle_JoinMember)
               else
-                if BattleStates.Teleport == battleState then
+                if __eGuildBattleState_Teleport == battleState then
                   ShowIfNotShowing(PaGlobal_GuildBattlePoint)
                   HideIfShowing(PaGlobal_GuildBattle_SelectEntry)
                   HideIfShowing(PaGlobal_GuildBattle_SelectAttend)
@@ -100,7 +97,7 @@ local UpdatePanelsVisibility = function()
 end
 
 local ShowBattleStateChangeMessage = function(state)
-  -- function num : 0_4 , upvalues : BattleStates
+  -- function num : 0_4
   if ToClient_isPersonalBattle() == false then
     local progressServer = ToClient_GuildBattle_GetMyGuildBattleServer()
     local curChannelData = getCurrentChannelServerData()
@@ -110,42 +107,42 @@ local ShowBattleStateChangeMessage = function(state)
   end
   do
     local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_USE_GUILDWINDOW"), sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
-    if state == BattleStates.Idle then
+    if state == __eGuildBattleState_Idle then
       return 
     else
-      if state == BattleStates.Join then
+      if state == __eGuildBattleState_Join then
         msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_USE_GUILDWINDOW")
         msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_MATCH_SUCCESS")
       else
-        if state == BattleStates.SelectEntry then
+        if state == __eGuildBattleState_SelectEntry then
           if ToClient_isPersonalBattle() == true then
             return 
           else
             msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_STARTSELECT_ENTRY")
           end
         else
-          if state == BattleStates.SelectAttend then
+          if state == __eGuildBattleState_SelectAttend then
             if ToClient_isPersonalBattle() == true then
               msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_STARTSELECT_ATTEND")
             else
               msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_STARTSELECT_ATTEND")
             end
           else
-            if state == BattleStates.Ready then
+            if state == __eGuildBattleState_Ready then
               if ToClient_isPersonalBattle() == true then
                 msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_READYSTATE")
               else
                 msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_READYSTATE")
               end
             else
-              if state == BattleStates.Fight then
+              if state == __eGuildBattleState_Fight then
                 if ToClient_isPersonalBattle() == true then
                   msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_FIGHTSTART")
                 else
                   msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_FIGHTSTART")
                 end
               else
-                if state == BattleStates.End then
+                if state == __eGuildBattleState_End then
                   local winnerGuildNo = ToClient_GuildBattle_GetWinGuildNo()
                   if ToClient_isPersonalBattle() == true then
                     msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_END")
@@ -156,33 +153,43 @@ local ShowBattleStateChangeMessage = function(state)
                     msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE_DRAW")
                   else
                     if ToClient_isPersonalBattle() == true then
+                      local battleResultReason = ToClient_GuildBattle_GetBattleResultReason()
                       if ToClient_isPersonalBattleWin() == true then
-                        if ToClient_GuildBattle_GetNoMasterState() == true then
+                        if __eGuildBattleResultReason_NoMaster == battleResultReason then
                           msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_OTHERTEAM_MASTER_OUT")
+                        else
+                          if __eGuildBattleResultReason_TooManyPlayerOut == battleResultReason then
+                            msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_OTHERTEAM_MANYPLAYER_OUT")
+                          end
                         end
                         msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_WIN")
                       else
-                        if ToClient_GuildBattle_GetNoMasterState() == true then
+                        if __eGuildBattleResultReason_NoMaster == battleResultReason then
                           msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_MYTEAM_MASTER_OUT")
+                        else
+                          if __eGuildBattleResultReason_TooManyPlayerOut == battleResultReason then
+                            msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_MYTEAM_MANYPLAYER_OUT")
+                          end
                         end
                         msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_LOSE")
                       end
                     else
-                      local guildName = ToClient_guild_getGuildName(winnerGuildNo)
-                      msg.main = tostring(guildName) .. " " .. tostring(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WINNER"))
-                    end
-                  end
-                else
-                  do
-                    if state == BattleStates.Teleport then
-                      return 
-                    else
-                      -- DECOMPILER ERROR at PC233: Confused about usage of register: R2 in 'UnsetPending'
+                      do
+                        do
+                          local guildName = ToClient_guild_getGuildName(winnerGuildNo)
+                          msg.main = tostring(guildName) .. " " .. tostring(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WINNER"))
+                          if state == __eGuildBattleState_Teleport then
+                            return 
+                          else
+                            -- DECOMPILER ERROR at PC245: Confused about usage of register: R2 in 'UnsetPending'
 
-                      self._CanCancel = false
-                      return 
+                            self._CanCancel = false
+                            return 
+                          end
+                          Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 78, false)
+                        end
+                      end
                     end
-                    Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 78, false)
                   end
                 end
               end
@@ -246,31 +253,31 @@ FromClient_GuildBattle_Emergency_Ringout = function(count)
 end
 
 FromClient_GuildBattle_FightEnd = function(winState, isRingOut)
-  -- function num : 0_9 , upvalues : GuildBattleWinStates
+  -- function num : 0_9
   msg = {main = "", sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC19: Confused about usage of register: R2 in 'UnsetPending'
 
-  if winState == GuildBattleWinStates.Win then
+  if winState == __eGuildBattleWinState_Win then
     if isRingOut == true then
       msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_RINGOUT_WIN")
     end
-    -- DECOMPILER ERROR at PC27: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC26: Confused about usage of register: R2 in 'UnsetPending'
 
     msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WINFIGHT")
   else
-    -- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC39: Confused about usage of register: R2 in 'UnsetPending'
 
-    if winState == GuildBattleWinStates.Lose then
+    if winState == __eGuildBattleWinState_Lose then
       if isRingOut == true then
         msg.sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_RINGOUT_LOSE")
       end
-      -- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
       msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_LOSEFIGHT")
     else
-      -- DECOMPILER ERROR at PC60: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC57: Confused about usage of register: R2 in 'UnsetPending'
 
-      if winState == GuildBattleWinStates.Draw then
+      if winState == __eGuildBattleWinState_Draw then
         msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_DRAWFIGHT")
       else
         _PA_ASSERT(false, "새로�\180 WinState�\128 생겼습니�\140? winState=" .. winState)
@@ -395,8 +402,14 @@ FromClient_GuildBattle_OurMemberUnjoined_GuildBattleControl = function(userNo, i
   end
 end
 
-FromClient_GuildBattle_SomeOneKilledSomeOne_GuildBattleControl = function(attackerName, peerName, attackerTeamNo, peerTeamNo)
+FromClient_GuildBattle_SomeOneKilledSomeOne_ForWaitingState = function(attackerName, peerName)
   -- function num : 0_15
+  msg = {main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_COMPETITION_USERDEAD_ATTACKED", "attackerName", attackerName, "deadUserName", peerName), sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
+  Proc_ShowMessage_Ack_For_RewardSelect(msg, 4.5, 78, false)
+end
+
+FromClient_GuildBattle_SomeOneKilledSomeOne_GuildBattleControl = function(attackerName, peerName, attackerTeamNo, peerTeamNo)
+  -- function num : 0_16
   local attackerGuildInfo = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(attackerTeamNo)
   local peerGuildInfo = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(peerTeamNo)
   if attackerGuildInfo == nil or peerGuildInfo == nil then
@@ -424,14 +437,14 @@ FromClient_GuildBattle_SomeOneKilledSomeOne_GuildBattleControl = function(attack
 end
 
 FromClient_GuildBattle_AttendPlayer_GuildBattleControl = function()
-  -- function num : 0_16
+  -- function num : 0_17
   msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SELECTED_PARTICIPANT"), sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 78, false)
 end
 
 local GuildWatchMode = {UI_BG = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Static_CommandBG"), UI_KeyQ = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_Q"), UI_KeyE = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_E"), UI_KeyR = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_R"), UI_TextSmall = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Small"), UI_TextBig = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Big"), UI_TextExit = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Exit"), UI_TextDesc = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_CameraSpeedLow"), UI_ShowButton = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Button_ShowCommand")}
 HandleClick_WatchShowToggle = function()
-  -- function num : 0_17 , upvalues : GuildWatchMode
+  -- function num : 0_18 , upvalues : GuildWatchMode
   if (GuildWatchMode.UI_BG):GetShow() == true then
     GuildWatchMode_SetControlShow(false)
   else
@@ -440,7 +453,7 @@ HandleClick_WatchShowToggle = function()
 end
 
 PaGlobal_GuildBattle_WatchModeStringSetting = function()
-  -- function num : 0_18 , upvalues : GuildWatchMode, BattleModes
+  -- function num : 0_19 , upvalues : GuildWatchMode
   if ToClient_isPersonalBattle() == true then
     (GuildWatchMode.UI_TextSmall):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_WATCHING_START"))
     ;
@@ -456,7 +469,7 @@ PaGlobal_GuildBattle_WatchModeStringSetting = function()
     (GuildWatchMode.UI_TextDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WATCHING_DESC"))
   end
   local yPos = (GuildWatchMode.UI_KeyE):GetPosY()
-  if BattleModes.OneOne ~= ToClient_GuildBattle_GetCurrentMode() then
+  if __eGuildBattleMode_OneOne ~= ToClient_GuildBattle_GetCurrentMode() then
     (GuildWatchMode.UI_KeyE):SetShow(true)
     ;
     (GuildWatchMode.UI_TextBig):SetShow(true)
@@ -483,7 +496,7 @@ PaGlobal_GuildBattle_WatchModeStringSetting = function()
 end
 
 GuildWatchMode_SetControlShow = function(isShow)
-  -- function num : 0_19 , upvalues : GuildWatchMode
+  -- function num : 0_20 , upvalues : GuildWatchMode
   PaGlobal_GuildBattle_WatchModeStringSetting()
   ;
   (GuildWatchMode.UI_BG):SetShow(isShow)
@@ -509,7 +522,7 @@ GuildWatchMode_SetControlShow = function(isShow)
 end
 
 WatchingPanel_SetPosition = function()
-  -- function num : 0_20
+  -- function num : 0_21
   local ScrX = getScreenSizeX()
   local ScrY = getScreenSizeY()
   Panel_GuildBattleWatchingMode:SetSize(200, 320)
@@ -518,7 +531,7 @@ WatchingPanel_SetPosition = function()
 end
 
 FromClient_NotifyGuildTeamBattleShowWatchPanel = function(isShow)
-  -- function num : 0_21 , upvalues : isShowGuildBattleCam, GuildWatchMode
+  -- function num : 0_22 , upvalues : isShowGuildBattleCam, GuildWatchMode
   if isShowGuildBattleCam == false then
     ToClient_CanOpenGuildBattleCam(false)
     return 
@@ -548,12 +561,12 @@ FromClient_NotifyGuildTeamBattleShowWatchPanel = function(isShow)
 end
 
 FromClient_NotifyGuildBattleCameraMessage = function()
-  -- function num : 0_22
+  -- function num : 0_23
   return 
 end
 
 FromClient_FightTimeLeftMessage = function(fightTime)
-  -- function num : 0_23
+  -- function num : 0_24
   local min = (math.floor)(fightTime / 60)
   local sec = (math.floor)(fightTime % 60)
   local msg = {main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_FIGHT_TIMELEFT", "min", tostring(min), "sec", tostring(sec)), sub = PaGlobal_GuildBattle:GetTitle(), addMsg = ""}
@@ -582,4 +595,5 @@ registerEvent("FromClient_NotifyGuildTeamBattleShowWatchPanel", "FromClient_Noti
 registerEvent("FromClient_NotifyGuildBattleCameraMessage", "FromClient_NotifyGuildBattleCameraMessage")
 registerEvent("FromClient_FightTimeLeftMessage", "FromClient_FightTimeLeftMessage")
 registerEvent("FromClient_GuildBattle_Emergency_Ringout", "FromClient_GuildBattle_Emergency_Ringout")
+registerEvent("FromClient_GuildBattle_SomeOneKilledSomeOne_ForWaitingState", "FromClient_GuildBattle_SomeOneKilledSomeOne_ForWaitingState")
 

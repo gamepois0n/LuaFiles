@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\worldmap\worldminimap.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\worldmap\worldminimap.luac 
 
 -- params : ...
 -- function num : 0
@@ -27,7 +27,7 @@ local swapRadar = function(radarType)
   else
     Panel_WorldMiniMap:SetShow(false)
     Panel_Radar:SetShow(true)
-    Radar_SetRotateMode(radarMap.isRotateMode)
+    setRotateRadarMode(radarMap.isRotateMode)
     Panel_Radar:ComputePos()
   end
   local self = PaGlobal_WorldMiniMap

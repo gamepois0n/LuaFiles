@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\competitiongame\panel_competitiongameforteamchange.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\competitiongame\panel_competitiongameforteamchange.luac 
 
 -- params : ...
 -- function num : 0
@@ -600,6 +600,12 @@ FromClient_CompetitionMatchDone = function(teamNo, rank)
         local leaderInfo = ToClient_GetTeamLeaderInfo(teamNo)
         if leaderInfo ~= nil then
           Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE_FREEFORALL", "rank", rank, "leaderName", leaderInfo:getCharacterName()))
+        end
+      else
+        do
+          if matchMode == 2 then
+            Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE", "teamNo", teamAlphabet))
+          end
         end
       end
     end

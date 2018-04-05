@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\alchemy\panel_alchemy_new.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\alchemy\panel_alchemy_new.luac 
 
 -- params : ...
 -- function num : 0
@@ -20,9 +20,6 @@ _staticMaterialSlots = {}
 }
 local InventoryFilterFunction = function(slotNo, itemWrapper, whereType)
   -- function num : 0_0
-  if isUsePcExchangeInLocalizingValue() == false then
-    return true
-  end
   if (CppEnums.ItemWhereType).eInventory ~= whereType then
     return true
   end
@@ -36,6 +33,10 @@ local InventoryFilterFunction = function(slotNo, itemWrapper, whereType)
   end
   local itemType = (itemWrapper:getStaticStatus()):getItemType()
   if (PaGlobal_Alchemy._invenFilterItemTypes)[itemType] ~= nil then
+    return true
+  end
+  local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+  if isCash then
     return true
   end
   return false
@@ -219,17 +220,20 @@ PaGlobal_Alchemy.showPanel = function(self, isCook, installationType)
   end
   self:updateKnowledgeList()
   Panel_Alchemy:SetShow(true, true)
-  do
-    local funcPushMaterial = function(slotIdx, itemWrapper, count)
+  Panel_Alchemy:SetPosX(getScreenSizeX() - getScreenSizeX() / 2 - Panel_Alchemy:GetSizeX() + Panel_Alchemy:GetSizeX() / 2)
+  Panel_Alchemy:ComputePos()
+  local funcRClicked = function(slotIdx, itemWrapper, count)
     -- function num : 0_3_0 , upvalues : self
     self:showInventoryNumpad(slotIdx, count)
   end
 
-    Inventory_SetFunctor(InventoryFilterFunction, funcPushMaterial, function()
+  do
+    local funcOtherWindowOpen = function()
     -- function num : 0_3_1 , upvalues : self
     self:closePanel()
   end
-, nil)
+
+    Inventory_SetFunctor(InventoryFilterFunction, funcRClicked, funcOtherWindowOpen, nil)
     FGlobal_SetInventoryDragNoUse(Panel_Alchemy)
     InventoryWindow_Show()
     -- DECOMPILER ERROR: 8 unprocessed JMP targets
@@ -254,6 +258,7 @@ PaGlobal_Alchemy.closePanel = function(self)
   Panel_Alchemy:SetShow(false)
   PaGlobal_RecentCook:closePanel()
   InventoryWindow_Close()
+  Panel_Alchemy:ComputePos()
 end
 
 -- DECOMPILER ERROR at PC114: Confused about usage of register: R7 in 'UnsetPending'
@@ -291,22 +296,34 @@ PaGlobal_Alchemy.updateMaterialSlot = function(self)
   for slotIndex = 1, self._maxMaterialCount do
     if slotIndex <= countSlotPushed then
       local itemStaticWrapper = ToClient_AlchemyGetItemStaticAtMaterialSlot(slotIndex - 1)
-      local itemCount = ToClient_AlchemyGetCountItemAtMaterialSlot_s64(slotIndex - 1)
-      ;
-      (((self._ui)._staticMaterialSlots)[slotIndex]):setItemByStaticStatus(itemStaticWrapper, itemCount)
-      ;
-      ((((self._ui)._staticMaterialSlots)[slotIndex]).icon):SetShow(true)
-    else
-      do
+      if itemStaticWrapper ~= nil then
+        local itemCount = ToClient_AlchemyGetCountItemAtMaterialSlot_s64(slotIndex - 1)
+        ;
+        (((self._ui)._staticMaterialSlots)[slotIndex]):setItemByStaticStatus(itemStaticWrapper, itemCount)
+        ;
+        ((((self._ui)._staticMaterialSlots)[slotIndex]).icon):SetShow(true)
+      else
         do
-          ;
-          ((((self._ui)._staticMaterialSlots)[slotIndex]).icon):SetShow(false)
-          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out DO_STMT
+          do
+            do
+              ;
+              ((((self._ui)._staticMaterialSlots)[slotIndex]).icon):SetShow(false)
+              ;
+              ((((self._ui)._staticMaterialSlots)[slotIndex]).icon):SetShow(false)
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC36: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out IF_STMT
+
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC46: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
         end
       end
     end
@@ -409,11 +426,12 @@ PaGlobal_Alchemy.showInventoryNumpad = function(self, slotIndex, itemCount)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_NOT_CHANGE"))
     return 
   end
-  Panel_NumberPad_Show(true, itemCount, slotIndex, function(count, slotIdx)
+  local funcConfirmClicked = function(count, slotIdx)
     -- function num : 0_12_0 , upvalues : self
     self:pushItemFromInventory(slotIdx, count)
   end
-)
+
+  Panel_NumberPad_Show(true, itemCount, slotIndex, funcConfirmClicked)
 end
 
 -- DECOMPILER ERROR at PC139: Confused about usage of register: R7 in 'UnsetPending'
@@ -426,6 +444,7 @@ PaGlobal_Alchemy.selectKnowledge = function(self, knowledgeIndex)
     PaGlobal_RecentCook:closePanel()
     local isLearn = ToClient_AlchemyIsLearntMentalCard(mentalCardStaticWrapper:getKey())
     if isLearn == true then
+      Panel_Alchemy:SetPosX(getScreenSizeX() - (Panel_Alchemy:GetSizeX() + 430 + 310))
       PaGlobal_RecentCook:showPanel(knowledgeIndex, self._isCook, Panel_Alchemy:GetPosX() + Panel_Alchemy:GetSizeX() - 25, Panel_Alchemy:GetPosY() + 25)
       ;
       (ui._staticAlchemyIcon):ChangeTextureInfoName(mentalCardStaticWrapper:getImagePath())
@@ -488,11 +507,12 @@ PaGlobal_Alchemy.showMassProductionMessageBox = function(self)
   -- function num : 0_17
   local msgBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
   local msgBoxContentStrID = self._isCook and "LUA_ALCHEMY_MSGBOX_COOK_SEQUENCE_MSG" or "LUA_ALCHEMY_MSGBOX_ALCHEMY_SEQUENCE_MSG"
-  local msgBoxData = {title = msgBoxTitle, content = PAGetString(Defines.StringSheet_GAME, msgBoxContentStrID), functionYes = function()
+  local funcYesButtonClicked = function()
     -- function num : 0_17_0
     PaGlobal_Alchemy:askMassProductionQuantity()
   end
-, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+
+  local msgBoxData = {title = msgBoxTitle, content = PAGetString(Defines.StringSheet_GAME, msgBoxContentStrID), functionYes = funcYesButtonClicked, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(msgBoxData, "middle")
 end
@@ -507,11 +527,12 @@ PaGlobal_Alchemy.askMassProductionQuantity = function(self)
   end
   local maxCount = ToClient_AlchemyGetMaxMassProductionCount()
   if (Defines.s64_const).s64_1 <= maxCount then
-    Panel_NumberPad_Show(true, maxCount, nil, function(inputNumber)
+    local funcConfirmClicked = function(inputNumber)
     -- function num : 0_18_0 , upvalues : self
     self:startAlchemy(inputNumber)
   end
-)
+
+    Panel_NumberPad_Show(true, maxCount, nil, funcConfirmClicked)
   end
 end
 
@@ -545,6 +566,9 @@ end
 PaGlobal_Alchemy.handleMouseOn_ShowMaterialTooltip = function(self, slotIndex)
   -- function num : 0_22
   local itemStatic = ToClient_AlchemyGetItemStaticAtMaterialSlot(slotIndex - 1)
+  if itemStatic == nil then
+    return 
+  end
   local uiBase = (((self._ui)._staticMaterialSlots)[slotIndex]).icon
   Panel_Tooltip_Item_Show(itemStatic, uiBase, true, false)
 end
@@ -640,15 +664,17 @@ FromClient_AlchemyFail_PaGlobal_Alchemy = function(isSuccess, hint, alchemyType,
           failMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_ALCHEMY")
         end
         local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMY_MSGBOX_FAIL_MEMO", "failMsg", failMsg)
-        local messageBoxData = {title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMY_MSGBOX_FAIL_TITLE", "failMsg", failMsg), content = messageBoxMemo, functionYes = function()
+        local funcYesButtonClicked = function()
     -- function num : 0_33_0
     PaGlobal_Alchemy:resumeMassProduction()
   end
-, functionNo = function()
+
+        local funcNoButtonClicked = function()
     -- function num : 0_33_1
     PaGlobal_Alchemy:cancelAlchemy()
   end
-, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+
+        local messageBoxData = {title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMY_MSGBOX_FAIL_TITLE", "failMsg", failMsg), content = messageBoxMemo, functionYes = funcYesButtonClicked, functionNo = funcNoButtonClicked, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
         ;
         (MessageBox.showMessageBox)(messageBoxData)
       end

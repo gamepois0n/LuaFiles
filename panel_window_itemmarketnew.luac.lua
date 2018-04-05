@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarketnew.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarketnew.luac 
 
 -- params : ...
 -- function num : 0
@@ -25,7 +25,7 @@ local splitWindow = ToClient_IsContentsGroupOpen("240")
 local shopType = {eShopType_Potion = 1, eShopType_Weapon = 2, eShopType_Jewel = 3, eShopType_Furniture = 4, eShopType_Collect = 5, eShopType_Cook = 9, eShopType_PC = 10}
 local ItemMarket = {panelTitle = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_BG"), btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Win_Close"), checkPopUp = (UI.getChildControl)(Panel_Window_ItemMarket, "CheckButton_PopUp"), btn_MyList = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_MyList"), btn_BackPage = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BackPage"), btn_SetAlarm = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetAlarm"), btn_SetPreBid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetPreBid"), btn_Refresh = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Refresh"), btn_RegistItem = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_RegistItem"), btn_BidDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BidDesc"), btn_InMarketRegist = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_InMarketRegist"), selectCategory = 0, selectItemSort = 0, static_ListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ListHeadSmallBG"), specialListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SpecialListHeadBG"), 
 selectSingleSlot = {}
-, txt_SpecialGoodsName = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Name"), txt_SpecialGoodsDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Desc"), txt_ItemNameBackPage = "", txt_SpecialItemNameBackPage = "", static_FilterBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_FilterBG"), static_ItemListBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ItemListBG"), txt_BottomDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_BottomDesc"), btn_BuyMaid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BuyMaid"), btn_GoItemMarket = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_GoItemMarket"), invenMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money"), invenMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money"), warehouseMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money2"), warehouseMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money2"), invenDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Inven"), warehouseDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Warehouse"), iconTooltip = nil, _list2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket"), _list2_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Inside"), _list2_SpecialList = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList"), _list2_SpecialList_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList_Inside"), _btn_CategoryAll = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_MainCategoryAll"), selectedListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SelectedListHeadBG"), noSearchResult = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_NoSearchResult"), nowScrollPos = 0, scrollInverVal = 0, curItemClassify = 1, curFilterIndex = -1, curClassType = -1, curServantType = -1, 
+, txt_SpecialGoodsName = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Name"), txt_SpecialGoodsDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Desc"), txt_ItemNameBackPage = "", txt_SpecialItemNameBackPage = "", static_FilterBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_FilterBG"), static_ItemListBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ItemListBG"), txt_BottomDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_BottomDesc"), btn_BuyMaid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BuyMaid"), btn_GoItemMarket = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_GoItemMarket"), invenMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money"), invenMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money"), warehouseMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money2"), warehouseMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money2"), invenDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Inven"), warehouseDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Warehouse"), iconTooltip = nil, _list2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket"), _list2_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Inside"), _list2_SpecialList = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList"), _list2_SpecialList_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList_Inside"), _btn_CategoryAll = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_MainCategoryAll"), _btn_Recommend = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Recommend"), selectedListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SelectedListHeadBG"), noSearchResult = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_NoSearchResult"), nowScrollPos = 0, scrollInverVal = 0, curItemClassify = 1, curFilterIndex = -1, curClassType = -1, curServantType = -1, 
 categoryUiPool = {}
 , 
 filterUiPool = {}
@@ -37,7 +37,7 @@ itemSingleUiPool = {}
 slotGroupConfing = {createIcon = true, createBorder = true, createCount = false, createEnchant = true, createCash = true, createClassEquipBG = true}
 , 
 slotSingleConfing = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createClassEquipBG = true}
-, _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Question"), escMenuSaveValue = false, isSelectItem = false, _isMarketItemShow = false}
+, _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Question"), escMenuSaveValue = false, isSelectItem = false, _isMarketItemShow = false, _isRecommend = false}
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 if splitWindow then
   (ItemMarket.checkPopUp):SetShow(isPopUpContentsEnable)
@@ -256,7 +256,7 @@ local _sortTexture = {
 }
 }
 }
-local territoryKey = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")}
+local territoryKey = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7")}
 ItemMarketShowAni = function()
   -- function num : 0_0
   Panel_Window_ItemMarket:SetAlpha(0)
@@ -436,93 +436,106 @@ ItemMarket.Initialize = function(self)
   (tree2:getElementManager()):refillKeyList()
   ;
   (self._btn_CategoryAll):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_AllCategory()")
-  if isGameTypeRussia() then
-    (self.btn_BidDesc):SetSize(235, 32)
+  ;
+  (self._btn_Recommend):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_RecommendList()")
+  if isGameServiceTypeDev() == false then
+    (self._btn_Recommend):SetShow(false)
     ;
-    (self.txt_BottomDesc):SetTextVerticalTop()
-  else
-    ;
-    (self.btn_BidDesc):SetSize(135, 32)
-    ;
-    (self.txt_BottomDesc):SetTextVerticalCenter()
+    (self._btn_CategoryAll):SetPosY(58)
+    local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
+    tree2:SetSize(tree2:GetSizeX(), 520)
+    tree2:SetPosY(95)
   end
-  ;
-  (self.txt_BottomDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
-  ;
-  (self.txt_BottomDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_BOTTOMDESC"))
-  ;
-  (self.btn_BidDesc):SetPosX(800)
-  ;
-  (self.btn_BidDesc):SetPosY(635)
-  if isGameTypeRussia() then
-    (self.btn_BuyMaid):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 330)
+  do
+    if isGameTypeRussia() then
+      (self.btn_BidDesc):SetSize(235, 32)
+      ;
+      (self.txt_BottomDesc):SetTextVerticalTop()
+    else
+      ;
+      (self.btn_BidDesc):SetSize(135, 32)
+      ;
+      (self.txt_BottomDesc):SetTextVerticalCenter()
+    end
     ;
-    (self.btn_BuyMaid):SetPosY((self.btn_BidDesc):GetPosY())
+    (self.txt_BottomDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
     ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 8, 2 )")
+    (self.txt_BottomDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_BOTTOMDESC"))
     ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,0)")
+    (self.btn_BidDesc):SetPosX(800)
     ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+    (self.btn_BidDesc):SetPosY(635)
+    if isGameTypeRussia() then
+      (self.btn_BuyMaid):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 330)
+      ;
+      (self.btn_BuyMaid):SetPosY((self.btn_BidDesc):GetPosY())
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 67 )")
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,0)")
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+      ;
+      (self.btn_GoItemMarket):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 365)
+      ;
+      (self.btn_GoItemMarket):SetPosY((self.btn_BidDesc):GetPosY())
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_LUp", "HandleClicked_TownNpcIcon_NaviStart(25, false)")
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,1)")
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+      ;
+      (self.btn_BidDesc):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BidDesc_Open()")
+      ;
+      (self.txt_BottomDesc):SetPosX(220)
+      ;
+      (self.txt_BottomDesc):SetPosY(620)
+    else
+      ;
+      (self.btn_BuyMaid):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 140)
+      ;
+      (self.btn_BuyMaid):SetPosY((self.btn_BidDesc):GetPosY())
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 67 )")
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,0)")
+      ;
+      (self.btn_BuyMaid):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+      ;
+      (self.btn_GoItemMarket):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 175)
+      ;
+      (self.btn_GoItemMarket):SetPosY((self.btn_BidDesc):GetPosY())
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_LUp", "HandleClicked_TownNpcIcon_NaviStart(25, false)")
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,1)")
+      ;
+      (self.btn_GoItemMarket):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+      ;
+      (self.btn_BidDesc):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BidDesc_Open()")
+    end
     ;
-    (self.btn_GoItemMarket):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 365)
+    (self.btn_InMarketRegist):SetSize(135, 32)
     ;
-    (self.btn_GoItemMarket):SetPosY((self.btn_BidDesc):GetPosY())
+    (self.btn_InMarketRegist):SetPosX(840)
     ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_LUp", "HandleClicked_TownNpcIcon_NaviStart(25, false)")
+    (self.btn_InMarketRegist):SetPosY(635)
     ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,1)")
+    (self.btn_InMarketRegist):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_Open()")
     ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
+    (self.btn_FavoriteOnOff):SetCheck(true)
     ;
-    (self.btn_BidDesc):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BidDesc_Open()")
+    (self.btn_FavoriteOnOff):addInputEvent("Mouse_On", "ItemMarket_FavoriteItemTooltip(true)")
     ;
-    (self.txt_BottomDesc):SetPosX(220)
-    ;
-    (self.txt_BottomDesc):SetPosY(620)
-  else
-    ;
-    (self.btn_BuyMaid):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 140)
-    ;
-    (self.btn_BuyMaid):SetPosY((self.btn_BidDesc):GetPosY())
-    ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 8, 2 )")
-    ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,0)")
-    ;
-    (self.btn_BuyMaid):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
-    ;
-    (self.btn_GoItemMarket):SetPosX((self.btn_BidDesc):GetPosX() + (self.btn_BidDesc):GetSizeX() - 175)
-    ;
-    (self.btn_GoItemMarket):SetPosY((self.btn_BidDesc):GetPosY())
-    ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_LUp", "HandleClicked_TownNpcIcon_NaviStart(25, false)")
-    ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_On", "ItemMarket_SimpleTooltipCommon(true,1)")
-    ;
-    (self.btn_GoItemMarket):addInputEvent("Mouse_Out", "ItemMarket_SimpleTooltipCommon(false)")
-    ;
-    (self.btn_BidDesc):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BidDesc_Open()")
+    (self.btn_FavoriteOnOff):addInputEvent("Mouse_Out", "ItemMarket_FavoriteItemTooltip(false)")
+    self._verticalScroll = (UI.getChildControl)(self._list2, "List2_1_VerticalScroll")
   end
-  ;
-  (self.btn_InMarketRegist):SetSize(135, 32)
-  ;
-  (self.btn_InMarketRegist):SetPosX(840)
-  ;
-  (self.btn_InMarketRegist):SetPosY(635)
-  ;
-  (self.btn_InMarketRegist):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_Open()")
-  ;
-  (self.btn_FavoriteOnOff):SetCheck(true)
-  ;
-  (self.btn_FavoriteOnOff):addInputEvent("Mouse_On", "ItemMarket_FavoriteItemTooltip(true)")
-  ;
-  (self.btn_FavoriteOnOff):addInputEvent("Mouse_Out", "ItemMarket_FavoriteItemTooltip(false)")
 end
 
 local selectedKey = -1
 local selectedSubKey = -1
-HandleClicked_ItemMarket_AllCategory = function()
+HandleClicked_ItemMarket_RecommendList = function()
   -- function num : 0_3 , upvalues : ItemMarket, selectedKey, selectedSubKey, tree2IndexMap
   local self = ItemMarket
   ;
@@ -550,6 +563,60 @@ HandleClicked_ItemMarket_AllCategory = function()
   (self._list2_SpecialList):SetShow(false)
   ;
   (self._list2_SpecialList_Inside):SetShow(false)
+  self._isRecommend = true
+  selectedKey = -1
+  selectedSubKey = -1
+  selectMarketCategory(0, -1)
+  ItemMarket:Update()
+  local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
+  for key,value in pairs(tree2IndexMap) do
+    if value._isMain then
+      local keyElement = (tree2:getElementManager()):getByKey(toInt64(0, key), false)
+      keyElement:setIsOpen(false)
+    end
+  end
+  ;
+  (tree2:getElementManager()):refillKeyList()
+  tree2:moveTopIndex()
+  ;
+  (self._list2):moveTopIndex()
+  ;
+  (self._list2_Inside):moveTopIndex()
+  ;
+  (self._list2_SpecialList):moveTopIndex()
+  ;
+  (self._list2_SpecialList_Inside):moveTopIndex()
+end
+
+HandleClicked_ItemMarket_AllCategory = function()
+  -- function num : 0_4 , upvalues : ItemMarket, selectedKey, selectedSubKey, tree2IndexMap
+  local self = ItemMarket
+  ;
+  (self.combobox_Filter_Sort1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_NONE"))
+  self.txt_ItemNameBackPage = ""
+  self.txt_SpecialItemNameBackPage = ""
+  ;
+  (self.edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  ;
+  (self.edit_SpecialItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  self.isGrouplist = true
+  self.isSpecialCategory = false
+  self.isSpecialInside = false
+  ;
+  (self.static_ListHeadBG):SetShow(true)
+  ;
+  (self.specialListHeadBG):SetShow(false)
+  ;
+  (self.selectedListHeadBG):SetShow(false)
+  ;
+  (self._list2):SetShow(true)
+  ;
+  (self._list2_Inside):SetShow(false)
+  ;
+  (self._list2_SpecialList):SetShow(false)
+  ;
+  (self._list2_SpecialList_Inside):SetShow(false)
+  self._isRecommend = false
   selectedKey = -1
   selectedSubKey = -1
   selectMarketCategory(0, -1)
@@ -575,7 +642,7 @@ HandleClicked_ItemMarket_AllCategory = function()
 end
 
 HandleClicked_ItemMarket_RecommandList = function()
-  -- function num : 0_4
+  -- function num : 0_5
   local cnt = ToClient_getRecommandItemEnchantList()
   for ii = 0, cnt - 1 do
     local EnchantKey = ToClient_getRecommandItemEnchantListByIndex(ii)
@@ -583,7 +650,7 @@ HandleClicked_ItemMarket_RecommandList = function()
 end
 
 HandleClicked_ItemMarket_MainCategory = function(index)
-  -- function num : 0_5 , upvalues : ItemMarket, tree2IndexMap, selectedSubKey, selectedKey
+  -- function num : 0_6 , upvalues : ItemMarket, tree2IndexMap, selectedSubKey, selectedKey
   local self = ItemMarket
   local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
   for key,value in pairs(tree2IndexMap) do
@@ -616,6 +683,7 @@ HandleClicked_ItemMarket_MainCategory = function(index)
   end
   selectMarketCategory(UICategoryValue:getCategoryNo(), -1)
   self.isGrouplist = true
+  self._isRecommend = false
   if index == 999 then
     self.isSpecialCategory = true
     ;
@@ -643,7 +711,7 @@ HandleClicked_ItemMarket_MainCategory = function(index)
 end
 
 HandleClicked_ItemMarket_SubCategory = function(index)
-  -- function num : 0_6 , upvalues : ItemMarket, tree2IndexMap, selectedSubKey
+  -- function num : 0_7 , upvalues : ItemMarket, tree2IndexMap, selectedSubKey
   local self = ItemMarket
   local indexMap = tree2IndexMap[index]
   local UIMarektCategoryInfo = ToClient_GetItemMarketCategoryAt(indexMap._index)
@@ -682,7 +750,7 @@ HandleClicked_ItemMarket_SubCategory = function(index)
 end
 
 HandleClicked_ItemMarket_SpecialCategory = function(index)
-  -- function num : 0_7 , upvalues : ItemMarket, tree2IndexMap, selectedKey, selectedSubKey
+  -- function num : 0_8 , upvalues : ItemMarket, tree2IndexMap, selectedKey, selectedSubKey
   local self = ItemMarket
   local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
   for key,value in pairs(tree2IndexMap) do
@@ -729,7 +797,7 @@ HandleClicked_ItemMarket_SpecialCategory = function(index)
 end
 
 Itemmarket_CategoryUpdate = function(contents, key)
-  -- function num : 0_8 , upvalues : ItemMarket, tree2IndexMap, isWakenWeaponOpen, isAlchemyStoneOpen, _categoryTexture, UI_color, selectedKey, selectedSubKey
+  -- function num : 0_9 , upvalues : ItemMarket, tree2IndexMap, isWakenWeaponOpen, isAlchemyStoneOpen, _categoryTexture, UI_color, selectedKey, selectedSubKey
   local self = ItemMarket
   local idx = Int64toInt32(key)
   local indexMap = tree2IndexMap[idx]
@@ -740,7 +808,6 @@ Itemmarket_CategoryUpdate = function(contents, key)
   categoryBar:setNotImpactScrollEvent(true)
   local categoryIcon = (UI.getChildControl)(contents, "Template_RadioButton_CategoryIcon")
   if not isWakenWeaponOpen then
-    _PA_LOG("정태�\164", "여기 들어오면안됩니다.")
     if not isAlchemyStoneOpen then
       _categoryTexture = {
 {
@@ -880,7 +947,6 @@ Itemmarket_CategoryUpdate = function(contents, key)
     end
   else
     if not isAlchemyStoneOpen then
-      _PA_LOG("정태�\164", "여기 들어오나�\148 ?  야ㅕㄴ금석이 안열려있는데!?")
       _categoryTexture = {
 {
 [0] = {226, 162, 244, 180}
@@ -951,7 +1017,6 @@ Itemmarket_CategoryUpdate = function(contents, key)
 }
 }
     else
-      _PA_LOG("정태�\164", "여기 들어오나�\148 ?  연금석이 열려있는�\176 주의하시죠@!")
       _categoryTexture = {
 {
 [0] = {226, 162, 244, 180}
@@ -1089,12 +1154,12 @@ Itemmarket_CategoryUpdate = function(contents, key)
 end
 
 Itemmarket_ListUpdate = function(contents, key)
-  -- function num : 0_9 , upvalues : ItemMarket, UI_TM
+  -- function num : 0_10 , upvalues : ItemMarket, UI_TM, isPreBidOpen
   local self = ItemMarket
   local idx = Int64toInt32(key)
   self.savedListUpdate_idx = idx
   local replaceCount = function(num)
-    -- function num : 0_9_0
+    -- function num : 0_10_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1104,241 +1169,272 @@ Itemmarket_ListUpdate = function(contents, key)
     return count
   end
 
-  local itemList_PosY = 5
-  if self.isGrouplist == true then
-    local itemlistBG = (UI.getChildControl)(contents, "Template_Button_ItemList")
-    itemlistBG:SetShow(true)
-    itemlistBG:setNotImpactScrollEvent(true)
-    local itemlist_SlotBG = (UI.getChildControl)(contents, "Template_Static_SlotBG")
-    itemlist_SlotBG:SetShow(true)
-    local createSlot = {}
-    local itemlist_Slot = (UI.getChildControl)(contents, "Template_Static_Slot")
-    itemlist_Slot:SetShow(true)
-    ;
-    (SlotItem.reInclude)(createSlot, "ItemMarket_ItemGroupListSlotItem", 0, itemlist_Slot, self.slotGroupConfing)
-    ;
-    (createSlot.icon):SetSize(40, 40)
-    ;
-    (createSlot.border):SetSize(41, 41)
-    ;
-    (createSlot.border):SetPosX(0)
-    local itemlist_ItemName = (UI.getChildControl)(contents, "Template_StaticText_ItemName")
-    itemlist_ItemName:SetTextMode(UI_TM.eTextMode_LimitText)
-    itemlist_ItemName:SetShow(true)
-    local itemlist_AveragePrice_Title = (UI.getChildControl)(contents, "Template_StaticText_AveragePrice_Title")
-    itemlist_AveragePrice_Title:SetPosX(430)
-    itemlist_AveragePrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 0 .. ", " .. idx .. " )")
-    itemlist_AveragePrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    local itemlist_AveragePrice_Value = (UI.getChildControl)(contents, "Template_StaticText_AveragePrice_Value")
-    itemlist_AveragePrice_Value:SetPosX(500)
-    itemlist_AveragePrice_Value:SetShow(true)
-    local itemlist_RecentPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RecentPrice_Title")
-    itemlist_RecentPrice_Title:SetPosX(430)
-    itemlist_RecentPrice_Title:SetPosY(32)
-    itemlist_RecentPrice_Title:SetShow(true)
-    itemlist_RecentPrice_Title:SetEnableArea(0, 0, 100, itemlist_RecentPrice_Title:GetSizeY())
-    itemlist_RecentPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 1 .. ", " .. idx .. " )")
-    itemlist_RecentPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    local itemlist_RecentPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RecentPrice_Value")
-    itemlist_RecentPrice_Value:SetPosX(500)
-    itemlist_RecentPrice_Value:SetPosY(30)
-    itemlist_RecentPrice_Value:SetShow(true)
-    local itemlist_RegistHighPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistHighPrice_Title")
-    itemlist_RegistHighPrice_Title:SetPosX(250)
-    itemlist_RegistHighPrice_Title:SetPosY(30)
-    itemlist_RegistHighPrice_Title:SetShow(true)
-    itemlist_RegistHighPrice_Title:SetTextSpan(30, -3)
-    itemlist_RegistHighPrice_Title:SetEnableArea(0, 0, 70, itemlist_RegistHighPrice_Title:GetSizeY())
-    itemlist_RegistHighPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 2 .. ", " .. idx .. " )")
-    itemlist_RegistHighPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    itemlist_RegistHighPrice_Title:setNotImpactScrollEvent(true)
-    local itemlist_RegistHighPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistHighPrice_Value")
-    itemlist_RegistHighPrice_Value:SetPosX(345)
-    itemlist_RegistHighPrice_Value:SetPosY(30)
-    itemlist_RegistHighPrice_Value:SetShow(false)
-    itemlist_RegistHighPrice_Value:SetTextHorizonCenter()
-    local itemlist_RegistLowPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistLowPrice_Title")
-    itemlist_RegistLowPrice_Title:SetPosX(60)
-    itemlist_RegistLowPrice_Title:SetPosY(30)
-    itemlist_RegistLowPrice_Title:SetShow(true)
-    itemlist_RegistLowPrice_Title:SetTextSpan(30, -3)
-    itemlist_RegistLowPrice_Title:SetEnableArea(0, 0, 70, itemlist_RegistLowPrice_Title:GetSizeY())
-    itemlist_RegistLowPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 3 .. ", " .. idx .. " )")
-    itemlist_RegistLowPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    itemlist_RegistLowPrice_Title:setNotImpactScrollEvent(true)
-    local itemlist_RegistLowPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistLowPrice_Value")
-    itemlist_RegistLowPrice_Value:SetPosX(225)
-    itemlist_RegistLowPrice_Value:SetPosY(30)
-    itemlist_RegistLowPrice_Value:SetShow(false)
-    itemlist_RegistLowPrice_Value:SetTextHorizonCenter()
-    local itemlist_RegistListCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistListCount_Title")
-    itemlist_RegistListCount_Title:SetPosX(610)
-    itemlist_RegistListCount_Title:SetPosY(10)
-    itemlist_RegistListCount_Title:SetShow(true)
-    itemlist_RegistListCount_Title:SetEnableArea(0, 0, 60, itemlist_RegistListCount_Title:GetSizeY())
-    itemlist_RegistListCount_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 4 .. ", " .. idx .. " )")
-    itemlist_RegistListCount_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    local itemlist_RegistListCount_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistListCount_Value")
-    itemlist_RegistListCount_Value:SetPosX(660)
-    itemlist_RegistListCount_Value:SetPosY(8)
-    itemlist_RegistListCount_Value:SetShow(true)
-    local itemlist_RegistItemCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistItemCount_Title")
-    itemlist_RegistItemCount_Title:SetPosX(610)
-    itemlist_RegistItemCount_Title:SetPosY(32)
-    itemlist_RegistItemCount_Title:SetShow(true)
-    itemlist_RegistItemCount_Title:SetEnableArea(0, 0, 60, itemlist_RegistItemCount_Title:GetSizeY())
-    itemlist_RegistItemCount_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 5 .. ", " .. idx .. " )")
-    itemlist_RegistItemCount_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
-    local itemlist_RegistItemCount_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistItemCount_Value")
-    itemlist_RegistItemCount_Value:SetPosX(660)
-    itemlist_RegistItemCount_Value:SetPosY(30)
-    itemlist_RegistItemCount_Value:SetShow(true)
-    local itemlist_Line1 = (UI.getChildControl)(contents, "Template_Static_Line_1")
-    itemlist_Line1:SetPosX(410)
-    itemlist_Line1:SetPosY(10)
-    itemlist_Line1:SetShow(true)
-    local itemlist_Line2 = (UI.getChildControl)(contents, "Template_Static_Line_2")
-    itemlist_Line2:SetPosX(600)
-    itemlist_Line2:SetPosY(10)
-    itemlist_Line2:SetShow(true)
-    local itemlist_Line3 = (UI.getChildControl)(contents, "Template_Static_Line_3")
-    itemlist_Line3:SetPosX(590)
-    itemlist_Line3:SetPosY(10)
-    itemlist_Line3:SetShow(false)
-    local itemlist_Dash = (UI.getChildControl)(contents, "Selected_StaticText_dash")
-    itemlist_Dash:SetPosX(205)
-    itemlist_Dash:SetPosY(30)
-    itemlist_Dash:SetShow(true)
-    local itemlist_RegistAlarm_Chk = (UI.getChildControl)(contents, "Template_CheckButton_RegistAlarm")
-    itemlist_RegistAlarm_Chk:SetPosX(610)
-    itemlist_RegistAlarm_Chk:SetPosY(23)
-    itemlist_RegistAlarm_Chk:SetShow(false)
-    local itemMarketSummaryInfo = getItemMarketCategorySummaryInClientByIndex(idx)
-    if itemMarketSummaryInfo ~= nil then
-      local iess = itemMarketSummaryInfo:getItemEnchantStaticStatusWrapper()
-      local enchantLevel = ((iess:get())._key):getEnchantLevel()
-      local itemEnchantKeyRaw = ((iess:get())._key):get()
-      local nameColorGrade = iess:getGradeType()
-      local nameColor = self:SetNameColor(nameColorGrade)
-      itemlist_ItemName:SetFontColor(nameColor)
-      local itemNameStr = self:SetNameAndEnchantLevel(enchantLevel, iess:getItemType(), iess:getName(), iess:getItemClassify())
-      itemlist_ItemName:SetText(itemNameStr)
-      if itemlist_ItemName:IsLimitText() then
-        itemlist_ItemName:addInputEvent("Mouse_On", "ItemMarket_SelectedItemNameTooltip( true, \"" .. itemNameStr .. "\", " .. idx .. ", 0 )")
-        itemlist_ItemName:addInputEvent("Mouse_Out", "ItemMarket_SelectedItemNameTooltip( false )")
-        itemlist_ItemName:SetIgnore(false)
+  do
+    local itemList_PosY = 5
+    if self.isGrouplist == true then
+      local itemlistBG = (UI.getChildControl)(contents, "Template_Button_ItemList")
+      itemlistBG:SetShow(true)
+      itemlistBG:setNotImpactScrollEvent(true)
+      local itemlist_SlotBG = (UI.getChildControl)(contents, "Template_Static_SlotBG")
+      itemlist_SlotBG:SetShow(true)
+      local createSlot = {}
+      local itemlist_Slot = (UI.getChildControl)(contents, "Template_Static_Slot")
+      itemlist_Slot:SetShow(true)
+      ;
+      (SlotItem.reInclude)(createSlot, "ItemMarket_ItemGroupListSlotItem", 0, itemlist_Slot, self.slotGroupConfing)
+      ;
+      (createSlot.icon):SetSize(40, 40)
+      ;
+      (createSlot.border):SetSize(41, 41)
+      ;
+      (createSlot.border):SetPosX(0)
+      local itemlist_ItemName = (UI.getChildControl)(contents, "Template_StaticText_ItemName")
+      itemlist_ItemName:SetTextMode(UI_TM.eTextMode_LimitText)
+      itemlist_ItemName:SetShow(true)
+      local itemlist_AveragePrice_Title = (UI.getChildControl)(contents, "Template_StaticText_AveragePrice_Title")
+      itemlist_AveragePrice_Title:SetPosX(430)
+      itemlist_AveragePrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 0 .. ", " .. idx .. " )")
+      itemlist_AveragePrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      local itemlist_AveragePrice_Value = (UI.getChildControl)(contents, "Template_StaticText_AveragePrice_Value")
+      itemlist_AveragePrice_Value:SetPosX(500)
+      itemlist_AveragePrice_Value:SetShow(true)
+      local itemlist_RecentPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RecentPrice_Title")
+      itemlist_RecentPrice_Title:SetPosX(430)
+      itemlist_RecentPrice_Title:SetPosY(32)
+      itemlist_RecentPrice_Title:SetShow(true)
+      itemlist_RecentPrice_Title:SetEnableArea(0, 0, 100, itemlist_RecentPrice_Title:GetSizeY())
+      itemlist_RecentPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 1 .. ", " .. idx .. " )")
+      itemlist_RecentPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      local itemlist_RecentPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RecentPrice_Value")
+      itemlist_RecentPrice_Value:SetPosX(500)
+      itemlist_RecentPrice_Value:SetPosY(30)
+      itemlist_RecentPrice_Value:SetShow(true)
+      local itemlist_RegistHighPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistHighPrice_Title")
+      itemlist_RegistHighPrice_Title:SetPosX(250)
+      itemlist_RegistHighPrice_Title:SetPosY(30)
+      itemlist_RegistHighPrice_Title:SetShow(true)
+      itemlist_RegistHighPrice_Title:SetTextSpan(30, -3)
+      itemlist_RegistHighPrice_Title:SetEnableArea(0, 0, 70, itemlist_RegistHighPrice_Title:GetSizeY())
+      itemlist_RegistHighPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 2 .. ", " .. idx .. " )")
+      itemlist_RegistHighPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      itemlist_RegistHighPrice_Title:setNotImpactScrollEvent(true)
+      local itemlist_RegistHighPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistHighPrice_Value")
+      itemlist_RegistHighPrice_Value:SetPosX(345)
+      itemlist_RegistHighPrice_Value:SetPosY(30)
+      itemlist_RegistHighPrice_Value:SetShow(false)
+      itemlist_RegistHighPrice_Value:SetTextHorizonCenter()
+      local itemlist_RegistLowPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistLowPrice_Title")
+      itemlist_RegistLowPrice_Title:SetPosX(60)
+      itemlist_RegistLowPrice_Title:SetPosY(30)
+      itemlist_RegistLowPrice_Title:SetShow(true)
+      itemlist_RegistLowPrice_Title:SetTextSpan(30, -3)
+      itemlist_RegistLowPrice_Title:SetEnableArea(0, 0, 70, itemlist_RegistLowPrice_Title:GetSizeY())
+      itemlist_RegistLowPrice_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 3 .. ", " .. idx .. " )")
+      itemlist_RegistLowPrice_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      itemlist_RegistLowPrice_Title:setNotImpactScrollEvent(true)
+      local itemlist_RegistLowPrice_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistLowPrice_Value")
+      itemlist_RegistLowPrice_Value:SetPosX(225)
+      itemlist_RegistLowPrice_Value:SetPosY(30)
+      itemlist_RegistLowPrice_Value:SetShow(false)
+      itemlist_RegistLowPrice_Value:SetTextHorizonCenter()
+      local itemlist_RegistListCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistListCount_Title")
+      itemlist_RegistListCount_Title:SetPosX(610)
+      itemlist_RegistListCount_Title:SetPosY(10)
+      itemlist_RegistListCount_Title:SetShow(true)
+      itemlist_RegistListCount_Title:SetEnableArea(0, 0, 60, itemlist_RegistListCount_Title:GetSizeY())
+      itemlist_RegistListCount_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 4 .. ", " .. idx .. " )")
+      itemlist_RegistListCount_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      local itemlist_RegistListCount_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistListCount_Value")
+      itemlist_RegistListCount_Value:SetPosX(660)
+      itemlist_RegistListCount_Value:SetPosY(8)
+      itemlist_RegistListCount_Value:SetShow(true)
+      local itemlist_RegistItemCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistItemCount_Title")
+      itemlist_RegistItemCount_Title:SetPosX(610)
+      itemlist_RegistItemCount_Title:SetPosY(32)
+      itemlist_RegistItemCount_Title:SetShow(true)
+      itemlist_RegistItemCount_Title:SetEnableArea(0, 0, 60, itemlist_RegistItemCount_Title:GetSizeY())
+      itemlist_RegistItemCount_Title:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, " .. 5 .. ", " .. idx .. " )")
+      itemlist_RegistItemCount_Title:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+      local itemlist_RegistItemCount_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistItemCount_Value")
+      itemlist_RegistItemCount_Value:SetPosX(660)
+      itemlist_RegistItemCount_Value:SetPosY(30)
+      itemlist_RegistItemCount_Value:SetShow(true)
+      local itemlist_Line1 = (UI.getChildControl)(contents, "Template_Static_Line_1")
+      itemlist_Line1:SetPosX(410)
+      itemlist_Line1:SetPosY(10)
+      itemlist_Line1:SetShow(true)
+      local itemlist_Line2 = (UI.getChildControl)(contents, "Template_Static_Line_2")
+      itemlist_Line2:SetPosX(600)
+      itemlist_Line2:SetPosY(10)
+      itemlist_Line2:SetShow(true)
+      local itemlist_Line3 = (UI.getChildControl)(contents, "Template_Static_Line_3")
+      itemlist_Line3:SetPosX(590)
+      itemlist_Line3:SetPosY(10)
+      itemlist_Line3:SetShow(false)
+      local itemlist_Dash = (UI.getChildControl)(contents, "Selected_StaticText_dash")
+      itemlist_Dash:SetPosX(205)
+      itemlist_Dash:SetPosY(30)
+      itemlist_Dash:SetShow(true)
+      local itemlist_RegistAlarm_Chk = (UI.getChildControl)(contents, "Template_CheckButton_RegistAlarm")
+      itemlist_RegistAlarm_Chk:SetPosX(610)
+      itemlist_RegistAlarm_Chk:SetPosY(23)
+      itemlist_RegistAlarm_Chk:SetShow(false)
+      local itemList_AttentionItem = (UI.getChildControl)(contents, "Template_Button_AttentionItem")
+      itemList_AttentionItem:SetShow(true)
+      itemList_AttentionItem:SetPosX(60)
+      itemList_AttentionItem:SetPosY(27)
+      local itemList_ReservationItem = (UI.getChildControl)(contents, "Template_Button_ReservationItem")
+      itemList_ReservationItem:SetShow(false)
+      itemList_ReservationItem:SetShow(ToClient_GetItemMarketMyReservationsCount() == 0)
+      itemList_ReservationItem:SetPosX(220)
+      itemList_ReservationItem:SetPosY(27)
+      local itemMarketSummaryInfo = (getItemMarketCategorySummaryInClientByIndex(idx))
+      local itemMarketSummaryInfo = nil
+      if self._isRecommend == true then
+        itemMarketSummaryInfo = getItemMarketRecommendSummaryInClientByIndex(idx)
       else
-        itemlist_ItemName:addInputEvent("Mouse_On", "")
-        itemlist_ItemName:addInputEvent("Mouse_Out", "")
-        itemlist_ItemName:SetIgnore(true)
+        itemMarketSummaryInfo = getItemMarketCategorySummaryInClientByIndex(idx)
       end
-      createSlot:setItemByStaticStatus(iess, 1, -1, false)
-      ;
-      (createSlot.icon):addInputEvent("Mouse_On", "_itemMarket_ShowListOutsideItemSlotToolTip( " .. idx .. ", " .. tostring(nil) .. " )")
-      ;
-      (createSlot.icon):addInputEvent("Mouse_Out", "_itemMarket_HideToolTip()")
-      ;
-      (createSlot.icon):SetShow(true)
-      itemlist_RegistHighPrice_Title:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedHighestOnePrice()))
-      itemlist_RegistLowPrice_Title:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedLowestOnePrice()))
-      local masterInfo = getItemMarketMasterByItemEnchantKey(itemEnchantKeyRaw)
-      local marketConditions = (masterInfo:getMinPrice() + masterInfo:getMaxPrice()) / toInt64(0, 2)
-      itemlist_AveragePrice_Value:SetText(replaceCount(marketConditions))
-      itemlist_RecentPrice_Value:SetText(replaceCount(itemMarketSummaryInfo:getLastTradedOnePrice()))
-      itemlist_RegistListCount_Value:SetText(replaceCount(itemMarketSummaryInfo:getTradedTotalAmount()))
-      itemlist_RegistItemCount_Value:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedTotalAmount()))
-      if Int64toInt32(itemMarketSummaryInfo:getDisplayedTotalAmount()) == 0 then
-        itemlistBG:SetMonoTone(true)
-        itemlist_SlotBG:SetMonoTone(true)
-        itemlist_ItemName:SetMonoTone(true)
-        itemlist_AveragePrice_Title:SetMonoTone(true)
-        itemlist_AveragePrice_Value:SetMonoTone(true)
-        itemlist_RecentPrice_Title:SetMonoTone(true)
-        itemlist_RecentPrice_Value:SetMonoTone(true)
-        itemlist_RegistHighPrice_Title:SetMonoTone(true)
-        itemlist_RegistHighPrice_Value:SetMonoTone(true)
-        itemlist_RegistLowPrice_Title:SetMonoTone(true)
-        itemlist_RegistLowPrice_Value:SetMonoTone(true)
-        itemlist_RegistListCount_Title:SetMonoTone(true)
-        itemlist_RegistListCount_Value:SetMonoTone(true)
-        itemlist_RegistItemCount_Title:SetMonoTone(true)
-        itemlist_RegistItemCount_Value:SetMonoTone(true)
-        itemlist_Line1:SetMonoTone(true)
-        itemlist_Line2:SetMonoTone(true)
-        itemlist_Line3:SetMonoTone(true)
-        itemlist_Dash:SetMonoTone(true)
+      if itemMarketSummaryInfo ~= nil then
+        local iess = itemMarketSummaryInfo:getItemEnchantStaticStatusWrapper()
+        local enchantLevel = ((iess:get())._key):getEnchantLevel()
+        local itemEnchantKeyRaw = ((iess:get())._key):get()
+        local nameColorGrade = iess:getGradeType()
+        local nameColor = self:SetNameColor(nameColorGrade)
+        itemlist_ItemName:SetFontColor(nameColor)
+        local itemNameStr = self:SetNameAndEnchantLevel(enchantLevel, iess:getItemType(), iess:getName(), iess:getItemClassify())
+        itemlist_ItemName:SetText(itemNameStr)
+        if itemlist_ItemName:IsLimitText() then
+          itemlist_ItemName:addInputEvent("Mouse_On", "ItemMarket_SelectedItemNameTooltip( true, \"" .. itemNameStr .. "\", " .. idx .. ", 0 )")
+          itemlist_ItemName:addInputEvent("Mouse_Out", "ItemMarket_SelectedItemNameTooltip( false )")
+          itemlist_ItemName:SetIgnore(false)
+        else
+          itemlist_ItemName:addInputEvent("Mouse_On", "")
+          itemlist_ItemName:addInputEvent("Mouse_Out", "")
+          itemlist_ItemName:SetIgnore(true)
+        end
+        createSlot:setItemByStaticStatus(iess, 1, -1, false)
         ;
-        (createSlot.icon):SetMonoTone(true)
-      else
-        itemlistBG:SetMonoTone(false)
-        itemlist_SlotBG:SetMonoTone(false)
-        itemlist_ItemName:SetMonoTone(false)
-        itemlist_AveragePrice_Title:SetMonoTone(false)
-        itemlist_AveragePrice_Value:SetMonoTone(false)
-        itemlist_RecentPrice_Title:SetMonoTone(false)
-        itemlist_RecentPrice_Value:SetMonoTone(false)
-        itemlist_RegistHighPrice_Title:SetMonoTone(false)
-        itemlist_RegistHighPrice_Value:SetMonoTone(false)
-        itemlist_RegistLowPrice_Title:SetMonoTone(false)
-        itemlist_RegistLowPrice_Value:SetMonoTone(false)
-        itemlist_RegistListCount_Title:SetMonoTone(false)
-        itemlist_RegistListCount_Value:SetMonoTone(false)
-        itemlist_RegistItemCount_Title:SetMonoTone(false)
-        itemlist_RegistItemCount_Value:SetMonoTone(false)
-        itemlist_Line1:SetMonoTone(false)
-        itemlist_Line2:SetMonoTone(false)
-        itemlist_Line3:SetMonoTone(false)
-        itemlist_Dash:SetMonoTone(false)
+        (createSlot.icon):addInputEvent("Mouse_On", "_itemMarket_ShowListOutsideItemSlotToolTip( " .. idx .. ", " .. tostring(nil) .. " )")
         ;
-        (createSlot.icon):SetMonoTone(false)
+        (createSlot.icon):addInputEvent("Mouse_Out", "_itemMarket_HideToolTip()")
+        ;
+        (createSlot.icon):SetShow(true)
+        itemlist_RegistHighPrice_Title:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedHighestOnePrice()))
+        itemlist_RegistLowPrice_Title:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedLowestOnePrice()))
+        itemList_AttentionItem:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_SetAlarm( " .. itemEnchantKeyRaw .. " )")
+        itemList_AttentionItem:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, 6, " .. idx .. " )")
+        itemList_AttentionItem:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+        itemList_ReservationItem:addInputEvent("Mouse_LUp", "FGlobal_ItemMarketPreBid_Open( " .. itemEnchantKeyRaw .. ", 0)")
+        itemList_ReservationItem:addInputEvent("Mouse_On", "_itemMarket_ShowListOutSideTooltip( true, 7, " .. idx .. " )")
+        itemList_ReservationItem:addInputEvent("Mouse_Out", "_itemMarket_ShowListOutSideTooltip( false )")
+        local masterInfo = getItemMarketMasterByItemEnchantKey(itemEnchantKeyRaw)
+        local marketConditions = (masterInfo:getMinPrice() + masterInfo:getMaxPrice()) / toInt64(0, 2)
+        itemlist_AveragePrice_Value:SetText(replaceCount(marketConditions))
+        itemlist_RecentPrice_Value:SetText(replaceCount(itemMarketSummaryInfo:getLastTradedOnePrice()))
+        itemlist_RegistListCount_Value:SetText(replaceCount(itemMarketSummaryInfo:getTradedTotalAmount()))
+        itemlist_RegistItemCount_Value:SetText(replaceCount(itemMarketSummaryInfo:getDisplayedTotalAmount()))
+        if Int64toInt32(itemMarketSummaryInfo:getDisplayedTotalAmount()) == 0 then
+          itemlistBG:SetMonoTone(true)
+          itemlist_SlotBG:SetMonoTone(true)
+          itemlist_ItemName:SetMonoTone(true)
+          itemlist_AveragePrice_Title:SetMonoTone(true)
+          itemlist_AveragePrice_Value:SetMonoTone(true)
+          itemlist_RecentPrice_Title:SetMonoTone(true)
+          itemlist_RecentPrice_Value:SetMonoTone(true)
+          itemlist_RegistHighPrice_Title:SetMonoTone(true)
+          itemlist_RegistHighPrice_Value:SetMonoTone(true)
+          itemlist_RegistLowPrice_Title:SetMonoTone(true)
+          itemlist_RegistLowPrice_Value:SetMonoTone(true)
+          itemlist_RegistListCount_Title:SetMonoTone(true)
+          itemlist_RegistListCount_Value:SetMonoTone(true)
+          itemlist_RegistItemCount_Title:SetMonoTone(true)
+          itemlist_RegistItemCount_Value:SetMonoTone(true)
+          itemlist_Line1:SetMonoTone(true)
+          itemlist_Line2:SetMonoTone(true)
+          itemlist_Line3:SetMonoTone(true)
+          itemlist_Dash:SetMonoTone(true)
+          ;
+          (createSlot.icon):SetMonoTone(true)
+          itemList_AttentionItem:SetShow(true)
+          itemList_ReservationItem:SetShow(not self.isWorldMapOpen and not isPreBidOpen or (iess:get()):isCash() == false)
+          itemlist_RegistHighPrice_Title:SetShow(false)
+          itemlist_RegistLowPrice_Title:SetShow(false)
+          itemlist_Dash:SetShow(false)
+        else
+          itemlistBG:SetMonoTone(false)
+          itemlist_SlotBG:SetMonoTone(false)
+          itemlist_ItemName:SetMonoTone(false)
+          itemlist_AveragePrice_Title:SetMonoTone(false)
+          itemlist_AveragePrice_Value:SetMonoTone(false)
+          itemlist_RecentPrice_Title:SetMonoTone(false)
+          itemlist_RecentPrice_Value:SetMonoTone(false)
+          itemlist_RegistHighPrice_Title:SetMonoTone(false)
+          itemlist_RegistHighPrice_Value:SetMonoTone(false)
+          itemlist_RegistLowPrice_Title:SetMonoTone(false)
+          itemlist_RegistLowPrice_Value:SetMonoTone(false)
+          itemlist_RegistListCount_Title:SetMonoTone(false)
+          itemlist_RegistListCount_Value:SetMonoTone(false)
+          itemlist_RegistItemCount_Title:SetMonoTone(false)
+          itemlist_RegistItemCount_Value:SetMonoTone(false)
+          itemlist_Line1:SetMonoTone(false)
+          itemlist_Line2:SetMonoTone(false)
+          itemlist_Line3:SetMonoTone(false)
+          itemlist_Dash:SetMonoTone(false)
+          ;
+          (createSlot.icon):SetMonoTone(false)
+          itemList_AttentionItem:SetShow(false)
+          itemList_ReservationItem:SetShow(false)
+          itemlist_RegistHighPrice_Title:SetShow(true)
+          itemlist_RegistLowPrice_Title:SetShow(true)
+          itemlist_Dash:SetShow(true)
+        end
+        itemlistBG:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_ItemName:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_AveragePrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_AveragePrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RecentPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RecentPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistHighPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistHighPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistLowPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistLowPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistListCount_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistListCount_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistItemCount_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        itemlist_RegistItemCount_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+        contents:SetShow(true)
       end
-      itemlistBG:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_ItemName:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_AveragePrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_AveragePrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RecentPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RecentPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistHighPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistHighPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistLowPrice_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistLowPrice_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistListCount_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistListCount_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistItemCount_Title:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
-      itemlist_RegistItemCount_Value:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_GroupItem( " .. idx .. "," .. itemEnchantKeyRaw .. " )")
+      itemlistBG:SetShow(true)
+      ;
+      (self.selectedListHeadBG):SetShow(false)
+      ;
+      (self.static_ListHeadBG):SetShow(true)
+      ;
+      (self.specialListHeadBG):SetShow(false)
+      ;
+      (self.btn_BackPage):SetShow(false)
+      ;
+      (self.btn_SetAlarm):SetShow(false)
+      ;
+      (self.btn_SetPreBid):SetShow(false)
+      ;
+      (self.btn_Refresh):SetShow(false)
     end
-    do
-      do
-        itemlistBG:SetShow(true)
-        ;
-        (self.selectedListHeadBG):SetShow(false)
-        ;
-        (self.static_ListHeadBG):SetShow(true)
-        ;
-        (self.specialListHeadBG):SetShow(false)
-        ;
-        (self.btn_BackPage):SetShow(false)
-        ;
-        (self.btn_SetAlarm):SetShow(false)
-        ;
-        (self.btn_SetPreBid):SetShow(false)
-        ;
-        (self.btn_Refresh):SetShow(false)
-        ;
-        (self.txt_SpecialGoodsName):SetShow(false)
-        ;
-        (self.txt_SpecialGoodsDesc):SetShow(false)
-      end
-    end
+    ;
+    (self.txt_SpecialGoodsName):SetShow(false)
+    ;
+    (self.txt_SpecialGoodsDesc):SetShow(false)
+    -- DECOMPILER ERROR: 12 unprocessed JMP targets
   end
 end
 
 Itemmarket_ListUpdate_Inside = function(contents, key)
-  -- function num : 0_10 , upvalues : ItemMarket, UI_TM, textAddSize
+  -- function num : 0_11 , upvalues : ItemMarket, UI_TM, textAddSize
   local self = ItemMarket
   local idx = Int64toInt32(key)
   local replaceCount = function(num)
-    -- function num : 0_10_0
+    -- function num : 0_11_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1377,7 +1473,7 @@ Itemmarket_ListUpdate_Inside = function(contents, key)
   itemlist_SellPrice_Value:SetShow(true)
   local itemlist_RegistPeriod_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistPeriod_Title")
   itemlist_RegistPeriod_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ITEMMARKET_REGISTPERIOD_TITLE"))
-  itemlist_RegistPeriod_Title:SetPosX(400)
+  itemlist_RegistPeriod_Title:SetPosX(380)
   itemlist_RegistPeriod_Title:SetPosY(25)
   itemlist_RegistPeriod_Title:SetShow(true)
   local itemlist_RegistPeriod_Value = (UI.getChildControl)(contents, "Template_StaticText_RegistPeriod_Value")
@@ -1388,6 +1484,10 @@ Itemmarket_ListUpdate_Inside = function(contents, key)
   itemlist_BuyItem:SetPosX(660)
   itemlist_BuyItem:SetPosY(13)
   itemlist_BuyItem:SetShow(true)
+  local itemlist_BuyAllItem = (UI.getChildControl)(contents, "Template_Button_BuyAllItem")
+  itemlist_BuyAllItem:SetPosX(560)
+  itemlist_BuyAllItem:SetPosY(13)
+  itemlist_BuyAllItem:SetShow(false)
   local itemlist_PrivateIcon = (UI.getChildControl)(contents, "Static_PassIcon")
   itemlist_PrivateIcon:SetPosX(itemlist_BuyItem:GetPosX() + 7)
   itemlist_PrivateIcon:SetPosY(itemlist_BuyItem:GetPosY() + 12)
@@ -1466,6 +1566,12 @@ Itemmarket_ListUpdate_Inside = function(contents, key)
           itemlist_BuyItem:SetFontColor((Defines.Color).C_FFEFEFEF)
           itemlist_BuyItem:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_BTN_BIDDING_RESEULT"))
           itemlist_BuyItem:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_SingleItem( " .. idx .. "," .. self.sellInfoItemEnchantKeyRaw .. ", false)")
+          if Int64toInt32(sellInfo:getCount()) > 1 then
+            itemlist_BuyAllItem:SetShow(true)
+            itemlist_BuyAllItem:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BuyAllItem( " .. idx .. "," .. self.sellInfoItemEnchantKeyRaw .. ")")
+          else
+            itemlist_BuyAllItem:SetShow(false)
+          end
         else
           itemlist_BuyItem:SetEnable(false)
           itemlist_BuyItem:SetMonoTone(true)
@@ -1482,15 +1588,15 @@ Itemmarket_ListUpdate_Inside = function(contents, key)
     end
     itemlist_SingleItemBG:SetShow(true)
   end
-  -- DECOMPILER ERROR: 14 unprocessed JMP targets
+  -- DECOMPILER ERROR: 15 unprocessed JMP targets
 end
 
 Itemmarket_SpecialListUpdate = function(contents, key)
-  -- function num : 0_11 , upvalues : ItemMarket, UI_TM, UI_color
+  -- function num : 0_12 , upvalues : ItemMarket, UI_TM, UI_color
   local self = ItemMarket
   local idx = Int64toInt32(key)
   local replaceCount = function(num)
-    -- function num : 0_11_0
+    -- function num : 0_12_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1633,11 +1739,11 @@ Itemmarket_SpecialListUpdate = function(contents, key)
 end
 
 Itemmarket_SpecialListUpdate_Inside = function(contents, key)
-  -- function num : 0_12 , upvalues : ItemMarket, UI_color
+  -- function num : 0_13 , upvalues : ItemMarket, UI_color
   local self = ItemMarket
   local idx = Int64toInt32(key)
   local replaceCount = function(num)
-    -- function num : 0_12_0
+    -- function num : 0_13_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1740,10 +1846,10 @@ Itemmarket_SpecialListUpdate_Inside = function(contents, key)
 end
 
 Itemmarket_SelectedListHeadBGUpdate = function()
-  -- function num : 0_13 , upvalues : ItemMarket, UI_color, UI_TM, textAddSize
+  -- function num : 0_14 , upvalues : ItemMarket, UI_color, UI_TM, textAddSize
   local self = ItemMarket
   local replaceCount = function(num)
-    -- function num : 0_13_0
+    -- function num : 0_14_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1912,7 +2018,7 @@ end
 local itemMarketSummaryCountCache = 0
 local itemInsideItemCountCache = 0
 ItemMarket.Update = function(self)
-  -- function num : 0_14 , upvalues : itemMarketSummaryCountCache, itemInsideItemCountCache
+  -- function num : 0_15 , upvalues : itemMarketSummaryCountCache, itemInsideItemCountCache
   if Panel_Window_ItemMarket:GetShow() == false then
     return 
   end
@@ -1928,7 +2034,7 @@ ItemMarket.Update = function(self)
   (self.static_ItemListBG):SetSize(765, 505)
   local itemInfoCount = 0
   local replaceCount = function(num)
-    -- function num : 0_14_0
+    -- function num : 0_15_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -1943,7 +2049,12 @@ ItemMarket.Update = function(self)
   ;
   (self.txt_SpecialGoodsDesc):SetShow(false)
   if self.isGrouplist then
-    local itemMarketSummaryCount = getItemMarketCategorySummaryInClientCount()
+    local itemMarketSummaryCount = 0
+    if self._isRecommend == true then
+      itemMarketSummaryCount = getItemMarketCategoryRecommendInClientCount()
+    else
+      itemMarketSummaryCount = getItemMarketCategorySummaryInClientCount()
+    end
     if itemMarketSummaryCount > 0 then
       (self.noSearchResult):SetShow(false)
     else
@@ -2053,7 +2164,7 @@ ItemMarket.Update = function(self)
 end
 
 ItemMarket.SetNameColor = function(self, nameColorGrade)
-  -- function num : 0_15 , upvalues : UI_color
+  -- function num : 0_16 , upvalues : UI_color
   local nameColor = nil
   if nameColorGrade == 0 then
     nameColor = UI_color.C_FFFFFFFF
@@ -2080,7 +2191,7 @@ ItemMarket.SetNameColor = function(self, nameColorGrade)
 end
 
 ItemMarket.SetNameAndEnchantLevel = function(self, enchantLevel, itemType, itemName, itemClassify)
-  -- function num : 0_16
+  -- function num : 0_17
   local nameStr = ""
   if itemType == 1 and enchantLevel > 15 then
     nameStr = HighEnchantLevel_ReplaceString(enchantLevel) .. " " .. itemName
@@ -2097,7 +2208,7 @@ end
 local specialCategoryCountCache = 0
 local specialInsideCategoryCountCache = 0
 ItemMarket.SpecialGoodsUpdate = function(self)
-  -- function num : 0_17 , upvalues : specialCategoryCountCache, specialInsideCategoryCountCache
+  -- function num : 0_18 , upvalues : specialCategoryCountCache, specialInsideCategoryCountCache
   if Panel_Window_ItemMarket:GetShow() == false then
     return 
   end
@@ -2105,7 +2216,7 @@ ItemMarket.SpecialGoodsUpdate = function(self)
     return 
   end
   local replaceCount = function(num)
-    -- function num : 0_17_0
+    -- function num : 0_18_0
     local count = Int64toInt32(num)
     if count == 0 then
       count = "-"
@@ -2262,7 +2373,7 @@ ItemMarket.SpecialGoodsUpdate = function(self)
 end
 
 ItemMarket.SetPosition = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_ItemMarket:GetSizeX()
@@ -2272,7 +2383,7 @@ ItemMarket.SetPosition = function(self)
 end
 
 _itemMarket_doSortList = function(sortTarget, sortValue, isResetScroll)
-  -- function num : 0_19 , upvalues : ItemMarket
+  -- function num : 0_20 , upvalues : ItemMarket
   local self = ItemMarket
   local isNum = 0
   if sortValue == true then
@@ -2283,7 +2394,7 @@ _itemMarket_doSortList = function(sortTarget, sortValue, isResetScroll)
 end
 
 _itemMarket_ChangeTextureBySort = function(control, sortTarget, sortValue)
-  -- function num : 0_20 , upvalues : ItemMarket, _sortTexture
+  -- function num : 0_21 , upvalues : ItemMarket, _sortTexture
   local self = ItemMarket
   if sortValue == true then
     sortValue = 0
@@ -2304,7 +2415,7 @@ _itemMarket_ChangeTextureBySort = function(control, sortTarget, sortValue)
 end
 
 _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
-  -- function num : 0_21 , upvalues : ItemMarket
+  -- function num : 0_22 , upvalues : ItemMarket
   local self = ItemMarket
   local itemStaticStatus = nil
   if idx == nil then
@@ -2319,7 +2430,12 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
   if contents ~= nil then
     local itemIcon = (UI.getChildControl)(contents, "Template_Static_Slot")
     if isSelected == nil then
-      local itemMarketSummaryInfo = getItemMarketCategorySummaryInClientByIndex(idx)
+      local itemMarketSummaryInfo = nil
+      if self._isRecommend == true then
+        itemMarketSummaryInfo = getItemMarketRecommendSummaryInClientByIndex(idx)
+      else
+        itemMarketSummaryInfo = getItemMarketCategorySummaryInClientByIndex(idx)
+      end
       itemStaticStatus = itemMarketSummaryInfo:getItemEnchantStaticStatusWrapper()
       UiBase = itemIcon
       Panel_Tooltip_Item_Show(itemStaticStatus, UiBase, true, false, nil, nil, true)
@@ -2341,7 +2457,7 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
           local sellInfo = getItemMarketSellInfoInClientByIndex(self.curTerritoryKeyRaw, self.sellInfoItemEnchantKeyRaw, idx)
           itemWrapper = sellInfo:getItemWrapper()
           UiBase = itemIcon
-          -- DECOMPILER ERROR at PC85: Confused about usage of register: R10 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC95: Confused about usage of register: R10 in 'UnsetPending'
 
           ItemMarket._isMarketItemShow = true
           Panel_Tooltip_Item_Show(itemWrapper, UiBase, false, true, nil, nil, true)
@@ -2352,13 +2468,13 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
 end
 
 ItemMarket_getIsMarketItem = function()
-  -- function num : 0_22 , upvalues : ItemMarket
+  -- function num : 0_23 , upvalues : ItemMarket
   local self = ItemMarket
   return self._isMarketItemShow
 end
 
 _specialGoods_ShowToolTip = function(idx)
-  -- function num : 0_23 , upvalues : ItemMarket
+  -- function num : 0_24 , upvalues : ItemMarket
   local self = ItemMarket
   if idx == nil then
     return 
@@ -2375,7 +2491,7 @@ _specialGoods_ShowToolTip = function(idx)
 end
 
 _specialGoodsSingle_ShowToolTip = function(enchantKey, idx)
-  -- function num : 0_24 , upvalues : ItemMarket
+  -- function num : 0_25 , upvalues : ItemMarket
   local self = ItemMarket
   if enchantKey == nil then
     return 
@@ -2403,7 +2519,7 @@ _specialGoodsSingle_ShowToolTip = function(enchantKey, idx)
 end
 
 _itemMarket_HideToolTip = function()
-  -- function num : 0_25 , upvalues : ItemMarket
+  -- function num : 0_26 , upvalues : ItemMarket
   Panel_Tooltip_Item_hideTooltip()
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
 
@@ -2411,7 +2527,7 @@ _itemMarket_HideToolTip = function()
 end
 
 ItemMarket_SelectedItemNameTooltip = function(isShow, itemName, idx, tipType)
-  -- function num : 0_26 , upvalues : ItemMarket
+  -- function num : 0_27 , upvalues : ItemMarket
   local self = ItemMarket
   local name, desc, control = nil, nil, nil
   if itemName == nil then
@@ -2452,8 +2568,12 @@ ItemMarket_SelectedItemNameTooltip = function(isShow, itemName, idx, tipType)
 end
 
 _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
-  -- function num : 0_27 , upvalues : ItemMarket
+  -- function num : 0_28 , upvalues : ItemMarket
   local self = ItemMarket
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
   if uiIdx == nil then
     TooltipSimple_Hide()
     return 
@@ -2467,6 +2587,14 @@ _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
     local itemlist_RegistLowPrice_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistLowPrice_Title")
     local itemlist_RegistListCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistListCount_Title")
     local itemlist_RegistItemCount_Title = (UI.getChildControl)(contents, "Template_StaticText_RegistItemCount_Title")
+    local itemlist_Attention_btn = (UI.getChildControl)(contents, "Template_Button_AttentionItem")
+    local itemlist_Reservation_btn = ((UI.getChildControl)(contents, "Template_Button_ReservationItem"))
+    local itemMarketSummaryInfo = nil
+    if uiIdx == nil then
+      itemMarketSummaryInfo = getItemMarketSummaryInClientByItemEnchantKey(self.sellInfoItemEnchantKeyRaw)
+    else
+      itemMarketSummaryInfo = getItemMarketSummaryInClientByIndex(self.curItemClassify, uiIdx)
+    end
     if iconType == 0 then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_AVG_NAME")
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_AVG_DESC")
@@ -2476,12 +2604,6 @@ _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
         name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_RECENT_NAME")
         desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_RECENT_DESC")
         uiControl = itemlist_RecentPrice_Title
-        local itemMarketSummaryInfo = nil
-        if uiIdx == nil then
-          itemMarketSummaryInfo = getItemMarketSummaryInClientByItemEnchantKey(self.sellInfoItemEnchantKeyRaw)
-        else
-          itemMarketSummaryInfo = getItemMarketSummaryInClientByIndex(self.curItemClassify, uiIdx)
-        end
         if itemMarketSummaryInfo ~= nil and Int64toInt32(itemMarketSummaryInfo:getLastTradedUtc()) > 0 then
           local lastTradeTime = getTimeYearMonthDayHourMinSecByTTime64(itemMarketSummaryInfo:getLastTradedUtc())
           desc = desc .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_RECENT_TRADETIME", "time", tostring(lastTradeTime))
@@ -2507,14 +2629,42 @@ _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
                   name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_REGISTITEMCOUNT_NAME")
                   desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_REGISTITEMCOUNT_DESC")
                   uiControl = itemlist_RegistItemCount_Title
+                else
+                  if iconType == 6 then
+                    local iess = itemMarketSummaryInfo:getItemEnchantStaticStatusWrapper()
+                    if iess == nil then
+                      return 
+                    end
+                    local enchantLevel = ((iess:get())._key):getEnchantLevel()
+                    local itemNameStr = self:SetNameAndEnchantLevel(enchantLevel, iess:getItemType(), iess:getName(), iess:getItemClassify())
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_REGISTALERT_NAME")
+                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_REGISTALERT_DESC", "itemNameStr", tostring(itemNameStr))
+                    uiControl = itemlist_Attention_btn
+                  else
+                    do
+                      if iconType == 7 then
+                        local iess = itemMarketSummaryInfo:getItemEnchantStaticStatusWrapper()
+                        if iess == nil then
+                          return 
+                        end
+                        local enchantLevel = ((iess:get())._key):getEnchantLevel()
+                        local itemNameStr = self:SetNameAndEnchantLevel(enchantLevel, iess:getItemType(), iess:getName(), iess:getItemClassify())
+                        name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_RESERVATION_NAME")
+                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_RESERVATION_DESC", "itemNameStr", tostring(itemNameStr))
+                        uiControl = itemlist_Reservation_btn
+                      end
+                      do
+                        if isShow == true then
+                          TooltipSimple_Show(uiControl, name, desc)
+                        else
+                          TooltipSimple_Hide()
+                        end
+                      end
+                    end
+                  end
                 end
               end
             end
-          end
-          if isShow == true then
-            TooltipSimple_Show(uiControl, name, desc)
-          else
-            TooltipSimple_Hide()
           end
         end
       end
@@ -2523,7 +2673,7 @@ _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
 end
 
 ItemMarket_FavoriteItemTooltip = function(isShow)
-  -- function num : 0_28 , upvalues : ItemMarket
+  -- function num : 0_29 , upvalues : ItemMarket
   local self = ItemMarket
   if isShow then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_FAVORITEBTN_NAME")
@@ -2535,7 +2685,7 @@ ItemMarket_FavoriteItemTooltip = function(isShow)
 end
 
 ItemMarket_SimpleTooltipCommon = function(isShow, tipType)
-  -- function num : 0_29 , upvalues : ItemMarket
+  -- function num : 0_30 , upvalues : ItemMarket
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -2556,7 +2706,7 @@ ItemMarket_SimpleTooltipCommon = function(isShow, tipType)
 end
 
 _itemMarket_ShowSpecialListOutSideTooltip = function(isShow, iconType, uiIdx)
-  -- function num : 0_30 , upvalues : ItemMarket
+  -- function num : 0_31 , upvalues : ItemMarket
   local self = ItemMarket
   if uiIdx == nil then
     TooltipSimple_Hide()
@@ -2594,7 +2744,7 @@ _itemMarket_ShowSpecialListOutSideTooltip = function(isShow, iconType, uiIdx)
 end
 
 _itemMarket_ShowListInSideTooltip = function(isShow, iconType)
-  -- function num : 0_31 , upvalues : ItemMarket
+  -- function num : 0_32 , upvalues : ItemMarket
   local self = ItemMarket
   if iconType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_AVG_NAME")
@@ -2647,7 +2797,7 @@ _itemMarket_ShowListInSideTooltip = function(isShow, iconType)
 end
 
 _itemMarket_ShowIconToolTip = function(isShow, iconType)
-  -- function num : 0_32 , upvalues : ItemMarket
+  -- function num : 0_33 , upvalues : ItemMarket
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -2680,7 +2830,7 @@ _itemMarket_ShowIconToolTip = function(isShow, iconType)
 end
 
 _itemMarket_MoneyToolTip = function(isShow, tipType)
-  -- function num : 0_33 , upvalues : ItemMarket
+  -- function num : 0_34 , upvalues : ItemMarket
   local self = ItemMarket
   if isShow == true then
     if tipType == 0 then
@@ -2699,7 +2849,7 @@ _itemMarket_MoneyToolTip = function(isShow, tipType)
 end
 
 _itemMarket_Search = function()
-  -- function num : 0_34 , upvalues : ItemMarket
+  -- function num : 0_35 , upvalues : ItemMarket
   local self = ItemMarket
   local text = (self.edit_ItemName):GetEditText()
   if text == nil or text == "" or PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") == text then
@@ -2720,7 +2870,7 @@ _itemMarket_Search = function()
 end
 
 FGlobal_FavoriteItem_Search = function(text, enchantKey)
-  -- function num : 0_35 , upvalues : ItemMarket
+  -- function num : 0_36 , upvalues : ItemMarket
   local self = ItemMarket
   self.isSelectItem = false
   if ((string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_16")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_17")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_18")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_19")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_20")) ~= nil) and enchantKey ~= 0 then
@@ -2747,7 +2897,7 @@ FGlobal_FavoriteItem_Search = function(text, enchantKey)
 end
 
 _itemMarket_FavoriteItemRegist = function()
-  -- function num : 0_36 , upvalues : ItemMarket
+  -- function num : 0_37 , upvalues : ItemMarket
   local self = ItemMarket
   local text = ""
   if self.isSpecialCategory then
@@ -2777,7 +2927,7 @@ _itemMarket_FavoriteItemRegist = function()
 end
 
 _itemMarket_SpecialSearch = function()
-  -- function num : 0_37 , upvalues : ItemMarket
+  -- function num : 0_38 , upvalues : ItemMarket
   local self = ItemMarket
   local text = (self.edit_SpecialItemName):GetEditText()
   if text == nil or text == "" or PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") == text then
@@ -2801,7 +2951,7 @@ _itemMarket_SpecialSearch = function()
 end
 
 HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
-  -- function num : 0_38 , upvalues : ItemMarket
+  -- function num : 0_39 , upvalues : ItemMarket
   local self = ItemMarket
   local totalItemCount = toClient_GetItemMarketFavoriteItemListSize()
   if itemEnchantKeyRaw ~= nil then
@@ -2908,7 +3058,7 @@ HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
 end
 
 HandleClicked_ItemMarket_GroupItem = function(itemIdx, itemEnchantKeyRaw)
-  -- function num : 0_39 , upvalues : ItemMarket, isPreBidOpen
+  -- function num : 0_40 , upvalues : ItemMarket, isPreBidOpen
   do
     local self = ItemMarket
     if ToClient_WorldMapIsShow() or ToClient_CheckExistSummonMaid() or ItemMarket.escMenuSaveValue then
@@ -3000,7 +3150,7 @@ HandleClicked_ItemMarket_GroupItem = function(itemIdx, itemEnchantKeyRaw)
 end
 
 HandleClicked_SpecialGoods_GroupItem = function(itemIdx, itemEnchantKeyRaw)
-  -- function num : 0_40 , upvalues : ItemMarket
+  -- function num : 0_41 , upvalues : ItemMarket
   local self = ItemMarket
   if not ToClient_WorldMapIsShow() and not ToClient_CheckExistSummonMaid() then
     local isIgnoreNpc = ItemMarket.escMenuSaveValue
@@ -3040,8 +3190,17 @@ HandleClicked_SpecialGoods_GroupItem = function(itemIdx, itemEnchantKeyRaw)
   end
 end
 
+HandleClicked_ItemMarket_BuyAllItem = function(slotidx, itemEnchantKeyRaw)
+  -- function num : 0_42 , upvalues : ItemMarket
+  local self = ItemMarket
+  self.buyItemSlotidx = slotidx
+  self.buyItemKeyraw = itemEnchantKeyRaw
+  local sellInfo = getItemMarketSellInfoInClientByIndex(self.curTerritoryKeyRaw, self.sellInfoItemEnchantKeyRaw, slotidx)
+  FGlobal_HandleClicked_ItemMarket_SingleItem_Do(Int64toInt32(sellInfo:getCount()))
+end
+
 HandleClicked_ItemMarket_SingleItem = function(slotidx, itemEnchantKeyRaw, isBidding)
-  -- function num : 0_41 , upvalues : ItemMarket
+  -- function num : 0_43 , upvalues : ItemMarket
   local self = ItemMarket
   local itemCount = self._registerCount
   self.buyItemKeyraw = itemEnchantKeyRaw
@@ -3075,13 +3234,16 @@ HandleClicked_ItemMarket_SingleItem = function(slotidx, itemEnchantKeyRaw, isBid
 end
 
 ItemMarket_SingleItemBuy = function()
-  -- function num : 0_42
+  -- function num : 0_44
   FGlobal_HandleClicked_ItemMarket_SingleItem_Do(1)
 end
 
 local isOpenByMaid = false
 ItemMarket_UpdateMoneyByWarehouse = function()
-  -- function num : 0_43 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_45 , upvalues : ItemMarket, isOpenByMaid
+  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_ItemMarket:GetShow() == false then
+    return 
+  end
   local self = ItemMarket
   ;
   (self.invenMoney):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
@@ -3117,7 +3279,7 @@ ItemMarket_UpdateMoneyByWarehouse = function()
 end
 
 FGlobal_HandleClicked_ItemMarket_SingleItem_Do = function(itemCount)
-  -- function num : 0_44 , upvalues : ItemMarket
+  -- function num : 0_46 , upvalues : ItemMarket
   local self = ItemMarket
   local fromWhereType = (CppEnums.ItemWhereType).eInventory
   if (self.warehouseMoneyTit):IsCheck() then
@@ -3150,7 +3312,7 @@ FGlobal_HandleClicked_ItemMarket_SingleItem_Do = function(itemCount)
 end
 
 FGlobal_ItemMarket_BuyWith_PrivatePasssword = function(password, itemCount)
-  -- function num : 0_45 , upvalues : ItemMarket
+  -- function num : 0_47 , upvalues : ItemMarket
   local self = ItemMarket
   local fromWhereType = (CppEnums.ItemWhereType).eInventory
   if (self.warehouseMoneyTit):IsCheck() then
@@ -3180,7 +3342,7 @@ end
 
 local _specialGoodsIndex, _specialGoodsEnchantKeyRaw = nil, nil
 HandleClicked_ItemMarket_SpecialItem = function(index, enchantKeyRaw)
-  -- function num : 0_46 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
+  -- function num : 0_48 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
   local self = ItemMarket
   local fromWhereType = (CppEnums.ItemWhereType).eInventory
   if (self.warehouseMoneyTit):IsCheck() then
@@ -3212,7 +3374,7 @@ HandleClicked_ItemMarket_SpecialItem = function(index, enchantKeyRaw)
 end
 
 FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2, param3, param4)
-  -- function num : 0_47 , upvalues : ItemMarket
+  -- function num : 0_49 , upvalues : ItemMarket
   local self = ItemMarket
   if msgType == 0 then
     if param1 == 0 then
@@ -3226,7 +3388,7 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
     end
   else
     if msgType == 1 then
-      local territoryNameArray = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
+      local territoryNameArray = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))}
       if param2 < 0 or param2 > 6 then
         return 
       end
@@ -3422,7 +3584,7 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
                                                   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_CANCELRESERVATIONSUCCESS"))
                                                 else
                                                   if msgType == 10 then
-                                                    local territoryNameArray = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
+                                                    local territoryNameArray = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))}
                                                     if param2 < 0 or param2 > 6 then
                                                       return 
                                                     end
@@ -3532,7 +3694,7 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
 end
 
 HandleClicked_ItemMarket_UnSetGroupItem = function()
-  -- function num : 0_48 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_50 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   if not (self.selectedListHeadBG):GetShow() then
     return 
@@ -3569,7 +3731,7 @@ HandleClicked_ItemMarket_UnSetGroupItem = function()
 end
 
 HandleClicked_ItemMarketNew_SelectCategory = function(isBackPage, realCategory_Idx)
-  -- function num : 0_49 , upvalues : ItemMarket, selectedKey
+  -- function num : 0_51 , upvalues : ItemMarket, selectedKey
   TooltipSimple_Hide()
   local self = ItemMarket
   if (self.btn_BackPage):GetShow() == true then
@@ -3606,7 +3768,7 @@ end
 
 local filter1 = 0
 Itemmarket_Sort_ShowComboBox = function()
-  -- function num : 0_50 , upvalues : ItemMarket, tree2IndexMap, selectedKey, filter1
+  -- function num : 0_52 , upvalues : ItemMarket, tree2IndexMap, selectedKey, filter1
   local self = ItemMarket
   ;
   (self.combobox_Filter_Sort1):DeleteAllItem()
@@ -3642,7 +3804,7 @@ Itemmarket_Sort_ShowComboBox = function()
 end
 
 Itemmarket_Sort_SetSort = function()
-  -- function num : 0_51 , upvalues : ItemMarket, filter1
+  -- function num : 0_53 , upvalues : ItemMarket, filter1
   local self = ItemMarket
   ;
   (self.combobox_Filter_Sort1):SetSelectItemIndex((self.combobox_Filter_Sort1):GetSelectIndex())
@@ -3653,7 +3815,7 @@ Itemmarket_Sort_SetSort = function()
 end
 
 HandleClicked_ItemMarket_ItemSort = function(sortTarget)
-  -- function num : 0_52 , upvalues : ItemMarket
+  -- function num : 0_54 , upvalues : ItemMarket
   local self = ItemMarket
   self.selectItemSort = sortTarget
   _itemMarket_ChangeTextureBySort(self.btn_Sort_RegistItemCount, 2, true)
@@ -3704,7 +3866,7 @@ HandleClicked_ItemMarket_ItemSort = function(sortTarget)
 end
 
 _itemMarket_ResetTextureBySort = function(control)
-  -- function num : 0_53
+  -- function num : 0_55
   local self = control
   self.curSortValue = false
   self.isSort_ItemName = true
@@ -3718,7 +3880,7 @@ _itemMarket_ResetTextureBySort = function(control)
 end
 
 HandleClicked_ItemMarket_Close = function()
-  -- function num : 0_54 , upvalues : ItemMarket
+  -- function num : 0_56 , upvalues : ItemMarket
   Panel_Window_ItemMarket:CloseUISubApp()
   ;
   (ItemMarket.checkPopUp):SetCheck(false)
@@ -3726,7 +3888,7 @@ HandleClicked_ItemMarket_Close = function()
 end
 
 HandleClicked_ItemMarket_PopUp = function()
-  -- function num : 0_55 , upvalues : ItemMarket
+  -- function num : 0_57 , upvalues : ItemMarket
   if (ItemMarket.checkPopUp):IsCheck() then
     Panel_Window_ItemMarket:OpenUISubApp()
   else
@@ -3736,7 +3898,7 @@ HandleClicked_ItemMarket_PopUp = function()
 end
 
 ItemMarketPopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_56 , upvalues : ItemMarket
+  -- function num : 0_58 , upvalues : ItemMarket
   if isShow then
     local self = ItemMarket
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
@@ -3755,34 +3917,34 @@ ItemMarketPopUp_ShowIconToolTip = function(isShow)
 end
 
 HandleClicked_ItemMarket_Search = function()
-  -- function num : 0_57
+  -- function num : 0_59
   _itemMarket_Search()
 end
 
 FGlobal_ItemMarket_FavoriteItemRegiste = function()
-  -- function num : 0_58
+  -- function num : 0_60
   _itemMarket_FavoriteItemRegist()
 end
 
 HandleClicked_ItemMarket_SpecialSearch = function()
-  -- function num : 0_59
+  -- function num : 0_61
   _itemMarket_SpecialSearch()
 end
 
 HandleClicked_ItemMarket_RefreshList = function()
-  -- function num : 0_60 , upvalues : ItemMarket
+  -- function num : 0_62 , upvalues : ItemMarket
   HandleClicked_ItemMarket_GroupItem(ItemMarket.curSummaryItemIndex, ItemMarket.sellInfoItemEnchantKeyRaw)
 end
 
 FGlobal_ItemMarket_FavoriteBtn_CheckOff = function()
-  -- function num : 0_61 , upvalues : ItemMarket
+  -- function num : 0_63 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.btn_FavoriteOnOff):SetCheck(false)
 end
 
 HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
-  -- function num : 0_62 , upvalues : ItemMarket
+  -- function num : 0_64 , upvalues : ItemMarket
   local self = ItemMarket
   if (self.btn_FavoriteOnOff):IsCheck() then
     FGlobal_ItemMarket_FavoriteItem_Open()
@@ -3792,7 +3954,7 @@ HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
 end
 
 HandleClicked_ItemMarket_EditText = function()
-  -- function num : 0_63 , upvalues : ItemMarket
+  -- function num : 0_65 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_ItemName):SetEditText("", true)
@@ -3808,7 +3970,7 @@ HandleClicked_ItemMarket_EditText = function()
 end
 
 HandleClicked_ItemMarket_SpecialEditText = function()
-  -- function num : 0_64 , upvalues : ItemMarket
+  -- function num : 0_66 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_SpecialItemName):SetEditText("", true)
@@ -3823,7 +3985,7 @@ HandleClicked_ItemMarket_SpecialEditText = function()
 end
 
 FGolbal_ItemMarketNew_Search = function()
-  -- function num : 0_65 , upvalues : ItemMarket
+  -- function num : 0_67 , upvalues : ItemMarket
   _itemMarket_Search()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3836,7 +3998,7 @@ FGolbal_ItemMarketNew_Search = function()
 end
 
 FGolbal_ItemMarketNew_SpecialSearch = function()
-  -- function num : 0_66 , upvalues : ItemMarket
+  -- function num : 0_68 , upvalues : ItemMarket
   _itemMarket_SpecialSearch()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3849,13 +4011,13 @@ FGolbal_ItemMarketNew_SpecialSearch = function()
 end
 
 HandleClicked_ItemMarket_ClearEdit = function()
-  -- function num : 0_67 , upvalues : ItemMarket
+  -- function num : 0_69 , upvalues : ItemMarket
   (ItemMarket.edit_ItemName):SetEditText("", true)
   SetFocusEdit(ItemMarket.edit_ItemName)
 end
 
 HandleClicked_ItemMarket_RegistItem = function()
-  -- function num : 0_68 , upvalues : ItemMarket
+  -- function num : 0_70 , upvalues : ItemMarket
   Warehouse_OpenPanelFromMaid()
   HandleClicked_WhItemMarketRegistItem_Open(true)
   Panel_Window_ItemMarket:SetShow(false)
@@ -3868,7 +4030,7 @@ HandleClicked_ItemMarket_RegistItem = function()
 end
 
 FGlobal_ItemMarketNew_Open = function()
-  -- function num : 0_69 , upvalues : ItemMarket, selectedKey, tree2IndexMap
+  -- function num : 0_71 , upvalues : ItemMarket, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -3957,6 +4119,7 @@ FGlobal_ItemMarketNew_Open = function()
   self.curSortTarget = -1
   self.curSortValue = false
   self.isSearch = false
+  self._isRecommend = false
   selectedKey = -1
   self.isGrouplist = true
   self.isSpecialCategory = false
@@ -3992,6 +4155,8 @@ FGlobal_ItemMarketNew_Open = function()
   ;
   (self.combobox_Filter_Sort1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_NONE"))
   ;
+  (self._btn_Recommend):SetCheck(false)
+  ;
   (self._btn_CategoryAll):SetCheck(true)
   local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
   for key,value in pairs(tree2IndexMap) do
@@ -4020,7 +4185,7 @@ FGlobal_ItemMarketNew_Open = function()
 end
 
 FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
-  -- function num : 0_70 , upvalues : ItemMarket, isPopUpContentsEnable, selectedKey, tree2IndexMap
+  -- function num : 0_72 , upvalues : ItemMarket, isPopUpContentsEnable, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -4052,7 +4217,7 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
   ;
   (self.btn_InMarketRegist):SetShow(false)
   ;
-  (self.btn_BidDesc):SetPosX(830)
+  (self.btn_BidDesc):SetPosX(840)
   if isGameTypeRussia() then
     (self.btn_BidDesc):SetPosX(740)
   end
@@ -4093,6 +4258,7 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
   (self._list2_SpecialList):SetShow(false)
   ;
   (self._list2_SpecialList_Inside):SetShow(false)
+  self._isRecommend = false
   requestOpenItemMarket()
   ClearFocusEdit()
   ;
@@ -4132,6 +4298,8 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
   selectMarketCategory(0, -1)
   self:Update()
   ;
+  (self._btn_Recommend):SetCheck(false)
+  ;
   (self._btn_CategoryAll):SetCheck(true)
   local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
   for key,value in pairs(tree2IndexMap) do
@@ -4159,7 +4327,7 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
 end
 
 FGlobal_ItemMarket_OpenByMaid = function()
-  -- function num : 0_71 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
+  -- function num : 0_73 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
   local self = ItemMarket
   if Panel_Window_ItemMarket:IsUISubApp() then
     Panel_Window_ItemMarket:CloseUISubApp()
@@ -4186,7 +4354,7 @@ FGlobal_ItemMarket_OpenByMaid = function()
   ;
   (self.btn_InMarketRegist):SetShow(false)
   ;
-  (self.btn_BidDesc):SetPosX(830)
+  (self.btn_BidDesc):SetPosX(840)
   if isGameTypeRussia() then
     (self.btn_BidDesc):SetPosX(740)
   end
@@ -4265,6 +4433,7 @@ FGlobal_ItemMarket_OpenByMaid = function()
     self.curSortTarget = -1
     self.curSortValue = false
     self.isSearch = false
+    self._isRecommend = false
     selectedKey = -1
     self.isGrouplist = true
     self.isSpecialCategory = false
@@ -4300,6 +4469,8 @@ FGlobal_ItemMarket_OpenByMaid = function()
     selectMarketCategory(0, -1)
     self:Update()
     ;
+    (self._btn_Recommend):SetCheck(false)
+    ;
     (self._btn_CategoryAll):SetCheck(true)
     local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
     for key,value in pairs(tree2IndexMap) do
@@ -4329,7 +4500,7 @@ FGlobal_ItemMarket_OpenByMaid = function()
 end
 
 FGolbal_ItemMarketNew_Close = function()
-  -- function num : 0_72 , upvalues : selectedKey, isOpenByMaid, ItemMarket
+  -- function num : 0_74 , upvalues : selectedKey, isOpenByMaid, ItemMarket
   if Panel_Window_ItemMarket:IsShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true then
     return 
   end
@@ -4360,7 +4531,7 @@ FGolbal_ItemMarketNew_Close = function()
 end
 
 Update_ItemMarketMasterInfo = function()
-  -- function num : 0_73 , upvalues : ItemMarket
+  -- function num : 0_75 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
     self:SpecialGoodsUpdate()
@@ -4370,7 +4541,7 @@ Update_ItemMarketMasterInfo = function()
 end
 
 Update_ItemMarketSummaryInfo = function()
-  -- function num : 0_74 , upvalues : ItemMarket
+  -- function num : 0_76 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
     self:SpecialGoodsUpdate()
@@ -4380,7 +4551,7 @@ Update_ItemMarketSummaryInfo = function()
 end
 
 Update_ItemMarketSellInfo = function()
-  -- function num : 0_75 , upvalues : ItemMarket
+  -- function num : 0_77 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
     self:SpecialGoodsUpdate()
@@ -4390,7 +4561,7 @@ Update_ItemMarketSellInfo = function()
 end
 
 FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
-  -- function num : 0_76 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
+  -- function num : 0_78 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
   if notifyType == 0 and Panel_Window_ItemMarket:GetShow() then
     ItemMarket:SpecialGoodsUpdate()
   end
@@ -4435,7 +4606,7 @@ FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
 end
 
 FGlobal_HandleClicked_ItemMarketBackPage = function()
-  -- function num : 0_77 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_79 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4470,7 +4641,7 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
 end
 
 FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
-  -- function num : 0_78 , upvalues : ItemMarket
+  -- function num : 0_80 , upvalues : ItemMarket
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4493,25 +4664,25 @@ FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
 end
 
 FGlobal_isOpenItemMarketBackPage = function()
-  -- function num : 0_79 , upvalues : ItemMarket
+  -- function num : 0_81 , upvalues : ItemMarket
   local self = ItemMarket
   return (self.btn_BackPage):GetShow()
 end
 
 FGlobal_SpecialListPage = function()
-  -- function num : 0_80 , upvalues : ItemMarket
+  -- function num : 0_82 , upvalues : ItemMarket
   local self = ItemMarket
   return self.isSpecialInside
 end
 
 FGlobal_ItemmarketNew_OpenInventory = function()
-  -- function num : 0_81
+  -- function num : 0_83
   Inventory_SetFunctor(nil, nil, nil, nil)
   InventoryWindow_Show(true, false, true)
 end
 
 Panel_ItemMarket_BidDesc_Init = function()
-  -- function num : 0_82 , upvalues : itemMarketBidDesc, UI_TM
+  -- function num : 0_84 , upvalues : itemMarketBidDesc, UI_TM
   local self = itemMarketBidDesc
   ;
   (self._txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -4529,23 +4700,23 @@ Panel_ItemMarket_BidDesc_Init = function()
 end
 
 HandleClicked_ItemMarket_BidDesc_Open = function()
-  -- function num : 0_83 , upvalues : itemMarketBidDesc
+  -- function num : 0_85 , upvalues : itemMarketBidDesc
   local self = itemMarketBidDesc
   Panel_ItemMarket_BidDesc_Show()
 end
 
 Panel_ItemMarket_BidDesc_Show = function()
-  -- function num : 0_84
+  -- function num : 0_86
   Panel_ItemMarket_BidDesc:SetShow(true)
 end
 
 Panel_ItemMarket_BidDesc_Hide = function()
-  -- function num : 0_85
+  -- function num : 0_87
   Panel_ItemMarket_BidDesc:SetShow(false)
 end
 
 ItemMarket.registEventHandler = function(self)
-  -- function num : 0_86
+  -- function num : 0_88
   (self.edit_ItemName):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_EditText()")
   ;
   (self.edit_ItemName):RegistReturnKeyEvent("FGolbal_ItemMarketNew_Search()")
@@ -4606,7 +4777,7 @@ ItemMarket.registEventHandler = function(self)
 end
 
 ItemMarket.registMessageHandler = function(self)
-  -- function num : 0_87
+  -- function num : 0_89
   registerEvent("FromClient_notifyItemMarketMessage", "FromClient_notifyItemMarketMessage")
   registerEvent("FromClient_NotifyItemMarketByParty", "FromClient_NotifyItemMarketByParty")
   registerEvent("FromClient_InventoryUpdate", "ItemMarket_UpdateMoneyByWarehouse")

@@ -1,9 +1,8 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_pose.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_pose.luac 
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local rotMin, rotMax, currentRotation = nil, nil, nil
 local PoseEditUIRect = {left, top, right, bottom}
 local ContentImage = {}
@@ -187,26 +186,7 @@ ShowPoseEditor = function(show)
 end
 
 UpdateSavedPoses = function()
-  -- function num : 0_11 , upvalues : UI_GroupType, Button_Slider_X, Button_Slider_Y, Button_Slider_Z, CheckButton_Symmetry, CheckButton_ControlPart, Button_AllReset, Button_PartReset, ContentImage, Button_Save, Button_Delete, FrameTemplate, Frame_Scroll
-  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-  ClearAll_CustomizationUIGroup(0)
-  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-  Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-  Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
-  local maxcountx = 50
-  local maxcounty = 50
-  Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, Button_Slider_X)
-  Add_CustomizationUIControl(0, 0, 0, 1, maxcountx, maxcounty, Button_Slider_Y)
-  Add_CustomizationUIControl(0, 0, 0, 2, maxcountx, maxcounty, Button_Slider_Z)
-  Add_CustomizationUIControl(0, 0, 0, 3, maxcountx, maxcounty, CheckButton_Symmetry)
-  Add_CustomizationUIControl(0, 0, 1, 3, maxcountx, maxcounty, CheckButton_ControlPart)
-  Add_CustomizationUIControl(0, 0, 0, 4, maxcountx, maxcounty, Button_AllReset)
-  Add_CustomizationUIControl(0, 0, 1, 4, maxcountx, maxcounty, Button_PartReset)
-  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 3)
-  local currentheight = 5
-  local countx = 4
-  local county = 3
-  local realcount = 10
+  -- function num : 0_11 , upvalues : ContentImage, FrameTemplate, Frame_Scroll
   for imageIndex = 0, 9 do
     local bPoseSlotEmpty = getPoseDataEmpty(imageIndex)
     if bPoseSlotEmpty == false then
@@ -215,11 +195,7 @@ UpdateSavedPoses = function()
       ;
       (ContentImage[imageIndex]):SetShow(false)
     end
-    Add_CustomizationUIControl(0, 0, imageIndex % countx, currentheight + imageIndex / countx, maxcountx, maxcounty, ContentImage[imageIndex])
   end
-  currentheight = currentheight + county
-  Add_CustomizationUIControl(0, 0, 0, currentheight, maxcountx, maxcounty, Button_Save)
-  Add_CustomizationUIControl(0, 0, 1, currentheight, maxcountx, maxcounty, Button_Delete)
   FrameTemplate:UpdateContentScroll()
   Frame_Scroll:SetControlTop()
   FrameTemplate:UpdateContentPos()

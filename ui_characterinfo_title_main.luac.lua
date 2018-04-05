@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\characterinfo\ui_characterinfo_title_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\characterinfo\ui_characterinfo_title_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -11,7 +11,7 @@ _categoryStirng = {[0] = "LUA_CHARACTERINFO_TITLE_LISTALL", [1] = "LUA_CHARACTER
 , 
 _comboBoxList = {_all = 0, _have = 1, _absence = 2}
 , 
-_comboBoxString = {[0] = "ì \132 ì²\180", [1] = "ë³\180 ìœ\160", [2] = "ë¯¸ë³´ìœ\160"}
+_comboBoxString = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_FILTER_ALL"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_FILTER_GET"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_FILTER_NOGET")}
 , 
 _ui = {
 _radioButtonCategory = {[0] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_AllRound"), [1] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Combat"), [2] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Product"), [3] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Fishing")}
@@ -25,7 +25,7 @@ _staticTextTitle_Percent = {[0] = (UI.getChildControl)(Panel_Window_CharInfo_Tit
 _circularProgressTitle = {[0] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_AllRound"), [1] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Combat"), [2] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Product"), [3] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Fishing")}
 , _staticText_TotalReward = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward"), _staticText_TotalReward_Value = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward_Value"), _staticText_PartDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_SelectedType"), _staticText_SubTitleBar = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_LeftSubTitle"), _staticText_LastUpdateTime = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AcceptCooltime"), _list2Title = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "List2_CharacterInfo_TitleList"), _comboBoxSort = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "Combobox_List_Sort"), _editSearch = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "EditSearchText"), _buttonSearch = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "BtnSearch"), _staticText_Nothing = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Nothing")}
 }
--- DECOMPILER ERROR at PC236: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC251: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.initialize = function(self)
   -- function num : 0_0 , upvalues : UI_TM
@@ -43,6 +43,8 @@ PaGlobal_CharacterInfoTitle.initialize = function(self)
   ((self._ui)._staticText_TotalReward_Value):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   ((self._ui)._staticText_PartDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
+  ((self._ui)._staticText_PartDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_PARTDESC"))
   if isGameTypeKorea() then
     ((self._ui)._editSearch):SetMaxInput(20)
   else
@@ -53,7 +55,7 @@ PaGlobal_CharacterInfoTitle.initialize = function(self)
   ((self._ui)._staticText_Nothing):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC239: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC254: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.update = function(self)
   -- function num : 0_1
@@ -111,7 +113,7 @@ PaGlobal_CharacterInfoTitle.update = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC242: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC257: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.registEventHandler = function(self)
   -- function num : 0_2
@@ -136,7 +138,7 @@ PaGlobal_CharacterInfoTitle.registEventHandler = function(self)
   ((self._ui)._editSearch):RegistReturnKeyEvent("PaGlobal_CharacterInfoTitle:handleClicked_SearchButton()")
 end
 
--- DECOMPILER ERROR at PC245: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC260: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.registMessageHandler = function(self)
   -- function num : 0_3

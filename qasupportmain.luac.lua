@@ -1,45 +1,25 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\qasupport\qasupportmain.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\qasupport\qasupportmain.luac 
 
 -- params : ...
 -- function num : 0
-CreateAllStar = function()
+allydisJoin = function()
   -- function num : 0_0
-  ToClient_createAllStar()
+  ToClient_RequestDisjoinGuildAlliance()
 end
 
-GetAllStar = function()
+allydestroy = function()
   -- function num : 0_1
-  ToClient_getAllStarGuildList()
-end
-
-GetAllReq = function()
-  -- function num : 0_2
-  ToClient_getAllStarRequestList()
-end
-
-preq = function()
-  -- function num : 0_3
-  ToClient_joinAllStar(0, false)
-end
-
-greq = function()
-  -- function num : 0_4
-  ToClient_joinAllStar(0, true)
-end
-
-allact = function()
-  -- function num : 0_5
-  ToClient_acceptAllStar(0)
+  ToClient_RequestDestroyGuildAlliance()
 end
 
 testCreate = function()
-  -- function num : 0_6
+  -- function num : 0_2
   ToClient_qaCreateItem(10010, 15, 1)
 end
 
 workerready = function(level)
-  -- function num : 0_7
+  -- function num : 0_3
   ToClient_qaCreateItem(64204, 0, 1)
   ToClient_qaCreateItem(64205, 0, 1)
   ToClient_qaCreateItem(64206, 0, 1)
@@ -62,7 +42,7 @@ workerready = function(level)
 end
 
 runAutoFrameCheck = function()
-  -- function num : 0_8
+  -- function num : 0_4
   FGlobal_AutoFrameCheck_setMinFrame(25)
   FGlobal_setAutoFrameCheckRepeat(true)
   FGlobal_AutoFrameCheck_addPositionList(100, 100, 100)
@@ -70,8 +50,8 @@ runAutoFrameCheck = function()
 end
 
 local UI_CT = CppEnums.ClassType
-BeHero = function()
-  -- function num : 0_9
+behero = function()
+  -- function num : 0_5
   ToClient_qaCreateItem(9693, 0, 10)
   ToClient_qaCreateItem(793, 0, 20)
   ToClient_qaCreateItem(45220, 0, 1)
@@ -91,29 +71,26 @@ BeHero = function()
   ToClient_qaCreateItem(65494, 0, 1)
 end
 
-WarReady = function(enchantLeve1)
-  -- function num : 0_10
+warready = function(enchantLeve1)
+  -- function num : 0_6
   createBuffItem(enchantLeve1)
-  createBossWeapon(enchantLeve1)
+  item(enchantLeve1)
   createBossArmor(enchantLeve1)
   createAccessory(enchantLeve1)
 end
 
 createBuffItem = function(enchantLevel)
-  -- function num : 0_11
+  -- function num : 0_7
   ToClient_qaCreateItem(65487, 0, 1)
   ToClient_qaCreateItem(65488, 0, 1)
   ToClient_qaCreateItem(65489, 0, 1)
   ToClient_qaCreateItem(65490, 0, 1)
   ToClient_qaCreateItem(65491, 0, 1)
-  ToClient_qaCreateItem(65483, 0, 50)
-  ToClient_qaCreateItem(65484, 0, 50)
-  ToClient_qaCreateItem(65485, 0, 50)
-  ToClient_qaCreateItem(65486, 0, 50)
+  ToClient_qaCreateItem(529, 0, 150)
 end
 
-createBossWeapon = function(enchantLeve1)
-  -- function num : 0_12 , upvalues : UI_CT
+item = function(enchantLeve1)
+  -- function num : 0_8 , upvalues : UI_CT
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -128,9 +105,9 @@ createBossWeapon = function(enchantLeve1)
     ToClient_qaConditionCompleteQuest()
     ToClient_qaCompleteQuest(285, 4)
     ToClient_qaCompleteQuest(653, 6)
-    ToClient_qaCreateItem(141, 0, 1)
-    ToClient_qaCreateItem(142, 0, 2)
-    ToClient_qaCreateItem(143, 0, 3)
+    ToClient_qaCreateItem(142, 0, 1)
+    ToClient_qaCreateItem(143, 0, 2)
+    ToClient_qaCreateItem(144, 0, 3)
     ToClient_qaCreateItem(594, 0, 200)
   else
     if isClassType == UI_CT.ClassType_Ranger then
@@ -231,7 +208,7 @@ createBossWeapon = function(enchantLeve1)
                   ToClient_qaCreateItem(165, 0, 1)
                   ToClient_qaCreateItem(594, 0, 200)
                 else
-                  if isClassType == UI_CT.ClassType_Kunoichi then
+                  if isClassType == UI_CT.ClassType_NinjaWomen then
                     ToClient_qaCreateItem(13210, enchantLeve1, 1)
                     ToClient_qaCreateItem(14538, enchantLeve1, 1)
                     ToClient_qaCreateItem(14540, enchantLeve1, 1)
@@ -361,7 +338,7 @@ createBossWeapon = function(enchantLeve1)
 end
 
 createBossArmor = function(enchantLevel)
-  -- function num : 0_13
+  -- function num : 0_9
   ToClient_qaCreateItem(11013, enchantLevel, 1)
   ToClient_qaCreateItem(11101, enchantLevel, 1)
   ToClient_qaCreateItem(11015, enchantLevel, 1)
@@ -371,7 +348,7 @@ createBossArmor = function(enchantLevel)
 end
 
 createAccessory = function(enchantLeve1)
-  -- function num : 0_14
+  -- function num : 0_10
   if enchantLeve1 == 16 then
     ToClient_qaCreateItem(12230, 0, 1)
     ToClient_qaCreateItem(12031, 0, 2)
@@ -441,6 +418,8 @@ createAccessory = function(enchantLeve1)
             ToClient_qaCreateItem(15201, 0, 2)
             ToClient_qaCreateItem(15654, 0, 2)
             ToClient_qaCreateItem(60, 0, 200)
+          else
+            Proc_ShowMessage_Ack("16~20 까지 범위�\140 장신�\172 생성�\180 �\128능합니다.")
           end
         end
       end

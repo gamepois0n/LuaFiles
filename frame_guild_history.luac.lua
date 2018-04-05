@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\guild\frame_guild_history.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\guild\frame_guild_history.luac 
 
 -- params : ...
 -- function num : 0
@@ -282,7 +282,7 @@ GuildHistory_HelpWidget_Show = function(isShow, index, isLeft)
     TooltipSimple_Hide()
     return 
   end
-  local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._myHistory, index)
+  local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._guildHistory, index)
   if journalInfo == nil then
     TooltipSimple_Hide()
     return 

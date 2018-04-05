@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\exchange\panel_exchangewithpc.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\exchange\panel_exchangewithpc.luac 
 
 -- params : ...
 -- function num : 0
@@ -415,6 +415,7 @@ ExchangePC_MessageBox_ResponseConfirm = function()
   if Panel_Equipment:GetShow() then
     FGlobal_Equipment_SetHide(false)
   end
+  ClothInventory_Close()
   if Panel_Window_Exchange:IsShow() == false then
     Panel_Window_Exchange:SetShow(true, true)
   end
@@ -490,6 +491,7 @@ EventTradePC_ReceiveToMyRequest = function()
   if Panel_Equipment:GetShow() then
     FGlobal_Equipment_SetHide(false)
   end
+  ClothInventory_Close()
   if Panel_Window_Exchange:IsShow() == false then
     Panel_Window_Exchange:SetShow(true, true)
   end

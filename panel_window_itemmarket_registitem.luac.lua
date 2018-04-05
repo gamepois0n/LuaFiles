@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\itemmarket\panel_window_itemmarket_registitem.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\itemmarket\panel_window_itemmarket_registitem.luac 
 
 -- params : ...
 -- function num : 0
@@ -15,7 +15,7 @@ itemSlot = {}
 , _invenWhereType = 0, _invenSlotNo = 0, _registerCount = 0, _waypointKey = 0, _minPrice = 0, _maxPrice = 0, _isByMaid = false, _priceCheck = false, _isAblePearlProduct = false, 
 _lastRegistPrice = {}
 , _itemKey = nil, _password = 0}
-local territoryKey = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
+local territoryKey = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")), [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))}
 ItemMarketRegistItem_ShowAni = function()
   -- function num : 0_0
 end
@@ -436,8 +436,8 @@ FGlobal_ItemMarketRegistItem_Open = function(isOpenWarehouse, isByMaid)
   end
   if isOpenWarehouse then
     requestItemMarketMyItems(true, true)
-    if Panel_Window_SearchMenuWareHouse:GetShow() == true then
-      FGlobal_SearchMenuWareHouse_Show(false)
+    if _ContentsGroup_isAllWarehouse == true then
+      PaGlobal_SearchMenuWarehouse:Close()
     end
   end
   if Panel_Window_ItemMarket:GetShow() then
@@ -628,6 +628,7 @@ FGlobal_ItemMarketRegistItemFromInventory = function(s64_count, slotNo, inventor
         end
       end
       do
+        warehouse_requestInfo(waypointKey)
         do
           local warehouseWrapper = warehouse_get(waypointKey)
           itemWrapper = warehouseWrapper:getItem(slotNo)

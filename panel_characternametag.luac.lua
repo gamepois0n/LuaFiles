@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\characternametag\panel_characternametag.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\characternametag\panel_characternametag.luac 
 
 -- params : ...
 -- function num : 0
@@ -2007,7 +2007,7 @@ end
     local mpRate = mp * 100 / maxMp
     mpMain:SetProgressRate(mpRate)
     mpMain:SetCurrentProgressRate(mpRate)
-    local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType()
+    local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType() or UI_classType.ClassType_Orange == playerWrapper:getClassType()
     local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType()
     local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
     local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
@@ -2229,9 +2229,16 @@ end
     txt_WarPoint:SetScale(scaleBuffer.x, scaleBuffer.y)
     txt_WarPoint:ComputePos()
     txt_WarPoint:SetText("")
-    if ToClient_CompetitionMatchType() == 0 and competitionTeamNo ~= 0 then
-      local teamA_Info = ToClient_GetTeamListAt(0)
-      local teamB_Info = ToClient_GetTeamListAt(1)
+    local needOverHeadNameTag = ToClient_CompetitionMatchType() == 0 or ToClient_CompetitionMatchType() == 2
+    if needOverHeadNameTag == true and competitionTeamNo ~= 0 then
+      local teamA_Info, teamB_Info = nil, nil
+      if ToClient_CompetitionMatchType() == 0 then
+        teamA_Info = ToClient_GetTeamListAt(0)
+        teamB_Info = ToClient_GetTeamListAt(1)
+      elseif ToClient_CompetitionMatchType() == 2 then
+        teamA_Info = ToClient_GetArshaTeamInfo(1)
+        teamB_Info = ToClient_GetArshaTeamInfo(2)
+      end
       local teamA_Name = ""
       local teamB_Name = ""
       if teamA_Info ~= nil and teamB_Info ~= nil then
@@ -2245,9 +2252,9 @@ end
           txt_WarPoint:SetText("[ " .. teamB_Name .. " ]")
         end
       elseif competitionTeamNo == 1 then
-        txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM") .. " ]")
+        txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A") .. " ]")
       elseif competitionTeamNo == 2 then
-        txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM") .. " ]")
+        txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B") .. " ]")
       end
     elseif ToClient_CompetitionMatchType() == 1 and competitionTeamNo ~= 0 then
       local leaderInfo = ToClient_GetTeamLeaderInfo(competitionTeamNo)
@@ -2264,7 +2271,7 @@ end
     local insertedArray = (Array.new)()
     settingLifeRankIcon(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
   end
-  -- DECOMPILER ERROR: 30 unprocessed JMP targets
+  -- DECOMPILER ERROR: 33 unprocessed JMP targets
 end
 
   FGlobal_SettingMpBarTemp = function()

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\righttopicons\panel_personalicon_autotraining2.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\righttopicons\panel_personalicon_autotraining2.luac 
 
 -- params : ...
 -- function num : 0
@@ -19,6 +19,7 @@ AutoPlayShowAni = function()
   ImageMoveAni.IsChangeChild = true
   Panel_AutoTraining:CalcUIAniPos(ImageMoveAni)
   ImageMoveAni:SetDisableWhileAni(true)
+  PAGlobal_AutoTraining_Alarm_OnAutoTrainingStart()
 end
 
 AutoPlayHideAni = function()
@@ -31,6 +32,7 @@ AutoPlayHideAni = function()
   ImageMoveAni:SetDisableWhileAni(true)
   ImageMoveAni:SetHideAtEnd(true)
   ImageMoveAni:SetDisableWhileAni(true)
+  PAGlobal_AutoTraining_Alarm_OnAutoTrainingEnd()
 end
 
 -- DECOMPILER ERROR at PC45: Confused about usage of register: R4 in 'UnsetPending'

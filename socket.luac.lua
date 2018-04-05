@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\socket\socket.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\socket\socket.luac 
 
 -- params : ...
 -- function num : 0
@@ -80,7 +80,9 @@ socket.createControl = function(self)
   (self.slotMain).slotNo = nil
   for ii = 1, (self.config).socketSlotCount do
     slotSocket = {icon = ((self.control).staticSocket)[ii], iconBg = ((self.control).staticSocketBackground)[ii], name = ((self.control).staticSocketName)[ii], desc = ((self.control).staticSocketDesc)[ii]}
-    -- DECOMPILER ERROR at PC65: Confused about usage of register: R6 in 'UnsetPending'
+    ;
+    (slotSocket.desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+    -- DECOMPILER ERROR at PC72: Confused about usage of register: R6 in 'UnsetPending'
 
     slotSocket.setShow = function(self, bShow)
     -- function num : 0_1_0
@@ -110,7 +112,7 @@ socket.createControl = function(self)
     ;
     (slotSocket.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. ii .. ", \"Socket_Insert\", false)")
     Panel_Tooltip_Item_SetPosition(ii, slotSocket, "Socket_Insert")
-    -- DECOMPILER ERROR at PC136: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC143: Confused about usage of register: R7 in 'UnsetPending'
 
     slotSocket.empty = true
     ;
@@ -627,6 +629,7 @@ Socket_WindowClose = function()
   InventoryWindow_Close()
   Equipment_PosLoadMemory()
   Panel_Equipment:SetShow(false, false)
+  ClothInventory_Close()
   ToClient_BlackspiritEnchantClose()
 end
 

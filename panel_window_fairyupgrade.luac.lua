@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\fairyinfo\panel_window_fairyupgrade.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\fairyinfo\panel_window_fairyupgrade.luac 
 
 -- params : ...
 -- function num : 0
@@ -7,23 +7,27 @@ Panel_Window_FairyUpgrade:SetShow(false)
 local UI_TM = CppEnums.TextMode
 local FairyUpgrade = {
 _UI = {_close = (UI.getChildControl)(Panel_Window_FairyUpgrade, "Button_Win_Close"), _mainBG = (UI.getChildControl)(Panel_Window_FairyUpgrade, "Static_MainBG"), _upgrade = (UI.getChildControl)(Panel_Window_FairyUpgrade, "Button_Upgrade"), _bottomDescBG = (UI.getChildControl)(Panel_Window_FairyUpgrade, "Static_BottomBG")}
-, _isAnimating = false, _currentItemEnchantKey = nil, _currentItemSlotNo = 0, _currentItemStackCount = 0, _const_aniTime = 2.3, _ani_TimeStamp = 0, _previewExpRate = 0, _previewLevel = 0}
--- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'
+, _isAnimating = false, _currentItemEnchantKey = nil, _currentItemSlotNo = 0, _currentItemStackCount = 0, _const_aniTime = 2.3, _ani_TimeStamp = 0, _previewExpRate = 0, _previewLevel = 0, _diffExp = 0, _animeLv = 0, _animeExp = 0}
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R2 in 'UnsetPending'
 
 ;
 (FairyUpgrade._UI)._iconFairy = (UI.getChildControl)((FairyUpgrade._UI)._mainBG, "Static_FairyBG")
--- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R2 in 'UnsetPending'
 
 ;
 (FairyUpgrade._UI)._bottomDesc = (UI.getChildControl)((FairyUpgrade._UI)._bottomDescBG, "StaticText_BottomDesc")
 PaGlobal_FairyUpgrade_Open = function(PositionReset)
   -- function num : 0_0 , upvalues : FairyUpgrade
+  ClothInventory_Close()
   if Panel_Window_FairySetting:GetShow() then
     PaGlobal_FairySetting_Close()
   end
   if Panel_Window_FairyUpgrade:GetShow() then
     PaGlobal_FairyUpgrade_Close()
     return 
+  end
+  if _ContentsGroup_FairyTierUpgradeAndRebirth and Panel_Window_FairyTierUpgrade:GetShow() then
+    PaGlobal_FairyTierUpgrade_Close()
   end
   if PaGlobal_FairyInfo_isMaxLevel() == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantFairyFusionLevel"))
@@ -69,6 +73,7 @@ PaGlobal_FairyUpgrade_RClickItemByNumberPad = function(count, slotNo, itemKey)
   ToClient_CalculateUpgradeExp(PaGlobal_FairyInfo_GetFairyNo(), self._currentItemEnchantKey, self._currentItemSlotNo, self._currentItemStackCount, ((self._UI)._checkBtn):IsCheck())
   self._previewExpRate = ToClient_GetFutureFairyExp()
   self._previewLevel = ToClient_GetFutureFairyLevel()
+  self._currentItemStackCount = Int64toInt32(ToClient_GetFeedCount())
   self:Open()
 end
 
@@ -123,6 +128,13 @@ FairyUpgrade.Clear = function(self)
   ((self._UI)._checkBtn):SetMonoTone(false)
   self._previewExpRate = 0
   self._previewLevel = 0
+  ;
+  ((self._UI)._upgrade):SetIgnore(false)
+  ;
+  ((self._UI)._upgrade):SetMonoTone(false)
+  self._animeExp = 0
+  self._animeLv = 0
+  self._diffExp = 0
 end
 
 FairyUpgrade.Open = function(self)
@@ -203,7 +215,8 @@ PaGlobal_FairyUpgrade_Request = function()
   end
   local FunctionYesOverExp = function()
     -- function num : 0_6_0 , upvalues : self, FairyUpgrade
-    -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+    audioPostEvent_SystemUi(21, 0)
+    -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
 
     self._isAnimating = true
     ;
@@ -236,10 +249,11 @@ PaGlobal_FairyUpgrade_Request = function()
 
   local FunctionYes = function()
     -- function num : 0_6_1 , upvalues : self, FairyUpgrade, FunctionYesOverExp
-    local isOverExp = ToClient_isOverExpFairyFeeding(PaGlobal_FairyInfo_GetFairyNo(), self._currentItemEnchantKey)
-    -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
-
+    local isOverExp = ToClient_isOverExpFairyFeeding(PaGlobal_FairyInfo_GetFairyNo(), self._currentItemEnchantKey, self._currentItemStackCount)
     if isOverExp == false then
+      audioPostEvent_SystemUi(21, 0)
+      -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
+
       self._isAnimating = true
       ;
       ((self._UI)._checkBtn):SetIgnore(true)
@@ -274,6 +288,18 @@ PaGlobal_FairyUpgrade_Request = function()
     end
   end
 
+  _futureLevel = self._previewLevel
+  _futureExp = self._previewExpRate
+  local ExpRate = PaGlobal_FairyInfo_CurrentExpRate() / 100
+  local currentLevel = PaGlobal_FairyInfo_GetLevel()
+  local diffLevel = _futureLevel - currentLevel
+  if diffLevel > 0 then
+    self._diffExp = (_futureExp + diffLevel + (1 - ExpRate)) / self._const_aniTime - 0.3
+  else
+    self._diffExp = (_futureExp - ExpRate) / (self._const_aniTime - 0.3)
+  end
+  self._animeLv = currentLevel
+  self._animeExp = ExpRate
   local _title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING")
   local _contenet = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_UPGRADE_ALERT")
   local messageBoxData = {title = _title, content = _contenet, functionYes = FunctionYes, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -286,6 +312,25 @@ UpdateFunc_FairyUpgradeAni = function(deltaTime)
   local self = FairyUpgrade
   if self._isAnimating == true then
     self._ani_TimeStamp = self._ani_TimeStamp + deltaTime
+    self._animeExp = self._animeExp + self._diffExp * deltaTime
+    if self._animeExp > 1 then
+      self._animeLv = self._animeLv + 1
+      self._animeExp = self._animeExp - 1
+    end
+    if self._previewLevel <= self._animeLv then
+      self._animeLv = self._previewLevel
+      if self._previewExpRate <= self._animeExp then
+        self._animeExp = self._previewExpRate
+      end
+    end
+    ;
+    ((self._UI)._progressPreview):SetProgressRate(self._animeExp * 100)
+    ;
+    ((self._UI)._progressPreview):SetCurrentProgressRate(self._animeExp * 100)
+    ;
+    ((self._UI)._previewLevelText):SetText("Lv." .. tostring(self._animeLv))
+    ;
+    ((self._UI)._previewExpRateText):SetText((string.format)("%.2f", self._animeExp * 100) .. "%")
     if self._const_aniTime <= self._ani_TimeStamp then
       self._isAnimating = false
       ToClient_FairyFeedingRequest(PaGlobal_FairyInfo_GetFairyNo(), self._currentItemEnchantKey, self._currentItemSlotNo, self._currentItemStackCount, ((self._UI)._checkBtn):IsCheck())
@@ -294,16 +339,14 @@ UpdateFunc_FairyUpgradeAni = function(deltaTime)
       ((self._UI)._upgrade):SetIgnore(false)
       ;
       ((self._UI)._upgrade):SetMonoTone(false)
-      self:Clear()
-      self:Open()
     end
   end
 end
 
 FairyUpgrade.SetPosition = function(self)
   -- function num : 0_8
-  Panel_Window_FairyUpgrade:SetPosX(Panel_FairyInfo:GetPosX() + Panel_FairyInfo:GetSizeX())
-  Panel_Window_FairyUpgrade:SetPosY(Panel_FairyInfo:GetPosY())
+  Panel_Window_FairyUpgrade:SetPosX(Panel_FairyInfo:GetPosX() + Panel_FairyInfo:GetSizeX() / 2 - Panel_Window_FairyUpgrade:GetSizeX() / 2)
+  Panel_Window_FairyUpgrade:SetPosY(Panel_FairyInfo:GetPosY() + 20)
 end
 
 PaGlobal_FairyUpgrade_UpdateExp = function()
@@ -426,10 +469,22 @@ end
 PaGlobal_FairyUpgrade_ClearFeedItem = function()
   -- function num : 0_14 , upvalues : FairyUpgrade
   local self = FairyUpgrade
+  if self._isAnimating == true then
+    return 
+  end
   Panel_Tooltip_Item_hideTooltip()
   self:Clear()
   self:Open()
 end
 
+FromClient_PetInfoChanged = function(petNo)
+  -- function num : 0_15 , upvalues : FairyUpgrade
+  if Panel_Window_FairyUpgrade:GetShow() == true and petNo == PaGlobal_FairyInfo_GetFairyNo() then
+    FairyUpgrade:Clear()
+    FairyUpgrade:Open()
+  end
+end
+
 FairyUpgrade:Initialize()
+registerEvent("FromClient_PetInfoChanged", "FromClient_PetInfoChanged")
 

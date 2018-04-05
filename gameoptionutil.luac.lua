@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\option\gameoptionutil.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\option\gameoptionutil.luac 
 
 -- params : ...
 -- function num : 0
@@ -78,16 +78,16 @@ end
 
 PaGlobal_Option.radioButtonMapping_ServiceResourceType = function(self, value, fromRadioButtonToCppEnum)
   -- function num : 0_4
-  local radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
+  local radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [3] = (CppEnums.ServiceResourceType).eServiceResourceType_ES, [4] = (CppEnums.ServiceResourceType).eServiceResourceType_SP}
   local resourceType = getGameServiceType()
   if (CppEnums.GameServiceType).eGameServiceType_DEV == resourceType then
-    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
+    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [3] = (CppEnums.ServiceResourceType).eServiceResourceType_SP}
   else
     if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == resourceType then
-      radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+      radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE, [3] = (CppEnums.ServiceResourceType).eServiceResourceType_SP}
     else
       if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == resourceType then
-        radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+        radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE, [3] = (CppEnums.ServiceResourceType).eServiceResourceType_SP}
       else
         if (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA == resourceType then
           radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_PT, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_ES}
@@ -122,16 +122,16 @@ end
 
 PaGlobal_Option.radioButtonMapping_ChatChannelType = function(self, value, fromRadioButtonToCppEnum)
   -- function num : 0_5
-  local radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID}
+  local radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID, [4] = (CppEnums.LangType).LangType_SP}
   local resourceType = getGameServiceType()
   if (CppEnums.GameServiceType).eGameServiceType_DEV == resourceType then
-    radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID}
+    radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID, [4] = (CppEnums.LangType).LangType_Es, [5] = (CppEnums.LangType).LangType_SP}
   else
     if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == resourceType then
-      radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+      radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German, [4] = (CppEnums.LangType).LangType_SP}
     else
       if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == resourceType then
-        radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+        radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German, [4] = (CppEnums.LangType).LangType_SP}
       else
         if (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA == resourceType then
           radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_Pt, [2] = (CppEnums.LangType).LangType_Es}
@@ -143,7 +143,7 @@ PaGlobal_Option.radioButtonMapping_ChatChannelType = function(self, value, fromR
               radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
             else
               if (CppEnums.GameServiceType).eGameServiceType_ID_REAL == resourceType then
-                radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
+                radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_ID, [2] = (CppEnums.LangType).LangType_English}
               else
                 if (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA == resourceType then
                   radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_TR, [2] = (CppEnums.LangType).LangType_English}
@@ -162,9 +162,9 @@ PaGlobal_Option.radioButtonMapping_ChatChannelType = function(self, value, fromR
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
 
-local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
-local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_INTERNATIONAL"), [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
--- DECOMPILER ERROR at PC276: Confused about usage of register: R3 in 'UnsetPending'
+local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR"), [(CppEnums.ServiceResourceType).eServiceResourceType_SP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_SP")}
+local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_INTERNATIONAL"), [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR"), [(CppEnums.LangType).LangType_SP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_SP")}
+-- DECOMPILER ERROR at PC294: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.RadioButtonMapping = function(self, table, value, fromRadioButtonToCppEnum)
   -- function num : 0_6
@@ -179,7 +179,7 @@ PaGlobal_Option.RadioButtonMapping = function(self, table, value, fromRadioButto
   return -1
 end
 
--- DECOMPILER ERROR at PC280: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC298: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.GetEventTypeText = function(self, controlTypeEnum)
   -- function num : 0_7 , upvalues : CONTROL
@@ -206,7 +206,7 @@ PaGlobal_Option.GetEventTypeText = function(self, controlTypeEnum)
   return eventType
 end
 
--- DECOMPILER ERROR at PC284: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC302: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.GetControlTypeByControlName = function(self, controlName)
   -- function num : 0_8 , upvalues : CONTROL
@@ -235,7 +235,7 @@ PaGlobal_Option.GetControlTypeByControlName = function(self, controlName)
   return controlTypeEnum
 end
 
--- DECOMPILER ERROR at PC287: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC305: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.FromSliderValueToRealValue = function(self, value, min, max)
   -- function num : 0_9
@@ -254,7 +254,7 @@ PaGlobal_Option.FromSliderValueToRealValue = function(self, value, min, max)
   return value
 end
 
--- DECOMPILER ERROR at PC290: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC308: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.FromRealValueToSliderValue = function(self, value, lower, upper)
   -- function num : 0_10
@@ -264,7 +264,7 @@ PaGlobal_Option.FromRealValueToSliderValue = function(self, value, lower, upper)
   return value
 end
 
--- DECOMPILER ERROR at PC295: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC313: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
   -- function num : 0_11 , upvalues : isOnServiceResourceTypeTag, isOnServiceChatTypeTag
@@ -433,7 +433,7 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
   end
 end
 
--- DECOMPILER ERROR at PC298: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC316: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetUltra = function(self, value)
   -- function num : 0_12
@@ -459,7 +459,7 @@ PaGlobal_Option.SetUltra = function(self, value)
   self:SetControlSettingTable(graphicOption, graphicOption._curValue)
 end
 
--- DECOMPILER ERROR at PC301: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC319: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetGraphicOption = function(self, value, isIncrease)
   -- function num : 0_13
@@ -586,7 +586,7 @@ PaGlobal_Option.SetGraphicOption = function(self, value, isIncrease)
   end
 end
 
--- DECOMPILER ERROR at PC304: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC322: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetSpecSetting = function(self, value)
   -- function num : 0_14
@@ -600,290 +600,322 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
     -- DECOMPILER ERROR at PC19: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.UseEffectFrameOptimization)._curValue = true
+    (options.TextureQuality)._curValue = 0
     -- DECOMPILER ERROR at PC21: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.EffectFrameOptimization)._curValue = 0.9
+    (options.UseEffectFrameOptimization)._curValue = true
     -- DECOMPILER ERROR at PC23: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.UsePlayerEffectDistOptimization)._curValue = true
+    (options.EffectFrameOptimization)._curValue = 0.9
     -- DECOMPILER ERROR at PC25: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.PlayerEffectDistOptimization)._curValue = 0.9
+    (options.UsePlayerEffectDistOptimization)._curValue = true
     -- DECOMPILER ERROR at PC27: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.UseCharacterUpdateFrameOptimize)._curValue = true
+    (options.PlayerEffectDistOptimization)._curValue = 0.9
     -- DECOMPILER ERROR at PC29: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (options.UseOtherPlayerUpdate)._curValue = true
+    (options.UseCharacterUpdateFrameOptimize)._curValue = true
     -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
+    (options.UseOtherPlayerUpdate)._curValue = true
+    -- DECOMPILER ERROR at PC33: Confused about usage of register: R4 in 'UnsetPending'
+
+    ;
     (options.WorkerVisible)._curValue = false
-    -- DECOMPILER ERROR at PC34: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC36: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (options.PetRender)._curValue = PETRENDER.NONE
   else
-    -- DECOMPILER ERROR at PC43: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC45: Confused about usage of register: R4 in 'UnsetPending'
 
     if (self.SPEC).MidNormal == value then
       (options.GraphicOption)._curValue = (self.GRAPHIC).Medium
       self:SetGraphicOption((options.GraphicOption)._curValue, false)
-      -- DECOMPILER ERROR at PC50: Confused about usage of register: R4 in 'UnsetPending'
-
-      ;
-      (options.UseEffectFrameOptimization)._curValue = true
       -- DECOMPILER ERROR at PC52: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
-      (options.EffectFrameOptimization)._curValue = 0.6
+      (options.TextureQuality)._curValue = 1
       -- DECOMPILER ERROR at PC54: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
-      (options.UsePlayerEffectDistOptimization)._curValue = true
+      (options.UseEffectFrameOptimization)._curValue = true
       -- DECOMPILER ERROR at PC56: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
-      (options.PlayerEffectDistOptimization)._curValue = 0.6
+      (options.EffectFrameOptimization)._curValue = 0.6
       -- DECOMPILER ERROR at PC58: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
-      (options.UseCharacterUpdateFrameOptimize)._curValue = true
+      (options.UsePlayerEffectDistOptimization)._curValue = true
       -- DECOMPILER ERROR at PC60: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
-      (options.UseOtherPlayerUpdate)._curValue = true
+      (options.PlayerEffectDistOptimization)._curValue = 0.6
       -- DECOMPILER ERROR at PC62: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
+      (options.UseCharacterUpdateFrameOptimize)._curValue = true
+      -- DECOMPILER ERROR at PC64: Confused about usage of register: R4 in 'UnsetPending'
+
+      ;
+      (options.UseOtherPlayerUpdate)._curValue = true
+      -- DECOMPILER ERROR at PC66: Confused about usage of register: R4 in 'UnsetPending'
+
+      ;
       (options.WorkerVisible)._curValue = false
-      -- DECOMPILER ERROR at PC65: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC69: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (options.PetRender)._curValue = PETRENDER.NONE
     else
-      -- DECOMPILER ERROR at PC74: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC78: Confused about usage of register: R4 in 'UnsetPending'
 
       if (self.SPEC).HighNormal == value then
         (options.GraphicOption)._curValue = (self.GRAPHIC).VeryHigh
         self:SetGraphicOption((options.GraphicOption)._curValue, true)
-        -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
-
-        ;
-        (options.UseEffectFrameOptimization)._curValue = true
-        -- DECOMPILER ERROR at PC83: Confused about usage of register: R4 in 'UnsetPending'
-
-        ;
-        (options.EffectFrameOptimization)._curValue = 0.3
         -- DECOMPILER ERROR at PC85: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
-        (options.UsePlayerEffectDistOptimization)._curValue = true
+        (options.TextureQuality)._curValue = 2
         -- DECOMPILER ERROR at PC87: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
-        (options.PlayerEffectDistOptimization)._curValue = 0.3
+        (options.UseEffectFrameOptimization)._curValue = true
         -- DECOMPILER ERROR at PC89: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
-        (options.UseCharacterUpdateFrameOptimize)._curValue = true
+        (options.EffectFrameOptimization)._curValue = 0.3
         -- DECOMPILER ERROR at PC91: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
-        (options.UseOtherPlayerUpdate)._curValue = false
+        (options.UsePlayerEffectDistOptimization)._curValue = true
         -- DECOMPILER ERROR at PC93: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
+        (options.PlayerEffectDistOptimization)._curValue = 0.3
+        -- DECOMPILER ERROR at PC95: Confused about usage of register: R4 in 'UnsetPending'
+
+        ;
+        (options.UseCharacterUpdateFrameOptimize)._curValue = true
+        -- DECOMPILER ERROR at PC97: Confused about usage of register: R4 in 'UnsetPending'
+
+        ;
+        (options.UseOtherPlayerUpdate)._curValue = false
+        -- DECOMPILER ERROR at PC99: Confused about usage of register: R4 in 'UnsetPending'
+
+        ;
         (options.WorkerVisible)._curValue = false
-        -- DECOMPILER ERROR at PC96: Confused about usage of register: R4 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC102: Confused about usage of register: R4 in 'UnsetPending'
 
         ;
         (options.PetRender)._curValue = PETRENDER.ONLYME
       else
-        -- DECOMPILER ERROR at PC105: Confused about usage of register: R4 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC111: Confused about usage of register: R4 in 'UnsetPending'
 
         if (self.SPEC).HighestNormal == value then
           (options.GraphicOption)._curValue = (self.GRAPHIC).VeryVeryHigh
           self:SetGraphicOption((options.GraphicOption)._curValue, true)
-          -- DECOMPILER ERROR at PC112: Confused about usage of register: R4 in 'UnsetPending'
-
-          ;
-          (options.UseEffectFrameOptimization)._curValue = false
-          -- DECOMPILER ERROR at PC114: Confused about usage of register: R4 in 'UnsetPending'
-
-          ;
-          (options.UsePlayerEffectDistOptimization)._curValue = false
-          -- DECOMPILER ERROR at PC116: Confused about usage of register: R4 in 'UnsetPending'
-
-          ;
-          (options.UseCharacterUpdateFrameOptimize)._curValue = false
           -- DECOMPILER ERROR at PC118: Confused about usage of register: R4 in 'UnsetPending'
 
           ;
-          (options.UseOtherPlayerUpdate)._curValue = false
+          (options.TextureQuality)._curValue = 2
           -- DECOMPILER ERROR at PC120: Confused about usage of register: R4 in 'UnsetPending'
 
           ;
+          (options.UseEffectFrameOptimization)._curValue = false
+          -- DECOMPILER ERROR at PC122: Confused about usage of register: R4 in 'UnsetPending'
+
+          ;
+          (options.UsePlayerEffectDistOptimization)._curValue = false
+          -- DECOMPILER ERROR at PC124: Confused about usage of register: R4 in 'UnsetPending'
+
+          ;
+          (options.UseCharacterUpdateFrameOptimize)._curValue = false
+          -- DECOMPILER ERROR at PC126: Confused about usage of register: R4 in 'UnsetPending'
+
+          ;
+          (options.UseOtherPlayerUpdate)._curValue = false
+          -- DECOMPILER ERROR at PC128: Confused about usage of register: R4 in 'UnsetPending'
+
+          ;
           (options.WorkerVisible)._curValue = true
-          -- DECOMPILER ERROR at PC123: Confused about usage of register: R4 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC131: Confused about usage of register: R4 in 'UnsetPending'
 
           ;
           (options.PetRender)._curValue = PETRENDER.ALL
         else
-          -- DECOMPILER ERROR at PC132: Confused about usage of register: R4 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC140: Confused about usage of register: R4 in 'UnsetPending'
 
           if (self.SPEC).LowSiege == value then
             (options.GraphicOption)._curValue = (self.GRAPHIC).VeryLow
             self:SetGraphicOption((options.GraphicOption)._curValue, false)
-            -- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
-
-            ;
-            (options.UseEffectFrameOptimization)._curValue = true
-            -- DECOMPILER ERROR at PC141: Confused about usage of register: R4 in 'UnsetPending'
-
-            ;
-            (options.EffectFrameOptimization)._curValue = 1
-            -- DECOMPILER ERROR at PC143: Confused about usage of register: R4 in 'UnsetPending'
-
-            ;
-            (options.UsePlayerEffectDistOptimization)._curValue = true
-            -- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
-
-            ;
-            (options.PlayerEffectDistOptimization)._curValue = 1
             -- DECOMPILER ERROR at PC147: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
-            (options.UseCharacterUpdateFrameOptimize)._curValue = true
+            (options.TextureQuality)._curValue = 0
             -- DECOMPILER ERROR at PC149: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
-            (options.UseOtherPlayerUpdate)._curValue = true
+            (options.UseEffectFrameOptimization)._curValue = true
             -- DECOMPILER ERROR at PC151: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
+            (options.EffectFrameOptimization)._curValue = 1
+            -- DECOMPILER ERROR at PC153: Confused about usage of register: R4 in 'UnsetPending'
+
+            ;
+            (options.UsePlayerEffectDistOptimization)._curValue = true
+            -- DECOMPILER ERROR at PC155: Confused about usage of register: R4 in 'UnsetPending'
+
+            ;
+            (options.PlayerEffectDistOptimization)._curValue = 1
+            -- DECOMPILER ERROR at PC157: Confused about usage of register: R4 in 'UnsetPending'
+
+            ;
+            (options.UseCharacterUpdateFrameOptimize)._curValue = true
+            -- DECOMPILER ERROR at PC159: Confused about usage of register: R4 in 'UnsetPending'
+
+            ;
+            (options.UseOtherPlayerUpdate)._curValue = true
+            -- DECOMPILER ERROR at PC161: Confused about usage of register: R4 in 'UnsetPending'
+
+            ;
             (options.WorkerVisible)._curValue = false
-            -- DECOMPILER ERROR at PC154: Confused about usage of register: R4 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC164: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
             (options.PetRender)._curValue = PETRENDER.NONE
           else
-            -- DECOMPILER ERROR at PC163: Confused about usage of register: R4 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC173: Confused about usage of register: R4 in 'UnsetPending'
 
             if (self.SPEC).MidSiege == value then
               (options.GraphicOption)._curValue = (self.GRAPHIC).Medium
               self:SetGraphicOption((options.GraphicOption)._curValue, false)
-              -- DECOMPILER ERROR at PC170: Confused about usage of register: R4 in 'UnsetPending'
-
-              ;
-              (options.UseEffectFrameOptimization)._curValue = true
-              -- DECOMPILER ERROR at PC172: Confused about usage of register: R4 in 'UnsetPending'
-
-              ;
-              (options.EffectFrameOptimization)._curValue = 0.75
-              -- DECOMPILER ERROR at PC174: Confused about usage of register: R4 in 'UnsetPending'
-
-              ;
-              (options.UsePlayerEffectDistOptimization)._curValue = true
-              -- DECOMPILER ERROR at PC176: Confused about usage of register: R4 in 'UnsetPending'
-
-              ;
-              (options.PlayerEffectDistOptimization)._curValue = 0.75
-              -- DECOMPILER ERROR at PC178: Confused about usage of register: R4 in 'UnsetPending'
-
-              ;
-              (options.UseCharacterUpdateFrameOptimize)._curValue = true
               -- DECOMPILER ERROR at PC180: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
-              (options.UseOtherPlayerUpdate)._curValue = true
+              (options.TextureQuality)._curValue = 1
               -- DECOMPILER ERROR at PC182: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
+              (options.UseEffectFrameOptimization)._curValue = true
+              -- DECOMPILER ERROR at PC184: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (options.EffectFrameOptimization)._curValue = 0.75
+              -- DECOMPILER ERROR at PC186: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (options.UsePlayerEffectDistOptimization)._curValue = true
+              -- DECOMPILER ERROR at PC188: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (options.PlayerEffectDistOptimization)._curValue = 0.75
+              -- DECOMPILER ERROR at PC190: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (options.UseCharacterUpdateFrameOptimize)._curValue = true
+              -- DECOMPILER ERROR at PC192: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (options.UseOtherPlayerUpdate)._curValue = true
+              -- DECOMPILER ERROR at PC194: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
               (options.WorkerVisible)._curValue = false
-              -- DECOMPILER ERROR at PC185: Confused about usage of register: R4 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC197: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
               (options.PetRender)._curValue = PETRENDER.NONE
             else
-              -- DECOMPILER ERROR at PC194: Confused about usage of register: R4 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC206: Confused about usage of register: R4 in 'UnsetPending'
 
               if (self.SPEC).HighSiege == value then
                 (options.GraphicOption)._curValue = (self.GRAPHIC).VeryHigh
                 self:SetGraphicOption((options.GraphicOption)._curValue, true)
-                -- DECOMPILER ERROR at PC201: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.UseEffectFrameOptimization)._curValue = true
-                -- DECOMPILER ERROR at PC203: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.EffectFrameOptimization)._curValue = 0.5
-                -- DECOMPILER ERROR at PC205: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.UsePlayerEffectDistOptimization)._curValue = true
-                -- DECOMPILER ERROR at PC207: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.PlayerEffectDistOptimization)._curValue = 0.5
-                -- DECOMPILER ERROR at PC209: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.UseCharacterUpdateFrameOptimize)._curValue = true
-                -- DECOMPILER ERROR at PC211: Confused about usage of register: R4 in 'UnsetPending'
-
-                ;
-                (options.UseOtherPlayerUpdate)._curValue = true
                 -- DECOMPILER ERROR at PC213: Confused about usage of register: R4 in 'UnsetPending'
 
                 ;
+                (options.TextureQuality)._curValue = 2
+                -- DECOMPILER ERROR at PC215: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.UseEffectFrameOptimization)._curValue = true
+                -- DECOMPILER ERROR at PC217: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.EffectFrameOptimization)._curValue = 0.5
+                -- DECOMPILER ERROR at PC219: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.UsePlayerEffectDistOptimization)._curValue = true
+                -- DECOMPILER ERROR at PC221: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.PlayerEffectDistOptimization)._curValue = 0.5
+                -- DECOMPILER ERROR at PC223: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.UseCharacterUpdateFrameOptimize)._curValue = true
+                -- DECOMPILER ERROR at PC225: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
+                (options.UseOtherPlayerUpdate)._curValue = true
+                -- DECOMPILER ERROR at PC227: Confused about usage of register: R4 in 'UnsetPending'
+
+                ;
                 (options.WorkerVisible)._curValue = false
-                -- DECOMPILER ERROR at PC216: Confused about usage of register: R4 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC230: Confused about usage of register: R4 in 'UnsetPending'
 
                 ;
                 (options.PetRender)._curValue = PETRENDER.ONLYME
               else
-                -- DECOMPILER ERROR at PC225: Confused about usage of register: R4 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC239: Confused about usage of register: R4 in 'UnsetPending'
 
                 if (self.SPEC).HighestSiege == value then
                   (options.GraphicOption)._curValue = (self.GRAPHIC).VeryVeryHigh
                   self:SetGraphicOption((options.GraphicOption)._curValue, true)
-                  -- DECOMPILER ERROR at PC232: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC246: Confused about usage of register: R4 in 'UnsetPending'
+
+                  ;
+                  (options.TextureQuality)._curValue = 2
+                  -- DECOMPILER ERROR at PC248: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.UseEffectFrameOptimization)._curValue = true
-                  -- DECOMPILER ERROR at PC234: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC250: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.EffectFrameOptimization)._curValue = 0.3
-                  -- DECOMPILER ERROR at PC236: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC252: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.UsePlayerEffectDistOptimization)._curValue = true
-                  -- DECOMPILER ERROR at PC238: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC254: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.PlayerEffectDistOptimization)._curValue = 0.3
-                  -- DECOMPILER ERROR at PC240: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC256: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.UseCharacterUpdateFrameOptimize)._curValue = true
-                  -- DECOMPILER ERROR at PC242: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC258: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.UseOtherPlayerUpdate)._curValue = false
-                  -- DECOMPILER ERROR at PC244: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC260: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.WorkerVisible)._curValue = false
-                  -- DECOMPILER ERROR at PC247: Confused about usage of register: R4 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC263: Confused about usage of register: R4 in 'UnsetPending'
 
                   ;
                   (options.PetRender)._curValue = PETRENDER.ONLYME
@@ -895,7 +927,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
       end
     end
   end
-  -- DECOMPILER ERROR at PC249: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC265: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (options.GraphicUltra)._curValue = false
@@ -916,7 +948,7 @@ local LUTRecommandation = -1
 local LUTRecommandation2 = -1
 local LUTRecommandationName = "Vibrance"
 local LUTRecommandationName2 = "NonContrast"
--- DECOMPILER ERROR at PC314: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC332: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SetRecommandationLUT = function(self)
   -- function num : 0_16 , upvalues : LUTRecommandation, LUTRecommandationName
@@ -938,7 +970,7 @@ PaGlobal_Option.SetRecommandationLUT = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC319: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC337: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SetRecommandationLUT2 = function(self)
   -- function num : 0_17 , upvalues : LUTRecommandation2, LUTRecommandationName2
@@ -960,7 +992,7 @@ PaGlobal_Option.SetRecommandationLUT2 = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC323: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC341: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SpectialOptionInit = function(self)
   -- function num : 0_18 , upvalues : InitSpectionOption_LUT

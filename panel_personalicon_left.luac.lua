@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\mainstatus\panel_personalicon_left.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\mainstatus\panel_personalicon_left.luac 
 
 -- params : ...
 -- function num : 0
@@ -746,7 +746,7 @@ FromClient_PackageIconUpdate = function()
     _btnCashShop:SetShow(false)
     _btnAlertClose:SetShow(false)
   end
-  if isPremiumPcRoom == true and not isGameTypeRussia() and not isGameTypeEnglish() and not isGameTypeSA() and not isGameTypeKR2() then
+  if isPremiumPcRoom == true and not isGameTypeRussia() and not isGameTypeEnglish() and not isGameTypeSA() and not isGameTypeKR2() and not isGameTypeTR() then
     _pcRoomIcon:SetShow(true)
   end
   if isServerFixedCharge() then

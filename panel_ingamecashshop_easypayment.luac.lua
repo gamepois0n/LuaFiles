@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ingamecashshop\panel_ingamecashshop_easypayment.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ingamecashshop\panel_ingamecashshop_easypayment.luac 
 
 -- params : ...
 -- function num : 0
@@ -216,7 +216,7 @@ end
 
 -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
 
-PaGlobal_EasyBuy.Open = function(self, mainCategory, middleCategory, smallCategory, waypointKey)
+PaGlobal_EasyBuy.Open = function(self, uniqueNo, waypointKey)
   -- function num : 0_9
   if Panel_IngameCashShop_EasyPayment:GetShow() then
     PaGlobal_EasyBuy:Close()
@@ -246,18 +246,19 @@ PaGlobal_EasyBuy.Open = function(self, mainCategory, middleCategory, smallCatego
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
+  local categoryInfo = getCategoryInfo(uniqueNo)
+  if categoryInfo:getMainCategory() == -1 then
+    return 
+  end
   cashShop_requestCash()
   cashShop_requestCashShopList()
   PaymentPassword_Close()
-  if smallCategory == nil then
-    smallCategory = -1
-  end
   if waypointKey == nil then
     waypointKey = -1
   end
-  self.savedMainCategory = mainCategory
-  self.savedMiddleCategory = middleCategory
-  self.savedSmallCategory = smallCategory
+  self.savedMainCategory = categoryInfo:getMainCategory()
+  self.savedMiddleCategory = categoryInfo:getMiddleCategory()
+  self.savedSmallCategory = categoryInfo:getSmallCategory()
   self.savedWayPointKey = waypointKey
   PaGlobal_EasyBuy:Update()
   PaGlobal_EasyBuy:MyPearlUpdate()

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\damage\ui_lua_damage.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\damage\ui_lua_damage.luac 
 
 -- params : ...
 -- function num : 0
@@ -309,7 +309,7 @@ FromClient_WpChanged = function(prevWp, wp)
 end
 
 DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType, additionalDamageType, posFloat3, isTribeAttack, attackerActorKeyRaw, isNotRandom)
-  -- function num : 0_16 , upvalues : DamagePanel, DamagePanel_Index, DamagePanel_Count, WHITE_A0, WHITE_A1, RED_A0, RED_A1, ORANGE_A0, ORANGE_A1, GREEN_A0, GREEN_A1, SKY_BLUE_A0, SKY_BLUE_A1, LIGHT_ORANGE_A0, LIGHT_ORANGE_A1, isShowAttackEffect, SetAnimationPanel, effectControlSetting, SetAnimationControl, SetAnimation_CounterAttack
+  -- function num : 0_16 , upvalues : DamagePanel, DamagePanel_Index, DamagePanel_Count, WHITE_A0, WHITE_A1, RED_A0, RED_A1, ORANGE_A0, ORANGE_A1, GREEN_A0, GREEN_A1, SKY_BLUE_A0, SKY_BLUE_A1, LIGHT_ORANGE_A0, LIGHT_ORANGE_A1, isShowAttackEffect, SetAnimationPanel, SetAnimationControl, effectControlSetting, SetAnimation_CounterAttack
   local target = DamagePanel[DamagePanel_Index]
   DamagePanel_Index = DamagePanel_Index + 1
   if DamagePanel_Count < DamagePanel_Index then
@@ -419,216 +419,243 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
       targetPanel:SetWorldPosY(target._posY)
       targetPanel:SetWorldPosZ(target._posZ)
       SetAnimationPanel(targetPanel, startendColor, middleColor, timeRate)
-      if effectType ~= 0 and effectType ~= 6 then
-        -- DECOMPILER ERROR at PC227: Unhandled construct in 'MakeBoolean' P3
-
-        -- DECOMPILER ERROR at PC227: Unhandled construct in 'MakeBoolean' P3
-
-        if (effectType == 7 and effectType == 1) or effectType == 4 then
-          baseX = baseX - (effectControlSetting[effectType])._sizeX / 2
-          SetAnimationControl((target.effectList)[effectType], baseX, baseY, timeRate)
+      local onDmgMeter = (ToClient_getGameOptionControllerWrapper()):getOnDamageMeter()
+      do
+        if attackerActorKeyRaw == selfPlayer:getActorKey() then
+          local attakeeActor = getCharacterActor(attakeeKeyRaw)
+          if attakeeActor ~= nil then
+            onDmgMeter = checkActiveCondition(attakeeActor:getCharacterKey())
+          end
         end
-      end
-      if effectType ~= 5 or effectType == 8 then
-        baseX = baseX - (effectControlSetting[6])._sizeX
-        SetAnimationControl((target.effectList)[6], baseX, baseY - 60, timeRate)
-      elseif effectType == 93 then
-        baseX = baseX - (effectControlSetting[effectType])._sizeX
-        baseY = baseY + 5
-        SetAnimationControl((target.effectList)[effectType], baseX, baseY, timeRate)
-      elseif effectType == 96 then
-        baseX = baseX - (effectControlSetting[96])._sizeX
-        baseY = baseY + 5
-        SetAnimationControl((target.effectList)[96], baseX, baseY, timeRate)
-      elseif effectType == 97 then
-        baseX = baseX - (effectControlSetting[97])._sizeX
-        baseY = baseY + 5
-        SetAnimationControl((target.effectList)[97], baseX, baseY, timeRate)
-      elseif effectType == 99 then
-        baseX = baseX - (effectControlSetting[99])._sizeX
-        baseY = baseY + 50
-        SetAnimationControl((target.effectList)[99], baseX, baseY - 50, timeRate)
-      else
-        (UI.ASSERT)(false, "이상�\156 효과번호�\128 들어�\180.")
-      end
-      if isDamageShow then
-        if additionalDamageType == 0 and effectType == 1 then
-          if attackeeIsSelfPlayer then
-            ((target.effectList)[7]):AddEffect("Ui_Damage_CriticalBackattack_Red", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+        if onDmgMeter then
+          onDmgMeter = _ContentsGroup_DamageMeter
+        end
+        if onDmgMeter == true then
+          local nameStatic = target.damage
+          local numberWidth = 0
+          local numberHeight = 50
+          if effectType <= 6 then
+            setDamageNameStatic(nameStatic, effectNumber, showSymbol, startendColor)
+            numberWidth = nameStatic:getNumberWidth()
+            SetAnimationControl(nameStatic, -numberWidth / 2, baseY, timeRate)
+            baseY = baseY + numberHeight
           else
-            ((target.effectList)[7]):AddEffect("Ui_Damage_CriticalBackattack_White", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
-            render_setChromaticBlur(50, 0.1)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
+            nameStatic:SetShow(false)
           end
-          baseX = baseX - (effectControlSetting[7])._sizeX / 2
-          SetAnimationControl((target.effectList)[7], baseX, baseY, 10)
-        elseif additionalDamageType == 0 then
-          if attackeeIsSelfPlayer then
-            ((target.effectList)[7]):AddEffect("Ui_Damage_Backattack_red", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
-          else
-            ((target.effectList)[7]):AddEffect("Ui_Damage_Backattack", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 0, attackerActorKeyRaw)
-            render_setChromaticBlur(50, 0.1)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
+        else
+          (target.damage):SetShow(false)
+        end
+        if effectType ~= 0 and effectType ~= 6 then
+          -- DECOMPILER ERROR at PC281: Unhandled construct in 'MakeBoolean' P3
+
+          -- DECOMPILER ERROR at PC281: Unhandled construct in 'MakeBoolean' P3
+
+          if (effectType == 7 and effectType == 1) or effectType == 4 then
+            baseX = baseX - (effectControlSetting[effectType])._sizeX / 2
+            SetAnimationControl((target.effectList)[effectType], baseX, baseY, timeRate)
           end
-          baseX = baseX - (effectControlSetting[7])._sizeX / 2
-          SetAnimationControl((target.effectList)[7], baseX, baseY, 10)
-        elseif additionalDamageType == 1 then
-          if effectType == 1 then
+        end
+        if effectType ~= 5 or effectType == 8 then
+          baseX = baseX - (effectControlSetting[6])._sizeX
+          SetAnimationControl((target.effectList)[6], baseX, baseY - 60, timeRate)
+        elseif effectType == 93 then
+          baseX = baseX - (effectControlSetting[effectType])._sizeX
+          baseY = baseY + 5
+          SetAnimationControl((target.effectList)[effectType], baseX, baseY, timeRate)
+        elseif effectType == 96 then
+          baseX = baseX - (effectControlSetting[96])._sizeX
+          baseY = baseY + 5
+          SetAnimationControl((target.effectList)[96], baseX, baseY, timeRate)
+        elseif effectType == 97 then
+          baseX = baseX - (effectControlSetting[97])._sizeX
+          baseY = baseY + 5
+          SetAnimationControl((target.effectList)[97], baseX, baseY, timeRate)
+        elseif effectType == 99 then
+          baseX = baseX - (effectControlSetting[99])._sizeX
+          baseY = baseY + 50
+          SetAnimationControl((target.effectList)[99], baseX, baseY - 50, timeRate)
+        else
+          (UI.ASSERT)(false, "이상�\156 효과번호�\128 들어�\180.")
+        end
+        if isDamageShow then
+          if additionalDamageType == 0 and effectType == 1 then
             if attackeeIsSelfPlayer then
-              ((target.effectList)[8]):AddEffect("Ui_Damage_CriticalCounter_Red", false, 0, 0)
+              ((target.effectList)[7]):AddEffect("Ui_Damage_CriticalBackattack_Red", false, 0, 0)
               render_setPointBlur(0.04, 0.03)
               render_setColorBypass(0.8, 0.15)
               render_setColorBalance(float3(-0.3, 0, 0), 0.12)
             else
-              ((target.effectList)[8]):AddEffect("Ui_Damage_CriticalCounter_White", false, 0, 0)
+              ((target.effectList)[7]):AddEffect("Ui_Damage_CriticalBackattack_White", false, 0, 0)
+              audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
+              render_setChromaticBlur(50, 0.1)
+              render_setPointBlur(0.025, 0.03)
+              render_setColorBypass(0.3, 0.08)
+            end
+            baseX = baseX - (effectControlSetting[7])._sizeX / 2
+            SetAnimationControl((target.effectList)[7], baseX, baseY, 10)
+          elseif additionalDamageType == 0 then
+            if attackeeIsSelfPlayer then
+              ((target.effectList)[7]):AddEffect("Ui_Damage_Backattack_red", false, 0, 0)
+              render_setPointBlur(0.04, 0.03)
+              render_setColorBypass(0.8, 0.15)
+              render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+            else
+              ((target.effectList)[7]):AddEffect("Ui_Damage_Backattack", false, 0, 0)
+              audioPostEvent_SystemUi3D(14, 0, attackerActorKeyRaw)
+              render_setChromaticBlur(50, 0.1)
+              render_setPointBlur(0.025, 0.03)
+              render_setColorBypass(0.3, 0.08)
+            end
+            baseX = baseX - (effectControlSetting[7])._sizeX / 2
+            SetAnimationControl((target.effectList)[7], baseX, baseY, 10)
+          elseif additionalDamageType == 1 then
+            if effectType == 1 then
+              if attackeeIsSelfPlayer then
+                ((target.effectList)[8]):AddEffect("Ui_Damage_CriticalCounter_Red", false, 0, 0)
+                render_setPointBlur(0.04, 0.03)
+                render_setColorBypass(0.8, 0.15)
+                render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+              else
+                ((target.effectList)[8]):AddEffect("Ui_Damage_CriticalCounter_White", false, 0, 0)
+                audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
+                render_setChromaticBlur(65, 0.15)
+                render_setPointBlur(0.025, 0.03)
+                render_setColorBypass(0.3, 0.08)
+              end
+            elseif attackeeIsSelfPlayer then
+              ((target.effectList)[8]):AddEffect("Ui_Damage_Counter", false, 0, 0)
+              render_setPointBlur(0.04, 0.03)
+              render_setColorBypass(0.8, 0.15)
+              render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+            else
+              ((target.effectList)[8]):AddEffect("Ui_Damage_Counter", false, 0, 0)
               audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
               render_setChromaticBlur(65, 0.15)
               render_setPointBlur(0.025, 0.03)
               render_setColorBypass(0.3, 0.08)
             end
-          elseif attackeeIsSelfPlayer then
-            ((target.effectList)[8]):AddEffect("Ui_Damage_Counter", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
-          else
-            ((target.effectList)[8]):AddEffect("Ui_Damage_Counter", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
-            render_setChromaticBlur(65, 0.15)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
-          end
-          CounterAttack_Show()
-          baseX = baseX - (effectControlSetting[8])._sizeX / 2
-          SetAnimation_CounterAttack((target.effectList)[8], baseX, baseY, timeRate)
-        elseif additionalDamageType == 2 then
-          if effectType == 1 then
-            if attackeeIsSelfPlayer then
-              ((target.effectList)[9]):AddEffect("Ui_Damage_CriticalDownattack_Red", false, 0, 0)
+            CounterAttack_Show()
+            baseX = baseX - (effectControlSetting[8])._sizeX / 2
+            SetAnimation_CounterAttack((target.effectList)[8], baseX, baseY, timeRate)
+          elseif additionalDamageType == 2 then
+            if effectType == 1 then
+              if attackeeIsSelfPlayer then
+                ((target.effectList)[9]):AddEffect("Ui_Damage_CriticalDownattack_Red", false, 0, 0)
+                render_setPointBlur(0.04, 0.03)
+                render_setColorBypass(0.8, 0.15)
+                render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+              else
+                ((target.effectList)[9]):AddEffect("Ui_Damage_CriticalDownattack_White", false, 0, 0)
+                audioPostEvent_SystemUi3D(14, 3, attackerActorKeyRaw)
+                render_setChromaticBlur(55, 0.15)
+                render_setPointBlur(0.025, 0.03)
+                render_setColorBypass(0.3, 0.08)
+              end
+            elseif attackeeIsSelfPlayer then
+              ((target.effectList)[9]):AddEffect("Ui_Damage_Downattack", false, 0, 0)
               render_setPointBlur(0.04, 0.03)
               render_setColorBypass(0.8, 0.15)
               render_setColorBalance(float3(-0.3, 0, 0), 0.12)
             else
-              ((target.effectList)[9]):AddEffect("Ui_Damage_CriticalDownattack_White", false, 0, 0)
+              ((target.effectList)[9]):AddEffect("Ui_Damage_Downattack", false, 0, 0)
               audioPostEvent_SystemUi3D(14, 3, attackerActorKeyRaw)
               render_setChromaticBlur(55, 0.15)
               render_setPointBlur(0.025, 0.03)
               render_setColorBypass(0.3, 0.08)
             end
-          elseif attackeeIsSelfPlayer then
-            ((target.effectList)[9]):AddEffect("Ui_Damage_Downattack", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
-          else
-            ((target.effectList)[9]):AddEffect("Ui_Damage_Downattack", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 3, attackerActorKeyRaw)
-            render_setChromaticBlur(55, 0.15)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
-          end
-          baseX = baseX - (effectControlSetting[9])._sizeX / 2
-          SetAnimation_CounterAttack((target.effectList)[9], baseX, baseY, timeRate)
-        elseif additionalDamageType == 3 then
-          if effectType == 1 then
-            if attackeeIsSelfPlayer then
-              ((target.effectList)[10]):AddEffect("Ui_Damage_CriticalSpeedattack_Red", false, 0, 0)
+            baseX = baseX - (effectControlSetting[9])._sizeX / 2
+            SetAnimation_CounterAttack((target.effectList)[9], baseX, baseY, timeRate)
+          elseif additionalDamageType == 3 then
+            if effectType == 1 then
+              if attackeeIsSelfPlayer then
+                ((target.effectList)[10]):AddEffect("Ui_Damage_CriticalSpeedattack_Red", false, 0, 0)
+                render_setPointBlur(0.04, 0.03)
+                render_setColorBypass(0.8, 0.15)
+                render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+              else
+                ((target.effectList)[10]):AddEffect("Ui_Damage_CriticalSpeedattack_White", false, 0, 0)
+                audioPostEvent_SystemUi3D(14, 4, attackerActorKeyRaw)
+                render_setChromaticBlur(55, 0.15)
+                render_setPointBlur(0.025, 0.03)
+                render_setColorBypass(0.3, 0.08)
+              end
+            elseif attackeeIsSelfPlayer then
+              ((target.effectList)[10]):AddEffect("Ui_Damage_Speedattack", false, 0, 0)
               render_setPointBlur(0.04, 0.03)
               render_setColorBypass(0.8, 0.15)
               render_setColorBalance(float3(-0.3, 0, 0), 0.12)
             else
-              ((target.effectList)[10]):AddEffect("Ui_Damage_CriticalSpeedattack_White", false, 0, 0)
+              ((target.effectList)[10]):AddEffect("Ui_Damage_Speedattack", false, 0, 0)
               audioPostEvent_SystemUi3D(14, 4, attackerActorKeyRaw)
               render_setChromaticBlur(55, 0.15)
               render_setPointBlur(0.025, 0.03)
               render_setColorBypass(0.3, 0.08)
             end
-          elseif attackeeIsSelfPlayer then
-            ((target.effectList)[10]):AddEffect("Ui_Damage_Speedattack", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
-          else
-            ((target.effectList)[10]):AddEffect("Ui_Damage_Speedattack", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 4, attackerActorKeyRaw)
-            render_setChromaticBlur(55, 0.15)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
-          end
-          baseX = baseX - (effectControlSetting[10])._sizeX / 2
-          SetAnimation_CounterAttack((target.effectList)[10], baseX, baseY, timeRate)
-        elseif additionalDamageType == 4 then
-          if effectType == 1 then
-            if attackeeIsSelfPlayer then
-              ((target.effectList)[12]):AddEffect("Ui_Damage_CriticalAirattack_Red", false, 0, 0)
+            baseX = baseX - (effectControlSetting[10])._sizeX / 2
+            SetAnimation_CounterAttack((target.effectList)[10], baseX, baseY, timeRate)
+          elseif additionalDamageType == 4 then
+            if effectType == 1 then
+              if attackeeIsSelfPlayer then
+                ((target.effectList)[12]):AddEffect("Ui_Damage_CriticalAirattack_Red", false, 0, 0)
+                render_setPointBlur(0.04, 0.03)
+                render_setColorBypass(0.8, 0.15)
+                render_setColorBalance(float3(-0.3, 0, 0), 0.12)
+              else
+                ((target.effectList)[12]):AddEffect("Ui_Damage_CriticalAirattack_White", false, 0, 0)
+                audioPostEvent_SystemUi3D(14, 5, attackerActorKeyRaw)
+                render_setChromaticBlur(55, 0.15)
+                render_setPointBlur(0.025, 0.03)
+                render_setColorBypass(0.3, 0.08)
+              end
+            elseif attackeeIsSelfPlayer then
+              ((target.effectList)[12]):AddEffect("Ui_Damage_Airattack", false, 0, 0)
               render_setPointBlur(0.04, 0.03)
               render_setColorBypass(0.8, 0.15)
               render_setColorBalance(float3(-0.3, 0, 0), 0.12)
             else
-              ((target.effectList)[12]):AddEffect("Ui_Damage_CriticalAirattack_White", false, 0, 0)
+              ((target.effectList)[12]):AddEffect("Ui_Damage_Airattack", false, 0, 0)
               audioPostEvent_SystemUi3D(14, 5, attackerActorKeyRaw)
               render_setChromaticBlur(55, 0.15)
               render_setPointBlur(0.025, 0.03)
               render_setColorBypass(0.3, 0.08)
             end
-          elseif attackeeIsSelfPlayer then
-            ((target.effectList)[12]):AddEffect("Ui_Damage_Airattack", false, 0, 0)
-            render_setPointBlur(0.04, 0.03)
-            render_setColorBypass(0.8, 0.15)
-            render_setColorBalance(float3(-0.3, 0, 0), 0.12)
-          else
-            ((target.effectList)[12]):AddEffect("Ui_Damage_Airattack", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 5, attackerActorKeyRaw)
-            render_setChromaticBlur(55, 0.15)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.3, 0.08)
+            baseX = baseX - (effectControlSetting[12])._sizeX / 2
+            SetAnimation_CounterAttack((target.effectList)[12], baseX, baseY, timeRate)
+          elseif effectType == 1 then
+            if attackeeIsSelfPlayer then
+              ((target.effectList)[1]):AddEffect("Ui_Damage_Critical", false, 0, 0)
+              render_setPointBlur(0.045, 0.05)
+              render_setColorBypass(0.8, 0.15)
+            else
+              ((target.effectList)[1]):AddEffect("Ui_Damage_Critical", false, 0, 0)
+              audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
+              render_setChromaticBlur(70, 0.09)
+              render_setPointBlur(0.025, 0.03)
+              render_setColorBypass(0.5, 0.08)
+            end
+            baseX = baseX - (effectControlSetting[1])._sizeX / 2
+            SetAnimation_CounterAttack((target.effectList)[1], baseX, baseY, timeRate)
           end
-          baseX = baseX - (effectControlSetting[12])._sizeX / 2
-          SetAnimation_CounterAttack((target.effectList)[12], baseX, baseY, timeRate)
-        elseif effectType == 1 then
-          if attackeeIsSelfPlayer then
-            ((target.effectList)[1]):AddEffect("Ui_Damage_Critical", false, 0, 0)
-            render_setPointBlur(0.045, 0.05)
-            render_setColorBypass(0.8, 0.15)
-          else
-            ((target.effectList)[1]):AddEffect("Ui_Damage_Critical", false, 0, 0)
-            audioPostEvent_SystemUi3D(14, 2, attackerActorKeyRaw)
-            render_setChromaticBlur(70, 0.09)
-            render_setPointBlur(0.025, 0.03)
-            render_setColorBypass(0.5, 0.08)
-          end
-          baseX = baseX - (effectControlSetting[1])._sizeX / 2
-          SetAnimation_CounterAttack((target.effectList)[1], baseX, baseY, timeRate)
         end
-      end
-      do
-        -- DECOMPILER ERROR at PC1015: Unhandled construct in 'MakeBoolean' P1
+        do
+          -- DECOMPILER ERROR at PC1069: Unhandled construct in 'MakeBoolean' P1
 
-        if additionalDamageType ~= 99 or effectType == 96 or effectType == 97 or effectType == 93 then
-          local arrowControl = (target.effectList)[94]
-          if effectNumber < 0 then
-            arrowControl = (target.effectList)[95]
-            ;
-            ((target.effectList)[94]):ResetVertexAni(true)
-          else
-            arrowControl = (target.effectList)[94]
-            ;
-            ((target.effectList)[95]):ResetVertexAni(true)
+          if additionalDamageType ~= 99 or effectType == 96 or effectType == 97 or effectType == 93 then
+            local arrowControl = (target.effectList)[94]
+            if effectNumber < 0 then
+              arrowControl = (target.effectList)[95]
+              ;
+              ((target.effectList)[94]):ResetVertexAni(true)
+            else
+              arrowControl = (target.effectList)[94]
+              ;
+              ((target.effectList)[95]):ResetVertexAni(true)
+            end
+            baseX = baseX + (effectControlSetting[effectType])._sizeX
+            SetAnimationControl(arrowControl, baseX, baseY + 10, timeRate)
           end
-          baseX = baseX + (effectControlSetting[effectType])._sizeX
-          SetAnimationControl(arrowControl, baseX, baseY + 10, timeRate)
+          -- DECOMPILER ERROR: 69 unprocessed JMP targets
         end
-        -- DECOMPILER ERROR: 64 unprocessed JMP targets
       end
     end
   end

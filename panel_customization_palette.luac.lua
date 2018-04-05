@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_palette.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_palette.luac 
 
 -- params : ...
 -- function num : 0
@@ -9,7 +9,6 @@ local Static_SelectMark = nil
 local ColumnCount = 10
 local imageSize = 25
 local currentColorIndex = 0
-local consolegroupHeight = 0
 local checkPalette = function(x, y, static)
   -- function num : 0_0
   panel_x = 0
@@ -47,19 +46,14 @@ UpdatePaletteMarkPosition = function(index)
   end
 end
 
-CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType, paramIndex, PaletteIndex, historyapply)
-  -- function num : 0_2 , upvalues : Static_SelectMark, ColumnCount, imageSize, colorStatic, consolegroupHeight
+CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType, paramIndex, PaletteIndex)
+  -- function num : 0_2 , upvalues : Static_SelectMark, imageSize, ColumnCount, colorStatic
   clearPalette()
   local Frame_Content = (UI.getChildControl)(FrameTemplate, "Frame_Content")
   Static_SelectMark = (UI.getChildControl)(Frame_Content, "Static_SelectMark")
   Static_SelectMark:SetShow(false)
   local ftContent = (UI.getChildControl)(FrameTemplate, "Frame_Content")
   local count = getPaletteColorCount(PaletteIndex)
-  local countx = ColumnCount
-  local county = (math.floor)(count / ColumnCount)
-  if count % ColumnCount ~= 0 then
-    county = county + 1
-  end
   for colorIndex = 0, count - 1 do
     local luaColorIndex = colorIndex + 1
     local tempStatic = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ftContent, "Static_Color_" .. colorIndex)
@@ -76,10 +70,9 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
     tempStatic:SetColor(Int64toInt32(colorTemp))
     tempStatic:addInputEvent("Mouse_PressMove", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
     tempStatic:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-    -- DECOMPILER ERROR at PC133: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC122: Confused about usage of register: R17 in 'UnsetPending'
 
     colorStatic[luaColorIndex] = tempStatic
-    Add_CustomizationUIControl(0, 0, colorIndex % ColumnCount, consolegroupHeight + colorIndex / ColumnCount, 50, 50, colorStatic[luaColorIndex])
   end
   ftCollision:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/cus_palette.dds")
   ;
@@ -116,13 +109,13 @@ UpdateCommonPalette = function(classType, paramType, paramIndex)
 end
 
 local CheckControlArr = {}
-CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, paramIndex, paramIndex2, PaletteIndex, CheckControl1, CheckControl2, historyapply)
-  -- function num : 0_4 , upvalues : CheckControlArr, Static_SelectMark, ColumnCount, imageSize, colorStatic, consolegroupHeight
+CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, paramIndex, paramIndex2, PaletteIndex, CheckControl1, CheckControl2)
+  -- function num : 0_4 , upvalues : CheckControlArr, Static_SelectMark, imageSize, ColumnCount, colorStatic
   clearPalette()
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R10 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R9 in 'UnsetPending'
 
   CheckControlArr[1] = CheckControl1
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R10 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R9 in 'UnsetPending'
 
   CheckControlArr[2] = CheckControl2
   local Frame_Content = (UI.getChildControl)(FrameTemplate, "Frame_Content")
@@ -130,11 +123,6 @@ CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, pa
   Static_SelectMark:SetShow(false)
   local ftContent = (UI.getChildControl)(FrameTemplate, "Frame_Content")
   local count = getPaletteColorCount(PaletteIndex)
-  local countx = ColumnCount
-  local county = (math.floor)(count / ColumnCount)
-  if count % ColumnCount ~= 0 then
-    county = county + 1
-  end
   for colorIndex = 0, count - 1 do
     local luaColorIndex = colorIndex + 1
     local tempStatic = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ftContent, "Static_Color_" .. colorIndex)
@@ -150,10 +138,9 @@ CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, pa
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
     tempStatic:addInputEvent("Mouse_PressMove", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
-    -- DECOMPILER ERROR at PC128: Confused about usage of register: R23 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC117: Confused about usage of register: R20 in 'UnsetPending'
 
     colorStatic[luaColorIndex] = tempStatic
-    Add_CustomizationUIControl(0, 0, colorIndex % ColumnCount, consolegroupHeight + colorIndex / ColumnCount, 50, 50, colorStatic[luaColorIndex])
   end
   ftCollision:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/cus_palette.dds")
   ;
@@ -203,11 +190,6 @@ clearPalette = function()
   end
   colorStatic = {}
   rgbArr = {}
-end
-
-setConsoleHeightPalette = function(height)
-  -- function num : 0_7 , upvalues : consolegroupHeight
-  consolegroupHeight = height
 end
 
 
