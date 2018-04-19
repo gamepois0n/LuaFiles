@@ -427,4 +427,29 @@ createAccessory = function(enchantLeve1)
   end
 end
 
+clearAllianceJoinQueue = function()
+  -- function num : 0_11
+  ToClient_RequestClearAllianceJoinQueue()
+end
+
+requestAddAlliance = function(name, taxRate, limitCount)
+  -- function num : 0_12
+  ToClient_RequestAddAllianceJoinQueue(name, taxRate, limitCount)
+end
+
+createGuildAlliance = function(allianceName)
+  -- function num : 0_13
+  ToClient_CreateGuildAlliance(allianceName)
+end
+
+sendJoinGuildAlliance = function(doAccept)
+  -- function num : 0_14
+  ToClient_sendJoinGuildAlliance(doAccept)
+end
+
+cancelCreateGuildAlliance = function()
+  -- function num : 0_15
+  ToClient_CancelCreateGuildAlliance()
+end
+
 

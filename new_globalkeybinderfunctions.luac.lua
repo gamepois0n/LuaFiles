@@ -818,7 +818,11 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCashShop = function(delataTime)
                     if (getGameDanceEditor()):isShow() then
                       (getGameDanceEditor()):hide()
                     else
-                      InGameShop_Close()
+                      if Panel_Window_RecommandGoods_PopUp:GetShow() then
+                        PaGlobal_Recommend_PopUp:Close()
+                      else
+                        InGameShop_Close()
+                      end
                     end
                   end
                 end
@@ -1421,18 +1425,10 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
   end
 end
 
-local InteractionCheck = function(interactionType)
-  -- function num : 0_41
-  if interactionType == (CppEnums.InteractionType).InteractionType_ExchangeItem or interactionType == (CppEnums.InteractionType).InteractionType_InvitedParty or interactionType == (CppEnums.InteractionType).InteractionType_GuildInvite then
-    return true
-  end
-  return false
-end
-
--- DECOMPILER ERROR at PC166: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
-  -- function num : 0_42 , upvalues : VCK
+  -- function num : 0_41 , upvalues : VCK
   uiEdit = GetFocusEdit()
   if uiEdit == nil then
     return false
@@ -1691,10 +1687,10 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
 end
 
 local fastPinDelta = 0
--- DECOMPILER ERROR at PC173: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
-  -- function num : 0_43 , upvalues : VCK, fastPinDelta, InteractionCheck
+  -- function num : 0_42 , upvalues : VCK, fastPinDelta
   if FGlobal_GetFirstTutorialState() == true then
     return 
   end
@@ -1736,75 +1732,15 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
       end
       do
         if Panel_Interaction:IsShow() then
-          local buttonCount = FGlobal_InteractionButtonCount()
-          if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) == true then
-            local camBlur = getCameraBlur()
-            local interactableActor = interaction_getInteractable()
-            if interactableActor ~= nil and (not (interactableActor:get()):isPlayer() or (interactableActor:get()):isSelfPlayer()) and camBlur <= 0 then
-              local interactionType = interactableActor:getSettedFirstInteractionType()
-              if InteractionCheck(interactionType) then
-                return 
-              end
-              Interaction_ButtonPushed(interactionType)
-              DragManager:clearInfo()
-              return 
-            elseif interactableActor ~= nil and (interactableActor:get()):isPlayer() and camBlur <= 0 then
-              local interactionType = interactableActor:getSettedFirstInteractionType()
-              if InteractionCheck(interactionType) then
-                return 
-              end
-              Interaction_ButtonPushed(interactionType)
-              DragManager:clearInfo()
-              return 
-            end
+          local keyCode = nil
+          if _ContentsGroup_isConsoleTest and isPadInputIn() then
+            keyCode = FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
           else
-            -- DECOMPILER ERROR at PC198: Unhandled construct in 'MakeBoolean' P1
-
-            if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_1) and buttonCount >= 2 then
-              FGlobal_InteractionButtonActionRun(1)
-              DragManager:clearInfo()
-              setUiInputProcessed(VCK.KeyCode_F5)
-              return 
-            end
+            keyCode = FGlobal_Interaction_CheckAndGetPressedKeyCode()
           end
-        end
-        -- DECOMPILER ERROR at PC219: Unhandled construct in 'MakeBoolean' P1
-
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_2) and buttonCount >= 3 then
-          FGlobal_InteractionButtonActionRun(2)
-          DragManager:clearInfo()
-          setUiInputProcessed(VCK.KeyCode_F6)
-          return 
-        end
-        -- DECOMPILER ERROR at PC240: Unhandled construct in 'MakeBoolean' P1
-
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_3) and buttonCount >= 4 then
-          FGlobal_InteractionButtonActionRun(3)
-          DragManager:clearInfo()
-          setUiInputProcessed(VCK.KeyCode_F7)
-          return 
-        end
-        -- DECOMPILER ERROR at PC261: Unhandled construct in 'MakeBoolean' P1
-
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_4) and buttonCount >= 5 then
-          FGlobal_InteractionButtonActionRun(4)
-          DragManager:clearInfo()
-          setUiInputProcessed(VCK.KeyCode_F8)
-          return 
-        end
-        -- DECOMPILER ERROR at PC282: Unhandled construct in 'MakeBoolean' P1
-
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_5) and buttonCount >= 6 then
-          FGlobal_InteractionButtonActionRun(5)
-          DragManager:clearInfo()
-          setUiInputProcessed(VCK.KeyCode_F9)
-          return 
-        end
-        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F10) and buttonCount >= 7 then
-          FGlobal_InteractionButtonActionRun(6)
-          DragManager:clearInfo()
-          setUiInputProcessed(VCK.KeyCode_F10)
-          return 
+          if keyCode ~= nil then
+            Interaction_ExecuteByKeyMapping(keyCode)
+          end
         end
         if (getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial or isGameTypeTaiwan()) and GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_CashShop) then
           if PaGlobal_TutorialManager:isDoingTutorial() then
@@ -1837,13 +1773,13 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           ;
           (QuestInfoData.questDescHideWindow)()
         end
-        -- DECOMPILER ERROR at PC433: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC259: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           FGlobal_Panel_WebHelper_ShowToggle()
         end
         do return  end
-        -- DECOMPILER ERROR at PC451: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC277: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           Panel_ProductNote_ShowToggle()
@@ -1900,7 +1836,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC598: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC424: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -2046,7 +1982,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             return 
           end
           do
-            -- DECOMPILER ERROR at PC988: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC814: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               local isMailMain = Panel_Mail_Main:IsShow()
@@ -2059,117 +1995,100 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            if _ContentsGroup_isMemoOpen == true then
+            do
               do
-                -- DECOMPILER ERROR at PC1020: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC843: Unhandled construct in 'MakeBoolean' P1
 
-                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Memo) and Panel_Memo_List ~= nil then
-                  local isMemoList = Panel_Memo_List:IsShow()
-                  if isMemoList == false then
-                    audioPostEvent_SystemUi(1, 22)
-                    PaGlobal_Memo:ListOpen()
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
+                  local isFriendList = Panel_FriendList:IsShow()
+                  if isFriendList == false then
+                    FriendList_show()
+                    audioPostEvent_SystemUi(1, 28)
                   else
-                    audioPostEvent_SystemUi(1, 21)
-                    PaGlobal_Memo:ListClose()
+                    FriendList_hide()
+                    audioPostEvent_SystemUi(1, 27)
                   end
                 end
                 do return  end
-                do
-                  do
-                    -- DECOMPILER ERROR at PC1051: Unhandled construct in 'MakeBoolean' P1
-
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
-                      local isFriendList = Panel_FriendList:IsShow()
-                      if isFriendList == false then
-                        FriendList_show()
-                        audioPostEvent_SystemUi(1, 28)
-                      else
-                        FriendList_hide()
-                        audioPostEvent_SystemUi(1, 27)
-                      end
-                    end
-                    do return  end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_QuestHistory) then
-                      if Panel_Window_Quest_New:GetShow() then
-                        audioPostEvent_SystemUi(1, 27)
-                        Panel_Window_QuestNew_Show(false)
-                      else
-                        audioPostEvent_SystemUi(1, 29)
-                        Panel_Window_QuestNew_Show(true)
-                      end
-                      TooltipSimple_Hide()
-                      return 
-                    end
-                    if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_C) then
-                      if not isPvpEnable() then
-                        return 
-                      else
-                        requestTogglePvP()
-                        return 
-                      end
-                    end
-                    if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_B) then
-                      requestBlackSpritSkill()
-                      return 
-                    end
-                    if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial and not isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_BeautyShop) then
-                      if PaGlobal_TutorialManager:isDoingTutorial() then
-                        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
-                        return 
-                      end
-                      if not (getCustomizingManager()):isShow() then
-                        IngameCustomize_Show()
-                        return 
-                      end
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_WorldMap) then
-                      if not Panel_Global_Manual:GetShow() or FGlobal_BulletCount_UiShowCheck() then
-                        FGlobal_PushOpenWorldMap()
-                      else
-                        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_MINIGAMING_NOT_WORLDMAP"))
-                        return 
-                      end
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_House) then
-                      if Panel_HousingList:GetShow() then
-                        HousingList_Close()
-                      else
-                        FGlobal_HousingList_Open()
-                      end
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Worker) then
-                      FGlobal_WorkerManger_ShowToggle()
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Pet) then
-                      FGlobal_PetListNew_Toggle()
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Maid) then
-                      if Panel_Window_MaidList:GetShow() then
-                        MaidList_Close()
-                      else
-                        MaidList_Open()
-                      end
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Servant) then
-                      Servant_Call(0)
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_GuildServant) then
-                      FGlobal_GuildServantList_Open()
-                    end
-                    if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_DeleteNavigation) then
-                      if ((getSelfPlayer()):get()):getLevel() < 11 then
-                        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_TUTORIAL_PROGRSS_ACK"))
-                        return 
-                      end
-                      ToClient_DeleteNaviGuideByGroup(0)
-                      Panel_NaviButton:SetShow(false)
-                      audioPostEvent_SystemUi(0, 15)
-                    end
-                    ;
-                    (PaGlobal_GlobalKeyBinder.Process_CheckEscape)()
-                    -- DECOMPILER ERROR: 107 unprocessed JMP targets
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_QuestHistory) then
+                  if Panel_Window_Quest_New:GetShow() then
+                    audioPostEvent_SystemUi(1, 27)
+                    Panel_Window_QuestNew_Show(false)
+                  else
+                    audioPostEvent_SystemUi(1, 29)
+                    Panel_Window_QuestNew_Show(true)
+                  end
+                  TooltipSimple_Hide()
+                  return 
+                end
+                if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_C) then
+                  if not isPvpEnable() then
+                    return 
+                  else
+                    requestTogglePvP()
+                    return 
                   end
                 end
+                if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_B) then
+                  requestBlackSpritSkill()
+                  return 
+                end
+                if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial and not isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_BeautyShop) then
+                  if PaGlobal_TutorialManager:isDoingTutorial() then
+                    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
+                    return 
+                  end
+                  if not (getCustomizingManager()):isShow() then
+                    IngameCustomize_Show()
+                    return 
+                  end
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_WorldMap) then
+                  if not Panel_Global_Manual:GetShow() or FGlobal_BulletCount_UiShowCheck() then
+                    FGlobal_PushOpenWorldMap()
+                  else
+                    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_MINIGAMING_NOT_WORLDMAP"))
+                    return 
+                  end
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_House) then
+                  if Panel_HousingList:GetShow() then
+                    HousingList_Close()
+                  else
+                    FGlobal_HousingList_Open()
+                  end
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Worker) then
+                  FGlobal_WorkerManger_ShowToggle()
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Pet) then
+                  FGlobal_PetListNew_Toggle()
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Maid) then
+                  if Panel_Window_MaidList:GetShow() then
+                    MaidList_Close()
+                  else
+                    MaidList_Open()
+                  end
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Servant) then
+                  Servant_Call(0)
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_GuildServant) then
+                  FGlobal_GuildServantList_Open()
+                end
+                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_DeleteNavigation) then
+                  if ((getSelfPlayer()):get()):getLevel() < 11 then
+                    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_TUTORIAL_PROGRSS_ACK"))
+                    return 
+                  end
+                  ToClient_DeleteNaviGuideByGroup(0)
+                  Panel_NaviButton:SetShow(false)
+                  audioPostEvent_SystemUi(0, 15)
+                end
+                ;
+                (PaGlobal_GlobalKeyBinder.Process_CheckEscape)()
+                -- DECOMPILER ERROR: 96 unprocessed JMP targets
               end
             end
           end
@@ -2179,10 +2098,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC177: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC175: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
-  -- function num : 0_44 , upvalues : VCK
+  -- function num : 0_43 , upvalues : VCK
   if getEscHandle() == true or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) == false then
     return 
   end
@@ -2358,10 +2277,10 @@ PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
   end
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC178: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu = function(deltaTime)
-  -- function num : 0_45
+  -- function num : 0_44
   if _ContentsGroup_isConsoleTest == false or getGamePadEnable() == false then
     return 
   end
@@ -2369,19 +2288,28 @@ PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu = function(deltaTime)
     return 
   end
   if FGlobal_ConsoleQuickMenuCustom_IsShow() == true then
-    FromClient_ConsoleQuickMenu_OpenCustomPage(ToClient_checkQuickMenuCurrentGroup())
-    return 
-  end
-  if getInputMode() ~= (CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode then
-    if FGlobal_ConsoleQuickMenu_IsShow() == true then
-      FromClient_ConsoleQuickMenu_Quit(__eQuickMenuGroup_Count)
+    if (PaGlobal_ConsoleQuickMenuSetting._registMode)._isStart == true then
+      FGlobal_ConsoleQuickMenuSetting_RegistMode()
     end
     return 
   end
-  if FGlobal_ConsoleQuickMenu_IsShow() == false then
-    ToClient_checkAndOpenQuickMenu()
+  local state = __eQuickMenuState_Count
+  if getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode then
+    state = __eQuickMenuState_Normal
   else
-    local position = ToClient_checkAndRunQuickMenu()
+    if getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode then
+      state = __eQuickMenuState_Social
+    end
+  end
+  -- DECOMPILER ERROR at PC57: Unhandled construct in 'MakeBoolean' P1
+
+  if __eQuickMenuState_Count == state and FGlobal_ConsoleQuickMenu_IsShow() == true then
+    FromClient_ConsoleQuickMenu_Quit(__eQuickMenuDpadGroup_Count)
+  end
+  if FGlobal_ConsoleQuickMenu_IsShow() == false then
+    ToClient_checkAndOpenQuickMenu(state)
+  else
+    local position = ToClient_checkAndRunQuickMenu(__QuickMenuState_Normal)
     FGlobal_ConsoleQuickMenu_Update(position)
   end
 end

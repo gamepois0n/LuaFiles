@@ -23,9 +23,14 @@ if not ToClient_IsDevelopment() then
   _ContentsGroup_guildAlliance = ToClient_IsContentsGroupOpen("365")
   _ContentsGroup_LifeStatManufacturing = ToClient_IsContentsGroupOpen("368")
   _ContentsGroup_FairyTierUpgradeAndRebirth = ToClient_IsContentsGroupOpen("381")
-  _ContentsGroup_InvenUpdateCheck = ToClient_IsDevelopment()
+  _ContentsGroup_InvenUpdateCheck = false
   _ContentsGroup_GuildManufacture = ToClient_IsContentsGroupOpen("382")
   _ContentsGroup_DamageMeter = ToClient_IsContentsGroupOpen("383")
-  _ContentsGroup_Recommend = ToClient_IsDevelopment()
+  _ContentsGroup_Politics = ToClient_IsContentsGroupOpen("385")
+  if not ToClient_IsDevelopment() then
+    _ContentsGroup_Recommend = isGameTypeKorea()
+    _ContentsGroup_DriganBossDragon = ToClient_IsContentsGroupOpen("377")
+    _ContentsGroup_SeigeSeason5 = ToClient_IsContentsGroupOpen("388")
+  end
 end
 

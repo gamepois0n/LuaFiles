@@ -184,7 +184,7 @@ AcquireQuestDirect_UpdateQuestDemand = function(questData, demand, isComplete)
   ;
   (ui._text_QuestTitle):SetText("")
   ;
-  (ui._text_QuestTitle_2):SetText(demand._desc)
+  (ui._text_QuestTitle_2):SetText(ToClient_getReplaceDialog(demand._desc))
   ;
   (ui._text_QuestTitle_2):SetPosY(-70)
   ;
@@ -200,7 +200,7 @@ AcquireQuestDirect_UpdateQuestDemand = function(questData, demand, isComplete)
     ;
     (ui._text_QuestDemand):SetText("")
     local conditionCountMSg = demand._currentCount .. " / " .. demand._destCount
-    chatting_sendMessage("", demand._desc .. " : " .. conditionCountMSg, (CppEnums.ChatType).System)
+    chatting_sendMessage("", ToClient_getReplaceDialog(demand._desc) .. " : " .. conditionCountMSg, (CppEnums.ChatType).System)
     ;
     (ui._text_QuestDemand_2):SetText(conditionCountMSg)
     AcquireQuestDirect_Start(5)
@@ -213,7 +213,7 @@ AcquireQuestDirect_UpdateQuestDemand = function(questData, demand, isComplete)
       ;
       (ui._text_QuestDemand_2):SetText("")
       ;
-      (ui._text_QuestTitle):SetText(demand._desc)
+      (ui._text_QuestTitle):SetText(ToClient_getReplaceDialog(demand._desc))
       chatting_sendMessage("", PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AQUIREMESSAGE_QUESTCOMPLETE", "desc", demand._desc), (CppEnums.ChatType).System)
       if isComplete then
         audioPostEvent_SystemUi(4, 2)

@@ -97,7 +97,11 @@ PaGlobal_URL_Check = function(param1)
                                               if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
                                                 url = "https://game.sea.playblackdesert.com"
                                               else
-                                                _PA_LOG("정태�\164", "새로�\180 국가 �\128입입니다!!!!! global_define_url.lua �\144 �\173 추가해주세요!!!!")
+                                                if ToClient_isXBox() then
+                                                  url = "https://gameweb-na980.blackdesertonline.com"
+                                                else
+                                                  _PA_LOG("정태�\164", "새로�\180 국가 �\128입입니다!!!!! global_define_url.lua �\144 �\173 추가해주세요!!!!")
+                                                end
                                               end
                                             end
                                           end

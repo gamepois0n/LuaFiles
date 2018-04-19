@@ -382,7 +382,7 @@ CppEnums.PcWorkType = {ePcWorkType_Empty = 0, ePcWorkType_Play = 1, ePcWorkType_
 CppEnums.MatchType = {Pvp = 0, Race = 1}
 -- DECOMPILER ERROR at PC5531: Confused about usage of register: R0 in 'UnsetPending'
 
-CppEnums.ItemWhereType = {eInventory = 0, eEquip = 1, eWarehouse = 2, eServantInventory = 4, eServantEquip = 5, eGuildWarehouse = 14, eCashInventory = 17, eInventoryBag = 19, eCashInventoryBag = 20, eCount = 21}
+CppEnums.ItemWhereType = {eInventory = 0, eEquip = 1, eWarehouse = 2, eServantInventory = 4, eServantEquip = 5, eGuildWarehouse = 14, eCashInventory = 17, eInventoryBag = 19, eCashInventoryBag = 20, eCount = 22}
 -- DECOMPILER ERROR at PC5547: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuickSlotType = {eEmpty = 0, eItem = 1, eSkill = 2, eCashItem = 3}

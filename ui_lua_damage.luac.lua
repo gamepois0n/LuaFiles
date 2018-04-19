@@ -427,8 +427,8 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
             onDmgMeter = checkActiveCondition(attakeeActor:getCharacterKey())
           end
         end
-        if onDmgMeter then
-          onDmgMeter = _ContentsGroup_DamageMeter
+        if not onDmgMeter or not _ContentsGroup_DamageMeter then
+          onDmgMeter = ToClient_getDmgMeterStateForTest()
         end
         if onDmgMeter == true then
           local nameStatic = target.damage
@@ -446,9 +446,9 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
           (target.damage):SetShow(false)
         end
         if effectType ~= 0 and effectType ~= 6 then
-          -- DECOMPILER ERROR at PC281: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC286: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC281: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC286: Unhandled construct in 'MakeBoolean' P3
 
           if (effectType == 7 and effectType == 1) or effectType == 4 then
             baseX = baseX - (effectControlSetting[effectType])._sizeX / 2
@@ -638,7 +638,7 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
           end
         end
         do
-          -- DECOMPILER ERROR at PC1069: Unhandled construct in 'MakeBoolean' P1
+          -- DECOMPILER ERROR at PC1074: Unhandled construct in 'MakeBoolean' P1
 
           if additionalDamageType ~= 99 or effectType == 96 or effectType == 97 or effectType == 93 then
             local arrowControl = (target.effectList)[94]
@@ -654,7 +654,7 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
             baseX = baseX + (effectControlSetting[effectType])._sizeX
             SetAnimationControl(arrowControl, baseX, baseY + 10, timeRate)
           end
-          -- DECOMPILER ERROR: 69 unprocessed JMP targets
+          -- DECOMPILER ERROR: 70 unprocessed JMP targets
         end
       end
     end
