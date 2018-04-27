@@ -104,7 +104,12 @@ mercenary.Update = function(self)
     local territoryKey = index + 2
     local occupyGuildWrapper = ToClient_GetOccupyGuildWrapper(territoryKey)
     if occupyGuildWrapper ~= nil then
-      local guildName = occupyGuildWrapper:getName()
+      local guildName = ""
+      if occupyGuildWrapper:getAllianceName() == "" then
+        guildName = occupyGuildWrapper:getName()
+      else
+        guildName = occupyGuildWrapper:getAllianceName()
+      end
       ;
       ((((self._control)._territoryControl)[index])._occupyGuild):SetText(guildName)
       ;
@@ -128,11 +133,11 @@ mercenary.Update = function(self)
           ;
           ((((self._control)._territoryControl)[index])._freeDesc):SetShow(true)
           self:SetButton(index, false)
-          -- DECOMPILER ERROR at PC73: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC73: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC73: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

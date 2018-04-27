@@ -482,15 +482,15 @@ GuildStableList_ButtonOpen = function(eType, slotNo)
             buttonList[buttonSlotNo] = self._buttonRecovery
             buttonSlotNo = buttonSlotNo + 1
           end
+          if servantInfo:getDeadCount() > 0 then
+            buttonList[buttonSlotNo] = self._buttonInjury
+            buttonSlotNo = buttonSlotNo + 1
+          end
         else
           if (CppEnums.ServantStateType).Type_Coma == servantInfo:getStateType() then
             buttonList[buttonSlotNo] = self._buttonRecovery
             buttonSlotNo = buttonSlotNo + 1
           end
-        end
-        if servantInfo:getDeadCount() > 0 then
-          buttonList[buttonSlotNo] = self._buttonInjury
-          buttonSlotNo = buttonSlotNo + 1
         end
       end
     end

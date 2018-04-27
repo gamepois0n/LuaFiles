@@ -1561,6 +1561,8 @@ PaGlobal_CheckedQuest.questInfo = function(self, questGroupInfo, uiQuestInfo, _n
   local questId = (uiQuestInfo:getQuestNo())._quest
   if uiQuestInfo._isCleared == false and uiQuestInfo._isProgressing == true then
     tmp_nextPosY = self:ProgressQuest(questGroupInfo, uiQuestInfo, tmp_nextPosY, isSingle, groupTitle, questGroupCount, questGroupIndex)
+  else
+    tmp_nextPosY = _nextPosY
   end
   return tmp_nextPosY
 end
@@ -1757,17 +1759,17 @@ PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, quest
       local conditionText = nil
       if conditionInfo._currentCount == conditionInfo._destCount or conditionInfo._destCount <= conditionInfo._currentCount then
         conditionText = "- " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
-        uiCondition:SetText(conditionText)
+        uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
         uiCondition:SetLineRender(true)
         uiCondition:SetFontColor(UI_color.C_FF626262)
       else
         if conditionInfo._destCount == 1 then
           conditionText = "- " .. conditionInfo._desc
-          uiCondition:SetText(conditionText)
+          uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
           uiCondition:SetLineRender(false)
         else
           conditionText = "- " .. conditionInfo._desc .. " (" .. conditionInfo._currentCount .. "/" .. conditionInfo._destCount .. ")"
-          uiCondition:SetText(conditionText)
+          uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
           uiCondition:SetLineRender(false)
         end
       end

@@ -13,7 +13,7 @@ registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Enchant"
 PaGlobal_Enchant = {
 _ui = {_button_Question = (UI.getChildControl)(Panel_Window_Enchant, "Button_Question"), _radiobutton_EnchantTab = (UI.getChildControl)(Panel_Window_Enchant, "Radiobutton_EnchantTab"), _radiobutton_CronEnchantTab = (UI.getChildControl)(Panel_Window_Enchant, "Radiobutton_CronEnchantTab"), _effect_Enchant = (UI.getChildControl)(Panel_Window_Enchant, "Static_EnchantEffect"), _button_Apply = (UI.getChildControl)(Panel_Window_Enchant, "Button_EnchantApply"), _statictext_noticeApplyButton = (UI.getChildControl)(Panel_Window_Enchant, "StaticText_NoticeApplyButton"), _checkbox_skipEffect = (UI.getChildControl)(Panel_Window_Enchant, "CheckBox_SkipEffect"), _tooltip_TargetItem = (UI.getChildControl)(Panel_Window_Enchant, "StaticText_Notice_Slot_0"), _tooltip_EnchantMaterial = (UI.getChildControl)(Panel_Window_Enchant, "StaticText_Notice_Slot_1"), _statictext_EnchantResult = (UI.getChildControl)(Panel_Window_Enchant, "StaticText_Result"), _difficultyBg = (UI.getChildControl)(Panel_Window_Enchant, "Static_DifficultyBg"), 
 _difficultyValue = {}
-, _frame_DescEnchant = (UI.getChildControl)(Panel_Window_Enchant, "Static_DescEnchantFrame"), _statictext_EnchantFailCount = nil, _statictext_ValksCount = nil, _statictext_TotalEnchantCount = nil, _statictext_EnchantInfo = nil, _button_SecretExtract = nil, _radiobutton_EasyEnchant = nil, _radiobutton_DifficultEnchant = nil, _checkbox_ForcedEnchant = nil, _checkbox_UseCron = nil, _tooltip_ForcedEnchant = nil, _tooltip_UseCron = nil, _slot_Cron = nil, _statictext_NumOfCron = nil, _frame_DescCronEnchant = (UI.getChildControl)(Panel_Window_Enchant, "Static_DescUpgradeFrame"), _progress_Cron = nil, _bg_ProgressCron = nil, 
+, _frame_DescEnchant = (UI.getChildControl)(Panel_Window_Enchant, "Static_DescEnchantFrame"), _statictext_EnchantFailCount = nil, _statictext_ValksCount = nil, _statictext_TotalEnchantCount = nil, _statictext_EnchantInfo = nil, _button_SecretExtract = nil, _radiobutton_EasyEnchant = nil, _radiobutton_DifficultEnchant = nil, _checkbox_ForcedEnchant = nil, _checkbox_UseCron = nil, _tooltip_ForcedEnchant = nil, _tooltip_UseCron = nil, _slot_Cron = nil, _statictext_NumOfCron = nil, _static_descBG = nil, _frame_DescCronEnchant = (UI.getChildControl)(Panel_Window_Enchant, "Static_DescUpgradeFrame"), _progress_Cron = nil, _bg_ProgressCron = nil, 
 _addStatBg = {}
 , 
 _statictext_AddStat = {}
@@ -32,10 +32,10 @@ _enum_EnchantType = {_safe = 0, _unsafe = 1, _broken = 2, _gradedown = 3, _downA
 _enum_EnchantResult = {_success = 0, _broken = 1, _gradedown = 2, _fail = 3, _failAndPrevent = 4, _error = 5}
 , 
 _strForEnchantInfo = {_forcedChecked = "", _cronChecked = "", _notChecked = ""}
-, _enchantInfo = nil, _screctExtractIvenType = nil, _numOfCronLevelText = 4, _animationTimeStamp = 0, _isAnimating = false, _resultFlag = false, _resultShowTime = 0, _resultTimeCheck = false, _grantItemSlotNo = nil, _grantItemWhereType = nil, _isLastEnchant = false, _isResulTextAnimation = false, _isContentsEnable = ToClient_IsContentsGroupOpen("74"), _isCronBonusOpen = ToClient_IsContentsGroupOpen("222"), _isCronEnchantOpen = ToClient_IsContentsGroupOpen("234"), 
+, _enchantInfo = nil, _screctExtractIvenType = nil, _numOfCronLevelText = 4, _animationTimeStamp = 0, _isAnimating = false, _resultFlag = false, _resultShowTime = 0, _resultTimeCheck = false, _grantItemSlotNo = nil, _grantItemWhereType = nil, _isLastEnchant = false, _isResulTextAnimation = false, _isPossiblePromotion = false, _isContentsEnable = ToClient_IsContentsGroupOpen("74"), _isCronBonusOpen = ToClient_IsContentsGroupOpen("222"), _isCronEnchantOpen = ToClient_IsContentsGroupOpen("234"), 
 _enchantData = {}
 , _isShowNoticeApplyButton = false}
--- DECOMPILER ERROR at PC1329: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1331: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant._enchantData = {
 _20 = {
@@ -228,7 +228,7 @@ _5 = {
 }
 }
 }
--- DECOMPILER ERROR at PC1332: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1334: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.initialize = function(self)
   -- function num : 0_0
@@ -363,35 +363,39 @@ PaGlobal_Enchant.initialize = function(self)
 
   ;
   ((self._ui)._statictext_AddStat)[3] = (UI.getChildControl)(((self._ui)._addStatBg)[3], "StaticText_Stat")
-  -- DECOMPILER ERROR at PC284: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  ((self._ui)._staticText_CronEnchantCount)[0] = (UI.getChildControl)((self._ui)._bg_ProgressCron, "StaticText_CronCount0")
-  -- DECOMPILER ERROR at PC293: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  ((self._ui)._staticText_CronEnchantCount)[1] = (UI.getChildControl)((self._ui)._bg_ProgressCron, "StaticText_CronCount1")
-  -- DECOMPILER ERROR at PC302: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  ((self._ui)._staticText_CronEnchantCount)[2] = (UI.getChildControl)((self._ui)._bg_ProgressCron, "StaticText_CronCount2")
-  -- DECOMPILER ERROR at PC311: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  ((self._ui)._staticText_CronEnchantCount)[3] = (UI.getChildControl)((self._ui)._bg_ProgressCron, "StaticText_CronCount3")
-  -- DECOMPILER ERROR at PC319: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC283: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._stackTitle = (UI.getChildControl)((self._ui)._bg_ProgressCron, "StaticText_StackTitle")
+  -- DECOMPILER ERROR at PC291: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._currentGrade = (UI.getChildControl)((self._ui)._frame_DescCronEnchant, "StaticText_CurrentGrade")
+  -- DECOMPILER ERROR at PC299: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._maxGrade = (UI.getChildControl)((self._ui)._frame_DescCronEnchant, "StaticText_MaxGrade")
+  -- DECOMPILER ERROR at PC307: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._currentStat = (UI.getChildControl)((self._ui)._frame_DescCronEnchant, "StaticText_CurrentStack")
+  -- DECOMPILER ERROR at PC315: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._progress = (UI.getChildControl)((self._ui)._frame_DescCronEnchant, "Progress2_EnergyEXP")
+  -- DECOMPILER ERROR at PC323: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._static_descBG = (UI.getChildControl)((self._ui)._frame_DescCronEnchant, "Static_DescBg")
   for dIndex = 0, 10 do
-    -- DECOMPILER ERROR at PC334: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC338: Confused about usage of register: R5 in 'UnsetPending'
 
     ((self._ui)._difficultyValue)[dIndex] = (UI.getChildControl)((self._ui)._difficultyBg, "Static_Difficulty_" .. dIndex)
     ;
     (((self._ui)._difficultyValue)[dIndex]):SetShow(false)
   end
   local slotConfig = {createIcon = false, createBorder = true, createCount = true, createEnchant = true, createCash = true}
-  -- DECOMPILER ERROR at PC355: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC359: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._slot_TargetItem).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_0")
@@ -399,7 +403,7 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)((self._ui)._slot_TargetItem, "Slot_0", 0, Panel_Window_Enchant, slotConfig)
   ;
   ((self._ui)._slot_TargetItem):createChild()
-  -- DECOMPILER ERROR at PC371: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC375: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._slot_TargetItem).empty = true
@@ -412,7 +416,7 @@ PaGlobal_Enchant.initialize = function(self)
   ;
   (((self._ui)._slot_TargetItem).border):SetPosY(0)
   Panel_Tooltip_Item_SetPosition(0, (self._ui)._slot_TargetItem, "Enchant")
-  -- DECOMPILER ERROR at PC408: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC412: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._slot_EnchantMaterial).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_1")
@@ -420,7 +424,7 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)((self._ui)._slot_EnchantMaterial, "Slot_1", 1, Panel_Window_Enchant, slotConfig)
   ;
   ((self._ui)._slot_EnchantMaterial):createChild()
-  -- DECOMPILER ERROR at PC424: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC428: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._slot_EnchantMaterial).empty = true
@@ -435,6 +439,8 @@ PaGlobal_Enchant.initialize = function(self)
   Panel_Tooltip_Item_SetPosition(1, (self._ui)._slot_EnchantMaterial, "Enchant")
   ;
   ((self._ui)._statictext_BounsStats):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self._ui)._statictext_StackForNext):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   ((self._ui)._checkbox_skipEffect):SetEnableArea(0, 0, ((self._ui)._checkbox_skipEffect):GetTextSizeX() + 60, ((self._ui)._checkbox_skipEffect):GetSizeY())
   local itemSSW = FromClient_getPreventDownGradeItem()
@@ -535,13 +541,14 @@ PaGlobal_Enchant.initialize = function(self)
   registerEvent("EventEnchantResultShow", "FromClient_EnchantResultShow")
   registerEvent("FromClient_UpgradeItem", "FromClient_UpgradeItem")
   registerEvent("FromClient_UpdateEnchantFailCount", "FromClient_UpdateEnchantFailCount")
+  registerEvent("FromClient_PromotionItem", "FromClient_PromotionItem")
   registerEvent("onScreenResize", "OnScreenEvent")
   Panel_Window_Enchant:RegisterUpdateFunc("UpdateFunc_checkAnimation")
   ;
   ((self._ui)._radiobutton_CronEnchantTab):SetShow(self._isCronEnchantOpen)
 end
 
--- DECOMPILER ERROR at PC1335: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1337: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.init_EnchantFrame = function(self)
   -- function num : 0_1
@@ -574,7 +581,7 @@ PaGlobal_Enchant.init_EnchantFrame = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1338: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1340: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.init_CronFrame = function(self)
   -- function num : 0_2
@@ -592,7 +599,15 @@ PaGlobal_Enchant.init_CronFrame = function(self)
   self:setAsCronEnchantButton()
   self:hideAllCronCountText()
   ;
+  ((self._ui)._static_descBG):SetSize(((self._ui)._static_descBG):GetSizeX(), 60)
+  ;
+  ((self._ui)._static_descBG):ComputePos()
+  ;
   ((self._ui)._statictext_BounsStats):SetText("\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_SETEQUIPMENT"))
+  ;
+  ((self._ui)._statictext_BounsStats):SetPosY(0)
+  ;
+  ((self._ui)._statictext_BounsStats):ComputePos()
   ;
   ((self._ui)._statictext_StackForNext):SetText("")
   ;
@@ -605,9 +620,17 @@ PaGlobal_Enchant.init_CronFrame = function(self)
   ((self._ui)._statictext_EnchantResult):ComputePos()
   ;
   ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_NOEQUIP"))
+  ;
+  ((self._ui)._currentGrade):SetShow(false)
+  ;
+  ((self._ui)._maxGrade):SetShow(false)
+  ;
+  ((self._ui)._currentStat):SetShow(false)
+  ;
+  ((self._ui)._progress):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC1341: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1343: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showDifficultEnchantButton = function(self, isShow)
   -- function num : 0_3
@@ -621,7 +644,7 @@ PaGlobal_Enchant.showDifficultEnchantButton = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC1344: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1346: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showScretExtractButton = function(self, isShow)
   -- function num : 0_4
@@ -633,7 +656,7 @@ PaGlobal_Enchant.showScretExtractButton = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC1347: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1349: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.clearItemSlot = function(self, itemSlot)
   -- function num : 0_5
@@ -645,7 +668,7 @@ PaGlobal_Enchant.clearItemSlot = function(self, itemSlot)
   (itemSlot.icon):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1350: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1352: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setItemToSlot = function(self, uiSlot, slotNo, itemWrapper, inventoryType)
   -- function num : 0_6
@@ -663,7 +686,7 @@ PaGlobal_Enchant.setItemToSlot = function(self, uiSlot, slotNo, itemWrapper, inv
   end
 end
 
--- DECOMPILER ERROR at PC1353: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1355: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setItemToSlotMonoTone = function(self, uiSlot, itemStaticWrapper)
   -- function num : 0_7
@@ -676,7 +699,7 @@ PaGlobal_Enchant.setItemToSlotMonoTone = function(self, uiSlot, itemStaticWrappe
   uiSlot:setItemByStaticStatus(itemStaticWrapper, toInt64(0, 0), 0, false, false, false, 0, 0, nil)
 end
 
--- DECOMPILER ERROR at PC1356: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1358: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setEnable_button_Apply = function(self, isTrue)
   -- function num : 0_8
@@ -693,14 +716,14 @@ PaGlobal_Enchant.setEnable_button_Apply = function(self, isTrue)
   end
 end
 
--- DECOMPILER ERROR at PC1359: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1361: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.SetCheck_RadioButton = function(self, radioBtn, isTrue)
   -- function num : 0_9
   radioBtn:SetCheck(isTrue)
 end
 
--- DECOMPILER ERROR at PC1362: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1364: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setAsCancelButton = function(self)
   -- function num : 0_10
@@ -715,24 +738,31 @@ PaGlobal_Enchant.setAsCancelButton = function(self)
   ((self._ui)._button_Apply):SetFontColor((Defines.Color).C_FFC4BEBE)
 end
 
--- DECOMPILER ERROR at PC1365: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1367: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setAsEnchantButton = function(self)
   -- function num : 0_11
   ((self._ui)._button_Apply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
 end
 
--- DECOMPILER ERROR at PC1368: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1370: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setAsCronEnchantButton = function(self)
   -- function num : 0_12
-  ((self._ui)._button_Apply):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RADIOBTNTITLE_2"))
+  ((self._ui)._button_Apply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_APPLY_BUTTON_NORM_CAPHRAS"))
 end
 
--- DECOMPILER ERROR at PC1371: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1373: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.setAsPromotionEnchantButton = function(self)
+  -- function num : 0_13
+  ((self._ui)._button_Apply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_APPLY_BUTTON_MAX_CAPHRAS"))
+end
+
+-- DECOMPILER ERROR at PC1376: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setEnable_CheckboxForcedEnchant = function(self, isEnable)
-  -- function num : 0_13
+  -- function num : 0_14
   ((self._ui)._checkbox_ForcedEnchant):SetIgnore(not isEnable)
   ;
   ((self._ui)._checkbox_ForcedEnchant):SetMonoTone(not isEnable)
@@ -745,10 +775,10 @@ PaGlobal_Enchant.setEnable_CheckboxForcedEnchant = function(self, isEnable)
   ((self._ui)._forceEnchantIcon):SetCheck(not isEnable)
 end
 
--- DECOMPILER ERROR at PC1374: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1379: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setEnable_CheckboxUseCron = function(self, isEnable)
-  -- function num : 0_14
+  -- function num : 0_15
   if not self._isContentsEnable then
     isEnable = false
   end
@@ -767,10 +797,10 @@ PaGlobal_Enchant.setEnable_CheckboxUseCron = function(self, isEnable)
   ((self._ui)._useCronIcon):SetCheck(isEnable)
 end
 
--- DECOMPILER ERROR at PC1377: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1382: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setText_NumOfCron = function(self, cnt, needCnt)
-  -- function num : 0_15
+  -- function num : 0_16
   if cnt < needCnt then
     ((self._ui)._statictext_NumOfCron):SetText("<PAColor0xffff7383>" .. tostring(cnt) .. "/" .. tostring(needCnt) .. "<PAOldColor>")
   else
@@ -779,10 +809,10 @@ PaGlobal_Enchant.setText_NumOfCron = function(self, cnt, needCnt)
   end
 end
 
--- DECOMPILER ERROR at PC1380: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1385: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setText_EnchantInfo = function(self, isChecked)
-  -- function num : 0_16
+  -- function num : 0_17
   if isChecked then
     ((self._ui)._statictext_EnchantInfo):SetText((self._strForEnchantInfo)._forcedChecked)
     ;
@@ -793,10 +823,10 @@ PaGlobal_Enchant.setText_EnchantInfo = function(self, isChecked)
   end
 end
 
--- DECOMPILER ERROR at PC1383: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1388: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setText_EnchantProtectInfo = function(self, isChecked)
-  -- function num : 0_17
+  -- function num : 0_18
   if isChecked then
     ((self._ui)._statictext_EnchantInfo):SetText((self._strForEnchantInfo)._cronChecked)
     ;
@@ -807,25 +837,25 @@ PaGlobal_Enchant.setText_EnchantProtectInfo = function(self, isChecked)
   end
 end
 
--- DECOMPILER ERROR at PC1386: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1391: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addEnchantEffectToItemSlot = function(self, icon)
-  -- function num : 0_18
+  -- function num : 0_19
   icon:EraseAllEffect()
   icon:AddEffect("fUI_LimitOver01A", false, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1389: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1394: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addEnchantSuccessEffectToItemSlot = function(self, icon)
-  -- function num : 0_19
+  -- function num : 0_20
   icon:AddEffect("UI_ItemEnchant01", false, -6, -6)
 end
 
--- DECOMPILER ERROR at PC1392: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1397: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addWeaponEnchantEffect = function(self)
-  -- function num : 0_20
+  -- function num : 0_21
   ((self._ui)._effect_Enchant):EraseAllEffect()
   ;
   ((self._ui)._effect_Enchant):AddEffect("fUI_LimitOver02A", true, 0, 0)
@@ -835,10 +865,10 @@ PaGlobal_Enchant.addWeaponEnchantEffect = function(self)
   ((self._ui)._effect_Enchant):AddEffect("fUI_LimitOver_Spark", false, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1395: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1401: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addAmorEnchantEffect = function(self)
-  -- function num : 0_21
+  -- function num : 0_22
   ((self._ui)._effect_Enchant):EraseAllEffect()
   ;
   ((self._ui)._effect_Enchant):AddEffect("fUI_LimitOver02A", true, 0, 0)
@@ -848,10 +878,10 @@ PaGlobal_Enchant.addAmorEnchantEffect = function(self)
   ((self._ui)._effect_Enchant):AddEffect("fUI_LimitOver_Spark", false, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1398: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1405: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeEnchantEffect = function(self)
-  -- function num : 0_22
+  -- function num : 0_23
   ((self._ui)._effect_Enchant):EraseAllEffect()
   ;
   (((self._ui)._slot_EnchantMaterial).icon):EraseAllEffect()
@@ -859,88 +889,88 @@ PaGlobal_Enchant.removeEnchantEffect = function(self)
   (((self._ui)._slot_TargetItem).icon):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1401: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1409: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addFailCountEffectForTutorial = function(self)
-  -- function num : 0_23
+  -- function num : 0_24
   ((self._ui)._statictext_EnchantFailCount):AddEffect("UI_QustComplete01", false, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1405: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1413: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeFailCountEffect = function(self)
-  -- function num : 0_24
+  -- function num : 0_25
   ((self._ui)._statictext_EnchantFailCount):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1409: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1417: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addValksCountEffectForTutorial = function(self)
-  -- function num : 0_25
+  -- function num : 0_26
   ((self._ui)._statictext_ValksCount):AddEffect("UI_QustComplete02", true, 0, 0)
   ;
   ((self._ui)._statictext_ValksCount):AddEffect("UI_ArrowMark06", true, ((self._ui)._statictext_ValksCount):GetSizeX() * -0.9, 0)
 end
 
--- DECOMPILER ERROR at PC1413: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1421: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeValksCountEffect = function(self)
-  -- function num : 0_26
+  -- function num : 0_27
   ((self._ui)._statictext_ValksCount):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1417: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1425: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addTargetSlotEffectForTutorial = function(self)
-  -- function num : 0_27
+  -- function num : 0_28
   (((self._ui)._slot_TargetItem).icon):AddEffect("UI_ArrowMark02", true, 0, -50)
   ;
   (((self._ui)._slot_TargetItem).icon):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1421: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1429: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeTargetSlotEffect = function(self)
-  -- function num : 0_28
+  -- function num : 0_29
   (((self._ui)._slot_TargetItem).icon):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1425: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1433: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addMaterialSlotEffectForTutorial = function(self)
-  -- function num : 0_29
+  -- function num : 0_30
   (((self._ui)._slot_EnchantMaterial).icon):AddEffect("UI_ArrowMark02", true, 0, -50)
   ;
   (((self._ui)._slot_EnchantMaterial).icon):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1429: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1437: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeMaterialSlotEffect = function(self)
-  -- function num : 0_30
+  -- function num : 0_31
   (((self._ui)._slot_EnchantMaterial).icon):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1433: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1441: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.addApplyButtonEffectForTutorial = function(self)
-  -- function num : 0_31
+  -- function num : 0_32
   ((self._ui)._button_Apply):AddEffect("UI_ArrowMark02", true, 0, -50)
   ;
   ((self._ui)._button_Apply):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
 end
 
--- DECOMPILER ERROR at PC1437: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1445: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.removeApplyButtonEffect = function(self)
-  -- function num : 0_32
+  -- function num : 0_33
   ((self._ui)._button_Apply):EraseAllEffect()
 end
 
--- DECOMPILER ERROR at PC1441: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1449: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showPanel = function(self)
-  -- function num : 0_33
+  -- function num : 0_34
   InventoryWindow_Show()
   Equipment_PosSaveMemory()
   self:clearEnchantSlot()
@@ -951,104 +981,69 @@ PaGlobal_Enchant.showPanel = function(self)
   OnScreenEvent()
 end
 
--- DECOMPILER ERROR at PC1445: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Enchant.setTextEnchantFailCntWithCnt = function(self, cnt)
-  -- function num : 0_34
-  ((self._ui)._statictext_EnchantFailCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELP", "failCount", cnt))
-end
-
--- DECOMPILER ERROR at PC1449: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Enchant.setTextValksCntWithCnt = function(self, cnt)
-  -- function num : 0_35
-  ((self._ui)._statictext_ValksCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_VALKSCOUNT", "count", cnt))
-end
-
 -- DECOMPILER ERROR at PC1453: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextTotalEnchantCntWithCnt = function(self, cnt)
-  -- function num : 0_36
-  ((self._ui)._statictext_TotalEnchantCount):SetText("<PAColor0xffffbc1a>+ " .. cnt)
+PaGlobal_Enchant.setTextEnchantFailCntWithCnt = function(self, cnt)
+  -- function num : 0_35
+  ((self._ui)._statictext_EnchantFailCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELP", "failCount", cnt))
 end
 
 -- DECOMPILER ERROR at PC1457: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextCronEnchantState = function(self, curLevel, curStack)
-  -- function num : 0_37
-  ((self._ui)._statictext_CurCronState):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTSTATE", "level", tostring(curLevel), "stack", tostring(curStack)))
-  ;
-  ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTGRADE", "level", curLevel))
+PaGlobal_Enchant.setTextValksCntWithCnt = function(self, cnt)
+  -- function num : 0_36
+  ((self._ui)._statictext_ValksCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_VALKSCOUNT", "count", cnt))
 end
 
 -- DECOMPILER ERROR at PC1461: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextCronEnchantResultState = function(self)
-  -- function num : 0_38
-  local curLevel = (self._enchantInfo):ToClient_getCurLevel()
-  if curLevel == 4 then
-    self:setEnable_button_Apply(false)
-    ;
-    ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALGRADE"))
-  else
-    ;
-    ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTGRADE", "level", curLevel))
-  end
+PaGlobal_Enchant.setTextTotalEnchantCntWithCnt = function(self, cnt)
+  -- function num : 0_37
+  ((self._ui)._statictext_TotalEnchantCount):SetText("<PAColor0xffffbc1a>+ " .. cnt)
 end
 
 -- DECOMPILER ERROR at PC1465: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextStackForNext = function(self, needStack)
-  -- function num : 0_39
-  local curLevel = (self._enchantInfo):ToClient_getCurLevel()
-  if curLevel == 4 then
-    ((self._ui)._statictext_StackForNext):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALENERGY"))
-  else
-    ;
-    ((self._ui)._statictext_StackForNext):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTSTACK", "stack", needStack))
-  end
+PaGlobal_Enchant.setTextCronEnchantState = function(self, curLevel, curStack)
+  -- function num : 0_38
+  ((self._ui)._statictext_CurCronState):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTSTATE", "level", tostring(curLevel), "stack", tostring(curStack)))
+  ;
+  ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTGRADE_CAPHRAS", "level", curLevel))
 end
 
 -- DECOMPILER ERROR at PC1469: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setNeedCountToMatrialSlot = function(self, slot, needCnt)
-  -- function num : 0_40
-  if tonumber((slot.count):GetText()) < Int64toInt32(needCnt) then
-    (slot.count):SetText("<PAColor0xffff7383>" .. (slot.count):GetText() .. "/" .. tostring(needCnt) .. "<PAOldColor>")
+PaGlobal_Enchant.setTextCronEnchantResultState = function(self)
+  -- function num : 0_39
+  local curLevel = (self._enchantInfo):ToClient_getCurLevel()
+  local maxLevel = (self._enchantInfo):ToClient_getMaxLevel()
+  if maxLevel == curLevel then
+    ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALGRADE_CAPHRAS"))
   else
     ;
-    (slot.count):SetText("<PAColor0xFF0FBFFF>" .. (slot.count):GetText() .. "/" .. tostring(needCnt) .. "<PAOldColor>")
+    ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENTGRADE_CAPHRAS", "level", curLevel))
   end
-  PaGlobal_Enchant:setEnable_button_Apply(not isAble)
 end
 
 -- DECOMPILER ERROR at PC1473: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setCronStackProgress = function(self, curStack, maxStack)
-  -- function num : 0_41
-  local rate = 0
-  if maxStack ~= 0 then
-    rate = curStack / maxStack * 100
-  end
-  ;
-  ((self._ui)._progress_Cron):SetProgressRate(rate)
-  if self._grantItemWhereType == nil or self._grantItemSlotNo == nil then
-    return 
-  end
-  local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
-  if itemWrapper ~= nil then
-    local curCount = itemWrapper:getCronEnchantFailCount()
-    for idx = 0, 3 do
-      local itemSSW = itemWrapper:getStaticStatus()
-      local itemClassifyType = itemSSW:getItemClassify()
-      local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
-      local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, idx)
-      local enchantableCount = cronEnchantSSW:getCount()
-      if curCount < enchantableCount then
-        (((self._ui)._statictext_AddStat)[idx]):SetFontColor((Defines.Color).C_FFC4BEBE)
-      else
+PaGlobal_Enchant.setTextStackForNext = function(self, needStack)
+  -- function num : 0_40
+  local curLevel = (self._enchantInfo):ToClient_getCurLevel()
+  local maxLevel = (self._enchantInfo):ToClient_getMaxLevel()
+  if maxLevel == curLevel then
+    ((self._ui)._statictext_StackForNext):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALENERGY"))
+  else
+    if curLevel < maxLevel then
+      local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+      if itemWrapper ~= nil then
+        local itemSSW = itemWrapper:getStaticStatus()
+        local cronKey = itemSSW:getCronKey()
+        local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+        local cronEnchantSSW = ToClient_GetCronEnchantWrapper(cronKey, enchantLevel, curLevel)
+        local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedHDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedHPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
         ;
-        (((self._ui)._statictext_AddStat)[idx]):SetFontColor((Defines.Color).C_FF69BB4C)
+        ((self._ui)._statictext_StackForNext):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_NEXT_BONUS", "bonus", addText))
       end
     end
   end
@@ -1056,47 +1051,114 @@ end
 
 -- DECOMPILER ERROR at PC1477: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, HDV, PV, HPV, HP, MP, isReturn)
+PaGlobal_Enchant.setNeedCountToMatrialSlot = function(self, slot, needCnt)
+  -- function num : 0_41
+  _PA_LOG("이문�\133", "needCnt : " .. tostring(needCnt))
+  ;
+  (slot.count):SetText("<PAColor0xFF0FBFFF>" .. tostring(needCnt) .. "<PAOldColor>")
+  PaGlobal_Enchant:setEnable_button_Apply(not isAble)
+end
+
+-- DECOMPILER ERROR at PC1481: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.setCronStackProgress = function(self, curStack, maxStack, nextStack)
   -- function num : 0_42
+  local rate = 0
+  if maxStack ~= 0 then
+    rate = curStack / maxStack * 100
+  end
+  ;
+  ((self._ui)._progress):SetProgressRate(rate)
+  ;
+  ((self._ui)._currentStat):SetText((string.format)("%.3f", rate) .. " %")
+  if nextStack ~= nil then
+    ((self._ui)._maxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_NEXT_STEP_CAPHRAS", "val", nextStack))
+  else
+    local maxLevel = (self._enchantInfo):ToClient_getMaxLevel()
+    ;
+    ((self._ui)._maxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_MAX_CRONELV", "level", tostring(maxLevel)))
+  end
+  do
+    if self._grantItemWhereType == nil or self._grantItemSlotNo == nil then
+      return 
+    end
+    local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+    if itemWrapper ~= nil then
+      local curCount = itemWrapper:getCronEnchantFailCount()
+      for idx = 0, 3 do
+        local itemSSW = itemWrapper:getStaticStatus()
+        local itemClassifyType = itemSSW:getItemClassify()
+        local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+        local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, idx)
+        local enchantableCount = cronEnchantSSW:getCount()
+        if curCount < enchantableCount then
+          (((self._ui)._statictext_AddStat)[idx]):SetFontColor((Defines.Color).C_FFC4BEBE)
+        else
+          ;
+          (((self._ui)._statictext_AddStat)[idx]):SetFontColor((Defines.Color).C_FF69BB4C)
+        end
+      end
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC1485: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, HDV, PV, HPV, HP, MP, isReturn)
+  -- function num : 0_43
   local str = ""
   if DD > 0 then
-    str = PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_ATTCK") .. tostring(DD)
+    str = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK") .. tostring(DD)
   end
   if HIT > 0 then
     if str ~= "" then
       str = str .. " / "
     end
-    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_HIT") .. tostring(HIT)
+    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT") .. tostring(HIT)
   end
   if DV > 0 then
     if str ~= "" then
       str = str .. " / "
     end
-    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_DV") .. tostring(DV)
+    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE") .. tostring(DV)
   end
   if HDV > 0 then
-    str = str .. "(+" .. tostring(HDV) .. ")"
+    if DV == 0 then
+      if str ~= "" then
+        str = str .. " / "
+      end
+      str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE") .. "0" .. "(+" .. tostring(HDV) .. ")"
+    else
+      str = str .. "(+" .. tostring(HDV) .. ")"
+    end
   end
   if PV > 0 then
     if str ~= "" then
       str = str .. " / "
     end
-    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_PV") .. tostring(PV)
+    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE") .. tostring(PV)
   end
   if HPV > 0 then
-    str = str .. "(+" .. tostring(HPV) .. ")"
+    if PV == 0 then
+      if str ~= "" then
+        str = str .. " / "
+      end
+      str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE") .. "0" .. "(+" .. tostring(HPV) .. ")"
+    else
+      str = str .. "(+" .. tostring(HPV) .. ")"
+    end
   end
   if HP > 0 then
     if str ~= "" then
       str = str .. " / "
     end
-    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_HP") .. tostring(HP)
+    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP") .. tostring(HP)
   end
   if MP > 0 then
     if str ~= "" then
       str = str .. " / "
     end
-    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_MP") .. tostring(MP)
+    str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP") .. tostring(MP)
   end
   if str == "" then
     str = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_NOEFFECT")
@@ -1108,76 +1170,40 @@ PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, HDV, PV, HPV, H
   ((self._ui)._statictext_BounsStats):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_ADDEFFECT", "add", str))
 end
 
--- DECOMPILER ERROR at PC1481: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1489: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.initCronLevelAndCountText = function(self, maxLevel)
-  -- function num : 0_43
-  local countControl, curCount = nil, nil
-  local maxCountInv = 1 / (self._enchantInfo):ToClient_getStackForLevel(maxLevel - 1) * ((self._ui)._progress_Cron):GetSizeX()
-  local posX = 0
+  -- function num : 0_44
+  local curCount = nil
+  local maxCountInv = 1 / (self._enchantInfo):ToClient_getStackForLevel(maxLevel - 1) * ((self._ui)._progress):GetSizeX()
   local maxIdx = (math.max)(maxLevel, self._numOfCronLevelText) - 1
   for idx = 0, maxIdx do
-    if self._numOfCronLevelText < idx then
-      countControl = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, (self._frame_DescCronEnchant)._bg_ProgressCron, "StaticText_CronCount" .. tostring(idx))
-      CopyBaseProperty((self._frame_DescCronEnchant)._bg_ProgressCron, countControl)
-      -- DECOMPILER ERROR at PC45: Confused about usage of register: R11 in 'UnsetPending'
-
-      ;
-      ((self._ui)._staticText_CronEnchantCount)[idx] = countControl
-    else
-      countControl = ((self._ui)._staticText_CronEnchantCount)[idx]
-    end
     if idx < maxLevel then
       local maxCount = (self._enchantInfo):ToClient_getStackForLevel(maxIdx)
       curCount = (self._enchantInfo):ToClient_getStackForLevel(idx)
-      posX = curCount / maxCount * ((self._ui)._progress_Cron):GetSizeX() + (self._const)._posX_CronCount - countControl:GetSizeX() / 2
-      countControl:SetText(tostring(curCount))
-      countControl:SetPosX(posX)
-      countControl:SetPosY((self._const)._posY_CronCount)
-      countControl:SetShow(true)
       ;
       ((self._ui)._stackTitle):SetPosY((self._const)._posY_CronCount + 2)
       if ((self._ui)._addStatBg)[idx] ~= nil then
-        if idx < 3 then
-          if idx == 0 then
-            posX = posX - 10
-          end
-          local statPosX = posX + countControl:GetSizeX() / 2 - (((self._ui)._addStatBg)[idx]):GetSizeX() / 2
-          ;
-          (((self._ui)._addStatBg)[idx]):SetPosX(statPosX)
+        local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+        if itemWrapper ~= nil then
+          local itemSSW = itemWrapper:getStaticStatus()
+          local itemClassifyType = itemSSW:getItemClassify()
+          local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+          local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, idx)
+          local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedHDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedHPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
         end
+      end
+    else
+      do
         do
           ;
-          (((self._ui)._addStatBg)[idx]):SetShow(true)
-          local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
-          if itemWrapper ~= nil then
-            local itemSSW = itemWrapper:getStaticStatus()
-            local itemClassifyType = itemSSW:getItemClassify()
-            local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
-            local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, idx)
-            local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedHDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedHPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
-            ;
-            (((self._ui)._statictext_AddStat)[idx]):SetText(addText)
-          end
-          do
-            do
-              countControl:SetShow(false)
-              ;
-              ((self._ui)._stackTitle):SetShow(false)
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out DO_STMT
+          ((self._ui)._stackTitle):SetShow(false)
+          -- DECOMPILER ERROR at PC88: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC88: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC88: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_STMT
-
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_STMT
-
-            end
-          end
         end
       end
     end
@@ -1187,29 +1213,46 @@ PaGlobal_Enchant.initCronLevelAndCountText = function(self, maxLevel)
   ;
   ((self._ui)._topDesc2):SetShow(true)
   ;
+  ((self._ui)._topDesc2):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self._ui)._topDesc2):SetText(((self._ui)._topDesc2):GetText())
+  ;
   ((self._ui)._statictext_CurCronState):SetShow(false)
   ;
-  ((self._ui)._bg_ProgressCron):SetShow(true)
+  ((self._ui)._bg_ProgressCron):SetShow(false)
   ;
-  ((self._ui)._progress_Cron):SetShow(true)
+  ((self._ui)._progress_Cron):SetShow(false)
   ;
-  ((self._ui)._progress_CronBg):SetShow(true)
+  ((self._ui)._progress_CronBg):SetShow(false)
   ;
-  ((self._ui)._stackTitle):SetShow(true)
+  ((self._ui)._stackTitle):SetShow(false)
   self._numOfCronLevelText = maxIdx + 1
+  ;
+  ((self._ui)._currentGrade):SetShow(true)
+  ;
+  ((self._ui)._maxGrade):SetShow(true)
+  ;
+  ((self._ui)._currentStat):SetShow(true)
+  ;
+  ((self._ui)._progress):SetShow(true)
+  local maxLevel = (self._enchantInfo):ToClient_getMaxLevel()
+  local curLevel = (self._enchantInfo):ToClient_getCurLevel()
+  ;
+  ((self._ui)._currentGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_CURRENT_CRONELV", "level", tostring(curLevel)))
 end
 
--- DECOMPILER ERROR at PC1485: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1493: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.hideAllCronCountText = function(self)
-  -- function num : 0_44
+  -- function num : 0_45
   for idx = 0, self._numOfCronLevelText - 1 do
-    (((self._ui)._staticText_CronEnchantCount)[idx]):SetShow(false)
-    ;
-    (((self._ui)._addStatBg)[idx]):SetShow(false)
   end
   ;
   ((self._ui)._topDesc):SetShow(true)
+  ;
+  ((self._ui)._topDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self._ui)._topDesc):SetText(((self._ui)._topDesc):GetText())
   ;
   ((self._ui)._topDesc2):SetShow(false)
   ;
@@ -1224,10 +1267,10 @@ PaGlobal_Enchant.hideAllCronCountText = function(self)
   ((self._ui)._stackTitle):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC1489: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1497: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.setEnchantFailCount = function(self)
-  -- function num : 0_45
+  -- function num : 0_46
   if self._enchantInfo == nil then
     self._enchantInfo = getEnchantInformation()
     ;
@@ -1261,10 +1304,10 @@ PaGlobal_Enchant.setEnchantFailCount = function(self)
   self:showEnchantProbability(failCount + valksCount)
 end
 
--- DECOMPILER ERROR at PC1493: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1501: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showDifficulty = function(self, inventoryType, slotNo)
-  -- function num : 0_46
+  -- function num : 0_47
   if not isGameServiceTypeDev() then
     ((self._ui)._difficultyBg):SetShow(false)
     return 
@@ -1341,10 +1384,10 @@ PaGlobal_Enchant.showDifficulty = function(self, inventoryType, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC1497: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1505: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showSlotToolTip = function(self, toolTip, text)
-  -- function num : 0_47
+  -- function num : 0_48
   toolTip:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   toolTip:SetAutoResize(true)
   toolTip:SetText(text)
@@ -1352,10 +1395,10 @@ PaGlobal_Enchant.showSlotToolTip = function(self, toolTip, text)
   toolTip:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC1501: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1509: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showNoticeEnchantApply = function(self, enchantType)
-  -- function num : 0_48
+  -- function num : 0_49
   if enchantType == (self._enum_EnchantType)._safe then
     local isWeapon = true
     local isCollectTool = true
@@ -1400,10 +1443,10 @@ PaGlobal_Enchant.showNoticeEnchantApply = function(self, enchantType)
   end
 end
 
--- DECOMPILER ERROR at PC1505: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1513: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showEnchantResultText = function(self, resultType, mainSlotNo, mainWhereType)
-  -- function num : 0_49
+  -- function num : 0_50
   if resultType == (self._enum_EnchantResult)._success then
     ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_0"))
     ;
@@ -1450,10 +1493,10 @@ PaGlobal_Enchant.showEnchantResultText = function(self, resultType, mainSlotNo, 
   self:showEffectByResult(resultType, mainSlotNo, mainWhereType)
 end
 
--- DECOMPILER ERROR at PC1509: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1517: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showEffectByResult = function(self, resultType, mainSlotNo, mainWhereType)
-  -- function num : 0_50
+  -- function num : 0_51
   if resultType == (self._enum_EnchantResult)._success then
     local itemWrapper = getInventoryItemByType(mainWhereType, mainSlotNo)
     if itemWrapper ~= nil then
@@ -1474,11 +1517,11 @@ PaGlobal_Enchant.showEffectByResult = function(self, resultType, mainSlotNo, mai
   end
 end
 
--- DECOMPILER ERROR at PC1513: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1521: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showCronEnchantResult = function(self, variedCount)
-  -- function num : 0_51
-  ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_5", "count", tostring(variedCount)))
+  -- function num : 0_52
+  ((self._ui)._statictext_EnchantResult):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_5_CAPHRAS", "count", tostring(variedCount)))
   ;
   ((self._ui)._statictext_EnchantResult):SetShow(true)
   ;
@@ -1488,10 +1531,24 @@ PaGlobal_Enchant.showCronEnchantResult = function(self, variedCount)
   self._resultTimeCheck = true
 end
 
--- DECOMPILER ERROR at PC1517: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1525: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.showPromotionResult = function(self)
+  -- function num : 0_53
+  ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_PROMOTION_CAPHRAS"))
+  ;
+  ((self._ui)._statictext_EnchantResult):SetShow(true)
+  ;
+  ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+  ;
+  ((self._ui)._statictext_EnchantResult):AddEffect("UI_QustComplete01", false, 0, 0)
+  self._resultTimeCheck = true
+end
+
+-- DECOMPILER ERROR at PC1529: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.showEnchantProbability = function(self, count)
-  -- function num : 0_52
+  -- function num : 0_54
   if self._resultFlag then
     self._resultFlag = false
     return 
@@ -1511,10 +1568,10 @@ PaGlobal_Enchant.showEnchantProbability = function(self, count)
   self._resultTimeCheck = false
 end
 
--- DECOMPILER ERROR at PC1521: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1533: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnAddStat = function(self, index)
-  -- function num : 0_53
+  -- function num : 0_55
   local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
   if itemWrapper ~= nil then
     local itemSSW = itemWrapper:getStaticStatus()
@@ -1526,15 +1583,15 @@ PaGlobal_Enchant.handleMOnAddStat = function(self, index)
   end
 end
 
--- DECOMPILER ERROR at PC1525: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1537: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutAddStat = function(self)
-  -- function num : 0_54
+  -- function num : 0_56
   TooltipSimple_Hide()
 end
 
 FromClient_luaLoadComplete_Enchant = function()
-  -- function num : 0_55
+  -- function num : 0_57
   PaGlobal_Enchant:initialize()
 end
 

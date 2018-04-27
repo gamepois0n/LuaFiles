@@ -101,7 +101,7 @@ GuildWar_SetDay = function()
   ((worldmapGrand.ui).comboBox_DaySelect):ToggleListbox()
 end
 
-local maxTaxGrade = 3
+local maxTaxGrade = 4
 WorldMap_GuildWar_TaxGradeFilterShow = function()
   -- function num : 0_2 , upvalues : worldmapGrand, maxTaxGrade
   ((worldmapGrand.ui).comboBox_TaxGrade):DeleteAllItem()
@@ -110,31 +110,83 @@ WorldMap_GuildWar_TaxGradeFilterShow = function()
     if index == 0 then
       ((worldmapGrand.ui).comboBox_TaxGrade):AddItem(PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SELECTDEFALUT"), index)
     else
-      ;
-      ((worldmapGrand.ui).comboBox_TaxGrade):AddItem(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_VILLAGETENT_GRADE", "index", index), index)
+      if index == 1 then
+        if _ContentsGroup_SeigeSeason5 == true then
+          ((worldmapGrand.ui).comboBox_TaxGrade):AddItem(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CHALLENGE_POINT_GRADE_ZERO"))
+        else
+          count = count - 1
+        end
+      else
+        local taxGrade = index - 1
+        local tempString = ""
+        if taxGrade == 1 then
+          tempString = "I"
+        else
+          if taxGrade == 2 then
+            tempString = "II"
+          else
+            if taxGrade == 3 then
+              tempString = "III"
+            end
+          end
+        end
+        ;
+        ((worldmapGrand.ui).comboBox_TaxGrade):AddItem(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CHALLENGE_POINT_GRADE", "index", tempString))
+      end
     end
-    count = count + 1
+    do
+      do
+        count = count + 1
+        -- DECOMPILER ERROR at PC68: LeaveBlock: unexpected jumping out DO_STMT
+
+      end
+    end
   end
   ;
-  (((worldmapGrand.ui).comboBox_TaxGrade):GetListControl()):SetSize(((worldmapGrand.ui).comboBox_TaxGrade):GetSizeX(), (count) * 18)
+  (((worldmapGrand.ui).comboBox_TaxGrade):GetListControl()):SetSize(((worldmapGrand.ui).comboBox_TaxGrade):GetSizeX(), (count) * 16)
   ;
   ((worldmapGrand.ui).comboBox_TaxGrade):ToggleListbox()
 end
 
 GuildWar_SetGrade = function()
   -- function num : 0_3 , upvalues : worldmapGrand
-  local selectIndex = ((worldmapGrand.ui).comboBox_TaxGrade):GetSelectIndex()
-  if selectIndex == 0 then
+  if ((worldmapGrand.ui).comboBox_TaxGrade):GetSelectIndex() == -1 then
+    return 
+  end
+  local selectIndex = ((worldmapGrand.ui).comboBox_TaxGrade):GetSelectIndex() - 1
+  if selectIndex == -1 then
     ToClient_resetVisibleVillageSiegeTaxLevel()
     ;
     ((worldmapGrand.ui).comboBox_TaxGrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SELECTDEFALUT"))
   else
+    if _ContentsGroup_SeigeSeason5 == false then
+      selectIndex = selectIndex + 1
+    end
     ToClient_setVisibleVillageSiegeTaxLevel(selectIndex)
-    ;
-    ((worldmapGrand.ui).comboBox_TaxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_VILLAGETENT_GRADE", "index", selectIndex))
+    if selectIndex == 0 then
+      ((worldmapGrand.ui).comboBox_TaxGrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CHALLENGE_POINT_GRADE_ZERO"))
+    else
+      local taxGrade = selectIndex
+      local tempString = ""
+      if taxGrade == 1 then
+        tempString = "I"
+      else
+        if taxGrade == 2 then
+          tempString = "II"
+        else
+          if taxGrade == 3 then
+            tempString = "III"
+          end
+        end
+      end
+      ;
+      ((worldmapGrand.ui).comboBox_TaxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CHALLENGE_POINT_GRADE", "index", tempString))
+    end
   end
-  ;
-  ((worldmapGrand.ui).comboBox_TaxGrade):ToggleListbox()
+  do
+    ;
+    ((worldmapGrand.ui).comboBox_TaxGrade):ToggleListbox()
+  end
 end
 
 isWorldMapGrandOpen = function()

@@ -9,7 +9,7 @@ Panel_Window_Arsha:SetShow(false)
 local arshaPvP = {btn_Close = (UI.getChildControl)(Panel_Window_Arsha, "Button_Close"), arshaManagementTitle = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_ArshaManagementTitle"), img_NotAdmin = (UI.getChildControl)(Panel_Window_Arsha, "Static_NotAdminBG"), list2_ArshaWait = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaWait"), list2_ArshaObserver = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaObserver"), roundWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_FreeWing"), personalMatchWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_PersonalWing"), list2_ArshaTeamA = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamA"), list2_ArshaTeamB = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamB"), btn_AllResurrection = (UI.getChildControl)(Panel_Window_Arsha, "Button_AllResurrection"), btn_InviteList = (UI.getChildControl)(Panel_Window_Arsha, "Button_InviteList"), btn_GoA = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoA"), btn_GoB = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoB"), btn_GameStart = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStart"), btn_GameStop = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStop"), btn_GoWait = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoWait"), btn_Exit = (UI.getChildControl)(Panel_Window_Arsha, "Button_Exit"), rdo_SelectWait = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWait"), rdo_SelectWatch = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWatch"), txt_bottomDesc = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_BottomDesc"), btn_Kick_A = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_A"), btn_Kick_B = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_B"), _isOpen = false, _targetScore = 3, _timeLimit = ToClient_CompetitionMatchTimeLimit(), _levelLimit = 58, _maxPartyMemberCount = 5, _maxWaitTime = 20}
 local checkPopUp = (UI.getChildControl)(Panel_Window_Arsha, "CheckButton_PopUp")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
-local isPersonalModeOpen = false
+local isPersonalModeOpen = true
 checkPopUp:SetShow(false)
 checkPopUp:addInputEvent("Mouse_LUp", "PaGlobal_Panel_Arsha_PopUp()")
 checkPopUp:addInputEvent("Mouse_On", "PaGlobal_Panel_Arsha_ShowIconToolTip( true )")
@@ -319,61 +319,76 @@ ArshaPvP_TeamA_Update = function(contents, key)
   local idx = Int64toInt32(key)
   selectedKey = idx
   local matchMode = (ToClient_CompetitionMatchType())
-  local waitListInfo = nil
+  local waitListInfo, teamInfo = nil, nil
   if matchMode == 0 then
     waitListInfo = ToClient_GetTeamUserInfoAt(1, idx)
   else
     if matchMode == 1 then
-      local teamInfo = ToClient_GetTeamListAt(idx)
+      teamInfo = ToClient_GetTeamListAt(idx)
       if teamInfo == nil then
         return 
       end
       waitListInfo = ToClient_GetTeamLeaderInfo(teamInfo:getTeamNo())
     else
-      do
-        if matchMode == 2 then
-          waitListInfo = ToClient_GetTeamUserInfoAt(1, idx)
-        end
-        if waitListInfo ~= nil then
-          local _txt_Level = (UI.getChildControl)(contents, "StaticText_Level")
-          _txt_Level:SetShow(true)
-          _txt_Level:SetPosY(0)
-          local _txt_Class = (UI.getChildControl)(contents, "StaticText_Class")
-          _txt_Class:SetShow(true)
-          _txt_Class:SetPosY(0)
-          local _txt_Name = (UI.getChildControl)(contents, "StaticText_Name")
-          _txt_Name:SetShow(true)
-          _txt_Name:SetPosY(0)
-          local teamNo = waitListInfo:getTeamNo()
-          local userNo = waitListInfo:getUserNo()
-          local userLevel = waitListInfo:getCharacterLevel()
-          local userClass = waitListInfo:getCharacterClass()
-          local userName = waitListInfo:getUserName()
-          local characterName = waitListInfo:getCharacterName()
-          local isAssistant = waitListInfo:isAssistant()
-          _txt_Level:SetText(userLevel)
-          _txt_Class:SetText(getCharacterClassName(userClass))
-          _txt_Name:SetText(characterName)
-          if waitListInfo:isHost() then
-            _txt_Name:SetFontColor((Defines.Color).C_FFFFD237)
-          else
-            if waitListInfo:isAssistant() then
-              _txt_Name:SetFontColor((Defines.Color).C_FFB5FF6D)
-            else
-              _txt_Name:SetFontColor((Defines.Color).C_FFFFFFFF)
-            end
-          end
-          local isHost = ToClient_IsCompetitionHost()
-          local isSubHost = ToClient_IsCompetitionAssistant()
-          if isHost or isSubHost then
-            _txt_Name:addInputEvent("Mouse_LUp", "HandleClicked_ArshaPvP_TeamSubMenuShow( " .. idx .. ", " .. 0 .. ", " .. tostring(userNo) .. ", " .. tostring(isAssistant) .. " )")
-          else
-            _txt_Name:addInputEvent("Mouse_LUp", "")
-          end
-          Panel_Window_ArshaPvPSubMenu:addInputEvent("Mouse_Out", "ArshaPvP_SubMenu_Off()")
+      if matchMode == 2 then
+        waitListInfo = ToClient_GetTeamUserInfoAt(1, idx)
+        teamInfo = ToClient_GetArshaTeamInfo(1)
+        if teamInfo == nil then
+          return 
         end
       end
     end
+  end
+  if waitListInfo ~= nil then
+    local _static_TeamMaster = (UI.getChildControl)(contents, "Static_TeamMasterIcon")
+    local _txt_Level = (UI.getChildControl)(contents, "StaticText_Level")
+    _txt_Level:SetShow(true)
+    _txt_Level:SetPosY(0)
+    local _txt_Class = (UI.getChildControl)(contents, "StaticText_Class")
+    _txt_Class:SetShow(true)
+    _txt_Class:SetPosY(0)
+    local _txt_Name = (UI.getChildControl)(contents, "StaticText_Name")
+    _txt_Name:SetShow(true)
+    _txt_Name:SetPosY(0)
+    local teamNo = waitListInfo:getTeamNo()
+    local userNo = waitListInfo:getUserNo()
+    local userLevel = waitListInfo:getCharacterLevel()
+    local userClass = waitListInfo:getCharacterClass()
+    local userName = waitListInfo:getUserName()
+    local characterName = waitListInfo:getCharacterName()
+    local isAssistant = waitListInfo:isAssistant()
+    _txt_Level:SetText(userLevel)
+    _txt_Class:SetText(getCharacterClassName(userClass))
+    _txt_Name:SetText(characterName)
+    if waitListInfo:isHost() then
+      _txt_Name:SetFontColor((Defines.Color).C_FFFFD237)
+    else
+      if waitListInfo:isAssistant() then
+        _txt_Name:SetFontColor((Defines.Color).C_FFB5FF6D)
+      else
+        _txt_Name:SetFontColor((Defines.Color).C_FFFFFFFF)
+      end
+    end
+    local isHost = ToClient_IsCompetitionHost()
+    local isSubHost = ToClient_IsCompetitionAssistant()
+    if isHost or isSubHost then
+      _txt_Name:addInputEvent("Mouse_LUp", "HandleClicked_ArshaPvP_TeamSubMenuShow( " .. idx .. ", " .. 0 .. ", " .. tostring(userNo) .. ", " .. tostring(isAssistant) .. " )")
+    else
+      _txt_Name:addInputEvent("Mouse_LUp", "")
+    end
+    if ToClient_CompetitionMatchType() == 2 then
+      if waitListInfo:getUserNo() == teamInfo:getTeamMaster() then
+        _static_TeamMaster:SetShow(true)
+      else
+        _static_TeamMaster:SetShow(false)
+      end
+      if waitListInfo:isDeadInPersonalMatch() == true then
+        _txt_Name:SetFontColor((Defines.Color).C_FF444444)
+      end
+    else
+      _static_TeamMaster:SetShow(false)
+    end
+    Panel_Window_ArshaPvPSubMenu:addInputEvent("Mouse_Out", "ArshaPvP_SubMenu_Off()")
   end
 end
 
@@ -382,7 +397,7 @@ ArshaPvP_TeamB_Update = function(contents, key)
   local idx = Int64toInt32(key)
   selectedKey = idx
   local matchMode = (ToClient_CompetitionMatchType())
-  local waitListInfo = nil
+  local waitListInfo, teamInfo = nil, nil
   if matchMode == 0 then
     waitListInfo = ToClient_GetTeamUserInfoAt(2, idx)
   else
@@ -391,10 +406,15 @@ ArshaPvP_TeamB_Update = function(contents, key)
     else
       if matchMode == 2 then
         waitListInfo = ToClient_GetTeamUserInfoAt(2, idx)
+        teamInfo = ToClient_GetArshaTeamInfo(2)
+        if teamInfo == nil then
+          return 
+        end
       end
     end
   end
   if waitListInfo ~= nil then
+    local _static_TeamMaster = (UI.getChildControl)(contents, "Static_TeamMasterIcon")
     local _txt_Level = (UI.getChildControl)(contents, "StaticText_Level")
     _txt_Level:SetShow(true)
     _txt_Level:SetPosY(0)
@@ -429,6 +449,18 @@ ArshaPvP_TeamB_Update = function(contents, key)
     else
       _txt_Name:addInputEvent("Mouse_LUp", "")
     end
+    if ToClient_CompetitionMatchType() == 2 then
+      if waitListInfo:getUserNo() == teamInfo:getTeamMaster() then
+        _static_TeamMaster:SetShow(true)
+      else
+        _static_TeamMaster:SetShow(false)
+      end
+      if waitListInfo:isDeadInPersonalMatch() == true then
+        _txt_Name:SetFontColor((Defines.Color).C_FF444444)
+      end
+    else
+      _static_TeamMaster:SetShow(false)
+    end
     Panel_Window_ArshaPvPSubMenu:addInputEvent("Mouse_Out", "ArshaPvP_SubMenu_Off()")
   end
 end
@@ -438,7 +470,6 @@ ArshaPvP_Wait_Update = function(contents, key)
   local idx = Int64toInt32(key)
   selectedKey = idx
   local waitListInfo = ToClient_GetTeamUserInfoAt(0, idx)
-  _PA_LOG("아르샤의�\189", "ArshaPvP_Wait_Update" .. idx)
   if waitListInfo ~= nil and waitListInfo:getTeamNo() == 0 then
     local _txt_Level = (UI.getChildControl)(contents, "StaticText_Level")
     _txt_Level:SetShow(true)
@@ -550,7 +581,6 @@ ArshaPvP_SelectedUpdate_Round = function()
     end
     do
       local ListWaitCount = ToClient_GetTeamUserInfoCount(0)
-      _PA_LOG("아르샤의�\189", "�\128�\176 인원 �\152 " .. ListWaitCount)
       ;
       ((self.list2_ArshaWait):getElementManager()):clearKey()
       if ListWaitCount > 0 then
@@ -636,7 +666,6 @@ end
 
 ArshaPvP_SelectedUpdate_PersonalMatch = function()
   -- function num : 0_7 , upvalues : arshaPvP
-  _PA_LOG("아르샤의�\189", "ArshaPvP_SelectedUpdate_PersonalMatch")
   local self = arshaPvP
   local ListTeamACount = ToClient_GetTeamUserInfoCount(1)
   ;
@@ -1083,7 +1112,7 @@ HandleClicked_ArshaPvP_ChangeOption = function()
           if matchMode == 2 then
             (self.txt_modeTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_PERSONALMODE_TITLE"))
             ;
-            (self.txt_personalMatchText):SetText("개인 �\128�\132")
+            (self.txt_personalMatchText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_PERSONALMODE"))
           end
         end
       end
@@ -1779,33 +1808,37 @@ FGlobal_ArshaPvP_Open = function()
       else
         if matchMode == 2 then
           (self.descBG):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_ARSHA_USER_DESC_GAMEPROGRESSES_PERSONAL", "limitTimeSum", limitMinuteTime, "level", ToClient_GetLevelLimit()))
+          local currentRound = ToClient_GetCurrentRound()
+          if currentRound <= 0 then
+            currentRound = 1
+          end
           ;
-          (self.txt_RoundMarkCount):SetText(tostring(roundCount))
+          (self.txt_personalCurrentRound):SetText(tostring(currentRound))
           ;
-          (self.txt_RoundCountTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_ROUNDOFWIN_TITLE"))
-          ;
-          (self.txt_RoundMarkText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_USER_OPTION_ROUND_FORCOUNT", "targetScore", targetScore))
+          (self.txt_personalMatchText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_PERSONALMODE"))
           ;
           (self.btn_Kick_A):SetShow(false)
           ;
           (self.btn_Kick_B):SetShow(false)
         end
       end
-      ;
-      (self.descBG):SetSize((self.descBG):GetSizeX(), (self.descBG):GetTextSizeY() + 10)
-      ;
-      (self.descBG):ComputePos()
-      ;
-      (self.txt_RoundCount):SetText(targetScore)
-      ;
-      (self.txt_LimitMinute):SetText(limitMinuteTime)
-      ;
-      (self.txt_LimitSecond):SetText(limitSecondTime)
-      ;
-      (self.txt_LimitLevel):SetText(ToClient_GetLevelLimit())
-      ;
-      (self.txt_PartyMemberLimitCount):SetText(ToClient_GetMaxPartyMemberCount())
-      Panel_Window_Arsha:SetShow(true)
+      do
+        ;
+        (self.descBG):SetSize((self.descBG):GetSizeX(), (self.descBG):GetTextSizeY() + 10)
+        ;
+        (self.descBG):ComputePos()
+        ;
+        (self.txt_RoundCount):SetText(targetScore)
+        ;
+        (self.txt_LimitMinute):SetText(limitMinuteTime)
+        ;
+        (self.txt_LimitSecond):SetText(limitSecondTime)
+        ;
+        (self.txt_LimitLevel):SetText(ToClient_GetLevelLimit())
+        ;
+        (self.txt_PartyMemberLimitCount):SetText(ToClient_GetMaxPartyMemberCount())
+        Panel_Window_Arsha:SetShow(true)
+      end
     end
   end
 end
@@ -1823,7 +1856,6 @@ ArshaPvP_Team_Kick = function(teamNo, isMode)
   if teamNo == nil then
     return 
   end
-  _PA_LOG("추방", "추방 �\128번호 " .. tostring(teamNo))
   if teamNo == 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_ALLKICK_NOWAITMEMBERKICK"))
     return 
@@ -1908,7 +1940,6 @@ end
 
 FromClient_UpdateTeamScore = function(teamNum, scoreValue, round, winTeamHP, loseTeamHP)
   -- function num : 0_53
-  _PA_LOG("아르샤의�\189", "FromClient_UpdateTeamScore")
   if teamNum == 0 then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE_DRAW", "currentRound", round))
   else
@@ -2036,7 +2067,6 @@ FromClient_EntryUserChangeTeam = function(userInfo)
   local message = ""
   local teamNo = userInfo:getTeamNo()
   if teamNo == 0 then
-    _PA_LOG("아르샤의�\189", "WTF")
     message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_CHANGE_TO_WAITING", "playerName", userInfo:getCharacterName())
   else
     local teamInfo = ToClient_GetArshaTeamInfo(teamNo)
@@ -2065,7 +2095,11 @@ FromClient_GetOutUserFromCompetition = function(outUserInfo)
   if outUserInfo == nil then
     return 
   end
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GETOUT_FROM_COMPETITION", "characterName", outUserInfo:getCharacterName()))
+  if outUserInfo:isHost() == true then
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_GAMEHOST_LEAVE", "characterName", outUserInfo:getCharacterName()))
+  else
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GETOUT_FROM_COMPETITION", "characterName", outUserInfo:getCharacterName()))
+  end
 end
 
 FromClient_ChangeAssistant = function(userInfo)
@@ -2113,21 +2147,27 @@ FromClient_CompetitionOptionChanged = function(isOpen, matchTimeLimit, targetSco
       else
         if matchMode == 2 then
           (self.descBG):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ARSHA_USER_DESC_GAMEPROGRESSES_PERSONAL", "limitTimeSum", limitMinuteTime, "level", ToClient_GetLevelLimit()))
+          local currentRound = ToClient_GetCurrentRound()
+          if currentRound <= 0 then
+            currentRound = 1
+          end
           ;
-          (self.txt_personalCurrentRound):SetText(1)
+          (self.txt_personalCurrentRound):SetText(tostring(currentRound))
           ;
-          (self.txt_personalMatchText):SetText("개인 �\128�\132")
+          (self.txt_personalMatchText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_PERSONALMODE"))
         end
       end
-      ;
-      (self.descBG):SetSize((self.descBG):GetSizeX(), (self.descBG):GetTextSizeY() + 10)
-      ;
-      (self.descBG):ComputePos()
-      if isHost then
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SETTING_GAME_ACK"))
+      do
+        ;
+        (self.descBG):SetSize((self.descBG):GetSizeX(), (self.descBG):GetTextSizeY() + 10)
+        ;
+        (self.descBG):ComputePos()
+        if isHost then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SETTING_GAME_ACK"))
+        end
+        HandleClicked_ArshaPvP_ChangeOption()
+        ArshaPvP_Widget_Update()
       end
-      HandleClicked_ArshaPvP_ChangeOption()
-      ArshaPvP_Widget_Update()
     end
   end
 end

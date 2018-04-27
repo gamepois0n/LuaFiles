@@ -4,12 +4,12 @@
 -- params : ...
 -- function num : 0
 local UI_TM = CppEnums.TextMode
-PaGlobal_RecommendGoods = {_currentPage = 0, _maxPage = 0, 
+PaGlobal_RecommendGoods = {_currentPage = 0, _maxPage = 0, _CONST_MAX_PAGE_SIZE = 7, 
 _ui = {
 _goodsBg = {[0] = (UI.getChildControl)(Panel_Window_RecommandGoods, "Static_TempBg0"), [1] = (UI.getChildControl)(Panel_Window_RecommandGoods, "Static_TempBg1"), [2] = (UI.getChildControl)(Panel_Window_RecommandGoods, "Static_TempBg2")}
-, _close = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Close"), _btn_Left = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Left"), _btn_Right = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Right")}
+, _close = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Close"), _btn_Left = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Left"), _btn_Right = (UI.getChildControl)(Panel_Window_RecommandGoods, "Button_Right"), _text_Title = (UI.getChildControl)(Panel_Window_RecommandGoods, "StaticText_Title")}
 }
--- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Initialize = function(self)
   -- function num : 0_0
@@ -37,17 +37,23 @@ PaGlobal_RecommendGoods.Initialize = function(self)
   ;
   ((self._ui)._btn_Right):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:Click_Slide(false)")
   ;
-  ((self._ui)._close):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:Close()")
+  ((self._ui)._close):SetIgnore(true)
+  ;
+  ((self._ui)._close):SetShow(false)
   for ii = 0, 2 do
     (((self._ui)._goodsName)[ii]):SetIgnore(true)
     ;
     (((self._ui)._goodsImage)[ii]):SetIgnore(true)
     ;
     (((self._ui)._goodsPrice)[ii]):SetIgnore(true)
+    ;
+    (((self._ui)._goodsBg)[ii]):addInputEvent("Mouse_UpScroll", "PaGlobal_RecommendGoods:Click_Slide(true)")
+    ;
+    (((self._ui)._goodsBg)[ii]):addInputEvent("Mouse_DownScroll", "PaGlobal_RecommendGoods:Click_Slide(false)")
   end
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Clear_OnlyProduct = function(self)
   -- function num : 0_1
@@ -56,7 +62,7 @@ PaGlobal_RecommendGoods.Clear_OnlyProduct = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC54: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Click_Slide = function(self, isLeft)
   -- function num : 0_2
@@ -69,7 +75,7 @@ PaGlobal_RecommendGoods.Click_Slide = function(self, isLeft)
   self:Update()
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC64: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Click_Radio = function(self, idx)
   -- function num : 0_3
@@ -78,20 +84,26 @@ PaGlobal_RecommendGoods.Click_Radio = function(self, idx)
   self:Update()
 end
 
--- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Update = function(self)
   -- function num : 0_4 , upvalues : UI_TM
   local uiRow = 0
   local size = ToClient_getCashRecommendList()
-  self._maxPage = (math.floor)(size / 3)
+  if size == 0 then
+    return false
+  end
+  self._maxPage = (math.floor)(size / 3) - 1
+  if self._CONST_MAX_PAGE_SIZE - 1 < self._maxPage then
+    self._maxPage = self._CONST_MAX_PAGE_SIZE - 1
+  end
   local loopStart = self._currentPage * 3
   local loopEnd = loopStart + 2
   if self._maxPage < loopEnd then
     for ii = loopStart, loopEnd do
       local productNo = ToClient_getRecommendCashProductNoByIndex(ii)
       local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNo)
-      if cashProduct ~= nil and cashProduct:isSellTimeOver() == false then
+      if cashProduct ~= nil then
         (((self._ui)._goodsBG)[uiRow]):SetShow(true)
         ;
         (((self._ui)._goodsName)[uiRow]):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -129,26 +141,45 @@ PaGlobal_RecommendGoods.Update = function(self)
       ;
       (((self._ui)._radioBtn)[ii]):SetCheck(false)
     end
-    ;
-    (((self._ui)._radioBtn)[self._maxPage - self._currentPage]):SetCheck(true)
+    local calcPageNo = self._maxPage - self._currentPage
+    if calcPageNo < 0 then
+      (((self._ui)._radioBtn)[0]):SetCheck(true)
+    else
+      ;
+      (((self._ui)._radioBtn)[calcPageNo]):SetCheck(true)
+    end
+    return true
   end
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Open = function(self)
   -- function num : 0_5
   if _ContentsGroup_Recommend == false then
     return 
   end
-  self:Clear()
-  self:Update()
-  Panel_Window_RecommandGoods:SetPosX(50)
-  Panel_Window_RecommandGoods:SetPosY(3)
-  Panel_Window_RecommandGoods:SetShow(true)
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer ~= nil then
+    local userNickName = (getSelfPlayer()):getUserNickname()
+    ;
+    ((self._ui)._text_Title):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASH_RECOMMEND_TITLE", "userName", tostring(userNickName)))
+  else
+    do
+      ;
+      ((self._ui)._text_Title):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASH_RECOMMEND_TITLE", "userName", ""))
+      self:Clear()
+      if self:Update() == false then
+        return 
+      end
+      Panel_Window_RecommandGoods:SetPosX(50)
+      Panel_Window_RecommandGoods:SetPosY(3)
+      Panel_Window_RecommandGoods:SetShow(true)
+    end
+  end
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Clear = function(self)
   -- function num : 0_6
@@ -162,7 +193,7 @@ PaGlobal_RecommendGoods.Clear = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.Close = function(self)
   -- function num : 0_7
@@ -170,11 +201,12 @@ PaGlobal_RecommendGoods.Close = function(self)
   Panel_Window_RecommandGoods:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_RecommendGoods.GoToProduct = function(self, cashProductNo)
   -- function num : 0_8
-  ToClient_RequestShowProduct(cashProductNo)
+  local mainCashProductNo = ToClient_getRealTargetCashProductNo(cashProductNo)
+  ToClient_RequestShowProduct(mainCashProductNo)
 end
 
 PaGlobal_RecommendGoods:Initialize()

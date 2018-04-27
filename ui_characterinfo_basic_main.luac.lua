@@ -31,7 +31,7 @@ _staticStatus_Title = {}
 _staticStatus_Value = {}
 , 
 _progress2Status = {}
-, _progress2WeightMoney = nil, _progress2WeightEquip = nil, _staticTextAttack_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Title"), _staticTextAttack_Value = nil, _staticTextAwakenAttack_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Title"), _staticTextAwakenAttack_Value = nil, _staticTextDefence_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Title"), _staticTextDefence_Value = nil, _staticTextStamina_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Title"), _staticTextStamina_Value = nil, 
+, _progress2WeightMoney = nil, _progress2WeightEquip = nil, _staticTextAttack_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Title"), _staticTextAttack_Value = nil, _staticTextAwakenAttack_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Title"), _staticTextAwakenAttack_Value = nil, _staticTextDefence_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Title"), _staticTextDefence_Value = nil, _staticTextStamina_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Title"), _staticTextStamina_Value = nil, battlePointValueAndIcon = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_BattlePoint"), 
 _staticTextResist_Title = {}
 , 
 _staticTextResist_Percent = {}
@@ -69,7 +69,7 @@ _progress2Craft = {}
 _progress2CraftBG = {}
 }
 }
--- DECOMPILER ERROR at PC271: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC277: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initialize = function(self)
   -- function num : 0_0 , upvalues : Class_BattleSpeed, BattleSpeed, UI_Symbol, CombatType, UI_Class
@@ -142,7 +142,7 @@ PaGlobal_CharacterInfoBasic.initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC274: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC280: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initializeControl = function(self)
   -- function num : 0_1
@@ -349,7 +349,7 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC277: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC283: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.update = function(self)
   -- function num : 0_2
@@ -388,9 +388,10 @@ PaGlobal_CharacterInfoBasic.update = function(self)
   FromClient_UI_CharacterInfo_Basic_PotentialChanged()
   FromClient_UI_CharacterInfo_Basic_FitnessChanged(0, 0, 0, 0)
   FromClient_UI_CharacterInfo_Basic_NormalStackChanged()
+  self:updatePlayerTotalStat()
 end
 
--- DECOMPILER ERROR at PC280: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC286: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
   -- function num : 0_3
@@ -444,10 +445,70 @@ PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
   ((self._ui)._buttonFacePhoto):addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:handleClicked_FacePhotoButton()")
 end
 
--- DECOMPILER ERROR at PC283: Confused about usage of register: R7 in 'UnsetPending'
+FromClient_CharacterInfo_PlayerTotalStat_Changed = function(actorKey, totalStatValue)
+  -- function num : 0_4
+  if Panel_Window_CharInfo_Status:GetShow() == false then
+    return 
+  end
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local playerActorProxyWrapper = getPlayerActor(actorKey)
+  if playerActorProxyWrapper == nil then
+    return 
+  end
+  if playerActorProxyWrapper:getActorKey() ~= selfPlayer:getActorKey() then
+    return 
+  end
+  local totalStatValue = (math.floor)(totalStatValue)
+  local tier = ToClient_GetTier(totalStatValue) - 1
+  PaGlobal_CharacterInfoBasic:changedBattlePoint(totalStatValue, tier)
+end
+
+-- DECOMPILER ERROR at PC291: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_CharacterInfoBasic.changedBattlePoint = function(self, battlePoint, tier)
+  -- function num : 0_5
+  if Panel_Window_CharInfo_Status:GetShow() == false then
+    return 
+  end
+  local tierName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOTALSTAT_TIERNAME_" .. tier + 1, "totalStat", battlePoint)
+  ;
+  ((self._ui).battlePointValueAndIcon):SetText(tierName)
+  ;
+  ((self._ui).battlePointValueAndIcon):ChangeTextureInfoName("")
+  ;
+  ((self._ui).battlePointValueAndIcon):SetShow(true)
+  local x1, y1, x2, y2 = nil, nil, nil, nil
+  x1 = 182 + (3 - tier % 4) * 43
+  x2 = 224 + (3 - tier % 4) * 43
+  y1 = 99 + (1 - (math.floor)(tier / 4)) * 43
+  y2 = 141 + (1 - (math.floor)(tier / 4)) * 43
+  x1 = setTextureUV_Func((self._ui).battlePointValueAndIcon, x1, y1, x2, y2)
+  ;
+  (((self._ui).battlePointValueAndIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+  ;
+  ((self._ui).battlePointValueAndIcon):setRenderTexture(((self._ui).battlePointValueAndIcon):getBaseTexture())
+end
+
+-- DECOMPILER ERROR at PC294: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_CharacterInfoBasic.updatePlayerTotalStat = function(self)
+  -- function num : 0_6
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local totalStatValue = (math.floor)(selfPlayer:getTotalStatValue())
+  local tier = ToClient_GetTier(totalStatValue) - 1
+  self:changedBattlePoint(totalStatValue, tier)
+end
+
+-- DECOMPILER ERROR at PC297: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registMessageHandler = function(self)
-  -- function num : 0_4
+  -- function num : 0_7
   registerEvent("FromClient_SelfPlayerTendencyChanged", "FromClient_UI_CharacterInfo_Basic_TendencyChanged")
   registerEvent("FromClient_WpChanged", "FromClient_UI_CharacterInfo_Basic_MentalChanged")
   registerEvent("FromClient_UpdateExplorePoint", "FromClient_UI_CharacterInfo_Basic_ContributionChanged")
@@ -466,6 +527,7 @@ PaGlobal_CharacterInfoBasic.registMessageHandler = function(self)
   registerEvent("FromClientFitnessUp", "FromClient_UI_CharacterInfo_Basic_FitnessChanged")
   registerEvent("FromClient_ShowLifeRank", "FromClient_UI_CharacterInfo_Basic_RankChanged")
   registerEvent("onScreenResize", "FromClient_UI_CharacterInfo_Basic_ScreenResize")
+  registerEvent("FromClient_PlayerTotalStat_Changed", "FromClient_CharacterInfo_PlayerTotalStat_Changed")
 end
 
 PaGlobal_CharacterInfoBasic:initialize()

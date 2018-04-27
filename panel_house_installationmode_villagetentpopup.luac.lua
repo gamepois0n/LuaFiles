@@ -88,12 +88,28 @@ VillageTent_SetText = function(count)
       local day = (regionInfoWrapper[index]):getVillageSiegeType()
       local regionName = (regionInfoWrapper[index]):getAreaName()
       local taxLevel = ((regionInfoWrapper[index]):get()):getVillageTaxLevel()
+      local tempString = ""
+      if taxLevel == 0 then
+        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_TAX_GRADE_ZERO")
+      else
+        if taxLevel == 1 then
+          tempString = "I"
+        else
+          if taxLevel == 2 then
+            tempString = "II"
+          else
+            if taxLevel == 3 then
+              tempString = "III"
+            end
+          end
+        end
+      end
       ;
       ((dayControl[index])._day):SetText(dayString[day])
       ;
       ((dayControl[index])._day):SetShow(true)
       ;
-      ((dayControl[index])._regionName):SetText(regionName .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_VILLAGETENT_GRADE", "index", taxLevel) .. ")")
+      ((dayControl[index])._regionName):SetText(regionName .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_VILLAGETENT_GRADE", "index", tempString) .. ")")
       ;
       ((dayControl[index])._regionName):SetShow(true)
       if warDay == day then
@@ -106,11 +122,11 @@ VillageTent_SetText = function(count)
           ((dayControl[index])._day):SetShow(false)
           ;
           ((dayControl[index])._regionName):SetShow(false)
-          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC104: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC104: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC83: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC104: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

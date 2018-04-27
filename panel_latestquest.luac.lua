@@ -318,17 +318,17 @@ PaGlobal_LatestQuest.setConditions = function(self, index, PosY, uiQuestInfo)
         local conditionText = nil
         if conditionInfo._currentCount == conditionInfo._destCount or conditionInfo._destCount <= conditionInfo._currentCount then
           conditionText = "- " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
-          uiCondition:SetText(conditionText)
+          uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
           uiCondition:SetLineRender(true)
           uiCondition:SetFontColor(UI_color.C_FF626262)
         else
           if conditionInfo._destCount == 1 then
             conditionText = "- " .. conditionInfo._desc
-            uiCondition:SetText(conditionText)
+            uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
             uiCondition:SetLineRender(false)
           else
             conditionText = "- " .. conditionInfo._desc .. " (" .. conditionInfo._currentCount .. "/" .. conditionInfo._destCount .. ")"
-            uiCondition:SetText(conditionText)
+            uiCondition:SetText(ToClient_getReplaceDialog(conditionText))
             uiCondition:SetLineRender(false)
           end
         end

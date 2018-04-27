@@ -17,6 +17,7 @@ local isSpecialCharacterOpen = ToClient_IsContentsGroupOpen("281")
 local CharacterListIndex = 0
 local SpecialCharacterListIndex = 1
 local isChangeCharacterTab = false
+local enablePremiumCharacterEverywhere = true
 local isGhostMode = false
 Panel_CharacterSelectNew:SetShow(false)
 local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG"), radioBtnBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_RadioBtnBg"), radioBtn_CharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_CharacterList"), radioBtn_SpecialCharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_SpecialCharacterList"), premiumPcRoomSizeY = 0}
@@ -1296,24 +1297,6 @@ local CharacterList_Update = function(isChangeSpecialTab)
             ;
             (slot._centerBg):SetShow(false)
           end
-          if ToClient_isDataStreamingContentsOpen() then
-            (slot._possibleStat):SetPosX(180)
-            ;
-            (slot._possibleStat):SetPosY(20)
-            ;
-            (slot._possibleStat):SetShow(true)
-            if ToClient_isPossibleEnterToField(characterData._currentPosition) then
-              (slot._possibleStat):SetText("접속 �\128�\165")
-            else
-              ;
-              (slot._possibleStat):SetText("접속 불가�\165")
-              Panel_DataProgress:SetShow(true)
-              PaGlobal_Dataprogress:Initialize()
-            end
-          else
-            ;
-            (slot._possibleStat):SetShow(false)
-          end
           ;
           (slot._btnStart):SetShow(true)
         end
@@ -1388,11 +1371,11 @@ local CharacterList_Update = function(isChangeSpecialTab)
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1899,7 +1882,7 @@ HandleClicked_ToggleGhostMode = function()
 end
 
 UpdateSpecialCharacterTab = function()
-  -- function num : 0_37 , upvalues : SelectCharacter, isSpecialCharacterOpen, configData
+  -- function num : 0_37 , upvalues : SelectCharacter, isSpecialCharacterOpen, enablePremiumCharacterEverywhere, configData
   local self = SelectCharacter
   local temporaryWrapper = getTemporaryInformationWrapper()
   temporaryWrapper:ToClient_completeInitialUI()
@@ -1913,9 +1896,11 @@ UpdateSpecialCharacterTab = function()
       return 
     end
   else
-    isPremiumPcRoom = temporaryWrapper:isPremiumPcRoom()
-    if isPremiumPcRoom == false then
-      return 
+    if enablePremiumCharacterEverywhere == false then
+      isPremiumPcRoom = temporaryWrapper:isPremiumPcRoom()
+      if isPremiumPcRoom == false then
+        return 
+      end
     end
   end
   ;
@@ -1936,7 +1921,7 @@ UpdateSpecialCharacterTab = function()
     ;
     (SelectCharacter.radioBtnBG):SetShow(false)
   end
-  -- DECOMPILER ERROR at PC92: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC95: Confused about usage of register: R3 in 'UnsetPending'
 
   SelectCharacter.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
   ;
@@ -1947,10 +1932,10 @@ UpdateSpecialCharacterTab = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
-  -- DECOMPILER ERROR at PC146: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC149: Confused about usage of register: R7 in 'UnsetPending'
 
   configData._listCount = _btnCount
-  -- DECOMPILER ERROR at PC149: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC152: Confused about usage of register: R7 in 'UnsetPending'
 
   configData.slotUiPool = {}
   for slotIdx = 0, configData._listCount - 1 do
@@ -2027,7 +2012,7 @@ UpdateSpecialCharacterTab = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC403: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC406: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot

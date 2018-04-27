@@ -14,6 +14,8 @@ local _houseDescBG = (UI.getChildControl)(Panel_Interaction_House, "Static_BuyHo
 local _houseDesc = (UI.getChildControl)(Panel_Interaction_House, "StaticText_BuyHouse_Desc")
 local _contribute_Help = (UI.getChildControl)(Panel_Interaction_House, "StaticText_ContHelp")
 local _globalGuide = (UI.getChildControl)(Panel_Interaction, "StaticText_Purpose")
+local _circularProgressBarInteraction = (UI.getChildControl)(Panel_Interaction, "CircularProgress_Press")
+local _circularProgressBarStaticbgInteraction = (UI.getChildControl)(Panel_Interaction, "Static_CircleProgress_PressBG")
 Panel_Interaction:RegisterShowEventFunc(true, "Panel_Interaction_ShowAni()")
 Panel_Interaction:RegisterShowEventFunc(false, "Panel_Interaction_HideAni()")
 Panel_Interaction_ShowAni = function()
@@ -32,7 +34,7 @@ for ii = 0, eInteractionTypeMax - 1 do
 end
 INETRACTION_BUTTON_TEXT = {}
 for ii = 0, eInteractionTypeMax - 1 do
-  -- DECOMPILER ERROR at PC91: Confused about usage of register: R17 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC101: Confused about usage of register: R19 in 'UnsetPending'
 
   INETRACTION_BUTTON_TEXT[ii] = PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU" .. tostring(ii))
 end
@@ -256,7 +258,7 @@ end
 local YSize = 0
 local linkButtonAction = {}
 Interaction_Show = function(actor)
-  -- function num : 0_12 , upvalues : basicInteractionType, focusInteractionType, DESC_TEXT, isTargetNpc, UI_NAME, UI_DESC, updateButtonList, SHOW_BUTTON_COUNT, interactionTargetUIList, interactionTargetTextList, UI_Color, linkButtonAction, _globalGuide, _needCollectTool, ANIMATING_BUTTON, BUTTON_UPDATE_TIME
+  -- function num : 0_12 , upvalues : basicInteractionType, focusInteractionType, DESC_TEXT, isTargetNpc, UI_NAME, UI_DESC, updateButtonList, SHOW_BUTTON_COUNT, interactionTargetUIList, interactionTargetTextList, UI_Color, linkButtonAction, _globalGuide, _needCollectTool, ANIMATING_BUTTON, BUTTON_UPDATE_TIME, _circularProgressBarInteraction
   audioPostEvent_SystemUi(1, 5)
   local firstInteractionType = actor:getSettedFirstInteractionType()
   basicInteractionType = firstInteractionType
@@ -411,6 +413,8 @@ Interaction_Show = function(actor)
                   Furniture_Check(actorKeyRaw)
                   PaGlobal_TutorialManager:handleInteractionShow(actor)
                   RemoteControl_Interaction_ShowToggloe()
+                  FGlobal_Interaction_ClearSelectIndex()
+                  _circularProgressBarInteraction:SetProgressRate(0)
                 end
               end
             end
@@ -635,20 +639,26 @@ Interaction_ButtonPushed = function(interactionType)
                           Proc_ShowMessage_Ack(failMsg)
                           return 
                         end
+                        do
+                          do
+                            if __eWeightLevel3 <= getWeightLevel() then
+                              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoItemIsTooHeavy"))
+                              return 
+                            end
+                            if isTakedownCannon then
+                              local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
+                              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
+                              local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                              ;
+                              (MessageBox.showMessageBox)(messageBoxData)
+                            else
+                              do
+                                interaction_processInteraction(interactionType)
+                              end
+                            end
+                          end
+                        end
                       end
-                    end
-                  end
-                end
-                do
-                  if isTakedownCannon then
-                    local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
-                    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
-                    local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                    ;
-                    (MessageBox.showMessageBox)(messageBoxData)
-                  else
-                    do
-                      interaction_processInteraction(interactionType)
                     end
                   end
                 end
@@ -1051,6 +1061,216 @@ Panel_Interaction_House_HelpDesc_Func = function(contribute, isOn)
       end
     end
   end
+end
+
+local InteractionCheck = function(interactionType)
+  -- function num : 0_43
+  if interactionType == (CppEnums.InteractionType).InteractionType_ExchangeItem or interactionType == (CppEnums.InteractionType).InteractionType_InvitedParty or interactionType == (CppEnums.InteractionType).InteractionType_GuildInvite then
+    return true
+  end
+  return false
+end
+
+Interaction_ExecuteByKeyMapping = function(keycode)
+  -- function num : 0_44 , upvalues : _circularProgressBarInteraction, InteractionCheck
+  _circularProgressBarInteraction:SetProgressRate(0)
+  local buttonCount = FGlobal_InteractionButtonCount()
+  DragManager:clearInfo()
+  if keycode ~= (CppEnums.ActionInputType).ActionInputType_Interaction then
+    setUiInputProcessed(keycode)
+  end
+  if keycode == (CppEnums.ActionInputType).ActionInputType_Interaction then
+    local camBlur = getCameraBlur()
+    local interactableActor = interaction_getInteractable()
+    if interactableActor ~= nil and (not (interactableActor:get()):isPlayer() or (interactableActor:get()):isSelfPlayer()) and camBlur <= 0 then
+      local interactionType = interactableActor:getSettedFirstInteractionType()
+      if InteractionCheck(interactionType) then
+        return 
+      end
+      Interaction_ButtonPushed(interactionType)
+      return 
+    else
+      do
+        do
+          if interactableActor ~= nil and (interactableActor:get()):isPlayer() and camBlur <= 0 then
+            local interactionType = interactableActor:getSettedFirstInteractionType()
+            if InteractionCheck(interactionType) then
+              return 
+            end
+            Interaction_ButtonPushed(interactionType)
+            return 
+          end
+          -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P1
+
+          if keycode == (CppEnums.UiInputType).UiInputType_Interaction_1 and buttonCount >= 2 then
+            FGlobal_InteractionButtonActionRun(1)
+            return 
+          end
+          -- DECOMPILER ERROR at PC99: Unhandled construct in 'MakeBoolean' P1
+
+          if keycode == (CppEnums.UiInputType).UiInputType_Interaction_2 and buttonCount >= 3 then
+            FGlobal_InteractionButtonActionRun(2)
+            return 
+          end
+          -- DECOMPILER ERROR at PC111: Unhandled construct in 'MakeBoolean' P1
+
+          if keycode == (CppEnums.UiInputType).UiInputType_Interaction_3 and buttonCount >= 4 then
+            FGlobal_InteractionButtonActionRun(3)
+            return 
+          end
+          -- DECOMPILER ERROR at PC123: Unhandled construct in 'MakeBoolean' P1
+
+          if keycode == (CppEnums.UiInputType).UiInputType_Interaction_4 and buttonCount >= 5 then
+            FGlobal_InteractionButtonActionRun(4)
+            return 
+          end
+          -- DECOMPILER ERROR at PC135: Unhandled construct in 'MakeBoolean' P1
+
+          if keycode == (CppEnums.UiInputType).UiInputType_Interaction_5 and buttonCount >= 6 then
+            FGlobal_InteractionButtonActionRun(5)
+            return 
+          end
+          if keycode == (CppEnums.VirtualKeyCode).KeyCode_F10 and buttonCount >= 7 then
+            FGlobal_InteractionButtonActionRun(6)
+            return 
+          end
+        end
+      end
+    end
+  end
+end
+
+local currentInteractionSelectIndex = 0
+local currentInteractionKeyPressedTime = 0
+FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox = function(deltaTime)
+  -- function num : 0_45 , upvalues : currentInteractionKeyPressedTime, currentInteractionSelectIndex
+  FGlobal_Interaction_UpdatePressedInteractionKey(currentInteractionKeyPressedTime)
+  if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
+    currentInteractionKeyPressedTime = 0
+  else
+    if keyCustom_IsPressed_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
+      currentInteractionKeyPressedTime = currentInteractionKeyPressedTime + deltaTime
+      if currentInteractionKeyPressedTime > 0.5 then
+        local keyCodeTable = {[0] = (CppEnums.ActionInputType).ActionInputType_Interaction, [1] = (CppEnums.UiInputType).UiInputType_Interaction_1, [2] = (CppEnums.UiInputType).UiInputType_Interaction_2, [3] = (CppEnums.UiInputType).UiInputType_Interaction_3, [4] = (CppEnums.UiInputType).UiInputType_Interaction_4, [5] = (CppEnums.UiInputType).UiInputType_Interaction_5, [6] = (CppEnums.VirtualKeyCode).KeyCode_F10}
+        return keyCodeTable[currentInteractionSelectIndex]
+      end
+    else
+      do
+        if keyCustom_IsUp_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
+          if currentInteractionKeyPressedTime < 0.5 and __eConsoleState_GameModeWeaponOut ~= ToClient_GetConsoleState() then
+            FGlobal_Interaction_IncreaseSelectIndex()
+          end
+          currentInteractionKeyPressedTime = 0
+        end
+        return nil
+      end
+    end
+  end
+end
+
+FGlobal_Interaction_CheckAndGetPressedKeyCode = function()
+  -- function num : 0_46
+  local keyCode = (CppEnums.ActionInputType).ActionInputType_Interaction
+  if keyCustom_IsDownOnce_Action(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.UiInputType).UiInputType_Interaction_1
+  if GlobalKeyBinder_CheckCustomKeyPressed(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.UiInputType).UiInputType_Interaction_2
+  if GlobalKeyBinder_CheckCustomKeyPressed(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.UiInputType).UiInputType_Interaction_3
+  if GlobalKeyBinder_CheckCustomKeyPressed(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.UiInputType).UiInputType_Interaction_4
+  if GlobalKeyBinder_CheckCustomKeyPressed(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.UiInputType).UiInputType_Interaction_5
+  if GlobalKeyBinder_CheckCustomKeyPressed(keyCode) then
+    return keyCode
+  end
+  keyCode = (CppEnums.VirtualKeyCode).KeyCode_F10
+  if GlobalKeyBinder_CheckKeyPressed((CppEnums.VirtualKeyCode).KeyCode_F10) then
+    return keyCode
+  end
+  return nil
+end
+
+FGlobal_Interaction_IncreaseSelectIndex = function()
+  -- function num : 0_47 , upvalues : currentInteractionSelectIndex, SHOW_BUTTON_COUNT, isTargetNpc, _background, interactionTargetUIList, _needCollectTool
+  currentInteractionSelectIndex = (currentInteractionSelectIndex + 1) % SHOW_BUTTON_COUNT
+  local CIRCLE_RADIUS = 0
+  local actor = interaction_getInteractable()
+  if actor == nil then
+    return 
+  end
+  if isTargetNpc then
+    _background:SetSize(140, 140)
+    BUTTON_OFFSET_X = -18
+    BUTTON_OFFSET_Y = 42
+    CIRCLE_RADIUS = 60
+  else
+    _background:SetSize(128, 128)
+    BUTTON_OFFSET_X = -25
+    BUTTON_OFFSET_Y = 35
+    CIRCLE_RADIUS = 50
+  end
+  local ANGLE_OFFSET = math.pi * -0.5
+  local jj = -currentInteractionSelectIndex % SHOW_BUTTON_COUNT
+  for ii = 0, #interactionTargetUIList do
+    local isShow = actor:isSetInteracatbleFrag(ii)
+    if isShow then
+      local div = jj / SHOW_BUTTON_COUNT
+      local buttonPosX = BUTTON_OFFSET_X + CIRCLE_RADIUS * (math.cos)(math.pi * 2 * div + ANGLE_OFFSET)
+      local buttonPosY = BUTTON_OFFSET_Y + CIRCLE_RADIUS * (math.sin)(math.pi * 2 * div + ANGLE_OFFSET)
+      ;
+      (interactionTargetUIList[ii]):SetPosX(buttonPosX)
+      ;
+      (interactionTargetUIList[ii]):SetPosY(buttonPosY)
+      _needCollectTool:SetPosX(buttonPosX + 2)
+      _needCollectTool:SetPosY(buttonPosY + 2)
+      local verticalSize = (interactionTargetUIList[ii]):GetSizeY()
+      if buttonPosY < BUTTON_OFFSET_Y then
+        verticalSize = verticalSize * -0.5
+      end
+      ;
+      (interactionTargetUIList[ii]):SetTextSpan(0, verticalSize)
+      if (math.floor)(buttonPosX) == (math.floor)(BUTTON_OFFSET_X) then
+        (interactionTargetUIList[ii]):SetTextHorizonCenter()
+      else
+        if buttonPosX < BUTTON_OFFSET_X then
+          (interactionTargetUIList[ii]):SetTextHorizonRight()
+        else
+          if BUTTON_OFFSET_X < buttonPosX then
+            (interactionTargetUIList[ii]):SetTextHorizonLeft()
+          end
+        end
+      end
+      jj = (jj + 1) % SHOW_BUTTON_COUNT
+    end
+  end
+end
+
+FGlobal_Interaction_ClearSelectIndex = function()
+  -- function num : 0_48 , upvalues : currentInteractionSelectIndex
+  currentInteractionSelectIndex = 0
+end
+
+FGlobal_Interaction_UpdatePressedInteractionKey = function(time)
+  -- function num : 0_49 , upvalues : _circularProgressBarInteraction, _circularProgressBarStaticbgInteraction
+  if time * 200 > 0 then
+    _circularProgressBarInteraction:SetShow(true)
+    _circularProgressBarStaticbgInteraction:SetShow(true)
+  else
+    _circularProgressBarInteraction:SetShow(false)
+    _circularProgressBarStaticbgInteraction:SetShow(false)
+  end
+  _circularProgressBarInteraction:SetProgressRate(time * 200)
 end
 
 houseInit()

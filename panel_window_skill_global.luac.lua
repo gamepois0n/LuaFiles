@@ -827,26 +827,51 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   if skillLevelInfo._learnable == false then
     return 
   end
-  local isSuccess = skillWindow_DoLearn(skillNo)
-  audioPostEvent_SystemUi(0, 0)
-  if isSuccess then
-    audioPostEvent_SystemUi(4, 2)
+  local skillSS = getSkillStaticStatus(skillNo, 1)
+  if skillSS == nil then
+    return 
+  end
+  if skillSS:isAnyPreRequiredSkillBlocked() then
+    local blockedPreRequiredSkillKeyList = skillSS:getBlockedPreRequiredSkillNoList()
+    local skillNameStr = ""
+    for k,v in pairs(blockedPreRequiredSkillKeyList) do
+      local skillNo = v:getSkillNo()
+      local skillTypeSS = getSkillTypeStaticStatus(skillNo)
+      if skillTypeSS ~= nil and skillTypeSS:getName() ~= nil then
+        if skillNameStr == "" then
+          skillNameStr = skillTypeSS:getName()
+        else
+          skillNameStr = skillNameStr .. ", " .. skillTypeSS:getName()
+        end
+      end
+    end
+    local messageData = {content = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_BLOCKED_NOTICE") .. "\n\n" .. skillNameStr, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageData)
+    return 
+  end
+  do
+    local isSuccess = skillWindow_DoLearn(skillNo)
+    audioPostEvent_SystemUi(0, 0)
+    if isSuccess then
+      audioPostEvent_SystemUi(4, 2)
+      if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then
+        return 
+      end
+      ;
+      (((self.skillNoSlot)[skillNo]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
+      ;
+      (((self.skillNoSlot)[skillNo]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
+      ;
+      (self.learnedSkillList):push_back(skillNo)
+    end
     if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then
       return 
     end
-    ;
-    (((self.skillNoSlot)[skillNo]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
-    ;
-    (((self.skillNoSlot)[skillNo]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
-    ;
-    (self.learnedSkillList):push_back(skillNo)
-  end
-  if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then
-    return 
-  end
-  UI_MAIN_checkSkillLearnable()
-  if isSkillLearnTutorialClick_check() then
-    HandleMLUp_SkillWindow_Close()
+    UI_MAIN_checkSkillLearnable()
+    if isSkillLearnTutorialClick_check() then
+      HandleMLUp_SkillWindow_Close()
+    end
   end
 end
 

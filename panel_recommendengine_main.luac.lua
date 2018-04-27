@@ -8,11 +8,11 @@ local isDevelopment = ToClient_IsDevelopment()
 local RecommendEngine = {_clearTime = 0, 
 _clickCashProductList = {}
 }
-PaGlobal_RecommendEngine_CashVeiw = function(CashProductNo)
+PaGlobal_RecommendEngine_CashVeiw = function(CashProductNo, bValue)
   -- function num : 0_0 , upvalues : RecommendEngine, RAT_VIEW
   local isFirstClick = RecommendEngine:checkCashProduct(CashProductNo)
   if isFirstClick == true then
-    ToClient_sendRecommendInfoCashShop(RAT_VIEW, CashProductNo)
+    ToClient_sendRecommendInfoCashShop(RAT_VIEW, CashProductNo, bValue)
   end
 end
 

@@ -408,7 +408,7 @@ PaGlobal_ClickSummonButton = function()
     end
   else
     ToClient_requestPetUnseal(self._fairyNo)
-    if Panel_Window_FairyTierUpgrade:GetShow() then
+    if _ContentsGroup_FairyTierUpgradeAndRebirth == true and Panel_Window_FairyTierUpgrade:GetShow() then
       PaGlobal_FairyTierUpgrade_Close()
     end
   end

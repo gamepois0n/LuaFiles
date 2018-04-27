@@ -1195,7 +1195,7 @@ FromClient_notifyGetItem = function(notifyType, playerName, fromName, iconPath, 
     message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
     subMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_OPENBOX_SUBMSG", "fromName", fromName)
     itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-  elseif notifyType == 2 then
+  elseif notifyType == 2 or notifyType == 9 then
     if Int64toInt32(param1) ~= nil and Int64toInt32(param1) ~= 0 then
       if Int64toInt32(param1) >= 16 then
         itemName = HighEnchantLevel_ReplaceString(Int64toInt32(param1)) .. " " .. itemName
@@ -1206,7 +1206,11 @@ FromClient_notifyGetItem = function(notifyType, playerName, fromName, iconPath, 
       end
     end
     message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
-    subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_SUCCESSENCHANT_SUBMSG")
+    if notifyType == 2 then
+      subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_SUCCESSENCHANT_SUBMSG")
+    elseif notifyType == 9 then
+      subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_PROMOTION_SUBMSG_CAPHRAS")
+    end
     itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
   elseif notifyType == 3 then
     message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_GOODHORSE_MSG", "playerName", playerName)
@@ -1254,12 +1258,12 @@ FromClient_notifyGetItem = function(notifyType, playerName, fromName, iconPath, 
       end
     elseif notifyType == 6 then
       Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.horseNineTier, nil, isSelfPlayer)
-    elseif notifyType == 2 then
+    elseif notifyType == 2 or notifyType == 9 then
       Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.enchantSuccess, nil, isSelfPlayer)
     else
       Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.anotherPlayerGotItem, nil, isSelfPlayer)
     end
-    -- DECOMPILER ERROR: 27 unprocessed JMP targets
+    -- DECOMPILER ERROR: 31 unprocessed JMP targets
   end
 end
 

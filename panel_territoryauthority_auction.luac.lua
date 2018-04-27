@@ -231,7 +231,10 @@ FromClientNotifySupplyTradeStart = function()
 end
 
 FromClientNotifySupplyShopReset = function()
-  -- function num : 0_8
+  -- function num : 0_8 , upvalues : isEnableSupplyTrade
+  if isEnableSupplyTrade then
+    return 
+  end
   local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_MSG_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_MSG_SUB"), addMsg = ""}
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 3, 8)
 end

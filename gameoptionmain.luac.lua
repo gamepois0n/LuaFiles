@@ -653,7 +653,11 @@ end
   -- function num : 0_16
   local serviceResourceType = PaGlobal_Option:radioButtonMapping_ServiceResourceType(value)
   local chatChannelType = (PaGlobal_Option._elements).ChatChannelType
-  chatChannelType._curValue = PaGlobal_Option:radioButtonMapping_ChatChannelType(serviceResourceType, true)
+  if (CppEnums.ServiceResourceType).eServiceResourceType_SP == serviceResourceType then
+    chatChannelType._curValue = PaGlobal_Option:radioButtonMapping_ChatChannelType((CppEnums.LangType).LangType_SP, true)
+  else
+    chatChannelType._curValue = PaGlobal_Option:radioButtonMapping_ChatChannelType(serviceResourceType, true)
+  end
   PaGlobal_Option:ResetControlSettingTable(chatChannelType)
   PaGlobal_Option:SetControlSettingTable(chatChannelType, chatChannelType._curValue)
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_LANGUAGESETTING"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}

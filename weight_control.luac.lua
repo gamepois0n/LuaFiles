@@ -47,9 +47,6 @@ FGlobal_Inventory_WeightCheck = function()
     if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
       (self.weight):SetPosY((self.panel):GetSizeY() + 35)
     end
-    if Panel_NewEquip:GetShow() then
-      (self.weight):SetPosY((self.panel):GetSizeY())
-    end
     ;
     (self.panel):SetShow(true)
     ;

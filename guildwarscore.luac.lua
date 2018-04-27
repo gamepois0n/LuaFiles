@@ -345,44 +345,67 @@ guildNoReturn = function()
 end
 
 GuildWarScore.UpdateData = function(self)
-  -- function num : 0_9 , upvalues : _constGuildListMaxCount, _startMemberIndex, guildWarScoreTitle
+  -- function num : 0_9 , upvalues : _constGuildListMaxCount, GuildWarScore, guildWarScoreTitle
   for index = 0, _constGuildListMaxCount - 1 do
     ((self._list)[index]):SetShow(false)
   end
   if guildNoReturn() == nil then
     return 
   end
-  local currentGuildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildNoReturn())
-  if currentGuildWrapper == nil then
-    return 
+  local guildAlliance = ToClient_GetGuildAllianceWrapperbyNo(guildNoReturn())
+  local memberCount = 0
+  if guildAlliance ~= nil then
+    for index = 0, guildAlliance:getMemberCount() - 1 do
+      local guildWrapper = guildAlliance:getMemberGuild(index)
+      GuildWarScore:SetWarScoreList(guildWrapper, memberCount)
+      memberCount = memberCount + guildWrapper:getMemberCount()
+    end
+    guildWarScoreTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_WARSCORE_SCORETITLE", "getName", guildAlliance:getRepresentativeName()))
+  else
+    local guildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildNoReturn())
+    GuildWarScore:SetWarScoreList(guildWrapper, memberCount)
+    memberCount = guildWrapper:getMemberCount()
+    guildWarScoreTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARSCORE_SCORETITLE", "getName", guildWrapper:getName()))
   end
-  local memberCount = currentGuildWrapper:getMemberCount()
-  for index = 0, _constGuildListMaxCount - 1 do
-    if _startMemberIndex + index < memberCount then
-      ((self._list)[index]):SetData(currentGuildWrapper:getMember(_startMemberIndex + index))
-      ;
-      ((self._list)[index]):SetShow(true)
+  do
+    if _constGuildListMaxCount < memberCount then
+      (self._scrollBar):SetShow(true)
     else
       ;
-      ((self._list)[index]):SetShow(false)
+      (self._scrollBar):SetShow(false)
     end
   end
-  guildWarScoreTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARSCORE_SCORETITLE", "getName", currentGuildWrapper:getName()))
-  if memberCount > 17 then
-    (self._scrollBar):SetShow(true)
-  else
-    ;
-    (self._scrollBar):SetShow(false)
+end
+
+GuildWarScore.SetWarScoreList = function(self, guildWrapper, uiIndex)
+  -- function num : 0_10 , upvalues : _constGuildListMaxCount, _startMemberIndex
+  if guildWrapper == nil then
+    return 
+  end
+  local memberCount = guildWrapper:getMemberCount()
+  for index = 0, _constGuildListMaxCount - 1 do
+    if _constGuildListMaxCount <= uiIndex then
+      return 
+    end
+    if _startMemberIndex + index < memberCount then
+      ((self._list)[uiIndex]):SetData(guildWrapper:getMember(_startMemberIndex + index))
+      ;
+      ((self._list)[uiIndex]):SetShow(true)
+    else
+      ;
+      ((self._list)[uiIndex]):SetShow(false)
+    end
+    uiIndex = uiIndex + 1
   end
 end
 
 FromClient_GuildWarScoreUpdate = function()
-  -- function num : 0_10 , upvalues : GuildWarScore
+  -- function num : 0_11 , upvalues : GuildWarScore
   GuildWarScore:UpdateData()
 end
 
 Panel_GuildWarScore_RePos = function()
-  -- function num : 0_11
+  -- function num : 0_12
   if Panel_GuildWarInfo:GetShow() then
     if Panel_GuildWarInfo:GetPosX() + Panel_GuildWarInfo:GetSizeX() + Panel_GuildWarScore:GetSizeX() - 40 < getScreenSizeX() then
       Panel_GuildWarScore:SetPosX(Panel_GuildWarInfo:GetPosX() + Panel_GuildWarInfo:GetSizeX() - 40)
@@ -394,7 +417,7 @@ Panel_GuildWarScore_RePos = function()
 end
 
 Panel_GuildWarScore_Close = function()
-  -- function num : 0_12
+  -- function num : 0_13
   Panel_GuildWarScore:SetShow(false, false)
 end
 

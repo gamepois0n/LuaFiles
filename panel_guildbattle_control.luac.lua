@@ -442,9 +442,9 @@ FromClient_GuildBattle_AttendPlayer_GuildBattleControl = function()
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 78, false)
 end
 
-local GuildWatchMode = {UI_BG = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Static_CommandBG"), UI_KeyQ = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_Q"), UI_KeyE = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_E"), UI_KeyR = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_R"), UI_TextSmall = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Small"), UI_TextBig = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Big"), UI_TextExit = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Exit"), UI_TextDesc = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_CameraSpeedLow"), UI_ShowButton = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Button_ShowCommand")}
+GuildWatchMode = {UI_BG = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Static_CommandBG"), UI_KeyQ = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_Q"), UI_KeyE = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_E"), UI_KeyR = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Key_R"), UI_TextSmall = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Small"), UI_TextBig = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Big"), UI_TextExit = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_Exit"), UI_TextDesc = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_CameraSpeedLow"), UI_ShowButton = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "Button_ShowCommand"), UI_RemainTime = (UI.getChildControl)(Panel_GuildBattleWatchingMode, "StaticText_RemainTime"), _isSeigeWatching = false, _remainTime = -1}
 HandleClick_WatchShowToggle = function()
-  -- function num : 0_18 , upvalues : GuildWatchMode
+  -- function num : 0_18
   if (GuildWatchMode.UI_BG):GetShow() == true then
     GuildWatchMode_SetControlShow(false)
   else
@@ -453,7 +453,7 @@ HandleClick_WatchShowToggle = function()
 end
 
 PaGlobal_GuildBattle_WatchModeStringSetting = function()
-  -- function num : 0_19 , upvalues : GuildWatchMode
+  -- function num : 0_19
   if ToClient_isPersonalBattle() == true then
     (GuildWatchMode.UI_TextSmall):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE_WATCHING_START"))
     ;
@@ -496,7 +496,7 @@ PaGlobal_GuildBattle_WatchModeStringSetting = function()
 end
 
 GuildWatchMode_SetControlShow = function(isShow)
-  -- function num : 0_20 , upvalues : GuildWatchMode
+  -- function num : 0_20
   PaGlobal_GuildBattle_WatchModeStringSetting()
   ;
   (GuildWatchMode.UI_BG):SetShow(isShow)
@@ -519,6 +519,12 @@ GuildWatchMode_SetControlShow = function(isShow)
   else
     Panel_GuildBattleWatchingMode:SetPosY(Panel_GuildBattleWatchingMode:GetPosY() - 200)
   end
+  if isShow == true and GuildWatchMode._isSeigeWatching == true then
+    (GuildWatchMode.UI_RemainTime):SetShow(isShow)
+  else
+    ;
+    (GuildWatchMode.UI_RemainTime):SetShow(isShow)
+  end
 end
 
 WatchingPanel_SetPosition = function()
@@ -531,7 +537,7 @@ WatchingPanel_SetPosition = function()
 end
 
 FromClient_NotifyGuildTeamBattleShowWatchPanel = function(isShow)
-  -- function num : 0_22 , upvalues : isShowGuildBattleCam, GuildWatchMode
+  -- function num : 0_22 , upvalues : isShowGuildBattleCam
   if isShowGuildBattleCam == false then
     ToClient_CanOpenGuildBattleCam(false)
     return 
@@ -576,11 +582,41 @@ FromClient_FightTimeLeftMessage = function(fightTime)
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 78, false)
 end
 
+GuildBattle_UpdatePerFrame = function(deltaTime)
+  -- function num : 0_25
+  if GuildWatchMode._isSeigeWatching == false then
+    return 
+  end
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+
+  if GuildWatchMode._remainTime == nil then
+    GuildWatchMode._isSeigeWatching = false
+    Panel_GuildBattleWatchingMode:SetShow(false)
+    FromClient_NotifySiegeShowWatchPanel(false)
+    ToClient_FirstPersonOpserverModeInSiege(false)
+  end
+  -- DECOMPILER ERROR at PC26: Confused about usage of register: R1 in 'UnsetPending'
+
+  if GuildWatchMode._remainTime < 0 then
+    GuildWatchMode._isSeigeWatching = false
+    Panel_GuildBattleWatchingMode:SetShow(false)
+    FromClient_NotifySiegeShowWatchPanel(false)
+    ToClient_FirstPersonOpserverModeInSiege(false)
+  else
+    -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+
+    GuildWatchMode._remainTime = GuildWatchMode._remainTime - deltaTime
+    ;
+    (GuildWatchMode.UI_RemainTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWATCH_REMAINTIME", "time", tostring((math.floor)(GuildWatchMode._remainTime))))
+  end
+end
+
 Panel_GuildBattleWatchingMode:SetShow(false)
 ;
 (GuildWatchMode.UI_ShowButton):addInputEvent("Mouse_LUp", "HandleClick_WatchShowToggle()")
 ;
 (GuildWatchMode.UI_ShowButton):SetCheck(true)
+Panel_GuildBattleWatchingMode:RegisterUpdateFunc("GuildBattle_UpdatePerFrame")
 registerEvent("FromClient_luaLoadComplete", "FromClient_GuildBattle_Control_Initialize")
 registerEvent("FromClient_GuildBattle_FightEnd", "FromClient_GuildBattle_FightEnd")
 registerEvent("FromClient_guildBattleTimer", "FromClient_GuildBattle_GuildBattleTimerEnd")

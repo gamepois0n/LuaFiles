@@ -70,7 +70,7 @@ taming = {startX = 230, startY = 50, startTitleX = 30, startTitleY = 0, startBut
 , 
 button = {startX = 180, startY = 0, startButtonX = 15, startButtonY = 10, gapY = 40, sizeY = 40, sizeYY = 10}
 , slotCount = 4}
-, _staticListBG = (UI.getChildControl)(Panel_Window_StableList, "Static_ListBG"), _staticButtonListBG = (UI.getChildControl)(Panel_Window_StableList, "Static_PopupBG"), _staticNotice = (UI.getChildControl)(Panel_Window_StableList, "StaticText_Notice"), _staticSlotCount = (UI.getChildControl)(Panel_Window_StableList, "StaticText_Slot_Count"), _scroll = (UI.getChildControl)(Panel_Window_StableList, "Scroll_Slot_List"), _slots = (Array.new)(), _selectSlotNo = nil, _startSlotIndex = 0, _selectSceneIndex = -1, 
+, _staticListBG = (UI.getChildControl)(Panel_Window_StableList, "Static_ListBG"), _staticButtonListBG = (UI.getChildControl)(Panel_Window_StableList, "Static_PopupBG"), _staticNotice = (UI.getChildControl)(Panel_Window_StableList, "StaticText_Notice"), _staticSlotCount = (UI.getChildControl)(Panel_Window_StableList, "StaticText_Slot_Count"), _sealedCount = (UI.getChildControl)(Panel_Window_StableList, "StaticText_SealedCount"), _unsealedCount = (UI.getChildControl)(Panel_Window_StableList, "StaticText_UnsealedCount"), _maxCount = (UI.getChildControl)(Panel_Window_StableList, "StaticText_MaxCount"), _scroll = (UI.getChildControl)(Panel_Window_StableList, "Scroll_Slot_List"), _slots = (Array.new)(), _selectSlotNo = nil, _startSlotIndex = 0, _selectSceneIndex = -1, 
 _unseal = {}
 , 
 _taming = {}
@@ -97,6 +97,7 @@ stableList.init = function(self)
     slot.grade = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_HorseGrade", slot.button, "ServantList_Slot_Grade_" .. ii)
     slot.mating = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_Mating", slot.button, "ServantList_Slot_Mating_" .. ii)
     slot.matingComplete = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_MatingComplete", slot.button, "ServantList_Slot_MatingCompletes_" .. ii)
+    slot.regionChanging = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_RegionChanging", slot.button, "ServantList_Slot_RegionChanging_" .. ii)
     slot.training = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_Training", slot.button, "ServantList_Slot_Training_" .. ii)
     slot.isSeized = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_Attachment", slot.button, "ServantList_Slot_Seized" .. ii)
     slot.stallion = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_iconStallion", slot.button, "ServantList_Slot_Stallion" .. ii)
@@ -178,6 +179,10 @@ stableList.init = function(self)
             ;
             (slot.matingComplete):SetPosY(iconConfig.startStateY)
             ;
+            (slot.regionChanging):SetPosX(iconConfig.startStateX)
+            ;
+            (slot.regionChanging):SetPosY(iconConfig.startStateY)
+            ;
             (slot.training):SetPosX(iconConfig.startStateX)
             ;
             (slot.training):SetPosY(iconConfig.startStateY)
@@ -199,52 +204,52 @@ stableList.init = function(self)
             (UIScroll.InputEventByControl)(slot.button, "StableList_ScrollEvent")
             ;
             (slot.stallion):SetShow(false)
-            -- DECOMPILER ERROR at PC420: Confused about usage of register: R8 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC438: Confused about usage of register: R8 in 'UnsetPending'
 
             ;
             (self._slots)[ii] = slot
-            -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC439: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC439: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC439: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC439: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
       end
     end
   end
-  -- DECOMPILER ERROR at PC430: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC448: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._bg = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_BG", Panel_Window_StableList, "StableList_Unseal_BG")
-  -- DECOMPILER ERROR at PC439: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC457: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._stallion = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_unsealStallion", Panel_Window_StableList, "StableList_Unseal_Stallion")
-  -- DECOMPILER ERROR at PC449: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC467: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._title = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_SubTitle", (self._unseal)._bg, "StableList_Unseal_Title")
-  -- DECOMPILER ERROR at PC459: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC477: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._button = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Button", (self._unseal)._bg, "StableList_Unseal_Button")
-  -- DECOMPILER ERROR at PC469: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC487: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._icon = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Icon", (self._unseal)._bg, "StableList_Unseal_Icon")
-  -- DECOMPILER ERROR at PC479: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC497: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._pcroomIcon = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_PCRoom", (self._unseal)._bg, "StableList_Unseal_PcRoomIcon")
-  -- DECOMPILER ERROR at PC489: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC507: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._effect = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Button_UnSeal_Effect", (self._unseal)._bg, "StableList_Unseal_Effect")
-  -- DECOMPILER ERROR at PC499: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC517: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._grade = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_HorseGrade", (self._unseal)._bg, "ServantList_Slot_Grade")
@@ -285,23 +290,23 @@ stableList.init = function(self)
   ((self._unseal)._effect):SetPosY(unsealConfig.startButtonY - 2)
   ;
   ((self._unseal)._button):addInputEvent("Mouse_LUp", "StableList_ButtonOpen( 1, 0 )")
-  -- DECOMPILER ERROR at PC612: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC630: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._taming)._bg = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_BG", Panel_Window_StableList, "StableList_Taming_BG")
-  -- DECOMPILER ERROR at PC622: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC640: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._taming)._title = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "StaticText_SubTitle", (self._taming)._bg, "StableList_Taming_Title")
-  -- DECOMPILER ERROR at PC632: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC650: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._taming)._button = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Button", (self._taming)._bg, "StableList_Taming_Button")
-  -- DECOMPILER ERROR at PC642: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC660: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._taming)._icon = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Icon", (self._taming)._bg, "StableList_Taming_Icon")
-  -- DECOMPILER ERROR at PC652: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC670: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._taming)._effect = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Static_Button_Taming_Effect", (self._taming)._bg, "StableList_Taming_Effect")
@@ -336,6 +341,7 @@ stableList.init = function(self)
   self._buttonRecoveryUnseal = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_RecoveryUnseal", self._staticButtonListBG, "StableList_Button_RecoveryUnseal")
   self._buttonRepairUnseal = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_RepairUnseal", self._staticButtonListBG, "StableList_Button_RepairUnseal")
   self._buttonUnseal = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_Unseal", self._staticButtonListBG, "StableList_Button_Unseal")
+  self._buttonMove = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_Move", self._staticButtonListBG, "StableList_Button_Move")
   self._buttonRepair = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_Repair", self._staticButtonListBG, "StableList_Button_Repair")
   self._buttonRecovery = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_Recovery", self._staticButtonListBG, "StableList_Button_Recovery")
   self._buttonSell = (UI.createAndCopyBasePropertyControl)(Panel_Window_StableList, "Button_Sell", self._staticButtonListBG, "StableList_Button_Sell")
@@ -359,17 +365,58 @@ stableList.init = function(self)
   (self._buttonRelease):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_TITLE"))
   ;
   (self._scroll):SetControlPos(0)
+  ;
+  (self._sealedCount):addInputEvent("Mouse_On", "stableList_ShowCountTooltip(" .. 0 .. ")")
+  ;
+  (self._sealedCount):addInputEvent("Mouse_Out", "stableList_HideCountTooltip()")
+  ;
+  (self._unsealedCount):addInputEvent("Mouse_On", "stableList_ShowCountTooltip(" .. 1 .. ")")
+  ;
+  (self._unsealedCount):addInputEvent("Mouse_Out", "stableList_HideCountTooltip()")
+  ;
+  (self._maxCount):addInputEvent("Mouse_On", "stableList_ShowCountTooltip(" .. 2 .. ")")
+  ;
+  (self._maxCount):addInputEvent("Mouse_Out", "stableList_HideCountTooltip()")
   Panel_Window_StableList:SetChildIndex(self._staticButtonListBG, 9999)
 end
 
+stableList_ShowCountTooltip = function(iconType)
+  -- function num : 0_3 , upvalues : stableList
+  local self = stableList
+  local uiControl, name, desc = nil, nil, nil
+  if iconType == 0 then
+    uiControl = self._sealedCount
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SEALCOUNT_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SEALCOUNT_DESC")
+  else
+    if iconType == 1 then
+      uiControl = self._unsealedCount
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_UNSEALCOUNT_TITLE")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_UNSEALCOUNT_DESC")
+    else
+      if iconType == 2 then
+        uiControl = self._maxCount
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_MAXCOUNT_TITLE")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_MAXCOUNT_DESC")
+      end
+    end
+  end
+  TooltipSimple_Show(uiControl, name, desc)
+end
+
+stableList_HideCountTooltip = function()
+  -- function num : 0_4
+  TooltipSimple_Hide()
+end
+
 stableList.clear = function(self)
-  -- function num : 0_3
+  -- function num : 0_5
   self._selectSlotNo = nil
   self._startSlotIndex = 0
 end
 
 stableList.update = function(self)
-  -- function num : 0_4 , upvalues : stableList, isContentsStallionEnable, isContentsNineTierEnable
+  -- function num : 0_6 , upvalues : stableList, isContentsStallionEnable, isContentsNineTierEnable
   local servantCount = stable_count()
   if servantCount == 0 then
     (stableList._staticNotice):SetShow(true)
@@ -380,9 +427,29 @@ stableList.update = function(self)
   end
   if isSiegeStable() then
     (self._staticSlotCount):SetText(servantCount .. " / " .. servantCount)
+    ;
+    (self._staticSlotCount):SetShow(true)
+    ;
+    (self._sealedCount):SetShow(false)
+    ;
+    (self._unsealedCount):SetShow(false)
+    ;
+    (self._maxCount):SetShow(false)
   else
     ;
-    (self._staticSlotCount):SetText(stable_currentSlotCount() .. " / " .. stable_maxSlotCount())
+    (self._staticSlotCount):SetShow(false)
+    ;
+    (self._sealedCount):SetShow(true)
+    ;
+    (self._unsealedCount):SetShow(true)
+    ;
+    (self._maxCount):SetShow(true)
+    ;
+    (self._sealedCount):SetText(stable_currentSlotCount())
+    ;
+    (self._unsealedCount):SetText(stable_currentRegionSlotCountAll() - stable_currentSlotCount())
+    ;
+    (self._maxCount):SetText(stable_currentRegionSlotCountAll() .. " / " .. stable_maxSlotCount())
   end
   for ii = 0, (self._config).slotCount - 1 do
     local slot = (self._slots)[ii]
@@ -394,6 +461,7 @@ stableList.update = function(self)
   local slotNo = 0
   local linkedHorseCount = 0
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+  self._currentRegionKey = regionInfo:getRegionKey()
   local regionName = regionInfo:getAreaName()
   for ii = self._startSlotIndex, servantCount - 1 do
     local sortIndex = 0
@@ -431,6 +499,8 @@ stableList.update = function(self)
         (slot.mating):SetShow(false)
         ;
         (slot.matingComplete):SetShow(false)
+        ;
+        (slot.regionChanging):SetShow(false)
         ;
         (slot.stallion):SetShow(false)
         ;
@@ -480,6 +550,8 @@ stableList.update = function(self)
           (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
           ;
           (slot.training):SetShow(true)
+        elseif (Defines.s64_const).s64_0 < servantInfo:getRemainSecondsToUnseal() then
+          (slot.regionChanging):SetShow(true)
         end
         if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse then
           if servantInfo:isMale() then
@@ -614,13 +686,13 @@ stableList.update = function(self)
       ;
       (UIScroll.SetButtonSize)(self._scroll, (self._config).slotCount, servantCount)
       FGlobal_NeedStableRegistItem_Print()
-      -- DECOMPILER ERROR: 43 unprocessed JMP targets
+      -- DECOMPILER ERROR: 44 unprocessed JMP targets
     end
   end
 end
 
 stableList.registEventHandler = function(self)
-  -- function num : 0_5 , upvalues : lookChangeSlot
+  -- function num : 0_7 , upvalues : lookChangeSlot
   (UIScroll.InputEvent)(self._scroll, "StableList_ScrollEvent")
   Panel_Window_StableList:addInputEvent("Mouse_UpScroll", "StableList_ScrollEvent( true )")
   Panel_Window_StableList:addInputEvent("Mouse_DownScroll", "StableList_ScrollEvent( false )")
@@ -690,7 +762,7 @@ stableList.registEventHandler = function(self)
 end
 
 stableList.registMessageHandler = function(self)
-  -- function num : 0_6
+  -- function num : 0_8
   registerEvent("onScreenResize", "StableList_Resize")
   registerEvent("FromClient_ServantRegisterToAuction", "StableList_UpdateSlotData")
   registerEvent("FromClient_ServantUpdate", "StableList_UpdateSlotData")
@@ -717,10 +789,11 @@ stableList.registMessageHandler = function(self)
   registerEvent("FromClient_StartStallionSkillTraining", "FromClient_StartStallionSkillTraining")
   registerEvent("FromClient_EndStallionSkillTraining", "FromClient_EndStallionSkillTraining")
   registerEvent("FromClient_IncreaseStallionSkillExpAck", "FromClient_IncreaseStallionSkillExpAck")
+  registerEvent("FromClient_OnChangeServantRegion", "StableList_UpdateSlotData")
 end
 
 StableList_Resize = function()
-  -- function num : 0_7 , upvalues : stableList
+  -- function num : 0_9 , upvalues : stableList
   local screenX = getScreenSizeX()
   local screenY = getScreenSizeY()
   local self = stableList
@@ -745,12 +818,18 @@ StableList_Resize = function()
       (((self._slots)[3]).button):SetShow(false)
     end
   end
-  Panel_Window_StableList:SetSize(Panel_Window_StableList:GetSizeX(), panelSize)
+  Panel_Window_StableList:SetSize(Panel_Window_StableList:GetSizeX(), panelSize + 30)
+  ;
+  (self._sealedCount):ComputePos()
+  ;
+  (self._unsealedCount):ComputePos()
+  ;
+  (self._maxCount):ComputePos()
   ;
   (self._staticListBG):SetSize((self._staticListBG):GetSizeX(), panelBGSize)
   ;
   (self._scroll):SetSize((self._scroll):GetSizeX(), scrollSize)
-  -- DECOMPILER ERROR at PC62: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R7 in 'UnsetPending'
 
   ;
   (self._config).slotCount = slotCount
@@ -758,7 +837,7 @@ end
 
 local currentButtonServantNo = nil
 StableList_UnsealByServantNo = function()
-  -- function num : 0_8 , upvalues : currentButtonServantNo, stableList
+  -- function num : 0_10 , upvalues : currentButtonServantNo, stableList
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   stable_unsealByServantNo(currentButtonServantNo)
@@ -772,20 +851,30 @@ StableList_UnsealByServantNo = function()
   _startSlotIndex = 0
 end
 
+StableList_HandleMoveButtonClick = function()
+  -- function num : 0_11 , upvalues : stableList, currentButtonServantNo
+  local posX = (stableList._staticButtonListBG):GetParentPosX() + (stableList._staticButtonListBG):GetSizeX()
+  local posY = (stableList._staticButtonListBG):GetParentPosY()
+  changeServantRegion:open(currentButtonServantNo, posX, posY)
+end
+
 StableList_RegistButtonEventHandler = function(servantInfo)
-  -- function num : 0_9 , upvalues : stableList, currentButtonServantNo
+  -- function num : 0_12 , upvalues : stableList, currentButtonServantNo
   local self = stableList
   currentButtonServantNo = servantInfo:getServantNo()
   ;
   (self._buttonUnseal):addInputEvent("Mouse_LUp", "StableList_UnsealByServantNo()")
+  ;
+  (self._buttonMove):addInputEvent("Mouse_LUp", "StableList_HandleMoveButtonClick()")
 end
 
 local beforeSlotNo, beforeEType = nil, nil
 StableList_ButtonOpen = function(eType, slotNo)
-  -- function num : 0_10 , upvalues : stableList, beforeSlotNo, beforeEType, isContentsEnable, isContentsEnableSupply, isContentsStallionEnable, isContentsNineTierEnable
+  -- function num : 0_13 , upvalues : stableList, beforeSlotNo, beforeEType, isContentsEnable, isContentsEnableSupply, isContentsStallionEnable, isContentsNineTierEnable
   if Panel_AddToCarriage:GetShow() or Panel_Window_StableMix:GetShow() then
     return 
   end
+  changeServantRegion:close()
   local self = stableList
   if (self._staticButtonListBG):GetShow() and beforeSlotNo ~= nil and beforeSlotNo == slotNo and beforeEType ~= nil and beforeEType == eType then
     (self._staticButtonListBG):SetShow(false)
@@ -800,6 +889,8 @@ StableList_ButtonOpen = function(eType, slotNo)
   (self._buttonRegister):SetShow(false)
   ;
   (self._buttonSeal):SetShow(false)
+  ;
+  (self._buttonMove):SetShow(false)
   ;
   (self._buttonCompulsionSeal):SetShow(false)
   ;
@@ -872,6 +963,7 @@ StableList_ButtonOpen = function(eType, slotNo)
     local regMating = (CppEnums.ServantStateType).Type_RegisterMating
     local training = (CppEnums.ServantStateType).Type_SkillTraining
     local stallionTraining = (CppEnums.ServantStateType).Type_StallionTraining
+    local showChangeRegionButtonFlag = false
     if isSiegeStable() then
       buttonList[buttonSlotNo] = self._buttonUnseal
       buttonSlotNo = buttonSlotNo + 1
@@ -883,19 +975,21 @@ StableList_ButtonOpen = function(eType, slotNo)
         positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
         positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 30
       else
-        -- DECOMPILER ERROR at PC284: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC292: Unhandled construct in 'MakeBoolean' P1
 
         if ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant == vehicleType) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState and stallionTraining ~= getState then
           buttonList[buttonSlotNo] = self._buttonUnseal
           buttonSlotNo = buttonSlotNo + 1
+          showChangeRegionButtonFlag = true
         end
         buttonList[buttonSlotNo] = self._buttonUnseal
         buttonSlotNo = buttonSlotNo + 1
+        showChangeRegionButtonFlag = true
         if ((servantInfo:getHp() >= servantInfo:getMaxHp() and servantInfo:getMp() >= servantInfo:getMaxMp()) or ((CppEnums.VehicleType).Type_Horse ~= vehicleType and (CppEnums.VehicleType).Type_Donkey ~= vehicleType and (CppEnums.VehicleType).Type_Camel ~= vehicleType and (CppEnums.VehicleType).Type_MountainGoat ~= vehicleType and (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType) or servantInfo:isMatingComplete() or nowMating == getState or regMarket == getState or regMating == getState or training == getState or stallionTraining ~= getState) then
           buttonList[buttonSlotNo] = self._buttonRecovery
           buttonSlotNo = buttonSlotNo + 1
         end
-        -- DECOMPILER ERROR at PC363: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC373: Unhandled construct in 'MakeBoolean' P1
 
         if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (servantInfo:getHp() < servantInfo:getMaxHp() or servantInfo:getMp() < servantInfo:getMaxMp()) then
           buttonList[buttonSlotNo] = self._buttonRepair
@@ -949,9 +1043,9 @@ StableList_ButtonOpen = function(eType, slotNo)
                 ;
                 (self._buttonHorseLookChange):addInputEvent("Mouse_LUp", "StableList_LookChange(" .. slotNo .. ")")
               end
-              -- DECOMPILER ERROR at PC735: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC745: Unhandled construct in 'MakeBoolean' P1
 
-              -- DECOMPILER ERROR at PC735: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC745: Unhandled construct in 'MakeBoolean' P1
 
               if isPcroomOnly == false and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType or stallionTraining ~= getState) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
                 if stable_isMarket() and servantLevel >= 15 and (CppEnums.VehicleType).Type_Horse == vehicleType and isContentsEnableSupply then
@@ -985,9 +1079,13 @@ StableList_ButtonOpen = function(eType, slotNo)
                 (self._buttonTrainingFinish):addInputEvent("Mouse_LUp", "StableList_StallionTrainFinish(" .. index .. ")")
                 buttonSlotNo = buttonSlotNo + 1
               end
+              if showChangeRegionButtonFlag and changeServantRegion:isEnabled() then
+                buttonList[buttonSlotNo] = self._buttonMove
+                buttonSlotNo = buttonSlotNo + 1
+              end
               positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
               positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 20
-              -- DECOMPILER ERROR at PC899: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC919: Unhandled construct in 'MakeBoolean' P1
 
               if eType == (self._const).eTypeUnsealed and isSiegeStable() == false then
                 stableList:clear()
@@ -1016,7 +1114,7 @@ StableList_ButtonOpen = function(eType, slotNo)
                   buttonList[buttonSlotNo] = self._buttonRecoveryUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
-                -- DECOMPILER ERROR at PC1019: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC1039: Unhandled construct in 'MakeBoolean' P1
 
                 if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() or unSealServantInfo:getMp() < unSealServantInfo:getMaxMp()) then
                   buttonList[buttonSlotNo] = self._buttonRepairUnseal
@@ -1061,8 +1159,9 @@ StableList_ButtonOpen = function(eType, slotNo)
                   (self._staticButtonListBG):SetShow(true)
                 else
                   (self._staticButtonListBG):SetShow(false)
+                  changeServantRegion:close()
                 end
-                -- DECOMPILER ERROR: 53 unprocessed JMP targets
+                -- DECOMPILER ERROR: 54 unprocessed JMP targets
               end
             end
           end
@@ -1073,19 +1172,20 @@ StableList_ButtonOpen = function(eType, slotNo)
 end
 
 StableList_ButtonClose = function()
-  -- function num : 0_11 , upvalues : stableList
+  -- function num : 0_14 , upvalues : stableList
   local self = stableList
   if not (self._staticButtonListBG):GetShow() then
     return false
   end
   ;
   (self._staticButtonListBG):SetShow(false)
+  changeServantRegion:close()
   Panel_HorseLookChange_Close()
   return false
 end
 
 StableList_SlotSelect = function(slotNo)
-  -- function num : 0_12 , upvalues : stableList
+  -- function num : 0_15 , upvalues : stableList
   if Panel_Window_StableStallion_Effect:GetShow() then
     return 
   end
@@ -1132,7 +1232,7 @@ StableList_SlotSelect = function(slotNo)
 end
 
 StableList_CharacterSceneReset = function(slotNo)
-  -- function num : 0_13 , upvalues : stableList
+  -- function num : 0_16 , upvalues : stableList
   local self = stableList
   local servantInfo = stable_getServant(slotNo)
   if servantInfo == nil then
@@ -1146,7 +1246,7 @@ StableList_CharacterSceneReset = function(slotNo)
 end
 
 StableList_CharacterSceneResetServantNo = function(servantNo)
-  -- function num : 0_14 , upvalues : stableList
+  -- function num : 0_17 , upvalues : stableList
   local self = stableList
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
@@ -1160,7 +1260,7 @@ StableList_CharacterSceneResetServantNo = function(servantNo)
 end
 
 StableList_Mix = function(slotNo)
-  -- function num : 0_15 , upvalues : stableList
+  -- function num : 0_18 , upvalues : stableList
   local self = stableList
   if slotNo == nil then
     return 
@@ -1190,7 +1290,7 @@ StableList_Mix = function(slotNo)
     return 
   end
   local doMixServant = function()
-    -- function num : 0_15_0 , upvalues : sortIndex
+    -- function num : 0_18_0 , upvalues : sortIndex
     StableMix_Set(sortIndex)
   end
 
@@ -1208,11 +1308,11 @@ StableList_Mix = function(slotNo)
 end
 
 StableList_Seal = function(isCompulsion)
-  -- function num : 0_16
+  -- function num : 0_19
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local seal_Go = function()
-    -- function num : 0_16_0 , upvalues : isCompulsion
+    -- function num : 0_19_0 , upvalues : isCompulsion
     stable_seal(isCompulsion)
   end
 
@@ -1229,7 +1329,7 @@ StableList_Seal = function(isCompulsion)
 end
 
 StableList_Unseal = function()
-  -- function num : 0_17 , upvalues : stableList
+  -- function num : 0_20 , upvalues : stableList
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   stable_unseal(StableList_SelectSlotNo())
@@ -1244,7 +1344,7 @@ StableList_Unseal = function()
 end
 
 StableList_RecoveryUnseal = function()
-  -- function num : 0_18 , upvalues : stableList
+  -- function num : 0_21 , upvalues : stableList
   StableList_ButtonClose()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
@@ -1274,7 +1374,7 @@ StableList_RecoveryUnseal = function()
     end
   end
   local RecoveryUnseal = function()
-    -- function num : 0_18_0
+    -- function num : 0_21_0
     StableList_RecoveryUnsealXXX()
   end
 
@@ -1288,13 +1388,13 @@ StableList_RecoveryUnseal = function()
 end
 
 StableList_RecoveryUnsealXXX = function()
-  -- function num : 0_19
+  -- function num : 0_22
   audioPostEvent_SystemUi(5, 7)
   stable_recoveryUnseal((MessageBoxCheck.isCheck)())
 end
 
 StableList_Recovery = function()
-  -- function num : 0_20
+  -- function num : 0_23
   StableList_ButtonClose()
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1346,21 +1446,21 @@ StableList_Recovery = function()
 end
 
 StableList_RecoveryXXX = function()
-  -- function num : 0_21
+  -- function num : 0_24
   audioPostEvent_SystemUi(5, 7)
   stable_recovery(StableList_SelectSlotNo(), (MessageBoxCheck.isCheck)())
   StableInfo_Open()
 end
 
 StableList_ReviveXXX = function()
-  -- function num : 0_22
+  -- function num : 0_25
   audioPostEvent_SystemUi(5, 7)
   stable_revive(StableList_SelectSlotNo(), (MessageBoxCheck.isCheck)())
   StableInfo_Open()
 end
 
 StableList_SellToNpc = function()
-  -- function num : 0_23 , upvalues : servantInvenAlert
+  -- function num : 0_26 , upvalues : servantInvenAlert
   StableList_ButtonClose()
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1371,7 +1471,7 @@ StableList_SellToNpc = function()
 end
 
 StableList_SupplyToNpc = function()
-  -- function num : 0_24 , upvalues : servantInvenAlert
+  -- function num : 0_27 , upvalues : servantInvenAlert
   StableList_ButtonClose()
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1387,13 +1487,13 @@ StableList_SupplyToNpc = function()
 end
 
 StableList_SellToNpcXXX = function()
-  -- function num : 0_25 , upvalues : sellCheck
+  -- function num : 0_28 , upvalues : sellCheck
   stable_changeToReward(StableList_SelectSlotNo(), (CppEnums.ServantToRewardType).Type_Money)
   sellCheck = true
 end
 
 StableList_Release = function()
-  -- function num : 0_26 , upvalues : servantInvenAlert
+  -- function num : 0_29 , upvalues : servantInvenAlert
   StableList_ButtonClose()
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1407,16 +1507,16 @@ StableList_Release = function()
 end
 
 StableList_ReleaseXXX = function()
-  -- function num : 0_27 , upvalues : sellCheck
+  -- function num : 0_30 , upvalues : sellCheck
   stable_changeToReward(StableList_SelectSlotNo(), (CppEnums.ServantToRewardType).Type_Experience)
   sellCheck = true
 end
 
 StableList_ChangeName = function()
-  -- function num : 0_28
+  -- function num : 0_31
   StableList_ButtonClose()
   local executeChangeName = function()
-    -- function num : 0_28_0
+    -- function num : 0_31_0
     StableRegister_OpenByEventType((CppEnums.ServantRegist).eEventType_ChangeName)
   end
 
@@ -1427,14 +1527,14 @@ StableList_ChangeName = function()
 end
 
 StableList_RegisterMating = function()
-  -- function num : 0_29
+  -- function num : 0_32
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMATING_NOTIFY_TITLE"), PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMATING_NOTIFY_MSG"), StableList_RegisterMatingXXX, MessageBox_Empty_function)
 end
 
 StableList_RegisterMatingXXX = function()
-  -- function num : 0_30
+  -- function num : 0_33
   local slotNo = StableList_SelectSlotNo()
   local servantInfo = stable_getServant(slotNo)
   if servantInfo == nil then
@@ -1444,19 +1544,19 @@ StableList_RegisterMatingXXX = function()
 end
 
 StableList_RegisterMatingXXXXX = function(s64_inputNumber, slotNo)
-  -- function num : 0_31
+  -- function num : 0_34
   stable_registerServantToSomeWhereElse(StableList_SelectSlotNo(), (CppEnums.AuctionType).AuctionGoods_ServantMating, StableRegister_GetTransferType(), s64_inputNumber)
 end
 
 StableList_RegisterMarket = function()
-  -- function num : 0_32
+  -- function num : 0_35
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMARKET_NOTIFY_TITLE"), PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMARKET_NOTIFY_MSG"), StableList_RegisterMarketXXX, MessageBox_Empty_function)
 end
 
 StableList_RegisterMarketXXX = function()
-  -- function num : 0_33
+  -- function num : 0_36
   local slotNo = StableList_SelectSlotNo()
   local servantInfo = stable_getServant(slotNo)
   if servantInfo == nil then
@@ -1466,18 +1566,18 @@ StableList_RegisterMarketXXX = function()
 end
 
 StableList_RegisterMarketXXXXXX = function(s64_inputNumber, slotNo)
-  -- function num : 0_34
+  -- function num : 0_37
   stable_registerServantToSomeWhereElse(StableList_SelectSlotNo(), (CppEnums.AuctionType).AuctionGoods_ServantMarket, (CppEnums.TransferType).TransferType_Normal, s64_inputNumber)
 end
 
 StableList_RegisterCancel = function()
-  -- function num : 0_35
+  -- function num : 0_38
   StableList_ButtonClose()
   StableMating_Cancel(StableList_SelectSlotNo())
 end
 
 StableList_RegisterFromTaming = function()
-  -- function num : 0_36
+  -- function num : 0_39
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   StableRegister_OpenByTaming()
@@ -1485,17 +1585,17 @@ StableList_RegisterFromTaming = function()
 end
 
 StableList_ReceiveChildServant = function()
-  -- function num : 0_37
+  -- function num : 0_40
   StableList_ButtonClose()
   stable_getServantMatingChildInfo(StableList_SelectSlotNo())
 end
 
 StableList_ClearDeadCount = function()
-  -- function num : 0_38
+  -- function num : 0_41
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local clearDeadCountDo = function()
-    -- function num : 0_38_0
+    -- function num : 0_41_0
     stable_clearDeadCount(StableList_SelectSlotNo())
   end
 
@@ -1506,11 +1606,11 @@ StableList_ClearDeadCount = function()
 end
 
 StableList_ClearMatingCount = function()
-  -- function num : 0_39
+  -- function num : 0_42
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local clearMatingCountDo = function()
-    -- function num : 0_39_0
+    -- function num : 0_42_0
     stable_clearMatingCount(StableList_SelectSlotNo())
   end
 
@@ -1521,11 +1621,11 @@ StableList_ClearMatingCount = function()
 end
 
 StableList_Imprint = function(isImprint)
-  -- function num : 0_40
+  -- function num : 0_43
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local imprint = function()
-    -- function num : 0_40_0 , upvalues : isImprint
+    -- function num : 0_43_0 , upvalues : isImprint
     stable_imprint(StableList_SelectSlotNo(), isImprint)
   end
 
@@ -1540,7 +1640,7 @@ StableList_Imprint = function(isImprint)
 end
 
 StableList_AddToCarriage = function()
-  -- function num : 0_41
+  -- function num : 0_44
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local slotNo = StableList_SelectSlotNo()
@@ -1551,7 +1651,7 @@ StableList_AddToCarriage = function()
 end
 
 StableList_Unlink = function()
-  -- function num : 0_42
+  -- function num : 0_45
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local slotNo = StableList_SelectSlotNo()
@@ -1578,7 +1678,7 @@ StableList_Unlink = function()
 end
 
 StableList_LookChange = function(index)
-  -- function num : 0_43 , upvalues : stableList
+  -- function num : 0_46 , upvalues : stableList
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local slotNo = StableList_SelectSlotNo()
@@ -1596,14 +1696,14 @@ StableList_LookChange = function(index)
 end
 
 StableList_TrainFinish = function(index)
-  -- function num : 0_44
+  -- function num : 0_47
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   stable_endServantSkillExpTraining(index)
 end
 
 StableList_StartStallionTraining = function()
-  -- function num : 0_45 , upvalues : isContentsStallionEnable, isContentsNineTierEnable
+  -- function num : 0_48 , upvalues : isContentsStallionEnable, isContentsNineTierEnable
   if not isContentsStallionEnable and not isContentsNineTierEnable then
     return 
   end
@@ -1627,12 +1727,12 @@ StableList_StartStallionTraining = function()
 end
 
 FromClient_StartStallionSkillTraining = function(servantNo)
-  -- function num : 0_46
+  -- function num : 0_49
   Panel_Window_StableStallion:SetShow(true)
 end
 
 StableList_StallionTrainFinish = function(index)
-  -- function num : 0_47
+  -- function num : 0_50
   StableList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   stable_endStallionSkillExpTraining(index)
@@ -1642,7 +1742,7 @@ local lookIndex = 0
 local beforeActionIndex = -1
 local currentPage = 0
 HorseLookChange_Set = function(isNext, index)
-  -- function num : 0_48 , upvalues : stableList, currentPage, lookIndex, lookChangeSlot, beforeActionIndex
+  -- function num : 0_51 , upvalues : stableList, currentPage, lookIndex, lookChangeSlot, beforeActionIndex
   local slotNo = StableList_SelectSlotNo()
   if slotNo == nil then
     return 
@@ -1700,7 +1800,7 @@ HorseLookChange_Set = function(isNext, index)
       (self._btnLeft):SetShow(false)
     end
     local lookChangeSlotInit = function()
-    -- function num : 0_48_0 , upvalues : self, lookChangeSlot
+    -- function num : 0_51_0 , upvalues : self, lookChangeSlot
     for ii = 1, self._lookChangeMaxSlotCount do
       (lookChangeSlot[ii]):SetShow(false)
     end
@@ -1816,12 +1916,12 @@ HorseLookChange_Set = function(isNext, index)
 end
 
 HandleClicked_LookSlot = function(index)
-  -- function num : 0_49
+  -- function num : 0_52
   HorseLookChange_Set(nil, index)
 end
 
 HandleClicked_LookCombo = function()
-  -- function num : 0_50 , upvalues : stableList
+  -- function num : 0_53 , upvalues : stableList
   local slotNo = StableList_SelectSlotNo()
   if slotNo == nil then
     return 
@@ -1848,7 +1948,7 @@ HandleClicked_LookCombo = function()
 end
 
 Set_LookChange = function()
-  -- function num : 0_51 , upvalues : stableList, currentPage
+  -- function num : 0_54 , upvalues : stableList, currentPage
   local tierIndex = (stableList._comboBox):GetSelectIndex()
   if tierIndex <= 0 then
     (stableList._comboBox):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_LOOKCHANGE_SPECIAL"))
@@ -1863,7 +1963,7 @@ Set_LookChange = function()
 end
 
 HorseLookChange_ChangeConfirm = function()
-  -- function num : 0_52 , upvalues : stableList, lookIndex
+  -- function num : 0_55 , upvalues : stableList, lookIndex
   local slotNo = StableList_SelectSlotNo()
   if slotNo == nil then
     return 
@@ -1890,7 +1990,7 @@ HorseLookChange_ChangeConfirm = function()
         end
         formIndex = 0
         local changeConfirm = function()
-    -- function num : 0_52_0 , upvalues : slotNo, formIndex, stableList
+    -- function num : 0_55_0 , upvalues : slotNo, formIndex, stableList
     stable_changeForm(slotNo, formIndex, 0)
     stableList:update()
     Panel_HorseLookChange_Close()
@@ -1906,7 +2006,7 @@ HorseLookChange_ChangeConfirm = function()
 end
 
 HorseLookChange_PremiumChangeConfirm = function()
-  -- function num : 0_53 , upvalues : stableList, lookIndex
+  -- function num : 0_56 , upvalues : stableList, lookIndex
   local slotNo = StableList_SelectSlotNo()
   if slotNo == nil then
     return 
@@ -1934,14 +2034,14 @@ HorseLookChange_PremiumChangeConfirm = function()
         end
         formIndex = 0
         local changeConfirm = function()
-    -- function num : 0_53_0 , upvalues : slotNo, formIndex, isPossibleLearnSkill, stableList
+    -- function num : 0_56_0 , upvalues : slotNo, formIndex, isPossibleLearnSkill, stableList
     stable_changeForm(slotNo, formIndex, 1, isPossibleLearnSkill)
     stableList:update()
     Panel_HorseLookChange_Close()
   end
 
         local isContinueLookChange = function()
-    -- function num : 0_53_1 , upvalues : changeConfirm
+    -- function num : 0_56_1 , upvalues : changeConfirm
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_PREMIUMCHANGEALERT")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CHANGECONFIRM_TITLE"), content = messageBoxMemo, functionYes = changeConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
@@ -1964,18 +2064,18 @@ HorseLookChange_PremiumChangeConfirm = function()
 end
 
 FGlobal_StableList_Update = function()
-  -- function num : 0_54 , upvalues : stableList
+  -- function num : 0_57 , upvalues : stableList
   stableList:update()
 end
 
 StableList_SelectSlotNo = function()
-  -- function num : 0_55 , upvalues : stableList
+  -- function num : 0_58 , upvalues : stableList
   local self = stableList
   return stable_SortByWayPointKey(self._selectSlotNo)
 end
 
 StableList_ScrollEvent = function(isScrollUp)
-  -- function num : 0_56 , upvalues : stableList
+  -- function num : 0_59 , upvalues : stableList
   local self = stableList
   local servantCount = stable_count()
   do
@@ -2005,7 +2105,7 @@ StableList_ScrollEvent = function(isScrollUp)
 end
 
 Stable_SlotSound = function(slotNo)
-  -- function num : 0_57
+  -- function num : 0_60
   if isFirstSlot == true then
     StableList_SlotLClick(slotNo)
     isFirstSlot = false
@@ -2016,7 +2116,7 @@ Stable_SlotSound = function(slotNo)
 end
 
 stable_WindowOpenCheck = function()
-  -- function num : 0_58
+  -- function num : 0_61
   if Panel_Win_System:GetShow() or Panel_Window_StableRegister:GetShow() or Panel_Servant_Market_Input:GetShow() then
     return true
   end
@@ -2025,7 +2125,7 @@ end
 
 local sortByExploreKey = {}
 stableList_ServantCountInit = function(nums)
-  -- function num : 0_59 , upvalues : sortByExploreKey
+  -- function num : 0_62 , upvalues : sortByExploreKey
   sortByExploreKey = {}
   for i = 1, nums do
     -- DECOMPILER ERROR at PC11: Confused about usage of register: R5 in 'UnsetPending'
@@ -2035,7 +2135,7 @@ stableList_ServantCountInit = function(nums)
 end
 
 stable_SortDataupdate = function()
-  -- function num : 0_60 , upvalues : sortByExploreKey
+  -- function num : 0_63 , upvalues : sortByExploreKey
   local maxStableServantCount = stable_count()
   stableList_ServantCountInit(maxStableServantCount)
   for ii = 1, maxStableServantCount do
@@ -2058,7 +2158,7 @@ stable_SortDataupdate = function()
     end
   end
   local sortExplaoreKey = function(a, b)
-    -- function num : 0_60_0
+    -- function num : 0_63_0
     do return a._exploreKey < b._exploreKey end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
@@ -2088,7 +2188,7 @@ stable_SortDataupdate = function()
     sortByExploreKey[i] = temp[i - 1]
   end
   local affiliatedTerritory = function(exploerKey)
-    -- function num : 0_60_1
+    -- function num : 0_63_1
     local territoryKey = -1
     if exploerKey > 0 and exploerKey <= 300 then
       territoryKey = 0
@@ -2114,7 +2214,7 @@ stable_SortDataupdate = function()
 
   local sIndex = 0
   local sortByTerritory = function(territoryKey)
-    -- function num : 0_60_2 , upvalues : maxStableServantCount, affiliatedTerritory, sortByExploreKey, temp, sIndex
+    -- function num : 0_63_2 , upvalues : maxStableServantCount, affiliatedTerritory, sortByExploreKey, temp, sIndex
     for servantIndex = 1, maxStableServantCount do
       -- DECOMPILER ERROR at PC15: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -2161,7 +2261,7 @@ stable_SortDataupdate = function()
 end
 
 stable_SortByWayPointKey = function(index)
-  -- function num : 0_61 , upvalues : sortByExploreKey
+  -- function num : 0_64 , upvalues : sortByExploreKey
   if index == nil then
     return nil
   else
@@ -2170,7 +2270,7 @@ stable_SortByWayPointKey = function(index)
 end
 
 StableList_UpdateSlotData = function()
-  -- function num : 0_62 , upvalues : stableList
+  -- function num : 0_65 , upvalues : stableList
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2192,7 +2292,7 @@ StableList_UpdateSlotData = function()
 end
 
 StableList_PopMessageBox = function(possibleTime_s64)
-  -- function num : 0_63
+  -- function num : 0_66
   local stringText = convertStringFromDatetime(possibleTime_s64)
   local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_POPMSGBOX_MEMO", "stringText", stringText)
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -2201,7 +2301,7 @@ StableList_PopMessageBox = function(possibleTime_s64)
 end
 
 FromClient_ServantSeal = function(servantNo, regionKey, servantWhereType)
-  -- function num : 0_64 , upvalues : UI_SW, stableList
+  -- function num : 0_67 , upvalues : UI_SW, stableList
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2220,7 +2320,7 @@ FromClient_ServantSeal = function(servantNo, regionKey, servantWhereType)
 end
 
 FromClient_ServantUnseal = function(servantNo, servantWhereType)
-  -- function num : 0_65 , upvalues : UI_SW
+  -- function num : 0_68 , upvalues : UI_SW
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2238,7 +2338,7 @@ FromClient_ServantUnseal = function(servantNo, servantWhereType)
 end
 
 FromClient_ServantToReward = function(servantNo, servantWhereType)
-  -- function num : 0_66 , upvalues : UI_SW, sellCheck
+  -- function num : 0_69 , upvalues : UI_SW, sellCheck
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2254,7 +2354,7 @@ FromClient_ServantToReward = function(servantNo, servantWhereType)
 end
 
 FromClient_ServantRecovery = function(servantNo, servantWhereType)
-  -- function num : 0_67 , upvalues : UI_SW
+  -- function num : 0_70 , upvalues : UI_SW
   if UI_SW.ServantWhereTypeUser ~= servantWhereType and UI_SW.ServantWhereTypePcRoom ~= servantWhereType then
     return 
   end
@@ -2273,7 +2373,7 @@ FromClient_ServantRecovery = function(servantNo, servantWhereType)
 end
 
 FromClient_ServantChangeName = function(servantNo)
-  -- function num : 0_68
+  -- function num : 0_71
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2282,7 +2382,7 @@ FromClient_ServantChangeName = function(servantNo)
 end
 
 FromClient_ServantRegisterAuction = function(servantNo)
-  -- function num : 0_69
+  -- function num : 0_72
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2291,7 +2391,7 @@ FromClient_ServantRegisterAuction = function(servantNo)
 end
 
 FromClient_ServantCancelAuction = function(servantNo)
-  -- function num : 0_70
+  -- function num : 0_73
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2300,7 +2400,7 @@ FromClient_ServantCancelAuction = function(servantNo)
 end
 
 FromClient_ServantReceiveAuction = function(servantNo)
-  -- function num : 0_71
+  -- function num : 0_74
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2309,7 +2409,7 @@ FromClient_ServantReceiveAuction = function(servantNo)
 end
 
 FromClient_ServantBuyMarket = function(doRemove)
-  -- function num : 0_72
+  -- function num : 0_75
   if doRemove == nil then
     return 
   end
@@ -2321,7 +2421,7 @@ FromClient_ServantBuyMarket = function(doRemove)
 end
 
 FromClient_ServantStartMating = function(servantNo)
-  -- function num : 0_73
+  -- function num : 0_76
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2330,7 +2430,7 @@ FromClient_ServantStartMating = function(servantNo)
 end
 
 FromClient_ServantChildMating = function(servantNo)
-  -- function num : 0_74
+  -- function num : 0_77
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2339,12 +2439,12 @@ FromClient_ServantChildMating = function(servantNo)
 end
 
 FromClient_ServantClearDeadCount = function()
-  -- function num : 0_75
+  -- function num : 0_78
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_KILLCOUNTRESET_ACK"))
 end
 
 FromClient_ServantImprint = function(servantNo, isImprint)
-  -- function num : 0_76
+  -- function num : 0_79
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2357,7 +2457,7 @@ FromClient_ServantImprint = function(servantNo, isImprint)
 end
 
 FromClient_ServantClearMatingCount = function(servantNo)
-  -- function num : 0_77
+  -- function num : 0_80
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2366,7 +2466,7 @@ FromClient_ServantClearMatingCount = function(servantNo)
 end
 
 FromClient_ServantLink = function(horseNo, carriageNo, isLinkSuccess)
-  -- function num : 0_78
+  -- function num : 0_81
   StableList_UpdateSlotData()
   local horseInfo = stable_getServantByServantNo(horseNo)
   local carriageInfo = stable_getServantByServantNo(carriageNo)
@@ -2384,7 +2484,7 @@ FromClient_ServantLink = function(horseNo, carriageNo, isLinkSuccess)
 end
 
 FromClient_ServantStartSkillTraining = function(servantNo)
-  -- function num : 0_79
+  -- function num : 0_82
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2393,7 +2493,7 @@ FromClient_ServantStartSkillTraining = function(servantNo)
 end
 
 FromClient_ServantEndSkillTraining = function(servantNo)
-  -- function num : 0_80
+  -- function num : 0_83
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2402,7 +2502,7 @@ FromClient_ServantEndSkillTraining = function(servantNo)
 end
 
 FromClient_StartStallionSkillTraining = function(servantNo)
-  -- function num : 0_81 , upvalues : isContentsStallionEnable, isContentsNineTierEnable, stableList
+  -- function num : 0_84 , upvalues : isContentsStallionEnable, isContentsNineTierEnable, stableList
   if not isContentsStallionEnable and not isContentsNineTierEnable then
     return 
   end
@@ -2417,7 +2517,7 @@ FromClient_StartStallionSkillTraining = function(servantNo)
 end
 
 FromClient_EndStallionSkillTraining = function(servantNo)
-  -- function num : 0_82 , upvalues : stableList
+  -- function num : 0_85 , upvalues : stableList
   local servantInfo = stable_getServantByServantNo(servantNo)
   if servantInfo == nil then
     return 
@@ -2427,11 +2527,11 @@ FromClient_EndStallionSkillTraining = function(servantNo)
 end
 
 FromClient_IncreaseStallionSkillExpAck = function(servantNo, skillKey, skillExp)
-  -- function num : 0_83
+  -- function num : 0_86
 end
 
 StableList_Open = function()
-  -- function num : 0_84 , upvalues : stableList
+  -- function num : 0_87 , upvalues : stableList
   local self = stableList
   self:clear()
   self:update()
@@ -2462,7 +2562,7 @@ StableList_Open = function()
 end
 
 StableList_Close = function()
-  -- function num : 0_85 , upvalues : stableList
+  -- function num : 0_88 , upvalues : stableList
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2479,10 +2579,11 @@ StableList_Close = function()
   StableList_ButtonClose()
   stableCarriage_Close()
   Panel_Window_StableList:SetShow(false)
+  changeServantRegion:close()
 end
 
 Panel_HorseLookChange_Open = function()
-  -- function num : 0_86 , upvalues : currentPage
+  -- function num : 0_89 , upvalues : currentPage
   if Panel_Window_HorseLookChange:GetShow() then
     return 
   end
@@ -2496,7 +2597,7 @@ Panel_HorseLookChange_Open = function()
 end
 
 Panel_HorseLookChange_Close = function()
-  -- function num : 0_87 , upvalues : beforeActionIndex
+  -- function num : 0_90 , upvalues : beforeActionIndex
   Panel_Window_HorseLookChange:SetShow(false)
   if beforeActionIndex ~= -1 then
     showSceneCharacter(self._selectSceneIndex, false, beforeActionIndex)
@@ -2511,4 +2612,158 @@ stableList:init()
 stableList:registEventHandler()
 stableList:registMessageHandler()
 StableList_Resize()
+changeServantRegion = {_init = false}
+-- DECOMPILER ERROR at PC540: Confused about usage of register: R18 in 'UnsetPending'
+
+changeServantRegion.init = function(self)
+  -- function num : 0_91
+  if self._init then
+    return 
+  end
+  self._init = true
+  self._regionList2 = (UI.getChildControl)(Panel_ServantMove, "List2_StableList")
+  ;
+  (self._regionList2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "ChangeServantRegion_HandleListChange")
+  ;
+  (self._regionList2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
+  self._changeRegionCloseButton = (UI.getChildControl)(Panel_ServantMove, "Button_Close")
+  ;
+  (self._changeRegionCloseButton):addInputEvent("Mouse_LUp", "ChangeServantRegion_HandleCloseButtonClick()")
+  self._changeRegionButton = (UI.getChildControl)(Panel_ServantMove, "Button_Move")
+  ;
+  (self._changeRegionButton):addInputEvent("Mouse_LUp", "ChangeServantRegion_HandleChangeButtonClick()")
+  self._titleControl = (UI.getChildControl)(Panel_ServantMove, "StaticText_Title")
+  self._regionCountControl = (UI.getChildControl)(Panel_ServantMove, "StaticText_StableCount")
+end
+
+-- DECOMPILER ERROR at PC543: Confused about usage of register: R18 in 'UnsetPending'
+
+changeServantRegion.open = function(self, servantNo, posX, posY)
+  -- function num : 0_92
+  if Panel_ServantMove:GetShow() then
+    return 
+  end
+  self:init()
+  self._servantNo = servantNo
+  local servantInfo = stable_getServantByServantNo(servantNo)
+  if not servantInfo then
+    return 
+  end
+  self._regionTo = 0
+  ;
+  ((self._regionList2):getElementManager()):clearKey()
+  local currentRegionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+  currentRegionKey = currentRegionInfo:getRegionKey()
+  if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
+    local regionKeyCount = ToClient_GetCountOfRegionListWithStableNpc()
+    for i = 0, regionKeyCount - 1 do
+      local regionKey = ToClient_GetRegionWithStableNpcByIndex(i)
+      if regionKey ~= currentRegionKey then
+        ((self._regionList2):getElementManager()):pushKey(toInt64(0, regionKey))
+      end
+    end
+    ;
+    (self._titleControl):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_VEHICLEMOVETITLE"))
+    ;
+    (self._regionCountControl):SetText(PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_STABLE_CHANGE_REGION_LIST_COUNT", "count", regionKeyCount))
+  else
+    do
+      if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
+        local regionKeyCount = ToClient_GetCountOfRegionListWithWharfNpc()
+        for i = 0, regionKeyCount - 1 do
+          local regionKey = ToClient_GetRegionWithWharfNpcByIndex(R12_PC95)
+          R12_PC95 = currentRegionKey
+          if regionKey ~= R12_PC95 then
+            R12_PC95 = self._regionList2
+            R12_PC95 = R12_PC95(R12_PC95)
+            R12_PC95(R12_PC95, toInt64(0, regionKey))
+          end
+        end
+        ;
+        (self._titleControl):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WHARF_VEHICLEMOVETITLE"))
+        -- DECOMPILER ERROR at PC123: Overwrote pending register: R12 in 'AssignReg'
+
+        ;
+        (self._regionCountControl):SetText(PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_WHARF_CHANGE_REGION_LIST_COUNT", R12_PC95, regionKeyCount))
+      else
+        do
+          do return  end
+          Panel_ServantMove:SetPosX(posX)
+          Panel_ServantMove:SetPosY(posY)
+          Panel_ServantMove:SetShow(true)
+        end
+      end
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC546: Confused about usage of register: R18 in 'UnsetPending'
+
+changeServantRegion.close = function(self)
+  -- function num : 0_93
+  _PA_LOG("cylee", "changeServantRegion:close()")
+  if not Panel_ServantMove:GetShow() then
+    return 
+  end
+  Panel_ServantMove:SetShow(false)
+end
+
+-- DECOMPILER ERROR at PC549: Confused about usage of register: R18 in 'UnsetPending'
+
+changeServantRegion.isEnabled = function(self)
+  -- function num : 0_94
+  return false
+end
+
+ChangeServantRegion_HandleListChange = function(control, key)
+  -- function num : 0_95
+  local self = changeServantRegion
+  local regionKey = Int64toInt32(key)
+  local regionInfo = getRegionInfoWrapper(regionKey)
+  if not regionInfo then
+    _PA_LOG("cylee", "ChangeServantRegion_HandleListChange() no region info")
+    return 
+  end
+  do
+    local regionControl = (UI.getChildControl)(control, "RadioButton_StableName")
+    regionControl:addInputEvent("Mouse_LUp", "ChangeServantRegion_HandleRegionRadioButtonClick(" .. regionKey .. ")")
+    regionControl:SetText(regionInfo:getAreaName())
+    regionControl:SetCheck(self._regionTo == regionKey)
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  end
+end
+
+ChangeServantRegion_HandleRegionRadioButtonClick = function(regionKey)
+  -- function num : 0_96
+  local self = changeServantRegion
+  self._regionTo = regionKey
+end
+
+ChangeServantRegion_HandleCloseButtonClick = function()
+  -- function num : 0_97
+  local self = changeServantRegion
+  self:close()
+end
+
+ChangeServantRegion_HandleChangeButtonClick = function()
+  -- function num : 0_98
+  local self = changeServantRegion
+  self:close()
+  StableList_ButtonClose()
+  WharfList_ButtonClose()
+  local money = ToClient_GetCostToChangeServantRegion()
+  local title = "title"
+  local msg = "msg...money:" .. tostring(money)
+  local messageBoxData = {title = title, content = msg, functionApply = ChangeServantRegion_HandleApplyClick, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBoxCheck.showMessageBox)(messageBoxData)
+end
+
+ChangeServantRegion_HandleApplyClick = function()
+  -- function num : 0_99
+  local self = changeServantRegion
+  local moneyWhereType = (MessageBoxCheck.isCheck)()
+  ToClient_ChangeServantRegion(self._servantNo, self._regionTo, moneyWhereType)
+end
+
 

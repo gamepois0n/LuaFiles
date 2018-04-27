@@ -155,7 +155,7 @@ WarInfoMessageHideAni = function()
   aniInfo1:SetDisableWhileAni(true)
 end
 
-FromClient_NotifyOccupySiege = function(regionKeyRaw, guildName)
+FromClient_NotifyOccupySiege = function(regionKeyRaw, guildName, isAlliance)
   -- function num : 0_4
   local regionInfoWrapper = getRegionInfoWrapper(regionKeyRaw)
   if regionInfoWrapper == nil then
@@ -170,7 +170,12 @@ FromClient_NotifyOccupySiege = function(regionKeyRaw, guildName)
     areaName = regionInfoWrapper:getVillageSiegeAreaName()
     msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYOCCUPY_VILLAGESIEGE_END_MAIN", "territoryName", areaName)
   end
-  local msg_Sub = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYOCCUPYSIEGE_END_SUB", "territoryName", areaName, "guildName", guildName)
+  local msg_Sub = ""
+  if isAlliance == true then
+    msg_Sub = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYOCCUPYSIEGE_ALLIANCE_END_SUB", "territoryName", areaName, "guildName", guildName)
+  else
+    msg_Sub = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYOCCUPYSIEGE_END_SUB", "territoryName", areaName, "guildName", guildName)
+  end
   local message = {main = msg_Main, sub = msg_Sub, addMsg = ""}
   Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 11)
 end
@@ -194,7 +199,7 @@ FromClient_NotifyReleaseSiege = function(regionKeyRaw)
   Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 11)
 end
 
-FromClient_NotifyKingOrLordTentChange = function(notifyType, regionKeyRaw, guildName, guildNamePeer, isMilitia)
+FromClient_NotifyKingOrLordTentChange = function(notifyType, regionKeyRaw, guildName, guildNamePeer, isMilitia, isAlliance)
   -- function num : 0_6
   local regionInfoWrapper = getRegionInfoWrapper(regionKeyRaw)
   if regionInfoWrapper == nil then
@@ -231,7 +236,11 @@ FromClient_NotifyKingOrLordTentChange = function(notifyType, regionKeyRaw, guild
             if isMilitia then
               msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_MILITIA", "guildName", guildName)
             else
-              msg_Main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_MAIN", "guildNamePeer", guildNamePeer, "guildName", guildName)
+              if isAlliance == true then
+                msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_ALLIANCE_MAIN", "guildNamePeer", guildNamePeer)
+              else
+                msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_GUILD_MAIN", "guildNamePeer", guildNamePeer)
+              end
             end
             if count_CompleteTent == 1 then
               msg_Sub = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_ONLYONE_SUB", "territoryName", areaName, "warInfoName", warInfoName)
@@ -504,8 +513,22 @@ local TWKScore_updatePosition = function()
   end
 end
 
-FromClient_NotifyKillOrDeathPlayer = function(notifyType, isKill, characterName, characterNamePeer, guildNamePeer, isInSiege, isWarGuild, doPopup, militiaType)
+FromClient_NotifyKillOrDeathPlayer = function()
   -- function num : 0_16 , upvalues : TWKScore_PosIndex, TWKScore_PanelCount, TWKScore_AlertList, TWKScore_Open, TWKScore_PanelUIPool, TWKScore_updatePosition
+  local data = ToClient_getKillOrDeathPlayerData()
+  if data == nil then
+    return 
+  end
+  local notifyType = data:getNotifyType()
+  local isKill = data:isKill()
+  local characterName = data:getCharacterName()
+  local characterNamePeer = data:getCharacterNamePeer()
+  local guildNamePeer = data:getGuildNamePeer()
+  local isInSiege = data:isInSiege()
+  local isWarGuild = data:isWarGuild()
+  local doPopup = data:doPopup()
+  local militiaType = data:getSiegeKillType()
+  local isAllianceName = (data:isAllianceName())
   local killOrDeathMsg = nil
   local colorValue = 0
   local textureDDS = ""
@@ -545,7 +568,11 @@ FromClient_NotifyKillOrDeathPlayer = function(notifyType, isKill, characterName,
         if PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA") == characterNamePeer then
           killOrDeathMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttacker_Militia", "characterName", characterName, "characterNamePeer", characterNamePeer)
         else
-          killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttacker", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          if isAllianceName == true then
+            killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_Alliance_SiegeAttacker", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          else
+            killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttacker", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          end
         end
         textureDDS = "New_UI_Common_forLua/Widget/WarInfoMessage/score_KillingEnemy.dds"
         colorValue = 4282165742
@@ -591,7 +618,11 @@ FromClient_NotifyKillOrDeathPlayer = function(notifyType, isKill, characterName,
         if PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA") == characterNamePeer then
           killOrDeathMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttackee_Militia", "characterName", characterName, "characterNamePeer", characterNamePeer)
         else
-          killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttackee", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          if isAllianceName == true then
+            killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_Alliance_SiegeAttackee", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          else
+            killOrDeathMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_SiegeAttackee", "characterName", characterName, "guildNamePeer", guildNamePeer, "characterNamePeer", characterNamePeer)
+          end
         end
         textureDDS = "New_UI_Common_forLua/Widget/WarInfoMessage/score_DeathAlly.dds"
         colorValue = 4294057271

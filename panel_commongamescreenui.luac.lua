@@ -30,9 +30,21 @@ click_button = function()
   end
 end
 
+bossCamera_ShowTooltip = function()
+  -- function num : 0_2 , upvalues : btn_bossCamera
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSCAMERA_TOOLTIPNAME")
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSCAMERA_TOOLTIPDESC")
+  TooltipSimple_Show(btn_bossCamera, name, desc)
+end
+
+bossCamera_HideTooltip = function()
+  -- function num : 0_3
+  TooltipSimple_Hide()
+end
+
 FromClient_EventCameraCharacter_RangeIn = function(chracterWrapper)
-  -- function num : 0_2 , upvalues : btn_bossCamera, isBossRange
-  if not ToClient_IsDevelopment() then
+  -- function num : 0_4 , upvalues : btn_bossCamera, isBossRange
+  if not _ContentsGroup_DriganBossDragon then
     return 
   end
   btn_bossCamera:SetShow(true)
@@ -41,40 +53,48 @@ FromClient_EventCameraCharacter_RangeIn = function(chracterWrapper)
 end
 
 FromClient_EventCameraCharacter_RangeChange = function()
-  -- function num : 0_3 , upvalues : btn_bossCamera, isBossRange
-  if not ToClient_IsDevelopment() then
+  -- function num : 0_5 , upvalues : btn_bossCamera, isBossRange
+  if not _ContentsGroup_DriganBossDragon then
     return 
   end
   btn_bossCamera:SetShow(true)
   sttic_sequenceAni:SetShow(true)
+  bossCamera_Repos()
   isBossRange = true
 end
 
 FromClient_EventCameraCharacter_RangeOut = function()
-  -- function num : 0_4 , upvalues : isBossRange, clear_BossCamButton
+  -- function num : 0_6 , upvalues : isBossRange, clear_BossCamButton
   isBossRange = false
   clear_BossCamButton()
 end
 
 FromClient_EventCameraCharacter_Dead = function()
-  -- function num : 0_5 , upvalues : isBossRange, clear_BossCamButton
+  -- function num : 0_7 , upvalues : isBossRange, clear_BossCamButton
   isBossRange = false
   clear_BossCamButton()
 end
 
-local initialize = function()
-  -- function num : 0_6 , upvalues : btn_bossCamera, clear_BossCamButton
-  btn_bossCamera = (UI.getChildControl)(Panel_CommonGameScreenUI, "Button_BossCamera")
-  btn_bossCamera:SetShow(false)
-  btn_bossCamera:addInputEvent("Mouse_LUp", "click_button()")
-  sttic_sequenceAni = (UI.getChildControl)(Panel_CommonGameScreenUI, "Static_SequenceAni")
-  sttic_sequenceAni:SetShow(false)
-  local screenSizeX = getScreenSizeX()
-  local screenSizeY = getScreenSizeY()
+bossCamera_Repos = function()
+  -- function num : 0_8 , upvalues : btn_bossCamera
   btn_bossCamera:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - btn_bossCamera:GetSizeX() - 20)
   btn_bossCamera:SetPosY(Panel_Radar:GetSizeY() - btn_bossCamera:GetSizeY() + 10)
   sttic_sequenceAni:SetPosX(btn_bossCamera:GetPosX() - 5)
   sttic_sequenceAni:SetPosY(btn_bossCamera:GetPosY() - 5)
+end
+
+local initialize = function()
+  -- function num : 0_9 , upvalues : btn_bossCamera, clear_BossCamButton
+  btn_bossCamera = (UI.getChildControl)(Panel_CommonGameScreenUI, "Button_BossCamera")
+  btn_bossCamera:SetShow(false)
+  btn_bossCamera:addInputEvent("Mouse_LUp", "click_button()")
+  btn_bossCamera:addInputEvent("Mouse_On", "bossCamera_ShowTooltip()")
+  btn_bossCamera:addInputEvent("Mouse_Out", "bossCamera_HideTooltip()")
+  sttic_sequenceAni = (UI.getChildControl)(Panel_CommonGameScreenUI, "Static_SequenceAni")
+  sttic_sequenceAni:SetShow(false)
+  local screenSizeX = getScreenSizeX()
+  local screenSizeY = getScreenSizeY()
+  bossCamera_Repos()
   clear_BossCamButton()
 end
 
@@ -84,7 +104,7 @@ registerEvent("FromClient_EventCameraCharacter_RangeChange", "FromClient_EventCa
 registerEvent("FromClient_EventCameraCharacter_RangeOut", "FromClient_EventCameraCharacter_RangeOut")
 registerEvent("FromClient_EventCameraCharacter_Dead", "FromClient_EventCameraCharacter_Dead")
 FromClient_luaLoadComplete_CommonGameScreenUI = function()
-  -- function num : 0_7 , upvalues : initialize, btn_bossCamera
+  -- function num : 0_10 , upvalues : initialize, btn_bossCamera
   initialize()
   Panel_CommonGameScreenUI:SetShow(true)
   btn_bossCamera:SetShow(false)

@@ -800,9 +800,6 @@ end
 
 FromClient_NewQuickSlot_Update = function()
   -- function num : 0_28 , upvalues : NewQuickSlot
-  if _ContentsGroup_InvenUpdateCheck == true and Panel_NewQuickSlot:GetShow() == false then
-    return 
-  end
   NewQuickSlot:UpdateMain()
 end
 

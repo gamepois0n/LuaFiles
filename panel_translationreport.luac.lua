@@ -37,8 +37,8 @@ Panel_TranslationReport.Open = function(self, staticType, key1, key2, key3, text
   end
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
-  local languageType = ToClient_GetLanguageType()
-  url = url .. "/Translation" .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey1=" .. tostring(key1) .. "&translationKey2=" .. tostring(key2) .. "&translationKey3=" .. tostring(key3) .. "&textNo=" .. tostring(textNo) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticType)
+  local serviceResourceType = ToClient_getResourceType()
+  url = url .. "/Translation" .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey1=" .. tostring(key1) .. "&translationKey2=" .. tostring(key2) .. "&translationKey3=" .. tostring(key3) .. "&textNo=" .. tostring(textNo) .. "&serviceResourceType=" .. tostring(serviceResourceType) .. "&staticType=" .. tostring(staticType)
   _translationReportWebControl:SetUrl(700, 610, url, false, true)
   _translationReportWebControl:SetIME(true)
   Panel_TranslationReport:SetPosX(getScreenSizeX() / 2 - Panel_TranslationReport:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_TranslationReport:GetSizeY() / 2)

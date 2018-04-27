@@ -48,20 +48,40 @@ Panel_Alchemy_CreateKnowledgeListContent = function(content, key)
   local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
   local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
   local mentalCardStaticWrapper = ToClient_AlchemyGetKnowledge(knowledgeIndex)
+  recipe:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
   if PaGlobal_Alchemy._selectedKnowledge == knowledgeIndex then
     selectList:SetShow(true)
   else
     selectList:SetShow(false)
   end
+  Alchemy_UnknownRecipe_TooltipShow = function(index)
+    -- function num : 0_1_0 , upvalues : recipe
+    local mentalCardSSW = ToClient_AlchemyGetKnowledge(index)
+    if mentalCardSSW ~= nil then
+      TooltipSimple_Show(recipe, mentalCardSSW:getKeyword())
+    end
+  end
+
+  Alchemy_KnownRecipe_TooltipShow = function(index)
+    -- function num : 0_1_1 , upvalues : recipe
+    local mentalCardSSW = ToClient_AlchemyGetKnowledge(index)
+    if mentalCardSSW ~= nil then
+      TooltipSimple_Show(recipe, mentalCardSSW:getName(), mentalCardSSW:getKeyword())
+    end
+  end
+
   if mentalCardStaticWrapper ~= nil then
     local isLearn = ToClient_AlchemyIsLearntMentalCard(mentalCardStaticWrapper:getKey())
     if isLearn == true then
       recipe:SetFontColor(UI_color.C_FF84FFF5)
       recipe:SetText(mentalCardStaticWrapper:getName())
+      recipe:addInputEvent("Mouse_On", "Alchemy_KnownRecipe_TooltipShow(" .. knowledgeIndex .. ")")
     else
       recipe:SetFontColor(UI_color.C_FF888888)
       recipe:SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
+      recipe:addInputEvent("Mouse_On", "Alchemy_UnknownRecipe_TooltipShow(" .. knowledgeIndex .. ")")
     end
+    recipe:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
     recipe:SetShow(true)
     recipe:SetPosY(6)
     recipe:addInputEvent("Mouse_LUp", "PaGlobal_Alchemy:selectKnowledge( " .. knowledgeIndex .. " )")

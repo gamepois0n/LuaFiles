@@ -103,27 +103,30 @@ ArshaPvP_Widget_Init = function()
     (self.roundCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_USER_OPTION_ROUND_FORCOUNT", "targetScore", ToClient_GetTargetScore()))
   else
     if (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Personal == ToClient_CompetitionMatchType() then
-      (self.personalRoundCount):SetText("Í∞úÏù∏Îå\128Ï†\132")
+      (self.personalRoundCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_PERSONALMODE"))
       ;
       (self.personalLeftParty):SetText(teamA_Name)
       ;
       (self.personalRightParty):SetText(teamB_Name)
-      if teamA_Info ~= nil and teamB_Info ~= nil then
-        local teamAAliveCount = teamA_Info:getAliveAttendCount()
-        local teamBAliveCount = teamB_Info:getAliveAttendCount()
-        local msg1 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamAAliveCount)
-        local msg2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamBAliveCount)
+      if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == ToClient_CompetitionFightState() then
+        (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
         ;
-        (self.personalLeftPoint):SetText(msg1)
-        ;
-        (self.personalRightPoint):SetText(msg2)
+        (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
       else
-        do
-          local msg = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING")
+        if teamA_Info ~= nil and teamB_Info ~= nil then
+          local teamAAliveCount = teamA_Info:getAliveAttendCount()
+          local teamBAliveCount = teamB_Info:getAliveAttendCount()
           ;
-          (self.personalLeftPoint):SetText(msg)
+          (self.personalLeftPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamAAliveCount))
           ;
-          (self.personalRightPoint):SetText(msg)
+          (self.personalRightPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamBAliveCount))
+        else
+          do
+            ;
+            (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+            ;
+            (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+          end
         end
       end
     end
@@ -237,26 +240,34 @@ ArshaPvP_Widget_Update = function()
           (self.personalLeftParty):SetText(teamA_Name)
           ;
           (self.personalRightParty):SetText(teamB_Name)
-          if teamA_Info ~= nil and teamB_Info ~= nil then
-            local teamAAliveCount = teamA_Info:getAliveAttendCount()
-            local teamBAliveCount = teamB_Info:getAliveAttendCount()
+          if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == ToClient_CompetitionFightState() then
+            (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
             ;
-            (self.personalLeftPoint):SetText(teamAAliveCount .. " Î™\133 ÏÉùÏ°¥")
-            ;
-            (self.personalRightPoint):SetText(teamBAliveCount .. " Î™\133 ÏÉùÏ°¥")
+            (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
           else
-            do
+            if teamA_Info ~= nil and teamB_Info ~= nil then
+              local teamAAliveCount = teamA_Info:getAliveAttendCount()
+              local teamBAliveCount = teamB_Info:getAliveAttendCount()
               ;
-              (self.personalLeftPoint):SetText("Îå\128Í∏\176 Ï§\145")
+              (self.personalLeftPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamAAliveCount))
               ;
-              (self.personalRightPoint):SetText("Îå\128Í∏\176 Ï§\145")
-              local option = getArshaPvpOption()
-              ;
-              (self.freeTime):SetText(convertSecondsToClockTime(option._timeLimit))
-              ;
-              (self.roundTime):SetText(convertSecondsToClockTime(option._timeLimit))
-              ;
-              (self.personalMatchTime):SetText(convertSecondsToClockTime(option._timeLimit))
+              (self.personalRightPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamBAliveCount))
+            else
+              do
+                ;
+                (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+                ;
+                (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+                ;
+                (self.personalRoundCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_PERSONALMODE"))
+                local option = getArshaPvpOption()
+                ;
+                (self.freeTime):SetText(convertSecondsToClockTime(option._timeLimit))
+                ;
+                (self.roundTime):SetText(convertSecondsToClockTime(option._timeLimit))
+                ;
+                (self.personalMatchTime):SetText(convertSecondsToClockTime(option._timeLimit))
+              end
             end
           end
         end
@@ -273,19 +284,25 @@ FromClient_UpdatePersonalMatchScore = function()
   end
   local teamA_Info = ToClient_GetArshaTeamInfo(1)
   local teamB_Info = ToClient_GetArshaTeamInfo(2)
-  if teamA_Info ~= nil and teamB_Info ~= nil then
-    local teamAAliveCount = teamA_Info:getAliveAttendCount()
-    local teamBAliveCount = teamB_Info:getAliveAttendCount()
+  if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == ToClient_CompetitionFightState() then
+    (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
     ;
-    (self.personalLeftPoint):SetText(teamAAliveCount .. " Î™\133 ÏÉùÏ°¥")
-    ;
-    (self.personalRightPoint):SetText(teamBAliveCount .. " Î™\133 ÏÉùÏ°¥")
+    (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
   else
-    do
+    if teamA_Info ~= nil and teamB_Info ~= nil then
+      local teamAAliveCount = teamA_Info:getAliveAttendCount()
+      local teamBAliveCount = teamB_Info:getAliveAttendCount()
       ;
-      (self.personalLeftPoint):SetText("Îå\128Í∏\176 Ï§\145")
+      (self.personalLeftPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamAAliveCount))
       ;
-      (self.personalRightPoint):SetText("Îå\128Í∏\176 Ï§\145")
+      (self.personalRightPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ALIVECOUNT_SCORE", "aliveCount", teamBAliveCount))
+    else
+      do
+        ;
+        (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+        ;
+        (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+      end
     end
   end
 end
@@ -346,9 +363,8 @@ arshaPvPWidget._upadteTimerWidget = function(self, targetControl)
   end
 end
 
-FromClient_UpdateFightState = function(fightState)
+FromClient_UpdateFightState = function(fightState, isShowingResultMessage)
   -- function num : 0_11 , upvalues : arshaPvPWidget, hideAndShowWingWidget
-  _PA_LOG("ÏïÑÎ•¥ÏÉ§ÏùòÏ∞\189", "FromClient_UpdateFightState : " .. fightState)
   local self = arshaPvPWidget
   if fightState == nil or fightState == "" then
     return 
@@ -368,11 +384,16 @@ FromClient_UpdateFightState = function(fightState)
         Panel_Arsha_TeamWidget:SetShow(true)
         CompetitionGameTeamUI_Close()
         Panel_Arsha_SelectMember:Clear()
-        local message = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_SUB"), addMsg = ""}
-        Proc_ShowMessage_Ack_For_RewardSelect(message, 5, 57, false)
-        hideAndShowWingWidget()
-      else
         do
+          if isShowingResultMessage == false then
+            local message = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_SUB"), addMsg = ""}
+            Proc_ShowMessage_Ack_For_RewardSelect(message, 5, 57, false)
+          end
+          hideAndShowWingWidget()
+          ;
+          (self.personalLeftPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
+          ;
+          (self.personalRightPoint):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_WAITING"))
           if (CppEnums.CompetitionFightState).eCompetitionFightState_Wait == fightState then
             hideAndShowWingWidget()
             CompetitionGameTeamUI_Close()

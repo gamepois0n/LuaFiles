@@ -313,189 +313,206 @@ FromClient_OnWorldMapNode = function(nodeBtn)
     local siegeNode = ((nodeBtn:FromClient_getExplorationNodeInClient()):getStaticStatus()):getMinorSiegeRegion()
     if siegeNode ~= nil then
       local taxGrade = siegeNode:getVillageTaxLevel()
-      ;
-      (villageWar.nodeTaxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_TAXGRADE", "taxGrade", taxGrade))
-      ;
-      (villageWar.nodeTaxGrade):SetShow(true)
-      Panel_NodeSiegeTooltip:SetShow(true)
-    else
-      do
-        ;
-        (villageWar.nodeTaxGrade):SetShow(false)
-        Panel_NodeSiegeTooltip:SetShow(false)
-        local _dayString = ""
-        if villageSiegeType >= 0 and villageSiegeType < 7 then
-          _dayString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_GUILDWARDAY", "day", dayString[villageSiegeType])
-          ;
-          (villageWar.nodeGuildWarDay):SetText(_dayString)
-          ;
-          (villageWar.nodeGuildWarDay):SetShow(true)
+      if taxGrade == 0 then
+        (villageWar.nodeTaxGrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CHALLENGE_POINT_GRADE_ZERO"))
+      else
+        local tempString = ""
+        if taxGrade == 1 then
+          tempString = "I"
         else
-          ;
-          (villageWar.nodeGuildWarDay):SetShow(false)
+          if taxGrade == 2 then
+            tempString = "II"
+          else
+            if taxGrade == 3 then
+              tempString = "III"
+            end
+          end
         end
-        local nodeStaticStatus = nodeInfo:getStaticStatus()
-        local regionInfo = nodeStaticStatus:getMinorSiegeRegion()
-        if regionInfo ~= nil then
-          local regionKey = regionInfo._regionKey
-          local regionWrapper = getRegionInfoWrapper(regionKey:get())
-          local minorSiegeWrapper = regionWrapper:getMinorSiegeWrapper()
-          local siegeWrapper = ToClient_GetSiegeWrapperByRegionKey(regionKey:get())
+        ;
+        (villageWar.nodeTaxGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_TAXGRADE", "taxGrade", tempString))
+      end
+      do
+        do
           ;
-          (villageWar.title):SetText(nodeNameOri)
-          if minorSiegeWrapper ~= nil then
-            if minorSiegeWrapper:isSiegeBeing() then
-              local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
-              ;
-              (villageWar.guildMarkBg):SetShow(false)
-              ;
-              (villageWar.guildMark):SetShow(false)
-              ;
-              (villageWar.guildName):SetShow(false)
-              ;
-              (villageWar.guildMasterName):SetShow(false)
-              ;
-              (villageWar.guildOption):SetShow(false)
-              ;
-              (villageWar.nodeLastWeek):SetShow(false)
-              ;
-              (villageWar.guildMasterName):SetText("")
-              ;
-              (villageWar.guildName):SetText("")
-              ;
-              (villageWar.guildMasterName):SetText("")
-              ;
-              (villageWar.nodeState):SetShow(true)
-              ;
-              (villageWar.nodeStateDesc):SetShow(true)
-              ;
-              (villageWar.nodeWarJoinCount):SetShow(false)
-              ;
-              (villageWar.nodeState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_ISBEIGN"))
-              local minorSiegeDoing = ToClient_doMinorSiegeInTerritory(regionWrapper:getTerritoryKeyRaw())
-              if minorSiegeDoing then
-                (villageWar.nodeStateDesc):SetShow(true)
-              else
+          (villageWar.nodeTaxGrade):SetShow(true)
+          Panel_NodeSiegeTooltip:SetShow(true)
+          ;
+          (villageWar.nodeTaxGrade):SetShow(false)
+          Panel_NodeSiegeTooltip:SetShow(false)
+          local _dayString = ""
+          if villageSiegeType >= 0 and villageSiegeType < 7 then
+            _dayString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_GUILDWARDAY", "day", dayString[villageSiegeType])
+            ;
+            (villageWar.nodeGuildWarDay):SetText(_dayString)
+            ;
+            (villageWar.nodeGuildWarDay):SetShow(true)
+          else
+            ;
+            (villageWar.nodeGuildWarDay):SetShow(false)
+          end
+          local nodeStaticStatus = nodeInfo:getStaticStatus()
+          local regionInfo = nodeStaticStatus:getMinorSiegeRegion()
+          if regionInfo ~= nil then
+            local regionKey = regionInfo._regionKey
+            local regionWrapper = getRegionInfoWrapper(regionKey:get())
+            local minorSiegeWrapper = regionWrapper:getMinorSiegeWrapper()
+            local siegeWrapper = ToClient_GetSiegeWrapperByRegionKey(regionKey:get())
+            ;
+            (villageWar.title):SetText(nodeNameOri)
+            if minorSiegeWrapper ~= nil then
+              if minorSiegeWrapper:isSiegeBeing() then
+                local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
                 ;
-                (villageWar.nodeStateDesc):SetShow(false)
-              end
-              ;
-              (villageWar.nodeStateDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_JOINGUILD", "count", siegeTentCount))
-            else
-              do
-                if siegeWrapper:doOccupantExist() == true then
-                  (villageWar.guildMarkBg):SetShow(true)
+                (villageWar.guildMarkBg):SetShow(false)
+                ;
+                (villageWar.guildMark):SetShow(false)
+                ;
+                (villageWar.guildName):SetShow(false)
+                ;
+                (villageWar.guildMasterName):SetShow(false)
+                ;
+                (villageWar.guildOption):SetShow(false)
+                ;
+                (villageWar.nodeLastWeek):SetShow(false)
+                ;
+                (villageWar.guildMasterName):SetText("")
+                ;
+                (villageWar.guildName):SetText("")
+                ;
+                (villageWar.guildMasterName):SetText("")
+                ;
+                (villageWar.nodeState):SetShow(true)
+                ;
+                (villageWar.nodeStateDesc):SetShow(true)
+                ;
+                (villageWar.nodeWarJoinCount):SetShow(false)
+                ;
+                (villageWar.nodeState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_ISBEIGN"))
+                local minorSiegeDoing = ToClient_doMinorSiegeInTerritory(regionWrapper:getTerritoryKeyRaw())
+                if minorSiegeDoing then
+                  (villageWar.nodeStateDesc):SetShow(true)
+                else
                   ;
-                  (villageWar.guildMark):SetShow(true)
-                  ;
-                  (villageWar.guildName):SetShow(true)
-                  if isSet == false then
-                    (villageWar.guildMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
-                    local x1, y1, x2, y2 = setTextureUV_Func(villageWar.guildMark, 183, 1, 188, 6)
+                  (villageWar.nodeStateDesc):SetShow(false)
+                end
+                ;
+                (villageWar.nodeStateDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_JOINGUILD", "count", siegeTentCount))
+              else
+                do
+                  if siegeWrapper:doOccupantExist() == true then
+                    (villageWar.guildMarkBg):SetShow(true)
                     ;
-                    ((villageWar.guildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
-                  else
-                    do
+                    (villageWar.guildMark):SetShow(true)
+                    ;
+                    (villageWar.guildName):SetShow(true)
+                    if isSet == false then
+                      (villageWar.guildMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+                      local x1, y1, x2, y2 = setTextureUV_Func(villageWar.guildMark, 183, 1, 188, 6)
                       ;
-                      ((villageWar.guildMark):getBaseTexture()):setUV(0, 0, 1, 1)
-                      ;
-                      (villageWar.guildMark):setRenderTexture((villageWar.guildMark):getBaseTexture())
-                      ;
-                      (villageWar.guildName):SetText(siegeWrapper:getGuildName())
-                      local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
-                      if siegeTentCount == 0 then
-                        (villageWar.nodeWarJoinCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_NO"))
-                      else
-                        ;
-                        (villageWar.nodeWarJoinCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_COUNT", "siegeTentCount", siegeTentCount))
-                      end
-                      local isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), villageWar.guildMark)
-                      ;
-                      (villageWar.nodeState):SetShow(false)
-                      ;
-                      (villageWar.nodeStateDesc):SetShow(false)
-                      ;
-                      (villageWar.guildMasterName):SetShow(true)
-                      ;
-                      (villageWar.guildMasterName):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_GUILDMASTER", "name", siegeWrapper:getGuildMasterName()))
-                      ;
-                      (villageWar.guildOption):SetShow(true)
-                      local paDate = siegeWrapper:getOccupyingDate()
-                      local year = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_YEAR", "year", tostring(paDate:GetYear()))
-                      local month = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_MONTH", "month", tostring(paDate:GetMonth()))
-                      local day = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_DAY", "day", tostring(paDate:GetDay()))
-                      local hour = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_HOUR", "hour", tostring(paDate:GetHour()))
-                      local d_date = year .. month .. day .. hour
-                      ;
-                      (villageWar.guildOption):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_OCCUPYINGDATE", "date", d_date))
+                      ((villageWar.guildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
+                    else
                       do
-                        local hasBuilding = ToClient_IsVillageSiegeInThisWeek(regionKey:get())
                         ;
-                        (villageWar.nodeLastWeek):SetShow(true)
-                        if hasBuilding then
-                          (villageWar.nodeLastWeek):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_THISWEEK"))
+                        ((villageWar.guildMark):getBaseTexture()):setUV(0, 0, 1, 1)
+                        ;
+                        (villageWar.guildMark):setRenderTexture((villageWar.guildMark):getBaseTexture())
+                        ;
+                        (villageWar.guildName):SetText(siegeWrapper:getGuildName())
+                        local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
+                        if siegeTentCount == 0 then
+                          (villageWar.nodeWarJoinCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_NO"))
                         else
                           ;
-                          (villageWar.nodeLastWeek):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_LASTWEEK"))
+                          (villageWar.nodeWarJoinCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_COUNT", "siegeTentCount", siegeTentCount))
                         end
+                        local isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), villageWar.guildMark)
+                        ;
+                        (villageWar.nodeState):SetShow(false)
+                        ;
+                        (villageWar.nodeStateDesc):SetShow(false)
+                        ;
+                        (villageWar.guildMasterName):SetShow(true)
+                        ;
+                        (villageWar.guildMasterName):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_GUILDMASTER", "name", siegeWrapper:getGuildMasterName()))
+                        ;
+                        (villageWar.guildOption):SetShow(true)
+                        local paDate = siegeWrapper:getOccupyingDate()
+                        local year = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_YEAR", "year", tostring(paDate:GetYear()))
+                        local month = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_MONTH", "month", tostring(paDate:GetMonth()))
+                        local day = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_DAY", "day", tostring(paDate:GetDay()))
+                        local hour = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_HOUR", "hour", tostring(paDate:GetHour()))
+                        local d_date = year .. month .. day .. hour
+                        ;
+                        (villageWar.guildOption):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_OCCUPYINGDATE", "date", d_date))
                         do
-                          local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
-                          if siegeTentCount == 0 then
-                            (villageWar.nodeWarJoinCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_NO"))
+                          local hasBuilding = ToClient_IsVillageSiegeInThisWeek(regionKey:get())
+                          ;
+                          (villageWar.nodeLastWeek):SetShow(true)
+                          if hasBuilding then
+                            (villageWar.nodeLastWeek):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_THISWEEK"))
                           else
                             ;
-                            (villageWar.nodeWarJoinCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_COUNT", "siegeTentCount", siegeTentCount))
+                            (villageWar.nodeLastWeek):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOOLTIP_LASTWEEK"))
                           end
-                          ;
-                          (villageWar.guildMarkBg):SetShow(false)
-                          ;
-                          (villageWar.guildMark):SetShow(false)
-                          ;
-                          (villageWar.guildName):SetShow(false)
-                          ;
-                          (villageWar.guildMasterName):SetShow(false)
-                          ;
-                          (villageWar.guildOption):SetShow(false)
-                          ;
-                          (villageWar.nodeLastWeek):SetShow(false)
-                          ;
-                          (villageWar.guildName):SetText("")
-                          ;
-                          (villageWar.guildMasterName):SetText("")
-                          ;
-                          (villageWar.guildOption):SetText("")
-                          ;
-                          (villageWar.nodeState):SetShow(true)
-                          ;
-                          (villageWar.nodeStateDesc):SetShow(false)
-                          ;
-                          (villageWar.nodeState):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-                          ;
-                          (villageWar.nodeState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_NOTYETOCCUPY"))
-                          ;
-                          (villageWar.guildMarkBg):SetShow(false)
-                          ;
-                          (villageWar.guildMark):SetShow(false)
-                          ;
-                          (villageWar.guildName):SetShow(false)
-                          ;
-                          (villageWar.guildMasterName):SetShow(false)
-                          ;
-                          (villageWar.guildOption):SetShow(false)
-                          ;
-                          (villageWar.nodeLastWeek):SetShow(false)
-                          ;
-                          (villageWar.guildName):SetText("")
-                          ;
-                          (villageWar.guildMasterName):SetText("")
-                          ;
-                          (villageWar.guildOption):SetText("")
-                          ;
-                          (villageWar.nodeState):SetShow(true)
-                          ;
-                          (villageWar.nodeStateDesc):SetShow(false)
-                          Panel_NodeSiegeTooltip:SetPosX(nodeBtn:GetPosX() + nodeBtn:GetSizeX() + 10)
-                          Panel_NodeSiegeTooltip:SetPosY(nodeBtn:GetPosY())
+                          do
+                            local siegeTentCount = ToClient_GetCompleteSiegeTentCount(regionKey:get())
+                            if siegeTentCount == 0 then
+                              (villageWar.nodeWarJoinCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_NO"))
+                            else
+                              ;
+                              (villageWar.nodeWarJoinCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_COUNT", "siegeTentCount", siegeTentCount))
+                            end
+                            ;
+                            (villageWar.guildMarkBg):SetShow(false)
+                            ;
+                            (villageWar.guildMark):SetShow(false)
+                            ;
+                            (villageWar.guildName):SetShow(false)
+                            ;
+                            (villageWar.guildMasterName):SetShow(false)
+                            ;
+                            (villageWar.guildOption):SetShow(false)
+                            ;
+                            (villageWar.nodeLastWeek):SetShow(false)
+                            ;
+                            (villageWar.guildName):SetText("")
+                            ;
+                            (villageWar.guildMasterName):SetText("")
+                            ;
+                            (villageWar.guildOption):SetText("")
+                            ;
+                            (villageWar.nodeState):SetShow(true)
+                            ;
+                            (villageWar.nodeStateDesc):SetShow(false)
+                            ;
+                            (villageWar.nodeState):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+                            ;
+                            (villageWar.nodeState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_MINUSIEGETOOLTIP_NOTYETOCCUPY"))
+                            ;
+                            (villageWar.guildMarkBg):SetShow(false)
+                            ;
+                            (villageWar.guildMark):SetShow(false)
+                            ;
+                            (villageWar.guildName):SetShow(false)
+                            ;
+                            (villageWar.guildMasterName):SetShow(false)
+                            ;
+                            (villageWar.guildOption):SetShow(false)
+                            ;
+                            (villageWar.nodeLastWeek):SetShow(false)
+                            ;
+                            (villageWar.guildName):SetText("")
+                            ;
+                            (villageWar.guildMasterName):SetText("")
+                            ;
+                            (villageWar.guildOption):SetText("")
+                            ;
+                            (villageWar.nodeState):SetShow(true)
+                            ;
+                            (villageWar.nodeStateDesc):SetShow(false)
+                            Panel_NodeSiegeTooltip:SetPosX(nodeBtn:GetPosX() + nodeBtn:GetSizeX() + 10)
+                            Panel_NodeSiegeTooltip:SetPosY(nodeBtn:GetPosY())
+                          end
                         end
                       end
                     end
@@ -650,7 +667,8 @@ FromClient_OnBuildingNode = function(buildingBtn, commonOverUI)
   end
   local buildingInfo = buildingBtn:ToClient_getBuildingStaticStatus()
   local isMyThing = buildingInfo:isMyGuildBuilding()
-  if isMyThing then
+  local isMyAllianceThing = buildingInfo:isMyAllianceGuildBuilding()
+  if isMyThing == true or isMyAllianceThing == true then
     FGlobal_HouseInstallation_MinorWar_Open(buildingBtn)
   end
   ToClient_createBuildingLineInVillageSiegeByRegionKey((buildingInfo:getBuildingRegionKey()):get())

@@ -3257,6 +3257,7 @@ HandleClickedFuncButton = function(index)
       local talker = dialog_getTalker()
       if talker == nil then
         _uiNpcDialog:SetShow(false)
+        dialogData:setEmptyMainDialog()
         for index = 0, 3 do
           (_uiFilterRadioButton[index]):SetShow(true)
           ;
@@ -4684,6 +4685,40 @@ isNextButtonShow = function()
     return _uiNextButton:GetShow()
   end
   return false
+end
+
+PaGlobal_SetProposeToNpc = function()
+  -- function num : 0_95 , upvalues : _mainDialog, _maxLine
+  local dialog = ToClient_getNpcProposeTalk()
+  if dialog ~= "" then
+    _mainDialog = {}
+    local stringList = (string.split)(dialog, "\n")
+    local i = 0
+    local strFirst, strSecond = nil, nil
+    while 1 do
+      strFirst = stringList[i * 2 + 1]
+      strSecond = stringList[i * 2 + 2]
+      -- DECOMPILER ERROR at PC28: Confused about usage of register: R5 in 'UnsetPending'
+
+      if strFirst ~= nil and strSecond ~= nil then
+        _mainDialog[i] = strFirst .. "\n" .. strSecond
+      else
+        if strFirst == nil then
+          break
+        else
+          -- DECOMPILER ERROR at PC37: Confused about usage of register: R5 in 'UnsetPending'
+
+          if strSecond == nil then
+            _mainDialog[i] = strFirst
+            break
+          end
+        end
+      end
+      i = i + 1
+    end
+    _maxLine = #_mainDialog
+    Dialog_updateMainDialog()
+  end
 end
 
 

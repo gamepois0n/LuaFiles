@@ -30,7 +30,7 @@ GuildListInfoPage = {_scrollBar, _btnGiveIncentive, _btnDeposit, _btnPaypal, _bt
 _list = {}
 , 
 _buttonList = {}
-}
+, _clickedUserNo = -1}
 local tempGuildList = {}
 local tempGuildUserNolist = {}
 Panel_GuildIncentive:SetShow(false)
@@ -225,7 +225,7 @@ GuildLogoutTimeConvert = function(s64_datetime)
   return strDate
 end
 
--- DECOMPILER ERROR at PC456: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC457: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.initialize = function(self)
   -- function num : 0_3 , upvalues : UI_TM, UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
@@ -774,6 +774,7 @@ HandleClickedGuildMemberMenuButton = function(index)
       (GuildListInfoPage._buttonListBG):SetSize(140, buttonPosY)
     end
     _selectIndex = dataIdx
+    self._clickedUserNo = guildMember:getUserNo()
   end
 end
 
@@ -1279,7 +1280,7 @@ end
 
 MessageBoxYesFunction_ExpelMember = function()
   -- function num : 0_24 , upvalues : _selectIndex
-  ToClient_RequestExpelMemberFromGuild(_selectIndex)
+  ToClient_RequestExpelMemberFromGuild(_selectIndex, GuildListInfoPage._clickedUserNo)
 end
 
 MessageBoxYesFunction_AppointCommander = function()
@@ -1335,7 +1336,7 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC574: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC575: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
   -- function num : 0_32 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
@@ -1348,7 +1349,7 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC578: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC579: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
   -- function num : 0_33 , upvalues : tempGuildList
@@ -1598,7 +1599,7 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC619: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC620: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
   -- function num : 0_42 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
@@ -1611,7 +1612,7 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC631: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC632: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
   -- function num : 0_43 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
@@ -1644,7 +1645,7 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC645: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC646: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
   -- function num : 0_44 , upvalues : _initMoney, contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
@@ -2056,7 +2057,7 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC651: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC652: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
   -- function num : 0_46 , upvalues : tempGuildUserNolist
@@ -2175,7 +2176,7 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC663: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC664: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
   -- function num : 0_50 , upvalues : _selectSortType, listening_Volume
@@ -2194,7 +2195,7 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC666: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC667: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
   -- function num : 0_51

@@ -132,16 +132,27 @@ setCurrentMessageData = function(currentData, position)
   end
 end
 
--- DECOMPILER ERROR at PC221: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC225: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
-  -- function num : 0_1 , upvalues : list, functionKeyUse, elapsedTime, textBG, static_Beginner_BG, static_BeginnerTitleBG, staticText_BeginnerTxt1, staticText_BeginnerTxt2, textContent, blockBG
+  -- function num : 0_1 , upvalues : list, functionKeyUse, buttonYes, buttonNo, buttonApply, buttonCancel, elapsedTime, textBG, static_Beginner_BG, static_BeginnerTitleBG, staticText_BeginnerTxt1, staticText_BeginnerTxt2, textContent, blockBG
   if Panel_Win_System:GetShow() and MessageData.enablePriority == nil then
     return 
   end
   local Front = list
   local preList = nil
   functionKeyUse = keyUse
+  if functionKeyUse ~= nil and functionKeyUse == false then
+    buttonYes:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_YES_WITHOUT_KEY"))
+    buttonNo:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_NO_WITHOUT_KEY"))
+    buttonApply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_APPLY_WITHOUT_KEY"))
+    buttonCancel:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_CANCEL_WITHOUT_KEY"))
+  else
+    buttonYes:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_YES"))
+    buttonNo:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_NO"))
+    buttonApply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_APPLY"))
+    buttonCancel:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_CANCEL"))
+  end
   while 1 do
     while 1 do
       if list == nil or MessageData.priority < (list.data).priority then
@@ -149,15 +160,15 @@ MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
         if list.pre == nil then
           setCurrentMessageData(list.data, position)
         else
-          -- DECOMPILER ERROR at PC40: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC111: Confused about usage of register: R6 in 'UnsetPending'
 
           ;
           (list.pre).next = list
           list = Front
         end
-        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_THEN_STMT
+        -- DECOMPILER ERROR at PC114: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
+        -- DECOMPILER ERROR at PC114: LeaveBlock: unexpected jumping out IF_STMT
 
       end
     end
@@ -279,7 +290,7 @@ allClearMessageData = function()
   end
 end
 
--- DECOMPILER ERROR at PC245: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC249: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.doHaveMessageBoxData = function(title)
   -- function num : 0_5 , upvalues : list
@@ -295,14 +306,14 @@ MessageBox.doHaveMessageBoxData = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC248: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC252: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.isPopUp = function()
   -- function num : 0_6
   return Panel_Win_System:IsShow()
 end
 
--- DECOMPILER ERROR at PC252: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC256: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.isCurrentOpen = function(title)
   -- function num : 0_7 , upvalues : _currentMessageBoxData
@@ -312,7 +323,7 @@ MessageBox.isCurrentOpen = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC257: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC261: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.keyProcessEnter = function()
   -- function num : 0_8 , upvalues : functionKeyUse, list
@@ -342,7 +353,7 @@ MessageBox.keyProcessEnter = function()
   end
 end
 
--- DECOMPILER ERROR at PC262: Confused about usage of register: R28 in 'UnsetPending'
+-- DECOMPILER ERROR at PC266: Confused about usage of register: R28 in 'UnsetPending'
 
 MessageBox.keyProcessEscape = function()
   -- function num : 0_9 , upvalues : functionKeyUse, list

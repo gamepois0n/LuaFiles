@@ -197,6 +197,11 @@ DeliveryInformationWindow_Open = function()
   -- function num : 0_9 , upvalues : deliveryInformation
   DeliveryRequestWindow_Close()
   Warehouse_SetIgnoreMoneyButton(true)
+  local self = deliveryInformation
+  ;
+  (self.radiobutton_trans_list):SetCheck(true)
+  ;
+  (self.radiobutton_alltrans_list):SetCheck(false)
   if not Panel_Window_Delivery_Information:IsShow() then
     Panel_Window_Delivery_Information:SetAlphaExtraChild(1)
     Panel_Window_Delivery_Information:SetShow(true, true)
@@ -206,7 +211,6 @@ DeliveryInformationWindow_Open = function()
       WorldMapPopupManager:push(Panel_Window_Delivery_Information, true)
     end
   end
-  local self = deliveryInformation
   self:updateSlot()
   Panel_Window_Delivery_Information:SetPosX(Panel_Window_Warehouse:GetPosX() - Panel_Window_Delivery_Information:GetSizeX())
   Panel_Window_Delivery_Information:SetPosY(Panel_Window_Warehouse:GetPosY() - 40)
@@ -215,10 +219,6 @@ DeliveryInformationWindow_Open = function()
   ;
   (self.list2):moveTopIndex()
   self.scrollIndex = 0
-  ;
-  (self.radiobutton_trans_list):SetCheck(true)
-  ;
-  (self.radiobutton_alltrans_list):SetCheck(false)
   FGlobal_WarehouseTownListCheck()
 end
 

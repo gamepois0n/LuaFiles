@@ -61,7 +61,7 @@ unseal = {startX = 230, startY = 0, startButtonX = 25, startButtonY = 25, startI
 , 
 button = {startX = 180, startY = 0, startButtonX = 15, startButtonY = 10, gapY = 40, sizeY = 40, sizeYY = 10}
 , slotCount = 4}
-, _staticListBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_ListBG"), _staticButtonListBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_ButtonBG"), _staticUnsealBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_UnsealBG"), _staticNoticeText = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_Notice"), _staticSlotCount = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_Slot_Count"), _scroll = (UI.getChildControl)(Panel_Window_WharfList, "Scroll_Slot_List"), _slots = (Array.new)(), _selectSlotNo = 0, _startSlotIndex = 0, _selectSceneIndex = -1, 
+, _staticListBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_ListBG"), _staticButtonListBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_ButtonBG"), _staticUnsealBG = (UI.getChildControl)(Panel_Window_WharfList, "Static_UnsealBG"), _staticNoticeText = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_Notice"), _staticSlotCount = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_Slot_Count"), _sealedCount = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_SealedCount"), _unsealedCount = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_UnsealedCount"), _maxCount = (UI.getChildControl)(Panel_Window_WharfList, "StaticText_MaxCount"), _scroll = (UI.getChildControl)(Panel_Window_WharfList, "Scroll_Slot_List"), _slots = (Array.new)(), _selectSlotNo = 0, _startSlotIndex = 0, _selectSceneIndex = -1, 
 _unseal = {}
 }
 wharfList.init = function(self)
@@ -137,17 +137,59 @@ wharfList.init = function(self)
   self._buttonSeal = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_Seal", self._staticButtonListBG, "WharfList_Button_Seal")
   self._buttonCompulsionSeal = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_CompulsionSeal", self._staticButtonListBG, "WharfList_Button_CompulsionSeal")
   self._buttonUnseal = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_Unseal", self._staticButtonListBG, "WharfList_Button_Unseal")
+  self._buttonMove = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_Move", self._staticButtonListBG, "WharfList_Button_Move")
   self._buttonRepair = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_Repair", self._staticButtonListBG, "WharfList_Button_Repair")
   self._buttonSell = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_Sell", self._staticButtonListBG, "WharfList_Button_Sell")
   self._buttonChangeName = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_ChangeName", self._staticButtonListBG, "WharfList_Button_ChangeName")
   self._buttonClearDeadCount = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Button_KillReset", self._staticButtonListBG, "WharfList_DeadCountReset")
   ;
   (self._scroll):SetControlPos(0)
+  ;
+  (self._sealedCount):addInputEvent("Mouse_On", "wharfList_ShowCountTooltip(" .. 0 .. ")")
+  ;
+  (self._sealedCount):addInputEvent("Mouse_Out", "wharfList_HideCountTooltip()")
+  ;
+  (self._unsealedCount):addInputEvent("Mouse_On", "wharfList_ShowCountTooltip(" .. 1 .. ")")
+  ;
+  (self._unsealedCount):addInputEvent("Mouse_Out", "wharfList_HideCountTooltip()")
+  ;
+  (self._maxCount):addInputEvent("Mouse_On", "wharfList_ShowCountTooltip(" .. 2 .. ")")
+  ;
+  (self._maxCount):addInputEvent("Mouse_Out", "wharfList_HideCountTooltip()")
   Panel_Window_WharfList:SetChildIndex(self._staticButtonListBG, 9999)
 end
 
+wharfList_ShowCountTooltip = function(iconType)
+  -- function num : 0_3 , upvalues : wharfList
+  local self = wharfList
+  local uiControl, name, desc = nil, nil, nil
+  if iconType == 0 then
+    uiControl = self._sealedCount
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_SEALCOUNT_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_SEALCOUNT_DESC")
+  else
+    if iconType == 1 then
+      uiControl = self._unsealedCount
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_UNSEALCOUNT_TITLE")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_UNSEALCOUNT_DESC")
+    else
+      if iconType == 2 then
+        uiControl = self._maxCount
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_MAXCOUNT_TITLE")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_MAXCOUNT_DESC")
+      end
+    end
+  end
+  TooltipSimple_Show(uiControl, name, desc)
+end
+
+wharfList_HideCountTooltip = function()
+  -- function num : 0_4
+  TooltipSimple_Hide()
+end
+
 wharfList.update = function(self)
-  -- function num : 0_3
+  -- function num : 0_5
   local servantCount = stable_count()
   if servantCount == 0 then
     (self._staticNoticeText):SetShow(true)
@@ -158,6 +200,20 @@ wharfList.update = function(self)
   end
   ;
   (self._staticSlotCount):SetText(stable_currentSlotCount() .. " / " .. stable_maxSlotCount())
+  ;
+  (self._staticSlotCount):SetShow(false)
+  ;
+  (self._sealedCount):SetShow(true)
+  ;
+  (self._unsealedCount):SetShow(true)
+  ;
+  (self._maxCount):SetShow(true)
+  ;
+  (self._sealedCount):SetText(stable_currentSlotCount())
+  ;
+  (self._unsealedCount):SetText(stable_currentRegionSlotCountAll() - stable_currentSlotCount())
+  ;
+  (self._maxCount):SetText(stable_currentRegionSlotCountAll() .. " / " .. stable_maxSlotCount())
   for ii = 0, (self._config).slotCount - 1 do
     local slot = (self._slots)[ii]
     slot.index = -1
@@ -216,7 +272,7 @@ wharfList.update = function(self)
 end
 
 wharfList.registEventHandler = function(self)
-  -- function num : 0_4
+  -- function num : 0_6
   (UIScroll.InputEvent)(self._scroll, "WharfList_ScrollEvent")
   Panel_Window_WharfList:addInputEvent("Mouse_UpScroll", "WharfList_ScrollEvent( true  )")
   Panel_Window_WharfList:addInputEvent("Mouse_DownScroll", "WharfList_ScrollEvent( false )")
@@ -226,6 +282,8 @@ wharfList.registEventHandler = function(self)
   (self._buttonCompulsionSeal):addInputEvent("Mouse_LUp", "WharfList_Seal( true  )")
   ;
   (self._buttonUnseal):addInputEvent("Mouse_LUp", "WharfList_Unseal()")
+  ;
+  (self._buttonMove):addInputEvent("Mouse_LUp", "WharfList_HandleMoveButtonClick()")
   ;
   (self._buttonRepair):addInputEvent("Mouse_LUp", "WharfList_Recovery()")
   ;
@@ -237,14 +295,15 @@ wharfList.registEventHandler = function(self)
 end
 
 wharfList.registMessageHandler = function(self)
-  -- function num : 0_5
+  -- function num : 0_7
   registerEvent("onScreenResize", "WharfList_Resize")
   registerEvent("FromClient_ServantUpdate", "WharfList_updateSlotData")
   registerEvent("FromClient_GroundMouseClick", "WharfList_ButtonClose")
+  registerEvent("FromClient_OnChangeServantRegion", "WharfList_updateSlotData")
 end
 
 WharfList_Resize = function()
-  -- function num : 0_6 , upvalues : wharfList
+  -- function num : 0_8 , upvalues : wharfList
   local screenX = getScreenSizeX()
   local screenY = getScreenSizeY()
   local self = wharfList
@@ -269,12 +328,18 @@ WharfList_Resize = function()
       (((self._slots)[3]).button):SetShow(false)
     end
   end
-  Panel_Window_WharfList:SetSize(Panel_Window_WharfList:GetSizeX(), panelSize)
+  Panel_Window_WharfList:SetSize(Panel_Window_WharfList:GetSizeX(), panelSize + 30)
+  ;
+  (self._sealedCount):ComputePos()
+  ;
+  (self._unsealedCount):ComputePos()
+  ;
+  (self._maxCount):ComputePos()
   ;
   (self._staticListBG):SetSize((self._staticListBG):GetSizeX(), panelBGSize)
   ;
   (self._scroll):SetSize((self._scroll):GetSizeX(), scrollSize)
-  -- DECOMPILER ERROR at PC62: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R7 in 'UnsetPending'
 
   ;
   (self._config).slotCount = slotCount
@@ -282,8 +347,9 @@ end
 
 local beforeSlotNo, beforeEType = nil, nil
 WharfList_ButtonOpen = function(eType, slotNo)
-  -- function num : 0_7 , upvalues : wharfList, beforeSlotNo, beforeEType
+  -- function num : 0_9 , upvalues : wharfList, beforeSlotNo, beforeEType
   local self = wharfList
+  changeServantRegion:close()
   if (self._staticButtonListBG):GetShow() and beforeSlotNo ~= nil and beforeSlotNo == slotNo and beforeEType ~= nil and beforeEType == eType then
     (self._staticButtonListBG):SetShow(false)
     return 
@@ -296,6 +362,8 @@ WharfList_ButtonOpen = function(eType, slotNo)
   (self._buttonCompulsionSeal):SetShow(false)
   ;
   (self._buttonUnseal):SetShow(false)
+  ;
+  (self._buttonMove):SetShow(false)
   ;
   (self._buttonRepair):SetShow(false)
   ;
@@ -325,9 +393,11 @@ WharfList_ButtonOpen = function(eType, slotNo)
     local nowMp = servantInfo:getMp()
     local maxMp = servantInfo:getMaxMp()
     local vehicleType = servantInfo:getVehicleType()
+    local showChangeRegionButtonFlag = false
     if regionName == servantRegionName then
       buttonList[button_Index] = self._buttonUnseal
       button_Index = button_Index + 1
+      showChangeRegionButtonFlag = true
       if nowHp < maxHp then
         buttonList[button_Index] = self._buttonRepair
         button_Index = button_Index + 1
@@ -362,6 +432,10 @@ WharfList_ButtonOpen = function(eType, slotNo)
         buttonList[button_Index] = self._buttonRepair
         button_Index = button_Index + 1
       end
+    end
+    if showChangeRegionButtonFlag and changeServantRegion:isEnabled() then
+      buttonList[button_Index] = self._buttonMove
+      button_Index = button_Index + 1
     end
     positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
     positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY
@@ -401,18 +475,19 @@ WharfList_ButtonOpen = function(eType, slotNo)
 end
 
 WharfList_ButtonClose = function()
-  -- function num : 0_8 , upvalues : wharfList
+  -- function num : 0_10 , upvalues : wharfList
   local self = wharfList
   if not (self._staticButtonListBG):GetShow() then
     return false
   end
   ;
   (self._staticButtonListBG):SetShow(false)
+  changeServantRegion:close()
   return false
 end
 
 WharfList_SlotSelect = function(slotNo)
-  -- function num : 0_9 , upvalues : wharfList
+  -- function num : 0_11 , upvalues : wharfList
   if not Panel_Window_WharfList:GetShow() then
     return 
   end
@@ -442,13 +517,25 @@ WharfList_SlotSelect = function(slotNo)
 end
 
 WharfList_UnsealSlotSelect = function()
-  -- function num : 0_10
+  -- function num : 0_12
   WharfList_ButtonClose()
   WharfList_ButtonOpen(0, slotNo)
 end
 
+WharfList_HandleMoveButtonClick = function()
+  -- function num : 0_13 , upvalues : wharfList
+  local index = WharfList_SelectSlotNo()
+  local servantInfo = stable_getServant(index)
+  if servantInfo == nil then
+    return 
+  end
+  local posX = (wharfList._staticButtonListBG):GetParentPosX() + (wharfList._staticButtonListBG):GetSizeX()
+  local posY = (wharfList._staticButtonListBG):GetParentPosY()
+  changeServantRegion:open(servantInfo:getServantNo(), posX, posY)
+end
+
 WharfList_Seal = function(isCompulsionSeal)
-  -- function num : 0_11 , upvalues : wharfList
+  -- function num : 0_14 , upvalues : wharfList
   local self = wharfList
   audioPostEvent_SystemUi(0, 0)
   WharfList_ButtonClose()
@@ -465,19 +552,19 @@ WharfList_Seal = function(isCompulsionSeal)
 end
 
 WharfList_Button_CompulsionSeal = function()
-  -- function num : 0_12
+  -- function num : 0_15
   stable_seal(true)
 end
 
 WharfList_Unseal = function()
-  -- function num : 0_13
+  -- function num : 0_16
   audioPostEvent_SystemUi(0, 0)
   stable_unseal(WharfList_SelectSlotNo())
   WharfList_ButtonClose()
 end
 
 WharfList_Recovery = function()
-  -- function num : 0_14
+  -- function num : 0_17
   local servantInfo = stable_getServant(WharfList_SelectSlotNo())
   if servantInfo == nil then
     return 
@@ -500,20 +587,20 @@ WharfList_Recovery = function()
 end
 
 WharfList_RecoveryXXX = function()
-  -- function num : 0_15
+  -- function num : 0_18
   audioPostEvent_SystemUi(5, 7)
   WharfList_ButtonClose()
   stable_recovery(WharfList_SelectSlotNo())
 end
 
 WharfList_ReviveXXX = function()
-  -- function num : 0_16
+  -- function num : 0_19
   WharfList_ButtonClose()
   stable_revive(WharfList_SelectSlotNo())
 end
 
 WharfList_SellToNpc = function()
-  -- function num : 0_17 , upvalues : wharfInvenAlert
+  -- function num : 0_20 , upvalues : wharfInvenAlert
   local servantInfo = stable_getServant(WharfList_SelectSlotNo())
   if servantInfo == nil then
     return 
@@ -523,23 +610,23 @@ WharfList_SellToNpc = function()
 end
 
 WharfList_SellToNpcXXX = function()
-  -- function num : 0_18
+  -- function num : 0_21
   WharfList_ButtonClose()
   stable_changeToReward(WharfList_SelectSlotNo(), (CppEnums.ServantToRewardType).Type_Experience)
 end
 
 WharfList_ChangeName = function()
-  -- function num : 0_19
+  -- function num : 0_22
   WharfList_ButtonClose()
   WharfRegister_OpenByChangeName()
 end
 
 WharfList_ClearDeadCount = function()
-  -- function num : 0_20
+  -- function num : 0_23
   WharfList_ButtonClose()
   audioPostEvent_SystemUi(0, 0)
   local clearDeadCountDo = function()
-    -- function num : 0_20_0
+    -- function num : 0_23_0
     stable_clearDeadCount(WharfList_SelectSlotNo())
   end
 
@@ -550,13 +637,13 @@ WharfList_ClearDeadCount = function()
 end
 
 WharfList_SelectSlotNo = function()
-  -- function num : 0_21 , upvalues : wharfList
+  -- function num : 0_24 , upvalues : wharfList
   local self = wharfList
   return wharfList_SortByWayPointKey(self._selectSlotNo)
 end
 
 WharfList_SlotSound = function(slotNo)
-  -- function num : 0_22
+  -- function num : 0_25
   if isFirstSlot then
     isFirstSlot = false
   else
@@ -565,7 +652,7 @@ WharfList_SlotSound = function(slotNo)
 end
 
 WharfList_ScrollEvent = function(isScrollUp)
-  -- function num : 0_23 , upvalues : wharfList
+  -- function num : 0_26 , upvalues : wharfList
   local self = wharfList
   local servantCount = stable_count()
   self._startSlotIndex = (UIScroll.ScrollEvent)(self._scroll, isScrollUp, (self._config).slotCount, servantCount, self._startSlotIndex, 1)
@@ -576,7 +663,7 @@ end
 
 local sortByExploreKey = {}
 wharfList_ServantCountInit = function(nums)
-  -- function num : 0_24 , upvalues : sortByExploreKey
+  -- function num : 0_27 , upvalues : sortByExploreKey
   sortByExploreKey = {}
   for i = 1, nums do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
@@ -586,7 +673,7 @@ wharfList_ServantCountInit = function(nums)
 end
 
 wharfList_SortDataupdate = function()
-  -- function num : 0_25 , upvalues : sortByExploreKey
+  -- function num : 0_28 , upvalues : sortByExploreKey
   local maxWharfServantCount = stable_count()
   wharfList_ServantCountInit(maxWharfServantCount)
   for ii = 1, maxWharfServantCount do
@@ -613,7 +700,7 @@ wharfList_SortDataupdate = function()
     end
   end
   local sortExplaoreKey = function(a, b)
-    -- function num : 0_25_0
+    -- function num : 0_28_0
     if a._exploreKey < b._exploreKey then
       return true
     end
@@ -660,7 +747,7 @@ wharfList_SortDataupdate = function()
     sortByExploreKey[i] = temp[i - 1]
   end
   local affiliatedTerritory = function(exploerKey)
-    -- function num : 0_25_1
+    -- function num : 0_28_1
     local territoryKey = -1
     if exploerKey > 0 and exploerKey <= 300 then
       territoryKey = 0
@@ -688,7 +775,7 @@ wharfList_SortDataupdate = function()
 
   local sIndex = 0
   local sortByTerritory = function(territoryKey)
-    -- function num : 0_25_2 , upvalues : maxWharfServantCount, affiliatedTerritory, sortByExploreKey, temp, sIndex
+    -- function num : 0_28_2 , upvalues : maxWharfServantCount, affiliatedTerritory, sortByExploreKey, temp, sIndex
     for servantIndex = 1, maxWharfServantCount do
       -- DECOMPILER ERROR at PC15: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -761,7 +848,7 @@ wharfList_SortDataupdate = function()
 end
 
 wharfList_SortByWayPointKey = function(index)
-  -- function num : 0_26 , upvalues : sortByExploreKey
+  -- function num : 0_29 , upvalues : sortByExploreKey
   if index == nil then
     return nil
   else
@@ -770,7 +857,7 @@ wharfList_SortByWayPointKey = function(index)
 end
 
 WharfList_updateSlotData = function()
-  -- function num : 0_27 , upvalues : wharfList
+  -- function num : 0_30 , upvalues : wharfList
   if not Panel_Window_WharfList:GetShow() then
     return 
   end
@@ -779,7 +866,7 @@ WharfList_updateSlotData = function()
 end
 
 WharfList_Open = function()
-  -- function num : 0_28 , upvalues : wharfList
+  -- function num : 0_31 , upvalues : wharfList
   if Panel_Window_WharfList:IsShow() then
     return 
   end
@@ -798,7 +885,7 @@ WharfList_Open = function()
 end
 
 WharfList_Close = function()
-  -- function num : 0_29 , upvalues : wharfList
+  -- function num : 0_32 , upvalues : wharfList
   if not Panel_Window_WharfList:GetShow() then
     return 
   end

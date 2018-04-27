@@ -325,6 +325,7 @@ IngameCashShopEventCart_Update = function(productNoRaw)
       if rv == 0 then
         ((self._list2):getElementManager()):pushKey(productNoRaw)
         IngameCashShopEventCart_UpdatePrice()
+        ToClient_RequestRecommendList(productNoRaw)
       end
     end
   end
@@ -410,6 +411,7 @@ IngameCashShopEventCart_Close = function()
   if Panel_IngameCashShop_EventCart:IsShow() then
     IngameCashShopEventCart_Clear()
     Panel_IngameCashShop_EventCart:SetShow(false)
+    InGameShopBuy_Close()
   end
 end
 

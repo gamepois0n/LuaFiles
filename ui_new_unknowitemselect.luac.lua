@@ -34,6 +34,9 @@ local shopTypeNum = nil
 local randomShopItemPrice = 0
 randomSelect_ReserveAni = function(isShow)
   -- function num : 0_0 , upvalues : _reserveAni, _reserveTime
+  if dialog_getTalkNpcKey() == 44672 then
+    isShow = false
+  end
   _reserveAni:SetShow(isShow)
   _reserveAni:setUpdateTextureAni(isShow)
   _reserveTime:SetShow(isShow)
@@ -74,7 +77,11 @@ randomShopShow = function(slotNo, priceRate)
   end
   if shopTypeNum == 12 then
     useWp = 25
-    _reserveButton:SetShow(isReserveContentOpen)
+    if dialog_getTalkNpcKey() == 44672 then
+      _reserveButton:SetShow(false)
+    else
+      _reserveButton:SetShow(isReserveContentOpen)
+    end
   else
     if shopTypeNum == 13 then
       useWp = 10
@@ -97,6 +104,15 @@ randomShopShow = function(slotNo, priceRate)
       _itemButtonReSelect:SetEnable(false)
       _itemButtonReSelect:SetMonoTone(true)
     end
+  end
+  if shopTypeNum == 12 and ToClient_IsRandomShopKeepItem() == true and dialog_getTalkNpcKey() == 44672 then
+    _itemButtonReSelect:SetEnable(false)
+    _itemButtonReSelect:SetMonoTone(true)
+    _itemButtonSelect:SetEnable(false)
+    _itemButtonSelect:SetMonoTone(true)
+  else
+    _itemButtonSelect:SetEnable(true)
+    _itemButtonSelect:SetMonoTone(false)
   end
   local btnReSelectSizeX = _itemButtonReSelect:GetSizeX() + 23
   local btnReSelectTextPosX = btnReSelectSizeX - btnReSelectSizeX / 2 - _itemButtonReSelect:GetTextSizeX() / 2

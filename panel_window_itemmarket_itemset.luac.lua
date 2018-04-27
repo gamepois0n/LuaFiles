@@ -912,10 +912,6 @@ end
 
 ItemMarketItemSet_UpdateMoneyByWarehouse = function()
   -- function num : 0_27 , upvalues : ItemMarketItemSet
-  if _ContentsGroup_InvenUpdateCheck == true and Panel_Window_ItemMarket_ItemSet:GetShow() == false then
-    return 
-  end
-  ;
   (ItemMarketItemSet.invenMoney):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
   ;
   (ItemMarketItemSet.warehouseMoney):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))

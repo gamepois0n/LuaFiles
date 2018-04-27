@@ -31,12 +31,12 @@ _subButtonSize = {_BigX = 303, _SmallX = 121}
 , 
 _const = {_sortTypeAsc = 1, _sortTypeDesc = 2}
 , _static_TopLineBG = (UI.getChildControl)(Panel_IngameCashShop, "Static_TopLineBG"), _static_PromotionBanner = (UI.getChildControl)(Panel_IngameCashShop, "Static_PromotionBanner"), _static_GradationTop = (UI.getChildControl)(Panel_IngameCashShop, "Static_Gradation_Top"), _static_GradationBottom = (UI.getChildControl)(Panel_IngameCashShop, "Static_Gradation_Bottom"), _staticText_CashCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_NowCashCount"), _staticText_PearlCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_NowPearlCount"), _staticText_SilverCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_SilverCount"), _staticText_MileageCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_MileageCount"), _static_SideLineLeft = (UI.getChildControl)(Panel_IngameCashShop, "Static_SideLineLeft"), _static_SideLineRight = (UI.getChildControl)(Panel_IngameCashShop, "Static_SideLineRight"), _scroll_IngameCash = (UI.getChildControl)(Panel_IngameCashShop, "Scroll_IngameCash"), _static_ScrollArea = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea"), _static_ScrollArea1 = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea_1"), _static_ScrollArea2 = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea_2"), _static_Construction = (UI.getChildControl)(Panel_IngameCashShop, "Static_Construction"), _edit_Search = (UI.getChildControl)(Panel_IngameCashShop, "Edit_GoodsName"), _button_Search = (UI.getChildControl)(Panel_IngameCashShop, "Button_Search"), _combo_Class = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_ClassSort"), _combo_Sort = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_PriceSort"), _combo_SubFilter = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_SubFilter"), _haveCashBoxBG = (UI.getChildControl)(Panel_IngameCashShop, "Static_HaveCashBoxBG"), _pearlBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_PearlBox"), _nowPearlIcon = (UI.getChildControl)(Panel_IngameCashShop, "Static_NowPearlIcon"), _silverBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_SilverBox"), _silver = (UI.getChildControl)(Panel_IngameCashShop, "Static_SilverIcon"), _mileageBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_MileageBox"), _mileage = (UI.getChildControl)(Panel_IngameCashShop, "Static_MileageIcon"), _cashBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_CashBox"), _nowCash = (UI.getChildControl)(Panel_IngameCashShop, "Static_CashIcon"), _btn_BuyPearl = (UI.getChildControl)(Panel_IngameCashShop, "Button_BuyPearl"), _btn_BuyDaum = (UI.getChildControl)(Panel_IngameCashShop, "Button_BuyDaum"), _btn_RefreshCash = (UI.getChildControl)(Panel_IngameCashShop, "Button_RefreshCash"), _btn_HowUsePearl = (UI.getChildControl)(Panel_IngameCashShop, "Button_PearlHowUse"), 
-desc = {_static_ItemNameCombo = nil, _staticText_Title = nil, _static_SlotBG = nil, _static_Slot = nil, _static_Desc = nil, _staticText_ProductInfo_Title = nil, _staticText_PurchaseLimit = nil, _static_VestedDesc = nil, _static_TradeDesc = nil, _static_ClassDesc = nil, _static_WarningDesc = nil, _static_DiscountPeriodDesc = nil, _static_ItemListTitle = nil, _static_RelatedItemTitle = nil, _static_PearlIcon = nil, _static_PearOriginalPrice = nil, _static_PearlPrice = nil, _btn_BigBuy = nil, _btn_BigBuy_M = nil, _btn_BigBuy_C = nil, _btn_BigCart = nil, _btn_BigGift = nil, _btn_BigECart = nil}
+desc = {_static_ItemNameCombo = nil, _staticText_Title = nil, _static_SlotBG = nil, _static_Slot = nil, _static_Desc = nil, _staticText_ProductInfo_Title = nil, _staticText_PurchaseLimit = nil, _static_VestedDesc = nil, _static_TradeDesc = nil, _static_ClassDesc = nil, _static_WarningDesc = nil, _static_DiscountPeriodDesc = nil, _static_ItemListTitle = nil, _static_RelatedItemTitle = nil, _static_PearlIcon = nil, _static_PearOriginalPrice = nil, _static_PearlPrice = nil, _btn_BigBuy = nil, _btn_BigBuy_M = nil, _btn_BigBuy_C = nil, _btn_BigBuy_Silver = nil, _btn_BigCart = nil, _btn_BigGift = nil, _btn_BigECart = nil}
 , _subItemButton = (Array.new)(), _subItemCount = 20, _endSunPositionY = 0, _bigButtonCount = 0, _smallButtonCount = 0, _skipCount = 0, _itemCount = 20, _items = (Array.new)(), _relatedItems = (Array.new)(), _comboList = (Array.new)(), _listComboCount = 1, _listComboIncludeDummyCount = 1, itemDescDetailSize = 0, _chooseProductList = (Array.new)(), _chooseProductListCount = 10, _chooseProductClickList = (Array.new)(), _endChoosePositionY = 0, _openFunction = false, _openProductKeyRaw = -1, _categoryWeb = nil, _promotionWeb = nil, _promotionSizeY = 0, 
 _promotionTab = {}
 , 
 _myCartTab = {}
-, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 0, _currentTab = nil, _previousTab = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false, _pricePosX = 0, _currentIndex = 0, _isClick = false, _isSubItemClick = false, _categoryProductKeyRaw = -1, _currentProductKeyRaw = -1, _cashProductNoData = -1, _cashProductIndex = 1}
+, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 0, _currentTab = nil, _previousTab = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false, _pricePosX = 0, _currentIndex = 0, _isClick = false, _isSubItemClick = false, _categoryProductKeyRaw = -1, _currentProductKeyRaw = -1, _cashProductNoData = -1, _cashProductIndex = 1, _ViewingRecommend = false}
 inGameShop._scrollBTN_IngameCash = (UI.getChildControl)(inGameShop._scroll_IngameCash, "Scroll_CtrlButton")
 inGameShop._combo_ClassList = (UI.getChildControl)(inGameShop._combo_Class, "Combobox_List")
 inGameShop._combo_SubFilterList = (UI.getChildControl)(inGameShop._combo_SubFilter, "Combobox_List")
@@ -395,7 +395,7 @@ inGameShop.init = function(self)
     ;
     (slot.name):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     ;
-    (slot.productIcon):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ")")
+    (slot.productIcon):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", false" .. ")")
     ;
     (slot.productIcon):addInputEvent("Mouse_UpScroll", "InGameShop_ScrollEvent( true )")
     ;
@@ -405,7 +405,7 @@ inGameShop.init = function(self)
     ;
     (slot.static):addInputEvent("Mouse_DownScroll", "InGameShop_ScrollEvent( false )")
     ;
-    (slot.static):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ")")
+    (slot.static):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", false" .. ")")
     ;
     (slot.buttonCart):addInputEvent("Mouse_LUp", "IngameCashShop_CartItem(" .. ii .. ")")
     ;
@@ -430,7 +430,7 @@ inGameShop.init = function(self)
     (slot.soldout):SetShow(false)
     ;
     (slot.static):SetShow(false)
-    -- DECOMPILER ERROR at PC735: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC737: Confused about usage of register: R16 in 'UnsetPending'
 
     ;
     (self._slots)[ii] = slot
@@ -467,16 +467,10 @@ inGameShop.init = function(self)
   (self._promotionWeb):SetShow(true)
   ;
   (self._promotionWeb):SetPosX(0)
-  if _ContentsGroup_Recommend == false then
-    (self._promotionWeb):SetPosY(0)
-    ;
-    (self._promotionWeb):SetSize(709, scrSizeY - 95)
-  else
-    ;
-    (self._promotionWeb):SetPosY(170)
-    ;
-    (self._promotionWeb):SetSize(709, scrSizeY - 265)
-  end
+  ;
+  (self._promotionWeb):SetPosY(0)
+  ;
+  (self._promotionWeb):SetSize(709, scrSizeY - 95)
   _AllBG:SetSize(_AllBG:GetSizeX(), scrSizeY - 95)
   ;
   (self._promotionWeb):ResetUrl()
@@ -903,9 +897,9 @@ inGameShop.updateSlot = function(self)
         ;
         (self._goodDescBG):SetShow(true)
         ;
-        ((self.desc)._btn_BigECart):SetSpanSize(140, 10)
-        ;
         ((self.desc)._btn_BigGift):SetSpanSize(100, 10)
+        ;
+        ((self.desc)._btn_BigECart):SetSpanSize(60, 10)
         ;
         ((self.desc)._btn_BigCart):SetSpanSize(60, 10)
         ;
@@ -914,6 +908,8 @@ inGameShop.updateSlot = function(self)
         ((self.desc)._btn_BigBuy_C):SetSpanSize(20, 10)
         ;
         ((self.desc)._btn_BigBuy_M):SetSpanSize(20, 10)
+        ;
+        ((self.desc)._btn_BigBuy_Silver):SetSpanSize(20, 10)
         ;
         ((self.desc)._static_PearlIcon):SetSpanSize(155, 60)
         ;
@@ -1022,6 +1018,7 @@ inGameShop.registEventHandler = function(self)
   registerEvent("EventSelfPlayerPreDead", "InGameShop_OuterEventForDead")
   registerEvent("ToClient_RequestShowProduct", "ToClient_RequestShowProduct")
   registerEvent("FromClient_InventoryUpdate", "InGameShop_UpdateCash")
+  registerEvent("FromClient_ShowRecommendProductByComplete", "FromClient_ShowRecommendProductByComplete")
 end
 
 inGameShop.initData = function(self)
@@ -1136,8 +1133,10 @@ InGameShop_TabEvent = function(tab)
             do
               IngameCashShopEventCart_Close()
               IngameCashShopEventCart_Close()
-              if FGlobal_InGameShopBuy_IsEventCart() == true then
-                InGameShopBuy_Close()
+              if Panel_Window_RecommandGoods:GetShow() == false and _ContentsGroup_Recommend == true then
+                PaGlobal_RecommendGoods:Open()
+                ;
+                (self._categoryWeb):SetShow(false)
               end
             end
           end
@@ -1526,12 +1525,8 @@ InGameShop_Promotion_Open = function()
   Panel_IngameCashShop:SetChildIndex((self._promotionTab).icon, 9900)
   ;
   (self._promotionWeb):SetPosX(5)
-  if _ContentsGroup_Recommend == false then
-    (self._promotionWeb):SetPosY(5)
-  else
-    ;
-    (self._promotionWeb):SetPosY(195)
-  end
+  ;
+  (self._promotionWeb):SetPosY(5)
   ;
   (self._promotionWeb):SetSize((self._promotionWeb):GetSizeX(), self._promotionSizeY)
   ;
@@ -1548,6 +1543,7 @@ InGameShop_Promotion_Open = function()
   _ingameCash_SetTabIconTexture((self._promotionTab).icon, tabId.promotionTab, 2)
   IngameCashShopEventCart_Close()
   makeSubTab(tabId.promotionTab)
+  PaGlobal_RecommendGoods:Close()
 end
 
 InGameShop_Promotion_Close = function()
@@ -1618,12 +1614,15 @@ InGameShop_ProductListContent_ChangeMoneyIconTexture = function(slot, categoryId
       end
     end
   end
+  if isEnableSilver then
+    iconType = cashIconType.silver
+  end
   if isDesc then
     cashIcon_changeTextureForList(slot, serviceContry, iconType)
   else
     cashIcon_changeTextureForList(slot.pearlIcon, serviceContry, iconType)
   end
-  -- DECOMPILER ERROR: 7 unprocessed JMP targets
+  -- DECOMPILER ERROR: 8 unprocessed JMP targets
 end
 
 HandleClicked_InGameShop_SetScrollIndexByLClick = function()
@@ -1752,7 +1751,7 @@ FGlobal_InGameShop_OpenByEventAlarm = function()
   ;
   (self._static_Construction):ComputePos()
   ;
-  (self._static_Construction):SetShow(true)
+  (self._static_Construction):SetShow(false)
   Panel_IngameCashShop:SetShow(true)
   ;
   (self._scroll_IngameCash):SetShow(false)
@@ -1902,6 +1901,7 @@ IngameCashShop_Descinit = function()
   self._btn_BigBuy = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigBuy")
   self._btn_BigBuy_M = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigBuy_M")
   self._btn_BigBuy_C = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigBuy_C")
+  self._btn_BigBuy_Silver = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigBuy_Silver")
   self._btn_BigCart = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigCart")
   self._btn_BigGift = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigGift")
   self._btn_BigECart = (UI.getChildControl)(inGameShop._goodDescBG, "Button_BigECart")
@@ -1936,7 +1936,7 @@ IngameCashShop_Descinit = function()
     (slot.iconBG):SetPosX(itemConfig._startX + itemConfig._gapX * ii)
     ;
     (slot.iconBG):SetPosY(itemConfig._startY)
-    -- DECOMPILER ERROR at PC254: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC261: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (inGameShop._items)[ii] = slot
@@ -1959,7 +1959,7 @@ IngameCashShop_Descinit = function()
     (subitem.static):SetIgnore(true)
     ;
     (subitem.static):addInputEvent("Mouse_LUp", "InGameShop_subItemEvent(" .. kk .. ")")
-    -- DECOMPILER ERROR at PC301: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC308: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     (selfPanel._subItemButton)[kk] = subitem
@@ -1989,7 +1989,7 @@ IngameCashShop_Descinit = function()
     (chooseProduct.staticEditCount):SetShow(false)
     ;
     (chooseProduct.staticEditCount):SetIgnore(true)
-    -- DECOMPILER ERROR at PC405: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC412: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (selfPanel._chooseProductList)[jj] = chooseProduct
@@ -2198,6 +2198,8 @@ IngameCashShop_DescUpdate = function()
         ;
         (self._btn_BigBuy_C):SetShow(true)
         ;
+        (self._btn_BigBuy_Silver):SetShow(false)
+        ;
         (self._btn_BigGift):SetEnable(false)
         ;
         (self._btn_BigCart):SetEnable(false)
@@ -2212,6 +2214,8 @@ IngameCashShop_DescUpdate = function()
           (self._btn_BigBuy_M):SetShow(true)
           ;
           (self._btn_BigBuy_C):SetShow(false)
+          ;
+          (self._btn_BigBuy_Silver):SetShow(false)
           if UI_PLT.AtCharacter == limitType or UI_PLT.AtAccount == limitType then
             local limitCount = cashProduct:getCashPurchaseCount()
             local mylimitCount = (getIngameCashMall()):getRemainingLimitCount(cashProduct:getNoRaw())
@@ -2336,6 +2340,28 @@ IngameCashShop_DescUpdate = function()
                   (self._btn_BigBuy_M):SetShow(false)
                   ;
                   (self._btn_BigBuy_C):SetShow(false)
+                  if cashProduct:isMoneyPrice() then
+                    (self._btn_BigBuy):SetShow(false)
+                    ;
+                    (self._btn_BigBuy_Silver):SetShow(true)
+                    if (self._btn_BigBuy):IsEnable() == true then
+                      (self._btn_BigBuy_Silver):SetEnable(true)
+                      ;
+                      (self._btn_BigBuy_Silver):SetMonoTone(false)
+                    else
+                      ;
+                      (self._btn_BigBuy_Silver):SetEnable(false)
+                      ;
+                      (self._btn_BigBuy_Silver):SetMonoTone(true)
+                    end
+                    ;
+                    (self._btn_BigCart):SetEnable(false)
+                    ;
+                    (self._btn_BigCart):SetMonoTone(true)
+                  else
+                    ;
+                    (self._btn_BigBuy_Silver):SetShow(false)
+                  end
                   if cashProduct:isChooseCash() then
                     (self._btn_BigGift):SetMonoTone(true)
                     ;
@@ -2346,9 +2372,13 @@ IngameCashShop_DescUpdate = function()
                     (self._btn_BigCart):SetEnable(false)
                   end
                   ;
+                  (self._btn_BigCart):SetShow(true)
+                  ;
                   (self._btn_BigECart):SetShow(false)
                   if inGameShop._currentTab > 0 and inGameShop._currentTab <= getCashMainCategorySize() and (tabIndexList[inGameShop._currentTab])[6] > 0 and FGlobal_IngameCashShopEventCart_IsContentsOpen() == true then
                     (self._btn_BigECart):SetShow(true)
+                    ;
+                    (self._btn_BigCart):SetShow(false)
                   end
                   ;
                   (self._btn_BigGift):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
@@ -2362,6 +2392,8 @@ IngameCashShop_DescUpdate = function()
                   (self._btn_BigBuy_M):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
                   ;
                   (self._btn_BigECart):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ")")
+                  ;
+                  (self._btn_BigBuy_Silver):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
                 end
               end
             end
@@ -2414,35 +2446,42 @@ IngameCashShop_initSubItemButton = function()
   end
 end
 
-IngameCashShop_initDescData = function()
+IngameCashShop_initDescData = function(cashProduct)
   -- function num : 0_56 , upvalues : inGameShop
+  if cashProduct == nil then
+    return 
+  end
   IngameCashShop_initSubItemButton()
   local self = inGameShop.desc
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R2 in 'UnsetPending'
 
   inGameShop._comboList = (Array.new)()
-  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R2 in 'UnsetPending'
 
   inGameShop._listComboCount = 1
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R2 in 'UnsetPending'
 
   inGameShop._listComboIncludeDummyCount = 1
-  local count = (getIngameCashMall()):getCashProductStaticStatusListCount()
+  local offergroup = cashProduct:getOfferGroup()
+  local count = 0
+  if offergroup ~= 0 then
+    count = (getIngameCashMall()):getCashProductStaticStatusGroupListCount(offergroup)
+  end
   for ii = 0, count - 1 do
-    local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByIndex(ii)
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R7 in 'UnsetPending'
+    local cashProduct = (getIngameCashMall()):getCashProductStaticStatusGroupByIndex(offergroup, ii)
+    -- DECOMPILER ERROR at PC50: Confused about usage of register: R9 in 'UnsetPending'
 
     if cashProduct ~= nil and IngameCashShop_filterData(cashProduct) then
       (inGameShop._comboList)[inGameShop._listComboCount] = cashProduct:getNoRaw()
-      -- DECOMPILER ERROR at PC44: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC55: Confused about usage of register: R9 in 'UnsetPending'
 
       inGameShop._listComboCount = inGameShop._listComboCount + 1
-      -- DECOMPILER ERROR at PC57: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC68: Confused about usage of register: R9 in 'UnsetPending'
 
       if cashProduct:getDisplayFilterKey() == 1 or cashProduct:getDisplayFilterKey() == 11 then
         inGameShop._bigButtonCount = inGameShop._bigButtonCount + 1
       else
-        -- DECOMPILER ERROR at PC63: Confused about usage of register: R7 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC74: Confused about usage of register: R9 in 'UnsetPending'
 
         inGameShop._smallButtonCount = inGameShop._smallButtonCount + 1
       end
@@ -2458,7 +2497,7 @@ IngameCashShop_initDescData = function()
   local divide = 0
   local sizeX = 0
   local gapXpos = 0
-  -- DECOMPILER ERROR at PC85: Confused about usage of register: R11 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC96: Confused about usage of register: R13 in 'UnsetPending'
 
   if inGameShop._bigButtonCount ~= 0 then
     inGameShop._skipCount = inGameShop._bigButtonCount % 2
@@ -2485,11 +2524,11 @@ IngameCashShop_initDescData = function()
           (((inGameShop._subItemButton)[ii]).static):SetShow(true)
           ;
           (((inGameShop._subItemButton)[ii]).static):SetIgnore(false)
-          -- DECOMPILER ERROR at PC167: Confused about usage of register: R17 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC178: Confused about usage of register: R19 in 'UnsetPending'
 
           ;
           ((inGameShop._subItemButton)[ii]).productNo = (inGameShop._comboList)[ii]
-          -- DECOMPILER ERROR at PC177: Confused about usage of register: R17 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC188: Confused about usage of register: R19 in 'UnsetPending'
 
           if inGameShop._cashProductNoData == ((inGameShop._subItemButton)[ii]).productNo then
             inGameShop._cashProductIndex = ii
@@ -2525,7 +2564,7 @@ IngameCashShop_initDescData = function()
             (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetShow(true)
             ;
             (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetIgnore(false)
-            -- DECOMPILER ERROR at PC281: Confused about usage of register: R17 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC292: Confused about usage of register: R19 in 'UnsetPending'
 
             ;
             ((inGameShop._subItemButton)[ii + inGameShop._skipCount]).productNo = (inGameShop._comboList)[ii]
@@ -2543,19 +2582,19 @@ IngameCashShop_initDescData = function()
               (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetPosX(30 + (realCount - 1 - (positionSX)) * sizeX)
               ;
               (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetPosY(40 + (positionSY) * (configButton._subButton)._gapY)
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -2563,10 +2602,10 @@ IngameCashShop_initDescData = function()
       end
     end
   end
-  -- DECOMPILER ERROR at PC338: Confused about usage of register: R11 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC349: Confused about usage of register: R13 in 'UnsetPending'
 
   inGameShop._endSunPositionY = positionSY
-  -- DECOMPILER ERROR at PC344: Confused about usage of register: R11 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC355: Confused about usage of register: R13 in 'UnsetPending'
 
   if inGameShop._smallButtonCount == 0 then
     inGameShop._endSunPositionY = positionBY
@@ -2584,7 +2623,7 @@ IngameCashShop_initDescData = function()
       ;
       (((inGameShop._subItemButton)[ii]).static):SetPosY(40 + positionBY * (configButton._subButton)._gapY)
     end
-    -- DECOMPILER ERROR at PC404: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC415: Confused about usage of register: R14 in 'UnsetPending'
 
     inGameShop._listComboIncludeDummyCount = subButtonCount
   end
@@ -2603,7 +2642,7 @@ IngameCashShop_initDescData = function()
         ;
         (((inGameShop._subItemButton)[ii]).static):SetPosY(40 + (positionSY) * (configButton._subButton)._gapY)
       end
-      -- DECOMPILER ERROR at PC488: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC499: Confused about usage of register: R14 in 'UnsetPending'
 
       inGameShop._listComboIncludeDummyCount = subButtonCount + inGameShop._bigButtonCount + inGameShop._skipCount
     end
@@ -2612,10 +2651,10 @@ IngameCashShop_initDescData = function()
       if cashProduct == nil then
         return 
       end
-      -- DECOMPILER ERROR at PC499: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC510: Confused about usage of register: R14 in 'UnsetPending'
 
       inGameShop._endChoosePositionY = 0
-      -- DECOMPILER ERROR at PC501: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC512: Confused about usage of register: R14 in 'UnsetPending'
 
       inGameShop._chooseProductClickList = nil
       ;
@@ -2623,7 +2662,7 @@ IngameCashShop_initDescData = function()
       if cashProduct:isChooseCash() then
         local validChooseCashProduct = cashProduct:chooseCashCount()
         local nextLine = -1
-        -- DECOMPILER ERROR at PC517: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC528: Confused about usage of register: R16 in 'UnsetPending'
 
         inGameShop._chooseProductClickList = (Array.new)()
         for ii = 0, inGameShop._chooseProductListCount - 1 do
@@ -2695,21 +2734,21 @@ IngameCashShop_initDescData = function()
                 (radioBenner.staticEditCount):SetShow(false)
                 ;
                 (radioBenner.staticEditCount):SetText("0")
-                -- DECOMPILER ERROR at PC680: Confused about usage of register: R19 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC691: Confused about usage of register: R21 in 'UnsetPending'
 
                 ;
                 (inGameShop._chooseProductClickList)[ii] = 0
-                -- DECOMPILER ERROR at PC681: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC692: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC681: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC692: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC681: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC692: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
           end
         end
-        -- DECOMPILER ERROR at PC688: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC699: Confused about usage of register: R16 in 'UnsetPending'
 
         inGameShop._endChoosePositionY = inGameShop._endChoosePositionY + 59 * (nextLine + 1)
       else
@@ -2743,16 +2782,6 @@ IngameCashShop_filterData = function(cashProduct)
   -- function num : 0_57 , upvalues : inGameShop
   local self = inGameShop
   if not CheckCashProduct(cashProduct) then
-    return false
-  end
-  local currentCashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._openProductKeyRaw)
-  if currentCashProduct == nil then
-    return false
-  end
-  if cashProduct:getOfferGroup() == 0 then
-    return false
-  end
-  if cashProduct:getOfferGroup() ~= currentCashProduct:getOfferGroup() then
     return false
   end
   return true
@@ -2834,7 +2863,7 @@ InGameShop_ShowSubItemToolTip = function(isShow, index)
   end
 end
 
-IngameCashShop_SelectedItem = function(index)
+IngameCashShop_SelectedItem = function(index, bValue)
   -- function num : 0_64 , upvalues : inGameShop
   local self = inGameShop
   local slot = (self._slots)[index]
@@ -2858,10 +2887,10 @@ IngameCashShop_SelectedItem = function(index)
   end
   audioPostEvent_SystemUi(1, 0)
   FGlobal_SpecialMoveSettingCheck()
-  IngameCashShop_SelectedItemXXX(slot.productNoRaw, false)
+  IngameCashShop_SelectedItemXXX(slot.productNoRaw, nil, bValue)
 end
 
-IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
+IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet, bValue)
   -- function num : 0_65 , upvalues : inGameShop, UI_CCC, tabIndexList
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNoRaw)
@@ -2885,7 +2914,7 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
     self._openProductKeyRaw = productNoRaw
     ;
     (self._goodDescBG):SetShow(true)
-    IngameCashShop_initDescData()
+    IngameCashShop_initDescData(cashProduct)
     if isForcePositionSet then
       local pos = 0
       for ii = 0, self._listCount - 1 do
@@ -2933,7 +2962,7 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
             do
               do
                 pos = pos + ((self._config)._slot)._gapY
-                -- DECOMPILER ERROR at PC134: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC135: LeaveBlock: unexpected jumping out DO_STMT
 
               end
             end
@@ -2941,7 +2970,7 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
           ;
           (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), 1)
           IngameCashShop_DescUpdate()
-          -- DECOMPILER ERROR at PC162: Unhandled construct in 'MakeBoolean' P1
+          -- DECOMPILER ERROR at PC163: Unhandled construct in 'MakeBoolean' P1
 
           if UI_CCC.eCashProductCategory_Costumes == (tabIndexList[self._currentTab])[5] and (Return_CashShopController_FirstIgnore() == false or inGameShop._listComboCount == 1) then
             FGlobal_CashShop_SetEquip_Update(productNoRaw)
@@ -2949,7 +2978,8 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
           end
           FGlobal_CashShop_SetEquip_Update(productNoRaw)
           FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
-          PaGlobal_RecommendEngine_CashVeiw(productNoRaw)
+          PaGlobal_RecommendEngine_CashVeiw(productNoRaw, bValue)
+          self._ViewingRecommend = bValue
           self:update()
         end
       end
@@ -2968,6 +2998,7 @@ InGameShop_subItemEvent = function(index)
     inGameShop._openProductKeyRaw = ((inGameShop._subItemButton)[index]).productNo
     IngameCashShop_DescUpdate()
     FGlobal_CashShop_SetEquip_Update(((inGameShop._subItemButton)[index]).productNo)
+    PaGlobal_RecommendEngine_CashVeiw(((inGameShop._subItemButton)[index]).productNo, self._ViewingRecommend)
     self:update()
   end
 end
@@ -3165,6 +3196,7 @@ IngameCashShop_DescSelectedCartItem = function(productKeyRaw)
     do
       Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CARTITEM_ACK", "getName", cashProduct:getName()))
       FGlobal_PushCart_IngameCashShop_NewCart(tempSaveProductKeyRaw, 1)
+      ToClient_RequestRecommendList(productKeyRaw)
     end
   end
 end
@@ -3254,6 +3286,7 @@ end
 IngameCashShop_DescSelectedEcartItem = function(productNoRaw)
   -- function num : 0_76
   IngameCashShopEventCart_Update(productNoRaw)
+  ToClient_RequestRecommendList(productNoRaw)
 end
 
 IngameCashShop_BuyItem = function(index)
@@ -3299,6 +3332,7 @@ IngameCashShop_BuyItem = function(index)
     elseif isCouponOpen == true then
       IngameCashShopCoupon_Open(0)
     end
+    ToClient_RequestRecommendList(productNoRaw)
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
@@ -3345,6 +3379,7 @@ IngameCashShop_DescSelectedBuyItem = function(productNoRaw)
     elseif isCouponOpen == true then
       IngameCashShopCoupon_Open(0, productNoRaw)
     end
+    ToClient_RequestRecommendList(productNoRaw)
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
@@ -3632,8 +3667,15 @@ do
     end
   end
   InGameCashshopDescUpdate(deltaTime)
-  if ToClient_isCompleteCash ~= nil and ToClient_isCompleteCash() == true then
-    PaGlobal_Recommend_PopUp:Open()
+  if PaGlobal_Recommend_PopUp._isRequestShow == true then
+    if Panel_Window_RecommandGoods_PopUp:GetShow() then
+      _PA_LOG("�\128민혁", "이게뭐야")
+      -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
+
+      PaGlobal_Recommend_PopUp._isRequestShow = false
+    else
+      PaGlobal_Recommend_PopUp:Open()
+    end
   end
 end
 
@@ -3805,7 +3847,7 @@ end
   ;
   (self._static_Construction):ComputePos()
   ;
-  (self._static_Construction):SetShow(true)
+  (self._static_Construction):SetShow(false)
   Panel_IngameCashShop:SetShow(true)
   InventoryWindow_Close()
   Panel_Tooltip_Item_hideTooltip()
@@ -3910,7 +3952,8 @@ end
   InGameShop_Promotion_Open()
   FGlobal_SpecialMoveSettingCheck()
   FGlobal_BuffTooltipOff()
-  PaGlobal_RecommendGoods:Open()
+  self._ViewingRecommend = false
+  PaGlobal_RecommendGoods:Close()
   PaGlobal_Recommend_PopUp:Close()
 end
 
@@ -3956,6 +3999,9 @@ end
   if Panel_IngameCashShop_EventCart:GetShow() then
     IngameCashShopEventCart_Close()
   end
+  if Panel_Window_RecommandGoods_PopUp:GetShow() then
+    Panel_Window_RecommandGoods_PopUp:Close()
+  end
   if Panel_ChangeWeapon:GetShow() then
     WeaponChange_Close()
   end
@@ -3992,7 +4038,7 @@ end
   ((inGameShop._myCartTab).static):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_UPDATECART", "cartListCount", cartListCount))
 end
 
-  ToClient_RequestShowProduct = function(productNo, price)
+  ToClient_RequestShowProduct = function(productNo, price, bValue)
   -- function num : 0_98 , upvalues : inGameShop, tabIndexList
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNo)
@@ -4028,10 +4074,10 @@ end
     if (self._tabs)[tabIndex] ~= nil then
       (((self._tabs)[tabIndex]).static):SetCheck(true)
     end
-    -- DECOMPILER ERROR at PC80: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC80: Confused about usage of register: R9 in 'UnsetPending'
 
     inGameShop._cashProductNoData = productNo
-    IngameCashShop_SelectedItemXXX(productNo, true)
+    IngameCashShop_SelectedItemXXX(productNo, true, true)
     ;
     (((inGameShop._subItemButton)[1]).static):SetCheck(false)
     ;
@@ -4129,6 +4175,13 @@ end
   inGameShop:registMessageHandler()
   inGameShop:initTabPos()
   renderMode:setClosefunctor(renderMode, InGameShop_Close)
+  FromClient_ShowRecommendProductByComplete = function()
+  -- function num : 0_105
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+
+  PaGlobal_Recommend_PopUp._isRequestShow = true
+end
+
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 

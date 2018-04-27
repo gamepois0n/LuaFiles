@@ -342,15 +342,22 @@ HandleClicked_ChangeCompetitionOption = function()
   end
 end
 
-FromClient_IsMyTeamResult = function(isWin)
+FromClient_IsMyTeamResult = function(matchResult)
   -- function num : 0_27
   local msg = {main = "", sub = "", addMsg = ""}
-  if isWin == true then
-    msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_SUB"), addMsg = ""}
-    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 45, false)
-  else
-    msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_LOSE_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_SUB"), addMsg = ""}
+  if __eCompetitionResult_Draw == matchResult then
+    msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_DRAW_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_SUB"), addMsg = ""}
     Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 46, false)
+  else
+    if __eCompetitionResult_Win == matchResult then
+      msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_SUB"), addMsg = ""}
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 45, false)
+    else
+      if __eCompetitionResult_Loose == matchResult then
+        msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_LOSE_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_WIN_SUB"), addMsg = ""}
+        Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 46, false)
+      end
+    end
   end
 end
 

@@ -203,6 +203,9 @@ GuildRecruitment_SelectPlayer = function(idx, uiIdx)
   local parentSlot = ((self.slotPool)[uiIdx]).bg
   self.selectedPlayer = idx
   local unjoinPlayerWrapper = ToClient_GetGuildUnjoinedPlayerAt(idx)
+  if unjoinPlayerWrapper == nil then
+    return 
+  end
   local playerNickName = unjoinPlayerWrapper:getUserNickName()
   local playerName = unjoinPlayerWrapper:getCharacterName()
   FGlobal_ChattingInput_ShowWhisper(playerName)
@@ -215,6 +218,9 @@ GuildRecruit_Tooltip = function(index, count)
     return 
   end
   local unjoinPlayerList = ToClient_GetGuildUnjoinedPlayerAt(index)
+  if unjoinPlayerList == nil then
+    return 
+  end
   local name = unjoinPlayerList:getCharacterName() .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_PLAYERINTRO")
   local desc = unjoinPlayerList:getUserIntroduction()
   local uiControl = ((GuildRecruitment.slotPool)[count]).bg

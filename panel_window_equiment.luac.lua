@@ -34,7 +34,7 @@ equipSlotId = {[6] = "Check_Slot_Helm"}
 _checkFlag = {[14] = 1, [15] = 2, [16] = 4, [17] = 8, [18] = 32, [19] = 64, [20] = 16, [22] = 256, [23] = 512, [21] = 128, [3] = 65536, [4] = 131072, [5] = 262144, [6] = 524288, [0] = 2097152, [1] = 4194304, [30] = 1024}
 , 
 slotNoIdToString = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_MAINHAND"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_SUBHAND"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_GATHERTOOLS"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_UPPERBODY"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_GLOVES"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_BOOTS"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_HELM"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_NECKLACE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [11] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [12] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_WAISTBAND"), [13] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_LANTERN"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BODY"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HANDS"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BOOTS"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HELM"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MAIN"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_SUB"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_UNDERWEAR"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_EYES"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MOUSE"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HEAD"), [27] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_alchemyStone"), [29] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_awakenWeapon"), [30] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_avatarAwakenWeapon"), [31] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_QUESTBOOK")}
-, slots = (Array.new)(), slotBGs = (Array.new)(), avataSlots = (Array.new)(), defaultSlots = (Array.new)(), staticTitle = (UI.getChildControl)(Panel_Equipment, "Static_Text_Title"), buttonClose = (UI.getChildControl)(Panel_Equipment, "Button_Close"), enchantText = (UI.getChildControl)(Panel_Equipment, "Static_Text_Slot_Enchant_value"), attackText = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack"), attackValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack_Value"), defenceText = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence"), defenceValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence_Value"), awakenText = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack"), awakenValue = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack_Value"), effectBG = (UI.getChildControl)(Panel_Equipment, "Static_Effect"), checkCloak = (UI.getChildControl)(Panel_Equipment, "CheckButton_Cloak_Invisual"), checkHelm = (UI.getChildControl)(Panel_Equipment, "CheckButton_Helm_Invisual"), checkHelmOpen = (UI.getChildControl)(Panel_Equipment, "CheckButton_HelmOpen"), btn_PetList = (UI.getChildControl)(Panel_Equipment, "Button_PetInfo"), checkUnderwear = (UI.getChildControl)(Panel_Equipment, "CheckButton_Underwear_Invisual"), checkCamouflage = (UI.getChildControl)(Panel_Equipment, "CheckButton_ShowNameWhenCamouflage"), checkPopUp = (UI.getChildControl)(Panel_Equipment, "CheckButton_PopUp"), iconSetItemTooltip = (UI.getChildControl)(Panel_Equipment, "StaticText_SetEffect"), btn_ServantInventory = (UI.getChildControl)(Panel_Equipment, "Button_ServantInventory"), 
+, slots = (Array.new)(), slotBGs = (Array.new)(), avataSlots = (Array.new)(), defaultSlots = (Array.new)(), staticTitle = (UI.getChildControl)(Panel_Equipment, "Static_Text_Title"), buttonClose = (UI.getChildControl)(Panel_Equipment, "Button_Close"), enchantText = (UI.getChildControl)(Panel_Equipment, "Static_Text_Slot_Enchant_value"), attackText = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack"), attackValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack_Value"), defenceText = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence"), defenceValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence_Value"), awakenText = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack"), awakenValue = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack_Value"), battlePointBG = (UI.getChildControl)(Panel_Equipment, "Static_BattlePointBg"), effectBG = (UI.getChildControl)(Panel_Equipment, "Static_Effect"), checkCloak = (UI.getChildControl)(Panel_Equipment, "CheckButton_Cloak_Invisual"), checkHelm = (UI.getChildControl)(Panel_Equipment, "CheckButton_Helm_Invisual"), checkHelmOpen = (UI.getChildControl)(Panel_Equipment, "CheckButton_HelmOpen"), btn_PetList = (UI.getChildControl)(Panel_Equipment, "Button_PetInfo"), checkUnderwear = (UI.getChildControl)(Panel_Equipment, "CheckButton_Underwear_Invisual"), checkCamouflage = (UI.getChildControl)(Panel_Equipment, "CheckButton_ShowNameWhenCamouflage"), checkPopUp = (UI.getChildControl)(Panel_Equipment, "CheckButton_PopUp"), iconSetItemTooltip = (UI.getChildControl)(Panel_Equipment, "StaticText_SetEffect"), btn_ServantInventory = (UI.getChildControl)(Panel_Equipment, "Button_ServantInventory"), 
 extendedSlotInfoArray = {}
 , checkExtendedSlot = 0, checkBox_AlchemyStone = (UI.getChildControl)(Panel_Equipment, "CheckBox_AlchemyStone"), slotRingIndex = 0, slotEaringIndex = 0}
 local alchemyStoneQuickKey = (UI.getChildControl)(Panel_Equipment, "Static_Slot_AlchemyStone_Key")
@@ -306,6 +306,11 @@ equip.initControl = function(self)
   (self.iconSetItemTooltip):SetShow(initSucceed)
   ;
   (self.iconSetItemTooltip):SetIgnore(not initSucceed)
+  initSucceed = PaGlobal_Tooltip_BattlePoint:initWithIcon(self.battlePointText)
+  ;
+  (self.battlePointText):SetShow(initSucceed)
+  ;
+  (self.battlePointText):SetIgnore(not initSucceed)
   Equipment_onScreenResize()
 end
 
@@ -340,6 +345,7 @@ EquipmentWindow_Close = function()
 
   equip.slotEaringIndex = 0
   PaGlobal_EquipmentTooltip:show(false)
+  PaGlobal_Tooltip_BattlePoint:show(false)
 end
 
 EquipmentWindow_ShowAni = function()
@@ -790,15 +796,22 @@ Equipment_updateSlotData = function()
     end
     interaction_Forceed()
     ToClient_updateAttackStat()
-    ;
-    (self.attackValue):SetText(tostring(ToClient_getOffence()))
-    ;
-    (self.defenceValue):SetText(tostring(ToClient_getDefence()))
-    ;
-    (self.awakenValue):SetText(tostring(ToClient_getAwakenOffence()))
+    local selfPlayer = getSelfPlayer()
+    if selfPlayer == nil then
+      return 
+    end
     _offenceValue = ToClient_getOffence()
     _awakenOffecnValue = ToClient_getAwakenOffence()
     _defenceValue = ToClient_getDefence()
+    local battlePointValue = (math.floor)((selfPlayer:get()):getTotalStatValue())
+    ;
+    (self.attackValue):SetText(tostring(_offenceValue))
+    ;
+    (self.awakenValue):SetText(tostring(_awakenOffecnValue))
+    ;
+    (self.defenceValue):SetText(tostring(_defenceValue))
+    ;
+    (self.BattlePointValue):SetText(tostring(battlePointValue))
     if Panel_Global_Manual:GetShow() then
       setFishingResourcePool_text()
     end
@@ -1282,6 +1295,12 @@ end
 
 FGlobal_Equipment_Init = function()
   -- function num : 0_42 , upvalues : equip
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
+
+  equip.battlePointText = (UI.getChildControl)(equip.battlePointBG, "StaticText_BattlePointIcon")
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
+
+  equip.BattlePointValue = (UI.getChildControl)(equip.battlePointBG, "StaticText_BattlePointValue")
   equip:initControl()
   equip:registEventHandler()
   equip:registMessageHandler()

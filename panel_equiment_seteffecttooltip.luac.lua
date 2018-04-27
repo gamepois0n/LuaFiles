@@ -152,6 +152,7 @@ PaGlobal_EquipmentTooltip.show = function(self, showFlag)
   end
   ;
   (self._panel):SetShow(showFlag, showFlag)
+  PaGlobal_Tooltip_BattlePoint:show(false)
   if showFlag then
     self._isDetail = false
     self:updateInfo()

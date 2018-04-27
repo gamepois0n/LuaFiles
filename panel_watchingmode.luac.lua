@@ -226,8 +226,15 @@ end
 
 isDeadInWatchingMode = function()
   -- function num : 0_4 , upvalues : resurrectionTime
-  do return (resurrectionTime ~= nil and Panel_WatchingMode:GetShow()) end
-  -- DECOMPILER ERROR: 2 unprocessed JMP targets
+  local selfPlayer = getSelfPlayer()
+  do
+    local isDead = false
+    if selfPlayer ~= nil then
+      isDead = selfPlayer:isDead()
+    end
+    do return (resurrectionTime ~= nil and Panel_WatchingMode:GetShow()) or not Panel_GuildBattleWatchingMode:GetShow() or isDead == true end
+    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+  end
 end
 
 FromClient_WatchModeCloseByKingOrLordTentDestroy = function()

@@ -161,7 +161,7 @@ PaGlobal_Enchant.initialize = function(self)
     end
   end
   ;
-  (self._uiCheckBtn_CronEnchnt):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_TITLE"))
+  (self._uiCheckBtn_CronEnchnt):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_TITLE_CAPHRAS"))
   ;
   (self._uiCheckBtn_CronEnchnt):SetShow(self._isCronEnchantOpen)
   ;
@@ -298,7 +298,7 @@ end
 PaGlobal_Enchant.enchantTooltipShow = function(self, isShow)
   -- function num : 0_6
   if isShow == true then
-    local name = PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_TITLE")
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_TITLE_CAPHRAS")
     local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_DESC")
     TooltipSimple_Show(self._uiCheckBtn_CronEnchnt, name, desc)
   else
@@ -664,7 +664,7 @@ PaGlobal_Enchant.handleMOnoutSkipEnchantTooltip = function(self, isShow)
   -- function num : 0_26
   local name, desc, control = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_NAME")
-  desc = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_DESC")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_DESC_CAPHRAS")
   control = self._uiSkipEnchant
   if isShow == true then
     registTooltipControl(control, Panel_Tooltip_SimpleText)

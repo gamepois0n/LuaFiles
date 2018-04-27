@@ -131,24 +131,29 @@ FGlobal_NpcGift_PopupMessage = function()
   (MessageBox.showMessageBox)(messageBoxData, "middle")
 end
 
+FGlobal_NpcGift_Propose = function()
+  -- function num : 0_7
+  ToClient_proposeToNpc()
+end
+
 FGlobal_NpcGift_Confirm = function()
-  -- function num : 0_7 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_8 , upvalues : PaGlobal_NpcGift
   local self = PaGlobal_NpcGift
   ToClient_giveNpcGift(self._inventoryType, self._slotNo, self._count)
 end
 
 FGlobal_NpcGift_Open = function()
-  -- function num : 0_8 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_9 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:open()
 end
 
 FGlobal_NpcGift_Close = function()
-  -- function num : 0_9 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_10 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:close()
 end
 
 FGlobal_NpcGift_OnPresentTooltip = function()
-  -- function num : 0_10 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_11 , upvalues : PaGlobal_NpcGift
   local self = PaGlobal_NpcGift
   local itemWrapper = getInventoryItemByType(self._inventoryType, self._slotNo)
   if itemWrapper == nil then
@@ -158,18 +163,18 @@ FGlobal_NpcGift_OnPresentTooltip = function()
 end
 
 FGlobal_NpcGift_OnTooltip = function(idx)
-  -- function num : 0_11 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_12 , upvalues : PaGlobal_NpcGift
   local needSS = ToClient_getInterestNpcGift(idx)
   Panel_Tooltip_Item_Show(needSS, (((PaGlobal_NpcGift._ui)._slot_InterestItemList)[idx]).icon, true, false)
 end
 
 FGlobal_NpcGift_OutTooltip = function()
-  -- function num : 0_12
+  -- function num : 0_13
   Panel_Tooltip_Item_hideTooltip()
 end
 
 FGlobal_Enchant_FileterForNpcGift = function(slotNo, notUse_itemWrappers, whereType)
-  -- function num : 0_13
+  -- function num : 0_14
   do
     local itemWrapper = getInventoryItemByType(whereType, slotNo)
     if itemWrapper == nil then
@@ -184,13 +189,13 @@ FGlobal_Enchant_FileterForNpcGift = function(slotNo, notUse_itemWrappers, whereT
 end
 
 FromClient_luaLoadComplete_NpcGift = function()
-  -- function num : 0_14 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_15 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:init()
   PaGlobal_NpcGift:registEventHandler()
 end
 
 FromClient_NpcGiftSend = function()
-  -- function num : 0_15 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_16 , upvalues : PaGlobal_NpcGift
   local self = PaGlobal_NpcGift
   self._count = 0
   self._inventoryType = 0
@@ -203,11 +208,20 @@ FromClient_NpcGiftSend = function()
   ((self._ui)._slot_PresentItem):clearItem()
 end
 
+FromClient_SuccessProposeToNpc = function(npcName)
+  -- function num : 0_17 , upvalues : PaGlobal_NpcGift
+  PaGlobal_NpcGift:close()
+  local message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SUCCESS_PROPOSETONPC", "name", npcName)
+  Proc_ShowMessage_Ack(message)
+end
+
 PaGlobal_NpcGift.registEventHandler = function(self)
-  -- function num : 0_16
+  -- function num : 0_18
   local ui = self._ui
   ;
   (ui._presentBtn):addInputEvent("Mouse_LUp", "FGlobal_NpcGift_PopupMessage()")
+  ;
+  (ui._confessionBtn):addInputEvent("Mouse_LUp", "FGlobal_NpcGift_Propose()")
   ;
   (ui._closeBtn):addInputEvent("Mouse_LUp", "FGlobal_NpcGift_Close()")
   ;
@@ -223,4 +237,5 @@ end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_NpcGift")
 registerEvent("FromClient_VaryIntimacy_Dialog", "FromClient_NpcGiftSend")
+registerEvent("FromClient_SuccessProposeToNpc", "FromClient_SuccessProposeToNpc")
 

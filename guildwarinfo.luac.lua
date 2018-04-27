@@ -464,52 +464,59 @@ FromClient_WarInfoContent_Set = function(territoryKey)
           if guildWrapper == nil then
             return 
           end
+          local guildAllianceName = guildWrapper:getAllianceName()
           local index = 1
-          -- DECOMPILER ERROR at PC1030: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1032: Confused about usage of register: R7 in 'UnsetPending'
 
           ;
           ((warInfoContent[territoryKey])[index])._guildNo = guildWrapper:getGuildNo_s64()
-          -- DECOMPILER ERROR at PC1036: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1040: Confused about usage of register: R7 in 'UnsetPending'
 
-          ;
-          ((warInfoContent[territoryKey])[index])._guildName = guildWrapper:getName()
-          -- DECOMPILER ERROR at PC1042: Confused about usage of register: R6 in 'UnsetPending'
+          if guildAllianceName == "" then
+            ((warInfoContent[territoryKey])[index])._guildName = guildWrapper:getName()
+          else
+            -- DECOMPILER ERROR at PC1045: Confused about usage of register: R7 in 'UnsetPending'
+
+            ;
+            ((warInfoContent[territoryKey])[index])._guildName = guildAllianceName
+          end
+          -- DECOMPILER ERROR at PC1051: Confused about usage of register: R7 in 'UnsetPending'
 
           ;
           ((warInfoContent[territoryKey])[index])._guildMaster = guildWrapper:getGuildMasterName()
           local currentGuildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildWrapper:getGuildNo_s64())
-          -- DECOMPILER ERROR at PC1057: Confused about usage of register: R7 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1066: Confused about usage of register: R8 in 'UnsetPending'
 
           if isGameTypeKorea() then
             ((warInfoContent[territoryKey])[index])._destroySiegeCountValue = currentGuildWrapper:getTotalSiegeCount(0)
-            -- DECOMPILER ERROR at PC1064: Confused about usage of register: R7 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC1073: Confused about usage of register: R8 in 'UnsetPending'
 
             ;
             ((warInfoContent[territoryKey])[index])._killCountValue = currentGuildWrapper:getTotalSiegeCount(1)
-            -- DECOMPILER ERROR at PC1071: Confused about usage of register: R7 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC1080: Confused about usage of register: R8 in 'UnsetPending'
 
             ;
             ((warInfoContent[territoryKey])[index])._deathCountValue = currentGuildWrapper:getTotalSiegeCount(2)
-            -- DECOMPILER ERROR at PC1078: Confused about usage of register: R7 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC1087: Confused about usage of register: R8 in 'UnsetPending'
 
             ;
             ((warInfoContent[territoryKey])[index])._cannonCountValue = currentGuildWrapper:getTotalSiegeCount(3)
           else
             for gmIndex = 0, currentGuildWrapper:getMemberCount() - 1 do
               local guildMemberData = currentGuildWrapper:getMember(gmIndex)
-              -- DECOMPILER ERROR at PC1105: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC1114: Confused about usage of register: R13 in 'UnsetPending'
 
               ;
               ((warInfoContent[territoryKey])[index])._destroySiegeCountValue = ((warInfoContent[territoryKey])[index])._destroySiegeCountValue + guildMemberData:commandPostCount() + guildMemberData:towerCount() + guildMemberData:gateCount()
-              -- DECOMPILER ERROR at PC1122: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC1131: Confused about usage of register: R13 in 'UnsetPending'
 
               ;
               ((warInfoContent[territoryKey])[index])._killCountValue = ((warInfoContent[territoryKey])[index])._killCountValue + guildMemberData:guildMasterCount() + guildMemberData:squadLeaderCount() + guildMemberData:squadMemberCount()
-              -- DECOMPILER ERROR at PC1133: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC1142: Confused about usage of register: R13 in 'UnsetPending'
 
               ;
               ((warInfoContent[territoryKey])[index])._deathCountValue = ((warInfoContent[territoryKey])[index])._deathCountValue + guildMemberData:deathCount()
-              -- DECOMPILER ERROR at PC1144: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC1153: Confused about usage of register: R13 in 'UnsetPending'
 
               ;
               ((warInfoContent[territoryKey])[index])._cannonCountValue = ((warInfoContent[territoryKey])[index])._cannonCountValue + guildMemberData:summonedCount()
@@ -518,7 +525,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
           do
             ;
             (((warInfoContent[territoryKey])[index]).guildMaster):SetText(((warInfoContent[territoryKey])[index])._guildMaster)
-            -- DECOMPILER ERROR at PC1161: Confused about usage of register: R7 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC1170: Confused about usage of register: R8 in 'UnsetPending'
 
             ;
             ((warInfoContent[territoryKey])[index])._guildMp = currentGuildWrapper:getGuildMp()
@@ -539,7 +546,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                 ;
                 (((warInfoContent[territoryKey])[index]).guildName):SetText(((warInfoContent[territoryKey])[index])._guildName)
                 occupyGuildWrapper = ToClient_GetOccupyGuildWrapper(territoryKey)
-                -- DECOMPILER ERROR at PC1272: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC1281: Unhandled construct in 'MakeBoolean' P1
 
                 if occupyGuildWrapper ~= nil and ((warInfoContent[territoryKey])[index])._guildNo == occupyGuildWrapper:getGuildNo_s64() then
                   (((warInfoContent[territoryKey])[index]).lordCrownIcon):SetShow(true)
@@ -571,7 +578,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                   ;
                   (((warInfoContent[territoryKey])[index]).cannonCountValue):SetText(((warInfoContent[territoryKey])[index])._cannonCountValue)
                   local currentGuildMp = currentGuildWrapper:getGuildMp()
-                  -- DECOMPILER ERROR at PC1414: Confused about usage of register: R9 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC1423: Confused about usage of register: R10 in 'UnsetPending'
 
                   if ((warInfoContent[territoryKey])[index])._guildMp ~= currentGuildMp then
                     ((warInfoContent[territoryKey])[index])._guildMp = currentGuildMp
@@ -638,7 +645,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                           local index = 0
                           local contentBg = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, self.frame_content, "Static_WarInfoContent_" .. index)
                           CopyBaseProperty(self.contentBg, contentBg)
-                          -- DECOMPILER ERROR at PC1684: Confused about usage of register: R8 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC1693: Confused about usage of register: R8 in 'UnsetPending'
 
                           ;
                           ((warInfoContent[territoryKey])[index]).contentBg = contentBg
@@ -648,7 +655,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                           (((warInfoContent[territoryKey])[index]).contentBg):SetShow(true)
                           local setFree = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_setFree_" .. index)
                           CopyBaseProperty(self.setFree, setFree)
-                          -- DECOMPILER ERROR at PC1718: Confused about usage of register: R9 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC1727: Confused about usage of register: R9 in 'UnsetPending'
 
                           ;
                           ((warInfoContent[territoryKey])[index]).setFree = setFree
@@ -659,7 +666,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                           end
                           local setFreeDesc = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_setFreeDesc_" .. index)
                           CopyBaseProperty(self.setFreeDesc, setFreeDesc)
-                          -- DECOMPILER ERROR at PC1758: Confused about usage of register: R10 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC1767: Confused about usage of register: R10 in 'UnsetPending'
 
                           ;
                           ((warInfoContent[territoryKey])[index]).setFreeDesc = setFreeDesc
@@ -673,8 +680,12 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                           else
                             ;
                             (((warInfoContent[territoryKey])[index]).setFree):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREE_END", "selectTerritoy", territoryName[territoryKey]))
-                            ;
-                            (((warInfoContent[territoryKey])[index]).setFreeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getName()))
+                            if guildWrapper:getAllianceName() == "" then
+                              (((warInfoContent[territoryKey])[index]).setFreeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getName()))
+                            else
+                              ;
+                              (((warInfoContent[territoryKey])[index]).setFreeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_ALLIANCE_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getAllianceName()))
+                            end
                           end
                           startIndex = 1
                           lastIndex = battleGuildCount[territoryKey] + 1
@@ -686,7 +697,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                           for index = startIndex, lastIndex - 1 do
                             local contentBg = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, self.frame_content, "Static_WarInfoContent_" .. index)
                             CopyBaseProperty(self.contentBg, contentBg)
-                            -- DECOMPILER ERROR at PC1858: Confused about usage of register: R11 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC1886: Confused about usage of register: R11 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).contentBg = contentBg
@@ -699,7 +710,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             end
                             local guildMarkBg = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_GuildMarkBg_" .. index)
                             CopyBaseProperty(self.guildMarkBg, guildMarkBg)
-                            -- DECOMPILER ERROR at PC1911: Confused about usage of register: R12 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC1939: Confused about usage of register: R12 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).guildMarkBg = guildMarkBg
@@ -707,7 +718,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).guildMarkBg):SetShow(true)
                             local guildMark = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_GuildMark_" .. index)
                             CopyBaseProperty(self.guildMark, guildMark)
-                            -- DECOMPILER ERROR at PC1938: Confused about usage of register: R13 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC1966: Confused about usage of register: R13 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).guildMark = guildMark
@@ -715,7 +726,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).guildMark):SetShow(true)
                             local guildName = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_GuildName_" .. index)
                             CopyBaseProperty(self.guildName, guildName)
-                            -- DECOMPILER ERROR at PC1965: Confused about usage of register: R14 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC1993: Confused about usage of register: R14 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).guildName = guildName
@@ -723,7 +734,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).guildName):SetShow(true)
                             local lordCrownIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_LordIcon")
                             CopyBaseProperty(self.lordCrownIcon, lordCrownIcon)
-                            -- DECOMPILER ERROR at PC1990: Confused about usage of register: R15 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2018: Confused about usage of register: R15 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).lordCrownIcon = lordCrownIcon
@@ -731,7 +742,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).lordCrownIcon):SetShow(false)
                             local guildMaster = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_GuildMaster_" .. index)
                             CopyBaseProperty(self.guildMaster, guildMaster)
-                            -- DECOMPILER ERROR at PC2017: Confused about usage of register: R16 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2045: Confused about usage of register: R16 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).guildMaster = guildMaster
@@ -739,7 +750,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).guildMaster):SetShow(true)
                             local guildWarIconBg = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_GuildWarIconBg_" .. index)
                             CopyBaseProperty(self.guildWarIconBg, guildWarIconBg)
-                            -- DECOMPILER ERROR at PC2044: Confused about usage of register: R17 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2072: Confused about usage of register: R17 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).guildWarIconBg = guildWarIconBg
@@ -747,7 +758,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).guildWarIconBg):SetShow(true)
                             local siegeEnduranceIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_SiegeEnduranceIcon_" .. index)
                             CopyBaseProperty(self.siegeEnduranceIcon, siegeEnduranceIcon)
-                            -- DECOMPILER ERROR at PC2071: Confused about usage of register: R18 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2099: Confused about usage of register: R18 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).siegeEnduranceIcon = siegeEnduranceIcon
@@ -755,7 +766,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).siegeEnduranceIcon):SetShow(true)
                             local siegeEnduranceValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_SiegeEnduranceValue_" .. index)
                             CopyBaseProperty(self.siegeEnduranceValue, siegeEnduranceValue)
-                            -- DECOMPILER ERROR at PC2098: Confused about usage of register: R19 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2126: Confused about usage of register: R19 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).siegeEnduranceValue = siegeEnduranceValue
@@ -763,7 +774,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).siegeEnduranceValue):SetShow(true)
                             local destroySiegeCountIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_DestroySiegeCountIcon_" .. index)
                             CopyBaseProperty(self.destroySiegeCountIcon, destroySiegeCountIcon)
-                            -- DECOMPILER ERROR at PC2125: Confused about usage of register: R20 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2153: Confused about usage of register: R20 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).destroySiegeCountIcon = destroySiegeCountIcon
@@ -771,7 +782,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).destroySiegeCountIcon):SetShow(true)
                             local destroySiegeCountValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_DestroySiegeCountValue_" .. index)
                             CopyBaseProperty(self.destroySiegeCountValue, destroySiegeCountValue)
-                            -- DECOMPILER ERROR at PC2152: Confused about usage of register: R21 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2180: Confused about usage of register: R21 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).destroySiegeCountValue = destroySiegeCountValue
@@ -779,7 +790,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).destroySiegeCountValue):SetShow(true)
                             local killCountIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_KillCountIcon_" .. index)
                             CopyBaseProperty(self.killCountIcon, killCountIcon)
-                            -- DECOMPILER ERROR at PC2179: Confused about usage of register: R22 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2207: Confused about usage of register: R22 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).killCountIcon = killCountIcon
@@ -787,7 +798,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).killCountIcon):SetShow(true)
                             local killCountValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_KillCountValue_" .. index)
                             CopyBaseProperty(self.killCountValue, killCountValue)
-                            -- DECOMPILER ERROR at PC2206: Confused about usage of register: R23 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2234: Confused about usage of register: R23 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).killCountValue = killCountValue
@@ -795,7 +806,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).killCountValue):SetShow(true)
                             local deathCountIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_DeathCountIcon_" .. index)
                             CopyBaseProperty(self.deathCountIcon, deathCountIcon)
-                            -- DECOMPILER ERROR at PC2233: Confused about usage of register: R24 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2261: Confused about usage of register: R24 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).deathCountIcon = deathCountIcon
@@ -803,7 +814,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).deathCountIcon):SetShow(true)
                             local deathCountValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_DeathCountValue_" .. index)
                             CopyBaseProperty(self.deathCountValue, deathCountValue)
-                            -- DECOMPILER ERROR at PC2260: Confused about usage of register: R25 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2288: Confused about usage of register: R25 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).deathCountValue = deathCountValue
@@ -811,7 +822,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).deathCountValue):SetShow(true)
                             local cannonCountIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_CannonCountIcon_" .. index)
                             CopyBaseProperty(self.cannonCountIcon, cannonCountIcon)
-                            -- DECOMPILER ERROR at PC2287: Confused about usage of register: R26 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2315: Confused about usage of register: R26 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).cannonCountIcon = cannonCountIcon
@@ -819,7 +830,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).cannonCountIcon):SetShow(true)
                             local cannonCountValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_CannonCountValue_" .. index)
                             CopyBaseProperty(self.cannonCountValue, cannonCountValue)
-                            -- DECOMPILER ERROR at PC2314: Confused about usage of register: R27 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2342: Confused about usage of register: R27 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).cannonCountValue = cannonCountValue
@@ -827,7 +838,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).cannonCountValue):SetShow(true)
                             local moraleIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_MoraleIcon_" .. index)
                             CopyBaseProperty(self.moraleIcon, moraleIcon)
-                            -- DECOMPILER ERROR at PC2341: Confused about usage of register: R28 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2369: Confused about usage of register: R28 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).moraleIcon = moraleIcon
@@ -835,7 +846,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).moraleIcon):SetShow(false)
                             local moraleProgressBg = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, ((warInfoContent[territoryKey])[index]).contentBg, "Static_MoraleProgressBg_" .. index)
                             CopyBaseProperty(self.moraleProgressBg, moraleProgressBg)
-                            -- DECOMPILER ERROR at PC2368: Confused about usage of register: R29 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2396: Confused about usage of register: R29 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).moraleProgressBg = moraleProgressBg
@@ -843,7 +854,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).moraleProgressBg):SetShow(false)
                             local moraleProgress = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_PROGRESS2, ((warInfoContent[territoryKey])[index]).contentBg, "Progress2_MoraleProgress_" .. index)
                             CopyBaseProperty(self.moraleProgress, moraleProgress)
-                            -- DECOMPILER ERROR at PC2395: Confused about usage of register: R30 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2423: Confused about usage of register: R30 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).moraleProgress = moraleProgress
@@ -855,7 +866,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).moraleProgress):SetProgressRate(0)
                             local btn_CurrentInfo = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, ((warInfoContent[territoryKey])[index]).contentBg, "Button_CurrentInfo_" .. index)
                             CopyBaseProperty(self.btn_CurrentInfo, btn_CurrentInfo)
-                            -- DECOMPILER ERROR at PC2436: Confused about usage of register: R31 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2464: Confused about usage of register: R31 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).btn_CurrentInfo = btn_CurrentInfo
@@ -869,7 +880,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             end
                             local btn_Cheer = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, ((warInfoContent[territoryKey])[index]).contentBg, "Button_Cheer_" .. index)
                             CopyBaseProperty(self.btn_Cheer, btn_Cheer)
-                            -- DECOMPILER ERROR at PC2480: Confused about usage of register: R32 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2508: Confused about usage of register: R32 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).btn_Cheer = btn_Cheer
@@ -877,7 +888,7 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                             (((warInfoContent[territoryKey])[index]).btn_Cheer):SetShow(false)
                             local cheerPoint = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, ((warInfoContent[territoryKey])[index]).contentBg, "StaticText_CheerPoint_" .. index)
                             CopyBaseProperty(self.cheerPoint, cheerPoint)
-                            -- DECOMPILER ERROR at PC2507: Confused about usage of register: R33 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC2535: Confused about usage of register: R33 in 'UnsetPending'
 
                             ;
                             ((warInfoContent[territoryKey])[index]).cheerPoint = cheerPoint
@@ -916,19 +927,26 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                               local killCountEffect = false
                               local deathCountEffect = false
                               local cannonCountEffect = false
-                              -- DECOMPILER ERROR at PC2593: Confused about usage of register: R21 in 'UnsetPending'
+                              -- DECOMPILER ERROR at PC2621: Confused about usage of register: R21 in 'UnsetPending'
 
                               ;
                               ((warInfoContent[territoryKey])[index])._guildNo = guildWrapper:getGuildNo_s64()
-                              -- DECOMPILER ERROR at PC2599: Confused about usage of register: R21 in 'UnsetPending'
+                              local guildAllianceName = guildWrapper:getAllianceName()
+                              -- DECOMPILER ERROR at PC2631: Confused about usage of register: R22 in 'UnsetPending'
 
-                              ;
-                              ((warInfoContent[territoryKey])[index])._guildName = guildWrapper:getName()
-                              -- DECOMPILER ERROR at PC2605: Confused about usage of register: R21 in 'UnsetPending'
+                              if guildAllianceName == "" then
+                                ((warInfoContent[territoryKey])[index])._guildName = guildWrapper:getName()
+                              else
+                                -- DECOMPILER ERROR at PC2636: Confused about usage of register: R22 in 'UnsetPending'
+
+                                ;
+                                ((warInfoContent[territoryKey])[index])._guildName = guildAllianceName
+                              end
+                              -- DECOMPILER ERROR at PC2642: Confused about usage of register: R22 in 'UnsetPending'
 
                               ;
                               ((warInfoContent[territoryKey])[index])._guildMaster = guildWrapper:getGuildMasterName()
-                              -- DECOMPILER ERROR at PC2612: Confused about usage of register: R21 in 'UnsetPending'
+                              -- DECOMPILER ERROR at PC2649: Confused about usage of register: R22 in 'UnsetPending'
 
                               ;
                               ((warInfoContent[territoryKey])[index])._siegeEnduranceValue = siegeBuildingInfo:getRemainHp() / 10000
@@ -948,25 +966,25 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                                 end
                               end
                               do
-                                -- DECOMPILER ERROR at PC2681: Confused about usage of register: R22 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC2718: Confused about usage of register: R23 in 'UnsetPending'
 
                                 if _destroySiegeCountValue ~= ((warInfoContent[territoryKey])[index])._destroySiegeCountValue then
                                   ((warInfoContent[territoryKey])[index])._destroySiegeCountValue = _destroySiegeCountValue
                                   destroySiegeCountEffect = true
                                 end
-                                -- DECOMPILER ERROR at PC2692: Confused about usage of register: R22 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC2729: Confused about usage of register: R23 in 'UnsetPending'
 
                                 if _killCountValue ~= ((warInfoContent[territoryKey])[index])._killCountValue then
                                   ((warInfoContent[territoryKey])[index])._killCountValue = _killCountValue
                                   killCountEffect = true
                                 end
-                                -- DECOMPILER ERROR at PC2703: Confused about usage of register: R22 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC2740: Confused about usage of register: R23 in 'UnsetPending'
 
                                 if _deathCountValue ~= ((warInfoContent[territoryKey])[index])._deathCountValue then
                                   ((warInfoContent[territoryKey])[index])._deathCountValue = _deathCountValue
                                   deathCountEffect = true
                                 end
-                                -- DECOMPILER ERROR at PC2714: Confused about usage of register: R22 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC2751: Confused about usage of register: R23 in 'UnsetPending'
 
                                 if _cannonCountValue ~= ((warInfoContent[territoryKey])[index])._cannonCountValue then
                                   ((warInfoContent[territoryKey])[index])._cannonCountValue = _cannonCountValue
@@ -1062,14 +1080,14 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                                           ;
                                           (((warInfoContent[territoryKey])[index]).cannonCountValue):SetText(_cannonCountValue)
                                           local currentGuildMp = currentGuildWrapper:getGuildMp()
-                                          -- DECOMPILER ERROR at PC3124: Confused about usage of register: R25 in 'UnsetPending'
+                                          -- DECOMPILER ERROR at PC3161: Confused about usage of register: R26 in 'UnsetPending'
 
                                           if ((warInfoContent[territoryKey])[index])._guildMp ~= currentGuildMp then
                                             ((warInfoContent[territoryKey])[index])._guildMp = currentGuildMp
                                           end
                                           ;
                                           (((warInfoContent[territoryKey])[index]).moraleProgress):SetProgressRate(((warInfoContent[territoryKey])[index])._guildMp / 1500 * 100)
-                                          -- DECOMPILER ERROR at PC3160: Unhandled construct in 'MakeBoolean' P3
+                                          -- DECOMPILER ERROR at PC3197: Unhandled construct in 'MakeBoolean' P3
 
                                           if (isSiegeEnd() == false and siegeBuildingInfo:isEnterSiege() == false) or isSiegeBeing(territoryKey) == false then
                                             (((warInfoContent[territoryKey])[index]).btn_Cheer):SetIgnore(true)
@@ -1120,21 +1138,21 @@ FromClient_WarInfoContent_Set = function(territoryKey)
                                             ;
                                             (((warInfoContent[territoryKey])[index]).btn_Cheer):addInputEvent("Mouse_LUp", "HandleClicked_Cheer(" .. territoryKey .. ", " .. index .. ")")
                                             siegeGuildIndex = siegeGuildIndex + 1
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out IF_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out IF_STMT
 
-                                            -- DECOMPILER ERROR at PC3384: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC3421: LeaveBlock: unexpected jumping out DO_STMT
 
                                           end
                                         end

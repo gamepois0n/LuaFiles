@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_Arsha_SelectMember = {
-_ui = {_btn_WinClose = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Button_Win_Close"), _staticText_Title = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "StaticText_Title"), _static_TopBg = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Static_TopBg"), _static_Bg = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Static_Bg"), _static_BottomBg = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Static_BottomBg")}
+_ui = {_btn_WinClose = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Button_Win_Close"), _staticText_Title = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "StaticText_Title"), _static_Bg = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Static_Bg"), _static_BottomBg = (UI.getChildControl)(Panel_Window_ArshaSelectMember, "Static_BottomBg")}
 , _attendUserNoTemp = toInt64(-1, -1)}
 local EnableControl = function(target, isEnable)
   -- function num : 0_0
@@ -101,7 +101,7 @@ CreateListContent_Arsha_AttendMember = function(content, userIdx)
   end
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC40: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.OpenPanel = function(self)
   -- function num : 0_3
@@ -111,14 +111,14 @@ Panel_Arsha_SelectMember.OpenPanel = function(self)
   self:UpdateMemberList()
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC43: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.ClosePanel = function(self)
   -- function num : 0_4
   Panel_Window_ArshaSelectMember:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.Initialize = function(self)
   -- function num : 0_5
@@ -143,19 +143,25 @@ Panel_Arsha_SelectMember.Initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.UpdateMemberList = function(self)
   -- function num : 0_6 , upvalues : EnableControl
   local ui = self._ui
   local myTeamNo = ToClient_GetMyTeamNo()
+  if ToClient_Arsha_IsMySelfTeamMaster() == true then
+    (ui._btn_ConfirmAttend):SetShow(true)
+  else
+    ;
+    (ui._btn_ConfirmAttend):SetShow(false)
+  end
   local isAttendSetted = ToClient_IsMyTeamAttendSetted()
   if isAttendSetted == true then
     local attendUserInfo = ToClient_GetArshaAttendUserInfo(myTeamNo)
     if attendUserInfo == nil then
       return 
     end
-    -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC29: Confused about usage of register: R5 in 'UnsetPending'
 
     Panel_Arsha_SelectMember._attendUserNoTemp = attendUserInfo:getUserNo()
     EnableControl(ui._btn_ConfirmAttend, false)
@@ -186,7 +192,7 @@ Panel_Arsha_SelectMember.UpdateMemberList = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.SetAttendMemberTemp = function(self, userIdx)
   -- function num : 0_7
@@ -207,7 +213,7 @@ Panel_Arsha_SelectMember.SetAttendMemberTemp = function(self, userIdx)
   self:UpdateMemberList()
 end
 
--- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.ConfirmAttendMember = function(self)
   -- function num : 0_8
@@ -215,7 +221,7 @@ Panel_Arsha_SelectMember.ConfirmAttendMember = function(self)
   ToClient_SelectPersonalMatchAttend(self._attendUserNoTemp, myTeamNo)
 end
 
--- DECOMPILER ERROR at PC65: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R2 in 'UnsetPending'
 
 Panel_Arsha_SelectMember.Clear = function(self)
   -- function num : 0_9
@@ -288,6 +294,7 @@ FromClient_PersonalMatchMasterSetted = function(userNo, teamNo, isAutoSelected)
   if selfPlayer ~= nil and (selfPlayer:get()):getUserNo() == userNo and (CppEnums.CompetitionFightState).eCompetitionFightState_SelectAttend == fightState then
     Panel_Arsha_SelectMember:OpenPanel()
   end
+  FromClient_UpdateTeamUserList()
 end
 
 FromClient_luaLoadComplete_Arsha_SelectMemeber = function()
