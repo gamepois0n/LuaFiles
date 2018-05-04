@@ -559,41 +559,43 @@ stableInfo.update = function(self, unsealType)
               (self._staticImprintValue):SetTextHorizonLeft()
               ;
               (self._staticImprintValue):SetSpanSize(-97, 220)
-              local remainSecondsToUneal = servantInfo:getRemainSecondsToUnseal()
-              if (Defines.s64_const).s64_0 < remainSecondsToUneal then
+              if servantInfo:isChangingRegion() then
                 (self._staticRegionChangingTime):SetShow(true)
+                local remainSecondsToUneal = servantInfo:getRemainSecondsToUnseal()
                 ;
                 (self._staticRegionChangingTimeValue):SetText(convertStringFromDatetime(remainSecondsToUneal))
                 ;
                 (self._staticRegionChangingTimeValue):SetShow(true)
               end
-              if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RidableBabyElephant then
-                (stableInfo.panel_abillity):SetSize(370, 250)
-              else
-                ;
-                (stableInfo.panel_abillity):SetSize(370, 225)
-              end
-              ;
-              (self._staticImprint):SetShow(false)
-              ;
-              (self._staticImprintValue):SetShow(false)
-              if servantInfo:isImprint() then
-                (self._staticImprint):SetShow(true)
-                ;
-                (self._staticImprintValue):SetShow(true)
-                ;
-                (self._staticImprintValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTING"))
-              else
+              do
                 if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RidableBabyElephant then
+                  (stableInfo.panel_abillity):SetSize(370, 250)
+                else
+                  ;
+                  (stableInfo.panel_abillity):SetSize(370, 225)
+                end
+                ;
+                (self._staticImprint):SetShow(false)
+                ;
+                (self._staticImprintValue):SetShow(false)
+                if servantInfo:isImprint() then
                   (self._staticImprint):SetShow(true)
                   ;
                   (self._staticImprintValue):SetShow(true)
                   ;
-                  (self._staticImprintValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTPOSSIBLE"))
+                  (self._staticImprintValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTING"))
+                else
+                  if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RidableBabyElephant then
+                    (self._staticImprint):SetShow(true)
+                    ;
+                    (self._staticImprintValue):SetShow(true)
+                    ;
+                    (self._staticImprintValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTPOSSIBLE"))
+                  end
                 end
+                self:updateSkill(unsealType)
+                FGlobal_StableList_Update()
               end
-              self:updateSkill(unsealType)
-              FGlobal_StableList_Update()
             end
           end
         end

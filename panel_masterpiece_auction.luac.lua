@@ -583,6 +583,9 @@ FGlobal_MasterPieceAuction_Reset = function()
   ((self._ui)._staticTextWareHouse):SetShow(true)
   ;
   ((self._ui)._staticTextMoney):SetShow(true)
+  local wareHouseMoney = warehouse_moneyFromNpcShop_s64()
+  ;
+  ((self._ui)._staticTextMoney):SetText(makeDotMoney(wareHouseMoney))
   isOpenEscMenu = false
   ;
   ((self._ui)._txt_BottomDesc):SetShow(false)
@@ -689,11 +692,16 @@ PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
     ;
     ((self._ui)._staticTextWareHouse):SetShow(true)
   end
-  ;
-  ((self._ui)._txt_BottomDesc):ComputePos()
-  ;
-  ((self._ui)._staticTextDescBG):ComputePos()
-  -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  do
+    local wareHouseMoney = warehouse_moneyFromNpcShop_s64()
+    ;
+    ((self._ui)._staticTextMoney):SetText(makeDotMoney(wareHouseMoney))
+    ;
+    ((self._ui)._txt_BottomDesc):ComputePos()
+    ;
+    ((self._ui)._staticTextDescBG):ComputePos()
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  end
 end
 
 -- DECOMPILER ERROR at PC244: Confused about usage of register: R4 in 'UnsetPending'

@@ -389,9 +389,6 @@ FromClient_RClickedWorldMiniMap = function(position, clickActor)
       if ((getSelfPlayer()):get()):getLevel() < 11 then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_TUTORIAL_PROGRSS_ACK"))
         FGlobal_QuestWidget_UpdateList()
-        if not isQuest160524_chk() then
-          updateQuestWindowList(FGlobal_QuestWindowGetStartPosition())
-        end
         return 
       end
       ToClient_WorldMapNaviStart(position, NavigationGuideParam(), false, true)

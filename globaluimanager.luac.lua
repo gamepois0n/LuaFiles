@@ -7,7 +7,7 @@ local IM = CppEnums.EProcessorInputMode
 local VCK = CppEnums.VirtualKeyCode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local isClickControlKey = 0
-local panel_WindowList = {Panel_Window_ServantInfo, Panel_PartyOption, Panel_Alchemy, Panel_Window_StableFunction, Panel_Window_StableList, Panel_Window_StableInfo, Panel_Window_StableEquipInfo, Panel_Window_StableShop, Panel_Window_StableMating, Panel_Window_StableRegister, Panel_Window_StableStallion, Panel_Servant_Market_Input, Panel_Window_WharfFunction, Panel_Window_WharfList, Panel_Window_WharfInfo, Panel_Window_WharfRegister, Panel_Window_Exchange_Number, Panel_Win_System, Panel_Window_Delivery_Request, Panel_Window_Delivery_Information, Panel_Window_Delivery_CarriageInformation, Panel_Mail_Detail, Panel_Mail_Send, Panel_CreateClan, Panel_IntroMovie, Panel_Window_Repair, Panel_Scroll, Panel_SkillAwaken, Panel_Popup_MoveItem, Panel_LordMenu, Panel_CarriageInfo, Panel_FixEquip, Panel_Dialogue_Itemtake, Panel_CreateGuild, Panel_EnableSkill, Panel_HelpMessage, Panel_ProductNote, Panel_KeyboardHelp, Panel_WebControl, Panel_Window_Quest_New, Panel_Interaction_HouseRank, Panel_ColorBalance, Panel_CheckedQuestInfo, Panel_Window_Quest_History, Panel_Tooltip_Common, Panel_ShipInfo, Panel_Window_PetListNew, Panel_AgreementGuild_Master, Panel_Housing_FarmInfo_New, Panel_Window_ItemMarket_ItemSet, Panel_ClanList, Panel_CarveSeal, Panel_ResetSeal, Panel_ClearVested, Panel_Window_CharInfo_Status, Panel_Chatting_Input, Panel_Window_GameTips, Panel_Window_SkillGuide, Panel_MovieTheater_320, Panel_MovieTheater_640, Panel_MovieTheater_SkillGuide_640, Panel_NewKnowledge, Panel_QuestInfo, Panel_MovieGuide, Panel_Window_PetRegister, Panel_FishEncyclopedia, Panel_Tooltip_Item_chattingLinkedItem, Panel_Window_ItemMarket_BuyConfirm, Panel_Tooltip_SimpleText, Panel_Event_100Day, Panel_HousingList, Panel_LifeRanking, Panel_RecommandName, Panel_Interaction_FriendHouseList, Panel_GuildWarScore, Panel_KnowledgeManagement, Panel_Window_StableMix, Panel_RecentCook, Panel_Window_PetCompose, Panel_GuildWebInfo, Panel_Guild_Rank, Panel_TransferLifeExperience, Panel_LinkedHorse_Skill, Panel_Window_MaidList, Panel_Window_WorkerRandomSelect, Panel_Worker_Auction, Panel_Window_UnknownRandomSelect, Panel_NodeWarMenu, Panel_RallyRanking, Panel_Window_Warehouse, Panel_Manufacture, Panel_EnchantExtraction, Panel_Join, Panel_Window_PetMarket, Panel_Window_PetMarketRegist, Panel_Window_GuildStableFunction, Panel_Window_GuildStable_List, Panel_Window_GuildStable_Info, Panel_Window_GuildStableRegister, Panel_ChangeWeapon, Panel_WorkerChangeSkill, Panel_GuildServantList, Panel_DyePalette, Panel_SetShortCut, Panel_ExitConfirm, Panel_Party_ItemList, Panel_Harvest_WorkManager, Panel_HarvestList, Panel_GuildDuel, Panel_Window_PetLookChange, Panel_Win_Check, Panel_Chatting_Filter, Panel_CustomizingAlbum, Panel_SetVoiceChat, Panel_Chatting_Color, Panel_WorkerShipInfo, Panel_Window_ItemMarket, Panel_GuildRank_Web, Panel_SkillReinforce, Panel_ItemWarp, Panel_Tooltip_Item_chattingLinkedItemClick, Panel_GoldenTreasureBox, Panel_ScreenShotAlbum, Panel_ScreenShotAlbum_FullScreen, Panel_GuildHouse_Auction, Panel_Window_ReinforceSkill, Panel_Guild_Incentive_Foundation, Panel_Window_Quest_New_Option, Panel_CompetitionGame_JoinDesc, Panel_IngameCashShop_Coupon, Panel_CompetitionGame_GuildReservation, Panel_PartyList, Panel_Window_Profile, Panel_Window_Dance, Panel_DanceFrame, Panel_GuildServant_RevivalList, Panel_Copyright, Panel_TranslationReport, Panel_CharacterTag, Panel_Widget_DropItem, Panel_Window_DropItem, Panel_SkillCoolTimeSlot, Panel_PetRestoreAll, Panel_Guild_NoneJoinMember, Panel_ButtonShortcuts, Panel_FairyInfo, Panel_Guild_ChoiseTheMoney, Panel_IngameCashShop_EventCart, Panel_Window_Politics, Panel_Window_RecommandGoods_PopUp}
+local panel_WindowList = {Panel_Window_ServantInfo, Panel_PartyOption, Panel_Alchemy, Panel_Window_StableFunction, Panel_Window_StableList, Panel_Window_StableInfo, Panel_Window_StableEquipInfo, Panel_Window_StableShop, Panel_Window_StableMating, Panel_Window_StableRegister, Panel_Window_StableStallion, Panel_Servant_Market_Input, Panel_Window_WharfFunction, Panel_Window_WharfList, Panel_Window_WharfInfo, Panel_Window_WharfRegister, Panel_Window_Exchange_Number, Panel_Win_System, Panel_Window_Delivery_Request, Panel_Window_Delivery_Information, Panel_Window_Delivery_CarriageInformation, Panel_Mail_Detail, Panel_Mail_Send, Panel_CreateClan, Panel_IntroMovie, Panel_Window_Repair, Panel_Scroll, Panel_SkillAwaken, Panel_Popup_MoveItem, Panel_LordMenu, Panel_CarriageInfo, Panel_FixEquip, Panel_Dialogue_Itemtake, Panel_CreateGuild, Panel_EnableSkill, Panel_HelpMessage, Panel_ProductNote, Panel_KeyboardHelp, Panel_WebControl, Panel_Window_Quest_New, Panel_Interaction_HouseRank, Panel_ColorBalance, Panel_CheckedQuestInfo, Panel_Window_Quest_History, Panel_Tooltip_Common, Panel_ShipInfo, Panel_Window_PetListNew, Panel_AgreementGuild_Master, Panel_Housing_FarmInfo_New, Panel_Window_ItemMarket_ItemSet, Panel_ClanList, Panel_CarveSeal, Panel_ResetSeal, Panel_ClearVested, Panel_Window_CharInfo_Status, Panel_Chatting_Input, Panel_Window_GameTips, Panel_Window_SkillGuide, Panel_MovieTheater_320, Panel_MovieTheater_640, Panel_MovieTheater_SkillGuide_640, Panel_NewKnowledge, Panel_QuestInfo, Panel_MovieGuide, Panel_Window_PetRegister, Panel_FishEncyclopedia, Panel_Tooltip_Item_chattingLinkedItem, Panel_Window_ItemMarket_BuyConfirm, Panel_Tooltip_SimpleText, Panel_Event_100Day, Panel_HousingList, Panel_LifeRanking, Panel_RecommandName, Panel_Interaction_FriendHouseList, Panel_GuildWarScore, Panel_KnowledgeManagement, Panel_Window_StableMix, Panel_RecentCook, Panel_Window_PetCompose, Panel_GuildWebInfo, Panel_Guild_Rank, Panel_TransferLifeExperience, Panel_LinkedHorse_Skill, Panel_Window_MaidList, Panel_Window_WorkerRandomSelect, Panel_Worker_Auction, Panel_Window_UnknownRandomSelect, Panel_NodeWarMenu, Panel_RallyRanking, Panel_Window_Warehouse, Panel_Manufacture, Panel_EnchantExtraction, Panel_Join, Panel_Window_PetMarket, Panel_Window_PetMarketRegist, Panel_Window_GuildStableFunction, Panel_Window_GuildStable_List, Panel_Window_GuildStable_Info, Panel_Window_GuildStableRegister, Panel_ChangeWeapon, Panel_WorkerChangeSkill, Panel_GuildServantList, Panel_DyePalette, Panel_SetShortCut, Panel_ExitConfirm, Panel_Party_ItemList, Panel_Harvest_WorkManager, Panel_HarvestList, Panel_GuildDuel, Panel_Window_PetLookChange, Panel_Win_Check, Panel_Chatting_Filter, Panel_CustomizingAlbum, Panel_SetVoiceChat, Panel_Chatting_Color, Panel_WorkerShipInfo, Panel_Window_ItemMarket, Panel_GuildRank_Web, Panel_SkillReinforce, Panel_ItemWarp, Panel_Tooltip_Item_chattingLinkedItemClick, Panel_GoldenTreasureBox, Panel_ScreenShotAlbum, Panel_ScreenShotAlbum_FullScreen, Panel_GuildHouse_Auction, Panel_Window_ReinforceSkill, Panel_Guild_Incentive_Foundation, Panel_Window_Quest_New_Option, Panel_CompetitionGame_JoinDesc, Panel_IngameCashShop_Coupon, Panel_CompetitionGame_GuildReservation, Panel_PartyList, Panel_Window_Profile, Panel_Window_Dance, Panel_DanceFrame, Panel_GuildServant_RevivalList, Panel_Copyright, Panel_TranslationReport, Panel_CharacterTag, Panel_Widget_DropItem, Panel_Window_DropItem, Panel_SkillCoolTimeSlot, Panel_PetRestoreAll, Panel_Guild_NoneJoinMember, Panel_ButtonShortcuts, Panel_FairyInfo, Panel_Guild_ChoiseTheMoney, Panel_IngameCashShop_EventCart, Panel_Window_Politics, Panel_Window_RecommandGoods_PopUp, Panel_Window_QuestInfo}
 local panel_SoundedWindowList = {Panel_Window_Inventory, Panel_Equipment, Panel_Window_Skill, Panel_Window_Enchant, Panel_Window_ServantInventory, Panel_Window_Warehouse, Panel_Mail_Main, Panel_Window_Option, Panel_Manufacture, Panel_Window_Socket, Panel_FriendList, Panel_Housing_SettingVendingMachine, Panel_Housing_VendingMachineList, Panel_Housing_SettingConsignmentSale, Panel_Housing_RegisterConsignmentSale, Panel_Housing_ConsignmentSale, Panel_SkillAwaken, Panel_Improvement}
 if _ContentsGroup_isNewOption then
   panel_SoundedWindowList[8] = Panel_Window_cOption
@@ -201,11 +201,17 @@ close_WindowPanelList = function()
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  if Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
-    Panel_Window_QuestNew_Show(false)
-  end
-  if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
-    FGlobal_QuestInfoDetail_Close()
+  if _ContentsGroup_RenewUI == false then
+    if Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
+      Panel_Window_QuestNew_Show(false)
+    end
+    if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
+      FGlobal_QuestInfoDetail_Close()
+    end
+  else
+    if FGlobal_QuestInfoGetShow() == true then
+      FGlobal_QuestInfoSetShow(false)
+    end
   end
   if Panel_IntroMovie:IsShow() then
     CloseIntroMovie()
@@ -453,8 +459,13 @@ close_force_WindowPanelList = function()
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  if Panel_Window_Quest_New:GetShow() then
+  -- DECOMPILER ERROR at PC262: Unhandled construct in 'MakeBoolean' P1
+
+  if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() == true then
     HandleClicked_QuestNew_Close()
+  end
+  if FGlobal_QuestInfoGetShow() == true then
+    FGlobal_QuestInfoSetShow(false)
   end
   if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
     FGlobal_QuestInfoDetail_Close()
@@ -615,8 +626,13 @@ close_UISubAppPanelList = function()
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  if Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() then
+  -- DECOMPILER ERROR at PC61: Unhandled construct in 'MakeBoolean' P1
+
+  if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() == true and Panel_Window_Quest_New:IsUISubApp() == true then
     HandleClicked_QuestNew_Close()
+  end
+  if FGlobal_QuestInfoGetShow() == true then
+    FGlobal_QuestInfoSetShow(false)
   end
   if Panel_Npc_Quest_Reward:IsUISubApp() then
     FGlobal_ShowRewardList(false, 0)

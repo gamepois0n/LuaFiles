@@ -1155,6 +1155,7 @@ HandleClicked_CashShopController_SetShowUIToggle = function()
     if Panel_IngameCashShop_GoodsDetailInfo:GetShow() then
       InGameShopDetailInfo_Close()
     end
+    Panel_Window_RecommandGoods:SetShow(false)
     self.isShowUI = false
   else
     Panel_IngameCashShop:SetShow(true)

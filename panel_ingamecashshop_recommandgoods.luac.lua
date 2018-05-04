@@ -114,9 +114,9 @@ PaGlobal_RecommendGoods.Update = function(self)
         ;
         (((self._ui)._goodsImage)[uiRow]):ChangeTextureInfoName(cashProduct:getPackageIcon())
         ;
-        (((self._ui)._goodsBG)[uiRow]):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:GoToProduct(" .. productNo .. ")")
+        (((self._ui)._goodsBG)[uiRow]):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:GoToProduct(" .. productNo .. "," .. "1" .. ")")
         ;
-        (((self._ui)._goodsImage)[uiRow]):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:GoToProduct(" .. productNo .. ")")
+        (((self._ui)._goodsImage)[uiRow]):addInputEvent("Mouse_LUp", "PaGlobal_RecommendGoods:GoToProduct(" .. productNo .. "," .. "1" .. ")")
         uiRow = uiRow + 1
       end
     end
@@ -203,10 +203,10 @@ end
 
 -- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_RecommendGoods.GoToProduct = function(self, cashProductNo)
+PaGlobal_RecommendGoods.GoToProduct = function(self, cashProductNo, clickType)
   -- function num : 0_8
   local mainCashProductNo = ToClient_getRealTargetCashProductNo(cashProductNo)
-  ToClient_RequestShowProduct(mainCashProductNo)
+  ToClient_RequestShowProduct(mainCashProductNo, nil, clickType)
 end
 
 PaGlobal_RecommendGoods:Initialize()

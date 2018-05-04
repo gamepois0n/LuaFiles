@@ -746,6 +746,9 @@ InventoryWindow_Close = function()
     if Panel_Window_ClothInventory:GetShow() then
       ClothInventory_Close()
     end
+    if Panel_Window_ServantInventory:GetShow() then
+      ServantInventory_Close()
+    end
     if openUiType == true then
       FGlobal_Equipment_SetHide(false)
     else

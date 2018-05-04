@@ -77,7 +77,7 @@ PaGlobal_Tooltip_BattlePoint.updateUIPos = function(self)
   if ((self._ui)._staticBG_TierTotal):GetShow() == true then
     ((self._ui)._staticBG_TierTotal):SetPosY(posY)
     sizeY = ((self._ui)._staticBG_TierTotal):GetSizeY()
-    posY = posY + sizeY
+    posY = posY + sizeY + 10
   end
   if ((self._ui)._staticBG_CurrentTier):GetShow() == true then
     ((self._ui)._staticBG_CurrentTier):SetPosY(posY)
@@ -177,7 +177,7 @@ Fglobal_Init_Tooltip_BattlePoint = function()
 
     if control ~= nil then
       (ui._tierTitles)[idx] = control
-      control:SetPosY(control:GetPosY() - 90)
+      control:SetPosY(control:GetPosY() - 80)
     end
   end
   local tierDesc = {"StaticText_DescTier1", "StaticText_DescTier2", "StaticText_DescTier3", "StaticText_DescTier4", "StaticText_DescTier5", "StaticText_DescTier6", "StaticText_DescTier7", "StaticText_DescTier8"}
@@ -191,7 +191,7 @@ Fglobal_Init_Tooltip_BattlePoint = function()
 
     if control ~= nil then
       (ui._tierDesces)[idx] = control
-      control:SetPosY(control:GetPosY() - 90)
+      control:SetPosY(control:GetPosY() - 80)
       min = ToClient_GetMinTotalStatByTier(idx - 1)
       if idx - 1 == 0 then
         tierValue = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_BATTLEPOINT_TIER1", "minStat", min)
@@ -246,14 +246,14 @@ PaGlobal_Tooltip_BattlePoint.updateCurrnetTier = function(self)
   ;
   ((self._ui)._staticIcon_CurrentTier):SetText(tierName)
   ;
-  ((self._ui)._staticIcon_CurrentTier):ChangeTextureInfoName("")
+  ((self._ui)._staticIcon_CurrentTier):ChangeTextureInfoName("new_ui_common_forlua/default/Default_Etc_04.dds")
   ;
   ((self._ui)._staticIcon_CurrentTier):SetShow(true)
   local x1, y1, x2, y2 = nil, nil, nil, nil
-  x1 = 182 + (3 - tier % 4) * 43
-  x2 = 224 + (3 - tier % 4) * 43
-  y1 = 99 + (1 - (math.floor)(tier / 4)) * 43
-  y2 = 141 + (1 - (math.floor)(tier / 4)) * 43
+  x1 = 429 - tier % 4 * 25
+  x2 = 453 - tier % 4 * 25
+  y1 = 99 + (1 - (math.floor)(tier / 4)) * 25
+  y2 = 123 + (1 - (math.floor)(tier / 4)) * 25
   x1 = setTextureUV_Func((self._ui)._staticIcon_CurrentTier, x1, y1, x2, y2)
   ;
   (((self._ui)._staticIcon_CurrentTier):getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -270,9 +270,9 @@ PaGlobal_Tooltip_BattlePoint.updateCurrnetTier = function(self)
   ;
   ((self._ui)._staticText_CurrentTier):SetText(tierValue)
   ;
-  ((self._ui)._currentGradeBg):SetPosX(tier % 2 * 190 + 10)
+  ((self._ui)._currentGradeBg):SetPosX(tier % 2 * 190 + 5)
   ;
-  ((self._ui)._currentGradeBg):SetPosY((math.floor)(tier / 2) * 25 + 25)
+  ((self._ui)._currentGradeBg):SetPosY((math.floor)(tier / 2) * 30 + 27)
 end
 
 FGlobal_EquipmentUpdate = function()

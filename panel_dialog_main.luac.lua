@@ -2869,9 +2869,6 @@ FromClient_hideDialog = function(isSetWait)
   FGlobal_NpcNavi_ShowRequestOuter()
   AcquireDirecteReShowUpdate()
   isAuctionDialog = false
-  if not isQuest160524_chk() then
-    updateQuestWindowList(FGlobal_QuestWindowGetStartPosition())
-  end
   FGlobal_QuestWidget_UpdateList()
   PaGlobalAppliedBuffList:show()
   setShowNpcDialog(false)

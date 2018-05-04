@@ -7,6 +7,9 @@ local const_lineGap = 5
 local territoryName = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_Title")
 local territoryInfoScetion = {territoryTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_SiteInfoTItle"), territoryIcon = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_SiteIcon"), cityName = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_CityName"), userRate = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_UserRate"), taxTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_TaxRateInfoTitle"), taxTransfer = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_TransferTax"), sectionBG = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_TerritoryInfoBG")}
 local occupyGuildSection = {sectionTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupiersInfoTitle"), guildIcon = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_GuildIcon"), guildIconBG = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_GuildIconBG"), guildName = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupationGuild"), guildOwner = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupationOwner"), occupyDate = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupationDate"), occupyWeek = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupationWeek"), sectionBG = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_OccupiersInfoBG")}
+local occupyBenefit = {sectionBG = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_OccupyBenefitBg"), sectionTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupyTitle"), sectionDesc = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupyDesc")}
+;
+(occupyBenefit.sectionDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 local commonInfoSection = {playerInfoTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_PlayerInfoTitle"), playerPopular = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_Reputation"), warInfoTitle = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_OccupationInfoTitle"), warInfo = (UI.getChildControl)(Panel_Worldmap_Territory, "StaticText_WarInfo"), sectionBG = (UI.getChildControl)(Panel_Worldmap_Territory, "Static_InformationBG")}
 territoryInfoScetion.SetShow = function(self, isShow)
   -- function num : 0_0
@@ -116,8 +119,46 @@ occupyGuildSection.SetInfo = function(self, territoryInfo, territoryKeyRaw)
   end
 end
 
-commonInfoSection.SetShow = function(self, isShow)
+occupyBenefit.SetInfo = function(self, territoryKeyRaw)
   -- function num : 0_4
+  local isShow = not _ContentsGroup_OccupyBenefit or territoryKeyRaw == 2 or territoryKeyRaw == 3 or territoryKeyRaw == 4
+  ;
+  (self.sectionBG):SetShow(isShow)
+  ;
+  (self.sectionTitle):SetShow(isShow)
+  ;
+  (self.sectionDesc):SetShow(isShow)
+  if isShow == false then
+    return 
+  end
+  if territoryKeyRaw == 2 then
+    (self.sectionDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYINFO_BENEFIT_1"))
+  elseif territoryKeyRaw == 3 then
+    (self.sectionDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYINFO_BENEFIT_2"))
+  elseif territoryKeyRaw == 4 then
+    (self.sectionDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYINFO_BENEFIT_3"))
+  end
+  do
+    local siegeWrapper = ToClient_GetSiegeWrapper(territoryKeyRaw)
+    if siegeWrapper ~= nil and siegeWrapper:doOccupantExist() then
+      (self.sectionBG):SetSpanSize(0, 400)
+      ;
+      (self.sectionTitle):SetSpanSize(0, 410)
+      ;
+      (self.sectionDesc):SetSpanSize(30, 440)
+    else
+      (self.sectionBG):SetSpanSize(0, 240)
+      ;
+      (self.sectionTitle):SetSpanSize(0, 250)
+      ;
+      (self.sectionDesc):SetSpanSize(30, 280)
+    end
+    -- DECOMPILER ERROR: 8 unprocessed JMP targets
+  end
+end
+
+commonInfoSection.SetShow = function(self, isShow)
+  -- function num : 0_5
   (self.playerInfoTitle):SetShow(isShow)
   ;
   (self.playerPopular):SetShow(isShow)
@@ -130,7 +171,7 @@ commonInfoSection.SetShow = function(self, isShow)
 end
 
 commonInfoSection.SetInfo = function(self, territoryInfo, territoryKeyRaw)
-  -- function num : 0_5
+  -- function num : 0_6 , upvalues : occupyBenefit
   local supportPoint = ToClient_getRemainSurportPointByTerritory(territoryInfo)
   local supportExpRate = ToClient_getCurrentExpRate(territoryInfo)
   if supportPoint == 0 then
@@ -163,32 +204,36 @@ commonInfoSection.SetInfo = function(self, territoryInfo, territoryKeyRaw)
     (self.warInfo):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_TERRITORYTOOLTIP_JOINGUILDCOUNT", "joinGuildCount", joinGuildCount))
   end
   local siegeWrapper = ToClient_GetSiegeWrapper(territoryKeyRaw)
+  local occupyBenefitSizeY = 0
+  if (occupyBenefit.sectionBG):GetShow() then
+    occupyBenefitSizeY = 100
+  end
   if siegeWrapper ~= nil and siegeWrapper:doOccupantExist() then
-    (self.sectionBG):SetSpanSize(0, 400)
+    (self.sectionBG):SetSpanSize(0, 400 + occupyBenefitSizeY)
     ;
-    (self.playerInfoTitle):SetSpanSize(0, 410)
+    (self.playerInfoTitle):SetSpanSize(0, 410 + occupyBenefitSizeY)
     ;
-    (self.playerPopular):SetSpanSize(30, 440)
+    (self.playerPopular):SetSpanSize(30, 440 + occupyBenefitSizeY)
     ;
-    (self.warInfoTitle):SetSpanSize(0, 480)
+    (self.warInfoTitle):SetSpanSize(0, 480 + occupyBenefitSizeY)
     ;
-    (self.warInfo):SetSpanSize(30, 510)
+    (self.warInfo):SetSpanSize(30, 510 + occupyBenefitSizeY)
   else
     ;
-    (self.sectionBG):SetSpanSize(0, 240)
+    (self.sectionBG):SetSpanSize(0, 240 + occupyBenefitSizeY)
     ;
-    (self.playerInfoTitle):SetSpanSize(0, 250)
+    (self.playerInfoTitle):SetSpanSize(0, 250 + occupyBenefitSizeY)
     ;
-    (self.playerPopular):SetSpanSize(30, 280)
+    (self.playerPopular):SetSpanSize(30, 280 + occupyBenefitSizeY)
     ;
-    (self.warInfoTitle):SetSpanSize(0, 320)
+    (self.warInfoTitle):SetSpanSize(0, 320 + occupyBenefitSizeY)
     ;
-    (self.warInfo):SetSpanSize(30, 350)
+    (self.warInfo):SetSpanSize(30, 350 + occupyBenefitSizeY)
   end
 end
 
 FromClient_TerritoryUICreate = function(territoryUI)
-  -- function num : 0_6
+  -- function num : 0_7
   local territoryInfo = territoryUI:FromClient_getTerritoryInfo()
   local guildMark = territoryUI:FromClient_getGuildMark()
   guildMark:SetSize(32, 32)
@@ -209,7 +254,7 @@ FromClient_TerritoryUICreate = function(territoryUI)
 end
 
 FromClient_updateGuildmark = function(territoryUI)
-  -- function num : 0_7
+  -- function num : 0_8
   local territoryInfo = territoryUI:FromClient_getTerritoryInfo()
   local guildMark = territoryUI:FromClient_getGuildMark()
   local isSet = ToClient_setGuildTexture(territoryInfo, guildMark)
@@ -223,7 +268,7 @@ FromClient_updateGuildmark = function(territoryUI)
 end
 
 FromClient_OnTerritoryTooltipShow = function(territoryUI, territoryInfo, territoryKeyRaw)
-  -- function num : 0_8 , upvalues : territoryName, territoryInfoScetion, const_lineGap, occupyGuildSection, commonInfoSection
+  -- function num : 0_9 , upvalues : territoryName, territoryInfoScetion, const_lineGap, occupyGuildSection, occupyBenefit, commonInfoSection
   if territoryInfo == nil then
     return 
   end
@@ -241,6 +286,7 @@ FromClient_OnTerritoryTooltipShow = function(territoryUI, territoryInfo, territo
   else
     occupyGuildSection:SetShow(false)
   end
+  occupyBenefit:SetInfo(territoryKeyRaw)
   commonInfoSection:SetShow(true)
   commonInfoSection:SetInfo(territoryInfo, territoryKeyRaw)
   Panel_Worldmap_Territory:SetSize(Panel_Worldmap_Territory:GetSizeX(), (commonInfoSection.sectionBG):GetPosY() + (commonInfoSection.sectionBG):GetSizeY() + 20)
@@ -261,7 +307,7 @@ FromClient_OnTerritoryTooltipShow = function(territoryUI, territoryInfo, territo
 end
 
 FromClient_OnTerritoryTooltipHide = function()
-  -- function num : 0_9
+  -- function num : 0_10
   Panel_Worldmap_Territory:SetShow(false)
 end
 

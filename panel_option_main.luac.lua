@@ -744,6 +744,7 @@ FGlobal_Option_ResetFrame = function()
   local self = PaGlobal_Option
   local resetElements = (((self._frames)[(self._list2)._curCategory])[(self._list2)._curDetail])._containElement
   local isKeyCustomReset = false
+  local rv = nil
   for index,elementName in ipairs(resetElements) do
     local option = (self._elements)[elementName]
     if option ~= nil then
@@ -752,9 +753,15 @@ FGlobal_Option_ResetFrame = function()
         isKeyCustomReset = true
       else
         if option._defaultValue ~= nil then
+          local beforeOption = self:Get(elementName)
           self:ResetControlSetting(elementName)
-          self:SetXXX(elementName, option._defaultValue)
-          option._initValue = option._defaultValue
+          rv = self:SetXXX(elementName, option._defaultValue)
+          if rv == false then
+            self:SetControlSetting(elementName, beforeOption)
+            option._initValue = beforeOption
+          else
+            option._initValue = option._defaultValue
+          end
           option._applyValue = nil
           option._curValue = nil
         end
@@ -1537,18 +1544,30 @@ PaGlobal_Option.SetContentsOption = function(self)
                     ;
                     (self._elements).FairyRender = nil
                   end
+                  if _ContentsGroup_StatTierIcon == false then
+                    local statTierBg = (UI.getChildControl)((((self._frames).Function).View)._uiFrameContent, "StaticText_BgOrder5_Import")
+                    statTierBg:SetShow(false)
+                    -- DECOMPILER ERROR at PC574: Confused about usage of register: R4 in 'UnsetPending'
+
+                    ;
+                    (self._elements).ShowReputation = nil
+                    local damageMeterRenderBG = (UI.getChildControl)((((self._frames).Function).View)._uiFrameContent, "StaticText_BgOrder3_Import")
+                    damageMeterRenderBG:SetPosY(damageMeterRenderBG:GetPosY() - statTierBg:GetSizeY() - 10)
+                    ;
+                    ((((self._frames).Function).View)._uiFrameContent):SetSize(((((self._frames).Function).View)._uiFrameContent):GetSizeX(), ((((self._frames).Function).View)._uiFrameContent):GetSizeY() - statTierBg:GetSizeY() - 10)
+                  end
                   if _ContentsGroup_DamageMeter == false then
                     local damageMeterRenderBG = (UI.getChildControl)((((self._frames).Function).View)._uiFrameContent, "StaticText_BgOrder3_Import")
                     local damageMeterButton = (UI.getChildControl)(damageMeterRenderBG, "CheckButton_DamageMeter")
                     local damageMeterDesc = (UI.getChildControl)(damageMeterRenderBG, "StaticText_DamageMeter_Desc")
                     damageMeterButton:SetShow(false)
                     damageMeterDesc:SetShow(false)
-                    -- DECOMPILER ERROR at PC587: Confused about usage of register: R6 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC641: Confused about usage of register: R6 in 'UnsetPending'
 
                     ;
                     (self._elements).DamageMeter = nil
                   end
-                  -- DECOMPILER ERROR: 8 unprocessed JMP targets
+                  -- DECOMPILER ERROR: 9 unprocessed JMP targets
                 end
               end
             end

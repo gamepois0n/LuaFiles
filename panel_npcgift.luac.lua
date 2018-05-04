@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local PaGlobal_NpcGift = {
-_ui = {_questionBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Question"), _presentBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Present"), _confessionBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Confession"), _closeBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Close"), 
+_ui = {_questionBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Question"), _presentBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Present"), _confessionBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Confession"), _closeBtn = (UI.getChildControl)(Panel_NpcGift, "Button_Close"), _iconDetail = (UI.getChildControl)(Panel_NpcGift, "StaticText_DetailIcon"), _detailDesc = (UI.getChildControl)(Panel_NpcGift, "StaticText_DetailDesc"), 
 _slot_PresentItem = {}
 , _interestItemListBG = (UI.getChildControl)(Panel_NpcGift, "Static_InterestItemListBg"), 
 _slot_InterestItemList = {}
@@ -47,6 +47,14 @@ PaGlobal_NpcGift.init = function(self)
     ;
     ((self._ui)._slot_InterestItemList)[idx] = itemSlot
   end
+  ;
+  ((self._ui)._detailDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self._ui)._detailDesc):SetText(((self._ui)._detailDesc):GetText())
+  ;
+  ((self._ui)._detailDesc):SetSize(((self._ui)._detailDesc):GetSizeX(), ((self._ui)._detailDesc):GetTextSizeY() + 5)
+  ;
+  ((self._ui)._detailDesc):ComputePos()
 end
 
 PaGlobal_NpcGift.setItemToSlot = function(self, uiSlot, itemSS, count)
@@ -145,11 +153,13 @@ end
 FGlobal_NpcGift_Open = function()
   -- function num : 0_9 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:open()
+  FGlobal_NpcGift_TooltipShow(false)
 end
 
 FGlobal_NpcGift_Close = function()
   -- function num : 0_10 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:close()
+  FGlobal_NpcGift_TooltipShow(false)
 end
 
 FGlobal_NpcGift_OnPresentTooltip = function()
@@ -188,14 +198,19 @@ FGlobal_Enchant_FileterForNpcGift = function(slotNo, notUse_itemWrappers, whereT
   end
 end
 
-FromClient_luaLoadComplete_NpcGift = function()
+FGlobal_NpcGift_TooltipShow = function(isShow)
   -- function num : 0_15 , upvalues : PaGlobal_NpcGift
+  ((PaGlobal_NpcGift._ui)._detailDesc):SetShow(isShow)
+end
+
+FromClient_luaLoadComplete_NpcGift = function()
+  -- function num : 0_16 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:init()
   PaGlobal_NpcGift:registEventHandler()
 end
 
 FromClient_NpcGiftSend = function()
-  -- function num : 0_16 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_17 , upvalues : PaGlobal_NpcGift
   local self = PaGlobal_NpcGift
   self._count = 0
   self._inventoryType = 0
@@ -209,14 +224,15 @@ FromClient_NpcGiftSend = function()
 end
 
 FromClient_SuccessProposeToNpc = function(npcName)
-  -- function num : 0_17 , upvalues : PaGlobal_NpcGift
+  -- function num : 0_18 , upvalues : PaGlobal_NpcGift
   PaGlobal_NpcGift:close()
   local message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SUCCESS_PROPOSETONPC", "name", npcName)
   Proc_ShowMessage_Ack(message)
+  PaGlobal_SetProposeToNpc()
 end
 
 PaGlobal_NpcGift.registEventHandler = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
   local ui = self._ui
   ;
   (ui._presentBtn):addInputEvent("Mouse_LUp", "FGlobal_NpcGift_PopupMessage()")
@@ -233,6 +249,10 @@ PaGlobal_NpcGift.registEventHandler = function(self)
     ;
     (((ui._slot_InterestItemList)[idx]).icon):addInputEvent("Mouse_Out", "FGlobal_NpcGift_OutTooltip()")
   end
+  ;
+  (ui._iconDetail):addInputEvent("Mouse_On", "FGlobal_NpcGift_TooltipShow(true)")
+  ;
+  (ui._iconDetail):addInputEvent("Mouse_Out", "FGlobal_NpcGift_TooltipShow(false)")
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_NpcGift")

@@ -18,6 +18,7 @@ if not ToClient_IsDevelopment() then
   _ContentsGroup_isConsoleTest = ToClient_isXBox()
   _ContentsGroup_isCamp = ToClient_IsContentsGroupOpen("347")
   _ContentsGroup_isFairy = ToClient_IsContentsGroupOpen("357")
+  _ContentsGroup_StatTierIcon = false
   _ContentsGroup_isAllWarehouse = ToClient_IsContentsGroupOpen("366")
   _ContentsGroup_isSecretExtract = ToClient_IsContentsGroupOpen("247")
   _ContentsGroup_guildAlliance = ToClient_IsContentsGroupOpen("365")
@@ -31,6 +32,8 @@ if not ToClient_IsDevelopment() then
     _ContentsGroup_Recommend = isGameTypeKorea()
     _ContentsGroup_DriganBossDragon = ToClient_IsContentsGroupOpen("377")
     _ContentsGroup_SeigeSeason5 = ToClient_IsContentsGroupOpen("388")
+    _ContentsGroup_RenewUI = ToClient_isXBox()
+    _ContentsGroup_OccupyBenefit = ToClient_IsDevelopment()
   end
 end
 

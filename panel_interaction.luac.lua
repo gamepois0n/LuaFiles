@@ -635,7 +635,7 @@ Interaction_ButtonPushed = function(interactionType)
                         local needWp = ToClient_CheckMiniGameFindWp(charWrapper:getCharacterKey())
                         if playerWp < needWp then
                           local charName = charWrapper:getName()
-                          local failMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MINIGAMEFIND_WPHELP", "name", charName, "wp", needWp)
+                          local failMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAMEFIND_WPHELP", "name", charName)
                           Proc_ShowMessage_Ack(failMsg)
                           return 
                         end

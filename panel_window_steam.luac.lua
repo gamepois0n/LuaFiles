@@ -53,6 +53,21 @@ PaGlobal_Steam_Redemption = function()
             url = "https://blackdesert.playredfox.com/black_desert/myaccount?i=" .. isUserID .. "&t=" .. ticket .. "&locale=" .. langType
             ToClient_OpenChargeWebPage(url, false)
             return 
+          else
+            do
+              if isGameTypeTR() and isSteamClient() then
+                ToClient_requestRedeemAuthSessionTicket()
+                local userID = ToClient_GetUserId()
+                local userNo = getUserNoByLobby()
+                local ticket = getSteamAuthSessionTicket()
+                if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                  url = "https://payment.tr.playblackdesert.com/Pay/Steam/WebStorage?accountNo=" .. userID .. "&userNo=" .. tostring(userNo) .. "&sessionTicket=" .. ticket
+                else
+                  url = "http://alpha-payment.tr.playblackdesert.com/Pay/Steam/WebStorage?accountNo=" .. userID .. "&userNo=" .. tostring(userNo) .. "&sessionTicket=" .. ticket
+                end
+                steamOverlayToWebPage(url)
+              end
+            end
           end
         end
       end

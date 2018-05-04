@@ -35,7 +35,7 @@ WharfInfoHideAni = function()
   aniInfo1:SetDisableWhileAni(true)
 end
 
-local wharfInfo = {_staticName = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_Name"), _mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP"), _staticText_GaugeBar_Hp = (UI.getChildControl)(Panel_Window_WharfInfo, "HP_GaugeBar"), _staticText_GaugeBar_Mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP_GaugeBar"), _staticText_GaugeBar_Weight = (UI.getChildControl)(Panel_Window_WharfInfo, "Weight_GaugeBar"), _staticText_Hp = (UI.getChildControl)(Panel_Window_WharfInfo, "HP_Value"), _staticText_Mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP_Value"), _staticText_Weight = (UI.getChildControl)(Panel_Window_WharfInfo, "Weight_Value"), _staticText_MoveSpeed = (UI.getChildControl)(Panel_Window_WharfInfo, "MaxMoveSpeedValue"), _staticText_Acceleration = (UI.getChildControl)(Panel_Window_WharfInfo, "AccelerationValue"), _staticText_Cornering = (UI.getChildControl)(Panel_Window_WharfInfo, "CorneringSpeedValue"), _staticText_BrakeSpeed = (UI.getChildControl)(Panel_Window_WharfInfo, "BrakeSpeedValue"), _deadCount = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_DeadCountValue")}
+local wharfInfo = {_staticName = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_Name"), _mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP"), _staticText_GaugeBar_Hp = (UI.getChildControl)(Panel_Window_WharfInfo, "HP_GaugeBar"), _staticText_GaugeBar_Mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP_GaugeBar"), _staticText_GaugeBar_Weight = (UI.getChildControl)(Panel_Window_WharfInfo, "Weight_GaugeBar"), _staticText_Hp = (UI.getChildControl)(Panel_Window_WharfInfo, "HP_Value"), _staticText_Mp = (UI.getChildControl)(Panel_Window_WharfInfo, "MP_Value"), _staticText_Weight = (UI.getChildControl)(Panel_Window_WharfInfo, "Weight_Value"), _staticText_MoveSpeed = (UI.getChildControl)(Panel_Window_WharfInfo, "MaxMoveSpeedValue"), _staticText_Acceleration = (UI.getChildControl)(Panel_Window_WharfInfo, "AccelerationValue"), _staticText_Cornering = (UI.getChildControl)(Panel_Window_WharfInfo, "CorneringSpeedValue"), _staticText_BrakeSpeed = (UI.getChildControl)(Panel_Window_WharfInfo, "BrakeSpeedValue"), _staticRegionChangingTime = (UI.getChildControl)(Panel_Window_WharfInfo, "Static_RegionChangingTime"), _staticRegionChangingTimeValue = (UI.getChildControl)(Panel_Window_WharfInfo, "Static_RegionChangingTimeValue"), _deadCount = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_Window_WharfInfo, "StaticText_DeadCountValue")}
 wharfInfo.init = function(self)
   -- function num : 0_2
 end
@@ -79,25 +79,37 @@ wharfInfo.update = function(self)
     ;
     (self._mp):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_HEART"))
   end
-  local deadCount = servantInfo:getDeadCount()
-  if servantInfo:doClearCountByDead() then
-    deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETOK", "deadCount", deadCount)
-  else
-    deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETNO", "deadCount", deadCount)
-  end
-  if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant then
-    (self._deadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_KILLCOUNT"))
-  else
-    if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
-      (self._deadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
+  local isChangingRegion = servantInfo:isChangingRegion()
+  ;
+  (self._staticRegionChangingTime):SetShow(isChangingRegion)
+  ;
+  (self._staticRegionChangingTimeValue):SetShow(isChangingRegion)
+  do
+    if isChangingRegion then
+      local remainSecondsToUneal = servantInfo:getRemainSecondsToUnseal()
+      ;
+      (self._staticRegionChangingTimeValue):SetText(convertStringFromDatetime(remainSecondsToUneal))
+    end
+    local deadCount = servantInfo:getDeadCount()
+    if servantInfo:doClearCountByDead() then
+      deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETOK", "deadCount", deadCount)
     else
-      if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat then
+      deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETNO", "deadCount", deadCount)
+    end
+    if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant then
+      (self._deadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_KILLCOUNT"))
+    else
+      if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
         (self._deadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
+      else
+        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat then
+          (self._deadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
+        end
       end
     end
+    ;
+    (self._deadCountValue):SetText(deadCount)
   end
-  ;
-  (self._deadCountValue):SetText(deadCount)
 end
 
 wharfInfo.registEventHandler = function(self)

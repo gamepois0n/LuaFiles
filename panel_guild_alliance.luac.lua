@@ -224,26 +224,15 @@ PaGlobal_GuildAlliance.updateTaxConst = function(self)
   _PA_LOG("cylee", "GuildAlliance:updateTaxConst()")
 end
 
-FGlobal_GuildAllianceOnNoticeChanged = function()
-  -- function num : 0_19
-  local self = PaGlobal_GuildAlliance
-  local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
-  if not guildAlliance then
-    return 
-  end
-  ;
-  ((self._ui)._allianceNotice):SetEditText(guildAlliance:getNotice(), true)
-end
-
--- DECOMPILER ERROR at PC141: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC139: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_GuildAlliance.isShowing = function(self)
-  -- function num : 0_20
+  -- function num : 0_19
   return Panel_Guild_Ally:GetShow()
 end
 
 FGlobal_OnGuildAllianceUpdate = function()
-  -- function num : 0_21
+  -- function num : 0_20
   _PA_LOG("cylee", "FGlobal_OnGuildAllianceUpdate() - FromClient_GuildAllianceUpdate")
   local self = PaGlobal_GuildAlliance
   if self:isShowing() then
@@ -253,6 +242,5 @@ end
 
 registerEvent("FromClient_luaLoadComplete", "FGlobal_GuildAllianceInfoInit")
 registerEvent("EventChangeGuildInfo", "FGlobal_GuildAllianceOnMarkChanged")
-registerEvent("FromClient_ResponseGuildNotice", "FGlobal_GuildAllianceOnNoticeChanged")
 registerEvent("FromClient_GuildAllianceUpdate", "FGlobal_OnGuildAllianceUpdate")
 

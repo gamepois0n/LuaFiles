@@ -440,6 +440,9 @@ FGlobal_ItemMarketRegistItem_Open = function(isOpenWarehouse, isByMaid)
       PaGlobal_SearchMenuWarehouse:Close()
     end
   end
+  if Panel_Manufacture:GetShow() == true then
+    Manufacture_Close()
+  end
   if Panel_Window_ItemMarket:GetShow() then
     FGolbal_ItemMarketNew_Close()
   end

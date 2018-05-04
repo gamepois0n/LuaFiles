@@ -222,8 +222,8 @@ EventNotifyTerritoryTradeAuthority = function(msgType, territoryKey, bidPrice)
 end
 
 FromClientNotifySupplyTradeStart = function()
-  -- function num : 0_7 , upvalues : isEnableSupplyTrade
-  if isEnableSupplyTrade then
+  -- function num : 0_7
+  if ToClient_IsContentsGroupOpen("26") == false then
     return 
   end
   local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_IMPERIAL_START"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_10"), addMsg = ""}
@@ -232,7 +232,7 @@ end
 
 FromClientNotifySupplyShopReset = function()
   -- function num : 0_8 , upvalues : isEnableSupplyTrade
-  if isEnableSupplyTrade then
+  if isEnableSupplyTrade == false then
     return 
   end
   local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_MSG_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_MSG_SUB"), addMsg = ""}

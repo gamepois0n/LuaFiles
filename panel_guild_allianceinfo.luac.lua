@@ -946,6 +946,8 @@ PaGlobal_Guild_AllianceInfo.InfoInitialize = function(self)
   ;
   ((self._infoUi).btnGuildAllianceMark):SetShow(false)
   local _notice = guildAlliance:getNotice()
+  ;
+  ((self._infoUi).editAllianceNoticeUi):SetText(_notice)
   if selfPlayer:isGuildAllianceChair() then
     ((self._infoUi).allianceMark):SetIgnore(false)
     ;
@@ -965,6 +967,8 @@ PaGlobal_Guild_AllianceInfo.InfoInitialize = function(self)
     ;
     ((self._infoUi).editAllianceNoticeUi):RegistReturnKeyEvent("PaGlobal_Guild_AllianceInfo:AllianceNotice_Regist()")
     ;
+    ((self._infoUi).editAllianceNoticeUi):SetEditText(_notice)
+    ;
     ((self._infoUi).button_Notice):SetShow(true)
     ;
     ((self._infoUi).button_NoticeInitialize):SetShow(true)
@@ -977,13 +981,7 @@ PaGlobal_Guild_AllianceInfo.InfoInitialize = function(self)
     ((self._infoUi).allyIconBG):SetIgnore(true)
   end
   ;
-  ((self._infoUi).editAllianceNoticeUi):SetText(_notice)
-  ;
-  ((self._infoUi).editAllianceNoticeUi):SetAutoResize(true)
-  ;
   ((self._infoUi).editAllianceNoticeUi):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-  ;
-  ((self._infoUi).editAllianceNoticeUi):SetText(((self._infoUi).editAllianceNoticeUi):GetText())
   local isSet = setGuildTextureByAllianceNo(_allianceNo, (self._infoUi).allianceMark)
   if isSet == false then
     ((self._infoUi).allianceMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
@@ -1071,8 +1069,10 @@ PaGlobal_Guild_AllianceInfo.AllianceNotice_Initialize = function(self)
 
   (self._infoUi)._notice = ""
   ;
+  ((self._infoUi).editAllianceNoticeUi):SetEditText("")
+  ;
   ((self._infoUi).editAllianceNoticeUi):SetText((self._infoUi)._notice)
-  ToClient_SetGuildAllianceNotice(_notice)
+  ToClient_SetGuildAllianceNotice("")
 end
 
 -- DECOMPILER ERROR at PC173: Confused about usage of register: R0 in 'UnsetPending'
@@ -1115,13 +1115,24 @@ FGlobal_GuildAlliance_Show = function(isShow)
   end
 end
 
+FGlobal_GuildAllianceOnNoticeChanged = function()
+  -- function num : 0_43
+  local self = PaGlobal_Guild_AllianceInfo
+  local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
+  if guildAlliance == nil then
+    return 
+  end
+  ;
+  ((self._infoUi).editAllianceNoticeUi):SetText(guildAlliance:getNotice())
+end
+
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Guild_AllianceInfo")
 registerEvent("EventChangeGuildInfo", "FGlobal_GuildAllianceInfoOnMarkChanged")
 registerEvent("FromClient_ResponseGuildNotice", "FGlobal_GuildAllianceOnNoticeChanged")
 registerEvent("FromClient_CreateGuildAlliance", "FGlobal_GuildAllianceDone")
 registerEvent("FromClient_DestroyGuildAlliance", "FGlobal_GuildAllianceDisbandDone")
 FromClient_luaLoadComplete_Panel_Guild_AllianceInfo = function()
-  -- function num : 0_43
+  -- function num : 0_44
   local self = PaGlobal_Guild_AllianceInfo
   self:OpenGuildAlliance()
   self.defaultFrameBG_Alliance = (UI.getChildControl)(Panel_Window_Guild, "Static_Frame_AllianceBG")

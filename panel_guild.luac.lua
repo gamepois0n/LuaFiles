@@ -1719,6 +1719,7 @@ GuildManager.TabToggle = function(self, index)
     FGlobal_ClearCandidate()
     _Web:ResetUrl()
   end
+  PaGlobal_Guild_Manufacture:SetShow(false)
   if index == 0 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDHISTORY"), 92, 1, 104, 15)
     FGlobal_GuildHistory_Show(true)
@@ -1918,6 +1919,7 @@ GuildManager.TabToggle = function(self, index)
     btn_GuildMasterMandate:SetShow(false)
     FGlobal_GuildBattle_Close()
     FGlobal_GuildAlliance_Show(false)
+    PaGlobal_Guild_Manufacture:SetShow(true)
     ;
     (self.historyBG):SetShow(true)
     tabNumber = 8
@@ -1966,6 +1968,7 @@ GuildManager.Hide = function(self)
   if Panel_Window_Guild:IsUISubApp() then
     return 
   end
+  PaGlobal_Guild_ManufactureSelect:close()
   PaGlobal_Guild_UseGuildFunds:ShowToggle(nil, false)
   Panel_Window_Guild:SetShow(false, true)
   FGlobal_ShowRewardList(false)
@@ -2236,29 +2239,17 @@ GuildMainInfo_Show = function()
   local hasOccupyTerritory = myGuildInfo:getHasSiegeCount()
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
-  ;
-  (GuildWarInfoPage._txtWarInfoTitle):SetShow(true)
-  if isGuildMaster then
-    (GuildInfoPage._btnChangeMark):SetShow(true)
-    notice_btn:SetShow(true)
-    promote_btn:SetShow(true)
-    introduce_btn:SetShow(true)
-    introduce_Reset:SetShow(true)
-    ;
-    (GuildWarInfoPage._btnDeclaration):SetShow(true)
-    ;
-    (GuildInfoPage._btnIncreaseMember):SetShow(true)
-    if isProtectGuildMember then
-      (GuildInfoPage._btnProtectAdd):SetShow(true)
+  do
+    if hasOccupyTerritory == 0 then
+      local myGuildAllianceChair = ToClient_GetMyGuildAlliancChairGuild()
+      if myGuildAllianceChair ~= nil then
+        hasOccupyTerritory = myGuildAllianceChair:getHasSiegeCount()
+      end
     end
-    if isGameTypeTaiwan() then
-      introduce_edit_TW:SetEnable(true)
-    else
-      introduce_edit:SetEnable(true)
-    end
-  else
-    if isGuildSubMaster then
-      (GuildInfoPage._btnChangeMark):SetShow(false)
+    ;
+    (GuildWarInfoPage._txtWarInfoTitle):SetShow(true)
+    if isGuildMaster then
+      (GuildInfoPage._btnChangeMark):SetShow(true)
       notice_btn:SetShow(true)
       promote_btn:SetShow(true)
       introduce_btn:SetShow(true)
@@ -2266,138 +2257,158 @@ GuildMainInfo_Show = function()
       ;
       (GuildWarInfoPage._btnDeclaration):SetShow(true)
       ;
-      (GuildInfoPage._btnIncreaseMember):SetShow(false)
-      ;
-      (GuildInfoPage._btnProtectAdd):SetShow(false)
+      (GuildInfoPage._btnIncreaseMember):SetShow(true)
+      if isProtectGuildMember then
+        (GuildInfoPage._btnProtectAdd):SetShow(true)
+      end
       if isGameTypeTaiwan() then
         introduce_edit_TW:SetEnable(true)
       else
         introduce_edit:SetEnable(true)
       end
     else
-      ;
-      (GuildInfoPage._btnChangeMark):SetShow(false)
-      notice_btn:SetShow(false)
-      promote_btn:SetShow(false)
-      introduce_btn:SetShow(false)
-      introduce_Reset:SetShow(false)
-      ;
-      (GuildWarInfoPage._btnDeclaration):SetShow(false)
-      ;
-      (GuildInfoPage._btnIncreaseMember):SetShow(false)
-      ;
-      (GuildInfoPage._btnProtectAdd):SetShow(false)
-      if isGameTypeTaiwan() then
-        introduce_edit_TW:SetEnable(false)
+      if isGuildSubMaster then
+        (GuildInfoPage._btnChangeMark):SetShow(false)
+        notice_btn:SetShow(true)
+        promote_btn:SetShow(true)
+        introduce_btn:SetShow(true)
+        introduce_Reset:SetShow(true)
+        ;
+        (GuildWarInfoPage._btnDeclaration):SetShow(true)
+        ;
+        (GuildInfoPage._btnIncreaseMember):SetShow(false)
+        ;
+        (GuildInfoPage._btnProtectAdd):SetShow(false)
+        if isGameTypeTaiwan() then
+          introduce_edit_TW:SetEnable(true)
+        else
+          introduce_edit:SetEnable(true)
+        end
       else
-        introduce_edit:SetEnable(false)
+        ;
+        (GuildInfoPage._btnChangeMark):SetShow(false)
+        notice_btn:SetShow(false)
+        promote_btn:SetShow(false)
+        introduce_btn:SetShow(false)
+        introduce_Reset:SetShow(false)
+        ;
+        (GuildWarInfoPage._btnDeclaration):SetShow(false)
+        ;
+        (GuildInfoPage._btnIncreaseMember):SetShow(false)
+        ;
+        (GuildInfoPage._btnProtectAdd):SetShow(false)
+        if isGameTypeTaiwan() then
+          introduce_edit_TW:SetEnable(false)
+        else
+          introduce_edit:SetEnable(false)
+        end
       end
     end
-  end
-  if hasOccupyTerritory ~= 0 then
-    (GuildInfoPage._iconOccupyTerritory):SetShow(true)
-  else
+    if hasOccupyTerritory ~= 0 then
+      (GuildInfoPage._iconOccupyTerritory):SetShow(true)
+    else
+      ;
+      (GuildInfoPage._iconOccupyTerritory):SetShow(false)
+    end
+    notice_title:SetShow(true)
+    notice_edit:SetShow(true)
+    if isGameTypeTaiwan() then
+      introduce_edit_TW:SetShow(true)
+      introduce_edit:SetShow(false)
+    else
+      introduce_edit:SetShow(true)
+      introduce_edit_TW:SetShow(false)
+    end
+    if isGameTypeEnglish() then
+      (GuildInfoPage._txtMaster):SetShow(false)
+      ;
+      (GuildInfoPage._txtGuildName):SetShow(false)
+    else
+      ;
+      (GuildInfoPage._txtMaster):SetShow(true)
+      ;
+      (GuildInfoPage._txtGuildName):SetShow(true)
+    end
     ;
-    (GuildInfoPage._iconOccupyTerritory):SetShow(false)
-  end
-  notice_title:SetShow(true)
-  notice_edit:SetShow(true)
-  if isGameTypeTaiwan() then
-    introduce_edit_TW:SetShow(true)
-    introduce_edit:SetShow(false)
-  else
-    introduce_edit:SetShow(true)
-    introduce_edit_TW:SetShow(false)
-  end
-  if isGameTypeEnglish() then
-    (GuildInfoPage._txtMaster):SetShow(false)
+    (GuildInfoPage._textGuildInfoTitle):SetShow(true)
     ;
-    (GuildInfoPage._txtGuildName):SetShow(false)
-  else
+    (GuildInfoPage._guildMainBG):SetShow(true)
     ;
-    (GuildInfoPage._txtMaster):SetShow(true)
+    (GuildInfoPage._iconGuildMark):SetShow(true)
     ;
-    (GuildInfoPage._txtGuildName):SetShow(true)
-  end
-  ;
-  (GuildInfoPage._textGuildInfoTitle):SetShow(true)
-  ;
-  (GuildInfoPage._guildMainBG):SetShow(true)
-  ;
-  (GuildInfoPage._iconGuildMark):SetShow(true)
-  ;
-  (GuildInfoPage._txtRGuildName):SetShow(true)
-  ;
-  (GuildInfoPage._txtRMaster):SetShow(true)
-  ;
-  (GuildInfoPage._txtRRank_Title):SetShow(true)
-  ;
-  (GuildInfoPage._txtRRank):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildPoint):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildPointValue):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildPointPercent):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildMpValue):SetShow(false)
-  ;
-  (GuildInfoPage._txtGuildMpPercent):SetShow(false)
-  ;
-  (GuildInfoPage._progressMpPoint):SetShow(false)
-  ;
-  (GuildInfoPage._btnGuildDel):SetShow(true)
-  ;
-  (GuildInfoPage._guildIntroduce_Title):SetShow(true)
-  ;
-  (GuildInfoPage._guildIntroduce_BG):SetShow(true)
-  ;
-  (GuildInfoPage._guildBbs_Title):SetShow(true)
-  ;
-  (GuildInfoPage._guildBbs_BG):SetShow(true)
-  ;
-  (GuildInfoPage._planning):SetShow(true)
-  ;
-  (GuildInfoPage._txtProtect):SetShow(true)
-  ;
-  (GuildInfoPage._txtProtectValue):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildMoneyTitle):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildMoney):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildTerritoryTitle):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildTerritoryValue):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildServantTitle):SetShow(true)
-  ;
-  (GuildInfoPage._txtGuildServantValue):SetShow(true)
-  if isContentsGuildHouse then
-    (GuildInfoPage._btnGuildWarehouse):SetShow(true)
-  else
+    (GuildInfoPage._txtRGuildName):SetShow(true)
     ;
-    (GuildInfoPage._btnGuildWarehouse):SetShow(false)
-  end
-  if isContentsGuildInfo then
-    (GuildInfoPage._btnGuildWebInfo):SetShow(true)
-  else
+    (GuildInfoPage._txtRMaster):SetShow(true)
     ;
-    (GuildInfoPage._btnGuildWebInfo):SetShow(false)
+    (GuildInfoPage._txtRRank_Title):SetShow(true)
     ;
-    (GuildInfoPage._btnGuildWarehouse):SetPosX((GuildInfoPage._btnGuildWebInfo):GetPosX())
-  end
-  ;
-  (GuildInfoPage._btnGetArshaHost):SetShow(false)
-  if (isGuildMaster or isGuildSubMaster) and isContentsArsha == true and isCanDoReservation == true then
-    (GuildInfoPage._btnGetArshaHost):SetShow(true)
-  end
-  GuildMainInfo_MandateBtn()
-  if isGameTypeKR2() then
-    (GuildInfoPage._btnChangeMark):SetShow(false)
-  end
-  if guildCommentsWebUrl ~= nil then
-    _Web:SetShow(true)
+    (GuildInfoPage._txtRRank):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildPoint):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildPointValue):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildPointPercent):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildMpValue):SetShow(false)
+    ;
+    (GuildInfoPage._txtGuildMpPercent):SetShow(false)
+    ;
+    (GuildInfoPage._progressMpPoint):SetShow(false)
+    ;
+    (GuildInfoPage._btnGuildDel):SetShow(true)
+    ;
+    (GuildInfoPage._guildIntroduce_Title):SetShow(true)
+    ;
+    (GuildInfoPage._guildIntroduce_BG):SetShow(true)
+    ;
+    (GuildInfoPage._guildBbs_Title):SetShow(true)
+    ;
+    (GuildInfoPage._guildBbs_BG):SetShow(true)
+    ;
+    (GuildInfoPage._planning):SetShow(true)
+    ;
+    (GuildInfoPage._txtProtect):SetShow(true)
+    ;
+    (GuildInfoPage._txtProtectValue):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildMoneyTitle):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildMoney):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildTerritoryTitle):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildTerritoryValue):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildServantTitle):SetShow(true)
+    ;
+    (GuildInfoPage._txtGuildServantValue):SetShow(true)
+    if isContentsGuildHouse then
+      (GuildInfoPage._btnGuildWarehouse):SetShow(true)
+    else
+      ;
+      (GuildInfoPage._btnGuildWarehouse):SetShow(false)
+    end
+    if isContentsGuildInfo then
+      (GuildInfoPage._btnGuildWebInfo):SetShow(true)
+    else
+      ;
+      (GuildInfoPage._btnGuildWebInfo):SetShow(false)
+      ;
+      (GuildInfoPage._btnGuildWarehouse):SetPosX((GuildInfoPage._btnGuildWebInfo):GetPosX())
+    end
+    ;
+    (GuildInfoPage._btnGetArshaHost):SetShow(false)
+    if (isGuildMaster or isGuildSubMaster) and isContentsArsha == true and isCanDoReservation == true then
+      (GuildInfoPage._btnGetArshaHost):SetShow(true)
+    end
+    GuildMainInfo_MandateBtn()
+    if isGameTypeKR2() then
+      (GuildInfoPage._btnChangeMark):SetShow(false)
+    end
+    if guildCommentsWebUrl ~= nil then
+      _Web:SetShow(true)
+    end
   end
 end
 
@@ -2622,10 +2633,33 @@ HandleClicked_TerritoryNameOnEvent = function(isShow)
           territoryComma = ""
         end
         territoryWarName = territoryWarName .. territoryComma .. guildArea1
+        if territoryKey == 2 then
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_1")
+        end
+        if territoryKey == 3 then
+          if desc == nil then
+            desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_2")
+          else
+            desc = desc .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_3")
+          end
+        end
+        if territoryKey == 4 then
+          if desc == nil then
+            desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_4")
+          else
+            desc = desc .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_5")
+          end
+        end
       end
     end
     name = territoryWarName
     control = self._txtGuildTerritoryValue
+    if desc ~= nil then
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TERRITORYBENEFIT_6", "territoryName", desc)
+    end
+    if not _ContentsGroup_OccupyBenefit then
+      desc = nil
+    end
   end
   local guildArea2 = ""
   local regionKey = ""

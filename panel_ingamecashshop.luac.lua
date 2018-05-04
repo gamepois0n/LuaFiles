@@ -395,7 +395,7 @@ inGameShop.init = function(self)
     ;
     (slot.name):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     ;
-    (slot.productIcon):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", false" .. ")")
+    (slot.productIcon):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", 0" .. ")")
     ;
     (slot.productIcon):addInputEvent("Mouse_UpScroll", "InGameShop_ScrollEvent( true )")
     ;
@@ -405,7 +405,7 @@ inGameShop.init = function(self)
     ;
     (slot.static):addInputEvent("Mouse_DownScroll", "InGameShop_ScrollEvent( false )")
     ;
-    (slot.static):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", false" .. ")")
+    (slot.static):addInputEvent("Mouse_LUp", "IngameCashShop_SelectedItem(" .. ii .. ", 0" .. ")")
     ;
     (slot.buttonCart):addInputEvent("Mouse_LUp", "IngameCashShop_CartItem(" .. ii .. ")")
     ;
@@ -1175,21 +1175,25 @@ setPosOpenSubTab = function(tabIndex)
   local statPosX = (((self._tabs)[tabIndex]).static):GetPosX()
   local statPosY = (((self._tabs)[tabIndex]).static):GetPosY() + tabConfig._gapY + 10
   local subCategoryCount = getCashMiddleCategorySize((tabIndexList[tabIndex])[2])
+  local showCountii = 0
   for ii = 1, subCategoryCount do
-    (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetPosX(statPosX)
-    ;
-    (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetPosY(statPosY + (ii - 1) * 25)
-    ;
-    (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetShow(true)
-    ;
-    (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetPosX(0)
-    ;
-    (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetPosY(0)
-    ;
-    (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetShow(true)
+    if (((self._tabs)[tabIndex])._subTab)[ii] ~= nil then
+      (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetPosX(statPosX)
+      ;
+      (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetPosY(statPosY + showCountii * 25)
+      ;
+      (((((self._tabs)[tabIndex])._subTab)[ii]).static):SetShow(true)
+      ;
+      (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetPosX(0)
+      ;
+      (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetPosY(0)
+      ;
+      (((((self._tabs)[tabIndex])._subTab)[ii]).text):SetShow(true)
+      showCountii = showCountii + 1
+    end
   end
-  local lastPosY = statPosY + 25 * (subCategoryCount - 1) + 15
-  local subTabSize = 25 * subCategoryCount
+  local lastPosY = statPosY + 25 * (showCountii - 1) + 15
+  local subTabSize = 25 * (showCountii)
   for jj = tabIndex + 1, self._tabCount do
     local tab = (self._tabs)[jj]
     ;
@@ -1222,9 +1226,11 @@ setPosCloseSubTab = function()
   for jj = 1, mainCatogorySize do
     local subCategoryCount = getCashMiddleCategorySize((tabIndexList[jj])[2])
     for ii = 1, subCategoryCount do
-      (((((self._tabs)[jj])._subTab)[ii]).static):SetShow(false)
-      ;
-      (((((self._tabs)[jj])._subTab)[ii]).text):SetShow(false)
+      if (((self._tabs)[jj])._subTab)[ii] ~= nil then
+        (((((self._tabs)[jj])._subTab)[ii]).static):SetShow(false)
+        ;
+        (((((self._tabs)[jj])._subTab)[ii]).text):SetShow(false)
+      end
     end
   end
 end
@@ -1332,7 +1338,11 @@ end
 
 InGameShop_BuyDaumCash = function()
   -- function num : 0_30
-  FGlobal_BuyDaumCash()
+  if ToClient_isXBox() then
+    ToClient_XboxShowStore()
+  else
+    FGlobal_BuyDaumCash()
+  end
 end
 
 InGameShop_RefreshCash = function()
@@ -2888,6 +2898,11 @@ IngameCashShop_SelectedItem = function(index, bValue)
   audioPostEvent_SystemUi(1, 0)
   FGlobal_SpecialMoveSettingCheck()
   IngameCashShop_SelectedItemXXX(slot.productNoRaw, nil, bValue)
+  local tempSaveProductKeyRaw = slot.productNoRaw
+  local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(tempSaveProductKeyRaw)
+  if cashProduct:isMoneyPrice() then
+    warehouse_requestInfo(getCurrentWaypointKey())
+  end
 end
 
 IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet, bValue)
@@ -3495,6 +3510,7 @@ InGameShop_SelectSubFilter = function()
   self:update()
 end
 
+local isFirstRespone = true
 InGameShop_UpdateCashShop = function()
   -- function num : 0_85 , upvalues : inGameShop
   local self = inGameShop
@@ -3667,11 +3683,10 @@ do
     end
   end
   InGameCashshopDescUpdate(deltaTime)
+  -- DECOMPILER ERROR at PC26: Confused about usage of register: R1 in 'UnsetPending'
+
   if PaGlobal_Recommend_PopUp._isRequestShow == true then
     if Panel_Window_RecommandGoods_PopUp:GetShow() then
-      _PA_LOG("�\128민혁", "이게뭐야")
-      -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
-
       PaGlobal_Recommend_PopUp._isRequestShow = false
     else
       PaGlobal_Recommend_PopUp:Open()
@@ -3775,7 +3790,7 @@ end
 end
 
   InGameShop_Open = function()
-  -- function num : 0_94 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
+  -- function num : 0_94 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG, isFirstRespone, tabIndexList
   if Panel_IngameCashShop_EasyPayment:IsShow() then
     Panel_IngameCashShop_EasyPayment:SetShow(false, false)
   end
@@ -3955,6 +3970,31 @@ end
   self._ViewingRecommend = false
   PaGlobal_RecommendGoods:Close()
   PaGlobal_Recommend_PopUp:Close()
+  if isFirstRespone == true then
+    for ii = 1, self._tabCount do
+      (getIngameCashMall()):setCurrentCategory((tabIndexList[ii])[2])
+      local subCategoryCount = getCashMiddleCategorySize((tabIndexList[ii])[2])
+      for jj = 1, subCategoryCount do
+        (getIngameCashMall()):setSearchText("")
+        ;
+        (getIngameCashMall()):setCurrentClass(-1)
+        ;
+        (getIngameCashMall()):setCurrentSort(-1)
+        ;
+        (getIngameCashMall()):setCurrentSubFilter(-1)
+        ;
+        (getIngameCashMall()):setCurrentSubTab(jj)
+        ;
+        (getIngameCashMall()):setCashProductNoRawFilterList()
+        -- DECOMPILER ERROR at PC606: Confused about usage of register: R14 in 'UnsetPending'
+
+        if (getIngameCashMall()):getCashProductFilterListCount() <= 0 then
+          (((self._tabs)[ii])._subTab)[jj] = nil
+        end
+      end
+    end
+    isFirstRespone = false
+  end
 end
 
   FGlobal_CheckPromotionTab = function()
@@ -4077,7 +4117,7 @@ end
     -- DECOMPILER ERROR at PC80: Confused about usage of register: R9 in 'UnsetPending'
 
     inGameShop._cashProductNoData = productNo
-    IngameCashShop_SelectedItemXXX(productNo, true, true)
+    IngameCashShop_SelectedItemXXX(productNo, true, bValue)
     ;
     (((inGameShop._subItemButton)[1]).static):SetCheck(false)
     ;

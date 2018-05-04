@@ -577,6 +577,9 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
   if Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
+  if Panel_Window_ItemMarket_RegistItem:GetShow() == true then
+    FGlobal_ItemMarketRegistItem_Close()
+  end
   ClothInventory_Close()
   local noticeText = ""
   invenShow = showType

@@ -38,6 +38,7 @@ nodeStableList.init = function(self)
     slot.registerMarket = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_RegisterMarket", slot.button, "nodeStableList_Slot_RegisterMarket_" .. slotidx)
     slot.mating = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_Mating", slot.button, "nodeStableList_Slot_Mating_" .. slotidx)
     slot.matingComplete = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_MatingComplete", slot.button, "nodeStableList_Slot_MatingCompletes_" .. slotidx)
+    slot.changingRegion = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_ChangingRegion", slot.button, "nodeStableList_Slot_ChangingRegion_" .. slotidx)
     slot.isSeized = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_Seized", slot.button, "nodeStableList_Slot_Seized_" .. slotidx)
     slot.stallionIcon = (UI.createAndCopyBasePropertyControl)(Panel_NodeStable, "List_iconStallion", slot.button, "nodeStableList_Slot_Stallion_" .. slotidx)
     local slotConfig = (self._config).slot
@@ -99,12 +100,16 @@ nodeStableList.init = function(self)
     ;
     (slot.matingComplete):SetPosY(iconConfig.startStateY)
     ;
+    (slot.changingRegion):SetPosX(iconConfig.startStateX)
+    ;
+    (slot.changingRegion):SetPosY(iconConfig.startStateY)
+    ;
     (slot.isSeized):SetPosX(iconConfig.startStateX)
     ;
     (slot.isSeized):SetPosY(iconConfig.startStateY)
     ;
     (slot.icon):ActiveMouseEventEffect(true)
-    -- DECOMPILER ERROR at PC302: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC320: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._slots)[slotidx] = slot
@@ -183,6 +188,8 @@ nodeStableList.update = function(self)
             ;
             (slot.matingComplete):SetShow(false)
             ;
+            (slot.changingRegion):SetShow(false)
+            ;
             (slot.stallionIcon):SetShow(false)
             if servantInfo:isSeized() then
               (slot.isSeized):SetShow(true)
@@ -196,6 +203,8 @@ nodeStableList.update = function(self)
               else
                 (slot.mating):SetShow(true)
               end
+            elseif (Defines.s64_const).s64_0 < servantInfo:getRemainSecondsToUnseal() then
+              (slot.changingRegion):SetShow(true)
             elseif (CppEnums.ServantStateType).Type_Coma == servantInfo:getStateType() then
               (slot.coma):SetShow(true)
             end
@@ -229,9 +238,9 @@ nodeStableList.update = function(self)
             slot.index = servantIdx
             uiIdx = uiIdx + 1
           end
-          -- DECOMPILER ERROR at PC330: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC346: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC330: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC346: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -243,7 +252,7 @@ nodeStableList.update = function(self)
     else
       (self._scroll):SetShow(false)
     end
-    -- DECOMPILER ERROR: 21 unprocessed JMP targets
+    -- DECOMPILER ERROR: 22 unprocessed JMP targets
   end
 end
 

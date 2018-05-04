@@ -242,6 +242,9 @@ end
   if setDivisionTime < updateTime then
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
+    if ToClient_isXBox() then
+      GoblinUpdate(deltaTime)
+    end
   end
 end
 

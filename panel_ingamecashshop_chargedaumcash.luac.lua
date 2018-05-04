@@ -144,52 +144,88 @@ do
                   else
                     do
                       if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_TEST")
-                      else
-                        if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_REAL")
-                        else
-                          if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_TEST")
-                          else
-                            if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_REAL")
-                            else
-                              if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_TEST")
-                              else
-                                if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_REAL")
-                                else
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                        if isSteamClient() then
+                          if not isSteamInGameOverlayEnabled() then
+                            local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STEAM_ALERT")
+                            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            ;
+                            (MessageBox.showMessageBox)(messageBoxData)
+                            return 
+                          end
+                          do
+                            ToClient_requestCashChargeAuthSessionTicket()
+                            local isUserID = ToClient_GetUserId()
+                            do
+                              local ticket = getSteamAuthSessionTicket()
+                              url = "http://alpha-payment.tr.playblackdesert.com/Pay/Steam?accountNo=" .. isUserID .. "&sessionTicket=" .. ticket
+                              steamOverlayToWebPage(url)
+                              do return  end
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_TEST")
+                              if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                if isSteamClient() then
+                                  if not isSteamInGameOverlayEnabled() then
+                                    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STEAM_ALERT")
+                                    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                    ;
+                                    (MessageBox.showMessageBox)(messageBoxData)
+                                    return 
+                                  end
+                                  do
+                                    ToClient_requestCashChargeAuthSessionTicket()
+                                    local userID = ToClient_GetUserId()
+                                    do
+                                      local ticket = getSteamAuthSessionTicket()
+                                      url = "http://payment.tr.playblackdesert.com/Pay/Steam?accountNo=" .. userID .. "&sessionTicket=" .. ticket
+                                      steamOverlayToWebPage(url)
+                                      do return  end
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_REAL")
+                                      if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_TEST")
+                                      else
+                                        if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_REAL")
+                                        else
+                                          if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_TEST")
+                                          else
+                                            if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_REAL")
+                                            else
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                                            end
+                                          end
+                                        end
+                                      end
+                                      local exeIE = true
+                                      if isGameTypeKorea() then
+                                        exeIE = true
+                                      else
+                                        exeIE = false
+                                      end
+                                      ToClient_OpenChargeWebPage(url, exeIE)
+                                      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
+                                      if isGameTypeTR() then
+                                        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TR")
+                                      else
+                                        if isGameTypeTH() then
+                                          messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TH")
+                                        else
+                                          if isGameTypeID() then
+                                            messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_ID")
+                                          end
+                                        end
+                                      end
+                                      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                      ;
+                                      (MessageBox.showMessageBox)(messageBoxData)
+                                    end
+                                  end
                                 end
                               end
                             end
                           end
                         end
                       end
-                      local exeIE = true
-                      if isGameTypeKorea() then
-                        exeIE = true
-                      else
-                        exeIE = false
-                      end
-                      ToClient_OpenChargeWebPage(url, exeIE)
-                      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
-                      if isGameTypeTR() then
-                        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TR")
-                      else
-                        if isGameTypeTH() then
-                          messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TH")
-                        else
-                          if isGameTypeID() then
-                            messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_ID")
-                          end
-                        end
-                      end
-                      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                      ;
-                      (MessageBox.showMessageBox)(messageBoxData)
                     end
                   end
                 end

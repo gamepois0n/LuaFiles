@@ -812,7 +812,15 @@ GameMenu_CheckEnAble = function(buttonType)
     if isGameTypeEnglish() or isGameTypeSA() or isGameServiceTypeDev() then
       returnValue = true
     else
-      returnValue = false
+      if isGameTypeTR() then
+        if isSteamClient() then
+          returnValue = true
+        else
+          returnValue = false
+        end
+      else
+        returnValue = false
+      end
     end
   end
   if buttonType == MenuButtonId.btn_Update then

@@ -25,7 +25,7 @@ giftTopList = {}
 giftBotList = {}
 , 
 giftUserList = {}
-, savedProductCount = 1, savedCouponApply = nil, savedCouponDiscountRate = 0, savedCouponDiscountTextSizeX = 0, _panelTitle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Title"), _static_LeftBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_LeftBG"), _static_PearlBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_PearlBG"), _static_ItemIconBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlotBG"), _static_ItemIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlot"), _static_ItemName = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GoodsName"), _static_PearlIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlIcon"), _static_StampIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStampIcon"), _txt_PearlIconPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_CouponPearlIcon"), _txt_DiscountDirection = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountDirection"), _static_DiscountPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountGoodsPrice"), _static_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GiftTo"), _edit_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Edit_GiftTo"), _static_GiftListBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBG"), _static_GiftListTopBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListTopBG"), _static_GiftListMiddleBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListMiddleBG"), _static_GiftListBotBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBotBG"), _static_GiftList_NonUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_NonUser"), _scroll_GiftTopList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftTopList"), _scroll_GiftBotList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftBotList"), _buttonFriendList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Friend"), _buttonGuildList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Guild"), _button_AddUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_AddUser"), _button_Close = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Win_Close"), _button_Confirm = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Confirm"), _button_Cancle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Cancle"), _static_selectStampBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_StampCouponSelectBG"), _static_Caution = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Caution"), _slotCount = 20, _slots = (Array.new)(), _needMoneyType = -1, _productNoRaw = nil, _isGift = false, _byCart = false, _easyBuy = false, _eventCart = false, _usePearlStampCount = 0, _isUsePearl = false, _radio_PayInven = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "RadioButton_InverMoney"), _radio_PayWarehouse = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "RadioButton_WarehouseMoney"), _staticText_PayInven = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_InvenMoney"), _staticText_PayWarehouse = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_WarehouseMoney"), _radio_PayWarehouseChecked = false}
+, savedProductCount = 1, savedCouponApply = nil, savedCouponDiscountRate = 0, savedCouponDiscountTextSizeX = 0, _panelTitle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Title"), _static_LeftBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_LeftBG"), _static_PearlBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_PearlBG"), _static_ItemIconBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlotBG"), _static_ItemIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlot"), _static_ItemName = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GoodsName"), _static_PearlIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlIcon"), _static_StampIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStampIcon"), _txt_PearlIconPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_CouponPearlIcon"), _txt_DiscountDirection = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountDirection"), _static_DiscountPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountGoodsPrice"), _static_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GiftTo"), _edit_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Edit_GiftTo"), _static_GiftListBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBG"), _static_GiftListTopBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListTopBG"), _static_GiftListMiddleBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListMiddleBG"), _static_GiftListBotBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBotBG"), _static_GiftList_NonUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_NonUser"), _scroll_GiftTopList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftTopList"), _scroll_GiftBotList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftBotList"), _buttonFriendList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Friend"), _buttonGuildList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Guild"), _button_AddUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_AddUser"), _button_Close = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Win_Close"), _button_Confirm = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Confirm"), _button_Cancle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Cancle"), _static_selectStampBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_StampCouponSelectBG"), _static_Caution = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Caution"), _slotCount = 20, _slots = (Array.new)(), _needMoneyType = -1, _productNoRaw = nil, _isGift = false, _byCart = false, _easyBuy = false, _eventCart = false, _usePearlStampCount = 0, _isUsePearl = false, _radio_PayInven = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "RadioButton_InverMoney"), _radio_PayWarehouse = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "RadioButton_WarehouseMoney"), _staticText_PayInven = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_InvenMoney"), _staticText_PayWarehouse = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_WarehouseMoney"), _bool_payInSilverFromWarehouse = false}
 inGameShopBuy.icon_Pearl = (UI.getChildControl)(inGameShopBuy._static_GiftListMiddleBG, "StaticText_TotalPearlIcon")
 local contry = {kr = 0, jp = 1, ru = 2, kr2 = 3}
 local cashIconType = {cash = 0, pearl = 1, mileage = 2, silver = 3}
@@ -255,7 +255,9 @@ end
   ;
   (self._buttonGuildList):addInputEvent("Mouse_LUp", "HandelClicked_InGameShopBuy_FriendGuild()")
   ;
-  (self._radio_PayWarehouse):addInputEvent("Mouse_LUp", "HandleClicked_InGameShopBuy_CheckPayWarehouse()")
+  (self._radio_PayInven):addInputEvent("Mouse_LUp", "HandleClicked_InGameShopBuy_CheckPayWarehouse(false)")
+  ;
+  (self._radio_PayWarehouse):addInputEvent("Mouse_LUp", "HandleClicked_InGameShopBuy_CheckPayWarehouse(true)")
 end
 
   inGameShopBuy.registEventHandler = function(self)
@@ -280,6 +282,14 @@ end
   ;
   (self._txt_PearlIconPrice):SetFontColor(UI_color.C_FFEFEFEF)
   self.savedCouponApply = isCouponApply
+  ;
+  (self._radio_PayInven):SetShow(false)
+  ;
+  (self._radio_PayWarehouse):SetShow(false)
+  ;
+  (self._staticText_PayInven):SetShow(false)
+  ;
+  (self._staticText_PayWarehouse):SetShow(false)
   for ii = 0, self._slotCount - 1 do
     local slot = (self._slots)[ii]
     slot._itemRaw = 0
@@ -333,7 +343,7 @@ end
             (slot.iconBG):SetShow(true)
             realCount = realCount + 1
           end
-          -- DECOMPILER ERROR at PC174: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out DO_STMT
 
         end
       end
@@ -709,6 +719,30 @@ end
                 (self._static_selectStampBG):SetShow(true)
                 FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(cashProduct:getPrice(), cashProduct:getMainCategory())
                 if cashProduct:isMoneyPrice() then
+                  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+                  if regionInfo == nil then
+                    return 
+                  end
+                  local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
+                  local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
+                  local wayKey = getCurrentWaypointKey()
+                  if ToClient_IsAccessibleRegionKey(myAffiliatedTownRegionKey) == false then
+                    local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+                    local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+                    if newRegionInfo == nil then
+                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+                    end
+                    wayKey = (newRegionInfo:get())._waypointKey
+                    myAffiliatedTownRegionKey = newRegionInfo:getRegionKey()
+                    if myAffiliatedTownRegionKey == 0 then
+                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+                    end
+                    if wayKey == 0 then
+                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+                    end
+                  end
+                  warehouse_requestInfo(wayKey)
+                  ;
                   (self._static_PearlBG):SetSize((self._static_PearlBG):GetSizeX(), (self._static_PearlBG):GetSizeY() + 50)
                   Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), Panel_IngameCashShop_BuyOrGift:GetSizeY() + 50)
                   ;
@@ -728,31 +762,11 @@ end
                   ;
                   (self._staticText_PayWarehouse):SetShow(true)
                   local silverInInventory = (((getSelfPlayer()):get()):getInventory()):getMoney_s64()
-                  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-                  if regionInfo == nil then
-                    return 
-                  end
-                  local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
-                  local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
-                  if ToClient_IsAccessibleRegionKey(regionInfo:getAffiliatedTownRegionKey()) == false then
-                    local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
-                    local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
-                    if newRegionInfo == nil then
-                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
-                      return 
-                    end
-                    myAffiliatedTownRegionKey = newRegionInfo:getRegionKey()
-                    if myAffiliatedTownRegionKey == 0 then
-                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
-                      return 
-                    end
-                  end
                   local silverInWarehouse = warehouse_moneyFromRegionKey_s64(myAffiliatedTownRegionKey)
                   ;
                   (self._radio_PayInven):SetCheck(silverInWarehouse < silverInInventory)
                   ;
                   (self._radio_PayWarehouse):SetCheck(silverInInventory <= silverInWarehouse)
-                  self._radio_PayWarehouseChecked = silverInInventory <= silverInWarehouse
                   ;
                   (self._staticText_PayInven):SetText(makeDotMoney(silverInInventory))
                   ;
@@ -1070,6 +1084,8 @@ end
 
   InGameShopBuy_ConfirmMSG = function()
   -- function num : 0_11 , upvalues : inGameShopBuy
+  local self = inGameShopBuy
+  self._bool_payInSilverFromWarehouse = (self._radio_PayWarehouse):IsChecked()
   if inGameShopBuy._eventCart then
     InGameShopBuy_ConfirmEventCart()
     return 
@@ -1324,11 +1340,10 @@ end
     local fromWhereType = (CppEnums.ItemWhereType).eCount
     if cashProduct:isMoneyPrice() then
       fromWhereType = (CppEnums.ItemWhereType).eInventory
-      if self._radio_PayWarehouseChecked == true then
+      if self._bool_payInSilverFromWarehouse == true then
         fromWhereType = (CppEnums.ItemWhereType).eWarehouse
       end
     end
-    _PA_LOG("박범�\128", "fromWhereType : eWarehouse - " .. tostring(self._radio_PayWarehouseChecked))
     ;
     (getIngameCashMall()):requestBuyItem(self._productNoRaw, count, cashProduct:getPrice(), isImmediatelyUse, couponNo, couponKey, pearlCount, fromWhereType)
   end
@@ -1649,10 +1664,10 @@ end
   ClearFocusEdit()
 end
 
-  HandleClicked_InGameShopBuy_CheckPayWarehouse = function()
+  HandleClicked_InGameShopBuy_CheckPayWarehouse = function(bool)
   -- function num : 0_37 , upvalues : inGameShopBuy
   local self = inGameShopBuy
-  self._radio_PayWarehouseChecked = (self._radio_PayWarehouse):IsCheck()
+  self._bool_payInSilverFromWarehouse = bool
 end
 
   InGameShopBuy_ShowItemToolTip = function(isShow, index)

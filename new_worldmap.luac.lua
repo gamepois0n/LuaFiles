@@ -424,7 +424,11 @@ FGlobal_PopCloseWorldMap = function()
     ToClient_preCloseMap()
     Panel_NodeSiegeTooltip:SetShow(false)
     Panel_WorldMap_Tooltip:SetShow(false)
-    Panel_Window_QuestNew_Show(false)
+    if _ContentsGroup_RenewUI == false then
+      Panel_Window_QuestNew_Show(false)
+    else
+      FGlobal_QuestInfoSetShow(false)
+    end
     Panel_Tooltip_SimpleText:SetShow(false)
     isCloseWorldMap = false
     Panel_NaviButton:SetShow(false)

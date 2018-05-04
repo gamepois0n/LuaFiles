@@ -69,10 +69,25 @@ _progress2Craft = {}
 _progress2CraftBG = {}
 }
 }
--- DECOMPILER ERROR at PC277: Confused about usage of register: R7 in 'UnsetPending'
+local setTierIcon = function(iconControl, textureName, iconIdx, leftX, topY, xCount, iconSize)
+  -- function num : 0_0
+  iconControl:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Etc_04.dds")
+  iconControl:SetShow(true)
+  local x1, y1, x2, y2 = nil, nil, nil, nil
+  x1 = leftX + (iconSize + 1) * (iconIdx % xCount)
+  y1 = topY + (iconSize + 1) * (math.floor)(iconIdx / xCount)
+  x2 = x1 + iconSize
+  y2 = y1 + iconSize
+  x1 = setTextureUV_Func(iconControl, x1, y1, x2, y2)
+  ;
+  (iconControl:getBaseTexture()):setUV(x1, y1, x2, y2)
+  iconControl:setRenderTexture(iconControl:getBaseTexture())
+end
+
+-- DECOMPILER ERROR at PC278: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initialize = function(self)
-  -- function num : 0_0 , upvalues : Class_BattleSpeed, BattleSpeed, UI_Symbol, CombatType, UI_Class
+  -- function num : 0_1 , upvalues : Class_BattleSpeed, BattleSpeed, UI_Symbol, CombatType, UI_Class
   self._player = getSelfPlayer()
   self._playerGet = (self._player):get()
   self:initializeControl()
@@ -142,10 +157,10 @@ PaGlobal_CharacterInfoBasic.initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC280: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC281: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.initializeControl = function(self)
-  -- function num : 0_1
+  -- function num : 0_2
   for key,index in pairs(self._status) do
     -- DECOMPILER ERROR at PC13: Confused about usage of register: R6 in 'UnsetPending'
 
@@ -349,10 +364,10 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC283: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC284: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.update = function(self)
-  -- function num : 0_2
+  -- function num : 0_3
   local FamiName = (self._player):getUserNickname()
   local ChaName = (self._player):getOriginalName()
   ;
@@ -391,10 +406,10 @@ PaGlobal_CharacterInfoBasic.update = function(self)
   self:updatePlayerTotalStat()
 end
 
--- DECOMPILER ERROR at PC286: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC287: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
-  -- function num : 0_3
+  -- function num : 0_4
   for index,value in pairs((self._ui)._staticTextCraft_Title) do
     (((self._ui)._staticTextCraft_Title)[index]):addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_Craft(true, " .. index .. ")")
     ;
@@ -446,7 +461,7 @@ PaGlobal_CharacterInfoBasic.registEventHandler = function(self)
 end
 
 FromClient_CharacterInfo_PlayerTotalStat_Changed = function(actorKey, totalStatValue)
-  -- function num : 0_4
+  -- function num : 0_5
   if Panel_Window_CharInfo_Status:GetShow() == false then
     return 
   end
@@ -463,52 +478,49 @@ FromClient_CharacterInfo_PlayerTotalStat_Changed = function(actorKey, totalStatV
   end
   local totalStatValue = (math.floor)(totalStatValue)
   local tier = ToClient_GetTier(totalStatValue) - 1
-  PaGlobal_CharacterInfoBasic:changedBattlePoint(totalStatValue, tier)
+  PaGlobal_CharacterInfoBasic:changedBattlePoint(totalStatValue)
 end
 
--- DECOMPILER ERROR at PC291: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC293: Confused about usage of register: R8 in 'UnsetPending'
 
-PaGlobal_CharacterInfoBasic.changedBattlePoint = function(self, battlePoint, tier)
-  -- function num : 0_5
+PaGlobal_CharacterInfoBasic.changedBattlePoint = function(self, battlePoint)
+  -- function num : 0_6 , upvalues : setTierIcon
   if Panel_Window_CharInfo_Status:GetShow() == false then
     return 
   end
-  local tierName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOTALSTAT_TIERNAME_" .. tier + 1, "totalStat", battlePoint)
-  ;
-  ((self._ui).battlePointValueAndIcon):SetText(tierName)
-  ;
-  ((self._ui).battlePointValueAndIcon):ChangeTextureInfoName("")
-  ;
-  ((self._ui).battlePointValueAndIcon):SetShow(true)
-  local x1, y1, x2, y2 = nil, nil, nil, nil
-  x1 = 182 + (3 - tier % 4) * 43
-  x2 = 224 + (3 - tier % 4) * 43
-  y1 = 99 + (1 - (math.floor)(tier / 4)) * 43
-  y2 = 141 + (1 - (math.floor)(tier / 4)) * 43
-  x1 = setTextureUV_Func((self._ui).battlePointValueAndIcon, x1, y1, x2, y2)
-  ;
-  (((self._ui).battlePointValueAndIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
-  ;
-  ((self._ui).battlePointValueAndIcon):setRenderTexture(((self._ui).battlePointValueAndIcon):getBaseTexture())
+  local highTier = ToClient_GetHighTierByTotalStat(battlePoint)
+  if _ContentsGroup_StatTierIcon == true and highTier >= 1 and highTier <= ToClient_GetHighTierCount() then
+    local tierName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOTALSTAT_HIGHTIERNAME_" .. highTier, "totalStat", battlePoint)
+    ;
+    ((self._ui).battlePointValueAndIcon):SetText(tierName)
+    setTierIcon((self._ui).battlePointValueAndIcon, "new_ui_common_forlua/default/Default_Etc_04.dds", 3 - highTier, 225, 142, 3, 42)
+  else
+    do
+      local tier = ToClient_GetTier(battlePoint)
+      local tierName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOTALSTAT_TIERNAME_" .. tier, "totalStat", battlePoint)
+      ;
+      ((self._ui).battlePointValueAndIcon):SetText(tierName)
+      setTierIcon((self._ui).battlePointValueAndIcon, "new_ui_common_forlua/default/Default_Etc_04.dds", 8 - tier, 354, 99, 4, 24)
+    end
+  end
 end
 
--- DECOMPILER ERROR at PC294: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC296: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.updatePlayerTotalStat = function(self)
-  -- function num : 0_6
+  -- function num : 0_7
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
   end
   local totalStatValue = (math.floor)(selfPlayer:getTotalStatValue())
-  local tier = ToClient_GetTier(totalStatValue) - 1
-  self:changedBattlePoint(totalStatValue, tier)
+  self:changedBattlePoint(totalStatValue)
 end
 
--- DECOMPILER ERROR at PC297: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC299: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.registMessageHandler = function(self)
-  -- function num : 0_7
+  -- function num : 0_8
   registerEvent("FromClient_SelfPlayerTendencyChanged", "FromClient_UI_CharacterInfo_Basic_TendencyChanged")
   registerEvent("FromClient_WpChanged", "FromClient_UI_CharacterInfo_Basic_MentalChanged")
   registerEvent("FromClient_UpdateExplorePoint", "FromClient_UI_CharacterInfo_Basic_ContributionChanged")

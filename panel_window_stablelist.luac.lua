@@ -62,7 +62,7 @@ _const = {eTypeSealed = 0, eTypeUnsealed = 1, eTypeTaming = 2}
 _config = {
 slot = {startX = 15, startY = 15, gapY = 158}
 , 
-icon = {startX = 0, startY = 0, startNameX = 5, startNameY = 120, startEffectX = -1, startEffectY = -1, startSexIconX = 0, startSexIconY = 0, startStateX = 23, startStateY = 3}
+icon = {startX = 0, startY = 0, startNameX = 5, startNameY = 120, startEffectX = -1, startEffectY = -1, startSexIconX = 0, startSexIconY = 0, startStateX = 23, startStateY = 3, secondLineStartStateY = 28}
 , 
 unseal = {startX = 230, startY = 0, startTitleX = -15, startTitleY = 0, startButtonX = 25, startButtonY = 25, startIconX = 25, startIconY = 35, startEffectX = -1, startEffectY = -1}
 , 
@@ -550,8 +550,16 @@ stableList.update = function(self)
           (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
           ;
           (slot.training):SetShow(true)
-        elseif (Defines.s64_const).s64_0 < servantInfo:getRemainSecondsToUnseal() then
+        elseif servantInfo:isChangingRegion() then
+          if (slot.link):GetShow() then
+            (slot.regionChanging):SetPosY(((self._config).icon).secondLineStartStateY)
+          else
+            (slot.regionChanging):SetPosY(((self._config).icon).startStateY)
+          end
+          ;
           (slot.regionChanging):SetShow(true)
+          ;
+          (slot.button):SetMonoTone(true)
         end
         if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse then
           if servantInfo:isMale() then
@@ -686,7 +694,7 @@ stableList.update = function(self)
       ;
       (UIScroll.SetButtonSize)(self._scroll, (self._config).slotCount, servantCount)
       FGlobal_NeedStableRegistItem_Print()
-      -- DECOMPILER ERROR: 44 unprocessed JMP targets
+      -- DECOMPILER ERROR: 46 unprocessed JMP targets
     end
   end
 end
@@ -789,7 +797,7 @@ stableList.registMessageHandler = function(self)
   registerEvent("FromClient_StartStallionSkillTraining", "FromClient_StartStallionSkillTraining")
   registerEvent("FromClient_EndStallionSkillTraining", "FromClient_EndStallionSkillTraining")
   registerEvent("FromClient_IncreaseStallionSkillExpAck", "FromClient_IncreaseStallionSkillExpAck")
-  registerEvent("FromClient_OnChangeServantRegion", "StableList_UpdateSlotData")
+  registerEvent("FromClient_OnChangeServantRegion", "ChangeServantRegion_HandleUpdate")
 end
 
 StableList_Resize = function()
@@ -949,6 +957,11 @@ StableList_ButtonOpen = function(eType, slotNo)
     local servantInfo = stable_getServant(index)
     if servantInfo == nil then
       return 
+    else
+      if servantInfo:isChangingRegion() then
+        StableList_ButtonClose()
+        return 
+      end
     end
     StableList_RegistButtonEventHandler(servantInfo)
     local vehicleType = servantInfo:getVehicleType()
@@ -975,21 +988,21 @@ StableList_ButtonOpen = function(eType, slotNo)
         positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
         positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 30
       else
-        -- DECOMPILER ERROR at PC292: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC300: Unhandled construct in 'MakeBoolean' P1
 
         if ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant == vehicleType) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState and stallionTraining ~= getState then
           buttonList[buttonSlotNo] = self._buttonUnseal
           buttonSlotNo = buttonSlotNo + 1
-          showChangeRegionButtonFlag = true
+          showChangeRegionButtonFlag = not servantInfo:isChangingRegion()
         end
         buttonList[buttonSlotNo] = self._buttonUnseal
         buttonSlotNo = buttonSlotNo + 1
-        showChangeRegionButtonFlag = true
+        showChangeRegionButtonFlag = not servantInfo:isChangingRegion()
         if ((servantInfo:getHp() >= servantInfo:getMaxHp() and servantInfo:getMp() >= servantInfo:getMaxMp()) or ((CppEnums.VehicleType).Type_Horse ~= vehicleType and (CppEnums.VehicleType).Type_Donkey ~= vehicleType and (CppEnums.VehicleType).Type_Camel ~= vehicleType and (CppEnums.VehicleType).Type_MountainGoat ~= vehicleType and (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType) or servantInfo:isMatingComplete() or nowMating == getState or regMarket == getState or regMating == getState or training == getState or stallionTraining ~= getState) then
           buttonList[buttonSlotNo] = self._buttonRecovery
           buttonSlotNo = buttonSlotNo + 1
         end
-        -- DECOMPILER ERROR at PC373: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC385: Unhandled construct in 'MakeBoolean' P1
 
         if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (servantInfo:getHp() < servantInfo:getMaxHp() or servantInfo:getMp() < servantInfo:getMaxMp()) then
           buttonList[buttonSlotNo] = self._buttonRepair
@@ -1004,7 +1017,7 @@ StableList_ButtonOpen = function(eType, slotNo)
             do
               buttonList[buttonSlotNo] = self._buttonReceiveChild
               buttonSlotNo = buttonSlotNo + 1
-              if stable_isMarket() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState and stallionTraining ~= getState and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType) and regionName == servantRegionName then
+              if stable_isMarket() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState and stallionTraining ~= getState and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType) and regionName == servantRegionName and not servantInfo:isChangingRegion() then
                 buttonList[buttonSlotNo] = self._buttonRegisterMarket
                 buttonSlotNo = buttonSlotNo + 1
               end
@@ -1043,9 +1056,9 @@ StableList_ButtonOpen = function(eType, slotNo)
                 ;
                 (self._buttonHorseLookChange):addInputEvent("Mouse_LUp", "StableList_LookChange(" .. slotNo .. ")")
               end
-              -- DECOMPILER ERROR at PC745: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC761: Unhandled construct in 'MakeBoolean' P1
 
-              -- DECOMPILER ERROR at PC745: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC761: Unhandled construct in 'MakeBoolean' P1
 
               if isPcroomOnly == false and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType or stallionTraining ~= getState) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
                 if stable_isMarket() and servantLevel >= 15 and (CppEnums.VehicleType).Type_Horse == vehicleType and isContentsEnableSupply then
@@ -1085,7 +1098,7 @@ StableList_ButtonOpen = function(eType, slotNo)
               end
               positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
               positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 20
-              -- DECOMPILER ERROR at PC919: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC935: Unhandled construct in 'MakeBoolean' P1
 
               if eType == (self._const).eTypeUnsealed and isSiegeStable() == false then
                 stableList:clear()
@@ -1114,7 +1127,7 @@ StableList_ButtonOpen = function(eType, slotNo)
                   buttonList[buttonSlotNo] = self._buttonRecoveryUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
-                -- DECOMPILER ERROR at PC1039: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P1
 
                 if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() or unSealServantInfo:getMp() < unSealServantInfo:getMaxMp()) then
                   buttonList[buttonSlotNo] = self._buttonRepairUnseal
@@ -2613,7 +2626,7 @@ stableList:registEventHandler()
 stableList:registMessageHandler()
 StableList_Resize()
 changeServantRegion = {_init = false}
--- DECOMPILER ERROR at PC540: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC541: Confused about usage of register: R18 in 'UnsetPending'
 
 changeServantRegion.init = function(self)
   -- function num : 0_91
@@ -2636,7 +2649,7 @@ changeServantRegion.init = function(self)
   self._regionCountControl = (UI.getChildControl)(Panel_ServantMove, "StaticText_StableCount")
 end
 
--- DECOMPILER ERROR at PC543: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC544: Confused about usage of register: R18 in 'UnsetPending'
 
 changeServantRegion.open = function(self, servantNo, posX, posY)
   -- function num : 0_92
@@ -2647,6 +2660,10 @@ changeServantRegion.open = function(self, servantNo, posX, posY)
   self._servantNo = servantNo
   local servantInfo = stable_getServantByServantNo(servantNo)
   if not servantInfo then
+    return 
+  end
+  if (CppEnums.ServantStateType).Type_Coma == servantInfo:getStateType() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoServantNeedToRecovery"))
     return 
   end
   self._regionTo = 0
@@ -2662,6 +2679,7 @@ changeServantRegion.open = function(self, servantNo, posX, posY)
         ((self._regionList2):getElementManager()):pushKey(toInt64(0, regionKey))
       end
     end
+    regionKeyCount = regionKeyCount - 1
     ;
     (self._titleControl):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_VEHICLEMOVETITLE"))
     ;
@@ -2671,20 +2689,21 @@ changeServantRegion.open = function(self, servantNo, posX, posY)
       if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
         local regionKeyCount = ToClient_GetCountOfRegionListWithWharfNpc()
         for i = 0, regionKeyCount - 1 do
-          local regionKey = ToClient_GetRegionWithWharfNpcByIndex(R12_PC95)
-          R12_PC95 = currentRegionKey
-          if regionKey ~= R12_PC95 then
-            R12_PC95 = self._regionList2
-            R12_PC95 = R12_PC95(R12_PC95)
-            R12_PC95(R12_PC95, toInt64(0, regionKey))
+          local regionKey = ToClient_GetRegionWithWharfNpcByIndex(R12_PC111)
+          R12_PC111 = currentRegionKey
+          if regionKey ~= R12_PC111 then
+            R12_PC111 = self._regionList2
+            R12_PC111 = R12_PC111(R12_PC111)
+            R12_PC111(R12_PC111, toInt64(0, regionKey))
           end
         end
+        regionKeyCount = regionKeyCount - 1
         ;
         (self._titleControl):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WHARF_VEHICLEMOVETITLE"))
-        -- DECOMPILER ERROR at PC123: Overwrote pending register: R12 in 'AssignReg'
+        -- DECOMPILER ERROR at PC140: Overwrote pending register: R12 in 'AssignReg'
 
         ;
-        (self._regionCountControl):SetText(PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_WHARF_CHANGE_REGION_LIST_COUNT", R12_PC95, regionKeyCount))
+        (self._regionCountControl):SetText(PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_WHARF_CHANGE_REGION_LIST_COUNT", R12_PC111, regionKeyCount))
       else
         do
           do return  end
@@ -2697,7 +2716,7 @@ changeServantRegion.open = function(self, servantNo, posX, posY)
   end
 end
 
--- DECOMPILER ERROR at PC546: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC547: Confused about usage of register: R18 in 'UnsetPending'
 
 changeServantRegion.close = function(self)
   -- function num : 0_93
@@ -2708,11 +2727,11 @@ changeServantRegion.close = function(self)
   Panel_ServantMove:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC549: Confused about usage of register: R18 in 'UnsetPending'
+-- DECOMPILER ERROR at PC550: Confused about usage of register: R18 in 'UnsetPending'
 
 changeServantRegion.isEnabled = function(self)
   -- function num : 0_94
-  return false
+  return true
 end
 
 ChangeServantRegion_HandleListChange = function(control, key)
@@ -2748,19 +2767,30 @@ end
 ChangeServantRegion_HandleChangeButtonClick = function()
   -- function num : 0_98
   local self = changeServantRegion
+  if not getRegionInfoWrapper(self._regionTo) then
+    return 
+  end
   self:close()
   StableList_ButtonClose()
   WharfList_ButtonClose()
-  local money = ToClient_GetCostToChangeServantRegion()
-  local title = "title"
-  local msg = "msg...money:" .. tostring(money)
+  local cost = ToClient_GetCostToChangeServantRegion()
+  local title = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_VEHICLEMOVETITLE")
+  local msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_CHANGE_REGION_NOTIFY_DESC", "cost", cost)
   local messageBoxData = {title = title, content = msg, functionApply = ChangeServantRegion_HandleApplyClick, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBoxCheck.showMessageBox)(messageBoxData)
 end
 
-ChangeServantRegion_HandleApplyClick = function()
+ChangeServantRegion_HandleUpdate = function()
   -- function num : 0_99
+  local self = changeServantRegion
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SERVANT_CHANGE_REGION_ACK_DESC"))
+  StableList_UpdateSlotData()
+  WharfList_updateSlotData()
+end
+
+ChangeServantRegion_HandleApplyClick = function()
+  -- function num : 0_100
   local self = changeServantRegion
   local moneyWhereType = (MessageBoxCheck.isCheck)()
   ToClient_ChangeServantRegion(self._servantNo, self._regionTo, moneyWhereType)

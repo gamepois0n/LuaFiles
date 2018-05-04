@@ -24,6 +24,7 @@ end
 Stallion_ItemNotify = function(skillKey, index)
   -- function num : 0_2 , upvalues : _notify, _notifyBG
   _notify:SetShow(true)
+  _notify:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   if index == 0 then
     _notify:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLIONITEMNOTIFY_TEXT_ITEMNOTIFY_1"))
   else

@@ -226,9 +226,12 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap = function(deltaTime)
     return 
   end
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    if Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
+    if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
       Panel_Window_QuestNew_Show(false)
       return 
+    end
+    if FGlobal_QuestInfoGetShow() == true then
+      FGlobal_QuestInfoSetShow(false)
     end
     if Panel_ItemMarket_BidDesc:GetShow() then
       Panel_ItemMarket_BidDesc_Hide()
@@ -270,7 +273,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap = function(deltaTime)
     FGlobal_HandleClicked_ItemMarketBackPage()
   end
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-    -- DECOMPILER ERROR at PC151: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC162: Unhandled construct in 'MakeBoolean' P1
 
     if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil then
       Panel_ProductNote_ShowToggle()
@@ -1861,38 +1864,46 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
         end
         do return  end
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Inventory) then
-          local isInvenOpen = Panel_Window_Inventory:IsShow()
-          local isEquipOpen = Panel_Equipment:IsShow()
-          local temporaryWrapper = getTemporaryInformationWrapper()
-          local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-          local servantShipInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
-          if isInvenOpen == false and isEquipOpen == false then
-            if isEquipOpen == false then
-              Equipment_SetShow(true)
-            end
-            audioPostEvent_SystemUi(1, 16)
-            InventoryWindow_Show(true)
-            if Panel_Window_ServantInventory:GetShow() then
-              TooltipSimple_Hide()
-              Panel_Tooltip_Item_hideTooltip()
+          if _ContentsGroup_RenewUI then
+            if FGlobal_Window_InventoryInfo_isOpened() == false then
+              FGlobal_Window_InventoryInfo_Open(1)
+            else
+              FGlobal_Window_InventoryInfo_Close()
             end
           else
-            if Panel_Window_Exchange:GetShow() then
-              Panel_ExchangePC_BtnClose_Mouse_Click()
-              return 
-            end
-            if Panel_Window_Inventory:IsUISubApp() and isEquipOpen == false then
-              Equipment_SetShow(true)
+            local isInvenOpen = Panel_Window_Inventory:IsShow()
+            local isEquipOpen = Panel_Equipment:IsShow()
+            local temporaryWrapper = getTemporaryInformationWrapper()
+            local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+            local servantShipInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+            if isInvenOpen == false and isEquipOpen == false then
+              if isEquipOpen == false then
+                Equipment_SetShow(true)
+              end
+              audioPostEvent_SystemUi(1, 16)
+              InventoryWindow_Show(true)
+              if Panel_Window_ServantInventory:GetShow() then
+                TooltipSimple_Hide()
+                Panel_Tooltip_Item_hideTooltip()
+              end
             else
-              Equipment_SetShow(false)
+              if Panel_Window_Exchange:GetShow() then
+                Panel_ExchangePC_BtnClose_Mouse_Click()
+                return 
+              end
+              if Panel_Window_Inventory:IsUISubApp() and isEquipOpen == false then
+                Equipment_SetShow(true)
+              else
+                Equipment_SetShow(false)
+              end
+              audioPostEvent_SystemUi(1, 15)
+              InventoryWindow_Close()
+              ServantInventory_Close()
+              ClothInventory_Close()
+              TooltipSimple_Hide()
             end
-            audioPostEvent_SystemUi(1, 15)
-            InventoryWindow_Close()
-            ServantInventory_Close()
-            ClothInventory_Close()
-            TooltipSimple_Hide()
+            return 
           end
-          return 
         end
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Dyeing) then
           if PaGlobal_TutorialManager:isDoingTutorial() then
@@ -1982,7 +1993,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             return 
           end
           do
-            -- DECOMPILER ERROR at PC814: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC828: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               local isMailMain = Panel_Mail_Main:IsShow()
@@ -1997,7 +2008,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             do return  end
             do
               do
-                -- DECOMPILER ERROR at PC843: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC857: Unhandled construct in 'MakeBoolean' P1
 
                 if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
                   local isFriendList = Panel_FriendList:IsShow()
@@ -2011,12 +2022,20 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                 end
                 do return  end
                 if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_QuestHistory) then
-                  if Panel_Window_Quest_New:GetShow() then
+                  if _ContentsGroup_RenewUI == false then
+                    if Panel_Window_Quest_New:GetShow() then
+                      audioPostEvent_SystemUi(1, 27)
+                      Panel_Window_QuestNew_Show(false)
+                    else
+                      audioPostEvent_SystemUi(1, 29)
+                      Panel_Window_QuestNew_Show(true)
+                    end
+                  elseif FGlobal_QuestInfoGetShow() == true then
                     audioPostEvent_SystemUi(1, 27)
-                    Panel_Window_QuestNew_Show(false)
+                    FGlobal_QuestInfoSetShow(false)
                   else
-                    audioPostEvent_SystemUi(1, 29)
-                    Panel_Window_QuestNew_Show(true)
+                    audioPostEvent_SystemUi(1, 27)
+                    FGlobal_QuestInfoSetShow(true)
                   end
                   TooltipSimple_Hide()
                   return 
@@ -2088,7 +2107,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                 end
                 ;
                 (PaGlobal_GlobalKeyBinder.Process_CheckEscape)()
-                -- DECOMPILER ERROR: 96 unprocessed JMP targets
+                -- DECOMPILER ERROR: 100 unprocessed JMP targets
               end
             end
           end

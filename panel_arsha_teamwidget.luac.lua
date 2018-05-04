@@ -462,6 +462,38 @@ ArshaPvP_Widget_LualoadComplete = function()
   ArshaPvP_Widget_Update()
 end
 
+FromClient_ArshaDebuff = function()
+  -- function num : 0_17
+end
+
+FromClient_ArshaPersonalMatchDebuff_Message = function(debuffTeamNo)
+  -- function num : 0_18
+  if (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Personal ~= ToClient_CompetitionMatchType() then
+    return 
+  end
+  if debuffTeamNo ~= 1 and debuffTeamNo ~= 2 then
+    return 
+  end
+  local teamInfo = ToClient_GetArshaTeamInfo(debuffTeamNo)
+  if teamInfo == nil then
+    return 
+  end
+  local userInfo = ToClient_GetEntryInfoByUserNo(teamInfo:getAttendPlayer())
+  if userInfo == nil then
+    return 
+  end
+  local teamName = teamInfo:getTeamName()
+  if teamName == "" then
+    if debuffTeamNo == 1 then
+      teamName = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+    else
+      teamName = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
+    end
+  end
+  local msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ARSHAPERSONALMATCH_DEBUFF_APPLIED", "teamName", teamName, "playerName", userInfo:getCharacterName())
+  Proc_ShowMessage_Ack(msg)
+end
+
 ArshaPvP_Widget_Init()
 ArshaPvP_Widget_SubInit()
 registerEvent("FromClient_luaLoadComplete", "ArshaPvP_Widget_LualoadComplete")
@@ -472,5 +504,7 @@ registerEvent("FromClient_UpdatePersonalMatchAliveAttendCount", "FromClient_Upda
 registerEvent("FromClient_FirstMatchStart", "ArshaPvP_Match_ScoreReset")
 registerEvent("FromClient_WaitTimeAlert", "FromClient_WaitTimeAlert")
 registerEvent("FromClient_ArshaTeamMasterOut", "FromClient_ArshaTeamMasterOut")
+registerEvent("FromClient_ArshaDebuff", "FromClient_ArshaDebuff")
+registerEvent("FromClient_ArshaPersonalMatchDebuff", "FromClient_ArshaPersonalMatchDebuff_Message")
 Panel_Arsha_TeamWidget:RegisterUpdateFunc("ArshaPvP_Widget_PerframeMain")
 

@@ -75,6 +75,7 @@ wharfList.init = function(self)
     slot.icon = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Static_Icon", slot.button, "WharfList_Slot_Icon_" .. ii)
     slot.name = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "StaticText_Name", slot.button, "WharfList_Slot_Name_" .. ii)
     slot.stateComa = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "StaticText_Coma", slot.button, "WharfList_Slot_StateComa_" .. ii)
+    slot.regionChanging = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "StaticText_RegionChanging", slot.button, "WharfList_Slot_RegionChanging_" .. ii)
     slot.isSeized = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "StaticText_Attachment", slot.button, "WharfList_Slot_Seize_" .. ii)
     local slotConfig = (self._config).slot
     ;
@@ -95,6 +96,10 @@ wharfList.init = function(self)
     ;
     (slot.stateComa):SetPosY(iconConfig.startY)
     ;
+    (slot.regionChanging):SetPosX(iconConfig.startX)
+    ;
+    (slot.regionChanging):SetPosY(iconConfig.startY)
+    ;
     (slot.isSeized):SetPosX(iconConfig.startX)
     ;
     (slot.isSeized):SetPosY(iconConfig.startY)
@@ -108,16 +113,16 @@ wharfList.init = function(self)
     (slot.button):addInputEvent("Mouse_LUp", "WharfList_SlotSelect(" .. ii .. ")")
     ;
     (UIScroll.InputEventByControl)(slot.button, "WharfList_ScrollEvent")
-    -- DECOMPILER ERROR at PC143: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC161: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._slots)[ii] = slot
   end
-  -- DECOMPILER ERROR at PC153: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC171: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._button = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Static_Button", self._staticUnsealBG, "WharfList_Unseal_Button")
-  -- DECOMPILER ERROR at PC162: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC180: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._unseal)._icon = (UI.createAndCopyBasePropertyControl)(Panel_Window_WharfList, "Static_Icon", self._staticUnsealBG, "WharfList_Unseal_Icon")
@@ -237,6 +242,8 @@ wharfList.update = function(self)
         ;
         (slot.stateComa):SetShow(false)
         ;
+        (slot.regionChanging):SetShow(false)
+        ;
         (slot.isSeized):SetShow(false)
         if servantInfo:isSeized() then
           (slot.isSeized):SetShow(true)
@@ -252,6 +259,11 @@ wharfList.update = function(self)
         if regionName == servantRegionName then
           (slot.button):SetMonoTone(false)
         else
+          ;
+          (slot.button):SetMonoTone(true)
+        end
+        if servantInfo:isChangingRegion() then
+          (slot.regionChanging):SetShow(true)
           ;
           (slot.button):SetMonoTone(true)
         end
@@ -299,7 +311,7 @@ wharfList.registMessageHandler = function(self)
   registerEvent("onScreenResize", "WharfList_Resize")
   registerEvent("FromClient_ServantUpdate", "WharfList_updateSlotData")
   registerEvent("FromClient_GroundMouseClick", "WharfList_ButtonClose")
-  registerEvent("FromClient_OnChangeServantRegion", "WharfList_updateSlotData")
+  registerEvent("FromClient_OnChangeServantRegion", "ChangeServantRegion_HandleUpdate")
 end
 
 WharfList_Resize = function()
@@ -384,6 +396,11 @@ WharfList_ButtonOpen = function(eType, slotNo)
     local servantInfo = stable_getServant(index)
     if servantInfo == nil then
       return 
+    else
+      if servantInfo:isChangingRegion() then
+        WharfList_ButtonClose()
+        return 
+      end
     end
     WharfList_SlotSound(slotNo)
     local servantRegionName = servantInfo:getRegionName()
@@ -397,7 +414,7 @@ WharfList_ButtonOpen = function(eType, slotNo)
     if regionName == servantRegionName then
       buttonList[button_Index] = self._buttonUnseal
       button_Index = button_Index + 1
-      showChangeRegionButtonFlag = true
+      showChangeRegionButtonFlag = not servantInfo:isChangingRegion()
       if nowHp < maxHp then
         buttonList[button_Index] = self._buttonRepair
         button_Index = button_Index + 1
@@ -427,6 +444,7 @@ WharfList_ButtonOpen = function(eType, slotNo)
         button_Index = button_Index + 1
       end
       buttonList[button_Index] = self._buttonSell
+      button_Index = button_Index + 1
     else
       if nowHp == 0 then
         buttonList[button_Index] = self._buttonRepair
