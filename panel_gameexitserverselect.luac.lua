@@ -218,7 +218,7 @@ ChannelSelect_Init = function()
         ;
         (channelMainDesc._siegeValencia):SetShow(false)
         local sizeControl = nil
-        if isGameTypeSA() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+        if isGameTypeSA() or isGameTypeTH() or isGameTypeID() then
           (channelMainDesc._speedTitle):SetShow(false)
           ;
           (channelMainDesc._speedDesc):SetShow(false)

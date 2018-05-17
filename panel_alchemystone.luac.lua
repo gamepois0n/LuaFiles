@@ -5,7 +5,7 @@
 -- function num : 0
 Panel_AlchemyStone:SetShow(false)
 local AlchemyStone = {
-control = {tab_Charge = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Charge"), tab_Exp = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Exp"), tab_Upgrade = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Upgrade"), contentBG = (UI.getChildControl)(Panel_AlchemyStone, "Static_ContentTypeBG"), contentEffect = (UI.getChildControl)(Panel_AlchemyStone, "Static_ContentTypeEffect"), guideString = (UI.getChildControl)(Panel_AlchemyStone, "Static_GuideText"), btn_Close = (UI.getChildControl)(Panel_AlchemyStone, "Button_Win_Close"), btn_Doit = (UI.getChildControl)(Panel_AlchemyStone, "Button_Doit"), slotBg_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBg_1"), slotBg_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBg_2"), Slot_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_Slot_1"), Slot_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_Slot_2"), needCount = (UI.getChildControl)(Panel_AlchemyStone, "Static_NeedCountTitle"), count = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_NeedCount"), expMaterial = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_ExpMaterial"), expMaterial2 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_ExpMaterial2"), btn_Plus = (UI.getChildControl)(Panel_AlchemyStone, "Button_CountPlus"), btn_Minus = (UI.getChildControl)(Panel_AlchemyStone, "Button_CountMinus"), descBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_DescBg"), desc = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Desc"), progressBg_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_GaugeBG_1"), progress_1 = (UI.getChildControl)(Panel_AlchemyStone, "Progress2_Exp_Gauge_1"), progressText_1 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Count_1"), progressBg_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_GaugeBG_2"), progress_2 = (UI.getChildControl)(Panel_AlchemyStone, "Progress2_Exp_Gauge_2"), progressText_2 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Count_2"), resultSlot = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBgTemplate"), resultSlotBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_ResultSlotBg"), upgradeSlotBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_UpgradeSlotBg")}
+control = {tab_Charge = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Charge"), tab_Exp = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Exp"), tab_Upgrade = (UI.getChildControl)(Panel_AlchemyStone, "RadioButton_Tab_Upgrade"), contentBG = (UI.getChildControl)(Panel_AlchemyStone, "Static_ContentTypeBG"), contentEffect = (UI.getChildControl)(Panel_AlchemyStone, "Static_ContentTypeEffect"), guideString = (UI.getChildControl)(Panel_AlchemyStone, "Static_GuideText"), btn_Close = (UI.getChildControl)(Panel_AlchemyStone, "Button_Win_Close"), btn_Doit = (UI.getChildControl)(Panel_AlchemyStone, "Button_Doit"), slotBg_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBg_1"), slotBg_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBg_2"), Slot_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_Slot_1"), Slot_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_Slot_2"), needCount = (UI.getChildControl)(Panel_AlchemyStone, "Static_NeedCountTitle"), count = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_NeedCount"), expMaterial = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_ExpMaterial"), expMaterial2 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_ExpMaterial2"), btn_Plus = (UI.getChildControl)(Panel_AlchemyStone, "Button_CountPlus"), btn_Minus = (UI.getChildControl)(Panel_AlchemyStone, "Button_CountMinus"), descBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_DescBg"), desc = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Desc"), progressBg_1 = (UI.getChildControl)(Panel_AlchemyStone, "Static_GaugeBG_1"), progress_1 = (UI.getChildControl)(Panel_AlchemyStone, "Progress2_Exp_Gauge_1"), progress_1_Pre = (UI.getChildControl)(Panel_AlchemyStone, "Progress2_Exp_Gauge_1_PreView"), progressText_1 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Count_1"), progressBg_2 = (UI.getChildControl)(Panel_AlchemyStone, "Static_GaugeBG_2"), progress_2 = (UI.getChildControl)(Panel_AlchemyStone, "Progress2_Exp_Gauge_2"), progressText_2 = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Count_2"), resultSlot = (UI.getChildControl)(Panel_AlchemyStone, "Static_SlotBgTemplate"), resultSlotBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_ResultSlotBg"), upgradeSlotBg = (UI.getChildControl)(Panel_AlchemyStone, "Static_UpgradeSlotBg"), chargeDesc = (UI.getChildControl)(Panel_AlchemyStone, "StaticText_Charge_Desc")}
 , 
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = true}
 , 
@@ -16,7 +16,7 @@ Stone_slot = {}
 resultSlot = {}
 , 
 resultSlotBg = {}
-, selectedTabIdx = 0, selectedStoneType = 0, selectedStoneItemKey = nil, fromWhereType = -1, fromSlotNo = -1, fromCount = toInt64(0, -1), fromMaxCount = toInt64(0, -1), toWhereType = -1, toSlotNo = -1, toLostEndurance = 0, recoverCount = 0, maxRecoverCount = 0, chargePoint = 0, isPushDoit = false, doItType = -1, startEffectPlay = false, contentEffectPlay = false, slotEffectPlay = false, effectEnd = false, 
+, selectedTabIdx = 0, selectedStoneType = 0, selectedStoneItemKey = nil, fromWhereType = -1, fromSlotNo = -1, fromCount = toInt64(0, -1), fromMaxCount = toInt64(0, -1), toWhereType = -1, toSlotNo = -1, currentEndurance = 0, maxEndurance = 0, toLostEndurance = 0, recoverCount = 0, maxRecoverCount = 0, chargePoint = 0, isPushDoit = false, doItType = -1, startEffectPlay = false, contentEffectPlay = false, slotEffectPlay = false, effectEnd = false, 
 resultMsg = {}
 , upgradeItem = nil, 
 resultItemKey = {}
@@ -112,6 +112,8 @@ AlchemyStone.Init = function(self)
     alchemyStoneDesc[0] = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DESC_1")
   end
   self.upgradeItem = nil
+  ;
+  ((self.control).chargeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DESC_5", "needCountMin", 0))
 end
 
 AlchemyStone.registEventHandler = function(self)
@@ -160,22 +162,58 @@ AlchemyStone.registMessageHandler = function(self)
   Panel_AlchemyStone:RegisterUpdateFunc("Panel_AlchemyStone_updateTime")
 end
 
-AlchemyStone.ClearData = function(self, isOpenStep)
-  -- function num : 0_3 , upvalues : AlchemyStoneTab, AlchemyStone
+AlchemyStone.UpdateStone = function(self, whereType, slotNo)
+  -- function num : 0_3 , upvalues : AlchemyStone
+  local itemWrapper = getInventoryItemByType(whereType, Int64toInt32(slotNo))
+  self.currentEndurance = (itemWrapper:get()):getEndurance()
+  self.maxEndurance = (itemWrapper:get()):getMaxEndurance()
+  self.toLostEndurance = self.maxEndurance - self.currentEndurance
+  local progressRate = self.currentEndurance / self.maxEndurance * 100
+  ;
+  ((AlchemyStone.control).progress_1):SetProgressRate(progressRate)
+  local endurancePoint = self.currentEndurance .. " / " .. self.maxEndurance
+  ;
+  ((AlchemyStone.control).progressText_1):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_ENDURANCE", "endurance", endurancePoint))
+end
+
+AlchemyStone.ClearData = function(self, isOpenStep, isStuffOnly)
+  -- function num : 0_4 , upvalues : AlchemyStoneTab, AlchemyStone
   if isOpenStep == true then
     self.resultMsg = {}
   end
-  self.toWhereType = -1
-  self.toSlotNo = -1
+  if isStuffOnly == false then
+    self.toWhereType = -1
+    self.toSlotNo = -1
+    self.selectedStoneType = -1
+    self.selectedStoneItemKey = nil
+    self.currentEndurance = 0
+    self.maxEndurance = 0
+    self.toLostEndurance = 0
+    self.recoverCount = 0
+    self.maxRecoverCount = 0
+    ;
+    (self.Stone_slot):clearItem()
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R3 in 'UnsetPending'
+
+    ;
+    (self.Stone_slot).Empty = true
+    ;
+    ((self.control).progressBg_1):SetShow(false)
+    ;
+    ((self.control).progress_1):SetShow(false)
+    ;
+    ((self.control).progress_1_Pre):SetShow(false)
+    ;
+    ((self.control).progressText_1):SetShow(false)
+    ;
+    ((self.control).progress_1):SetProgressRate(0)
+    ;
+    ((self.control).progress_1_Pre):SetProgressRate(0)
+  end
   self.fromWhereType = -1
   self.fromSlotNo = -1
   self.fromCount = toInt64(0, -1)
   self.fromMaxCount = toInt64(0, -1)
-  self.selectedStoneType = -1
-  self.selectedStoneItemKey = nil
-  self.toLostEndurance = 0
-  self.recoverCount = 0
-  self.maxRecoverCount = 0
   self.chargePoint = 0
   self.isPushDoit = false
   self.startEffectPlay = false
@@ -194,16 +232,10 @@ AlchemyStone.ClearData = function(self, isOpenStep)
   ((self.control).btn_Doit):SetEnable(self.isPushDoit)
   ;
   (self.Stuff_slot):clearItem()
-  ;
-  (self.Stone_slot):clearItem()
-  -- DECOMPILER ERROR at PC59: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC95: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self.Stuff_slot).Empty = true
-  -- DECOMPILER ERROR at PC61: Confused about usage of register: R2 in 'UnsetPending'
-
-  ;
-  (self.Stone_slot).Empty = true
   ;
   ((self.resultSlot)[0]):clearItem()
   ;
@@ -223,12 +255,6 @@ AlchemyStone.ClearData = function(self, isOpenStep)
   ;
   (((self.resultSlot)[2]).icon):addInputEvent("Mouse_Out", "")
   ;
-  ((self.control).progressBg_1):SetShow(false)
-  ;
-  ((self.control).progress_1):SetShow(false)
-  ;
-  ((self.control).progressText_1):SetShow(false)
-  ;
   ((self.control).progressBg_2):SetShow(false)
   ;
   ((self.control).progress_2):SetShow(false)
@@ -240,8 +266,6 @@ AlchemyStone.ClearData = function(self, isOpenStep)
   ((self.control).expMaterial):SetShow(false)
   ;
   ((self.control).expMaterial2):SetShow(false)
-  ;
-  ((self.control).progress_1):SetProgressRate(0)
   ;
   ((self.control).progress_2):SetProgressRate(0)
   ;
@@ -285,7 +309,7 @@ AlchemyStone.ClearData = function(self, isOpenStep)
 end
 
 HandleClicked_AlchemyStoneTab = function(tabIdx)
-  -- function num : 0_4 , upvalues : AlchemyStone, AlchemyStoneTab, alchemyStoneDesc, panelSizeY, bgSizeY
+  -- function num : 0_5 , upvalues : AlchemyStone, AlchemyStoneTab, alchemyStoneDesc, panelSizeY, bgSizeY
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.toWhereType = -1
@@ -312,14 +336,20 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   AlchemyStone.selectedStoneItemKey = nil
   -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
-  AlchemyStone.toLostEndurance = 0
+  AlchemyStone.currentEndurance = 0
   -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
-  AlchemyStone.recoverCount = 0
+  AlchemyStone.maxEndurance = 0
   -- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
 
-  AlchemyStone.maxRecoverCount = 0
+  AlchemyStone.toLostEndurance = 0
   -- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
+
+  AlchemyStone.recoverCount = 0
+  -- DECOMPILER ERROR at PC33: Confused about usage of register: R1 in 'UnsetPending'
+
+  AlchemyStone.maxRecoverCount = 0
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.chargePoint = 0
   ;
@@ -332,23 +362,23 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   ((AlchemyStone.resultSlot)[1]):clearItem()
   ;
   ((AlchemyStone.resultSlot)[2]):clearItem()
-  -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (AlchemyStone.Stone_slot).Empty = true
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (AlchemyStone.Stuff_slot).Empty = true
   -- DECOMPILER ERROR at PC64: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  ((AlchemyStone.resultSlot)[0]).Empty = true
+  (AlchemyStone.Stuff_slot).Empty = true
   -- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  ((AlchemyStone.resultSlot)[1]).Empty = true
+  ((AlchemyStone.resultSlot)[0]).Empty = true
   -- DECOMPILER ERROR at PC72: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  ((AlchemyStone.resultSlot)[1]).Empty = true
+  -- DECOMPILER ERROR at PC76: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((AlchemyStone.resultSlot)[2]).Empty = true
@@ -372,11 +402,11 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   (((AlchemyStone.resultSlot)[2]).icon):addInputEvent("Mouse_On", "")
   ;
   (((AlchemyStone.resultSlot)[2]).icon):addInputEvent("Mouse_Out", "")
-  -- DECOMPILER ERROR at PC150: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC154: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.selectedTabIdx = tabIdx
   doItType = -1
-  -- DECOMPILER ERROR at PC154: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC158: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.isPushDoit = false
   ;
@@ -392,6 +422,8 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   ((AlchemyStone.control).btn_Plus):SetShow(false)
   ;
   ((AlchemyStone.control).btn_Minus):SetShow(false)
+  ;
+  ((AlchemyStone.control).chargeDesc):SetShow(false)
   local guideKeyword = ""
   local guideText = ""
   if AlchemyStoneTab.Charge == tabIdx then
@@ -532,6 +564,8 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   ;
   ((AlchemyStone.control).progress_1):SetShow(false)
   ;
+  ((AlchemyStone.control).progress_1_Pre):SetShow(false)
+  ;
   ((AlchemyStone.control).progressText_1):SetShow(false)
   ;
   ((AlchemyStone.control).progressBg_2):SetShow(false)
@@ -548,21 +582,23 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   ;
   ((AlchemyStone.control).progress_1):SetProgressRate(0)
   ;
+  ((AlchemyStone.control).progress_1_Pre):SetProgressRate(0)
+  ;
   ((AlchemyStone.control).progress_2):SetProgressRate(0)
   ;
   ((AlchemyStone.control).btn_Doit):SetMonoTone(true)
   ;
   ((AlchemyStone.control).btn_Doit):SetEnable(false)
-  -- DECOMPILER ERROR at PC731: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC753: Confused about usage of register: R6 in 'UnsetPending'
 
   AlchemyStone.resultItemKey = {}
-  -- DECOMPILER ERROR at PC733: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC755: Confused about usage of register: R6 in 'UnsetPending'
 
   AlchemyStone.resultItemIndex = -1
 end
 
 HandleClicked_AlchemyStone_ChangeStuffCount = function(isUp)
-  -- function num : 0_5 , upvalues : AlchemyStone
+  -- function num : 0_6 , upvalues : AlchemyStone
   if AlchemyStone.fromCount < toInt64(0, 1) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_NOTSETSTUFF"))
     return 
@@ -590,10 +626,11 @@ HandleClicked_AlchemyStone_ChangeStuffCount = function(isUp)
   end
   ;
   ((AlchemyStone.Stuff_slot).count):SetText(tostring(AlchemyStone.fromCount))
+  AlchemyStone:updateProgressBar()
 end
 
 HandleClicked_AlchemyStoneTab_Tooltip = function(isOn, buttonType)
-  -- function num : 0_6 , upvalues : AlchemyStoneTab, AlchemyStone
+  -- function num : 0_7 , upvalues : AlchemyStoneTab, AlchemyStone
   if isOn == true then
     local control = nil
     local name = ""
@@ -625,9 +662,9 @@ HandleClicked_AlchemyStoneTab_Tooltip = function(isOn, buttonType)
 end
 
 HandleClicked_AlchemyStone_Doit = function()
-  -- function num : 0_7 , upvalues : AlchemyStone, AlchemyStoneTab
+  -- function num : 0_8 , upvalues : AlchemyStone, AlchemyStoneTab
   local doUpgrade = function()
-    -- function num : 0_7_0 , upvalues : AlchemyStone
+    -- function num : 0_8_0 , upvalues : AlchemyStone
     -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
     AlchemyStone.isPushDoit = true
@@ -666,9 +703,19 @@ HandleClicked_AlchemyStone_Doit = function()
     end
   else
     do
-      -- DECOMPILER ERROR at PC86: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC99: Confused about usage of register: R7 in 'UnsetPending'
 
-      AlchemyStone.isPushDoit = true
+      if AlchemyStone.selectedTabIdx == AlchemyStoneTab.Charge then
+        if itemContentsParam2 + 1 <= Int64toInt32(AlchemyStone.fromCount) then
+          AlchemyStone.isPushDoit = true
+        else
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_WARN_2"))
+        end
+      else
+        -- DECOMPILER ERROR at PC110: Confused about usage of register: R7 in 'UnsetPending'
+
+        AlchemyStone.isPushDoit = true
+      end
       doItType = AlchemyStone.selectedTabIdx
       ;
       ((AlchemyStone.control).contentEffect):SetShow(true)
@@ -682,48 +729,10 @@ HandleClicked_AlchemyStone_Doit = function()
 end
 
 HandleClicked_AlchemyStone_Close = function()
-  -- function num : 0_8 , upvalues : AlchemyStone
+  -- function num : 0_9 , upvalues : AlchemyStone
   Panel_AlchemyStone:SetShow(false)
   Panel_AlchemyStone:CloseUISubApp()
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.toWhereType = -1
-  -- DECOMPILER ERROR at PC10: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.toSlotNo = -1
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.fromWhereType = -1
-  -- DECOMPILER ERROR at PC14: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.fromSlotNo = -1
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.fromCount = toInt64(0, -1)
-  -- DECOMPILER ERROR at PC26: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.fromMaxCount = toInt64(0, -1)
-  -- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.selectedStoneType = -1
-  -- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.selectedStoneItemKey = nil
-  -- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.isPushDoit = false
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.toLostEndurance = 0
-  -- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.recoverCount = 0
-  -- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.maxRecoverCount = 0
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R0 in 'UnsetPending'
-
-  AlchemyStone.chargePoint = 0
+  AlchemyStone:ClearData(nil, false)
   doItType = -1
   if Panel_Window_Inventory:GetShow() then
     Inventory_SetFunctor(nil, nil, nil, nil)
@@ -732,18 +741,18 @@ HandleClicked_AlchemyStone_Close = function()
 end
 
 HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
-  -- function num : 0_9 , upvalues : AlchemyStone, AlchemyStoneTab
-  -- DECOMPILER ERROR at PC10: Unhandled construct in 'MakeBoolean' P1
+  -- function num : 0_10 , upvalues : AlchemyStone, AlchemyStoneTab
+  -- DECOMPILER ERROR at PC14: Unhandled construct in 'MakeBoolean' P1
 
-  if slotType == 0 and (AlchemyStone.Stone_slot).Empty == false then
+  if slotType == 0 and (AlchemyStone.Stone_slot).Empty == false and AlchemyStone.isPushDoit == false then
     (AlchemyStone.Stone_slot):clearItem()
-    -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (AlchemyStone.Stone_slot).Empty = true
     ;
     (AlchemyStone.Stuff_slot):clearItem()
-    -- DECOMPILER ERROR at PC20: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC24: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (AlchemyStone.Stuff_slot).Empty = true
@@ -751,6 +760,8 @@ HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
     ((AlchemyStone.control).progressBg_1):SetShow(false)
     ;
     ((AlchemyStone.control).progress_1):SetShow(false)
+    ;
+    ((AlchemyStone.control).progress_1_Pre):SetShow(false)
     ;
     ((AlchemyStone.control).progressText_1):SetShow(false)
     ;
@@ -768,7 +779,13 @@ HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
     ;
     ((AlchemyStone.control).progress_1):SetProgressRate(0)
     ;
+    ((AlchemyStone.control).progress_1_Pre):SetProgressRate(0)
+    ;
     ((AlchemyStone.control).progress_2):SetProgressRate(0)
+    ;
+    ((AlchemyStone.control).chargeDesc):SetShow(false)
+    ;
+    ((AlchemyStone.control).chargeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DESC_5", "needCountMin", 0))
     ;
     ((AlchemyStone.Stone_slot).icon):addInputEvent("Mouse_On", "")
     ;
@@ -801,19 +818,19 @@ HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
     ((AlchemyStone.resultSlotBg)[2]):SetShow(false)
     ;
     ((AlchemyStone.resultSlot)[0]):clearItem()
-    -- DECOMPILER ERROR at PC194: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC228: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     ((AlchemyStone.resultSlot)[0]).Empty = true
     ;
     ((AlchemyStone.resultSlot)[1]):clearItem()
-    -- DECOMPILER ERROR at PC203: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC237: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     ((AlchemyStone.resultSlot)[1]).Empty = true
     ;
     ((AlchemyStone.resultSlot)[2]):clearItem()
-    -- DECOMPILER ERROR at PC212: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC246: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     ((AlchemyStone.resultSlot)[2]).Empty = true
@@ -834,9 +851,9 @@ HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
       Panel_NumberPad_ButtonCancel_Mouse_Click()
     end
   end
-  if (AlchemyStone.Stuff_slot).Empty == false then
+  if (AlchemyStone.Stuff_slot).Empty == false and AlchemyStone.isPushDoit == false then
     (AlchemyStone.Stuff_slot):clearItem()
-    -- DECOMPILER ERROR at PC285: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC323: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (AlchemyStone.Stuff_slot).Empty = true
@@ -855,22 +872,26 @@ HandleClicked_AlchemyStone_UnSetSlot = function(slotType)
     ;
     ((AlchemyStone.control).expMaterial2):SetShow(false)
     Inventory_SetFunctor(AlchemyStone_StuffFilter, AlchemyStone_StuffRfunction, nil, nil)
+    -- DECOMPILER ERROR at PC374: Confused about usage of register: R1 in 'UnsetPending'
+
+    AlchemyStone.fromCount = 0
+    AlchemyStone:updateProgressBar()
   end
   if AlchemyStoneTab.Upgrade == AlchemyStone.selectedTabIdx then
     ((AlchemyStone.control).resultSlotBg):SetShow(true)
     ;
     ((AlchemyStone.resultSlotBg)[0]):SetShow(true)
   end
-  -- DECOMPILER ERROR at PC355: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC398: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.resultItemKey = {}
-  -- DECOMPILER ERROR at PC357: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC400: Confused about usage of register: R1 in 'UnsetPending'
 
   AlchemyStone.resultItemIndex = -1
 end
 
 AlchemyStone_ItemToolTip = function(isShow, slotType)
-  -- function num : 0_10 , upvalues : AlchemyStone
+  -- function num : 0_11 , upvalues : AlchemyStone
   if isShow == true then
     local control, itemWrapper = nil, nil
     if slotType == 0 then
@@ -898,7 +919,7 @@ AlchemyStone_ItemToolTip = function(isShow, slotType)
 end
 
 AlchemyStone_ResultItemTooltip = function(isShow, index)
-  -- function num : 0_11 , upvalues : AlchemyStone
+  -- function num : 0_12 , upvalues : AlchemyStone
   if not isShow then
     Panel_Tooltip_Item_hideTooltip()
     return 
@@ -912,7 +933,7 @@ AlchemyStone_ResultItemTooltip = function(isShow, index)
 end
 
 AlchemyStone_StoneFilter = function(slotNo, itemWrapper, count, inventoryType)
-  -- function num : 0_12 , upvalues : AlchemyStone
+  -- function num : 0_13 , upvalues : AlchemyStone
   local returnValue = true
   if itemWrapper:getStaticStatus() == nil then
     return returnValue
@@ -949,7 +970,7 @@ AlchemyStone_StoneFilter = function(slotNo, itemWrapper, count, inventoryType)
 end
 
 AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType)
-  -- function num : 0_13 , upvalues : AlchemyStone, AlchemyStoneTab
+  -- function num : 0_14 , upvalues : AlchemyStone, AlchemyStoneTab
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
 
   AlchemyStone.toWhereType = inventoryType
@@ -976,7 +997,14 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
   local alchemystoneExp = itemWrapper:getExperience() / 10000
   local itemSSW = itemWrapper:getStaticStatus()
   local itemContentsParam1 = (itemSSW:get())._contentsEventParam1
-  -- DECOMPILER ERROR at PC51: Confused about usage of register: R9 in 'UnsetPending'
+  local itemContentsParam2 = (itemSSW:get())._contentsEventParam2
+  -- DECOMPILER ERROR at PC53: Confused about usage of register: R10 in 'UnsetPending'
+
+  AlchemyStone.maxEndurance = maxEndurance
+  -- DECOMPILER ERROR at PC55: Confused about usage of register: R10 in 'UnsetPending'
+
+  AlchemyStone.currentEndurance = currentEndurance
+  -- DECOMPILER ERROR at PC58: Confused about usage of register: R10 in 'UnsetPending'
 
   AlchemyStone.toLostEndurance = maxEndurance - currentEndurance
   ;
@@ -1004,12 +1032,20 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
     ;
     ((AlchemyStone.control).progress_1):SetShow(true)
     ;
+    ((AlchemyStone.control).progress_1_Pre):SetShow(true)
+    ;
     ((AlchemyStone.control).progressText_1):SetShow(true)
     ;
+    ((AlchemyStone.control).chargeDesc):SetShow(true)
+    ;
     ((AlchemyStone.control).progress_1):SetProgressRate(currentEndurance / maxEndurance * 100)
+    ;
+    ((AlchemyStone.control).progress_1_Pre):SetProgressRate(currentEndurance / maxEndurance * 100)
     local endurancePoint = currentEndurance .. " / " .. maxEndurance
     ;
     ((AlchemyStone.control).progressText_1):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_ENDURANCE", "endurance", endurancePoint))
+    ;
+    ((AlchemyStone.control).chargeDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DESC_5", "needCountMin", itemContentsParam2 + 1))
   else
     do
       if AlchemyStoneTab.Exp == AlchemyStone.selectedTabIdx then
@@ -1018,6 +1054,8 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
         ((AlchemyStone.control).progressBg_1):SetShow(false)
         ;
         ((AlchemyStone.control).progress_1):SetShow(false)
+        ;
+        ((AlchemyStone.control).progress_1_Pre):SetShow(false)
         ;
         ((AlchemyStone.control).progressText_1):SetShow(false)
         ;
@@ -1061,6 +1099,8 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
             ;
             ((AlchemyStone.control).progress_1):SetShow(false)
             ;
+            ((AlchemyStone.control).progress_1_Pre):SetShow(false)
+            ;
             ((AlchemyStone.control).progressText_1):SetShow(false)
             ;
             ((AlchemyStone.control).progressBg_2):SetShow(false)
@@ -1089,7 +1129,7 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
                 (((AlchemyStone.resultSlot)[index]).icon):addInputEvent("Mouse_Out", "AlchemyStone_ResultItemTooltip(false, " .. index .. ")")
                 ;
                 ((AlchemyStone.resultSlotBg)[index]):SetShow(true)
-                -- DECOMPILER ERROR at PC455: Confused about usage of register: R21 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC505: Confused about usage of register: R22 in 'UnsetPending'
 
                 ;
                 (AlchemyStone.resultItemKey)[index] = ((resultItemWrapper:get())._key):getItemKey()
@@ -1098,11 +1138,11 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
                   do
                     ;
                     ((AlchemyStone.resultSlotBg)[index]):SetShow(false)
-                    -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -1178,7 +1218,7 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
 end
 
 AlchemyStone_StuffFilter = function(slotNo, itemWrapper, count, inventoryType)
-  -- function num : 0_14 , upvalues : AlchemyStone, AlchemyStoneTab
+  -- function num : 0_15 , upvalues : AlchemyStone, AlchemyStoneTab
   local returnValue = true
   local staticStatus = itemWrapper:getStaticStatus()
   if staticStatus == nil or AlchemyStone.selectedStoneType == -1 then
@@ -1201,25 +1241,50 @@ AlchemyStone_StuffFilter = function(slotNo, itemWrapper, count, inventoryType)
   end
 end
 
+AlchemyStone.updateProgressBar = function(self)
+  -- function num : 0_16 , upvalues : AlchemyStone
+  local progressRate = 0
+  local itemWrapper = getInventoryItemByType(AlchemyStone.toWhereType, AlchemyStone.toSlotNo)
+  local itemSSW = itemWrapper:getStaticStatus()
+  local itemGradeNum = (itemSSW:get())._contentsEventParam2 + 1
+  local stuffCount = Int64toInt32(AlchemyStone.fromCount)
+  if AlchemyStone.currentEndurance > 0 then
+    progressRate = AlchemyStone.currentEndurance / AlchemyStone.maxEndurance * 100
+  end
+  if AlchemyStone.maxRecoverCount <= stuffCount then
+    progressRate = 100
+  else
+    if stuffCount % itemGradeNum ~= 0 then
+      stuffCount = (math.floor)(stuffCount / itemGradeNum) * itemGradeNum
+    end
+    progressRate = progressRate + AlchemyStone.toLostEndurance / AlchemyStone.maxEndurance / AlchemyStone.maxRecoverCount * (stuffCount) * 100
+  end
+  ;
+  ((AlchemyStone.control).progress_1_Pre):SetProgressRate(progressRate)
+end
+
 AlchemyStone_StuffRfunction = function(slotNo, itemWrapper, count, inventoryType)
-  -- function num : 0_15 , upvalues : AlchemyStone, AlchemyStoneTab
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
-
-  AlchemyStone.fromWhereType = inventoryType
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R4 in 'UnsetPending'
-
-  AlchemyStone.fromSlotNo = slotNo
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R4 in 'UnsetPending'
-
-  AlchemyStone.fromCount = count
-  -- DECOMPILER ERROR at PC7: Confused about usage of register: R4 in 'UnsetPending'
-
-  AlchemyStone.fromMaxCount = count
+  -- function num : 0_17 , upvalues : AlchemyStone, AlchemyStoneTab
   local itemSSW = itemWrapper:getStaticStatus()
   local itemKey = (itemSSW:get())._key
   local guideText = ""
+  if (AlchemyStone.Stuff_slot).Empty == false then
+    HandleClicked_AlchemyStone_UnSetSlot(1)
+  end
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R7 in 'UnsetPending'
+
+  AlchemyStone.fromWhereType = inventoryType
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R7 in 'UnsetPending'
+
+  AlchemyStone.fromSlotNo = slotNo
+  -- DECOMPILER ERROR at PC23: Confused about usage of register: R7 in 'UnsetPending'
+
+  AlchemyStone.fromCount = toInt64(0, 0)
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R7 in 'UnsetPending'
+
+  AlchemyStone.fromMaxCount = count
   local setStuffFunc = function(itemCount)
-    -- function num : 0_15_0 , upvalues : AlchemyStone, itemKey, guideText
+    -- function num : 0_17_0 , upvalues : AlchemyStone, itemKey, guideText
     -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
     AlchemyStone.fromCount = itemCount
@@ -1240,18 +1305,23 @@ AlchemyStone_StuffRfunction = function(slotNo, itemWrapper, count, inventoryType
     ((AlchemyStone.control).btn_Doit):SetEnable(not AlchemyStone.isPushDoit)
     ;
     ((AlchemyStone.control).guideString):SetText(guideText)
+    AlchemyStone:updateProgressBar()
   end
 
   ;
   ((AlchemyStone.control).count):SetShow(false)
   if AlchemyStoneTab.Charge == AlchemyStone.selectedTabIdx then
     guideText = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DOIT_CHARGE")
-    -- DECOMPILER ERROR at PC47: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC59: Confused about usage of register: R8 in 'UnsetPending'
 
     AlchemyStone.chargePoint = ToClient_GetAlchmeyStoneChargePoint(AlchemyStone.toWhereType, AlchemyStone.toSlotNo, AlchemyStone.fromWhereType, AlchemyStone.fromSlotNo)
-    -- DECOMPILER ERROR at PC60: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC72: Confused about usage of register: R8 in 'UnsetPending'
 
     AlchemyStone.maxRecoverCount = (math.ceil)(AlchemyStone.toLostEndurance / AlchemyStone.chargePoint) * AlchemyStone.recoverCount
+    if AlchemyStone.maxRecoverCount <= 0 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_WARN_1"))
+      return 
+    end
     local string = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_NEEDMAXCHARGECOUNT", "count1", AlchemyStone.maxRecoverCount, "count2", AlchemyStone.recoverCount, "count3", AlchemyStone.chargePoint)
     ;
     ((AlchemyStone.control).count):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_NEEDMATERIALCOUNT", "count", AlchemyStone.maxRecoverCount))
@@ -1276,7 +1346,7 @@ AlchemyStone_StuffRfunction = function(slotNo, itemWrapper, count, inventoryType
 end
 
 FGlobal_AlchemyStone_Open = function()
-  -- function num : 0_16 , upvalues : AlchemyStone
+  -- function num : 0_18 , upvalues : AlchemyStone
   local isAlchemyStoneEnble = ToClient_IsContentsGroupOpen("35")
   if not isAlchemyStoneEnble then
     return 
@@ -1298,13 +1368,13 @@ FGlobal_AlchemyStone_Open = function()
   ((AlchemyStone.control).tab_Exp):SetCheck(false)
   ;
   ((AlchemyStone.control).tab_Upgrade):SetCheck(false)
-  AlchemyStone:ClearData(true)
+  AlchemyStone:ClearData(true, false)
   HandleClicked_AlchemyStoneTab(0)
   doItType = 0
   if Panel_Window_Inventory:IsUISubApp() then
     Panel_AlchemyStone:OpenUISubApp()
   end
-  if Panel_Equipment:GetShow() then
+  if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
     ClothInventory_Close()
   end
@@ -1313,12 +1383,12 @@ FGlobal_AlchemyStone_Open = function()
 end
 
 FGlobal_AlchemyStone_Close = function()
-  -- function num : 0_17
+  -- function num : 0_19
   HandleClicked_AlchemyStone_Close()
 end
 
 FGlobal_AlchemyStone_Use = function()
-  -- function num : 0_18
+  -- function num : 0_20
   local itemWrapper = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).alchemyStone)
   if itemWrapper ~= nil and (itemWrapper:get()):getEndurance() > 0 then
     useAlchemyStone()
@@ -1328,7 +1398,7 @@ end
 local elapsTime = 0
 local isUpgrade = false
 Panel_AlchemyStone_updateTime = function(deltaTime)
-  -- function num : 0_19 , upvalues : AlchemyStone, elapsTime, AlchemyStoneTab, isUpgrade
+  -- function num : 0_21 , upvalues : AlchemyStone, elapsTime, AlchemyStoneTab, isUpgrade
   if AlchemyStone.isPushDoit then
     elapsTime = elapsTime + deltaTime
     if elapsTime > 0 and AlchemyStone.startEffectPlay == false then
@@ -1360,11 +1430,13 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
       end
     end
     if elapsTime > 1 and AlchemyStone.contentEffectPlay == false and not ((AlchemyStone.control).tab_Upgrade):IsCheck() then
-      (AlchemyStone.Stuff_slot):clearItem()
-      -- DECOMPILER ERROR at PC106: Confused about usage of register: R1 in 'UnsetPending'
+      if AlchemyStoneTab.Charge ~= doItType then
+        (AlchemyStone.Stuff_slot):clearItem()
+        -- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
 
-      ;
-      (AlchemyStone.Stuff_slot).Empty = true
+        ;
+        (AlchemyStone.Stuff_slot).Empty = true
+      end
       ;
       ((AlchemyStone.control).contentEffect):EraseAllEffect()
       if AlchemyStoneTab.Charge == doItType then
@@ -1378,7 +1450,7 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
           end
         end
       end
-      -- DECOMPILER ERROR at PC157: Confused about usage of register: R1 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC162: Confused about usage of register: R1 in 'UnsetPending'
 
       AlchemyStone.contentEffectPlay = true
     end
@@ -1395,18 +1467,18 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
           end
         end
       end
-      -- DECOMPILER ERROR at PC209: Confused about usage of register: R1 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC214: Confused about usage of register: R1 in 'UnsetPending'
 
       AlchemyStone.slotEffectPlay = true
       if ((AlchemyStone.control).tab_Upgrade):IsCheck() then
         (AlchemyStone.Stuff_slot):clearItem()
-        -- DECOMPILER ERROR at PC223: Confused about usage of register: R1 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC228: Confused about usage of register: R1 in 'UnsetPending'
 
         ;
         (AlchemyStone.Stuff_slot).Empty = true
       end
     end
-    -- DECOMPILER ERROR at PC232: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC237: Confused about usage of register: R1 in 'UnsetPending'
 
     if elapsTime > 3 and AlchemyStone.effectEnd == false then
       AlchemyStone.effectEnd = true
@@ -1421,13 +1493,11 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
       if AlchemyStoneTab.Charge == doItType then
         alchemyRepair(AlchemyStone.toWhereType, AlchemyStone.toSlotNo, AlchemyStone.fromWhereType, AlchemyStone.fromSlotNo, AlchemyStone.fromCount)
         elapsTime = 0
-        AlchemyStone:ClearData()
-        Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)
       else
         if AlchemyStoneTab.Exp == doItType then
           alchemyUpgrade(AlchemyStone.fromWhereType, AlchemyStone.fromSlotNo, AlchemyStone.fromCount, AlchemyStone.toWhereType, AlchemyStone.toSlotNo)
           elapsTime = 0
-          -- DECOMPILER ERROR at PC308: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC305: Confused about usage of register: R1 in 'UnsetPending'
 
           AlchemyStone.isPushDoit = false
           Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)
@@ -1449,7 +1519,7 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
       isUpgrade = true
     end
     if elapsTime > 12 and isUpgrade then
-      AlchemyStone:ClearData()
+      AlchemyStone:ClearData(nil, false)
       Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)
       isUpgrade = false
       elapsTime = 0
@@ -1461,12 +1531,12 @@ Panel_AlchemyStone_updateTime = function(deltaTime)
 end
 
 AlchemyStone_onScreenResize = function()
-  -- function num : 0_20
+  -- function num : 0_22
   Panel_AlchemyStone:ComputePos()
 end
 
 FromClient_ItemUpgrade = function(itemwhereType, slotNo, exp)
-  -- function num : 0_21 , upvalues : AlchemyStoneTab, AlchemyStone
+  -- function num : 0_23 , upvalues : AlchemyStoneTab, AlchemyStone
   if not Panel_AlchemyStone:GetShow() then
     return 
   end
@@ -1503,24 +1573,24 @@ FromClient_ItemUpgrade = function(itemwhereType, slotNo, exp)
   ;
   ((AlchemyStone.control).progressText_2):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_EXPERIENCE", "exp", _exp))
   if AlchemyStoneTab.Charge == doItType then
-    AlchemyStone:ClearData()
+    AlchemyStone:ClearData(nil, true)
     Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)
   else
     if AlchemyStoneTab.Exp == doItType then
       Inventory_SetFunctor(AlchemyStone_StuffFilter, AlchemyStone_StuffRfunction, nil, nil)
-      -- DECOMPILER ERROR at PC151: Confused about usage of register: R7 in 'UnsetPending'
-
-      AlchemyStone.isPushDoit = false
       -- DECOMPILER ERROR at PC153: Confused about usage of register: R7 in 'UnsetPending'
 
-      AlchemyStone.startEffectPlay = false
+      AlchemyStone.isPushDoit = false
       -- DECOMPILER ERROR at PC155: Confused about usage of register: R7 in 'UnsetPending'
 
-      AlchemyStone.contentEffectPlay = false
+      AlchemyStone.startEffectPlay = false
       -- DECOMPILER ERROR at PC157: Confused about usage of register: R7 in 'UnsetPending'
 
-      AlchemyStone.slotEffectPlay = false
+      AlchemyStone.contentEffectPlay = false
       -- DECOMPILER ERROR at PC159: Confused about usage of register: R7 in 'UnsetPending'
+
+      AlchemyStone.slotEffectPlay = false
+      -- DECOMPILER ERROR at PC161: Confused about usage of register: R7 in 'UnsetPending'
 
       AlchemyStone.effectEnd = false
       AlchemyStone_TabButton_Enable(true)
@@ -1529,7 +1599,7 @@ FromClient_ItemUpgrade = function(itemwhereType, slotNo, exp)
 end
 
 FromClient_StoneChange = function(whereType, slotNo)
-  -- function num : 0_22 , upvalues : AlchemyStone
+  -- function num : 0_24 , upvalues : AlchemyStone
   if not Panel_AlchemyStone:GetShow() then
     return 
   end
@@ -1555,7 +1625,7 @@ FromClient_StoneChange = function(whereType, slotNo)
 end
 
 FromClient_StoneChangeFailedByDown = function(whereType, slotNo)
-  -- function num : 0_23
+  -- function num : 0_25
   if not Panel_AlchemyStone:GetShow() then
     return 
   end
@@ -1572,7 +1642,7 @@ FromClient_StoneChangeFailedByDown = function(whereType, slotNo)
 end
 
 FromClient_AlchemyEvolve = function(evolveType)
-  -- function num : 0_24 , upvalues : AlchemyStone
+  -- function num : 0_26 , upvalues : AlchemyStone
   if not Panel_AlchemyStone:GetShow() then
     return 
   end
@@ -1600,19 +1670,20 @@ FromClient_AlchemyEvolve = function(evolveType)
 end
 
 FromClient_AlchemyRepair = function(whereType, slotNo)
-  -- function num : 0_25 , upvalues : AlchemyStone
+  -- function num : 0_27 , upvalues : AlchemyStone
   local itemWrapper = getInventoryItemByType(whereType, Int64toInt32(slotNo))
   if itemWrapper ~= nil then
     local itemSSW = itemWrapper:getStaticStatus()
     local itemName = itemSSW:getName()
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_CHARGE_COMPLETE_ACK", "itemName", itemName))
-    AlchemyStone:ClearData()
-    Inventory_SetFunctor(AlchemyStone_StoneFilter, AlchemyStone_StoneRfunction, nil, nil)
+    AlchemyStone:ClearData(nil, true)
+    Inventory_SetFunctor(AlchemyStone_StuffFilter, AlchemyStone_StuffRfunction, nil, nil)
+    AlchemyStone:UpdateStone(whereType, slotNo)
   end
 end
 
 AlchemyStone_TabButton_Enable = function(isEnable)
-  -- function num : 0_26 , upvalues : AlchemyStone
+  -- function num : 0_28 , upvalues : AlchemyStone
   local self = AlchemyStone.control
   ;
   (self.tab_Charge):SetEnable(isEnable)

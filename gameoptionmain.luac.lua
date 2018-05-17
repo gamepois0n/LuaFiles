@@ -602,7 +602,7 @@ PaGlobal_Option.ResetControlSettingTable = function(self, option, elementName)
             else
             end
             do
-              if CONTROL.PA_UI_CONTROL_COMBOBOX == option._controlType then
+              if CONTROL.PA_UI_CONTROL_COMBOBOX ~= option._controlType or CONTROL.PA_UI_CONTROL_COMBOBOX == option._controlType then
               end
             end
           end
@@ -917,433 +917,448 @@ end
 
 PaGlobal_Option.InitValue = function(self, gameOptionSetting)
   -- function num : 0_30
+  local elems_ = self._elements
+  for i,option in pairs(elems_) do
+    option._curValue = nil
+    option._applyValue = nil
+  end
+  self._sliderButtonString = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_CURRENT_SLIDERVALUE") .. " <PAColor0xffddcd82>"
+  self:SpectialControlComboBoxInitValue()
+  self._keyCustomPadMode = getGamePadEnable()
+  self:KeyCustomInitValue()
+  -- DECOMPILER ERROR at PC28: Confused about usage of register: R3 in 'UnsetPending'
+
+  if self._keyCustomPadMode == true then
+    (elems_.KeyCustomMode)._initValue = 1
+  else
+    -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
+
+    ;
+    (elems_.KeyCustomMode)._initValue = 0
+  end
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.AimAssist)._initValue = gameOptionSetting:getAimAssist()
+  -- DECOMPILER ERROR at PC44: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.UseNewQuickSlot)._initValue = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot)
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.EnableSimpleUI)._initValue = gameOptionSetting:getEnableSimpleUI()
+  -- DECOMPILER ERROR at PC52: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.IsOnScreenSaver)._initValue = gameOptionSetting:getIsOnScreenSaver()
+  -- DECOMPILER ERROR at PC59: Confused about usage of register: R3 in 'UnsetPending'
+
+  if elems_.UIFontSizeType ~= nil then
+    (elems_.UIFontSizeType)._initValue = gameOptionSetting:getUIFontSizeType()
+  end
+  -- DECOMPILER ERROR at PC63: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.ShowNavPathEffectType)._initValue = gameOptionSetting:getShowNavPathEffectType()
+  -- DECOMPILER ERROR at PC67: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.RefuseRequests)._initValue = gameOptionSetting:getRefuseRequests()
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.IsPvpRefuse)._initValue = gameOptionSetting:getPvpRefuse()
+  -- DECOMPILER ERROR at PC78: Confused about usage of register: R3 in 'UnsetPending'
+
+  if elems_.IsExchangeRefuse ~= nil then
+    (elems_.IsExchangeRefuse)._initValue = gameOptionSetting:getIsExchangeRefuse()
+  end
+  -- DECOMPILER ERROR at PC82: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.RotateRadarMode)._initValue = gameOptionSetting:getRadarRotateMode()
+  -- DECOMPILER ERROR at PC86: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.HideWindowByAttacked)._initValue = gameOptionSetting:getHideWindowByAttacked()
+  -- DECOMPILER ERROR at PC93: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.AudioResourceType)._initValue = self:radioButtonMapping_AudioResourceType(gameOptionSetting:getAudioResourceType(), true)
+  -- DECOMPILER ERROR at PC100: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.ServiceResourceType)._initValue = self:radioButtonMapping_ServiceResourceType(gameOptionSetting:getServiceResType(), true)
+  -- DECOMPILER ERROR at PC104: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.UseChattingFilter)._initValue = gameOptionSetting:getUseChattingFilter()
+  -- DECOMPILER ERROR at PC111: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.ChatChannelType)._initValue = self:radioButtonMapping_ChatChannelType(gameOptionSetting:getChatLanguageType(), true)
+  -- DECOMPILER ERROR at PC115: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.SelfPlayerNameTagVisible)._initValue = gameOptionSetting:getSelfPlayerNameTagVisible()
+  -- DECOMPILER ERROR at PC126: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.OtherPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getOtherPlayerNameTagVisible()
+  -- DECOMPILER ERROR at PC137: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.PartyPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getPartyPlayerNameTagVisible()
+  -- DECOMPILER ERROR at PC148: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuildPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getGuildPlayerNameTagVisible()
+  -- DECOMPILER ERROR at PC159: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.RankingPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getRankingPlayerNameTagVisible()
+  -- DECOMPILER ERROR at PC164: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineZoneChange)._initValue = gameOptionSetting:getRenderPlayerColor("ZoneChange")
+  -- DECOMPILER ERROR at PC168: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineQuestNPC)._initValue = gameOptionSetting:getShowQuestActorColor()
+  -- DECOMPILER ERROR at PC172: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineNpcIntimacy)._initValue = gameOptionSetting:getShowHumanRelation()
+  -- DECOMPILER ERROR at PC177: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineWarAlly)._initValue = gameOptionSetting:getRenderPlayerColor("WarAlly")
+  -- DECOMPILER ERROR at PC182: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineNonWarPlayer)._initValue = gameOptionSetting:getRenderPlayerColor("NonWarPlayer")
+  -- DECOMPILER ERROR at PC187: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineEnemy)._initValue = gameOptionSetting:getRenderPlayerColor("Enemy")
+  -- DECOMPILER ERROR at PC192: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineGuild)._initValue = gameOptionSetting:getRenderPlayerColor("Guild")
+  -- DECOMPILER ERROR at PC197: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLineParty)._initValue = gameOptionSetting:getRenderPlayerColor("Party")
+  -- DECOMPILER ERROR at PC201: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.GuideLinePartyMemberEffect)._initValue = gameOptionSetting:getRenderHitEffectParty()
+  -- DECOMPILER ERROR at PC205: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.PetRender)._initValue = gameOptionSetting:getPetRender()
+  -- DECOMPILER ERROR at PC211: Confused about usage of register: R3 in 'UnsetPending'
+
+  if gameOptionSetting:getFairyRender() == true then
+    (elems_.FairyRender)._initValue = 0
+  else
+    -- DECOMPILER ERROR at PC214: Confused about usage of register: R3 in 'UnsetPending'
+
+    (elems_.FairyRender)._initValue = 1
+  end
+  -- DECOMPILER ERROR at PC218: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.MaidView)._sliderValueMax = gameOptionSetting:getMaidMaxCount()
+  -- DECOMPILER ERROR at PC227: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.MaidView)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMaidView(), 0, gameOptionSetting:getMaidMaxCount())
   do
-    local elems_ = self._elements
-    for i,option in pairs(elems_) do
-      option._curValue = nil
-      option._applyValue = nil
+    local frameContent = ((self._frames).Function).View
+    if frameContent ~= nil then
+      local maidControl = (UI.getChildControl)(frameContent._uiFrameContent, "StaticText_BgOrder6_Import")
+      local maidMaxControl = (UI.getChildControl)(maidControl, "StaticText_MaxMaidView")
+      maidMaxControl:SetShow(true)
+      maidMaxControl:SetText(tostring(gameOptionSetting:getMaidMaxCount()))
     end
-    self._sliderButtonString = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_CURRENT_SLIDERVALUE") .. " <PAColor0xffddcd82>"
-    self:SpectialControlComboBoxInitValue()
-    self._keyCustomPadMode = getGamePadEnable()
-    self:KeyCustomInitValue()
-    -- DECOMPILER ERROR at PC28: Confused about usage of register: R3 in 'UnsetPending'
-
-    if self._keyCustomPadMode == true then
-      (elems_.KeyCustomMode)._initValue = 1
-    else
-      -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
-
-      ;
-      (elems_.KeyCustomMode)._initValue = 0
-    end
-    -- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.AimAssist)._initValue = gameOptionSetting:getAimAssist()
-    -- DECOMPILER ERROR at PC44: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.UseNewQuickSlot)._initValue = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot)
-    -- DECOMPILER ERROR at PC48: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.EnableSimpleUI)._initValue = gameOptionSetting:getEnableSimpleUI()
-    -- DECOMPILER ERROR at PC52: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.IsOnScreenSaver)._initValue = gameOptionSetting:getIsOnScreenSaver()
-    -- DECOMPILER ERROR at PC59: Confused about usage of register: R3 in 'UnsetPending'
-
-    if elems_.UIFontSizeType ~= nil then
-      (elems_.UIFontSizeType)._initValue = gameOptionSetting:getUIFontSizeType()
-    end
-    -- DECOMPILER ERROR at PC63: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.ShowNavPathEffectType)._initValue = gameOptionSetting:getShowNavPathEffectType()
-    -- DECOMPILER ERROR at PC67: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.RefuseRequests)._initValue = gameOptionSetting:getRefuseRequests()
-    -- DECOMPILER ERROR at PC71: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.IsPvpRefuse)._initValue = gameOptionSetting:getPvpRefuse()
-    -- DECOMPILER ERROR at PC78: Confused about usage of register: R3 in 'UnsetPending'
-
-    if elems_.IsExchangeRefuse ~= nil then
-      (elems_.IsExchangeRefuse)._initValue = gameOptionSetting:getIsExchangeRefuse()
-    end
-    -- DECOMPILER ERROR at PC82: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.RotateRadarMode)._initValue = gameOptionSetting:getRadarRotateMode()
-    -- DECOMPILER ERROR at PC86: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.HideWindowByAttacked)._initValue = gameOptionSetting:getHideWindowByAttacked()
-    -- DECOMPILER ERROR at PC93: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.AudioResourceType)._initValue = self:radioButtonMapping_AudioResourceType(gameOptionSetting:getAudioResourceType(), true)
-    -- DECOMPILER ERROR at PC100: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.ServiceResourceType)._initValue = self:radioButtonMapping_ServiceResourceType(gameOptionSetting:getServiceResType(), true)
-    -- DECOMPILER ERROR at PC104: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.UseChattingFilter)._initValue = gameOptionSetting:getUseChattingFilter()
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.ChatChannelType)._initValue = self:radioButtonMapping_ChatChannelType(gameOptionSetting:getChatLanguageType(), true)
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.SelfPlayerNameTagVisible)._initValue = gameOptionSetting:getSelfPlayerNameTagVisible()
-    -- DECOMPILER ERROR at PC126: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.OtherPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getOtherPlayerNameTagVisible()
-    -- DECOMPILER ERROR at PC137: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.PartyPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getPartyPlayerNameTagVisible()
-    -- DECOMPILER ERROR at PC148: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuildPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getGuildPlayerNameTagVisible()
-    -- DECOMPILER ERROR at PC159: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.RankingPlayerNameTagVisible)._initValue = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow == gameOptionSetting:getRankingPlayerNameTagVisible()
-    -- DECOMPILER ERROR at PC164: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineZoneChange)._initValue = gameOptionSetting:getRenderPlayerColor("ZoneChange")
-    -- DECOMPILER ERROR at PC168: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineQuestNPC)._initValue = gameOptionSetting:getShowQuestActorColor()
-    -- DECOMPILER ERROR at PC172: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineNpcIntimacy)._initValue = gameOptionSetting:getShowHumanRelation()
-    -- DECOMPILER ERROR at PC177: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineWarAlly)._initValue = gameOptionSetting:getRenderPlayerColor("WarAlly")
-    -- DECOMPILER ERROR at PC182: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineNonWarPlayer)._initValue = gameOptionSetting:getRenderPlayerColor("NonWarPlayer")
-    -- DECOMPILER ERROR at PC187: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineEnemy)._initValue = gameOptionSetting:getRenderPlayerColor("Enemy")
-    -- DECOMPILER ERROR at PC192: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineGuild)._initValue = gameOptionSetting:getRenderPlayerColor("Guild")
-    -- DECOMPILER ERROR at PC197: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLineParty)._initValue = gameOptionSetting:getRenderPlayerColor("Party")
-    -- DECOMPILER ERROR at PC201: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.GuideLinePartyMemberEffect)._initValue = gameOptionSetting:getRenderHitEffectParty()
-    -- DECOMPILER ERROR at PC205: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (elems_.PetRender)._initValue = gameOptionSetting:getPetRender()
-    -- DECOMPILER ERROR at PC211: Confused about usage of register: R3 in 'UnsetPending'
-
-    if gameOptionSetting:getFairyRender() == true then
-      (elems_.FairyRender)._initValue = 0
-    else
-      -- DECOMPILER ERROR at PC214: Confused about usage of register: R3 in 'UnsetPending'
-
-      (elems_.FairyRender)._initValue = 1
-    end
-    -- DECOMPILER ERROR at PC218: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC255: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ShowReputation)._initValue = gameOptionSetting:getShowStatTier()
-    -- DECOMPILER ERROR at PC222: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC259: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.RenderHitEffect)._initValue = gameOptionSetting:getRenderHitEffect()
-    -- DECOMPILER ERROR at PC226: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC263: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.DamageMeter)._initValue = gameOptionSetting:getOnDamageMeter()
-    -- DECOMPILER ERROR at PC230: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC267: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ShowComboGuide)._initValue = gameOptionSetting:getShowComboGuide()
-    -- DECOMPILER ERROR at PC234: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC271: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.HideMastOnCarrier)._initValue = gameOptionSetting:getHideMastOnCarrier()
-    -- DECOMPILER ERROR at PC238: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC275: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WorkerVisible)._initValue = gameOptionSetting:getWorkerVisible()
-    -- DECOMPILER ERROR at PC242: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC279: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WorldMapOpenType)._initValue = gameOptionSetting:getWorldmapOpenType()
-    -- DECOMPILER ERROR at PC246: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC283: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WorldmapCameraPitchType)._initValue = gameOptionSetting:getWorldMapCameraPitchType()
-    -- DECOMPILER ERROR at PC253: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC290: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.TextureQuality)._initValue = self:radioButtonMapping_TextureQuality(gameOptionSetting:getTextureQuality(), true)
-    -- DECOMPILER ERROR at PC260: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC297: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GraphicOption)._initValue = self:radioButtonMapping_GraphicOption(gameOptionSetting:getGraphicOption(), true)
     self:SetGraphicOption((elems_.GraphicOption)._initValue)
-    -- DECOMPILER ERROR at PC268: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC305: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AntiAliasing)._initValue = gameOptionSetting:getAntiAliasing()
-    -- DECOMPILER ERROR at PC272: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC309: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.SSAO)._initValue = gameOptionSetting:getSSAO()
-    -- DECOMPILER ERROR at PC280: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC317: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.PostFilter)._initValue = gameOptionSetting:getPostFilter() == 2
-    -- DECOMPILER ERROR at PC284: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC321: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.Tessellation)._initValue = gameOptionSetting:getTessellation()
-    -- DECOMPILER ERROR at PC288: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC325: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GraphicUltra)._initValue = gameOptionSetting:getGraphicUltra()
-    -- DECOMPILER ERROR at PC292: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC329: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.Dof)._initValue = gameOptionSetting:getDof()
-    -- DECOMPILER ERROR at PC296: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC333: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.Representative)._initValue = gameOptionSetting:getRepresentative()
-    -- DECOMPILER ERROR at PC300: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC337: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CharacterEffect)._initValue = gameOptionSetting:getCharacterEffect()
-    -- DECOMPILER ERROR at PC304: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC341: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.SnowPoolOnlyInSafeZone)._initValue = gameOptionSetting:getSnowPoolOnlyInSafeZone()
-    -- DECOMPILER ERROR at PC312: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC349: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.BloodEffect)._initValue = gameOptionSetting:getBloodEffect() == 2
-    -- DECOMPILER ERROR at PC316: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC353: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.LensBlood)._initValue = gameOptionSetting:getLensBlood()
-    -- DECOMPILER ERROR at PC323: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC360: Confused about usage of register: R4 in 'UnsetPending'
 
     if elems_.ShowHpRular ~= nil then
       (elems_.ShowHpRular)._initValue = gameOptionSetting:getIsShowHpBar()
     end
-    -- DECOMPILER ERROR at PC327: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC364: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AutoOptimization)._initValue = gameOptionSetting:getAutoOptimization()
-    -- DECOMPILER ERROR at PC335: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC372: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AutoOptimizationFrameLimit)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getAutoOptimizationFrameLimit(), 0, 60)
-    -- DECOMPILER ERROR at PC339: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC376: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UpscaleEnable)._initValue = gameOptionSetting:getUpscaleEnable()
-    -- DECOMPILER ERROR at PC343: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC380: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.SelfPlayerOnlyEffect)._initValue = gameOptionSetting:getSelfPlayerOnlyEffect()
-    -- DECOMPILER ERROR at PC347: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC384: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.NearestPlayerOnlyEffect)._initValue = gameOptionSetting:getNearestPlayerOnlyEffect()
-    -- DECOMPILER ERROR at PC351: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC388: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.SelfPlayerOnlyLantern)._initValue = gameOptionSetting:getSelfPlayerOnlyLantern()
-    -- DECOMPILER ERROR at PC355: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC392: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.PresentLock)._initValue = gameOptionSetting:getPresentLock()
-    -- DECOMPILER ERROR at PC359: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC396: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UseEffectFrameOptimization)._initValue = gameOptionSetting:getUseOptimizationEffectFrame()
-    -- DECOMPILER ERROR at PC367: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC404: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EffectFrameOptimization)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getEffectFrameEffectOptimization(), 0.1, 25)
-    -- DECOMPILER ERROR at PC371: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC408: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UsePlayerEffectDistOptimization)._initValue = gameOptionSetting:getUsePlayerOptimizationEffectFrame()
-    -- DECOMPILER ERROR at PC380: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC417: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.PlayerEffectDistOptimization)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getPlayerEffectFrameEffectOptimization() / 100, 10, 50)
-    -- DECOMPILER ERROR at PC384: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC421: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UseCharacterUpdateFrameOptimize)._initValue = gameOptionSetting:getUseCharacterDistUpdate()
-    -- DECOMPILER ERROR at PC392: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC429: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UseOtherPlayerUpdate)._initValue = gameOptionSetting:getUseOtherPlayerUpdate() ~= true
-    -- DECOMPILER ERROR at PC396: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC433: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.MouseInvertX)._initValue = gameOptionSetting:getMouseInvertX()
-    -- DECOMPILER ERROR at PC400: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC437: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.MouseInvertY)._initValue = gameOptionSetting:getMouseInvertY()
-    -- DECOMPILER ERROR at PC408: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC445: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.MouseSensitivityX)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMouseSensitivityX(), 0.1, 2)
-    -- DECOMPILER ERROR at PC416: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC453: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.MouseSensitivityY)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMouseSensitivityY(), 0.1, 2)
-    -- DECOMPILER ERROR at PC420: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC457: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GameMouseMode)._initValue = gameOptionSetting:getGameMouseMode()
-    -- DECOMPILER ERROR at PC424: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC461: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.IsUIModeMouseLock)._initValue = gameOptionSetting:getUIModeMouseLock()
-    -- DECOMPILER ERROR at PC428: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC465: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadEnable)._initValue = gameOptionSetting:getGamePadEnable()
-    -- DECOMPILER ERROR at PC432: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC469: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadVibration)._initValue = gameOptionSetting:getGamePadVibration()
-    -- DECOMPILER ERROR at PC436: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC473: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadInvertX)._initValue = gameOptionSetting:getGamePadInvertX()
-    -- DECOMPILER ERROR at PC440: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC477: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadInvertY)._initValue = gameOptionSetting:getGamePadInvertY()
-    -- DECOMPILER ERROR at PC448: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC485: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadSensitivityX)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityX(), 0.1, 2)
-    -- DECOMPILER ERROR at PC456: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC493: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GamePadSensitivityY)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityY(), 0.1, 2)
-    -- DECOMPILER ERROR at PC463: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC500: Confused about usage of register: R4 in 'UnsetPending'
 
     if _ContentsGroup_isConsoleTest == true then
       (elems_.ConsolePadKeyType)._initValue = gameOptionSetting:getConsoleKeyType()
     else
-      -- DECOMPILER ERROR at PC466: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC503: Confused about usage of register: R4 in 'UnsetPending'
 
       (elems_.ConsolePadKeyType)._initValue = 0
     end
-    -- DECOMPILER ERROR at PC470: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC507: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.LUT)._initValue = gameOptionSetting:getCameraLUTFilter()
-    -- DECOMPILER ERROR at PC478: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC515: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.Fov)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getFov(), 40, 70)
-    -- DECOMPILER ERROR at PC486: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC523: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CameraEffectMaster)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCameraMasterPower(), 0, 1)
-    -- DECOMPILER ERROR at PC494: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC531: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CameraShakePower)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCameraShakePower(), 0, 1)
-    -- DECOMPILER ERROR at PC502: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC539: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.MotionBlurPower)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMotionBlurPower(), 0, 1)
-    -- DECOMPILER ERROR at PC510: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC547: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CameraTranslatePower)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCameraTranslatePower(), 0, 1)
-    -- DECOMPILER ERROR at PC518: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC555: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CameraFovPower)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCameraFovPower(), 0, 1)
-    -- DECOMPILER ERROR at PC522: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC559: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ScreenShotQuality)._initValue = gameOptionSetting:getScreenShotQuality()
-    -- DECOMPILER ERROR at PC526: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC563: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ScreenShotFormat)._initValue = gameOptionSetting:getScreenShotFormat()
-    -- DECOMPILER ERROR at PC534: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC571: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WatermarkAlpha)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getWatermarkAlpha(), 0, 1)
-    -- DECOMPILER ERROR at PC538: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC575: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WatermarkScale)._initValue = gameOptionSetting:getWatermarkScale()
-    -- DECOMPILER ERROR at PC542: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC579: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WatermarkPosition)._initValue = gameOptionSetting:getWatermarkPosition()
-    -- DECOMPILER ERROR at PC546: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC583: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.WatermarkService)._initValue = gameOptionSetting:getWatermarkService()
-    -- DECOMPILER ERROR at PC550: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC587: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ScreenMode)._initValue = gameOptionSetting:getScreenMode()
-    -- DECOMPILER ERROR at PC554: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC591: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AutoRunCamera)._initValue = gameOptionSetting:getAutoRunCamera()
-    -- DECOMPILER ERROR at PC558: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC595: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AutoRunCameraRotation)._initValue = gameOptionSetting:getAutoRunCameraRotation()
-    -- DECOMPILER ERROR at PC567: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC604: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ScreenResolution)._initValue = (self._availableResolutionList):findResolution(gameOptionSetting:getScreenResolutionWidth(), gameOptionSetting:getScreenResolutionHeight())
-    -- DECOMPILER ERROR at PC575: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC612: Confused about usage of register: R4 in 'UnsetPending'
 
     if (elems_.ScreenResolution)._eventControl ~= nil then
       (self._userInitScreenResolution).width = gameOptionSetting:getScreenResolutionWidth()
-      -- DECOMPILER ERROR at PC579: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC617: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (self._userInitScreenResolution).height = gameOptionSetting:getScreenResolutionHeight()
-      if (elems_.ScreenResolution)._initValue == -1 then
+      if -1 == (elems_.ScreenResolution)._initValue then
         for _,value in pairs((elems_.ScreenResolution)._eventControl) do
           value:SetText((self._userInitScreenResolution).width .. "x" .. (self._userInitScreenResolution).height)
         end
@@ -1353,180 +1368,180 @@ PaGlobal_Option.InitValue = function(self, gameOptionSetting)
         end
       end
     end
-    -- DECOMPILER ERROR at PC617: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC660: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CropModeEnable)._initValue = gameOptionSetting:getCropModeEnable()
-    -- DECOMPILER ERROR at PC625: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC670: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CropModeScaleX)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleX(), 0.5, 1)
-    -- DECOMPILER ERROR at PC633: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC680: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.CropModeScaleY)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleY(), 0.5, 1)
-    -- DECOMPILER ERROR at PC641: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC690: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.UIScale)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getUIScale(), 0.5, 2)
-    -- DECOMPILER ERROR at PC650: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC700: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.GammaValue)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGammaValue(), 0, 1)
-    -- DECOMPILER ERROR at PC660: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC710: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ContrastValue)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getContrastValue(), 0, 1)
-    -- DECOMPILER ERROR at PC670: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC720: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EffectAlpha)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getEffectAlpha(), 0.3, 1)
-    -- DECOMPILER ERROR at PC680: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC730: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.SkillPostEffect)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getSkillPostEffect(), 0, 1)
-    -- DECOMPILER ERROR at PC692: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC742: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ColorBlind)._initValue = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
-    -- DECOMPILER ERROR at PC698: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC748: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableMusic)._initValue = gameOptionSetting:getEnableMusic()
-    -- DECOMPILER ERROR at PC704: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC754: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableSound)._initValue = gameOptionSetting:getEnableSound()
-    -- DECOMPILER ERROR at PC710: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC760: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableEnv)._initValue = gameOptionSetting:getEnableEnvSound()
-    -- DECOMPILER ERROR at PC716: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC766: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableRidingSound)._initValue = gameOptionSetting:getEnableRidingSound()
-    -- DECOMPILER ERROR at PC722: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC772: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableWhisperMusic)._initValue = gameOptionSetting:getEnableWhisperSound()
-    -- DECOMPILER ERROR at PC728: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC778: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.EnableTraySoundOnOff)._initValue = gameOptionSetting:getEnableTraySound()
-    -- DECOMPILER ERROR at PC734: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC784: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.BattleSoundType)._initValue = gameOptionSetting:getEnableBattleSoundType()
-    -- DECOMPILER ERROR at PC744: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC794: Confused about usage of register: R4 in 'UnsetPending'
 
     if true == gameOptionSetting:getEnableFairySound() then
       (elems_.EnableAudioFairy)._initValue = 1
     else
-      -- DECOMPILER ERROR at PC749: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC799: Confused about usage of register: R4 in 'UnsetPending'
 
       (elems_.EnableAudioFairy)._initValue = 0
     end
-    -- DECOMPILER ERROR at PC759: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC809: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeMaster)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMasterVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC769: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC819: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeMusic)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getMusicVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC779: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC829: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeFx)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getFxVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC789: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC839: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeEnv)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getEnvSoundVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC799: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC849: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeDlg)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getDialogueVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC809: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC859: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeHitFxVolume)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHitFxVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC819: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC869: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeHitFxWeight)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHitFxWeight(), 0, 100)
-    -- DECOMPILER ERROR at PC829: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC879: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeOtherPlayer)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getOtherPlayerVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC839: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC889: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.VolumeFairy)._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getFairyVolume(), 0, 100)
-    -- DECOMPILER ERROR at PC849: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC899: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertNormalTrade)._initValue = not ToClient_GetMessageFilter((self.ALERT).NormalTrade)
-    -- DECOMPILER ERROR at PC859: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC909: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertRoyalTrade)._initValue = not ToClient_GetMessageFilter((self.ALERT).RoyalTrade)
-    -- DECOMPILER ERROR at PC869: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC919: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertOtherPlayerGetItem)._initValue = not ToClient_GetMessageFilter((self.ALERT).OtherPlayerGetItem)
-    -- DECOMPILER ERROR at PC879: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC929: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertLifeLevelUp)._initValue = not ToClient_GetMessageFilter((self.ALERT).LifeLevelUp)
-    -- DECOMPILER ERROR at PC889: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC939: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertItemMarket)._initValue = not ToClient_GetMessageFilter((self.ALERT).ItemMarket)
-    -- DECOMPILER ERROR at PC899: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC949: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertOtherMarket)._initValue = not ToClient_GetMessageFilter((self.ALERT).OtherMarket)
-    -- DECOMPILER ERROR at PC909: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC959: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertChangeRegion)._initValue = not ToClient_GetMessageFilter((self.ALERT).ChangeRegion)
-    -- DECOMPILER ERROR at PC919: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC969: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertFitnessLevelUp)._initValue = not ToClient_GetMessageFilter((self.ALERT).FitnessLevelUp)
-    -- DECOMPILER ERROR at PC929: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC979: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertTerritoryWar)._initValue = not ToClient_GetMessageFilter((self.ALERT).TerritoryWar)
-    -- DECOMPILER ERROR at PC939: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC989: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertGuildWar)._initValue = not ToClient_GetMessageFilter((self.ALERT).GuildWar)
-    -- DECOMPILER ERROR at PC949: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC999: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertEnchantSuccess)._initValue = not ToClient_GetMessageFilter((self.ALERT).EnchantSuccess)
-    -- DECOMPILER ERROR at PC959: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1009: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertEnchantFail)._initValue = not ToClient_GetMessageFilter((self.ALERT).EnchantFail)
-    -- DECOMPILER ERROR at PC969: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1019: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertGuildQuestMessage)._initValue = not ToClient_GetMessageFilter((self.ALERT).GuildQuestMessage)
-    -- DECOMPILER ERROR at PC979: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1029: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.AlertNearMonster)._initValue = not ToClient_GetMessageFilter((self.ALERT).NearMonster)
-    -- DECOMPILER ERROR at PC985: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1035: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.BlackSpiritNotice)._initValue = gameOptionSetting:getBlackSpiritNotice()
-    -- DECOMPILER ERROR at PC992: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1042: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ShowCashAlert)._initValue = not gameOptionSetting:getCashAlert()
-    -- DECOMPILER ERROR at PC998: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1048: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (elems_.ShowGuildLoginMessage)._initValue = gameOptionSetting:getShowGuildLoginMessage()
@@ -1534,7 +1549,7 @@ PaGlobal_Option.InitValue = function(self, gameOptionSetting)
     setRotateRadarMode((elems_.RotateRadarMode)._initValue)
     setAutoRunCamera((elems_.AutoRunCamera)._initValue)
     setAutoRunCameraRotation((elems_.AutoRunCameraRotation)._initValue)
-    -- DECOMPILER ERROR: 18 unprocessed JMP targets
+    -- DECOMPILER ERROR: 19 unprocessed JMP targets
   end
 end
 
@@ -1607,16 +1622,38 @@ FromClient_CanChangeOptionAfterSec = function(sec)
   end
 end
 
+FromClient_RefreshMaidOptionInfo = function(gameOptionSetting)
+  -- function num : 0_37
+  local elems_ = PaGlobal_Option._elements
+  local curValue = PaGlobal_Option:Get("MaidView") * (elems_.MaidView)._sliderValueMax
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.MaidView)._sliderValueMax = gameOptionSetting:getMaidMaxCount()
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (elems_.MaidView)._initValue = PaGlobal_Option:FromRealValueToSliderValue(curValue, 0, gameOptionSetting:getMaidMaxCount())
+  PaGlobal_Option:SetXXX("MaidView", ((PaGlobal_Option._elements).MaidView)._initValue)
+  local frameContent = ((PaGlobal_Option._frames).Function).View
+  if frameContent ~= nil then
+    local maidControl = (UI.getChildControl)(frameContent._uiFrameContent, "StaticText_BgOrder6_Import")
+    local maidMaxControl = (UI.getChildControl)(maidControl, "StaticText_MaxMaidView")
+    maidMaxControl:SetText(tostring(gameOptionSetting:getMaidMaxCount()))
+  end
+end
+
 registerEvent("EventGameOptionInitGameOption", "FGlobal_Option_InitializeOption")
 registerEvent("EventGameOptionInitDisplayModeList", "FGlobal_Option_InitializeScreenResolution")
 registerEvent("FromClient_luaLoadComplete", "FGlobal_Option_luaLoadComplete")
 registerEvent("FromClient_OtherPlayeUpdate", "FromClient_OtherPlayeUpdate")
 registerEvent("FromClient_RefreshGameOption", "FromClient_RefreshGameOption")
 registerEvent("FromClient_CanChangeOptionAfterSec", "FromClient_CanChangeOptionAfterSec")
--- DECOMPILER ERROR at PC149: Confused about usage of register: R1 in 'UnsetPending'
+registerEvent("FromClient_RefreshMaidOptionInfo", "FromClient_RefreshMaidOptionInfo")
+-- DECOMPILER ERROR at PC155: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Option.SetSkillCommandPanel = function(self, check)
-  -- function num : 0_37
+  -- function num : 0_38
   isChecked_SkillCommand = check
   if Panel_SkillCommand ~= nil then
     if isChecked_SkillCommand then

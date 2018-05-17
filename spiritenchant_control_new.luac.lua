@@ -51,7 +51,9 @@ PaGlobal_Enchant.enchantClose = function(self)
   self:clearEnchantSlot()
   Equipment_PosLoadMemory()
   InventoryWindow_Close()
-  Panel_Equipment:SetShow(false, false)
+  if _ContentsGroup_RenewUI == false then
+    Panel_Equipment:SetShow(false, false)
+  end
   ClothInventory_Close()
   ToClient_BlackspiritEnchantClose()
   PaGlobal_TutorialManager:handleCloseEnchantWindow()

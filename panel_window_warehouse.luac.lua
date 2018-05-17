@@ -1005,6 +1005,10 @@ Warehouse_PopToSomewhere = function(s64_count, slotNo, toActorKeyRaw)
         s64_count = toInt64(0, 2147483647)
       end
       s64_count = toInt64(0, (math.min)((math.floor)(100 / weight), Int64toInt32(s64_count)))
+      if s64_count <= (Defines.s64_const).s64_0 then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoMaidDeliveryCantHeavyItem"))
+        return 
+      end
     end
   end
   do
@@ -1015,7 +1019,13 @@ end
 Warehouse_PopToSomewhereXXX = function(s64_count, slotNo)
   -- function num : 0_43 , upvalues : warehouse
   local self = warehouse
-  if Panel_Window_Inventory:GetShow() and GetUIMode() ~= (Defines.UIMode).eUIMode_WorldMap then
+  local invenIsShow = false
+  if _ContentsGroup_RenewUI == true then
+    invenIsShow = PaGlobalFunc_InventoryInfo_IsOpened()
+  else
+    invenIsShow = Panel_Window_Inventory:GetShow()
+  end
+  if invenIsShow and GetUIMode() ~= (Defines.UIMode).eUIMode_WorldMap then
     if self:isNpc() then
       _PA_LOG("cylee", "Warehouse_PopToSomewhereXXX() currentWaypointKey:" .. tostring(getCurrentWaypointKey()))
       _PA_LOG("cylee", "Warehouse_PopToSomewhereXXX() self._currentWaypointKey:" .. tostring(self._currentWaypointKey))

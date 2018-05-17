@@ -100,14 +100,20 @@ NodeWarMenuUpdate = function()
     (self._txt_GuildMark):SetShow(false)
     ;
     (self._txt_taxValue):SetShow(false)
-    if dropType == 0 and nodeTaxType >= 1 then
-      dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxType)
+    local nodeTaxLevel = 0
+    if _ContentsGroup_SeigeSeason5 == true then
+      nodeTaxLevel = nodeTaxType + 1
+    else
+      nodeTaxLevel = nodeTaxType
+    end
+    if dropType == 0 and nodeTaxLevel >= 1 then
+      dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxLevel)
     else
       if dropType >= 1 and nodeTaxType == 0 then
         dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
       else
         if dropType >= 1 and nodeTaxType >= 1 then
-          dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH_NPC", "nodeTaxType", tostring(nodeTaxType), "dropType", tostring(dropType + 1))
+          dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH_NPC", "nodeTaxType", tostring(nodeTaxLevel), "dropType", tostring(dropType + 1))
         else
           dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
         end
@@ -120,60 +126,68 @@ NodeWarMenuUpdate = function()
     ;
     (self._txt_NodeWarBenefits):SetText(dropTypeValue)
   else
-    ;
-    (self._txt_NodeWarProcessing):SetShow(false)
-    local isSet = setGuildTextureByGuildNo(minorSiegeWrapper:getGuildNo(), self._txt_GuildMark)
-    if not isSet then
-      (self._txt_GuildMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(self._txt_GuildMark, 183, 1, 188, 6)
-      ;
-      ((self._txt_GuildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
-      ;
-      (self._txt_GuildMark):setRenderTexture((self._txt_GuildMark):getBaseTexture())
-    end
     do
-      if dropType == 0 and nodeTaxType >= 1 then
-        dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxType)
-      else
-        if dropType >= 1 and nodeTaxType == 0 then
-          dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
+      ;
+      (self._txt_NodeWarProcessing):SetShow(false)
+      local isSet = setGuildTextureByGuildNo(minorSiegeWrapper:getGuildNo(), self._txt_GuildMark)
+      if not isSet then
+        (self._txt_GuildMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(self._txt_GuildMark, 183, 1, 188, 6)
+        ;
+        ((self._txt_GuildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (self._txt_GuildMark):setRenderTexture((self._txt_GuildMark):getBaseTexture())
+      end
+      do
+        local nodeTaxLevel = 0
+        if _ContentsGroup_SeigeSeason5 == true then
+          nodeTaxLevel = nodeTaxType + 1
         else
-          if dropType >= 1 and nodeTaxType >= 1 then
-            dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH_NPC", "nodeTaxType", tostring(nodeTaxType), "dropType", tostring(dropType + 1))
+          nodeTaxLevel = nodeTaxType
+        end
+        if dropType == 0 and nodeTaxLevel >= 1 then
+          dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxLevel)
+        else
+          if dropType >= 1 and nodeTaxType == 0 then
+            dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
           else
-            dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
+            if dropType >= 1 and nodeTaxType >= 1 then
+              dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH_NPC", "nodeTaxType", tostring(nodeTaxLevel), "dropType", tostring(dropType + 1))
+            else
+              dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
+            end
           end
         end
-      end
-      if nodeTaxType >= 1 and isLord and isSiegeChannel then
-        if toInt64(0, 0) == nodeTax_s64 then
-          (self._btn_GetTax):SetShow(false)
+        if nodeTaxType >= 1 and isLord and isSiegeChannel then
+          if toInt64(0, 0) == nodeTax_s64 then
+            (self._btn_GetTax):SetShow(false)
+          else
+            ;
+            (self._btn_GetTax):SetShow(true)
+          end
+          ;
+          (self._txt_tax):SetShow(true)
+          ;
+          (self._txt_taxValue):SetShow(true)
+          ;
+          (self._txt_taxValue):SetText(makeDotMoney(nodeTax_s64))
         else
           ;
-          (self._btn_GetTax):SetShow(true)
+          (self._txt_tax):SetShow(false)
+          ;
+          (self._btn_GetTax):SetShow(false)
+          ;
+          (self._txt_taxValue):SetShow(false)
         end
         ;
-        (self._txt_tax):SetShow(true)
+        (self._txt_GuildName):SetText(nodeGuildName)
         ;
-        (self._txt_taxValue):SetShow(true)
+        (self._txt_NodeMasterName):SetText(nodeGuildMasterName)
         ;
-        (self._txt_taxValue):SetText(makeDotMoney(nodeTax_s64))
-      else
+        (self._txt_NodeOccupation):SetText(year .. " " .. month .. " " .. day .. " " .. hour)
         ;
-        (self._txt_tax):SetShow(false)
-        ;
-        (self._btn_GetTax):SetShow(false)
-        ;
-        (self._txt_taxValue):SetShow(false)
+        (self._txt_NodeWarBenefits):SetText(dropTypeValue)
       end
-      ;
-      (self._txt_GuildName):SetText(nodeGuildName)
-      ;
-      (self._txt_NodeMasterName):SetText(nodeGuildMasterName)
-      ;
-      (self._txt_NodeOccupation):SetText(year .. " " .. month .. " " .. day .. " " .. hour)
-      ;
-      (self._txt_NodeWarBenefits):SetText(dropTypeValue)
     end
   end
 end

@@ -216,7 +216,7 @@ PaGlobal_Alchemy.showPanel = function(self, isCook, installationType)
     ;
     (ui._checkButtonLearntOnly):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_SHOW_LEARNT_COOK"))
     ;
-    (ui._buttonStartAlchemy):SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_COOK"))
+    (ui._buttonStartAlchemy):SetText(PAGetString(Defines.StringSheet_RESOURCE, "COOK_LETSCOOKING"))
   else
     (ui._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelAlchemy\" )")
     ;

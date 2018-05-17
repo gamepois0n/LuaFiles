@@ -33,7 +33,8 @@ if not ToClient_IsDevelopment() then
     _ContentsGroup_DriganBossDragon = ToClient_IsContentsGroupOpen("377")
     _ContentsGroup_SeigeSeason5 = ToClient_IsContentsGroupOpen("388")
     _ContentsGroup_RenewUI = ToClient_isXBox()
-    _ContentsGroup_OccupyBenefit = ToClient_IsDevelopment()
+    _ContentsGroup_OccupyBenefit = ToClient_IsContentsGroupOpen("397")
+    _ContentsGroup_NewMaid = true
   end
 end
 

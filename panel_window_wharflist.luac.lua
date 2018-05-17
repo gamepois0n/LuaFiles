@@ -213,12 +213,14 @@ wharfList.update = function(self)
   (self._unsealedCount):SetShow(true)
   ;
   (self._maxCount):SetShow(true)
+  local sealedCount = stable_currentSlotCount()
+  local unsealedCount = stable_currentRegionSlotCountAll() - sealedCount + Int64toInt32(stable_currentRegionSlotCountOfOtherCharacter())
   ;
-  (self._sealedCount):SetText(stable_currentSlotCount())
+  (self._sealedCount):SetText(sealedCount)
   ;
-  (self._unsealedCount):SetText(stable_currentRegionSlotCountAll() - stable_currentSlotCount())
+  (self._unsealedCount):SetText(unsealedCount)
   ;
-  (self._maxCount):SetText(stable_currentRegionSlotCountAll() .. " / " .. stable_maxSlotCount())
+  (self._maxCount):SetText(sealedCount + unsealedCount .. " / " .. stable_maxSlotCount())
   for ii = 0, (self._config).slotCount - 1 do
     local slot = (self._slots)[ii]
     slot.index = -1

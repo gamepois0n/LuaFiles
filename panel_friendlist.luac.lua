@@ -297,9 +297,15 @@ end
 
 PaGlobal_FriendList.AcceptRequest = function(self)
   -- function num : 0_11 , upvalues : FriendRequestList
-  if FriendRequestList._selectFriendIndex ~= -1 then
+  -- DECOMPILER ERROR at PC11: Unhandled construct in 'MakeBoolean' P1
+
+  if ToClient_isAddFriendAllowed() and FriendRequestList._selectFriendIndex ~= -1 then
     ToClient_AcceptFriend(FriendRequestList._selectFriendIndex)
   end
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 -- DECOMPILER ERROR at PC145: Confused about usage of register: R2 in 'UnsetPending'
@@ -878,9 +884,18 @@ end
 
 PaGlobal_FriendList.OpenMessanger = function(self)
   -- function num : 0_43 , upvalues : PopupFriendMenu
-  local selectedUser = ((self._friendData)._info)[(self._friendData)._selectedIndex]
-  ToClient_OpenMessanger(selectedUser:getUserNo(), selectedUser:getName(), selectedUser:isOnline())
-  PopupFriendMenu:SetShow(false)
+  if ToClient_isAddFriendAllowed() then
+    local selectedUser = ((self._friendData)._info)[(self._friendData)._selectedIndex]
+    ToClient_OpenMessanger(selectedUser:getUserNo(), selectedUser:getName(), selectedUser:isOnline())
+    PopupFriendMenu:SetShow(false)
+  else
+    do
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    end
+  end
 end
 
 -- DECOMPILER ERROR at PC324: Confused about usage of register: R8 in 'UnsetPending'
@@ -915,6 +930,7 @@ PaGlobal_FriendList.Show = function(self)
   local friendsBTN = (UI.getChildControl)(Panel_UIMain, "Button_FriendList")
   friendsBTN:EraseAllEffect()
   FGlobal_NewMessage_Close()
+  ToClient_updateAddFriendAllowed()
   Panel_FriendList:SetShow(true, true)
 end
 

@@ -444,257 +444,261 @@ stableList.update = function(self)
     (self._unsealedCount):SetShow(true)
     ;
     (self._maxCount):SetShow(true)
+    local sealedCount = stable_currentSlotCount()
+    local unsealedCount = stable_currentRegionSlotCountAll() - sealedCount + Int64toInt32(stable_currentRegionSlotCountOfOtherCharacter())
     ;
-    (self._sealedCount):SetText(stable_currentSlotCount())
+    (self._sealedCount):SetText(sealedCount)
     ;
-    (self._unsealedCount):SetText(stable_currentRegionSlotCountAll() - stable_currentSlotCount())
+    (self._unsealedCount):SetText(unsealedCount)
     ;
-    (self._maxCount):SetText(stable_currentRegionSlotCountAll() .. " / " .. stable_maxSlotCount())
+    (self._maxCount):SetText(sealedCount + unsealedCount .. " / " .. stable_maxSlotCount())
   end
-  for ii = 0, (self._config).slotCount - 1 do
-    local slot = (self._slots)[ii]
-    slot.index = -1
-    ;
-    (slot.button):SetShow(false)
-  end
-  stable_SortDataupdate()
-  local slotNo = 0
-  local linkedHorseCount = 0
-  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-  self._currentRegionKey = regionInfo:getRegionKey()
-  local regionName = regionInfo:getAreaName()
-  for ii = self._startSlotIndex, servantCount - 1 do
-    local sortIndex = 0
-    sortIndex = stable_SortByWayPointKey(ii)
-    local servantInfo = stable_getServant(sortIndex)
-    if servantInfo ~= nil then
-      local servantRegionName = servantInfo:getRegionName()
-      local isLinkedHorse = not servantInfo:isLink() or (CppEnums.VehicleType).Type_Horse == servantInfo:getVehicleType()
-      local regionKey = servantInfo:getRegionKeyRaw()
-      local regionInfoWrapper = getRegionInfoWrapper(regionKey)
-      local exploerKey = regionInfoWrapper:getExplorationKey()
-      local getState = servantInfo:getStateType()
-      local vehicleType = servantInfo:getVehicleType()
-      if slotNo <= (self._config).slotCount - 1 then
-        local slot = (self._slots)[slotNo]
-        ;
-        (slot.maleIcon):SetShow(false)
-        ;
-        (slot.femaleIcon):SetShow(false)
-        ;
-        (slot.pcroomIcon):SetShow(false)
-        ;
-        (slot.isSeized):SetShow(false)
-        ;
-        (slot.registerMating):SetShow(false)
-        ;
-        (slot.registerMarket):SetShow(false)
-        ;
-        (slot.coma):SetShow(false)
-        ;
-        (slot.link):SetShow(false)
-        ;
-        (slot.grade):SetShow(false)
-        ;
-        (slot.mating):SetShow(false)
-        ;
-        (slot.matingComplete):SetShow(false)
-        ;
-        (slot.regionChanging):SetShow(false)
-        ;
-        (slot.stallion):SetShow(false)
-        ;
-        (slot.training):SetShow(false)
-        if isLinkedHorse then
-          (slot.link):SetShow(true)
-        end
-        ;
-        (slot.name):SetText(servantInfo:getName(ii) .. "\n(" .. servantInfo:getRegionName(ii) .. ")")
-        ;
-        (slot.icon):ChangeTextureInfoName(servantInfo:getIconPath1())
-        if regionName == servantRegionName then
-          (slot.button):SetMonoTone(false)
-        elseif servantInfo:getHp() == 0 and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_MountainGoat == vehicleType) and not servantInfo:isMatingComplete() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
-          (slot.button):SetMonoTone(false)
-        elseif not isSiegeStable() then
-          (slot.button):SetMonoTone(true)
-        end
-        if servantInfo:isSeized() then
-          (slot.isSeized):SetShow(true)
-        elseif (CppEnums.ServantStateType).Type_RegisterMarket == getState then
-          (slot.registerMarket):SetShow(true)
-        elseif (CppEnums.ServantStateType).Type_RegisterMating == getState then
-          (slot.registerMating):SetShow(true)
-        elseif (CppEnums.ServantStateType).Type_Mating == getState then
-          if servantInfo:isMatingComplete() then
-            (slot.matingComplete):SetShow(true)
-          else
-            (slot.mating):SetShow(true)
-          end
-        elseif (CppEnums.ServantStateType).Type_Coma == getState then
-          (slot.coma):SetShow(true)
-          if vehicleType == (CppEnums.VehicleType).Type_Carriage or vehicleType == (CppEnums.VehicleType).Type_CowCarriage or vehicleType == (CppEnums.VehicleType).Type_RepairableCarriage then
-            (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REPAIR"))
-          else
-            (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_HURT"))
-          end
-        elseif (CppEnums.ServantStateType).Type_SkillTraining == getState then
-          if stable_isSkillExpTrainingComplete(sortIndex) then
-            (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINFINISH"))
-          else
-            (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
-          end
-          ;
-          (slot.training):SetShow(true)
-        elseif (CppEnums.ServantStateType).Type_StallionTraining == getState and isContentsStallionEnable and isContentsNineTierEnable then
-          (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
-          ;
-          (slot.training):SetShow(true)
-        elseif servantInfo:isChangingRegion() then
-          if (slot.link):GetShow() then
-            (slot.regionChanging):SetPosY(((self._config).icon).secondLineStartStateY)
-          else
-            (slot.regionChanging):SetPosY(((self._config).icon).startStateY)
-          end
-          ;
-          (slot.regionChanging):SetShow(true)
-          ;
-          (slot.button):SetMonoTone(true)
-        end
-        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse then
-          if servantInfo:isMale() then
-            (slot.maleIcon):SetShow(true)
-            ;
-            (slot.femaleIcon):SetShow(false)
-          else
-            (slot.maleIcon):SetShow(false)
-            ;
-            (slot.femaleIcon):SetShow(true)
-          end
-          ;
-          (slot.grade):SetShow(true)
-          if servantInfo:getTier() == 9 then
-            (slot.grade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9"))
-          else
-            (slot.grade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", servantInfo:getTier()))
-          end
-        elseif servantInfo:isStallion() then
-          (slot.grade):SetShow(false)
+  do
+    for ii = 0, (self._config).slotCount - 1 do
+      local slot = (self._slots)[ii]
+      slot.index = -1
+      ;
+      (slot.button):SetShow(false)
+    end
+    stable_SortDataupdate()
+    local slotNo = 0
+    local linkedHorseCount = 0
+    local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+    self._currentRegionKey = regionInfo:getRegionKey()
+    local regionName = regionInfo:getAreaName()
+    for ii = self._startSlotIndex, servantCount - 1 do
+      local sortIndex = 0
+      sortIndex = stable_SortByWayPointKey(ii)
+      local servantInfo = stable_getServant(sortIndex)
+      if servantInfo ~= nil then
+        local servantRegionName = servantInfo:getRegionName()
+        local isLinkedHorse = not servantInfo:isLink() or (CppEnums.VehicleType).Type_Horse == servantInfo:getVehicleType()
+        local regionKey = servantInfo:getRegionKeyRaw()
+        local regionInfoWrapper = getRegionInfoWrapper(regionKey)
+        local exploerKey = regionInfoWrapper:getExplorationKey()
+        local getState = servantInfo:getStateType()
+        local vehicleType = servantInfo:getVehicleType()
+        if slotNo <= (self._config).slotCount - 1 then
+          local slot = (self._slots)[slotNo]
           ;
           (slot.maleIcon):SetShow(false)
           ;
           (slot.femaleIcon):SetShow(false)
-        end
-        if servantInfo:isPcroomOnly() then
-          (slot.pcroomIcon):SetShow(true)
-        end
-        ;
-        (slot.button):SetShow(true)
-        slot.index = ii
-        slotNo = slotNo + 1
-        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse and servantInfo:getTier() ~= 9 and servantInfo:isPcroomOnly() == false and isContentsStallionEnable then
-          (slot.stallion):SetShow(true)
-          local stallion = servantInfo:isStallion()
-          if stallion == true and regionName == servantRegionName then
-            (slot.stallion):SetMonoTone(false)
+          ;
+          (slot.pcroomIcon):SetShow(false)
+          ;
+          (slot.isSeized):SetShow(false)
+          ;
+          (slot.registerMating):SetShow(false)
+          ;
+          (slot.registerMarket):SetShow(false)
+          ;
+          (slot.coma):SetShow(false)
+          ;
+          (slot.link):SetShow(false)
+          ;
+          (slot.grade):SetShow(false)
+          ;
+          (slot.mating):SetShow(false)
+          ;
+          (slot.matingComplete):SetShow(false)
+          ;
+          (slot.regionChanging):SetShow(false)
+          ;
+          (slot.stallion):SetShow(false)
+          ;
+          (slot.training):SetShow(false)
+          if isLinkedHorse then
+            (slot.link):SetShow(true)
+          end
+          ;
+          (slot.name):SetText(servantInfo:getName(ii) .. "\n(" .. servantInfo:getRegionName(ii) .. ")")
+          ;
+          (slot.icon):ChangeTextureInfoName(servantInfo:getIconPath1())
+          if regionName == servantRegionName then
+            (slot.button):SetMonoTone(false)
+          elseif servantInfo:getHp() == 0 and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_MountainGoat == vehicleType) and not servantInfo:isMatingComplete() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
+            (slot.button):SetMonoTone(false)
+          elseif not isSiegeStable() then
+            (slot.button):SetMonoTone(true)
+          end
+          if servantInfo:isSeized() then
+            (slot.isSeized):SetShow(true)
+          elseif (CppEnums.ServantStateType).Type_RegisterMarket == getState then
+            (slot.registerMarket):SetShow(true)
+          elseif (CppEnums.ServantStateType).Type_RegisterMating == getState then
+            (slot.registerMating):SetShow(true)
+          elseif (CppEnums.ServantStateType).Type_Mating == getState then
+            if servantInfo:isMatingComplete() then
+              (slot.matingComplete):SetShow(true)
+            else
+              (slot.mating):SetShow(true)
+            end
+          elseif (CppEnums.ServantStateType).Type_Coma == getState then
+            (slot.coma):SetShow(true)
+            if vehicleType == (CppEnums.VehicleType).Type_Carriage or vehicleType == (CppEnums.VehicleType).Type_CowCarriage or vehicleType == (CppEnums.VehicleType).Type_RepairableCarriage then
+              (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REPAIR"))
+            else
+              (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_HURT"))
+            end
+          elseif (CppEnums.ServantStateType).Type_SkillTraining == getState then
+            if stable_isSkillExpTrainingComplete(sortIndex) then
+              (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINFINISH"))
+            else
+              (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
+            end
+            ;
+            (slot.training):SetShow(true)
+          elseif (CppEnums.ServantStateType).Type_StallionTraining == getState and isContentsStallionEnable and isContentsNineTierEnable then
+            (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
+            ;
+            (slot.training):SetShow(true)
+          elseif servantInfo:isChangingRegion() then
+            if (slot.link):GetShow() then
+              (slot.regionChanging):SetPosY(((self._config).icon).secondLineStartStateY)
+            else
+              (slot.regionChanging):SetPosY(((self._config).icon).startStateY)
+            end
+            ;
+            (slot.regionChanging):SetShow(true)
+            ;
+            (slot.button):SetMonoTone(true)
+          end
+          if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse then
+            if servantInfo:isMale() then
+              (slot.maleIcon):SetShow(true)
+              ;
+              (slot.femaleIcon):SetShow(false)
+            else
+              (slot.maleIcon):SetShow(false)
+              ;
+              (slot.femaleIcon):SetShow(true)
+            end
+            ;
+            (slot.grade):SetShow(true)
+            if servantInfo:getTier() == 9 then
+              (slot.grade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9"))
+            else
+              (slot.grade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", servantInfo:getTier()))
+            end
+          elseif servantInfo:isStallion() then
+            (slot.grade):SetShow(false)
+            ;
+            (slot.maleIcon):SetShow(false)
+            ;
+            (slot.femaleIcon):SetShow(false)
+          end
+          if servantInfo:isPcroomOnly() then
+            (slot.pcroomIcon):SetShow(true)
+          end
+          ;
+          (slot.button):SetShow(true)
+          slot.index = ii
+          slotNo = slotNo + 1
+          if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse and servantInfo:getTier() ~= 9 and servantInfo:isPcroomOnly() == false and isContentsStallionEnable then
+            (slot.stallion):SetShow(true)
+            local stallion = servantInfo:isStallion()
+            if stallion == true and regionName == servantRegionName then
+              (slot.stallion):SetMonoTone(false)
+            else
+              (slot.stallion):SetMonoTone(true)
+            end
           else
-            (slot.stallion):SetMonoTone(true)
+            (slot.stallion):SetShow(false)
+          end
+        end
+      end
+    end
+    ;
+    ((self._unseal)._bg):SetShow(false)
+    ;
+    ((self._unseal)._stallion):SetShow(false)
+    local temporaryWrapper = getTemporaryInformationWrapper()
+    local servantInfo = temporaryWrapper:getUnsealVehicle(stable_getServantType())
+    if servantInfo ~= nil then
+      if servantInfo:getVehicleType() ~= (CppEnums.VehicleType).Type_BabyElephant then
+        ((self._unseal)._icon):ChangeTextureInfoName(servantInfo:getIconPath1())
+        ;
+        ((self._unseal)._bg):SetShow(true)
+        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse and servantInfo:getTier() ~= 9 and servantInfo:isPcroomOnly() == false and isContentsStallionEnable then
+          ((self._unseal)._stallion):SetShow(true)
+          local isStallion = servantInfo:isStallion()
+          if isStallion == true then
+            ((self._unseal)._stallion):SetMonoTone(false)
+          else
+            ((self._unseal)._stallion):SetMonoTone(true)
           end
         else
-          (slot.stallion):SetShow(false)
+          ((self._unseal)._stallion):SetShow(false)
         end
       end
+      if servantInfo:isPcroomOnly() then
+        if isGameTypeKorea() then
+          ((self._unseal)._pcroomIcon):SetSize(18, 13)
+          ;
+          ((self._unseal)._pcroomIcon):ChangeTextureInfoName("new_ui_common_forlua/default/default_etc_02.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func((self._unseal)._pcroomIcon, 93, 231, 111, 244)
+          ;
+          (((self._unseal)._pcroomIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+          ;
+          ((self._unseal)._pcroomIcon):setRenderTexture(((self._unseal)._pcroomIcon):getBaseTexture())
+        elseif isGameTypeRussia() then
+          ((self._unseal)._pcroomIcon):SetSize(24, 24)
+          ;
+          ((self._unseal)._pcroomIcon):ChangeTextureInfoName("new_ui_common_forlua/Widget/BuffList/PremiumPackage3.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func((self._unseal)._pcroomIcon, 0, 0, 32, 32)
+          ;
+          (((self._unseal)._pcroomIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+          ;
+          ((self._unseal)._pcroomIcon):setRenderTexture(((self._unseal)._pcroomIcon):getBaseTexture())
+        end
+        ;
+        ((self._unseal)._pcroomIcon):SetShow(true)
+      else
+        ((self._unseal)._pcroomIcon):SetShow(false)
+      end
     end
-  end
-  ;
-  ((self._unseal)._bg):SetShow(false)
-  ;
-  ((self._unseal)._stallion):SetShow(false)
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local servantInfo = temporaryWrapper:getUnsealVehicle(stable_getServantType())
-  if servantInfo ~= nil then
-    if servantInfo:getVehicleType() ~= (CppEnums.VehicleType).Type_BabyElephant then
-      ((self._unseal)._icon):ChangeTextureInfoName(servantInfo:getIconPath1())
-      ;
-      ((self._unseal)._bg):SetShow(true)
-      if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse and servantInfo:getTier() ~= 9 and servantInfo:isPcroomOnly() == false and isContentsStallionEnable then
-        ((self._unseal)._stallion):SetShow(true)
-        local isStallion = servantInfo:isStallion()
-        if isStallion == true then
-          ((self._unseal)._stallion):SetMonoTone(false)
+    local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+    local horseWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.VehicleType).Type_Horse)
+    if horseWrapper ~= nil then
+      if servantInfo:getTier() > 0 then
+        ((self._unseal)._grade):SetShow(true)
+        if servantInfo:getTier() == 9 then
+          ((self._unseal)._grade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9"))
         else
-          ((self._unseal)._stallion):SetMonoTone(true)
+          ((self._unseal)._grade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", servantInfo:getTier()))
         end
       else
-        ((self._unseal)._stallion):SetShow(false)
-      end
-    end
-    if servantInfo:isPcroomOnly() then
-      if isGameTypeKorea() then
-        ((self._unseal)._pcroomIcon):SetSize(18, 13)
-        ;
-        ((self._unseal)._pcroomIcon):ChangeTextureInfoName("new_ui_common_forlua/default/default_etc_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func((self._unseal)._pcroomIcon, 93, 231, 111, 244)
-        ;
-        (((self._unseal)._pcroomIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
-        ;
-        ((self._unseal)._pcroomIcon):setRenderTexture(((self._unseal)._pcroomIcon):getBaseTexture())
-      elseif isGameTypeRussia() then
-        ((self._unseal)._pcroomIcon):SetSize(24, 24)
-        ;
-        ((self._unseal)._pcroomIcon):ChangeTextureInfoName("new_ui_common_forlua/Widget/BuffList/PremiumPackage3.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func((self._unseal)._pcroomIcon, 0, 0, 32, 32)
-        ;
-        (((self._unseal)._pcroomIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
-        ;
-        ((self._unseal)._pcroomIcon):setRenderTexture(((self._unseal)._pcroomIcon):getBaseTexture())
-      end
-      ;
-      ((self._unseal)._pcroomIcon):SetShow(true)
-    else
-      ((self._unseal)._pcroomIcon):SetShow(false)
-    end
-  end
-  local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-  local horseWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.VehicleType).Type_Horse)
-  if horseWrapper ~= nil then
-    if servantInfo:getTier() > 0 then
-      ((self._unseal)._grade):SetShow(true)
-      if servantInfo:getTier() == 9 then
-        ((self._unseal)._grade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9"))
-      else
-        ((self._unseal)._grade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", servantInfo:getTier()))
+        ((self._unseal)._grade):SetShow(false)
       end
     else
       ((self._unseal)._grade):SetShow(false)
     end
-  else
-    ((self._unseal)._grade):SetShow(false)
-  end
-  ;
-  ((self._taming)._bg):SetShow(false)
-  local characterKey = stable_getTamingServantCharacterKey()
-  do
+    ;
+    ((self._taming)._bg):SetShow(false)
+    local characterKey = stable_getTamingServantCharacterKey()
     do
-      if characterKey ~= nil then
-        local servantInfo = stable_getServantByCharacterKey(characterKey, 1)
-        if servantInfo ~= nil then
-          if servantInfo:getVehicleType() ~= (CppEnums.VehicleType).Type_BabyElephant then
-            ((self._taming)._icon):ChangeTextureInfoName(servantInfo:getIconPath1())
-            ;
-            ((self._taming)._bg):SetShow(true)
-          end
-          if ((self._unseal)._bg):GetShow() then
-            ((self._taming)._bg):SetPosY(((self._config).taming).startButtonY + ((self._unseal)._bg):GetSizeY() + 10)
-          else
-            ((self._taming)._bg):SetPosY(((self._config).taming).startButtonY)
+      do
+        if characterKey ~= nil then
+          local servantInfo = stable_getServantByCharacterKey(characterKey, 1)
+          if servantInfo ~= nil then
+            if servantInfo:getVehicleType() ~= (CppEnums.VehicleType).Type_BabyElephant then
+              ((self._taming)._icon):ChangeTextureInfoName(servantInfo:getIconPath1())
+              ;
+              ((self._taming)._bg):SetShow(true)
+            end
+            if ((self._unseal)._bg):GetShow() then
+              ((self._taming)._bg):SetPosY(((self._config).taming).startButtonY + ((self._unseal)._bg):GetSizeY() + 10)
+            else
+              ((self._taming)._bg):SetPosY(((self._config).taming).startButtonY)
+            end
           end
         end
+        ;
+        (UIScroll.SetButtonSize)(self._scroll, (self._config).slotCount, servantCount)
+        FGlobal_NeedStableRegistItem_Print()
+        -- DECOMPILER ERROR: 46 unprocessed JMP targets
       end
-      ;
-      (UIScroll.SetButtonSize)(self._scroll, (self._config).slotCount, servantCount)
-      FGlobal_NeedStableRegistItem_Print()
-      -- DECOMPILER ERROR: 46 unprocessed JMP targets
     end
   end
 end
@@ -2576,6 +2580,7 @@ end
 
 StableList_Close = function()
   -- function num : 0_88 , upvalues : stableList
+  changeServantRegion:close()
   if not Panel_Window_StableList:GetShow() then
     return 
   end
@@ -2592,7 +2597,6 @@ StableList_Close = function()
   StableList_ButtonClose()
   stableCarriage_Close()
   Panel_Window_StableList:SetShow(false)
-  changeServantRegion:close()
 end
 
 Panel_HorseLookChange_Open = function()
@@ -2721,6 +2725,9 @@ end
 changeServantRegion.close = function(self)
   -- function num : 0_93
   _PA_LOG("cylee", "changeServantRegion:close()")
+  if (MessageBoxCheck.isCurrentOpen)(self._changeServantRegionCostPopupTitle) then
+    messageBoxCheck_CancelButtonUp()
+  end
   if not Panel_ServantMove:GetShow() then
     return 
   end
@@ -2775,10 +2782,11 @@ ChangeServantRegion_HandleChangeButtonClick = function()
   WharfList_ButtonClose()
   local cost = ToClient_GetCostToChangeServantRegion()
   local title = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_VEHICLEMOVETITLE")
+  self._changeServantRegionCostPopupTitle = title
   local msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_CHANGE_REGION_NOTIFY_DESC", "cost", cost)
   local messageBoxData = {title = title, content = msg, functionApply = ChangeServantRegion_HandleApplyClick, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
-  (MessageBoxCheck.showMessageBox)(messageBoxData)
+  (MessageBoxCheck.showMessageBox)(messageBoxData, nil, true)
 end
 
 ChangeServantRegion_HandleUpdate = function()

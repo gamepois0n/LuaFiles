@@ -2900,7 +2900,7 @@ IngameCashShop_SelectedItem = function(index, bValue)
   IngameCashShop_SelectedItemXXX(slot.productNoRaw, nil, bValue)
   local tempSaveProductKeyRaw = slot.productNoRaw
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(tempSaveProductKeyRaw)
-  if cashProduct:isMoneyPrice() then
+  if cashProduct ~= nil and cashProduct:isMoneyPrice() then
     warehouse_requestInfo(getCurrentWaypointKey())
   end
 end
@@ -4027,7 +4027,7 @@ end
   if Panel_Window_Inventory:GetShow() then
     InventoryWindow_Close()
     Inventory_SetFunctor(nil, nil, nil, nil)
-    if Panel_Equipment:GetShow() then
+    if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
       EquipmentWindow_Close()
     end
   end

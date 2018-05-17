@@ -971,12 +971,21 @@ end
 
 PaGlobal_Enchant.showPanel = function(self)
   -- function num : 0_34
+  if _ContentsGroup_RenewUI == true then
+    PaGlobalFunc_InventoryInfo_Open()
+    Panel_Window_Enchant:SetShow(true, true)
+    self:clearEnchantSlot()
+    OnScreenEvent()
+    return 
+  end
   InventoryWindow_Show()
-  Equipment_PosSaveMemory()
   self:clearEnchantSlot()
-  Panel_Equipment:SetShow(true, true)
-  Panel_Equipment:SetPosX((self._const)._gapX_PanelEquip)
-  Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  if _ContentsGroup_RenewUI == false then
+    Equipment_PosSaveMemory()
+    Panel_Equipment:SetShow(true, true)
+    Panel_Equipment:SetPosX((self._const)._gapX_PanelEquip)
+    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  end
   Panel_Window_Enchant:SetShow(true, true)
   OnScreenEvent()
 end

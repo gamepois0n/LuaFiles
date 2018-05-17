@@ -27,6 +27,9 @@ FromClient_EnduranceUpdate = function(enduranceType)
       end
     end
   end
+  if not self:checkInit() then
+    return 
+  end
   local isShow = false
   local isCantRepair = false
   local enduranceCheck = 0
@@ -52,28 +55,28 @@ FromClient_EnduranceUpdate = function(enduranceType)
     end
     ;
     (((self.enduranceInfo)[index]).control):ResetVertexAni()
-    -- DECOMPILER ERROR at PC112: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC117: Confused about usage of register: R10 in 'UnsetPending'
 
     if enduranceLevel < 0 then
       ((self.enduranceInfo)[index]).itemEquiped = false
-      -- DECOMPILER ERROR at PC118: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC123: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).color = (Defines.Color).C_FF000000
-      -- DECOMPILER ERROR at PC121: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC126: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).isBroken = false
     else
-      -- DECOMPILER ERROR at PC125: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).itemEquiped = true
-      -- DECOMPILER ERROR at PC133: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC138: Confused about usage of register: R10 in 'UnsetPending'
 
       if enduranceLevel > 1 then
         ((self.enduranceInfo)[index]).color = (Defines.Color).C_FF444444
-        -- DECOMPILER ERROR at PC136: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC141: Confused about usage of register: R10 in 'UnsetPending'
 
         ;
         ((self.enduranceInfo)[index]).isBroken = false
@@ -317,7 +320,7 @@ FromClient_EnduranceUpdate = function(enduranceType)
             end
           end
         end
-        -- DECOMPILER ERROR at PC715: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC720: Confused about usage of register: R10 in 'UnsetPending'
 
         ;
         ((self.enduranceInfo)[index]).isBroken = true

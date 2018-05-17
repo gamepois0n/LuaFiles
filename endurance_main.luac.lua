@@ -126,10 +126,19 @@ PaGlobalPlayerEnduranceList.initialize = function(self)
   ;
   (self.repair_Navi):addInputEvent("Mouse_LUp", "HandleMLUpRepairNavi(CppEnums.EnduranceType.eEnduranceType_Player, false)")
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
+  self._isInit = true
+end
+
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobalPlayerEnduranceList.checkInit = function(self)
+  -- function num : 0_1
+  do return self._isInit == true end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 HandleMEnduranceNotice = function(enduranceType, isShow)
-  -- function num : 0_1
+  -- function num : 0_2
   local self = PaGlobalPlayerEnduranceList
   if enduranceType == (CppEnums.EnduranceType).eEnduranceType_Player then
     self = PaGlobalPlayerEnduranceList
@@ -151,7 +160,7 @@ HandleMEnduranceNotice = function(enduranceType, isShow)
 end
 
 HandleMLUpRepairNavi = function(enduranceType, isAuto)
-  -- function num : 0_2
+  -- function num : 0_3
   local self = PaGlobalPlayerEnduranceList
   if enduranceType == (CppEnums.EnduranceType).eEnduranceType_Player then
     self = PaGlobalPlayerEnduranceList
@@ -212,7 +221,7 @@ HandleMLUpRepairNavi = function(enduranceType, isAuto)
 end
 
 Panel_PlayerEndurance_Position = function()
-  -- function num : 0_3
+  -- function num : 0_4
   local self = PaGlobalPlayerEnduranceList
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
   ;
@@ -225,7 +234,7 @@ Panel_PlayerEndurance_Position = function()
 end
 
 renderModeChange_Panel_PlayerEndurance_Position = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_4
+  -- function num : 0_5
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -233,7 +242,7 @@ renderModeChange_Panel_PlayerEndurance_Position = function(prevRenderModeList, n
 end
 
 PaGlobalPlayerEnduranceList_Init = function()
-  -- function num : 0_5
+  -- function num : 0_6
   PaGlobalPlayerEnduranceList:initialize()
 end
 

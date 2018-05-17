@@ -106,6 +106,7 @@ ChatSubMenu.SetShow = function(self, isShow, isInviteParty, isInviteGuild, isInv
         end
       end
     end
+    ToClient_updateAddFriendAllowed()
     if isGameManager == true then
       (self._uiButtonBlockVote):SetShow(false)
       ;
@@ -2723,21 +2724,30 @@ end
 
 HandleClicked_ChatSubMenu_AddFriend = function()
   -- function num : 0_44 , upvalues : clickedName, clickedUserNickName, ChatSubMenu, clickedMsg, currentPoolIndex, clickedMessageIndex
-  if clickedName ~= nil and clickedUserNickName ~= nil then
-    local nameType = ToClient_getChatNameType()
-    if nameType == 0 then
-      requestFriendList_addFriend(clickedName, true)
-    else
-      if nameType == 1 then
-        requestFriendList_addFriend(clickedUserNickName, false)
+  do
+    -- DECOMPILER ERROR at PC12: Unhandled construct in 'MakeBoolean' P1
+
+    if ToClient_isAddFriendAllowed() and clickedName ~= nil and clickedUserNickName ~= nil then
+      local nameType = ToClient_getChatNameType()
+      if nameType == 0 then
+        requestFriendList_addFriend(clickedName, true)
+      else
+        if nameType == 1 then
+          requestFriendList_addFriend(clickedUserNickName, false)
+        end
       end
+      ChatSubMenu:SetShow(false)
+      clickedName = nil
+      clickedUserNickName = nil
+      clickedMsg = nil
+      currentPoolIndex = nil
+      clickedMessageIndex = nil
     end
-    ChatSubMenu:SetShow(false)
-    clickedName = nil
-    clickedUserNickName = nil
-    clickedMsg = nil
-    currentPoolIndex = nil
-    clickedMessageIndex = nil
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    do return  end
   end
 end
 

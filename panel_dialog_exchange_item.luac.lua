@@ -45,15 +45,15 @@ ExchangeItem.Init = function(self)
     ;
     (slot._sourceItemName):SetPosY(1)
     ;
-    (slot._resultIcon):SetPosX(215)
+    (slot._resultIcon):SetPosX(295)
     ;
     (slot._resultIcon):SetPosY(4)
     ;
-    (slot._resultItemName):SetPosX(246)
+    (slot._resultItemName):SetPosX(326)
     ;
     (slot._resultItemName):SetPosY(1)
     ;
-    (slot._progressArrow):SetPosX(180)
+    (slot._progressArrow):SetPosX(260)
     ;
     (slot._progressArrow):SetPosY((slot._sourceIcon):GetPosY() - 2)
     ;

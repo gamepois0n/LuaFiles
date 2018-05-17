@@ -51,13 +51,13 @@ PaGlobal_Twitch.TwitchUrlReturn = function(self)
         isNationType = "ru"
       else
         if isGameTypeEnglish() then
-          if (CppEnums.ServiceResourceType).eServiceResourceType_EN == Toclient_getResourceType() then
+          if (CppEnums.ServiceResourceType).eServiceResourceType_EN == ToClient_getResourceType() then
             isNationType = "en"
           else
-            if (CppEnums.ServiceResourceType).eServiceResourceType_FR == Toclient_getResourceType() then
+            if (CppEnums.ServiceResourceType).eServiceResourceType_FR == ToClient_getResourceType() then
               isNationType = "fr"
             else
-              if (CppEnums.ServiceResourceType).eServiceResourceType_DE == Toclient_getResourceType() then
+              if (CppEnums.ServiceResourceType).eServiceResourceType_DE == ToClient_getResourceType() then
                 isNationType = "de"
               else
                 isNationType = "en"
@@ -69,10 +69,10 @@ PaGlobal_Twitch.TwitchUrlReturn = function(self)
             isNationType = "tw"
           else
             if isGameTypeSA() then
-              if (CppEnums.ServiceResourceType).eServiceResourceType_ES == Toclient_getResourceType() then
+              if (CppEnums.ServiceResourceType).eServiceResourceType_ES == ToClient_getResourceType() then
                 isNationType = "es"
               else
-                if (CppEnums.ServiceResourceType).eServiceResourceType_PT == Toclient_getResourceType() then
+                if (CppEnums.ServiceResourceType).eServiceResourceType_PT == ToClient_getResourceType() then
                   isNationType = "pt"
                 else
                   isNationType = "pt"

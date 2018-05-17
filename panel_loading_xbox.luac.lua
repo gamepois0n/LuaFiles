@@ -37,6 +37,18 @@ LoadingPanel_SetProgress_Xbox = function(rate)
   goblinRun:SetPosY(progressRateY + progressHeadY + 25)
 end
 
+local screenX, screenY = getScreenSizeX(), getScreenSizeY()
+local tempTime = 0
+GoblinUpdate = function(deltaTime)
+  -- function num : 0_2 , upvalues : goblinRun, _knowledge_title, tempTime, screenX, screenY
+  goblinRun:SetShow(true)
+  _knowledge_title:SetShow(true)
+  tempTime = tempTime + deltaTime
+  _knowledge_title:SetText((math.floor)(tempTime))
+  goblinRun:SetPosX(screenX * 0.5)
+  goblinRun:SetPosY(screenY * 0.5)
+end
+
 registerEvent("FromClient_completeDownloadProgress", "LoadingPanel_SetProgress_Xbox")
 LoadingPanel_Init()
 

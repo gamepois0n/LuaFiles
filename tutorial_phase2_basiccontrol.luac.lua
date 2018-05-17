@@ -275,7 +275,7 @@ PaGlobal_TutorialPhase_BasicControl.changeStepWaitMinimapComment = function(self
   ;
   (PaGlobal_TutorialUiManager:getUiMasking()):hideQuestMasking()
   FGlobal_Panel_Radar_Show_AddEffect()
-  Panel_TimeBar:SetShow(true, true)
+  Panel_TimeBar:SetShow(true)
 end
 
 -- DECOMPILER ERROR at PC84: Confused about usage of register: R7 in 'UnsetPending'

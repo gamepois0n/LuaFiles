@@ -230,8 +230,8 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap = function(deltaTime)
       Panel_Window_QuestNew_Show(false)
       return 
     end
-    if FGlobal_QuestInfoGetShow() == true then
-      FGlobal_QuestInfoSetShow(false)
+    if PaGlobalFunc_Quest_GetShow() == true then
+      PaGlobalFunc_Quest_SetShow(false)
     end
     if Panel_ItemMarket_BidDesc:GetShow() then
       Panel_ItemMarket_BidDesc_Hide()
@@ -794,7 +794,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCashShop = function(delataTime)
   end
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_Inventory:IsShow() and not Panel_Window_Inventory:IsUISubApp() then
-      Panel_Window_Inventory:SetShow(false)
+      InventoryWindow_Close()
     else
       if Panel_IngameCashShop_BuyOrGift:GetShow() then
         InGameShopBuy_Close()
@@ -874,10 +874,24 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_Dye = function(delataTime)
   end
 end
 
--- DECOMPILER ERROR at PC107: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC106: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_GlobalKeyBinder.Process_UIMode_SkillWindow = function(delataTime)
+  -- function num : 0_26 , upvalues : VCK
+  if _ContentsGroup_RenewUI == false then
+    return 
+  end
+  if (not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE)) or GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) then
+    audioPostEvent_SystemUi(1, 23)
+    PaGlobalFunc_Skill_Close()
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+  end
+end
+
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
-  -- function num : 0_26 , upvalues : VCK, IM
+  -- function num : 0_27 , upvalues : VCK, IM
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
@@ -954,28 +968,28 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
   end
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC115: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_ProductNote = function(deltaTime)
-  -- function num : 0_27 , upvalues : VCK
+  -- function num : 0_28 , upvalues : VCK
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_ProductNote_ShowToggle()
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_QnAWebLink = function(deltaTime)
-  -- function num : 0_28 , upvalues : VCK
+  -- function num : 0_29 , upvalues : VCK
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and Panel_QnAWebLink_ShowToggle() == false then
     CheckChattingInput()
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_TradeGame = function(deltaTime)
-  -- function num : 0_29
+  -- function num : 0_30
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     Fglobal_TradeGame_Close()
     return 
@@ -983,10 +997,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_TradeGame = function(deltaTime)
   global_Update_TradeGame(deltaTime)
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_CutSceneMode = function(deltaTime)
-  -- function num : 0_30
+  -- function num : 0_31
   if ToClient_cutsceneIsPlay() then
     if not (MessageBox.isPopUp)() and isKeyDown_Once((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "CUTSCENE_EXIT_MESSAGEBOX_MEMO")
@@ -1001,20 +1015,20 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CutSceneMode = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC125: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC129: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_UiSetting = function(deltaTime)
-  -- function num : 0_31 , upvalues : VCK
+  -- function num : 0_32 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_UiSet_Close()
     return 
   end
 end
 
--- DECOMPILER ERROR at PC129: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_Gacha_Roulette = function(deltaTime)
-  -- function num : 0_32 , upvalues : VCK
+  -- function num : 0_33 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
     FGlobal_gacha_Roulette_OnPressSpace()
   else
@@ -1025,10 +1039,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_Gacha_Roulette = function(deltaTime)
   return 
 end
 
--- DECOMPILER ERROR at PC133: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC137: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_EventNotify = function(deltaTime)
-  -- function num : 0_33 , upvalues : VCK
+  -- function num : 0_34 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     EventNotifyContent_Close()
     CheckChattingInput()
@@ -1036,13 +1050,13 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_EventNotify = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC137: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_ScreenShotMode = function(delataTime)
-  -- function num : 0_34 , upvalues : VCK
+  -- function num : 0_35 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     local screenShotFrame_Close = function()
-    -- function num : 0_34_0
+    -- function num : 0_35_0
     FGlobal_ScreenShotFrame_Close()
   end
 
@@ -1069,19 +1083,19 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ScreenShotMode = function(delataTime)
   end
 end
 
--- DECOMPILER ERROR at PC141: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_InGameDance = function(deltaTime)
-  -- function num : 0_35 , upvalues : VCK
+  -- function num : 0_36 , upvalues : VCK
   if (getGameDanceEditor()):isShow() == true and not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Dance_Close()
   end
 end
 
--- DECOMPILER ERROR at PC144: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ButtonShortcuts = function(deltaTime)
-  -- function num : 0_36
+  -- function num : 0_37
   local isEnd = false
   local clickedAlt = isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_MENU)
   local clickedShift = isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT)
@@ -1113,10 +1127,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ButtonShortcuts = function(del
   end
 end
 
--- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC152: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UiModeNotInput = function()
-  -- function num : 0_37 , upvalues : VCK
+  -- function num : 0_38 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if GlobalSwitch_UseOldAlchemy == false then
       FGlobal_Alchemy_Close()
@@ -1126,10 +1140,10 @@ PaGlobal_GlobalKeyBinder.Process_UiModeNotInput = function()
   end
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ChattingMacro = function()
-  -- function num : 0_38 , upvalues : VCK
+  -- function num : 0_39 , upvalues : VCK
   if isKeyPressed(VCK.KeyCode_MENU) == false then
     return false
   end
@@ -1150,10 +1164,10 @@ PaGlobal_GlobalKeyBinder.Process_ChattingMacro = function()
   return false
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_SkillkeyBinder = function(deltaTime)
-  -- function num : 0_39
+  -- function num : 0_40
   if isUseNewQuickSlot() then
     local ii = nil
     local quickSlot1 = (CppEnums.ActionInputType).ActionInputType_QuickSlot1
@@ -1179,10 +1193,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_SkillkeyBinder = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC161: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
-  -- function num : 0_40 , upvalues : VCK, IM, UIMode
+  -- function num : 0_41 , upvalues : VCK, IM, UIMode
   if (MessageBox.isPopUp)() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
       (MessageBox.keyProcessEnter)()
@@ -1428,10 +1442,10 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
-  -- function num : 0_41 , upvalues : VCK
+  -- function num : 0_42 , upvalues : VCK
   uiEdit = GetFocusEdit()
   if uiEdit == nil then
     return false
@@ -1690,10 +1704,10 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
 end
 
 local fastPinDelta = 0
--- DECOMPILER ERROR at PC171: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC175: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
-  -- function num : 0_42 , upvalues : VCK, fastPinDelta
+  -- function num : 0_43 , upvalues : VCK, fastPinDelta
   if FGlobal_GetFirstTutorialState() == true then
     return 
   end
@@ -1839,16 +1853,25 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC424: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC427: Unhandled construct in 'MakeBoolean' P1
 
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
-          if Panel_Window_Skill:IsShow() then
+        -- DECOMPILER ERROR at PC427: Unhandled construct in 'MakeBoolean' P1
+
+        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and _ContentsGroup_RenewUI == false and Panel_Window_Skill ~= nil then
+          if Panel_Window_Skill:IsShow() == true then
             audioPostEvent_SystemUi(1, 17)
             HandleMLUp_SkillWindow_Close()
           else
             audioPostEvent_SystemUi(1, 18)
             PaGlobal_Skill:SkillWindow_Show()
           end
+        end
+        if PaGlobalFunc_Skill_GetShow() == true then
+          audioPostEvent_SystemUi(1, 17)
+          PaGlobalFunc_Skill_Close()
+        else
+          audioPostEvent_SystemUi(1, 18)
+          PaGlobalFunc_Skill_Open()
         end
         do return  end
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ChatTabNext) then
@@ -1864,11 +1887,15 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
         end
         do return  end
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Inventory) then
-          if _ContentsGroup_RenewUI then
-            if FGlobal_Window_InventoryInfo_isOpened() == false then
-              FGlobal_Window_InventoryInfo_Open(1)
+          if _ContentsGroup_RenewUI == true then
+            if PaGlobalFunc_InventoryInfo_IsOpened() == false then
+              if PaGlobalFunc_Quest_GetShow() == true then
+                audioPostEvent_SystemUi(1, 27)
+                PaGlobalFunc_Quest_Close()
+              end
+              PaGlobalFunc_InventoryInfo_Open(1)
             else
-              FGlobal_Window_InventoryInfo_Close()
+              PaGlobalFunc_InventoryInfo_Close()
             end
           else
             local isInvenOpen = Panel_Window_Inventory:IsShow()
@@ -1993,7 +2020,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             return 
           end
           do
-            -- DECOMPILER ERROR at PC828: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC859: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               local isMailMain = Panel_Mail_Main:IsShow()
@@ -2008,7 +2035,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             do return  end
             do
               do
-                -- DECOMPILER ERROR at PC857: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC888: Unhandled construct in 'MakeBoolean' P1
 
                 if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
                   local isFriendList = Panel_FriendList:IsShow()
@@ -2030,12 +2057,15 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                       audioPostEvent_SystemUi(1, 29)
                       Panel_Window_QuestNew_Show(true)
                     end
-                  elseif FGlobal_QuestInfoGetShow() == true then
+                  elseif PaGlobalFunc_Quest_GetShow() == true then
                     audioPostEvent_SystemUi(1, 27)
-                    FGlobal_QuestInfoSetShow(false)
+                    PaGlobalFunc_Quest_SetShow(false)
                   else
+                    if PaGlobalFunc_InventoryInfo_IsOpened() == true then
+                      PaGlobalFunc_InventoryInfo_Close()
+                    end
                     audioPostEvent_SystemUi(1, 27)
-                    FGlobal_QuestInfoSetShow(true)
+                    PaGlobalFunc_Quest_SetShow(true)
                   end
                   TooltipSimple_Hide()
                   return 
@@ -2107,7 +2137,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                 end
                 ;
                 (PaGlobal_GlobalKeyBinder.Process_CheckEscape)()
-                -- DECOMPILER ERROR: 100 unprocessed JMP targets
+                -- DECOMPILER ERROR: 104 unprocessed JMP targets
               end
             end
           end
@@ -2117,10 +2147,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC175: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC179: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
-  -- function num : 0_43 , upvalues : VCK
+  -- function num : 0_44 , upvalues : VCK
   if getEscHandle() == true or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) == false then
     return 
   end
@@ -2207,18 +2237,29 @@ PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
     PaGlobal_MovieGuide_Weblist:Close()
     return 
   end
-  if Panel_MovieSkillGuide_Web:GetShow() then
-    if Panel_MovieSkillGuide_Weblist:GetShow() then
+  if FGlobal_CheckedQuestQptionGetShow() == true then
+    FGlobal_CheckedQuestOptionClose()
+    return 
+  end
+  if _ContentsGroup_RenewUI == false then
+    if Panel_MovieSkillGuide_Web:GetShow() == true then
+      if Panel_MovieSkillGuide_Weblist:GetShow() == true then
+        PaGlobal_MovieSkillGuide_Weblist:Close()
+        return 
+      else
+        PaGlobal_MovieSkillGuide_Web:Close()
+        return 
+      end
+    end
+    if Panel_MovieSkillGuide_Weblist:GetShow() == true then
       PaGlobal_MovieSkillGuide_Weblist:Close()
       return 
-    else
-      PaGlobal_MovieSkillGuide_Web:Close()
+    end
+  else
+    if PaGlobalFunc_Skill_GetShow() == true then
+      PaGlobalFunc_Skill_Close()
       return 
     end
-  end
-  if Panel_MovieSkillGuide_Weblist:GetShow() then
-    PaGlobal_MovieSkillGuide_Weblist:Close()
-    return 
   end
   if Panel_SaveSetting:IsShow() then
     PaGlobal_Panel_SaveSetting_Hide()
@@ -2268,6 +2309,10 @@ PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
     PaGlobal_Memo:ListClose()
     return 
   end
+  if Panel_Guild_OneOnOneRequest:GetShow() == true then
+    FGlobal_GuildTeamBattle_CloseRequestPanel()
+    return 
+  end
   if Panel_CustomizingAlbum:GetShow() == true then
     CustomizingAlbum_Close()
   end
@@ -2296,10 +2341,10 @@ PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
   end
 end
 
--- DECOMPILER ERROR at PC178: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC182: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu = function(deltaTime)
-  -- function num : 0_44
+  -- function num : 0_45
   if _ContentsGroup_isConsoleTest == false or getGamePadEnable() == false then
     return 
   end

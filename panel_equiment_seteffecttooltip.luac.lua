@@ -112,6 +112,9 @@ end
 
 PaGlobal_EquipmentTooltip.SetPos = function(self)
   -- function num : 0_8
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   local posX = Panel_Equipment:GetPosX() - (self._panel):GetSizeX()
   if posX < 0 then
     posX = Panel_Equipment:GetPosX() + Panel_Equipment:GetSizeX()

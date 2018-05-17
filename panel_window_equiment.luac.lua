@@ -301,6 +301,10 @@ equip.initControl = function(self)
   (self.awakenText):addInputEvent("Mouse_On", "Equipment_StatValueTooltips(true, 2)")
   ;
   (self.awakenText):addInputEvent("Mouse_Out", "Equipment_StatValueTooltips(false)")
+  ;
+  (self.BonusBattlePointValue):addInputEvent("Mouse_On", "Equipment_StatValueTooltips(true, 3)")
+  ;
+  (self.BonusBattlePointValue):addInputEvent("Mouse_Out", "Equipment_StatValueTooltips(false)")
   local initSucceed = PaGlobal_EquipmentTooltip:initWithIcon(self.iconSetItemTooltip)
   ;
   (self.iconSetItemTooltip):SetShow(initSucceed)
@@ -779,6 +783,7 @@ Equipment_updateSlotData = function()
     (equip.defenceValue):SetSpanSize(95, valueSpanSizeY)
   end
   if self.checkExtendedSlot == 1 then
+    _PA_LOG("박범�\128", "self.checkExtendedSlot == 1")
     for extendSlotNo,parentSlotNo in pairs(self.extendedSlotInfoArray) do
       local itemWrapper = ToClient_getEquipmentItem(parentSlotNo)
       local setSlotBG = (self.slotBGs)[extendSlotNo]
@@ -804,14 +809,27 @@ Equipment_updateSlotData = function()
     _awakenOffecnValue = ToClient_getAwakenOffence()
     _defenceValue = ToClient_getDefence()
     local battlePointValue = (math.floor)((selfPlayer:get()):getTotalStatValue())
+    local bonusBattlePoint = ToClient_GetBonusStatBySupportPoint(ToClient_GetMaxSupportPoint())
     ;
     (self.attackValue):SetText(tostring(_offenceValue))
     ;
     (self.awakenValue):SetText(tostring(_awakenOffecnValue))
     ;
     (self.defenceValue):SetText(tostring(_defenceValue))
-    ;
-    (self.BattlePointValue):SetText(tostring(battlePointValue))
+    if bonusBattlePoint > 0 then
+      (self.BattlePointValue):SetText(tostring(battlePointValue))
+      ;
+      (self.BonusBattlePointValue):SetText("(+" .. bonusBattlePoint .. ")")
+      ;
+      (self.BonusBattlePointValue):SetSpanSize(((self.BattlePointValue):GetSpanSize()).x + ((self.BattlePointValue):GetSizeX() + (self.BattlePointValue):GetTextSizeX()) * 0.5 + 1, ((self.BonusBattlePointValue):GetSpanSize()).y)
+      ;
+      (self.BonusBattlePointValue):SetShow(true)
+    else
+      ;
+      (self.BattlePointValue):SetText(tostring(battlePointValue))
+      ;
+      (self.BonusBattlePointValue):SetShow(false)
+    end
     if Panel_Global_Manual:GetShow() then
       setFishingResourcePool_text()
     end
@@ -1051,6 +1069,12 @@ Equipment_StatValueTooltips = function(isShow, tipType)
         name = PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TOOLTIP_AWAKEN_TITLE")
         desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AWAKEN_TEXT_TOOLTIP_DESC") .. "\n<PAColor0xffe7d583>- " .. PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TEXT_HIT") .. " : " .. tostring(ToClient_getHit()) .. "<PAOldColor>"
         control = self.awakenText
+      else
+        if tipType == 3 then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_BONUS_TOTALSTAT_TITLE")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_BONUS_TOTALSTAT_DESC")
+          control = self.BonusBattlePointValue
+        end
       end
     end
   end
@@ -1301,11 +1325,46 @@ FGlobal_Equipment_Init = function()
   -- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
 
   equip.BattlePointValue = (UI.getChildControl)(equip.battlePointBG, "StaticText_BattlePointValue")
+  -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
+
+  equip.BonusBattlePointValue = (UI.getChildControl)(equip.battlePointBG, "StaticText_BonusBattlePointValue")
   equip:initControl()
   equip:registEventHandler()
   equip:registMessageHandler()
 end
 
+FGlobal_UpdateTotalStatValue_InEquipment = function(actorKeyRaw)
+  -- function num : 0_43 , upvalues : equip
+  if Panel_Equipment:GetShow() == false then
+    return 
+  end
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  if (selfPlayer:get()):getActorKeyRaw() ~= actorKeyRaw then
+    return 
+  end
+  local self = equip
+  local battlePointValue = (math.floor)((selfPlayer:get()):getTotalStatValue())
+  local bonusBattlePoint = ToClient_GetBonusStatBySupportPoint(ToClient_GetMaxSupportPoint())
+  if bonusBattlePoint > 0 then
+    (self.BattlePointValue):SetText(tostring(battlePointValue))
+    ;
+    (self.BonusBattlePointValue):SetText("(+" .. bonusBattlePoint .. ")")
+    ;
+    (self.BonusBattlePointValue):SetSpanSize(((self.BattlePointValue):GetSpanSize()).x + ((self.BattlePointValue):GetSizeX() + (self.BattlePointValue):GetTextSizeX()) * 0.5 + 1, ((self.BonusBattlePointValue):GetSpanSize()).y)
+    ;
+    (self.BonusBattlePointValue):SetShow(true)
+  else
+    ;
+    (self.BattlePointValue):SetText(tostring(battlePointValue))
+    ;
+    (self.BonusBattlePointValue):SetShow(false)
+  end
+end
+
 registerEvent("FromClient_luaLoadComplete", "FGlobal_Equipment_Init")
 registerEvent("FromClient_ChangeUnderwearModeInHouse", "FromClient_ChangeUnderwearMode_Equipment")
+registerEvent("FromClient_ShowTotalStatTierChanged", "FGlobal_UpdateTotalStatValue_InEquipment")
 

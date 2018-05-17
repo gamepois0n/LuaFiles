@@ -1219,10 +1219,12 @@ PaGlobal_Enchant.show = function(self)
   Panel_Window_Enchant:SetShow(true, true)
   audioPostEvent_SystemUi(1, 0)
   InventoryWindow_Show()
-  Equipment_PosSaveMemory()
-  Panel_Equipment:SetShow(true, true)
-  Panel_Equipment:SetPosX(10)
-  Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  if _ContentsGroup_RenewUI == false then
+    Equipment_PosSaveMemory()
+    Panel_Equipment:SetShow(true, true)
+    Panel_Equipment:SetPosX(10)
+    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  end
   self._btnMouseOnCount = 0
   self._enchantHelpDesc = ""
   Panel_Window_Enchant:SetEnableArea(0, 0, 530, 25)

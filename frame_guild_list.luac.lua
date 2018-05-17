@@ -1361,7 +1361,10 @@ GuildListInfoPage.SetGuildList = function(self)
   tempGuildList = {}
   for index = 1, memberCount do
     local myGuildMemberInfo = myGuildListInfo:getMember(index - 1)
-    -- DECOMPILER ERROR at PC52: Confused about usage of register: R8 in 'UnsetPending'
+    if myGuildMemberInfo == nil then
+      return 
+    end
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R8 in 'UnsetPending'
 
     tempGuildList[index] = {idx = index - 1, online = myGuildMemberInfo:isOnline(), grade = myGuildMemberInfo:getGrade(), level = myGuildMemberInfo:getLevel(), class = myGuildMemberInfo:getClassType(), name = myGuildMemberInfo:getName(), ap = Int64toInt32(myGuildMemberInfo:getTotalActivity()), expiration = myGuildMemberInfo:getContractedExpirationUtc(), wp = myGuildMemberInfo:getMaxWp(), kp = myGuildMemberInfo:getExplorationPoint(), userNo = myGuildMemberInfo:getUserNo()}
   end

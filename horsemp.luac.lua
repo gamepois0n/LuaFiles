@@ -128,12 +128,16 @@ HorseMP_Update = function()
           ;
           (self._staticBar):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 4, " .. staminaPercent .. ")")
         else
-          ;
-          (self._staticBar):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 1, " .. staminaPercent .. ")")
-          ;
-          (self._staticBar):addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 1 )")
-          ;
-          (self._staticBar):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 1, " .. staminaPercent .. ")")
+          if UI_VT.Type_WoodenFence == vehicleType then
+            Panel_HorseMp:SetShow(false, false)
+          else
+            ;
+            (self._staticBar):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 1, " .. staminaPercent .. ")")
+            ;
+            (self._staticBar):addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 1 )")
+            ;
+            (self._staticBar):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 1, " .. staminaPercent .. ")")
+          end
         end
       end
     end

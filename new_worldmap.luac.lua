@@ -427,7 +427,7 @@ FGlobal_PopCloseWorldMap = function()
     if _ContentsGroup_RenewUI == false then
       Panel_Window_QuestNew_Show(false)
     else
-      FGlobal_QuestInfoSetShow(false)
+      PaGlobalFunc_Quest_SetShow(false)
     end
     Panel_Tooltip_SimpleText:SetShow(false)
     isCloseWorldMap = false
@@ -466,8 +466,12 @@ FromClient_WorldMapOpen = function()
   Panel_NpcNavi:SetShow(false)
   FGlobal_WarInfo_Open()
   FGlobal_NodeWarInfo_Open()
-  FGlobal_WorldMapOpenForMenu()
-  FGlobal_WorldMapOpenForMain()
+  if _ContentsGroup_RenewUI == true then
+    PaGlobalFunc_WorldMapSideBar_Open()
+  else
+    FGlobal_WorldMapOpenForMenu()
+    FGlobal_WorldMapOpenForMain()
+  end
   if ((getSelfPlayer()):get()):getLevel() >= 20 or questList_isClearQuest(654, 4) == true then
     isPrevShowPanel = Panel_CheckedQuest:GetShow()
     isPrevShowMainQuestPanel = Panel_MainQuest:GetShow()
@@ -631,6 +635,10 @@ local eCheckState = CppEnums.WorldMapCheckState
 local eWorldmapState = CppEnums.WorldMapState
 FromClient_RenderStateChange = function(state)
   -- function num : 0_33 , upvalues : eWorldmapState, eCheckState
+  if _ContentsGroup_RenewUI == true then
+    FromClient_WorldMapSideBar_RenderStateChange(state)
+    return 
+  end
   if eWorldmapState.eWMS_EXPLORE_PLANT == state then
     local questShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Quest)
     local knowledgeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Knowledge)

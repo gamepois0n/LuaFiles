@@ -790,6 +790,32 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       deadMessage_Animation()
       return 
     end
+    if ToClient_IsSelfInGuildTeamBattle() == true then
+      _regenTime:SetShow(false)
+      _button_SiegeIng:SetShow(false)
+      _button_MoveExploration:SetShow(false)
+      _button_MoveTown:SetShow(false)
+      _button_AdvancedBase:SetShow(false)
+      _text_AdvancedBaseAlert:SetShow(false)
+      _text_reviveNotify:SetShow(false)
+      _button_GuildSpawn:SetShow(false)
+      _useCashItemBG:SetShow(false)
+      _checkBoxUseCache:SetShow(false)
+      _deadMessage:SetText("사망하였습니�\164. 잠시 �\132 자동�\128�\156 됩니�\164.")
+      _button_Immediate:SetShow(false)
+      _text_ImmediateCount:SetShow(false)
+      _button_ObserverMode:SetShow(false)
+      _checkBoxUseFairy:SetShow(false)
+      _button_LocalWar:SetShow(false)
+      _button_SavageOut:SetShow(false)
+      _button_Volunteer:SetShow(false)
+      _deadQuestion:SetShow(false)
+      _button_Plunder:SetShow(false)
+      ResurrectionTime = 0
+      Panel_DeadMessage:SetShow(true, false)
+      deadMessage_Animation()
+      return 
+    end
     if isPvPMatchRevive then
       _button_SiegeIng:SetShow(false)
       _button_MoveExploration:SetShow(false)

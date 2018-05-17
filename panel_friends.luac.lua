@@ -646,21 +646,136 @@ FriendList.updateList = function(self)
   (self._uiTreeFriend):RefreshOpenList()
 end
 
+FriendList.updateListForXbox = function(self)
+  -- function num : 0_19 , upvalues : _groupListData, _friendListData
+  (self._uiTreeFriend):ClearTree()
+  ;
+  (self._uiTreeFriend):SetAlpha(1)
+  ;
+  (self._uiTreeFriend):SetShow(true)
+  ;
+  (self._uiTreeFriendBackStatic):SetAlpha(1)
+  ;
+  (self._uiTreeFriendOverStatic):SetAlpha(1)
+  ;
+  (self._uiTreeFriendBackStatic):SetShow(true)
+  ;
+  (self._uiTreeFriendOverStatic):SetShow(true)
+  local friendGroupNoDefault = -1
+  local friendGroupNoPartyFriend = -2
+  local friendGroupCount = RequestFriends_getFriendGroupCount()
+  local indexCnt = 0
+  local groupIndexCnt = 0
+  for groupIndex = 0, friendGroupCount - 1 do
+    local friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
+    local rootItem = (self._uiTreeFriend):createRootItem()
+    if friendGroup:getGroupNo() == friendGroupNoDefault then
+      rootItem:SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_GROUP_ETC"))
+      -- DECOMPILER ERROR at PC55: Confused about usage of register: R12 in 'UnsetPending'
+
+      _groupListData._defaultGroupIndex = indexCnt
+    else
+      if friendGroup:getGroupNo() == friendGroupNoPartyFriend then
+        rootItem:SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_GROUP_PARTY"))
+        -- DECOMPILER ERROR at PC69: Confused about usage of register: R12 in 'UnsetPending'
+
+        _groupListData._partyplayGroupIndex = indexCnt
+      else
+        rootItem:SetText(friendGroup:getName())
+      end
+    end
+    rootItem:SetCustomData(rootItem)
+    ;
+    (self._uiTreeFriend):AddRootItem(rootItem)
+    -- DECOMPILER ERROR at PC84: Confused about usage of register: R12 in 'UnsetPending'
+
+    ;
+    (_groupListData._groupInfo)[indexCnt] = friendGroup
+    -- DECOMPILER ERROR at PC87: Confused about usage of register: R12 in 'UnsetPending'
+
+    ;
+    (_groupListData._groupInfoByGroupIndex)[groupIndex] = friendGroup
+    -- DECOMPILER ERROR at PC89: Confused about usage of register: R12 in 'UnsetPending'
+
+    _groupListData._groupCount = friendGroupCount
+    indexCnt = indexCnt + 1
+    groupIndexCnt = indexCnt
+    if friendGroup:isHide() == false then
+      local friendCount = ToClient_InitializeXboxFriendForLua()
+      for friendIndex = 0, friendCount - 1 do
+        local friendInfo = ToClient_getXboxFriendInfoByIndex(friendIndex)
+        if friendInfo == nil then
+          local childItem = (self._uiTreeFriend):createChildItem()
+          local friendName = "[" .. friendInfo:getGamerTag() .. "] " .. friendInfo:getName()
+          if friendInfo:isOnline() == false then
+            friendName = friendName .. "( Offline )"
+          else
+            if friendInfo:getWp() > -1 and friendInfo:getExplorationPoint() > -1 then
+              friendName = friendName .. "(" .. friendInfo:getCharacterName() .. ", " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. tostring(friendInfo:getLevel()) .. ") " .. tostring(friendInfo:getWp()) .. "/" .. tostring(friendInfo:getExplorationPoint())
+            else
+              friendName = friendName .. "(" .. PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_ONLINE") .. ")"
+            end
+          end
+          childItem:SetText(friendName)
+          childItem:SetCustomData(childItem)
+          ;
+          (self._uiTreeFriend):AddItem(childItem, rootItem)
+          local messageList = ToClient_GetFriendMessageListByUserNo(friendInfo:getUserNo())
+          if messageList ~= nil then
+            local messageCount = messageList:getMessageCount()
+            if messageCount > 0 then
+              local childIcon = childItem:GetChildIcon()
+              childIcon:SetText(messageCount)
+              childIcon:SetTextureByPath("New_UI_Common_forLua/Widget/Character_Main/Knowledge_00.dds")
+              childIcon:SetTextureUV(196, 1, 20, 20)
+              childIcon:SetIconSize(14, 14)
+            end
+          end
+          do
+            do
+              -- DECOMPILER ERROR at PC210: Confused about usage of register: R21 in 'UnsetPending'
+
+              ;
+              (_friendListData._friendInfo)[indexCnt] = friendInfo
+              indexCnt = indexCnt + 1
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out DO_STMT
+
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
+        end
+      end
+      if friendCount > 0 then
+        (self._uiTreeFriend):SetSelectItem(groupIndexCnt)
+      end
+    end
+  end
+  ;
+  (self._uiTreeFriend):RefreshOpenList()
+end
+
 FriendList:initialize()
 registerEvent("ResponseFriendList_updateFriends", "ResponseFriendList_updateFriends")
 registerEvent("FromClient_NoticeNewMessage", "FromClient_NoticeNewMessage")
 ResponseFriendList_updateFriends = function()
-  -- function num : 0_19 , upvalues : FriendList
-  FriendList:updateList()
+  -- function num : 0_20 , upvalues : FriendList
+  if ToClient_isXBox() == true then
+    FriendList:updateListForXbox()
+  else
+    FriendList:updateList()
+  end
 end
 
 Friend_CloseWindow = function()
-  -- function num : 0_20
+  -- function num : 0_21
   FriendList_hide()
 end
 
 FromClient_NoticeNewMessage = function(isSoundNotice, isEffectNotice)
-  -- function num : 0_21
+  -- function num : 0_22
   if isEffectNotice and Panel_FriendList:GetShow() == false then
     UIMain_FriendListUpdate()
     UIMain_FriendsUpdate()
@@ -674,12 +789,12 @@ local RequestFriendList = {_selectFriendIndex; _maxFriendCount = 30, _uiRequestF
 _friendList = {}
 , _slotRows = 12}
 friend_clickCloseRequestFriendButton = function()
-  -- function num : 0_22
+  -- function num : 0_23
   AddFriendList_hide()
 end
 
 RequestFriendList.SetShow = function(self, isShow)
-  -- function num : 0_23 , upvalues : RequestFriendList
+  -- function num : 0_24 , upvalues : RequestFriendList
   (RequestFriendList._uiRequestFriendList):SetShow(isShow)
   ;
   (RequestFriendList._uiBackGround):SetShow(isShow)
@@ -696,7 +811,7 @@ RequestFriendList.SetShow = function(self, isShow)
 end
 
 RequestFriendList.initialize = function(self)
-  -- function num : 0_24
+  -- function num : 0_25
   self._uiScroll = (UI.getChildControl)(self._uiRequestFriendList, "RequestFriend_Scroll")
   ;
   (self._uiScroll):SetControlTop()
@@ -713,28 +828,34 @@ RequestFriendList.initialize = function(self)
 end
 
 friend_clickAcceptFriend = function()
-  -- function num : 0_25 , upvalues : RequestFriendList
-  if RequestFriendList._selectFriendIndex ~= -1 then
+  -- function num : 0_26 , upvalues : RequestFriendList
+  -- DECOMPILER ERROR at PC11: Unhandled construct in 'MakeBoolean' P1
+
+  if ToClient_isAddFriendAllowed() and RequestFriendList._selectFriendIndex ~= -1 then
     requestFriendList_acceptFriend(RequestFriendList._selectFriendIndex)
   end
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 friend_clickRefuseFriend = function()
-  -- function num : 0_26 , upvalues : RequestFriendList
+  -- function num : 0_27 , upvalues : RequestFriendList
   if RequestFriendList._selectFriendIndex ~= -1 then
     requestFriendList_refuseFriend(RequestFriendList._selectFriendIndex)
   end
 end
 
 clickRequestList = function()
-  -- function num : 0_27 , upvalues : RequestFriendList
+  -- function num : 0_28 , upvalues : RequestFriendList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
 
   RequestFriendList._selectFriendIndex = (RequestFriendList._uiRequestFriendList):GetSelectIndex()
 end
 
 RequestFriendList.updateList = function(self)
-  -- function num : 0_28 , upvalues : UI_color
+  -- function num : 0_29 , upvalues : UI_color
   local listControl = self._uiRequestFriendList
   listControl:DeleteAll()
   local friendCount = RequestFriends_getAddFriendCount()
@@ -753,7 +874,7 @@ end
 RequestFriendList:initialize()
 registerEvent("ResponseFriendList_updateAddFriends", "ResponseFriendList_updateAddFriends")
 AddFriendList_show = function()
-  -- function num : 0_29 , upvalues : RequestFriendList
+  -- function num : 0_30 , upvalues : RequestFriendList
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   self._selectFriendIndex = -1
@@ -763,18 +884,18 @@ AddFriendList_show = function()
 end
 
 AddFriendList_hide = function()
-  -- function num : 0_30 , upvalues : RequestFriendList
+  -- function num : 0_31 , upvalues : RequestFriendList
   RequestFriendList:SetShow(false)
 end
 
 ResponseFriendList_updateAddFriends = function()
-  -- function num : 0_31 , upvalues : RequestFriendList
+  -- function num : 0_32 , upvalues : RequestFriendList
   RequestFriendList:updateList()
 end
 
 local PopupAddFriend = {_uiBackGround = (UI.getChildControl)(Panel_FriendList, "Static_FriendName_BG"), _uiEditName = (UI.getChildControl)(Panel_FriendList, "Edit_FriendName"), _uiYesButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_Yes"), _uiNoButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_No"), _uiCloseButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_Close"), _uiStaticTitle = (UI.getChildControl)(Panel_FriendList, "StaticText_AddFriend"), _uiCheckUserNickName = (UI.getChildControl)(Panel_FriendList, "CheckButton_IsUserNickName")}
 PopupAddFriend.SetShow = function(self, isShow)
-  -- function num : 0_32
+  -- function num : 0_33
   (self._uiBackGround):SetShow(isShow)
   ;
   (self._uiEditName):SetShow(isShow)
@@ -800,7 +921,7 @@ PopupAddFriend.SetShow = function(self, isShow)
 end
 
 PopupAddFriend.initialize = function(self)
-  -- function num : 0_33
+  -- function num : 0_34
   (self._uiYesButton):addInputEvent("Mouse_LUp", "friend_clickAddFriend()")
   ;
   (self._uiNoButton):addInputEvent("Mouse_LUp", "friend_clickAddFriendClose()")
@@ -823,7 +944,7 @@ PopupAddFriend.initialize = function(self)
 end
 
 friend_clickAddFriend = function()
-  -- function num : 0_34 , upvalues : PopupAddFriend
+  -- function num : 0_35 , upvalues : PopupAddFriend
   local isNickName = (PopupAddFriend._uiCheckUserNickName):IsCheck()
   requestFriendList_addFriend((PopupAddFriend._uiEditName):GetEditText(), isNickName)
   PopupAddFriend:SetShow(false)
@@ -831,17 +952,17 @@ friend_clickAddFriend = function()
 end
 
 friend_clickAddFriendClose = function()
-  -- function num : 0_35 , upvalues : PopupAddFriend
+  -- function num : 0_36 , upvalues : PopupAddFriend
   PopupAddFriend:SetShow(false)
   ClearFocusEdit()
 end
 
 friend_ChangeInputMode = function()
-  -- function num : 0_36
+  -- function num : 0_37
 end
 
 friend_ChangeNickNameMode = function()
-  -- function num : 0_37 , upvalues : PopupAddFriend
+  -- function num : 0_38 , upvalues : PopupAddFriend
   local isNickName = not (PopupAddFriend._uiCheckUserNickName):IsCheck()
   if isNickName then
     (PopupAddFriend._uiCheckUserNickName):SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_BTN_NICKNAME"))
@@ -852,7 +973,7 @@ friend_ChangeNickNameMode = function()
 end
 
 AddFriendInput_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_38 , upvalues : PopupAddFriend
+  -- function num : 0_39 , upvalues : PopupAddFriend
   do return targetUI ~= nil and targetUI:GetKey() == (PopupAddFriend._uiEditName):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
@@ -860,7 +981,7 @@ end
 PopupAddFriend:initialize()
 local PopupRenameGroup = {_uiBackGround = (UI.getChildControl)(Panel_FriendList, "Static_GroupName_BG"), _uiEditName = (UI.getChildControl)(Panel_FriendList, "Edit_GroupName"), _uiYesButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_Yes"), _uiNoButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_No"), _uiCloseButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_Close"), _uiStaticTitle = (UI.getChildControl)(Panel_FriendList, "StaticText_ChangeGroupName")}
 PopupRenameGroup.SetShow = function(self, isShow)
-  -- function num : 0_39
+  -- function num : 0_40
   self._isShow = isShow
   ;
   (self._uiBackGround):SetShow(isShow)
@@ -882,7 +1003,7 @@ PopupRenameGroup.SetShow = function(self, isShow)
 end
 
 PopupRenameGroup.initialize = function(self)
-  -- function num : 0_40
+  -- function num : 0_41
   (self._uiYesButton):addInputEvent("Mouse_LUp", "friend_clickRenameGroup()")
   ;
   (self._uiNoButton):addInputEvent("Mouse_LUp", "friend_clickRenameGroupClose()")
@@ -894,7 +1015,7 @@ PopupRenameGroup.initialize = function(self)
 end
 
 friend_clickRenameGroup = function()
-  -- function num : 0_41 , upvalues : _groupListData, PopupRenameGroup
+  -- function num : 0_42 , upvalues : _groupListData, PopupRenameGroup
   do
     if _groupListData._selectedGroupIndex >= 0 then
       local friendGroup = (_groupListData._groupInfo)[_groupListData._selectedGroupIndex]
@@ -911,7 +1032,7 @@ friend_clickRenameGroup = function()
 end
 
 friend_clickRenameGroupClose = function()
-  -- function num : 0_42 , upvalues : PopupRenameGroup
+  -- function num : 0_43 , upvalues : PopupRenameGroup
   PopupRenameGroup:SetShow(false)
 end
 
@@ -922,7 +1043,7 @@ stylePopupBackGround:SetShow(false)
 styleMenuButton:SetShow(false)
 local PopupGroupMenu = {_uiBackGround, _uiRenameGroup, _uiAddGroup}
 PopupGroupMenu.initialize = function(self)
-  -- function num : 0_43 , upvalues : UI_PUCT, stylePopupBackGround, styleMenuButton
+  -- function num : 0_44 , upvalues : UI_PUCT, stylePopupBackGround, styleMenuButton
   self._uiBackGround = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_FriendList, "FriendPopupGroupMenu")
   CopyBaseProperty(stylePopupBackGround, self._uiBackGround)
   self._uiRenameGroup = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupRenameGroup")
@@ -958,7 +1079,7 @@ PopupGroupMenu.initialize = function(self)
 end
 
 PopupGroupMenu.SetShow = function(self, isShow)
-  -- function num : 0_44 , upvalues : _groupListData, FriendList
+  -- function num : 0_45 , upvalues : _groupListData, FriendList
   if _groupListData._defaultGroupIndex == _groupListData._selectedGroupIndex then
     (self._uiRenameGroup):SetEnable(false)
     ;
@@ -1007,16 +1128,16 @@ PopupGroupMenu.SetShow = function(self, isShow)
 end
 
 PopupGroupMenu.setPos = function(self, x, y)
-  -- function num : 0_45
+  -- function num : 0_46
   (self._uiBackGround):SetPosX(x)
   ;
   (self._uiBackGround):SetPosY(y)
 end
 
 PopupGroupMenu:initialize()
-local PopupFriendMenu = {_uiBackGround, _uiPartyInvite, _uiMessanger, _uiMoveGroup, _uiDelete}
+local PopupFriendMenu = {_uiBackGround, _uiPartyInvite, _uiMessanger, _uiMoveGroup, _uiDelete, _uiXboxProfile, _uiRecallFriend}
 PopupFriendMenu.initialize = function(self)
-  -- function num : 0_46 , upvalues : UI_PUCT, styleMenuButton
+  -- function num : 0_47 , upvalues : UI_PUCT, styleMenuButton
   self._uiBackGround = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_FriendList, "FriendPopupFriendMenu")
   self._uiPartyInvite = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupPartyInvite")
   CopyBaseProperty(styleMenuButton, self._uiPartyInvite)
@@ -1026,6 +1147,10 @@ PopupFriendMenu.initialize = function(self)
   CopyBaseProperty(styleMenuButton, self._uiMoveGroup)
   self._uiDelete = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupDeleteFriend")
   CopyBaseProperty(styleMenuButton, self._uiDelete)
+  self._uiXboxProfile = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupXboxProfile")
+  CopyBaseProperty(styleMenuButton, self._uiXboxProfile)
+  self._uiRecallFriend = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupXboxRecallFriend")
+  CopyBaseProperty(styleMenuButton, self._uiRecallFriend)
   local buttonSizeX = styleMenuButton:GetSizeX()
   local buttonSizeY = styleMenuButton:GetSizeY()
   ;
@@ -1047,6 +1172,14 @@ PopupFriendMenu.initialize = function(self)
   ;
   (self._uiDelete):SetPosY(buttonSizeY * 3)
   ;
+  (self._uiXboxProfile):SetPosX(0)
+  ;
+  (self._uiXboxProfile):SetPosY(buttonSizeY * 4)
+  ;
+  (self._uiRecallFriend):SetPosX(0)
+  ;
+  (self._uiRecallFriend):SetPosY(buttonSizeY * 5)
+  ;
   (self._uiPartyInvite):SetShow(true)
   ;
   (self._uiMessanger):SetShow(true)
@@ -1054,6 +1187,20 @@ PopupFriendMenu.initialize = function(self)
   (self._uiMoveGroup):SetShow(true)
   ;
   (self._uiDelete):SetShow(true)
+  ;
+  (self._uiXboxProfile):SetShow(true)
+  ;
+  (self._uiRecallFriend):SetShow(true)
+  if ToClient_isXBox() == false then
+    (self._uiXboxProfile):SetShow(false)
+    ;
+    (self._uiRecallFriend):SetShow(false)
+  end
+  if ToClient_IsDevelopment() then
+    (self._uiXboxProfile):SetShow(true)
+    ;
+    (self._uiRecallFriend):SetShow(true)
+  end
   ;
   (self._uiPartyInvite):SetText(PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU3"))
   ;
@@ -1063,6 +1210,10 @@ PopupFriendMenu.initialize = function(self)
   ;
   (self._uiDelete):SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_REMOVE_FRIEND"))
   ;
+  (self._uiXboxProfile):SetText("XboxProfile")
+  ;
+  (self._uiRecallFriend):SetText("Recall")
+  ;
   (self._uiPartyInvite):addInputEvent("Mouse_LUp", "friend_PartyInvite()")
   ;
   (self._uiMessanger):addInputEvent("Mouse_LUp", "friend_Messanger()")
@@ -1071,11 +1222,15 @@ PopupFriendMenu.initialize = function(self)
   ;
   (self._uiDelete):addInputEvent("Mouse_LUp", "friend_deleteFriend()")
   ;
+  (self._uiXboxProfile):addInputEvent("Mouse_LUp", "friend_XboxProfileShow()")
+  ;
+  (self._uiRecallFriend):addInputEvent("Mouse_LUp", "friend_RequestRecall()")
+  ;
   (self._uiBackGround):SetShow(false)
 end
 
 PopupFriendMenu.SetShow = function(self, isShow)
-  -- function num : 0_47 , upvalues : _friendListData, FriendList
+  -- function num : 0_48 , upvalues : _friendListData, FriendList
   if isShow then
     local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
     local isMessage = RequestFriendList_isMessageList(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
@@ -1104,7 +1259,7 @@ PopupFriendMenu.SetShow = function(self, isShow)
 end
 
 PopupFriendMenu.setPos = function(self, x, y)
-  -- function num : 0_48
+  -- function num : 0_49
   (self._uiBackGround):SetPosX(x)
   ;
   (self._uiBackGround):SetPosY(y)
@@ -1113,7 +1268,7 @@ end
 PopupFriendMenu:initialize()
 local PopupPartyFriendMenu = {_uiBackGround, _uiAddFriend, _uiDeletePartyFriend}
 PopupPartyFriendMenu.initialize = function(self)
-  -- function num : 0_49 , upvalues : UI_PUCT, styleMenuButton
+  -- function num : 0_50 , upvalues : UI_PUCT, styleMenuButton
   self._uiBackGround = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_FriendList, "FriendPopupPartyFriendMenu")
   self._uiAddFriend = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupRequestAddFriend")
   self._uiDeletePartyFriend = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, self._uiBackGround, "FriendPopupRequestDeletePartyFriend")
@@ -1150,7 +1305,7 @@ PopupPartyFriendMenu.initialize = function(self)
 end
 
 PopupPartyFriendMenu.SetShow = function(self, isShow)
-  -- function num : 0_50 , upvalues : FriendList
+  -- function num : 0_51 , upvalues : FriendList
   (self._uiBackGround):SetShow(isShow)
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -1158,7 +1313,7 @@ PopupPartyFriendMenu.SetShow = function(self, isShow)
 end
 
 PopupPartyFriendMenu.setPos = function(self, x, y)
-  -- function num : 0_51
+  -- function num : 0_52
   (self._uiBackGround):SetPosX(x)
   ;
   (self._uiBackGround):SetPosY(y)
@@ -1169,7 +1324,7 @@ local PopupGroupList = {_uiBackGround;
 _uiMoveGroups = {}
 , _maxGroupCount = 5}
 PopupGroupList.initialize = function(self)
-  -- function num : 0_52 , upvalues : UI_PUCT, styleMenuButton
+  -- function num : 0_53 , upvalues : UI_PUCT, styleMenuButton
   self._uiBackGround = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_FriendList, "FriendPopupGroupList")
   for groupIndex = 0, self._maxGroupCount - 1 do
     -- DECOMPILER ERROR at PC23: Confused about usage of register: R5 in 'UnsetPending'
@@ -1191,7 +1346,7 @@ PopupGroupList.initialize = function(self)
 end
 
 PopupGroupList.updateGroups = function(self)
-  -- function num : 0_53 , upvalues : _groupListData, styleMenuButton
+  -- function num : 0_54 , upvalues : _groupListData, styleMenuButton
   for index = 0, self._maxGroupCount - 1 do
     ((self._uiMoveGroups)[index]):SetShow(false)
   end
@@ -1217,7 +1372,7 @@ PopupGroupList.updateGroups = function(self)
 end
 
 PopupGroupList.SetShow = function(self, isShow)
-  -- function num : 0_54 , upvalues : PopupGroupList
+  -- function num : 0_55 , upvalues : PopupGroupList
   (self._uiBackGround):SetShow(isShow)
   if isShow then
     PopupGroupList:updateGroups()
@@ -1225,7 +1380,7 @@ PopupGroupList.SetShow = function(self, isShow)
 end
 
 PopupGroupList.setPos = function(self, x, y)
-  -- function num : 0_55
+  -- function num : 0_56
   (self._uiBackGround):SetPosX(x)
   ;
   (self._uiBackGround):SetPosY(y)
@@ -1233,12 +1388,12 @@ end
 
 PopupGroupList:initialize()
 clickFriendGroupIcon = function(groupIndex)
-  -- function num : 0_56 , upvalues : _groupListData
+  -- function num : 0_57 , upvalues : _groupListData
   requestFriendList_checkGroup(((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
 end
 
 clickFriendGroup = function(groupIndex)
-  -- function num : 0_57 , upvalues : _groupListData, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu
+  -- function num : 0_58 , upvalues : _groupListData, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   _groupListData._selectedGroupIndex = groupIndex
@@ -1249,24 +1404,24 @@ clickFriendGroup = function(groupIndex)
 end
 
 friend_renameFriendGroup = function()
-  -- function num : 0_58 , upvalues : PopupRenameGroup, PopupGroupMenu
+  -- function num : 0_59 , upvalues : PopupRenameGroup, PopupGroupMenu
   PopupRenameGroup:SetShow(true)
   PopupGroupMenu:SetShow(false)
 end
 
 friend_addFriendGroup = function()
-  -- function num : 0_59 , upvalues : PopupGroupMenu
+  -- function num : 0_60 , upvalues : PopupGroupMenu
   requestFriendList_addFriendGroup(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_NEW_GROUPNAME"))
   PopupGroupMenu:SetShow(false)
 end
 
 friend_deleteFriendGroup = function()
-  -- function num : 0_60 , upvalues : PopupGroupMenu
+  -- function num : 0_61 , upvalues : PopupGroupMenu
   PopupGroupMenu:SetShow(false)
 end
 
 clickFriendList = function(isRUp)
-  -- function num : 0_61 , upvalues : FriendList, _groupListData, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, _friendListData, PopupGroupList
+  -- function num : 0_62 , upvalues : FriendList, _groupListData, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, _friendListData, PopupGroupList
   local self = FriendList
   ;
   (self._uiTreeFriend):SetSelectItemMousePoint()
@@ -1319,7 +1474,7 @@ clickFriendList = function(isRUp)
 end
 
 friend_PartyInvite = function()
-  -- function num : 0_62 , upvalues : _friendListData
+  -- function num : 0_63 , upvalues : _friendListData
   local userCharacterName = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getCharacterName()
   local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
   local isSelfPlayerPlayingPvPMatch = (getSelfPlayer()):isDefinedPvPMatch()
@@ -1330,7 +1485,7 @@ friend_PartyInvite = function()
 end
 
 friend_Messanger = function()
-  -- function num : 0_63 , upvalues : _friendListData, PopupFriendMenu
+  -- function num : 0_64 , upvalues : _friendListData, PopupFriendMenu
   local userNo = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo()
   local userName = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName()
   local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
@@ -1339,27 +1494,41 @@ friend_Messanger = function()
 end
 
 friend_groupMoveList = function()
-  -- function num : 0_64 , upvalues : PopupGroupList, PopupFriendMenu
+  -- function num : 0_65 , upvalues : PopupGroupList, PopupFriendMenu
   PopupGroupList:SetShow(true)
   PopupGroupList:setPos((PopupFriendMenu._uiBackGround):GetPosX() + (PopupFriendMenu._uiBackGround):GetSizeX(), (PopupFriendMenu._uiBackGround):GetPosY())
 end
 
 friend_requestAddFriend = function()
-  -- function num : 0_65 , upvalues : _friendListData, PopupPartyFriendMenu
+  -- function num : 0_66 , upvalues : _friendListData, PopupPartyFriendMenu
   requestFriendList_addFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName())
   PopupPartyFriendMenu:SetShow(false)
 end
 
 friend_deleteFriend = function()
-  -- function num : 0_66 , upvalues : _friendListData, PopupFriendMenu, PopupPartyFriendMenu
+  -- function num : 0_67 , upvalues : _friendListData, PopupFriendMenu, PopupPartyFriendMenu
   requestFriendList_deleteFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
   PopupFriendMenu:SetShow(false)
   PopupPartyFriendMenu:SetShow(false)
 end
 
 clickedFriend_moveGroup = function(groupIndex)
-  -- function num : 0_67 , upvalues : _friendListData, _groupListData, PopupFriendMenu, PopupGroupList
+  -- function num : 0_68 , upvalues : _friendListData, _groupListData, PopupFriendMenu, PopupGroupList
   requestFriendList_moveGroup(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo(), ((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
+  PopupFriendMenu:SetShow(false)
+  PopupGroupList:SetShow(false)
+end
+
+friend_XboxProfileShow = function()
+  -- function num : 0_69 , upvalues : _friendListData, PopupFriendMenu, PopupGroupList
+  ToClient_showXboxFriendProfile(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getXuid())
+  PopupFriendMenu:SetShow(false)
+  PopupGroupList:SetShow(false)
+end
+
+friend_RequestRecall = function()
+  -- function num : 0_70 , upvalues : _friendListData, PopupFriendMenu, PopupGroupList
+  friends_requestRecall(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
   PopupFriendMenu:SetShow(false)
   PopupGroupList:SetShow(false)
 end
@@ -1370,7 +1539,7 @@ uiRequestList:addInputEvent("Mouse_LUp", "friend_clickRequestButton()")
 local uiAddFriend = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend")
 uiAddFriend:addInputEvent("Mouse_LUp", "friend_clickAddFriendButton()")
 friend_closeFriendMenu = function()
-  -- function num : 0_68 , upvalues : PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, PopupGroupList
+  -- function num : 0_71 , upvalues : PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, PopupGroupList
   PopupFriendMenu:SetShow(false)
   PopupPartyFriendMenu:SetShow(false)
   PopupGroupMenu:SetShow(false)
@@ -1378,7 +1547,7 @@ friend_closeFriendMenu = function()
 end
 
 friend_clickRequestButton = function()
-  -- function num : 0_69 , upvalues : RequestFriendList
+  -- function num : 0_72 , upvalues : RequestFriendList
   if (RequestFriendList._uiBackGround):GetShow() then
     AddFriendList_hide()
   else
@@ -1387,16 +1556,25 @@ friend_clickRequestButton = function()
 end
 
 friend_clickAddFriendButton = function()
-  -- function num : 0_70 , upvalues : PopupAddFriend
+  -- function num : 0_73 , upvalues : PopupAddFriend
   if (PopupAddFriend._uiBackGround):GetShow() then
     PopupAddFriend:SetShow(false)
   else
-    PopupAddFriend:SetShow(true)
+    if ToClient_isAddFriendAllowed() == false then
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    else
+      do
+        PopupAddFriend:SetShow(true)
+      end
+    end
   end
 end
 
 FriendList_ShowToggle = function()
-  -- function num : 0_71
+  -- function num : 0_74
   if (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == (UI.Get_ProcessorInputMode)() then
     return 
   end
@@ -1408,13 +1586,14 @@ FriendList_ShowToggle = function()
 end
 
 FriendList_show = function()
-  -- function num : 0_72 , upvalues : friendsBTN
+  -- function num : 0_75 , upvalues : friendsBTN
+  ToClient_updateAddFriendAllowed()
   friendsBTN:EraseAllEffect()
   Panel_FriendList:SetShow(true, true)
 end
 
 FriendList_hide = function()
-  -- function num : 0_73 , upvalues : PopupAddFriend, RequestFriendList, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, PopupGroupList
+  -- function num : 0_76 , upvalues : PopupAddFriend, RequestFriendList, PopupFriendMenu, PopupPartyFriendMenu, PopupGroupMenu, PopupGroupList
   PopupAddFriend:SetShow(false)
   RequestFriendList:SetShow(false)
   PopupFriendMenu:SetShow(false)
@@ -1425,15 +1604,19 @@ FriendList_hide = function()
 end
 
 FromClient_FriendList_onScreenResize = function()
-  -- function num : 0_74
+  -- function num : 0_77
   Panel_FriendList:SetPosX(getScreenSizeX() - Panel_FriendList:GetSizeX())
   Panel_FriendList:SetPosY(getScreenSizeY() / 2 - Panel_FriendList:GetSizeY() / 2)
 end
 
 FriendList_showAni = function()
-  -- function num : 0_75 , upvalues : FriendList, RequestFriendList, UI_ANI_ADV
+  -- function num : 0_78 , upvalues : FriendList, RequestFriendList, UI_ANI_ADV
   local isNew = RequestFriendList_getFriendList()
-  FriendList:updateList()
+  if ToClient_isXBox() == true then
+    FriendList:updateListForXbox()
+  else
+    FriendList:updateList()
+  end
   RequestFriendList_getAddFriendList()
   RequestFriendList:updateList()
   ;
@@ -1455,13 +1638,13 @@ FriendList_showAni = function()
 end
 
 FriendList_hideAni = function()
-  -- function num : 0_76
+  -- function num : 0_79
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_FriendList, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
 
 FromClient_NotifyFriendMessage = function(msgType, strParam1, param1, param2)
-  -- function num : 0_77 , upvalues : FriendList
+  -- function num : 0_80 , upvalues : FriendList
   local msgStr = ""
   if msgType == 0 then
     if param1 == 1 then
@@ -1477,6 +1660,20 @@ FromClient_NotifyFriendMessage = function(msgType, strParam1, param1, param2)
   end
 end
 
+FromClient_ResponseFriendRecall = function(friendName, serverName, serverNo)
+  -- function num : 0_81
+  local ClickedYesFunc = function()
+    -- function num : 0_81_0
+    TargetWindow_ShowToggle(43)
+  end
+
+  friendServerNo = serverNo
+  local messageboxData = {title = "친구 초대", content = tostring(friendName) .. "�\128 " .. tostring(serverName) .. " 채널�\156 초대하였습니�\164. 채널이동하시겠습니까?", functionYes = ClickedYesFunc, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageboxData)
+end
+
+registerEvent("FromClient_ResponseFriendRecall", "FromClient_ResponseFriendRecall")
 registerEvent("FromClient_GroundMouseClick", "FriendMessanger_KillFocusEdit")
 registerEvent("onScreenResize", "FromClient_FriendList_onScreenResize")
 registerEvent("FromClient_FriendListUpdateLogOnOffForMessanger", "FromClient_FriendListUpdateLogOnOffForMessanger")

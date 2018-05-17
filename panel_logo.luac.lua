@@ -98,27 +98,7 @@ Panel_Logo_Init = function()
                                 ;
                                 (static_Grade:getBaseTexture()):setUV(x1, y1, x2, y2)
                                 static_Grade:setRenderTexture(static_Grade:getBaseTexture())
-                                if isGameTypeKorea() then
-                                  local isAdult = ToClient_IsAdultLogin()
-                                  if isAdult then
-                                    staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE"))
-                                  else
-                                    staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_15"))
-                                  end
-                                else
-                                  do
-                                    if isGameTypeTaiwan() then
-                                      staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
-                                    else
-                                      if isGameTypeKR2() then
-                                        staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
-                                      else
-                                        staticText_Warning:SetText("")
-                                      end
-                                    end
-                                    static_PearlAbyss:SetShow(false)
-                                  end
-                                end
+                                static_PearlAbyss:SetShow(false)
                               end
                             end
                           end
@@ -130,6 +110,30 @@ Panel_Logo_Init = function()
               end
             end
           end
+        end
+      end
+    end
+  end
+end
+
+setWarningText = function()
+  -- function num : 0_1 , upvalues : staticText_Warning
+  if isGameTypeKorea() then
+    local isAdult = ToClient_IsAdultLogin()
+    if isAdult then
+      staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE"))
+    else
+      staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_15"))
+    end
+  else
+    do
+      if isGameTypeTaiwan() then
+        staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
+      else
+        if isGameTypeKR2() then
+          staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
+        else
+          staticText_Warning:SetText("")
         end
       end
     end
@@ -225,7 +229,7 @@ else
                     aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
                     local updateTime = 0
                     Panel_Logo_Update = function()
-  -- function num : 0_1 , upvalues : static_Movie
+  -- function num : 0_2 , upvalues : static_Movie
   static_Movie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Logo, "WebControl_Movie")
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
@@ -237,11 +241,12 @@ else
 end
 
                     Panel_Logo_Pause = function(deltaTime)
-  -- function num : 0_2 , upvalues : updateTime, setDivisionTime, static_Movie
+  -- function num : 0_3 , upvalues : updateTime, setDivisionTime, static_Movie
   updateTime = updateTime + deltaTime
   if setDivisionTime < updateTime then
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
+    setWarningText()
     if ToClient_isXBox() then
       GoblinUpdate(deltaTime)
     end

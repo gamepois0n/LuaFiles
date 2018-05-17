@@ -574,7 +574,7 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
   if Panel_DyePalette:GetShow() then
     FGlobal_DyePalette_Close()
   end
-  if Panel_Equipment:GetShow() then
+  if _ContentsGroup_RenewUI == false and Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
   if Panel_Window_ItemMarket_RegistItem:GetShow() == true then
@@ -702,7 +702,9 @@ Manufacture_Close = function()
   Inventory_SetFunctor(nil, nil, nil, nil)
   Warehouse_SetFunctor(nil, nil)
   if invenShow == true and not FGlobal_InventoryIsClosing() then
-    Panel_Equipment:SetShow(true)
+    if _ContentsGroup_RenewUI == true then
+      Panel_Equipment:SetShow(true)
+    end
     Panel_Window_Inventory:SetShow(true)
     invenShow = false
   else
@@ -1426,8 +1428,12 @@ Manufacture_Mouse_LUp = function()
       local allWeight = Int64toInt32(s64_allWeight) / 10000
       local maxWeight = Int64toInt32(s64_maxWeight) / 10000
       local invenWeight = allWeight - equipmentWeight - moneyWeight
+      local playerFairyWeight = ToClient_getDecreaseWeightByFairy() / 10000
+      if playerFairyWeight < 0 then
+        playerFairyWeight = 0
+      end
       local totalWeight = allWeight / maxWeight * 100
-      if totalWeight >= 100 then
+      if 100 + playerFairyWeight <= totalWeight then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_INVENTORY_WEIGHTOVER"))
         return 
       end
@@ -1448,31 +1454,31 @@ Manufacture_Mouse_LUp = function()
           end
           local itemStaticWrapper = itemWrapper:getStaticStatus()
           local idx = #Manufacture_Notify._data_Resource + 1
-          -- DECOMPILER ERROR at PC252: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC259: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           (Manufacture_Notify._data_Resource)[idx] = {}
-          -- DECOMPILER ERROR at PC258: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC265: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._slotNo = _materialSlotNoList[index]
-          -- DECOMPILER ERROR at PC265: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC272: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._key = (itemStaticWrapper:get())._key
-          -- DECOMPILER ERROR at PC271: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC278: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._name = itemStaticWrapper:getName()
-          -- DECOMPILER ERROR at PC279: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC286: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._iconPath = "Icon/" .. itemStaticWrapper:getIconPath()
-          -- DECOMPILER ERROR at PC289: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC296: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._originalCnt = Int64toInt32((itemWrapper:get()):getCount_s64())
-          -- DECOMPILER ERROR at PC297: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC304: Confused about usage of register: R32 in 'UnsetPending'
 
           ;
           ((Manufacture_Notify._data_Resource)[idx])._currentCnt = ((Manufacture_Notify._data_Resource)[idx])._originalCnt
@@ -1519,10 +1525,10 @@ Manufacture_Mouse_LUp = function()
             end
           end
           audioPostEvent_SystemUi(0, 0)
-          -- DECOMPILER ERROR at PC434: Confused about usage of register: R24 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC441: Confused about usage of register: R25 in 'UnsetPending'
 
           Manufacture_Notify._failCount = 0
-          -- DECOMPILER ERROR at PC436: Confused about usage of register: R24 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC443: Confused about usage of register: R25 in 'UnsetPending'
 
           Manufacture_Notify._successCount = 0
           Manufacture_Close()

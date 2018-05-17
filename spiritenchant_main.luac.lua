@@ -355,7 +355,9 @@ Enchant_Close = function()
   ;
   (self._uiHelpEnchantBtn):SetShow(false)
   InventoryWindow_Close()
-  Panel_Equipment:SetShow(false, false)
+  if _ContentsGroup_RenewUI == false then
+    Panel_Equipment:SetShow(false, false)
+  end
   ClothInventory_Close()
   ToClient_BlackspiritEnchantClose()
   PaGlobal_TutorialManager:handleCloseEnchantWindow()

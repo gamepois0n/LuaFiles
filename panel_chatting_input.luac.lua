@@ -826,49 +826,58 @@ ChatInput_Show = function()
   if Panel_Chatting_Input:IsShow() then
     return 
   end
-  local self = chatInput
-  SetFocusEdit((chatInput.control).edit)
-  local isLastChatType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat)
-  if isLastChatType ~= 0 and isLastChatType ~= 4 then
-    self.lastChatType = isLastChatType
+  if ToClient_isCommunicationAllowed() == false then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
   end
-  Panel_Chatting_Input:SetShow(true, true)
-  ;
-  ((self.control).macroButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 10)
-  ;
-  ((self.control).socialButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 40)
-  if UI_CT.Private == self.lastChatType then
-    ((self.control).macroButton):SetPosX(((self.control).whisperEdit):GetPosX() + ((self.control).whisperEdit):GetSizeX())
-    ;
-    ((self.control).socialButton):SetPosX(((self.control).whisperEdit):GetPosX() + ((self.control).whisperEdit):GetSizeX() + 30)
-    ;
-    ((self.control).nameTypeButton):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_" .. ToClient_getChatNameType()))
-  else
+  do
+    local self = chatInput
+    SetFocusEdit((chatInput.control).edit)
+    local isLastChatType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat)
+    if isLastChatType ~= 0 and isLastChatType ~= 4 then
+      self.lastChatType = isLastChatType
+    end
+    Panel_Chatting_Input:SetShow(true, true)
     ;
     ((self.control).macroButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 10)
     ;
     ((self.control).socialButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 40)
-  end
-  ;
-  ((self.control).macroButton):SetCheck(false)
-  if Panel_Chat_SocialMenu:GetShow() then
-    ((self.control).socialButton):SetCheck(true)
-  else
+    if UI_CT.Private == self.lastChatType then
+      ((self.control).macroButton):SetPosX(((self.control).whisperEdit):GetPosX() + ((self.control).whisperEdit):GetSizeX())
+      ;
+      ((self.control).socialButton):SetPosX(((self.control).whisperEdit):GetPosX() + ((self.control).whisperEdit):GetSizeX() + 30)
+      ;
+      ((self.control).nameTypeButton):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_" .. ToClient_getChatNameType()))
+    else
+      ;
+      ((self.control).macroButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 10)
+      ;
+      ((self.control).socialButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 40)
+    end
     ;
-    ((self.control).socialButton):SetCheck(false)
-  end
-  if chatting_isBlocked() then
-    local blockString = convertStringFromDatetime(chatting_blockedEndDatetime())
-    local blockReason = tostring(chatting_blockedReasonMemo())
-    local tempString = PAGetStringParam2(Defines.StringSheet_GAME, "CHATTING_BLOCK_TIME_REASON", "time", blockString, "reason", blockReason)
-    ;
-    ((self.control).edit):SetText("<PAColor0xFF888888>" .. tempString)
-  end
-  do
-    chatting_startAction()
-    curChatMsgCnt = chatting_getMessageHistoryCount()
-    curWhisperMsgCnt = chatting_getTargetHistoryCount()
-    ToClient_ClearLinkedGuildList()
+    ((self.control).macroButton):SetCheck(false)
+    if Panel_Chat_SocialMenu:GetShow() then
+      ((self.control).socialButton):SetCheck(true)
+    else
+      ;
+      ((self.control).socialButton):SetCheck(false)
+    end
+    if chatting_isBlocked() then
+      local blockString = convertStringFromDatetime(chatting_blockedEndDatetime())
+      local blockReason = tostring(chatting_blockedReasonMemo())
+      local tempString = PAGetStringParam2(Defines.StringSheet_GAME, "CHATTING_BLOCK_TIME_REASON", "time", blockString, "reason", blockReason)
+      ;
+      ((self.control).edit):SetText("<PAColor0xFF888888>" .. tempString)
+    end
+    do
+      chatting_startAction()
+      curChatMsgCnt = chatting_getMessageHistoryCount()
+      curWhisperMsgCnt = chatting_getTargetHistoryCount()
+      ToClient_ClearLinkedGuildList()
+    end
   end
 end
 

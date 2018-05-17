@@ -25,18 +25,18 @@ PaGlobal_Guild_AllianceInfo.OpenGuildAlliance = function(self)
   local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
   local _isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local _isGuildAllianceMember = ((getSelfPlayer()):get()):isGuildAllianceMember()
+  self:InviteInitialize()
+  self:InfoInitialize()
   self:gulidalliance_CautionInitialize()
   if _isGuildAllianceMember ~= true then
     if _isGuildMaster == true then
       if guildAlliance == nil then
-        self:InviteInitialize()
         self:Alliance_AllInputInitialize()
         ;
         ((self._mainUi).allianceInviteBg):SetShow(true)
         ;
         ((self._mainUi).allianceInfoBg):SetShow(false)
       else
-        self:InfoInitialize()
         ;
         ((self._mainUi).allianceInviteBg):SetShow(false)
         ;
@@ -49,7 +49,6 @@ PaGlobal_Guild_AllianceInfo.OpenGuildAlliance = function(self)
       ((self._mainUi).allianceInviteBg):SetShow(false)
     end
   else
-    self:InfoInitialize()
     ;
     ((self._mainUi).allianceInviteBg):SetShow(false)
     ;
@@ -751,13 +750,27 @@ PaGlobal_Guild_AllianceInfo.Alliance_AllInputInitialize = function(self)
   end
 end
 
-FGlobal_GuildAllianceDone = function(index)
+FGlobal_GuildAllianceDone = function(index, guildName)
   -- function num : 0_29
   local self = PaGlobal_Guild_AllianceInfo
-  if index == false then
+  if __eCreateGuildAlliance_Create == index then
     ((self._inviteUi).text_Wait):SetShow(true)
   else
-    self:OpenGuildAlliance()
+    if __eCreateGuildAlliance_Complete == index then
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_ACCEPT_JOIN", "guildName", guildName))
+      self:OpenGuildAlliance()
+    else
+      if __eCreateGuildAlliance_AcceptJoin == index then
+        Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_ACCEPT_JOIN", "guildName", guildName))
+      else
+        if __eCreateGuildAlliance_Reject == index then
+          Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_REJECT_JOIN", "guildName", guildName))
+          self:OpenGuildAlliance()
+        else
+          self:OpenGuildAlliance()
+        end
+      end
+    end
   end
 end
 
@@ -1121,9 +1134,11 @@ FGlobal_GuildAllianceOnNoticeChanged = function()
   local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
   if guildAlliance == nil then
     return 
+  else
+    self:OpenGuildAlliance()
+    ;
+    ((self._infoUi).editAllianceNoticeUi):SetText(guildAlliance:getNotice())
   end
-  ;
-  ((self._infoUi).editAllianceNoticeUi):SetText(guildAlliance:getNotice())
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Guild_AllianceInfo")

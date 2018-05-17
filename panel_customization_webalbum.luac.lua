@@ -102,7 +102,14 @@ end
 
 FGlobal_CustomizingAlbum_Show = function(isCTMode, isSceneState)
   -- function num : 0_5
-  CustomizingAlbum_Open(isCTMode, isSceneState)
+  if ToClient_isUserCreateContentsAllowed() then
+    CustomizingAlbum_Open(isCTMode, isSceneState)
+  else
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  end
 end
 
 FGlobal_CustomizingAlbum_ShowByScreenShotFrame = function()

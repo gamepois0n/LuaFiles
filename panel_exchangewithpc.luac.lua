@@ -412,7 +412,7 @@ ExchangePC_MessageBox_ResponseConfirm = function()
   InventoryWindow_Close()
   Inventory_SetFunctor(ExchangePC_InventoryFilter, ExchangePC_InventoryRClick, nil, nil)
   InventoryWindow_Show()
-  if Panel_Equipment:GetShow() then
+  if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
     FGlobal_Equipment_SetHide(false)
   end
   ClothInventory_Close()
@@ -488,7 +488,7 @@ EventTradePC_ReceiveToMyRequest = function()
   InventoryWindow_Close()
   Inventory_SetFunctor(ExchangePC_InventoryFilter, ExchangePC_InventoryRClick, nil, nil)
   InventoryWindow_Show()
-  if Panel_Equipment:GetShow() then
+  if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
     FGlobal_Equipment_SetHide(false)
   end
   ClothInventory_Close()

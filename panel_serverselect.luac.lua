@@ -311,22 +311,29 @@ PKChannelInfo_Init = function()
           PKChannelInfo_Show()
           warInfo_Show()
         else
-          if isGameTypeSA() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+          if isGameTypeSA() or isGameTypeTH() or isGameTypeID() then
             SpeedChannelInfo_Hide()
             ChannelSelectInfo_Show()
             warInfo_Show()
             PKChannelInfo_Hide()
           else
-            if isGameTypeEnglish() then
-              ChannelSelectInfo_Show()
+            if isGameTypeTR() then
               SpeedChannelInfo_Show()
-              PKChannelInfo_Show()
+              ChannelSelectInfo_Show()
               warInfo_Show()
-            else
-              ChannelSelectInfo_Hide()
-              SpeedChannelInfo_Hide()
-              warInfo_Hide()
               PKChannelInfo_Hide()
+            else
+              if isGameTypeEnglish() then
+                ChannelSelectInfo_Show()
+                SpeedChannelInfo_Show()
+                PKChannelInfo_Show()
+                warInfo_Show()
+              else
+                ChannelSelectInfo_Hide()
+                SpeedChannelInfo_Hide()
+                warInfo_Hide()
+                PKChannelInfo_Hide()
+              end
             end
           end
         end
@@ -603,6 +610,7 @@ StartUp_Panel_SelectServer = function()
     _selectWorldIndex = -1
     Panel_Lobby_function_SelectWorldServer(PaGlobal_FindMyWorldServer())
     Panel_SelectServer_RePositioningCtrls()
+    PaGlobal_CheckGamerTag()
   end
 end
 

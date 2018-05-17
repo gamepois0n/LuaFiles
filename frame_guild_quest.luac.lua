@@ -1050,8 +1050,7 @@ end
 
 FromClient_ResponseOtherGuildQuestList = function()
   -- function num : 0_24
-  _PA_LOG("luadebug", "FromClient_ResponseOtherGuildQuestList")
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   GuildQuestInfoPage._questListInfo = true
   GuildQuestInfoPage:UpdateData()

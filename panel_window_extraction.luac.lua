@@ -126,9 +126,11 @@ PaGlobal_Extraction.openPanel = function(self, isShow)
     setIgnoreShowDialog(true)
     ;
     (UIAni.fadeInSCR_Down)(Panel_Window_Extraction)
-    Equipment_PosSaveMemory()
-    Panel_Equipment:SetPosX(10)
-    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+    if not _ContentsGroup_RenewUI then
+      Equipment_PosSaveMemory()
+      Panel_Equipment:SetPosX(10)
+      Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+    end
   else
     SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
     setIgnoreShowDialog(false)
@@ -137,8 +139,10 @@ PaGlobal_Extraction.openPanel = function(self, isShow)
     ExtractionCloth_WindowClose()
     PaGlobal_ExtractionCrystal:clearData()
     InventoryWindow_Close()
-    Equipment_PosLoadMemory()
-    Panel_Equipment:SetShow(false, false)
+    if not _ContentsGroup_RenewUI then
+      Equipment_PosLoadMemory()
+      Panel_Equipment:SetShow(false, false)
+    end
     ClothInventory_Close()
   end
   Panel_Npc_Dialog:SetShow(not isShow)
@@ -157,11 +161,15 @@ PaGlobal_Extraction.button_ExtractionCrystal_Click = function(self)
     PaGlobal_ExtractionCrystal:show(true)
     Inventory_SetFunctor(Socket_Extraction_InvenFiler_EquipItem, Panel_Socket_ExtractionCrystal_InteractortionFromInventory, Socket_ExtractionCrystal_WindowClose, nil)
     InventoryWindow_Show()
-    Panel_Equipment:SetShow(true, true)
+    if not _ContentsGroup_RenewUI then
+      Panel_Equipment:SetShow(true, true)
+    end
   else
     PaGlobal_ExtractionCrystal:show(false)
     InventoryWindow_Close()
-    EquipmentWindow_Close()
+    if not _ContentsGroup_RenewUI then
+      EquipmentWindow_Close()
+    end
   end
   PaGlobal_TutorialManager:handleClickExtractionCrystalButton(Panel_Window_Extraction_Crystal:GetShow())
 end

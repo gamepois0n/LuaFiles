@@ -79,10 +79,19 @@ PaGlobalHorseEnduranceList.initialize = function(self)
   (self.repair_Navi):addInputEvent("Mouse_LUp", "HandleMLUpRepairNavi(CppEnums.EnduranceType.eEnduranceType_Horse, false)")
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
   Panel_HorseEndurance_Position()
+  self._isInit = true
+end
+
+-- DECOMPILER ERROR at PC37: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobalHorseEnduranceList.checkInit = function(self)
+  -- function num : 0_1
+  do return self._isInit == true end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 Panel_HorseEndurance_Position = function()
-  -- function num : 0_1
+  -- function num : 0_2
   local self = PaGlobalHorseEnduranceList
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
   ;
@@ -95,7 +104,7 @@ Panel_HorseEndurance_Position = function()
 end
 
 renderModeChange_Panel_HorseEndurance_Position = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_2
+  -- function num : 0_3
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -103,7 +112,7 @@ renderModeChange_Panel_HorseEndurance_Position = function(prevRenderModeList, ne
 end
 
 PaGlobalHorseEnduranceList_Init = function()
-  -- function num : 0_3
+  -- function num : 0_4
   PaGlobalHorseEnduranceList:initialize()
 end
 

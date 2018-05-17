@@ -39,7 +39,7 @@ FGlobal_Panel_Radar_Show_AddEffect = function()
   radar_Background:AddEffect("fUI_Tuto_MiniMap_01A", false, 0, 0)
 end
 
-FGlobal_Panel_Radar_Show = function(isShow)
+FGlobal_Panel_Radar_Show = function(isShow, withAni)
   -- function num : 0_1
   if _ContentsGroup_3DMiniMapOpen == false or Panel_WorldMiniMap == nil then
     Panel_Radar:SetShow(isShow)
@@ -49,7 +49,7 @@ FGlobal_Panel_Radar_Show = function(isShow)
   if worldMiniMapState then
     Panel_WorldMiniMap:SetShow(isShow)
   else
-    Panel_Radar:SetShow(isShow)
+    Panel_Radar:SetShow(isShow, withAni)
   end
 end
 

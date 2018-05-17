@@ -73,10 +73,19 @@ PaGlobalShipEnduranceList.initialize = function(self)
   (self.repair_Navi):addInputEvent("Mouse_LUp", "HandleMLUpRepairNavi(CppEnums.EnduranceType.eEnduranceType_Ship, false)")
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
   Panel_ShipEndurance_Position()
+  self._isInit = true
+end
+
+-- DECOMPILER ERROR at PC37: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobalShipEnduranceList.checkInit = function(self)
+  -- function num : 0_1
+  do return self._isInit == true end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 Panel_ShipEndurance_Position = function()
-  -- function num : 0_1
+  -- function num : 0_2
   local self = PaGlobalShipEnduranceList
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
   if (PaGlobalHorseEnduranceList.panel):GetShow() or (PaGlobalCarriageEnduranceList.panel):GetShow() then
@@ -93,7 +102,7 @@ Panel_ShipEndurance_Position = function()
 end
 
 renderModeChange_Panel_ShipEndurance_Position = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_2
+  -- function num : 0_3
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -101,7 +110,7 @@ renderModeChange_Panel_ShipEndurance_Position = function(prevRenderModeList, nex
 end
 
 PaGlobalShipEnduranceList_Init = function()
-  -- function num : 0_3
+  -- function num : 0_4
   PaGlobalShipEnduranceList:initialize()
 end
 

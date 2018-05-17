@@ -498,113 +498,118 @@ fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrappe
       local profitItemGold = toInt64(0, 0)
       f_sellRate = tradeItemWrapper:getSellPriceRate()
       local bigHand = ((getSelfPlayer()):get()):getlTradeItemCountRate() ~= 1000000
-      local realPrice = getCalculateTradeItemPrice(tradeItemWrapper:getTradeSellPrice(), (tradeItemWrapper:getStaticStatus()):getCommerceType(), fromPosition, selfPlayerPosition, tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType(), leftPeriod, isTradeGameSuccess() or bigHand)
-      local fromToDistanceNavi = 0
-      if regionInfo._waypointKey ~= 0 then
-        fromToDistanceNavi = getFromToDistanceTradeShop()
-      else
-        isExistTradeOrigin = false
-      end
-      local desertBuffPercent = ToClient_TradeGroupFromToAddPercent(tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType())
-      local desertBuffDistance = ToClient_TradeGroupFromToDistance(tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType())
-      if desertBuffPercent > 100 and desertBuffDistance <= fromToDistanceNavi then
-        ((tradeSellMarket.desertBuff)[count]):SetShow(true)
-      else
-        ((tradeSellMarket.desertBuff)[count]):SetShow(false)
-      end
-      local bonusPercent = 0
-      bonusPercent = (math.floor)(fromToDistanceNavi / 100 * FromClient_getTradeBonusPercent())
-      bonusPercent = (math.min)(bonusPercent, FromClient_getTradeMaxDistancePercent())
-      local bonosPercentString = bonusPercent / e1Percent - bonusPercent / e1Percent % 1 .. "%"
-      ;
-      ((tradeSellMarket.DistanceBonusValue)[count]):SetText(bonosPercentString)
-      ;
-      ((tradeSellMarket.DistanceNoBonus)[count]):SetShow(false)
-      local isLinkedNode = false
-      if ToClient_IsDevelopment() == false then
-        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType)
-      elseif _isShip == true then
-        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 1)
-      else
-        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 0)
-      end
-      -- DECOMPILER ERROR at PC216: Confused about usage of register: R26 in 'UnsetPending'
-
-      if not isLinkedNode then
-        tradeSellMarket._isNoLinkedNodeOne = true
-        realPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64) * getNotLinkNodeSellPercent() / e1Percent / 100
-        f_sellRate = getNotLinkNodeSellPercent() / e1Percent
-        if isExistTradeOrigin == false then
-          realPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64)
-          f_sellRate = 100
-        end
-        profitItemGold = toInt64(0, realPrice) - itemValueType:getBuyingPrice()
-        ;
-        ((tradeSellMarket.DistanceNoBonus)[count]):SetShow(true)
-        ;
-        ((tradeSellMarket.DistanceBonusValue)[count]):SetShow(false)
-        ;
-        ((tradeSellMarket.DistanceBonus)[count]):SetShow(false)
-        -- DECOMPILER ERROR at PC272: Confused about usage of register: R26 in 'UnsetPending'
-
-        ;
-        (tradeSellMarket._isLinkedNode)[count] = false
-      else
-        profitItemGold = realPrice - itemValueType:getBuyingPrice()
-        -- DECOMPILER ERROR at PC279: Confused about usage of register: R26 in 'UnsetPending'
-
-        ;
-        (tradeSellMarket._isLinkedNode)[count] = true
-      end
-      local str_sellRate = (string.format)("%.f", f_sellRate)
-      do
-        local str_sellRate_Value = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TradeMarketSellList_Percents", "Percent", str_sellRate)
-        if tonumber(tostring(str_sellRate)) > 100 then
-          str_sellRate_Value = "<PAColor0xFFFFCE22>" .. str_sellRate_Value .. "â–\178<PAOldColor>"
+      local checkTradeBonusGold = isSupplyMerchant == false and isFishSupplyMerchant == false
+      local realPrice = 0
+      if not isTradeGameSuccess() then
+        realPrice = getCalculateTradeItemPrice(tradeItemWrapper:getTradeSellPrice(), (tradeItemWrapper:getStaticStatus()):getCommerceType(), fromPosition, selfPlayerPosition, tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType(), leftPeriod, not checkTradeBonusGold or bigHand)
+        realPrice = tradeItemWrapper:getTradeSellPrice()
+        local fromToDistanceNavi = 0
+        if regionInfo._waypointKey ~= 0 then
+          fromToDistanceNavi = getFromToDistanceTradeShop()
         else
-          str_sellRate_Value = "<PAColor0xFFF26A6A>" .. str_sellRate_Value .. "â–\188<PAOldColor>"
+          isExistTradeOrigin = false
         end
-        ;
-        ((tradeSellMarket.Quotation)[count]):SetText(str_sellRate_Value)
-        if profitItemGold < toInt64(0, 0) then
-          local profitItemGold_abs = toInt64(0, (math.abs)(Int64toInt32(profitItemGold)))
-          ;
-          ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFD20000)
-          ;
-          ((tradeSellMarket.profitGold)[count]):SetText("-" .. makeDotMoney(profitItemGold_abs))
+        local desertBuffPercent = ToClient_TradeGroupFromToAddPercent(tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType())
+        local desertBuffDistance = ToClient_TradeGroupFromToDistance(tradeItemWrapper:getTradeGroupType(), characterStaticStatus:getTradeGroupType())
+        if desertBuffPercent > 100 and desertBuffDistance <= fromToDistanceNavi then
+          ((tradeSellMarket.desertBuff)[count]):SetShow(true)
         else
-          ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFFFCE22)
-          ;
-          ((tradeSellMarket.profitGold)[count]):SetText(makeDotMoney(profitItemGold))
+          ((tradeSellMarket.desertBuff)[count]):SetShow(false)
         end
+        local bonusPercent = 0
+        bonusPercent = (math.floor)(fromToDistanceNavi / 100 * FromClient_getTradeBonusPercent())
+        bonusPercent = (math.min)(bonusPercent, FromClient_getTradeMaxDistancePercent())
+        local bonosPercentString = bonusPercent / e1Percent - bonusPercent / e1Percent % 1 .. "%"
         ;
-        ((tradeSellMarket.noLink)[count]):SetShow(true)
+        ((tradeSellMarket.DistanceBonusValue)[count]):SetText(bonosPercentString)
         ;
-        ((tradeSellMarket.AddCart)[count]):SetPosY(((tradeSellMarket.noLink)[count]):GetPosY() + ((tradeSellMarket.noLink)[count]):GetTextSizeY() + 10)
-        -- DECOMPILER ERROR at PC387: Confused about usage of register: R28 in 'UnsetPending'
+        ((tradeSellMarket.DistanceNoBonus)[count]):SetShow(false)
+        local isLinkedNode = false
+        if ToClient_IsDevelopment() == false then
+          isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType)
+        elseif _isShip == true then
+          isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 1)
+        else
+          isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 0)
+        end
+        -- DECOMPILER ERROR at PC230: Confused about usage of register: R27 in 'UnsetPending'
 
-        ;
-        (tradeSellMarket.itemProfit)[count] = profitItemGold
-        ;
-        (((tradeSellMarket.icons)[count]).icon):SetShow(true)
-        if isSupplyMerchant == true or isFishSupplyMerchant then
-          local profitRate = (string.format)("%.f", tradeItemWrapper:getSellPriceRate())
-          if not isLinkedNode and isFishSupplyMerchant then
-            profitRate = 30
+        if not isLinkedNode then
+          tradeSellMarket._isNoLinkedNodeOne = true
+          realPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64) * getNotLinkNodeSellPercent() / e1Percent / 100
+          f_sellRate = getNotLinkNodeSellPercent() / e1Percent
+          if isExistTradeOrigin == false then
+            realPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64)
+            f_sellRate = 100
           end
-          local sellPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64)
-          str_sellRate_Value = "<PAColor0xFFFFCE22>" .. profitRate .. "%â–\178<PAOldColor>"
+          profitItemGold = toInt64(0, realPrice) - itemValueType:getBuyingPrice()
+          ;
+          ((tradeSellMarket.DistanceNoBonus)[count]):SetShow(true)
+          ;
+          ((tradeSellMarket.DistanceBonusValue)[count]):SetShow(false)
+          ;
+          ((tradeSellMarket.DistanceBonus)[count]):SetShow(false)
+          -- DECOMPILER ERROR at PC286: Confused about usage of register: R27 in 'UnsetPending'
+
+          ;
+          (tradeSellMarket._isLinkedNode)[count] = false
+        else
+          profitItemGold = realPrice - itemValueType:getBuyingPrice()
+          -- DECOMPILER ERROR at PC293: Confused about usage of register: R27 in 'UnsetPending'
+
+          ;
+          (tradeSellMarket._isLinkedNode)[count] = true
+        end
+        local str_sellRate = (string.format)("%.f", f_sellRate)
+        do
+          local str_sellRate_Value = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TradeMarketSellList_Percents", "Percent", str_sellRate)
+          if tonumber(tostring(str_sellRate)) > 100 then
+            str_sellRate_Value = "<PAColor0xFFFFCE22>" .. str_sellRate_Value .. "â–\178<PAOldColor>"
+          else
+            str_sellRate_Value = "<PAColor0xFFF26A6A>" .. str_sellRate_Value .. "â–\188<PAOldColor>"
+          end
           ;
           ((tradeSellMarket.Quotation)[count]):SetText(str_sellRate_Value)
+          if profitItemGold < toInt64(0, 0) then
+            local profitItemGold_abs = toInt64(0, (math.abs)(Int64toInt32(profitItemGold)))
+            ;
+            ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFD20000)
+            ;
+            ((tradeSellMarket.profitGold)[count]):SetText("-" .. makeDotMoney(profitItemGold_abs))
+          else
+            ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFFFCE22)
+            ;
+            ((tradeSellMarket.profitGold)[count]):SetText(makeDotMoney(profitItemGold))
+          end
           ;
-          ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFFFCE22)
+          ((tradeSellMarket.noLink)[count]):SetShow(true)
           ;
-          ((tradeSellMarket.profitGold)[count]):SetText(makeDotMoney(sellPrice * profitRate / 100 * (_displayleftPeriod) / 100))
+          ((tradeSellMarket.AddCart)[count]):SetPosY(((tradeSellMarket.noLink)[count]):GetPosY() + ((tradeSellMarket.noLink)[count]):GetTextSizeY() + 10)
+          -- DECOMPILER ERROR at PC401: Confused about usage of register: R29 in 'UnsetPending'
+
           ;
-          ((tradeSellMarket.sellPrice)[count]):SetText(makeDotMoney(sellPrice * profitRate / 100 * (_displayleftPeriod) / 100))
+          (tradeSellMarket.itemProfit)[count] = profitItemGold
+          ;
+          (((tradeSellMarket.icons)[count]).icon):SetShow(true)
+          if isSupplyMerchant == true or isFishSupplyMerchant then
+            local profitRate = (string.format)("%.f", tradeItemWrapper:getSellPriceRate())
+            if not isLinkedNode and isFishSupplyMerchant then
+              profitRate = 30
+            end
+            local sellPrice = Int64toInt32(((tradeItemWrapper:getStaticStatus()):get())._originalPrice_s64)
+            str_sellRate_Value = "<PAColor0xFFFFCE22>" .. profitRate .. "%â–\178<PAOldColor>"
+            ;
+            ((tradeSellMarket.Quotation)[count]):SetText(str_sellRate_Value)
+            ;
+            ((tradeSellMarket.profitGold)[count]):SetFontColor(UI_color.C_FFFFCE22)
+            ;
+            ((tradeSellMarket.profitGold)[count]):SetText(makeDotMoney(sellPrice * profitRate / 100 * (_displayleftPeriod) / 100))
+            ;
+            ((tradeSellMarket.sellPrice)[count]):SetText(makeDotMoney(sellPrice * profitRate / 100 * (_displayleftPeriod) / 100))
+          end
+          do return realPrice end
+          -- DECOMPILER ERROR: 23 unprocessed JMP targets
         end
-        do return realPrice end
-        -- DECOMPILER ERROR: 19 unprocessed JMP targets
       end
     end
   end

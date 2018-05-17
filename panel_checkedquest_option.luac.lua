@@ -257,7 +257,11 @@ end
 HandleClicked_QueestOptionConfirm = function()
   -- function num : 0_9 , upvalues : CheckedQuestOptionPanel
   CheckedQuestOptionPanel:Confirm()
-  FGlobal_QuestWindow_favorTypeUpdate()
+  if _ContentsGroup_RenewUI == false then
+    FGlobal_QuestWindow_favorTypeUpdate()
+  else
+    FGlobal_CheckedQuestFaverTypeUpdate()
+  end
   FGlobal_ChangeLatestQuestShowCount()
 end
 
@@ -332,6 +336,11 @@ FGlobal_CheckedQuestOptionOpen = function()
     Panel_Window_Quest_New_Option:SetIgnore(false)
   end
   CheckedQuestOptionPanel:Initialize()
+end
+
+FGlobal_CheckedQuestQptionGetShow = function()
+  -- function num : 0_14
+  return Panel_Window_Quest_New_Option:GetShow()
 end
 
 CheckedQuestOptionPanel:Initialize()

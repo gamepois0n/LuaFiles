@@ -144,130 +144,142 @@ MaidCoolTime_Update = function()
   if getSelfPlayer() == nil then
     return 
   end
-  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-  if regionInfo == nil then
-    return 
-  end
-  for index = 0, self.maxShowCount - 1 do
-    if index < getTotalMaidList() then
-      local maidInfoWrapper = getMaidDataByIndex(index + self.startIndex)
-      if maidInfoWrapper ~= nil then
-        (((self.maidInfo)[index]).name):SetText(maidInfoWrapper:getName())
-        ;
-        (((self.maidInfo)[index]).name):SetShow(true)
-        ;
-        (((self.maidInfo)[index]).town):SetText((getRegionInfoWrapper(maidInfoWrapper:getRegionKey())):getAreaName())
-        ;
-        (((self.maidInfo)[index]).town):SetShow(true)
-        if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
-          (((self.maidInfo)[index]).func):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE"))
-        else
-          if maidInfoWrapper:isAbleSubmitMarket() then
-            (((self.maidInfo)[index]).func):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET"))
-          end
-        end
-        ;
-        (((self.maidInfo)[index]).func):SetShow(true)
-        ;
-        (((self.maidInfo)[index]).coolTime):SetShow(true)
-        local coolTime = maidInfoWrapper:getCoolTime()
-        if coolTime > 0 then
-          (((self.maidInfo)[index]).coolTime):SetFontColor((Defines.Color).C_FFC4BEBE)
-          local oneMinute = 60000
-          if coolTime < oneMinute then
-            (((self.maidInfo)[index]).coolTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+  do
+    if _ContentsGroup_NewMaid == false then
+      local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+      if regionInfo == nil then
+        return 
+      end
+    end
+    for index = 0, self.maxShowCount - 1 do
+      if index < getTotalMaidList() then
+        local maidInfoWrapper = getMaidDataByIndex(index + self.startIndex)
+        if maidInfoWrapper ~= nil then
+          (((self.maidInfo)[index]).name):SetText(maidInfoWrapper:getName())
+          ;
+          (((self.maidInfo)[index]).name):SetShow(true)
+          if _ContentsGroup_NewMaid == false then
+            (((self.maidInfo)[index]).town):SetText((getRegionInfoWrapper(maidInfoWrapper:getRegionKey())):getAreaName())
+            ;
+            (((self.maidInfo)[index]).town):SetShow(true)
           else
             ;
-            (((self.maidInfo)[index]).coolTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+            (((self.maidInfo)[index]).town):SetShow(false)
           end
-        else
-          do
+          if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+            (((self.maidInfo)[index]).func):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE"))
+          else
+            if maidInfoWrapper:isAbleSubmitMarket() then
+              (((self.maidInfo)[index]).func):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET"))
+            end
+          end
+          ;
+          (((self.maidInfo)[index]).func):SetShow(true)
+          ;
+          (((self.maidInfo)[index]).coolTime):SetShow(true)
+          local coolTime = maidInfoWrapper:getCoolTime()
+          if coolTime > 0 then
+            (((self.maidInfo)[index]).coolTime):SetFontColor((Defines.Color).C_FFC4BEBE)
+            local oneMinute = 6000
+            if _ContentsGroup_NewMaid == true then
+              oneMinute = 60
+            end
+            if coolTime < oneMinute then
+              (((self.maidInfo)[index]).coolTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+            else
+              ;
+              (((self.maidInfo)[index]).coolTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+            end
+          else
             do
               do
-                ;
-                (((self.maidInfo)[index]).coolTime):SetText(maidInfoWrapper:getName())
-                ;
-                (((self.maidInfo)[index]).coolTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
-                ;
-                (((self.maidInfo)[index]).coolTime):SetFontColor((Defines.Color).C_FFC4BEBE)
-                ;
-                (((self.maidInfo)[index]).name):SetShow(false)
-                ;
-                (((self.maidInfo)[index]).town):SetShow(false)
-                ;
-                (((self.maidInfo)[index]).func):SetShow(false)
-                ;
-                (((self.maidInfo)[index]).coolTime):SetShow(false)
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out DO_STMT
+                do
+                  if _ContentsGroup_NewMaid == false then
+                    (((self.maidInfo)[index]).coolTime):SetText(maidInfoWrapper:getName())
+                  end
+                  ;
+                  (((self.maidInfo)[index]).coolTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
+                  ;
+                  (((self.maidInfo)[index]).coolTime):SetFontColor((Defines.Color).C_FFC4BEBE)
+                  ;
+                  (((self.maidInfo)[index]).name):SetShow(false)
+                  ;
+                  (((self.maidInfo)[index]).town):SetShow(false)
+                  ;
+                  (((self.maidInfo)[index]).func):SetShow(false)
+                  ;
+                  (((self.maidInfo)[index]).coolTime):SetShow(false)
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_STMT
 
+                end
               end
             end
           end
         end
       end
     end
-  end
-  albeWarehouseMaidCount = 0
-  albeMarketMaidCount = 0
-  for index = 0, getTotalMaidList() - 1 do
-    local maidInfoWrapper = getMaidDataByIndex(index)
-    if maidInfoWrapper ~= nil and maidInfoWrapper:getCoolTime() == 0 then
-      if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
-        albeWarehouseMaidCount = albeWarehouseMaidCount + 1
-      end
-      if maidInfoWrapper:isAbleSubmitMarket() then
-        albeMarketMaidCount = albeMarketMaidCount + 1
+    albeWarehouseMaidCount = 0
+    albeMarketMaidCount = 0
+    for index = 0, getTotalMaidList() - 1 do
+      local maidInfoWrapper = getMaidDataByIndex(index)
+      if maidInfoWrapper ~= nil and maidInfoWrapper:getCoolTime() == 0 then
+        if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+          albeWarehouseMaidCount = albeWarehouseMaidCount + 1
+        end
+        if maidInfoWrapper:isAbleSubmitMarket() then
+          albeMarketMaidCount = albeMarketMaidCount + 1
+        end
       end
     end
+    if albeWarehouseMaidCount > 0 then
+      (self.btnWarehouse):SetIgnore(false)
+      ;
+      (self.btnWarehouse):SetMonoTone(false)
+      ;
+      (self.btnWarehouse):SetFontColor((Defines.Color).C_FFEFEFEF)
+    else
+      ;
+      (self.btnWarehouse):SetIgnore(true)
+      ;
+      (self.btnWarehouse):SetMonoTone(true)
+      ;
+      (self.btnWarehouse):SetFontColor((Defines.Color).C_FFC4BEBE)
+    end
+    if albeMarketMaidCount > 0 then
+      (self.btnMarket):SetIgnore(false)
+      ;
+      (self.btnMarket):SetMonoTone(false)
+      ;
+      (self.btnMarket):SetFontColor((Defines.Color).C_FFEFEFEF)
+    else
+      ;
+      (self.btnMarket):SetIgnore(true)
+      ;
+      (self.btnMarket):SetMonoTone(true)
+      ;
+      (self.btnMarket):SetFontColor((Defines.Color).C_FFC4BEBE)
+    end
+    local countValuePos = (self.albeCount):GetTextSizeX()
+    local ableMaidCount = albeWarehouseMaidCount + albeMarketMaidCount
+    ;
+    (self.albeCountValue):SetPosX(countValuePos)
+    ;
+    (self.albeCountValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
   end
-  if albeWarehouseMaidCount > 0 then
-    (self.btnWarehouse):SetIgnore(false)
-    ;
-    (self.btnWarehouse):SetMonoTone(false)
-    ;
-    (self.btnWarehouse):SetFontColor((Defines.Color).C_FFEFEFEF)
-  else
-    ;
-    (self.btnWarehouse):SetIgnore(true)
-    ;
-    (self.btnWarehouse):SetMonoTone(true)
-    ;
-    (self.btnWarehouse):SetFontColor((Defines.Color).C_FFC4BEBE)
-  end
-  if albeMarketMaidCount > 0 then
-    (self.btnMarket):SetIgnore(false)
-    ;
-    (self.btnMarket):SetMonoTone(false)
-    ;
-    (self.btnMarket):SetFontColor((Defines.Color).C_FFEFEFEF)
-  else
-    ;
-    (self.btnMarket):SetIgnore(true)
-    ;
-    (self.btnMarket):SetMonoTone(true)
-    ;
-    (self.btnMarket):SetFontColor((Defines.Color).C_FFC4BEBE)
-  end
-  local countValuePos = (self.albeCount):GetTextSizeX()
-  local ableMaidCount = albeWarehouseMaidCount + albeMarketMaidCount
-  ;
-  (self.albeCountValue):SetPosX(countValuePos)
-  ;
-  (self.albeCountValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
 end
 
 MaidList_SetScroll = function()
@@ -339,140 +351,163 @@ FGlobal_WarehouseOpenByMaid = function(index)
   if selfProxy == nil then
     return 
   end
-  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-  if regionInfo == nil then
-    return 
-  end
-  local isFreeBattle = (selfProxy:get()):isBattleGroundDefine()
-  local isArshaJoin = ToClient_IsMyselfInArena()
-  local localWarTeam = ToClient_GetMyTeamNoLocalWar()
-  local isSpecialCharacter = (getTemporaryInformationWrapper()):isSpecialCharacter()
-  local isSavageDefence = ToClient_getPlayNowSavageDefence()
-  local isGuildBattle = ToClient_getJoinGuildBattle()
-  if localWarTeam ~= 0 then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_LOCALWAR"))
-    return 
-  end
-  if isFreeBattle then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_FREEBATTLE"))
-    return 
-  end
-  if isArshaJoin then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_ARSHA"))
-    return 
-  end
-  if selfplayerIsInHorseRace() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_HORSERACE"))
-    return 
-  end
-  if isSpecialCharacter then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_PREMIUMCHARACTER"))
-    return 
-  end
-  if isSavageDefence then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantPlayingSavageDefence"))
-    return 
-  end
-  if isGuildBattle then
-    if ToClient_isPersonalBattle() == true then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_PERSONALBATTLE"))
-    else
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_GUILDBATTLE"))
+  do
+    if _ContentsGroup_NewMaid == false then
+      local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+      if regionInfo == nil then
+        return 
+      end
     end
-    return 
-  end
-  local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
-  local warehouseInMaid = checkMaid_WarehouseIn(true)
-  local warehouseOutMaid = checkMaid_WarehouseOut(true)
-  local marketMaid = checkMaid_SubmitMarket(true)
-  local enableWarehouseMaid = checkMaid_WarehouseIn(false)
-  local enableMarketMaid = checkMaid_SubmitMarket(false)
-  if index == 0 then
-    if marketMaid then
-      FGlobal_ItemMarket_OpenByMaid()
-      if ToClient_CheckExistSummonMaid() and dontGoMaid ~= -1 then
-        if maidType == 0 then
-          ToClient_CallHandlerMaid("_marketMaid")
-        else
-          for mIndex = 0, getTotalMaidList() - 1 do
-            local maidInfoWrapper = getMaidDataByIndex(mIndex)
-            if maidInfoWrapper:isAbleSubmitMarket() and maidInfoWrapper:getCoolTime() == 0 then
-              ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
-              ToClient_CallHandlerMaid("_warehouseMaidLogOut")
-              ToClient_CallHandlerMaid("_marketMaid")
-              dontGoMaid = mIndex
-              MaidList_Close()
-              maidType = 0
-              break
-            end
-          end
-        end
-        do
-          MaidList_Close()
-          for mIndex = 0, getTotalMaidList() - 1 do
-            local maidInfoWrapper = getMaidDataByIndex(mIndex)
-            if maidInfoWrapper:isAbleSubmitMarket() and maidInfoWrapper:getCoolTime() == 0 then
-              ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
-              ToClient_CallHandlerMaid("_marketMaid")
-              dontGoMaid = mIndex
-              MaidList_Close()
-              maidType = 0
-              break
+    local isFreeBattle = (selfProxy:get()):isBattleGroundDefine()
+    local isArshaJoin = ToClient_IsMyselfInArena()
+    local localWarTeam = ToClient_GetMyTeamNoLocalWar()
+    local isSpecialCharacter = (getTemporaryInformationWrapper()):isSpecialCharacter()
+    local isSavageDefence = ToClient_getPlayNowSavageDefence()
+    local isGuildBattle = ToClient_getJoinGuildBattle()
+    if localWarTeam ~= 0 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_LOCALWAR"))
+      return 
+    end
+    if isFreeBattle then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_FREEBATTLE"))
+      return 
+    end
+    if isArshaJoin then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_ARSHA"))
+      return 
+    end
+    if selfplayerIsInHorseRace() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_HORSERACE"))
+      return 
+    end
+    if isSpecialCharacter then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_PREMIUMCHARACTER"))
+      return 
+    end
+    if isSavageDefence then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantPlayingSavageDefence"))
+      return 
+    end
+    if isGuildBattle then
+      if ToClient_isPersonalBattle() == true then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_PERSONALBATTLE"))
+      else
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_GUILDBATTLE"))
+      end
+      return 
+    end
+    local warehouseInMaid = checkMaid_WarehouseIn(true)
+    local warehouseOutMaid = checkMaid_WarehouseOut(true)
+    local marketMaid = checkMaid_SubmitMarket(true)
+    local enableWarehouseMaid = checkMaid_WarehouseIn(false)
+    local enableMarketMaid = checkMaid_SubmitMarket(false)
+    if index == 0 then
+      if marketMaid then
+        FGlobal_ItemMarket_OpenByMaid()
+        if ToClient_CheckExistSummonMaid() and dontGoMaid ~= -1 then
+          if maidType == 0 then
+            ToClient_CallHandlerMaid("_marketMaid")
+          else
+            for mIndex = 0, getTotalMaidList() - 1 do
+              local maidInfoWrapper = getMaidDataByIndex(mIndex)
+              if maidInfoWrapper:isAbleSubmitMarket() and maidInfoWrapper:getCoolTime() == 0 then
+                if _ContentsGroup_NewMaid == false then
+                  ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
+                else
+                  ToClient_SummonMaid(maidInfoWrapper:getMaidNo(), 1)
+                end
+                ToClient_CallHandlerMaid("_warehouseMaidLogOut")
+                ToClient_CallHandlerMaid("_marketMaid")
+                dontGoMaid = mIndex
+                MaidList_Close()
+                maidType = 0
+                break
+              end
             end
           end
           do
-            if enableMarketMaid == false then
-              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_NONE"))
-            else
-              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_COOLTIME"))
+            MaidList_Close()
+            for mIndex = 0, getTotalMaidList() - 1 do
+              local maidInfoWrapper = getMaidDataByIndex(mIndex)
+              if maidInfoWrapper:isAbleSubmitMarket() and maidInfoWrapper:getCoolTime() == 0 then
+                if _ContentsGroup_NewMaid == false then
+                  ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
+                else
+                  ToClient_SummonMaid(maidInfoWrapper:getMaidNo(), 1)
+                end
+                ToClient_CallHandlerMaid("_marketMaid")
+                dontGoMaid = mIndex
+                MaidList_Close()
+                maidType = 0
+                break
+              end
             end
-            SetUIMode((Defines.UIMode).eUIMode_Default)
-            if index == 1 then
-              if warehouseOutMaid or warehouseInMaid then
-                if IsSelfPlayerWaitAction() then
-                  Warehouse_OpenPanelFromMaid()
-                  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-                  if regionInfo == nil then
-                    return 
-                  end
-                  if ToClient_CheckExistSummonMaid() and dontGoMaid ~= -1 then
-                    if maidType == 1 then
-                      ToClient_CallHandlerMaid("_warehouseMaid")
-                    else
-                      for mIndex = 0, getTotalMaidList() - 1 do
-                        local maidInfoWrapper = getMaidDataByIndex(mIndex)
-                        if (maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse()) and maidInfoWrapper:getCoolTime() == 0 then
-                          ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
-                          ToClient_CallHandlerMaid("_marketMaidLogOut")
-                          ToClient_CallHandlerMaid("_warehouseMaid")
-                          dontGoMaid = mIndex
-                          MaidList_Close()
-                          maidType = 1
-                          break
-                        end
-                      end
-                    end
+            do
+              if enableMarketMaid == false then
+                Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_NONE"))
+              else
+                Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_COOLTIME"))
+              end
+              SetUIMode((Defines.UIMode).eUIMode_Default)
+              if index == 1 then
+                if warehouseOutMaid or warehouseInMaid then
+                  if IsSelfPlayerWaitAction() then
+                    Warehouse_OpenPanelFromMaid()
                     do
-                      MaidList_Close()
-                      for mIndex = 0, getTotalMaidList() - 1 do
-                        local maidInfoWrapper = getMaidDataByIndex(mIndex)
-                        if (maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse()) and maidInfoWrapper:getCoolTime() == 0 then
-                          ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
-                          ToClient_CallHandlerMaid("_warehouseMaid")
-                          dontGoMaid = mIndex
-                          MaidList_Close()
-                          maidType = 1
-                          break
+                      if _ContentsGroup_NewMaid == false then
+                        local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+                        if regionInfo == nil then
+                          return 
                         end
                       end
-                      do
-                        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ALERT"))
-                        if enableWarehouseMaid == false then
-                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_NONE"))
+                      if ToClient_CheckExistSummonMaid() and dontGoMaid ~= -1 then
+                        if maidType == 1 then
+                          ToClient_CallHandlerMaid("_warehouseMaid")
                         else
-                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_COOLTIME"))
+                          for mIndex = 0, getTotalMaidList() - 1 do
+                            local maidInfoWrapper = getMaidDataByIndex(mIndex)
+                            if (maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse()) and maidInfoWrapper:getCoolTime() == 0 then
+                              if _ContentsGroup_NewMaid == false then
+                                ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
+                              else
+                                ToClient_SummonMaid(maidInfoWrapper:getMaidNo(), 1)
+                              end
+                              ToClient_CallHandlerMaid("_marketMaidLogOut")
+                              ToClient_CallHandlerMaid("_warehouseMaid")
+                              dontGoMaid = mIndex
+                              MaidList_Close()
+                              maidType = 1
+                              break
+                            end
+                          end
                         end
-                        SetUIMode((Defines.UIMode).eUIMode_Default)
+                        do
+                          MaidList_Close()
+                          for mIndex = 0, getTotalMaidList() - 1 do
+                            local maidInfoWrapper = getMaidDataByIndex(mIndex)
+                            if (maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse()) and maidInfoWrapper:getCoolTime() == 0 then
+                              if _ContentsGroup_NewMaid == false then
+                                ToClient_SummonMaid(maidInfoWrapper:getInstallationNo(), 1)
+                              else
+                                ToClient_SummonMaid(maidInfoWrapper:getMaidNo(), 1)
+                              end
+                              ToClient_CallHandlerMaid("_warehouseMaid")
+                              dontGoMaid = mIndex
+                              MaidList_Close()
+                              maidType = 1
+                              break
+                            end
+                          end
+                          do
+                            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ALERT"))
+                            if enableWarehouseMaid == false then
+                              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_NONE"))
+                            else
+                              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_COOLTIME"))
+                            end
+                            SetUIMode((Defines.UIMode).eUIMode_Default)
+                          end
+                        end
                       end
                     end
                   end
@@ -496,56 +531,60 @@ FGlobal_MaidIcon_SetPos = function(resetScroll)
   if isFlushedUI() or ((getSelfPlayer()):get()):getLevel() < 7 then
     return 
   end
-  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-  if regionInfo == nil then
-    return 
-  end
-  local warehouseInMaid = checkMaid_WarehouseIn(true)
-  local warehouseOutMaid = checkMaid_WarehouseOut(true)
-  local marketMaid = checkMaid_SubmitMarket(true)
-  if getTotalMaidList() > 0 then
-    Panel_Icon_Maid:SetShow(true)
-    ;
-    (MaidControl.buttonMaid):EraseAllEffect()
-    if warehouseInMaid or warehouseOutMaid or marketMaid then
-      (MaidControl.buttonMaid):AddEffect("fUI_Maid_01A", false, -1, 2)
-    else
-      ;
-      (MaidControl.buttonMaid):AddEffect("fUI_Maid_02A", false, -1, 2)
-    end
-    local posX, posY = nil, nil
-    if Panel_Window_PetIcon:GetShow() then
-      posX = Panel_Window_PetIcon:GetPosX() + Panel_Window_PetIcon:GetSizeX() - 3
-      posY = Panel_Window_PetIcon:GetPosY()
-    else
-      if FGlobal_HouseIconCount() > 0 and Panel_MyHouseNavi:GetShow() then
-        posX = Panel_MyHouseNavi:GetPosX() + 60 * FGlobal_HouseIconCount() - 3
-        posY = Panel_MyHouseNavi:GetPosY()
-      else
-        if FGlobal_ServantIconCount() > 0 and Panel_Window_Servant:GetShow() then
-          posX = Panel_Window_Servant:GetPosX() + 60 * FGlobal_ServantIconCount() - 3
-          posY = Panel_Window_Servant:GetPosY()
-        else
-          posX = 0
-          posY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
-        end
+  do
+    if _ContentsGroup_NewMaid == false then
+      local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+      if regionInfo == nil then
+        return 
       end
     end
-    Panel_Icon_Maid:SetPosX(posX)
-    Panel_Icon_Maid:SetPosY(posY)
-    MaidList_SetScroll()
-    -- DECOMPILER ERROR at PC158: Confused about usage of register: R7 in 'UnsetPending'
-
-    if resetScroll == true and Panel_Window_MaidList:GetShow() then
-      maidList.startIndex = 0
-      MaidList_Set(maidList.startIndex)
+    local warehouseInMaid = checkMaid_WarehouseIn(true)
+    local warehouseOutMaid = checkMaid_WarehouseOut(true)
+    local marketMaid = checkMaid_SubmitMarket(true)
+    if getTotalMaidList() > 0 then
+      Panel_Icon_Maid:SetShow(true)
       ;
-      (maidList.scroll):SetControlPos(0)
-    end
-  else
-    do
-      Panel_Icon_Maid:SetShow(false)
-      PaGlobal_PvPBattle:setPosMatchIcon()
+      (MaidControl.buttonMaid):EraseAllEffect()
+      if warehouseInMaid or warehouseOutMaid or marketMaid then
+        (MaidControl.buttonMaid):AddEffect("fUI_Maid_01A", false, -1, 2)
+      else
+        ;
+        (MaidControl.buttonMaid):AddEffect("fUI_Maid_02A", false, -1, 2)
+      end
+      local posX, posY = nil, nil
+      if Panel_Window_PetIcon:GetShow() then
+        posX = Panel_Window_PetIcon:GetPosX() + Panel_Window_PetIcon:GetSizeX() - 3
+        posY = Panel_Window_PetIcon:GetPosY()
+      else
+        if FGlobal_HouseIconCount() > 0 and Panel_MyHouseNavi:GetShow() then
+          posX = Panel_MyHouseNavi:GetPosX() + 60 * FGlobal_HouseIconCount() - 3
+          posY = Panel_MyHouseNavi:GetPosY()
+        else
+          if FGlobal_ServantIconCount() > 0 and Panel_Window_Servant:GetShow() then
+            posX = Panel_Window_Servant:GetPosX() + 60 * FGlobal_ServantIconCount() - 3
+            posY = Panel_Window_Servant:GetPosY()
+          else
+            posX = 0
+            posY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
+          end
+        end
+      end
+      Panel_Icon_Maid:SetPosX(posX)
+      Panel_Icon_Maid:SetPosY(posY)
+      MaidList_SetScroll()
+      -- DECOMPILER ERROR at PC161: Confused about usage of register: R6 in 'UnsetPending'
+
+      if resetScroll == true and Panel_Window_MaidList:GetShow() then
+        maidList.startIndex = 0
+        MaidList_Set(maidList.startIndex)
+        ;
+        (maidList.scroll):SetControlPos(0)
+      end
+    else
+      do
+        Panel_Icon_Maid:SetShow(false)
+        PaGlobal_PvPBattle:setPosMatchIcon()
+      end
     end
   end
 end
@@ -558,71 +597,81 @@ MaidFunc_ShowTooltip = function(isShow)
   end
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_NAME")
   local desc = ""
-  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-  if regionInfo == nil then
-    return 
-  end
-  local warehouseInMaid = checkMaid_WarehouseIn(true)
-  local warehouseOutMaid = checkMaid_WarehouseOut(true)
-  local marketMaid = checkMaid_SubmitMarket(true)
-  if warehouseInMaid or warehouseOutMaid then
-    desc = "<" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE") .. ">"
-  end
-  if marketMaid then
-    if desc == "" then
-      desc = "<" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET") .. ">"
-    else
-      desc = desc .. ", <" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET") .. ">"
-    end
-  end
-  local maidCount = getTotalMaidList()
-  local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
-  local cooltimeText = ""
-  local maidAffiliatedTownName = ""
-  local areaName = {}
-  local sameAreaCoolTime = {}
-  local oneMinute = 60000
-  local mIndex = 0
-  local usableMaidCount = 0
-  for index = 0, maidCount - 1 do
-    local maidInfoWrapper = getMaidDataByIndex(index)
-    areaName[index] = (getRegionInfoWrapper(maidInfoWrapper:getRegionKey())):getAreaName()
-    local sameAreaNameCheck = false
-    if index > 0 then
-      for ii = 0, index - 1 do
-        if areaName[index] == areaName[ii] then
-          sameAreaNameCheck = true
-        end
+  do
+    if _ContentsGroup_NewMaid == false then
+      local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+      if regionInfo == nil then
+        return 
       end
     end
-    do
-      do
-        if maidAffiliatedTownName == "" then
-          maidAffiliatedTownName = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_1") .. " " .. areaName[index]
-        else
-          if sameAreaNameCheck == false then
-            maidAffiliatedTownName = maidAffiliatedTownName .. " / " .. areaName[index]
+    local warehouseInMaid = checkMaid_WarehouseIn(true)
+    local warehouseOutMaid = checkMaid_WarehouseOut(true)
+    local marketMaid = checkMaid_SubmitMarket(true)
+    if warehouseInMaid or warehouseOutMaid then
+      desc = "<" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE") .. ">"
+    end
+    if marketMaid then
+      if desc == "" then
+        desc = "<" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET") .. ">"
+      else
+        desc = desc .. ", <" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET") .. ">"
+      end
+    end
+    local maidCount = getTotalMaidList()
+    local cooltimeText = ""
+    local maidAffiliatedTownName = ""
+    local areaName = {}
+    local sameAreaCoolTime = {}
+    local oneMinute = nil
+    if _ContentsGroup_NewMaid == false then
+      oneMinute = 6000
+    else
+      oneMinute = 60
+    end
+    local mIndex = 0
+    local usableMaidCount = 0
+    if _ContentsGroup_NewMaid == false then
+      for index = 0, maidCount - 1 do
+        local maidInfoWrapper = getMaidDataByIndex(index)
+        areaName[index] = (getRegionInfoWrapper(maidInfoWrapper:getRegionKey())):getAreaName()
+        local sameAreaNameCheck = false
+        if index > 0 then
+          for ii = 0, index - 1 do
+            if areaName[index] == areaName[ii] then
+              sameAreaNameCheck = true
+            end
           end
         end
-        -- DECOMPILER ERROR at PC120: LeaveBlock: unexpected jumping out DO_STMT
+        do
+          do
+            if maidAffiliatedTownName == "" then
+              maidAffiliatedTownName = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_1") .. " " .. areaName[index]
+            else
+              if sameAreaNameCheck == false then
+                maidAffiliatedTownName = maidAffiliatedTownName .. " / " .. areaName[index]
+              end
+            end
+            -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out DO_STMT
 
+          end
+        end
       end
     end
+    if desc == "" then
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_2", "maidCount", maidCount)
+    else
+      desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_3", "desc", desc, "maidCount", maidCount)
+    end
+    if maidAffiliatedTownName ~= "" then
+      desc = desc .. "\n" .. maidAffiliatedTownName
+    end
+    if not warehouseInMaid and not warehouseOutMaid and cooltimeText ~= "" then
+      desc = desc .. "\n" .. cooltimeText
+    end
+    local hotkeyDesc = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_4")
+    desc = desc .. "\n" .. hotkeyDesc
+    TooltipSimple_Show(MaidControl.buttonMaid, name, desc)
   end
-  if desc == "" then
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_2", "maidCount", maidCount)
-  else
-    desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_3", "desc", desc, "maidCount", maidCount)
-  end
-  if maidAffiliatedTownName ~= "" then
-    desc = desc .. "\n" .. maidAffiliatedTownName
-  end
-  if not warehouseInMaid and not warehouseOutMaid and cooltimeText ~= "" then
-    desc = desc .. "\n" .. cooltimeText
-  end
-  local hotkeyDesc = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_4")
-  desc = desc .. "\n" .. hotkeyDesc
-  TooltipSimple_Show(MaidControl.buttonMaid, name, desc)
 end
 
 LogInMaidShow = function()
@@ -632,9 +681,16 @@ LogInMaidShow = function()
     local randomMaidIndex = (math.random)(getTotalMaidList()) - 1
     local maidInfoWrapper = getMaidDataByIndex(randomMaidIndex)
     if maidInfoWrapper ~= nil then
-      local installationNo = maidInfoWrapper:getInstallationNo()
       local aiVariable = 2
-      ToClient_SummonMaid(installationNo, aiVariable)
+      if _ContentsGroup_NewMaid == false then
+        local installationNo = maidInfoWrapper:getInstallationNo()
+        ToClient_SummonMaid(installationNo, aiVariable)
+      else
+        do
+          local maidNo = maidInfoWrapper:getMaidNo()
+          ToClient_SummonMaid(maidNo, aiVariable)
+        end
+      end
     end
   end
 end
@@ -647,11 +703,16 @@ renderModeChange_FGlobal_MaidIcon_SetPos = function(prevRenderModeList, nextRend
   FGlobal_MaidIcon_SetPos(true)
 end
 
+FromClient_Refresh = function()
+  -- function num : 0_14
+  FGlobal_MaidIcon_SetPos(true)
+end
+
 Panel_Window_MaidList:RegisterUpdateFunc("MaidCoolTime_Update")
-registerEvent("FromClient_RefreshMaidList", "maidList:setPosAndScrollReset")
+registerEvent("FromClient_RefreshMaidList", "FromClient_Refresh")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Icon_Maid")
 FromClient_luaLoadComplete_Icon_Maid = function()
-  -- function num : 0_14
+  -- function num : 0_15
   Panel_MyHouseNavi_Update(true)
   MaidCoolTime_Update()
   LogInMaidShow()

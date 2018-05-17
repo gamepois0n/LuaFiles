@@ -161,7 +161,7 @@ close_WindowPanelList = function()
   end
   if Panel_Window_Inventory:IsShow() and Panel_Window_Inventory:IsUISubApp() == false then
     InventoryWindow_Close()
-    if Panel_Equipment:GetShow() then
+    if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
       Equipment_SetShow(false)
     end
     ClothInventory_Close()
@@ -209,8 +209,8 @@ close_WindowPanelList = function()
       FGlobal_QuestInfoDetail_Close()
     end
   else
-    if FGlobal_QuestInfoGetShow() == true then
-      FGlobal_QuestInfoSetShow(false)
+    if PaGlobalFunc_Quest_GetShow() == true then
+      PaGlobalFunc_Quest_SetShow(false)
     end
   end
   if Panel_IntroMovie:IsShow() then
@@ -312,7 +312,7 @@ close_WindowPanelList = function()
     end
   end
   for i = 1, #panel_SoundedWindowList do
-    if panel_SoundedWindowList[i] ~= nil and (panel_SoundedWindowList[i]):IsUISubApp() == false then
+    if panel_SoundedWindowList[i] ~= nil and (panel_SoundedWindowList[i]):IsUISubApp() == false and _ContentsGroup_RenewUI == false and i ~= 1 then
       (panel_SoundedWindowList[i]):SetShow(false, false)
     end
   end
@@ -422,7 +422,7 @@ close_force_WindowPanelList = function()
   end
   if Panel_Window_Inventory:IsShow() then
     HandleClicked_InventoryWindow_Close()
-    if Panel_Equipment:GetShow() then
+    if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
       Equipment_SetShow(false)
     end
     ClothInventory_Close()
@@ -459,13 +459,13 @@ close_force_WindowPanelList = function()
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  -- DECOMPILER ERROR at PC262: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC265: Unhandled construct in 'MakeBoolean' P1
 
   if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() == true then
     HandleClicked_QuestNew_Close()
   end
-  if FGlobal_QuestInfoGetShow() == true then
-    FGlobal_QuestInfoSetShow(false)
+  if PaGlobalFunc_Quest_GetShow() == true then
+    PaGlobalFunc_Quest_SetShow(false)
   end
   if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
     FGlobal_QuestInfoDetail_Close()
@@ -620,19 +620,19 @@ close_UISubAppPanelList = function()
   if Panel_Window_Inventory:IsShow() and Panel_Window_Inventory:IsUISubApp() then
     HandleClicked_InventoryWindow_Close()
   end
-  if Panel_Equipment:IsShow() and Panel_Equipment:IsUISubApp() then
+  if not _ContentsGroup_RenewUI and Panel_Equipment:IsShow() and Panel_Equipment:IsUISubApp() then
     HandleClicked_EquipmentWindow_Close()
   end
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  -- DECOMPILER ERROR at PC61: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC64: Unhandled construct in 'MakeBoolean' P1
 
   if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() == true and Panel_Window_Quest_New:IsUISubApp() == true then
     HandleClicked_QuestNew_Close()
   end
-  if FGlobal_QuestInfoGetShow() == true then
-    FGlobal_QuestInfoSetShow(false)
+  if PaGlobalFunc_Quest_GetShow() == true then
+    PaGlobalFunc_Quest_SetShow(false)
   end
   if Panel_Npc_Quest_Reward:IsUISubApp() then
     FGlobal_ShowRewardList(false, 0)

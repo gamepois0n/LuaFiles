@@ -962,8 +962,6 @@ GuildWarInfoPage.initialize = function(self)
       ;
       (rtGuildWarInfo._guildWarScore):SetShow(isShow)
       ;
-      (rtGuildWarInfo._WarIcon):SetShow(isShow)
-      ;
       (rtGuildWarInfo._txtStopWar):SetShow(isShow)
       if isContentsGuildDuel then
         (rtGuildWarInfo._txtShowbu):SetShow(isShow)
@@ -1033,15 +1031,6 @@ GuildWarInfoPage.initialize = function(self)
                 (rtGuildWarInfo._guildShowbuScore):addInputEvent("Mouse_Out", "")
                 ;
                 (rtGuildWarInfo._guildShowbuScore):SetShow(false)
-                local penaltyCount = pWarringGuild:getPenaltyCount()
-                if penaltyCount == 0 then
-                  (rtGuildWarInfo._WarIcon):SetShow(false)
-                else
-                  ;
-                  (rtGuildWarInfo._WarIcon):ChangeTextureInfoName("New_UI_Common_forLua/Window/Guild/Guild_WarPenaltyIcon.dds")
-                  ;
-                  (rtGuildWarInfo._WarIcon):SetShow(true)
-                end
                 ;
                 (rtGuildWarInfo._txtShowbu):SetIgnore(false)
                 ;
@@ -1057,7 +1046,7 @@ GuildWarInfoPage.initialize = function(self)
                   ;
                   (rtGuildWarInfo._txtShowbu):addInputEvent("Mouse_LUp", "")
                 end
-                -- DECOMPILER ERROR at PC276: Confused about usage of register: R8 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC256: Confused about usage of register: R7 in 'UnsetPending'
 
                 rtGuildWarInfo._PenaltyType = 7
               end
@@ -1263,10 +1252,6 @@ GuildWarInfoPage.UpdateData = function(self)
           ;
           ((self._list)[uiIdx]):SetData(ToClient_GetWarringGuildListAt(index), index)
           ;
-          (((self._list)[uiIdx])._WarIcon):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. ((self._list)[uiIdx])._PenaltyType .. ", true, " .. uiIdx .. " )")
-          ;
-          (((self._list)[uiIdx])._WarIcon):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. ((self._list)[uiIdx])._PenaltyType .. ", false, " .. uiIdx .. " )")
-          ;
           (((self._list)[uiIdx])._txtStopWar):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. uiIdx .. " )")
           ;
           (((self._list)[uiIdx])._txtStopWar):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", false, " .. uiIdx .. " )")
@@ -1297,11 +1282,11 @@ GuildWarInfoPage.UpdateData = function(self)
               ;
               ((self._list)[uiIdx]):SetShow(false)
               uiIdx = uiIdx + 1
-              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC212: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end

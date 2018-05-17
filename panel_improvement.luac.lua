@@ -126,9 +126,11 @@ Panel_Improvement_Show = function()
   Inventory_SetFunctor(ImproveInvenFilerMainItem, ImproveSetMainItemFromInventory, Panel_Improvement_Hide, nil)
   FGlobal_SetInventoryDragNoUse(Panel_Improvement)
   Equipment_PosSaveMemory()
-  Panel_Equipment:SetShow(true, true)
-  Panel_Equipment:SetPosX(10)
-  Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  if _ContentsGroup_RenewUI == false then
+    Panel_Equipment:SetShow(true, true)
+    Panel_Equipment:SetPosX(10)
+    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  end
   audioPostEvent_SystemUi(1, 0)
   ;
   (improvement._chk_Skip):SetCheck(false)

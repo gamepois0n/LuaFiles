@@ -163,4 +163,32 @@ PaGlobal_AnimationEasingFun_easeOutQuadFragments = function(timeDelta, fragments
   return -fragments * fixtimeDelta * fixtimeDelta + fragments
 end
 
+PaGlobal_UpdateRectClipOnArea_Animation = function(controlList, activeControlNo, lastActiveControlNo, targetTime, currentTime)
+  -- function num : 0_20
+  local normalized = currentTime / targetTime
+  if normalized > 1 then
+    normalized = 1
+  end
+  local posY = ((controlList[1])._title):GetPosY()
+  for idx,control in ipairs(controlList) do
+    (control._title):SetPosY(posY)
+    posY = posY + (control._title):GetSizeY() + 2
+    ;
+    (control._desc):SetPosY(posY)
+    local animatedSizeY = 0
+    if idx == activeControlNo then
+      animatedSizeY = normalized * (control._desc):GetSizeY()
+    else
+      if lastActiveControlNo == idx then
+        animatedSizeY = (control._desc):GetSizeY() * (1 - normalized)
+      else
+        animatedSizeY = 0
+      end
+    end
+    ;
+    (control._desc):SetRectClipOnArea(float2(0, 0), float2((control._desc):GetSizeX(), animatedSizeY))
+    posY = posY + animatedSizeY + 5
+  end
+end
+
 

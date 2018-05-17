@@ -80,6 +80,7 @@ PaGlobal_GlobalKeyBinder.Init = function(self)
   self:Register(UIMode.eUIMode_ScreenShotMode, self.Process_UIMode_ScreenShotMode)
   self:Register(UIMode.eUIMode_InGameDance, self.Process_UIMode_InGameDance)
   self:Register(UIMode.eUIMode_KeyCustom_ButtonShortcuts, self.Process_UIMode_KeyCustom_ButtonShortcuts)
+  self:Register(UIMode.eUIMode_SkillWindow, self.Process_UIMode_SkillWindow)
 end
 
 -- DECOMPILER ERROR at PC27: Confused about usage of register: R7 in 'UnsetPending'

@@ -247,7 +247,7 @@ DyePalette.Close = function(self)
   Inventory_SetFunctor(nil, nil, nil, nil)
   Panel_DyePalette:SetShow(false, false)
   Panel_DyePalette:CloseUISubApp()
-  if Panel_Window_Inventory:GetShow() and not Panel_Equipment:GetShow() then
+  if _ContentsGroup_RenewUI == false and Panel_Window_Inventory:GetShow() and not Panel_Equipment:GetShow() then
     Panel_Equipment:SetShow(true)
   end
 end
@@ -565,7 +565,7 @@ FGlobal_DyePalette_Open = function()
   if Panel_Manufacture:GetShow() then
     Manufacture_Close()
   end
-  if Panel_Equipment:GetShow() then
+  if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
   DyePalette:Open()

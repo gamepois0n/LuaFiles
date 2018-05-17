@@ -86,14 +86,20 @@ nodeOwnerInfo.Update = function(self, nodeStaticStatus)
         end
         ;
         ((self.ui)._txt_GuildName_Value):SetText("<PAColor0xfff26a6a>" .. PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODEOWNERINFO_WAR") .. "<PAOldColor>")
-        if dropType == 0 and nodeTaxType >= 1 then
-          dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxType)
+        local nodeTaxLevel = 0
+        if _ContentsGroup_SeigeSeason5 == true then
+          nodeTaxLevel = nodeTaxType + 1
+        else
+          nodeTaxLevel = nodeTaxType
+        end
+        if dropType == 0 and nodeTaxLevel >= 1 then
+          dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxLevel)
         else
           if dropType >= 1 and nodeTaxType == 0 then
             dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
           else
             if dropType >= 1 and nodeTaxType >= 1 then
-              dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxType), "dropType", tostring(dropType + 1))
+              dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxLevel), "dropType", tostring(dropType + 1))
             else
               dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
             end
@@ -114,21 +120,27 @@ nodeOwnerInfo.Update = function(self, nodeStaticStatus)
               ((self.ui)._static_GuildMark):setRenderTexture(((self.ui)._static_GuildMark):getBaseTexture())
             end
             do
+              ;
+              ((self.ui)._txt_GuildName_Value):SetText("<PAColor0xff00c0d7>" .. siegeWrapper:getGuildName() .. "<PAOldColor>")
+              ;
+              ((self.ui)._txt_GuildMaster_Value):SetText("<PAColor0xff96d4fc>" .. siegeWrapper:getGuildMasterName() .. "<PAOldColor>")
+              ;
+              ((self.ui)._txt_HasDate_Value):SetText("<PAColor0xff96d4fc>" .. year .. " " .. month .. " " .. day .. " " .. hour .. "<PAOldColor>")
               do
-                ;
-                ((self.ui)._txt_GuildName_Value):SetText("<PAColor0xff00c0d7>" .. siegeWrapper:getGuildName() .. "<PAOldColor>")
-                ;
-                ((self.ui)._txt_GuildMaster_Value):SetText("<PAColor0xff96d4fc>" .. siegeWrapper:getGuildMasterName() .. "<PAOldColor>")
-                ;
-                ((self.ui)._txt_HasDate_Value):SetText("<PAColor0xff96d4fc>" .. year .. " " .. month .. " " .. day .. " " .. hour .. "<PAOldColor>")
-                if dropType == 0 and nodeTaxType >= 1 then
-                  dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxType)
+                local nodeTaxLevel = 0
+                if _ContentsGroup_SeigeSeason5 == true then
+                  nodeTaxLevel = nodeTaxType + 1
+                else
+                  nodeTaxLevel = nodeTaxType
+                end
+                if dropType == 0 and nodeTaxLevel >= 1 then
+                  dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxLevel)
                 else
                   if dropType >= 1 and nodeTaxType == 0 then
                     dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
                   else
                     if dropType >= 1 and nodeTaxType >= 1 then
-                      dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxType), "dropType", tostring(dropType + 1))
+                      dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxLevel), "dropType", tostring(dropType + 1))
                     else
                       dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
                     end
@@ -138,26 +150,32 @@ nodeOwnerInfo.Update = function(self, nodeStaticStatus)
                 ((self.ui)._txt_NodeBonus_Value):SetText(dropTypeValue)
                 ;
                 ((self.ui)._static_GuildMark):ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+                local x1, y1, x2, y2 = setTextureUV_Func((self.ui)._static_GuildMark, 0, 0, 0, 0)
+                ;
+                (((self.ui)._static_GuildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
+                ;
+                ((self.ui)._static_GuildMark):setRenderTexture(((self.ui)._static_GuildMark):getBaseTexture())
+                ;
+                ((self.ui)._txt_GuildName_Value):SetText("<PAColor0xfff26a6a>" .. PAGetString(Defines.StringSheet_GAME, "LUA_GRAND_WORLDMAP_NODEOWNERINFO_NOWAR") .. "<PAOldColor>")
+                ;
+                ((self.ui)._txt_GuildMaster_Value):SetText("<PAColor0xff515151>-<PAOldColor>")
+                ;
+                ((self.ui)._txt_HasDate_Value):SetText("<PAColor0xff515151>-<PAOldColor>")
                 do
-                  local x1, y1, x2, y2 = setTextureUV_Func((self.ui)._static_GuildMark, 0, 0, 0, 0)
-                  ;
-                  (((self.ui)._static_GuildMark):getBaseTexture()):setUV(x1, y1, x2, y2)
-                  ;
-                  ((self.ui)._static_GuildMark):setRenderTexture(((self.ui)._static_GuildMark):getBaseTexture())
-                  ;
-                  ((self.ui)._txt_GuildName_Value):SetText("<PAColor0xfff26a6a>" .. PAGetString(Defines.StringSheet_GAME, "LUA_GRAND_WORLDMAP_NODEOWNERINFO_NOWAR") .. "<PAOldColor>")
-                  ;
-                  ((self.ui)._txt_GuildMaster_Value):SetText("<PAColor0xff515151>-<PAOldColor>")
-                  ;
-                  ((self.ui)._txt_HasDate_Value):SetText("<PAColor0xff515151>-<PAOldColor>")
-                  if dropType == 0 and nodeTaxType >= 1 then
-                    dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxType)
+                  local nodeTaxLevel = 0
+                  if _ContentsGroup_SeigeSeason5 == true then
+                    nodeTaxLevel = nodeTaxType + 1
+                  else
+                    nodeTaxLevel = nodeTaxType
+                  end
+                  if dropType == 0 and nodeTaxLevel >= 1 then
+                    dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_TAX", "nodeTaxType", nodeTaxLevel)
                   else
                     if dropType >= 1 and nodeTaxType == 0 then
                       dropTypeValue = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_LIFE", "dropType", dropType + 1)
                     else
                       if dropType >= 1 and nodeTaxType >= 1 then
-                        dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxType), "dropType", tostring(dropType + 1))
+                        dropTypeValue = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_BOTH", "nodeTaxType", tostring(nodeTaxLevel), "dropType", tostring(dropType + 1))
                       else
                         dropTypeValue = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODE_NODEWAR_BENEFITS_NOT")
                       end

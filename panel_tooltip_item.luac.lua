@@ -323,9 +323,9 @@ Panel_Tooltip_Item_Show = function(itemStaticStatus, uiBase, isSSW, isItemWrappe
       end
     end
   end
-  local isEquipalbeItem, servantItem = showTooltip_Item(normalTooltip, itemStaticStatus, isSSW, isItemWrapper, chattingLinkedItem, index, nil, invenSlotNo, itemNamingStr)
+  local isEquipableItem, servantItem = showTooltip_Item(normalTooltip, itemStaticStatus, isSSW, isItemWrapper, chattingLinkedItem, index, nil, invenSlotNo, itemNamingStr)
   local equipItemWrapper = nil
-  if isEquipalbeItem and not servantItem and isItemMarket then
+  if isEquipableItem and not servantItem and isItemMarket then
     if isSSW then
       equipItemWrapper = ToClient_getEquipmentItem(itemStaticStatus:getEquipSlotNo())
     else
@@ -385,12 +385,12 @@ end
 
 local clothBagSlotNo = nil
 local bagInWarehouse = false
-Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
+Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index, targetX, targetY)
   -- function num : 0_8 , upvalues : Panel_Tooltip_Item_DataObject, EquipItem_Lock, clothBagSlotNo, bagInWarehouse, normalTooltip, equippedTooltip
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R6 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.itemMarket = nil
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R6 in 'UnsetPending'
 
   EquipItem_Lock.equipment = false
   if Panel_Tooltip_Item_Show_General(slotNo, slotType, isOn, true, index) == false then
@@ -402,12 +402,18 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
   local parent = false
   local inven = false
   if slotType == "servant_inventory" then
-    if getServantInventorySize(ServantInventory_GetActorKeyRawFromIndex(0)) <= slotNo then
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = ServantInventory_GetActorKeyRawFromIndex(0)
+    end
+    if getServantInventorySize(actorKey) <= slotNo then
+      _PA_LOG("박범�\128", "Panel_Tooltip_Item_Show_GeneralNormal size over return")
       return 
     end
     parent = true
   else
-    -- DECOMPILER ERROR at PC42: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R9 in 'UnsetPending'
 
     if slotType == "inventory" then
       Panel_Tooltip_Item_DataObject.inventory = true
@@ -448,7 +454,12 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
   local isServantEquipOn = false
   local DeliveryItemNo = nil
   if slotType == "servant_inventory" then
-    itemWrapper = getServantInventoryItemBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo)
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = ServantInventory_GetActorKeyRawFromIndex(index)
+    end
+    itemWrapper = getServantInventoryItemBySlotNo(actorKey, slotNo)
   elseif slotType == "QuickSlot" then
     local quickSlotInfo = getQuickSlotItem(slotNo)
     if quickSlotInfo == nil then
@@ -499,10 +510,10 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
     isEquipOn = true
     parent = true
     inven = true
-    -- DECOMPILER ERROR at PC242: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC264: Confused about usage of register: R13 in 'UnsetPending'
 
     EquipItem_Lock.equipment = true
-    -- DECOMPILER ERROR at PC248: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC270: Confused about usage of register: R13 in 'UnsetPending'
 
     EquipItem_Lock.itemLock = ToClient_EquipSlot_CheckItemLock(slotNo, 1)
   elseif slotType == "disassemble_source" then
@@ -514,14 +525,25 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
   elseif slotType == "product_result" then
     itemWrapper = product_GetResultItem(slotNo)
   elseif slotType == "ServantEquipment" then
-    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    local actorKey = nil
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = Servant_GetActorKeyFromItemToolTip()
+    end
+    local servantWrapper = getServantInfoFromActorKey(actorKey)
     if servantWrapper ~= nil then
       itemWrapper = servantWrapper:getEquipItem(slotNo)
     end
     isEquipOn = true
     isServantEquipOn = false
   elseif slotType == "ServantShipEquipment" then
-    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = Servant_GetActorKeyFromItemToolTip()
+    end
+    local servantWrapper = getServantInfoFromActorKey(actorKey)
     if servantWrapper ~= nil then
       itemWrapper = servantWrapper:getEquipItem(slotNo)
     end
@@ -533,7 +555,12 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
       itemWrapper = servantInfo:getEquipItem(slotNo)
     end
   elseif slotType == "LinkedHorseEquip" then
-    local servantWrapper = getServantInfoFromActorKey(Servant_GetActorKeyFromItemToolTip())
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = Servant_GetActorKeyFromItemToolTip()
+    end
+    local servantWrapper = getServantInfoFromActorKey(actorKey)
     local servantInfo = stable_getServantFromOwnerServant(servantWrapper:getServantNo(), FGlobal_LinkedHorse_SelectedIndex())
     if servantInfo ~= nil then
       itemWrapper = servantInfo:getEquipItem(slotNo)
@@ -641,7 +668,12 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
       itemNamingStr = getItemNaming(warehouseItemNo)
     end
   elseif slotType == "servant_inventory" then
-    itemNamingStr = getItemNaming(servantInventory_getItemNoBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo))
+    if _ContentsGroup_RenewUI == true then
+      actorKey = PaGlobalFunc_InventoryInfo_GetServantActorKey()
+    else
+      actorKey = ServantInventory_GetActorKeyRawFromIndex(index)
+    end
+    itemNamingStr = getItemNaming(servantInventory_getItemNoBySlotNo(actorKey, slotNo))
   elseif slotType == "SocketItem" then
     itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNo, false))
   elseif slotType == "FixEquip" then
@@ -652,42 +684,42 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
   elseif slotType == "DeliveryRequest" then
     itemNamingStr = getItemNaming(delivery_packItemNoByIndex(slotNo))
   else
-    -- DECOMPILER ERROR at PC663: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC722: Unhandled construct in 'MakeBoolean' P1
 
     if slotType == "DeliveryCarriageInformation" and DeliveryItemNo ~= nil then
       itemNamingStr = getItemNaming(DeliveryItemNo)
     end
   end
   itemNamingStr = getItemNaming(getTItemNoBySlotNo(getInventory_RealSlotNo(slotNo), false))
-  local isEquipalbeItem = false
+  local isEquipableItem = false
   local servantItem = false
   do
     local skillKey = SkillKey()
-    -- DECOMPILER ERROR at PC679: Confused about usage of register: R15 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC738: Confused about usage of register: R17 in 'UnsetPending'
 
     Panel_Tooltip_Item_DataObject.isSkill = false
-    -- DECOMPILER ERROR at PC688: Confused about usage of register: R15 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC747: Confused about usage of register: R17 in 'UnsetPending'
 
     if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
       Panel_Tooltip_Item_DataObject.skillSlot = slot
       Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
-      -- DECOMPILER ERROR at PC697: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC756: Confused about usage of register: R17 in 'UnsetPending'
 
       Panel_Tooltip_Item_DataObject.isSkill = true
       return 
     elseif not isEquipOn then
       local itemSSW = itemWrapper:getStaticStatus()
       if not itemSSW:isEquipable() then
-        isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+        isEquipableItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
       else
-        -- DECOMPILER ERROR at PC729: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC788: Overwrote pending register: R15 in 'AssignReg'
 
-        isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
+        isEquipableItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
       end
     else
       showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
     end
-    if isEquipalbeItem and not isEquipOn then
+    if isEquipableItem and not isEquipOn then
       local equipItemWrapper, campingItemWrapper = nil, nil
       if servantItem or isServantEquipOn then
         local temporaryWrapper = getTemporaryInformationWrapper()
@@ -710,13 +742,13 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
         end
       else
         local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-        -- DECOMPILER ERROR at PC811: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC870: Confused about usage of register: R20 in 'UnsetPending'
 
         if accSlotNo ~= nil then
           EquipItem_Lock.itemAccNo = accSlotNo
           equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
         else
-          -- DECOMPILER ERROR at PC818: Confused about usage of register: R18 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC877: Confused about usage of register: R20 in 'UnsetPending'
 
           EquipItem_Lock.itemAccNo = -1
           equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
@@ -766,9 +798,9 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
         (normalTooltip.mainPanel):OpenUISubApp()
       end
     else
-      Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+      Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven, targetX, targetY)
     end
-    -- DECOMPILER ERROR: 81 unprocessed JMP targets
+    -- DECOMPILER ERROR: 93 unprocessed JMP targets
   end
 end
 
@@ -922,8 +954,8 @@ Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
                                                 -- DECOMPILER ERROR at PC301: Confused about usage of register: R12 in 'UnsetPending'
 
                                                 Panel_Tooltip_Item_DataObject.isSkill = false
-                                                local isEquipalbeItem, servantItem = showTooltip_Item(normalTooltip, itemSSW, isSSW, isItemWrapper)
-                                                if isEquipalbeItem then
+                                                local isEquipableItem, servantItem = showTooltip_Item(normalTooltip, itemSSW, isSSW, isItemWrapper)
+                                                if isEquipableItem then
                                                   local equipItemWrapper = nil
                                                   if servantItem then
                                                     local temporaryWrapper = getTemporaryInformationWrapper()
@@ -1203,7 +1235,7 @@ Panel_Tooltip_Item_Set_Position_UISubApp = function(positionData, parent, inven)
   end
 end
 
-Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven)
+Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven, targetX, targetY)
   -- function num : 0_13 , upvalues : equippedTooltip, normalTooltip
   local itemShow = Panel_Tooltip_Item:GetShow()
   local equipItemShow = Panel_Tooltip_Item_equipped:GetShow()
@@ -1229,86 +1261,93 @@ Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven)
   end
   local isLeft = screenSizeX / 2 < posX
   local isTop = screenSizeY / 2 < posY
-  local tooltipSize = {width = 0, height = 0}
-  local tooltipEquipped = {width = 0, height = 0}
-  do
-    local sumSize = {width = 0, height = 0}
-    if Panel_Tooltip_Item:GetShow() then
-      tooltipSize.width = Panel_Tooltip_Item:GetSizeX()
-      tooltipSize.height = Panel_Tooltip_Item:GetSizeY()
-      sumSize.width = sumSize.width + tooltipSize.width
-      sumSize.height = (math.max)(sumSize.height, tooltipSize.height)
-    end
-    if Panel_Tooltip_Item_equipped:GetShow() then
-      tooltipEquipped.width = Panel_Tooltip_Item_equipped:GetSizeX()
-      tooltipEquipped.height = Panel_Tooltip_Item_equipped:GetSizeY()
-      sumSize.width = sumSize.width + tooltipEquipped.width
-      sumSize.height = (math.max)(sumSize.height, tooltipEquipped.height)
-    end
-    if not isLeft then
-      if parent and inven then
-        posX = (positionData:getParent()):GetSizeX() + (positionData:getParent()):GetParentPosX()
-      else
-        posX = posX + positionData:GetSizeX()
+  if screenSizeX / 2 >= targetX then
+    isLeft = targetX == nil or targetY == nil
+    isTop = screenSizeY / 2 < targetY
+    local tooltipSize = {width = 0, height = 0}
+    local tooltipEquipped = {width = 0, height = 0}
+    do
+      local sumSize = {width = 0, height = 0}
+      if Panel_Tooltip_Item:GetShow() then
+        tooltipSize.width = Panel_Tooltip_Item:GetSizeX()
+        tooltipSize.height = Panel_Tooltip_Item:GetSizeY()
+        sumSize.width = sumSize.width + tooltipSize.width
+        sumSize.height = (math.max)(sumSize.height, tooltipSize.height)
       end
-    end
-    if isTop then
-      posY = posY + positionData:GetSizeY()
-      local yDiff = posY - sumSize.height
-      if yDiff < 0 then
-        posY = posY - yDiff
+      if Panel_Tooltip_Item_equipped:GetShow() then
+        tooltipEquipped.width = Panel_Tooltip_Item_equipped:GetSizeX()
+        tooltipEquipped.height = Panel_Tooltip_Item_equipped:GetSizeY()
+        sumSize.width = sumSize.width + tooltipEquipped.width
+        sumSize.height = (math.max)(sumSize.height, tooltipEquipped.height)
       end
-    else
-      local yDiff = screenSizeY - (posY + sumSize.height)
-      if yDiff < 0 then
-        posY = posY + yDiff
+      if not isLeft then
+        if parent and inven then
+          posX = (positionData:getParent()):GetSizeX() + (positionData:getParent()):GetParentPosX()
+        else
+          posX = posX + positionData:GetSizeX()
+        end
       end
-    end
-    if Panel_Tooltip_Item:GetShow() then
-      if isLeft then
-        posX = posX - tooltipSize.width
-      end
-      local yTmp = posY
       if isTop then
-        yTmp = yTmp - tooltipSize.height
-      end
-      Panel_Tooltip_Item:SetPosX(posX)
-      Panel_Tooltip_Item:SetPosY(yTmp)
-    end
-    if Panel_Tooltip_Item_equipped:GetShow() then
-      if isLeft then
-        posX = posX - tooltipEquipped.width
+        posY = posY + positionData:GetSizeY()
+        local yDiff = posY - sumSize.height
+        if yDiff < 0 then
+          posY = posY - yDiff
+        end
       else
-        posX = posX + tooltipSize.width
+        local yDiff = screenSizeY - (posY + sumSize.height)
+        if yDiff < 0 then
+          posY = posY + yDiff
+        end
       end
-      local yTmp = posY
-      if isTop then
-        yTmp = yTmp - tooltipEquipped.height
+      if targetX ~= nil and targetY ~= nil then
+        posX = targetX
       end
-      Panel_Tooltip_Item_equipped:SetPosX(posX)
-      Panel_Tooltip_Item_equipped:SetPosY(yTmp)
-    end
-    if (equippedTooltip.mainPanel):GetShow() and (normalTooltip.mainPanel):GetShow() then
-      local arrow = equippedTooltip.arrow
-      if Panel_Tooltip_Item:GetPosX() < Panel_Tooltip_Item_equipped:GetPosX() then
+      if Panel_Tooltip_Item:GetShow() then
+        if isLeft then
+          posX = posX - tooltipSize.width
+        end
+        local yTmp = posY
+        if isTop then
+          yTmp = yTmp - tooltipSize.height
+        end
+        Panel_Tooltip_Item:SetPosX(posX)
+        Panel_Tooltip_Item:SetPosY(yTmp)
+      end
+      if Panel_Tooltip_Item_equipped:GetShow() then
+        if isLeft then
+          posX = posX - tooltipEquipped.width
+        else
+          posX = posX + tooltipSize.width
+        end
+        local yTmp = posY
+        if isTop then
+          yTmp = yTmp - tooltipEquipped.height
+        end
+        Panel_Tooltip_Item_equipped:SetPosX(posX)
+        Panel_Tooltip_Item_equipped:SetPosY(yTmp)
+      end
+      if (equippedTooltip.mainPanel):GetShow() and (normalTooltip.mainPanel):GetShow() then
+        local arrow = equippedTooltip.arrow
+        if Panel_Tooltip_Item:GetPosX() < Panel_Tooltip_Item_equipped:GetPosX() then
+          (equippedTooltip.arrow):SetShow(false)
+          arrow = equippedTooltip.arrow_L
+          arrow:SetShow(true)
+          arrow:SetPosY(((equippedTooltip.mainPanel):GetSizeY() - arrow:GetSizeY()) / 2)
+          arrow:SetPosX(-arrow:GetSizeX() / 2)
+        else
+          (equippedTooltip.arrow_L):SetShow(false)
+          arrow = equippedTooltip.arrow
+          arrow:SetShow(true)
+          arrow:SetPosY(((equippedTooltip.mainPanel):GetSizeY() - arrow:GetSizeY()) / 2)
+          arrow:SetPosX((equippedTooltip.mainPanel):GetSizeX() - arrow:GetSizeX() / 2)
+        end
+      else
         (equippedTooltip.arrow):SetShow(false)
-        arrow = equippedTooltip.arrow_L
-        arrow:SetShow(true)
-        arrow:SetPosY(((equippedTooltip.mainPanel):GetSizeY() - arrow:GetSizeY()) / 2)
-        arrow:SetPosX(-arrow:GetSizeX() / 2)
-      else
+        ;
         (equippedTooltip.arrow_L):SetShow(false)
-        arrow = equippedTooltip.arrow
-        arrow:SetShow(true)
-        arrow:SetPosY(((equippedTooltip.mainPanel):GetSizeY() - arrow:GetSizeY()) / 2)
-        arrow:SetPosX((equippedTooltip.mainPanel):GetSizeX() - arrow:GetSizeX() / 2)
       end
-    else
-      (equippedTooltip.arrow):SetShow(false)
-      ;
-      (equippedTooltip.arrow_L):SetShow(false)
+      -- DECOMPILER ERROR: 22 unprocessed JMP targets
     end
-    -- DECOMPILER ERROR: 18 unprocessed JMP targets
   end
 end
 

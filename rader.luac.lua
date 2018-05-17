@@ -7,8 +7,8 @@ Panel_Radar:SetShow(true, false)
 Panel_Radar:SetIgnore(true)
 Panel_Radar:setGlassBackground(true)
 Panel_TimeBar:SetShow(true, false)
-Panel_TimeBar:RegisterShowEventFunc(true, " ")
-Panel_TimeBar:RegisterShowEventFunc(false, " ")
+Panel_TimeBar:RegisterShowEventFunc(true, "TimebarShowAni()")
+Panel_TimeBar:RegisterShowEventFunc(false, "TimebarHideAni()")
 Panel_TimeBarNumber:SetIgnore(true)
 Panel_Radar:RegisterShowEventFunc(true, "RaderShowAni()")
 Panel_Radar:RegisterShowEventFunc(false, "RaderHideAni()")
@@ -387,9 +387,6 @@ RadarMap_Background_MouseRUp = function()
   if ((getSelfPlayer()):get()):getLevel() < 11 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_TUTORIAL_PROGRSS_ACK"))
     FGlobal_QuestWidget_UpdateList()
-    if not isQuest160524_chk() then
-      updateQuestWindowList(FGlobal_QuestWindowGetStartPosition())
-    end
     return 
   end
   if ToClient_IsShowNaviGuideGroup(0) then
@@ -736,27 +733,49 @@ RadarScale_SimpleTooltips = function(isShow)
 end
 
 RaderShowAni = function()
-  -- function num : 0_26 , upvalues : UI_ANI_ADV, UI_color
-  Panel_Radar:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_IN)
-  local MainStatusOpen_Alpha = Panel_Radar:addColorAnimation(0, 0.35, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  MainStatusOpen_Alpha:SetStartColor(UI_color.C_00FFFFFF)
-  MainStatusOpen_Alpha:SetEndColor(UI_color.C_FFFFFFFF)
-  MainStatusOpen_Alpha.IsChangeChild = true
+  -- function num : 0_26
+  Panel_Radar:ResetVertexAni()
+  local aniInfo1 = Panel_Radar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  aniInfo1:SetStartPosition(getScreenSizeX(), Panel_Radar:GetPosY())
+  aniInfo1:SetEndPosition(getScreenSizeX() - Panel_Radar:GetSizeX() - (Panel_Radar:GetSpanSize()).x, Panel_Radar:GetPosY())
+  aniInfo1.IsChangeChild = true
 end
 
 RaderHideAni = function()
-  -- function num : 0_27 , upvalues : UI_ANI_ADV, UI_color
-  Panel_Radar:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
-  local MainStatusOpen_Alpha = Panel_Radar:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  MainStatusOpen_Alpha:SetStartColor(UI_color.C_FFFFFFFF)
-  MainStatusOpen_Alpha:SetEndColor(UI_color.C_00FFFFFF)
-  MainStatusOpen_Alpha.IsChangeChild = true
-  MainStatusOpen_Alpha:SetHideAtEnd(true)
-  MainStatusOpen_Alpha:SetDisableWhileAni(true)
+  -- function num : 0_27
+  Panel_Radar:ResetVertexAni()
+  local aniInfo1 = Panel_Radar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfo1:SetStartPosition(Panel_Radar:GetPosX(), Panel_Radar:GetPosY())
+  aniInfo1:SetEndPosition(Panel_Radar:GetPosX() + 600, Panel_Radar:GetPosY())
+  aniInfo1.IsChangeChild = true
+end
+
+local timeBarOriginX = nil
+TimebarShowAni = function()
+  -- function num : 0_28 , upvalues : timeBarOriginX
+  Panel_TimeBar:ResetVertexAni()
+  local aniInfo1 = Panel_TimeBar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  aniInfo1:SetStartPosition(getScreenSizeX(), Panel_TimeBar:GetPosY())
+  aniInfo1:SetEndPosition(timeBarOriginX, Panel_TimeBar:GetPosY())
+  aniInfo1.IsChangeChild = true
+  aniInfo1:SetHideAtEnd(false)
+end
+
+TimebarHideAni = function()
+  -- function num : 0_29 , upvalues : timeBarOriginX
+  if timeBarOriginX == nil then
+    timeBarOriginX = Panel_TimeBar:GetPosX()
+  end
+  Panel_TimeBar:ResetVertexAni()
+  local aniInfo1 = Panel_TimeBar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfo1:SetStartPosition(Panel_TimeBar:GetPosX(), Panel_TimeBar:GetPosY())
+  aniInfo1:SetEndPosition(Panel_TimeBar:GetPosX() + 600, Panel_TimeBar:GetPosY())
+  aniInfo1.IsChangeChild = true
+  aniInfo1:SetHideAtEnd(true)
 end
 
 SortRador_IconIndex = function()
-  -- function num : 0_28 , upvalues : radar_SizeSlider, radar_AlphaScrl, radar_MiniMapScl
+  -- function num : 0_30 , upvalues : radar_SizeSlider, radar_AlphaScrl, radar_MiniMapScl
   local mapButton = radarMap.controls
   Panel_Radar:SetChildIndex(radar_SizeSlider, 9999)
   Panel_Radar:SetChildIndex(radar_AlphaScrl, 9999)
@@ -764,10 +783,10 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1270: Confused about usage of register: R80 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1273: Confused about usage of register: R81 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
-  -- function num : 0_29
+  -- function num : 0_31
   local iconPool = self.iconPool
   if iconPool:length() > 0 then
     return iconPool:pop_back()
@@ -778,17 +797,17 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1274: Confused about usage of register: R80 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1277: Confused about usage of register: R81 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
-  -- function num : 0_30
+  -- function num : 0_32
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1279: Confused about usage of register: R80 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1282: Confused about usage of register: R81 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
-  -- function num : 0_31 , upvalues : QuestArrowHalfSize
+  -- function num : 0_33 , upvalues : QuestArrowHalfSize
   local questPool = self.questIconPool
   if questPool:length() > 0 then
     return questPool:pop_back()
@@ -810,15 +829,15 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1283: Confused about usage of register: R80 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1286: Confused about usage of register: R81 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
-  -- function num : 0_32
+  -- function num : 0_34
   (self.questIconPool):push_back(questIcon)
 end
 
 Panel_TimeBar_ShowToggle = function()
-  -- function num : 0_33
+  -- function num : 0_35
   local isShow = Panel_TimeBar:IsShow()
   if isShow then
     Panel_TimeBarNumber:SetShow(false)
@@ -829,7 +848,7 @@ Panel_TimeBar_ShowToggle = function()
 end
 
 RadarMap_updateRegion = function(regionData)
-  -- function num : 0_34 , upvalues : radarTime, currentSafeZone, VillageWarTooltip, radar_regionName, UI_color, radar_regionNodeName, radar_regionWarName, radar_DangerIcon, beforeCombatZone, beforSafeZone, beforeArenaZone, beforeDesertZone, balenciaPart2, nodeWarRegionName
+  -- function num : 0_36 , upvalues : radarTime, currentSafeZone, VillageWarTooltip, radar_regionName, UI_color, radar_regionNodeName, radar_regionWarName, radar_DangerIcon, beforeCombatZone, beforSafeZone, beforeArenaZone, beforeDesertZone, balenciaPart2, nodeWarRegionName
   if regionData == nil then
     return 
   end
@@ -839,7 +858,7 @@ RadarMap_updateRegion = function(regionData)
   local isDesertZone = regionData:isDesert()
   currentSafeZone = isSafetyZone
   local checkVillageWarArea = function(control, isRight)
-    -- function num : 0_34_0 , upvalues : VillageWarTooltip
+    -- function num : 0_36_0 , upvalues : VillageWarTooltip
     control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Guild/Guild_00.dds")
     local x1, y1, x2, y2 = 0, 0, 0, 0
     if isRight then
@@ -981,7 +1000,7 @@ RadarMap_updateRegion = function(regionData)
 end
 
 NodeLevelRegionNameShow = function(wayPointKey)
-  -- function num : 0_35 , upvalues : radar_regionNodeName, nodeWarRegionName, radar_regionWarName
+  -- function num : 0_37 , upvalues : radar_regionNodeName, nodeWarRegionName, radar_regionWarName
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
   if nodeName == "" or nodeName == nil then
     radar_regionNodeName:SetShow(false)
@@ -1005,7 +1024,7 @@ registerEvent("FromClint_EventChangedExplorationNode", "NodeLevelRegionNameShow"
 local _nightCheck = 0
 local _nightAlertCheck = 0
 RadarMap_UpdateTimePerFrame = function()
-  -- function num : 0_36 , upvalues : dayCycle, RegionData_IngameTime, floor, radarTime, RegionData_RealIngameTime, _nightCheck, _nightAlertCheck, useLanternAlertTime
+  -- function num : 0_38 , upvalues : dayCycle, RegionData_IngameTime, floor, radarTime, RegionData_RealIngameTime, _nightCheck, _nightAlertCheck, useLanternAlertTime
   local ingameTime = getIngameTime_variableSecondforLua()
   if ingameTime < 0 then
     return 
@@ -1089,7 +1108,7 @@ RadarMap_UpdateTimePerFrame = function()
 end
 
 showUseLanternToolTip = function(param)
-  -- function num : 0_37 , upvalues : useLanternAlertTime
+  -- function num : 0_39 , upvalues : useLanternAlertTime
   local itemWrapper = ToClient_getEquipmentItem(13)
   if itemWrapper == nil and param == true and useLanternAlertTime < 100 then
     FGlobal_ShowUseLantern(true)
@@ -1106,7 +1125,7 @@ Panel_Rader_NightAlert:RegisterShowEventFunc(false, "Rader_NightAlert_HideAni()"
 local Night_AlertPanel = (UI.getChildControl)(Panel_Rader_NightAlert, "Static_AlertPanel")
 local Night_AlertText = (UI.getChildControl)(Panel_Rader_NightAlert, "StaticText_Alert_NoticeText")
 Night_Alert = function(_nightCheck)
-  -- function num : 0_38 , upvalues : Night_AlertText, UI_color, Night_AlertPanel
+  -- function num : 0_40 , upvalues : Night_AlertText, UI_color, Night_AlertPanel
   local message = ""
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if isColorBlindMode == 0 then
@@ -1135,7 +1154,7 @@ end
 
 local _cumulateTime = 0
 Rader_NightAlert_Close = function(fDeltaTime)
-  -- function num : 0_39 , upvalues : _cumulateTime
+  -- function num : 0_41 , upvalues : _cumulateTime
   _cumulateTime = _cumulateTime + fDeltaTime
   if _cumulateTime >= 9 then
     Panel_Rader_NightAlert:SetShow(false, true)
@@ -1145,14 +1164,14 @@ end
 
 Panel_Rader_NightAlert:RegisterUpdateFunc("Rader_NightAlert_Close")
 Rader_NightAlert_ShowAni = function()
-  -- function num : 0_40
+  -- function num : 0_42
   audioPostEvent_SystemUi(1, 9)
   ;
   (UIAni.fadeInSCR_MidOut)(Panel_Rader_NightAlert)
 end
 
 Rader_NightAlert_HideAni = function()
-  -- function num : 0_41 , upvalues : UI_ANI_ADV, UI_color
+  -- function num : 0_43 , upvalues : UI_ANI_ADV, UI_color
   Panel_Rader_NightAlert:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo6 = Panel_Rader_NightAlert:addColorAnimation(0, 1.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo6:SetStartColor(UI_color.C_FFFFFFFF)
@@ -1163,7 +1182,7 @@ Rader_NightAlert_HideAni = function()
 end
 
 local RadarMap_UpdateSelfPlayerPerFrame = function()
-  -- function num : 0_42 , upvalues : PI
+  -- function num : 0_44 , upvalues : PI
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return 
@@ -1189,13 +1208,13 @@ local RadarMap_UpdateSelfPlayerPerFrame = function()
 end
 
 FromClient_setSiegeAttackAreaPosition = function(position)
-  -- function num : 0_43 , upvalues : _siegeAttackPosition, _OnSiegeRide
+  -- function num : 0_45 , upvalues : _siegeAttackPosition, _OnSiegeRide
   _siegeAttackPosition = position
   _OnSiegeRide = true
 end
 
 local getPosBaseControl = function(actorPosition)
-  -- function num : 0_44
+  -- function num : 0_46
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
   local dx = (actorPosition.x - selfPlayerPos.x) * 0.01
@@ -1212,7 +1231,7 @@ local getPosBaseControl = function(actorPosition)
 end
 
 local getPosQuestControl = function(areaQuest)
-  -- function num : 0_45
+  -- function num : 0_47
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
   local dx = (areaQuest.x - selfPlayerPos.x) * 0.01
@@ -1228,7 +1247,7 @@ local getPosQuestControl = function(areaQuest)
 end
 
 local RadarMap_DestoryQuestIcons = function()
-  -- function num : 0_46
+  -- function num : 0_48
   for idx,areaQuest in pairs(radarMap.areaQuests) do
     if areaQuest ~= nil then
       (areaQuest.icon_QuestArea):SetShow(false)
@@ -1243,7 +1262,7 @@ local RadarMap_DestoryQuestIcons = function()
 end
 
 regeistTooltipInfo = function(index, isArrow)
-  -- function num : 0_47
+  -- function num : 0_49
   if isArrow then
     registTooltipControl(((radarMap.areaQuests)[index]).icon_QuestArrow, Panel_QuestInfo)
   else
@@ -1252,7 +1271,7 @@ regeistTooltipInfo = function(index, isArrow)
 end
 
 QuestTooltipForHandle = function(index, controlIdx, IsArrow)
-  -- function num : 0_48
+  -- function num : 0_50
   regeistTooltipInfo(controlIdx, IsArrow)
   ;
   (QuestInfoData.questDescShowWindowForLeft)(index)
@@ -1260,7 +1279,7 @@ QuestTooltipForHandle = function(index, controlIdx, IsArrow)
 end
 
 Radar_UpdateQuestList = function()
-  -- function num : 0_49 , upvalues : RadarMap_DestoryQuestIcons, floor, RadarMap_UpdatePixelRate
+  -- function num : 0_51 , upvalues : RadarMap_DestoryQuestIcons, floor, RadarMap_UpdatePixelRate
   RadarMap_DestoryQuestIcons()
   local questCount = questList_getCheckedProgressQuestCount()
   local controlCount = 1
@@ -1332,7 +1351,7 @@ Radar_UpdateQuestList = function()
 end
 
 RadarMap_UpdatePixelRate = function()
-  -- function num : 0_50 , upvalues : floor
+  -- function num : 0_52 , upvalues : floor
   for _,areaQuest in pairs(radarMap.areaQuests) do
     local size = floor(radarMap.worldDistanceToPixelRate * areaQuest.radius * 0.02)
     ;
@@ -1341,7 +1360,7 @@ RadarMap_UpdatePixelRate = function()
 end
 
 local RadarMap_UpdateQuestAreaPositionPerFrame = function()
-  -- function num : 0_51 , upvalues : PI, getPosQuestControl, floor, atan2, QuestArrowHalfSize
+  -- function num : 0_53 , upvalues : PI, getPosQuestControl, floor, atan2, QuestArrowHalfSize
   local enableHalfSize = 12
   local sizeX = Panel_Radar:GetSizeX()
   local sizeY = Panel_Radar:GetSizeY()
@@ -1443,7 +1462,7 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
 end
 
 RadarMap_DestoryOtherActor = function(actorKeyRaw)
-  -- function num : 0_52
+  -- function num : 0_54
   local actorIcon = (radarMap.actorIcons)[actorKeyRaw]
   if actorIcon ~= nil then
     actorIcon:SetShow(false)
@@ -1456,17 +1475,17 @@ RadarMap_DestoryOtherActor = function(actorKeyRaw)
 end
 
 Rader_ChangeTexture_On = function()
-  -- function num : 0_53 , upvalues : raderText
+  -- function num : 0_55 , upvalues : raderText
   raderText:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_RADER_RADER") .. "-" .. PAGetString(Defines.StringSheet_GAME, "PANEL_RADER_MOVE_DRAG"))
 end
 
 Rader_ChangeTexture_Off = function()
-  -- function num : 0_54 , upvalues : raderText
+  -- function num : 0_56 , upvalues : raderText
   raderText:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_RADER_RADER"))
 end
 
 Panel_Radar_ShowToggle = function()
-  -- function num : 0_55
+  -- function num : 0_57
   local isShow = Panel_Radar:IsShow()
   if isShow then
     Panel_Radar:SetShow(false)
@@ -1478,7 +1497,7 @@ Panel_Radar_ShowToggle = function()
 end
 
 local RadarMap_UpdateTerrainInfo = function()
-  -- function num : 0_56 , upvalues : radarTime, textInfo
+  -- function num : 0_58 , upvalues : radarTime, textInfo
   local terraintype = selfPlayerNaviMaterial()
   local radarControl = (radarTime.controls).terrainInfo
   radarControl:ChangeTextureInfoName("new_ui_common_forlua/default/default_etc_01.dds")
@@ -1620,7 +1639,7 @@ end
 local _isSiegeArea = false
 local buildingType = ""
 RadarMap_UpdatePosition = function()
-  -- function num : 0_57 , upvalues : radarTime, weatherTooltip, UI_RT, buildingTooltip, buildingType, _isSiegeArea, siegeTooltip, radar_regionName, radar_regionNodeName
+  -- function num : 0_59 , upvalues : radarTime, weatherTooltip, UI_RT, buildingTooltip, buildingType, _isSiegeArea, siegeTooltip, radar_regionName, radar_regionNodeName
   if Panel_TimeBar:GetShow() == false then
     return 
   end
@@ -1715,7 +1734,7 @@ RadarMap_UpdatePosition = function()
   (radarTimeControl.citadel):SetSpanSize(posX, regionNameSpanY + 1)
   posX = posX + iconSize
   local CheckSiegeArea = function(installType)
-    -- function num : 0_57_0 , upvalues : radarTime, UI_RT, buildingType, _isSiegeArea, siegeTooltip, posX, regionNameSpanY
+    -- function num : 0_59_0 , upvalues : radarTime, UI_RT, buildingType, _isSiegeArea, siegeTooltip, posX, regionNameSpanY
     local x1, y1, x2, y2 = 0, 0, 0, 0
     local radarTimeControl = radarTime.controls
     ;
@@ -1814,7 +1833,7 @@ end
 
 RadarMap_UpdatePosition()
 local RadarMap_MouseOnOffAnimation = function(deltaTime)
-  -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl, radar_SequenceAni
+  -- function num : 0_60 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl, radar_SequenceAni
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
@@ -1856,7 +1875,7 @@ end
 
 local iconPartyMemberArrow = {}
 local partyMemberArrowIcon = function(index, isShow)
-  -- function num : 0_59 , upvalues : iconPartyMemberArrow, atan2
+  -- function num : 0_61 , upvalues : iconPartyMemberArrow, atan2
   if iconPartyMemberArrow[index] == nil then
     if isShow == false then
       return 
@@ -1896,7 +1915,7 @@ local partyMemberArrowIcon = function(index, isShow)
 end
 
 local partyMemberIconPerFrame = function()
-  -- function num : 0_60 , upvalues : partyMemberArrowIcon
+  -- function num : 0_62 , upvalues : partyMemberArrowIcon
   local partyMemberCount = FGlobal_PartyMemberCount()
   for i = 0, 4 do
     partyMemberArrowIcon(i, false)
@@ -1932,7 +1951,7 @@ local partyMemberIconPerFrame = function()
 end
 
 local getPosBaseControl2 = function(actorPosition)
-  -- function num : 0_61
+  -- function num : 0_63
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
   local dx = (actorPosition.x - selfPlayerPos.x) * 0.01
@@ -1949,7 +1968,7 @@ local getPosBaseControl2 = function(actorPosition)
 end
 
 local RadarMap_UpdateSelfPlayerNavigationGuide = function()
-  -- function num : 0_62 , upvalues : getPosBaseControl2
+  -- function num : 0_64 , upvalues : getPosBaseControl2
   local color = float4(1, 0.8, 0.6, 1)
   local colorBG = float4(0.6, 0.2, 0.2, 0.3)
   local radarBackground = (radarMap.controls).rader_Background
@@ -1980,7 +1999,7 @@ local whaleTimeCheck = 0
 local chattingAlertTimeCheck = 60
 local strongMonsterCheckDistance = 3500
 RadarMap_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_63 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateSelfPlayerNavigationGuide, RadarMap_UpdateQuestAreaPositionPerFrame, RadarMap_UpdateTerrainInfo, RadarMap_MouseOnOffAnimation, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg, radar_ChangeBtn, radar_SequenceAni
+  -- function num : 0_65 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateSelfPlayerNavigationGuide, RadarMap_UpdateQuestAreaPositionPerFrame, RadarMap_UpdateTerrainInfo, RadarMap_MouseOnOffAnimation, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg, radar_ChangeBtn, radar_SequenceAni
   RadarMap_UpdateSelfPlayerPerFrame()
   RadarMap_UpdateSelfPlayerNavigationGuide()
   RadarMap_UpdateQuestAreaPositionPerFrame()
@@ -2043,19 +2062,19 @@ RadarMap_UpdatePerFrame = function(deltaTime)
 end
 
 TimeBar_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_64
+  -- function num : 0_66
   RadarMap_UpdateTimePerFrame()
   RadarMap_UpdatePosition()
 end
 
 FGlobal_ChattingAlert_Call = function()
-  -- function num : 0_65
+  -- function num : 0_67
 end
 
 local textAniTime = 0
 local isAnimation = false
 StrongMonsterByNear = function(deltaTime)
-  -- function num : 0_66 , upvalues : textAniTime, strongMonsterCheckDistance, isAnimation, currentSafeZone, redar_DangerAletText, radar_DangetAlertBg
+  -- function num : 0_68 , upvalues : textAniTime, strongMonsterCheckDistance, isAnimation, currentSafeZone, redar_DangerAletText, radar_DangetAlertBg
   textAniTime = textAniTime + deltaTime
   if FromClient_DetectsOfStrongMonster(strongMonsterCheckDistance) then
     local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
@@ -2090,7 +2109,7 @@ StrongMonsterByNear = function(deltaTime)
 end
 
 RadarMap_UpdateSiegeAttackArea = function()
-  -- function num : 0_67 , upvalues : _OnSiegeRide, _siegeAttackPosition, floor, _const_siegeAttackHitArea
+  -- function num : 0_69 , upvalues : _OnSiegeRide, _siegeAttackPosition, floor, _const_siegeAttackHitArea
   if _OnSiegeRide == false or _OnSiegeRide == true then
     ((radarMap.template).area_siegeAttackHit):SetShow(false)
     return 
@@ -2117,7 +2136,7 @@ RadarMap_UpdateSiegeAttackArea = function()
 end
 
 RadarMap_SimpleUIUpdatePerFrame = function(deltaTime)
-  -- function num : 0_68 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl
+  -- function num : 0_70 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
@@ -2158,32 +2177,32 @@ end
 registerEvent("SimpleUI_UpdatePerFrame", "RadarMap_SimpleUIUpdatePerFrame")
 registerEvent("FromClient_setSiegeAttackAreaPosition", "FromClient_setSiegeAttackAreaPosition")
 RaderMap_GetDistanceToPixelRate = function()
-  -- function num : 0_69
+  -- function num : 0_71
   return radarMap.worldDistanceToPixelRate
 end
 
 RaderMap_GetSelfPosInRader = function()
-  -- function num : 0_70
+  -- function num : 0_72
   return radarMap.pcPosBaseControl
 end
 
 RadarMap_GetScaleRateWidth = function()
-  -- function num : 0_71
+  -- function num : 0_73
   return radarMap.scaleRateWidth
 end
 
 RadarMap_GetScaleRateHeight = function()
-  -- function num : 0_72
+  -- function num : 0_74
   return radarMap.scaleRateHeight
 end
 
 HandleClicked_RadarResize = function()
-  -- function num : 0_73
+  -- function num : 0_75
   ToClient_SaveUiInfo(false)
 end
 
 RadarMap_InitPanel = function()
-  -- function num : 0_74
+  -- function num : 0_76
   ToClient_setRadarType(false)
   ToClient_setRadorUIPanel(Panel_Radar)
   ToClient_setRadorUIViewDistanceRate(7225)
@@ -2202,30 +2221,30 @@ Panel_Radar:addInputEvent("Mouse_On", "Rader_ChangeTexture_On()")
 Panel_Radar:addInputEvent("Mouse_Out", "Rader_ChangeTexture_Off()")
 Panel_Radar:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
 RadarMap_EnableSimpleUI_Force_Over = function()
-  -- function num : 0_75
+  -- function num : 0_77
   RadarMap_EnableSimpleUI(true)
 end
 
 RadarMap_EnableSimpleUI_Force_Out = function()
-  -- function num : 0_76
+  -- function num : 0_78
   RadarMap_EnableSimpleUI(false)
 end
 
 registerEvent("EventSimpleUIEnable", "RadarMap_EnableSimpleUI_Force_Over")
 registerEvent("EventSimpleUIDisable", "RadarMap_EnableSimpleUI_Force_Out")
 RadarMap_EnableSimpleUI = function(isEnable)
-  -- function num : 0_77 , upvalues : cacheSimpleUI_ShowButton
+  -- function num : 0_79 , upvalues : cacheSimpleUI_ShowButton
   cacheSimpleUI_ShowButton = true
 end
 
 if getEnableSimpleUI() then
   RadarMap_SetDragMode = function(isSet)
-  -- function num : 0_78 , upvalues : isDrag
+  -- function num : 0_80 , upvalues : isDrag
   isDrag = isSet
 end
 
   resetRadorActorListRotateValue = function()
-  -- function num : 0_79 , upvalues : typeDepth
+  -- function num : 0_81 , upvalues : typeDepth
   local actorList = nil
   for Key,value in pairs(typeDepth) do
     actorList = FromClient_getRadarIconList(Key)
@@ -2236,7 +2255,7 @@ end
 end
 
   FGlobal_Rador_SetColorBlindMode = function()
-  -- function num : 0_80 , upvalues : colorBlindNone, colorBlindRed, colorBlindGreen
+  -- function num : 0_82 , upvalues : colorBlindNone, colorBlindRed, colorBlindGreen
   local ActorIconList = nil
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if isColorBlindMode == 0 then
@@ -2272,7 +2291,7 @@ end
 end
 
   FromClient_RadorUICreated = function(actorKeyRaw, control, actorProxyWrapper, radorTypeValue)
-  -- function num : 0_81 , upvalues : template, radorType, UI_color, typeDepth
+  -- function num : 0_83 , upvalues : template, radorType, UI_color, typeDepth
   control:SetSize(10, 10)
   local base = template[radorTypeValue]
   local isColorBlindType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
@@ -2403,7 +2422,7 @@ end
 end
 
   FromClient_RadorTypeChanged = function(actorKeyRaw, targetUI, radorTypeValue)
-  -- function num : 0_82 , upvalues : template, radorType, UI_color, typeDepth
+  -- function num : 0_84 , upvalues : template, radorType, UI_color, typeDepth
   local templateUI = template[radorTypeValue]
   if templateUI == nil then
     targetUI:SetShow(false)
@@ -2530,7 +2549,7 @@ end
   registerEvent("FromClient_RadorTypeChanged", "FromClient_RadorTypeChanged")
   registerEvent("FromClient_RadorUICreated", "FromClient_RadorUICreated")
   local check_ServerChannel = function()
-  -- function num : 0_83 , upvalues : radarTime
+  -- function num : 0_85 , upvalues : radarTime
   local radarTimeControl = radarTime.controls
   ;
   (radarTimeControl.serverName):SetText(getCurrentWolrdName())
@@ -2548,7 +2567,7 @@ end
 
   check_ServerChannel()
   CalcPositionUseToTextUI = function(targetUIposX, targetUIposY, textUI)
-  -- function num : 0_84
+  -- function num : 0_86
   if Panel_Radar:GetSizeX() < targetUIposX + textUI:GetTextSizeX() then
     textUI:SetPosX(Panel_Radar:GetSizeX() - textUI:GetTextSizeX())
   else
@@ -2562,7 +2581,7 @@ end
 end
 
   FromClient_setNameOfMouseOverIcon = function(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
-  -- function num : 0_85 , upvalues : radar_OverName
+  -- function num : 0_87 , upvalues : radar_OverName
   local actorName = ""
   if (actorProxyWrapper:get()):isNpc() then
     if actorProxyWrapper:getCharacterTitle() ~= "" then
@@ -2600,7 +2619,7 @@ end
 end
 
   FromClient_NameOff = function()
-  -- function num : 0_86 , upvalues : radar_OverName
+  -- function num : 0_88 , upvalues : radar_OverName
   if radar_OverName == nil then
     return 
   end
@@ -2610,12 +2629,12 @@ end
 end
 
   PaGlobal_Radar_WarAlert = function(isShow)
-  -- function num : 0_87 , upvalues : radar_WarAlert
+  -- function num : 0_89 , upvalues : radar_WarAlert
   radar_WarAlert:SetShow(isShow)
 end
 
   RaderResizeByReset = function(resetRadarScale)
-  -- function num : 0_88 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
+  -- function num : 0_90 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
   if resetRadarScale == false then
     local raderCurrentSizeX = Panel_Radar:GetSizeX()
     local raderCurrentSizeY = Panel_Radar:GetSizeY()
@@ -2659,7 +2678,7 @@ end
 end
 
   FGlobal_ResetRadarUI = function(resetRadarScale)
-  -- function num : 0_89 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
+  -- function num : 0_91 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
   RaderResizeByReset(resetRadarScale)
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
   Rader_updateWorldMap_AlphaControl_Init()
@@ -2669,7 +2688,7 @@ end
 end
 
   Radar_luaLoadComplete = function()
-  -- function num : 0_90 , upvalues : controlAlign
+  -- function num : 0_92 , upvalues : controlAlign
   controlAlign()
 end
 

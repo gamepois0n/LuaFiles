@@ -11,13 +11,27 @@ Panel_Window_Repair:SetShow(false, false)
 Panel_Window_Repair:setMaskingChild(true)
 Panel_Window_Repair:ActiveMouseEventEffect(true)
 Panel_LuckyRepair_Result:SetShow(false)
-PaGlobal_Repair = {_repairMessage, _repairMessageJP; _screenX = nil, _screenY = nil, _repairWhereType = nil, _repairSlotNo = nil, _uiRepairCursor = (UI.getChildControl)(Panel_Window_Repair, "Static_Cursor"), _uiRepairMessageBG = (UI.getChildControl)(Panel_Equipment, "Static_Repair_Message"), _isContentsEnable = ToClient_IsContentsGroupOpen("36"), _uiRepairInven = (UI.getChildControl)(Panel_Equipment, "Static_Text_Money"), _uiRepairWareHouse = (UI.getChildControl)(Panel_Equipment, "Static_Text_Money2"), _uiRepairInvenMoney = (UI.getChildControl)(Panel_Equipment, "RadioButton_Icon_Money"), _uiRepairWareHouseMoney = (UI.getChildControl)(Panel_Equipment, "RadioButton_Icon_Money2"), _uiRepairBG = (UI.getChildControl)(Panel_Window_Repair, "RepairBackGround"), _uiRepairStableEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Servant"), _uiRepairWharfEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Ship"), _uiRepairElephantButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Elephant"), _uiRepairAllEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_EquipItem"), _uiRepairAllInvenItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_InvenItem"), _uiFixEquipItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_FixEquip"), _uiRepairExitButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Exit"), _resultMsg_ShowTime = 0, 
+PaGlobal_Repair = {_repairMessage, _repairMessageJP; _screenX = nil, _screenY = nil, _repairWhereType = nil, _repairSlotNo = nil, _uiRepairCursor = (UI.getChildControl)(Panel_Window_Repair, "Static_Cursor"), _uiRepairMessageBG = nil, _isContentsEnable = ToClient_IsContentsGroupOpen("36"), _uiRepairInven = nil, _uiRepairWareHouse = nil, _uiRepairInvenMoney = nil, _uiRepairWareHouseMoney = nil, _uiRepairBG = (UI.getChildControl)(Panel_Window_Repair, "RepairBackGround"), _uiRepairStableEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Servant"), _uiRepairWharfEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Ship"), _uiRepairElephantButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_Elephant"), _uiRepairAllEquippedItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_EquipItem"), _uiRepairAllInvenItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Repair_InvenItem"), _uiFixEquipItemButton = (UI.getChildControl)(Panel_Window_Repair, "Button_FixEquip"), _uiRepairExitButton = (UI.getChildControl)(Panel_Window_Repair, "Button_Exit"), _resultMsg_ShowTime = 0, 
 _luckyRepairMSG = {}
 , _uiRepairInvenMoneyTextSizeX = 0, _uiRepairWareHouseMoneyTextSizeX = 0, _uiRepairTextSizeX = 0, _isCamping = false}
--- DECOMPILER ERROR at PC131: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC106: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.initialize = function(self)
   -- function num : 0_0
+  if _ContentsGroup_RenewUI == false then
+    self._uiRepairMessageBG = (UI.getChildControl)(Panel_Equipment, "Static_Repair_Message")
+    self._uiRepairInven = (UI.getChildControl)(Panel_Equipment, "Static_Text_Money")
+    self._uiRepairWareHouse = (UI.getChildControl)(Panel_Equipment, "Static_Text_Money2")
+    self._uiRepairInvenMoney = (UI.getChildControl)(Panel_Equipment, "RadioButton_Icon_Money")
+    self._uiRepairWareHouseMoney = (UI.getChildControl)(Panel_Equipment, "RadioButton_Icon_Money2")
+  else
+    self._uiRepairMessageBG = (UI.getChildControl)(Panel_Window_Inventory, "Static_Repair_Message")
+    self._uiRepairInven = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Money")
+    self._uiRepairWareHouse = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Money2")
+    self._uiRepairInvenMoney = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Icon_Money")
+    self._uiRepairWareHouseMoney = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Icon_Money2")
+  end
+  ;
   (self._uiRepairBG):setGlassBackground(true)
   ;
   (self._uiRepairBG):SetShow(true)
@@ -179,7 +193,7 @@ PaGlobal_Repair.initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC135: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.luckyRepair_Set = function(self)
   -- function num : 0_1 , upvalues : UI_color
@@ -226,7 +240,7 @@ Chk_LuckyRepair_ResultMsg_ShowTime = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_BtnResize = function(self)
   -- function num : 0_4
@@ -260,7 +274,7 @@ PaGlobal_Repair.repair_BtnResize = function(self)
   (self._uiRepairExitButton):SetTextSpan(btnExitTextPosX, 5)
 end
 
--- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC123: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_BtnResize_Camping = function(self)
   -- function num : 0_5
@@ -324,7 +338,7 @@ Repair_Resize = function()
   ((self._luckyRepairMSG).MSGBG):SetVertexAniRun("Ani_Scale_0", true)
 end
 
--- DECOMPILER ERROR at PC154: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC129: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
   -- function num : 0_7
@@ -381,7 +395,9 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairWareHouse):SetShow(false)
     InventoryWindow_Close()
   end
-  Panel_Equipment:SetShow(isShow, true)
+  if not _ContentsGroup_RenewUI then
+    Panel_Equipment:SetShow(isShow, true)
+  end
   self:repairMoneyUpdate()
   Panel_Npc_Dialog:SetShow(not isShow)
   Panel_Window_Repair:SetShow(isShow, false)
@@ -391,7 +407,9 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairInven):SetShow(isShow)
     ;
     (self._uiRepairInvenMoney):SetShow(isShow)
-    FGlobal_Equipment_SetFunctionButtonHide(not isShow)
+    if _ContentsGroup_RenewUI == false then
+      FGlobal_Equipment_SetFunctionButtonHide(not isShow)
+    end
     ;
     (self._repairMessage):SetShow(false)
     ;
@@ -405,7 +423,9 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairInven):SetShow(isShow)
     ;
     (self._uiRepairInvenMoney):SetShow(isShow)
-    FGlobal_Equipment_SetFunctionButtonHide(not isShow)
+    if _ContentsGroup_RenewUI == false then
+      FGlobal_Equipment_SetFunctionButtonHide(not isShow)
+    end
     ;
     (self._repairMessageJP):SetShow(false)
     ;
@@ -500,7 +520,7 @@ PaGlobal_Repair_MouseTooltip = function(isShow, tipType)
   TooltipSimple_Show(control, name, desc)
 end
 
--- DECOMPILER ERROR at PC159: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC134: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repairMoneyUpdate = function(self)
   -- function num : 0_9
@@ -516,7 +536,7 @@ Repair_Money_Update = function()
   (self._uiRepairWareHouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
 end
 
--- DECOMPILER ERROR at PC164: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.cursor_PosUpdate = function(self)
   -- function num : 0_11
@@ -525,7 +545,7 @@ PaGlobal_Repair.cursor_PosUpdate = function(self)
   (self._uiRepairCursor):SetPosY(getMousePosY() - Panel_Window_Repair:GetPosY())
 end
 
--- DECOMPILER ERROR at PC167: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC142: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.Repair_Money_SetPos = function(self)
   -- function num : 0_12
@@ -538,7 +558,7 @@ PaGlobal_Repair.Repair_Money_SetPos = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC170: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_registMessageHandler = function(self)
   -- function num : 0_13
@@ -548,7 +568,7 @@ PaGlobal_Repair.repair_registMessageHandler = function(self)
   Panel_LuckyRepair_Result:RegisterUpdateFunc("Chk_LuckyRepair_ResultMsg_ShowTime")
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.setIsCamping = function(self, isCamping)
   -- function num : 0_14

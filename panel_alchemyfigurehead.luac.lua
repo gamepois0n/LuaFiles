@@ -496,7 +496,7 @@ FGlobal_AlchemyFigureHead_Open = function()
   if Panel_Window_Inventory:IsUISubApp() then
     Panel_AlchemyFigureHead:OpenUISubApp()
   end
-  if Panel_Equipment:GetShow() then
+  if _ContentsGroup_RenewUI == false and Panel_Equipment:GetShow() then
     EquipmentWindow_Close()
   end
   ClothInventory_Close()

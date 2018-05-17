@@ -217,6 +217,7 @@ LogInPanel_Resize = function()
                           Static_CI:ComputePos()
                           Static_DaumCI:ComputePos()
                           Static_BI:SetPosY(getScreenSizeY() * 0.14)
+                          PaGlobal_CheckGamerTag()
                         end
                       end
                     end
@@ -281,9 +282,14 @@ Panel_Login_Update = function(deltaTime)
         baseTexture:setUV(startUV, startUV, startUV2, startUV2)
         ;
         (Static_Back[currentBackIndex]):setRenderTexture(baseTexture)
-        local fadeColor2 = (Static_Back[currentBackIndex]):addColorAnimation(12, 15, 0)
-        fadeColor2:SetStartColor((Defines.Color).C_00FFFFFF)
-        fadeColor2:SetEndColor((Defines.Color).C_FFFFFFFF)
+        do
+          local fadeColor2 = (Static_Back[currentBackIndex]):addColorAnimation(12, 15, 0)
+          fadeColor2:SetStartColor((Defines.Color).C_00FFFFFF)
+          fadeColor2:SetEndColor((Defines.Color).C_FFFFFFFF)
+          if ToClient_isXBox() and isPadUp(__eJoyPadInputType_A) then
+            PaGlobal_Policy_Close()
+          end
+        end
       end
     end
   end
@@ -330,4 +336,7 @@ Button_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
 Button_GameOption:addInputEvent("Mouse_LUp", "showGameOption()")
 registerEvent("onScreenResize", "LogInPanel_Resize")
 LogInPanel_Resize()
+if ToClient_isXBox() then
+  PaGlobal_Policy_ShowWindow(true)
+end
 

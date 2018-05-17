@@ -15,15 +15,15 @@ local isRenew = false
 local AgreementGuild_Master = {btn_Send = (UI.getChildControl)(Panel_AgreementGuild_Master, "Button_Confirm"), btn_Refuse = (UI.getChildControl)(Panel_AgreementGuild_Master, "Button_Refuse"), btn_Close = (UI.getChildControl)(Panel_AgreementGuild_Master, "Button_Close"), title = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_AgreementContentTitle"), content = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_AgreementContent"), radioBtnPeriod = (UI.getChildControl)(Panel_AgreementGuild_Master, "RadioButton_Period"), penaltyCostTitle = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_PenaltyCost"), dailyPaymentTitle = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_DailyPayment"), remainPeriodTitle = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_Period"), remainPeriod = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_PeriodValue"), dailyPayment = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_PaymentValue"), penaltyCost = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_PenaltyCostValue"), btnRenew = (UI.getChildControl)(Panel_AgreementGuild_Master, "Button_Period_Renew"), from = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_From"), to = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_To"), guildMark = (UI.getChildControl)(Panel_AgreementGuild_Master, "Static_GuildMark"), dailyPayment_edit = (UI.getChildControl)(Panel_AgreementGuild_Master, "Edit_Payment"), penaltyCost_edit = (UI.getChildControl)(Panel_AgreementGuild_Master, "Edit_PenaltyCost"), contractPeriod_edit = (UI.getChildControl)(Panel_AgreementGuild_Master, "Edit_ContractPeriod"), memberBenefit = 0, memberPenalty = 0, maxDailyPayment = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_MaxPayment"), maxpenaltyCost = (UI.getChildControl)(Panel_AgreementGuild_Master, "StaticText_MaxPenaltyCost"), _frame = (UI.getChildControl)(Panel_AgreementGuild_Master, "Frame_1"), usableActivity = 0, maxBenefitValue = 0, maxpenaltyCostValue = 0}
 _frame_Content = (UI.getChildControl)(AgreementGuild_Master._frame, "Frame_1_Content")
 _frame_Summary = (UI.getChildControl)(_frame_Content, "StaticText_1")
-local periodValue = {[0] = 0, [1] = 1, [2] = 7, [3] = 14, [4] = 30}
-local paymentPerDay = {[0] = 0, [1] = 1000, [2] = 7000, [3] = 14000, [4] = 30000}
-local cancellationCharge = {[0] = 0, [1] = 500, [2] = 3500, [3] = 7000, [4] = 15000}
+local periodValue = {[0] = 0, [1] = 1, [2] = 7, [3] = 14, [4] = 30, [5] = 180, [6] = 365}
+local paymentPerDay = {[0] = 0, [1] = 1000, [2] = 7000, [3] = 14000, [4] = 30000, [5] = 180000, [6] = 365000}
+local cancellationCharge = {[0] = 0, [1] = 500, [2] = 3500, [3] = 7000, [4] = 15000, [5] = 90000, [6] = 182500}
 AgreementGuild_Master._radioBtn_Period = {}
-for index = 0, 4 do
-  -- DECOMPILER ERROR at PC191: Confused about usage of register: R16 in 'UnsetPending'
+for index = 0, 6 do
+  -- DECOMPILER ERROR at PC197: Confused about usage of register: R16 in 'UnsetPending'
 
   (AgreementGuild_Master._radioBtn_Period)[index] = {}
-  -- DECOMPILER ERROR at PC201: Confused about usage of register: R16 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC207: Confused about usage of register: R16 in 'UnsetPending'
 
   ;
   (AgreementGuild_Master._radioBtn_Period)[index] = (UI.createControl)(UCT.PA_UI_CONTROL_RADIOBUTTON, Panel_AgreementGuild_Master, "RadioButton_Period_" .. index)
@@ -31,7 +31,7 @@ for index = 0, 4 do
   ;
   ((AgreementGuild_Master._radioBtn_Period)[index]):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_DAY", "day", periodValue[index]))
   ;
-  ((AgreementGuild_Master._radioBtn_Period)[index]):SetPosX(((AgreementGuild_Master.radioBtnPeriod):GetPosX() + 150) * index)
+  ((AgreementGuild_Master._radioBtn_Period)[index]):SetPosX(((AgreementGuild_Master.radioBtnPeriod):GetPosX() + 75) * index)
   ;
   ((AgreementGuild_Master._radioBtn_Period)[index]):SetPosY(480)
   ;
@@ -167,7 +167,7 @@ AgreementGuild_Master.SetShowContractPreSet = function(self, isShow)
   end
   local sumIndex = 0
   for index = startRadioIndex, #periodValue do
-    ((self._radioBtn_Period)[index]):SetPosX((self.radioBtnPeriod):GetPosX() + 80 * sumIndex)
+    ((self._radioBtn_Period)[index]):SetPosX((self.radioBtnPeriod):GetPosX() + 55 * sumIndex)
     ;
     ((self._radioBtn_Period)[index]):SetShow(true)
     ;
@@ -179,7 +179,7 @@ AgreementGuild_Master.SetShowContractPreSet = function(self, isShow)
   ;
   (self.penaltyCost):SetShow(true)
   if isShow then
-    HandleClicked_AgreementGuild_Master_SetData(#periodValue)
+    HandleClicked_AgreementGuild_Master_SetData(4)
   end
   ;
   (self.dailyPayment_edit):SetShow(not isShow)

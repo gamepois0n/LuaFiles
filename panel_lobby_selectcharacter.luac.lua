@@ -295,6 +295,9 @@ local SelectCharacter_Init = function()
     CheckButton:SetShow(true)
     CheckButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleGhostMode()")
   end
+  do
+    PaGlobal_CheckGamerTag()
+  end
 end
 
 Panel_Lobby_SelectCharacter_EnableSelectButton = function(enableValue)
@@ -478,10 +481,10 @@ local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpe
           viewCharacterFov(0.55)
         else
           if classType == UI_Class.ClassType_Orange then
-            viewCharacter(index, -20, -20, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
+            viewCharacter(index, -20, -30, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
             viewCharacterPitchRoll(0, 0)
-            setWeatherTime(8, 2)
-            viewCharacterFov(0.55)
+            viewCharacterFov(0.8)
+            setWeatherTime(8, 1)
           else
             viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
             viewCharacterPitchRoll(3.14, 0)

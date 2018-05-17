@@ -457,10 +457,18 @@ end
 
 HandleClicked_ShowMainQuestDetail = function(groupId, questId, checkCondition, groupTitle, questGroupCount)
   -- function num : 0_15
-  local fromQuestWidget = true
-  FGlobal_QuestWindow_SetProgress()
-  FGlobal_QuestInfoDetail(groupId, questId, checkCondition, groupTitle, questGroupCount, true)
-  audioPostEvent_SystemUi(0, 0)
+  if _ContentsGroup_RenewUI == false then
+    local fromQuestWidget = true
+    FGlobal_QuestWindow_SetProgress()
+    FGlobal_QuestInfoDetail(groupId, questId, checkCondition, groupTitle, questGroupCount, true)
+    audioPostEvent_SystemUi(0, 0)
+  else
+    do
+      audioPostEvent_SystemUi(0, 0)
+      PaGlobal_MainQuest:showAcceptConditionTooltip(false)
+      PaGlobalFunc_Quest_OpenDetail(groupId, questId, 1)
+    end
+  end
 end
 
 HandleClicked_MainQuest_FindWay = function(gruopNo, questNo, questCondition, isAuto, checkAcceptable, control)
@@ -473,7 +481,11 @@ HandleClicked_MainQuest_FindWay = function(gruopNo, questNo, questCondition, isA
         return 
       end
     end
-    HandleClicked_QuestWindow_FindWay(gruopNo, questNo, questCondition, isAuto)
+    if _ContentsGroup_RenewUI == false then
+      HandleClicked_QuestWindow_FindWay(gruopNo, questNo, questCondition, isAuto)
+    else
+      PaGlobalFunc_Quest_FindWay(gruopNo, questNo, isAuto)
+    end
   end
 end
 

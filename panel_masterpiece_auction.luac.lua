@@ -139,6 +139,8 @@ PaGlobal_MasterpieceAuction.initialize = function(self)
   ;
   ((self._ui)._staticTextDescBG):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_MYBIDITEMINFO"))
   ;
+  ((self._ui)._staticTextItemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
   ((self._ui)._txt_BottomDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   ((self._ui)._txt_BottomDesc):setPadding((CppEnums.Padding).ePadding_Left, 10)

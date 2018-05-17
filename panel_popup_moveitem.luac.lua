@@ -289,27 +289,33 @@ HandleClickedMoveItemButtonXXX = function(toWhereType, toActorKeyRaw)
             local weight = Int64toInt32((itemSSW:get())._weight) / 10000
             self._s64_count = toInt64(0, (math.min)((math.floor)(100 / weight), Int64toInt32(self._s64_count)))
           end
-        end
-        do
-          Warehouse_PushFromInventoryItem(self._s64_count, self._whereType, self._slotNo, fromActorKeyRaw)
-          if (CppEnums.MoveItemToType).Type_Vehicle == fromWhereType or (CppEnums.MoveItemToType).Type_Ship == fromWhereType or (CppEnums.MoveItemToType).Type_Pet == fromWhereType then
-            if (CppEnums.MoveItemToType).Type_Vehicle == toWhereType or (CppEnums.MoveItemToType).Type_Ship == toWhereType or (CppEnums.MoveItemToType).Type_Pet == toWhereType or (CppEnums.MoveItemToType).Type_Player == toWhereType then
-              PopupMoveItem_MoveInventoryItemFromActorToActor(toActorKeyRaw, self._s64_count, self._whereType, self._slotNo)
-            else
-              if (CppEnums.MoveItemToType).Type_Warehouse == toWhereType then
-                Warehouse_PushFromInventoryItem(self._s64_count, self._whereType, self._slotNo, fromActorKeyRaw)
+          do
+            do
+              if self._s64_count <= (Defines.s64_const).s64_0 then
+                Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoMaidDeliveryCantHeavyItem"))
+                return 
               end
-            end
-          else
-            if (CppEnums.MoveItemToType).Type_Warehouse == fromWhereType then
-              Warehouse_PopToSomewhere(self._s64_count, self._slotNo, toActorKeyRaw)
-            else
-              ;
-              (UI.ASSERT)(false, "아이�\156 이동 �\128입이 정상적이�\128 않습니다!!!")
+              Warehouse_PushFromInventoryItem(self._s64_count, self._whereType, self._slotNo, fromActorKeyRaw)
+              if (CppEnums.MoveItemToType).Type_Vehicle == fromWhereType or (CppEnums.MoveItemToType).Type_Ship == fromWhereType or (CppEnums.MoveItemToType).Type_Pet == fromWhereType then
+                if (CppEnums.MoveItemToType).Type_Vehicle == toWhereType or (CppEnums.MoveItemToType).Type_Ship == toWhereType or (CppEnums.MoveItemToType).Type_Pet == toWhereType or (CppEnums.MoveItemToType).Type_Player == toWhereType then
+                  PopupMoveItem_MoveInventoryItemFromActorToActor(toActorKeyRaw, self._s64_count, self._whereType, self._slotNo)
+                else
+                  if (CppEnums.MoveItemToType).Type_Warehouse == toWhereType then
+                    Warehouse_PushFromInventoryItem(self._s64_count, self._whereType, self._slotNo, fromActorKeyRaw)
+                  end
+                end
+              else
+                if (CppEnums.MoveItemToType).Type_Warehouse == fromWhereType then
+                  Warehouse_PopToSomewhere(self._s64_count, self._slotNo, toActorKeyRaw)
+                else
+                  ;
+                  (UI.ASSERT)(false, "아이�\156 이동 �\128입이 정상적이�\128 않습니다!!!")
+                end
+              end
+              PopupMoveItem_Close()
+              audioPostEvent_SystemUi(1, 1)
             end
           end
-          PopupMoveItem_Close()
-          audioPostEvent_SystemUi(1, 1)
         end
       end
     end

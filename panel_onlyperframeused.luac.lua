@@ -44,9 +44,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     WhereUseItemDirectionRestore()
   end
   do
-    if FGlobal_AlchemyStonCheck() ~= nil then
+    if FGlobal_AlchemyStonCheck ~= nil then
       local cooltime = FGlobal_AlchemyStonCheck()
-      -- DECOMPILER ERROR at PC67: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC66: Unhandled construct in 'MakeBoolean' P1
 
       if cooltime > 0 and ToClient_GetAlchemyStoneReuseNextTick() == true then
         FGlobal_AlchemyStone_Use()

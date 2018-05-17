@@ -3,23 +3,13 @@
 
 -- params : ...
 -- function num : 0
-allydisJoin = function()
-  -- function num : 0_0
-  ToClient_RequestDisjoinGuildAlliance()
-end
-
-allydestroy = function()
-  -- function num : 0_1
-  ToClient_RequestDestroyGuildAlliance()
-end
-
 testCreate = function()
-  -- function num : 0_2
+  -- function num : 0_0
   ToClient_qaCreateItem(10010, 15, 1)
 end
 
 workerready = function(level)
-  -- function num : 0_3
+  -- function num : 0_1
   ToClient_qaCreateItem(64204, 0, 1)
   ToClient_qaCreateItem(64205, 0, 1)
   ToClient_qaCreateItem(64206, 0, 1)
@@ -42,7 +32,7 @@ workerready = function(level)
 end
 
 runAutoFrameCheck = function()
-  -- function num : 0_4
+  -- function num : 0_2
   FGlobal_AutoFrameCheck_setMinFrame(25)
   FGlobal_setAutoFrameCheckRepeat(true)
   FGlobal_AutoFrameCheck_addPositionList(100, 100, 100)
@@ -51,7 +41,7 @@ end
 
 local UI_CT = CppEnums.ClassType
 behero = function()
-  -- function num : 0_5
+  -- function num : 0_3
   ToClient_qaCreateItem(9693, 0, 10)
   ToClient_qaCreateItem(793, 0, 20)
   ToClient_qaCreateItem(45220, 0, 1)
@@ -72,7 +62,7 @@ behero = function()
 end
 
 warready = function(enchantLeve1)
-  -- function num : 0_6
+  -- function num : 0_4
   createBuffItem(enchantLeve1)
   item(enchantLeve1)
   createBossArmor(enchantLeve1)
@@ -80,7 +70,7 @@ warready = function(enchantLeve1)
 end
 
 createBuffItem = function(enchantLevel)
-  -- function num : 0_7
+  -- function num : 0_5
   ToClient_qaCreateItem(65487, 0, 1)
   ToClient_qaCreateItem(65488, 0, 1)
   ToClient_qaCreateItem(65489, 0, 1)
@@ -90,7 +80,7 @@ createBuffItem = function(enchantLevel)
 end
 
 item = function(enchantLeve1)
-  -- function num : 0_8 , upvalues : UI_CT
+  -- function num : 0_6 , upvalues : UI_CT
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -338,7 +328,7 @@ item = function(enchantLeve1)
 end
 
 createBossArmor = function(enchantLevel)
-  -- function num : 0_9
+  -- function num : 0_7
   ToClient_qaCreateItem(11013, enchantLevel, 1)
   ToClient_qaCreateItem(11101, enchantLevel, 1)
   ToClient_qaCreateItem(11015, enchantLevel, 1)
@@ -348,7 +338,7 @@ createBossArmor = function(enchantLevel)
 end
 
 createAccessory = function(enchantLeve1)
-  -- function num : 0_10
+  -- function num : 0_8
   if enchantLeve1 == 16 then
     ToClient_qaCreateItem(12230, 0, 1)
     ToClient_qaCreateItem(12031, 0, 2)
@@ -425,31 +415,6 @@ createAccessory = function(enchantLeve1)
       end
     end
   end
-end
-
-clearAllianceJoinQueue = function()
-  -- function num : 0_11
-  ToClient_RequestClearAllianceJoinQueue()
-end
-
-requestAddAlliance = function(name, taxRate, limitCount)
-  -- function num : 0_12
-  ToClient_RequestAddAllianceJoinQueue(name, taxRate, limitCount)
-end
-
-createGuildAlliance = function(allianceName)
-  -- function num : 0_13
-  ToClient_CreateGuildAlliance(allianceName)
-end
-
-sendJoinGuildAlliance = function(doAccept)
-  -- function num : 0_14
-  ToClient_sendJoinGuildAlliance(doAccept)
-end
-
-cancelCreateGuildAlliance = function()
-  -- function num : 0_15
-  ToClient_CancelCreateGuildAlliance()
 end
 
 
