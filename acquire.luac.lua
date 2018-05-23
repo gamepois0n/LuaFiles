@@ -636,7 +636,9 @@ Acquire_ProcessMessage = function()
                   if notifyMsg == nil and FGlobal_NakMessagePanel_CheckLeftMessageCount() ~= 0 then
                     Panel_RewardSelect_NakMessage:SetShow(true, false)
                   end
-                  enableSkill_UpdateData()
+                  if _ContentsGroup_RenewUI_Skill == false then
+                    enableSkill_UpdateData()
+                  end
                 end
               end
             end

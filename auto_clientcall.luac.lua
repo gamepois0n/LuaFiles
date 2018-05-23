@@ -5,7 +5,9 @@
 -- function num : 0
 FromClient_AutoStart = function()
   -- function num : 0_0
-  PaGlobal_AutoManager:start(false)
+  if _ContentsGroup_RenewUI == false then
+    PaGlobal_AutoManager:start(false)
+  end
 end
 
 FromClient_AutoStop = function()

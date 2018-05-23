@@ -438,6 +438,11 @@ PaGlobal_TutorialManager.startTutorial = function(self, phaseNo, stepNo, typeNo)
     _PA_LOG("곽민�\176", "시작하려�\148 페이즈가 없습니다. destPhaseNo : " .. tostring(destPhaseNo))
     return 
   end
+  if _ContentsGroup_RenewUI == true and destPhaseNo >= 8 then
+    self._isDoingTutorial = false
+    self:endTutorial()
+    return 
+  end
   local destStepNo = 0
   if stepNo == nil or stepNo == 0 then
     destStepNo = 1
@@ -459,11 +464,20 @@ end
 PaGlobal_TutorialManager.startNextPhase = function(self)
   -- function num : 0_16
   self._currentPhaseNo = self._currentPhaseNo + 1
-  if self._currentPhaseNo > 0 and (self._phaseList)[self._currentPhaseNo] == nil then
-    self:endTutorial()
+  if _ContentsGroup_RenewUI == false then
+    if self._currentPhaseNo > 0 and (self._phaseList)[self._currentPhaseNo] == nil then
+      self:endTutorial()
+    else
+      ;
+      ((self._phaseList)[self._currentPhaseNo]):startPhase(1, 1)
+    end
   else
-    ;
-    ((self._phaseList)[self._currentPhaseNo]):startPhase(1, 1)
+    if self._currentPhaseNo >= 8 then
+      self:endTutorial()
+    else
+      ;
+      ((self._phaseList)[self._currentPhaseNo]):startPhase(1, 1)
+    end
   end
 end
 
@@ -476,6 +490,7 @@ PaGlobal_TutorialManager.endTutorial = function(self)
     (getSelfPlayer()):setActionChart("WAIT")
   end
   Panel_Tutorial:SetShow(false, true)
+  self._isDoingTutorial = false
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()
   PaGlobal_TutorialUiManager:restoreAllUiByUserSetting()

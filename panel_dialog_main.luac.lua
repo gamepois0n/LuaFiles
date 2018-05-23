@@ -2855,7 +2855,9 @@ FromClient_hideDialog = function(isSetWait)
   setShowLine(true)
   _blackStone_CallingTime = 0
   setFullSizeMode(false, (FullSizeMode.fullSizeModeEnum).Dialog)
-  HandleMLUp_SkillWindow_Close()
+  if _ContentsGroup_RenewUI_Skill == false then
+    HandleMLUp_SkillWindow_Close()
+  end
   click_DeliveryForPerson_Close()
   NpcShop_WindowClose()
   FGlobal_NodeWarMenuClose()
@@ -2904,7 +2906,9 @@ ClickFunctionButtonByType = function(type)
     return 
   end
   NpcShop_WindowClose()
-  HandleMLUp_SkillWindow_Close()
+  if _ContentsGroup_RenewUI_Skill == false then
+    HandleMLUp_SkillWindow_Close()
+  end
   Warehouse_Close()
   FGlobal_ItemMarketRegistItem_Close()
   TerritoryAuth_Auction_Close()
@@ -3067,7 +3071,9 @@ ClickFunctionButtonByType = function(type)
                                     count = 2
                                     targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
                                     show_DialogPanel()
-                                    if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                    -- DECOMPILER ERROR at PC590: Unhandled construct in 'MakeBoolean' P1
+
+                                    if (CppEnums.ContentsType).Contents_Skill == funcButtonType and _ContentsGroup_RenewUI_Skill == false then
                                       count = 1
                                       targetWindowList = {Panel_Window_Skill}
                                     end
@@ -3200,7 +3206,9 @@ HandleClickedFuncButton = function(index)
     return 
   end
   NpcShop_WindowClose()
-  HandleMLUp_SkillWindow_Close()
+  if _ContentsGroup_RenewUI_Skill == false then
+    HandleMLUp_SkillWindow_Close()
+  end
   Warehouse_Close()
   FGlobal_ItemMarketRegistItem_Close()
   TerritoryAuth_Auction_Close()
@@ -3369,7 +3377,9 @@ HandleClickedFuncButton = function(index)
                                 count = 2
                                 targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
                                 show_DialogPanel()
-                                if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                -- DECOMPILER ERROR at PC615: Unhandled construct in 'MakeBoolean' P1
+
+                                if (CppEnums.ContentsType).Contents_Skill == funcButtonType and _ContentsGroup_RenewUI_Skill == false then
                                   count = 1
                                   targetWindowList = {Panel_Window_Skill}
                                 end
@@ -3409,9 +3419,14 @@ HandleClickedFuncButton = function(index)
                                 if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
                                   npcShop_requestList(funcButtonType)
                                   FGlobal_NodeWarMenuClose()
-                                elseif (CppEnums.ContentsType).Contents_Skill == funcButtonType then
-                                  HandleMLUp_SkillWindow_OpenForLearn()
-                                elseif (CppEnums.ContentsType).Contents_Repair == funcButtonType then
+                                else
+                                  -- DECOMPILER ERROR at PC793: Unhandled construct in 'MakeBoolean' P1
+
+                                  if (CppEnums.ContentsType).Contents_Skill == funcButtonType and _ContentsGroup_RenewUI_Skill == false then
+                                    HandleMLUp_SkillWindow_OpenForLearn()
+                                  end
+                                end
+                                if (CppEnums.ContentsType).Contents_Repair == funcButtonType then
                                   PaGlobal_Repair:repair_OpenPanel(true)
                                 elseif (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
                                   Warehouse_OpenPanelFromDialog()
@@ -3872,7 +3887,7 @@ HandleClickedBackButton = function()
   if check_ShowWindow() then
     close_WindowPanelList()
   end
-  if Panel_Window_Skill:IsShow() then
+  if _ContentsGroup_RenewUI_Skill == false and Panel_Window_Skill:IsShow() then
     HandleMLUp_SkillWindow_Close()
   end
   if Panel_Window_Warehouse:IsShow() then

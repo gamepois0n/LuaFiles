@@ -151,7 +151,7 @@ end
 PaGlobal_TutorialPhase_BasicMove.changeStepBlackSpiritTalk = function(self)
   -- function num : 0_7
   (getSelfPlayer()):setActionChart("TUTORIAL_WAIT_STEP1")
-  Panel_QuickSlot:SetShow(false, false)
+  PaGlobalFunc_QuickSlot_SetShow(false, false)
 end
 
 -- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'

@@ -13,12 +13,21 @@ appear_blackSpirit = function(questNo, blackSpiritUIType)
   SetUIMode(UIMode.eUIMode_NpcDialog_Dummy)
   local callSummon = RequestAppearBlackSpirit(questNo, blackSpiritUIType)
   if callSummon then
-    Panel_Npc_Dialog:SetShow(false)
-    FGlobal_Dialog_renderMode:set()
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_Close()
+      PaGlobalFunc_Dialog_Main_SetRenderMode()
+    else
+      Panel_Npc_Dialog:SetShow(false)
+      FGlobal_Dialog_renderMode:set()
+    end
   else
     SetUIMode(preUIMode)
     ToClient_PopBlackSpiritFlush()
-    Panel_Npc_Dialog:SetShow(false)
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_Close()
+    else
+      Panel_Npc_Dialog:SetShow(false)
+    end
   end
 end
 

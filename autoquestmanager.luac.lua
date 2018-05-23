@@ -174,46 +174,63 @@ PaGlobal_AutoQuestManager.mouseProgress = function(self)
               self._pressButton = pressButton.mouseL
             end
             if self._stateType == stateTypeValue.startQuestToNpc then
-              local buttonPosition = FGlobal_Dialog_GetFuncPositionNewQuestButton()
-              if buttonPosition._Return == false then
-                return 
-              end
-              self._pressButton = pressButton.mouseMoving
-              if self:moveMouse(buttonPosition._PosX + 65, Panel_Npc_Dialog:GetPosY() + buttonPosition._PosY + 18) == false then
-                self._stateType = stateTypeValue.doingQuest
-                if self._pressButton ~= pressButton.keyboarR then
-                  self._pressButton = pressButton.keyboarR
-                  self._mouseAutoMove = false
+              if _ContentsGroup_RenewUI_Dailog == true then
+                local buttonPosition = PaGlobalFunc_MainDialog_Bottom_GetFuncPositionNewQuestButton()
+                if buttonPosition._Return == false then
+                  return 
                 end
-              end
-            else
-              do
-                if self._stateType == stateTypeValue.endQuestToNpc then
-                  if self._autoMove then
-                    return 
+                self._pressButton = pressButton.mouseMoving
+                local sizeX, sizeY = PaGlobalFunc_MainDialog_Bottom_GetFuncButtonSizeXY()
+                if self:moveMouse(buttonPosition._PosX + sizeX / 2, PaGlobalFunc_MainDialog_Bottom_GetSizeY() + buttonPosition._PosY + sizeY / 2) == false then
+                  self._stateType = stateTypeValue.doingQuest
+                  if self._pressButton ~= pressButton.keyboarR then
+                    self._pressButton = pressButton.keyboarR
+                    self._mouseAutoMove = false
                   end
-                  local npcData = ToClient_GetCurrentDialogData()
-                  if npcData == nil then
-                    return 
-                  end
-                  local selCount = 0
-                  local QuestStatic = questList_getQuestStatic(self._currentQuestGroup, self._currentQuestId)
-                  if QuestStatic ~= nil then
-                    selCount = QuestStatic:getQuestSelectRewardCount()
-                  end
-                  if selCount ~= 0 then
-                    local buttonPosition = FGlobal_getSelectRewardPosition()
-                    if self:moveMouse(buttonPosition._PosX, buttonPosition._PosY) == false then
-                      self._stateType = stateTypeValue.idle
-                      self._pressButton = pressButton.selectreward
-                      self._mouseAutoMove = false
+                end
+              else
+                do
+                  do
+                    local buttonPosition = FGlobal_Dialog_GetFuncPositionNewQuestButton()
+                    if buttonPosition._Return == false then
+                      return 
                     end
-                  else
-                    do
+                    self._pressButton = pressButton.mouseMoving
+                    if self:moveMouse(buttonPosition._PosX + 65, Panel_Npc_Dialog:GetPosY() + buttonPosition._PosY + 18) == false then
+                      self._stateType = stateTypeValue.doingQuest
                       if self._pressButton ~= pressButton.keyboarR then
                         self._pressButton = pressButton.keyboarR
+                        self._mouseAutoMove = false
                       end
-                      self._mouseAutoMove = false
+                    end
+                    if self._stateType == stateTypeValue.endQuestToNpc then
+                      if self._autoMove then
+                        return 
+                      end
+                      local npcData = ToClient_GetCurrentDialogData()
+                      if npcData == nil then
+                        return 
+                      end
+                      local selCount = 0
+                      local QuestStatic = questList_getQuestStatic(self._currentQuestGroup, self._currentQuestId)
+                      if QuestStatic ~= nil then
+                        selCount = QuestStatic:getQuestSelectRewardCount()
+                      end
+                      if selCount ~= 0 then
+                        local buttonPosition = FGlobal_getSelectRewardPosition()
+                        if self:moveMouse(buttonPosition._PosX, buttonPosition._PosY) == false then
+                          self._stateType = stateTypeValue.idle
+                          self._pressButton = pressButton.selectreward
+                          self._mouseAutoMove = false
+                        end
+                      else
+                        do
+                          if self._pressButton ~= pressButton.keyboarR then
+                            self._pressButton = pressButton.keyboarR
+                          end
+                          self._mouseAutoMove = false
+                        end
+                      end
                     end
                   end
                 end

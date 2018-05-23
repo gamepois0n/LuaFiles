@@ -112,7 +112,7 @@ close_WindowPanelList = function()
   if Panel_Window_Warehouse:GetShow() then
     Warehouse_Close()
   end
-  if Panel_Window_Skill:IsShow() then
+  if _ContentsGroup_RenewUI_Skill == false and Panel_Window_Skill:IsShow() then
     HandleMLUp_SkillWindow_Close()
   end
   if Panel_EventNotify:GetShow() then
@@ -161,7 +161,7 @@ close_WindowPanelList = function()
   end
   if Panel_Window_Inventory:IsShow() and Panel_Window_Inventory:IsUISubApp() == false then
     InventoryWindow_Close()
-    if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
+    if Panel_Equipment:GetShow() then
       Equipment_SetShow(false)
     end
     ClothInventory_Close()
@@ -211,6 +211,7 @@ close_WindowPanelList = function()
   else
     if PaGlobalFunc_Quest_GetShow() == true then
       PaGlobalFunc_Quest_SetShow(false)
+      return 
     end
   end
   if Panel_IntroMovie:IsShow() then
@@ -301,6 +302,14 @@ close_WindowPanelList = function()
       end
     end
   end
+  if Panel_LifeRanking:IsShow() then
+    FGlobal_LifeRanking_Close()
+  end
+  if Panel_ButtonShortcuts:GetShow() == true then
+    _PA_LOG("�\128선용", "force close")
+    PaGlobal_ButtonShortcuts:Close()
+    return 
+  end
   for i = 1, #panel_WindowList do
     if panel_WindowList[i] ~= nil and (panel_WindowList[i]):IsUISubApp() == false then
       (panel_WindowList[i]):SetShow(false, false)
@@ -316,7 +325,7 @@ close_WindowPanelList = function()
       (panel_SoundedWindowList[i]):SetShow(false, false)
     end
   end
-  if not Panel_Npc_Dialog:GetShow() then
+  if _ContentsGroup_RenewUI_Dailog == true and not PaGlobalFunc_MainDialog_GetShow() then
     for _,loopPanel in ipairs(panel_ExceptionWindowList) do
       if loopPanel ~= nil and loopPanel:IsUISubApp() == false then
         loopPanel:SetShow(false, false)
@@ -324,31 +333,40 @@ close_WindowPanelList = function()
     end
   end
   do
-    AcquireDirecteReShowUpdate()
-    if isFocusInChatting() then
-      Panel_Chatting_Input:SetShow(true, false)
+    if not Panel_Npc_Dialog:GetShow() then
+      for _,loopPanel in ipairs(panel_ExceptionWindowList) do
+        if loopPanel ~= nil and loopPanel:IsUISubApp() == false then
+          loopPanel:SetShow(false, false)
+        end
+      end
     end
-    if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 1 then
-      FGlobal_Panel_LowLevelGuide_MovePlay_FindWay()
-    else
-      if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 2 then
-        FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
+    do
+      AcquireDirecteReShowUpdate()
+      if isFocusInChatting() then
+        Panel_Chatting_Input:SetShow(true, false)
+      end
+      if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 1 then
+        FGlobal_Panel_LowLevelGuide_MovePlay_FindWay()
       else
-        if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 3 then
-          FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()
+        if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 2 then
+          FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
         else
-          if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 4 then
-            FGlobal_Panel_LowLevelGuide_MovePlay_AcceptQuest()
+          if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 3 then
+            FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()
           else
-            if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 99 then
-              FGlobal_Panel_LowLevelGuide_MovePlay_BlackSpirit()
+            if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 4 then
+              FGlobal_Panel_LowLevelGuide_MovePlay_AcceptQuest()
+            else
+              if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 99 then
+                FGlobal_Panel_LowLevelGuide_MovePlay_BlackSpirit()
+              end
             end
           end
         end
       end
-    end
-    if Panel_ButtonShortcuts:GetShow() == true then
-      PaGlobal_ButtonShortcuts:Close()
+      if Panel_ButtonShortcuts:GetShow() == true then
+        PaGlobal_ButtonShortcuts:Close()
+      end
     end
   end
 end
@@ -382,7 +400,7 @@ close_force_WindowPanelList = function()
   if Panel_Window_Warehouse:GetShow() then
     Warehouse_Close()
   end
-  if Panel_Window_Skill:IsShow() then
+  if _ContentsGroup_RenewUI_Skill == false and Panel_Window_Skill:IsShow() then
     HandleMLUp_SkillWindow_Close()
   end
   if Panel_SetVoiceChat:GetShow() then
@@ -459,13 +477,14 @@ close_force_WindowPanelList = function()
   if Panel_KnowledgeManagement:GetShow() then
     FGlobal_KnowledgeClose()
   end
-  -- DECOMPILER ERROR at PC265: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC268: Unhandled construct in 'MakeBoolean' P1
 
   if _ContentsGroup_RenewUI == false and Panel_Window_Quest_New:GetShow() == true then
     HandleClicked_QuestNew_Close()
   end
   if PaGlobalFunc_Quest_GetShow() == true then
     PaGlobalFunc_Quest_SetShow(false)
+    return 
   end
   if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
     FGlobal_QuestInfoDetail_Close()
@@ -559,7 +578,7 @@ close_force_WindowPanelList = function()
       (panel_SoundedWindowList[i]):SetShow(false, false)
     end
   end
-  if not Panel_Npc_Dialog:GetShow() then
+  if _ContentsGroup_RenewUI_Dailog == true and not PaGlobalFunc_MainDialog_GetShow() then
     for _,loopPanel in ipairs(panel_ExceptionWindowList) do
       if loopPanel ~= nil and loopPanel:IsUISubApp() == false then
         loopPanel:SetShow(false, false)
@@ -567,39 +586,48 @@ close_force_WindowPanelList = function()
     end
   end
   do
-    AcquireDirecteReShowUpdate()
-    if isFocusInChatting() then
-      Panel_Chatting_Input:SetShow(true, false)
+    if not Panel_Npc_Dialog:GetShow() then
+      for _,loopPanel in ipairs(panel_ExceptionWindowList) do
+        if loopPanel ~= nil and loopPanel:IsUISubApp() == false then
+          loopPanel:SetShow(false, false)
+        end
+      end
     end
-    if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 1 then
-      FGlobal_Panel_LowLevelGuide_MovePlay_FindWay()
-    else
-      if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 2 then
-        FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
+    do
+      AcquireDirecteReShowUpdate()
+      if isFocusInChatting() then
+        Panel_Chatting_Input:SetShow(true, false)
+      end
+      if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 1 then
+        FGlobal_Panel_LowLevelGuide_MovePlay_FindWay()
       else
-        if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 3 then
-          FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()
+        if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 2 then
+          FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
         else
-          if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 4 then
-            FGlobal_Panel_LowLevelGuide_MovePlay_AcceptQuest()
+          if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 3 then
+            FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()
           else
-            if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 99 then
-              FGlobal_Panel_LowLevelGuide_MovePlay_BlackSpirit()
+            if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 4 then
+              FGlobal_Panel_LowLevelGuide_MovePlay_AcceptQuest()
+            else
+              if Panel_LowLevelGuide_Value_IsCheckMoviePlay == 99 then
+                FGlobal_Panel_LowLevelGuide_MovePlay_BlackSpirit()
+              end
             end
           end
         end
       end
+      if Panel_Window_Camp:GetShow() then
+        PaGlobal_Camp:close()
+      end
+      if Panel_Window_MonsterRanking:GetShow() then
+        FGlobal_MonsterRanking_Close()
+      end
+      if Panel_ChatOption:GetShow() then
+        ChattingOption_Close()
+      end
+      close_UISubAppPanelList()
     end
-    if Panel_Window_Camp:GetShow() then
-      PaGlobal_Camp:close()
-    end
-    if Panel_Window_MonsterRanking:GetShow() then
-      FGlobal_MonsterRanking_Close()
-    end
-    if Panel_ChatOption:GetShow() then
-      ChattingOption_Close()
-    end
-    close_UISubAppPanelList()
   end
 end
 
@@ -633,6 +661,7 @@ close_UISubAppPanelList = function()
   end
   if PaGlobalFunc_Quest_GetShow() == true then
     PaGlobalFunc_Quest_SetShow(false)
+    return 
   end
   if Panel_Npc_Quest_Reward:IsUISubApp() then
     FGlobal_ShowRewardList(false, 0)

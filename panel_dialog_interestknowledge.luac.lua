@@ -131,21 +131,34 @@ Panel_Interest_Knowledge_Show = function()
   Panel_Interest_Knowledge:SetShow(true, true)
 end
 
+PaGlobalFunc_Panel_Interest_Knowledge_ShowToggle = function()
+  -- function num : 0_9
+  if Panel_Interest_Knowledge:IsShow() then
+    Panel_Interest_Knowledge_Hide()
+  else
+    Dialog_InterestKnowledgeUpdate()
+  end
+end
+
 Panel_Interest_Knowledge_Hide = function()
-  -- function num : 0_9 , upvalues : scrollIndex, _scrollCtrlBtn
+  -- function num : 0_10 , upvalues : scrollIndex, _scrollCtrlBtn
   Panel_Interest_Knowledge:SetShow(false, false)
   scrollIndex = 0
   _scrollCtrlBtn:SetPosY(0)
 end
 
 InterestKnowledge_onScreenResize = function()
-  -- function num : 0_10
+  -- function num : 0_11
   local scrY = getScreenSizeY()
-  Panel_Interest_Knowledge:SetPosY(scrY - (Panel_Npc_Dialog:GetSizeY() + Panel_Interest_Knowledge:GetSizeY() + 50))
+  if _ContentsGroup_RenewUI_Dailog == true then
+    Panel_Interest_Knowledge:SetPosY(scrY - (PaGlobalFunc_MainDialog_Bottom_GetSizeY() + Panel_Interest_Knowledge:GetSizeY() + 50))
+  else
+    Panel_Interest_Knowledge:SetPosY(scrY - (Panel_Npc_Dialog:GetSizeY() + Panel_Interest_Knowledge:GetSizeY() + 50))
+  end
 end
 
 InterestKnowledge_Init = function()
-  -- function num : 0_11 , upvalues : _knowledgeMaxCount, uiText, UI_PUCT, _knowledgeList, _scroll, uiBackGround
+  -- function num : 0_12 , upvalues : _knowledgeMaxCount, uiText, UI_PUCT, _knowledgeList, _scroll, uiBackGround
   for index = 0, _knowledgeMaxCount - 1 do
     -- DECOMPILER ERROR at PC15: Confused about usage of register: R4 in 'UnsetPending'
 

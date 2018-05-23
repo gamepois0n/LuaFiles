@@ -35,7 +35,12 @@ end
 
 DragManager.setDragInfo = function(self, panel, whereType, slot, IconPath, groundHitCallbackFunction, fromActorKeyRaw)
   -- function num : 0_3 , upvalues : dragPanel
-  if (panel == Panel_QuickSlot or panel == Panel_Window_Skill) and not isUseNewQuickSlot() then
+  -- DECOMPILER ERROR at PC14: Unhandled construct in 'MakeBoolean' P1
+
+  if _ContentsGroup_RenewUI_Skill == false and (panel == Panel_QuickSlot or panel == Panel_Window_Skill) and not isUseNewQuickSlot() then
+    QuickSlot_ShowBackGround()
+  end
+  if panel == Panel_QuickSlot and not isUseNewQuickSlot() then
     QuickSlot_ShowBackGround()
   end
   self.dragStartPanel = panel

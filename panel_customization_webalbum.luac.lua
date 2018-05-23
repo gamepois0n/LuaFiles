@@ -30,6 +30,7 @@ end
 
 Panel_CustomizingAlbum_HideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(13, 5)
   Panel_CustomizingAlbum:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_CustomizingAlbum, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -95,6 +96,7 @@ end
 
 CustomizingAlbum_Close = function()
   -- function num : 0_4 , upvalues : _customizingAlbumWeb
+  audioPostEvent_SystemUi(13, 5)
   FGlobal_ClearCandidate()
   _customizingAlbumWeb:ResetUrl()
   Panel_CustomizingAlbum:SetShow(false, false)
@@ -102,14 +104,7 @@ end
 
 FGlobal_CustomizingAlbum_Show = function(isCTMode, isSceneState)
   -- function num : 0_5
-  if ToClient_isUserCreateContentsAllowed() then
-    CustomizingAlbum_Open(isCTMode, isSceneState)
-  else
-    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
-    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-    ;
-    (MessageBox.showMessageBox)(messageBoxData)
-  end
+  CustomizingAlbum_Open(isCTMode, isSceneState)
 end
 
 FGlobal_CustomizingAlbum_ShowByScreenShotFrame = function()

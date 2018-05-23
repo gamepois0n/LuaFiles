@@ -815,8 +815,9 @@ end
       if hasGuild then
         local isAllianceMember = playerActorProxy:isGuildAllianceMember()
         local isSiegeBeingChannel = ToClient_IsAnySiegeBeingOfMyChannel()
+        local isGuildTeamBattleAttend = playerActorProxy:isGuildTeamBattleAttend()
         local guildNameText = ""
-        if isAllianceMember == true and isSiegeBeingChannel == true then
+        if isAllianceMember == true and (isSiegeBeingChannel == true or isGuildTeamBattleAttend == true) then
           guildNameText = playerActorProxyWrapper:getGuildAllianceName()
           if guildNameText == "" then
             guildNameText = playerActorProxyWrapper:getGuildName()
@@ -896,7 +897,7 @@ end
         guildOccupyIcon:SetShow(false)
         guildMarkInit(guildMark)
       end
-      -- DECOMPILER ERROR: 28 unprocessed JMP targets
+      -- DECOMPILER ERROR: 29 unprocessed JMP targets
     end
   end
 end

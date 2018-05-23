@@ -135,7 +135,11 @@ end
 PaGlobal_TutorialPhase_Hidel_Worker.endPhase = function(self)
   -- function num : 0_4
   FGlobal_Worldmap_SetRenderMode({(Defines.RenderMode).eRenderMode_WorldMap})
-  FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog})
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_Dialog_Main_SetRenderModeList({(Defines.RenderMode).eRenderMode_Dialog})
+  else
+    FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog})
+  end
   FGlobal_EraseAllEffect_ExitButton()
   FGlobal_NodeMenu_SetEnableNodeUnlinkButton(true)
   PaGlobal_TutorialUiBlackSpirit:setShowAll(false)
@@ -602,9 +606,17 @@ PaGlobal_TutorialPhase_Hidel_Worker.eventCallStep3InteractionShow = function(sel
       isTargetNpc = true
     end
     if isTargetNpc == true then
-      FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog, (Defines.RenderMode).eRenderMode_Tutorial})
+      if _ContentsGroup_RenewUI_Dailog == true then
+        PaGlobalFunc_Dialog_Main_SetRenderModeList({(Defines.RenderMode).eRenderMode_Dialog, (Defines.RenderMode).eRenderMode_Tutorial})
+      else
+        FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog, (Defines.RenderMode).eRenderMode_Tutorial})
+      end
     else
-      FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog})
+      if _ContentsGroup_RenewUI_Dailog == true then
+        PaGlobalFunc_Dialog_Main_SetRenderModeList({(Defines.RenderMode).eRenderMode_Dialog})
+      else
+        FGlobal_Dialog_SetRenderMode({(Defines.RenderMode).eRenderMode_Dialog, (Defines.RenderMode).eRenderMode_Tutorial})
+      end
     end
   end
 end

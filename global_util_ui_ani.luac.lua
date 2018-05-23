@@ -410,7 +410,11 @@ end
 
 IsAniUse = function()
   -- function num : 0_18
-  return not Panel_Npc_Dialog:GetShow()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    return not Panel_Dialog_Main:GetShow()
+  else
+    return not Panel_Npc_Dialog:GetShow()
+  end
 end
 
 

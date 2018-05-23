@@ -41,6 +41,7 @@ end
 
 ChattingFilterList_HideAni = function()
   -- function num : 0_1 , upvalues : UI_ANI_ADV, UI_color
+  audioPostEvent_SystemUi(1, 1)
   local aniInfo1 = Panel_Chatting_Filter:addColorAnimation(0, 0.1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
   aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
@@ -200,14 +201,15 @@ end
 
 ChattingFilter.Close = function(self)
   -- function num : 0_5
+  audioPostEvent_SystemUi(1, 1)
   Panel_Chatting_Filter:SetShow(false, false)
   ;
   ((self.ui).scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self.config).startIndex = 0
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self.config).totalFilterCount = 0

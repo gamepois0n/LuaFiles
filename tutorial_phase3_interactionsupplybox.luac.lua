@@ -268,8 +268,12 @@ local isFinish = false
 PaGlobal_TutorialPhase_InteractionSupplyBox.eventCallClickedSupplyBoxExitButton = function(self, talker)
   -- function num : 0_13 , upvalues : supplyBoxCharacterKey, gainedBeginnerPotion
   if talker ~= nil and talker:getCharacterKey() == supplyBoxCharacterKey then
-    Inventory_SetCheckRadioButtonNormalInventory(true)
-    Inventory_updateSlotData()
+    if _ContentsGroup_RenewUI == false then
+      Inventory_SetCheckRadioButtonNormalInventory(true)
+      Inventory_updateSlotData()
+    else
+      Inventory_updateSlotData(true)
+    end
     if gainedBeginnerPotion == true then
       return true
     end

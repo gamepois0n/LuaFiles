@@ -62,7 +62,11 @@ executeLuaFunc = function(funcText)
                                 Panel_WebHelper_ShowToggle("PanelWindowStableShop")
                               else
                                 if funcText == "selectQuest" then
-                                  FGlobal_HideDialog()
+                                  if _ContentsGroup_RenewUI_Dailog == true then
+                                    FGlobal_HideDialog()
+                                  else
+                                    PaGlobalFunc_MainDialog_Hide()
+                                  end
                                   FGlobal_FirstLogin_InGameOpen()
                                 else
                                   if funcText == "findTargetMovieGuide" then

@@ -179,25 +179,34 @@ AutoState_DialogInteraction.MouseUpdate = function(self)
     return 
   end
   if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.DIALOG_ACCEPT_BUTTON then
-    local pos = FGlobal_Dialog_GetFuncPositionNewQuestButton((CppEnums.ContentsType).Contents_NewQuest)
-    local posX = pos._PosX + 10
-    local posY = pos._PosY + Panel_Npc_Dialog:GetPosY() + 10
-    if pos._Return == false then
-      _PA_LOG("�\128규보", "MouseUpdate, 새로�\180 의뢰 버튼�\132 찾을 �\152 없다")
-    end
-    if pos._Return == false or Auto_MouseMove(posX, posY) == false then
-      self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
-    end
-  else
-    do
-      if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.DIALOG_REWARD_BUTTON then
-        local pos = FGlobal_getSelectRewardPosition()
-        if Auto_MouseMove(pos._PosX, pos._PosY) == false then
-          self._interactionState = AutoDialogInteractionState_Type.COMPLETE_QUEST
-          self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
-          _PA_LOG("�\128규보", "DIALOG_REWARD_BUTTON NONE")
-        else
-          self._interactionState = AutoDialogInteractionState_Type.DIALOG_REWARD_BUTTON
+    local pos, posX, posY = nil, nil, nil
+    if _ContentsGroup_RenewUI_Dailog == true then
+      pos = PaGlobalFunc_MainDialog_Bottom_GetFuncPositionNewQuestButton((CppEnums.ContentsType).Contents_NewQuest)
+      local sizeX, sizeY = PaGlobalFunc_MainDialog_Bottom_GetFuncButtonSizeXY()
+      posX = pos._PosX + sizeX / 2
+      posY = pos._PosY + PaGlobalFunc_MainDialog_Bottom_GetSizeY() + sizeY / 2
+    else
+      do
+        do
+          pos = FGlobal_Dialog_GetFuncPositionNewQuestButton((CppEnums.ContentsType).Contents_NewQuest)
+          posX = pos._PosX + 10
+          posY = pos._PosY + Panel_Npc_Dialog:GetPosY() + 10
+          if pos._Return == false then
+            _PA_LOG("�\128규보", "MouseUpdate, 새로�\180 의뢰 버튼�\132 찾을 �\152 없다")
+          end
+          if pos._Return == false or Auto_MouseMove(posX, posY) == false then
+            self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
+          end
+          if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.DIALOG_REWARD_BUTTON then
+            local pos = FGlobal_getSelectRewardPosition()
+            if Auto_MouseMove(pos._PosX, pos._PosY) == false then
+              self._interactionState = AutoDialogInteractionState_Type.COMPLETE_QUEST
+              self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
+              _PA_LOG("�\128규보", "DIALOG_REWARD_BUTTON NONE")
+            else
+              self._interactionState = AutoDialogInteractionState_Type.DIALOG_REWARD_BUTTON
+            end
+          end
         end
       end
     end

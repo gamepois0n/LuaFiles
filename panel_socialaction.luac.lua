@@ -340,6 +340,7 @@ HandleClicked_SocialIcon = function(iconIndex)
   if socialIconCount == 0 then
     return 
   end
+  audioPostEvent_SystemUi(0, 0)
   Panel_SocialMenu_ResetVertexAni()
   ;
   (_socialIconSlot[iconIndex]):ResetVertexAni()
@@ -386,6 +387,7 @@ end
 FGlobal_SocialAction_ShowToggle = function()
   -- function num : 0_9
   if Panel_Chat_SocialMenu:GetShow() then
+    audioPostEvent_SystemUi(1, 1)
     Panel_Chat_SocialMenu:SetShow(false)
     FGlobal_SocialAction_SetCHK(false)
     TooltipSimple_Hide()
@@ -397,6 +399,7 @@ FGlobal_SocialAction_ShowToggle = function()
       Panel_Chat_SocialMenu:SetShow(true)
       return true
     else
+      audioPostEvent_SystemUi(1, 0)
       SocialAction_Icon_Initialize()
       Panel_Chat_SocialMenu:SetShow(true)
       return true

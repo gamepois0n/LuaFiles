@@ -140,7 +140,11 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.handleChangeStep = function(self, c
     self:changeStepUsePotionInInventory()
   else
     if currentStep == 2 then
-      self:changeStepUsePotionInQuickSlot()
+      if _ContentsGroup_RenewUI == false then
+        self:changeStepUsePotionInQuickSlot()
+      else
+        self:endPhase()
+      end
     else
       if currentStep == 3 then
         self:endPhase()
@@ -198,7 +202,7 @@ end
 PaGlobal_TutorialPhase_InventoryAndQuickSlot.changeStepUsePotionInInventory = function(self)
   -- function num : 0_10
   if self._currentProgress == 1 then
-    Panel_QuickSlot:SetShow(false, false)
+    PaGlobalFunc_QuickSlot_SetShow(false, false)
     if Panel_Window_Inventory:GetShow() == true then
       self._currentProgress = self._currentProgress + 1
       self:handleChangeStep(self._currentStep)
@@ -213,7 +217,12 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.changeStepUsePotionInInventory = fu
 )
   else
     if self._currentProgress == 2 then
-      Inventory_SetCheckRadioButtonNormalInventory(true)
+      if _ContentsGroup_RenewUI == false then
+        Inventory_SetCheckRadioButtonNormalInventory(true)
+        Inventory_updateSlotData()
+      else
+        Inventory_updateSlotData(true)
+      end
       Inventory_updateSlotData()
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_10_1
@@ -260,7 +269,7 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.changeStepUsePotionInQuickSlot = fu
   -- function num : 0_14
   if self._currentProgress == 1 then
     (PaGlobal_TutorialUiManager:getUiMasking()):hideQuestMasking()
-    Panel_QuickSlot:SetShow(false)
+    PaGlobalFunc_QuickSlot_SetShow(false)
     FGlobal_QuickSlot_Show()
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_14_0
