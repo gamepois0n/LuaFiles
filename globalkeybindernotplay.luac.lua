@@ -22,7 +22,7 @@ GlobalKeyBinder_UpdateNotPlay = function(deltaTime)
     return 
   end
   if Panel_Login ~= nil and Panel_Login:GetShow() then
-    if Panel_TermsofGameUse ~= nil and Panel_TermsofGameUse:GetShow() then
+    if (Panel_Window_Policy == nil or not Panel_Window_Policy:GetShow() or Panel_TermsofGameUse ~= nil) and Panel_TermsofGameUse:GetShow() then
       if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
         FGlobal_HandleClicked_TermsofGameUse_Next()
       else
@@ -52,6 +52,9 @@ GlobalKeyBinder_UpdateNotPlay = function(deltaTime)
   end
   if Panel_CharacterSelectNew ~= nil and Panel_CharacterSelectNew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     CharacterSelect_Back()
+  end
+  if Panel_Window_cOption ~= nil and Panel_Window_cOption:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    Panel_Window_cOption:SetShow(false, true)
   end
 end
 

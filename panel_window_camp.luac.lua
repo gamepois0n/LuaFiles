@@ -56,6 +56,9 @@ end
 
 PaGlobal_Camp.open = function(self)
   -- function num : 0_1
+  if _ContentsGroup_RenewUI_NpcShop == true and PaGlobalFunc_Dialog_NPCShop_GetShow() then
+    return 
+  end
   if Panel_Window_NpcShop:GetShow() then
     return 
   end
@@ -72,7 +75,11 @@ PaGlobal_Camp.close = function(self)
   -- function num : 0_2
   if Panel_Window_Inventory:GetShow() then
     Inventory_ShowToggle()
-    handleClickedNpcShow_WindowClose()
+    if _ContentsGroup_RenewUI_NpcShop == true then
+      PaGlobalFunc_Dialog_NPCShop_ExitButton()
+    else
+      handleClickedNpcShow_WindowClose()
+    end
   end
   if Panel_Window_Repair:GetShow() then
     handleMClickedRepairExitButton()
@@ -381,7 +388,12 @@ PaGlobal_Camp.slotRClick = function(self, slotNo)
   if slotNo == 4 and Panel_Window_Repair:GetShow() then
     return 
   end
-  if slotNo == 5 and Panel_Window_NpcShop:GetShow() then
+  -- DECOMPILER ERROR at PC40: Unhandled construct in 'MakeBoolean' P1
+
+  if slotNo == 5 and _ContentsGroup_RenewUI_NpcShop == true and PaGlobalFunc_Dialog_NPCShop_GetShow() then
+    return 
+  end
+  if Panel_Window_NpcShop:GetShow() then
     return 
   end
   servant_doUnequip(campWrapper:getActorKeyRaw(), slotNo)

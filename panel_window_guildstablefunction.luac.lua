@@ -155,7 +155,11 @@ GuildStableFunction_Close = function()
     return 
   end
   Servant_SceneClose(Panel_Window_GuildStableFunction)
-  Dialog_updateButtons(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate()
+  else
+    Dialog_updateButtons(true)
+  end
 end
 
 guildStableFunction:init()

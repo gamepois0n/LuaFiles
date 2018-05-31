@@ -75,7 +75,11 @@ FGolbal_ItemMarket_Function_Open = function()
   -- function num : 0_2 , upvalues : ItemMarketFunction
   local self = ItemMarketFunction
   SetUIMode((Defines.UIMode).eUIMode_ItemMarket)
-  Panel_Npc_Dialog:SetShow(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Close()
+  else
+    Panel_Npc_Dialog:SetShow(false)
+  end
   self:SetBtnPosition()
   self:SetPosition()
   Panel_Window_ItemMarket_Function:SetShow(true)
@@ -85,7 +89,11 @@ end
 FGolbal_ItemMarket_Function_Close = function()
   -- function num : 0_3
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
-  Panel_Npc_Dialog:SetShow(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+  end
   FGolbal_ItemMarketNew_Close()
   FGlobal_ItemMarketItemSet_Close()
   FGlobal_ItemMarket_BuyConfirm_Close()

@@ -3,12 +3,12 @@
 
 -- params : ...
 -- function num : 0
-local Window_SkillInfo = {_renderMode; 
+local Window_SkillInfo = {_renderMode, _needMantalString, _mantalString, _defaultDividerPosY, _remainSkillPoint; 
 _ui = {
 _body = {}
 , 
 _right = {}
-, _static_BodyBg = (UI.getChildControl)(Panel_Window_Skill_Renew, "Static_BodyBg"), _static_RightBg = (UI.getChildControl)(Panel_Window_Skill_Renew, "Static_RightBg")}
+, _static_BodyBg = (UI.getChildControl)(Panel_Window_Skill_Renew, "Static_BodyBg"), _static_RightBg = (UI.getChildControl)(Panel_Window_Skill_Renew, "Static_RightBg"), _static_IconEffect = (UI.getChildControl)(Panel_Window_Skill_Renew, "Static_Icon_Skill_Effect")}
 , 
 _config = {_title_Learn = 0, _title_Basic = 1, _title_Awaken = 2}
 , 
@@ -29,7 +29,7 @@ _skillTable = {}
 _currentSkillListInfo = {}
 , 
 _currentSkillListUI = {}
-, _currentSkillIndex = nil, _lastSelectedUI = nil, _currentTitle = 0, _isLDown = false, _isRDown = false, _movePosX = 0, _movePosY = 0}
+, _currentSkillIndex = nil, _lastSelectedUI = nil, _currentTitle = 0, _isLDown = false, _isRDown = false, _movePosX = 0, _movePosY = 0, _currentTabIndex = 0}
 Window_SkillInfo.GetFusionSkillFromCell = function(self, cellTable)
   -- function num : 0_0
   local cols = cellTable:capacityX()
@@ -147,10 +147,17 @@ PaGlobalFunc_Skill_LockButton = function()
   local isBlockSkill = ToClient_isBlockSkillCommand(skillLevelInfo._skillKey)
   if isBlockSkill == true then
     ToClient_enableSkillCommand(skillLevelInfo._skillKey)
+    skillInfo._isLock = false
   else
     ToClient_blockSkillCommand(skillLevelInfo._skillKey)
+    skillInfo._isLock = true
   end
-  PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
+  -- DECOMPILER ERROR at PC39: Confused about usage of register: R4 in 'UnsetPending'
+
+  ;
+  (self._currentSkillListInfo)[self._currentSkillIndex] = skillInfo
+  ;
+  (((self._ui)._right)._list2_Skill):requestUpdateByKey(toInt64(0, self._currentSkillIndex))
 end
 
 PaGlobalFunc_Skill_LearnButton = function()
@@ -191,33 +198,31 @@ end
 PaGlobalFunc_Skill_SelectTitle = function(titleType)
   -- function num : 0_7 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
+  local tooltip = ((self._ui)._right)._staticText_Tooltip
+  local learnSkill = ((self._ui)._right)._radioButton_LearnSkill
+  local basicSkill = ((self._ui)._right)._radioButton_SkillBasic
+  local awakenSkill = ((self._ui)._right)._radioButton_SkillAwaken
   self:Clear()
   self:Update()
   if (self._config)._title_Learn == titleType then
-    (((self._ui)._right)._staticText_Tooltip):SetText("습득�\128�\165")
-    ;
-    (((self._ui)._right)._staticText_Tooltip):SetPosX((((self._ui)._right)._radioButton_LearnSkill):GetPosX() - (((self._ui)._right)._radioButton_LearnSkill):GetSizeX() / 2)
+    tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_TAB_LEARNABLE"))
+    tooltip:SetPosX(learnSkill:GetPosX() - learnSkill:GetSizeX() / 2)
     self._currentTitle = (self._config)._title_Learn
-    ;
-    (((self._ui)._right)._radioButton_LearnSkill):SetCheck(true)
+    learnSkill:SetCheck(true)
     self:SetLearnableSkillList()
   else
     if (self._config)._title_Basic == titleType then
-      (((self._ui)._right)._staticText_Tooltip):SetText("기본스킬")
-      ;
-      (((self._ui)._right)._staticText_Tooltip):SetPosX((((self._ui)._right)._radioButton_SkillBasic):GetPosX() - (((self._ui)._right)._radioButton_SkillBasic):GetSizeX() / 2)
+      tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_COMBAT"))
+      tooltip:SetPosX(basicSkill:GetPosX() - basicSkill:GetSizeX() / 2)
       self._currentTitle = (self._config)._title_Basic
-      ;
-      (((self._ui)._right)._radioButton_SkillBasic):SetCheck(true)
+      basicSkill:SetCheck(true)
       self:SetSkillList(self._combatTable)
     else
       if (self._config)._title_Awaken == titleType then
-        (((self._ui)._right)._staticText_Tooltip):SetText("각성스킬")
-        ;
-        (((self._ui)._right)._staticText_Tooltip):SetPosX((((self._ui)._right)._radioButton_SkillAwaken):GetPosX() - (((self._ui)._right)._radioButton_SkillAwaken):GetSizeX() / 2)
+        tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RELEASEWEAPONE"))
+        tooltip:SetPosX(awakenSkill:GetPosX() - awakenSkill:GetSizeX() / 2)
         self._currentTitle = (self._config)._title_Awaken
-        ;
-        (((self._ui)._right)._radioButton_SkillAwaken):SetCheck(true)
+        awakenSkill:SetCheck(true)
         self:SetSkillList(self._awakenTable)
       else
         _PA_LOG("이호�\156", "�\128이틀 �\128입이 잘못 들어왔다.")
@@ -324,7 +329,13 @@ PaGlobalFunc_Skill_List2EventControlCreate = function(list_content, key)
     ((((self._ui)._right)._list2_Skill):getElementManager()):removeKey(toInt64(0, id))
     return 
   end
-  local uiInfo = {_radioButton_SkillBg = (UI.getChildControl)(list_content, "Radio_SkillBg"), _radioButton_LeftSkill = (UI.getChildControl)(list_content, "Radiobutton_LeftSkill"), _radioButton_RightSkill = (UI.getChildControl)(list_content, "Radiobutton_RightSkill"), _static_SelectedSkillBg = (UI.getChildControl)(list_content, "Static_SelectedSkillBg"), _static_SkillIcon = (UI.getChildControl)(list_content, "Static_Skill_Box2"), _staticText_Name = (UI.getChildControl)(list_content, "StaticText_Skill_Name"), _staticText_RequireLevel = (UI.getChildControl)(list_content, "StaticText_Skill_Require_Level"), _static_LockIcon = (UI.getChildControl)(list_content, "Static_Skill_Lock_Icon")}
+  local uiInfo = {_radioButton_SkillBg = (UI.getChildControl)(list_content, "Radio_SkillBg"), _radioButton_LeftSkill = (UI.getChildControl)(list_content, "Radiobutton_LeftSkill"), _radioButton_RightSkill = (UI.getChildControl)(list_content, "Radiobutton_RightSkill"), _static_SelectedSkillBg = (UI.getChildControl)(list_content, "Static_SelectedSkillBg"), _static_SkillIcon = (UI.getChildControl)(list_content, "Static_Skill_Box2"), _staticText_Name = (UI.getChildControl)(list_content, "StaticText_Skill_Name"), _staticText_RequireLevel = (UI.getChildControl)(list_content, "StaticText_Skill_Require_Level"), _static_LockIcon = (UI.getChildControl)(list_content, "Static_Skill_Lock_Icon"), _progress2_ProgressBar = (UI.getChildControl)(list_content, "Progress2_1")}
+  local rate = 100 * self._remainSkillPoint / skillInfo._needSkillPoint
+  if skillInfo._learndLevel == 1 then
+    rate = 100
+  end
+  ;
+  (uiInfo._progress2_ProgressBar):SetProgressRate(rate)
   ;
   (uiInfo._static_SelectedSkillBg):SetShow(false)
   ;
@@ -343,24 +354,33 @@ PaGlobalFunc_Skill_List2EventControlCreate = function(list_content, key)
     ;
     (uiInfo._static_LockIcon):SetShow(false)
   end
-  local requireDesc = "[습득]"
-  if skillInfo._learnable == false or skillInfo._learndLevel == 0 then
-    requireDesc = "습득 �\128�\165 레벨 : " .. skillInfo._needCharacterLevel
-    requireDesc = requireDesc .. "\n" .. "필요�\156 기술 포인�\184 : " .. skillInfo._needSkillPoint
+  local requireDesc = PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_LEARNED")
+  if skillInfo._learndLevel == 0 then
+    if skillInfo._needCharacterLevel == 0 then
+      requireDesc = PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_SKILL_LEARNCONDITION", "condition", PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_QuestGain"))
+    else
+      requireDesc = PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILLLEARN_TXT_NEEDLV")
+      requireDesc = requireDesc .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedLevel", "needLvLearning", skillInfo._needCharacterLevel) .. "\n"
+      requireDesc = requireDesc .. PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_SKILL_NEEDSP", "needSP", skillInfo._needSkillPoint)
+    end
   end
   ;
   (uiInfo._staticText_RequireLevel):SetText(requireDesc)
-  -- DECOMPILER ERROR at PC134: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC187: Confused about usage of register: R8 in 'UnsetPending'
 
   ;
   (self._currentSkillListUI)[id] = uiInfo
-  if _ContentsGroup_isConsoleTest == false then
+  if _ContentsGroup_isConsolePadControl == false then
     (uiInfo._radioButton_SkillBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
+    ;
+    (uiInfo._radioButton_SkillBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_LearnButton()")
   else
     ;
     (uiInfo._radioButton_SkillBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_LearnButton()")
     ;
     (uiInfo._radioButton_SkillBg):addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
+    list_content:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Skill_SkillHandle(" .. id .. ",-1)")
+    list_content:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Skill_SkillHandle(" .. id .. ",1)")
   end
   if (self._config)._title_Learn == self._currentTitle then
     (uiInfo._radioButton_LeftSkill):SetShow(false)
@@ -466,6 +486,8 @@ PaGlobalFunc_Skill_SelectSkill = function(id)
   ;
   (body._static_IconBg):SetShow(true)
   ;
+  (body._staticText_EffectTitle):SetShow(true)
+  ;
   (body._static_Icon):ChangeTextureInfoName("Icon/" .. skillInfo._iconPath)
   ;
   ((body._static_Icon):getBaseTexture()):setUV(0, 0, 1, 1)
@@ -478,23 +500,35 @@ PaGlobalFunc_Skill_SelectSkill = function(id)
   ;
   (body._staticText_Desc):SetPosY((((self._ui)._body)._staticText_Name):GetPosY() + (((self._ui)._body)._staticText_Name):GetSizeY())
   ;
-  (body._staticText_Command):SetText(skillInfo._command)
-  ;
   (body._staticText_EffectDesc):SetText(skillInfo._buffDesc)
+  ;
+  (body._staticText_EffectDesc):SetPosY((body._static_KeyGuide):GetPosY() - (body._staticText_EffectDesc):GetSizeY() + 30)
+  ;
+  (body._staticText_EffectTitle):SetPosY((body._staticText_EffectDesc):GetPosY() - (body._staticText_EffectTitle):GetSizeY() - 5)
   local needResource = ""
   if skillInfo._requireHp > 1 then
-    needResource = needResource .. "요구 체력 " .. skillInfo._requireHp .. "\n"
+    needResource = needResource .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILL_TXT_NEEDHP") .. " " .. skillInfo._requireHp .. "\n"
   end
   if skillInfo._requireMp > 1 then
-    needResource = needResource .. "요구 정신�\165 " .. skillInfo._requireMp .. "\n"
+    needResource = needResource .. self._needMantalString .. " " .. skillInfo._requireMp .. "\n"
   end
   if skillInfo._requireSp > 1 then
-    needResource = needResource .. "요구 스테미너 " .. skillInfo._requireSp .. "\n"
+    needResource = needResource .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILL_TXT_NEEDSP") .. " " .. skillInfo._requireSp .. "\n"
   end
   ;
   (body._staticText_NeedResource):SetText(needResource)
   ;
   (body._staticText_NeedResource):SetPosY((((self._ui)._body)._staticText_Desc):GetPosY() + (((self._ui)._body)._staticText_Desc):GetSizeY())
+  local needResourcePosY = (body._staticText_NeedResource):GetPosY() + (body._staticText_NeedResource):GetSizeY()
+  local dividerPosY = (body._static_Divider2):GetPosY()
+  ;
+  (body._static_Divider2):SetPosY((math.max)(needResourcePosY, dividerPosY))
+  ;
+  (body._staticText_Command):SetSize((body._staticText_Command):GetSizeX(), (body._static_Divider2):GetPosY() - (body._static_Divider1):GetPosY())
+  ;
+  (body._staticText_Command):SetPosY((body._static_Divider1):GetPosY())
+  ;
+  (body._staticText_Command):SetText(skillInfo._command)
   self._lastSelectedUI = skillUI
   self._currentSkillIndex = id
 end
@@ -507,6 +541,8 @@ Window_SkillInfo.SkillDetailClear = function(self)
   ;
   (body._staticText_Desc):SetText("")
   ;
+  (body._staticText_EffectTitle):SetShow(false)
+  ;
   (body._staticText_EffectDesc):SetText("")
   ;
   (body._staticText_NeedResource):SetText("")
@@ -516,6 +552,8 @@ Window_SkillInfo.SkillDetailClear = function(self)
   (body._static_Icon):SetShow(false)
   ;
   (body._static_IconBg):SetShow(false)
+  ;
+  (body._static_Divider2):SetPosY(self._defaultDividerPosY)
 end
 
 Window_SkillInfo.UpdateSkillData = function(self)
@@ -553,16 +591,51 @@ Window_SkillInfo.UpdateSkillData = function(self)
   end
 end
 
-Window_SkillInfo.Initialize = function(self)
+Window_SkillInfo.InitResisterEvent = function(self)
   -- function num : 0_15
+  registerEvent("EventSkillWindowUpdate", "PaGlobalFunc_FromClient_Skill_WindowUpdate")
+  registerEvent("onScreenResize", "PaGlobalFunc_Skill_Resize")
+end
+
+Window_SkillInfo.Initialize = function(self)
+  -- function num : 0_16
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local characterActorProxyWrapper = getCharacterActor((selfPlayer:get()):getActorKeyRaw())
+  if characterActorProxyWrapper == nil then
+    return 
+  end
+  local mentalType = characterActorProxyWrapper:getCombatResourceType()
+  if (CppEnums.CombatResourceType).CombatType_MP == mentalType then
+    self._needMantalString = PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedMP")
+    self._mantalString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP")
+  else
+    if (CppEnums.CombatResourceType).CombatType_FP == mentalType then
+      self._needMantalString = PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedFP")
+      self._mantalString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FP")
+    else
+      if (CppEnums.CombatResourceType).CombatType_EP == mentalType then
+        self._needMantalString = PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedEP")
+        self._mantalString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EP")
+      else
+        if (CppEnums.CombatResourceType).CombatType_BP == mentalType then
+          self._needMantalString = PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedBP")
+          self._mantalString = PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_BP")
+        end
+      end
+    end
+  end
   self._renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_SkillWindow}, false)
   self:InitControl()
   self:InitEvent()
+  self:InitResisterEvent()
   self:Update()
 end
 
 Window_SkillInfo.Clear = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   self._combatSkill = {}
   self._awakenSkill = {}
   self._fusionSkill = {}
@@ -583,7 +656,7 @@ Window_SkillInfo.Clear = function(self)
 end
 
 Window_SkillInfo.Update = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   self:UpdateStat()
   self:UpdateSkillData()
   self:UpdateSkillTable(self._combatSkill, self._combatTable)
@@ -591,7 +664,7 @@ Window_SkillInfo.Update = function(self)
 end
 
 Window_SkillInfo.UpdateSkillTable = function(self, oldTable, newTable)
-  -- function num : 0_18
+  -- function num : 0_19
   local index = 0
   local skillName = ""
   local oldSkillTable = {}
@@ -662,7 +735,7 @@ _skillTable = {}
 end
 
 Window_SkillInfo.UpdateStat = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   local selfPlayerActorProxy = (getSelfPlayer()):get()
   if selfPlayerActorProxy == nil then
     return 
@@ -671,10 +744,11 @@ Window_SkillInfo.UpdateStat = function(self)
   if skillPointInfo == -1 then
     return 
   end
+  self._remainSkillPoint = skillPointInfo._remainPoint
   local skillPoint = PAGetString(Defines.StringSheet_RESOURCE, "SKILL_TEXT_POINT") .. "  " .. tostring(skillPointInfo._remainPoint) .. " / " .. tostring(skillPointInfo._acquirePoint)
   local attackPoint = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BATTLEPOINT_ATTACKPOINT") .. "  " .. tostring(ToClient_getOffence())
   local awakenAttackPoint = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BATTLEPOINT_AWAKENATTACKPOINT") .. "  " .. tostring(ToClient_getAwakenOffence())
-  local maxMp = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP") .. "  " .. selfPlayerActorProxy:getMaxMp()
+  local maxMp = self._mantalString .. "  " .. selfPlayerActorProxy:getMaxMp()
   ;
   (((self._ui)._body)._staticText_SkillPoint):SetText(skillPoint)
   ;
@@ -686,7 +760,7 @@ Window_SkillInfo.UpdateStat = function(self)
 end
 
 Window_SkillInfo.InitControl = function(self)
-  -- function num : 0_20
+  -- function num : 0_21
   local body = (self._ui)._body
   local right = (self._ui)._right
   local ui = self._ui
@@ -708,7 +782,13 @@ Window_SkillInfo.InitControl = function(self)
   body._static_KeyGuide = (UI.getChildControl)(ui._static_BodyBg, "Static_Key_Guide")
   body._radioButton_Lock = (UI.getChildControl)(body._static_KeyGuide, "Radiobutton_Lock_Key")
   body._radioButton_SkillDemo = (UI.getChildControl)(body._static_KeyGuide, "Radiobutton_Demo_Key")
+  body._staticText_EffectTitle = (UI.getChildControl)(ui._static_BodyBg, "StaticText_Skill_Effect_Title")
   body._staticText_EffectDesc = (UI.getChildControl)(ui._static_BodyBg, "StaticText_Skill_EffectDesc")
+  ;
+  (body._staticText_EffectDesc):SetAutoResize(true)
+  body._static_Divider1 = (UI.getChildControl)(ui._static_BodyBg, "Static_Divider1")
+  body._static_Divider2 = (UI.getChildControl)(ui._static_BodyBg, "Static_Divider2")
+  self._defaultDividerPosY = (body._static_Divider2):GetPosY()
   body._staticText_Command = (UI.getChildControl)(ui._static_BodyBg, "StaticText_KeyGuide_Basic")
   body._static_CommandFirst = (UI.getChildControl)(ui._static_BodyBg, "Static_KeyGuide_Basic_First")
   body._static_CommandPlus = (UI.getChildControl)(ui._static_BodyBg, "Static_KeyGuide_Basic_Plus")
@@ -739,10 +819,11 @@ Window_SkillInfo.InitControl = function(self)
   right._static_KeyGuide = (UI.getChildControl)(ui._static_RightBg, "Static_KeyGuide")
   right._radioButton_learnSkillKey = (UI.getChildControl)(right._static_KeyGuide, "Radiobutton_Learn_Skill_Key")
   right._radiobutton_ResetSkillKey = (UI.getChildControl)(right._static_KeyGuide, "Radiobutton_SkillPoint_Reset_Key")
+  self._currentTabIndex = 0
 end
 
 Window_SkillInfo.InitEvent = function(self)
-  -- function num : 0_21
+  -- function num : 0_22
   local right = (self._ui)._right
   local body = (self._ui)._body
   Panel_Window_Skill_Renew:RegisterUpdateFunc("PaGlobalFunc_Skill_UpdatePanelView")
@@ -781,7 +862,7 @@ Window_SkillInfo.InitEvent = function(self)
 end
 
 PaGlobalFunc_Skill_UpdatePanelView = function()
-  -- function num : 0_22 , upvalues : Window_SkillInfo
+  -- function num : 0_23 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   if self._isLDown == false and self._isRDown == false then
     return 
@@ -804,7 +885,7 @@ PaGlobalFunc_Skill_UpdatePanelView = function()
 end
 
 PaGlobalFunc_Skill_SetPanelViewStart = function(isLButton)
-  -- function num : 0_23 , upvalues : Window_SkillInfo
+  -- function num : 0_24 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   if isLButton == true then
     self._isLDown = true
@@ -816,7 +897,7 @@ PaGlobalFunc_Skill_SetPanelViewStart = function(isLButton)
 end
 
 PaGlobalFunc_Skill_SetPanelViewEnd = function(isLButton)
-  -- function num : 0_24 , upvalues : Window_SkillInfo
+  -- function num : 0_25 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   if isLButton == nil then
     self._isLDown = false
@@ -831,7 +912,7 @@ PaGlobalFunc_Skill_SetPanelViewEnd = function(isLButton)
 end
 
 PaGlobalFunc_Skill_SetCameraZoom = function(scrollValue)
-  -- function num : 0_25
+  -- function num : 0_26
   local upValue = 35
   if scrollValue == true then
     upValue = -upValue
@@ -840,7 +921,7 @@ PaGlobalFunc_Skill_SetCameraZoom = function(scrollValue)
 end
 
 PaGlobalFunc_Skill_SkillAction = function()
-  -- function num : 0_26 , upvalues : Window_SkillInfo
+  -- function num : 0_27 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   if self._title_Learn == self._currentTitle then
     return 
@@ -853,9 +934,12 @@ PaGlobalFunc_Skill_SkillAction = function()
   ToClient_LearnSkillCameraStartSkillAction(skillStaticStatusWrapper:get())
 end
 
-PaGlobalFunc_Skill_Open = function()
-  -- function num : 0_27 , upvalues : Window_SkillInfo
+PaGlobalFunc_Skill_Open = function(isDialog)
+  -- function num : 0_28 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
+  if isDialog == true then
+    PaGlobalFunc_MainDialog_Hide()
+  end
   if isDeadInWatchingMode() == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYEOPENALERT_INDEAD"))
     return 
@@ -895,7 +979,7 @@ PaGlobalFunc_Skill_Open = function()
 end
 
 PaGlobalFunc_Skill_Close = function()
-  -- function num : 0_28 , upvalues : Window_SkillInfo
+  -- function num : 0_29 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   if PaGlobalFunc_Skill_GetShow() == false then
     return 
@@ -910,39 +994,88 @@ PaGlobalFunc_Skill_Close = function()
 end
 
 PaGlobalFunc_Skill_GetShow = function()
-  -- function num : 0_29
+  -- function num : 0_30
   return Panel_Window_Skill_Renew:GetShow()
 end
 
 PaGlobalFunc_FromClient_Skill_luaLoadComplete = function()
-  -- function num : 0_30 , upvalues : Window_SkillInfo
+  -- function num : 0_31 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   self:Initialize()
+  self:Resize()
 end
 
 PaGlobalFunc_FromClient_Skill_WindowUpdate = function()
-  -- function num : 0_31 , upvalues : Window_SkillInfo
+  -- function num : 0_32 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
   self:Update()
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
 end
 
-Toggle_SkillTab_forPadEventFunc = function(index)
-  -- function num : 0_32 , upvalues : Window_SkillInfo
+Panel_Window_Skill_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_SkillTab_forPadEventFunc(-1)")
+Panel_Window_Skill_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_SkillTab_forPadEventFunc(1)")
+Toggle_SkillTab_forPadEventFunc = function(value)
+  -- function num : 0_33 , upvalues : Window_SkillInfo
   local self = Window_SkillInfo
-  if index == 0 then
+  self._currentTabIndex = self._currentTabIndex + value
+  if self._currentTabIndex < 0 then
+    self._currentTabIndex = 2
+  else
+    if self._currentTabIndex > 2 then
+      self._currentTabIndex = 0
+    end
+  end
+  if self._currentTabIndex == 0 then
     PaGlobalFunc_Skill_SelectTitle((self._config)._title_Learn)
   else
-    if index == 1 then
+    if self._currentTabIndex == 1 then
       PaGlobalFunc_Skill_SelectTitle((self._config)._title_Basic)
     else
-      if index == 2 then
+      if self._currentTabIndex == 2 then
         PaGlobalFunc_Skill_SelectTitle((self._config)._title_Awaken)
       end
     end
   end
 end
 
+Window_SkillInfo.Resize = function(self)
+  -- function num : 0_34
+  local body = (self._ui)._body
+  local right = (self._ui)._right
+  Panel_Window_Skill_Renew:SetSize(getScreenSizeX(), getScreenSizeY())
+  Panel_Window_Skill_Renew:SetPosX(0)
+  Panel_Window_Skill_Renew:SetPosY(0)
+  ;
+  ((self._ui)._static_RightBg):ComputePos()
+  ;
+  ((self._ui)._static_BodyBg):SetSize(((self._ui)._static_BodyBg):GetSizeX(), Panel_Window_Skill_Renew:GetSizeY())
+  ;
+  ((self._ui)._static_RightBg):SetSize(((self._ui)._static_RightBg):GetSizeX(), Panel_Window_Skill_Renew:GetSizeY())
+  ;
+  (right._list2_Skill):SetSize((right._list2_Skill):GetSizeX(), (right._static_KeyGuide):GetPosY() - (right._list2_Skill):GetPosY() - 20)
+  ;
+  (body._staticText_Command):SetPosX(((self._ui)._static_RightBg):GetPosX() - (body._staticText_Command):GetSizeX() - 20)
+  ;
+  (body._static_KeyGuide):ComputePos()
+  ;
+  (right._static_KeyGuide):ComputePos()
+end
+
+PaGlobalFunc_Skill_GetEffectControl = function()
+  -- function num : 0_35 , upvalues : Window_SkillInfo
+  local self = Window_SkillInfo
+  return (self._ui)._static_IconEffect
+end
+
+PaGlobalFunc_Skill_GetPanel = function()
+  -- function num : 0_36
+  return Panel_Window_Skill_Renew
+end
+
+PaGlobalFunc_Skill_Resize = function()
+  -- function num : 0_37 , upvalues : Window_SkillInfo
+  Window_SkillInfo:Resize()
+end
+
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_Skill_luaLoadComplete")
-registerEvent("EventSkillWindowUpdate", "PaGlobalFunc_FromClient_Skill_WindowUpdate")
 

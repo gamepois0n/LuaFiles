@@ -32,8 +32,13 @@ PaGlobal_Guild_OneOnOne_Request.Open = function(self)
   Panel_Guild_OneOnOneRequest:SetShow(true)
   local guildName = ToClient_GetCurrentTerritoryOccupant_Name()
   if guildName == nil or guildName == "" then
+    (ui._staticText_DefenceGuildName):SetShow(false)
+    ;
+    (ui._staticText_RequestDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_REQUEST_DESC"))
     return 
   end
+  ;
+  (ui._staticText_DefenceGuildName):SetShow(true)
   ;
   (ui._staticText_DefenceGuildName):SetText("[" .. guildName .. "]")
   if ToClient_IsCurrentTerritoryOccupant_Alliance() == true then
@@ -63,7 +68,7 @@ end
 PaGlobal_Guild_OneOnOne_Request.Confirm = function(self)
   -- function num : 0_4
   local ui = self._ui
-  if ToClient_GetGuildTeamBattleState() ~= 1 then
+  if __eGuildTeamBattleState_Requesting ~= ToClient_GetGuildTeamBattleState() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_NOTTIMEFORREQUEST"))
     return 
   end
@@ -120,7 +125,7 @@ end
 
 FGlobal_OpenGuildTeamBattle_RequestPanel_Open = function()
   -- function num : 0_8
-  if ToClient_GetGuildTeamBattleState() ~= 1 then
+  if __eGuildTeamBattleState_Requesting ~= ToClient_GetGuildTeamBattleState() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoGuildTeamBattleNotTimeToPlay"))
     return 
   end

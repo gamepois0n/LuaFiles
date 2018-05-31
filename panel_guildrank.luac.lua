@@ -671,6 +671,7 @@ GuildRank_Web_Show = function()
     url = url .. "/GuildRank?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey)
     _Web:SetUrl(890, 645, url, false, true)
     _Web:SetIME(true)
+    audioPostEvent_SystemUi(1, 0)
   end
 end
 
@@ -679,6 +680,7 @@ GuildRank_Web_Close = function()
   Panel_GuildRank_Web:SetShow(false, true)
   FGlobal_ClearCandidate()
   _Web:ResetUrl()
+  audioPostEvent_SystemUi(1, 1)
 end
 
 

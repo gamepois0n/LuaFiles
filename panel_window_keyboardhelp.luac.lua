@@ -36,6 +36,7 @@ end
 KeyboardHelpHide = function()
   -- function num : 0_3
   Panel_KeyboardHelp:SetShow(false)
+  audioPostEvent_SystemUi(1, 1)
 end
 
 keyboardHelp.registEventHandler = function(self)

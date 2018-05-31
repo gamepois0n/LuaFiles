@@ -329,6 +329,7 @@ end
 
 Panel_Memo_List_ShowAni = function()
   -- function num : 0_14
+  audioPostEvent_SystemUi(1, 22)
   local aniInfo1 = Panel_Memo_List:addScaleAnimation(0, 0.08, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
   aniInfo1:SetEndScale(1.12)
@@ -347,6 +348,7 @@ end
 
 Panel_Memo_List_HideAni = function()
   -- function num : 0_15
+  audioPostEvent_SystemUi(1, 21)
   local aniInfo1 = Panel_Memo_List:addColorAnimation(0, 0.1, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
   aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)

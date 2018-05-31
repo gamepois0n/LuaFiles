@@ -28,7 +28,7 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if Competition_UpdatePerFrame ~= nil then
     Competition_UpdatePerFrame(deltaTime)
   end
-  if GameTips_MessageUpdate ~= nil then
+  if _ContentsGroup_RenewUI == false and GameTips_MessageUpdate ~= nil then
     GameTips_MessageUpdate(deltaTime)
   end
   if OnlyPerFrame_ProgressBar_Collect_Update ~= nil then
@@ -46,7 +46,7 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   do
     if FGlobal_AlchemyStonCheck ~= nil then
       local cooltime = FGlobal_AlchemyStonCheck()
-      -- DECOMPILER ERROR at PC66: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC69: Unhandled construct in 'MakeBoolean' P1
 
       if cooltime > 0 and ToClient_GetAlchemyStoneReuseNextTick() == true then
         FGlobal_AlchemyStone_Use()

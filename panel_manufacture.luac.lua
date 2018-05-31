@@ -717,6 +717,7 @@ Manufacture_Close = function()
   _manufactureName:SetShow(false)
   _textTemp:SetShow(false)
   _currentActionIcon:SetShow(false)
+  audioPostEvent_SystemUi(1, 25)
 end
 
 Manufacture_ClearMaterial = function()
@@ -1513,7 +1514,11 @@ Manufacture_Mouse_LUp = function()
             end
           else
             if (CppEnums.ItemWhereType).eWarehouse == materialItemWhereType then
-              FGlobal_HideDialog()
+              if _ContentsGroup_RenewUI_Dailog == true then
+                PaGlobalFunc_MainDialog_Hide()
+              else
+                FGlobal_HideDialog()
+              end
             end
             if _ContentsGroup_LifeStatManufacturing == true and _isMassManufacture == true then
               CURRENT_ACTIONNAME = (_listAction[_actionIndex])._actionName
@@ -1525,16 +1530,16 @@ Manufacture_Mouse_LUp = function()
             end
           end
           audioPostEvent_SystemUi(0, 0)
-          -- DECOMPILER ERROR at PC441: Confused about usage of register: R25 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC447: Confused about usage of register: R25 in 'UnsetPending'
 
           Manufacture_Notify._failCount = 0
-          -- DECOMPILER ERROR at PC443: Confused about usage of register: R25 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC449: Confused about usage of register: R25 in 'UnsetPending'
 
           Manufacture_Notify._successCount = 0
           Manufacture_Close()
           Interaction_Close()
           audioPostEvent_SystemUi(13, 11)
-          -- DECOMPILER ERROR: 15 unprocessed JMP targets
+          -- DECOMPILER ERROR: 16 unprocessed JMP targets
         end
       end
     end

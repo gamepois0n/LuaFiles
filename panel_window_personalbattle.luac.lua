@@ -133,6 +133,7 @@ end
 
 PaGlobal_PersonalBattle.open = function(self)
   -- function num : 0_1
+  audioPostEvent_SystemUi(1, 18)
   if ToClient_getJoinGuildBattle() == true then
     if ToClient_isPersonalBattle() == false then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantattendGuildBattle"))
@@ -149,6 +150,7 @@ end
 
 PaGlobal_PersonalBattle.close = function(self)
   -- function num : 0_2
+  audioPostEvent_SystemUi(1, 17)
   Panel_Window_PersonalBattle:SetShow(false)
 end
 

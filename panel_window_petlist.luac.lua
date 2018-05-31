@@ -115,7 +115,7 @@ end
 
 local baseSkillTypeString = {[1] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE7"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE11"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPE12")}
 local baseSkillTypeUnit = {[1] = "", [2] = "", [3] = "%", [4] = "%", [5] = "%", [6] = "%", [7] = "%", [8] = "%", [9] = "%", [10] = "%", [11] = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_BASESKILLTYPEUNIT_SECOND"), [12] = "LT"}
-local baseSkillMultiplePoint = {[1] = 10, [2] = 10, [3] = 1, [4] = 1, [5] = 1, [6] = 1, [7] = 1, [8] = 1, [9] = 5, [10] = 1, [11] = 5, [12] = 10}
+local baseSkillMultiplePoint = {[1] = 25, [2] = 10, [3] = 1, [4] = 1, [5] = 1, [6] = 1, [7] = 1, [8] = 1, [9] = 5, [10] = 1, [11] = 5, [12] = 10}
 AmountPetSkill_Attribute = function(count)
   -- function num : 0_4 , upvalues : petSkillList, baseSkillTypeString, baseSkillMultiplePoint, baseSkillTypeUnit, maxskillTypeCount, skillInfo, skillTypeString
   if count == 0 then
@@ -1269,6 +1269,7 @@ end
 
 FGlobal_PetListNew_Close = function()
   -- function num : 0_44 , upvalues : PetList
+  audioPostEvent_SystemUi(1, 1)
   PetList:Close()
   PetList:showFeedUi(-1)
   PetList:showFeedAllUi(false)
@@ -1296,6 +1297,7 @@ FGlobal_PetListNew_Toggle = function()
   if Panel_Window_PetListNew:GetShow() then
     PetList:Close()
     Panel_Window_PetCompose_Close()
+    audioPostEvent_SystemUi(1, 1)
   else
     PetList:Open()
     audioPostEvent_SystemUi(1, 40)
@@ -1830,7 +1832,7 @@ PetListControlCreate = function(control, key)
             local petComposable = (math.abs)(petTier - composePetTier) >= 2 and ((petRace == 99 and petTier))
             if petComposeNo[1] ~= nil then
               btnFusion:SetShow(false)
-            elseif petNo_s64 ~= petComposeNo[0] and petComposeNo[0] ~= nil and (petCompose._race == petRace or petRace == 99) and petComposable then
+            elseif petNo_s64 ~= petComposeNo[0] and petComposeNo[0] ~= nil and (petCompose._race == petRace or petCompose._race == 39 or petRace == 99) and petComposable then
               btnFusion:SetShow(true)
             elseif petComposeNo[0] == nil and CheckCompose() == true and petRace <= #petRaceCount and petRace ~= 99 then
               btnFusion:SetShow(true)

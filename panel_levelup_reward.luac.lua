@@ -191,7 +191,9 @@ ToClient_SelfPlayerLevelUp = function(hp, mp, stun, weight)
     isUpdateList[4] = false
   end
   Reward_AniFunc(aniType.levelUP)
-  enableSkill_UpdateData()
+  if _ContentsGroup_RenewUI_Skill == false then
+    enableSkill_UpdateData()
+  end
   if ((getSelfPlayer()):get()):getLevel() <= 6 then
     SimpleUI_Check()
   end

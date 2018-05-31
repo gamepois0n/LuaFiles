@@ -247,8 +247,8 @@ end
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
     setWarningText()
-    if ToClient_isXBox() then
-      GoblinUpdate(deltaTime)
+    if ToClient_isXBox() == true then
+      update_XboxLoadingCircle(deltaTime)
     end
   end
 end

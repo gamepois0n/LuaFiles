@@ -14,11 +14,14 @@ local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
 Mail_Detail_ShowAni = function()
   -- function num : 0_0
+  audioPostEvent_SystemUi(1, 0)
+  ;
   (UIAni.fadeInSCR_Left)(Panel_Mail_Detail)
 end
 
 Mail_Detail_HideAni = function()
   -- function num : 0_1 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  audioPostEvent_SystemUi(1, 1)
   Panel_Mail_Detail:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local mailHideAni = Panel_Mail_Detail:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   mailHideAni:SetStartColor(UI_color.C_FFFFFFFF)

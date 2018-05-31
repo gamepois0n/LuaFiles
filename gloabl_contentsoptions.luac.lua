@@ -35,7 +35,21 @@ if not ToClient_IsDevelopment() then
   _ContentsGroup_RenewUI = ToClient_isXBox()
   _ContentsGroup_RenewUI_Skill = ToClient_isXBox()
   _ContentsGroup_RenewUI_Dailog = ToClient_isXBox()
+  _ContentsGroup_RenewUI_ExitGame = ToClient_isXBox()
+  _ContentsGroup_RenewUI_NpcShop = ToClient_isXBox()
+  _ContentsGroup_RenewUI_ReinforceSkill = ToClient_isXBox()
+  _ContentsGroup_RenewUI_MentalGame = ToClient_isXBox()
+  _ContentsGroup_RenewUI_Repair = ToClient_isXBox()
+  _ContentsGroup_RenewUI_Guild = ToClient_isXBox()
+  _ContentsGroup_RenewUI_VoiceChat = ToClient_isXBox()
+  _ContentsGroup_RenewUI_MessageBox = ToClient_isXBox()
   _ContentsGroup_OccupyBenefit = ToClient_IsContentsGroupOpen("397")
   _ContentsGroup_NewMaid = true
+  _ContentsGroup_ForXBoxXR = ToClient_isXBox()
+  if false then
+    _ContentsGroup_ForXBoxFinalCert = ToClient_isXBox()
+    _ContentsGroup_RenewUI_ExitGame_New = true
+    _ContentsGroup_StackingHpBar = false
+  end
 end
 

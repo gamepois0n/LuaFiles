@@ -821,10 +821,18 @@ closeNpcTrade_Basket = function()
   end
   Fglobal_TradeGame_Close()
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
-  setIgnoreShowDialog(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+  else
+    setIgnoreShowDialog(false)
+  end
   InventoryWindow_Close()
   Panel_Tooltip_Item_hideTooltip()
-  Panel_Npc_Dialog:SetShow(true, false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open(false)
+  else
+    Panel_Npc_Dialog:SetShow(true, false)
+  end
   if Panel_Trade_Market_Graph_Window:IsShow() then
     Panel_Trade_Market_Graph_Window:SetShow(false)
   end
@@ -850,6 +858,11 @@ end
 InitNpcTradeShopOpen = function()
   -- function num : 0_29 , upvalues : npcTradeShop
   if global_IsTrading == false then
+    -- DECOMPILER ERROR at PC10: Unhandled construct in 'MakeBoolean' P1
+
+    if _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_IsShow() == false then
+      return 
+    end
     if Panel_Npc_Dialog:IsShow() == false then
       return 
     end
@@ -858,26 +871,31 @@ InitNpcTradeShopOpen = function()
       openClientChangeScene(npcKey, 1)
     end
     SetUIMode((Defines.UIMode).eUIMode_Trade)
-    setIgnoreShowDialog(true)
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+      PaGlobalFunc_MainDialog_Close(false)
+    else
+      setIgnoreShowDialog(true)
+      Panel_Npc_Dialog:SetShow(false, false)
+    end
     global_IsTrading = true
-    Panel_Npc_Dialog:SetShow(false, false)
     Panel_Npc_Trade_Market:SetShow(true)
     Panel_Trade_Market_Graph_Window:SetShow(true, false)
     if ToClient_IsDevelopment() == true then
       tempInfo = getTemporaryInformationWrapper()
       shipWrapper = tempInfo:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
       vehicleWrapper = tempInfo:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-      -- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC88: Confused about usage of register: R1 in 'UnsetPending'
 
       if shipWrapper ~= nil and vehicleWrapper ~= nil then
         npcTradeShop._isShip = false
       else
-        -- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC94: Confused about usage of register: R1 in 'UnsetPending'
 
         if shipWrapper ~= nil then
           npcTradeShop._isShip = true
         else
-          -- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC97: Confused about usage of register: R1 in 'UnsetPending'
 
           npcTradeShop._isShip = false
         end

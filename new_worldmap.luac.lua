@@ -405,7 +405,11 @@ FGlobal_PushOpenWorldMap = function()
     return 
   end
   FGlobal_HideWorkerTooltip()
-  FGlobal_HideDialog()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Hide()
+  else
+    FGlobal_HideDialog()
+  end
   ToClient_AddWorldMapFlush()
 end
 
@@ -426,8 +430,6 @@ FGlobal_PopCloseWorldMap = function()
     Panel_WorldMap_Tooltip:SetShow(false)
     if _ContentsGroup_RenewUI == false then
       Panel_Window_QuestNew_Show(false)
-    else
-      PaGlobalFunc_Quest_SetShow(false)
     end
     Panel_Tooltip_SimpleText:SetShow(false)
     isCloseWorldMap = false
@@ -461,7 +463,11 @@ FromClient_WorldMapOpen = function()
   ToClient_openWorldMap()
   setFullSizeMode(true, (FullSizeMode.fullSizeModeEnum).Worldmap)
   FGlobal_NpcNavi_ShowRequestOuter()
-  Panel_Npc_Dialog:SetShow(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Close()
+  else
+    Panel_Npc_Dialog:SetShow(false)
+  end
   workerManager_Close()
   Panel_NpcNavi:SetShow(false)
   FGlobal_WarInfo_Open()

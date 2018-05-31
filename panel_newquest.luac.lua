@@ -59,7 +59,17 @@ FGlobal_NewMainQuest_Alarm_Open = function()
     return 
   end
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
-  if isRide == false and not Panel_Npc_Dialog:GetShow() then
+  local openAvailable = false
+  -- DECOMPILER ERROR at PC71: Unhandled construct in 'MakeBoolean' P1
+
+  if isRide == false and _ContentsGroup_RenewUI_Dailog == true and not Panel_Dialog_Main:GetShow() then
+    openAvailable = true
+  end
+  if not Panel_Npc_Dialog:GetShow() then
+    openAvailable = true
+  end
+  Panel_NewQuest:SetShow(false, true)
+  if openAvailable == true then
     _blackStone_CallingTime = _blackStone_CallingTime + 1
     Panel_NewQuest:SetShow(true, true)
     if Panel_LocalWar:GetShow() then
@@ -105,9 +115,6 @@ FGlobal_NewMainQuest_Alarm_Open = function()
     _callingYou_Sub:SetShow(true)
     _callingYou_Sub:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_QUESTLIST_CALLINGYOU_SUB", "keyString", blackSpiritKeyString))
     _cumulatedTime = 0
-  end
-  do
-    Panel_NewQuest:SetShow(false, true)
   end
 end
 

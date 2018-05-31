@@ -161,6 +161,7 @@ FGlobal_MercenaryOpen = function()
   if Panel_Window_Mercenary:GetShow() then
     FGlobal_MercenaryClose()
   else
+    audioPostEvent_SystemUi(1, 18)
     mercenary:Update()
     Panel_Window_Mercenary:SetShow(true)
     Panel_Mercenary_Repos()
@@ -170,6 +171,7 @@ end
 
 FGlobal_MercenaryClose = function()
   -- function num : 0_6
+  audioPostEvent_SystemUi(1, 17)
   Panel_Window_Mercenary:SetShow(false)
   FGlobal_MercenaryDesc_Close()
   TooltipSimple_Hide()

@@ -49,8 +49,13 @@ TalkPopup_Show = function(displayData)
 
   TalkPopup._currentDisplayData = displayData
   Panel_Dialogue_Itemtake:SetShow(true)
-  Panel_Dialogue_Itemtake:SetPosX(getScreenSizeX() - Panel_Dialogue_Itemtake:GetSizeX() * 1.5)
-  Panel_Dialogue_Itemtake:SetPosY(getScreenSizeY() / 2 - Panel_Dialogue_Itemtake:GetSizeY() / 2 - 60)
+  if _ContentsGroup_RenewUI_Dailog == false then
+    Panel_Dialogue_Itemtake:SetPosX(getScreenSizeX() - Panel_Dialogue_Itemtake:GetSizeX() * 1.5)
+    Panel_Dialogue_Itemtake:SetPosY(getScreenSizeY() / 2 - Panel_Dialogue_Itemtake:GetSizeY() / 2 - 60)
+  else
+    Panel_Dialogue_Itemtake:SetPosX(getScreenSizeX() / 2 - Panel_Dialogue_Itemtake:GetSizeX() / 2)
+    Panel_Dialogue_Itemtake:SetPosY(getScreenSizeY() / 2 - Panel_Dialogue_Itemtake:GetSizeY() / 2 - 60)
+  end
   local itemStaticWrapper = getItemEnchantStaticStatus(displayData:getItemKey())
   local explorePoint = getExplorePointByTerritory((TalkPopup._currentDisplayData)._territoryKey)
   ;

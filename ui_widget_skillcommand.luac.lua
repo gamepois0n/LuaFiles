@@ -470,7 +470,11 @@ end
 
 SkillCommand_Click = function(index)
   -- function num : 0_15
-  HandleMLUp_SkillWindow_OpenForLearn()
+  if _ContentsGroup_RenewUI_Skill == false then
+    HandleMLUp_SkillWindow_OpenForLearn()
+  else
+    PaGlobalFunc_Skill_Open()
+  end
 end
 
 FGlobal_SkillCommand_ResetPosition = function()

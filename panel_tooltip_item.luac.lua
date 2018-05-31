@@ -239,6 +239,11 @@ Panel_Tooltip_Item_Initialize = function()
     local slot = Panel_Tooltip_Item_DataObject.skillSlot
     return (slot.icon):GetSizeY()
   end
+, GetParentPanel = function()
+    -- function num : 0_0_6 , upvalues : Panel_Tooltip_Item_DataObject
+    local slot = Panel_Tooltip_Item_DataObject.skillSlot
+    return (slot.icon):GetParentPanel()
+  end
 }
   Panel_SkillTooltip_SetPosition(1, skillTooltipFunctionList, "itemToSkill")
 end

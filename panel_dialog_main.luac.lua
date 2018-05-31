@@ -3114,7 +3114,11 @@ ClickFunctionButtonByType = function(type)
                                     elseif (CppEnums.ContentsType).Contents_Skill == funcButtonType then
                                       HandleMLUp_SkillWindow_OpenForLearn()
                                     elseif (CppEnums.ContentsType).Contents_Repair == funcButtonType then
-                                      PaGlobal_Repair:repair_OpenPanel(true)
+                                      if _ContentsGroup_RenewUI_Repair == true then
+                                        PaGlobalFunc_RepairInfo_Open()
+                                      else
+                                        PaGlobal_Repair:repair_OpenPanel(true)
+                                      end
                                     elseif (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
                                       Warehouse_OpenPanelFromDialog()
                                     elseif (CppEnums.ContentsType).Contents_Stable == funcButtonType then
@@ -3162,7 +3166,7 @@ ClickFunctionButtonByType = function(type)
                                     end
                                     Dialog_clickFuncButtonReq(index)
                                     Panel_Interest_Knowledge_Hide()
-                                    -- DECOMPILER ERROR: 53 unprocessed JMP targets
+                                    -- DECOMPILER ERROR: 54 unprocessed JMP targets
                                   end
                                 end
                               end
@@ -3427,7 +3431,11 @@ HandleClickedFuncButton = function(index)
                                   end
                                 end
                                 if (CppEnums.ContentsType).Contents_Repair == funcButtonType then
-                                  PaGlobal_Repair:repair_OpenPanel(true)
+                                  if _ContentsGroup_RenewUI_Repair == true then
+                                    PaGlobalFunc_RepairInfo_Open()
+                                  else
+                                    PaGlobal_Repair:repair_OpenPanel(true)
+                                  end
                                 elseif (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
                                   Warehouse_OpenPanelFromDialog()
                                 elseif (CppEnums.ContentsType).Contents_Stable == funcButtonType then
@@ -3478,7 +3486,7 @@ HandleClickedFuncButton = function(index)
                                 PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
                                 Dialog_clickFuncButtonReq(index)
                                 Panel_Interest_Knowledge_Hide()
-                                -- DECOMPILER ERROR: 55 unprocessed JMP targets
+                                -- DECOMPILER ERROR: 56 unprocessed JMP targets
                               end
                             end
                           end
@@ -4224,7 +4232,11 @@ FromClient_CloseAllPanelWhenNpcGoHome = function()
     closeNpcTrade_Basket()
   end
   if GetUIMode() == (Defines.UIMode).eUIMode_Repair then
-    PaGlobal_Repair:repair_OpenPanel(false)
+    if _ContentsGroup_RenewUI_Repair == true then
+      PaGlobalFunc_RepairInfo_Close()
+    else
+      PaGlobal_Repair:repair_OpenPanel(false)
+    end
   end
   if GetUIMode() == (Defines.UIMode).eUIMode_Extraction then
     PaGlobal_Extraction:openPanel(false)

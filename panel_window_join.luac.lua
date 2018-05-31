@@ -384,10 +384,18 @@ FromClient_JoinLocalWar = function(teamNo)
   msg.main = PAGetString(Defines.StringSheet_GAME, "LUA_JOIN_LOCALWAR_WELCOME_1")
   msg.sub = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_JOIN_LOCALWAR_WELCOME_2", "team", teamName)
   Proc_ShowMessage_Ack_For_RewardSelect(msg, showRate, msgType)
-  if Panel_Npc_Dialog:GetShow() then
-    Panel_Join_Close()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    if PaGlobalFunc_MainDialog_GetShow() then
+      Panel_Join_Close()
+    else
+      FGlobal_NewLocalWar_Show()
+    end
   else
-    FGlobal_NewLocalWar_Show()
+    if Panel_Npc_Dialog:GetShow() then
+      Panel_Join_Close()
+    else
+      FGlobal_NewLocalWar_Show()
+    end
   end
 end
 
@@ -406,10 +414,18 @@ FromClient_UnJoinLocalWar = function(unJoinType)
     end
   end
   Proc_ShowMessage_Ack_For_RewardSelect(msg, showRate, msgType)
-  if Panel_Npc_Dialog:GetShow() then
-    Panel_Join_Close()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    if PaGlobalFunc_MainDialog_GetShow() then
+      Panel_Join_Close()
+    else
+      NewLocalWar_Hide()
+    end
   else
-    NewLocalWar_Hide()
+    if Panel_Npc_Dialog:GetShow() then
+      Panel_Join_Close()
+    else
+      NewLocalWar_Hide()
+    end
   end
 end
 

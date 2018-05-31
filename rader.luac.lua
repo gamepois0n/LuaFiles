@@ -750,28 +750,25 @@ RaderHideAni = function()
   aniInfo1.IsChangeChild = true
 end
 
-local timeBarOriginX = nil
+local _timeBarIsHiding = false
 TimebarShowAni = function()
-  -- function num : 0_28 , upvalues : timeBarOriginX
+  -- function num : 0_28 , upvalues : _timeBarIsHiding
+  _timeBarIsHiding = false
   Panel_TimeBar:ResetVertexAni()
   local aniInfo1 = Panel_TimeBar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartPosition(getScreenSizeX(), Panel_TimeBar:GetPosY())
-  aniInfo1:SetEndPosition(timeBarOriginX, Panel_TimeBar:GetPosY())
+  aniInfo1:SetEndPosition(getScreenSizeX() - Panel_TimeBar:GetSizeX() - (Panel_TimeBar:GetSpanSize()).x, Panel_TimeBar:GetPosY())
   aniInfo1.IsChangeChild = true
-  aniInfo1:SetHideAtEnd(false)
 end
 
 TimebarHideAni = function()
-  -- function num : 0_29 , upvalues : timeBarOriginX
-  if timeBarOriginX == nil then
-    timeBarOriginX = Panel_TimeBar:GetPosX()
-  end
+  -- function num : 0_29 , upvalues : _timeBarIsHiding
+  _timeBarIsHiding = true
   Panel_TimeBar:ResetVertexAni()
   local aniInfo1 = Panel_TimeBar:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartPosition(Panel_TimeBar:GetPosX(), Panel_TimeBar:GetPosY())
   aniInfo1:SetEndPosition(Panel_TimeBar:GetPosX() + 600, Panel_TimeBar:GetPosY())
   aniInfo1.IsChangeChild = true
-  aniInfo1:SetHideAtEnd(true)
 end
 
 SortRador_IconIndex = function()
@@ -1639,8 +1636,8 @@ end
 local _isSiegeArea = false
 local buildingType = ""
 RadarMap_UpdatePosition = function()
-  -- function num : 0_59 , upvalues : radarTime, weatherTooltip, UI_RT, buildingTooltip, buildingType, _isSiegeArea, siegeTooltip, radar_regionName, radar_regionNodeName
-  if Panel_TimeBar:GetShow() == false then
+  -- function num : 0_59 , upvalues : _timeBarIsHiding, radarTime, weatherTooltip, UI_RT, buildingTooltip, buildingType, _isSiegeArea, siegeTooltip, radar_regionName, radar_regionNodeName
+  if Panel_TimeBar:GetShow() == false or _timeBarIsHiding == true then
     return 
   end
   local radarTimeControl = radarTime.controls
@@ -1665,21 +1662,21 @@ RadarMap_UpdatePosition = function()
       x1 = setTextureUV_Func(radarTimeControl.raining, 78, 206, 98, 226)
     else
       weatherTooltip = 0
-      -- DECOMPILER ERROR at PC81: Overwrote pending register: R8 in 'AssignReg'
+      -- DECOMPILER ERROR at PC84: Overwrote pending register: R8 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC82: Overwrote pending register: R7 in 'AssignReg'
+      -- DECOMPILER ERROR at PC85: Overwrote pending register: R7 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC83: Overwrote pending register: R6 in 'AssignReg'
+      -- DECOMPILER ERROR at PC86: Overwrote pending register: R6 in 'AssignReg'
 
       x1 = setTextureUV_Func(radarTimeControl.raining, 43, 133, 62, 152)
     end
   else
     weatherTooltip = 1
-    -- DECOMPILER ERROR at PC95: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC98: Overwrote pending register: R8 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC96: Overwrote pending register: R7 in 'AssignReg'
+    -- DECOMPILER ERROR at PC99: Overwrote pending register: R7 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC97: Overwrote pending register: R6 in 'AssignReg'
+    -- DECOMPILER ERROR at PC100: Overwrote pending register: R6 in 'AssignReg'
 
     x1 = setTextureUV_Func(radarTimeControl.raining, 171, 187, 188, 205)
   end
@@ -1706,20 +1703,20 @@ RadarMap_UpdatePosition = function()
   else
     if UI_RT.eRegionType_Siege == radarMap.regionTypeValue then
       buildingTooltip = 2
-      -- DECOMPILER ERROR at PC177: Overwrote pending register: R12 in 'AssignReg'
+      -- DECOMPILER ERROR at PC180: Overwrote pending register: R12 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC178: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC181: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC179: Overwrote pending register: R10 in 'AssignReg'
+      -- DECOMPILER ERROR at PC182: Overwrote pending register: R10 in 'AssignReg'
 
       x1 = setTextureUV_Func(radarTimeControl.siegeArea, 291, 31, 311, 51)
     else
       buildingTooltip = 0
-      -- DECOMPILER ERROR at PC191: Overwrote pending register: R12 in 'AssignReg'
+      -- DECOMPILER ERROR at PC194: Overwrote pending register: R12 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC192: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC195: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC193: Overwrote pending register: R10 in 'AssignReg'
+      -- DECOMPILER ERROR at PC196: Overwrote pending register: R10 in 'AssignReg'
 
       x1 = setTextureUV_Func(radarTimeControl.siegeArea, 312, 31, 332, 51)
     end

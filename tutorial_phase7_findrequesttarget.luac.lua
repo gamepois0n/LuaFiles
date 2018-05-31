@@ -95,8 +95,10 @@ PaGlobal_TutorialPhase_FindRequestTarget.startPhaseXXX = function(self, stepNo)
   PaGlobal_TutorialUiManager:hideAllTutorialUi()
   FGlobal_Panel_Radar_Show(true)
   Panel_TimeBar:SetShow(true)
-  GameTips_Show()
-  GameTips_Reposition()
+  if _ContentsGroup_RenewUI == false then
+    GameTips_Show()
+    GameTips_Reposition()
+  end
   Panel_SkillCommand:SetShow(true, true)
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()

@@ -99,6 +99,10 @@ UpdateIntroMovie = function(deltaTime)
     if introMoviePlayTime < updateTime then
       isIntroMoviePlaying = false
       setMoviePlayMode(false)
+      if Panel_IntroMovie:IsShow() then
+        toClient_FadeIn(1)
+        CloseIntroMovie()
+      end
     end
   end
 end

@@ -93,6 +93,8 @@ end
 
 PaGlobal_CharacterInfoTitle.handleClicked_ComboBoxText = function(self)
   -- function num : 0_6
+  audioPostEvent_SystemUi(0, 0)
+  ;
   ((self._ui)._comboBoxSort):SetSelectItemIndex(((self._ui)._comboBoxSort):GetSelectIndex())
   ;
   ((self._ui)._comboBoxSort):ToggleListbox()
@@ -104,6 +106,7 @@ end
 
 PaGlobal_CharacterInfoTitle.handleClicked_Description = function(self, categoryIdx, titleIdx)
   -- function num : 0_7
+  audioPostEvent_SystemUi(0, 0)
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -114,7 +117,10 @@ end
 
 PaGlobal_CharacterInfoTitle.handleClicked_Title = function(self, categoryIdx, titleIdx)
   -- function num : 0_8
-  self:handleClicked_Description(categoryIdx, titleIdx)
+  ToClient_SetCurrentTitleCategory(categoryIdx)
+  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
+  ;
+  ((self._ui)._staticText_PartDesc):SetText(titleWrapper:getDescription())
   ToClient_TitleSetRequest(categoryIdx, titleIdx)
 end
 

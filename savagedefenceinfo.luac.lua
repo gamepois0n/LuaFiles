@@ -376,11 +376,13 @@ end
 
 FGlobal_SavageDefenceInfo_Open = function()
   -- function num : 0_7
+  audioPostEvent_SystemUi(1, 18)
   ToClient_SavageDefenceStatusRefreshReq()
 end
 
 FGlobal_SavageDefenceInfo_Close = function()
   -- function num : 0_8 , upvalues : PaGlobal_SavegeDefenceInfo
+  audioPostEvent_SystemUi(1, 17)
   local self = PaGlobal_SavegeDefenceInfo
   self._openDesc = -1
   ;

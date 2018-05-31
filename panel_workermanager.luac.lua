@@ -935,6 +935,8 @@ end
 
 HandleClicked_WorkerManager_Town = function()
   -- function num : 0_7 , upvalues : comboBox, townSort
+  audioPostEvent_SystemUi(0, 0)
+  ;
   (comboBox.town):DeleteAllItem()
   ;
   (comboBox.town):AddItem(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_ALL"), 1)
@@ -947,6 +949,7 @@ end
 
 WorkerManager_SetTown = function()
   -- function num : 0_8 , upvalues : comboBox, selectHomeWayPointIndex, townSort, workerManager, workerManager_Update
+  audioPostEvent_SystemUi(0, 0)
   local selectTownIndex = (comboBox.town):GetSelectIndex()
   selectHomeWayPointIndex = selectTownIndex
   ;
@@ -961,7 +964,7 @@ WorkerManager_SetTown = function()
   (comboBox.town):ToggleListbox()
   ;
   (workerManager._scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC44: Confused about usage of register: R1 in 'UnsetPending'
 
   workerManager._startIndex = 1
   workerManager_Update()
@@ -969,6 +972,8 @@ end
 
 HandleClicked_WorkerManager_Grade = function()
   -- function num : 0_9 , upvalues : comboBox, gradeSort, workerGrade
+  audioPostEvent_SystemUi(0, 0)
+  ;
   (comboBox.grade):DeleteAllItem()
   ;
   (comboBox.grade):AddItem(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_ALL"), 1)
@@ -981,6 +986,7 @@ end
 
 WorkerManager_SetGrade = function()
   -- function num : 0_10 , upvalues : comboBox, workerGrade, gradeSort, selectWorkerGrade, workerManager, workerManager_Update
+  audioPostEvent_SystemUi(0, 0)
   local selectGradeIndex = (comboBox.grade):GetSelectIndex()
   ;
   (comboBox.grade):SetSelectItemIndex(selectGradeIndex)
@@ -996,7 +1002,7 @@ WorkerManager_SetGrade = function()
   (comboBox.grade):ToggleListbox()
   ;
   (workerManager._scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC44: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
 
   workerManager._startIndex = 1
   workerManager_Update()
@@ -1655,6 +1661,7 @@ end
 
 HandleClicked_WorkerManager_Close = function()
   -- function num : 0_40 , upvalues : workerManager
+  audioPostEvent_SystemUi(1, 1)
   Panel_WorkerManager:CloseUISubApp()
   ;
   (workerManager.checkPopUp):SetCheck(false)

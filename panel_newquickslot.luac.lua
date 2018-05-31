@@ -18,7 +18,7 @@ config = {maxPanelCount = 20, isPressMove = false}
 slotConfig_Item = {createIcon = true, createBorder = false, createCount = true, createCooltime = true, createCooltimeText = true, createCash = true, createEnchant = true, createQuickslotBagIcon = true}
 , 
 slotConfig_Skill = {createIcon = true, createEffect = true, createFG = false, createFGDisabled = false, createLevel = false, createLearnButton = false, createCooltime = true, createCooltimeText = true, 
-template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")}
+template = {effect}
 }
 , 
 slotKey = {[0] = (CppEnums.ActionInputType).ActionInputType_QuickSlot1, [1] = (CppEnums.ActionInputType).ActionInputType_QuickSlot2, [2] = (CppEnums.ActionInputType).ActionInputType_QuickSlot3, [3] = (CppEnums.ActionInputType).ActionInputType_QuickSlot4, [4] = (CppEnums.ActionInputType).ActionInputType_QuickSlot5, [5] = (CppEnums.ActionInputType).ActionInputType_QuickSlot6, [6] = (CppEnums.ActionInputType).ActionInputType_QuickSlot7, [7] = (CppEnums.ActionInputType).ActionInputType_QuickSlot8, [8] = (CppEnums.ActionInputType).ActionInputType_QuickSlot9, [9] = (CppEnums.ActionInputType).ActionInputType_QuickSlot10, [10] = (CppEnums.ActionInputType).ActionInputType_QuickSlot11, [11] = (CppEnums.ActionInputType).ActionInputType_QuickSlot12, [12] = (CppEnums.ActionInputType).ActionInputType_QuickSlot13, [13] = (CppEnums.ActionInputType).ActionInputType_QuickSlot14, [14] = (CppEnums.ActionInputType).ActionInputType_QuickSlot15, [15] = (CppEnums.ActionInputType).ActionInputType_QuickSlot16, [16] = (CppEnums.ActionInputType).ActionInputType_QuickSlot17, [17] = (CppEnums.ActionInputType).ActionInputType_QuickSlot18, [18] = (CppEnums.ActionInputType).ActionInputType_QuickSlot19, [19] = (CppEnums.ActionInputType).ActionInputType_QuickSlot20}
@@ -32,7 +32,7 @@ hp = {[0] = 502, [1] = 513, [2] = 514, [3] = 517, [4] = 518, [5] = 519, [6] = 52
 mp = {[0] = 503, [1] = 520, [2] = 521, [3] = 522, [4] = 526, [5] = 527, [6] = 515, [7] = 516, [8] = 531, [9] = 532, [10] = 533}
 }
 PaGlobal_NewQuickSlot = {}
--- DECOMPILER ERROR at PC346: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC342: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_NewQuickSlot.addSlotEffectForTutorial = function(self, panelIdx, slot, effectString, isLoop, posX, posY)
   -- function num : 0_0 , upvalues : NewQuickSlot_PanelList
@@ -42,7 +42,7 @@ PaGlobal_NewQuickSlot.addSlotEffectForTutorial = function(self, panelIdx, slot, 
   (PaGlobal_TutorialUiManager:getUiMasking()):showNewQuickSlotMasking(newQuickSlotPanel:GetPosX() + newQuickSlotPanel:GetSizeX() * 0.5, newQuickSlotPanel:GetPosY() + newQuickSlotPanel:GetSizeY() * 0.5)
 end
 
--- DECOMPILER ERROR at PC349: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC345: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_NewQuickSlot.eraseSlotEffectForTutorial = function(self, slot)
   -- function num : 0_1
@@ -108,13 +108,23 @@ end
 
 FGlobal_NewQuickSlot_Hide = function()
   -- function num : 0_3
-  Panel_NewQuickSlot:SetShow(false, false)
+  PaGlobalFunc_NewQuickSlot_SetShow(false, false)
 end
 
 NewQuickSlot.Init = function(self)
-  -- function num : 0_4 , upvalues : NewQuickSlot_PanelList, NewQuickSlot
+  -- function num : 0_4 , upvalues : NewQuickSlot, NewQuickSlot_PanelList
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
+
+  if _ContentsGroup_RenewUI_Skill == false then
+    ((NewQuickSlot.slotConfig_Skill).template).effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")
+  else
+    -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
+
+    ;
+    ((NewQuickSlot.slotConfig_Skill).template).effect = PaGlobalFunc_Skill_GetEffectControl()
+  end
   for panelIdx = 0, (self.config).maxPanelCount - 1 do
-    -- DECOMPILER ERROR at PC8: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC27: Confused about usage of register: R5 in 'UnsetPending'
 
     (self.panelPool)[panelIdx] = {}
     local slot = (self.panelPool)[panelIdx]
@@ -932,6 +942,15 @@ NewQuickSlot_UpdatePerFrame = function(fDeltaTime)
   end
   if onEffectTime > 3 then
     onEffectTime = 0
+  end
+end
+
+PaGlobalFunc_NewQuickSlot_SetShow = function(isShow, isAni)
+  -- function num : 0_31
+  if _ContentsGroup_RenewUI == false then
+    Panel_NewQuickSlot:SetShow(isShow, isAni)
+  else
+    Panel_NewQuickSlot:SetShow(false, false)
   end
 end
 

@@ -260,7 +260,11 @@ RemoteManufacture_Go = function()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_INVENTORY_WEIGHTOVER"))
       return 
     end
-    FGlobal_HideDialog()
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_Hide()
+    else
+      FGlobal_HideDialog()
+    end
     local rv = Manufacture_Do((CppEnums.InstallationType).TypeCount, (self._actionName)[self._actionIndex], (CppEnums.ItemWhereType).eWarehouse, _materialSlotNoList[0], _materialSlotNoList[1], _materialSlotNoList[2], _materialSlotNoList[3], _materialSlotNoList[4])
     audioPostEvent_SystemUi(13, 11)
   end

@@ -324,6 +324,7 @@ PaGlobal_EquipmentTooltip.toggleDetail = function(self)
   -- function num : 0_15
   self._isDetail = not self._isDetail
   self:updateUI()
+  audioPostEvent_SystemUi(0, 0)
 end
 
 FGlobal_EquipmentTooltip_Init = function()

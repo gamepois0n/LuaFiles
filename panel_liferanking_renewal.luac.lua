@@ -647,7 +647,6 @@ end
 
 PaGlobal_LifeRanking.ShowAndUpdate = function(self)
   -- function num : 0_15
-  audioPostEvent_SystemUi(1, 0)
   PaGlobal_LifeRanking:Update()
   if Panel_LifeRanking:GetShow() == false then
     Panel_LifeRanking:SetShow(true, true)
@@ -711,10 +710,11 @@ end
 
 FGlobal_LifeRanking_Open = function()
   -- function num : 0_23
+  audioPostEvent_SystemUi(1, 30)
   local self = PaGlobal_LifeRanking
   if self._serverChange == true then
     for idx = 0, self._createTabCount - 1 do
-      -- DECOMPILER ERROR at PC10: Confused about usage of register: R5 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC14: Confused about usage of register: R5 in 'UnsetPending'
 
       (self._listUpdate)[idx] = false
     end
@@ -732,6 +732,7 @@ end
 
 FGlobal_LifeRanking_Close = function()
   -- function num : 0_24
+  audioPostEvent_SystemUi(1, 31)
   Panel_LifeRanking:SetShow(false, false)
 end
 

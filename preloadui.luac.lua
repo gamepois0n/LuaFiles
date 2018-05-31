@@ -59,6 +59,8 @@ preloadUI_cahngeUIFontSize = function(fontRaiseSize)
     ;
     (ToClient_getFontWrapper("BaseFont_12_Glow")):changeCurrentFontSizeBeMore(addFontSize)
     ;
+    (ToClient_getFontWrapper("BaseFont_14_Bold")):changeCurrentFontSizeBeMore(addFontSize)
+    ;
     (ToClient_getFontWrapper("SubTitleFont_14")):changeCurrentFontSizeBeMore(addFontSize)
     ;
     (ToClient_getFontWrapper("SubTitleFont_14_Bold")):changeCurrentFontSizeBeMore(addFontSize)

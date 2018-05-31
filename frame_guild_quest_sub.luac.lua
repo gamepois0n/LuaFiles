@@ -76,6 +76,11 @@ GuildProgressQuestInfoPage.UpdateData = function(self)
   -- function num : 0_3 , upvalues : _saveGuildTitle, UI_color
   local boolProgressing = ToClient_isProgressingGuildQuest()
   if boolProgressing == true then
+    -- DECOMPILER ERROR at PC19: Unhandled construct in 'MakeBoolean' P1
+
+    if _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_IsShow() == false and Panel_CheckedQuest:IsShow() == true then
+      Panel_Current_Guild_Quest:SetShow(true)
+    end
     if Panel_Npc_Dialog:IsShow() == false and Panel_CheckedQuest:IsShow() == true then
       Panel_Current_Guild_Quest:SetShow(true)
     end

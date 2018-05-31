@@ -2901,7 +2901,7 @@ IngameCashShop_SelectedItem = function(index, bValue)
   local tempSaveProductKeyRaw = slot.productNoRaw
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(tempSaveProductKeyRaw)
   if cashProduct ~= nil and cashProduct:isMoneyPrice() then
-    warehouse_requestInfo(getCurrentWaypointKey())
+    ToClient_RequestCurrentMainTownRegionWarehouseInfo()
   end
 end
 
@@ -3841,6 +3841,7 @@ end
     cashShop_requestCash()
   end
   cashShop_requestCashShopList()
+  ToClient_RequestCurrentMainTownRegionWarehouseInfo()
   PaymentPassword_Close()
   SetUIMode((Defines.UIMode).eUIMode_InGameCashShop)
   renderMode:set()
@@ -3986,7 +3987,7 @@ end
         (getIngameCashMall()):setCurrentSubTab(jj)
         ;
         (getIngameCashMall()):setCashProductNoRawFilterList()
-        -- DECOMPILER ERROR at PC606: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC608: Confused about usage of register: R14 in 'UnsetPending'
 
         if (getIngameCashMall()):getCashProductFilterListCount() <= 0 then
           (((self._tabs)[ii])._subTab)[jj] = nil

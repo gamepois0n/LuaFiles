@@ -49,7 +49,7 @@ for index = 0, 11 do
   ;
   (monthIndex[index]):SetSpanSize(((monthIndex[index]):GetSizeX() + 15) * _monthCount + 20)
   ;
-  (monthIndex[index]):addInputEvent("Mouse_LUp", "HandleClicked_MyHistory_MonthCheck(" .. index .. ")")
+  (monthIndex[index]):addInputEvent("Mouse_LUp", "HandleClicked_MyHistory_MonthCheck(" .. index .. ",true)")
   ;
   (monthIndex[index]):SetShow(true)
   _monthCount = _monthCount - 1
@@ -288,8 +288,11 @@ MyHistory_HelpWidget_Show = function(isShow, index, isLeft)
   TooltipSimple_Show(_dayHistoryValue[index], name, desc)
 end
 
-HandleClicked_MyHistory_MonthCheck = function(index)
+HandleClicked_MyHistory_MonthCheck = function(index, audioFlag)
   -- function num : 0_4 , upvalues : monthIndex, UI_color, currentValue, pastMonth_DayCount
+  if audioFlag == true then
+    audioPostEvent_SystemUi(0, 0)
+  end
   for i = 0, 11 do
     if index == i then
       (monthIndex[i]):SetFontColor(UI_color.C_FFFFFFFF)
@@ -300,20 +303,20 @@ HandleClicked_MyHistory_MonthCheck = function(index)
   end
   ;
   (monthIndex[index]):SetCheck(true)
-  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC33: Confused about usage of register: R2 in 'UnsetPending'
 
   currentValue._month = index + 1
-  -- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
 
   if ToClient_GetThisYear() <= currentValue._year and ToClient_GetThisMonth() < currentValue._month then
     currentValue._day = 0
   end
-  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC57: Confused about usage of register: R2 in 'UnsetPending'
 
   if ToClient_GetThisMonth() == currentValue._month then
     currentValue._day = ToClient_GetToday()
   else
-    -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC63: Confused about usage of register: R2 in 'UnsetPending'
 
     currentValue._day = pastMonth_DayCount[index + 1]
   end

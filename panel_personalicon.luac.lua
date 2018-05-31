@@ -162,7 +162,11 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
     ;
     (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
-    Panel_PersonalIcon:SetShow(true)
+    if _ContentsGroup_RenewUI then
+      Panel_PersonalIcon:SetShow(false)
+    else
+      Panel_PersonalIcon:SetShow(true)
+    end
     radarPosX = FGlobal_Panel_Radar_GetPosX()
     radarPosY = FGlobal_Panel_Radar_GetPosY()
     if CppDefine.ChangeUIAndResolution == true then

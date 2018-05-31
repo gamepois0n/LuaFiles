@@ -6,10 +6,15 @@
 Servant_SceneOpen = function(panel)
   -- function num : 0_0
   SetUIMode((Defines.UIMode).eUIMode_Stable)
-  setIgnoreShowDialog(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+    PaGlobalFunc_MainDialog_Close()
+  else
+    setIgnoreShowDialog(true)
+    Panel_Npc_Dialog:SetShow(false)
+  end
   ;
   (UIAni.fadeInSCR_Down)(panel)
-  Panel_Npc_Dialog:SetShow(false)
   local npcKey = dialog_getTalkNpcKey()
   if npcKey == 0 then
     return 
@@ -23,7 +28,11 @@ end
 Servant_SceneClose = function(panel)
   -- function num : 0_1
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
-  setIgnoreShowDialog(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+  else
+    setIgnoreShowDialog(false)
+  end
   ;
   (UIAni.fadeInSCR_Down)(panel)
   panel:SetShow(false)
@@ -33,7 +42,11 @@ Servant_SceneClose = function(panel)
   end
   local mainCameraName = Dialog_getMainSceneCameraName()
   changeCameraScene(mainCameraName, 0.5)
-  Panel_Npc_Dialog:SetShow(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+  end
 end
 
 Servant_ScenePushObject = function(servantInfo, beforeSceneIndex)

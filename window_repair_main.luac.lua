@@ -346,7 +346,11 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
   if isShow == true then
     SetUIMode((Defines.UIMode).eUIMode_Repair)
     repair_SetRepairMode(true)
-    setIgnoreShowDialog(true)
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+    else
+      setIgnoreShowDialog(true)
+    end
     ;
     (UIAni.fadeInSCR_Down)(Panel_Window_Repair)
     Inventory_SetFunctor(Repair_InvenFilter, Repair_InvenRClick, handleMClickedRepairExitButton, nil)
@@ -387,7 +391,11 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
       SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
     end
     repair_SetRepairMode(false)
-    setIgnoreShowDialog(false)
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+    else
+      setIgnoreShowDialog(false)
+    end
     Inventory_SetFunctor(nil, nil, nil, nil)
     ;
     (self._uiRepairWareHouseMoney):SetShow(false)
@@ -399,7 +407,15 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     Panel_Equipment:SetShow(isShow, true)
   end
   self:repairMoneyUpdate()
-  Panel_Npc_Dialog:SetShow(not isShow)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    if isShow == true then
+      PaGlobalFunc_MainDialog_Close()
+    else
+      PaGlobalFunc_MainDialog_Open()
+    end
+  else
+    Panel_Npc_Dialog:SetShow(not isShow)
+  end
   Panel_Window_Repair:SetShow(isShow, false)
   if isGameTypeKorea() == false then
     (self._uiRepairMessageBG):SetShow(isShow)

@@ -47,6 +47,7 @@ PaGlobal_MovieSkillGuide_Web.Close = function(self)
   -- function num : 0_2 , upvalues : _Web
   Panel_MovieSkillGuide_Web:SetShow(false)
   _Web:ResetUrl()
+  audioPostEvent_SystemUi(1, 1)
 end
 
 PaGlobal_MovieSkillGuide_Web:init()

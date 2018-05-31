@@ -16,6 +16,7 @@ Panel_Window_DailyStamp:RegisterShowEventFunc(true, "DailyStampShowAni()")
 Panel_Window_DailyStamp:RegisterShowEventFunc(false, "DailyStampHideAni()")
 DailyStampShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV, UI_TT
+  audioPostEvent_SystemUi(13, 6)
   Panel_Window_DailyStamp:ChangeSpecialTextureInfoName("new_ui_common_forlua/Default/Mask_MidHorizon.dds")
   local FadeMaskAni = Panel_Window_DailyStamp:addTextureUVAnimation(0, 0.2, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   FadeMaskAni:SetTextureType(UI_TT.PAUI_TEXTURE_TYPE_MASK)
@@ -28,13 +29,14 @@ DailyStampShowAni = function()
   FadeMaskAni:SetStartUV(1, 1, 3)
   FadeMaskAni:SetEndUV(0.4, 1, 3)
   FadeMaskAni.IsChangeChild = true
-  -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
 
   dailyStamp.animationTime = 0
 end
 
 DailyStampHideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(13, 5)
   Panel_Window_DailyStamp:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_Window_DailyStamp, 0, 0.1)
   aniInfo:SetHideAtEnd(true)

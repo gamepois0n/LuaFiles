@@ -31,6 +31,7 @@ end
 PaGlobal_Guild_NoneJoinMember.Open = function(self)
   -- function num : 0_1
   Panel_Guild_NoneJoinMember:SetShow(true)
+  audioPostEvent_SystemUi(1, 30)
 end
 
 -- DECOMPILER ERROR at PC51: Confused about usage of register: R2 in 'UnsetPending'
@@ -38,6 +39,7 @@ end
 PaGlobal_Guild_NoneJoinMember.Close = function(self)
   -- function num : 0_2
   Panel_Guild_NoneJoinMember:SetShow(false)
+  audioPostEvent_SystemUi(1, 31)
 end
 
 -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'

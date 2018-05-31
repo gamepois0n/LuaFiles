@@ -33,7 +33,7 @@ local quickSlot = {
 slotConfig_Item = {createIcon = true, createBorder = false, createCount = true, createCooltime = true, createCooltimeText = true, createCash = true, createEnchant = true, createQuickslotBagIcon = true}
 , 
 slotConfig_Skill = {createIcon = true, createEffect = true, createFG = false, createFGDisabled = false, createLevel = false, createLearnButton = false, createCooltime = true, createCooltimeText = true, 
-template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")}
+template = {effect}
 }
 , 
 config = {slotCount = 10, slotInitStartX = -5, slotInitStartY = 13, slotInitGapX = 55, slotInitGapY = 0}
@@ -47,7 +47,7 @@ numberNames = {"Static_No_1", "Static_No_2", "Static_No_3", "Static_No_4", "Stat
 skillToggle = {"Static_SkillToggle_1", "Static_SkillToggle_2", "Static_SkillToggle_3", "Static_SkillToggle_4", "Static_SkillToggle_5", "Static_SkillToggle_6", "Static_SkillToggle_7", "Static_SkillToggle_8", "Static_SkillToggle_9", "Static_SkillToggle_10"}
 , quickSlotInit = false, initPosX = Panel_QuickSlot:GetPosX(), initPosY = Panel_QuickSlot:GetPosY()}
 PaGlobal_QuickSlot = {}
--- DECOMPILER ERROR at PC153: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC149: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.addSlotEffectForTutorial = function(self, itemSlot, effectString, isLoop, posX, posY)
   -- function num : 0_1
@@ -56,7 +56,7 @@ PaGlobal_QuickSlot.addSlotEffectForTutorial = function(self, itemSlot, effectStr
   (PaGlobal_TutorialUiManager:getUiMasking()):showQuickSlotMasking(((itemSlot.item).icon):GetPosX(), ((itemSlot.item).icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC156: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC152: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.eraseSlotEffectForTutorial = function(self, itemSlot)
   -- function num : 0_2
@@ -67,7 +67,7 @@ PaGlobal_QuickSlot.eraseSlotEffectForTutorial = function(self, itemSlot)
   end
 end
 
--- DECOMPILER ERROR at PC160: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_QuickSlot.getSlotByIndex = function(self, slotIndex)
   -- function num : 0_3 , upvalues : quickSlot
@@ -79,7 +79,17 @@ PaGlobal_QuickSlot.getSlotByIndex = function(self, slotIndex)
 end
 
 quickSlot.init = function(self)
-  -- function num : 0_4
+  -- function num : 0_4 , upvalues : quickSlot
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
+
+  if _ContentsGroup_RenewUI_Skill == false then
+    ((quickSlot.slotConfig_Skill).template).effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")
+  else
+    -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
+
+    ;
+    ((quickSlot.slotConfig_Skill).template).effect = PaGlobalFunc_Skill_GetEffectControl()
+  end
 end
 
 QuickSlot_ShowAni = function()
@@ -919,7 +929,7 @@ QuickSlot_UpdatePerFrame = function(fDeltaTime)
     return 
   end
   if FGlobal_QuickSlot_CheckDefaultQuickSlotShowAble() == false then
-    Panel_QuickSlot:SetShow(false, false)
+    PaGlobalFunc_QuickSlot_SetShow(false, false)
     return 
   end
   onEffectTime = onEffectTime + fDeltaTime
@@ -1041,13 +1051,13 @@ QuickSlot_UpdatePerFrame = function(fDeltaTime)
             end
           end
           do
-            -- DECOMPILER ERROR at PC360: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC360: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC360: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC360: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1204,7 +1214,7 @@ end
 QuickSlot_UpdateData = function()
   -- function num : 0_22 , upvalues : quickSlot
   if FGlobal_QuickSlot_CheckDefaultQuickSlotShowAble() == false then
-    Panel_QuickSlot:SetShow(false, false)
+    PaGlobalFunc_QuickSlot_SetShow(false, false)
     return 
   end
   if CppDefine.ChangeUIAndResolution == true then
@@ -1224,7 +1234,7 @@ QuickSlot_UpdateData = function()
         end
         changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
         if not Panel_QuickSlot:GetShow() then
-          Panel_QuickSlot:SetShow(true, true)
+          PaGlobalFunc_QuickSlot_SetShow(true, true)
         end
         local self = quickSlot
         for idx,slot in ipairs(self.slots) do
@@ -1307,9 +1317,18 @@ end
 QuickSlot_UpdateAfter_cleanupDialog = function()
   -- function num : 0_25
   if Panel_QuickSlot:IsUse() then
-    local hideNpcTradeMarketDialog = FGlobal_CloseNpcDialogForDetail()
-    if hideNpcTradeMarketDialog and Panel_Npc_Dialog:IsShow() then
-      FGlobal_HideDialog(true)
+    if _ContentsGroup_RenewUI_Dailog == true then
+      local hideNpcTradeMarketDialog = PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
+      if hideNpcTradeMarketDialog and PaGlobalFunc_MainDialog_IsShow() then
+        PaGlobalFunc_MainDialog_Hide()
+      end
+    else
+      do
+        local hideNpcTradeMarketDialog = FGlobal_CloseNpcDialogForDetail()
+        if hideNpcTradeMarketDialog and Panel_Npc_Dialog:IsShow() then
+          FGlobal_HideDialog(true)
+        end
+      end
     end
   end
 end
@@ -1345,9 +1364,9 @@ Panel_QuickSlot_ShowToggle = function()
   end
   local isShow = Panel_QuickSlot:IsShow()
   if isShow then
-    Panel_QuickSlot:SetShow(false, false)
+    PaGlobalFunc_QuickSlot_SetShow(false, false)
   else
-    Panel_QuickSlot:SetShow(true, true)
+    PaGlobalFunc_QuickSlot_SetShow(true, true)
   end
 end
 
@@ -1356,7 +1375,7 @@ FGlobal_QuickSlot_Show = function()
   if FGlobal_QuickSlot_CheckDefaultQuickSlotShowAble() == false then
     return 
   end
-  Panel_QuickSlot:SetShow(true, true)
+  PaGlobalFunc_QuickSlot_SetShow(true, true)
   local itemSlot = (quickSlot.slots)[1]
   if itemSlot ~= nil then
     if itemSlot.item ~= nil then
@@ -1609,9 +1628,18 @@ renderModeChange_QuickSlot_OnscreenResize = function(prevRenderModeList, nextRen
   QuickSlot_OnscreenResize()
 end
 
+PaGlobalFunc_QuickSlot_SetShow = function(isShow, isAni)
+  -- function num : 0_42
+  if _ContentsGroup_RenewUI == false then
+    Panel_QuickSlot:SetShow(isShow, isAni)
+  else
+    Panel_QuickSlot:SetShow(false, false)
+  end
+end
+
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_QuickSlot")
 FromClient_luaLoadComplete_QuickSlot = function()
-  -- function num : 0_42 , upvalues : quickSlot
+  -- function num : 0_43 , upvalues : quickSlot
   quickSlot:init()
   quickSlot:createSlot()
   quickSlot:registEventHandler()

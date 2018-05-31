@@ -49,7 +49,6 @@ SkillEvent_SkillWindow_LearnQuest = function(skillNo)
     return 
   end
   local self = PaGlobal_Skill
-  audioPostEvent_SystemUi(0, 0)
   if (self.skillNoSlot)[skillNo] ~= nil then
     audioPostEvent_SystemUi(4, 2)
     ;
@@ -447,6 +446,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     PaGlobal_Skill.scrollPos = 0
     FGlobal_ResetUrl_Tooltip_SkillForLearning()
     TooltipSimple_Hide()
+    audioPostEvent_SystemUi(1, 17)
   end
 end
 
@@ -544,6 +544,7 @@ end
 
 HandleMLUp_SkillWindow_LearnButtonClick = function(skillNo)
   -- function num : 0_13
+  audioPostEvent_SystemUi(0, 0)
   local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
   if skillTypeStaticWrapper == nil then
     return 

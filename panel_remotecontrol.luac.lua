@@ -310,6 +310,9 @@ RemoteControl_Interaction_ShowToggloe = function()
   -- function num : 0_10 , upvalues : remoteControl, UI_ANI_ADV
   local self = remoteControl
   local isShow = Panel_Interaction:GetShow()
+  if _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_IsUse() then
+    return 
+  end
   if Panel_Npc_Dialog:IsUse() then
     return 
   end
@@ -335,7 +338,11 @@ RemoteControl_LeaveDialog = function()
     FGlobal_RemoteControl_Hide()
     remoteControl:Show(5)
   else
-    FGlobal_HideDialog()
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_Hide()
+    else
+      FGlobal_HideDialog()
+    end
     FGlobal_RemoteControl_Hide()
     remoteControl:Show(1)
   end

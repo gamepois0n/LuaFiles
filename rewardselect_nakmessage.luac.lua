@@ -1131,7 +1131,11 @@ NakMessagePanel_Resize_For_RewardSelect = function()
     if Panel_Arsha_TeamWidget:GetShow() then
       Panel_RewardSelect_NakMessage:SetPosY(Panel_Arsha_TeamWidget:GetPosY() + Panel_Arsha_TeamWidget:GetSizeY() - 30)
     else
-      Panel_RewardSelect_NakMessage:SetPosY(30)
+      if Panel_Guild_OneOnOneClock:GetShow() then
+        Panel_RewardSelect_NakMessage:SetPosY(Panel_Guild_OneOnOneClock:GetPosY() + Panel_Guild_OneOnOneClock:GetSizeY() - 40)
+      else
+        Panel_RewardSelect_NakMessage:SetPosY(30)
+      end
     end
   end
   Panel_RewardSelect_NakMessage:SetPosX((getScreenSizeX() - Panel_RewardSelect_NakMessage:GetSizeX()) * 0.5)

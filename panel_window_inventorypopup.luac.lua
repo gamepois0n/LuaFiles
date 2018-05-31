@@ -179,8 +179,10 @@ end
 
 PaGlobalFunc_InventoryPopup_ProcessFunc = function(index)
   -- function num : 0_5 , upvalues : _popupConfig
-  ((_popupConfig[index]).func)((_popupConfig[index]).param)
-  PaGlobalFunc_InventoryPopup_Close()
+  if (_popupConfig[index]).func ~= nil and type((_popupConfig[index]).func) == "function" then
+    ((_popupConfig[index]).func)((_popupConfig[index]).param)
+    PaGlobalFunc_InventoryPopup_Close()
+  end
 end
 
 PaGlobalFunc_InventoryPopup_CheckMouseAndClose = function()

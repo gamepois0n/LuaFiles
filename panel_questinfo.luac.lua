@@ -339,6 +339,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
         Panel_CheckedQuestInfo:SetPosX(getScreenSizeX() - getScreenSizeX() / 2 - Panel_CheckedQuestInfo:GetSizeX() / 2)
         Panel_CheckedQuestInfo:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_CheckedQuestInfo:GetSizeY() / 2)
       end
+      FGlobal_SetUrl_Tooltip_SkillForLearning()
       Panel_CheckedQuestInfo:SetShow(true, true)
       if Panel_Window_Quest_New:IsUISubApp() then
         Panel_CheckedQuestInfo:OpenUISubApp()
@@ -384,6 +385,8 @@ FGlobal_QuestInfoDetail_Close = function()
   checkedQuestInfo_PosY = Panel_CheckedQuestInfo:GetPosY()
   expTooltip:SetShow(false)
   FGlobal_QuestInfoDetail_ResetInfo()
+  FGlobal_ResetUrl_Tooltip_SkillForLearning()
+  audioPostEvent_SystemUi(1, 1)
 end
 
 FGlobal_QuestInfoDetail_ResetInfo = function()

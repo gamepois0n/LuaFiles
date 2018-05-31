@@ -2119,7 +2119,12 @@ Chatting_OnResize = function()
     if CppDefine.ChangeUIAndResolution == true then
       if panel:GetRelativePosX() == -1 and panel:GetRelativePosY() == -1 then
         local initPosX = 0
-        local initPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+        local initPosY = nil
+        if _ContentsGroup_RenewUI == false then
+          initPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+        else
+          initPosY = getScreenSizeY() - panelSizeY
+        end
         panelPosX = initPosX
         panelPosY = initPosY
         panel:SetPosX(panelPosX)
@@ -2129,7 +2134,11 @@ Chatting_OnResize = function()
       do
         if panel:GetRelativePosX() == 0 and panel:GetRelativePosY() == 0 then
           panelPosX = 0
-          panelPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+          if _ContentsGroup_RenewUI == false then
+            panelPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+          else
+            panelPosY = getScreenSizeY() - panelSizeY
+          end
         else
           if panel:GetRelativePosX() > 0 or panel:GetRelativePosY() > 0 then
             panelPosX = panel:GetRelativePosX() * getScreenSizeX() - panel:GetSizeX() / 2
@@ -2177,7 +2186,12 @@ Chatting_OnResize = function()
           ;
           ((chatUI._list_Scroll)[0]):SetControlBottom()
         end
-        local defaultPosY = getScreenSizeY() - panel:GetSizeY() - Panel_GameTips:GetSizeY()
+        local defaultPosY = nil
+        if _ContentsGroup_RenewUI == false then
+          defaultPosY = getScreenSizeY() - panel:GetSizeY() - Panel_GameTips:GetSizeY()
+        else
+          defaultPosY = getScreenSizeY() - panel:GetSizeY()
+        end
         if panelPosX == -1 and panelPosY == -1 then
           panelPosX = 0
           panelPosY = defaultPosY
@@ -2186,7 +2200,11 @@ Chatting_OnResize = function()
             panelPosX = 0
           else
             if getScreenSizeX() - panel:GetSizeX() < panelPosX then
-              panelPosX = getScreenSizeX() - panel:GetSizeX() - Panel_GameTips:GetSizeY()
+              if _ContentsGroup_RenewUI == false then
+                panelPosX = getScreenSizeX() - panel:GetSizeX() - Panel_GameTips:GetSizeY()
+              else
+                panelPosX = getScreenSizeX() - panel:GetSizeX()
+              end
             end
           end
           if CppDefine.ChangeUIAndResolution == true then
@@ -2222,11 +2240,11 @@ Chatting_OnResize = function()
           if isCombinePanel then
             divisionPanel:combineToMainPanel()
           end
-          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -2647,28 +2665,36 @@ HandleClicked_ChattingSender = function(poolIndex, senderStaticIndex)
   local poolCurrentUI = ChatUIPoolManager:getPool(poolIndex)
   local messageIndex = (poolCurrentUI._list_SenderMessageIndex)[senderStaticIndex]
   local chattingMessage = chatPanel:getChattingMessageByIndex(messageIndex)
-  if chattingMessage ~= nil then
-    clickedName = chattingMessage:getSender(0)
-    clickedUserNickName = chattingMessage:getSender(1)
-    clickedMsg = chattingMessage:getContent()
-    chatType = chattingMessage.chatType
-    isSameChannel = chattingMessage.isSameChannel
-    currentPoolIndex = paramIndex
-    clickedMessageIndex = messageIndex
-    if clickedName ~= nil and clickedUserNickName ~= nil then
-      setClipBoardText(clickedName)
-      if (ChatSubMenu._mainPanel):IsShow() then
-        ChatSubMenu:SetShow(false)
+  local isBlockedUser = ToClient_isChatMsgFromBlockedUser(chattingMessage)
+  if isBlockedUser == false then
+    if chattingMessage ~= nil then
+      clickedName = chattingMessage:getSender(0)
+      clickedUserNickName = chattingMessage:getSender(1)
+      clickedMsg = chattingMessage:getContent()
+      chatType = chattingMessage.chatType
+      isSameChannel = chattingMessage.isSameChannel
+      currentPoolIndex = paramIndex
+      clickedMessageIndex = messageIndex
+      if clickedName ~= nil and clickedUserNickName ~= nil then
+        setClipBoardText(clickedName)
+        if (ChatSubMenu._mainPanel):IsShow() then
+          ChatSubMenu:SetShow(false)
+        end
+        ChatSubMenu:SetShow(true, isInviteParty(chatType, isSameChannel), isInviteGuild(chatType, isSameChannel), isInviteCompetition(isSameChannel), chattingMessage.isGameManager, clickedName, clickedUserNickName)
+        ChatSubMenu:SetPos(posX, posY)
       end
-      ChatSubMenu:SetShow(true, isInviteParty(chatType, isSameChannel), isInviteGuild(chatType, isSameChannel), isInviteCompetition(isSameChannel), chattingMessage.isGameManager, clickedName, clickedUserNickName)
-      ChatSubMenu:SetPos(posX, posY)
+    else
+      clickedName = nil
+      clickedUserNickName = nil
+      clickedMsg = nil
+      currentPoolIndex = nil
+      clickedMessageIndex = nil
     end
   else
-    clickedName = nil
-    clickedUserNickName = nil
-    clickedMsg = nil
-    currentPoolIndex = nil
-    clickedMessageIndex = nil
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
   end
 end
 

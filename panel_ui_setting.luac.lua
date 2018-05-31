@@ -1671,7 +1671,6 @@ FGlobal_UiSet_Open = function(isMenu)
   (UiSet.btn_FieldView):SetCheck(false)
   ;
   (UiSet.btn_QuickSlotMagnetic):SetCheck(true)
-  audioPostEvent_SystemUi(1, 41)
   UiSet_ScaleSet()
   for idx = 1, UiSet.panelCount do
     local slot = (UiSet.panelPool)[idx]
@@ -1713,12 +1712,12 @@ FGlobal_UiSet_Open = function(isMenu)
   local count = ToClient_getChattingPanelCount()
   for chattingPanelindex = 0, count - 1 do
     local chatPanel = ToClient_getChattingPanel(chattingPanelindex)
-    -- DECOMPILER ERROR at PC151: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC147: Confused about usage of register: R7 in 'UnsetPending'
 
     if chatPanel:isOpen() then
       ChatPanelIsOpenState[chattingPanelindex + 1] = true
     else
-      -- DECOMPILER ERROR at PC155: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC151: Confused about usage of register: R7 in 'UnsetPending'
 
       ChatPanelIsOpenState[chattingPanelindex + 1] = false
     end

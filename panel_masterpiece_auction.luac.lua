@@ -14,6 +14,8 @@ local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_TM = CppEnums.TextMode
 MasterpieceAuction_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
+  audioPostEvent_SystemUi(1, 30)
+  ;
   (UIAni.fadeInSCR_Down)(Panel_Window_MasterpieceAuction)
   local aniInfo1 = Panel_Window_MasterpieceAuction:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -33,6 +35,7 @@ end
 
 MasterpieceAuction_HideAni = function()
   -- function num : 0_1 , upvalues : UI_PSFT, UI_ANI_ADV
+  audioPostEvent_SystemUi(1, 31)
   FGlobal_MasterPieceAuction_Reset()
   Panel_Window_MasterpieceAuction:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Window_MasterpieceAuction:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
@@ -139,8 +142,6 @@ PaGlobal_MasterpieceAuction.initialize = function(self)
   ;
   ((self._ui)._staticTextDescBG):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_MYBIDITEMINFO"))
   ;
-  ((self._ui)._staticTextItemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-  ;
   ((self._ui)._txt_BottomDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   ((self._ui)._txt_BottomDesc):setPadding((CppEnums.Padding).ePadding_Left, 10)
@@ -185,6 +186,7 @@ end
 
 PaGlobal_MasterpieceAuction.close = function(self)
   -- function num : 0_4
+  audioPostEvent_SystemUi(1, 31)
   Panel_Window_MasterpieceAuction:SetShow(false)
   Panel_Tooltip_Item_hideTooltip()
   FGlobal_MasterPieceAuction_Reset()

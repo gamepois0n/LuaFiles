@@ -94,8 +94,10 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.startPhaseXXX = function(self, step
   PaGlobal_TutorialUiManager:repositionScreen()
   FGlobal_Panel_Radar_Show(true)
   Panel_TimeBar:SetShow(true)
-  GameTips_Show()
-  GameTips_Reposition()
+  if _ContentsGroup_RenewUI == false then
+    GameTips_Show()
+    GameTips_Reposition()
+  end
   FGlobal_NewQuickSlot_Update()
   Panel_MainStatus_User_Bar:SetShow(true, false)
   FGlobal_ClassResource_SetShowControl(true)

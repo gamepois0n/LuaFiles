@@ -1465,7 +1465,11 @@ local endUIProcess = function()
   if isClose == false then
     return 
   end
-  FromClient_ShowDialog()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    FromClient_ShowMainDialog()
+  else
+    FromClient_ShowDialog()
+  end
 end
 
 MentalGame_Hide = function()
@@ -1481,8 +1485,13 @@ MentalGame_HideByDamage = function()
   end
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
-  Panel_Npc_Dialog:SetShow(true)
-  dialog_CloseNpcTalk(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_Dialog_Main_CloseNpcTalk()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+    dialog_CloseNpcTalk(true)
+  end
   setShowNpcDialog(false)
   setShowLine(true)
   ToClient_PopDialogueFlush()
@@ -1496,8 +1505,13 @@ MentalGame_HideByDead = function()
     return 
   end
   renderMode:reset()
-  Panel_Npc_Dialog:SetShow(true)
-  dialog_CloseNpcTalk(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_Dialog_Main_CloseNpcTalk()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+    dialog_CloseNpcTalk(true)
+  end
   setShowNpcDialog(false)
   setShowLine(true)
   ToClient_PopDialogueFlush()
@@ -1643,9 +1657,15 @@ MentalGame_Show = function()
   ((mgUI.zodiac).panel):SetShow(true, false)
   Panel_Window_WorkerRandomSelect:SetShow(false, false)
   FGlobal_ShowRewardList(false)
-  Panel_Npc_Dialog:SetShow(false, false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Close(false)
+  else
+    Panel_Npc_Dialog:SetShow(false, false)
+  end
   Panel_Dialogue_Itemtake:SetShow(false)
-  HandleMLUp_SkillWindow_Close(true)
+  if _ContentsGroup_RenewUI_Skill == false then
+    HandleMLUp_SkillWindow_Close(true)
+  end
   NpcShop_WindowClose()
   ;
   ((mgUI.left).panel):SetShow(true, false)

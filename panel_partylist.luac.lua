@@ -303,6 +303,7 @@ end
 
 partyList.Show = function(self)
   -- function num : 0_10
+  audioPostEvent_SystemUi(1, 29)
   Panel_PartyList:SetShow(true, true)
   ToClient_RequestListPartyRecruitment()
   Panel_PartyList:SetPosX(getScreenSizeX() / 2 - Panel_PartyList:GetSizeX() / 2)
@@ -312,6 +313,7 @@ end
 
 partyList.Hide = function(self)
   -- function num : 0_11
+  audioPostEvent_SystemUi(1, 1)
   Panel_PartyList:SetShow(false, false)
   ClearFocusEdit()
   FGlobal_PartyListClearFocusEdit()

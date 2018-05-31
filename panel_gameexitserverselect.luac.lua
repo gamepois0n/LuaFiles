@@ -49,6 +49,7 @@ local channelChildControl = {_name = (UI.getChildControl)(channelSelect._channel
 local channelMainDesc = {_serverTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_ChannelSelectTitle"), _serverDesc = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_ChannelSelectDesc"), _speedTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_SpeedTitle"), _speedDesc = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_SpeedDesc"), _pkTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_PKTitle"), _pkDesc = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_PKDesc"), _siegeTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Channel"), _siegeBalenos = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Balenos"), _siegeSerendia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Serendia"), _siegeCalpheon = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Calpheon"), _siegeMedia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Media"), _siegeValencia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Valencia"), _scheduleTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule"), _scheduleSiege = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule_Siege"), _scheduleNodeWar = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule_Nodewar")}
 Panel_ChannelSelect_ShowAni = function()
   -- function num : 0_0
+  audioPostEvent_SystemUi(1, 0)
   Panel_ChannelSelect:SetAlpha(0)
   ;
   (UIAni.AlphaAnimation)(1, Panel_ChannelSelect, 0, 0.3)
@@ -56,6 +57,7 @@ end
 
 Panel_ChannelSelect_HideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(1, 1)
   local ani1 = (UIAni.AlphaAnimation)(0, Panel_ChannelSelect, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end
@@ -880,6 +882,7 @@ end
 
 HandleClicked_ChannelSelect = function(selectChannel)
   -- function num : 0_6 , upvalues : channelSelect
+  audioPostEvent_SystemUi(0, 0)
   do
     if isChannelMoveOnlySafe() then
       local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())

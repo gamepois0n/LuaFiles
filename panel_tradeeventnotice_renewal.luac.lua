@@ -379,6 +379,7 @@ PaGlobal_TradeEventNotice_Renewal.Close = function(self)
   else
     Panel_TradeEventNotice_Renewal:SetShow(false, true)
   end
+  audioPostEvent_SystemUi(1, 1)
 end
 
 -- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'

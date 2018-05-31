@@ -15,8 +15,22 @@ _territoryNameInfo = {}
 , _currentTerritoryKey = -1, _maxTerritoryKeyCount = 10, _separatorNumber = 100, _selectWaypointKey = -1}
 -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_SearchMenuWarehouse.Init = function(self)
+PaGlobal_SearchMenuWarehouse.registMessageHandler = function(self)
   -- function num : 0_0
+  registerEvent("EventWarehouseUpdate", "PaGlobal_SearchMenuWarehouse_UpdateWarehouse")
+end
+
+PaGlobal_SearchMenuWarehouse_UpdateWarehouse = function(waypointKey)
+  -- function num : 0_1
+  local self = PaGlobal_SearchMenuWarehouse
+  ;
+  ((self._ui)._list2):requestUpdateByKey(toInt64(0, waypointKey + self._separatorNumber))
+end
+
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_SearchMenuWarehouse.Init = function(self)
+  -- function num : 0_2
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._ui).list_Title = (UI.getChildControl)((self._ui).part_SearchMenuWarehouse, "List_Title")
@@ -52,7 +66,7 @@ PaGlobal_SearchMenuWarehouse.Init = function(self)
 end
 
 PaGlobal_SearchMenuWarehouse_UpdateList = function(contents, key)
-  -- function num : 0_1
+  -- function num : 0_3
   local self = PaGlobal_SearchMenuWarehouse
   local idx = Int64toInt32(key)
   local radioButton = (UI.getChildControl)(contents, "RadioButton_Territory")
@@ -77,7 +91,6 @@ PaGlobal_SearchMenuWarehouse_UpdateList = function(contents, key)
     radioButton:SetShow(false)
     warehouseName:SetShow(true)
     local waypointKey = idx - self._separatorNumber
-    warehouse_requestInfo(waypointKey)
     if waypointKey == self._selectWaypointKey then
       warehouseName:SetFontColor((Defines.Color).C_FFACE400)
       warehouseName:SetCheck(true)
@@ -101,7 +114,7 @@ PaGlobal_SearchMenuWarehouse_UpdateList = function(contents, key)
 end
 
 FGlobal_SearchMenuWarehouse_TerritoryOpen = function(territoryKey, isFirstOpen)
-  -- function num : 0_2
+  -- function num : 0_4
   local self = PaGlobal_SearchMenuWarehouse
   ;
   (((self._ui)._list2):getElementManager()):clearKey()
@@ -114,6 +127,7 @@ FGlobal_SearchMenuWarehouse_TerritoryOpen = function(territoryKey, isFirstOpen)
         else
           local maxTerritoryWarehouseCount = (((self._warehouseInfo)._territoryGroup)[index])._count
           for wIndex = 1, maxTerritoryWarehouseCount do
+            warehouse_requestInfo((((self._warehouseInfo)._territoryGroup)[index])[wIndex])
             local waypointKey = (((self._warehouseInfo)._territoryGroup)[index])[wIndex] + self._separatorNumber
             ;
             (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, waypointKey))
@@ -137,10 +151,10 @@ FGlobal_SearchMenuWarehouse_TerritoryOpen = function(territoryKey, isFirstOpen)
   end
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_SearchMenuWarehouse.ClickOtherTownsWareHouse = function(self, waypointKey)
-  -- function num : 0_3
+  -- function num : 0_5
   local isCurrentTownsWarehouse = waypointKey == getCurrentWaypointKey()
   if isCurrentTownsWarehouse then
     Warehouse_OpenPanelFromDialog()
@@ -160,19 +174,19 @@ PaGlobal_SearchMenuWarehouse.ClickOtherTownsWareHouse = function(self, waypointK
   end
 end
 
--- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_SearchMenuWarehouse.ClickCurrentTownsWareHouse = function(self)
-  -- function num : 0_4
+  -- function num : 0_6
   self._selectIndex = -1
   self._selectWaypointKey = -1
   Warehouse_OpenPanelFromDialog()
 end
 
--- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC43: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_SearchMenuWarehouse.Open = function(self)
-  -- function num : 0_5
+  -- function num : 0_7
   if ((self._ui).part_SearchMenuWarehouse):GetShow() == true or not _ContentsGroup_isAllWarehouse then
     return 
   end
@@ -244,10 +258,10 @@ PaGlobal_SearchMenuWarehouse.Open = function(self)
   ((self._ui).part_SearchMenuWarehouse):ComputePos()
 end
 
--- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC46: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_SearchMenuWarehouse.Close = function(self)
-  -- function num : 0_6
+  -- function num : 0_8
   if ((self._ui).part_SearchMenuWarehouse):GetShow() == false then
     return 
   end
@@ -256,7 +270,7 @@ PaGlobal_SearchMenuWarehouse.Close = function(self)
 end
 
 FGlobal_WarehouseTownListCheck = function()
-  -- function num : 0_7
+  -- function num : 0_9
   if ToClient_WorldMapIsShow() then
     return 
   end
@@ -270,4 +284,5 @@ FGlobal_WarehouseTownListCheck = function()
 end
 
 PaGlobal_SearchMenuWarehouse:Init()
+PaGlobal_SearchMenuWarehouse:registMessageHandler()
 

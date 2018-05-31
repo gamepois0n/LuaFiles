@@ -5,6 +5,7 @@
 -- function num : 0
 Panel_Login:SetShow(true, false)
 Panel_Login:SetSize(getScreenSizeX(), getScreenSizeY())
+Panel_Login:SetShow(false, false)
 local _loginBG = (UI.getChildControl)(Panel_Login, "Static_LoginBG")
 local _buttonBG = (UI.getChildControl)(Panel_Login, "Static_ButtonBG")
 local _txt_Guide = (UI.getChildControl)(Panel_Login, "StaticText_InputTxt")
@@ -26,6 +27,7 @@ Button_Login:SetEnable(true)
 Button_Exit:SetEnable(true)
 Button_GameOption:SetEnable(true)
 StaticEventBG:SetShow(false)
+Panel_Login:SetShow(true, false)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
@@ -102,7 +104,7 @@ for _,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_Login:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC449: Confused about usage of register: R35 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC459: Confused about usage of register: R35 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex

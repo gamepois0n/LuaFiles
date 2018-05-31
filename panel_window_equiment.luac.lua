@@ -320,6 +320,8 @@ end
 
 HandleClicked_EquipmentWindow_Close = function()
   -- function num : 0_4 , upvalues : equip
+  audioPostEvent_SystemUi(1, 1)
+  ;
   (equip.checkPopUp):SetCheck(false)
   Panel_Equipment:CloseUISubApp()
   EquipmentWindow_Close()
@@ -783,7 +785,6 @@ Equipment_updateSlotData = function()
     (equip.defenceValue):SetSpanSize(95, valueSpanSizeY)
   end
   if self.checkExtendedSlot == 1 then
-    _PA_LOG("박범�\128", "self.checkExtendedSlot == 1")
     for extendSlotNo,parentSlotNo in pairs(self.extendedSlotInfoArray) do
       local itemWrapper = ToClient_getEquipmentItem(parentSlotNo)
       local setSlotBG = (self.slotBGs)[extendSlotNo]

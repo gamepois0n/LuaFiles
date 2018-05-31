@@ -3855,6 +3855,7 @@ Itemmarket_Sort_ShowComboBox = function()
   if filterLineCount == 0 then
     return 
   end
+  audioPostEvent_SystemUi(0, 0)
   ;
   (self.combobox_Filter_Sort1):AddItemWithKey(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_ALL"), 0)
   local count = 0
@@ -3875,6 +3876,7 @@ end
 
 Itemmarket_Sort_SetSort = function()
   -- function num : 0_55 , upvalues : ItemMarket, filter1
+  audioPostEvent_SystemUi(0, 0)
   local self = ItemMarket
   ;
   (self.combobox_Filter_Sort1):SetSelectItemIndex((self.combobox_Filter_Sort1):GetSelectIndex())
@@ -4574,6 +4576,7 @@ FGolbal_ItemMarketNew_Close = function()
   if Panel_Window_ItemMarket:IsShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true then
     return 
   end
+  audioPostEvent_SystemUi(1, 1)
   selectedKey = -1
   _itemMarket_ShowIconToolTip(false)
   ClearFocusEdit()
@@ -4587,7 +4590,7 @@ FGolbal_ItemMarketNew_Close = function()
     (ItemMarket.btn_RegistItem):SetShow(false)
     FGlobal_ReturnIsByMaid()
   end
-  -- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
   if not Panel_Window_ItemMarket_Function:GetShow() and ItemMarket.escMenuSaveValue == true then
     ItemMarket.escMenuSaveValue = false

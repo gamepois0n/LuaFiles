@@ -1455,16 +1455,17 @@ clickFriendList = function(isRUp)
     end
     PopupGroupList:SetShow(false)
   else
+    audioPostEvent_SystemUi(0, 0)
     if self._isFriendMenuShow or self._isGroupMenuShow then
       friend_closeFriendMenu()
     else
     end
   end
-  -- DECOMPILER ERROR at PC140: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC144: Confused about usage of register: R3 in 'UnsetPending'
 
   if (CppEnums.TreeItemType).PA_TREE_ITEM_ROOT == friendIndex:GetType() then
     _friendListData._selectedFriendIndex = friendIndex:GetIndex()
-    -- DECOMPILER ERROR at PC154: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC158: Confused about usage of register: R3 in 'UnsetPending'
 
     if ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getFriendType() == 1 then
       _friendListData._selectedFriendIndex = friendIndex:GetIndex()
@@ -1611,6 +1612,7 @@ end
 
 FriendList_showAni = function()
   -- function num : 0_78 , upvalues : FriendList, RequestFriendList, UI_ANI_ADV
+  audioPostEvent_SystemUi(1, 0)
   local isNew = RequestFriendList_getFriendList()
   if ToClient_isXBox() == true then
     FriendList:updateListForXbox()
@@ -1639,6 +1641,7 @@ end
 
 FriendList_hideAni = function()
   -- function num : 0_79
+  audioPostEvent_SystemUi(1, 1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_FriendList, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end

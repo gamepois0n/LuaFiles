@@ -6,6 +6,7 @@
 local UI_PD = CppEnums.Padding
 Panel_ServerSelect:SetShow(true, false)
 Panel_ServerSelect:SetSize(getScreenSizeX(), getScreenSizeY())
+Panel_ServerSelect:SetShow(false, false)
 local FRAME_SERVERLIST = (UI.getChildControl)(Panel_ServerSelect, "FrameServerList")
 local FRAMEContents_SERVERLIST = (UI.getChildControl)(FRAME_SERVERLIST, "Frame_1_Content")
 local FRAME_Scroll = (UI.getChildControl)(FRAME_SERVERLIST, "Frame_1_VerticalScroll")
@@ -429,7 +430,7 @@ for v,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_ServerSelect:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC736: Confused about usage of register: R61 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC741: Confused about usage of register: R61 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -487,6 +488,7 @@ StartUp_Panel_SelectServer = function()
   else
     SELECT_SERVER_BG_TEXT:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SERVER"))
   end
+  Panel_ServerSelect:SetShow(false, false)
   Panel_ServerSelect:SetSize(getScreenSizeX(), getScreenSizeY())
   _worldServerCount = getGameWorldServerDataCount()
   for idx = 0, _worldServerCount - 1 do
@@ -599,7 +601,7 @@ StartUp_Panel_SelectServer = function()
     worldCtrl._unableCreate = tempUnableCreate
     worldCtrl._countText = tempCount
     worldCtrl._statusText = tempStatus
-    -- DECOMPILER ERROR at PC417: Confused about usage of register: R21 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC422: Confused about usage of register: R21 in 'UnsetPending'
 
     _worldServerCtrls[idx] = worldCtrl
   end
@@ -611,6 +613,7 @@ StartUp_Panel_SelectServer = function()
     Panel_Lobby_function_SelectWorldServer(PaGlobal_FindMyWorldServer())
     Panel_SelectServer_RePositioningCtrls()
     PaGlobal_CheckGamerTag()
+    Panel_ServerSelect:SetShow(true, false)
   end
 end
 

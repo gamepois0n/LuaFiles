@@ -47,7 +47,11 @@ local _russiaPack3 = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_Russi
 local _currentNodeLv = 0
 local registEventHandler = function()
   -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining, _memoryOfMaetsro, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
-  _btn_NewSkill:addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_OpenForLearn()")
+  if _ContentsGroup_RenewUI_Skill == false then
+    _btn_NewSkill:addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_OpenForLearn()")
+  else
+    _btn_NewSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_Open()")
+  end
   _btn_NewSkill:addInputEvent("Mouse_RUp", "Panel_SelfPlayer_EnableSkillCheck_Close()")
   _btn_NewSkill:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 0 )")
   _btn_NewSkill:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false )")
@@ -664,6 +668,9 @@ end
 
 Panel_SelfPlayer_EnableSkillCheck_Func = function()
   -- function num : 0_3 , upvalues : _btn_NewSkill, _txt_NewSkill
+  if _ContentsGroup_RenewUI_Skill == true then
+    return 
+  end
   local isLearnable = PaGlobal_Skill:SkillWindow_PlayerLearnableSkill()
   local skillCount = FGlobal_EnableSkillReturn()
   local isSkillIconShowCheck = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).SkillIconCheck)

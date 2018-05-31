@@ -852,7 +852,6 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   end
   do
     local isSuccess = skillWindow_DoLearn(skillNo)
-    audioPostEvent_SystemUi(0, 0)
     if isSuccess then
       audioPostEvent_SystemUi(4, 2)
       if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then

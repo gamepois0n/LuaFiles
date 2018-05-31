@@ -35,6 +35,7 @@ FGlobal_ItemMarket_FavoriteItem_Open = function()
   for key = 0, self.textCount - 1 do
     ((self.list2):getElementManager()):pushKey(toInt64(0, key))
   end
+  audioPostEvent_SystemUi(1, 0)
 end
 
 ItemMarket_FavoriteItem_CloseEvent = function()
@@ -48,6 +49,7 @@ ItemMarket_FavoriteItem_Close = function()
   local self = ItemMarket_FavoriteItem
   ToClient_saveFavoritesSearchListClientData()
   Panel_Window_ItemMarket_Favorite:SetShow(false)
+  audioPostEvent_SystemUi(1, 1)
 end
 
 FGlobal_ItemMarket_FavoriteItem_Close = function()

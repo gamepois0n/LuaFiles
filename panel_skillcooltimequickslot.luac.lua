@@ -12,19 +12,29 @@ _panelPool = {}
 _config = {maxPanelCount = 10}
 , 
 _slotConfig_Skill = {createIcon = true, createEffect = true, createFG = false, createFGDisabled = false, createLevel = false, createLearnButton = false, createCooltime = true, createCooltimeText = true, 
-template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")}
+template = {effect}
 }
 , 
 _skillCoolTimeQuickSlot_PanelID = {[0] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_0, [1] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_1, [2] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_2, [3] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_3, [4] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_4, [5] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_5, [6] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_6, [7] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_7, [8] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_8, [9] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_9}
 , 
 _skillCoolTimeQuickSlot_PanelList = {[0] = Panel_SkillCoolTimeQuickSlot_0, [1] = Panel_SkillCoolTimeQuickSlot_1, [2] = Panel_SkillCoolTimeQuickSlot_2, [3] = Panel_SkillCoolTimeQuickSlot_3, [4] = Panel_SkillCoolTimeQuickSlot_4, [5] = Panel_SkillCoolTimeQuickSlot_5, [6] = Panel_SkillCoolTimeQuickSlot_6, [7] = Panel_SkillCoolTimeQuickSlot_7, [8] = Panel_SkillCoolTimeQuickSlot_8, [9] = Panel_SkillCoolTimeQuickSlot_9}
 }
--- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC75: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.init = function(self)
   -- function num : 0_0
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
+
+  if _ContentsGroup_RenewUI_Skill == false then
+    ((PaGlobal_SkillCoolTimeQuickSlot._slotConfig_Skill).template).effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect")
+  else
+    -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
+
+    ;
+    ((PaGlobal_SkillCoolTimeQuickSlot._slotConfig_Skill).template).effect = PaGlobalFunc_Skill_GetEffectControl()
+  end
   for panelIdx = 0, (self._config).maxPanelCount - 1 do
-    -- DECOMPILER ERROR at PC8: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC27: Confused about usage of register: R5 in 'UnsetPending'
 
     (self._panelPool)[panelIdx] = {}
     local slot = (self._panelPool)[panelIdx]
@@ -51,7 +61,7 @@ PaGlobal_SkillCoolTimeQuickSlot.init = function(self)
   PaGlobal_SkillCoolTimeQuickSlot:settingPos(true)
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC78: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.updateQuickSlot = function(self)
   -- function num : 0_1
@@ -81,7 +91,7 @@ PaGlobal_SkillCoolTimeQuickSlot.updateQuickSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.updateSkill = function(self, panelIdx, skillNo)
   -- function num : 0_2
@@ -93,7 +103,7 @@ PaGlobal_SkillCoolTimeQuickSlot.updateSkill = function(self, panelIdx, skillNo)
   ((slot.skill).icon):SetIgnore(false)
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.settingPos = function(self, updateByServer)
   -- function num : 0_3

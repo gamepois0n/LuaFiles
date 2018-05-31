@@ -734,6 +734,7 @@ end
 
 FGlobal_FishEncyclopedia_Open = function()
   -- function num : 0_17
+  audioPostEvent_SystemUi(1, 0)
   audioPostEvent_SystemUi(1, 42)
   Panel_FishEncyclopedia:SetShow(true)
 end
@@ -741,6 +742,7 @@ end
 FGlobal_FishEncyclopedia_Close = function()
   -- function num : 0_18
   Panel_FishEncyclopedia:SetShow(false)
+  audioPostEvent_SystemUi(1, 1)
 end
 
 local returnTime = 0

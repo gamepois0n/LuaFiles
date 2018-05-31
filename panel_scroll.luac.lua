@@ -138,14 +138,24 @@ end
 
 UIScrollButton.ScrollMoveEvent = function(parentPanel, moveDirection)
   -- function num : 0_2
-  if Panel_CheckedQuest == parentPanel then
-    QuestList_ScrollMove(moveDirection)
-  else
-    if Panel_Window_Quest_History == parentPanel then
-      QuestHistory_ScrollMove(moveDirection)
+  if _ContentsGroup_RenewUI_Skill == false then
+    if Panel_CheckedQuest == parentPanel then
+      QuestList_ScrollMove(moveDirection)
     else
-      if Panel_Window_Skill == parentPanel then
-        PaGlobal_Skill:Skill_ScrollMove(moveDirection)
+      if Panel_Window_Quest_History == parentPanel then
+        QuestHistory_ScrollMove(moveDirection)
+      else
+        if Panel_Window_Skill == parentPanel then
+          PaGlobal_Skill:Skill_ScrollMove(moveDirection)
+        end
+      end
+    end
+  else
+    if Panel_CheckedQuest == parentPanel then
+      QuestList_ScrollMove(moveDirection)
+    else
+      if Panel_Window_Quest_History == parentPanel then
+        QuestHistory_ScrollMove(moveDirection)
       end
     end
   end

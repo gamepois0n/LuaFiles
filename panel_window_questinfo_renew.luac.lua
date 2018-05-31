@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-local Window_QuestInfo = {
+local Window_QuestInfo = {_radioGroupTexture; 
 _ui = {_expToolTip; 
 _questTitle = {}
 , 
@@ -35,7 +35,9 @@ _recommendTable = {}
 _mainTable = {}
 , 
 _repetitionTable = {}
-}
+, 
+_treeIndexMap = {}
+, _currentTabIndex = 0}
 local questRegion = {[(CppEnums.QuestRegionType).eQuestRegionType_None] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_99"), [(CppEnums.QuestRegionType).eQuestRegionType_Balenos] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_1"), [(CppEnums.QuestRegionType).eQuestRegionType_Serendia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_2"), [(CppEnums.QuestRegionType).eQuestRegionType_NorthCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_3"), [(CppEnums.QuestRegionType).eQuestRegionType_CalpheonBigCity] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_4"), [(CppEnums.QuestRegionType).eQuestRegionType_Keplan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_5"), [(CppEnums.QuestRegionType).eQuestRegionType_SouthWestCalpheon] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_6"), [(CppEnums.QuestRegionType).eQuestRegionType_Media] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_7"), [(CppEnums.QuestRegionType).eQuestRegionType_Valencia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_8"), [(CppEnums.QuestRegionType).eQuestRegionType_Kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_9"), [(CppEnums.QuestRegionType).eQuestRegionType_Drigan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_10")}
 PaGlobalFunc_Quest_SelectTitleButton = function(value)
   -- function num : 0_0 , upvalues : Window_QuestInfo
@@ -58,7 +60,7 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
   if ((self._config)._title)._progress == self._currentTitleType then
     titleType = ((self._config)._title)._progress
     ;
-    ((self._ui)._staticText_RadioButtonTooltip):SetText("진행�\145")
+    ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_PROGRESS"))
     ;
     ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._progress):GetPosX() - (((self._ui)._questTitle)._progress):GetSizeX() / 2)
     self:ShowListByGroup(self._progressTable)
@@ -66,7 +68,7 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
     if ((self._config)._title)._main == self._currentTitleType then
       titleType = ((self._config)._title)._main
       ;
-      ((self._ui)._staticText_RadioButtonTooltip):SetText("메인")
+      ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_QUEST_MAIN"))
       ;
       ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._main):GetPosX() - (((self._ui)._questTitle)._main):GetSizeX() / 2)
       self:ShowListByGroup(self._mainTable)
@@ -74,7 +76,7 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
       if ((self._config)._title)._recommend == self._currentTitleType then
         titleType = ((self._config)._title)._recommend
         ;
-        ((self._ui)._staticText_RadioButtonTooltip):SetText("추천")
+        ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_RECOMMAND"))
         ;
         ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._recommend):GetPosX() - (((self._ui)._questTitle)._recommend):GetSizeX() / 2)
         self:ShowListByGroup(self._recommendTable)
@@ -82,7 +84,7 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
         if ((self._config)._title)._repeat == self._currentTitleType then
           titleType = ((self._config)._title)._repeat
           ;
-          ((self._ui)._staticText_RadioButtonTooltip):SetText("반복")
+          ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_QUESTFILTER_REPEAT"))
           ;
           ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._repeat):GetPosX() - (((self._ui)._questTitle)._repeat):GetSizeX() / 2)
           self:ShowListByGroup(self._repetitionTable)
@@ -127,28 +129,24 @@ Window_QuestInfo.ShowListByGroup = function(self, groupTable)
   ;
   (((self._ui)._list2_Quest):getElementManager()):clearKey()
   local list2Index = 0
+  local mainElement = (((self._ui)._list2_Quest):getElementManager()):getMainElement()
   for index = 0, #groupTable do
-    -- DECOMPILER ERROR at PC21: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC27: Confused about usage of register: R8 in 'UnsetPending'
 
     (self._questInfo)[list2Index] = self:CreateGroupData(groupTable[index])
-    ;
-    (((self._ui)._list2_Quest):getElementManager()):pushKey(toInt64(0, list2Index))
-    ;
-    ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, list2Index))
+    local treeElement = mainElement:createChild(toInt64(0, list2Index))
+    treeElement:setIsOpen(false)
     list2Index = list2Index + 1
-    if (groupTable[index])._isClicked == true then
-      for questIndex = 0, (groupTable[index])._count - 1 do
-        -- DECOMPILER ERROR at PC55: Confused about usage of register: R11 in 'UnsetPending'
+    for questIndex = 0, (groupTable[index])._count - 1 do
+      -- DECOMPILER ERROR at PC48: Confused about usage of register: R13 in 'UnsetPending'
 
-        (self._questInfo)[list2Index] = ((groupTable[index])._questTable)[questIndex]
-        ;
-        (((self._ui)._list2_Quest):getElementManager()):pushKey(toInt64(0, list2Index))
-        ;
-        ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, list2Index))
-        list2Index = list2Index + 1
-      end
+      (self._questInfo)[list2Index] = ((groupTable[index])._questTable)[questIndex]
+      local subTreeElement = treeElement:createChild(toInt64(0, list2Index))
+      list2Index = list2Index + 1
     end
   end
+  ;
+  (((self._ui)._list2_Quest):getElementManager()):refillKeyList()
 end
 
 Window_QuestInfo.SetProgressGroupData = function(self, questGroupCount, questGroupList)
@@ -288,7 +286,7 @@ Window_QuestInfo.InitInputEvent = function(self)
   ;
   ((self._ui)._list2_Quest):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "PaGlobalFunc_Quest_List2EventControlCreate")
   ;
-  ((self._ui)._list2_Quest):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
+  ((self._ui)._list2_Quest):createChildContent((CppEnums.PAUIList2ElementManagerType).tree)
   for index = 0, (self._config)._baseRewardMax - 1 do
     Panel_Tooltip_Item_SetPosition(index, ((self._ui)._baseRewardSlot)[index], "QuestReward_Base")
   end
@@ -298,7 +296,7 @@ Window_QuestInfo.InitInputEvent = function(self)
   ;
   ((self._ui)._radioButton_SetQuestType):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_SetQuestType()")
   ;
-  ((self._ui)._radioButton_WorldMap):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_WorldMap()")
+  ((self._ui)._radioButton_Close):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_Close()")
   Panel_Window_QuestInfo:RegisterShowEventFunc(true, "PaGlobalFunc_Quest_ShowAni()")
   Panel_Window_QuestInfo:RegisterShowEventFunc(false, "PaGlobalFunc_Quest_HideAni()")
 end
@@ -314,18 +312,35 @@ PaGlobalFunc_Quest_List2EventControlCreate = function(list_content, key)
   do
     local questUI = {_radioButton_QuestBg = (UI.getChildControl)(list_content, "RadioButton_QuestBg"), _static_QuesetTypeIcon = (UI.getChildControl)(list_content, "Static_QuestTypeIcon"), _staticText_QuestName = (UI.getChildControl)(list_content, "StaticText_QuestName"), _staticText_ProgressCount = (UI.getChildControl)(list_content, "StaticText_ProgressCount")}
     ;
+    (questUI._staticText_QuestName):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+    ;
+    (questUI._staticText_QuestName):SetPosX(((self._ui)._list2_Quest):GetPosX() - 30)
+    ;
+    (questUI._static_QuesetTypeIcon):SetPosX(((self._ui)._list2_Quest):GetPosX() - 30)
+    ;
     (questUI._radioButton_QuestBg):SetCheck(id == self._currentQuestIndex)
     ;
     (questUI._staticText_ProgressCount):SetText("")
+    ;
+    (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "")
+    ;
+    (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "")
     if questInfo._isGroup == true then
       (questUI._static_QuesetTypeIcon):SetShow(false)
       ;
       (questUI._staticText_QuestName):SetText(questInfo._questName)
       ;
-      (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GroupToggle(" .. id .. "," .. self._currentTitleType .. ")")
-      return 
+      (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GroupToggle(" .. id .. ")")
+      ;
+      (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SimpleToolTipShow(" .. id .. ")")
+      ;
+      (questUI._radioButton_QuestBg):addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
     else
       (questUI._static_QuesetTypeIcon):SetShow(true)
+      ;
+      (questUI._static_QuesetTypeIcon):SetPosX(30)
+      ;
+      (questUI._staticText_QuestName):SetPosX(60)
       if questInfo._isContinueQuest == true then
         FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
         ;
@@ -341,14 +356,49 @@ PaGlobalFunc_Quest_List2EventControlCreate = function(list_content, key)
         (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
       else
         (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
+        ;
+        (questUI._radioButton_QuestBg):addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SelectQuestClear(" .. id .. ")")
       end
     end
+    -- DECOMPILER ERROR at PC179: Confused about usage of register: R6 in 'UnsetPending'
+
+    ;
+    (self._qusetUI)[id] = questUI
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
+PaGlobalFunc_Quest_SelectQuestClear = function(index)
+  -- function num : 0_10 , upvalues : Window_QuestInfo
+  local self = Window_QuestInfo
+  local prevIndex = self._currentQuestIndex
+  self._currentQuestIndex = index
+  ;
+  ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, prevIndex))
+  ;
+  ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, index))
+  self:DetailClear()
+end
+
+PaGlobalFunc_Quest_SimpleToolTipShow = function(id)
+  -- function num : 0_11 , upvalues : Window_QuestInfo
+  local self = Window_QuestInfo
+  local questUI = (self._qusetUI)[id]
+  if questUI == nil then
+    return 
+  end
+  local qusetInfo = (self._questInfo)[id]
+  if qusetInfo == nil then
+    return 
+  end
+  if (questUI._staticText_QuestName):IsLimitText() == false then
+    return 
+  end
+  TooltipSimple_Show(questUI._radioButton_QuestBg, qusetInfo._questName)
+end
+
 Window_QuestInfo.GetTableByTitleType = function(self, titleType)
-  -- function num : 0_10
+  -- function num : 0_12
   if ((self._config)._title)._progress == titleType then
     return self._progressTable
   else
@@ -369,7 +419,7 @@ Window_QuestInfo.GetTableByTitleType = function(self, titleType)
 end
 
 Window_QuestInfo.UpdateTableByTitleType = function(self, table, titleType)
-  -- function num : 0_11
+  -- function num : 0_13
   if ((self._config)._title)._progress == titleType then
     self._progressTable = table
   else
@@ -389,87 +439,71 @@ Window_QuestInfo.UpdateTableByTitleType = function(self, table, titleType)
   end
 end
 
-PaGlobalFunc_Quest_GroupToggle = function(id, titleType)
-  -- function num : 0_12 , upvalues : Window_QuestInfo
+PaGlobalFunc_Quest_GroupToggle = function(id)
+  -- function num : 0_14 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  local questInfo = (self._questInfo)[id]
-  if questInfo == nil then
-    return 
-  end
-  local table = self:GetTableByTitleType(titleType)
-  if table == nil then
-    return 
-  end
-  for index = 0, #table do
-    -- DECOMPILER ERROR at PC25: Confused about usage of register: R9 in 'UnsetPending'
-
-    if (table[index])._groupType == questInfo._groupType then
-      (table[index])._isClicked = not (table[index])._isClicked
-      break
-    end
-  end
-  do
-    self:UpdateTableByTitleType(table, titleType)
-    PaGlobalFunc_Quest_SelectQuestTitle(titleType)
-  end
+  ;
+  (((self._ui)._list2_Quest):getElementManager()):toggle(toInt64(0, id))
+  self:DetailClear()
 end
 
 FromClient_luaLoadComplete = function()
-  -- function num : 0_13 , upvalues : Window_QuestInfo
+  -- function num : 0_15 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
+  self._radioGroupTexture = ((self._ui)._static_RadioGroup):getBaseTexture()
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._staticText_TopTitle = (UI.getChildControl)((self._ui)._static_Title, "StaticText_Title")
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._static_TopTitleIcon = (UI.getChildControl)((self._ui)._static_Title, "Static_TitleIcon")
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._progress = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Progress")
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._main = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Main")
-  -- DECOMPILER ERROR at PC43: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._recommend = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_recommend")
-  -- DECOMPILER ERROR at PC52: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._repeat = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Repeat")
-  -- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._buttonLB = (UI.getChildControl)((self._ui)._static_RadioGroup, "Button_LB")
-  -- DECOMPILER ERROR at PC70: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._buttonRB = (UI.getChildControl)((self._ui)._static_RadioGroup, "Button_RB")
-  -- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._frameContent_1_Content = (UI.getChildControl)((self._ui)._frame_Detail, "Frame_1_Content")
-  -- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC91: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._scroll_FrameVertical = (UI.getChildControl)((self._ui)._frame_Detail, "Frame_1_VerticalScroll")
-  -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC100: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Title = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Title")
-  -- DECOMPILER ERROR at PC104: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC109: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Type = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Type")
-  -- DECOMPILER ERROR at PC113: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC118: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Desc = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Desc")
-  -- DECOMPILER ERROR at PC122: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Condition = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Condition")
@@ -485,82 +519,85 @@ FromClient_luaLoadComplete = function()
     ;
     (SlotItem.new)(slot, "Static_BaseReward_" .. index, index, control, (self._config)._questRewardSlotConfig)
     slot:createChild()
-    -- DECOMPILER ERROR at PC170: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC175: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._baseRewardSlot)[index] = slot
-    -- DECOMPILER ERROR at PC173: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC178: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._baseRewardControl)[index] = control
   end
+  -- DECOMPILER ERROR at PC187: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._static_BaseToolTip = (UI.getChildControl)((self._ui)._static_BaseReward, "StaticText_BaseToolTip")
+  ;
+  ((self._ui)._static_BaseToolTip):SetTextHorizonCenter()
+  ;
+  ((self._ui)._static_BaseToolTip):SetTextVerticalCenter()
   for index = 0, (self._config)._selectRewardMax - 1 do
     local control = (UI.getChildControl)((self._ui)._static_SelectReward, "Static_Item0" .. index)
     local slot = {}
     ;
     (SlotItem.new)(slot, "Static_SelectReward_" .. index, index, control, (self._config)._questRewardSlotConfig)
     slot:createChild()
-    -- DECOMPILER ERROR at PC205: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC226: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._selectRewardSlot)[index] = slot
-    -- DECOMPILER ERROR at PC208: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC229: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._selectRewardControl)[index] = control
   end
-  -- DECOMPILER ERROR at PC217: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC238: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._static_SelectToolTip = (UI.getChildControl)((self._ui)._static_SelectReward, "StaticText_SelectToolTip")
+  ;
+  ((self._ui)._static_SelectToolTip):SetTextHorizonCenter()
+  ;
+  ((self._ui)._static_SelectToolTip):SetTextVerticalCenter()
+  -- DECOMPILER ERROR at PC254: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_autoFindWay = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_autoFindWay")
-  -- DECOMPILER ERROR at PC225: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui)._radioButton_WorldMap = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_WorldMap")
-  -- DECOMPILER ERROR at PC233: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC262: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_QuestGiveUp = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_QuestGiveUp")
-  -- DECOMPILER ERROR at PC241: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC270: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_SetQuestType = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_SetQuestType")
+  -- DECOMPILER ERROR at PC278: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._radioButton_Close = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_Close")
+  self._currentTabIndex = 0
   self:InitInputEvent()
-  self:CreateToolTip()
+  self:InitResisterEvent()
   PaGlobalFunc_Quest_UpdateList()
   PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._progress)
 end
 
-Window_QuestInfo.CreateToolTip = function(self)
-  -- function num : 0_14
-  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
-
-  (self._ui)._expToolTip = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, (self._ui)._static_BaseReward, "expTooltip")
-  CopyBaseProperty((self._ui)._static_BaseReward, (self._ui)._expToolTip)
-  ;
-  ((self._ui)._expToolTip):SetColor((Defines.Color).C_FFFFFFFF)
-  ;
-  ((self._ui)._expToolTip):SetAlpha(1)
-  ;
-  ((self._ui)._expToolTip):SetFontColor((Defines.Color).C_FFFFFFFF)
-  ;
-  ((self._ui)._expToolTip):SetSize(80, 50)
-  ;
-  ((self._ui)._expToolTip):SetAutoResize(true)
-  ;
-  ((self._ui)._expToolTip):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-  ;
-  ((self._ui)._expToolTip):SetTextHorizonCenter()
-  ;
-  ((self._ui)._expToolTip):SetShow(false)
+Window_QuestInfo.InitResisterEvent = function(self)
+  -- function num : 0_16
+  registerEvent("EventQuestListChanged", "PaGlobalFunc_Quest_UpdateList")
+  registerEvent("onScreenResize", "PaGlobalFunc_Quest_Resize")
 end
 
 PaGlobalFunc_Quest_SelectQuest = function(index)
-  -- function num : 0_15 , upvalues : Window_QuestInfo
+  -- function num : 0_17 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   self:DetailClear()
   local questInfo = (self._questInfo)[index]
   if questInfo == nil then
+    return 
+  end
+  if questInfo._isGroup == true then
+    _PA_LOG("이호�\156", "이것�\128 그룹이다")
     return 
   end
   local title = ((self._ui)._questDetail)._staticText_Title
@@ -591,12 +628,17 @@ PaGlobalFunc_Quest_SelectQuest = function(index)
   ((self._ui)._radioButton_autoFindWay):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. (questInfo._questNo)._group .. "," .. (questInfo._questNo)._quest .. ",false)")
   ;
   ((self._ui)._radioButton_QuestGiveUp):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
+  local prevIndex = self._currentQuestIndex
   self._currentQuestIndex = index
+  ;
+  ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, prevIndex))
+  ;
+  ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, index))
   self:SetReward((questInfo._questNo)._group, (questInfo._questNo)._quest)
 end
 
 Window_QuestInfo.SetReward = function(self, groupID, questID)
-  -- function num : 0_16
+  -- function num : 0_18
   self:SlotClear()
   local questInfo = questList_getQuestStatic(groupID, questID)
   if questInfo == nil then
@@ -622,7 +664,7 @@ Window_QuestInfo.SetReward = function(self, groupID, questID)
 end
 
 Window_QuestInfo.SetRewardIcon = function(self, slot, reward, index, rewardStr)
-  -- function num : 0_17
+  -- function num : 0_19
   local rewardType = reward:getType()
   if rewardType == nil then
     return 
@@ -682,12 +724,6 @@ Window_QuestInfo.SetRewardIcon = function(self, slot, reward, index, rewardStr)
               (slot.icon):SetShow(true)
               if reward:getItemCount() ~= 0 and slot.count == nil then
                 slot.count = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, slot.icon, "StaticText_" .. slot.id .. "_Count")
-                ;
-                (slot.count):SetHorizonRight()
-                ;
-                (slot.count):SetVerticalBottom()
-                ;
-                (slot.count):SetIgnore(true)
               end
               slot:setItemByStaticStatus(itemStatic, reward:getItemCount())
               slot._item = reward:getItemEnchantKey()
@@ -701,6 +737,14 @@ Window_QuestInfo.SetRewardIcon = function(self, slot, reward, index, rewardStr)
                 ;
                 (slot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Select\",false)")
               end
+              ;
+              (slot.count):SetSize(42, 21)
+              ;
+              (slot.count):SetPosY((slot.count):GetPosY() + (slot.count):GetSizeY())
+              ;
+              (slot.count):SetTextHorizonRight()
+              ;
+              (slot.count):SetVerticalBottom()
             else
               do
                 if __eRewardIntimacy == rewardType then
@@ -734,7 +778,7 @@ Window_QuestInfo.SetRewardIcon = function(self, slot, reward, index, rewardStr)
 end
 
 PaGlobalFunc_Quest_FindWay = function(groupNo, questNo, isAuto)
-  -- function num : 0_18 , upvalues : Window_QuestInfo
+  -- function num : 0_20 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local questInfo = ToClient_GetQuestInfo(groupNo, questNo)
   if questInfo == nil then
@@ -776,7 +820,7 @@ PaGlobalFunc_Quest_FindWay = function(groupNo, questNo, isAuto)
 end
 
 PaGlobalFunc_Quest_GiveUp = function(index)
-  -- function num : 0_19 , upvalues : Window_QuestInfo
+  -- function num : 0_21 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local questInfo = (self._questInfo)[index]
   if questInfo == nil then
@@ -786,45 +830,49 @@ PaGlobalFunc_Quest_GiveUp = function(index)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return 
   end
+  local messageboxContent = PAGetString(Defines.StringSheet_GAME, "PANEL_QUESTLIST_REAL_GIVEUP_QUESTION")
+  local messageboxData = {title = messageboxTitle, content = messageboxContent, functionYes = PaGlobalFunc_Quest_GiveUpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageboxData)
+end
+
+PaGlobalFunc_Quest_GiveUpConfirm = function()
+  -- function num : 0_22 , upvalues : Window_QuestInfo
+  local self = Window_QuestInfo
+  local questInfo = (self._questInfo)[self._currentQuestIndex]
+  if questInfo == nil then
+    return 
+  end
   ToClient_GiveupQuest((questInfo._questNo)._group, (questInfo._questNo)._quest)
 end
 
 PaGlobalFunc_Quest_SetQuestType = function()
-  -- function num : 0_20
+  -- function num : 0_23
   FGlobal_CheckedQuestOptionOpen()
 end
 
-PaGlobalFunc_Quest_WorldMap = function()
-  -- function num : 0_21
-  PaGlobalFunc_Quest_SetShow(false)
-  FGlobal_PushOpenWorldMap()
-end
-
 PaGlobalFunc_Quest_SetTooltip = function(questType, show, rewardStr, index, mentalCardKey)
-  -- function num : 0_22 , upvalues : Window_QuestInfo
+  -- function num : 0_24 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  local tooltip = (self._ui)._expToolTip
-  if tooltip == nil then
-    return 
-  end
+  local str = nil
   if show == true then
     if questType == "Exp" then
-      tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP"))
+      str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP")
     else
       if questType == "SkillExp" then
-        tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP"))
+        str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP")
       else
         if questType == "ExpGrade" then
-          tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP_GRADE"))
+          str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP_GRADE")
         else
           if questType == "SkillExpGrade" then
-            tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP_GRADE"))
+            str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_SKILLEXP_GRADE")
           else
             if questType == "ProductExp" then
-              tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_PRODUCTEXP"))
+              str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_PRODUCTEXP")
             else
               if questType == "Intimacy" then
-                tooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_INTIMACY"))
+                str = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_INTIMACY")
               else
                 if questType == "Knowledge" then
                   local mentalCardSSW = ToClinet_getMentalCardStaticStatus(mentalCardKey)
@@ -833,7 +881,7 @@ PaGlobalFunc_Quest_SetTooltip = function(questType, show, rewardStr, index, ment
                   end
                   local mentalCardName = mentalCardSSW:getName()
                   local mentalCardDesc = mentalCardSSW:getDesc()
-                  tooltip:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARD_TOOLTIP_KNOWLEDGE", "mentalCardName", mentalCardName, "mentalCardName2", mentalCardName))
+                  str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARD_TOOLTIP_KNOWLEDGE", "mentalCardName", mentalCardName, "mentalCardName2", mentalCardName)
                 end
               end
             end
@@ -843,22 +891,34 @@ PaGlobalFunc_Quest_SetTooltip = function(questType, show, rewardStr, index, ment
     end
     do
       if rewardStr == "base" then
-        tooltip:SetPosX((((self._ui)._baseRewardControl)[index]):GetPosX() - (((self._ui)._baseRewardControl)[index]):GetPosX() / 2)
-        tooltip:SetPosY((((self._ui)._baseRewardControl)[index]):GetPosY() - tooltip:GetSizeY())
+        ((self._ui)._static_BaseToolTip):SetText(str)
+        ;
+        ((self._ui)._static_BaseToolTip):SetPosX((((self._ui)._baseRewardControl)[index]):GetPosX() - (((self._ui)._baseRewardControl)[index]):GetSizeX() / 2 - 5)
+        ;
+        ((self._ui)._static_BaseToolTip):SetPosY((((self._ui)._baseRewardControl)[index]):GetPosY() - ((self._ui)._static_BaseToolTip):GetSizeY())
+        ;
+        ((self._ui)._static_BaseToolTip):SetShow(true)
       else
         if rewardStr == "select" then
-          tooltip:SetPosX((((self._ui)._selectRewardControl)[index]):GetPosX() - (((self._ui)._selectRewardControl)[index]):GetPosX() / 2)
-          tooltip:SetPosY((((self._ui)._selectRewardControl)[index]):GetPosY() - tooltip:GetSizeY())
+          ((self._ui)._static_SelectToolTip):SetText(str)
+          ;
+          ((self._ui)._static_SelectToolTip):SetPosX((((self._ui)._selectRewardControl)[index]):GetPosX() - (((self._ui)._selectRewardControl)[index]):GetSizeX() / 2 - 5)
+          ;
+          ((self._ui)._static_SelectToolTip):SetPosY((((self._ui)._selectRewardControl)[index]):GetPosY() - ((self._ui)._static_SelectToolTip):GetSizeY())
+          ;
+          ((self._ui)._static_SelectToolTip):SetShow(true)
         end
       end
-      tooltip:SetShow(true)
-      tooltip:SetShow(false)
+      ;
+      ((self._ui)._static_BaseToolTip):SetShow(false)
+      ;
+      ((self._ui)._static_SelectToolTip):SetShow(false)
     end
   end
 end
 
 Window_QuestInfo.SlotClear = function(self)
-  -- function num : 0_23
+  -- function num : 0_25
   for index = 0, (self._config)._baseRewardMax - 1 do
     ((((self._ui)._baseRewardSlot)[index]).icon):SetShow(false)
     if (((self._ui)._baseRewardSlot)[index]).count ~= nil then
@@ -882,7 +942,7 @@ Window_QuestInfo.SlotClear = function(self)
 end
 
 Window_QuestInfo.DetailClear = function(self)
-  -- function num : 0_24
+  -- function num : 0_26
   (((self._ui)._questDetail)._staticText_Title):SetText("")
   ;
   (((self._ui)._questDetail)._staticText_Desc):SetText("")
@@ -899,7 +959,7 @@ Window_QuestInfo.DetailClear = function(self)
 end
 
 PaGlobalFunc_Quest_OpenDetail = function(questGroupId, questId, titleType)
-  -- function num : 0_25 , upvalues : Window_QuestInfo
+  -- function num : 0_27 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local table = self:GetTableByTitleType(titleType)
   if table == nil then
@@ -935,7 +995,7 @@ PaGlobalFunc_Quest_OpenDetail = function(questGroupId, questId, titleType)
 end
 
 Window_QuestInfo.GetQuestGroupCount = function(self, titleType, selfPlayerQuestInfo)
-  -- function num : 0_26
+  -- function num : 0_28
   local count = -1
   if ((self._config)._title)._progress == titleType then
     count = selfPlayerQuestInfo:getQuestGroupCount()
@@ -958,7 +1018,7 @@ Window_QuestInfo.GetQuestGroupCount = function(self, titleType, selfPlayerQuestI
 end
 
 Window_QuestInfo.GetQuestGroupByIndex = function(self, titleType, questListIndex, selfPlayerQuestInfo)
-  -- function num : 0_27
+  -- function num : 0_29
   local questGroup = nil
   if ((self._config)._title)._progress == titleType then
     questGroup = selfPlayerQuestInfo:getQuestGroupAt(questListIndex)
@@ -981,7 +1041,7 @@ Window_QuestInfo.GetQuestGroupByIndex = function(self, titleType, questListIndex
 end
 
 PaGlobalFunc_Quest_ShowAni = function()
-  -- function num : 0_28 , upvalues : Window_QuestInfo
+  -- function num : 0_30 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local panel = Panel_Window_QuestInfo
   panel:ResetVertexAni()
@@ -1003,10 +1063,19 @@ PaGlobalFunc_Quest_ShowAni = function()
   ((self._ui)._static_TopTitleIcon):ResetVertexAni()
   ;
   ((self._ui)._static_TopTitleIcon):SetVertexAniRun("Ani_Move_Pos_Show", true)
+  ;
+  ((self._ui)._static_RadioGroup):setRenderTexture(self._radioGroupTexture)
+  local x1, y1, x2, y2 = setTextureUV_Func((self._ui)._static_RadioGroup, 0, 0, 1, 1)
+  ;
+  (((self._ui)._static_RadioGroup):getBaseTexture()):setUV(x1, y1, x2, y2)
+  ;
+  ((self._ui)._static_RadioGroup):setRenderTexture(((self._ui)._static_RadioGroup):getBaseTexture())
+  FGlobal_SetUrl_Tooltip_SkillForLearning()
 end
 
 PaGlobalFunc_Quest_HideAni = function()
-  -- function num : 0_29
+  -- function num : 0_31 , upvalues : Window_QuestInfo
+  local self = Window_QuestInfo
   local panel = Panel_Window_QuestInfo
   panel:ResetVertexAni()
   local aniInfo = panel:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
@@ -1015,16 +1084,17 @@ PaGlobalFunc_Quest_HideAni = function()
   aniInfo.IsChangeChild = true
   aniInfo:SetHideAtEnd(true)
   aniInfo:SetDisableWhileAni(true)
+  FGlobal_ResetUrl_Tooltip_SkillForLearning()
 end
 
 PaGlobalFunc_Quest_Close = function()
-  -- function num : 0_30
+  -- function num : 0_32
   Panel_Window_QuestInfo:SetShow(false, true)
 end
 
 PaGlobalFunc_Quest_SetShow = function(value)
-  -- function num : 0_31 , upvalues : Window_QuestInfo
-  local self = Window_QuestInfo
+  -- function num : 0_33
+  Panel_Window_QuestInfo:SetShow(value, true)
   if value == true then
     FGlobal_Panel_Radar_Show(false, true)
     Panel_TimeBar:SetShow(false, true)
@@ -1034,33 +1104,42 @@ PaGlobalFunc_Quest_SetShow = function(value)
     Panel_TimeBar:SetShow(true, true)
     FGlobal_QuestWidget_Open()
   end
-  Panel_Window_QuestInfo:SetShow(value, true)
+  PaGlobal_TutorialManager:handleShowQuestNewWindow(value)
 end
 
 PaGlobalFunc_Quest_GetShow = function()
-  -- function num : 0_32
+  -- function num : 0_34
   return Panel_Window_QuestInfo:GetShow()
 end
 
 PaGlobalFunc_Quest_Toggle = function()
-  -- function num : 0_33
+  -- function num : 0_35
   Panel_Window_QuestInfo:SetShow(not Panel_Window_QuestInfo:GetShow())
 end
 
-Toggle_QuestTab_forPadEventFunc = function(index)
-  -- function num : 0_34 , upvalues : Window_QuestInfo
+Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_QuestTab_forPadEventFunc(-1)")
+Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_QuestTab_forPadEventFunc(1)")
+Toggle_QuestTab_forPadEventFunc = function(value)
+  -- function num : 0_36 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  _PA_LOG("원선", "�\164 먹음?" .. index)
-  if index == 0 then
+  self._currentTabIndex = self._currentTabIndex + value
+  if self._currentTabIndex < 0 then
+    self._currentTabIndex = 3
+  else
+    if self._currentTabIndex > 3 then
+      self._currentTabIndex = 0
+    end
+  end
+  if self._currentTabIndex == 0 then
     PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._progress)
   else
-    if index == 1 then
+    if self._currentTabIndex == 1 then
       PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._main)
     else
-      if index == 2 then
+      if self._currentTabIndex == 2 then
         PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._recommend)
       else
-        if index == 3 then
+        if self._currentTabIndex == 3 then
           PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._repeat)
         end
       end
@@ -1069,7 +1148,7 @@ Toggle_QuestTab_forPadEventFunc = function(index)
 end
 
 Quest_TabSound = function()
-  -- function num : 0_35
+  -- function num : 0_37
   if DragManager:isDragging() then
     DragManager:clearInfo()
   end
@@ -1083,16 +1162,33 @@ Quest_TabSound = function()
 end
 
 Window_QuestInfo.Resize = function(self)
-  -- function num : 0_36
+  -- function num : 0_38
+  Panel_Window_QuestInfo:SetSize(Panel_Window_QuestInfo:GetSizeX(), getScreenSizeY())
+  ;
+  ((self._ui)._static_Title):ComputePos()
+  ;
+  ((self._ui)._list2_Quest):ComputePos()
+  ;
+  ((self._ui)._frame_Detail):ComputePos()
+  ;
+  ((self._ui)._static_BaseReward):ComputePos()
+  ;
+  ((self._ui)._static_SelectReward):ComputePos()
+  ;
+  ((self._ui)._static_KeyGuideBg):ComputePos()
+  ;
+  ((self._ui)._frameContent_1_Content):ComputePos()
+  ;
+  ((self._ui)._frame_Detail):SetSize(((self._ui)._frame_Detail):GetSizeX(), ((self._ui)._static_BaseReward):GetPosY() - ((self._ui)._frame_Detail):GetPosY())
 end
 
 PaGlobalFunc_Quest_Resize = function()
-  -- function num : 0_37 , upvalues : Window_QuestInfo
+  -- function num : 0_39 , upvalues : Window_QuestInfo
   Window_QuestInfo:Resize()
 end
 
 Window_QuestInfo.Clear = function(self)
-  -- function num : 0_38
+  -- function num : 0_40
   local titleType = -1
   self:DetailClear()
   self:SlotClear()
@@ -1105,7 +1201,7 @@ Window_QuestInfo.Clear = function(self)
 end
 
 PaGlobalFunc_Quest_UpdateList = function()
-  -- function num : 0_39 , upvalues : Window_QuestInfo
+  -- function num : 0_41 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   self:Clear()
   self._progressTable = self:GetQuestGroupByTitle(((self._config)._title)._progress)
@@ -1115,7 +1211,5 @@ PaGlobalFunc_Quest_UpdateList = function()
   PaGlobalFunc_Quest_SelectQuestTitle(self._currentTitleType)
 end
 
-registerEvent("EventQuestListChanged", "PaGlobalFunc_Quest_UpdateList")
-registerEvent("onScreenResize", "PaGlobalFunc_Quest_Resize")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete")
 

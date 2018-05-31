@@ -35,6 +35,7 @@ PaGlobal_Guild_ManufactureSelect.initialize = function(self)
   for ii = 0, #productEnchantKeyList do
     local itemEnchantKey = productEnchantKeyList[ii]
     local manufactureStatic = ToClient_GetGuildManufactureStaticStatusWrapper(itemEnchantKey)
+    local checkMakeflag = ToClient_CheckCanMakeGuildManufacture(itemEnchantKey)
     if manufactureStatic ~= nil then
       local slot = {}
       slot.bg = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (self._ui)._staticBG, "ProductItemBG_" .. ii)
@@ -48,25 +49,31 @@ PaGlobal_Guild_ManufactureSelect.initialize = function(self)
       (slot.icon):SetPosY(4)
       ;
       (slot.icon):SetShow(true)
-      ;
-      (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Guild_ManufactureSelect:select(" .. ii .. ")")
+      if checkMakeflag == true then
+        (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Guild_ManufactureSelect:select(" .. ii .. ")")
+        ;
+        (slot.icon):SetMonoTone(false)
+      else
+        ;
+        (slot.icon):SetMonoTone(true)
+      end
       ;
       (slot.icon):addInputEvent("Mouse_On", "PaGlobal_Guild_ManufactureSelect:itemTooltip_Show(" .. ii .. ")")
       ;
       (slot.icon):addInputEvent("Mouse_Out", "PaGlobal_Guild_ManufactureSelect:itemTooltip_Hide()")
       local itemWrapper = getItemEnchantStaticStatus(itemEnchantKey)
       slot:setItemByStaticStatus(itemWrapper)
-      -- DECOMPILER ERROR at PC123: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC137: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (self._itemEnchantKey)[ii] = itemEnchantKey
       local categoryNo = manufactureStatic:getCategoryNo()
       local slotCount = ((self._category)[categoryNo])._slotCount
-      -- DECOMPILER ERROR at PC132: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC146: Confused about usage of register: R13 in 'UnsetPending'
 
       ;
       (((self._category)[categoryNo])._slot)[slotCount] = slot
-      -- DECOMPILER ERROR at PC136: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC150: Confused about usage of register: R13 in 'UnsetPending'
 
       ;
       ((self._category)[categoryNo])._slotCount = slotCount + 1
@@ -98,12 +105,12 @@ PaGlobal_Guild_ManufactureSelect.initialize = function(self)
     startPosY = startPosY + (self._config)._gapY * (row + 2)
   end
   deleteControl((self._ui)._baseSlot)
-  -- DECOMPILER ERROR at PC222: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC236: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (self._ui)._baseSlot = nil
   deleteControl((self._ui)._baseCategory)
-  -- DECOMPILER ERROR at PC228: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC242: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (self._ui)._baseCategory = nil

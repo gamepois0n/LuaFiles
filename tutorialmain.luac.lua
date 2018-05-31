@@ -67,7 +67,9 @@ executeLuaFunc = function(funcText)
                                   else
                                     PaGlobalFunc_MainDialog_Hide()
                                   end
-                                  FGlobal_FirstLogin_InGameOpen()
+                                  if ToClient_isXBox() == false then
+                                    FGlobal_FirstLogin_InGameOpen()
+                                  end
                                 else
                                   if funcText == "findTargetMovieGuide" then
                                     FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()

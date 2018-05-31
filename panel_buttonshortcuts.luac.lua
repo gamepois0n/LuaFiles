@@ -33,6 +33,8 @@ end
 
 PaGlobal_ButtonShortcuts.Open = function(self, index)
   -- function num : 0_2
+  audioPostEvent_SystemUi(1, 0)
+  ;
   ((self._ui)._checkButtonAllVeiw):SetCheck(true)
   do
     local isCurrentMode = index ~= nil
@@ -200,6 +202,7 @@ end
 
 PaGlobal_ButtonShortcuts.Close = function(self)
   -- function num : 0_13
+  audioPostEvent_SystemUi(1, 1)
   Panel_ButtonShortcuts:SetShow(false)
   self._openButtonsShortcuts = nil
   setKeyCustomizing(false)

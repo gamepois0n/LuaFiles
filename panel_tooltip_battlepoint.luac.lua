@@ -177,6 +177,7 @@ end
 
 PaGlobal_Tooltip_BattlePoint.toggleDetail = function(self)
   -- function num : 0_7
+  audioPostEvent_SystemUi(0, 0)
   self._isDetail = not self._isDetail
   self:updateUIPos()
   self:updateData()

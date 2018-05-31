@@ -110,6 +110,9 @@ Region_OnChangeRegion = function(regionData)
     regigonPlace:SetText(regionData:getTerritoryName())
     local regionType = (regionData:get()):getRegionType()
     local isArenaZone = (regionData:get()):isArenaZone()
+    if _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_GetShow() then
+      return 
+    end
     if Panel_Npc_Dialog:GetShow() then
       return 
     end

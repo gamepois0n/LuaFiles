@@ -126,7 +126,7 @@ end
 
 FGlobal_Update_Guild_OneOnOneAcceptTime = function(state, remainSec)
   -- function num : 0_10
-  if state ~= 1 then
+  if __eGuildTeamBattleState_Accepting ~= state then
     return 
   end
   PaGlobal_Guild_OneOnOne_Accept:UpdateClock(remainSec)

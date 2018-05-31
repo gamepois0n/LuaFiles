@@ -334,7 +334,7 @@ do
   Panel_MainStatus_User_Bar:SetShow(false)
   Panel_SelfPlayerExpGage:SetShow(false)
   Panel_Chat0:SetShow(false)
-  Panel_QuickSlot:SetShow(false)
+  PaGlobalFunc_QuickSlot_SetShow(false)
   Panel_UIMain:SetShow(false)
   Panel_CheckedQuest:SetShow(false)
   FGlobal_Panel_RadarRealLine_Show(false)

@@ -81,6 +81,7 @@ end
 
 PaGlobal_Panel_SaveSetting_Hide = function()
   -- function num : 0_4 , upvalues : _Web
+  audioPostEvent_SystemUi(1, 1)
   Panel_SaveSetting:SetShow(false, false)
   _Web:ResetUrl()
 end

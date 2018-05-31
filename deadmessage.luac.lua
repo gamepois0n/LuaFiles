@@ -801,10 +801,10 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_GuildSpawn:SetShow(false)
       _useCashItemBG:SetShow(false)
       _checkBoxUseCache:SetShow(false)
-      _deadMessage:SetText("사망하였습니�\164. 잠시 �\132 자동�\128�\156 됩니�\164.")
+      _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_DEADATFIGHT"))
       _button_Immediate:SetShow(false)
       _text_ImmediateCount:SetShow(false)
-      _button_ObserverMode:SetShow(false)
+      _button_ObserverMode:SetShow(true)
       _checkBoxUseFairy:SetShow(false)
       _button_LocalWar:SetShow(false)
       _button_SavageOut:SetShow(false)
@@ -1203,6 +1203,9 @@ deadMessage_UpdatePerFrame = function(deltaTime)
             isObserverMode = true
           end
           if ToClient_getPlayNowSavageDefence() == true then
+            isObserverMode = true
+          end
+          if ToClient_IsSelfInGuildTeamBattle() == true then
             isObserverMode = true
           end
           _button_ObserverMode:SetShow(isObserverMode)
@@ -1674,7 +1677,7 @@ deadMessage_ButtonPushed_ObserverMode = function()
     Panel_DeadMessage:SetShow(false)
   end
   observerCameraModeStart()
-  if ToClient_getJoinGuildBattle() == false and ToClient_getPlayNowSavageDefence() == false then
+  if ToClient_getJoinGuildBattle() == false and ToClient_getPlayNowSavageDefence() == false and ToClient_IsSelfInGuildTeamBattle() == false then
     ShowCommandFunc(ResurrectionTime)
   else
     ShowCommandFunc(nil)

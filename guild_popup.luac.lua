@@ -519,7 +519,12 @@ end
 
 FromClient_CreateGuild_onScreenResize = function()
   -- function num : 0_27
-  local createClanPosY = (getScreenSizeY() - Panel_Npc_Dialog:GetSizeY()) / 2 - Panel_CreateClan:GetSizeY() / 2
+  local createClanPosY = nil
+  if _ContentsGroup_RenewUI_Dailog == true then
+    createClanPosY = (getScreenSizeY() - PaGlobalFunc_MainDialog_Bottom_GetSizeY()) / 2 - Panel_CreateClan:GetSizeY() / 2
+  else
+    createClanPosY = (getScreenSizeY() - Panel_Npc_Dialog:GetSizeY()) / 2 - Panel_CreateClan:GetSizeY() / 2
+  end
   if createClanPosY < -10 then
     createClanPosY = 0
   end

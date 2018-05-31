@@ -86,14 +86,22 @@ PetFunction_Button_Exit = function()
   ;
   (self._buttonRegister):EraseAllEffect()
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
-  setIgnoreShowDialog(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+  else
+    setIgnoreShowDialog(false)
+  end
   Panel_Window_PetFunction:SetShow(false)
   InventoryWindow_Close()
   PetList_Close()
   PetInfo_Close()
   PetRegister_Close()
   PetMating_Close()
-  Panel_Npc_Dialog:SetShow(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+  end
   local npcKey = dialog_getTalkNpcKey()
   if npcKey ~= 0 then
     closeClientChangeScene(npcKey)
@@ -198,10 +206,18 @@ end
 
 PetFunction_HideDialog = function()
   -- function num : 0_15
-  setIgnoreShowDialog(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+  else
+    setIgnoreShowDialog(true)
+  end
   ;
   (UIAni.fadeInSCR_Down)(Panel_Window_PetFunction)
-  Panel_Npc_Dialog:SetShow(false)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Close()
+  else
+    Panel_Npc_Dialog:SetShow(false)
+  end
 end
 
 PetFunction_ViewScene = function()

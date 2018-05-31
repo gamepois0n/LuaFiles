@@ -96,8 +96,10 @@ PaGlobal_TutorialPhase_InteractionSupplyBox.startPhaseXXX = function(self, stepN
   FGlobal_NewQuickSlot_Update()
   FGlobal_Panel_Radar_Show(true)
   Panel_TimeBar:SetShow(true, false)
-  GameTips_Show()
-  GameTips_Reposition()
+  if _ContentsGroup_RenewUI == false then
+    GameTips_Show()
+    GameTips_Reposition()
+  end
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
 end

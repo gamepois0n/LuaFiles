@@ -824,6 +824,7 @@ ComboBox_Set = function()
   comboBox:SetSelectItemIndex(comboBox:GetSelectIndex())
   comboBox:ToggleListbox()
   enableSkill_UpdateData(isEditCheck)
+  audioPostEvent_SystemUi(0, 0)
 end
 
 RadioButton_Click_Init = function()

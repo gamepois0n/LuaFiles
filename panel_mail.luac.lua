@@ -425,6 +425,7 @@ end
 
 Mail_Close = function()
   -- function num : 0_13
+  audioPostEvent_SystemUi(1, 21)
   if Panel_Mail_Main:IsShow() then
     Panel_Mail_Main:SetShow(false, true)
     Mail_Detail_Close()

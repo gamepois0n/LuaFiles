@@ -211,6 +211,7 @@ local buttonTexture = {
 }
 TargetWindow_ShowToggle = function(index)
   -- function num : 0_1 , upvalues : MenuButtonId, UI_IT
+  audioPostEvent_SystemUi(0, 0)
   Panel_UIControl_SetShow(false)
   if MenuButtonId.btn_GameExit == index then
     GameExitShowToggle(false)
@@ -325,14 +326,12 @@ TargetWindow_ShowToggle = function(index)
                                                                   end
                                                                 else
                                                                   if MenuButtonId.btn_Channel == index then
-                                                                    audioPostEvent_SystemUi(1, 41)
                                                                     FGlobal_ChannelSelect_Show()
                                                                   else
                                                                     if MenuButtonId.btn_Notice == index then
                                                                       EventNotify_Open(true, true)
                                                                     else
                                                                       if MenuButtonId.btn_LocalWar == index then
-                                                                        audioPostEvent_SystemUi(1, 6)
                                                                         local playerWrapper = getSelfPlayer()
                                                                         local player = playerWrapper:get()
                                                                         local hp = player:getHp()
@@ -381,6 +380,7 @@ TargetWindow_ShowToggle = function(index)
                                                                                           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_PVPBATTLEGROUND_CONDITION_WAIT"))
                                                                                           return 
                                                                                         end
+                                                                                        audioPostEvent_SystemUi(1, 18)
                                                                                         local FunctionYesJoinPvpBattle = function()
     -- function num : 0_1_1
     ToClient_JoinPvpBattleGround(0)
@@ -809,18 +809,10 @@ GameMenu_CheckEnAble = function(buttonType)
     end
   end
   if buttonType == MenuButtonId.btn_Steam then
-    if isGameTypeEnglish() or isGameTypeSA() or isGameServiceTypeDev() then
+    if isGameTypeEnglish() or isGameTypeSA() or isGameTypeTR() or isGameServiceTypeDev() then
       returnValue = true
     else
-      if isGameTypeTR() then
-        if isSteamClient() then
-          returnValue = true
-        else
-          returnValue = false
-        end
-      else
-        returnValue = false
-      end
+      returnValue = false
     end
   end
   if buttonType == MenuButtonId.btn_Update then
@@ -1009,32 +1001,32 @@ GameMenu_ChangeButtonTexture = function(index)
           (menuTextPool[MenuButtonId.btn_SavageDefence]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WAVE"))
         end
       else
-        -- DECOMPILER ERROR at PC267: Overwrote pending register: R4 in 'AssignReg'
+        -- DECOMPILER ERROR at PC271: Overwrote pending register: R4 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC268: Overwrote pending register: R3 in 'AssignReg'
+        -- DECOMPILER ERROR at PC272: Overwrote pending register: R3 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC269: Overwrote pending register: R2 in 'AssignReg'
+        -- DECOMPILER ERROR at PC273: Overwrote pending register: R2 in 'AssignReg'
 
         if index == MenuButtonId.btn_Steam then
-          if isGameTypeSA() then
+          if isGameTypeSA() or isGameTypeTR() then
             x1 = setTextureUV_Func(menuButtonIcon[index], 370, 219, 414, 263)
           else
-            -- DECOMPILER ERROR at PC288: Overwrote pending register: R4 in 'AssignReg'
+            -- DECOMPILER ERROR at PC292: Overwrote pending register: R4 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC289: Overwrote pending register: R3 in 'AssignReg'
+            -- DECOMPILER ERROR at PC293: Overwrote pending register: R3 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC290: Overwrote pending register: R2 in 'AssignReg'
+            -- DECOMPILER ERROR at PC294: Overwrote pending register: R2 in 'AssignReg'
 
             if isGameTypeEnglish() or isGameServiceTypeDev() then
               x1 = setTextureUV_Func(menuButtonIcon[index], 324, 219, 368, 263)
             end
           end
         else
-          -- DECOMPILER ERROR at PC309: Overwrote pending register: R4 in 'AssignReg'
+          -- DECOMPILER ERROR at PC313: Overwrote pending register: R4 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC310: Overwrote pending register: R3 in 'AssignReg'
+          -- DECOMPILER ERROR at PC314: Overwrote pending register: R3 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC311: Overwrote pending register: R2 in 'AssignReg'
+          -- DECOMPILER ERROR at PC315: Overwrote pending register: R2 in 'AssignReg'
 
           x1 = setTextureUV_Func(menuButtonIcon[index], (buttonTexture[index])[1], (buttonTexture[index])[2], (buttonTexture[index])[3], (buttonTexture[index])[4])
         end

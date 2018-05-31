@@ -202,7 +202,11 @@ PaGlobal_TutorialUiManager.closeAllWindow = function(self)
   if check_ShowWindow() then
     close_WindowPanelList()
   else
-    FGlobal_HideDialog()
+    if _ContentsGroup_RenewUI_Dailog == true then
+      PaGlobalFunc_MainDialog_Hide()
+    else
+      FGlobal_HideDialog()
+    end
   end
 end
 

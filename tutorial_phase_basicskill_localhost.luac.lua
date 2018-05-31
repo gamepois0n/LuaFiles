@@ -112,8 +112,10 @@ PaGlobal_TutorialPhase_BasicSkill_LocalHost.startPhaseXXX = function(self, stepN
     PaGlobal_TutorialUiManager:hideAllTutorialUi()
     FGlobal_Panel_Radar_Show(true)
     Panel_TimeBar:SetShow(true, false)
-    GameTips_Show()
-    GameTips_Reposition()
+    if _ContentsGroup_RenewUI == false then
+      GameTips_Show()
+      GameTips_Reposition()
+    end
     FGlobal_NewQuickSlot_Update()
     QuickSlot_UpdateData()
     Panel_UIMain:SetShow(true, true)

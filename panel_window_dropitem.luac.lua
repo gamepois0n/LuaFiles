@@ -391,6 +391,7 @@ end
 
 PaGlobal_WorldDropItem.Open = function(self)
   -- function num : 0_8
+  audioPostEvent_SystemUi(13, 6)
   Panel_Window_DropItem:SetShow(true)
 end
 
@@ -398,6 +399,7 @@ end
 
 PaGlobal_WorldDropItem.Close = function(self)
   -- function num : 0_9
+  audioPostEvent_SystemUi(13, 5)
   Panel_Window_DropItem:SetShow(false)
 end
 

@@ -556,16 +556,32 @@ FromClient_ResponseWorkerAuction = function()
   if Panel_Window_WorkerRandomSelect:IsShow() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_COMPLETE_WORKERCONTRACT"))
   else
-    local totalSizeY = Panel_Npc_Dialog:GetSizeY() * 2 + Panel_Worker_Auction:GetSizeY()
-    local subSizeY = Panel_Npc_Dialog:GetSizeY() + Panel_Worker_Auction:GetSizeY()
-    Panel_Worker_Auction:SetPosX(getScreenSizeX() / 2 - Panel_Worker_Auction:GetSizeX() / 2)
-    if totalSizeY < getScreenSizeY() then
-      Panel_Worker_Auction:SetPosY(getScreenSizeY() - Panel_Npc_Dialog:GetSizeY() - Panel_Worker_Auction:GetSizeY())
-    else
-      if getScreenSizeY() < subSizeY then
-        Panel_Worker_Auction:SetPosY(5)
+    local totalSizeY, subSizeY = nil, nil
+    if _ContentsGroup_RenewUI_Dailog == true then
+      totalSizeY = PaGlobalFunc_MainDialog_Bottom_GetSizeY() * 2 + Panel_Worker_Auction:GetSizeY()
+      subSizeY = PaGlobalFunc_MainDialog_Bottom_GetSizeY() + Panel_Worker_Auction:GetSizeY()
+      Panel_Worker_Auction:SetPosX(getScreenSizeX() / 2 - Panel_Worker_Auction:GetSizeX() / 2)
+      if totalSizeY < getScreenSizeY() then
+        Panel_Worker_Auction:SetPosY(getScreenSizeY() - PaGlobalFunc_MainDialog_Bottom_GetSizeY() - Panel_Worker_Auction:GetSizeY())
       else
-        Panel_Worker_Auction:SetPosY(getScreenSizeY() / 2 - Panel_Worker_Auction:GetSizeY() / 2)
+        if getScreenSizeY() < subSizeY then
+          Panel_Worker_Auction:SetPosY(5)
+        else
+          Panel_Worker_Auction:SetPosY(getScreenSizeY() / 2 - Panel_Worker_Auction:GetSizeY() / 2)
+        end
+      end
+    else
+      totalSizeY = Panel_Npc_Dialog:GetSizeY() * 2 + Panel_Worker_Auction:GetSizeY()
+      subSizeY = Panel_Npc_Dialog:GetSizeY() + Panel_Worker_Auction:GetSizeY()
+      Panel_Worker_Auction:SetPosX(getScreenSizeX() / 2 - Panel_Worker_Auction:GetSizeX() / 2)
+      if totalSizeY < getScreenSizeY() then
+        Panel_Worker_Auction:SetPosY(getScreenSizeY() - Panel_Npc_Dialog:GetSizeY() - Panel_Worker_Auction:GetSizeY())
+      else
+        if getScreenSizeY() < subSizeY then
+          Panel_Worker_Auction:SetPosY(5)
+        else
+          Panel_Worker_Auction:SetPosY(getScreenSizeY() / 2 - Panel_Worker_Auction:GetSizeY() / 2)
+        end
       end
     end
     Panel_Worker_Auction:SetShow(true)

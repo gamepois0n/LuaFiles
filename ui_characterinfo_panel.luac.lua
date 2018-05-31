@@ -136,6 +136,7 @@ end
 
 PaGlobal_CharacterInfo.hideWindow = function(self)
   -- function num : 0_5
+  audioPostEvent_SystemUi(1, 1)
   Panel_Window_CharInfo_Status:SetShow(false, false)
   PaGlobal_CharacterInfoBasic:hideWindow()
   ;

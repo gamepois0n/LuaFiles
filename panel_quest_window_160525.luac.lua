@@ -1503,6 +1503,7 @@ end
 
 HandleClicked_QuestNew_Close = function()
   -- function num : 0_14 , upvalues : QuestWindow
+  audioPostEvent_SystemUi(1, 1)
   Panel_Window_Quest_New:CloseUISubApp()
   ;
   ((QuestWindow.ui).checkPopUp):SetCheck(false)
@@ -1525,6 +1526,7 @@ Panel_Window_QuestNew_Show = function(isShow)
     ((QuestWindow.ui).scroll):SetControlTop()
     QuestWindow:update()
   else
+    audioPostEvent_SystemUi(1, 1)
     Panel_Window_Quest_New:SetShow(false, false)
     if Panel_CheckedQuestInfo:GetShow() then
       FGlobal_QuestInfoDetail_Close()

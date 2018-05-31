@@ -240,7 +240,11 @@ end
         FGolbal_ItemMarketNew_Close()
         if Panel_Window_ItemMarket_Function:GetShow() then
           FGolbal_ItemMarket_Function_Close()
-          FGlobal_HideDialog()
+          if _ContentsGroup_RenewUI_Dailog == true then
+            PaGlobalFunc_MainDialog_Hide()
+          else
+            FGlobal_HideDialog()
+          end
         end
       end
     end

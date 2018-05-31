@@ -13,6 +13,8 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local isBlackSpiritAdventure = ToClient_IsContentsGroupOpen("1015")
 BlackSpiritAdventure_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
+  audioPostEvent_SystemUi(0, 22)
+  ;
   (UIAni.fadeInSCR_Down)(Panel_Window_BlackSpiritAdventure)
   local aniInfo1 = Panel_Window_BlackSpiritAdventure:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -32,6 +34,7 @@ end
 
 BlackSpiritAdventure_HideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(1, 1)
   Panel_Window_BlackSpiritAdventure:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_Window_BlackSpiritAdventure, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -124,6 +127,7 @@ end
 
 BlackSpiritAd_Hide = function()
   -- function num : 0_4 , upvalues : checkPopUp, _Web
+  audioPostEvent_SystemUi(1, 1)
   Panel_Window_BlackSpiritAdventure:SetShow(false, false)
   Panel_Window_BlackSpiritAdventure:CloseUISubApp()
   checkPopUp:SetCheck(false)

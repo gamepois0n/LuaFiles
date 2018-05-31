@@ -372,7 +372,9 @@ end
     _staticSkillPointMain:useGlowFont(true, "BaseFont_Glow", 4289951243)
     _staticSkillPointSub:SetFontColor(4294899677)
     _staticSkillPointSub:useGlowFont(true, "BaseFont_10_Glow", 4289951243)
-    enableSkill_UpdateData()
+    if _ContentsGroup_RenewUI_Skill == false then
+      enableSkill_UpdateData()
+    end
   end
 end
 

@@ -31,6 +31,7 @@ FGlobal_Panel_CompetitionGame_JoinDesc_Open = function()
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   local isGuildLeader = isGuildMaster or isGuildSubMaster
+  audioPostEvent_SystemUi(1, 18)
   Panel_CompetitionGame_JoinDesc:SetShow(true)
   if isContentsArsha == true and isCanDoReservation == true then
     FGlobal_Panel_CompetitionGame_GuildReservation_Open()
@@ -40,6 +41,7 @@ end
 FGlobal_Panel_CompetitionGame_JoinDesc_Close = function()
   -- function num : 0_2 , upvalues : competitionGameJoinDesc
   local self = competitionGameJoinDesc
+  audioPostEvent_SystemUi(1, 17)
   Panel_CompetitionGame_JoinDesc:SetShow(false)
 end
 

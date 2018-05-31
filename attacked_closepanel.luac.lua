@@ -62,8 +62,13 @@ FromClient_CancelByAttacked = function()
     FGlobal_ChannelSelect_Hide()
     Panel_GameExit_sendGameDelayExitCancel()
   end
-  FGlobal_CloseNpcDialogForDetail()
-  FGlobal_HideDialog(true)
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_CloseMainDialogDetail()
+    PaGlobalFunc_MainDialog_Hide()
+  else
+    FGlobal_CloseNpcDialogForDetail()
+    FGlobal_HideDialog()
+  end
   if GameOption_GetHideWindow() then
     ResetKeyCustombyAttacked()
     close_WindowPanelList()

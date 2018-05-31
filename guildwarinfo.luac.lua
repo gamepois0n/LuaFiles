@@ -14,6 +14,7 @@ Panel_GuildWarInfo:RegisterShowEventFunc(true, "Panel_GuildWarInfo_ShowAni()")
 Panel_GuildWarInfo:RegisterShowEventFunc(false, "Panel_GuildWarInfo_HideAni()")
 Panel_GuildWarInfo_ShowAni = function()
   -- function num : 0_0
+  audioPostEvent_SystemUi(1, 6)
   Panel_GuildWarInfo:SetAlpha(0)
   ;
   (UIAni.AlphaAnimation)(1, Panel_GuildWarInfo, 0, 0.3)
@@ -21,6 +22,7 @@ end
 
 Panel_GuildWarInfo_HideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(1, 1)
   local ani1 = (UIAni.AlphaAnimation)(0, Panel_GuildWarInfo, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end
@@ -1396,6 +1398,8 @@ end
 
 HandleClicked_Territory = function()
   -- function num : 0_8 , upvalues : warInfo_Main, siegingAreaCount, territoryName
+  audioPostEvent_SystemUi(0, 0)
+  ;
   (warInfo_Main.comboBox_Territory):DeleteAllItem()
   for ii = 0, siegingAreaCount - 1 do
     (warInfo_Main.comboBox_Territory):AddItem(territoryName[ii], ii)
@@ -1406,6 +1410,7 @@ end
 
 GuildWarInfo_Set_Territory = function(index)
   -- function num : 0_9 , upvalues : warInfo_Main, territoryName, warInfo_Content, selectTerritoy
+  audioPostEvent_SystemUi(0, 0)
   if index == nil then
     (warInfo_Main.comboBox_Territory):SetSelectItemIndex((warInfo_Main.comboBox_Territory):GetSelectIndex())
   else
@@ -1467,7 +1472,6 @@ FGlobal_GuildWarInfo_Show = function()
     return 
   end
   if not Panel_GuildWarInfo:GetShow() then
-    audioPostEvent_SystemUi(1, 6)
     Panel_GuildWarInfo:SetShow(true, true)
     guildWarInfo_ShowCheck = true
   end

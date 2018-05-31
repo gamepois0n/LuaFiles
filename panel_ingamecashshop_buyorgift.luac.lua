@@ -724,24 +724,7 @@ end
                     return 
                   end
                   local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
-                  local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
-                  local wayKey = getCurrentWaypointKey()
-                  if ToClient_IsAccessibleRegionKey(myAffiliatedTownRegionKey) == false then
-                    local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
-                    local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
-                    if newRegionInfo == nil then
-                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
-                    end
-                    wayKey = (newRegionInfo:get())._waypointKey
-                    myAffiliatedTownRegionKey = newRegionInfo:getRegionKey()
-                    if myAffiliatedTownRegionKey == 0 then
-                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
-                    end
-                    if wayKey == 0 then
-                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
-                    end
-                  end
-                  warehouse_requestInfo(wayKey)
+                  ToClient_RequestCurrentMainTownRegionWarehouseInfo()
                   ;
                   (self._static_PearlBG):SetSize((self._static_PearlBG):GetSizeX(), (self._static_PearlBG):GetSizeY() + 50)
                   Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), Panel_IngameCashShop_BuyOrGift:GetSizeY() + 50)
@@ -790,7 +773,7 @@ end
                 (self._button_Confirm):ComputePos()
                 ;
                 (self._button_Cancle):ComputePos()
-                -- DECOMPILER ERROR: 18 unprocessed JMP targets
+                -- DECOMPILER ERROR: 15 unprocessed JMP targets
               end
             end
           end

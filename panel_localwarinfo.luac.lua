@@ -12,6 +12,7 @@ Panel_LocalWarInfo:RegisterShowEventFunc(true, "LocalWarInfoShowAni()")
 Panel_LocalWarInfo:RegisterShowEventFunc(false, "LocalWarInfoHideAni()")
 LocalWarInfoShowAni = function()
   -- function num : 0_0
+  audioPostEvent_SystemUi(1, 6)
   Panel_LocalWarInfo:SetAlpha(0)
   ;
   (UIAni.AlphaAnimation)(1, Panel_LocalWarInfo, 0, 0.3)
@@ -19,6 +20,7 @@ end
 
 LocalWarInfoHideAni = function()
   -- function num : 0_1
+  audioPostEvent_SystemUi(1, 1)
   local ani1 = (UIAni.AlphaAnimation)(0, Panel_LocalWarInfo, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end

@@ -492,6 +492,7 @@ Inventory_TabSound = function()
   if DragManager:isDragging() then
     DragManager:clearInfo()
   end
+  audioPostEvent_SystemUi(0, 0)
   if isFirstTab == true then
     isFirstTab = false
   else
@@ -672,6 +673,7 @@ end
 
 HandleClicked_InventoryWindow_Close = function()
   -- function num : 0_23 , upvalues : checkPopUp
+  audioPostEvent_SystemUi(1, 1)
   Panel_Window_Inventory:CloseUISubApp()
   checkPopUp:SetCheck(false)
   InventoryWindow_Close()
@@ -900,6 +902,7 @@ Inventory_SlotLClick = function(index)
       else
         do
           if invenUseSize - useStartSlot - self.startSlotIndex == index then
+            audioPostEvent_SystemUi(0, 0)
             PaGlobal_EasyBuy:Open(5)
           end
         end
@@ -942,7 +945,13 @@ Inventory_SlotRClick = function(index, equipSlotNo)
     if not isItemLock then
       return 
     end
-    if Panel_Npc_Dialog:IsShow() or Panel_Window_ItemMarket_Function:GetShow() or Panel_Window_ItemMarket_RegistItem:GetShow() or Panel_Window_Repair:GetShow() then
+    if _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_IsShow() then
+      return 
+    end
+    if Panel_Npc_Dialog:IsShow() then
+      return 
+    end
+    if Panel_Window_ItemMarket_Function:GetShow() or Panel_Window_ItemMarket_RegistItem:GetShow() or Panel_Window_Repair:GetShow() then
       return 
     end
     if (itemWrapper:getStaticStatus()):isStackable() == false and itemWrapper:isSoulCollector() == false then
@@ -2904,6 +2913,13 @@ InvenFiler_InterActionDead = function(slotNo, itemWrapper)
   -- function num : 0_95
   if itemWrapper == nil then
     return true
+  end
+  if (((itemWrapper:getStaticStatus()):get())._key):getItemKey() == 54002 then
+    if ToClient_IsAnySiegeBeingOfMyChannel() == true and _ContentsGroup_SeigeSeason5 == true then
+      return true
+    else
+      return false
+    end
   end
   if not ((itemWrapper:getStaticStatus()):get()):isItemTargetAlive() then
     return not itemWrapper:checkConditions()
