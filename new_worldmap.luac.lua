@@ -307,24 +307,33 @@ UpdateWorldMapNode = function(node)
   if wayPlant ~= nil then
     affiliatedTownKey = ToClinet_getPlantAffiliatedWaypointKey(wayPlant)
   end
-  FGlobal_FilterClear()
-  if WorldMapArrowEffectEraseClear ~= nil then
-    WorldMapArrowEffectEraseClear()
-  end
-  FGlobal_ShowInfoNodeMenuPanel(node)
-  WorldMapPopupManager:increaseLayer()
-  WorldMapPopupManager:push(Panel_NodeMenu, true)
-  if regionInfo ~= nil then
-    local regionKey = regionInfo._regionKey
-    local regionWrapper = getRegionInfoWrapper(regionKey:get())
-    local minorSiegeWrapper = regionWrapper:getMinorSiegeWrapper()
-    if minorSiegeWrapper ~= nil then
-      WorldMapPopupManager:push(Panel_NodeOwnerInfo, true)
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    if PaGlobalFunc_WorldMapSideBar_EraseArrow ~= nil then
+      PaGlobalFunc_WorldMapSideBar_EraseArrow()
     end
-  end
-  do
-    FGlobal_OpenOtherPanelWithNodeMenu(node, true)
-    NodeName_ShowToggle(true)
+    PaGlobalFunc_WorldMapNodeInfo_Open(node)
+    WorldMapPopupManager:increaseLayer()
+    WorldMapPopupManager:push(Panel_Worldmap_NodeInfo_Console, true)
+  else
+    if WorldMapArrowEffectEraseClear ~= nil then
+      WorldMapArrowEffectEraseClear()
+    end
+    FGlobal_ShowInfoNodeMenuPanel(node)
+    WorldMapPopupManager:increaseLayer()
+    WorldMapPopupManager:push(Panel_NodeMenu, true)
+    if regionInfo ~= nil then
+      local regionKey = regionInfo._regionKey
+      local regionWrapper = getRegionInfoWrapper(regionKey:get())
+      local minorSiegeWrapper = regionWrapper:getMinorSiegeWrapper()
+      if minorSiegeWrapper ~= nil then
+        WorldMapPopupManager:push(Panel_NodeOwnerInfo, true)
+      end
+    end
+    do
+      FGlobal_OpenOtherPanelWithNodeMenu(node, true)
+      FGlobal_FilterClear()
+      NodeName_ShowToggle(true)
+    end
   end
 end
 
@@ -434,7 +443,11 @@ FGlobal_PopCloseWorldMap = function()
     Panel_Tooltip_SimpleText:SetShow(false)
     isCloseWorldMap = false
     Panel_NaviButton:SetShow(false)
-    WorldMapArrowEffectErase()
+    if _ContentsGroup_ForXBoxFinalCert == true then
+      PaGlobalFunc_WorldMapSideBar_EraseArrow()
+    else
+      WorldMapArrowEffectErase()
+    end
     DeliveryCarriageInformationWindow_Close()
   end
 end
@@ -472,39 +485,50 @@ FromClient_WorldMapOpen = function()
   Panel_NpcNavi:SetShow(false)
   FGlobal_WarInfo_Open()
   FGlobal_NodeWarInfo_Open()
-  if _ContentsGroup_RenewUI == true then
+  if _ContentsGroup_ForXBoxFinalCert == true then
     PaGlobalFunc_WorldMapSideBar_Open()
   else
-    FGlobal_WorldMapOpenForMenu()
-    FGlobal_WorldMapOpenForMain()
+    if _ContentsGroup_ForXBoxXR == false then
+      FGlobal_WorldMapOpenForMenu()
+      FGlobal_WorldMapOpenForMain()
+    end
   end
-  if ((getSelfPlayer()):get()):getLevel() >= 20 or questList_isClearQuest(654, 4) == true then
-    isPrevShowPanel = Panel_CheckedQuest:GetShow()
-    isPrevShowMainQuestPanel = Panel_MainQuest:GetShow()
-    FGlobal_QuestWidget_Close()
-    FGlobal_workerChangeSkill_Close()
-    if not Panel_WorkerRestoreAll:IsUISubApp() then
-      workerRestoreAll_Close()
-    end
-    FGlobal_TentTooltipHide()
-    if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
-      Panel_CheckedQuestInfo:SetShow(false)
-    end
-    FGolbal_ItemMarketNew_Close()
-    if Panel_Window_ItemMarket_ItemSet:GetShow() then
-      FGlobal_ItemMarketItemSet_Close()
-    end
-    if Panel_ChatOption:GetShow() then
-      ChattingOption_Close()
-    end
-    isCullingNaviBtn = true
-    Panel_WorldMapNaviBtn()
-    Panel_Tooltip_Item_hideTooltip()
-    delivery_requsetList()
-    renderMode:set()
-    if ToClient_WorldMapIsShow() == true then
-      PaGlobal_TutorialManager:handleWorldMapOpenComplete()
-    end
+  isPrevShowPanel = Panel_CheckedQuest:GetShow()
+  isPrevShowMainQuestPanel = Panel_MainQuest:GetShow()
+  FGlobal_QuestWidget_Close()
+  FGlobal_workerChangeSkill_Close()
+  if not Panel_WorkerRestoreAll:IsUISubApp() then
+    workerRestoreAll_Close()
+  end
+  FGlobal_TentTooltipHide()
+  if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
+    Panel_CheckedQuestInfo:SetShow(false)
+  end
+  FGolbal_ItemMarketNew_Close()
+  if Panel_Window_ItemMarket_ItemSet:GetShow() then
+    FGlobal_ItemMarketItemSet_Close()
+  end
+  if Panel_ChatOption:GetShow() then
+    ChattingOption_Close()
+  end
+  isCullingNaviBtn = true
+  Panel_WorldMapNaviBtn()
+  Panel_Tooltip_Item_hideTooltip()
+  delivery_requsetList()
+  renderMode:set()
+  if ToClient_WorldMapIsShow() == true then
+    PaGlobal_TutorialManager:handleWorldMapOpenComplete()
+  end
+  if _ContentsGroup_ForXBoxXR == true and _ContentsGroup_ForXBoxFinalCert == false then
+    ToClient_WorldmapCheckState(0, false, false)
+    ToClient_WorldmapCheckState(1, false, false)
+    ToClient_WorldmapCheckState(2, false, false)
+    ToClient_WorldmapCheckState(3, true, false)
+    ToClient_WorldmapCheckState(4, true, false)
+    ToClient_WorldmapCheckState(5, true, false)
+    ToClient_WorldmapCheckState(6, false, false)
+    ToClient_WorldmapCheckState(7, false, false)
+    ToClient_WorldmapCheckState(8, false, false)
   end
 end
 
@@ -544,23 +568,30 @@ FGlobal_WorldMapWindowEscape = function()
     return 
   end
   if ToClient_WorldMapIsShow() then
-    -- DECOMPILER ERROR at PC136: Unhandled construct in 'MakeBoolean' P1
-
-    if (((not _ContentsGroup_isUsedNewTradeEventNotice or Panel_HouseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (Panel_TradeEventNotice_Renewal:GetShow() ~= false and Panel_TradeEventNotice_Renewal:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
+    local _panel_TradeMarket_EventInfo = Panel_TradeMarket_EventInfo
+    if _ContentsGroup_isUsedNewTradeEventNotice then
+      _panel_TradeMarket_EventInfo = Panel_TradeEventNotice_Renewal
+    end
+    local _panel_houseControl = Panel_HouseControl
+    if _ContentsGroup_ForXBoxFinalCert == true then
+      _panel_houseControl = Panel_Worldmap_HouseCraft
+    end
+    if (((_panel_houseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (_panel_TradeMarket_EventInfo:GetShow() ~= false and _panel_TradeMarket_EventInfo:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
       ToClient_WorldMapPushEscape()
     end
-    if (((Panel_HouseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (Panel_TradeMarket_EventInfo:GetShow() ~= false and Panel_TradeMarket_EventInfo:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
-      ToClient_WorldMapPushEscape()
+    if _ContentsGroup_ForXBoxXR == false and _ContentsGroup_ForXBoxFinalCert == false then
+      FGlobal_WarInfo_Open()
+      FGlobal_NodeWarInfo_Open()
     end
-    FGlobal_WarInfo_Open()
-    FGlobal_NodeWarInfo_Open()
     if not WorldMapPopupManager:pop() then
       FGlobal_PopCloseWorldMap()
     end
   end
-  if WorldMapPopupManager._currentMode < 0 then
-    FGlobal_WorldMapCloseSubPanel()
-    FGlobal_HideAll_Tooltip_Work_Copy()
+  do
+    if WorldMapPopupManager._currentMode < 0 then
+      FGlobal_WorldMapCloseSubPanel()
+      FGlobal_HideAll_Tooltip_Work_Copy()
+    end
   end
 end
 
@@ -622,6 +653,7 @@ end
 
 FGlobal_WorldMapCloseSubPanel = function()
   -- function num : 0_32 , upvalues : isCullingNaviBtn
+  _PA_LOG("박범�\128", "FGlobal_WorldMapCloseSubPanel")
   Panel_Window_Warehouse:SetShow(false)
   Panel_manageWorker:SetShow(false)
   Panel_Working_Progress:SetShow(false)
@@ -633,7 +665,11 @@ FGlobal_WorldMapCloseSubPanel = function()
   if not _ContentsGroup_isUsedNewTradeEventNotice and not Panel_TradeMarket_EventInfo:IsUISubApp() then
     TradeEventInfo_Close()
   end
-  FGlobal_SetNodeFilter()
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapSideBar_ResetFilter()
+  else
+    FGlobal_SetNodeFilter()
+  end
   isCullingNaviBtn = true
 end
 
@@ -641,7 +677,7 @@ local eCheckState = CppEnums.WorldMapCheckState
 local eWorldmapState = CppEnums.WorldMapState
 FromClient_RenderStateChange = function(state)
   -- function num : 0_33 , upvalues : eWorldmapState, eCheckState
-  if _ContentsGroup_RenewUI == true then
+  if _ContentsGroup_ForXBoxFinalCert == true then
     FromClient_WorldMapSideBar_RenderStateChange(state)
     return 
   end
@@ -732,6 +768,7 @@ end
 local _townModeWaypointKey = nil
 FromClient_SetTownMode = function(waypointKey)
   -- function num : 0_34 , upvalues : _townModeWaypointKey, eCheckState
+  _PA_LOG("박범�\128", "FromClient_SetTownMode ___ 1")
   _townModeWaypointKey = waypointKey
   local explorationNodeInClient = ToClient_getExploratioNodeInClientByWaypointKey(waypointKey)
   if explorationNodeInClient ~= nil then
@@ -751,13 +788,18 @@ FromClient_SetTownMode = function(waypointKey)
   ToClient_worldmapGuideLineSetShow(false)
   ToClient_worldmapDeliverySetShow(false)
   ToClient_worldmapTerritoryManagerSetShow(false)
-  Panel_WorldMap_Main:SetShow(false)
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapSideBar_Close()
+    PaGlobalFunc_WorldMapSideBar_RetreatToWorldMapMode()
+  else
+    Panel_WorldMap_Main:SetShow(false)
+    FGlobal_WorldmapGrand_Bottom_MenuSet(waypointKey)
+    FGlobal_nodeOwnerInfo_SetPosition()
+    FGlobal_GrandWorldMap_SearchToWorldMapMode()
+  end
   ToClient_SetGuildMode(false)
-  Panel_NodeSiegeTooltip:SetShow(false)
   FGlobal_LoadWorldMapTownSideWindow(waypointKey)
-  FGlobal_WorldmapGrand_Bottom_MenuSet(waypointKey)
-  FGlobal_nodeOwnerInfo_SetPosition()
-  FGlobal_GrandWorldMap_SearchToWorldMapMode()
+  Panel_NodeSiegeTooltip:SetShow(false)
   PaGlobal_TutorialManager:handleSetTownMode(waypointKey)
 end
 
@@ -767,21 +809,32 @@ FromClient_resetTownMode = function()
   ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
   ToClient_worldmapGuildHouseSetShow(true, CppEnums.WaypointKeyUndefined)
   ToClient_worldmapTerritoryManagerSetShow(true)
-  FGlobal_WorldMapStateMaintain()
-  Panel_WorldMap_Main:SetShow(true)
-  FGlobal_WorldmapGrand_Bottom_MenuSet()
-  if Panel_NodeStable:GetShow() then
-    StableClose_FromWorldMap()
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapSideBar_Open()
+    if Panel_NodeStable:GetShow() then
+      StableClose_FromWorldMap()
+    end
+    ToClient_SetGuildMode(PaGlobalFunc_WorldMapSideBar_IsGuildWarMode())
+    PaGlobalFunc_WorldMapSideBar_EraseArrow()
+    FGlobal_FilterEffectClear()
+  else
+    FGlobal_WorldMapStateMaintain()
+    Panel_WorldMap_Main:SetShow(true)
+    FGlobal_WorldmapGrand_Bottom_MenuSet()
+    if Panel_NodeStable:GetShow() then
+      StableClose_FromWorldMap()
+    end
+    FGlobal_nodeOwnerInfo_Close()
+    ToClient_SetGuildMode(FGlobal_isGuildWarMode())
+    WorldMapArrowEffectEraseClear()
+    FGlobal_FilterEffectClear()
+    FGlobal_GrandWorldMap_SearchToWorldMapMode()
   end
-  FGlobal_nodeOwnerInfo_Close()
-  ToClient_SetGuildMode(FGlobal_isGuildWarMode())
-  WorldMapArrowEffectEraseClear()
-  FGlobal_FilterEffectClear()
-  FGlobal_GrandWorldMap_SearchToWorldMapMode()
 end
 
 FGlobal_OpenNodeStable = function()
   -- function num : 0_36 , upvalues : _townModeWaypointKey
+  _PA_LOG("박범�\128", "FGlobal_OpenNodeStable")
   if _townModeWaypointKey == nil then
     return 
   end

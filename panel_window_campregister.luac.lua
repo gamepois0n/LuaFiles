@@ -87,7 +87,9 @@ end
 FromClient_CampingServantListUpdate = function()
   -- function num : 0_4
   local isShow = ToClient_isCampingReigsted()
-  Panel_Icon_Camp:SetShow(isShow)
+  if _ContentsGroup_RenewUI == true then
+    Panel_Icon_Camp:SetShow(isShow)
+  end
 end
 
 -- DECOMPILER ERROR at PC80: Confused about usage of register: R2 in 'UnsetPending'

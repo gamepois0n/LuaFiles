@@ -41,10 +41,16 @@ _intimacyIcon = {
 Panel_Dialog_Main_Intimacy_Info.registerMessageHandler = function(self)
   -- function num : 0_0
   registerEvent("onScreenResize", "FromClient_onScreenResize_MainDialog_Intimacy")
+  registerEvent("FromClient_VaryIntimacy", "FromClient_Update_MainDialog_Intimacy")
+end
+
+FromClient_Update_MainDialog_Intimacy = function()
+  -- function num : 0_1
+  PaGlobalFunc_MainDialog_Intimacy_Update()
 end
 
 Panel_Dialog_Main_Intimacy_Info.initialize = function(self)
-  -- function num : 0_1
+  -- function num : 0_2
   self:close()
   self:initControl()
   self._initialize = true
@@ -52,7 +58,7 @@ Panel_Dialog_Main_Intimacy_Info.initialize = function(self)
 end
 
 Panel_Dialog_Main_Intimacy_Info.initControl = function(self)
-  -- function num : 0_2
+  -- function num : 0_3
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._ui).static_IntimacyProgressBg = (UI.getChildControl)((self._ui).static_IntimacyBg, "Static_IntimacyProgressBg")
@@ -92,17 +98,17 @@ Panel_Dialog_Main_Intimacy_Info.initControl = function(self)
 end
 
 Panel_Dialog_Main_Intimacy_Info.open = function(self)
-  -- function num : 0_3
+  -- function num : 0_4
   ((self._ui).static_IntimacyBg):SetShow(true)
 end
 
 Panel_Dialog_Main_Intimacy_Info.close = function(self)
-  -- function num : 0_4
+  -- function num : 0_5
   ((self._ui).static_IntimacyBg):SetShow(false)
 end
 
 Panel_Dialog_Main_Intimacy_Info.update = function(self)
-  -- function num : 0_5
+  -- function num : 0_6
   self:close()
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
@@ -111,13 +117,10 @@ Panel_Dialog_Main_Intimacy_Info.update = function(self)
   end
   local talker = dialog_getTalker()
   if talker ~= nil then
-    local IntimacyTitle = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_INTIMACY")
     local characterKey = talker:getCharacterKey()
     local npcData = getNpcInfoByCharacterKeyRaw(characterKey, (talker:get()):getDialogIndex())
     if npcData ~= nil and npcData:hasSpawnType((CppEnums.SpawnType).eSpawnType_intimacy) == true then
       self:open()
-      ;
-      ((self._ui).staticText_Intimacy_Title):SetText(IntimacyTitle)
       local intimacy = getIntimacyByCharacterKey(characterKey)
       local valuePercent = intimacy / 1000 * 100
       if valuePercent > 100 then
@@ -133,7 +136,7 @@ Panel_Dialog_Main_Intimacy_Info.update = function(self)
 end
 
 Panel_Dialog_Main_Intimacy_Info.Resize = function(self)
-  -- function num : 0_6
+  -- function num : 0_7
   ((self._ui).static_IntimacyBg):ComputePos()
   ;
   ((self._ui).circularProgress_IntimacyProgress):ComputePos()
@@ -150,7 +153,7 @@ Panel_Dialog_Main_Intimacy_Info.Resize = function(self)
 end
 
 Panel_Dialog_Main_Intimacy_Info.Update_Intimacy_reward = function(self, characterKey, indimacy)
-  -- function num : 0_7
+  -- function num : 0_8
   local count = getIntimacyInformationCount(characterKey)
   local QuestCount = 1
   for index = 0, (self._config).maxIntimacyRewardCount - 1 do
@@ -193,10 +196,6 @@ Panel_Dialog_Main_Intimacy_Info.Update_Intimacy_reward = function(self, characte
         (Rewardtext:getBaseTexture()):setUV(x1, y1, x2, y2)
         Rewardtext:setRenderTexture(Rewardtext:getBaseTexture())
         Rewardtext:SetShow(true)
-        if indimacy / 1000 < percent then
-          RewardIcon:SetMonoTone(true)
-          Rewardtext:SetMonoTone(true)
-        end
         if percent >= 0 and percent <= 1 and ToClient_checkIntimacyInformationFixedState(intimacyInformationData) then
           local angle = math.pi * 2 * percent
           local lineStart = float3((math.sin)(angle), -(math.cos)(angle), 0)
@@ -216,25 +215,30 @@ Panel_Dialog_Main_Intimacy_Info.Update_Intimacy_reward = function(self, characte
               local PosY = ((self._pos).rewardTextPos).Y + index * (self._space).rewardTextHBorder
               Rewardtext:SetPosY(PosY)
               Rewardtext:SetText(giftName .. ":" .. giftDesc)
+              if indimacy < percent * 1000 then
+                RewardIcon:SetColor((Defines.Color).C_FF888888)
+                Rewardtext:SetColor((Defines.Color).C_FF888888)
+                Rewardtext:SetFontColor((Defines.Color).C_FF888888)
+              else
+                RewardIcon:SetColor((Defines.Color).C_FFEFEFEF)
+                Rewardtext:SetColor((Defines.Color).C_FFEFEFEF)
+                Rewardtext:SetFontColor((Defines.Color).C_FFEFEFEF)
+              end
               ;
               ((((self._ui).static_Reward_List)[index]).reward_Icon):SetShow(false)
               ;
               ((((self._ui).static_Reward_List)[index]).reward):SetShow(false)
-              ;
-              ((((self._ui).static_Reward_List)[index]).reward_Icon):SetMonoTone(false)
-              ;
-              ((((self._ui).static_Reward_List)[index]).reward):SetMonoTone(false)
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -245,32 +249,32 @@ Panel_Dialog_Main_Intimacy_Info.Update_Intimacy_reward = function(self, characte
 end
 
 PaGlobalFunc_MainDialog_Intimacy_Open = function()
-  -- function num : 0_8 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_9 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:open()
 end
 
 PaGlobalFunc_MainDialog_Intimacy_Close = function()
-  -- function num : 0_9 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_10 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:close()
 end
 
 PaGlobalFunc_MainDialog_Intimacy_Update = function()
-  -- function num : 0_10 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_11 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:update()
 end
 
 FromClient_InitMainDialog_Intimacy = function()
-  -- function num : 0_11 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_12 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog_Intimacy = function()
-  -- function num : 0_12 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_13 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:Resize()
 end

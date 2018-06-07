@@ -1170,8 +1170,8 @@ PaGlobal_Option.InitValue = function(self, gameOptionSetting)
     (elems_.LensBlood)._initValue = gameOptionSetting:getLensBlood()
     -- DECOMPILER ERROR at PC360: Confused about usage of register: R4 in 'UnsetPending'
 
-    if elems_.ShowHpRular ~= nil then
-      (elems_.ShowHpRular)._initValue = gameOptionSetting:getIsShowHpBar()
+    if elems_.ShowStackHp ~= nil then
+      (elems_.ShowStackHp)._initValue = gameOptionSetting:getIsShowHpBar()
     end
     -- DECOMPILER ERROR at PC364: Confused about usage of register: R4 in 'UnsetPending'
 

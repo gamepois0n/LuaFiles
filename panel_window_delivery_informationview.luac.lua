@@ -121,10 +121,8 @@ DeliveryInformationView_Open = function()
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
     WorldMapPopupManager:push(Panel_Window_Delivery_InformationView, true)
-    if isWorldMapGrandOpen() then
-      Panel_Window_Delivery_InformationView:SetPosX(getScreenSizeX() - Panel_Window_Delivery_InformationView:GetSizeX() - 10)
-      Panel_Window_Delivery_InformationView:SetPosY(getScreenSizeY() / 2 - Panel_Window_Delivery_InformationView:GetSizeY() / 2)
-    end
+    Panel_Window_Delivery_InformationView:SetPosX(getScreenSizeX() - Panel_Window_Delivery_InformationView:GetSizeX() - 10)
+    Panel_Window_Delivery_InformationView:SetPosY(getScreenSizeY() / 2 - Panel_Window_Delivery_InformationView:GetSizeY() / 2)
   end
   DeliveryInformationView_Update()
   Panel_Window_Delivery_InformationView:SetAlphaExtraChild(1)

@@ -242,7 +242,7 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   FGlobal_Party_ConditionalShow()
   PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
   PaGlobal_CharacterTag_SetPosIcon()
-  if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_GameTips, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow) == 1 then
+  if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_GameTips, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow) == 1 and _ContentsGroup_RenewUI == false then
     GameTips_Show()
     GameTips_Reposition()
   end
@@ -268,8 +268,10 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
   Panel_CheckedQuest:SetShow(isShow)
   Panel_MainQuest:SetShow(isShow)
   PaGlobal_TutorialUiManager:setShowChattingPanel(isShow)
-  Panel_GameTips:SetShow(isShow)
-  Panel_GameTipMask:SetShow(isShow)
+  if _ContentsGroup_RenewUI == false then
+    Panel_GameTips:SetShow(isShow)
+    Panel_GameTipMask:SetShow(isShow)
+  end
   Panel_MainStatus_User_Bar:SetShow(isShow)
   if Panel_MainStatus_User_Bar:GetShow() == true then
     FGlobal_ClassResource_SetShowControl(true)

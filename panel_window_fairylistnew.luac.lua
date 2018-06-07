@@ -11,22 +11,12 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local IM = CppEnums.EProcessorInputMode
-Panel_Window_FairyListNew:RegisterShowEventFunc(true, "PetNewListShowAni()")
-Panel_Window_FairyListNew:RegisterShowEventFunc(false, "PetNewListHideAni()")
-PetNewListShowAni = function()
-  -- function num : 0_0
-end
-
-PetNewListHideAni = function()
-  -- function num : 0_1
-end
-
 local maxUnsealCount = 1
 local FairyListNew = {_list2_FairyListNew = (UI.getChildControl)(Panel_Window_FairyListNew, "List2_FairyList"), _unSealDATACount = 0, _sealDATACount = 0, _isUpgradeState = false, 
 _UI = {_Button_Upgrade = (UI.getChildControl)(Panel_Window_FairyListNew, "Button_Upgrade"), _Button_Close = (UI.getChildControl)(Panel_Window_FairyListNew, "Button_Win_Close"), _Static_FeedinfBg = (UI.getChildControl)(Panel_Window_FairyListNew, "Static_FeedingBg")}
 }
 PaGlobal_FairyListNew_UnSeal = function(petNoStr)
-  -- function num : 0_2 , upvalues : FairyListNew
+  -- function num : 0_0 , upvalues : FairyListNew
   audioPostEvent_SystemUi(1, 40)
   local self = FairyListNew
   local petNo_s64 = tonumber64(petNoStr)
@@ -38,25 +28,25 @@ PaGlobal_FairyListNew_UnSeal = function(petNoStr)
 end
 
 PaGlobal_FairyListNew_Seal = function(petNoStr)
-  -- function num : 0_3
+  -- function num : 0_1
   audioPostEvent_SystemUi(1, 40)
   local petNo_s64 = tonumber64(petNoStr)
   ToClient_requestPetSeal(petNo_s64)
 end
 
 PaGlobal_FairyListNew_Setting = function(petNoStr, tier)
-  -- function num : 0_4
+  -- function num : 0_2
   PaGlobal_FairySetting_Open(petNoStr, tier)
 end
 
 PaGlobal_FairyUpgrade_Open_Call = function()
-  -- function num : 0_5 , upvalues : FairyListNew
+  -- function num : 0_3 , upvalues : FairyListNew
   PaGlobal_FairyUpgrade_Open()
   FairyListNew:UpdateList(true)
 end
 
 FairyListNew.UpdateList = function(self, noclearscroll)
-  -- function num : 0_6
+  -- function num : 0_4
   local toIndex = 0
   local scrollvalue = 0
   local vscroll = (self._list2_FairyListNew):GetVScroll()
@@ -124,7 +114,7 @@ FairyListNew.UpdateList = function(self, noclearscroll)
 end
 
 FairyListNew.SetPos = function(self)
-  -- function num : 0_7
+  -- function num : 0_5
   local ScreenX = getScreenSizeX()
   local ScreenY = getScreenSizeY()
   Panel_Window_FairyListNew:SetPosX(ScreenX / 2 - Panel_Window_FairyListNew:GetSizeX() / 2)
@@ -132,7 +122,7 @@ FairyListNew.SetPos = function(self)
 end
 
 FairyListNew.Open = function(self)
-  -- function num : 0_8
+  -- function num : 0_6
   self._isUpgradeState = false
   self:SetPos()
   Panel_Window_FairyListNew:SetShow(true)
@@ -142,13 +132,13 @@ FairyListNew.Open = function(self)
 end
 
 PaGlobal_FairyListNew_Open = function()
-  -- function num : 0_9 , upvalues : FairyListNew
+  -- function num : 0_7 , upvalues : FairyListNew
   local self = FairyListNew
   self:Open()
 end
 
 PaGlobal_FairyListNew_Update = function(control, key)
-  -- function num : 0_10 , upvalues : UI_TM
+  -- function num : 0_8 , upvalues : UI_TM
   local bg = (UI.getChildControl)(control, "Static_BG")
   local iconBg = (UI.getChildControl)(control, "Static_IconBG")
   local icon = (UI.getChildControl)(control, "Static_Icon")
@@ -164,7 +154,7 @@ PaGlobal_FairyListNew_Update = function(control, key)
   local sealPetCount = ToClient_getFairySealedList()
   local unsealPetCount = ToClient_getFairyUnsealedList()
   local isUnsealPet = function(petNo_s64)
-    -- function num : 0_10_0 , upvalues : unsealPetCount
+    -- function num : 0_8_0 , upvalues : unsealPetCount
     if unsealPetCount > 0 then
       for index = 0, unsealPetCount - 1 do
         local pcPetData = ToClient_getFairyUnsealedDataByIndex(index)
@@ -409,12 +399,12 @@ PaGlobal_FairyListNew_Update = function(control, key)
 end
 
 FromClient_FairyUpdateNew = function()
-  -- function num : 0_11 , upvalues : FairyListNew
+  -- function num : 0_9 , upvalues : FairyListNew
   FairyListNew:UpdateList()
 end
 
 FairyListNew.RegistEvent = function(self)
-  -- function num : 0_12
+  -- function num : 0_10
   (self._list2_FairyListNew):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "PaGlobal_FairyListNew_Update")
   ;
   (self._list2_FairyListNew):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
@@ -435,28 +425,28 @@ FairyListNew.RegistEvent = function(self)
 end
 
 PaGlobal_FairyListNew_Close = function()
-  -- function num : 0_13
+  -- function num : 0_11
   PaGlobal_FairyUpgrade_Close()
   PaGlobal_FairySetting_Close()
   Panel_Window_FairyListNew:SetShow(false)
 end
 
 FromClient_ShowFairyMessageByType = function(msgType)
-  -- function num : 0_14 , upvalues : FairyMessageType
+  -- function num : 0_12 , upvalues : FairyMessageType
   if FairyMessageType.eTurnOnLantern == msgType then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_TURNON_LANTERN"))
   end
 end
 
 FairyListNew.Initialize = function(self)
-  -- function num : 0_15
+  -- function num : 0_13
   self:RegistEvent()
   self:Open()
   Panel_Window_FairyListNew:SetShow(false)
 end
 
 PaGlobal_FairyList_Update = function()
-  -- function num : 0_16 , upvalues : FairyListNew
+  -- function num : 0_14 , upvalues : FairyListNew
   FairyListNew:UpdateList(true)
 end
 

@@ -964,7 +964,11 @@ end
 
 moveChannelMsg = function()
   -- function num : 0_7
-  FGlobal_gameExit_saveCurrentData()
+  if _ContentsGroup_RenewUI_ExitGame == false then
+    FGlobal_gameExit_saveCurrentData()
+  else
+    PaGlobalFunc_GameExit_SaveCurrentData()
+  end
   gameExit_MoveChannel(_selectChannel)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELWAIT_MSG")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = nil, functionClose = nil, exitButton = true, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1026,6 +1030,11 @@ FGlobal_ChannelSelect_Show = function()
   -- function num : 0_9
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHANNELCHANGEOPENALERT_INDEAD"))
+    return 
+  end
+  local rv = ToClient_CheckToMoveChannel()
+  if rv ~= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoRestrictedToMoveChannelOnBossSpawnPeriod"))
     return 
   end
   Panel_ChannelSelect:SetShow(true, true)

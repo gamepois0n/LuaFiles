@@ -830,167 +830,190 @@ Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
     itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slot._item))
   else
     if slotType == "shop" then
-      local shopItemWrapper = nil
-      if (Panel_Window_NpcShop.npcShop).lastTabIndex == 0 or (Panel_Window_NpcShop.npcShop).lastTabIndex == nil then
-        shopItemWrapper = npcShop_getItemBuy(slotNo)
-        if shopItemWrapper ~= nil then
-          itemSSW = shopItemWrapper:getStaticStatus()
-        end
-      else
-        if (Panel_Window_NpcShop.npcShop).lastTabIndex == 1 then
-          itemSSW = npcShop_getItemWrapperByShopSlotNo(slotNo)
-          isSSW = false
+      if _ContentsGroup_RenewUI_NpcShop == true then
+        local NPCShopInfo = (PaGlobalFunc_Dialog_NPCShop_GetNPCShop())
+        local shopItemWrapper = nil
+        if (NPCShopInfo._value).lastTabIndex == 0 or (NPCShopInfo._value).lastTabIndex == nil then
+          shopItemWrapper = npcShop_getItemBuy(slotNo)
+          if shopItemWrapper ~= nil then
+            itemSSW = shopItemWrapper:getStaticStatus()
+          end
         else
-          itemSSW = npcShop_getItemRepurchaseForToolTip(slotNo)
-          isItemWrapper = true
-          isSSW = false
-        end
-      end
-      inven = true
-      parent = true
-    else
-      do
-        if slotType == "workListMilibogi" then
-          itemSSW = HouseControl_getItemStaticStatusByIndex(slotNo)
-        else
-          if slotType == "tradeMarket" then
-            itemSSW = global_TradeMarketGraph_StaticStatus(slotNo)
+          if (NPCShopInfo._value).lastTabIndex == 1 then
+            itemSSW = npcShop_getItemWrapperByShopSlotNo(slotNo)
+            isSSW = false
           else
-            if slotType == "tradeMarket_Buy" then
-              itemSSW = (npcShop_getItemBuy(slotNo)):getStaticStatus()
+            itemSSW = npcShop_getItemRepurchaseForToolTip(slotNo)
+            isItemWrapper = true
+            isSSW = false
+          end
+        end
+        inven = true
+        parent = true
+      else
+        do
+          do
+            local shopItemWrapper = nil
+            if (Panel_Window_NpcShop.npcShop).lastTabIndex == 0 or (Panel_Window_NpcShop.npcShop).lastTabIndex == nil then
+              shopItemWrapper = npcShop_getItemBuy(slotNo)
+              if shopItemWrapper ~= nil then
+                itemSSW = shopItemWrapper:getStaticStatus()
+              end
             else
-              if slotType == "tradeSupply" then
-                local shopItemWrapper = ToClient_worldmap_getTradeSupplyItem(TradeNpcItemInfo_getTerritoryKey(), slotNo - 1)
-                if shopItemWrapper ~= nil then
-                  itemSSW = shopItemWrapper:getStaticStatus()
-                end
+              if (Panel_Window_NpcShop.npcShop).lastTabIndex == 1 then
+                itemSSW = npcShop_getItemWrapperByShopSlotNo(slotNo)
+                isSSW = false
               else
-                do
-                  if slotType == "tradeEventInfo" then
-                    local shopItemWrapper = ToClient_worldmap_getTradeSupplyItem(index, slotNo)
+                itemSSW = npcShop_getItemRepurchaseForToolTip(slotNo)
+                isItemWrapper = true
+                isSSW = false
+              end
+            end
+            inven = true
+            parent = true
+            if slotType == "workListMilibogi" then
+              itemSSW = HouseControl_getItemStaticStatusByIndex(slotNo)
+            else
+              if slotType == "tradeMarket" then
+                itemSSW = global_TradeMarketGraph_StaticStatus(slotNo)
+              else
+                if slotType == "tradeMarket_Buy" then
+                  itemSSW = (npcShop_getItemBuy(slotNo)):getStaticStatus()
+                else
+                  if slotType == "tradeSupply" then
+                    local shopItemWrapper = ToClient_worldmap_getTradeSupplyItem(TradeNpcItemInfo_getTerritoryKey(), slotNo - 1)
                     if shopItemWrapper ~= nil then
                       itemSSW = shopItemWrapper:getStaticStatus()
                     end
                   else
                     do
-                      if slotType == "product_source" then
-                        local informationWrapper = product_GetSourceItem(slotNo)
-                        if informationWrapper ~= nil then
-                          itemSSW = informationWrapper:getStaticStatus()
-                          if itemSSW ~= nil then
-                            showTooltip_Item(normalTooltip, itemSSW, true, false)
-                          end
+                      if slotType == "tradeEventInfo" then
+                        local shopItemWrapper = ToClient_worldmap_getTradeSupplyItem(index, slotNo)
+                        if shopItemWrapper ~= nil then
+                          itemSSW = shopItemWrapper:getStaticStatus()
                         end
                       else
                         do
-                          if slotType == "Socket_Insert" then
-                            local mainSlotNo = Socket_GetSlotNo()
-                            local invenItemWrapper = getInventoryItem(mainSlotNo)
-                            if invenItemWrapper ~= nil then
-                              itemSSW = invenItemWrapper:getPushedItem(slotNo - 1)
+                          if slotType == "product_source" then
+                            local informationWrapper = product_GetSourceItem(slotNo)
+                            if informationWrapper ~= nil then
+                              itemSSW = informationWrapper:getStaticStatus()
+                              if itemSSW ~= nil then
+                                showTooltip_Item(normalTooltip, itemSSW, true, false)
+                              end
                             end
                           else
                             do
-                              if slotType == "popupItem" then
-                                local ESSWrapper = getPopupIteWrapper()
-                                if ESSWrapper ~= nil then
-                                  itemSSW = ESSWrapper:getPopupItemAt(slotNo - 1)
+                              if slotType == "Socket_Insert" then
+                                local mainSlotNo = Socket_GetSlotNo()
+                                local invenItemWrapper = getInventoryItem(mainSlotNo)
+                                if invenItemWrapper ~= nil then
+                                  itemSSW = invenItemWrapper:getPushedItem(slotNo - 1)
                                 end
                               else
                                 do
-                                  if slotType == "TerritoryAuth_Auction" then
-                                    local myAuctionInfo = RequestGetAuctionInfo()
-                                    itemSSW = myAuctionInfo:getTerritoryTradeitem(slotNo)
+                                  if slotType == "popupItem" then
+                                    local ESSWrapper = getPopupIteWrapper()
+                                    if ESSWrapper ~= nil then
+                                      itemSSW = ESSWrapper:getPopupItemAt(slotNo - 1)
+                                    end
                                   else
                                     do
-                                      if slotType == "Dialog_ChallengeReward_Base" or slotType == "Dialog_ChallengeReward_Select" then
-                                        itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slot._item))
+                                      if slotType == "TerritoryAuth_Auction" then
+                                        local myAuctionInfo = RequestGetAuctionInfo()
+                                        itemSSW = myAuctionInfo:getTerritoryTradeitem(slotNo)
                                       else
-                                        if slotType == "Dialog_ChallengePcroomReward_Base" or slotType == "Dialog_ChallengePcroomReward_Select" then
-                                          itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slot._item))
-                                        else
-                                          if slotType == "DailyStamp" then
-                                            itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slotNo))
+                                        do
+                                          if slotType == "Dialog_ChallengeReward_Base" or slotType == "Dialog_ChallengeReward_Select" then
+                                            itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slot._item))
                                           else
-                                            if slotType == "masterpiecdAuction" then
-                                              local myAuctionInfo = (RequestGetAuctionInfo())
-                                              local goodsInfo = nil
-                                              if (CppEnums.AuctionTabType).AuctionTab_SellItem == index then
-                                                goodsInfo = myAuctionInfo:getItemAuctionListAt(slotNo)
-                                              else
-                                                if (CppEnums.AuctionTabType).AuctionTab_MySellPage == index then
-                                                  goodsInfo = myAuctionInfo:getMySellingItemAuctionAt(slotNo)
-                                                else
-                                                  if (CppEnums.AuctionTabType).AuctionTab_MyBidPage == index then
-                                                    goodsInfo = myAuctionInfo:getMyItemBidListAt(slotNo)
-                                                  end
-                                                end
-                                              end
-                                              if goodsInfo == nil then
-                                                return 
-                                              end
-                                              local itemWrapper = goodsInfo:getItem()
-                                              itemSSW = itemWrapper:getStaticStatus()
+                                            if slotType == "Dialog_ChallengePcroomReward_Base" or slotType == "Dialog_ChallengePcroomReward_Select" then
+                                              itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slot._item))
                                             else
-                                              do
-                                                ;
-                                                (UI.ASSERT)(false, "showTooltip(static)으로 정의되지 않은 slot�\128�\133(" .. slotType .. ")�\180 들어왔습니다. 확인해주세요.")
-                                                do return  end
-                                                if itemSSW == nil then
-                                                  return 
-                                                end
-                                                local skillKey = SkillKey()
-                                                local isSkillBook = false
-                                                if isSSW == true and isItemWrapper == false then
-                                                  isSkillBook = itemSSW:isSkillBook(skillKey)
-                                                else
-                                                  isSkillBook = (itemSSW:getStaticStatus()):isSkillBook(skillKey)
-                                                end
-                                                -- DECOMPILER ERROR at PC289: Confused about usage of register: R12 in 'UnsetPending'
-
-                                                if isSkillBook then
-                                                  Panel_Tooltip_Item_DataObject.isSkill = true
-                                                  -- DECOMPILER ERROR at PC291: Confused about usage of register: R12 in 'UnsetPending'
-
-                                                  Panel_Tooltip_Item_DataObject.skillSlot = slot
-                                                  Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
-                                                  return 
-                                                end
-                                                -- DECOMPILER ERROR at PC301: Confused about usage of register: R12 in 'UnsetPending'
-
-                                                Panel_Tooltip_Item_DataObject.isSkill = false
-                                                local isEquipableItem, servantItem = showTooltip_Item(normalTooltip, itemSSW, isSSW, isItemWrapper)
-                                                if isEquipableItem then
-                                                  local equipItemWrapper = nil
-                                                  if servantItem then
-                                                    local temporaryWrapper = getTemporaryInformationWrapper()
-                                                    if temporaryWrapper ~= nil and temporaryWrapper:isSelfVehicle() then
-                                                      if isItemWrapper or not isSSW then
-                                                        equipItemWrapper = (temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getEquipItem((itemSSW:getStaticStatus()):getEquipSlotNo())
-                                                      else
-                                                        equipItemWrapper = (temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getEquipItem(itemSSW:getEquipSlotNo())
+                                              if slotType == "DailyStamp" then
+                                                itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(slotNo))
+                                              else
+                                                if slotType == "masterpiecdAuction" then
+                                                  local myAuctionInfo = (RequestGetAuctionInfo())
+                                                  local goodsInfo = nil
+                                                  if (CppEnums.AuctionTabType).AuctionTab_SellItem == index then
+                                                    goodsInfo = myAuctionInfo:getItemAuctionListAt(slotNo)
+                                                  else
+                                                    if (CppEnums.AuctionTabType).AuctionTab_MySellPage == index then
+                                                      goodsInfo = myAuctionInfo:getMySellingItemAuctionAt(slotNo)
+                                                    else
+                                                      if (CppEnums.AuctionTabType).AuctionTab_MyBidPage == index then
+                                                        goodsInfo = myAuctionInfo:getMyItemBidListAt(slotNo)
                                                       end
                                                     end
-                                                  else
-                                                    do
-                                                      do
-                                                        if isItemWrapper or not isSSW then
-                                                          equipItemWrapper = ToClient_getEquipmentItem((itemSSW:getStaticStatus()):getEquipSlotNo())
-                                                        else
-                                                          equipItemWrapper = ToClient_getEquipmentItem(itemSSW:getEquipSlotNo())
-                                                        end
-                                                        if equipItemWrapper ~= nil and not servantItem then
-                                                          showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
-                                                        end
-                                                        if ((slot.icon):getParent()):IsUISubApp() then
-                                                          Panel_Tooltip_Item_Set_Position_UISubApp((slot.icon):getParent())
-                                                          ;
-                                                          (normalTooltip.mainPanel):OpenUISubApp()
-                                                          if equipItemWrapper ~= nil then
-                                                            (equippedTooltip.mainPanel):OpenUISubApp()
+                                                  end
+                                                  if goodsInfo == nil then
+                                                    return 
+                                                  end
+                                                  local itemWrapper = goodsInfo:getItem()
+                                                  itemSSW = itemWrapper:getStaticStatus()
+                                                else
+                                                  do
+                                                    ;
+                                                    (UI.ASSERT)(false, "showTooltip(static)으로 정의되지 않은 slot�\128�\133(" .. slotType .. ")�\180 들어왔습니다. 확인해주세요.")
+                                                    do return  end
+                                                    if itemSSW == nil then
+                                                      return 
+                                                    end
+                                                    local skillKey = SkillKey()
+                                                    local isSkillBook = false
+                                                    if isSSW == true and isItemWrapper == false then
+                                                      isSkillBook = itemSSW:isSkillBook(skillKey)
+                                                    else
+                                                      isSkillBook = (itemSSW:getStaticStatus()):isSkillBook(skillKey)
+                                                    end
+                                                    -- DECOMPILER ERROR at PC332: Confused about usage of register: R12 in 'UnsetPending'
+
+                                                    if isSkillBook then
+                                                      Panel_Tooltip_Item_DataObject.isSkill = true
+                                                      -- DECOMPILER ERROR at PC334: Confused about usage of register: R12 in 'UnsetPending'
+
+                                                      Panel_Tooltip_Item_DataObject.skillSlot = slot
+                                                      Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
+                                                      return 
+                                                    end
+                                                    -- DECOMPILER ERROR at PC344: Confused about usage of register: R12 in 'UnsetPending'
+
+                                                    Panel_Tooltip_Item_DataObject.isSkill = false
+                                                    local isEquipableItem, servantItem = showTooltip_Item(normalTooltip, itemSSW, isSSW, isItemWrapper)
+                                                    if isEquipableItem then
+                                                      local equipItemWrapper = nil
+                                                      if servantItem then
+                                                        local temporaryWrapper = getTemporaryInformationWrapper()
+                                                        if temporaryWrapper ~= nil and temporaryWrapper:isSelfVehicle() then
+                                                          if isItemWrapper or not isSSW then
+                                                            equipItemWrapper = (temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getEquipItem((itemSSW:getStaticStatus()):getEquipSlotNo())
+                                                          else
+                                                            equipItemWrapper = (temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getEquipItem(itemSSW:getEquipSlotNo())
                                                           end
-                                                        else
-                                                          Panel_Tooltip_Item_Set_Position((slot.icon):getParent())
+                                                        end
+                                                      else
+                                                        do
+                                                          do
+                                                            if isItemWrapper or not isSSW then
+                                                              equipItemWrapper = ToClient_getEquipmentItem((itemSSW:getStaticStatus()):getEquipSlotNo())
+                                                            else
+                                                              equipItemWrapper = ToClient_getEquipmentItem(itemSSW:getEquipSlotNo())
+                                                            end
+                                                            if equipItemWrapper ~= nil and not servantItem then
+                                                              showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
+                                                            end
+                                                            if ((slot.icon):getParent()):IsUISubApp() then
+                                                              Panel_Tooltip_Item_Set_Position_UISubApp((slot.icon):getParent())
+                                                              ;
+                                                              (normalTooltip.mainPanel):OpenUISubApp()
+                                                              if equipItemWrapper ~= nil then
+                                                                (equippedTooltip.mainPanel):OpenUISubApp()
+                                                              end
+                                                            else
+                                                              Panel_Tooltip_Item_Set_Position((slot.icon):getParent())
+                                                            end
+                                                          end
                                                         end
                                                       end
                                                     end
@@ -2353,11 +2376,15 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                           do
                                             if 0 < lifeminLevel then
                                               local myLifeLevel = (myInfo:get()):getLifeExperienceLevel(craftType)
-                                              if _ContentsGroup_isUsedNewCharacterInfo == false then
-                                                (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_CraftLevel_Replace(lifeminLevel, craftType)))
+                                              if true == _ContentsGroup_RenewUI then
+                                                (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", PaGlobalFunc_CharacterLifeInfo_CraftLevel_Replace(lifeminLevel, craftType)))
                                               else
-                                                ;
-                                                (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeminLevel)))
+                                                if _ContentsGroup_isUsedNewCharacterInfo == false then
+                                                  (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_CraftLevel_Replace(lifeminLevel, craftType)))
+                                                else
+                                                  ;
+                                                  (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeminLevel)))
+                                                end
                                               end
                                               ;
                                               (target.useLimit_level_value):SetShow(true)
@@ -2387,7 +2414,7 @@ extendedSlotInfoArray = {}
                                                 local compareSlot = {}
                                                 for i = 1, slotNoMax do
                                                   local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                  -- DECOMPILER ERROR at PC2963: Confused about usage of register: R63 in 'UnsetPending'
+                                                  -- DECOMPILER ERROR at PC2984: Confused about usage of register: R63 in 'UnsetPending'
 
                                                   if slotNoMax ~= extendSlotNo then
                                                     (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2405,7 +2432,7 @@ extendedSlotInfoArray = {}
                                                 end
                                                 if 1 == equip.checkExtendedSlot then
                                                   local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                  -- DECOMPILER ERROR at PC2998: Confused about usage of register: R59 in 'UnsetPending'
+                                                  -- DECOMPILER ERROR at PC3019: Confused about usage of register: R59 in 'UnsetPending'
 
                                                   ;
                                                   (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2427,7 +2454,7 @@ extendedSlotInfoArray = {}
                                                       if nil ~= servantKindType then
                                                         for i = 1, slotNoMax do
                                                           local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                          -- DECOMPILER ERROR at PC3053: Confused about usage of register: R64 in 'UnsetPending'
+                                                          -- DECOMPILER ERROR at PC3074: Confused about usage of register: R64 in 'UnsetPending'
 
                                                           if slotNoMax ~= extendSlotNo then
                                                             (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2447,7 +2474,7 @@ extendedSlotInfoArray = {}
                                                       do
                                                         if 1 == equip.checkExtendedSlot then
                                                           local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                          -- DECOMPILER ERROR at PC3088: Confused about usage of register: R60 in 'UnsetPending'
+                                                          -- DECOMPILER ERROR at PC3109: Confused about usage of register: R60 in 'UnsetPending'
 
                                                           ;
                                                           (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2904,9 +2931,9 @@ extendedSlotInfoArray = {}
                                                                                                         else
                                                                                                           buffList = buffList .. " / " .. desc
                                                                                                         end
-                                                                                                        -- DECOMPILER ERROR at PC4409: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                        -- DECOMPILER ERROR at PC4430: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                        -- DECOMPILER ERROR at PC4409: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                        -- DECOMPILER ERROR at PC4430: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                       end
                                                                                                     end
@@ -2935,21 +2962,21 @@ extendedSlotInfoArray = {}
                                                                                                     ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                                     ;
                                                                                                     ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                    -- DECOMPILER ERROR at PC4500: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                    -- DECOMPILER ERROR at PC4521: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                   end
                                                                                                 end

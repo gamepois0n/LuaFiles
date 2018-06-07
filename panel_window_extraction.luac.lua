@@ -168,7 +168,7 @@ PaGlobal_Extraction.openPanel = function(self, isShow)
     if isShow == true then
       PaGlobalFunc_MainDialog_Close()
     else
-      PaGlobalFunc_MainDialog_Open()
+      PaGlobalFunc_MainDialog_ReOpen()
     end
   else
     Panel_Npc_Dialog:SetShow(not isShow)

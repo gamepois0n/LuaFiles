@@ -314,7 +314,7 @@ StableFunction_Close = function()
   end
   Servant_SceneClose(Panel_Window_StableFunction)
   if _ContentsGroup_RenewUI_Dailog == true then
-    FromClient_ShowMainDialog()
+    PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate()
   else
     Dialog_updateButtons(true)
   end

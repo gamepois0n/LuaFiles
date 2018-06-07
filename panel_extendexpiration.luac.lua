@@ -104,7 +104,9 @@ ExtendExpiration.Close = function(self)
   ;
   ((ExtendExpiration.ui).item):clearItem()
   Inventory_SetFunctor(nil, nil, nil, nil)
-  Equipment_SetShow(true)
+  if _ContentsGroup_RenewUI == false then
+    Equipment_SetShow(true)
+  end
 end
 
 ExtendExpiration_Inventory_Filter = function(slotNo, itemWrapper, currentWhereType)

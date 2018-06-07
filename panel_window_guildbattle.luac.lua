@@ -501,6 +501,11 @@ PaGlobal_GuildBattle.Join = function(self)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_CANNOT_GUILDBATTLE_SERVER"))
     return 
   end
+  local rv = ToClient_CheckToJoinBattle()
+  if rv ~= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoRestrictedToJoinBattle"))
+    return 
+  end
   ToClient_GuildBattle_JoinGuildBattle()
 end
 

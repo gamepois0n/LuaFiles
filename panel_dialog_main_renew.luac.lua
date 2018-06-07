@@ -168,8 +168,11 @@ Panel_Dialog_Main_Info.preclosePanel_OpenMainDialog = function(self)
   if Panel_Dialog_Search:IsShow() then
     searchView_Close()
   end
-  if Panel_GameExit:IsShow() then
+  if _ContentsGroup_RenewUI_ExitGame == false and Panel_GameExit:IsShow() then
     Panel_GameExit:SetShow(false)
+  end
+  if PaGlobalFunc_GameExit_GetShow() == true then
+    PaGlobalFunc_GameExit_SetShow(false, false)
   end
 end
 
@@ -195,8 +198,12 @@ Panel_Dialog_Main_Info.hideMainDialog = function(self, isSetWait)
   Panel_Window_Delivery_Information:SetShow(false)
   Panel_Window_Delivery_Request:SetShow(false)
   Panel_Dialogue_Itemtake:SetShow(false)
-  Panel_SkillReinforce:SetShow(false)
-  Panel_Window_ReinforceSkill:SetShow(false)
+  if _ContentsGroup_RenewUI_ReinforceSkill == true then
+    PaGlobalFunc_Dialog_SkillSpecialize_Close(false)
+  else
+    Panel_SkillReinforce:SetShow(false)
+    Panel_Window_ReinforceSkill:SetShow(false)
+  end
   Panel_Worker_Auction:SetShow(false)
   Panel_Window_WorkerRandomSelect:SetShow(false)
   randomSelectHide()
@@ -211,7 +218,7 @@ Panel_Dialog_Main_Info.hideMainDialog = function(self, isSetWait)
     HandleMLUp_SkillWindow_Close()
   end
   click_DeliveryForPerson_Close()
-  NpcShop_WindowClose()
+  PaGlobalFunc_Dialog_NPCShop_Close()
   FGlobal_NodeWarMenuClose()
   if isMonsterBarShow then
     Panel_Monster_Bar:SetShow(true, false)
@@ -321,44 +328,53 @@ PaGlobalFunc_MainDialog_Close = function(showAni)
   Panel_Dialog_Main_Info:close(showAni)
 end
 
+PaGlobalFunc_MainDialog_ReOpen = function(showAni)
+  -- function num : 0_21 , upvalues : Panel_Dialog_Main_Info
+  Panel_Dialog_Main_Info:open(showAni)
+  PaGlobalFunc_MainDialog_Bottom_OpenEndHide()
+  PaGlobalFunc_MainDialog_Right_ReOpen()
+end
+
 PaGlobalFunc_MainDialog_GetShow = function()
-  -- function num : 0_21
+  -- function num : 0_22
   return Panel_Dialog_Main:GetShow()
 end
 
 PaGlobalFunc_MainDialog_IsShow = function()
-  -- function num : 0_22
+  -- function num : 0_23
   return Panel_Dialog_Main:IsShow()
 end
 
 PaGlobalFunc_MainDialog_IsUse = function()
-  -- function num : 0_23
+  -- function num : 0_24
   return Panel_Dialog_Main:IsUse()
 end
 
 PaGlobalFunc_MainDialog_Update = function()
-  -- function num : 0_24 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:update()
 end
 
 PaGlobalFunc_MainDialog_CloseIniteValues = function()
-  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   PaGlobalFunc_MainDialog_Bottom_InitValue()
   PaGlobalFunc_MainDialog_Quest_IsFirstReset()
-  -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._value).dialogShowCheck_Once = false
+  PaGlobalFunc_MainDialog_Right_InitValue()
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
+  (self._value).dialogShowCheck_Once = false
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
   (self._value).isAuctionDialog = false
+  PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
 end
 
 PaGlobalFunc_MainDialog_MainDialogShowAni = function()
-  -- function num : 0_26
+  -- function num : 0_27
   audioPostEvent_SystemUi(1, 19)
   ;
   (UIAni.fadeInSCR_Up)(Panel_Dialog_Main)
@@ -366,7 +382,7 @@ PaGlobalFunc_MainDialog_MainDialogShowAni = function()
 end
 
 PaGlobalFunc_MainDialog_MainDialogHideAni = function()
-  -- function num : 0_27
+  -- function num : 0_28
   audioPostEvent_SystemUi(1, 20)
   Panel_Dialog_Main:ResetVertexAni()
   Panel_Dialog_Main:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
@@ -381,23 +397,22 @@ PaGlobalFunc_MainDialog_MainDialogHideAni = function()
 end
 
 PaGlobalFunc_MainDialog_setIgnoreShowDialog = function(value)
-  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:setIgnoreShowDialog()
 end
 
 PaGlobalFunc_MainDialog_proRenderModeSet = function()
-  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._value).dialogShowCheck_Once = true
-  _PA_LOG("mingu", "dialogShowCheck_Once set")
 end
 
 PaGlobalFunc_MainDialog_RenderMode_DialogListClose = function()
-  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
   self:Open()
@@ -405,7 +420,7 @@ PaGlobalFunc_MainDialog_RenderMode_DialogListClose = function()
 end
 
 PaGlobalFunc_MainDialog_Hide = function()
-  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_32 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   if Panel_Win_System:GetShow() then
     return 
@@ -438,7 +453,7 @@ PaGlobalFunc_MainDialog_Hide = function()
 end
 
 PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
-  -- function num : 0_32
+  -- function num : 0_33
   if (getCustomizingManager()):isShow() then
     HandleClicked_CloseIngameCustomization()
     return true
@@ -450,6 +465,9 @@ PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
   if Panel_Window_StableFunction:IsShow() then
     StableFunction_Close()
     return true
+  end
+  if _ContentsGroup_RenewUI_Repair == true and PaGlobalFunc_RepairInfo_IsOpened() then
+    PaGlobalFunc_RepairInfo_Close()
   end
   if Panel_FixEquip:GetShow() then
     handleMClickedRepairExitButton()
@@ -511,34 +529,34 @@ PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
 end
 
 PaGlobalFunc_Dialog_Main_SetRenderModeList = function(renderModeList)
-  -- function num : 0_33
+  -- function num : 0_34
   PaGlobal_Dialog_Main_renderMode:setRenderMode(renderModeList)
 end
 
 PaGlobalFunc_Dialog_Main_SetRenderMode = function()
-  -- function num : 0_34
+  -- function num : 0_35
   PaGlobal_Dialog_Main_renderMode:set()
 end
 
 PaGlobalFunc_Dialog_Main_ResetRenderMode = function()
-  -- function num : 0_35
+  -- function num : 0_36
   PaGlobal_Dialog_Main_renderMode:reset()
 end
 
 PaGlobalFunc_Dialog_Main_CloseNpcTalk = function(isSetWait)
-  -- function num : 0_36 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_37 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:closeNpcTalk(isSetWait)
 end
 
 getAuctionState = function()
-  -- function num : 0_37 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_38 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   return (self._value).isAuctionDialog
 end
 
 PaGlobalFunc_Dialog_Main_SetisAuctionDialog = function(value)
-  -- function num : 0_38 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_39 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -547,20 +565,20 @@ PaGlobalFunc_Dialog_Main_SetisAuctionDialog = function(value)
 end
 
 FromClient_InitMainDialog = function()
-  -- function num : 0_39 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_40 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog = function()
-  -- function num : 0_40 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:Resize()
 end
 
 FromClient_ShowMainDialog = function()
-  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   PaGlobal_TutorialManager:handleBeforeShowDialog()
   FGlobal_RemoteControl_Hide()
@@ -569,52 +587,60 @@ FromClient_ShowMainDialog = function()
     ToClient_SaveUiInfo(false)
   end
   self:preclosePanel_OpenMainDialog()
-  local isShow = Panel_GameExit:IsShow()
-  if isShow == true then
-    Panel_GameExit:SetShow(false)
-  end
-  if (self._value).ignoreShowDialog == true then
-    return 
-  end
-  if GetUIMode() ~= (Defines.UIMode).eUIMode_Default and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog_Dummy and GetUIMode() ~= (Defines.UIMode).eUIMode_ItemMarket then
-    ToClient_PopDialogueFlush()
-    return 
-  end
-  local dialogData = ToClient_GetCurrentDialogData()
-  if dialogData == nil then
-    ToClient_PopDialogueFlush()
-    return 
-  end
-  if not isFullSizeModeAble((FullSizeMode.fullSizeModeEnum).Dialog) then
-    ToClient_PopDialogueFlush()
-    return 
+  if _ContentsGroup_RenewUI_ExitGame == false then
+    local isShow = Panel_GameExit:IsShow()
+    if isShow == true then
+      Panel_GameExit:SetShow(false)
+    end
   else
-    setFullSizeMode(true, (FullSizeMode.fullSizeModeEnum).Dialog)
-  end
-  SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
-  Panel_Tooltip_Item_hideTooltip()
-  Panel_SkillTooltip_Hide()
-  FGlobal_BuffTooltipOff()
-  Interaction_Close()
-  PaGlobal_Dialog_Main_renderMode:set()
-  setShowLine(false)
-  PaGlobalAppliedBuffList:hide()
-  if Panel_Window_Exchange:GetShow() then
-    ExchangePC_MessageBox_ResponseCancel()
-  end
-  setShowNpcDialog(true)
-  -- DECOMPILER ERROR at PC119: Confused about usage of register: R3 in 'UnsetPending'
+    do
+      if PaGlobalFunc_GameExit_GetShow() == true then
+        PaGlobalFunc_GameExit_SetShow(false, false)
+      end
+      if (self._value).ignoreShowDialog == true then
+        return 
+      end
+      if GetUIMode() ~= (Defines.UIMode).eUIMode_Default and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog_Dummy and GetUIMode() ~= (Defines.UIMode).eUIMode_ItemMarket then
+        ToClient_PopDialogueFlush()
+        return 
+      end
+      local dialogData = ToClient_GetCurrentDialogData()
+      if dialogData == nil then
+        ToClient_PopDialogueFlush()
+        return 
+      end
+      if not isFullSizeModeAble((FullSizeMode.fullSizeModeEnum).Dialog) then
+        ToClient_PopDialogueFlush()
+        return 
+      else
+        setFullSizeMode(true, (FullSizeMode.fullSizeModeEnum).Dialog)
+      end
+      SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
+      Panel_Tooltip_Item_hideTooltip()
+      Panel_SkillTooltip_Hide()
+      FGlobal_BuffTooltipOff()
+      Interaction_Close()
+      PaGlobal_Dialog_Main_renderMode:set()
+      setShowLine(false)
+      PaGlobalAppliedBuffList:hide()
+      if Panel_Window_Exchange:GetShow() then
+        ExchangePC_MessageBox_ResponseCancel()
+      end
+      setShowNpcDialog(true)
+      -- DECOMPILER ERROR at PC131: Confused about usage of register: R2 in 'UnsetPending'
 
-  ;
-  (self._value).isFirstShowTooltip = true
-  self:update()
-  Panel_Dialog_Main:SetShow(true, true)
-  Panel_MovieTheater_LowLevel_WindowClose()
-  PaGlobal_TutorialManager:handleShowDialog(dialogData)
+      ;
+      (self._value).isFirstShowTooltip = true
+      self:update()
+      self:open(true)
+      Panel_MovieTheater_LowLevel_WindowClose()
+      PaGlobal_TutorialManager:handleShowDialog(dialogData)
+    end
+  end
 end
 
 FromClient_ExitMainDialog = function(isSetWait)
-  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_43 , upvalues : Panel_Dialog_Main_Info
   QuickSlot_UpdateData()
   FGlobal_QuestWidget_CalcScrollButtonSize()
   FGlobal_QuestWidget_UpdateList()
@@ -631,29 +657,29 @@ FromClient_ExitMainDialog = function(isSetWait)
 end
 
 FromClient_MainDialog_CloseDialog = function()
-  -- function num : 0_43
+  -- function num : 0_44
   PaGlobalFunc_MainDialog_Hide()
 end
 
 FromClient_VaryIntimacy_Dialog = function()
-  -- function num : 0_44
+  -- function num : 0_45
   if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() then
     PaGlobalFunc_MainDialog_Quest_Update()
   end
 end
 
 FromClient_CloseMainDialogByAttacked = function()
-  -- function num : 0_45
+  -- function num : 0_46
   PaGlobal_Dialog_Main_renderMode:reset()
 end
 
 FromClient_CloseMainDialogForDetail = function()
-  -- function num : 0_46
+  -- function num : 0_47
   PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
 end
 
 FromClient_CloseAllPanelWhenNpcGoHome = function()
-  -- function num : 0_47
+  -- function num : 0_48
   if GetUIMode() == (Defines.UIMode).eUIMode_Stable then
     StableFunction_Close()
   end
@@ -664,7 +690,11 @@ FromClient_CloseAllPanelWhenNpcGoHome = function()
     closeNpcTrade_Basket()
   end
   if GetUIMode() == (Defines.UIMode).eUIMode_Repair then
-    PaGlobal_Repair:repair_OpenPanel(false)
+    if _ContentsGroup_RenewUI_Repair == true then
+      PaGlobalFunc_RepairInfo_Close()
+    else
+      PaGlobal_Repair:repair_OpenPanel(false)
+    end
   end
   if GetUIMode() == (Defines.UIMode).eUIMode_Extraction then
     PaGlobal_Extraction:openPanel(false)

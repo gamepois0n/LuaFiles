@@ -291,20 +291,10 @@ StableOpen_FromWorldMap = function(waypointKey)
   -- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
 
   nodeStableList._nodeServantCount = stable_countFromWaypointKey(nodeStableList._nodeWaypointKey)
-  if isWorldMapGrandOpen() then
-    Panel_NodeStable:SetPosX(getScreenSizeX() - Panel_NodeStable:GetSizeX() - 10)
-    Panel_NodeStable:SetPosY((getScreenSizeY() - Panel_NodeStable:GetSizeY()) / 2)
-    Panel_NodeStableInfo:SetPosX(Panel_NodeStable:GetPosX() - Panel_NodeStableInfo:GetSizeX() - 5)
-    Panel_NodeStableInfo:SetPosY(Panel_NodeStable:GetPosY())
-  else
-    if Panel_NodeOwnerInfo:GetShow() then
-      Panel_NodeStable:SetPosX(Panel_NodeOwnerInfo:GetPosX() + Panel_NodeOwnerInfo:GetSizeX() + 10)
-      Panel_NodeStableInfo:SetPosX(Panel_NodeStable:GetPosX() + Panel_NodeStable:GetSizeX())
-    else
-      Panel_NodeStable:SetPosX(240)
-      Panel_NodeStableInfo:SetPosX(413)
-    end
-  end
+  Panel_NodeStable:SetPosX(getScreenSizeX() - Panel_NodeStable:GetSizeX() - 10)
+  Panel_NodeStable:SetPosY((getScreenSizeY() - Panel_NodeStable:GetSizeY()) / 2)
+  Panel_NodeStableInfo:SetPosX(Panel_NodeStable:GetPosX() - Panel_NodeStableInfo:GetSizeX() - 5)
+  Panel_NodeStableInfo:SetPosY(Panel_NodeStable:GetPosY())
   if nodeStableList._nodeServantCount <= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_STABLE_NOTHAVEVIHICLE"))
     return 

@@ -4025,10 +4025,10 @@ end
   if Panel_QnAWebLink:GetShow() then
     FGlobal_QnAWebLink_Close()
   end
-  if Panel_Window_Inventory:GetShow() then
+  if Panel_Window_Inventory:GetShow() and _ContentsGroup_RenewUI == false then
     InventoryWindow_Close()
     Inventory_SetFunctor(nil, nil, nil, nil)
-    if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then
+    if Panel_Equipment:GetShow() then
       EquipmentWindow_Close()
     end
   end

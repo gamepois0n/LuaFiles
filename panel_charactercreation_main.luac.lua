@@ -453,41 +453,45 @@ end
       CopyBaseProperty(Static_Small_Point, (mainButtonInfo[idx]).smallPoint)
       CopyBaseProperty(staticMainImage[idx], (mainButtonInfo[idx]).static)
       CopyBaseProperty(StaticText_Main, (mainButtonInfo[idx]).staticText)
-      ;
-      ((mainButtonInfo[idx]).button):addInputEvent("Mouse_On", "overMainButton(" .. idx .. ")")
-      ;
-      ((mainButtonInfo[idx]).button):SetShow(true)
-      ;
-      ((mainButtonInfo[idx]).line):SetShow(true)
-      ;
-      ((mainButtonInfo[idx]).point):SetShow(true)
-      ;
-      ((mainButtonInfo[idx]).smallPoint):SetShow(true)
-      ;
-      ((mainButtonInfo[idx]).staticText):SetText(mainText[idx])
-      ;
-      ((mainButtonInfo[idx]).staticText):SetShow(true)
-      if idx == 2 then
-        createCustomizationGroup(mainButtonInfo[idx])
-      else
-        if idx == 1 then
-          createWeatherGroup(mainButtonInfo[idx])
+      if _ContentsGroup_isConsolePadControl == false then
+        ((mainButtonInfo[idx]).button):addInputEvent("Mouse_On", "overMainButton(" .. idx .. ")")
+        ;
+        ((mainButtonInfo[idx]).button):SetShow(true)
+        ;
+        ((mainButtonInfo[idx]).line):SetShow(true)
+        ;
+        ((mainButtonInfo[idx]).point):SetShow(true)
+        ;
+        ((mainButtonInfo[idx]).smallPoint):SetShow(true)
+        ;
+        ((mainButtonInfo[idx]).staticText):SetText(mainText[idx])
+        ;
+        ((mainButtonInfo[idx]).staticText):SetShow(true)
+        if idx == 2 then
+          createCustomizationGroup(mainButtonInfo[idx])
         else
-          if idx == 4 then
-            createPoseGroup(mainButtonInfo[idx])
+          if idx == 1 then
+            createWeatherGroup(mainButtonInfo[idx])
           else
+            if idx == 4 then
+              createPoseGroup(mainButtonInfo[idx])
+            else
+            end
           end
         end
-      end
-      if idx ~= 3 or idx == 5 then
-        createZodiacGroup(mainButtonInfo[idx])
-      end
-      ;
-      ((mainButtonInfo[idx]).tree):collapseAll()
-      -- DECOMPILER ERROR at PC210: Confused about usage of register: R4 in 'UnsetPending'
+        if idx ~= 3 or idx == 5 then
+          createZodiacGroup(mainButtonInfo[idx])
+        end
+        ;
+        ((mainButtonInfo[idx]).tree):collapseAll()
+        -- DECOMPILER ERROR at PC213: Confused about usage of register: R4 in 'UnsetPending'
 
-      ;
-      (mainButtonInfo[idx]).isOpen = false
+        ;
+        (mainButtonInfo[idx]).isOpen = false
+      end
+      if _ContentsGroup_isConsolePadControl then
+        ((mainButtonInfo[idx]).static):SetShow(false)
+      end
     end
     ;
     (staticMainImage[idx]):SetShow(false)
@@ -1033,12 +1037,33 @@ end
 end
 
         showAllUI = function(show)
-  -- function num : 0_38 , upvalues : CheckButton_ToggleUi, InGameMode
+  -- function num : 0_38 , upvalues : CheckButton_ToggleUi, InGameMode, Button_ScreenShot, Button_ScreenShotFolder, Button_ScreenShotFolder_Title, StaticText_CustomizationMessage, staticMainImage, StaticText_AuthorName, StaticText_AuthorTitle, StaticText_CustomizationInfo, Button_SaveHistory, btn_RandomBeauty, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization, Button_CustomizingAlbum
   CheckButton_ToggleUi:SetCheck(show)
   ToggleUi()
   showStaticUI(show)
   if not InGameMode then
     SelectZodiac(getRandomValue(0, getZodiacCount() - 1))
+  end
+  if _ContentsGroup_isConsolePadControl then
+    showStaticUI(false)
+    CheckButton_ToggleUi:SetShow(false)
+    Button_ScreenShot:SetShow(false)
+    Button_ScreenShotFolder:SetShow(false)
+    Button_ScreenShotFolder_Title:SetShow(false)
+    historyTableSetShow(false)
+    StaticText_CustomizationMessage:SetShow(false)
+    for ii = 1, 5 do
+      (staticMainImage[ii]):SetShow(false)
+    end
+    StaticText_AuthorName:SetShow(false)
+    StaticText_AuthorTitle:SetShow(false)
+    StaticText_CustomizationInfo:SetShow(false)
+    Button_SaveHistory:SetShow(false)
+    btn_RandomBeauty:SetShow(false)
+    Button_SaveCustomization:SetShow(false)
+    Button_LoadCustomization:SetShow(false)
+    Button_ApplyDefaultCustomization:SetShow(false)
+    Button_CustomizingAlbum:SetShow(false)
   end
 end
 
@@ -1273,37 +1298,42 @@ end
 
         CreateHistoryButton = function()
   -- function num : 0_50 , upvalues : historyButtons, Button_SaveHistory, RadioButton_HistoryTemp
-  for _,v in pairs(historyButtons) do
-    v:SetShow(false)
-    ;
-    (UI.deleteControl)(v)
-  end
-  historyButtons = {}
-  local count = getHistoryCount()
-  for index = 0, 9 do
-    local tempButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_CustomizationMain, "BT_HISTORY_" .. index)
-    local PosX = Button_SaveHistory:GetPosX()
-    local PosY = Button_SaveHistory:GetPosY()
-    CopyBaseProperty(RadioButton_HistoryTemp, tempButton)
-    tempButton:SetPosX(PosX + Button_SaveHistory:GetSizeX() + 10 + (tempButton:GetSizeX() + 2) * index)
-    tempButton:SetPosY(PosY)
-    tempButton:SetShow(true)
-    if index < count then
-      tempButton:addInputEvent("Mouse_LUp", "HandleClicked_ApplyHistory(" .. index .. ")")
-    else
-      local x1, y1, x2, y2 = setTextureUV_Func(tempButton, 124, 1, 153, 30)
+  if _ContentsGroup_isConsolePadControl == false then
+    for _,v in pairs(historyButtons) do
+      v:SetShow(false)
       ;
-      (tempButton:getBaseTexture()):setUV(x1, y1, x2, y2)
-      tempButton:setRenderTexture(tempButton:getBaseTexture())
-      tempButton:SetIgnore(true)
+      (UI.deleteControl)(v)
     end
-    do
+    historyButtons = {}
+    local count = getHistoryCount()
+    for index = 0, 9 do
+      local tempButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_CustomizationMain, "BT_HISTORY_" .. index)
+      local PosX = Button_SaveHistory:GetPosX()
+      local PosY = Button_SaveHistory:GetPosY()
+      CopyBaseProperty(RadioButton_HistoryTemp, tempButton)
+      tempButton:SetPosX(PosX + Button_SaveHistory:GetSizeX() + 10 + (tempButton:GetSizeX() + 2) * index)
+      tempButton:SetPosY(PosY)
+      tempButton:SetShow(true)
+      if _ContentsGroup_isConsolePadControl then
+        tempButton:SetShow(false)
+      end
+      if index < count then
+        tempButton:addInputEvent("Mouse_LUp", "HandleClicked_ApplyHistory(" .. index .. ")")
+      else
+        local x1, y1, x2, y2 = setTextureUV_Func(tempButton, 124, 1, 153, 30)
+        ;
+        (tempButton:getBaseTexture()):setUV(x1, y1, x2, y2)
+        tempButton:setRenderTexture(tempButton:getBaseTexture())
+        tempButton:SetIgnore(true)
+      end
       do
-        -- DECOMPILER ERROR at PC93: Confused about usage of register: R8 in 'UnsetPending'
+        do
+          -- DECOMPILER ERROR at PC102: Confused about usage of register: R8 in 'UnsetPending'
 
-        historyButtons[index + 1] = tempButton
-        -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out DO_STMT
+          historyButtons[index + 1] = tempButton
+          -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out DO_STMT
 
+        end
       end
     end
   end

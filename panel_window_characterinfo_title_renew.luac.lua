@@ -9,7 +9,7 @@ local CharacterTitleInfo = {
 _ui = {stc_GraphBg = (UI.getChildControl)(_panel, "Static_Graph_BG"), stc_TitleTapBg = (UI.getChildControl)(_panel, "Static_Title_Tap"), list_TitleList = (UI.getChildControl)(_panel, "List2_Title_List"), stc_TotalInfoBg = (UI.getChildControl)(_panel, "Static_Total_Progress_BG"), 
 radiobutton_Category = {}
 }
-, _currentCategoryCount = 0, _currentCategoryIdx = 0, _currentClickTitleIdx = -1, defaultFrameBG_CharacterInfo_Title = nil, _isSelectedTitle = false}
+, _currentCategoryCount = 0, _currentCategoryIdx = 0, _currentClickTitleIdx = -1, defaultFrameBG_CharacterInfo_Title = nil, _isSelectedTitle = false, _currentTitleListType = 0, _maxTitleListType = 4, _previousTitleListType = nil}
 CharacterTitleInfo.init = function(self)
   -- function num : 0_0 , upvalues : CharacterTitleInfo
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
@@ -69,7 +69,7 @@ CharacterTitleInfo.init = function(self)
   ;
   ((self._ui).radiobutton_Category)[3] = (UI.getChildControl)((self._ui).stc_TitleTapBg, "RadioButton_Fish")
   for ii = 0, 3 do
-    (((self._ui).radiobutton_Category)[ii]):addInputEvent("Mouse_LUp", "InputMLUp_ChangeCategory(" .. ii .. " )")
+    (((self._ui).radiobutton_Category)[ii]):addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TapToOpen(" .. ii .. " )")
   end
   -- DECOMPILER ERROR at PC140: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -78,20 +78,24 @@ CharacterTitleInfo.init = function(self)
   -- DECOMPILER ERROR at PC148: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).stc_LTButton = (UI.getChildControl)((self._ui).stc_TitleTapBg, "Static_LT")
-  -- DECOMPILER ERROR at PC156: Confused about usage of register: R1 in 'UnsetPending'
+  (self._ui).stc_LTButton = (UI.getChildControl)((self._ui).stc_TitleTapBg, "Static_LT_ConsoleUI")
+  ;
+  ((self._ui).stc_LTButton):addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterTitleInfo_ShowLeftNextTab()")
+  -- DECOMPILER ERROR at PC162: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).stc_RTButton = (UI.getChildControl)((self._ui).stc_TitleTapBg, "Static_RT")
-  -- DECOMPILER ERROR at PC164: Confused about usage of register: R1 in 'UnsetPending'
+  (self._ui).stc_RTButton = (UI.getChildControl)((self._ui).stc_TitleTapBg, "Static_RT_ConsoleUI")
+  ;
+  ((self._ui).stc_RTButton):addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterTitleInfo_ShowRightNextTab()")
+  -- DECOMPILER ERROR at PC176: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Total_Progress = (UI.getChildControl)((self._ui).stc_TotalInfoBg, "StaticText_Progress")
-  -- DECOMPILER ERROR at PC172: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC184: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Total_Percent = (UI.getChildControl)((self._ui).stc_TotalInfoBg, "Progress2_Percent")
-  -- DECOMPILER ERROR at PC180: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC192: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Reward = (UI.getChildControl)((self._ui).stc_TotalInfoBg, "StaticText_Reward")
@@ -121,6 +125,7 @@ end
 
 CharacterTitleInfo.titleListCheck = function(self, categoryIdx)
   -- function num : 0_2
+  self._currentTitleListType = categoryIdx
   self._currentCategoryCount = ToClient_GetCategoryTitleCount(categoryIdx)
   self._currentCategoryIdx = categoryIdx
   local _fontColor = {selected = (Defines.Color).C_FFEEEEEE, defalut = (Defines.Color).C_FFC4BEBE}
@@ -130,7 +135,7 @@ CharacterTitleInfo.titleListCheck = function(self, categoryIdx)
   end
   ;
   (((self._ui).radiobutton_Category)[categoryIdx]):SetFontColor(_fontColor.selected)
-  FromClient_Character_TitleInfo_Update()
+  FromClient_CharacterTitleInfo_Update()
 end
 
 CharacterInfo_TitleList_ControlCreate = function(content, key)
@@ -142,51 +147,48 @@ CharacterInfo_TitleList_ControlCreate = function(content, key)
     return 
   end
   local titleBG = (UI.getChildControl)(content, "RadioButton_Select_Title_Template")
-  titleBG:setNotImpactScrollEvent(true)
   local titleName = (UI.getChildControl)(content, "StaticText_Title_Name_Template")
   local titleSet = (UI.getChildControl)(content, "StaticText_Status_Template")
   local radioButton_NA = (UI.getChildControl)(content, "RadioButton_NA_Template")
   radioButton_NA:SetIgnore(true)
-  do
-    local stc_Selected = (UI.getChildControl)(content, "Static_Selected")
-    titleName:SetText(titleWrapper:getName())
-    if titleWrapper:isAcquired() == true then
-      titleBG:SetIgnore(false)
-      titleBG:addInputEvent("Mouse_On", "InputMOn_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-      titleBG:addInputEvent("Mouse_Out", "InputMOut_CloseDescription()")
-      titleBG:SetCheck(self._currentClickTitleIdx == titleIndex)
-      titleName:SetShow(true)
-      titleSet:SetShow(true)
-      titleBG:addInputEvent("Mouse_LUp", "InputMLUp_TitleSet(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-      radioButton_NA:SetShow(false)
-      if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
-        titleSet:SetText(PAGetString(Defines.StringSheet_GAME, ""))
-        stc_Selected:SetShow(true)
-      else
-        titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
-        stc_Selected:SetShow(false)
-      end
+  local stc_Selected = (UI.getChildControl)(content, "Static_Selected")
+  titleName:SetText(titleWrapper:getName())
+  if titleWrapper:isAcquired() == true then
+    titleBG:SetIgnore(false)
+    titleBG:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
+    titleBG:addInputEvent("Mouse_Out", "InputMOut_CharacterTitleInfo_CloseDescription()")
+    titleBG:SetUnchecked()
+    titleName:SetShow(true)
+    titleSet:SetShow(true)
+    titleBG:addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TitleSet(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
+    radioButton_NA:SetShow(false)
+    if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, ""))
+      stc_Selected:SetShow(true)
     else
-      titleBG:SetIgnore(true)
-      titleName:SetShow(true)
-      radioButton_NA:SetIgnore(false)
-      radioButton_NA:addInputEvent("Mouse_On", "InputMOn_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-      radioButton_NA:addInputEvent("Mouse_Out", "InputMOut_CloseDescription()")
-      titleSet:SetShow(false)
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
       stc_Selected:SetShow(false)
-      radioButton_NA:SetShow(true)
     end
-    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  else
+    titleBG:SetIgnore(true)
+    titleName:SetShow(true)
+    radioButton_NA:SetIgnore(false)
+    radioButton_NA:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
+    radioButton_NA:addInputEvent("Mouse_Out", "InputMOut_CharacterTitleInfo_CloseDescription()")
+    titleBG:SetUnchecked()
+    titleSet:SetShow(false)
+    stc_Selected:SetShow(false)
+    radioButton_NA:SetShow(true)
   end
 end
 
-InputMLUp_ChangeCategory = function(categoryIdx)
+InputMLUp_CharacterTitleInfo_TapToOpen = function(categoryIdx)
   -- function num : 0_4 , upvalues : CharacterTitleInfo
   local self = CharacterTitleInfo
   self:titleListCheck(categoryIdx)
 end
 
-InputMOn_ShowDescription = function(categoryIdx, titleIdx)
+InputMOn_CharacterTitleInfo_ShowDescription = function(categoryIdx, titleIdx)
   -- function num : 0_5 , upvalues : CharacterTitleInfo
   local self = CharacterTitleInfo
   ToClient_SetCurrentTitleCategory(categoryIdx)
@@ -197,7 +199,7 @@ InputMOn_ShowDescription = function(categoryIdx, titleIdx)
   ((self._ui).txt_Title_Name_Info):SetText(titleWrapper:getDescription())
 end
 
-InputMOut_CloseDescription = function()
+InputMOut_CharacterTitleInfo_CloseDescription = function()
   -- function num : 0_6 , upvalues : CharacterTitleInfo
   local self = CharacterTitleInfo
   ;
@@ -259,15 +261,24 @@ CharacterTitleInfo.titleInfoUpdate = function(self)
     if lastCount < 1 then
       return 
     end
-    ;
-    (((self._ui).list_TitleList):getElementManager()):clearKey()
-    for titleIndex = 0, lastCount - 1 do
-      (((self._ui).list_TitleList):getElementManager()):pushKey(toInt64(0, titleIndex))
+    if self._previousTitleListType == self._currentTitleListType then
+      for titleIndex = 0, lastCount - 1 do
+        ((self._ui).list_TitleList):requestUpdateByKey(toInt64(0, titleIndex))
+      end
+    else
+      do
+        self._previousTitleListType = self._currentTitleListType
+        ;
+        (((self._ui).list_TitleList):getElementManager()):clearKey()
+        for titleIndex = 0, lastCount - 1 do
+          (((self._ui).list_TitleList):getElementManager()):pushKey(toInt64(0, titleIndex))
+        end
+      end
     end
   end
 end
 
-InputMLUp_TitleSet = function(categoryIdx, titleIdx)
+InputMLUp_CharacterTitleInfo_TitleSet = function(categoryIdx, titleIdx)
   -- function num : 0_8 , upvalues : CharacterTitleInfo
   local self = CharacterTitleInfo
   ToClient_SetCurrentTitleCategory(categoryIdx)
@@ -280,10 +291,10 @@ end
 
 CharacterTitleInfo.registMessageHandler = function(self)
   -- function num : 0_9
-  registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_Character_TitleInfo_Update")
+  registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_CharacterTitleInfo_Update")
 end
 
-FromClient_Character_TitleInfo_Update = function()
+FromClient_CharacterTitleInfo_Update = function()
   -- function num : 0_10 , upvalues : CharacterTitleInfo, _mainPanel
   local self = CharacterTitleInfo
   if _mainPanel:IsShow() == false then
@@ -311,7 +322,6 @@ end
 FromClient_luaLoadComplete_Panel_Window_CharacterInfo_Title = function()
   -- function num : 0_12 , upvalues : CharacterTitleInfo, _panel
   local self = CharacterTitleInfo
-  _PA_LOG("원선", "칭호UI")
   self:init()
   self.defaultFrameBG_CharacterInfo_Title = (UI.getChildControl)(Panel_Window_CharacterInfo_Renew, "Static_TitleInfoBg")
   ;
@@ -329,6 +339,41 @@ CoolTimeCountdown_UpdatePerFrame = function(deltaTime)
   end
 end
 
+PaGlobalFunc_CharacterTitleInfo_ShowRightNextTab = function()
+  -- function num : 0_14 , upvalues : CharacterTitleInfo
+  local self = CharacterTitleInfo
+  self:ShowNextTab(false)
+end
+
+PaGlobalFunc_CharacterTitleInfo_ShowLeftNextTab = function()
+  -- function num : 0_15 , upvalues : CharacterTitleInfo
+  local self = CharacterTitleInfo
+  self:ShowNextTab(true)
+end
+
+CharacterTitleInfo.ShowNextTab = function(self, isLeft)
+  -- function num : 0_16
+  -- DECOMPILER ERROR at PC7: Unhandled construct in 'MakeBoolean' P1
+
+  if isLeft == true and self._currentTitleListType > 0 then
+    self._currentTitleListType = self._currentTitleListType - 1
+    self:titleListCheck(self._currentTitleListType)
+  end
+  if self._currentTitleListType < self._maxTitleListType - 1 then
+    self._currentTitleListType = self._currentTitleListType + 1
+    self:titleListCheck(self._currentTitleListType)
+  end
+end
+
+PaGlobalFunc_CharacterTitleInfoTab_PadControl = function(index)
+  -- function num : 0_17 , upvalues : CharacterTitleInfo
+  self = CharacterTitleInfo
+  if index == 0 then
+    self:ShowNextTab(true)
+  else
+    self:ShowNextTab(false)
+  end
+end
+
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Window_CharacterInfo_Title")
-registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_Character_TitleInfo_Update")
 

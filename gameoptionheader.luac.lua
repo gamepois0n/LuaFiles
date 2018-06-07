@@ -180,7 +180,7 @@ SelfPlayerOnlyLantern = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONT
 , 
 PresentLock = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ShowHpRular = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+ShowStackHp = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
 UseEffectFrameOptimization = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
@@ -639,6 +639,8 @@ end
   (ToClient_getFontWrapper("BaseFont_12_Bold")):changeCurrentFontSizeBeMore(addFontSize)
   ;
   (ToClient_getFontWrapper("BaseFont_12_Glow")):changeCurrentFontSizeBeMore(addFontSize)
+  ;
+  (ToClient_getFontWrapper("BaseFont_14_Bold")):changeCurrentFontSizeBeMore(addFontSize)
   ;
   (ToClient_getFontWrapper("SubTitleFont_14")):changeCurrentFontSizeBeMore(addFontSize)
   ;
@@ -1879,10 +1881,11 @@ end
 -- DECOMPILER ERROR at PC2522: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).ShowHpRular = function(value)
+(PaGlobal_Option._functions).ShowStackHp = function(value)
   -- function num : 0_142
-  GameOptionApply_CharacterNameTag_Ruler(value)
-  setShowHpRular(value)
+  if _ContentsGroup_StackingHpBar == true then
+    setShowStackHp(GameOptionApply_CharacterNameTag_StackHpBar(value))
+  end
 end
 
 ConsolePadType = function(value)

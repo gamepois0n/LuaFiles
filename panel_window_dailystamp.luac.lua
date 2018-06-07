@@ -1533,8 +1533,13 @@ FGlobal_DailyStamp_ShowCheck = function()
   end
 end
 
+FGlobal_DailyStamp_GetDailyStampKeys = function()
+  -- function num : 0_32 , upvalues : dailyStampKeys
+  return dailyStampKeys
+end
+
 DailyStamp_SetAnimation = function(tabIndex, dayIndex)
-  -- function num : 0_32 , upvalues : dailyStamp
+  -- function num : 0_33 , upvalues : dailyStamp
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
   dailyStamp.animationTabIndex = tabIndex
@@ -1551,7 +1556,7 @@ DailyStamp_SetAnimation = function(tabIndex, dayIndex)
 end
 
 DailStamp_StampAnimation = function(deltaTime)
-  -- function num : 0_33 , upvalues : dailyStamp
+  -- function num : 0_34 , upvalues : dailyStamp
   local self = dailyStamp
   self.animationTime = self.animationTime + deltaTime
   if self.tapIndex == self.animationTabIndex and self.animationTime > 0.3 and self.animationTime < 1 then

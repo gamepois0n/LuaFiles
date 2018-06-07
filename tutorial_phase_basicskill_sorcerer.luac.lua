@@ -112,7 +112,7 @@ PaGlobal_TutorialPhase_BasicSkill_Sorcerer.startPhaseXXX = function(self, stepNo
     Panel_TimeBar:SetShow(true, false)
     FGlobal_NewQuickSlot_Update()
     QuickSlot_UpdateData()
-    Panel_UIMain:SetShow(true, true)
+    Panel_UIMain:SetShow(not _ContentsGroup_RenewUI_Main, true)
     Panel_SelfPlayerExpGage:SetShow(true, false)
     FGlobal_Panel_MainStatus_User_Bar_Show()
     FGlobal_ClassResource_SetShowControl(true)

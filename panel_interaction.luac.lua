@@ -185,9 +185,10 @@ local isTargetNpc = false
 local interactionShowableCheck = function(actor)
   -- function num : 0_8
   if actor == nil then
-    return 
+    return false
+  else
+    return interaction_showableCheck(actor:get())
   end
-  return true
 end
 
 local interactionTutorial = true
@@ -264,6 +265,9 @@ Interaction_Show = function(actor)
   basicInteractionType = firstInteractionType
   focusInteractionType = firstInteractionType
   if DESC_TEXT[firstInteractionType] == nil then
+    return 
+  end
+  if ToClient_isXBox() and (actor:get()):isHouseHold() then
     return 
   end
   local houseShow = false
@@ -363,17 +367,17 @@ Interaction_Show = function(actor)
                 end
                 do
                   do
-                    -- DECOMPILER ERROR at PC323: Confused about usage of register: R13 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC334: Confused about usage of register: R13 in 'UnsetPending'
 
                     linkButtonAction[SHOW_BUTTON_COUNT] = ii
                     SHOW_BUTTON_COUNT = SHOW_BUTTON_COUNT + 1
-                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC338: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC338: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC338: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC338: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -613,12 +617,16 @@ Interaction_ButtonPushed = function(interactionType)
               if actor == nil then
                 return 
               else
-                local targetCharacterName = actor:getOriginalName()
-                PaGlobal_PvPBattle:notifyRequest(targetCharacterName)
+                if ToClient_doExistWorldBossMonster() == true then
+                  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoPVPMatchCantBossMonster"))
+                else
+                  local targetCharacterName = actor:getOriginalName()
+                  PaGlobal_PvPBattle:notifyRequest(targetCharacterName)
+                end
               end
             else
               do
-                -- DECOMPILER ERROR at PC106: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC118: Unhandled construct in 'MakeBoolean' P1
 
                 if (CppEnums.InteractionType).InteractionType_InstallationMode == interactionType and getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode then
                   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOT_ENTER_HOUSINGMODE_CHATMODE"))
@@ -1142,17 +1150,25 @@ end
 
 local currentInteractionSelectIndex = 0
 local currentInteractionKeyPressedTime = 0
+local xboxInteractionAvailable = false
 FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox = function(deltaTime)
-  -- function num : 0_45 , upvalues : currentInteractionKeyPressedTime, currentInteractionSelectIndex
+  -- function num : 0_45 , upvalues : currentInteractionKeyPressedTime, xboxInteractionAvailable, currentInteractionSelectIndex
   FGlobal_Interaction_UpdatePressedInteractionKey(currentInteractionKeyPressedTime)
   if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
     currentInteractionKeyPressedTime = 0
+    xboxInteractionAvailable = true
   else
     if keyCustom_IsPressed_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
       currentInteractionKeyPressedTime = currentInteractionKeyPressedTime + deltaTime
       if currentInteractionKeyPressedTime > 0.5 then
+        if xboxInteractionAvailable == false then
+          return nil
+        end
+        xboxInteractionAvailable = false
         local keyCodeTable = {[0] = (CppEnums.ActionInputType).ActionInputType_Interaction, [1] = (CppEnums.UiInputType).UiInputType_Interaction_1, [2] = (CppEnums.UiInputType).UiInputType_Interaction_2, [3] = (CppEnums.UiInputType).UiInputType_Interaction_3, [4] = (CppEnums.UiInputType).UiInputType_Interaction_4, [5] = (CppEnums.UiInputType).UiInputType_Interaction_5, [6] = (CppEnums.VirtualKeyCode).KeyCode_F10}
-        return keyCodeTable[currentInteractionSelectIndex]
+        local keycode = keyCodeTable[currentInteractionSelectIndex]
+        FGlobal_Interaction_ClearSelectIndex()
+        return keycode
       end
     else
       do
@@ -1161,6 +1177,7 @@ FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox = function(deltaTime)
             FGlobal_Interaction_IncreaseSelectIndex()
           end
           currentInteractionKeyPressedTime = 0
+          xboxInteractionAvailable = false
         end
         return nil
       end
@@ -1257,18 +1274,22 @@ FGlobal_Interaction_IncreaseSelectIndex = function()
 end
 
 FGlobal_Interaction_ClearSelectIndex = function()
-  -- function num : 0_48 , upvalues : currentInteractionSelectIndex
+  -- function num : 0_48 , upvalues : currentInteractionSelectIndex, currentInteractionKeyPressedTime, xboxInteractionAvailable
   currentInteractionSelectIndex = 0
+  currentInteractionKeyPressedTime = 0
+  xboxInteractionAvailable = false
 end
 
 FGlobal_Interaction_UpdatePressedInteractionKey = function(time)
-  -- function num : 0_49 , upvalues : _circularProgressBarInteraction, _circularProgressBarStaticbgInteraction
-  if time * 200 > 0 then
+  -- function num : 0_49 , upvalues : xboxInteractionAvailable, _circularProgressBarInteraction, _circularProgressBarStaticbgInteraction, UI_NAME
+  if xboxInteractionAvailable then
     _circularProgressBarInteraction:SetShow(true)
     _circularProgressBarStaticbgInteraction:SetShow(true)
+    UI_NAME:SetShow(false)
   else
     _circularProgressBarInteraction:SetShow(false)
     _circularProgressBarStaticbgInteraction:SetShow(false)
+    UI_NAME:SetShow(true)
   end
   _circularProgressBarInteraction:SetProgressRate(time * 200)
 end

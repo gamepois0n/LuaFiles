@@ -133,6 +133,11 @@ end
 
 PaGlobal_PersonalBattle.open = function(self)
   -- function num : 0_1
+  local rv = ToClient_CheckToJoinBattle()
+  if rv ~= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoRestrictedToJoinBattle"))
+    return 
+  end
   audioPostEvent_SystemUi(1, 18)
   if ToClient_getJoinGuildBattle() == true then
     if ToClient_isPersonalBattle() == false then

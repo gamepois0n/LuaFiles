@@ -674,11 +674,9 @@ FGlobal_ShowInfoNodeMenuPanel = function(node)
     (NodeLevelGroup.Btn_NodeLev):SetTextSpan(btnNodeLevTextPosX, 5)
     FromClient_WorldMap_HouseNaviShow()
     FGlobal_SetNodeName(getExploreNodeName(nodeStaticStatus))
-    if isWorldMapGrandOpen() then
-      FGlobal_WorldMapGrand_NodeExplorePoint_Update()
-      FGlobal_WorldmapGrand_Main_UpdateExplorePoint()
-    end
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    FGlobal_WorldMapGrand_NodeExplorePoint_Update()
+    FGlobal_WorldmapGrand_Main_UpdateExplorePoint()
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
 

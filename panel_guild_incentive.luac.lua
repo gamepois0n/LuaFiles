@@ -18,6 +18,7 @@ local maxGuildList = 20
 local maxIncentiveGrade = 4
 local _guildList = {}
 local _selectedMemberIndex = 0
+local _isAllButton = {}
 local _selectSortType = -1
 local _listSort = {name = false}
 local tempGuildIncentive = {}
@@ -54,7 +55,7 @@ local _ySize = (Guild_Incentive._memberGrade):GetSizeY()
 local frameTextGap = 10
 local _memberCtrlCount = 0
 Guild_Incentive.ResetControl = function(self)
-  -- function num : 0_0 , upvalues : _guildMoney, _memberCtrlCount, maxGuildList, _scroll, _contentGuildList, _guildList, UCT, Guild_Incentive, _ySize, frameTextGap, maxIncentiveGrade, _frameGuildList
+  -- function num : 0_0 , upvalues : _guildMoney, _memberCtrlCount, maxGuildList, _scroll, _contentGuildList, _guildList, UCT, Guild_Incentive, _ySize, frameTextGap, maxIncentiveGrade, _frameGuildList, _isAllButton
   do
     local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
     if myGuildListInfo == nil then
@@ -208,6 +209,7 @@ Guild_Incentive.ResetControl = function(self)
     _frameGuildList:UpdateContentScroll()
     _scroll:SetControlTop()
     _frameGuildList:UpdateContentPos()
+    _isAllButton = {}
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
@@ -278,19 +280,34 @@ Guild_Incentive.UpdateData = function(self)
               local grade = ToClient_getGuildMemberIncentiveGrade(dataIdx)
               ;
               ((_guildList[index])._btn_IncentiveLevel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_GRADE_FOR_WHAT", "grade", tostring(grade)))
+              local incentive = ToClient_getGuildMemberIncentiveMoney_s64(dataIdx)
+              ;
+              ((_guildList[index])._memberIncentiveValue):SetText(makeDotMoney(incentive))
+              ;
+              ((_guildList[index])._comboboxRank):SetText(tostring(grade))
               do
-                local incentive = ToClient_getGuildMemberIncentiveMoney_s64(dataIdx)
+                local isAll = (tempGuildIncentive[index + 1]).isAll
+                if isAll == true then
+                  ((_guildList[index])._radio_All):SetCheck(true)
+                  ;
+                  ((_guildList[index])._radio_Personal):SetCheck(false)
+                else
+                  ;
+                  ((_guildList[index])._radio_All):SetCheck(false)
+                  ;
+                  ((_guildList[index])._radio_Personal):SetCheck(true)
+                end
                 ;
-                ((_guildList[index])._memberIncentiveValue):SetText(makeDotMoney(incentive))
+                ((_guildList[index])._radio_All):addInputEvent("Mouse_LUp", "GuildIncentive_UpdateIncentiveRadioButton(" .. tostring(index) .. ",true)")
                 ;
-                ((_guildList[index])._comboboxRank):SetText(tostring(grade))
-                -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out DO_STMT
+                ((_guildList[index])._radio_Personal):addInputEvent("Mouse_LUp", "GuildIncentive_UpdateIncentiveRadioButton(" .. tostring(index) .. ",false)")
+                -- DECOMPILER ERROR at PC289: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC289: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC289: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC289: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -302,8 +319,16 @@ Guild_Incentive.UpdateData = function(self)
   end
 end
 
+GuildIncentive_UpdateIncentiveRadioButton = function(index, bValue)
+  -- function num : 0_2 , upvalues : tempGuildIncentive, _isAllButton
+  local userNoStr = tostring((tempGuildIncentive[index + 1]).userNo)
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R3 in 'UnsetPending'
+
+  _isAllButton[userNoStr] = bValue
+end
+
 click_Incentive_GradeList = function(index)
-  -- function num : 0_2 , upvalues : _selectedMemberIndex, _guildList, _frameGuildList, _contentGuildList
+  -- function num : 0_3 , upvalues : _selectedMemberIndex, _guildList, _frameGuildList, _contentGuildList
   _selectedMemberIndex = index
   local listCombbox = ((_guildList[index])._comboboxRank):GetListControl()
   if _frameGuildList:GetSizeY() - _contentGuildList:GetPosY() - listCombbox:GetSizeY() < ((_guildList[index])._comboboxRank):GetPosY() then
@@ -318,13 +343,13 @@ end
 
 local temp_Incentive_Idx = 0
 PaGlobal_SetInventive_Grade = function(index)
-  -- function num : 0_3 , upvalues : temp_Incentive_Idx
+  -- function num : 0_4 , upvalues : temp_Incentive_Idx
   temp_Incentive_Idx = index
   Panel_NumberPad_Show(true, toInt64(0, 10), 0, PaGlobal_SetInventive_Grade_CallBack)
 end
 
 PaGlobal_SetInventive_Grade_CallBack = function(count)
-  -- function num : 0_4 , upvalues : temp_Incentive_Idx, tempGuildIncentive, guildIncentiveMoneyValue, _guildList, Guild_Incentive
+  -- function num : 0_5 , upvalues : temp_Incentive_Idx, tempGuildIncentive, guildIncentiveMoneyValue, _guildList, Guild_Incentive
   local index = temp_Incentive_Idx
   local dataIdx = (tempGuildIncentive[index + 1]).idx
   local editMoney = tonumber64((string.gsub)((guildIncentiveMoneyValue._edit_MoneyValue):GetEditText(), ",", ""))
@@ -350,7 +375,7 @@ PaGlobal_SetInventive_Grade_CallBack = function(count)
 end
 
 Set_Incentive_Grade = function(index)
-  -- function num : 0_5 , upvalues : tempGuildIncentive, _guildList, guildIncentiveMoneyValue, Guild_Incentive
+  -- function num : 0_6 , upvalues : tempGuildIncentive, _guildList, guildIncentiveMoneyValue, Guild_Incentive
   local dataIdx = (tempGuildIncentive[index + 1]).idx
   ;
   ((_guildList[index])._comboboxRank):SetSelectItemIndex(((_guildList[index])._comboboxRank):GetSelectIndex())
@@ -384,7 +409,7 @@ Set_Incentive_Grade = function(index)
 end
 
 Give_Incentive = function()
-  -- function num : 0_6
+  -- function num : 0_7
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_PAYMENTS")
   local contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_PAYMENTS_CONFIRM")
   local messageboxData = {title = titleString, content = contentString, functionYes = PayIncentiveConfirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -393,14 +418,14 @@ Give_Incentive = function()
 end
 
 PayIncentiveConfirm = function()
-  -- function num : 0_7
+  -- function num : 0_8
   ToClient_PayGuildMemberIncentive()
   Panel_GuildIncentiveOption_Close()
   Panel_Guild_Incentive_Foundation_Close()
 end
 
 Panel_GuildIncentiveOption_ShowToggle = function()
-  -- function num : 0_8
+  -- function num : 0_9
   if Panel_Guild_IncentiveOption:GetShow() then
     Panel_GuildIncentiveOption_Close()
     Panel_Guild_Incentive_Foundation_Close()
@@ -410,7 +435,7 @@ Panel_GuildIncentiveOption_ShowToggle = function()
 end
 
 Panel_GuildIncentiveOption_Close = function()
-  -- function num : 0_9
+  -- function num : 0_10
   if Panel_Guild_IncentiveOption:GetShow() then
     Panel_Guild_IncentiveOption:SetShow(false)
     Panel_Guild_Incentive_Foundation_Close()
@@ -418,13 +443,13 @@ Panel_GuildIncentiveOption_Close = function()
 end
 
 Panel_Guild_IncentiveOption_Resize = function()
-  -- function num : 0_10
+  -- function num : 0_11
   Panel_Guild_IncentiveOption:SetPosX(getScreenSizeX() / 2 - Panel_Guild_IncentiveOption:GetSizeX() / 2)
   Panel_Guild_IncentiveOption:SetPosY(getScreenSizeY() / 2 - Panel_Guild_IncentiveOption:GetSizeY() / 2 - 50)
 end
 
 Panel_Guild_Incentive_Foundation_Init = function()
-  -- function num : 0_11 , upvalues : guildIncentiveMoneyValue, UI_TM, Guild_Incentive
+  -- function num : 0_12 , upvalues : guildIncentiveMoneyValue, UI_TM, Guild_Incentive
   local self = guildIncentiveMoneyValue
   ;
   (self._txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -448,7 +473,7 @@ Panel_Guild_Incentive_Foundation_Init = function()
 end
 
 Panel_Guild_Incentive_Foundation_Update = function()
-  -- function num : 0_12 , upvalues : guildIncentiveMoneyValue
+  -- function num : 0_13 , upvalues : guildIncentiveMoneyValue
   local self = guildIncentiveMoneyValue
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -464,7 +489,7 @@ Panel_Guild_Incentive_Foundation_Update = function()
 end
 
 Panel_Guild_Incentive_Foundation_MainShowToggle = function()
-  -- function num : 0_13 , upvalues : guildIncentiveMoneyValue, Guild_Incentive
+  -- function num : 0_14 , upvalues : guildIncentiveMoneyValue, Guild_Incentive
   local self = guildIncentiveMoneyValue
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -492,7 +517,7 @@ Panel_Guild_Incentive_Foundation_MainShowToggle = function()
 end
 
 Panel_Guild_Incentive_Foundation_Editing = function()
-  -- function num : 0_14 , upvalues : guildIncentiveMoneyValue
+  -- function num : 0_15 , upvalues : guildIncentiveMoneyValue
   local self = guildIncentiveMoneyValue
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -505,26 +530,26 @@ Panel_Guild_Incentive_Foundation_Editing = function()
 end
 
 Panel_Guild_Incentive_Foundation_ConfirmFunction = function(inputNumber, param)
-  -- function num : 0_15 , upvalues : guildIncentiveMoneyValue
+  -- function num : 0_16 , upvalues : guildIncentiveMoneyValue
   local self = guildIncentiveMoneyValue
   ;
   (self._edit_MoneyValue):SetEditText(makeDotMoney(inputNumber), false)
 end
 
 FGlobal_CheckGuildIncentiveUiEdit = function(targetUI)
-  -- function num : 0_16 , upvalues : guildIncentiveMoneyValue
+  -- function num : 0_17 , upvalues : guildIncentiveMoneyValue
   do return targetUI ~= nil and targetUI:GetKey() == (guildIncentiveMoneyValue._edit_MoneyValue):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 FGlobal_GuildIncentiveClearFocusEdit = function()
-  -- function num : 0_17
+  -- function num : 0_18
   ClearFocusEdit()
   CheckChattingInput()
 end
 
 Panel_Guild_Incentive_Foundation_Open = function()
-  -- function num : 0_18 , upvalues : guildIncentiveMoneyValue
+  -- function num : 0_19 , upvalues : guildIncentiveMoneyValue
   Panel_Guild_Incentive_Foundation:SetShow(true)
   ;
   (guildIncentiveMoneyValue._edit_MoneyValue):SetEditText("0", true)
@@ -532,12 +557,12 @@ Panel_Guild_Incentive_Foundation_Open = function()
 end
 
 Panel_Guild_Incentive_Foundation_Close = function()
-  -- function num : 0_19
+  -- function num : 0_20
   Panel_Guild_Incentive_Foundation:SetShow(false)
 end
 
 GuildIncentive_TitleLineReset = function()
-  -- function num : 0_20 , upvalues : Guild_Incentive
+  -- function num : 0_21 , upvalues : Guild_Incentive
   local self = Guild_Incentive
   ;
   (self._title_CharName):SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME"))
@@ -546,7 +571,7 @@ GuildIncentive_TitleLineReset = function()
 end
 
 GuildIncentive_SetGuildIncentive = function()
-  -- function num : 0_21 , upvalues : tempGuildIncentive
+  -- function num : 0_22 , upvalues : tempGuildIncentive, _isAllButton
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -555,14 +580,29 @@ GuildIncentive_SetGuildIncentive = function()
   tempGuildIncentive = {}
   for index = 1, memberCount do
     local myGuildMemberInfo = myGuildListInfo:getMember(index - 1)
-    -- DECOMPILER ERROR at PC52: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC53: Confused about usage of register: R7 in 'UnsetPending'
 
-    tempGuildIncentive[index] = {idx = index - 1, online = myGuildMemberInfo:isOnline(), grade = myGuildMemberInfo:getGrade(), level = myGuildMemberInfo:getLevel(), class = myGuildMemberInfo:getClassType(), name = myGuildMemberInfo:getName(), ap = Int64toInt32(myGuildMemberInfo:getTotalActivity()), expiration = myGuildMemberInfo:getContractedExpirationUtc(), wp = myGuildMemberInfo:getMaxWp(), kp = myGuildMemberInfo:getExplorationPoint(), userNo = myGuildMemberInfo:getUserNo()}
+    tempGuildIncentive[index] = {idx = index - 1, online = myGuildMemberInfo:isOnline(), grade = myGuildMemberInfo:getGrade(), level = myGuildMemberInfo:getLevel(), class = myGuildMemberInfo:getClassType(), name = myGuildMemberInfo:getName(), ap = Int64toInt32(myGuildMemberInfo:getTotalActivity()), expiration = myGuildMemberInfo:getContractedExpirationUtc(), wp = myGuildMemberInfo:getMaxWp(), kp = myGuildMemberInfo:getExplorationPoint(), userNo = myGuildMemberInfo:getUserNo(), isAll = true}
+    local userNoStr = tostring((tempGuildIncentive[index]).userNo)
+    -- DECOMPILER ERROR at PC64: Confused about usage of register: R8 in 'UnsetPending'
+
+    if _isAllButton[userNoStr] == nil then
+      _isAllButton[userNoStr] = true
+      -- DECOMPILER ERROR at PC67: Confused about usage of register: R8 in 'UnsetPending'
+
+      ;
+      (tempGuildIncentive[index]).isAll = true
+    else
+      -- DECOMPILER ERROR at PC73: Confused about usage of register: R8 in 'UnsetPending'
+
+      ;
+      (tempGuildIncentive[index]).isAll = _isAllButton[userNoStr]
+    end
   end
 end
 
 local guildIncentiveCompareName = function(w1, w2)
-  -- function num : 0_22 , upvalues : _listSort
+  -- function num : 0_23 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.name == true and w1.name < w2.name then
@@ -574,7 +614,7 @@ local guildIncentiveCompareName = function(w1, w2)
 end
 
 local guildIncentiveCompareAp = function(w1, w2)
-  -- function num : 0_23 , upvalues : _listSort
+  -- function num : 0_24 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.ap == true and w2.ap < w1.ap then
@@ -586,7 +626,7 @@ local guildIncentiveCompareAp = function(w1, w2)
 end
 
 HandleClicked_GuildIncentiveSort = function(sortType)
-  -- function num : 0_24 , upvalues : Guild_Incentive, _selectSortType, _listSort, tempGuildIncentive, guildIncentiveCompareName, guildIncentiveCompareAp
+  -- function num : 0_25 , upvalues : Guild_Incentive, _selectSortType, _listSort, tempGuildIncentive, guildIncentiveCompareName, guildIncentiveCompareAp
   local self = Guild_Incentive
   GuildIncentive_TitleLineReset()
   _selectSortType = sortType
@@ -627,7 +667,7 @@ HandleClicked_GuildIncentiveSort = function(sortType)
 end
 
 GuildIncentive_updateSort = function()
-  -- function num : 0_25 , upvalues : Guild_Incentive, _selectSortType, tempGuildIncentive, guildIncentiveCompareName, guildIncentiveCompareAp
+  -- function num : 0_26 , upvalues : Guild_Incentive, _selectSortType, tempGuildIncentive, guildIncentiveCompareName, guildIncentiveCompareAp
   local self = Guild_Incentive
   if _selectSortType == 0 then
     (table.sort)(tempGuildIncentive, guildIncentiveCompareName)

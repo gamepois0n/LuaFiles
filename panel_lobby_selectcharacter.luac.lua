@@ -54,7 +54,7 @@ end
 local SelectCharacter_Init = function()
   -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, isSpecialCharacterOpen, configData, isGhostMode
   setShowBlockBG(false)
-  Panel_CharacterSelectNew:SetShow(true)
+  Panel_CharacterSelectNew:SetShow(false)
   Panel_CharacterSelectNew:SetSize(getScreenSizeX(), getScreenSizeY())
   if isGameTypeEnglish() and getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Pre then
     btn_SaveCustomization:SetShow(true)
@@ -297,6 +297,7 @@ local SelectCharacter_Init = function()
   end
   do
     PaGlobal_CheckGamerTag()
+    Panel_CharacterSelectNew:SetShow(true)
   end
 end
 
@@ -930,8 +931,12 @@ local What_R_U_Doing_Now = function(isSpecialCharacter)
                           else
                             ;
                             (SelectCharacter.static_DeleteBox):SetShow(false)
-                            ;
-                            (SelectCharacter.btn_ChaInfoDelete):SetShow(true)
+                            if _ContentsGroup_isConsolePadControl == false then
+                              (SelectCharacter.btn_ChaInfoDelete):SetShow(true)
+                            else
+                              ;
+                              (SelectCharacter.btn_ChaInfoDelete):SetShow(false)
+                            end
                             if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Pre then
                               (SelectCharacter.btn_ChaInfoStart):SetShow(false)
                               ;
@@ -1208,8 +1213,14 @@ local CharacterList_Update = function(isChangeSpecialTab)
         ;
         (slot._btn_Slot):SetCheck(false)
       end
-      ;
-      (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
+      if _ContentsGroup_isConsolePadControl == false then
+        (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
+      else
+        ;
+        (slot._btn_Slot):addInputEvent("Mouse_On", "CharacterSelect_selected( " .. slotIdx .. " )")
+        ;
+        (slot._btn_Slot):addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
+      end
       ;
       (slot._btnStart):addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
       ;
@@ -1374,11 +1385,11 @@ local CharacterList_Update = function(isChangeSpecialTab)
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC664: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1397,6 +1408,12 @@ local CharacterList_Update = function(isChangeSpecialTab)
     GhostButton:SetText("GhostMode ON")
   else
     GhostButton:SetText("GhostMode OFF")
+  end
+  if _ContentsGroup_isConsolePadControl == false then
+    (SelectCharacter.btn_ChangeLocate):SetShow(true)
+  else
+    ;
+    (SelectCharacter.btn_ChangeLocate):SetShow(false)
   end
 end
 
@@ -1455,7 +1472,7 @@ CharacterSelect_PlayGame = function(index)
       end
       if characterData ~= nil then
         if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
-          if characterData._level == 1 and characterCount == 1 then
+          if characterData._level == 1 and characterCount == 1 and ToClient_isXBox() == false then
             FGlobal_FirstLogin_Open(index)
           else
             local pcDeliveryRegionKey = characterData._arrivalRegionKey
@@ -2026,6 +2043,16 @@ end
 SelectCharacter_Init()
 registerEvent("EventChangeLobbyStageToCharacterSelect", "CharacterSelect_Open")
 registerEvent("FromClient_UpdateSpecialCharacterTab", "UpdateSpecialCharacterTab")
+PaGlobalFunc_Panel_CharacterSelect_PadControl = function(index)
+  -- function num : 0_38
+  if Panel_CharacterSelectNew:GetShow() == false then
+    return 
+  end
+  RadioButton_Click(index)
+end
+
+Panel_CharacterSelectNew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_Panel_CharacterSelect_PadControl(0)")
+Panel_CharacterSelectNew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_Panel_CharacterSelect_PadControl(1)")
 registerEvent("EventCancelEnterWating", "cancelEnterWaitingLine")
 registerEvent("EventReceiveEnterWating", "receiveEnterWaiting")
 registerEvent("EventSetEnterWating", "setEnterWaitingUserCount")

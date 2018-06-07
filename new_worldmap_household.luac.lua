@@ -119,41 +119,49 @@ FromClient_LClickedWorldMapHouse = function(houseBtn)
   clear_HouseSelectedAni_byHouse()
   houseKey = houseInfo:getHouseKey()
   local IsUsable = ToClient_IsUsable(houseKey)
-  if Panel_HouseControl:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false then
+  local _panel_houseControl = Panel_HouseControl
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    _panel_houseControl = Panel_Worldmap_HouseCraft
+  end
+  if _panel_houseControl:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false then
     clear_HouseSelectedAni_bySellBuy()
     if Panel_RentHouse_WorkManager:GetShow() == true then
       if Panel_Select_Inherit:GetShow() == true then
         WorldMapPopupManager:pop()
       end
       WorldMapPopupManager:pop()
-      if Panel_HouseControl:GetShow() == false then
+      if _panel_houseControl:GetShow() == false then
         WorldMapPopupManager:increaseLayer()
-        WorldMapPopupManager:push(Panel_HouseControl, true)
+        WorldMapPopupManager:push(_panel_houseControl, true)
       end
     else
       if Panel_Building_WorkManager:GetShow() == true or Panel_LargeCraft_WorkManager:GetShow() == true or Panel_Plant_WorkManager:GetShow() == true then
         WorldMapPopupManager:pop()
-        if Panel_HouseControl:GetShow() == false then
+        if _panel_houseControl:GetShow() == false then
           WorldMapPopupManager:increaseLayer()
-          WorldMapPopupManager:push(Panel_HouseControl, true)
+          WorldMapPopupManager:push(_panel_houseControl, true)
         end
       else
         WorldMapPopupManager:increaseLayer()
-        WorldMapPopupManager:push(Panel_HouseControl, true)
+        WorldMapPopupManager:push(_panel_houseControl, true)
       end
     end
   else
     if Panel_House_SellBuy_Condition:GetShow() == true then
       WorldMapPopupManager:pop()
-      if Panel_HouseControl:GetShow() == false then
+      if _panel_houseControl:GetShow() == false then
         WorldMapPopupManager:increaseLayer()
-        WorldMapPopupManager:push(Panel_HouseControl, true)
+        WorldMapPopupManager:push(_panel_houseControl, true)
       end
     end
   end
   show_HouseSelectedAni_byHouse()
-  FGlobal_UpdateHouseControl(houseInfo)
-  FGlobal_Reset_HousePanelPos()
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapHouseCraft_Open(houseInfo)
+  else
+    FGlobal_UpdateHouseControl(houseInfo)
+    FGlobal_Reset_HousePanelPos()
+  end
   PaGlobal_TutorialManager:handleLClickedWorldMapHouse(houseBtn)
 end
 

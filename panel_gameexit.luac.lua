@@ -534,8 +534,12 @@ refreshCharacterInfoData = function(startIdx)
                                                                                       (charPositionPool[uiCount]):SetShow(true)
                                                                                       ;
                                                                                       (charEnterWaiting[uiCount]):SetShow(true)
-                                                                                      ;
-                                                                                      (isCharacterSlot[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+                                                                                      if _ContentsGroup_isConsolePadControl == false then
+                                                                                        (isCharacterSlot[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+                                                                                      else
+                                                                                        ;
+                                                                                        (isCharacterSlot[uiCount]):addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+                                                                                      end
                                                                                       ;
                                                                                       (CharacterChangeButton[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
                                                                                       local selfProxy = getSelfPlayer()
@@ -629,131 +633,131 @@ refreshCharacterInfoData = function(startIdx)
                                                                                           if uiCount == 4 then
                                                                                             break
                                                                                           end
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                          -- DECOMPILER ERROR at PC1226: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                          -- DECOMPILER ERROR at PC1239: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                         end
                                                                                       end
@@ -959,6 +963,9 @@ Panel_GameExit_ClickCharSlot = function(idx)
   (isCharacterSelect[idx]):SetShow(true)
   ;
   (CharacterChangeButton[idx]):SetShow(true)
+  if _ContentsGroup_isConsolePadControl == true then
+    (isCharacterSlot[idx]):addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
+  end
   ;
   (isCharacterSlot[idx]):ResetVertexAni()
   ;

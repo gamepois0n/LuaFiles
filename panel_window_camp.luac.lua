@@ -29,6 +29,9 @@ PaGlobal_Camp.initialize = function(self)
   PaGlobal_Camp:setPos()
   local isShow = ToClient_isCampingReigsted()
   Panel_Icon_Camp:SetShow(isShow)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Icon_Camp:SetShow(false)
+  end
   for index,value in pairs((self._config)._slotNo) do
     local slot = {}
     ;
@@ -40,7 +43,7 @@ PaGlobal_Camp.initialize = function(self)
     (slot.icon):addInputEvent("Mouse_On", "PaGlobal_Camp:equipItemTooltipShow(" .. value .. ", true)")
     ;
     (slot.icon):addInputEvent("Mouse_Out", "PaGlobal_Camp:equipItemTooltipShow(" .. value .. ", false)")
-    -- DECOMPILER ERROR at PC55: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC62: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._itemSlots)[value] = slot
@@ -452,6 +455,9 @@ FromClient_InitializeCamp = function()
   -- function num : 0_25
   local isShow = ToClient_isCampingReigsted()
   Panel_Icon_Camp:SetShow(isShow)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Icon_Camp:SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC237: Confused about usage of register: R0 in 'UnsetPending'

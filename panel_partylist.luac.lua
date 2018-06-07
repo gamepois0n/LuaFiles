@@ -6,25 +6,15 @@
 Panel_PartyList:SetShow(false, false)
 Panel_PartyList:setGlassBackground(true)
 Panel_PartyList:SetDragAll(true)
-Panel_PartyList:RegisterShowEventFunc(true, "Panel_PartyList_ShowAni()")
-Panel_PartyList:RegisterShowEventFunc(false, "Panel_PartyList_HideAni()")
 local UI_TM = CppEnums.TextMode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_color = Defines.Color
-Panel_PartyList_ShowAni = function()
-  -- function num : 0_0
-end
-
-Panel_PartyList_HideAni = function()
-  -- function num : 0_1
-end
-
 local partyList = {
 control = {_btnClose = (UI.getChildControl)(Panel_PartyList, "Button_Close"), _btnRecruite = (UI.getChildControl)(Panel_PartyList, "Button_Recruite"), _btnReload = (UI.getChildControl)(Panel_PartyList, "Button_Reload"), _editSearch = (UI.getChildControl)(Panel_PartyList, "Edit_Search"), _btnSearch = (UI.getChildControl)(Panel_PartyList, "Button_Search"), _btnReset = (UI.getChildControl)(Panel_PartyList, "Button_Reset"), _list2PartyList = (UI.getChildControl)(Panel_PartyList, "List2_PartyList")}
 }
 partyList.checkBlocked = function(self, index)
-  -- function num : 0_2
+  -- function num : 0_0
   local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
   if partyWrapper == nil then
     return false
@@ -46,7 +36,7 @@ partyList.checkBlocked = function(self, index)
 end
 
 partyList.Update = function(self)
-  -- function num : 0_3 , upvalues : partyList
+  -- function num : 0_1 , upvalues : partyList
   (((self.control)._list2PartyList):getElementManager()):clearKey()
   local partyListCount = ToClient_GetRecruitmentPartyListCount()
   if partyListCount > 0 then
@@ -63,7 +53,7 @@ partyList.Update = function(self)
 end
 
 PartyListControlCreate = function(control, key)
-  -- function num : 0_4
+  -- function num : 0_2
   local bg = (UI.getChildControl)(control, "Static_Bg")
   local myBg = (UI.getChildControl)(control, "Static_MyServerBg")
   local content = (UI.getChildControl)(control, "StaticText_Content")
@@ -178,7 +168,7 @@ PartyListControlCreate = function(control, key)
 end
 
 PartyList_WhisperToLeader = function(index)
-  -- function num : 0_5
+  -- function num : 0_3
   local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
   if partyWrapper == nil then
     return 
@@ -187,7 +177,7 @@ PartyList_WhisperToLeader = function(index)
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_MSGWHISPERTITLE")
   local content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PARTYLIST_MSGWHISPERDESC", "name", leaderName)
   local party_Whisper = function()
-    -- function num : 0_5_0 , upvalues : leaderName
+    -- function num : 0_3_0 , upvalues : leaderName
     FGlobal_ChattingInput_ShowWhisper(leaderName)
   end
 
@@ -197,7 +187,7 @@ PartyList_WhisperToLeader = function(index)
 end
 
 PartyList_Advertising = function(index)
-  -- function num : 0_6
+  -- function num : 0_4
   local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
   if partyWrapper ~= nil then
     local adMsg = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_PARTYLIST_ADDVERSTISING_ADMSG", "title", partyWrapper:getTitle(), "level", partyWrapper:getMinLevel(), "count", partyWrapper:getCurrentCount())
@@ -206,9 +196,9 @@ PartyList_Advertising = function(index)
 end
 
 PartyList_Cancel = function()
-  -- function num : 0_7
+  -- function num : 0_5
   local party_Cancel = function()
-    -- function num : 0_7_0
+    -- function num : 0_5_0
     ToClient_RequestCancelRecruitPartyMember()
   end
 
@@ -219,8 +209,13 @@ PartyList_Cancel = function()
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
+PartList_IsBlockedLeader = function(xuid)
+  -- function num : 0_6
+  return ToClient_IsBlockedLeaderFromMe(xuid)
+end
+
 PartyList_Support = function(index)
-  -- function num : 0_8
+  -- function num : 0_7
   local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
   if partyWrapper == nil then
     return 
@@ -228,12 +223,21 @@ PartyList_Support = function(index)
   local partyNo = partyWrapper:getPartyNo()
   local serverNo = partyWrapper:getServerNo()
   local requestJoinPartyRecruitment = function()
-    -- function num : 0_8_0 , upvalues : partyNo, serverNo
-    ToClient_RequestJoinPartyRecruitment(partyNo, serverNo)
+    -- function num : 0_7_0 , upvalues : partyWrapper, partyNo, serverNo
+    if PartList_IsBlockedLeader(partyWrapper:getXuid()) then
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    else
+      do
+        ToClient_RequestJoinPartyRecruitment(partyNo, serverNo)
+      end
+    end
   end
 
   local requestBreakPartyRecruitment = function()
-    -- function num : 0_8_1 , upvalues : partyNo, serverNo
+    -- function num : 0_7_1 , upvalues : partyNo, serverNo
     ToClient_RequestBreakPartyRecruitment(partyNo, serverNo)
   end
 
@@ -245,12 +249,21 @@ PartyList_Support = function(index)
     return 
   end
   do
-    requestJoinPartyRecruitment()
+    if PartList_IsBlockedLeader(partyWrapper:getXuid()) then
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    else
+      do
+        ToClient_RequestJoinPartyRecruitment(partyNo, serverNo)
+      end
+    end
   end
 end
 
 PartyList_MoveServer = function(serverNo, partyNo)
-  -- function num : 0_9
+  -- function num : 0_8
   local serverCount = getGameWorldServerDataCount()
   local curChannelData = getCurrentChannelServerData()
   local curWorldData = getGameWorldServerDataByWorldNo(curChannelData._worldNo)
@@ -270,7 +283,7 @@ PartyList_MoveServer = function(serverNo, partyNo)
     end
   end
   local moveServer = function()
-    -- function num : 0_9_0 , upvalues : serverIndex
+    -- function num : 0_8_0 , upvalues : serverIndex
     if serverIndex ~= nil then
       gameExit_MoveChannel(serverIndex)
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELWAIT_MSG")
@@ -281,7 +294,7 @@ PartyList_MoveServer = function(serverNo, partyNo)
   end
 
   local requestBreakPartyRecruitment = function()
-    -- function num : 0_9_1 , upvalues : partyNo, serverNo
+    -- function num : 0_8_1 , upvalues : partyNo, serverNo
     ToClient_RequestBreakPartyRecruitment(partyNo, serverNo)
   end
 
@@ -302,7 +315,7 @@ PartyList_MoveServer = function(serverNo, partyNo)
 end
 
 partyList.Show = function(self)
-  -- function num : 0_10
+  -- function num : 0_9
   audioPostEvent_SystemUi(1, 29)
   Panel_PartyList:SetShow(true, true)
   ToClient_RequestListPartyRecruitment()
@@ -312,7 +325,7 @@ partyList.Show = function(self)
 end
 
 partyList.Hide = function(self)
-  -- function num : 0_11
+  -- function num : 0_10
   audioPostEvent_SystemUi(1, 1)
   Panel_PartyList:SetShow(false, false)
   ClearFocusEdit()
@@ -320,19 +333,19 @@ partyList.Hide = function(self)
 end
 
 FGlobal_CheckPartyListUiEdit = function(targetUI)
-  -- function num : 0_12 , upvalues : partyList
+  -- function num : 0_11 , upvalues : partyList
   do return targetUI ~= nil and targetUI:GetKey() == ((partyList.control)._editSearch):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 FGlobal_PartyListClearFocusEdit = function()
-  -- function num : 0_13
+  -- function num : 0_12
   ClearFocusEdit()
   CheckChattingInput()
 end
 
 FGlobal_PartyList_ShowToggle = function()
-  -- function num : 0_14 , upvalues : partyList
+  -- function num : 0_13 , upvalues : partyList
   if Panel_PartyList:GetShow() then
     partyList:Hide()
   else
@@ -341,7 +354,7 @@ FGlobal_PartyList_ShowToggle = function()
 end
 
 FromClient_ResponsePartyRecruitmentInfo = function(param1)
-  -- function num : 0_15 , upvalues : partyList
+  -- function num : 0_14 , upvalues : partyList
   if param1 == 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_REGISTALERT"))
   else
@@ -353,9 +366,9 @@ FromClient_ResponsePartyRecruitmentInfo = function(param1)
 end
 
 FromClient_RequestPartyJoin = function(guestActorKey, characterName, level, classType)
-  -- function num : 0_16
+  -- function num : 0_15
   local partyJoin = function()
-    -- function num : 0_16_0 , upvalues : characterName
+    -- function num : 0_15_0 , upvalues : characterName
     RequestParty_inviteCharacter(characterName)
   end
 
@@ -368,12 +381,12 @@ FromClient_RequestPartyJoin = function(guestActorKey, characterName, level, clas
 end
 
 PartyList_Update = function()
-  -- function num : 0_17
+  -- function num : 0_16
   ToClient_RequestListPartyRecruitment()
 end
 
 HandleClicked_PartyList_SearchEdit = function()
-  -- function num : 0_18 , upvalues : partyList
+  -- function num : 0_17 , upvalues : partyList
   local self = partyList
   SetFocusEdit((self.control)._editSearch)
   ;
@@ -381,7 +394,7 @@ HandleClicked_PartyList_SearchEdit = function()
 end
 
 HandleClicked_PartyList_DoSearch = function()
-  -- function num : 0_19 , upvalues : partyList
+  -- function num : 0_18 , upvalues : partyList
   local self = partyList
   local msg = ((self.control)._editSearch):GetEditText()
   if msg == "" then
@@ -393,7 +406,7 @@ HandleClicked_PartyList_DoSearch = function()
 end
 
 HandleClicked_PartyList_Reset = function()
-  -- function num : 0_20 , upvalues : partyList
+  -- function num : 0_19 , upvalues : partyList
   local serverNo = 0
   local msg = ""
   ;
@@ -402,7 +415,7 @@ HandleClicked_PartyList_Reset = function()
 end
 
 partyList.RegisterEvent = function(self)
-  -- function num : 0_21
+  -- function num : 0_20
   registerEvent("FromClient_ResponsePartyRecruitmentInfo", "FromClient_ResponsePartyRecruitmentInfo")
   registerEvent("FromClient_RequestPartyJoin", "FromClient_RequestPartyJoin")
   ;

@@ -69,10 +69,16 @@ IngameCustomize_Hide = function()
       HandleClicked_CloseIngameCustomization()
       if gameExitPhoto == true then
         GameExitShowToggle(false)
-        refreshCharacterInfoData(CharacterSlotIndex + 1)
+        if _ContentsGroup_RenewUI_ExitGame == false then
+          refreshCharacterInfoData(CharacterSlotIndex + 1)
+        end
       end
       if characterInfoPhoto == true then
-        PaGlobal_CharacterInfoBasic:updateFacePhoto()
+        if _ContentsGroup_RenewUI == true then
+          PaGlobalFunc_CharacterInfo_UpdateFacePhoto()
+        else
+          PaGlobal_CharacterInfoBasic:updateFacePhoto()
+        end
       end
       gameExitPhoto = false
       characterInfoPhoto = false

@@ -450,7 +450,6 @@ _new = {
   ;
   (self._ui)._bottomBanner_New_2 = (UI.getChildControl)((self._ui)._bottomBanner_New, "Button_Banner_1")
   self:ChangeBannerTexture((self._ui)._bottomBanner_New_1, false)
-  self._currentTabIndex = 0
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
@@ -584,10 +583,12 @@ end
         realIndex = realIndex + 1
       end
     end
+    ;
+    (((self._ui)._custom)._templeteButton):SetShow(false)
   end
   for mIndex = 0, ((self._categoryData)[6])._count - 1 do
     local categoryData = ((self._categoryData)[6])[mIndex]
-    -- DECOMPILER ERROR at PC204: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC210: Confused about usage of register: R7 in 'UnsetPending'
 
     if categoryData._isContentOpen then
       ((self._ui)._customButtonBg)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (self._ui)._customWindow, "CustomButtonBg_" .. realIndex)
@@ -598,7 +599,7 @@ end
       (((self._ui)._customButtonBg)[realIndex]):SetPosY(132 + (math.floor)((realIndex) / 7) * 45)
       ;
       (((self._ui)._customButtonBg)[realIndex]):SetShow(true)
-      -- DECOMPILER ERROR at PC251: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC257: Confused about usage of register: R7 in 'UnsetPending'
 
       ;
       ((self._ui)._customButton)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, (self._ui)._customWindow, "CustomButton_" .. realIndex)
@@ -625,7 +626,7 @@ end
       realIndex = realIndex + 1
     end
   end
-  -- DECOMPILER ERROR at PC369: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC375: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._custom)._effect = (UI.createAndCopyBasePropertyControl)((self._ui)._customWindow, "Static_Effect", (self._ui)._customWindow, "Static_Effect_Copy")
@@ -635,7 +636,7 @@ end
   (((self._ui)._custom)._effect):SetPosX(16)
   ;
   (((self._ui)._custom)._effect):SetPosY(131)
-  -- DECOMPILER ERROR at PC399: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC405: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._custom)._checkIcon = (UI.createAndCopyBasePropertyControl)((self._ui)._customWindow, "Static_Check", (self._ui)._customWindow, "Static_CheckIcon_Copy")
@@ -645,19 +646,19 @@ end
   (((self._ui)._custom)._checkIcon):SetShow(false)
   do
     local isWide = getScreenSizeY() >= 800
-    -- DECOMPILER ERROR at PC426: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC432: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCustom = (UI.getChildControl)((self._ui)._categoryMenuBg, "Button_EditCustom")
-    -- DECOMPILER ERROR at PC434: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC440: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCustom720 = (UI.getChildControl)((self._ui)._categoryMenuBg, "Button_EditCustom720")
-    -- DECOMPILER ERROR at PC442: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC448: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonSaveCustom = (UI.getChildControl)((self._ui)._customWindow, "Button_Save720")
-    -- DECOMPILER ERROR at PC450: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC456: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCancelCustom = (UI.getChildControl)((self._ui)._customWindow, "Button_Cancel720")
@@ -1206,8 +1207,6 @@ end
   return nil
 end
 
-          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
-          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
           Toggle_MenuTab_forPadEventFunc = function(value)
   -- function num : 0_13
   local self = PaGlobal_Menu
@@ -1226,6 +1225,8 @@ end
   end
 end
 
+          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
+          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
           -- DECOMPILER ERROR at PC4241: Confused about usage of register: R0 in 'UnsetPending'
 
           PaGlobal_Menu.SetCustomMode = function(self)
@@ -2013,6 +2014,8 @@ end
   if not isShow then
     return 
   end
+  self._currentTabIndex = 0
+  Toggle_MenuTab_forPadEventFunc(0)
   for index = 0, self._categoryCount - 1 do
     (((self._ui)._radioButtonGroup)[index]):SetCheck(index == 0)
   end
@@ -2121,6 +2124,7 @@ end
     ImageMoveAni.IsChangeChild = true
     Panel_Menu_New:CalcUIAniPos(ImageMoveAni)
     ImageMoveAni:SetDisableWhileAni(true)
+    ImageMoveAni:SetIgnoreUpdateSnapping(true)
   else
     local ImageMoveAni = Panel_Menu_New:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
     ImageMoveAni:SetStartPosition(getScreenSizeX(), 0)
@@ -2128,6 +2132,7 @@ end
     ImageMoveAni.IsChangeChild = true
     Panel_Menu_New:CalcUIAniPos(ImageMoveAni)
     ImageMoveAni:SetDisableWhileAni(true)
+    ImageMoveAni:SetIgnoreUpdateSnapping(true)
   end
   -- DECOMPILER ERROR: 3 unprocessed JMP targets
 end
@@ -2148,7 +2153,8 @@ end
   ImageMoveAni:SetDisableWhileAni(true)
   ImageMoveAni:SetHideAtEnd(true)
   ImageMoveAni:SetDisableWhileAni(true)
-  -- DECOMPILER ERROR at PC59: Unhandled construct in 'MakeBoolean' P1
+  ImageMoveAni:SetIgnoreUpdateSnapping(true)
+  -- DECOMPILER ERROR at PC62: Unhandled construct in 'MakeBoolean' P1
 
   if _ContentsGroup_RenewUI_Dailog == false and Panel_Npc_Dialog:GetShow() == false then
     ToClient_setUsablePanelSnapping(false)

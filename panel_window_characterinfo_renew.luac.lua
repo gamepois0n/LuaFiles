@@ -11,6 +11,10 @@ _ui = {stc_TitleBg = (UI.getChildControl)(_panel, "Static_Title"), stc_TabGroup 
 _potentialUIData = {limitPotentialLevel = 5, maxX = 280, posX = 260, posY = 96, gapY = 35, sizeY = 2}
 , 
 _fitness = {stamina = 0, strength = 1, health = 2}
+, 
+PANEL_TYPE = {UNDEFINED = 0, BASIC = 1, NAMED = 2, DAIRY = 3, TASK = 4, FOOTSTEP = 5, LIFE = 6}
+, _currentPanelType = 0, _maxPanelTypeNumber = 6, 
+POTENTIAL_TYPE = {MOVESPEED = 0, ATTACKSPEED = 1, CRITICALLEVEL = 2, FISHINGLEVEL = 3, GATHERLEVEL = 4, LUCKLEVEL = 5, TOTALCOUNT = 6}
 }
 FromClient_luaLoadComplete_CharaterInfo_Init = function()
   -- function num : 0_0 , upvalues : CharacterInfo
@@ -18,278 +22,282 @@ FromClient_luaLoadComplete_CharaterInfo_Init = function()
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CharaterInfo_Init")
-local PANEL_TYPE = {UNDEFINED = 0, BASIC = 1, NAMED = 2, DAIRY = 3, TASK = 4, FOOTSTEP = 5, LIFE = 6}
-local POTENTIAL_TYPE = {MOVESPEED = 0, ATTACKSPEED = 1, CRITICALLEVEL = 2, FISHINGLEVEL = 3, GATHERLEVEL = 4, LUCKLEVEL = 5, TOTALCOUNT = 6}
 CharacterInfo.init = function(self)
-  -- function num : 0_1
+  -- function num : 0_1 , upvalues : _panel
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._ui).stc_LB = (UI.getChildControl)((self._ui).stc_TabGroup, "Static_LB")
-  -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).stc_LB):addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterInfo_ShowLeftNextTab()")
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_RB = (UI.getChildControl)((self._ui).stc_TabGroup, "Static_RB")
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).stc_RB):addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterInfo_ShowRightNextTab()")
+  -- DECOMPILER ERROR at PC72: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).radioButton = {[1] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_Basic"), [2] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_Named"), [3] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_Dairy"), [4] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_Task"), [5] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_FootStep"), [6] = (UI.getChildControl)((self._ui).stc_TabGroup, "RadioButton_Life")}
   for ii = 1, 6 do
     (((self._ui).radioButton)[ii]):addInputEvent("Mouse_LUp", "InputMLUp_TapToOpenWindow(" .. ii .. ")")
   end
-  -- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_CharacterName = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "StaticText_CharacterName")
-  -- DECOMPILER ERROR at PC91: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC103: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_CharacterIcon = (UI.getChildControl)((self._ui).txt_CharacterName, "Static_Icon")
-  -- DECOMPILER ERROR at PC99: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_AdventureTitle = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "StaticText_AdventureTitle")
-  -- DECOMPILER ERROR at PC107: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC119: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_AdventureIcon = (UI.getChildControl)((self._ui).txt_AdventureTitle, "Static_Icon")
-  -- DECOMPILER ERROR at PC115: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Journey = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "StaticText_Journey")
-  -- DECOMPILER ERROR at PC123: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC135: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_ProfileImageBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_LeftBg")
-  -- DECOMPILER ERROR at PC131: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC143: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_ProfileSlot = (UI.getChildControl)((self._ui).stc_ProfileImageBg, "Static_Profile_Image")
-  -- DECOMPILER ERROR at PC139: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC151: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_TakePic = (UI.getChildControl)((self._ui).stc_ProfileSlot, "Static_Bg")
-  -- DECOMPILER ERROR at PC147: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC159: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_FamilyInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Fam_Info")
-  -- DECOMPILER ERROR at PC155: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC167: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_FamilyPoint = (UI.getChildControl)((self._ui).stc_FamilyInfoBg, "StaticText_Fam_Point")
-  -- DECOMPILER ERROR at PC163: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC175: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_BattlePoint = (UI.getChildControl)((self._ui).stc_FamilyInfoBg, "StaticText_Battle_Point")
-  -- DECOMPILER ERROR at PC171: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC183: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_LifePoint = (UI.getChildControl)((self._ui).stc_FamilyInfoBg, "StaticText_Life_Point")
-  -- DECOMPILER ERROR at PC179: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC191: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_SpecialPoint = (UI.getChildControl)((self._ui).stc_FamilyInfoBg, "StaticText_Special_Point")
-  -- DECOMPILER ERROR at PC187: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC199: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Introduce = (UI.getChildControl)((self._ui).stc_ProfileImageBg, "Edit_Introduce")
-  -- DECOMPILER ERROR at PC195: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC207: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).StaticText_IntroduceSave = (UI.getChildControl)((self._ui).stc_ProfileImageBg, "Static_IntroduceSave")
-  -- DECOMPILER ERROR at PC203: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC215: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_StatInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Stat_Basic")
-  -- DECOMPILER ERROR at PC211: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC223: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_HealthPoint = (UI.getChildControl)((self._ui).stc_StatInfoBg, "StaticText_Health_Val")
-  -- DECOMPILER ERROR at PC219: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC231: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_MentalPoint = (UI.getChildControl)((self._ui).stc_StatInfoBg, "StaticText_Mental_Val")
-  -- DECOMPILER ERROR at PC227: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC239: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_WeightPoint = (UI.getChildControl)((self._ui).stc_StatInfoBg, "StaticText_Weight_Val")
-  -- DECOMPILER ERROR at PC235: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC247: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Health = (UI.getChildControl)((self._ui).stc_StatInfoBg, "Progress2_Health")
-  -- DECOMPILER ERROR at PC243: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC255: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Mental = (UI.getChildControl)((self._ui).stc_StatInfoBg, "Progress2_Mental")
-  -- DECOMPILER ERROR at PC251: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC263: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Weight = (UI.getChildControl)((self._ui).stc_StatInfoBg, "Progress2_Weight")
-  -- DECOMPILER ERROR at PC259: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC271: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Weight2 = (UI.getChildControl)((self._ui).stc_StatInfoBg, "Progress2_Weight2")
-  -- DECOMPILER ERROR at PC267: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC279: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Weight3 = (UI.getChildControl)((self._ui).stc_StatInfoBg, "Progress2_Weight3")
-  -- DECOMPILER ERROR at PC275: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC287: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Count = (UI.getChildControl)((self._ui).stc_StatInfoBg, "StaticText_Count")
-  -- DECOMPILER ERROR at PC283: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC295: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_StatBattleInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Stat_Battle")
-  -- DECOMPILER ERROR at PC291: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC303: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_AtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Val")
-  -- DECOMPILER ERROR at PC299: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC311: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_AwakenAtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Awaken_Val")
-  -- DECOMPILER ERROR at PC307: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC319: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_DefPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Def_Val")
-  -- DECOMPILER ERROR at PC315: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC327: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_StaminaPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Stamina_Val")
-  -- DECOMPILER ERROR at PC323: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC335: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_SKillPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Skill_Point")
-  -- DECOMPILER ERROR at PC331: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC343: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_AtkSpeedLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Speed_Level")
-  -- DECOMPILER ERROR at PC339: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC351: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_MoveSpeedLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Move_Speed_Level")
-  -- DECOMPILER ERROR at PC347: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC359: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_CriticalLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Cri_Level")
-  -- DECOMPILER ERROR at PC355: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC367: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_FishingLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Fish_Level")
-  -- DECOMPILER ERROR at PC363: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC375: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_GatherLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Gather_Level")
-  -- DECOMPILER ERROR at PC371: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC383: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_LuckLevel = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Luck_Level")
-  -- DECOMPILER ERROR at PC379: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC391: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_Potential_BarBgTemplete = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "Static_Potential_GaugeBG")
-  -- DECOMPILER ERROR at PC387: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC399: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_Potential_BarTemplete = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "Static_Potential_Gauge")
-  -- DECOMPILER ERROR at PC395: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC407: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_BaseInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_BaseInfoBg")
-  -- DECOMPILER ERROR at PC403: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC415: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Style = (UI.getChildControl)((self._ui).stc_BaseInfoBg, "StaticText_Style")
-  -- DECOMPILER ERROR at PC411: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC423: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Enegy = (UI.getChildControl)((self._ui).stc_BaseInfoBg, "StaticText_Energy")
-  -- DECOMPILER ERROR at PC419: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC431: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Contribution = (UI.getChildControl)((self._ui).stc_BaseInfoBg, "StaticText_Contrib")
-  -- DECOMPILER ERROR at PC427: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC439: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Star = (UI.getChildControl)((self._ui).stc_BaseInfoBg, "StaticText_Star")
-  -- DECOMPILER ERROR at PC435: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC447: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_StatPotentialInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Potential")
-  -- DECOMPILER ERROR at PC443: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC455: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_BreathInfo = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Breath")
-  -- DECOMPILER ERROR at PC451: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC463: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_BreathLevel = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Breath_level")
-  -- DECOMPILER ERROR at PC459: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC471: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Breath = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_Breath")
-  -- DECOMPILER ERROR at PC467: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC479: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_PowerInfo = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Power")
-  -- DECOMPILER ERROR at PC475: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC487: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_PowerLevel = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Power_level")
-  -- DECOMPILER ERROR at PC483: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC495: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Power = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_Power")
-  -- DECOMPILER ERROR at PC491: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC503: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_HealthInfo = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Health")
-  -- DECOMPILER ERROR at PC499: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC511: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_HealthLevel = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Health_level")
-  -- DECOMPILER ERROR at PC507: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC519: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Health2 = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_Health")
-  -- DECOMPILER ERROR at PC515: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC527: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_StunPoint = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Stun_Reg_Val")
-  -- DECOMPILER ERROR at PC523: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC535: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Stun = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_Stun")
-  -- DECOMPILER ERROR at PC531: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC543: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_GrabPoint = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Grab_Reg_Val")
-  -- DECOMPILER ERROR at PC539: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC551: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_Grab = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_Grab")
-  -- DECOMPILER ERROR at PC547: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC559: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_KnockDownPoint = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Down_Reg_Val")
-  -- DECOMPILER ERROR at PC555: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC567: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_KnockDown = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_KnockDown")
-  -- DECOMPILER ERROR at PC563: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC575: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_KnockBackPoint = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "StaticText_Air_Reg_Val")
-  -- DECOMPILER ERROR at PC571: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC583: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).progress_KnockBack = (UI.getChildControl)((self._ui).stc_StatPotentialInfoBg, "Progress2_KnockBack")
   self._toolTipDefaultPosX = ((self._ui).txt_toolTip):GetPosX()
   self:potentialGauge_Init()
+  self:XB_Contorl_Init()
+  _panel:RegisterUpdateFunc("CoolTimeCountdown_UpdatePerFrame")
 end
 
 CharacterInfo.potentialGauge_Init = function(self)
-  -- function num : 0_2 , upvalues : POTENTIAL_TYPE
+  -- function num : 0_2
   local _sizeX = (math.floor)((self._potentialUIData).maxX / (self._potentialUIData).limitPotentialLevel)
   local _gapX = _sizeX + 3
   -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
@@ -300,7 +308,7 @@ CharacterInfo.potentialGauge_Init = function(self)
 
   ;
   (self._ui).stc_PotentialBar = {}
-  for ii = 1, POTENTIAL_TYPE.TOTALCOUNT do
+  for ii = 1, (self.POTENTIAL_TYPE).TOTALCOUNT do
     -- DECOMPILER ERROR at PC23: Confused about usage of register: R7 in 'UnsetPending'
 
     ((self._ui).stc_PotentialBarBg)[ii] = {}
@@ -339,7 +347,8 @@ end
 InputMLUp_TapToOpenWindow = function(index)
   -- function num : 0_3 , upvalues : CharacterInfo
   local self = CharacterInfo
-  _PA_LOG("원선", "InputMLUp_TapToOpenWindow index =" .. index)
+  Panel_Tooltip_Item_hideTooltip()
+  self._currentPanelType = index
   local _panelDisplay = {[1] = (self._ui).stc_CharacterInfoBg, [2] = (self._ui).stc_TitleInfoBg, [3] = (self._ui).stc_HistoryInfoBg, [4] = (self._ui).stc_ChallengeInfoBg, [5] = (self._ui).stc_ProfileInfoBg, [6] = (self._ui).stc_LifeInfoBg}
   for ii = 1, 6 do
     (_panelDisplay[ii]):SetShow(false)
@@ -350,28 +359,39 @@ InputMLUp_TapToOpenWindow = function(index)
   (_panelDisplay[index]):SetShow(true)
   ;
   (((self._ui).radioButton)[index]):SetCheck(true)
-  local _tapName = {[1] = "기본 정보", [2] = "칭호", [3] = "일지", [4] = "과제", [5] = "발자�\168", [6] = "생활"}
-  ;
-  ((self._ui).txt_toolTip):SetText(_tapName[index])
-  ;
-  ((self._ui).txt_toolTip):SetPosX(self._toolTipDefaultPosX + 100 * (index - 1))
-  if index == 1 then
-    self:update()
-  else
-    if index == 2 then
-      FromClient_Character_TitleInfo_Update()
+  do
+    local _tapName = {[1] = "기본 정보", [2] = "칭호", [3] = "일지", [4] = "과제", [5] = "발자�\168", [6] = "생활"}
+    ;
+    ((self._ui).txt_toolTip):SetText(_tapName[index])
+    ;
+    ((self._ui).txt_toolTip):SetPosX(self._toolTipDefaultPosX + 100 * (index - 1))
+    if index == 1 then
+      self:update()
+    else
+      if index == 2 then
+        InputMLUp_CharacterTitleInfo_TapToOpen(0)
+      else
+        if index == 3 then
+          PaGlobalFunc_CharacterHistoryInfo_Open()
+        else
+          if index == 4 then
+            InputMLUp_CharacterChallengeInfo_TapToOpen(0)
+          else
+            if index == 5 then
+              InputMLUp_CharacterProfileInfo_TapToOpen(0)
+            else
+            end
+          end
+        end
+      end
+    end
+    if index == 6 then
     end
   end
 end
 
-Toggle_CharacterInfoTab_forPadEventFunc = function(index)
-  -- function num : 0_4 , upvalues : CharacterInfo
-  self = CharacterInfo
-  InputMLUp_TapToOpenWindow(index + 1)
-end
-
 CharacterInfo.update = function(self)
-  -- function num : 0_5
+  -- function num : 0_4
   self._player = getSelfPlayer()
   self._playerGet = (self._player):get()
   FromClient_CharacterInfo_Basic_LevelChanged()
@@ -397,7 +417,6 @@ CharacterInfo.update = function(self)
   ((self._ui).txt_SpecialPoint):SetText("특수 명성 " .. tostring(etcFP))
   local msg = ToClient_GetUserIntroduction()
   local oneLineMsg = (string.gsub)(msg, "\n", " ")
-  oneLineMsg = "난너를믿었던만큼내친구도믿었기에난아무렇�\128않게널내친구에게소개"
   ;
   ((self._ui).txt_Introduce):SetEditText(oneLineMsg)
   ;
@@ -433,7 +452,7 @@ CharacterInfo.update = function(self)
 end
 
 FromClient_CharacterInfo_Basic_LevelChanged = function()
-  -- function num : 0_6 , upvalues : CharacterInfo
+  -- function num : 0_5 , upvalues : CharacterInfo
   local self = CharacterInfo
   local _playerLevel = ((self._player):get()):getLevel()
   local _famiName = (self._player):getUserNickname()
@@ -443,7 +462,7 @@ FromClient_CharacterInfo_Basic_LevelChanged = function()
 end
 
 InputMLUp_CharacterInfo_Edit_Introduce = function()
-  -- function num : 0_7 , upvalues : CharacterInfo
+  -- function num : 0_6 , upvalues : CharacterInfo
   local self = CharacterInfo
   SetFocusEdit((self._ui).txt_Introduce)
   ;
@@ -452,6 +471,12 @@ InputMLUp_CharacterInfo_Edit_Introduce = function()
   ((self._ui).txt_Introduce):SetMaxInput(120)
   ;
   ((self._ui).txt_Introduce):SetEditText(((self._ui).txt_Introduce):GetEditText(), true)
+end
+
+PaGlobalFunc_CharacterInfo_UpdateFacePhoto = function()
+  -- function num : 0_7 , upvalues : CharacterInfo
+  local self = CharacterInfo
+  CharacterInfo:updateFacePhoto()
 end
 
 CharacterInfo.updateFacePhoto = function(self)
@@ -558,41 +583,36 @@ FromClient_CharacterInfo_Basic_AttackChanged = function()
   local _charAttack = ToClient_getOffence()
   ;
   ((self._ui).txt_AtkPoint):SetText(tostring(_charAttack))
-  local _isSetAwakenWeapon = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
-  do
-    if _isSetAwakenWeapon ~= nil then
-      local _charAwakenAttack = ToClient_getAwakenOffence()
-      ;
-      ((self._ui).txt_AwakenAtkPoint):SetText(tostring(_charAwakenAttack))
-    end
-    local _charDefence = ToClient_getDefence()
-    ;
-    ((self._ui).txt_DefPoint):SetText(tostring(_charDefence))
-    -- DECOMPILER ERROR at PC50: Confused about usage of register: R4 in 'UnsetPending'
+  local _charAwakenAttack = ToClient_getAwakenOffence()
+  ;
+  ((self._ui).txt_AwakenAtkPoint):SetText(tostring(_charAwakenAttack))
+  local _charDefence = ToClient_getDefence()
+  ;
+  ((self._ui).txt_DefPoint):SetText(tostring(_charDefence))
+  -- DECOMPILER ERROR at PC43: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).stc_StatBattleInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Stat_Battle")
-    -- DECOMPILER ERROR at PC58: Confused about usage of register: R4 in 'UnsetPending'
+  ;
+  (self._ui).stc_StatBattleInfoBg = (UI.getChildControl)((self._ui).stc_CharacterInfoBg, "Static_Stat_Battle")
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).txt_AtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Val")
-    -- DECOMPILER ERROR at PC66: Confused about usage of register: R4 in 'UnsetPending'
+  ;
+  (self._ui).txt_AtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Val")
+  -- DECOMPILER ERROR at PC59: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).txt_AwakenAtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Awaken_Val")
-    -- DECOMPILER ERROR at PC74: Confused about usage of register: R4 in 'UnsetPending'
+  ;
+  (self._ui).txt_AwakenAtkPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Atk_Awaken_Val")
+  -- DECOMPILER ERROR at PC67: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).txt_DefPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Def_Val")
-    -- DECOMPILER ERROR at PC82: Confused about usage of register: R4 in 'UnsetPending'
+  ;
+  (self._ui).txt_DefPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Def_Val")
+  -- DECOMPILER ERROR at PC75: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).txt_StaminaPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Stamina_Val")
-    -- DECOMPILER ERROR at PC90: Confused about usage of register: R4 in 'UnsetPending'
+  ;
+  (self._ui).txt_StaminaPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Stamina_Val")
+  -- DECOMPILER ERROR at PC83: Confused about usage of register: R4 in 'UnsetPending'
 
-    ;
-    (self._ui).txt_SKillPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Skill_Point")
-  end
+  ;
+  (self._ui).txt_SKillPoint = (UI.getChildControl)((self._ui).stc_StatBattleInfoBg, "StaticText_Skill_Point")
 end
 
 FromClient_CharacterInfo_Basic_SkillPointChanged = function()
@@ -619,7 +639,7 @@ FromClient_CharacterInfo_Basic_StaminaChanged = function()
 end
 
 FromClient_CharacterInfo_Basic_PotentialChanged = function()
-  -- function num : 0_16 , upvalues : CharacterInfo, _panel, POTENTIAL_TYPE, Class_BattleSpeed
+  -- function num : 0_16 , upvalues : CharacterInfo, _panel, Class_BattleSpeed
   local self = CharacterInfo
   if _panel:IsShow() == false then
     return 
@@ -627,8 +647,8 @@ FromClient_CharacterInfo_Basic_PotentialChanged = function()
   local levelText = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_POTENLEVEL")
   local classType = (self._player):getClassType()
   local _txt_PotentialDisplay = {[1] = (self._ui).txt_AtkSpeedLevel, [2] = (self._ui).txt_MoveSpeedLevel, [3] = (self._ui).txt_CriticalLevel, [4] = (self._ui).txt_FishingLevel, [5] = (self._ui).txt_GatherLevel, [6] = (self._ui).txt_LuckLevel}
-  local _potentialData = {[1] = (self._player):characterStatPointSpeed(POTENTIAL_TYPE.ATTACKSPEED + Class_BattleSpeed[classType]) - 5, [2] = (self._player):characterStatPointSpeed(POTENTIAL_TYPE.MOVESPEED) - 5, [3] = (self._player):characterStatPointCritical(), [4] = (self._player):getCharacterStatPointFishing(), [5] = (self._player):getCharacterStatPointCollection(), [6] = (self._player):getCharacterStatPointDropItem()}
-  for ii = 1, POTENTIAL_TYPE.TOTALCOUNT do
+  local _potentialData = {[1] = (self._player):characterStatPointSpeed((self.POTENTIAL_TYPE).ATTACKSPEED + Class_BattleSpeed[classType]) - 5, [2] = (self._player):characterStatPointSpeed((self.POTENTIAL_TYPE).MOVESPEED) - 5, [3] = (self._player):characterStatPointCritical(), [4] = (self._player):getCharacterStatPointFishing(), [5] = (self._player):getCharacterStatPointCollection(), [6] = (self._player):getCharacterStatPointDropItem()}
+  for ii = 1, (self.POTENTIAL_TYPE).TOTALCOUNT do
     if (self._potentialUIData).limitPotentialLevel <= _potentialData[ii] then
       _potentialData[ii] = (self._potentialUIData).limitPotentialLevel
     end
@@ -786,7 +806,104 @@ CharacterInfo.open = function(self)
   -- function num : 0_24 , upvalues : _panel
   _panel:SetShow(true, true)
   self:update()
+  InputMLUp_TapToOpenWindow(1)
 end
 
-Panel_Window_CharacterInfo_Renew:RegisterUpdateFunc("CoolTimeCountdown_UpdatePerFrame")
+PaGlobalFunc_Window_CharacterInfo_Close = function()
+  -- function num : 0_25 , upvalues : CharacterInfo
+  CharacterInfo:close()
+end
+
+PaGlobalFunc_Window_CharacterInfo_SaveUserIntroduction = function()
+  -- function num : 0_26 , upvalues : CharacterInfo
+  if CharacterInfo == nil then
+    return 
+  end
+  self = CharacterInfo
+  ToClient_RequestSetUserIntroduction(((self._ui).txt_Introduce):GetText())
+end
+
+CharacterInfo.close = function(self)
+  -- function num : 0_27
+  audioPostEvent_SystemUi(1, 1)
+  Panel_Window_CharacterInfo_Renew:SetShow(false, false)
+  ;
+  (UI.ClearFocusEdit)()
+  Panel_Window_CharacterInfo_Renew:CloseUISubApp()
+  HelpMessageQuestion_Out()
+  Panel_Tooltip_Item_hideTooltip()
+end
+
+PaGlobalFunc_CharacterInfo_CheckIntroduceUiEdit = function(targetUI)
+  -- function num : 0_28 , upvalues : CharacterInfo
+  do
+    local self = CharacterInfo
+    do return targetUI ~= nil and targetUI:GetKey() == ((self._ui).txt_Introduce):GetKey() end
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  end
+end
+
+PaGlobalFunc_CharacterInfo_ShowRightNextTab = function()
+  -- function num : 0_29 , upvalues : CharacterInfo
+  local self = CharacterInfo
+  self:ShowNextTab(false)
+end
+
+PaGlobalFunc_CharacterInfo_ShowLeftNextTab = function()
+  -- function num : 0_30 , upvalues : CharacterInfo
+  local self = CharacterInfo
+  self:ShowNextTab(true)
+end
+
+CharacterInfo.ShowNextTab = function(self, isLeft)
+  -- function num : 0_31
+  -- DECOMPILER ERROR at PC7: Unhandled construct in 'MakeBoolean' P1
+
+  if isLeft == true and self._currentPanelType > 1 then
+    self._currentPanelType = self._currentPanelType - 1
+    InputMLUp_TapToOpenWindow(self._currentPanelType)
+  end
+  if self._currentPanelType < self._maxPanelTypeNumber then
+    self._currentPanelType = self._currentPanelType + 1
+    InputMLUp_TapToOpenWindow(self._currentPanelType)
+  end
+end
+
+PaGlobalFunc_CharacterInfoTab_PadControl = function(index)
+  -- function num : 0_32 , upvalues : CharacterInfo
+  local self = CharacterInfo
+  _PA_LOG("원선", "PaGlobalFunc_CharacterInfoTab_PadControl" .. index)
+  if index == 0 then
+    self:ShowNextTab(true)
+  else
+    self:ShowNextTab(false)
+  end
+end
+
+CharacterInfo.XB_Contorl_Init = function(self)
+  -- function num : 0_33 , upvalues : _panel
+  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_CharacterInfoTab_PadControl(0)")
+  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_CharacterInfoTab_PadControl(1)")
+  ;
+  ((self._ui).stc_CharacterInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "InputMLUp_CharacterInfo_TakePicButton()")
+  ;
+  ((self._ui).stc_CharacterInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
+  ;
+  ((self._ui).stc_TitleInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(0)")
+  ;
+  ((self._ui).stc_TitleInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(1)")
+  ;
+  ((self._ui).stc_HistoryInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "InputMLUp_CharacterHistoryInfo_DecreaseMonth()")
+  ;
+  ((self._ui).stc_HistoryInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "InputMLUp_CharacterHistoryInfo_IncreaseMonth()")
+  ;
+  ((self._ui).stc_ChallengeInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(0)")
+  ;
+  ((self._ui).stc_ChallengeInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(1)")
+  ;
+  ((self._ui).stc_ProfileInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(0)")
+  ;
+  ((self._ui).stc_ProfileInfoBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(1)")
+end
+
 

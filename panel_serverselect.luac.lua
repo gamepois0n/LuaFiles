@@ -46,6 +46,9 @@ local isSpeedServer = {}
 local isNotSpeedServer = {}
 local isFirst = true
 local isSettingLastConnectServer = false
+if _ContentsGroup_isConsolePadControl then
+  mainServerBg:SetShow(false)
+end
 local warInfo = {_uiWarInfo = (UI.getChildControl)(Panel_ServerSelect, "Static_WarInfo"), _warInfoTitle = (UI.getChildControl)(Panel_ServerSelect, "StaticText_WarInfo_Title"), _uiBG = (UI.getChildControl)(Panel_ServerSelect, "Static_WarInfo_BG"), _warGuide = (UI.getChildControl)(Panel_ServerSelect, "StaticText_WarGuide"), _siegeBG = (UI.getChildControl)(Panel_ServerSelect, "Static_SiegeBG"), _staticChannel = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Channel"), _siegeBalenos = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Balenos"), _siegeSerendia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Serendia"), _siegeCalpheon = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Calpheon"), _siegeMedia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Media"), _siegeValencia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Valencia"), _nodeWarBG = (UI.getChildControl)(Panel_ServerSelect, "Static_NodeWarBG"), _staticSchedule = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule"), _scheduleSiege = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule_Siege"), _scheduleNodeWar = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule_Nodewar"), _slotMaxCount = 5, _startPosY = 5, _isSieging = false, _isNodeWar = false, 
 _slots = {}
 }
@@ -430,7 +433,7 @@ for v,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_ServerSelect:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC741: Confused about usage of register: R61 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC747: Confused about usage of register: R61 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex

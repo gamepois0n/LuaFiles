@@ -111,7 +111,11 @@ FromClient_CompleteChallengeReward = function()
   if isNewbie() or ((getSelfPlayer()):get()):getLevel() > 5 then
     Panel_ChallengeReward_Alert:SetShow(false)
     completeChallengeReward_ShowMessage()
-    FromClient_ChallengeReward_UpdateText()
+    if _ContentsGroup_RenewUI == true then
+      PaGlobalFunc_CharacterChallengeInfo_UpdateData()
+    else
+      FromClient_ChallengeReward_UpdateText()
+    end
     FGlobal_RightBottomIconReposition()
     PcRoomGift_TimeCheck()
     PackageIconPosition()

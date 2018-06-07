@@ -1563,48 +1563,52 @@ end
 
 FGlobal_UpdateHouseControl = function(houseInfoSSWrapper)
   -- function num : 0_50 , upvalues : houseInfoSS, HouseManageSection, HouseImageSection, HouseInfoSection
-  FGlobal_GrandWorldMap_SearchToWorldMapMode()
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapSideBar_RetreatToWorldMapMode()
+  else
+    FGlobal_GrandWorldMap_SearchToWorldMapMode()
+  end
   houseInfoSS = houseInfoSSWrapper:get()
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
-
-  HouseControlManager._houseKey = houseInfoSSWrapper:getHouseKey()
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
+  HouseControlManager._houseKey = houseInfoSSWrapper:getHouseKey()
+  -- DECOMPILER ERROR at PC20: Confused about usage of register: R1 in 'UnsetPending'
+
   HouseControlManager._isUsable = ToClient_IsUsable(HouseControlManager._houseKey)
-  -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._feature1 = ToClient_getHouseFeature1(houseInfoSS)
-  -- DECOMPILER ERROR at PC24: Confused about usage of register: R1 in 'UnsetPending'
-
-  HouseControlManager._feature2 = ToClient_getHouseFeature2(houseInfoSS)
   -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
+  HouseControlManager._feature2 = ToClient_getHouseFeature2(houseInfoSS)
+  -- DECOMPILER ERROR at PC36: Confused about usage of register: R1 in 'UnsetPending'
+
   HouseControlManager._screenShotPath = ToClient_getScreenShotPath(houseInfoSS, 0)
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._isSalable = houseInfoSSWrapper:isSalable()
-  -- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC44: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._isPurchasable = houseInfoSSWrapper:isPurchasable()
-  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._needExplorePoint = houseInfoSSWrapper:getNeedExplorePoint()
-  -- DECOMPILER ERROR at PC46: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC52: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._isSet = houseInfoSSWrapper:isSet()
-  -- DECOMPILER ERROR at PC50: Confused about usage of register: R1 in 'UnsetPending'
-
-  HouseControlManager._receipeCount = houseInfoSSWrapper:getReceipeCount()
-  -- DECOMPILER ERROR at PC54: Confused about usage of register: R1 in 'UnsetPending'
-
-  HouseControlManager._houseName = houseInfoSSWrapper:getName()
   -- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
 
+  HouseControlManager._receipeCount = houseInfoSSWrapper:getReceipeCount()
+  -- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
+
+  HouseControlManager._houseName = houseInfoSSWrapper:getName()
+  -- DECOMPILER ERROR at PC62: Confused about usage of register: R1 in 'UnsetPending'
+
   HouseControlManager._clickedUseType = 0
-  -- DECOMPILER ERROR at PC58: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC64: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._clickedUseTypeButton = false
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._offsetIndex = 0
   ;
@@ -1614,48 +1618,48 @@ FGlobal_UpdateHouseControl = function(houseInfoSSWrapper)
   HouseWorkListSection:clear()
   HouseProgressSection_Hide()
   FGlobal_Hide_Tooltip_Work(nil, true)
-  -- DECOMPILER ERROR at PC85: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC91: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseControlManager._Panel_SizeY = Panel_HouseControl:GetSizeY()
   local rentHouse = ToClient_GetRentHouseWrapper(HouseControlManager._houseKey)
-  -- DECOMPILER ERROR at PC99: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
 
   if rentHouse ~= nil and rentHouse:isSet() == true then
     HouseControlManager._currentUseType = rentHouse:getType()
-    -- DECOMPILER ERROR at PC103: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
 
     HouseControlManager._currentLevel = rentHouse:getLevel()
-    -- DECOMPILER ERROR at PC107: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
 
     HouseControlManager._currentGroupType = rentHouse:getHouseUseType()
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC117: Confused about usage of register: R2 in 'UnsetPending'
 
     HouseControlManager._clickedUseType = HouseControlManager._currentUseType
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC121: Confused about usage of register: R2 in 'UnsetPending'
 
     HouseControlManager._clickedGroupType = HouseControlManager._currentGroupType
   else
-    -- DECOMPILER ERROR at PC118: Confused about usage of register: R2 in 'UnsetPending'
-
-    HouseControlManager._currentUseType = -1
-    -- DECOMPILER ERROR at PC122: Confused about usage of register: R2 in 'UnsetPending'
-
-    HouseControlManager._currentGroupType = eHouseUseGroupType.Count
     -- DECOMPILER ERROR at PC124: Confused about usage of register: R2 in 'UnsetPending'
 
+    HouseControlManager._currentUseType = -1
+    -- DECOMPILER ERROR at PC128: Confused about usage of register: R2 in 'UnsetPending'
+
+    HouseControlManager._currentGroupType = eHouseUseGroupType.Count
+    -- DECOMPILER ERROR at PC130: Confused about usage of register: R2 in 'UnsetPending'
+
     HouseControlManager._clickedUseType = 2
-    -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC132: Confused about usage of register: R2 in 'UnsetPending'
 
     HouseControlManager._clickedGroupType = 2
   end
   local realIndex = houseInfoSSWrapper:getIndexByReceipeKey(HouseControlManager._currentUseType)
   local houseInfoCraftWrapper = houseInfoSSWrapper:getHouseCraftWrapperByIndex(realIndex)
-  -- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
 
   if houseInfoCraftWrapper ~= nil then
     HouseControlManager._useTypeName = houseInfoCraftWrapper:getReciepeName()
   else
-    -- DECOMPILER ERROR at PC147: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC153: Confused about usage of register: R4 in 'UnsetPending'
 
     HouseControlManager._useTypeName = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_TYPENAME_EMPTYHOUSE")
   end
@@ -1663,7 +1667,7 @@ FGlobal_UpdateHouseControl = function(houseInfoSSWrapper)
   (HouseControlManager._txt_House_Title):SetText(HouseControlManager._houseName)
   HouseInfoSection:init()
   HouseControlManager:SetCheck(false)
-  -- DECOMPILER ERROR at PC162: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC168: Confused about usage of register: R4 in 'UnsetPending'
 
   HouseControlManager._clickedUseTypeButton = true
   HouseControlManager:clear()
@@ -3332,10 +3336,17 @@ FromClient_ReceiveBuyHouse = function(houseInfoSSWrapper)
       House_SellBuy_Condition.isAll = false
     end
   end
+  -- DECOMPILER ERROR at PC47: Unhandled construct in 'MakeBoolean' P1
+
+  if _ContentsGroup_ForXBoxFinalCert == true and PaGlobalFunc_WorldMapHouseCraft_IsShow() == false then
+    PaGlobalFunc_WorldMapHouseCraft_Open(houseInfoSSWrapper)
+  end
   if Panel_HouseControl:GetShow() and HouseControlManager._houseKey == houseInfoSSWrapper:getHouseKey() then
     FGlobal_UpdateHouseControl(houseInfoSSWrapper)
   end
-  if isWorldMapGrandOpen() then
+  if _ContentsGroup_ForXBoxFinalCert == true then
+    PaGlobalFunc_WorldMapNodeInfo_UpdateExplorePoint()
+  else
     FGlobal_WorldMapGrand_NodeExplorePoint_Update()
   end
 end
@@ -3361,9 +3372,7 @@ FromClient_ReceiveReturnHouse = function(houseInfoSSWrapper)
   if Panel_HouseControl:GetShow() and HouseControlManager._houseKey == houseInfoSSWrapper:getHouseKey() then
     FGlobal_UpdateHouseControl(houseInfoSSWrapper)
   end
-  if isWorldMapGrandOpen() then
-    FGlobal_WorldMapGrand_NodeExplorePoint_Update()
-  end
+  FGlobal_WorldMapGrand_NodeExplorePoint_Update()
 end
 
 FGlobal_ReceiveChangeUseType = function(houseInfoSSWrapper, hasPreviouseHouse)

@@ -509,8 +509,13 @@ CharacterTag.LoadList = function(self)
     targetImage:addInputEvent("Mouse_UpScroll", "PaGlobal_CharacterTag_ScrollEvent(true)")
     targetImage:addInputEvent("Mouse_DownScroll", "PaGlobal_CharacterTag_ScrollEvent(false)")
     local regionInfo = getRegionInfoByPosition(char_float3_position)
-    local serverUtc64 = getServerUtc64()
-    local workingText = global_workTypeToStringSwap(characterData._pcWorkingType)
+    local serverUtc64 = (getServerUtc64())
+    local workingText = nil
+    if _ContentsGroup_RenewUI_ExitGame == false then
+      workingText = global_workTypeToStringSwap(characterData._pcWorkingType)
+    else
+      workingText = PaGlobalFunc_GameExit_workTypeToStringSwap(characterData._pcWorkingType)
+    end
     if pcDeliveryRegionKey:get() ~= 0 and serverUtc64 < characterData._arrivalTime then
       self:SetMonotoneIgnore(targetUI, targetImage, true)
       targetState:SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_WORKING_TEXT_DELIVERY"))

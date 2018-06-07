@@ -642,6 +642,10 @@ FromClient_GuildWarehouseUpdate = function(bForcedOpen, bForcedClose)
   if Worldmap_Grand_GuildHouseControl:GetShow() or Worldmap_Grand_GuildCraft:GetShow() then
     return 
   end
+  if _ContentsGroup_RenewUI_NpcShop == true and PaGlobalFunc_Dialog_NPCShop_IsShow() then
+    FromClient_Dialog_NPCShop_UpdateContent()
+    return 
+  end
   if Panel_Window_NpcShop:IsShow() then
     NpcShop_UpdateContent()
     return 
@@ -1327,14 +1331,8 @@ Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
     WorldMapPopupManager:push(Panel_Window_Warehouse, true)
-    if isWorldMapGrandOpen() then
-      Panel_Window_Warehouse:SetHorizonRight()
-      Panel_Window_Warehouse:SetVerticalMiddle()
-    else
-      Panel_Window_Warehouse:SetHorizonRight()
-      Panel_Window_Warehouse:SetVerticalBottom()
-      Panel_Window_Warehouse:SetPosY(Panel_Window_Warehouse:GetPosY() - 50)
-    end
+    Panel_Window_Warehouse:SetHorizonRight()
+    Panel_Window_Warehouse:SetVerticalMiddle()
   end
   Warehouse_OpenPanel(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)

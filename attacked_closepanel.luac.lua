@@ -60,10 +60,14 @@ FromClient_CancelByAttacked = function()
   if Panel_GameExit:GetShow() then
     GameExitShowToggle(true)
     FGlobal_ChannelSelect_Hide()
-    Panel_GameExit_sendGameDelayExitCancel()
+    if _ContentsGroup_RenewUI_ExitGame == false then
+      Panel_GameExit_sendGameDelayExitCancel()
+    else
+      PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
+    end
   end
   if _ContentsGroup_RenewUI_Dailog == true then
-    PaGlobalFunc_MainDialog_CloseMainDialogDetail()
+    PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     PaGlobalFunc_MainDialog_Hide()
   else
     FGlobal_CloseNpcDialogForDetail()

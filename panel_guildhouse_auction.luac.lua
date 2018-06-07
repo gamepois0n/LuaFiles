@@ -25,6 +25,7 @@ Panel_GuildHouse_Auction_ShowAni = function()
   aniInfo1.AxisY = Panel_GuildHouse_Auction:GetSizeY() / 2
   aniInfo1.ScaleType = 2
   aniInfo1.IsChangeChild = true
+  aniInfo1:SetIgnoreUpdateSnapping(true)
   local aniInfo2 = Panel_GuildHouse_Auction:addScaleAnimation(0.08, 0.15, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo2:SetStartScale(1.1)
   aniInfo2:SetEndScale(1)
@@ -32,6 +33,7 @@ Panel_GuildHouse_Auction_ShowAni = function()
   aniInfo2.AxisY = Panel_GuildHouse_Auction:GetSizeY() / 2
   aniInfo2.ScaleType = 2
   aniInfo2.IsChangeChild = true
+  aniInfo2:SetIgnoreUpdateSnapping(true)
 end
 
 Panel_GuildHouse_Auction_HideAni = function()
@@ -154,8 +156,13 @@ HandleClicked_GuildHouseAuctionPageChange = function()
   end
 end
 
-;
-(GuildHouseAuction.btn_Page_Prv):addInputEvent("Mouse_LUp", "HandleClickedAuctionPrevButton()")
+if _ContentsGroup_isConsolePadControl == false then
+  (GuildHouseAuction.btn_Page_Prv):addInputEvent("Mouse_LUp", "HandleClickedAuctionPrevButton()")
+  ;
+  (GuildHouseAuction.btn_Page_Next):addInputEvent("Mouse_LUp", "HandleClickedAuctionNextButton()")
+end
+Panel_GuildHouse_Auction:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "HandleClickedAuctionPrevButton()")
+Panel_GuildHouse_Auction:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "HandleClickedAuctionNextButton()")
 HandleClickedAuctionPrevButton = function()
   -- function num : 0_6 , upvalues : GuildHouseAuctionManager
   for key,value in pairs(GuildHouseAuctionManager._houseAuctionList) do
@@ -165,8 +172,6 @@ HandleClickedAuctionPrevButton = function()
   RequestAuctionPrevPage()
 end
 
-;
-(GuildHouseAuction.btn_Page_Next):addInputEvent("Mouse_LUp", "HandleClickedAuctionNextButton()")
 HandleClickedAuctionNextButton = function()
   -- function num : 0_7 , upvalues : GuildHouseAuctionManager
   local myAuctionInfo = RequestGetAuctionInfo()

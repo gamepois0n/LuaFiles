@@ -2962,8 +2962,18 @@ FGlobal_Chatting_ShowToggle = function()
   FromClient_ChatUpdate()
 end
 
+PaGlobalFunc_Chatting_ShowOff = function()
+  -- function num : 0_56 , upvalues : ChatUIPoolManager
+  for chatPoolIdx = 0, 4 do
+    local baseChatPanel = ChatUIPoolManager:getPanel(chatPoolIdx)
+    if baseChatPanel ~= nil then
+      baseChatPanel:SetShow(false)
+    end
+  end
+end
+
 FGlobal_Chatting_PanelTransparency = function(panelIndex, _transparency, update)
-  -- function num : 0_56 , upvalues : ChattingViewManager
+  -- function num : 0_57 , upvalues : ChattingViewManager
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
   (ChattingViewManager._transparency)[panelIndex] = _transparency
@@ -2975,12 +2985,12 @@ FGlobal_Chatting_PanelTransparency = function(panelIndex, _transparency, update)
 end
 
 FGlobal_Chatting_PanelTransparency_Chk = function(panelIndex)
-  -- function num : 0_57 , upvalues : ChattingViewManager
+  -- function num : 0_58 , upvalues : ChattingViewManager
   return (ChattingViewManager._transparency)[panelIndex]
 end
 
 Chatting_PanelTransparency = function(panelIndex, transparency, isHideTooltip)
-  -- function num : 0_58 , upvalues : ChatUIPoolManager, isMouseOn, ChattingViewManager, isMouseOnChattingViewIndex
+  -- function num : 0_59 , upvalues : ChatUIPoolManager, isMouseOn, ChattingViewManager, isMouseOnChattingViewIndex
   local count = ToClient_getChattingPanelCount()
   if count < panelIndex then
     return 
@@ -3015,7 +3025,7 @@ Chatting_PanelTransparency = function(panelIndex, transparency, isHideTooltip)
 end
 
 FGlobal_MainChatPanelUpdate = function()
-  -- function num : 0_59 , upvalues : ChatUIPoolManager, UI_color
+  -- function num : 0_60 , upvalues : ChatUIPoolManager, UI_color
   local chatPanelInfo = ToClient_getChattingPanel(0)
   local targetPanel = ChatUIPoolManager:getPanel(0)
   targetPanel:SetShow(false, false)
@@ -3034,7 +3044,7 @@ FGlobal_MainChatPanelUpdate = function()
 end
 
 ChatPanel_Update = function()
-  -- function num : 0_60 , upvalues : ChatUIPoolManager
+  -- function num : 0_61 , upvalues : ChatUIPoolManager
   local count = ToClient_getChattingPanelCount()
   for panelIndex = 0, count - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
@@ -3049,7 +3059,7 @@ ChatPanel_Update = function()
 end
 
 ChattingPoolUpdate = function(poolCurrentUI, currentPanel, panelIndex, drawPanelIndex)
-  -- function num : 0_61 , upvalues : ChattingViewManager
+  -- function num : 0_62 , upvalues : ChattingViewManager
   poolCurrentUI:clear()
   local panel_resizeButton = poolCurrentUI:newResizeButton()
   panel_resizeButton:SetNotAbleMasking(true)
@@ -3089,7 +3099,11 @@ ChattingPoolUpdate = function(poolCurrentUI, currentPanel, panelIndex, drawPanel
 end
 
 FromClient_ChatUpdate = function(isShow, currentPanelIndex)
-  -- function num : 0_62 , upvalues : _tabButton_PosX, addChat_PosX, ChatUIPoolManager, ChattingViewManager, isMouseOn
+  -- function num : 0_63 , upvalues : _tabButton_PosX, addChat_PosX, ChatUIPoolManager, ChattingViewManager, isMouseOn
+  if _ContentsGroup_RenewUI == true then
+    PaGlobalFunc_Chatting_ShowOff()
+    return 
+  end
   _tabButton_PosX = 0
   addChat_PosX = 0
   local openedChattingPanelCount = 0
@@ -3118,11 +3132,11 @@ FromClient_ChatUpdate = function(isShow, currentPanelIndex)
         do
           local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
           poolCurrentUI:clear()
-          -- DECOMPILER ERROR at PC70: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC76: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC70: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC76: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC70: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC76: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -3166,7 +3180,7 @@ FromClient_ChatUpdate = function(isShow, currentPanelIndex)
       if ChattingViewManager._addChattingPreset == false then
         ChattingOption_Open(ChattingViewManager._addChattingIdx, 0, true)
       end
-      -- DECOMPILER ERROR at PC186: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC192: Confused about usage of register: R4 in 'UnsetPending'
 
       ChattingViewManager._addChattingIdx = nil
     end
@@ -3174,23 +3188,23 @@ FromClient_ChatUpdate = function(isShow, currentPanelIndex)
 end
 
 FGlobal_getChattingPanel = function(poolIndex)
-  -- function num : 0_63 , upvalues : ChatUIPoolManager
+  -- function num : 0_64 , upvalues : ChatUIPoolManager
   local panel = ChatUIPoolManager:getPanel(poolIndex)
   return panel
 end
 
 FGlobal_getChattingPanelUIPool = function(panelIndex)
-  -- function num : 0_64 , upvalues : ChatUIPoolManager
+  -- function num : 0_65 , upvalues : ChatUIPoolManager
   return ChatUIPoolManager:getPool(panelIndex)
 end
 
 Chatting_EnableSimpleUI = function()
-  -- function num : 0_65
+  -- function num : 0_66
   FromClient_ChatUpdate()
 end
 
 FGlobal_InputModeChangeForChatting = function()
-  -- function num : 0_66 , upvalues : isMouseOn, ChattingViewManager
+  -- function num : 0_67 , upvalues : isMouseOn, ChattingViewManager
   local IM = CppEnums.EProcessorInputMode
   if ToClient_isLoadingProcessor() == false and IM.eProcessorInputMode_GameMode == getInputMode() then
     isMouseOn = false
@@ -3202,7 +3216,7 @@ local saveWhisperTime = getTime()
 local checkWhistperTime = toUint64(0, 60000)
 local sendPossibleTime = toUint64(0, 0)
 FromClient_PrivateChatMessageUpdate = function()
-  -- function num : 0_67 , upvalues : sendPossibleTime, checkWhistperTime
+  -- function num : 0_68 , upvalues : sendPossibleTime, checkWhistperTime
   if sendPossibleTime <= getTime() then
     audioPostEvent_SystemUi(100, 0)
     sendPossibleTime = getTime() + checkWhistperTime
@@ -3210,27 +3224,27 @@ FromClient_PrivateChatMessageUpdate = function()
 end
 
 Chatting_setIsOpenValue = function(panelIndex, isOpen)
-  -- function num : 0_68
+  -- function num : 0_69
   local chatPanel = ToClient_getChattingPanel(panelIndex)
   chatPanel:setOpenValue(isOpen)
 end
 
 Chatting_setUsedSmoothChattingUp = function(flag)
-  -- function num : 0_69 , upvalues : isUsedSmoothChattingUp
+  -- function num : 0_70 , upvalues : isUsedSmoothChattingUp
   isUsedSmoothChattingUp = flag
 end
 
 Chatting_getUsedSmoothChattingUp = function()
-  -- function num : 0_70 , upvalues : isUsedSmoothChattingUp
+  -- function num : 0_71 , upvalues : isUsedSmoothChattingUp
   return isUsedSmoothChattingUp
 end
 
 checkCombineandActiveMainPanel = function()
-  -- function num : 0_71
+  -- function num : 0_72
 end
 
 ResetAllScroll = function()
-  -- function num : 0_72 , upvalues : ChatUIPoolManager, ChattingViewManager
+  -- function num : 0_73 , upvalues : ChatUIPoolManager, ChattingViewManager
   local count = ToClient_getChattingPanelCount()
   for panelIndex = 0, count - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
@@ -3249,7 +3263,11 @@ ResetAllScroll = function()
       ((poolCurrentUI._list_Scroll)[0]):SetControlPos(1)
     end
   end
-  FromClient_ChatUpdate(true)
+  if _ContentsGroup_RenewUI == true then
+    PaGlobalFunc_Chatting_ShowOff()
+  else
+    FromClient_ChatUpdate(true)
+  end
 end
 
 registerEvent("EventSimpleUIEnable", "Chatting_EnableSimpleUI")

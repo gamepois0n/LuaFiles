@@ -2905,6 +2905,10 @@ FromClient_ResponseUpdateGuildContract = function(notifyType, userNickName, char
                                                 if toInt64(0, 0) == s64_param1 then
                                                   Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_USEGUILDSHOP_BUY", "userNickName", tostring(userNickName), "param2", makeDotMoney(s64_param2)))
                                                 end
+                                                if _ContentsGroup_RenewUI_NpcShop == true and PaGlobalFunc_Dialog_NPCShop_IsShow() and npcShop_isGuildShopContents() then
+                                                  FromClient_Dialog_NPCShop_UpdateMoneyWarehouse()
+                                                  return 
+                                                end
                                                 if Panel_Window_NpcShop:IsShow() and npcShop_isGuildShopContents() then
                                                   NpcShop_UpdateMoneyWarehouse()
                                                   return 
@@ -2932,14 +2936,14 @@ FromClient_ResponseUpdateGuildContract = function(notifyType, userNickName, char
                                                       else
                                                         do
                                                           do
-                                                            -- DECOMPILER ERROR at PC425: Unhandled construct in 'MakeBoolean' P1
+                                                            -- DECOMPILER ERROR at PC440: Unhandled construct in 'MakeBoolean' P1
 
                                                             if notifyType == 17 and ToClient_GetMessageFilter(9) == false then
                                                               local text = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ACCEPT_GUILDQUEST")
                                                               Proc_ShowMessage_Ack(text)
                                                             end
                                                             do
-                                                              -- DECOMPILER ERROR at PC441: Unhandled construct in 'MakeBoolean' P1
+                                                              -- DECOMPILER ERROR at PC456: Unhandled construct in 'MakeBoolean' P1
 
                                                               if notifyType == 18 and ToClient_GetMessageFilter(9) == false then
                                                                 local text = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_COMPLETE_GUILDQUEST")
@@ -2956,7 +2960,7 @@ FromClient_ResponseUpdateGuildContract = function(notifyType, userNickName, char
                                                               else
                                                               end
                                                               do
-                                                                -- DECOMPILER ERROR at PC492: Unhandled construct in 'MakeBoolean' P1
+                                                                -- DECOMPILER ERROR at PC507: Unhandled construct in 'MakeBoolean' P1
 
                                                                 if (notifyType ~= 20 or notifyType == 21) and (CppEnums.GuildWarType).GuildWarType_Normal == ToClient_GetGuildWarType() then
                                                                   if param3 == 1 then

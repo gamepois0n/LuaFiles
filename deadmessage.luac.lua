@@ -56,6 +56,7 @@ local matchReviveTime = 10
 local buttonAbleTime = 10
 local isUseButtonAbleTime = false
 local isSiegeBeingInDead = false
+local isMyChannelSiegeBeing = false
 local ResurrectionTime = revivalTime
 local CurrentTime = 0
 local revivalCacheItemCount = 0
@@ -588,7 +589,7 @@ local deadMessage_Animation = function()
 end
 
 deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreExp, isAblePvPMatchRevive, respawnTime)
-  -- function num : 0_7 , upvalues : _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Plunder, _button_SavageOut, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, ResurrectionTime, revivalTime, deadMessage_Animation, _deadMessage, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
+  -- function num : 0_7 , upvalues : _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Plunder, _button_SavageOut, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, ResurrectionTime, revivalTime, deadMessage_Animation, _deadMessage, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, isMyChannelSiegeBeing, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
   if Panel_GameExit:GetShow() then
     Panel_GameExit:SetShow(false)
   end
@@ -932,10 +933,10 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
     local isVillageWarZone = (linkedSiegeRegionInfoWrapper:get()):isVillageWarZone()
     isSiegeBeingInDead = deadMessage_isSiegeBeingInCurrentPosition()
     local isArena = (regionInfo:get()):isArenaArea()
-    local isMyChannelSiegeBeing = deadMessage_isSiegeBeingMyChannel()
+    isMyChannelSiegeBeing = deadMessage_isSiegeBeingMyChannel()
     buttonAbleTime = -1
     isUseButtonAbleTime = false
-    if (isSiegeBeingInDead and deadMessage_isInSiegeBattle()) or (selfProxy:get()):getVolunteerTeamNoForLua() ~= 0 then
+    if (isMyChannelSiegeBeing and deadMessage_isInSiegeBattle()) or (selfProxy:get()):getVolunteerTeamNoForLua() ~= 0 then
       respawnTime = respawnTime / 1000
       local buttonDelayTime = respawnTime
       if buttonDelayTime ~= 0 then
@@ -1140,7 +1141,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
 end
 
 deadMessage_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_8 , upvalues : isUseButtonAbleTime, buttonAbleTime, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _button_Immediate, _button_GuildSpawn, _button_Volunteer, ResurrectionTime, CurrentTime, isSiegeBeingInDead, _regenTime, UI_ANI_ADV, UI_color, deadMessage_ClearDropItems, _button_GuildObserverMode, _button_ObserverMode
+  -- function num : 0_8 , upvalues : isUseButtonAbleTime, buttonAbleTime, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _button_Immediate, _button_GuildSpawn, _button_Volunteer, ResurrectionTime, CurrentTime, isMyChannelSiegeBeing, _regenTime, UI_ANI_ADV, UI_color, deadMessage_ClearDropItems, _button_GuildObserverMode, _button_ObserverMode
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil or not selfPlayer:isDead() then
     Panel_DeadMessage:SetShow(false, false)
@@ -1166,7 +1167,7 @@ deadMessage_UpdatePerFrame = function(deltaTime)
     ResurrectionTime = ResurrectionTime - deltaTime
     local regenTime = (math.floor)(ResurrectionTime)
     if CurrentTime ~= regenTime then
-      if isUseButtonAbleTime and not isSiegeBeingInDead then
+      if isUseButtonAbleTime and not isMyChannelSiegeBeing then
         _regenTime:SetText(PAGetString(Defines.StringSheet_GAME, DEADMESSAGE_TEXT_RespawnWaitting))
       else
         _regenTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_RESPAWN_TIME", "regenTime", tostring(regenTime)))
@@ -1181,7 +1182,7 @@ deadMessage_UpdatePerFrame = function(deltaTime)
         _regenTime:SetShow(false)
       end
     end
-    if not isSiegeBeingInDead then
+    if not isMyChannelSiegeBeing then
       if ((getSelfPlayer()):get()):getVolunteerTeamNoForLua() ~= 0 then
         Panel_DeadMessage:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
         do

@@ -156,11 +156,7 @@ FGlobal_NodeWarInfo_Open = function()
   if Panel_Win_Worldmap_NodeWarInfo:GetShow() then
     return 
   end
-  if isWorldMapGrandOpen() then
-    Panel_Win_Worldmap_NodeWarInfo:SetSpanSize(5, 75)
-  else
-    Panel_Win_Worldmap_NodeWarInfo:SetSpanSize(5, 5)
-  end
+  Panel_Win_Worldmap_NodeWarInfo:SetSpanSize(5, 75)
   local territoryCount = getTerritoryListByAll()
   if territoryCount == nil then
     return 

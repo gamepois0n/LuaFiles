@@ -12,16 +12,6 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local IM = CppEnums.EProcessorInputMode
-Panel_Window_FairyList:RegisterShowEventFunc(true, "PetNewListShowAni()")
-Panel_Window_FairyList:RegisterShowEventFunc(false, "PetNewListHideAni()")
-PetNewListShowAni = function()
-  -- function num : 0_0
-end
-
-PetNewListHideAni = function()
-  -- function num : 0_1
-end
-
 local isFairyOpen = true
 local maxUnsealCount = 1
 local nowFairyCompose = false
@@ -55,7 +45,7 @@ _cacheSetting = {_hpKey = 0, _mpKey = 0, _hpRate = 0, _mpRate = 0}
 ;
 (FairyList.Static_SkillList):SetShow(true)
 FairyList.GetSubGageRateText = function(self, value)
-  -- function num : 0_2 , upvalues : fairySubGageRateText
+  -- function num : 0_0 , upvalues : fairySubGageRateText
   if (fairySubGageRateText[1])[value] == nil then
     value = 0
   end
@@ -63,12 +53,12 @@ FairyList.GetSubGageRateText = function(self, value)
 end
 
 PaGlobal_FairySetting_IsOpen = function()
-  -- function num : 0_3 , upvalues : FairyList
+  -- function num : 0_1 , upvalues : FairyList
   return (FairyList.Static_FairySetting):GetShow()
 end
 
 FairyList.ClearCache = function(self)
-  -- function num : 0_4
+  -- function num : 0_2
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._cacheSetting)._hpKey = ItemEnchantKey(0, 0)
@@ -87,7 +77,7 @@ FairyList.ClearCache = function(self)
 end
 
 FairyList.SetPosition = function(self)
-  -- function num : 0_5
+  -- function num : 0_3
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_FairyList:GetSizeX()
@@ -97,7 +87,7 @@ FairyList.SetPosition = function(self)
 end
 
 FairyList.Open = function(self)
-  -- function num : 0_6 , upvalues : spiritClass, ClassType_Valkiry
+  -- function num : 0_4 , upvalues : spiritClass, ClassType_Valkiry
   if self._isSubGageClassType == nil then
     local selfPlayer = getSelfPlayer()
     local classType = selfPlayer:getClassType()
@@ -122,7 +112,7 @@ FairyList.Open = function(self)
 end
 
 FairyList.SetFairyList = function(self, noclearscroll)
-  -- function num : 0_7
+  -- function num : 0_5
   if not Panel_Window_FairyList:GetShow() then
     return 
   end
@@ -201,7 +191,7 @@ FairyList.SetFairyList = function(self, noclearscroll)
 end
 
 FairyList = function(control, key)
-  -- function num : 0_8 , upvalues : UI_TM, FairyHpRateText, FairyList
+  -- function num : 0_6 , upvalues : UI_TM, FairyHpRateText, FairyList
   local bg = (UI.getChildControl)(control, "Template_Static_ListContentBG")
   local iconBg = (UI.getChildControl)(control, "Template_Static_IconFairyBG")
   local icon = (UI.getChildControl)(control, "Template_Static_IconFairy")
@@ -217,7 +207,7 @@ FairyList = function(control, key)
   local sealPetCount = ToClient_getFairySealedList()
   local unsealPetCount = ToClient_getFairyUnsealedList()
   local isUnsealPet = function(petNo_s64)
-    -- function num : 0_8_0 , upvalues : unsealPetCount
+    -- function num : 0_6_0 , upvalues : unsealPetCount
     if unsealPetCount > 0 then
       for index = 0, unsealPetCount - 1 do
         local pcPetData = ToClient_getFairyUnsealedDataByIndex(index)
@@ -403,18 +393,18 @@ FairyList = function(control, key)
 end
 
 PaGlobal_FairyList_Question = function()
-  -- function num : 0_9
+  -- function num : 0_7
   _PA_LOG("�\128민혁", "요정 도움말정보를 요청합니�\164. 함수 내부구현해주세요...")
 end
 
 PaGlobal_FairyList_Close = function()
-  -- function num : 0_10 , upvalues : Static_FairySetting_all
+  -- function num : 0_8 , upvalues : Static_FairySetting_all
   Panel_Window_FairyList:SetShow(false, false)
   Static_FairySetting_all:SetShow(false, false)
 end
 
 PaGlobal_FairyList_UnSeal = function(petNoStr)
-  -- function num : 0_11 , upvalues : FairyList
+  -- function num : 0_9 , upvalues : FairyList
   audioPostEvent_SystemUi(1, 40)
   local self = FairyList
   local petNo_s64 = tonumber64(petNoStr)
@@ -426,7 +416,7 @@ PaGlobal_FairyList_UnSeal = function(petNoStr)
 end
 
 PaGlobal_FairyList_Seal = function(petNoStr)
-  -- function num : 0_12 , upvalues : FairyList
+  -- function num : 0_10 , upvalues : FairyList
   audioPostEvent_SystemUi(1, 40)
   local self = FairyList
   local petNo_s64 = tonumber64(petNoStr)
@@ -434,7 +424,7 @@ PaGlobal_FairyList_Seal = function(petNoStr)
 end
 
 PaGlobal_FairyList_Setting = function(petNoStr)
-  -- function num : 0_13 , upvalues : FairyList
+  -- function num : 0_11 , upvalues : FairyList
   audioPostEvent_SystemUi(1, 40)
   local self = FairyList
   if (self.Static_FairySetting):GetShow() == true then
@@ -448,13 +438,13 @@ PaGlobal_FairyList_Setting = function(petNoStr)
 end
 
 PaGlobal_FairySettingList_GetShow = function()
-  -- function num : 0_14 , upvalues : FairyList
+  -- function num : 0_12 , upvalues : FairyList
   local self = FairyList
   return (self.Static_FairySetting):GetShow()
 end
 
 PaGlobal_FairyList_SetYes = function()
-  -- function num : 0_15 , upvalues : FairyList
+  -- function num : 0_13 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -473,7 +463,7 @@ PaGlobal_FairyList_SetYes = function()
 end
 
 PaGlobal_FairyList_SetNo = function()
-  -- function num : 0_16 , upvalues : FairyList
+  -- function num : 0_14 , upvalues : FairyList
   local self = FairyList
   self._currentPetNoStr = nil
   self:ClearCache()
@@ -482,7 +472,7 @@ PaGlobal_FairyList_SetNo = function()
 end
 
 FairyList.Update_Setting = function(self, petNoStr, notDataUpdate)
-  -- function num : 0_17
+  -- function num : 0_15
   local petNo_s64 = tonumber64(petNoStr)
   local settingData = ToClient_getFairySettingData(petNo_s64)
   if notDataUpdate then
@@ -557,7 +547,7 @@ FairyList.Update_Setting = function(self, petNoStr, notDataUpdate)
 end
 
 PaGlobal_FairyList_HpRateCheck = function(rate)
-  -- function num : 0_18 , upvalues : FairyList
+  -- function num : 0_16 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -566,7 +556,7 @@ PaGlobal_FairyList_HpRateCheck = function(rate)
 end
 
 PaGlobal_FairyList_MpRateCheck = function(mpCheck)
-  -- function num : 0_19 , upvalues : FairyList
+  -- function num : 0_17 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -575,7 +565,7 @@ PaGlobal_FairyList_MpRateCheck = function(mpCheck)
 end
 
 PaGlobal_FairyList_IsHp = function(hpKeyStr)
-  -- function num : 0_20 , upvalues : fairyMainPotionData
+  -- function num : 0_18 , upvalues : fairyMainPotionData
   local key = tonumber(hpKeyStr)
   for idx,value in pairs(fairyMainPotionData) do
     if key == value then
@@ -586,7 +576,7 @@ PaGlobal_FairyList_IsHp = function(hpKeyStr)
 end
 
 PaGlobal_FairyList_IsMp = function(mpKeyStr)
-  -- function num : 0_21 , upvalues : fairySubPotionData, FairyList
+  -- function num : 0_19 , upvalues : fairySubPotionData, FairyList
   local key = tonumber(mpKeyStr)
   for idx,value in pairs(fairySubPotionData[FairyList._isSubGageClassType]) do
     if key == value then
@@ -597,12 +587,12 @@ PaGlobal_FairyList_IsMp = function(mpKeyStr)
 end
 
 FromClient_FairyUpdate = function()
-  -- function num : 0_22 , upvalues : FairyList
+  -- function num : 0_20 , upvalues : FairyList
   FairyList:SetFairyList()
 end
 
 PaGlobal_FairySetting_HpReset = function()
-  -- function num : 0_23 , upvalues : FairyList
+  -- function num : 0_21 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -613,7 +603,7 @@ PaGlobal_FairySetting_HpReset = function()
 end
 
 PaGlobal_FairySetting_MpReset = function()
-  -- function num : 0_24 , upvalues : FairyList
+  -- function num : 0_22 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -624,7 +614,7 @@ PaGlobal_FairySetting_MpReset = function()
 end
 
 FromClient_ShowFairyMessageByType = function(msgType)
-  -- function num : 0_25 , upvalues : FairyMessageType
+  -- function num : 0_23 , upvalues : FairyMessageType
   if ToClient_IsDevelopment() == false then
     return 
   end
@@ -640,7 +630,7 @@ FromClient_ShowFairyMessageByType = function(msgType)
 end
 
 FairyList.Initialize = function(self)
-  -- function num : 0_26
+  -- function num : 0_24
   (self.List2_FairyList):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "FairyListCreate")
   ;
   (self.List2_FairyList):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
@@ -691,7 +681,7 @@ FairyList.Initialize = function(self)
 end
 
 HandleClicked_OnOut_ShowHpEquipItemToolTip = function(isShow)
-  -- function num : 0_27 , upvalues : FairyList
+  -- function num : 0_25 , upvalues : FairyList
   local self = FairyList
   local selfPlayer = (getSelfPlayer()):get()
   local inventory = selfPlayer:getInventoryByType((CppEnums.ItemWhereType).eInventory)
@@ -711,7 +701,7 @@ HandleClicked_OnOut_ShowHpEquipItemToolTip = function(isShow)
 end
 
 HandleClicked_OnOut_ShowMpEquipItemToolTip = function(isShow)
-  -- function num : 0_28 , upvalues : FairyList
+  -- function num : 0_26 , upvalues : FairyList
   local self = FairyList
   local selfPlayer = (getSelfPlayer()):get()
   local inventory = selfPlayer:getInventoryByType((CppEnums.ItemWhereType).eInventory)
@@ -752,7 +742,7 @@ skillNoList = {nil, nil, nil, nil, nil; [0] = nil}
 FairyComposeNo = {[0] = nil, [1] = nil}
 , race = nil}
 FairyCompose.Initialize = function(self)
-  -- function num : 0_29
+  -- function num : 0_27
   (self._button_Compose):addInputEvent("Mouse_LUp", "PaGlobal_FairyComposeOpen()")
   ;
   (self.btn_Yes):addInputEvent("Mouse_LUp", "Confirm_FairyCompose()")
@@ -775,7 +765,7 @@ FairyCompose.Initialize = function(self)
 end
 
 FairyCompose_Init = function()
-  -- function num : 0_30 , upvalues : FairyCompose
+  -- function num : 0_28 , upvalues : FairyCompose
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
 
   (FairyCompose.FairyComposeNo)[0] = nil
@@ -838,7 +828,7 @@ end
 local petComposeString = PAGetString(Defines.StringSheet_GAME, "PANEL_PETLIST_PETCOMPOSE_NAME")
 local petComposeDesc = PAGetString(Defines.StringSheet_GAME, "PANEL_PETLIST_PETCOMPOSE_DESC")
 FairyCompose.Open = function(self)
-  -- function num : 0_31 , upvalues : nowFairyCompose, FairyCompose, petComposeString, composeFairyTier
+  -- function num : 0_29 , upvalues : nowFairyCompose, FairyCompose, petComposeString, composeFairyTier
   nowFairyCompose = true
   Panel_Window_FairyCompose:SetShow(true)
   Panel_Window_FairyCompose:SetPosX(Panel_Window_FairyList:GetPosX() + Panel_Window_FairyList:GetSizeX() + 10)
@@ -850,46 +840,46 @@ FairyCompose.Open = function(self)
 end
 
 FairyCompose.Clear = function(self)
-  -- function num : 0_32
+  -- function num : 0_30
 end
 
 FairyCompose.Close = function(self)
-  -- function num : 0_33 , upvalues : nowFairyCompose
+  -- function num : 0_31 , upvalues : nowFairyCompose
   nowFairyCompose = false
   Panel_Window_FairyCompose:SetShow(false)
 end
 
 FairyList_Compose = function()
-  -- function num : 0_34
+  -- function num : 0_32
 end
 
 PaGlobal_FairyComposeOpen = function()
-  -- function num : 0_35 , upvalues : FairyCompose
+  -- function num : 0_33 , upvalues : FairyCompose
   FairyCompose:Open()
 end
 
 PaGlobal_FairyComposeClose = function()
-  -- function num : 0_36 , upvalues : FairyCompose
+  -- function num : 0_34 , upvalues : FairyCompose
   FairyCompose:Close()
 end
 
 testFairy1 = function()
-  -- function num : 0_37
+  -- function num : 0_35
   PaGlobal_FairyComposeSetting("2404", 1, 1)
 end
 
 testFairy2 = function()
-  -- function num : 0_38
+  -- function num : 0_36
   PaGlobal_FairyComposeSetting("2405", 1, 1)
 end
 
 testFairy3 = function()
-  -- function num : 0_39
+  -- function num : 0_37
   PaGlobal_FairyComposeSetting("2422", 1, 3)
 end
 
 PaGlobal_FairyComposeSetting = function(fairyNoStr, fairyRace, sealFairyIndex)
-  -- function num : 0_40 , upvalues : FairyCompose, FairyList
+  -- function num : 0_38 , upvalues : FairyCompose, FairyList
   local self = FairyCompose
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R4 in 'UnsetPending'
 
@@ -916,7 +906,7 @@ PaGlobal_FairyComposeSetting = function(fairyNoStr, fairyRace, sealFairyIndex)
 end
 
 composeFairyNo = function(fairyNo)
-  -- function num : 0_41
+  -- function num : 0_39
   for sealFairyIndex = 0, ToClient_getFairySealedList() - 1 do
     local fairyData = ToClient_getFairySealedDataByIndex(sealFairyIndex)
     local _fairyNo = fairyData._petNo
@@ -929,7 +919,7 @@ composeFairyNo = function(fairyNo)
 end
 
 PaGlobal_FairyImgChange = function(fairyNo, index)
-  -- function num : 0_42 , upvalues : FairyCompose
+  -- function num : 0_40 , upvalues : FairyCompose
   for sealFairyIndex = 0, ToClient_getFairySealedList() - 1 do
     local fairyData = ToClient_getPetSealedDataByIndex(sealFairyIndex)
     local _fairyNo = fairyData._petNo
@@ -952,7 +942,7 @@ PaGlobal_FairyImgChange = function(fairyNo, index)
 end
 
 FairyCompose_SkillSet = function(fairyIndex, uiIndex)
-  -- function num : 0_43 , upvalues : FairyCompose
+  -- function num : 0_41 , upvalues : FairyCompose
   local self = FairyCompose
   local fairyData = ToClient_getFairySealedDataByIndex(fairyIndex)
   if fairyData == nil then
@@ -1003,7 +993,7 @@ FairyCompose_SkillSet = function(fairyIndex, uiIndex)
 end
 
 FairyComposeSkill_Init = function()
-  -- function num : 0_44 , upvalues : FairyCompose
+  -- function num : 0_42 , upvalues : FairyCompose
   for ii,aSkillSlot in pairs((FairyCompose.skillSlot)[3]) do
     aSkillSlot:SetShow(false)
     aSkillSlot:addInputEvent("Mouse_On", "")
@@ -1013,7 +1003,7 @@ end
 
 local fairySkillCheck = nil
 FairyCompose_UpdateFairySkillList = function()
-  -- function num : 0_45 , upvalues : FairyCompose, fairySkillCheck
+  -- function num : 0_43 , upvalues : FairyCompose, fairySkillCheck
   local fairyNo0 = (FairyCompose.FairyComposeNo)[0]
   local fairyNo1 = (FairyCompose.FairyComposeNo)[1]
   FairyComposeSkill_Init()
@@ -1023,7 +1013,7 @@ FairyCompose_UpdateFairySkillList = function()
   (FairyCompose.skillNoList)[0] = nil
   fairySkillCheck = {}
   local havePetSkillCheck = function(fairyNo)
-    -- function num : 0_45_0 , upvalues : fairySkillCheck, FairyCompose
+    -- function num : 0_43_0 , upvalues : fairySkillCheck, FairyCompose
     if fairyNo ~= nil then
       local skillLearnCount = 0
       local skillMaxCount = ToClient_getPetEquipSkillMax()
@@ -1068,7 +1058,7 @@ FairyCompose_UpdateFairySkillList = function()
     end
   end
   local fairyIconChange = function(fairyNo)
-    -- function num : 0_45_1 , upvalues : FairyCompose
+    -- function num : 0_43_1 , upvalues : FairyCompose
     for sealPetIndex = 0, ToClient_getFairySealedList() - 1 do
       local fairyData = ToClient_getFairySealedDataByIndex(sealPetIndex)
       local _fairyNo = fairyData._petNo
@@ -1099,7 +1089,7 @@ FairyCompose_UpdateFairySkillList = function()
 end
 
 HandleClicked_FairyCompose_ClearEdit = function()
-  -- function num : 0_46 , upvalues : FairyCompose
+  -- function num : 0_44 , upvalues : FairyCompose
   (FairyCompose.editName):SetMaxInput(getGameServiceTypePetNameLength())
   SetFocusEdit(FairyCompose.editName)
   ;
@@ -1107,7 +1097,7 @@ HandleClicked_FairyCompose_ClearEdit = function()
 end
 
 Confirm_FairyCompose = function()
-  -- function num : 0_47 , upvalues : FairyCompose, petComposeString
+  -- function num : 0_45 , upvalues : FairyCompose, petComposeString
   ClearFocusEdit(FairyCompose.editName)
   local fairyName = (FairyCompose.editName):GetEditText()
   if fairyName == "" or petComposeString == fairyName then
@@ -1116,7 +1106,7 @@ Confirm_FairyCompose = function()
   end
   if (FairyCompose.FairyComposeNo)[1] ~= nil then
     local confirm_compose = function()
-    -- function num : 0_47_0 , upvalues : FairyCompose, fairyName
+    -- function num : 0_45_0 , upvalues : FairyCompose, fairyName
     -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
 
     if FairyCompose.preserveSkillNo == nil then
@@ -1159,12 +1149,12 @@ end
 FairyList:Initialize()
 FairyCompose:Initialize()
 PaGlobal_FairyList_Open = function()
-  -- function num : 0_48 , upvalues : FairyList
+  -- function num : 0_46 , upvalues : FairyList
   FairyList:Open()
 end
 
 OpenFairyList = function()
-  -- function num : 0_49 , upvalues : isFairyOpen, FairyList
+  -- function num : 0_47 , upvalues : isFairyOpen, FairyList
   if isFairyOpen == false then
     return 
   end
@@ -1172,7 +1162,7 @@ OpenFairyList = function()
 end
 
 TestLua = function()
-  -- function num : 0_50
+  -- function num : 0_48
   if ToClient_IsDevelopment() == false then
     return 
   end

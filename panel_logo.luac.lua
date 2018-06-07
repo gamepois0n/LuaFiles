@@ -8,7 +8,9 @@ Panel_Logo:SetSize(getScreenSizeX(), getScreenSizeY())
 local static_PearlAbyss = (UI.getChildControl)(Panel_Logo, "Static_Pearl")
 local static_Daum = (UI.getChildControl)(Panel_Logo, "Static_Daum")
 local static_Grade = (UI.getChildControl)(Panel_Logo, "Static_Grade")
-local staticText_Warning = ((UI.getChildControl)(Panel_Logo, "MultilineText_Warning"))
+local staticText_Warning = (UI.getChildControl)(Panel_Logo, "MultilineText_Warning")
+local static_XboxScreen = (UI.getChildControl)(Panel_Logo, "Static_XboxScreen")
+static_XboxScreen:SetShow(false)
 local static_Movie = nil
 local setDivisionTime = 6
 if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
@@ -149,6 +151,7 @@ staticText_Warning:ComputePos()
 static_Daum:SetAlpha(0)
 static_Grade:SetAlpha(0)
 staticText_Warning:SetFontAlpha(0)
+static_XboxScreen:ComputePos()
 local startAniTime = 6
 if isGameTypeKorea() then
   local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
@@ -229,7 +232,7 @@ else
                     aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
                     local updateTime = 0
                     Panel_Logo_Update = function()
-  -- function num : 0_2 , upvalues : static_Movie
+  -- function num : 0_2 , upvalues : static_Movie, static_XboxScreen
   static_Movie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Logo, "WebControl_Movie")
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
@@ -237,17 +240,23 @@ else
   static_Movie:SetPosX(-8)
   static_Movie:SetPosY(-8)
   static_Movie:SetSize(sizeX + 34, sizeY + 19)
+  if ToClient_isXBox() == true then
+    static_XboxScreen:SetPosX(-8)
+    static_XboxScreen:SetPosY(-8)
+    static_XboxScreen:SetSize(sizeX + 34, sizeY + 19)
+  end
   static_Movie:SetUrl(1920, 1080, "coui://UI_Movie/CI_Play_NoSound.html", false, true)
 end
 
                     Panel_Logo_Pause = function(deltaTime)
-  -- function num : 0_3 , upvalues : updateTime, setDivisionTime, static_Movie
+  -- function num : 0_3 , upvalues : updateTime, setDivisionTime, static_Movie, static_XboxScreen
   updateTime = updateTime + deltaTime
   if setDivisionTime < updateTime then
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
     setWarningText()
     if ToClient_isXBox() == true then
+      static_XboxScreen:SetShow(true)
       update_XboxLoadingCircle(deltaTime)
     end
   end

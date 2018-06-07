@@ -659,7 +659,7 @@ FGlobal_Panel_DyeReNew_Show = function()
   if isShowable == false then
     return 
   end
-  if not IsSelfPlayerWaitAction() then
+  if ToClient_IsAutoLevelUp() == false and not IsSelfPlayerWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_DYE"))
     return 
   end
@@ -700,7 +700,9 @@ FGlobal_Panel_DyeReNew_Hide = function()
   renderMode:reset()
   if isInventoryOpen == false then
     InventoryWindow_Close()
-    FGlobal_Equipment_SetHide(false)
+    if _ContentsGroup_RenewUI == false then
+      FGlobal_Equipment_SetHide(false)
+    end
   else
     Inventory_SetFunctor(nil, nil, nil, nil)
     Inventory_SetShow(true)

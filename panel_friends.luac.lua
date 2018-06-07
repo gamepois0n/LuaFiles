@@ -1190,7 +1190,7 @@ PopupFriendMenu.initialize = function(self)
   ;
   (self._uiXboxProfile):SetShow(true)
   ;
-  (self._uiRecallFriend):SetShow(true)
+  (self._uiRecallFriend):SetShow(false)
   if ToClient_isXBox() == false then
     (self._uiXboxProfile):SetShow(false)
     ;
@@ -1199,7 +1199,7 @@ PopupFriendMenu.initialize = function(self)
   if ToClient_IsDevelopment() then
     (self._uiXboxProfile):SetShow(true)
     ;
-    (self._uiRecallFriend):SetShow(true)
+    (self._uiRecallFriend):SetShow(false)
   end
   ;
   (self._uiPartyInvite):SetText(PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU3"))
@@ -1210,7 +1210,7 @@ PopupFriendMenu.initialize = function(self)
   ;
   (self._uiDelete):SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_REMOVE_FRIEND"))
   ;
-  (self._uiXboxProfile):SetText("XboxProfile")
+  (self._uiXboxProfile):SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_XBOX_PROFILE"))
   ;
   (self._uiRecallFriend):SetText("Recall")
   ;
@@ -1479,10 +1479,19 @@ friend_PartyInvite = function()
   local userCharacterName = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getCharacterName()
   local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
   local isSelfPlayerPlayingPvPMatch = (getSelfPlayer()):isDefinedPvPMatch()
-  if isSelfPlayerPlayingPvPMatch == false then
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", userCharacterName))
+  if isSelectFriendBlocked() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
   end
-  RequestParty_inviteCharacter(userCharacterName)
+  do
+    if isSelfPlayerPlayingPvPMatch == false then
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", userCharacterName))
+    end
+    RequestParty_inviteCharacter(userCharacterName)
+  end
 end
 
 friend_Messanger = function()
@@ -1490,8 +1499,17 @@ friend_Messanger = function()
   local userNo = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo()
   local userName = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName()
   local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
-  RequestFriendList_OpenMessanger(userNo, userName, isOnline)
-  PopupFriendMenu:SetShow(false)
+  if isSelectFriendBlocked() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
+  end
+  do
+    RequestFriendList_OpenMessanger(userNo, userName, isOnline)
+    PopupFriendMenu:SetShow(false)
+  end
 end
 
 friend_groupMoveList = function()
@@ -1529,9 +1547,18 @@ end
 
 friend_RequestRecall = function()
   -- function num : 0_70 , upvalues : _friendListData, PopupFriendMenu, PopupGroupList
-  friends_requestRecall(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
-  PopupFriendMenu:SetShow(false)
-  PopupGroupList:SetShow(false)
+  if isSelectFriendBlocked() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
+  end
+  do
+    friends_requestRecall(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
+    PopupFriendMenu:SetShow(false)
+    PopupGroupList:SetShow(false)
+  end
 end
 
 Panel_FriendList:addInputEvent("Mouse_Out", "friend_closeFriendMenu()")
@@ -1676,9 +1703,34 @@ FromClient_ResponseFriendRecall = function(friendName, serverName, serverNo)
   (MessageBox.showMessageBox)(messageboxData)
 end
 
+isSelectFriendBlocked = function()
+  -- function num : 0_82 , upvalues : _friendListData
+  local userNo = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo()
+  local groupNo = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getGroupNo()
+  return RequestFriends_isBlockedFriend(userNo, groupNo)
+end
+
 registerEvent("FromClient_ResponseFriendRecall", "FromClient_ResponseFriendRecall")
 registerEvent("FromClient_GroundMouseClick", "FriendMessanger_KillFocusEdit")
 registerEvent("onScreenResize", "FromClient_FriendList_onScreenResize")
 registerEvent("FromClient_FriendListUpdateLogOnOffForMessanger", "FromClient_FriendListUpdateLogOnOffForMessanger")
 registerEvent("FromClient_NotifyFriendMessage", "FromClient_NotifyFriendMessage")
+registerEvent("FromClient_FriendDirectlyMessage", "FromClient_FriendDirectlyMessage")
+FriendfunctionYes = function()
+  -- function num : 0_83
+  ToClient_RquestDirectlyCompelte(true)
+end
+
+FriendfunctionNo = function()
+  -- function num : 0_84
+  ToClient_RquestDirectlyCompelte(false)
+end
+
+FromClient_FriendDirectlyMessage = function(fromUserName)
+  -- function num : 0_85
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_RESOURCE, "FRIEND_TEXT_TITLE"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_MESSAGE", "userName", fromUserName), functionYes = FriendfunctionYes, functionNo = FriendfunctionNo, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
 

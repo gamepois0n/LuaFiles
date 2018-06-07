@@ -17,7 +17,7 @@ _skillKey = {}
 , _fairyNo = nil, _isUnseal = nil, _learnPotionSkill = false, _iconPath = nil, _fairyName = nil, 
 _skillTooltipDesc = {}
 , _fairyLevel = 0, _isFairyMaxLevel = false, currentLevel = 0, _fairyTier = 0, _fairyTierMax = 3, 
-_UI = {_fairyBigIcon = (UI.getChildControl)(Panel_FairyInfo, "Static_FairyBigIcon"), _levelPosition = (UI.getChildControl)(Panel_FairyInfo, "Static_LevelPosition"), _namePosition = (UI.getChildControl)(Panel_FairyInfo, "Static_NamePosition"), _question = (UI.getChildControl)(Panel_FairyInfo, "Button_Question"), _desc = (UI.getChildControl)(Panel_FairyInfo, "StaticText_Desc"), _potionPositionBG = (UI.getChildControl)(Panel_FairyInfo, "Static_PotionPositionBG"), _skillBG = (UI.getChildControl)(Panel_FairyInfo, "Static_SkillBG"), _buttonPosition = (UI.getChildControl)(Panel_FairyInfo, "Static_ButtonPosition"), _potionPositionLockBG = (UI.getChildControl)(Panel_FairyInfo, "Static_PotionPositionLockBG"), _button_Win_Close = (UI.getChildControl)(Panel_FairyInfo, "Button_Win_Close"), _button_FairyBTN = (UI.getChildControl)(Panel_FairyInfo, "Button_FairyBTN"), _button_Lanter = (UI.getChildControl)(Panel_FairyInfo, "CheckButton_Lantern"), _fairyTierUpgradeButton = (UI.getChildControl)(Panel_FairyInfo, "Button_FairyUpgradeBTN")}
+_UI = {_fairyBigIcon = (UI.getChildControl)(Panel_FairyInfo, "Static_FairyBigIcon"), _levelPosition = (UI.getChildControl)(Panel_FairyInfo, "Static_LevelPosition"), _namePosition = (UI.getChildControl)(Panel_FairyInfo, "Static_NamePosition"), _question = (UI.getChildControl)(Panel_FairyInfo, "Button_Question"), _desc = (UI.getChildControl)(Panel_FairyInfo, "StaticText_Desc"), _potionPositionBG = (UI.getChildControl)(Panel_FairyInfo, "Static_PotionPositionBG"), _skillBG = (UI.getChildControl)(Panel_FairyInfo, "Static_SkillBG"), _buttonPosition = (UI.getChildControl)(Panel_FairyInfo, "Static_ButtonPosition"), _potionPositionLockBG = (UI.getChildControl)(Panel_FairyInfo, "Static_PotionPositionLockBG"), _button_Win_Close = (UI.getChildControl)(Panel_FairyInfo, "Button_Win_Close"), _button_setFree = (UI.getChildControl)(Panel_FairyInfo, "Button_FairyBTN"), _button_Lanter = (UI.getChildControl)(Panel_FairyInfo, "CheckButton_Lantern"), _fairyTierUpgradeButton = (UI.getChildControl)(Panel_FairyInfo, "Button_FairyUpgradeBTN")}
 , _currentHpKey = nil, _currentMpKey = nil, _isAnimate = false, _const_Ani_Time = 8.5, _timeStamp = 0, _fromWhereType = 0, _fromSlotNo = 0, _currentExpRate = 0}
 PaGlobal_FairyInfo_GetFairyNo = function()
   -- function num : 0_0 , upvalues : FairyInfo
@@ -111,6 +111,17 @@ FairyInfo.Update = function(self)
     self._isFairyMaxLevel = true
   end
   self._fairyUpgradeStack = pcFairyData:getUpgradeStackCount()
+  if self._isFairyMaxLevel then
+    ((self._UI)._button_Growth):SetEnable(false)
+    ;
+    ((self._UI)._button_Growth):SetMonoTone(true)
+  else
+    ;
+    ((self._UI)._button_Growth):SetEnable(true)
+    ;
+    ((self._UI)._button_Growth):SetMonoTone(false)
+  end
+  self._fairyTier = fairyTier
   if _ContentsGroup_FairyTierUpgradeAndRebirth then
     if self._fairyUpgradeStack > 0 and self._isFairyMaxLevel and not PaGlobal_FairyInfo_isMaxTier() then
       ((self._UI)._fairyTierUpgradeButton):SetShow(true)
@@ -128,17 +139,6 @@ FairyInfo.Update = function(self)
     ;
     ((self._UI)._fairyTierUpgradeButton):SetShow(false)
   end
-  if self._isFairyMaxLevel then
-    ((self._UI)._button_Growth):SetEnable(false)
-    ;
-    ((self._UI)._button_Growth):SetMonoTone(true)
-  else
-    ;
-    ((self._UI)._button_Growth):SetEnable(true)
-    ;
-    ((self._UI)._button_Growth):SetMonoTone(false)
-  end
-  self._fairyTier = fairyTier
   local remainTime = 0
   for ii = eFairyMaxEquipSkill - 2, 0, -1 do
     -- DECOMPILER ERROR at PC189: Confused about usage of register: R29 in 'UnsetPending'
@@ -694,11 +694,11 @@ FairyInfo.Initialize = function(self)
   self._GenerationStr = {[0] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_GENERATION_1"), [1] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_GENERATION_2"), [2] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_GENERATION_3"), [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_GENERATION_4")}
   self._InfoDescStr = {[0] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC"), [1] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC_2"), [2] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC_3"), [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC_4")}
   ;
-  ((self._UI)._button_FairyBTN):addInputEvent("Mouse_LUp", "PaGlobal_FairyInfo_RequestFreedom()")
+  ((self._UI)._button_setFree):addInputEvent("Mouse_LUp", "PaGlobal_FairyInfo_RequestFreedom()")
   ;
-  ((self._UI)._button_FairyBTN):addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltip(true, 0)")
+  ((self._UI)._button_setFree):addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltip(true, 0)")
   ;
-  ((self._UI)._button_FairyBTN):addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
+  ((self._UI)._button_setFree):addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
   -- DECOMPILER ERROR at PC549: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
@@ -865,7 +865,7 @@ PaGlobal_FairyInfo_SimpleTooltip = function(isShow, tipType)
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_FREEDOM_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_FREEDOM_DESC")
-    control = (self._UI)._button_FairyBTN
+    control = (self._UI)._button_setFree
   else
     if tipType == 1 then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYINFO_POTIONSETTING_TOOLTIP_TITLE")

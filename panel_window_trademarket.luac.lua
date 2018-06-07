@@ -829,7 +829,7 @@ closeNpcTrade_Basket = function()
   InventoryWindow_Close()
   Panel_Tooltip_Item_hideTooltip()
   if _ContentsGroup_RenewUI_Dailog == true then
-    PaGlobalFunc_MainDialog_Open(false)
+    PaGlobalFunc_MainDialog_ReOpen(false)
   else
     Panel_Npc_Dialog:SetShow(true, false)
   end

@@ -352,7 +352,7 @@ PaGlobalFunc_Quest_List2EventControlCreate = function(list_content, key)
         ;
         (questUI._staticText_QuestName):SetText(questInfo._questName)
       end
-      if _ContentsGroup_isConsoleTest == false then
+      if _ContentsGroup_isConsolePadControl == false then
         (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
       else
         (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
@@ -575,11 +575,9 @@ FromClient_luaLoadComplete = function()
 
   ;
   (self._ui)._radioButton_Close = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_Close")
-  self._currentTabIndex = 0
   self:InitInputEvent()
   self:InitResisterEvent()
   PaGlobalFunc_Quest_UpdateList()
-  PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._progress)
 end
 
 Window_QuestInfo.InitResisterEvent = function(self)
@@ -1044,6 +1042,8 @@ PaGlobalFunc_Quest_ShowAni = function()
   -- function num : 0_30 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local panel = Panel_Window_QuestInfo
+  self._currentTabIndex = 0
+  PaGlobalFunc_Quest_SelectQuestTitle(((self._config)._title)._progress)
   panel:ResetVertexAni()
   local aniInfo = panel:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo:SetStartPosition(getScreenSizeX(), 0)
@@ -1051,6 +1051,7 @@ PaGlobalFunc_Quest_ShowAni = function()
   aniInfo.IsChangeChild = true
   aniInfo:SetHideAtEnd(false)
   aniInfo:SetDisableWhileAni(true)
+  aniInfo:SetIgnoreUpdateSnapping(true)
   ;
   ((self._ui)._staticText_TopTitle):ComputePos()
   ;
@@ -1084,6 +1085,7 @@ PaGlobalFunc_Quest_HideAni = function()
   aniInfo.IsChangeChild = true
   aniInfo:SetHideAtEnd(true)
   aniInfo:SetDisableWhileAni(true)
+  aniInfo:SetIgnoreUpdateSnapping(true)
   FGlobal_ResetUrl_Tooltip_SkillForLearning()
 end
 
@@ -1096,13 +1098,19 @@ PaGlobalFunc_Quest_SetShow = function(value)
   -- function num : 0_33
   Panel_Window_QuestInfo:SetShow(value, true)
   if value == true then
-    FGlobal_Panel_Radar_Show(false, true)
-    Panel_TimeBar:SetShow(false, true)
-    FGlobal_QuestWidget_Close()
+    if PaGlobalFunc_InventoryInfo_IsOpened() == true then
+      PaGlobalFunc_InventoryInfo_Close()
+    else
+      FGlobal_Panel_Radar_Show(false, true)
+      Panel_TimeBar:SetShow(false, true)
+      FGlobal_QuestWidget_Close()
+    end
   else
-    FGlobal_Panel_Radar_Show(true, true)
-    Panel_TimeBar:SetShow(true, true)
-    FGlobal_QuestWidget_Open()
+    if PaGlobalFunc_InventoryInfo_IsOpened() == false then
+      FGlobal_Panel_Radar_Show(true, true)
+      Panel_TimeBar:SetShow(true, true)
+      FGlobal_QuestWidget_Open()
+    end
   end
   PaGlobal_TutorialManager:handleShowQuestNewWindow(value)
 end
@@ -1117,8 +1125,6 @@ PaGlobalFunc_Quest_Toggle = function()
   Panel_Window_QuestInfo:SetShow(not Panel_Window_QuestInfo:GetShow())
 end
 
-Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_QuestTab_forPadEventFunc(-1)")
-Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_QuestTab_forPadEventFunc(1)")
 Toggle_QuestTab_forPadEventFunc = function(value)
   -- function num : 0_36 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
@@ -1147,22 +1153,10 @@ Toggle_QuestTab_forPadEventFunc = function(value)
   end
 end
 
-Quest_TabSound = function()
-  -- function num : 0_37
-  if DragManager:isDragging() then
-    DragManager:clearInfo()
-  end
-  if isFirstTab == true then
-    isFirstTab = false
-  else
-    audioPostEvent_SystemUi(0, 0)
-  end
-  Inventory_updateSlotData()
-  Inventory_CashTabScroll(true)
-end
-
+Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_QuestTab_forPadEventFunc(-1)")
+Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_QuestTab_forPadEventFunc(1)")
 Window_QuestInfo.Resize = function(self)
-  -- function num : 0_38
+  -- function num : 0_37
   Panel_Window_QuestInfo:SetSize(Panel_Window_QuestInfo:GetSizeX(), getScreenSizeY())
   ;
   ((self._ui)._static_Title):ComputePos()
@@ -1183,12 +1177,12 @@ Window_QuestInfo.Resize = function(self)
 end
 
 PaGlobalFunc_Quest_Resize = function()
-  -- function num : 0_39 , upvalues : Window_QuestInfo
+  -- function num : 0_38 , upvalues : Window_QuestInfo
   Window_QuestInfo:Resize()
 end
 
 Window_QuestInfo.Clear = function(self)
-  -- function num : 0_40
+  -- function num : 0_39
   local titleType = -1
   self:DetailClear()
   self:SlotClear()
@@ -1201,7 +1195,7 @@ Window_QuestInfo.Clear = function(self)
 end
 
 PaGlobalFunc_Quest_UpdateList = function()
-  -- function num : 0_41 , upvalues : Window_QuestInfo
+  -- function num : 0_40 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   self:Clear()
   self._progressTable = self:GetQuestGroupByTitle(((self._config)._title)._progress)

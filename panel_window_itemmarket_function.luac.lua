@@ -90,7 +90,7 @@ FGolbal_ItemMarket_Function_Close = function()
   -- function num : 0_3
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
   if _ContentsGroup_RenewUI_Dailog == true then
-    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_MainDialog_ReOpen()
   else
     Panel_Npc_Dialog:SetShow(true)
   end

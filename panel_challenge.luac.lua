@@ -64,10 +64,14 @@ expTooltip:SetShow(false)
 Panel_ChallengeReward_Alert:SetShow(false)
 HandleClicked_challengeRewardAlert_Open = function()
   -- function num : 0_0
-  if _ContentsGroup_isUsedNewCharacterInfo == false then
-    CharacterInfoWindow_Show()
+  if _ContentsGroup_RenewUI == true then
+    PaGlobalFunc_Window_CharacterInfo_Open()
   else
-    PaGlobal_CharacterInfo:showWindow(0)
+    if _ContentsGroup_isUsedNewCharacterInfo == false then
+      CharacterInfoWindow_Show()
+    else
+      PaGlobal_CharacterInfo:showWindow(0)
+    end
   end
 end
 

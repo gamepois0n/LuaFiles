@@ -867,23 +867,39 @@ PaGlobal_FriendList.ClickFriendList = function(self, isRUp)
   end
 end
 
--- DECOMPILER ERROR at PC315: Confused about usage of register: R8 in 'UnsetPending'
+isSelectFriendBlocked = function()
+  -- function num : 0_42
+  local userNo = (((PaGlobal_FriendList._friendData)._info)[(PaGlobal_FriendList._friendData)._selectedIndex]):getUserNo()
+  local groupNo = (((PaGlobal_FriendList._friendData)._info)[(PaGlobal_FriendList._friendData)._selectedIndex]):getGroupNo()
+  return RequestFriends_isBlockedFriend(userNo, groupNo)
+end
+
+-- DECOMPILER ERROR at PC317: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.PartyInvite = function(self)
-  -- function num : 0_42
+  -- function num : 0_43
   local userCharacterName = (((PaGlobal_FriendList._friendData)._info)[(PaGlobal_FriendList._friendData)._selectedIndex]):getCharacterName()
   local isOnline = (((PaGlobal_FriendList._friendData)._info)[(PaGlobal_FriendList._friendData)._selectedIndex]):isOnline()
   local isSelfPlayerPlayingPvPMatch = (getSelfPlayer()):isDefinedPvPMatch()
-  if isSelfPlayerPlayingPvPMatch == false then
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", userCharacterName))
+  if isSelectFriendBlocked() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
   end
-  RequestParty_inviteCharacter(userCharacterName)
+  do
+    if isSelfPlayerPlayingPvPMatch == false then
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", userCharacterName))
+    end
+    RequestParty_inviteCharacter(userCharacterName)
+  end
 end
 
--- DECOMPILER ERROR at PC319: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC321: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.OpenMessanger = function(self)
-  -- function num : 0_43 , upvalues : PopupFriendMenu
+  -- function num : 0_44 , upvalues : PopupFriendMenu
   if ToClient_isAddFriendAllowed() then
     local selectedUser = ((self._friendData)._info)[(self._friendData)._selectedIndex]
     ToClient_OpenMessanger(selectedUser:getUserNo(), selectedUser:getName(), selectedUser:isOnline())
@@ -898,35 +914,35 @@ PaGlobal_FriendList.OpenMessanger = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC324: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC326: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.GroupMoveList = function(self)
-  -- function num : 0_44 , upvalues : PopupGroupList, PopupFriendMenu
+  -- function num : 0_45 , upvalues : PopupGroupList, PopupFriendMenu
   PopupGroupList:SetShow(true)
   PopupGroupList:SetPos(((PopupFriendMenu._ui)._backGround):GetPosX() + ((PopupFriendMenu._ui)._backGround):GetSizeX(), ((PopupFriendMenu._ui)._backGround):GetPosY())
 end
 
--- DECOMPILER ERROR at PC328: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC330: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.DeleteFriend = function(self)
-  -- function num : 0_45 , upvalues : PopupFriendMenu
+  -- function num : 0_46 , upvalues : PopupFriendMenu
   ToClient_DeleteFriend((((self._friendData)._info)[(self._friendData)._selectedIndex]):getUserNo())
   PopupFriendMenu:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC333: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC335: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.MoveGroup = function(self, groupIndex)
-  -- function num : 0_46 , upvalues : PopupFriendMenu, PopupGroupList
+  -- function num : 0_47 , upvalues : PopupFriendMenu, PopupGroupList
   ToClient_MoveGroup((((self._friendData)._info)[(self._friendData)._selectedIndex]):getUserNo(), (((self._groupData)._infoByIndex)[groupIndex]):getGroupNo())
   PopupFriendMenu:SetShow(false)
   PopupGroupList:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC336: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC338: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.Show = function(self)
-  -- function num : 0_47
+  -- function num : 0_48
   local friendsBTN = (UI.getChildControl)(Panel_UIMain, "Button_FriendList")
   friendsBTN:EraseAllEffect()
   FGlobal_NewMessage_Close()
@@ -934,20 +950,20 @@ PaGlobal_FriendList.Show = function(self)
   Panel_FriendList:SetShow(true, true)
 end
 
--- DECOMPILER ERROR at PC341: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC343: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.Hide = function(self)
-  -- function num : 0_48 , upvalues : PopupAddFriend, FriendRequestList
+  -- function num : 0_49 , upvalues : PopupAddFriend, FriendRequestList
   self:ClosePopupMenu(false)
   PopupAddFriend:SetShow(false)
   FriendRequestList:SetShow(false)
   Panel_FriendList:SetShow(false, true)
 end
 
--- DECOMPILER ERROR at PC345: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC347: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.ShowAni = function(self)
-  -- function num : 0_49 , upvalues : FriendRequestList
+  -- function num : 0_50 , upvalues : FriendRequestList
   ToClient_GetFriendList()
   ToClient_GetAddFriendList()
   self:UpdateList()
@@ -970,35 +986,35 @@ PaGlobal_FriendList.ShowAni = function(self)
   aniInfo2.IsChangeChild = true
 end
 
--- DECOMPILER ERROR at PC348: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC350: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.HideAni = function(self)
-  -- function num : 0_50
+  -- function num : 0_51
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_FriendList, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
 
--- DECOMPILER ERROR at PC354: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC356: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_FriendList.ClosePopupMenu = function(self)
-  -- function num : 0_51 , upvalues : PopupFriendMenu, PopupGroupMenu, PopupGroupList
+  -- function num : 0_52 , upvalues : PopupFriendMenu, PopupGroupMenu, PopupGroupList
   PopupFriendMenu:SetShow(false)
   PopupGroupMenu:SetShow(false)
   PopupGroupList:SetShow(false)
 end
 
 FGlobal_FriendList_Show = function()
-  -- function num : 0_52
+  -- function num : 0_53
   PaGlobal_FriendList:Show()
 end
 
 FGlobal_FriendList_Hide = function()
-  -- function num : 0_53
+  -- function num : 0_54
   PaGlobal_FriendList:Hide()
 end
 
 FromClient_OnScreenResize_FriendList = function()
-  -- function num : 0_54
+  -- function num : 0_55
   Panel_FriendList:SetPosX(getScreenSizeX() - Panel_FriendList:GetSizeX())
   Panel_FriendList:SetPosY(getScreenSizeY() / 2 - Panel_FriendList:GetSizeY() / 2)
 end

@@ -43,7 +43,7 @@ Servant_SceneClose = function(panel)
   local mainCameraName = Dialog_getMainSceneCameraName()
   changeCameraScene(mainCameraName, 0.5)
   if _ContentsGroup_RenewUI_Dailog == true then
-    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_MainDialog_ReOpen()
   else
     Panel_Npc_Dialog:SetShow(true)
   end

@@ -797,7 +797,7 @@ SelfCharacterInfo_UpdateMainStatus = function()
     (CharacterInfo._progress2_mp):setRenderTexture((CharacterInfo._progress2_mp):getBaseTexture())
   else
     do
-      if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() or UI_classType.ClassType_CombattantWomen == player:getClassType() then
+      if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() or UI_classType.ClassType_CombattantWomen == player:getClassType() or UI_classType.ClassType_Lahn == player:getClassType() then
         (CharacterInfo._mpTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FP"))
         ;
         (CharacterInfo._progress2_mp):ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges.dds")
@@ -934,7 +934,7 @@ SelfCharacterInfo_UpdateMainStatusRegen = function()
       if UI_classType.ClassType_Valkyrie == player:getClassType() then
         (CharacterInfo._mpRegen):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_BPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))
       else
-        if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() or UI_classType.ClassType_CombattantWomen == player:getClassType() then
+        if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() or UI_classType.ClassType_CombattantWomen == player:getClassType() or UI_classType.ClassType_Lahn == player:getClassType() then
           (CharacterInfo._mpRegen):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))
         end
       end
@@ -1009,9 +1009,9 @@ SelfCharacterInfo_UpdateAttackStat = function()
     ;
     (CharacterInfo._awakenAttack):SetShow(false)
     ;
-    (CharacterInfo._staminaTitle):SetSpanSize(385, 182)
+    (CharacterInfo._staminaTitle):SetSpanSize(550, 157)
     ;
-    (CharacterInfo._stamina):SetSpanSize(490, 177)
+    (CharacterInfo._stamina):SetSpanSize(655, 152)
   end
   local ChaDefence = ToClient_getDefence()
   ;

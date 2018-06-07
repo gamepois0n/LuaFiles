@@ -440,8 +440,6 @@ end
                                     if isMyGuild and isSiegeTent then
                                       local expireTime = (houseActorWarpper:get()):getExpiredTime()
                                       local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
-                                      local builddingInfo = ToClient_getBuildingInfo(actorKeyRaw)
-                                      local buildProgress = builddingInfo:getBuildingProgress()
                                       textName = getHouseHoldName(actorProxy)
                                       targetPanel:Set3DRotationY(actorProxy:getRotation())
                                     else
@@ -934,7 +932,7 @@ end
         guildName:SetFontColor(4293914607)
         guildName:useGlowFont(true, "BaseFont_10_Glow", 4279004349)
         local guildNo = 0
-        if isAllianceMember == true and isSiegeBeingChannel == true then
+        if isAllianceMember == true and (isSiegeBeingChannel == true or isGuildTeamBattleAttend == true) then
           guildNo = playerActorProxyWrapper:getGuildAllianceNo_s64()
         else
           guildNo = playerActorProxyWrapper:getGuildNo_s64()
@@ -1002,7 +1000,7 @@ end
         guildOccupyIcon:SetShow(false)
         guildMarkInit(guildMark)
       end
-      -- DECOMPILER ERROR: 29 unprocessed JMP targets
+      -- DECOMPILER ERROR: 30 unprocessed JMP targets
     end
   end
 end
@@ -2014,8 +2012,8 @@ end
                                     local prevRate = hpMain:GetProgressRate()
                                     local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
                                     local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() then
-                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isCompetitionDefined()
+                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
+                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
                                     end
                                     local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
                                     if hpRate < prevRate then
@@ -2037,11 +2035,11 @@ end
                                     hpLater:SetShow(isShow)
                                     hpMain:SetShow(isShow)
                                     local x1, y1, x2, y2 = nil, nil, nil, nil
-                                    -- DECOMPILER ERROR at PC1237: Overwrote pending register: R20 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1243: Overwrote pending register: R20 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC1237: Overwrote pending register: R19 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1243: Overwrote pending register: R19 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC1238: Overwrote pending register: R21 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1244: Overwrote pending register: R21 in 'AssignReg'
 
                                     if isParty then
                                       y1(x2, y2)
@@ -2049,29 +2047,29 @@ end
                                     else
                                       if isColorBlindMode == 0 then
                                         hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
-                                        -- DECOMPILER ERROR at PC1264: Overwrote pending register: R18 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1270: Overwrote pending register: R18 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1265: Overwrote pending register: R17 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1271: Overwrote pending register: R17 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1266: Overwrote pending register: R16 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1272: Overwrote pending register: R16 in 'AssignReg'
 
                                         x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                                       elseif isColorBlindMode == 1 then
                                         hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                        -- DECOMPILER ERROR at PC1281: Overwrote pending register: R18 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1287: Overwrote pending register: R18 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1282: Overwrote pending register: R17 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1288: Overwrote pending register: R17 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1283: Overwrote pending register: R16 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1289: Overwrote pending register: R16 in 'AssignReg'
 
                                         x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                       elseif isColorBlindMode == 2 then
                                         hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                        -- DECOMPILER ERROR at PC1298: Overwrote pending register: R18 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1304: Overwrote pending register: R18 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1299: Overwrote pending register: R17 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1305: Overwrote pending register: R17 in 'AssignReg'
 
-                                        -- DECOMPILER ERROR at PC1300: Overwrote pending register: R16 in 'AssignReg'
+                                        -- DECOMPILER ERROR at PC1306: Overwrote pending register: R16 in 'AssignReg'
 
                                         x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                       end
@@ -2085,12 +2083,12 @@ end
                                   else
                                     local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
                                     local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() then
-                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isCompetitionDefined()
+                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
+                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
                                     end
                                     local overedHpBack = (UI.getChildControl)(targetPanel, "Static_HpBg2")
                                     local isShow = (actorProxy:isHideTimeOver(hideTimeType.overHeadUI) == false or not isParty) and isArenaAreaOrZone
-                                    -- DECOMPILER ERROR at PC1378: Overwrote pending register: R16 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1390: Overwrote pending register: R16 in 'AssignReg'
 
                                     if GameOption_GetShowStackHp() == true and _ContentsGroup_StackingHpBar == true then
                                       hpBack = (UI.getChildControl)(targetPanel, y1)
@@ -2100,7 +2098,7 @@ end
                                       hpLater:SetShow(isShow)
                                       hpMain:SetShow(isShow)
                                       overedHpBack:SetShow(isShow)
-                                      -- DECOMPILER ERROR at PC1410: Overwrote pending register: R17 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC1422: Overwrote pending register: R17 in 'AssignReg'
 
                                       if isShow == true then
                                         CharacterNameTag_SetHpBarContainer(actorKeyRaw, actorProxy, x2)
@@ -2111,7 +2109,7 @@ end
                                     else
                                       local prevRate = hpMain:GetProgressRate()
                                       local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                                      -- DECOMPILER ERROR at PC1429: Overwrote pending register: R18 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC1441: Overwrote pending register: R18 in 'AssignReg'
 
                                       hpBack:SetShow(y2)
                                       hpLater:SetShow(isShow)
@@ -2133,7 +2131,7 @@ end
                                         data.stackHpBarBackColor = hpLater
                                         data.hpBack = hpBack
                                         data.overedHpBack = overedHpBack
-                                        -- DECOMPILER ERROR at PC1481: Confused about usage of register: R17 in 'UnsetPending'
+                                        -- DECOMPILER ERROR at PC1493: Confused about usage of register: R17 in 'UnsetPending'
 
                                         _characterHpBarContainer[actorKeyRaw] = data
                                       end
@@ -4409,6 +4407,20 @@ end
   settingStatTierIcon(playerActorKey, panel, actorProxyWrapper)
 end
 
+  FromClient_ShowPlayerInfo_GuildTeamBattle = function(actorProxyWrapper, panel)
+  -- function num : 0_126 , upvalues : settingName, settingTitle, settingAlias, settingGuildInfo, settingHpBar
+  if actorProxyWrapper == nil or panel == nil then
+    return 
+  end
+  local actorKeyRaw = (actorProxyWrapper:get()):getActorKeyRaw()
+  local insertedArray = (Array.new)()
+  settingName(actorKeyRaw, panel, actorProxyWrapper)
+  settingTitle(actorKeyRaw, panel, actorProxyWrapper)
+  settingAlias(actorKeyRaw, panel, actorProxyWrapper)
+  settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
+  settingHpBar(actorKeyRaw, panel, actorProxyWrapper)
+end
+
   registerEvent("EventActorCreated", "EventActorCreated_NameTag")
   registerEvent("FromClient_TendencyChanged", "FromClient_NameTag_TendencyChanged")
   registerEvent("EventFirstTalk", "EventActorFirsttalk")
@@ -4456,5 +4468,6 @@ end
   registerEvent("FromClient_ShowOverheadRank", "FromClient_ShowOverheadRank")
   registerEvent("FromClient_PlayerTotalStat_Changed", "FromClient_PlayerTotalStat_Changed_Handler")
   registerEvent("FromClient_ShowTotalStatTierChanged", "FromClient_ShowTotalStatTierChanged")
+  registerEvent("FromClient_GuildTeamBattle_UpdateAttendOverHeadUI", "FromClient_ShowPlayerInfo_GuildTeamBattle")
 end
 

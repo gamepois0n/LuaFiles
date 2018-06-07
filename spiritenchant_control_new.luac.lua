@@ -1023,7 +1023,7 @@ PaGlobal_Enchant.handleLUpEnchantApplyButton = function(self)
     self:willStartPromotionEnchant()
   end
 
-                      local messageBoxData = {content = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PROMOTE_WARNING_CAPHRAS"), functionYes = promotionConfirm, functionNo = MessageBox_Empty_function}
+                      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_MESSAGETITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PROMOTE_WARNING_CAPHRAS"), functionYes = promotionConfirm, functionNo = MessageBox_Empty_function}
                       ;
                       (MessageBox.showMessageBox)(messageBoxData)
                     end

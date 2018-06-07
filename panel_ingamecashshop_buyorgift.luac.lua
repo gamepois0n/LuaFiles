@@ -719,11 +719,6 @@ end
                 (self._static_selectStampBG):SetShow(true)
                 FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(cashProduct:getPrice(), cashProduct:getMainCategory())
                 if cashProduct:isMoneyPrice() then
-                  local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-                  if regionInfo == nil then
-                    return 
-                  end
-                  local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
                   ToClient_RequestCurrentMainTownRegionWarehouseInfo()
                   ;
                   (self._static_PearlBG):SetSize((self._static_PearlBG):GetSizeX(), (self._static_PearlBG):GetSizeY() + 50)
@@ -745,7 +740,7 @@ end
                   ;
                   (self._staticText_PayWarehouse):SetShow(true)
                   local silverInInventory = (((getSelfPlayer()):get()):getInventory()):getMoney_s64()
-                  local silverInWarehouse = warehouse_moneyFromRegionKey_s64(myAffiliatedTownRegionKey)
+                  local silverInWarehouse = warehouse_moneyByCurrentRegionMainTown_s64()
                   ;
                   (self._radio_PayInven):SetCheck(silverInWarehouse < silverInInventory)
                   ;
@@ -773,7 +768,7 @@ end
                 (self._button_Confirm):ComputePos()
                 ;
                 (self._button_Cancle):ComputePos()
-                -- DECOMPILER ERROR: 15 unprocessed JMP targets
+                -- DECOMPILER ERROR: 14 unprocessed JMP targets
               end
             end
           end

@@ -288,7 +288,7 @@ Panel_Login_Update = function(deltaTime)
           local fadeColor2 = (Static_Back[currentBackIndex]):addColorAnimation(12, 15, 0)
           fadeColor2:SetStartColor((Defines.Color).C_00FFFFFF)
           fadeColor2:SetEndColor((Defines.Color).C_FFFFFFFF)
-          if ToClient_isXBox() and (isPadUp(__eJoyPadInputType_A) or isKeyDown_Once((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) or isKeyDown_Once((CppEnums.VirtualKeyCode).KeyCode_RETURN)) then
+          if ToClient_isXBox() and isPadUp(__eJoyPadInputType_A) then
             PaGlobal_Policy_Close()
           end
         end

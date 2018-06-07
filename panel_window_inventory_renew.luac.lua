@@ -9,7 +9,7 @@ local UPPER_TAB_TYPE = {UNDEFINED = 0, EQUIPMENT = 1, COSTUME = 2, INFORMATION =
 local LOWER_TAB_TYPE = {UNDEFINED = 0, INVENTORY = 1, CASH_INVEN = 2}
 local WHERE_TYPE = {INVENTORY = (CppEnums.ItemWhereType).eInventory, EQUIPMENT = (CppEnums.ItemWhereType).eEquip, WAREHOUSE = (CppEnums.ItemWhereType).eWarehouse, SERVANT_INVEN = (CppEnums.ItemWhereType).eServantInventory, SERVANT_EQUIP = (CppEnums.ItemWhereType).eServantEquip, GUILD_WAREHOUSE = (CppEnums.ItemWhereType).eGuildWarehouse, CASH_INVEN = (CppEnums.ItemWhereType).eCashInventory, INVEN_BAG = (CppEnums.ItemWhereType).eInventoryBag, CASH_INVEN_BAG = (CppEnums.ItemWhereType).eCashInventoryBag}
 local UI_color = Defines.Color
-local InventoryInfo = {_haveExtentedSlot; 
+local InventoryInfo = {
 _ui = {stc_windowTopEnd = (UI.getChildControl)(_panel, "Static_WindowTopEnd"), stc_rotateDeco1 = nil, stc_rotateDeco2 = nil, stc_topEndPictogram = nil, txt_topEndTitle = nil, stc_subWindowMoney = (UI.getChildControl)(_panel, "Static_SubWindowMoney"), stc_silverIcon = nil, txt_Silver = nil, txt_Pearl = nil, txt_Mileage = nil, stc_subWindowUpper = (UI.getChildControl)(_panel, "Static_SubWindowUpper"), stc_upperBorderLeft = nil, stc_upperBorderRight = nil, groups = nil, stc_topEndBorder = (UI.getChildControl)(_panel, "Static_TopEndBorder"), rdo_tabButtons = nil, equipSlotTemplate = nil, costumeSlotTemplate = nil, invenSlotTemplate = nil, servantInvenSlotTemplate = nil, servantEquipSlotTemplate = nil, servantCostumeSlotTemplate = nil, stc_EquipBG = nil, txt_attackValue = nil, txt_awakenAttackValue = nil, txt_defenceValue = nil, chk_autoActive = nil, chk_hideHelmet = nil, chk_openHelmet = nil, chk_showUnderwear = nil, chk_toggleCloak = nil, chk_toggleNameWhenCamo = nil, frame_characterInfo = nil, stc_characterInfoBG = nil, txt_resistValues = nil, txt_fitnessSubtitles = nil, txt_fitnessValues = nil, setItemEffectTitleList = nil, setItemEffectValueList = nil, frame_setEffect = nil, stc_setEffectBG = nil, stc_noSetEffect = nil, frame_servantInven = nil, stc_servantInfoBG = nil, stc_contentBG = nil, txt_servantName = nil, progress2_servantWeight = nil, txt_servantInvenCountDisplay = nil, txt_servantWeightValue = nil, stc_horseWeight = nil, txt_servantEquipInfo = nil, txt_servantCostumeInfo = nil, txt_noServant = nil, stc_subWindowLower = (UI.getChildControl)(_panel, "Static_SubWindowLower"), stc_itemSlotTemplate = nil, stc_highlight = nil, txt_invenName = nil, scroll_inven = nil, stc_invenBG = nil, stc_plusSlot = nil, 
 stc_lockedSlots = {}
 , 
@@ -39,7 +39,7 @@ stc_servantCostumeSlotBG = {}
 , 
 servantCostumeSlots = {}
 , txt_KeyGuideY = nil}
-, _isAutoSort = false, _rotateVal1 = 45, _rotateVal2 = 0, _tabXGab = 80, _resistCount = 4, _fitnessCount = 3, _setItemEffectTitleCount = nil, _setItemEffectValueCount = nil, _setItemEffectData = nil, _invenSlotColumnMax = 8, _invenSlotRowMax = 9, _invenSlotMax = 72, _invenStartSlotIndex = 0, 
+, _isAutoSort = false, _rotateVal1 = 45, _rotateVal2 = 0, _tabXGab = 80, _resistCount = 4, _fitnessCount = 3, _setItemEffectTitleCount = nil, _setItemEffectValueCount = nil, _setItemEffectData = nil, _invenSlotColumnMax = 8, _invenSlotRowMax = 9, _invenSlotMax = 72, _invenCapacity = nil, _invenStartSlotIndex = 0, 
 _slotEtcData = {}
 , _servantInvenSlotMax = 50, _servantEquipSlotMax = 6, _defaultXGap = 54, _defaultYGap = 54, _weightDesignatorTarget = nil, _weightDesignatorIsAnimating = false, _servantActorKeyRaw = nil, _tooltipWhereType = nil, _tooltipSlotNo = nil, _rClickFunc = nil, _filterFunc = nil, _otherWindowOpenFunc = nil, _effect = nil, _currentUpperTab = 0, 
 _upperTabsData = {
@@ -489,10 +489,10 @@ InventoryInfo.initCostumeUIControls = function(self)
     ;
     (slot.icon):addInputEvent("Mouse_Out", "InputMOn_InventoryInfo_equipShowTooltip(" .. (self._costumeSlotIndex)[ii] .. ", false)")
     slot.pictogram = pictogram
-    slot.toggleButton = (UI.getChildControl)(slotBG, "CheckButton_ShowToggle")
+    slot.chk_toggleButton = (UI.getChildControl)(slotBG, "CheckButton_ShowToggle")
     ;
-    (slot.toggleButton):addInputEvent("Mouse_LUp", "Input_InventoryInfo_CostumeShowToggle(" .. ii .. ")")
-    slotBG:SetChildOrder((slot.icon):GetKey(), (slot.toggleButton):GetKey())
+    (slot.chk_toggleButton):addInputEvent("Mouse_LUp", "Input_InventoryInfo_CostumeShowToggle(" .. ii .. ")")
+    slotBG:SetChildOrder((slot.icon):GetKey(), (slot.chk_toggleButton):GetKey())
     Panel_Tooltip_Item_SetPosition((self._costumeSlotIndex)[ii], slot, "equipment")
     -- DECOMPILER ERROR at PC193: Confused about usage of register: R17 in 'UnsetPending'
 
@@ -701,15 +701,17 @@ InventoryInfo.initServantUIControl = function(self)
 
   ;
   (self._ui).txt_noServant = (UI.getChildControl)((self._ui).stc_subWindowUpper, "StaticText_NoServant")
-  -- DECOMPILER ERROR at PC113: Confused about usage of register: R3 in 'UnsetPending'
+  ;
+  ((self._ui).txt_noServant):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NotVehicleNear"))
+  -- DECOMPILER ERROR at PC122: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._ui).servantInvenSlotTemplate = (UI.getChildControl)(frameContent, "Static_ServantSlotTemplate")
-  -- DECOMPILER ERROR at PC121: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC130: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._ui).servantEquipSlotTemplate = (UI.getChildControl)((self._ui).txt_servantEquipInfo, "Static_EquipItemSlot_Template")
-  -- DECOMPILER ERROR at PC129: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC138: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._ui).servantCostumeSlotTemplate = (UI.getChildControl)((self._ui).txt_servantCostumeInfo, "Static_CostumeItemSlot_Template")
@@ -756,18 +758,18 @@ InventoryInfo.initServantUIControl = function(self)
     ((servantEquipSlot[ii]).icon):addInputEvent("Mouse_On", "Input_InventoryInfo_ServantEquipShowTooltip(" .. WHERE_TYPE.SERVANT_EQUIP .. "," .. ii .. ", true)")
     ;
     ((servantEquipSlot[ii]).icon):addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantEquipShowTooltip(" .. WHERE_TYPE.SERVANT_EQUIP .. "," .. ii .. ", false)")
-    -- DECOMPILER ERROR at PC303: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC312: Confused about usage of register: R11 in 'UnsetPending'
 
     ;
     (servantEquipSlot[ii]).pictogram = (UI.getChildControl)(stc_servantEquipSlotBG[ii], "Static_ItemPictogram")
-    -- DECOMPILER ERROR at PC310: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC319: Confused about usage of register: R11 in 'UnsetPending'
 
     ;
-    (servantEquipSlot[ii]).toggleButton = (UI.getChildControl)(stc_servantEquipSlotBG[ii], "CheckButton_ShowToggle")
+    (servantEquipSlot[ii]).chk_toggleButton = (UI.getChildControl)(stc_servantEquipSlotBG[ii], "CheckButton_ShowToggle")
     ;
-    ((servantEquipSlot[ii]).toggleButton):addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_ServantEquipToggle(" .. ii .. ")")
+    ((servantEquipSlot[ii]).chk_toggleButton):addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_ServantEquipOrCostumeToggle(true," .. ii .. ")")
     ;
-    (stc_servantEquipSlotBG[ii]):SetChildOrder(((servantEquipSlot[ii]).icon):GetKey(), ((servantEquipSlot[ii]).toggleButton):GetKey())
+    (stc_servantEquipSlotBG[ii]):SetChildOrder(((servantEquipSlot[ii]).icon):GetKey(), ((servantEquipSlot[ii]).chk_toggleButton):GetKey())
   end
   local servantCostumeSlots = (self._ui).servantCostumeSlots
   local stc_servantCostumeSlotBG = (self._ui).stc_servantCostumeSlotBG
@@ -788,18 +790,18 @@ InventoryInfo.initServantUIControl = function(self)
     ((servantCostumeSlots[ii]).icon):addInputEvent("Mouse_On", "Input_InventoryInfo_ServantCostumeShowTooltip(" .. WHERE_TYPE.SERVANT_EQUIP .. "," .. ii .. ", true)")
     ;
     ((servantCostumeSlots[ii]).icon):addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantCostumeShowTooltip(" .. WHERE_TYPE.SERVANT_EQUIP .. "," .. ii .. ", false)")
-    -- DECOMPILER ERROR at PC420: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC429: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (servantCostumeSlots[ii]).pictogram = (UI.getChildControl)(stc_servantCostumeSlotBG[ii], "Static_ItemPictogram")
-    -- DECOMPILER ERROR at PC427: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC436: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
-    (servantCostumeSlots[ii]).toggleButton = (UI.getChildControl)(stc_servantCostumeSlotBG[ii], "CheckButton_ShowToggle")
+    (servantCostumeSlots[ii]).chk_toggleButton = (UI.getChildControl)(stc_servantCostumeSlotBG[ii], "CheckButton_ShowToggle")
     ;
-    ((servantCostumeSlots[ii]).toggleButton):addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_ServantCostumeToggle(" .. ii .. ")")
+    ((servantCostumeSlots[ii]).chk_toggleButton):addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_ServantEquipOrCostumeToggle(false," .. ii .. ")")
     ;
-    (stc_servantCostumeSlotBG[ii]):SetChildOrder(((servantCostumeSlots[ii]).icon):GetKey(), ((servantCostumeSlots[ii]).toggleButton):GetKey())
+    (stc_servantCostumeSlotBG[ii]):SetChildOrder(((servantCostumeSlots[ii]).icon):GetKey(), ((servantCostumeSlots[ii]).chk_toggleButton):GetKey())
   end
 end
 
@@ -815,17 +817,13 @@ InventoryInfo.initInventory = function(self)
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).stc_highlight = (UI.getChildControl)((self._ui).stc_subWindowLower, "Static_InvenHighlight")
-  -- DECOMPILER ERROR at PC26: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
   (self._ui).stc_invenBG = (UI.getChildControl)((self._ui).stc_subWindowLower, "Static_InventoryBG")
   local slotBG = (self._ui).stc_invenSlotBG
   local slotTemplate = (self._ui).invenSlotTemplate
   local xSize, ySize = self._defaultXGap, self._defaultYGap
   local startX, startY = 0, 0
   local columnMax = self._invenSlotColumnMax
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R8 in 'UnsetPending'
 
   ;
   (self._ui).invenSlots = (Array.new)()
@@ -854,7 +852,7 @@ InventoryInfo.initInventory = function(self)
     ;
     ((slot[ii]).icon):addInputEvent("Mouse_PressMove", "InputDrag_InventoryInfo_invenDrag(" .. ii .. ")")
     ;
-    (slotBG[ii]):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "Input_InventoryInfo_ItemDelete(" .. ii .. ")")
+    (slotBG[ii]):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "Input_InventoryInfo_ItemDelete(" .. ii .. ")")
     ;
     ((slot[ii]).icon):SetEnableDragAndDrop(true)
     ;
@@ -864,17 +862,17 @@ InventoryInfo.initInventory = function(self)
     Panel_Tooltip_Item_SetPosition(ii, slot[ii], "inventory")
     local effectSlot = {}
     effectSlot.isFirstItem = false
-    -- DECOMPILER ERROR at PC175: Confused about usage of register: R14 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC167: Confused about usage of register: R14 in 'UnsetPending'
 
     ;
     (self._slotEtcData)[ii] = effectSlot
-    -- DECOMPILER ERROR at PC187: Confused about usage of register: R14 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC179: Confused about usage of register: R14 in 'UnsetPending'
 
     ;
     ((self._ui).stc_lockedSlots)[ii] = (UI.createAndCopyBasePropertyControl)(_panel, "Static_LockedSlot", slotBG[ii], "Static_LockedSlot_" .. ii)
   end
   slotTemplate:SetShow(false)
-  -- DECOMPILER ERROR at PC199: Confused about usage of register: R9 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC191: Confused about usage of register: R9 in 'UnsetPending'
 
   ;
   (self._ui).scroll_inven = (UI.getChildControl)((self._ui).stc_subWindowLower, "Scroll_Inventory")
@@ -884,13 +882,13 @@ InventoryInfo.initInventory = function(self)
   (UIScroll.InputEvent)((self._ui).scroll_inven, "InputScroll_InventoryInfo_Inventory")
   ;
   (UIScroll.InputEventByControl)((self._ui).stc_invenBG, "InputScroll_InventoryInfo_Inventory")
-  -- DECOMPILER ERROR at PC224: Confused about usage of register: R9 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC216: Confused about usage of register: R9 in 'UnsetPending'
 
   ;
   (self._ui).btn_invenPuzzle = (UI.getChildControl)((self._ui).stc_subWindowLower, "Button_Puzzle")
   ;
   ((self._ui).btn_invenPuzzle):SetShow(false)
-  -- DECOMPILER ERROR at PC237: Confused about usage of register: R9 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC229: Confused about usage of register: R9 in 'UnsetPending'
 
   ;
   (self._ui).stc_plusSlot = (UI.getChildControl)((self._ui).stc_invenBG, "Static_OnlyPlus")
@@ -931,6 +929,9 @@ InventoryInfo.registMessageHandler = function(self)
   registerEvent("FromClient_FindExchangeItemNPC", "FromClient_InventoryInfo_FindExchangeItemNPC")
   registerEvent("FromClient_InventoryUpdatebyAddItem", "FromClient_InventoryInfo_updateSlotDatabyAddItem")
   registerEvent("FromClient_UpdateInventoryBag", "FromClient_InventoryInfo_updateSlotDatabyAddItem")
+  registerEvent("FromClient_ServantInventoryOpenWithInventory", "FromClient_InventoryInfo_OpenServantInven")
+  registerEvent("FromClient_ServantInventoryUpdate", "FromClient_InventoryInfo_ServantEquipChanged")
+  registerEvent("FromClient_UpdateCannonBallCount", "FromClient_InventoryInfo_ServantEquipChanged")
   registerEvent("EventServantEquipmentUpdate", "FromClient_InventoryInfo_ServantEquipChanged")
   registerEvent("EventServantEquipItem", "FromClient_InventoryInfo_ServantEquipOn")
   registerEvent("FromClient_UpdateTolerance", "FromClient_InventoryInfo_ResistChanged")
@@ -951,6 +952,15 @@ end
 InventoryInfo.open = function(self, openType)
   -- function num : 0_11 , upvalues : _panel, UPPER_TAB_TYPE
   _panel:SetShow(true, true)
+  if (Defines.UIMode).eUIMode_Default == GetUIMode() then
+    if PaGlobalFunc_Quest_GetShow() == true then
+      PaGlobalFunc_Quest_Close()
+    else
+      FGlobal_Panel_Radar_Show(false, true)
+      Panel_TimeBar:SetShow(false, true)
+      FGlobal_QuestWidget_Close()
+    end
+  end
   if openType ~= nil then
     (((self._ui).rdo_tabButtons)[openType]):SetCheck(true)
     self:setTabTo(openType)
@@ -982,6 +992,11 @@ InventoryInfo.close = function(self)
       callFunc()
     end
     _panel:SetShow(false, true)
+    if (Defines.UIMode).eUIMode_Default == GetUIMode() and PaGlobalFunc_Quest_GetShow() == false then
+      FGlobal_Panel_Radar_Show(true, true)
+      Panel_TimeBar:SetShow(true, true)
+      FGlobal_QuestWidget_Open()
+    end
     PaGlobalFunc_InventoryPopup_Close()
     self._weightDesignatorTarget = getScreenSizeY()
     self._weightDesignatorIsAnimating = true
@@ -1146,8 +1161,8 @@ InventoryInfo.updateEquipment = function(self)
       slot:setItem(itemWrapper, slotIndex, true)
       ;
       (slot.pictogram):SetShow(false)
-      if slot.toggleButton ~= nil then
-        (((self._ui).equipSlotBG)[ii]):SetChildOrder(slot, slot.toggleButton)
+      if slot.chk_toggleButton ~= nil then
+        (((self._ui).equipSlotBG)[ii]):SetChildOrder(slot, slot.chk_toggleButton)
       end
       ;
       (slot.icon):SetEnable(true)
@@ -1164,10 +1179,12 @@ InventoryInfo.updateEquipment = function(self)
   for childSlot,parentSlot in pairs(self._extendedSlotArray) do
     local itemWrapper = ToClient_getEquipmentItem(parentSlot)
     local index = self:getIndexFromEquipSlotIndex(childSlot)
-    slot = ((self._ui).equipSlots)[index]
-    if slot ~= nil then
-      ((((self._ui).equipSlots)[index]).pictogram):SetShow(false)
-      self:setItemInfoUseWrapper(slot, itemWrapper, true, true)
+    if index ~= nil then
+      slot = ((self._ui).equipSlots)[index]
+      if slot ~= nil then
+        ((((self._ui).equipSlots)[index]).pictogram):SetShow(false)
+        self:setItemInfoUseWrapper(slot, itemWrapper, true, true)
+      end
     end
   end
   local autoActiveIsOn = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).AlchemyStone)
@@ -1220,43 +1237,62 @@ InventoryInfo.updateCostume = function(self)
   if not _isInitialized or not _panel:GetShow() then
     return 
   end
-  self._extendedSlotArray = {}
-  for ii = 1, #self._costumeSlotIndex do
-    local slotIndex = (self._costumeSlotIndex)[ii]
-    local slot = ((self._ui).costumeSlots)[ii]
-    local isShow = true
-    local itemWrapper = ToClient_getEquipmentItem(slotIndex)
-    if itemWrapper ~= nil then
-      self:extendedSlotInfo(itemWrapper, slotIndex)
-      slot:setItem(itemWrapper, slotIndex, true)
-      isShow = ToClient_IsSetAvatarEquipSlotFlag(_avatarCheckFlag[slotIndex])
-      if slot.toggleButton ~= nil then
-        (((self._ui).equipSlotBG)[ii]):SetChildOrder(slot, slot.toggleButton)
+  local rightHandItemWrapper = (ToClient_getEquipmentItem(0))
+  local primWeaponIsFishingRod = nil
+  if (rightHandItemWrapper:getStaticStatus()):getEquipType() ~= 44 then
+    primWeaponIsFishingRod = rightHandItemWrapper == nil
+    self._extendedSlotArray = {}
+    for ii = 1, #self._costumeSlotIndex do
+      local slotIndex = (self._costumeSlotIndex)[ii]
+      local slot = ((self._ui).costumeSlots)[ii]
+      local isShow = true
+      local itemWrapper = ToClient_getEquipmentItem(slotIndex)
+      if itemWrapper ~= nil then
+        self:extendedSlotInfo(itemWrapper, slotIndex)
+        slot:setItem(itemWrapper, slotIndex, true)
+        isShow = ToClient_IsSetAvatarEquipSlotFlag(_avatarCheckFlag[slotIndex])
+        if slot.chk_toggleButton ~= nil then
+          (((self._ui).equipSlotBG)[ii]):SetChildOrder(slot, slot.chk_toggleButton)
+        end
+        ;
+        (slot.pictogram):SetShow(false)
+        ;
+        (slot.icon):SetEnable(true)
+        ;
+        (slot.icon):SetMonoTone(false)
+        ;
+        (slot.enchantText):SetMonoTone(false)
+      else
+        slot:clearItem()
+        ;
+        (slot.pictogram):SetShow(true)
       end
       ;
-      (slot.pictogram):SetShow(false)
-      ;
-      (slot.icon):SetEnable(true)
-      ;
-      (slot.icon):SetMonoTone(false)
-      ;
-      (slot.enchantText):SetMonoTone(false)
-    else
-      slot:clearItem()
-      ;
-      (slot.pictogram):SetShow(true)
+      (slot.chk_toggleButton):SetCheck(isShow)
     end
-    ;
-    (slot.toggleButton):SetCheck(isShow)
-  end
-  for childSlot,parentSlot in pairs(self._extendedSlotArray) do
-    local itemWrapper = ToClient_getEquipmentItem(parentSlot)
-    local index = self:getIndexFromCostumeSlotIndex(childSlot)
-    slot = ((self._ui).costumeSlots)[index]
-    if slot ~= nil then
+    for childSlot,parentSlot in pairs(self._extendedSlotArray) do
+      local itemWrapper = ToClient_getEquipmentItem(parentSlot)
+      local index = self:getIndexFromCostumeSlotIndex(childSlot)
+      if index ~= nil then
+        slot = ((self._ui).costumeSlots)[index]
+        if slot ~= nil then
+          ((((self._ui).costumeSlots)[index]).pictogram):SetShow(false)
+          self:setItemInfoUseWrapper(slot, itemWrapper, true, true)
+        end
+      end
+    end
+    if primWeaponIsFishingRod then
+      local fishingRodWrapper = ToClient_getEquipmentItem(0)
+      local index = self:getIndexFromCostumeSlotIndex(18)
+      ;
       ((((self._ui).costumeSlots)[index]).pictogram):SetShow(false)
-      self:setItemInfoUseWrapper(slot, itemWrapper, true, true)
+      self:setItemInfoUseWrapper(((self._ui).costumeSlots)[index], fishingRodWrapper, true, true)
+      index = self:getIndexFromCostumeSlotIndex(19)
+      ;
+      ((((self._ui).costumeSlots)[index]).pictogram):SetShow(false)
+      self:setItemInfoUseWrapper(((self._ui).costumeSlots)[index], fishingRodWrapper, true, true)
     end
+    -- DECOMPILER ERROR: 7 unprocessed JMP targets
   end
 end
 
@@ -1337,83 +1373,86 @@ InventoryInfo.updateInformation = function(self)
   end
 
   local data = {}
-  local titles = (self._ui).setItemEffectTitleList
-  local values = (self._ui).setItemEffectValueList
-  for ii = 1, #titles do
-    (titles[ii]):SetShow(false)
+  local txt_titles = (self._ui).setItemEffectTitleList
+  local txt_values = (self._ui).setItemEffectValueList
+  for ii = 1, #txt_titles do
+    (txt_titles[ii]):SetShow(false)
   end
-  for ii = 1, #values do
-    (values[ii]):SetShow(false)
+  for ii = 1, #txt_values do
+    (txt_values[ii]):SetShow(false)
   end
+  local startY = 10
   for ii = 1, #sortedInfoList + 1 do
     data[ii] = {}
-    -- DECOMPILER ERROR at PC302: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC303: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).skillNo = (sortedInfoList[ii - 1]):getSkillNo()
-    -- DECOMPILER ERROR at PC308: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC309: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).groupTitle = (sortedInfoList[ii - 1]):getGroupTitle()
-    -- DECOMPILER ERROR at PC314: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC315: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).isApplied = (sortedInfoList[ii - 1]):getApply()
-    -- DECOMPILER ERROR at PC320: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC321: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).point = (sortedInfoList[ii - 1]):getPoint()
-    -- DECOMPILER ERROR at PC326: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC327: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).descTitle = (sortedInfoList[ii - 1]):getDescTitle()
-    -- DECOMPILER ERROR at PC332: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC333: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (data[ii]).desc = (sortedInfoList[ii - 1]):getDesc()
     if not containGroup((data[ii]).groupTitle) then
-      if titles[self._setItemEffectTitleCount] == nil then
-        titles[self._setItemEffectTitleCount] = (UI.createAndCopyBasePropertyControl)(((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectTitle", ((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectTitle" .. ii)
+      if txt_titles[self._setItemEffectTitleCount] == nil then
+        txt_titles[self._setItemEffectTitleCount] = (UI.createAndCopyBasePropertyControl)(((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectTitle", ((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectTitle" .. ii)
       end
       ;
-      (titles[self._setItemEffectTitleCount]):SetShow(true)
+      (txt_titles[self._setItemEffectTitleCount]):SetShow(true)
       ;
-      (titles[self._setItemEffectTitleCount]):SetText((data[ii]).groupTitle)
+      (txt_titles[self._setItemEffectTitleCount]):SetText((data[ii]).groupTitle)
       ;
-      (titles[self._setItemEffectTitleCount]):SetPosX(50)
+      (txt_titles[self._setItemEffectTitleCount]):SetPosX(50)
       ;
-      (titles[self._setItemEffectTitleCount]):SetPosY((self._setItemEffectTitleCount - 1) * 40 + (self._setItemEffectValueCount - 1) * 30 + 10)
-      -- DECOMPILER ERROR at PC392: Confused about usage of register: R16 in 'UnsetPending'
+      (txt_titles[self._setItemEffectTitleCount]):SetPosY(startY)
+      startY = startY + (txt_titles[self._setItemEffectTitleCount]):GetTextSizeY() + 12
+      -- DECOMPILER ERROR at PC392: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._setItemEffectData)[self._setItemEffectTitleCount] = (data[ii]).groupTitle
       self._setItemEffectTitleCount = self._setItemEffectTitleCount + 1
     end
-    if values[self._setItemEffectValueCount] == nil then
-      values[self._setItemEffectValueCount] = (UI.createAndCopyBasePropertyControl)(((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectValue", ((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectValue" .. ii)
+    if txt_values[self._setItemEffectValueCount] == nil then
+      txt_values[self._setItemEffectValueCount] = (UI.createAndCopyBasePropertyControl)(((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectValue", ((self._ui).frame_setEffect):GetFrameContent(), "StaticText_SetItemEffectValue" .. ii)
     end
     ;
-    (values[self._setItemEffectValueCount]):SetShow(true)
+    (txt_values[self._setItemEffectValueCount]):SetShow(true)
     if (data[ii]).isApplied == true then
-      (values[self._setItemEffectValueCount]):SetFontColor((Defines.Color).C_FF96D4FC)
+      (txt_values[self._setItemEffectValueCount]):SetFontColor((Defines.Color).C_FF96D4FC)
     else
-      (values[self._setItemEffectValueCount]):SetFontColor((Defines.Color).C_FFC4BEBE)
+      (txt_values[self._setItemEffectValueCount]):SetFontColor((Defines.Color).C_FFC4BEBE)
     end
     ;
-    (values[self._setItemEffectValueCount]):SetText((data[ii]).descTitle .. " : " .. (data[ii]).desc)
+    (txt_values[self._setItemEffectValueCount]):SetText((data[ii]).descTitle .. " : " .. (data[ii]).desc)
     ;
-    (values[self._setItemEffectValueCount]):SetPosX(50)
+    (txt_values[self._setItemEffectValueCount]):SetPosX(50)
     ;
-    (values[self._setItemEffectValueCount]):SetPosY((self._setItemEffectTitleCount - 1) * 40 + (self._setItemEffectValueCount - 1) * 30 + 10)
+    (txt_values[self._setItemEffectValueCount]):SetPosY(startY)
+    startY = startY + (txt_values[self._setItemEffectValueCount]):GetTextSizeY() + 12
     self._setItemEffectValueCount = self._setItemEffectValueCount + 1
   end
   ;
   ((self._ui).frame_setEffect):UpdateContentPos()
-  local content = ((self._ui).frame_setEffect):GetFrameContent()
   do
-    local sizeY = self._setItemEffectTitleCount * 40 + self._setItemEffectValueCount * 30 + 10
+    local content = ((self._ui).frame_setEffect):GetFrameContent()
     ;
-    ((self._ui).stc_characterInfoBG):SetSize(content:GetSizeX(), sizeY)
+    ((self._ui).stc_characterInfoBG):SetSize(content:GetSizeX(), startY)
+    content:SetSize(content:GetSizeX(), startY)
     ;
     ((self._ui).frame_setEffect):UpdateContentPos()
     if ((self._ui).frame_setEffect):GetSizeY() < content:GetSizeY() then
@@ -1551,11 +1590,12 @@ InventoryInfo.updateServantInven = function(self, actorKeyRaw)
       slot:clearItem()
     end
   end
-  local lastSlot = ((self._ui).stc_servantInvenSlotBG)[fullCount]
+  local rowCount = (math.ceil)(fullCount / columnMax)
+  local lastSlot = ((self._ui).stc_servantInvenSlotBG)[#(self._ui).stc_servantInvenSlotBG]
   ;
   ((self._ui).stc_contentBG):SetSize(((self._ui).stc_contentBG):GetSizeX(), lastSlot:GetSizeY() + lastSlot:GetPosY())
-  ;
-  (((self._ui).frame_servantInven):GetFrameContent()):SetSize((((self._ui).frame_servantInven):GetFrameContent()):GetSizeX(), lastSlot:GetSizeY() + lastSlot:GetPosY())
+  local frameContent = ((self._ui).frame_servantInven):GetFrameContent()
+  frameContent:SetSize(frameContent:GetSizeX(), ((self._ui).stc_contentBG):GetSizeY())
   ;
   ((self._ui).frame_servantInven):UpdateContentPos()
   ;
@@ -1594,10 +1634,7 @@ InventoryInfo.updateServantEquipOrCostume = function(self, isEquip)
   local UV = (_servantData[dataType]).pictogramUV
   local slotCount = #slotNoList
   local group = ((self._ui).groups)[UPPER_TAB_TYPE.SERVANT]
-  local startX = group:GetSizeX() / 2 - ((equipOrCostumeSlotsBG[1]):getParent()):GetPosX() - (slotCount * self._defaultXGap + (equipOrCostumeSlotsBG[1]):GetSizeX()) / 2
-  _PA_LOG("박범�\128", "group:GetSizeX() : " .. group:GetSizeX())
-  _PA_LOG("박범�\128", "slotCount : " .. slotCount)
-  _PA_LOG("박범�\128", "slotCount * self._defaultXGap : " .. tostring(slotCount * self._defaultXGap))
+  local startX = group:GetSizeX() / 2 - ((slotCount - 1) * self._defaultXGap + (equipOrCostumeSlotsBG[1]):GetSizeX()) / 2
   for ii = 1, self._servantEquipSlotMax do
     local slot = equipOrCostumeSlots[ii]
     local slotBG = equipOrCostumeSlotsBG[ii]
@@ -1607,34 +1644,33 @@ InventoryInfo.updateServantEquipOrCostume = function(self, isEquip)
       local slotNo = slotNoList[ii]
       local itemWrapper = servantWrapper:getEquipItem(slotNo)
       if slot.pictogram == nil then
-        _PA_LOG("박범�\128", "slot pictogram at " .. " is nil")
         slot.pictogram = (UI.getChildControl)(slotBG, "Static_ItemPictogram")
       end
-      if slot.toggleButton == nil then
-        slot.toggleButton = (UI.getChildControl)(slotBG, "CheckButton_ShowToggle")
+      if slot.chk_toggleButton == nil then
+        slot.chk_toggleButton = (UI.getChildControl)(slotBG, "CheckButton_ShowToggle")
       end
       if itemWrapper ~= nil then
         slot:setItem(itemWrapper, slotNo, true)
         ;
         (slot.pictogram):SetShow(false)
         if (CppEnums.VehicleType).Type_Elephant == vehicleType then
-          (slot.toggleButton):SetShow(false)
+          (slot.chk_toggleButton):SetShow(false)
         else
           if checkFlagList[slotNo] == nil then
-            (slot.toggleButton):SetShow(false)
+            (slot.chk_toggleButton):SetShow(false)
           else
             ;
-            (slot.toggleButton):SetShow(true)
+            (slot.chk_toggleButton):SetShow(true)
             local checkBool = ToClient_IsSetVehicleEquipSlotFlag(vehicleType, checkFlagList[slotNo])
             ;
-            (slot.toggleButton):SetCheck(checkBool)
+            (slot.chk_toggleButton):SetCheck(checkBool)
           end
         end
       else
         do
           slot:clearItem()
           ;
-          (slot.toggleButton):SetShow(false)
+          (slot.chk_toggleButton):SetShow(false)
           ;
           (slot.pictogram):SetShow(true)
           do
@@ -1645,17 +1681,17 @@ InventoryInfo.updateServantEquipOrCostume = function(self, isEquip)
               ;
               (slot.pictogram):setRenderTexture((slot.pictogram):getBaseTexture())
               slotBG:SetShow(false)
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC219: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC186: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -1665,13 +1701,8 @@ InventoryInfo.updateServantEquipOrCostume = function(self, isEquip)
   end
 end
 
-hideInvenColor = function()
-  -- function num : 0_27 , upvalues : InventoryInfo
-  ((InventoryInfo._ui).stc_highlight):SetShow(false)
-end
-
 InventoryInfo.updateInventory = function(self, ignorePanelVisibility)
-  -- function num : 0_28 , upvalues : _isInitialized, _panel, LOWER_TAB_TYPE, UI_color, effectScene
+  -- function num : 0_27 , upvalues : _isInitialized, _panel, LOWER_TAB_TYPE, effectScene, UI_color
   if not ignorePanelVisibility and (not _isInitialized or not _panel:GetShow()) then
     return 
   end
@@ -1681,194 +1712,184 @@ InventoryInfo.updateInventory = function(self, ignorePanelVisibility)
   if ignorePanelVisibility then
     self._currentLowerTab = LOWER_TAB_TYPE.INVENTORY
   end
-  if LOWER_TAB_TYPE.CASH_INVEN == self._currentLowerTab then
-    local ImageAni = ((self._ui).stc_highlight):addColorAnimation(0, 0.25, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_LINEAR)
-    ImageAni:SetStartColor(UI_color.C_FFFFFFFF)
-    ImageAni:SetEndColor(4278255615)
-  else
-    do
-      do
-        local ImageAni = ((self._ui).stc_highlight):addColorAnimation(0, 0.25, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_LINEAR)
-        ImageAni:SetStartColor(4278255615)
-        ImageAni:SetEndColor(UI_color.C_FFFFFFFF)
-        self:updateSilverPearlMileage()
-        local playerLevel = ((getSelfPlayer()):get()):getLevel()
-        local selfPlayer = getSelfPlayer()
-        local invenUseSize = (selfPlayer:get()):getInventorySlotCount(LOWER_TAB_TYPE.CASH_INVEN == self._currentLowerTab)
-        local useStartSlot = inventorySlotNoUserStart()
-        local inventory = Inventory_GetCurrentInventory()
-        local currentWhereType = Inventory_GetCurrentInventoryType()
-        local invenMaxSize = inventory:sizeXXX()
-        local slotNoList = (Array.new)()
-        local classType = selfPlayer:getClassType()
-        slotNoList:fill(useStartSlot, invenMaxSize - 1)
-        self._isAutoSort = false
-        if self._isAutoSort then
-          local sortList = (Array.new)()
-          sortList:fill(useStartSlot, invenUseSize - 1)
-          sortList:quicksort(PaGlobalFunc_InventoryInfo_ItemComparer)
-          for ii = 1, #sortList do
-            slotNoList[ii] = sortList[ii]
-          end
-        end
-        Panel_Inventory_isBlackStone_16001 = false
-        Panel_Inventory_isBlackStone_16002 = false
-        Panel_Inventory_isSocketItem = false
-        ;
-        ((self._ui).stc_plusSlot):SetShow(false)
-        do
-          local openedSlotCount = invenUseSize - useStartSlot
-          for ii = 1, self._invenSlotMax do
-            local slot = ((self._ui).invenSlots)[ii]
-            slot:clearItem()
-            slotNo = slotNoList[ii + self._invenStartSlotIndex]
-            slot.slotNo = slotNo
-            if ii - 1 + self._invenStartSlotIndex < openedSlotCount then
-              (slot.icon):EraseAllEffect()
-              local itemWrapper = getInventoryItemByType(((self._lowerTabData)[self._currentLowerTab]).whereType, slotNoList[ii + self._invenStartSlotIndex])
-              if itemWrapper ~= nil then
-                slot:setItem(itemWrapper, slotNo)
-                slot.isEmpty = false
-                local isFiltered = false
-                if self._filterFunc ~= nil and type(self._filterFunc) == "function" then
-                  isFiltered = (self._filterFunc)(slotNo, itemWrapper, currentWhereType)
-                end
-                ;
-                (slot.icon):SetEnable(not isFiltered)
-                ;
-                (slot.icon):SetMonoTone(isFiltered)
-                ;
-                (slot.icon):SetIgnore(isFiltered)
-                if isFiltered then
-                  (slot.icon):SetAlpha(0.5)
-                  ;
-                  (slot.icon):EraseAllEffect()
-                else
-                  if self._filterFunc ~= nil then
-                    (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
-                  end
-                  self:addEffectMapea(ii, slotNo)
-                end
-                Panel_Inventory_isBlackStone_16002 = self:addEffectBlackStone(ii, isFiltered, slotNo)
-                local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-                self:autoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
-                PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
-                if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
-                  (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
-                end
-                if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
-                  (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
-                end
-                local itemSSW = itemWrapper:getStaticStatus()
-                local item_type = itemSSW:getItemType()
-                if item_type == 5 then
-                  Panel_Inventory_isSocketItem = true
-                end
-                local isSoulCollector = itemWrapper:isSoulCollector()
-                local isCurrentSoulCount = itemWrapper:getSoulCollectorCount()
-                local isMaxSoulCount = itemWrapper:getSoulCollectorMaxCount()
-                local itemIconPath = (itemWrapper:getStaticStatus()):getIconPath()
-                if isSoulCollector then
-                  (slot.icon):ChangeTextureInfoName("icon/" .. itemIconPath)
-                  if isCurrentSoulCount == 0 then
-                    (slot.icon):ChangeTextureInfoName("icon/" .. itemIconPath)
-                  end
-                  if isCurrentSoulCount > 0 then
-                    (slot.icon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_1.dds")
-                  end
-                  if isCurrentSoulCount == isMaxSoulCount then
-                    (slot.icon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_2.dds")
-                  end
-                  local x1, y1, x2, y2 = setTextureUV_Func(slot.icon, 0, 0, 42, 42)
-                  ;
-                  ((slot.icon):getBaseTexture()):setUV(x1, y1, x2, y2)
-                  ;
-                  (slot.icon):setRenderTexture((slot.icon):getBaseTexture())
-                end
-                local offencePoint = 0
-                local defencePoint = 0
-                local equipOffencePoint = 0
-                local equipDefencePoint = 0
-                local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
-                local matchEquip = false
-                local isAccessory = false
-                offencePoint = self:compareSpec(currentWhereType, slotNo, isAccessory)
-                local currentEndurance = (itemWrapper:get()):getEndurance()
-                local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
-                if not isUsableServant and not Panel_Window_Exchange:GetShow() then
-                  if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
-                    (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-                    local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-                    Panel_NewEquip_Update(equipPos)
-                    PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
-                  end
-                  if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
-                    (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-                    local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-                    Panel_NewEquip_Update(equipPos)
-                  end
-                  if slotNo < self._invenSlotMax and ((self._slotEtcData)[slotNo]).isFirstItem == true then
-                    local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
-                    -- DECOMPILER ERROR at PC511: Confused about usage of register: R36 in 'UnsetPending'
-
-                    ;
-                    (effectScene.newItem)[slotNo] = newItemEffectSceneId
-                    UIMain_ItemUpdate()
-                  end
-                end
-                local isUsableClass = nil
-                if itemSSW ~= nil then
-                  if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
-                    isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
-                  else
-                    isUsableClass = true
-                  end
-                else
-                  isUsableClass = false
-                end
-                if isEquip == false then
-                  (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                elseif isUsableClass == true then
-                  (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                else
-                  (slot.icon):SetColor(UI_color.C_FFD20000)
-                end
-                local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
-                if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
-                  (slot.icon):SetColor(UI_color.C_FFD20000)
-                end
-              end
-              ;
-              (((self._ui).stc_lockedSlots)[ii]):SetShow(false)
-            elseif ii - 1 + self._invenStartSlotIndex == openedSlotCount then
-              local posX = (ii - 1) % self._invenSlotColumnMax * self._defaultXGap
-              local posY = (math.floor)((ii - 1) / self._invenSlotColumnMax) * self._defaultYGap
-              ;
-              ((self._ui).stc_plusSlot):SetPosX(posX + 1)
-              ;
-              ((self._ui).stc_plusSlot):SetPosY(posY + 1)
-              ;
-              ((self._ui).stc_plusSlot):SetShow(true)
-              ;
-              (((self._ui).stc_lockedSlots)[ii]):SetShow(false)
-            else
-              (((self._ui).stc_lockedSlots)[ii]):SetShow(true)
-            end
-          end
-          if self._invenSlotMax < openedSlotCount then
-            ((self._ui).scroll_inven):SetShow(true)
-          end
-          PaGlobal_TutorialManager:handleOpenedInventory()
-          self:findPuzzle()
-          -- DECOMPILER ERROR: 29 unprocessed JMP targets
-        end
+  self:updateSilverPearlMileage()
+  local playerLevel = ((getSelfPlayer()):get()):getLevel()
+  local selfPlayer = getSelfPlayer()
+  local invenUseSize = (selfPlayer:get()):getInventorySlotCount(LOWER_TAB_TYPE.CASH_INVEN == self._currentLowerTab)
+  local useStartSlot = inventorySlotNoUserStart()
+  local inventory = Inventory_GetCurrentInventory()
+  local currentWhereType = Inventory_GetCurrentInventoryType()
+  local invenMaxSize = inventory:sizeXXX()
+  local slotNoList = (Array.new)()
+  do
+    local classType = selfPlayer:getClassType()
+    slotNoList:fill(useStartSlot, invenMaxSize - 1)
+    self._isAutoSort = false
+    if self._isAutoSort then
+      local sortList = (Array.new)()
+      sortList:fill(useStartSlot, invenUseSize - 1)
+      sortList:quicksort(PaGlobalFunc_InventoryInfo_ItemComparer)
+      for ii = 1, #sortList do
+        slotNoList[ii] = sortList[ii]
       end
     end
+    Panel_Inventory_isBlackStone_16001 = false
+    Panel_Inventory_isBlackStone_16002 = false
+    Panel_Inventory_isSocketItem = false
+    ;
+    ((self._ui).stc_plusSlot):SetShow(false)
+    self._invenCapacity = invenUseSize - useStartSlot
+    for ii = 1, self._invenSlotMax do
+      local slot = ((self._ui).invenSlots)[ii]
+      slot:clearItem()
+      slotNo = slotNoList[ii + self._invenStartSlotIndex]
+      slot.slotNo = slotNo
+      if ii - 1 + self._invenStartSlotIndex < self._invenCapacity then
+        (slot.icon):EraseAllEffect()
+        local itemWrapper = getInventoryItemByType(((self._lowerTabData)[self._currentLowerTab]).whereType, slotNoList[ii + self._invenStartSlotIndex])
+        if itemWrapper ~= nil then
+          slot:setItem(itemWrapper, slotNo)
+          slot.isEmpty = false
+          local isFiltered = false
+          if self._filterFunc ~= nil and type(self._filterFunc) == "function" then
+            isFiltered = (self._filterFunc)(slotNo, itemWrapper, currentWhereType)
+          end
+          ;
+          (slot.icon):SetEnable(not isFiltered)
+          ;
+          (slot.icon):SetMonoTone(isFiltered)
+          ;
+          (slot.icon):SetIgnore(isFiltered)
+          if isFiltered then
+            (slot.icon):SetAlpha(0.5)
+            ;
+            (slot.icon):EraseAllEffect()
+          else
+            if self._filterFunc ~= nil then
+              (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
+            end
+            self:addEffectMapea(ii, slotNo)
+          end
+          Panel_Inventory_isBlackStone_16002 = self:addEffectBlackStone(ii, isFiltered, slotNo)
+          local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+          self:autoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
+          PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
+          if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
+            (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+          end
+          if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
+            (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+          end
+          local itemSSW = itemWrapper:getStaticStatus()
+          local item_type = itemSSW:getItemType()
+          if item_type == 5 then
+            Panel_Inventory_isSocketItem = true
+          end
+          local isSoulCollector = itemWrapper:isSoulCollector()
+          local isCurrentSoulCount = itemWrapper:getSoulCollectorCount()
+          local isMaxSoulCount = itemWrapper:getSoulCollectorMaxCount()
+          local itemIconPath = (itemWrapper:getStaticStatus()):getIconPath()
+          if isSoulCollector then
+            (slot.icon):ChangeTextureInfoName("icon/" .. itemIconPath)
+            if isCurrentSoulCount == 0 then
+              (slot.icon):ChangeTextureInfoName("icon/" .. itemIconPath)
+            end
+            if isCurrentSoulCount > 0 then
+              (slot.icon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_1.dds")
+            end
+            if isCurrentSoulCount == isMaxSoulCount then
+              (slot.icon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_2.dds")
+            end
+            local x1, y1, x2, y2 = setTextureUV_Func(slot.icon, 0, 0, 42, 42)
+            ;
+            ((slot.icon):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            (slot.icon):setRenderTexture((slot.icon):getBaseTexture())
+          end
+          local offencePoint = 0
+          local defencePoint = 0
+          local equipOffencePoint = 0
+          local equipDefencePoint = 0
+          local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
+          local matchEquip = false
+          local isAccessory = false
+          offencePoint = self:compareSpec(currentWhereType, slotNo, isAccessory)
+          local currentEndurance = (itemWrapper:get()):getEndurance()
+          local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
+          if not isUsableServant and not Panel_Window_Exchange:GetShow() then
+            if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
+              (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+              local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+              Panel_NewEquip_Update(equipPos)
+              PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
+            end
+            if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
+              (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+              local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+              Panel_NewEquip_Update(equipPos)
+            end
+            if slotNo < self._invenSlotMax and ((self._slotEtcData)[slotNo]).isFirstItem == true then
+              local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
+              -- DECOMPILER ERROR at PC475: Confused about usage of register: R35 in 'UnsetPending'
+
+              ;
+              (effectScene.newItem)[slotNo] = newItemEffectSceneId
+              UIMain_ItemUpdate()
+            end
+          end
+          local isUsableClass = nil
+          if itemSSW ~= nil then
+            if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
+              isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
+            else
+              isUsableClass = true
+            end
+          else
+            isUsableClass = false
+          end
+          if isEquip == false then
+            (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+          elseif isUsableClass == true then
+            (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+          else
+            (slot.icon):SetColor(UI_color.C_FFD20000)
+          end
+          local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
+          if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
+            (slot.icon):SetColor(UI_color.C_FFD20000)
+          end
+        end
+        ;
+        (((self._ui).stc_lockedSlots)[ii]):SetShow(false)
+      elseif ii - 1 + self._invenStartSlotIndex == self._invenCapacity then
+        local posX = (ii - 1) % self._invenSlotColumnMax * self._defaultXGap
+        local posY = (math.floor)((ii - 1) / self._invenSlotColumnMax) * self._defaultYGap
+        if _ContentsGroup_ForXBoxFinalCert == false then
+          (((self._ui).stc_lockedSlots)[ii]):SetShow(true)
+        else
+          ((self._ui).stc_plusSlot):SetPosX(posX + 1)
+          ;
+          ((self._ui).stc_plusSlot):SetPosY(posY + 1)
+          ;
+          ((self._ui).stc_plusSlot):SetShow(true)
+          ;
+          (((self._ui).stc_lockedSlots)[ii]):SetShow(false)
+        end
+      else
+        (((self._ui).stc_lockedSlots)[ii]):SetShow(true)
+      end
+    end
+    if self._invenSlotMax < self._invenCapacity then
+      ((self._ui).scroll_inven):SetShow(true)
+    end
+    PaGlobal_TutorialManager:handleOpenedInventory()
+    self:findPuzzle()
+    -- DECOMPILER ERROR: 30 unprocessed JMP targets
   end
 end
 
 InventoryInfo.findPuzzle = function(self)
-  -- function num : 0_29 , upvalues : LOWER_TAB_TYPE
+  -- function num : 0_28 , upvalues : LOWER_TAB_TYPE
   if self._isAutoSort == true then
     return 
   end
@@ -1911,7 +1932,7 @@ InventoryInfo.findPuzzle = function(self)
 end
 
 InventoryInfo.updateWeight = function(self)
-  -- function num : 0_30
+  -- function num : 0_29
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local _const = Defines.s64_const
@@ -1949,7 +1970,7 @@ InventoryInfo.updateWeight = function(self)
 end
 
 PaGlobalFunc_Window_InventoryInfo_PerFrameUpdate = function(deltaTime)
-  -- function num : 0_31 , upvalues : InventoryInfo
+  -- function num : 0_30 , upvalues : InventoryInfo
   local self = InventoryInfo
   if deltaTime <= 0 then
     return 
@@ -2016,7 +2037,7 @@ PaGlobalFunc_Window_InventoryInfo_PerFrameUpdate = function(deltaTime)
 end
 
 InventoryInfo.animateWeightDesignator = function(self)
-  -- function num : 0_32
+  -- function num : 0_31
   local designtorY = ((self._ui).stc_designator):GetPosY()
   local difference = self._weightDesignatorTarget - designtorY
   if (math.abs)(difference) > 1 then
@@ -2050,7 +2071,7 @@ InventoryInfo.animateWeightDesignator = function(self)
 end
 
 InventoryInfo.setTabTo = function(self, tabIndex)
-  -- function num : 0_33 , upvalues : UPPER_TAB_TYPE, LOWER_TAB_TYPE
+  -- function num : 0_32 , upvalues : UPPER_TAB_TYPE, LOWER_TAB_TYPE
   self._currentUpperTab = tabIndex
   for ii = 1, #(self._ui).groups do
     (((self._ui).groups)[ii]):SetShow(false)
@@ -2084,12 +2105,12 @@ InventoryInfo.setTabTo = function(self, tabIndex)
 end
 
 PaGlobalFunc_InventoryInfo_SetUpperTabTo = function(tabIndex)
-  -- function num : 0_34 , upvalues : InventoryInfo
+  -- function num : 0_33 , upvalues : InventoryInfo
   InventoryInfo:setTabTo(tabIndex)
 end
 
 Input_InventoryInfo_SetUpperTabLeft = function()
-  -- function num : 0_35 , upvalues : InventoryInfo
+  -- function num : 0_34 , upvalues : InventoryInfo
   local self = InventoryInfo
   self._currentUpperTab = self._currentUpperTab - 1
   if self._currentUpperTab < 1 then
@@ -2101,7 +2122,7 @@ end
 _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_InventoryTab_forPadEventFunc(-1)")
 _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_InventoryTab_forPadEventFunc(1)")
 Toggle_InventoryTab_forPadEventFunc = function(value)
-  -- function num : 0_36
+  -- function num : 0_35
   if value == 1 then
     Input_InventoryInfo_SetUpperTabRight()
   else
@@ -2110,7 +2131,7 @@ Toggle_InventoryTab_forPadEventFunc = function(value)
 end
 
 Input_InventoryInfo_SetUpperTabRight = function()
-  -- function num : 0_37 , upvalues : InventoryInfo
+  -- function num : 0_36 , upvalues : InventoryInfo
   local self = InventoryInfo
   self._currentUpperTab = self._currentUpperTab + 1
   if #(self._ui).rdo_tabButtons < self._currentUpperTab then
@@ -2120,7 +2141,7 @@ Input_InventoryInfo_SetUpperTabRight = function()
 end
 
 Input_InventoryInfo_SetLowerTabLeft = function()
-  -- function num : 0_38 , upvalues : InventoryInfo
+  -- function num : 0_37 , upvalues : InventoryInfo
   local self = InventoryInfo
   self._currentLowerTab = self._currentLowerTab - 1
   if self._currentLowerTab < 1 then
@@ -2132,7 +2153,7 @@ Input_InventoryInfo_SetLowerTabLeft = function()
 end
 
 Input_InventoryInfo_SetLowerTabRight = function()
-  -- function num : 0_39 , upvalues : InventoryInfo
+  -- function num : 0_38 , upvalues : InventoryInfo
   local self = InventoryInfo
   self._currentLowerTab = self._currentLowerTab + 1
   if #self._lowerTabData < self._currentLowerTab then
@@ -2144,7 +2165,7 @@ Input_InventoryInfo_SetLowerTabRight = function()
 end
 
 Input_InventoryInfo_SetLowerTabTo = function(tabIndex)
-  -- function num : 0_40 , upvalues : InventoryInfo
+  -- function num : 0_39 , upvalues : InventoryInfo
   local self = InventoryInfo
   if tabIndex ~= self._currentLowerTab then
     self._invenStartSlotIndex = 0
@@ -2156,9 +2177,9 @@ Input_InventoryInfo_SetLowerTabTo = function(tabIndex)
 end
 
 InputMRUp_InventoryInfo_EquipSlot = function(slotType, index)
-  -- function num : 0_41 , upvalues : InventoryInfo
+  -- function num : 0_40 , upvalues : InventoryInfo
   local self = InventoryInfo
-  if not isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT) or self:invokeShiftRUpFunction(slotType, index) == false and self:invokeRUpFunction(slotType, index) == false then
+  if isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT) then
     local itemWrapper = ToClient_getEquipmentItem(index)
     if itemWrapper ~= nil then
       equipmentDoUnequip(index)
@@ -2167,28 +2188,28 @@ InputMRUp_InventoryInfo_EquipSlot = function(slotType, index)
 end
 
 InputMLUp_InventoryInfo_EquipSlot = function(slotType, index)
-  -- function num : 0_42
+  -- function num : 0_41
 end
 
 Input_InventoryInfo_AutoActive = function()
-  -- function num : 0_43 , upvalues : InventoryInfo
+  -- function num : 0_42 , upvalues : InventoryInfo
   _PA_LOG("박범�\128", "Input_InventoryInfo_AutoActive, " .. tostring(((InventoryInfo._ui).chk_autoActive):IsCheck()))
   ;
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).AlchemyStone, ((InventoryInfo._ui).chk_autoActive):IsCheck(), (CppEnums.VariableStorageType).eVariableStorageType_Character)
 end
 
 Input_InventoryInfo_HideHelmet = function()
-  -- function num : 0_44 , upvalues : InventoryInfo
+  -- function num : 0_43 , upvalues : InventoryInfo
   selfPlayerShowHelmet(not ((InventoryInfo._ui).chk_HideHelmet):IsCheck())
 end
 
 Input_InventoryInfo_OpenHelmet = function()
-  -- function num : 0_45 , upvalues : InventoryInfo
+  -- function num : 0_44 , upvalues : InventoryInfo
   selfPlayerShowBattleHelmet(((InventoryInfo._ui).chk_openHelmet):IsCheck())
 end
 
 Input_InventoryInfo_ToggleUnderwear = function(isShow)
-  -- function num : 0_46 , upvalues : InventoryInfo
+  -- function num : 0_45 , upvalues : InventoryInfo
   local self = InventoryInfo
   if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
@@ -2219,17 +2240,17 @@ Input_InventoryInfo_ToggleUnderwear = function(isShow)
 end
 
 Input_InventoryInfo_ToggleCloak = function()
-  -- function num : 0_47 , upvalues : InventoryInfo
+  -- function num : 0_46 , upvalues : InventoryInfo
   selfPlayerShowCloak(not ((InventoryInfo._ui).chk_toggleCloak):IsCheck())
 end
 
 Input_InventoryInfo_ToggleNameWhenCamo = function()
-  -- function num : 0_48
+  -- function num : 0_47
   Toclient_setShowNameWhenCamouflage(not ((getSelfPlayer()):get()):isShowNameWhenCamouflage())
 end
 
 InputMRUp_InventoryInfo_ServantInvenSlot = function(index)
-  -- function num : 0_49 , upvalues : InventoryInfo
+  -- function num : 0_48 , upvalues : InventoryInfo
   if InputMLUp_InventoryInfo_ServantInvenDropHandler() then
     return 
   end
@@ -2246,7 +2267,7 @@ InputMRUp_InventoryInfo_ServantInvenSlot = function(index)
 end
 
 InputMLUp_InventoryInfo_ServantInvenDropHandler = function()
-  -- function num : 0_50 , upvalues : InventoryInfo
+  -- function num : 0_49 , upvalues : InventoryInfo
   local self = InventoryInfo
   if DragManager.dragStartPanel == nil then
     return false
@@ -2264,15 +2285,14 @@ InputMLUp_InventoryInfo_ServantInvenDropHandler = function()
 end
 
 Input_InventoryInfo_ServantInvenTooltip = function(index, isShow)
-  -- function num : 0_51 , upvalues : InventoryInfo, _panel
-  _PA_LOG("박범�\128", "Input_InventoryInfo_ServantInvenTooltip, index ")
+  -- function num : 0_50 , upvalues : InventoryInfo, _panel
   local self = InventoryInfo
   Panel_Tooltip_Item_SetPosition(index, ((self._ui).servantInvenSlots)[index], "servant_inventory")
   Panel_Tooltip_Item_Show_GeneralNormal(index, "servant_inventory", isShow, nil, _panel:GetPosX() - 20, getScreenSizeY() - 100)
 end
 
 InputMRUp_InventoryInfo_ServantEquipSlot = function(index)
-  -- function num : 0_52 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
+  -- function num : 0_51 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
   local self = InventoryInfo
   local servantWrapper = getServantInfoFromActorKey((self._servantActorKeyRaw)[1])
   if servantWrapper == nil then
@@ -2291,12 +2311,8 @@ InputMRUp_InventoryInfo_ServantEquipSlot = function(index)
   servant_doUnequip(servantWrapper:getActorKeyRaw(), slotNo)
 end
 
-InputMLUp_InventoryInfo_ServantEquipSlot = function()
-  -- function num : 0_53
-end
-
-InputMLUp_InventoryInfo_ServantEquipToggle = function(index)
-  -- function num : 0_54 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
+InputMLUp_InventoryInfo_ServantEquipSlot = function(isEquipment, index)
+  -- function num : 0_52 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
   local self = InventoryInfo
   local servantWrapper = getServantInfoFromActorKey((self._servantActorKeyRaw)[1])
   if servantWrapper == nil then
@@ -2307,8 +2323,15 @@ InputMLUp_InventoryInfo_ServantEquipToggle = function(index)
   if dataType == nil then
     return 
   end
-  local slotNo = ((_servantData[dataType]).equipSlotNoList)[index]
-  if ((((self._ui).servantEquipSlots)[index]).toggleButton):IsCheck() == true then
+  local slotNo, check = nil, nil
+  if isEquipment == true then
+    slotNo = ((_servantData[dataType]).equipSlotNoList)[index]
+    check = ((((self._ui).servantEquipSlots)[index]).chk_toggleButton):IsCheck()
+  else
+    slotNo = ((_servantData[dataType]).costumeSlotNoList)[index]
+    check = ((((self._ui).servantCostumeSlots)[index]).chk_toggleButton):IsCheck()
+  end
+  if check == true then
     ToClient_SetVehicleEquipSlotFlag(vehicleType, ((_servantData[dataType]).checkFlag)[slotNo])
   else
     ToClient_ResetVehicleEquipSlotFlag(vehicleType, ((_servantData[dataType]).checkFlag)[slotNo])
@@ -2317,7 +2340,7 @@ InputMLUp_InventoryInfo_ServantEquipToggle = function(index)
 end
 
 InputMRUp_InventoryInfo_ServantCostumeSlot = function(index)
-  -- function num : 0_55 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
+  -- function num : 0_53 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData
   local self = InventoryInfo
   local servantWrapper = getServantInfoFromActorKey((self._servantActorKeyRaw)[1])
   if servantWrapper == nil then
@@ -2337,11 +2360,11 @@ InputMRUp_InventoryInfo_ServantCostumeSlot = function(index)
 end
 
 InputMLUp_InventoryInfo_ServantCostumeSlot = function()
-  -- function num : 0_56
+  -- function num : 0_54
 end
 
 Input_InventoryInfo_ServantEquipShowTooltip = function(whereType, index, isShow)
-  -- function num : 0_57 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData, _panel
+  -- function num : 0_55 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData, _panel
   local self = InventoryInfo
   local servantWrapper = getServantInfoFromActorKey((self._servantActorKeyRaw)[1])
   if servantWrapper == nil then
@@ -2355,7 +2378,7 @@ Input_InventoryInfo_ServantEquipShowTooltip = function(whereType, index, isShow)
 end
 
 Input_InventoryInfo_ServantCostumeShowTooltip = function(whereType, index, isShow)
-  -- function num : 0_58 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData, _panel
+  -- function num : 0_56 , upvalues : InventoryInfo, _vehicleTypeToSERVANT_TYPE, _servantData, _panel
   local self = InventoryInfo
   local servantWrapper = getServantInfoFromActorKey((self._servantActorKeyRaw)[1])
   if servantWrapper == nil then
@@ -2369,15 +2392,20 @@ Input_InventoryInfo_ServantCostumeShowTooltip = function(whereType, index, isSho
 end
 
 InputMRUp_InventoryInfo_InvenSlot = function(index)
-  -- function num : 0_59 , upvalues : InventoryInfo
+  -- function num : 0_57 , upvalues : InventoryInfo, UPPER_TAB_TYPE
   local self = InventoryInfo
-  if not isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT) or self:invokeShiftRUpFunction(index) == false and self:invokeRUpFunction(index) == false then
-    self:onInventoryItemRClick(index)
+  if isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT) then
+    local actorKeysRaw = self:getNearbyServantsActorKeys()
+    if UPPER_TAB_TYPE.SERVANT == self._currentUpperTab and #actorKeysRaw > 0 then
+      self:onInventoryItemTransfer(index)
+    else
+      self:onInventoryItemRClick(index)
+    end
   end
 end
 
 InputMLDown_InventoryInfo_InvenSlot = function(index)
-  -- function num : 0_60 , upvalues : InventoryInfo
+  -- function num : 0_58 , upvalues : InventoryInfo
   local self = InventoryInfo
   local slotNo = (((self._ui).invenSlots)[index]).slotNo
   local inventoryType = ((self._lowerTabData)[self._currentLowerTab]).whereType
@@ -2418,31 +2446,46 @@ InputMLDown_InventoryInfo_InvenSlot = function(index)
 end
 
 InputMOn_InventoryInfo_invenShowTooltip = function(index)
-  -- function num : 0_61 , upvalues : InventoryInfo, effectScene, _panel
+  -- function num : 0_59 , upvalues : InventoryInfo, effectScene, _panel
   if InventoryInfo._showAniIsPlaying == true then
     return 
   end
   local self = InventoryInfo
-  local slotNo = (((self._ui).invenSlots)[index]).slotNo
+  local slotNo = nil
+  if index + self._invenStartSlotIndex <= self._invenCapacity then
+    slotNo = (((self._ui).invenSlots)[index]).slotNo
+  end
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
   end
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R4 in 'UnsetPending'
 
-  if slotNo < self._invenSlotMax then
+  if slotNo ~= nil then
     ((self._slotEtcData)[slotNo]).isFirstItem = false
     if (effectScene.newItem)[slotNo] ~= nil then
       ((((self._ui).invenSlots)[index]).icon):EraseEffect((effectScene.newItem)[slotNo])
     end
+  else
+    if _ContentsGroup_ForXBoxXR == true and _ContentsGroup_ForXBoxFinalCert == true and index + self._invenStartSlotIndex == self._invenCapacity + 1 then
+      local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
+      local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
+      local control = (((self._ui).invenSlots)[index]).icon
+      TooltipSimple_Show(control, name, desc)
+      return 
+    else
+      do
+        TooltipSimple_Hide()
+        self._tooltipWhereType = ((self._lowerTabData)[self._currentLowerTab]).whereType
+        self._tooltipSlotNo = slotNo
+        Panel_Tooltip_Item_Show_GeneralNormal(index, "inventory", true, false, _panel:GetPosX() - 20, getScreenSizeY() - 100)
+      end
+    end
   end
-  self._tooltipWhereType = ((self._lowerTabData)[self._currentLowerTab]).whereType
-  self._tooltipSlotNo = slotNo
-  Panel_Tooltip_Item_Show_GeneralNormal(index, "inventory", true, false, _panel:GetPosX() - 20, getScreenSizeY() - 100)
 end
 
 InputMOut_InventoryInfo_invenHideTooltip = function(index)
-  -- function num : 0_62 , upvalues : InventoryInfo, over_SlotEffect
+  -- function num : 0_60 , upvalues : InventoryInfo, over_SlotEffect
   local self = InventoryInfo
   if over_SlotEffect ~= nil then
     ((((self._ui).invenSlots)[index]).icon):EraseEffect(over_SlotEffect)
@@ -2454,7 +2497,7 @@ InputMOut_InventoryInfo_invenHideTooltip = function(index)
 end
 
 InputDrag_InventoryInfo_invenDrag = function(index)
-  -- function num : 0_63 , upvalues : InventoryInfo, _panel
+  -- function num : 0_61 , upvalues : InventoryInfo, _panel
   local self = InventoryInfo
   local slotNo = (((self._ui).invenSlots)[index]).slotNo
   if inventoryDragNoUseList ~= nil and inventoryDragNoUseList:IsShow() then
@@ -2478,7 +2521,7 @@ InputDrag_InventoryInfo_invenDrag = function(index)
 end
 
 InputDrag_InventoryInfo_invenDragEnd = function(index)
-  -- function num : 0_64 , upvalues : InventoryInfo, _panel
+  -- function num : 0_62 , upvalues : InventoryInfo, _panel
   local self = InventoryInfo
   local slotNo = (((self._ui).invenSlots)[index]).slotNo
   if DragManager.dragStartPanel == nil then
@@ -2506,7 +2549,7 @@ end
 
 local INVEN_MAX_COUNT = 192
 InputScroll_InventoryInfo_Inventory = function(isUp)
-  -- function num : 0_65 , upvalues : InventoryInfo, INVEN_MAX_COUNT
+  -- function num : 0_63 , upvalues : InventoryInfo, INVEN_MAX_COUNT
   local self = InventoryInfo
   local useStartSlot = inventorySlotNoUserStart()
   local inventory = Inventory_GetCurrentInventory()
@@ -2521,7 +2564,7 @@ InputScroll_InventoryInfo_Inventory = function(isUp)
 end
 
 InventoryInfo.onInventoryItemRClick = function(self, index)
-  -- function num : 0_66
+  -- function num : 0_64
   local inventoryType = ((self._lowerTabData)[self._currentLowerTab]).whereType
   local slotNo = (((self._ui).invenSlots)[index]).slotNo
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
@@ -2596,7 +2639,7 @@ InventoryInfo.onInventoryItemRClick = function(self, index)
                   else
                     if ((itemEnchantWrapper:get())._vestedType):getItemKey() == 2 and (itemWrapper:get()):isVested() == false then
                       local bindingItemUse = function()
-    -- function num : 0_66_0 , upvalues : inventoryType, slotNo
+    -- function num : 0_64_0 , upvalues : inventoryType, slotNo
     Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
   end
 
@@ -2669,7 +2712,7 @@ InventoryInfo.onInventoryItemRClick = function(self, index)
                                   do
                                     if not itemStatic:isUseToVehicle() then
                                       local useTradeItem = function()
-    -- function num : 0_66_1 , upvalues : inventoryType, slotNo
+    -- function num : 0_64_1 , upvalues : inventoryType, slotNo
     Inventory_UseItemTargetSelf(inventoryType, slotNo, nil)
   end
 
@@ -2713,8 +2756,16 @@ InventoryInfo.onInventoryItemRClick = function(self, index)
   end
 end
 
+InventoryInfo.onInventoryItemTransfer = function(self, index)
+  -- function num : 0_65
+  local slotNo = (((self._ui).invenSlots)[index]).slotNo
+  local whereType = (_lowerTabData[self._currentLowerTab]).whereType
+  local itemWrapper = getInventoryItemByType(whereType, slotNo)
+  FGlobal_PopupMoveItem_InitByInventory(slotNo, itemWrapper, (itemWrapper:get()):getCount_s64(), whereType)
+end
+
 InputMOn_InventoryInfo_equipShowTooltip = function(index, isOn)
-  -- function num : 0_67 , upvalues : InventoryInfo, _panel
+  -- function num : 0_66 , upvalues : InventoryInfo, _panel
   if InventoryInfo._showAniIsPlaying == true then
     return 
   end
@@ -2722,9 +2773,9 @@ InputMOn_InventoryInfo_equipShowTooltip = function(index, isOn)
 end
 
 Input_InventoryInfo_CostumeShowToggle = function(index)
-  -- function num : 0_68 , upvalues : InventoryInfo, _avatarCheckFlag
+  -- function num : 0_67 , upvalues : InventoryInfo, _avatarCheckFlag
   local self = InventoryInfo
-  local isCheck = ((((self._ui).costumeSlots)[index]).toggleButton):IsCheck()
+  local isCheck = ((((self._ui).costumeSlots)[index]).chk_toggleButton):IsCheck()
   if isCheck == true then
     ToClient_SetAvatarEquipSlotFlag(_avatarCheckFlag[(self._costumeSlotIndex)[index]])
   else
@@ -2734,13 +2785,13 @@ Input_InventoryInfo_CostumeShowToggle = function(index)
 end
 
 Input_InventoryInfo_CompletePuzzle = function()
-  -- function num : 0_69 , upvalues : InventoryInfo
+  -- function num : 0_68 , upvalues : InventoryInfo
   ((InventoryInfo._ui).btn_invenPuzzle):SetShow(false)
   requestMakePuzzle()
 end
 
 Input_InventoryInfo_ItemDelete = function(index)
-  -- function num : 0_70 , upvalues : InventoryInfo
+  -- function num : 0_69 , upvalues : InventoryInfo
   local self = InventoryInfo
   local slotNo = (((self._ui).invenSlots)[index]).slotNo
   if slotNo == nil then
@@ -2760,7 +2811,7 @@ Input_InventoryInfo_ItemDelete = function(index)
 end
 
 Inventory_ItemDelete_Check = function(count, slotNo, whereType)
-  -- function num : 0_71
+  -- function num : 0_70
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
   local itemName = (itemWrapper:getStaticStatus()):getName()
   deleteWhereType = whereType
@@ -2776,7 +2827,7 @@ Inventory_ItemDelete_Check = function(count, slotNo, whereType)
 end
 
 Inventory_Delete_Yes = function()
-  -- function num : 0_72
+  -- function num : 0_71
   if deleteSlotNo == nil then
     return 
   end
@@ -2817,7 +2868,7 @@ Inventory_Delete_Yes = function()
 end
 
 Inventory_Delete_YesXXX = function()
-  -- function num : 0_73
+  -- function num : 0_72
   if deleteSlotNo == nil then
     return 
   end
@@ -2827,7 +2878,7 @@ Inventory_Delete_YesXXX = function()
 end
 
 Inventory_Delete_No = function()
-  -- function num : 0_74
+  -- function num : 0_73
   deleteWhereType = nil
   deleteSlotNo = nil
   Inventory_DropEscapeAlert()
@@ -2835,7 +2886,7 @@ Inventory_Delete_No = function()
 end
 
 FromClient_InventoryInfo_EquipmentHaveChanged = function()
-  -- function num : 0_75 , upvalues : InventoryInfo
+  -- function num : 0_74 , upvalues : InventoryInfo
   local self = InventoryInfo
   self:updateEquipment()
   self:updateCostume()
@@ -2843,7 +2894,7 @@ FromClient_InventoryInfo_EquipmentHaveChanged = function()
 end
 
 FromClient_InventoryInfo_EventEquipItem = function(slotIndex)
-  -- function num : 0_76 , upvalues : InventoryInfo
+  -- function num : 0_75 , upvalues : InventoryInfo
   local self = InventoryInfo
   local slot = {}
   if self:slotIndexIsCostume(slotIndex) == true then
@@ -2860,14 +2911,28 @@ FromClient_InventoryInfo_EventEquipItem = function(slotIndex)
   self:updateAttackStat(true)
 end
 
+FromClient_InventoryInfo_OpenServantInven = function(actorKeyRaw)
+  -- function num : 0_76 , upvalues : InventoryInfo, UPPER_TAB_TYPE
+  -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
+
+  self._servantActorKeyRaw = {}
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._servantActorKeyRaw)[1] = actorKeyRaw
+  InventoryInfo:open(UPPER_TAB_TYPE.SERVANT)
+end
+
 FromClient_InventoryInfo_ServantEquipOn = function(slotIndex)
   -- function num : 0_77
+  _PA_LOG("박범�\128", "FromClient_InventoryInfo_ServantEquipOn : " .. tostring(slotIndex))
 end
 
 FromClient_InventoryInfo_ServantEquipChanged = function()
   -- function num : 0_78 , upvalues : InventoryInfo
   InventoryInfo:updateInventory()
   InventoryInfo:updateServantEquipOrCostume(true)
+  InventoryInfo:updateServantEquipOrCostume(false)
 end
 
 FromClient_InventoryInfo_OnScreenResize = function()
@@ -2931,6 +2996,8 @@ FromClient_InventoryInfo_UnequipItem = function(whereType, slotNo)
     for ii = 1, #self._costumeSlotIndex do
       local slot = ((self._ui).costumeSlots)[ii]
       if slotNo == slot.slotNo then
+        _PA_LOG("박범�\128", "fUI_Item_Clear at slotNo : " .. slotNo)
+        ;
         (slot.icon):AddEffect("fUI_Item_Clear", false, 0, 0)
       end
     end
@@ -2939,6 +3006,8 @@ FromClient_InventoryInfo_UnequipItem = function(whereType, slotNo)
       for ii = 1, #self._equipSlotIndex do
         local slot = ((self._ui).equipSlots)[ii]
         if slotNo == slot.slotNo then
+          _PA_LOG("박범�\128", "fUI_Item_Clear at slotNo : " .. slotNo)
+          ;
           (slot.icon):AddEffect("fUI_Item_Clear", false, 0, 0)
         end
       end
@@ -3941,7 +4010,7 @@ HandleClickedWidget = function(slotNo)
 end
 
 PaGlobal_Inventory = {_itemKeyForTutorial = nil, _isItemSlotRClickedForTutorial = false}
--- DECOMPILER ERROR at PC1999: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2001: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString, isLoop, posX, posY)
   -- function num : 0_128
@@ -3950,28 +4019,28 @@ PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString,
   (PaGlobal_TutorialUiManager:getUiMasking()):showInventoryMasking((slot.icon):GetPosX(), (slot.icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC2003: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2005: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.setItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_129
   self._itemKeyForTutorial = itemKey
 end
 
--- DECOMPILER ERROR at PC2007: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2009: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.clearItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_130
   self._itemKeyForTutorial = nil
 end
 
--- DECOMPILER ERROR at PC2011: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2013: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.isItemSlotRClickedForTutorial = function(self)
   -- function num : 0_131
   return self._isItemSlotRClickedForTutorial
 end
 
--- DECOMPILER ERROR at PC2015: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2017: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   -- function num : 0_132
@@ -3980,7 +4049,7 @@ PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   PaGlobal_Inventory._isItemSlotRClickedForTutorial = bool
 end
 
--- DECOMPILER ERROR at PC2019: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2021: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_Inventory.findItemWrapper = function(self, itemWhereType, targetItemKey, targetEnchantLevel)
   -- function num : 0_133
@@ -4082,28 +4151,8 @@ Inventory_DropEscape = function()
   -- function num : 0_145
 end
 
-InventoryInfo.invokeRUpFunction = function(self, index)
-  -- function num : 0_146
-  return false
-end
-
-InventoryInfo.invokeShiftRUpFunction = function(self, index)
-  -- function num : 0_147
-  return false
-end
-
-InventoryInfo.invokeLUpFunction = function(self, index)
-  -- function num : 0_148
-  return false
-end
-
-InventoryInfo.invokeShiftLUpFunction = function(self, index)
-  -- function num : 0_149
-  return false
-end
-
 InventoryInfo.slotIndexIsCostume = function(self, slotIndex)
-  -- function num : 0_150
+  -- function num : 0_146
   for ii = 1, #self._costumeSlotIndex do
     if slotIndex == (self._costumeSlotIndex)[ii] then
       return true
@@ -4113,7 +4162,7 @@ InventoryInfo.slotIndexIsCostume = function(self, slotIndex)
 end
 
 InventoryInfo.getIndexFromEquipSlotIndex = function(self, slotIndex)
-  -- function num : 0_151
+  -- function num : 0_147
   for ii = 1, #self._equipSlotIndex do
     if slotIndex == (self._equipSlotIndex)[ii] then
       return ii
@@ -4125,7 +4174,7 @@ InventoryInfo.getIndexFromEquipSlotIndex = function(self, slotIndex)
 end
 
 InventoryInfo.getIndexFromCostumeSlotIndex = function(self, slotIndex)
-  -- function num : 0_152
+  -- function num : 0_148
   for ii = 1, #self._costumeSlotIndex do
     if slotIndex == (self._costumeSlotIndex)[ii] then
       return ii
@@ -4137,7 +4186,7 @@ InventoryInfo.getIndexFromCostumeSlotIndex = function(self, slotIndex)
 end
 
 InventoryInfo.getNearbyServantsActorKeys = function(self)
-  -- function num : 0_153
+  -- function num : 0_149
   local keys = {}
   for ii = 1, (CppEnums.ServantType).Type_Count do
     if servant_checkDistance(ii - 1) then
@@ -4151,7 +4200,7 @@ InventoryInfo.getNearbyServantsActorKeys = function(self)
 end
 
 InventoryInfo.extendedSlotInfo = function(self, itemWrapper, slotNo)
-  -- function num : 0_154
+  -- function num : 0_150
   local itemSSW = itemWrapper:getStaticStatus()
   local slotNoMax = itemSSW:getExtendedSlotCount()
   local ret = false
@@ -4168,7 +4217,7 @@ InventoryInfo.extendedSlotInfo = function(self, itemWrapper, slotNo)
 end
 
 InventoryInfo.setItemInfoUseWrapper = function(self, slot, itemWrapper, isMono, isExtended, slotNo)
-  -- function num : 0_155
+  -- function num : 0_151
   slot:setItem(itemWrapper, slotNo, true)
   local itemSSW = itemWrapper:getStaticStatus()
   local enchantCount = ((itemSSW:get())._key):getEnchantLevel()

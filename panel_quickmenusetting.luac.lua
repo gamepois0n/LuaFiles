@@ -21,8 +21,8 @@ _buttonPositionIcon = {}
 , _customCrossDeco = (UI.getChildControl)(Panel_QuickMenuCustom, "Static_CrossIcon")}
 , 
 _registMode = {_isStart = false, _stickPosition = __eQuickMenuStickPosition_Count, _index = -1}
-, _listMaxCount = 8, _curState = __eQuickMenuState_Count, _curPosition = 1, _curPage = 1, _curGroup = __eQuickMenuDpadGroup_Count, _curCategory = 0}
--- DECOMPILER ERROR at PC40: Confused about usage of register: R0 in 'UnsetPending'
+, _listMaxCount = 8, _curPosition = 1, _curPage = 1, _curGroup = __eQuickMenuDpadGroup_Count, _curCategory = 0}
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.initializeUI = function(self)
   -- function num : 0_0
@@ -51,7 +51,7 @@ PaGlobal_ConsoleQuickMenuSetting.initializeUI = function(self)
 
     ((self._ui)._buttonPosition)[ii] = (UI.getChildControl)(leftBg, "Button_Templete" .. tostring(ii - 1))
     ;
-    (((self._ui)._buttonPosition)[ii]):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:setPosition( " .. ii .. ")")
+    (((self._ui)._buttonPosition)[ii]):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu( " .. ii .. ")")
     -- DECOMPILER ERROR at PC97: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
@@ -65,7 +65,7 @@ PaGlobal_ConsoleQuickMenuSetting.initializeUI = function(self)
   ((UI.getChildControl)(Panel_QuickMenuCustom, "RadioButton_Menu")):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:CustomSettingSetCategory( " .. __eQuickMenuDataType_Function .. " )")
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.startRegistQuickMenu = function(self, index)
   -- function num : 0_1
@@ -87,7 +87,7 @@ PaGlobal_ConsoleQuickMenuSetting.startRegistQuickMenu = function(self, index)
   end
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.quitRegistQuickMenu = function(self, executePosition)
   -- function num : 0_2
@@ -99,7 +99,7 @@ PaGlobal_ConsoleQuickMenuSetting.quitRegistQuickMenu = function(self, executePos
   self:registQuickMenu(exeucteIndex, executePosition)
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC47: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.clearRegistCustomSetting = function(self)
   -- function num : 0_3
@@ -121,7 +121,7 @@ PaGlobal_ConsoleQuickMenuSetting.clearRegistCustomSetting = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC50: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.registQuickMenu = function(self, index, position)
   -- function num : 0_4
@@ -139,14 +139,14 @@ PaGlobal_ConsoleQuickMenuSetting.registQuickMenu = function(self, index, positio
   end
 end
 
--- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.registItem = function(self, index, position)
   -- function num : 0_5
   if (self._inventoryData)[index] == nil then
     return 
   end
-  local rv = ToClient_registQuickMenuItem(self._curState, self._curGroup, position, (CppEnums.ItemWhereType).eInventory, ((self._inventoryData)[index])._slotNo)
+  local rv = ToClient_registQuickMenuItem(self._curGroup, position, (CppEnums.ItemWhereType).eInventory, ((self._inventoryData)[index])._slotNo)
   if rv == true then
     local control = ((self._ui)._buttonPositionIcon)[position + 1]
     control:ChangeTextureInfoName(((self._inventoryData)[index])._icon)
@@ -156,14 +156,14 @@ PaGlobal_ConsoleQuickMenuSetting.registItem = function(self, index, position)
   end
 end
 
--- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.registSkill = function(self, index, position)
   -- function num : 0_6
   if (self._skillData)[index] == nil then
     return 
   end
-  local rv = ToClient_registQuickMenuSkill(self._curState, self._curGroup, position, ((self._skillData)[index])._skillKey)
+  local rv = ToClient_registQuickMenuSkill(self._curGroup, position, ((self._skillData)[index])._skillKey)
   if rv == true then
     local control = ((self._ui)._buttonPositionIcon)[position + 1]
     control:ChangeTextureInfoName(((self._skillData)[index])._icon)
@@ -173,14 +173,14 @@ PaGlobal_ConsoleQuickMenuSetting.registSkill = function(self, index, position)
   end
 end
 
--- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.registFunctionType = function(self, index, position)
   -- function num : 0_7
   if (self._functionTypeData)[index] == nil then
     return 
   end
-  local rv = ToClient_registQuickMenuFunctionType(self._curState, self._curGroup, position, ((self._functionTypeData)[index])._enumType)
+  local rv = ToClient_registQuickMenuFunctionType(self._curGroup, position, ((self._functionTypeData)[index])._enumType)
   if rv == true then
     local data = (self._functionTypeData)[index]
     local control = ((self._ui)._buttonPositionIcon)[position + 1]
@@ -191,7 +191,7 @@ PaGlobal_ConsoleQuickMenuSetting.registFunctionType = function(self, index, posi
   end
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomSettingSetCategory = function(self, category)
   -- function num : 0_8
@@ -200,7 +200,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomSettingSetCategory = function(self, categ
   self:CustomSettingUpdateCurrentPage()
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC65: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomSettingNextPage = function(self)
   -- function num : 0_9
@@ -221,7 +221,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomSettingNextPage = function(self)
   self:CustomSettingUpdateCurrentPage()
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomSettingPrevPage = function(self)
   -- function num : 0_10
@@ -231,7 +231,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomSettingPrevPage = function(self)
   self:CustomSettingUpdateCurrentPage()
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomSettingUpdateCurrentPage = function(self)
   -- function num : 0_11
@@ -285,7 +285,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomSettingUpdateCurrentPage = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomSettingDataUpdate = function(self)
   -- function num : 0_12
@@ -294,7 +294,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomSettingDataUpdate = function(self)
   self:getFunctionTypeData()
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.getFunctionTypeData = function(self)
   -- function num : 0_13
@@ -309,7 +309,7 @@ PaGlobal_ConsoleQuickMenuSetting.getFunctionTypeData = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.getInventToryData = function(self)
   -- function num : 0_14
@@ -339,7 +339,7 @@ PaGlobal_ConsoleQuickMenuSetting.getInventToryData = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.getSkillData = function(self)
   -- function num : 0_15
@@ -364,7 +364,7 @@ PaGlobal_ConsoleQuickMenuSetting.getSkillData = function(self)
   self:getSkillCellTableData(cellTable)
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.getSkillCellTableData = function(self, cellTable)
   -- function num : 0_16
@@ -419,31 +419,30 @@ FGlobal_ConsoleQuickMenuCustom_IsShow = function()
   return Panel_QuickMenuCustom:GetShow()
 end
 
-FromClient_ConsoleQuickMenu_OpenCustomPage = function(currentSettingState, currentSettingGroup, isUpdate)
+FromClient_ConsoleQuickMenu_OpenCustomPage = function(currentSettingGroup, isUpdate)
   -- function num : 0_19
   if currentSettingGroup < 0 or __eQuickMenuDpadGroup_Count <= currentSettingGroup then
     return 
   end
-  FromClient_ConsoleQuickMenu_Quit()
+  FromClient_ConsoleQuickMenu_Close()
   Panel_QuickMenuCustom:SetShow(true)
   local self = PaGlobal_ConsoleQuickMenuSetting
   self:CustomSettingDataUpdate()
   self:CustomSettingUpdateCurrentPage()
   self._curPosition = 1
   self._curGroup = currentSettingGroup
-  self._curState = currentSettingState
   self:CustomCrossTextureChange(currentSettingGroup)
   if isUpdate == nil then
     self:clearRegistCustomSetting()
   end
-  self:SetUICusttomSettingCurrentGroup(currentSettingState, currentSettingGroup)
+  self:SetUICusttomSettingCurrentGroup(currentSettingGroup)
 end
 
--- DECOMPILER ERROR at PC97: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC95: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_ConsoleQuickMenuSetting.SetUICusttomSettingCurrentGroup = function(self, state, group)
+PaGlobal_ConsoleQuickMenuSetting.SetUICusttomSettingCurrentGroup = function(self, group)
   -- function num : 0_20
-  local groupInfo = PaGlobal_ConsoleQuickMenu:GetCurrentGroupInfo(state, group)
+  local groupInfo = PaGlobal_ConsoleQuickMenu:GetCurrentGroupInfo(group)
   for position,info in ipairs(groupInfo) do
     if ((self._ui)._buttonPositionIcon)[position] == nil then
       _PA_LOG("후진", " ??? " .. position)
@@ -461,7 +460,7 @@ PaGlobal_ConsoleQuickMenuSetting.SetUICusttomSettingCurrentGroup = function(self
   end
 end
 
--- DECOMPILER ERROR at PC100: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC98: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.CustomCrossTextureChange = function(self, currentGroup)
   -- function num : 0_21
@@ -479,7 +478,7 @@ PaGlobal_ConsoleQuickMenuSetting.CustomCrossTextureChange = function(self, curre
   centerControl:setRenderTexture(centerControl:getBaseTexture())
 end
 
--- DECOMPILER ERROR at PC103: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC101: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenuSetting.setPosition = function(self, index)
   -- function num : 0_22
@@ -514,11 +513,7 @@ FGlobal_ConsoleQuickMenuSetting_RegistMode = function()
   ;
   (self._registMode)._stickPosition = registPosition
   FGlobal_ConsoleQuickMenuCustomSetting_Update(registPosition)
-  FromClient_ConsoleQuickMenu_OpenCustomPage(self._curState, changeGroup)
-  if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Dash) then
-    local state = ToClient_getNextPageQuickMenuSetting()
-    FromClient_ConsoleQuickMenu_OpenCustomPage(state, self._curGroup)
-  end
+  FromClient_ConsoleQuickMenu_OpenCustomPage(changeGroup)
 end
 
 Panel_QuickMenuCustom:RegisterUpdateFunc("FGlobal_ConsoleQuickMenuSetting_UpdatePage")

@@ -686,7 +686,6 @@ end
 
 PaGlobal_FairyTierUpgrade.decimalRoundForPercentValue = function(self, value)
   -- function num : 0_26
-  _PA_LOG("박범�\128", "val : " .. value)
   if value >= 100 then
     return 100
   else

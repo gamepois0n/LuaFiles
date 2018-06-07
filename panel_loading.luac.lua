@@ -210,6 +210,19 @@ local LoadingPanel_GetRandomKnowledge = function()
     _knowledge_desc:SetText(mentalCardData:getDesc())
     LoadingPanel_PlayKnowledgeAni()
   end
+  do
+    if _ContentsGroup_RenewUI == true then
+      ToClient_WorldmapCheckState(0, false, false)
+      ToClient_WorldmapCheckState(1, false, false)
+      ToClient_WorldmapCheckState(2, false, false)
+      ToClient_WorldmapCheckState(3, true, false)
+      ToClient_WorldmapCheckState(4, true, false)
+      ToClient_WorldmapCheckState(5, true, false)
+      ToClient_WorldmapCheckState(6, false, false)
+      ToClient_WorldmapCheckState(7, false, false)
+      ToClient_WorldmapCheckState(8, false, false)
+    end
+  end
 end
 
 local LoadingPanel_GetBackGroundImage = function()

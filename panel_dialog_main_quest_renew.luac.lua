@@ -12,7 +12,7 @@ baseRewardSlot = {nil, nil, nil, nil, nil, nil}
 static_Quest_Reward_Select = {nil, nil, nil, nil, nil, nil}
 , 
 selectRewardSlot = {nil, nil, nil, nil, nil, nil}
-, staticText_Quest_Reward_Select = nil, static_Divider4 = nil, expToolTip = nil, frame_1_VerticalScroll = nil, btn_Confirm = nil, btn_Cancel = nil}
+, staticText_Quest_Reward_Select = nil, static_Divider4 = nil, expToolTip = nil, frame_1_VerticalScroll = nil, btn_Confirm = nil, btn_Cancel = nil, btn_Quest_Y = nil}
 , 
 _config = {maxQuestRewardCount = 6, 
 questRewardSlotConfig = {_createIcon = true, _createBorder = true, _createCount = true, _createClassEquipBG = true, _createCash = true}
@@ -208,6 +208,14 @@ Panel_Dialog_Main_Quest_Info.initControl = function(self)
 
   ;
   (self._ui).btn_Cancel = (UI.getChildControl)((self._ui).static_QuestBg, "Button_Cancel")
+  -- DECOMPILER ERROR at PC322: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).static_QuestKey_Confirm = (UI.getChildControl)((self._ui).static_QuestBg, "Static_QuestKey_Confirm")
+  -- DECOMPILER ERROR at PC330: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).btn_Quest_Y = (UI.getChildControl)((self._ui).static_QuestBg, "Button_Quest_Y")
   self:CreateRewardToolTipControl()
 end
 
@@ -352,7 +360,11 @@ Panel_Dialog_Main_Quest_Info.Quest_InfomationSetData = function(self, dialogData
   ;
   ((self._ui).staticText_Quest_Condition):SetText(completeDesc)
   self:SetQuestReward(simplequestData)
-  self:QuestButtonUpdate(dialogData)
+  if _ContentsGroup_RenewUI_Dailog then
+    self:QuestButtonUpdateXBox(dialogData)
+  else
+    self:QuestButtonUpdate(dialogData)
+  end
 end
 
 Panel_Dialog_Main_Quest_Info.QuestInfomationSetPosAll = function(self)
@@ -398,8 +410,31 @@ Panel_Dialog_Main_Quest_Info.QuestInfomationSetPosAll = function(self)
   ((self._ui).frame_Dialog_Quest):UpdateContentScroll()
 end
 
-Panel_Dialog_Main_Quest_Info.QuestButtonUpdate = function(self, dialogData)
+Panel_Dialog_Main_Quest_Info.QuestButtonUpdateXBox = function(self, dialogData)
   -- function num : 0_12
+  ((self._ui).btn_Confirm):SetShow(false)
+  ;
+  ((self._ui).btn_Cancel):SetShow(false)
+  ;
+  ((self._ui).btn_Quest_Y):SetShow(false)
+  ;
+  ((self._ui).btn_Quest_Y):ComputePos()
+  local QuestButtonCount = dialogData:getQuestButtonCount()
+  if QuestButtonCount == 1 then
+    local QuestButton = dialogData:getQuestButtonAt(0)
+    if (CppEnums.DialogState).eDialogState_QuestComplete == tostring(QuestButton._linkType) or (CppEnums.DialogState).eDialogState_AcceptQuest == tostring(QuestButton._linkType) then
+      ((self._ui).btn_Quest_Y):SetShow(true)
+      ;
+      ((self._ui).btn_Quest_Y):SetText(QuestButton:getText())
+      ;
+      ((self._ui).btn_Quest_Y):addInputEvent("Mouse_LUp", "ToClient_ClickQuestButton(0)")
+    end
+  end
+end
+
+Panel_Dialog_Main_Quest_Info.QuestButtonUpdate = function(self, dialogData)
+  -- function num : 0_13
+  ((self._ui).btn_Quest_Y):SetShow(false)
   local questButton = {}
   questButton[0] = (self._ui).btn_Confirm
   questButton[1] = (self._ui).btn_Cancel
@@ -421,7 +456,7 @@ Panel_Dialog_Main_Quest_Info.QuestButtonUpdate = function(self, dialogData)
 end
 
 Panel_Dialog_Main_Quest_Info.SetQuestReward = function(self, simplequestData)
-  -- function num : 0_13
+  -- function num : 0_14
   self:ClearQuestReward()
   local questInfo = simplequestData:getQuestStaticStatusWrapper()
   if questInfo == nil then
@@ -453,7 +488,7 @@ Panel_Dialog_Main_Quest_Info.SetQuestReward = function(self, simplequestData)
 end
 
 Panel_Dialog_Main_Quest_Info.SetRewardIcon = function(self, slot, reward, index, rewardStr)
-  -- function num : 0_14
+  -- function num : 0_15
   local rewardType = reward:getType()
   if rewardType == nil then
     return 
@@ -506,7 +541,7 @@ Panel_Dialog_Main_Quest_Info.SetRewardIcon = function(self, slot, reward, index,
 end
 
 Panel_Dialog_Main_Quest_Info.CreateRewardToolTipControl = function(self)
-  -- function num : 0_15
+  -- function num : 0_16
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._ui).expToolTip = (UI.getChildControl)((self._ui).frame_1_Content, "StaticText_ToolTipTemplete")
@@ -529,7 +564,7 @@ Panel_Dialog_Main_Quest_Info.CreateRewardToolTipControl = function(self)
 end
 
 Panel_Dialog_Main_Quest_Info.ClearQuestReward = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   for index = 0, (self._config).maxQuestRewardCount - 1 do
     ((((self._ui).baseRewardSlot)[index]).icon):SetShow(false)
     ;
@@ -552,7 +587,7 @@ Panel_Dialog_Main_Quest_Info.ClearQuestReward = function(self)
 end
 
 Panel_Dialog_Main_Quest_Info.Resize = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   local titleSpanY = (math.abs)((((self._ui).staticText_QuestTitle):GetSpanSize()).y)
@@ -577,7 +612,7 @@ Panel_Dialog_Main_Quest_Info.Resize = function(self)
 end
 
 PaGlobalFunc_MainDialog_Quest_IsFirstSet = function()
-  -- function num : 0_18 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_19 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -586,7 +621,7 @@ PaGlobalFunc_MainDialog_Quest_IsFirstSet = function()
 end
 
 PaGlobalFunc_MainDialog_Quest_IsFirstReset = function()
-  -- function num : 0_19 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_20 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -595,31 +630,31 @@ PaGlobalFunc_MainDialog_Quest_IsFirstReset = function()
 end
 
 PaGlobalFunc_MainDialog_Quest_Open = function()
-  -- function num : 0_20 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_21 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   self:open()
 end
 
 PaGlobalFunc_MainDialog_Quest_Close = function()
-  -- function num : 0_21 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_22 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   self:close()
 end
 
 PaGlobalFunc_MainDialog_Quest_Update = function()
-  -- function num : 0_22 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_23 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   self:update()
 end
 
 PaGlobalFunc_MainDialog_Quest_GetShow = function()
-  -- function num : 0_23 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_24 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   return ((self._ui).static_QuestBg):GetShow()
 end
 
 PaGlobalFunc_MainDialog_Quest_List2EventControlCreate = function(list_content, key)
-  -- function num : 0_24
+  -- function num : 0_25
   local id = Int64toInt32(key)
   local dialogData = ToClient_GetCurrentDialogData()
   local simplequestData = dialogData:getHaveQuestAt(id)
@@ -651,14 +686,14 @@ PaGlobalFunc_MainDialog_Quest_List2EventControlCreate = function(list_content, k
 end
 
 PaGlobal_MainDialog_Quest_ClickQuestList = function(index)
-  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   ToClient_ClickQuestList(index)
   self:update_Quest_Infomation()
 end
 
 PaGlobalFunc_MainDialog_Quest_RewardToolTip = function(rewardType, show, rewardStr, index, mentalCardKey)
-  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_27 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   if (self._ui).expToolTip == nil then
     return 
@@ -719,7 +754,7 @@ PaGlobalFunc_MainDialog_Quest_RewardToolTip = function(rewardType, show, rewardS
 end
 
 PaGlobalFunc_MainDialog_Quest_HandleClickedSelectedReward = function(selectIndex)
-  -- function num : 0_27 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   local leastIndex = (self._value).leastSelectReward
   ;
@@ -736,7 +771,7 @@ PaGlobalFunc_MainDialog_Quest_HandleClickedSelectedReward = function(selectIndex
 end
 
 PaGlobalFunc_MainDialog_Quest_InteractionCheck = function()
-  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   local isShow = ((self._ui).static_QuestBg):GetShow()
   if isShow == false then
@@ -756,14 +791,14 @@ PaGlobalFunc_MainDialog_Quest_InteractionCheck = function()
 end
 
 FromClient_InitMainDialog_Quest = function()
-  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog_Quest = function()
-  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Quest_Info
+  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
   self:Resize()
 end

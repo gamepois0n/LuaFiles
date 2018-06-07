@@ -6,7 +6,7 @@
 PaGlobal_MiniGame_Find = {
 _ui = {_baseOpenSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_OpenSlot"), _baseCloseSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_CloseSlot"), _closeButton = (UI.getChildControl)(Panel_MiniGame_Find, "Button_Win_Close"), _rightBG = (UI.getChildControl)(Panel_MiniGame_Find, "Static_RightBg"), _startMsg = (UI.getChildControl)(Panel_MiniGame_Find, "Static_Msg"), _timerMsg = (UI.getChildControl)(Panel_MiniGame_MiniGameResult, "StaticText_Msg"), _staticObjBg = (UI.getChildControl)(Panel_MiniGame_Find, "Static_Body"), _descBg = (UI.getChildControl)(Panel_MiniGame_Find, "Static_BottomBg"), _facePicture = (UI.getChildControl)(Panel_MiniGame_Find, "Static_Obsidian"), _bubbleBg = (UI.getChildControl)(Panel_MiniGame_Find, "Static_Obsidian_B"), _maskBg = (UI.getChildControl)(Panel_MiniGame_Find, "Static_MaskBg"), _tutorialStep_1 = (UI.getChildControl)(Panel_MiniGame_Find, "Static_TutorialStep_1"), _tutorialStep_2 = (UI.getChildControl)(Panel_MiniGame_Find, "Static_TutorialStep_2"), _tutorialStep_3 = (UI.getChildControl)(Panel_MiniGame_Find, "Static_TutorialStep_3")}
 , 
-_config = {_slotCols = 12, _slotRows = 12, _slotSize = 48, _slotStartPosX = 13, _slotStartPosY = 45, _rewardMaxCount = 6, _nextGameSec = 3, _endGameSec = 5, _slotTypeDefault = 0, _slotTypeEmpty = 1, _slotTypeMain = 2, _slotTypeSub = 3, _slotTypeTrap = 5}
+_config = {_slotCols = 16, _slotRows = 16, _totalSlotSize = 576, _slotStartPosX = 13, _slotStartPosY = 45, _rewardMaxCount = 6, _nextGameSec = 3, _endGameSec = 5, _slotTypeDefault = 0, _slotTypeEmpty = 1, _slotTypeMain = 2, _slotTypeSub = 3, _slotTypeTrap = 5}
 , 
 _clickType = {LClcik = 1, RClcik = 2}
 , 
@@ -334,8 +334,7 @@ end
 
 PaGlobal_MiniGame_Find.refresh = function(self, slotMaxCol, slotMaxRow)
   -- function num : 0_8
-  local diffCount = (self._config)._slotCols - slotMaxCol
-  local slotSize = (self._config)._slotSize + 3 * diffCount
+  local slotSize = (self._config)._totalSlotSize / slotMaxCol
   for row = 0, (self._config)._slotRows - 1 do
     for col = 0, (self._config)._slotCols - 1 do
       local slot = ((self._slots)[col])[row]

@@ -75,6 +75,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if ToClient_isXBox() then
       FGlobal_KeyGuideTypeCheck(deltaTime)
     end
+    if _ContentsGroup_RenewUI == true then
+      PaGlobal_DarkSpiritCall(deltaTime)
+    end
   end
 end
 

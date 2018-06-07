@@ -1472,8 +1472,12 @@ end
 
 PaGlobal_HandleClicked_MentalCard = function(mentalCardKey)
   -- function num : 0_6
-  Panel_Knowledge_Show()
-  Panel_Knowledge_SelectAnotherCard(mentalCardKey)
+  if _ContentsGroup_RenewUI_Knowledge == false then
+    Panel_Knowledge_Show()
+    Panel_Knowledge_SelectAnotherCard(mentalCardKey)
+  else
+    PaGlobalFunc_Window_Knowledge_Show()
+  end
 end
 
 

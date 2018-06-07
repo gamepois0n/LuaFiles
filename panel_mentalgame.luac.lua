@@ -1466,7 +1466,7 @@ local endUIProcess = function()
     return 
   end
   if _ContentsGroup_RenewUI_Dailog == true then
-    FromClient_ShowMainDialog()
+    PaGlobalFunc_MainDialog_ReOpen()
   else
     FromClient_ShowDialog()
   end
@@ -1666,7 +1666,11 @@ MentalGame_Show = function()
   if _ContentsGroup_RenewUI_Skill == false then
     HandleMLUp_SkillWindow_Close(true)
   end
-  NpcShop_WindowClose()
+  if _ContentsGroup_RenewUI_NpcShop == true then
+    PaGlobalFunc_Dialog_NPCShop_Close()
+  else
+    NpcShop_WindowClose()
+  end
   ;
   ((mgUI.left).panel):SetShow(true, false)
   local isSuccess = show_MentalGame()

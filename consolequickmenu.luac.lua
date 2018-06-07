@@ -3,199 +3,216 @@
 
 -- params : ...
 -- function num : 0
+local Type = {Inventory = 0, BlackSpirit = 1, WorldMap = 2, Skill = 3, Mail = 4, CharacterChallange = 5, ItemMarket = 6, Quest = 7, ServantCall = 8, ServantNavi = 9, CampActivate = 10, CampNavi = 11, HorseRaceInformation = 12, HorseRaceEnterOrCancel = 13, HouseList = 14, WorkerList = 15, InstallationList = 16, PetList = 17, MaidList = 18, TagSetting = 19, Tag = 20, NpcFind = 21, MovieGuide = 22, Mercenary = 23, VillageSiegeArea = 24, Pvp = 25, Undefined = 26}
+local getTypeName = function(index)
+  -- function num : 0_0 , upvalues : Type
+  for typeName,typeIndex in pairs(Type) do
+    if index == typeIndex then
+      return typeName
+    end
+  end
+  return nil
+end
+
 local ExecuteFunction = {}
-ExecuteFunction.__eQuickMenuFunctionType_Inventory = function()
-  -- function num : 0_0
+ExecuteFunction.Inventory = function()
+  -- function num : 0_1
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Inventory)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_BlackSpirit = function()
-  -- function num : 0_1
+ExecuteFunction.BlackSpirit = function()
+  -- function num : 0_2
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_BlackSpirit)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_WorldMap = function()
-  -- function num : 0_2
+ExecuteFunction.WorldMap = function()
+  -- function num : 0_3
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_WorldMap)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_Skill = function()
-  -- function num : 0_3
+ExecuteFunction.Skill = function()
+  -- function num : 0_4
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Skill)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_Mail = function()
-  -- function num : 0_4
+ExecuteFunction.Mail = function()
+  -- function num : 0_5
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Mail)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_CharacterChallange = function()
-  -- function num : 0_5
+ExecuteFunction.CharacterChallange = function()
+  -- function num : 0_6
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Present)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_ItemMarket = function()
-  -- function num : 0_6
+ExecuteFunction.ItemMarket = function()
+  -- function num : 0_7
   FGlobal_ItemMarket_Open_ForWorldMap(1, true)
   audioPostEvent_SystemUi(1, 30)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_Quest = function()
-  -- function num : 0_7
+ExecuteFunction.Quest = function()
+  -- function num : 0_8
   GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_QuestHistory)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_ServantCall = function()
-  -- function num : 0_8
+ExecuteFunction.ServantCall = function()
+  -- function num : 0_9
   Servant_Call(0)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_ServantNavi = function()
-  -- function num : 0_9
+ExecuteFunction.ServantNavi = function()
+  -- function num : 0_10
   Servant_Navi(0)
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_HorseRaceInformation = function()
-  -- function num : 0_10
+ExecuteFunction.HorseRaceInformation = function()
+  -- function num : 0_11
   HandelClicked_RaceInfo_Toggle()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_HorseRaceEnterOrCancel = function()
-  -- function num : 0_11
+ExecuteFunction.HorseRaceEnterOrCancel = function()
+  -- function num : 0_12
   HandelClicked_RaceInfo_Join()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_HouseList = function()
-  -- function num : 0_12
+ExecuteFunction.HouseList = function()
+  -- function num : 0_13
   FGlobal_HousingList_Open()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_WorkerList = function()
-  -- function num : 0_13
+ExecuteFunction.WorkerList = function()
+  -- function num : 0_14
   WorkerManager_ShowToggle()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_InstallationList = function()
-  -- function num : 0_14
+ExecuteFunction.InstallationList = function()
+  -- function num : 0_15
   HandleClicked_TentList_ShowToggle()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_PetList = function()
-  -- function num : 0_15
+ExecuteFunction.PetList = function()
+  -- function num : 0_16
   FGlobal_PetListNew_Toggle()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_MaidList = function()
-  -- function num : 0_16
+ExecuteFunction.MaidList = function()
+  -- function num : 0_17
   MaidList_Open()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_TagSetting = function()
-  -- function num : 0_17
-end
-
-ExecuteFunction.__eQuickMenuFunctionType_Tag = function()
+ExecuteFunction.TagSetting = function()
   -- function num : 0_18
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_NpcFind = function()
+ExecuteFunction.Tag = function()
   -- function num : 0_19
+end
+
+ExecuteFunction.NpcFind = function()
+  -- function num : 0_20
   NpcNavi_ShowToggle()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_MovieGuide = function()
-  -- function num : 0_20
+ExecuteFunction.MovieGuide = function()
+  -- function num : 0_21
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_Mercenary = function()
-  -- function num : 0_21
+ExecuteFunction.Mercenary = function()
+  -- function num : 0_22
   FGlobal_MercenaryOpen()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_VillageSiegeArea = function()
-  -- function num : 0_22
+ExecuteFunction.VillageSiegeArea = function()
+  -- function num : 0_23
   FGlobal_GuildWarInfo_Show()
 end
 
-ExecuteFunction.__eQuickMenuFunctionType_Pvp = function()
-  -- function num : 0_23
+ExecuteFunction.Pvp = function()
+  -- function num : 0_24
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R3 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.initialize = function(self)
+  -- function num : 0_25
+end
+
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
--- DECOMPILER ERROR at PC136: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._ExecuteFunction = {
-[__eQuickMenuDataType_Function] = {[__eQuickMenuFunctionType_Inventory] = ExecuteFunction.__eQuickMenuFunctionType_Inventory, [__eQuickMenuFunctionType_BlackSpirit] = ExecuteFunction.__eQuickMenuFunctionType_BlackSpirit, [__eQuickMenuFunctionType_WorldMap] = ExecuteFunction.__eQuickMenuFunctionType_WorldMap, [__eQuickMenuFunctionType_Skill] = ExecuteFunction.__eQuickMenuFunctionType_Skill, [__eQuickMenuFunctionType_Mail] = ExecuteFunction.__eQuickMenuFunctionType_Mail, [__eQuickMenuFunctionType_CharacterChallange] = ExecuteFunction.__eQuickMenuFunctionType_CharacterChallange, [__eQuickMenuFunctionType_ItemMarket] = ExecuteFunction.__eQuickMenuFunctionType_ItemMarket, [__eQuickMenuFunctionType_Quest] = ExecuteFunction.__eQuickMenuFunctionType_Quest, [__eQuickMenuFunctionType_ServantCall] = ExecuteFunction.__eQuickMenuFunctionType_ServantCall, [__eQuickMenuFunctionType_ServantNavi] = ExecuteFunction.__eQuickMenuFunctionType_ServantNavi, [__eQuickMenuFunctionType_CampActivate] = ExecuteFunction.__eQuickMenuFunctionType_CampActivate, [__eQuickMenuFunctionType_CampNavi] = ExecuteFunction.__eQuickMenuFunctionType_CampNavi, [__eQuickMenuFunctionType_HorseRaceInformation] = ExecuteFunction.__eQuickMenuFunctionType_HorseRaceInformation, [__eQuickMenuFunctionType_HorseRaceEnterOrCancel] = ExecuteFunction.__eQuickMenuFunctionType_HorseRaceEnterOrCancel, [__eQuickMenuFunctionType_HouseList] = ExecuteFunction.__eQuickMenuFunctionType_HouseList, [__eQuickMenuFunctionType_WorkerList] = ExecuteFunction.__eQuickMenuFunctionType_WorkerList, [__eQuickMenuFunctionType_InstallationList] = ExecuteFunction.__eQuickMenuFunctionType_InstallationList, [__eQuickMenuFunctionType_PetList] = ExecuteFunction.__eQuickMenuFunctionType_PetList, [__eQuickMenuFunctionType_MaidList] = ExecuteFunction.__eQuickMenuFunctionType_MaidList, [__eQuickMenuFunctionType_TagSetting] = ExecuteFunction.__eQuickMenuFunctionType_TagSetting, [__eQuickMenuFunctionType_Tag] = ExecuteFunction.__eQuickMenuFunctionType_Tag, [__eQuickMenuFunctionType_NpcFind] = ExecuteFunction.__eQuickMenuFunctionType_NpcFind, [__eQuickMenuFunctionType_MovieGuide] = ExecuteFunction.__eQuickMenuFunctionType_MovieGuide, [__eQuickMenuFunctionType_Mercenary] = ExecuteFunction.__eQuickMenuFunctionType_Mercenary, [__eQuickMenuFunctionType_VillageSiegeArea] = ExecuteFunction.__eQuickMenuFunctionType_VillageSiegeArea, [__eQuickMenuFunctionType_Pvp] = ExecuteFunction.__eQuickMenuFunctionType_Pvp}
+[__eQuickMenuDataType_Function] = {[Type.Inventory] = ExecuteFunction.Inventory, [Type.BlackSpirit] = ExecuteFunction.BlackSpirit, [Type.WorldMap] = ExecuteFunction.WorldMap, [Type.Skill] = ExecuteFunction.Skill, [Type.Mail] = ExecuteFunction.Mail, [Type.CharacterChallange] = ExecuteFunction.CharacterChallange, [Type.ItemMarket] = ExecuteFunction.ItemMarket, [Type.Quest] = ExecuteFunction.Quest, [Type.ServantCall] = ExecuteFunction.ServantCall, [Type.ServantNavi] = ExecuteFunction.ServantNavi, [Type.CampActivate] = ExecuteFunction.CampActivate, [Type.CampNavi] = ExecuteFunction.CampNavi, [Type.HorseRaceInformation] = ExecuteFunction.HorseRaceInformation, [Type.HorseRaceEnterOrCancel] = ExecuteFunction.HorseRaceEnterOrCancel, [Type.HouseList] = ExecuteFunction.HouseList, [Type.WorkerList] = ExecuteFunction.WorkerList, [Type.InstallationList] = ExecuteFunction.InstallationList, [Type.PetList] = ExecuteFunction.PetList, [Type.MaidList] = ExecuteFunction.MaidList, [Type.TagSetting] = ExecuteFunction.TagSetting, [Type.Tag] = ExecuteFunction.Tag, [Type.NpcFind] = ExecuteFunction.NpcFind, [Type.MovieGuide] = ExecuteFunction.MovieGuide, [Type.Mercenary] = ExecuteFunction.Mercenary, [Type.VillageSiegeArea] = ExecuteFunction.VillageSiegeArea, [Type.Pvp] = ExecuteFunction.Pvp}
 }
--- DECOMPILER ERROR at PC351: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC384: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._icon = {
 [__eQuickMenuDataType_Function] = {
-[__eQuickMenuFunctionType_Inventory] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 501, _x2 = 984, _y2 = 551}
+[Type.Inventory] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 501, _x2 = 984, _y2 = 551}
 , 
-[__eQuickMenuFunctionType_BlackSpirit] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 399, _x2 = 984, _y2 = 449}
+[Type.BlackSpirit] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 399, _x2 = 984, _y2 = 449}
 , 
-[__eQuickMenuFunctionType_WorldMap] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 552, _x2 = 1035, _y2 = 602}
+[Type.WorldMap] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 552, _x2 = 1035, _y2 = 602}
 , 
-[__eQuickMenuFunctionType_Skill] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 450, _x2 = 984, _y2 = 500}
+[Type.Skill] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 450, _x2 = 984, _y2 = 500}
 , 
-[__eQuickMenuFunctionType_Mail] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 501, _x2 = 1035, _y2 = 551}
+[Type.Mail] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 501, _x2 = 1035, _y2 = 551}
 , 
-[__eQuickMenuFunctionType_CharacterChallange] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 399, _x2 = 1035, _y2 = 449}
+[Type.CharacterChallange] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 399, _x2 = 1035, _y2 = 449}
 , 
-[__eQuickMenuFunctionType_ItemMarket] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 552, _x2 = 984, _y2 = 602}
+[Type.ItemMarket] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 552, _x2 = 984, _y2 = 602}
 , 
-[__eQuickMenuFunctionType_Quest] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 450, _x2 = 1035, _y2 = 500}
+[Type.Quest] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 450, _x2 = 1035, _y2 = 500}
 , 
-[__eQuickMenuFunctionType_ServantCall] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 399, _x2 = 1086, _y2 = 449}
+[Type.ServantCall] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 399, _x2 = 1086, _y2 = 449}
 , 
-[__eQuickMenuFunctionType_ServantNavi] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 450, _x2 = 1086, _y2 = 500}
+[Type.ServantNavi] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 450, _x2 = 1086, _y2 = 500}
 , 
-[__eQuickMenuFunctionType_CampActivate] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 654, _x2 = 1086, _y2 = 704}
+[Type.CampActivate] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 654, _x2 = 1086, _y2 = 704}
 , 
-[__eQuickMenuFunctionType_CampNavi] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 654, _x2 = 1086, _y2 = 704}
+[Type.CampNavi] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1036, _y1 = 654, _x2 = 1086, _y2 = 704}
 , 
-[__eQuickMenuFunctionType_HorseRaceInformation] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 399, _x2 = 1086, _y2 = 449}
+[Type.HorseRaceInformation] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 399, _x2 = 1086, _y2 = 449}
 , 
-[__eQuickMenuFunctionType_HorseRaceEnterOrCancel] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 450, _x2 = 1137, _y2 = 500}
+[Type.HorseRaceEnterOrCancel] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 450, _x2 = 1137, _y2 = 500}
 , 
-[__eQuickMenuFunctionType_HouseList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 603, _x2 = 1188, _y2 = 653}
+[Type.HouseList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 603, _x2 = 1188, _y2 = 653}
 , 
-[__eQuickMenuFunctionType_WorkerList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 399, _x2 = 1188, _y2 = 449}
+[Type.WorkerList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 399, _x2 = 1188, _y2 = 449}
 , 
-[__eQuickMenuFunctionType_InstallationList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 450, _x2 = 1188, _y2 = 500}
+[Type.InstallationList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 450, _x2 = 1188, _y2 = 500}
 , 
-[__eQuickMenuFunctionType_PetList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 501, _x2 = 1188, _y2 = 551}
+[Type.PetList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 501, _x2 = 1188, _y2 = 551}
 , 
-[__eQuickMenuFunctionType_MaidList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 501, _x2 = 1137, _y2 = 551}
+[Type.MaidList] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 501, _x2 = 1137, _y2 = 551}
 , 
-[__eQuickMenuFunctionType_TagSetting] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 552, _x2 = 1137, _y2 = 602}
+[Type.TagSetting] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 552, _x2 = 1137, _y2 = 602}
 , 
-[__eQuickMenuFunctionType_Tag] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 552, _x2 = 1188, _y2 = 602}
+[Type.Tag] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1138, _y1 = 552, _x2 = 1188, _y2 = 602}
 , 
-[__eQuickMenuFunctionType_NpcFind] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 603, _x2 = 984, _y2 = 653}
+[Type.NpcFind] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 603, _x2 = 984, _y2 = 653}
 , 
-[__eQuickMenuFunctionType_MovieGuide] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 603, _x2 = 1137, _y2 = 653}
+[Type.MovieGuide] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 603, _x2 = 1137, _y2 = 653}
 , 
-[__eQuickMenuFunctionType_Mercenary] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 654, _x2 = 984, _y2 = 704}
+[Type.Mercenary] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 934, _y1 = 654, _x2 = 984, _y2 = 704}
 , 
-[__eQuickMenuFunctionType_VillageSiegeArea] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 603, _x2 = 1035, _y2 = 653}
+[Type.VillageSiegeArea] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 603, _x2 = 1035, _y2 = 653}
 , 
-[__eQuickMenuFunctionType_Pvp] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 654, _x2 = 1137, _y2 = 704}
+[Type.Pvp] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 654, _x2 = 1137, _y2 = 704}
 }
 }
--- DECOMPILER ERROR at PC410: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC443: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._name = {
-[__eQuickMenuDataType_Function] = {[__eQuickMenuFunctionType_Inventory] = "INVENTORY", [__eQuickMenuFunctionType_BlackSpirit] = "BLACKSPIRIT", [__eQuickMenuFunctionType_WorldMap] = "WORLDMAP", [__eQuickMenuFunctionType_Skill] = "SKILL", [__eQuickMenuFunctionType_Mail] = "MAIL", [__eQuickMenuFunctionType_CharacterChallange] = "CHALLENGE", [__eQuickMenuFunctionType_ItemMarket] = "ITEM MARKETPLACE", [__eQuickMenuFunctionType_Quest] = "QUEST", [__eQuickMenuFunctionType_ServantCall] = "CALL MOUNT", [__eQuickMenuFunctionType_ServantNavi] = "FIND MOUNT LOCATION", [__eQuickMenuFunctionType_CampActivate] = "CAMP", [__eQuickMenuFunctionType_CampNavi] = "FIND CAMP LOCATION", [__eQuickMenuFunctionType_HorseRaceInformation] = "HORSE RACE", [__eQuickMenuFunctionType_HorseRaceEnterOrCancel] = "ENTER HORSE RACE", [__eQuickMenuFunctionType_HouseList] = "MY RESICENCE LIST", [__eQuickMenuFunctionType_WorkerList] = "WORKER LIST", [__eQuickMenuFunctionType_InstallationList] = "GARDEN", [__eQuickMenuFunctionType_PetList] = "MY PET", [__eQuickMenuFunctionType_MaidList] = "FAIRY MAID LIST", [__eQuickMenuFunctionType_TagSetting] = "TAG CHARACTER SETTING", [__eQuickMenuFunctionType_Tag] = "TAG CHARACTER", [__eQuickMenuFunctionType_NpcFind] = "FIND NPC", [__eQuickMenuFunctionType_MovieGuide] = "VIDEO GUIDE", [__eQuickMenuFunctionType_Mercenary] = "MILITIA", [__eQuickMenuFunctionType_VillageSiegeArea] = "SHOW NODE INSTALLATION AREA", [__eQuickMenuFunctionType_Pvp] = "PVP"}
+[__eQuickMenuDataType_Function] = {[Type.Inventory] = "INVENTORY", [Type.BlackSpirit] = "BLACKSPIRIT", [Type.WorldMap] = "WORLDMAP", [Type.Skill] = "SKILL", [Type.Mail] = "MAIL", [Type.CharacterChallange] = "CHALLENGE", [Type.ItemMarket] = "ITEM MARKETPLACE", [Type.Quest] = "QUEST", [Type.ServantCall] = "CALL MOUNT", [Type.ServantNavi] = "FIND MOUNT LOCATION", [Type.CampActivate] = "CAMP", [Type.CampNavi] = "FIND CAMP LOCATION", [Type.HorseRaceInformation] = "HORSE RACE", [Type.HorseRaceEnterOrCancel] = "ENTER HORSE RACE", [Type.HouseList] = "MY RESICENCE LIST", [Type.WorkerList] = "WORKER LIST", [Type.InstallationList] = "GARDEN", [Type.PetList] = "MY PET", [Type.MaidList] = "FAIRY MAID LIST", [Type.TagSetting] = "TAG CHARACTER SETTING", [Type.Tag] = "TAG CHARACTER", [Type.NpcFind] = "FIND NPC", [Type.MovieGuide] = "VIDEO GUIDE", [Type.Mercenary] = "MILITIA", [Type.VillageSiegeArea] = "SHOW NODE INSTALLATION AREA", [Type.Pvp] = "PVP"}
 }
 FromClient_ConsoleQuickMenu_ExecuteFunctionType = function(datatype, functionType)
-  -- function num : 0_24
+  -- function num : 0_26
   if __eQuickMenuDataType_Function ~= datatype then
     return 
   end
@@ -208,4 +225,27 @@ FromClient_ConsoleQuickMenu_ExecuteFunctionType = function(datatype, functionTyp
 end
 
 registerEvent("FromClient_ConsoleQuickMenu_ExecuteFunctionType", "FromClient_ConsoleQuickMenu_ExecuteFunctionType")
+-- DECOMPILER ERROR at PC453: Confused about usage of register: R3 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.setDefaultSetting = function(self)
+  -- function num : 0_27 , upvalues : Type
+  ToClient_registQuickMenuFunctionType(3, 0, Type.Inventory)
+  ToClient_registQuickMenuFunctionType(3, 1, Type.BlackSpirit)
+  ToClient_registQuickMenuFunctionType(3, 2, Type.WorldMap)
+  ToClient_registQuickMenuFunctionType(3, 3, Type.Skill)
+  ToClient_registQuickMenuFunctionType(3, 4, Type.Mail)
+  ToClient_registQuickMenuFunctionType(3, 5, Type.CharacterChallange)
+  ToClient_registQuickMenuFunctionType(3, 6, Type.ItemMarket)
+  ToClient_registQuickMenuFunctionType(3, 7, Type.Quest)
+  ToClient_registQuickMenuFunctionType(2, 0, Type.ServantCall)
+  ToClient_registQuickMenuFunctionType(2, 1, Type.ServantNavi)
+  ToClient_registQuickMenuFunctionType(2, 2, Type.PetList)
+  ToClient_registQuickMenuFunctionType(2, 3, Type.NpcFind)
+  ToClient_registQuickMenuFunctionType(2, 4, Type.MovieGuide)
+  ToClient_registQuickMenuFunctionType(2, 5, Type.VillageSiegeArea)
+  ToClient_registQuickMenuFunctionType(2, 6, Type.Pvp)
+  ToClient_registQuickMenuFunctionType(2, 7, Type.HouseList)
+end
+
+PaGlobal_ConsoleQuickMenu:setDefaultSetting()
 
