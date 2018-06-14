@@ -16,6 +16,8 @@ _quickMenuPosition = {}
 _quickMenuPositionIcon = {}
 , _staticTextIconName = (UI.getChildControl)(Panel_QuickMenu, "StaticText_SelectedButtonTitle"), _staticTextIconDesc = (UI.getChildControl)(Panel_QuickMenu, "StaticText_SelectedButtonDesc"), _centerDeco = (UI.getChildControl)(Panel_QuickMenu, "Static_CenterDeco"), 
 _line = {}
+, 
+_rightMenuPanel = {}
 }
 , _curGroup = 0, 
 _center = {_x = 0, _y = 0}
@@ -43,53 +45,171 @@ _bottom = {
 [3] = {_x1 = 486, _y1 = 797, _x2 = 572, _y2 = 883}
 }
 }
-}
--- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
+, _maxMenuTabType = 4}
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.initializeUI = function(self)
   -- function num : 0_0
-  for ii = 1, __eQuickMenuStickPosition_Count do
-    -- DECOMPILER ERROR at PC15: Confused about usage of register: R5 in 'UnsetPending'
+  for ii = 0, __eQuickMenuStickPosition_Count do
+    if __eQuickMenuStickPosition_QuickSlot == ii then
+      break
+    end
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R5 in 'UnsetPending'
 
-    ((self._ui)._quickMenuPosition)[ii] = (UI.getChildControl)(Panel_QuickMenu, "Button_Templete" .. tostring(ii - 1))
-    -- DECOMPILER ERROR at PC25: Confused about usage of register: R5 in 'UnsetPending'
+    ;
+    ((self._ui)._quickMenuPosition)[ii] = (UI.getChildControl)(Panel_QuickMenu, "Button_Templete" .. tostring(ii))
+    -- DECOMPILER ERROR at PC29: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     ((self._ui)._quickMenuPositionIcon)[ii] = (UI.getChildControl)(((self._ui)._quickMenuPosition)[ii], "Static_Icon")
   end
-  -- DECOMPILER ERROR at PC33: Confused about usage of register: R1 in 'UnsetPending'
+  do
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
 
-  ;
-  (self._ui)._center = (UI.getChildControl)(Panel_QuickMenu, "Static_CenterPoint")
-  for ii = 1, __eQuickMenuStickPosition_Count do
-    -- DECOMPILER ERROR at PC48: Confused about usage of register: R5 in 'UnsetPending'
-
-    ((self._ui)._line)[ii] = (UI.getChildControl)((self._ui)._center, "Static_Line" .. ii - 1)
     ;
-    (((self._ui)._line)[ii]):SetShow(false)
+    (self._ui)._center = (UI.getChildControl)(Panel_QuickMenu, "Static_CenterPoint")
+    for ii = 0, __eQuickMenuStickPosition_Count do
+      if __eQuickMenuStickPosition_QuickSlot == ii then
+        break
+      end
+      -- DECOMPILER ERROR at PC56: Confused about usage of register: R5 in 'UnsetPending'
+
+      ;
+      ((self._ui)._line)[ii] = (UI.getChildControl)((self._ui)._center, "Static_Line" .. ii)
+      ;
+      (((self._ui)._line)[ii]):SetShow(false)
+    end
+    do
+      -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      (self._ui)._widget = {}
+      for group = 0, __eQuickMenuDpadGroup_Count - 1 do
+        local bg = (UI.getChildControl)(Panel_Widget_QuickMenu, "Static_Bg" .. tostring(group))
+        -- DECOMPILER ERROR at PC84: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        ((self._ui)._widget)[group] = {}
+        -- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (((self._ui)._widget)[group])._pad = (UI.getChildControl)(bg, "Static_Pad")
+        -- DECOMPILER ERROR at PC102: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (((self._ui)._widget)[group])._slot = (UI.getChildControl)(bg, "Static_SlotBg")
+        -- DECOMPILER ERROR at PC111: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (((self._ui)._widget)[group])._selected = (UI.getChildControl)(bg, "Static_SelectedPad")
+        -- DECOMPILER ERROR at PC120: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (((self._ui)._widget)[group])._ring = (UI.getChildControl)(bg, "Static_Ring")
+        -- DECOMPILER ERROR at PC125: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (((self._ui)._widget)[group])._ringPosition = {}
+        for position = 0, __eQuickMenuStickPosition_Count - 1 do
+          if position == __eQuickMenuStickPosition_QuickSlot then
+            break
+          end
+          -- DECOMPILER ERROR at PC151: Confused about usage of register: R10 in 'UnsetPending'
+
+          ;
+          ((((self._ui)._widget)[group])._ringPosition)[position] = (UI.getChildControl)((((self._ui)._widget)[group])._ring, "Static_" .. tostring(position))
+        end
+      end
+      -- DECOMPILER ERROR at PC161: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._stc_LeftBg = (UI.getChildControl)(Panel_QuickMenuCustom, "Static_LeftBg")
+      -- DECOMPILER ERROR at PC171: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._txt_RingMenuDesc = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_LeftBg, "StaticText_RingMenuDesc")
+      ;
+      (((self._ui)._rightMenuPanel)._txt_RingMenuDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_RingMenuDesc):SetAutoResize(true)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_RingMenuDesc):SetText((((self._ui)._rightMenuPanel)._txt_RingMenuDesc):GetText())
+      -- DECOMPILER ERROR at PC205: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._txt_QuickSlotDesc = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_LeftBg, "StaticText_QuickSlotDesc")
+      ;
+      (((self._ui)._rightMenuPanel)._txt_QuickSlotDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_QuickSlotDesc):SetAutoResize(true)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_QuickSlotDesc):SetText((((self._ui)._rightMenuPanel)._txt_QuickSlotDesc):GetText())
+      -- DECOMPILER ERROR at PC239: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._txt_ChangeMenuDesc = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_LeftBg, "StaticText_ChangeMenuDesc")
+      ;
+      (((self._ui)._rightMenuPanel)._txt_ChangeMenuDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_ChangeMenuDesc):SetAutoResize(true)
+      ;
+      (((self._ui)._rightMenuPanel)._txt_ChangeMenuDesc):SetText((((self._ui)._rightMenuPanel)._txt_ChangeMenuDesc):GetText())
+      -- DECOMPILER ERROR at PC271: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._stc_TabBg = (UI.getChildControl)(Panel_QuickMenuCustom, "Static_TabBg")
+      -- DECOMPILER ERROR at PC275: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      ((self._ui)._rightMenuPanel)._btn_TabBtn = {}
+      -- DECOMPILER ERROR at PC287: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      (((self._ui)._rightMenuPanel)._btn_TabBtn)[__eQuickMenuDataType_Item] = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_TabBg, "RadioButton_Item")
+      -- DECOMPILER ERROR at PC299: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      (((self._ui)._rightMenuPanel)._btn_TabBtn)[__eQuickMenuDataType_Skill] = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_TabBg, "RadioButton_Skill")
+      -- DECOMPILER ERROR at PC311: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      (((self._ui)._rightMenuPanel)._btn_TabBtn)[__eQuickMenuDataType_Function] = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_TabBg, "RadioButton_Menu")
+      -- DECOMPILER ERROR at PC323: Confused about usage of register: R1 in 'UnsetPending'
+
+      ;
+      (((self._ui)._rightMenuPanel)._btn_TabBtn)[__eQuickMenuDataType_SocialAction] = (UI.getChildControl)(((self._ui)._rightMenuPanel)._stc_TabBg, "RadioButton_Social")
+    end
   end
 end
 
 FGlobal_ConsoleQuickMenu_Update = function(position)
   -- function num : 0_1
+  if __eQuickMenuStickPosition_QuickSlot == position then
+    return 
+  end
+  local quickMenuPosition = (PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition
   if __eQuickMenuStickPosition_Count <= position then
-    for ii = 1, __eQuickMenuStickPosition_Count do
-      (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]):SetMonoTone(false)
-      ;
-      (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]):SetCheck(false)
+    for ii = 0, __eQuickMenuStickPosition_Count do
+      if quickMenuPosition[ii] ~= nil then
+        (quickMenuPosition[ii]):SetMonoTone(false)
+        ;
+        (quickMenuPosition[ii]):SetCheck(false)
+      end
     end
   else
     do
-      for ii = 1, __eQuickMenuStickPosition_Count do
-        (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]):SetMonoTone(true)
-        ;
-        (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]):SetCheck(false)
+      for ii = 0, __eQuickMenuStickPosition_Count do
+        if quickMenuPosition[ii] ~= nil then
+          (quickMenuPosition[ii]):SetMonoTone(true)
+          ;
+          (quickMenuPosition[ii]):SetCheck(false)
+        end
       end
       ;
-      (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[position + 1]):SetMonoTone(false)
+      (quickMenuPosition[position]):SetMonoTone(false)
       ;
-      (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[position + 1]):SetCheck(true)
-      PaGlobal_ConsoleQuickMenu:setButtonPos(position + 1)
+      (quickMenuPosition[position]):SetCheck(true)
+      PaGlobal_ConsoleQuickMenu:setButtonPos(position)
       local name = PaGlobal_ConsoleQuickMenu:GetCurrentQuickMenuName(PaGlobal_ConsoleQuickMenu._curGroup, position)
       ;
       ((PaGlobal_ConsoleQuickMenu._ui)._staticTextIconName):SetText(name)
@@ -99,10 +219,20 @@ FGlobal_ConsoleQuickMenu_Update = function(position)
   end
 end
 
--- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_ConsoleQuickMenuCustom_HighlightCategory = function(category)
+  -- function num : 0_2
+  self = PaGlobal_ConsoleQuickMenu
+  for ii = 0, self._maxMenuTabType - 1 do
+    ((((self._ui)._rightMenuPanel)._btn_TabBtn)[ii]):SetFontColor((Defines.Color).C_FF888888)
+  end
+  ;
+  ((((self._ui)._rightMenuPanel)._btn_TabBtn)[category]):SetFontColor((Defines.Color).C_FFEEEEEE)
+end
+
+-- DECOMPILER ERROR at PC112: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.setButtonPos = function(self, selectedIndex)
-  -- function num : 0_2
+  -- function num : 0_3
   if self._isAnimating then
     return 
   end
@@ -116,7 +246,7 @@ PaGlobal_ConsoleQuickMenu.setButtonPos = function(self, selectedIndex)
   (self._center).y = ((self._ui)._center):GetPosY()
   local angle = 2 * math.pi / 8 * 5
   local angleOffset = 2 * math.pi / 8
-  for index = 1, 8 do
+  for index = 0, 7 do
     angle = angle + angleOffset
     if selectedIndex == index then
       local x = 205 * (math.cos)(angle)
@@ -150,14 +280,17 @@ PaGlobal_ConsoleQuickMenu.setButtonPos = function(self, selectedIndex)
   end
 end
 
--- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC115: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.moveButtonAni = function(self, currentPosition)
-  -- function num : 0_3
-  if currentPosition == nil or currentPosition < 0 or __eQuickMenuStickPosition_Count <= currentPosition then
+  -- function num : 0_4
+  if __eQuickMenuStickPosition_QuickSlot == currentPosition then
     return 
   end
-  local control = ((self._ui)._quickMenuPosition)[currentPosition + 1]
+  if currentPosition == nil or currentPosition < 0 or __eQuickMenuStickPosition_Count <= currentPosition or __eQuickMenuStickPosition_QuickSlot == currentPosition then
+    return 
+  end
+  local control = ((self._ui)._quickMenuPosition)[currentPosition]
   local buttonMoveAni = control:addMoveAnimation(0, 0.1, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   buttonMoveAni:SetStartPosition(control:GetPosX(), control:GetPosY())
   buttonMoveAni:SetEndPosition((self._center).x - 47, (self._center).y - 47)
@@ -170,17 +303,17 @@ PaGlobal_ConsoleQuickMenu.moveButtonAni = function(self, currentPosition)
   self._isAnimating = true
 end
 
--- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC118: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.clearButtonAni = function(self)
-  -- function num : 0_4
+  -- function num : 0_5
   for index,value in pairs((self._ui)._quickMenuPosition) do
     value:ResetAndClearVertexAni()
   end
 end
 
 QuickMenu_ShowAni = function()
-  -- function num : 0_5
+  -- function num : 0_6
   (UIAni.AlphaAnimation)(1, Panel_QuickMenu, 0, 0.1)
   local aniInfo1 = Panel_QuickMenu:addScaleAnimation(0, 0.1, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.9)
@@ -192,25 +325,25 @@ QuickMenu_ShowAni = function()
 end
 
 QuickMenu_HideAni = function()
-  -- function num : 0_6
+  -- function num : 0_7
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_QuickMenu, 0.1, 0.2)
   aniInfo:SetHideAtEnd(true)
 end
 
 FGlobal_ConsoleQuickMenu_IsShow = function()
-  -- function num : 0_7
+  -- function num : 0_8
   return Panel_QuickMenu:GetShow()
 end
 
 FGlobal_ConsoleQuickMenuCustom_IsShow = function()
-  -- function num : 0_8
+  -- function num : 0_9
   return Panel_QuickMenuCustom:GetShow()
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC129: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.Open = function(self, currentGroup)
-  -- function num : 0_9
+  -- function num : 0_10
   if currentGroup < 0 or __eQuickMenuDpadGroup_Count <= currentGroup then
     return 
   end
@@ -221,28 +354,27 @@ PaGlobal_ConsoleQuickMenu.Open = function(self, currentGroup)
   self:SetUICurrentGroup(currentGroup)
   self._isAnimating = false
   PaGlobal_ConsoleQuickMenu:clearButtonAni()
-  self:setButtonPos(__eQuickMenuStickPosition_Count + 1)
+  self:setButtonPos(__eQuickMenuStickPosition_Count)
   self:CrossTextureChange(currentGroup)
   Panel_QuickMenu:SetShow(true, true)
 end
 
 FromClient_ConsoleQuickMenu_Close = function(currentPosition)
-  -- function num : 0_10
+  -- function num : 0_11
   PaGlobal_ConsoleQuickMenu:moveButtonAni(currentPosition)
   Panel_QuickMenu:SetShow(false, false)
 end
 
--- DECOMPILER ERROR at PC129: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC134: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.SetUICurrentGroup = function(self, group)
-  -- function num : 0_11
+  -- function num : 0_12
   local groupInfo = self:GetCurrentGroupInfo(group)
   for position,info in ipairs(groupInfo) do
-    if ((self._ui)._quickMenuPositionIcon)[position] == nil then
-      _PA_LOG("후진", " ??? " .. position)
+    if ((self._ui)._quickMenuPositionIcon)[position - 1] == nil then
       return 
     end
-    local control = ((self._ui)._quickMenuPositionIcon)[position]
+    local control = ((self._ui)._quickMenuPositionIcon)[position - 1]
     control:ChangeTextureInfoName(info._icon)
     if info._uv ~= nil then
       (control:getBaseTexture()):setUV(setTextureUV_Func(control, (info._uv)._x1, (info._uv)._y1, (info._uv)._x2, (info._uv)._y2))
@@ -254,82 +386,51 @@ PaGlobal_ConsoleQuickMenu.SetUICurrentGroup = function(self, group)
   end
 end
 
--- DECOMPILER ERROR at PC132: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC137: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_ConsoleQuickMenu.GetCurrentGroupInfo = function(self, group)
-  -- function num : 0_12
-  if group < 0 or __eQuickMenuDpadGroup_Count <= group then
-    return 
-  end
-  local table = {}
-  for position = 0, __eQuickMenuStickPosition_Count - 1 do
-    local quickMenu = ToClient_getAtQuickMenu(group, position)
-    if quickMenu == nil then
-      return 
+PaGlobal_ConsoleQuickMenu.GetPositionInfo = function(self, quickMenu)
+  -- function num : 0_13
+  local name = ""
+  local icon = ""
+  local uv = nil
+  if __eQuickMenuDataType_Skill == quickMenu._type then
+    local skillTypeStaticWrapper = getSkillTypeStaticStatus((quickMenu._skillKey):getSkillNo())
+    if skillTypeStaticWrapper ~= nil then
+      name = skillTypeStaticWrapper:getName()
+      icon = "Icon/" .. skillTypeStaticWrapper:getIconPath()
     end
-    local name = ""
-    local icon = ""
-    local uv = nil
-    if __eQuickMenuDataType_Skill == quickMenu._type then
-      local skillTypeStaticWrapper = getSkillTypeStaticStatus((quickMenu._skillKey):getSkillNo())
-      if skillTypeStaticWrapper ~= nil then
-        name = skillTypeStaticWrapper:getName()
-        icon = "Icon/" .. skillTypeStaticWrapper:getIconPath()
-      end
-    else
-      do
-        if __eQuickMenuDataType_Item == quickMenu._type then
-          local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickMenu._itemKey)
-          if itemStaticStatusWrapper ~= nil then
-            name = itemStaticStatusWrapper:getName()
-            icon = "Icon/" .. itemStaticStatusWrapper:getIconPath()
-          end
-        else
-          do
-            if __eQuickMenuDataType_Function == quickMenu._type then
-              name = (((self._functionTypeList)._name)[__eQuickMenuDataType_Function])[quickMenu._functionType]
-              icon = ((((self._functionTypeList)._icon)[__eQuickMenuDataType_Function])[quickMenu._functionType])._path
-              local iconUV = (((self._functionTypeList)._icon)[__eQuickMenuDataType_Function])[quickMenu._functionType]
-              uv = {_x1 = iconUV._x1, _y1 = iconUV._y1, _x2 = iconUV._x2, _y2 = iconUV._y2}
-            else
+  else
+    do
+      if __eQuickMenuDataType_Item == quickMenu._type then
+        local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickMenu._itemKey)
+        if itemStaticStatusWrapper ~= nil then
+          name = itemStaticStatusWrapper:getName()
+          icon = "Icon/" .. itemStaticStatusWrapper:getIconPath()
+        end
+      else
+        do
+          if __eQuickMenuDataType_Function == quickMenu._type then
+            name = (((self._functionTypeList)._name)[__eQuickMenuDataType_Function])[quickMenu._functionType]
+            _PA_LOG("후진", " quickMenu._functionType " .. quickMenu._functionType)
+            icon = ((((self._functionTypeList)._icon)[__eQuickMenuDataType_Function])[quickMenu._functionType])._path
+            local iconUV = (((self._functionTypeList)._icon)[__eQuickMenuDataType_Function])[quickMenu._functionType]
+            uv = {_x1 = iconUV._x1, _y1 = iconUV._y1, _x2 = iconUV._x2, _y2 = iconUV._y2}
+          else
+            do
+              if __eQuickMenuDataType_SocialAction == quickMenu._type then
+                for ii = 0, ToClient_getSocialActionInfoList() - 1 do
+                  local socialActionInfo = ToClient_getSocialActionInfoByIndex(ii)
+                  local sASS = socialActionInfo:getStaticStatus()
+                  local socialKey = sASS:getKey()
+                  if socialKey == quickMenu._socialActionKey then
+                    name = sASS:getName()
+                    icon = "Icon/" .. sASS:getIconPath()
+                    break
+                  end
+                end
+              end
               do
-                if __eQuickMenuDataType_SocialAction == quickMenu._type then
-                  for ii = 0, ToClient_getSocialActionInfoList() - 1 do
-                    local socialActionInfo = ToClient_getSocialActionInfoByIndex(ii)
-                    local sASS = socialActionInfo:getStaticStatus()
-                    local socialKey = sASS:getKey()
-                    if socialKey == quickMenu._socialActionKey then
-                      name = sASS:getName()
-                      icon = "Icon/" .. sASS:getIconPath()
-                      break
-                    end
-                  end
-                end
-                do
-                  do
-                    table[#table + 1] = {_name = name, _icon = icon, _uv = uv}
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                    -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_STMT
-
-                  end
-                end
+                return {_name = name, _icon = icon, _uv = uv, _type = quickMenu._type}
               end
             end
           end
@@ -337,13 +438,35 @@ PaGlobal_ConsoleQuickMenu.GetCurrentGroupInfo = function(self, group)
       end
     end
   end
-  return table
 end
 
--- DECOMPILER ERROR at PC135: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC140: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.GetCurrentGroupInfo = function(self, group)
+  -- function num : 0_14
+  if group < 0 or __eQuickMenuDpadGroup_Count <= group then
+    return 
+  end
+  local table = {}
+  for position = 0, __eQuickMenuStickPosition_Count - 1 do
+    if __eQuickMenuStickPosition_QuickSlot == position then
+      break
+    end
+    local quickMenu = ToClient_getAtQuickMenu(group, position)
+    if quickMenu == nil then
+      return 
+    end
+    table[#table + 1] = self:GetPositionInfo(quickMenu)
+  end
+  do
+    return table
+  end
+end
+
+-- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.GetCurrentQuickMenuName = function(self, group, position)
-  -- function num : 0_13
+  -- function num : 0_15
   if group < 0 or __eQuickMenuDpadGroup_Count <= group then
     return ""
   end
@@ -377,10 +500,27 @@ PaGlobal_ConsoleQuickMenu.GetCurrentQuickMenuName = function(self, group, positi
   end
 end
 
--- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.setIcon = function(self, control, icon, uv)
+  -- function num : 0_16
+  if control == nil then
+    return 
+  end
+  control:ChangeTextureInfoName(icon)
+  if uv ~= nil then
+    (control:getBaseTexture()):setUV(setTextureUV_Func(control, uv._x1, uv._y1, uv._x2, uv._y2))
+  else
+    ;
+    (control:getBaseTexture()):setUV(0, 0, 1, 1)
+  end
+  control:setRenderTexture(control:getBaseTexture())
+end
+
+-- DECOMPILER ERROR at PC149: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.CrossTextureChange = function(self, currentGroup)
-  -- function num : 0_14
+  -- function num : 0_17
   local bottomControl = (self._ui)._staticTextIconName
   local iconPathData1 = ((self._textureIcon)._bottom)[currentGroup]
   bottomControl:ChangeTextureInfoName("Renewal/Function/Console_Function_RingMenu.dds")
@@ -395,37 +535,98 @@ PaGlobal_ConsoleQuickMenu.CrossTextureChange = function(self, currentGroup)
   centerControl:setRenderTexture(centerControl:getBaseTexture())
 end
 
+-- DECOMPILER ERROR at PC152: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.setWidget = function(self)
+  -- function num : 0_18
+  for group = 0, __eQuickMenuDpadGroup_Count - 1 do
+    local widget = ((self._ui)._widget)[group]
+    if ToClient_isQuickMenuQuickMode(group) then
+      (widget._ring):SetShow(false)
+      ;
+      (widget._slot):SetShow(true)
+    else
+      ;
+      (widget._ring):SetShow(true)
+      ;
+      (widget._slot):SetShow(false)
+    end
+  end
+  for group = 0, __eQuickMenuDpadGroup_Count - 1 do
+    local widget = ((self._ui)._widget)[group]
+    if ToClient_isQuickMenuQuickMode(group) then
+      (widget._ring):SetShow(false)
+      ;
+      (widget._slot):SetShow(true)
+      local quickSlot = ToClient_getAtQuickMenu(group, __eQuickMenuStickPosition_QuickSlot)
+      local quickSlotInfo = self:GetPositionInfo(quickSlot)
+      self:setIcon(widget._slot, quickSlotInfo._icon, quickSlotInfo._uv)
+    else
+      do
+        local groupInfo = self:GetCurrentGroupInfo(group)
+        for index,info in ipairs(groupInfo) do
+          ((widget._ringPosition)[index - 1]):SetShow(__eQuickMenuDataType_Empty ~= info._type)
+        end
+        -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out DO_STMT
+
+        -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+        -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+  end
+  -- DECOMPILER ERROR: 3 unprocessed JMP targets
+end
+
 FromClient_ConsoleQuickMenu_luaLoadComplete = function()
-  -- function num : 0_15
+  -- function num : 0_19
   PaGlobal_ConsoleQuickMenu:initializeUI()
-  PaGlobal_ConsoleQuickMenuSetting:initializeUI()
   PaGlobal_ConsoleQuickMenu:setDefaultSetting()
+  PaGlobal_ConsoleQuickMenu:setWidget()
+  Panel_Widget_QuickMenu:SetShow(true)
 end
 
 FromClient_ConsoleQuickMenu_Open = function(group)
-  -- function num : 0_16
-  do return  end
+  -- function num : 0_20
   PaGlobal_ConsoleQuickMenu:Open(group)
 end
 
-FromClient_ConsoleQuickMenu_Execute = function()
-  -- function num : 0_17
+FromClient_ConsoleQuickMenu_Execute = function(position)
+  -- function num : 0_21
 end
 
-FromClient_ConsoleQuickMenu_Selecting = function()
-  -- function num : 0_18
-end
-
--- DECOMPILER ERROR at PC149: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_ConsoleQuickMenu.setDefaultSetting = function(self)
-  -- function num : 0_19
-  for ii = 0, ToClient_getSocialActionInfoList() - 1 do
-    local socialActionInfo = ToClient_getSocialActionInfoByIndex(ii)
-    local sASS = socialActionInfo:getStaticStatus()
-    local socialKey = sASS:getKey()
+FromClient_ConsoleQuickMenu_Selecting = function(group, position)
+  -- function num : 0_22
+  if position == __eQuickMenuStickPosition_QuickSlot then
+    return 
   end
-  if (ii >= 32 or ii < 64) then
+  if __eQuickMenuStickPosition_Count == position then
+    for ii = 0, __eQuickMenuStickPosition_Count do
+      local control = ((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]
+      if control == nil then
+        break
+      end
+      control:SetMonoTone(false)
+      control:SetCheck(false)
+    end
+  else
+    do
+      for ii = 0, __eQuickMenuStickPosition_Count do
+        local control = ((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[ii]
+        if control == nil then
+          break
+        end
+        control:SetMonoTone(true)
+        control:SetCheck(false)
+      end
+      do
+        ;
+        (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[position]):SetMonoTone(false)
+        ;
+        (((PaGlobal_ConsoleQuickMenu._ui)._quickMenuPosition)[position]):SetCheck(true)
+      end
+    end
   end
 end
 

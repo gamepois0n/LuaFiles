@@ -1578,6 +1578,7 @@ FGlobal_Option_luaLoadComplete = function()
   end
   if ToClient_isXBox() == true then
     PaGlobal_Option:SetUltra(true)
+    setConsoleKeySet(1)
   end
 end
 

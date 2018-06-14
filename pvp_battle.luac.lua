@@ -73,6 +73,9 @@ PaGlobal_PvPBattle.setPosMatchIcon = function(self)
     do
       Panel_Icon_Duel:SetShow(false)
       PaGlobal_Camp:setPos()
+      if _ContentsGroup_RenewUI_Main == true then
+        Panel_Icon_Duel:SetShow(false)
+      end
     end
   end
 end

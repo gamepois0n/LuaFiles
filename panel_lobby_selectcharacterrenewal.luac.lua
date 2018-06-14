@@ -1240,65 +1240,77 @@ end
 
 CharacterSelect_PlayGame = function(index)
   -- function num : 0_16 , upvalues : SelectCharacter, configData, ePcWorkingType
-  local isSpecialCharacter = false
-  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
-    isSpecialCharacter = true
-  end
-  local removeTime = getCharacterDataRemoveTime(index, isSpecialCharacter)
-  if removeTime ~= nil then
-    return 
-  end
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R3 in 'UnsetPending'
-
-  configData.selectCaracterIdx = index
-  local characterData = getCharacterDataByIndex(index, isSpecialCharacter)
-  local classType = getCharacterClassType(characterData)
-  local characterCount = getCharacterDataCount()
-  local serverUtc64 = getServerUtc64()
-  do
-    if ToClient_IsCustomizeOnlyClass(classType) then
-      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  if ToClient_isXBox() and not ToClient_IsDevelopment() then
+    local isComplete = ToClient_isDataDownloadComplete()
+    local percent = ToClient_getDataDownloadProgress()
+    if isComplete == false then
+      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = "Fail to GameStart Because not Installation Xbox data, Please wait for second : Data installation percent : " .. tostring(percent), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageboxData)
       return 
     end
-    if characterData ~= nil then
-      if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
-        if characterData._level == 1 and characterCount == 1 then
-          FGlobal_FirstLogin_Open(index)
-        else
-          local pcDeliveryRegionKey = characterData._arrivalRegionKey
-          if (ePcWorkingType.ePcWorkType_Empty ~= characterData._pcWorkingType and ePcWorkingType.ePcWorkType_Play ~= characterData._pcWorkingType) or pcDeliveryRegionKey:get() ~= 0 and serverUtc64 < characterData._arrivalTime then
-            if pcDeliveryRegionKey:get() ~= 0 then
-              contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_CHANGE_Q") .. PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_MOVECHARACTER_MSG")
-            else
-              if ePcWorkingType.ePcWorkType_ReadBook == characterData._pcWorkingType then
-                contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_READ_BOOK")
+  end
+  do
+    local isSpecialCharacter = false
+    if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+      isSpecialCharacter = true
+    end
+    local removeTime = getCharacterDataRemoveTime(index, isSpecialCharacter)
+    if removeTime ~= nil then
+      return 
+    end
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R3 in 'UnsetPending'
+
+    configData.selectCaracterIdx = index
+    local characterData = getCharacterDataByIndex(index, isSpecialCharacter)
+    local classType = getCharacterClassType(characterData)
+    local characterCount = getCharacterDataCount()
+    local serverUtc64 = getServerUtc64()
+    do
+      if ToClient_IsCustomizeOnlyClass(classType) then
+        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+        ;
+        (MessageBox.showMessageBox)(messageboxData)
+        return 
+      end
+      if characterData ~= nil then
+        if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
+          if characterData._level == 1 and characterCount == 1 then
+            FGlobal_FirstLogin_Open(index)
+          else
+            local pcDeliveryRegionKey = characterData._arrivalRegionKey
+            if (ePcWorkingType.ePcWorkType_Empty ~= characterData._pcWorkingType and ePcWorkingType.ePcWorkType_Play ~= characterData._pcWorkingType) or pcDeliveryRegionKey:get() ~= 0 and serverUtc64 < characterData._arrivalTime then
+              if pcDeliveryRegionKey:get() ~= 0 then
+                contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_CHANGE_Q") .. PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_MOVECHARACTER_MSG")
               else
-                if ePcWorkingType.ePcWorkType_RepairItem == characterData._pcWorkingType then
-                  contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_REPAIR")
+                if ePcWorkingType.ePcWorkType_ReadBook == characterData._pcWorkingType then
+                  contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_READ_BOOK")
+                else
+                  if ePcWorkingType.ePcWorkType_RepairItem == characterData._pcWorkingType then
+                    contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_REPAIR")
+                  end
                 end
               end
-            end
-            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"), content = contentString, functionYes = CharacterSelect_SelectEnterToGame, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-            ;
-            (MessageBox.showMessageBox)(messageboxData)
-          else
-            do
-              if ToClient_IsCustomizeOnlyClass(classType) then
-                local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                ;
-                (MessageBox.showMessageBox)(messageboxData)
-              else
-                do
+              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"), content = contentString, functionYes = CharacterSelect_SelectEnterToGame, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              ;
+              (MessageBox.showMessageBox)(messageboxData)
+            else
+              do
+                if ToClient_IsCustomizeOnlyClass(classType) then
+                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  ;
+                  (MessageBox.showMessageBox)(messageboxData)
+                else
                   do
-                    if selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) == true then
-                      Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+                    do
+                      if selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) == true then
+                        Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+                      end
+                      local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
+                      local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
+                      ;
+                      (MessageBox.showMessageBox)(messageboxData)
                     end
-                    local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
-                    local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
-                    ;
-                    (MessageBox.showMessageBox)(messageboxData)
                   end
                 end
               end

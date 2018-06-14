@@ -185,18 +185,19 @@ PaGlobal_LatestQuest.setGroupBG = function(self, index, posY, uiQuestInfo)
     (questEntry._uiSelectBG):SetPosX(0)
     ;
     (questEntry._uiSelectBG):SetPosY(0)
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_LUp", "HandleClicked_ShowQuestInfo( " .. questNo._group .. ", " .. questNo._quest .. ", " .. checkCondition .. ", \"" .. groupTitle .. "\", " .. questGroupCnt .. " )")
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_RUp", "HandleClicked_QuestWidget_FindTarget( " .. questNo._group .. ", " .. questNo._quest .. ", " .. checkCondition .. ", false )")
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_DownScroll", "QuestWidget_ScrollEvent( true )")
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_On", "HandleMouseOver_QuestGroup( true, " .. index .. ", " .. questNo._group .. ", " .. questNo._quest .. " )")
-    ;
-    (questEntry._uiGroupBG):addInputEvent("Mouse_Out", "HandleMouseOver_QuestGroup( false, " .. index .. ", " .. questNo._group .. " )")
+    if _ContentsGroup_RenewUI == false then
+      (questEntry._uiGroupBG):addInputEvent("Mouse_LUp", "HandleClicked_ShowQuestInfo( " .. questNo._group .. ", " .. questNo._quest .. ", " .. checkCondition .. ", \"" .. groupTitle .. "\", " .. questGroupCnt .. " )")
+      ;
+      (questEntry._uiGroupBG):addInputEvent("Mouse_RUp", "HandleClicked_QuestWidget_FindTarget( " .. questNo._group .. ", " .. questNo._quest .. ", " .. checkCondition .. ", false )")
+      ;
+      (questEntry._uiGroupBG):addInputEvent("Mouse_DownScroll", "QuestWidget_ScrollEvent( true )")
+      ;
+      (questEntry._uiGroupBG):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
+      ;
+      (questEntry._uiGroupBG):addInputEvent("Mouse_On", "HandleMouseOver_QuestGroup( true, " .. index .. ", " .. questNo._group .. ", " .. questNo._quest .. " )")
+      ;
+      (questEntry._uiGroupBG):addInputEvent("Mouse_Out", "HandleMouseOver_QuestGroup( false, " .. index .. ", " .. questNo._group .. " )")
+    end
   end
 end
 
@@ -736,6 +737,9 @@ end
 
 HandleMouseOver_QuestGroup = function(isMouseOver, index, groupId, questId)
   -- function num : 0_24
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if index < PaGlobal_LatestQuest._maxVisibleCnt then
     local questEntry = (PaGlobal_LatestQuest._uiList)[index]
     if isMouseOver == true then

@@ -6,8 +6,8 @@
 local _panel = Panel_Repair_Renew
 local REPAIR_TYPE = {UNDEFINED = 0, GUILD = 1, MAX_ENDURANCE = 2, SHIP = 3, SERVANT = 4, EQUIP = 5, INVEN = 6, COUNT = 6}
 local RepairInfo = {
-_ui = {stc_titleBar = (UI.getChildControl)(_panel, "Static_TitleBar"), txt_title = nil, stc_titleIcon = nil, stc_BodyBG = (UI.getChildControl)(_panel, "Static_BodyBG"), btn_template = nil, btn_repairs = nil, stc_clipAreas = nil, stc_buttonBGs = nil, txt_buttonNames = nil, stc_bottomLeft = (UI.getChildControl)(_panel, "Static_BottomLeft"), txt_moneyInChar = nil, txt_moneyInCharVal = nil, stc_bottomRight = (UI.getChildControl)(_panel, "Static_BottomRight"), txt_moneyInWarehouse = nil, txt_moneyInWarehouseVal = nil, stc_keyGuideSelect = (UI.getChildControl)(_panel, "Static_SelectKeyImage"), txt_keyGuide = (UI.getChildControl)(_panel, "StaticText_KeyGuide")}
-, _buttonsYGap = 101, _mainButtonCount = 6, _currentButtonSelected = 0, _lateInitDone = false, _resultMsg_ShowTime = 0, _buttonBGSpeed = 5, _buttonBGSelectedX = 320, _buttonBGDeselectedX = 360, 
+_ui = {stc_titleBar = (UI.getChildControl)(_panel, "Static_TitleBar"), txt_title = nil, stc_titleIcon = nil, stc_bodyBG = (UI.getChildControl)(_panel, "Static_BodyBG"), btn_template = nil, btn_repairs = nil, stc_clipAreas = nil, stc_buttonBGs = nil, txt_buttonNames = nil, stc_bottomLeft = (UI.getChildControl)(_panel, "Static_BottomLeft"), txt_moneyInChar = nil, txt_moneyInCharVal = nil, stc_bottomRight = (UI.getChildControl)(_panel, "Static_BottomRight"), txt_moneyInWarehouse = nil, txt_moneyInWarehouseVal = nil, stc_keyGuideSelect = (UI.getChildControl)(_panel, "Static_SelectKeyImage"), txt_keyGuide = (UI.getChildControl)(_panel, "StaticText_KeyGuide"), stc_cursorEffect = (UI.getChildControl)(_panel, "Static_CursorEffect")}
+, _buttonsYGap = 101, _mainButtonCount = 6, _currentButtonSelected = 0, _lateInitDone = false, _resultMsg_ShowTime = 0, _buttonBGSpeed = 1000, _buttonBGSelectedX = 320, _buttonBGDeselectedX = 360, _buttonBGAniThreshold = 40, 
 _isAnimating = {}
 , 
 _aniTargetForButtonBG = {}
@@ -55,7 +55,7 @@ RepairInfo.initialize = function(self)
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).btn_template = (UI.getChildControl)((self._ui).stc_BodyBG, "Button_Template")
+  (self._ui).btn_template = (UI.getChildControl)((self._ui).stc_bodyBG, "Button_Template")
   local buttonStartX = ((self._ui).btn_template):GetPosX()
   local buttonStartY = ((self._ui).btn_template):GetPosY()
   -- DECOMPILER ERROR at PC34: Confused about usage of register: R3 in 'UnsetPending'
@@ -65,7 +65,7 @@ RepairInfo.initialize = function(self)
   for ii = 1, REPAIR_TYPE.COUNT do
     -- DECOMPILER ERROR at PC52: Confused about usage of register: R7 in 'UnsetPending'
 
-    ((self._ui).btn_repairs)[ii] = (UI.cloneControl)((self._ui).btn_template, (self._ui).stc_BodyBG, "Button_Repair_" .. ii)
+    ((self._ui).btn_repairs)[ii] = (UI.cloneControl)((self._ui).btn_template, (self._ui).stc_bodyBG, "Button_Repair_" .. ii)
     ;
     (((self._ui).btn_repairs)[ii]):SetShow(true)
     ;
@@ -102,7 +102,7 @@ end
 RepairInfo.registMessageHandler = function(self)
   -- function num : 0_2 , upvalues : _panel
   _panel:RegisterUpdateFunc("PaGlobalFunc_RepairInfo_UpdatePerFrame")
-  Panel_LuckyRepair_Result:RegisterUpdateFunc("PaGlobalFunc_RepairInfo_UpdatePerFrame")
+  Panel_LuckyRepair_Result:RegisterUpdateFunc("PaGlobalFunc_RepairInfo_UpdatePerFrameLuckyRepair")
   registerEvent("FromClient_MaxEnduranceLuckyRepairEvent", "FromClient_RepairInfo_resultShow")
 end
 
@@ -127,15 +127,16 @@ RepairInfo.lateInit = function(self)
 
     ;
     ((self._ui).stc_buttonBGs)[ii] = (UI.getChildControl)(((self._ui).stc_clipAreas)[ii], "Static_ButtonBG")
-    local stc_BG = ((self._ui).stc_buttonBGs)[ii]
-    local x1, y1, x2, y2 = setTextureUV_Func(stc_BG, ((_buttonsData[ii]).uv)[1], ((_buttonsData[ii]).uv)[2], ((_buttonsData[ii]).uv)[3], ((_buttonsData[ii]).uv)[4])
+    local x1, y1, x2, y2 = setTextureUV_Func(((self._ui).stc_buttonBGs)[ii], ((_buttonsData[ii]).uv)[1], ((_buttonsData[ii]).uv)[2], ((_buttonsData[ii]).uv)[3], ((_buttonsData[ii]).uv)[4])
     ;
-    (stc_BG:getBaseTexture()):setUV(x1, y1, x2, y2)
-    stc_BG:setRenderTexture(stc_BG:getBaseTexture())
-    stc_BG:SetPosX(self._buttonBGDeselectedX)
+    ((((self._ui).stc_buttonBGs)[ii]):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (((self._ui).stc_buttonBGs)[ii]):setRenderTexture((((self._ui).stc_buttonBGs)[ii]):getBaseTexture())
+    ;
+    (((self._ui).stc_buttonBGs)[ii]):SetPosX(self._buttonBGDeselectedX)
     ;
     (((self._ui).stc_clipAreas)[ii]):SetRectClipOnArea(float2(0, 0), float2((((self._ui).stc_clipAreas)[ii]):GetSizeX(), (((self._ui).stc_clipAreas)[ii]):GetSizeY()))
-    -- DECOMPILER ERROR at PC102: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC113: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui).txt_buttonNames)[ii] = (UI.getChildControl)(((self._ui).btn_repairs)[ii], "StaticText_Name")
@@ -145,7 +146,7 @@ RepairInfo.lateInit = function(self)
   self._lateInitDone = true
 end
 
-PaGlobalFunc_RepairInfo_IsOpened = function()
+PaGlobalFunc_RepairInfo_GetShow = function()
   -- function num : 0_4 , upvalues : _panel
   return _panel:GetShow()
 end
@@ -160,10 +161,15 @@ RepairInfo.open = function(self)
   _panel:SetShow(true, false)
   self:lateInit()
   self._isCamping = PaGlobal_Camp:getIsCamping()
-  SetUIMode((Defines.UIMode).eUIMode_Repair)
+  PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+  if (Defines.UIMode).eUIMode_Repair ~= GetUIMode() then
+    SetUIMode((Defines.UIMode).eUIMode_Repair)
+  end
   repair_SetRepairMode(true)
-  PaGlobalFunc_MainDialog_Close()
-  InventoryWindow_Show()
+  Inventory_SetFunctor(PaGlobalFunc_RepairInfo_Filter, PaGlobalFunc_RepairInfo_InvenRClick, nil, nil)
+  if PaGlobalFunc_InventoryInfo_GetShow() == false then
+    PaGlobalFunc_InventoryInfo_Open(1)
+  end
   local initialSelect = REPAIR_TYPE.GUILD
   self:updateButtonSelection(initialSelect)
   self:updateMoneyDisplay()
@@ -185,17 +191,18 @@ RepairInfo.close = function(self)
   end
   if _ContentsGroup_RenewUI_Dailog == true then
     PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+    PaGlobalFunc_MainDialog_ReOpen()
   else
     setIgnoreShowDialog(false)
   end
   InventoryWindow_Close()
-  PaGlobalFunc_MainDialog_ReOpen()
+  Inventory_SetFunctor(nil, nil, nil, nil)
 end
 
 RepairInfo.updateButtonSelection = function(self, selection)
   -- function num : 0_9 , upvalues : REPAIR_TYPE
   self._currentButtonSelected = selection
-  local keyGuideStartY = ((self._ui).stc_BodyBG):GetPosY() + ((self._ui).btn_template):GetPosY() + ((self._ui).btn_template):GetSizeY() / 2 - ((self._ui).stc_keyGuideSelect):GetSizeY() / 2
+  local keyGuideStartY = ((self._ui).stc_bodyBG):GetPosY() + ((self._ui).btn_template):GetPosY() + ((self._ui).btn_template):GetSizeY() / 2 - ((self._ui).stc_keyGuideSelect):GetSizeY() / 2
   ;
   ((self._ui).stc_keyGuideSelect):SetPosY(keyGuideStartY + (selection - 1) * self._buttonsYGap)
   for ii = 1, REPAIR_TYPE.COUNT do
@@ -245,25 +252,117 @@ RepairInfo.animateButtonBG = function(self, buttonIndex, deltaTime)
   local target = (self._aniTargetForButtonBG)[buttonIndex]
   local currentPos = stc_BG:GetPosX()
   local distance = target - currentPos
-  _PA_LOG("박범�\128", "buttonIndex : " .. buttonIndex .. ", distance : " .. distance)
-  if (math.abs)(distance) > 2 then
-    stc_BG:SetPosX(currentPos + distance * deltaTime * self._buttonBGSpeed)
+  local acc = distance / self._buttonBGAniThreshold * deltaTime * self._buttonBGSpeed
+  if acc > -1 and acc < 0 then
+    acc = -1
+  else
+    if acc < 1 and acc > 0 then
+      acc = 1
+    end
+  end
+  if (math.abs)(distance) > 1 then
+    stc_BG:SetPosX(currentPos + acc)
   else
     stc_BG:SetPosX(target)
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC38: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._isAnimating)[buttonIndex] = false
   end
 end
 
-InputMOn_RepairInfo_SelectButton = function(buttonIndex)
+PaGlobalFunc_RepairInfo_UpdatePerFrameLuckyRepair = function(deltaTime)
   -- function num : 0_13 , upvalues : RepairInfo
+  RepairInfo:resultMsg(deltaTime)
+end
+
+RepairInfo.resultMsg = function(self, deltaTime)
+  -- function num : 0_14 , upvalues : RepairInfo
+  local self = RepairInfo
+  self._resultMsg_ShowTime = self._resultMsg_ShowTime + deltaTime
+  if self._resultMsg_ShowTime > 3 and Panel_LuckyRepair_Result:GetShow() == true then
+    Panel_LuckyRepair_Result:SetShow(false)
+  end
+  if self._resultMsg_ShowTime > 5 then
+    self._resultMsg_ShowTime = 0
+  end
+end
+
+PaGlobalFunc_RepairInfo_Filter = function(slotNo, itemWrapper)
+  -- function num : 0_15
+  if itemWrapper == nil then
+    return true
+  end
+  local isAble = itemWrapper:checkToRepairItem()
+  return not isAble
+end
+
+PaGlobalFunc_RepairInfo_InvenRClick = function(slotNo, itemWrapper, s64_itemCount, itemWhereType)
+  -- function num : 0_16 , upvalues : RepairInfo
+  local self = RepairInfo
+  local isAble = itemWrapper:checkToRepairItem()
+  if not isAble then
+    return 
+  end
+  local repairPrice = repair_getRepairPrice_s64(itemWhereType, slotNo, (CppEnums.ServantType).Type_Count, PaGlobal_Camp:getIsCamping())
+  if (Defines.s64_const).s64_0 < repairPrice then
+    local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
+    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = Repair_Item_MessageBox_Confirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBoxCheck.showMessageBox)(messageboxData)
+    self._repairWhereType = itemWhereType
+    self._repairSlotNo = slotNo
+  end
+end
+
+PaGlobalFunc_RepairInfo_EquipRClick = function(equipSlotNo, itemWrapper)
+  -- function num : 0_17 , upvalues : RepairInfo
+  local self = RepairInfo
+  local isAble = itemWrapper:checkToRepairItem()
+  if not isAble then
+    return 
+  end
+  local onConfirmButton = function()
+    -- function num : 0_17_0 , upvalues : self
+    local invenMoney = (MessageBoxCheck.isCheck)()
+    local moneyWhereType = (CppEnums.ItemWhereType).eInventory
+    if invenMoney then
+      moneyWhereType = (CppEnums.ItemWhereType).eInventory
+    else
+      moneyWhereType = (CppEnums.ItemWhereType).eWarehouse
+    end
+    if PaGlobal_Camp:getIsCamping() then
+      repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, (CppEnums.ServantType).Type_Count)
+    else
+      repair_Item(self._repairWhereType, self._repairSlotNo, moneyWhereType, (CppEnums.ServantType).Type_Count)
+    end
+  end
+
+  local repairPrice = repair_getRepairPrice_s64((CppEnums.ItemWhereType).eEquip, equipSlotNo, (CppEnums.ServantType).Type_Count, PaGlobal_Camp:getIsCamping())
+  if (Defines.s64_const).s64_0 < repairPrice then
+    local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
+    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = onConfirmButton, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBoxCheck.showMessageBox)(messageboxData)
+    self._repairWhereType = (CppEnums.ItemWhereType).eEquip
+    self._repairSlotNo = equipSlotNo
+  end
+end
+
+PaGlobalFunc_RepairInfo_OnPadB = function()
+  -- function num : 0_18
+  PaGlobalFunc_RepairInfo_Close()
+end
+
+InputMOn_RepairInfo_SelectButton = function(buttonIndex)
+  -- function num : 0_19 , upvalues : RepairInfo
   RepairInfo:updateButtonSelection(buttonIndex)
 end
 
 InputMLUp_RepairInfo_PressButton = function(buttonIndex)
-  -- function num : 0_14 , upvalues : RepairInfo, REPAIR_TYPE
+  -- function num : 0_20 , upvalues : RepairInfo, REPAIR_TYPE
   RepairInfo:updateButtonSelection(buttonIndex)
   if buttonIndex == REPAIR_TYPE.GUILD then
     RepairInfo:onClickGuildRepair()
@@ -291,10 +390,10 @@ InputMLUp_RepairInfo_PressButton = function(buttonIndex)
 end
 
 RepairInfo.onClickGuildRepair = function(self)
-  -- function num : 0_15
+  -- function num : 0_21
   local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, true, false)
   local GuildMoneyRepairElephant = function()
-    -- function num : 0_15_0
+    -- function num : 0_21_0
     repair_AllItem((CppEnums.ItemWhereType).eGuildWarehouse)
   end
 
@@ -315,18 +414,20 @@ RepairInfo.onClickGuildRepair = function(self)
 end
 
 RepairInfo.onClickMaxEndurance = function(self)
-  -- function num : 0_16
+  -- function num : 0_22 , upvalues : _panel
+  PaGlobalFunc_FixMaxEnduranceInfo_Open()
+  _panel:SetShow(false)
 end
 
 RepairInfo.onClickShipRepair = function(self)
-  -- function num : 0_17
+  -- function num : 0_23
   local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Ship, false, false)
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
-    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
-    (MessageBox.showMessageBox)(messageboxData)
+    (MessageBoxCheck.showMessageBox)(messageboxData)
   else
     do
       local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_REPAIR_SERVANT_DISTANCEREPAIR")
@@ -338,14 +439,14 @@ RepairInfo.onClickShipRepair = function(self)
 end
 
 RepairInfo.onClickServantRepair = function(self)
-  -- function num : 0_18
+  -- function num : 0_24
   local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, false, false)
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
-    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
-    (MessageBox.showMessageBox)(messageboxData)
+    (MessageBoxCheck.showMessageBox)(messageboxData)
   else
     do
       local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_REPAIR_SERVANT_DISTANCEREPAIR")
@@ -357,14 +458,14 @@ RepairInfo.onClickServantRepair = function(self)
 end
 
 RepairInfo.onClickEquipRepair = function(self)
-  -- function num : 0_19
+  -- function num : 0_25
   local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eEquip, true, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
-    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
-    (MessageBox.showMessageBox)(messageboxData)
+    (MessageBoxCheck.showMessageBox)(messageboxData)
   else
     do
       local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "REPAIR_NOT_MESSAGEBOX_MEMO")
@@ -376,14 +477,16 @@ RepairInfo.onClickEquipRepair = function(self)
 end
 
 RepairInfo.onClickInvenRepair = function(self)
-  -- function num : 0_20
+  -- function num : 0_26
+  local inventory_s64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eInventory, true, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
   local totalPrices_64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eCashInventory, false, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
+  _PA_LOG("박범�\128", "totalPrices_64 : " .. tostring(totalPrices_64))
   if (Defines.s64_const).s64_0 < totalPrices_64 then
     local strPrice = (string.format)("%d", Int64toInt32(totalPrices_64))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_INVENTORY_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
-    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_ALL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionApply = PaGlobalFunc_RepairInfo_RepairAll, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
-    (MessageBox.showMessageBox)(messageboxData)
+    (MessageBoxCheck.showMessageBox)(messageboxData)
   else
     do
       local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "REPAIR_NOT_MESSAGEBOX_MEMO")
@@ -395,10 +498,9 @@ RepairInfo.onClickInvenRepair = function(self)
 end
 
 PaGlobalFunc_RepairInfo_RepairAll = function()
-  -- function num : 0_21 , upvalues : RepairInfo
+  -- function num : 0_27 , upvalues : RepairInfo
   local self = RepairInfo
-  local invenMoney = (self._uiRepairInvenMoney):IsCheck()
-  local wareHouseMoney = (self._uiRepairWareHouseMoney):IsCheck()
+  local invenMoney = (MessageBoxCheck.isCheck)()
   local moneyWhereType = (CppEnums.ItemWhereType).eInventory
   if invenMoney then
     moneyWhereType = (CppEnums.ItemWhereType).eInventory
@@ -413,7 +515,7 @@ PaGlobalFunc_RepairInfo_RepairAll = function()
 end
 
 RepairInfo.initLuckyRepair = function(self)
-  -- function num : 0_22
+  -- function num : 0_28
   Panel_LuckyRepair_Result:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_LuckyRepair_Result:SetPosX(0)
   Panel_LuckyRepair_Result:SetPosY(0)
@@ -435,23 +537,11 @@ RepairInfo.initLuckyRepair = function(self)
 end
 
 FromClient_RepairInfo_resultShow = function()
-  -- function num : 0_23 , upvalues : RepairInfo
+  -- function num : 0_29 , upvalues : RepairInfo
   local self = RepairInfo
   if Panel_LuckyRepair_Result:GetShow() == false then
     ((self._luckyRepairMSG).MSG):SetText(PAGetString(Defines.StringSheet_GAME, "REPAIR_LUCKY_TEXT"))
     Panel_LuckyRepair_Result:SetShow(true)
-    self._resultMsg_ShowTime = 0
-  end
-end
-
-PaGlobalFunc_RepairInfo_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_24 , upvalues : RepairInfo
-  local self = RepairInfo
-  self._resultMsg_ShowTime = self._resultMsg_ShowTime + deltaTime
-  if self._resultMsg_ShowTime > 3 and Panel_LuckyRepair_Result:GetShow() == true then
-    Panel_LuckyRepair_Result:SetShow(false)
-  end
-  if self._resultMsg_ShowTime > 5 then
     self._resultMsg_ShowTime = 0
   end
 end

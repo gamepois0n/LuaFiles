@@ -9,7 +9,9 @@ local IM = CppEnums.EProcessorInputMode
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_TM = CppEnums.TextMode
 Panel_MovieGuide:ActiveMouseEventEffect(true)
-Panel_MovieGuide:setGlassBackground(true)
+if _ContentsGroup_RenewUI_Main == false then
+  Panel_MovieGuide:setGlassBackground(true)
+end
 Panel_MovieGuide:RegisterShowEventFunc(true, "Panel_MovieGuide_ShowAni()")
 Panel_MovieGuide:RegisterShowEventFunc(false, "Panel_MovieGuide_HideAni()")
 local _btn_MovieGuide = FGlobal_GetPersonalIconControl(1)

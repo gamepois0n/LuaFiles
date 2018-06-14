@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local Window_GameExit_ConfirmInfo = {
-_ui = {_staticText_Title = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_Title"), _button_Confirm = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "Button_Confirm"), _button_Cancle = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "Button_Cancel"), _checkBox_Tray = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "CheckButton_Tray"), _staticText_TrayHelp = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_TrayHelp"), _staticText_GameExit = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_GameExit")}
+_ui = {_staticText_Title = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_Title"), _button_Confirm = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "Button_Confirm"), _button_Cancel = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "Button_Cancel"), _checkBox_Tray = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "CheckButton_Tray"), _staticText_TrayHelp = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_TrayHelp"), _staticText_GameExit = (UI.getChildControl)(Panel_Window_GameExit_Confirm, "StaticText_GameExit")}
 , 
 _config = {_exitType_Exit = 0, _exitType_Tray = 1, _exitType_CharacterSelect = 2}
 }
@@ -25,11 +25,9 @@ Window_GameExit_ConfirmInfo.SetDescByExitType = function(self, exitType)
       ((self._ui)._staticText_TrayHelp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_TRAYLIMIT"))
     else
       if (self._config)._exitType_CharacterSelect == exitType then
-        ((self._ui)._staticText_Title):SetText("")
+        ((self._ui)._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHARACTERSELECT_NAME_TEXT"))
         ;
-        ((self._ui)._staticText_GameExit):SetText("")
-        ;
-        ((self._ui)._staticText_TrayHelp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_BACK_TO_CHARACTERSELECT_Q"))
+        ((self._ui)._staticText_GameExit):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_BACK_TO_CHARACTERSELECT_Q"))
       else
         _PA_LOG("이호�\156", "종료 �\128입이 잘못됐습니다.")
       end
@@ -40,13 +38,17 @@ end
 Window_GameExit_ConfirmInfo.SetButtonEventByExitType = function(self, exitType)
   -- function num : 0_1
   if (self._config)._exitType_Exit == exitType then
+    ((self._ui)._staticText_TrayHelp):SetShow(false)
+    ;
     ((self._ui)._button_Confirm):addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_ExitButton()")
+    Panel_Window_GameExit_Confirm:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_GameExitConfirm_ExitButton()")
   else
     if (self._config)._exitType_Tray == exitType then
       ((self._ui)._button_Confirm):addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_TrayButton()")
     else
       if (self._config)._exitType_CharacterSelect == exitType then
         ((self._ui)._button_Confirm):addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_CharacterSelectButton()")
+        Panel_Window_GameExit_Confirm:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_GameExitConfirm_CharacterSelectButton()")
       else
         _PA_LOG("이호�\156", "종료 �\128입이 잘못됐습니다.")
       end
@@ -84,11 +86,18 @@ Window_GameExit_ConfirmInfo.InitControl = function(self)
   ((self._ui)._staticText_TrayHelp):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   ((self._ui)._staticText_TrayHelp):SetAutoResize(true)
+  if _ContentsGroup_isConsolePadControl then
+    ((self._ui)._staticText_TrayHelp):SetShow(false)
+    ;
+    ((self._ui)._checkBox_Tray):SetShow(false)
+    ;
+    ((self._ui)._staticText_GameExit):SetPosY(150)
+  end
 end
 
 Window_GameExit_ConfirmInfo.InitEvent = function(self)
   -- function num : 0_7
-  ((self._ui)._button_Cancle):addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_SetShow(false,false)")
+  ((self._ui)._button_Cancel):addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_SetShow(false,false)")
 end
 
 PaGlobalFunc_FromClient_GameExitConfirm_luaLoadComplete = function()

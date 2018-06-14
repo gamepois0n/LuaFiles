@@ -836,7 +836,7 @@ GuildQuestInfoPage.UpdateData = function(self)
               ;
               (((self._list)[index])._list_Title):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_QUEST_LIMIT", "currentGuildQuestName", guildQuestList:getTitle(), "requireGuildRankStr", requireGuildRankStr))
               ;
-              (((self._list)[index])._list_Desc):SetSize(470, (((self._list)[index])._list_Desc):GetSizeY())
+              (((self._list)[index])._list_Desc):SetSize(540, (((self._list)[index])._list_Desc):GetSizeY())
               ;
               (((self._list)[index])._list_Desc):SetText(guildQuestList:getDesc())
               ;

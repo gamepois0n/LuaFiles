@@ -56,6 +56,9 @@ knowledgeWidget.showFunctionRaw = function(self)
     ;
     (self._panel):SetShow(false)
   end
+  if _ContentsGroup_RenewUI_Main == true then
+    (self._panel):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC52: Confused about usage of register: R5 in 'UnsetPending'

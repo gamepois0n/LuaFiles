@@ -46,11 +46,13 @@ CharacterProfileInfo.init = function(self)
 
   ;
   (self._ui).txt_MonsterTitle = (UI.getChildControl)((self._ui).stc_MonsterBG, "StaticText_Monster_Title")
-  -- DECOMPILER ERROR at PC113: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).txt_MonsterTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_1"))
+  -- DECOMPILER ERROR at PC122: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_MonsterCount = (UI.getChildControl)((self._ui).stc_MonsterBG, "StaticText_Monster_Count")
-  -- DECOMPILER ERROR at PC121: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC130: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_MonsterDesc = (UI.getChildControl)((self._ui).stc_MonsterBG, "StaticText_Monster_Desc")
@@ -60,27 +62,29 @@ CharacterProfileInfo.init = function(self)
   ((self._ui).txt_MonsterDesc):SetAutoResize(true)
   ;
   ((self._ui).txt_MonsterDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_1"))
-  -- DECOMPILER ERROR at PC150: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC159: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_FishBG = (UI.getChildControl)((self._ui).stc_BottomBg, "Static_Fish_BG")
-  -- DECOMPILER ERROR at PC158: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC167: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_FishIconBG = (UI.getChildControl)((self._ui).stc_FishBG, "Static_Fish_Icon_BG")
-  -- DECOMPILER ERROR at PC166: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC175: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_FishIcon = (UI.getChildControl)((self._ui).stc_FishBG, "Static_Fish_Icon")
-  -- DECOMPILER ERROR at PC174: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC183: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_FishTitle = (UI.getChildControl)((self._ui).stc_FishBG, "StaticText_Fish_Title")
-  -- DECOMPILER ERROR at PC182: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).txt_FishTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_2"))
+  -- DECOMPILER ERROR at PC200: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_FishCount = (UI.getChildControl)((self._ui).stc_FishBG, "StaticText_Fish_Count")
-  -- DECOMPILER ERROR at PC190: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC208: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_FishDesc = (UI.getChildControl)((self._ui).stc_FishBG, "StaticText_Fish_Desc")
@@ -90,27 +94,29 @@ CharacterProfileInfo.init = function(self)
   ((self._ui).txt_FishDesc):SetAutoResize(true)
   ;
   ((self._ui).txt_FishDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_2"))
-  -- DECOMPILER ERROR at PC219: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC237: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_GatherBG = (UI.getChildControl)((self._ui).stc_BottomBg, "Static_Gather_BG")
-  -- DECOMPILER ERROR at PC227: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC245: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_GatherIconBG = (UI.getChildControl)((self._ui).stc_GatherBG, "Static_Gather_Icon_BG")
-  -- DECOMPILER ERROR at PC235: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC253: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_GatherIcon = (UI.getChildControl)((self._ui).stc_GatherBG, "Static_Gather_Icon")
-  -- DECOMPILER ERROR at PC243: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC261: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_GatherTitle = (UI.getChildControl)((self._ui).stc_GatherBG, "StaticText_Gather_Title")
-  -- DECOMPILER ERROR at PC251: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).txt_GatherTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_3"))
+  -- DECOMPILER ERROR at PC278: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_GatherCount = (UI.getChildControl)((self._ui).stc_GatherBG, "StaticText_Gather_Count")
-  -- DECOMPILER ERROR at PC259: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC286: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_GatherDesc = (UI.getChildControl)((self._ui).stc_GatherBG, "StaticText_Gather_Desc")
@@ -120,27 +126,29 @@ CharacterProfileInfo.init = function(self)
   ((self._ui).txt_GatherDesc):SetAutoResize(true)
   ;
   ((self._ui).txt_GatherDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_3"))
-  -- DECOMPILER ERROR at PC288: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC315: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_WeightBG = (UI.getChildControl)((self._ui).stc_BottomBg, "Static_Weight_BG")
-  -- DECOMPILER ERROR at PC296: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC323: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_WeightIconBG = (UI.getChildControl)((self._ui).stc_WeightBG, "Static_Weight_Icon_BG")
-  -- DECOMPILER ERROR at PC304: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC331: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_WeightIcon = (UI.getChildControl)((self._ui).stc_WeightBG, "Static_Weight_Icon")
-  -- DECOMPILER ERROR at PC312: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC339: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_WeightTitle = (UI.getChildControl)((self._ui).stc_WeightBG, "StaticText_Weight_Title")
-  -- DECOMPILER ERROR at PC320: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).txt_WeightTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_4"))
+  -- DECOMPILER ERROR at PC356: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_WeightCount = (UI.getChildControl)((self._ui).stc_WeightBG, "StaticText_Weight_Count")
-  -- DECOMPILER ERROR at PC328: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC364: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_WeightDesc = (UI.getChildControl)((self._ui).stc_WeightBG, "StaticText_Weight_Desc")
@@ -150,15 +158,15 @@ CharacterProfileInfo.init = function(self)
   ((self._ui).txt_WeightDesc):SetAutoResize(true)
   ;
   ((self._ui).txt_WeightDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_4"))
-  -- DECOMPILER ERROR at PC357: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC393: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_PlayTimeTotal = (UI.getChildControl)((self._ui).stc_BottomBg, "StaticText_PlayTimeTotal")
-  -- DECOMPILER ERROR at PC365: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC401: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_PlayTimeDay = (UI.getChildControl)((self._ui).stc_BottomBg, "StaticText_PlayTimeToday")
-  -- DECOMPILER ERROR at PC373: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC409: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_PlayTimePcRoom = (UI.getChildControl)((self._ui).stc_BottomBg, "StaticText_PlayTimePcRoom")
@@ -171,7 +179,7 @@ CharacterProfileInfo.updateData = function(self, period)
   self._currentCategoryType = period
   ToClient_RequestUserProfileInfo()
   for btnIdx = 0, #(self._ui).radioButton do
-    (((self._ui).radioButton)[btnIdx]):SetFontColor((Defines.Color).C_70FFFFFF)
+    (((self._ui).radioButton)[btnIdx]):SetFontColor((Defines.Color).C_FF888888)
   end
   ;
   (((self._ui).radioButton)[period]):SetFontColor((Defines.Color).C_FFEEEEEE)
@@ -241,14 +249,19 @@ end
 
 CharacterProfileInfo.ShowNextTab = function(self, isLeft)
   -- function num : 0_6
-  -- DECOMPILER ERROR at PC7: Unhandled construct in 'MakeBoolean' P1
-
-  if isLeft == true and self._currentCategoryType > 0 then
-    self._currentCategoryType = self._currentCategoryType - 1
+  if isLeft == true then
+    if self._currentCategoryType > 0 then
+      self._currentCategoryType = self._currentCategoryType - 1
+    else
+      self._currentCategoryType = self._maxCategoryType - 1
+    end
     self:updateData(self._currentCategoryType)
-  end
-  if self._currentCategoryType < self._maxCategoryType - 1 then
-    self._currentCategoryType = self._currentCategoryType + 1
+  else
+    if self._currentCategoryType < self._maxCategoryType - 1 then
+      self._currentCategoryType = self._currentCategoryType + 1
+    else
+      self._currentCategoryType = 0
+    end
     self:updateData(self._currentCategoryType)
   end
 end

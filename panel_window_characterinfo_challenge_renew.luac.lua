@@ -43,97 +43,113 @@ CharacterChallengeInfo.init = function(self)
 
   ;
   ((self._ui).radioButton_Type)[0] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Object")
-  -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  (((self._ui).radioButton_Type)[0]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_SHORT"))
+  -- DECOMPILER ERROR at PC58: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui).radioButton_Type)[1] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Time")
-  -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  (((self._ui).radioButton_Type)[1]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_DAILY"))
+  -- DECOMPILER ERROR at PC77: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui).radioButton_Type)[2] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_PC_Room")
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  (((self._ui).radioButton_Type)[2]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_PCROOM"))
+  -- DECOMPILER ERROR at PC96: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui).radioButton_Type)[3] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Event")
-  -- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
-
   ;
-  ((self._ui).radioButton_Type)[4] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Pre_Complete")
-  -- DECOMPILER ERROR at PC84: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  ((self._ui).radioButton_Type)[5] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Complete")
-  for ii = 0, 5 do
-    (((self._ui).radioButton_Type)[ii]):addInputEvent("Mouse_LUp", "InputMLUp_CharacterChallengeInfo_TapToOpen(" .. ii .. ")")
-  end
-  -- DECOMPILER ERROR at PC107: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).frame_Content = (UI.getChildControl)((self._ui).frame_RewardList, "Frame_Content")
+  (((self._ui).radioButton_Type)[3]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_EVENT"))
   -- DECOMPILER ERROR at PC115: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
+  ((self._ui).radioButton_Type)[4] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Pre_Complete")
+  ;
+  (((self._ui).radioButton_Type)[4]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_COMPLETE"))
+  -- DECOMPILER ERROR at PC134: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  ((self._ui).radioButton_Type)[5] = (UI.getChildControl)((self._ui).stc_CategoryTap, "RadioButton_Complete")
+  ;
+  (((self._ui).radioButton_Type)[5]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_TAPMENU_COMPLETEGETITEM"))
+  for ii = 0, 5 do
+    (((self._ui).radioButton_Type)[ii]):addInputEvent("Mouse_LUp", "InputMLUp_CharacterChallengeInfo_TapToOpen(" .. R9_PC157 .. ")")
+  end
+  -- DECOMPILER ERROR at PC167: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).frame_Content = (UI.getChildControl)((self._ui).frame_RewardList, "Frame_Content")
+  -- DECOMPILER ERROR at PC175: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
   (self._ui).stc_RewardBG = (UI.getChildControl)((self._ui).frame_Content, "Static_Reward_BG")
-  -- DECOMPILER ERROR at PC123: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC183: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Title = (UI.getChildControl)((self._ui).stc_RewardBG, "StaticText_Title")
-  -- DECOMPILER ERROR at PC131: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC191: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Desc = (UI.getChildControl)((self._ui).stc_RewardBG, "StaticText_Desc")
-  -- DECOMPILER ERROR at PC139: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC199: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Basic = (UI.getChildControl)((self._ui).stc_RewardBG, "StaticText_Basic")
-  -- DECOMPILER ERROR at PC147: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC207: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).txt_Select = (UI.getChildControl)((self._ui).stc_RewardBG, "StaticText_Select")
-  -- DECOMPILER ERROR at PC150: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC210: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_BasicItem = {}
-  for idx = 0, self._maxBasicSlotCount do
-    -- DECOMPILER ERROR at PC165: Confused about usage of register: R5 in 'UnsetPending'
+  for idx = 0, self._maxBasicSlotCount - 1 do
+    -- DECOMPILER ERROR at PC226: Confused about usage of register: R5 in 'UnsetPending'
 
-    ((self._ui).stc_BasicItem)[idx] = (UI.getChildControl)((self._ui).stc_RewardBG, "Static_Basic_Item" .. idx)
+    ((self._ui).stc_BasicItem)[idx] = (UI.getChildControl)((self._ui).stc_RewardBG, "Static_Basic_Item" .. R9_PC157)
   end
-  -- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC230: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).stc_SelectItem = {}
-  for idx = 0, self._maxSelectSlotCount do
-    -- DECOMPILER ERROR at PC184: Confused about usage of register: R5 in 'UnsetPending'
+  for idx = 0, self._maxSelectSlotCount - 1 do
+    -- DECOMPILER ERROR at PC243: Overwrote pending register: R9 in 'AssignReg'
 
-    ((self._ui).stc_SelectItem)[idx] = (UI.getChildControl)((self._ui).stc_RewardBG, "Static_Select_Item" .. idx)
+    -- DECOMPILER ERROR at PC246: Confused about usage of register: R5 in 'UnsetPending'
+
+    ((self._ui).stc_SelectItem)[idx] = (UI.getChildControl)((self._ui).stc_RewardBG, "Static_Select_Item" .. R9_PC157)
   end
-  -- DECOMPILER ERROR at PC193: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC255: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).button_GetReward = (UI.getChildControl)((self._ui).stc_RewardBG, "Button_Get_Reward")
-  -- DECOMPILER ERROR at PC204: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC266: Confused about usage of register: R1 in 'UnsetPending'
 
-  if _ContentsGroup_RenewUI then
+  if _ContentsGroup_RenewUI == true then
     (self._ui).txt_ReceiveIcon = (UI.getChildControl)((self._ui).stc_RewardBG, "StaticText_ReceiveIcon_ConsoleUI")
   end
-  -- DECOMPILER ERROR at PC212: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).stc_RewardBG):SetShow(false)
+  -- DECOMPILER ERROR at PC279: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).scroll_Vertical = (UI.getChildControl)((self._ui).frame_RewardList, "Frame_VerticalScroll")
-  -- DECOMPILER ERROR at PC220: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC287: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).btn_VerticalUp = (UI.getChildControl)((self._ui).scroll_Vertical, "Frame_VerticalScroll_UpButton")
-  -- DECOMPILER ERROR at PC228: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC295: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).btn_VerticalDown = (UI.getChildControl)((self._ui).scroll_Vertical, "Frame_VerticalScroll_DownButton")
-  -- DECOMPILER ERROR at PC236: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC303: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).btn_VerticalCtrl = (UI.getChildControl)((self._ui).scroll_Vertical, "Frame_VerticalScroll_CtrlButton")
-  -- DECOMPILER ERROR at PC244: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC311: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).scroll_Horizontal = (UI.getChildControl)((self._ui).frame_RewardList, "Frame_HorizontalScroll")
@@ -143,7 +159,7 @@ CharacterChallengeInfo.updateData = function(self, index)
   -- function num : 0_1
   self._currentCategoryType = index
   for radioIdx = 0, 5 do
-    (((self._ui).radioButton_Type)[radioIdx]):SetFontColor((Defines.Color).C_70FFFFFF)
+    (((self._ui).radioButton_Type)[radioIdx]):SetFontColor((Defines.Color).C_FF888888)
   end
   ;
   (((self._ui).radioButton_Type)[index]):SetFontColor((Defines.Color).C_FFEEEEEE)
@@ -175,7 +191,7 @@ CharacterChallengeInfo.updateData = function(self, index)
           progressInfo = ToClient_GetCompletedChallengeAt(uiIdx)
           ;
           (((self._rewardList)[uiIdx]).button_GetReward):removeInputEvent("Mouse_LUp")
-          if _ContentsGroup_RenewUI then
+          if _ContentsGroup_RenewUI == true then
             (((self._rewardList)[uiIdx]).txt_ReceiveIcon):SetShow(false)
           end
           ;
@@ -183,7 +199,7 @@ CharacterChallengeInfo.updateData = function(self, index)
           ;
           (((self._rewardList)[uiIdx]).button_GetReward):SetIgnore(true)
           ;
-          (((self._rewardList)[uiIdx]).button_GetReward):SetText("클리�\180")
+          (((self._rewardList)[uiIdx]).button_GetReward):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_CHALLENGE_ACHIVED"))
         else
           if (self.challengeRewardInfoIndex).doneRewardInfo == index then
             progressInfo = ToClient_GetChallengeRewardInfoWrapper(uiIdx)
@@ -194,7 +210,7 @@ CharacterChallengeInfo.updateData = function(self, index)
             (((self._rewardList)[uiIdx]).button_GetReward):SetIgnore(false)
             ;
             (((self._rewardList)[uiIdx]).button_GetReward):SetColor((Defines.Color).C_FFFFFFFF)
-            if _ContentsGroup_RenewUI then
+            if _ContentsGroup_RenewUI == true then
               (((self._rewardList)[uiIdx]).txt_ReceiveIcon):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_BTNGETREWARD", "existRewardCount", existRewardCount))
               ;
               (((self._rewardList)[uiIdx]).txt_ReceiveIcon):SetShow(true)
@@ -209,7 +225,7 @@ CharacterChallengeInfo.updateData = function(self, index)
               progressInfo = ToClient_GetProgressChallengeAt(index + 1, uiIdx)
               ;
               (((self._rewardList)[uiIdx]).button_GetReward):removeInputEvent("Mouse_LUp")
-              if _ContentsGroup_RenewUI then
+              if _ContentsGroup_RenewUI == true then
                 (((self._rewardList)[uiIdx]).txt_ReceiveIcon):SetShow(false)
               end
               ;
@@ -217,68 +233,80 @@ CharacterChallengeInfo.updateData = function(self, index)
               ;
               (((self._rewardList)[uiIdx]).button_GetReward):SetIgnore(true)
               ;
-              (((self._rewardList)[uiIdx]).button_GetReward):SetText("미달�\177")
-              -- DECOMPILER ERROR at PC227: Confused about usage of register: R5 in 'UnsetPending'
+              (((self._rewardList)[uiIdx]).button_GetReward):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_CHALLENGE_NOTACHIVED"))
+              -- DECOMPILER ERROR at PC235: Confused about usage of register: R5 in 'UnsetPending'
 
               if (self._listBaseRewardSlots)[uiIdx] == nil then
                 (self._uiBackBaseReward)[uiIdx] = {}
-                -- DECOMPILER ERROR at PC230: Confused about usage of register: R5 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC238: Confused about usage of register: R5 in 'UnsetPending'
 
                 ;
                 (self._listBaseRewardSlots)[uiIdx] = {}
                 for basicSlotIdx = 0, self._maxBasicSlotCount - 1 do
-                  -- DECOMPILER ERROR at PC242: Confused about usage of register: R9 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC250: Confused about usage of register: R9 in 'UnsetPending'
 
                   ((self._uiBackBaseReward)[uiIdx])[basicSlotIdx] = (((self._rewardList)[uiIdx]).stc_BasicItem)[basicSlotIdx]
                   local slot = {}
                   ;
-                  (SlotItem.new)(slot, "BaseReward_" .. basicSlotIdx, basicSlotIdx, (((self._rewardList)[uiIdx]).stc_BasicItem)[basicSlotIdx], self.challengeRewardSlotConfig)
+                  (SlotItem.new)(slot, "BaseReward_" .. R13_PC257, R13_PC257, (((self._rewardList)[uiIdx]).stc_BasicItem)[basicSlotIdx], self.challengeRewardSlotConfig)
                   slot:createChild()
+                  -- DECOMPILER ERROR at PC270: Overwrote pending register: R13 in 'AssignReg'
+
                   ;
-                  (slot.icon):SetSize(42, 42)
+                  (slot.icon):SetSize(42, R13_PC257)
                   ;
                   (slot.icon):SetPosX(14)
                   ;
                   (slot.icon):SetPosY(14)
+                  -- DECOMPILER ERROR at PC283: Overwrote pending register: R13 in 'AssignReg'
+
                   ;
-                  (slot.border):SetSize(42, 42)
+                  (slot.border):SetSize(42, R13_PC257)
                   ;
                   (slot.border):SetPosX(1)
                   ;
                   (slot.border):SetPosY(1)
-                  -- DECOMPILER ERROR at PC287: Confused about usage of register: R10 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC295: Confused about usage of register: R10 in 'UnsetPending'
 
                   ;
                   ((self._listBaseRewardSlots)[uiIdx])[basicSlotIdx] = slot
                 end
               end
               do
-                -- DECOMPILER ERROR at PC295: Confused about usage of register: R5 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC303: Confused about usage of register: R5 in 'UnsetPending'
 
                 if (self._listSelectRewardSlots)[uiIdx] == nil then
                   (self._uiButtonSelectRewardSlots)[uiIdx] = {}
-                  -- DECOMPILER ERROR at PC298: Confused about usage of register: R5 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC306: Confused about usage of register: R5 in 'UnsetPending'
 
                   ;
                   (self._listSelectRewardSlots)[uiIdx] = {}
                   for selectSlotIdx = 0, self._maxSelectSlotCount - 1 do
-                    -- DECOMPILER ERROR at PC310: Confused about usage of register: R9 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC318: Confused about usage of register: R9 in 'UnsetPending'
 
                     ((self._uiButtonSelectRewardSlots)[uiIdx])[selectSlotIdx] = (((self._rewardList)[uiIdx]).stc_SelectItem)[selectSlotIdx]
                     local slot = {}
+                    -- DECOMPILER ERROR at PC324: Overwrote pending register: R13 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC326: Overwrote pending register: R13 in 'AssignReg'
+
                     ;
-                    (SlotItem.new)(slot, "SelectReward_" .. selectSlotIdx, selectSlotIdx, (((self._rewardList)[uiIdx]).stc_SelectItem)[selectSlotIdx], self.challengeRewardSlotConfig)
+                    (SlotItem.new)(slot, "SelectReward_" .. R13_PC257, R13_PC257, (((self._rewardList)[uiIdx]).stc_SelectItem)[selectSlotIdx], self.challengeRewardSlotConfig)
                     slot:createChild()
+                    -- DECOMPILER ERROR at PC338: Overwrote pending register: R13 in 'AssignReg'
+
                     ;
-                    (slot.icon):SetSize(30, 30)
+                    (slot.icon):SetSize(30, R13_PC257)
                     ;
                     (slot.icon):SetPosX(5)
                     ;
                     (slot.icon):SetPosY(5)
                     ;
                     (slot.icon):SetIgnore(false)
+                    -- DECOMPILER ERROR at PC355: Overwrote pending register: R13 in 'AssignReg'
+
                     ;
-                    (slot.border):SetSize(30, 30)
+                    (slot.border):SetSize(30, R13_PC257)
                     ;
                     (slot.count):SetPosX(-5)
                     ;
@@ -287,9 +315,11 @@ CharacterChallengeInfo.updateData = function(self, index)
                     (slot.classEquipBG):SetHorizonRight()
                     ;
                     (slot.classEquipBG):SetVerticalBottom()
+                    -- DECOMPILER ERROR at PC374: Overwrote pending register: R13 in 'AssignReg'
+
                     ;
-                    (slot.classEquipBG):SetSpanSize(2, 2)
-                    -- DECOMPILER ERROR at PC370: Confused about usage of register: R10 in 'UnsetPending'
+                    (slot.classEquipBG):SetSpanSize(2, R13_PC257)
+                    -- DECOMPILER ERROR at PC378: Confused about usage of register: R10 in 'UnsetPending'
 
                     ;
                     ((self._listSelectRewardSlots)[uiIdx])[selectSlotIdx] = slot
@@ -309,25 +339,25 @@ CharacterChallengeInfo.updateData = function(self, index)
                     ;
                     (((self._rewardList)[uiIdx]).stc_RewardBG):SetShow(true)
                     uiIdx = uiIdx + 1
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC420: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -374,20 +404,20 @@ stc_SelectItemBG = {}
   _newCopy.txt_Desc = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "StaticText_Desc", _newCopy.stc_RewardBG, "StaticText_Desc_No" .. uiIdx)
   _newCopy.txt_Basic = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "StaticText_Basic", _newCopy.stc_RewardBG, "StaticText_Basic_No" .. uiIdx)
   _newCopy.txt_Select = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "StaticText_Select", _newCopy.stc_RewardBG, "StaticText_Select_No" .. uiIdx)
-  for idx = 0, self._maxBasicSlotCount do
-    -- DECOMPILER ERROR at PC92: Confused about usage of register: R7 in 'UnsetPending'
+  for idx = 0, self._maxBasicSlotCount - 1 do
+    -- DECOMPILER ERROR at PC93: Confused about usage of register: R7 in 'UnsetPending'
 
     (_newCopy.stc_BasicItemBG)[idx] = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "Static_Basic_Item" .. idx, _newCopy.stc_RewardBG, "Static_Basic_ItemBG_No" .. uiIdx .. "_" .. idx)
-    -- DECOMPILER ERROR at PC108: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC109: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (_newCopy.stc_BasicItem)[idx] = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "Static_Basic_Item" .. idx, _newCopy.stc_RewardBG, "Static_Basic_Item_No" .. uiIdx .. "_" .. idx)
   end
-  for idx = 0, self._maxSelectSlotCount do
-    -- DECOMPILER ERROR at PC129: Confused about usage of register: R7 in 'UnsetPending'
+  for idx = 0, self._maxSelectSlotCount - 1 do
+    -- DECOMPILER ERROR at PC131: Confused about usage of register: R7 in 'UnsetPending'
 
     (_newCopy.stc_SelectItemBG)[idx] = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "Static_Select_Item" .. idx, _newCopy.stc_RewardBG, "Static_Select_ItemBG_No" .. uiIdx .. "_" .. idx)
-    -- DECOMPILER ERROR at PC145: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC147: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (_newCopy.stc_SelectItem)[idx] = (UI.createAndCopyBasePropertyControl)((self._ui).stc_RewardBG, "Static_Select_Item" .. idx, _newCopy.stc_RewardBG, "Static_Select_Item_No" .. uiIdx .. "_" .. idx)

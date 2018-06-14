@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local Panel_Dialog_SkillSpecialize_info = {_initialize = false, 
-_ui = {static_Skill_Specialize1 = nil, staticText_Skill_Special_Title = nil, staticText_Skill_Awaken_Special_Title = nil, rbtn_ChangeSkill_Template = nil, static_Skill_Icon = nil, staticText_Skill = nil, staticText_Skill_Desc = nil, staticText_Skill_Effect = nil, staticText_Key_Guide = nil, button_ChangeEffect = nil, rbtn_ChangeNotyet_Template = nil, staticText_Level = nil, staticText_EnalbeSpecialize = nil, 
+_ui = {static_Skill_Specialize1 = nil, staticText_Skill_Special_Title = nil, staticText_Skill_Awaken_Special_Title = nil, rbtn_ChangeSkill_Template = nil, static_Skill_Icon = nil, staticText_Skill = nil, staticText_Skill_Desc = nil, staticText_Skill_Effect = nil, staticText_Key_Guide = nil, button_ChangeEffect = nil, rbtn_ChangeNotyet_Template = nil, staticText_Level = nil, staticText_EnableSpecialize = nil, 
 rbtn_List_ChangeSkill = {nil, nil, nil, nil, nil, nil}
 , 
 rbtn_List_ChangeNotyet = {nil, nil, nil, nil, nil, nil}
@@ -156,7 +156,7 @@ Panel_Dialog_SkillSpecialize_info.childControl = function(self)
   -- DECOMPILER ERROR at PC102: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).staticText_EnalbeSpecialize = (UI.getChildControl)((self._ui).rbtn_ChangeNotyet_Template, "StaticText_EnalbeSpecialize")
+  (self._ui).staticText_EnableSpecialize = (UI.getChildControl)((self._ui).rbtn_ChangeNotyet_Template, "StaticText_EnableSpecialize")
   -- DECOMPILER ERROR at PC109: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
@@ -332,12 +332,22 @@ end
 
 Panel_Dialog_SkillSpecialize_info.open = function(self, showAni)
   -- function num : 0_9
-  Panel_Dialog_SkillSpecialize:SetShow(true, showAni)
+  if showAni == nil then
+    Panel_Dialog_SkillSpecialize:SetShow(true, true)
+    return 
+  else
+    Panel_Dialog_SkillSpecialize:SetShow(true, showAni)
+  end
 end
 
 Panel_Dialog_SkillSpecialize_info.close = function(self, showAni)
   -- function num : 0_10
-  Panel_Dialog_SkillSpecialize:SetShow(false, showAni)
+  if showAni == nil then
+    Panel_Dialog_SkillSpecialize:SetShow(false, true)
+    return 
+  else
+    Panel_Dialog_SkillSpecialize:SetShow(false, showAni)
+  end
 end
 
 Panel_Dialog_SkillSpecialize_info.resize = function(self)
@@ -914,11 +924,14 @@ end
 
 PaGlobalFunc_Dialog_SkillSpecialize_GetShow = function()
   -- function num : 0_33
+  return Panel_Dialog_SkillSpecialize:GetShow()
 end
 
 PaGlobalFunc_Dialog_SkillSpecialize_Exit = function()
   -- function num : 0_34
-  PaGlobalFunc_Dialog_SkillSpecialize_Close(true)
+  if PaGlobalFunc_Dialog_SkillSpecialize_GetShow() == true then
+    PaGlobalFunc_Dialog_SkillSpecialize_Close(true)
+  end
 end
 
 PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton = function(buttonIndex)
@@ -935,7 +948,6 @@ PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton = function(buttonInde
 
   ;
   (self._value).currentSpecializeIndex = buttonIndex
-  _PA_LOG("mingu", "self._value.currentSpecializeIndex" .. (self._value).currentSpecializeIndex)
   if (self._value).lastSpecializeIndex ~= nil then
     ((((self._ui).rbtn_List)[(self._value).lastSpecializeIndex]).radiobutton):SetCheck(false)
   end
@@ -1215,43 +1227,41 @@ PaGlobalFunc_Dialog_SkillSpecialize_GoBackStepPage2 = function()
   end
   if (self._value).currentStep == (self._enum).eStepSelectSkill then
     if (self._value).currentSelectSkillIndex == nil then
-      _PA_LOG("mingu", "goback select")
       self:initValuePage2()
       self:goPage1()
       return 
     end
-    _PA_LOG("mingu", "goback noselect")
-    -- DECOMPILER ERROR at PC36: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC28: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (self._value).currentSelectSkillIndex = nil
-    -- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (self._value).currentReinforceSkillNo = nil
-    -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC34: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (self._value).currentStep = (self._enum).eStepBase
     self:setContentPage2((self._value).currentStep)
     return 
   end
-  -- DECOMPILER ERROR at PC55: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
 
   if (self._value).currentStep == (self._enum).eStepSelectEffect1 then
     (self._value).currentEffectIndex = nil
-    -- DECOMPILER ERROR at PC59: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (self._value).currentStep = (self._enum).eStepSelectSkill
     self:setContentPage2((self._value).currentStep)
     return 
   end
-  -- DECOMPILER ERROR at PC72: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC64: Confused about usage of register: R1 in 'UnsetPending'
 
   if (self._value).currentStep == (self._enum).eStepSelectEffect2 then
     (self._value).currentEffectIndex2 = nil
-    -- DECOMPILER ERROR at PC76: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
     ;
     (self._value).currentStep = (self._enum).eStepSelectEffect1

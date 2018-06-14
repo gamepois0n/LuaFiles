@@ -208,7 +208,7 @@ PaGlobal_Guild_AllianceInfo.InviteListCreate = function(self)
   local plusSizeX = 0
   for ii = 1, 9 do
     if ii % 2 == 1 then
-      plusSizeX = 348
+      plusSizeX = 398
     else
       plusSizeX = 0
     end
@@ -254,7 +254,7 @@ PaGlobal_Guild_AllianceInfo.InviteListCreate = function(self)
     (((self._inviteUi).inputUi).taxConstRateUi)[ii] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, (self._inviteUi).frame1_List, "StaticText_TaxConstRate" .. ii)
     CopyBaseProperty(((self._inviteUi).guildList).taxConstRateTemplete, (((self._inviteUi).inputUi).taxConstRateUi)[ii])
     ;
-    ((((self._inviteUi).inputUi).taxConstRateUi)[ii]):SetPosX(270 + plusSizeX)
+    ((((self._inviteUi).inputUi).taxConstRateUi)[ii]):SetPosX(295 + plusSizeX)
     ;
     ((((self._inviteUi).inputUi).taxConstRateUi)[ii]):SetPosY((self._inviteListConfig).startY + (self._inviteListConfig).gapY * (math.floor)(ii / 2))
     ;

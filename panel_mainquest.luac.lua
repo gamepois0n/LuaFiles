@@ -16,8 +16,8 @@ local questNo = {_groupId = 0, _questId = 0}
 Panel_MainQuest:SetShow(true, false)
 Panel_MainQuest:setGlassBackground(true)
 Panel_MainQuest:SetDragEnable(false)
-PaGlobal_MainQuest = {_uiGroupBG = (UI.getChildControl)(Panel_MainQuest, "Static_GroupBG"), _uiQuestCompleteNpc = (UI.getChildControl)(Panel_MainQuest, "StaticText_Quest_ClearNpc"), _uiQuestGroupTitle = (UI.getChildControl)(Panel_MainQuest, "StaticText_WidgetGroupTitle"), _uiQuestTypeIcon = (UI.getChildControl)(Panel_MainQuest, "Static_Quest_Type"), _uiQuestTitle = (UI.getChildControl)(Panel_MainQuest, "StaticText_Quest_Title"), _uiAutoNaviBtn = (UI.getChildControl)(Panel_MainQuest, "CheckButton_AutoNavi"), _uiNaviBtn = (UI.getChildControl)(Panel_MainQuest, "Checkbox_Quest_Navi"), _uiQuestClearIcon = (UI.getChildControl)(Panel_MainQuest, "Static_Quest_Icon_ClearCheck"), _uiQuestTopDeco = (UI.getChildControl)(Panel_MainQuest, "Static_TopDeco"), _uiQuestBottomDeco = (UI.getChildControl)(Panel_MainQuest, "Static_BottomDeco"), _uiTooltip = (UI.getChildControl)(Panel_MainQuest, "StaticText_Notice_1"), _uiQuestConditions = (Array.new)(), _maxConditionCnt = 5, _closeableLevel = 50}
--- DECOMPILER ERROR at PC109: Confused about usage of register: R10 in 'UnsetPending'
+PaGlobal_MainQuest = {_uiGroupBG = (UI.getChildControl)(Panel_MainQuest, "Static_GroupBG"), _uiQuestCompleteNpc = (UI.getChildControl)(Panel_MainQuest, "StaticText_Quest_ClearNpc"), _uiQuestGroupTitle = (UI.getChildControl)(Panel_MainQuest, "StaticText_WidgetGroupTitle"), _uiQuestTypeIcon = (UI.getChildControl)(Panel_MainQuest, "Static_Quest_Type"), _uiQuestTitle = (UI.getChildControl)(Panel_MainQuest, "StaticText_Quest_Title"), _uiAutoNaviBtn = (UI.getChildControl)(Panel_MainQuest, "CheckButton_AutoNavi"), _uiNaviBtn = (UI.getChildControl)(Panel_MainQuest, "Checkbox_Quest_Navi"), _uiQuestClearIcon = (UI.getChildControl)(Panel_MainQuest, "Static_Quest_Icon_ClearCheck"), _uiQuestTopDeco = (UI.getChildControl)(Panel_MainQuest, "Static_TopDeco"), _uiQuestBottomDeco = (UI.getChildControl)(Panel_MainQuest, "Static_BottomDeco"), _uiTooltip = (UI.getChildControl)(Panel_MainQuest, "StaticText_Notice_1"), _uiConsoleGuideLine = (UI.getChildControl)(Panel_MainQuest, "Static_BottomLine_ConsoleUI"), _uiQuestConditions = (Array.new)(), _maxConditionCnt = 5, _closeableLevel = 50}
+-- DECOMPILER ERROR at PC115: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.initialize = function(self)
   -- function num : 0_0 , upvalues : UI_color
@@ -67,9 +67,12 @@ PaGlobal_MainQuest.initialize = function(self)
   (self._uiQuestBottomDeco):ComputePos()
   self:subscribeDefaultHandler()
   self:clearAll()
+  if _ContentsGroup_RenewUI == false then
+    (self._uiConsoleGuideLine):SetShow(false)
+  end
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC118: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.subscribeDefaultHandler = function(self)
   -- function num : 0_1
@@ -82,7 +85,7 @@ PaGlobal_MainQuest.subscribeDefaultHandler = function(self)
   (self._uiNaviBtn):addInputEvent("Mouse_Out", "HandleMouseOver_Buttons( false, \"navi\")")
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC121: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.questCompleteMarkEffect = function(self)
   -- function num : 0_2
@@ -92,7 +95,7 @@ PaGlobal_MainQuest.questCompleteMarkEffect = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.questCompleteMarkEffectErase = function(self)
   -- function num : 0_3
@@ -101,7 +104,7 @@ PaGlobal_MainQuest.questCompleteMarkEffectErase = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.update = function(self)
   -- function num : 0_4
@@ -121,7 +124,7 @@ PaGlobal_MainQuest.update = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.OpenMainQuest = function(self)
   -- function num : 0_5
@@ -129,7 +132,7 @@ PaGlobal_MainQuest.OpenMainQuest = function(self)
   PaGlobal_MainQuest:update()
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.CloseMainQuest = function(self)
   -- function num : 0_6
@@ -137,7 +140,7 @@ PaGlobal_MainQuest.CloseMainQuest = function(self)
   self:clearAll()
 end
 
--- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC136: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.clearAll = function(self)
   -- function num : 0_7
@@ -163,7 +166,7 @@ PaGlobal_MainQuest.clearAll = function(self)
   self:clearConditionInfo()
 end
 
--- DECOMPILER ERROR at PC134: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC140: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setQuestGroupTitleInfo = function(self, uiQuestInfo)
   -- function num : 0_8 , upvalues : UI_color
@@ -203,7 +206,7 @@ PaGlobal_MainQuest.setQuestGroupTitleInfo = function(self, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC139: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC145: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setQuestTitleInfo = function(self, uiQuestInfo)
   -- function num : 0_9 , upvalues : UI_color, isMouseOnWidget
@@ -284,7 +287,7 @@ PaGlobal_MainQuest.setQuestTitleInfo = function(self, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC142: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.getQuestTitle = function(self, uiQuestInfo)
   -- function num : 0_10
@@ -296,7 +299,7 @@ PaGlobal_MainQuest.getQuestTitle = function(self, uiQuestInfo)
   return questTitle
 end
 
--- DECOMPILER ERROR at PC145: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC151: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setIconInfo = function(self, uiQuestInfo)
   -- function num : 0_11
@@ -308,7 +311,7 @@ PaGlobal_MainQuest.setIconInfo = function(self, uiQuestInfo)
   FGlobal_ChangeOnTextureForDialogQuestIcon(self._uiQuestTypeIcon, uiQuestInfo:getQuestType())
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC155: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setConditionInfo = function(self, uiQuestInfo, startPosY)
   -- function num : 0_12 , upvalues : UI_color
@@ -391,7 +394,7 @@ PaGlobal_MainQuest.setConditionInfo = function(self, uiQuestInfo, startPosY)
   end
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC158: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setButtonCheckState = function(self, uiQuestInfo)
   -- function num : 0_13
@@ -428,7 +431,7 @@ PaGlobal_MainQuest.setButtonCheckState = function(self, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC161: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setButtonState = function(self, isMouseOver)
   -- function num : 0_14
@@ -489,7 +492,7 @@ HandleClicked_MainQuest_FindWay = function(gruopNo, questNo, questCondition, isA
   end
 end
 
--- DECOMPILER ERROR at PC162: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.showAcceptConditionTooltip = function(self, show)
   -- function num : 0_17
@@ -509,7 +512,7 @@ PaGlobal_MainQuest.showAcceptConditionTooltip = function(self, show)
   end
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.clearConditionInfo = function(self)
   -- function num : 0_18
@@ -523,7 +526,7 @@ PaGlobal_MainQuest.clearConditionInfo = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC174: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.ShowGroupBG = function(self, show)
   -- function num : 0_19
@@ -535,7 +538,7 @@ PaGlobal_MainQuest.ShowGroupBG = function(self, show)
   end
 end
 
--- DECOMPILER ERROR at PC171: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.isHitTest = function(self, control)
   -- function num : 0_20
@@ -554,7 +557,7 @@ PaGlobal_MainQuest.isHitTest = function(self, control)
   return false
 end
 
--- DECOMPILER ERROR at PC174: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC180: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.setTooltipPos = function(self, posY)
   -- function num : 0_21
@@ -571,7 +574,7 @@ PaGlobal_MainQuest.setTooltipPos = function(self, posY)
   uiTooltip:SetPosX(Panel_MainQuest:GetSizeX() - uiTooltip:GetSizeX() + 5)
 end
 
--- DECOMPILER ERROR at PC177: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC183: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_MainQuest.isShownQuest = function(self, questNo)
   -- function num : 0_22
@@ -594,6 +597,9 @@ end
 
 HandleMouseOver_Buttons = function(show, target)
   -- function num : 0_24
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   Panel_MainQuest:SetChildIndex(PaGlobal_MainQuest._uiTooltip, 9999)
   local uiTooltip = PaGlobal_MainQuest._uiTooltip
   local posY = 0
@@ -616,6 +622,9 @@ end
 
 HandleMouseOver_MainQuestWidget = function(isMouseOver, isAcceptedQuest)
   -- function num : 0_25 , upvalues : isMouseOnWidget
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if isMouseOver == true then
     PaGlobal_MainQuest:ShowGroupBG(true)
     PaGlobal_MainQuest:setButtonState(true)

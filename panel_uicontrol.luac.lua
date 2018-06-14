@@ -22,7 +22,10 @@ UI_Control_HideAni = function()
   Panel_UIControl:SetShow(false)
 end
 
-local expText = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_EXPText")
+local expText = nil
+if _ContentsGroup_RenewUI_Main == false then
+  expText = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_EXPText")
+end
 local mainBarText = (UI.getChildControl)(Panel_MainStatus_User_Bar, "StaticText_MainBarText")
 local quickSlotText = (UI.getChildControl)(Panel_QuickSlot, "StaticText_quickSlot")
 local questListText = (UI.getChildControl)(Panel_CheckedQuest, "StaticText_questText")

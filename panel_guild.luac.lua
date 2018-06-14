@@ -144,10 +144,10 @@ GuildInfoPage.initialize = function(self)
   end
   if isGameTypeTH() or isGameTypeID() then
     promote_btn:SetSize(115, 30)
-    promote_btn:SetSpanSize(410, 365)
+    promote_btn:SetSpanSize(460, 365)
   else
-    promote_btn:SetSize(100, 30)
-    promote_btn:SetSpanSize(425, 365)
+    promote_btn:SetSize(115, 30)
+    promote_btn:SetSpanSize(460, 365)
   end
   self:SetShow(false)
   ;
@@ -228,9 +228,9 @@ end
 
 local _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Window_Guild, "WebControl_EventNotify_WebLink")
 _Web:SetShow(true)
-_Web:SetPosX(410)
+_Web:SetPosX(460)
 _Web:SetPosY(430)
-_Web:SetSize(323, 272)
+_Web:SetSize(373, 272)
 _Web:ResetUrl()
 Panel_Window_Guild:SetChildIndex(_Web, 9999)
 local HandleClickedGuildDelContinue = function()
@@ -443,7 +443,7 @@ GuildInfoPage.UpdateData = function(self)
     ;
     (self._txtProtectValue):SetText(myGuildInfo:getProtectGuildMemberCount() .. "/" .. myGuildInfo:getAvaiableProtectGuildMemberCount())
     ;
-    (self._txtProtectValue):SetSpanSize(((self._txtProtect):GetSpanSize()).x + (self._txtProtect):GetTextSizeX(), ((self._txtProtectValue):GetSpanSize()).y)
+    (self._txtProtectValue):SetSpanSize(((self._txtProtect):GetSpanSize()).x + (self._txtProtect):GetTextSizeX() + 10, ((self._txtProtectValue):GetSpanSize()).y)
     ;
     (self._btnProtectAdd):SetPosX((self._txtProtectValue):GetPosX() + (self._txtProtectValue):GetTextSizeX() + 50)
     ;
@@ -453,7 +453,7 @@ GuildInfoPage.UpdateData = function(self)
     ;
     (self._txtGuildPointPercent):SetSpanSize(((self._txtGuildPointValue):GetSpanSize()).x + (self._txtGuildPointValue):GetTextSizeX() + 25, ((self._txtGuildPointPercent):GetSpanSize()).y)
     ;
-    (self._txtGuildPointValue):SetSpanSize(((self._txtGuildPoint):GetSpanSize()).x + (self._txtGuildPoint):GetTextSizeX(), ((self._txtGuildPointValue):GetSpanSize()).y)
+    (self._txtGuildPointValue):SetSpanSize(((self._txtGuildPoint):GetSpanSize()).x + (self._txtGuildPoint):GetTextSizeX() + 10, ((self._txtGuildPointValue):GetSpanSize()).y)
     ;
     (self._txtGuildPointPercent):SetSpanSize(((self._txtGuildPointValue):GetSpanSize()).x + (self._txtGuildPointValue):GetTextSizeX() + 20, ((self._txtGuildPointPercent):GetSpanSize()).y)
     local currentGuildMp = myGuildInfo:getGuildMp()
@@ -523,11 +523,11 @@ GuildInfoPage.UpdateData = function(self)
             do
               ;
               (self._txtGuildTerritoryValue):SetText(territoryWarName)
-              -- DECOMPILER ERROR at PC406: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC408: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC406: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC408: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC406: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC408: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -554,11 +554,11 @@ GuildInfoPage.UpdateData = function(self)
             do
               ;
               (self._txtGuildTerritoryValue):SetText(siegeWarName)
-              -- DECOMPILER ERROR at PC446: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC448: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC446: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC448: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC446: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC448: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -836,7 +836,7 @@ GuildWarInfoPage.initialize = function(self)
     ;
     (self._btnDeclaration):SetSize(120, 23)
     ;
-    (self._btnDeclaration):SetSpanSize(220, 22)
+    (self._btnDeclaration):SetSpanSize(260, 22)
   else
     ;
     (self._btnWarList1):SetSize(70, 23)
@@ -845,7 +845,7 @@ GuildWarInfoPage.initialize = function(self)
     ;
     (self._btnDeclaration):SetSize(100, 23)
     ;
-    (self._btnDeclaration):SetSpanSize(240, 22)
+    (self._btnDeclaration):SetSpanSize(280, 22)
   end
   ;
   (self._btnWarList1):SetPosX(10)
@@ -2161,7 +2161,7 @@ GuildComment_Load = function()
     FGlobal_SetCandidate()
     local url = guildCommentsWebUrl .. "/guild?guildNo=" .. tostring(guildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin)
     _urlCache = url
-    _Web:SetUrl(323, 272, url, false, true)
+    _Web:SetUrl(373, 272, url, false, true)
     _Web:SetIME(true)
   end
 end
@@ -3892,17 +3892,19 @@ Guild_PopUp_ShowIconToolTip = function(isShow)
   end
 end
 
-registerEvent("FromClient_ResponseGuildUpdate", "FromClient_ResponseGuildUpdate")
-registerEvent("ResponseGuild_invite", "FromClient_ResponseGuild_invite")
-registerEvent("ResponseGuild_refuse", "FromClient_ResponseGuild_refuse")
-registerEvent("EventChangeGuildInfo", "FromClient_EventActorChangeGuildInfo")
-registerEvent("FromClient_UpdateGuildContract", "FromClient_ResponseUpdateGuildContract")
-registerEvent("FromClient_NotifyGuildMessage", "FromClient_NotifyGuildMessage")
-registerEvent("FromClient_GuildInviteForGuildGrade", "FromClient_ResponseGuildInviteForGuildGrade")
-registerEvent("FromClient_ResponseDeclareGuildWarToMyGuild ", "FromClient_ResponseDeclareGuildWarToMyGuild")
-registerEvent("FromClient_RequestGuildWar", "FromClient_RequestGuildWar")
-registerEvent("FromClient_ResponseGuildNotice", "FromClient_ResponseGuildNotice")
-registerEvent("FromClient_GuildListUpdate", "FromClient_GuildListUpdate")
+if _ContentsGroup_RenewUI_Guild == false then
+  registerEvent("FromClient_ResponseGuildUpdate", "FromClient_ResponseGuildUpdate")
+  registerEvent("ResponseGuild_invite", "FromClient_ResponseGuild_invite")
+  registerEvent("ResponseGuild_refuse", "FromClient_ResponseGuild_refuse")
+  registerEvent("EventChangeGuildInfo", "FromClient_EventActorChangeGuildInfo")
+  registerEvent("FromClient_UpdateGuildContract", "FromClient_ResponseUpdateGuildContract")
+  registerEvent("FromClient_NotifyGuildMessage", "FromClient_NotifyGuildMessage")
+  registerEvent("FromClient_GuildInviteForGuildGrade", "FromClient_ResponseGuildInviteForGuildGrade")
+  registerEvent("FromClient_ResponseDeclareGuildWarToMyGuild ", "FromClient_ResponseDeclareGuildWarToMyGuild")
+  registerEvent("FromClient_RequestGuildWar", "FromClient_RequestGuildWar")
+  registerEvent("FromClient_ResponseGuildNotice", "FromClient_ResponseGuildNotice")
+  registerEvent("FromClient_GuildListUpdate", "FromClient_GuildListUpdate")
+end
 registerEvent("FromWeb_WebPageError", "FromWeb_WebPageError")
 registerEvent("onScreenResize", "Guild_onScreenResize")
 registerEvent("FromClient_luaLoadComplete", "Guild_Init")

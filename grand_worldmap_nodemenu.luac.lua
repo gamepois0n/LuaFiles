@@ -850,7 +850,9 @@ end
 
 FromClient_CreateNodeIcon = function(nodeBtn)
   -- function num : 0_36 , upvalues : nodeBtnArray
-  worldmapNodeIcon_GuildWarSet(nodeBtn)
+  if _ContentsGroup_RenewUI == false then
+    worldmapNodeIcon_GuildWarSet(nodeBtn)
+  end
   local tradeIcon = nodeBtn:FromClient_getTradeIcon()
   local explorationInfo = nodeBtn:FromClient_getExplorationNodeInClient()
   local plantKey = explorationInfo:getPlantKey()
@@ -880,7 +882,7 @@ FromClient_CreateNodeIcon = function(nodeBtn)
     if wayPointKey == 301 or wayPointKey == 1 or wayPointKey == 601 or wayPointKey == 1101 or wayPointKey == 1301 then
       tradeIcon:SetSpanSize(-10, 20)
       tradeIcon:SetShow(false)
-      -- DECOMPILER ERROR at PC72: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC75: Confused about usage of register: R6 in 'UnsetPending'
 
       nodeBtnArray[wayPointKey] = nodeBtn
       tradeIcon:addInputEvent("Mouse_LUp", "FGlobal_handleOpenItemMarket(" .. territoryKeyRaw .. ")")
@@ -1062,7 +1064,9 @@ registerEvent("WorldMap_NodeWithdraw", "FGlobal_ShowInfoNodeMenuPanel")
 registerEvent("FromClint_EventIncreaseExperienceExplorationNode", "FGlobal_ExplorationNode")
 registerEvent("FromClient_StartMinorSiege", "FromClient_StartMinorSiege")
 registerEvent("FromClient_EndMinorSiege", "FromClient_EndMinorSiege")
-registerEvent("FromClient_SetGuildModeeWorldMapNodeIcon", "FromClient_SetGuildModeeWorldMapNodeIcon")
+if _ContentsGroup_RenewUI == false then
+  registerEvent("FromClient_SetGuildModeeWorldMapNodeIcon", "FromClient_SetGuildModeeWorldMapNodeIcon")
+end
 registerEvent("FromClient_OnVillageSiegeBuildingNodeGroup", "FromClient_OnVillageSiegeBuildingNodeGroup")
 registerEvent("FromClient_OutVillageSiegeBuildingNodeGroup", "FromClient_OutVillageSiegeBuildingNodeGroup")
 registerEvent("onScreenResize", "nodeMenu_OnScreenResize")

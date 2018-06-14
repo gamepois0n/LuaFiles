@@ -57,15 +57,21 @@ FromClient_CancelByAttacked = function()
   if dialog_getTalkNpcKey() ~= 0 then
     global_setTrading(false)
   end
-  if Panel_GameExit:GetShow() then
+  if _ContentsGroup_RenewUI_ExitGame == false and Panel_GameExit:GetShow() then
     GameExitShowToggle(true)
     FGlobal_ChannelSelect_Hide()
-    if _ContentsGroup_RenewUI_ExitGame == false then
-      Panel_GameExit_sendGameDelayExitCancel()
-    else
-      PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
-    end
+    Panel_GameExit_sendGameDelayExitCancel()
   end
+  if PaGlobalFunc_GameExitCharMove_GetShow() == true then
+    PaGlobalFunc_GameExitCharMove_SetShow(false, false)
+  end
+  if PaGlobalFunc_GameExit_GetShow() == true then
+    PaGlobalFunc_GameExit_SetShow(false, false)
+  end
+  if Panel_ChannelSelect:GetShow() then
+    FGlobal_ChannelSelect_Hide()
+  end
+  PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
   if _ContentsGroup_RenewUI_Dailog == true then
     PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     PaGlobalFunc_MainDialog_Hide()

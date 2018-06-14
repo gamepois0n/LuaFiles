@@ -458,6 +458,9 @@ FromClient_WorldMapOpen = function()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPOPENALERT_INDEAD"))
     return 
   end
+  if _ContentsGroup_RenewUI == true then
+    PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+  end
   isFadeOutWindow = false
   ToClient_SaveUiInfo(false)
   if ToClient_WorldMapIsShow() then
@@ -647,6 +650,9 @@ FGlobal_WorldMapClose = function()
   if ToClient_IsSavedUi() then
     ToClient_SaveUiInfo(false)
     ToClient_SetSavedUi(false)
+  end
+  if _ContentsGroup_RenewUI == true then
+    PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   end
   FGlobal_Panel_MovieTheater640_WindowClose()
 end

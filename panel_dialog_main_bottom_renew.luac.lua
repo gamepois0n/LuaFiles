@@ -6,17 +6,15 @@
 local Panel_Dialog_Main_Bottom_Info = {_initialize = false, 
 _ui = {static_BottomBG = (UI.getChildControl)(Panel_Dialog_Main, "Static_BottomBG"), btn_FuncTemplete = nil, btn_FuncIconTemplete = nil, 
 btn_Func_List = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
-, static_Base_Line = nil, staticText_NPCName = nil, staticText_NPCTitle = nil, btn_LB = nil, btn_RB = nil, static_ConsoleKeyGuide = nil, btn_B = nil, btn_X = nil, btn_A = nil}
+, static_Base_Line = nil, staticText_NPCName = nil, staticText_NPCTitle = nil, btn_LB = nil, btn_RB = nil, static_ConsoleKeyGuide = nil, btn_B = nil, btn_RT = nil}
 , 
-_config = {maxFuncButtonCount = 10}
+_config = {maxFuncButtonCount = 10, lastFuncButtonIndex = 8, firstFuncButtonIndex = -1}
 , 
 _space = {functionButtonSpace = 32, defaultBottomSize = 282}
 , 
 _size = {funcButtonSizeX = nil, funcButtonSizeY = nil}
 , 
-_value = {leastFuncButtonIndex = -1, isHide = false}
-, 
-_text = {blackSpriteName = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BLACKSPIRIT")}
+_value = {leastFuncButtonIndex = -1, questFuncButtonIndex = nil}
 , 
 _enum = {eButtonTypeDefault = -1}
 , 
@@ -78,8 +76,11 @@ greeting = {x1 = 356, y1 = 458, x2 = 426, y2 = 528}
 [32] = {x1 = 1, y1 = 32, x2 = 71, y2 = 102}
 }
 , 
+_hideDialog = {[-1] = false, [0] = false, [1] = false, [2] = true, [3] = true, [4] = true, [5] = false, [6] = false, [7] = true, [8] = true, [9] = true, [10] = true, [11] = false, [12] = false, [13] = false, [14] = true, [15] = true, [16] = false, [17] = false, [18] = false, [19] = true, [20] = true, [21] = true, [22] = true, [23] = true, [24] = false, [25] = false, [26] = true, [27] = false, [28] = true, [29] = false, [30] = true, [31] = false, [32] = true, [33] = false}
+, 
 _shopType = {eShopType_None = 0, eShopType_Potion = 1, eShopType_Weapon = 2, eShopType_Jewel = 3, eShopType_Furniture = 4, eShopType_Collect = 5, eShopType_Fish = 6, eShopType_Worker = 7, eShopType_Alchemy = 8, eShopType_Cook = 9, eShopType_PC = 10, eShopType_Grocery = 11, eShopType_RandomShop = 12, eShopType_DayRandomShop = 13, eShopType_Count = 14}
-, _UI_color = Defines.Color, _currentTabIndex = 0, _currentMaxFuncButtonCount = 1}
+, _UI_color = Defines.Color, _currentTabIndex = -1, _currentMaxFuncButtonCount = 1}
+local slot = {btn_Func = nil, static_Icon = nil, funcButtonType = -1}
 FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
   -- function num : 0_0 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
@@ -88,7 +89,7 @@ FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEf
     return 
   end
   local button = nil
-  button = (((self._ui).btn_Func_List)[buttonNo + 1]).btn_Func
+  button = (((self._ui).btn_Func_List)[buttonNo]).btn_Func
   if button == nil then
     return 
   end
@@ -98,8 +99,8 @@ end
 FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
   -- function num : 0_1 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
-  local maxButtonFuncCount = (self._config).maxFuncButtonCount - 1
-  for index = 0, maxButtonFuncCount do
+  local maxButtonFuncCount = (self._config).lastFuncButtonIndex
+  for index = (self._config).firstFuncButtonIndex, maxButtonFuncCount do
     local button = (((self._ui).btn_Func_List)[index]).btn_Func
     if button ~= nil then
       button:EraseAllEffect()
@@ -161,7 +162,7 @@ Panel_Dialog_Main_Bottom_Info.initValue = function(self)
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._value).isHide = false
+  (self._value).questFuncButtonIndex = nil
 end
 
 Panel_Dialog_Main_Bottom_Info.initControl = function(self)
@@ -183,7 +184,7 @@ Panel_Dialog_Main_Bottom_Info.initControl = function(self)
 
   ;
   (self._size).funcButtonSizeY = ((self._ui).btn_FuncTemplete):GetSizeY()
-  for index = 0, (self._config).maxFuncButtonCount - 1 do
+  for index = (self._config).firstFuncButtonIndex, (self._config).lastFuncButtonIndex do
     local btn_slot = {}
     btn_slot.btn_Func = (UI.createAndCopyBasePropertyControl)((self._ui).static_BottomBG, "Button_FuncTemplete", (self._ui).static_BottomBG, "Button_Func_" .. index)
     btn_slot.static_Icon = (UI.createAndCopyBasePropertyControl)((self._ui).btn_FuncTemplete, "Static_Icon", (self._ui).static_BottomBG, "Static_Icon_" .. index)
@@ -223,15 +224,15 @@ Panel_Dialog_Main_Bottom_Info.initControl = function(self)
   -- DECOMPILER ERROR at PC131: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).btn_A = (UI.getChildControl)((self._ui).static_ConsoleKeyGuide, "Button_A")
+  (self._ui).btn_RT = (UI.getChildControl)((self._ui).static_ConsoleKeyGuide, "Button_RT")
+  ;
+  ((self._ui).btn_RT):SetShow(false)
   Toggle_DialogMainTab_forPadEventFunc(0)
 end
 
 Panel_Dialog_Main_Bottom_Info.open = function(self)
   -- function num : 0_9
-  if (self._value).isHide == false then
-    ((self._ui).static_BottomBG):SetShow(true)
-  end
+  ((self._ui).static_BottomBG):SetShow(true)
 end
 
 Panel_Dialog_Main_Bottom_Info.close = function(self)
@@ -239,16 +240,8 @@ Panel_Dialog_Main_Bottom_Info.close = function(self)
   ((self._ui).static_BottomBG):SetShow(false)
 end
 
-Panel_Dialog_Main_Bottom_Info.hideMonent = function(self)
-  -- function num : 0_11
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
-
-  (self._value).isHide = true
-  self:close()
-end
-
 Panel_Dialog_Main_Bottom_Info.update = function(self)
-  -- function num : 0_12
+  -- function num : 0_11
   self:open()
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
@@ -267,7 +260,7 @@ Panel_Dialog_Main_Bottom_Info.update = function(self)
     ((self._ui).staticText_NPCName):SetText(npcName)
   else
     ;
-    ((self._ui).staticText_NPCName):SetText((self._text).blackSpriteName)
+    ((self._ui).staticText_NPCName):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BLACKSPIRIT"))
   end
   ;
   ((self._ui).staticText_NPCName):SetPosX((self._space).functionButtonSpace)
@@ -278,24 +271,31 @@ Panel_Dialog_Main_Bottom_Info.update = function(self)
 end
 
 Panel_Dialog_Main_Bottom_Info.perFrameUpdate = function(self)
-  -- function num : 0_13
+  -- function num : 0_12
 end
 
 Panel_Dialog_Main_Bottom_Info.hide_SubDialog = function(self)
-  -- function num : 0_14
+  -- function num : 0_13
   PaGlobalFunc_MainDialog_Intimacy_Close()
   PaGlobalFunc_MainDialog_Right_Close()
 end
 
 Panel_Dialog_Main_Bottom_Info.guideButtonSetting = function(self, dialogData)
-  -- function num : 0_15
+  -- function num : 0_14
+  local buttonType = (((self._ui).btn_Func_List)[self._currentTabIndex]).funcButtonType
+  if buttonType ~= nil and (self._hideDialog)[buttonType] == false then
+    ((self._ui).btn_RT):SetShow(false)
+  end
+  ;
   ((self._ui).btn_B):addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Hide()")
 end
 
 Panel_Dialog_Main_Bottom_Info.funcButton_Update = function(self, dialogData)
-  -- function num : 0_16
-  for index = 0, (self._config).maxFuncButtonCount - 1 do
+  -- function num : 0_15
+  for index = (self._config).firstFuncButtonIndex, (self._config).lastFuncButtonIndex do
     ((((self._ui).btn_Func_List)[index]).btn_Func):SetShow(false)
+    ;
+    ((((self._ui).btn_Func_List)[index]).static_Icon):SetShow(false)
   end
   ;
   ((self._ui).btn_LB):SetShow(false)
@@ -304,7 +304,7 @@ Panel_Dialog_Main_Bottom_Info.funcButton_Update = function(self, dialogData)
   local funcButtonCount = 1
   funcButtonCount = funcButtonCount + dialogData:getFuncButtonCount()
   self._currentMaxFuncButtonCount = funcButtonCount
-  if funcButtonCount == nil then
+  if funcButtonCount == 1 then
     return 
   end
   local funcButtonsSizeX = ((self._ui).btn_FuncTemplete):GetSizeX()
@@ -319,14 +319,17 @@ Panel_Dialog_Main_Bottom_Info.funcButton_Update = function(self, dialogData)
   totalSapceX = (funcButtonCount) * borderX + funcButtonsSizeX * (funcButtonCount)
   startButtonPosX = centerX - (totalSapceX) / 2
   endButtonPosX = startButtonPosX + (totalSapceX)
-  for index = 0, (self._config).maxFuncButtonCount - 1 do
+  for index = (self._config).firstFuncButtonIndex, (self._config).lastFuncButtonIndex do
     local funcButtonControl = (((self._ui).btn_Func_List)[index]).btn_Func
     local funcButtonIconControl = (((self._ui).btn_Func_List)[index]).static_Icon
-    funcButtonControl:SetPosX(startButtonPosX + (funcButtonsSizeX + borderX) * index)
-    funcButtonIconControl:SetPosXY(startButtonPosX + (funcButtonsSizeX + borderX) * index + iconGap, funcButtonControl:GetPosY() + iconGap)
+    funcButtonControl:SetPosX(startButtonPosX + (funcButtonsSizeX + borderX) * (index + 1))
+    funcButtonIconControl:SetPosXY(startButtonPosX + (funcButtonsSizeX + borderX) * (index + 1) + iconGap, funcButtonControl:GetPosY() + iconGap)
     funcButtonControl:SetShow(true)
     funcButtonIconControl:SetShow(true)
-    if index == 0 then
+    -- DECOMPILER ERROR at PC111: Confused about usage of register: R17 in 'UnsetPending'
+
+    if (self._config).firstFuncButtonIndex == index then
+      (((self._ui).btn_Func_List)[index]).funcButtonType = -1
       funcButtonControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_GREETING"))
       funcButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()")
       local iconData = (self._funcButtonIcon).greeting
@@ -337,26 +340,31 @@ Panel_Dialog_Main_Bottom_Info.funcButton_Update = function(self, dialogData)
       funcButtonIconControl:setRenderTexture(funcButtonIconControl:getBaseTexture())
     else
       do
-        if index < funcButtonCount then
-          local funcButton = dialogData:getFuncButtonAt(index - 1)
+        if index < funcButtonCount - 1 then
+          local funcButton = dialogData:getFuncButtonAt(index)
+          local funcButtonType = tonumber(funcButton._param)
+          -- DECOMPILER ERROR at PC161: Confused about usage of register: R19 in 'UnsetPending'
+
+          ;
+          (((self._ui).btn_Func_List)[index]).funcButtonType = funcButtonType
           self:funcButton_ChangeIcon(funcButtonIconControl, funcButton)
-          self:funcButton_CreatTypeBranch(funcButtonIconControl, funcButtonControl, funcButton, index - 1)
+          self:funcButton_CreatTypeBranch(funcButtonIconControl, funcButtonControl, funcButton, index)
         else
           do
             do
               funcButtonControl:SetShow(false)
               funcButtonIconControl:SetShow(false)
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC156: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -379,15 +387,13 @@ Panel_Dialog_Main_Bottom_Info.funcButton_Update = function(self, dialogData)
 end
 
 Panel_Dialog_Main_Bottom_Info.funcButton_ChangeIcon = function(self, funcButtonIconControl, funcButton)
-  -- function num : 0_17
+  -- function num : 0_16
   local funcButtonType = tonumber(funcButton._param)
-  _PA_LOG("mingu", "funcButtonType" .. funcButtonType)
   local iconData = (self._funcButtonIcon)[funcButtonType]
   if iconData == nil then
     funcButtonIconControl:SetShow(false)
     return 
   end
-  _PA_LOG("mingu", "iconchange")
   funcButtonIconControl:SetShow(true)
   funcButtonIconControl:ChangeTextureInfoName((self._funcButtonIcon).texture)
   local x1, y1, x2, y2 = setTextureUV_Func(funcButtonIconControl, iconData.x1, iconData.y1, iconData.x2, iconData.y2)
@@ -397,7 +403,7 @@ Panel_Dialog_Main_Bottom_Info.funcButton_ChangeIcon = function(self, funcButtonI
 end
 
 Panel_Dialog_Main_Bottom_Info.funcButton_CreatTypeBranch = function(self, IconControl, ButtonControl, funcButton, index)
-  -- function num : 0_18
+  -- function num : 0_17
   local funcButtonType = tonumber(funcButton._param)
   local funcButtonName = funcButton:getText()
   ButtonControl:SetText(funcButtonName)
@@ -405,6 +411,10 @@ Panel_Dialog_Main_Bottom_Info.funcButton_CreatTypeBranch = function(self, IconCo
   ButtonControl:SetFontColor((self._UI_color).C_FFFFFFFF)
   if funcButtonType ~= (CppEnums.ContentsType).Contents_Quest or funcButtonType == (CppEnums.ContentsType).Contents_NewQuest then
     audioPostEvent_SystemUi(4, 4)
+    -- DECOMPILER ERROR at PC31: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    (self._value).questFuncButtonIndex = index
   else
     if funcButtonType == (CppEnums.ContentsType).Contents_Shop then
       FGlobal_RemoteControl_Show(5)
@@ -434,12 +444,12 @@ Panel_Dialog_Main_Bottom_Info.funcButton_CreatTypeBranch = function(self, IconCo
     end
   end
   do
-    -- DECOMPILER ERROR at PC133: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC135: Unhandled construct in 'MakeBoolean' P1
 
     if (funcButtonType ~= (CppEnums.ContentsType).Contents_Stable or stable_doHaveRegisterItem() and (funcButtonType ~= (CppEnums.ContentsType).Contents_Explore or dialog_getIsExplorationUseableCurrentTalker() == false and funcButtonType == (CppEnums.ContentsType).Contents_Enchant) and (isBlackStone_16001 or isBlackStone_16002)) then
       ButtonControl:EraseAllEffect()
     end
-    -- DECOMPILER ERROR at PC144: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC146: Unhandled construct in 'MakeBoolean' P1
 
     if funcButtonType == (CppEnums.ContentsType).Contents_Socket and value_IsSocket == true then
       ButtonControl:EraseAllEffect()
@@ -453,7 +463,7 @@ Panel_Dialog_Main_Bottom_Info.funcButton_CreatTypeBranch = function(self, IconCo
 end
 
 Panel_Dialog_Main_Bottom_Info.checkInfoFuncButton = function(self)
-  -- function num : 0_19
+  -- function num : 0_18
   local talker = dialog_getTalker()
   if talker == nil then
     return 
@@ -470,7 +480,7 @@ Panel_Dialog_Main_Bottom_Info.checkInfoFuncButton = function(self)
 end
 
 Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
-  -- function num : 0_20
+  -- function num : 0_19
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return 
@@ -501,28 +511,28 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
           local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
           do
             if s64_maxWeight <= s64_allWeight then
-              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
               ;
               (MessageBox.showMessageBox)(messageboxData)
               return 
             end
             do
               if ((getSelfPlayer()):get()):checkWorkerWorkingServerNo() ~= 0 then
-                local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                 ;
                 (MessageBox.showMessageBox)(messageboxData3)
                 return 
               end
               do
                 if waitWorkerCount == maxWorkerCount then
-                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                   ;
                   (MessageBox.showMessageBox)(messageboxData)
                   return 
                 end
                 do
                   if MyWp >= 5 then
-                    local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                     ;
                     (MessageBox.showMessageBox)(messageboxData2)
                     return 
@@ -530,7 +540,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                   if (self._shopType).eShopType_RandomShop == shopType then
                     do
                       if invenSize <= 0 then
-                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                         ;
                         (MessageBox.showMessageBox)(messageboxData)
                         return 
@@ -539,7 +549,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                       local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
                       do
                         if s64_maxWeight <= s64_allWeight then
-                          local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                          local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                           ;
                           (MessageBox.showMessageBox)(messageboxData)
                           return 
@@ -548,7 +558,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                         if IsRamdomShopkeepItem == false then
                           local randomShopConsumeWp = ToClient_getRandomShopConsumWp()
                           if MyWp < randomShopConsumeWp then
-                            local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                             ;
                             (MessageBox.showMessageBox)(messageboxData2)
                             return 
@@ -556,7 +566,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                             do
                               do
                                 if randomShopConsumeWp <= MyWp then
-                                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                   ;
                                   (MessageBox.showMessageBox)(messageboxData2)
                                   return 
@@ -564,7 +574,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                                 if (self._shopType).eShopType_DayRandomShop == shopType then
                                   do
                                     if invenSize <= 0 then
-                                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                       ;
                                       (MessageBox.showMessageBox)(messageboxData)
                                       return 
@@ -573,14 +583,14 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                                     local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
                                     do
                                       if s64_maxWeight <= s64_allWeight then
-                                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                         ;
                                         (MessageBox.showMessageBox)(messageboxData)
                                         return 
                                       end
                                       local randomShopConsumeWp = 10
                                       if MyWp < randomShopConsumeWp then
-                                        local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                        local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                         ;
                                         (MessageBox.showMessageBox)(messageboxData2)
                                         return 
@@ -589,14 +599,13 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                                           do
                                             do
                                               if randomShopConsumeWp <= MyWp then
-                                                local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                                local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm, functionNo = PaGlobalFunc_MainDialog_ReOpen, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                                 ;
                                                 (MessageBox.showMessageBox)(messageboxData2)
                                                 return 
                                               end
                                               count = 2
                                               targetWindowList = {Panel_Dialog_NPCShop, Panel_Window_Inventory}
-                                              self:hideMonent()
                                               if (CppEnums.ContentsType).Contents_Skill == buttonType then
                                                 count = 1
                                                 if _ContentsGroup_RenewUI_Skill == false then
@@ -616,10 +625,20 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                                                 end
                                               end
                                               if (CppEnums.ContentsType).Contents_Explore ~= buttonType or (CppEnums.ContentsType).Contents_Enchant == buttonType then
-                                                PaGlobal_Enchant:enchant_Show()
+                                                if _ContentsGroup_RenewUI_SpiritEnchant == true then
+                                                  PaGlobalFunc_EnchantInfo_Open()
+                                                  PaGlobalFunc_MainDialog_Close()
+                                                else
+                                                  PaGlobal_Enchant:enchant_Show()
+                                                end
                                               else
                                                 if (CppEnums.ContentsType).Contents_Socket == buttonType then
-                                                  Socket_Window_Show()
+                                                  if _ContentsGroup_RenewUI_SpiritEnchant == true then
+                                                    PaGlobalFunc_SocketInfo_Open()
+                                                    PaGlobalFunc_MainDialog_Close()
+                                                  else
+                                                    Socket_Window_Show()
+                                                  end
                                                 else
                                                   if (CppEnums.ContentsType).Contents_LordMenu == buttonType then
                                                     LordMenu_Show()
@@ -636,7 +655,6 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
                                                           if (CppEnums.ContentsType).Contents_GuildShop == buttonType then
                                                             count = 2
                                                             targetWindowList = {Panel_Dialog_NPCShop, Panel_Window_Inventory}
-                                                            self:hideMonent()
                                                           else
                                                             if (CppEnums.ContentsType).Contents_SupplyShop == buttonType then
                                                               npcShop_requestList(buttonType)
@@ -779,7 +797,7 @@ Panel_Dialog_Main_Bottom_Info.button_Func_Branch = function(self, buttonType)
 end
 
 Panel_Dialog_Main_Bottom_Info.Dialog_innerPanelShow = function(self, count, targetWindowList)
-  -- function num : 0_21
+  -- function num : 0_20
   if count <= 50 then
     return 
   end
@@ -807,7 +825,7 @@ Panel_Dialog_Main_Bottom_Info.Dialog_innerPanelShow = function(self, count, targ
 end
 
 Panel_Dialog_Main_Bottom_Info.Resize = function(self)
-  -- function num : 0_22
+  -- function num : 0_21
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   ;
@@ -825,13 +843,13 @@ Panel_Dialog_Main_Bottom_Info.Resize = function(self)
 end
 
 PaGlobalFunc_MainDialog_Bottom_GetLeastFunButtonIndex = function()
-  -- function num : 0_23 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_22 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   return (self._value).leastFuncButtonIndex
 end
 
 PaGlobalFunc_MainDialog_Bottom_SetLeastFunButtonIndex = function(index)
-  -- function num : 0_24 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_23 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -840,7 +858,7 @@ PaGlobalFunc_MainDialog_Bottom_SetLeastFunButtonIndex = function(index)
 end
 
 PaGlobalFunc_MainDialog_Bottom_ResetLeastFunButtonIndex = function()
-  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_24 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -849,7 +867,7 @@ PaGlobalFunc_MainDialog_Bottom_ResetLeastFunButtonIndex = function()
 end
 
 PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault = function()
-  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   if (self._value).leastFuncButtonIndex == (self._enum).eButtonTypeDefault then
     return true
@@ -859,41 +877,31 @@ PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault = function()
 end
 
 PaGlobalFunc_MainDialog_Bottom_InitValue = function()
-  -- function num : 0_27 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   self:initValue()
 end
 
 PaGlobalFunc_MainDialog_Bottom_Open = function()
-  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_27 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
-  self:open()
-end
-
-PaGlobalFunc_MainDialog_Bottom_OpenEndHide = function()
-  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Bottom_Info
-  local self = Panel_Dialog_Main_Bottom_Info
-  -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._value).isHide = false
   self:open()
 end
 
 PaGlobalFunc_MainDialog_Bottom_Close = function()
-  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   self:close()
 end
 
 PaGlobalFunc_MainDialog_Bottom_Update = function()
-  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   self:update()
 end
 
 PaGlobalFunc_MainDialog_Bottom_GetSizeY = function()
-  -- function num : 0_32 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   if self._initialize == true then
     return ((self._ui).static_BottomBG):GetSizeY()
@@ -903,7 +911,7 @@ PaGlobalFunc_MainDialog_Bottom_GetSizeY = function()
 end
 
 PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate = function()
-  -- function num : 0_33 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
@@ -913,7 +921,7 @@ PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate = function()
 end
 
 PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton = function()
-  -- function num : 0_34 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_32 , upvalues : Panel_Dialog_Main_Bottom_Info
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -956,13 +964,13 @@ PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton = function()
   end
   ToClient_SetFilterType(0, false)
   local self = Panel_Dialog_Main_Bottom_Info
-  PaGlobalFunc_MainDialog_Bottom_ResetLeastFunButtonIndex()
+  PaGlobalFunc_MainDialog_CloseIniteValues()
   self:hide_SubDialog()
   ReqeustDialog_retryTalk()
 end
 
 PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom = function(index)
-  -- function num : 0_35 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_33 , upvalues : Panel_Dialog_Main_Bottom_Info
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1018,6 +1026,9 @@ PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom = function(index)
   local funcButtonType = tonumber(funcButton._param)
   local self = Panel_Dialog_Main_Bottom_Info
   PaGlobalFunc_MainDialog_Bottom_SetLeastFunButtonIndex(index)
+  if (self._hideDialog)[funcButtonType] == true and funcButton._enable == true then
+    PaGlobalFunc_MainDialog_CloseMoment()
+  end
   self:button_Func_Branch(funcButtonType)
   PaGlobalFunc_MainDialog_Right_Close()
   PaGlobalFunc_MainDialog_Quest_Close()
@@ -1027,7 +1038,7 @@ PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom = function(index)
 end
 
 PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm = function(index)
-  -- function num : 0_36
+  -- function num : 0_34
   if index == nil then
     index = _indexWhenWorkerShopClicked
   end
@@ -1037,7 +1048,7 @@ PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm = function(index
 end
 
 PaGlobalFunc_MainDialog_Bottom_GetFuncPositionNewQuestButton = function()
-  -- function num : 0_37 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_35 , upvalues : Panel_Dialog_Main_Bottom_Info
   local Position = {_Return = false, _PosX = -1, _PosY = -1}
   local Index = PaGlobalFunc_MainDialog_Bottom_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_NewQuest)
   if Index == -1 then
@@ -1045,13 +1056,13 @@ PaGlobalFunc_MainDialog_Bottom_GetFuncPositionNewQuestButton = function()
   end
   local self = Panel_Dialog_Main_Bottom_Info
   Position._Return = true
-  Position._PosX = (((self._ui).btn_Func_List)[Index + 1]):GetPosX()
-  Position._PosY = (((self._ui).btn_Func_List)[Index + 1]):GetPosY()
+  Position._PosX = (((self._ui).btn_Func_List)[Index]):GetPosX()
+  Position._PosY = (((self._ui).btn_Func_List)[Index]):GetPosY()
   return Position
 end
 
 PaGlobalFunc_MainDialog_Bottom_FindFuncButtonIndexByType = function(targetFuncButtonType)
-  -- function num : 0_38
+  -- function num : 0_36
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return -1
@@ -1068,47 +1079,94 @@ PaGlobalFunc_MainDialog_Bottom_FindFuncButtonIndexByType = function(targetFuncBu
 end
 
 PaGlobalFunc_MainDialog_Bottom_GetFuncButtonSizeXY = function()
-  -- function num : 0_39 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_37 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   return (self._size).funcButtonSizeX, (self._size).funcButtonSizeY
 end
 
 Toggle_DialogMainTab_forPadEventFunc = function(value)
-  -- function num : 0_40 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_38 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   local _currentBottomButton = {}
-  for ii = 0, self._currentMaxFuncButtonCount - 1 do
+  local _lastArrayIndex = self._currentMaxFuncButtonCount - 2
+  for ii = (self._config).firstFuncButtonIndex, _lastArrayIndex do
     _currentBottomButton[ii] = (((self._ui).btn_Func_List)[ii]).btn_Func
     ;
     (_currentBottomButton[ii]):setRenderTexture((_currentBottomButton[ii]):getBaseTexture())
   end
+  PaGlobalFunc_MainDialog_Intimacy_Close()
+  if PaGlobalFunc_MainDialog_Quest_GetShow() then
+    PaGlobalFunc_MainDialog_Quest_Close()
+  end
+  if check_ShowWindow() then
+    close_WindowPanelList()
+  end
   self._currentTabIndex = self._currentTabIndex + value
-  if self._currentTabIndex < 0 then
-    self._currentTabIndex = self._currentMaxFuncButtonCount - 1
+  if self._currentTabIndex < (self._config).firstFuncButtonIndex then
+    self._currentTabIndex = _lastArrayIndex
   else
-    if self._currentMaxFuncButtonCount - 1 < self._currentTabIndex then
-      self._currentTabIndex = 0
+    if _lastArrayIndex < self._currentTabIndex then
+      self._currentTabIndex = (self._config).firstFuncButtonIndex
     end
   end
   ;
   (_currentBottomButton[self._currentTabIndex]):setRenderTexture((_currentBottomButton[self._currentTabIndex]):getOnTexture())
+  local buttonType = (((self._ui).btn_Func_List)[self._currentTabIndex]).funcButtonType
+  if buttonType ~= nil then
+    if (self._hideDialog)[buttonType] == false then
+      PaGlobalFunc_MainDialog_Right_Close()
+      Toggle_DialogMainTab_Enter()
+      ;
+      ((self._ui).btn_RT):SetShow(false)
+    else
+      ;
+      ((self._ui).btn_RT):SetShow(true)
+    end
+  end
 end
 
 Toggle_DialogMainTab_Enter = function()
-  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_39 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
-  if self._currentTabIndex == 0 then
+  if (self._config).firstFuncButtonIndex == self._currentTabIndex then
     PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()
   else
-    PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(self._currentTabIndex - 1)
+    PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(self._currentTabIndex)
+  end
+end
+
+Toggle_DialogMainTab_SetIndexQuest = function()
+  -- function num : 0_40 , upvalues : Panel_Dialog_Main_Bottom_Info
+  local self = Panel_Dialog_Main_Bottom_Info
+  if (self._value).questFuncButtonIndex == nil then
+    return 
+  end
+  local _lastArrayIndex = self._currentMaxFuncButtonCount - 2
+  local _currentBottomButton = {}
+  for ii = (self._config).firstFuncButtonIndex, _lastArrayIndex do
+    _currentBottomButton[ii] = (((self._ui).btn_Func_List)[ii]).btn_Func
+    ;
+    (_currentBottomButton[ii]):setRenderTexture((_currentBottomButton[ii]):getBaseTexture())
+  end
+  self._currentTabIndex = (self._value).questFuncButtonIndex
+  if _currentBottomButton[self._currentTabIndex] ~= nil then
+    (_currentBottomButton[self._currentTabIndex]):setRenderTexture((_currentBottomButton[self._currentTabIndex]):getOnTexture())
   end
 end
 
 PaGlobalFunc_Main_Dialog_Bottom_Index_Init = function()
-  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
-  Toggle_DialogMainTab_forPadEventFunc(self._currentTabIndex)
-  self._currentTabIndex = 0
+  self._currentTabIndex = (self._config).firstFuncButtonIndex
+  local _lastArrayIndex = self._currentMaxFuncButtonCount - 2
+  local _currentBottomButton = {}
+  for ii = (self._config).firstFuncButtonIndex, _lastArrayIndex do
+    _currentBottomButton[ii] = (((self._ui).btn_Func_List)[ii]).btn_Func
+    ;
+    (_currentBottomButton[ii]):setRenderTexture((_currentBottomButton[ii]):getBaseTexture())
+  end
+  ;
+  (_currentBottomButton[self._currentTabIndex]):setRenderTexture((_currentBottomButton[self._currentTabIndex]):getOnTexture())
 end
 
 Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()")
@@ -1116,14 +1174,14 @@ Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_Dialog
 Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_DialogMainTab_forPadEventFunc(1)")
 Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "Toggle_DialogMainTab_Enter()")
 FromClient_InitMainDialog_Bottom = function()
-  -- function num : 0_43 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog_Bottom = function()
-  -- function num : 0_44 , upvalues : Panel_Dialog_Main_Bottom_Info
+  -- function num : 0_43 , upvalues : Panel_Dialog_Main_Bottom_Info
   local self = Panel_Dialog_Main_Bottom_Info
   self:Resize()
 end

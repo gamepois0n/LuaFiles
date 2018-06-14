@@ -61,7 +61,7 @@ Guild_Recruitment_Initialize = function()
   local slotStartY = 47
   local slotGapY = 145
   for slotIdx = 0, self.maxSlotCount - 1 do
-    local posX = 10 + 350 * (slotIdx % 2)
+    local posX = 10 + 400 * (slotIdx % 2)
     local posY = slotStartY + slotGapY * (math.floor)(slotIdx / 2)
     local slot = {}
     slot.bg = (UI.createAndCopyBasePropertyControl)(Panel_Guild_Recruitment, "Static_SampleBg", Panel_Guild_Recruitment, "GuildRecruitment_BG_" .. slotIdx)
@@ -85,7 +85,7 @@ Guild_Recruitment_Initialize = function()
     (slot.name):SetPosY(5)
     slot.class = (UI.createAndCopyBasePropertyControl)(Panel_Guild_Recruitment, "StaticText_CharacterLv", slot.bg, "GuildRecruitment_Lv_" .. slotIdx)
     ;
-    (slot.class):SetPosX(276)
+    (slot.class):SetPosX(86)
     ;
     (slot.class):SetPosY(25)
     slot.intro = (UI.createAndCopyBasePropertyControl)(Panel_Guild_Recruitment, "StaticText_SelfIntro", slot.bg, "GuildRecruitment_Intro_" .. slotIdx)

@@ -3,14 +3,14 @@
 
 -- params : ...
 -- function num : 0
-local Window_GameExitInfo = {_prevUIMode; 
+local Window_GameExitInfo = {
 _ui = {_static_MainBg = (UI.getChildControl)(Panel_Window_GameExit, "Static_MainBg"), _static_titleBar = (UI.getChildControl)(Panel_Window_GameExit, "Static_TitleBar"), _static_Bottom = (UI.getChildControl)(Panel_Window_GameExit, "Static_Bottom"), 
 _body = {}
 , 
 _bottom = {}
 }
 , 
-_config = {_exitType_GameExit = 0, _exitType_CharacterSelect = 1, _exitType_Tray = 2, _exitType_UnTray = 3, _exitType_CharacterSwap = 4, _maxQuestList = 5, _maxJournalList = 5, _maxCharacterSlot = 4}
+_config = {_exitType_GameExit = 0, _exitType_CharacterSelect = 1, _exitType_Tray = 2, _exitType_UnTray = 3, _exitType_CharacterSwap = 4, _maxQuestList = 3, _maxJournalList = 3, _maxCharacterSlot = 4}
 , _currentExitType = -1, _logoutDelayTime = getLogoutWaitingTime(), _exitTime = -1, _isTakePhoto = false, 
 _characterUITable = {}
 , 
@@ -146,6 +146,11 @@ Window_GameExitInfo.SetCharacterSlot = function(self, charInfo, charSlot)
   if charInfo == nil or charSlot == nil then
     return false
   end
+  for _,control in pairs(charSlot) do
+    if control == nil then
+      return false
+    end
+  end
   ;
   (charSlot._staticText_Level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. charInfo._level)
   ;
@@ -157,180 +162,183 @@ Window_GameExitInfo.SetCharacterSlot = function(self, charInfo, charSlot)
   ;
   (charSlot._staticText_EnchantFailCount):SetText(PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_ENCHANT") .. " " .. charInfo._enchantFailCount .. "+" .. charInfo._enchantValksCount)
   ;
-  (charSlot._staticText_RemindTime):SetText(charInfo._remindTime)
+  (charSlot._staticText_RemindTime):SetText("")
+  if charInfo._remindTime ~= nil then
+    (charSlot._staticText_RemindTime):SetText(charInfo._remindTime)
+  end
   ;
   (charSlot._staticText_Condtion):SetText(charInfo._condition)
-  ;
-  (charSlot._button_ChangePicture):SetShow(charInfo._isSelfPlayer)
-  local isCaptureExist = (charSlot._static_Picture):ChangeTextureInfoNameNotDDS(charInfo._textureName, charInfo._classType, self._isTakePhoto)
-  if isCaptureExist == true then
-    ((charSlot._static_Picture):getBaseTexture()):setUV(0, 0, 1, 1)
-  else
-    if _ContentsGroup_isUsedNewCharacterInfo == false then
-      if charInfo._classType == (CppEnums.ClassType).ClassType_Warrior then
-        (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
-        ;
-        ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-        ;
-        (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-      else
-        do
-          if charInfo._classType == (CppEnums.ClassType).ClassType_Ranger then
-            (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-            local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
-            ;
-            ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-            ;
-            (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-          else
-            do
-              if charInfo._classType == (CppEnums.ClassType).ClassType_Sorcerer then
-                (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-                local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
-                ;
-                ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                ;
-                (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-              else
-                do
-                  if charInfo._classType == (CppEnums.ClassType).ClassType_Giant then
-                    (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-                    local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 202, 156, 402)
-                    ;
-                    ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                    ;
-                    (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                  else
-                    do
-                      if charInfo._classType == (CppEnums.ClassType).ClassType_Tamer then
-                        (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-                        local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 202, 312, 402)
-                        ;
-                        ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                        ;
-                        (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                      else
-                        do
-                          if charInfo._classType == (CppEnums.ClassType).ClassType_BladeMaster then
-                            (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
-                            local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 202, 468, 402)
-                            ;
-                            ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                            ;
-                            (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                          else
-                            do
-                              if charInfo._classType == (CppEnums.ClassType).ClassType_Valkyrie then
-                                (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
-                                ;
-                                ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                ;
-                                (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                              else
-                                do
-                                  if charInfo._classType == (CppEnums.ClassType).ClassType_BladeMasterWomen then
-                                    (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                    local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
-                                    ;
-                                    ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    ;
-                                    (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                  else
-                                    do
-                                      if charInfo._classType == (CppEnums.ClassType).ClassType_Wizard then
-                                        (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                        local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
-                                        ;
-                                        ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                        ;
-                                        (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                      else
-                                        do
-                                          if charInfo._classType == (CppEnums.ClassType).ClassType_WizardWomen then
-                                            (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                            local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 202, 156, 402)
-                                            ;
-                                            ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                            ;
-                                            (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                          else
-                                            do
-                                              if charInfo._classType == (CppEnums.ClassType).ClassType_NinjaWomen then
-                                                (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                                local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 202, 312, 402)
-                                                ;
-                                                ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                ;
-                                                (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                              else
-                                                do
-                                                  if charInfo._classType == (CppEnums.ClassType).ClassType_NinjaMan then
-                                                    (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
-                                                    local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 202, 468, 402)
-                                                    ;
-                                                    ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                    ;
-                                                    (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                  else
-                                                    do
-                                                      if charInfo._classType == (CppEnums.ClassType).ClassType_DarkElf then
-                                                        (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
-                                                        local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
-                                                        ;
-                                                        ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                        ;
-                                                        (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                      else
-                                                        do
-                                                          if charInfo._classType == (CppEnums.ClassType).ClassType_Combattant then
-                                                            (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
-                                                            local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
-                                                            ;
-                                                            ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                            ;
-                                                            (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                          else
-                                                            do
-                                                              if charInfo._classType == (CppEnums.ClassType).ClassType_CombattantWomen then
-                                                                (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
-                                                                local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
-                                                                ;
-                                                                ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                ;
-                                                                (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                              else
-                                                                do
-                                                                  if charInfo._classType == (CppEnums.ClassType).ClassType_Lahn then
-                                                                    (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
-                                                                    local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
-                                                                    ;
-                                                                    ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                    ;
-                                                                    (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                                  else
-                                                                    do
-                                                                      if charInfo._classType == (CppEnums.ClassType).ClassType_Orange then
-                                                                        (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
-                                                                        local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
-                                                                        ;
-                                                                        ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                        ;
-                                                                        (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                                      end
+  if _ContentsGroup_isConsolePadControl then
+    local isCaptureExist = (charSlot._static_Picture):ChangeTextureInfoNameNotDDS(charInfo._textureName, charInfo._classType, self._isTakePhoto)
+    if isCaptureExist == true then
+      ((charSlot._static_Picture):getBaseTexture()):setUV(0, 0, 1, 1)
+    else
+      if _ContentsGroup_isUsedNewCharacterInfo == false then
+        if charInfo._classType == (CppEnums.ClassType).ClassType_Warrior then
+          (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
+          ;
+          ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+          ;
+          (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+        else
+          do
+            if charInfo._classType == (CppEnums.ClassType).ClassType_Ranger then
+              (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+              local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
+              ;
+              ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+              ;
+              (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+            else
+              do
+                if charInfo._classType == (CppEnums.ClassType).ClassType_Sorcerer then
+                  (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+                  local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
+                  ;
+                  ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                  ;
+                  (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                else
+                  do
+                    if charInfo._classType == (CppEnums.ClassType).ClassType_Giant then
+                      (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+                      local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 202, 156, 402)
+                      ;
+                      ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                      ;
+                      (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                    else
+                      do
+                        if charInfo._classType == (CppEnums.ClassType).ClassType_Tamer then
+                          (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+                          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 202, 312, 402)
+                          ;
+                          ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                          ;
+                          (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                        else
+                          do
+                            if charInfo._classType == (CppEnums.ClassType).ClassType_BladeMaster then
+                              (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
+                              local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 202, 468, 402)
+                              ;
+                              ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                              ;
+                              (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                            else
+                              do
+                                if charInfo._classType == (CppEnums.ClassType).ClassType_Valkyrie then
+                                  (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                  local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
+                                  ;
+                                  ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                  ;
+                                  (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                else
+                                  do
+                                    if charInfo._classType == (CppEnums.ClassType).ClassType_BladeMasterWomen then
+                                      (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                      local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
+                                      ;
+                                      ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                      ;
+                                      (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                    else
+                                      do
+                                        if charInfo._classType == (CppEnums.ClassType).ClassType_Wizard then
+                                          (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
+                                          ;
+                                          ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                          ;
+                                          (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                        else
+                                          do
+                                            if charInfo._classType == (CppEnums.ClassType).ClassType_WizardWomen then
+                                              (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                              local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 202, 156, 402)
+                                              ;
+                                              ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                              ;
+                                              (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                            else
+                                              do
+                                                if charInfo._classType == (CppEnums.ClassType).ClassType_NinjaWomen then
+                                                  (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                                  local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 202, 312, 402)
+                                                  ;
+                                                  ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                  ;
+                                                  (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                else
+                                                  do
+                                                    if charInfo._classType == (CppEnums.ClassType).ClassType_NinjaMan then
+                                                      (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds")
+                                                      local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 202, 468, 402)
+                                                      ;
+                                                      ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                      ;
+                                                      (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                    else
+                                                      do
+                                                        if charInfo._classType == (CppEnums.ClassType).ClassType_DarkElf then
+                                                          (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
+                                                          ;
+                                                          ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                          ;
+                                                          (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                        else
+                                                          do
+                                                            if charInfo._classType == (CppEnums.ClassType).ClassType_Combattant then
+                                                              (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
+                                                              local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 157, 1, 312, 201)
+                                                              ;
+                                                              ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                              ;
+                                                              (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                            else
+                                                              do
+                                                                if charInfo._classType == (CppEnums.ClassType).ClassType_CombattantWomen then
+                                                                  (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_02.dds")
+                                                                  local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 313, 1, 468, 201)
+                                                                  ;
+                                                                  ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                  ;
+                                                                  (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                                else
+                                                                  do
+                                                                    if charInfo._classType == (CppEnums.ClassType).ClassType_Lahn then
+                                                                      (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
+                                                                      ;
+                                                                      ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                      ;
+                                                                      (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                                    else
                                                                       do
-                                                                        local DefaultFace = (CppEnums.ClassType_DefaultFaceTexture)[charInfo._classType]
-                                                                        ;
-                                                                        (charSlot._static_Picture):ChangeTextureInfoName(DefaultFace[1])
-                                                                        do
-                                                                          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, DefaultFace[2], DefaultFace[3], DefaultFace[4], DefaultFace[5])
+                                                                        if charInfo._classType == (CppEnums.ClassType).ClassType_Orange then
+                                                                          (charSlot._static_Picture):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
+                                                                          local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, 1, 1, 156, 201)
                                                                           ;
                                                                           ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                           ;
                                                                           (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
-                                                                          self._isTakePhoto = false
-                                                                          return true
+                                                                        end
+                                                                        do
+                                                                          local DefaultFace = (CppEnums.ClassType_DefaultFaceTexture)[charInfo._classType]
+                                                                          ;
+                                                                          (charSlot._static_Picture):ChangeTextureInfoName(DefaultFace[1])
+                                                                          do
+                                                                            local x1, y1, x2, y2 = setTextureUV_Func(charSlot._static_Picture, DefaultFace[2], DefaultFace[3], DefaultFace[4], DefaultFace[5])
+                                                                            ;
+                                                                            ((charSlot._static_Picture):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                            ;
+                                                                            (charSlot._static_Picture):setRenderTexture((charSlot._static_Picture):getBaseTexture())
+                                                                            self._isTakePhoto = false
+                                                                            return true
+                                                                          end
                                                                         end
                                                                       end
                                                                     end
@@ -660,6 +668,7 @@ Window_GameExitInfo.Initialize = function(self)
   self:InitRegister()
   self:InitControl()
   self:InitEvent()
+  self:XB_Control_Init()
 end
 
 Window_GameExitInfo.InitControl = function(self)
@@ -678,7 +687,11 @@ Window_GameExitInfo.InitControl = function(self)
   body._button_LB = (UI.getChildControl)((self._ui)._static_MainBg, "Button_LB")
   body._button_RB = (UI.getChildControl)((self._ui)._static_MainBg, "Button_RB")
   bottom._staticText_QuestList = (UI.getChildControl)((self._ui)._static_Bottom, "StaticText_QuestList")
+  ;
+  (bottom._staticText_QuestList):SetTextVerticalTop()
   bottom._staticText_JournalList = (UI.getChildControl)((self._ui)._static_Bottom, "StaticText_JournalList")
+  ;
+  (bottom._staticText_JournalList):SetTextVerticalTop()
   ;
   (body._button_LB):SetShow(getCharacterDataCount() > 4)
   ;
@@ -725,7 +738,7 @@ Window_GameExitInfo.InitControl = function(self)
     (uiTable._radioButton_CharBg):SetPosX((uiTable._radioButton_CharBg):GetPosX() + ((uiTable._radioButton_CharBg):GetSizeX() + 10) * index)
     ;
     (uiTable._radioButton_CharBg):SetShow(false)
-    -- DECOMPILER ERROR at PC368: Confused about usage of register: R14 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC374: Confused about usage of register: R14 in 'UnsetPending'
 
     ;
     (self._characterUITable)[index] = uiTable
@@ -821,7 +834,7 @@ PaGlobalFunc_GameExit_SetShow = function(isShow, isAni, isAttacked)
   if (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == (UI.Get_ProcessorInputMode)() then
     return 
   end
-  local curretnUIMode = GetUIMode()
+  local currentUIMode = GetUIMode()
   if currentUIMode == (Defines.UIMode).eUIMode_Gacha_Roulette or currentUIMode == (Defines.UIMode).eUIMode_DeadMessage then
     return 
   end
@@ -842,13 +855,12 @@ PaGlobalFunc_GameExit_SetShow = function(isShow, isAni, isAttacked)
       end
     end
     if isShow == true then
-      self._prevUIMode = GetUIMode()
       SetUIMode((Defines.UIMode).eUIMode_GameExit)
       sendWaitingListOfMyCharacters()
       self:Clear()
       self:Update()
     else
-      SetUIMode(self._prevUIMode)
+      SetUIMode((Defines.UIMode).eUIMode_Default)
       if self._currentExitType ~= -1 then
         PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
       end
@@ -896,7 +908,6 @@ PaGlobalFunc_CharChangePhoto_Y = function()
   if Panel_Window_GameExit:GetShow() == false then
     return 
   end
-  _PA_LOG("원선", "인덱�\164 : " .. tostring(self._selfPlayerIndex))
   PaGlobalFunc_GameExit_SetShow(false, false)
   IsGameExitPhoto(true)
   IngameCustomize_Show()
@@ -904,8 +915,11 @@ PaGlobalFunc_CharChangePhoto_Y = function()
   self._isTakePhoto = true
 end
 
-Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_GameExit_UpdateCharList(-1)")
-Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_GameExit_UpdateCharList(1)")
-Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_CharChangePhoto_Y()")
+Window_GameExitInfo.XB_Control_Init = function(self)
+  -- function num : 0_35
+  Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_GameExit_UpdateCharList(-1)")
+  Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_GameExit_UpdateCharList(1)")
+end
+
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_GameExit_luaLoadComplete")
 

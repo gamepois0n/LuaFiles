@@ -117,6 +117,9 @@ end
 
 FGlobal_LevelupGuide_Open = function(isLevelUp)
   -- function num : 0_5 , upvalues : isLevelGuideUse, _Web
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if not isLevelGuideUse then
     return 
   end
@@ -191,6 +194,8 @@ FGlobal_LevelupGuide_PowerClose = function()
   _Web:ResetUrl()
 end
 
-LevelupGuide_OpenCheck()
-registerEvent("EventSelfPlayerLevelUp", "LevelupGuide_LevelUpCheck")
+if _ContentsGroup_RenewUI == false then
+  LevelupGuide_OpenCheck()
+  registerEvent("EventSelfPlayerLevelUp", "LevelupGuide_LevelUpCheck")
+end
 

@@ -12,6 +12,7 @@ local _deadMessage = (UI.getChildControl)(Panel_DeadMessage, "Static_DeadText")
 local _button_MoveTown = (UI.getChildControl)(Panel_DeadMessage, "Button_MoveTown")
 local _button_MoveExploration = (UI.getChildControl)(Panel_DeadMessage, "Button_MoveExploration")
 local _button_Immediate = (UI.getChildControl)(Panel_DeadMessage, "Button_Immediate")
+local _button_GuildTeamBattle = (UI.getChildControl)(Panel_DeadMessage, "Button_GuildTeamBattle")
 local _button_AdvancedBase = (UI.getChildControl)(Panel_DeadMessage, "Button_AdvancedBase")
 local _button_LocalWar = (UI.getChildControl)(Panel_DeadMessage, "Button_LocalWar")
 local _button_GuildSpawn = (UI.getChildControl)(Panel_DeadMessage, "Button_GuildSpawn")
@@ -32,6 +33,9 @@ local _button_GuildObserverMode = (UI.getChildControl)(Panel_DeadMessage, "Butto
 local reviveBG = (UI.getChildControl)(Panel_DeadNodeSelect, "Static_AllBG")
 local reviveScroll = (UI.getChildControl)(Panel_DeadNodeSelect, "Scroll_List")
 local _deadNodeSelectClose = (UI.getChildControl)(Panel_DeadNodeSelect, "Button_Close")
+if _ContentsGroup_RenewUI == true then
+  _deadQuestion:SetShow(false)
+end
 reviveScroll:SetShow(false)
 reviveScroll:SetShow(false)
 _checkBoxUseFairy:SetShow(false)
@@ -46,7 +50,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local CPP_slotNoString = CppEnums.EquipSlotNoString
-enRespawnType = {respawnType_None = 0, respawnType_Immediate = 1, respawnType_ByOtherPlayer = 2, respawnType_Exploration = 3, respawnType_NearTown = 4, respawnType_TimeOver = 5, respawnType_InSiegeingFortress = 6, respawnType_LocalWar = 7, respawnType_AdvancedBase = 8, respawnType_GuildSpawn = 9, respawnType_Competition = 10, respawnType_SavageDefence = 11, respawnType_Volunteer = 12, respawnType_GuildBatle = 13, respawnType_Plunder = 14, respawnType_Count = 15}
+enRespawnType = {respawnType_None = 0, respawnType_Immediate = 1, respawnType_ByOtherPlayer = 2, respawnType_Exploration = 3, respawnType_NearTown = 4, respawnType_TimeOver = 5, respawnType_InSiegeingFortress = 6, respawnType_LocalWar = 7, respawnType_AdvancedBase = 8, respawnType_GuildSpawn = 9, respawnType_Competition = 10, respawnType_SavageDefence = 11, respawnType_Volunteer = 12, respawnType_GuildBatle = 13, respawnType_Plunder = 14, respawnType_GuildTeamBattle = 15, respawnType_Count = 16}
 local revivalTime = 600
 local DROP_ITEM_COUNT = 1
 local startTimer = false
@@ -229,7 +233,7 @@ deadNodeSelectClose = function()
 end
 
 deadMessage_Resize = function()
-  -- function num : 0_5 , upvalues : _deadBlackHole, _deadMessage, _button_Immediate, _useCashItemBG, _checkBoxUseCache, _checkBoxUseFairy, _text_reviveNotify, _button_ObserverMode, _button_GuildObserverMode, _deadQuestion, _text_ImmediateCount, _button_MoveTown, _button_SavageOut, _button_MoveExploration, _button_Volunteer, _button_SiegeIng, _button_AdvancedBase, _text_AdvancedBaseAlert, _button_GuildSpawn, _button_LocalWar, _regenTime, _button_Plunder, STATIC_DROP_ITEM
+  -- function num : 0_5 , upvalues : _deadBlackHole, _deadMessage, _button_Immediate, _useCashItemBG, _checkBoxUseCache, _checkBoxUseFairy, _text_reviveNotify, _button_ObserverMode, _button_GuildObserverMode, _button_GuildTeamBattle, _deadQuestion, _text_ImmediateCount, _button_MoveTown, _button_SavageOut, _button_MoveExploration, _button_Volunteer, _button_SiegeIng, _button_AdvancedBase, _text_AdvancedBaseAlert, _button_GuildSpawn, _button_LocalWar, _regenTime, _button_Plunder, STATIC_DROP_ITEM
   local screenX = getScreenSizeX()
   local screenY = getScreenSizeY()
   Panel_DeadMessage:SetSize(screenX, screenY)
@@ -253,6 +257,8 @@ deadMessage_Resize = function()
   _button_GuildObserverMode:SetPosY(screenY / 2 + buttonSizeY - 20)
   _button_Immediate:SetPosX(screenX / 2 - buttonHalfSizeX)
   _button_Immediate:SetPosY(screenY / 2 + buttonSizeY * 2 + 50)
+  _button_GuildTeamBattle:SetPosX(screenX / 2 - buttonHalfSizeX)
+  _button_GuildTeamBattle:SetPosY(screenY / 2 + buttonSizeY * 2 + 50)
   _deadQuestion:SetPosX(screenX / 2 + buttonHalfSizeX - 40)
   _deadQuestion:SetPosY(screenY / 2 + buttonSizeY * 2 + 10)
   _text_ImmediateCount:SetPosX(screenX / 2 - _text_ImmediateCount:GetSizeX() / 2)
@@ -589,14 +595,27 @@ local deadMessage_Animation = function()
 end
 
 deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreExp, isAblePvPMatchRevive, respawnTime)
-  -- function num : 0_7 , upvalues : _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Plunder, _button_SavageOut, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, ResurrectionTime, revivalTime, deadMessage_Animation, _deadMessage, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, isMyChannelSiegeBeing, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
-  if Panel_GameExit:GetShow() then
-    Panel_GameExit:SetShow(false)
-  end
-  if Panel_ChannelSelect:GetShow() then
-    FGlobal_ChannelSelect_Hide()
+  -- function num : 0_7 , upvalues : _button_GuildTeamBattle, _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Plunder, _button_SavageOut, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, ResurrectionTime, revivalTime, deadMessage_Animation, _deadMessage, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, isMyChannelSiegeBeing, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
+  if _ContentsGroup_RenewUI_ExitGame == false then
+    if Panel_GameExit:GetShow() then
+      Panel_GameExit:SetShow(false)
+    end
+    if Panel_ChannelSelect:GetShow() then
+      FGlobal_ChannelSelect_Hide()
+    end
+  else
+    if PaGlobalFunc_GameExitCharMove_GetShow() == true then
+      PaGlobalFunc_GameExitCharMove_SetShow(false, false)
+    end
+    if PaGlobalFunc_GameExit_GetShow() == true then
+      PaGlobalFunc_GameExit_SetShow(false, false)
+    end
+    if Panel_ChannelSelect:GetShow() then
+      FGlobal_ChannelSelect_Hide()
+    end
   end
   SetUIMode((Defines.UIMode).eUIMode_DeadMessage)
+  _button_GuildTeamBattle:SetShow(false)
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -635,6 +654,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
     _deadQuestion:SetShow(false)
     _button_Plunder:SetShow(true)
     _button_ObserverMode:SetShow(true)
+    _button_GuildTeamBattle:SetShow(false)
     ResurrectionTime = revivalTime
     Panel_DeadMessage:SetShow(true, false)
     deadMessage_Animation()
@@ -660,6 +680,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
     _button_Volunteer:SetShow(false)
     _deadQuestion:SetShow(false)
     _button_Plunder:SetShow(false)
+    _button_GuildTeamBattle:SetShow(false)
     if attackerActorProxyWrapper == nil then
       _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
     else
@@ -696,6 +717,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _deadQuestion:SetShow(false)
       _button_LocalWar:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       if (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Personal == ToClient_CompetitionMatchType() then
         _button_ObserverMode:SetShow(false)
       else
@@ -740,6 +762,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       ResurrectionTime = 0
       Panel_DeadMessage:SetShow(true, false)
       deadMessage_Animation()
@@ -786,13 +809,14 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       ResurrectionTime = 0
       Panel_DeadMessage:SetShow(true, false)
       deadMessage_Animation()
       return 
     end
     if ToClient_IsSelfInGuildTeamBattle() == true then
-      _regenTime:SetShow(false)
+      _regenTime:SetShow(true)
       _button_SiegeIng:SetShow(false)
       _button_MoveExploration:SetShow(false)
       _button_MoveTown:SetShow(false)
@@ -803,16 +827,19 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _useCashItemBG:SetShow(false)
       _checkBoxUseCache:SetShow(false)
       _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_DEADATFIGHT"))
+      _button_GuildTeamBattle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+      _button_GuildTeamBattle:SetShow(true)
+      _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
+      _text_ImmediateCount:SetShow(true)
       _button_Immediate:SetShow(false)
-      _text_ImmediateCount:SetShow(false)
-      _button_ObserverMode:SetShow(true)
+      _button_ObserverMode:SetShow(false)
       _checkBoxUseFairy:SetShow(false)
       _button_LocalWar:SetShow(false)
       _button_SavageOut:SetShow(false)
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
-      ResurrectionTime = 0
+      ResurrectionTime = 25
       Panel_DeadMessage:SetShow(true, false)
       deadMessage_Animation()
       return 
@@ -837,6 +864,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       if attackerActorProxyWrapper == nil then
         _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
       else
@@ -869,6 +897,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       Panel_DeadMessage:SetShow(true, false)
       return 
     end
@@ -891,6 +920,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
       Panel_DeadMessage:SetShow(true, false)
+      _button_GuildTeamBattle:SetShow(false)
       ResurrectionTime = 2
       return 
     end
@@ -914,6 +944,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_Volunteer:SetShow(false)
       _deadQuestion:SetShow(false)
       _button_Plunder:SetShow(false)
+      _button_GuildTeamBattle:SetShow(false)
       if attackerActorProxyWrapper == nil then
         _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
       else
@@ -1000,7 +1031,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
               if attackerActorProxyWrapper ~= nil then
                 local isAttackPlayer = (attackerActorProxyWrapper:get()):isPlayer()
                 if isAttackPlayer then
-                  if ToClient_isDontPvPDecreaseTendency() then
+                  if ToClient_isDontPvPDecreaseTendency() or _ContentsGroup_RenewUI == true then
                     _deadQuestion:SetShow(false)
                   else
                     _deadQuestion:SetShow(true)
@@ -1141,7 +1172,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
 end
 
 deadMessage_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_8 , upvalues : isUseButtonAbleTime, buttonAbleTime, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _button_Immediate, _button_GuildSpawn, _button_Volunteer, ResurrectionTime, CurrentTime, isMyChannelSiegeBeing, _regenTime, UI_ANI_ADV, UI_color, deadMessage_ClearDropItems, _button_GuildObserverMode, _button_ObserverMode
+  -- function num : 0_8 , upvalues : isUseButtonAbleTime, buttonAbleTime, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _button_Immediate, _button_GuildSpawn, _button_Volunteer, ResurrectionTime, CurrentTime, isMyChannelSiegeBeing, _regenTime, deadMessage_ClearDropItems, UI_ANI_ADV, UI_color, _button_GuildObserverMode, _button_ObserverMode
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil or not selfPlayer:isDead() then
     Panel_DeadMessage:SetShow(false, false)
@@ -1183,36 +1214,41 @@ deadMessage_UpdatePerFrame = function(deltaTime)
       end
     end
     if not isMyChannelSiegeBeing then
-      if ((getSelfPlayer()):get()):getVolunteerTeamNoForLua() ~= 0 then
+      if ((getSelfPlayer()):get()):getVolunteerTeamNoForLua() == 0 or ToClient_IsSelfInGuildTeamBattle() == true then
+        deadMessage_ClearDropItems()
+        deadMessage_Revival(enRespawnType.respawnType_GuildTeamBattle, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+        SetUIMode((Defines.UIMode).eUIMode_Default)
+      else
         Panel_DeadMessage:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
-        do
-          local aniInfo1 = Panel_DeadMessage:addColorAnimation(0, 1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-          aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
-          aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
-          aniInfo1.IsChangeChild = true
-          aniInfo1:SetHideAtEnd(true)
-          aniInfo1:SetDisableWhileAni(true)
-          deadMessage_ClearDropItems()
-          deadMessage_Revival(enRespawnType.respawnType_TimeOver, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
-          SetUIMode((Defines.UIMode).eUIMode_Default)
-          local isObserverMode = false
-          _button_GuildObserverMode:SetShow(isObserverMode)
-          if ((getSelfPlayer()):get()):isCompetitionDefined() and (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Personal ~= ToClient_CompetitionMatchType() then
-            isObserverMode = true
-          end
-          if ToClient_getJoinGuildBattle() == true then
-            isObserverMode = true
-          end
-          if ToClient_getPlayNowSavageDefence() == true then
-            isObserverMode = true
-          end
-          if ToClient_IsSelfInGuildTeamBattle() == true then
-            isObserverMode = true
-          end
-          _button_ObserverMode:SetShow(isObserverMode)
-          _regenTime:SetShow(false)
-        end
+        local aniInfo1 = Panel_DeadMessage:addColorAnimation(0, 1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+        aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
+        aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
+        aniInfo1.IsChangeChild = true
+        aniInfo1:SetHideAtEnd(true)
+        aniInfo1:SetDisableWhileAni(true)
+        deadMessage_ClearDropItems()
+        deadMessage_Revival(enRespawnType.respawnType_TimeOver, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+        SetUIMode((Defines.UIMode).eUIMode_Default)
       end
+    end
+  else
+    do
+      local isObserverMode = false
+      _button_GuildObserverMode:SetShow(isObserverMode)
+      if ((getSelfPlayer()):get()):isCompetitionDefined() and (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Personal ~= ToClient_CompetitionMatchType() then
+        isObserverMode = true
+      end
+      if ToClient_getJoinGuildBattle() == true then
+        isObserverMode = true
+      end
+      if ToClient_getPlayNowSavageDefence() == true then
+        isObserverMode = true
+      end
+      if ToClient_IsSelfInGuildTeamBattle() == true then
+        isObserverMode = false
+      end
+      _button_ObserverMode:SetShow(isObserverMode)
+      _regenTime:SetShow(false)
     end
   end
 end
@@ -1491,8 +1527,19 @@ deadMessage_ButtonPushed_Immediate = function()
   deadMessage_ClearDropItems()
 end
 
-deadMessage_ButtonPushed_SiegeIng = function()
+deadMessage_ButtonPushed_GuildTeamBattle = function()
   -- function num : 0_21 , upvalues : deadMessage_ClearDropItems
+  local selfProxy = getSelfPlayer()
+  if selfProxy == nil then
+    return 
+  end
+  deadMessage_Revival(enRespawnType.respawnType_GuildTeamBattle, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+  FGlobal_ImmediatelyResurrection((selfProxy:get()):getMaxHp())
+  deadMessage_ClearDropItems()
+end
+
+deadMessage_ButtonPushed_SiegeIng = function()
+  -- function num : 0_22 , upvalues : deadMessage_ClearDropItems
   local buildingRegionKey = 0
   local currentBuildInfo = ToClient_getCurrentBuildingInfo()
   if currentBuildInfo == nil then
@@ -1509,19 +1556,19 @@ deadMessage_ButtonPushed_SiegeIng = function()
 end
 
 deadMessage_ButtonPushed_AdvancedBase = function()
-  -- function num : 0_22
+  -- function num : 0_23
   deadMessage_Revival(enRespawnType.respawnType_AdvancedBase, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
 end
 
 deadMessage_ButtonPushed_LocalWar = function()
-  -- function num : 0_23
+  -- function num : 0_24
   deadMessage_Revival(enRespawnType.respawnType_LocalWar, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
 end
 
 deadMessage_ButtonPushed_SavageDefence = function()
-  -- function num : 0_24
+  -- function num : 0_25
   local executeUnjoin = function()
-    -- function num : 0_24_0
+    -- function num : 0_25_0
     ToClient_SavageDefenceUnJoin()
   end
 
@@ -1532,7 +1579,7 @@ deadMessage_ButtonPushed_SavageDefence = function()
 end
 
 deadMessage_RevivalGuildSpawn_Confirm = function()
-  -- function num : 0_25
+  -- function num : 0_26
   local servantNo = 0
   local guildServantCount = guildServant_count()
   local selfPosition = ((getSelfPlayer()):get()):getPosition()
@@ -1558,7 +1605,7 @@ deadMessage_RevivalGuildSpawn_Confirm = function()
 end
 
 deadMessage_ButtonPushed_GuildSpawn = function()
-  -- function num : 0_26 , upvalues : _checkBoxUseCache, isHasRestoreExperience, deadMessage_ClearDropItems
+  -- function num : 0_27 , upvalues : _checkBoxUseCache, isHasRestoreExperience, deadMessage_ClearDropItems
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -1590,7 +1637,7 @@ deadMessage_ButtonPushed_GuildSpawn = function()
 end
 
 useCheckCacheItem = function(respawnType)
-  -- function num : 0_27
+  -- function num : 0_28
   local revivalItemCount = 0
   revivalItemCount = ToClient_InventorySizeByProductCategory((CppEnums.ItemWhereType).eCashInventory, (CppEnums.ItemProductCategory).eItemProductCategory_Revival)
   local selfProxy = getSelfPlayer()
@@ -1615,7 +1662,7 @@ useCheckCacheItem = function(respawnType)
 end
 
 useCheckFairy = function(respawnType)
-  -- function num : 0_28
+  -- function num : 0_29
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -1630,7 +1677,7 @@ useCheckFairy = function(respawnType)
 end
 
 deadMessage_SimpleTooltips = function(isShow)
-  -- function num : 0_29 , upvalues : _checkBoxUseCache
+  -- function num : 0_30 , upvalues : _checkBoxUseCache
   local uiControl, name, desc = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_DESC")
@@ -1643,7 +1690,7 @@ deadMessage_SimpleTooltips = function(isShow)
 end
 
 deadMessage_SimpleTooltipsFairy = function(isShow)
-  -- function num : 0_30 , upvalues : _checkBoxUseFairy
+  -- function num : 0_31 , upvalues : _checkBoxUseFairy
   local uiControl, name, desc = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_FAIRY_DESC")
@@ -1656,7 +1703,7 @@ deadMessage_SimpleTooltipsFairy = function(isShow)
 end
 
 deadMessage_PkPenalty_Tooltip = function(isShow)
-  -- function num : 0_31 , upvalues : _deadQuestion
+  -- function num : 0_32 , upvalues : _deadQuestion
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1673,7 +1720,7 @@ deadMessage_PkPenalty_Tooltip = function(isShow)
 end
 
 deadMessage_ButtonPushed_ObserverMode = function()
-  -- function num : 0_32 , upvalues : ResurrectionTime
+  -- function num : 0_33 , upvalues : ResurrectionTime
   if Panel_DeadMessage:GetShow() then
     Panel_DeadMessage:SetShow(false)
   end
@@ -1686,7 +1733,7 @@ deadMessage_ButtonPushed_ObserverMode = function()
 end
 
 deadMessage_ButtonPushed_GuildObserverMode = function()
-  -- function num : 0_33 , upvalues : tempButtonAbleTimeForGuildObserver, buttonAbleTime, startTimeForGuildObserver
+  -- function num : 0_34 , upvalues : tempButtonAbleTimeForGuildObserver, buttonAbleTime, startTimeForGuildObserver
   if Panel_DeadMessage:GetShow() then
     Panel_DeadMessage:SetShow(false)
   end
@@ -1696,13 +1743,13 @@ deadMessage_ButtonPushed_GuildObserverMode = function()
 end
 
 deadMessage_ResurrectionTimeReturn = function(Rtime)
-  -- function num : 0_34 , upvalues : ResurrectionTime, buttonAbleTime
+  -- function num : 0_35 , upvalues : ResurrectionTime, buttonAbleTime
   ResurrectionTime = Rtime
   buttonAbleTime = Rtime
 end
 
 FromClient_ResurrectionTimeResetByKingOrLordTentDestroy = function(notifyType, regionKeyRaw)
-  -- function num : 0_35
+  -- function num : 0_36
   local regionInfoWrapper = getRegionInfoWrapper(regionKeyRaw)
   if regionInfoWrapper == nil then
     return 
@@ -1711,7 +1758,7 @@ FromClient_ResurrectionTimeResetByKingOrLordTentDestroy = function(notifyType, r
 end
 
 deadMessage_toggleRespawnCheck = function(cacheClick)
-  -- function num : 0_36 , upvalues : _checkBoxUseFairy, _checkBoxUseCache
+  -- function num : 0_37 , upvalues : _checkBoxUseFairy, _checkBoxUseCache
   -- DECOMPILER ERROR at PC8: Unhandled construct in 'MakeBoolean' P1
 
   if cacheClick == true and _checkBoxUseFairy ~= nil then
@@ -1723,10 +1770,11 @@ deadMessage_toggleRespawnCheck = function(cacheClick)
 end
 
 deadMessage_registEventHandler = function()
-  -- function num : 0_37 , upvalues : _button_MoveTown, _button_MoveExploration, _button_Immediate, _button_SiegeIng, _button_AdvancedBase, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _checkBoxUseCache, _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Volunteer, _deadQuestion, _button_Plunder
+  -- function num : 0_38 , upvalues : _button_MoveTown, _button_MoveExploration, _button_Immediate, _button_GuildTeamBattle, _button_SiegeIng, _button_AdvancedBase, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _checkBoxUseCache, _checkBoxUseFairy, _button_ObserverMode, _button_GuildObserverMode, _button_Volunteer, _deadQuestion, _button_Plunder
   _button_MoveTown:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_MoveToVillage()")
   _button_MoveExploration:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_MoveExploration()")
   _button_Immediate:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_Immediate()")
+  _button_GuildTeamBattle:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_GuildTeamBattle()")
   _button_SiegeIng:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_SiegeIng()")
   _button_AdvancedBase:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_AdvancedBase()")
   _button_LocalWar:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_LocalWar()")
@@ -1739,15 +1787,17 @@ deadMessage_registEventHandler = function()
   _button_ObserverMode:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_ObserverMode()")
   _button_GuildObserverMode:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_GuildObserverMode()")
   _button_Volunteer:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_Volunteer()")
-  _deadQuestion:addInputEvent("Mouse_On", "deadMessage_PkPenalty_Tooltip(true)")
-  _deadQuestion:addInputEvent("Mouse_Out", "deadMessage_PkPenalty_Tooltip(false)")
+  if _ContentsGroup_RenewUI == false then
+    _deadQuestion:addInputEvent("Mouse_On", "deadMessage_PkPenalty_Tooltip(true)")
+    _deadQuestion:addInputEvent("Mouse_Out", "deadMessage_PkPenalty_Tooltip(false)")
+  end
   _checkBoxUseFairy:addInputEvent("Mouse_LUp", "deadMessage_toggleRespawnCheck(false)")
   _checkBoxUseCache:addInputEvent("Mouse_LUp", "deadMessage_toggleRespawnCheck(true)")
   _button_Plunder:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_Plunder()")
 end
 
 FromClient_NotifySiegeShowWatchPanel = function(isShow)
-  -- function num : 0_38 , upvalues : tempButtonAbleTimeForGuildObserver, startTimeForGuildObserver, buttonAbleTime, ResurrectionTime
+  -- function num : 0_39 , upvalues : tempButtonAbleTimeForGuildObserver, startTimeForGuildObserver, buttonAbleTime, ResurrectionTime
   if isShowGuildBattleCam == false then
     ToClient_CanOpenGuildBattleCam(false)
     return 
@@ -1825,7 +1875,7 @@ FromClient_NotifySiegeShowWatchPanel = function(isShow)
 end
 
 deadMessage_registMessageHandler = function()
-  -- function num : 0_39
+  -- function num : 0_40
   registerEvent("EventSelfPlayerDead", "deadMessage_Show")
   registerEvent("Event_DeadMessage_AddDropItem", "deadMessage_AddDropItem")
   registerEvent("Event_DeadMessage_WeakEquip", "deadMessage_WeakEquip")

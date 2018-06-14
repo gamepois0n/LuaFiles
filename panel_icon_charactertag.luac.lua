@@ -107,6 +107,9 @@ PaGlobal_CharacterTag_SetPosIcon = function()
       if _ContentsGroup_isFairy == true then
         PaGlobal_Fairy_SetPosIcon()
       end
+      if _ContentsGroup_RenewUI_Main == true then
+        Panel_Icon_CharacterTag:SetShow(false)
+      end
     end
   end
 end
@@ -127,7 +130,11 @@ end
 InitializeTagIcon = function()
   -- function num : 0_3 , upvalues : Button_CharacterTag, isOpenCharacterTag
   Panel_Icon_CharacterTag:SetIgnore(false)
-  Panel_Icon_CharacterTag:SetShow(true)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Icon_CharacterTag:SetShow(false)
+  else
+    Panel_Icon_CharacterTag:SetShow(true)
+  end
   Button_CharacterTag = (UI.getChildControl)(Panel_Icon_CharacterTag, "Button_TagIcon")
   Button_CharacterTag:ActiveMouseEventEffect(true)
   Button_CharacterTag:addInputEvent("Mouse_LUp", "PaGlobal_CharacterTag_Open()")

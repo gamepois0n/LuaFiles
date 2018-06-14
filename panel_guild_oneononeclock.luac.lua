@@ -22,7 +22,7 @@ PaGlobal_Guild_OneOnOneClock.Open = function(self)
   local ui = self._ui
   local state = ToClient_GetGuildTeamBattleState()
   if __eGuildTeamBattleState_Teleport == state then
-    (ui._staticText_Time):SetText("05:00")
+    (ui._staticText_Time):SetText("03:00")
   end
   self:UpdateData()
   Panel_Guild_OneOnOneClock:SetShow(true)
@@ -73,28 +73,41 @@ end
 PaGlobal_Guild_OneOnOneClock.Close = function(self)
   -- function num : 0_4
   Panel_Guild_OneOnOneClock:SetShow(false)
+  ;
+  ((PaGlobal_Guild_OneOnOneClock._ui)._staticText_AlertMessageBg):SetShow(false)
+  ;
+  ((PaGlobal_Guild_OneOnOneClock._ui)._staticText_NoticeMessageBg):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Guild_OneOnOneClock.UpdateClock = function(self, state, remainSec)
-  -- function num : 0_5
+  -- function num : 0_5 , upvalues : GetTeamKind
   local ui = self._ui
+  local attackTeamInfo = ToClient_GetGuildTeamBattleAttackTeam()
+  local defenceTeamInfo = ToClient_GetGuildTeamBattleDefenceTeam()
+  local strAttackTeamName = attackTeamInfo:getTeamName()
+  local strDefenceTeamName = defenceTeamInfo:getTeamName()
+  local strAttackTeamKind = GetTeamKind(attackTeamInfo:isAlliance())
+  local strDefenceTeamKind = GetTeamKind(defenceTeamInfo:isAlliance())
+  if remainSec < 0 then
+    remainSec = 0
+  end
   local clockTime = convertSecondsToClockTime(remainSec)
   if __eGuildTeamBattleState_Requesting == state then
     (ui._staticText_Time):SetText(clockTime)
     local attackTeam = ToClient_GetGuildTeamBattleAttackTeam()
     if attackTeam:isDefined() == false then
-      (ui._staticText_Title):SetText("�\128장전 신청 �\145")
+      (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_REQUESTING"))
       ;
-      (ui._staticText_NoticeMessage):SetText("시간 내에 공성�\128�\152 출전자가 직접 �\128장전�\132 신청해야 합니�\164.")
+      (ui._staticText_NoticeMessage):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_REQUESTING_DESC"))
       ;
       (ui._staticText_NoticeMessageBg):SetShow(true)
     else
       ;
-      (ui._staticText_Title):SetText("�\128장전 신청 완료")
+      (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_REQUESTING_DONE"))
       ;
-      (ui._staticText_NoticeMessage):SetText("잠시 �\132 수성�\128에게 1분간 �\128장전�\132 수락�\160 �\152 있는 시간�\180 주어집니�\164.")
+      (ui._staticText_NoticeMessage):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_AFTER_REQUESTING", "defenceTeamName", strDefenceTeamName, "defenceTeamKind", strDefenceTeamKind))
       ;
       (ui._staticText_NoticeMessageBg):SetShow(true)
     end
@@ -105,16 +118,16 @@ PaGlobal_Guild_OneOnOneClock.UpdateClock = function(self, state, remainSec)
         (ui._staticText_Time):SetText(clockTime)
         local defenceTeam = ToClient_GetGuildTeamBattleDefenceTeam()
         if defenceTeam:isDefined() == false then
-          (ui._staticText_Title):SetText("�\128장전 수락 �\145")
+          (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ACCEPTING"))
           ;
-          (ui._staticText_NoticeMessage):SetText("시간 내에 수성�\128�\180 공성�\128�\152 �\128장전 신청�\144 응하�\128 않으�\180 수성�\128�\180 패배�\156 것으�\156 처리됩니�\164.")
+          (ui._staticText_NoticeMessage):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ACCEPTING_DESC", "defenceTeamName", strDefenceTeamName, "defenceTeamKind", strDefenceTeamKind))
           ;
           (ui._staticText_NoticeMessageBg):SetShow(true)
         else
           ;
-          (ui._staticText_Title):SetText("�\128장전 성사")
+          (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ACCEPTTED"))
           ;
-          (ui._staticText_NoticeMessage):SetText("잠시 후부�\176 출전자들에게 전투�\188 �\128비할 �\152 있는 시간 1분이 주어집니�\164.")
+          (ui._staticText_NoticeMessage):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_WAITING_TELEPORT"))
           ;
           (ui._staticText_NoticeMessageBg):SetShow(true)
         end
@@ -122,15 +135,19 @@ PaGlobal_Guild_OneOnOneClock.UpdateClock = function(self, state, remainSec)
       else
         do
           if __eGuildTeamBattleState_Teleport == state then
-            (ui._staticText_Title):SetText("전투 �\128�\132 �\145")
+            (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_READYING"))
             ;
-            (ui._staticText_NoticeMessage):SetText(remainSec .. "�\136 후에 전투�\128 시작됩니�\164. 출전자들�\128 전투�\188 �\128비해주시�\176 바랍니다.")
-            ;
-            (ui._staticText_NoticeMessageBg):SetShow(true)
+            (ui._staticText_NoticeMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_FIGHTSTART_AFTER_SEC", "sec", remainSec))
+            if remainSec > 5 then
+              (ui._staticText_NoticeMessageBg):SetShow(true)
+            else
+              ;
+              (ui._staticText_NoticeMessageBg):SetShow(false)
+            end
             self:UpdateData()
           else
             if __eGuildTeamBattleState_Fight == state then
-              (ui._staticText_Title):SetText("�\128장전 진행 �\145")
+              (ui._staticText_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_FIGHTING"))
               ;
               (ui._staticText_Time):SetText(clockTime)
               ;
@@ -171,42 +188,48 @@ FGlobal_UpdateOneOnOneClock_TimeUpdate = function(state, remainSec)
   local ui = PaGlobal_Guild_OneOnOneClock._ui
   local self = PaGlobal_Guild_OneOnOneClock
   self:UpdateClock(state, remainSec)
-  if __eGuildTeamBattleState_Teleport == state then
-    if (ToClient_IsSelfInGuildTeamBattle() == true or ToClient_IsSelfPlayerInGuildTeamBattleTerritory() == true) and remainSec ~= self._lastRemainTime then
-      if remainSec > 0 and remainSec % 10 == 0 then
-        local msg = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_WAITING_MAIN", "remainSec", remainSec), sub = "", addMsg = ""}
-        Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 3, false)
+  if __eGuildTeamBattleState_Requesting == state or __eGuildTeamBattleState_Accepting == state or __eGuildTeamBattleState_Teleport == state or __eGuildTeamBattleState_Fight == state then
+    if ToClient_IsDoingGuildTeamBattleRingout() == true then
+      if ToClient_IsSelfInGuildTeamBattle() == false then
+        (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ILLEGALENTERANCE_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
+        ;
+        (ui._staticText_AlertMessageBg):SetShow(true)
       else
-        do
-          do
-            if remainSec > 0 and remainSec <= 5 then
-              local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_STARTSOON"), sub = tostring(remainSec), addMsg = ""}
-              Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(msg, 5, 62, false)
-            end
-            self._lastRemainTime = remainSec
-            -- DECOMPILER ERROR at PC85: Unhandled construct in 'MakeBoolean' P1
+        ;
+        (ui._staticText_AlertMessageBg):SetShow(false)
+      end
+    else
+      ;
+      (ui._staticText_AlertMessageBg):SetShow(false)
+    end
+  end
+  -- DECOMPILER ERROR at PC84: Unhandled construct in 'MakeBoolean' P1
 
-            if ToClient_IsDoingGuildTeamBattleRingout() == true and ToClient_IsSelfInGuildTeamBattle() == false then
-              (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ILLEGALENTERANCE_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
-              ;
-              (ui._staticText_AlertMessage):SetShow(true)
-            end
-            ;
-            (ui._staticText_AlertMessage):SetShow(false)
-            if __eGuildTeamBattleState_Fight == state then
-              if ToClient_IsDoingGuildTeamBattleRingout() == true then
-                if ToClient_IsSelfInGuildTeamBattle() == true then
-                  (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_RINGOUT_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
-                else
-                  ;
-                  (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ILLEGALENTERANCE_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
-                end
-                ;
-                (ui._staticText_AlertMessage):SetShow(true)
+  if __eGuildTeamBattleState_Teleport == state and (ToClient_IsSelfInGuildTeamBattle() == true or ToClient_IsSelfPlayerInGuildTeamBattleTerritory() == true) and remainSec ~= self._lastRemainTime then
+    if remainSec > 0 and remainSec < 60 and remainSec % 10 == 0 then
+      local msg = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_WAITING_MAIN", "remainSec", remainSec), sub = "", addMsg = ""}
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 3, false)
+    else
+      do
+        do
+          if remainSec > 0 and remainSec <= 5 then
+            local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_STARTSOON"), sub = tostring(remainSec), addMsg = ""}
+            Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(msg, 1, 62, false)
+          end
+          self._lastRemainTime = remainSec
+          if __eGuildTeamBattleState_Fight == state then
+            if ToClient_IsDoingGuildTeamBattleRingout() == true then
+              if ToClient_IsSelfInGuildTeamBattle() == true then
+                (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_RINGOUT_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
               else
                 ;
-                (ui._staticText_AlertMessage):SetShow(false)
+                (ui._staticText_AlertMessage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_ILLEGALENTERANCE_MAIN", "remainSec", ToClient_GetGuildTeamBattleRingoutTime()))
               end
+              ;
+              (ui._staticText_AlertMessageBg):SetShow(true)
+            else
+              ;
+              (ui._staticText_AlertMessageBg):SetShow(false)
             end
           end
         end
@@ -219,22 +242,25 @@ FGlobal_UpdateOneOnOneClock_TurnOnOff = function(regionInfo)
   -- function num : 0_8 , upvalues : GetTeamKind
   local state = ToClient_GetGuildTeamBattleState()
   local territoryKey = regionInfo:getTerritoryKeyRaw()
-  -- DECOMPILER ERROR at PC20: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC26: Unhandled construct in 'MakeBoolean' P1
 
-  if (__eGuildTeamBattleState_Teleport == state or __eGuildTeamBattleState_Fight == state) and PaGlobal_Guild_OneOnOneClock._lastTerritoryKey ~= territoryKey then
+  if (__eGuildTeamBattleState_Teleport == state or __eGuildTeamBattleState_Fight == state or __eGuildTeamBattleState_Requesting == state or __eGuildTeamBattleState_Accepting == state) and PaGlobal_Guild_OneOnOneClock._lastTerritoryKey ~= territoryKey then
     if ToClient_IsSelfPlayerInGuildTeamBattleTerritory() == true then
       local attackTeamInfo = ToClient_GetGuildTeamBattleAttackTeam()
       local defenceTeamInfo = ToClient_GetGuildTeamBattleDefenceTeam()
-      local message = {main = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_INGMESSAGE_SUB", "attackTeamName", attackTeamInfo:getTeamName(), "attackTeamKind", GetTeamKind(attackTeamInfo:isAlliance()), "defenceTeamName", defenceTeamInfo:getTeamName(), "defenceTeamKind", GetTeamKind(defenceTeamInfo:isAlliance())), sub = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_INGMESSAGE_MAIN", "territoryName", regionInfo:getTerritoryName()), addMsg = ""}
-      Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 93)
-      PaGlobal_Guild_OneOnOneClock:Open()
-    else
       do
-        PaGlobal_Guild_OneOnOneClock:Close()
-        PaGlobal_Guild_OneOnOneClock:Close()
-        -- DECOMPILER ERROR at PC72: Confused about usage of register: R3 in 'UnsetPending'
+        do
+          if ToClient_IsGuildTeamBattleInfoSet() == true then
+            local message = {main = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_INGMESSAGE_SUB", "attackTeamName", attackTeamInfo:getTeamName(), "attackTeamKind", GetTeamKind(attackTeamInfo:isAlliance()), "defenceTeamName", defenceTeamInfo:getTeamName(), "defenceTeamKind", GetTeamKind(defenceTeamInfo:isAlliance())), sub = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_INGMESSAGE_MAIN", "territoryName", regionInfo:getTerritoryName()), addMsg = ""}
+            Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 93, false)
+          end
+          PaGlobal_Guild_OneOnOneClock:Open()
+          PaGlobal_Guild_OneOnOneClock:Close()
+          PaGlobal_Guild_OneOnOneClock:Close()
+          -- DECOMPILER ERROR at PC83: Confused about usage of register: R3 in 'UnsetPending'
 
-        PaGlobal_Guild_OneOnOneClock._lastTerritoryKey = territoryKey
+          PaGlobal_Guild_OneOnOneClock._lastTerritoryKey = territoryKey
+        end
       end
     end
   end

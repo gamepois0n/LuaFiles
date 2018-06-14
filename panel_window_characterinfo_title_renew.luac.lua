@@ -119,7 +119,7 @@ CharacterTitleInfo.current_TitleName = function(self)
     ((self._ui).txt_Character_Title):SetText(selfplayer:getTitleName())
   else
     ;
-    ((self._ui).txt_Character_Title):SetText("아직 적용중인 칭호�\128 없습니다.")
+    ((self._ui).txt_Character_Title):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_TITLE_NOAPPLIEDTITLEYET"))
   end
 end
 
@@ -224,7 +224,7 @@ CharacterTitleInfo.titleInfoUpdate = function(self)
     ;
     ((self._ui).progress_Total_Percent):SetProgressRate(totalPercent)
     ;
-    ((self._ui).txt_Total_Progress):SetText("�\157 진행�\132: " .. (string.format)("%.1f", totalPercent) .. "%")
+    ((self._ui).txt_Total_Progress):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_TITLE_TOTALPROGRESS") .. " : " .. (string.format)("%.1f", totalPercent) .. "%")
     for index = 0, titleTotalCount - 1 do
       local titleBuffWrapper = ToClient_GetTitleBuffWrapper(index)
       if titleBuffWrapper ~= nil then
@@ -248,9 +248,9 @@ CharacterTitleInfo.titleInfoUpdate = function(self)
           (_categoryProgressDisplay[ii]):SetProgressRate(titleCurrentPercent)
           ;
           (_categoryPersentDisplay[ii]):SetText((string.format)("%.1f", titleCurrentPercent) .. "%")
-          -- DECOMPILER ERROR at PC125: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC125: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -282,9 +282,8 @@ InputMLUp_CharacterTitleInfo_TitleSet = function(categoryIdx, titleIdx)
   -- function num : 0_8 , upvalues : CharacterTitleInfo
   local self = CharacterTitleInfo
   ToClient_SetCurrentTitleCategory(categoryIdx)
-  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
-  ToClient_TitleSetRequest(categoryIdx, titleIdx)
   CharacterTitleInfo:current_TitleName()
+  ToClient_TitleSetRequest(categoryIdx, titleIdx)
   self._isSelectedTitle = true
   self._currentClickTitleIdx = titleIdx
 end
@@ -353,14 +352,19 @@ end
 
 CharacterTitleInfo.ShowNextTab = function(self, isLeft)
   -- function num : 0_16
-  -- DECOMPILER ERROR at PC7: Unhandled construct in 'MakeBoolean' P1
-
-  if isLeft == true and self._currentTitleListType > 0 then
-    self._currentTitleListType = self._currentTitleListType - 1
+  if isLeft == true then
+    if self._currentTitleListType > 0 then
+      self._currentTitleListType = self._currentTitleListType - 1
+    else
+      self._currentTitleListType = self._maxTitleListType - 1
+    end
     self:titleListCheck(self._currentTitleListType)
-  end
-  if self._currentTitleListType < self._maxTitleListType - 1 then
-    self._currentTitleListType = self._currentTitleListType + 1
+  else
+    if self._currentTitleListType < self._maxTitleListType - 1 then
+      self._currentTitleListType = self._currentTitleListType + 1
+    else
+      self._currentTitleListType = 0
+    end
     self:titleListCheck(self._currentTitleListType)
   end
 end

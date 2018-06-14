@@ -1424,6 +1424,9 @@ FGlobal_PetListNew_NoPet = function()
   do
     FGlobal_MaidIcon_SetPos(false)
     PaGlobal_Camp:setPos()
+    if _ContentsGroup_RenewUI_Main == true then
+      Panel_Window_PetIcon:SetShow(false)
+    end
   end
 end
 

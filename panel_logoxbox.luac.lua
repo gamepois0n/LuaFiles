@@ -25,5 +25,15 @@ Panel_LogoXbox_PressA = function()
   ToClient_ActiveProcessXbox()
 end
 
+Panel_LogoXbox_UpdatePerFrame = function()
+  -- function num : 0_2
+  if isPadUp(__eJoyPadInputType_A) then
+    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = "Pocessing .. ", functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageboxData)
+  end
+end
+
+Panel_LogoXbox:RegisterUpdateFunc("Panel_LogoXbox_UpdatePerFrame")
 button_Xbox:addInputEvent("Mouse_LUp", "Panel_LogoXbox_PressA()")
 

@@ -939,6 +939,9 @@ end
 
 QuestWidget_ScrollEvent = function(UpDown)
   -- function num : 0_33 , upvalues : _startPosition, _isDontDownScroll
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   local prevPos = _startPosition
   if UpDown == true then
     if _isDontDownScroll == true then
@@ -961,6 +964,9 @@ end
 local _maxscrollBarPos = 0
 QuestWidget_ScrollLPress = function()
   -- function num : 0_34 , upvalues : _startPosition, _isDontDownScroll
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   local prevPos = _startPosition
   local totalCount = PaGlobal_CheckedQuest:getTotalListCount()
   local currentPos = (math.floor)((PaGlobal_CheckedQuest._uiScrollBar):GetControlPos() * (totalCount - 1) + 0.5)
@@ -1679,18 +1685,19 @@ PaGlobal_CheckedQuest.setQuestGroupPos = function(self, idx, uiQuestInfo, questG
   if groupTitle == nil then
     groupTitle = "nil"
   end
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_LUp", "HandleClicked_ShowQuestInfo( " .. questGroupId .. ", " .. questId .. ", " .. conditionCheck .. ", \"" .. groupTitle .. "\", " .. questGroupCount .. " )")
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_RUp", "HandleClicked_QuestWidget_FindTarget( " .. questGroupId .. ", " .. questId .. ", " .. conditionCheck .. ", false )")
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_DownScroll", "QuestWidget_ScrollEvent( true )")
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_On", "HandleMouseOver_CheckedQuestGroup( true, " .. idx .. "," .. naviBtnShow .. " )")
-  ;
-  (elem._uiGroupBG):addInputEvent("Mouse_Out", "HandleMouseOver_CheckedQuestGroup( false, " .. idx .. "," .. naviBtnShow .. " )")
+  if _ContentsGroup_RenewUI == false then
+    (elem._uiGroupBG):addInputEvent("Mouse_LUp", "HandleClicked_ShowQuestInfo( " .. questGroupId .. ", " .. questId .. ", " .. conditionCheck .. ", \"" .. groupTitle .. "\", " .. questGroupCount .. " )")
+    ;
+    (elem._uiGroupBG):addInputEvent("Mouse_RUp", "HandleClicked_QuestWidget_FindTarget( " .. questGroupId .. ", " .. questId .. ", " .. conditionCheck .. ", false )")
+    ;
+    (elem._uiGroupBG):addInputEvent("Mouse_DownScroll", "QuestWidget_ScrollEvent( true )")
+    ;
+    (elem._uiGroupBG):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
+    ;
+    (elem._uiGroupBG):addInputEvent("Mouse_On", "HandleMouseOver_CheckedQuestGroup( true, " .. idx .. "," .. naviBtnShow .. " )")
+    ;
+    (elem._uiGroupBG):addInputEvent("Mouse_Out", "HandleMouseOver_CheckedQuestGroup( false, " .. idx .. "," .. naviBtnShow .. " )")
+  end
   if uiQuestInfo:isSatisfied() == true and uiQuestInfo:isCompleteBlackSpirit() then
     (elem._uiGroupBG):addInputEvent("Mouse_RUp", "HandleClicked_CallBlackSpirit()")
   end
@@ -2189,6 +2196,9 @@ end
 
 FGlobal_QuestWidget_MouseOver = function(show)
   -- function num : 0_73 , upvalues : widgetMouseOn
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if show == true then
     (PaGlobal_CheckedQuest._uiTransBG):SetShow(true)
     if isEmptyNormalQuestGroup() == false then
@@ -2322,6 +2332,9 @@ end
 
 HandleMouseOver_CheckedQuestGroup = function(show, bgIndex, naviBtnShow)
   -- function num : 0_78
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if bgIndex < 0 or PaGlobal_CheckedQuest._maxQuestListCnt <= bgIndex then
     _PA_LOG("�\128병호", "=================error=================")
     _PA_LOG("�\128병호", "HandleMouseOver_CheckedQuestGroup: bgIndex == " .. tostring(bgIndex))
@@ -2419,6 +2432,7 @@ FGlobal_QuestWidget_Close = function()
   Panel_CheckedQuest:SetShow(false, false)
   Panel_MainQuest:SetShow(false, false)
   questInfo_TooltipShow(false)
+  TooltipSimple_Hide()
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:pop()
   end
@@ -2426,6 +2440,9 @@ end
 
 HandleClicked_ShowQuestInfo = function(questGroupId, questId, questCondition_Chk, groupTitle, questGroupCount)
   -- function num : 0_89
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if _ContentsGroup_RenewUI == false then
     local fromQuestWidget = true
     FGlobal_QuestWindow_SetProgress()
@@ -2456,7 +2473,9 @@ end
 
 HandleClicked_QuestWidget_FindTarget = function(questGroupId, questId, condition, isAuto)
   -- function num : 0_91 , upvalues : _questGroupId, _questId, _naviInfoAgain, _isAutoRun
-  PaGlobal_TutorialManager:handleClickedQuestWidgetFindTarget(questGroupId, questId, condition, isAuto)
+  if _ContentsGroup_RenewUI == false then
+    PaGlobal_TutorialManager:handleClickedQuestWidgetFindTarget(questGroupId, questId, condition, isAuto)
+  end
   if _questGroupId == questGroupId and _questId == questId then
     if _naviInfoAgain == false then
       ToClient_DeleteNaviGuideByGroup(0)
@@ -2483,10 +2502,13 @@ end
 
 _QuestWidget_FindTarget_Auto = function(questGroupId, questId, condition, _isAutoRun, bgIdx)
   -- function num : 0_92 , upvalues : _autoNaviGuide, _questGroupId, _questId, _naviInfoAgain
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R5 in 'UnsetPending'
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R5 in 'UnsetPending'
 
   _autoNaviGuide.groupKey = questGroupId
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R5 in 'UnsetPending'
 
   _autoNaviGuide.questKey = questId
   _questGroupId = questGroupId

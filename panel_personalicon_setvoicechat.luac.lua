@@ -5,7 +5,9 @@
 -- function num : 0
 Panel_SetVoiceChat:SetShow(false)
 Panel_SetVoiceChat:ActiveMouseEventEffect(true)
-Panel_SetVoiceChat:setGlassBackground(true)
+if _ContentsGroup_RenewUI_Main == false then
+  Panel_SetVoiceChat:setGlassBackground(true)
+end
 local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
 local voiceSet = {
 ui = {micOnOff = (UI.getChildControl)(Panel_SetVoiceChat, "Checkbox_MicOnOff"), headphoneOnOff = (UI.getChildControl)(Panel_SetVoiceChat, "CheckButton_SpeakerOnOff"), pushToTalk = (UI.getChildControl)(Panel_SetVoiceChat, "CheckButton_PushToTalkOnOff"), slider_0 = (UI.getChildControl)(Panel_SetVoiceChat, "Slider_MicVolControl_0"), slider_1 = (UI.getChildControl)(Panel_SetVoiceChat, "Slider_MicVolControl_1"), slider_2 = (UI.getChildControl)(Panel_SetVoiceChat, "Slider_MicVolControl_2"), slider_3 = (UI.getChildControl)(Panel_SetVoiceChat, "Slider_MicVolControl_3"), confirm = (UI.getChildControl)(Panel_SetVoiceChat, "Button_Confirm"), cancel = (UI.getChildControl)(Panel_SetVoiceChat, "Button_Cancel"), winClose = (UI.getChildControl)(Panel_SetVoiceChat, "Button_WinClose")}
@@ -16,7 +18,7 @@ enumVoiceType = {enVoiceChatType_Guild = 0, enVoiceChatType_Party = 1, enVoiceCh
 , 
 config = {sliderCount = 4, openIsMicOn = true, openIsHeadphoneOn = true, openIsPushToTalk = true, openMicVolume = 0, openHeadphoneVolume = 0, openMicSensitivity = 0, openMicAmplification = 0}
 }
--- DECOMPILER ERROR at PC102: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
 
 ;
 (voiceSet.ui).sliderBtn = (UI.getChildControl)((voiceSet.ui).slider_0, "Slider_MicVol_Button")

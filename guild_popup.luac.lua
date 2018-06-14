@@ -5,12 +5,8 @@
 -- function num : 0
 Panel_CreateGuild:SetShow(false)
 Panel_CreateClan:SetShow(false, false)
-Panel_CreateClan:RegisterShowEventFunc(true, "CreateClanShowAni()")
-Panel_CreateClan:RegisterShowEventFunc(false, "CreateClanHideAni()")
 Panel_CreateClan:setGlassBackground(true)
 Panel_ClanToGuild:SetShow(false, false)
-Panel_ClanToGuild:RegisterShowEventFunc(true, "ClanToGuildShowAni()")
-Panel_ClanToGuild:RegisterShowEventFunc(false, "ClanToGuildHideAni()")
 Panel_ClanToGuild:setGlassBackground(true)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
@@ -18,25 +14,9 @@ local UI_TM = CppEnums.TextMode
 local IM = CppEnums.EProcessorInputMode
 local CreateClan = {selectedClan = (UI.getChildControl)(Panel_CreateClan, "RadioButton_Clan"), selectedGuild = (UI.getChildControl)(Panel_CreateClan, "RadioButton_Guild"), create = (UI.getChildControl)(Panel_CreateClan, "Button_Confirm"), createDescBG = (UI.getChildControl)(Panel_CreateClan, "Static_CreateClanDescBG"), guideMainBaseBG = (UI.getChildControl)(Panel_CreateClan, "Static_BaseBG"), guideMainBG = (UI.getChildControl)(Panel_CreateClan, "Static_SelectedTypeDescBG"), guideTitle = (UI.getChildControl)(Panel_CreateClan, "StaticText_SelectedTypeTitle"), guideDesc = (UI.getChildControl)(Panel_CreateClan, "StaticText_SelectedTypeDesc"), help = (UI.getChildControl)(Panel_CreateClan, "Button_Question"), close = (UI.getChildControl)(Panel_CreateClan, "Button_Win_Close")}
 local ClanToGuild = {convert = (UI.getChildControl)(Panel_ClanToGuild, "Button_Convert"), help = (UI.getChildControl)(Panel_ClanToGuild, "Button_Question"), close = (UI.getChildControl)(Panel_ClanToGuild, "Button_Win_Close")}
-CreateClanShowAni = function()
-  -- function num : 0_0
-end
-
-CreateClanHideAni = function()
-  -- function num : 0_1
-end
-
-ClanToGuildShowAni = function()
-  -- function num : 0_2
-end
-
-ClanToGuildHideAni = function()
-  -- function num : 0_3
-end
-
 local GuildCreateManager = {_createGuildBG = (UI.getChildControl)(Panel_CreateGuild, "Static_BG"), _buttonApply = (UI.getChildControl)(Panel_CreateGuild, "Button_Confirm"), _buttonCancel = (UI.getChildControl)(Panel_CreateGuild, "Button_Cancel"), _editGuildNameInput = (UI.getChildControl)(Panel_CreateGuild, "Edit_GuildName"), _txt_NameDesc = (UI.getChildControl)(Panel_CreateGuild, "StaticText_NameDesc"), _staticCreateServantNameBG = (UI.getChildControl)(Panel_CreateGuild, "Static_NamingPolicyBG"), _staticCreateServantNameTitle = (UI.getChildControl)(Panel_CreateGuild, "StaticText_NamingPolicyTitle"), _staticCreateServantName = (UI.getChildControl)(Panel_CreateGuild, "StaticText_NamingPolicy")}
 GuildCreateManager.initialize = function(self)
-  -- function num : 0_4 , upvalues : GuildCreateManager, UI_TM
+  -- function num : 0_0 , upvalues : GuildCreateManager, UI_TM
   (GuildCreateManager._buttonApply):addInputEvent("Mouse_LUp", "handleClicked_GuildCreateApply()")
   ;
   (GuildCreateManager._buttonCancel):addInputEvent("Mouse_LUp", "handleClicked_GuildCreateCancel()")
@@ -76,7 +56,7 @@ GuildCreateManager.initialize = function(self)
 end
 
 CreateClan.initialize = function(self)
-  -- function num : 0_5 , upvalues : UI_TM, GuildCreateManager
+  -- function num : 0_1 , upvalues : UI_TM, GuildCreateManager
   (self.guideDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (self.guideTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
@@ -113,10 +93,17 @@ CreateClan.initialize = function(self)
       end
     end
   end
+  if _ContentsGroup_isConsolePadControl then
+    (self.selectedGuild):addInputEvent("Mouse_On", "selectclaned2()")
+    ;
+    (self.guideTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
+    ;
+    (self.guideDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+  end
 end
 
 FGlobal_CehckedGuildEditUI = function(uiEdit)
-  -- function num : 0_6 , upvalues : GuildCreateManager
+  -- function num : 0_2 , upvalues : GuildCreateManager
   if uiEdit == nil then
     return false
   end
@@ -125,7 +112,7 @@ FGlobal_CehckedGuildEditUI = function(uiEdit)
 end
 
 handleClickedShowGuildCreateComment = function()
-  -- function num : 0_7 , upvalues : GuildCreateManager, UI_TM
+  -- function num : 0_3 , upvalues : GuildCreateManager, UI_TM
   local luaGuildTextGuildCreateMsg = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_CREATE_MSG")
   if (GuildCreateManager._buttonCreateGuild):IsChecked() then
     (GuildCreateManager._textCommentTitle):SetText(GuildCreateManager._titleGuild)
@@ -139,22 +126,24 @@ handleClickedShowGuildCreateComment = function()
 end
 
 handleClickedGuildCreateCancel = function()
-  -- function num : 0_8
+  -- function num : 0_4
   Panel_GuildManager:SetShow(false, false)
 end
 
 Guild_PopupCreate = function(guildGrade)
-  -- function num : 0_9 , upvalues : GuildCreateManager, UI_TM
+  -- function num : 0_5 , upvalues : GuildCreateManager, UI_TM
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   local showInputGuildName = function()
-    -- function num : 0_9_0 , upvalues : GuildCreateManager, UI_TM
+    -- function num : 0_5_0 , upvalues : GuildCreateManager, UI_TM
     Panel_CreateGuild:SetShow(true)
     ;
     (GuildCreateManager._editGuildNameInput):SetEditText("", true)
     ;
     (GuildCreateManager._editGuildNameInput):SetMaxInput(getGameServiceTypeGuildNameLength())
-    SetFocusEdit(GuildCreateManager._editGuildNameInput)
+    if _ContentsGroup_isConsolePadControl == false then
+      SetFocusEdit(GuildCreateManager._editGuildNameInput)
+    end
     ;
     (GuildCreateManager._editGuildNameInput):SetEnable(true)
     ;
@@ -174,6 +163,11 @@ Guild_PopupCreate = function(guildGrade)
     (GuildCreateManager._buttonApply):SetText(PAGetString(Defines.StringSheet_RESOURCE, "EXCHANGE_NUMBER_BTN_APPLY"))
     ;
     (GuildCreateManager._buttonCancel):SetText(PAGetString(Defines.StringSheet_RESOURCE, "EXCHANGE_NUMBER_BTN_CANCEL"))
+    if _ContentsGroup_isConsolePadControl then
+      (GuildCreateManager._buttonApply):SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_APPLY_WITHOUT_KEY"))
+      ;
+      (GuildCreateManager._buttonCancel):SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_CANCEL_WITHOUT_KEY"))
+    end
     ;
     (GuildCreateManager._staticCreateServantName):ComputePos()
     ;
@@ -223,7 +217,7 @@ Guild_PopupCreate = function(guildGrade)
 end
 
 handleClicked_GuildCreateApply = function()
-  -- function num : 0_10 , upvalues : GuildCreateManager, CreateClan
+  -- function num : 0_6 , upvalues : GuildCreateManager, CreateClan
   if (GuildCreateManager._editGuildNameInput):GetEditText() == "" then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_POPUP_ENTER_GUILDNAME"))
     ClearFocusEdit()
@@ -264,17 +258,17 @@ handleClicked_GuildCreateApply = function()
 end
 
 handleClicked_GuildCreateCancel = function()
-  -- function num : 0_11
+  -- function num : 0_7
   CreateClan_Close()
 end
 
 FGlobal_GuildCreateManagerPopup = function()
-  -- function num : 0_12
+  -- function num : 0_8
   CreateClan_Open()
 end
 
 CreateClan_PressCreate = function()
-  -- function num : 0_13 , upvalues : CreateClan
+  -- function num : 0_9 , upvalues : CreateClan
   local self = CreateClan
   if (self.selectedClan):IsCheck() then
     Guild_PopupCreate(0)
@@ -284,7 +278,11 @@ CreateClan_PressCreate = function()
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
         return 
       end
-      Guild_PopupCreate(1)
+      if _ContentsGroup_RenewUI_Guild == false then
+        Guild_PopupCreate(1)
+      else
+        PaGlobalFunc_GuildCreate_Open()
+      end
     else
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_CLANORGUILD_SELECT_ACK"))
     end
@@ -292,7 +290,7 @@ CreateClan_PressCreate = function()
 end
 
 CreateClan_SelectGroupType = function()
-  -- function num : 0_14 , upvalues : CreateClan
+  -- function num : 0_10 , upvalues : CreateClan
   local self = CreateClan
   local myGuildListInfo = (ToClient_GetMyGuildInfoWrapper())
   local title, desc = nil, nil
@@ -319,7 +317,7 @@ CreateClan_SelectGroupType = function()
 end
 
 CreateClan_Open = function()
-  -- function num : 0_15 , upvalues : CreateClan, UI_TM
+  -- function num : 0_11 , upvalues : CreateClan, UI_TM
   local self = CreateClan
   ;
   (self.selectedClan):SetCheck(true)
@@ -388,6 +386,19 @@ CreateClan_Open = function()
     end
   end
   do
+    if _ContentsGroup_RenewUI == true then
+      (self.selectedClan):SetCheck(false)
+      ;
+      (self.selectedClan):SetMonoTone(true)
+      ;
+      (self.selectedClan):SetEnable(false)
+      ;
+      (self.selectedGuild):SetCheck(true)
+      ;
+      (self.selectedGuild):SetMonoTone(false)
+      ;
+      (self.selectedGuild):SetEnable(true)
+    end
     local title = ""
     local desc = ""
     ;
@@ -411,19 +422,26 @@ CreateClan_Open = function()
     ;
     (self.create):SetSpanSize(((self.create):GetSpanSize()).x, 20)
     Panel_CreateClan:SetShow(true)
+    if _ContentsGroup_isConsolePadControl then
+      selectclaned2()
+      ;
+      (self.create):SetShow(false)
+    end
   end
 end
 
 CreateClan_Close = function()
-  -- function num : 0_16
+  -- function num : 0_12
   Panel_CreateGuild:SetShow(false)
   Panel_CreateClan:SetShow(false)
   ClearFocusEdit()
 end
 
 CreateClan.registEventHandler = function(self)
-  -- function num : 0_17
-  (self.selectedClan):addInputEvent("Mouse_LUp", "CreateClan_SelectGroupType()")
+  -- function num : 0_13
+  if _ContentsGroup_RenewUI == false then
+    (self.selectedClan):addInputEvent("Mouse_LUp", "CreateClan_SelectGroupType()")
+  end
   ;
   (self.selectedGuild):addInputEvent("Mouse_LUp", "CreateClan_SelectGroupType()")
   ;
@@ -437,33 +455,60 @@ CreateClan.registEventHandler = function(self)
   ;
   (self.help):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelClan\", \"false\")")
   registerEvent("onScreenResize", "FromClient_CreateGuild_onScreenResize")
+  if _ContentsGroup_isConsolePadControl then
+    (self.selectedGuild):addInputEvent("Mouse_LUp", "CreateClan_PressCreate()")
+    ;
+    (self.guideTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
+    ;
+    (self.guideDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+  end
+end
+
+selectclaned = function()
+  -- function num : 0_14 , upvalues : CreateClan
+  local self = CreateClan
+  ;
+  (self.selectedClan):SetCheck(true)
+  ;
+  (self.selectedGuild):SetCheck(false)
+  CreateClan_SelectGroupType()
+end
+
+selectclaned2 = function()
+  -- function num : 0_15 , upvalues : CreateClan
+  local self = CreateClan
+  ;
+  (self.selectedGuild):SetCheck(true)
+  ;
+  (self.selectedClan):SetCheck(false)
+  CreateClan_SelectGroupType()
 end
 
 CreateClan.registMessageHandler = function(self)
-  -- function num : 0_18
+  -- function num : 0_16
 end
 
 GuildTotClan_Convert = function()
-  -- function num : 0_19
+  -- function num : 0_17
 end
 
 HandleClicked_GuildTotClanClose = function()
-  -- function num : 0_20
+  -- function num : 0_18
   Panel_ClanToGuild:SetShow(false, false)
 end
 
 FGlobal_GuildTotClanOpen = function()
-  -- function num : 0_21
+  -- function num : 0_19
   Panel_ClanToGuild:SetShow(true, true)
 end
 
 FGlobal_GuildTotClanClose = function()
-  -- function num : 0_22
+  -- function num : 0_20
   Panel_ClanToGuild:SetShow(false, false)
 end
 
 ClanToGuild.registEventHandler = function(self)
-  -- function num : 0_23
+  -- function num : 0_21
   (self.convert):addInputEvent("Mouse_LUp", "GuildTotClan_Convert()")
   ;
   (self.help):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelClan\" )")
@@ -476,11 +521,11 @@ ClanToGuild.registEventHandler = function(self)
 end
 
 ClanToGuild.registMessageHandler = function(self)
-  -- function num : 0_24
+  -- function num : 0_22
 end
 
 Guild_CreateGuild = function()
-  -- function num : 0_25
+  -- function num : 0_23
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -509,7 +554,7 @@ Guild_CreateGuild = function()
 end
 
 Guild_CreateGuild_ConfirmFromMessageBox = function()
-  -- function num : 0_26
+  -- function num : 0_24
   local guildGrade = 1
   local businessFunds = 300000
   ToClient_RequestRaisingGuildGrade(guildGrade, businessFunds)
@@ -518,7 +563,7 @@ Guild_CreateGuild_ConfirmFromMessageBox = function()
 end
 
 FromClient_CreateGuild_onScreenResize = function()
-  -- function num : 0_27
+  -- function num : 0_25
   local createClanPosY = nil
   if _ContentsGroup_RenewUI_Dailog == true then
     createClanPosY = (getScreenSizeY() - PaGlobalFunc_MainDialog_Bottom_GetSizeY()) / 2 - Panel_CreateClan:GetSizeY() / 2

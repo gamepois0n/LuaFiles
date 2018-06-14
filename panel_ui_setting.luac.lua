@@ -770,6 +770,10 @@ UiSet_Initialize = function()
       (((UiSet.panelPool)[idx]).control):SetRelativePosY(relativePosY)
     end
   end
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_SkillCommand:SetShow(false)
+    Panel_UIMain:SetShow(false)
+  end
   ;
   (UiSet.slider_UI_Scale):SetInterval(160)
 end
@@ -932,29 +936,35 @@ UiSet_update = function()
                     ;
                     (slot.close):SetShow(false)
                   end
+                else
+                  -- DECOMPILER ERROR at PC399: Overwrote pending register: R7 in 'AssignReg'
+
+                  if idx == panelID.UIMain and _ContentsGroup_RenewUI_Main == true then
+                    (slot.control):SetShow(false)
+                  end
                 end
               end
             end
           end
         end
-        -- DECOMPILER ERROR at PC401: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC413: Overwrote pending register: R7 in 'AssignReg'
 
         if (panelControl[idx]).isShow then
           if (panelControl[idx]).posFixed then
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", (panelControl[idx]).name))
           else
-            -- DECOMPILER ERROR at PC414: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC426: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText((panelControl[idx]).name)
           end
         else
-          -- DECOMPILER ERROR at PC423: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC435: Overwrote pending register: R7 in 'AssignReg'
 
           if idx == 21 then
             (slot.control):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
           else
-            -- DECOMPILER ERROR at PC432: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC444: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", (panelControl[idx]).name))
@@ -962,20 +972,20 @@ UiSet_update = function()
         end
         do
           local stateValue = 0
-          -- DECOMPILER ERROR at PC444: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC456: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC445: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC457: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC446: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC458: Overwrote pending register: R7 in 'AssignReg'
 
           if not R7_PC305 then
             stateValue = 1
           else
-            -- DECOMPILER ERROR at PC451: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC463: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC452: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC464: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC453: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC465: Overwrote pending register: R7 in 'AssignReg'
 
             if R7_PC305 then
               stateValue = 3
@@ -983,14 +993,14 @@ UiSet_update = function()
               stateValue = 2
             end
           end
-          -- DECOMPILER ERROR at PC459: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC471: Overwrote pending register: R7 in 'AssignReg'
 
-          R7_PC305(R8_PC462, stateValue)
-          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out DO_STMT
+          R7_PC305(R8_PC474, stateValue)
+          -- DECOMPILER ERROR at PC475: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC475: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC475: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1281,9 +1291,9 @@ UiSet_ConfrimSetting_Sub = function(isReset)
           Panel_GameTipMask:SetPosY(controlPosY - 7)
         end
       else
-        -- DECOMPILER ERROR at PC229: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC232: Unhandled construct in 'MakeBoolean' P1
 
-        if idx == panelID.ClassResource and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType()) then
+        if idx == panelID.ClassResource and _ContentsGroup_RenewUI_Main == false and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType()) then
           ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
         end
       end
@@ -1305,155 +1315,164 @@ UiSet_ConfrimSetting_Sub = function(isReset)
         isChecked_KeyViewer = (panelControl[idx]).isShow
         GameOption_UpdateOptionChanged()
       else
-        if idx == panelID.NewQuickSlot0 then
-          if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-            quickSlot_Clear(0)
+        if idx == panelID.UIMain then
+          if _ContentsGroup_RenewUI_Main == true then
+            ((panelControl[idx]).control):SetShow(false)
+          else
+            ;
+            ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
           end
-          ;
-          ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
         else
-          if idx == panelID.NewQuickSlot1 then
+          if idx == panelID.NewQuickSlot0 then
             if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-              quickSlot_Clear(1)
+              quickSlot_Clear(0)
             end
             ;
             ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
           else
-            if idx == panelID.NewQuickSlot2 then
+            if idx == panelID.NewQuickSlot1 then
               if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                quickSlot_Clear(2)
+                quickSlot_Clear(1)
               end
               ;
               ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
             else
-              if idx == panelID.NewQuickSlot3 then
+              if idx == panelID.NewQuickSlot2 then
                 if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                  quickSlot_Clear(3)
+                  quickSlot_Clear(2)
                 end
                 ;
                 ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
               else
-                if idx == panelID.NewQuickSlot4 then
+                if idx == panelID.NewQuickSlot3 then
                   if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                    quickSlot_Clear(4)
+                    quickSlot_Clear(3)
                   end
                   ;
                   ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                 else
-                  if idx == panelID.NewQuickSlot5 then
+                  if idx == panelID.NewQuickSlot4 then
                     if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                      quickSlot_Clear(5)
+                      quickSlot_Clear(4)
                     end
                     ;
                     ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                   else
-                    if idx == panelID.NewQuickSlot6 then
+                    if idx == panelID.NewQuickSlot5 then
                       if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                        quickSlot_Clear(6)
+                        quickSlot_Clear(5)
                       end
                       ;
                       ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                     else
-                      if idx == panelID.NewQuickSlot7 then
+                      if idx == panelID.NewQuickSlot6 then
                         if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                          quickSlot_Clear(7)
+                          quickSlot_Clear(6)
                         end
                         ;
                         ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                       else
-                        if idx == panelID.NewQuickSlot8 then
+                        if idx == panelID.NewQuickSlot7 then
                           if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                            quickSlot_Clear(8)
+                            quickSlot_Clear(7)
                           end
                           ;
                           ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                         else
-                          if idx == panelID.NewQuickSlot9 then
+                          if idx == panelID.NewQuickSlot8 then
                             if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                              quickSlot_Clear(9)
+                              quickSlot_Clear(8)
                             end
                             ;
                             ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                           else
-                            if idx == panelID.NewQuickSlot10 then
+                            if idx == panelID.NewQuickSlot9 then
                               if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                quickSlot_Clear(10)
+                                quickSlot_Clear(9)
                               end
                               ;
                               ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                             else
-                              if idx == panelID.NewQuickSlot11 then
+                              if idx == panelID.NewQuickSlot10 then
                                 if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                  quickSlot_Clear(11)
+                                  quickSlot_Clear(10)
                                 end
                                 ;
                                 ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                               else
-                                if idx == panelID.NewQuickSlot12 then
+                                if idx == panelID.NewQuickSlot11 then
                                   if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                    quickSlot_Clear(12)
+                                    quickSlot_Clear(11)
                                   end
                                   ;
                                   ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                 else
-                                  if idx == panelID.NewQuickSlot13 then
+                                  if idx == panelID.NewQuickSlot12 then
                                     if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                      quickSlot_Clear(13)
+                                      quickSlot_Clear(12)
                                     end
                                     ;
                                     ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                   else
-                                    if idx == panelID.NewQuickSlot14 then
+                                    if idx == panelID.NewQuickSlot13 then
                                       if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                        quickSlot_Clear(14)
+                                        quickSlot_Clear(13)
                                       end
                                       ;
                                       ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                     else
-                                      if idx == panelID.NewQuickSlot15 then
+                                      if idx == panelID.NewQuickSlot14 then
                                         if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                          quickSlot_Clear(15)
+                                          quickSlot_Clear(14)
                                         end
                                         ;
                                         ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                       else
-                                        if idx == panelID.NewQuickSlot16 then
+                                        if idx == panelID.NewQuickSlot15 then
                                           if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                            quickSlot_Clear(16)
+                                            quickSlot_Clear(15)
                                           end
                                           ;
                                           ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                         else
-                                          if idx == panelID.NewQuickSlot17 then
+                                          if idx == panelID.NewQuickSlot16 then
                                             if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                              quickSlot_Clear(17)
+                                              quickSlot_Clear(16)
                                             end
                                             ;
                                             ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                           else
-                                            if idx == panelID.NewQuickSlot18 then
+                                            if idx == panelID.NewQuickSlot17 then
                                               if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                                quickSlot_Clear(18)
+                                                quickSlot_Clear(17)
                                               end
                                               ;
                                               ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                             else
-                                              if idx == panelID.NewQuickSlot19 then
+                                              if idx == panelID.NewQuickSlot18 then
                                                 if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
-                                                  quickSlot_Clear(19)
+                                                  quickSlot_Clear(18)
                                                 end
                                                 ;
                                                 ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                               else
-                                                if panelID.SkillCoolTimeQuickSlot0 <= idx and idx <= panelID.SkillCoolTimeQuickSlot9 then
-                                                  ((panelControl[idx]).control):SetPosX(controlPosX)
-                                                  ;
-                                                  ((panelControl[idx]).control):SetPosY(controlPosY)
+                                                if idx == panelID.NewQuickSlot19 then
+                                                  if (panelControl[idx]).isShow == false and isUseNewQuickSlot() then
+                                                    quickSlot_Clear(19)
+                                                  end
                                                   ;
                                                   ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                                                 else
-                                                  ;
-                                                  ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
+                                                  if panelID.SkillCoolTimeQuickSlot0 <= idx and idx <= panelID.SkillCoolTimeQuickSlot9 then
+                                                    ((panelControl[idx]).control):SetPosX(controlPosX)
+                                                    ;
+                                                    ((panelControl[idx]).control):SetPosY(controlPosY)
+                                                    ;
+                                                    ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
+                                                  else
+                                                    ;
+                                                    ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
+                                                  end
                                                 end
                                               end
                                             end
@@ -2371,7 +2390,7 @@ FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isC
 end
 
 FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chatWindowIndex, relativePosX, relativePosY)
-  -- function num : 0_30 , upvalues : panelControl, UiSet, closeEmptyPanelState, panelID
+  -- function num : 0_30 , upvalues : panelControl, UiSet, panelID, closeEmptyPanelState
   if (panelControl[panelIndex]).posFixed == false then
     (((UiSet.panelPool)[panelIndex]).control):SetPosX(posX)
     ;
@@ -2402,6 +2421,11 @@ FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chat
   (((UiSet.panelPool)[panelIndex]).control):SetShow(isShow)
   ;
   ((panelControl[panelIndex]).control):SetShow(isShow)
+  if _ContentsGroup_RenewUI_Main == true then
+    _PA_LOG("박범�\128", "FromClient_getUiSettingPanelInfo")
+    ;
+    ((panelControl[panelID.UIMain]).control):SetShow(false)
+  end
   if closeEmptyPanelState[panelIndex - panelID.Chat0] == false then
     ((panelControl[panelIndex]).control):SetShow(isShow)
   end

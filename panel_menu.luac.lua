@@ -1172,6 +1172,10 @@ end
 
 Panel_Menu_ShowToggle = function()
   -- function num : 0_18 , upvalues : isActionUiOpen
+  if _ContentsGroup_RenewUI then
+    Panel_Window_Menu_ShowToggle()
+    return 
+  end
   do
     if isActionUiOpen or isGameTypeKorea() then
       local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)

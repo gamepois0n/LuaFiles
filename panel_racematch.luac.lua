@@ -291,7 +291,11 @@ RaceWindowToggleCheck = function()
     InGameShop_Close()
   end
   IngameCustomize_Hide()
-  Panel_Knowledge_Hide()
+  if _ContentsGroup_RenewUI_Knowledge == false then
+    Panel_Knowledge_Hide()
+  else
+    PaGlobalFunc_Window_Knowledge_Exit()
+  end
   FGlobal_Panel_DyeReNew_Hide()
 end
 

@@ -32,7 +32,7 @@ adrenallin_Update = function()
   (ui._adCircleProgress):SetProgressRate(adrenallin)
   ;
   (ui._txt_Adrenallin):SetText(tostring(adrenallin) .. "%")
-  if prevAdrenallin ~= adrenallin then
+  if prevAdrenallin ~= adrenallin and _ContentsGroup_RenewUI_Main == false then
     FGlobal_MainStatus_FadeIn(5)
   end
   prevAdrenallin = adrenallin
@@ -72,9 +72,13 @@ FromClient_UpdateAdrenalin = function()
     return 
   end
   changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-  if (getSelfPlayer()):isEnableAdrenalin() then
-    Panel_Adrenallin:SetShow(not isRecordMode)
-    adrenallin_Update()
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Adrenallin:SetShow(false)
+  else
+    if (getSelfPlayer()):isEnableAdrenalin() then
+      Panel_Adrenallin:SetShow(not isRecordMode)
+      adrenallin_Update()
+    end
   end
 end
 
@@ -110,8 +114,12 @@ FromClient_ChangeAdrenalinMode = function()
           Panel_Adrenallin:SetPosY(getScreenSizeY() * Panel_Adrenallin:GetRelativePosY() - Panel_Adrenallin:GetSizeY() / 2)
         end
         changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-        if (getSelfPlayer()):isEnableAdrenalin() then
-          Panel_Adrenallin:SetShow(not isRecordMode)
+        if _ContentsGroup_RenewUI_Main == true then
+          Panel_Adrenallin:SetShow(false)
+        else
+          if (getSelfPlayer()):isEnableAdrenalin() then
+            Panel_Adrenallin:SetShow(not isRecordMode)
+          end
         end
       end
     end
@@ -178,9 +186,13 @@ Panel_Adrenallin_OnSreenResize = function()
         Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
         Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
         changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-        if (getSelfPlayer()):isEnableAdrenalin() then
-          Panel_Adrenallin:SetShow(not isRecordMode)
-          FGlobal_PanelRepostionbyScreenOut(Panel_Adrenallin)
+        if _ContentsGroup_RenewUI_Main == true then
+          Panel_Adrenallin:SetShow(false)
+        else
+          if (getSelfPlayer()):isEnableAdrenalin() then
+            Panel_Adrenallin:SetShow(not isRecordMode)
+            FGlobal_PanelRepostionbyScreenOut(Panel_Adrenallin)
+          end
         end
       end
     end
@@ -202,8 +214,12 @@ registerEvent("FromClient_UseableBlackSpritSkill", "UseableBlackSpritSkill")
 Panel_Adrenallin_InitShow = function()
   -- function num : 0_13
   changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-  if (getSelfPlayer()):isEnableAdrenalin() then
-    Panel_Adrenallin:SetShow(not isRecordMode)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Adrenallin:SetShow(false)
+  else
+    if (getSelfPlayer()):isEnableAdrenalin() then
+      Panel_Adrenallin:SetShow(not isRecordMode)
+    end
   end
 end
 

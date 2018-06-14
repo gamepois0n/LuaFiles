@@ -20,7 +20,7 @@ questRewardSlotConfig = {_createIcon = true, _createBorder = true, _createCount 
 , 
 _enum = {eDefaulIndex = -1}
 , 
-_value = {isFirstOpen = false, leastSelectReward = 0}
+_value = {isFirstOpen = false, currentQuestIndex = 0, leastSelectReward = 0}
 , 
 _text = {requestText = PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST"), progressingText = PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_PROGRESS")}
 , 
@@ -211,10 +211,6 @@ Panel_Dialog_Main_Quest_Info.initControl = function(self)
   -- DECOMPILER ERROR at PC322: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui).static_QuestKey_Confirm = (UI.getChildControl)((self._ui).static_QuestBg, "Static_QuestKey_Confirm")
-  -- DECOMPILER ERROR at PC330: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
   (self._ui).btn_Quest_Y = (UI.getChildControl)((self._ui).static_QuestBg, "Button_Quest_Y")
   self:CreateRewardToolTipControl()
 end
@@ -331,39 +327,60 @@ Panel_Dialog_Main_Quest_Info.Quest_InfomationSetData = function(self, dialogData
   end
   local npcWord = simplequestData:getQuestDialog()
   if npcWord ~= nil and npcWord ~= "" then
-    ((self._ui).staticText_Quest_Npc_Words):SetAutoResize(true)
-    ;
-    ((self._ui).staticText_Quest_Npc_Words):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    ((self._ui).staticText_Quest_Npc_Words):SetText(npcWord)
-  end
-  local questDesc = simplequestData:getQuestDesc()
-  if questDesc ~= nil and questDesc ~= "" then
-    ((self._ui).staticText_Quest_Detail):SetAutoResize(true)
-    ;
-    ((self._ui).staticText_Quest_Detail):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    ((self._ui).staticText_Quest_Detail):SetText(questDesc)
-  end
-  local completeDesc = PAGetStringParam1(Defines.StringSheet_GAME, "QUESTLIST_COMPLETETARGET", "getCompleteDisplay", simplequestData:getCompleteDisplay())
-  local demandCount = simplequestData:getDemandCount()
-  for demandIndex = 0, demandCount - 1 do
-    local desc = simplequestData:getDemandAtDesc(R14_PC70)
-    if desc ~= nil then
-      completeDesc = completeDesc .. R14_PC70 .. desc
+    local newNpcWord = ""
+    local stringList = ((string.split)(npcWord, "\n"))
+    local strFirst, strSecond = nil, nil
+    if #stringList < 2 then
+      newNpcWord = npcWord
+    else
+      for line = 1, #stringList / 2 do
+        strFirst = stringList[line * 2 - 1]
+        strSecond = stringList[line * 2]
+        newNpcWord = newNpcWord .. strFirst .. "\n" .. strSecond .. "\n"
+        if line ~= #stringList / 2 then
+          newNpcWord = newNpcWord .. "\n"
+        end
+      end
     end
-  end
-  ;
-  ((self._ui).staticText_Quest_Condition):SetAutoResize(true)
-  ;
-  ((self._ui).staticText_Quest_Condition):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-  ;
-  ((self._ui).staticText_Quest_Condition):SetText(completeDesc)
-  self:SetQuestReward(simplequestData)
-  if _ContentsGroup_RenewUI_Dailog then
-    self:QuestButtonUpdateXBox(dialogData)
-  else
-    self:QuestButtonUpdate(dialogData)
+    do
+      do
+        ;
+        ((self._ui).staticText_Quest_Npc_Words):SetAutoResize(true)
+        ;
+        ((self._ui).staticText_Quest_Npc_Words):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+        ;
+        ((self._ui).staticText_Quest_Npc_Words):SetText(newNpcWord)
+        local preDesc = simplequestData:getQuestDesc()
+        local questDesc = ToClient_getReplaceDialog(preDesc)
+        if questDesc ~= nil and questDesc ~= "" then
+          ((self._ui).staticText_Quest_Detail):SetAutoResize(true)
+          ;
+          ((self._ui).staticText_Quest_Detail):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+          ;
+          ((self._ui).staticText_Quest_Detail):SetText(questDesc)
+        end
+        local completeDesc = PAGetStringParam1(Defines.StringSheet_GAME, "QUESTLIST_COMPLETETARGET", "getCompleteDisplay", simplequestData:getCompleteDisplay())
+        local demandCount = simplequestData:getDemandCount()
+        for demandIndex = 0, demandCount - 1 do
+          local desc = simplequestData:getDemandAtDesc(R15_PC109)
+          if desc ~= nil then
+            completeDesc = completeDesc .. R15_PC109 .. desc
+          end
+        end
+        ;
+        ((self._ui).staticText_Quest_Condition):SetAutoResize(true)
+        ;
+        ((self._ui).staticText_Quest_Condition):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+        ;
+        ((self._ui).staticText_Quest_Condition):SetText(completeDesc)
+        self:SetQuestReward(simplequestData)
+        if _ContentsGroup_RenewUI_Dailog then
+          self:QuestButtonUpdateXBox(dialogData)
+        else
+          self:QuestButtonUpdate(dialogData)
+        end
+      end
+    end
   end
 end
 
@@ -402,6 +419,8 @@ Panel_Dialog_Main_Quest_Info.QuestInfomationSetPosAll = function(self)
     value:SetPosY(currentPosY)
   end
   currentPosY = currentPosY + (((self._ui).static_Quest_Reward_Select)[0]):GetSizeY() + PanY
+  ;
+  ((self._ui).frame_1_Content):SetSize(currentPosY)
   ;
   ((self._ui).frame_1_VerticalScroll):SetControlPos(0)
   ;
@@ -451,6 +470,9 @@ Panel_Dialog_Main_Quest_Info.QuestButtonUpdate = function(self, dialogData)
       (questButton[index]):SetShow(true)
       ;
       (questButton[index]):addInputEvent("Mouse_LUp", "ToClient_ClickQuestButton(" .. index .. ")")
+      if _ContentsGroup_isConsolePadControl then
+        (questButton[index]):addInputEvent("Mouse_On", "ToClient_ClickQuestButton(" .. index .. ")")
+      end
     end
   end
 end
@@ -508,6 +530,8 @@ Panel_Dialog_Main_Quest_Info.SetRewardIcon = function(self, slot, reward, index,
       ;
       (slot.count):SetVerticalBottom()
       ;
+      (slot.count):SetTextHorizonRight()
+      ;
       (slot.count):SetIgnore(true)
     end
     slot:setItemByStaticStatus(itemStatic, reward:getItemCount())
@@ -522,8 +546,6 @@ Panel_Dialog_Main_Quest_Info.SetRewardIcon = function(self, slot, reward, index,
       (slot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Select\",true)")
       ;
       (slot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Select\",false)")
-      ;
-      (slot.icon):addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Quest_HandleClickedSelectedReward(" .. index .. ")")
       Panel_Tooltip_Item_SetPosition(index, slot, "Dialog_QuestReward_Select")
     end
   else
@@ -618,6 +640,7 @@ PaGlobalFunc_MainDialog_Quest_IsFirstSet = function()
 
   ;
   (self._value).isFirstOpen = true
+  Toggle_DialogMainTab_SetIndexQuest()
 end
 
 PaGlobalFunc_MainDialog_Quest_IsFirstReset = function()
@@ -679,7 +702,8 @@ PaGlobalFunc_MainDialog_Quest_List2EventControlCreate = function(list_content, k
   do
     local questType = questInfo:getQuestType()
     FGlobal_ChangeOnTextureForDialogQuestIcon(questTypeIcon, questType)
-    radioButton_Quest:addInputEvent("Mouse_LUp", "PaGlobal_MainDialog_Quest_ClickQuestList(" .. id .. ")")
+    radioButton_Quest:addInputEvent("Mouse_On", "PaGlobal_MainDialog_Quest_ClickQuestList(" .. id .. ")")
+    questName:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
     questName:SetText(realTiTile)
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
@@ -688,7 +712,14 @@ end
 PaGlobal_MainDialog_Quest_ClickQuestList = function(index)
   -- function num : 0_26 , upvalues : Panel_Dialog_Main_Quest_Info
   local self = Panel_Dialog_Main_Quest_Info
+  local dialogData = ToClient_GetCurrentDialogData()
+  local selecIndex = dialogData:getSelectedQuestIndex()
+  local lastIndex = selecIndex
   ToClient_ClickQuestList(index)
+  ;
+  ((self._ui).list2_Quest_List):requestUpdateByKey(toInt64(0, index))
+  ;
+  ((self._ui).list2_Quest_List):requestUpdateByKey(toInt64(0, lastIndex))
   self:update_Quest_Infomation()
 end
 
@@ -786,7 +817,7 @@ PaGlobalFunc_MainDialog_Quest_InteractionCheck = function()
     return 
   end
   audioPostEvent_SystemUi(0, 0)
-  ReqeustDialog_selectReward(selectIndex)
+  ReqeustDialog_selectReward((self._value).leastSelectReward)
   ToClient_ClickQuestButton(0)
 end
 
@@ -795,6 +826,8 @@ FromClient_InitMainDialog_Quest = function()
   local self = Panel_Dialog_Main_Quest_Info
   self:initialize()
   self:Resize()
+  ;
+  ((self._ui).static_QuestBg):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_MainDialog_Quest_InteractionCheck()")
 end
 
 FromClient_onScreenResize_MainDialog_Quest = function()

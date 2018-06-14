@@ -344,10 +344,18 @@ HandleClicked_GuildHistory_YearCheck = function(index)
   else
     yearRightButton:SetShow(false)
   end
-  if currentValue._year == ToClient_GetThisYear() then
-    HandleClicked_MyHistory_MonthCheck(ToClient_GetThisMonth() - 1)
+  if _ContentsGroup_RenewUI == true then
+    if currentValue._year == ToClient_GetThisYear() then
+      InputMLUp_CharacterHistoryInfo_TapToOpen(ToClient_GetThisMonth())
+    else
+      InputMLUp_CharacterHistoryInfo_TapToOpen(12)
+    end
   else
-    HandleClicked_MyHistory_MonthCheck(11)
+    if currentValue._year == ToClient_GetThisYear() then
+      HandleClicked_MyHistory_MonthCheck(ToClient_GetThisMonth() - 1)
+    else
+      HandleClicked_MyHistory_MonthCheck(11)
+    end
   end
   yearLeftButton:addInputEvent("Mouse_LUp", "HandleClicked_GuildHistory_YearCheck(" .. currentValue._year - firstLogYearValue - 1 .. ")")
   yearRightButton:addInputEvent("Mouse_LUp", "HandleClicked_GuildHistory_YearCheck(" .. currentValue._year - firstLogYearValue + 1 .. ")")

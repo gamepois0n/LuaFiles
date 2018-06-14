@@ -101,6 +101,9 @@ skillCommand.Open = function(self)
   Panel_SkillCommand:SetSize(300, 250)
   skillCommand:SetSkill()
   Panel_SkillCommand:SetShow(true)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_SkillCommand:SetShow(false)
+  end
 end
 
 FromClient_SkillCommandList = function(skillNo, isAwaken)

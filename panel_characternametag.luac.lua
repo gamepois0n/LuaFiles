@@ -64,41 +64,28 @@ do
 end
 
   init()
-  local _stackHpBarColor = {[-1] = (Defines.Color).C_FF000000, [0] = (Defines.Color).C_FFC4000C, [1] = (Defines.Color).C_FFFF8030, [2] = (Defines.Color).C_FF89CB4A, [3] = (Defines.Color).C_FF0075C9}
-  local _normalHpBarColor = {defaultColor = (Defines.Color).C_FFD20000, blindMode_Red = (Defines.Color).C_FFFFCE22, blindMode_Blue = (Defines.Color).C_FFFFCE22, partyMemeberColor = (Defines.Color).C_FF96D4FC}
+  local _stackHpBarColor = {[-1] = (Defines.Color).C_FF000000, [0] = 4291035148, [1] = 4294934576, [2] = 4294953029, [3] = 4287220554, [4] = 4281445845, [5] = 4278220233, [6] = 4289076667}
+  local _normalHpBarColor = {defaultColor = (Defines.Color).C_FFD20000, blindMode_Red = (Defines.Color).C_FFFFCE22, blindMode_Blue = (Defines.Color).C_FFFFCE22, partyMemeberColor = (Defines.Color).C_FF008AFF}
   local _mpBarColor = {ep_Character = (Defines.Color).C_FF81CE1C, fp_Character = (Defines.Color).C_FFF0D147, bp_Character = (Defines.Color).C_FFBFBFB7, darkelf = (Defines.Color).C_FF8B4DFF, mp_Character = (Defines.Color).C_FF367CFE}
   local _characterHpBarContainer = {}
   local _maxHpCount = 1000
-  local _maxHpBarColorCount = 4
+  local _maxHpBarColorCount = 7
   local _isStackOvered = false
   local CharacterNameTag_SetHpBarContainer = function(actorKeyRaw, actorProxy, targetPanel)
-  -- function num : 0_1 , upvalues : _maxHpCount, _characterHpBarContainer, _maxHpBarColorCount, _isStackOvered, _stackHpBarColor
+  -- function num : 0_1 , upvalues : _maxHpCount, _characterHpBarContainer, _maxHpBarColorCount, _stackHpBarColor
   local hpRate = actorProxy:getHp() % _maxHpCount / _maxHpCount * 100
   local modifiedHpIdx = (math.floor)(actorProxy:getHp() / _maxHpCount)
   local hpRatePerMaxHP = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
   local stackHpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
   local stackHpBackColor = (UI.getChildControl)(targetPanel, "Progress2_StackHpBackColor")
-  local stackHpbar = (UI.getChildControl)(targetPanel, "Progress2_StackHpBar")
-  local stackOveredHpBack = (UI.getChildControl)(targetPanel, "Static_HpBg2")
-  stackOveredHpBack:SetShow(false)
+  local stackHpbar = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
+  local hpPointer = (UI.getChildControl)(targetPanel, "StaticText_HP")
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if _characterHpBarContainer[actorKeyRaw] == nil then
     local hpBarData = {}
-    local hpBarPosX = stackHpbar:GetPosX()
-    local hpBarPosY = stackHpbar:GetPosY()
     hpBarData.stackHpBar = stackHpbar
     hpBarData.stackHpBarBackColor = stackHpBackColor
-    hpBarData.stackOveredHpBack = stackOveredHpBack
-    if GameOption_GetShowStackHp() == true then
-      if _maxHpBarColorCount < modifiedHpIdx then
-        (hpBarData.stackOveredHpBack):SetShow(true)
-        _isStackOvered = true
-      else
-        ;
-        (hpBarData.stackOveredHpBack):SetShow(false)
-        _isStackOvered = false
-      end
-    end
+    hpBarData.hpPointer = hpPointer
     local colorValue = modifiedHpIdx % _maxHpBarColorCount
     local backColorValue = colorValue - 1
     if modifiedHpIdx <= 0 then
@@ -108,7 +95,7 @@ end
         backColorValue = _maxHpBarColorCount - 1
       end
     end
-    if _maxHpBarColorCount * 2 < modifiedHpIdx and (hpBarData.stackOveredHpBack):GetShow() == true then
+    if _maxHpBarColorCount * 2 < modifiedHpIdx then
       (hpBarData.stackHpBarBackColor):SetColor(_stackHpBarColor[_maxHpBarColorCount - 1])
       ;
       (hpBarData.stackHpBar):SetColor(_stackHpBarColor[_maxHpBarColorCount - 1])
@@ -130,31 +117,31 @@ end
     hpBarData.currentHpIdx = modifiedHpIdx
     hpBarData.currentHpRate = hpRate
     hpBarData.hpBack = stackHpBack
-    -- DECOMPILER ERROR at PC148: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC116: Confused about usage of register: R14 in 'UnsetPending'
 
     _characterHpBarContainer[actorKeyRaw] = hpBarData
   else
     do
-      -- DECOMPILER ERROR at PC152: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC120: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (_characterHpBarContainer[actorKeyRaw]).stackHpBar = stackHpbar
-      -- DECOMPILER ERROR at PC155: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC123: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (_characterHpBarContainer[actorKeyRaw]).stackHpBarBackColor = stackHpBackColor
-      -- DECOMPILER ERROR at PC158: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC126: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (_characterHpBarContainer[actorKeyRaw]).targetHpIdx = modifiedHpIdx
-      -- DECOMPILER ERROR at PC161: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC129: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (_characterHpBarContainer[actorKeyRaw]).currentHpRate = hpRate
-      -- DECOMPILER ERROR at PC164: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC132: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
-      (_characterHpBarContainer[actorKeyRaw]).stackOveredHpBack = stackOveredHpBack
+      (_characterHpBarContainer[actorKeyRaw]).hpPointer = hpPointer
       if modifiedHpIdx == (_characterHpBarContainer[actorKeyRaw]).currentHpIdx then
         ((_characterHpBarContainer[actorKeyRaw]).stackHpBar):SetProgressRate(hpRate)
       end
@@ -1325,7 +1312,7 @@ end
 end
 
   local settingHpBarInitState = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_30 , upvalues : CharacterNameTag_FreeHpBarContainer
+  -- function num : 0_30 , upvalues : CharacterNameTag_SetHpBarContainer
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1341,15 +1328,9 @@ end
       hpLater = (UI.getChildControl)(targetPanel, "KingOrLordTentProgress2_HpLater")
       hpMain = (UI.getChildControl)(targetPanel, "KingOrLordTentHPGageProgress")
     else
-      if GameOption_GetShowStackHp() == true and (actorProxy:isSelfPlayer() or actorProxy:isPlayer()) then
-        hpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
-        hpMain = (UI.getChildControl)(targetPanel, "Progress2_StackHpBackColor")
-        hpLater = (UI.getChildControl)(targetPanel, "Progress2_StackHpBar")
-      else
-        hpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
-        hpLater = (UI.getChildControl)(targetPanel, "Progress2_HpLater")
-        hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
-      end
+      hpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
+      hpLater = (UI.getChildControl)(targetPanel, "Progress2_HpLater")
+      hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
     end
   end
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
@@ -1366,7 +1347,7 @@ end
   else
     do
       if actorProxy:isPlayer() == true then
-        CharacterNameTag_FreeHpBarContainer(actorKeyRaw)
+        CharacterNameTag_SetHpBarContainer(actorKeyRaw, actorProxy, targetPanel)
       end
     end
   end
@@ -1503,9 +1484,8 @@ end
       (hpBarData.stackHpBarBackColor):SetShow(false)
       ;
       (hpBarData.hpBack):SetShow(false)
-      if hpBarData.stackOveredHpBack ~= nil then
-        (hpBarData.stackOveredHpBack):SetShow(false)
-      end
+      ;
+      (hpBarData.hpPointer):SetShow(false)
     end
   end
   _characterHpBarContainer = {}
@@ -1517,7 +1497,7 @@ end
 end
 
   local settingHpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_37 , upvalues : furnitureCheck, _normalHpBarColor, hideTimeType, CharacterNameTag_SetRuler, CharacterNameTag_SetHpBarContainer, CharacterNameTag_FreeHpBarContainer, _characterHpBarContainer
+  -- function num : 0_37 , upvalues : furnitureCheck, hideTimeType, CharacterNameTag_SetRuler, CharacterNameTag_SetHpBarContainer, CharacterNameTag_FreeHpBarContainer, _normalHpBarColor, _characterHpBarContainer
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1761,96 +1741,135 @@ end
                         hpMain:SetCurrentProgressRate(100)
                         hpLater:SetCurrentProgressRate(100)
                         if actorProxy:isSelfPlayer() then
-                          if _ContentsGroup_StackingHpBar == false then
-                            local hpAlert = (UI.getChildControl)(targetPanel, "Static_nameTagGaugeAlert")
-                            local usePotion = (UI.getChildControl)(targetPanel, "StaticText_UsePotion")
-                            hpBack:SetShow(true)
-                            hpLater:SetShow(true)
-                            hpMain:SetShow(true)
-                            -- DECOMPILER ERROR at PC664: Overwrote pending register: R14 in 'AssignReg'
+                          local hpAlert = (UI.getChildControl)(targetPanel, "Static_nameTagGaugeAlert")
+                          local usePotion = (UI.getChildControl)(targetPanel, "StaticText_UsePotion")
+                          hpBack:SetShow(true)
+                          hpLater:SetShow(true)
+                          hpMain:SetShow(true)
+                          -- DECOMPILER ERROR at PC661: Overwrote pending register: R14 in 'AssignReg'
 
-                            local x1, y1, x2, y2 = nil, nil, nil, x2
-                            -- DECOMPILER ERROR at PC665: Overwrote pending register: R15 in 'AssignReg'
+                          local x1, y1, x2, y2 = nil, nil, nil, x2
+                          -- DECOMPILER ERROR at PC662: Overwrote pending register: R15 in 'AssignReg'
 
-                            if y2() > 0 then
+                          if y2() > 0 then
+                            hpMain:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Gauges.dds")
+                            x1 = setTextureUV_Func(hpMain, 1, 63, 233, 69)
+                          else
+                            if isColorBlindMode == 0 then
                               hpMain:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Gauges.dds")
-                              x1 = setTextureUV_Func(hpMain, 1, 63, 233, 69)
+                              -- DECOMPILER ERROR at PC693: Overwrote pending register: R14 in 'AssignReg'
+
+                              -- DECOMPILER ERROR at PC694: Overwrote pending register: R13 in 'AssignReg'
+
+                              -- DECOMPILER ERROR at PC695: Overwrote pending register: R12 in 'AssignReg'
+
+                              x1 = setTextureUV_Func(hpMain, 206, 96, 255, 99)
                             else
-                              if isColorBlindMode == 0 then
-                                hpMain:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Gauges.dds")
-                                -- DECOMPILER ERROR at PC696: Overwrote pending register: R14 in 'AssignReg'
+                              if isColorBlindMode == 1 then
+                                hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                -- DECOMPILER ERROR at PC710: Overwrote pending register: R14 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC697: Overwrote pending register: R13 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC711: Overwrote pending register: R13 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC698: Overwrote pending register: R12 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC712: Overwrote pending register: R12 in 'AssignReg'
 
-                                x1 = setTextureUV_Func(hpMain, 206, 96, 255, 99)
+                                x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                               else
-                                if isColorBlindMode == 1 then
+                                if isColorBlindMode == 2 then
                                   hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC713: Overwrote pending register: R14 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC727: Overwrote pending register: R14 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC714: Overwrote pending register: R13 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC728: Overwrote pending register: R13 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC715: Overwrote pending register: R12 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC729: Overwrote pending register: R12 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                else
-                                  if isColorBlindMode == 2 then
-                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC730: Overwrote pending register: R14 in 'AssignReg'
+                                end
+                              end
+                            end
+                          end
+                          ;
+                          (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
+                          local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
+                          local prevRate = hpMain:GetProgressRate()
+                          local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                          if hpRate < prevRate then
+                            hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
+                            hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
+                          else
+                            if prevRate < hpRate then
+                              hpMain:ResetVertexAni(true)
+                              hpLater:ResetVertexAni(true)
+                              hpMain:SetAlpha(1)
+                              hpLater:SetAlpha(1)
+                            end
+                          end
+                          hpMain:SetProgressRate(hpRate)
+                          hpLater:SetProgressRate(hpRate)
+                          hpAlert:ResetVertexAni(true)
+                          local x1, y1, x2, y2 = nil, nil, nil, nil
+                          if hpRate >= 40 then
+                            if isColorBlindMode == 0 then
+                              hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
+                              x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
+                            else
+                              if isColorBlindMode == 1 then
+                                hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                -- DECOMPILER ERROR at PC819: Overwrote pending register: R21 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC731: Overwrote pending register: R13 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC820: Overwrote pending register: R20 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC732: Overwrote pending register: R12 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC821: Overwrote pending register: R19 in 'AssignReg'
 
-                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                  end
+                                x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
+                              else
+                                if isColorBlindMode == 2 then
+                                  hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                  -- DECOMPILER ERROR at PC836: Overwrote pending register: R21 in 'AssignReg'
+
+                                  -- DECOMPILER ERROR at PC837: Overwrote pending register: R20 in 'AssignReg'
+
+                                  -- DECOMPILER ERROR at PC838: Overwrote pending register: R19 in 'AssignReg'
+
+                                  x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 end
                               end
                             end
                             ;
                             (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                            local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
-                            local prevRate = hpMain:GetProgressRate()
-                            local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                            if hpRate < prevRate then
-                              hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
-                              hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                            else
-                              if prevRate < hpRate then
-                                hpMain:ResetVertexAni(true)
-                                hpLater:ResetVertexAni(true)
-                                hpMain:SetAlpha(1)
-                                hpLater:SetAlpha(1)
-                              end
-                            end
-                            hpMain:SetProgressRate(hpRate)
-                            hpLater:SetProgressRate(hpRate)
-                            hpAlert:ResetVertexAni(true)
-                            local x1, y1, x2, y2 = nil, nil, nil, nil
-                            if hpRate >= 40 then
+                            usePotion:SetShow(false)
+                            hpMain:ResetVertexAni(true)
+                            hpMain:SetAlpha(1)
+                            hpAlert:SetShow(false)
+                          else
+                            if hpRate >= 20 then
                               if isColorBlindMode == 0 then
                                 hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
+                                -- DECOMPILER ERROR at PC875: Overwrote pending register: R21 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC876: Overwrote pending register: R20 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC877: Overwrote pending register: R19 in 'AssignReg'
+
                                 x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                               else
                                 if isColorBlindMode == 1 then
                                   hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC822: Overwrote pending register: R21 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC892: Overwrote pending register: R21 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC823: Overwrote pending register: R20 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC893: Overwrote pending register: R20 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC824: Overwrote pending register: R19 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC894: Overwrote pending register: R19 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 else
                                   if isColorBlindMode == 2 then
                                     hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC839: Overwrote pending register: R21 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC909: Overwrote pending register: R21 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC840: Overwrote pending register: R20 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC910: Overwrote pending register: R20 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC841: Overwrote pending register: R19 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC911: Overwrote pending register: R19 in 'AssignReg'
 
                                     x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                   end
@@ -1858,109 +1877,72 @@ end
                               end
                               ;
                               (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                              usePotion:SetShow(false)
-                              hpMain:ResetVertexAni(true)
-                              hpMain:SetAlpha(1)
-                              hpAlert:SetShow(false)
-                            else
-                              if hpRate >= 20 then
-                                if isColorBlindMode == 0 then
-                                  hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
-                                  -- DECOMPILER ERROR at PC878: Overwrote pending register: R21 in 'AssignReg'
-
-                                  -- DECOMPILER ERROR at PC879: Overwrote pending register: R20 in 'AssignReg'
-
-                                  -- DECOMPILER ERROR at PC880: Overwrote pending register: R19 in 'AssignReg'
-
-                                  x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
-                                else
-                                  if isColorBlindMode == 1 then
-                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC895: Overwrote pending register: R21 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC896: Overwrote pending register: R20 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC897: Overwrote pending register: R19 in 'AssignReg'
-
-                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                  else
-                                    if isColorBlindMode == 2 then
-                                      hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                      -- DECOMPILER ERROR at PC912: Overwrote pending register: R21 in 'AssignReg'
-
-                                      -- DECOMPILER ERROR at PC913: Overwrote pending register: R20 in 'AssignReg'
-
-                                      -- DECOMPILER ERROR at PC914: Overwrote pending register: R19 in 'AssignReg'
-
-                                      x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                    end
-                                  end
-                                end
-                                ;
-                                (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                if selfPlayerLevel <= 15 then
-                                  usePotion:SetShow(true)
-                                end
-                                hpMain:SetVertexAniRun("Ani_Color_Damage_40", true)
-                                hpAlert:SetShow(true)
-                                hpAlert:SetVertexAniRun("Ani_Color_nameTagAlertGauge0", true)
-                              else
-                                if isColorBlindMode == 0 then
-                                  hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
-                                  -- DECOMPILER ERROR at PC953: Overwrote pending register: R21 in 'AssignReg'
-
-                                  -- DECOMPILER ERROR at PC954: Overwrote pending register: R20 in 'AssignReg'
-
-                                  -- DECOMPILER ERROR at PC955: Overwrote pending register: R19 in 'AssignReg'
-
-                                  x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
-                                else
-                                  if isColorBlindMode == 1 then
-                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC970: Overwrote pending register: R21 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC971: Overwrote pending register: R20 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC972: Overwrote pending register: R19 in 'AssignReg'
-
-                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                  else
-                                    if isColorBlindMode == 2 then
-                                      hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                      -- DECOMPILER ERROR at PC987: Overwrote pending register: R21 in 'AssignReg'
-
-                                      -- DECOMPILER ERROR at PC988: Overwrote pending register: R20 in 'AssignReg'
-
-                                      -- DECOMPILER ERROR at PC989: Overwrote pending register: R19 in 'AssignReg'
-
-                                      x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                    end
-                                  end
-                                end
-                                ;
-                                (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                if selfPlayerLevel <= 15 then
-                                  usePotion:SetShow(true)
-                                end
-                                hpMain:SetVertexAniRun("Ani_Color_Damage_20", true)
-                                hpAlert:SetShow(true)
-                                hpAlert:SetVertexAniRun("Ani_Color_nameTagAlertGauge1", true)
+                              if selfPlayerLevel <= 15 then
+                                usePotion:SetShow(true)
                               end
+                              hpMain:SetVertexAniRun("Ani_Color_Damage_40", true)
+                              hpAlert:SetShow(true)
+                              hpAlert:SetVertexAniRun("Ani_Color_nameTagAlertGauge0", true)
+                            else
+                              if isColorBlindMode == 0 then
+                                hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
+                                -- DECOMPILER ERROR at PC950: Overwrote pending register: R21 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC951: Overwrote pending register: R20 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC952: Overwrote pending register: R19 in 'AssignReg'
+
+                                x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
+                              else
+                                if isColorBlindMode == 1 then
+                                  hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                  -- DECOMPILER ERROR at PC967: Overwrote pending register: R21 in 'AssignReg'
+
+                                  -- DECOMPILER ERROR at PC968: Overwrote pending register: R20 in 'AssignReg'
+
+                                  -- DECOMPILER ERROR at PC969: Overwrote pending register: R19 in 'AssignReg'
+
+                                  x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
+                                else
+                                  if isColorBlindMode == 2 then
+                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                    -- DECOMPILER ERROR at PC984: Overwrote pending register: R21 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC985: Overwrote pending register: R20 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC986: Overwrote pending register: R19 in 'AssignReg'
+
+                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
+                                  end
+                                end
+                              end
+                              ;
+                              (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
+                              if selfPlayerLevel <= 15 then
+                                usePotion:SetShow(true)
+                              end
+                              hpMain:SetVertexAniRun("Ani_Color_Damage_20", true)
+                              hpAlert:SetShow(true)
+                              hpAlert:SetVertexAniRun("Ani_Color_nameTagAlertGauge1", true)
                             end
-                            hpMain:setRenderTexture(hpMain:getBaseTexture())
-                          else
-                            do
-                              local usePotion = (UI.getChildControl)(targetPanel, "StaticText_UsePotion")
-                              hpBack:SetShow(true)
-                              hpLater:SetShow(true)
-                              hpMain:SetShow(true)
-                              local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
-                              local prevRate = hpMain:GetProgressRate()
-                              -- DECOMPILER ERROR at PC1042: Overwrote pending register: R13 in 'AssignReg'
+                          end
+                          hpMain:setRenderTexture(hpMain:getBaseTexture())
+                        else
+                          do
+                            if actorProxy:isPlayer() then
+                              if _ContentsGroup_StackingHpBar == false then
+                                local prevRate = hpMain:GetProgressRate()
+                                local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
+                                -- DECOMPILER ERROR at PC1030: Overwrote pending register: R12 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC1045: Overwrote pending register: R14 in 'AssignReg'
+                                local playerActorProxyWrapper = getPlayerActor(y1)
+                                -- DECOMPILER ERROR at PC1032: Overwrote pending register: R13 in 'AssignReg'
 
-                              do
+                                if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
+                                  local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
+                                end
+                                -- DECOMPILER ERROR at PC1054: Overwrote pending register: R14 in 'AssignReg'
+
                                 local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
                                 if hpRate < prevRate then
                                   hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
@@ -1975,283 +1957,230 @@ end
                                 end
                                 hpMain:SetProgressRate(hpRate)
                                 hpLater:SetProgressRate(hpRate)
-                                if hpRate >= 40 then
-                                  usePotion:SetShow(false)
-                                  hpMain:ResetVertexAni(true)
-                                  hpMain:SetAlpha(1)
-                                else
-                                  if hpRate >= 20 then
-                                    if selfPlayerLevel <= 15 then
-                                      usePotion:SetShow(true)
-                                    end
-                                    hpMain:SetVertexAniRun("Ani_Color_Damage_40", true)
-                                  else
-                                    if selfPlayerLevel <= 15 then
-                                      usePotion:SetShow(true)
-                                    end
-                                    hpMain:SetVertexAniRun("Ani_Color_Damage_20", true)
-                                  end
-                                end
-                                if RequestParty_getPartyMemberCount() > 0 then
-                                  hpMain:SetColor(_normalHpBarColor.partyMemeberColor)
+                                local isShow = (actorProxy:isHideTimeOver(hideTimeType.overHeadUI) == false or not isParty) and isArenaAreaOrZone
+                                hpMain:SetShow(true)
+                                hpBack:SetShow(isShow)
+                                hpLater:SetShow(isShow)
+                                hpMain:SetShow(isShow)
+                                local x1, y1, x2, y2 = nil, nil, nil, nil
+                                -- DECOMPILER ERROR at PC1118: Overwrote pending register: R20 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC1118: Overwrote pending register: R19 in 'AssignReg'
+
+                                -- DECOMPILER ERROR at PC1119: Overwrote pending register: R21 in 'AssignReg'
+
+                                if isParty then
+                                  y1(x2, y2)
+                                  x1 = setTextureUV_Func(hpMain, 1, 63, 233, 69)
                                 else
                                   if isColorBlindMode == 0 then
-                                    hpMain:SetColor(_normalHpBarColor.defaultColor)
+                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
+                                    -- DECOMPILER ERROR at PC1145: Overwrote pending register: R18 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1146: Overwrote pending register: R17 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1147: Overwrote pending register: R16 in 'AssignReg'
+
+                                    x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
+                                  elseif isColorBlindMode == 1 then
+                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                    -- DECOMPILER ERROR at PC1162: Overwrote pending register: R18 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1163: Overwrote pending register: R17 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1164: Overwrote pending register: R16 in 'AssignReg'
+
+                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
+                                  elseif isColorBlindMode == 2 then
+                                    hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
+                                    -- DECOMPILER ERROR at PC1179: Overwrote pending register: R18 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1180: Overwrote pending register: R17 in 'AssignReg'
+
+                                    -- DECOMPILER ERROR at PC1181: Overwrote pending register: R16 in 'AssignReg'
+
+                                    x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
+                                  end
+                                  ;
+                                  (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                end
+                                ;
+                                (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                hpMain:setRenderTexture(hpMain:getBaseTexture())
+                                CharacterNameTag_SetRuler(actorProxy:getMaxHp(), targetPanel, actorKeyRaw)
+                              else
+                                local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
+                                local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
+                                if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
+                                  local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
+                                end
+                                local isShow = (actorProxy:isHideTimeOver(hideTimeType.overHeadUI) == false or not isParty) and isArenaAreaOrZone
+                                local hpPointer = (UI.getChildControl)(targetPanel, "StaticText_HP")
+                                -- DECOMPILER ERROR at PC1258: Overwrote pending register: R16 in 'AssignReg'
+
+                                local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                                -- DECOMPILER ERROR at PC1271: Overwrote pending register: R17 in 'AssignReg'
+
+                                if GameOption_GetShowStackHp() == true and _ContentsGroup_StackingHpBar == true then
+                                  hpBack = (UI.getChildControl)(targetPanel, x2)
+                                  hpMain = (UI.getChildControl)(targetPanel, "Progress2_StackHpBackColor")
+                                  hpLater = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
+                                  hpBack:SetShow(isShow)
+                                  hpLater:SetShow(isShow)
+                                  hpMain:SetShow(isShow)
+                                  hpPointer:SetShow(isShow)
+                                  local pointerHalfSize = hpPointer:GetSizeX() * 0.5
+                                  -- DECOMPILER ERROR at PC1302: Overwrote pending register: R18 in 'AssignReg'
+
+                                  hpPointer:SetPosX(y2(hpBack) + 0.01 * hpRate * hpBack:GetSizeX() - pointerHalfSize)
+                                  if isShow == true then
+                                    CharacterNameTag_SetHpBarContainer(actorKeyRaw, actorProxy, targetPanel)
+                                    targetPanel:RegisterUpdateFunc("PaGlobal_WaitUntilHpBarChange_UpdateFunc")
                                   else
-                                    if isColorBlindMode == 1 then
-                                      hpMain:SetColor(_normalHpBarColor.blindMode_Red)
-                                    else
-                                      if isColorBlindMode == 2 then
-                                        hpMain:SetColor(_normalHpBarColor.blindMode_Blue)
-                                      end
-                                    end
+                                    CharacterNameTag_FreeHpBarContainer(actorKeyRaw)
+                                  end
+                                else
+                                  local prevRate = hpMain:GetProgressRate()
+                                  hpBack:SetShow(isShow)
+                                  hpLater:SetShow(isShow)
+                                  hpMain:SetShow(isShow)
+                                  hpPointer:SetShow(false)
+                                  if isParty == true then
+                                    hpMain:SetColor(_normalHpBarColor.partyMemeberColor)
+                                  elseif isColorBlindMode == 0 then
+                                    hpMain:SetColor(_normalHpBarColor.defaultColor)
+                                  elseif isColorBlindMode == 1 then
+                                    hpMain:SetColor(_normalHpBarColor.blindMode_Red)
+                                  elseif isColorBlindMode == 2 then
+                                    hpMain:SetColor(_normalHpBarColor.blindMode_Blue)
+                                  end
+                                  hpMain:SetAniSpeed(0)
+                                  hpMain:SetProgressRate(hpRate)
+                                  if _ContentsGroup_StackingHpBar == true then
+                                    local data = {}
+                                    data.stackHpBar = hpMain
+                                    data.stackHpBarBackColor = hpLater
+                                    data.hpBack = hpBack
+                                    data.hpPointer = hpPointer
+                                    -- DECOMPILER ERROR at PC1382: Confused about usage of register: R17 in 'UnsetPending'
+
+                                    _characterHpBarContainer[actorKeyRaw] = data
                                   end
                                 end
-                                if actorProxy:isPlayer() then
-                                  if _ContentsGroup_StackingHpBar == false then
-                                    local prevRate = hpMain:GetProgressRate()
-                                    local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
-                                    local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
-                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
+                              end
+                            elseif actorProxy:isNpc() then
+                              local isShow = false
+                              local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
+                              do
+                                do
+                                  if isFusionCore == true then
+                                    local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
+                                    if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
+                                      isShow = true
                                     end
+                                  end
+                                  if isShow then
                                     local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                                    local prevRate = hpMain:GetProgressRate()
                                     if hpRate < prevRate then
                                       hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
                                       hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                                    else
-                                      if prevRate < hpRate then
+                                    elseif prevRate < hpRate then
+                                      hpMain:ResetVertexAni(true)
+                                      hpLater:ResetVertexAni(true)
+                                      hpMain:SetAlpha(1)
+                                      hpLater:SetAlpha(1)
+                                    end
+                                    hpMain:SetProgressRate(hpRate)
+                                    hpLater:SetProgressRate(hpRate)
+                                  end
+                                  hpBack:SetShow(isShow)
+                                  hpLater:SetShow(isShow)
+                                  hpMain:SetShow(isShow)
+                                  if actorProxy:isHouseHold() then
+                                    houseHoldActorWrapper = getHouseHoldActor(actorKeyRaw)
+                                    if houseHoldActorWrapper == nil then
+                                      return 
+                                    end
+                                    if ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isKingOrLordTent() or ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBase() == false then
+                                      return 
+                                    end
+                                    local prevRate = hpMain:GetProgressRate()
+                                    local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                                    if hpLater:GetCurrentProgressRate() < hpMain:GetCurrentProgressRate() then
+                                      hpLater:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
+                                      hpMain:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
+                                    end
+                                    if hpRate < prevRate then
+                                      hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
+                                      hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
+                                    elseif prevRate < hpRate then
+                                      hpMain:ResetVertexAni(true)
+                                      hpLater:ResetVertexAni(true)
+                                      hpMain:SetAlpha(1)
+                                      hpLater:SetAlpha(1)
+                                    end
+                                    hpMain:SetProgressRate(hpRate)
+                                    hpLater:SetProgressRate(hpRate)
+                                    hpBack:SetShow(true)
+                                    hpLater:SetShow(true)
+                                    hpMain:SetShow(true)
+                                  elseif actorProxy:isInstanceObject() then
+                                    if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isHealingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isObservatory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isElephantBarn() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isRepairingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isMineFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBombFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDistributor() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDefenceTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBaseTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTankFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSavageDefenceObject() then
+                                      local prevRate = hpMain:GetProgressRate()
+                                      local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                                      hpMain:SetProgressRate(hpRate)
+                                      hpLater:SetProgressRate(hpRate)
+                                      if hpRate < prevRate then
+                                        hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
+                                        hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
+                                      elseif prevRate < hpRate then
+                                        if hpLater:GetCurrentProgressRate() < hpMain:GetCurrentProgressRate() then
+                                          hpLater:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
+                                        end
                                         hpMain:ResetVertexAni(true)
                                         hpLater:ResetVertexAni(true)
                                         hpMain:SetAlpha(1)
                                         hpLater:SetAlpha(1)
                                       end
+                                      hpBack:SetShow(true)
+                                      hpLater:SetShow(true)
+                                      hpMain:SetShow(true)
+                                    elseif ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
+                                      hpBack:SetShow(false)
+                                      hpLater:SetShow(false)
+                                      hpMain:SetShow(false)
                                     end
-                                    hpMain:SetProgressRate(hpRate)
-                                    hpLater:SetProgressRate(hpRate)
-                                    local isShow = (actorProxy:isHideTimeOver(hideTimeType.overHeadUI) == false or not isParty) and isArenaAreaOrZone
-                                    hpMain:SetShow(true)
-                                    hpBack:SetShow(isShow)
-                                    hpLater:SetShow(isShow)
-                                    hpMain:SetShow(isShow)
-                                    local x1, y1, x2, y2 = nil, nil, nil, nil
-                                    -- DECOMPILER ERROR at PC1243: Overwrote pending register: R20 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC1243: Overwrote pending register: R19 in 'AssignReg'
-
-                                    -- DECOMPILER ERROR at PC1244: Overwrote pending register: R21 in 'AssignReg'
-
-                                    if isParty then
-                                      y1(x2, y2)
-                                      x1 = setTextureUV_Func(hpMain, 1, 63, 233, 69)
-                                    else
-                                      if isColorBlindMode == 0 then
-                                        hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
-                                        -- DECOMPILER ERROR at PC1270: Overwrote pending register: R18 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1271: Overwrote pending register: R17 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1272: Overwrote pending register: R16 in 'AssignReg'
-
-                                        x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
-                                      elseif isColorBlindMode == 1 then
-                                        hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                        -- DECOMPILER ERROR at PC1287: Overwrote pending register: R18 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1288: Overwrote pending register: R17 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1289: Overwrote pending register: R16 in 'AssignReg'
-
-                                        x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                      elseif isColorBlindMode == 2 then
-                                        hpMain:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                        -- DECOMPILER ERROR at PC1304: Overwrote pending register: R18 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1305: Overwrote pending register: R17 in 'AssignReg'
-
-                                        -- DECOMPILER ERROR at PC1306: Overwrote pending register: R16 in 'AssignReg'
-
-                                        x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
-                                      end
-                                      ;
-                                      (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    end
-                                    ;
-                                    (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    hpMain:setRenderTexture(hpMain:getBaseTexture())
-                                    CharacterNameTag_SetRuler(actorProxy:getMaxHp(), targetPanel, actorKeyRaw)
-                                  else
-                                    local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
-                                    local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                    if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() and not (playerActorProxyWrapper:get()):isCompetitionDefined() then
-                                      local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isGuildTeamBattleAttend()
-                                    end
-                                    local overedHpBack = (UI.getChildControl)(targetPanel, "Static_HpBg2")
-                                    local isShow = (actorProxy:isHideTimeOver(hideTimeType.overHeadUI) == false or not isParty) and isArenaAreaOrZone
-                                    -- DECOMPILER ERROR at PC1390: Overwrote pending register: R16 in 'AssignReg'
-
-                                    if GameOption_GetShowStackHp() == true and _ContentsGroup_StackingHpBar == true then
-                                      hpBack = (UI.getChildControl)(targetPanel, y1)
-                                      hpMain = (UI.getChildControl)(targetPanel, "Progress2_StackHpBackColor")
-                                      hpLater = (UI.getChildControl)(targetPanel, "Progress2_StackHpBar")
-                                      hpBack:SetShow(isShow)
-                                      hpLater:SetShow(isShow)
-                                      hpMain:SetShow(isShow)
-                                      overedHpBack:SetShow(isShow)
-                                      -- DECOMPILER ERROR at PC1422: Overwrote pending register: R17 in 'AssignReg'
-
-                                      if isShow == true then
-                                        CharacterNameTag_SetHpBarContainer(actorKeyRaw, actorProxy, x2)
-                                        targetPanel:RegisterUpdateFunc("PaGlobal_WaitUntilHpBarChange_UpdateFunc")
-                                      else
-                                        CharacterNameTag_FreeHpBarContainer(actorKeyRaw)
-                                      end
-                                    else
+                                  elseif actorProxy:isVehicle() then
+                                    local vehicleActorWrapper = getVehicleActorByProxy(actorProxy)
+                                    if vehicleActorWrapper ~= nil and ((CppEnums.VehicleType).Type_ThrowStone == (vehicleActorWrapper:get()):getVehicleType() or (CppEnums.VehicleType).Type_ThrowFire == (vehicleActorWrapper:get()):getVehicleType() or (CppEnums.VehicleType).Type_WoodenFence == (vehicleActorWrapper:get()):getVehicleType()) then
+                                      _PA_LOG("LUA", "name show : " .. tostring(actorProxyWrapper:getName()))
                                       local prevRate = hpMain:GetProgressRate()
                                       local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                                      -- DECOMPILER ERROR at PC1441: Overwrote pending register: R18 in 'AssignReg'
-
-                                      hpBack:SetShow(y2)
-                                      hpLater:SetShow(isShow)
-                                      hpMain:SetShow(isShow)
-                                      overedHpBack:SetShow(false)
-                                      if RequestParty_getPartyMemberCount() > 0 then
-                                        hpMain:SetColor(_normalHpBarColor.partyMemeberColor)
-                                      elseif isColorBlindMode == 0 then
-                                        hpMain:SetColor(_normalHpBarColor.defaultColor)
-                                      elseif isColorBlindMode == 1 then
-                                        hpMain:SetColor(_normalHpBarColor.blindMode_Red)
-                                      elseif isColorBlindMode == 2 then
-                                        hpMain:SetColor(_normalHpBarColor.blindMode_Blue)
-                                      end
                                       hpMain:SetProgressRate(hpRate)
-                                      if _ContentsGroup_StackingHpBar == true then
-                                        local data = {}
-                                        data.stackHpBar = hpMain
-                                        data.stackHpBarBackColor = hpLater
-                                        data.hpBack = hpBack
-                                        data.overedHpBack = overedHpBack
-                                        -- DECOMPILER ERROR at PC1493: Confused about usage of register: R17 in 'UnsetPending'
-
-                                        _characterHpBarContainer[actorKeyRaw] = data
-                                      end
-                                    end
-                                  end
-                                elseif actorProxy:isNpc() then
-                                  local isShow = false
-                                  local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
-                                  do
-                                    do
-                                      if isFusionCore == true then
-                                        local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
-                                        if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
-                                          isShow = true
-                                        end
-                                      end
-                                      if isShow then
-                                        local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                                        local prevRate = hpMain:GetProgressRate()
-                                        if hpRate < prevRate then
-                                          hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
-                                          hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                                        elseif prevRate < hpRate then
-                                          hpMain:ResetVertexAni(true)
-                                          hpLater:ResetVertexAni(true)
-                                          hpMain:SetAlpha(1)
-                                          hpLater:SetAlpha(1)
-                                        end
-                                        hpMain:SetProgressRate(hpRate)
-                                        hpLater:SetProgressRate(hpRate)
-                                      end
-                                      hpBack:SetShow(isShow)
-                                      hpLater:SetShow(isShow)
-                                      hpMain:SetShow(isShow)
-                                      if actorProxy:isHouseHold() then
-                                        houseHoldActorWrapper = getHouseHoldActor(actorKeyRaw)
-                                        if houseHoldActorWrapper == nil then
-                                          return 
-                                        end
-                                        if ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isKingOrLordTent() or ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBase() == false then
-                                          return 
-                                        end
-                                        local prevRate = hpMain:GetProgressRate()
-                                        local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
+                                      hpLater:SetProgressRate(hpRate)
+                                      if hpRate < prevRate then
+                                        hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
+                                        hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
+                                      elseif prevRate < hpRate then
                                         if hpLater:GetCurrentProgressRate() < hpMain:GetCurrentProgressRate() then
                                           hpLater:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
-                                          hpMain:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
                                         end
-                                        if hpRate < prevRate then
-                                          hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
-                                          hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                                        elseif prevRate < hpRate then
-                                          hpMain:ResetVertexAni(true)
-                                          hpLater:ResetVertexAni(true)
-                                          hpMain:SetAlpha(1)
-                                          hpLater:SetAlpha(1)
-                                        end
-                                        hpMain:SetProgressRate(hpRate)
-                                        hpLater:SetProgressRate(hpRate)
-                                        hpBack:SetShow(true)
-                                        hpLater:SetShow(true)
-                                        hpMain:SetShow(true)
-                                      elseif actorProxy:isInstanceObject() then
-                                        if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isHealingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isObservatory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isElephantBarn() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isRepairingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isMineFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBombFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDistributor() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDefenceTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBaseTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTankFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSavageDefenceObject() then
-                                          local prevRate = hpMain:GetProgressRate()
-                                          local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                                          hpMain:SetProgressRate(hpRate)
-                                          hpLater:SetProgressRate(hpRate)
-                                          if hpRate < prevRate then
-                                            hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
-                                            hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                                          elseif prevRate < hpRate then
-                                            if hpLater:GetCurrentProgressRate() < hpMain:GetCurrentProgressRate() then
-                                              hpLater:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
-                                            end
-                                            hpMain:ResetVertexAni(true)
-                                            hpLater:ResetVertexAni(true)
-                                            hpMain:SetAlpha(1)
-                                            hpLater:SetAlpha(1)
-                                          end
-                                          hpBack:SetShow(true)
-                                          hpLater:SetShow(true)
-                                          hpMain:SetShow(true)
-                                        elseif ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
-                                          hpBack:SetShow(false)
-                                          hpLater:SetShow(false)
-                                          hpMain:SetShow(false)
-                                        end
-                                      elseif actorProxy:isVehicle() then
-                                        local vehicleActorWrapper = getVehicleActorByProxy(actorProxy)
-                                        if vehicleActorWrapper ~= nil and ((CppEnums.VehicleType).Type_ThrowStone == (vehicleActorWrapper:get()):getVehicleType() or (CppEnums.VehicleType).Type_ThrowFire == (vehicleActorWrapper:get()):getVehicleType() or (CppEnums.VehicleType).Type_WoodenFence == (vehicleActorWrapper:get()):getVehicleType()) then
-                                          _PA_LOG("LUA", "name show : " .. tostring(actorProxyWrapper:getName()))
-                                          local prevRate = hpMain:GetProgressRate()
-                                          local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
-                                          hpMain:SetProgressRate(hpRate)
-                                          hpLater:SetProgressRate(hpRate)
-                                          if hpRate < prevRate then
-                                            hpMain:SetVertexAniRun("Ani_Color_Damage_0", true)
-                                            hpLater:SetVertexAniRun("Ani_Color_Damage_White", true)
-                                          elseif prevRate < hpRate then
-                                            if hpLater:GetCurrentProgressRate() < hpMain:GetCurrentProgressRate() then
-                                              hpLater:SetCurrentProgressRate(hpMain:GetCurrentProgressRate())
-                                            end
-                                            hpMain:ResetVertexAni(true)
-                                            hpLater:ResetVertexAni(true)
-                                            hpMain:SetAlpha(1)
-                                            hpLater:SetAlpha(1)
-                                          end
-                                          hpBack:SetShow(true)
-                                          hpLater:SetShow(true)
-                                          hpMain:SetShow(true)
-                                        else
-                                          hpBack:SetShow(false)
-                                          hpLater:SetShow(false)
-                                          hpMain:SetShow(false)
-                                        end
+                                        hpMain:ResetVertexAni(true)
+                                        hpLater:ResetVertexAni(true)
+                                        hpMain:SetAlpha(1)
+                                        hpLater:SetAlpha(1)
                                       end
-                                      -- DECOMPILER ERROR: 42 unprocessed JMP targets
+                                      hpBack:SetShow(true)
+                                      hpLater:SetShow(true)
+                                      hpMain:SetShow(true)
+                                    else
+                                      hpBack:SetShow(false)
+                                      hpLater:SetShow(false)
+                                      hpMain:SetShow(false)
                                     end
                                   end
+                                  -- DECOMPILER ERROR: 42 unprocessed JMP targets
                                 end
                               end
                             end
@@ -2271,11 +2200,11 @@ end
 end
 
   local CharacterNameTag_HpBarUpdateCheck = function()
-  -- function num : 0_38 , upvalues : _characterHpBarContainer, _maxHpBarColorCount, _stackHpBarColor, _isStackOvered
+  -- function num : 0_38 , upvalues : _characterHpBarContainer, _maxHpBarColorCount, _stackHpBarColor
   for _,hpBarData in pairs(_characterHpBarContainer) do
     if hpBarData ~= nil then
       if hpBarData.currentHpIdx ~= hpBarData.targetHpIdx then
-        (hpBarData.stackHpBar):SetAniSpeed(1 / ((math.abs)(hpBarData.currentHpIdx - hpBarData.targetHpIdx) + 2))
+        (hpBarData.stackHpBar):SetAniSpeed(1 / ((math.abs)(hpBarData.currentHpIdx - hpBarData.targetHpIdx) + 1))
         if hpBarData.currentHpIdx < hpBarData.targetHpIdx then
           (hpBarData.stackHpBar):SetProgressRate(100)
         else
@@ -2336,34 +2265,20 @@ end
               end
             end
             do
-              do
-                if GameOption_GetShowStackHp() == true then
-                  if _maxHpBarColorCount - 1 < hpBarData.currentHpIdx then
-                    (hpBarData.stackOveredHpBack):SetShow(true)
-                    _isStackOvered = true
-                  else
-                    ;
-                    (hpBarData.stackOveredHpBack):SetShow(false)
-                    _isStackOvered = false
-                  end
-                end
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC158: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC180: LeaveBlock: unexpected jumping out IF_STMT
-
-              end
             end
           end
         end
@@ -2393,87 +2308,33 @@ end
   end
   local instanceObject = (actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()
   if actorProxy:isSelfPlayer() then
-    if _ContentsGroup_StackingHpBar == false then
-      local playerWrapper = getSelfPlayer()
-      local mp = (playerWrapper:get()):getMp()
-      local maxMp = (playerWrapper:get()):getMaxMp()
-      local mpRate = mp * 100 / maxMp
-      mpMain:SetProgressRate(mpRate)
-      mpMain:SetCurrentProgressRate(mpRate)
-      local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType() or UI_classType.ClassType_Orange == playerWrapper:getClassType()
-      local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType()
-      local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
-      local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
-      local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)
-      if isEP_Character then
-        if isColorBlindMode == 0 then
-          mpMain:SetColor((Defines.Color).C_FFA3EF00)
-        elseif isColorBlindMode == 1 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        elseif isColorBlindMode == 2 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        end
-      elseif isFP_Character then
-        if isColorBlindMode == 0 then
-          mpMain:SetColor((Defines.Color).C_FFFFCE22)
-        elseif isColorBlindMode == 1 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        elseif isColorBlindMode == 2 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        end
-      elseif isBP_Character then
-        if isColorBlindMode == 0 then
-          mpMain:SetColor((Defines.Color).C_FFFFCE22)
-        elseif isColorBlindMode == 1 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        elseif isColorBlindMode == 2 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        end
-      elseif isOnlyDarkelf then
-        if isColorBlindMode == 0 then
-          mpMain:SetColor((Defines.Color).C_FF505DEC)
-        elseif isColorBlindMode == 1 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        elseif isColorBlindMode == 2 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        end
-      elseif isMP_Character then
-        if isColorBlindMode == 0 then
-          mpMain:SetColor((Defines.Color).C_FF00A1FF)
-        elseif isColorBlindMode == 1 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        elseif isColorBlindMode == 2 then
-          mpMain:SetColor((Defines.Color).C_FFEE9900)
-        end
-      end
-      mpBack:SetShow(true)
-      mpMain:SetShow(true)
-    else
-      local playerWrapper = getSelfPlayer()
-      local mp = (playerWrapper:get()):getMp()
-      local maxMp = (playerWrapper:get()):getMaxMp()
-      local mpRate = mp * 100 / maxMp
-      mpMain:SetProgressRate(mpRate)
-      mpMain:SetCurrentProgressRate(mpRate)
-      local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType() or UI_classType.ClassType_Orange == playerWrapper:getClassType()
-      local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType()
-      local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
-      local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
-      local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)
-      if isEP_Character then
-        mpMain:SetColor(_mpBarColor.ep_Character)
-      elseif isFP_Character then
-        mpMain:SetColor(_mpBarColor.fp_Character)
-      elseif isBP_Character then
-        mpMain:SetColor(_mpBarColor.bp_Character)
-      elseif isOnlyDarkelf then
-        mpMain:SetColor(_mpBarColor.darkelf)
-      elseif isMP_Character then
-        mpMain:SetColor(_mpBarColor.mp_Character)
-      end
-      mpBack:SetShow(false)
-      mpMain:SetShow(true)
+    local playerWrapper = getSelfPlayer()
+    local mp = (playerWrapper:get()):getMp()
+    local maxMp = (playerWrapper:get()):getMaxMp()
+    local mpRate = mp * 100 / maxMp
+    mpMain:SetProgressRate(mpRate)
+    mpMain:SetCurrentProgressRate(mpRate)
+    local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType() or UI_classType.ClassType_Orange == playerWrapper:getClassType()
+    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType()
+    local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
+    local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
+    local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)
+    if isEP_Character then
+      mpMain:SetColor(_mpBarColor.ep_Character)
+    elseif isFP_Character then
+      mpMain:SetColor(_mpBarColor.fp_Character)
+    elseif isBP_Character then
+      mpMain:SetColor(_mpBarColor.bp_Character)
+    elseif isOnlyDarkelf then
+      mpMain:SetColor(_mpBarColor.darkelf)
+    elseif isMP_Character then
+      mpMain:SetColor(_mpBarColor.mp_Character)
     end
+    if isColorBlindMode ~= 0 then
+      mpMain:SetColor((Defines.Color).C_FFEE9900)
+    end
+    mpBack:SetShow(true)
+    mpMain:SetShow(true)
   elseif actorProxy:isInstanceObject() then
     if instanceObject:isBarricade() or instanceObject:isHealingTower() or instanceObject:isObservatory() or instanceObject:isElephantBarn() or instanceObject:isRepairingTower() or instanceObject:isMineFactory() or instanceObject:isBombFactory() or instanceObject:isDistributor() or instanceObject:isSiegeTower() or instanceObject:isLargeSiegeTower() or instanceObject:isDefenceTower() or instanceObject:isAdvancedBaseTower() or instanceObject:isTankFactory() or instanceObject:isSavageDefenceObject() then
       local isShowMp = false
@@ -2538,7 +2399,7 @@ end
               mpBack:SetShow(false)
               mpMain:SetShow(false)
             end
-            -- DECOMPILER ERROR: 48 unprocessed JMP targets
+            -- DECOMPILER ERROR: 27 unprocessed JMP targets
           end
         end
       end

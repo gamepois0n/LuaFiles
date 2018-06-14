@@ -87,7 +87,11 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
       if (CppEnums.PAGameUIType).PAGameUIPanel_RadarMap == value then
         FGlobal_Panel_Radar_Show(true)
       else
-        key:SetShow(isShow)
+        if (CppEnums.PAGameUIType).PAGameUIPanel_UIMenu == value then
+          key:SetShow(not _ContentsGroup_RenewUI_Main)
+        else
+          key:SetShow(isShow)
+        end
       end
       local posX = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
       local posY = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
@@ -110,7 +114,9 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
       checkAndSetPosInScreen(key)
     end
   end
-  Panel_ClassResource:SetShow(true)
+  if _ContentsGroup_RenewUI_Main == false then
+    Panel_ClassResource:SetShow(true)
+  end
   local chattingPanelCount = ToClient_getChattingPanelCount()
   for panelIndex = 0, chattingPanelCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
@@ -129,6 +135,9 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
     end
   end
   Chatting_OnResize()
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_SkillCommand:SetShow(false)
+  end
 end
 
 onReSizePanel = function(key)
@@ -136,41 +145,44 @@ onReSizePanel = function(key)
   if key == Panel_NewEquip then
     Panel_NewEquip_ScreenResize()
   else
-    if key == Panel_MainStatus_User_Bar then
+    -- DECOMPILER ERROR at PC13: Unhandled construct in 'MakeBoolean' P1
+
+    if key == Panel_MainStatus_User_Bar and _ContentsGroup_RenewUI_Main == false then
       Panel_MainStatus_User_Bar_Onresize()
+    end
+  end
+  if key == Panel_MainQuest then
+    FromClient_MainQuestWidget_ResetPosition()
+  else
+    if key == Panel_SkillCommand then
+      FGlobal_SkillCommand_ResetPosition()
     else
-      if key == Panel_MainQuest then
-        FromClient_MainQuestWidget_ResetPosition()
+      -- DECOMPILER ERROR at PC34: Unhandled construct in 'MakeBoolean' P1
+
+      if key == Panel_PvpMode and _ContentsGroup_RenewUI_Main == false then
+        PvpMode_Resize()
+      end
+    end
+  end
+  if key == Panel_Party then
+    partWidget_OnscreenEvent()
+  else
+    if key == Panel_Movie_KeyViewer then
+      Panel_KeyViewer_ScreenRePosition()
+    else
+      if key == Panel_CheckedQuest then
+        FromClient_questWidget_ResetPosition()
       else
-        if key == Panel_SkillCommand then
-          FGlobal_SkillCommand_ResetPosition()
-        else
-          if key == Panel_PvpMode then
-            PvpMode_Resize()
-          else
-            if key == Panel_Party then
-              partWidget_OnscreenEvent()
-            else
-              if key == Panel_Movie_KeyViewer then
-                Panel_KeyViewer_ScreenRePosition()
-              else
-                if key == Panel_CheckedQuest then
-                  FromClient_questWidget_ResetPosition()
-                else
-                  if key == Panel_Adrenallin then
-                    Panel_Adrenallin_OnSreenResize()
-                  else
-                    if key == Panel_QuickSlot then
-                      QuickSlot_OnscreenResize()
-                    end
-                  end
-                end
-              end
-            end
-          end
+        -- DECOMPILER ERROR at PC61: Unhandled construct in 'MakeBoolean' P1
+
+        if key == Panel_Adrenallin and _ContentsGroup_RenewUI_Main == false then
+          Panel_Adrenallin_OnSreenResize()
         end
       end
     end
+  end
+  if key == Panel_QuickSlot then
+    QuickSlot_OnscreenResize()
   end
 end
 
@@ -226,8 +238,10 @@ PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
       FGlobal_PersonalIcon_ButtonPosUpdate()
     end
     self:showConditionalUi()
-    Panel_ClassResource:SetShow(true)
-    -- DECOMPILER ERROR: 5 unprocessed JMP targets
+    if _ContentsGroup_RenewUI_Main == false then
+      Panel_ClassResource:SetShow(true)
+    end
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
@@ -246,10 +260,12 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
     GameTips_Show()
     GameTips_Reposition()
   end
-  if isPvpEnable() then
-    PvpMode_ShowButton(true)
-  else
-    PvpMode_ShowButton(false)
+  if _ContentsGroup_RenewUI_Main == false then
+    if isPvpEnable() then
+      PvpMode_ShowButton(true)
+    else
+      PvpMode_ShowButton(false)
+    end
   end
   FGlobal_ResetRadarUI(false)
 end
@@ -282,7 +298,11 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
   end
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()
-  Panel_UIMain:SetShow(isShow)
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_UIMain:SetShow(false)
+  else
+    Panel_UIMain:SetShow(isShow)
+  end
   Panel_SkillCommand:SetShow(isShow)
   if isShow == true then
     FGlobal_PersonalIcon_ButtonPosUpdate()
@@ -318,6 +338,9 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
       PvpMode_ShowButton(true)
     else
       PvpMode_ShowButton(false)
+    end
+    if _ContentsGroup_RenewUI_Main == true then
+      Panel_SkillCommand:SetShow(false)
     end
   end
 end

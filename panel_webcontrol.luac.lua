@@ -201,196 +201,200 @@ Panel_WebControl_TakeAndShow = function(helpType)
                             if helpType == "Chatting" then
                               html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEINFO_CHATTING" .. countryType))
                             else
-                              if helpType == "PanelAlchemy" then
-                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_ALCHEMY" .. countryType))
+                              if helpType == "KnownIssue" then
+                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_KNOWNISSUE" .. countryType))
                               else
-                                if helpType == "PanelCook" then
-                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_COOK" .. countryType))
+                                if helpType == "PanelAlchemy" then
+                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_ALCHEMY" .. countryType))
                                 else
-                                  if helpType == "PanelManufacture" then
-                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_MANUFACTURE" .. countryType))
+                                  if helpType == "PanelCook" then
+                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_COOK" .. countryType))
                                   else
-                                    if helpType == "PanelHouseControl" then
-                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSECONTROL" .. countryType))
+                                    if helpType == "PanelManufacture" then
+                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_MANUFACTURE" .. countryType))
                                     else
-                                      if helpType == "PanelTradeMarketGraph" then
-                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TRADEMARKETGRAPH" .. countryType))
+                                      if helpType == "PanelHouseControl" then
+                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSECONTROL" .. countryType))
                                       else
-                                        if helpType == "TerritoryTrade" then
-                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYTRADE" .. countryType))
+                                        if helpType == "PanelTradeMarketGraph" then
+                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TRADEMARKETGRAPH" .. countryType))
                                         else
-                                          if helpType == "TerritorySupply" then
-                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYSUPPLY" .. countryType))
+                                          if helpType == "TerritoryTrade" then
+                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYTRADE" .. countryType))
                                           else
-                                            if helpType == "TerritoryAuth" then
-                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYTRADE" .. countryType))
+                                            if helpType == "TerritorySupply" then
+                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYSUPPLY" .. countryType))
                                             else
-                                              if helpType == "HouseManageWork" then
-                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSEMANAGEWORK" .. countryType))
+                                              if helpType == "TerritoryAuth" then
+                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_TERRITORYTRADE" .. countryType))
                                               else
-                                                if helpType == "PanelWorldMapTownWorkerManage" then
-                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WORLDMAPTOWNWORKERMANAGE" .. countryType))
+                                                if helpType == "HouseManageWork" then
+                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSEMANAGEWORK" .. countryType))
                                                 else
-                                                  if helpType == "FarmManageWork" then
-                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_FARMMANAGEWORK" .. countryType))
+                                                  if helpType == "PanelWorldMapTownWorkerManage" then
+                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WORLDMAPTOWNWORKERMANAGE" .. countryType))
                                                   else
-                                                    if helpType == "PanelWindowHouse" then
-                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WINDOWHOUSE" .. countryType))
+                                                    if helpType == "FarmManageWork" then
+                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_FARMMANAGEWORK" .. countryType))
                                                     else
-                                                      if helpType == "PanelWindowTent" then
-                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WINDOWTENT" .. countryType))
+                                                      if helpType == "PanelWindowHouse" then
+                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WINDOWHOUSE" .. countryType))
                                                       else
-                                                        if helpType == "Gathering" then
-                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_GATHERING" .. countryType))
+                                                        if helpType == "PanelWindowTent" then
+                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WINDOWTENT" .. countryType))
                                                         else
-                                                          if helpType == "Pet" then
-                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_PET" .. countryType))
+                                                          if helpType == "Gathering" then
+                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_GATHERING" .. countryType))
                                                           else
-                                                            if helpType == "Dye" then
-                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_DYE" .. countryType))
+                                                            if helpType == "Pet" then
+                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_PET" .. countryType))
                                                             else
-                                                              if helpType == "HouseRank" then
-                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSERANK" .. countryType))
+                                                              if helpType == "Dye" then
+                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_DYE" .. countryType))
                                                               else
-                                                                if helpType == "Worker" then
-                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WORKER" .. countryType))
+                                                                if helpType == "HouseRank" then
+                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_HOUSERANK" .. countryType))
                                                                 else
-                                                                  if helpType == "AlchemyStone" then
-                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_ALCHEMYSTONE" .. countryType))
+                                                                  if helpType == "Worker" then
+                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFE_WORKER" .. countryType))
                                                                   else
-                                                                    if helpType == "LifeRanking" then
-                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFERANKING" .. countryType))
+                                                                    if helpType == "AlchemyStone" then
+                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_ALCHEMYSTONE" .. countryType))
                                                                     else
-                                                                      if helpType == "DeliveryPerson" then
-                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYPERSON" .. countryType))
+                                                                      if helpType == "LifeRanking" then
+                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_LIFERANKING" .. countryType))
                                                                       else
-                                                                        if helpType == "PanelServantinfo" then
-                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_SERVANTINFO" .. countryType))
+                                                                        if helpType == "DeliveryPerson" then
+                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYPERSON" .. countryType))
                                                                         else
-                                                                          if helpType == "PanelServantInventory" then
-                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_SERVANTINVENTORY" .. countryType))
+                                                                          if helpType == "PanelServantinfo" then
+                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_SERVANTINFO" .. countryType))
                                                                           else
-                                                                            if helpType == "PanelWindowStableShop" then
-                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEMARKET" .. countryType))
+                                                                            if helpType == "PanelServantInventory" then
+                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_SERVANTINVENTORY" .. countryType))
                                                                             else
-                                                                              if helpType == "PanelWindowStableMarket" then
+                                                                              if helpType == "PanelWindowStableShop" then
                                                                                 html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEMARKET" .. countryType))
                                                                               else
-                                                                                if helpType == "PanelWindowStableMating" then
-                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEMATING" .. countryType))
+                                                                                if helpType == "PanelWindowStableMarket" then
+                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEMARKET" .. countryType))
                                                                                 else
-                                                                                  if helpType == "PanelWindowStableRegister" then
-                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEREGISTER" .. countryType))
+                                                                                  if helpType == "PanelWindowStableMating" then
+                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEMATING" .. countryType))
                                                                                   else
-                                                                                    if helpType == "HousingConsignmentSale" then
-                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_HOUSINGCONSIGNMENTSALE" .. countryType))
+                                                                                    if helpType == "PanelWindowStableRegister" then
+                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WINDOWSTABLEREGISTER" .. countryType))
                                                                                     else
-                                                                                      if helpType == "HosingVendingMachine" then
-                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_HOUSINGVENDINGMACHINE" .. countryType))
+                                                                                      if helpType == "HousingConsignmentSale" then
+                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_HOUSINGCONSIGNMENTSALE" .. countryType))
                                                                                       else
-                                                                                        if helpType == "WareHouse" then
-                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WAREHOUSE" .. countryType))
+                                                                                        if helpType == "HosingVendingMachine" then
+                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_HOUSINGVENDINGMACHINE" .. countryType))
                                                                                         else
-                                                                                          if helpType == "DeliveryInformation" then
-                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYINFORMATION" .. countryType))
+                                                                                          if helpType == "WareHouse" then
+                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_WAREHOUSE" .. countryType))
                                                                                           else
-                                                                                            if helpType == "DeliveryRequest" then
-                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYREQUEST" .. countryType))
+                                                                                            if helpType == "DeliveryInformation" then
+                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYINFORMATION" .. countryType))
                                                                                             else
-                                                                                              if helpType == "MyVendorList" then
-                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_MYVENDORLIST" .. countryType))
+                                                                                              if helpType == "DeliveryRequest" then
+                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_DELIVERYREQUEST" .. countryType))
                                                                                               else
-                                                                                                if helpType == "ProductNote" then
-                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_PRODUCTNOTE" .. countryType))
+                                                                                                if helpType == "MyVendorList" then
+                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_MYVENDORLIST" .. countryType))
                                                                                                 else
-                                                                                                  if helpType == "ItemMarket" then
-                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_ITEMMARKET" .. countryType))
+                                                                                                  if helpType == "ProductNote" then
+                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_PRODUCTNOTE" .. countryType))
                                                                                                   else
-                                                                                                    if helpType == "ClothExchange" then
-                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CLOTHEXCHANGE" .. countryType))
+                                                                                                    if helpType == "ItemMarket" then
+                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CONVENI_ITEMMARKET" .. countryType))
                                                                                                     else
-                                                                                                      if helpType == "QuickSlot" then
-                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_QUICKSLOT" .. countryType))
+                                                                                                      if helpType == "ClothExchange" then
+                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_CLOTHEXCHANGE" .. countryType))
                                                                                                       else
-                                                                                                        if helpType == "SpiritEnchant" then
-                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SPIRITENCHANT" .. countryType))
+                                                                                                        if helpType == "QuickSlot" then
+                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_QUICKSLOT" .. countryType))
                                                                                                         else
-                                                                                                          if helpType == "PanelWindowExtractionCrystal" then
-                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWEXTRACTIONCRYSTAL" .. countryType))
+                                                                                                          if helpType == "SpiritEnchant" then
+                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SPIRITENCHANT" .. countryType))
                                                                                                           else
-                                                                                                            if helpType == "PanelWindowExtractionEnchantStone" then
-                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWEXTRACTIONENCHANTSTONE" .. countryType))
+                                                                                                            if helpType == "PanelWindowExtractionCrystal" then
+                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWEXTRACTIONCRYSTAL" .. countryType))
                                                                                                             else
-                                                                                                              if helpType == "PanelWindowSkill" then
-                                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWSKILL" .. countryType))
+                                                                                                              if helpType == "PanelWindowExtractionEnchantStone" then
+                                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWEXTRACTIONENCHANTSTONE" .. countryType))
                                                                                                               else
-                                                                                                                if helpType == "PanelEnableSkill" then
-                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_ENABLESKILL" .. countryType))
+                                                                                                                if helpType == "PanelWindowSkill" then
+                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WINDOWSKILL" .. countryType))
                                                                                                                 else
-                                                                                                                  if helpType == "PanelSkillAwaken" then
-                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SKILLAWAKEN" .. countryType))
+                                                                                                                  if helpType == "PanelEnableSkill" then
+                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_ENABLESKILL" .. countryType))
                                                                                                                   else
-                                                                                                                    if helpType == "Socket" then
-                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SOCKET" .. countryType))
+                                                                                                                    if helpType == "PanelSkillAwaken" then
+                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SKILLAWAKEN" .. countryType))
                                                                                                                     else
-                                                                                                                      if helpType == "WarInfo" then
-                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WARINFO" .. countryType))
+                                                                                                                      if helpType == "Socket" then
+                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_SOCKET" .. countryType))
                                                                                                                       else
-                                                                                                                        if helpType == "PanelExchangeWithPC" then
-                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_EXCHANGEWITHPC" .. countryType))
+                                                                                                                        if helpType == "WarInfo" then
+                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMBAT_WARINFO" .. countryType))
                                                                                                                         else
-                                                                                                                          if helpType == "PanelFriends" then
-                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FRIENDS" .. countryType))
+                                                                                                                          if helpType == "PanelExchangeWithPC" then
+                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_EXCHANGEWITHPC" .. countryType))
                                                                                                                           else
-                                                                                                                            if helpType == "PanelClan" then
-                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_CLAN" .. countryType))
+                                                                                                                            if helpType == "PanelFriends" then
+                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FRIENDS" .. countryType))
                                                                                                                             else
-                                                                                                                              if helpType == "PanelGuild" then
-                                                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_GUILD" .. countryType))
+                                                                                                                              if helpType == "PanelClan" then
+                                                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_CLAN" .. countryType))
                                                                                                                               else
-                                                                                                                                if helpType == "PanelLordMenu" then
-                                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_LORDMENU" .. countryType))
+                                                                                                                                if helpType == "PanelGuild" then
+                                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_GUILD" .. countryType))
                                                                                                                                 else
-                                                                                                                                  if helpType == "Panelmail" then
-                                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_MAIL" .. countryType))
+                                                                                                                                  if helpType == "PanelLordMenu" then
+                                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_LORDMENU" .. countryType))
                                                                                                                                   else
-                                                                                                                                    if helpType == "PartyOption" then
-                                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_PARTYOPTION" .. countryType))
+                                                                                                                                    if helpType == "Panelmail" then
+                                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_MAIL" .. countryType))
                                                                                                                                     else
-                                                                                                                                      if helpType == "HouseAuction" then
-                                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_HOUSEAUCTION" .. countryType))
+                                                                                                                                      if helpType == "PartyOption" then
+                                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_PARTYOPTION" .. countryType))
                                                                                                                                       else
-                                                                                                                                        if helpType == "PanelMailSend" then
-                                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_MAILSEND" .. countryType))
+                                                                                                                                        if helpType == "HouseAuction" then
+                                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_HOUSEAUCTION" .. countryType))
                                                                                                                                         else
-                                                                                                                                          if helpType == "Update" then
-                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_UPDATE" .. countryType))
+                                                                                                                                          if helpType == "PanelMailSend" then
+                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_MAILSEND" .. countryType))
                                                                                                                                           else
-                                                                                                                                            if helpType == "Fairy" then
-                                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FAIRY" .. countryType))
+                                                                                                                                            if helpType == "Update" then
+                                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_UPDATE" .. countryType))
                                                                                                                                             else
-                                                                                                                                              if helpType == "DeliveryCarriageinformation" then
-                                                                                                                                                html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Delivery/WebHelper_Delivery_CarriageInformation.html")
+                                                                                                                                              if helpType == "Fairy" then
+                                                                                                                                                html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FAIRY" .. countryType))
                                                                                                                                               else
-                                                                                                                                                if helpType == "HouseList" then
-                                                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/HouseInfo/WebHelper_HouesList.html")
+                                                                                                                                                if helpType == "DeliveryCarriageinformation" then
+                                                                                                                                                  html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Delivery/WebHelper_Delivery_CarriageInformation.html")
                                                                                                                                                 else
-                                                                                                                                                  if helpType == "PanelHouseInfo" then
-                                                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/HouseInfo/WebHelper_Panel_HouseInfo.html")
+                                                                                                                                                  if helpType == "HouseList" then
+                                                                                                                                                    html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/HouseInfo/WebHelper_HouesList.html")
                                                                                                                                                   else
-                                                                                                                                                    if helpType == "PanelInn" then
-                                                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Inn/WebHelper_Inn.html")
+                                                                                                                                                    if helpType == "PanelHouseInfo" then
+                                                                                                                                                      html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/HouseInfo/WebHelper_Panel_HouseInfo.html")
                                                                                                                                                     else
-                                                                                                                                                      if helpType == "PanelMailDetail" then
-                                                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Mail/WebHelper_Mail_Detail.html")
+                                                                                                                                                      if helpType == "PanelInn" then
+                                                                                                                                                        html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Inn/WebHelper_Inn.html")
                                                                                                                                                       else
-                                                                                                                                                        if helpType == "PanelPetSkill" then
-                                                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Servant/WebHelper_PetSkill.html")
+                                                                                                                                                        if helpType == "PanelMailDetail" then
+                                                                                                                                                          html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Mail/WebHelper_Mail_Detail.html")
                                                                                                                                                         else
-                                                                                                                                                          if helpType == "PanelAuction" then
-                                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Auction/WebHelper_Panel_Auction.html")
+                                                                                                                                                          if helpType == "PanelPetSkill" then
+                                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Servant/WebHelper_PetSkill.html")
                                                                                                                                                           else
-                                                                                                                                                            html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEGUIDE"))
+                                                                                                                                                            if helpType == "PanelAuction" then
+                                                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Auction/WebHelper_Panel_Auction.html")
+                                                                                                                                                            else
+                                                                                                                                                              html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEGUIDE"))
+                                                                                                                                                            end
                                                                                                                                                           end
                                                                                                                                                         end
                                                                                                                                                       end

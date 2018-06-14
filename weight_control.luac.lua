@@ -47,12 +47,19 @@ FGlobal_Inventory_WeightCheck = function()
     if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
       (self.weight):SetPosY((self.panel):GetSizeY() + 35)
     end
+    if _ContentsGroup_RenewUI_Main == true then
+      (self.weight):SetPosY((self.panel):GetSizeY() + 50)
+    end
     ;
     (self.panel):SetShow(true)
     ;
     (self.weight):SetShow(true)
     ;
     (self.weightText):SetShow(true)
+    ;
+    (self.weightText):SetPosX((self.weight):GetPosX() - (self.weightText):GetTextSizeX() - 25)
+    ;
+    (self.weightText):SetPosY((self.weight):GetPosY() - 4)
     ;
     (self.weight):SetAlpha(0.8)
     ;

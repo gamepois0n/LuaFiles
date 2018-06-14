@@ -6,16 +6,19 @@
 local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
 local voiceChatButton = FGlobal_GetPersonalIconControl(2)
 voiceChatButton:SetShow(isVoiceOpen)
+if _ContentsGroup_RenewUI then
+  voiceChatButton:SetShow(false)
+end
 local VoiceChat = {
 ui = {button = FGlobal_GetPersonalIconControl(2)}
 , 
 config = {micVol = false, headphoneVol = false}
 }
--- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC33: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (VoiceChat.ui).mic = (UI.getChildControl)((VoiceChat.ui).button, "Static_Mic")
--- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (VoiceChat.ui).headphone = (UI.getChildControl)((VoiceChat.ui).button, "Static_Headphone")

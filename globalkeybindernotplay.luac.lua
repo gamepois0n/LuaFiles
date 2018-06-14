@@ -64,6 +64,9 @@ GlobalKeyBinder_UpdateNotPlay = function(deltaTime)
     if Panel_CharacterSelectNew ~= nil and Panel_CharacterSelectNew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       CharacterSelect_Back()
     end
+    if Panel_CharacterSelect_Renew ~= nil and Panel_CharacterSelect_Renew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PaGlobal_CharacterSelect_BackToServerSelect()
+    end
     if Panel_Window_cOption ~= nil and Panel_Window_cOption:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       Panel_Window_cOption:SetShow(false, true)
     end

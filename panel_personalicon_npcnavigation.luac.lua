@@ -6,7 +6,9 @@
 Panel_NpcNavi:setMaskingChild(true)
 Panel_Tooltip_NpcNavigation:setMaskingChild(true)
 Panel_NpcNavi:ActiveMouseEventEffect(true)
-Panel_NpcNavi:setGlassBackground(true)
+if _ContentsGroup_RenewUI_Main == false then
+  Panel_NpcNavi:setGlassBackground(true)
+end
 local npcNaviText = (UI.getChildControl)(Panel_NpcNavi, "StaticText_npcNaviText")
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE

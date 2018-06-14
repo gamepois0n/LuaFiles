@@ -164,142 +164,142 @@ PaGlobal_Option.InitUi = function(self)
     spec:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnSpec(" .. specindex .. ")")
     spec:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutSpec(" .. specindex .. ")")
   end
+  local category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Optimize")
+  category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Performance" .. "\"" .. ")")
+  category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Performance" .. "\"" .. ")")
+  category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Performance" .. "\"" .. ")")
+  -- DECOMPILER ERROR at PC577: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryTitleTable).Performance = (UI.getChildControl)(category, "StaticText_Name")
+  -- DECOMPILER ERROR at PC585: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryDescTable).Performance = (UI.getChildControl)(category, "StaticText_Desc")
+  ;
+  (((self._ui)._categoryTitleTable).Performance):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (((self._ui)._categoryTitleTable).Performance):SetText((((self._ui)._categoryTitleTable).Performance):GetText())
+  ;
+  (((self._ui)._categoryDescTable).Performance):SetPosY((((self._ui)._categoryDescTable).Performance):GetPosY() + (((self._ui)._categoryTitleTable).Performance):GetTextSizeY() - (((self._ui)._categoryTitleTable).Performance):GetSizeY())
+  category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Graphic")
+  category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Graphic" .. "\"" .. ")")
+  category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Graphic" .. "\"" .. ")")
+  category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Graphic" .. "\"" .. ")")
+  -- DECOMPILER ERROR at PC667: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryTitleTable).Graphic = (UI.getChildControl)(category, "StaticText_Name")
+  -- DECOMPILER ERROR at PC675: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryDescTable).Graphic = (UI.getChildControl)(category, "StaticText_Desc")
+  ;
+  (((self._ui)._categoryTitleTable).Graphic):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (((self._ui)._categoryTitleTable).Graphic):SetText((((self._ui)._categoryTitleTable).Graphic):GetText())
+  ;
+  (((self._ui)._categoryDescTable).Graphic):SetPosY((((self._ui)._categoryDescTable).Graphic):GetPosY() + (((self._ui)._categoryTitleTable).Graphic):GetTextSizeY() - (((self._ui)._categoryTitleTable).Graphic):GetSizeY())
+  category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Sound")
+  category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Sound" .. "\"" .. ")")
+  category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Sound" .. "\"" .. ")")
+  category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Sound" .. "\"" .. ")")
+  -- DECOMPILER ERROR at PC757: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryTitleTable).Sound = (UI.getChildControl)(category, "StaticText_Name")
+  -- DECOMPILER ERROR at PC765: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryDescTable).Sound = (UI.getChildControl)(category, "StaticText_Desc")
+  ;
+  (((self._ui)._categoryTitleTable).Sound):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (((self._ui)._categoryTitleTable).Sound):SetText((((self._ui)._categoryTitleTable).Sound):GetText())
+  ;
+  (((self._ui)._categoryDescTable).Sound):SetPosY((((self._ui)._categoryDescTable).Sound):GetPosY() + (((self._ui)._categoryTitleTable).Sound):GetTextSizeY() - (((self._ui)._categoryTitleTable).Sound):GetSizeY())
+  category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Function")
+  category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Function" .. "\"" .. ")")
+  category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Function" .. "\"" .. ")")
+  category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Function" .. "\"" .. ")")
+  -- DECOMPILER ERROR at PC847: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryTitleTable).Function = (UI.getChildControl)(category, "StaticText_Name")
+  -- DECOMPILER ERROR at PC855: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryDescTable).Function = (UI.getChildControl)(category, "StaticText_Desc")
+  ;
+  (((self._ui)._categoryTitleTable).Function):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (((self._ui)._categoryTitleTable).Function):SetText((((self._ui)._categoryTitleTable).Function):GetText())
+  ;
+  (((self._ui)._categoryDescTable).Function):SetPosY((((self._ui)._categoryDescTable).Function):GetPosY() + (((self._ui)._categoryTitleTable).Function):GetTextSizeY() - (((self._ui)._categoryTitleTable).Function):GetSizeY())
+  category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Interface")
+  category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Interface" .. "\"" .. ")")
+  category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Interface" .. "\"" .. ")")
+  category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Interface" .. "\"" .. ")")
+  -- DECOMPILER ERROR at PC937: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryTitleTable).Interface = (UI.getChildControl)(category, "StaticText_Name")
+  -- DECOMPILER ERROR at PC945: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  ((self._ui)._categoryDescTable).Interface = (UI.getChildControl)(category, "StaticText_Desc")
+  ;
+  (((self._ui)._categoryTitleTable).Interface):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (((self._ui)._categoryTitleTable).Interface):SetText((((self._ui)._categoryTitleTable).Interface):GetText())
+  ;
+  (((self._ui)._categoryDescTable).Interface):SetPosY((((self._ui)._categoryDescTable).Interface):GetPosY() + (((self._ui)._categoryTitleTable).Interface):GetTextSizeY() - (((self._ui)._categoryTitleTable).Interface):GetSizeY())
+  category = nil
+  for index,control in pairs((self._ui)._categoryDescTable) do
+    control:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+    control:SetText(control:GetText())
+  end
+  -- DECOMPILER ERROR at PC1010: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  (self._ui)._editSearch = (UI.getChildControl)((self._ui)._staticMainTopBg, "Edit_SearchOption")
+  -- DECOMPILER ERROR at PC1018: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  (self._ui)._editSearchSub = (UI.getChildControl)((self._ui)._staticSubTopBg, "Edit_SearchOption")
+  -- DECOMPILER ERROR at PC1026: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  (self._ui)._editSearchMain = (UI.getChildControl)((self._ui)._staticMainTopBg, "Edit_SearchOption")
+  ;
+  ((self._ui)._editSearchSub):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachEditControl()")
+  ;
+  ((self._ui)._editSearchMain):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachEditControl()")
+  -- DECOMPILER ERROR at PC1045: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  (self._ui)._staticSearchNoResult = (UI.getChildControl)(Panel_Window_cOption, "StaticText_SearchNoResult")
+  ;
+  ((self._ui)._staticSearchNoResult):SetShow(false)
+  local topsearchIcon = (UI.getChildControl)((self._ui)._staticMainTopBg, "Button_SearchIcon")
+  topsearchIcon:addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachOption()")
   do
-    local category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Optimize")
-    category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Performance" .. "\"" .. ")")
-    category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Performance" .. "\"" .. ")")
-    category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Performance" .. "\"" .. ")")
-    -- DECOMPILER ERROR at PC577: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryTitleTable).Performance = (UI.getChildControl)(category, "StaticText_Name")
-    -- DECOMPILER ERROR at PC585: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryDescTable).Performance = (UI.getChildControl)(category, "StaticText_Desc")
-    ;
-    (((self._ui)._categoryTitleTable).Performance):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    (((self._ui)._categoryTitleTable).Performance):SetText((((self._ui)._categoryTitleTable).Performance):GetText())
-    ;
-    (((self._ui)._categoryDescTable).Performance):SetPosY((((self._ui)._categoryDescTable).Performance):GetPosY() + (((self._ui)._categoryTitleTable).Performance):GetTextSizeY() - (((self._ui)._categoryTitleTable).Performance):GetSizeY())
-    category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Graphic")
-    category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Graphic" .. "\"" .. ")")
-    category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Graphic" .. "\"" .. ")")
-    category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Graphic" .. "\"" .. ")")
-    -- DECOMPILER ERROR at PC667: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryTitleTable).Graphic = (UI.getChildControl)(category, "StaticText_Name")
-    -- DECOMPILER ERROR at PC675: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryDescTable).Graphic = (UI.getChildControl)(category, "StaticText_Desc")
-    ;
-    (((self._ui)._categoryTitleTable).Graphic):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    (((self._ui)._categoryTitleTable).Graphic):SetText((((self._ui)._categoryTitleTable).Graphic):GetText())
-    ;
-    (((self._ui)._categoryDescTable).Graphic):SetPosY((((self._ui)._categoryDescTable).Graphic):GetPosY() + (((self._ui)._categoryTitleTable).Graphic):GetTextSizeY() - (((self._ui)._categoryTitleTable).Graphic):GetSizeY())
-    category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Sound")
-    category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Sound" .. "\"" .. ")")
-    category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Sound" .. "\"" .. ")")
-    category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Sound" .. "\"" .. ")")
-    -- DECOMPILER ERROR at PC757: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryTitleTable).Sound = (UI.getChildControl)(category, "StaticText_Name")
-    -- DECOMPILER ERROR at PC765: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryDescTable).Sound = (UI.getChildControl)(category, "StaticText_Desc")
-    ;
-    (((self._ui)._categoryTitleTable).Sound):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    (((self._ui)._categoryTitleTable).Sound):SetText((((self._ui)._categoryTitleTable).Sound):GetText())
-    ;
-    (((self._ui)._categoryDescTable).Sound):SetPosY((((self._ui)._categoryDescTable).Sound):GetPosY() + (((self._ui)._categoryTitleTable).Sound):GetTextSizeY() - (((self._ui)._categoryTitleTable).Sound):GetSizeY())
-    category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Function")
-    category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Function" .. "\"" .. ")")
-    category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Function" .. "\"" .. ")")
-    category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Function" .. "\"" .. ")")
-    -- DECOMPILER ERROR at PC847: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryTitleTable).Function = (UI.getChildControl)(category, "StaticText_Name")
-    -- DECOMPILER ERROR at PC855: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryDescTable).Function = (UI.getChildControl)(category, "StaticText_Desc")
-    ;
-    (((self._ui)._categoryTitleTable).Function):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    (((self._ui)._categoryTitleTable).Function):SetText((((self._ui)._categoryTitleTable).Function):GetText())
-    ;
-    (((self._ui)._categoryDescTable).Function):SetPosY((((self._ui)._categoryDescTable).Function):GetPosY() + (((self._ui)._categoryTitleTable).Function):GetTextSizeY() - (((self._ui)._categoryTitleTable).Function):GetSizeY())
-    category = (UI.getChildControl)((self._ui)._staticCategoryBG, "Button_Interface")
-    category:addInputEvent("Mouse_LUp", "PaGlobal_Option:GoCategory( " .. "\"" .. "Interface" .. "\"" .. ")")
-    category:addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCategory(" .. "\"" .. "Interface" .. "\"" .. ")")
-    category:addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCategory(" .. "\"" .. "Interface" .. "\"" .. ")")
-    -- DECOMPILER ERROR at PC937: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryTitleTable).Interface = (UI.getChildControl)(category, "StaticText_Name")
-    -- DECOMPILER ERROR at PC945: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    ((self._ui)._categoryDescTable).Interface = (UI.getChildControl)(category, "StaticText_Desc")
-    ;
-    (((self._ui)._categoryTitleTable).Interface):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    (((self._ui)._categoryTitleTable).Interface):SetText((((self._ui)._categoryTitleTable).Interface):GetText())
-    ;
-    (((self._ui)._categoryDescTable).Interface):SetPosY((((self._ui)._categoryDescTable).Interface):GetPosY() + (((self._ui)._categoryTitleTable).Interface):GetTextSizeY() - (((self._ui)._categoryTitleTable).Interface):GetSizeY())
-    category = nil
-    for index,control in pairs((self._ui)._categoryDescTable) do
-      control:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-      control:SetText(control:GetText())
-    end
-    -- DECOMPILER ERROR at PC1010: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    (self._ui)._editSearch = (UI.getChildControl)((self._ui)._staticMainTopBg, "Edit_SearchOption")
-    -- DECOMPILER ERROR at PC1018: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    (self._ui)._editSearchSub = (UI.getChildControl)((self._ui)._staticSubTopBg, "Edit_SearchOption")
-    -- DECOMPILER ERROR at PC1026: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    (self._ui)._editSearchMain = (UI.getChildControl)((self._ui)._staticMainTopBg, "Edit_SearchOption")
-    ;
-    ((self._ui)._editSearchSub):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachEditControl()")
-    ;
-    ((self._ui)._editSearchMain):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachEditControl()")
-    -- DECOMPILER ERROR at PC1045: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    (self._ui)._staticSearchNoResult = (UI.getChildControl)(Panel_Window_cOption, "StaticText_SearchNoResult")
-    ;
-    ((self._ui)._staticSearchNoResult):SetShow(false)
-    ;
-    ((UI.getChildControl)((self._ui)._staticMainTopBg, "Button_SearchIcon")):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachOption()")
-    ;
-    ((UI.getChildControl)((self._ui)._staticSubTopBg, "Button_SearchIcon")):addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachOption()")
+    local subtopsearchIcon = (UI.getChildControl)((self._ui)._staticSubTopBg, "Button_SearchIcon")
+    subtopsearchIcon:addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedSeachOption()")
     ;
     ((self._ui)._listSearchBg):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "FGlobal_Option_List2SearchElementCreate")
     ;
     ((self._ui)._listSearchBg):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
-    -- DECOMPILER ERROR at PC1088: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1088: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._ui)._customDescTable = {}
-    -- DECOMPILER ERROR at PC1091: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1091: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._ui)._customLoadConfirmIcon = {}
     for customIndex = 0, 1 do
-      -- DECOMPILER ERROR at PC1110: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1110: Confused about usage of register: R17 in 'UnsetPending'
 
       (self._ui)["_buttonSaveCustom" .. customIndex] = (UI.getChildControl)((self._ui)._staticSubBottomBg, "Button_CustomSave_" .. tostring(customIndex + 1))
       ;
@@ -308,7 +308,7 @@ PaGlobal_Option.InitUi = function(self)
       ((self._ui)["_buttonSaveCustom" .. customIndex]):addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "CustomSave" .. customIndex .. "\"" .. ")")
       ;
       ((self._ui)["_buttonSaveCustom" .. customIndex]):addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "CustomSave" .. customIndex .. "\"" .. ")")
-      -- DECOMPILER ERROR at PC1167: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1167: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._ui)["_buttonLoadCustom" .. customIndex] = (UI.getChildControl)((self._ui)._staticSpecBG, "Button_Custom" .. tostring(customIndex + 1))
@@ -318,7 +318,7 @@ PaGlobal_Option.InitUi = function(self)
       ((self._ui)["_buttonLoadCustom" .. customIndex]):addInputEvent("Mouse_On", "PaGlobal_Option:MouseOnCustom(" .. customIndex .. ")")
       ;
       ((self._ui)["_buttonLoadCustom" .. customIndex]):addInputEvent("Mouse_Out", "PaGlobal_Option:MouseOutCustom(" .. customIndex .. ")")
-      -- DECOMPILER ERROR at PC1215: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1215: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       ((self._ui)._customDescTable)[customIndex] = (UI.getChildControl)((self._ui)["_buttonLoadCustom" .. customIndex], "StaticText_Desc")
@@ -326,7 +326,7 @@ PaGlobal_Option.InitUi = function(self)
       (((self._ui)._customDescTable)[customIndex]):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
       ;
       (((self._ui)._customDescTable)[customIndex]):SetText((((self._ui)._customDescTable)[customIndex]):GetText())
-      -- DECOMPILER ERROR at PC1245: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1245: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       ((self._ui)._customLoadConfirmIcon)[customIndex] = (UI.getChildControl)((self._ui)["_buttonLoadCustom" .. customIndex], "Static_AdjustIcon")
@@ -335,6 +335,11 @@ PaGlobal_Option.InitUi = function(self)
       customName:SetText(customName:GetText())
       ;
       (((self._ui)._customDescTable)[customIndex]):SetPosY((((self._ui)._customDescTable)[customIndex]):GetPosY() + customName:GetTextSizeY() - customName:GetSizeY())
+      if _ContentsGroup_isConsolePadControl then
+        ((self._ui)["_buttonSaveCustom" .. customIndex]):SetShow(false)
+        ;
+        ((self._ui)["_buttonLoadCustom" .. customIndex]):SetShow(false)
+      end
     end
     ;
     ((self._ui)._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"UIGameOption\" )")
@@ -342,57 +347,73 @@ PaGlobal_Option.InitUi = function(self)
     ((self._ui)._buttonQuestion):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"UIGameOption\", \"true\")")
     ;
     ((self._ui)._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"UIGameOption\", \"false\")")
-    -- DECOMPILER ERROR at PC1308: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1327: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).TopResetAll = {control = topResetAll, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_RESETALL")}
-    -- DECOMPILER ERROR at PC1318: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1337: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).BottomResetAll = {control = bottomResetAll, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_RESETALL")}
-    -- DECOMPILER ERROR at PC1328: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1347: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).CacheDelete = {control = topCacheDelete, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_CACHEDELETE")}
-    -- DECOMPILER ERROR at PC1338: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1357: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).TopSaveSetting = {control = topSaveSetting, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_SAVEFILE")}
-    -- DECOMPILER ERROR at PC1348: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1367: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).BottomSaveSetting = {control = bottomSaveSetting, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_SAVEFILE")}
-    -- DECOMPILER ERROR at PC1360: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1379: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).Apply = {control = (self._ui)._applyButton, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_ADJUST")}
-    -- DECOMPILER ERROR at PC1370: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1389: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).Cancel = {control = buttonCanel, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_ADJUSTBACK")}
-    -- DECOMPILER ERROR at PC1380: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1399: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).Confirm = {control = buttonAdmin, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_ADMIN")}
-    -- DECOMPILER ERROR at PC1392: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1411: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).Home = {control = (self._ui)._buttonTopHome, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_HOME")}
-    -- DECOMPILER ERROR at PC1404: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1423: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).CustomSave0 = {control = (self._ui)._buttonSaveCustom0, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_CUSTOMSAVE")}
-    -- DECOMPILER ERROR at PC1416: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1435: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).CustomSave1 = {control = (self._ui)._buttonSaveCustom1, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_CUSTOMSAVE")}
-    -- DECOMPILER ERROR at PC1428: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1447: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._tooltip).ResetFrame = {control = (self._ui)._buttonResetFrame, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_RESETBUTTON")}
+    if _ContentsGroup_isConsolePadControl then
+      ((self._ui)._editSearch):SetShow(false)
+      ;
+      ((self._ui)._editSearchSub):SetShow(false)
+      ;
+      ((self._ui)._editSearchMain):SetShow(false)
+      ;
+      ((self._ui)._buttonTopHome):SetShow(false)
+      topResetAll:SetShow(false)
+      bottomResetAll:SetShow(false)
+      topCacheDelete:SetShow(false)
+      topsearchIcon:SetShow(false)
+      topSaveSetting:SetShow(false)
+      bottomSaveSetting:SetShow(false)
+      subtopsearchIcon:SetShow(false)
+    end
     self:MoveUi((self.UIMODE).Main)
     self:SetContentsOption()
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
   end
 end
 
@@ -531,6 +552,9 @@ PaGlobal_Option.MoveUi = function(self, value)
   ;
   ((self._ui)._editSearch):SetEditText("")
   ClearFocusEdit()
+  if _ContentsGroup_isConsolePadControl then
+    ((self._ui)._buttonTopHome):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
@@ -570,6 +594,10 @@ PaGlobal_Option.Open = function(self)
     ;
     ((self._ui)._staticSubTopBg):SetEnable(false)
     self:SelectOptionFrame("Function", "Nation")
+  end
+  if _ContentsGroup_isConsolePadControl then
+    self:MoveUi((self.UIMODE).Category)
+    self:SelectOptionFrame("Sound", "OnOff")
   end
   Panel_Window_cOption:SetShow(true, true)
   Panel_Window_cOption:SetIgnore(false)
@@ -696,7 +724,7 @@ FGlobal_Option_ResetAllOption = function()
   keyCustom_SetDefaultUI()
   if ToClient_isXBox() == true then
     setConsoleKeyType(2)
-    setConsoleKeySet(2)
+    setConsoleKeySet(1)
   end
   PaGlobal_Option:ResetKeyCustomString()
   saveGameOption(false)

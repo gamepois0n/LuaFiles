@@ -382,6 +382,11 @@ FromClient_EnduranceUpdate = function(enduranceType)
         ;
         (value.repair_Navi):SetShow(true)
         isRepairShow = true
+        if _ContentsGroup_RenewUI_Main == true then
+          (value.repair_AutoNavi):SetShow(false)
+          ;
+          (value.repair_Navi):SetShow(false)
+        end
       else
         ;
         (value.repair_AutoNavi):SetShow(false)

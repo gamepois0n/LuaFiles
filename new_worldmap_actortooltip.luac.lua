@@ -991,8 +991,10 @@ FromClient_luaLoadComplete_WorldMap_ActorTooltip = function()
   initNodeResultDropGroupControl()
 end
 
-registerEvent("FromClient_OnWorldMapNode", "FromClient_OnWorldMapNode")
-registerEvent("FromClient_OutWorldMapNode", "FromClient_OutWorldMapNode")
+if _ContentsGroup_RenewUI == false then
+  registerEvent("FromClient_OnWorldMapNode", "FromClient_OnWorldMapNode")
+  registerEvent("FromClient_OutWorldMapNode", "FromClient_OutWorldMapNode")
+end
 registerEvent("FromClient_WorldmapIconTooltipInit", "FromClient_WorldmapIconTooltipInit")
 registerEvent("FromClient_OnWorldMapHouse", "FromClient_OnWorldMapHouse")
 registerEvent("FromClient_OutWorldMapHouse", "FromClient_OutWorldMapHouse")

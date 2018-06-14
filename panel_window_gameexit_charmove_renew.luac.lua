@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-local Window_GameExit_CharMoveInfo = {_prevUIMode; 
+local Window_GameExit_CharMoveInfo = {
 _ui = {_static_Bottom = (UI.getChildControl)(Panel_Window_GameExit_CharMove, "Static_Bottom"), _static_main = (UI.getChildControl)(Panel_Window_GameExit_CharMove, "Static_Main"), 
 _bottom = {}
 , 
@@ -436,6 +436,11 @@ Window_GameExit_CharMoveInfo.InitControl = function(self)
   main._staticText_RegionName = (UI.getChildControl)((self._ui)._static_main, "StaticText_RegionName")
   bottom._button_RT = (UI.getChildControl)((self._ui)._static_Bottom, "Button_RT")
   bottom._button_LT = (UI.getChildControl)((self._ui)._static_Bottom, "Button_LT")
+  bottom._staticText_Desc = (UI.getChildControl)((self._ui)._static_Bottom, "StaticText_Desc")
+  ;
+  (bottom._staticText_Desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (bottom._staticText_Desc):SetTextHorizonCenter()
   ;
   (bottom._button_RT):SetShow(getCharacterDataCount() > 5)
   ;
@@ -457,7 +462,7 @@ Window_GameExit_CharMoveInfo.InitControl = function(self)
     (uiTable._radioButton_Slot):SetPosX((uiTable._radioButton_Slot):GetPosX() + ((uiTable._radioButton_Slot):GetSizeX() + 10) * index)
     ;
     (uiTable._radioButton_Slot):SetShow(false)
-    -- DECOMPILER ERROR at PC184: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC200: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (self._characterUITable)[index] = uiTable
@@ -567,7 +572,6 @@ PaGlobalFunc_GameExitCharMove_SetShow = function(isShow, isAni)
     return 
   end
   if isShow == true then
-    self._prevUIMode = GetUIMode()
     sendWaitingListOfMyCharacters()
     SetUIMode((Defines.UIMode).eUIMode_GameExit)
     self:Clear()
@@ -575,7 +579,7 @@ PaGlobalFunc_GameExitCharMove_SetShow = function(isShow, isAni)
     PaGlobalFunc_GameExitCharMove_UpdateChararcterList(0)
     PaGlobalFunc_GameExitCharMove_UpdateRegionList(0)
   else
-    SetUIMode(self._prevUIMode)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
     if ((self._ui)._button_NoticeMsg):GetShow() == true then
       PaGlobalFunc_GameExitCharMove_ButtonClick_ExitCancel()
     end

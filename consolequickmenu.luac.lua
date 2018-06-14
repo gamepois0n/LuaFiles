@@ -3,7 +3,10 @@
 
 -- params : ...
 -- function num : 0
-local Type = {Inventory = 0, BlackSpirit = 1, WorldMap = 2, Skill = 3, Mail = 4, CharacterChallange = 5, ItemMarket = 6, Quest = 7, ServantCall = 8, ServantNavi = 9, CampActivate = 10, CampNavi = 11, HorseRaceInformation = 12, HorseRaceEnterOrCancel = 13, HouseList = 14, WorkerList = 15, InstallationList = 16, PetList = 17, MaidList = 18, TagSetting = 19, Tag = 20, NpcFind = 21, MovieGuide = 22, Mercenary = 23, VillageSiegeArea = 24, Pvp = 25, Undefined = 26}
+local Type = {Inventory = 0, BlackSpirit = 1, WorldMap = 2, Skill = 3, Mail = 4, CharacterChallange = 5, ItemMarket = 6, Quest = 7, ServantCall = 8, ServantNavi = 9, CampActivate = 10, CampNavi = 11, HorseRaceInformation = 12, HorseRaceEnterOrCancel = 13, HouseList = 14, WorkerList = 15, InstallationList = 16, PetList = 17, MaidList = 18, TagSetting = 19, Tag = 20, NpcFind = 21, MovieGuide = 22, Mercenary = 23, VillageSiegeArea = 24, Pvp = 25, RingMenuSetting = 26, Profile = 27, VoiceChat = 28, Knowledge = 29, Undefined = 30}
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local getTypeName = function(index)
   -- function num : 0_0 , upvalues : Type
   for typeName,typeIndex in pairs(Type) do
@@ -132,22 +135,42 @@ ExecuteFunction.Pvp = function()
   -- function num : 0_24
 end
 
--- DECOMPILER ERROR at PC81: Confused about usage of register: R3 in 'UnsetPending'
-
-PaGlobal_ConsoleQuickMenu.initialize = function(self)
+ExecuteFunction.RingMenuSetting = function()
   -- function num : 0_25
+  FromClient_ConsoleQuickMenu_OpenCustomPage(2)
 end
 
--- DECOMPILER ERROR at PC84: Confused about usage of register: R3 in 'UnsetPending'
+ExecuteFunction.Profile = function()
+  -- function num : 0_26
+  GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_PlayerInfo)
+end
+
+ExecuteFunction.VoiceChat = function()
+  -- function num : 0_27
+  FGlobal_SetVoiceChat_Toggle()
+end
+
+ExecuteFunction.Knowledge = function()
+  -- function num : 0_28
+  PaGlobalFunc_Window_Knowledge_Show()
+end
+
+-- DECOMPILER ERROR at PC97: Confused about usage of register: R3 in 'UnsetPending'
+
+PaGlobal_ConsoleQuickMenu.initialize = function(self)
+  -- function num : 0_29
+end
+
+-- DECOMPILER ERROR at PC100: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
--- DECOMPILER ERROR at PC169: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC197: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._ExecuteFunction = {
-[__eQuickMenuDataType_Function] = {[Type.Inventory] = ExecuteFunction.Inventory, [Type.BlackSpirit] = ExecuteFunction.BlackSpirit, [Type.WorldMap] = ExecuteFunction.WorldMap, [Type.Skill] = ExecuteFunction.Skill, [Type.Mail] = ExecuteFunction.Mail, [Type.CharacterChallange] = ExecuteFunction.CharacterChallange, [Type.ItemMarket] = ExecuteFunction.ItemMarket, [Type.Quest] = ExecuteFunction.Quest, [Type.ServantCall] = ExecuteFunction.ServantCall, [Type.ServantNavi] = ExecuteFunction.ServantNavi, [Type.CampActivate] = ExecuteFunction.CampActivate, [Type.CampNavi] = ExecuteFunction.CampNavi, [Type.HorseRaceInformation] = ExecuteFunction.HorseRaceInformation, [Type.HorseRaceEnterOrCancel] = ExecuteFunction.HorseRaceEnterOrCancel, [Type.HouseList] = ExecuteFunction.HouseList, [Type.WorkerList] = ExecuteFunction.WorkerList, [Type.InstallationList] = ExecuteFunction.InstallationList, [Type.PetList] = ExecuteFunction.PetList, [Type.MaidList] = ExecuteFunction.MaidList, [Type.TagSetting] = ExecuteFunction.TagSetting, [Type.Tag] = ExecuteFunction.Tag, [Type.NpcFind] = ExecuteFunction.NpcFind, [Type.MovieGuide] = ExecuteFunction.MovieGuide, [Type.Mercenary] = ExecuteFunction.Mercenary, [Type.VillageSiegeArea] = ExecuteFunction.VillageSiegeArea, [Type.Pvp] = ExecuteFunction.Pvp}
+[__eQuickMenuDataType_Function] = {[Type.Inventory] = ExecuteFunction.Inventory, [Type.BlackSpirit] = ExecuteFunction.BlackSpirit, [Type.WorldMap] = ExecuteFunction.WorldMap, [Type.Skill] = ExecuteFunction.Skill, [Type.Mail] = ExecuteFunction.Mail, [Type.CharacterChallange] = ExecuteFunction.CharacterChallange, [Type.ItemMarket] = ExecuteFunction.ItemMarket, [Type.Quest] = ExecuteFunction.Quest, [Type.ServantCall] = ExecuteFunction.ServantCall, [Type.ServantNavi] = ExecuteFunction.ServantNavi, [Type.CampActivate] = ExecuteFunction.CampActivate, [Type.CampNavi] = ExecuteFunction.CampNavi, [Type.HorseRaceInformation] = ExecuteFunction.HorseRaceInformation, [Type.HorseRaceEnterOrCancel] = ExecuteFunction.HorseRaceEnterOrCancel, [Type.HouseList] = ExecuteFunction.HouseList, [Type.WorkerList] = ExecuteFunction.WorkerList, [Type.InstallationList] = ExecuteFunction.InstallationList, [Type.PetList] = ExecuteFunction.PetList, [Type.MaidList] = ExecuteFunction.MaidList, [Type.TagSetting] = ExecuteFunction.TagSetting, [Type.Tag] = ExecuteFunction.Tag, [Type.NpcFind] = ExecuteFunction.NpcFind, [Type.MovieGuide] = ExecuteFunction.MovieGuide, [Type.Mercenary] = ExecuteFunction.Mercenary, [Type.VillageSiegeArea] = ExecuteFunction.VillageSiegeArea, [Type.Pvp] = ExecuteFunction.Pvp, [Type.RingMenuSetting] = ExecuteFunction.RingMenuSetting, [Type.Profile] = ExecuteFunction.Profile, [Type.VoiceChat] = ExecuteFunction.VoiceChat, [Type.Knowledge] = ExecuteFunction.Knowledge}
 }
--- DECOMPILER ERROR at PC384: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC444: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._icon = {
@@ -203,16 +226,36 @@ PaGlobal_ConsoleQuickMenu._functionTypeList = {}
 [Type.VillageSiegeArea] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 985, _y1 = 603, _x2 = 1035, _y2 = 653}
 , 
 [Type.Pvp] = {_path = "Renewal/Function/Console_Function_RingMenu.dds", _x1 = 1087, _y1 = 654, _x2 = 1137, _y2 = 704}
+, 
+[Type.RingMenuSetting] = {_path = "Renewal/Function/Console_Function_RingMenu_01.dds", _x1 = 205, _y1 = 445, _x2 = 255, _y2 = 495}
+, 
+[Type.Profile] = {_path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 64, _y1 = 2, _x2 = 124, _y2 = 62}
+, 
+[Type.VoiceChat] = {_path = "Renewal/Function/Console_Function_RingMenu_01.dds", _x1 = 256, _y1 = 190, _x2 = 306, _y2 = 240}
+, 
+[Type.Knowledge] = {_path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 126, _y1 = 64, _x2 = 186, _y2 = 124}
 }
 }
--- DECOMPILER ERROR at PC443: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC511: Confused about usage of register: R3 in 'UnsetPending'
 
 ;
 (PaGlobal_ConsoleQuickMenu._functionTypeList)._name = {
-[__eQuickMenuDataType_Function] = {[Type.Inventory] = "INVENTORY", [Type.BlackSpirit] = "BLACKSPIRIT", [Type.WorldMap] = "WORLDMAP", [Type.Skill] = "SKILL", [Type.Mail] = "MAIL", [Type.CharacterChallange] = "CHALLENGE", [Type.ItemMarket] = "ITEM MARKETPLACE", [Type.Quest] = "QUEST", [Type.ServantCall] = "CALL MOUNT", [Type.ServantNavi] = "FIND MOUNT LOCATION", [Type.CampActivate] = "CAMP", [Type.CampNavi] = "FIND CAMP LOCATION", [Type.HorseRaceInformation] = "HORSE RACE", [Type.HorseRaceEnterOrCancel] = "ENTER HORSE RACE", [Type.HouseList] = "MY RESICENCE LIST", [Type.WorkerList] = "WORKER LIST", [Type.InstallationList] = "GARDEN", [Type.PetList] = "MY PET", [Type.MaidList] = "FAIRY MAID LIST", [Type.TagSetting] = "TAG CHARACTER SETTING", [Type.Tag] = "TAG CHARACTER", [Type.NpcFind] = "FIND NPC", [Type.MovieGuide] = "VIDEO GUIDE", [Type.Mercenary] = "MILITIA", [Type.VillageSiegeArea] = "SHOW NODE INSTALLATION AREA", [Type.Pvp] = "PVP"}
+[__eQuickMenuDataType_Function] = {[Type.Inventory] = "INVENTORY", [Type.BlackSpirit] = "BLACKSPIRIT", [Type.WorldMap] = "WORLDMAP", [Type.Skill] = "SKILL", [Type.Mail] = "MAIL", [Type.CharacterChallange] = "CHALLENGE", [Type.ItemMarket] = "ITEM MARKETPLACE", [Type.Quest] = "QUEST", [Type.ServantCall] = "CALL MOUNT", [Type.ServantNavi] = "FIND MOUNT LOCATION", [Type.CampActivate] = "CAMP", [Type.CampNavi] = "FIND CAMP LOCATION", [Type.HorseRaceInformation] = "HORSE RACE", [Type.HorseRaceEnterOrCancel] = "ENTER HORSE RACE", [Type.HouseList] = "MY RESICENCE LIST", [Type.WorkerList] = "WORKER LIST", [Type.InstallationList] = "GARDEN", [Type.PetList] = "MY PET", [Type.MaidList] = "FAIRY MAID LIST", [Type.TagSetting] = "TAG CHARACTER SETTING", [Type.Tag] = "TAG CHARACTER", [Type.NpcFind] = "FIND NPC", [Type.MovieGuide] = "VIDEO GUIDE", [Type.Mercenary] = "MILITIA", [Type.VillageSiegeArea] = "SHOW NODE INSTALLATION AREA", [Type.Pvp] = "PVP", [Type.RingMenuSetting] = "RINGMENU SETTING", [Type.Profile] = "PROFILE", [Type.VoiceChat] = "VOICE CHAT", [Type.Knowledge] = "KNOWLEDGE"}
 }
+varify = function()
+  -- function num : 0_30 , upvalues : Type
+  for type,index in pairs(Type) do
+    local func = ((PaGlobal_ConsoleQuickMenu._functionTypeList)._ExecuteFunction)[__eQuickMenuDataType_Function]
+    local icon = ((PaGlobal_ConsoleQuickMenu._functionTypeList)._icon)[__eQuickMenuDataType_Function]
+    local name = ((PaGlobal_ConsoleQuickMenu._functionTypeList)._name)[__eQuickMenuDataType_Function]
+    _PA_ASSERT(func, "링메뉴에 메뉴�\128�\133 Function �\180 없습니다. type : " .. tostring(type))
+    _PA_ASSERT(icon, "링메뉴에 메뉴�\128�\133 icon �\180 없습니다. type : " .. tostring(type))
+    _PA_ASSERT(name, "링메뉴에 메뉴�\128�\133 name �\180 없습니다. type : " .. tostring(type))
+  end
+end
+
 FromClient_ConsoleQuickMenu_ExecuteFunctionType = function(datatype, functionType)
-  -- function num : 0_26
+  -- function num : 0_31
   if __eQuickMenuDataType_Function ~= datatype then
     return 
   end
@@ -225,26 +268,11 @@ FromClient_ConsoleQuickMenu_ExecuteFunctionType = function(datatype, functionTyp
 end
 
 registerEvent("FromClient_ConsoleQuickMenu_ExecuteFunctionType", "FromClient_ConsoleQuickMenu_ExecuteFunctionType")
--- DECOMPILER ERROR at PC453: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC523: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ConsoleQuickMenu.setDefaultSetting = function(self)
-  -- function num : 0_27 , upvalues : Type
-  ToClient_registQuickMenuFunctionType(3, 0, Type.Inventory)
-  ToClient_registQuickMenuFunctionType(3, 1, Type.BlackSpirit)
-  ToClient_registQuickMenuFunctionType(3, 2, Type.WorldMap)
-  ToClient_registQuickMenuFunctionType(3, 3, Type.Skill)
-  ToClient_registQuickMenuFunctionType(3, 4, Type.Mail)
-  ToClient_registQuickMenuFunctionType(3, 5, Type.CharacterChallange)
-  ToClient_registQuickMenuFunctionType(3, 6, Type.ItemMarket)
-  ToClient_registQuickMenuFunctionType(3, 7, Type.Quest)
-  ToClient_registQuickMenuFunctionType(2, 0, Type.ServantCall)
-  ToClient_registQuickMenuFunctionType(2, 1, Type.ServantNavi)
-  ToClient_registQuickMenuFunctionType(2, 2, Type.PetList)
-  ToClient_registQuickMenuFunctionType(2, 3, Type.NpcFind)
-  ToClient_registQuickMenuFunctionType(2, 4, Type.MovieGuide)
-  ToClient_registQuickMenuFunctionType(2, 5, Type.VillageSiegeArea)
-  ToClient_registQuickMenuFunctionType(2, 6, Type.Pvp)
-  ToClient_registQuickMenuFunctionType(2, 7, Type.HouseList)
+  -- function num : 0_32
+  ToClient_setDefaultQuickMenu()
 end
 
 PaGlobal_ConsoleQuickMenu:setDefaultSetting()

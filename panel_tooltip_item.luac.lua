@@ -809,12 +809,12 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index, 
   end
 end
 
-Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
+Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index, posX, posY)
   -- function num : 0_9 , upvalues : Panel_Tooltip_Item_DataObject, normalTooltip, equippedTooltip
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R6 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.itemMarket = nil
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R6 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.inventory = nil
   if Panel_Tooltip_Item_Show_General(slotNo, slotType, isOn, false, index) == false then
@@ -967,17 +967,17 @@ Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
                                                     else
                                                       isSkillBook = (itemSSW:getStaticStatus()):isSkillBook(skillKey)
                                                     end
-                                                    -- DECOMPILER ERROR at PC332: Confused about usage of register: R12 in 'UnsetPending'
+                                                    -- DECOMPILER ERROR at PC332: Confused about usage of register: R14 in 'UnsetPending'
 
                                                     if isSkillBook then
                                                       Panel_Tooltip_Item_DataObject.isSkill = true
-                                                      -- DECOMPILER ERROR at PC334: Confused about usage of register: R12 in 'UnsetPending'
+                                                      -- DECOMPILER ERROR at PC334: Confused about usage of register: R14 in 'UnsetPending'
 
                                                       Panel_Tooltip_Item_DataObject.skillSlot = slot
                                                       Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
                                                       return 
                                                     end
-                                                    -- DECOMPILER ERROR at PC344: Confused about usage of register: R12 in 'UnsetPending'
+                                                    -- DECOMPILER ERROR at PC344: Confused about usage of register: R14 in 'UnsetPending'
 
                                                     Panel_Tooltip_Item_DataObject.isSkill = false
                                                     local isEquipableItem, servantItem = showTooltip_Item(normalTooltip, itemSSW, isSSW, isItemWrapper)
@@ -1011,7 +1011,11 @@ Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
                                                                 (equippedTooltip.mainPanel):OpenUISubApp()
                                                               end
                                                             else
-                                                              Panel_Tooltip_Item_Set_Position((slot.icon):getParent())
+                                                              if posX ~= nil and posY ~= nil then
+                                                                Panel_Tooltip_Item_Set_Position(((slot.icon):getParent()), nil, nil, posX, posY, false)
+                                                              else
+                                                                Panel_Tooltip_Item_Set_Position((slot.icon):getParent())
+                                                              end
                                                             end
                                                           end
                                                         end
@@ -1263,7 +1267,7 @@ Panel_Tooltip_Item_Set_Position_UISubApp = function(positionData, parent, inven)
   end
 end
 
-Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven, targetX, targetY)
+Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven, targetX, targetY, absolutLeft)
   -- function num : 0_13 , upvalues : equippedTooltip, normalTooltip
   local itemShow = Panel_Tooltip_Item:GetShow()
   local equipItemShow = Panel_Tooltip_Item_equipped:GetShow()
@@ -1292,6 +1296,9 @@ Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven, targetX,
   if screenSizeX / 2 >= targetX then
     isLeft = targetX == nil or targetY == nil
     isTop = screenSizeY / 2 < targetY
+    if absolutLeft ~= nil then
+      isLeft = absolutLeft
+    end
     local tooltipSize = {width = 0, height = 0}
     local tooltipEquipped = {width = 0, height = 0}
     do
@@ -1374,7 +1381,7 @@ Panel_Tooltip_Item_Set_Position = function(positionData, parent, inven, targetX,
         ;
         (equippedTooltip.arrow_L):SetShow(false)
       end
-      -- DECOMPILER ERROR: 22 unprocessed JMP targets
+      -- DECOMPILER ERROR: 23 unprocessed JMP targets
     end
   end
 end
@@ -3703,8 +3710,11 @@ extendedSlotInfoArray = {}
                                                                                             end
                                                                                             ;
                                                                                             (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), TooltipYPos + elementBiggap / 2)
+                                                                                            if true == _ContentsGroup_RenewUI then
+                                                                                              (target.productNotify):SetShow(false)
+                                                                                            end
                                                                                             do return item_type == 1, itemSSW:isUsableServant() end
-                                                                                            -- DECOMPILER ERROR: 100 unprocessed JMP targets
+                                                                                            -- DECOMPILER ERROR: 101 unprocessed JMP targets
                                                                                           end
                                                                                         end
                                                                                       end

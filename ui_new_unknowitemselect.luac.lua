@@ -76,7 +76,7 @@ randomShopShow = function(slotNo, priceRate)
     end
   end
   if shopTypeNum == 12 then
-    useWp = 25
+    useWp = ToClient_getRandomShopConsumWp()
     if dialog_getTalkNpcKey() == 44672 then
       _reserveButton:SetShow(false)
     else
@@ -172,7 +172,7 @@ Item_RequestShopList = function()
   -- function num : 0_6 , upvalues : shopTypeNum, _itemButtonReSelect
   local myWp = (getSelfPlayer()):getWp()
   if shopTypeNum == 12 then
-    useWp = 25
+    useWp = ToClient_getRandomShopConsumWp()
   else
     if shopTypeNum == 13 then
       useWp = 10

@@ -41,6 +41,7 @@ local radar_DangerIcon = (UI.getChildControl)(Panel_Radar, "Static_DangerArea")
 local redar_DangerAletText = (UI.getChildControl)(Panel_Radar, "StaticText_MonsterAlert")
 local radar_DangetAlertBg = (UI.getChildControl)(Panel_Radar, "Static_Alert")
 local radar_WarAlert = (UI.getChildControl)(Panel_Radar, "StaticText_WarAlert")
+local radar_GuildTeamBattleAlert = (UI.getChildControl)(Panel_Radar, "StaticText_GuildTeamBattleAlert")
 local radar_ChangeBtn = (UI.getChildControl)(Panel_Radar, "Button_Swap")
 local radar_SequenceAni = (UI.getChildControl)(Panel_Radar, "Static_SequenceAni")
 radar_ChangeBtn:SetShow(_ContentsGroup_3DMiniMapOpen)
@@ -62,8 +63,12 @@ radar_WarAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 radar_WarAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_WAR_NO_MONSTER"))
 radar_WarAlert:SetShow(false)
 radar_WarAlert:SetDepth(-9999)
+radar_GuildTeamBattleAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+radar_GuildTeamBattleAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_GUILDTEAMBATTLE_ALERT"))
+radar_GuildTeamBattleAlert:SetShow(false)
+radar_GuildTeamBattleAlert:SetDepth(-9999)
 local raderAlert_Resize = function()
-  -- function num : 0_0 , upvalues : redar_DangerAletText, radar_WarAlert, radar_DangetAlertBg
+  -- function num : 0_0 , upvalues : redar_DangerAletText, radar_WarAlert, radar_GuildTeamBattleAlert, radar_DangetAlertBg
   if redar_DangerAletText:GetSizeY() < redar_DangerAletText:GetTextSizeY() then
     redar_DangerAletText:SetSize(Panel_Radar:GetSizeX() - 60, redar_DangerAletText:GetSizeY() + 20)
   else
@@ -74,12 +79,20 @@ local raderAlert_Resize = function()
   else
     radar_WarAlert:SetSize(Panel_Radar:GetSizeX() - 60, radar_WarAlert:GetSizeY())
   end
+  if radar_GuildTeamBattleAlert:GetSizeY() < radar_GuildTeamBattleAlert:GetTextSizeY() then
+    radar_GuildTeamBattleAlert:SetSize(Panel_Radar:GetSizeX() - 60, radar_GuildTeamBattleAlert:GetSizeY() + 20)
+  else
+    radar_GuildTeamBattleAlert:SetSize(Panel_Radar:GetSizeX() - 60, radar_GuildTeamBattleAlert:GetSizeY())
+  end
   redar_DangerAletText:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   redar_DangerAletText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTERALERT"))
   redar_DangerAletText:ComputePos()
   radar_WarAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   radar_WarAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_WAR_NO_MONSTER"))
   radar_WarAlert:ComputePos()
+  radar_GuildTeamBattleAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  radar_GuildTeamBattleAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_GUILDTEAMBATTLE_ALERT"))
+  radar_GuildTeamBattleAlert:ComputePos()
   radar_DangetAlertBg:SetSize(Panel_Radar:GetSizeX() - 25, Panel_Radar:GetSizeY() - 25)
   radar_DangetAlertBg:ComputePos()
 end
@@ -780,7 +793,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1273: Confused about usage of register: R81 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1302: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_31
@@ -794,14 +807,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1277: Confused about usage of register: R81 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1306: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_32
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1282: Confused about usage of register: R81 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1311: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_33 , upvalues : QuestArrowHalfSize
@@ -826,7 +839,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1286: Confused about usage of register: R81 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1315: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_34
@@ -2630,8 +2643,13 @@ end
   radar_WarAlert:SetShow(isShow)
 end
 
+  PaGlobal_Radar_GuildTeamBattleAlert = function(isShow)
+  -- function num : 0_90 , upvalues : radar_GuildTeamBattleAlert
+  radar_GuildTeamBattleAlert:SetShow(isShow)
+end
+
   RaderResizeByReset = function(resetRadarScale)
-  -- function num : 0_90 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
+  -- function num : 0_91 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
   if resetRadarScale == false then
     local raderCurrentSizeX = Panel_Radar:GetSizeX()
     local raderCurrentSizeY = Panel_Radar:GetSizeY()
@@ -2675,7 +2693,7 @@ end
 end
 
   FGlobal_ResetRadarUI = function(resetRadarScale)
-  -- function num : 0_91 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
+  -- function num : 0_92 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
   RaderResizeByReset(resetRadarScale)
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
   Rader_updateWorldMap_AlphaControl_Init()
@@ -2685,8 +2703,9 @@ end
 end
 
   Radar_luaLoadComplete = function()
-  -- function num : 0_92 , upvalues : controlAlign
+  -- function num : 0_93 , upvalues : controlAlign
   controlAlign()
+  PaGlobal_Radar_GuildTeamBattleAlert(false)
 end
 
   registerEvent("FromClient_luaLoadComplete", "Radar_luaLoadComplete")

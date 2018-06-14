@@ -86,6 +86,9 @@ end
 
 PaGlobal_TutorialMenu.setShow = function(self, bShow, bShowAni)
   -- function num : 0_8
+  if _ContentsGroup_RenewUI == true then
+    return 
+  end
   if bShow == true then
     self:alignPosByPivotUi()
     if Panel_TutorialMenu:GetShow() == true and self._isFold == false then

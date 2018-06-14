@@ -244,10 +244,14 @@ loadLobbyUI = function()
   -- function num : 0_13 , upvalues : UIGroup, renewalUiOpen, RenderModeAllModeOpen, RenderMode
   basicLoadUI("UI_Data/UI_Lobby/UI_Startl.xml", "Panel_Start", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelect.xml", "Panel_CharacterSelect", UIGroup.PAGameUIGroup_Windows)
-  if renewalUiOpen then
-    basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelectRenewal.xml", "Panel_CharacterSelectNew", UIGroup.PAGameUIGroup_Windows)
+  if _ContentsGroup_RenewUI == true then
+    basicLoadUI("UI_Data/UI_Lobby/Console/Panel_Lobby_CharacterSelect_Renew.xml", "Panel_CharacterSelect_Renew", UIGroup.PAGameUIGroup_Windows)
   else
-    basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelectNew.xml", "Panel_CharacterSelectNew", UIGroup.PAGameUIGroup_Windows)
+    if renewalUiOpen then
+      basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelectRenewal.xml", "Panel_CharacterSelectNew", UIGroup.PAGameUIGroup_Windows)
+    else
+      basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelectNew.xml", "Panel_CharacterSelectNew", UIGroup.PAGameUIGroup_Windows)
+    end
   end
   basicLoadUI("UI_Data/UI_Lobby/UI_CharacterCreate_SelectClass.xml", "Panel_CharacterCreateSelectClass", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/UI_Lobby/UI_CharacterCreate.xml", "Panel_CharacterCreate", UIGroup.PAGameUIGroup_Windows)
@@ -270,10 +274,14 @@ loadLobbyUI = function()
   basicLoadUI("UI_Data/Widget/NakMessage/NakMessage.XML", "Panel_NakMessage", UIGroup.PAGameUIGroup_ModalDialog)
   runLua("UI_Data/Script/Widget/NakMessage/NakMessage.lua")
   runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_Main.lua")
-  if renewalUiOpen then
-    runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_SelectCharacterRenewal.lua")
+  if _ContentsGroup_RenewUI == true then
+    runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_CharacterSelect_Renew.lua")
   else
-    runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_SelectCharacter.lua")
+    if renewalUiOpen then
+      runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_SelectCharacterRenewal.lua")
+    else
+      runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_SelectCharacter.lua")
+    end
   end
   if _ContentsGroup_RenewUI_MessageBox == false then
     runLua("UI_Data/Script/Window/MessageBox/MessageBox.lua")
@@ -624,6 +632,7 @@ preLoadGameUI = function()
     basicLoadUI("UI_Data/Window/Guild/Console/Console_window_AgreementGuild.XML", "Panel_Console_Window_GuildAgreement", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/Guild/Console/Panel_Window_Guild_SignOption.XML", "Panel_Console_Window_SignOption", UIGroup.PAGameUIGroup_Windows)
     loadUI("UI_Data/Window/Guild/Console/Panel_Window_GuildCreate_Renew.XML", "Panel_Console_Window_GuildCreate", UIGroup.PAGameUIGroup_Window_Progress, PAUIRenderModeBitSet({RenderMode.eRenderMode_Dialog}))
+    loadUI("UI_Data/Widget/Dialogue/Console/Panel_Dialog_GuildCreate.XML", "Panel_Console_Dialog_GuildPopup", UIGroup.PAGameUIGroup_Window_Progress, PAUIRenderModeBitSet({RenderMode.eRenderMode_Dialog}))
   end
   basicLoadUI("UI_Data/Window/Guild/Frame_Guild_History.XML", "Panel_Guild_History", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Frame_Guild_List.XML", "Panel_Guild_List", UIGroup.PAGameUIGroup_Windows)
@@ -632,7 +641,7 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/Guild/Frame_Guild_Skill.XML", "Panel_Guild_Skill", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Frame_Guild_Recruitment.XML", "Panel_Guild_Recruitment", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Frame_Guild_CraftInfo.XML", "Panel_Guild_CraftInfo", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Guild/Frame_Guild_Manufacture.XML", "Panel_Guild_Manufacture", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/Guild/Frame_Guild_Manufacture_New.XML", "Panel_Guild_Manufacture", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_Guild_ManufactureSelect.XML", "Panel_Guild_ManufactureSelect", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_Guild.XML", "Panel_Window_Guild", UIGroup.PAGameUIGroup_Windows)
   loadUI("UI_Data/Window/Guild/Panel_Guild_Create.XML", "Panel_CreateGuild", UIGroup.PAGameUIGroup_Window_Progress, PAUIRenderModeBitSet({RenderMode.eRenderMode_Dialog}))
@@ -971,12 +980,8 @@ preLoadGameUI = function()
     basicLoadUI("UI_Data/Window/GameExit/Console/Panel_Window_ExitConfirm.XML", "Panel_Window_GameExit_Confirm", UIGroup.PAGameUIGroup_WorldMap_Contents)
   else
     basicLoadUI("UI_Data/Window/GameExit/Panel_GameExit.xml", "Panel_GameExit", UIGroup.PAGameUIGroup_WorldMap_Contents)
-    if true == _ContentsGroup_RenewUI_ExitGame_New then
-      loadUI("UI_Data/Window/GameExit/Panel_ExitConfirm_New.xml", "Panel_ExitConfirm", UIGroup.PAGameUIGroup_GameMenu, RenderModeAllModeOpen)
-      loadUI("UI_Data/Window/GameExit/Panel_ExitConfirm.xml", "Panel_ExitConfirm_Old", UIGroup.PAGameUIGroup_GameMenu, RenderModeAllModeOpen)
-    else
-      loadUI("UI_Data/Window/GameExit/Panel_ExitConfirm.xml", "Panel_ExitConfirm", UIGroup.PAGameUIGroup_GameMenu, RenderModeAllModeOpen)
-    end
+    loadUI("UI_Data/Window/GameExit/Panel_ExitConfirm_New.xml", "Panel_ExitConfirm", UIGroup.PAGameUIGroup_GameMenu, RenderModeAllModeOpen)
+    loadUI("UI_Data/Window/GameExit/Panel_ExitConfirm.xml", "Panel_ExitConfirm_Old", UIGroup.PAGameUIGroup_GameMenu, RenderModeAllModeOpen)
   end
   if false == _ContentsGroup_RenewUI then
     loadUI("UI_Data/Widget/RecentMemory/Panel_RecentMemory.XML", "Panel_RecentMemory", UIGroup.PAGameUIGroup_WorldMap_Contents, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default}))
@@ -1162,7 +1167,7 @@ preLoadGameUI = function()
     basicLoadUI("UI_Data/Widget/Z_RightTopIcons/UI_Widget_Function.xml", "Panel_FunctionButton_Area", UIGroup.PAGameUIGroup_Widget)
   end
   if true == _ContentsGroup_isConsoleTest then
-    loadUI("UI_Data/Widget/Menu/Console/Panel_QuickMenu.xml", "Panel_QuickMenu", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap}))
+    loadUI("UI_Data/Widget/Menu/Console/Panel_QuickMenu.xml", "Panel_QuickMenu", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap}))
     basicLoadUI("UI_Data/Widget/Menu/Console/Panel_QuickMenuCustom_Edit.xml", "Panel_QuickMenuCustom", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Widget/Menu/Console/Panel_QuickMenuCustom_RightRing.xml", "Panel_QuickMenuCustom_RightRing", UIGroup.PAGameUIGroup_Window_Progress)
     basicLoadUI("UI_Data/Widget/Menu/Console/Panel_Widget_QuickMenu.xml", "Panel_Widget_QuickMenu", UIGroup.PAGameUIGroup_Windows)
@@ -1694,6 +1699,7 @@ loadGameUI = function()
     runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_Agreement_Renew.lua")
     runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_AgreementOption_Renew.lua")
     runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_Create.lua")
+    runLua("UI_Data/Script/Window/Guild/Console/Panel_Dialog_Guild_Popup.lua")
   end
   runLua("UI_Data/Script/Window/Guild/Frame_Guild_History.lua")
   runLua("UI_Data/Script/Window/Guild/Frame_Guild_List.lua")
@@ -1847,11 +1853,7 @@ loadGameUI = function()
     runLua("UI_Data/Script/Window/GameExit/Console/Panel_Window_GameExit_CharMove_Renew.lua")
     runLua("UI_Data/Script/Window/GameExit/Console/Panel_Window_GameExit_Confirm_Renew.lua")
   else
-    if true == _ContentsGroup_RenewUI_ExitGame_New then
-      runLua("UI_Data/Script/Window/GameExit/Panel_GameExit_New.lua")
-    else
-      runLua("UI_Data/Script/Window/GameExit/Panel_GameExit.lua")
-    end
+    runLua("UI_Data/Script/Window/GameExit/Panel_GameExit_New.lua")
   end
   runLua("UI_Data/Script/Window/DeadMessage/Panel_NoAccessArea_Alert.lua")
   runLua("UI_Data/Script/Window/DeadMessage/Panel_Cash_Revival_BuyItem.lua")
@@ -2086,6 +2088,7 @@ loadGameUI = function()
     runLua("UI_Data/Script/globalUIManager.lua")
   end
   if true == isUseNewGlobalKeyBinder_chk() then
+    runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderUiInputType.lua")
     runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderManager.lua")
     runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinder.lua")
   end

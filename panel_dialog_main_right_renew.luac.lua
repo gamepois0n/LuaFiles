@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local Panel_Dialog_Main_Right_Info = {_initialize = false, 
-_ui = {static_RightBg = (UI.getChildControl)(Panel_Dialog_Main, "Static_RightBg"), staticText_DialogTitle = nil, staticText_Dialog_Text = nil, btn_DialogTemplete = nil, 
+_ui = {static_RightBg = (UI.getChildControl)(Panel_Dialog_Main, "Static_RightBg"), staticText_DialogTitle = nil, static_Bg = nil, staticText_Dialog_Text = nil, btn_DialogTemplete = nil, 
 btn_Dialog_List = {nil, nil, nil, nil, nil, nil, nil, nil}
 , static_TypeIcon = nil, staticText_Name = nil, staticText_Needs = nil, list2_Dialog_List = nil, static_ExchangeBg = nil, staticText_Exchange_Title = nil, list2_Exchange_List = nil, list2_2_Content = nil, staticText_BeforeTemplete = nil, static_ArrowTemplete = nil, staticText_AfterTemplete = nil, list2_3_VerticalScroll = nil}
 , 
@@ -12,7 +12,7 @@ _config = {maxButtonDialogCount = 6, maxExchangeSlotCount = 6}
 , 
 _enum = {eDefaultIndex = -1, eDefaultDialogSize = 4}
 , 
-_value = {exchangelistCount = 0, promiseTokenKey = 44192, allContentsSize = 0, isSetData = false}
+_value = {currentDialogButtonIndex = 0, lastDialogButtonIndex = -1, exchangelistCount = 0, promiseTokenKey = 44192, allContentsSize = 0, isSetData = false}
 , 
 _text = {}
 , 
@@ -51,11 +51,17 @@ Panel_Dialog_Main_Right_Info.initControl = function(self)
 
   ;
   (self._ui).staticText_DialogTitle = (UI.getChildControl)((self._ui).static_RightBg, "StaticText_DialogTitle")
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).staticText_DialogTitle):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  -- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).static_Bg = (UI.getChildControl)((self._ui).static_RightBg, "Static_Bg")
+  -- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).staticText_Dialog_Text = (UI.getChildControl)((self._ui).static_RightBg, "StaticText_Dialog_Text")
-  -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).list2_Dialog_List = (UI.getChildControl)((self._ui).static_RightBg, "List2_Dialog_List")
@@ -63,15 +69,15 @@ Panel_Dialog_Main_Right_Info.initControl = function(self)
   ((self._ui).list2_Dialog_List):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "PaGlobalFunc_MainDialog_Right_List2EventControlCreate")
   ;
   ((self._ui).list2_Dialog_List):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
-  -- DECOMPILER ERROR at PC53: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).static_ExchangeBg = (UI.getChildControl)((self._ui).static_RightBg, "Static_ExchangeBg")
-  -- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC76: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).staticText_Title = (UI.getChildControl)((self._ui).static_ExchangeBg, "StaticText_Title")
-  -- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC84: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).list2_Exchange_List = (UI.getChildControl)((self._ui).static_ExchangeBg, "List2_Exchange_List")
@@ -164,18 +170,37 @@ Panel_Dialog_Main_Right_Info.setData = function(self, dialogData, realDialog)
   if realDialog == "" or realDialog == nil then
     ((self._ui).staticText_Dialog_Text):SetShow(false)
   else
-    ;
-    ((self._ui).staticText_Dialog_Text):SetShow(true)
-    ;
-    ((self._ui).staticText_Dialog_Text):SetAutoResize(true)
-    ;
-    ((self._ui).staticText_Dialog_Text):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-    ;
-    ((self._ui).staticText_Dialog_Text):SetText(realDialog)
+    local newNpcWord = ""
+    local stringList = ((string.split)(realDialog, "\n"))
+    local strFirst, strSecond = nil, nil
+    if #stringList < 2 then
+      newNpcWord = realDialog
+    else
+      for line = 1, #stringList / 2 do
+        strFirst = stringList[line * 2 - 1]
+        strSecond = stringList[line * 2]
+        newNpcWord = newNpcWord .. strFirst .. "\n" .. strSecond .. "\n"
+        if line ~= #stringList / 2 then
+          newNpcWord = newNpcWord .. "\n"
+        end
+      end
+    end
+    do
+      do
+        ;
+        ((self._ui).staticText_Dialog_Text):SetShow(true)
+        ;
+        ((self._ui).staticText_Dialog_Text):SetAutoResize(true)
+        ;
+        ((self._ui).staticText_Dialog_Text):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+        ;
+        ((self._ui).staticText_Dialog_Text):SetText(newNpcWord)
+        self:ResizeContents(dialogData)
+        self:updateDialogList(dialogData)
+        self:updateExchange(dialogData)
+      end
+    end
   end
-  self:ResizeContents(dialogData)
-  self:updateDialogList(dialogData)
-  self:updateExchange(dialogData)
 end
 
 Panel_Dialog_Main_Right_Info.openAndSetData = function(self, dialogData, realDialog)
@@ -187,16 +212,11 @@ end
 Panel_Dialog_Main_Right_Info.updateExchange = function(self, dialogData)
   -- function num : 0_7
   self:closeExchange()
-  local displayExchangeWrapper = dialogData:getCurrentDisplayExchangeWrapper()
-  if displayExchangeWrapper == nil then
-    return 
+  local exchangeShow = false
+  if exchangeShow == true then
+    self:openExchange()
+    self:updateExchangeList(displayExchangeWrapper)
   end
-  local count = displayExchangeWrapper:getItemExchangeByNpcListSize()
-  if count == 0 then
-    return 
-  end
-  self:openExchange()
-  self:updateExchangeList(displayExchangeWrapper)
 end
 
 Panel_Dialog_Main_Right_Info.updateDialogList = function(self, dialogData)
@@ -212,10 +232,18 @@ Panel_Dialog_Main_Right_Info.updateDialogList = function(self, dialogData)
     ((self._ui).list2_Dialog_List):SetShow(false)
     return 
   end
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._value).currentDialogButtonIndex = 0
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._value).lastDialogButtonIndex = -1
   ;
   ((self._ui).list2_Dialog_List):SetShow(true)
   for index = 0, dialogCount - 1 do
-    -- DECOMPILER ERROR at PC34: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC38: Confused about usage of register: R7 in 'UnsetPending'
 
     (self._dialogId)[index] = index
     ;
@@ -315,61 +343,55 @@ Panel_Dialog_Main_Right_Info.ResizeContents = function(self, dialogData)
 
   ;
   (self._pos).textstartPosY = ((self._ui).staticText_Dialog_Text):GetPosY()
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R2 in 'UnsetPending'
+  local _bgSize = (self._pos).textstartPosY
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
 
   if ((self._ui).staticText_Dialog_Text):GetShow() == true then
     (self._pos).liststartPosY = (self._pos).textstartPosY + ((self._ui).staticText_Dialog_Text):GetSizeY() + (self._space).contentsSpace
   else
-    -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC32: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._pos).liststartPosY = (self._pos).textstartPosY
   end
+  ;
+  ((self._ui).static_Bg):SetSize(((self._ui).static_Bg):GetSizeX(), (self._pos).liststartPosY - _bgSize + (self._space).contentsSpace)
   local dialogCount = dialogData:getDialogButtonCount()
   if dialogCount > 0 then
     ((self._ui).list2_Dialog_List):SetPosY((self._pos).liststartPosY)
-    -- DECOMPILER ERROR at PC60: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC76: Confused about usage of register: R4 in 'UnsetPending'
 
     if dialogCount < (self._enum).eDefaultDialogSize then
       (self._pos).exchangePosY = (self._pos).liststartPosY + (self._space).contentsSpace + ((self._ui).list2_Dialog_List):GetSizeY() * dialogCount / (self._enum).eDefaultDialogSize
     else
-      -- DECOMPILER ERROR at PC73: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC89: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (self._pos).exchangePosY = (self._pos).liststartPosY + (self._space).contentsSpace + ((self._ui).list2_Dialog_List):GetSizeY()
     end
   else
-    -- DECOMPILER ERROR at PC78: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC94: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (self._pos).exchangePosY = (self._pos).liststartPosY
   end
   local exchangeShow = false
-  local displayExchangeWrapper = dialogData:getCurrentDisplayExchangeWrapper()
-  do
-    if displayExchangeWrapper ~= nil then
-      local count = displayExchangeWrapper:getItemExchangeByNpcListSize()
-      if count ~= 0 then
-        exchangeShow = true
-      end
-    end
-    if exchangeShow == true then
-      ((self._ui).static_ExchangeBg):SetPosY((self._pos).exchangePosY)
-      -- DECOMPILER ERROR at PC108: Confused about usage of register: R5 in 'UnsetPending'
+  if exchangeShow == true then
+    ((self._ui).static_ExchangeBg):SetPosY((self._pos).exchangePosY)
+    -- DECOMPILER ERROR at PC115: Confused about usage of register: R5 in 'UnsetPending'
 
-      ;
-      (self._value).allContentsSize = (self._pos).exchangePosY + ((self._ui).static_ExchangeBg):GetSizeY() + (self._space).contentsSpace
-    else
-      -- DECOMPILER ERROR at PC113: Confused about usage of register: R5 in 'UnsetPending'
+    ;
+    (self._value).allContentsSize = (self._pos).exchangePosY + ((self._ui).static_ExchangeBg):GetSizeY() + (self._space).contentsSpace
+  else
+    -- DECOMPILER ERROR at PC120: Confused about usage of register: R5 in 'UnsetPending'
 
-      ;
-      (self._value).allContentsSize = (self._pos).exchangePosY
-    end
     ;
-    ((self._ui).static_RightBg):SetSize(((self._ui).static_RightBg):GetSizeX(), (self._value).allContentsSize)
-    ;
-    ((self._ui).static_RightBg):ComputePos()
+    (self._value).allContentsSize = (self._pos).exchangePosY
   end
+  ;
+  ((self._ui).static_RightBg):SetSize(((self._ui).static_RightBg):GetSizeX(), (self._value).allContentsSize)
+  ;
+  ((self._ui).static_RightBg):ComputePos()
 end
 
 Panel_Dialog_Main_Right_Info.ExpirationItemCheck = function(self, itemKey)
@@ -523,7 +545,13 @@ PaGlobalFunc_MainDialog_Right_ReOpen = function()
   -- function num : 0_24 , upvalues : Panel_Dialog_Main_Right_Info
   local self = Panel_Dialog_Main_Right_Info
   if (self._value).isSetData == true then
-    self:open()
+    local dialogData = ToClient_GetCurrentDialogData()
+    if dialogData == nil then
+      return 
+    end
+    local npcWord = dialogData:getMainDialog()
+    local realDialog = ToClient_getReplaceDialog(npcWord)
+    self:openAndSetData(dialogData, realDialog)
   end
 end
 
@@ -540,8 +568,15 @@ PaGlobalFunc_MainDialog_Right_List2EventControlCreate = function(list_content, k
   local static_TypeIcon = (UI.getChildControl)(btn_Dialog, "Static_TypeIcon")
   local text_Dialog = (UI.getChildControl)(list_content, "StaticText_Dialog_Name")
   local textNeed_Dialog = (UI.getChildControl)(list_content, "StaticText_Dialog_Needs")
+  local button_A = (UI.getChildControl)(list_content, "Button_A")
+  button_A:SetShow(false)
   local dialogText = dialogButton:getText()
   btn_Dialog:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(" .. id .. ")")
+  btn_Dialog:addInputEvent("Mouse_On", "PaGlobalFunc_MainDialog_Right_HandleOnDialogButton(" .. id .. ")")
+  button_A:SetShow(false)
+  if (self._value).currentDialogButtonIndex == id then
+    button_A:SetShow(true)
+  end
   static_TypeIcon:SetShow(false)
   textNeed_Dialog:SetShow(false)
   btn_Dialog:SetMonoTone(false)
@@ -632,6 +667,10 @@ PaGlobalFunc_MainDialog_Right_List2EventControlCreateExchange = function(list_co
   local StaticText_Before = (UI.getChildControl)(list_content, "StaticText_BeforeTemplete")
   local Static_Arrow = (UI.getChildControl)(list_content, "Static_ArrowTemplete")
   local StaticText_After = (UI.getChildControl)(list_content, "StaticText_AfterTemplete")
+  StaticText_Before:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
+  StaticText_Before:setLineCountByLimitAutoWrap(2)
+  StaticText_After:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
+  StaticText_After:setLineCountByLimitAutoWrap(2)
   StaticText_Before:setLocalizedStaticType((self._localize).localizedType)
   StaticText_Before:setLocalizedKey((self._localize).mainDialogLocalizedKey)
   StaticText_After:setLocalizedStaticType((self._localize).localizedType)
@@ -656,8 +695,26 @@ PaGlobalFunc_MainDialog_Right_List2EventControlCreateExchange = function(list_co
   end
 end
 
-PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton = function(index, type)
+PaGlobalFunc_MainDialog_Right_HandleOnDialogButton = function(id)
   -- function num : 0_27 , upvalues : Panel_Dialog_Main_Right_Info
+  local self = Panel_Dialog_Main_Right_Info
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R2 in 'UnsetPending'
+
+  ;
+  (self._value).lastDialogButtonIndex = (self._value).currentDialogButtonIndex
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
+
+  ;
+  (self._value).currentDialogButtonIndex = id
+  ;
+  ((self._ui).list2_Dialog_List):requestUpdateByKey(toInt64(0, (self._value).currentDialogButtonIndex))
+  if (self._value).lastDialogButtonIndex ~= -1 then
+    ((self._ui).list2_Dialog_List):requestUpdateByKey(toInt64(0, (self._value).lastDialogButtonIndex))
+  end
+end
+
+PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton = function(index, type)
+  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Right_Info
   local self = Panel_Dialog_Main_Right_Info
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
@@ -681,7 +738,7 @@ PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton = function(index, type)
 end
 
 PaGlobalFunc_MainDialog_Right_InteractionCheck = function()
-  -- function num : 0_28 , upvalues : Panel_Dialog_Main_Right_Info
+  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Right_Info
   local self = Panel_Dialog_Main_Right_Info
   local isShow = ((self._ui).static_RightBg):GetShow()
   if isShow == false then
@@ -713,7 +770,7 @@ PaGlobalFunc_MainDialog_Right_InteractionCheck = function()
 end
 
 FromClient_InitMainDialog_Right = function()
-  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Right_Info
+  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Right_Info
   local self = Panel_Dialog_Main_Right_Info
   self:initialize()
   self:Resize()
@@ -721,7 +778,7 @@ FromClient_InitMainDialog_Right = function()
 end
 
 FromClient_onScreenResize_MainDialog_Right = function()
-  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Right_Info
+  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Right_Info
   local self = Panel_Dialog_Main_Right_Info
   self:Resize()
 end

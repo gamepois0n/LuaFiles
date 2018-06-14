@@ -108,6 +108,9 @@ MaidList_Open = function()
   Panel_Window_MaidList:SetPosX(Panel_Icon_Maid:GetPosX() + Panel_Icon_Maid:GetSizeX())
   Panel_Window_MaidList:SetPosY(Panel_Icon_Maid:GetPosY())
   MaidList_Set()
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_Window_MaidList:SetShow(false)
+  end
 end
 
 MaidList_Close = function()
@@ -542,7 +545,11 @@ FGlobal_MaidIcon_SetPos = function(resetScroll)
     local warehouseOutMaid = checkMaid_WarehouseOut(true)
     local marketMaid = checkMaid_SubmitMarket(true)
     if getTotalMaidList() > 0 then
-      Panel_Icon_Maid:SetShow(true)
+      if _ContentsGroup_RenewUI_Main == true then
+        Panel_Icon_Maid:SetShow(false)
+      else
+        Panel_Icon_Maid:SetShow(true)
+      end
       ;
       (MaidControl.buttonMaid):EraseAllEffect()
       if warehouseInMaid or warehouseOutMaid or marketMaid then
@@ -572,7 +579,7 @@ FGlobal_MaidIcon_SetPos = function(resetScroll)
       Panel_Icon_Maid:SetPosX(posX)
       Panel_Icon_Maid:SetPosY(posY)
       MaidList_SetScroll()
-      -- DECOMPILER ERROR at PC161: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC169: Confused about usage of register: R6 in 'UnsetPending'
 
       if resetScroll == true and Panel_Window_MaidList:GetShow() then
         maidList.startIndex = 0

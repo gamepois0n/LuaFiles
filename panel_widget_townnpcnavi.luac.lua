@@ -106,7 +106,11 @@ local iconTexture = {
 [UI_ST.eSpawnType_transfer] = {76, 224, 112, 260, 76, 261, 112, 297, 76, 298, 112, 334}
 }
 local toggleBtn = FGlobal_GetPersonalIconControl(0)
-toggleBtn:SetShow(true)
+if _ContentsGroup_RenewUI_VoiceChat == false then
+  toggleBtn:SetShow(true)
+else
+  toggleBtn:SetShow(false)
+end
 toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
 local iconBG = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "StaticText_ToolTip")
 local npcIcon = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "StaticText_TownNpcNavi_Icon")

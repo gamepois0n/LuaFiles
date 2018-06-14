@@ -1025,7 +1025,7 @@ Warehouse_PopToSomewhereXXX = function(s64_count, slotNo)
   local self = warehouse
   local invenIsShow = false
   if _ContentsGroup_RenewUI == true then
-    invenIsShow = PaGlobalFunc_InventoryInfo_IsOpened()
+    invenIsShow = PaGlobalFunc_InventoryInfo_GetShow()
   else
     invenIsShow = Panel_Window_Inventory:GetShow()
   end

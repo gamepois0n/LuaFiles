@@ -874,10 +874,10 @@ Equipment_equipItem = function(slotNo)
   ;
   (slot.icon):AddEffect("fUI_SkillButton01", false, 0, 0)
   if slotNo < 14 or slotNo == 29 then
-    (self.effectBG):AddEffect("UI_ItemInstall_BigRing", false, -0.9, -58)
+    (self.effectBG):AddEffect("UI_ItemInstall_BigRing", false, -0.9, -74)
   else
     ;
-    (self.effectBG):AddEffect("UI_ItemInstall_BigRing02", false, -0.9, -58)
+    (self.effectBG):AddEffect("UI_ItemInstall_BigRing02", false, -0.9, -74)
   end
   ToClient_updateAttackStat()
   local itemWrapper = ToClient_getEquipmentItem(slotNo)

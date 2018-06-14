@@ -1316,19 +1316,18 @@ end
 
 QuickSlot_UpdateAfter_cleanupDialog = function()
   -- function num : 0_25
-  if Panel_QuickSlot:IsUse() then
-    if _ContentsGroup_RenewUI_Dailog == true then
+  do
+    -- DECOMPILER ERROR at PC14: Unhandled construct in 'MakeBoolean' P1
+
+    if Panel_QuickSlot:IsUse() and _ContentsGroup_RenewUI_Dailog == true and PaGlobalFunc_MainDialog_IsShow() then
       local hideNpcTradeMarketDialog = PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
-      if hideNpcTradeMarketDialog and PaGlobalFunc_MainDialog_IsShow() then
+      if hideNpcTradeMarketDialog then
         PaGlobalFunc_MainDialog_Hide()
       end
-    else
-      do
-        local hideNpcTradeMarketDialog = FGlobal_CloseNpcDialogForDetail()
-        if hideNpcTradeMarketDialog and Panel_Npc_Dialog:IsShow() then
-          FGlobal_HideDialog(true)
-        end
-      end
+    end
+    local hideNpcTradeMarketDialog = FGlobal_CloseNpcDialogForDetail()
+    if hideNpcTradeMarketDialog and Panel_Npc_Dialog:IsShow() then
+      FGlobal_HideDialog(true)
     end
   end
 end

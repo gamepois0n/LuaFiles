@@ -10,6 +10,8 @@ static_Reward_List = {nil, nil, nil, nil, nil, nil, nil, nil, nil}
 , 
 _config = {maxIntimacyRewardCount = 8}
 , 
+_value = {isShowOnce = false}
+, 
 _text = {hasMentalCardText = PAGetString(Defines.StringSheet_GAME, "LUA_INTIMACY_INFORMATION_HASMENTALCARD"), hasntMentalCardText = PAGetString(Defines.StringSheet_GAME, "LUA_INTIMACY_INFORMATION_HASNTMENTALCARD")}
 , 
 _pos = {
@@ -91,7 +93,9 @@ Panel_Dialog_Main_Intimacy_Info.initControl = function(self)
 
   ;
   (self._ui).staticText_CurrentIntimacyPoint = (UI.getChildControl)((self._ui).static_IntimacyBg, "StaticText_CurrentIntimacyPoint")
-  -- DECOMPILER ERROR at PC92: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).staticText_CurrentIntimacyPoint):SetShow(false)
+  -- DECOMPILER ERROR at PC97: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).staticText_Intimacy_Title = (UI.getChildControl)((self._ui).static_IntimacyBg, "StaticText_Title")
@@ -120,7 +124,14 @@ Panel_Dialog_Main_Intimacy_Info.update = function(self)
     local characterKey = talker:getCharacterKey()
     local npcData = getNpcInfoByCharacterKeyRaw(characterKey, (talker:get()):getDialogIndex())
     if npcData ~= nil and npcData:hasSpawnType((CppEnums.SpawnType).eSpawnType_intimacy) == true then
+      if (self._value).isShowOnce == true then
+        return 
+      end
       self:open()
+      -- DECOMPILER ERROR at PC39: Confused about usage of register: R5 in 'UnsetPending'
+
+      ;
+      (self._value).isShowOnce = true
       local intimacy = getIntimacyByCharacterKey(characterKey)
       local valuePercent = intimacy / 1000 * 100
       if valuePercent > 100 then
@@ -266,15 +277,24 @@ PaGlobalFunc_MainDialog_Intimacy_Update = function()
   self:update()
 end
 
-FromClient_InitMainDialog_Intimacy = function()
+PaGlobalFunc_MainDialog_Intimacy_InitValue = function()
   -- function num : 0_12 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  local self = Panel_Dialog_Main_Intimacy_Info
+  -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._value).isShowOnce = false
+end
+
+FromClient_InitMainDialog_Intimacy = function()
+  -- function num : 0_13 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog_Intimacy = function()
-  -- function num : 0_13 , upvalues : Panel_Dialog_Main_Intimacy_Info
+  -- function num : 0_14 , upvalues : Panel_Dialog_Main_Intimacy_Info
   local self = Panel_Dialog_Main_Intimacy_Info
   self:Resize()
 end

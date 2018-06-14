@@ -28,29 +28,33 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
   local RadarSpanSizeY = FGlobal_Panel_Radar_GetSpanSizeY()
   local playerLV = ((getSelfPlayer()):get()):getLevel()
   if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT and _ContentsGroup_RenewUI_VoiceChat == false then
-    if isGameTypeEnglish() then
+    if isGameTypeEnglish() and _ContentsGroup_RenewUI_VoiceChat == false then
       (self._btn_MovieGuide):SetShow(true)
     else
       ;
       (self._btn_MovieGuide):SetShow(false)
     end
   else
-    if isGameTypeKR2() and _ContentsGroup_RenewUI_VoiceChat == false then
-      (self._btn_MovieGuide):SetShow(false)
-    else
-      ;
-      (self._btn_MovieGuide):SetShow(true)
+    if _ContentsGroup_RenewUI_VoiceChat == false then
+      if isGameTypeKR2() then
+        (self._btn_MovieGuide):SetShow(false)
+      else
+        ;
+        (self._btn_MovieGuide):SetShow(true)
+      end
     end
   end
-  if playerLV > 51 and _ContentsGroup_RenewUI_VoiceChat == false then
-    (self._btn_NpcNavi):SetShow(true)
-    ;
-    (self._btn_NpcNaviTW):SetShow(false)
-  else
-    ;
-    (self._btn_NpcNavi):SetShow(false)
-    ;
-    (self._btn_NpcNaviTW):SetShow(true)
+  if _ContentsGroup_RenewUI_VoiceChat == false then
+    if playerLV > 51 then
+      (self._btn_NpcNavi):SetShow(true)
+      ;
+      (self._btn_NpcNaviTW):SetShow(false)
+    else
+      ;
+      (self._btn_NpcNavi):SetShow(false)
+      ;
+      (self._btn_NpcNaviTW):SetShow(true)
+    end
   end
   do
     do
@@ -168,9 +172,12 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
         radarPosX = FGlobal_Panel_Radar_GetPosX()
         radarPosY = FGlobal_Panel_Radar_GetPosY()
       end
+      if _ContentsGroup_RenewUI_Main == true then
+        (self._btn_VoiceChat):SetShow(false)
+      end
       Panel_PersonalIcon:SetSize((sizeX + controlGapX) * (showIconCount) - 5, Panel_PersonalIcon:GetSizeY())
       Panel_PersonalIcon:SetPosX(radarPosX - (sizeX + controlGapX) * (showIconCount))
-      -- DECOMPILER ERROR: 10 unprocessed JMP targets
+      -- DECOMPILER ERROR: 11 unprocessed JMP targets
     end
   end
 end

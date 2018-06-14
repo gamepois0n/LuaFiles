@@ -313,6 +313,8 @@ end
 
 registerEvent("FromClient_WorldMapTerritoryNodeCreate", "FromClient_TerritoryUICreate")
 registerEvent("FromClient_WorldMapTerritoryNodeGuildMarkUpdate", "FromClient_updateGuildmark")
-registerEvent("FromClient_TerritoryTooltipShow", "FromClient_OnTerritoryTooltipShow")
-registerEvent("FromClient_TerritoryTooltipHide", "FromClient_OnTerritoryTooltipHide")
+if _ContentsGroup_RenewUI == false then
+  registerEvent("FromClient_TerritoryTooltipShow", "FromClient_OnTerritoryTooltipShow")
+  registerEvent("FromClient_TerritoryTooltipHide", "FromClient_OnTerritoryTooltipHide")
+end
 

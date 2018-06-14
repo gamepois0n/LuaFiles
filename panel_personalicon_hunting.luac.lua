@@ -6,7 +6,9 @@
 local _btn_HuntingAlert = FGlobal_GetPersonalIconControl(3)
 local _huntingPlus = FGlobal_GetPersonalText(3)
 _btn_HuntingAlert:ActiveMouseEventEffect(true)
-_btn_HuntingAlert:setGlassBackground(true)
+if _ContentsGroup_RenewUI_Main == false then
+  _btn_HuntingAlert:setGlassBackground(true)
+end
 local msg = {name, desc}
 WhaleConditionCheck = function()
   -- function num : 0_0 , upvalues : msg, _huntingPlus

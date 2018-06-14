@@ -63,7 +63,9 @@ matchInfo.init = function(self, isEnableChannel)
       (matchInfo._Button_Info):SetMonoTone(true)
     end
   end
-  Panel_RecentMemory:SetShow(false)
+  if _ContentsGroup_RenewUI == false then
+    Panel_RecentMemory:SetShow(false)
+  end
 end
 
 matchInfo.setPosition = function(self)
@@ -173,7 +175,9 @@ FromClient_UpdateMatchInfo = function(matchType, matchState)
               ;
               (matchInfo._Button_Info):SetFontColor(UI_color.C_FFFF973A)
               HandleClicked_MatchOpen(true)
-              Panel_RecentMemory:SetShow(false)
+              if _ContentsGroup_RenewUI == false then
+                Panel_RecentMemory:SetShow(false)
+              end
             else
               if matchState == 4 then
                 messages = {main = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYCOMBAT_MATCHSTATUS_NAK_STARTFIGHT"), sub = "", addMsg = ""}
@@ -192,7 +196,9 @@ FromClient_UpdateMatchInfo = function(matchType, matchState)
                 ;
                 (matchInfo._Button_Info):SetFontColor(UI_color.C_FFFF4B4B)
                 HandleClicked_MatchOpen(true)
-                Panel_RecentMemory:SetShow(false)
+                if _ContentsGroup_RenewUI == false then
+                  Panel_RecentMemory:SetShow(false)
+                end
               else
               end
             end

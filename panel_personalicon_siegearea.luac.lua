@@ -5,7 +5,9 @@
 -- function num : 0
 local _btn_VillageSiegeArea = FGlobal_GetPersonalIconControl(4)
 _btn_VillageSiegeArea:ActiveMouseEventEffect(true)
-_btn_VillageSiegeArea:setGlassBackground(true)
+if _ContentsGroup_RenewUI_Main == false then
+  _btn_VillageSiegeArea:setGlassBackground(true)
+end
 local showSiegeArea = false
 ToClient_toggleVillageSiegeArea(showSiegeArea)
 ToggleVillageSiegeArea = function(isShow)

@@ -510,7 +510,7 @@ Interaction_PositionUpdate = function(actor)
 end
 
 Interaction_ButtonPositionUpdate = function(deltaTime)
-  -- function num : 0_20 , upvalues : isTargetNpc, _background, UI_NAME, BUTTON_UPDATE_TIME, ANIMATING_BUTTON, interactionTargetUIList, SHOW_BUTTON_COUNT, _needCollectTool
+  -- function num : 0_20 , upvalues : isTargetNpc, _background, _circularProgressBarInteraction, _circularProgressBarStaticbgInteraction, UI_NAME, BUTTON_UPDATE_TIME, ANIMATING_BUTTON, interactionTargetUIList, SHOW_BUTTON_COUNT, _needCollectTool
   local ANIMATION_TIME = 0.35
   local BUTTON_OFFSET_X = 0
   local BUTTON_OFFSET_Y = 0
@@ -526,6 +526,10 @@ Interaction_ButtonPositionUpdate = function(deltaTime)
     BUTTON_OFFSET_Y = 35
     CIRCLE_RADIUS = 50
   end
+  _circularProgressBarInteraction:SetPosX(BUTTON_OFFSET_X - 10)
+  _circularProgressBarInteraction:SetPosY(BUTTON_OFFSET_Y - 7)
+  _circularProgressBarStaticbgInteraction:SetPosX(BUTTON_OFFSET_X - 10)
+  _circularProgressBarStaticbgInteraction:SetPosY(BUTTON_OFFSET_Y - 7)
   UI_NAME:SetPosY(_background:GetPosY() + _background:GetSizeY() / 2 - UI_NAME:GetSizeY() * 0.5)
   local ANGLE_OFFSET = math.pi * -0.5
   if ANIMATION_TIME < BUTTON_UPDATE_TIME then
@@ -743,7 +747,7 @@ Interaction_UpdatePerFrame_Desc = function()
 end
 
 Interaction_UpdateDesc = function(indteractionType)
-  -- function num : 0_26 , upvalues : basicInteractionType, interactionTargetTextList, DESC_TEXT, _needCollectTool, interactionTargetUIList, _globalGuide
+  -- function num : 0_26 , upvalues : basicInteractionType, interactionTargetTextList, DESC_TEXT, _needCollectTool, interactionTargetUIList, _globalGuide, SHOW_BUTTON_COUNT
   local actor = interaction_getInteractable()
   if actor == nil then
     return 
@@ -815,6 +819,15 @@ Interaction_UpdateDesc = function(indteractionType)
                 end
                 _globalGuide:SetText(interactionDesc)
                 _globalGuide:SetShow(true)
+                if _ContentsGroup_RenewUI then
+                  if SHOW_BUTTON_COUNT > 1 then
+                    _globalGuide:SetSize(250, 50)
+                    _globalGuide:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_INTERACTION_XBOXGUIDE"))
+                  else
+                    _globalGuide:SetSize(250, 23)
+                    _globalGuide:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_INTERACTION_XBOXGUIDE2"))
+                  end
+                end
               end
             end
           end

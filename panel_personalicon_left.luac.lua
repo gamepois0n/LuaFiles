@@ -104,9 +104,12 @@ local registEventHandler = function()
   _russiaKamasilv:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 10 )")
 end
 
-local _ExpFix = (UI.getChildControl)(Panel_SelfPlayerExpGage, "CheckButton_ExpFix")
-_ExpFix:SetCheck(false)
-_ExpFix:SetShow(false)
+local _ExpFix = nil
+if _ContentsGroup_RenewUI_Main == false then
+  _ExpFix = (UI.getChildControl)(Panel_SelfPlayerExpGage, "CheckButton_ExpFix")
+  _ExpFix:SetCheck(false)
+  _ExpFix:SetShow(false)
+end
 _btn_NewSkill:ActiveMouseEventEffect(true)
 local _buffIconPosX = 0
 PackageIconPosition = function()
@@ -669,6 +672,8 @@ end
 Panel_SelfPlayer_EnableSkillCheck_Func = function()
   -- function num : 0_3 , upvalues : _btn_NewSkill, _txt_NewSkill
   if _ContentsGroup_RenewUI_Skill == true then
+    _btn_NewSkill:SetShow(false)
+    _txt_NewSkill:SetShow(false)
     return 
   end
   local isLearnable = PaGlobal_Skill:SkillWindow_PlayerLearnableSkill()
@@ -704,7 +709,7 @@ end
 
 local valuePackCheck = false
 FromClient_PackageIconUpdate = function()
-  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _blackSpiritSkillTraining, _memoryOfMaetsro, _pcRoomUserHomeBuff, _challengeNumber
+  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, _btn_NewSkill, _NodeLvBuffIcon, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _blackSpiritSkillTraining, _memoryOfMaetsro, _pcRoomUserHomeBuff, _challengeNumber
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local selfPlayer = getSelfPlayer()
@@ -746,6 +751,11 @@ FromClient_PackageIconUpdate = function()
   _russiaPack3:SetShow(false)
   _goldPremiumBuff:SetShow(false)
   _challengeReward:SetShow(false)
+  if _ContentsGroup_ForXBoxXR == true then
+    _btn_NewSkill:SetShow(false)
+    _NodeLvBuffIcon:SetShow(false)
+    return 
+  end
   if valuePackCheck then
     valuePackCheck = false
     PremiumPackageBuyNotice()
@@ -841,7 +851,11 @@ FromClient_PackageIconUpdate = function()
             _goldPremiumBuff:SetShow(false)
           end
           if remainRewardCount > 0 then
-            _challengeReward:SetShow(true)
+            if _ContentsGroup_RenewUI_Main == false then
+              _challengeReward:SetShow(true)
+            else
+              _challengeReward:SetShow(false)
+            end
             _challengeNumber:SetText(remainRewardCount)
           else
             _challengeReward:SetShow(false)
@@ -864,6 +878,9 @@ FromClient_ResponseChangeExpAndDropPercent = function()
   if expEventShow then
     _expEvent:SetShow(true)
   else
+    _expEvent:SetShow(false)
+  end
+  if _ContentsGroup_RenewUI_Main == true then
     _expEvent:SetShow(false)
   end
   if dropEventShow then
@@ -949,13 +966,18 @@ eventChangedExplorationNode = function(wayPointKey)
     do
       _NodeLvBuffIcon:SetShow(true)
       _NodeLvBuffIcon:ChangeTextureInfoName("Icon/New_Icon/04_PC_Skill/03_Buff/Non_ItemDropRateUP.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(_NodeLvBuffIcon, 1, 1, 32, 32)
-      ;
-      (_NodeLvBuffIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-      _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())
-      PackageIconPosition()
-      localNodeInvestment = false
-      _currentNodeLv = 0
+      do
+        local x1, y1, x2, y2 = setTextureUV_Func(_NodeLvBuffIcon, 1, 1, 32, 32)
+        ;
+        (_NodeLvBuffIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+        _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())
+        PackageIconPosition()
+        localNodeInvestment = false
+        _currentNodeLv = 0
+        if _ContentsGroup_RenewUI_Main == true then
+          _NodeLvBuffIcon:SetShow(false)
+        end
+      end
     end
   end
 end
@@ -963,6 +985,9 @@ end
 FGlobal_NodeLvBuffIcon_SetShow = function(isShow)
   -- function num : 0_14 , upvalues : _NodeLvBuffIcon
   _NodeLvBuffIcon:SetShow(isShow)
+  if _ContentsGroup_ForXBoxXR == false then
+    _NodeLvBuffIcon:SetShow(false)
+  end
 end
 
 eventChangedExplorationNodeCheck = function(wayPointKey)

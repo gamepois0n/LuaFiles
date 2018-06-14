@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_Dialog_Main_renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_Dialog}, false)
+local redermode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_Dialog}, false)
 local Panel_Dialog_Main_Info = {_initialize = false, 
 _ui = {Panel_Dialog_Main}
 , 
@@ -64,17 +64,15 @@ Panel_Dialog_Main_Info.registerMessageHandler = function(self)
 end
 
 Panel_Dialog_Main_Info.initialize = function(self)
-  -- function num : 0_5
+  -- function num : 0_5 , upvalues : redermode
   self:close()
   self._initialize = true
   self:InitValue()
   self:initControl()
-  PaGlobal_Dialog_Main_renderMode:setPrefunctor(renderMode, PaGlobalFunc_MainDialog_proRenderModeSet)
-  PaGlobal_Dialog_Main_renderMode:setClosefunctor(renderMode, PaGlobalFunc_MainDialog_RenderMode_DialogListClose)
+  redermode:setPrefunctor(redermode, PaGlobalFunc_MainDialog_proRenderModeSet)
+  redermode:setClosefunctor(redermode, PaGlobalFunc_MainDialog_RenderMode_DialogListClose)
   Panel_Dialog_Main:setGlassBackground(true)
   Panel_Dialog_Main:setFlushAble(false)
-  Panel_Dialog_Main:RegisterShowEventFunc(true, "PaGlobalFunc_MainDialog_MainDialogShowAni()")
-  Panel_Dialog_Main:RegisterShowEventFunc(false, "PaGlobalFunc_MainDialog_MainDialogHideAni()")
   self:registerMessageHandler()
 end
 
@@ -94,19 +92,21 @@ end
 
 Panel_Dialog_Main_Info.open = function(self, showAni)
   -- function num : 0_8
-  if showAni == true then
-    Panel_Dialog_Main:SetShow(true, true)
-  else
+  if showAni == nil then
     Panel_Dialog_Main:SetShow(true, false)
+    return 
+  else
+    Panel_Dialog_Main:SetShow(true, showAni)
   end
 end
 
 Panel_Dialog_Main_Info.close = function(self, showAni)
   -- function num : 0_9
-  if showAni == true then
-    Panel_Dialog_Main:SetShow(false, true)
-  else
+  if showAni == nil then
     Panel_Dialog_Main:SetShow(false, false)
+    return 
+  else
+    Panel_Dialog_Main:SetShow(false, showAni)
   end
 end
 
@@ -124,9 +124,9 @@ end
 
 Panel_Dialog_Main_Info.setIgnoreShowDialog = function(self, value)
   -- function num : 0_12
-  -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
-  (self._value).ignoreShowDialog = ignoreShowDialog
+  (self._value).ignoreShowDialog = value
 end
 
 Panel_Dialog_Main_Info.preclosePanel_OpenMainDialog = function(self)
@@ -188,9 +188,10 @@ Panel_Dialog_Main_Info.hideMainDialog = function(self, isSetWait)
   if Panel_Window_Warehouse:GetShow() then
     Warehouse_Close()
   end
-  if Panel_CreateClan:GetShow() or Panel_CreateGuild:GetShow() then
+  if _ContentsGroup_RenewUI_Guild == false and (Panel_CreateClan:GetShow() or Panel_CreateGuild:GetShow()) then
     CreateClan_Close()
   end
+  PaGlobalFunc_GuildCreate_Close()
   Panel_WorkerResist_Auction:SetShow(false)
   Panel_WorkerList_Auction:SetShow(false)
   FGolbal_ItemMarketNew_Close()
@@ -257,14 +258,19 @@ Panel_Dialog_Main_Info.closeNpcTalk = function(self, isSetWait)
   end
   self:restoreUI()
   Dialog_clickExitReq(isSetWait)
-  checkHpAlertPostEvent()
+  if _ContentsGroup_RenewUI_Main == true then
+    Panel_SkillCommand:SetShow(false)
+    PaGlobalFunc_MainStatusInfo_UpdateHPAndMP()
+  else
+    checkHpAlertPostEvent()
+  end
 end
 
 Panel_Dialog_Main_Info.restoreUI = function(self)
-  -- function num : 0_16
+  -- function num : 0_16 , upvalues : redermode
   SetUIMode((Defines.UIMode).eUIMode_Default)
   if ((self._ui).Panel_Dialog_Main):IsShow() then
-    PaGlobal_Dialog_Main_renderMode:reset()
+    redermode:reset()
     ;
     ((self._ui).Panel_Dialog_Main):SetShow(false, false)
   end
@@ -328,53 +334,130 @@ PaGlobalFunc_MainDialog_Close = function(showAni)
   Panel_Dialog_Main_Info:close(showAni)
 end
 
-PaGlobalFunc_MainDialog_ReOpen = function(showAni)
+PaGlobalFunc_MainDialog_getIgnoreShowDialog = function()
   -- function num : 0_21 , upvalues : Panel_Dialog_Main_Info
+  local self = Panel_Dialog_Main_Info
+  return (self._value).ignoreShowDialog
+end
+
+PaGlobalFunc_MainDialog_setIgnoreShowDialog = function(value)
+  -- function num : 0_22 , upvalues : Panel_Dialog_Main_Info
+  local self = Panel_Dialog_Main_Info
+  self:setIgnoreShowDialog(value)
+end
+
+PaGlobalFunc_MainDialog_CloseMoment = function(showAni)
+  -- function num : 0_23
+  PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
+  PaGlobalFunc_MainDialog_Close()
+end
+
+PaGlobalFunc_MainDialog_ReOpen = function(showAni)
+  -- function num : 0_24 , upvalues : Panel_Dialog_Main_Info
+  PaGlobalFunc_Dialog_Main_SetRenderMode()
+  SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
   Panel_Dialog_Main_Info:open(showAni)
-  PaGlobalFunc_MainDialog_Bottom_OpenEndHide()
+  PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+  PaGlobalFunc_MainDialog_Bottom_Open()
   PaGlobalFunc_MainDialog_Right_ReOpen()
 end
 
+local _blackSpiritButtonPos = {eBlackSpiritButtonType_GoFirst = -1, eBlackSpiritButtonType_Quest = 0, eBlackSpiritButtonType_Enchant = 1, eBlackSpiritButtonType_Socket = 2, eBlackSpiritButtonType_Improve = 3, eBlackSpiritButtonType_Count = 6}
+PaGlobalFunc_MainDialog_ExecuteAfterDialogLoad = function()
+  -- function num : 0_25 , upvalues : _blackSpiritButtonPos
+  local dialogData = ToClient_GetCurrentDialogData()
+  if dialogData == nil then
+    return 
+  end
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+
+  if dialogData:isHaveQuest() == false then
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Enchant = 0
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Socket = 1
+    -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
+
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Improve = 2
+  else
+    -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
+
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Enchant = 1
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Socket = 2
+    -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
+
+    _blackSpiritButtonPos.eBlackSpiritButtonType_Improve = 3
+  end
+  local blackSpiritUiType = getBlackSpiritUiType()
+  if (CppEnums.EFlush_BlackSpirit_Ui_Type).eFlush_BlackSpirit_Ui_None ~= blackSpiritUiType and getBlackSpiritGrowthStep() > 0 then
+    if (CppEnums.EFlush_BlackSpirit_Ui_Type).eFlush_BlackSpirit_Ui_ItemEnchant == blackSpiritUiType then
+      PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(_blackSpiritButtonPos.eBlackSpiritButtonType_Enchant)
+    else
+      if (CppEnums.EFlush_BlackSpirit_Ui_Type).eFlush_BlackSpirit_Ui_Socket == blackSpiritUiType then
+        PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(_blackSpiritButtonPos.eBlackSpiritButtonType_Socket)
+      else
+        if (CppEnums.EFlush_BlackSpirit_Ui_Type).eFlush_BlackSpirit_Ui_Improve == blackSpiritUiType then
+          PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(_blackSpiritButtonPos.eBlackSpiritButtonType_Improve)
+        end
+      end
+    end
+  end
+end
+
 PaGlobalFunc_MainDialog_GetShow = function()
-  -- function num : 0_22
+  -- function num : 0_26
   return Panel_Dialog_Main:GetShow()
 end
 
 PaGlobalFunc_MainDialog_IsShow = function()
-  -- function num : 0_23
+  -- function num : 0_27
   return Panel_Dialog_Main:IsShow()
 end
 
 PaGlobalFunc_MainDialog_IsUse = function()
-  -- function num : 0_24
+  -- function num : 0_28
   return Panel_Dialog_Main:IsUse()
 end
 
 PaGlobalFunc_MainDialog_Update = function()
-  -- function num : 0_25 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:update()
 end
 
+PaGlobalFunc_MainDialog_OpenIniteValues = function()
+  -- function num : 0_30
+  -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
+
+  (self._value).isFirstShowTooltip = true
+end
+
 PaGlobalFunc_MainDialog_CloseIniteValues = function()
-  -- function num : 0_26 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   PaGlobalFunc_MainDialog_Bottom_InitValue()
   PaGlobalFunc_MainDialog_Quest_IsFirstReset()
   PaGlobalFunc_MainDialog_Right_InitValue()
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
+  PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
+  PaGlobalFunc_MainDialog_Intimacy_InitValue()
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._value).dialogShowCheck_Once = false
-  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._value).isAuctionDialog = false
-  PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._value).ignoreShowDialog = false
 end
 
 PaGlobalFunc_MainDialog_MainDialogShowAni = function()
-  -- function num : 0_27
+  -- function num : 0_32
   audioPostEvent_SystemUi(1, 19)
   ;
   (UIAni.fadeInSCR_Up)(Panel_Dialog_Main)
@@ -382,13 +465,13 @@ PaGlobalFunc_MainDialog_MainDialogShowAni = function()
 end
 
 PaGlobalFunc_MainDialog_MainDialogHideAni = function()
-  -- function num : 0_28
+  -- function num : 0_33
   audioPostEvent_SystemUi(1, 20)
   Panel_Dialog_Main:ResetVertexAni()
   Panel_Dialog_Main:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
-  local Ani1 = Panel_Dialog_Main:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  Ani1:SetStartColor(UI_color.C_FFFFFFFF)
-  Ani1:SetEndColor(UI_color.C_00FFFFFF)
+  local Ani1 = Panel_Dialog_Main:addColorAnimation(0, 0.25, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  Ani1:SetStartColor((Defines.Color).C_FFFFFFFF)
+  Ani1:SetEndColor((Defines.Color).C_00FFFFFF)
   Ani1:SetStartIntensity(3)
   Ani1:SetEndIntensity(1)
   Ani1.IsChangeChild = true
@@ -396,14 +479,8 @@ PaGlobalFunc_MainDialog_MainDialogHideAni = function()
   Ani1:SetDisableWhileAni(true)
 end
 
-PaGlobalFunc_MainDialog_setIgnoreShowDialog = function(value)
-  -- function num : 0_29 , upvalues : Panel_Dialog_Main_Info
-  local self = Panel_Dialog_Main_Info
-  self:setIgnoreShowDialog()
-end
-
 PaGlobalFunc_MainDialog_proRenderModeSet = function()
-  -- function num : 0_30 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_34 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -412,15 +489,15 @@ PaGlobalFunc_MainDialog_proRenderModeSet = function()
 end
 
 PaGlobalFunc_MainDialog_RenderMode_DialogListClose = function()
-  -- function num : 0_31 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_35 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
-  self:Open()
+  self:open()
   PaGlobalFunc_MainDialog_Hide()
 end
 
 PaGlobalFunc_MainDialog_Hide = function()
-  -- function num : 0_32 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_36 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   if Panel_Win_System:GetShow() then
     return 
@@ -453,7 +530,7 @@ PaGlobalFunc_MainDialog_Hide = function()
 end
 
 PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
-  -- function num : 0_33
+  -- function num : 0_37
   if (getCustomizingManager()):isShow() then
     HandleClicked_CloseIngameCustomization()
     return true
@@ -466,7 +543,7 @@ PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
     StableFunction_Close()
     return true
   end
-  if _ContentsGroup_RenewUI_Repair == true and PaGlobalFunc_RepairInfo_IsOpened() then
+  if _ContentsGroup_RenewUI_Repair == true and PaGlobalFunc_RepairInfo_GetShow() then
     PaGlobalFunc_RepairInfo_Close()
   end
   if Panel_FixEquip:GetShow() then
@@ -513,8 +590,12 @@ PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
     FixEquip_Close()
     return true
   end
-  if Panel_Knowledge_Main:GetShow() then
-    Panel_Knowledge_Hide()
+  if PaGlobalFunc_Skill_GetShow() then
+    PaGlobalFunc_Skill_Close()
+    return true
+  end
+  if PaGlobalFunc_Window_Knowledge_GetShow() then
+    PaGlobalFunc_Window_Knowledge_Exit()
     return true
   end
   if Panel_DyeNew_CharacterController:GetShow() then
@@ -529,34 +610,34 @@ PaGlobalFunc_MainDialog_CloseMainDialogForDetail = function()
 end
 
 PaGlobalFunc_Dialog_Main_SetRenderModeList = function(renderModeList)
-  -- function num : 0_34
-  PaGlobal_Dialog_Main_renderMode:setRenderMode(renderModeList)
+  -- function num : 0_38 , upvalues : redermode
+  redermode:setRenderMode(renderModeList)
 end
 
 PaGlobalFunc_Dialog_Main_SetRenderMode = function()
-  -- function num : 0_35
-  PaGlobal_Dialog_Main_renderMode:set()
+  -- function num : 0_39 , upvalues : redermode
+  redermode:set()
 end
 
 PaGlobalFunc_Dialog_Main_ResetRenderMode = function()
-  -- function num : 0_36
-  PaGlobal_Dialog_Main_renderMode:reset()
+  -- function num : 0_40 , upvalues : redermode
+  redermode:reset()
 end
 
 PaGlobalFunc_Dialog_Main_CloseNpcTalk = function(isSetWait)
-  -- function num : 0_37 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:closeNpcTalk(isSetWait)
 end
 
 getAuctionState = function()
-  -- function num : 0_38 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   return (self._value).isAuctionDialog
 end
 
 PaGlobalFunc_Dialog_Main_SetisAuctionDialog = function(value)
-  -- function num : 0_39 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_43 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -564,21 +645,33 @@ PaGlobalFunc_Dialog_Main_SetisAuctionDialog = function(value)
   (self._value).isAuctionDialog = value
 end
 
+PaGlobalFunc_Dialog_Main_CheckCompleteQuest = function(questData)
+  -- function num : 0_44
+  if questData == nil then
+    return 
+  end
+  if dialog_isTalking() == false then
+    return 
+  end
+  local talker = dialog_getTalker()
+  local completeNpc = questData:getCompleteNpc()
+end
+
 FromClient_InitMainDialog = function()
-  -- function num : 0_40 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_45 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:initialize()
   self:Resize()
 end
 
 FromClient_onScreenResize_MainDialog = function()
-  -- function num : 0_41 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_46 , upvalues : Panel_Dialog_Main_Info
   local self = Panel_Dialog_Main_Info
   self:Resize()
 end
 
 FromClient_ShowMainDialog = function()
-  -- function num : 0_42 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_47 , upvalues : Panel_Dialog_Main_Info, redermode
   local self = Panel_Dialog_Main_Info
   PaGlobal_TutorialManager:handleBeforeShowDialog()
   FGlobal_RemoteControl_Hide()
@@ -600,7 +693,8 @@ FromClient_ShowMainDialog = function()
       if (self._value).ignoreShowDialog == true then
         return 
       end
-      if GetUIMode() ~= (Defines.UIMode).eUIMode_Default and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog and GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog_Dummy and GetUIMode() ~= (Defines.UIMode).eUIMode_ItemMarket then
+      local currentUIMode = GetUIMode()
+      if currentUIMode ~= (Defines.UIMode).eUIMode_Default and currentUIMode ~= (Defines.UIMode).eUIMode_NpcDialog and currentUIMode ~= (Defines.UIMode).eUIMode_NpcDialog_Dummy and currentUIMode ~= (Defines.UIMode).eUIMode_ItemMarket then
         ToClient_PopDialogueFlush()
         return 
       end
@@ -620,27 +714,25 @@ FromClient_ShowMainDialog = function()
       Panel_SkillTooltip_Hide()
       FGlobal_BuffTooltipOff()
       Interaction_Close()
-      PaGlobal_Dialog_Main_renderMode:set()
+      redermode:set()
       setShowLine(false)
       PaGlobalAppliedBuffList:hide()
       if Panel_Window_Exchange:GetShow() then
         ExchangePC_MessageBox_ResponseCancel()
       end
       setShowNpcDialog(true)
-      -- DECOMPILER ERROR at PC131: Confused about usage of register: R2 in 'UnsetPending'
-
-      ;
-      (self._value).isFirstShowTooltip = true
+      PaGlobalFunc_MainDialog_OpenIniteValues()
       self:update()
       self:open(true)
       Panel_MovieTheater_LowLevel_WindowClose()
+      PaGlobalFunc_MainDialog_ExecuteAfterDialogLoad()
       PaGlobal_TutorialManager:handleShowDialog(dialogData)
     end
   end
 end
 
 FromClient_ExitMainDialog = function(isSetWait)
-  -- function num : 0_43 , upvalues : Panel_Dialog_Main_Info
+  -- function num : 0_48 , upvalues : Panel_Dialog_Main_Info
   QuickSlot_UpdateData()
   FGlobal_QuestWidget_CalcScrollButtonSize()
   FGlobal_QuestWidget_UpdateList()
@@ -657,29 +749,29 @@ FromClient_ExitMainDialog = function(isSetWait)
 end
 
 FromClient_MainDialog_CloseDialog = function()
-  -- function num : 0_44
+  -- function num : 0_49
   PaGlobalFunc_MainDialog_Hide()
 end
 
 FromClient_VaryIntimacy_Dialog = function()
-  -- function num : 0_45
+  -- function num : 0_50
   if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() then
     PaGlobalFunc_MainDialog_Quest_Update()
   end
 end
 
 FromClient_CloseMainDialogByAttacked = function()
-  -- function num : 0_46
-  PaGlobal_Dialog_Main_renderMode:reset()
+  -- function num : 0_51 , upvalues : redermode
+  redermode:reset()
 end
 
 FromClient_CloseMainDialogForDetail = function()
-  -- function num : 0_47
+  -- function num : 0_52
   PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
 end
 
 FromClient_CloseAllPanelWhenNpcGoHome = function()
-  -- function num : 0_48
+  -- function num : 0_53
   if GetUIMode() == (Defines.UIMode).eUIMode_Stable then
     StableFunction_Close()
   end

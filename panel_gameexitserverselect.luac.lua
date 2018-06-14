@@ -647,19 +647,20 @@ ChannelSelect_Update = function()
           (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
         end
       end
-      if _serverData._isSpeedChannel then
-        if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
-          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
-        else
-          if ToClient_SelfPlayerIsGM() then
-            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
-          else
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
-          end
-        end
+      -- DECOMPILER ERROR at PC259: Unhandled construct in 'MakeBoolean' P1
+
+      -- DECOMPILER ERROR at PC259: Unhandled construct in 'MakeBoolean' P1
+
+      if _serverData._isSpeedChannel and temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 and _ContentsGroup_isConsolePadControl == false then
+        (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
+        ;
+        (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
+      end
+      if ToClient_SelfPlayerIsGM() then
+        (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
+      else
+        ;
+        (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
       end
       if _serverData._isBalanceChannel then
         if ToClient_isAccessableBalanceChannel() then
@@ -747,37 +748,38 @@ ChannelSelect_Update = function()
         do
           local channelBgSizeX = (((self.channelSelectUIPool)[chIndex]).channelStatus):GetTextSizeX() + (basePosX) + 50
           channelSizeX = (math.max)(channelSizeX, channelBgSizeX)
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 4 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelPKIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 5 .. "," .. chIndex .. ")")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelPKIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          -- DECOMPILER ERROR at PC716: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          if _ContentsGroup_isConsolePadControl == false then
+            (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 4 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelPKIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 5 .. "," .. chIndex .. ")")
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelPKIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          end
+          -- DECOMPILER ERROR at PC722: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC716: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC722: LeaveBlock: unexpected jumping out IF_STMT
 
-          -- DECOMPILER ERROR at PC716: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC722: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC716: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC722: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

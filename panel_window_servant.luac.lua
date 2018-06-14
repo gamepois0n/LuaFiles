@@ -389,6 +389,9 @@ servantIcon.update = function(self)
   (((self._slots)[4]).icon):SetShow(false)
   ;
   (horseRace._RaceInfo_btn_Info):SetShow(false)
+  if _ContentsGroup_RenewUI_Main == true then
+    return 
+  end
   local temporaryWrapper = getTemporaryInformationWrapper()
   local landVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
   if landVehicleWrapper ~= nil then
@@ -406,22 +409,22 @@ servantIcon.update = function(self)
         else
           ;
           (((self._slots)[0]).icon):ChangeTextureInfoName("New_UI_Common_forLua/Window/Horse/servant_icon_02.dds")
-          -- DECOMPILER ERROR at PC136: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC140: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC137: Overwrote pending register: R6 in 'AssignReg'
+          -- DECOMPILER ERROR at PC141: Overwrote pending register: R6 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC138: Overwrote pending register: R5 in 'AssignReg'
+          -- DECOMPILER ERROR at PC142: Overwrote pending register: R5 in 'AssignReg'
 
           x1 = setTextureUV_Func(((self._slots)[0]).icon, 62, 1, 122, 61)
           ;
           ((((self._slots)[0]).icon):getBaseTexture()):setUV(x1, y1, x2, y2)
         end
       else
-        -- DECOMPILER ERROR at PC170: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC174: Overwrote pending register: R7 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC171: Overwrote pending register: R6 in 'AssignReg'
+        -- DECOMPILER ERROR at PC175: Overwrote pending register: R6 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC172: Overwrote pending register: R5 in 'AssignReg'
+        -- DECOMPILER ERROR at PC176: Overwrote pending register: R5 in 'AssignReg'
 
         if isRussiaPremiumPack then
           if doHaveContentsItem(16, UI_VT.Type_Horse) then
@@ -431,33 +434,33 @@ servantIcon.update = function(self)
           else
             ;
             (((self._slots)[0]).icon):ChangeTextureInfoName("New_UI_Common_forLua/Window/Horse/servant_icon_02.dds")
-            -- DECOMPILER ERROR at PC201: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC205: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC202: Overwrote pending register: R6 in 'AssignReg'
+            -- DECOMPILER ERROR at PC206: Overwrote pending register: R6 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC203: Overwrote pending register: R5 in 'AssignReg'
+            -- DECOMPILER ERROR at PC207: Overwrote pending register: R5 in 'AssignReg'
 
             x1 = setTextureUV_Func(((self._slots)[0]).icon, 62, 1, 122, 61)
             ;
             ((((self._slots)[0]).icon):getBaseTexture()):setUV(x1, y1, x2, y2)
           end
         else
-          -- DECOMPILER ERROR at PC233: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC237: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC234: Overwrote pending register: R6 in 'AssignReg'
+          -- DECOMPILER ERROR at PC238: Overwrote pending register: R6 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC235: Overwrote pending register: R5 in 'AssignReg'
+          -- DECOMPILER ERROR at PC239: Overwrote pending register: R5 in 'AssignReg'
 
           if doHaveContentsItem(16, UI_VT.Type_Horse) then
             x1 = setTextureUV_Func(((self._slots)[0]).icon, 62, 62, 122, 122)
             ;
             ((((self._slots)[0]).icon):getBaseTexture()):setUV(x1, y1, x2, y2)
           else
-            -- DECOMPILER ERROR at PC258: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC262: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC259: Overwrote pending register: R6 in 'AssignReg'
+            -- DECOMPILER ERROR at PC263: Overwrote pending register: R6 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC260: Overwrote pending register: R5 in 'AssignReg'
+            -- DECOMPILER ERROR at PC264: Overwrote pending register: R5 in 'AssignReg'
 
             x1 = setTextureUV_Func(((self._slots)[0]).icon, 62, 1, 122, 61)
             ;
@@ -473,11 +476,11 @@ servantIcon.update = function(self)
       end
     else
       do
-        -- DECOMPILER ERROR at PC290: Overwrote pending register: R6 in 'AssignReg'
+        -- DECOMPILER ERROR at PC294: Overwrote pending register: R6 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC290: Overwrote pending register: R5 in 'AssignReg'
+        -- DECOMPILER ERROR at PC294: Overwrote pending register: R5 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC299: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC303: Overwrote pending register: R7 in 'AssignReg'
 
         if UI_VT.Type_Camel == y1(x2) then
           local x1, y1, x2, y2 = setTextureUV_Func(((self._slots)[0]).icon, 1, y2, 61, 122)
@@ -654,19 +657,19 @@ servantIcon.update = function(self)
                                             (((self._slots)[4]).icon):SetPosX(icon_PosX)
                                             icon_PosX = icon_PosX + (((self._slots)[4]).icon):GetSizeX()
                                             do break end
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out IF_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                            -- DECOMPILER ERROR at PC911: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC915: LeaveBlock: unexpected jumping out IF_STMT
 
                                           end
                                         end

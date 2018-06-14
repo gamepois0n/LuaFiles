@@ -80,6 +80,10 @@ local updateStunGauge = function(targetActor, stun, maxStun)
 end
 
 local nowTarget = {}
+local _dangerAlert_Show = FGlobal_DangerAlert_Show
+if _ContentsGroup_RenewUI_Main == true then
+  _dangerAlert_Show = PaGlobalFunc_MainStatusInfo_DangerAlertShow
+end
 Panel_MonsterInfo_UpdateStun = function(actorKey, stun, maxStun)
   -- function num : 0_2 , upvalues : targetActorKey, updateStunGauge
   if targetActorKey == actorKey then
@@ -89,10 +93,10 @@ Panel_MonsterInfo_UpdateStun = function(actorKey, stun, maxStun)
 end
 
 targetHpInfo_Update_Monster = function(actorKey, nowHP)
-  -- function num : 0_3 , upvalues : _darkSpirit, _RunawayBG, _txt_Runaway, _checkBtnAlert, _helpBubble, _helpMsg, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, UI_TM, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later
+  -- function num : 0_3 , upvalues : _dangerAlert_Show, _darkSpirit, _RunawayBG, _txt_Runaway, _checkBtnAlert, _helpBubble, _helpMsg, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, UI_TM, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later
   local targetActor = getCharacterActor(actorKey)
   if targetActor == nil then
-    FGlobal_DangerAlert_Show(false)
+    _dangerAlert_Show(false)
     return 
   end
   local monsterLevel = ((targetActor:get()):getCharacterStaticStatus()).level
@@ -322,11 +326,11 @@ targetHpInfo_Update_Monster = function(actorKey, nowHP)
                   _checkBtnAlert:SetPosX(_RunawayBG:GetPosX() + 10)
                   _checkBtnAlert:SetPosY(_RunawayBG:GetPosY())
                   if Panel_Monster_Bar:GetShow() then
-                    FGlobal_DangerAlert_Show(true)
+                    _dangerAlert_Show(true)
                     FGlobal_ChattingAlert_Call()
                   end
                 else
-                  FGlobal_DangerAlert_Show(false)
+                  _dangerAlert_Show(false)
                 end
               end
             end
@@ -459,7 +463,7 @@ targetHpInfo_Update_Other = function(actorKey, nowHP)
 end
 
 panel_Update_Monster_Info = function(actorKey)
-  -- function num : 0_6 , upvalues : blackBg, lua_TargetInfo_NormalEnemyGauge, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, lua_TargetInfo_BossEnemyGauge, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later, lua_TargetInfo_PlayerEnemyGauge, lua_TargetInfo_PlayerHpRate, lua_TargetInfo_PlayerHpRate_Later, lua_TargetInfo_Name, appliedBuff_UIPool_Last, appliedBuff_UIPool, targetActorKey, monsterList, getMaxLevel, elapsedTime, updateStunGauge, EnemyBuffListBoarder, appliedBuff_DATAPool, monsterBuffIcon_Base, lua_TargetInfo_StunRate_Back, lua_TargetInfo_StunRate, _darkSpirit, _helpBubble, _helpMsg, lua_EnemyTypeIcon, lua_EnemyTypeText
+  -- function num : 0_6 , upvalues : blackBg, lua_TargetInfo_NormalEnemyGauge, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, lua_TargetInfo_BossEnemyGauge, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later, lua_TargetInfo_PlayerEnemyGauge, lua_TargetInfo_PlayerHpRate, lua_TargetInfo_PlayerHpRate_Later, lua_TargetInfo_Name, appliedBuff_UIPool_Last, appliedBuff_UIPool, targetActorKey, monsterList, getMaxLevel, elapsedTime, updateStunGauge, EnemyBuffListBoarder, appliedBuff_DATAPool, monsterBuffIcon_Base, _dangerAlert_Show, lua_TargetInfo_StunRate_Back, lua_TargetInfo_StunRate, _darkSpirit, _helpBubble, _helpMsg, lua_EnemyTypeIcon, lua_EnemyTypeText
   blackBg:SetShow(false)
   lua_TargetInfo_NormalEnemyGauge:SetShow(false)
   lua_TargetInfo_NormalHpRate:SetShow(false)
@@ -570,7 +574,7 @@ panel_Update_Monster_Info = function(actorKey)
       if curHP < 1 then
         Panel_Monster_Bar:SetShow(false, false)
         monsterList = {}
-        FGlobal_DangerAlert_Show(false)
+        _dangerAlert_Show(false)
       end
       if (targetActor:get()):isMonster() then
         targetHpInfo_Update_Monster(actorKey, nowHP)
@@ -709,14 +713,14 @@ _recentTargetInfo_TendencyOnDead_MSG = function(targetActor, actorKey)
 end
 
 updateTargetInfoCheckTime = function(fDeltatime)
-  -- function num : 0_8 , upvalues : elapsedTime, monsterList
+  -- function num : 0_8 , upvalues : elapsedTime, monsterList, _dangerAlert_Show
   elapsedTime = elapsedTime + fDeltatime
   if elapsedTime > 20 then
     elapsedTime = 0
     monsterList = {}
     Panel_Monster_Bar:SetShow(false, false)
     clearTargetActor()
-    FGlobal_DangerAlert_Show(false)
+    _dangerAlert_Show(false)
   end
 end
 
@@ -732,10 +736,10 @@ FGlobal_Panel_Monster_Bar_RePos = function()
 end
 
 hideRecentTargetInfo = function()
-  -- function num : 0_10 , upvalues : monsterList
+  -- function num : 0_10 , upvalues : monsterList, _dangerAlert_Show
   monsterList = {}
   Panel_Monster_Bar:SetShow(false, false)
-  FGlobal_DangerAlert_Show(false)
+  _dangerAlert_Show(false)
 end
 
 GameOption_NearMonsterAlertOff = function()

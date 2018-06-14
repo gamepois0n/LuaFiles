@@ -277,6 +277,9 @@ Panel_MyHouseNavi_Update = function(init, listCount)
     else
       Panel_MyHouseNavi:SetShow(false)
     end
+    if _ContentsGroup_RenewUI_Main == true then
+      Panel_MyHouseNavi:SetShow(false)
+    end
     Panel_MyHouseNavi:SetSize(panelSizeX, Panel_MyHouseNavi:GetSizeY())
     houseIconCount = iconNums
     if firstLoadingCheck then
@@ -288,7 +291,7 @@ Panel_MyHouseNavi_Update = function(init, listCount)
       PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
     end
     PaGlobal_CharacterTag_SetPosIcon()
-    -- DECOMPILER ERROR: 18 unprocessed JMP targets
+    -- DECOMPILER ERROR: 19 unprocessed JMP targets
   end
 end
 

@@ -12,7 +12,9 @@ _config = {slotCount = 14, slotRows = 0, slotCols = 2}
 , 
 _space = {itemButtonSpaceY = 0, itemButtonSizeY = 0, tabButtonSizeX = 0, tabButtonSpaceX = 160}
 , 
-_value = {isCamping = false, lastSelectedSlotIndex = nil, selectedSlotIndex = nil, selectedSlotKeyValue = nil, lastTabIndex = 0, lastStartSlotNo = 0, startSlotIndex = 0, lastScrollValue = 0, inputNumber = 0, itemListSize = 0, enableTrade = false, enableSell = false}
+_pos = {toolTipPosX = 0, toolTipPosY = 0}
+, 
+_value = {isCamping = false, lastSelectedSlotIndex = nil, selectedSlotIndex = nil, selectedSlotKeyValue = nil, lastTabIndex = 0, lastStartSlotNo = 0, startSlotIndex = 0, lastScrollValue = 0, inputNumber = 0, itemListSize = 0, enableTrade = false, enableSell = false, tabCount = 3}
 , 
 _enum = {etabIndexBuy = 0, etabIndexSell = 1, etabIndexRepurchase = 2}
 , 
@@ -196,8 +198,9 @@ ItemSlotTemplete.New = function(self)
   slot.setSelect = function(self, bSelect)
     -- function num : 0_0_3
     self.selected = bSelect
-    ;
-    (self.radioButton):SetCheck(bSelect)
+    if _ContentsGroup_RenewUI_NpcShop == true then
+      (self.radioButton):SetCheck(bSelect)
+    end
   end
 
   slot.clearItem = function(self)
@@ -445,19 +448,21 @@ end
 
 Panel_Dialog_NPCShop_Info.open = function(self, showAni)
   -- function num : 0_6
-  if showAni == true then
-    Panel_Dialog_NPCShop:SetShow(true, true)
-  else
+  if showAni == nil then
     Panel_Dialog_NPCShop:SetShow(true, false)
+    return 
+  else
+    Panel_Dialog_NPCShop:SetShow(true, showAni)
   end
 end
 
 Panel_Dialog_NPCShop_Info.close = function(self, showAni)
   -- function num : 0_7
-  if showAni == true then
-    Panel_Dialog_NPCShop:SetShow(false, true)
-  else
+  if showAni == nil then
     Panel_Dialog_NPCShop:SetShow(false, false)
+    return 
+  else
+    Panel_Dialog_NPCShop:SetShow(false, showAni)
   end
 end
 
@@ -472,6 +477,16 @@ Panel_Dialog_NPCShop_Info.resize = function(self)
     else
       Panel_Dialog_NPCShop:SetHorizonLeft()
     end
+  end
+  do
+    -- DECOMPILER ERROR at PC44: Confused about usage of register: R1 in 'UnsetPending'
+
+    ;
+    (self._pos).toolTipPosX = Panel_Dialog_NPCShop:GetPosX() + Panel_Dialog_NPCShop:GetSizeX() + (Panel_Dialog_NPCShop:GetSpanSize()).x
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R1 in 'UnsetPending'
+
+    ;
+    (self._pos).toolTipPosY = Panel_Dialog_NPCShop:GetPosY() + ((self._ui).frame_Item_List):GetPosY()
   end
 end
 
@@ -511,8 +526,8 @@ Panel_Dialog_NPCShop_Info.createSlot = function(self)
         slot.staticText_Price = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, slot.radioButton, "Content_Item_Prce_" .. strId)
         CopyBaseProperty((self._ui).staticText_Price_Right_templete, slot.staticText_Price)
       end
-      if ToClient_isXBox() == true then
-        (slot.radioButton):addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(" .. index .. ")")
+      if _ContentsGroup_RenewUI_NpcShop == true then
+        (slot.radioButton):addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(" .. index .. ")")
         ;
         (slot.radioButton):addInputEvent("Mouse_RUp", "PaGlobalFunc_Dialog_NPCShop_OnRSlotClicked(" .. index .. ")")
         ;
@@ -534,10 +549,17 @@ Panel_Dialog_NPCShop_Info.createSlot = function(self)
       (slot.icon):createChild()
       slot:setPos(row)
       slot:setShow(true)
-      -- DECOMPILER ERROR at PC266: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC265: Confused about usage of register: R12 in 'UnsetPending'
 
       ;
       (self._slots)[index] = slot
+      if row == 0 then
+        (slot.radioButton):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_UP, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( true )")
+      else
+        if row == (self._config).slotRows - 1 then
+          (slot.radioButton):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_DOWN, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( false )")
+        end
+      end
     end
   end
 end
@@ -640,29 +662,33 @@ Panel_Dialog_NPCShop_Info.updateContentData = function(self)
             local shopItem = shopItemWrapper:get()
             if (self._enum).etabIndexSell == (self._value).lastTabIndex then
               itemPrice_s64 = shopItem:getItemSellPriceWithOption()
-              if ToClient_isXBox() == true then
+              if _ContentsGroup_RenewUI_NpcShop == true then
                 (slot.radioButton):addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
               end
               slot:setItem(shopItemWrapper:getStaticStatus(), shopItem.leftCount_s64, itemPrice_s64, s64_inventoryItemCount, shopItem:getItemUsablePeriod())
             else
               if (self._enum).etabIndexBuy == (self._value).lastTabIndex then
                 itemPrice_s64 = shopItem:getItemPriceWithOption()
-                if ToClient_isXBox() == true then
+                if _ContentsGroup_RenewUI_NpcShop == true then
                   (slot.radioButton):addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
                 end
                 slot:setItem(shopItemWrapper:getStaticStatus(), shopItem.leftCount_s64, itemPrice_s64, s64_inventoryItemCount, shopItem:getItemUsablePeriod(), shopItem:getNeedIntimacy())
               else
                 itemPrice_s64 = shopItem.price_s64
-                if ToClient_isXBox() == true then
+                if _ContentsGroup_RenewUI_NpcShop == true then
                   (slot.radioButton):addInputEvent("Mouse_LUp", "")
                 end
                 slot:setItem(shopItemWrapper:getStaticStatus(), shopItem.leftCount_s64, itemPrice_s64, s64_inventoryItemCount, shopItem:getItemUsablePeriod(), shopItem:getNeedIntimacy())
               end
             end
-            ;
-            ((slot.icon).icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", true)")
-            ;
-            ((slot.icon).icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false)")
+            if _ContentsGroup_RenewUI_NpcShop == true then
+              (slot.radioButton):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false, nil," .. (self._pos).toolTipPosX .. "," .. (self._pos).toolTipPosY .. ")")
+            else
+              ;
+              ((slot.icon).icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", true, nil," .. (self._pos).toolTipPosX .. "," .. (self._pos).toolTipPosY .. ")")
+              ;
+              ((slot.icon).icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false, nil," .. (self._pos).toolTipPosX .. "," .. (self._pos).toolTipPosY .. ")")
+            end
             Panel_Tooltip_Item_SetPosition(slot.slotNo, slot.icon, "shop")
           end
           local moneyItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eInventory, getMoneySlotNo())
@@ -695,19 +721,19 @@ Panel_Dialog_NPCShop_Info.updateContentData = function(self)
                     (slot.staticText_Price):SetFontColor(UI_color.C_FFE7E7E7)
                   end
                   slot:clearItem()
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC320: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC347: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -749,6 +775,7 @@ Panel_Dialog_NPCShop_Info.preShow = function(self)
     self:resize()
     self:controlInit()
     self:checkInit()
+    self._currentTabIndex = 0
   end
 end
 
@@ -907,6 +934,10 @@ Panel_Dialog_NPCShop_Info.setPosTabButton = function(self)
       tabCount = tabCount + 1
     end
   end
+  -- DECOMPILER ERROR at PC20: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._value).tabCount = tabCount
   local BaseX = Panel_Dialog_NPCShop:GetPosX()
   local sizeX = Panel_Dialog_NPCShop:GetSizeX()
   local startPosX = sizeX / 2 - ((tabCount) * ((self._space).tabButtonSizeX / 2) + (tabCount - 1) * ((self._space).tabButtonSpaceX / 2))
@@ -976,17 +1007,17 @@ end
 PaGlobalFunc_Dialog_NPCShop_Open = function()
   -- function num : 0_23 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
-  self._currentTabIndex = 0
 end
 
 PaGlobalFunc_Dialog_NPCShop_Close = function()
   -- function num : 0_24
   if Panel_Dialog_NPCShop:GetShow() then
     Panel_Dialog_NPCShop:SetShow(false, false)
-    PaGlobalFunc_MainDialog_Bottom_OpenEndHide()
     audioPostEvent_SystemUi(1, 1)
+    Inventory_SetFunctor(nil, nil, nil, nil)
     InventoryWindow_Close()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
+    Panel_Tooltip_Item_hideTooltip()
     if PaGlobal_Camp:getIsCamping() then
       InventoryWindow_Close()
       PaGlobal_Camp:open()
@@ -1121,6 +1152,10 @@ PaGlobalFunc_Dialog_NPCShop_InvenRClick_SellItem = function(itemCount, slotNo)
     end
   end
 
+  if _ContentsGroup_ForXBoxFinalCert == false and _ContentsGroup_ForXBoxXR == true then
+    sellDoit()
+    return 
+  end
   local itemKeyForTradeInfo = (((itemWrapper:getStaticStatus()):get())._key):get()
   local tradeMasterInfo = getItemMarketMasterByItemEnchantKey(itemKeyForTradeInfo)
   if tradeMasterInfo ~= nil and itemEndurance ~= 0 then
@@ -1161,10 +1196,11 @@ end
 PaGlobalFunc_Dialog_NPCShop_TabButtonClick = function(tabIndex)
   -- function num : 0_33 , upvalues : Panel_Dialog_NPCShop_Info, UI_color
   local self = Panel_Dialog_NPCShop_Info
+  Panel_Tooltip_Item_hideTooltip()
   self:clearTabButton()
   if tabIndex ~= (self._value).lastTabIndex then
     PaGlobalFunc_Dialog_NPCShop_OnSlotClicked()
-    -- DECOMPILER ERROR at PC10: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (self._value).lastTabIndex = tabIndex
@@ -1184,11 +1220,11 @@ PaGlobalFunc_Dialog_NPCShop_TabButtonClick = function(tabIndex)
     end
     ;
     ((self._ui).frame_VerticalScroll):SetControlPos(0)
-    -- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (self._value).lastStartSlotNo = 0
-    -- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (self._value).startSlotIndex = 0
@@ -1199,8 +1235,77 @@ PaGlobalFunc_Dialog_NPCShop_TabButtonClick = function(tabIndex)
   PaGlobal_TutorialManager:handleNpcShopTabButtonClick(tabIndex)
 end
 
-PaGlobalFunc_Dialog_NPCShop_OnSlotClicked = function(slotIdx)
+PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip = function(slotIdx)
   -- function num : 0_34 , upvalues : Panel_Dialog_NPCShop_Info
+  local self = Panel_Dialog_NPCShop_Info
+  local slot = nil
+  if (self._value).lastSelectedSlotIndex ~= slotIdx then
+    Panel_NumberPad_Show(false, (Defines.s64_const).s64_0, 0, nil)
+  end
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._value).lastSelectedSlotIndex = (self._value).selectedSlotIndex
+  -- DECOMPILER ERROR at PC19: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._value).selectedSlotIndex = slotIdx
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R3 in 'UnsetPending'
+
+  if (self._value).lastSelectedSlotIndex ~= nil then
+    (self._value).enableTrade = false
+    local slot = (self._slots)[(self._value).lastSelectedSlotIndex]
+    Panel_Tooltip_Item_Show_GeneralStatic(slot.slotNo, "shop", false, nil, (self._pos).toolTipPosX, (self._pos).toolTipPosY)
+    slot:setSelect(false)
+    ;
+    ((self._ui).staticText_SomeOrAll_ConsoleUI):SetEnable(false)
+    ;
+    ((self._ui).staticText_SomeOrAll_ConsoleUI):SetMonoTone(true)
+    ;
+    ((self._ui).staticText_BuyOrSell_ConsoleUI):SetEnable(false)
+    ;
+    ((self._ui).staticText_BuyOrSell_ConsoleUI):SetMonoTone(true)
+  end
+  do
+    do
+      -- DECOMPILER ERROR at PC66: Confused about usage of register: R3 in 'UnsetPending'
+
+      if slotIdx ~= nil then
+        (self._value).enableTrade = true
+        -- DECOMPILER ERROR at PC68: Confused about usage of register: R3 in 'UnsetPending'
+
+        ;
+        (self._value).selectedSlotIndex = slotIdx
+        local slot = (self._slots)[(self._value).selectedSlotIndex]
+        Panel_Tooltip_Item_Show_GeneralStatic(slot.slotNo, "shop", true, nil, (self._pos).toolTipPosX, (self._pos).toolTipPosY)
+        slot:setSelect(true)
+        -- DECOMPILER ERROR at PC88: Confused about usage of register: R4 in 'UnsetPending'
+
+        ;
+        (self._value).selectedSlotKeyValue = slot.keyValue
+        ;
+        ((self._ui).staticText_BuyOrSell_ConsoleUI):SetEnable(true)
+        ;
+        ((self._ui).staticText_BuyOrSell_ConsoleUI):SetMonoTone(false)
+        if slot.isStackable == false then
+          ((self._ui).staticText_SomeOrAll_ConsoleUI):SetEnable(false)
+          ;
+          ((self._ui).staticText_SomeOrAll_ConsoleUI):SetMonoTone(true)
+        else
+          ;
+          ((self._ui).staticText_SomeOrAll_ConsoleUI):SetEnable(true)
+          ;
+          ((self._ui).staticText_SomeOrAll_ConsoleUI):SetMonoTone(false)
+        end
+      end
+      if (self._enum).etabIndexBuy ~= (self._value).lastTabIndex or (self._enum).etabIndexSell == (self._value).lastTabIndex then
+      end
+    end
+  end
+end
+
+PaGlobalFunc_Dialog_NPCShop_OnSlotClicked = function(slotIdx)
+  -- function num : 0_35 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   local slot = nil
   if (self._value).lastSelectedSlotIndex ~= slotIdx then
@@ -1267,13 +1372,13 @@ PaGlobalFunc_Dialog_NPCShop_OnSlotClicked = function(slotIdx)
 end
 
 PaGlobalFunc_Dialog_NPCShop_OnRSlotClicked = function(slotIdx)
-  -- function num : 0_35
+  -- function num : 0_36
   PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(slotIdx)
   PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
 end
 
 PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem = function()
-  -- function num : 0_36 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_37 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   if (self._value).selectedSlotIndex ~= nil then
     local slot = (self._slots)[(self._value).selectedSlotIndex]
@@ -1292,7 +1397,7 @@ PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem = function()
 end
 
 PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem = function()
-  -- function num : 0_37 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_38 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   if (self._value).selectedSlotIndex ~= nil then
     local slot = (self._slots)[(self._value).selectedSlotIndex]
@@ -1392,11 +1497,11 @@ PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem = function()
               end
             end
             local sellDoit = function()
-    -- function num : 0_37_0 , upvalues : slot, toWhereType, self, pricePiece
+    -- function num : 0_38_0 , upvalues : slot, toWhereType, self, pricePiece
     local itemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_37_0_0 , upvalues : slot, toWhereType, self
+      -- function num : 0_38_0_0 , upvalues : slot, toWhereType, self
       npcShop_doSellByItemNo(slot.slotNo, 1, toWhereType, (self._value).isCamping)
     end
 
@@ -1460,7 +1565,7 @@ PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem = function()
 end
 
 PaGlobalFunc_Dialog_NPCShop_BuySome = function()
-  -- function num : 0_38 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_39 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   local shopItemWrapper = npcShop_getItemBuy((self._value).startSlotIndex + (self._value).selectedSlotIndex)
   local shopItem = shopItemWrapper:get()
@@ -1511,7 +1616,7 @@ PaGlobalFunc_Dialog_NPCShop_BuySome = function()
 end
 
 PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
-  -- function num : 0_39 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_40 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -1555,7 +1660,7 @@ PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction = function(inputNumber, para
 end
 
 PaGlobalFunc_Dialog_NpcShop_BuySome_Do = function()
-  -- function num : 0_40 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_41 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   local buyCount = (self._value).inputNumber
   local slot = (self._slots)[(self._value).selectedSlotIndex]
@@ -1573,7 +1678,7 @@ PaGlobalFunc_Dialog_NpcShop_BuySome_Do = function()
 end
 
 PaGlobalFunc_Dialog_NpcShop_SellItemAll = function()
-  -- function num : 0_41 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_42 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   if (self._value).selectedSlotIndex ~= nil then
     local slot = (self._slots)[(self._value).selectedSlotIndex]
@@ -1588,7 +1693,7 @@ PaGlobalFunc_Dialog_NpcShop_SellItemAll = function()
       local toWhereType = 0
       local sellPrice = pricePiece * itemCount
       local sellAllDoit = function()
-    -- function num : 0_41_0 , upvalues : toWhereType, self, sellPrice, slot
+    -- function num : 0_42_0 , upvalues : toWhereType, self, sellPrice, slot
     if npcShop_isGuildShopContents() then
       toWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
     else
@@ -1600,7 +1705,7 @@ PaGlobalFunc_Dialog_NpcShop_SellItemAll = function()
     local shopItemEndurance = (itemSSW:get()):getEndurance()
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_41_0_0 , upvalues : slot, toWhereType, self
+      -- function num : 0_42_0_0 , upvalues : slot, toWhereType, self
       npcShop_doSellAll(slot.keyValue, toWhereType, (self._value).isCamping)
     end
 
@@ -1663,23 +1768,27 @@ PaGlobalFunc_Dialog_NpcShop_SellItemAll = function()
 end
 
 PaGlobalFunc_Dialog_NPCShop_ScrollEvent = function(isUpScroll)
-  -- function num : 0_42 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_43 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
+  local beforeSlotIndex = (self._value).startSlotIndex
+  -- DECOMPILER ERROR at PC18: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._value).startSlotIndex = (UIScroll.ScrollEvent)((self._ui).frame_VerticalScroll, isUpScroll, (self._config).slotRows, (self._value).itemListSize, (self._value).startSlotIndex, (self._config).slotCols)
-  -- DECOMPILER ERROR at PC29: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
 
   if (self._value).startSlotIndex < (self._config).slotCols then
     (self._value).startSlotIndex = (self._value).startSlotIndex * (self._config).slotCols
+  end
+  if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= (self._value).startSlotIndex then
+    ToClient_setIgnoreSnapping()
   end
   Panel_Tooltip_Item_hideTooltip()
   self:updateContent(false)
 end
 
 PaGlobalFunc_Dialog_NPCShop_ShowAni = function()
-  -- function num : 0_43
+  -- function num : 0_44
   audioPostEvent_SystemUi(1, 1)
   Panel_Dialog_NPCShop:SetAlpha(0)
   ;
@@ -1687,13 +1796,13 @@ PaGlobalFunc_Dialog_NPCShop_ShowAni = function()
 end
 
 PaGlobalFunc_Dialog_NPCShop_HideAni = function()
-  -- function num : 0_44
+  -- function num : 0_45
   local ani1 = (UIAni.AlphaAnimation)(0, Panel_Dialog_NPCShop, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end
 
 PaGlobalFunc_Dialog_NPCShop_IsExchangeItem = function(slotNo, itemWrapper)
-  -- function num : 0_45
+  -- function num : 0_46
   if itemWrapper == nil then
     return true
   end
@@ -1716,20 +1825,20 @@ PaGlobalFunc_Dialog_NPCShop_IsExchangeItem = function(slotNo, itemWrapper)
 end
 
 FromClient_Init_Dialog_NPCShop = function()
-  -- function num : 0_46 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_47 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   self:initialize()
   self:resize()
 end
 
 FromClient_onScreenResize_Dialog_NPCShop = function()
-  -- function num : 0_47 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_48 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   self:resize()
 end
 
 FromClient_Dialog_NPCShop_UpdateContent = function()
-  -- function num : 0_48 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_49 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   local talker = dialog_getTalker()
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R2 in 'UnsetPending'
@@ -1765,7 +1874,7 @@ FromClient_Dialog_NPCShop_UpdateContent = function()
 end
 
 FromClient_Dialog_NPCShop_UpdateMoney = function()
-  -- function num : 0_49 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_50 , upvalues : Panel_Dialog_NPCShop_Info
   if _ContentsGroup_InvenUpdateCheck == true and PaGlobalFunc_Dialog_NPCShop_GetShow() == false then
     return 
   end
@@ -1798,7 +1907,7 @@ FromClient_Dialog_NPCShop_UpdateMoney = function()
 end
 
 FromClient_Dialog_NPCShop_UpdateMoneyWarehouse = function()
-  -- function num : 0_50 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_51 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   if not npcShop_isGuildShopContents() then
     ((self._ui).staticText_Storage):SetShow(true)
@@ -1826,7 +1935,7 @@ FromClient_Dialog_NPCShop_UpdateMoneyWarehouse = function()
 end
 
 FromClient_Dialog_NPCShop_UpdateGuildPriceLimit = function()
-  -- function num : 0_51 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_52 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
@@ -1868,8 +1977,11 @@ FromClient_Dialog_NPCShop_UpdateGuildPriceLimit = function()
 end
 
 Toggle_NPCShopTab_forPadEventFunc = function(value)
-  -- function num : 0_52 , upvalues : Panel_Dialog_NPCShop_Info
+  -- function num : 0_53 , upvalues : Panel_Dialog_NPCShop_Info
   local self = Panel_Dialog_NPCShop_Info
+  if (self._value).tabCount == 1 then
+    return 
+  end
   self._currentTabIndex = self._currentTabIndex + value
   if self._currentTabIndex < 0 then
     self._currentTabIndex = 2

@@ -47,14 +47,14 @@ if not ToClient_IsDevelopment() then
   _ContentsGroup_RenewUI_Main = _ContentsGroup_RenewUI
   _ContentsGroup_RenewUI_Knowledge = _ContentsGroup_RenewUI
   _ContentsGroup_RenewUI_SpiritEnchant = _ContentsGroup_RenewUI
+  _ContentsGroup_RenewUI_Stable = false
   _ContentsGroup_OccupyBenefit = ToClient_IsContentsGroupOpen("397")
   _ContentsGroup_NewMaid = true
   _ContentsGroup_ForXBoxXR = ToClient_isXBox()
   if false then
     _ContentsGroup_ForXBoxFinalCert = ToClient_isXBox()
     _ContentsGroup_Menu_Xbox = ToClient_isXBox()
-    _ContentsGroup_RenewUI_ExitGame_New = true
-    _ContentsGroup_StackingHpBar = false
+    _ContentsGroup_StackingHpBar = ToClient_IsContentsGroupOpen("346")
   end
 end
 

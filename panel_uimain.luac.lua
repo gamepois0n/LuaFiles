@@ -4,6 +4,9 @@
 -- params : ...
 -- function num : 0
 Panel_UIMain:SetShow(true, false)
+if _ContentsGroup_RenewUI_Main == true then
+  Panel_UIMain:SetShow(false, false)
+end
 Panel_DailyStamp_Alert:SetShow(false)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local IM = CppEnums.EProcessorInputMode
@@ -437,6 +440,9 @@ UIMain_QuestUpdate = function()
     blackSpritCall:SetPosX(-67)
     blackSpritCall:SetPosY(-15)
     checkNewQuestForEffect = true
+    if ToClient_isXBox() == true then
+      Proc_ShowMessage_Ack("[�\140 ] �\188 눌러�\156 흑정령을 불러 보시게나 허허�\136!!")
+    end
   else
     if questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
       (MenuButtons[MenuButtonId.Btn_BlackStone]):EraseAllEffect()
@@ -516,8 +522,21 @@ local setAlphaAll = function(alpha)
   _bubbleNotice:SetAlpha(alpha)
 end
 
+local xboxDeltaTime = 0
+PaGlobal_DarkSpiritCall = function(updateTime)
+  -- function num : 0_22 , upvalues : xboxDeltaTime
+  if _ContentsGroup_RenewUI == true and questList_doHaveNewQuest() == true then
+    xboxDeltaTime = xboxDeltaTime + updateTime
+    if xboxDeltaTime >= 10 then
+      audioPostEvent_SystemUi(4, 11)
+      FGlobal_NewMainQuest_Alarm_Open()
+      xboxDeltaTime = 0
+    end
+  end
+end
+
 uiMainUpdate = function(updateTime)
-  -- function num : 0_22 , upvalues : elapsedTime, _bubbleNotice, isOn, animationEndTime, setAlphaAll, blackSpritCall, newQuestDeltaTime, blackMsgShowTime
+  -- function num : 0_23 , upvalues : elapsedTime, _bubbleNotice, isOn, animationEndTime, setAlphaAll, blackSpritCall, newQuestDeltaTime, blackMsgShowTime
   elapsedTime = elapsedTime + updateTime
   if _bubbleNotice:GetShow() == true then
     if isOn == false then
@@ -554,7 +573,7 @@ uiMainUpdate = function(updateTime)
 end
 
 ResetPos_WidgetButton = function()
-  -- function num : 0_23 , upvalues : MenuButtons, MenuButtonId, showedMenuButtonList, btn_totalSizeTmp
+  -- function num : 0_24 , upvalues : MenuButtons, MenuButtonId, showedMenuButtonList, btn_totalSizeTmp
   local ScrX = getScreenSizeX()
   local btn_Count = 7
   Panel_UIMain:SetSize((MenuButtons[MenuButtonId.Btn_GameExit]):GetSizeX() * btn_Count, 38)
@@ -578,7 +597,7 @@ ResetPos_WidgetButton = function()
 end
 
 FromClient_NewFriendAlert = function(param)
-  -- function num : 0_24 , upvalues : MenuButtons, MenuButtonId, _badgeFriend
+  -- function num : 0_25 , upvalues : MenuButtons, MenuButtonId, _badgeFriend
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if param == 1 then
     if isColorBlindMode == 0 then
@@ -610,7 +629,7 @@ FromClient_NewFriendAlert = function(param)
 end
 
 badgeWidgetMake = function(parentControl, controlName, text)
-  -- function num : 0_25
+  -- function num : 0_26
   local _badgeWidgetChild = (UI.createAndCopyBasePropertyControl)(Panel_UIMain, "StaticText_Number", parentControl, controlName)
   _badgeWidgetChild:SetPosX(15)
   _badgeWidgetChild:SetPosY(parentControl:GetPosY() - 2)
@@ -620,7 +639,7 @@ badgeWidgetMake = function(parentControl, controlName, text)
 end
 
 FGlobal_NewFriendAlertOff = function()
-  -- function num : 0_26 , upvalues : _badgeFriend, MenuButtons, MenuButtonId
+  -- function num : 0_27 , upvalues : _badgeFriend, MenuButtons, MenuButtonId
   if _badgeFriend == nil then
     return 
   end
@@ -631,7 +650,7 @@ FGlobal_NewFriendAlertOff = function()
 end
 
 FromClient_RegisterCoupon = function()
-  -- function num : 0_27 , upvalues : couponIcon, isCouponOpen, couponCount
+  -- function num : 0_28 , upvalues : couponIcon, isCouponOpen, couponCount
   local count = ToClient_GetCouponInfoUsableCount()
   Panel_Coupon_Alert:SetShow(false)
   local iconPosX = 60
@@ -658,14 +677,14 @@ FromClient_RegisterCoupon = function()
 end
 
 FGlobal_ItemMarket_AlarmIcon_Show = function()
-  -- function num : 0_28
+  -- function num : 0_29
   Panel_ItemMarket_Alert:SetShow(true)
   FGlobal_ItemMarket_SetCount()
   FromClient_RegisterCoupon()
 end
 
 FGlobal_ItemMarket_SetCount = function()
-  -- function num : 0_29 , upvalues : itemMarketAlarmCount, itemMarketIcon
+  -- function num : 0_30 , upvalues : itemMarketAlarmCount, itemMarketIcon
   do
     local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
     itemMarketAlarmCount:SetText(alarmCount)
@@ -679,7 +698,7 @@ FGlobal_ItemMarket_SetCount = function()
 end
 
 FGlobal_RightBottomIconReposition = function()
-  -- function num : 0_30
+  -- function num : 0_31
   FromClient_RegisterCoupon()
 end
 

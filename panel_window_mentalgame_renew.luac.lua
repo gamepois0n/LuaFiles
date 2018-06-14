@@ -94,6 +94,13 @@ Window_MentalGameInfo.Clear = function(self)
       (control._static_Bg):SetShow(false)
     end
   end
+  for _,control in pairs(self._bottomCardList) do
+    if control ~= nil then
+      (control._static_CardIcon):SetShow(false)
+      ;
+      (control._staticText_CardText):SetShow(false)
+    end
+  end
   ;
   (((self._ui)._static_Zodiac)._control):SetShow(false)
   self:CircleLineAndObjectClear()
@@ -126,6 +133,7 @@ Window_MentalGameInfo.Initialize = function(self)
   self:InitRegister()
   self:InitContorl()
   self:InitEvent()
+  self:XB_Control_Init()
 end
 
 Window_MentalGameInfo.UpdateBottomUIPos = function(self, deltaTime)
@@ -148,6 +156,7 @@ Window_MentalGameInfo.UpdateBottomUIPos = function(self, deltaTime)
   for index,value in pairs(self._bottomCardList) do
     local text = value._staticText_CardText
     local icon = value._static_CardIcon
+    local selectBg = value._static_SelectBg
     if text ~= nil and icon ~= nil then
       icon:SetIgnore(isIgnore)
       local posIndex = index - self._scrollPosition
@@ -172,10 +181,13 @@ Window_MentalGameInfo.UpdateBottomUIPos = function(self, deltaTime)
       else
         text:SetShow(false)
         icon:SetShow(false)
+        selectBg:SetShow(false)
       end
       text:SetPosY(text:GetPosY() - 50)
       icon:SetPosX(text:GetPosX())
       icon:SetPosY(text:GetPosY() - 10)
+      selectBg:SetPosX(icon:GetPosX() + 5)
+      selectBg:SetPosY(icon:GetPosY() + 3)
     end
   end
   -- DECOMPILER ERROR: 6 unprocessed JMP targets
@@ -227,17 +239,34 @@ Window_MentalGameInfo.InitEvent = function(self)
   -- function num : 0_7
   Panel_Window_MentalGame:RegisterUpdateFunc("PaGlobalFunc_MentalGame_BaseUpdatePerFrame")
   ;
-  (((self._ui)._bottom)._button_RightArrow):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_Arrow(false)")
+  (((self._ui)._bottom)._button_RightArrow):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_Arrow(false)")
   ;
-  (((self._ui)._bottom)._button_LeftArrow):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_Arrow(true)")
+  (((self._ui)._bottom)._button_LeftArrow):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_Arrow(true)")
   ;
-  ((self._ui)._button_Back):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_Back()")
+  ((self._ui)._button_Back):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_Back()")
   ;
-  ((self._ui)._button_Select):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_SlectCard()")
+  ((self._ui)._button_Select):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_SlectCard()")
+  ;
+  ((self._ui)._button_Clear):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_SelectClear()")
+end
+
+PaGlobalFunc_MentalGame_SelectClear = function()
+  -- function num : 0_8 , upvalues : Window_MentalGameInfo
+  local self = Window_MentalGameInfo
+  local mentalObject = getMentalgameObject()
+  if mentalObject == nil then
+    return 
+  end
+  for index = 0, #self._selectCardTable do
+    RequestMentalGame_clearSelectCard(index)
+    if mentalObject:getCardBySlotIndex(index) ~= nil then
+      audioPostEvent_SystemUi(0, 2)
+    end
+  end
 end
 
 PaGlobalFunc_MentalGame_LClick_Back = function()
-  -- function num : 0_8 , upvalues : Window_MentalGameInfo
+  -- function num : 0_9 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalStage = RequestMentalGame_getMentalStage()
   if mentalStage._isSuccess == true then
@@ -248,11 +277,11 @@ PaGlobalFunc_MentalGame_LClick_Back = function()
 end
 
 PaGlobalFunc_MentalGame_LClick_SlectCard = function()
-  -- function num : 0_9
+  -- function num : 0_10
 end
 
 PaGlobalFunc_MentalGame_LClick_StartGame = function()
-  -- function num : 0_10 , upvalues : Window_MentalGameInfo
+  -- function num : 0_11 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
@@ -265,7 +294,7 @@ PaGlobalFunc_MentalGame_LClick_StartGame = function()
 end
 
 PaGlobalFunc_MentalGame_LClick_ReStart = function()
-  -- function num : 0_11 , upvalues : Window_MentalGameInfo
+  -- function num : 0_12 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   self._gameStep = 0
   self._gamePlayCount = self._gamePlayCount + 1
@@ -279,7 +308,7 @@ PaGlobalFunc_MentalGame_LClick_ReStart = function()
 end
 
 PaGlobalFunc_MentalGame_LClick_Arrow = function(isleft)
-  -- function num : 0_12 , upvalues : Window_MentalGameInfo
+  -- function num : 0_13 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
@@ -300,7 +329,7 @@ PaGlobalFunc_MentalGame_LClick_Arrow = function(isleft)
 end
 
 Window_MentalGameInfo.UpdateCardScrollButton = function(self)
-  -- function num : 0_13
+  -- function num : 0_14
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -323,42 +352,49 @@ Window_MentalGameInfo.UpdateCardScrollButton = function(self)
 end
 
 Window_MentalGameInfo.InitContorl = function(self)
-  -- function num : 0_14
+  -- function num : 0_15
   local left = (self._ui)._left
   local bottom = (self._ui)._bottom
   left._staticIcon_Type = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_TypeIcon")
   left._staticText_Name = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Name")
   left._staticText_Mission = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Mission")
   left._staticText_Tip = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Tip")
+  left._static_CircularProgressBg = (UI.getChildControl)((self._ui)._static_LeftBg, "Static_CircularProgress_BG")
   left._circularProgress_IntimacyPoint = (UI.getChildControl)((self._ui)._static_LeftBg, "CircularProgress_Friend_Point")
-  left._staticText_IntimacyPoint = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_CurrentIntimacyPoint")
+  left._staticText_IntimacyPoint = (UI.getChildControl)(left._static_CircularProgressBg, "StaticText_CurrentIntimacyPoint")
   left._staticText_Interest = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Interest")
   left._staticText_Impression = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Impression")
-  left._static_RewardIcon = (UI.getChildControl)((self._ui)._static_LeftBg, "Static_RewardIcon")
+  left._static_RewardIcon = (UI.getChildControl)(left._static_CircularProgressBg, "Static_RewardIcon")
   ;
   (left._static_RewardIcon):SetShow(false)
-  left._static_RewardText = (UI.getChildControl)((self._ui)._static_LeftBg, "StaticText_Reward")
+  left._static_RewardText = (UI.getChildControl)(left._static_CircularProgressBg, "StaticText_Reward")
   ;
   (left._static_RewardText):SetShow(false)
   bottom._button_RightArrow = (UI.getChildControl)((self._ui)._static_BottomBg, "Button_RightArrow")
   bottom._button_LeftArrow = (UI.getChildControl)((self._ui)._static_BottomBg, "Button_LeftArrow")
-  -- DECOMPILER ERROR at PC103: Confused about usage of register: R3 in 'UnsetPending'
+  bottom._button_RB = (UI.getChildControl)(bottom._button_RightArrow, "Static_RB")
+  bottom._button_LB = (UI.getChildControl)(bottom._button_LeftArrow, "Static_LB")
+  -- DECOMPILER ERROR at PC119: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._ui)._button_Back = (UI.getChildControl)((self._ui)._static_keyGuide, "Button_Key_Guide_Back")
-  -- DECOMPILER ERROR at PC111: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC127: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._ui)._button_Select = (UI.getChildControl)((self._ui)._static_keyGuide, "Button_Key_Guide_Select")
+  -- DECOMPILER ERROR at PC135: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._ui)._button_Clear = (UI.getChildControl)((self._ui)._static_keyGuide, "Button_Key_Guide_Clear")
   ;
   ((self._ui)._staticText_addInterest):SetShow(false)
-  -- DECOMPILER ERROR at PC125: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC149: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   ((self._ui)._top)._staticText_CommentTitle = (UI.getChildControl)((self._ui)._static_TopBg, "StaticText_Comment_1")
   ;
   (((self._ui)._top)._staticText_CommentTitle):SetTextHorizonCenter()
-  -- DECOMPILER ERROR at PC139: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC163: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   ((self._ui)._top)._staticText_CommentDesc = (UI.getChildControl)((self._ui)._static_TopBg, "StaticText_Comment_2")
@@ -368,45 +404,51 @@ Window_MentalGameInfo.InitContorl = function(self)
   (((self._ui)._top)._staticText_CommentDesc):SetTextHorizonCenter()
   ;
   (((self._ui)._tooltip)._staticText_Bonus):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-  -- DECOMPILER ERROR at PC166: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC190: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._bottomCardTemplete)._static_CardBg = (UI.getChildControl)((self._ui)._static_BottomBg, "Static_CircleBG")
-  -- DECOMPILER ERROR at PC174: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC198: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._bottomCardTemplete)._static_CardIcon = (UI.getChildControl)((self._ui)._static_BottomBg, "Static_MentalIcon_C_0")
-  -- DECOMPILER ERROR at PC182: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC206: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._bottomCardTemplete)._staticText_CardText = (UI.getChildControl)((self._ui)._static_BottomBg, "StaticText_MentalTxt_C_0")
+  -- DECOMPILER ERROR at PC214: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (self._bottomCardTemplete)._static_SelectBg = (UI.getChildControl)((self._ui)._static_BottomBg, "Static_Selected_Npc")
   ;
   ((self._bottomCardTemplete)._staticText_CardText):SetTextHorizonCenter()
   ;
   ((self._bottomCardTemplete)._staticText_CardText):SetTextVerticalBottom()
-  -- DECOMPILER ERROR at PC197: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC229: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._selectCardTemplete)._static_Bg = (UI.getChildControl)(Panel_Window_MentalGame, "SelectCardTemplete")
-  -- DECOMPILER ERROR at PC205: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC237: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._selectCardTemplete)._circularProgress_Progress = (UI.getChildControl)((self._selectCardTemplete)._static_Bg, "CircularProgress_Progress")
-  -- DECOMPILER ERROR at PC213: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC245: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._selectCardTemplete)._static_Success = (UI.getChildControl)((self._selectCardTemplete)._static_Bg, "Static_Success")
-  -- DECOMPILER ERROR at PC221: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC253: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (self._selectCardTemplete)._static_Failed = (UI.getChildControl)((self._selectCardTemplete)._static_Bg, "Static_Failed")
   ;
   ((self._selectCardTemplete)._static_Bg):SetShow(false)
-  -- DECOMPILER ERROR at PC236: Confused about usage of register: R3 in 'UnsetPending'
+  ;
+  ((self._bottomCardTemplete)._static_SelectBg):SetShow(false)
+  -- DECOMPILER ERROR at PC273: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   ((self._ui)._static_Zodiac)._panel = (UI.createOtherPanel)("ZodiacCenterPanel", (CppEnums.OtherListType).OtherPanelType_Wiki)
-  -- DECOMPILER ERROR at PC249: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC286: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   ((self._ui)._static_Zodiac)._control = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ((self._ui)._static_Zodiac)._panel, "ZodiacCenterPanelImage")
@@ -447,13 +489,13 @@ Window_MentalGameInfo.InitContorl = function(self)
 end
 
 Window_MentalGameInfo.SetGameStep = function(self, gameStep)
-  -- function num : 0_15
+  -- function num : 0_16
   self._gameStep = gameStep
   self:UpdateStageByStep()
 end
 
 Window_MentalGameInfo.SetCircleLineAndObject = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   (MentalKnowledgeBase.init)()
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -556,14 +598,14 @@ Window_MentalGameInfo.SetCircleLineAndObject = function(self)
 end
 
 Window_MentalGameInfo.CircleLineAndObjectClear = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   self._circleKeyList = {}
   ;
   (MentalKnowledgeBase.ClearLineAndCircle)()
 end
 
 Window_MentalGameInfo.SetBottomCardList = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
   self._bottomCardList = {}
   self._bottomCardInfoList = {}
   local UCT = CppEnums.PA_UI_CONTROL_TYPE
@@ -599,6 +641,12 @@ Window_MentalGameInfo.SetBottomCardList = function(self)
     (ui._staticText_CardText):SetText(cardWrapper:getName())
     ;
     (ui._staticText_CardText):SetVerticalBottom()
+    ui._static_SelectBg = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, (self._ui)._static_BottomBg, "selectIcon_" .. index)
+    CopyBaseProperty((self._bottomCardTemplete)._static_SelectBg, ui._static_SelectBg)
+    ;
+    (ui._static_SelectBg):SetPosX(index * gap)
+    ;
+    (ui._static_SelectBg):ComputePos()
     ui._static_CardIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, (self._ui)._static_BottomBg, "cardIcon_" .. index)
     CopyBaseProperty((self._bottomCardTemplete)._static_CardIcon, ui._static_CardIcon)
     ;
@@ -614,7 +662,7 @@ Window_MentalGameInfo.SetBottomCardList = function(self)
     ;
     (ui._static_CardIcon):SetIgnore(false)
     ;
-    (ui._static_CardIcon):addInputEvent("Mouse_RDown", "PaGlobalFunc_MentalGame_RClick_BottomCard(" .. index .. " )")
+    (ui._static_CardIcon):addInputEvent("Mouse_RUp", "PaGlobalFunc_MentalGame_RClick_BottomCard(" .. index .. " )")
     ;
     (ui._static_CardIcon):addInputEvent("Mouse_On", "PaGlobalFunc_MentalGame_CardOver(" .. index .. ",false,true)")
     ;
@@ -634,7 +682,7 @@ Window_MentalGameInfo.SetBottomCardList = function(self)
     (ui._staticText_CardText):ComputePos()
     ;
     (ui._static_CardIcon):ComputePos()
-    -- DECOMPILER ERROR at PC192: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC214: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._bottomCardList)[index] = ui
@@ -642,7 +690,7 @@ Window_MentalGameInfo.SetBottomCardList = function(self)
 end
 
 Window_MentalGameInfo.SetCardColor = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -663,7 +711,7 @@ Window_MentalGameInfo.SetCardColor = function(self)
 end
 
 PaGlobalFunc_MentalGame_RClick_BanedCard = function(index)
-  -- function num : 0_20 , upvalues : Window_MentalGameInfo
+  -- function num : 0_21 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
@@ -676,7 +724,7 @@ PaGlobalFunc_MentalGame_RClick_BanedCard = function(index)
 end
 
 PaGlobalFunc_MentalGame_RClick_BottomCard = function(index)
-  -- function num : 0_21 , upvalues : Window_MentalGameInfo
+  -- function num : 0_22 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   self._selectCardIndex = index
   local mentalObject = getMentalgameObject()
@@ -699,7 +747,7 @@ PaGlobalFunc_MentalGame_RClick_BottomCard = function(index)
 end
 
 Window_MentalGameInfo.InitRegister = function(self)
-  -- function num : 0_22
+  -- function num : 0_23
   registerEvent("startMentalGame", "PaGlobalFunc_FromClient_MentalGame_Open")
   registerEvent("onScreenResize", "PaGlobalFunc_MentalGame_ScreenResize")
   registerEvent("ResponseMentalGame_updateStage", "PaGlobalFunc_FromClient_MentalGame_UpdateStage")
@@ -710,11 +758,11 @@ Window_MentalGameInfo.InitRegister = function(self)
 end
 
 PaGlobalFunc_MentalGame_ScreenResize = function()
-  -- function num : 0_23
+  -- function num : 0_24
 end
 
 PaGlobalFunc_FromClient_MentalGame_Open = function()
-  -- function num : 0_24 , upvalues : Window_MentalGameInfo
+  -- function num : 0_25 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   ToClient_SaveUiInfo(false)
   if GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog then
@@ -730,6 +778,14 @@ PaGlobalFunc_FromClient_MentalGame_Open = function()
     return 
   end
   Panel_Window_MentalGame_Finish:SetShow(false)
+  ;
+  ((self._ui)._static_LeftBg):SetShow(true)
+  ;
+  ((self._ui)._static_BottomBg):SetShow(true)
+  ;
+  ((self._ui)._static_keyGuide):SetShow(true)
+  ;
+  ((self._ui)._static_TopBg):SetShow(true)
   self:Clear()
   self:SetMentalGameInfo()
   self:SetZodiac()
@@ -743,7 +799,7 @@ PaGlobalFunc_FromClient_MentalGame_Open = function()
 end
 
 Window_MentalGameInfo.SetZodiac = function(self)
-  -- function num : 0_25
+  -- function num : 0_26
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -757,7 +813,7 @@ Window_MentalGameInfo.SetZodiac = function(self)
 end
 
 Window_MentalGameInfo.SetSelectCardPos = function(self)
-  -- function num : 0_26
+  -- function num : 0_27
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -802,14 +858,12 @@ Window_MentalGameInfo.SetSelectCardPos = function(self)
         (selectCard._static_Bg):SetPosY(transformData.y - (selectCard._static_Bg):GetSizeY() / 2)
       end
       ;
-      (selectCard._static_Bg):SetPosX((selectCard._static_Bg):GetPosX() + 150)
-      ;
-      (selectCard._static_Bg):SetPosY((selectCard._static_Bg):GetPosY() + 25)
+      (selectCard._static_Bg):SetPosY((selectCard._static_Bg):GetPosY() - 25)
       ;
       (selectCard._static_Bg):SetAlpha(1)
       ;
       (selectCard._static_Bg):SetDepth(cameraDistance)
-      -- DECOMPILER ERROR at PC156: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC149: Confused about usage of register: R20 in 'UnsetPending'
 
       ;
       (self._selectCardTable)[index] = selectCard
@@ -818,7 +872,7 @@ Window_MentalGameInfo.SetSelectCardPos = function(self)
 end
 
 Window_MentalGameInfo.CreateSelectCard = function(self, index)
-  -- function num : 0_27
+  -- function num : 0_28
   local selectCard = {_static_Bg, _circularProgress_Progress, _static_Success, _static_Failed}
   local UCT = CppEnums.PA_UI_CONTROL_TYPE
   selectCard._static_Bg = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, Panel_Window_MentalGame, "static_Bg_" .. index)
@@ -826,7 +880,7 @@ Window_MentalGameInfo.CreateSelectCard = function(self, index)
   ;
   (selectCard._static_Bg):SetIgnore(false)
   ;
-  (selectCard._static_Bg):addInputEvent("Mouse_RDown", "PaGlobalFunc_MentalGame_RClick_BanedCard(" .. index .. ")")
+  (selectCard._static_Bg):addInputEvent("Mouse_RUp", "PaGlobalFunc_MentalGame_RClick_BanedCard(" .. index .. ")")
   ;
   (selectCard._static_Bg):addInputEvent("Mouse_On", "PaGlobalFunc_MentalGame_CardOver(" .. index .. ",true,true)")
   ;
@@ -845,57 +899,58 @@ Window_MentalGameInfo.CreateSelectCard = function(self, index)
   CopyBaseProperty((self._selectCardTemplete)._static_Success, selectCard._static_Success)
   selectCard._static_Failed = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, selectCard._static_Bg, "static_Failed_" .. index)
   CopyBaseProperty((self._selectCardTemplete)._static_Failed, selectCard._static_Failed)
-  ;
-  (selectCard._static_Bg):SetPosX((selectCard._static_Bg):GetPosX() + (selectCard._static_Bg):GetSizeX() * index)
-  ;
-  (selectCard._static_Bg):SetShow(true)
   return selectCard
 end
 
 PaGlobalFunc_MentalGame_CardOver = function(mouseOverKey, isInserted, isShow)
-  -- function num : 0_28 , upvalues : Window_MentalGameInfo
+  -- function num : 0_29 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
-  local tooltip = (self._ui)._tooltip
-  local mentalObject = getMentalgameObject()
-  if mentalObject == nil then
-    return 
+  local prevIndex = self._selectCardIndex
+  self._selectCardIndex = mouseOverKey
+  if prevIndex ~= -1 then
+    (((self._bottomCardList)[prevIndex])._static_SelectBg):SetShow(false)
   end
-  -- DECOMPILER ERROR at PC21: Unhandled construct in 'MakeBoolean' P1
-
-  -- DECOMPILER ERROR at PC21: Unhandled construct in 'MakeBoolean' P1
-
-  if (self._config)._gameStep_StartGame ~= self._gameStep and self._overKey == mouseOverKey and isShow == false then
+  if isShow ~= true then
+    (((self._bottomCardList)[self._selectCardIndex])._static_SelectBg):SetShow(self._selectCardIndex == -1)
+    local tooltip = (self._ui)._tooltip
     Panel_Window_MentalGame_Tooltip:SetShow(false)
-    self._overKey = -1
-  end
-  if isShow == true then
-    local targetUI = nil
-    local isSuccess = true
-    if isInserted == true then
-      isSuccess = self:UpdateTooltipContext(mentalObject:getCardBySlotIndex(mouseOverKey), isInserted, mouseOverKey)
-      uiGroup = (self._selectCardTable)[mouseOverKey]
-      if (self._selectCardTable)[mouseOverKey] ~= nil then
-        targetUI = ((self._selectCardTable)[mouseOverKey])._static_Bg
+    local mentalObject = getMentalgameObject()
+    if mentalObject == nil then
+      return 
+    end
+    -- DECOMPILER ERROR at PC48: Unhandled construct in 'MakeBoolean' P1
+
+    -- DECOMPILER ERROR at PC48: Unhandled construct in 'MakeBoolean' P1
+
+    if (self._config)._gameStep_StartGame ~= self._gameStep and self._overKey == mouseOverKey and isShow == false then
+      Panel_Window_MentalGame_Tooltip:SetShow(false)
+      self._overKey = -1
+    end
+    if isShow == true then
+      local targetUI = nil
+      local isSuccess = true
+      if isInserted == true then
+        isSuccess = self:UpdateTooltipContext(mentalObject:getCardBySlotIndex(mouseOverKey), isInserted, mouseOverKey)
+        uiGroup = (self._selectCardTable)[mouseOverKey]
+        if (self._selectCardTable)[mouseOverKey] ~= nil then
+          targetUI = ((self._selectCardTable)[mouseOverKey])._static_Bg
+        end
+      else
+        isSuccess = self:UpdateTooltipContext(mentalObject:getCard(mouseOverKey), isInserted, mouseOverKey)
+        if (self._bottomCardList)[mouseOverKey] ~= nil and ((self._bottomCardList)[mouseOverKey])._static_CardIcon ~= nil then
+          targetUI = ((self._bottomCardList)[mouseOverKey])._static_CardIcon
+        end
       end
-    else
-      isSuccess = self:UpdateTooltipContext(mentalObject:getCard(mouseOverKey), isInserted, mouseOverKey)
-      if (self._bottomCardList)[mouseOverKey] ~= nil and ((self._bottomCardList)[mouseOverKey])._static_CardIcon ~= nil then
-        targetUI = ((self._bottomCardList)[mouseOverKey])._static_CardIcon
+      if isSuccess == true then
+        Panel_Window_MentalGame_Tooltip:SetShow(true)
       end
     end
-    if isSuccess == true then
-      Panel_Window_MentalGame_Tooltip:SetShow(true)
-      self._overKey = mouseOverKey
-      if targetUI ~= nil then
-        Panel_Window_MentalGame_Tooltip:SetPosX(targetUI:GetParentPosX() - ((tooltip._static_Bg):GetSizeX() - 40))
-        Panel_Window_MentalGame_Tooltip:SetPosY((math.max)(0, targetUI:GetParentPosY() - ((tooltip._static_Bg):GetSizeY() - 50)))
-      end
-    end
+    -- DECOMPILER ERROR: 7 unprocessed JMP targets
   end
 end
 
 Window_MentalGameInfo.UpdateTooltipContext = function(self, mentalCard, isInserted, slotIndex)
-  -- function num : 0_29
+  -- function num : 0_30
   local mentalObject = getMentalgameObject()
   if mentalCard == nil or mentalObject == nil then
     return false
@@ -1023,7 +1078,7 @@ Window_MentalGameInfo.UpdateTooltipContext = function(self, mentalCard, isInsert
 end
 
 Window_MentalGameInfo.SetMentalGameInfo = function(self)
-  -- function num : 0_30
+  -- function num : 0_31
   local left = (self._ui)._left
   local mentalStage = RequestMentalGame_getMentalStage()
   local mentalObject = getMentalgameObject()
@@ -1173,7 +1228,7 @@ Window_MentalGameInfo.SetMentalGameInfo = function(self)
 end
 
 Window_MentalGameInfo.Update = function(self)
-  -- function num : 0_31
+  -- function num : 0_32
   self:SetMentalGameInfo()
   self:SetZodiac()
   self:CircleLineAndObjectClear()
@@ -1183,7 +1238,7 @@ Window_MentalGameInfo.Update = function(self)
 end
 
 Window_MentalGameInfo.UpdateState = function(self)
-  -- function num : 0_32
+  -- function num : 0_33
   local left = (self._ui)._left
   local mentalStage = RequestMentalGame_getMentalStage()
   local mentalObject = getMentalgameObject()
@@ -1242,7 +1297,7 @@ Window_MentalGameInfo.UpdateState = function(self)
 end
 
 PaGlobalFunc_FromClient_MentalGame_UpdateStage = function(isNext)
-  -- function num : 0_33 , upvalues : Window_MentalGameInfo
+  -- function num : 0_34 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
@@ -1272,32 +1327,33 @@ PaGlobalFunc_FromClient_MentalGame_UpdateStage = function(isNext)
   local minCardSlotCount = mentalObject:getMinCardSlotCount()
   local filledSlotCount = mentalObject:getFilledSlotCount()
   local count = minCardSlotCount - filledSlotCount
-  local commentDesc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENTALGAME_BASE_COMMENT2")
-  if (self._config)._gameStep_CardSelect == self._gameStep and count ~= 0 then
-    (((self._ui)._top)._staticText_CommentTitle):SetFontColor((Defines.Color).C_FF888888)
-    ;
-    (((self._ui)._top)._staticText_CommentTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENTALGAME_BASE_COMMENT1"))
-    ;
-    (((self._ui)._top)._staticText_CommentDesc):SetFontColor((Defines.Color).C_FF888888)
-    ;
-    (((self._ui)._top)._staticText_CommentDesc):SetText(count .. commentDesc)
-  else
-    ;
-    (((self._ui)._top)._staticText_CommentDesc):SetText("")
-  end
-  if (self._config)._gameStep_StartGame == self._gameStep then
-    local currentPoint = mentalObject:getInterestValue()
-    self._bestPoint = (math.max)(self._bestPoint, currentPoint)
-    local descStr = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MENTALGAME_INTEREST_COMBOANDFAILED", "combo", comboCount, "failed", mentalObject:getFail()) .. "\n"
-    descStr = descStr .. "      " .. PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_ACC_INTERESTING") .. " : " .. mentalObject:getTotalInterest() .. "\n"
-    descStr = descStr .. "      " .. PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_MOST_INTERESTING") .. " : " .. self._bestPoint
-    ;
-    (((self._ui)._top)._staticText_CommentDesc):SetFontColor((Defines.Color).C_FFEFEFEF)
-    ;
-    (((self._ui)._top)._staticText_CommentDesc):SetText(descStr)
-  end
+  ;
+  ((self._ui)._button_Clear):SetShow(filledSlotCount ~= 0)
   do
-    -- DECOMPILER ERROR at PC187: Unhandled construct in 'MakeBoolean' P1
+    local commentDesc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENTALGAME_BASE_COMMENT2")
+    if (self._config)._gameStep_CardSelect == self._gameStep and count ~= 0 then
+      (((self._ui)._top)._staticText_CommentTitle):SetFontColor((Defines.Color).C_FF888888)
+      ;
+      (((self._ui)._top)._staticText_CommentTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENTALGAME_BASE_COMMENT1"))
+      ;
+      (((self._ui)._top)._staticText_CommentDesc):SetFontColor((Defines.Color).C_FF888888)
+      ;
+      (((self._ui)._top)._staticText_CommentDesc):SetText(count .. commentDesc)
+    else
+      (((self._ui)._top)._staticText_CommentDesc):SetText("")
+    end
+    if (self._config)._gameStep_StartGame == self._gameStep then
+      local currentPoint = mentalObject:getInterestValue()
+      self._bestPoint = (math.max)(self._bestPoint, currentPoint)
+      local descStr = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MENTALGAME_INTEREST_COMBOANDFAILED", "combo", comboCount, "failed", mentalObject:getFail()) .. "\n"
+      descStr = descStr .. "      " .. PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_ACC_INTERESTING") .. " : " .. mentalObject:getTotalInterest() .. "\n"
+      descStr = descStr .. "      " .. PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_MOST_INTERESTING") .. " : " .. self._bestPoint
+      ;
+      (((self._ui)._top)._staticText_CommentDesc):SetFontColor((Defines.Color).C_FFEFEFEF)
+      ;
+      (((self._ui)._top)._staticText_CommentDesc):SetText(descStr)
+    end
+    -- DECOMPILER ERROR at PC195: Unhandled construct in 'MakeBoolean' P1
 
     if minCardSlotCount <= filledSlotCount and (self._config)._gameStep_CardSelect == self._gameStep then
       self:SetGameStep((self._config)._gameStep_ReadyGame)
@@ -1317,7 +1373,6 @@ PaGlobalFunc_FromClient_MentalGame_UpdateStage = function(isNext)
         if mentalObject:isBanedCard(cardWrapper) == true or mentalObject:isSelectedCard(cardWrapper) == true then
           (((self._bottomCardList)[index])._static_CardIcon):SetColor((Defines.Color).C_FF626262)
         else
-          ;
           (((self._bottomCardList)[index])._static_CardIcon):SetColor((Defines.Color).C_FFFFFFFF)
         end
       end
@@ -1325,11 +1380,12 @@ PaGlobalFunc_FromClient_MentalGame_UpdateStage = function(isNext)
     if isNext == true then
       self:UpdateNextTryEvent()
     end
+    -- DECOMPILER ERROR: 10 unprocessed JMP targets
   end
 end
 
 PaGlobalFunc_MentalGame_PosUpdateAnimation = function(key, value)
-  -- function num : 0_34
+  -- function num : 0_35
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -1337,6 +1393,7 @@ PaGlobalFunc_MentalGame_PosUpdateAnimation = function(key, value)
   local basePos = mentalObject:getCardPos()
   local pos = mentalObject:getLerpBySlot(value._startIndex, value._endIndex, (value._deltaTime - value._startTime) / (value._endTime - value._startTime))
   local float3Pos = ((Util.Math).AddVectorToVector)(basePos, pos)
+  float3Pos.y = float3Pos.y + 20
   local transformData = getTransformRevers(float3Pos.x, float3Pos.y, float3Pos.z)
   ;
   (value._ui):SetPosX(transformData.x - (value._ui):GetSizeX() / 2)
@@ -1345,7 +1402,7 @@ PaGlobalFunc_MentalGame_PosUpdateAnimation = function(key, value)
 end
 
 PaGlobalFunc_MentalGame_FontAlphaUpdateAnimation = function(key, value)
-  -- function num : 0_35
+  -- function num : 0_36
   local playTime = value._endTime - value._startTime
   local halfPlayTime = (value._endTime - value._startTime) / 2
   local inPlayDelta = value._deltaTime - value._startTime
@@ -1362,7 +1419,7 @@ PaGlobalFunc_MentalGame_FontAlphaUpdateAnimation = function(key, value)
 end
 
 Window_MentalGameInfo.CreateInfomationUI = function(self)
-  -- function num : 0_36
+  -- function num : 0_37
   local otherControlTextType = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT
   for from = 0, 19 do
     -- DECOMPILER ERROR at PC13: Confused about usage of register: R6 in 'UnsetPending'
@@ -1432,7 +1489,7 @@ Window_MentalGameInfo.CreateInfomationUI = function(self)
 end
 
 Window_MentalGameInfo.CreateAnimationUI = function(self)
-  -- function num : 0_37
+  -- function num : 0_38
   local otherControlTextType = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT
   for from = 0, 19 do
     -- DECOMPILER ERROR at PC13: Confused about usage of register: R6 in 'UnsetPending'
@@ -1448,57 +1505,34 @@ Window_MentalGameInfo.CreateAnimationUI = function(self)
       end
       local targetGroup = ((self._animationUIList)[from])[to]
       do
-        if targetGroup._panel == nil then
-          local target = (UI.createPanelAndSetPanelRenderMode)("MentalGame_Animation_" .. tostring(from) .. "_" .. tostring(to), (Defines.UIGroup).PAGameUIGroup_QuestLog, PAUIRenderModeBitSet({(Defines.RenderMode).eRenderMode_MentalGame}))
+        if targetGroup._pointImage == nil then
+          local target = (UI.createControl)(otherControlTextType, Panel_Window_MentalGame, "PointImage_" .. tostring(from) .. "_" .. tostring(to))
+          CopyBaseProperty((self._ui)._staticText_addInterest, target)
           target:SetIgnore(true)
-          target:SetShow(true)
+          target:SetShow(false)
+          target:SetAlpha(0.5)
+          target:SetFontAlpha(0)
           target:SetSpanSize(0, 0)
-          target:SetAlpha(1)
+          target:SetPosX(0)
+          target:SetPosY(0)
+          target:ChangeTextureInfoName("new_ui_common_forlua/widget/worldmap/worldmap_etc_00.dds")
           target:ComputePos()
-          targetGroup._panel = target
+          target:SetHorizonCenter()
+          target:SetVerticalMiddle()
+          targetGroup._pointImage = target
         end
         do
-          if targetGroup._pointImage == nil then
-            local target = (UI.createControl)(otherControlTextType, targetGroup._panel, "PointImage_" .. tostring(from) .. "_" .. tostring(to))
-            CopyBaseProperty((self._ui)._staticText_addInterest, target)
-            target:SetIgnore(true)
-            target:SetShow(true)
-            target:SetAlpha(0.5)
-            target:SetFontAlpha(0)
-            target:SetSpanSize(0, 0)
-            target:SetPosX(0)
-            target:SetPosY(0)
-            target:ChangeTextureInfoName("new_ui_common_forlua/widget/worldmap/worldmap_etc_00.dds")
-            target:ComputePos()
-            target:SetHorizonCenter()
-            target:SetVerticalMiddle()
-            targetGroup._pointImage = target
+          if targetGroup._nameTag == nil then
+            local nameTag = (UI.createControl)(otherControlTextType, targetGroup._pointImage, "NameTag_" .. tostring(from) .. "_" .. tostring(to))
+            nameTag:SetIgnore(true)
+            nameTag:SetShow(true)
+            nameTag:SetSpanSize(0, 30)
+            nameTag:SetHorizonCenter()
+            nameTag:SetVerticalBottom()
+            targetGroup._nameTag = nameTag
           end
-          do
-            do
-              if targetGroup._nameTag == nil then
-                local nameTag = (UI.createControl)(otherControlTextType, targetGroup._pointImage, "NameTag_" .. tostring(from) .. "_" .. tostring(to))
-                nameTag:SetIgnore(true)
-                nameTag:SetShow(true)
-                nameTag:SetSpanSize(0, 30)
-                nameTag:SetHorizonCenter()
-                nameTag:SetVerticalBottom()
-                targetGroup._nameTag = nameTag
-              end
-              ;
-              (targetGroup._panel):SetChildIndex(targetGroup._pointImage, 9999)
-              -- DECOMPILER ERROR at PC164: Confused about usage of register: R11 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC116: LeaveBlock: unexpected jumping out DO_STMT
 
-              ;
-              ((self._animationUIList)[from])[to] = targetGroup
-              -- DECOMPILER ERROR at PC165: LeaveBlock: unexpected jumping out DO_STMT
-
-              -- DECOMPILER ERROR at PC165: LeaveBlock: unexpected jumping out DO_STMT
-
-              -- DECOMPILER ERROR at PC165: LeaveBlock: unexpected jumping out DO_STMT
-
-            end
-          end
         end
       end
     end
@@ -1506,8 +1540,8 @@ Window_MentalGameInfo.CreateAnimationUI = function(self)
 end
 
 Window_MentalGameInfo.UpdateStageByStep = function(self)
-  -- function num : 0_38
-  ((self._ui)._button_Select):addInputEvent("Mouse_LDown", "")
+  -- function num : 0_39
+  ((self._ui)._button_Select):addInputEvent("Mouse_LUp", "")
   if (self._config)._gameStep_CardSelect == self._gameStep then
     ((self._ui)._button_Select):SetShow(true)
     ;
@@ -1515,7 +1549,9 @@ Window_MentalGameInfo.UpdateStageByStep = function(self)
     ;
     ((self._ui)._button_Select):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORLDMAP_GUILDHOUSE_CHANGEWORKER_SELECTBTN"))
     ;
-    ((self._ui)._button_Select):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_SlectCard()")
+    ((self._ui)._button_Select):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_SlectCard()")
+    ;
+    (((self._ui)._top)._staticText_CommentTitle):SetShow(true)
     ;
     (((self._ui)._top)._staticText_CommentDesc):SetShow(true)
   else
@@ -1526,7 +1562,7 @@ Window_MentalGameInfo.UpdateStageByStep = function(self)
       ;
       ((self._ui)._button_Select):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENTALGAME_RIGHT_APPLY_NEW_BTN"))
       ;
-      ((self._ui)._button_Select):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_StartGame()")
+      ((self._ui)._button_Select):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_StartGame()")
       ;
       (((self._ui)._top)._staticText_CommentDesc):SetShow(true)
       ;
@@ -1538,8 +1574,11 @@ Window_MentalGameInfo.UpdateStageByStep = function(self)
         ((self._ui)._button_Select):SetShow(false)
         ;
         (((self._ui)._top)._staticText_CommentDesc):SetShow(true)
+        ;
+        ((self._ui)._button_Clear):SetShow(false)
       else
         if (self._config)._gameStep_EndGame == self._gameStep then
+          ((self._ui)._button_Clear):SetShow(false)
           local mentalStage = RequestMentalGame_getMentalStage()
           local playableNextGame = self._gamePlayCount < (self._config)._maxPlayCount - 1
           ;
@@ -1551,8 +1590,10 @@ Window_MentalGameInfo.UpdateStageByStep = function(self)
           ;
           (((self._ui)._top)._staticText_CommentTitle):SetShow(true)
           ;
-          ((self._ui)._button_Select):addInputEvent("Mouse_LDown", "PaGlobalFunc_MentalGame_LClick_ReStart()")
+          ((self._ui)._button_Select):addInputEvent("Mouse_LUp", "PaGlobalFunc_MentalGame_LClick_ReStart()")
         elseif (self._config)._gameStep_GameExit == self._gameStep then
+          ((self._ui)._button_Clear):SetShow(false)
+          ;
           (((self._ui)._top)._staticText_CommentDesc):SetShow(true)
           ;
           (((self._ui)._top)._staticText_CommentTitle):SetShow(true)
@@ -1608,7 +1649,7 @@ Window_MentalGameInfo.UpdateStageByStep = function(self)
 end
 
 Window_MentalGameInfo.UpdateNextTryEvent = function(self)
-  -- function num : 0_39
+  -- function num : 0_40
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
     return 
@@ -1671,7 +1712,7 @@ Window_MentalGameInfo.UpdateNextTryEvent = function(self)
           ((((self._animationUIList)[prevSlot])[index])._pointImage):SetColor((Defines.Color).C_FFFFFFFF)
         end
         local playCount = index - prevSlot - mentalObject:getEmptyCount(prevSlot, index)
-        self:AddAnimation((((self._animationUIList)[prevSlot])[index])._panel, 0, mentalObject:getMentalGameSpeed() / 1000 * playCount, prevSlot, index, PaGlobalFunc_MentalGame_PosUpdateAnimation)
+        self:AddAnimation((((self._animationUIList)[prevSlot])[index])._pointImage, 0, mentalObject:getMentalGameSpeed() / 1000 * playCount, prevSlot, index, PaGlobalFunc_MentalGame_PosUpdateAnimation)
         self:AddAnimation((((self._infomationUIList)[prevSlot])[index])._nameTag, 0, mentalObject:getMentalGameSpeed() / 1000 * playCount, prevSlot, index, PaGlobalFunc_MentalGame_FontAlphaUpdateAnimation)
       end
     end
@@ -1679,7 +1720,7 @@ Window_MentalGameInfo.UpdateNextTryEvent = function(self)
 end
 
 Window_MentalGameInfo.AddAnimation = function(self, ui, startTime, endTime, startIndex, endIndex, animationFunc)
-  -- function num : 0_40
+  -- function num : 0_41
   if endTime <= startTime or ui == nil or endTime <= 0 or animationFunc == nil then
     return 
   end
@@ -1691,7 +1732,7 @@ Window_MentalGameInfo.AddAnimation = function(self, ui, startTime, endTime, star
 end
 
 Window_MentalGameInfo.UpdateAnimationList = function(self, deltaTime)
-  -- function num : 0_41
+  -- function num : 0_42
   for key,value in pairs(self._animationList) do
     value._deltaTime = value._deltaTime + deltaTime
     if value._endTime < value._deltaTime then
@@ -1714,11 +1755,11 @@ Window_MentalGameInfo.UpdateAnimationList = function(self, deltaTime)
 end
 
 PaGlobalFunc_MentalGame_tryCard = function()
-  -- function num : 0_42
+  -- function num : 0_43
 end
 
 PaGlobalFunc_MentalGame_endStage = function(addedIntimacy)
-  -- function num : 0_43 , upvalues : Window_MentalGameInfo
+  -- function num : 0_44 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   local mentalObject = getMentalgameObject()
   if mentalObject == nil then
@@ -1746,7 +1787,7 @@ PaGlobalFunc_MentalGame_endStage = function(addedIntimacy)
 end
 
 PaGlobalFunc_MentalGame_updateMatrix = function()
-  -- function num : 0_44 , upvalues : Window_MentalGameInfo
+  -- function num : 0_45 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   self:CircleLineAndObjectClear()
   self:SetCircleLineAndObject()
@@ -1754,24 +1795,89 @@ PaGlobalFunc_MentalGame_updateMatrix = function()
 end
 
 PaGlobalFunc_MentalGame_HideByDead = function()
-  -- function num : 0_45
-  PaGlobalFunc_MentalGame_Close()
+  -- function num : 0_46 , upvalues : Window_MentalGameInfo
+  local self = Window_MentalGameInfo
+  if PaGlobalFunc_MentalGame_GetShow() == false then
+    return 
+  end
+  Panel_Window_MentalGame:SetShow(false)
+  Panel_Window_MentalGame_Tooltip:SetShow(false)
+  Panel_Window_MentalGame_Finish:SetShow(false)
+  ;
+  ((self._ui)._static_LeftBg):SetShow(false)
+  ;
+  ((self._ui)._static_BottomBg):SetShow(false)
+  ;
+  ((self._ui)._static_keyGuide):SetShow(false)
+  ;
+  ((self._ui)._static_TopBg):SetShow(false)
+  self:Clear()
+  self:StageClear()
+  hide_MentalGame(true)
+  RequestMentalGame_endGame()
+  ;
+  (self._renderMode):reset()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_Dialog_Main_CloseNpcTalk()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+    dialog_CloseNpcTalk(true)
+  end
+  setShowNpcDialog(false)
+  setShowLine(true)
+  ToClient_PopDialogueFlush()
 end
 
 PaGlobalFunc_MentalGame_HideByDamage = function()
-  -- function num : 0_46
-  PaGlobalFunc_MentalGame_Close()
+  -- function num : 0_47 , upvalues : Window_MentalGameInfo
+  local self = Window_MentalGameInfo
+  if PaGlobalFunc_MentalGame_GetShow() == false then
+    return 
+  end
+  Panel_Window_MentalGame:SetShow(false)
+  Panel_Window_MentalGame_Tooltip:SetShow(false)
+  Panel_Window_MentalGame_Finish:SetShow(false)
+  ;
+  ((self._ui)._static_LeftBg):SetShow(false)
+  ;
+  ((self._ui)._static_BottomBg):SetShow(false)
+  ;
+  ((self._ui)._static_keyGuide):SetShow(false)
+  ;
+  ((self._ui)._static_TopBg):SetShow(false)
+  self:Clear()
+  self:StageClear()
+  hide_MentalGame(false)
+  RequestMentalGame_endGame()
+  SetUIMode((Defines.UIMode).eUIMode_Default)
+  ;
+  (self._renderMode):reset()
+  if _ContentsGroup_RenewUI_Dailog == true then
+    PaGlobalFunc_MainDialog_Open()
+    PaGlobalFunc_Dialog_Main_CloseNpcTalk()
+  else
+    Panel_Npc_Dialog:SetShow(true)
+    dialog_CloseNpcTalk(true)
+  end
+  setShowNpcDialog(false)
+  setShowLine(true)
+  ToClient_PopDialogueFlush()
 end
 
 PaGlobalFunc_FromClient_MentalGame_luaLoadComplete = function()
-  -- function num : 0_47 , upvalues : Window_MentalGameInfo
+  -- function num : 0_48 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
   self:Initialize()
 end
 
 PaGlobalFunc_MentalGame_Close = function()
-  -- function num : 0_48 , upvalues : Window_MentalGameInfo
+  -- function num : 0_49 , upvalues : Window_MentalGameInfo
   local self = Window_MentalGameInfo
+  if PaGlobalFunc_MentalGame_GetShow() == false then
+    return 
+  end
+  hide_MentalGame(false)
   RequestMentalGame_endGame()
   ;
   (self._renderMode):reset()
@@ -1779,20 +1885,38 @@ PaGlobalFunc_MentalGame_Close = function()
   Panel_Window_MentalGame:SetShow(false)
   Panel_Window_MentalGame_Tooltip:SetShow(false)
   Panel_Window_MentalGame_Finish:SetShow(false)
-  hide_MentalGame(false)
+  ;
+  ((self._ui)._static_LeftBg):SetShow(false)
+  ;
+  ((self._ui)._static_BottomBg):SetShow(false)
+  ;
+  ((self._ui)._static_keyGuide):SetShow(false)
+  ;
+  ((self._ui)._static_TopBg):SetShow(false)
   self:Clear()
   self:StageClear()
   if _ContentsGroup_RenewUI_Dailog == true then
     PaGlobalFunc_MainDialog_ReOpen()
-    FromClient_ShowMainDialog()
   else
     FromClient_ShowDialog()
   end
 end
 
 PaGlobalFunc_MentalGame_Open = function()
-  -- function num : 0_49
+  -- function num : 0_50
   Panel_Window_MentalGame:SetShow(true)
+end
+
+Window_MentalGameInfo.XB_Control_Init = function(self)
+  -- function num : 0_51
+  ((self._ui)._button_Select):registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_MentalGame_LClick_ReStart()")
+  Panel_Window_MentalGame:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_MentalGame_LClick_Arrow(true)")
+  Panel_Window_MentalGame:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_MentalGame_LClick_Arrow(false)")
+end
+
+PaGlobalFunc_MentalGame_GetShow = function()
+  -- function num : 0_52
+  return Panel_Window_MentalGame:GetShow()
 end
 
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_MentalGame_luaLoadComplete")

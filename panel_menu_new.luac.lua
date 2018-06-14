@@ -69,44 +69,44 @@ _bannerAnimationPos = {
 }
 , 
 _color = {_defaultIconColor = 4289642191, _defaultNormalFontColor = 4286352799, _defaultOverFontColor = 4289449972, _defaultClickFontColor = 4289449972, _newIconColor = 4292520281, _newNormalFontColor = 4293639262, _newOverFontColor = 4294960300, _newClickFontColor = 4294960300, _hotIconColor = 4287996368, _hotNormalFontColor = 4286813382, _hotOverFontColor = 4285830305, _hotClickFontColor = 4285830305, _customIconColor = 4288857556, _customNormalFontColor = 4289320682, _customOverFontColor = 4289320682, _customClickFontColor = 4289320682}
-, _isXboxOpen = ToClient_isXBox(), _currentTabIndex = 0}
--- DECOMPILER ERROR at PC368: Confused about usage of register: R0 in 'UnsetPending'
+, _currentTabIndex = 0}
+-- DECOMPILER ERROR at PC365: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 (PaGlobal_Menu._ui)._custom = {_bg = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Static_Bg"), _templeteButtonBg = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Static_IconBg"), _templeteButton = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Button_Icon"), _beforeMenu = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "StaticText_SelectedMenu"), _afterMenu = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "StaticText_SelectedChangeMenu"), _effect = nil, _checkIcon = nil}
--- DECOMPILER ERROR at PC380: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC377: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 ((PaGlobal_Menu._ui)._custom)._beforeIcon = (UI.getChildControl)(((PaGlobal_Menu._ui)._custom)._beforeMenu, "Button_MenuIcon")
--- DECOMPILER ERROR at PC392: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC389: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 ((PaGlobal_Menu._ui)._custom)._afterIcon = (UI.getChildControl)(((PaGlobal_Menu._ui)._custom)._afterMenu, "Button_MenuIcon")
--- DECOMPILER ERROR at PC404: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC401: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._main = {_help = 0, _cashShop = 1, _escape = 2, _shortCut = 3, _inven = 4, _option = 5, _gameExit = 6, _saveSetting = 7, _count = 8}
--- DECOMPILER ERROR at PC422: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC419: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._contents = {_beauty = 0, _dye = 1, _pallet = 2, _pet = 3, _blackSpirit = 4, _questInfo = 5, _skill = 6, _manufacture = 7, _uiSetting = 8, _dailyStamp = 9, _blackSpiritAdventure = 10, _blackSpiritAdventure2 = 11, _beautyAlbum = 12, _photoGallery = 13, _count = 14}
--- DECOMPILER ERROR at PC433: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC430: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._cooperation = {_localWar = 0, _freeFighting = 1, _waveDefence = 2, _arsha = 3, _militia = 4, _partyFind = 5, _teamDuel = 6, _count = 7}
--- DECOMPILER ERROR at PC454: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC451: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._infomation = {_keyboard = 0, _productNote = 1, _myInfo = 2, _serverChange = 3, _fishEncyclopedia = 4, _knowledge = 5, _worldMap = 6, _workerList = 7, _itemMarket = 8, _tradeInfo = 9, _warInfo = 10, _event = 11, _update = 12, _steam = 13, _notice = 14, _masterpiece = 15, _dropItem = 16, _count = 17}
--- DECOMPILER ERROR at PC469: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC466: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._community = {_guild = 0, _friend = 1, _mail = 2, _guildRank = 3, _lifeRank = 4, _monsterRank = 5, _chattingFilter = 6, _language = 7, _blackDesertTv = 8, _socialAction = 9, _memo = 10, _count = 11}
--- DECOMPILER ERROR at PC475: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC472: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._banner = {_blackDesertTv = 0, _memo = 1, _count = 2}
--- DECOMPILER ERROR at PC490: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC487: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._bannerHot = {_pet = 0, _cashShop = 1, _beauty = 2, _dailyStamp = 3, _itemMarket = 4, _militia = 5, _partyFind = 6, _guild = 7, _guildRank = 8, _update = 9, _event = 10, _count = 11}
--- DECOMPILER ERROR at PC499: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC496: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._bannerNew = {_waveDefence = 0, _masterpiece = 1, _dropItem = 2, _blackDesertTv = 3, _memo = 4, _count = 5}
--- DECOMPILER ERROR at PC1053: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1034: Confused about usage of register: R0 in 'UnsetPending'
 
 if not isGameTypeKorea() and not isGameTypeTaiwan() and not isGameTypeTR() and not isGameTypeID() and not isGameTypeTH() then
   PaGlobal_Menu._bannerData = {
@@ -146,21 +146,21 @@ _new = {
 [(PaGlobal_Menu._bannerNew)._memo] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MEMONAME"), _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds", _x1 = 1, _y1 = 117, _x2 = 188, _y2 = 174, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isMemoOpen}
 , _count = (PaGlobal_Menu._bannerNew)._count}
 }
-  -- DECOMPILER ERROR at PC1074: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1055: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_Menu._myMenu = {_graphic = 0, _sound = 1, _game = 2, _performance = 3, _characterSelect = 4, _count = 5}
-  -- DECOMPILER ERROR at PC1093: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1074: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_Menu._customIndex = {6, 16, 20, 21, 22, 24, 35, 25, 29, 34, 44, 49; [0] = 14}
-  -- DECOMPILER ERROR at PC4089: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3996: Confused about usage of register: R0 in 'UnsetPending'
 
-  -- DECOMPILER ERROR at PC4089: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC3996: Unhandled construct in 'MakeBoolean' P3
 
-  -- DECOMPILER ERROR at PC4089: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC3996: Unhandled construct in 'MakeBoolean' P3
 
-  -- DECOMPILER ERROR at PC4089: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC3996: Unhandled construct in 'MakeBoolean' P3
 
-  -- DECOMPILER ERROR at PC4089: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC3996: Unhandled construct in 'MakeBoolean' P3
 
   if ((isGameTypeEnglish() or isGameTypeSA() or isGameTypeTR() or not isGameTypeKorea()) and isGameTypeEnglish()) or not isGameTypeEnglish() then
     PaGlobal_Menu._categoryData = {
@@ -175,7 +175,7 @@ _new = {
 , 
 [(PaGlobal_Menu._main)._gameExit] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_EXIT"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 263, _y1 = 3, _x2 = 323, _y2 = 63, _isContentOpen = true, _isNew = false, _isHot = false, _index = 4}
 , 
-[(PaGlobal_Menu._main)._cashShop] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_CASHSHOP"), _hotKey = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_CashShop), _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 449, _y1 = 189, _x2 = 509, _y2 = 249, _isContentOpen = (CppEnums.ContentsServiceType).eContentsServiceType_Commercial == getContentsServiceType(), _isNew = false, _isHot = false, _index = 5}
+[(PaGlobal_Menu._main)._cashShop] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_CASHSHOP"), _hotKey = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_CashShop), _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 449, _y1 = 189, _x2 = 509, _y2 = 249, _isContentOpen = true, _isNew = false, _isHot = false, _index = 5}
 , 
 [(PaGlobal_Menu._main)._shortCut] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_BUTTONSHORTCUT_SUBTITLE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 90, _y1 = 397, _x2 = 150, _y2 = 457, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isButtonShortCut, _isNew = false, _isHot = false, _index = 3}
 , 
@@ -323,14 +323,9 @@ _new = {
           categoryData._x2 = 372
           categoryData._y2 = 248
         end
-        do
-          if ToClient_isXBox() then
-            local categoryData = ((PaGlobal_Menu._categoryData)[0])[(PaGlobal_Menu._main)._help]
-            categoryData._string = "Policy"
-          end
-          -- DECOMPILER ERROR at PC4175: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4067: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.Init = function(self)
+        PaGlobal_Menu.Init = function(self)
   -- function num : 0_0
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -453,9 +448,9 @@ _new = {
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
-          -- DECOMPILER ERROR at PC4179: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4071: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleOver_MenuOpenWay = function(self, openType)
+        PaGlobal_Menu.HandleOver_MenuOpenWay = function(self, openType)
   -- function num : 0_1
   local uiControl, desc = nil
   if openType == 0 then
@@ -470,16 +465,16 @@ end
   TooltipSimple_Show(uiControl, desc)
 end
 
-          -- DECOMPILER ERROR at PC4183: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4075: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleOver_ChangeMenu = function(self)
+        PaGlobal_Menu.HandleOver_ChangeMenu = function(self)
   -- function num : 0_2
   TooltipSimple_Show(((self._ui)._main)._btnChange, PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_CHANGEUI"))
 end
 
-          -- DECOMPILER ERROR at PC4187: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4079: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetMainMenu = function(self)
+        PaGlobal_Menu.SetMainMenu = function(self)
   -- function num : 0_3
   for index = 0, (self._main)._count - 1 do
     -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
@@ -511,8 +506,6 @@ end
   (((self._ui)._main)._btnChange):addInputEvent("Mouse_On", "PaGlobal_Menu:HandleOver_ChangeMenu()")
   ;
   (((self._ui)._main)._btnChange):addInputEvent("Mouse_Out", "PaGlobal_Menu:CustomWindow_TooltipHide()")
-  ;
-  (((self._ui)._main)._btnChange):SetShow(not self._isXboxOpen)
   if (PaGlobal_Menu._contentsGroup)._isButtonShortCut then
     (((self._ui)._main)[1]):SetSpanSize(-140, 75)
     ;
@@ -531,17 +524,17 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4191: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4083: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetBanner = function(self)
+        PaGlobal_Menu.SetBanner = function(self)
   -- function num : 0_4
   for index = 0, (self._banner)._count - 1 do
   end
 end
 
-          -- DECOMPILER ERROR at PC4195: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4087: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetCustomWindow = function(self)
+        PaGlobal_Menu.SetCustomWindow = function(self)
   -- function num : 0_5
   local realIndex = 0
   for cIndex = 1, self._categoryCount do
@@ -580,6 +573,8 @@ end
         (((self._ui)._customButton)[realIndex]):addInputEvent("Mouse_On", "PaGlobal_Menu:CustomWindow_OverEffect(" .. realIndex .. "," .. categoryData._index .. ")")
         ;
         (((self._ui)._customButton)[realIndex]):addInputEvent("Mouse_Out", "PaGlobal_Menu:CustomWindow_TooltipHide()")
+        ;
+        (((self._ui)._customButton)[realIndex]):SetShow(true)
         realIndex = realIndex + 1
       end
     end
@@ -588,7 +583,7 @@ end
   end
   for mIndex = 0, ((self._categoryData)[6])._count - 1 do
     local categoryData = ((self._categoryData)[6])[mIndex]
-    -- DECOMPILER ERROR at PC210: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC216: Confused about usage of register: R7 in 'UnsetPending'
 
     if categoryData._isContentOpen then
       ((self._ui)._customButtonBg)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (self._ui)._customWindow, "CustomButtonBg_" .. realIndex)
@@ -599,7 +594,7 @@ end
       (((self._ui)._customButtonBg)[realIndex]):SetPosY(132 + (math.floor)((realIndex) / 7) * 45)
       ;
       (((self._ui)._customButtonBg)[realIndex]):SetShow(true)
-      -- DECOMPILER ERROR at PC257: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC263: Confused about usage of register: R7 in 'UnsetPending'
 
       ;
       ((self._ui)._customButton)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, (self._ui)._customWindow, "CustomButton_" .. realIndex)
@@ -623,10 +618,12 @@ end
       (((self._ui)._customButton)[realIndex]):addInputEvent("Mouse_Out", "PaGlobal_Menu:CustomWindow_TooltipHide()")
       ;
       (((self._ui)._customButton)[realIndex]):SetColor((Defines.Color).C_FFB5FF6D)
+      ;
+      (((self._ui)._customButton)[realIndex]):SetShow(true)
       realIndex = realIndex + 1
     end
   end
-  -- DECOMPILER ERROR at PC375: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC387: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._custom)._effect = (UI.createAndCopyBasePropertyControl)((self._ui)._customWindow, "Static_Effect", (self._ui)._customWindow, "Static_Effect_Copy")
@@ -636,7 +633,7 @@ end
   (((self._ui)._custom)._effect):SetPosX(16)
   ;
   (((self._ui)._custom)._effect):SetPosY(131)
-  -- DECOMPILER ERROR at PC405: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC417: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._custom)._checkIcon = (UI.createAndCopyBasePropertyControl)((self._ui)._customWindow, "Static_Check", (self._ui)._customWindow, "Static_CheckIcon_Copy")
@@ -646,19 +643,19 @@ end
   (((self._ui)._custom)._checkIcon):SetShow(false)
   do
     local isWide = getScreenSizeY() >= 800
-    -- DECOMPILER ERROR at PC432: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC444: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCustom = (UI.getChildControl)((self._ui)._categoryMenuBg, "Button_EditCustom")
-    -- DECOMPILER ERROR at PC440: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC452: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCustom720 = (UI.getChildControl)((self._ui)._categoryMenuBg, "Button_EditCustom720")
-    -- DECOMPILER ERROR at PC448: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC460: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonSaveCustom = (UI.getChildControl)((self._ui)._customWindow, "Button_Save720")
-    -- DECOMPILER ERROR at PC456: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC468: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     (self._ui)._buttonCancelCustom = (UI.getChildControl)((self._ui)._customWindow, "Button_Cancel720")
@@ -688,9 +685,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4199: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4091: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetMenuOpenWay = function(self, isLeft)
+        PaGlobal_Menu.SetMenuOpenWay = function(self, isLeft)
   -- function num : 0_6
   local way = 0
   if not isLeft then
@@ -701,17 +698,17 @@ end
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuOpenWay, way, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
-          -- DECOMPILER ERROR at PC4203: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4095: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.ComboGuideShowToggle = function(self)
+        PaGlobal_Menu.ComboGuideShowToggle = function(self)
   -- function num : 0_7
   PaGlobal_Menu:SetShow(false)
   PaGlobal_ConsoleKeyFirstCombo:showToggle()
 end
 
-          -- DECOMPILER ERROR at PC4207: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4099: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.ChangeTexture = function(self, menuIndex, categoryIndex, uiIndex, isCustom, isMain)
+        PaGlobal_Menu.ChangeTexture = function(self, menuIndex, categoryIndex, uiIndex, isCustom, isMain)
   -- function num : 0_8
   if categoryIndex == nil then
     categoryIndex = self._currentCategoryIndex
@@ -862,9 +859,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4211: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4103: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetSubButtonIcon = function(self, count)
+        PaGlobal_Menu.SetSubButtonIcon = function(self, count)
   -- function num : 0_9
   for index = 0, self._maxUiSlotCount - 1 do
     (((self._ui)._subButton)[index]):SetSize(95, 95)
@@ -1068,9 +1065,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4215: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4107: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleClicked_CategoryGroup = function(self, index)
+        PaGlobal_Menu.HandleClicked_CategoryGroup = function(self, index)
   -- function num : 0_10
   if self._isCustomMode then
     for categoryIndex = 0, self._categoryCount - 1 do
@@ -1126,9 +1123,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4219: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4111: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleClicked_CustomCategory = function(self, isCustom)
+        PaGlobal_Menu.HandleClicked_CustomCategory = function(self, isCustom)
   -- function num : 0_11
   self:ResetVertexAni()
   for categoryIndex = 0, self._categoryCount - 1 do
@@ -1180,9 +1177,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4223: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4115: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.Check_MenuIndex = function(self, index)
+        PaGlobal_Menu.Check_MenuIndex = function(self, index)
   -- function num : 0_12
   local rv = {}
   for cIndex = 0, self._categoryCount do
@@ -1207,7 +1204,7 @@ end
   return nil
 end
 
-          Toggle_MenuTab_forPadEventFunc = function(value)
+        Toggle_MenuTab_forPadEventFunc = function(value)
   -- function num : 0_13
   local self = PaGlobal_Menu
   self._currentTabIndex = self._currentTabIndex + value
@@ -1225,11 +1222,11 @@ end
   end
 end
 
-          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
-          Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
-          -- DECOMPILER ERROR at PC4241: Confused about usage of register: R0 in 'UnsetPending'
+        Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
+        Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
+        -- DECOMPILER ERROR at PC4133: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetCustomMode = function(self)
+        PaGlobal_Menu.SetCustomMode = function(self)
   -- function num : 0_14
   audioPostEvent_SystemUi(0, 0)
   self:CustomWindow_Init()
@@ -1252,9 +1249,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4245: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4137: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomModeAnimation = function(self, isCustom, isLeft)
+        PaGlobal_Menu.CustomModeAnimation = function(self, isCustom, isLeft)
   -- function num : 0_15
   self:Resize()
   local gap = -400
@@ -1317,9 +1314,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4249: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4141: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetCurrentMenu = function(self, categoryIndex, menuIndex, uiIndex)
+        PaGlobal_Menu.SetCurrentMenu = function(self, categoryIndex, menuIndex, uiIndex)
   -- function num : 0_16
   local categoryData = ((self._categoryData)[categoryIndex])[menuIndex]
   if self._beforeIndex == nil then
@@ -1388,9 +1385,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4253: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4145: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetChangeMenu = function(self, categoryIndex, menuIndex, realIndex)
+        PaGlobal_Menu.SetChangeMenu = function(self, categoryIndex, menuIndex, realIndex)
   -- function num : 0_17
   local categoryData = ((self._categoryData)[categoryIndex])[menuIndex]
   ;
@@ -1418,9 +1415,9 @@ end
   (((self._ui)._custom)._checkIcon):SetPosY(131 + (math.floor)(realIndex / 7) * 45)
 end
 
-          -- DECOMPILER ERROR at PC4257: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4149: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomWindow_OverEffect = function(self, index, dataIndex)
+        PaGlobal_Menu.CustomWindow_OverEffect = function(self, index, dataIndex)
   -- function num : 0_18
   (((self._ui)._custom)._effect):SetPosX(16 + index % 7 * 45)
   ;
@@ -1433,9 +1430,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4261: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4153: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomWindow_OverEffect_MyMenu = function(self, index, dataIndex)
+        PaGlobal_Menu.CustomWindow_OverEffect_MyMenu = function(self, index, dataIndex)
   -- function num : 0_19
   (((self._ui)._custom)._effect):SetPosX(16 + index % 7 * 45)
   ;
@@ -1449,16 +1446,16 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4265: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4157: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomWindow_TooltipHide = function(self)
+        PaGlobal_Menu.CustomWindow_TooltipHide = function(self)
   -- function num : 0_20
   TooltipSimple_Hide()
 end
 
-          -- DECOMPILER ERROR at PC4269: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4161: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SaveChangeMenu = function(self)
+        PaGlobal_Menu.SaveChangeMenu = function(self)
   -- function num : 0_21
   if (self._beforeMenu)._categoryIndex == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_ALERT_BEFOREMENU"))
@@ -1496,9 +1493,9 @@ end
   self:HandleClicked_CustomCategory(true)
 end
 
-          -- DECOMPILER ERROR at PC4273: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4165: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CancelChangeMenu = function(self)
+        PaGlobal_Menu.CancelChangeMenu = function(self)
   -- function num : 0_22
   self:SetCustomMode()
   self:CustomWindow_Init()
@@ -1506,9 +1503,9 @@ end
   ((self._ui)._customWindow):SetShow(false)
 end
 
-          -- DECOMPILER ERROR at PC4277: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4169: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleClicked_MenuButton = function(self, index, categoryIndex, uiIndex)
+        PaGlobal_Menu.HandleClicked_MenuButton = function(self, index, categoryIndex, uiIndex)
   -- function num : 0_23
   audioPostEvent_SystemUi(0, 0)
   if categoryIndex == nil then
@@ -1526,11 +1523,7 @@ end
   Panel_Menu_ShowToggle()
   if categoryIndex == 0 then
     if (PaGlobal_Menu._main)._help == index then
-      if ToClient_isXBox() then
-        PaGlobal_Policy_ShowWindow(false)
-      else
-        FGlobal_Panel_WebHelper_ShowToggle()
-      end
+      FGlobal_Panel_WebHelper_ShowToggle()
     else
       if (PaGlobal_Menu._main)._escape == index then
         if ToClient_IsMyselfInArena() then
@@ -1894,9 +1887,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4281: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4173: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetCheckIcon = function(self, uiIndex)
+        PaGlobal_Menu.SetCheckIcon = function(self, uiIndex)
   -- function num : 0_24
   if uiIndex == nil then
     for index = 0, self._maxUiSlotCount - 1 do
@@ -1916,9 +1909,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4285: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4177: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomWindow_Init = function(self)
+        PaGlobal_Menu.CustomWindow_Init = function(self)
   -- function num : 0_25
   (((self._ui)._custom)._beforeMenu):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EDITSLOTTEXT"))
   ;
@@ -1949,9 +1942,9 @@ end
   self:SetCheckIcon()
 end
 
-          -- DECOMPILER ERROR at PC4289: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4181: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.CustomIndex_Init = function(self)
+        PaGlobal_Menu.CustomIndex_Init = function(self)
   -- function num : 0_26
   for index = 0, #self._customIndex do
     local saveIndex = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType)["Menu" .. index])
@@ -1986,9 +1979,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4293: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4185: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.ContentOpenCheckByIndex = function(self, index)
+        PaGlobal_Menu.ContentOpenCheckByIndex = function(self, index)
   -- function num : 0_27
   for cIndex = 1, self._categoryCount do
     for mIndex = 0, ((self._categoryData)[cIndex])._count - 1 do
@@ -2006,9 +1999,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4297: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4189: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetShow = function(self, isShow)
+        PaGlobal_Menu.SetShow = function(self, isShow)
   -- function num : 0_28
   Panel_Menu_New:SetShow(isShow, true)
   if not isShow then
@@ -2043,16 +2036,16 @@ end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
-          Panel_Menu_ShowToggle_New = function()
+        Panel_Menu_ShowToggle_New = function()
   -- function num : 0_29
   local isShow = Panel_Menu_New:GetShow()
   PaGlobal_Menu:SetShow(not isShow)
   return isShow
 end
 
-          -- DECOMPILER ERROR at PC4303: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4195: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.Resize = function(self)
+        PaGlobal_Menu.Resize = function(self)
   -- function num : 0_30
   Panel_Menu_New:SetSize(Panel_Menu_New:GetSizeX(), getScreenSizeY())
   ;
@@ -2112,9 +2105,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4307: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4199: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.ShowAni = function(self)
+        PaGlobal_Menu.ShowAni = function(self)
   -- function num : 0_31
   self._isLeft = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuOpenWay) == 0
   if self._isLeft then
@@ -2137,9 +2130,9 @@ end
   -- DECOMPILER ERROR: 3 unprocessed JMP targets
 end
 
-          -- DECOMPILER ERROR at PC4311: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4203: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HideAni = function(self)
+        PaGlobal_Menu.HideAni = function(self)
   -- function num : 0_32
   local ImageMoveAni = Panel_Menu_New:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   ImageMoveAni:SetStartPosition(Panel_Menu_New:GetPosX(), 0)
@@ -2164,9 +2157,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4315: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4207: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.SetVertexAni = function(self, index)
+        PaGlobal_Menu.SetVertexAni = function(self, index)
   -- function num : 0_33
   self:ResetVertexAni()
   for menuIndex = 0, self._maxUiSlotCount - 1 do
@@ -2187,9 +2180,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4319: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4211: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.ResetVertexAni = function(self)
+        PaGlobal_Menu.ResetVertexAni = function(self)
   -- function num : 0_34
   for index = 0, self._maxUiSlotCount - 1 do
     (((self._ui)._subButton)[index]):ResetVertexAni()
@@ -2204,9 +2197,9 @@ end
   ((self._ui)._effect_BottomBanner):SetShow(false)
 end
 
-          -- DECOMPILER ERROR at PC4323: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4215: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleClicked_Banner = function(self, isHot)
+        PaGlobal_Menu.HandleClicked_Banner = function(self, isHot)
   -- function num : 0_35
   Panel_Menu_ShowToggle()
   if isHot then
@@ -2285,9 +2278,9 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC4327: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4219: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleOvered_MainMenuButon = function(self, index)
+        PaGlobal_Menu.HandleOvered_MainMenuButon = function(self, index)
   -- function num : 0_36
   if self._isCustomMode then
     return 
@@ -2301,9 +2294,9 @@ end
   ((self._ui)._effect_MainMenuButton):SetPosY(((self._ui)._mainMenuBg):GetPosY() + (((self._ui)._main)[index]):GetPosY())
 end
 
-          -- DECOMPILER ERROR at PC4331: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4223: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleOvered_Banner = function(self, isHot)
+        PaGlobal_Menu.HandleOvered_Banner = function(self, isHot)
   -- function num : 0_37
   if self._isCustomMode then
     return 
@@ -2324,26 +2317,26 @@ end
   self._isBannerOver = true
 end
 
-          -- DECOMPILER ERROR at PC4335: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4227: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.HandleOuted_Banner = function(self)
+        PaGlobal_Menu.HandleOuted_Banner = function(self)
   -- function num : 0_38
   self._isBannerOver = false
 end
 
-          Panel_Menu_Resize = function()
+        Panel_Menu_Resize = function()
   -- function num : 0_39
   PaGlobal_Menu:Resize()
 end
 
-          Panel_Menu_Init = function()
+        Panel_Menu_Init = function()
   -- function num : 0_40
   PaGlobal_Menu:Init()
 end
 
-          -- DECOMPILER ERROR at PC4343: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4235: Confused about usage of register: R0 in 'UnsetPending'
 
-          PaGlobal_Menu.registerEvent = function(self)
+        PaGlobal_Menu.registerEvent = function(self)
   -- function num : 0_41
   for index = 0, self._categoryCount - 1 do
     (((self._ui)._radioButtonGroup)[index]):addInputEvent("Mouse_LUp", "PaGlobal_Menu:HandleClicked_CategoryGroup(" .. index + 1 .. ")")
@@ -2354,46 +2347,46 @@ end
   registerEvent("FromClient_luaLoadComplete", "Panel_Menu_Init")
 end
 
-          UIMain_ItemUpdate = function()
+        UIMain_ItemUpdate = function()
   -- function num : 0_42
 end
 
-          UIMain_ItemUpdateRemove = function()
+        UIMain_ItemUpdateRemove = function()
   -- function num : 0_43
 end
 
-          UIMain_FriendListUpdate = function()
+        UIMain_FriendListUpdate = function()
   -- function num : 0_44
 end
 
-          UIMain_FriendListUpdateRemove = function()
+        UIMain_FriendListUpdateRemove = function()
   -- function num : 0_45
 end
 
-          do
-            local knowledgePoint = 0
-            UIMain_KnowledgeUpdate = function()
+        do
+          local knowledgePoint = 0
+          UIMain_KnowledgeUpdate = function()
   -- function num : 0_46
 end
 
-            UIMain_KnowledgeUpdateRemove = function()
+          UIMain_KnowledgeUpdateRemove = function()
   -- function num : 0_47
 end
 
-            UI_MAIN_checkSkillLearnable = function()
+          UI_MAIN_checkSkillLearnable = function()
   -- function num : 0_48
 end
 
-            UIMain_SkillPointUpdateRemove = function()
+          UIMain_SkillPointUpdateRemove = function()
   -- function num : 0_49
 end
 
-            Panel_Menu_Close_New = function()
+          Panel_Menu_Close_New = function()
   -- function num : 0_50
   Panel_Menu_New:SetShow(false, true)
 end
 
-            HandleClicked_RescueConfirm = function()
+          HandleClicked_RescueConfirm = function()
   -- function num : 0_51
   audioPostEvent_SystemUi(1, 41)
   local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
@@ -2403,12 +2396,12 @@ end
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
-            RescueExecute = function()
+          RescueExecute = function()
   -- function num : 0_52
   callRescue()
 end
 
-            ChangeUI_Menu_New = function()
+          ChangeUI_Menu_New = function()
   -- function num : 0_53
   Panel_Menu_Close_New()
   ;
@@ -2416,7 +2409,7 @@ end
   Panel_Menu_ShowToggle()
 end
 
-            UpdateFunc_MenuAnimation = function(deltaTime)
+          UpdateFunc_MenuAnimation = function(deltaTime)
   -- function num : 0_54
   local self = PaGlobal_Menu
   if self._isBannerOver then
@@ -2433,9 +2426,9 @@ end
   end
 end
 
-            -- DECOMPILER ERROR at PC4374: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC4266: Confused about usage of register: R1 in 'UnsetPending'
 
-            PaGlobal_Menu.BannerAnimation = function(self, flag, aniType, isHot)
+          PaGlobal_Menu.BannerAnimation = function(self, flag, aniType, isHot)
   -- function num : 0_55
   local image1, image2 = nil
   if isHot then
@@ -2474,9 +2467,9 @@ end
   end
 end
 
-            -- DECOMPILER ERROR at PC4378: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC4270: Confused about usage of register: R1 in 'UnsetPending'
 
-            PaGlobal_Menu.ChangeBannerTexture = function(self, control, isHot)
+          PaGlobal_Menu.ChangeBannerTexture = function(self, control, isHot)
   -- function num : 0_56
   local index = nil
   if isHot then
@@ -2514,10 +2507,9 @@ end
   end
 end
 
-            Panel_Menu_New:RegisterUpdateFunc("UpdateFunc_MenuAnimation")
-            PaGlobal_Menu:registerEvent()
-            -- DECOMPILER ERROR: 15 unprocessed JMP targets
-          end
+          Panel_Menu_New:RegisterUpdateFunc("UpdateFunc_MenuAnimation")
+          PaGlobal_Menu:registerEvent()
+          -- DECOMPILER ERROR: 13 unprocessed JMP targets
         end
       end
     end

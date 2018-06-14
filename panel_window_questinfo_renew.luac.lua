@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-local Window_QuestInfo = {_radioGroupTexture; 
+local Window_QuestInfo = {
 _ui = {_expToolTip; 
 _questTitle = {}
 , 
@@ -44,9 +44,9 @@ PaGlobalFunc_Quest_SelectTitleButton = function(value)
   local self = Window_QuestInfo
   self._currentTitleType = self._currentTitleType + value
   if self._currentTitleType < ((self._config)._title)._progress then
-    self._currentTitleType = ((self._config)._title)._repeat
+    self._currentTitleType = ((self._config)._title)._main
   end
-  if ((self._config)._title)._repeat < self._currentTitleType then
+  if ((self._config)._title)._main < self._currentTitleType then
     self._currentTitleType = ((self._config)._title)._progress
   end
   PaGlobalFunc_Quest_SelectQuestTitle(self._currentTitleType)
@@ -58,6 +58,9 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
   self._currentQuestIndex = -1
   self._currentTitleType = questType
   if ((self._config)._title)._progress == self._currentTitleType then
+    ((self._ui)._radioButton_autoFindWay):SetShow(true)
+    ;
+    ((self._ui)._radioButton_QuestGiveUp):SetShow(true)
     titleType = ((self._config)._title)._progress
     ;
     ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_PROGRESS"))
@@ -66,6 +69,9 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
     self:ShowListByGroup(self._progressTable)
   else
     if ((self._config)._title)._main == self._currentTitleType then
+      ((self._ui)._radioButton_autoFindWay):SetShow(true)
+      ;
+      ((self._ui)._radioButton_QuestGiveUp):SetShow(false)
       titleType = ((self._config)._title)._main
       ;
       ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_QUEST_MAIN"))
@@ -73,26 +79,10 @@ PaGlobalFunc_Quest_SelectQuestTitle = function(questType)
       ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._main):GetPosX() - (((self._ui)._questTitle)._main):GetSizeX() / 2)
       self:ShowListByGroup(self._mainTable)
     else
-      if ((self._config)._title)._recommend == self._currentTitleType then
-        titleType = ((self._config)._title)._recommend
-        ;
-        ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_RECOMMAND"))
-        ;
-        ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._recommend):GetPosX() - (((self._ui)._questTitle)._recommend):GetSizeX() / 2)
-        self:ShowListByGroup(self._recommendTable)
-      else
-        if ((self._config)._title)._repeat == self._currentTitleType then
-          titleType = ((self._config)._title)._repeat
-          ;
-          ((self._ui)._staticText_RadioButtonTooltip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_QUESTFILTER_REPEAT"))
-          ;
-          ((self._ui)._staticText_RadioButtonTooltip):SetPosX((((self._ui)._questTitle)._repeat):GetPosX() - (((self._ui)._questTitle)._repeat):GetSizeX() / 2)
-          self:ShowListByGroup(self._repetitionTable)
-        else
-          _PA_LOG("이호�\156", "제목�\180 잘못 됬습니다.")
-        end
-      end
     end
+  end
+  if ((self._config)._title)._recommend ~= self._currentTitleType or ((self._config)._title)._repeat == self._currentTitleType then
+    _PA_LOG("이호�\156", "제목�\180 잘못 됬습니다.")
   end
 end
 
@@ -135,7 +125,7 @@ Window_QuestInfo.ShowListByGroup = function(self, groupTable)
 
     (self._questInfo)[list2Index] = self:CreateGroupData(groupTable[index])
     local treeElement = mainElement:createChild(toInt64(0, list2Index))
-    treeElement:setIsOpen(false)
+    treeElement:setIsOpen(true)
     list2Index = list2Index + 1
     for questIndex = 0, (groupTable[index])._count - 1 do
       -- DECOMPILER ERROR at PC48: Confused about usage of register: R13 in 'UnsetPending'
@@ -325,12 +315,14 @@ PaGlobalFunc_Quest_List2EventControlCreate = function(list_content, key)
     (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "")
     ;
     (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "")
+    ;
+    (questUI._radioButton_QuestBg):SetIgnore(false)
     if questInfo._isGroup == true then
       (questUI._static_QuesetTypeIcon):SetShow(false)
       ;
-      (questUI._staticText_QuestName):SetText(questInfo._questName)
+      (questUI._radioButton_QuestBg):SetIgnore(true)
       ;
-      (questUI._radioButton_QuestBg):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GroupToggle(" .. id .. ")")
+      (questUI._staticText_QuestName):SetText(questInfo._questName)
       ;
       (questUI._radioButton_QuestBg):addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SimpleToolTipShow(" .. id .. ")")
       ;
@@ -372,11 +364,9 @@ PaGlobalFunc_Quest_SelectQuestClear = function(index)
   -- function num : 0_10 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
   local prevIndex = self._currentQuestIndex
-  self._currentQuestIndex = index
+  self._currentQuestIndex = -1
   ;
   ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, prevIndex))
-  ;
-  ((self._ui)._list2_Quest):requestUpdateByKey(toInt64(0, index))
   self:DetailClear()
 end
 
@@ -450,60 +440,59 @@ end
 FromClient_luaLoadComplete = function()
   -- function num : 0_15 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  self._radioGroupTexture = ((self._ui)._static_RadioGroup):getBaseTexture()
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._staticText_TopTitle = (UI.getChildControl)((self._ui)._static_Title, "StaticText_Title")
-  -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._static_TopTitleIcon = (UI.getChildControl)((self._ui)._static_Title, "Static_TitleIcon")
-  -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._progress = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Progress")
-  -- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC34: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._main = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Main")
-  -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC43: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._recommend = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_recommend")
-  -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC52: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._repeat = (UI.getChildControl)((self._ui)._static_RadioGroup, "RadioButton_Repeat")
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC61: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._buttonLB = (UI.getChildControl)((self._ui)._static_RadioGroup, "Button_LB")
-  -- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC70: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questTitle)._buttonRB = (UI.getChildControl)((self._ui)._static_RadioGroup, "Button_RB")
-  -- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._frameContent_1_Content = (UI.getChildControl)((self._ui)._frame_Detail, "Frame_1_Content")
-  -- DECOMPILER ERROR at PC91: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._scroll_FrameVertical = (UI.getChildControl)((self._ui)._frame_Detail, "Frame_1_VerticalScroll")
-  -- DECOMPILER ERROR at PC100: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Title = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Title")
-  -- DECOMPILER ERROR at PC109: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC104: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Type = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Type")
-  -- DECOMPILER ERROR at PC118: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC113: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Desc = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Desc")
-  -- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC122: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   ((self._ui)._questDetail)._staticText_Condition = (UI.getChildControl)((self._ui)._frameContent_1_Content, "StaticText_Condition")
@@ -519,16 +508,16 @@ FromClient_luaLoadComplete = function()
     ;
     (SlotItem.new)(slot, "Static_BaseReward_" .. index, index, control, (self._config)._questRewardSlotConfig)
     slot:createChild()
-    -- DECOMPILER ERROR at PC175: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC170: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._baseRewardSlot)[index] = slot
-    -- DECOMPILER ERROR at PC178: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC173: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._baseRewardControl)[index] = control
   end
-  -- DECOMPILER ERROR at PC187: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC182: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._static_BaseToolTip = (UI.getChildControl)((self._ui)._static_BaseReward, "StaticText_BaseToolTip")
@@ -542,16 +531,16 @@ FromClient_luaLoadComplete = function()
     ;
     (SlotItem.new)(slot, "Static_SelectReward_" .. index, index, control, (self._config)._questRewardSlotConfig)
     slot:createChild()
-    -- DECOMPILER ERROR at PC226: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC221: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._selectRewardSlot)[index] = slot
-    -- DECOMPILER ERROR at PC229: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC224: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._selectRewardControl)[index] = control
   end
-  -- DECOMPILER ERROR at PC238: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC233: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._static_SelectToolTip = (UI.getChildControl)((self._ui)._static_SelectReward, "StaticText_SelectToolTip")
@@ -559,19 +548,19 @@ FromClient_luaLoadComplete = function()
   ((self._ui)._static_SelectToolTip):SetTextHorizonCenter()
   ;
   ((self._ui)._static_SelectToolTip):SetTextVerticalCenter()
-  -- DECOMPILER ERROR at PC254: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC249: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_autoFindWay = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_autoFindWay")
-  -- DECOMPILER ERROR at PC262: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC257: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_QuestGiveUp = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_QuestGiveUp")
-  -- DECOMPILER ERROR at PC270: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC265: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_SetQuestType = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_SetQuestType")
-  -- DECOMPILER ERROR at PC278: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC273: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._radioButton_Close = (UI.getChildControl)((self._ui)._static_KeyGuideBg, "Radiobutton_Close")
@@ -623,9 +612,14 @@ PaGlobalFunc_Quest_SelectQuest = function(index)
   ;
   ((self._ui)._frame_Detail):UpdateContentPos()
   ;
-  ((self._ui)._radioButton_autoFindWay):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. (questInfo._questNo)._group .. "," .. (questInfo._questNo)._quest .. ",false)")
+  ((self._ui)._radioButton_autoFindWay):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. index .. ",false)")
   ;
   ((self._ui)._radioButton_QuestGiveUp):addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
+  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_Quest_FindWay(" .. index .. ",false)")
+  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "")
+  if ((self._config)._title)._progress == self._currentTitleType then
+    Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
+  end
   local prevIndex = self._currentQuestIndex
   self._currentQuestIndex = index
   ;
@@ -775,37 +769,38 @@ Window_QuestInfo.SetRewardIcon = function(self, slot, reward, index, rewardStr)
   end
 end
 
-PaGlobalFunc_Quest_FindWay = function(groupNo, questNo, isAuto)
+PaGlobalFunc_Quest_FindWay = function(index, isAuto)
   -- function num : 0_20 , upvalues : Window_QuestInfo
   local self = Window_QuestInfo
-  local questInfo = ToClient_GetQuestInfo(groupNo, questNo)
+  local questInfo = (self._questInfo)[index]
   if questInfo == nil then
     return 
   end
+  local groupNo = (questInfo._questNo)._group
+  local questNo = (questInfo._questNo)._quest
   local questStatic = questList_getQuestStatic(groupNo, questNo)
   if questStatic == nil then
     return 
   end
   local questCondition = QuestConditionCheckType.eQuestConditionCheckType_Complete
-  if questInfo:isSatisfied() == true then
-    questCondition = QuestConditionCheckType.eQuestConditionCheckType_Complete
-  else
-    if questInfo._isCleared == false then
-      if questInfo._isCleared == false and questInfo._isProgressing == false then
+  do
+    local isNext = (not questInfo._isCleared and not questInfo._isProgressing)
+    if questInfo._isSatisfied == true then
+      questCondition = QuestConditionCheckType.eQuestConditionCheckType_Complete
+    elseif questInfo._isCleared == false then
+      if isNext == true then
         questCondition = QuestConditionCheckType.eQuestConditionCheckType_NotAccept
       else
         questCondition = QuestConditionCheckType.eQuestConditionCheckType_Progress
       end
     end
-  end
-  if QuestConditionCheckType.eQuestConditionCheckType_Complete == questCondition then
-    if questStatic:isCompleteBlackSpirit() == true then
-      HandleClicked_CallBlackSpirit()
-    else
-      HandleClicked_QuestWidget_FindTarget(groupNo, questNo, questCondition, isAuto)
-    end
-  else
-    if QuestConditionCheckType.eQuestConditionCheckType_NotAccept == questCondition then
+    if QuestConditionCheckType.eQuestConditionCheckType_Complete == questCondition then
+      if questStatic:isCompleteBlackSpirit() == true then
+        HandleClicked_CallBlackSpirit()
+      else
+        HandleClicked_QuestWidget_FindTarget(groupNo, questNo, questCondition, isAuto)
+      end
+    elseif QuestConditionCheckType.eQuestConditionCheckType_NotAccept == questCondition then
       if (questStatic:getAccecptNpc()):get() == 0 then
         HandleClicked_CallBlackSpirit()
       else
@@ -814,6 +809,7 @@ PaGlobalFunc_Quest_FindWay = function(groupNo, questNo, isAuto)
     else
       HandleClicked_QuestWidget_FindTarget(groupNo, questNo, questCondition, isAuto)
     end
+    -- DECOMPILER ERROR: 10 unprocessed JMP targets
   end
 end
 
@@ -949,11 +945,24 @@ Window_QuestInfo.DetailClear = function(self)
   ;
   (((self._ui)._questDetail)._staticText_Type):SetText("")
   ;
+  ((self._ui)._radioButton_autoFindWay):addInputEvent("Mouse_LUp", "")
+  ;
+  ((self._ui)._radioButton_QuestGiveUp):addInputEvent("Mouse_LUp", "")
+  ;
+  (((self._ui)._questDetail)._staticText_Desc):SetSize((((self._ui)._questDetail)._staticText_Desc):GetSizeX(), 10)
+  ;
+  (((self._ui)._questDetail)._staticText_Condition):SetSize((((self._ui)._questDetail)._staticText_Condition):GetSizeX(), 10)
+  ;
+  (((self._ui)._questDetail)._staticText_Type):SetSize((((self._ui)._questDetail)._staticText_Type):GetSizeX(), 10)
+  ;
+  ((self._ui)._frameContent_1_Content):SetSize(((self._ui)._frameContent_1_Content):GetSizeX(), 10)
+  ;
   ((self._ui)._frame_Detail):UpdateContentScroll()
   ;
   ((self._ui)._scroll_FrameVertical):SetControlPos(0)
   ;
   ((self._ui)._frame_Detail):UpdateContentPos()
+  self:SlotClear()
 end
 
 PaGlobalFunc_Quest_OpenDetail = function(questGroupId, questId, titleType)
@@ -1047,7 +1056,7 @@ PaGlobalFunc_Quest_ShowAni = function()
   panel:ResetVertexAni()
   local aniInfo = panel:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo:SetStartPosition(getScreenSizeX(), 0)
-  aniInfo:SetEndPosition(getScreenSizeX() - panel:GetSizeX(), 0)
+  aniInfo:SetEndPosition(getScreenSizeX() - panel:GetSizeX() + 2, 0)
   aniInfo.IsChangeChild = true
   aniInfo:SetHideAtEnd(false)
   aniInfo:SetDisableWhileAni(true)
@@ -1064,13 +1073,6 @@ PaGlobalFunc_Quest_ShowAni = function()
   ((self._ui)._static_TopTitleIcon):ResetVertexAni()
   ;
   ((self._ui)._static_TopTitleIcon):SetVertexAniRun("Ani_Move_Pos_Show", true)
-  ;
-  ((self._ui)._static_RadioGroup):setRenderTexture(self._radioGroupTexture)
-  local x1, y1, x2, y2 = setTextureUV_Func((self._ui)._static_RadioGroup, 0, 0, 1, 1)
-  ;
-  (((self._ui)._static_RadioGroup):getBaseTexture()):setUV(x1, y1, x2, y2)
-  ;
-  ((self._ui)._static_RadioGroup):setRenderTexture(((self._ui)._static_RadioGroup):getBaseTexture())
   FGlobal_SetUrl_Tooltip_SkillForLearning()
 end
 
@@ -1095,10 +1097,11 @@ PaGlobalFunc_Quest_Close = function()
 end
 
 PaGlobalFunc_Quest_SetShow = function(value)
-  -- function num : 0_33
+  -- function num : 0_33 , upvalues : Window_QuestInfo
+  local self = Window_QuestInfo
   Panel_Window_QuestInfo:SetShow(value, true)
   if value == true then
-    if PaGlobalFunc_InventoryInfo_IsOpened() == true then
+    if PaGlobalFunc_InventoryInfo_GetShow() == true then
       PaGlobalFunc_InventoryInfo_Close()
     else
       FGlobal_Panel_Radar_Show(false, true)
@@ -1106,7 +1109,7 @@ PaGlobalFunc_Quest_SetShow = function(value)
       FGlobal_QuestWidget_Close()
     end
   else
-    if PaGlobalFunc_InventoryInfo_IsOpened() == false then
+    if PaGlobalFunc_InventoryInfo_GetShow() == false then
       FGlobal_Panel_Radar_Show(true, true)
       Panel_TimeBar:SetShow(true, true)
       FGlobal_QuestWidget_Open()

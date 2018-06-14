@@ -735,11 +735,23 @@ end
 
 deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreExp, isAblePvPMatchRevive, respawnTime)
   -- function num : 0_17 , upvalues : _button_ItemRevival, _button_NormalRevival, _button_Back, maxRevivalItemKindCount, revivalItemControl, _button_SavageOut, _button_ObserverMode, isPvPMatchRevive, _useCashItemBG, _checkBoxUseCache, _penaltyIcon, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadMessage, ResurrectionTime, revivalTime, deadMessage_Animation, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
-  if Panel_GameExit:GetShow() then
-    Panel_GameExit:SetShow(false)
-  end
-  if Panel_ChannelSelect:GetShow() then
-    FGlobal_ChannelSelect_Hide()
+  if _ContentsGroup_RenewUI_ExitGame == false then
+    if Panel_GameExit:GetShow() then
+      Panel_GameExit:SetShow(false)
+    end
+    if Panel_ChannelSelect:GetShow() then
+      FGlobal_ChannelSelect_Hide()
+    end
+  else
+    if PaGlobalFunc_GameExitCharMove_GetShow() == true then
+      PaGlobalFunc_GameExitCharMove_SetShow(false, false)
+    end
+    if PaGlobalFunc_GameExit_GetShow() == true then
+      PaGlobalFunc_GameExit_SetShow(false, false)
+    end
+    if Panel_ChannelSelect:GetShow() then
+      FGlobal_ChannelSelect_Hide()
+    end
   end
   _button_ItemRevival:SetShow(false)
   _button_NormalRevival:SetShow(false)

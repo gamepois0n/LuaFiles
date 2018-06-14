@@ -71,6 +71,9 @@ PaGlobal_Fairy_SetPosIcon = function()
   else
     do
       Panel_Window_FairyIcon:SetShow(false)
+      if _ContentsGroup_RenewUI_Main == true then
+        Panel_Window_FairyIcon:SetShow(false)
+      end
     end
   end
 end

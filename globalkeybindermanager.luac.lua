@@ -171,7 +171,7 @@ end
 
 SetUIMode = function(uiMode)
   -- function num : 0_6 , upvalues : UIMode, _uiMode
-  if uiMode >= 0 and uiMode < UIMode.eUIMode_Count then
+  if uiMode >= 0 and uiMode < UIMode.eUIMode_Count and (ToClient_isXBox() == true) then
     _uiMode = uiMode
   end
 end
