@@ -52,6 +52,8 @@ function InitIntroMoviePanel()
     introMoviePlayTime = 60
   elseif isGameTypeTaiwan() then
     introMoviePlayTime = 125
+  elseif ToClient_isXBox() then
+    introMoviePlayTime = 60
   else
     introMoviePlayTime = 60
   end

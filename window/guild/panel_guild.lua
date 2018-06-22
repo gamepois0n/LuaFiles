@@ -96,6 +96,7 @@ function GuildInfoPage:initialize()
   self._txtGuildTerritoryTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_TerritoryArea")
   self._txtGuildTerritoryValue = UI.getChildControl(Panel_Window_Guild, "StaticText_TerritoryAreaValue")
   self._txtGuildTerritoryValue:SetTextMode(UI_TM.eTextMode_LimitText)
+  self._btnEvacuation = UI.getChildControl(Panel_Window_Guild, "Button_Evacuation")
   self._txtGuildServantTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildServant")
   self._txtGuildServantValue = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildServantValue")
   self._txtGuildServantValue:SetTextMode(UI_TM.eTextMode_LimitText)
@@ -184,6 +185,9 @@ function GuildInfoPage:initialize()
   notice_title:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
   notice_btn:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 10)")
   notice_btn:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
+  self._btnEvacuation:addInputEvent("Mouse_LUp", "HandleClickedRelease()")
+  self._btnEvacuation:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 11 )")
+  self._btnEvacuation:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 11 )")
 end
 local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Window_Guild, "WebControl_EventNotify_WebLink")
 _Web:SetShow(true)
@@ -525,6 +529,20 @@ function GuildInfoPage:UpdateData()
   else
     HandleClickedGuildHideButton()
   end
+end
+function HandleClickedRelease()
+  local contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_MESSAGE_DESC")
+  local messageboxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_NAME"),
+    content = contentString,
+    functionYes = ReleaseAccept,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageboxData)
+end
+function ReleaseAccept()
+  ToClient_RequestReleaseSiege()
 end
 local GuildLetsWarPage = {}
 function GuildLetsWarPage:initialize()
@@ -1066,8 +1084,10 @@ function GuildManager:initialize()
   self.mainBtn_GuildAlliance:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 14, false )")
   if true == _ContentsGroup_GuildManufacture then
     self.mainBtn_GuildManufacture:SetShow(true)
+    self.mainBtn_CraftInfo:SetShow(false)
   else
     self.mainBtn_GuildManufacture:SetShow(false)
+    self.mainBtn_CraftInfo:SetShow(true)
   end
   if true == _ContentsGroup_guildAlliance then
     self.mainBtn_GuildAlliance:SetShow(true)
@@ -1152,7 +1172,7 @@ function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
       desc = nil
     elseif 13 == tabNo then
       uiControl = GuildManager.mainBtn_GuildManufacture
-      name = "\234\184\184\235\147\156 \234\176\128\234\179\181"
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDMANUFACTURE")
       desc = nil
     elseif 14 == tabNo then
       uiControl = GuildManager.mainBtn_GuildAlliance
@@ -1213,6 +1233,10 @@ function GuildSimplTooltips(isShow, tipType)
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_LIST_NOTICE_TITLE") .. " " .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ITEMMARKET_REGISTITEM_BTN_CONFIRM")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ONLINE_NOTICE_DESC")
     control = notice_btn
+  elseif 11 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_TOOLTIP_DESC")
+    control = GuildInfoPage._btnEvacuation
   end
   if true == isShow then
     TooltipSimple_Show(control, name, desc)
@@ -1407,7 +1431,7 @@ function GuildManager:TabToggle(index)
     self.historyBG:SetShow(true)
     tabNumber = 7
   elseif 8 == index then
-    self:ChangeTab("\234\184\184\235\147\156 \234\176\128\234\179\181", 122, 1, 134, 15)
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDMANUFACTURE"), 122, 1, 134, 15)
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
     GuildListInfoPage:Hide()
@@ -1461,6 +1485,7 @@ function GuildManager:Hide()
   if Panel_Window_Guild:IsUISubApp() then
     return
   end
+  Panel_Tooltip_Item_hideTooltip()
   PaGlobal_Guild_ManufactureSelect:close()
   PaGlobal_Guild_UseGuildFunds:ShowToggle(nil, false)
   Panel_Window_Guild:SetShow(false, true)
@@ -1539,6 +1564,7 @@ function GuildManager:Show()
       self.mainBtn_CraftInfo:SetCheck(false)
       self.mainBtn_GuildBattle:SetCheck(false)
       self.mainBtn_GuildAlliance:SetCheck(false)
+      self.mainBtn_GuildManufacture:SetCheck(false)
       self.mainBtn_Main:SetIgnore(true)
       self.mainBtn_Info:SetIgnore(true)
       self.mainBtn_Quest:SetIgnore(true)
@@ -1549,6 +1575,7 @@ function GuildManager:Show()
       self.mainBtn_CraftInfo:SetIgnore(true)
       self.mainBtn_GuildBattle:SetIgnore(true)
       self.mainBtn_GuildAlliance:SetIgnore(true)
+      self.mainBtn_GuildManufacture:SetIgnore(true)
       self.mainBtn_Main:SetMonoTone(true)
       self.mainBtn_Info:SetMonoTone(true)
       self.mainBtn_Quest:SetMonoTone(true)
@@ -1559,6 +1586,7 @@ function GuildManager:Show()
       self.mainBtn_CraftInfo:SetMonoTone(true)
       self.mainBtn_GuildBattle:SetMonoTone(true)
       self.mainBtn_GuildAlliance:SetMonoTone(true)
+      self.mainBtn_GuildManufacture:SetMonoTone(true)
     else
       GuildManager:TabToggle(99)
     end
@@ -1759,6 +1787,8 @@ function GuildMainInfo_Show()
   GuildInfoPage._txtGuildTerritoryValue:SetShow(true)
   GuildInfoPage._txtGuildServantTitle:SetShow(true)
   GuildInfoPage._txtGuildServantValue:SetShow(true)
+  if true == _ContentsGroup_SeigeSeason5 then
+  end
   if isContentsGuildHouse then
     GuildInfoPage._btnGuildWarehouse:SetShow(true)
   else
@@ -1888,6 +1918,7 @@ function GuildMainInfo_Hide()
   GuildInfoPage._btnGuildWebInfo:SetShow(false)
   GuildInfoPage._btnGuildWarehouse:SetShow(false)
   GuildInfoPage._btnGetArshaHost:SetShow(false)
+  GuildInfoPage._btnEvacuation:SetShow(false)
   GuildMainInfo_MandateBtn()
 end
 function HandleClicked_TerritoryNameOnEvent(isShow)

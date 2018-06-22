@@ -212,14 +212,16 @@ Button_ProfileScreenShot:addInputEvent("Mouse_On", "overToggleButton(\"" .. Butt
 Button_ProfileScreenShot:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
 CheckButton_ImagePreset:SetShow(false)
 Button_SaveHistory:addInputEvent("Mouse_LUp", "HandleClicked_CustomizationAddHistory()")
-registerEvent("EventSetMainButtonPosition", "SetMainButtonPosition")
-registerEvent("EventShowUpAllUI", "showAllUI")
-registerEvent("EventCustomizationMessage", "CustomizationMessage")
-registerEvent("EventShowCharacterCustomization", "ShowCharacterCustomization")
-registerEvent("EventinitToggleIndex", "initToggleIndex")
-registerEvent("EventNotify_customizationAuthorName", "CustomizationAuthorName")
-registerEvent("FromClient_CustomizationHistoryApplyUpdate", "FromClient_CustomizationHistoryApplyUpdate")
-registerEvent("FromClient_CustomizationHistoryUpdate", "FromClient_CustomizationHistoryUpdate")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventSetMainButtonPosition", "SetMainButtonPosition")
+  registerEvent("EventShowUpAllUI", "showAllUI")
+  registerEvent("EventCustomizationMessage", "CustomizationMessage")
+  registerEvent("EventShowCharacterCustomization", "ShowCharacterCustomization")
+  registerEvent("EventinitToggleIndex", "initToggleIndex")
+  registerEvent("EventNotify_customizationAuthorName", "CustomizationAuthorName")
+  registerEvent("FromClient_CustomizationHistoryApplyUpdate", "FromClient_CustomizationHistoryApplyUpdate")
+  registerEvent("FromClient_CustomizationHistoryUpdate", "FromClient_CustomizationHistoryUpdate")
+end
 local mainButtonInfo = {}
 local groupTree = {}
 local initialized = false
@@ -1243,7 +1245,9 @@ function ShowCharacterCustomization(customizationData, classIndex, isInGame)
     btn_CharacterNameCreateRule:SetShow(false)
   end
   InitializeCustomizationData(customizationData, classIndex)
-  Panel_CustomizationMessage:SetShow(true, false)
+  if false == _ContentsGroup_RenewUI_Customization then
+    Panel_CustomizationMessage:SetShow(true, false)
+  end
   InitCustomizationMainUI()
   StaticText_CustomizationInfo:SetShow(true)
   StaticText_AuthorName:SetShow(true)
@@ -1274,6 +1278,9 @@ function EventApplyDefaultParams()
 end
 function EventSelectClass()
   restoreUIScale()
+  if true == _ContentsGroup_RenewUI_Customization then
+    PaGlobalFunc_Customization_Close()
+  end
   changeCreateCharacterMode_SelectClass(FGlobal_getIsSpecialCharacter())
 end
 function EventSelectBack()

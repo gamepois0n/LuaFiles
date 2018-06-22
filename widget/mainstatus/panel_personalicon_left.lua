@@ -17,6 +17,7 @@ local _fixedChargeIcon = UI.getChildControl(Panel_PersonalIcon_Left, "Static_Fix
 local _starterPackage = UI.getChildControl(Panel_PersonalIcon_Left, "Static_StarterPackageIcon")
 local _premiumPackage = UI.getChildControl(Panel_PersonalIcon_Left, "Static_PremiumPackageIcon")
 local _premiumAlert = UI.getChildControl(Panel_PersonalIcon_Left, "StaticText_BubbleAlert")
+local _premiumAlertClose = UI.getChildControl(_premiumAlert, "Button_Close")
 local _premiumText = UI.getChildControl(Panel_PersonalIcon_Left, "StaticText_NoticePremium")
 local _btnCashShop = UI.getChildControl(Panel_PersonalIcon_Left, "Button_IngameCashShop")
 local _btnAlertClose = UI.getChildControl(Panel_PersonalIcon_Left, "Button_TextClose")
@@ -96,6 +97,7 @@ local function registEventHandler()
   _russiaPack3:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 15 )")
   _russiaKamasilv:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 10 )")
   _russiaKamasilv:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 10 )")
+  _premiumAlertClose:addInputEvent("Mouse_LUp", "_premiumAlert_HideAni()")
 end
 local _ExpFix
 if not _ContentsGroup_RenewUI_Main then
@@ -163,8 +165,6 @@ function PackageIconPosition()
     _premiumPackage:SetPosX(iconPosX)
     _premiumPackage:SetPosY(iconPosY)
     iconPosX = iconPosX + _premiumPackage:GetSizeX() + iconGapX
-    _premiumAlert:SetPosX(_premiumPackage:GetPosX())
-    _premiumAlert:SetPosY(_premiumPackage:GetPosY() + _premiumPackage:GetSizeY() + 10)
     _premiumText:SetPosX(_premiumPackage:GetPosX())
     _premiumText:SetPosY(_premiumPackage:GetPosY() + _premiumPackage:GetSizeY())
     _btnCashShop:SetPosX(_premiumText:GetPosX() + _premiumText:GetTextSizeX() + 30)
@@ -283,6 +283,106 @@ function PackageIconPosition()
   Panel_PersonalIcon_Left:SetPosY(5)
   Panel_PersonalIcon_Left:SetSize(iconPosX, Panel_PersonalIcon_Left:GetSizeY())
   _buffIconPosX = iconPosX
+  Panel_PersonalIcon_Left:calculateAlertBox(applyStarter, applyPremium, applyDyeingPackage, starter, premium, dyeingPackage, applyRussiaPack3, russiaPack3Time, applyRussiaKamasilv, russiaKamasilv)
+end
+local _PremiumPackageToolTipOnce = true
+function Panel_PersonalIcon_Left:calculateAlertBox(applyStarter, applyPremium, applyDyeingPackage, starter, premium, dyeingPackage, applyRussiaPack3, russiaPack3Time, applyRussiaKamasilv, russiaKamasilv)
+  local applyFlag = {
+    applyStarter,
+    applyPremium,
+    applyDyeingPackage
+  }
+  local checkTime = {
+    starter,
+    premium,
+    dyeingPackage
+  }
+  local controls = {
+    _starterPackage,
+    _premiumPackage,
+    _pearlPallete
+  }
+  local msgKey = {
+    "LUA_PERSONALICON_LEFT_STARTER",
+    "LUA_PERSONALICON_LEFT_PREMIUM",
+    "LUA_PERSONALICON_LEFT_PALLETE"
+  }
+  if isGameTypeRussia() then
+    applyFlag = {
+      applyStarter,
+      applyPremium,
+      applyDyeingPackage,
+      applyRussiaPack3,
+      applyRussiaKamasilv
+    }
+    checkTime = {
+      starter,
+      premium,
+      dyeingPackage,
+      russiaPack3Time,
+      russiaKamasilv
+    }
+    controls = {
+      _starterPackage,
+      _premiumPackage,
+      _pearlPallete,
+      _russiaPack3,
+      _russiaKamasilv
+    }
+    msgKey = {
+      "LUA_PERSONALICON_LEFT_PREMIUM1_RUS",
+      "LUA_PERSONALICON_LEFT_PREMIUM2_RUS",
+      "LUA_PERSONALICON_LEFT_PALLETE",
+      "LUA_PERSONALICON_LEFT_PREMIUM3_RUS",
+      "LUA_PERSONALICON_LEFT_STARTER"
+    }
+  else
+    msgKey = {
+      "LUA_PERSONALICON_LEFT_STARTER",
+      "LUA_PERSONALICON_LEFT_PREMIUM",
+      "LUA_PERSONALICON_LEFT_PALLETE"
+    }
+  end
+  local msgs = {}
+  local posFlag = false
+  for k, v in ipairs(applyFlag) do
+    if true == v and checkTime[k] > 0 then
+      local leftHour = math.ceil(checkTime[k] / 60 / 60)
+      if leftHour <= 72 then
+        if leftHour > 24 then
+          local day = math.floor(leftHour / 24)
+          leftHour = leftHour - day * 24
+          msgs[k] = PAGetStringParam2(Defines.StringSheet_GAME, msgKey[k] .. 2, "leftDay", day, "leftHour", leftHour)
+        else
+          msgs[k] = PAGetStringParam1(Defines.StringSheet_GAME, msgKey[k], "leftHour", leftHour)
+        end
+        if false == posFlag then
+          _premiumAlert:SetPosX(controls[k]:GetPosX())
+          _premiumAlert:SetPosY(controls[k]:GetPosY() + controls[k]:GetSizeY() + 10)
+          posFlag = true
+        end
+      end
+    end
+  end
+  for k, v in ipairs(controls) do
+    controls[k]:EraseAllEffect()
+  end
+  if true == posFlag and (true == _PremiumPackageToolTipOnce or true == _premiumAlert:GetShow()) then
+    if nil ~= msgs then
+      local message = "<PAColor0xffe7d583>" .. PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_ALERT_TITLE") .. "<PAOldColor>" .. "\n"
+      for index, str in pairs(msgs) do
+        message = message .. str .. "\n"
+        controls[index]:AddEffect("fUI_PremiumPackage_01A", true, 0, 0)
+      end
+      _premiumAlert:SetText(string.sub(message, 1, string.len(message) - 1))
+      _premiumAlert:SetSize(_premiumAlert:GetTextSizeX() + 18, _premiumAlert:GetTextSizeY() + 25)
+      _premiumAlert:SetShow(true)
+      _premiumAlertClose:ComputePos()
+      _PremiumPackageToolTipOnce = false
+    end
+  else
+    _premiumAlert:SetShow(false)
+  end
 end
 local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = Int64toInt32(pcRoomNeedTime)
@@ -684,14 +784,6 @@ function FromClient_PackageIconUpdate()
   if applyPremium then
     if premium > 0 then
       _premiumPackage:SetShow(true)
-      _premiumAlert:SetShow(false)
-      local leftTime = math.ceil(premium / 60 / 60)
-      if leftTime <= 24 then
-        local msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BUFFTIME_MSG", "leftTime", leftTime)
-        _premiumAlert:SetText(msg)
-        _premiumAlert:SetSize(_premiumAlert:GetTextSizeX() + 10, _premiumAlert:GetSizeY())
-        _premiumAlert_ShowAni(_premiumAlert, 10)
-      end
       valuePackCheck = true
     else
       _premiumPackage:SetShow(false)
@@ -792,6 +884,12 @@ function FromClient_ResponseChangeExpAndDropPercent()
     _expVehicleEvent:SetShow(false)
   end
   PackageIconPosition()
+end
+function _premiumAlert_HideAni()
+  _starterPackage:EraseAllEffect()
+  _premiumPackage:EraseAllEffect()
+  _pearlPallete:EraseAllEffect()
+  _premiumAlert:SetShow(false)
 end
 function _premiumAlert_ShowAni(control, showTime)
   control:SetShow(true)

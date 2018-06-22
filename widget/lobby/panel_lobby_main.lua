@@ -142,9 +142,13 @@ local Panel_Lobby_UI = {
   CCSC_BackButton = UI.getChildControl(Panel_CharacterCreateSelectClass, "Button_Back"),
   CCSC_SelectClassButton = UI.getChildControl(Panel_CharacterCreateSelectClass, "Button_SelectClass"),
   CCSC_NoMovie = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_NoMovie"),
-  CM_StaticText_CharacterName = UI.getChildControl(Panel_CustomizationMain, "StaticText_CharacterName"),
-  CM_Edit_CharacterName = UI.getChildControl(Panel_CustomizationMain, "Edit_CharacterName")
+  CCSC_LeaveConsole = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_Leave_ConsoleUI"),
+  CCSC_SelectConsole = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_Select"),
+  CM_Edit_CharacterName
 }
+if false == _ContentsGroup_RenewUI_Customization then
+  Panel_Lobby_UI.CM_Edit_CharacterName = UI.getChildControl(Panel_CustomizationMain, "Edit_CharacterName")
+end
 local Character_Status = {
   _stat_Ctrl = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_Stat_Ctrl"),
   _stat_Att = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_Stat_Att"),
@@ -153,6 +157,7 @@ local Character_Status = {
   _stat_Cmb = UI.getChildControl(Panel_CharacterCreateSelectClass, "StaticText_Stat_Cmb")
 }
 local Panel_Lobby_Global_Variable = {
+  currentSelectedIdx = -1,
   UIList = {},
   UiMaker = nil,
   characterSelect = -1,
@@ -331,32 +336,42 @@ local function Panel_Lobby_Function_Initialize()
   Panel_Lobby_UI.CC_SelectClassButton:addInputEvent("Mouse_LUp", "changeCreateCharacterMode_SelectClass()")
   Panel_Lobby_UI.CC_CreateButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateOk()")
   Panel_Lobby_UI.CC_BackButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateCancel()")
-  local scrX = getScreenSizeX()
-  local scrY = getScreenSizeY()
-  Panel_Lobby_UI.CCSC_ClassMovie:SetPosX(scrX - 441)
-  Panel_Lobby_UI.CCSC_ClassMovie:SetPosY(scrY - 372)
-  Panel_Lobby_UI.CCSC_ClassMovie:SetUrl(422, 237, "coui://UI_Data/UI_Html/Class_Movie.html")
-  Panel_Lobby_UI.CCSC_ClassMovie:SetSize(422, 237)
-  Panel_Lobby_UI.CCSC_ClassMovie:SetSpanSize(-1, 0)
-  Panel_Lobby_UI.CCSC_ClassMovie:SetShow(true)
-  local checkAgeType = ToClient_isAdultUser()
-  if checkAgeType then
-    Panel_Lobby_UI.CCSC_ClassMovie:SetMonoTone(false)
+  if true == ToClient_isXBox() then
+    Panel_Lobby_UI.CCSC_ClassMovie:SetShow(false)
+    Panel_Lobby_UI.CCSC_RadioNormalMovie:SetShow(false)
+    Panel_Lobby_UI.CCSC_RadioAwakenMovie:SetShow(false)
+    Panel_Lobby_UI.CCSC_ClassDesc:SetShow(false)
+    txt_BottomDesc:SetShow(false)
+    bottomFrame:SetShow(false)
+    _frameBottomDesc:SetShow(false)
+    Panel_Lobby_UI.CCSC_ClassDescBG:SetShow(false)
   else
-    Panel_Lobby_UI.CCSC_ClassMovie:SetMonoTone(true)
+    local scrX = getScreenSizeX()
+    local scrY = getScreenSizeY()
+    Panel_Lobby_UI.CCSC_ClassMovie:SetPosX(scrX - 441)
+    Panel_Lobby_UI.CCSC_ClassMovie:SetPosY(scrY - 372)
+    Panel_Lobby_UI.CCSC_ClassMovie:SetUrl(422, 237, "coui://UI_Data/UI_Html/Class_Movie.html")
+    Panel_Lobby_UI.CCSC_ClassMovie:SetSize(422, 237)
+    Panel_Lobby_UI.CCSC_ClassMovie:SetSpanSize(-1, 0)
+    Panel_Lobby_UI.CCSC_ClassMovie:SetShow(true)
+    local checkAgeType = ToClient_isAdultUser()
+    if checkAgeType then
+      Panel_Lobby_UI.CCSC_ClassMovie:SetMonoTone(false)
+    else
+      Panel_Lobby_UI.CCSC_ClassMovie:SetMonoTone(true)
+    end
+    Panel_Lobby_UI.CCSC_NoMovie:SetPosX(scrX - 441)
+    Panel_Lobby_UI.CCSC_NoMovie:SetPosY(scrY - 372)
+    Panel_Lobby_UI.CCSC_NoMovie:SetSpanSize(-1, 0)
+    Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
+    Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. 0 .. ")")
+    Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
+    Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
+    Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. 1 .. ")")
+    Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
   end
-  Panel_Lobby_UI.CCSC_NoMovie:SetPosX(scrX - 441)
-  Panel_Lobby_UI.CCSC_NoMovie:SetPosY(scrY - 372)
-  Panel_Lobby_UI.CCSC_NoMovie:SetSpanSize(-1, 0)
-  Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
-  Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. 0 .. ")")
-  Panel_Lobby_UI.CCSC_RadioNormalMovie:addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
-  Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_LUp", "Panel_Lobby_SetMovie()")
-  Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_On", "Panel_Lobby_TooltipShow(" .. 1 .. ")")
-  Panel_Lobby_UI.CCSC_RadioAwakenMovie:addInputEvent("Mouse_Out", "Panel_Lobby_TooltipHide()")
 end
 local function Panel_Lobby_function_StartUp_CreateCharacter_SelectClass()
-  Panel_Lobby_function_SelectClassType(UI_Class.ClassType_Warrior)
   Panel_Lobby_Global_Variable.UiMaker = Panel_CharacterCreateSelectClass
   Panel_Lobby_Global_Variable.UiMaker:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_CharacterCreateSelectClass:SetShow(true, false)
@@ -419,6 +434,7 @@ local function Panel_Lobby_function_StartUp_CreateCharacter_SelectClass()
     classType = getPossibleClassTypeFromIndex(index)
     ClassBtn_Show(classType)
   end
+  Panel_Lobby_function_SelectClassType(UI_Class.ClassType_Warrior)
 end
 function Panel_Lobby_Function_showCharacterCreate_SelectClass()
   if true == _ContentsGroup_RenewUI then
@@ -426,29 +442,41 @@ function Panel_Lobby_Function_showCharacterCreate_SelectClass()
   else
     FGlobal_CharacterSelect_Close()
   end
+  Panel_Lobby_Global_Variable.currentSelectedIdx = -1
+  local isXbox = ToClient_isXBox()
+  Panel_Lobby_UI.CCSC_LeaveConsole:SetShow(isXbox)
+  Panel_Lobby_UI.CCSC_SelectConsole:SetShow(isXbox)
+  Panel_Lobby_UI.CCSC_BackButton:SetShow(not isXbox)
+  Panel_Lobby_UI.CCSC_CreateButton:SetShow(not isXbox)
   Panel_Lobby_function_DeleteButton()
   Panel_Lobby_function_ClearData()
   Panel_Lobby_function_StartUp_CreateCharacter_SelectClass()
-  Panel_CharacterCreate:SetShow(false, false)
-  Panel_Customization_Control:SetShow(false, false)
-  Panel_CustomizationMotion:SetShow(false, false)
-  Panel_CustomizationExpression:SetShow(false, false)
-  Panel_CustomizationCloth:SetShow(false, false)
-  Panel_CustomizationTest:SetShow(false, false)
   Panel_CharacterCreateSelectClass:SetShow(true, false)
-  Panel_CustomizationMesh:SetShow(false, false)
-  Panel_CustomizationMain:SetShow(false, false)
-  Panel_CustomizationStatic:SetShow(false, false)
-  Panel_CustomizationMessage:SetShow(false, false)
-  Panel_CustomizationFrame:SetShow(false, false)
+  if false == _ContentsGroup_RenewUI_Customization then
+    Panel_CharacterCreate:SetShow(false, false)
+    Panel_Customization_Control:SetShow(false, false)
+    Panel_CustomizationMotion:SetShow(false, false)
+    Panel_CustomizationExpression:SetShow(false, false)
+    Panel_CustomizationCloth:SetShow(false, false)
+    Panel_CustomizationTest:SetShow(false, false)
+    Panel_CustomizationMesh:SetShow(false, false)
+    Panel_CustomizationMain:SetShow(false, false)
+    Panel_CustomizationStatic:SetShow(false, false)
+    Panel_CustomizationMessage:SetShow(false, false)
+    Panel_CustomizationFrame:SetShow(false, false)
+  end
   Panel_CharacterCreateSelectClass:SetSize(getScreenSizeY(), getScreenSizeX())
 end
 function Panel_Lobby_Function_showCharacterCustomization(customizationData)
   Panel_Lobby_function_DeleteButton()
   Panel_CharacterCreateSelectClass:SetShow(false, false)
-  Panel_Lobby_UI.CM_Edit_CharacterName:SetEditText("")
   resizeUIScale()
-  ShowCharacterCustomization(customizationData, Panel_Lobby_Global_Variable.characterSelectType, false)
+  if true == _ContentsGroup_RenewUI_Customization then
+    PaGlobalFunc_Customization_SetClassType(index)
+  else
+    Panel_Lobby_UI.CM_Edit_CharacterName:SetEditText("")
+    ShowCharacterCustomization(customizationData, Panel_Lobby_Global_Variable.characterSelectType, false)
+  end
   viewCharacterCreateMode(Panel_Lobby_Global_Variable.characterSelectType)
 end
 function Panel_Lobby_function_ClearData()
@@ -462,6 +490,12 @@ function Panel_Lobby_function_SelectClassType(index, isOn)
     if false == ToClient_checkCreatePossibleClass(index, isSpecialCharacter) then
       return
     end
+    if index == Panel_Lobby_Global_Variable.currentSelectedIdx then
+      changeCreateCharacterMode()
+      return
+    else
+      Panel_Lobby_Global_Variable.currentSelectedIdx = index
+    end
     for key, value in pairs(Panel_Lobby_ClassUI.ClassButtons) do
       value:SetMonoTone(true)
       value:SetVertexAniRun("Ani_Color_Reset", true)
@@ -469,21 +503,28 @@ function Panel_Lobby_function_SelectClassType(index, isOn)
     end
     Panel_Lobby_ClassUI.ClassButtons[index]:SetMonoTone(false)
     Panel_Lobby_ClassUI.ClassButtons[index]:AddEffect("UI_CharactorSelcect_Line", true, 10, 4)
-    local movieName = getClassMovie(index, isSpecialCharacter)
-    if movieName ~= nil then
-      Panel_Lobby_UI.CCSC_ClassMovie:TriggerEvent("PlayMovie", "coui://" .. movieName)
+    if true == ToClient_isXBox() then
+      _index = index
+      viewCharacterCreateSelectClassMode(index)
+      Panel_Lobby_Global_Variable.characterSelectType = index
+      Panel_Lobby_UI.CCSC_ClassName:SetText(getClassName(index, isSpecialCharacter))
+    else
+      local movieName = getClassMovie(index, isSpecialCharacter)
+      if movieName ~= nil then
+        Panel_Lobby_UI.CCSC_ClassMovie:TriggerEvent("PlayMovie", "coui://" .. movieName)
+      end
+      Panel_Lobby_UI.CCSC_RadioNormalMovie:SetCheck(true)
+      Panel_Lobby_UI.CCSC_RadioAwakenMovie:SetShow(isAwakenOpen[index])
+      _index = index
+      viewCharacterCreateSelectClassMode(index)
+      Panel_Lobby_Global_Variable.characterSelectType = index
+      Panel_Lobby_UI.CCSC_ClassName:SetText(getClassName(index, isSpecialCharacter))
+      Panel_Lobby_UI.CCSC_ClassDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+      Panel_Lobby_UI.CCSC_ClassDesc:SetText(getClassDescription(index, isSpecialCharacter))
+      Panel_Lobby_UI.CCSC_ClassDesc:SetShow(false)
+      txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+      txt_BottomDesc:SetText(getClassDescription(index, isSpecialCharacter))
     end
-    Panel_Lobby_UI.CCSC_RadioNormalMovie:SetCheck(true)
-    Panel_Lobby_UI.CCSC_RadioAwakenMovie:SetShow(isAwakenOpen[index])
-    _index = index
-    viewCharacterCreateSelectClassMode(index)
-    Panel_Lobby_Global_Variable.characterSelectType = index
-    Panel_Lobby_UI.CCSC_ClassName:SetText(getClassName(index, isSpecialCharacter))
-    Panel_Lobby_UI.CCSC_ClassDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    Panel_Lobby_UI.CCSC_ClassDesc:SetText(getClassDescription(index, isSpecialCharacter))
-    Panel_Lobby_UI.CCSC_ClassDesc:SetShow(false)
-    txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    txt_BottomDesc:SetText(getClassDescription(index, isSpecialCharacter))
     _frameBottomDesc:SetSize(_frameBottomDesc:GetSizeX(), txt_BottomDesc:GetTextSizeY())
     for _, value in pairs(Panel_Lobby_ClassUI.ClassStatus) do
       value:SetShow(false)
@@ -512,6 +553,26 @@ function Panel_Lobby_SelectClass_MouseEvent(index, isOn)
 end
 function Panel_CharacterCreateOk()
   chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, Panel_Lobby_UI.CC_CharacterNameEdit:GetEditText(), isSpecialCharacter)
+end
+function Panel_CharacterCreateOK_Renew(characterName)
+  local _edit_CharacterName = characterName
+  local function createCharacterFunc()
+    chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, _edit_CharacterName, isSpecialCharacter)
+    PaGlobalFunc_Customization_InputName_Close()
+  end
+  local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
+  local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_CHARACTERCREATE_RECONFIRM_CHARACTERNAME", "name", _edit_CharacterName)
+  local messageBoxData = {
+    title = messageBoxTitle,
+    content = messageBoxMemo,
+    functionYes = createCharacterFunc,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
+  ClearFocusEdit()
+  closeExplorer()
+  Panel_CustomizingAlbum:SetShow(false)
 end
 function Panel_CharacterCreateOK_NewCustomization()
   local _edit_CharacterName = Panel_Lobby_UI.CM_Edit_CharacterName:GetEditText()

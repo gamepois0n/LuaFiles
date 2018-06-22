@@ -985,8 +985,8 @@ function deadMessage_Show(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreE
       _button_Immediate:SetEnable(false)
       _button_GuildSpawn:SetEnable(false)
       _button_Volunteer:SetEnable(false)
-      _button_OutsideGate:SetShow(false)
-      _button_InsideGate:SetShow(false)
+      _button_OutsideGate:SetEnable(false)
+      _button_InsideGate:SetEnable(false)
     end
     ResurrectionTime = respawnTime
     _regenTime:SetShow(true)

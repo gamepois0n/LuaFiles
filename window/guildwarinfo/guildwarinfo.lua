@@ -352,7 +352,11 @@ function FromClient_WarInfoContent_Set(territoryKey)
     end
     warInfoContent[territoryKey][0].setFree:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREE_END", "selectTerritoy", territoryName[territoryKey]))
     if isOccupyGuild then
-      warInfoContent[territoryKey][0].setFreeDesc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getName()))
+      if "" == guildWrapper:getAllianceName() then
+        warInfoContent[territoryKey][0].setFreeDesc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getName()))
+      else
+        warInfoContent[territoryKey][0].setFreeDesc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_ALLIANCE_WARINFOCONTENTS_SETFREEDESC_END", "getName", guildWrapper:getAllianceName()))
+      end
     else
       warInfoContent[territoryKey][0].setFreeDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_WARINFOCONTENTS_SETFREEDESC"))
     end

@@ -34,6 +34,7 @@ local appliedBuff_UIPool_Last = 0
 local appliedBuff_DATAPool = {}
 local targetActorKey = 0
 isMonsterBarShow = false
+local isXbox = ToClient_isXBox()
 lua_TargetInfo_NormalEnemyGauge:SetShow(false)
 lua_TargetInfo_NormalHpRate:SetShow(false)
 lua_TargetInfo_NormalHpRate_Later:SetShow(false)
@@ -118,7 +119,7 @@ function targetHpInfo_Update_Monster(actorKey, nowHP)
         _helpBubble:SetShow(false)
         _helpMsg:SetShow(false)
       end
-      if playerLevel <= 20 then
+      if not isXbox and playerLevel <= 20 then
         _darkSpirit:SetShow(true)
         _helpBubble:SetShow(true)
         _helpMsg:SetShow(true)
@@ -171,7 +172,7 @@ function targetHpInfo_Update_Monster(actorKey, nowHP)
       _helpBubble:SetShow(false)
       _helpMsg:SetShow(false)
     end
-    if playerLevel <= 20 then
+    if not isXbox and playerLevel <= 20 then
       _darkSpirit:SetShow(true)
       _helpBubble:SetShow(true)
       _helpMsg:SetShow(true)
@@ -205,34 +206,36 @@ function targetHpInfo_Update_Monster(actorKey, nowHP)
     lua_TargetInfo_BossHpRate:setRenderTexture(lua_TargetInfo_BossHpRate:getBaseTexture())
   end
   local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
-  if not ToClient_GetMessageFilter(10) and FromClient_ContactOfStrongMonster() and not regionInfo:get():isSafeZone() then
-    _darkSpirit:SetShow(true)
-    _RunawayBG:SetShow(true)
-    _txt_Runaway:SetShow(true)
-    if false == _ContentsGroup_RenewUI then
-      _checkBtnAlert:SetShow(true)
-      _checkBtnAlert:SetCheck(false)
+  if not isXbox then
+    if not ToClient_GetMessageFilter(10) and FromClient_ContactOfStrongMonster() and not regionInfo:get():isSafeZone() then
+      _darkSpirit:SetShow(true)
+      _RunawayBG:SetShow(true)
+      _txt_Runaway:SetShow(true)
+      if false == _ContentsGroup_RenewUI then
+        _checkBtnAlert:SetShow(true)
+        _checkBtnAlert:SetCheck(false)
+      else
+        _checkBtnAlert:SetShow(false)
+      end
+      _helpBubble:SetShow(false)
+      _helpMsg:SetShow(false)
+      _darkSpirit:EraseAllEffect()
+      _darkSpirit:AddEffect("fUI_DarkSpirit_Tutorial", true, 0, 0)
+      _txt_Runaway:SetAutoResize(true)
+      _txt_Runaway:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENEMYGAUGE_DARKSPIRIT_RUNAWAY"))
+      _RunawayBG:SetSize(_txt_Runaway:GetTextSizeX() + 25, _txt_Runaway:GetSizeY() + 37)
+      _RunawayBG:SetPosX(_darkSpirit:GetPosX() - _RunawayBG:GetSizeX())
+      _txt_Runaway:SetPosX(_RunawayBG:GetPosX() + 10)
+      _txt_Runaway:SetPosY(_RunawayBG:GetPosY() + 27)
+      _checkBtnAlert:SetPosX(_RunawayBG:GetPosX() + 10)
+      _checkBtnAlert:SetPosY(_RunawayBG:GetPosY())
+      if Panel_Monster_Bar:GetShow() then
+        _dangerAlert_Show(true)
+        FGlobal_ChattingAlert_Call()
+      end
     else
-      _checkBtnAlert:SetShow(false)
+      _dangerAlert_Show(false)
     end
-    _helpBubble:SetShow(false)
-    _helpMsg:SetShow(false)
-    _darkSpirit:EraseAllEffect()
-    _darkSpirit:AddEffect("fUI_DarkSpirit_Tutorial", true, 0, 0)
-    _txt_Runaway:SetAutoResize(true)
-    _txt_Runaway:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENEMYGAUGE_DARKSPIRIT_RUNAWAY"))
-    _RunawayBG:SetSize(_txt_Runaway:GetTextSizeX() + 25, _txt_Runaway:GetSizeY() + 37)
-    _RunawayBG:SetPosX(_darkSpirit:GetPosX() - _RunawayBG:GetSizeX())
-    _txt_Runaway:SetPosX(_RunawayBG:GetPosX() + 10)
-    _txt_Runaway:SetPosY(_RunawayBG:GetPosY() + 27)
-    _checkBtnAlert:SetPosX(_RunawayBG:GetPosX() + 10)
-    _checkBtnAlert:SetPosY(_RunawayBG:GetPosY())
-    if Panel_Monster_Bar:GetShow() then
-      _dangerAlert_Show(true)
-      FGlobal_ChattingAlert_Call()
-    end
-  else
-    _dangerAlert_Show(false)
   end
 end
 function targetHpInfo_Update_Player(actorKey, nowHP)
@@ -272,21 +275,23 @@ function targetHpInfo_Update_Other(actorKey, nowHP)
     lua_TargetInfo_NormalHpRate:getBaseTexture():setUV(x1, y1, x2, y2)
     lua_TargetInfo_NormalHpRate:setRenderTexture(lua_TargetInfo_NormalHpRate:getBaseTexture())
   else
-    if playerLevel <= 20 then
-      _darkSpirit:SetShow(true)
-      _helpBubble:SetShow(true)
-      _helpMsg:SetShow(true)
-      _darkSpirit:EraseAllEffect()
-      _darkSpirit:AddEffect("fUI_DarkSpirit_Tutorial", true, 0, 0)
-      _helpMsg:SetTextMode(UI_TM.eTextMode_AutoWrap)
-      _helpMsg:SetAutoResize(true)
-      _helpMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENEMYGAUGE_DARKSPIRIT"))
-      _helpBubble:SetSize(_helpBubble:GetSizeX(), _helpMsg:GetSizeY() + 37)
-      _helpMsg:SetPosY(_helpBubble:GetPosY() + 27)
-    else
-      _darkSpirit:SetShow(false)
-      _helpBubble:SetShow(false)
-      _helpMsg:SetShow(false)
+    if not isXbox then
+      if playerLevel <= 20 then
+        _darkSpirit:SetShow(true)
+        _helpBubble:SetShow(true)
+        _helpMsg:SetShow(true)
+        _darkSpirit:EraseAllEffect()
+        _darkSpirit:AddEffect("fUI_DarkSpirit_Tutorial", true, 0, 0)
+        _helpMsg:SetTextMode(UI_TM.eTextMode_AutoWrap)
+        _helpMsg:SetAutoResize(true)
+        _helpMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENEMYGAUGE_DARKSPIRIT"))
+        _helpBubble:SetSize(_helpBubble:GetSizeX(), _helpMsg:GetSizeY() + 37)
+        _helpMsg:SetPosY(_helpBubble:GetPosY() + 27)
+      else
+        _darkSpirit:SetShow(false)
+        _helpBubble:SetShow(false)
+        _helpMsg:SetShow(false)
+      end
     end
     lua_TargetInfo_NormalHpRate:ResetVertexAni()
     lua_TargetInfo_NormalHpRate:SetVertexAniRun("Ani_Color_Damage_0", true)

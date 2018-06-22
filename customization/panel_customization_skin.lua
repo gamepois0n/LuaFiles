@@ -10,8 +10,10 @@ local sliderParam = 0
 local sliderParamMin = 0
 local sliderParamMax = 255
 local sliderParamDefault = 0
-registerEvent("EventOpenSkinUi", "OpenSkinUi")
-registerEvent("EventCloseSkinUi", "CloseSkinUi")
+if false == _ContentsGroup_RenewUI then
+  registerEvent("EventOpenSkinUi", "OpenSkinUi")
+  registerEvent("EventCloseSkinUi", "CloseSkinUi")
+end
 local selectedClassType, selectedUiId
 local controlOffset = 10
 local contentsStartY = 0

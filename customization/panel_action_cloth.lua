@@ -21,8 +21,10 @@ local ContentImage = {}
 local selectedClassType
 Button_Close:addInputEvent("Mouse_LUp", "closeClothUI()")
 CheckButton_ShowHelmet:addInputEvent("Mouse_LUp", "ShowHelmet()")
-registerEvent("EventOpenClothUI", "openClothUI")
-registerEvent("EventCloseClothUI", "closeClothUI")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventOpenClothUI", "openClothUI")
+  registerEvent("EventCloseClothUI", "closeClothUI")
+end
 local function UpdateMarkPosition(index)
   if index ~= -1 then
     Static_SelectMark:SetShow(true)

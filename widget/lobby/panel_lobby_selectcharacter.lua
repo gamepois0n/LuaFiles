@@ -69,6 +69,7 @@ local configData = {
   _listCount = 9,
   _initList = 12,
   selectCaracterIdx = -1,
+  prevSelectedIdx = -1,
   isWaitLine = false,
   slotUiPool = {}
 }
@@ -851,7 +852,10 @@ local function CharacterList_Update(isChangeSpecialTab)
       slot._btn_Slot:SetText(characterName)
       slot._ChaLev:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. characterLevel)
       if configData.selectCaracterIdx == slotIdx then
-        CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter, isChangeSpecialTab)
+        if configData.prevSelectedIdx ~= configData.selectCaracterIdx then
+          CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter, isChangeSpecialTab)
+          configData.prevSelectedIdx = configData.selectCaracterIdx
+        end
         slot._btn_Slot:SetCheck(true)
       else
         slot._btn_Slot:SetCheck(false)
@@ -1087,6 +1091,7 @@ function CharacterSelect_ChangeCharacterPosition(index, isUp)
   end
   ToClient_ChangeCharacterListOrder(index, isUp)
   ToClient_SaveClientCacheData()
+  configData.prevSelectedIdx = -1
   CharacterList_Update(false)
 end
 function CharacterSelect_SelectEnterToGame()
@@ -1119,6 +1124,7 @@ function CharacterSelect_Open(characterIndex)
     configData.selectCaracterIdx = characterIndex
   end
   CharacterCustomization_Close()
+  configData.prevSelectedIdx = -1
   configData._startIndex = 0
   SelectCharacter.btn_ChangeLocate:SetCheck(false)
   CharacterList_Update(false)
@@ -1392,6 +1398,7 @@ function RadioButton_Click(radioIndex)
     end
   end
   configData.selectCaracterIdx = 0
+  configData.prevSelectedIdx = -1
   configData._startIndex = 0
   SelectCharacter._scroll:SetControlPos(0)
   SelectCharacter.static_CharacterInfoBG:SetShow(false)

@@ -107,14 +107,16 @@ Button_SliderArr[5]:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
 Button_All_Reset:addInputEvent("Mouse_LUp", "clearGroupCustomizedBonInfoLua()")
 Button_Part_Reset:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
 CheckButton_ControlPart:addInputEvent("Mouse_LUp", "ToggleShowHairBoneControlPart()")
-registerEvent("EventOpenHairShapeUi", "OpenHairShapeUi")
-registerEvent("EventCloseHairShapeUi", "CloseHairShapeUi")
-registerEvent("EventOpenHairShapeUiWithoutBoneControl", "OpenHairShapeUiWithoutBoneControl")
-registerEvent("EventCloseHairShapeUiWithoutBoneControl", "CloseHairShapeUiWithoutBoneControl")
-registerEvent("EventPickingHairBone", "PickingHairBone")
-registerEvent("EventAdjustHairBoneTranslation", "AdjustHairBoneTranslation")
-registerEvent("EventAdjustHairBoneRotation", "AdjustHairBoneRotation")
-registerEvent("EventEnableHairSlide", "EnableHairSlide")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventOpenHairShapeUi", "OpenHairShapeUi")
+  registerEvent("EventCloseHairShapeUi", "CloseHairShapeUi")
+  registerEvent("EventOpenHairShapeUiWithoutBoneControl", "OpenHairShapeUiWithoutBoneControl")
+  registerEvent("EventCloseHairShapeUiWithoutBoneControl", "CloseHairShapeUiWithoutBoneControl")
+  registerEvent("EventPickingHairBone", "PickingHairBone")
+  registerEvent("EventAdjustHairBoneTranslation", "AdjustHairBoneTranslation")
+  registerEvent("EventAdjustHairBoneRotation", "AdjustHairBoneRotation")
+  registerEvent("EventEnableHairSlide", "EnableHairSlide")
+end
 local transMin, transMax, currentTranslation, rotMin, rotMax, currentRotation
 local paramType = {}
 local paramIndex = {}

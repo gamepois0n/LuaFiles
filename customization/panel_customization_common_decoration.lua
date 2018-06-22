@@ -57,15 +57,17 @@ local sliderParamMax = {}
 local sliderParamDefault = {}
 CheckTextArr[1]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYELEFT"))
 CheckTextArr[2]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYERIGHT"))
-registerEvent("EventOpenCommonDecorationUi", "OpenCommonDecorationUi")
-registerEvent("EventCloseCommonDecorationUi", "CloseCommonDecorationUi")
-registerEvent("EventOpenEyeDecorationUi", "OpenEyeDecorationUi")
-registerEvent("EventCloseEyeDecorationUi", "CloseEyeDecorationUi")
-registerEvent("EventOpenTattooDecorationUi", "OpenTattooDecorationUi")
-registerEvent("EventCloseTattooDecorationUi", "CloseTattooDecorationUi")
-registerEvent("EventEnableDecorationSlide", "EnableDecorationSlide")
-registerEvent("EventOpenCommonExpressionUi", "OpenCommonExpressionUi")
-registerEvent("EventCloseCommonExpressionUi", "CloseCommonExpressionUi")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventOpenCommonDecorationUi", "OpenCommonDecorationUi")
+  registerEvent("EventCloseCommonDecorationUi", "CloseCommonDecorationUi")
+  registerEvent("EventOpenEyeDecorationUi", "OpenEyeDecorationUi")
+  registerEvent("EventCloseEyeDecorationUi", "CloseEyeDecorationUi")
+  registerEvent("EventOpenTattooDecorationUi", "OpenTattooDecorationUi")
+  registerEvent("EventCloseTattooDecorationUi", "CloseTattooDecorationUi")
+  registerEvent("EventEnableDecorationSlide", "EnableDecorationSlide")
+  registerEvent("EventOpenCommonExpressionUi", "OpenCommonExpressionUi")
+  registerEvent("EventCloseCommonExpressionUi", "CloseCommonExpressionUi")
+end
 local selectedClassType, selectedUiId, selectedListParamType, selectedListParamIndex, selectedItemIndex
 local ContentImage = {}
 local PayMark = {}

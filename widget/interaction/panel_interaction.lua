@@ -292,6 +292,15 @@ function Interaction_Show(actor)
   if ToClient_isXBox() and actor:get():isHouseHold() then
     return
   end
+  if true == ToClient_isXBox() then
+    for ii = 0, #interactionTargetUIList do
+      local isShow = actor:isSetInteracatbleFrag(ii)
+      if isShow and (ii == CppEnums.InteractionType.InteractionType_OpenDoor or ii == CppEnums.InteractionType.InteractionType_Observer or ii == CppEnums.InteractionType.InteractionType_PvPBattle or ii == CppEnums.InteractionType.InteractionType_RankerHouseList) then
+        Panel_Interaction:SetShow(false)
+        return
+      end
+    end
+  end
   local houseShow = false
   if actor:get():isHouseHold() then
     local houseHoldActor = getHouseHoldActor(actor:getActorKey())
@@ -364,14 +373,24 @@ function Interaction_Show(actor)
         if CppEnums.InteractionType.InteractionType_InvitedParty == ii or CppEnums.InteractionType.InteractionType_GuildInvite == ii or CppEnums.InteractionType.InteractionType_ExchangeItem == ii then
           interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii])
         elseif CppEnums.InteractionType.InteractionType_Talk == ii and actor:getCharacterStaticStatusWrapper():get():isSummonedCharacterBySiegeObject() then
-          interactionTargetUIList[ii]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_USE") .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey(CppEnums.ActionInputType.ActionInputType_Interaction) .. ")<PAOldColor>")
+          if true == _ContentsGroup_RenewUI then
+            interactionTargetUIList[ii]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_USE"))
+          else
+            interactionTargetUIList[ii]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_USE") .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey(CppEnums.ActionInputType.ActionInputType_Interaction) .. ")<PAOldColor>")
+          end
+        elseif true == _ContentsGroup_RenewUI then
+          interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii])
         else
           interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey(CppEnums.ActionInputType.ActionInputType_Interaction) .. ")<PAOldColor>")
         end
         interactionTargetUIList[ii]:SetFontColor(UI_Color.C_FFEFEFEF)
       else
         local _string = Interaction_ChangeString(SHOW_BUTTON_COUNT)
-        interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. _string .. ")<PAOldColor>")
+        if true == _ContentsGroup_RenewUI then
+          interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii])
+        else
+          interactionTargetUIList[ii]:SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. _string .. ")<PAOldColor>")
+        end
         interactionTargetUIList[ii]:SetFontColor(UI_Color.C_FF999999)
       end
       linkButtonAction[SHOW_BUTTON_COUNT] = ii
@@ -742,7 +761,7 @@ function Interaction_UpdateDesc(indteractionType)
       _globalGuide:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_INTERACTION_XBOXGUIDE"))
     else
       _globalGuide:SetSize(250, 23)
-      _globalGuide:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_INTERACTION_XBOXGUIDE2"))
+      _globalGuide:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_INTERACTION_XBOXGUIDE"))
     end
   end
 end
@@ -1063,7 +1082,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
       return keycode
     end
   elseif keyCustom_IsUp_Action(CppEnums.ActionInputType.ActionInputType_Interaction) then
-    if currentInteractionKeyPressedTime < 0.5 and __eConsoleState_GameModeWeaponOut ~= ToClient_GetConsoleState() and SHOW_BUTTON_COUNT > 1 then
+    if currentInteractionKeyPressedTime < 0.5 and SHOW_BUTTON_COUNT > 1 then
       _isInteractionRolling = true
     end
     currentInteractionKeyPressedTime = 0
@@ -1126,14 +1145,12 @@ function FGlobal_Interaction_RollingAnimation(deltaTime)
     BUTTON_OFFSET_Y = 35
     CIRCLE_RADIUS = 50
   end
-  _PA_LOG("\236\162\133\237\152\132", "kk")
   local div = 1 / SHOW_BUTTON_COUNT
   local btnIdx = -currentInteractionSelectIndex % SHOW_BUTTON_COUNT
   for ii = 0, #interactionTargetUIList do
     local isShow = actor:isSetInteracatbleFrag(ii)
     if isShow then
       local ANGLE_OFFSET = math.pi * (2 * btnIdx / SHOW_BUTTON_COUNT - 0.5)
-      _PA_LOG("\236\162\133\237\152\132", tostring(ii) .. " : " .. tostring(ANGLE_OFFSET) .. " , " .. tostring(btnIdx) .. " , " .. tostring(SHOW_BUTTON_COUNT))
       local buttonPosX = BUTTON_OFFSET_X + CIRCLE_RADIUS * math.cos(math.pi * 2 * div * -(_roleCheckTimeAcc / _rollingTime) + ANGLE_OFFSET)
       local buttonPosY = BUTTON_OFFSET_Y + CIRCLE_RADIUS * math.sin(math.pi * 2 * div * -(_roleCheckTimeAcc / _rollingTime) + ANGLE_OFFSET)
       interactionTargetUIList[ii]:SetPosX(buttonPosX)
@@ -1197,7 +1214,6 @@ function FGlobal_Interaction_IncreaseSelectIndex()
 end
 function FGlobal_Interaction_ClearSelectIndex()
   currentInteractionSelectIndex = 0
-  currentInteractionKeyPressedTime = 0
   xboxInteractionAvailable = false
 end
 function FGlobal_Interaction_UpdatePressedInteractionKey(time)

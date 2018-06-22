@@ -81,22 +81,31 @@ function IngameCustomize_Hide()
   end
   gameExitPhoto = false
   characterInfoPhoto = false
-  faceHairCustomUpdate(false)
+  if false == _ContentsGroup_RenewUI_Customization then
+    faceHairCustomUpdate(false)
+  end
 end
 function HandleClicked_CloseIngameCustomization()
-  CloseCharacterCustomization()
-  getCustomizingManager():hide()
-  renderMode:reset()
-  SetUIMode(Defines.UIMode.eUIMode_Default)
-  Panel_CustomizationMessage:SetShow(false)
-  Panel_CustomizationStatic:SetShow(false)
-  Panel_Chat0:SetShow(true)
-  Panel_Cash_Customization:SetShow(false)
-  CashCumaBuy_Close()
-  allClearMessageData()
-  CustomizingAlbum_Close()
-  closeExplorer()
-  Panel_CustomizationVoice:SetShow(false)
+  if false == _ContentsGroup_RenewUI_Customization then
+    CloseCharacterCustomization()
+    getCustomizingManager():hide()
+    renderMode:reset()
+    SetUIMode(Defines.UIMode.eUIMode_Default)
+    Panel_CustomizationMessage:SetShow(false)
+    Panel_CustomizationStatic:SetShow(false)
+    Panel_Chat0:SetShow(true)
+    Panel_Cash_Customization:SetShow(false)
+    CashCumaBuy_Close()
+    allClearMessageData()
+    CustomizingAlbum_Close()
+    closeExplorer()
+    Panel_CustomizationVoice:SetShow(false)
+  else
+    getCustomizingManager():hide()
+    renderMode:reset()
+    SetUIMode(Defines.UIMode.eUIMode_Default)
+    PaGlobalFunc_Customization_Close()
+  end
 end
 function IsGameExitPhoto(isCheck)
   gameExitPhoto = isCheck

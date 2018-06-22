@@ -1313,6 +1313,7 @@ function FGlobal_WorldMapOpenForMain()
     FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
   end
   FGlobal_WorldmapMain_InitTutorialButton()
+  FGlobal_Hide_Tooltip_Work(nil, true)
 end
 function FGlobal_WorldmapGrand_Main_UpdateExplorePoint()
   worldmapGrand:UpdateExplorePoint()

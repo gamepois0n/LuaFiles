@@ -726,6 +726,7 @@ function FromClient_resetTownMode()
     WorldMapArrowEffectEraseClear()
     FGlobal_FilterEffectClear()
     FGlobal_GrandWorldMap_SearchToWorldMapMode()
+    FGlobal_Hide_Tooltip_Work(nil, true)
   end
 end
 function FGlobal_OpenNodeStable()

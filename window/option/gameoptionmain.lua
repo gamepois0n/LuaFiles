@@ -113,6 +113,13 @@ function PaGlobal_Option:CreateEventControl(category, detail)
     end
     self:SpecialCreateRadioButton(elementName)
   end
+  if _ContentsGroup_isConsolePadControl then
+    local bg = UI.getChildControlNoneAssert(frame._uiFrameContent, "StaticText_OptionDescBg_Import")
+    local checkbutton_On = UI.getChildControlNoneAssert(bg, "CheckButton_On")
+    local checkbutton_Off = UI.getChildControlNoneAssert(bg, "CheckButton_Off")
+    checkbutton_On:SetShow(false)
+    checkbutton_Off:SetShow(false)
+  end
   for frameIndex = 0, FRAME_CHILD_MAX do
     local bg = UI.getChildControlNoneAssert(frame._uiFrameContent, "StaticText_BgOrder" .. frameIndex .. "_Import")
     if nil == bg then

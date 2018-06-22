@@ -10,18 +10,30 @@ local UI_color = Defines.Color
 local _collectText = UI.getChildControl(Panel_Collect_Bar, "StaticText_CollectingNow")
 local checkBtn_DrawWater = UI.getChildControl(Panel_Collect_Bar, "CheckButton_DrawWater")
 checkBtn_DrawWater:addInputEvent("Mouse_LUp", "DrawWater_Check()")
+if true == ToClient_isXBox() then
+  checkBtn_DrawWater:SetShow(false)
+end
 function DrawWater_Check()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local isCheck = checkBtn_DrawWater:IsCheck()
+  if true == ToClient_isXBox() then
+    isCheck = false
+  end
   temporaryWrapper:setRepeatCollect(isCheck)
   Global_UpdateDrawWaterRepeat()
 end
 function Global_SetShowDrawWaterRepeat(isShow)
+  if true == ToClient_isXBox() then
+    isShow = false
+  end
   checkBtn_DrawWater:SetShow(isShow)
 end
 function Global_UpdateDrawWaterRepeat()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local isCheck = temporaryWrapper:getRepeatCollect()
+  if true == ToClient_isXBox() then
+    isCheck = false
+  end
   checkBtn_DrawWater:SetCheck(isCheck)
 end
 Panel_Collect_Bar:SetShow(false, false)

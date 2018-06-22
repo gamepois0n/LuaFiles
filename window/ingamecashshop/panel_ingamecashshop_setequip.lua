@@ -449,8 +449,10 @@ end
 CashShopSetEquip:Initialize()
 CashShopSetEquip:registEventHandler()
 Panel_IngameCashShop_Controller:SetShow(false)
-Panel_CustomizationMessage:SetShow(false, false)
-Panel_CustomizationMessage:SetIgnore(true)
+if false == _ContentsGroup_RenewUI_Customization then
+  Panel_CustomizationMessage:SetShow(false, false)
+  Panel_CustomizationMessage:SetIgnore(true)
+end
 local CashShopController = {
   GameTime_Slider = UI.getChildControl(Panel_IngameCashShop_Controller, "Slider_GameTime"),
   BTN_Light = UI.getChildControl(Panel_IngameCashShop_Controller, "CheckButton_Light"),

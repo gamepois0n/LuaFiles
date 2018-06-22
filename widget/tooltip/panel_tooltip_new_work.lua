@@ -237,7 +237,7 @@ local UpdatePosition_Tooltip = function(uiBase)
   Panel_Tooltip_Work:SetPosX(posX)
   Panel_Tooltip_Work:SetPosY(posY)
 end
-local function Insert_Tooltip_Work_Data(esSSW, isToolTip, controlIndex, nodeInfo, nodeType)
+local function Insert_Tooltip_Work_Data(esSSW, isToolTip, controlIndex, nodeInfo, nodeType, isGuildManufactureSelect)
   local self
   if true == isToolTip then
     self = control_Tooltip
@@ -322,7 +322,27 @@ local function Insert_Tooltip_Work_Data(esSSW, isToolTip, controlIndex, nodeInfo
     local workTime = math.ceil(workVolume / defaultWorkSpeed) * defaultWorkTime
     self._WorkVolume_Value:SetText("( " .. workVolume .. " )")
     self._WorkVolume_Guide:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TOOLTIP_WORK_TIME_0", "default_WorkSpeed", defaultWorkSpeed, "work_time", workTime))
-    default_PosY_Size._AdjustPosY_SubPanel_3 = self._WorkVolume_Guide:GetSizeY() - default_PosY_Size._WorkVolume_Guide_SizeY
+    if false == _ContentsGroup_GuildManufacture then
+      default_PosY_Size._AdjustPosY_SubPanel_3 = self._WorkVolume_Guide:GetSizeY() - default_PosY_Size._WorkVolume_Guide_SizeY
+    elseif true == esSSW:isGuildManufactureItem() then
+      default_PosY_Size._AdjustPosY_SubPanel_3 = self._Resource_Name[eSSCount - 1]:GetSizeY() - default_PosY_Size._Resource_BG_SizeY
+      self._WorkVolume_BG:SetShow(false)
+      self._WorkVolume_Title:SetShow(false)
+      self._WorkVolume_Value:SetShow(false)
+      self._WorkVolume_Guide:SetShow(false)
+    else
+      default_PosY_Size._AdjustPosY_SubPanel_3 = self._WorkVolume_Guide:GetSizeY() - default_PosY_Size._WorkVolume_Guide_SizeY
+      self._WorkVolume_BG:SetShow(true)
+      self._WorkVolume_Title:SetShow(true)
+      self._WorkVolume_Value:SetShow(true)
+      self._WorkVolume_Guide:SetShow(true)
+    end
+    if true == isGuildManufactureSelect then
+      self._Guide:SetShow(false)
+      default_PosY_Size._AdjustPosY_SubPanel_3 = default_PosY_Size._AdjustPosY_SubPanel_3 - self._Guide:GetSizeY()
+    else
+      self._Guide:SetShow(true)
+    end
     if true == isToolTip then
     end
   end
@@ -338,9 +358,9 @@ function FGlobal_Hide_Tooltip_Work(esSSW, isReset)
   defalut_Param.esSS = nil
   Panel_Tooltip_Work:SetShow(false)
 end
-function FGlobal_Show_Tooltip_Work(esSSW, uiBase, nodeInfo, nodeType)
+function FGlobal_Show_Tooltip_Work(esSSW, uiBase, nodeInfo, nodeType, isGuildManufactureSelect)
   audioPostEvent_SystemUi(1, 13)
-  Insert_Tooltip_Work_Data(esSSW, true, -1, nodeInfo, nodeType)
+  Insert_Tooltip_Work_Data(esSSW, true, -1, nodeInfo, nodeType, isGuildManufactureSelect)
   Set_Control_SizePoS(-1, true)
   UpdatePosition_Tooltip(uiBase)
   Panel_Tooltip_Work:SetShow(true)

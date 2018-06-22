@@ -1957,10 +1957,31 @@ CppEnums.InGameCashShopPreviewType = {
   Others = 4,
   Count = 5
 }
+CppEnums.PetSkillType = {
+  Looting = 1,
+  AlertCollect = 2,
+  AlertMurderer = 3,
+  DetectPosition = 4,
+  Aggro = 5,
+  FindNamedMonster = 6,
+  ReduceAutoFishingTime = 7,
+  RegistForRegionSkill = 8,
+  Collecting = 9,
+  CollectingBoost = 10,
+  UsePortion = 11,
+  Count = 12
+}
+CppEnums.PetLootingType = {
+  Precision = 0,
+  Normal = 1,
+  Celerity = 2,
+  Count = 3
+}
 CppEnums.MiniGame = {
   eMiniGameTutorial = 2,
   eMiniGameHerbMachine = 3,
   eMiniGameBuoy = 4,
+  eMiniSummerHammer = 5,
   eMiniGameBuyHouse = 1000,
   eMiniGameInvestPlant = 1001,
   eMiniGamePowerControl = 1003,

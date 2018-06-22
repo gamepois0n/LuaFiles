@@ -192,7 +192,8 @@ local PaGlobal_PanelList = {
   Panel_Icon_CharacterTag,
   Panel_Icon_Maid,
   Panel_Window_FairyIcon,
-  Panel_SkillCommand
+  Panel_SkillCommand,
+  Panel_CheckedQuest
 }
 function FromClient_luaLoadComplete_ConsoleConfig()
   if not ToClient_isXBox() then

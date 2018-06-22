@@ -6,9 +6,11 @@ local CheckButton_UseFaceCustomizationHair = UI.getChildControl(Panel_Customizat
 local StaticText_UseFaceCustomizationHair = UI.getChildControl(Panel_CustomizationFrame, "StaticText_UseFaceCustomizationHair")
 StaticText_UseFaceCustomizationHair:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONFRAME_USEFACECUSTOMIZATIONHAIR"))
 Button_Close:addInputEvent("Mouse_LUp", "CloseFrame()")
-registerEvent("EventCloseFrame", "CloseFrame")
-registerEvent("EventOpenCustomizationUiGroupFrame", "OpenCustomizationUiGroupFrame")
-registerEvent("EventCloseCustomizationUiGroupFrame", "CloseCustomizationUiGroupFrame")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventCloseFrame", "CloseFrame")
+  registerEvent("EventOpenCustomizationUiGroupFrame", "OpenCustomizationUiGroupFrame")
+  registerEvent("EventCloseCustomizationUiGroupFrame", "CloseCustomizationUiGroupFrame")
+end
 CheckButton_UseFaceCustomizationHair:addInputEvent("Mouse_LUp", "CheckFaceCustomizationHair()")
 CheckButton_UseFaceCustomizationHair:SetCheck(false)
 g_selectedPart = 0
@@ -148,6 +150,9 @@ function CheckFaceCustomizationHair()
   setUseFaceCustomizationHair(CheckButton_UseFaceCustomizationHair:IsCheck())
 end
 function OpenCustomizationUiGroupFrame(classType, uiGroupIndex)
+  if true == _ContentsGroup_RenewUI_Customization then
+    return
+  end
   ClearFocusEdit()
   clearGroupFrame()
   if uiGroupIndex == 1 then

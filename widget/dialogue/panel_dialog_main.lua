@@ -2283,7 +2283,11 @@ function HandleClickedFuncButton(index)
   Panel_Exchange_Item_Hide()
   Panel_Window_ReinforceSkill_Close()
   Panel_SkillReinforce_Close()
-  FGlobal_NpcGift_Close()
+  if true == _ContentsGroup_RenewUI_Gift then
+    PaGlobalFunc_NpcGift_Close()
+  else
+    FGlobal_NpcGift_Close()
+  end
   PaGlobal_Purification_Close()
   if Panel_Window_Enchant:GetShow() then
     PaGlobal_Enchant:enchantClose()

@@ -52,12 +52,14 @@ Button_Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
 Button_All_Reset:addInputEvent("Mouse_LUp", "clearGroupCustomizedBonInfoLua()")
 Button_Part_Reset:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
 CheckButton_ControlPart:addInputEvent("Mouse_LUp", "ToggleShowBodyBoneControlPart()")
-registerEvent("EventShowBodyBoneEditor", "ShowBodyBoneEditor")
-registerEvent("EventPickingBodyBone", "PickingBodyBone")
-registerEvent("EventAdjustBodyBoneScale", "AdjustBodyBoneScale")
-registerEvent("EventOpenBodyShapeUi", "OpenBodyShapeUi")
-registerEvent("EventCloseBodyShapeUi", "CloseBodyShapeUi")
-registerEvent("EventEnableBodySlide", "EnableBodySlide")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventShowBodyBoneEditor", "ShowBodyBoneEditor")
+  registerEvent("EventPickingBodyBone", "PickingBodyBone")
+  registerEvent("EventAdjustBodyBoneScale", "AdjustBodyBoneScale")
+  registerEvent("EventOpenBodyShapeUi", "OpenBodyShapeUi")
+  registerEvent("EventCloseBodyShapeUi", "CloseBodyShapeUi")
+  registerEvent("EventEnableBodySlide", "EnableBodySlide")
+end
 local scaleMin, scaleMax, currentScale, selectedClassType
 local SculptingUIRect = {
   left,

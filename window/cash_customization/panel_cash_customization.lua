@@ -261,6 +261,9 @@ function CashCumaBuy:Update(applyType)
     end
     CashCustomizationDataCount = #CashCustomizationData + 1
   end
+  if true == _ContentsGroup_RenewUI_Customization then
+    CashCustomizationDataCount = CashCustomizationDataCount - 1
+  end
   if applyType == "inven" then
     self.staticText_notify:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CASH_CUSTOMIZATION_STATICTEXT_NOTIFY1"))
   else
@@ -424,7 +427,9 @@ function CashCustomization_Open()
   local myInvenMoney = getSelfPlayer():get():getCashInventory():getMoney_s64()
   self.PearlValue:SetText(makeDotMoney(myInvenMoney))
   UIAni.AlphaAnimation(1, Panel_Cash_Customization, 0, 0.2)
-  historyTableRePosY(true)
+  if false == _ContentsGroup_RenewUI_Customization then
+    historyTableRePosY(true)
+  end
 end
 function CashCumaBuy_Open(applyType)
   local self = CashCumaBuy

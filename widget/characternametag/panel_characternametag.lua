@@ -1139,6 +1139,9 @@ function ShowUseTab_Func()
   else
     useTab:SetShow(false)
   end
+  if true == ToClient_isXBox() then
+    useTab:SetShow(false)
+  end
 end
 function HideUseTab_Func()
   local targetPanel = getSelfPlayer():get():getUIPanel()

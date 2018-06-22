@@ -210,6 +210,7 @@ local function SelectCharacter_Init()
   SelectCharacter.keyGuide:SetPosX(getScreenSizeX() - SelectCharacter.static_PenelBG:GetSizeX() - SelectCharacter.keyGuide:GetSizeX() - 15)
   SelectCharacter.keyGuide:SetPosY(getScreenSizeY() - SelectCharacter.keyGuide:GetSizeY() - 5)
   SelectCharacter.keyGuide:SetShow(false)
+  PaGlobal_CheckGamerTag()
 end
 function Panel_Lobby_SelectCharacter_EnableSelectButton(enableValue)
   for slotIdx = 0, configData._listCount - 1 do
@@ -852,7 +853,7 @@ function CharacterSelect_selected(index)
   CharacterList_Update(false)
 end
 function CharacterSelect_PlayGame(index)
-  if ToClient_isXBox() and not ToClient_IsDevelopment() then
+  if ToClient_isDataDownloadStart() then
     local isComplete = ToClient_isDataDownloadComplete()
     local percent = ToClient_getDataDownloadProgress()
     if false == isComplete then

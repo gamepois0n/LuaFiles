@@ -70,3 +70,8 @@ function FGlobal_MiniGame_RequestEditingHouse(param)
     request_clearMiniGame(CppEnums.MiniGame.eMiniGameEditingHouse, param)
   end
 end
+function FGlobal_MiniGame_SummerHammerGame()
+  if questList_hasProgressMiniGame(CppEnums.MiniGame.eMiniSummerHammer, CppEnums.MiniGameParam.eMiniGameParamDefault) then
+    request_clearMiniGame(CppEnums.MiniGame.eMiniSummerHammer, CppEnums.MiniGameParam.eMiniGameParamDefault)
+  end
+end

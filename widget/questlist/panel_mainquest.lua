@@ -157,7 +157,11 @@ function PaGlobal_MainQuest:setQuestTitleInfo(uiQuestInfo)
   self._uiQuestTitle:SetShow(true)
   self._uiQuestTitle:SetIgnore(true)
   self._uiQuestTitle:SetFontColor(UI_color.C_FFEFEFEF)
-  self._uiQuestTitle:useGlowFont(true, "BaseFont_8_Glow", 4287655978)
+  if _ContentsGroup_RenewUI then
+    self._uiQuestTitle:useGlowFont(true, "BaseFont_12_Glow", 4287655978)
+  else
+    self._uiQuestTitle:useGlowFont(true, "BaseFont_8_Glow", 4287655978)
+  end
   local questNo = uiQuestInfo:getQuestNo()
   local questStaticStatus = questList_getQuestStatic(questNo._group, questNo._quest)
   local checkCondition
@@ -216,10 +220,18 @@ function PaGlobal_MainQuest:setConditionInfo(uiQuestInfo, startPosY)
   end
   local uiQuestCondition
   if not uiQuestInfo._isCleared and not uiQuestInfo._isProgressing then
-    self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_MAINQUEST_ACCEPT_NOTICE"))
+    if true == ToClient_isXBox() then
+      self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "GAME_QUEST_BASIC_DIALOGUE_1"))
+    else
+      self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_MAINQUEST_ACCEPT_NOTICE"))
+    end
     self._uiQuestCompleteNpc:SetFontColor(Defines.Color.C_FFC4BEBE)
     self._uiQuestCompleteNpc:SetShow(true)
-    startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 2
+    if _ContentsGroup_RenewUI then
+      startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 10
+    else
+      startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 2
+    end
   elseif 1 == checkCondition then
     for conditionIndex = 0, uiQuestInfo:getDemandCount() - 1 do
       local conditionInfo = uiQuestInfo:getDemandAt(conditionIndex)
@@ -247,7 +259,11 @@ function PaGlobal_MainQuest:setConditionInfo(uiQuestInfo, startPosY)
       end
       uiQuestCondition:SetShow(true)
       uiQuestCondition:SetIgnore(true)
-      startPosY = startPosY + uiQuestCondition:GetSizeY() + 2
+      if _ContentsGroup_RenewUI then
+        startPosY = startPosY + uiQuestCondition:GetSizeY() + 10
+      else
+        startPosY = startPosY + uiQuestCondition:GetSizeY() + 2
+      end
     end
   elseif 0 == checkCondition then
     if 0 == uiQuestInfo:getQuestType() then
@@ -255,11 +271,19 @@ function PaGlobal_MainQuest:setConditionInfo(uiQuestInfo, startPosY)
     elseif 0 < uiQuestInfo:getQuestType() then
       self._uiQuestTypeIcon:AddEffect("UI_Quest_Complete_GreenAura", true, 130, 0)
     end
-    self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_QUESTCOMPLETENPC"))
+    if true == ToClient_isXBox() then
+      self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "GAME_QUEST_BASIC_DIALOGUE_2"))
+    else
+      self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_QUESTCOMPLETENPC"))
+    end
     self._uiQuestCompleteNpc:SetFontColor(Defines.Color.C_FFF26A6A)
     self._uiQuestCompleteNpc:SetShow(true)
     FGlobal_ChangeOnTextureForDialogQuestIcon(self._uiQuestTypeIcon, 8)
-    startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 2
+    if _ContentsGroup_RenewUI then
+      startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 10
+    else
+      startPosY = startPosY + self._uiQuestCompleteNpc:GetSizeY() + 2
+    end
     FGlobal_QuestWidget_AutoReleaseNavi(uiQuestInfo)
   end
   Panel_MainQuest:SetSize(Panel_MainQuest:GetSizeX(), startPosY + 10)

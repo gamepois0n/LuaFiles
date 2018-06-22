@@ -40,6 +40,19 @@ function FromClient_CancelByAttacked()
   if Panel_Window_MonsterRanking:GetShow() then
     FGlobal_MonsterRanking_Close()
   end
+  if Panel_Window_MonsterRanking:GetShow() then
+    FGlobal_MonsterRanking_Close()
+  end
+  if true == _ContentsGroup_isConsoleTest and PaGlobal_QuickMenuSetting_GetShow() then
+    Panel_QuickMenuCustom:SetShow(false)
+    Panel_QuickMenuCustom_RightRing:SetShow(false)
+  end
+  if true == _ContentsGroup_RenewUI_VoiceChat and true == PaGlobalFunc_VoiceChat_GetShow() then
+    PaGlobalFunc_VoiceChat_Close()
+  end
+  if true == _ContentsGroup_RenewUI_Guild and true == PaGlobalFunc_Guild_GetShow() then
+    PaGlobalFunc_Guild_Close()
+  end
   if isPhotoMode() then
     audioPostEvent_SystemUi(8, 14)
   end

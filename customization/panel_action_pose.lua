@@ -62,8 +62,10 @@ local MotionTable = {
   [38] = combat,
   [39] = combat
 }
-registerEvent("EventOpenMotionUI", "openMotionUi")
-registerEvent("EventCloseMotionUI", "closeMotionUi")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventOpenMotionUI", "openMotionUi")
+  registerEvent("EventCloseMotionUI", "closeMotionUi")
+end
 local function UpdateMarkPosition(index)
   if index ~= -1 then
     Static_SelectMark:SetShow(true)

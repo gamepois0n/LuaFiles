@@ -45,6 +45,9 @@ function CloseSelectMeshUi()
   globalcurrentuiId = -2
 end
 function OpenSelectMeshUi(classType, uiId)
+  if true == _ContentsGroup_RenewUI_Customization then
+    return
+  end
   clearMeshUI()
   paramValueList = {}
   globalcurrentclassType = classType

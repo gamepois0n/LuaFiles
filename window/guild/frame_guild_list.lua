@@ -2016,6 +2016,10 @@ end
 function HandleClicked_GuildListWelfare_Request()
   ToClient_RequestGuildWelfare()
 end
-function FromClient_ChangedSiegeGrade()
+function FromClient_ChangedSiegeGrade(isNotify, userName, grade)
+  if true == isNotify then
+    local str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_SETTING_TOOLTIP", "userName", userName, "grade", tostring(6 - grade))
+    Proc_ShowMessage_Ack(str)
+  end
   GuildListInfoPage:UpdateData()
 end

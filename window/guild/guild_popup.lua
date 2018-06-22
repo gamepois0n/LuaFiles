@@ -11,6 +11,7 @@ local CreateClan = {
   selectedClan = UI.getChildControl(Panel_CreateClan, "RadioButton_Clan"),
   selectedGuild = UI.getChildControl(Panel_CreateClan, "RadioButton_Guild"),
   create = UI.getChildControl(Panel_CreateClan, "Button_Confirm"),
+  createConsole = UI.getChildControl(Panel_CreateClan, "StaticText_Create_ConsoleUI"),
   createDescBG = UI.getChildControl(Panel_CreateClan, "Static_CreateClanDescBG"),
   guideMainBaseBG = UI.getChildControl(Panel_CreateClan, "Static_BaseBG"),
   guideMainBG = UI.getChildControl(Panel_CreateClan, "Static_SelectedTypeDescBG"),
@@ -59,6 +60,7 @@ function GuildCreateManager:initialize()
   end
 end
 function CreateClan:initialize()
+  self.createConsole:SetShow(false)
   self.guideDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.guideTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
   self.guideDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
@@ -85,6 +87,7 @@ function CreateClan:initialize()
     self.selectedGuild:addInputEvent("Mouse_On", "selectclaned2()")
     self.guideTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
     self.guideDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+    self.createConsole:SetShow(true)
   end
 end
 function FGlobal_CehckedGuildEditUI(uiEdit)

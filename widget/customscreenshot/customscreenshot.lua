@@ -62,7 +62,11 @@ function FromClient_OpenExplorer_CustomizingCharacter(title, defaultName, paramL
   if 1 ~= paramCount or "" ~= title then
     return
   end
-  ToClient_UploadWebCustomizingCharacter(false == Panel_CustomizationMain:GetShow(), subNameStringBDC)
+  if false == _ContentsGroup_RenewUI_Customization then
+    ToClient_UploadWebCustomizingCharacter(false == Panel_CustomizationMain:GetShow(), subNameStringBDC)
+  else
+    ToClient_UploadWebCustomizingCharacter(false == PaGlobalFunc_Customization_GetShow(), subNameStringBDC)
+  end
 end
 function FromClient_OpenExplorer_CustomSizeScreenShot(title, defaultName, paramList)
   local paramCount = 0

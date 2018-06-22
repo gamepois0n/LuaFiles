@@ -158,7 +158,8 @@ local panel_WindowList = {
   Panel_Window_GameExit_CharMove,
   Panel_Window_CharacterInfo_Renew,
   Panel_Dialog_SkillSpecialize,
-  Panel_Window_Knowledge_Renew
+  Panel_Window_Knowledge_Renew,
+  Panel_Guild_ManufactureSelect
 }
 local panel_SoundedWindowList = {
   Panel_Window_Inventory,
@@ -423,6 +424,9 @@ function close_WindowPanelList()
     elseif Panel_GuildDuel:GetShow() then
       FGlobal_GuildDuel_Close()
       return
+    elseif Panel_Guild_ManufactureSelect:GetShow() then
+      PaGlobal_Guild_ManufactureSelect:close()
+      return
     end
     audioPostEvent_SystemUi(1, 31)
     GuildManager:Hide()
@@ -490,7 +494,6 @@ function close_WindowPanelList()
     FGlobal_LifeRanking_Close()
   end
   if true == Panel_ButtonShortcuts:GetShow() then
-    _PA_LOG("\234\185\128\236\132\160\236\154\169", "force close")
     PaGlobal_ButtonShortcuts:Close()
     return
   end
@@ -678,6 +681,8 @@ function close_force_WindowPanelList()
       FGlobal_GuildIncentive_Close()
     elseif Panel_GuildDuel:GetShow() then
       FGlobal_GuildDuel_Close()
+    elseif Panel_Guild_ManufactureSelect:GetShow() then
+      PaGlobal_Guild_ManufactureSelect:close()
     end
     audioPostEvent_SystemUi(1, 31)
     GuildManager:Hide()

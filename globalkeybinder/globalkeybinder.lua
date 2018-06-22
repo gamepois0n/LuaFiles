@@ -636,39 +636,43 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Extraction(deltaTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCustomize(deltaTime)
-  if Panel_CustomizationMain:IsShow() and Panel_CustomizationMain:GetAlpha() == 1 and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
-    if Panel_CustomizingAlbum:GetShow() then
-      CustomizingAlbum_Close()
-    else
-      IngameCustomize_Hide()
-    end
-  end
-  if Panel_CustomizationStatic:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) and not Panel_FileExplorer:GetShow() and not Panel_CustomizingAlbum:GetShow() then
-    FGlobal_TakeScreenShotByHotKey()
-  end
-  if Panel_Widget_ScreenShotFrame:GetShow() then
-    if not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
-      local screenShotFrame_Close = function()
-        FGlobal_ScreenShotFrame_Close()
+  if false == _ContentsGroup_RenewUI_Customization then
+    if Panel_CustomizationMain:IsShow() and Panel_CustomizationMain:GetAlpha() == 1 and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+      if Panel_CustomizingAlbum:GetShow() then
+        CustomizingAlbum_Close()
+      else
+        IngameCustomize_Hide()
       end
-      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_CONTENT")
-      local messageBoxData = {
-        title = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_TITLE"),
-        content = messageBoxMemo,
-        functionYes = screenShotFrame_Close,
-        functionNo = MessageBox_Empty_function,
-        exitButton = true,
-        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-      }
-      MessageBox.showMessageBox(messageBoxData)
-      return
-    elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ADD) then
-      ScreenShotFrameSize_Increase()
-    elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SUBTRACT) then
-      ScreenShotFrameSize_Decrease()
-    elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
-      FGlobal_TakeAScreenShot()
     end
+    if Panel_CustomizationStatic:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) and not Panel_FileExplorer:GetShow() and not Panel_CustomizingAlbum:GetShow() then
+      FGlobal_TakeScreenShotByHotKey()
+    end
+    if Panel_Widget_ScreenShotFrame:GetShow() then
+      if not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+        local screenShotFrame_Close = function()
+          FGlobal_ScreenShotFrame_Close()
+        end
+        local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_CONTENT")
+        local messageBoxData = {
+          title = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_TITLE"),
+          content = messageBoxMemo,
+          functionYes = screenShotFrame_Close,
+          functionNo = MessageBox_Empty_function,
+          exitButton = true,
+          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+        }
+        MessageBox.showMessageBox(messageBoxData)
+        return
+      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ADD) then
+        ScreenShotFrameSize_Increase()
+      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SUBTRACT) then
+        ScreenShotFrameSize_Decrease()
+      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
+        FGlobal_TakeAScreenShot()
+      end
+    end
+  elseif true == PaGlobalFunc_Customization_GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+    PaGlobalFunc_Customization_Back()
   end
 end
 local prevPressControl
@@ -1198,6 +1202,10 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
   end
   if Panel_Purification:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     PuriManager:Close()
+    return true
+  end
+  if _ContentsGroup_RenewUI and Panel_Chatting_Input:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    ChatInput_Close()
     return true
   end
   return false

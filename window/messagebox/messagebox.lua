@@ -441,13 +441,23 @@ function Event_MessageBox_NotifyMessage(message)
   MessageBox.showMessageBox(messageboxData)
 end
 function Event_MessageBox_NotifyMessage_FreeButton(message)
-  local messageboxData = {
-    title = "",
-    content = message,
-    priority = UI_PP.PAUIMB_PRIORITY_1,
-    exitButton = false
-  }
-  MessageBox.showMessageBox(messageboxData)
+  if true == ToClient_isXBox() then
+    local messageboxData = {
+      title = "",
+      content = message,
+      priority = UI_PP.PAUIMB_PRIORITY_LOW,
+      exitButton = false
+    }
+    MessageBox.showMessageBox(messageboxData)
+  else
+    local messageboxData = {
+      title = "",
+      content = message,
+      priority = UI_PP.PAUIMB_PRIORITY_1,
+      exitButton = false
+    }
+    MessageBox.showMessageBox(messageboxData)
+  end
 end
 function Event_MessageBox_NotifyMessage_With_ClientMessage(message, gameMessageType)
   local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")

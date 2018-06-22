@@ -1,4 +1,4 @@
-Panel_Login:SetShow(true, false)
+Panel_Login:SetShow(false, false)
 Panel_Login:SetSize(getScreenSizeX(), getScreenSizeY())
 Panel_Login:SetShow(false, false)
 local _loginBG = UI.getChildControl(Panel_Login, "Static_LoginBG")

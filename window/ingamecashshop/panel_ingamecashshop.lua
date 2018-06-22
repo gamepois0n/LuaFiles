@@ -3124,10 +3124,15 @@ function InGameShop_Open()
   end
   FGlobal_HideWorkerTooltip()
   TooltipSimple_Hide()
+  FGlobal_Hide_Tooltip_Work(nil, true)
   self._openFunction = true
   self._static_Construction:ComputePos()
   self._static_Construction:SetShow(false)
-  Panel_IngameCashShop:SetShow(true)
+  if _ContentsGroup_RenewUI_PearlShop then
+    PaGlobalFunc_PearlShopCategoryOpen()
+  else
+    Panel_IngameCashShop:SetShow(true)
+  end
   InventoryWindow_Close()
   Panel_Tooltip_Item_hideTooltip()
   Panel_Tooltip_Item_chattingLinkedItemClick_hideTooltip()
@@ -3276,7 +3281,14 @@ function InGameShop_Close()
   self._openFunction = false
   self._openByEventAlarm = false
   ClearFocusEdit()
-  Panel_IngameCashShop:SetShow(false)
+  if _ContentsGroup_RenewUI_PearlShop then
+    PaGlobalFunc_PearlShopCategoryClose()
+    PaGlobalFunc_PearlShopClose()
+    PaGlobalFunc_PearlShopProductBuyClose()
+    PaGlobalFunc_PearlShopProductInfoClose()
+  else
+    Panel_IngameCashShop:SetShow(false)
+  end
   FGlobal_ClearCandidate()
   FGlobal_CashShop_GoodsTooltipInfo_Close()
   Panel_IngameCashShop_HowUsePearlShop_Close()

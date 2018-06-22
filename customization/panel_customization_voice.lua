@@ -26,7 +26,9 @@ playVoice_Ctrl:addInputEvent("Mouse_LUp", "playVoice()")
 UIScroll.InputEvent(frameScroll, "Voice_Scroll")
 static_Frame:addInputEvent("Mouse_UpScroll", "Voice_Scroll( true )")
 static_Frame:addInputEvent("Mouse_DownScroll", "Voice_Scroll( false )")
-registerEvent("EventCloseVoiceUI", "closeVoiceUI()")
+if false == _ContentsGroup_RenewUI_Customization then
+  registerEvent("EventCloseVoiceUI", "closeVoiceUI()")
+end
 local Const_UsebleMotionbyServiceArea = false
 local NoCashType = CppEnums.CustomizationNoCashType
 local NoCashMesh = CppEnums.CustomizationNoCashMesh

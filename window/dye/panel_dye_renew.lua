@@ -964,6 +964,7 @@ function FGlobal_Panel_Dye_ReNew_Open()
     return
   end
   Panel_Dye_ReNew:SetShow(true)
+  FGlobal_Hide_Tooltip_Work(nil, true)
 end
 function FGlobal_Panel_Dye_ReNew_Close()
   Panel_Dye_ReNew:SetShow(false)
@@ -1004,6 +1005,7 @@ function FGlobal_Panel_DyeReNew_Show()
   if Panel_DyePalette:GetShow() then
     FGlobal_DyePalette_Close()
   end
+  Panel_Tooltip_Item_hideTooltip()
   DyeReNew:Open()
   FGlobal_DyeNew_CharacterController_Open()
   Inventory_SetFunctor(FGlobal_Panel_DyeReNew_InventoryFilter, FGlobal_Panel_DyeReNew_Interaction_FromInventory, nil, nil)

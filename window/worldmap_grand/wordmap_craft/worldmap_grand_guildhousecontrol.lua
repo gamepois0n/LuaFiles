@@ -402,7 +402,9 @@ function HouseUseTypeState_Control:Update()
   else
     isMyGuildHouse = false
   end
-  HouseUseTypeState_Control._Btn_LargCraft:SetShow(isMyGuildHouse)
+  if false == _ContentsGroup_GuildManufacture then
+    HouseUseTypeState_Control._Btn_LargCraft:SetShow(isMyGuildHouse)
+  end
 end
 function FGlobal_HouseUseTypeState_Update(guildNoRaw)
   if Worldmap_Grand_GuildHouseControl:GetShow() and guildNoRaw == ownerGuildNoRaw then

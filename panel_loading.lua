@@ -19,6 +19,9 @@ local isDraganOpen = ToClient_IsContentsGroupOpen("6")
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 local isBgOpen = isDraganOpen
 local bgImageTexture = {}
+if true == ToClient_isXBox() then
+  isBgOpen = true
+end
 if isBgOpen then
   bgImageTexture = {
     [0] = "New_UI_Common_ForLua/Window/Loading/Dragan_01.dds",

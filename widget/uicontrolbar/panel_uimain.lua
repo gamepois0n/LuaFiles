@@ -407,10 +407,7 @@ function UIMain_QuestUpdate()
     blackSpritCall:SetPosX(-67)
     blackSpritCall:SetPosY(-15)
     checkNewQuestForEffect = true
-    if true == ToClient_isXBox() then
-      Proc_ShowMessage_Ack("[\238\128\140 ] \235\165\188 \235\136\140\235\159\172\236\132\156 \237\157\145\236\160\149\235\160\185\236\157\132 \235\182\136\235\159\172 \235\179\180\236\139\156\234\178\140\235\130\152 \237\151\136\237\151\136\237\151\136!!")
-    end
-  elseif questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
+  elseif true == ToClient_isXBox() and questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
     MenuButtons[MenuButtonId.Btn_BlackStone]:EraseAllEffect()
     buttonAni[MenuButtonId.Btn_BlackStone]:SetShow(false)
     blackSpritCall:SetShow(false)

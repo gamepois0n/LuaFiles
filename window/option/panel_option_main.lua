@@ -342,7 +342,9 @@ function PaGlobal_Option:Open()
   end
   if _ContentsGroup_isConsolePadControl then
     self:MoveUi(self.UIMODE.Category)
-    self:SelectOptionFrame("Sound", "OnOff")
+    if nil == self._list2._curCategory then
+      self:SelectOptionFrame("Function", "Alert")
+    end
   end
   Panel_Window_cOption:SetShow(true, true)
   Panel_Window_cOption:SetIgnore(false)
@@ -412,6 +414,10 @@ function PaGlobal_Option:ClickedApplyOption()
   keyCustom_applyChange()
   keyCustom_StartEdit()
   saveGameOption(false)
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer then
+    selfPlayer:saveCurrentDataForGameExit()
+  end
   self:ApplyButtonEnable(false)
   ClearFocusEdit()
   for _, icon in pairs(self._ui._customLoadConfirmIcon) do
@@ -726,45 +732,63 @@ function PaGlobal_Option:ListInit()
   local _frameOrder = {}
   local _detailOrder = {}
   if true == isNeedGameOptionFromServer() then
-    _frameOrder = {
-      "Performance",
-      "Graphic",
-      "Sound",
-      "Function",
-      "Interface"
-    }
-    _detailOrder = {
-      [1] = {
-        "Optimize",
-        "OptimizeBeta",
-        "GraphicQuality",
-        "Camera",
-        "Npc"
-      },
-      [2] = {
-        "Window",
-        "Quality",
-        "Effect",
-        "Camera",
-        "ScreenShot"
-      },
-      [3] = {"OnOff", "Volume"},
-      [4] = {
-        "Convenience",
-        "View",
-        "Alert",
-        "Worldmap",
-        "Nation",
-        "Etc"
-      },
-      [5] = {
-        "Action",
-        "UI",
-        "QuickSlot",
+    if _ContentsGroup_isConsoleTest then
+      _frameOrder = {
         "Function",
-        "Mouse",
-        "Pad"
+        "Interface",
+        "Sound"
       }
+      _detailOrder = {
+        [1] = {"Alert", "Etc"},
+        [2] = {"Pad"},
+        [3] = {"OnOff", "Volume"}
+      }
+    else
+      _frameOrder = {
+        "Performance",
+        "Graphic",
+        "Sound",
+        "Function",
+        "Interface"
+      }
+      _detailOrder = {
+        [1] = {
+          "Optimize",
+          "OptimizeBeta",
+          "GraphicQuality",
+          "Camera",
+          "Npc"
+        },
+        [2] = {
+          "Window",
+          "Quality",
+          "Effect",
+          "Camera",
+          "ScreenShot"
+        },
+        [3] = {"OnOff", "Volume"},
+        [4] = {
+          "Convenience",
+          "View",
+          "Alert",
+          "Worldmap",
+          "Nation",
+          "Etc"
+        },
+        [5] = {
+          "Action",
+          "UI",
+          "QuickSlot",
+          "Function",
+          "Mouse",
+          "Pad"
+        }
+      }
+    end
+  elseif _ContentsGroup_isConsoleTest then
+    _frameOrder = {"Sound"}
+    _detailOrder = {
+      [1] = {"OnOff", "Volume"}
     }
   else
     _frameOrder = {
@@ -1151,6 +1175,85 @@ function PaGlobal_Option:SetContentsOption()
     damageMeterButton:SetShow(false)
     damageMeterDesc:SetShow(false)
     self._elements.DamageMeter = nil
+  end
+  if _ContentsGroup_isConsoleTest then
+    local bg0 = UI.getChildControl(self._frames.Function.Alert._uiFrameContent, "StaticText_BgOrder0_Import")
+    local bg1 = UI.getChildControl(self._frames.Function.Alert._uiFrameContent, "StaticText_BgOrder1_Import")
+    local bg2 = UI.getChildControl(self._frames.Function.Alert._uiFrameContent, "StaticText_BgOrder2_Import")
+    local bg3 = UI.getChildControl(self._frames.Function.Alert._uiFrameContent, "StaticText_BgOrder3_Import")
+    UI.getChildControl(bg0, "CheckButton_AlertOtherMarket"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_AlertOtherMarket_Desc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_AlertNormalTrade"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_AlertNormalTrade_Desc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_AlertRoyalTrade"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_AlertRoyalTrade_Desc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_AlertItemMarket"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_AlertItemMarket_Desc"):SetShow(false)
+    bg0:SetShow(false)
+    UI.getChildControl(bg3, "CheckButton_AlertNearMonster"):SetShow(false)
+    UI.getChildControl(bg3, "StaticText_AlertNearMonster_Desc"):SetShow(false)
+    UI.getChildControl(bg3, "CheckButton_AlertGuildQuestMessage"):SetShow(false)
+    UI.getChildControl(bg3, "StaticText_AlertGuildQuestMessage_Desc"):SetShow(false)
+    local xx = UI.getChildControl(bg3, "CheckButton_ShowCashAlert")
+    local xxx = UI.getChildControl(bg3, "StaticText_ShowCashAlert_Desc")
+    xx:SetShow(false)
+    xxx:SetShow(false)
+    local xx1 = UI.getChildControl(bg3, "CheckButton_ShowGuildLoginMessage")
+    local xxx1 = UI.getChildControl(bg3, "StaticText_ShowGuildLoginMessage_Desc")
+    xx1:SetPosY(xx:GetPosY())
+    xxx1:SetPosY(xxx:GetPosY())
+    bg1:SetShow(false)
+    bg2:SetShow(false)
+    bg3:SetPosY(bg0:GetPosY())
+    local bg00 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder0_Import")
+    UI.getChildControl(bg00, "CheckButton_EnableWhisperMusic"):SetShow(false)
+    UI.getChildControl(bg00, "StaticText_EnableWhisperMusic_Desc"):SetShow(false)
+    UI.getChildControl(bg00, "CheckButton_EnableTraySoundOnOff"):SetShow(false)
+    UI.getChildControl(bg00, "StaticText_EnableTraySoundOnOff_Desc"):SetShow(false)
+    UI.getChildControl(bg00, "CheckButton_EnableRidingSound"):SetShow(false)
+    UI.getChildControl(bg00, "StaticText_EnableRidingSound_Desc"):SetShow(false)
+    local bg22 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder2_Import")
+    local bg33 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder3_Import")
+    local bg77 = UI.getChildControl(self._frames.Sound.Volume._uiFrameContent, "StaticText_BgOrder7_Import")
+    local bg88 = UI.getChildControl(self._frames.Sound.Volume._uiFrameContent, "StaticText_BgOrder8_Import")
+    bg22:SetShow(false)
+    bg33:SetShow(false)
+    bg77:SetShow(false)
+    bg88:SetShow(false)
+    local bg0 = UI.getChildControl(self._frames.Interface.Action._uiFrameContent, "StaticText_BgOrder0_Import")
+    local bg1 = UI.getChildControl(self._frames.Interface.Action._uiFrameContent, "StaticText_BgOrder1_Import")
+    local bg2 = UI.getChildControl(self._frames.Interface.Action._uiFrameContent, "StaticText_BgOrder2_Import")
+    bg0:SetShow(false)
+    bg1:SetShow(false)
+    bg2:SetPosY(bg0:GetPosY())
+    local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
+    local bg1 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder1_Import")
+    local bg2 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder2_Import")
+    local bg3 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder3_Import")
+    local bg4 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder4_Import")
+    bg4:SetShow(false)
+    bg3:SetPosY(bg3:GetPosY() - bg4:GetSizeY())
+    bg2:SetPosY(bg2:GetPosY() - bg4:GetSizeY())
+    bg1:SetPosY(bg1:GetPosY() - bg4:GetSizeY())
+    UI.getChildControl(bg0, "CheckButton_GamePadEnable"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_UsePadDesc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_GamePadInvertX"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_HorizenReverseDesc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_GamePadInvertY"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_VerticalReverseDesc"):SetShow(false)
+    local bg1 = UI.getChildControl(self._frames.Function.Etc._uiFrameContent, "StaticText_BgOrder1_Import")
+    UI.getChildControl(bg1, "CheckButton_IsPvpRefuse"):SetShow(false)
+    UI.getChildControl(bg1, "StaticText_IsPvpRefuse_Desc"):SetShow(false)
+    UI.getChildControl(bg1, "CheckButton_IsExchangeRefuse"):SetShow(false)
+    UI.getChildControl(bg1, "StaticText_IsExchangeRefuse_Desc"):SetShow(false)
+    bg1:SetSize(bg1:GetSizeX(), bg1:GetSizeY() - 60)
+    local bg2 = UI.getChildControl(self._frames.Function.Etc._uiFrameContent, "StaticText_BgOrder2_Import")
+    if true == _ContentsGroup_RenewUI then
+      bg1:SetShow(false)
+      bg2:SetPosY(bg2:GetPosY() - 60 - bg1:GetSizeY())
+    else
+      bg2:SetPosY(bg2:GetPosY() - 60)
+    end
   end
 end
 function FGlobal_Temp_ActionKeySetting(actionInputType)

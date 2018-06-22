@@ -3,10 +3,15 @@ Panel_Copy_NaviPath:SetPosY(-1000)
 function FromClient_CreateNavigationPanel(targetPanel, index)
   local meterControl = UI.getChildControl(targetPanel, "StaticText_Meter")
   local naviButton = UI.getChildControl(targetPanel, "Checkbox_NaviBtn")
-  meterControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  meterControl:SetShow(true)
-  naviButton:addInputEvent("Mouse_LUp", "NavigationControlClick(" .. tostring(index) .. ")")
-  naviButton:SetShow(true)
+  if true == ToClient_isXBox() then
+    meterControl:SetShow(false)
+    naviButton:SetShow(false)
+  else
+    meterControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    meterControl:SetShow(true)
+    naviButton:addInputEvent("Mouse_LUp", "NavigationControlClick(" .. tostring(index) .. ")")
+    naviButton:SetShow(true)
+  end
 end
 function NavigationControlClick(index)
   local selfPlayer = getSelfPlayer():get()
