@@ -48,6 +48,7 @@ function PaGlobal_Option:InitUi()
   topCacheDelete:addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedCacheDeleteOption()")
   topCacheDelete:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "CacheDelete" .. "\"" .. ")")
   topCacheDelete:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "CacheDelete" .. "\"" .. ")")
+  self._ui._atFieldString = UI.getChildControl(self._ui._staticMainTopBg, "StaticText_AtFieldString")
   self._ui._applyButton = UI.getChildControl(self._ui._staticSubBottomBg, "Button_Apply")
   self._ui._applyButton:addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedApplyOption()")
   self._ui._applyButton:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "Apply" .. "\"" .. ")")
@@ -346,6 +347,7 @@ function PaGlobal_Option:Open()
       self:SelectOptionFrame("Function", "Alert")
     end
   end
+  self._ui._atFieldString:SetText(ToClient_GetAtFieldString())
   Panel_Window_cOption:SetShow(true, true)
   Panel_Window_cOption:SetIgnore(false)
   self:ApplyButtonEnable(false)
@@ -1253,6 +1255,13 @@ function PaGlobal_Option:SetContentsOption()
       bg2:SetPosY(bg2:GetPosY() - 60 - bg1:GetSizeY())
     else
       bg2:SetPosY(bg2:GetPosY() - 60)
+    end
+  end
+  if true == UI.checkResolution4KForXBox() then
+    for i, v in pairs(self._elements.UIScale._eventControl) do
+      v:SetIgnore(true)
+      v:SetMonoTone(true)
+      UI.getChildControl(v, "Slider_Button"):SetIgnore(true)
     end
   end
 end

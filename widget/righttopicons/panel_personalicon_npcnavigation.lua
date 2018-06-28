@@ -491,7 +491,7 @@ function Panel_NpcNavi_updateIntimacyCircle(characterKeyRaw)
         CopyBaseProperty(UILink.tooltip_GiftIcon, _npcNavi_Target)
       end
       _npcNavi_Target:SetShow(true)
-      _npcNavi_Target:ChangeTextureInfoName(uv[imageType]._fileName)
+      _npcNavi_Target:ChangeTextureInfoNameAsync(uv[imageType]._fileName)
       local x1, y1, x2, y2 = setTextureUV_Func(_npcNavi_Target, uv[imageType].x1, uv[imageType].y1, uv[imageType].x2, uv[imageType].y2)
       _npcNavi_Target:getBaseTexture():setUV(x1, y1, x2, y2)
       _npcNavi_Target:setRenderTexture(_npcNavi_Target:getBaseTexture())

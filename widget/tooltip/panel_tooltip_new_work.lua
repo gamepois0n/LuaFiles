@@ -337,11 +337,13 @@ local function Insert_Tooltip_Work_Data(esSSW, isToolTip, controlIndex, nodeInfo
       self._WorkVolume_Value:SetShow(true)
       self._WorkVolume_Guide:SetShow(true)
     end
-    if true == isGuildManufactureSelect then
-      self._Guide:SetShow(false)
-      default_PosY_Size._AdjustPosY_SubPanel_3 = default_PosY_Size._AdjustPosY_SubPanel_3 - self._Guide:GetSizeY()
-    else
-      self._Guide:SetShow(true)
+    if nil ~= self._Guide then
+      if true == isGuildManufactureSelect then
+        self._Guide:SetShow(false)
+        default_PosY_Size._AdjustPosY_SubPanel_3 = default_PosY_Size._AdjustPosY_SubPanel_3 - self._Guide:GetSizeY()
+      else
+        self._Guide:SetShow(true)
+      end
     end
     if true == isToolTip then
     end

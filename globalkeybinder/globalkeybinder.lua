@@ -311,16 +311,15 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Stable(deltaTime)
     end
   elseif not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if CppEnums.ServantType.Type_Vehicle == stable_getServantType() then
-      if PaGlobalFunc_StableInfo_GetShow() then
-        PaGlobalFunc_StableInfo_Close()
+      if true == PaGlobalFunc_StableFunction_closeStablSubPanelOnce() then
         return
       end
-      if PaGlobalFunc_StableList_GetShow() then
-        PaGlobalFunc_StableList_Close()
-        return
-      end
-      PaGlobalFunc_Stable_Function_Close()
+      StableFunction_Close()
     elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
+      if true == PaGlobalFunc_WharfFunction_closeWharfSubPanelOnce() then
+        return
+      end
+      WharfFunction_Close()
     end
   end
 end
@@ -682,7 +681,17 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCashShop(delataTime)
     Panel_Tooltip_Item_hideTooltip()
   end
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    if Panel_Window_Inventory:IsShow() and not Panel_Window_Inventory:IsUISubApp() then
+    if _ContentsGroup_RenewUI_PearlShop then
+      if PaGlobalFunc_PearlShopProductBuyCheckShow() then
+        PaGlobalFunc_PearlShopProductBuyBack()
+      elseif PaGlobalFunc_PearlShopProductInfoCheckShow() then
+        PaGlobalFunc_PearlShopProductInfoBack()
+      elseif PaGlobalFunc_PearlShopCheckShow() then
+        PaGlobalFunc_PearlShopBack()
+      elseif PaGlobalFunc_PearlShopCategoryCheckShow() then
+        PaGlobalFunc_PearlShopCategoryBack()
+      end
+    elseif Panel_Window_Inventory:IsShow() and not Panel_Window_Inventory:IsUISubApp() then
       InventoryWindow_Close()
     elseif Panel_IngameCashShop_BuyOrGift:GetShow() then
       InGameShopBuy_Close()
@@ -1083,11 +1092,6 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
       HandleClicked_EventNotifyContent_Close()
       return true
     end
-  elseif Panel_Window_PetInfoNew:GetShow() then
-    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-      FGlobal_PetInfoNew_Close()
-      return true
-    end
   elseif Panel_EventNotify:GetShow() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       FGlobal_EventNotifyClose()
@@ -1208,6 +1212,10 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     ChatInput_Close()
     return true
   end
+  if false == _ContentsGroup_RenewUI_Pet and Panel_Window_PetInfoNew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    FGlobal_PetInfoNew_Close()
+    return true
+  end
   return false
 end
 function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
@@ -1249,15 +1257,30 @@ function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
     end
     return true
   elseif ChatInput_CheckCurrentUiEdit(uiEdit) then
-    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+    if true == _ContentsGroup_RenewUI_Chatting then
+      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+        PaGlobalFunc_ChattingInfo_PressedEnter()
+      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        Input_ChattingInfo_OnPadB()
+      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) then
+        PaGlobalFunc_ChattingInfo_CheckRemoveLinkedItem()
+      end
+    elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
       if true == _ContentsGroup_isConsoleTest then
-        ChatInput_PressedEnter()
+        if true == _ContentsGroup_RenewUI_Chatting then
+          PaGlobalFunc_ChattingInfo_PressedEnter()
+        else
+          ChatInput_PressedEnter()
+        end
       end
     elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_UP) then
       if ToClient_isComposition() then
         return
       end
-      ChatInput_PressedUp()
+      if true == _ContentsGroup_isConsoleTest then
+      else
+        ChatInput_PressedUp()
+      end
     elseif isKeyPressed(VCK.KeyCode_MENU) then
       ChatInput_CheckReservedKey()
     elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_TAB) then
@@ -1458,7 +1481,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
   if CommonWindowFunction(__eUiInputType_BlackSpirit, Process_UIMode_CommonWindow_BlackSpirit) then
     return
   end
-  if CommonWindowFunction(__eUiInputType_Chat, ChatInput_Show) then
+  if CommonWindowFunction(__eUiInputType_Chat, Process_UIMode_CommonWindow_Chatting) then
     return
   end
   if CommonWindowFunction(__eUiInputType_Help, FGlobal_Panel_WebHelper_ShowToggle) then
@@ -1548,7 +1571,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
     end
     return
   end
-  if Panel_Interaction:IsShow() then
+  if nil ~= Panel_Interaction and Panel_Interaction:IsShow() or nil ~= Panel_Widget_PanelInteraction_Renew and Panel_Widget_PanelInteraction_Renew:IsShow() then
     local keyCode
     if _ContentsGroup_isConsoleTest and isPadInputIn() then
       keyCode = FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
@@ -1745,9 +1768,15 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
     PaGlobal_Memo:ListClose()
     return
   end
-  if true == _ContentsGroup_RenewUI and true == Panel_Window_CharacterInfo_Renew:GetShow() then
-    PaGlobalFunc_Window_CharacterInfo_Close()
-    return
+  if true == _ContentsGroup_RenewUI then
+    if true == Panel_Window_CharacterInfo_Renew:GetShow() then
+      PaGlobalFunc_Window_CharacterInfo_Close()
+      return
+    end
+    if true == Panel_Window_PetList_Renew:GetShow() then
+      FGlobal_PetList_Close()
+      return
+    end
   end
   if Panel_CustomizingAlbum:GetShow() == true then
     CustomizingAlbum_Close()

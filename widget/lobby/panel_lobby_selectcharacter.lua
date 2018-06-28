@@ -299,6 +299,7 @@ local function CharacterView(index, classType, isSpecialCharacter, isChangeSpeci
     viewCharacter(index, -50, -25, -94, -0.6, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0.2, 0)
     setWeatherTime(8, 3)
+    viewCharacterFov(0.85)
   elseif classType == UI_Class.ClassType_Tamer then
     viewCharacter(index, -30, -50, -94, -0.1, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)

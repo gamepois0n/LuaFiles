@@ -122,24 +122,26 @@ function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
   if false == _ContentsGroup_RenewUI_Main then
     Panel_ClassResource:SetShow(true)
   end
-  local chattingPanelCount = ToClient_getChattingPanelCount()
-  for panelIndex = 0, chattingPanelCount - 1 do
-    local chatPanel = ToClient_getChattingPanel(panelIndex)
-    local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
-    chatPanelUI:SetShow(chatPanel:isOpen())
-    local posX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_PositionX)
-    local posY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_PositionY)
-    chatPanelUI:SetPosX(posX)
-    chatPanelUI:SetPosY(posY)
-    if CppDefine.ChangeUIAndResolution == true then
-      local relativePosX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-      local relativePosY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
-      chatPanelUI:SetRelativePosX(relativePosX)
-      chatPanelUI:SetRelativePosY(relativePosY)
-      PAGlobal_setIsChangePanelState(panelIndex + chattingPanelCount, true, true)
+  if not _ContentsGroup_RenewUI_Chatting then
+    local chattingPanelCount = ToClient_getChattingPanelCount()
+    for panelIndex = 0, chattingPanelCount - 1 do
+      local chatPanel = ToClient_getChattingPanel(panelIndex)
+      local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
+      chatPanelUI:SetShow(chatPanel:isOpen())
+      local posX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_PositionX)
+      local posY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_PositionY)
+      chatPanelUI:SetPosX(posX)
+      chatPanelUI:SetPosY(posY)
+      if CppDefine.ChangeUIAndResolution == true then
+        local relativePosX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+        local relativePosY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+        chatPanelUI:SetRelativePosX(relativePosX)
+        chatPanelUI:SetRelativePosY(relativePosY)
+        PAGlobal_setIsChangePanelState(panelIndex + chattingPanelCount, true, true)
+      end
     end
+    Chatting_OnResize()
   end
-  Chatting_OnResize()
   if true == _ContentsGroup_RenewUI_Main then
     Panel_SkillCommand:SetShow(false)
   end

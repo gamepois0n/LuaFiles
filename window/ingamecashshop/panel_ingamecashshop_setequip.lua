@@ -515,6 +515,7 @@ CashShopController.GameTime_SliderCtrlBTN = UI.getChildControl(CashShopControlle
 CashShopController.Slider_EnduranceCtrlBTN = CashShopController.Slider_Endurance:GetControlButton()
 local StaticText_CustomizationMessage = UI.getChildControl(Panel_CustomizationMessage, "StaticText_CustomizationMessage")
 function CashShopController:Initialize()
+  _PA_LOG("cylee", "CashShopController:Initialize()")
   self.GameTime_Slider:SetInterval(23)
   self.Slider_Endurance:SetInterval(100)
   self.static_SetOptionBG:AddChild(self.static_SetOptionEnduranceBG)
@@ -639,6 +640,10 @@ function CashShopController:Initialize()
     self.btn_OpenHelm:SetPosY(15)
     self.btn_AwakenWeapon:SetPosY(15)
     self.btn_WarStance:SetPosY(15)
+  end
+  if _ContentsGroup_RenewUI_PearlShop then
+    UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_Exit"):SetShow(false)
+    UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_QNA"):SetShow(false)
   end
 end
 function FGlobal_CashShop_SetEquip_CouponEffectCheck()

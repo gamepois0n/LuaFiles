@@ -872,6 +872,9 @@ function isPossibleAttendance_AnyType(waitingTime)
   return isPossible
 end
 function FromClient_AttendanceTimer()
+  if nil == getSelfPlayer() then
+    return
+  end
   if getSelfPlayer():get():getLevel() < 6 then
     return
   end

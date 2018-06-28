@@ -39,6 +39,7 @@ local progressBarSpeed = 0
 local sumTime = 0
 local isWin = false
 local herbMachine_WinCount = 0
+local herbMachine_GameEndCount = 5
 local isBarMoveStart = false
 local function initValue()
   isBarMoveStart = false
@@ -47,6 +48,9 @@ local function initValue()
   sumTime = 0
   progressBarSpeed = 0
   isWin = false
+end
+function herbMachine_SetGameEndCount(value)
+  herbMachine_GameEndCount = value
 end
 local function init_HerbMachine()
   ui._timingProgress_Head = UI.getChildControl(ui._timingProgress, "Progress2_1_Timing_Head")
@@ -175,7 +179,7 @@ function Panel_Minigame_HerbMachine_End()
   Panel_MiniGame_Timing:SetShow(false, false)
 end
 function Panel_Minigame_HerbMachine_End_UI()
-  if herbMachine_WinCount >= 5 then
+  if herbMachine_GameEndCount <= herbMachine_WinCount then
     FGlobal_MiniGame_HerbMachine()
   end
   if isWin then

@@ -35,7 +35,7 @@ function Panel_Interaction_HouseRank_HideAni()
   aniInfo:SetHideAtEnd(true)
 end
 function Panel_Interaction_HouseRank_ShowToggle()
-  if Panel_Interaction:IsShow() then
+  if PaGlobal_Interaction_GetShow() then
     local posX = Panel_Interaction_GetGlobalGuidePosX()
     local posY = Panel_Interaction_GetGlobalGuidePosY()
     Panel_Interaction_HouseRank:SetPosX(posX)

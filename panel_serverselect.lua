@@ -530,7 +530,30 @@ function changeTexture_ByCreateStatus(control, status)
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
 end
+function PaGlobalFunc_ServerSelectAutoConnectToLastServer()
+  local rv = ToClient_CheckToMoveChannel()
+  _PA_LOG("cylee", "PaGlobalFunc_ServerSelectAutoConnectToLastServer() rv:" .. tostring(rv))
+  if 0 == rv then
+    return false
+  end
+  local tempWrapper = getTemporaryInformationWrapper()
+  local lastJoinServerNo = tempWrapper:getLastServerNo()
+  _PA_LOG("cylee", "PaGlobalFunc_ServerSelectAutoConnectToLastServer() lastJoinServerNo:" .. tostring(lastJoinServerNo))
+  if lastJoinServerNo <= 1 then
+    return
+  end
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+    content = PAGetString(Defines.StringSheet_GAME, "LUA_AUTO_CONNECT_TO_LAST_SERVER_WHEN_RESTRICTED_TO_MOVE_CHANNEL"),
+    functionYes = ServerList_LastJoinServer,
+    exitButton = false,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_1
+  }
+  MessageBox.showMessageBox(messageBoxData)
+  return true
+end
 function StartUp_Panel_SelectServer()
+  PaGlobalFunc_ServerSelectAutoConnectToLastServer()
   if isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_KOR) then
     SELECT_SERVER_BG_TEXT:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_CHANNEL"))
   else
@@ -1122,6 +1145,9 @@ function Panel_Lobby_function_EnterChannel(index)
     Panel_Lobby_Function_EnableEnterChannelButton(false)
     return
   end
+  if PaGlobalFunc_ServerSelectAutoConnectToLastServer() then
+    return
+  end
   if true == selectServerGroup(_selectWorldIndex, index) then
     Panel_Lobby_Function_EnableEnterChannelButton(false)
   end
@@ -1158,6 +1184,9 @@ function ServerList_RandomServerJoin()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    return
+  end
+  if PaGlobalFunc_ServerSelectAutoConnectToLastServer() then
     return
   end
   selectRandomServer(_selectWorldIndex)
@@ -1379,6 +1408,9 @@ function ServerSelect_Simpletooltip(isShow, tipType, index, idx)
   TooltipSimple_Show(control, name, desc)
 end
 function ServerList_EnterMainServer()
+  if PaGlobalFunc_ServerSelectAutoConnectToLastServer() then
+    return
+  end
   local mainServerNo = ServerList_GetMainServerNo()
   if -1 == mainServerNo then
     local messageBoxData = {
@@ -1445,6 +1477,3 @@ warInfo_Init()
 channelSelectInfo_Init()
 SpeedChannelInfo_Init()
 PKChannelInfo_Init()
-btn_SetMainServer:SetShow(false)
-btn_EnterMainServer:SetShow(false)
-mainServerText:SetShow(false)

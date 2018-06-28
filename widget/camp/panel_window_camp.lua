@@ -264,7 +264,7 @@ function PaGlobal_Camp:setPos()
   elseif Panel_Icon_Maid:GetShow() then
     posX = Panel_Icon_Maid:GetPosX() + Panel_Icon_Maid:GetSizeX() - 3
     posY = Panel_Icon_Maid:GetPosY()
-  elseif Panel_Window_PetIcon:GetShow() then
+  elseif false == _ContentsGroup_RenewUI_Pet and Panel_Window_PetIcon:GetShow() then
     posX = Panel_Window_PetIcon:GetPosX() + Panel_Window_PetIcon:GetSizeX() - 3
     posY = Panel_Window_PetIcon:GetPosY()
   elseif 0 < FGlobal_HouseIconCount() and Panel_MyHouseNavi:GetShow() then

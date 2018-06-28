@@ -521,7 +521,11 @@ function FromClient_ExitWorldMap()
 end
 function FromClient_WorldMapFadeOut()
   isFadeOutWindow = true
-  ChatInput_Close()
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingInfo_Close()
+  else
+    ChatInput_Close()
+  end
 end
 function FGlobal_IsFadeOutState()
   return isFadeOutWindow

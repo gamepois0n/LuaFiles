@@ -85,7 +85,7 @@ function FromClient_EventHumanRelationIconCreated(actorKeyRaw, panel, typeIndex,
   panel:SetPosY(-Panel_Copy_HumanRelationIcon:GetSizeY() - 10000)
   panel:SetScaleChild(1, 1)
   panel:SetSize(Panel_Copy_HumanRelationIcon:GetSizeX(), Panel_Copy_HumanRelationIcon:GetSizeY())
-  panel:ChangeTextureInfoName(uv[typeIndex]._fileName)
+  panel:ChangeTextureInfoNameAsync(uv[typeIndex]._fileName)
   local x1, y1, x2, y2 = setTextureUV_Func(panel, uv[typeIndex].x1, uv[typeIndex].y1, uv[typeIndex].x2, uv[typeIndex].y2)
   panel:getBaseTexture():setUV(x1, y1, x2, y2)
   panel:setRenderTexture(panel:getBaseTexture())

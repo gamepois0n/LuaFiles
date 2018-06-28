@@ -134,6 +134,18 @@ function PaGlobal_Option:radioButtonMapping_ServiceResourceType(value, fromRadio
       [0] = CppEnums.ServiceResourceType.eServiceResourceType_TR,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN
     }
+  elseif CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceType then
+    radioMap = {
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_KR,
+      [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
+      [2] = CppEnums.ServiceResourceType.eServiceResourceType_TW
+    }
+  elseif CppEnums.GameServiceType.eGameServiceType_GT_REAL == resourceType then
+    radioMap = {
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_KR,
+      [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
+      [2] = CppEnums.ServiceResourceType.eServiceResourceType_TW
+    }
   end
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
@@ -153,7 +165,7 @@ function PaGlobal_Option:radioButtonMapping_ChatChannelType(value, fromRadioButt
       [2] = CppEnums.LangType.LangType_French,
       [3] = CppEnums.LangType.LangType_ID,
       [4] = CppEnums.LangType.LangType_Es,
-      [5] = CppEnums.LangType.LangType_SP
+      [5] = CppEnums.LangType.LangType_AE
     }
   elseif CppEnums.GameServiceType.eGameServiceType_NA_ALPHA == resourceType then
     radioMap = {
@@ -199,13 +211,21 @@ function PaGlobal_Option:radioButtonMapping_ChatChannelType(value, fromRadioButt
     radioMap = {
       [0] = CppEnums.LangType.LangType_International,
       [1] = CppEnums.LangType.LangType_TR,
-      [2] = CppEnums.LangType.LangType_English
+      [2] = CppEnums.LangType.LangType_English,
+      [3] = CppEnums.LangType.LangType_AE
     }
   elseif CppEnums.GameServiceType.eGameServiceType_TR_REAL == resourceType then
     radioMap = {
       [0] = CppEnums.LangType.LangType_International,
       [1] = CppEnums.LangType.LangType_TR,
-      [2] = CppEnums.LangType.LangType_English
+      [2] = CppEnums.LangType.LangType_English,
+      [3] = CppEnums.LangType.LangType_AE
+    }
+  elseif CppEnums.GameServiceType.eGameServiceType_GT_REAL == resourceType or CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceType then
+    radioMap = {
+      [0] = CppEnums.LangType.LangType_International,
+      [1] = CppEnums.LangType.LangType_English,
+      [2] = CppEnums.LangType.LangType_Tw
     }
   end
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
@@ -242,7 +262,8 @@ local isOnServiceChatTypeTag = {
   [CppEnums.LangType.LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"),
   [CppEnums.LangType.LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"),
   [CppEnums.LangType.LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR"),
-  [CppEnums.LangType.LangType_SP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_SP")
+  [CppEnums.LangType.LangType_SP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_SP"),
+  [CppEnums.LangType.LangType_AE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_AE")
 }
 function PaGlobal_Option:RadioButtonMapping(table, value, fromRadioButtonToCppEnum)
   if nil == fromRadioButtonToCppEnum or false == fromRadioButtonToCppEnum then
@@ -313,7 +334,7 @@ function PaGlobal_Option:SpecialCreateRadioButton(elementName)
   if "ServiceResourceType" == elementName then
     local count
     local tempCount = 10
-    local controlCount = 6
+    local controlCount = 9
     for ii = 0, tempCount do
       if nil == self:radioButtonMapping_ServiceResourceType(ii) then
         count = ii
@@ -340,7 +361,7 @@ function PaGlobal_Option:SpecialCreateRadioButton(elementName)
   if "ChatChannelType" == elementName then
     local count
     local tempCount = 10
-    local controlCount = 6
+    local controlCount = 9
     for ii = 0, tempCount do
       if nil == self:radioButtonMapping_ChatChannelType(ii) then
         count = ii

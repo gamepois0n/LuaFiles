@@ -1,5 +1,5 @@
 function FromClient_CancelByAttacked()
-  if not AllowChangeInputMode() then
+  if not _ContentsGroup_RenewUI_Chatting and not AllowChangeInputMode() then
     return
   end
   RenderModeAllClose()

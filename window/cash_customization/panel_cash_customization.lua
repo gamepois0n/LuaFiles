@@ -448,6 +448,10 @@ function HandleClicked_CashCustomization_Apply()
   if nil == selfPlayer then
     return
   end
+  if true == _ContentsGroup_RenewUI_Customization then
+    ToClient_InGameSaveCustomizationData(true, invenSlotNo, CppEnums.ItemWhereType.eCount)
+    return
+  end
   local customizationPackageTime = selfPlayer:get():isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_CustomizationPackage)
   local invenSlotNo = 0
   if customizationPackageTime then

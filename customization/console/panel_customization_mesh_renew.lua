@@ -1,0 +1,233 @@
+Panel_Customizing_Mesh:ignorePanelMoveSnapping()
+local Customization_MeshInfo = {
+  _ui = {
+    _static_TypeBg = UI.getChildControl(Panel_Customizing_Mesh, "Static_TypeGroup"),
+    _meshList = {}
+  },
+  _config = {
+    _textureColumnCount = 4,
+    _meshColumnCount = 5,
+    _textureSize = 48,
+    _contentsOffsetX = 10,
+    _contentsOffsetY = 10,
+    _meshImageGap = 5,
+    _columnWidth,
+    _columnHeight
+  },
+  _currentClassType,
+  _currentUiId,
+  _selectedMeshIndex = -1,
+  _selectedListParamType = nil,
+  _selectedListParamIndex = nil,
+  _selectedItemIndex = nil,
+  _paramValueList = {},
+  _currentMeshIndex = -1
+}
+function HandleClicked_Customization_Mesh_Confirm()
+  local self = Customization_MeshInfo
+end
+function HandleClicked_Customization_Mesh_Cancel()
+  PaGlobalFunc_Customization_Mesh_Close()
+end
+function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(listParamType, listParamIndex, itemIndex)
+  local self = Customization_MeshInfo
+  self._selectedListParamType = listParamType
+  self._selectedListParamIndex = listParamIndex
+  self._selectedItemIndex = itemIndex
+end
+function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(listParamType, listParamIndex, itemIndex)
+  local self = Customization_MeshInfo
+  self._selectedListParamType = listParamType
+  self._selectedListParamIndex = listParamIndex
+  self._selectedItemIndex = itemIndex
+  local selectedParamValue = self._paramValueList[self._selectedItemIndex]
+  if Panel_Win_System:GetShow() then
+    MessageBox_Empty_function()
+    allClearMessageData()
+  end
+  if not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(self._currentClassType, listParamType, listParamIndex, selectedParamValue) then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_APPLY_CASHITEM")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+      content = messageBoxMemo,
+      functionYes = PaGlobalFunc_Customization_HairType_UpdateMeshIndex,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData, "top")
+  else
+    PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
+  end
+end
+function PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
+  local self = Customization_MeshInfo
+  local selectedParamValue = self._paramValueList[self._selectedItemIndex]
+  setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, selectedParamValue)
+  applyInitializeToGroupCustomizedBoneInfo()
+end
+function HandleClicked_Customization_Mesh_Close()
+  PaGlobalFunc_Customization_Mesh_Close()
+end
+function Customization_MeshInfo:ClearList()
+  for _, control in pairs(self._ui._meshList) do
+    if nil ~= control then
+      control:SetShow(false)
+    end
+  end
+end
+function HandleClicked_Customization_Mesh_Open(classType, uiId)
+  local self = Customization_MeshInfo
+  self._currentClassType = classType
+  self._currentUiId = uiId
+  self:ClearList()
+  local defaultContentsIndex = 0
+  local listCount = getUiListCount(classType, uiId, defaultContentsIndex)
+  local detailListCount = getUiDetailListCount(classType, uiId, defaultContentsIndex)
+  if listCount == 1 then
+    local listIndex = 0
+    local luaListIndex = listIndex + 1
+    local listTexture = getUiListTextureName(classType, uiId, defaultContentsIndex, listIndex)
+    local listParamType = getUiListParamType(classType, uiId, defaultContentsIndex, listIndex)
+    local listParamIndex = getUiListParamIndex(classType, uiId, defaultContentsIndex, listIndex)
+    local meshCount = getParamMax(classType, listParamType, listParamIndex) + 1
+    local normalLastIndex = 0
+    for itemIndex = 0, meshCount - 1 do
+      local luaShapeIdx = itemIndex + 1
+      local control = self._ui._meshList[itemIndex]
+      if nil == control then
+        control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_TypeBg, "HairType_Image_" .. itemIndex)
+        CopyBaseProperty(self._ui._hairTypeTemplate, control)
+      end
+      control:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(" .. itemIndex .. ")")
+      control:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(" .. listParamType .. "," .. listParamIndex .. "," .. itemIndex .. ")")
+      local col = itemIndex % self._config._textureColumnCount
+      local row = math.floor(itemIndex / self._config._textureColumnCount)
+      local texUV = {
+        x1,
+        y1,
+        x2,
+        y2
+      }
+      texUV.x1 = col * self._config._textureSize
+      texUV.y1 = row * self._config._textureSize
+      texUV.x2 = texUV.x1 + self._config._textureSize
+      texUV.y2 = texUV.y1 + self._config._textureSize
+      control:ChangeTextureInfoName(listTexture)
+      local x1, y1, x2, y2 = setTextureUV_Func(control, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
+      control:getBaseTexture():setUV(x1, y1, x2, y2)
+      control:SetPosX(itemIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
+      control:SetPosY(math.floor(itemIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
+      control:setRenderTexture(control:getBaseTexture())
+      if not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, listParamType, listParamIndex, itemIndex) and isServerFixedCharge() then
+        control:SetShow(false)
+      else
+        control:SetShow(true)
+      end
+      if not isNormalCustomizingIndex(classType, listParamType, listParamIndex, itemIndex) then
+      else
+        normalLastIndex = normalLastIndex + 1
+      end
+      self._ui._meshList[itemIndex] = control
+    end
+  end
+  if detailListCount == 1 then
+    local detailListIndex = 0
+    local luaDetailListIndex = detailListIndex + 1
+    local detailListParamType = getUiDetailListParamType(classType, uiId, defaultContentsIndex, detailListIndex)
+    local detailListParamIndex = getUiDetailListParamIndex(classType, uiId, defaultContentsIndex, detailListIndex)
+    local currentParamValue = getParam(detailListParamType, detailListParamIndex)
+    local currenelementIndex
+    local defaultDetailListIndex = 0
+    local meshCount = getUiDetailListElementCount(classType, uiId, defaultContentsIndex, defaultDetailListIndex)
+    local normalLastIndex = 0
+    for elementIndex = 0, meshCount - 1 do
+      local control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_TypeBg, "HairType_Image_" .. elementIndex)
+      CopyBaseProperty(self._ui._hairTypeTemplate, control)
+      local paramValue = getUiDetailListElementParamValue(classType, uiId, defaultContentsIndex, defaultDetailListIndex, elementIndex)
+      self._paramValueList[elementIndex] = paramValue
+      if paramValue == currentParamValue then
+        currenelementIndex = elementIndex
+      end
+      control:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(" .. elementIndex .. ")")
+      control:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(" .. detailListParamType .. "," .. detailListParamIndex .. "," .. elementIndex .. ")")
+      local texUV = {
+        x1,
+        y1,
+        x2,
+        y2
+      }
+      texUV.x1 = 1
+      texUV.y1 = 1
+      texUV.x2 = self._config._textureSize
+      texUV.y2 = self._config._textureSize
+      local detailListElementTexture = getUiDetailListElementTextureName(classType, uiId, defaultContentsIndex, defaultDetailListIndex, elementIndex)
+      control:ChangeTextureInfoName(detailListElementTexture)
+      local x1, y1, x2, y2 = setTextureUV_Func(control, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
+      control:getBaseTexture():setUV(x1, y1, x2, y2)
+      control:SetPosX(10 + elementIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
+      control:SetPosY(math.floor(elementIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
+      control:setRenderTexture(control:getBaseTexture())
+      if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) then
+        control:SetShow(false)
+      elseif not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) and isServerFixedCharge() then
+        control:SetShow(false)
+      else
+        control:SetShow(true)
+      end
+      if not isNormalCustomizingIndex(selectedClassType, classType, detailListParamIndex, paramValue) then
+      else
+        normalLastIndex = normalLastIndex + 1
+      end
+      self._ui._meshList[elementIndex] = control
+    end
+    local meshListCount = meshCount - 1
+    local VerticalCount = Int64toInt32(meshListCount / self._config._meshColumnCount + 2)
+    local sizeY = VerticalCount * (self._config._columnHeight + self._config._contentsOffsetY)
+    Panel_Customizing_Mesh:SetSize(Panel_Customizing_Mesh:GetSizeX(), sizeY - 10)
+    PaGlobalFunc_Customization_Mesh_Open()
+  end
+end
+function Customization_MeshInfo:InitControl()
+  self._ui._hairTypeTemplate = UI.getChildControl(self._ui._static_TypeBg, "RadioButton_TypeImage_Template")
+  self._ui._hairTypeTemplate:SetShow(false)
+  self._config._columnWidth = self._ui._hairTypeTemplate:GetSizeX() + self._config._meshImageGap
+  self._config._columnHeight = self._ui._hairTypeTemplate:GetSizeY() + self._config._meshImageGap
+end
+function Customization_MeshInfo:InitEvent()
+end
+function Customization_MeshInfo:InitRegister()
+  registerEvent("EventOpenSelectMeshUi", "HandleClicked_Customization_Mesh_Open")
+  registerEvent("EventCloseSelectMeshUi", "HandleClicked_Customization_Mesh_Close")
+end
+function Customization_MeshInfo:Initialize()
+  self:InitControl()
+  self:InitEvent()
+  self:InitRegister()
+end
+function PaGlobalFunc_Customization_Mesh_GetShow()
+  return Panel_Customizing_Mesh:GetShow()
+end
+function PaGlobalFunc_Customization_Mesh_SetShow(isShow, isAni)
+  Panel_Customizing_Mesh:SetShow(isShow, isAni)
+end
+function PaGlobalFunc_Customization_Mesh_Open()
+  if true == PaGlobalFunc_Customization_Mesh_GetShow() then
+    return
+  end
+  PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Mesh_Close)
+  PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Mesh_Close()")
+  PaGlobalFunc_Customization_Mesh_SetShow(true, false)
+end
+function PaGlobalFunc_Customization_Mesh_Close()
+  if false == PaGlobalFunc_Customization_Mesh_GetShow() then
+    return
+  end
+  PaGlobalFunc_Customization_SetCloseFunc(nil)
+  PaGlobalFunc_Customization_SetBackEvent()
+  PaGlobalFunc_Customization_Mesh_SetShow(false, false)
+end
+function PaGlobalFunc_FromClient_Customization_Mesh_luaLoadComplete()
+  local self = Customization_MeshInfo
+  self:Initialize()
+end
+PaGlobalFunc_FromClient_Customization_Mesh_luaLoadComplete()

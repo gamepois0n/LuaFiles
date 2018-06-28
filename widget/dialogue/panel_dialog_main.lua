@@ -784,7 +784,7 @@ function Dialog_intimacyValueUpdate()
               CopyBaseProperty(_intimacyGiftIcon, target)
             end
             target:SetShow(true)
-            target:ChangeTextureInfoName(uv[imageType]._fileName)
+            target:ChangeTextureInfoNameAsync(uv[imageType]._fileName)
             local x1, y1, x2, y2 = setTextureUV_Func(target, uv[imageType].x1, uv[imageType].y1, uv[imageType].x2, uv[imageType].y2)
             target:getBaseTexture():setUV(x1, y1, x2, y2)
             target:setRenderTexture(target:getBaseTexture())

@@ -357,6 +357,16 @@ function inGameShopBuy:updateByEventCart()
   self._button_Confirm:ComputePos()
   self._button_Cancle:ComputePos()
 end
+local territoryKeyToWaypointKey = {
+  [0] = 1,
+  [1] = 301,
+  [2] = 601,
+  [3] = 1101,
+  [4] = 1301,
+  [6] = 1623,
+  [5] = 1395,
+  [7] = 1649
+}
 function inGameShopBuy:update(isCouponApply)
   local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
   if nil == cashProduct then
@@ -568,7 +578,10 @@ function inGameShopBuy:update(isCouponApply)
     FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(cashProduct:getPrice(), cashProduct:getMainCategory())
   end
   if cashProduct:isMoneyPrice() then
-    ToClient_RequestCurrentMainTownRegionWarehouseInfo()
+    local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
+    local territoryKeyRaw = regionInfo:getTerritoryKeyRaw()
+    local waypointKey = territoryKeyToWaypointKey[territoryKeyRaw]
+    local warehouseWrapper = warehouse_get(waypointKey)
     self._static_PearlBG:SetSize(self._static_PearlBG:GetSizeX(), self._static_PearlBG:GetSizeY() + 50)
     Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), Panel_IngameCashShop_BuyOrGift:GetSizeY() + 50)
     self._radio_PayInven:ComputePos()
@@ -580,7 +593,10 @@ function inGameShopBuy:update(isCouponApply)
     self._staticText_PayInven:SetShow(true)
     self._staticText_PayWarehouse:SetShow(true)
     local silverInInventory = getSelfPlayer():get():getInventory():getMoney_s64()
-    local silverInWarehouse = warehouse_moneyByCurrentRegionMainTown_s64()
+    local silverInWarehouse = toInt64(0, 0)
+    if nil ~= warehouseWrapper then
+      silverInWarehouse = warehouseWrapper:getMoney_s64()
+    end
     self._radio_PayInven:SetCheck(silverInInventory > silverInWarehouse)
     self._radio_PayWarehouse:SetCheck(silverInInventory <= silverInWarehouse)
     self._staticText_PayInven:SetText(makeDotMoney(silverInInventory))

@@ -257,7 +257,7 @@ function remoteControl:ControlAnimate(isSpread)
 end
 function RemoteControl_Interaction_ShowToggloe()
   local self = remoteControl
-  local isShow = Panel_Interaction:GetShow()
+  local isShow = PaGlobal_Interaction_GetShow()
   if true == _ContentsGroup_RenewUI_Dailog then
     if PaGlobalFunc_MainDialog_IsUse() then
       return

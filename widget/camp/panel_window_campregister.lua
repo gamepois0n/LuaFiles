@@ -65,8 +65,10 @@ function FromClient_RegisterCampingTent(fromWhereType, fromSlotNo)
 end
 function FromClient_CampingServantListUpdate()
   local isShow = ToClient_isCampingReigsted()
+  Panel_Icon_Camp:SetShow(isShow)
+  PaGlobal_Camp:setPos()
   if true == _ContentsGroup_RenewUI then
-    Panel_Icon_Camp:SetShow(isShow)
+    Panel_Icon_Camp:SetShow(false)
   end
 end
 function PaGlobal_CampRegister:CampRegister_InputCampName(fromWhereType, fromSlotNo)

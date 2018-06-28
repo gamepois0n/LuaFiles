@@ -2466,7 +2466,7 @@ local function settingQuestUI(actorKeyRaw, targetPanel, actorProxyWrapper, inser
       lookAtMe:SetColor(Defines.Color.C_FFF26A6A)
       lookAtMe2:SetShow(true)
       lookAtMe2:SetColor(Defines.Color.C_FFF26A6A)
-      if Panel_Interaction:GetShow() and true ~= currentTypeChangeCheck[actorKeyRaw] then
+      if true == PaGlobal_Interaction_GetShow() and true ~= currentTypeChangeCheck[actorKeyRaw] then
         Interaction_Close()
       end
       currentTypeChangeCheck[actorKeyRaw] = true
@@ -2555,16 +2555,26 @@ local function settingBubbleBox(actorKeyRaw, targetPanel, actorProxyWrapper, mes
   targetStatic:SetScale(1, 1)
   targetStaticBG:SetScale(1, 1)
   targetStatic:SetSize(210, 10)
+  if true == ToClient_IsDevelopment() or true == isGameServiceTypeTurkey() then
+    targetStatic:SetUseHarfBuzz(true)
+  else
+    targetStatic:SetUseHarfBuzz(false)
+  end
   targetStatic:SetText(message)
-  local sizeY = targetStatic:GetSizeY() + 40
-  local sizeY = targetStatic:GetSizeY() + 40
+  local initSizeY = targetStatic:GetSizeY()
+  local sizeY = initSizeY + 40
   if 210 < targetStatic:GetTextSizeX() then
     targetStatic:SetSize(targetStatic:GetSizeX(), sizeY)
     targetStaticBG:SetSize(targetStatic:GetSizeX() + 18, sizeY)
-    targetStatic:SetSpanSize(targetStaticBG:GetSpanSize().x - 10, targetStaticBG:GetSpanSize().y)
   else
     targetStatic:SetSize(targetStatic:GetTextSizeX(), sizeY)
     targetStaticBG:SetSize(targetStatic:GetTextSizeX() + 27, sizeY)
+  end
+  if true == targetStatic:IsApplyHarfBuzz() then
+    local fontHeight = targetStatic:GetFontHeight() + 2
+    local lineCount = initSizeY / fontHeight - 1
+    targetStatic:SetSpanSize(targetStaticBG:GetSpanSize().x - 10, targetStaticBG:GetSpanSize().y - lineCount * fontHeight)
+  else
     targetStatic:SetSpanSize(targetStaticBG:GetSpanSize().x - 10, targetStaticBG:GetSpanSize().y)
   end
   local time

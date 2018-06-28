@@ -148,6 +148,11 @@ local ChattingAnimationOptionBg = UI.getChildControl(Panel_ChatOption, "Static_A
 local rdo_ChattingAnimationOn = UI.getChildControl(ChattingAnimationOptionBg, "RadioButton_AnimationOn")
 local rdo_ChattingAnimationOff = UI.getChildControl(ChattingAnimationOptionBg, "RadioButton_AnimationOff")
 local preChattingAnimation = true
+local preUseHarfBuzz
+local ApplyHarfBuzzTitleBg = UI.getChildControl(Panel_ChatOption, "Static_TurkeyOnlyTitleBg")
+local ApplyHarfBuzzOptionBg = UI.getChildControl(Panel_ChatOption, "Static_TurkeyOnlyOptionBg")
+local rdo_HarfBuzzOptionOn = UI.getChildControl(ApplyHarfBuzzOptionBg, "RadioButton_ArabicOn")
+local rdo_HarfBuzzOptionOff = UI.getChildControl(ApplyHarfBuzzOptionBg, "RadioButton_ArabicOff")
 function HandleClicked_ChattingTypeFilter_Notice(panelIdex)
   local self = chatOptionData
   local check = btnFilter[eChatButtonType.eChatNotice].chatFilter:IsCheck()
@@ -1046,6 +1051,46 @@ function FGlobal_ChattingOption_SettingColor(index, chatType, panelIndex, isSyst
     btnFilter[chatType].chatColor:SetColor(FGlobal_ColorList(index))
   end
 end
+function ApplyHarfBuzzOption_Initialize()
+  local currentUseHarfBuzz = ToClient_getUseHarfBuzz()
+  preUseHarfBuzz = currentUseHarfBuzz
+  local isShow = false
+  if true == ToClient_IsDevelopment() then
+    isShow = true
+  else
+    isShow = false
+  end
+  if true == isShow then
+    local offsetY = 70
+    Panel_ChatOption:SetSize(Panel_ChatOption:GetSizeX(), Panel_ChatOption:GetSizeY() + offsetY)
+    ApplyHarfBuzzTitleBg:ComputePos()
+    ApplyHarfBuzzOptionBg:ComputePos()
+    rdo_HarfBuzzOptionOn:ComputePos()
+    rdo_HarfBuzzOptionOff:ComputePos()
+    _button_blockList:SetPosY(_button_blockList:GetPosY() + offsetY)
+    _button_resetColor:SetPosY(_button_resetColor:GetPosY() + offsetY)
+    _button_Confirm:SetPosY(_button_Confirm:GetPosY() + offsetY)
+    _button_Cancle:SetPosY(_button_Cancle:GetPosY() + offsetY)
+    if true == preUseHarfBuzz then
+      rdo_HarfBuzzOptionOn:SetCheck(true)
+      rdo_HarfBuzzOptionOff:SetCheck(false)
+    else
+      rdo_HarfBuzzOptionOn:SetCheck(false)
+      rdo_HarfBuzzOptionOff:SetCheck(true)
+    end
+    rdo_HarfBuzzOptionOn:addInputEvent("Mouse_LUp", "FGlobal_SetUseHarfBuzz(true)")
+    rdo_HarfBuzzOptionOff:addInputEvent("Mouse_LUp", "FGlobal_SetUseHarfBuzz(false)")
+  end
+  ApplyHarfBuzzTitleBg:SetShow(isShow)
+  ApplyHarfBuzzOptionBg:SetShow(isShow)
+  rdo_HarfBuzzOptionOn:SetShow(isShow)
+  rdo_HarfBuzzOptionOff:SetShow(isShow)
+end
+function FGlobal_SetUseHarfBuzz(useHarfBuzz)
+  audioPostEvent_SystemUi(0, 0)
+  ToClient_setUseHarfBuzz(useHarfBuzz)
+  FGlobal_ChattingcheckArabicType(useHarfBuzz)
+end
 function ChattingOption_Open(penelIdex, drawPanelIndex, isCombinedMainPanel)
   if false == Panel_ChatOption:GetShow() then
     Panel_ChatOption:SetShow(true, true)
@@ -1105,6 +1150,7 @@ function ChattingOption_Open(penelIdex, drawPanelIndex, isCombinedMainPanel)
   if penelIdex == 0 then
     _prevMainTransparency = _transparency
   end
+  ApplyHarfBuzzOption_Initialize()
 end
 function ChattingOption_Close()
   local chatCount = ToClient_getChattingPanelCount()
@@ -1119,6 +1165,8 @@ function ChattingOption_Close()
   setisChangeFontSize(true)
   FromClient_ChatUpdate(true)
   ToClient_setChatNameType(preNameType)
+  ToClient_setUseHarfBuzz(preUseHarfBuzz)
+  FGlobal_ChattingcheckArabicType(preUseHarfBuzz)
   ChattingOption_ChatiingAnimation(preChattingAnimation)
   if _openOptionPanelIndex ~= -1 then
     FGlobal_Chatting_PanelTransparency(_openOptionPanelIndex, _prevTransparency, true)

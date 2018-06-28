@@ -59,7 +59,8 @@ PaGlobal_Menu = {
     _isMemoOpen = _ContentsGroup_isMemoOpen,
     _isDropItemOpen = ToClient_IsContentsGroupOpen("337"),
     _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350"),
-    _isButtonShortCut = ToClient_IsContentsGroupOpen("351")
+    _isButtonShortCut = ToClient_IsContentsGroupOpen("351"),
+    _isBlackDesertLab = _ContentsGroup_BlackDesertLab
   },
   _categoryData = {},
   _mainButtonCount = 5,
@@ -198,7 +199,8 @@ PaGlobal_Menu._contents = {
   _blackSpiritAdventure2 = 11,
   _beautyAlbum = 12,
   _photoGallery = 13,
-  _count = 14
+  _blackDesertLab = 14,
+  _count = 15
 }
 PaGlobal_Menu._cooperation = {
   _localWar = 0,
@@ -742,6 +744,19 @@ PaGlobal_Menu._categoryData = {
       _isHot = false,
       _index = 19
     },
+    [PaGlobal_Menu._contents._blackDesertLab] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
+      _hotKey = "",
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 498,
+      _y1 = 374,
+      _x2 = 558,
+      _y2 = 434,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackDesertLab,
+      _isNew = true,
+      _isHot = false,
+      _index = 63
+    },
     ["_name"] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_1"),
     ["_count"] = PaGlobal_Menu._contents._count
   },
@@ -1070,7 +1085,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 312,
       _x2 = 558,
       _y2 = 372,
-      _isContentOpen = isGameTypeKorea(),
+      _isContentOpen = isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTH() or isGameTypeID(),
       _isNew = false,
       _isHot = false,
       _index = 62
@@ -1894,8 +1909,8 @@ function Toggle_MenuTab_forPadEventFunc(value)
     self:HandleClicked_CategoryGroup(self._currentTabIndex)
   end
 end
-Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
-Panel_Menu_New:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
+Panel_Menu_New:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
+Panel_Menu_New:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
 function PaGlobal_Menu:SetCustomMode()
   audioPostEvent_SystemUi(0, 0)
   self:CustomWindow_Init()
@@ -2154,6 +2169,15 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       ScreenshotAlbum_Open()
     elseif PaGlobal_Menu._contents._saveSetting == index then
       PaGlobal_Panel_SaveSetting_Show(true)
+    elseif PaGlobal_Menu._contents._blackDesertLab == index then
+      local player = getSelfPlayer()
+      if nil == player then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LEVEL_LIMITED_GLOBAL_LABS"))
+        return
+      end
+      if 55 < player:get():getLevel() then
+        PaGlobal_BlackDesertLab_Show()
+      end
     end
   elseif 2 == categoryIndex then
     if PaGlobal_Menu._cooperation._localWar == index then
@@ -2503,13 +2527,6 @@ function PaGlobal_Menu:HideAni()
   ImageMoveAni:SetHideAtEnd(true)
   ImageMoveAni:SetDisableWhileAni(true)
   ImageMoveAni:SetIgnoreUpdateSnapping(true)
-  if false == _ContentsGroup_RenewUI_Dailog then
-    if Panel_Npc_Dialog:GetShow() == false then
-      ToClient_setUsablePanelSnapping(false)
-    end
-  elseif false == PaGlobalFunc_MainDialog_GetShow() then
-    ToClient_setUsablePanelSnapping(false)
-  end
 end
 function PaGlobal_Menu:SetVertexAni(index)
   self:ResetVertexAni()

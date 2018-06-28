@@ -411,6 +411,8 @@ local function MiniGame_Manual_Instrument_0(actorKeyRaw, isSelf)
   end
 end
 local function MiniGame_Manual_HerbMachine_0(actorKeyRaw, isSelf)
+  ui_Value.isFirstTime_Manual_HerbMachine_0 = true
+  herbMachine_SetGameEndCount(5)
   if ui_Value.isFirstTime_Manual_HerbMachine_0 == true then
     for _, v in pairs(ui) do
       v:SetShow(false)
@@ -534,6 +536,50 @@ local function MiniGame_Manual_HerbMachine_5(actorKeyRaw, isSelf)
 end
 local MiniGame_Manual_HerbMachine = function()
   Panel_Minigame_HerbMachine_ResetCount()
+end
+local function MiniGame_Manual_Hammer_0(actorKeyRaw, isSelf)
+  ui_Value.isFirstTime_Manual_HerbMachine_0 = true
+  herbMachine_SetGameEndCount(1)
+  if ui_Value.isFirstTime_Manual_HerbMachine_0 == true then
+    for _, v in pairs(ui) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    for _, v in pairs(uiPress) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    Panel_Global_Manual:SetShow(true)
+    Panel_Global_Manual:SetAlpha(0)
+    UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
+    ui._purposeText:SetShow(true)
+    ui._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    ui._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_SUMMERHAMMER_0") .. " " .. "(0/1)")
+    uiPress._button_Space:SetShow(true)
+    ui_Value.isFirstTime_Manual_HerbMachine_0 = false
+  end
+end
+local function MiniGame_Manual_Hammer_End(actorKeyRaw, isSelf)
+  if ui_Value.isFirstTime_Manual_HerbMachine_5 == true then
+    for _, v in pairs(ui) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    for _, v in pairs(uiPress) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    Panel_Global_Manual:SetShow(true)
+    Panel_Global_Manual:SetAlpha(0)
+    UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
+    FGlobal_MiniGame_SummerHammerGame()
+    ToClient_MinigameResult(2, true)
+    ui._purposeText:SetShow(true)
+    ui._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    ui._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_SUMMERHAMMER_1"))
+    uiPress._button_Space:SetShow(true)
+    ui_Value.isFirstTime_Manual_HerbMachine_5 = true
+  end
 end
 local function MiniGame_Manual_Buoy_0(actorKeyRaw, isSelf)
   if ui_Value.isFirstTime_Manual_Buoy_0 == true then
@@ -1024,6 +1070,8 @@ ActionChartEventBindFunction(254, MiniGame_Manual_HerbMachine_2)
 ActionChartEventBindFunction(255, MiniGame_Manual_HerbMachine_3)
 ActionChartEventBindFunction(256, MiniGame_Manual_HerbMachine_4)
 ActionChartEventBindFunction(257, MiniGame_Manual_HerbMachine_5)
+ActionChartEventBindFunction(258, MiniGame_Manual_Hammer_0)
+ActionChartEventBindFunction(259, MiniGame_Manual_Hammer_End)
 ActionChartEventBindFunction(261, MiniGame_Manual_Reset_Buoy)
 ActionChartEventBindFunction(262, MiniGame_Manual_Buoy_0)
 ActionChartEventBindFunction(263, MiniGame_Manual_Buoy_1)

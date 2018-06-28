@@ -153,15 +153,32 @@ function WeaponChange_ApplyChangeItem()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHANGEWEAPON_SELECTITEM"))
     return
   end
-  elapsTime = 0
-  doChange = true
-  isChangeDoing = true
-  audioPostEvent_SystemUi(13, 15)
-  runEffect:SetShow(true)
-  btn_Apply:SetMonoTone(true)
-  btn_Apply:SetEnable(false)
-  btn_Apply:SetIgnore(true)
-  Inventory_SetFunctor(WeaponChange_SetFilterIgnore, nil, nil, nil)
+  local function changeGo()
+    elapsTime = 0
+    doChange = true
+    isChangeDoing = true
+    audioPostEvent_SystemUi(13, 15)
+    runEffect:SetShow(true)
+    btn_Apply:SetMonoTone(true)
+    btn_Apply:SetEnable(false)
+    btn_Apply:SetIgnore(true)
+    Inventory_SetFunctor(WeaponChange_SetFilterIgnore, nil, nil, nil)
+  end
+  local meterialItemWrapper = getInventoryItemByType(selectedItemWhere, selectedItemSlotNo)
+  local materialItemName = meterialItemWrapper:getStaticStatus():getName()
+  local itemKey = meterialItemWrapper:get():getKey()
+  local toItemWrapper = getExchangeItem(selectedItemWhere, selectedItemSlotNo, materialWhereType, materialSlotno)
+  local resultItemName = toItemWrapper:getStaticStatus():getName()
+  local _title = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHANGEWEAPON_TITLE")
+  local _contenet = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_CHANGEITEM_MESSAGEDESC", "materialItem", materialItemName, "resultItem", resultItemName)
+  local messageBoxData = {
+    title = _title,
+    content = _contenet,
+    functionYes = changeGo,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
 end
 function WeaponChange_SetFilterIgnore()
   return true

@@ -889,6 +889,8 @@ function _premiumAlert_HideAni()
   _starterPackage:EraseAllEffect()
   _premiumPackage:EraseAllEffect()
   _pearlPallete:EraseAllEffect()
+  _russiaPack3:EraseAllEffect()
+  _russiaKamasilv:EraseAllEffect()
   _premiumAlert:SetShow(false)
 end
 function _premiumAlert_ShowAni(control, showTime)

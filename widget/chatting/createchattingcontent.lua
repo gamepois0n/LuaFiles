@@ -32,7 +32,11 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
   local noticeType = chattingMessage.noticeType
   local isMe = chattingMessage.isMe
   local isGameManager = chattingMessage.isGameManager
-  local msgColor = Chatting_MessageColor(chatType, noticeType, panelIndex)
+  local panelIndexModifier = 0
+  if true == _ContentsGroup_RenewUI_Chatting then
+    panelIndexModifier = 1
+  end
+  local msgColor = Chatting_MessageColor(chatType, noticeType, panelIndex - panelIndexModifier)
   local msg, msgData
   local isLinkedItem = chattingMessage:isLinkedItem()
   local isLinkedGuild = chattingMessage:isLinkedGuild()
@@ -65,7 +69,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
   chatting_Icon:SetShow(true)
   if chatType == CppEnums.ChatType.Private and false == chattingMessage.isMe then
     ChatInput_SetLastWhispersUserId(sender)
-    if Int64toInt32(getUtc64() - chattingMessage._time_s64) < 1 then
+    if 1 > Int64toInt32(getUtc64() - chattingMessage._time_s64) then
       local isSoundAlert = true
       if ChatInput_GetLastWhispersUserId() == sender then
         if getTickCount32() - ChatInput_GetLastWhispersTick() > 1000 then
@@ -100,7 +104,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
     end
   else
   end
-  if true == FGlobal_ChatOption_GetIsShowTimeString(panelIndex) or UI_CT.Private == chatType or UI_CT.System == chatType and UI_CST.Market == chatSystemType then
+  if true == FGlobal_ChatOption_GetIsShowTimeString(panelIndex - panelIndexModifier) or UI_CT.Private == chatType or UI_CT.System == chatType and UI_CST.Market == chatSystemType then
     msg = chattingMessage:getContent() .. " (" .. chattingMessage:getTimeString() .. ")"
   else
     msg = chattingMessage:getContent()
@@ -243,7 +247,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         local checkmsg = {}
         local ispreEmoticonIndex = contentindex
         while msgDataLen > 0 do
-          chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+          chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
           chatting_contents[contentindex]:SetFontColor(msgColor)
           chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
           chatting_contents[contentindex]:SetShow(true)
@@ -443,7 +447,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
         while msgDataLen > 0 do
           if 0 == checkitemwebat then
-            chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+            chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
             chatting_contents[contentindex]:SetFontColor(msgColor)
             chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
             chatting_contents[contentindex]:SetShow(true)
@@ -470,7 +474,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
             chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
             chatting_contents[contentindex]:SetIgnore(false)
           elseif 5 == checkitemwebat then
-            chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+            chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
             chatting_contents[contentindex]:SetFontColor(UI_color.C_FFFFFFFF)
             chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
             chatting_contents[contentindex]:addInputEvent("Mouse_On", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",true )")
@@ -609,6 +613,10 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
   return PosY - 3
 end
 function UiPrivateChatType(chatType, chatting_Icon, msgColor, isChatDivision, sender, senderStr, poolCurrentUI, noticeType)
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingHistory_SetChatIcon(chatType, chatting_Icon)
+    return
+  end
   local chattingIconIdx = poolCurrentUI:getCurrentChattingIconIndex()
   if UI_CT.Private == chatType then
     if isChatDivision then
@@ -800,6 +808,9 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
   else
     chat_contentAddPosX = 10
   end
+  if true == ToClient_getUseHarfBuzz() then
+    isChattingAt = false
+  end
   while msgstartindex < string.len(msg) do
     if false == isChattingAt and false == isLinkedItem and false == isLinkedGuild and false == isLinkedWebSite and false == isLinkedMentalCard then
       local msgData = string.sub(msg, msgstartindex + 1, string.len(msg))
@@ -808,7 +819,7 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
       local ispreEmoticonIndex = contentindex
       local fontColor
       while msgDataLen > 0 do
-        chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+        chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
         chatting_contents[contentindex]:SetFontColor(msgColor)
         chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
         chatting_contents[contentindex]:SetShow(true)
@@ -835,6 +846,15 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
         checkmsg = chatting_contents[contentindex]:GetTextLimitWidth(msgData)
         if isChangeFontSize() then
           chatting_contents[contentindex]:setChangeFontAfterTransSizeValue(true)
+        end
+        if true == ToClient_IsDevelopment() or true == isGameServiceTypeTurkey() then
+          if true == ToClient_isApplyHarfBuzzByChatType(chatType) then
+            chatting_contents[contentindex]:SetUseHarfBuzz(true)
+          else
+            chatting_contents[contentindex]:SetUseHarfBuzz(false)
+          end
+        else
+          chatting_contents[contentindex]:SetUseHarfBuzz(false)
         end
         chatting_contents[contentindex]:SetText(checkmsg)
         if nil ~= fontColor then
@@ -1012,7 +1032,7 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
       end
       while msgDataLen > 0 do
         if 0 == checkitemwebat then
-          chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+          chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
           chatting_contents[contentindex]:SetFontColor(msgColor)
           chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
           chatting_contents[contentindex]:SetShow(true)
@@ -1039,7 +1059,7 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
           chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
           chatting_contents[contentindex]:SetIgnore(false)
         elseif 5 == checkitemwebat then
-          chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+          chatting_contents[contentindex] = poolCurrentUI:newChattingContents(messageIndex)
           chatting_contents[contentindex]:SetFontColor(UI_color.C_FFFFFFFF)
           chatting_contents[contentindex]:SetTextMode(UI_TM.eTextMode_ChattingText)
           chatting_contents[contentindex]:addInputEvent("Mouse_On", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",true )")

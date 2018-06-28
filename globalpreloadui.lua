@@ -39,7 +39,7 @@ function ProcessorInputModeChange(prevMode, currentMode)
   posY = getMousePosY()
 end
 function CursorUIEffect_UpdateCursorPos()
-  if false == ToClient_isUsablePanelSnapping() or false == ToClient_isGamePadUISnapping() then
+  if false == ToClient_padSnapIsUse() then
     _voidCursor:SetShow(true)
     _consoleCursor:SetShow(false)
     if currentModeCache then

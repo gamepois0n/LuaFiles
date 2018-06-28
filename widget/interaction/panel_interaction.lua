@@ -933,6 +933,9 @@ function InteractionTooltipResize_ByFontSize()
     _globalGuide:SetSize(_globalGuide:GetSizeX(), 23)
   end
 end
+function PaGlobal_Interaction_GetShow()
+  return Panel_Interaction:GetShow()
+end
 registerEvent("FromClient_ReceiveBuyHouse", "Interaction_SetReloadState")
 registerEvent("FromClient_ReceiveChangeUseType", "Interaction_SetReloadState")
 registerEvent("FromClient_ReceiveReturnHouse", "Interaction_SetReloadState")

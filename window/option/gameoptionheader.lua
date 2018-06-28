@@ -60,7 +60,8 @@ PaGlobal_Option = {
     _listSearchBg = UI.getChildControl(Panel_Window_cOption, "List2_Search"),
     _specDescTable = {},
     _categoryTitleTable = {},
-    _categoryDescTable = {}
+    _categoryDescTable = {},
+    _atFieldString = nil
   },
   _list2 = {
     _curCategory = nil,
@@ -636,7 +637,7 @@ PaGlobal_Option = {
       _settingRightNow = true
     },
     VolumeMusic = {
-      _defaultValue = 0.62,
+      _defaultValue = 1,
       _controlType = CONTROL.PA_UI_CONTROL_SLIDER,
       _sliderValueMin = 0,
       _sliderValueMax = 100,
@@ -1243,7 +1244,19 @@ function PaGlobal_Option._functions.ChatChannelType(value)
   if false == ToClient_isAvailableChangeServiceType() then
     return
   end
-  ToClient_saveChatChannelType(PaGlobal_Option:radioButtonMapping_ChatChannelType(value))
+  local chatType = PaGlobal_Option:radioButtonMapping_ChatChannelType(value)
+  ToClient_saveChatChannelType(chatType)
+  if CppEnums.LangType.LangType_AE == chatType then
+    ToClient_setUseHarfBuzz(true)
+    if nil ~= FGlobal_ChattingcheckArabicType then
+      FGlobal_ChattingcheckArabicType(true)
+    end
+  else
+    ToClient_setUseHarfBuzz(false)
+    if nil ~= FGlobal_ChattingcheckArabicType then
+      FGlobal_ChattingcheckArabicType(false)
+    end
+  end
 end
 function PaGlobal_Option._functions.SelfPlayerNameTagVisible(value)
   setSelfPlayerNameTagVisible(value)

@@ -177,7 +177,7 @@ function PaGlobal_Inventory:findItemWrapper(itemWhereType, targetItemKey, target
   end
   local invenMaxSize = inventory:sizeXXX()
   for ii = 0, invenMaxSize - 1 do
-    local itemWrapper = getInventoryItem(ii)
+    local itemWrapper = getInventoryItemByType(itemWhereType, ii)
     if nil ~= itemWrapper then
       local itemKey = itemWrapper:get():getKey():getItemKey()
       local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()

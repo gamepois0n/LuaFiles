@@ -137,3 +137,21 @@ function UI.checkIsInMouseAndEventPanel(panel)
   end
   return isOverEvent
 end
+function UI.checkResolution4KForXBox()
+  if true == ToClient_isXBox() then
+    local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
+    if nil == gameOptionSetting then
+      return false
+    end
+    local screenWidth = gameOptionSetting:getScreenResolutionWidth()
+    local screenHeight = gameOptionSetting:getScreenResolutionHeight()
+    if nil == screenWidth or nil == screenHeight then
+      return false
+    end
+    if screenWidth >= 3840 or screenHeight >= 2160 then
+      _PA_LOG("\234\180\145\236\154\180", "==== 4K \236\157\188\235\149\140\235\138\148 Ui Scale\234\176\146\236\157\128 \235\172\180\236\161\176\234\177\180 200% \235\161\156 \234\179\160\236\160\149 \237\149\156\235\139\164.")
+      return true
+    end
+  end
+  return false
+end

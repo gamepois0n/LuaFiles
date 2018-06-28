@@ -941,6 +941,7 @@ function StableList_SlotSelect(slotNo)
   if -1 == self._slots[slotNo].index then
     return
   end
+  PaGlobal_Panel_Window_StableInfo_ResetSkillTarget()
   for ii = 0, self._config.slotCount - 1 do
     self._slots[ii].effect:SetShow(false)
   end

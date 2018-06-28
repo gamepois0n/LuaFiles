@@ -1158,78 +1158,80 @@ local ChatPanelIsOpenState = {
 }
 function UiSet_Initialize()
   for idx = 1, UiSet.panelCount do
-    local slot = {}
-    local fixedType = ""
-    if panelControl[idx].posFixed then
-      fixedType = "Static_DisAble"
-    else
-      fixedType = "Static_Able"
-    end
-    slot.control = UI.createAndCopyBasePropertyControl(Panel_UI_Setting, fixedType, Panel_UI_Setting, "UiSet_CreateControl_" .. idx)
-    slot.control:SetShow(true)
-    slot.control:SetSize(panelControl[idx].control:GetSizeX(), panelControl[idx].control:GetSizeY())
-    slot.control:SetPosX(panelControl[idx].control:GetPosX())
-    slot.control:SetPosY(panelControl[idx].control:GetPosY())
-    slot.control:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_MoveControlSet_Start( " .. idx .. " )")
-    slot.control:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_MoveControl( " .. idx .. " )")
-    slot.control:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_PositionCheck( " .. idx .. " )")
-    if idx >= 46 and idx <= 55 then
-      slot.control:addInputEvent("Mouse_On", "PaGlobal_SimpleTooltips_Index(true, " .. idx .. ")")
-      slot.control:addInputEvent("Mouse_Out", "PaGlobal_SimpleTooltips_Index(false, " .. idx .. ")")
-    end
-    slot.close = UI.createAndCopyBasePropertyControl(Panel_UI_Setting, "Button_Close", slot.control, "UiSet_Btn_CreateClose_" .. idx)
-    slot.close:SetShow(true)
-    slot.close:SetPosX(slot.control:GetSizeX() - slot.close:GetSizeX() - 3)
-    slot.close:SetPosY(3)
-    slot.close:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ControlShowToggle( " .. idx .. " )")
-    slot.close:SetCheck(panelControl[idx].control:GetShow())
-    UiSet.panelPool[idx] = slot
-    panelControl[idx].isShow = panelControl[idx].control:GetShow()
-    if panelControl[idx].isShow then
+    if nil ~= panelControl[idx].control then
+      local slot = {}
+      local fixedType = ""
       if panelControl[idx].posFixed then
-        slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", panelControl[idx].name))
+        fixedType = "Static_DisAble"
       else
-        slot.control:SetText(panelControl[idx].name)
+        fixedType = "Static_Able"
       end
-    elseif 21 == idx then
-      slot.control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
-    else
-      slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", panelControl[idx].name))
-    end
-    local stateValue = 0
-    if not panelControl[idx].isShow then
-      stateValue = 1
-    elseif panelControl[idx].posFixed then
-      stateValue = 3
-    else
-      stateValue = 2
-    end
-    UiSet_ChangeTexture_BG(idx, stateValue)
-    if CppDefine.ChangeUIAndResolution == true and 0 < ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      local relativePosX, relativePosY
-      if idx >= panelID.Chat0 and idx <= panelID.Chat4 then
-        relativePosX = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, idx - panelID.Chat0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-        relativePosY = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, idx - panelID.Chat0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
-      else
-        relativePosX = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-        relativePosY = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+      slot.control = UI.createAndCopyBasePropertyControl(Panel_UI_Setting, fixedType, Panel_UI_Setting, "UiSet_CreateControl_" .. idx)
+      slot.control:SetShow(true)
+      slot.control:SetSize(panelControl[idx].control:GetSizeX(), panelControl[idx].control:GetSizeY())
+      slot.control:SetPosX(panelControl[idx].control:GetPosX())
+      slot.control:SetPosY(panelControl[idx].control:GetPosY())
+      slot.control:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_MoveControlSet_Start( " .. idx .. " )")
+      slot.control:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_MoveControl( " .. idx .. " )")
+      slot.control:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_PositionCheck( " .. idx .. " )")
+      if idx >= 46 and idx <= 55 then
+        slot.control:addInputEvent("Mouse_On", "PaGlobal_SimpleTooltips_Index(true, " .. idx .. ")")
+        slot.control:addInputEvent("Mouse_Out", "PaGlobal_SimpleTooltips_Index(false, " .. idx .. ")")
       end
-      if relativePosX == -1 or relativePosX == -1 then
-        if 0 < panelControl[idx].control:GetRelativePosX() or 0 < panelControl[idx].control:GetRelativePosY() then
-          panelControl[idx].isChange = true
+      slot.close = UI.createAndCopyBasePropertyControl(Panel_UI_Setting, "Button_Close", slot.control, "UiSet_Btn_CreateClose_" .. idx)
+      slot.close:SetShow(true)
+      slot.close:SetPosX(slot.control:GetSizeX() - slot.close:GetSizeX() - 3)
+      slot.close:SetPosY(3)
+      slot.close:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ControlShowToggle( " .. idx .. " )")
+      slot.close:SetCheck(panelControl[idx].control:GetShow())
+      UiSet.panelPool[idx] = slot
+      panelControl[idx].isShow = panelControl[idx].control:GetShow()
+      if panelControl[idx].isShow then
+        if panelControl[idx].posFixed then
+          slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", panelControl[idx].name))
         else
+          slot.control:SetText(panelControl[idx].name)
+        end
+      elseif 21 == idx then
+        slot.control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
+      else
+        slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", panelControl[idx].name))
+      end
+      local stateValue = 0
+      if not panelControl[idx].isShow then
+        stateValue = 1
+      elseif panelControl[idx].posFixed then
+        stateValue = 3
+      else
+        stateValue = 2
+      end
+      UiSet_ChangeTexture_BG(idx, stateValue)
+      if CppDefine.ChangeUIAndResolution == true and 0 < ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+        local relativePosX, relativePosY
+        if idx >= panelID.Chat0 and idx <= panelID.Chat4 then
+          relativePosX = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, idx - panelID.Chat0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+          relativePosY = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, idx - panelID.Chat0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+        else
+          relativePosX = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+          relativePosY = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+        end
+        if relativePosX == -1 or relativePosX == -1 then
+          if 0 < panelControl[idx].control:GetRelativePosX() or 0 < panelControl[idx].control:GetRelativePosY() then
+            panelControl[idx].isChange = true
+          else
+            panelControl[idx].isChange = false
+          end
+        elseif relativePosX > 0 or relativePosY > 0 then
+          panelControl[idx].isChange = true
+        end
+        if panelControl[idx].posFixed == true then
           panelControl[idx].isChange = false
         end
-      elseif relativePosX > 0 or relativePosY > 0 then
-        panelControl[idx].isChange = true
+        panelControl[idx].control:SetRelativePosX(relativePosX)
+        panelControl[idx].control:SetRelativePosY(relativePosY)
+        UiSet.panelPool[idx].control:SetRelativePosX(relativePosX)
+        UiSet.panelPool[idx].control:SetRelativePosY(relativePosY)
       end
-      if panelControl[idx].posFixed == true then
-        panelControl[idx].isChange = false
-      end
-      panelControl[idx].control:SetRelativePosX(relativePosX)
-      panelControl[idx].control:SetRelativePosY(relativePosY)
-      UiSet.panelPool[idx].control:SetRelativePosX(relativePosX)
-      UiSet.panelPool[idx].control:SetRelativePosY(relativePosY)
     end
   end
   if true == _ContentsGroup_RenewUI_Main then
@@ -1711,6 +1713,9 @@ function HandleClicked_UiSet_ConfirmSetting(isReset)
   scale = scale + 0.002
   local uiScale_Percent = math.floor(scale * 100)
   scale = uiScale_Percent / 100
+  if true == UI.checkResolution4KForXBox() then
+    scale = 2
+  end
   setUIScale(scale)
   GameOption_SetUIMode(scale)
   saveGameOption(false)
@@ -1809,6 +1814,9 @@ function UiSet_ScaleSet()
   UiSet.replaceScale = UiSet.maxScale - UiSet.minScale
   UiSet.preScale = FGlobal_returnUIScale()
   UiSet.nowCurrentPercent = math.ceil((UiSet.currentScale - UiSet.minScale) / UiSet.replaceScale * 100)
+  if true == UI.checkResolution4KForXBox() then
+    UiSet.nowCurrentPercent = 200
+  end
 end
 function FGlobal_UiSet_Open(isMenu)
   close_force_WindowPanelList()
@@ -1932,6 +1940,7 @@ function HandleClicked_Reset_UiSetting_Msg()
     local midleScaleHeight = 900
     local uiScale = 1
     local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
+    local screenWidth = gameOptionSetting:getScreenResolutionWidth()
     local screenHeight = gameOptionSetting:getScreenResolutionHeight()
     if false == isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_KOR) then
       const_LowMaxScaleValue = 100
@@ -1946,6 +1955,9 @@ function HandleClicked_Reset_UiSetting_Msg()
     uiScale = math.floor(uiScale * 100) / 100
     if uiScale * 100 > maxScaleValue then
       uiScale = 0.8
+    end
+    if true == UI.checkResolution4KForXBox() then
+      uiScale = 2
     end
     UiSet.nowCurrentPercent = uiScale
     SetUIMode(Defines.UIMode.eUIMode_Default)

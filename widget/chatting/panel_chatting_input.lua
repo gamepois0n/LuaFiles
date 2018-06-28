@@ -34,7 +34,8 @@ local chatInput = {
     whisperNotice = UI.getChildControl(Panel_Chatting_Input, "StaticText_Whisper_Notice"),
     macroButton = UI.getChildControl(Panel_Chatting_Input, "RadioButton_Macro"),
     socialButton = UI.getChildControl(Panel_Chatting_Input, "RadioButton_SocialAction"),
-    nameTypeButton = UI.getChildControl(Panel_Chatting_Input, "Button_ChangeNameDisplay")
+    nameTypeButton = UI.getChildControl(Panel_Chatting_Input, "Button_ChangeNameDisplay"),
+    arabicCheckButton = UI.getChildControl(Panel_Chatting_Input, "CheckBox_DropTrash")
   },
   buttonIds = {
     [0] = nil,
@@ -198,6 +199,18 @@ function chatInput:init()
     self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
   end
   self.control.buttons[lastMemoryChatType]:SetShow(true)
+  if true == ToClient_IsDevelopment() or true == isGameServiceTypeTurkey() then
+    self.control.edit:SetUseHarfBuzz(true)
+    self.control.arabicCheckButton:SetShow(true)
+  else
+    self.control.edit:SetUseHarfBuzz(false)
+    self.control.arabicCheckButton:SetShow(false)
+  end
+  if true == ToClient_getUseHarfBuzz() then
+    self.control.arabicCheckButton:SetCheck(true)
+  else
+    self.control.arabicCheckButton:SetCheck(false)
+  end
   self.control.edit:SetMaxInput(self.maxEditInput)
   self.permissions:resize(#self.buttonIds, false)
   self.control.whisperNotice:SetSize(270, 20)
@@ -731,6 +744,26 @@ function HandleClicked_clickNameType()
     ToClient_setChatNameType(1)
   end
 end
+function HandleClicked_checkArabicType()
+  local self = chatInput
+  if true == self.control.arabicCheckButton:IsCheck() then
+    ToClient_setUseHarfBuzz(true)
+  else
+    ToClient_setUseHarfBuzz(false)
+  end
+end
+function HandleOver_Tooltip(isShow)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local self = chatInput
+  local name, desc, control
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_INPUT_ARABIC")
+  desc = ""
+  control = self.control.arabicCheckButton
+  TooltipSimple_Show(control, name, desc)
+end
 function FGlobal_Chatting_Macro_SetCHK(show)
   if true == show then
     chatInput.control.macroButton:SetCheck(true)
@@ -744,6 +777,10 @@ function FGlobal_SocialAction_SetCHK(show)
   else
     chatInput.control.socialButton:SetCheck(false)
   end
+end
+function FGlobal_ChattingcheckArabicType(check)
+  local self = chatInput
+  self.control.arabicCheckButton:SetCheck(check)
 end
 function isChatInputLinkedItem(itemWrapper)
   if nil == itemWrapper then
@@ -824,17 +861,20 @@ function ChatInput_Resize()
   Panel_Chatting_Input:SetSize(352, 30)
   Panel_Chatting_Input:ComputePos()
 end
-chatInput:init()
-chatInput:checkLoad()
-chatInput:registEventHandler()
-chatInput.control.macroButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(0)")
-chatInput.control.socialButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(1)")
-chatInput.control.nameTypeButton:addInputEvent("Mouse_LUp", "HandleClicked_clickNameType()")
-chatInput.control.whisperEdit:addInputEvent("Mouse_LUp", "HandleClicked_ChatInputEdit()")
-chatInput.control.edit:addInputEvent("Mouse_LUp", "HandleClicked_ChatInputEdit()")
-function HandleClicked_ChatInputEdit()
+function FromClient_Init_ChatInput()
+  local self = chatInput
+  self:init()
+  self:checkLoad()
+  self:registEventHandler()
+  self.control.macroButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(0)")
+  self.control.socialButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(1)")
+  self.control.nameTypeButton:addInputEvent("Mouse_LUp", "HandleClicked_clickNameType()")
+  self.control.arabicCheckButton:addInputEvent("Mouse_LUp", "HandleClicked_checkArabicType()")
+  self.control.arabicCheckButton:addInputEvent("Mouse_On", "HandleOver_Tooltip(true)")
+  self.control.arabicCheckButton:addInputEvent("Mouse_Out", "HandleOver_Tooltip(false)")
 end
 registerEvent("EventChatPermissionChanged", "ChatInput_UpdatePermission")
 registerEvent("EventChatInputClose", "ChatInput_Close")
 registerEvent("onScreenResize", "ChatInput_Resize")
 registerEvent("FromClient_GroundMouseClick", "FromClient_GroundMouseClickForChatting")
+registerEvent("FromClient_luaLoadComplete", "FromClient_Init_ChatInput")

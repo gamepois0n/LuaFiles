@@ -1605,7 +1605,9 @@ function FGlobal_InGameShop_OpenByEventAlarm()
   getIngameCashMall():changeViewMyCharacter()
   local self = inGameShop
   _ingameCashShop_SetViewListCount()
-  cashShop_Controller_Open()
+  if not _ContentsGroup_RenewUI_PearlShop then
+    cashShop_Controller_Open()
+  end
   FGlobal_CashShop_SetEquip_Open()
   for ii = 1, self._tabCount do
     self._tabs[ii].static:SetCheck(false)
@@ -3117,7 +3119,9 @@ function InGameShop_Open()
   getIngameCashMall():changeViewMyCharacter()
   local self = inGameShop
   _ingameCashShop_SetViewListCount()
-  cashShop_Controller_Open()
+  if not _ContentsGroup_RenewUI_PearlShop then
+    cashShop_Controller_Open()
+  end
   FGlobal_CashShop_SetEquip_Open()
   for ii = 1, self._tabCount do
     self._tabs[ii].static:SetCheck(false)
@@ -3129,7 +3133,7 @@ function InGameShop_Open()
   self._static_Construction:ComputePos()
   self._static_Construction:SetShow(false)
   if _ContentsGroup_RenewUI_PearlShop then
-    PaGlobalFunc_PearlShopCategoryOpen()
+    PaGlobalFunc_PearlShopCategoryOpen(true)
   else
     Panel_IngameCashShop:SetShow(true)
   end

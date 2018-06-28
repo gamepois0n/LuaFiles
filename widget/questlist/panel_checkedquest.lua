@@ -1771,6 +1771,9 @@ end
 function FGlobal_QuestWidget_Open()
   Panel_CheckedQuest:SetShow(true, true)
   Panel_MainQuest:SetShow(true, false)
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingInfo_Close()
+  end
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
     WorldMapPopupManager:push(Panel_CheckedQuest, true)

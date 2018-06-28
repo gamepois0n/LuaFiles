@@ -816,6 +816,9 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
   elems_.CropModeScaleX._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleX(), 0.5, 1)
   elems_.CropModeScaleY._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleY(), 0.5, 1)
   elems_.UIScale._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getUIScale(), 0.5, 2)
+  if true == UI.checkResolution4KForXBox() then
+    elems_.UIScale._initValue = 2
+  end
   elems_.GammaValue._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGammaValue(), 0, 1)
   elems_.ContrastValue._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getContrastValue(), 0, 1)
   elems_.EffectAlpha._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getEffectAlpha(), 0.3, 1)

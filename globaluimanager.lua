@@ -159,6 +159,7 @@ local panel_WindowList = {
   Panel_Window_CharacterInfo_Renew,
   Panel_Dialog_SkillSpecialize,
   Panel_Window_Knowledge_Renew,
+  Panel_Window_BlackDesertLab,
   Panel_Guild_ManufactureSelect
 }
 local panel_SoundedWindowList = {

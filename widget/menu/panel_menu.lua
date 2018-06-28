@@ -24,7 +24,8 @@ local isSiegeEnable = ToClient_IsContentsGroupOpen("21")
 local isDropItemOpen = ToClient_IsContentsGroupOpen("337")
 local isTeamDuelOpen = ToClient_IsContentsGroupOpen("350")
 local isButtonShortCut = ToClient_IsContentsGroupOpen("351")
-local isKnownIssue = isGameTypeKorea()
+local isKnownIssue = isGameTypeKorea() or isGameTypeTH() or isGameTypeID() or isGameTypeTaiwan()
+local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
 Panel_Menu:ActiveMouseEventEffect(true)
@@ -89,8 +90,9 @@ local MenuButtonId = {
   btn_ShortCut = 55,
   btn_SaveSetting = 56,
   btn_KnownIssue = 57,
-  btn_GameOption = 58,
-  btn_GameExit = 59
+  btn_BlackDesertLab = 58,
+  btn_GameOption = 59,
+  btn_GameExit = 60
 }
 local MenuButtonTextId = {
   [MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"),
@@ -151,7 +153,8 @@ local MenuButtonTextId = {
   [MenuButtonId.btn_Copyright] = PAGetString(Defines.StringSheet_GAME, "LUA_COPYRIGHT_TITLE"),
   [MenuButtonId.btn_ShortCut] = PAGetString(Defines.StringSheet_GAME, "LUA_BUTTONSHORTCUT_SUBTITLE"),
   [MenuButtonId.btn_SaveSetting] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_SAVESETTING"),
-  [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING")
+  [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING"),
+  [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE")
 }
 local MenuButtonHotKeyID = {
   [MenuButtonId.btn_HelpGuide] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help),
@@ -212,7 +215,8 @@ local MenuButtonHotKeyID = {
   [MenuButtonId.btn_TeamDuel] = "",
   [MenuButtonId.btn_ShortCut] = "",
   [MenuButtonId.btn_SaveSetting] = "",
-  [MenuButtonId.btn_KnownIssue] = ""
+  [MenuButtonId.btn_KnownIssue] = "",
+  [MenuButtonId.btn_BlackDesertLab] = ""
 }
 local contry = {
   kr = 0,
@@ -642,6 +646,12 @@ local buttonTexture = {
     127,
     460,
     171
+  },
+  [MenuButtonId.btn_BlackDesertLab] = {
+    416,
+    173,
+    460,
+    217
   }
 }
 function TargetWindow_ShowToggle(index)
@@ -860,6 +870,16 @@ function TargetWindow_ShowToggle(index)
     PaGlobal_Panel_SaveSetting_Show(true)
   elseif MenuButtonId.btn_KnownIssue == index then
     Panel_WebHelper_ShowToggle("KnownIssue")
+  elseif MenuButtonId.btn_BlackDesertLab == index then
+    local player = getSelfPlayer()
+    if nil == player then
+      return
+    end
+    if player:get():getLevel() < 56 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LEVEL_LIMITED_GLOBAL_LABS"))
+      return
+    end
+    PaGlobal_BlackDesertLab_Show()
   end
   if Panel_Menu:GetShow() then
     Panel_Menu:SetShow(false, false)
@@ -948,6 +968,11 @@ function GameMenu_Init()
 end
 function GameMenu_CheckEnAble(buttonType)
   local returnValue = false
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  local playerLevel = selfPlayer:get():getLevel()
   if isGameTypeKorea() then
     if buttonType == MenuButtonId.btn_Notice then
       returnValue = false
@@ -1147,6 +1172,9 @@ function GameMenu_CheckEnAble(buttonType)
   end
   if buttonType == MenuButtonId.btn_KnownIssue then
     returnValue = isKnownIssue
+  end
+  if buttonType == MenuButtonId.btn_BlackDesertLab then
+    returnValue = isBlackDesertLabOpen
   end
   if not isGameTypeKR2() then
     menuNewPool[buttonType]:ResetVertexAni()
