@@ -446,7 +446,7 @@ local function Acquire_SetData(notifyMsg)
     if nil ~= skillKey then
       Acquire_UI.servantSkillIcon:SetShow(true)
       Acquire_UI.servantSkillName:SetShow(true)
-      Acquire_UI.servantSkillIcon:ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
+      Acquire_UI.servantSkillIcon:ChangeTextureInfoNameAsync("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
       Acquire_UI.servantSkillName:SetText(skillName)
       Acquire_UI.servantSkillIcon:SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
     end
@@ -458,7 +458,7 @@ local function Acquire_SetData(notifyMsg)
     if nil ~= skillWrapper then
       Acquire_UI.servantSkillIcon:SetShow(true)
       Acquire_UI.servantSkillName:SetShow(true)
-      Acquire_UI.servantSkillIcon:ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
+      Acquire_UI.servantSkillIcon:ChangeTextureInfoNameAsync("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
       Acquire_UI.servantSkillName:SetText(skillName)
       Acquire_UI.servantSkillIcon:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName))
     end
@@ -498,7 +498,7 @@ local function Acquire_SetData(notifyMsg)
     if nil ~= skillTypeSSW then
       Acquire_UI.servantSkillIcon:SetShow(true)
       Acquire_UI.servantSkillName:SetShow(true)
-      Acquire_UI.servantSkillIcon:ChangeTextureInfoName("Icon/" .. arcIconPath)
+      Acquire_UI.servantSkillIcon:ChangeTextureInfoNameAsync("Icon/" .. arcIconPath)
       Acquire_UI.servantSkillName:SetText(skillName)
       Acquire_UI.servantSkillIcon:SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
     end
@@ -548,7 +548,7 @@ local function Acquire_SetData(notifyMsg)
     if nil ~= skillTypeSSW then
       Acquire_UI.servantSkillIcon:SetShow(true)
       Acquire_UI.servantSkillName:SetShow(true)
-      Acquire_UI.servantSkillIcon:ChangeTextureInfoName("Icon/" .. arcIconPath)
+      Acquire_UI.servantSkillIcon:ChangeTextureInfoNameAsync("Icon/" .. arcIconPath)
       Acquire_UI.servantSkillName:SetText(skillName)
       Acquire_UI.servantSkillIcon:SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
     end
@@ -577,7 +577,7 @@ local function Acquire_SetData(notifyMsg)
     Acquire_UI.iconImage:SetHorizonCenter()
     Acquire_UI.iconImage:SetSpanSize(0, -65)
     Acquire_UI.iconGrade:SetShow(false)
-    Acquire_UI.iconImage:ChangeTextureInfoName(arcIconPath)
+    Acquire_UI.iconImage:ChangeTextureInfoNameAsync(arcIconPath)
   elseif "" ~= arcIconPath then
     Acquire_UI.iconEtc:SetShow(false)
     Acquire_UI.iconBack:SetShow(true)
@@ -587,15 +587,15 @@ local function Acquire_SetData(notifyMsg)
     Acquire_UI.iconImage:SetVerticalTop()
     Acquire_UI.iconImage:SetHorizonCenter()
     Acquire_UI.iconImage:SetSpanSize(0, -17)
-    Acquire_UI.iconImage:ChangeTextureInfoName("icon/" .. arcIconPath)
+    Acquire_UI.iconImage:ChangeTextureInfoNameAsync("icon/" .. arcIconPath)
     if arcItemGrade >= 0 and arcItemGrade <= 4 then
-      Acquire_UI.iconGrade:ChangeTextureInfoName(itemGradeBorderData[arcItemGrade].texture)
+      Acquire_UI.iconGrade:ChangeTextureInfoNameAsync(itemGradeBorderData[arcItemGrade].texture)
       local x1, y1, x2, y2 = setTextureUV_Func(Acquire_UI.iconGrade, itemGradeBorderData[arcItemGrade].x1, itemGradeBorderData[arcItemGrade].y1, itemGradeBorderData[arcItemGrade].x2, itemGradeBorderData[arcItemGrade].y2)
       Acquire_UI.iconGrade:getBaseTexture():setUV(x1, y1, x2, y2)
       Acquire_UI.iconGrade:setRenderTexture(Acquire_UI.iconGrade:getBaseTexture())
     else
       Acquire_UI.iconGrade:ReleaseTexture()
-      Acquire_UI.iconGrade:ChangeTextureInfoName("")
+      Acquire_UI.iconGrade:ChangeTextureInfoNameAsync("")
     end
   else
     Acquire_UI.mainPanel:SetShow(false, false)

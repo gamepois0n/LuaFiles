@@ -941,7 +941,6 @@ function StableList_SlotSelect(slotNo)
   if -1 == self._slots[slotNo].index then
     return
   end
-  PaGlobal_Panel_Window_StableInfo_ResetSkillTarget()
   for ii = 0, self._config.slotCount - 1 do
     self._slots[ii].effect:SetShow(false)
   end
@@ -1376,7 +1375,7 @@ function StableList_LookChange(index)
   end
   currentPage = 0
   Panel_LookChange_Open()
-  PaGlobal_ServantChangeFormPanel._staticText:SetText("\235\167\144 \236\153\184\237\152\149 \235\179\128\234\178\189")
+  PaGlobal_ServantChangeFormPanel._staticText:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_HORSELOOKCHANGE_TITLE"))
   PaGlobal_ServantChangeFormPanel._comboBox:SetSelectItemIndex(0)
   Set_LookChange()
 end

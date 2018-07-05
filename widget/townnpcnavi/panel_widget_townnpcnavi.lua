@@ -435,14 +435,14 @@ local function npcIconChangeTexture(icon, spawnType)
   if nil == iconTexture[spawnType] then
     spawnType = UI_ST.eSpawnType_ShopMerchant
   end
-  icon:ChangeTextureInfoName("New_UI_Common_forLua/Default/NpcIcon_00.dds")
+  icon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/NpcIcon_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(icon, iconTexture[spawnType][1], iconTexture[spawnType][2], iconTexture[spawnType][3], iconTexture[spawnType][4])
   icon:getBaseTexture():setUV(x1, y1, x2, y2)
   icon:setRenderTexture(icon:getBaseTexture())
-  icon:ChangeOnTextureInfoName("New_UI_Common_forLua/Default/NpcIcon_00.dds")
+  icon:ChangeOnTextureInfoNameAsync("New_UI_Common_forLua/Default/NpcIcon_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(icon, iconTexture[spawnType][5], iconTexture[spawnType][6], iconTexture[spawnType][7], iconTexture[spawnType][8])
   icon:getOnTexture():setUV(x1, y1, x2, y2)
-  icon:ChangeClickTextureInfoName("New_UI_Common_forLua/Default/NpcIcon_00.dds")
+  icon:ChangeClickTextureInfoNameAsync("New_UI_Common_forLua/Default/NpcIcon_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(icon, iconTexture[spawnType][9], iconTexture[spawnType][10], iconTexture[spawnType][11], iconTexture[spawnType][12])
   icon:getClickTexture():setUV(x1, y1, x2, y2)
 end

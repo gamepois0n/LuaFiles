@@ -1,4 +1,8 @@
-registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_TutorialUiManager")
+if true == _ContentsGroup_RenewUI or ToClient_IsDevelopment() then
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "FromClient_luaLoadComplete_TutorialUiManager")
+else
+  registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_TutorialUiManager")
+end
 registerEvent("onScreenResize", "FromClient_TutorialScreenReposition")
 registerEvent("EventSelfPlayerLevelUp", "FromClient_EventSelfPlayerLevelUp_TutorialUiManager")
 PaGlobal_TutorialUiManager = {
@@ -219,7 +223,9 @@ function PaGlobal_TutorialUiManager:showConditionalUi()
   FGlobal_MyHouseNavi_Update()
   FGlobal_PersonalIcon_ButtonPosUpdate()
   Panel_Widget_TownNpcNavi:SetShow(true, true)
-  FGlobal_PetControl_CheckUnSealPet()
+  if false == _ContentsGroup_RenewUI_Pet then
+    FGlobal_PetControl_CheckUnSealPet()
+  end
   FGlobal_Party_ConditionalShow()
   PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
   PaGlobal_CharacterTag_SetPosIcon()
@@ -269,7 +275,9 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     FGlobal_PersonalIcon_ButtonPosUpdate()
     FGlobal_MyHouseNavi_Update()
     Panel_NewEventProduct_Alarm:SetShow(isShow)
-    FGlobal_PetControl_CheckUnSealPet()
+    if false == _ContentsGroup_RenewUI_Pet then
+      FGlobal_PetControl_CheckUnSealPet()
+    end
     PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
     PaGlobal_CharacterTag_SetPosIcon()
   elseif false == isShow then
@@ -290,6 +298,7 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     Panel_Movie_KeyViewer:SetShow(false)
     PaGlobal_Camp._btn_Camp:SetShow(false)
     Panel_Icon_CharacterTag:SetShow(false)
+    Panel_Window_FairyIcon:SetShow(false)
   end
   if isPvpEnable() then
     PvpMode_ShowButton(true)
@@ -308,18 +317,20 @@ function PaGlobal_TutorialUiManager:hideAllTutorialUi()
   end
 end
 function PaGlobal_TutorialUiManager:setShowChattingPanel(isShow)
-  local chattingPanelCount = ToClient_getChattingPanelCount()
-  for panelIndex = 0, chattingPanelCount - 1 do
-    local chatPanel = ToClient_getChattingPanel(panelIndex)
-    if chatPanel:isOpen() then
-      local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
-      chatPanelUI:SetShow(isShow)
-      if chatPanel:isCombinedToMainPanel() == true and panelIndex ~= 0 then
-        chatPanelUI:SetShow(false)
+  if false == _ContentsGroup_RenewUI_Chatting then
+    local chattingPanelCount = ToClient_getChattingPanelCount()
+    for panelIndex = 0, chattingPanelCount - 1 do
+      local chatPanel = ToClient_getChattingPanel(panelIndex)
+      if chatPanel:isOpen() then
+        local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
+        chatPanelUI:SetShow(isShow)
+        if chatPanel:isCombinedToMainPanel() == true and panelIndex ~= 0 then
+          chatPanelUI:SetShow(false)
+        end
       end
     end
+    Panel_Chat0:SetShow(isShow)
   end
-  Panel_Chat0:SetShow(isShow)
 end
 function FromClient_luaLoadComplete_TutorialUiManager()
   PaGlobal_TutorialUiManager:initialize()

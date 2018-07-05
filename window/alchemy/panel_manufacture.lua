@@ -907,7 +907,7 @@ function Manufacture_RefreshIsMassCheckButton(actionIndex)
     local itemWrapper = ToClient_getEquipmentItem(CppEnums.EquipSlotNoClient.eEquipSlotNoSubTool)
     if itemWrapper ~= nil then
       local itemSSW = itemWrapper:getStaticStatus()
-      if __ePlayerLifeStatType_Manufacturing == itemSSW:getLifeStatMainType() and actionIndex + 1 == itemSSW:getLifeStatSubType() then
+      if __ePlayerLifeStatType_Manufacture == itemSSW:getLifeStatMainType() and actionIndex + 1 == itemSSW:getLifeStatSubType() then
         isManufactureMassItemEquip = true
       end
     end
@@ -1703,10 +1703,8 @@ function Manufacture_Button_LUp_Cook(isClear)
     _usingItemSlotCount = 4
   elseif ToClient_IsContentsGroupOpen("228") then
     _usingItemSlotCount = 3
-  elseif isGameTypeTaiwan() then
-    _usingItemSlotCount = 3
   else
-    _usingItemSlotCount = 2
+    _usingItemSlotCount = 3
   end
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()

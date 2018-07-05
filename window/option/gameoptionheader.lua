@@ -83,7 +83,8 @@ PaGlobal_Option = {
       Quality = Panel_Graphic_Quality,
       Effect = Panel_Graphic_Effect,
       Camera = Panel_Graphic_Camera,
-      ScreenShot = Panel_Graphic_ScreenShot
+      ScreenShot = Panel_Graphic_ScreenShot,
+      HDR = Panel_Graphic_HDR
     },
     Sound = {OnOff = Panel_Sound_OnOff, Volume = Panel_Sound_Volume},
     Function = {
@@ -428,6 +429,24 @@ PaGlobal_Option = {
       _defaultValue = 8,
       _controlType = CONTROL.PA_UI_CONTROL_BUTTON,
       _settingRightNow = true
+    },
+    HDRDisplayGamma = {
+      _defaultValue = 0.5,
+      _controlType = CONTROL.PA_UI_CONTROL_SLIDER,
+      _sliderValueMin = 50,
+      _sliderValueMax = 150,
+      _settingRightNow = true
+    },
+    HDRDisplayMaxNits = {
+      _defaultValue = 0.5,
+      _controlType = CONTROL.PA_UI_CONTROL_SLIDER,
+      _sliderValueMin = 500,
+      _sliderValueMax = 3000,
+      _settingRightNow = true
+    },
+    UltraHighDefinition = {
+      _defaultValue = false,
+      _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
     },
     MouseInvertX = {
       _defaultValue = false,
@@ -1754,4 +1773,19 @@ function PaGlobal_Option._functions.ShowStackHp(value)
 end
 function ConsolePadType(value)
   selfPlayerSetConsolePadType(value)
+end
+function PaGlobal_Option._functions.HDRDisplayGamma(value)
+  value = PaGlobal_Option:FromSliderValueToRealValue(value, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin * 0.01, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax * 0.01)
+  setHdrDisplayGamma(value)
+end
+function PaGlobal_Option._functions.HDRDisplayMaxNits(value)
+  value = PaGlobal_Option:FromSliderValueToRealValue(value, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMin, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMax)
+  local bgHdr = UI.getChildControl(PaGlobal_Option._frames.Graphic.HDR._uiFrameContent, "Static_HDR_ImageBgs_Import")
+  local hdrRightImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
+  hdrRightImage:SetColorExtra(Defines.Color.C_FFFFFFFF, value)
+  setHdrDisplayMaxNits(value)
+end
+function PaGlobal_Option._functions.UltraHighDefinition(value)
+  _PA_LOG("\237\155\132\236\167\132", "UltraHighDefinition value : " .. tostring(value))
+  setUltraHighDefinition(value)
 end

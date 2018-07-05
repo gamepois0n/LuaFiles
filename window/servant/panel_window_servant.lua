@@ -762,19 +762,19 @@ function FGlobal_Window_Servant_ColorBlindUpdate()
   for index = 0, self._servant_SummonCount - 1 do
     self._slots[index].mp:SetColor(UI_color.C_FFFFCE22)
     if 0 == isColorBlindMode then
-      self._slots[index].hp:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges.dds")
+      self._slots[index].hp:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self._slots[index].hp, 1, 49, 232, 54)
       self._slots[index].hp:getBaseTexture():setUV(x1, y1, x2, y2)
       self._slots[index].hp:setRenderTexture(self._slots[index].hp:getBaseTexture())
       self._slots[index].mp:SetColor(UI_color.C_FFFFCE22)
     elseif 1 == isColorBlindMode then
-      self._slots[index].hp:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
+      self._slots[index].hp:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
       local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._slots[index].hp, 1, 226, 256, 234)
       self._slots[index].hp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
       self._slots[index].hp:setRenderTexture(self._slots[index].hp:getBaseTexture())
       self._slots[index].mp:SetColor(UI_color.C_FFEE9900)
     elseif 2 == isColorBlindMode then
-      self._slots[index].hp:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
+      self._slots[index].hp:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges_01.dds")
       local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._slots[index].hp, 1, 226, 256, 234)
       self._slots[index].hp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
       self._slots[index].hp:setRenderTexture(self._slots[index].hp:getBaseTexture())

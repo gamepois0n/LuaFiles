@@ -170,6 +170,60 @@ end
 function PaGlobal_Inventory:setIsitemSlotRClickedForTutorial(bool)
   PaGlobal_Inventory._isItemSlotRClickedForTutorial = bool
 end
+function PaGlobal_Inventory:findItemCountByEventType(targetContentsEventType, typeParam1, typeParam2)
+  local inventory = getSelfPlayer():get():getInventory(CppEnums.ItemWhereType.eCashInventory)
+  local itemCount = 0
+  if nil ~= inventory then
+    local invenMaxSize = inventory:sizeXXX()
+    for ii = 0, invenMaxSize - 1 do
+      local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, ii)
+      if nil ~= itemWrapper then
+        local itemSSW = itemWrapper:getStaticStatus()
+        local ContentsEventType = itemSSW:get():getContentsEventType()
+        local ContentsEventParam1 = itemSSW:get()._contentsEventParam1
+        local ContentsEventParam2 = itemSSW:get()._contentsEventParam2
+        local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
+        if ContentsEventType == targetContentsEventType then
+          if nil == typeParam1 and nil == typeParam2 then
+            itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+          elseif nil ~= typeParam1 and ContentsEventParam1 == typeParam1 then
+            if nil ~= typeParam2 and ContentsEventParam2 == typeParam2 then
+              itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            elseif nil == typeParam2 then
+              itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            end
+          end
+        end
+      end
+    end
+  end
+  inventory = getSelfPlayer():get():getInventory(CppEnums.ItemWhereType.eInventory)
+  if nil ~= inventory then
+    local invenMaxSize = inventory:sizeXXX()
+    for ii = 0, invenMaxSize - 1 do
+      local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eInventory, ii)
+      if nil ~= itemWrapper then
+        local itemSSW = itemWrapper:getStaticStatus()
+        local ContentsEventType = itemSSW:get():getContentsEventType()
+        local ContentsEventParam1 = itemSSW:get()._contentsEventParam1
+        local ContentsEventParam2 = itemSSW:get()._contentsEventParam2
+        local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
+        if ContentsEventType == targetContentsEventType then
+          if nil == typeParam1 and nil == typeParam2 then
+            itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+          elseif nil ~= typeParam1 and ContentsEventParam1 == typeParam1 then
+            if nil ~= typeParam2 and ContentsEventParam2 == typeParam2 then
+              itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            elseif nil == typeParam2 then
+              itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            end
+          end
+        end
+      end
+    end
+  end
+  return itemCount
+end
 function PaGlobal_Inventory:findItemWrapper(itemWhereType, targetItemKey, targetEnchantLevel)
   local inventory = getSelfPlayer():get():getInventoryByType(itemWhereType)
   if nil == inventory then

@@ -564,7 +564,7 @@ function BuffIcon_ShowSimpleToolTip(isShow, iconType)
         end
       end
     end
-    name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EXPBUFF", "percent", expEventPercentShow)
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EXPBUFF")
     if "" ~= expDesc then
       desc = "<PAColor0xFF66CC33>" .. expDesc .. "<PAOldColor>"
     else
@@ -940,7 +940,7 @@ function eventChangedExplorationNode(wayPointKey)
   saveWayPoint = wayPointKey
   if nodeLv > 0 and nodeExp >= toInt64(0, 0) then
     _NodeLvBuffIcon:SetShow(true)
-    _NodeLvBuffIcon:ChangeTextureInfoName("Icon/New_Icon/04_PC_Skill/03_Buff/Node_ItemDropRateUP.dds")
+    _NodeLvBuffIcon:ChangeTextureInfoNameAsync("Icon/New_Icon/04_PC_Skill/03_Buff/Node_ItemDropRateUP.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(_NodeLvBuffIcon, 1, 1, 32, 32)
     _NodeLvBuffIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())
@@ -949,7 +949,7 @@ function eventChangedExplorationNode(wayPointKey)
     _currentNodeLv = nodeLv
   else
     _NodeLvBuffIcon:SetShow(true)
-    _NodeLvBuffIcon:ChangeTextureInfoName("Icon/New_Icon/04_PC_Skill/03_Buff/Non_ItemDropRateUP.dds")
+    _NodeLvBuffIcon:ChangeTextureInfoNameAsync("Icon/New_Icon/04_PC_Skill/03_Buff/Non_ItemDropRateUP.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(_NodeLvBuffIcon, 1, 1, 32, 32)
     _NodeLvBuffIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())

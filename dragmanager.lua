@@ -42,7 +42,7 @@ function DragManager:setDragInfo(panel, whereType, slot, IconPath, groundHitCall
   DragPanel_PosUpdate()
 end
 function DragManager:isDragging()
-  return self.groundClickFunc ~= nil
+  return self.groundClickFunc ~= nil or self.dragSlotInfo ~= nil
 end
 function DragManager:clearInfo()
   if dragPanel:IsShow() then

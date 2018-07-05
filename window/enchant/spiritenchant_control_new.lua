@@ -98,7 +98,8 @@ function PaGlobal_Enchant:didsetEnchantTarget(isMonotone, isRadioClick)
   end
   local enchantItemClassify = itemWrapper:getStaticStatus():getItemClassify()
   local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
-  if enchantLevel > 16 or 4 == enchantItemClassify then
+  local isStackLessBlackStone = itemWrapper:getStaticStatus():isNeedStackLessBlackStonForEnchant()
+  if (enchantLevel > 16 or 4 == enchantItemClassify) and false == isStackLessBlackStone then
     self:setEnable_CheckboxUseCron(true)
     self:setText_NumOfCron(self._enchantInfo:ToClient_getCountProtecMaterial_s64(), self._enchantInfo:ToClient_getNeedCountForProtect_s64())
     local enduranceDesc = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType, true)
@@ -677,7 +678,8 @@ function PaGlobal_Enchant:handleLUpEnchantApplyButton()
       end
       local itemSSW = itemWrapper:getStaticStatus()
       local enchantLevel = itemSSW:get()._key:getEnchantLevel()
-      if 0 == failCount + valksCount then
+      local isStackLessBlackStone = itemSSW:isNeedStackLessBlackStonForEnchant()
+      if 0 == failCount + valksCount and false == isStackLessBlackStone then
         if nil ~= self._grantItemWhereType and nil ~= self._grantItemSlotNo then
           if CppEnums.ItemClassifyType.eItemClassify_Accessory == itemSSW:getItemClassify() then
             if enchantLevel > 0 then

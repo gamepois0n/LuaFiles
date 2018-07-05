@@ -67,6 +67,12 @@ function PaGlobal_Option:radioButtonMapping_AudioResourceType(value, fromRadioBu
     radioMap = {
       [0] = CppEnums.ServiceResourceType.eServiceResourceType_EN
     }
+  elseif isGameTypeGT() then
+    radioMap = {
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
+      [1] = CppEnums.ServiceResourceType.eServiceResourceType_JP,
+      [2] = CppEnums.ServiceResourceType.eServiceResourceType_KR
+    }
   end
   local val = PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
   if -1 == val then
@@ -134,17 +140,17 @@ function PaGlobal_Option:radioButtonMapping_ServiceResourceType(value, fromRadio
       [0] = CppEnums.ServiceResourceType.eServiceResourceType_TR,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN
     }
-  elseif CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceType then
+  elseif CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceeType then
     radioMap = {
-      [0] = CppEnums.ServiceResourceType.eServiceResourceType_KR,
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
-      [2] = CppEnums.ServiceResourceType.eServiceResourceType_TW
+      [2] = CppEnums.ServiceResourceType.eServiceResourceType_KR
     }
   elseif CppEnums.GameServiceType.eGameServiceType_GT_REAL == resourceType then
     radioMap = {
-      [0] = CppEnums.ServiceResourceType.eServiceResourceType_KR,
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
-      [2] = CppEnums.ServiceResourceType.eServiceResourceType_TW
+      [2] = CppEnums.ServiceResourceType.eServiceResourceType_KR
     }
   end
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)

@@ -1,12 +1,4 @@
 local CONTROL = CppEnums.PA_UI_CONTROL_TYPE
-function UI.getChildControlNoneAssert(parent, strID)
-  tempUIBaseForLua = nil
-  parent:getChildControl(strID)
-  if nil == tempUIBaseForLua then
-    return nil
-  end
-  return tempUIBaseForLua
-end
 function PaGlobal_Option:CreateFrame(category, detail)
   local optionFrame = {
     _category = category,
@@ -115,10 +107,12 @@ function PaGlobal_Option:CreateEventControl(category, detail)
   end
   if _ContentsGroup_isConsolePadControl then
     local bg = UI.getChildControlNoneAssert(frame._uiFrameContent, "StaticText_OptionDescBg_Import")
-    local checkbutton_On = UI.getChildControlNoneAssert(bg, "CheckButton_On")
-    local checkbutton_Off = UI.getChildControlNoneAssert(bg, "CheckButton_Off")
-    checkbutton_On:SetShow(false)
-    checkbutton_Off:SetShow(false)
+    if nil ~= bg then
+      local checkbutton_On = UI.getChildControlNoneAssert(bg, "CheckButton_On")
+      local checkbutton_Off = UI.getChildControlNoneAssert(bg, "CheckButton_Off")
+      checkbutton_On:SetShow(false)
+      checkbutton_Off:SetShow(false)
+    end
   end
   for frameIndex = 0, FRAME_CHILD_MAX do
     local bg = UI.getChildControlNoneAssert(frame._uiFrameContent, "StaticText_BgOrder" .. frameIndex .. "_Import")
@@ -812,9 +806,23 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
       end
     end
   end
+  local ultraResolutionWidth = 3840
+  local ultraResolutionHeight = 2140
+  if ultraResolutionWidth == gameOptionSetting:getScreenResolutionWidth() and ultraResolutionHeight == gameOptionSetting:getScreenResolutionHeight() then
+    elems_.UltraHighDefinition._initValue = true
+  else
+    elems_.UltraHighDefinition._initValue = false
+  end
   elems_.CropModeEnable._initValue = gameOptionSetting:getCropModeEnable()
   elems_.CropModeScaleX._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleX(), 0.5, 1)
   elems_.CropModeScaleY._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleY(), 0.5, 1)
+  if _ContentsGroup_isConsoleTest then
+    elems_.HDRDisplayGamma._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayGamma(), PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin * 0.01, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax * 0.01)
+    elems_.HDRDisplayMaxNits._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayMaxNits(), 500, 3000)
+    local bgHdr = UI.getChildControl(PaGlobal_Option._frames.Graphic.HDR._uiFrameContent, "Static_HDR_ImageBgs_Import")
+    local hdrRightImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
+    hdrRightImage:SetColorExtra(Defines.Color.C_FFFFFFFF, gameOptionSetting:getHdrDisplayMaxNits())
+  end
   elems_.UIScale._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getUIScale(), 0.5, 2)
   if true == UI.checkResolution4KForXBox() then
     elems_.UIScale._initValue = 2

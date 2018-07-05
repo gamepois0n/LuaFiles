@@ -99,13 +99,13 @@ local dialogButtonIcon = {
   }
 }
 function FGlobal_ChangeOnTextureForDialogQuestIcon(control, iconType)
-  control:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+  control:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, dialogQuestButtonIcon[iconType][1], dialogQuestButtonIcon[iconType][2], dialogQuestButtonIcon[iconType][3], dialogQuestButtonIcon[iconType][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
 end
 function FGlobal_ChangeOnTextureForDialogIcon(control, iconType)
-  control:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+  control:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, dialogButtonIcon[iconType][1], dialogButtonIcon[iconType][2], dialogButtonIcon[iconType][3], dialogButtonIcon[iconType][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())

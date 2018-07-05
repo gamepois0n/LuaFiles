@@ -153,6 +153,7 @@ local panel_WindowList = {
   Panel_IngameCashShop_EventCart,
   Panel_Window_Politics,
   Panel_Window_RecommandGoods_PopUp,
+  Panel_BossAlert_SettingV2,
   Panel_Window_QuestInfo,
   Panel_Window_GameExit,
   Panel_Window_GameExit_CharMove,

@@ -43,6 +43,9 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
   if nil ~= Panel_CharacterCreateSelectClass and Panel_CharacterCreateSelectClass:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_CharacterCreateCancel()
   end
+  if nil ~= Panel_Lobby_ClassSelect_Renew and Panel_Lobby_ClassSelect_Renew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    Panel_CharacterCreateCancel()
+  end
   if nil ~= Panel_CharacterSelectNew and Panel_CharacterSelectNew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     CharacterSelect_Back()
   end

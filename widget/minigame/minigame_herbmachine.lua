@@ -199,6 +199,9 @@ function Panel_Minigame_HerbMachine_Perframe(deltaTime)
   end
 end
 function Panel_Minigame_HerbMachine_Freeze(keyType)
+  if herbMachine_GameEndCount <= herbMachine_WinCount then
+    return
+  end
   if false == isBarMoveStart then
     for key, value in pairs(ui) do
       if "_result_Good" ~= key and "_result_Bad" ~= key and "_resultText" ~= key then

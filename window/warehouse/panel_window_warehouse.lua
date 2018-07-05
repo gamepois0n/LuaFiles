@@ -404,7 +404,11 @@ function warehouse:isFurnitureWareHouse()
   end
 end
 function warehouse:isDeliveryWindow()
-  return (Panel_Window_Delivery_Request:GetShow())
+  if true == _ContentsGroup_RenewUI_Delivery then
+    return PaGlobalFunc_PanelDelivery_GetShow()
+  else
+    return (Panel_Window_Delivery_Request:GetShow())
+  end
 end
 function warehouse:getWarehouse()
   local warehouseWrapper
@@ -811,7 +815,7 @@ function Warehouse_PopToSomewhereXXX(s64_count, slotNo)
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
       end
     end
-  elseif Panel_Window_Delivery_Request:GetShow() then
+  elseif true == self:isDeliveryWindow() then
     DeliveryRequest_PushPackingItem(slotNo, s64_count)
   end
 end
@@ -1150,11 +1154,17 @@ end
 function Warehouse_Close()
   local self = warehouse
   if Panel_Window_Warehouse:GetShow() then
-    if Panel_Window_Delivery_Information:GetShow() then
-      DeliveryInformationWindow_Close()
-    end
-    if Panel_Window_Delivery_Request:GetShow() then
-      DeliveryRequestWindow_Close()
+    if true == _ContentsGroup_RenewUI_Delivery then
+      if true == PaGlobalFunc_PanelDelivery_GetShow() then
+        DeliveryRequestWindow_Close()
+      end
+    else
+      if Panel_Window_Delivery_Information:GetShow() then
+        DeliveryInformationWindow_Close()
+      end
+      if Panel_Window_Delivery_Request:GetShow() then
+        DeliveryRequestWindow_Close()
+      end
     end
     if Panel_Window_Inventory:GetShow() and CppEnums.WarehoouseFromType.eWarehoouseFromType_Installation ~= self._fromType and CppEnums.WarehoouseFromType.eWarehoouseFromType_Maid ~= self._fromType then
       InventoryWindow_Close()

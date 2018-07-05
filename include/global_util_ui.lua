@@ -65,6 +65,14 @@ function UI.getChildControl(parent, strID)
   end
   return tempUIBaseForLua
 end
+function UI.getChildControlNoneAssert(parent, strID)
+  tempUIBaseForLua = nil
+  parent:getChildControl(strID)
+  if nil == tempUIBaseForLua then
+    return nil
+  end
+  return tempUIBaseForLua
+end
 function UI.getChildControlByIndex(parent, index)
   tempUIBaseForLua = nil
   parent:getChildControlByIndex(index)

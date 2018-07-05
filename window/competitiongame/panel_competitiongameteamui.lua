@@ -702,6 +702,8 @@ function CompetitionGame_TeamUI_Setting_Round(teamNo, userCount)
       userSlot._gaugeBlack:setRenderTexture(userSlot._gaugeBlack:getBaseTexture())
       hpPercent = 100
       adrenalinPoint = userInfo:getAP()
+      adrenalinPoint = adrenalinPoint / 10
+      adrenalinPoint = math.floor(adrenalinPoint) / 10
       userSlot._level:SetShow(true)
       userSlot._level:SetText(userInfo:getCharacterLevel())
       userSlot._progress:SetProgressRate(hpPercent)
@@ -719,7 +721,7 @@ function CompetitionGame_TeamUI_Setting_Round(teamNo, userCount)
         userSlot._gaugeBlack:SetShow(true)
         userSlot._gaugeBlack:SetProgressRate(adrenalinPoint)
         userSlot._gaugeRate:SetShow(true)
-        userSlot._gaugeRate:SetText(tostring(adrenalinPoint) .. "%")
+        userSlot._gaugeRate:SetText(string.format("%.1f", adrenalinPoint) .. "%")
       else
         userSlot._gaugeBlackBG:SetShow(false)
         userSlot._gaugeBlack:SetShow(false)
@@ -800,6 +802,8 @@ function COmpetitionGame_TeamUI_Setting_Personal(teamNo)
     userSlot._gaugeBlack:setRenderTexture(userSlot._gaugeBlack:getBaseTexture())
     hpPercent = 100
     adrenalinPoint = userInfo:getAP()
+    adrenalinPoint = adrenalinPoint / 10
+    adrenalinPoint = math.floor(adrenalinPoint) / 10
     userSlot._level:SetShow(true)
     userSlot._level:SetText(userInfo:getCharacterLevel())
     userSlot._progress:SetProgressRate(hpPercent)
@@ -817,7 +821,7 @@ function COmpetitionGame_TeamUI_Setting_Personal(teamNo)
       userSlot._gaugeBlack:SetShow(true)
       userSlot._gaugeBlack:SetProgressRate(adrenalinPoint)
       userSlot._gaugeRate:SetShow(true)
-      userSlot._gaugeRate:SetText(tostring(adrenalinPoint) .. "%")
+      userSlot._gaugeRate:SetText(string.format("%.1f", adrenalinPoint) .. "%")
     else
       userSlot._gaugeBlackBG:SetShow(false)
       userSlot._gaugeBlack:SetShow(false)
@@ -877,10 +881,12 @@ function FromClient_UpdateUserHP_Round()
         local remainTime = 0
         if myTeamNo == teamNo or 0 == myTeamNo then
           adrenalin = userInfo:getAP()
+          adrenalin = adrenalin / 10
+          adrenalin = math.floor(adrenalin) / 10
           userSlot._gaugeBlack:SetProgressRate(adrenalin)
           userSlot._gaugeBlack:SetPosX(3)
           userSlot._gaugeBlack:SetPosY(3)
-          userSlot._gaugeRate:SetText(tostring(adrenalin) .. "%")
+          userSlot._gaugeRate:SetText(string.format("%.1f", adrenalin) .. "%")
         end
         for idx = 0, skillCount - 1 do
           skillNo = ToClient_GetUseSkillListAt(actorKey, idx)
@@ -1026,10 +1032,12 @@ function FromClient_UpdateUserHP_Personal()
       local remainTime = 0
       if myTeamNo == teamNo or 0 == myTeamNo then
         adrenalin = userInfo:getAP()
+        adrenalin = adrenalin / 10
+        adrenalin = math.floor(adrenalin) / 10
         userSlot._gaugeBlack:SetProgressRate(adrenalin)
         userSlot._gaugeBlack:SetPosX(3)
         userSlot._gaugeBlack:SetPosY(3)
-        userSlot._gaugeRate:SetText(tostring(adrenalin) .. "%")
+        userSlot._gaugeRate:SetText(string.format("%.1f", adrenalin) .. "%")
       end
       userSlot._teamBg:addInputEvent("Mouse_LUp", "CompetitionGame_CameraControl(" .. tostring(userInfo:getUserNo()) .. ")")
     end

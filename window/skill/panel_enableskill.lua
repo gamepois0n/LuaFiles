@@ -776,7 +776,7 @@ function enableSkill_MakeControl(index)
   function ui:SetData(skillTypeSSW, skillNo)
     local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
     local needSp = skillStaticWrapper:get()._needSkillPointForLearning
-    self._skillIcon:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
+    self._skillIcon:ChangeTextureInfoNameAsync("Icon/" .. skillTypeSSW:getIconPath())
     local recommendCheck = false
     for i = 0, 3 do
       if skillNo == recommendSkill[getSelfPlayer():getClassType()][i] then

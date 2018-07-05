@@ -14,6 +14,7 @@ local IM = CppEnums.EProcessorInputMode
 local CT = CppEnums.ClassType
 local isContentsEnable = ToClient_IsContentsGroupOpen("35")
 local isKR2ContentsEnable = isGameTypeKR2()
+local isSwimmingSuitContentEnable = true
 local awakenWeapon = {
   [CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"),
   [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"),
@@ -321,7 +322,8 @@ function equip:initControl()
   self.checkHelm:SetCheck(not ToClient_IsShowHelm())
   self.checkHelmOpen:SetCheck(ToClient_IsShowBattleHelm())
   getSelfPlayer():get():setUnderwearModeInhouse(false)
-  self.checkUnderwear:SetCheck(getSelfPlayer():get():getUnderwearModeInhouse())
+  getSelfPlayer():get():setSwimmingSuitMode(false)
+  self.checkUnderwear:SetCheck(false)
   self.checkCamouflage:SetCheck(Toclient_setShowNameWhenCamouflage())
   selfPlayerShowHelmet(ToClient_IsShowHelm())
   selfPlayerShowBattleHelmet(ToClient_IsShowBattleHelm())
@@ -431,7 +433,9 @@ local _offenceValue, _awakenOffecnValue, _defenceValue
 function Equipment_RClick(slotNo)
   local itemWrapper = ToClient_getEquipmentItem(slotNo)
   if nil ~= itemWrapper then
-    Equipment_Checkbutton(slotNo, true, equip.checkUnderwear)
+    if CppEnums.EquipSlotNoClient.eEquipSlotNoAvatarUnderwear == slotNo then
+      HideUnderwearSlotItemModes()
+    end
     if Panel_Window_Repair:IsShow() and not Panel_FixEquip:GetShow() then
       PaGlobal_Repair:repair_EquipWindowRClick(slotNo, itemWrapper)
     elseif Panel_Window_Repair:IsShow() and Panel_FixEquip:GetShow() then
@@ -457,7 +461,7 @@ end
 function AvatarEquipSlot_LClick(slotNo)
   local self = equip
   local selfPlayer = getSelfPlayer()
-  if selfPlayer ~= nil and selfPlayer:get():getUnderwearModeInhouse() then
+  if selfPlayer ~= nil and (true == selfPlayer:get():getUnderwearModeInhouse() or true == selfPlayer:get():getSwimmingSuitMode()) then
     local isCheckedTemp = self.avataSlots[slotNo]:IsCheck()
     if isCheckedTemp then
       isCheckedTemp = false
@@ -515,10 +519,11 @@ function Equipment_SetShow(isShow)
   end
   local alchemyStoneQuickKeyString = keyCustom_GetString_UiKey(CppEnums.UiInputType.UiInputType_AlchemySton)
   alchemyStoneQuickKey:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_QUICKCOMMAND", "keyString", alchemyStoneQuickKeyString))
-  local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
-  local isSafeZone = regionInfo:get():isSafeZone()
-  if not isSafeZone then
-    self.checkUnderwear:SetEnable(true)
+  if true == getSelfPlayer():get():isWearingSwimmingSuit() then
+    self.checkUnderwear:SetCheck(getSelfPlayer():get():getSwimmingSuitMode())
+  elseif true == getSelfPlayer():get():isWearingUnderwear() then
+    self.checkUnderwear:SetCheck(getSelfPlayer():get():getUnderwearModeInhouse())
+  else
     self.checkUnderwear:SetCheck(false)
   end
   Equipment_updateSlotData()
@@ -776,6 +781,7 @@ function Equipment_equipItem(slotNo)
     end
     PaGlobal_TutorialManager:handleEquipItem(slotNo)
   end
+  UpdateUnderwearSlotOnEquip(slotNo)
 end
 function Equipment_onScreenResize()
   Panel_Equipment:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Equipment:GetSizeX())
@@ -809,29 +815,51 @@ function Check_PopUI()
 end
 function Check_Underwear()
   local self = equip
-  if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
-    if self.checkUnderwear:IsCheck() then
-      self.checkUnderwear:SetCheck(false)
-    else
-      self.checkUnderwear:SetCheck(true)
-    end
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
     return
   end
-  local selfPlayer = getSelfPlayer()
-  local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
-  local isSafeZone = regionInfo:get():isSafeZone()
-  Equipment_Checkbutton(20, false, equip.checkUnderwear)
-  if isSafeZone then
-    if selfPlayer:get():getUnderwearModeInhouse() then
-      selfPlayer:get():setUnderwearModeInhouse(false)
-      Toclient_setShowAvatarEquip()
+  if false == selfPlayer:get():isWearingUnderwear() and false == selfPlayer:get():isWearingSwimmingSuit() then
+    self.checkUnderwear:SetCheck(false)
+    return
+  elseif true == selfPlayer:get():isWearingSwimmingSuit() then
+    if false == IsSelfPlayerWaitAction() and false == IsSelfPlayerSwimmingWaitAction() or true == IsSelfPlayerBattleWaitAction() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SWIMMINGSUIT"))
+      self.checkUnderwear:SetCheck(selfPlayer:get():getSwimmingSuitMode())
+      return
+    end
+    local regionInfo = getRegionInfoByPosition(selfPlayer:get():getPosition())
+    local isSafeZone = regionInfo:get():isSafeZone()
+    if true == isSafeZone or true == IsSelfPlayerSwimmingWaitAction() then
+      if true == selfPlayer:get():getSwimmingSuitMode() then
+        selfPlayer:get():setSwimmingSuitMode(false)
+        Toclient_setShowAvatarEquip()
+      else
+        selfPlayer:get():setSwimmingSuitMode(true)
+      end
     else
-      selfPlayer:get():setUnderwearModeInhouse(true)
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EQUIP_SWIMMINGSUIT_ALERT"))
+      equip.checkUnderwear:SetCheck(self.checkUnderwear:SetCheck(selfPlayer:get():getSwimmingSuitMode()))
     end
   else
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EQUIP_UNDERWARE_ALERT"))
-    equip.checkUnderwear:SetCheck(false)
+    if false == IsSelfPlayerWaitAction() or true == IsSelfPlayerBattleWaitAction() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
+      self.checkUnderwear:SetCheck(selfPlayer:get():getUnderwearModeInhouse())
+      return
+    end
+    local regionInfo = getRegionInfoByPosition(selfPlayer:get():getPosition())
+    local isSafeZone = regionInfo:get():isSafeZone()
+    if isSafeZone then
+      if selfPlayer:get():getUnderwearModeInhouse() then
+        selfPlayer:get():setUnderwearModeInhouse(false)
+        Toclient_setShowAvatarEquip()
+      else
+        selfPlayer:get():setUnderwearModeInhouse(true)
+      end
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EQUIP_UNDERWARE_ALERT"))
+      self.checkUnderwear:SetCheck(selfPlayer:get():getUnderwearModeInhouse())
+    end
   end
 end
 function FGlobal_CheckUnderwear()
@@ -872,9 +900,18 @@ function Equipment_SimpleToolTips(isShow, btnType, flagControl)
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_DESC")
     uiControl = equip.checkCloak
   elseif btnType == 7 then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_UNDERWEAR_TOOLTIP_NAME")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_UNDERWEAR_TOOLTIP_DESC")
-    uiControl = equip.checkCloak
+    local selfPlayer = getSelfPlayer()
+    if nil == selfPlayer then
+      return
+    end
+    if true == isSwimmingSuitContentEnable and true == selfPlayer:get():isWearingSwimmingSuit() then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_SWIMMINGSUIT_TOOLTIP_NAME")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_SWIMMINGSUIT_TOOLTIP_DESC")
+    else
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_UNDERWEAR_TOOLTIP_NAME")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_UNDERWEAR_TOOLTIP_DESC")
+    end
+    uiControl = equip.checkUnderwear
   elseif btnType == 8 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_CAMOUFLAGE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_CAMOUFLAGE_TOOLTIP_DESC")
@@ -942,8 +979,18 @@ function HandleClicked_ServantInventoryOpen()
   ServantInventory_OpenAll()
 end
 function FromClient_ChangeUnderwearMode_Equipment(isUnderwearModeInHouse)
-  local self = equip
-  self.checkUnderwear:SetCheck(isUnderwearModeInHouse)
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  equip.checkUnderwear:SetCheck(isUnderwearModeInHouse)
+end
+function FromClient_ChangeSwimmingSuitMode_Equipment(isShowSwimmingSuit)
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  equip.checkUnderwear:SetCheck(isShowSwimmingSuit)
 end
 function FGlobal_AlchemyStonCheck()
   local itemWrapper = ToClient_getEquipmentItem(27)
@@ -1045,20 +1092,31 @@ function Equipment_RePosition()
     posXDefault = posXDefault - 30
   end
 end
-function Equipment_Checkbutton(index, isShow, controlBtn)
-  if 20 ~= index then
+function HideUnderwearSlotItemModes()
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
     return
   end
-  if false == isShow then
-    local itemWrapper = ToClient_getEquipmentItem(index)
-    if nil == itemWrapper then
-      controlBtn:SetCheck(false)
-      return
+  selfPlayer:get():setUnderwearModeInhouse(false)
+  selfPlayer:get():setSwimmingSuitMode(false)
+  Toclient_setShowAvatarEquip()
+  equip.checkUnderwear:SetCheck(false)
+end
+function UpdateUnderwearSlotOnEquip(slotNo)
+  if CppEnums.EquipSlotNoClient.eEquipSlotNoAvatarUnderwear ~= slotNo then
+    return
+  end
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  if true == selfPlayer:get():isWearingUnderwear() then
+    if true == selfPlayer:get():getSwimmingSuitMode() then
+      selfPlayer:get():setSwimmingSuitMode(false)
+      equip.checkUnderwear:SetCheck(false)
     end
-  elseif 20 == index then
-    local selfPlayer = getSelfPlayer()
+  elseif true == selfPlayer:get():isWearingSwimmingSuit() and true == selfPlayer:get():getUnderwearModeInhouse() then
     selfPlayer:get():setUnderwearModeInhouse(false)
-    Toclient_setShowAvatarEquip()
     equip.checkUnderwear:SetCheck(false)
   end
 end
@@ -1130,4 +1188,5 @@ function FGlobal_UpdateTotalStatValue_InEquipment(actorKeyRaw)
 end
 registerEvent("FromClient_luaLoadComplete", "FGlobal_Equipment_Init")
 registerEvent("FromClient_ChangeUnderwearModeInHouse", "FromClient_ChangeUnderwearMode_Equipment")
+registerEvent("FromClient_ChangeSwimmingSuitShowMode", "FromClient_ChangeSwimmingSuitMode_Equipment")
 registerEvent("FromClient_ShowTotalStatTierChanged", "FGlobal_UpdateTotalStatValue_InEquipment")

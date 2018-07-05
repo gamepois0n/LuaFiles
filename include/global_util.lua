@@ -785,8 +785,8 @@ function getContryTypeLua()
     returnValue = CppEnums.ContryCode.eContryCode_ID
   elseif eCountryType.TR_ALPHA == gameServiceType or eCountryType.TR_REAL == gameServiceType then
     returnValue = CppEnums.ContryCode.eContryCode_TR
-  elseif eCountryType.AE_ALPHA == gameServiceType or eCountryType.AE_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_AE
+  elseif eCountryType.GT_ALPHA == gameServiceType or eCountryType.GT_REAL == gameServiceType then
+    returnValue = cppEnums.ContryCode.eContryCode_GT
   else
     returnValue = CppEnums.ContryCode.eContryCode_Count
   end
@@ -898,6 +898,9 @@ function isGameTypeTH()
 end
 function isGameTypeID()
   return isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_ID)
+end
+function isGameTypeGT()
+  return isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_GT)
 end
 function isCommonGameType()
   local returnValue = false

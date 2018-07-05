@@ -154,7 +154,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
     local guildNo = linkedGuildInfo:getGuildNo()
     local isSet = setGuildTextureByGuildNo(guildNo, chatting_GuildMark)
     if false == isSet then
-      chatting_GuildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/BlankGuildMark.dds")
+      chatting_GuildMark:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/BlankGuildMark.dds")
     end
     chatting_GuildMark:setRenderTexture(chatting_GuildMark:getBaseTexture())
   end
@@ -206,12 +206,12 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         chatting_contents[contentindex] = poolCurrentUI:newChattingEmoticon()
         if nil ~= itemIconPath then
           if false == isLinkedMentalCard then
-            chatting_contents[contentindex]:ChangeTextureInfoName("Icon/" .. itemIconPath)
+            chatting_contents[contentindex]:ChangeTextureInfoNameAsync("Icon/" .. itemIconPath)
           else
-            chatting_contents[contentindex]:ChangeTextureInfoName(itemIconPath)
+            chatting_contents[contentindex]:ChangeTextureInfoNameAsync(itemIconPath)
           end
         else
-          chatting_contents[contentindex]:ChangeTextureInfoName(chattingMessage:getEmoticonPath(emoNum - 1))
+          chatting_contents[contentindex]:ChangeTextureInfoNameAsync(chattingMessage:getEmoticonPath(emoNum - 1))
           local startX = chattingMessage:getEmoticonUV(emoNum - 1).x
           local startY = chattingMessage:getEmoticonUV(emoNum - 1).y
           local sizeX = chattingMessage:getEmoticonSize(emoNum - 1).x

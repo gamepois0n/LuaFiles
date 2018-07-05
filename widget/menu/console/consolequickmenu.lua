@@ -407,6 +407,40 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.Knowledge] = "KNOWLEDGE"
   }
 }
+PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
+  [__eQuickMenuDataType_Function] = {
+    [Type.Inventory] = true,
+    [Type.BlackSpirit] = true,
+    [Type.WorldMap] = true,
+    [Type.Skill] = true,
+    [Type.Mail] = true,
+    [Type.CharacterChallange] = false,
+    [Type.ItemMarket] = false,
+    [Type.Quest] = true,
+    [Type.ServantCall] = true,
+    [Type.ServantNavi] = true,
+    [Type.CampActivate] = false,
+    [Type.CampNavi] = false,
+    [Type.HorseRaceInformation] = false,
+    [Type.HorseRaceEnterOrCancel] = false,
+    [Type.HouseList] = true,
+    [Type.WorkerList] = true,
+    [Type.InstallationList] = false,
+    [Type.PetList] = true,
+    [Type.MaidList] = false,
+    [Type.TagSetting] = false,
+    [Type.Tag] = false,
+    [Type.NpcFind] = false,
+    [Type.MovieGuide] = false,
+    [Type.Mercenary] = false,
+    [Type.VillageSiegeArea] = false,
+    [Type.Pvp] = false,
+    [Type.RingMenuSetting] = true,
+    [Type.Profile] = true,
+    [Type.VoiceChat] = true,
+    [Type.Knowledge] = true
+  }
+}
 function varify()
   for type, index in pairs(Type) do
     local func = PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction[__eQuickMenuDataType_Function]

@@ -2,6 +2,7 @@ Worldmap_Grand_GuildHouseControl:SetShow(false)
 Worldmap_Grand_GuildHouseControl:ActiveMouseEventEffect(true)
 Worldmap_Grand_GuildHouseControl:setGlassBackground(true)
 local isContentsEnable = ToClient_IsContentsGroupOpen("36")
+local VCK = CppEnums.VirtualKeyCode
 local Panel_Control = {
   _win_Close = UI.getChildControl(Worldmap_Grand_GuildHouseControl, "Button_Win_Close"),
   _buttonQuestion = UI.getChildControl(Worldmap_Grand_GuildHouseControl, "Button_Question"),
@@ -284,6 +285,7 @@ function GuildHouse_WorkList_Update(houseKeyRaw, _recipeKeyRaw)
           slotPool.icon:ChangeTextureInfoName(workIcon)
           slotPool.icon:addInputEvent("Mouse_On", "GuildHouse_WorkList_ItemToolTip( true, " .. rowNo .. ", " .. dataIdx .. ", " .. uiSlotNo .. ", " .. Idx .. " )")
           slotPool.icon:addInputEvent("Mouse_Out", "GuildHouse_WorkList_ItemToolTip( false," .. rowNo .. ", " .. dataIdx .. ", " .. uiSlotNo .. ", " .. Idx .. " )")
+          slotPool.icon:addInputEvent("Mouse_LUp", "GuildHouse_HandleClickedWorkListIcon( " .. rowNo .. ", " .. dataIdx .. ", " .. uiSlotNo .. ", " .. Idx .. " )")
           if isMyGuildHouse then
             local MyGuildHouseCraftInfoManager = getSelfPlayer():getGuildHouseCraftInfoManager()
             local maxDailyWorkingCount = itemExchangeSSW:getMaxDailyWorkingCount()
@@ -318,6 +320,17 @@ function GuildHouse_WorkList_ItemToolTip(isShow, rowNo, dataIdx, uiSlotNo, Idx)
     local itemExchangeSSW = guildHouseInfoSSW:getItemExchangeByIndex(dataIdx)
     if itemExchangeSSW:isSet() then
       FGlobal_Hide_Tooltip_Work(itemExchangeSSW, true)
+    end
+  end
+end
+function GuildHouse_HandleClickedWorkListIcon(rowNo, dataIdx, uiSlotNo, Idx)
+  if isKeyPressed(VCK.KeyCode_CONTROL) then
+    local dataArray = WorkDataRow[rowNo]
+    local guildHouseInfoSSW = ToClient_GetGuildHouseInfoStaticStatusWrapper(WorkList_Control._selecthouseKeyRaw)
+    local exchangeCount = guildHouseInfoSSW:getItemExchangeListCount(dataArray.receipeKey, dataArray.level)
+    local itemExchangeSSW = guildHouseInfoSSW:getItemExchangeByIndex(dataIdx)
+    if itemExchangeSSW:isSet() then
+      FGlobal_Show_Tooltip_Work_Copy(itemExchangeSSW)
     end
   end
 end

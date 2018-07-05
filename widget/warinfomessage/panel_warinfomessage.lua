@@ -384,6 +384,15 @@ function FromClient_NotifyStartSiege(msgtype, regionKeyRaw)
       addMsg = ""
     }
     Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 10)
+    if true == _ContentsGroup_SeigeSeason5 then
+      local msg_Main2 = PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYSTARTSIEGE_SIEGEPROGRESS_PLUNDER")
+      local message = {
+        main = msg_Main2,
+        sub = "",
+        addMsg = ""
+      }
+      Proc_ShowMessage_Ack_For_RewardSelect(message, 4, 10)
+    end
   elseif 1 == msgtype then
     local msg_type = 5
     local msg_Main = PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYSTARTSIEGE_SIEGEPROGRESS_MAIN")

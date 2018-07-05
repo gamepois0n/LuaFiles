@@ -146,8 +146,8 @@ if false == _ContentsGroup_isConsolePadControl then
   GuildHouseAuction.btn_Page_Prv:addInputEvent("Mouse_LUp", "HandleClickedAuctionPrevButton()")
   GuildHouseAuction.btn_Page_Next:addInputEvent("Mouse_LUp", "HandleClickedAuctionNextButton()")
 end
-Panel_GuildHouse_Auction:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "HandleClickedAuctionPrevButton()")
-Panel_GuildHouse_Auction:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "HandleClickedAuctionNextButton()")
+Panel_GuildHouse_Auction:registerPadEvent(__eConsoleUIPadEvent_LT, "HandleClickedAuctionPrevButton()")
+Panel_GuildHouse_Auction:registerPadEvent(__eConsoleUIPadEvent_RT, "HandleClickedAuctionNextButton()")
 function HandleClickedAuctionPrevButton()
   for key, value in pairs(GuildHouseAuctionManager._houseAuctionList) do
     value._editInGold:SetEditText("", true)

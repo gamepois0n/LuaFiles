@@ -7,7 +7,8 @@ Panel_Window_StableInfo:RegisterShowEventFunc(false, "StableInfoHideAni()")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
-local isContentsEnable = ToClient_IsContentsGroupOpen("60")
+local isContentsTrainingEnable = ToClient_IsContentsGroupOpen("60")
+local isContentsTrainingAllEnable = ToClient_IsContentsGroupOpen("452")
 local isContentsStallionEnable = ToClient_IsContentsGroupOpen("243")
 local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
 UI.getChildControl(Panel_Window_StableInfo, "Stable_Info_Ability"):setGlassBackground(true)
@@ -47,17 +48,17 @@ local stableInfo = {
     },
     skill = {
       startIconX = 5,
-      startIconY = 7,
+      startIconY = 10,
       startNameX = 59,
-      startNameY = 2,
+      startNameY = 5,
       startDecX = 59,
-      startDecY = 23,
+      startDecY = 26,
       startExpBGX = 0,
-      startExpBGY = 2,
+      startExpBGY = 5,
       startExpX = 2,
-      startExpY = 4,
+      startExpY = 7,
       startButtonX = 251,
-      startButtonY = 4
+      startButtonY = 1
     }
   },
   _maleIcon = UI.getChildControl(Panel_Window_StableInfo, "Static_MaleIcon"),
@@ -101,6 +102,7 @@ local stableInfo = {
   _deadCountValue = UI.getChildControl(Panel_Window_StableInfo, "StaticText_DeadCountValue"),
   panel_abillity = UI.getChildControl(Panel_Window_StableInfo, "Stable_Info_Ability"),
   _staticWantSkillBG = UI.getChildControl(Panel_Window_StableInfo, "Static_WantSkillBG"),
+  _staticSkillHelpBG = UI.getChildControl(Panel_Window_StableInfo, "Static_SkillHelpBG"),
   _buttonAllSkillTraining = UI.getChildControl(Panel_Window_StableInfo, "Button_AllSkillTraining"),
   _startSlotIndex = 0,
   _temporaySlotCount = 0,
@@ -247,6 +249,7 @@ end
 function stableInfo:clear()
   self._fromSkillKey = nil
   self._toSkillKey = nil
+  self._isTargetSkillOn = false
 end
 function stableInfo:init()
   self._staticChangeTitle = UI.getChildControl(self._staticWantSkillBG, "StaticText_ChangeSkillTitle")
@@ -255,32 +258,44 @@ function stableInfo:init()
   self._staticSkillTargetIcon = UI.getChildControl(self._staticChangeBG, "Static_ChangeSkillIcon")
   self._staticSkillTargetCount = UI.getChildControl(self._staticChangeBG, "StaticText_ChangeSkillCount")
   self._staticTextChangeDesc = UI.getChildControl(self._staticWantSkillBG, "StaticText_ChangeSkillDesc")
+  self._checkBtnHelpChange = UI.getChildControl(self._staticSkillHelpBG, "CheckButton_HelpCategoryChange")
+  self._checkBtnHelpDelete = UI.getChildControl(self._staticSkillHelpBG, "CheckButton_HelpCategoryDelete")
+  self._staticDescBGTemp = UI.getChildControl(self._staticSkillHelpBG, "Static_DescBG")
   self._staticSkillTitle = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Skill_Title", self._staticSkillPanel, "StableInfo_SkillTitle")
   self._staticSkillBG = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillBG", self._staticSkillPanel, "StableInfo_SkillBG")
   self._scrollSkill = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Scroll_Skill", self._staticSkillBG, "StableInfo_SkillScroll")
-  self._staticTextChangeDelDesc = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "StaticText_ChangeDelSkillDesc", self._staticSkillPanel, "StableInfo_ChangeSkillDesc")
+  self._staticHelpChangeDescBG = UI.cloneControl(self._staticDescBGTemp, self._staticSkillHelpBG, "Static_ChangeDescBG")
+  self._staticTextHelpChangeDesc = UI.getChildControl(self._staticHelpChangeDescBG, "StaticText_SkillDesc")
+  self._staticHelpDeleteDescBG = UI.cloneControl(self._staticDescBGTemp, self._staticSkillHelpBG, "Static_DeleteDescBG")
+  self._staticTextHelpDeleteDesc = UI.getChildControl(self._staticHelpDeleteDescBG, "StaticText_SkillDesc")
   local slotConfig = self._config.slot
   self._staticSkillBG:SetPosX(slotConfig.startBGX)
   self._staticSkillBG:SetPosY(slotConfig.startBGY)
   self._scrollSkill:SetPosX(slotConfig.startScrollX)
   self._scrollSkill:SetPosY(slotConfig.startScrollY)
+  self._checkBtnHelpChange:addInputEvent("Mouse_LUp", "StableInfo_ShowHelpDesc(0)")
+  self._checkBtnHelpDelete:addInputEvent("Mouse_LUp", "StableInfo_ShowHelpDesc(1)")
   self._staticSkillBG:addInputEvent("Mouse_UpScroll", "StableInfo_ScrollEvent( true )")
   self._staticSkillBG:addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
   self._iconStallion:addInputEvent("Mouse_On", "StableServantInfo_StallionToolTip( true )")
   self._iconStallion:addInputEvent("Mouse_Out", "StableServantInfo_StallionToolTip( false )")
-  self._staticTextChangeDelDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self._staticTextChangeDelDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILL_CHANGE_DESC"))
-  self._staticTextChangeDelDesc:SetPosX(self._staticSkillBG:GetPosX())
-  self._staticTextChangeDelDesc:SetPosY(self._staticSkillBG:GetPosY() + self._staticSkillBG:GetSizeY() + 5)
-  self._staticTextChangeDelDesc:SetShow(true)
-  self._staticSkillPanel:SetSize(self._staticSkillPanel:GetSizeX(), self._staticSkillPanel:GetSizeY() + self._staticTextChangeDelDesc:GetTextSizeY() + 5)
+  self._staticSkillPanel:SetSize(self._staticSkillPanel:GetSizeX(), self._staticSkillPanel:GetSizeY() + 5)
   self._staticWantSkillBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
   self._staticTextChangeDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self._staticTextHelpChangeDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self._staticTextHelpDeleteDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._staticTextChangeDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_INFO_CHANGESKILLDESC"))
+  self._staticTextHelpChangeDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILL_CHANGE_DESC"))
+  self._staticTextHelpDeleteDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILL_DELETE_DESC"))
+  self._staticHelpChangeDescBG:SetSize(self._staticHelpChangeDescBG:GetSizeX(), self._staticTextHelpChangeDesc:GetTextSizeY() + 10)
+  self._staticHelpDeleteDescBG:SetSize(self._staticHelpDeleteDescBG:GetSizeX(), self._staticTextHelpDeleteDesc:GetTextSizeY() + 10)
+  self._staticHelpChangeDescBG:ComputePos()
+  self._staticHelpDeleteDescBG:ComputePos()
   self._staticWantSkillBG:SetSize(self._staticWantSkillBG:GetSizeX(), self._staticWantSkillBG:GetSizeY() + self._staticTextChangeDesc:GetTextSizeY() + 10)
-  self._buttonAllSkillTraining:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
-  self._staticTrainingTime:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
-  self._staticTrainingTimeValue:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._staticSkillHelpBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._buttonAllSkillTraining:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
+  self._staticTrainingTime:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
+  self._staticTrainingTimeValue:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   for ii = 0, self._config.slot.count - 1 do
     local slot = {}
     slot.base = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_Skill", self._staticSkillBG, "StableInfo_Skill_" .. ii)
@@ -338,6 +353,49 @@ function stableInfo:init()
   end
   self._staticSkillEffect = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillIChange_EffectPanel", self._staticSkillBG, "StableInfo_SkillEffect")
 end
+function StableInfo_ShowHelpDesc(helpType, closeAll)
+  local width = 0
+  local height = 0
+  width = stableInfo._staticSkillHelpBG:GetSizeX()
+  height = stableInfo._checkBtnHelpChange:GetSizeY() + stableInfo._checkBtnHelpDelete:GetSizeY() + 25
+  if true == closeAll then
+    stableInfo._checkBtnHelpChange:SetCheck(false)
+    stableInfo._checkBtnHelpDelete:SetCheck(false)
+    stableInfo._checkBtnHelpDelete:SetPosY(stableInfo._checkBtnHelpChange:GetPosY() + stableInfo._checkBtnHelpChange:GetSizeY() + 5)
+    stableInfo._staticHelpChangeDescBG:SetShow(false)
+    stableInfo._staticHelpDeleteDescBG:SetShow(false)
+  end
+  if 0 == helpType then
+    if true == stableInfo._checkBtnHelpChange:IsCheck() then
+      stableInfo._staticHelpChangeDescBG:SetPosY(stableInfo._checkBtnHelpChange:GetPosY() + stableInfo._checkBtnHelpChange:GetSizeY())
+      stableInfo._staticHelpChangeDescBG:SetShow(true)
+      stableInfo._checkBtnHelpDelete:SetPosY(stableInfo._staticHelpChangeDescBG:GetPosY() + stableInfo._staticHelpChangeDescBG:GetSizeY() + 5)
+      stableInfo._staticHelpDeleteDescBG:SetPosY(stableInfo._checkBtnHelpDelete:GetPosY() + stableInfo._checkBtnHelpDelete:GetSizeY())
+    else
+      stableInfo._staticHelpChangeDescBG:SetPosY(stableInfo._checkBtnHelpChange:GetPosY() + stableInfo._checkBtnHelpChange:GetSizeY())
+      stableInfo._staticHelpChangeDescBG:SetShow(false)
+      stableInfo._checkBtnHelpDelete:SetPosY(stableInfo._checkBtnHelpChange:GetPosY() + stableInfo._checkBtnHelpChange:GetSizeY() + 5)
+      stableInfo._staticHelpDeleteDescBG:SetPosY(stableInfo._checkBtnHelpDelete:GetPosY() + stableInfo._checkBtnHelpDelete:GetSizeY())
+    end
+  elseif 1 == helpType then
+    if true == stableInfo._checkBtnHelpDelete:IsCheck() then
+      stableInfo._staticHelpDeleteDescBG:SetPosY(stableInfo._checkBtnHelpDelete:GetPosY() + stableInfo._checkBtnHelpDelete:GetSizeY())
+      stableInfo._staticHelpDeleteDescBG:SetShow(true)
+    else
+      stableInfo._staticHelpDeleteDescBG:SetShow(false)
+    end
+  end
+  if stableInfo._staticHelpChangeDescBG:GetShow() then
+    height = height + stableInfo._staticHelpChangeDescBG:GetSizeY()
+  end
+  if stableInfo._staticHelpDeleteDescBG:GetShow() then
+    height = height + stableInfo._staticHelpDeleteDescBG:GetSizeY()
+  end
+  stableInfo._staticSkillHelpBG:SetSize(width, height)
+  stableInfo._buttonAllSkillTraining:SetPosY(stableInfo._staticSkillHelpBG:GetPosY() + stableInfo._staticSkillHelpBG:GetSizeY() + 5)
+  stableInfo._staticTrainingTime:SetPosY(stableInfo._staticSkillHelpBG:GetPosY() + stableInfo._staticSkillHelpBG:GetSizeY() + 5)
+  stableInfo._staticTrainingTimeValue:SetPosY(stableInfo._staticSkillHelpBG:GetPosY() + stableInfo._staticSkillHelpBG:GetSizeY() + 5)
+end
 function FGlobal_StableList_UnsealInfo(unsealType)
   StableInfo_Open(unsealType)
 end
@@ -364,6 +422,7 @@ function stableInfo:update(unsealType)
     return
   end
   if servantInfo:getVehicleType() ~= CppEnums.VehicleType.Type_Horse then
+    self._buttonAllSkillTraining:SetShow(false)
     self._staticWantSkillBG:SetShow(false)
     self._staticChangeBG:SetShow(false)
     self._staticChangeTitle:SetShow(false)
@@ -371,10 +430,16 @@ function stableInfo:update(unsealType)
     self._staticSkillTargetIcon:SetShow(false)
     self._staticSkillTargetCount:SetShow(false)
     self._staticTextChangeDesc:SetShow(false)
-    self._staticTextChangeDelDesc:SetShow(false)
     self._iconStallion:SetShow(false)
+    self._staticSkillHelpBG:SetShow(false)
   else
-    self._staticTextChangeDelDesc:SetShow(true)
+    if isContentsTrainingAllEnable then
+      self._buttonAllSkillTraining:SetShow(true)
+    else
+      self._buttonAllSkillTraining:SetShow(false)
+    end
+    self._staticSkillHelpBG:SetShow(true)
+    self._staticSkillHelpBG:SetPosY(true)
   end
   self._iconStallion:SetShow(false)
   self._iconStallion:SetMonoTone(true)
@@ -589,7 +654,11 @@ function stableInfo:updateSkill(unsealType)
     end
   end
   if true == servantInfo:isPossibleTrainingSkill() and regionName == servantRegionName then
-    self._buttonAllSkillTraining:SetShow(true)
+    if isContentsTrainingAllEnable then
+      self._buttonAllSkillTraining:SetShow(true)
+    else
+      self._buttonAllSkillTraining:SetShow(false)
+    end
   else
     self._buttonAllSkillTraining:SetShow(false)
   end
@@ -607,13 +676,17 @@ function stableInfo:updateSkill(unsealType)
           local expTxt = tonumber(string.format("%.0f", servantInfo:getSkillExp(ii) / (skillWrapper:getMaxExp() / 100)))
           if expTxt >= 100 then
             expTxt = 100
-          elseif regionName == servantRegionName and isContentsEnable then
+          elseif regionName == servantRegionName and isContentsTrainingEnable then
             if servantInfo:isSeized() or CppEnums.ServantStateType.Type_RegisterMarket == servantInfo:getStateType() or CppEnums.ServantStateType.Type_RegisterMating == servantInfo:getStateType() or CppEnums.ServantStateType.Type_Mating == servantInfo:getStateType() or servantInfo:isMatingComplete() or CppEnums.ServantStateType.Type_Coma == servantInfo:getStateType() or CppEnums.ServantStateType.Type_SkillTraining == servantInfo:getStateType() or servantInfo:isLink() then
               slot.buttonTraining:SetShow(false)
             else
               slot.buttonTraining:SetShow(false)
               if CppEnums.VehicleType.Type_Carriage ~= servantInfo:getVehicleType() and CppEnums.VehicleType.Type_Donkey ~= servantInfo:getVehicleType() then
-                slot.buttonTraining:SetShow(true)
+                if true == self._isTargetSkillOn then
+                  slot.buttonTraining:SetShow(false)
+                else
+                  slot.buttonTraining:SetShow(true)
+                end
               end
             end
           end
@@ -636,6 +709,7 @@ function stableInfo:updateSkill(unsealType)
               slot.button:SetShow(false)
               slot.buttonDel:SetShow(false)
               if CppEnums.VehicleType.Type_Carriage ~= servantInfo:getVehicleType() and CppEnums.VehicleType.Type_Donkey ~= servantInfo:getVehicleType() then
+                slot.buttonTargetRelease:SetShow(false)
                 if true == self._isTargetSkillOn then
                   slot.buttonDel:SetShow(false)
                   slot.button:SetShow(true)
@@ -685,13 +759,15 @@ function stableInfo:updateSkill(unsealType)
     end
   end
   self._staticWantSkillBG:SetShow(false)
-  self._buttonAllSkillTraining:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._staticSkillHelpBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._buttonAllSkillTraining:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   self._staticChangeBG:SetShow(false)
   self._staticChangeTitle:SetShow(false)
   self._staticSkillTargetIcon:SetShow(false)
   self._staticSkillTargetName:SetShow(false)
   self._staticSkillTargetCount:SetShow(false)
   self._staticTextChangeDesc:SetShow(false)
+  self._staticSkillHelpBG:SetShow(true)
   if nil ~= self._toSkillKey then
     local skillWrapper = servantInfo:getSkillXXX(self._toSkillKey)
     if nil ~= skillWrapper then
@@ -699,13 +775,14 @@ function stableInfo:updateSkill(unsealType)
       self._staticSkillTargetName:SetText(skillWrapper:getName())
       self._staticSkillTargetCount:SetText(servantInfo:getSkillFailedCount())
       self._staticWantSkillBG:SetShow(true)
-      self._buttonAllSkillTraining:SetPosY(self._staticWantSkillBG:GetPosY() + self._staticWantSkillBG:GetSizeY() + 5)
       self._staticChangeBG:SetShow(true)
       self._staticChangeTitle:SetShow(true)
       self._staticSkillTargetIcon:SetShow(true)
       self._staticSkillTargetName:SetShow(true)
       self._staticSkillTargetCount:SetShow(true)
       self._staticTextChangeDesc:SetShow(true)
+      self._staticSkillHelpBG:SetPosY(self._staticWantSkillBG:GetPosY() + self._staticWantSkillBG:GetSizeY() + 5)
+      self._buttonAllSkillTraining:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
     end
   end
   if 0 < self._temporayLearnSkillCount then
@@ -757,22 +834,6 @@ function Button_SkillTargetRelease()
 end
 local deleteSkillName
 function Button_Skill_Delete(slotNo)
-  if isGameTypeKorea() and nil == PaGlobal_Inventory:findItemWrapper(CppEnums.ItemWhereType.eInventory, 18070) then
-    local EasyBuyOpen = function()
-      PaGlobal_EasyBuy:Open(2)
-    end
-    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_TITLE_DELETE")
-    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_CONTENT_DELETE")
-    local messageboxData = {
-      title = messageBoxTitle,
-      content = messageBoxMemo,
-      functionYes = EasyBuyOpen,
-      functionNo = MessageBox_Empty_function,
-      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-    }
-    MessageBox.showMessageBox(messageboxData)
-    return
-  end
   if Panel_Win_System:GetShow() then
     return
   end
@@ -885,22 +946,6 @@ function Button_AllSkillTraining()
   MessageBox.showMessageBox(messageboxData)
 end
 function Button_SkillChange(slotNo)
-  if isGameTypeKorea() and nil == PaGlobal_Inventory:findItemWrapper(CppEnums.ItemWhereType.eCashInventory, 17559, 0) and nil == PaGlobal_Inventory:findItemWrapper(CppEnums.ItemWhereType.eInventory, 19997) then
-    local EasyBuyOpen = function()
-      PaGlobal_EasyBuy:Open(43)
-    end
-    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_TITLE_CHANGE")
-    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_CONTENT_CHANGE")
-    local messageboxData = {
-      title = messageBoxTitle,
-      content = messageBoxMemo,
-      functionYes = EasyBuyOpen,
-      functionNo = MessageBox_Empty_function,
-      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-    }
-    MessageBox.showMessageBox(messageboxData)
-    return
-  end
   if nil == StableList_SelectSlotNo() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_STABLE_ALERT"))
     return
@@ -959,9 +1004,6 @@ function StableInfo_ScrollEvent(isScrollUp)
   else
     self:update()
   end
-end
-function PaGlobal_Panel_Window_StableInfo_ResetSkillTarget()
-  self._isTargetSkillOn = false
 end
 function StableInfo_MatingImmediately_Confirm()
   local self = stableInfo
@@ -1049,6 +1091,7 @@ end
 function StableInfo_Close()
   if not Panel_Window_StableInfo:GetShow() then
   end
+  StableInfo_ShowHelpDesc(nil, true)
   Panel_Window_StableInfo:SetShow(false)
 end
 function StableServantInfo_StallionToolTip(isOn)

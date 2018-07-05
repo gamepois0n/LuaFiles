@@ -354,6 +354,10 @@ function ServantInventory_DropHandler(index, toSlotNo)
   return (DragManager:itemDragMove(self._inventory[index]._type, self._inventory[index]._actorKeyRaw))
 end
 function ServantInventoryOpenWithInventory(actorKeyRaw)
+  if true == _ContentsGroup_RenewUI then
+    PaGlobalFunc_InventoryInfo_Open(4)
+    return
+  end
   local self = servantInventory
   self:clearActorKey()
   local selfPlayer = getSelfPlayer()

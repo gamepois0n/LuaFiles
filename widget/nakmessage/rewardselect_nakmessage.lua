@@ -1027,6 +1027,9 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         nakItemIcon:SetShow(true)
         nakItemIcon:ChangeTextureInfoName(MessageData._Msg[processIndex].msg.addMsg)
       elseif messageType.characterHPwarning == MessageData._Msg[processIndex].type then
+        if true == ToClient_isXBox() then
+          Panel_RewardSelect_NakMessage:SetShow(false, false)
+        end
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_ffff8181)
         audioPostEvent_SystemUi(8, 15)

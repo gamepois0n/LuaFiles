@@ -542,7 +542,9 @@ end
 local forMovieRecord = function()
   Panel_MainStatus_User_Bar:SetShow(false)
   Panel_SelfPlayerExpGage:SetShow(false)
-  Panel_Chat0:SetShow(false)
+  if false == _ContentsGroup_RenewUI_Chatting then
+    Panel_Chat0:SetShow(false)
+  end
   PaGlobalFunc_QuickSlot_SetShow(false)
   Panel_UIMain:SetShow(false)
   Panel_CheckedQuest:SetShow(false)

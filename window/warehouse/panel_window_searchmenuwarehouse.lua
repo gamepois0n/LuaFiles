@@ -184,7 +184,7 @@ function FGlobal_WarehouseTownListCheck()
     return
   end
   local self = PaGlobal_SearchMenuWarehouse
-  if Panel_Window_Delivery_Information:GetShow() or Panel_Window_Delivery_Request:GetShow() or not _ContentsGroup_isAllWarehouse then
+  if PaGlobalFunc_PanelDelivery_GetShow() or not _ContentsGroup_isAllWarehouse then
     self._ui.part_SearchMenuWarehouse:SetShow(false)
   else
     self._ui.part_SearchMenuWarehouse:SetShow(true)

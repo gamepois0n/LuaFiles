@@ -23,8 +23,11 @@ end
 function adrenallin_Update()
   local selfPlayer = getSelfPlayer()
   local adrenallin = selfPlayer:getAdrenalin()
+  adrenallin = adrenallin / 10
+  adrenallin = math.floor(adrenallin) / 10
+  adrenallin = string.format("%.1f", adrenallin)
   ui._adCircleProgress:SetProgressRate(adrenallin)
-  ui._txt_Adrenallin:SetText(tostring(adrenallin) .. "%")
+  ui._txt_Adrenallin:SetText(adrenallin .. "%")
   if prevAdrenallin ~= adrenallin and false == _ContentsGroup_RenewUI_Main then
     FGlobal_MainStatus_FadeIn(5)
   end
@@ -96,8 +99,10 @@ function FromClient_ChangeAdrenalinMode()
   end
 end
 function Adrenallin_ShowSimpleToolTip(isShow)
+  local count = ToClient_GetApRegenAmount()
+  local countString = string.format("%.2f", count / 100)
   name = PAGetString(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_TITLE")
-  desc = PAGetString(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC")
+  desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC", "count", tostring(countString))
   uiControl = Panel_Adrenallin
   registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
   if isShow == true then

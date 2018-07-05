@@ -1039,7 +1039,8 @@ CppEnums.CollectToolType = {
   eType_Pray = 9,
   eType_MagnifyingLens = 10,
   eType_MassStone = 11,
-  TypeCount = 12
+  eType_FishingChair = 12,
+  TypeCount = 13
 }
 CppEnums.CollectToolTypeName = {
   [CppEnums.CollectToolType.eType_BareHands] = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_DEFINE_CPP_ENUM_ETYPE_BAREHANDS"),
@@ -1053,7 +1054,8 @@ CppEnums.CollectToolTypeName = {
   [CppEnums.CollectToolType.eType_Tweezers] = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_DEFINE_CPP_ENUM_ETYPE_TWEEZERS"),
   [CppEnums.CollectToolType.eType_Pray] = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_DEFINE_CPP_ENUM_ETYPE_PRAY"),
   [CppEnums.CollectToolType.eType_MagnifyingLens] = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_DEFINE_CPP_ENUM_ETYPE_MAGNIFYINGLENS"),
-  [CppEnums.CollectToolType.eType_MassStone] = "\235\140\128\235\159\137 \234\176\128\234\179\181\236\132\157"
+  [CppEnums.CollectToolType.eType_MassStone] = "\235\140\128\235\159\137 \234\176\128\234\179\181\236\132\157",
+  [CppEnums.CollectToolType.eType_FishingChair] = "\235\130\154\236\139\156 \236\157\152\236\158\144"
 }
 _PA_ASSERT(CppEnums.CollectToolType.TypeCount == getMaxCollectToolTypeCount(), "\235\163\168\236\149\132\236\157\152 CollectToolType \234\176\156\236\136\152\236\153\128 \237\129\180\235\157\188\236\157\180\236\150\184\237\138\184 \236\189\148\235\147\156\236\157\152 CollectToolType\236\157\152 \234\176\156\236\136\152\234\176\128 \235\139\164\235\166\133\235\139\136\235\139\164. \235\167\158\236\182\176\236\163\188\236\132\184\236\154\148")
 CppEnums.ItemClassifyType = {
@@ -1406,7 +1408,8 @@ CppEnums.MiniGameType = {
   MiniGameType_15 = 15,
   MiniGameType_16 = 16,
   MiniGameType_17 = 17,
-  MiniGameType_18 = 18
+  MiniGameType_18 = 18,
+  MiniGameType_19 = 19
 }
 CppEnums.MiniGameKeyType = {
   MiniGameKeyType_W = 0,
@@ -2088,7 +2091,8 @@ CppEnums.ContryCode = {
   eContryCode_ID = 8,
   eContryCode_TR = 9,
   eContryCode_AE = 10,
-  eContryCode_Count = 11
+  eContryCode_GT = 12,
+  eContryCode_Count = 13
 }
 CppEnums.CustomizationNoCashType = {
   eCustomizationNoCashType_Voice = 0,
@@ -2387,7 +2391,9 @@ CppEnums.CountryType = {
   TR_ALPHA = 21,
   TR_REAL = 22,
   AE_ALPHA = 23,
-  AE_REAL = 24
+  AE_REAL = 24,
+  GT_ALPHA = 27,
+  GT_REAL = 28
 }
 CppEnums.GuildWarType = {
   GuildWarType_Normal = 0,
@@ -2479,7 +2485,10 @@ CppEnums.GlobalUIOptionType = {
   RadarAlpha = 61,
   ItemMarketAlarm = 62,
   RakiaroTutorial = 63,
-  ItemMarketAlarmSound = 64
+  ItemMarketAlarmSound = 64,
+  BossAlertOnOff = 65,
+  BossAlertTime = 66,
+  BossAlertKeep = 67
 }
 CppEnums.MembershipType = {
   default = 0,

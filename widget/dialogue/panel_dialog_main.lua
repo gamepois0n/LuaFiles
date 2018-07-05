@@ -2841,7 +2841,7 @@ function FGlobal_HideDialog()
   if nil == selfPlayer then
     return
   end
-  if selfPlayer:getLevel() < 5 then
+  if selfPlayer:getLevel() < 5 and false == _ContentsGroup_RenewUI_Chatting then
     Panel_Chat0:SetShow(false)
   end
   FGlobal_NewLocalWar_Show()

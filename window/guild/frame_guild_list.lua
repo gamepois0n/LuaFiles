@@ -1892,6 +1892,14 @@ function GuildList_PanelResize_ByFontSize()
         rtGuildListInfo._listening:SetPosX(607)
       end
     end
+  else
+    for index = 0, _constGuildListMaxCount - 1 do
+      local rtGuildListInfo = GuildListInfoPage._list[index]
+      rtGuildListInfo._charName:SetSize(240, 20)
+      rtGuildListInfo._charName:SetPosX(180)
+      rtGuildListInfo._activity:SetPosX(390)
+      rtGuildListInfo._contributedTendency:SetPosX(520)
+    end
   end
   for index = 0, _constGuildListMaxCount - 1 do
     local rtGuildListInfo = GuildListInfoPage._list[index]

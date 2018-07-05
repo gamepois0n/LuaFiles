@@ -98,6 +98,10 @@ function ToClient_EndIntroMovie(movieId)
     CloseIntroMovie()
   end
 end
-InitIntroMoviePanel()
+if true == _ContentsGroup_RenewUI or ToClient_IsDevelopment() then
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "InitIntroMoviePanel")
+else
+  InitIntroMoviePanel()
+end
 Panel_IntroMovie:RegisterUpdateFunc("UpdateIntroMovie")
 registerEvent("ToClient_EndGuideMovie", "ToClient_EndIntroMovie")

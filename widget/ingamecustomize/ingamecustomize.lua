@@ -93,7 +93,9 @@ function HandleClicked_CloseIngameCustomization()
     SetUIMode(Defines.UIMode.eUIMode_Default)
     Panel_CustomizationMessage:SetShow(false)
     Panel_CustomizationStatic:SetShow(false)
-    Panel_Chat0:SetShow(true)
+    if false == _ContentsGroup_RenewUI_Chatting then
+      Panel_Chat0:SetShow(true)
+    end
     Panel_Cash_Customization:SetShow(false)
     CashCumaBuy_Close()
     allClearMessageData()

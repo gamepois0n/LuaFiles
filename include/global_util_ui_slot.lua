@@ -430,7 +430,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
     soulCount = itemWrapper:getSoulCollectorCount()
     soulMax = itemWrapper:getSoulCollectorMaxCount()
     if soulCount >= soulMax then
-      self.soulComplete:ChangeTextureInfoName("new_ui_common_forlua/Widget/Dialogue/Dialogue_Etc_00.dds")
+      self.soulComplete:ChangeTextureInfoNameAsync("new_ui_common_forlua/Widget/Dialogue/Dialogue_Etc_00.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.soulComplete, 330, 61, 346, 76)
       self.soulComplete:getBaseTexture():setUV(x1, y1, x2, y2)
       self.soulComplete:setRenderTexture(self.soulComplete:getBaseTexture())
@@ -440,7 +440,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
   self:setItemByStaticStatus(itemWrapper:getStaticStatus(), itemWrapper:get():getCount_s64(), expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax, isWidget)
   local isAble = requestIsRegisterItemForItemMarket(itemWrapper:get():getKey())
   if nil ~= self.isCash and isCash and itemWrapper:isSealed() and not itemWrapper:get():isVested() and isAble and not itemWrapper:getStaticStatus():isStackable() then
-    self.isCash:ChangeTextureInfoName("new_ui_common_forlua/window/ingamecashshop/tax.dds")
+    self.isCash:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/ingamecashshop/tax.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(self.isCash, 1, 1, 28, 28)
     self.isCash:getBaseTexture():setUV(x1, y1, x2, y2)
     self.isCash:setRenderTexture(self.isCash:getBaseTexture())
@@ -449,7 +449,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
   if nil ~= slotNo and nil ~= self.itemLock then
     if true ~= equipment then
       if ToClient_Inventory_CheckItemLock(slotNo, whereType) then
-        self.itemLock:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Item_Lock.dds")
+        self.itemLock:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Item_Lock.dds")
         local x1, y1, x2, y2 = setTextureUV_Func(self.itemLock, 1, 1, 42, 42)
         self.itemLock:getBaseTexture():setUV(x1, y1, x2, y2)
         self.itemLock:setRenderTexture(self.itemLock:getBaseTexture())
@@ -458,7 +458,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
         self.itemLock:SetShow(false)
       end
     elseif ToClient_EquipSlot_CheckItemLock(slotNo, 1) then
-      self.itemLock:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Item_Lock.dds")
+      self.itemLock:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Item_Lock.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.itemLock, 1, 1, 42, 42)
       self.itemLock:getBaseTexture():setUV(x1, y1, x2, y2)
       self.itemLock:setRenderTexture(self.itemLock:getBaseTexture())
@@ -485,7 +485,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
         end
         if nil ~= bagItemWrapper then
           local iconPath = bagItemWrapper:getStaticStatus():getIconPath()
-          self.bagIcon:ChangeTextureInfoName("icon/" .. iconPath)
+          self.bagIcon:ChangeTextureInfoNameAsync("icon/" .. iconPath)
           self.bagIcon:SetShow(true)
           break
         end
@@ -505,7 +505,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
         local bagItemWrapper = getInventoryBagItemByType(whereType, slotNo, index)
         if nil ~= bagItemWrapper then
           local iconPath = bagItemWrapper:getStaticStatus():getIconPath()
-          self.quickslotBagIcon:ChangeTextureInfoName("icon/" .. iconPath)
+          self.quickslotBagIcon:ChangeTextureInfoNameAsync("icon/" .. iconPath)
           self.quickslotBagIcon:SetShow(true)
           break
         end
@@ -516,20 +516,20 @@ end
 function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax, isWidget)
   s64_stackCount = s64_stackCount or toInt64(0, 0)
   if nil ~= self.icon then
-    self.icon:ChangeTextureInfoName("Icon/" .. itemStaticWrapper:getIconPath())
+    self.icon:ChangeTextureInfoNameAsync("Icon/" .. itemStaticWrapper:getIconPath())
     self.icon:SetAlpha(1)
   end
   if nil ~= self.border then
     local gradeType = itemStaticWrapper:getGradeType()
     if gradeType > 0 and gradeType <= #UI.itemSlotConfig.borderTexture then
-      self.border:ChangeTextureInfoName(UI.itemSlotConfig.borderTexture[gradeType].texture)
+      self.border:ChangeTextureInfoNameAsync(UI.itemSlotConfig.borderTexture[gradeType].texture)
       local x1, y1, x2, y2 = setTextureUV_Func(self.border, UI.itemSlotConfig.borderTexture[gradeType].x1, UI.itemSlotConfig.borderTexture[gradeType].y1, UI.itemSlotConfig.borderTexture[gradeType].x2, UI.itemSlotConfig.borderTexture[gradeType].y2)
       self.border:getBaseTexture():setUV(x1, y1, x2, y2)
       self.border:setRenderTexture(self.border:getBaseTexture())
       self.border:SetShow(true)
     else
       self.border:ReleaseTexture()
-      self.border:ChangeTextureInfoName("")
+      self.border:ChangeTextureInfoNameAsync("")
     end
   end
   if nil ~= self.count then
@@ -653,7 +653,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   end
   if nil ~= self.expiration then
     if -1 ~= expirationIndex then
-      self.expiration:ChangeTextureInfoName(UI.itemSlotConfig.expirationTexture[expirationIndex].texture)
+      self.expiration:ChangeTextureInfoNameAsync(UI.itemSlotConfig.expirationTexture[expirationIndex].texture)
       local x1, y1, x2, y2 = setTextureUV_Func(self.expiration, UI.itemSlotConfig.expirationTexture[expirationIndex].x1, UI.itemSlotConfig.expirationTexture[expirationIndex].y1, UI.itemSlotConfig.expirationTexture[expirationIndex].x2, UI.itemSlotConfig.expirationTexture[expirationIndex].y2)
       self.expiration:getBaseTexture():setUV(x1, y1, x2, y2)
       self.expiration:setRenderTexture(self.expiration:getBaseTexture())
@@ -674,7 +674,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   end
   if nil ~= self.isCash then
     if itemStaticWrapper:get():isCash() then
-      self.isCash:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/CashIcon.dds")
+      self.isCash:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/CashIcon.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.isCash, 1, 1, 28, 28)
       self.isCash:getBaseTexture():setUV(x1, y1, x2, y2)
       self.isCash:setRenderTexture(self.isCash:getBaseTexture())
@@ -685,7 +685,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   end
   if nil ~= self.expirationBG then
     if 2 == expirationIndex then
-      self.expirationBG:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/inventory_01.dds")
+      self.expirationBG:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/inventory_01.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.expirationBG, 1, 1, 44, 44)
       self.expirationBG:getBaseTexture():setUV(x1, y1, x2, y2)
       self.expirationBG:setRenderTexture(self.expirationBG:getBaseTexture())
@@ -709,7 +709,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
       isUsableClass = false
     end
     if true == itemSSW:get():isEquipable() and false == isUsableClass then
-      self.classEquipBG:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Class.dds")
+      self.classEquipBG:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Disable_Class.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.classEquipBG, 1, 1, 12, 12)
       self.classEquipBG:getBaseTexture():setUV(x1, y1, x2, y2)
       self.classEquipBG:setRenderTexture(self.classEquipBG:getBaseTexture())
@@ -721,13 +721,13 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
     self.enduranceIcon:SetShow(false)
     if true == isBroken then
       if 2 == equipSlotNo then
-        self.enduranceIcon:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Repair.dds")
+        self.enduranceIcon:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Disable_Repair.dds")
         local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
         self.enduranceIcon:getBaseTexture():setUV(x1, y1, x2, y2)
         self.enduranceIcon:setRenderTexture(self.enduranceIcon:getBaseTexture())
         self.enduranceIcon:SetShow(true)
       else
-        self.enduranceIcon:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Need_Repair.dds")
+        self.enduranceIcon:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Need_Repair.dds")
         local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
         self.enduranceIcon:getBaseTexture():setUV(x1, y1, x2, y2)
         self.enduranceIcon:setRenderTexture(self.enduranceIcon:getBaseTexture())
@@ -736,7 +736,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
     end
   end
   if nil ~= self.checkBox then
-    self.checkBox:ChangeTextureInfoName(UI.itemSlotConfig.checkBtnTexture[0].texture)
+    self.checkBox:ChangeTextureInfoNameAsync(UI.itemSlotConfig.checkBtnTexture[0].texture)
     local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, UI.itemSlotConfig.checkBtnTexture[0].x1, UI.itemSlotConfig.checkBtnTexture[0].y1, UI.itemSlotConfig.checkBtnTexture[0].x2, UI.itemSlotConfig.checkBtnTexture[0].y2)
     self.checkBox:getBaseTexture():setUV(x1, y1, x2, y2)
     self.checkBox:setRenderTexture(self.checkBox:getBaseTexture())
@@ -764,7 +764,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
         local quickSlotBagItemWrapper = getInventoryBagItemByType(whereType, invenSlotNo, index)
         if nil ~= quickSlotBagItemWrapper then
           local iconPath = quickSlotBagItemWrapper:getStaticStatus():getIconPath()
-          self.quickslotBagIcon:ChangeTextureInfoName("icon/" .. iconPath)
+          self.quickslotBagIcon:ChangeTextureInfoNameAsync("icon/" .. iconPath)
           self.quickslotBagIcon:SetShow(true)
           break
         end
@@ -775,7 +775,7 @@ end
 function SlotItem:setItemByCashProductStaticStatus(cashProductStaticWrapper, s64_stackCount)
   s64_stackCount = s64_stackCount or toInt64(0, 0)
   if nil ~= self.icon then
-    self.icon:ChangeTextureInfoName("Icon/" .. cashProductStaticWrapper:getIconPath())
+    self.icon:ChangeTextureInfoNameAsync("Icon/" .. cashProductStaticWrapper:getIconPath())
     self.icon:SetAlpha(1)
   end
   if nil ~= self.count then
@@ -798,7 +798,7 @@ end
 function SlotItem:clearItem()
   if nil ~= self.icon then
     self.icon:ReleaseTexture()
-    self.icon:ChangeTextureInfoName("")
+    self.icon:ChangeTextureInfoNameAsync("")
     self.icon:SetAlpha(0)
   end
   if nil ~= self.border then
@@ -1072,7 +1072,7 @@ function SlotSkill:destroyChild()
 end
 function SlotSkill:setSkillTypeStatic(skillTypeStaticWrapper, skillNo)
   if nil ~= self.icon then
-    self.icon:ChangeTextureInfoName("Icon/" .. skillTypeStaticWrapper:getIconPath())
+    self.icon:ChangeTextureInfoNameAsync("Icon/" .. skillTypeStaticWrapper:getIconPath())
     self.icon:SetAlpha(1)
   end
   if nil ~= skillNo then

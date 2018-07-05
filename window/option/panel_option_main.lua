@@ -332,6 +332,13 @@ function PaGlobal_Option:Open()
   end
   tree2:getElementManager():refillKeyList()
   tree2:moveTopIndex()
+  if true == ToClient_isXBox() then
+    local idx = self._list2._selectedKey
+    local indexMap = self._list2._tree2IndexMap[idx]
+    if nil ~= idx then
+      self:ClickedMainCategory(idx, indexMap._category)
+    end
+  end
   self:CheckEnableSimpleUI()
   if isNeedGameOptionFromServer() == true then
     self:MoveUi(self.UIMODE.Main)
@@ -736,14 +743,16 @@ function PaGlobal_Option:ListInit()
   if true == isNeedGameOptionFromServer() then
     if _ContentsGroup_isConsoleTest then
       _frameOrder = {
+        "Graphic",
         "Function",
         "Interface",
         "Sound"
       }
       _detailOrder = {
-        [1] = {"Alert", "Etc"},
-        [2] = {"Pad"},
-        [3] = {"OnOff", "Volume"}
+        [1] = {"HDR"},
+        [2] = {"Alert", "Etc"},
+        [3] = {"Pad"},
+        [4] = {"OnOff", "Volume"}
       }
     else
       _frameOrder = {
@@ -788,9 +797,10 @@ function PaGlobal_Option:ListInit()
       }
     end
   elseif _ContentsGroup_isConsoleTest then
-    _frameOrder = {"Sound"}
+    _frameOrder = {"Sound", "Graphic"}
     _detailOrder = {
-      [1] = {"OnOff", "Volume"}
+      [1] = {"OnOff", "Volume"},
+      [2] = {"HDR"}
     }
   else
     _frameOrder = {
@@ -1256,6 +1266,21 @@ function PaGlobal_Option:SetContentsOption()
     else
       bg2:SetPosY(bg2:GetPosY() - 60)
     end
+    local bgHdr = UI.getChildControl(self._frames.Graphic.HDR._uiFrameContent, "Static_HDR_ImageBgs_Import")
+    local hdrImage = UI.getChildControl(bgHdr, "Static_HDR_Image")
+    local hdrLeftBlackImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
+    local hdrRightWhiteImage = UI.getChildControl(bgHdr, "Static_HDR_White")
+    hdrImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 10000)
+    hdrLeftBlackImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1)
+    hdrRightWhiteImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1)
+  else
+    local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
+    UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_ShowKeyGuideDesc"):SetShow(false)
+    bg0:SetSize(bg0:GetSizeX(), bg0:GetSizeY() - 30)
+    self._elements.HDRDisplayGamma = nil
+    self._elements.HDRDisplayMaxNits = nil
+    self._elements.UltraHighDefinition = nil
   end
   if true == UI.checkResolution4KForXBox() then
     for i, v in pairs(self._elements.UIScale._eventControl) do

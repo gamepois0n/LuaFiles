@@ -96,32 +96,12 @@ function FromClient_UI_CharacterInfo_Basic_AttackChanged()
     local chaAwakenAttack = ToClient_getAwakenOffence()
     self._ui._staticTextAwakenAttack_Title:SetShow(true)
     self._ui._staticTextAwakenAttack_Value:SetText(tostring(chaAwakenAttack))
-    self._ui._staticTextDefence_Title:SetSpanSize(385, 395)
-    self._ui._staticTextStamina_Title:SetSpanSize(385, 419)
-    self._ui._staticTextZodiac_Title:SetSpanSize(385, 515)
-    self._ui._staticTextZodiac_Value:SetSpanSize(611, 515)
-    self._ui._staticTextTendency_Title:SetSpanSize(385, 540)
-    self._ui._staticTextTendency_Value:SetSpanSize(611, 540)
-    self._ui._staticTextMental_Title:SetSpanSize(385, 443)
-    self._ui._staticTextMental_Value:SetSpanSize(611, 443)
-    self._ui._staticTextSkillPoint_Title:SetSpanSize(385, 491)
-    self._ui._staticTextSkillPoint_Value:SetSpanSize(611, 491)
-    self._ui._staticTextContribution_Title:SetSpanSize(385, 467)
-    self._ui._staticTextContribution_Value:SetSpanSize(611, 467)
+    self._ui._staticTextDefence_Title:SetSpanSize(207, 154)
+    self._ui._staticTextStamina_Title:SetSpanSize(207, 180)
   else
     self._ui._staticTextAwakenAttack_Title:SetShow(false)
-    self._ui._staticTextDefence_Title:SetSpanSize(385, 371)
-    self._ui._staticTextStamina_Title:SetSpanSize(385, 395)
-    self._ui._staticTextZodiac_Title:SetSpanSize(385, 491)
-    self._ui._staticTextZodiac_Value:SetSpanSize(611, 491)
-    self._ui._staticTextTendency_Title:SetSpanSize(385, 515)
-    self._ui._staticTextTendency_Value:SetSpanSize(611, 515)
-    self._ui._staticTextMental_Title:SetSpanSize(385, 419)
-    self._ui._staticTextMental_Value:SetSpanSize(611, 419)
-    self._ui._staticTextSkillPoint_Title:SetSpanSize(385, 467)
-    self._ui._staticTextSkillPoint_Value:SetSpanSize(611, 467)
-    self._ui._staticTextContribution_Title:SetSpanSize(385, 443)
-    self._ui._staticTextContribution_Value:SetSpanSize(611, 443)
+    self._ui._staticTextDefence_Title:SetSpanSize(207, 128)
+    self._ui._staticTextStamina_Title:SetSpanSize(207, 154)
   end
   local chaDefence = ToClient_getDefence()
   self._ui._staticTextDefence_Value:SetText(tostring(chaDefence))
@@ -151,9 +131,9 @@ function FromClient_UI_CharacterInfo_Basic_FamilyPointsChanged()
   local etcFP = self._playerGet:getEtcFamilyPoint()
   local sumFP = battleFP + lifeFP + etcFP
   self._ui._staticTextFamilyPoints[self._familyPoint._family]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FAMILYPOINT_TITLE", "familyPoint", tostring(sumFP)))
-  self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(tostring(battleFP))
-  self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(tostring(lifeFP))
-  self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(tostring(etcFP))
+  self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_BATTLEPOINT", "value", tostring(battleFP)))
+  self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_LIFEPOINT", "value", tostring(lifeFP)))
+  self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_ETCPOINT", "value", tostring(etcFP)))
 end
 function FromClient_UI_CharacterInfo_Basic_ResistChanged()
   if Panel_Window_CharInfo_Status:IsShow() == false then
@@ -683,3 +663,91 @@ function PaGlobal_CharacterInfoBasic:updateFacePhoto()
   end
   self._ui._staticCharSlot:setRenderTexture(self._ui._staticCharSlot:getBaseTexture())
 end
+PaGlobal_Char_LifeInfo = {
+  _lifeInfo = {},
+  _lifeType_Panel_Name = {
+    [__ePlayerLifeStatType_Collecting] = "Static_Bg_Gathering",
+    [__ePlayerLifeStatType_Fishing] = "Static_Bg_Fishing",
+    [__ePlayerLifeStatType_Hunting] = "Static_Bg_Hunting",
+    [__ePlayerLifeStatType_Cooking] = "Static_Bg_Cook",
+    [__ePlayerLifeStatType_Alchemy] = "Static_Bg_Alchemy",
+    [__ePlayerLifeStatType_Manufacture] = "Static_Bg_Manufacture",
+    [__ePlayerLifeStatType_Training] = "Static_Bg_TrainingHorse",
+    [__ePlayerLifeStatType_Trade] = "Static_Bg_Trade",
+    [__ePlayerLifeStatType_Harvest] = "Static_Bg_Gardening",
+    [__ePlayerLifeStatType_Sail] = "Static_Bg_Sailing"
+  },
+  _lifeSubTypeCount = {
+    [__ePlayerLifeStatType_Collecting] = __eCollectingStatType_Count,
+    [__ePlayerLifeStatType_Fishing] = __eFishingStatType_Count,
+    [__ePlayerLifeStatType_Hunting] = __eHuntingStatType_Count,
+    [__ePlayerLifeStatType_Cooking] = __eCookingStatType_Count,
+    [__ePlayerLifeStatType_Alchemy] = __eAlchemyStatType_Count,
+    [__ePlayerLifeStatType_Manufacture] = __eManufacturingStatType_Count,
+    [__ePlayerLifeStatType_Training] = __eTrainingStatType_Count,
+    [__ePlayerLifeStatType_Trade] = __eTradeStatType_Count,
+    [__ePlayerLifeStatType_Harvest] = __eFarmingStatType_Count,
+    [__ePlayerLifeStatType_Sail] = __eSailStatType_Count
+  }
+}
+function PaGlobal_Char_LifeInfo:Init()
+  for key, value in pairs(self._lifeType_Panel_Name) do
+    self._lifeInfo[key] = {}
+    self._lifeInfo[key]._ui = {}
+    self._lifeInfo[key]._ui._subCategoryTitle = {}
+    self._lifeInfo[key]._ui._subCategoryPoint = {}
+    self._lifeInfo[key]._ui._parent = UI.getChildControl(Panel_Window_CharInfo_LifeInfo, value)
+    self._lifeInfo[key]._ui._commonPoint = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_LifePoint")
+    self._lifeInfo[key]._ui._progressBar = UI.getChildControl(self._lifeInfo[key]._ui._parent, "Progress2_Exp")
+    self._lifeInfo[key]._ui._expText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Percent")
+    self._lifeInfo[key]._ui._levelText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Level")
+    local count = self._lifeSubTypeCount[key] - 1
+    if __ePlayerLifeStatType_Collecting == key then
+      count = self._lifeSubTypeCount[key]
+    end
+    for ii = 1, count do
+      if nil == self._lifeInfo[key] then
+      else
+        local titleControlName = "StaticText_SubCetegoryTitle" .. tostring(ii)
+        local pointControlName = "StaticText_SubCategoryValue" .. tostring(ii)
+        self._lifeInfo[key]._ui._subCategoryTitle[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, titleControlName)
+        self._lifeInfo[key]._ui._subCategoryPoint[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, pointControlName)
+      end
+    end
+  end
+end
+function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
+  if Panel_Window_CharInfo_Status:IsShow() == false then
+    return
+  end
+  local self = PaGlobal_Char_LifeInfo
+  local isSailOpen = ToClient_IsContentsGroupOpen("83")
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  for key, value in pairs(self._lifeType_Panel_Name) do
+    local currentLevel = selfPlayer:get():getLifeExperienceLevel(key)
+    local currentExp = selfPlayer:get():getCurrLifeExperiencePoint(key)
+    local needExp = selfPlayer:get():getDemandLifeExperiencePoint(key)
+    local currentExpRate = Int64toInt32(currentExp * toInt64(0, 100) / needExp)
+    local currentExpRateString = string.format("%.1f", currentExpRate)
+    self._lifeInfo[key]._ui._levelText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(currentLevel))
+    self._lifeInfo[key]._ui._levelText:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(currentLevel))
+    self._lifeInfo[key]._ui._progressBar:SetProgressRate(currentExpRate)
+    self._lifeInfo[key]._ui._expText:SetText(currentExpRateString .. "%")
+    local commonPoint = ToClient_GetCommonLifeStat(key)
+    local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(commonPoint)
+    self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
+    for ii = 1, self._lifeSubTypeCount[key] - 1 do
+      local subPoint = selfPlayer:get():getLifeStat(key, ii)
+      if nil ~= self._lifeInfo[key]._ui._subCategoryPoint[ii] then
+        self._lifeInfo[key]._ui._subCategoryPoint[ii]:SetText(tostring(subPoint))
+      end
+    end
+    if __ePlayerLifeStatType_Collecting == key then
+      self._lifeInfo[key]._ui._subCategoryPoint[self._lifeSubTypeCount[key]]:SetText(commonPoint)
+    end
+  end
+end
+PaGlobal_Char_LifeInfo:Init()

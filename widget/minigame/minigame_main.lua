@@ -3,7 +3,7 @@ local IM = CppEnums.EProcessorInputMode
 local currentMiniGame = -1
 local lastUIMode
 function ActionMiniGame_Main(gameIndex)
-  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 == gameIndex or gameIndex > MGT.MiniGameType_18 or currentMiniGame == gameIndex then
+  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 == gameIndex or gameIndex > MGT.MiniGameType_19 or currentMiniGame == gameIndex then
     return
   end
   if MGT.MiniGameType_0 == gameIndex then
@@ -42,6 +42,8 @@ function ActionMiniGame_Main(gameIndex)
     Panel_Minigame_SteeringWheel_Start()
   elseif MGT.MiniGameType_0 == gameIndex then
     Panel_Minigame_Gradient_Start(true)
+  elseif MGT.MiniGameType_19 == gameIndex then
+    PaGlobal_HammerGame:Start()
   end
   lastUIMode = GetUIMode()
   FGlobal_CloseWorldmapForLuaKeyHandling()
@@ -49,7 +51,7 @@ function ActionMiniGame_Main(gameIndex)
   currentMiniGame = gameIndex
 end
 function ActionMiniGame_Stop()
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_18 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
     return
   end
   if MGT.MiniGameType_0 == currentMiniGame then
@@ -88,6 +90,8 @@ function ActionMiniGame_Stop()
     Panel_Minigame_SteeringWheel_End()
   elseif MGT.MiniGameType_18 == currentMiniGame then
     Panel_Minigame_Gradient_End()
+  elseif MGT.MiniGameType_19 == currentMiniGame then
+    PaGlobal_HammerGame:End()
   end
   SetUIMode(Defines.UIMode.eUIMode_Default)
   CheckChattingInput()
@@ -95,7 +99,7 @@ function ActionMiniGame_Stop()
   currentMiniGame = -1
 end
 function Panel_Minigame_EventKeyPress(keyType)
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_18 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
     return
   end
   if MGT.MiniGameType_0 == currentMiniGame then
@@ -120,11 +124,14 @@ function Panel_Minigame_EventKeyPress(keyType)
   elseif MGT.MiniGameType_15 == currentMiniGame then
     Panel_MiniGame_Jaksal_KeyPressCheck(keyType)
   elseif MGT.MiniGameType_16 == currentMiniGame then
+  elseif MGT.MiniGameType_18 == currentMiniGame then
+  elseif MGT.MiniGameType_19 == currentMiniGame then
+    PaGlobal_HammerGame:KeyFunc(keyType)
   end
 end
 registerEvent("EventActionMiniGameKeyDownOnce", "Panel_Minigame_EventKeyPress")
 function Panel_Minigame_UpdateFunc(deltaTime)
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_17 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
     return
   end
   if MGT.MiniGameType_0 == currentMiniGame then
@@ -155,6 +162,8 @@ function Panel_Minigame_UpdateFunc(deltaTime)
     RhythmGame_Drum_UpdateFunc(deltaTime)
   elseif MGT.MiniGameType_17 == currentMiniGame then
     MiniGame_SteeringWhellMoveCalc(deltaTime)
+  elseif MGT.MiniGameType_19 == currentMiniGame then
+    PaGlobal_HammerGame:Update(deltaTime)
   end
 end
 local keyDownFunctorList = {}

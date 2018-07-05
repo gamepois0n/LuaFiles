@@ -1032,7 +1032,6 @@ function RadarMap_updateRegion(regionData)
     beforeCombatZone = not isDesertZone
     beforeArenaZone = not isDesertZone
     beforeDesertZone = isDesertZone
-    FGlobal_CheckUnderwear()
   end
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayerPos = selfPlayerWrapper:get3DPos()

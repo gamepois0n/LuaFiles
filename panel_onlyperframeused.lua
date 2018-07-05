@@ -9,6 +9,9 @@ end
 function Panel_OnlyPerframeUsedFunction(deltaTime)
   luaLoadAfterTime = luaLoadAfterTime + deltaTime
   luaLoadAfterFrameCount = luaLoadAfterFrameCount + 1
+  if nil ~= PaGlobal_BossAlert_NewAlarmShow then
+    PaGlobal_BossAlert_NewAlarmShow(deltaTime)
+  end
   if nil ~= NewQuickSlot_UpdatePerFrame then
     NewQuickSlot_UpdatePerFrame(deltaTime)
   end

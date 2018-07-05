@@ -567,7 +567,7 @@ function WharfList_LookChange(slotNo)
   end
   currentPage = 0
   Panel_LookChange_Open()
-  PaGlobal_ServantChangeFormPanel._staticText:SetText("\236\132\160\235\176\149 \236\153\184\237\152\149 \235\179\128\234\178\189")
+  PaGlobal_ServantChangeFormPanel._staticText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_CHANGECONFIRM_TITLE"))
   PaGlobal_ServantChangeFormPanel._comboBox:SetShow(false)
   PaGlobal_ServantChangeFormPanel._btnPremium:SetShow(false)
   WharfInfo_Close()
@@ -586,6 +586,7 @@ function WharfLookChange_Set(isNext, index)
   local fromCharacterKey = servantInfo:getCharacterKeyRaw()
   local transformManager = getServantTransformManager()
   local lookCount = 1
+  PaGlobal_ServantChangeFormPanel._LCSelectSlot:SetShow(false)
   transformManager:size()
   if nil ~= isNext then
     currentPage = currentPage + isNext
@@ -674,9 +675,9 @@ function WharfLookChange_ChangeConfirm()
     wharfList:update()
     Panel_WharfLookChange_Close()
   end
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CHANGECONFIRM_MEMO")
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_CHANGECONFIRM_MEMO")
   local messageBoxData = {
-    title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CHANGECONFIRM_TITLE"),
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_CHANGECONFIRM_TITLE"),
     content = messageBoxMemo,
     functionYes = changeConfirm,
     functionNo = MessageBox_Empty_function,

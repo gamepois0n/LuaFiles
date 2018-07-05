@@ -231,7 +231,8 @@ PaGlobal_Menu._infomation = {
   _masterpiece = 15,
   _dropItem = 16,
   _knownIssue = 17,
-  _count = 18
+  _bossAlert = 18,
+  _count = 19
 }
 PaGlobal_Menu._community = {
   _guild = 0,
@@ -540,7 +541,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 189,
       _x2 = 509,
       _y2 = 249,
-      _isContentOpen = true,
+      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType(),
       _isNew = false,
       _isHot = false,
       _index = 5
@@ -1089,6 +1090,19 @@ PaGlobal_Menu._categoryData = {
       _isNew = false,
       _isHot = false,
       _index = 62
+    },
+    [PaGlobal_Menu._infomation._bossAlert] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSALERTSET_TITLE"),
+      _hotKey = "",
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 498,
+      _y1 = 436,
+      _x2 = 558,
+      _y2 = 496,
+      _isContentOpen = isGameTypeKorea(),
+      _isNew = true,
+      _isHot = false,
+      _index = 64
     },
     ["_name"] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_3"),
     ["_count"] = PaGlobal_Menu._infomation._count
@@ -1909,8 +1923,8 @@ function Toggle_MenuTab_forPadEventFunc(value)
     self:HandleClicked_CategoryGroup(self._currentTabIndex)
   end
 end
-Panel_Menu_New:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
-Panel_Menu_New:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_MenuTab_forPadEventFunc(1)")
+Panel_Menu_New:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_MenuTab_forPadEventFunc(-1)")
+Panel_Menu_New:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_MenuTab_forPadEventFunc(1)")
 function PaGlobal_Menu:SetCustomMode()
   audioPostEvent_SystemUi(0, 0)
   self:CustomWindow_Init()
@@ -2314,6 +2328,8 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       FGlobal_DropItemWindow_Open()
     elseif PaGlobal_Menu._infomation._knownIssue == index then
       Panel_WebHelper_ShowToggle("KnownIssue")
+    elseif PaGlobal_Menu._infomation._bossAlert == index then
+      PaGlobal_BossAlertSet_Show()
     end
   elseif 4 == categoryIndex then
     if PaGlobal_Menu._community._guild == index then

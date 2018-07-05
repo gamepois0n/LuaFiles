@@ -6,7 +6,7 @@ function FromClient_CancelByAttacked()
   if Panel_PcRoomNotify:GetShow() then
     PcRoomNotify_Close()
   end
-  if Panel_Window_GuildWharfFunction:GetShow() then
+  if false == _ContentsGroup_RenewUI_Stable and Panel_Window_GuildWharfFunction:GetShow() then
     GuildWharfFunction_Close()
   end
   ToClient_PopBlackSpiritFlush()

@@ -26,6 +26,7 @@ local isTeamDuelOpen = ToClient_IsContentsGroupOpen("350")
 local isButtonShortCut = ToClient_IsContentsGroupOpen("351")
 local isKnownIssue = isGameTypeKorea() or isGameTypeTH() or isGameTypeID() or isGameTypeTaiwan()
 local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab
+local isBossAlert = isGameTypeKorea()
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
 Panel_Menu:ActiveMouseEventEffect(true)
@@ -91,8 +92,9 @@ local MenuButtonId = {
   btn_SaveSetting = 56,
   btn_KnownIssue = 57,
   btn_BlackDesertLab = 58,
-  btn_GameOption = 59,
-  btn_GameExit = 60
+  btn_BossAlert = 59,
+  btn_GameOption = 60,
+  btn_GameExit = 61
 }
 local MenuButtonTextId = {
   [MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"),
@@ -154,7 +156,8 @@ local MenuButtonTextId = {
   [MenuButtonId.btn_ShortCut] = PAGetString(Defines.StringSheet_GAME, "LUA_BUTTONSHORTCUT_SUBTITLE"),
   [MenuButtonId.btn_SaveSetting] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_SAVESETTING"),
   [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING"),
-  [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE")
+  [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
+  [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSALERTSET_TITLE")
 }
 local MenuButtonHotKeyID = {
   [MenuButtonId.btn_HelpGuide] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help),
@@ -216,7 +219,8 @@ local MenuButtonHotKeyID = {
   [MenuButtonId.btn_ShortCut] = "",
   [MenuButtonId.btn_SaveSetting] = "",
   [MenuButtonId.btn_KnownIssue] = "",
-  [MenuButtonId.btn_BlackDesertLab] = ""
+  [MenuButtonId.btn_BlackDesertLab] = "",
+  [MenuButtonId.btn_BossAlert] = ""
 }
 local contry = {
   kr = 0,
@@ -652,6 +656,12 @@ local buttonTexture = {
     173,
     460,
     217
+  },
+  [MenuButtonId.btn_BossAlert] = {
+    416,
+    219,
+    460,
+    263
   }
 }
 function TargetWindow_ShowToggle(index)
@@ -880,6 +890,8 @@ function TargetWindow_ShowToggle(index)
       return
     end
     PaGlobal_BlackDesertLab_Show()
+  elseif MenuButtonId.btn_BossAlert == index then
+    PaGlobal_BossAlertSet_Show()
   end
   if Panel_Menu:GetShow() then
     Panel_Menu:SetShow(false, false)
@@ -1175,6 +1187,9 @@ function GameMenu_CheckEnAble(buttonType)
   end
   if buttonType == MenuButtonId.btn_BlackDesertLab then
     returnValue = isBlackDesertLabOpen
+  end
+  if buttonType == MenuButtonId.btn_BossAlert then
+    returnValue = isBossAlert
   end
   if not isGameTypeKR2() then
     menuNewPool[buttonType]:ResetVertexAni()

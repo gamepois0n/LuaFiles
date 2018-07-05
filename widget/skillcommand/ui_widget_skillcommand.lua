@@ -176,7 +176,7 @@ function skillCommand:SetSkill()
     local iconPath = skillWrapper:getIconPath()
     local name = skillWrapper:getName()
     local slot = self._slots[i]
-    slot._skillIcon:ChangeTextureInfoName("Icon/" .. iconPath)
+    slot._skillIcon:ChangeTextureInfoNameAsync("Icon/" .. iconPath)
     slot._skillName:SetText(name)
     self.skillNameSizeX = math.max(self.skillNameSizeX, slot._skillName:GetPosX() + slot._skillName:GetTextSizeX())
   end

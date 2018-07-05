@@ -71,6 +71,7 @@ PaGlobal_CharacterInfoBasic = {
     _staticTextResist_Title = {},
     _staticTextResist_Percent = {},
     _progress2Resist = {},
+    _staticClassSymbol = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_PlayerLevel_Value"),
     _staticTextPotential_Title = {},
     _staticTextPotential_Value = {},
     _staticPotencialGradeBg = {},
@@ -97,15 +98,7 @@ PaGlobal_CharacterInfoBasic = {
     _buttonFacePhoto = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Button_FacePhoto"),
     _staticTextCharacterLevel = nil,
     _staticCharSlot = nil,
-    _staticClassSymbol = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_ClssIconandLevel"),
-    _staticTextNormalStack = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_NormalStack"),
-    _buttonRanker = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Button_Ranker"),
-    _staticCraftIcon = {},
-    _staticTextCraft_Title = {},
-    _staticTextCraft_Level = {},
-    _staticTextCraft_Percent = {},
-    _progress2Craft = {},
-    _progress2CraftBG = {}
+    _staticTextNormalStack = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_NormalStackOnPicture")
   }
 }
 local setTierIcon = function(iconControl, textureName, iconIdx, leftX, topY, xCount, iconSize)
@@ -124,14 +117,6 @@ function PaGlobal_CharacterInfoBasic:initialize()
   self._player = getSelfPlayer()
   self._playerGet = self._player:get()
   self:initializeControl()
-  for index = 0, 10 do
-    self._craftTable[index + 1] = {
-      _type = index,
-      _level = 1,
-      _exp = 0,
-      _maxExp = 1
-    }
-  end
   self._ui._multilineEditIntroduce:SetMaxEditLine(1)
   self._ui._multilineEditIntroduce:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   self._ui._multilineEdit:SetMaxEditLine(6)
@@ -180,17 +165,18 @@ function PaGlobal_CharacterInfoBasic:initialize()
   local x1, y1, x2, y2 = 0, 0, 0, 0
   if UI_Class.ClassType_DarkElf == classType then
     self._ui._staticStatus_Title[self._status._mental]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP_DARKELF"))
-    self._ui._progress2Status[self._status._mental]:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges_03.dds")
+    self._ui._progress2Status[self._status._mental]:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges_03.dds")
     x1, y1, x2, y2 = setTextureUV_Func(self._ui._progress2Status[self._status._mental], 1, 1, 255, 6)
   else
     local mentalType = self._player:getCombatResourceType()
     local Texture = progressTexture[mentalType]
     self._ui._staticStatus_Title[self._status._mental]:SetText(PAGetString(Defines.StringSheet_GAME, Texture[1]))
-    self._ui._progress2Status[self._status._mental]:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges.dds")
+    self._ui._progress2Status[self._status._mental]:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
     x1, y1, x2, y2 = setTextureUV_Func(self._ui._progress2Status[self._status._mental], Texture[2], Texture[3], Texture[4], Texture[5])
   end
   self._ui._progress2Status[self._status._mental]:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui._progress2Status[self._status._mental]:setRenderTexture(self._ui._progress2Status[self._status._mental]:getBaseTexture())
+  Panel_Window_CharInfo_BasicStatus:SetChildIndex(self._ui._staticIntroduceBG, 1000)
 end
 function PaGlobal_CharacterInfoBasic:initializeControl()
   for key, index in pairs(self._status) do
@@ -224,17 +210,17 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
       self._ui._staticPotencialGradeBg[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_SlotBG_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialGradeBg, self._ui._staticPotencialGradeBg[index][slotIndex])
       self._ui._staticPotencialGradeBg[index][slotIndex]:SetShow(true)
-      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(1 + slotIndex * 30)
+      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(1 + slotIndex * 60)
       self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(22)
       self._ui._staticPotencialPlusGrade[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_PlusSlot_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialPlusGrade, self._ui._staticPotencialPlusGrade[index][slotIndex])
       self._ui._staticPotencialPlusGrade[index][slotIndex]:SetShow(false)
-      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 30)
+      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 60)
       self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosY(23)
       self._ui._staticPotencialMinusGrade[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_MinusSlot_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialMinusGrade, self._ui._staticPotencialMinusGrade[index][slotIndex])
       self._ui._staticPotencialMinusGrade[index][slotIndex]:SetShow(false)
-      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 30)
+      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 60)
       self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosY(23)
     end
   end
@@ -255,19 +241,11 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   self._ui._buttonCloseIntroduce = UI.getChildControl(self._ui._staticIntroduceBG, "Button_CloseIntroduce")
   local staticFacePhotoBG = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Static_CharSlot_BG")
   local staticSymbolBG = UI.getChildControl(staticFacePhotoBG, "Static_ClassSymbol_BG")
+  self._ui._staticTextCharacterLevel = UI.getChildControl(staticFacePhotoBG, "StaticText_PlayerLevel_Value")
   self._ui._staticCharSlot = UI.getChildControl(staticFacePhotoBG, "Static_CharSlot")
   local staticFamily = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyBG")
   for key, index in pairs(self._familyPoint) do
     self._ui._staticTextFamilyPoints[index] = UI.getChildControl(staticFamily, "StaticText_FamilyPoint_" .. index)
-  end
-  for index = 0, 10 do
-    self._ui._staticCraftIcon[index] = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Static_Craft_" .. index)
-    self._ui._staticCraftIcon[index]:SetShow(false)
-    self._ui._staticTextCraft_Title[index] = UI.getChildControl(self._ui._staticCraftIcon[index], "StaticText_Title")
-    self._ui._staticTextCraft_Level[index] = UI.getChildControl(self._ui._staticCraftIcon[index], "StaticText_Level")
-    self._ui._staticTextCraft_Percent[index] = UI.getChildControl(self._ui._staticCraftIcon[index], "StaticText_Percent")
-    self._ui._progress2CraftBG[index] = UI.getChildControl(self._ui._staticCraftIcon[index], "Static_GaugeBG")
-    self._ui._progress2Craft[index] = UI.getChildControl(self._ui._staticCraftIcon[index], "Progress2_Gauge")
   end
 end
 function PaGlobal_CharacterInfoBasic:update()
@@ -296,17 +274,13 @@ function PaGlobal_CharacterInfoBasic:update()
   FromClient_UI_CharacterInfo_Basic_SkillPointChanged()
   FromClient_UI_CharacterInfo_Basic_FamilyPointsChanged()
   FromClient_UI_CharacterInfo_Basic_ResistChanged()
-  FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
+  FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   FromClient_UI_CharacterInfo_Basic_PotentialChanged()
   FromClient_UI_CharacterInfo_Basic_FitnessChanged(0, 0, 0, 0)
   FromClient_UI_CharacterInfo_Basic_NormalStackChanged()
   self:updatePlayerTotalStat()
 end
 function PaGlobal_CharacterInfoBasic:registEventHandler()
-  for index, value in pairs(self._ui._staticTextCraft_Title) do
-    self._ui._staticTextCraft_Title[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_Craft(true, " .. index .. ")")
-    self._ui._staticTextCraft_Title[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_Craft(false)")
-  end
   for key, index in pairs(self._potential) do
     self._ui._staticTextPotential_Title[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_Potential(true, " .. index .. ")")
     self._ui._staticTextPotential_Title[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_Potential(false)")
@@ -327,7 +301,6 @@ function PaGlobal_CharacterInfoBasic:registEventHandler()
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(true, " .. index .. ")")
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(false)")
   end
-  self._ui._buttonRanker:addInputEvent("Mouse_LUp", "FGlobal_LifeRanking_Open()")
   self._ui._buttonIntroduce:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:showIntroduce(true)")
   self._ui._buttonCloseIntroduce:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:showIntroduce(false)")
   self._ui._multilineEdit:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:handleClicked_Introduce()")
@@ -394,7 +367,7 @@ function PaGlobal_CharacterInfoBasic:registMessageHandler()
   registerEvent("EventStaminaUpdate", "FromClient_UI_CharacterInfo_Basic_StaminaChanged")
   registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "FromClient_UI_CharacterInfo_Basic_SkillPointChanged")
   registerEvent("FromClient_UpdateTolerance", "FromClient_UI_CharacterInfo_Basic_ResistChanged")
-  registerEvent("FromClient_UpdateSelfPlayerLifeExp", "FromClient_UI_CharacterInfo_Basic_CraftLevelChanged")
+  registerEvent("FromClient_UpdateSelfPlayerLifeExp", "FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew")
   registerEvent("FromClient_UpdateSelfPlayerStatPoint", "FromClient_UI_CharacterInfo_Basic_PotentialChanged")
   registerEvent("FromClientFitnessUp", "FromClient_UI_CharacterInfo_Basic_FitnessChanged")
   registerEvent("FromClient_ShowLifeRank", "FromClient_UI_CharacterInfo_Basic_RankChanged")

@@ -546,6 +546,13 @@ function Panel_Lobby_SelectClass_MouseEvent(index, isOn)
   if classButton ~= nil then
     if isOn == true then
       classButton:SetVertexAniRun("Ani_Color_Bright", true)
+      if true == ToClient_isXBox() then
+        if index == Panel_Lobby_Global_Variable.currentSelectedIdx then
+          Panel_Lobby_UI.CCSC_SelectConsole:SetText("Create")
+        else
+          Panel_Lobby_UI.CCSC_SelectConsole:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_MAIN_SELECT"))
+        end
+      end
     else
       classButton:ResetVertexAni()
     end

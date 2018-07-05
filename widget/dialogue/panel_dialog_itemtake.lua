@@ -69,6 +69,21 @@ function TalkPopup_Show(displayData)
     local x1, y1, x2, y2 = setTextureUV_Func(self._territoryMark, 278, 1, 328, 60)
     self._territoryMark:getBaseTexture():setUV(x1, y1, x2, y2)
     self._territoryMark:setRenderTexture(self._territoryMark:getBaseTexture())
+  elseif selfPlayerCurrentTerritory() == PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_TERRITORYNAME_2") then
+    self._territoryMark:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._territoryMark, 461, 309, 511, 368)
+    self._territoryMark:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._territoryMark:setRenderTexture(self._territoryMark:getBaseTexture())
+  elseif selfPlayerCurrentTerritory() == PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_TERRITORYNAME_3") then
+    self._territoryMark:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._territoryMark, 461, 429, 511, 488)
+    self._territoryMark:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._territoryMark:setRenderTexture(self._territoryMark:getBaseTexture())
+  elseif selfPlayerCurrentTerritory() == PAGetString(Defines.StringSheet_GAME, "LUA_CONTRYNAME_6") then
+    self._territoryMark:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._territoryMark, 461, 369, 511, 428)
+    self._territoryMark:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._territoryMark:setRenderTexture(self._territoryMark:getBaseTexture())
   end
   if displayData._needPoint > explorePoint:getRemainedPoint() then
     self._textComment:SetText(PAGetString(Defines.StringSheet_GAME, "DIALOG_ERROR_SHORTAGE_POINT"))

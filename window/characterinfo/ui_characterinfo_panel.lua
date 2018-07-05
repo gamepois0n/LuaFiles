@@ -4,14 +4,16 @@ PaGlobal_CharacterInfo = {
     _title = 1,
     _history = 2,
     _challenge = 3,
-    _profile = 4
+    _profile = 4,
+    _life = 5
   },
   _panel = {
     [0] = Panel_Window_CharInfo_BasicStatus,
     [1] = Panel_Window_CharInfo_TitleInfo,
     [2] = Panel_Window_CharInfo_HistoryInfo,
     [3] = Panel_Window_Challenge,
-    [4] = Panel_Window_Profile
+    [4] = Panel_Window_Profile,
+    [5] = Panel_Window_CharInfo_LifeInfo
   },
   _ui = {
     _staticDefaultBG = {},
@@ -91,6 +93,8 @@ function PaGlobal_CharacterInfo:showWindow(index)
     Fglobal_Challenge_UpdateData()
   elseif self._tabButton._profile == index then
     FGlobal_Profile_Update()
+  elseif self._tabButton._life == index then
+    FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   end
 end
 function PaGlobal_CharacterInfo:hideWindow()

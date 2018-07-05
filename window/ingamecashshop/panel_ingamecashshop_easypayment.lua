@@ -189,7 +189,7 @@ function PaGlobal_EasyBuy:WindowResize()
   self._ui._bottom_HavePearl:ComputePos()
 end
 function PaGlobal_EasyBuy:Open(uniqueNo, waypointKey)
-  if Panel_IngameCashShop_EasyPayment:GetShow() then
+  if Panel_IngameCashShop_EasyPayment:GetShow() and false == Panel_Window_StableInfo:GetShow() then
     PaGlobal_EasyBuy:Close()
     return
   end
@@ -236,12 +236,16 @@ function PaGlobal_EasyBuy:Open(uniqueNo, waypointKey)
   Panel_IngameCashShop_EasyPayment:SetShow(true, true)
 end
 function PaGlobal_EasyBuy:Close()
-  Panel_IngameCashShop_EasyPayment:SetShow(false, true)
-  getIngameCashMall():hide()
-  FGlobal_HideWorkerTooltip()
-  TooltipSimple_Hide()
-  Panel_Tooltip_Item_hideTooltip()
-  Panel_Tooltip_Item_chattingLinkedItemClick_hideTooltip()
+  if true == Panel_IngameCashShop_BuyOrGift:GetShow() then
+    InGameShopBuy_Close()
+  else
+    Panel_IngameCashShop_EasyPayment:SetShow(false, true)
+    getIngameCashMall():hide()
+    FGlobal_HideWorkerTooltip()
+    TooltipSimple_Hide()
+    Panel_Tooltip_Item_hideTooltip()
+    Panel_Tooltip_Item_chattingLinkedItemClick_hideTooltip()
+  end
 end
 function PaGlobal_EasyBuy_Open()
   PaGlobal_EasyBuy:Open()

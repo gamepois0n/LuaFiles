@@ -704,12 +704,12 @@ end
 function Panel_Tooltip_Item_GetCurrentSlotType()
   return Panel_Tooltip_Item_DataObject.currentSlotType
 end
-function Panel_Tooltip_Item_Refresh()
+function Panel_Tooltip_Item_Refresh(posX, posY)
   if Panel_Tooltip_Item_DataObject.currentSlotNo == -2 then
     return
   elseif Panel_Tooltip_Item_DataObject.currentSlotNo ~= -1 then
     if Panel_Tooltip_Item_DataObject.isNormal then
-      Panel_Tooltip_Item_Show_GeneralNormal(Panel_Tooltip_Item_DataObject.currentSlotNo, Panel_Tooltip_Item_DataObject.currentSlotType, true, Panel_Tooltip_Item_DataObject.index)
+      Panel_Tooltip_Item_Show_GeneralNormal(Panel_Tooltip_Item_DataObject.currentSlotNo, Panel_Tooltip_Item_DataObject.currentSlotType, true, Panel_Tooltip_Item_DataObject.index, posX, posY)
     else
       Panel_Tooltip_Item_Show_GeneralStatic(Panel_Tooltip_Item_DataObject.currentSlotNo, Panel_Tooltip_Item_DataObject.currentSlotType, true, Panel_Tooltip_Item_DataObject.index)
     end
@@ -796,7 +796,6 @@ function Panel_Tooltip_Item_Show_GeneralNormal(slotNo, slotType, isOn, index, ta
       actorKey = ServantInventory_GetActorKeyRawFromIndex(0)
     end
     if slotNo >= getServantInventorySize(actorKey) then
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "Panel_Tooltip_Item_Show_GeneralNormal size over return")
       return
     end
     parent = true

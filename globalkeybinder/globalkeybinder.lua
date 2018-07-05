@@ -151,6 +151,16 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       PaGlobal_Enchant:enchantClose()
       return
     end
+    if true == _ContentsGroup_RenewUI_Worker then
+      if true == Panel_Dialog_RandomWorker:GetShow() then
+        FGlobalFunc_Close_RandomWorker()
+        return
+      end
+      if true == Panel_Dialog_WorkerContract:GetShow() then
+        FGlobalFunc_Cancel_WorkerContract()
+        return
+      end
+    end
     if true == _ContentsGroup_RenewUI_Dailog and true == PaGlobalFunc_Dialog_NPCShop_GetShow() then
       PaGlobalFunc_Dialog_NPCShop_Close()
       PaGlobalFunc_MainDialog_ReOpen()
@@ -245,11 +255,13 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap(deltaTime)
   elseif FGlobal_AskCloseWorldMap() then
     FGlobal_PopCloseWorldMap()
   elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
-    if not Panel_Window_ItemMarket:GetShow() then
-      ChatInput_Show()
-      return
-    else
-      return
+    if false == _ContentsGroup_RenewUI_Chatting then
+      if not Panel_Window_ItemMarket:GetShow() then
+        ChatInput_Show()
+        return
+      else
+        return
+      end
     end
   elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_WorldMap) then
     FGlobal_CloseWorldmapForLuaKeyHandling()
@@ -288,7 +300,9 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Stable(deltaTime)
   if false == _ContentsGroup_RenewUI_Stable then
     if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       if CppEnums.ServantType.Type_Vehicle == stable_getServantType() and -1 == FGlobal_IsButtonClick() then
-        if Panel_Window_StableMarket:GetShow() then
+        if Panel_IngameCashShop_EasyPayment:IsShow() then
+          PaGlobal_EasyBuy_Close()
+        elseif Panel_Window_StableMarket:GetShow() then
           StableMarket_Close()
         elseif Panel_Window_StableMating:GetShow() then
           StableMating_Close()
@@ -1216,6 +1230,10 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     FGlobal_PetInfoNew_Close()
     return true
   end
+  if true == _ContentsGroup_RenewUI_Worker and Panel_Dialog_WorkerTrade_Renew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    FGlobal_WorkerTrade_Close()
+    return true
+  end
   return false
 end
 function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
@@ -1258,9 +1276,7 @@ function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
     return true
   elseif ChatInput_CheckCurrentUiEdit(uiEdit) then
     if true == _ContentsGroup_RenewUI_Chatting then
-      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-        PaGlobalFunc_ChattingInfo_PressedEnter()
-      elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
         Input_ChattingInfo_OnPadB()
       elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) then
         PaGlobalFunc_ChattingInfo_CheckRemoveLinkedItem()
@@ -1571,7 +1587,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
     end
     return
   end
-  if nil ~= Panel_Interaction and Panel_Interaction:IsShow() or nil ~= Panel_Widget_PanelInteraction_Renew and Panel_Widget_PanelInteraction_Renew:IsShow() then
+  if nil ~= Panel_Interaction and Panel_Interaction:IsShow() or nil ~= Panel_Widget_PanelInteraction_Renew and Panel_Widget_PanelInteraction_Renew:IsShow() and false == Panel_Widget_Chatting_Renew:GetShow() then
     local keyCode
     if _ContentsGroup_isConsoleTest and isPadInputIn() then
       keyCode = FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)

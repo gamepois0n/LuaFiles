@@ -352,6 +352,13 @@ function FromClient_DeliveryItemState(state)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DELIVERY_REQUEST_DELIVERYITEMSTATE_COMPLETE"))
   end
 end
+function PaGlobalFunc_PanelDelivery_GetShow()
+  if nil ~= Panel_Window_Delivery_Request and nil ~= Panel_Window_Delivery_Information then
+    return Panel_Window_Delivery_Request:GetShow() or Panel_Window_Delivery_Information:GetShow()
+  else
+    return false
+  end
+end
 deliveryRequest:init()
 deliveryRequest:registEventHandler()
 deliveryRequest:registMessageHandler()

@@ -356,6 +356,9 @@ function FGlobal_PushOpenWorldMap()
   else
     FGlobal_HideDialog()
   end
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingInfo_Close()
+  end
   ToClient_AddWorldMapFlush()
 end
 function FGlobal_CloseWorldmapForLuaKeyHandling()
@@ -500,7 +503,7 @@ function FGlobal_WorldMapWindowEscape()
     if true == _ContentsGroup_ForXBoxFinalCert then
       _panel_houseControl = Panel_Worldmap_HouseCraft
     end
-    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and Panel_Window_Delivery_Information:GetShow() == false and Panel_Window_Delivery_Request:GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (Panel_Window_ItemMarket:GetShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true) and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true) and Panel_WorldMap_MovieGuide:GetShow() == false and Panel_WorkerTrade:GetShow() == false and Panel_WorkerTrade_Caravan:GetShow() == false then
+    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and PaGlobalFunc_PanelDelivery_GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (Panel_Window_ItemMarket:GetShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true) and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true) and Panel_WorldMap_MovieGuide:GetShow() == false and Panel_WorkerTrade:GetShow() == false and Panel_WorkerTrade_Caravan:GetShow() == false then
       ToClient_WorldMapPushEscape()
     end
     if false == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
