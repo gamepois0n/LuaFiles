@@ -150,6 +150,7 @@ local panel_WindowList = {
   Panel_ButtonShortcuts,
   Panel_FairyInfo,
   Panel_Guild_ChoiseTheMoney,
+  Panel_Window_BlackDesertLab,
   Panel_IngameCashShop_EventCart,
   Panel_Window_Politics,
   Panel_Window_RecommandGoods_PopUp,
@@ -160,7 +161,6 @@ local panel_WindowList = {
   Panel_Window_CharacterInfo_Renew,
   Panel_Dialog_SkillSpecialize,
   Panel_Window_Knowledge_Renew,
-  Panel_Window_BlackDesertLab,
   Panel_Guild_ManufactureSelect
 }
 local panel_SoundedWindowList = {
@@ -291,6 +291,9 @@ function close_WindowPanelList()
     Panel_Knowledge_Hide()
   else
     PaGlobalFunc_Window_Knowledge_Exit()
+  end
+  if nil ~= Panel_Window_BlackDesertLab and true == Panel_Window_BlackDesertLab:GetShow() then
+    Panel_Window_BlackDesertLab:SetShow(false)
   end
   if Panel_ProductNote:IsShow() and false == Panel_ProductNote:IsUISubApp() then
     Panel_ProductNote_ShowToggle()

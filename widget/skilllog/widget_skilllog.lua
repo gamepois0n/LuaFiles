@@ -91,7 +91,9 @@ function FromClient_EventSelfPlayerUsedSkill()
     Panel_Widget_SkillLog:SetShow(false)
     local skillWrapper = selfPlayerUsedSkillFront()
     PaGlobal_TutorialManager:handleEventSelfPlayerUsedSkill(skillWrapper)
-    Tutorial_CheckUsedSkill(skillWrapper)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      Tutorial_CheckUsedSkill(skillWrapper)
+    end
     selfPlayerUsedSkillPopFront()
     return
   end
@@ -110,7 +112,9 @@ function FromClient_EventSelfPlayerUsedSkill()
   local skillWrapper = selfPlayerUsedSkillFront()
   if nil ~= skillWrapper then
     PaGlobal_TutorialManager:handleEventSelfPlayerUsedSkill(skillWrapper)
-    Tutorial_CheckUsedSkill(skillWrapper)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      Tutorial_CheckUsedSkill(skillWrapper)
+    end
     local iconPath = skillWrapper:getSkillTypeStaticStatusWrapper():getIconPath()
     skillLog_Icon:ChangeTextureInfoNameAsync("Icon/" .. iconPath)
     local skillName = skillWrapper:getName()

@@ -17,6 +17,9 @@ function PaGlobal_TutorialManager:handleLuaLoadComplete(isTool)
   _PA_LOG("\234\179\189\235\175\188\236\154\176", "@@@\235\163\168\236\149\132\235\161\156\235\147\156\236\153\132\235\163\140!!@@@")
 end
 function PaGlobal_TutorialManager:handleTutorialUiManagerInitialize()
+  if true == _ContentsGroup_RenewUI_Tutorial and (true == Panel_IntroMovie:GetShow() or false == isMoviePlayMode()) then
+    return
+  end
   if false == isMoviePlayMode() then
     self:continueTutorial()
   end
@@ -50,7 +53,7 @@ function PaGlobal_TutorialManager:handleNewEquipInInventory(newItemSlotNo)
   if true == self:isDoingTutorial() and nil ~= self:getCurrentPhase() and nil ~= self:getCurrentPhase().handleNewEquipInInventory then
     self:getCurrentPhase():handleNewEquipInInventory(newItemSlotNo)
   elseif false == self:isDoingTutorial() then
-    if true == PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() or true == PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() then
+    if false == _ContentsGroup_RenewUI_Tutorial and true == PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() or false == _ContentsGroup_RenewUI_Tutorial and true == PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() then
       _PA_LOG("\234\179\189\235\175\188\236\154\176", "(\236\149\132\236\157\180\237\133\156 \236\158\165\236\176\169 \237\138\156\237\134\160\235\166\172\236\150\188)\235\139\164\235\165\184 \237\138\156\237\134\160\235\166\172\236\150\188\236\157\180 \236\167\132\237\150\137\236\164\145\236\157\180\235\175\128\235\161\156 \235\133\184\236\182\156\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164.")
       return
     end
@@ -91,7 +94,6 @@ function FromClient_EventQuestUpdateNotify_TutorialManager(isAccept, questNoRaw)
   PaGlobal_TutorialManager:handleEventQuestUpdateNotify(isAccept, questNoRaw)
 end
 function PaGlobal_TutorialManager:handleEventQuestUpdateNotify(isAccept, questNoRaw)
-  _PA_LOG("\234\179\189\235\175\188\236\154\176", "Manager: " .. "isAccept : " .. tostring(isAccept) .. ", QuestGroupNo : " .. tostring(self:getQuestGroupNoByQuestNoRaw(questNoRaw)) .. ", QuestId : " .. tostring(self:getQuestIdByQuestNoRaw(questNoRaw)))
   if true == self:isDoingTutorial() and nil ~= self:getCurrentPhase() and nil ~= self:getCurrentPhase().handleEventQuestUpdateNotify then
     self:getCurrentPhase():handleEventQuestUpdateNotify(isAccept, questNoRaw)
   elseif false == self:isDoingTutorial() then
@@ -163,7 +165,11 @@ end
 function PaGlobal_TutorialManager:handleShowDialog(dialogData)
   if true == self:isDoingTutorial() then
     if false == FGlobal_Dialog_IsAllowTutorialPanelShow() then
-      Panel_Tutorial:SetShow(false, false)
+      if false == _ContentsGroup_RenewUI_Tutorial then
+        Panel_Tutorial:SetShow(false, false)
+      else
+        Panel_Tutorial_Renew:SetShow(false, false)
+      end
     end
     if nil ~= self:getCurrentPhase() and nil ~= self:getCurrentPhase().handleShowDialog then
       self:getCurrentPhase():handleShowDialog(dialogData)
@@ -173,7 +179,11 @@ end
 function PaGlobal_TutorialManager:handleClickedExitButton(talker)
   if true == self:isDoingTutorial() then
     if false == FGlobal_Dialog_IsAllowTutorialPanelShow() then
-      Panel_Tutorial:SetShow(true, true)
+      if false == _ContentsGroup_RenewUI_Tutorial then
+        Panel_Tutorial:SetShow(true, true)
+      else
+        Panel_Tutorial_Renew:SetShow(true, true)
+      end
     end
     if nil ~= self:getCurrentPhase() and nil ~= self:getCurrentPhase().handleClickedExitButton then
       self:getCurrentPhase():handleClickedExitButton(talker)

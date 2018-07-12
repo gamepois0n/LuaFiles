@@ -189,6 +189,9 @@ function PaGlobal_EasyBuy:WindowResize()
   self._ui._bottom_HavePearl:ComputePos()
 end
 function PaGlobal_EasyBuy:Open(uniqueNo, waypointKey)
+  if isGameTypeGT() then
+    return
+  end
   if Panel_IngameCashShop_EasyPayment:GetShow() and false == Panel_Window_StableInfo:GetShow() then
     PaGlobal_EasyBuy:Close()
     return

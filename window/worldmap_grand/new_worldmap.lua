@@ -63,6 +63,9 @@ end
 Panel_NaviButton:SetShow(false)
 local naviBtn = UI.getChildControl(Panel_NaviButton, "Button_Navi")
 naviBtn:SetShow(true)
+if true == ToClient_isXBox() then
+  naviBtn:SetShow(false)
+end
 naviBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE"))
 naviBtn:SetSize(naviBtn:GetTextSizeX() + 20, naviBtn:GetSizeY())
 naviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CompleteNode()")

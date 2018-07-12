@@ -886,11 +886,20 @@ function PaGlobal_Option:ClickedMainCategory(key, category)
       keyElement:setIsOpen(false)
     end
   end
-  tree2:getElementManager():toggle(toInt64(0, key))
-  self._list2._selectedKey = key
-  if category == "Alert" then
-    PaGlobal_Option:SelectOptionFrame("Alert", "Alarm")
+  local isOnlyOneSubCategory = 0
+  local onlyOnDetail
+  for k, value in pairs(self._list2._tree2IndexMap) do
+    if false == value._isMain and category == value._category then
+      isOnlyOneSubCategory = isOnlyOneSubCategory + 1
+      onlyOnDetail = value._detail
+    end
   end
+  if 1 == isOnlyOneSubCategory then
+    PaGlobal_Option:SelectOptionFrame(category, onlyOnDetail)
+  else
+    tree2:getElementManager():toggle(toInt64(0, key))
+  end
+  self._list2._selectedKey = key
   tree2:getElementManager():refillKeyList()
   local heightIndex = tree2:getIndexByKey(toInt64(0, key))
   tree2:moveIndex(heightIndex)
@@ -1088,9 +1097,18 @@ function PaGlobal_Option:SetContentsOption()
     if true == isGameTypeTH() then
       nationBgOrder2:SetShow(true)
       nationBgOrder2:SetSize(nationBgOrder2:GetSizeX(), nationBgOrder2:GetSizeY() - 40)
-      UI.getChildControl(nationBgOrder2, "RadioButton_ServiceResourceType"):SetShow(false)
-      UI.getChildControl(nationBgOrder2, "RadioButton_ServiceResourceType1"):SetShow(false)
-      UI.getChildControl(nationBgOrder2, "RadioButton_ServiceResourceType2"):SetShow(false)
+      for ii = 0, 10 do
+        local addStr = ""
+        if ii > 0 then
+          addStr = tostring(ii)
+        end
+        local control = UI.getChildControl(nationBgOrder2, "RadioButton_ServiceResourceType" .. addStr)
+        if nil ~= control then
+          control:SetShow(false)
+        else
+          break
+        end
+      end
     end
   end
   if false == _ContentsGroup_isFairy then
@@ -1249,10 +1267,6 @@ function PaGlobal_Option:SetContentsOption()
     bg1:SetPosY(bg1:GetPosY() - bg4:GetSizeY())
     UI.getChildControl(bg0, "CheckButton_GamePadEnable"):SetShow(false)
     UI.getChildControl(bg0, "StaticText_UsePadDesc"):SetShow(false)
-    UI.getChildControl(bg0, "CheckButton_GamePadInvertX"):SetShow(false)
-    UI.getChildControl(bg0, "StaticText_HorizenReverseDesc"):SetShow(false)
-    UI.getChildControl(bg0, "CheckButton_GamePadInvertY"):SetShow(false)
-    UI.getChildControl(bg0, "StaticText_VerticalReverseDesc"):SetShow(false)
     local bg1 = UI.getChildControl(self._frames.Function.Etc._uiFrameContent, "StaticText_BgOrder1_Import")
     UI.getChildControl(bg1, "CheckButton_IsPvpRefuse"):SetShow(false)
     UI.getChildControl(bg1, "StaticText_IsPvpRefuse_Desc"):SetShow(false)
@@ -1270,9 +1284,38 @@ function PaGlobal_Option:SetContentsOption()
     local hdrImage = UI.getChildControl(bgHdr, "Static_HDR_Image")
     local hdrLeftBlackImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
     local hdrRightWhiteImage = UI.getChildControl(bgHdr, "Static_HDR_White")
-    hdrImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 10000)
-    hdrLeftBlackImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1)
+    hdrImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1000000)
+    hdrLeftBlackImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1.45)
     hdrRightWhiteImage:SetColorExtra(Defines.Color.C_FFFFFFFF, 1)
+    if false == getHdrDiplayEnable() then
+      local bg0 = UI.getChildControl(self._frames.Graphic.HDR._uiFrameContent, "StaticText_BgOrder0_Import")
+      local title0 = UI.getChildControl(bg0, "StaticText_Title")
+      local slider0 = UI.getChildControl(bg0, "Slider_HDRDisplayGamma")
+      bg0:SetMonoTone(true)
+      bg0:SetIgnore(true)
+      slider0:SetIgnore(true)
+      title0:SetText(title0:GetText() .. " (Please check HDR setting)")
+      local bg1 = UI.getChildControl(self._frames.Graphic.HDR._uiFrameContent, "StaticText_BgOrder1_Import")
+      local title1 = UI.getChildControl(bg1, "StaticText_Title")
+      local slider1 = UI.getChildControl(bg1, "Slider_HDRDisplayMaxNits")
+      bg1:SetMonoTone(true)
+      bg1:SetIgnore(true)
+      slider1:SetIgnore(true)
+      title1:SetText(title1:GetText() .. " (Please check HDR setting)")
+    end
+    if false == isXBoxDevice_X() then
+      local bg = UI.getChildControl(self._frames.Graphic.HDR._uiFrameContent, "StaticText_BgOrder2_Import")
+      local title = UI.getChildControl(bg, "StaticText_Title")
+      local checkbutton = UI.getChildControl(bg, "CheckButton_UltraHighDefinition")
+      bg:SetMonoTone(true)
+      bg:SetIgnore(true)
+      checkbutton:SetIgnore(true)
+      title:SetText(title:GetText() .. " (XBox X Only)")
+    end
+    local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
+    UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_ShowKeyGuideDesc"):SetShow(false)
+    bg0:SetSize(bg0:GetSizeX(), bg0:GetSizeY() - 30)
   else
     local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
     UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)

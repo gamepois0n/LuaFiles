@@ -94,7 +94,7 @@ local getMaxCharacsterCount = function(isCharacterSpecial)
 end
 local function SelectCharacter_Init()
   setShowBlockBG(false)
-  Panel_CharacterSelectNew:SetShow(false)
+  Panel_CharacterSelectNew:SetShow(true)
   Panel_CharacterSelectNew:SetSize(getScreenSizeX(), getScreenSizeY())
   if isGameTypeEnglish() and getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Pre then
     btn_SaveCustomization:SetShow(true)
@@ -243,7 +243,6 @@ local function SelectCharacter_Init()
     CheckButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleGhostMode()")
   end
   PaGlobal_CheckGamerTag()
-  Panel_CharacterSelectNew:SetShow(true)
 end
 function Panel_Lobby_SelectCharacter_EnableSelectButton(enableValue)
   for slotIdx = 0, configData._listCount - 1 do
@@ -662,11 +661,7 @@ local function What_R_U_Doing_Now(isSpecialCharacter)
       SelectCharacter.static_ChaInfoProgressText:SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_DELETING"))
     else
       SelectCharacter.static_DeleteBox:SetShow(false)
-      if false == _ContentsGroup_isConsolePadControl then
-        SelectCharacter.btn_ChaInfoDelete:SetShow(true)
-      else
-        SelectCharacter.btn_ChaInfoDelete:SetShow(false)
-      end
+      SelectCharacter.btn_ChaInfoDelete:SetShow(true)
       if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Pre then
         SelectCharacter.btn_ChaInfoStart:SetShow(false)
         SelectCharacter.static_ticketNoByRegion:SetShow(false)
@@ -861,12 +856,7 @@ local function CharacterList_Update(isChangeSpecialTab)
       else
         slot._btn_Slot:SetCheck(false)
       end
-      if false == _ContentsGroup_isConsolePadControl then
-        slot._btn_Slot:addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
-      else
-        slot._btn_Slot:addInputEvent("Mouse_On", "CharacterSelect_selected( " .. slotIdx .. " )")
-        slot._btn_Slot:addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
-      end
+      slot._btn_Slot:addInputEvent("Mouse_LUp", "CharacterSelect_selected( " .. slotIdx .. " )")
       slot._btnStart:addInputEvent("Mouse_LUp", "CharacterSelect_PlayGame( " .. slotIdx .. " )")
       slot._btnUp:addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", true )")
       slot._btnDown:addInputEvent("Mouse_LUp", "CharacterSelect_ChangeCharacterPosition( " .. slotIdx .. ", false )")
@@ -972,11 +962,6 @@ local function CharacterList_Update(isChangeSpecialTab)
     GhostButton:SetText("GhostMode ON")
   else
     GhostButton:SetText("GhostMode OFF")
-  end
-  if false == _ContentsGroup_isConsolePadControl then
-    SelectCharacter.btn_ChangeLocate:SetShow(true)
-  else
-    SelectCharacter.btn_ChangeLocate:SetShow(false)
   end
 end
 function CharacterSelect_ChangeLocate()
@@ -1275,7 +1260,7 @@ function makeEnterWaitingUserMsg(receiveTicketNoMyRegion)
   local regionWaitStr = PAGetStringParam1(Defines.StringSheet_GAME, "CHARACTER_REGION_WAIT_COUNT", "iCount", tostring(myRegionWaitingPlayerCount))
   local emptyStr = PAGetString(Defines.StringSheet_GAME, "CHARACTER_WAITING_PLAYER_EMPTY")
   local taiwanMsg = ""
-  if isGameTypeTaiwan() then
+  if isGameTypeTaiwan() or isGameTypeGT() then
     taiwanMsg = "\n\n\233\187\145\232\137\178\230\178\153\230\188\160\231\130\186\229\150\174\228\184\128\228\184\150\231\149\140\229\133\168\228\188\186\230\156\141\229\153\168\229\133\177\233\128\154\239\188\140\229\156\168\233\129\138\230\136\178\230\153\130\229\143\175\229\156\168\229\144\132\233\160\187\233\129\147\233\150\147\232\135\170\231\148\177\231\167\187\229\139\149\239\188\140\232\171\139\233\129\184\230\147\135\233\128\178\232\161\140\232\188\131\233\160\134\229\136\169\231\154\132\233\160\187\233\129\147\231\153\187\229\133\165\233\129\138\230\136\178\229\141\179\229\143\175"
   end
   if const_64.s64_m1 == firstTicketNoByAll and const_64.s64_m1 ~= ticketCountByRegion then

@@ -158,7 +158,7 @@ local buttonAni = UI.getChildControl(Panel_UIMain, "Static_NewEffect_Ani")
 local function MenuButton_CheckEnAble(buttonType)
   local returnValue = false
   if buttonType == MenuButtonId.Btn_CashShop or buttonType == MenuButtonId.Btn_Beauty then
-    if getContentsServiceType() ~= CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
+    if isGameTypeGT() then
       returnValue = false
     else
       returnValue = true
@@ -405,6 +405,9 @@ function UIMain_QuestUpdate()
     blackSpritCall:SetShow(true)
     blackSpritCall:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UIMAIN_BLACKSPIRIT_TOOLTIP", "getKey", keyCustom_GetString_UiKey(UI_IT.UiInputType_BlackSpirit)))
     blackSpritCall:SetPosX(-67)
+    if isGameTypeGT() then
+      blackSpritCall:SetPosX(-20)
+    end
     blackSpritCall:SetPosY(-15)
     checkNewQuestForEffect = true
   elseif true == ToClient_isXBox() and questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
@@ -469,17 +472,6 @@ end
 local function setAlphaAll(alpha)
   _bubbleNotice:SetFontAlpha(alpha)
   _bubbleNotice:SetAlpha(alpha)
-end
-local xboxDeltaTime = 0
-function PaGlobal_DarkSpiritCall(updateTime)
-  if true == _ContentsGroup_RenewUI and true == questList_doHaveNewQuest() then
-    xboxDeltaTime = xboxDeltaTime + updateTime
-    if xboxDeltaTime >= 10 then
-      audioPostEvent_SystemUi(4, 11)
-      FGlobal_NewMainQuest_Alarm_Open()
-      xboxDeltaTime = 0
-    end
-  end
 end
 function uiMainUpdate(updateTime)
   elapsedTime = elapsedTime + updateTime

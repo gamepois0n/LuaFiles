@@ -627,6 +627,7 @@ function FGlobal_InventoryIsClosing()
   return self._isClosing
 end
 function InventoryWindow_Close()
+  _PA_LOG("cylee", "InventoryWindow_Close()")
   local self = inven
   self:setClosingFlag(true)
   if Panel_Window_Inventory:IsUISubApp() then
@@ -695,6 +696,7 @@ function InventoryWindow_Close()
   self:setClosingFlag(false)
 end
 function InventoryWindow_Show(uiType, isCashInven, isMarket)
+  _PA_LOG("cylee", "InventoryWindow_Show()")
   local self = inven
   self.effect = nil
   self.startSlotIndex = 0
@@ -773,6 +775,7 @@ function InventoryWindow_Show(uiType, isCashInven, isMarket)
       btn_DyePalette:SetMonoTone(false)
     end
   end
+  _PA_LOG("cylee", "InventoryWindow_Show() end")
 end
 function Inventory_SlotLClick(index)
   local self = inven
@@ -1194,6 +1197,9 @@ function HandleClicked_Inventory_Palette_Open()
   end
   FGlobal_DyePalette_Open()
 end
+function PaGlobalFunc_InventoryCheckShow()
+  return Panel_Window_Inventory:GetShow()
+end
 function FGlobal_CashInventoryOpen_ByEnchant()
   if not inven.radioButtonCashInven:IsCheck() then
     inven.radioButtonNormaiInven:SetCheck(false)
@@ -1283,7 +1289,7 @@ function Inventory_IconOver(index)
   end
   local useStartSlot = inventorySlotNoUserStart()
   local invenUseSize = selfPlayer:get():getInventorySlotCount(not self.radioButtonNormaiInven:IsChecked())
-  if invenUseSize - useStartSlot - self.startSlotIndex == index then
+  if invenUseSize - useStartSlot - self.startSlotIndex == index and not isGameTypeGT() then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
     local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
     local control = self.slots[index].icon
@@ -1695,14 +1701,18 @@ function Inventory_updateSlotData(isLoad)
     if ii < invenUseSize - useStartSlot - self.startSlotIndex then
       slot.empty:SetShow(true)
     elseif ii == invenUseSize - useStartSlot - self.startSlotIndex then
-      if self.slots[ii].icon:GetShow() then
-        slot.onlyPlus:SetShow(true)
+      if not isGameTypeGT() then
+        if self.slots[ii].icon:GetShow() then
+          slot.onlyPlus:SetShow(true)
+        else
+          slot.plus:SetShow(true)
+        end
+        slot.lock:SetShow(true)
+        Panel_Window_Inventory:SetChildIndex(slot.plus, 15099)
+        Panel_Window_Inventory:SetChildIndex(slot.onlyPlus, 15100)
       else
-        slot.plus:SetShow(true)
+        slot.lock:SetShow(true)
       end
-      slot.lock:SetShow(true)
-      Panel_Window_Inventory:SetChildIndex(slot.plus, 15099)
-      Panel_Window_Inventory:SetChildIndex(slot.onlyPlus, 15100)
     else
       slot.lock:SetShow(true)
     end
@@ -2186,7 +2196,7 @@ function Inventory_UseItemTargetSelf(whereType, slotNo, equipSlotNo)
     audioPostEvent_SystemUi(0, 14)
   end
   inventoryUseItem(whereType, slotNo, equipSlotNo, isTargetSelfPlayer)
-  if (42000 == itemKey or 42001 == itemKey or 42002 == itemKey or 42010 == itemKey or 42003 == itemKey or 42004 == itemKey or 42034 == itemKey or 42035 == itemKey or 42037 == itemKey or 42036 == itemKey or 42006 == itemKey or 42008 == itemKey or 42039 == itemKey or 42038 == itemKey or 42007 == itemKey or 42053 == itemKey or 41610 == itemKey or 42009 == itemKey or 42054 == itemKey or 42057 == itemKey or 42061 == itemKey or 42066 == itemKey or 42055 == itemKey or 42056 == itemKey) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() then
+  if (42000 == itemKey or 42001 == itemKey or 42002 == itemKey or 42010 == itemKey or 42003 == itemKey or 42004 == itemKey or 42034 == itemKey or 42035 == itemKey or 42037 == itemKey or 42036 == itemKey or 42006 == itemKey or 42008 == itemKey or 42039 == itemKey or 42038 == itemKey or 42007 == itemKey or 42053 == itemKey or 41610 == itemKey or 42009 == itemKey or 42054 == itemKey or 42057 == itemKey or 42061 == itemKey or 42066 == itemKey or 42055 == itemKey or 42056 == itemKey) and false == _ContentsGroup_RenewUI_Tutorial and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() then
     isFirstSummonItemUse = true
   end
 end
@@ -2303,11 +2313,14 @@ function Inventory_CashTabScroll(isUp)
   Inventory_updateSlotData()
 end
 function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFunction, effect)
+  _PA_LOG("cylee", "Inventory_SetFunctor()")
   local self = inven
   if nil ~= self.otherWindowOpenFunc and nil ~= otherWindowOpenFunction then
     local otherWindowOpenFuncDiff = otherWindowOpenFunction ~= self.otherWindowOpenFunc
     if otherWindowOpenFuncDiff and (nil ~= filterFunction or nil ~= rClickFunction or nil ~= otherWindowOpenFunction) then
+      _PA_LOG("cylee", "Inventory_SetFunctor() otherWindowOpenFunc()")
       self.otherWindowOpenFunc()
+      _PA_LOG("cylee", "Inventory_SetFunctor() otherWindowOpenFunc() end")
     end
   end
   if nil ~= filterFunction and "function" ~= type(filterFunction) then
@@ -2329,6 +2342,7 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
   if Panel_Window_Inventory:GetShow() then
     Inventory_updateSlotData()
   end
+  _PA_LOG("cylee", "Inventory_SetFunctor() end")
 end
 function Inventory_DropHandler(index)
   local self = inven

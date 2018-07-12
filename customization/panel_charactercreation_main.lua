@@ -1239,7 +1239,7 @@ function ShowCharacterCustomization(customizationData, classIndex, isInGame)
       end
     end
   end
-  if (isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID()) and not isInGame then
+  if (isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID()) and not isInGame then
     btn_CharacterNameCreateRule:SetShow(true)
   else
     btn_CharacterNameCreateRule:SetShow(false)

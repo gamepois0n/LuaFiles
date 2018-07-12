@@ -29,7 +29,12 @@ local Type = {
   Profile = 27,
   VoiceChat = 28,
   Knowledge = 29,
-  Undefined = 30
+  WharfNavi = 30,
+  Guild = 31,
+  Friend = 32,
+  PearlShop = 33,
+  PartySetting = 34,
+  Undefined = 35
 }
 PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local function getTypeName(index)
@@ -122,6 +127,21 @@ end
 function ExecuteFunction.Knowledge()
   PaGlobalFunc_Window_Knowledge_Show()
 end
+function ExecuteFunction.WharfNavi()
+  Servant_Navi(1)
+end
+function ExecuteFunction.Guild()
+  Process_UIMode_CommonWindow_Guild()
+end
+function ExecuteFunction.Friend()
+  Process_UIMode_CommonWindow_FriendList()
+end
+function ExecuteFunction.PearlShop()
+  Process_UIMode_CommonWindow_CashShop()
+end
+function ExecuteFunction.PartySetting()
+  Process_UIMode_CommonWindow_PartySetting()
+end
 function PaGlobal_ConsoleQuickMenu:initialize()
 end
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
@@ -156,7 +176,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction = {
     [Type.RingMenuSetting] = ExecuteFunction.RingMenuSetting,
     [Type.Profile] = ExecuteFunction.Profile,
     [Type.VoiceChat] = ExecuteFunction.VoiceChat,
-    [Type.Knowledge] = ExecuteFunction.Knowledge
+    [Type.Knowledge] = ExecuteFunction.Knowledge,
+    [Type.WharfNavi] = ExecuteFunction.WharfNavi,
+    [Type.Guild] = ExecuteFunction.Guild,
+    [Type.Friend] = ExecuteFunction.Friend,
+    [Type.PearlShop] = ExecuteFunction.PearlShop,
+    [Type.PartySetting] = ExecuteFunction.PartySetting
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
@@ -351,11 +376,11 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y2 = 495
     },
     [Type.Profile] = {
-      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
-      _x1 = 64,
-      _y1 = 2,
-      _x2 = 124,
-      _y2 = 62
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 307,
+      _y1 = 292,
+      _x2 = 357,
+      _y2 = 342
     },
     [Type.VoiceChat] = {
       _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
@@ -365,11 +390,46 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y2 = 240
     },
     [Type.Knowledge] = {
-      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
-      _x1 = 126,
-      _y1 = 64,
-      _x2 = 186,
-      _y2 = 124
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 256,
+      _y1 = 343,
+      _x2 = 306,
+      _y2 = 393
+    },
+    [Type.WharfNavi] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 103,
+      _y1 = 292,
+      _x2 = 153,
+      _y2 = 342
+    },
+    [Type.Guild] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 307,
+      _y1 = 190,
+      _x2 = 357,
+      _y2 = 240
+    },
+    [Type.Friend] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 256,
+      _y1 = 292,
+      _x2 = 306,
+      _y2 = 342
+    },
+    [Type.PearlShop] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 307,
+      _y1 = 241,
+      _x2 = 357,
+      _y2 = 291
+    },
+    [Type.PartySetting] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 307,
+      _y1 = 343,
+      _x2 = 357,
+      _y2 = 393
     }
   }
 }
@@ -404,7 +464,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.RingMenuSetting] = "RINGMENU SETTING",
     [Type.Profile] = "PROFILE",
     [Type.VoiceChat] = "VOICE CHAT",
-    [Type.Knowledge] = "KNOWLEDGE"
+    [Type.Knowledge] = "KNOWLEDGE",
+    [Type.WharfNavi] = "FIND SHIP LOCATION",
+    [Type.Guild] = "GUILD",
+    [Type.Friend] = "FRIEND",
+    [Type.PearlShop] = "CASH SHOP",
+    [Type.PartySetting] = "PARTY SETTING"
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
@@ -413,7 +478,7 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.BlackSpirit] = true,
     [Type.WorldMap] = true,
     [Type.Skill] = true,
-    [Type.Mail] = true,
+    [Type.Mail] = false,
     [Type.CharacterChallange] = false,
     [Type.ItemMarket] = false,
     [Type.Quest] = true,
@@ -423,8 +488,8 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.CampNavi] = false,
     [Type.HorseRaceInformation] = false,
     [Type.HorseRaceEnterOrCancel] = false,
-    [Type.HouseList] = true,
-    [Type.WorkerList] = true,
+    [Type.HouseList] = false,
+    [Type.WorkerList] = false,
     [Type.InstallationList] = false,
     [Type.PetList] = true,
     [Type.MaidList] = false,
@@ -438,7 +503,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.RingMenuSetting] = true,
     [Type.Profile] = true,
     [Type.VoiceChat] = true,
-    [Type.Knowledge] = true
+    [Type.Knowledge] = true,
+    [Type.WharfNavi] = true,
+    [Type.Guild] = true,
+    [Type.Friend] = true,
+    [Type.PearlShop] = true,
+    [Type.PartySetting] = true
   }
 }
 function varify()

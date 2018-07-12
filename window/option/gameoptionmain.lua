@@ -807,8 +807,8 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
     end
   end
   local ultraResolutionWidth = 3840
-  local ultraResolutionHeight = 2140
-  if ultraResolutionWidth == gameOptionSetting:getScreenResolutionWidth() and ultraResolutionHeight == gameOptionSetting:getScreenResolutionHeight() then
+  local ultraResolutionHeight = 2160
+  if ultraResolutionWidth <= gameOptionSetting:getScreenResolutionWidth() and ultraResolutionHeight <= gameOptionSetting:getScreenResolutionHeight() then
     elems_.UltraHighDefinition._initValue = true
   else
     elems_.UltraHighDefinition._initValue = false
@@ -817,11 +817,8 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
   elems_.CropModeScaleX._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleX(), 0.5, 1)
   elems_.CropModeScaleY._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getCropModeScaleY(), 0.5, 1)
   if _ContentsGroup_isConsoleTest then
-    elems_.HDRDisplayGamma._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayGamma(), PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin * 0.01, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax * 0.01)
-    elems_.HDRDisplayMaxNits._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayMaxNits(), 500, 3000)
-    local bgHdr = UI.getChildControl(PaGlobal_Option._frames.Graphic.HDR._uiFrameContent, "Static_HDR_ImageBgs_Import")
-    local hdrRightImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
-    hdrRightImage:SetColorExtra(Defines.Color.C_FFFFFFFF, gameOptionSetting:getHdrDisplayMaxNits())
+    elems_.HDRDisplayGamma._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayGamma(), PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax)
+    elems_.HDRDisplayMaxNits._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getHdrDisplayMaxNits(), PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMin, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMax)
   end
   elems_.UIScale._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getUIScale(), 0.5, 2)
   if true == UI.checkResolution4KForXBox() then

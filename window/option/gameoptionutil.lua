@@ -140,7 +140,7 @@ function PaGlobal_Option:radioButtonMapping_ServiceResourceType(value, fromRadio
       [0] = CppEnums.ServiceResourceType.eServiceResourceType_TR,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN
     }
-  elseif CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceeType then
+  elseif CppEnums.GameServiceType.eGameServiceType_GT_ALPHA == resourceType then
     radioMap = {
       [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_EN,

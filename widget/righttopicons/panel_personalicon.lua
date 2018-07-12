@@ -15,6 +15,7 @@ local personalIcon = {
   _btn_DropItem = UI.getChildControl(Panel_PersonalIcon, "Button_DropItem"),
   _plus_MovieGuide = UI.getChildControl(Panel_PersonalIcon, "StaticText_MoviePlus"),
   _plus_Hunting = UI.getChildControl(Panel_PersonalIcon, "StaticText_HuntingPlus"),
+  _btn_GuildTeamBattle = UI.getChildControl(Panel_PersonalIcon, "Button_OneOnOne"),
   _currentRegion = nil
 }
 local radarPosX = 0
@@ -57,6 +58,18 @@ function FGlobal_PersonalIcon_ButtonPosUpdate()
       self._btn_NpcNavi:SetShow(false)
       self._btn_NpcNaviTW:SetShow(true)
     end
+  end
+  if true == ToClient_IsContentsGroupOpen("396") and false == _ContentsGroup_RenewUI_VoiceChat then
+    if true == ToClient_ShouldShowNavigateGuildTeamBattleButton() and true == ToClient_IsMyGuildCanDoGuildTeamBattle() then
+      self._btn_GuildTeamBattle:SetShow(true)
+    else
+      self._btn_GuildTeamBattle:SetShow(false)
+    end
+  end
+  if true == self._btn_GuildTeamBattle:GetShow() and false == _ContentsGroup_RenewUI_VoiceChat then
+    self._btn_GuildTeamBattle:SetPosX((sizeX + controlGapX) * showIconCount)
+    self._btn_GuildTeamBattle:SetPosY(10)
+    showIconCount = showIconCount + 1
   end
   if ToClient_IsContentsGroupOpen("245") and false == _ContentsGroup_RenewUI_VoiceChat then
     local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -308,6 +321,9 @@ function PersonalIcon_Tooltip()
   self._btn_DropItem:addInputEvent("Mouse_On", "DropItemButton_Tooltip(true)")
   self._btn_DropItem:addInputEvent("Mouse_Out", "DropItemButton_Tooltip(false)")
   self._btn_DropItem:addInputEvent("Mouse_LUp", "FGlobal_DropItemOpen()")
+  self._btn_GuildTeamBattle:addInputEvent("Mouse_LUp", "ToClient_NavigateToGuildTeamBattlePosition()")
+  self._btn_GuildTeamBattle:addInputEvent("Mouse_On", "GuildTeamBattle_NavigateTooltip(true)")
+  self._btn_GuildTeamBattle:addInputEvent("Mouse_Out", "GuildTeamBattle_NavigateTooltip(false)")
 end
 function MilitiaButton_Tooltip(isShow)
   if false == isShow then
@@ -355,6 +371,17 @@ function DropItemButton_RegionCheck()
     self._btn_DropItem:SetShow(false)
   end
   FGlobal_PersonalIcon_ButtonPosUpdate()
+end
+function GuildTeamBattle_NavigateTooltip(isShow)
+  if false == isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local control = personalIcon._btn_DropItem
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_GUILDTEAMBATTLE_TOOLTIPNAME")
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_GUILDTEAMBATTLE_TOOLTIPDESC")
+  registTooltipControl(control, Panel_Tooltip_SimpleText)
+  TooltipSimple_Show(control, name, desc)
 end
 function FGlobal_GetRegionKey_ByDropItem()
   return personalIcon._currentRegion

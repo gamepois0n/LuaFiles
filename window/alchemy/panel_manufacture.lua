@@ -858,6 +858,9 @@ function Manufacture_UpdateSlot()
   Inventory_updateSlotData()
 end
 function Manufacture_Response()
+  if _ContentsGroup_RenewUI_Manufacture then
+    return
+  end
   local _uiMode = GetUIMode()
   if nil ~= #noneStackItemList and #noneStackItemList > 0 and true == noneStackItemCheck then
     return
@@ -965,6 +968,9 @@ local function checkManufactureFailCount(currentFailCount)
   end
 end
 function Manufacture_ResponseResultItem(itemDynamicListWrapper, failReason)
+  if _ContentsGroup_RenewUI_Manufacture then
+    return
+  end
   local size = itemDynamicListWrapper:getSize()
   if size > 0 then
     Manufacture_Notify._failCount = 0

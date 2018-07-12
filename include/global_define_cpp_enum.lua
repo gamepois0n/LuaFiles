@@ -2488,7 +2488,8 @@ CppEnums.GlobalUIOptionType = {
   ItemMarketAlarmSound = 64,
   BossAlertOnOff = 65,
   BossAlertTime = 66,
-  BossAlertKeep = 67
+  BossAlertKeep = 67,
+  CharacterInfo = 68
 }
 CppEnums.MembershipType = {
   default = 0,
@@ -2689,7 +2690,7 @@ CppEnums.ProfileIndex = {
   eUserProfileValueType_ProductSuccessCount = 3,
   eUserProfileValueType_Count = 4
 }
-CppEnums.GuildBenefit = {eMaxContractedBenefit = 5000000}
+CppEnums.GuildBenefit = {eMaxContractedBenefit = 5000000, eMaxContractedPenalty = 5000000}
 CppEnums.PartyType = {ePartyType_Normal = 0, ePartyType_Large = 1}
 CppEnums.PA_CONSOLE_UI_EVENT_TYPE = {
   eCONSOLE_UI_EVENT_TYPE_UP = 0,

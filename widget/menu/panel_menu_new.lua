@@ -60,7 +60,7 @@ PaGlobal_Menu = {
     _isDropItemOpen = ToClient_IsContentsGroupOpen("337"),
     _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350"),
     _isButtonShortCut = ToClient_IsContentsGroupOpen("351"),
-    _isBlackDesertLab = _ContentsGroup_BlackDesertLab
+    _isBlackDesertLab = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType()
   },
   _categoryData = {},
   _mainButtonCount = 5,

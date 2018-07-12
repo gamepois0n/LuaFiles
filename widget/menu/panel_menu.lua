@@ -25,7 +25,7 @@ local isDropItemOpen = ToClient_IsContentsGroupOpen("337")
 local isTeamDuelOpen = ToClient_IsContentsGroupOpen("350")
 local isButtonShortCut = ToClient_IsContentsGroupOpen("351")
 local isKnownIssue = isGameTypeKorea() or isGameTypeTH() or isGameTypeID() or isGameTypeTaiwan()
-local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab
+local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType()
 local isBossAlert = isGameTypeKorea()
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
@@ -1169,6 +1169,9 @@ function GameMenu_CheckEnAble(buttonType)
     elseif isGameServiceTypeDev() then
       returnValue = true
     end
+  end
+  if buttonType == MenuButtonId.btn_Event and isGameTypeGT() then
+    returnValue = false
   end
   if buttonType == MenuButtonId.btn_Siege then
     returnValue = isSiegeEnable

@@ -77,7 +77,8 @@ local tradeSellMarket = {
   DistanceNoBonus = {},
   tradePrice = {},
   icons = {},
-  totalProfit = toInt64(0, 0)
+  totalProfit = toInt64(0, 0),
+  ItemNameTable = {}
 }
 local realPriceCache = {
   _maxIndex = 0,
@@ -682,8 +683,7 @@ end
 function tradeSellMarket:setBuyItemDataInfo(index, itemName, leftCount, price, possibleCount)
   tradeSellMarket.ListBody[index]:EraseAllEffect()
   _btnTradeGame:EraseAllEffect()
-  tradeSellMarket.itemName[index]:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
-  tradeSellMarket.itemName[index]:setLineCountByLimitAutoWrap(2)
+  tradeSellMarket.itemName[index]:SetTextMode(UI_TM.eTextMode_LimitText)
   local characterStaticStatusWrapper = npcShop_getCurrentCharacterKeyForTrade()
   local characterStaticStatus = characterStaticStatusWrapper:get()
   local wp = getSelfPlayer():getWp()
@@ -699,7 +699,9 @@ function tradeSellMarket:setBuyItemDataInfo(index, itemName, leftCount, price, p
     end
     if true == checkLinkedNode(index) then
       tradeSellMarket.ListBody[index]:AddEffect("UI_Trade_SellRing", true, 0, 0)
-      tradeSellMarket.itemName[index]:SetText(tostring(itemName) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADEGAME"))
+      bonusText = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADEGAME")
+      itemName = itemName .. " " .. bonusText
+      tradeSellMarket.itemName[index]:SetText(tostring(itemName))
     else
       tradeSellMarket.itemName[index]:SetText(tostring(itemName))
     end
@@ -722,6 +724,15 @@ function tradeSellMarket:setBuyItemDataInfo(index, itemName, leftCount, price, p
       _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
     end
     tradeSellMarket.itemName[index]:SetText(tostring(itemName))
+  end
+  if true == tradeSellMarket.itemName[index]:IsLimitText() then
+    tradeSellMarket.ItemNameTable[index] = itemName
+    tradeSellMarket.itemName[index]:addInputEvent("Mouse_On", "TradeMarketSellList_SimpleToolTips( true, 8, " .. index .. ")")
+    tradeSellMarket.itemName[index]:addInputEvent("Mouse_Out", "TradeMarketSellList_SimpleToolTips(false)")
+    tradeSellMarket.itemName[index]:setTooltipEventRegistFunc("TradeMarketSellList_SimpleToolTips( true, 8, " .. index .. ")")
+    tradeSellMarket.itemName[index]:SetIgnore(false)
+  else
+    tradeSellMarket.ItemNameTable[index] = nil
   end
   tradeSellMarket.sellPrice[index]:SetText(makeDotMoney(sellPrice))
   tradeSellMarket.remainItemCount[index] = leftCount
@@ -1135,6 +1146,12 @@ function TradeMarketSellList_SimpleToolTips(isShow, tipType, index)
   elseif 7 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_DESERTBUFF")
     control = tradeSellMarket.desertBuff[index]
+  elseif 8 == tipType then
+    if nil == tradeSellMarket.ItemNameTable[index] then
+      return
+    end
+    name = tradeSellMarket.ItemNameTable[index]
+    control = tradeSellMarket.itemName[index]
   end
   if true == isShow then
     registTooltipControl(control, Panel_Tooltip_SimpleText)

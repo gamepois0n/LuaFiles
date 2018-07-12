@@ -38,7 +38,7 @@ function FGlobal_NewMainQuest_Alarm_Open()
     Panel_NewQuest:SetShow(false, false)
     return
   end
-  if Panel_LifeTutorial:GetShow() then
+  if false == _ContentsGroup_RenewUI_Tutorial and Panel_LifeTutorial:GetShow() then
     Panel_NewQuest:SetShow(false, false)
     return
   end
@@ -47,6 +47,10 @@ function FGlobal_NewMainQuest_Alarm_Open()
     return
   end
   if ToClient_getPlayNowSavageDefence() then
+    Panel_NewQuest:SetShow(false, false)
+    return
+  end
+  if true == ToClient_isXBox() then
     Panel_NewQuest:SetShow(false, false)
     return
   end

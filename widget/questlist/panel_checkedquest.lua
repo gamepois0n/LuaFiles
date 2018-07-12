@@ -800,9 +800,11 @@ function FromClient_QuestWidget_Update()
   PaGlobal_CheckedQuest:updateQuestList(_startPosition)
   PaGlobal_CheckedQuest:updateScrollButtonSize()
   FGlobal_ChangeWidgetType()
-  PaGlobal_SummonBossTutorial_Manager:checkQuestCondition()
-  if Panel_LifeTutorial:GetShow() then
-    FGlobal_LifeTutorial_Check()
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    PaGlobal_SummonBossTutorial_Manager:checkQuestCondition()
+    if Panel_LifeTutorial:GetShow() then
+      FGlobal_LifeTutorial_Check()
+    end
   end
 end
 function GuideButton_MouseOnOut(isOut)
@@ -1818,12 +1820,18 @@ function HandleClicked_QuestWidget_FindTarget(questGroupId, questId, condition, 
     PaGlobal_TutorialManager:handleClickedQuestWidgetFindTarget(questGroupId, questId, condition, isAuto)
   end
   if _questGroupId == questGroupId and _questId == questId then
-    if false == _naviInfoAgain then
-      ToClient_DeleteNaviGuideByGroup(0)
-      audioPostEvent_SystemUi(0, 15)
-      _naviInfoAgain = true
+    if false == _ContentsGroup_RenewUI then
+      if false == _naviInfoAgain then
+        ToClient_DeleteNaviGuideByGroup(0)
+        audioPostEvent_SystemUi(0, 15)
+        _naviInfoAgain = true
+      else
+        _naviInfoAgain = false
+        _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, isAuto)
+      end
     else
       _naviInfoAgain = false
+      ToClient_DeleteNaviGuideByGroup(0)
       _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, isAuto)
     end
   else

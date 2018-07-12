@@ -35,6 +35,37 @@ UI.itemSlotConfig = {
       y2 = 86
     }
   },
+  borderTextureForRenewUI = {
+    [0] = nil,
+    [1] = {
+      texture = "Renewal/Frame/Console_Frame_00.dds",
+      x1 = 167,
+      y1 = 108,
+      x2 = 187,
+      y2 = 128
+    },
+    [2] = {
+      texture = "Renewal/Frame/Console_Frame_00.dds",
+      x1 = 188,
+      y1 = 108,
+      x2 = 208,
+      y2 = 128
+    },
+    [3] = {
+      texture = "Renewal/Frame/Console_Frame_00.dds",
+      x1 = 209,
+      y1 = 108,
+      x2 = 229,
+      y2 = 128
+    },
+    [4] = {
+      texture = "Renewal/Frame/Console_Frame_00.dds",
+      x1 = 230,
+      y1 = 108,
+      x2 = 250,
+      y2 = 128
+    }
+  },
   expirationTexture = {
     [0] = {
       texture = "new_ui_common_forlua/Window/inventory/inventory_01.dds",
@@ -521,9 +552,18 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   end
   if nil ~= self.border then
     local gradeType = itemStaticWrapper:getGradeType()
-    if gradeType > 0 and gradeType <= #UI.itemSlotConfig.borderTexture then
-      self.border:ChangeTextureInfoNameAsync(UI.itemSlotConfig.borderTexture[gradeType].texture)
-      local x1, y1, x2, y2 = setTextureUV_Func(self.border, UI.itemSlotConfig.borderTexture[gradeType].x1, UI.itemSlotConfig.borderTexture[gradeType].y1, UI.itemSlotConfig.borderTexture[gradeType].x2, UI.itemSlotConfig.borderTexture[gradeType].y2)
+    local borderTextureData = UI.itemSlotConfig.borderTexture
+    if ToClient_isXBox() then
+      borderTextureData = UI.itemSlotConfig.borderTextureForRenewUI
+      local borderSample = PaGlobalFunc_InventoryInfo_GetSlotBorder()
+      if nil ~= borderSample then
+        CopyBasePropertyBaseOnly(self.border, borderSample)
+        borderSample:SetShow(false)
+      end
+    end
+    if gradeType > 0 and gradeType <= #borderTextureData then
+      self.border:ChangeTextureInfoNameAsync(borderTextureData[gradeType].texture)
+      local x1, y1, x2, y2 = setTextureUV_Func(self.border, borderTextureData[gradeType].x1, borderTextureData[gradeType].y1, borderTextureData[gradeType].x2, borderTextureData[gradeType].y2)
       self.border:getBaseTexture():setUV(x1, y1, x2, y2)
       self.border:setRenderTexture(self.border:getBaseTexture())
       self.border:SetShow(true)

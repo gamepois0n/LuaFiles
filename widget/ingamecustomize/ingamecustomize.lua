@@ -5,6 +5,10 @@ local gameExitPhoto = false
 local characterInfoPhoto = false
 local CharacterSlotIndex = 0
 function IngameCustomize_Show()
+  if isGameTypeGT() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOUSE_FUNCTION"))
+    return
+  end
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BEAUTYOPENALERT_INDEAD"))
     return

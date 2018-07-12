@@ -6,6 +6,7 @@ Panel_Window_StableMating:RegisterShowEventFunc(true, "StableMatingShowAni()")
 Panel_Window_StableMating:RegisterShowEventFunc(false, "StableMatingHideAni()")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
+local UI_TM = CppEnums.TextMode
 local isContentsStallionEnable = ToClient_IsContentsGroupOpen("243")
 local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
 function StableMatingShowAni()
@@ -158,10 +159,20 @@ function stableMating:init()
       slot._skill[jj] = skill
     end
     slot._buttonStart = UI.createAndCopyBasePropertyControl(Panel_Window_StableMating, "Button_Start", slot._baseSlot, "ServantMating_Start_" .. ii)
+    slot._buttonStart:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    slot._buttonStart:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_START"))
     slot._buttonMating = UI.createAndCopyBasePropertyControl(Panel_Window_StableMating, "Button_Mating", slot._baseSlot, "ServantMating_Mating_" .. ii)
+    slot._buttonMating:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    slot._buttonMating:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_MATING"))
     slot._buttonCancel = UI.createAndCopyBasePropertyControl(Panel_Window_StableMating, "Button_Cancel", slot._baseSlot, "ServantMating_Cancel_" .. ii)
+    slot._buttonCancel:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    slot._buttonCancel:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_CANCEL"))
     slot._buttonReceive = UI.createAndCopyBasePropertyControl(Panel_Window_StableMating, "Button_Receive", slot._baseSlot, "ServantMating_Receive_" .. ii)
+    slot._buttonReceive:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    slot._buttonReceive:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_RECEIVE"))
     slot._buttonEnd = UI.createAndCopyBasePropertyControl(Panel_Window_StableMating, "Button_End", slot._baseSlot, "ServantMating_End_" .. ii)
+    slot._buttonEnd:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    slot._buttonEnd:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_END"))
     local slotConfig = self._config.slot
     slot._baseSlot:SetPosX(slotConfig.startX)
     slot._baseSlot:SetPosY(slotConfig.startY + slotConfig.gapY * ii)
@@ -232,7 +243,7 @@ function stableMating:init()
     slot.skillNextPage:SetPosY(slot.skillPageValue:GetPosY() + slot.skillPageValue:GetSizeY())
     for jj = 0, self._config.skill.count - 1 do
       slot._skill[jj]._expBG:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 5)
-      slot._skill[jj]._expBG:SetPosY(skillConfig.iconY - 15)
+      slot._skill[jj]._expBG:SetPosY(skillConfig.iconY - 13)
       slot._skill[jj]._exp:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 3)
       slot._skill[jj]._exp:SetPosY(skillConfig.iconY - 13)
       slot._skill[jj]._skillIcon:SetPosX(skillConfig.iconX + skillConfig.gapX * jj)
@@ -358,6 +369,7 @@ function stableMating:updateSlot(isClear)
                 expTxt = 100
               end
               slot._skill[skillSlotNo]._skillIcon:ChangeTextureInfoName("Icon/" .. skillWrapper:getIconPath())
+              slot._skill[skillSlotNo]._skillText:SetTextMode(UI_TM.eTextMode_AutoWrap)
               slot._skill[skillSlotNo]._skillText:SetText(skillWrapper:getName())
               slot._skill[skillSlotNo]._exp:SetProgressRate(auctionServantInfo:getSkillExp(jj) / (skillWrapper:get()._maxExp / 100))
               slot._skill[skillSlotNo]._expText:SetText(expTxt .. "%")

@@ -101,7 +101,7 @@ function HandleClicked_AgreementGuild_Master_SetData(index)
     self.maxBenefitValue = useBenefit + useBenefit * (usableActivity / 100 / 100)
     self.maxpenaltyCostValue = usePenalty + usePenalty * (usableActivity / 100 / 100)
     AgreementGuild_SetMaxDailyPayment(paymentPerDay[index], self.maxBenefitValue)
-    self.maxpenaltyCost:SetText(makeDotMoney(toInt64(0, cancellationCharge[index])) .. " ~ " .. makeDotMoney(toInt64(0, self.maxpenaltyCostValue)) .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
+    AgreementGuild_SetMaxPenalty(cancellationCharge[index], self.maxpenaltyCostValue)
     self.dailyPayment_edit:SetEditText(tostring(self.memberBenefit))
     self.penaltyCost_edit:SetEditText(tostring(self.memberPenalty))
   end
@@ -295,6 +295,14 @@ function agreementGuild_Master_Send()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_PENALTIES"))
       return
     end
+    if value_DailyPayment > CppEnums.GuildBenefit.eMaxContractedBenefit then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_DAILYMONEY_TOOMUCH"))
+      return
+    end
+    if value_PenaltyCost > CppEnums.GuildBenefit.eMaxContractedPenalty then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_BREACH_TOOMUCH"))
+      return
+    end
   else
     for i = 0, #periodValue do
       if self._radioBtn_Period[i]:IsCheck() then
@@ -405,7 +413,7 @@ function HandleClicked_AgreementGuild_Master_Renew()
   self.maxBenefitValue = useBenefit + useBenefit * (usableActivity / 100 / 100)
   self.maxpenaltyCostValue = usePenalty + usePenalty * (usableActivity / 100 / 100)
   AgreementGuild_SetMaxDailyPayment(paymentPerDay[checkedIndex], self.maxBenefitValue)
-  self.maxpenaltyCost:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_MAXDAILYPAYMENT", "checkedIndex", makeDotMoney(toInt64(0, cancellationCharge[checkedIndex])), "maxpenaltyCostValue", makeDotMoney(toInt64(0, self.maxpenaltyCostValue))))
+  AgreementGuild_SetMaxPenalty(cancellationCharge[checkedIndex], self.maxpenaltyCostValue)
   self.dailyPayment:SetShow(false)
   self.penaltyCost:SetShow(false)
   self.btn_Close:SetShow(false)
@@ -429,5 +437,10 @@ function AgreementGuild_SetMaxDailyPayment(checkIndex, benefitMax)
   local self = AgreementGuild_Master
   local maxBenefit = math.min(tonumber(benefitMax), tonumber(CppEnums.GuildBenefit.eMaxContractedBenefit))
   self.maxDailyPayment:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_MAXDAILYPAYMENT", "checkedIndex", makeDotMoney(toInt64(0, checkIndex)), "maxBenefitValue", makeDotMoney(maxBenefit)))
+end
+function AgreementGuild_SetMaxPenalty(checkIndex, penaltyMax)
+  local self = AgreementGuild_Master
+  local maxPenalty = math.min(tonumber(penaltyMax), tonumber(CppEnums.GuildBenefit.eMaxContractedPenalty))
+  self.maxpenaltyCost:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_MAXDAILYPAYMENT", "checkedIndex", makeDotMoney(toInt64(0, checkIndex)), "maxBenefitValue", makeDotMoney(maxPenalty)))
 end
 AgreementGuild_Master:Initialize()

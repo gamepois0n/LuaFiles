@@ -265,7 +265,7 @@ function ChannelSelect_Init()
     channelMainDesc._speedTitle:SetShow(false)
     channelMainDesc._speedDesc:SetShow(false)
     sizeControl = channelMainDesc._serverDesc
-  elseif isGameTypeKR2() then
+  elseif isGameTypeKR2() or isGameTypeGT() then
     channelMainDesc._speedTitle:SetShow(false)
     channelMainDesc._speedDesc:SetShow(false)
     channelMainDesc._siegeTitle:SetShow(false)
@@ -363,7 +363,7 @@ function ChannelSelect_Init()
     channelMainDesc._scheduleSiege:SetShow(false)
     channelMainDesc._scheduleNodeWar:SetShow(false)
   end
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeGT() then
     self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY())
   elseif isGameTypeKorea() then
     if isAdult then
@@ -440,7 +440,7 @@ function ChannelSelect_Init()
   else
     self._PKIcon:SetShow(false)
   end
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeGT() then
     channelSelect._warIcon:SetShow(false)
     channelSelect._noEnteranceIcon:SetShow(false)
     channelSelect._maintenanceIcon:SetShow(false)

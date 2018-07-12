@@ -786,7 +786,7 @@ function getContryTypeLua()
   elseif eCountryType.TR_ALPHA == gameServiceType or eCountryType.TR_REAL == gameServiceType then
     returnValue = CppEnums.ContryCode.eContryCode_TR
   elseif eCountryType.GT_ALPHA == gameServiceType or eCountryType.GT_REAL == gameServiceType then
-    returnValue = cppEnums.ContryCode.eContryCode_GT
+    returnValue = CppEnums.ContryCode.eContryCode_GT
   else
     returnValue = CppEnums.ContryCode.eContryCode_Count
   end
@@ -794,43 +794,6 @@ function getContryTypeLua()
 end
 function isGameTypeThisCountry(country)
   if country == getContryTypeLua() then
-    return true
-  end
-  return false
-end
-function getContryDetailTypeLua()
-  local returnValue = -1
-  local gameServiceType = getGameServiceType()
-  local eCountryType = CppEnums.CountryType
-  if eCountryType.NONE == gameServiceType or eCountryType.DEV == gameServiceType or eCountryType.KOR_ALPHA == gameServiceType or eCountryType.KOR_REAL == gameServiceType or eCountryType.KOR_TEST == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_KOR
-  elseif eCountryType.JPN_ALPHA == gameServiceType or eCountryType.JPN_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_JAP
-  elseif eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_RUS
-  elseif eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_KR2
-  elseif eCountryType.NA_ALPHA == gameServiceType or eCountryType.NA_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_NA
-  elseif eCountryType.TW_ALPHA == gameServiceType or eCountryType.TW_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_TW
-  elseif eCountryType.SA_ALPHA == gameServiceType or eCountryType.SA_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_SA
-  elseif eCountryType.TH_ALPHA == gameServiceType or eCountryType.TH_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_TH
-  elseif eCountryType.ID_ALPHA == gameServiceType or eCountryType.ID_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_ID
-  elseif eCountryType.TR_ALPHA == gameServiceType or eCountryType.TR_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_TR
-  elseif eCountryType.AE_ALPHA == gameServiceType or eCountryType.AE_REAL == gameServiceType then
-    returnValue = CppEnums.ContryCode.eContryCode_AE
-  else
-    returnValue = CppEnums.ContryCode.eContryCode_Count
-  end
-  return returnValue
-end
-function isGameDetailTypeThisCountry(country)
-  if country == getContryDetailTypeLua() then
     return true
   end
   return false
@@ -895,9 +858,6 @@ function isGameTypeAE()
 end
 function isGameTypeTH()
   return isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_TH)
-end
-function isGameTypeID()
-  return isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_ID)
 end
 function isGameTypeGT()
   return isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_GT)

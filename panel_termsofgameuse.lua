@@ -49,6 +49,8 @@ function FGlobal_TermsofGameUse_Open()
     elseif CppEnums.CountryType.TW_REAL == getGameServiceType() then
       isTermsString = PAGetString(Defines.StringSheet_GAME, "LUA_TERMSOFGAMEUSE_URL_TW")
     end
+  elseif isGameTypeGT() then
+    isTermsString = "https://game-portal.global-lab.playblackdesert.com/Policy/"
   else
     isTermsString = PAGetString(Defines.StringSheet_GAME, "LUA_TERMSOFGAMEUSE_URL")
   end

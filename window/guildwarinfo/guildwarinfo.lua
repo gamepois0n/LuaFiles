@@ -58,7 +58,8 @@ local warInfo_Main = {
   comboBox_Territory = UI.getChildControl(Panel_GuildWarInfo, "Combobox_Territory"),
   checkPopUp = UI.getChildControl(Panel_GuildWarInfo, "CheckButton_PopUp"),
   frame_SiegeInfo = UI.getChildControl(Panel_GuildWarInfo, "Frame_SiegeInfo"),
-  subTitle = UI.getChildControl(Panel_GuildWarInfo, "StaticText_TitleBar")
+  subTitle = UI.getChildControl(Panel_GuildWarInfo, "StaticText_TitleBar"),
+  btn_Refresh = UI.getChildControl(Panel_GuildWarInfo, "Button_Refresh")
 }
 local comboxList = UI.getChildControl(warInfo_Main.comboBox_Territory, "Combobox_List")
 comboxList:SetSize(comboxList:GetSizeX(), 20 * siegingAreaCount + 5)
@@ -67,6 +68,7 @@ warInfo_Main.btn_Close:addInputEvent("Mouse_LUp", "Panel_GuildWarInfo_Hide()")
 warInfo_Main.checkPopUp:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_PopUp()")
 warInfo_Main.checkPopUp:addInputEvent("Mouse_On", "GuildWarInfo_PopUp_ShowIconToolTip( true )")
 warInfo_Main.checkPopUp:addInputEvent("Mouse_Out", "GuildWarInfo_PopUp_ShowIconToolTip( false )")
+warInfo_Main.btn_Refresh:addInputEvent("Mouse_LUp", "HandleClicked_Warinfo_Refresh()")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 warInfo_Main.checkPopUp:SetShow(isPopUpContentsEnable)
 warInfo_Main.comboBox_Territory:SetText(territoryName[0])
@@ -113,19 +115,6 @@ local textSizeY = 0
 for v, control in pairs(warInfo_Content) do
   control:SetShow(false)
 end
-local warInfo_Log = {
-  frame_SiegeLog = UI.getChildControl(Panel_GuildWarInfo, "Frame_SiegeLog"),
-  textLog = UI.getChildControl(Panel_GuildWarInfo, "StaticText_GuildWar_Log"),
-  isGuildMasterBg = UI.getChildControl(Panel_GuildWarInfo, "Static_LogBg")
-}
-local log_Content = {
-  frame_content = UI.getChildControl(warInfo_Log.frame_SiegeLog, "Frame_1_Content"),
-  _scroll = UI.getChildControl(warInfo_Log.frame_SiegeLog, "VerticalScroll"),
-  textLog = {},
-  isGuildMasterBg = {}
-}
-log_Content._scroll:SetShow(false)
-oneLineTextSizeY = warInfo_Log.textLog:GetTextSizeY()
 local battleGuildCount = {}
 local warInfoContent = {}
 local guildMpCheck = {}
@@ -162,7 +151,6 @@ local function WarInfoUI_Init(territoryKey)
     }
     guildMpCheck[territoryKey][index] = 0
   end
-  warInfo_Content.descBG:SetShow(true)
 end
 function BattleGuildCount_Update()
   for territoryIndex = 0, siegingAreaCount - 1 do
@@ -379,8 +367,9 @@ function FromClient_WarInfoContent_Set(territoryKey)
       warInfoContent[territoryKey][index]._deathCountValue = currentGuildWrapper:getTotalSiegeCount(2)
       warInfoContent[territoryKey][index]._cannonCountValue = currentGuildWrapper:getTotalSiegeCount(3)
     else
-      for gmIndex = 0, currentGuildWrapper:getMemberCount() - 1 do
-        local guildMemberData = currentGuildWrapper:getMember(gmIndex)
+      for gmIndex = 0, currentGuildWrapper:getTopMemberCount() - 1 do
+        local userNo = currentGuildWrapper:getTopMemberUserNobyIndex(gmIndex)
+        local guildMemberData = currentGuildWrapper:getMemberByUserNo(userNo)
         warInfoContent[territoryKey][index]._destroySiegeCountValue = warInfoContent[territoryKey][index]._destroySiegeCountValue + guildMemberData:commandPostCount() + guildMemberData:towerCount() + guildMemberData:gateCount()
         warInfoContent[territoryKey][index]._killCountValue = warInfoContent[territoryKey][index]._killCountValue + guildMemberData:guildMasterCount() + guildMemberData:squadLeaderCount() + guildMemberData:squadMemberCount()
         warInfoContent[territoryKey][index]._deathCountValue = warInfoContent[territoryKey][index]._deathCountValue + guildMemberData:deathCount()
@@ -644,8 +633,9 @@ function FromClient_WarInfoContent_Set(territoryKey)
         _deathCountValue = currentGuildWrapper:getTotalSiegeCount(2)
         _cannonCountValue = currentGuildWrapper:getTotalSiegeCount(3)
       else
-        for gmIndex = 0, currentGuildWrapper:getMemberCount() - 1 do
-          local guildMemberData = currentGuildWrapper:getMember(gmIndex)
+        for gmIndex = 0, currentGuildWrapper:getTopMemberCount() - 1 do
+          local userNo = currentGuildWrapper:getTopMemberUserNobyIndex(gmIndex)
+          local guildMemberData = currentGuildWrapper:getMemberByUserNo(userNo)
           _destroySiegeCountValue = _destroySiegeCountValue + guildMemberData:commandPostCount() + guildMemberData:towerCount() + guildMemberData:gateCount()
           _killCountValue = _killCountValue + guildMemberData:guildMasterCount() + guildMemberData:squadLeaderCount() + guildMemberData:squadMemberCount()
           _deathCountValue = _deathCountValue + guildMemberData:deathCount()
@@ -792,7 +782,6 @@ local _logCount = 0
 local viewalbeCount = 3
 local maxLogCount = 50
 local textGap = 15
-local defaultLogFrameSize = log_Content.frame_content:GetSizeY()
 function GuildMp_Check(index, territoryKey)
   local msg = ""
   local guildMpGrade = 0
@@ -898,6 +887,9 @@ function HandleClicked_Territory()
   end
   warInfo_Main.comboBox_Territory:ToggleListbox()
 end
+function HandleClicked_Warinfo_Refresh()
+  ToClient_RequestSiegeScore()
+end
 function GuildWarInfo_Set_Territory(index)
   audioPostEvent_SystemUi(0, 0)
   if nil == index then
@@ -959,6 +951,7 @@ function FGlobal_GuildWarInfo_Show()
   HandleClicked_Territory()
   GuildWarInfo_Set_Territory(selectTerritoy)
   FromClient_NotifySiegeScoreToLog()
+  ToClient_RequestSiegeScore()
 end
 function HandleClicked_GuildWarInfo_PopUp()
   if warInfo_Main.checkPopUp:IsCheck() then
@@ -969,6 +962,7 @@ function HandleClicked_GuildWarInfo_PopUp()
   TooltipSimple_Hide()
 end
 function FromClient_NotifySiegeScoreToLog()
+  do return end
   if false == Panel_GuildWarInfo:GetShow() then
     return
   end
@@ -1131,6 +1125,15 @@ function GuildWarInfo_PopUp_ShowIconToolTip(isShow)
     TooltipSimple_Hide()
   end
 end
+local guildWarInfoUpdateTimer = 0
+function GuildWarInfo_UpdatePerFrame(deltaTime)
+  guildWarInfoUpdateTimer = guildWarInfoUpdateTimer + deltaTime
+  if guildWarInfoUpdateTimer > 30 then
+    ToClient_RequestSiegeScore()
+    guildWarInfoUpdateTimer = 0
+  end
+end
+Panel_GuildWarInfo:RegisterUpdateFunc("GuildWarInfo_UpdatePerFrame")
 registerEvent("Event_SiegeScoreUpdateData", "FromClient_WarInfoContent_Set")
 registerEvent("FromClient_KingOrLordTentCountUpdate", "FromClient_WarInfoContent_Set")
 registerEvent("FromClient_NotifyAttackedKingOrLordTentToScore", "FromClient_NotifyAttackedKingOrLordTentToScore")

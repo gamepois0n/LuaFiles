@@ -818,10 +818,14 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
   if isLuaLoadingComplete and Panel_Acquire:GetShow() then
     return
   end
-  if Panel_Tutorial:GetShow() then
-    return
-  end
-  if Panel_LifeTutorial:GetShow() then
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    if Panel_Tutorial:GetShow() then
+      return
+    end
+    if Panel_LifeTutorial:GetShow() then
+      return
+    end
+  elseif Panel_Tutorial_Renew:GetShow() then
     return
   end
   if Panel_IngameCashShop:GetShow() or Panel_Cash_Customization:GetShow() or Panel_IngameCashShop_Controller:GetShow() or Panel_Dye_ReNew:GetShow() or Panel_DyeNew_CharacterController:GetShow() then

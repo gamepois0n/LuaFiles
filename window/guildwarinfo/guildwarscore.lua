@@ -184,6 +184,9 @@ function GuildWarScore:initialize()
       rtGuildWarfareInfo._Partline:SetShow(isShow)
     end
     function rtGuildWarfareInfo:SetData(pData)
+      if nil == pData then
+        return
+      end
       if pData:isOnline() then
         rtGuildWarfareInfo._txtCharName:SetText(pData:getName() .. " (" .. pData:getCharacterName() .. ")")
         rtGuildWarfareInfo._txtCharName:SetFontColor(UI_color.C_FFEFEFEF)
@@ -224,7 +227,7 @@ function GuildWarScore:initialize()
   copyCharName, copyTower, copyCommandCenter, copyCastleGate, copyHelp, copySummons, copyInstallation, copyMaster, copyCommander, copyMember, copyDeath, copyKillBySiege, copyPartline = nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
 end
 function Panel_GuildWarScore_MouseScrollEvent(isUpScroll)
-  local memberCount = currentGuildWrapper:getMemberCount()
+  local memberCount = currentGuildWrapper:getTopMemberCount()
   _startMemberIndex = UIScroll.ScrollEvent(GuildWarScore._scrollBar, isUpScroll, _constGuildListMaxCount, memberCount, _startMemberIndex, 1)
   GuildWarScore:UpdateData()
 end
@@ -273,7 +276,7 @@ function GuildWarScore:UpdateData()
     for index = 0, guildAlliance:getMemberCount() - 1 do
       local guildWrapper = guildAlliance:getMemberGuild(index)
       GuildWarScore:SetWarScoreList(guildWrapper, memberCount)
-      memberCount = memberCount + guildWrapper:getMemberCount()
+      memberCount = memberCount + guildWrapper:getTopMemberCount()
     end
     guildWarScoreTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_WARSCORE_SCORETITLE", "getName", guildAlliance:getRepresentativeName()))
   else
@@ -292,13 +295,14 @@ function GuildWarScore:SetWarScoreList(guildWrapper, uiIndex)
   if nil == guildWrapper then
     return
   end
-  local memberCount = guildWrapper:getMemberCount()
+  local memberCount = guildWrapper:getTopMemberCount()
   for index = 0, _constGuildListMaxCount - 1 do
     if uiIndex >= _constGuildListMaxCount then
       return
     end
-    if memberCount > _startMemberIndex + index then
-      self._list[uiIndex]:SetData(guildWrapper:getMember(_startMemberIndex + index))
+    if index < memberCount then
+      local userNo = guildWrapper:getTopMemberUserNobyIndex(index)
+      self._list[uiIndex]:SetData(guildWrapper:getMemberByUserNo(userNo))
       self._list[uiIndex]:SetShow(true)
     else
       self._list[uiIndex]:SetShow(false)

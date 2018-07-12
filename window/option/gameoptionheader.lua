@@ -433,15 +433,15 @@ PaGlobal_Option = {
     HDRDisplayGamma = {
       _defaultValue = 0.5,
       _controlType = CONTROL.PA_UI_CONTROL_SLIDER,
-      _sliderValueMin = 50,
-      _sliderValueMax = 150,
+      _sliderValueMin = 0.5,
+      _sliderValueMax = 1.5,
       _settingRightNow = true
     },
     HDRDisplayMaxNits = {
       _defaultValue = 0.5,
       _controlType = CONTROL.PA_UI_CONTROL_SLIDER,
       _sliderValueMin = 500,
-      _sliderValueMax = 3000,
+      _sliderValueMax = 10000,
       _settingRightNow = true
     },
     UltraHighDefinition = {
@@ -1775,14 +1775,11 @@ function ConsolePadType(value)
   selfPlayerSetConsolePadType(value)
 end
 function PaGlobal_Option._functions.HDRDisplayGamma(value)
-  value = PaGlobal_Option:FromSliderValueToRealValue(value, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin * 0.01, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax * 0.01)
+  value = PaGlobal_Option:FromSliderValueToRealValue(value, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax)
   setHdrDisplayGamma(value)
 end
 function PaGlobal_Option._functions.HDRDisplayMaxNits(value)
   value = PaGlobal_Option:FromSliderValueToRealValue(value, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMin, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMax)
-  local bgHdr = UI.getChildControl(PaGlobal_Option._frames.Graphic.HDR._uiFrameContent, "Static_HDR_ImageBgs_Import")
-  local hdrRightImage = UI.getChildControl(bgHdr, "Static_HDR_Black")
-  hdrRightImage:SetColorExtra(Defines.Color.C_FFFFFFFF, value)
   setHdrDisplayMaxNits(value)
 end
 function PaGlobal_Option._functions.UltraHighDefinition(value)

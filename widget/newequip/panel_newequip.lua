@@ -189,8 +189,10 @@ function Panel_NewEquip_EffectLastUpdate()
     end
   end
   Panel_NewEquip:SetShow(isPanelShow)
-  local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
-  PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+    PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+  end
   FromClient_questWidget_ResetPosition()
 end
 function Panel_NewEquip_Update(equipPos)

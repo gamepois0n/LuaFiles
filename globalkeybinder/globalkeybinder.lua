@@ -7,7 +7,8 @@ function PaGlobal_GlobalKeyBinder.Process_GameMode()
   if Panel_UIControl:IsShow() then
     Panel_UIControl_SetShow(false)
     Panel_Menu_ShowToggle()
-  elseif Panel_PartyOption:GetShow() then
+  end
+  if false == _ContentsGroup_RenewUI_Party and Panel_PartyOption:GetShow() then
     PartyOption_Hide()
   end
 end
@@ -161,7 +162,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
         return
       end
     end
-    if true == _ContentsGroup_RenewUI_Dailog and true == PaGlobalFunc_Dialog_NPCShop_GetShow() then
+    if true == _ContentsGroup_RenewUI_NpcShop and true == PaGlobalFunc_Dialog_NPCShop_GetShow() then
       PaGlobalFunc_Dialog_NPCShop_Close()
       PaGlobalFunc_MainDialog_ReOpen()
       return
@@ -169,6 +170,10 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
     if true == _ContentsGroup_RenewUI_Dailog and true == PaGlobalFunc_MainDialog_Quest_GetShow() then
       PaGlobalFunc_MainDialog_Quest_Close()
       PaGlobalFunc_MainDialog_Right_ReOpen()
+      return
+    end
+    if true == _ContentsGroup_RenewUI_Detect and true == PaGlobalFunc_DetectPlayer_GetShow() then
+      PaGlobalFunc_DetectPlayer_Exit()
       return
     end
     if check_ShowWindow() then
@@ -950,7 +955,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ButtonShortcuts(delta
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UiModeNotInput()
-  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and not _ContentsGroup_RenewUI_Alchemy then
     if false == GlobalSwitch_UseOldAlchemy then
       FGlobal_Alchemy_Close()
     else
@@ -1198,7 +1203,7 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     RecentMemory_Close()
     return true
   end
-  if Panel_Party_ItemList:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+  if false == _ContentsGroup_RenewUI_Party and Panel_Party_ItemList:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_Party_ItemList_Close()
     return true
   end
@@ -1393,7 +1398,7 @@ function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
       FGlobal_PartyListClearFocusEdit()
     end
     return true
-  elseif false == GlobalSwitch_UseOldAlchemy and FGlobal_Alchemy_CheckEditBox(uiEdit) then
+  elseif false == _ContentsGroup_RenewUI_Alchemy and false == GlobalSwitch_UseOldAlchemy and FGlobal_Alchemy_CheckEditBox(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       FGlobal_Alchemy_ClearEditFocus()
     end
@@ -1482,7 +1487,7 @@ function CommonWindowFunction(uiInputType, Function, param)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
-  if true == FGlobal_GetFirstTutorialState() then
+  if false == _ContentsGroup_RenewUI_Tutorial and true == FGlobal_GetFirstTutorialState() then
     return
   end
   if CommonWindowFunction(__eUiInputType_MentalKnowledge, Process_UIMode_CommonWindow_MentalKnowledge) then
@@ -1738,7 +1743,7 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
     HarvestList_Close()
     return
   end
-  if Panel_PartyRecruite:GetShow() then
+  if false == _ContentsGroup_RenewUI_Party and Panel_PartyRecruite:GetShow() then
     PartyListRecruite_Close()
     return
   end
@@ -1818,32 +1823,4 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu(deltaTime)
-  if true == _ContentsGroup_isConsoleTest or false == getGamePadEnable() then
-    return
-  end
-  if nil ~= PaGlobal_Option and 0 == PaGlobal_Option:Get("ConsolePadKeyType") then
-    return
-  end
-  if true == FGlobal_ConsoleQuickMenuCustom_IsShow() then
-    if true == PaGlobal_ConsoleQuickMenuSetting._registMode._isStart then
-      FGlobal_ConsoleQuickMenuSetting_RegistMode()
-    end
-    return
-  end
-  local state = __eQuickMenuState_Count
-  if getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
-    state = __eQuickMenuState_Normal
-  elseif getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_ChattingInputMode then
-    state = __eQuickMenuState_Social
-  end
-  if __eQuickMenuState_Count == state then
-    if true == FGlobal_ConsoleQuickMenu_IsShow() then
-      FromClient_ConsoleQuickMenu_Quit(__eQuickMenuDpadGroup_Count)
-    end
-  elseif false == FGlobal_ConsoleQuickMenu_IsShow() then
-    ToClient_checkAndOpenQuickMenu(state)
-  else
-    local position = ToClient_checkAndRunQuickMenu(__QuickMenuState_Normal)
-    FGlobal_ConsoleQuickMenu_Update(position)
-  end
 end

@@ -52,7 +52,6 @@ PaGlobal_TutorialManager = {
     [12] = "CS_Velia_00_PNM_Start_0001.pas"
   }
 }
-Panel_Tutorial:RegisterUpdateFunc("FGlobal_TutorialManager_UpdatePerFrame")
 timeRatio = 1
 function tutotest(phaseNo, stepNo, ratio)
   PaGlobal_TutorialManager:startTutorial(phaseNo, stepNo)
@@ -73,7 +72,11 @@ function FGlobal_TutorialManager_UpdatePerFrame(deltaTime)
   PaGlobal_TutorialManager:updatePerFrame(deltaTime)
 end
 function PaGlobal_TutorialManager:isDoingTutorial()
-  return Panel_Tutorial:GetShow() or self._isDoingTutorial
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    return Panel_Tutorial:GetShow() or self._isDoingTutorial
+  else
+    return Panel_Tutorial_Renew:GetShow() or self._isDoingTutorial
+  end
 end
 function PaGlobal_TutorialManager:setDoingTutorial(bDoing)
   self._isDoingTutorial = bDoing
@@ -192,7 +195,7 @@ function PaGlobal_TutorialManager:initializeClassBasicSkillPhaseTable()
   self._classBasicSkillPhaseList[29] = PaGlobal_TutorialPhase_BasicSkill_7Layer
 end
 function PaGlobal_TutorialManager:checkPossibleTutorial(phaseNo)
-  if true == PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() then
+  if false == _ContentsGroup_RenewUI_Tutorial and true == PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() then
     _PA_LOG("\234\179\189\235\175\188\236\154\176", "\234\176\129\236\132\177 \237\138\156\237\134\160\235\166\172\236\150\188 \236\167\132\237\150\137\236\164\145\236\157\180\235\175\128\235\161\156 \237\138\156\237\134\160\235\166\172\236\150\188\236\157\132 \236\139\156\236\158\145\236\139\156\237\130\164\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164. phaseNo : " .. tostring(phaseNo))
     return false
   end
@@ -214,9 +217,6 @@ function PaGlobal_TutorialManager:continueTutorial()
 end
 function PaGlobal_TutorialManager:startTutorial(phaseNo, stepNo, typeNo)
   _PA_LOG("\234\179\189\235\175\188\236\154\176", "#####\237\138\156\237\134\160\235\166\172\236\150\188 \236\139\156\236\158\145\236\139\156\235\143\132#####")
-  if true == ToClient_isXBox() then
-    return
-  end
   if false == self:checkPossibleTutorial(phaseNo) then
     _PA_LOG("\234\179\189\235\175\188\236\154\176", "\237\138\156\237\134\160\235\166\172\236\150\188 \236\139\156\236\158\145 \236\161\176\234\177\180\236\157\132 \235\167\140\236\161\177\237\149\152\236\167\128 \235\170\187\237\149\180\236\132\156 \236\139\156\236\158\145\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164. phaseNo : " .. tostring(phaseNo))
     return
@@ -255,7 +255,7 @@ function PaGlobal_TutorialManager:startTutorial(phaseNo, stepNo, typeNo)
 end
 function PaGlobal_TutorialManager:startNextPhase()
   self._currentPhaseNo = self._currentPhaseNo + 1
-  if false == _ContentsGroup_RenewUI then
+  if false == _ContentsGroup_RenewUI_Tutorial then
     if self._currentPhaseNo > 0 and nil == self._phaseList[self._currentPhaseNo] then
       self:endTutorial()
     else
@@ -272,7 +272,11 @@ function PaGlobal_TutorialManager:endTutorial()
   if 1 == self._currentPhaseNo then
     getSelfPlayer():setActionChart("WAIT")
   end
-  Panel_Tutorial:SetShow(false, true)
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    Panel_Tutorial:SetShow(false, true)
+  else
+    Panel_Tutorial_Renew:SetShow(false, true)
+  end
   self._isDoingTutorial = false
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()
@@ -430,3 +434,11 @@ function PaGlobal_TutorialManager:getStringResize(string1, string2, stringType)
   end
   return stringSet
 end
+function PaGlobal_TutorialManager:RegisterEvent()
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    Panel_Tutorial:RegisterUpdateFunc("FGlobal_TutorialManager_UpdatePerFrame")
+  else
+    Panel_Tutorial_Renew:RegisterUpdateFunc("FGlobal_TutorialManager_UpdatePerFrame")
+  end
+end
+PaGlobal_TutorialManager:RegisterEvent()

@@ -453,7 +453,9 @@ function EventProgressBarShow(isShow, progressTime, barType, param)
     elseif 7 == barType then
       collectBar._titleText:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_COOK") .. "..")
       collectBar._useType = 0
-      if true == GlobalSwitch_UseOldAlchemy then
+      if _ContentsGroup_RenewUI_Alchemy then
+        endFunction = PaGlobalFunc_AlchemyAlchemyXXXXX
+      elseif true == GlobalSwitch_UseOldAlchemy then
         endFunction = Alchemy_Do
       else
         endFunction = FGlobal_Alchemy_DoAlchemy
@@ -469,7 +471,9 @@ function EventProgressBarShow(isShow, progressTime, barType, param)
     elseif 9 == barType then
       collectBar._titleText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PROGRESSBAR_COLLECTBAR_TITLE"))
       collectBar._useType = 0
-      if true == GlobalSwitch_UseOldAlchemy then
+      if _ContentsGroup_RenewUI_Alchemy then
+        endFunction = PaGlobalFunc_AlchemyAlchemyXXXXX
+      elseif true == GlobalSwitch_UseOldAlchemy then
         endFunction = Alchemy_Do
       else
         endFunction = FGlobal_Alchemy_DoAlchemy

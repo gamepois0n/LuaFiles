@@ -30,7 +30,7 @@ function Panel_Logo_Init()
     static_Grade:setRenderTexture(static_Grade:getBaseTexture())
     static_Grade:SetShow(true)
     staticText_Warning:SetShow(false)
-  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or isGameTypeGT() or ToClient_isXBox() then
     static_Grade:SetSize(130, 129)
     static_Grade:ChangeTextureInfoName("GameGradeIcon18.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(static_Grade, 0, 0, 130, 129)
@@ -83,7 +83,7 @@ function setWarningText()
     else
       staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_15"))
     end
-  elseif isGameTypeTaiwan() then
+  elseif isGameTypeTaiwan() or isGameTypeGT() then
     staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
   elseif isGameTypeKR2() then
     staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
@@ -125,7 +125,7 @@ elseif isGameTypeEnglish() then
   local aniInfo2 = static_Grade:addColorAnimation(startAniTime + 6, startAniTime + 9, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo2:SetStartColor(Defines.Color.C_FFFFFFFF)
   aniInfo2:SetEndColor(Defines.Color.C_FFFFFFFF)
-elseif isGameTypeTaiwan() or ToClient_isXBox() then
+elseif isGameTypeTaiwan() or isGameTypeGT() or ToClient_isXBox() then
   local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo11:SetStartColor(Defines.Color.C_00FFFFFF)
   aniInfo11:SetEndColor(Defines.Color.C_FFFFFFFF)

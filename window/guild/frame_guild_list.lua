@@ -483,9 +483,9 @@ function GuildListInfoPage:initialize()
     rtGuildListInfoButton:SetPosX(_constStartButtonX)
     rtGuildListInfoButton:SetShow(true)
     if isGameTypeTH() or isGameTypeID() then
-      rtGuildListInfoButton:SetSize(150, 30)
+      rtGuildListInfoButton:SetSize(185, 30)
     else
-      rtGuildListInfoButton:SetSize(125, 30)
+      rtGuildListInfoButton:SetSize(175, 30)
     end
     rtGuildListInfoButton:addInputEvent("Mouse_LUp", "HandleClickedGuildMenuButton(" .. pIndex .. ")")
     return rtGuildListInfoButton
@@ -641,9 +641,9 @@ function HandleClickedGuildMemberMenuButton(index)
     end
   end
   if isGameTypeTH() or isGameTypeID() then
-    GuildListInfoPage._buttonListBG:SetSize(165, buttonPosY)
+    GuildListInfoPage._buttonListBG:SetSize(195, buttonPosY)
   else
-    GuildListInfoPage._buttonListBG:SetSize(140, buttonPosY)
+    GuildListInfoPage._buttonListBG:SetSize(185, buttonPosY)
   end
   _selectIndex = dataIdx
   self._clickedUserNo = guildMember:getUserNo()

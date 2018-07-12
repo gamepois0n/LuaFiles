@@ -22,95 +22,16 @@ local HouseInstallationControl = {
   warCountInnerObjectTitle = UI.getChildControl(Panel_House_WarInformation, "StaticText_EnalbeSizeTitle"),
   warCountInnerObjectMaxSize = UI.getChildControl(Panel_House_WarInformation, "StaticText_MaxInnerSize"),
   warCountInnerBigTitle_Limit = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectMaxCountTitle"),
+  warCountInnerBigTitle_Need = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectSizeTitle"),
+  warCountInnerResourceTitle = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectResourceTitle"),
   templateInnerObjectName = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectName"),
   templateInnerObjectCount = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectCurrentCount"),
   telplateInnerObjectSize = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectSize"),
-  templateInnerObjectMaxCount = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectMaxCount")
+  templateInnerObjectMaxCount = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectMaxCount"),
+  templateInnerObjectResource = UI.getChildControl(Panel_House_WarInformation, "StaticText_InnerObjectNeedResource")
 }
 local _txt_btnDesc = UI.getChildControl(Panel_House_InstallationMode_ObjectControl, "StaticText_Desc")
-local _isInnterOjbectCount = 13
-local innerObjectName = {
-  [0] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_HEALINGTOWER"),
-  [1] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBSERVATORY"),
-  [2] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_ELEPHANTBARN"),
-  [3] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_CATAPULTFACTORY"),
-  [4] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_FLAMEFACTORY"),
-  [5] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_DISTRIBUTOR"),
-  [6] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_BARRICADE"),
-  [7] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_BARRICADEGATE"),
-  [8] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_WOODENFENCE"),
-  [9] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_DEFFENCETOWER"),
-  [10] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_SIEGETOWER"),
-  [11] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_LARGESIEGETOWER"),
-  [12] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_ADVANCEBASETOWER")
-}
-local innerObjectSize = {
-  [0] = 1,
-  3,
-  5,
-  3,
-  3,
-  5,
-  1,
-  2,
-  1,
-  0,
-  3,
-  5,
-  3
-}
-local innerObjectKind = {
-  [0] = 10,
-  11,
-  12,
-  17,
-  18,
-  19,
-  3,
-  20,
-  21,
-  22,
-  23,
-  24,
-  26
-}
-if false then
-  _isInnterOjbectCount = 9
-  innerObjectName = {
-    [0] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_HEALINGTOWER"),
-    [1] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBSERVATORY"),
-    [2] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_CATAPULTFACTORY"),
-    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_FLAMEFACTORY"),
-    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_DISTRIBUTOR"),
-    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_BARRICADE"),
-    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_BARRICADEGATE"),
-    [7] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_DEFFENCETOWER"),
-    [8] = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_ADVANCEBASETOWER")
-  }
-  innerObjectSize = {
-    [0] = 1,
-    [1] = 3,
-    [2] = 3,
-    [3] = 3,
-    [4] = 5,
-    [5] = 1,
-    [6] = 2,
-    [7] = 0,
-    [8] = 3
-  }
-  innerObjectKind = {
-    [0] = 10,
-    [1] = 11,
-    [2] = 17,
-    [3] = 18,
-    [4] = 19,
-    [5] = 3,
-    [6] = 20,
-    [7] = 22,
-    [8] = 26
-  }
-end
-local innerObjectCount = _isInnterOjbectCount
+local innerObjectCount = ToClient_getSiegeObjectKindCount()
 local gapY = 20
 local basePosY = HouseInstallationControl.templateInnerObjectName:GetPosY()
 local innerObject = {}
@@ -123,7 +44,6 @@ function InnerObject_ControlInit()
     temp[index]._name = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_House_WarInformation, "StaticText_InnerObjectName_" .. index)
     CopyBaseProperty(self.templateInnerObjectName, temp[index]._name)
     temp[index]._name:SetPosY(basePosY + gapY * index)
-    temp[index]._name:SetText(innerObjectName[index])
     temp[index]._name:SetShow(true)
     temp[index]._count = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_House_WarInformation, "StaticText_InnerObjectCount_" .. index)
     CopyBaseProperty(self.templateInnerObjectCount, temp[index]._count)
@@ -132,13 +52,24 @@ function InnerObject_ControlInit()
     temp[index]._size = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_House_WarInformation, "StaticText_InnerObjectSize_" .. index)
     CopyBaseProperty(self.telplateInnerObjectSize, temp[index]._size)
     temp[index]._size:SetPosY(basePosY + gapY * index)
-    temp[index]._size:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", innerObjectSize[index]))
     temp[index]._size:SetShow(true)
     temp[index]._maxCount = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_House_WarInformation, "StaticText_InnerObjectMaxCount_" .. index)
     CopyBaseProperty(self.templateInnerObjectMaxCount, temp[index]._maxCount)
     temp[index]._maxCount:SetPosY(basePosY + gapY * index)
     temp[index]._maxCount:SetShow(true)
+    temp[index]._resources = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_House_WarInformation, "StaticText_ObjectCount_" .. index)
+    CopyBaseProperty(self.templateInnerObjectResource, temp[index]._resources)
+    temp[index]._resources:SetPosY(basePosY + gapY * index)
+    temp[index]._resources:SetShow(true)
+    if not _ContetnsGroup_SiegeResource then
+      temp[index]._maxCount:SetPosX(280)
+      temp[index]._size:SetPosX(360)
+    end
     innerObject[index] = temp[index]
+  end
+  if not _ContetnsGroup_SiegeResource then
+    self.warCountInnerBigTitle_Limit:SetPosX(280)
+    self.warCountInnerBigTitle_Need:SetPosX(360)
   end
   self.txt_RotateDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_CART_ROTATE_DESC"))
   Panel_House_WarInformation:SetSize(Panel_House_WarInformation:GetSizeX(), 150 + innerObjectCount * 20)
@@ -410,66 +341,30 @@ function FGlobal_HouseInstallation_MinorWar_Open(buildingInfo)
       if nil ~= buildingInfo then
         local allCount = buildingInfo:getAllInstanceObjectCount()
         local cOSW = houseWrapper:getStaticStatusWrapper():getObjectStaticStatus()
+        local usedCount = 0
         for index = 0, innerObjectCount - 1 do
           innerObject[index]._maxCount:SetShow(true)
           innerObject[index]._count:SetShow(true)
-        end
-        if false then
-          innerObject[0]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getHealingTownerMaxCount()))
-          innerObject[1]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getObservatoryMaxCount()))
-          innerObject[2]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getCatapultFactoryMaxCount()))
-          innerObject[3]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getFlameFactoryMaxCount()))
-          innerObject[4]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getDistributorMaxCount()))
-          innerObject[5]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getBarricadeMaxCount()))
-          innerObject[6]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getBarricadeGateMaxCount()))
-          innerObject[7]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getDefenceTowerMaxCount()))
-          innerObject[8]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getAdvancedBaseTowerMaxCount()))
-          innerObject[0]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[0])))
-          innerObject[1]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[1])))
-          innerObject[2]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[3])))
-          innerObject[3]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[4])))
-          innerObject[4]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[5])))
-          innerObject[5]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[6])))
-          innerObject[6]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[7])))
-          innerObject[7]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[9])))
-          innerObject[8]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[12])))
-        else
-          innerObject[0]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getHealingTownerMaxCount()))
-          innerObject[1]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getObservatoryMaxCount()))
-          innerObject[2]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getElephantBarnMaxCount()))
-          innerObject[3]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getCatapultFactoryMaxCount()))
-          innerObject[4]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getFlameFactoryMaxCount()))
-          innerObject[5]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getDistributorMaxCount()))
-          innerObject[6]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getBarricadeMaxCount()))
-          innerObject[7]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getBarricadeGateMaxCount()))
-          innerObject[8]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getWoodenFenceMaxCount()))
-          innerObject[9]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getDefenceTowerMaxCount()))
-          innerObject[10]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getSiegeTowerMaxCount()))
-          innerObject[11]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getLargeSiegeTowerMaxCount()))
-          innerObject[12]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getAdvancedBaseTowerMaxCount()))
-          innerObject[0]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[0])))
-          innerObject[1]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[1])))
-          innerObject[2]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[2])))
-          innerObject[3]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[3])))
-          innerObject[4]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[4])))
-          innerObject[5]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[5])))
-          innerObject[6]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[6])))
-          innerObject[7]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[7])))
-          innerObject[8]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[8])))
-          innerObject[9]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[9])))
-          innerObject[10]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[10])))
-          innerObject[11]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[11])))
-          innerObject[12]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildingInfo:getInstanceObjectCount(innerObjectKind[12])))
-        end
-        local usedCount = 0
-        for index = 0, innerObjectCount - 1 do
-          usedCount = usedCount + innerObjectSize[index] * buildingInfo:getInstanceObjectCount(innerObjectKind[index])
+          innerObject[index]._resources:SetShow(_ContetnsGroup_SiegeResource)
+          local characterWrapper = ToClient_getObjectStaticStatusByObjectKindbyIndex(index)
+          local objectWrapper = characterWrapper:getObjectStaticStatus()
+          if nil ~= objectWrapper then
+            local objectKind = objectWrapper:getObjectKind()
+            local objectCount = buildingInfo:getInstanceObjectCount(objectKind)
+            innerObject[index]._name:SetText(characterWrapper:getName())
+            innerObject[index]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", cOSW:getMaxCountByObjectKind(objectKind)))
+            innerObject[index]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", objectCount))
+            innerObject[index]._size:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", objectWrapper:getInnerObjectSize()))
+            innerObject[index]._resources:SetText(objectWrapper:getSiegeResource())
+            usedCount = usedCount + objectWrapper:getInnerObjectSize() * objectCount
+          end
         end
         HouseInstallationControl.warCountInnerObjectMaxSize:SetShow(true)
         HouseInstallationControl.warCountInnerObjectTitle:SetShow(true)
         HouseInstallationControl.warCountInnerBigTitle_Limit:SetShow(true)
         HouseInstallationControl.warCountInstallationCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", allCount))
         HouseInstallationControl.warCountInnerObjectMaxSize:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", cOSW:getInnerObjectSize()) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTLEFTCOUNT", "count", cOSW:getInnerObjectSize() - usedCount))
+        HouseInstallationControl.warCountInnerResourceTitle:SetShow(_ContetnsGroup_SiegeResource)
         Panel_House_WarInformation:ComputePos()
       end
     end
@@ -483,56 +378,23 @@ function FGlobal_HouseInstallation_MinorWar_Open(buildingInfo)
       if nil ~= CSSW then
         local OSSW = CSSW:getObjectStaticStatus()
         local allCount = buildInfo:getAllInstanceObjectCount()
-        if false then
-          innerObject[0]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getHealingTownerMaxCount()))
-          innerObject[1]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getObservatoryMaxCount()))
-          innerObject[2]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getCatapultFactoryMaxCount()))
-          innerObject[3]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getFlameFactoryMaxCount()))
-          innerObject[4]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getDistributorMaxCount()))
-          innerObject[5]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getBarricadeMaxCount()))
-          innerObject[6]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getBarricadeGateMaxCount()))
-          innerObject[7]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getDefenceTowerMaxCount()))
-          innerObject[8]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getAdvancedBaseTowerMaxCount()))
-          innerObject[0]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[0])))
-          innerObject[1]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[1])))
-          innerObject[2]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[3])))
-          innerObject[3]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[4])))
-          innerObject[4]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[5])))
-          innerObject[5]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[6])))
-          innerObject[6]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[7])))
-          innerObject[7]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[9])))
-          innerObject[8]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[12])))
-        else
-          innerObject[0]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getHealingTownerMaxCount()))
-          innerObject[1]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getObservatoryMaxCount()))
-          innerObject[2]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getElephantBarnMaxCount()))
-          innerObject[3]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getCatapultFactoryMaxCount()))
-          innerObject[4]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getFlameFactoryMaxCount()))
-          innerObject[5]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getDistributorMaxCount()))
-          innerObject[6]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getBarricadeMaxCount()))
-          innerObject[7]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getBarricadeGateMaxCount()))
-          innerObject[8]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getWoodenFenceMaxCount()))
-          innerObject[9]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getDefenceTowerMaxCount()))
-          innerObject[10]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getSiegeTowerMaxCount()))
-          innerObject[11]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getLargeSiegeTowerMaxCount()))
-          innerObject[12]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getAdvancedBaseTowerMaxCount()))
-          innerObject[0]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[0])))
-          innerObject[1]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[1])))
-          innerObject[2]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[2])))
-          innerObject[3]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[3])))
-          innerObject[4]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[4])))
-          innerObject[5]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[5])))
-          innerObject[6]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[6])))
-          innerObject[7]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[7])))
-          innerObject[8]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[8])))
-          innerObject[9]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[9])))
-          innerObject[10]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[10])))
-          innerObject[11]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[11])))
-          innerObject[12]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", buildInfo:getInstanceObjectCount(innerObjectKind[12])))
-        end
         local usedCount = 0
         for index = 0, innerObjectCount - 1 do
-          usedCount = usedCount + innerObjectSize[index] * buildInfo:getInstanceObjectCount(innerObjectKind[index])
+          innerObject[index]._maxCount:SetShow(true)
+          innerObject[index]._count:SetShow(true)
+          innerObject[index]._resources:SetShow(_ContetnsGroup_SiegeResource)
+          local characterWrapper = ToClient_getObjectStaticStatusByObjectKindbyIndex(index)
+          local objectWrapper = characterWrapper:getObjectStaticStatus()
+          if nil ~= objectWrapper then
+            local objectKind = objectWrapper:getObjectKind()
+            local objectCount = buildInfo:getInstanceObjectCount(objectKind)
+            innerObject[index]._name:SetText(characterWrapper:getName())
+            innerObject[index]._maxCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", OSSW:getMaxCountByObjectKind(objectKind)))
+            innerObject[index]._count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", objectCount))
+            innerObject[index]._size:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", objectWrapper:getInnerObjectSize()))
+            innerObject[index]._resources:SetText(objectWrapper:getSiegeResource())
+            usedCount = usedCount + objectWrapper:getInnerObjectSize() * objectCount
+          end
         end
         HouseInstallationControl.warCountInstallationCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", allCount))
         HouseInstallationControl.warCountInnerObjectMaxSize:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", OSSW:getInnerObjectSize()) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTLEFTCOUNT", "count", OSSW:getInnerObjectSize() - usedCount))

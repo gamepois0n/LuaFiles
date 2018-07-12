@@ -278,6 +278,8 @@ function Panel_WebControl_TakeAndShow(helpType)
     html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_UPDATE" .. countryType))
   elseif helpType == "Fairy" then
     html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_COMM_FAIRY" .. countryType))
+  elseif helpType == "WorldBoss" then
+    html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEINFO_WORLDBOSS" .. countryType))
   elseif helpType == "DeliveryCarriageinformation" then
     html_WebHelper_Control:SetUrl(960, 600, "coui://UI_Data/UI_Html/WebHelper/Window/Delivery/WebHelper_Delivery_CarriageInformation.html")
   elseif helpType == "HouseList" then
@@ -295,7 +297,7 @@ function Panel_WebControl_TakeAndShow(helpType)
   else
     html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEGUIDE"))
   end
-  if isGameTypeTaiwan() then
+  if isGameTypeTaiwan() or isGameTypeKorea() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
     html_WebHelper_Control:SetIME(true)
   end
   html_WebHelper_Control:SetSize(960, 600)

@@ -98,7 +98,12 @@ PaGlobal_CharacterInfoBasic = {
     _buttonFacePhoto = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Button_FacePhoto"),
     _staticTextCharacterLevel = nil,
     _staticCharSlot = nil,
-    _staticTextNormalStack = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_NormalStackOnPicture")
+    _staticTextNormalStack = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_NormalStackOnPicture"),
+    _lifeInfoBg = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Static_LifeBg"),
+    _lifeInfo = {},
+    _lifeRankButton = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Button_Ranker"),
+    _radioBtnBattle = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "RadioButton_BattleInfo"),
+    _radioBtnLife = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "RadioButton_LifeInfo")
   }
 }
 local setTierIcon = function(iconControl, textureName, iconIdx, leftX, topY, xCount, iconSize)
@@ -247,6 +252,59 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   for key, index in pairs(self._familyPoint) do
     self._ui._staticTextFamilyPoints[index] = UI.getChildControl(staticFamily, "StaticText_FamilyPoint_" .. index)
   end
+  for index = 1, 10 do
+    self._ui._lifeInfo[index] = {
+      _bg = {},
+      _title = {},
+      _level = {},
+      _percent = {},
+      _progress = {}
+    }
+    self._ui._lifeInfo[index]._bg = UI.getChildControl(self._ui._lifeInfoBg, "Static_Craft_" .. index)
+    self._ui._lifeInfo[index]._title = UI.getChildControl(self._ui._lifeInfo[index]._bg, "StaticText_Title")
+    self._ui._lifeInfo[index]._level = UI.getChildControl(self._ui._lifeInfo[index]._bg, "StaticText_Level")
+    self._ui._lifeInfo[index]._percent = UI.getChildControl(self._ui._lifeInfo[index]._bg, "StaticText_Percent")
+    self._ui._lifeInfo[index]._progress = UI.getChildControl(self._ui._lifeInfo[index]._bg, "Progress2_Gauge")
+    self._ui._lifeInfo[index]._title:SetIgnore(true)
+    self._ui._lifeInfo[index]._progress:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:Life_MouseOverEvent(" .. index .. ",true)")
+    self._ui._lifeInfo[index]._progress:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:Life_MouseOverEvent(" .. index .. ",false)")
+  end
+  local showDetailBtn_LifeInfo = UI.getChildControl(self._ui._lifeInfoBg, "Button_ShowDetail")
+  showDetailBtn_LifeInfo:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfo:showWindow(" .. 5 .. ")")
+  local viewType
+  local currentInfoType = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo)
+  if 0 == currentInfoType then
+    viewType = 0
+  else
+    viewType = 1
+  end
+  PaGlobal_CharacterInfoBasic:BaseInfoShow(0 == viewType)
+  self._ui._radioBtnBattle:SetCheck(0 == viewType)
+  self._ui._radioBtnLife:SetCheck(0 ~= viewType)
+end
+function PaGlobal_CharacterInfoBasic_ShowInfo(infoType)
+  ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo, infoType, CppEnums.VariableStorageType.eVariableStorageType_User)
+  PaGlobal_CharacterInfoBasic:BaseInfoShow(0 == infoType)
+end
+function PaGlobal_CharacterInfoBasic:BaseInfoShow(isBattleInfo)
+  for key, index in pairs(self._potential) do
+    self._ui._staticTextPotential_Title[index]:SetShow(isBattleInfo)
+    self._ui._staticTextPotential_Value[index]:SetShow(isBattleInfo)
+    for slotIndex = 0, 4 do
+      self._ui._staticPotencialGradeBg[index][slotIndex]:SetShow(isBattleInfo)
+      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetShow(false)
+      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetShow(false)
+    end
+  end
+  if isBattleInfo and nil ~= FromClient_UI_CharacterInfo_Basic_PotentialChanged then
+    FromClient_UI_CharacterInfo_Basic_PotentialChanged()
+  end
+  self._ui._staticTextAttack_Title:SetShow(isBattleInfo)
+  self._ui._staticTextAwakenAttack_Title:SetShow(isBattleInfo)
+  self._ui._staticTextDefence_Title:SetShow(isBattleInfo)
+  self._ui._staticTextStamina_Title:SetShow(isBattleInfo)
+  self._ui.battlePointValueAndIcon:SetShow(isBattleInfo)
+  self._ui._lifeInfoBg:SetShow(not isBattleInfo)
 end
 function PaGlobal_CharacterInfoBasic:update()
   local FamiName = self._player:getUserNickname()
@@ -274,6 +332,7 @@ function PaGlobal_CharacterInfoBasic:update()
   FromClient_UI_CharacterInfo_Basic_SkillPointChanged()
   FromClient_UI_CharacterInfo_Basic_FamilyPointsChanged()
   FromClient_UI_CharacterInfo_Basic_ResistChanged()
+  FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
   FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   FromClient_UI_CharacterInfo_Basic_PotentialChanged()
   FromClient_UI_CharacterInfo_Basic_FitnessChanged(0, 0, 0, 0)
@@ -301,6 +360,7 @@ function PaGlobal_CharacterInfoBasic:registEventHandler()
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(true, " .. index .. ")")
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(false)")
   end
+  self._ui._lifeRankButton:addInputEvent("Mouse_LUp", "FGlobal_LifeRanking_Open()")
   self._ui._buttonIntroduce:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:showIntroduce(true)")
   self._ui._buttonCloseIntroduce:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:showIntroduce(false)")
   self._ui._multilineEdit:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:handleClicked_Introduce()")
@@ -309,6 +369,8 @@ function PaGlobal_CharacterInfoBasic:registEventHandler()
   self._ui._buttonFacePhoto:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_FacePhotoButton(true)")
   self._ui._buttonFacePhoto:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_FacePhotoButton(false)")
   self._ui._buttonFacePhoto:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:handleClicked_FacePhotoButton()")
+  self._ui._radioBtnBattle:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic_ShowInfo(" .. 0 .. ")")
+  self._ui._radioBtnLife:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic_ShowInfo(" .. 1 .. ")")
 end
 function FromClient_CharacterInfo_PlayerTotalStat_Changed(actorKey, totalStatValue)
   if false == Panel_Window_CharInfo_Status:GetShow() then
@@ -352,6 +414,46 @@ function PaGlobal_CharacterInfoBasic:updatePlayerTotalStat()
   end
   local totalStatValue = math.floor(selfPlayer:getTotalStatValue())
   self:changedBattlePoint(totalStatValue)
+end
+function PaGlobal_CharacterInfoBasic:Life_MouseOverEvent(sourceType, isOn)
+  if true == isOn then
+    local name, desc, control
+    if 1 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE0")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_1")
+    elseif 2 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE1")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_5")
+    elseif 3 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE2")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_6")
+    elseif 4 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE3")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 5 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE4")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 6 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE5")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 7 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE6")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_3")
+    elseif 8 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE7")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_4")
+    elseif 9 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE8")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_7")
+    elseif 10 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE9")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_8")
+    end
+    control = self._ui._lifeInfo[sourceType]._progress
+    TooltipSimple_Show(control, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
 end
 function PaGlobal_CharacterInfoBasic:registMessageHandler()
   registerEvent("FromClient_SelfPlayerTendencyChanged", "FromClient_UI_CharacterInfo_Basic_TendencyChanged")

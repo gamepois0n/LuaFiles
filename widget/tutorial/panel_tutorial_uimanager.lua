@@ -280,7 +280,7 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     end
     PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
     PaGlobal_CharacterTag_SetPosIcon()
-  elseif false == isShow then
+  elseif false == isShow and false == _ContentsGroup_RenewUI_Main then
     local navi = FGlobal_GetPersonalIconControl(0)
     local movie = FGlobal_GetPersonalIconControl(1)
     local voiceChat = FGlobal_GetPersonalIconControl(2)
@@ -300,10 +300,12 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     Panel_Icon_CharacterTag:SetShow(false)
     Panel_Window_FairyIcon:SetShow(false)
   end
-  if isPvpEnable() then
-    PvpMode_ShowButton(true)
-  else
-    PvpMode_ShowButton(false)
+  if false == _ContentsGroup_RenewUI_Main then
+    if isPvpEnable() then
+      PvpMode_ShowButton(true)
+    else
+      PvpMode_ShowButton(false)
+    end
   end
   if true == _ContentsGroup_RenewUI_Main then
     Panel_SkillCommand:SetShow(false)

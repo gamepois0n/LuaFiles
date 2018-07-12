@@ -255,7 +255,7 @@ function LogInPanel_Resize()
     Static_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
     Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
     Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
-  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() or isGameTypeGT() then
     Static_DaumCI:SetShow(false)
     Static_CI:SetSpanSize(10, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
   elseif isGameTypeSA() then
@@ -370,7 +370,7 @@ function Panel_Login_ButtonDisable(bool)
 end
 function Panel_Login_BeforOpen()
   local serviceType = getGameServiceType()
-  if (isGameTypeTaiwan() or isGameTypeKorea()) and 1 ~= serviceType then
+  if (isGameTypeTaiwan() or isGameTypeGT() or isGameTypeKorea()) and 1 ~= serviceType then
     FGlobal_TermsofGameUse_Open()
   else
     Panel_Login_Enter()

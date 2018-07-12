@@ -91,10 +91,11 @@ function FromClient_UI_CharacterInfo_Basic_AttackChanged()
   ToClient_updateAttackStat()
   local chaAttack = ToClient_getOffence()
   self._ui._staticTextAttack_Value:SetText(tostring(chaAttack))
+  local isShow = 0 == ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo)
   local isSetAwakenWeapon = ToClient_getEquipmentItem(CppEnums.EquipSlotNo.awakenWeapon)
   if nil ~= isSetAwakenWeapon then
     local chaAwakenAttack = ToClient_getAwakenOffence()
-    self._ui._staticTextAwakenAttack_Title:SetShow(true)
+    self._ui._staticTextAwakenAttack_Title:SetShow(isShow)
     self._ui._staticTextAwakenAttack_Value:SetText(tostring(chaAwakenAttack))
     self._ui._staticTextDefence_Title:SetSpanSize(207, 154)
     self._ui._staticTextStamina_Title:SetSpanSize(207, 180)
@@ -154,142 +155,18 @@ function FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
   if Panel_Window_CharInfo_Status:IsShow() == false then
     return
   end
-  local LifeIcon = {
-    [UI_LifeType.gather] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      116,
-      1,
-      137,
-      22
-    },
-    [UI_LifeType.fishing] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      116,
-      23,
-      137,
-      44
-    },
-    [UI_LifeType.hunting] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      116,
-      45,
-      137,
-      66
-    },
-    [UI_LifeType.cooking] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      116,
-      67,
-      137,
-      88
-    },
-    [UI_LifeType.alchemy] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      138,
-      1,
-      159,
-      22
-    },
-    [UI_LifeType.manufacture] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      138,
-      23,
-      159,
-      44
-    },
-    [UI_LifeType.training] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      138,
-      45,
-      159,
-      66
-    },
-    [UI_LifeType.trade] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      138,
-      67,
-      159,
-      88
-    },
-    [UI_LifeType.growth] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      160,
-      1,
-      181,
-      22
-    }
-  }
-  local isSailOpen = ToClient_IsContentsGroupOpen("83")
-  if isSailOpen then
-    LifeIcon[UI_LifeType.sail] = {
-      "new_ui_common_forlua/default/default_etc_04.dds",
-      160,
-      23,
-      181,
-      44
-    }
-  end
-  for index = 0, #LifeIcon + 1 do
-    local tableIdx = index + 1
-    self._craftTable[tableIdx]._type = index
-    self._craftTable[tableIdx]._level = self._playerGet:getLifeExperienceLevel(self._craftTable[tableIdx]._type)
-    self._craftTable[tableIdx]._exp = self._playerGet:getCurrLifeExperiencePoint(self._craftTable[tableIdx]._type)
-    self._craftTable[tableIdx]._maxExp = self._playerGet:getDemandLifeExperiencePoint(self._craftTable[tableIdx]._type)
-    self._sortCraftTable[tableIdx] = self._craftTable[tableIdx]
-    self._ui._staticCraftIcon[index]:SetShow(true)
-  end
-  table.sort(self._sortCraftTable, function(a, b)
-    return a._level > b._level or a._level == b._level and a._exp > b._exp
-  end)
-  for index = 0, #LifeIcon do
-    local tableIdx = index + 1
-    local crafType = self._craftTable[tableIdx]._type
-    self._ui._staticCraftIcon[tableIdx]:ChangeTextureInfoName(LifeIcon[crafType][1])
-    local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticCraftIcon[tableIdx], LifeIcon[crafType][2], LifeIcon[crafType][3], LifeIcon[crafType][4], LifeIcon[crafType][5])
-    self._ui._staticCraftIcon[tableIdx]:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._ui._staticCraftIcon[tableIdx]:setRenderTexture(self._ui._staticCraftIcon[tableIdx]:getBaseTexture())
-    self._ui._staticCraftIcon[tableIdx]:SetSize(21, 21)
-    self._ui._staticCraftIcon[tableIdx]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_Tooltip(true, " .. crafType .. ", " .. tableIdx .. ")")
-    self._ui._staticCraftIcon[tableIdx]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_Tooltip(false)")
-    self._ui._staticTextCraft_Title[tableIdx]:SetText("")
-    self._ui._staticTextCraft_Level[tableIdx]:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(self._craftTable[tableIdx]._level))
-    self._ui._staticTextCraft_Level[tableIdx]:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._craftTable[tableIdx]._level))
-    self._ui._progress2Craft[tableIdx]:SetSize(120, 3)
-    self._ui._progress2Craft[tableIdx]:SetSpanSize(30, 15)
-    self._ui._progress2CraftBG[tableIdx]:SetSize(120, 3)
-    self._ui._progress2CraftBG[tableIdx]:SetSpanSize(30, 15)
-    if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
-      self._ui._staticTextCraft_Title[tableIdx]:SetText(UI_LifeString[crafType])
-      self._ui._staticCraftIcon[tableIdx]:SetSize(10, 10)
-      self._ui._progress2Craft[tableIdx]:SetSize(150, 3)
-      self._ui._progress2CraftBG[tableIdx]:SetSize(150, 3)
-      self._ui._progress2CraftBG[tableIdx]:SetSpanSize(0, 15)
-      self._ui._progress2Craft[tableIdx]:SetSpanSize(0, 15)
-      self._ui._staticCraftIcon[tableIdx]:addInputEvent("Mouse_On", "")
-      self._ui._staticCraftIcon[tableIdx]:addInputEvent("Mouse_Out", "")
-    end
-    local ExpRate = Int64toInt32(self._craftTable[tableIdx]._exp * toInt64(0, 100) / self._craftTable[tableIdx]._maxExp)
-    self._ui._progress2Craft[tableIdx]:SetProgressRate(ExpRate)
-    self._ui._staticTextCraft_Percent[tableIdx]:SetText(ExpRate .. "%")
-    self._ui._staticTextCraft_Percent[tableIdx]:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._craftTable[tableIdx]._level))
-    if not isGameTypeKorea() and not isGameTypeTaiwan() then
-      self._ui._staticTextCraft_Level[tableIdx]:SetSpanSize(80, -3)
-      self._ui._staticTextCraft_Percent[tableIdx]:SetShow(false)
+  local self = PaGlobal_CharacterInfoBasic
+  for index = 1, 10 do
+    local craftType = index - 1
+    if nil ~= self._ui._lifeInfo[index]._level then
+      self._ui._lifeInfo[index]._level:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(self._playerGet:getLifeExperienceLevel(craftType)))
+      self._ui._lifeInfo[index]._level:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._playerGet:getLifeExperienceLevel(craftType)))
+      self._ui._lifeInfo[index]._title:SetText(UI_LifeString[craftType])
+      local ExpRate = Int64toInt32(self._playerGet:getCurrLifeExperiencePoint(craftType) * toInt64(0, 100) / self._playerGet:getDemandLifeExperiencePoint(craftType))
+      self._ui._lifeInfo[index]._progress:SetProgressRate(ExpRate)
+      self._ui._lifeInfo[index]._percent:SetText(ExpRate .. "%")
     end
   end
-  local crafType = self._sortCraftTable[1]._type
-  self._ui._staticCraftIcon[0]:ChangeTextureInfoName(LifeIcon[crafType][1])
-  local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticCraftIcon[0], LifeIcon[crafType][2], LifeIcon[crafType][3], LifeIcon[crafType][4], LifeIcon[crafType][5])
-  self._ui._staticCraftIcon[0]:getBaseTexture():setUV(x1, y1, x2, y2)
-  self._ui._staticCraftIcon[0]:setRenderTexture(self._ui._staticCraftIcon[0]:getBaseTexture())
-  self._ui._staticTextCraft_Title[0]:SetText(UI_LifeString[crafType])
-  self._ui._staticTextCraft_Level[0]:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(self._sortCraftTable[1]._level))
-  self._ui._staticTextCraft_Level[0]:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._sortCraftTable[1]._level))
-  local ExpRate = Int64toInt32(self._sortCraftTable[1]._exp * toInt64(0, 100) / self._sortCraftTable[1]._maxExp)
-  self._ui._progress2Craft[0]:SetProgressRate(ExpRate)
-  self._ui._staticTextCraft_Percent[0]:SetText(ExpRate .. "%")
-  self._ui._staticTextCraft_Percent[0]:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._sortCraftTable[1]._level))
-  self._requestRank = true
 end
 function FromClient_UI_CharacterInfo_Basic_RankChanged()
   if self._requestRank == false then
@@ -701,6 +578,7 @@ function PaGlobal_Char_LifeInfo:Init()
     self._lifeInfo[key]._ui._progressBar = UI.getChildControl(self._lifeInfo[key]._ui._parent, "Progress2_Exp")
     self._lifeInfo[key]._ui._expText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Percent")
     self._lifeInfo[key]._ui._levelText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Level")
+    self._lifeInfo[key]._ui._progressBG = UI.getChildControl(self._lifeInfo[key]._ui._parent, "Static_ProgressBg")
     local count = self._lifeSubTypeCount[key] - 1
     if __ePlayerLifeStatType_Collecting == key then
       count = self._lifeSubTypeCount[key]
@@ -714,6 +592,8 @@ function PaGlobal_Char_LifeInfo:Init()
         self._lifeInfo[key]._ui._subCategoryPoint[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, pointControlName)
       end
     end
+    self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",true)")
+    self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",false)")
   end
 end
 function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
@@ -740,14 +620,70 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
     local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(commonPoint)
     self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
     for ii = 1, self._lifeSubTypeCount[key] - 1 do
-      local subPoint = selfPlayer:get():getLifeStat(key, ii)
       if nil ~= self._lifeInfo[key]._ui._subCategoryPoint[ii] then
+        local subPoint = selfPlayer:get():getLifeStat(key, ii)
         self._lifeInfo[key]._ui._subCategoryPoint[ii]:SetText(tostring(subPoint))
+        self._lifeInfo[key]._ui._subCategoryTitle[ii]:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. "," .. ii .. ")")
+        self._lifeInfo[key]._ui._subCategoryTitle[ii]:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. "," .. ii .. ")")
       end
     end
     if __ePlayerLifeStatType_Collecting == key then
       self._lifeInfo[key]._ui._subCategoryPoint[self._lifeSubTypeCount[key]]:SetText(commonPoint)
     end
+  end
+end
+function PaGlobal_Char_LifeInfo:Life_MouseOverEvent(sourceType, isOn)
+  if true == isOn then
+    local name, desc, control
+    if 0 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE0")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_1")
+    elseif 1 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE1")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_5")
+    elseif 2 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE2")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_6")
+    elseif 3 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE3")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 4 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE4")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 5 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE5")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
+    elseif 6 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE6")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_3")
+    elseif 7 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE7")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_4")
+    elseif 8 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE8")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_7")
+    elseif 9 == sourceType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE9")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_8")
+    end
+    control = self._lifeInfo[sourceType]._ui._progressBG
+    TooltipSimple_Show(control, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
+end
+function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subType)
+  if false == isShow then
+    TooltipSimple_Hide()
+  else
+    local name, desc, control
+    if __ePlayerLifeStatType_Manufacture == mainType then
+      local countRate = ToClient_getManufacturingStatCountRate(subType)
+      name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MANUFACTURING_POWER_TOOLTIP_DESC", "data2", tostring(countRate))
+    end
+    control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
+    TooltipSimple_Show(control, name, desc)
   end
 end
 PaGlobal_Char_LifeInfo:Init()

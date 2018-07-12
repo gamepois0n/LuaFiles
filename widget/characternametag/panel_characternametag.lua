@@ -1717,6 +1717,18 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
     hpBack:SetShow(true)
     hpLater:SetShow(true)
     hpMain:SetShow(true)
+    if houseHoldActorWrapper:getStaticStatusWrapper():getObjectStaticStatus():isKingOrLordTent() and _ContetnsGroup_SiegeResource then
+      local isMyGuild = houseHoldActorWrapper:get():isOwnedBySelfPlayerGuild()
+      if isMyGuild then
+        local resourceBack = UI.getChildControl(targetPanel, "Static_SiegeResourcesStackBg")
+        local resourceMain = UI.getChildControl(targetPanel, "Progress2_SiegeResourcesStack")
+        local prevResources = resourceMain:GetProgressRate()
+        local resourceRate = ToClient_GetMyGuildAllianceSiegeResource() * 100 / 100
+        resourceMain:SetProgressRate(resourceRate)
+        resourceBack:SetShow(true)
+        resourceMain:SetShow(true)
+      end
+    end
   elseif actorProxy:isInstanceObject() then
     if actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isBarricade() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isHealingTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isObservatory() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isElephantBarn() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isRepairingTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isMineFactory() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isBombFactory() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isDistributor() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isSiegeTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isLargeSiegeTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isDefenceTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isSiegeTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isLargeSiegeTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isAdvancedBaseTower() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isTankFactory() or actorProxyWrapper:getCharacterStaticStatusWrapper():getObjectStaticStatus():isSavageDefenceObject() then
       local prevRate = hpMain:GetProgressRate()

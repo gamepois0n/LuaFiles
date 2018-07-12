@@ -68,9 +68,6 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
   if ToClient_isXBox() then
     FGlobal_KeyGuideTypeCheck(deltaTime)
   end
-  if true == _ContentsGroup_RenewUI then
-    PaGlobal_DarkSpiritCall(deltaTime)
-  end
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_OnlyPerframeUsed")
 function FromClient_luaLoadComplete_OnlyPerframeUsed()

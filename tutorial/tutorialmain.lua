@@ -1,6 +1,5 @@
 local IM = CppEnums.EProcessorInputMode
 local UI_classType = CppEnums.ClassType
-runLua("UI_Data/Script/Tutorial/KeyTutorial.lua")
 isClearedQuest = false
 registerEvent("executeLuaFunc", "executeLuaFunc")
 local isFirstSummonBoss = false
@@ -67,20 +66,34 @@ function executeLuaFunc(funcText)
     FGlobal_Panel_LowLevelGuide_MovePlay_BlackSpirit()
     Panel_SkillCommand:SetShow(false)
   elseif funcText == "summonBoss1" then
-    PaGlobal_SummonBossTutorial_Manager:startTutorial(0)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      PaGlobal_SummonBossTutorial_Manager:startTutorial(0)
+    end
   elseif funcText == "summonBoss2" then
-    PaGlobal_SummonBossTutorial_Manager:startTutorial(1)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      PaGlobal_SummonBossTutorial_Manager:startTutorial(1)
+    end
   elseif funcText == "summonBoss3" or funcText == "summonBoss4" or funcText == "summonBoss5" or funcText == "summonBoss6" or funcText == "summonBoss7" or funcText == "summonBoss8" or funcText == "summonBoss9" or funcText == "summonBoss10" or funcText == "summonBoss11" or funcText == "summonBoss12" or funcText == "summonBoss13" or funcText == "summonBoss14" or funcText == "summonBoss15" or funcText == "summonBoss16" or funcText == "summonBoss17" or funcText == "summonBoss18" or funcText == "summonBoss19" or funcText == "summonBoss20" or funcText == "summonBoss21" or funcText == "summonBoss22" or funcText == "summonBoss23" or funcText == "summonBoss24" then
-    PaGlobal_SummonBossTutorial_Manager:startTutorial(2)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      PaGlobal_SummonBossTutorial_Manager:startTutorial(2)
+    end
   elseif funcText == "arousal_attack_tutorial" then
-    PaGlobal_ArousalTutorial_Manager:startTutorial()
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      PaGlobal_ArousalTutorial_Manager:startTutorial()
+    end
   elseif funcText == "huntingTutorial1" then
-    FGlobal_HuntingTutorial(1)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      FGlobal_HuntingTutorial(1)
+    end
   elseif funcText == "huntingTutorial2" then
-    FGlobal_HuntingTutorial(2)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      FGlobal_HuntingTutorial(2)
+    end
   elseif funcText == "huntingTutorial3" then
-    FGlobal_HuntingTutorial(3)
-  elseif funcText == "huntingTutorialEnd" then
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      FGlobal_HuntingTutorial(3)
+    end
+  elseif funcText == "huntingTutorialEnd" and false == _ContentsGroup_RenewUI_Tutorial then
     FGlobal_HuntingTutorialEnd()
   end
 end

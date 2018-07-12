@@ -671,6 +671,20 @@ function NpcShop_UpdateContent()
   NpcShop_UpdateMoneyWarehouse()
   UpdateGuildPriceLimit()
 end
+function NpcShop_UpdateMoneyWithContent()
+  NpcShop_UpdateMoney()
+  if true == Panel_Window_NpcShop:GetShow() then
+    local self = npcShop
+    self:updateContent()
+  end
+end
+function NpcShop_UpdateMoneyWarehouseWithContent()
+  NpcShop_UpdateMoneyWarehouse()
+  if true == Panel_Window_NpcShop:GetShow() then
+    local self = npcShop
+    self:updateContent()
+  end
+end
 function NpcShop_UpdateMoney()
   if true == _ContentsGroup_InvenUpdateCheck and false == Panel_Window_NpcShop:GetShow() then
     return
@@ -1299,8 +1313,8 @@ function Panel_NpcShop_InvenRClick_SellItem(itemCount, slotNo)
 end
 function npcShop:registMessageHandler()
   registerEvent("EventNpcShopUpdate", "NpcShop_UpdateContent")
-  registerEvent("FromClient_InventoryUpdate", "NpcShop_UpdateMoney")
-  registerEvent("EventWarehouseUpdate", "NpcShop_UpdateMoneyWarehouse")
+  registerEvent("FromClient_InventoryUpdate", "NpcShop_UpdateMoneyWithContent")
+  registerEvent("EventWarehouseUpdate", "NpcShop_UpdateMoneyWarehouseWithContent")
   registerEvent("UpdateGuildPriceLimit", "UpdateGuildPriceLimit")
 end
 function NpcShop_CheckInit()

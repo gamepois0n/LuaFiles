@@ -48,8 +48,10 @@ function FGlobal_Inventory_WeightCheck()
     self.weightText:SetPosY(self.weight:GetPosY() - 4)
     self.weight:SetAlpha(0.8)
     self.weight:SetText(totalWeight .. "%")
-    local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
-    PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+      PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+    end
     if sumtotalWeight >= 100 then
       self.weight:SetFontColor(Defines.Color.C_FFF26A6A)
     elseif sumtotalWeight <= 99 then
@@ -58,8 +60,10 @@ function FGlobal_Inventory_WeightCheck()
   else
     self.weight:SetShow(false)
     self.weightText:SetShow(false)
-    local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
-    PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+    if false == _ContentsGroup_RenewUI_Tutorial then
+      local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
+      PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
+    end
   end
   if sumtotalWeight >= 100 and false == isOnEffect then
     self.weight:EraseAllEffect()

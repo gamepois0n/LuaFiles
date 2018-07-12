@@ -1754,7 +1754,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   else
     tradeInfo = nil
   end
-  if nil ~= tradeInfo then
+  if nil ~= tradeInfo and not _ContentsGroup_RenewUI then
     local tradeMasterItemName = tradeInfo:getItemEnchantStaticStatusWrapper():getName()
     if nil ~= tradeSummaryInfo and toInt64(0, 0) ~= tradeSummaryInfo:getDisplayedTotalAmount() then
       target.tradeInfo_Value:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_TRADEINFO_REGISTPRICE", "highestOnePrice", makeDotMoney(tradeInfo:getDisplayedHighestOnePrice()), "LowestOnePrice", makeDotMoney(tradeInfo:getDisplayedLowestOnePrice())))
@@ -2230,58 +2230,72 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   target.useDyeColorIcon_Part[11]:SetShow(false)
   target.dying:SetShow(false)
   if nil ~= itemWrapper or nil ~= chattingLinkedItem then
-    do
-      local dyeAble = itemSSW:isDyeable()
-      if itemSSW:isEquipable() then
-        local dyeingPartCount = 0
-        if nil ~= itemWrapper then
-          dyeingPartCount = itemWrapper:getDyeingPartCount()
-        elseif nil ~= chattingLinkedItem then
-          dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
-        end
-        if true == dyeAble then
-          for dyeingPart_Index = 0, dyeingPartCount - 1 do
-            local bEmpty = false
-            if nil ~= itemWrapper then
-              bEmpty = itemWrapper:isEmptyDyeingPartColorAt(dyeingPart_Index)
-              if not itemWrapper:isAllreadyDyeingSlot(dyeingPart_Index) then
-                bEmpty = true
-              end
-            elseif nil ~= chattingLinkedItem then
-              bEmpty = chattingLinkedItem:isEmptyDyeingPartColorAt(dyeingPart_Index)
-              if not chattingLinkedItem:isAllreadyDyeingSlot(dyeingPart_Index) then
-                bEmpty = true
-              end
-            end
-            if not bEmpty then
-              target.dying:SetShow(true)
-              local dyeingPartColor
-              if nil ~= itemWrapper then
-                dyeingPartColor = itemWrapper:getDyeingPartColorAt(dyeingPart_Index)
-              elseif nil ~= chattingLinkedItem then
-                dyeingPartColor = chattingLinkedItem:getDyeingPartColorAt(dyeingPart_Index)
-              end
-              _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, dyeingPartColor)
-            else
-              _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
-            end
-            target.useDyeColorIcon_Part[dyeingPart_Index]:SetShow(true)
-          end
-          if dyeingPartCount > 0 then
-            local isPearlPallete = ""
-            if nil ~= itemWrapper and itemWrapper:isExpirationDyeing() then
-              isPearlPallete = "(" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE") .. ")"
-            end
-            target.useDyeColorTitle:SetShow(true)
-            target.useDyeColorTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEINFO") .. isPearlPallete)
-          end
-        else
-          target.useDyeColorTitle:SetShow(true)
-          target.useDyeColorTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEIMPOSSIBLE"))
-        end
+    local dyeAble = itemSSW:isDyeable()
+    if itemSSW:isEquipable() then
+      local dyeingPartCount = 0
+      if nil ~= itemWrapper then
+        dyeingPartCount = itemWrapper:getDyeingPartCount()
+      elseif nil ~= chattingLinkedItem then
+        dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
       end
+      if true == dyeAble then
+        for dyeingPart_Index = 0, dyeingPartCount - 1 do
+          local bEmpty = false
+          if nil ~= itemWrapper then
+            bEmpty = itemWrapper:isEmptyDyeingPartColorAt(dyeingPart_Index)
+            if not itemWrapper:isAllreadyDyeingSlot(dyeingPart_Index) then
+              bEmpty = true
+            end
+          elseif nil ~= chattingLinkedItem then
+            bEmpty = chattingLinkedItem:isEmptyDyeingPartColorAt(dyeingPart_Index)
+            if not chattingLinkedItem:isAllreadyDyeingSlot(dyeingPart_Index) then
+              bEmpty = true
+            end
+          end
+          if not bEmpty then
+            target.dying:SetShow(true)
+            local dyeingPartColor
+            if nil ~= itemWrapper then
+              dyeingPartColor = itemWrapper:getDyeingPartColorAt(dyeingPart_Index)
+            elseif nil ~= chattingLinkedItem then
+              dyeingPartColor = chattingLinkedItem:getDyeingPartColorAt(dyeingPart_Index)
+            end
+            _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, dyeingPartColor)
+          else
+            _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
+          end
+          target.useDyeColorIcon_Part[dyeingPart_Index]:SetShow(true)
+        end
+        if dyeingPartCount > 0 then
+          local isPearlPallete = ""
+          if nil ~= itemWrapper and itemWrapper:isExpirationDyeing() then
+            isPearlPallete = "(" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE") .. ")"
+          end
+          target.useDyeColorTitle:SetShow(true)
+          target.useDyeColorTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEINFO") .. isPearlPallete)
+        end
+      else
+        target.useDyeColorTitle:SetShow(true)
+        target.useDyeColorTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEIMPOSSIBLE"))
+      end
+    else
     end
-  else
+    if _ContentsGroup_RenewUI then
+      target.useDyeColorTitle:SetShow(false)
+      target.useDyeColorIcon_Part[0]:SetShow(false)
+      target.useDyeColorIcon_Part[1]:SetShow(false)
+      target.useDyeColorIcon_Part[2]:SetShow(false)
+      target.useDyeColorIcon_Part[3]:SetShow(false)
+      target.useDyeColorIcon_Part[4]:SetShow(false)
+      target.useDyeColorIcon_Part[5]:SetShow(false)
+      target.useDyeColorIcon_Part[6]:SetShow(false)
+      target.useDyeColorIcon_Part[7]:SetShow(false)
+      target.useDyeColorIcon_Part[8]:SetShow(false)
+      target.useDyeColorIcon_Part[9]:SetShow(false)
+      target.useDyeColorIcon_Part[10]:SetShow(false)
+      target.useDyeColorIcon_Part[11]:SetShow(false)
+      target.dying:SetShow(false)
+    end
   end
   local useLimitShow = false
   local minLevel = itemSSW:get()._minLevel
@@ -2928,7 +2942,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   target.enchantDifficulty:SetShow(false)
   if nil ~= itemSSW then
     local enchantDifficulty = itemSSW:get():getEnchantDifficulty()
-    if enchantDifficulty > 0 then
+    if enchantDifficulty > 0 and not _ContentsGroup_RenewUI then
       target.enchantDifficulty:SetShow(true)
       if 1 == enchantDifficulty then
         target.enchantDifficulty:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_EASY"))
@@ -2985,9 +2999,12 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
 - ]] .. itemSSW:getEnchantDescription()
   end
   target.itemDescription:SetText(_desc)
+  if _ContentsGroup_RenewUI then
+    target.itemDescription:SetShow(false)
+  end
   local isExchangeItem = itemSSW:isExchangeItem()
   local exchangeDesc = ""
-  if isExchangeItem then
+  if isExchangeItem and not _ContentsGroup_RenewUI then
     target.exchangeTitle:SetShow(true)
     target.exchangeDesc:SetShow(true)
     target.exchangeDesc:SetText(itemSSW:getExchangeDescription())
@@ -3297,8 +3314,10 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
       TooltipYPos = GetBottomPos(target.equipmentInBag) + elementBiggap
     end
   end
-  target.itemDescription:SetPosY(TooltipYPos)
-  TooltipYPos = GetBottomPos(target.itemDescription) + elementgap
+  if target.itemDescription:GetShow() then
+    target.itemDescription:SetPosY(TooltipYPos)
+    TooltipYPos = GetBottomPos(target.itemDescription) + elementgap
+  end
   if target.exchangeTitle:GetShow() then
     target.exchangeTitle:SetPosY(TooltipYPos)
     TooltipYPos = GetBottomPos(target.exchangeTitle) + elementgap
@@ -3335,7 +3354,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   target.itemLockNotify:SetShow(false)
   if normalTooltip == target and true == Panel_Tooltip_Item_DataObject.inventory then
     if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() ~= CppEnums.ContentsServiceType.eContentsServiceType_CBT then
-      if false == itemSSW:get():isCash() and false == itemWrapper:isSoulCollector() then
+      if false == itemSSW:get():isCash() and false == itemWrapper:isSoulCollector() and not _ContentsGroup_RenewUI then
         target.productNotify:SetShow(true)
       else
         target.productNotify:SetShow(false)
@@ -3369,7 +3388,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   end
   target.recoveryDesc:SetShow(false)
   if not itemSSW:get():isCash() then
-    if itemSSW:isEquipable() and 0 < itemSSW:getRecoveryMaxEndurance() and dynamicMaxEndurance <= 50 and 16145 ~= itemSSW:get()._key:getItemKey() then
+    if itemSSW:isEquipable() and 0 < itemSSW:getRecoveryMaxEndurance() and dynamicMaxEndurance <= 50 and 16145 ~= itemSSW:get()._key:getItemKey() and not _ContentsGroup_RenewUI then
       target.recoveryDesc:SetShow(true)
       target.recoveryDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_RECOVOERYDESC"))
     else
