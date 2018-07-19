@@ -1,5 +1,17 @@
 local isBossRange = false
 local btn_bossCamera
+local _bossKey = {
+  kuAng = 23001,
+  kaAng = 23060,
+  NuAng = 23032,
+  DumChit = 23073,
+  Muraka = 23158,
+  Quint = 23157,
+  Opin = 23810,
+  Gamos = 23120,
+  Gamos_quest = 23552
+}
+local _bossCharacterWrapper
 local function clear_BossCamButton()
   isBossRange = false
   btn_bossCamera:SetShow(false)
@@ -16,7 +28,38 @@ function click_button()
   else
     chk = ToClient_onBossCamera(false)
   end
-  local chk = ToClient_onBossCamera(btn_bossCamera:IsCheck())
+  sttic_sequenceAni:SetShow(btn_bossCamera:IsCheck())
+  if nil == _bossCharacterWrapper then
+    return
+  end
+  local characterKey = _bossCharacterWrapper:getCharacterKeyRaw()
+  local activeViewDistance, viewDistance, minDistance, maxDistance, viewBoundaryDistacne, viewInterPlationTime, mouse_wheel_sensitivity
+  if _bossKey.kuAng == characterKey or _bossKey.NuAng == characterKey or _bossKey.DumChit == characterKey or _bossKey.Opin == characterKey or _bossKey.Quint == characterKey or _bossKey.Muraka == characterKey then
+    activeViewDistance = 700
+    viewDistance = 450
+    minDistance = 100
+    maxDistance = 1000
+    viewBoundaryDistacne = 100
+    viewInterPlationTime = 3
+    mouse_wheel_sensitivity = 0.08
+  elseif _bossKey.kaAng == characterKey then
+    activeViewDistance = 450
+    viewDistance = 300
+    minDistance = 100
+    maxDistance = 700
+    viewBoundaryDistacne = 100
+    viewInterPlationTime = 3
+    mouse_wheel_sensitivity = 0.08
+  elseif _bossKey.Gamos == characterKey or _bossKey.Gamos_quest == characterKey then
+    activeViewDistance = 1500
+    viewDistance = 1000
+    minDistance = 100
+    maxDistance = 1500
+    viewBoundaryDistacne = 500
+    viewInterPlationTime = 5
+    mouse_wheel_sensitivity = 0.08
+  end
+  local chk = ToClient_onBossCamera(btn_bossCamera:IsCheck(), activeViewDistance, viewDistance, minDistance, maxDistance, viewBoundaryDistacne, viewInterPlationTime, mouse_wheel_sensitivity)
   if false == chk then
     _PA_LOG("\234\180\145\236\154\180", "Camera \236\180\136\234\184\176\237\153\148\234\176\128 \235\144\152\236\167\128 \236\149\138\236\149\152\235\139\164...?")
     btn_bossCamera:SetCheck(false)
@@ -30,20 +73,17 @@ end
 function bossCamera_HideTooltip()
   TooltipSimple_Hide()
 end
-function FromClient_EventCameraCharacter_RangeIn(chracterWrapper)
-  if not _ContentsGroup_DriganBossDragon then
+function FromClient_EventCameraCharacter_RangeIn(characterWrapper)
+  if nil == characterWrapper then
+    _PA_LOG("\234\180\145\236\154\180", "[\235\179\180\236\138\164\236\185\180\235\169\148\235\157\188] \235\179\180\236\138\164 characterWrapper\234\176\128 nil\236\157\180\235\169\180 \236\149\136\235\144\152\235\138\148\235\141\176\236\154\169..")
     return
   end
+  _bossCharacterWrapper = characterWrapper
   btn_bossCamera:SetShow(true)
-  sttic_sequenceAni:SetShow(true)
   isBossRange = true
 end
 function FromClient_EventCameraCharacter_RangeChange()
-  if not _ContentsGroup_DriganBossDragon then
-    return
-  end
   btn_bossCamera:SetShow(true)
-  sttic_sequenceAni:SetShow(true)
   bossCamera_Repos()
   isBossRange = true
 end

@@ -1043,7 +1043,9 @@ function Warehouse_OpenPanelFromWorldmap(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)
   if not FGlobal_Warehouse_IsMoveItem() then
     DeliveryRequestWindow_Close()
-    DeliveryInformationWindow_Close()
+    if false == _ContentsGroup_RenewUI_Delivery then
+      DeliveryInformationWindow_Close()
+    end
   end
   if true == self.BtnMarketRegist:GetShow() then
     self.BtnMarketRegist:SetShow(false)

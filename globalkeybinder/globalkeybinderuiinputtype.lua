@@ -51,6 +51,13 @@ function Process_UIMode_CommonWindow_BlackSpirit()
   FGlobal_TentTooltipHide()
   ToClient_AddBlackSpiritFlush()
 end
+function Process_UIMode_CommonWindow_Chatting()
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingInfo_Open()
+  else
+    ChatInput_Show()
+  end
+end
 function Process_UIMode_CommonWindow_ProductionNote()
   if nil ~= Panel_ProductNote and not Panel_ProductNote:IsUISubApp() then
     Panel_ProductNote_ShowToggle()
@@ -63,11 +70,17 @@ function Process_UIMode_CommonWindow_PlayerInfo()
         audioPostEvent_SystemUi(1, 31)
         PaGlobalFunc_Window_CharacterInfo_Close()
       else
-        if Panel_Window_ServantInfo:GetShow() or Panel_CarriageInfo:GetShow() or Panel_ShipInfo:GetShow() then
-          ServantInfo_Close()
-          CarriageInfo_Close()
-          ShipInfo_Close()
-          Panel_Tooltip_Item_hideTooltip()
+        if false == _ContentsGroup_RenewUI_StableInfo then
+          if Panel_Window_ServantInfo:GetShow() or Panel_CarriageInfo:GetShow() or Panel_ShipInfo:GetShow() then
+            ServantInfo_Close()
+            CarriageInfo_Close()
+            ShipInfo_Close()
+            Panel_Tooltip_Item_hideTooltip()
+            TooltipSimple_Hide()
+            return
+          end
+        elseif true == PaGlobalFunc_ServantInfo_GetShow() then
+          PaGlobalFunc_ServantInfo_Exit()
           TooltipSimple_Hide()
           return
         end
@@ -108,6 +121,9 @@ function Process_UIMode_CommonWindow_PlayerInfo()
       local inventory = unsealCacheData:getInventory()
       local invenSize = inventory:size()
       if 0 ~= actorKeyRaw then
+        if true == ToClient_isXBox() then
+          return
+        end
         if Panel_Window_ServantInfo:GetShow() or Panel_CarriageInfo:GetShow() or Panel_ShipInfo:GetShow() then
           ServantInfo_Close()
           CarriageInfo_Close()
@@ -147,7 +163,7 @@ function Process_UIMode_CommonWindow_PossessionByBlackSpirit()
   end
 end
 function Process_UIMode_CommonWindow_Inventory()
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Inventory then
     if false == PaGlobalFunc_InventoryInfo_GetShow() then
       PaGlobalFunc_InventoryInfo_Open(1)
     else
@@ -236,7 +252,15 @@ function Process_UIMode_CommonWindow_Manufacture()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
       return
     end
-    if Panel_Manufacture ~= nil and Panel_Window_Inventory ~= nil then
+    if _ContentsGroup_RenewUI_Manufacture then
+      if not PaGlobalFunc_ManufactureCheckShow() then
+        audioPostEvent_SystemUi(1, 26)
+        PaGlobalFunc_ManufactureOpen(true)
+      else
+        audioPostEvent_SystemUi(1, 25)
+        PaGlobalFunc_ManufactureClose()
+      end
+    elseif Panel_Manufacture ~= nil and Panel_Window_Inventory ~= nil then
       local isInvenOpen = Panel_Window_Inventory:GetShow()
       local isManufactureOpen = Panel_Manufacture:GetShow()
       if isManufactureOpen == false or isInvenOpen == false then
@@ -374,7 +398,11 @@ function Process_UIMode_CommonWindow_BeautyShop()
 end
 function Process_UIMode_CommonWindow_WorldMap()
   if not Panel_Global_Manual:GetShow() or FGlobal_BulletCount_UiShowCheck() then
-    FGlobal_PushOpenWorldMap()
+    if true == _ContentsGroup_RenewUI_WorldMap then
+      PaGlobalFunc_WorldMap_Open()
+    else
+      FGlobal_PushOpenWorldMap()
+    end
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_MINIGAMING_NOT_WORLDMAP"))
     return
@@ -402,4 +430,12 @@ function Process_UIMode_CommonWindow_DeleteNavigation()
   ToClient_DeleteNaviGuideByGroup(0)
   Panel_NaviButton:SetShow(false)
   audioPostEvent_SystemUi(0, 15)
+end
+function Process_UIMode_CommonWindow_PartySetting()
+  if true == PaGlobal_TutorialManager:isDoingTutorial() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
+    return
+  end
+  audioPostEvent_SystemUi(0, 16)
+  PaGlobalFunc_PartySetting_Show()
 end

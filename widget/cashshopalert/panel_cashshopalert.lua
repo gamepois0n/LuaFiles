@@ -74,6 +74,9 @@ local cashShopAlert = {
 cashShopAlert._bubbleTextTop = UI.getChildControl(cashShopAlert._bubbleBg, "StaticText_Obsidian_B")
 cashShopAlert._bubbleTextBot = UI.getChildControl(cashShopAlert._bubbleBg, "StaticText_Obsidian_N")
 function Panel_CashShopAlert_Show()
+  if isGameTypeGT() then
+    return
+  end
   Panel_CashShopAlert_RePos()
   Panel_CashShopAlert:SetShow(true, true)
 end

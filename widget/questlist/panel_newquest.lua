@@ -76,6 +76,7 @@ function FGlobal_NewMainQuest_Alarm_Open()
       Panel_NewQuest:SetPosY(120)
     end
     Panel_NewQuest:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
+    audioPostEvent_SystemUi(4, 11)
     local QuickSlotClose_Alpha = Panel_NewQuest:addColorAnimation(2, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
     QuickSlotClose_Alpha:SetStartColor(UI_color.C_FFFFFFFF)
     QuickSlotClose_Alpha:SetEndColor(UI_color.C_00FFFFFF)

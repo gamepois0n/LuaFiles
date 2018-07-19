@@ -4,6 +4,7 @@ PaGlobal_MonsterRanking = {
     _btn_ListBtn = UI.getChildControl(Panel_Window_MonsterRanking, "RadioButton_Tab"),
     _titleList2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingTitleList"),
     _list2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingList"),
+    _btn_Name = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_Name"),
     _nameTitle = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_NameTitle"),
     _btn_Close = UI.getChildControl(Panel_Window_MonsterRanking, "Button_Win_Close")
   },
@@ -68,12 +69,14 @@ end
 function PaGlobal_MonsterRanking:MonsterRanking_Title_ListControlCreate(content, key)
   local index = Int64toInt32(key)
   local title = UI.getChildControl(content, "List2_RadioButton_Tab")
+  local buttonName = UI.getChildControl(content, "StaticText_Name")
   local titleInfo = ToClient_GetTimeAttackGroupInfo(index)
   title:setNotImpactScrollEvent(true)
   if nil == titleInfo then
     return
   end
-  title:SetText(titleInfo:getGroupName())
+  buttonName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  buttonName:SetText(titleInfo:getGroupName())
   if index == self._listIndex then
     title:SetCheck(true)
   else

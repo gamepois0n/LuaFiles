@@ -38,7 +38,7 @@ function FGlobal_PersonalIcon_ButtonPosUpdate()
   local RadarSpanSizeY = FGlobal_Panel_Radar_GetSpanSizeY()
   local playerLV = getSelfPlayer():get():getLevel()
   if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT and false == _ContentsGroup_RenewUI_VoiceChat then
-    if isGameTypeEnglish() and false == _ContentsGroup_RenewUI_VoiceChat then
+    if isGameTypeEnglish() and false == _ContentsGroup_RenewUI_VoiceChat and not isGameTypeGT() then
       self._btn_MovieGuide:SetShow(true)
     else
       self._btn_MovieGuide:SetShow(false)
@@ -46,7 +46,7 @@ function FGlobal_PersonalIcon_ButtonPosUpdate()
   elseif false == _ContentsGroup_RenewUI_VoiceChat then
     if isGameTypeKR2() then
       self._btn_MovieGuide:SetShow(false)
-    else
+    elseif not isGameTypeGT() then
       self._btn_MovieGuide:SetShow(true)
     end
   end

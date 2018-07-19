@@ -100,6 +100,24 @@ local Panel_Dialog_Main_Bottom_Info = {
       x2 = 213,
       y2 = 315
     },
+    [9.1] = {
+      x1 = 143,
+      y1 = 245,
+      x2 = 213,
+      y2 = 315
+    },
+    [9.2] = {
+      x1 = 356,
+      y1 = 174,
+      x2 = 426,
+      y2 = 244
+    },
+    [9.3] = {
+      x1 = 1,
+      y1 = 245,
+      x2 = 71,
+      y2 = 315
+    },
     [10] = {
       x1 = 72,
       y1 = 387,
@@ -216,7 +234,7 @@ local Panel_Dialog_Main_Bottom_Info = {
     [2] = true,
     [3] = true,
     [4] = true,
-    [5] = false,
+    [5] = true,
     [6] = false,
     [7] = true,
     [8] = true,
@@ -242,7 +260,7 @@ local Panel_Dialog_Main_Bottom_Info = {
     [28] = true,
     [29] = false,
     [30] = true,
-    [31] = false,
+    [31] = true,
     [32] = true,
     [33] = false
   },
@@ -436,7 +454,7 @@ function Panel_Dialog_Main_Bottom_Info:funcButton_Update(dialogData)
     funcButtonIconControl:SetShow(true)
     if self._config.firstFuncButtonIndex == index then
       self._ui.btn_Func_List[index].funcButtonType = -1
-      funcButtonControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_GREETING"))
+      funcButtonControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_FIRST"))
       funcButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()")
       local iconData = self._funcButtonIcon.greeting
       funcButtonIconControl:ChangeTextureInfoName(self._funcButtonIcon.texture)
@@ -466,6 +484,19 @@ end
 function Panel_Dialog_Main_Bottom_Info:funcButton_ChangeIcon(funcButtonIconControl, funcButton)
   local funcButtonType = tonumber(funcButton._param)
   local iconData = self._funcButtonIcon[funcButtonType]
+  if CppEnums.ContentsType.Contents_Stable == funcButtonType then
+    if isGuildStable() then
+      if CppEnums.ServantType.Type_Vehicle == stable_getServantType() then
+        iconData = self._funcButtonIcon[9.1]
+      elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
+        iconData = self._funcButtonIcon[9.3]
+      end
+    elseif CppEnums.ServantType.Type_Vehicle == stable_getServantType() then
+      iconData = self._funcButtonIcon[funcButtonType]
+    elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
+      iconData = self._funcButtonIcon[9.2]
+    end
+  end
   if nil == iconData then
     funcButtonIconControl:SetShow(false)
     return
@@ -479,6 +510,7 @@ end
 function Panel_Dialog_Main_Bottom_Info:funcButton_CreatTypeBranch(IconControl, ButtonControl, funcButton, index)
   local funcButtonType = tonumber(funcButton._param)
   local funcButtonName = funcButton:getText()
+  ButtonControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   ButtonControl:SetText(funcButtonName)
   ButtonControl:SetMonoTone(false)
   ButtonControl:SetFontColor(self._UI_color.C_FFFFFFFF)
@@ -502,7 +534,9 @@ function Panel_Dialog_Main_Bottom_Info:funcButton_CreatTypeBranch(IconControl, B
     local selfPlayer = getSelfPlayer()
     if nil ~= selfPlayer then
       local Wp = selfPlayer:getWp()
-      ButtonControl:SetText(funcButtonName .. " (" .. funcButton:getNeedWp() .. "/" .. Wp .. ")")
+      ButtonControl:SetText(funcButtonName .. [[
+
+(]] .. funcButton:getNeedWp() .. "/" .. Wp .. ")")
     end
   elseif funcButtonType == CppEnums.ContentsType.Contents_Stable then
     if stable_doHaveRegisterItem() then
@@ -557,6 +591,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   if CppEnums.ContentsType.Contents_Quest == buttonType or CppEnums.ContentsType.Contents_NewQuest == buttonType then
     local talker = dialog_getTalker()
     PaGlobalFunc_MainDialog_Quest_Open()
+    PaGlobalFunc_MainDialog_Right_Close()
   elseif CppEnums.ContentsType.Contents_HelpDesk == buttonType then
   elseif CppEnums.ContentsType.Contents_Shop == buttonType then
     local shopType = dialogData:getShopType()
@@ -570,11 +605,12 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
       local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
       local s64_allWeight = Int64toInt32(getSelfPlayer():get():getCurrentWeight_s64())
       local s64_maxWeight = Int64toInt32(getSelfPlayer():get():getPossessableWeight_s64())
+      PaGlobalFunc_MainDialog_ReOpen()
       if s64_allWeight >= s64_maxWeight then
         local messageboxData = {
           title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"),
           content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"),
-          functionApply = PaGlobalFunc_MainDialog_ReOpen,
+          functionApply = MessageBox_Empty_function,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData)
@@ -584,7 +620,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         local messageboxData3 = {
           title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
           content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"),
-          functionApply = PaGlobalFunc_MainDialog_ReOpen,
+          functionApply = MessageBox_Empty_function,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData3)
@@ -594,23 +630,29 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         local messageboxData = {
           title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
           content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
-          functionApply = PaGlobalFunc_MainDialog_ReOpen,
+          functionApply = MessageBox_Empty_function,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData)
         return
       end
       if MyWp >= 5 then
-        local messageboxData2 = {
-          title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
-          content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp),
-          functionYes = PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm,
-          functionNo = PaGlobalFunc_MainDialog_ReOpen,
-          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-        }
-        MessageBox.showMessageBox(messageboxData2)
-        return
+        if false == _ContentsGroup_RenewUI_Worker then
+          local messageboxData2 = {
+            title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+            content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp),
+            functionYes = MessageBox_Empty_function,
+            functionNo = PaGlobalFunc_MainDialog_ReOpen,
+            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+          }
+          MessageBox.showMessageBox(messageboxData2)
+        else
+          FGlobalFunc_Open_WorkerContract(MyWp)
+        end
+      elseif true == _ContentsGroup_RenewUI_Worker then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERRANDOMSELECT_SHORTAGE_WP_ACK"))
       end
+      return
     end
     if self._shopType.eShopType_RandomShop == shopType then
       if invenSize <= 0 then
@@ -753,7 +795,11 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   elseif CppEnums.ContentsType.Contents_MinorLordMenu == buttonType then
     FGlobal_NodeWarMenuOpen()
   elseif CppEnums.ContentsType.Contents_Improve == buttonType then
-    Panel_Improvement_Show()
+    if true == _ContentsGroup_RenewUI_SpiritEnchant then
+      PaGlobalFunc_ImprovementInfo_Open()
+    else
+      Panel_Improvement_Show()
+    end
   end
   self:Dialog_innerPanelShow(count, targetWindowList)
   if CppEnums.ContentsType.Contents_Shop == buttonType then
@@ -786,10 +832,14 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         if false == _ContentsGroup_RenewUI_Stable then
           StableFunction_Open()
         else
-          PaGlobalFunc_Stable_Function_Open()
+          PaGlobalFunc_StableFunction_Open()
         end
       elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
-        WharfFunction_Open()
+        if false == _ContentsGroup_RenewUI_Stable then
+          WharfFunction_Open()
+        else
+          PaGlobalFunc_WharfFunction_Show()
+        end
       else
         PetFunction_Open()
         PetList_Open()
@@ -996,7 +1046,13 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(index)
     CreateClan_Close()
   end
   Manufacture_Close()
-  WorkerAuction_Close()
+  if false == _ContentsGroup_RenewUI_Worker then
+    WorkerAuction_Close()
+  else
+    FGlobal_WorkerTrade_Close()
+    FGlobalFunc_Close_RandomWorker()
+    FGlobalFunc_Cancel_WorkerContract()
+  end
   if true == _ContentsGroup_RenewUI_ReinforceSkill then
     PaGlobalFunc_Dialog_SkillSpecialize_Exit()
   else
@@ -1050,6 +1106,10 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(index)
   PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
   Dialog_clickFuncButtonReq(index)
   self:button_Func_Branch(funcButtonType)
+  if true == ToClient_isCheckRenderModeDialog() then
+    local npcWord = dialogData:getMainDialog()
+    local realDialog = ToClient_getReplaceDialog(npcWord)
+  end
   Panel_Interest_Knowledge_Hide()
 end
 function PaGlobalFunc_MainDialog_Bottom_RandomWorkerSelectUseMyWpConfirm(index)
@@ -1097,6 +1157,9 @@ function PaGlobalFunc_MainDialog_Bottom_GetFuncButtonSizeXY()
 end
 function Toggle_DialogMainTab_forPadEventFunc(value)
   local self = Panel_Dialog_Main_Bottom_Info
+  if self._currentMaxFuncButtonCount == 1 then
+    return
+  end
   local _currentBottomButton = {}
   local _lastArrayIndex = self._currentMaxFuncButtonCount - 2
   for ii = self._config.firstFuncButtonIndex, _lastArrayIndex do
@@ -1166,9 +1229,9 @@ function PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
   end
   _currentBottomButton[self._currentTabIndex]:setRenderTexture(_currentBottomButton[self._currentTabIndex]:getOnTexture())
 end
-Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_DialogMainTab_forPadEventFunc(-1)")
-Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_DialogMainTab_forPadEventFunc(1)")
-Panel_Dialog_Main:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "Toggle_DialogMainTab_Enter()")
+Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_DialogMainTab_forPadEventFunc(-1)")
+Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_DialogMainTab_forPadEventFunc(1)")
+Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_RT, "Toggle_DialogMainTab_Enter()")
 function FromClient_InitMainDialog_Bottom()
   local self = Panel_Dialog_Main_Bottom_Info
   self:initialize()

@@ -75,7 +75,7 @@ function mailDetail:init()
   UI.ASSERT(nil ~= self._ui._buttonDelete and "number" ~= type(self._ui._buttonDelete), "Button_Delete")
 end
 function mailDetail:registEventHandler()
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobal_MailDetail_Delete()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_MailDetail_Delete()")
   self._ui._buttonDelete:addInputEvent("Mouse_LUp", "PaGlobal_MailDetail_Delete()")
 end
 function mailDetail:registMessageHandler()

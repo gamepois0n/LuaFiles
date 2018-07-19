@@ -1,4 +1,4 @@
-Panel_Customizing_Voice:ignorePanelMoveSnapping()
+Panel_Customizing_Voice:ignorePadSnapMoveToOtherPanel()
 local Customization_VoiceInfo = {
   _ui = {
     _static_TypeGroup = UI.getChildControl(Panel_Customizing_Voice, "Static_TypeGroup"),
@@ -40,7 +40,8 @@ local Customization_VoiceInfo = {
   _isIngameMode = false,
   _columnIndex,
   _lastSocialControl,
-  _lastCombatControl
+  _lastCombatControl,
+  _isBoneControl = false
 }
 local none = 100
 local social = 1000
@@ -87,6 +88,29 @@ local MotionTable = {
   [38] = combat,
   [39] = combat
 }
+function PaGlobalFunc_Customization_Voice_UpdatePerFrame(deltaTime)
+  local self = Customization_VoiceInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_Voice_SetBoneControl(false)
+    end
+    return
+  end
+end
+function PaGlobalFunc_Customization_Voice_SetBoneControl(isSet)
+  local self = Customization_VoiceInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+    Panel_Customizing_Voice:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(9)
+    Panel_Customizing_Voice:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
+end
 function Customization_VoiceInfo:ClearContentList()
   for _, content in pairs(self._typeImage) do
     if nil ~= content then
@@ -154,6 +178,7 @@ function PaGlobalFunc_Customization_Voice_CreateVoiceList(inGameMode, classType)
     self._typeImage[itemIdx] = tempContentImage
     self._typeCount[itemIdx] = tempVoiceCount
   end
+  ToClient_padSnapRefreshTarget(self._ui._static_TypeGroup)
   self:Voice_SetSize(self._config._columnMaxIndex)
   self:Check_ServiceArea()
   self._isInitmotionIndex = false
@@ -195,6 +220,7 @@ function PaGlobalFunc_Customization_Voice_CreateVoiceList(inGameMode, classType)
       end
     end
   end
+  ToClient_padSnapRefreshTarget(self._ui._static_motionGroup)
   self._lastCombatControl = self._lastSocialControl
   createIndex = math.floor((createIndex - 1) / self._config._columnCount) * self._config._columnCount + self._config._columnCount
   for itemIdx = 0, count - 1 do
@@ -226,6 +252,9 @@ function PaGlobalFunc_Customization_Voice_CreateVoiceList(inGameMode, classType)
       createIndex = createIndex + 1
     end
   end
+  ToClient_padSnapRefreshTarget(self._ui._static_motionGroup)
+  self._ui._slider_Voice:SetControlPos(getVoicePitch())
+  PaGlobalFunc_Customization_Voice_UpdateSlide()
   PaGlobalFunc_Customization_Voice_Open()
 end
 function PaGlobalFunc_Customization_Voice_CloseVoiceUI()
@@ -234,21 +263,21 @@ function PaGlobalFunc_Customization_Voice_CloseVoiceUI()
   PaGlobalFunc_Customization_Voice_Close()
 end
 function Customization_VoiceInfo:UpdateVoiceFocus(index)
-  if index ~= -1 then
-    if self._typeImage[index] == nil or self._typeImage[index] == 0 then
+  if -1 ~= index then
+    if nil == self._typeImage[index] then
       return
     end
     self._ui._static_TypeSelect:SetShow(true)
-    self._ui._static_TypeSelect:SetPosX(self._typeImage[index]:GetPosX())
-    self._ui._static_TypeSelect:SetPosY(self._typeImage[index]:GetPosY())
+    self._ui._static_TypeSelect:SetPosX(self._typeImage[index]:GetPosX() - 1)
+    self._ui._static_TypeSelect:SetPosY(self._typeImage[index]:GetPosY() - 1)
     self._selectedVoiceIndex = index
   else
     self._ui._static_TypeSelect:SetShow(false)
   end
 end
 function Customization_VoiceInfo:UpdateMotionFocus(index)
-  if index ~= -1 then
-    if self._contentsMotionImage[index] == nil or self._contentsMotionImage[index] == 0 then
+  if -1 ~= index then
+    if nil == self._contentsMotionImage[index] then
       return
     end
     self._ui._static_motionSelect:SetShow(true)
@@ -261,10 +290,14 @@ function Customization_VoiceInfo:UpdateMotionFocus(index)
 end
 function PaGlobalFunc_Customization_Voice_SlideOn()
   local self = Customization_VoiceInfo
+  PaGlobalFunc_Customization_SetKeyGuide(3)
   self._ui._slider_VoiceFocus:SetShow(true)
 end
 function PaGlobalFunc_Customization_Voice_SlideOut()
   local self = Customization_VoiceInfo
+  if false == self._isBoneControl and true == PaGlobalFunc_Customization_Voice_GetShow() then
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+  end
   self._ui._slider_VoiceFocus:SetShow(false)
 end
 function PaGlobalFunc_Customization_Voice_UpdateSlide()
@@ -296,16 +329,21 @@ function Customization_VoiceInfo:InitControl()
   self._ui._slider_VoiceFocus:SetShow(false)
   self._ui._sliderButton_Voice = UI.getChildControl(self._ui._slider_Voice, "Slider_Button")
   self._ui._sliderButton_Voice:SetIgnore(true)
+  if true == _ContentsGroup_isContentsCustomizationVoice then
+    self._ui._slider_Voice:SetInterval(290)
+  else
+    self._ui._slider_Voice:SetInterval(240)
+  end
 end
 function Customization_VoiceInfo:InitEvent()
-  self._ui._slider_Voice:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Voice_UpdateSlide()")
-  self._ui._slider_Voice:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_Voice_UpdateSlide()")
-  self._ui._slider_Voice:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_Voice_UpdateSlide()")
+  self._ui._slider_Voice:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Voice_UpdateSlide()")
   self._ui._slider_Voice:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Voice_SlideOn()")
   self._ui._slider_Voice:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Voice_SlideOut()")
+  Panel_Customizing_Voice:RegisterUpdateFunc("PaGlobalFunc_Customization_Voice_UpdatePerFrame")
+  Panel_Customizing_Voice:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Voice_SetBoneControl(true)")
 end
 function Customization_VoiceInfo:InitRegister()
-  registerEvent("EventCloseVoiceUI", "PaGlobalFunc_Customization_Voice_CloseVoiceUI()")
+  registerEvent("EventCloseVoiceUI", "PaGlobalFunc_Customization_Voice_CloseVoiceUI")
 end
 function Customization_VoiceInfo:Initialize()
   self:InitControl()
@@ -317,17 +355,25 @@ function PaGlobalFunc_FromClient_Customization_Voice_luaLoadComplete()
   self:Initialize()
 end
 function PaGlobalFunc_Customization_Voice_Close()
+  local self = Customization_VoiceInfo
   if false == PaGlobalFunc_Customization_Voice_GetShow() then
-    return
+    return false
   end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_Voice_SetBoneControl(false)
+    return false
+  end
+  applyMotion(-1)
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_Voice_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_Voice_Open()
   if true == PaGlobalFunc_Customization_Voice_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(1)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Voice_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Voice_Close()")
   PaGlobalFunc_Customization_Voice_SetShow(true, false)

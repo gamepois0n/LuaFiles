@@ -509,6 +509,9 @@ function inGameShop:init()
   local maxSlotCount = self._slotCount
   local count = 0
   local classCount = getCharacterClassCount()
+  self._combo_Class:setListTextHorizonCenter()
+  self._combo_Sort:setListTextHorizonCenter()
+  self._combo_SubFilter:setListTextHorizonCenter()
   self._combo_Class:DeleteAllItem()
   self._combo_Class:AddItemWithKey(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_CLASSBASE"), getCharacterClassCount())
   for ii = 0, classCount - 1 do
@@ -712,6 +715,24 @@ function inGameShop:init()
   Panel_IngameCashShop:SetChildIndex(_AllBG, 9800)
   self._scroll_IngameCash:SetShow(false)
   FGlobal_ClearCandidate()
+  inGameShop:isGTServerCheckControl()
+end
+function inGameShop:isGTServerCheckControl()
+  if isGameTypeGT() then
+    self._btn_HowUsePearl:SetShow(false)
+    self._nowCash:SetShow(false)
+    self._staticText_CashCount:SetShow(false)
+    self._btn_BuyDaum:SetShow(false)
+    self._btn_RefreshCash:SetShow(false)
+    self._nowPearlIcon:SetShow(false)
+    self._staticText_PearlCount:SetShow(false)
+    self._btn_BuyPearl:SetShow(false)
+    self._pearlBox:SetShow(false)
+    self._cashBox:SetShow(false)
+    self._staticText_MileageCount:SetSpanSize(30, 20)
+    self._mileageBox:SetSpanSize(20, 15)
+    self._mileage:SetSpanSize(110, 20)
+  end
 end
 function FGlobal_CashShop_tabInfo_Return()
   return tabIndexList
@@ -1569,6 +1590,10 @@ function FGlobal_InGameShop_UpdateByBuy()
   inGameShop:update()
 end
 function FGlobal_InGameShop_OpenByEventAlarm()
+  if isGameTypeGT() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
+    return
+  end
   ToClient_SaveUiInfo(false)
   if isFlushedUI() then
     return
@@ -3061,6 +3086,10 @@ function InGameCashshopDescUpdate(deltaTime)
   self:updateSlot()
 end
 function InGameShop_Open()
+  if isGameTypeGT() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
+    return
+  end
   if Panel_IngameCashShop_EasyPayment:IsShow() then
     Panel_IngameCashShop_EasyPayment:SetShow(false, false)
   end

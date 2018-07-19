@@ -120,7 +120,6 @@ function Panel_Dialog_Main_Intimacy_Info:initControl()
   self._ui.static_RewardIconTemplete:SetShow(false)
   self._ui.staticText_RewardTemplete:SetShow(false)
   self._ui.staticText_CurrentIntimacyPoint = UI.getChildControl(self._ui.static_IntimacyBg, "StaticText_CurrentIntimacyPoint")
-  self._ui.staticText_CurrentIntimacyPoint:SetShow(false)
   self._ui.staticText_Intimacy_Title = UI.getChildControl(self._ui.static_IntimacyBg, "StaticText_Title")
 end
 function Panel_Dialog_Main_Intimacy_Info:open()

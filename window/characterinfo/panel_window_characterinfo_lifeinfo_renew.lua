@@ -335,4 +335,3 @@ function FromClient_luaLoadComplete_Panel_Window_Character_LifeInfo()
   self:registEvnet()
   self:updateData()
 end
-registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Window_Character_LifeInfo")

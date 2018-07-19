@@ -76,7 +76,7 @@ function defalut_Control:Init_Control()
   FGlobal_Set_Table_Control(self._mail, "_mail_GetItem", "_List_BG", true, false)
   local isCommercial = FGlobal_IsCommercialService()
   self._mail._Btn_QnA:SetShow(isCommercial)
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeGT() then
     self._mail._Btn_QnA:SetShow(false)
   end
 end

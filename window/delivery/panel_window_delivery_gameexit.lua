@@ -91,7 +91,7 @@ function deliveryForGameExit.fillData()
     end
     if characterNo_64 ~= characterData._characterNo_s64 then
       local strLevel = string.format("%d", characterData._level)
-      local characterNameLv = PAGetStringParam2(Defines.StringSheet_GAME, "CHARACTER_SELECT_LV", "character_level", strLevel, "character_name", getCharacterName(characterData))
+      local characterNameLv = PAGetStringParam2(Defines.StringSheet_GAME, "CHARACTER_SELECT_LV", "character_name", getCharacterName(characterData), "character_level", strLevel)
       deliveryForGameExit._comboBoxSwapCharacter:AddItem(characterNameLv)
     else
       deliveryForGameExit._selectCharacterIndexPos = idx
@@ -227,7 +227,9 @@ end
 local function initialize()
   deliveryForGameExit._buttonClose:addInputEvent("Mouse_LUp", "click_DeliveryForGameExit_Close()")
   deliveryForGameExit._buttonGetOn:addInputEvent("Mouse_LUp", "click_DeliveryForGameExit_GetOn()")
+  deliveryForGameExit._comboBoxDest:setListTextHorizonCenter()
   deliveryForGameExit._comboBoxDest:addInputEvent("Mouse_LUp", "click_DeliveryForGameExit_Dest()")
+  deliveryForGameExit._comboBoxSwapCharacter:setListTextHorizonCenter()
   deliveryForGameExit._comboBoxSwapCharacter:addInputEvent("Mouse_LUp", "click_DeliveryForGameExit_SwapCharacter()")
   registerEvent("EventDeliveryForPersonChangeCharacter", "deliveryForGameExitChangeCharacter()")
   registerEvent("EventGameExitDelayTime", "setPlayerDeliveryDelayTime")

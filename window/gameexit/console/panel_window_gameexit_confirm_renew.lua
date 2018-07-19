@@ -33,12 +33,12 @@ function Window_GameExit_ConfirmInfo:SetButtonEventByExitType(exitType)
   if self._config._exitType_Exit == exitType then
     self._ui._staticText_TrayHelp:SetShow(false)
     self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_ExitButton()")
-    Panel_Window_GameExit_Confirm:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_GameExitConfirm_ExitButton()")
+    Panel_Window_GameExit_Confirm:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GameExitConfirm_ExitButton()")
   elseif self._config._exitType_Tray == exitType then
     self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_TrayButton()")
   elseif self._config._exitType_CharacterSelect == exitType then
     self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExitConfirm_CharacterSelectButton()")
-    Panel_Window_GameExit_Confirm:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_GameExitConfirm_CharacterSelectButton()")
+    Panel_Window_GameExit_Confirm:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GameExitConfirm_CharacterSelectButton()")
   else
     _PA_LOG("\236\157\180\237\152\184\236\132\156", "\236\162\133\235\163\140 \237\131\128\236\158\133\236\157\180 \236\158\152\235\170\187\235\144\144\236\138\181\235\139\136\235\139\164.")
   end

@@ -27,6 +27,7 @@ local isButtonShortCut = ToClient_IsContentsGroupOpen("351")
 local isKnownIssue = isGameTypeKorea() or isGameTypeTH() or isGameTypeID() or isGameTypeTaiwan()
 local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType()
 local isBossAlert = isGameTypeKorea()
+local isTestServer = isGameTypeGT()
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
 Panel_Menu:ActiveMouseEventEffect(true)
@@ -157,7 +158,7 @@ local MenuButtonTextId = {
   [MenuButtonId.btn_SaveSetting] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_SAVESETTING"),
   [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING"),
   [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
-  [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSALERTSET_TITLE")
+  [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BOSS_ALERT")
 }
 local MenuButtonHotKeyID = {
   [MenuButtonId.btn_HelpGuide] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help),
@@ -733,7 +734,11 @@ function TargetWindow_ShowToggle(index)
   elseif MenuButtonId.btn_KeyboardHelp == index then
     FGlobal_KeyboardHelpShow()
   elseif MenuButtonId.btn_Siege == index then
-    FGlobal_GuildWarInfo_Show()
+    if true == _ContentsGroup_SeigeSeason5 then
+      FGlobal_GuildWarInfo_Show()
+    else
+      FGlobal_GuildWarInfo_Show()
+    end
     if Panel_Menu:GetShow() then
       Panel_Menu:SetShow(false, false)
     end
@@ -889,6 +894,10 @@ function TargetWindow_ShowToggle(index)
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LEVEL_LIMITED_GLOBAL_LABS"))
       return
     end
+    if true == ToClient_isCompleteTesterSubmit() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALREADY_TESTER_SUBMIT"))
+      return
+    end
     PaGlobal_BlackDesertLab_Show()
   elseif MenuButtonId.btn_BossAlert == index then
     PaGlobal_BossAlertSet_Show()
@@ -973,6 +982,9 @@ function GameMenu_Init()
       menuButtonIcon[index]:SetTextSpan(0, 42)
     end
     menuTextPool[index]:SetText(MenuButtonTextId[index])
+    if MenuButtonId.btn_BlackDesertLab == index and isGameServiceTypeKor() then
+      menuTextPool[index]:SetText("\234\178\128\236\157\128\236\130\172\235\167\137\n\236\151\176\234\181\172\236\134\140")
+    end
     GameMenu_ChangeButtonTexture(index)
   end
   FGlobal_MenuType_Check()
@@ -1170,9 +1182,6 @@ function GameMenu_CheckEnAble(buttonType)
       returnValue = true
     end
   end
-  if buttonType == MenuButtonId.btn_Event and isGameTypeGT() then
-    returnValue = false
-  end
   if buttonType == MenuButtonId.btn_Siege then
     returnValue = isSiegeEnable
   end
@@ -1194,9 +1203,12 @@ function GameMenu_CheckEnAble(buttonType)
   if buttonType == MenuButtonId.btn_BossAlert then
     returnValue = isBossAlert
   end
+  if isTestServer and (buttonType == MenuButtonId.btn_HelpGuide or buttonType == MenuButtonId.btn_Productnote or buttonType == MenuButtonId.btn_Beauty or buttonType == MenuButtonId.btn_GuildRanker or buttonType == MenuButtonId.btn_Event or buttonType == MenuButtonId.btn_Notice or buttonType == MenuButtonId.btn_BlackSpritAdventure or buttonType == MenuButtonId.btn_BSAdventure2 or buttonType == MenuButtonId.btn_WebAlbum or buttonType == MenuButtonId.btn_ScreenShotAlbum or buttonType == MenuButtonId.btn_Steam or buttonType == MenuButtonId.btn_Update or buttonType == MenuButtonId.btn_Twitch or buttonType == MenuButtonId.btn_Copyright or buttonType == MenuButtonId.btn_KnownIssue or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_CashShop) then
+    returnValue = false
+  end
   if not isGameTypeKR2() then
     menuNewPool[buttonType]:ResetVertexAni()
-    if buttonType == MenuButtonId.btn_ShortCut or buttonType == MenuButtonId.btn_DropItem or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_KnownIssue then
+    if buttonType == MenuButtonId.btn_ShortCut or buttonType == MenuButtonId.btn_DropItem or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_KnownIssue or buttonType == MenuButtonId.btn_BlackDesertLab then
       menuNewPool[buttonType]:SetShow(true)
       menuNewPool[buttonType]:SetVertexAniRun("Ani_Color_New", true)
     else

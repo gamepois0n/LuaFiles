@@ -268,7 +268,7 @@ function FGlobal_ConsoleQuickMenu_Update(position)
     return
   end
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
-    Panel_Widget_QuickMenu:SetShow(false)
+    PaGlobal_ConsoleQuickMenu:widgetClose()
     return
   end
   local quickMenuPosition = PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition
@@ -549,7 +549,11 @@ function PaGlobal_ConsoleQuickMenu:setWidget()
         local inventory = selfPlayer:getInventoryByType(whereType)
         local slotNo = inventory:getSlot(quickSlot._itemKey)
         local itemWrapper = getInventoryItemByType(whereType, slotNo)
-        widget._slot:setItem(itemWrapper)
+        if nil ~= itemWrapper then
+          widget._slot:setItem(itemWrapper)
+        else
+          self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
+        end
       else
         self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
       end
@@ -565,7 +569,7 @@ function FromClient_ConsoleQuickMenu_luaLoadComplete()
   PaGlobal_ConsoleQuickMenu:initializeUI()
   PaGlobal_ConsoleQuickMenu:setDefaultSetting()
   PaGlobal_ConsoleQuickMenu:setWidget()
-  Panel_Widget_QuickMenu:SetShow(true)
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
 end
 function FromClient_ConsoleQuickMenu_Open(group)
   PaGlobal_ConsoleQuickMenu:Open(group)

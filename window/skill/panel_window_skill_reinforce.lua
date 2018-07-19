@@ -1,4 +1,5 @@
 local UI_BUFFTYPE = CppEnums.UserChargeType
+local UI_TM = CppEnums.TextMode
 Panel_SkillReinforce:SetShow(false, false)
 Panel_SkillReinforce:ActiveMouseEventEffect(true)
 Panel_SkillReinforce:setGlassBackground(true)
@@ -24,7 +25,6 @@ function SkillAwakenResult_HideAni()
   local ani1 = UIAni.AlphaAnimation(0, Panel_SkillAwaken_ResultOption, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end
-local UI_TM = CppEnums.TextMode
 local skillReinforce = {
   btnClose = UI.getChildControl(Panel_SkillReinforce, "Button_Close"),
   btnQuestion = UI.getChildControl(Panel_SkillReinforce, "Button_Question"),
@@ -137,6 +137,8 @@ function skillReinforce:update(skillType, skillNo, optionIndex, reinforceSkillIn
       self.skillListDesc:SetShow(true)
       self.skillListSlot:SetShow(true)
       self.skillListName:SetText(tostring(skillSSW:getName()))
+      self.skillListDesc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
+      self.skillListDesc:setLineCountByLimitAutoWrap(3)
       self.skillListDesc:SetText(tostring(skillTypeSSW:getDescription()))
       self.skillListSlot:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
       Panel_SkillTooltip_SetPosition(skillNo, self.skillListSlot, "SkillAwaken")
@@ -164,6 +166,8 @@ function skillReinforce:update(skillType, skillNo, optionIndex, reinforceSkillIn
   _type = skillType
   _haveOptionIndex = optionIndex
   self._beforeSkillIndex = skillIndex
+  self.optionListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.optionListDesc2:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.optionListDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION"))
   self.optionListDesc2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION"))
   self.btnOptionListShow:SetShow(true)
@@ -206,6 +210,10 @@ function SkillListControlCreate(content, key)
       if count == _key then
         local skillTypeSSW = skillSSW:getSkillTypeStaticStatusWrapper()
         skillNo = skillSSW:getSkillNo()
+        skillListName:SetTextMode(UI_TM.eTextMode_AutoWrap)
+        skillListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+        skillListDesc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
+        skillListDesc:setLineCountByLimitAutoWrap(3)
         skillListName:SetText(tostring(skillSSW:getName()))
         skillListDesc:SetText(tostring(skillTypeSSW:getDescription()))
         skillListIcon:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
@@ -229,7 +237,11 @@ function skillReinforce_SetSkill(skillNo, index)
   self.skillListSlot:SetShow(true)
   local skillSSW = getSkillStaticStatus(skillNo, 1)
   local skillTypeSSW = skillSSW:getSkillTypeStaticStatusWrapper()
+  self.skillListName:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.skillListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.skillListName:SetText(tostring(skillSSW:getName()))
+  self.skillListDesc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
+  self.skillListDesc:setLineCountByLimitAutoWrap(2)
   self.skillListDesc:SetText(tostring(skillTypeSSW:getDescription()))
   self.skillListSlot:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
   Panel_SkillTooltip_SetPosition(skillNo, self.skillListSlot, "SkillAwaken")
@@ -254,6 +266,8 @@ function skillReinforce_SetSkill(skillNo, index)
   self.btnOptionListShow2:SetShow(true)
   self.optionListBlueBg:SetShow(false)
   self.optionListBlueBg2:SetShow(false)
+  self.optionListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.optionListDesc2:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.optionListDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION"))
   self.optionListDesc2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION"))
 end
@@ -291,6 +305,7 @@ function OptionListControlCreate(content, key)
     local count = 0
     local _key = Int64toInt32(key)
     for index = 0, optionCount - 1 do
+      optionListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
       if nil == self._currentOptionIndex2 then
         if index == _key then
           optionListDesc:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
@@ -376,6 +391,7 @@ function OptionListControlCreate2(content, key)
     local _key = Int64toInt32(key)
     for index = 0, optionCount - 1 do
       if self._currentOptionIndex ~= index and index == _key then
+        optionListDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
         optionListDesc:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
         optionListBg:addInputEvent("Mouse_LUp", "skillReinforce_OptionSet2(" .. index .. ")")
         break
@@ -393,6 +409,7 @@ function skillReinforce_OptionSet2(index)
   self._currentOptionIndex2 = index
   local skillSSW = getSkillStaticStatus(self._currentSkillNo, 1)
   local activeSkillSS = skillSSW:getActiveSkillStatus()
+  self.optionListDesc2:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.optionListDesc2:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
   activeSkillSS:getSkillAwakenDescription(index)
   Panel_SkillTooltip_Hide()

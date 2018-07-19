@@ -20,6 +20,7 @@ local CharacterTitleInfo = {
 function CharacterTitleInfo:init()
   self._ui.txt_Character_Title = UI.getChildControl(self._ui.stc_GraphBg, "StaticText_TitleName")
   self._ui.txt_Title_Name_Info = UI.getChildControl(self._ui.stc_GraphBg, "StaticText_Title_Name_Info")
+  self._ui.txt_Title_Name_Info:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self:current_TitleName()
   self._ui.progress_World = UI.getChildControl(self._ui.stc_GraphBg, "Progress2_World")
   self._ui.txt_WorldPercent = UI.getChildControl(self._ui.stc_GraphBg, "StaticText_World_Percent")
@@ -37,17 +38,22 @@ function CharacterTitleInfo:init()
     self._ui.radiobutton_Category[ii]:addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TapToOpen(" .. ii .. " )")
   end
   self._ui.txt_LastUpdateTime = UI.getChildControl(self._ui.stc_TitleTapBg, "StaticText_AcceptCooltime")
+  self._ui.txt_Total_Progress = UI.getChildControl(self._ui.stc_TotalInfoBg, "StaticText_Progress")
+  self._ui.progress_Total_Percent = UI.getChildControl(self._ui.stc_TotalInfoBg, "Progress2_Percent")
+  self._ui.txt_Reward = UI.getChildControl(self._ui.stc_TotalInfoBg, "StaticText_Reward")
+  self._ui.stc_TotalInfoBg:SetShow(false)
+  self._ui.scroll_VerticalTitleList = UI.getChildControl(self._ui.list_TitleList, "List2_1_VerticalScroll")
   self._ui.stc_LTButton = UI.getChildControl(self._ui.stc_TitleTapBg, "Static_LT_ConsoleUI")
   self._ui.stc_LTButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterTitleInfo_ShowLeftNextTab()")
   self._ui.stc_RTButton = UI.getChildControl(self._ui.stc_TitleTapBg, "Static_RT_ConsoleUI")
   self._ui.stc_RTButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterTitleInfo_ShowRightNextTab()")
-  self._ui.txt_Total_Progress = UI.getChildControl(self._ui.stc_TotalInfoBg, "StaticText_Progress")
-  self._ui.progress_Total_Percent = UI.getChildControl(self._ui.stc_TotalInfoBg, "Progress2_Percent")
-  self._ui.txt_Reward = UI.getChildControl(self._ui.stc_TotalInfoBg, "StaticText_Reward")
-  self._ui.list_TitleList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "CharacterInfo_TitleList_ControlCreate")
-  self._ui.list_TitleList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self:titleListCheck(0)
   CharacterTitleInfo:registMessageHandler()
+end
+function CharacterTitleInfo:registMessageHandler()
+  self._ui.list_TitleList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "CharacterInfo_TitleList_ControlCreate")
+  self._ui.list_TitleList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_CharacterTitleInfo_Update")
 end
 function CharacterTitleInfo:current_TitleName()
   local selfplayer = getSelfPlayer()
@@ -76,67 +82,17 @@ function CharacterTitleInfo:titleListCheck(categoryIdx)
   self._ui.radiobutton_Category[categoryIdx]:SetFontColor(_fontColor.selected)
   FromClient_CharacterTitleInfo_Update()
 end
-function CharacterInfo_TitleList_ControlCreate(content, key)
-  local self = CharacterTitleInfo
-  local titleIndex = Int64toInt32(key)
-  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)
-  if nil == titleWrapper then
-    return
-  end
-  local titleBG = UI.getChildControl(content, "RadioButton_Select_Title_Template")
-  local titleName = UI.getChildControl(content, "StaticText_Title_Name_Template")
-  local titleSet = UI.getChildControl(content, "StaticText_Status_Template")
-  local radioButton_NA = UI.getChildControl(content, "RadioButton_NA_Template")
-  radioButton_NA:SetIgnore(true)
-  local stc_Selected = UI.getChildControl(content, "Static_Selected")
-  titleName:SetText(titleWrapper:getName())
-  if titleWrapper:isAcquired() == true then
-    titleBG:SetIgnore(false)
-    titleBG:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-    titleBG:addInputEvent("Mouse_Out", "InputMOut_CharacterTitleInfo_CloseDescription()")
-    titleBG:SetUnchecked()
-    titleName:SetShow(true)
-    titleSet:SetShow(true)
-    titleBG:addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TitleSet(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-    radioButton_NA:SetShow(false)
-    if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
-      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, ""))
-      stc_Selected:SetShow(true)
-    else
-      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
-      stc_Selected:SetShow(false)
-    end
+function CharacterTitleInfo:updateCoolTime()
+  local coolTime = ToClient_GetUpdateTitleDelay()
+  if coolTime > 0 then
+    self._isSelectedTitle = true
+    self._ui.txt_LastUpdateTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LASTUPDATETIME", "coolTime", coolTime))
   else
-    titleBG:SetIgnore(true)
-    titleName:SetShow(true)
-    radioButton_NA:SetIgnore(false)
-    radioButton_NA:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
-    radioButton_NA:addInputEvent("Mouse_Out", "InputMOut_CharacterTitleInfo_CloseDescription()")
-    titleBG:SetUnchecked()
-    titleSet:SetShow(false)
-    stc_Selected:SetShow(false)
-    radioButton_NA:SetShow(true)
+    self._isSelectedTitle = false
+    self._ui.txt_LastUpdateTime:SetText("")
   end
-end
-function InputMLUp_CharacterTitleInfo_TapToOpen(categoryIdx)
-  local self = CharacterTitleInfo
-  self:titleListCheck(categoryIdx)
-end
-function InputMOn_CharacterTitleInfo_ShowDescription(categoryIdx, titleIdx)
-  local self = CharacterTitleInfo
-  ToClient_SetCurrentTitleCategory(categoryIdx)
-  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
-  self._ui.txt_Title_Name_Info:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.txt_Title_Name_Info:SetText(titleWrapper:getDescription())
-end
-function InputMOut_CharacterTitleInfo_CloseDescription()
-  local self = CharacterTitleInfo
-  self._ui.txt_Title_Name_Info:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.txt_Title_Name_Info:SetText("")
 end
 function CharacterTitleInfo:titleInfoUpdate()
-  local _titleCountByAll = ToClient_GetTotalTitleCount()
-  local _titleTotalCount = ToClient_GetTotalTitleBuffCount()
   local titleCountByAll = ToClient_GetTotalTitleCount()
   local acquiredTitleCountByAll = ToClient_GetTotalAcquiredTitleCount()
   local titleTotalCount = ToClient_GetTotalTitleBuffCount()
@@ -190,7 +146,62 @@ function CharacterTitleInfo:titleInfoUpdate()
     for titleIndex = 0, lastCount - 1 do
       self._ui.list_TitleList:getElementManager():pushKey(toInt64(0, titleIndex))
     end
+    ToClient_padSnapResetControl()
   end
+end
+function CharacterInfo_TitleList_ControlCreate(content, key)
+  local self = CharacterTitleInfo
+  local titleIndex = Int64toInt32(key)
+  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)
+  if nil == titleWrapper then
+    return
+  end
+  local titleBG = UI.getChildControl(content, "RadioButton_Select_Title_Template")
+  local titleName = UI.getChildControl(content, "StaticText_Title_Name_Template")
+  local titleSet = UI.getChildControl(content, "StaticText_Status_Template")
+  local radioButton_NA = UI.getChildControl(content, "RadioButton_NA_Template")
+  local stc_Selected = UI.getChildControl(content, "Static_Selected")
+  titleBG:SetUnchecked()
+  titleBG:SetIgnore(false)
+  radioButton_NA:SetIgnore(true)
+  titleName:SetText(titleWrapper:getName())
+  titleName:SetShow(true)
+  if titleWrapper:isAcquired() == true then
+    titleSet:SetShow(true)
+    radioButton_NA:SetShow(false)
+    titleBG:addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TitleSet(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
+    if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, ""))
+      stc_Selected:SetShow(true)
+    else
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
+      stc_Selected:SetShow(false)
+    end
+  else
+    radioButton_NA:SetIgnore(false)
+    radioButton_NA:SetShow(true)
+    titleSet:SetShow(false)
+    stc_Selected:SetShow(false)
+    titleBG:addInputEvent("Mouse_LUp", "")
+  end
+  titleBG:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. titleIndex .. " )")
+end
+function InputMLUp_CharacterTitleInfo_TapToOpen(categoryIdx)
+  local self = CharacterTitleInfo
+  self._previousTitleListType = nil
+  self:titleListCheck(categoryIdx)
+end
+function InputMOn_CharacterTitleInfo_ShowDescription(titleIdx)
+  local self = CharacterTitleInfo
+  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
+  if nil == titleWrapper then
+    return
+  end
+  self._ui.txt_Title_Name_Info:SetText(titleWrapper:getDescription())
+end
+function InputMOut_CharacterTitleInfo_CloseDescription()
+  local self = CharacterTitleInfo
+  self._ui.txt_Title_Name_Info:SetText("")
 end
 function InputMLUp_CharacterTitleInfo_TitleSet(categoryIdx, titleIdx)
   local self = CharacterTitleInfo
@@ -200,9 +211,6 @@ function InputMLUp_CharacterTitleInfo_TitleSet(categoryIdx, titleIdx)
   self._isSelectedTitle = true
   self._currentClickTitleIdx = titleIdx
 end
-function CharacterTitleInfo:registMessageHandler()
-  registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_CharacterTitleInfo_Update")
-end
 function FromClient_CharacterTitleInfo_Update()
   local self = CharacterTitleInfo
   if _mainPanel:IsShow() == false then
@@ -211,16 +219,6 @@ function FromClient_CharacterTitleInfo_Update()
   self:titleInfoUpdate()
   self:current_TitleName()
   self:updateCoolTime()
-end
-function CharacterTitleInfo:updateCoolTime()
-  local coolTime = ToClient_GetUpdateTitleDelay()
-  if coolTime > 0 then
-    self._isSelectedTitle = true
-    self._ui.txt_LastUpdateTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LASTUPDATETIME", "coolTime", coolTime))
-  else
-    self._isSelectedTitle = false
-    self._ui.txt_LastUpdateTime:SetText("")
-  end
 end
 function FromClient_luaLoadComplete_Panel_Window_CharacterInfo_Title()
   local self = CharacterTitleInfo
@@ -268,5 +266,6 @@ function PaGlobalFunc_CharacterTitleInfoTab_PadControl(index)
   else
     self:ShowNextTab(false)
   end
+  ToClient_padSnapResetControl()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Window_CharacterInfo_Title")

@@ -13,6 +13,7 @@ PaGlobal_Guild_AllianceInfo = {
   },
   _inviteUi = {},
   _allianceName = "",
+  _allianceType = 0,
   _leaderDefaultMemeberCount = 0,
   _selectedGuildIndex = 0,
   _createdCount = 0,
@@ -433,7 +434,7 @@ function PaGlobal_Guild_AllianceInfo:confirm_AllianceCreate()
   for ii = 0, self._createdCount do
     ToClient_RequestAddAllianceJoinQueue(self._allianceMemberName[ii], self._taxConstRate[ii], self._guildLimitMemeberCount[ii])
   end
-  ToClient_CreateGuildAlliance(self._allianceName)
+  ToClient_CreateGuildAlliance(self._allianceName, self._allianceType)
   self._isInvited = true
 end
 function PaGlobal_Guild_AllianceInfo:confirm_CancelInvite()

@@ -67,9 +67,9 @@ function defalut_Control:Init_Control()
   defalut_Control:registMessageHandler()
 end
 function defalut_Control:registEventHandler()
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "MailList_Change_Page(false)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "MailList_Change_Page(true)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGloba_Mail_GetDetail()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_DpadLeft, "MailList_Change_Page(false)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "MailList_Change_Page(true)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGloba_Mail_GetDetail()")
   for key, value in pairs(self._ui._List_BG) do
     value:addInputEvent("Mouse_On", "MailList_SelectMailWithIndex(" .. tostring(key) .. ")")
     value:addInputEvent("Mouse_LUp", "PaGloba_Mail_GetDetail()")

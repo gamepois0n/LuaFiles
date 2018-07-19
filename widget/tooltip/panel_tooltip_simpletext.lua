@@ -303,6 +303,22 @@ function TooltipSimple_CommonShow_Gauge(name, desc, needTime, useTime)
   end
   Panel_Tooltip_SimpleText:SetShow(true)
 end
+function TooltipSimple_ShowSetSetPos_Console(pos, name, desc)
+  if nil == pos.x then
+    pos.x = 0
+  end
+  if nil == pos.y then
+    pos.y = 0
+  end
+  Panel_Tooltip_SimpleText:ChangeTextureInfoName("new_ui_common_forlua/default/blackpanel_series.dds")
+  local x1, y1, x2, y2 = setTextureUV_Func(Panel_Tooltip_SimpleText, 127, 1, 189, 63)
+  Panel_Tooltip_SimpleText:getBaseTexture():setUV(x1, y1, x2, y2)
+  Panel_Tooltip_SimpleText:setRenderTexture(Panel_Tooltip_SimpleText:getBaseTexture())
+  _mouseL:SetShow(false)
+  _mouseR:SetShow(false)
+  Panel_Tooltip_SimpleText:SetPosXY(pos.x, pos.y)
+  TooltipSimple_CommonShow(name, desc)
+end
 function TooltipSimple_Show(uiControl, name, desc, reversePosX)
   Panel_Tooltip_SimpleText:ChangeTextureInfoName("new_ui_common_forlua/default/blackpanel_series.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(Panel_Tooltip_SimpleText, 127, 1, 189, 63)

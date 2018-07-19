@@ -589,16 +589,27 @@ function inven:createSlot()
     self.slotEtcData[ii] = effectSlot
   end
   if FGlobal_IsCommercialService() then
-    inven.buttonPearl:SetShow(true)
-    inven.valuePearl:SetShow(true)
-    inven.buttonMileage:SetShow(true)
-    inven.valueMileage:SetShow(true)
+    if isGameTypeGT() then
+      inven.buttonPearl:SetShow(false)
+      inven.valuePearl:SetShow(false)
+    else
+      inven.buttonPearl:SetShow(true)
+      inven.valuePearl:SetShow(true)
+      inven.buttonMileage:SetShow(true)
+      inven.valueMileage:SetShow(true)
+    end
   elseif isGameTypeEnglish() then
     inven.buttonPearl:SetShow(true)
     inven.valuePearl:SetShow(true)
     inven.buttonMileage:SetShow(true)
     inven.valueMileage:SetShow(true)
   else
+    inven.buttonPearl:SetShow(false)
+    inven.valuePearl:SetShow(false)
+    inven.buttonMileage:SetShow(false)
+    inven.valueMileage:SetShow(false)
+  end
+  if isGameTypeGT() then
     inven.buttonPearl:SetShow(false)
     inven.valuePearl:SetShow(false)
     inven.buttonMileage:SetShow(false)
@@ -1197,7 +1208,7 @@ function HandleClicked_Inventory_Palette_Open()
   end
   FGlobal_DyePalette_Open()
 end
-function PaGlobalFunc_InventoryCheckShow()
+function PaGlobalFunc_InventoryInfo_GetShow()
   return Panel_Window_Inventory:GetShow()
 end
 function FGlobal_CashInventoryOpen_ByEnchant()

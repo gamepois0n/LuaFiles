@@ -38,7 +38,8 @@ local Window_SkillInfo = {
   _currentTabIndex = 0,
   _remainSkillPoint,
   _selfPlayerLevel,
-  _isDialog = false
+  _isDialog = false,
+  _prevScrollIndex = 0
 }
 function Window_SkillInfo:GetFusionSkillFromCell(cellTable)
   local cols = cellTable:capacityX()
@@ -199,10 +200,11 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
   local learnSkill = self._ui._right._radioButton_LearnSkill
   local basicSkill = self._ui._right._radioButton_SkillBasic
   local awakenSkill = self._ui._right._radioButton_SkillAwaken
+  self._currentTabIndex = titleType
   self:Clear()
   self:Update()
-  Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
-  Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   if self._config._title_Learn == titleType then
     tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_TAB_LEARNABLE"))
     tooltip:SetPosX(learnSkill:GetPosX() - learnSkill:GetSizeX() / 2)
@@ -220,8 +222,8 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
     self._ui._right._radiobutton_ResetSkillKey:SetShow(true)
     self._ui._right._staticText_LearnableEmpty:SetShow(false)
     self._ui._right._radioButton_SkillDemo:SetShow(true)
-    Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Skill_SkillAction()")
-    Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_Skill_ResetButton()")
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Skill_SkillAction()")
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Skill_ResetButton()")
     basicSkill:SetCheck(true)
     self:SetSkillList(self._combatTable)
   elseif self._config._title_Awaken == titleType then
@@ -337,22 +339,24 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
     uiInfo._radioButton_LeftSkill:SetShow(false)
     uiInfo._radioButton_RightSkill:SetShow(false)
     uiInfo._radioButton_SkillBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_LearnButton()")
-    Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_Skill_LearnButton()")
   else
     uiInfo._radioButton_LeftSkill:SetShow(1 ~= self:FindSkillCount(skillInfo))
     uiInfo._radioButton_RightSkill:SetShow(1 ~= self:FindSkillCount(skillInfo))
     uiInfo._radioButton_SkillBg:addInputEvent("Mouse_LUp", "")
-    Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "")
-    uiInfo._radioButton_LeftSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_SkillHandle(" .. id .. ",-1)")
-    uiInfo._radioButton_RightSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_SkillHandle(" .. id .. ",1)")
     if _ContentsGroup_isConsolePadControl then
-      list_content:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",-1)")
-      list_content:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",1)")
+      Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadLeft, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",-1)")
+      Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",1)")
     end
   end
-  uiInfo._radioButton_SkillBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
   if _ContentsGroup_isConsolePadControl then
     uiInfo._radioButton_SkillBg:addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
+  end
+  if false == skillInfo._isPassive then
+    self._ui._right._radioButton_SkillDemo:SetShow(true)
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Skill_SkillAction()")
+  else
+    self._ui._right._radioButton_SkillDemo:SetShow(false)
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   end
 end
 function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
@@ -437,20 +441,6 @@ function PaGlobalFunc_Skill_SkillHandle(id, direction)
       end
     end
   else
-    for tableIndex = 0, #self._awakenTable do
-      local skillCount = self._awakenTable[tableIndex]._skillCount
-      local skillTable = self._awakenTable[tableIndex]._skillTable
-      if nil == skillTable then
-        return
-      end
-      for skillIndex = 0, skillCount - 1 do
-        if skillTable[skillIndex] == skillInfo then
-          findTableIndex = tableIndex
-          findSkillIndex = skillIndex
-          break
-        end
-      end
-    end
   end
   if -1 == findTableIndex or -1 == findSkillIndex then
     return
@@ -511,8 +501,11 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
   body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
-  body._staticText_Command:SetText("")
+  body._staticText_Command:SetText(skillInfo._command)
+  body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2)
   local resourcePosY = body._staticText_NeedResource:GetPosY() + body._staticText_NeedResource:GetSizeY()
+  local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY()
+  local needResourcePosY = math.max(resourcePosY, commendPosY)
   local needResourcePosY = resourcePosY
   local dividerPosY = body._static_Divider2:GetPosY()
   body._static_Divider2:SetPosY(math.max(needResourcePosY, dividerPosY))
@@ -638,8 +631,8 @@ function Window_SkillInfo:Clear()
   self._ui._right._radioButton_LearnSkill:SetCheck(false)
   self._ui._right._radioButton_SkillBasic:SetCheck(false)
   self._ui._right._radioButton_SkillAwaken:SetCheck(false)
-  Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_SkillTab_forPadEventFunc(-1)")
-  Panel_Window_Skill:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_SkillTab_forPadEventFunc(1)")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_SkillTab_forPadEventFunc(-1)")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_SkillTab_forPadEventFunc(1)")
 end
 function Window_SkillInfo:Update()
   self:UpdateStat()
@@ -887,7 +880,7 @@ function PaGlobalFunc_Skill_Open(isDialog)
   self._renderMode:set()
   self:SkillDetailClear()
   self:Update()
-  ToClient_LearnSkillCameraSetRotation(-10, 20)
+  ToClient_LearnSkillCameraSetZoom(400)
   ToClient_LearnSkillCameraSetPosition(2.5, -0.5)
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
 end
@@ -918,8 +911,10 @@ function PaGlobalFunc_FromClient_Skill_luaLoadComplete()
 end
 function PaGlobalFunc_FromClient_Skill_WindowUpdate()
   local self = Window_SkillInfo
+  self._prevScrollIndex = self._ui._right._list2_Skill:getCurrenttoIndex()
   self:Update()
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
+  self._ui._right._list2_Skill:moveIndex(self._prevScrollIndex)
 end
 function Toggle_SkillTab_forPadEventFunc(value)
   local self = Window_SkillInfo
@@ -935,6 +930,7 @@ function Toggle_SkillTab_forPadEventFunc(value)
     PaGlobalFunc_Skill_SelectTitle(self._config._title_Basic)
   elseif 2 == self._currentTabIndex then
   end
+  ToClient_padSnapResetControl()
 end
 function Window_SkillInfo:Resize()
 end

@@ -60,7 +60,8 @@ PaGlobal_Menu = {
     _isDropItemOpen = ToClient_IsContentsGroupOpen("337"),
     _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350"),
     _isButtonShortCut = ToClient_IsContentsGroupOpen("351"),
-    _isBlackDesertLab = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType()
+    _isBlackDesertLab = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType(),
+    _isTestServer = isGameTypeGT()
   },
   _categoryData = {},
   _mainButtonCount = 5,
@@ -273,7 +274,8 @@ PaGlobal_Menu._bannerNew = {
   _dropItem = 2,
   _blackDesertTv = 3,
   _memo = 4,
-  _count = 5
+  _blackDesertLab = 5,
+  _count = 6
 }
 PaGlobal_Menu._bannerData = {
   _hot = {
@@ -293,7 +295,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 291,
       _x2 = 188,
       _y2 = 348,
-      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType()
+      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType() and not PaGlobal_Menu._contentsGroup._isTestServer
     },
     [PaGlobal_Menu._bannerHot._beauty] = {
       _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BEAUTY"),
@@ -302,7 +304,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 349,
       _x2 = 188,
       _y2 = 406,
-      _isContentOpen = true
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer
     },
     [PaGlobal_Menu._bannerHot._dailyStamp] = {
       _string = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGTITLE"),
@@ -356,7 +358,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 291,
       _x2 = 376,
       _y2 = 348,
-      _isContentOpen = true
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer
     },
     [PaGlobal_Menu._bannerHot._update] = {
       _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_UPDATE"),
@@ -365,7 +367,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 409,
       _x2 = 376,
       _y2 = 464,
-      _isContentOpen = isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() or isGameServiceTypeDev()
+      _isContentOpen = (isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() or isGameServiceTypeDev()) and not PaGlobal_Menu._contentsGroup._isTestServer
     },
     [PaGlobal_Menu._bannerHot._event] = {
       _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"),
@@ -374,7 +376,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 465,
       _x2 = 188,
       _y2 = 522,
-      _isContentOpen = true
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer
     },
     ["_count"] = PaGlobal_Menu._bannerHot._count
   },
@@ -413,7 +415,7 @@ PaGlobal_Menu._bannerData = {
       _y1 = 1,
       _x2 = 188,
       _y2 = 58,
-      _isContentOpen = true
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer
     },
     [PaGlobal_Menu._bannerNew._memo] = {
       _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MEMONAME"),
@@ -423,6 +425,15 @@ PaGlobal_Menu._bannerData = {
       _x2 = 188,
       _y2 = 174,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isMemoOpen
+    },
+    [PaGlobal_Menu._bannerNew._blackDesertLab] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
+      _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds",
+      _x1 = 189,
+      _y1 = 465,
+      _x2 = 376,
+      _y2 = 522,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackDesertLab
     },
     ["_count"] = PaGlobal_Menu._bannerNew._count
   }
@@ -463,7 +474,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 3,
       _x2 = 261,
       _y2 = 63,
-      _isContentOpen = not isGameTypeKR2(),
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 0
@@ -541,7 +552,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 189,
       _x2 = 509,
       _y2 = 249,
-      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType(),
+      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType() and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 5
@@ -571,7 +582,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 126,
       _x2 = 186,
       _y2 = 186,
-      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType(),
+      _isContentOpen = CppEnums.ContentsServiceType.eContentsServiceType_Commercial == getContentsServiceType() and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = true,
       _index = 6
@@ -675,7 +686,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 298,
       _x2 = 62,
       _y2 = 358,
-      _isContentOpen = true,
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 14
@@ -701,7 +712,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 436,
       _x2 = 186,
       _y2 = 496,
-      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackSpiritAdventure,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackSpiritAdventure and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 16
@@ -714,7 +725,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 64,
       _x2 = 496,
       _y2 = 124,
-      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackSpiritAdventure2,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackSpiritAdventure2 and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = true,
       _isHot = false,
       _index = 17
@@ -727,7 +738,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 374,
       _x2 = 124,
       _y2 = 434,
-      _isContentOpen = PaGlobal_Menu._contentsGroup._webAlbumOpen,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._webAlbumOpen and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 18
@@ -740,7 +751,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 250,
       _x2 = 62,
       _y2 = 310,
-      _isContentOpen = PaGlobal_Menu._contentsGroup._photoGalleryOpen,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._photoGalleryOpen and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 19
@@ -878,7 +889,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 64,
       _x2 = 248,
       _y2 = 124,
-      _isContentOpen = not isGameTypeKR2(),
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 27
@@ -1008,7 +1019,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 188,
       _x2 = 310,
       _y2 = 248,
-      _isContentOpen = not isGameTypeKR2() and not isGameTypeEnglish() and not isServerFixedCharge(),
+      _isContentOpen = not isGameTypeKR2() and not isGameTypeEnglish() and not isServerFixedCharge() and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = true,
       _index = 37
@@ -1021,7 +1032,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 188,
       _x2 = 434,
       _y2 = 248,
-      _isContentOpen = isGameTypeEnglish() or isGameTypeSA() or isGameTypeTR() or isGameServiceTypeDev(),
+      _isContentOpen = (isGameTypeEnglish() or isGameTypeSA() or isGameTypeTR() or isGameServiceTypeDev()) and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 38
@@ -1034,7 +1045,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 312,
       _x2 = 186,
       _y2 = 372,
-      _isContentOpen = isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or isGameServiceTypeDev(),
+      _isContentOpen = (isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or isGameServiceTypeDev()) and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = true,
       _index = 39
@@ -1047,7 +1058,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 312,
       _x2 = 496,
       _y2 = 372,
-      _isContentOpen = isGameTypeEnglish(),
+      _isContentOpen = isGameTypeEnglish() and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 40
@@ -1086,7 +1097,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 312,
       _x2 = 558,
       _y2 = 372,
-      _isContentOpen = isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTH() or isGameTypeID(),
+      _isContentOpen = (isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeTH() or isGameTypeID()) and not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 62
@@ -1155,7 +1166,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 250,
       _x2 = 496,
       _y2 = 310,
-      _isContentOpen = true,
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = true,
       _index = 44
@@ -1220,7 +1231,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 436,
       _x2 = 372,
       _y2 = 496,
-      _isContentOpen = true,
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = true,
       _isHot = false,
       _index = 49
@@ -1263,7 +1274,7 @@ PaGlobal_Menu._categoryData = {
       _y1 = 2,
       _x2 = 124,
       _y2 = 62,
-      _isContentOpen = true,
+      _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
       _isNew = false,
       _isHot = false,
       _index = 51
@@ -1463,12 +1474,12 @@ function PaGlobal_Menu:SetMainMenu()
   local topCount = math.ceil(openContentCount / 2)
   local bottomCount = math.floor(openContentCount / 2)
   local posIndex = 0
-  for index = 0, openContentCount - 1 do
+  for index = 0, self._main._count - 1 do
     if self._categoryData[0][index]._isContentOpen then
       if 0 == posIndex % 2 then
-        self._ui._main[index]:SetSpanSize((45 * topCount - 40) * -1 + 90 * math.floor(index / 2), 0)
+        self._ui._main[index]:SetSpanSize((45 * topCount - 40) * -1 + 90 * math.floor(posIndex / 2), 0)
       else
-        self._ui._main[index]:SetSpanSize((45 * bottomCount - 40) * -1 + 90 * math.floor(index / 2), 75)
+        self._ui._main[index]:SetSpanSize((45 * bottomCount - 40) * -1 + 90 * math.floor(posIndex / 2), 75)
       end
       posIndex = posIndex + 1
     end
@@ -2311,7 +2322,11 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
         TradeEventInfo_Show()
       end
     elseif PaGlobal_Menu._infomation._warInfo == index then
-      FGlobal_GuildWarInfo_Show()
+      if true == _ContentsGroup_SeigeSeason5 then
+        FGlobal_GuildWarInfo_Show()
+      else
+        FGlobal_GuildWarInfo_Show()
+      end
     elseif PaGlobal_Menu._infomation._event == index then
       EventNotify_Open(true, true)
     elseif PaGlobal_Menu._infomation._steam == index then
@@ -2611,6 +2626,15 @@ function PaGlobal_Menu:HandleClicked_Banner(isHot)
       PaGlobal_Twitch:ShowWindow()
     elseif self._bannerNew._memo == index then
       PaGlobal_Memo:ListOpen()
+    elseif self._bannerNew._blackDesertLab == index then
+      local player = getSelfPlayer()
+      if nil == player then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LEVEL_LIMITED_GLOBAL_LABS"))
+        return
+      end
+      if 55 < player:get():getLevel() then
+        PaGlobal_BlackDesertLab_Show()
+      end
     end
   end
 end

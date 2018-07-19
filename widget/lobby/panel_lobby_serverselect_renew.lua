@@ -166,7 +166,7 @@ for v, value in ipairs(bgManager) do
       for index = 1, value.imageCount do
         local targetControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, _panel, "Static_ServerSelectBg_" .. imageIndex)
         CopyBaseProperty(tempBg, targetControl)
-        targetControl:ChangeTextureInfoNameAsync(baseLink .. value.iconPath .. index .. ".dds")
+        targetControl:ChangeTextureInfoName(baseLink .. value.iconPath .. index .. ".dds")
         targetControl:SetSize(screenX, screenY)
         targetControl:SetPosX(0)
         targetControl:SetPosY(0)
@@ -198,6 +198,30 @@ function ServerSelect:init()
   self:registEventHandler()
   self._ui.txt_Back_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_Back_ConsoleUI")
   self:initListData()
+end
+local isXboxDownlosdShowMessageBox = false
+function ServerSelect:checkXBoxInstallation()
+  if isXboxDownlosdShowMessageBox then
+    return
+  end
+  if ToClient_isDataDownloadStart() then
+    local isComplete = ToClient_isDataDownloadComplete()
+    local percent = ToClient_getDataDownloadProgress()
+    if false == isComplete then
+      local messageboxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+        content = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MESSAGEBOX_XBOX_DATAINSTALLATION_DESC") .. tostring(percent),
+        functionApply = ServerSelect_XboxDownload_MessgaeBoxYes,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageboxData)
+      return
+    end
+  end
+  isXboxDownlosdShowMessageBox = false
+end
+function ServerSelect_XboxDownload_MessgaeBoxYes()
+  isXboxDownlosdShowMessageBox = true
 end
 function ServerSelect:updateListData()
   local channelIdx = 0
@@ -457,6 +481,7 @@ function PaGlobal_ServerSelect_PerFrameUpdate(deltaTime)
     _updateTimeAcc = 15
     local self = ServerSelect
     self:updateListData()
+    self:checkXBoxInstallation()
     if _isScope then
       _stc_BackgroundImage[currentBackIndex]:SetShow(true)
       _isScope = false

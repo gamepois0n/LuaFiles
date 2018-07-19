@@ -104,8 +104,7 @@ function FromClient_CharacterHistoryInfo_updateInfo()
 end
 function CharacterHistoryInfo:updateInfo(indexYear, indexMonth)
   local _journalListCount = ToClient_GetJournalListCount(indexYear, indexMonth, self.currentValue._myHistory)
-  if not (_journalListCount <= 0) or indexYear == ToClient_GetThisYear() and indexMonth == ToClient_GetThisMonth() then
-  else
+  if _journalListCount <= 0 and (indexYear ~= ToClient_GetThisYear() or indexMonth ~= ToClient_GetThisMonth()) then
     return false
   end
   local _historyRightValueIdx = 0
@@ -246,6 +245,8 @@ function CharacterHistoryInfo:updateInfo(indexYear, indexMonth)
 end
 function CharacterHistoryInfo:registEvent()
   registerEvent("FromClient_JournalInfo_UpdateText", "FromClient_CharacterHistoryInfo_updateInfo")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "InputMLUp_CharacterHistoryInfo_IncreaseMonth()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "InputMLUp_CharacterHistoryInfo_DecreaseMonth()")
 end
 function PaGlobalFunc_CharacterHistoryInfo_Open()
   if nil == CharacterHistoryInfo then

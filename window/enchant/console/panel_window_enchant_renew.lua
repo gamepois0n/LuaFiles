@@ -33,7 +33,6 @@ local EnchantInfo = {
   _isAnimating = false,
   _forcedEnchant = false,
   _effectTime_Enchant = 6,
-  _forcedEnchantEnable = false,
   _strForEnchantInfo = {
     _forcedChecked = "",
     _cronChecked = "",
@@ -64,7 +63,7 @@ function EnchantInfo:initialize()
   self._ui.txt_desc = UI.getChildControl(self._ui.stc_mainBG, "StaticText_DescTitle")
   self._ui.txt_descSub = UI.getChildControl(self._ui.stc_mainBG, "StaticText_DescSub")
   self._ui.txt_descSub:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.txt_descSub:SetText(self._ui.txt_descSub:GetText())
+  self._ui.txt_descSub:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_DESC_RENEW"))
   self._ui.txt_bonus1 = UI.getChildControl(self._ui.stc_innerBG, "StaticText_ExtraChance1")
   self._ui.txt_bonus2 = UI.getChildControl(self._ui.stc_innerBG, "StaticText_ExtraChance2")
   self._ui.txt_bonus1Val = UI.getChildControl(self._ui.stc_innerBG, "StaticText_ExtraChance1Val")
@@ -84,7 +83,7 @@ function EnchantInfo:initialize()
   self._ui.txt_keyGuideForced = UI.getChildControl(self._ui.btn_forced, "StaticText_KeyGuideForce")
   local slotConfig = {
     createIcon = true,
-    createBorder = false,
+    createBorder = true,
     createCount = true,
     createEnchant = true,
     createCash = true
@@ -98,6 +97,8 @@ function EnchantInfo:initialize()
   SlotItem.new(self._ui.slot_subjectItem, "Slot_Subject", 1, self._ui.stc_subjectSlotBG, slotConfig)
   self._ui.slot_subjectItem:createChild()
   self._ui.txt_result = UI.getChildControl(self._ui.stc_enchantArtwork, "StaticText_ResultText")
+  self._ui.txt_result:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_result:SetText(self._ui.txt_result:GetText())
   self._ui.txt_keyGuideForExit = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideCancel_ConsoleUI")
   self:registEventHandler()
   self:registMessageHandler()
@@ -105,10 +106,10 @@ end
 function EnchantInfo:registEventHandler()
   self._ui.slot_targetItem.icon:addInputEvent("Mouse_RUp", "InputRUp_EnchantInfo_TargetSlot()")
   self._ui.slot_subjectItem.icon:addInputEvent("Mouse_RUp", "InputRUp_EnchantInfo_TargetSlot()")
-  self._ui.btn_normal:addInputEvent("Mouse_LUp", "Input_EnchantInfo_ApplyEnchant(false)")
-  self._ui.btn_forced:addInputEvent("Mouse_LUp", "Input_EnchantInfo_ApplyEnchant(true)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "Input_EnchantInfo_ApplyEnchant(false)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "Input_EnchantInfo_ApplyEnchant(true)")
+  self._ui.btn_normal:addInputEvent("Mouse_LUp", "Input_EnchantInfo_TryEnchant(false)")
+  self._ui.btn_forced:addInputEvent("Mouse_LUp", "Input_EnchantInfo_TryEnchant(true)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_EnchantInfo_TryEnchant(false)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_EnchantInfo_TryEnchant(true)")
 end
 function EnchantInfo:registMessageHandler()
   registerEvent("EventEnchantResultShow", "FromClient_EnchantInfo_ResultShow")
@@ -124,19 +125,18 @@ end
 function EnchantInfo:open()
   _panel:SetShow(true)
   self._ui.txt_keyGuideForExit:SetShow(true)
-  self._ui.txt_keyGuideForExit:SetText("Exit")
+  self._ui.txt_keyGuideForExit:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
   self._enchantInfo = getEnchantInformation()
   self._enchantInfo:ToClient_clearData()
   self:clearItemSlot(self._ui.slot_subjectItem)
   self:clearItemSlot(self._ui.slot_targetItem)
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideNormal, XBOX_PAD_BUTTON.EMPTY)
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideForced, XBOX_PAD_BUTTON.EMPTY)
+  self._ui.txt_keyGuideNormal:SetMonoTone(true)
+  self._ui.txt_keyGuideForced:SetMonoTone(true)
   self._ui.txt_result:SetShow(false)
-  self:setEnable_CheckboxForcedEnchant(true)
   self._isAnimating = false
   self:setEnchantFailCount()
   PaGlobalFunc_InventoryInfo_Open()
-  ToClient_setTargetPanel(Panel_Window_Inventory)
+  ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
   Inventory_SetFunctor(PaGlobal_EnchantInfo_FilterForEnchantTarget, PaGlobal_EnchantInfo_RClickTarget, nil, nil)
 end
 function PaGlobalFunc_EnchantInfo_Close()
@@ -197,6 +197,7 @@ function PaGlobal_EnchantInfo_RClickTarget(slotNo, itemWrapper, count, inventory
   end
   if itemWrapper:checkToValksItem() then
     Inventory_UseItemTargetSelf(inventoryType, slotNo, 0)
+    self:setEnchantFailCount()
     return
   end
   self:setEnchantTarget(slotNo, itemWrapper, inventoryType, nil, true)
@@ -219,7 +220,7 @@ function EnchantInfo:setEnchantTarget(slotNo, itemWrapper, inventoryType, result
         self._grantItemSlotNo = nil
         self._grantItemWhereType = nil
         self:setEnchantMaterial(true)
-        self:evaluateEnchantTarget(true)
+        ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
         return true
       end
     end
@@ -229,10 +230,13 @@ function EnchantInfo:setEnchantTarget(slotNo, itemWrapper, inventoryType, result
   if CppEnums.ItemClassifyType.eItemClassify_Accessory == equipType then
     monotone = true
   end
+  if not monotone then
+    ToClient_padSnapSetTargetPanel(_panel)
+  end
   self._grantItemSlotNo = slotNo
   self._grantItemWhereType = inventoryType
   self:evaluateEnchantTarget(monotone)
-  self._ui.txt_keyGuideForExit:SetText("Discard")
+  self._ui.txt_keyGuideForExit:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_DISCARD"))
   return true
 end
 function EnchantInfo:setItemToSlot(uiSlot, slotNo, itemWrapper, inventoryType)
@@ -244,26 +248,17 @@ function EnchantInfo:setItemToSlot(uiSlot, slotNo, itemWrapper, inventoryType)
   uiSlot:setItem(getInventoryItemByType(inventoryType, slotNo))
 end
 function EnchantInfo:evaluateEnchantTarget(isMonotone, isRadioClick)
-  local enchantType = self._enchantInfo:ToClient_getEnchantType()
-  local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
-  self._strForEnchantInfo._notChecked = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType)
   local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
   if nil == itemWrapper then
     return
   end
   local enchantItemClassify = itemWrapper:getStaticStatus():getItemClassify()
   local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
+  local enchantType = self._enchantInfo:ToClient_getEnchantType()
   if enchantLevel > 16 or 4 == enchantItemClassify then
     local enduranceDesc = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType, true)
     self._strForEnchantInfo._cronChecked = enduranceDesc .. self:getStr_EnchantProtectInfo(enchantType)
   else
-  end
-  if needCountForPerfectEnchant_s64 > toInt64(0, 0) then
-    self._forcedEnchantEnable = true
-    local enduranceDesc = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType, true)
-    self._strForEnchantInfo._forcedChecked = enduranceDesc .. self:getStr_PerfectEnchantInfo(needCountForPerfectEnchant_s64, self._enchantInfo:ToClient_getDecMaxEnduraPerfect())
-  else
-    self._forcedEnchantEnable = false
   end
   self:setText_EnchantInfo()
   if nil == isRadioClick then
@@ -271,21 +266,43 @@ function EnchantInfo:evaluateEnchantTarget(isMonotone, isRadioClick)
   end
 end
 function EnchantInfo:setText_EnchantInfo()
-  self._ui.txt_forceEnchantDesc:SetText(self._strForEnchantInfo._forcedChecked)
+  local enchantType = self._enchantInfo:ToClient_getEnchantType()
+  self._strForEnchantInfo._notChecked = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType)
+  local enduranceDesc = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType, true)
   self._ui.txt_normalEnchantDesc:SetText(self._strForEnchantInfo._notChecked)
+  local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
+  if needCountForPerfectEnchant_s64 > toInt64(0, 0) then
+    self._strForEnchantInfo._forcedChecked = self:getStr_PerfectEnchantInfo(needCountForPerfectEnchant_s64, self._enchantInfo:ToClient_getDecMaxEnduraPerfect())
+    self._ui.txt_forceEnchantDesc:SetText(self._strForEnchantInfo._forcedChecked)
+  else
+    self._ui.txt_forceEnchantDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RENEW_FORCED_DESC"))
+  end
 end
 function PaGlobalFunc_EnchantInfo_OnPadB()
   local self = EnchantInfo
   if self._isAnimating then
+    self:cancelEnchant()
     return
   end
   if nil ~= self._ui.slot_targetItem.slotNo or nil ~= self._ui.slot_subjectItem.slotNo then
     self:clearEnchantData()
+    ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
+    Inventory_SetFunctor(PaGlobal_EnchantInfo_FilterForEnchantTarget, PaGlobal_EnchantInfo_RClickTarget, nil, nil)
     return false
   else
     self:close()
     return true
   end
+end
+function EnchantInfo:cancelEnchant()
+  self._isAnimating = false
+  self:removeEnchantEffect()
+end
+function EnchantInfo:removeEnchantEffect()
+  self._ui.stc_enchantArtwork:EraseAllEffect()
+  self._ui.slot_targetItem.icon:EraseAllEffect()
+  self._ui.slot_subjectItem.icon:EraseAllEffect()
+  ToClient_BlackspiritEnchantCancel()
 end
 function PaGlobalFunc_EnchantInfo_RClickSubject(slotNo, itemWrapper, count, inventoryType)
   local self = EnchantInfo
@@ -299,6 +316,7 @@ function PaGlobalFunc_EnchantInfo_RClickSubject(slotNo, itemWrapper, count, inve
   self._isLastEnchant = false
   self:clearItemSlot(self._ui.slot_subjectItem)
   self:setEnchantMaterial(false)
+  ToClient_padSnapSetTargetPanel(_panel)
 end
 function EnchantInfo:setEnchantMaterial(isMonotone)
   local slotNo = self._enchantInfo:ToClient_getNeedItemSlotNo()
@@ -307,47 +325,62 @@ function EnchantInfo:setEnchantMaterial(isMonotone)
     self:setItemToSlotMonoTone(self._ui.slot_subjectItem, self._enchantInfo:ToClient_getNeedItemStaticInformation())
     self:enableApplyButton(false)
     self._enchantInfo:materialClearData()
-    return
+  else
+    local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
+    self:setItemToSlot(self._ui.slot_subjectItem, slotNo, itemWrapper, inventoryType)
+    self:enableApplyButton(true)
   end
-  local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
-  self:setItemToSlot(self._ui.slot_subjectItem, slotNo, itemWrapper, inventoryType)
-  self:enableApplyButton(true)
 end
 function EnchantInfo:enableApplyButton(isTrue)
   self._ui.btn_normal:SetIgnore(not isTrue)
   self._ui.btn_normal:SetMonoTone(not isTrue)
   if true == isTrue then
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideNormal, XBOX_PAD_BUTTON.X)
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideForced, XBOX_PAD_BUTTON.Y)
-    ToClient_setTargetPanel(_panel)
+    local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
+    if needCountForPerfectEnchant_s64 > toInt64(0, 0) then
+      self._ui.btn_forced:SetMonoTone(false)
+      self._ui.btn_forced:SetIgnore(false)
+      self._ui.txt_keyGuideForced:SetMonoTone(false)
+    else
+      self._ui.btn_forced:SetMonoTone(true)
+      self._ui.btn_forced:SetIgnore(true)
+      self._ui.txt_keyGuideForced:SetMonoTone(true)
+    end
+    self._ui.txt_keyGuideNormal:SetMonoTone(false)
   else
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideNormal, XBOX_PAD_BUTTON.EMPTY)
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideForced, XBOX_PAD_BUTTON.EMPTY)
-    ToClient_setTargetPanel(Panel_Window_Inventory)
+    self._ui.btn_forced:SetMonoTone(true)
+    self._ui.btn_forced:SetIgnore(true)
+    self._ui.txt_keyGuideNormal:SetMonoTone(true)
+    self._ui.txt_keyGuideForced:SetMonoTone(true)
   end
-  self:setEnable_CheckboxForcedEnchant(self._forcedEnchantEnable)
-end
-function EnchantInfo:setEnable_CheckboxForcedEnchant(isEnable)
-  self._ui.btn_forced:SetIgnore(not isEnable)
-  self._ui.btn_forced:SetMonoTone(not isEnable)
-  self._ui.btn_forced:SetEnable(isEnable)
-  self._ui.txt_keyGuideForced:SetMonoTone(not isEnable)
 end
 function InputRUp_EnchantInfo_TargetSlot()
   EnchantInfo:clearEnchantData()
+  ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
+  Inventory_SetFunctor(PaGlobal_EnchantInfo_FilterForEnchantTarget, PaGlobal_EnchantInfo_RClickTarget, nil, nil)
 end
-function Input_EnchantInfo_ApplyEnchant(isForcedEnchant)
+function Input_EnchantInfo_TryEnchant(isForcedEnchant)
   local self = EnchantInfo
-  if true == isForcedEnchant and not self._forcedEnchantEnable then
+  if self._isAnimating then
+    self._animationTimeStamp = self._effectTime_Enchant
+    self:removeEnchantEffect()
     return
   end
-  if self._ui.btn_forced:IsEnable() then
-    self:applyEnchant(isForcedEnchant)
-  else
-    self:applyEnchant(false)
+  local targetItemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+  if nil == targetItemWrapper then
+    return
   end
+  if 0 == self._ui.slot_subjectItem.slotNo then
+    return
+  end
+  local val = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
+  local forcedEnchantEnable = val > toInt64(0, 0)
+  if true == isForcedEnchant and not forcedEnchantEnable then
+    return
+  end
+  self._forcedEnchant = isForcedEnchant
+  self:tryEnchant()
 end
-function EnchantInfo:applyEnchant(isForcedEnchant)
+function EnchantInfo:tryEnchant()
   if self._isAnimating == true then
     return
   else
@@ -370,8 +403,7 @@ function EnchantInfo:applyEnchant(isForcedEnchant)
           enchantAlert = true
         end
       end
-      self._forcedEnchant = isForcedEnchant
-      if true == isForcedEnchant then
+      if true == self._forcedEnchant then
         enchantAlert = false
       end
       if enchantAlert then
@@ -410,7 +442,6 @@ function EnchantInfo:applyEnchant(isForcedEnchant)
     end
   end
   self._resultShowTime = 0
-  self:enableApplyButton(true)
 end
 function EnchantInfo:startEnchant()
   self._enchantInfo:ToClient_doEnchant(self._forcedEnchant, false)
@@ -472,7 +503,6 @@ function FromClient_EnchantInfo_PerFrame(deltaTime)
     self._animationTimeStamp = self._animationTimeStamp + deltaTime
     if self._effectTime_Enchant <= self._animationTimeStamp then
       self._isAnimating = false
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_EnchantInfo_PerFrame, Flag Off")
       self:startEnchant()
       return
     end
@@ -499,9 +529,7 @@ function FromClient_EnchantInfo_ResultShow(resultType, mainWhereType, mainSlotNo
 end
 function EnchantInfo:afterEnchant(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)
   if resultType == self._enum_EnchantResult._error then
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "afterEnchant return cause by error resultType")
     ToClient_BlackspiritEnchantCancel()
-    self:evaluateEnchantTarget()
     return
   end
   self:showEnchantResultEffect(resultType)
@@ -525,11 +553,12 @@ function EnchantInfo:afterEnchant(resultType, mainWhereType, mainSlotNo, subWher
       self:setItemToSlot(self._ui.slot_targetItem, mainSlotNo, itemWrapper, mainWhereType)
     else
       self:clearEnchantData()
+      ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
+      Inventory_SetFunctor(PaGlobal_EnchantInfo_FilterForEnchantTarget, PaGlobal_EnchantInfo_RClickTarget, nil, nil)
     end
   end
 end
 function EnchantInfo:showEnchantResultEffect(resultType)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "showEnchantResultEffect.." .. tostring(resultType))
   if resultType == self._enum_EnchantResult._success then
     audioPostEvent_SystemUi(5, 1)
     render_setChromaticBlur(40, 1)
@@ -649,10 +678,10 @@ function EnchantInfo:getStr_PerfectEnchantInfo(needCount, decEndura)
     local itemSSW = itemWrapper:getStaticStatus()
     local enchantLevel = itemSSW:get()._key:getEnchantLevel()
     if enchantLevel > 14 then
-      return "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT") .. "\n" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_7", "count", tostring(needCount), "endurance", tostring(decEndura))
+      return PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT") .. "\n" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_7", "count", tostring(needCount), "endurance", tostring(decEndura))
     end
   end
-  return "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT") .. "\n" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_6", "count", tostring(needCount), "endurance", tostring(decEndura))
+  return PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT") .. "\n" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_6", "count", tostring(needCount), "endurance", tostring(decEndura))
 end
 function EnchantInfo:clearEnchantData()
   self:clearItemSlot(self._ui.slot_targetItem)
@@ -661,11 +690,12 @@ function EnchantInfo:clearEnchantData()
   self._grantItemSlotNo = nil
   self._enchantInfo:ToClient_clearData()
   self._ui.txt_keyGuideForExit:SetShow(true)
-  self._ui.txt_keyGuideForExit:SetText("Exit")
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideNormal, XBOX_PAD_BUTTON.EMPTY)
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideForced, XBOX_PAD_BUTTON.EMPTY)
-  ToClient_setTargetPanel(Panel_Window_Inventory)
-  Inventory_SetFunctor(PaGlobal_EnchantInfo_FilterForEnchantTarget, PaGlobal_EnchantInfo_RClickTarget, nil, nil)
+  self._ui.txt_keyGuideForExit:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
+  self._ui.txt_keyGuideNormal:SetMonoTone(true)
+  self._ui.txt_keyGuideForced:SetMonoTone(true)
+  self:setText_EnchantInfo()
+  self._ui.txt_normalEnchantDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RENEW_NORMAL_DESC"))
+  self._ui.txt_forceEnchantDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RENEW_FORCED_DESC"))
 end
 function EnchantInfo:clearItemSlot(slot)
   slot.inventoryType = nil

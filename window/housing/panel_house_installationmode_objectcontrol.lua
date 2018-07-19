@@ -398,6 +398,7 @@ function FGlobal_HouseInstallation_MinorWar_Open(buildingInfo)
         end
         HouseInstallationControl.warCountInstallationCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", allCount))
         HouseInstallationControl.warCountInnerObjectMaxSize:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTSIZE", "size", OSSW:getInnerObjectSize()) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTLEFTCOUNT", "count", OSSW:getInnerObjectSize() - usedCount))
+        HouseInstallationControl.warCountInnerResourceTitle:SetShow(_ContetnsGroup_SiegeResource)
       end
     end
   end

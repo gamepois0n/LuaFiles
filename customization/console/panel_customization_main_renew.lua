@@ -1,7 +1,9 @@
+local HideAlbumAndPopular = true
 local Customization_MenuHandlerInfo = {
   _ui = {
     _static_MainMenuBg = UI.getChildControl(Panel_Customizing, "Static_MainMenu"),
     _static_SubMenuBg = UI.getChildControl(Panel_Customizing, "Static_SubMenu"),
+    _static_SubTitle = UI.getChildControl(Panel_Customizing, "Radiobutton_SubTitle"),
     _static_BottomBg = UI.getChildControl(Panel_Customizing, "Static_BottomBg"),
     _static_ZodiacBg = UI.getChildControl(Panel_Customizing, "Static_ZodiacBg"),
     _mainMenu = {},
@@ -13,7 +15,17 @@ local Customization_MenuHandlerInfo = {
   _config = {
     _CustomizingMaxSubTree = 4,
     _ActionMaxSubTree = 2,
-    _maxLeafTree = 20
+    _maxLeafTree = 20,
+    _main = 0,
+    _custom = 1,
+    _boneCustom = 2,
+    _customSlider = 3,
+    _boneCustomSlider = 4,
+    _charControl_Hair = 5,
+    _charControl_Face = 6,
+    _charControl_Body = 7,
+    _charControl_Pose = 8,
+    _cameraControl = 9
   },
   _mainMenuConfig = {
     _Customizing = 0,
@@ -22,6 +34,13 @@ local Customization_MenuHandlerInfo = {
     _BeautyAlbum = 3,
     _popular = 4,
     _max = 5
+  },
+  _mainInGameMenuConfig = {
+    _Customizing = 0,
+    _Action = 1,
+    _BeautyAlbum = 2,
+    _popular = 3,
+    _max = 4
   },
   _strCustomizingConfig = {
     [0] = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_HAIR"),
@@ -33,6 +52,113 @@ local Customization_MenuHandlerInfo = {
     [0] = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_LOOK"),
     [1] = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_COSTUME")
   },
+  _keyGuideTexture = "renewal/ui_icon/console_xboxkey_00.dds",
+  _keyGuideTextureConfig = {
+    _LS = 0,
+    _RSUpDown = 1,
+    _RSLeftRight = 2,
+    _LT = 3,
+    _A = 4,
+    _X = 5,
+    _Y = 6,
+    _LB = 7,
+    _RB = 8,
+    _Plus = 9,
+    _OR = 10,
+    _DPad = 11,
+    _RS = 12,
+    _B = 13,
+    _count = 14
+  },
+  _keyGuideUV = {
+    [0] = {
+      x1 = 136,
+      y1 = 46,
+      x2 = 180,
+      y2 = 90
+    },
+    [1] = {
+      x1 = 46,
+      y1 = 136,
+      x2 = 90,
+      y2 = 180
+    },
+    [2] = {
+      x1 = 1,
+      y1 = 136,
+      x2 = 45,
+      y2 = 180
+    },
+    [3] = {
+      x1 = 46,
+      y1 = 181,
+      x2 = 90,
+      y2 = 225
+    },
+    [4] = {
+      x1 = 1,
+      y1 = 1,
+      x2 = 45,
+      y2 = 45
+    },
+    [5] = {
+      x1 = 136,
+      y1 = 1,
+      x2 = 180,
+      y2 = 45
+    },
+    [6] = {
+      x1 = 46,
+      y1 = 1,
+      x2 = 90,
+      y2 = 45
+    },
+    [7] = {
+      x1 = 91,
+      y1 = 136,
+      x2 = 135,
+      y2 = 180
+    },
+    [8] = {
+      x1 = 136,
+      y1 = 136,
+      x2 = 180,
+      y2 = 180
+    },
+    [9] = {
+      x1 = 91,
+      y1 = 181,
+      x2 = 103,
+      y2 = 225
+    },
+    [10] = {
+      x1 = 104,
+      y1 = 181,
+      x2 = 116,
+      y2 = 225
+    },
+    [11] = {
+      x1 = 181,
+      y1 = 181,
+      x2 = 225,
+      y2 = 225
+    },
+    [12] = {
+      x1 = 91,
+      y1 = 46,
+      x2 = 135,
+      y2 = 90
+    },
+    [13] = {
+      x1 = 91,
+      y1 = 1,
+      x2 = 135,
+      y2 = 45
+    }
+  },
+  _keyGuideTextureList = {},
+  _keyGuideStringList = {},
+  _KeyGuideTable = {},
   _currentMainIndex = -1,
   _currentSubIndex = -1,
   _currentLeafIndex = -1,
@@ -43,7 +169,9 @@ local Customization_MenuHandlerInfo = {
   _isOtherPanelOpen = false,
   _currentOpenPanelCloseFunc = nil,
   _currentZodiacIndex = -1,
-  _isInGame = false
+  _isInGame = false,
+  _currentKeyGuideCount = 0,
+  _keyGuideStartPosX = 0
 }
 function PaGlobalFunc_Customization_IsInGame()
   local self = Customization_MenuHandlerInfo
@@ -61,12 +189,6 @@ function PaGlobalFunc_Customization_GetLeafTree()
   local self = Customization_MenuHandlerInfo
   self:LeafMenuClose()
   return self._ui._leafMune
-end
-function PaGlobalFunc_Customization_SetSubTitle()
-  local self = Customization_MenuHandlerInfo
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetShow(true)
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetPosX(self._focusMenuPosX)
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetPosY(self._focusMenuPosY)
 end
 function PaGlobalFunc_Customization_ClickedZodiac(index)
   local self = Customization_MenuHandlerInfo
@@ -98,11 +220,11 @@ function PaGlobalFunc_Customization_ClickedCustomizing(index)
     closeExplorer()
     return
   end
-  selectCustomizationControlGroup(index)
   self._currentDepth = 2
   self:MainMenuClose()
   self:SubMenuClose(self._currentMainIndex)
   self:SetSubTitlePos()
+  selectCustomizationControlGroup(index)
   closeExplorer()
 end
 function PaGlobalFunc_Customization_ClickedAction(index)
@@ -133,6 +255,11 @@ function aGlobalFunc_Customization_RandomBeautyComfirm()
   end
   url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true) .. "&isGm=" .. tostring(isGm) .. "&isRandom=" .. tostring(true)
   self._ui._web_RandomBeauty:SetUrl(1, 1, url, false, true)
+  self._ui._mainMenu[4]:SetCheck(false)
+end
+function aGlobalFunc_Customization_RandomBeautyCancel()
+  local self = Customization_MenuHandlerInfo
+  self._ui._mainMenu[4]:SetCheck(false)
 end
 function PaGlobalFunc_Customization_RandomBeauty()
   if ToClient_isUserCreateContentsAllowed() then
@@ -141,7 +268,7 @@ function PaGlobalFunc_Customization_RandomBeauty()
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
       functionYes = aGlobalFunc_Customization_RandomBeautyComfirm,
-      functionNo = MessageBox_Empty_function,
+      functionNo = aGlobalFunc_Customization_RandomBeautyCancel,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -150,8 +277,8 @@ function PaGlobalFunc_Customization_RandomBeauty()
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
-      functionYes = MessageBox_Empty_function,
-      functionNo = MessageBox_Empty_function,
+      functionYes = aGlobalFunc_Customization_RandomBeautyCancel,
+      functionNo = aGlobalFunc_Customization_RandomBeautyCancel,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -171,15 +298,51 @@ function PaGlobalFunc_Customization_ClickedMainMenu(index)
   self:SubMenuOpen(index)
   self._currentMainIndex = index
   self._currentDepth = 1
+  self:SetPadXButton(false)
+end
+function Customization_MenuHandlerInfo:SetPadXButton(isShow)
+  self._ui._button_Apply:SetShow(isShow)
+  if true == isShow then
+    if true == PaGlobalFunc_Customization_IsInGame() then
+      Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "HandleClicked_CashCustomization_Apply()")
+    else
+      Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_CreateCharacter()")
+    end
+    self._KeyGuideTable[0]._bg:SetPosX(10 - (getScreenSizeX() - self._ui._button_Apply:GetPosX()))
+  else
+    Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+    self._KeyGuideTable[0]._bg:SetPosX(0)
+  end
 end
 function Customization_MenuHandlerInfo:MainMenuOpen()
   self._ui._static_ZodiacBg:SetShow(false)
   for index, mainButton in pairs(self._ui._currentMainMenu) do
     mainButton:SetShow(true)
+    mainButton:SetCheck(false)
+    mainButton:SetIgnore(false)
     mainButton:SetPosX(self._focusMenuPosX)
     mainButton:SetPosY(self._focusMenuPosY + (mainButton:GetSizeY() + 30) * index)
+    if true == HideAlbumAndPopular then
+      if true == PaGlobalFunc_Customization_IsInGame() then
+        if index == self._mainInGameMenuConfig._BeautyAlbum then
+          mainButton:SetShow(false)
+        end
+        if index == self._mainInGameMenuConfig._popular then
+          mainButton:SetShow(false)
+        end
+      else
+        if index == self._mainMenuConfig._BeautyAlbum then
+          mainButton:SetShow(false)
+        end
+        if index == self._mainMenuConfig._popular then
+          mainButton:SetShow(false)
+        end
+      end
+    end
   end
   self._currentDepth = 0
+  self:SetPadXButton(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
 end
 function Customization_MenuHandlerInfo:MainMenuClose()
   for index, mainButton in pairs(self._ui._currentMainMenu) do
@@ -187,6 +350,7 @@ function Customization_MenuHandlerInfo:MainMenuClose()
   end
 end
 function Customization_MenuHandlerInfo:InitControl()
+  self._ui._static_SubTitle:SetShow(false)
   self._ui._staticText_ZodiacTitle = UI.getChildControl(self._ui._static_ZodiacBg, "StaticText_StarTitle")
   self._ui._staticText_ZodiacDesc = UI.getChildControl(self._ui._static_ZodiacBg, "StaticText_StarDesc")
   self._ui._static_ZodiacImage = UI.getChildControl(self._ui._static_ZodiacBg, "Static_ZodiacImage")
@@ -201,14 +365,17 @@ function Customization_MenuHandlerInfo:InitControl()
   self._ui._mainMenu[self._mainMenuConfig._Action]:SetShow(false)
   self._ui._mainMenu[self._mainMenuConfig._BeautyAlbum]:SetShow(false)
   self._ui._mainMenu[self._mainMenuConfig._popular]:SetShow(false)
-  self._ui._ingameMainMenu[0] = self._ui._mainMenu[self._mainMenuConfig._Customizing]
-  self._ui._ingameMainMenu[1] = self._ui._mainMenu[self._mainMenuConfig._Action]
-  self._ui._ingameMainMenu[2] = self._ui._mainMenu[self._mainMenuConfig._BeautyAlbum]
-  self._ui._ingameMainMenu[3] = self._ui._mainMenu[self._mainMenuConfig._popular]
+  self._ui._ingameMainMenu[self._mainInGameMenuConfig._Customizing] = self._ui._mainMenu[self._mainMenuConfig._Customizing]
+  self._ui._ingameMainMenu[self._mainInGameMenuConfig._Action] = self._ui._mainMenu[self._mainMenuConfig._Action]
+  self._ui._ingameMainMenu[self._mainInGameMenuConfig._BeautyAlbum] = self._ui._mainMenu[self._mainMenuConfig._BeautyAlbum]
+  self._ui._ingameMainMenu[self._mainInGameMenuConfig._popular] = self._ui._mainMenu[self._mainMenuConfig._popular]
   self._focusMenuPosX = self._ui._mainMenu[self._mainMenuConfig._Customizing]:GetPosX()
   self._focusMenuPosY = self._ui._mainMenu[self._mainMenuConfig._Customizing]:GetPosY()
-  self._ui._button_Back = UI.getChildControl(self._ui._static_BottomBg, "Button_Back")
-  self._ui._button_CreateCharacter = UI.getChildControl(self._ui._static_BottomBg, "Button_CharacterCreate")
+  self._ui._button_Apply = UI.getChildControl(self._ui._static_BottomBg, "Button_CharacterCreate")
+  self._ui._button_KeyGuideTemplete = UI.getChildControl(self._ui._static_BottomBg, "Button_KeyGuideTemplete")
+  self._ui._staticText_KeyGuideTemplete = UI.getChildControl(self._ui._static_BottomBg, "StaticText_KeyGuideTemplete")
+  self._ui._button_KeyGuideTemplete:SetShow(false)
+  self._ui._staticText_KeyGuideTemplete:SetShow(false)
   self._ui._subMenuTemplate = UI.getChildControl(self._ui._static_SubMenuBg, "RadioButton_SubMenu_Template")
   self._ui._subMenuTemplate:SetShow(false)
   self._ui._leafMenuTemplate = UI.getChildControl(self._ui._static_SubMenuBg, "RadioButton_ItemTemplate")
@@ -257,10 +424,265 @@ function Customization_MenuHandlerInfo:InitControl()
   end
   self._ui._web_RandomBeauty = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Customizing, "WebControl_RandomCustomization_Renew")
 end
+function PaGlobalFunc_Customization_SetKeyGuide(state)
+  local self = Customization_MenuHandlerInfo
+  for index, keyTable in pairs(self._KeyGuideTable) do
+    if nil ~= keyTable then
+      keyTable._bg:SetShow(state == index)
+    end
+  end
+end
+function Customization_MenuHandlerInfo:MakeKeyGuide(state)
+  local keyGuideTableTemplete = {}
+  keyGuideTableTemplete = {
+    _iconList = {},
+    _str,
+    _bg
+  }
+  self._currentKeyGuideCount = 0
+  keyGuideTableTemplete._bg = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Customizing, "Static_Custom_bottomBg_" .. #self._KeyGuideTable)
+  CopyBaseProperty(self._ui._static_BottomBg, keyGuideTableTemplete._bg)
+  keyGuideTableTemplete._bg:SetShow(false)
+  if self._config._main == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._B
+    }, "Back")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._A
+    }, "Select")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._DPad
+    }, "Move")
+  elseif self._config._custom == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._B
+    }, "Back")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._A
+    }, "Select")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._DPad
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LB
+    }, "Camera Control")
+  elseif self._config._boneCustom == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._B
+    }, "Back")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._A
+    }, "Select")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._DPad
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LB
+    }, "Character Control")
+  elseif self._config._customSlider == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._B
+    }, "Back")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._DPad
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RSLeftRight
+    }, "Slider")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LB
+    }, "Camera Control")
+  elseif self._config._boneCustomSlider == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._B
+    }, "Back")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._DPad
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RSLeftRight
+    }, "Slider")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LB
+    }, "Character Control")
+  elseif self._config._charControl_Hair == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RB,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._B
+    }, "Detail Control")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RS
+    }, "Camera")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LT,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._RSUpDown
+    }, "Zoom")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._A,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Trans")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._Y,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Rot")
+  elseif self._config._charControl_Face == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RB,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._B
+    }, "Detail Control")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RS
+    }, "Camera")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LT,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._RSUpDown
+    }, "Zoom")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._A,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Trans")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._X,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Scale")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._Y,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Rot")
+  elseif self._config._charControl_Body == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RB,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._B
+    }, "Detail Control")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RS
+    }, "Camera")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LT,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._RSUpDown
+    }, "Zoom")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._X,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Scale")
+  elseif self._config._charControl_Pose == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RB,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._B
+    }, "Detail Control")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LS
+    }, "Move")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RS
+    }, "Camera")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LT,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._RSUpDown
+    }, "Zoom")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._Y,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._LS
+    }, "Rot")
+  elseif self._config._cameraControl == state then
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RB,
+      self._keyGuideTextureConfig._OR,
+      self._keyGuideTextureConfig._B
+    }, "Detail Control")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._RS
+    }, "Camera")
+    self:addKeyGuide(keyGuideTableTemplete, {
+      self._keyGuideTextureConfig._LT,
+      self._keyGuideTextureConfig._Plus,
+      self._keyGuideTextureConfig._RSUpDown
+    }, "Zoom")
+  end
+  return keyGuideTableTemplete
+end
+function Customization_MenuHandlerInfo:addKeyGuide(keyGuideTable, iconKeyList, str)
+  local consoleUIList = {}
+  local lastIcon
+  local table = {
+    _iconList = {},
+    _str
+  }
+  local strControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, keyGuideTable._bg, "StaticText_Custom_KeyGuide_" .. #self._KeyGuideTable .. "_" .. self._currentKeyGuideCount)
+  CopyBaseProperty(self._ui._staticText_KeyGuideTemplete, strControl)
+  strControl:SetText(str)
+  local startPosX
+  if nil == keyGuideTable[self._currentKeyGuideCount - 1] then
+    startPosX = getScreenSizeX() - strControl:GetTextSizeX() - 50
+  else
+    startPosX = keyGuideTable[self._currentKeyGuideCount - 1]._iconList[0]:GetPosX() - strControl:GetTextSizeX() - 30
+  end
+  strControl:SetPosY(strControl:GetPosY() + 10)
+  strControl:SetPosX(startPosX)
+  strControl:SetShow(true)
+  for index = #iconKeyList - 1, 0, -1 do
+    local iconkey = iconKeyList[index + 1]
+    local control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, keyGuideTable._bg, "Button_Custom_KeyGuide_" .. #self._KeyGuideTable .. "_" .. self._currentKeyGuideCount .. "_" .. index)
+    CopyBaseProperty(self._ui._button_KeyGuideTemplete, control)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, self._keyGuideUV[iconkey].x1, self._keyGuideUV[iconkey].y1, self._keyGuideUV[iconkey].x2, self._keyGuideUV[iconkey].y2)
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+    if self._keyGuideTextureConfig._Plus == iconkey or self._keyGuideTextureConfig._OR == iconkey then
+      control:SetSize(12, 44)
+    end
+    if nil == lastIcon then
+      control:SetPosX(strControl:GetPosX() - control:GetSizeX() * (#iconKeyList - index))
+    else
+      control:SetPosX(lastIcon:GetPosX() - control:GetSizeX())
+    end
+    control:SetShow(true)
+    consoleUIList[index] = control
+    lastIcon = control
+  end
+  table._iconList = consoleUIList
+  table._str = strControl
+  keyGuideTable[self._currentKeyGuideCount] = table
+  self._currentKeyGuideCount = self._currentKeyGuideCount + 1
+end
 function Customization_MenuHandlerInfo:SetSubTitlePos()
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetShow(true)
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetPosX(self._focusMenuPosX)
-  self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetPosY(self._focusMenuPosY)
+  self._ui._static_SubTitle:SetText(self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:GetText())
+  self._ui._static_SubTitle:SetIgnore(true)
+  self._ui._static_SubTitle:SetCheck(true)
+  self._ui._static_SubTitle:SetShow(true)
 end
 function Customization_MenuHandlerInfo:LeafMenuClose()
   for _, control in pairs(self._ui._leafMune) do
@@ -271,11 +693,10 @@ function Customization_MenuHandlerInfo:LeafMenuClose()
 end
 function Customization_MenuHandlerInfo:SubMenuOpen(mainIndex)
   self._ui._static_ZodiacBg:SetShow(self._mainMenuConfig._Zodiac == mainIndex)
-  self._ui._mainMenu[mainIndex]:SetShow(true)
-  self._ui._mainMenu[mainIndex]:SetPosX(self._focusMenuPosX)
-  self._ui._mainMenu[mainIndex]:SetPosY(self._focusMenuPosY)
   for index, control in pairs(self._ui._subMenu[mainIndex]) do
     control:SetShow(true)
+    control:SetCheck(false)
+    control:SetIgnore(false)
     control:SetPosX(self._focusMenuPosX)
     control:SetPosY(self._focusMenuPosY + (control:GetSizeY() + 30) * (index + 1))
   end
@@ -285,6 +706,11 @@ function Customization_MenuHandlerInfo:SubMenuOpen(mainIndex)
       control:SetCheck(index == self._currentZodiacIndex)
     end
   end
+  self._ui._static_SubTitle:SetText(self._ui._mainMenu[mainIndex]:GetText())
+  self._ui._static_SubTitle:SetIgnore(true)
+  self._ui._static_SubTitle:SetCheck(true)
+  self._ui._static_SubTitle:SetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
 end
 function Customization_MenuHandlerInfo:SubMenuClose(mainIndex)
   if nil ~= mainIndex then
@@ -310,34 +736,53 @@ end
 function PaGlobalFunc_Customization_Back()
   local self = Customization_MenuHandlerInfo
   if true == Panel_CustomizingAlbum:GetShow() then
+    self._ui._mainMenu[3]:SetCheck(false)
     Panel_CustomizingAlbum:SetShow(false)
     return
   end
-  if true == self._isOtherPanelOpen then
+  if 0 == self._currentDepth then
     if nil ~= self._currentOpenPanelCloseFunc then
       self._currentOpenPanelCloseFunc()
-      for _, control in pairs(self._ui._leafMune) do
-        if nil ~= control then
-          control:SetCheck(false)
-        end
-      end
-      if -1 ~= self._currentMainIndex and -1 ~= self._currentSubIndex then
-        self._ui._subMenu[self._currentMainIndex][self._currentSubIndex]:SetCheck(false)
-        self._ui._mainMenu[self._currentMainIndex]:SetCheck(false)
-      end
+      return
     end
-    return
-  end
-  if 0 == self._currentDepth then
     if true == PaGlobalFunc_Customization_IsInGame() then
       IngameCustomize_Hide()
       return
     end
     PaGlobalFunc_Customization_Cancel()
   elseif 1 == self._currentDepth then
+    if true == self._isOtherPanelOpen then
+      if nil ~= self._currentOpenPanelCloseFunc then
+        if false == self._currentOpenPanelCloseFunc() then
+          return
+        end
+        for _, control in pairs(self._ui._subMenu[self._currentMainIndex]) do
+          if nil ~= control then
+            control:SetCheck(false)
+          end
+        end
+      end
+      PaGlobalFunc_Customization_SetKeyGuide(0)
+      return
+    end
     self:SubMenuClose(self._currentMainIndex)
     self:MainMenuOpen()
+    self._ui._static_SubTitle:SetShow(false)
   elseif 2 == self._currentDepth then
+    if true == self._isOtherPanelOpen then
+      if nil ~= self._currentOpenPanelCloseFunc then
+        if false == self._currentOpenPanelCloseFunc() then
+          return
+        end
+        for _, control in pairs(self._ui._leafMune) do
+          if nil ~= control then
+            control:SetCheck(false)
+          end
+        end
+      end
+      PaGlobalFunc_Customization_SetKeyGuide(0)
+      return
+    end
     selectCustomizationControlPart(-1)
     selectCustomizationControlGroup(-1)
     self:LeafMenuClose()
@@ -361,18 +806,37 @@ function Customization_MenuHandlerInfo:InitEvent()
   for index, zodiacControl in pairs(self._ui._subMenu[self._mainMenuConfig._Action]) do
     zodiacControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_ClickedAction(" .. index .. ")")
   end
-  self._ui._button_Back:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Cancel()")
-  self._ui._button_CreateCharacter:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_CreateCharacter()")
-  Panel_Customizing:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Customization_CreateCharacter()")
+  Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_CreateCharacter()")
+end
+function Customization_MenuHandlerInfo:InitKeyGuide()
+  self._KeyGuideTable = {}
+  self._KeyGuideTable[self._config._main] = {}
+  self._KeyGuideTable[self._config._main] = self:MakeKeyGuide(self._config._main)
+  self._KeyGuideTable[self._config._custom] = {}
+  self._KeyGuideTable[self._config._custom] = self:MakeKeyGuide(self._config._custom)
+  self._KeyGuideTable[self._config._boneCustom] = {}
+  self._KeyGuideTable[self._config._boneCustom] = self:MakeKeyGuide(self._config._boneCustom)
+  self._KeyGuideTable[self._config._customSlider] = {}
+  self._KeyGuideTable[self._config._customSlider] = self:MakeKeyGuide(self._config._customSlider)
+  self._KeyGuideTable[self._config._boneCustomSlider] = {}
+  self._KeyGuideTable[self._config._boneCustomSlider] = self:MakeKeyGuide(self._config._boneCustomSlider)
+  self._KeyGuideTable[self._config._charControl_Hair] = {}
+  self._KeyGuideTable[self._config._charControl_Hair] = self:MakeKeyGuide(self._config._charControl_Hair)
+  self._KeyGuideTable[self._config._charControl_Face] = {}
+  self._KeyGuideTable[self._config._charControl_Face] = self:MakeKeyGuide(self._config._charControl_Face)
+  self._KeyGuideTable[self._config._charControl_Body] = {}
+  self._KeyGuideTable[self._config._charControl_Body] = self:MakeKeyGuide(self._config._charControl_Body)
+  self._KeyGuideTable[self._config._charControl_Pose] = {}
+  self._KeyGuideTable[self._config._charControl_Pose] = self:MakeKeyGuide(self._config._charControl_Pose)
+  self._KeyGuideTable[self._config._cameraControl] = {}
+  self._KeyGuideTable[self._config._cameraControl] = self:MakeKeyGuide(self._config._cameraControl)
 end
 function PaGlobalFunc_Customization_SetBackEvent(func)
   local self = Customization_MenuHandlerInfo
   if nil ~= func then
     self._isOtherPanelOpen = true
-    self._ui._button_Back:addInputEvent("Mouse_LUp", func)
   else
     self._isOtherPanelOpen = false
-    self._ui._button_Back:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Back()")
   end
 end
 function PaGlobalFunc_Customization_SelectClass()
@@ -421,13 +885,20 @@ function PaGlobalFunc_Customization_Open()
   end
   self._ui._currentMainMenu = {}
   if false == PaGlobalFunc_Customization_IsInGame() then
-    self._ui._button_CreateCharacter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_CREATE_TXT_TITLE"))
-    Panel_Customizing:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Customization_CreateCharacter()")
+    self._ui._button_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_CREATE_TXT_TITLE"))
+    Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_CreateCharacter()")
     self._ui._currentMainMenu = self._ui._mainMenu
+    self._ui._static_SubTitle:SetPosY(180)
+    self._ui._static_MainMenuBg:SetPosY(180)
+    self._ui._static_SubMenuBg:SetPosY(180)
   else
-    self._ui._button_CreateCharacter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CASH_REVIVAL_BUYITEM_BTN_CONFIRM"))
-    Panel_Customizing:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "HandleClicked_CashCustomization_Apply()")
+    self._ui._button_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CASH_REVIVAL_BUYITEM_BTN_CONFIRM"))
+    Panel_Customizing:registerPadEvent(__eConsoleUIPadEvent_Up_X, "HandleClicked_CashCustomization_Apply()")
+    self._ui._button_Apply:SetPosX(getScreenSizeX() - 150)
     self._ui._currentMainMenu = self._ui._ingameMainMenu
+    self._ui._static_SubTitle:SetPosY(80)
+    self._ui._static_MainMenuBg:SetPosY(80)
+    self._ui._static_SubMenuBg:SetPosY(80)
   end
   self._currentMainIndex = -1
   self._currentSubIndex = -1
@@ -439,6 +910,7 @@ function PaGlobalFunc_Customization_Open()
   if false == PaGlobalFunc_Customization_IsInGame() then
     PaGlobalFunc_Customization_ClickedZodiac(getRandomValue(0, getZodiacCount() - 1))
   end
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_Toggle()
@@ -452,6 +924,7 @@ function Customization_MenuHandlerInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+  self:InitKeyGuide()
   self._isInGame = false
 end
 function PaGlobalFunc_FromClient_Customization_luaLoadComplete()

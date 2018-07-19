@@ -113,9 +113,13 @@ function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
   if Panel_ColorBalance:GetShow() then
     Panel_ColorBalance_Close()
   end
-  if Panel_WorkerManager:GetShow() then
-    workerManager_Close()
-    FGlobal_InitWorkerTooltip()
+  if false == _ContentsGroup_RenewUI_Worker then
+    if Panel_WorkerManager:GetShow() then
+      workerManager_Close()
+      FGlobal_InitWorkerTooltip()
+    end
+  else
+    PaGlobalFunc_WorkerManager_Close()
   end
   if Panel_Menu:GetShow() then
     Panel_Menu_Close()
@@ -123,7 +127,7 @@ function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
   if Panel_Window_Camp:GetShow() then
     PaGlobal_Camp:close()
   end
-  DetectPlayer_Close()
+  PaGlobalFunc_DetectPlayer_ExitAll()
   if Panel_Window_ItemMarket:GetShow() then
     FGolbal_ItemMarketNew_Close()
     if Panel_Win_System:GetShow() then
@@ -162,12 +166,20 @@ function Panel_Dialog_Main_Info:hideMainDialog(isSetWait)
     PaGlobalFunc_GuildPopup_Close()
     PaGlobalFunc_GuildCreate_Close()
   end
-  Panel_WorkerResist_Auction:SetShow(false)
-  Panel_WorkerList_Auction:SetShow(false)
+  if false == _ContentsGroup_RenewUI_Worker then
+    Panel_WorkerResist_Auction:SetShow(false)
+    Panel_WorkerList_Auction:SetShow(false)
+  else
+    FGlobal_WorkerTrade_Close()
+  end
   FGolbal_ItemMarketNew_Close()
   Panel_Window_ItemMarket_RegistItem:SetShow(false)
-  Panel_Window_Delivery_Information:SetShow(false)
-  Panel_Window_Delivery_Request:SetShow(false)
+  if true == _ContentsGroup_RenewUI_Delivery then
+    DeliveryRequestWindow_Close()
+  else
+    Panel_Window_Delivery_Information:SetShow(false)
+    Panel_Window_Delivery_Request:SetShow(false)
+  end
   Panel_Dialogue_Itemtake:SetShow(false)
   if true == _ContentsGroup_RenewUI_ReinforceSkill then
     PaGlobalFunc_Dialog_SkillSpecialize_Close(false)
@@ -175,10 +187,15 @@ function Panel_Dialog_Main_Info:hideMainDialog(isSetWait)
     Panel_SkillReinforce:SetShow(false)
     Panel_Window_ReinforceSkill:SetShow(false)
   end
-  Panel_Worker_Auction:SetShow(false)
-  Panel_Window_WorkerRandomSelect:SetShow(false)
+  if true == _ContentsGroup_RenewUI_Worker then
+    Panel_Dialog_RandomWorker:SetShow(false)
+    Panel_Dialog_WorkerContract:SetShow(false)
+  else
+    Panel_Worker_Auction:SetShow(false)
+    Panel_Window_WorkerRandomSelect:SetShow(false)
+  end
   randomSelectHide()
-  DetectPlayer_Close()
+  PaGlobalFunc_DetectPlayer_ExitAll()
   self:closeNpcTalk(isSetWait)
   Panel_Dialog_Main:ResetVertexAni()
   searchView_Close()
@@ -203,7 +220,11 @@ function Panel_Dialog_Main_Info:hideMainDialog(isSetWait)
   FGlobal_QuestWidget_UpdateList()
   PaGlobalAppliedBuffList:show()
   setShowNpcDialog(false)
-  ChatInput_Close()
+  if true == _ContentsGroup_RenewUI_Chatting then
+    PaGlobalFunc_ChattingInfo_Close()
+  else
+    ChatInput_Close()
+  end
   if Panel_Window_Exchange:IsShow() then
     ExchangePc_MessageBox_CloseConfirm()
   end
@@ -303,6 +324,10 @@ function PaGlobalFunc_MainDialog_ReOpen(showAni)
   SetUIMode(Defines.UIMode.eUIMode_NpcDialog)
   Panel_Dialog_Main_Info:open(showAni)
   PaGlobalFunc_MainDialog_setIgnoreShowDialog(false)
+  local mainCameraName = Dialog_getMainSceneCameraName()
+  if nil ~= mainCameraName then
+    changeCameraScene(mainCameraName, 0.3)
+  end
   PaGlobalFunc_MainDialog_Bottom_Open()
   PaGlobalFunc_MainDialog_Right_ReOpen()
 end
@@ -354,6 +379,7 @@ function PaGlobalFunc_MainDialog_Update()
   self:update()
 end
 function PaGlobalFunc_MainDialog_OpenIniteValues()
+  PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
 end
 function PaGlobalFunc_MainDialog_CloseIniteValues()
   local self = Panel_Dialog_Main_Info
@@ -414,7 +440,7 @@ function PaGlobalFunc_MainDialog_Hide()
   if nil == selfPlayer then
     return
   end
-  if selfPlayer:getLevel() < 5 then
+  if selfPlayer:getLevel() < 5 and false == _ContentsGroup_RenewUI_Chatting then
     Panel_Chat0:SetShow(false)
   end
   FGlobal_NewLocalWar_Show()
@@ -427,21 +453,23 @@ function PaGlobalFunc_MainDialog_Hide()
   end
 end
 function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
+  local retval = false
   if getCustomizingManager():isShow() then
     HandleClicked_CloseIngameCustomization()
-    return true
+    retval = true
   end
   if Panel_Npc_Trade_Market:IsShow() then
     closeNpcTrade_Basket()
-    return true
+    retval = true
   end
   if Panel_Window_StableFunction:IsShow() then
     StableFunction_Close()
-    return true
+    retval = true
   end
   if true == _ContentsGroup_RenewUI_Repair then
     if PaGlobalFunc_RepairInfo_GetShow() then
       PaGlobalFunc_RepairInfo_Close()
+      retval = true
     end
   else
     if Panel_FixEquip:GetShow() then
@@ -449,71 +477,91 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
       PaGlobal_Repair:repair_OpenPanel(false)
       Panel_FixEquip:SetShow(false)
       SetUIMode(Defines.UIMode.eUIMode_Default)
+      retval = true
     end
     if Panel_Window_Repair:IsShow() and false == PaGlobal_Camp:getIsCamping() then
       Panel_FixEquip:SetShow(false)
       PaGlobal_Repair:repair_OpenPanel(false)
-      return true
+      retval = true
     end
-  end
-  if Panel_Window_GuildStableFunction:IsShow() then
-    GuildStableFunction_Close()
-    return true
   end
   if Panel_Window_ItemMarket_Function:GetShow() then
     FGolbal_ItemMarket_Function_Close()
     if Panel_Window_ItemMarket_RegistItem:GetShow() then
       FGlobal_ItemMarketRegistItem_Close()
+      retval = true
     end
     if Panel_Window_ItemMarket_BuyConfirm:GetShow() then
       FGlobal_ItemMarket_BuyConfirm_Close()
-      return true
+      retval = true
     end
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
+      retval = true
     end
     if Panel_Window_ItemMarket:GetShow() then
       FGolbal_ItemMarketNew_Close()
+      retval = true
     end
-    return true
+    retval = true
   end
-  if Panel_Window_WharfFunction:GetShow() then
-    WharfFunction_Close()
-    return true
-  end
-  if Panel_Window_GuildWharfFunction:GetShow() then
-    GuildWharfFunction_Close()
-    return true
+  if false == _ContentsGroup_RenewUI_Stable then
+    if Panel_Window_StableFunction:GetShow() then
+      StableFunction_Close()
+      retval = true
+    end
+    if Panel_Window_WharfFunction:GetShow() then
+      WharfFunction_Close()
+      retval = true
+    end
+    if Panel_Window_GuildWharfFunction:GetShow() then
+      GuildWharfFunction_Close()
+      retval = true
+    end
+    if Panel_Window_GuildStableFunction:IsShow() then
+      GuildStableFunction_Close()
+      retval = true
+    end
+  else
+    if PaGlobalFunc_StableFunction_GetShow() then
+      StableFunction_Close()
+      retval = true
+    end
+    if PaGlobalFunc_WharfFunction_GetShow() then
+      WharfFunction_Close()
+      retval = true
+    end
   end
   if Panel_FixEquip:GetShow() then
     FixEquip_Close()
-    return true
+    retval = true
   end
   if PaGlobalFunc_Skill_GetShow() then
     PaGlobalFunc_Skill_Close()
-    return true
+    retval = true
   end
   if PaGlobalFunc_MentalGame_GetShow() then
     PaGlobalFunc_MentalGame_Close(false)
-    return true
+    retval = true
   end
   if PaGlobalFunc_Window_Knowledge_GetShow() then
     PaGlobalFunc_Window_Knowledge_Exit()
-    return true
+    retval = true
   end
   if Panel_DyeNew_CharacterController:GetShow() then
     FGlobal_Panel_DyeReNew_Hide()
-    return true
+    retval = true
   end
   if false == _ContentsGroup_RenewUI_Customization then
     if Panel_CustomizationMain:GetShow() then
       IngameCustomize_Hide()
-      return true
+      retval = true
     end
   elseif true == PaGlobalFunc_Customization_GetShow() then
     IngameCustomize_Hide()
+    retval = true
   end
-  return false
+  return retval
 end
 function PaGlobalFunc_Dialog_Main_SetRenderModeList(renderModeList)
   redermode:setRenderMode(renderModeList)
@@ -553,6 +601,14 @@ function PaGlobalFunc_Dialog_Main_CheckCompleteQuest(questData)
   end
   local talker = dialog_getTalker()
   local completeNpc = questData:getCompleteNpc()
+  if nil == talker and 0 == completeNpc then
+    ReqeustDialog_retryTalk()
+    return
+  end
+  if nil ~= talker and talker:getActorKey() == questData:getCompleteNpc() then
+    ReqeustDialog_retryTalk()
+    return
+  end
 end
 function FromClient_InitMainDialog()
   local self = Panel_Dialog_Main_Info
@@ -622,8 +678,12 @@ function FromClient_ExitMainDialog(isSetWait)
   PaGlobal_TutorialManager:handleClickedExitButton(dialog_getTalker())
   local self = Panel_Dialog_Main_Info
   self:hideMainDialog(isSetWait)
-  ServantInfo_Close()
-  CarriageInfo_Close()
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    ServantInfo_Close()
+    CarriageInfo_Close()
+  else
+    PaGlobalFunc_ServantInfo_Exit()
+  end
   ServantInventory_Close()
   FGlobal_RaceInfo_Hide()
   GuildServantList_Close()

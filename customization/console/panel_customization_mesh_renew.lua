@@ -1,4 +1,4 @@
-Panel_Customizing_Mesh:ignorePanelMoveSnapping()
+Panel_Customizing_Mesh:ignorePadSnapMoveToOtherPanel()
 local Customization_MeshInfo = {
   _ui = {
     _static_TypeBg = UI.getChildControl(Panel_Customizing_Mesh, "Static_TypeGroup"),
@@ -21,13 +21,31 @@ local Customization_MeshInfo = {
   _selectedListParamIndex = nil,
   _selectedItemIndex = nil,
   _paramValueList = {},
-  _currentMeshIndex = -1
+  _currentMeshIndex = -1,
+  _isBoneControl = false
 }
-function HandleClicked_Customization_Mesh_Confirm()
+function PaGlobalFunc_Customization_Mesh_UpdatePerFrame(deltaTime)
   local self = Customization_MeshInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_Mesh_SetBoneControl(false)
+    end
+    return
+  end
 end
-function HandleClicked_Customization_Mesh_Cancel()
-  PaGlobalFunc_Customization_Mesh_Close()
+function PaGlobalFunc_Customization_Mesh_SetBoneControl(isSet)
+  local self = Customization_MeshInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+    Panel_Customizing_Mesh:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(9)
+    Panel_Customizing_Mesh:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
 end
 function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(listParamType, listParamIndex, itemIndex)
   local self = Customization_MeshInfo
@@ -57,6 +75,7 @@ function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(listParamType, l
     MessageBox.showMessageBox(messageBoxData, "top")
   else
     PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
+    self:UpdateTypeFocus(self._selectedItemIndex)
   end
 end
 function PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
@@ -64,6 +83,7 @@ function PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
   local selectedParamValue = self._paramValueList[self._selectedItemIndex]
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, selectedParamValue)
   applyInitializeToGroupCustomizedBoneInfo()
+  self:UpdateTypeFocus(self._selectedItemIndex)
 end
 function HandleClicked_Customization_Mesh_Close()
   PaGlobalFunc_Customization_Mesh_Close()
@@ -115,8 +135,8 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       control:ChangeTextureInfoName(listTexture)
       local x1, y1, x2, y2 = setTextureUV_Func(control, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
       control:getBaseTexture():setUV(x1, y1, x2, y2)
-      control:SetPosX(itemIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
-      control:SetPosY(math.floor(itemIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
+      control:SetPosX(12 + itemIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
+      control:SetPosY(5 + math.floor(itemIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
       control:setRenderTexture(control:getBaseTexture())
       if not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, listParamType, listParamIndex, itemIndex) and isServerFixedCharge() then
         control:SetShow(false)
@@ -129,6 +149,8 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       end
       self._ui._meshList[itemIndex] = control
     end
+    local param = getParam(listParamType, listParamIndex)
+    self:UpdateTypeFocus(param)
   end
   if detailListCount == 1 then
     local detailListIndex = 0
@@ -164,8 +186,8 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       control:ChangeTextureInfoName(detailListElementTexture)
       local x1, y1, x2, y2 = setTextureUV_Func(control, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
       control:getBaseTexture():setUV(x1, y1, x2, y2)
-      control:SetPosX(10 + elementIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
-      control:SetPosY(math.floor(elementIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
+      control:SetPosX(12 + elementIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
+      control:SetPosY(5 + math.floor(elementIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
       control:setRenderTexture(control:getBaseTexture())
       if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) then
         control:SetShow(false)
@@ -180,20 +202,35 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       end
       self._ui._meshList[elementIndex] = control
     end
+    local param = getParam(detailListParamType, detailListParamIndex)
+    self:UpdateTypeFocus(param)
     local meshListCount = meshCount - 1
     local VerticalCount = Int64toInt32(meshListCount / self._config._meshColumnCount + 2)
-    local sizeY = VerticalCount * (self._config._columnHeight + self._config._contentsOffsetY)
-    Panel_Customizing_Mesh:SetSize(Panel_Customizing_Mesh:GetSizeX(), sizeY - 10)
+    local sizeY = VerticalCount * self._config._columnHeight
+    Panel_Customizing_Mesh:SetSize(Panel_Customizing_Mesh:GetSizeX(), sizeY + 20)
     PaGlobalFunc_Customization_Mesh_Open()
   end
+end
+function Customization_MeshInfo:UpdateTypeFocus(itemIndex)
+  local item = self._ui._meshList[itemIndex]
+  if nil == item then
+    return
+  end
+  self._ui._hairTypeSelect:SetShow(true)
+  self._ui._hairTypeSelect:SetPosX(item:GetPosX() - 1)
+  self._ui._hairTypeSelect:SetPosY(item:GetPosY() - 1)
 end
 function Customization_MeshInfo:InitControl()
   self._ui._hairTypeTemplate = UI.getChildControl(self._ui._static_TypeBg, "RadioButton_TypeImage_Template")
   self._ui._hairTypeTemplate:SetShow(false)
+  self._ui._hairTypeSelect = UI.getChildControl(self._ui._static_TypeBg, "Static_SelectedSlot")
+  self._ui._hairTypeSelect:SetShow(false)
   self._config._columnWidth = self._ui._hairTypeTemplate:GetSizeX() + self._config._meshImageGap
   self._config._columnHeight = self._ui._hairTypeTemplate:GetSizeY() + self._config._meshImageGap
 end
 function Customization_MeshInfo:InitEvent()
+  Panel_Customizing_Mesh:RegisterUpdateFunc("PaGlobalFunc_Customization_Mesh_UpdatePerFrame")
+  Panel_Customizing_Mesh:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Mesh_SetBoneControl(true)")
 end
 function Customization_MeshInfo:InitRegister()
   registerEvent("EventOpenSelectMeshUi", "HandleClicked_Customization_Mesh_Open")
@@ -214,17 +251,24 @@ function PaGlobalFunc_Customization_Mesh_Open()
   if true == PaGlobalFunc_Customization_Mesh_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(1)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Mesh_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Mesh_Close()")
   PaGlobalFunc_Customization_Mesh_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_Mesh_Close()
+  local self = Customization_MeshInfo
   if false == PaGlobalFunc_Customization_Mesh_GetShow() then
-    return
+    return false
+  end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_Mesh_SetBoneControl(false)
+    return false
   end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_Mesh_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_FromClient_Customization_Mesh_luaLoadComplete()
   local self = Customization_MeshInfo

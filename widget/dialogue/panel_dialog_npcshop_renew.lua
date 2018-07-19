@@ -408,9 +408,9 @@ function Panel_Dialog_NPCShop_Info:createSlot()
       slot:setShow(true)
       self._slots[index] = slot
       if row == 0 then
-        slot.radioButton:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_UP, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( true )")
+        slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( true )")
       elseif row == self._config.slotRows - 1 then
-        slot.radioButton:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_DOWN, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( false )")
+        slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( false )")
       end
     end
   end
@@ -610,7 +610,6 @@ function Panel_Dialog_NPCShop_Info:controlInit()
   end
 end
 function Panel_Dialog_NPCShop_Info:setKeyguide()
-  self._ui.staticText_Cancel_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_KeyCustom_Ui_17"))
   if self._enum.etabIndexBuy == self._value.lastTabIndex then
     self._ui.staticText_SomeOrAll_ConsoleUI:SetShow(true)
     self._ui.staticText_BuyOrSell_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "NPCSHOP_BUY"))
@@ -891,6 +890,7 @@ function PaGlobalFunc_Dialog_NPCShop_TabButtonClick(tabIndex)
   end
   self:setKeyguide()
   self:checkInit()
+  ToClient_padSnapResetControl()
   PaGlobal_TutorialManager:handleNpcShopTabButtonClick(tabIndex)
 end
 function PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(slotIdx)
@@ -1351,7 +1351,7 @@ function PaGlobalFunc_Dialog_NPCShop_ScrollEvent(isUpScroll)
     self._value.startSlotIndex = self._value.startSlotIndex * self._config.slotCols
   end
   if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startSlotIndex then
-    ToClient_setIgnoreSnapping()
+    ToClient_padSnapIgnoreGroupMove()
   end
   Panel_Tooltip_Item_hideTooltip()
   self:updateContent(false)
@@ -1503,6 +1503,6 @@ function Toggle_NPCShopTab_forPadEventFunc(value)
   end
   PaGlobalFunc_Dialog_NPCShop_TabButtonClick(self._currentTabIndex)
 end
-Panel_Dialog_NPCShop:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "Toggle_NPCShopTab_forPadEventFunc(-1)")
-Panel_Dialog_NPCShop:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "Toggle_NPCShopTab_forPadEventFunc(1)")
+Panel_Dialog_NPCShop:registerPadEvent(__eConsoleUIPadEvent_LT, "Toggle_NPCShopTab_forPadEventFunc(-1)")
+Panel_Dialog_NPCShop:registerPadEvent(__eConsoleUIPadEvent_RT, "Toggle_NPCShopTab_forPadEventFunc(1)")
 registerEvent("FromClient_luaLoadComplete", "FromClient_Init_Dialog_NPCShop")

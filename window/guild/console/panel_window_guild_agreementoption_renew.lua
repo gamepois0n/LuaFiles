@@ -73,9 +73,12 @@ function PaGlobalFunc_AgreementGuild_SignOption_Open()
   self._ui._edit_DailyPayment:SetIgnore(self._isJoin)
   self._ui._edit_PenaltyCost:SetIgnore(self._isJoin)
   self:SetMaxDailyPayment(self._paymentPerDay[0], 0)
-  self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[0])) .. " ~ " .. 0 .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
-  self._ui._staticText_PenaltyRange:SetShow(not self._isJoin)
-  self._ui._staticText_DailyPaymentRange:SetShow(not self._isJoin)
+  self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[0])) .. " ~ " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
+  for contorlIndex, control in pairs(self._ui._buttonList) do
+    control:SetCheck(false)
+  end
+  self._ui._buttonList[1]:SetCheck(true)
+  PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(1)
   PaGlobalFunc_AgreementGuild_SignOption_SetShow(true, false)
 end
 function PaGlobalFunc_AgreementGuild_SignOption_Close()
@@ -220,7 +223,7 @@ function PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(index)
     self._maxBenefitValue = useBenefit + useBenefit * (usableActivity / 100 / 100)
     self._maxpenaltyCostValue = usePenalty + usePenalty * (usableActivity / 100 / 100)
     self:SetMaxDailyPayment(self._paymentPerDay[index], self._maxBenefitValue)
-    self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[index])) .. " ~ " .. makeDotMoney(toInt64(0, self._maxpenaltyCostValue)) .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
+    self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[index])) .. " ~ " .. makeDotMoney(toInt64(0, self._maxpenaltyCostValue)) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
     self._ui._edit_DailyPayment:SetEditText(tostring(self._paymentPerDay[index]))
     self._ui._edit_PenaltyCost:SetEditText(tostring(self._cancellationCharge[index]))
   end
@@ -228,7 +231,7 @@ end
 function Window_GuildAgreementOptionInfo:SetMaxDailyPayment(checkIndex, benefitMax)
   local self = Window_GuildAgreementOptionInfo
   local maxBenefit = math.min(tonumber(benefitMax), tonumber(CppEnums.GuildBenefit.eMaxContractedBenefit))
-  self._ui._staticText_DailyPaymentRange:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_MAXDAILYPAYMENT", "checkedIndex", makeDotMoney(toInt64(0, checkIndex)), "maxBenefitValue", makeDotMoney(maxBenefit)))
+  self._ui._staticText_DailyPaymentRange:SetText(makeDotMoney(toInt64(0, checkIndex)) .. " ~ " .. makeDotMoney(maxBenefit) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
 end
 function Window_GuildAgreementOptionInfo:Initialize()
   self:InitControl()

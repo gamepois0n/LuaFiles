@@ -69,6 +69,9 @@ local movieDesc = {
 }
 local prevTitleNo = -1
 function Panel_MovieTheater640_GameGuide_Func(titleNo)
+  if isGameTypeGT() then
+    return
+  end
   if not _movieTheater_640:isReadyView() then
     return
   end
@@ -227,6 +230,9 @@ function FGlobal_Panel_MovieTheater640_WindowClose()
   Panel_MovieTheater640_Reset()
 end
 function Panel_MovieTheater640_ShowControl()
+  if isGameTypeGT() then
+    return
+  end
   _movieTheater_640:TriggerEvent("ShowControl", "true")
 end
 function Panel_MovieTheater640_HideControl()

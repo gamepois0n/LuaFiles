@@ -74,6 +74,7 @@ function PaGlobal_CharacterInfoTitle:initialize()
   self._ui._list2Title:setMinScrollBtnSize(float2(10, 50))
   self._ui._list2Title:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui._comboBoxSort:DeleteAllItem(0)
+  self._ui._comboBoxSort:setListTextHorizonCenter()
   for index = 0, #self._comboBoxString do
     self._ui._comboBoxSort:AddItem(self._comboBoxString[index])
   end

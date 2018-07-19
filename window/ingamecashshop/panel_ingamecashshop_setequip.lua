@@ -116,7 +116,7 @@ function CashShopSetEquip:Initialize()
   self.BTN_BuyAll:addInputEvent("Mouse_LUp", "HandleClicked_CashShopMoveCart()")
   cashShop_SetEquip_SetPosition()
   getIngameCashMall():clearCart()
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeGT() then
     self.BTN_QNA:SetShow(false)
   end
 end

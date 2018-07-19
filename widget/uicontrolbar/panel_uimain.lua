@@ -384,7 +384,6 @@ function UIMain_QuestUpdate()
     FGlobal_MessageHistory_InputMSG(0, PAGetString(Defines.StringSheet_GAME, "LUA_UIMAIN_MESSAGEHISTORY_NEWSPRITQUEST"))
     FGlobal_NewMainQuest_Alarm_Open()
     buttonAni[MenuButtonId.Btn_BlackStone]:SetShow(false)
-    audioPostEvent_SystemUi(4, 11)
     if 0 == isColorBlindMode then
       MenuButtons[MenuButtonId.Btn_BlackStone]:EraseAllEffect()
       MenuButtons[MenuButtonId.Btn_BlackStone]:AddEffect("UI_DarkSprit_Summon", false, 0, 0)
@@ -498,7 +497,6 @@ function uiMainUpdate(updateTime)
     end
     newQuestDeltaTime = newQuestDeltaTime + updateTime
     if blackMsgShowTime <= newQuestDeltaTime then
-      audioPostEvent_SystemUi(4, 11)
       FGlobal_NewMainQuest_Alarm_Open()
       newQuestDeltaTime = 0
     end

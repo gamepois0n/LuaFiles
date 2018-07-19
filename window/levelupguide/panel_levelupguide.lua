@@ -14,6 +14,9 @@ local isLevelGuideUse = true
 if isGameTypeKR2() then
   isLevelGuideUse = false
 end
+if isGameTypeGT() then
+  isLevelGuideUse = false
+end
 function LevelupGuideShowAni()
   UIAni.fadeInSCR_Down(Panel_LevelupGuide)
   local aniInfo1 = Panel_LevelupGuide:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)

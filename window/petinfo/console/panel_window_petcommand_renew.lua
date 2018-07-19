@@ -1,4 +1,5 @@
 Panel_Window_PetCommand_Renew:SetShow(false)
+Panel_Window_PetCommand_Renew:ignorePadSnapMoveToOtherPanel()
 PaGlobal_petCommandType = {
   _follow = 0,
   _getItem = 1,
@@ -44,44 +45,54 @@ function petCommand:initControl()
   petCommandUI._staticText_Title = UI.getChildControl(petCommandUI._static_MainTitleBG, "StaticText_Title")
   local Static_SpeedBg = UI.getChildControl(petCommandUI._static_CenterBG, "Static_SpeedBg")
   petCommandUI._radioButton_High = UI.getChildControl(Static_SpeedBg, "RadioButton_High")
+  petCommandUI._radioButton_HighConfirm = UI.getChildControl(petCommandUI._radioButton_High, "StaticText_Confirm")
   petCommandUI._radioButton_High:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Celerity .. ")")
   petCommandUI._radioButton_High:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Celerity .. ")")
   petCommandUI._radioButton_High:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Celerity .. ")")
   petCommandUI._radioButton_Normal = UI.getChildControl(Static_SpeedBg, "RadioButton_Normal")
+  petCommandUI._radioButton_NormalConfirm = UI.getChildControl(petCommandUI._radioButton_Normal, "StaticText_Confirm")
   petCommandUI._radioButton_Normal:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Normal .. ")")
   petCommandUI._radioButton_Normal:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Normal .. ")")
   petCommandUI._radioButton_Normal:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Normal .. ")")
   petCommandUI._radioButton_Slow = UI.getChildControl(Static_SpeedBg, "RadioButton_Slow")
+  petCommandUI._radioButton_SlowConfirm = UI.getChildControl(petCommandUI._radioButton_Slow, "StaticText_Confirm")
   petCommandUI._radioButton_Slow:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Precision .. ")")
   petCommandUI._radioButton_Slow:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Precision .. ")")
   petCommandUI._radioButton_Slow:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._lootingType .. "," .. CppEnums.PetLootingType.Precision .. ")")
   local Static_ActionBg = UI.getChildControl(petCommandUI._static_CenterBG, "Static_ActionBg")
   petCommandUI._radioButton_Follow = UI.getChildControl(Static_ActionBg, "RadioButton_Follow")
+  petCommandUI._radioButton_FollowConfirm = UI.getChildControl(petCommandUI._radioButton_Follow, "StaticText_Confirm")
   petCommandUI._radioButton_Follow:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._follow .. ", true)")
   petCommandUI._radioButton_Follow:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._follow .. ", true)")
   petCommandUI._radioButton_Follow:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._follow .. ", true)")
   petCommandUI._radioButton_Wait = UI.getChildControl(Static_ActionBg, "RadioButton_Wait")
+  petCommandUI._radioButton_WaitConfirm = UI.getChildControl(petCommandUI._radioButton_Wait, "StaticText_Confirm")
   petCommandUI._radioButton_Wait:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._follow .. ", false)")
   petCommandUI._radioButton_Wait:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._follow .. ", false)")
   petCommandUI._radioButton_Wait:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._follow .. ", false)")
   local Static_TalentBg = UI.getChildControl(petCommandUI._static_CenterBG, "Static_TalentBg")
   petCommandUI._radioButton_TalentOn = UI.getChildControl(Static_TalentBg, "RadioButton_On")
+  petCommandUI._radioButton_TalentOnConfirm = UI.getChildControl(petCommandUI._radioButton_TalentOn, "StaticText_Confirm")
   petCommandUI._radioButton_TalentOn:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._find .. ", true)")
   petCommandUI._radioButton_TalentOn:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._find .. ", true)")
   petCommandUI._radioButton_TalentOn:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._find .. ", true)")
   petCommandUI._radioButton_TalentOff = UI.getChildControl(Static_TalentBg, "RadioButton_Off")
+  petCommandUI._radioButton_TalentOffConfirm = UI.getChildControl(petCommandUI._radioButton_TalentOff, "StaticText_Confirm")
   petCommandUI._radioButton_TalentOff:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._find .. ", false)")
   petCommandUI._radioButton_TalentOff:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._find .. ", false)")
   petCommandUI._radioButton_TalentOff:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._find .. ", false)")
   local Static_GetItemBg = UI.getChildControl(petCommandUI._static_CenterBG, "Static_GetItemBg")
   petCommandUI._radioButton_GetItemOn = UI.getChildControl(Static_GetItemBg, "RadioButton_On")
+  petCommandUI._radioButton_GetItemOnConfirm = UI.getChildControl(petCommandUI._radioButton_GetItemOn, "StaticText_Confirm")
   petCommandUI._radioButton_GetItemOn:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._getItem .. ", true)")
   petCommandUI._radioButton_GetItemOn:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._getItem .. ", true)")
   petCommandUI._radioButton_GetItemOn:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._getItem .. ", true)")
   petCommandUI._radioButton_GetItemOff = UI.getChildControl(Static_GetItemBg, "RadioButton_Off")
+  petCommandUI._radioButton_GetItemOffConfirm = UI.getChildControl(petCommandUI._radioButton_GetItemOff, "StaticText_Confirm")
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._getItem .. ", false)")
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._getItem .. ", false)")
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._getItem .. ", false)")
+  Panel_Window_PetCommand_Renew:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetCommand_Close()")
   petCommandUI._staticText_Cancle = UI.getChildControl(petCommandUI._static_BottomKeyBG, "StaticText_Cansel_ConsoleUI")
   petCommandUI._ExitButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, petCommandUI._static_BottomKeyBG, "_exit_Button")
   CopyBaseProperty(petCommandUI._staticText_Cancle, petCommandUI._ExitButton)
@@ -173,41 +184,59 @@ function petCommand:applyFindCommand(petNo, isGetItem)
 end
 function petCommand:changeIconOn(orderType, value)
   local petCommandUI = self._ui
-  local x1, y1, x2, y2, ButtonIcon
+  petCommandUI._radioButton_HighConfirm:SetShow(false)
+  petCommandUI._radioButton_NormalConfirm:SetShow(false)
+  petCommandUI._radioButton_SlowConfirm:SetShow(false)
+  petCommandUI._radioButton_FollowConfirm:SetShow(false)
+  petCommandUI._radioButton_WaitConfirm:SetShow(false)
+  petCommandUI._radioButton_TalentOnConfirm:SetShow(false)
+  petCommandUI._radioButton_TalentOffConfirm:SetShow(false)
+  petCommandUI._radioButton_GetItemOnConfirm:SetShow(false)
+  petCommandUI._radioButton_GetItemOffConfirm:SetShow(false)
+  local x1, y1, x2, y2, ButtonIcon, ConfirmIcon
   if PaGlobal_petCommandType._lootingType == orderType then
     if CppEnums.PetLootingType.Celerity == value then
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_High, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 34, 124, 66)
+      petCommandUI._radioButton_HighConfirm:SetShow(true)
     elseif CppEnums.PetLootingType.Precision == value then
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_Slow, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 67, 124, 99)
+      petCommandUI._radioButton_SlowConfirm:SetShow(true)
     else
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_Normal, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 1, 124, 34)
+      petCommandUI._radioButton_NormalConfirm:SetShow(true)
     end
   elseif PaGlobal_petCommandType._follow == orderType then
     if value == true then
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_Follow, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 100, 124, 132)
+      petCommandUI._radioButton_FollowConfirm:SetShow(true)
     else
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_Wait, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 133, 124, 165)
+      petCommandUI._radioButton_WaitConfirm:SetShow(true)
     end
   elseif PaGlobal_petCommandType._find == orderType then
     if value == true then
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_TalentOn, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 166, 124, 198)
+      petCommandUI._radioButton_TalentOnConfirm:SetShow(true)
     else
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_TalentOff, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 166, 124, 198)
+      petCommandUI._radioButton_TalentOffConfirm:SetShow(true)
     end
   elseif PaGlobal_petCommandType._getItem == orderType then
     if value == true then
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_GetItemOn, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 199, 124, 231)
+      petCommandUI._radioButton_GetItemOnConfirm:SetShow(true)
     else
       ButtonIcon = UI.getChildControl(petCommandUI._radioButton_GetItemOff, "Static_Icon")
       x1, y1, x2, y2 = setTextureUV_Func(ButtonIcon, 92, 199, 124, 231)
+      petCommandUI._radioButton_GetItemOffConfirm:SetShow(true)
     end
   end
   if ButtonIcon == nil then

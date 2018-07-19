@@ -592,21 +592,18 @@ function Interaction_ButtonPushed(interactionType)
     local actorWrapper = interaction_getInteractable()
     if nil ~= actorWrapper then
       local charWrapper = actorWrapper:getCharacterStaticStatusWrapper()
-      if nil ~= charWrapper then
-        local charAttr = charWrapper:getAttr()
-        if __eAttrHoeMiniGame == charAttr and nil ~= getSelfPlayer() then
-          local playerWp = getSelfPlayer():getWp()
-          local needWp = ToClient_CheckMiniGameFindWp(charWrapper:getCharacterKey())
-          if playerWp < needWp then
-            local charName = charWrapper:getName()
-            local failMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAMEFIND_WPHELP", "name", charName)
-            Proc_ShowMessage_Ack(failMsg)
-            return
-          end
-          if __eWeightLevel3 <= getWeightLevel() then
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoItemIsTooHeavy"))
-            return
-          end
+      if nil ~= charWrapper and true == charWrapper:isAttrSet(__eHoeMiniGameCharacter) and nil ~= getSelfPlayer() then
+        local playerWp = getSelfPlayer():getWp()
+        local needWp = ToClient_CheckMiniGameFindWp(charWrapper:getCharacterKey())
+        if playerWp < needWp then
+          local charName = charWrapper:getName()
+          local failMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAMEFIND_WPHELP", "name", charName)
+          Proc_ShowMessage_Ack(failMsg)
+          return
+        end
+        if __eWeightLevel3 <= getWeightLevel() then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoItemIsTooHeavy"))
+          return
         end
       end
     end

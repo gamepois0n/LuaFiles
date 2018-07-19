@@ -490,6 +490,13 @@ local function settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
         textName = ""
       end
     end
+  elseif actorProxy:isVehicle() then
+    local charWrapper = actorProxyWrapper:getCharacterStaticStatusWrapper()
+    if nil ~= charWrapper and true == charWrapper:isAttrSet(__eGuildTeamBattleWoodenFence) then
+      nameTag:SetShow(false)
+      return
+    end
+    textName = actorProxyWrapper:getName()
   else
     textName = actorProxyWrapper:getName()
   end

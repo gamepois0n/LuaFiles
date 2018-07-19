@@ -313,6 +313,9 @@ function stableMarket:init()
     slot._baseSlot:SetShow(false)
     self._slots[ii] = slot
   end
+  self._comboGenFilter:setListTextHorizonCenter()
+  self._comboBox_SkillFilter:setListTextHorizonCenter()
+  self._comboBox_Sex:setListTextHorizonCenter()
 end
 function StableMarket_LookChangeTooltip(isShow, index)
   if not isShow then
@@ -613,7 +616,14 @@ function StableMarket_UpdateMoney()
   if true == self._isFromNpc then
     self._radioWarehouse:SetShow(true)
     self._staticWarehouse:SetShow(true)
-    self._staticWarehouse:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+    local warehouseMoney = warehouse_moneyFromNpcShop_s64()
+    self._staticWarehouse:SetText(makeDotMoney(warehouseMoney))
+    local warehouseMoneyEnabledFlag = warehouseMoney > Defines.s64_const.s64_0
+    self._radioWarehouse:SetEnable(warehouseMoneyEnabledFlag)
+    if not warehouseMoneyEnabledFlag then
+      self._radioInven:SetCheck(true)
+      self._radioWarehouse:SetCheck(false)
+    end
   else
     self._radioWarehouse:SetShow(false)
     self._staticWarehouse:SetShow(false)

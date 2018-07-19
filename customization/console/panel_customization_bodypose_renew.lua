@@ -1,4 +1,4 @@
-Panel_Customizing_BodyPose:ignorePanelMoveSnapping()
+Panel_Customizing_BodyPose:ignorePadSnapMoveToOtherPanel()
 local Customization_BodyPoseInfo = {
   _ui = {
     _static_ControlGroup = UI.getChildControl(Panel_Customizing_BodyPose, "Static_ControlGroup"),
@@ -13,8 +13,12 @@ local Customization_BodyPoseInfo = {
   _selectedRotMin,
   _selectedRotMax,
   _currentRotation,
+  _lastRotMin,
+  _lastRotMax,
+  _lastRot,
   _selectedImageIndex = -1,
-  _contentImage = {}
+  _contentImage = {},
+  _isBoneControl = false
 }
 function PaGlobalFunc_Customization_BodyPose_OpenPoseEditUi()
   local self = Customization_BodyPoseInfo
@@ -27,6 +31,7 @@ function PaGlobalFunc_Customization_BodyPose_OpenPoseEditUi()
   self._ui._slider_RotationZ:SetControlPos(50)
   self:UpdateSavedPose()
   PaGlobalFunc_Customization_BodyPose_ToggleShowPoseBoneControlPart()
+  PaGlobalFunc_Customization_BodyPose_PoseEditSymmetryChecked()
   setPresetCamera(4)
   PaGlobalFunc_Customization_BodyPose_Open()
 end
@@ -44,6 +49,7 @@ function PaGlobalFunc_Customization_BodyPose_SliderOn(sliderType)
   elseif 2 == sliderType then
     self._ui._slider_RotationZFocus:SetShow(true)
   end
+  PaGlobalFunc_Customization_SetKeyGuide(4)
 end
 function PaGlobalFunc_Customization_BodyPose_SliderOut(sliderType)
   local self = Customization_BodyPoseInfo
@@ -54,12 +60,12 @@ function PaGlobalFunc_Customization_BodyPose_SliderOut(sliderType)
   elseif 2 == sliderType then
     self._ui._slider_RotationZFocus:SetShow(false)
   end
+  if false == self._isBoneControl and true == PaGlobalFunc_Customization_BodyPose_GetShow() then
+    PaGlobalFunc_Customization_SetKeyGuide(2)
+  end
 end
 function PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()
   local self = Customization_BodyPoseInfo
-  if false == self._ui._slider_RotationX:IsEnable() then
-    return
-  end
   local x = self:CalculateSliderRotation(self._ui._slider_RotationX, self._selectedRotMin.x, self._selectedRotMax.x)
   local y = self:CalculateSliderRotation(self._ui._slider_RotationY, self._selectedRotMin.y, self._selectedRotMax.y)
   local z = self:CalculateSliderRotation(self._ui._slider_RotationZ, self._selectedRotMin.z, self._selectedRotMax.z)
@@ -81,9 +87,9 @@ function PaGlobalFunc_Customization_BodyPose_ShowPoseEditor(show)
 end
 function PaGlobalFunc_Customization_BodyPose_AdjustPoseBoneRotation(rotationX, rotationY, rotationZ)
   local self = Customization_BodyPoseInfo
-  setRotationSlider(self._ui._slider_RotationX, rotationX, self._selectedRotMin.x, self._selectedRotMax.x)
-  setRotationSlider(self._ui._slider_RotationY, rotationY, self._selectedRotMin.y, self._selectedRotMax.y)
-  setRotationSlider(self._ui._slider_RotationZ, rotationZ, self._selectedRotMin.z, self._selectedRotMax.z)
+  self:SetRotationSlider(self._ui._slider_RotationX, rotationX, self._selectedRotMin.x, self._selectedRotMax.x)
+  self:SetRotationSlider(self._ui._slider_RotationY, rotationY, self._selectedRotMin.y, self._selectedRotMax.y)
+  self:SetRotationSlider(self._ui._slider_RotationZ, rotationZ, self._selectedRotMin.z, self._selectedRotMax.z)
   self._currentRotation.x = rotationX
   self._currentRotation.y = rotationY
   self._currentRotation.z = rotationZ
@@ -92,8 +98,11 @@ function PaGlobalFunc_Customization_BodyPose_SelectPoseEditorControl(customizati
   local self = Customization_BodyPoseInfo
   PaGlobalFunc_Customization_BodyPose_EnablePoseEditSlide(true)
   self._selectedRotMin = customizationData:getSelectedBoneRotationMin()
+  self._lastRotMin = customizationData:getSelectedBoneRotationMin()
   self._selectedRotMax = customizationData:getSelectedBoneRotationMax()
+  self._lastRotMax = customizationData:getSelectedBoneRotationMax()
   self._currentRotation = customizationData:getSelectedBoneRotationValue()
+  self._lastRot = customizationData:getSelectedBoneRotationValue()
   self:SetRotationSlider(self._ui._slider_RotationX, self._currentRotation.x, self._selectedRotMin.x, self._selectedRotMax.x)
   self:SetRotationSlider(self._ui._slider_RotationY, self._currentRotation.y, self._selectedRotMin.y, self._selectedRotMax.y)
   self:SetRotationSlider(self._ui._slider_RotationZ, self._currentRotation.z, self._selectedRotMin.z, self._selectedRotMax.z)
@@ -117,13 +126,19 @@ function PaGlobalFunc_Customization_BodyPose_DeletePose()
     deletePoseInfo(self._selectedImageIndex)
     self:UpdateSavedPose()
     self._ui._poseSelect:SetShow(false)
+    self._selectedImageIndex = -1
+    PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
   end
 end
 function PaGlobalFunc_Customization_BodyPose_SelectPose(imageIndex)
   local self = Customization_BodyPoseInfo
   self._selectedImageIndex = imageIndex
-  self._ui._poseSelect:SetPosX(self._contentImage[imageIndex]:GetPosX())
-  self._ui._poseSelect:SetPosY(self._contentImage[imageIndex]:GetPosY())
+  if -1 == self._selectedImageIndex then
+    self._ui._poseSelect:SetShow(false)
+    return
+  end
+  self._ui._poseSelect:SetPosX(self._contentImage[imageIndex]:GetPosX() - 1)
+  self._ui._poseSelect:SetPosY(self._contentImage[imageIndex]:GetPosY() - 1)
   self._ui._poseSelect:SetShow(true)
   applyPose(imageIndex)
 end
@@ -185,8 +200,8 @@ function Customization_BodyPoseInfo:InitializePoseEditor()
     tempContentImage:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/cus_pose_tempsave.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
     tempContentImage:getBaseTexture():setUV(x1, y1, x2, y2)
-    tempContentImage:SetPosX(10 + itemIdx % 4 * (self._ui._poseTemplate:GetSizeX() + 10))
-    tempContentImage:SetPosY(10 + math.floor(itemIdx / 4) * (self._ui._poseTemplate:GetSizeY() + 10))
+    tempContentImage:SetPosX(25 + itemIdx % 5 * (self._ui._poseTemplate:GetSizeX() + 10))
+    tempContentImage:SetPosY(15 + math.floor(itemIdx / 5) * (self._ui._poseTemplate:GetSizeY() + 10))
     tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
     tempContentImage:SetShow(true)
     self._contentImage[itemIdx] = tempContentImage
@@ -203,8 +218,54 @@ function Customization_BodyPoseInfo:SetRotationSlider(sliderControl, value, valu
     sliderControl:SetControlPos((value - valueMin) / val * 100)
   end
 end
+function PaGlobalFunc_Customization_BodyPose_SetBoneControl(isSet)
+  local self = Customization_BodyPoseInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(2)
+    Panel_Customizing_BodyPose:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(8)
+    Panel_Customizing_BodyPose:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
+end
+function PaGlobalFunc_Customization_BodyPose_UpdatePerFrame(deltaTime)
+  local self = Customization_BodyPoseInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_BodyPose_SetBoneControl(false)
+    end
+    return
+  end
+end
+function PaGlobalFunc_Customization_BodyPose_ClearPoseBone()
+  local self = Customization_BodyPoseInfo
+  self._ui._poseSelect:SetShow(false)
+  if nil == self._lastRot then
+    return
+  end
+  self:SetRotationSlider(self._ui._slider_RotationX, self._lastRot.x, self._lastRotMin.x, self._lastRotMax.x)
+  self:SetRotationSlider(self._ui._slider_RotationY, self._lastRot.y, self._lastRotMin.y, self._lastRotMax.y)
+  self:SetRotationSlider(self._ui._slider_RotationZ, self._lastRot.z, self._lastRotMin.z, self._lastRotMax.z)
+  clearPoseBone()
+end
+function PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
+  local self = Customization_BodyPoseInfo
+  self._ui._poseSelect:SetShow(false)
+  clearAllPoseBone()
+  if nil == self._lastRot then
+    return
+  end
+  self:SetRotationSlider(self._ui._slider_RotationX, self._lastRot.x, self._lastRotMin.x, self._lastRotMax.x)
+  self:SetRotationSlider(self._ui._slider_RotationY, self._lastRot.y, self._lastRotMin.y, self._lastRotMax.y)
+  self:SetRotationSlider(self._ui._slider_RotationZ, self._lastRot.z, self._lastRotMin.z, self._lastRotMax.z)
+end
 function Customization_BodyPoseInfo:InitControl()
   self._ui._checkbox_ShowPart = UI.getChildControl(self._ui._static_ControlGroup, "CheckButton_ShowPart")
+  self._ui._checkbox_ShowPart:SetCheck(true)
   self._ui._checkbox_Symmetry = UI.getChildControl(self._ui._static_ControlGroup, "CheckButton_Symmetry")
   self._ui._button_ResetPart = UI.getChildControl(self._ui._static_ControlGroup, "Button_ResetPart")
   self._ui._button_ResetAll = UI.getChildControl(self._ui._static_ControlGroup, "Button_ResetAll")
@@ -224,26 +285,24 @@ function Customization_BodyPoseInfo:InitControl()
   self._ui._sliderButton_RotationY = UI.getChildControl(self._ui._slider_RotationY, "Slider_Button")
   self._ui._sliderButton_RotationZ = UI.getChildControl(self._ui._slider_RotationZ, "Slider_Button")
   self._ui._poseTemplate = UI.getChildControl(self._ui._static_PoseGroup, "Button_PoseTemplate")
+  self._ui._poseTemplate:SetShow(false)
   self._ui._poseSelect = UI.getChildControl(self._ui._static_PoseGroup, "Static_SelectedSlot")
   self._ui._poseSelect:SetShow(false)
   self._ui._button_Save = UI.getChildControl(self._ui._static_SaveGroup, "Button_Save")
   self._ui._button_Delete = UI.getChildControl(self._ui._static_SaveGroup, "Button_Delete")
 end
 function Customization_BodyPoseInfo:InitEvent()
-  self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "clearPoseBone()")
-  self._ui._button_ResetAll:addInputEvent("Mouse_LUp", "clearAllPoseBone()")
-  self._ui._slider_RotationX:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
-  self._ui._slider_RotationX:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
-  self._ui._slider_RotationY:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
-  self._ui._slider_RotationY:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
-  self._ui._slider_RotationZ:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
-  self._ui._slider_RotationZ:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
+  self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyPose_ClearPoseBone()")
+  self._ui._button_ResetAll:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()")
   self._ui._slider_RotationX:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyPose_SliderOn(0)")
   self._ui._slider_RotationX:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyPose_SliderOut(0)")
   self._ui._slider_RotationY:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyPose_SliderOn(1)")
   self._ui._slider_RotationY:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyPose_SliderOut(1)")
   self._ui._slider_RotationZ:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyPose_SliderOn(2)")
   self._ui._slider_RotationZ:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyPose_SliderOut(2)")
+  self._ui._slider_RotationX:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
+  self._ui._slider_RotationY:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
+  self._ui._slider_RotationZ:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyPose_PoseEditSliderUpdate()")
   self._ui._sliderButton_RotationX:SetIgnore(true)
   self._ui._sliderButton_RotationY:SetIgnore(true)
   self._ui._sliderButton_RotationZ:SetIgnore(true)
@@ -251,6 +310,8 @@ function Customization_BodyPoseInfo:InitEvent()
   self._ui._checkbox_Symmetry:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyPose_PoseEditSymmetryChecked()")
   self._ui._button_Save:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyPose_SavePose()")
   self._ui._button_Delete:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyPose_DeletePose()")
+  Panel_Customizing_BodyPose:RegisterUpdateFunc("PaGlobalFunc_Customization_BodyPose_UpdatePerFrame")
+  Panel_Customizing_BodyPose:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_BodyPose_SetBoneControl(true)")
 end
 function Customization_BodyPoseInfo:InitRegister()
   registerEvent("EventOpenPoseEditUi", "PaGlobalFunc_Customization_BodyPose_OpenPoseEditUi")
@@ -270,17 +331,27 @@ function PaGlobalFunc_FromClient_Customization_BodyPose_luaLoadComplete()
   self:Initialize()
 end
 function PaGlobalFunc_Customization_BodyPose_Close()
+  local self = Customization_BodyPoseInfo
   if false == PaGlobalFunc_Customization_BodyPose_GetShow() then
-    return
+    return false
   end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_BodyPose_SetBoneControl(false)
+    return false
+  end
+  clearAllPoseBone()
+  endPickingMode()
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_BodyPose_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_BodyPose_Open()
   if true == PaGlobalFunc_Customization_BodyPose_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(2)
+  PaGlobalFunc_Customization_BodyPose_ToggleShowPoseBoneControlPart()
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_BodyPose_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_BodyPose_Close()")
   PaGlobalFunc_Customization_BodyPose_SetShow(true, false)

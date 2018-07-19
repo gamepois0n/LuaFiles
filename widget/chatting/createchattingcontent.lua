@@ -32,11 +32,10 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
   local noticeType = chattingMessage.noticeType
   local isMe = chattingMessage.isMe
   local isGameManager = chattingMessage.isGameManager
-  local panelIndexModifier = 0
-  if true == _ContentsGroup_RenewUI_Chatting then
-    panelIndexModifier = 1
+  if true == _ContentsGroup_RenewUI_Chatting and nil ~= panelIndex then
+    panelIndex = panelIndex - 1
   end
-  local msgColor = Chatting_MessageColor(chatType, noticeType, panelIndex - panelIndexModifier)
+  local msgColor = Chatting_MessageColor(chatType, noticeType, panelIndex)
   local msg, msgData
   local isLinkedItem = chattingMessage:isLinkedItem()
   local isLinkedGuild = chattingMessage:isLinkedGuild()
@@ -104,7 +103,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
     end
   else
   end
-  if true == FGlobal_ChatOption_GetIsShowTimeString(panelIndex - panelIndexModifier) or UI_CT.Private == chatType or UI_CT.System == chatType and UI_CST.Market == chatSystemType then
+  if nil ~= panelIndex and true == FGlobal_ChatOption_GetIsShowTimeString(panelIndex) or UI_CT.Private == chatType or UI_CT.System == chatType and UI_CST.Market == chatSystemType then
     msg = chattingMessage:getContent() .. " (" .. chattingMessage:getTimeString() .. ")"
   else
     msg = chattingMessage:getContent()

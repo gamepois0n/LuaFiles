@@ -88,13 +88,13 @@ function PaGlobalFunc_AgreementGuild_Master_ContractOpen(memberIndex, requesterM
   end
   if _ContentsGroup_isConsolePadControl then
     if true == isRenew then
-      Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_AgreementGuild_SendReContract()")
-      Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_SendReContract()")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
     else
-      Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "")
-      Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
     end
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
   end
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   local guildName = guildWrapper:getName()
@@ -115,6 +115,8 @@ function PaGlobal_AgreementGuild_InviteOpen(isJoin, hostUsername, hostname, guil
   self._period = period
   self._dailyPayment = benefit
   self._penaltyCost = penalty
+  self._ui._staticText_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_CONTRACT", "guildName", self._inviteGuildName))
+  self._ui._staticText_ContentTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_CONTRACT", "guildName", self._inviteGuildName))
   self._ui._staticText_Periodvalue:SetText(self._period .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_TIME_DAY"))
   self._ui._staticText_DailyPaymentValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._dailyPayment)))
   self._ui._staticText_PenaltyCostValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._penaltyCost)))
@@ -127,9 +129,9 @@ function PaGlobal_AgreementGuild_InviteOpen(isJoin, hostUsername, hostname, guil
   self._ui._button_Confirm:SetShow(true)
   self._ui._button_Option:SetShow(false)
   if _ContentsGroup_isConsolePadControl then
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_AgreementGuild_AgreementConfirm()")
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Master_InviteRefuse()")
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_AgreementConfirm()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Master_InviteRefuse()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
   PaGlobalFunc_AgreementGuild_Open()
 end
@@ -168,15 +170,20 @@ function PaGlobalFunc_AgreementGuild_Open_ForJoin(targetKeyRaw, targetName, preG
   self._isJoin = true
   self._targetName = targetName
   self._ui._staticText_ToValue:SetText(targetName)
+  self._ui._staticText_FromValue:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORLDMAP_GUILDHOUSECONTROL_OWNGUILD_MASTER_TITLE"))
+  local guildWrapper = ToClient_GetMyGuildInfoWrapper()
+  local guildName = guildWrapper:getName()
+  self._ui._staticText_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_CONTRACT", "guildName", guildName))
+  self._ui._staticText_ContentTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_CONTRACT", "guildName", guildName))
   self._ui._button_Confirm:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDAGREEMENT_CONTRACT"))
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SendInvite()")
   self._ui._button_Confirm:SetShow(true)
   self._ui._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_Close()")
   self._ui._button_Option:SetShow(true)
   if _ContentsGroup_isConsolePadControl then
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_AgreementGuild_SendInvite()")
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
-    Panel_Console_Window_GuildAgreement:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_SendInvite()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
   end
   PaGlobalFunc_AgreementGuild_SignOption_Open()
   PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(4)
@@ -202,7 +209,9 @@ function Window_GuildAgreementInfo:InitControl()
   self._ui._staticText_DailyPaymentValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_DailyPaymentValue")
   self._ui._staticText_PenaltyCostValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_PenaltyCostValue")
   self._ui._staticText_FromValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_FromValue")
+  self._ui._staticText_FromValue:SetTextHorizonLeft(true)
   self._ui._staticText_ToValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_ToValue")
+  self._ui._staticText_ToValue:SetTextHorizonLeft(true)
   self._ui._staticText_Title = UI.getChildControl(self._ui._static_TopBg, "StaticText_TitleIcon")
   self._ui._staticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_2"))
   self._ui._button_Confirm = UI.getChildControl(self._ui._static_BottomBg, "Button_Confirm")

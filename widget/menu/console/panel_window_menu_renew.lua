@@ -25,7 +25,10 @@ PaGlobal_Menu_Renew_Renew._xbox = {
   _friend = 12,
   _ringMenu = 13,
   _cashShop = 14,
-  _count = 15
+  _pet = 15,
+  _beauty = 16,
+  _partyRecruite = 17,
+  _count = 18
 }
 PaGlobal_Menu_Renew_Renew._categoryData = {
   [PaGlobal_Menu_Renew_Renew._xbox._help] = {
@@ -162,6 +165,33 @@ PaGlobal_Menu_Renew_Renew._categoryData = {
     _y1 = 189,
     _x2 = 509,
     _y2 = 249
+  },
+  [PaGlobal_Menu_Renew_Renew._xbox._pet] = {
+    _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PET"),
+    _hotKey = "",
+    _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+    _x1 = 374,
+    _y1 = 64,
+    _x2 = 434,
+    _y2 = 124
+  },
+  [PaGlobal_Menu_Renew_Renew._xbox._beauty] = {
+    _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BEAUTY"),
+    _hotKey = "",
+    _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+    _x1 = 126,
+    _y1 = 126,
+    _x2 = 186,
+    _y2 = 186
+  },
+  [PaGlobal_Menu_Renew_Renew._xbox._partyRecruite] = {
+    _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYLISTRECRUITE_TITLE"),
+    _hotKey = "",
+    _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+    _x1 = 64,
+    _y1 = 436,
+    _x2 = 124,
+    _y2 = 496
   }
 }
 function PaGlobal_Menu_Renew_Renew:ShowAni()
@@ -174,7 +204,7 @@ function PaGlobal_Menu_Renew_Renew:Init()
   Panel_Window_Menu_Renew:ActiveMouseEventEffect(true)
   Panel_Window_Menu_Renew:RegisterShowEventFunc(true, "PaGlobal_Menu_Renew_Renew:ShowAni()")
   Panel_Window_Menu_Renew:RegisterShowEventFunc(false, "PaGlobal_Menu_Renew_Renew:HideAni()")
-  for index = 0, 14 do
+  for index = 0, self._xbox._count - 1 do
     self._ui._subButton[index] = UI.getChildControl(Panel_Window_Menu_Renew, "StaticText_ButtonBg_" .. index)
     self._ui._subButton[index]:SetText(self._categoryData[index]._string)
     self._ui._subButton[index]:addInputEvent("Mouse_LUp", "PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(" .. index .. ")")
@@ -229,6 +259,12 @@ function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
     FromClient_ConsoleQuickMenu_OpenCustomPage(2)
   elseif self._xbox._cashShop == index then
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_CashShop)
+  elseif self._xbox._pet == index then
+    FGlobal_PetListNew_Toggle()
+  elseif self._xbox._beauty == index then
+    GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_BeautyShop)
+  elseif self._xbox._partyRecruite == index then
+    PaGlobalFunc_FindParty_Show()
   end
   Panel_Window_Menu_ShowToggle()
 end

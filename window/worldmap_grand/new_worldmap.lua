@@ -423,7 +423,11 @@ function FromClient_WorldMapOpen()
   else
     Panel_Npc_Dialog:SetShow(false)
   end
-  workerManager_Close()
+  if false == _ContentsGroup_RenewUI_Worker then
+    workerManager_Close()
+  else
+    PaGlobalFunc_WorkerManager_Close()
+  end
   FGlobal_NpcNavi_Hide()
   FGlobal_WarInfo_Open()
   FGlobal_NodeWarInfo_Open()
@@ -436,9 +440,12 @@ function FromClient_WorldMapOpen()
   isPrevShowPanel = Panel_CheckedQuest:GetShow()
   isPrevShowMainQuestPanel = Panel_MainQuest:GetShow()
   FGlobal_QuestWidget_Close()
-  FGlobal_workerChangeSkill_Close()
-  if not Panel_WorkerRestoreAll:IsUISubApp() then
-    workerRestoreAll_Close()
+  if false == _ContentsGroup_RenewUI_Worker then
+    FGlobal_workerChangeSkill_Close()
+    if not Panel_WorkerRestoreAll:IsUISubApp() then
+      workerRestoreAll_Close()
+    end
+  else
   end
   FGlobal_TentTooltipHide()
   if Panel_CheckedQuestInfo:GetShow() and not Panel_CheckedQuestInfo:IsUISubApp() then
@@ -493,9 +500,13 @@ function FGlobal_OpenWorldMapWithHouse()
   isCloseWorldMap = false
 end
 function FGlobal_WorldMapWindowEscape()
-  if Panel_WorkerTrade_Caravan:GetShow() then
-    FGlobal_WorkerTradeCaravan_Hide()
-    return
+  if false == _ContentsGroup_RenewUI_Worker then
+    if Panel_WorkerTrade_Caravan:GetShow() then
+      FGlobal_WorkerTradeCaravan_Hide()
+      return
+    end
+  else
+    FGlobal_WorkerTrade_Close()
   end
   if ToClient_WorldMapIsShow() then
     local _panel_TradeMarket_EventInfo = Panel_TradeMarket_EventInfo
@@ -506,7 +517,7 @@ function FGlobal_WorldMapWindowEscape()
     if true == _ContentsGroup_ForXBoxFinalCert then
       _panel_houseControl = Panel_Worldmap_HouseCraft
     end
-    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and PaGlobalFunc_PanelDelivery_GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (Panel_Window_ItemMarket:GetShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true) and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true) and Panel_WorldMap_MovieGuide:GetShow() == false and Panel_WorkerTrade:GetShow() == false and Panel_WorkerTrade_Caravan:GetShow() == false then
+    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and PaGlobalFunc_PanelDelivery_GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (Panel_Window_ItemMarket:GetShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true) and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Window_WorkerManager_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true)) and Panel_WorldMap_MovieGuide:GetShow() == false and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Dialog_WorkerTrade_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade:GetShow() == false) and (true == _ContentsGroup_RenewUI_Worker or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade_Caravan:GetShow() == false) then
       ToClient_WorldMapPushEscape()
     end
     if false == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
@@ -561,7 +572,9 @@ function FGlobal_WorldMapClose()
   Panel_MainQuest:SetShow(isPrevShowMainQuestPanel)
   isPrevShowPanel = false
   isPrevShowMainQuestPanel = false
-  FGlobal_workerChangeSkill_Close()
+  if false == _ContentsGroup_RenewUI_Worker then
+    FGlobal_workerChangeSkill_Close()
+  end
   FGlobal_TownfunctionNavi_UnSetWorldMap()
   FGlobal_HouseInstallation_MinorWar_Close()
   SetUIMode(Defines.UIMode.eUIMode_Default)
@@ -578,7 +591,11 @@ end
 function FGlobal_WorldMapCloseSubPanel()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "FGlobal_WorldMapCloseSubPanel")
   Panel_Window_Warehouse:SetShow(false)
-  Panel_manageWorker:SetShow(false)
+  if false == _ContentsGroup_RenewUI_Worker then
+    Panel_manageWorker:SetShow(false)
+  else
+    PaGlobalFunc_WorkerManager_Close()
+  end
   Panel_Working_Progress:SetShow(false)
   FGlobal_ItemMarketItemSet_Close()
   FGolbal_ItemMarketNew_Close()
@@ -758,21 +775,23 @@ function FromClient_HideAutoCompletedNaviBtn(isShow)
   HideAutoCompletedNaviBtn = isShow
 end
 registerEvent("FromClient_RenderStateChange", "FromClient_RenderStateChange")
-registerEvent("FromClient_SetTownMode", "FromClient_SetTownMode")
-registerEvent("FromClient_resetTownMode", "FromClient_resetTownMode")
-registerEvent("FromClient_WorldMapOpen", "FromClient_WorldMapOpen")
-registerEvent("FromClient_ExitWorldMap", "FromClient_ExitWorldMap")
-registerEvent("FromClient_ImmediatelyCloseWorldMap", "FGlobal_WorldMapClose")
-registerEvent("FromClient_WorldMapFadeOut", "FromClient_WorldMapFadeOut")
-registerEvent("FromClient_LClickedWorldMapNode", "FromClient_LClickedWorldMapNode")
+if false == _ContentsGroup_RenewUI_WorldMap then
+  registerEvent("FromClient_WorldMapOpen", "FromClient_WorldMapOpen")
+  registerEvent("FromClient_LClickedWorldMapNode", "FromClient_LClickedWorldMapNode")
+  registerEvent("FromClient_SetTownMode", "FromClient_SetTownMode")
+  registerEvent("FromClient_resetTownMode", "FromClient_resetTownMode")
+  registerEvent("FromClient_ExitWorldMap", "FromClient_ExitWorldMap")
+  registerEvent("FromClient_ImmediatelyCloseWorldMap", "FGlobal_WorldMapClose")
+  registerEvent("FromClient_WorldMapFadeOut", "FromClient_WorldMapFadeOut")
+  registerEvent("FromClient_WorldMapFadeOutHideUI", "FromClient_WorldMapFadeOutHideUI")
+  registerEvent("FromClient_WorldMapNodeUpgrade", "UpdateWorldMapNode")
+  registerEvent("FromClient_FillNodeInfo", "FGlobal_OpenOtherPanelWithNodeMenu")
+end
 registerEvent("FromClient_NodeIsNextSiege", "FromClient_NodeIsNextSiege")
-registerEvent("FromClient_WorldMapNodeUpgrade", "UpdateWorldMapNode")
-registerEvent("FromClient_FillNodeInfo", "FGlobal_OpenOtherPanelWithNodeMenu")
 registerEvent("FromClient_WorldMapNodeFindNearNode", "FromClient_WorldMapNodeFindNearNode")
 registerEvent("FromClient_WorldMapNodeFindTargetNode", "FromClient_WorldMapNodeFindTargetNode")
 registerEvent("FromClient_RClickWorldmapPanel", "FromClient_RClickWorldmapPanel")
 registerEvent("FromClient_DeleteNaviGuidOnTheWorldmapPanel", "FromClient_DeleteNaviGuidOnTheWorldmapPanel")
-registerEvent("FromClient_WorldMapFadeOutHideUI", "FromClient_WorldMapFadeOutHideUI")
 registerEvent("FromClient_HideAutoCompletedNaviBtn", "FromClient_HideAutoCompletedNaviBtn")
 registerEvent("FromClient_DeliveryRequestAck", "DeliveryRequest_UpdateRequestSlotData")
 registerEvent("EventDeliveryInfoUpdate", "DeliveryInformation_UpdateSlotData")

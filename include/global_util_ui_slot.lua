@@ -553,7 +553,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   if nil ~= self.border then
     local gradeType = itemStaticWrapper:getGradeType()
     local borderTextureData = UI.itemSlotConfig.borderTexture
-    if ToClient_isXBox() then
+    if true == _ContentsGroup_RenewUI then
       borderTextureData = UI.itemSlotConfig.borderTextureForRenewUI
       local borderSample = PaGlobalFunc_InventoryInfo_GetSlotBorder()
       if nil ~= borderSample then

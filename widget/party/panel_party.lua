@@ -64,6 +64,7 @@ local registItem = {
   _btnCancel = UI.getChildControl(Panel_Party, "Button_Cancel")
 }
 registItem._option:addInputEvent("Mouse_LUp", "Party_RegistItem_ChangeMoney()")
+registItem._comboBox:setListTextHorizonCenter()
 registItem._comboBox:addInputEvent("Mouse_LUp", "Party_RegistItem_ShowComboBox()")
 registItem._comboBox:GetListControl():addInputEvent("Mouse_LUp", "Party_RegistItem_SetGrade()")
 registItem._btnAdmin:addInputEvent("Mouse_LUp", "Party_RegistItem_Set()")
@@ -264,6 +265,7 @@ local _uiComboLootingOption = UI.getChildControl(Panel_Party, "Combobox_Looting_
 local _comboBoxList = UI.getChildControl(_uiComboLootingOption, "Combobox_List")
 _styleLootType:SetShow(false)
 _uiComboLootingOption:SetShow(true)
+_uiComboLootingOption:setListTextHorizonCenter()
 Panel_Party:SetChildIndex(_uiComboLootingOption, 9999)
 local _uiPartyMemberList = {}
 _maxPartyMemberCount = 5

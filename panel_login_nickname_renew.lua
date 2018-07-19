@@ -21,8 +21,8 @@ function loginNickname:init()
   loginNickname.desc3:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NICKNAME_NOTIFY_3"))
   self.btn_apply:addInputEvent("Mouse_LUp", "LoginNickname_OK()")
   self.edit_nickname:setXboxVirtualKeyBoardEndEvent("Input_LoginNickname_KeyboardEnd")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "Input_loginNickname_Edit()")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "LoginNickname_OK()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_loginNickname_Edit()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "LoginNickname_OK()")
   registerEvent("EventCreateNickname", "LoginNickname_Open")
 end
 function LoginNickname_OK()
@@ -48,7 +48,8 @@ function Input_loginNickname_Edit()
   SetFocusEdit(loginNickname.edit_nickname)
 end
 function Input_LoginNickname_KeyboardEnd(str)
-  loginNickname.edit_nickname:SetText(str)
+  loginNickname.edit_nickname:SetEditText(str)
+  ClearFocusEdit()
 end
 function LoginNickname_Cancel_End()
   disConnectToGame()
@@ -58,7 +59,6 @@ function LoginNickname_Open()
   if _panel:GetShow() then
     return
   end
-  ToClient_setTargetPanel(_panel)
   local self = loginNickname
   self.edit_nickname:SetEditText("")
   self.edit_nickname:SetMaxInput(getGameServiceTypeUserNickNameLength())

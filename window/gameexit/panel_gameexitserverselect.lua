@@ -261,7 +261,11 @@ function ChannelSelect_Init()
   channelMainDesc._siegeMedia:SetShow(false)
   channelMainDesc._siegeValencia:SetShow(false)
   local sizeControl
-  if isGameTypeSA() or isGameTypeTH() or isGameTypeID() then
+  if isGameTypeSA() then
+    channelMainDesc._pkTitle:SetShow(false)
+    channelMainDesc._pkDesc:SetShow(false)
+    sizeControl = channelMainDesc._speedDesc
+  elseif isGameTypeTH() or isGameTypeID() then
     channelMainDesc._speedTitle:SetShow(false)
     channelMainDesc._speedDesc:SetShow(false)
     sizeControl = channelMainDesc._serverDesc
@@ -330,6 +334,13 @@ function ChannelSelect_Init()
   end
   channelMainDesc._pkTitle:SetPosY(channelMainDesc._speedDesc:GetPosY() + channelMainDesc._speedDesc:GetTextSizeY() + 15)
   channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 20)
+  if isGameTypeTH() or isGameTypeID() then
+    channelMainDesc._pkTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
+    channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 20)
+    channelMainDesc._pkTitle:SetShow(true)
+    channelMainDesc._pkDesc:SetShow(true)
+    sizeControl = channelMainDesc._pkDesc
+  end
   channelMainDesc._siegeTitle:SetPosY(sizeControl:GetPosY() + sizeControl:GetTextSizeY() + 15)
   channelMainDesc._siegeBalenos:SetPosY(channelMainDesc._siegeTitle:GetPosY() + 20)
   channelMainDesc._siegeSerendia:SetPosY(channelMainDesc._siegeBalenos:GetPosY() + 20)

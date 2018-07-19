@@ -132,6 +132,8 @@ function FGlobal_NpcGift_PopupMessage()
 end
 function FGlobal_NpcGift_Propose()
   ToClient_proposeToNpc()
+  resultProposeToNpc()
+  luaTimer_AddEvent(FromClient_NewMailAlram, 300000, false, 0)
 end
 function FGlobal_NpcGift_Confirm()
   local self = NpcGift
@@ -218,7 +220,7 @@ function NpcGift:registEventHandler()
   ui._iconDetail:addInputEvent("Mouse_On", "FGlobal_NpcGift_TooltipShow(true)")
   ui._iconDetail:addInputEvent("Mouse_Out", "FGlobal_NpcGift_TooltipShow(false)")
   if true == ToClient_isXBox() then
-    _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "FGlobal_NpcGift_Propose()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobal_NpcGift_Propose()")
   end
 end
 function NpcGift:registMessageHandler()

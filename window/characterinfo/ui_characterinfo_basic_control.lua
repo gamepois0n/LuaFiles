@@ -555,7 +555,7 @@ PaGlobal_Char_LifeInfo = {
     [__ePlayerLifeStatType_Sail] = "Static_Bg_Sailing"
   },
   _lifeSubTypeCount = {
-    [__ePlayerLifeStatType_Collecting] = __eCollectingStatType_Count,
+    [__ePlayerLifeStatType_Collecting] = __eCollectToolType_Count,
     [__ePlayerLifeStatType_Fishing] = __eFishingStatType_Count,
     [__ePlayerLifeStatType_Hunting] = __eHuntingStatType_Count,
     [__ePlayerLifeStatType_Cooking] = __eCookingStatType_Count,
@@ -579,9 +579,11 @@ function PaGlobal_Char_LifeInfo:Init()
     self._lifeInfo[key]._ui._expText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Percent")
     self._lifeInfo[key]._ui._levelText = UI.getChildControl(self._lifeInfo[key]._ui._parent, "StaticText_Level")
     self._lifeInfo[key]._ui._progressBG = UI.getChildControl(self._lifeInfo[key]._ui._parent, "Static_ProgressBg")
-    local count = self._lifeSubTypeCount[key] - 1
+    local count = 0
     if __ePlayerLifeStatType_Collecting == key then
-      count = self._lifeSubTypeCount[key]
+      count = 7
+    elseif __ePlayerLifeStatType_Manufacture == key then
+      count = self._lifeSubTypeCount[key] - 1
     end
     for ii = 1, count do
       if nil == self._lifeInfo[key] then
@@ -626,9 +628,6 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
         self._lifeInfo[key]._ui._subCategoryTitle[ii]:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. "," .. ii .. ")")
         self._lifeInfo[key]._ui._subCategoryTitle[ii]:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. "," .. ii .. ")")
       end
-    end
-    if __ePlayerLifeStatType_Collecting == key then
-      self._lifeInfo[key]._ui._subCategoryPoint[self._lifeSubTypeCount[key]]:SetText(commonPoint)
     end
   end
 end
@@ -681,6 +680,36 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       local countRate = ToClient_getManufacturingStatCountRate(subType)
       name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MANUFACTURING_POWER_TOOLTIP_DESC", "data2", tostring(countRate))
+    elseif __ePlayerLifeStatType_Collecting == mainType then
+      if false == _ContentsGroup_EnhanceCollect then
+        return
+      end
+      local characterCollectRate = ToClient_getSelfPlayerCollectRate()
+      local count = ToClient_LoadCollectingStatData(subType)
+      local tempString = {}
+      for ii = 0, count - 2 do
+        local dropRate = ToClient_getCollectingStatAddDropRate(ii)
+        local dropCountRate = ToClient_getCollectingStatAddDropCountRate(ii)
+        if characterCollectRate >= 800000 then
+          dropRate = 0
+        end
+        dropRate = dropRate / 1000
+        dropRate = math.floor(dropRate) / 10
+        dropCountRate = dropCountRate / 1000
+        dropCountRate = math.floor(dropCountRate) / 10
+        local stringFormatKey = string.format("LUA_COLLECTING_POWER_DESC_%d", ii + 1)
+        tempString[ii] = PAGetStringParam2(Defines.StringSheet_GAME, stringFormatKey, "rate1", tostring(dropRate), "rate2", tostring(dropCountRate))
+      end
+      characterCollectRate = characterCollectRate / 1000
+      characterCollectRate = math.floor(characterCollectRate) / 10
+      local subStringName = string.format("LUA_COLLECTING_POWER_DESC_SUB_%d", subType)
+      desc = string.format([[
+%s
+%s%s%s
+%s
+
+%s]], PAGetString(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_MAIN"), tempString[0], tempString[1], tempString[2], PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_4", "charRate", tostring(characterCollectRate)), PAGetString(Defines.StringSheet_GAME, tostring(subStringName)))
+      name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
     end
     control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
     TooltipSimple_Show(control, name, desc)

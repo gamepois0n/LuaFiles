@@ -27,5 +27,5 @@ function Panel_LogoXbox_UpdatePerFrame()
     MessageBox.showMessageBox(messageboxData)
   end
 end
-Panel_LogoXbox:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "Panel_LogoXbox_PressA()")
+Panel_LogoXbox:registerPadEvent(__eConsoleUIPadEvent_Up_A, "Panel_LogoXbox_PressA()")
 button_Xbox:addInputEvent("Mouse_LUp", "Panel_LogoXbox_PressA()")

@@ -1,12 +1,12 @@
 local _panel = Panel_Repair_Renew
 local REPAIR_TYPE = {
   UNDEFINED = 0,
-  GUILD = 1,
-  MAX_ENDURANCE = 2,
-  SHIP = 3,
+  EQUIP = 1,
+  INVEN = 2,
+  MAX_ENDURANCE = 3,
   SERVANT = 4,
-  EQUIP = 5,
-  INVEN = 6,
+  SHIP = 5,
+  GUILD = 6,
   COUNT = 6
 }
 local RepairInfo = {
@@ -15,7 +15,6 @@ local RepairInfo = {
     txt_title = nil,
     stc_titleIcon = nil,
     stc_bodyBG = UI.getChildControl(_panel, "Static_BodyBG"),
-    btn_template = nil,
     btn_repairs = nil,
     stc_clipAreas = nil,
     stc_buttonBGs = nil,
@@ -44,42 +43,6 @@ local RepairInfo = {
   _isCamping = nil
 }
 local _buttonsData = {
-  [REPAIR_TYPE.GUILD] = {
-    uv = {
-      1,
-      200,
-      511,
-      297
-    },
-    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_ELEPHANT")
-  },
-  [REPAIR_TYPE.MAX_ENDURANCE] = {
-    uv = {
-      1,
-      299,
-      511,
-      396
-    },
-    text = PAGetString(Defines.StringSheet_RESOURCE, "REPAIR_MAXENDURANCE_TITLE")
-  },
-  [REPAIR_TYPE.SHIP] = {
-    uv = {
-      1,
-      1,
-      511,
-      98
-    },
-    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_SHIP")
-  },
-  [REPAIR_TYPE.SERVANT] = {
-    uv = {
-      1,
-      100,
-      511,
-      197
-    },
-    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_VEHICLE")
-  },
   [REPAIR_TYPE.EQUIP] = {
     uv = {
       1,
@@ -97,6 +60,42 @@ local _buttonsData = {
       595
     },
     text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_IVNENITEM")
+  },
+  [REPAIR_TYPE.MAX_ENDURANCE] = {
+    uv = {
+      1,
+      299,
+      511,
+      396
+    },
+    text = PAGetString(Defines.StringSheet_RESOURCE, "REPAIR_MAXENDURANCE_TITLE")
+  },
+  [REPAIR_TYPE.SERVANT] = {
+    uv = {
+      1,
+      100,
+      511,
+      197
+    },
+    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_VEHICLE")
+  },
+  [REPAIR_TYPE.SHIP] = {
+    uv = {
+      1,
+      1,
+      511,
+      98
+    },
+    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_SHIP")
+  },
+  [REPAIR_TYPE.GUILD] = {
+    uv = {
+      1,
+      200,
+      511,
+      297
+    },
+    text = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_ELEPHANT")
   }
 }
 function FromClient_luaLoadComplete_Repair_Init()
@@ -105,20 +104,16 @@ end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Repair_Init")
 function RepairInfo:initialize()
   self._ui.txt_title = UI.getChildControl(self._ui.stc_titleBar, "StaticText_Title")
+  self._ui.txt_title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_2"))
   self._ui.stc_titleIcon = UI.getChildControl(self._ui.stc_titleBar, "Static_TitleIcon")
-  self._ui.btn_template = UI.getChildControl(self._ui.stc_bodyBG, "Button_Template")
-  local buttonStartX = self._ui.btn_template:GetPosX()
-  local buttonStartY = self._ui.btn_template:GetPosY()
   self._ui.btn_repairs = {}
   for ii = 1, REPAIR_TYPE.COUNT do
-    self._ui.btn_repairs[ii] = UI.cloneControl(self._ui.btn_template, self._ui.stc_bodyBG, "Button_Repair_" .. ii)
+    self._ui.btn_repairs[ii] = UI.getChildControl(self._ui.stc_bodyBG, "Button_Repair_" .. ii)
     self._ui.btn_repairs[ii]:SetShow(true)
-    self._ui.btn_repairs[ii]:SetPosX(buttonStartX)
-    self._ui.btn_repairs[ii]:SetPosY(buttonStartY + (ii - 1) * self._buttonsYGap)
+    self._ui.btn_repairs[ii]:SetPosY(10 + (ii - 1) * self._buttonsYGap)
     self._ui.btn_repairs[ii]:addInputEvent("Mouse_LUp", "InputMLUp_RepairInfo_PressButton(" .. ii .. ")")
     self._ui.btn_repairs[ii]:addInputEvent("Mouse_On", "InputMOn_RepairInfo_SelectButton(" .. ii .. ")")
   end
-  self._ui.btn_template:SetShow(false)
   self._ui.txt_moneyInChar = UI.getChildControl(self._ui.stc_bottomLeft, "StaticText_MoneyInCharacter")
   self._ui.txt_moneyInCharVal = UI.getChildControl(self._ui.stc_bottomLeft, "StaticText_MoneyInCharacterVal")
   self._ui.txt_moneyInWarehouse = UI.getChildControl(self._ui.stc_bottomRight, "StaticText_MoneyInWarehouse")
@@ -141,9 +136,6 @@ function RepairInfo:lateInit()
   for ii = 1, REPAIR_TYPE.COUNT do
     self._ui.stc_clipAreas[ii] = UI.getChildControl(self._ui.btn_repairs[ii], "Static_ClipArea")
     self._ui.stc_buttonBGs[ii] = UI.getChildControl(self._ui.stc_clipAreas[ii], "Static_ButtonBG")
-    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.stc_buttonBGs[ii], _buttonsData[ii].uv[1], _buttonsData[ii].uv[2], _buttonsData[ii].uv[3], _buttonsData[ii].uv[4])
-    self._ui.stc_buttonBGs[ii]:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._ui.stc_buttonBGs[ii]:setRenderTexture(self._ui.stc_buttonBGs[ii]:getBaseTexture())
     self._ui.stc_buttonBGs[ii]:SetPosX(self._buttonBGDeselectedX)
     self._ui.stc_clipAreas[ii]:SetRectClipOnArea(float2(0, 0), float2(self._ui.stc_clipAreas[ii]:GetSizeX(), self._ui.stc_clipAreas[ii]:GetSizeY()))
     self._ui.txt_buttonNames[ii] = UI.getChildControl(self._ui.btn_repairs[ii], "StaticText_Name")
@@ -165,11 +157,14 @@ function RepairInfo:open()
     SetUIMode(Defines.UIMode.eUIMode_Repair)
   end
   repair_SetRepairMode(true)
+  PaGlobalFunc_InventoryInfo_Open(1)
   Inventory_SetFunctor(PaGlobalFunc_RepairInfo_Filter, PaGlobalFunc_RepairInfo_InvenRClick, nil, nil)
-  if false == PaGlobalFunc_InventoryInfo_GetShow() then
-    PaGlobalFunc_InventoryInfo_Open(1)
-  end
   _panel:SetShow(true, false)
+  if not ToClient_IsContentsGroupOpen("36") then
+    self._ui.btn_repairs[REPAIR_TYPE.GUILD]:SetShow(false)
+  else
+    self._ui.btn_repairs[REPAIR_TYPE.GUILD]:SetShow(true)
+  end
   local initialSelect = REPAIR_TYPE.GUILD
   self:updateButtonSelection(initialSelect)
   self:updateMoneyDisplay()
@@ -196,13 +191,16 @@ function RepairInfo:close()
 end
 function RepairInfo:updateButtonSelection(selection)
   self._currentButtonSelected = selection
-  local keyGuideStartY = self._ui.stc_bodyBG:GetPosY() + self._ui.btn_template:GetPosY() + self._ui.btn_template:GetSizeY() / 2 - self._ui.stc_keyGuideSelect:GetSizeY() / 2
+  local keyGuideStartY = self._ui.stc_bodyBG:GetPosY() + self._ui.btn_repairs[1]:GetPosY() + self._ui.btn_repairs[1]:GetSizeY() / 2 - self._ui.stc_keyGuideSelect:GetSizeY() / 2
   self._ui.stc_keyGuideSelect:SetPosY(keyGuideStartY + (selection - 1) * self._buttonsYGap)
   for ii = 1, REPAIR_TYPE.COUNT do
     self._aniTargetForButtonBG[ii] = self._buttonBGDeselectedX
     self._isAnimating[ii] = true
   end
   self._aniTargetForButtonBG[selection] = self._buttonBGSelectedX
+end
+function PaGlobalFunc_RepairInfo_UpdateSilver()
+  RepairInfo:updateMoneyDisplay()
 end
 function RepairInfo:updateMoneyDisplay()
   self._ui.txt_moneyInCharVal:SetText(makeDotMoney(getSelfPlayer():get():getInventory():getMoney_s64()))
@@ -273,7 +271,7 @@ function PaGlobalFunc_RepairInfo_InvenRClick(slotNo, itemWrapper, s64_itemCount,
     local messageboxData = {
       title = PAGetString(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_TITLE"),
       content = messageboxMemo,
-      functionApply = Repair_Item_MessageBox_Confirm,
+      functionApply = PaGlobalFunc_RepairInfo_InvenRClickConfirm,
       functionCancel = MessageBox_Empty_function,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
@@ -281,6 +279,16 @@ function PaGlobalFunc_RepairInfo_InvenRClick(slotNo, itemWrapper, s64_itemCount,
     self._repairWhereType = itemWhereType
     self._repairSlotNo = slotNo
   end
+end
+function PaGlobalFunc_RepairInfo_InvenRClickConfirm()
+  local self = RepairInfo
+  local moneyWhereType = CppEnums.ItemWhereType.eInventory
+  if PaGlobal_Camp:getIsCamping() then
+    repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, CppEnums.ServantType.Type_Count)
+  else
+    repair_Item(self._repairWhereType, self._repairSlotNo, MessageBoxCheck.isCheck(), CppEnums.ServantType.Type_Count)
+  end
+  self:updateMoneyDisplay()
 end
 function PaGlobalFunc_RepairInfo_EquipRClick(equipSlotNo, itemWrapper)
   local self = RepairInfo

@@ -87,7 +87,7 @@ function ExecuteFunction.HouseList()
   FGlobal_HousingList_Open()
 end
 function ExecuteFunction.WorkerList()
-  WorkerManager_ShowToggle()
+  PaGlobalFunc_WorkerManager_Open()
 end
 function ExecuteFunction.InstallationList()
   HandleClicked_TentList_ShowToggle()
@@ -111,7 +111,11 @@ function ExecuteFunction.Mercenary()
   FGlobal_MercenaryOpen()
 end
 function ExecuteFunction.VillageSiegeArea()
-  FGlobal_GuildWarInfo_Show()
+  if true == _ContentsGroup_SeigeSeason5 then
+    FGlobal_GuildWarInfo_Show()
+  else
+    FGlobal_GuildWarInfo_Show()
+  end
 end
 function ExecuteFunction.Pvp()
 end
@@ -489,7 +493,7 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.HorseRaceInformation] = false,
     [Type.HorseRaceEnterOrCancel] = false,
     [Type.HouseList] = false,
-    [Type.WorkerList] = false,
+    [Type.WorkerList] = true,
     [Type.InstallationList] = false,
     [Type.PetList] = true,
     [Type.MaidList] = false,
@@ -533,6 +537,14 @@ function FromClient_ConsoleQuickMenu_ExecuteFunctionType(datatype, functionType)
   executeFunc()
 end
 registerEvent("FromClient_ConsoleQuickMenu_ExecuteFunctionType", "FromClient_ConsoleQuickMenu_ExecuteFunctionType")
+function PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_Widget_QuickMenu:SetShow(true)
+  ToClient_setAvailableInputWidget(true)
+end
+function PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_Widget_QuickMenu:SetShow(false)
+  ToClient_setAvailableInputWidget(false)
+end
 function PaGlobal_ConsoleQuickMenu:setDefaultSetting()
   ToClient_setDefaultQuickMenu()
 end

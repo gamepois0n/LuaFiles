@@ -555,6 +555,9 @@ function TestGuildTeamBattleMessage(mode, param1, param2)
     end
   end
 end
+function FGlobal_Update_ShowGuildTeamBattlePing(prevIsShouldPlayMusic, isShouldPlayMusic, currentState)
+  FGlobal_PersonalIcon_ButtonPosUpdate()
+end
 registerEvent("FromClient_luaLoadComplete", "FromClient_Guild_OneOnOneControl_Initialize")
 registerEvent("FromClient_GuildTeamBattle_End", "FromClient_GuildTeamBattle_End")
 registerEvent("FromClient_GuildTeamBattle_RequestDone", "FromClient_GuildTeamBattle_RequestDone")
@@ -564,3 +567,4 @@ registerEvent("FromClient_GuildTeamBattle_CheckOpenRequest", "FGlobal_GuildTeamB
 registerEvent("FromClient_UpdateGuildTeamBattle_RingoutPlayer", "FGlobal_GuildTeamBattle_RingoutPlayer")
 registerEvent("FromClient_GuildTeamBattle_RingoutAlert", "FGlobal_GuildTeamBattle_RingoutAlert")
 registerEvent("FromClient_GuildTeamBattle_AttendLogout", "FGlobal_GuildTeamBattle_AttendLogout")
+registerEvent("FromClient_GuildTeamBattle_UpdatePingUI", "FGlobal_Update_ShowGuildTeamBattlePing")

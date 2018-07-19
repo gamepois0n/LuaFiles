@@ -116,13 +116,14 @@ function Panel_Dialog_Main_Right_Info:update()
   self._ui.staticText_Dialog_Text:setLocalizedStaticType(self._localize.localizedType)
   self._ui.staticText_Dialog_Text:setLocalizedKey(self._localize.mainDialogLocalizedKey)
   local npcWord = dialogData:getMainDialog()
-  local realDialog = ToClient_getReplaceDialog(npcWord)
+  local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
+  local realDialog = ToClient_getReplaceDialog(ignoreWord)
   if true == PaGlobalFunc_MainDialog_Quest_GetShow() then
     self._value.isSetData = true
     self:setData(dialogData, realDialog)
     return
   end
-  local openCheck = PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault()
+  local openCheck = PaGlobalFunc_Dialog_Main_GetShowCheckOnce()
   if true == openCheck then
     self._value.isSetData = true
     self:openAndSetData(dialogData, realDialog)
@@ -302,10 +303,12 @@ function Panel_Dialog_Main_Right_Info:ResizeContents(dialogData, showDialogButto
   local _bgSize = self._pos.textstartPosY
   if true == self._ui.staticText_Dialog_Text:GetShow() then
     self._pos.liststartPosY = self._pos.textstartPosY + self._ui.staticText_Dialog_Text:GetSizeY() + self._space.contentsSpace
+    self._ui.static_Bg:SetShow(true)
+    self._ui.static_Bg:SetSize(self._ui.static_Bg:GetSizeX(), self._pos.liststartPosY - _bgSize + self._space.contentsSpace)
   else
+    self._ui.static_Bg:SetShow(false)
     self._pos.liststartPosY = self._pos.textstartPosY
   end
-  self._ui.static_Bg:SetSize(self._ui.static_Bg:GetSizeX(), self._pos.liststartPosY - _bgSize + self._space.contentsSpace)
   local dialogCount = 0
   if nil == showDialogButton or true == showDialogButton then
     dialogCount = dialogData:getDialogButtonCount()
@@ -472,7 +475,8 @@ function PaGlobalFunc_MainDialog_Right_ReOpen()
       return
     end
     local npcWord = dialogData:getMainDialog()
-    local realDialog = ToClient_getReplaceDialog(npcWord)
+    local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
+    local realDialog = ToClient_getReplaceDialog(ignoreWord)
     self:openAndSetData(dialogData, realDialog)
   end
 end
@@ -486,7 +490,8 @@ function PaGlobalFunc_MainDialog_Right_ReOpenWithOtherMent(npcWord)
     if nil == npcWord or "" == npcWord then
       return
     end
-    local realDialog = ToClient_getReplaceDialog(npcWord)
+    local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
+    local realDialog = ToClient_getReplaceDialog(ignoreWord)
     self:open()
     self:setDataOnlyMent(dialogData, realDialog)
   end
@@ -521,7 +526,8 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   if CppEnums.DialogState.eDialogState_ReContact == tostring(linkType) then
     return
   end
-  if CppEnums.DialogButtonType.eDialogButton_Normal == dialogButton._dialogButtonType then
+  local displayData = Dialog_getButtonDisplayData(id)
+  if nil ~= displayData and not displayData:empty() then
     static_TypeIcon:SetShow(true)
     local IconType = self._exchangIcon[1]
     static_TypeIcon:ChangeTextureInfoName(IconType.texture)
@@ -574,7 +580,7 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
       textNeed_Dialog:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PLAYER_INVENTORY_FULL"))
     end
   elseif CppEnums.DialogButtonType.eDialogButton_Knowledge == dialogButton._dialogButtonType then
-    textNeed_Dialog:SetShow(true)
+    textNeed_Dialog:SetShow(false)
   end
   if false == dialogButton._enable then
     btn_Dialog:SetMonoTone(true)
@@ -680,6 +686,22 @@ function PaGlobalFunc_MainDialog_Right_InteractionCheck()
   end
   audioPostEvent_SystemUi(0, 0)
   PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(enableDailogButtonIndex)
+end
+function PaGlobalFunc_MainDialog_Right_CheckSceneChange(_npcWord)
+  if nil == _npcWord or false == _ContentsGroup_RenewUI_Main then
+    return _npcWord
+  end
+  local firstParam = string.split(_npcWord, "{")
+  if nil == firstParam[2] then
+    return _npcWord
+  end
+  local secondParam = string.split(firstParam[2], "(")
+  local rawMessage = firstParam[1]
+  if "ChangeScene" == secondParam[1] then
+    return rawMessage
+  else
+    return _npcWord
+  end
 end
 function FromClient_InitMainDialog_Right()
   local self = Panel_Dialog_Main_Right_Info

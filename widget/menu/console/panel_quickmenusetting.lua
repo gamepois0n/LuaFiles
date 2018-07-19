@@ -30,7 +30,8 @@ PaGlobal_ConsoleQuickMenuSetting = {
   _curPage = 1,
   _curGroup = __eQuickMenuDpadGroup_Count,
   _curCategory = 0,
-  _startColumn = 0
+  _startColumn = 0,
+  _isRegisterQuickMenu = false
 }
 function PaGlobal_ConsoleQuickMenuSetting:GoCategory(category)
   self._ui._list2Skill:SetShow(false)
@@ -117,9 +118,9 @@ function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
     UIScroll.InputEventByControl(bgs[index], "PaGlobal_ConsoleQuickMenuSetting_scrollInventory")
     UIScroll.InputEventByControl(item.icon, "PaGlobal_ConsoleQuickMenuSetting_scrollInventory")
     if index < colMax then
-      bgs[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_UP, "PaGlobal_ConsoleQuickMenuSetting_scrollInventory(true)")
+      bgs[index]:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobal_ConsoleQuickMenuSetting_scrollInventory(true)")
     elseif index > colMax * (rowMax - 1) then
-      bgs[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_DOWN, "PaGlobal_ConsoleQuickMenuSetting_scrollInventory(false)")
+      bgs[index]:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "PaGlobal_ConsoleQuickMenuSetting_scrollInventory(false)")
     end
     self._ui._slots[index] = item
   end
@@ -175,6 +176,7 @@ function PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu(executePosition)
   end
   self:registQuickMenu(registData, executePosition)
   PaGlobal_ConsoleQuickMenu:setWidget()
+  self._isRegisterQuickMenu = true
 end
 function PaGlobal_ConsoleQuickMenuSetting:clearRegistCustomSetting()
   self._registMode._isStart = false
@@ -259,12 +261,14 @@ function PaGlobal_ConsoleQuickMenuSetting:setFunctionTypeData()
     return
   end
   for index = 0, PaGlobal_ConsoleQuickMenu._functionTypeCount do
-    self._functionTypeData[#self._functionTypeData + 1] = {
-      _type = __eQuickMenuDataType_Function,
-      _enumType = index,
-      _name = PaGlobal_ConsoleQuickMenu._functionTypeList._name[__eQuickMenuDataType_Function][index],
-      _icon = PaGlobal_ConsoleQuickMenu._functionTypeList._icon[__eQuickMenuDataType_Function][index]
-    }
+    if true == PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption[__eQuickMenuDataType_Function][index] then
+      self._functionTypeData[#self._functionTypeData + 1] = {
+        _type = __eQuickMenuDataType_Function,
+        _enumType = index,
+        _name = PaGlobal_ConsoleQuickMenu._functionTypeList._name[__eQuickMenuDataType_Function][index],
+        _icon = PaGlobal_ConsoleQuickMenu._functionTypeList._icon[__eQuickMenuDataType_Function][index]
+      }
+    end
   end
 end
 function PaGlobal_ConsoleQuickMenuSetting:setInventoryData()
@@ -492,7 +496,7 @@ function QuickMenuSeting_List2Event_SocialAction(content, key)
   if rightOk then
     rightText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     rightText:SetAutoResize(true)
-    rightText:SetText(leftData._name)
+    rightText:SetText(rightData._name)
     rightIcon:ChangeTextureInfoName(rightData._icon)
     rightButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_SocialAction .. "," .. tostring(id + 1) .. "  )")
   end
@@ -524,6 +528,12 @@ function FromClient_ConsoleQuickMenu_OpenCustomPage(currentSettingGroup)
   self:setMenuMode(currentSettingGroup)
   self:rotateDpadCrossHair(currentSettingGroup)
   PaGlobal_ConsoleQuickMenuSetting:ShowBlackBg(false)
+  if true == _ContentsGroup_RenewUI_Chatting and true == Panel_Widget_Chatting_Renew:GetShow() then
+    PaGlobalFunc_ChattingInfo_Close()
+  end
+  if nil == _blueprintQuickMenuWhenOpen then
+    _blueprintQuickMenuWhenOpen = {}
+  end
 end
 function PaGlobal_ConsoleQuickMenuSetting:rotateDpadCrossHair(group)
   local control = PaGlobal_ConsoleQuickMenuSetting._ui._ringCrossHair
@@ -608,6 +618,17 @@ function FGlobal_ConsoleQuickMenu_PerFrame()
   else
   end
 end
+function FGlobal_ConsoleQuickMenuSetting_Close()
+  Panel_QuickMenuCustom:SetShow(false)
+  Panel_QuickMenuCustom_RightRing:SetShow(false)
+  if true == PaGlobal_ConsoleQuickMenuSetting._isRegisterQuickMenu then
+    PaGlobal_ConsoleQuickMenuSetting._isRegisterQuickMenu = false
+    local selfPlayer = getSelfPlayer()
+    if nil ~= selfPlayer then
+      selfPlayer:saveCurrentDataForGameExit()
+    end
+  end
+end
 function FGlobal_ConsoleQuickMenu_ChangeDpadGroup(left)
   local changeGroup = PaGlobal_ConsoleQuickMenuSetting._curGroup
   if left == false then
@@ -629,10 +650,10 @@ end
 function PaGlobal_QuickMenuSetting_GetShow()
   return Panel_QuickMenuCustom:GetShow()
 end
-Panel_QuickMenuCustom:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "FGlobal_ConsoleQuickMenu_ChangeDpadGroup(false)")
-Panel_QuickMenuCustom:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_QuickMenuSetting_forPadEventFunc(true)")
-Panel_QuickMenuCustom:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_QuickMenuSetting_forPadEventFunc(false)")
-Panel_QuickMenuCustom:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobal_ConsoleQuickMenuSetting:changeMenuMode()")
+Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_RT, "FGlobal_ConsoleQuickMenu_ChangeDpadGroup(false)")
+Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_QuickMenuSetting_forPadEventFunc(true)")
+Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_QuickMenuSetting_forPadEventFunc(false)")
+Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_ConsoleQuickMenuSetting:changeMenuMode()")
 Panel_QuickMenuCustom:RegisterUpdateFunc("FGlobal_ConsoleQuickMenu_PerFrame")
 registerEvent("FromClient_luaLoadComplete", "FromClient_ConsoleQuickMenuSetting_luaLoadComplete")
 registerEvent("FromClient_ConsoleQuickMenu_OpenCustomPage", "FromClient_ConsoleQuickMenu_OpenCustomPage")

@@ -124,6 +124,7 @@ function PaGlobal_Window_Skill_CoolTimeSlot:skillCoolTimeSlot_MakeControl(index)
   ui._skillName:SetPosY(107 + index * (ui._IconBG:GetSizeY() + 3))
   ui._ComboBox = UI.createControl(UI_PUCT.PA_UI_CONTROL_COMBOBOX, Panel_SkillCoolTimeSlot, "Combobox_SkillCoolTimeQuickSlot_" .. index)
   CopyBaseProperty(self._copyUI._base_ComboBox, ui._ComboBox)
+  ui._ComboBox:setListTextHorizonCenter()
   ui._ComboBox:SetShow(false)
   ui._ComboBox:SetPosY(97 + index * (ui._IconBG:GetSizeY() + 3))
   for comboindex = 0, #self._comboBoxString do

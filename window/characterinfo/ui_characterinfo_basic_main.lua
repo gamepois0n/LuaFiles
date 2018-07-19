@@ -108,7 +108,6 @@ PaGlobal_CharacterInfoBasic = {
 }
 local setTierIcon = function(iconControl, textureName, iconIdx, leftX, topY, xCount, iconSize)
   iconControl:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Etc_04.dds")
-  iconControl:SetShow(true)
   local x1, y1, x2, y2
   x1 = leftX + (iconSize + 1) * (iconIdx % xCount)
   y1 = topY + (iconSize + 1) * math.floor(iconIdx / xCount)
@@ -305,6 +304,9 @@ function PaGlobal_CharacterInfoBasic:BaseInfoShow(isBattleInfo)
   self._ui._staticTextStamina_Title:SetShow(isBattleInfo)
   self._ui.battlePointValueAndIcon:SetShow(isBattleInfo)
   self._ui._lifeInfoBg:SetShow(not isBattleInfo)
+  if isBattleInfo and nil ~= FromClient_UI_CharacterInfo_Basic_AttackChanged then
+    FromClient_UI_CharacterInfo_Basic_AttackChanged()
+  end
 end
 function PaGlobal_CharacterInfoBasic:update()
   local FamiName = self._player:getUserNickname()

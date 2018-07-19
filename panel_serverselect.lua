@@ -243,11 +243,16 @@ function PKChannelInfo_Init()
     SpeedChannelInfo_Show()
     PKChannelInfo_Show()
     warInfo_Show()
-  elseif isGameTypeSA() or isGameTypeTH() or isGameTypeID() then
-    SpeedChannelInfo_Hide()
+  elseif isGameTypeSA() then
     ChannelSelectInfo_Show()
-    warInfo_Show()
+    SpeedChannelInfo_Show()
     PKChannelInfo_Hide()
+    warInfo_Show()
+  elseif isGameTypeTH() or isGameTypeID() then
+    ChannelSelectInfo_Show()
+    SpeedChannelInfo_Hide()
+    PKChannelInfo_Show()
+    warInfo_Show()
   elseif isGameTypeTR() then
     SpeedChannelInfo_Show()
     ChannelSelectInfo_Show()

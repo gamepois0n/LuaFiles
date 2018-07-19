@@ -134,8 +134,8 @@ function FriendNew_CreateOfferList(control, key)
   local uiOfferControl = UI.getChildControl(control, "Button_OfferTemplete")
   uiOfferControl:SetText(addFriendInfo:getName())
   if _ContentsGroup_isConsolePadControl then
-    control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobal_FriendNew:AddFriendAccept(" .. tostring(key) .. ")")
-    control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobal_FriendNew:AddFriendDecline(" .. tostring(key) .. ")")
+    control:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_FriendNew:AddFriendAccept(" .. tostring(key) .. ")")
+    control:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_FriendNew:AddFriendDecline(" .. tostring(key) .. ")")
   else
     uiOfferControl:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:AddFriendAccept(" .. tostring(key) .. ")")
     uiOfferControl:addInputEvent("Mouse_RUp", "PaGlobal_FriendNew:AddFriendDecline(" .. tostring(key) .. ")")
@@ -157,8 +157,8 @@ function FriendNew_InviteGuild(targetName, value)
 end
 function FriendNew_CreateFriendList(control, key)
   local self = PaGlobal_FriendNew
-  control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "")
-  control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+  control:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+  control:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   if true == self._isPCFriendTab then
     local uiCharacterName = UI.getChildControl(control, "StaticText_CharactorName")
     local uiFamilyName = UI.getChildControl(control, "StaticText_FamilyName")
@@ -176,8 +176,8 @@ function FriendNew_CreateFriendList(control, key)
     uiFamilyName:SetText(friendInfo:getName())
     uiLogin:SetText(loginString)
     if _ContentsGroup_isConsolePadControl then
-      control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "FriendNew_InviteGuild(\"" .. tostring(friendInfo:getCharacterName()) .. "\"," .. tostring(isLogin) .. ")")
-      control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobal_FriendNew:DeleteFriend(" .. tostring(key) .. ")")
+      control:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FriendNew_InviteGuild(\"" .. tostring(friendInfo:getCharacterName()) .. "\"," .. tostring(isLogin) .. ")")
+      control:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_FriendNew:DeleteFriend(" .. tostring(key) .. ")")
     else
       uiButton:addInputEvent("Mouse_LUp", "FriendNew_InviteGuild(\"" .. tostring(friendInfo:getCharacterName()) .. "\"," .. tostring(isLogin) .. ")")
       uiButton:addInputEvent("Mouse_RUp", "PaGlobal_FriendNew:DeleteFriend(" .. tostring(key) .. ")")
@@ -215,7 +215,7 @@ function FriendNew_CreateFriendList(control, key)
       uiLogin:SetFontColor(UI_color.C_FFFFFFFF)
     end
     if _ContentsGroup_isConsolePadControl then
-      control:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobal_FriendNew:ShowXBoxProfile(" .. tostring(key) .. ")")
+      control:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_FriendNew:ShowXBoxProfile(" .. tostring(key) .. ")")
     else
       uiButton:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:ShowXBoxProfile(" .. tostring(key) .. ")")
     end
@@ -355,9 +355,9 @@ function PaGlobal_FriendNew:Init()
   self._ui._Button_Delete:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:DeleteFriend()")
   self._ui._Edit_Nickname:setXboxVirtualKeyBoardEndEvent("PaGlobal_FriendNew_EnterAddFriendEdit")
   if _ContentsGroup_isConsolePadControl then
-    Panel_FriendList:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobal_FriendNew:OpenAddFriendEdit()")
-    Panel_FriendList:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobal_FriendNew:ClickLB()")
-    Panel_FriendList:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobal_FriendNew:ClickRB()")
+    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobal_FriendNew:OpenAddFriendEdit()")
+    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobal_FriendNew:ClickLB()")
+    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobal_FriendNew:ClickRB()")
   end
 end
 function PaGlobal_FriendNew_IsFriendAddEdit(targetUI)
@@ -489,17 +489,42 @@ function FromClient_FriendDirectlyMessage(fromUserName)
   }
   MessageBox.showMessageBox(messageBoxData)
 end
+function XboxFriendAsyncCall()
+  ToClient_addXboxFriendAsync()
+end
 function FromClient_ResponseFriendResult(fromUserName, isAccept)
   local messageStr = ""
+  local isAlReadyXboxFriend = ToClient_isAlreadyXboxFriend()
   if true == isAccept then
-    messageStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_REQUEST_ACCEPT", "characterName", fromUserName)
+    if true == isAlReadyXboxFriend then
+      messageStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_REQUEST_ACCEPT", "characterName", fromUserName)
+      local messageBoxDataXX = {
+        title = PAGetString(Defines.StringSheet_RESOURCE, "FRIEND_TEXT_TITLE"),
+        content = messageStr,
+        functionApply = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageBoxDataXX)
+      return
+    else
+      messageStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_REQUEST_ACCEPT_AND_XBOX_FRIEND", "characterName", fromUserName)
+      local messageBoxDataXX = {
+        title = PAGetString(Defines.StringSheet_RESOURCE, "FRIEND_TEXT_TITLE"),
+        content = messageStr,
+        functionYes = XboxFriendAsyncCall,
+        functionNo = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageBoxDataXX)
+      return
+    end
   else
     messageStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_REQUEST_REFUSE", "characterName", fromUserName)
   end
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "FRIEND_TEXT_TITLE"),
     content = messageStr,
-    functionYes = MessageBox_Empty_function,
+    functionApply = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData)

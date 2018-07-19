@@ -105,6 +105,12 @@ function stableMix:update()
   self._chkWare:SetEnableArea(0, 0, self._chkWare:GetTextSizeX() + self._wareMoney:GetTextSizeX(), self._chkWare:GetTextSizeY())
   self._invenMoney:SetText(makeDotMoney(invenMoney))
   self._wareMoney:SetText(makeDotMoney(wareMoney))
+  local warehouseMoneyEnabledFlag = wareMoney > Defines.s64_const.s64_0
+  self._chkWare:SetEnable(warehouseMoneyEnabledFlag)
+  if not warehouseMoneyEnabledFlag then
+    self._chkInven:SetCheck(true)
+    self._chkWare:SetCheck(false)
+  end
 end
 function stableMix:registEventHandler()
   self._buttonMix:addInputEvent("Mouse_LUp", "StableMix_Mix()")
@@ -234,11 +240,11 @@ function StableMix_Open()
     stableCarriage_Close()
   end
   self:init()
+  self._chkInven:SetCheck(false)
+  self._chkWare:SetCheck(true)
   self:update()
   stableMix_ClearSlot(1)
   stableMix_ClearSlot(2)
-  self._chkInven:SetCheck(false)
-  self._chkWare:SetCheck(true)
   Panel_Window_StableMix:SetShow(true)
 end
 function StableMix_Close()

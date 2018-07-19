@@ -1,4 +1,4 @@
-Panel_Customizing_CommonDecoration:ignorePanelMoveSnapping()
+Panel_Customizing_CommonDecoration:ignorePadSnapMoveToOtherPanel()
 local Customization_DecoInfo = {
   _ui = {
     _static_ButtonGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_ButtonGroup"),
@@ -43,8 +43,18 @@ local Customization_DecoInfo = {
   _currentSliderCount,
   _currentButtonCount,
   _currentTypeCount,
-  _isExpression = false
+  _isExpression = false,
+  _isBoneControl = false
 }
+function PaGlobalFunc_Customization_Deco_UpdatePerFrame(deltaTime)
+  local self = Customization_DecoInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_Deco_SetBoneControl(false)
+    end
+    return
+  end
+end
 function Customization_DecoInfo:ClearRadioButton()
   for _, control in pairs(self._buttonList) do
     if nil ~= control then
@@ -70,6 +80,7 @@ function Customization_DecoInfo:UpdateTypeFocus(itemIndex)
   if nil == item then
     return
   end
+  self._ui._typeSelect:SetShow(true)
   self._ui._typeSelect:SetPosX(item:GetPosX())
   self._ui._typeSelect:SetPosY(item:GetPosY())
 end
@@ -77,7 +88,19 @@ function Customization_DecoInfo:UpdateDecorationList()
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, self._selectedItemIndex)
   self:UpdateTypeFocus(self._selectedItemIndex)
 end
-function PaGlobalFunc_Customization_Deco_UpdateTattooAtlasList()
+function PaGlobalFunc_Customization_Deco_SetBoneControl(isSet)
+  local self = Customization_DecoInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+    Panel_Customizing_CommonDecoration:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(9)
+    Panel_Customizing_CommonDecoration:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
 end
 function PaGlobalFunc_Customization_Deco_UpdateDecorationPose()
   local self = Customization_DecoInfo
@@ -143,7 +166,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
     local listParamIndex = getUiListParamIndex(self._currentClassType, self._currentUiId, contentsIndex, listIndex)
     local paramMax = getParamMax(self._currentClassType, listParamType, listParamIndex)
     if true == self._isExpression then
-      paramMax = paramMax - 1
+      paramMax = getExpressionCount(self._currentClassType) - 1
     end
     self._currentTypeCount = paramMax
     for itemIndex = 0, paramMax do
@@ -198,8 +221,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
     self._sliderParamMax[sliderIndex] = getParamMax(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     self._sliderParamDefault[sliderIndex] = getParamDefault(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     PaGlobalFunc_CustomIzationCommon_SetSliderValue(self._ui._slider[sliderIndex], sliderParam, self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
-    self._ui._slider[sliderIndex]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_Deco_UpdateSlider(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_Deco_UpdateSlider(" .. sliderIndex .. ")")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Deco_UpdateSlider(" .. sliderIndex .. ")")
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn(" .. sliderIndex .. ")")
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut(" .. sliderIndex .. ")")
     local sliderDesc = getUiSliderDescName(self._currentClassType, self._currentUiId, contentsIndex, sliderIndex)
@@ -260,24 +282,24 @@ function Customization_DecoInfo:UpdatePanelSize()
     colorGroup:SetPosY(eyeGroup:GetPosY() + eyeGroup:GetSizeY() + 10)
   end
   if true == typeGroup:GetShow() then
-    local typeCount = self._currentTypeCount
+    local typeCount = self._currentTypeCount + 1
     VerticalCount = Int64toInt32(typeCount / self._config._listColumnCount + 1)
-    sizeY = VerticalCount * (self._config._listColumnWidth + self._config._listOffset)
-    typeGroup:SetSize(typeGroup:GetSizeX(), sizeY - 10)
+    sizeY = VerticalCount * self._config._listColumnWidth
+    if 0 == typeCount % self._config._listColumnCount then
+      sizeY = (VerticalCount - 1) * self._config._listColumnWidth
+    end
+    typeGroup:SetSize(typeGroup:GetSizeX(), sizeY + 10)
   end
   if true == typeGroup:GetShow() then
-    sliderGroup:SetPosY(typeGroup:GetPosY() + typeGroup:GetSizeY() + 10)
+    sliderGroup:SetPosY(typeGroup:GetPosY() + typeGroup:GetSizeY())
   end
   local sliderCount = self._currentSliderCount
-  local lastSlider = self._ui._slider[sliderCount - 1]
   sliderGroup:SetSize(sliderGroup:GetSizeX(), sliderCount * 30)
-  if nil ~= lastSlider then
-  end
-  colorGroup:SetPosY(sliderGroup:GetPosY() + sliderGroup:GetSizeY() + 10)
+  colorGroup:SetPosY(sliderGroup:GetPosY() + sliderGroup:GetSizeY() + 20)
   if true == colorGroup:GetShow() then
     Panel_Customizing_CommonDecoration:SetSize(Panel_Customizing_CommonDecoration:GetSizeX(), colorGroup:GetPosY() + colorGroup:GetSizeY())
   else
-    Panel_Customizing_CommonDecoration:SetSize(Panel_Customizing_CommonDecoration:GetSizeX(), sliderGroup:GetPosY() + sliderGroup:GetSizeY())
+    Panel_Customizing_CommonDecoration:SetSize(Panel_Customizing_CommonDecoration:GetSizeX(), sliderGroup:GetPosY() + sliderGroup:GetSizeY() + 20)
   end
   self._ui._static_KeyGuideGroup:SetPosY(Panel_Customizing_CommonDecoration:GetPosY() + Panel_Customizing_CommonDecoration:GetSizeY() - 50)
 end
@@ -422,8 +444,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
     self._sliderParamMax[sliderIndex] = getParamMax(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     self._sliderParamDefault[sliderIndex] = getParamDefault(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     PaGlobalFunc_CustomIzationCommon_SetSliderValue(self._ui._slider[sliderIndex], sliderParam, self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
-    self._ui._slider[sliderIndex]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(" .. sliderIndex .. ")")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(" .. sliderIndex .. ")")
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn(" .. sliderIndex .. ")")
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut(" .. sliderIndex .. ")")
     local sliderDesc = getUiSliderDescName(self._currentClassType, self._currentUiId, contentsIndex, sliderIndex)
@@ -496,10 +517,14 @@ function PaGlobalFunc_Customization_Deco_CloseCommonExpressionUi()
 end
 function PaGlobalFunc_Customization_Deco_SliderFocusOn(sliderindex)
   local self = Customization_DecoInfo
+  PaGlobalFunc_Customization_SetKeyGuide(3)
   self._ui._sliderFocus[sliderindex]:SetShow(true)
 end
 function PaGlobalFunc_Customization_Deco_SliderFocusOut(sliderindex)
   local self = Customization_DecoInfo
+  if false == self._isBoneControl and true == PaGlobalFunc_Customization_Deco_GetShow() then
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+  end
   self._ui._sliderFocus[sliderindex]:SetShow(false)
 end
 function PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(sliderIndex)
@@ -572,6 +597,10 @@ function Customization_DecoInfo:InitControl()
   self._config._listColumnHeight = self._ui._typeTemplate:GetSizeY() + self._config._listOffset
 end
 function Customization_DecoInfo:InitEvent()
+  Panel_Customizing_CommonDecoration:RegisterUpdateFunc("PaGlobalFunc_Customization_Deco_UpdatePerFrame")
+  Panel_Customizing_CommonDecoration:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Deco_SetBoneControl(true)")
+end
+function Customization_DecoInfo:InitRegister()
   registerEvent("EventOpenCommonDecorationUi", "PaGlobalFunc_Customization_Deco_OpenCommonDecorationUi")
   registerEvent("EventCloseCommonDecorationUi", "PaGlobalFunc_Customization_Deco_CloseCommonDecorationUi")
   registerEvent("EventOpenEyeDecorationUi", "PaGlobalFunc_Customization_Deco_OpenEyeDecorationUi")
@@ -581,8 +610,6 @@ function Customization_DecoInfo:InitEvent()
   registerEvent("EventEnableDecorationSlide", "PaGlobalFunc_Customization_Deco_EnableDecorationSlide")
   registerEvent("EventOpenCommonExpressionUi", "PaGlobalFunc_Customization_Deco_OpenCommonExpressionUi")
   registerEvent("EventCloseCommonExpressionUi", "PaGlobalFunc_Customization_Deco_CloseCommonExpressionUi")
-end
-function Customization_DecoInfo:InitRegister()
 end
 function Customization_DecoInfo:Initialize()
   self:InitControl()
@@ -594,17 +621,24 @@ function PaGlobalFunc_FromClient_Customization_Deco_luaLoadComplete()
   self:Initialize()
 end
 function PaGlobalFunc_Customization_Deco_Close()
+  local self = Customization_DecoInfo
   if false == PaGlobalFunc_Customization_Deco_GetShow() then
-    return
+    return false
+  end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_Deco_SetBoneControl(false)
+    return false
   end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_Deco_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_Deco_Open()
   if true == PaGlobalFunc_Customization_Deco_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(1)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Deco_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Deco_Close()")
   PaGlobalFunc_Customization_Deco_SetShow(true, false)

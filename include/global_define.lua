@@ -30,6 +30,7 @@ Defines.UIGroup = {
   PAGameUIGroup_DeadMessage = 2000,
   PAGameUIGroup_GameSystemMenu = 2100,
   PAGameUIGroup_ModalDialog = 2200,
+  PAGameUIGroup_SimpleTooltip = 2250,
   PAGameUIGroup_Movie = 3000,
   PAGameUIGroup_FadeScreen = 5000
 }

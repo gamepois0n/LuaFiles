@@ -181,6 +181,7 @@ PaGlobal_ServantLookChangeSlot = {
   [5] = UI.getChildControl(Panel_Window_HorseLookChange, "Static_LookChange_Slot_5")
 }
 function registEventHandler()
+  PaGlobal_ServantChangeFormPanel._comboBox:setListTextHorizonCenter()
   PaGlobal_ServantChangeFormPanel._btnClose:addInputEvent("Mouse_LUp", "Panel_LookChange_Close()")
   PaGlobal_ServantChangeFormPanel._btnLeft:addInputEvent("Mouse_LUp", "LookChange_Set(" .. -1 .. ")")
   PaGlobal_ServantChangeFormPanel._btnRight:addInputEvent("Mouse_LUp", "LookChange_Set(" .. 1 .. ")")

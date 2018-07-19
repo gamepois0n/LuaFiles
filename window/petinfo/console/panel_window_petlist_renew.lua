@@ -1,3 +1,4 @@
+Panel_Window_PetList_Renew:ignorePadSnapMoveToOtherPanel()
 Panel_Window_PetList_Renew:SetShow(false)
 local petList = {
   _ui = {
@@ -79,7 +80,19 @@ local petList = {
       [4] = 4
     },
     _PetInfoFrame = {_startX = 15, _startY = 10},
-    _SpecailPetRace = 99
+    _ConfirmIcon = {_posX = 140, _posY = -2},
+    _SpecailPetRace = 99,
+    _FontColor = {_specialSkill_Seal = 4287862695, _specialSkill_UnSeal = 4287806957},
+    _ButtonID = {
+      _FeedBtn = 0,
+      _SealBtn = 1,
+      _CommandBtn = 2,
+      _InfoBtn = 3,
+      _UnsealBtn = 4,
+      _ExchangeBtn = 5
+    },
+    _buttonGap = 70,
+    _IconPath = "renewal/ui_icon/pc_icon_pet_00.dds"
   },
   selectPetNo,
   selectPetIndex,
@@ -96,45 +109,148 @@ local petList = {
 function petList:initialize()
   self:initControl()
   self:setPosition()
-  self.selectPetNo = -1
+  self:resetData()
+end
+function petList:initControl()
+  local petListUI = self._ui
+  local confBtnId = self._config._ButtonID
+  petListUI._static_TitleText = UI.getChildControl(Panel_Window_PetList_Renew, "Static_MainTitleBar")
+  petListUI._list2_1_VerticalScroll = UI.getChildControl(petListUI._list2_PetList, "List2_1_VerticalScroll")
+  petListUI._list2_1_HorizontalScroll = UI.getChildControl(petListUI._list2_PetList, "List2_1_HorizontalScroll")
+  petListUI._static_FocusBg:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "ToClient_padSnapIgnoreGroupMove")
+  petListUI._button_Feed = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Feed")
+  petListUI._button_Feed:addInputEvent("Mouse_LUp", "FGlobal_PetFeed_Open()")
+  petListUI._button_Feed:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._FeedBtn .. ")")
+  petListUI._button_Order = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Order")
+  petListUI._button_Order:addInputEvent("Mouse_LUp", "FGlobal_PetCommand_Open()")
+  petListUI._button_Order:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._CommandBtn .. ")")
+  petListUI._button_ShowInfo = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Info")
+  petListUI._button_ShowInfo:addInputEvent("Mouse_LUp", "FGlobal_PetShowInfo_Open()")
+  petListUI._button_ShowInfo:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._InfoBtn .. ")")
+  petListUI._button_Seal = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Seal")
+  petListUI._button_Seal:addInputEvent("Mouse_LUp", "FGlobal_PetSeal_Open()")
+  petListUI._button_Seal:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._SealBtn .. ")")
+  petListUI._button_Compose = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Seal_Compose")
+  petListUI._button_Compose:addInputEvent("Mouse_LUp", "FGlobal_PetCompose_Open()")
+  petListUI._button_Compose:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._ExchangeBtn .. ")")
+  petListUI._button_Unseal = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Seal_Unseal")
+  petListUI._button_Unseal:addInputEvent("Mouse_LUp", "FGlobal_PetUnseal_Open()")
+  petListUI._button_Unseal:addInputEvent("Mouse_On", "FGlobal_PopUpButton_SetIconPosition(" .. confBtnId._UnsealBtn .. ")")
+  petListUI._staticText_Confirm = UI.getChildControl(petListUI._static_FocusBg, "StaticText_Confirm")
+  petListUI._static_SkillMainIcon = UI.getChildControl(petListUI._static_AdjustSkillList, "Static_SkillMainIcon")
+  petListUI._static_SkillEffectTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_SkillEffectTitle")
+  petListUI._static_SkillEffectDesc = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_SkillEffectDesc")
+  petListUI._static_ApplyOnlySkillTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_ApplyOnlySkillTitle")
+  petListUI._static_ApplyOnlySkillDesc = UI.getChildControl(petListUI._static_ApplyOnlySkillTitle, "StaticText_ApplyOnlySkillDesc")
+  petListUI._static_ApplySkillTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_ApplySkillTitle")
+  petListUI._static_ApplySkillDesc = UI.getChildControl(petListUI._static_ApplySkillTitle, "StaticText_ApplySkillDesc")
+  petListUI._static_Exit = UI.getChildControl(petListUI._static_BottomBG, "StaticText_Close_ConsoleUI")
+  petListUI._static_Confirm = UI.getChildControl(petListUI._static_BottomBG, "StaticText_Confirm_ConsoleUI")
+  petListUI._staticText_FeedAll = UI.getChildControl(petListUI._static_BottomBG, "StaticText_FeedAll_ConsoleUI")
+  petListUI._staticText_CheckInAll = UI.getChildControl(petListUI._static_BottomBG, "StaticText_SealAll_ConsoleUI")
+  local xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Exit:GetTextSizeX() - self._config._buttonGap
+  petListUI._static_Confirm:SetPosX(xPos)
+  xPos = xPos - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
+  petListUI._staticText_FeedAll:SetPosX(xPos)
+  xPos = xPos - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
+  petListUI._staticText_CheckInAll:SetPosX(xPos)
+  petListUI._static_Exit:addInputEvent("Mouse_LUp", "FGlobal_PetList_Close()")
+  petListUI._staticText_FeedAll:addInputEvent("Mouse_LUp", "FGlobal_PetList_FeedAll()")
+  petListUI._staticText_CheckInAll:addInputEvent("Mouse_LUp", "FGlobal_PetList_CheckInAll()")
+  Panel_Window_PetList_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobal_PetList_FeedAll()")
+  Panel_Window_PetList_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "FGlobal_PetList_CheckInAll()")
+end
+function petList:resetData()
+  self.selectPetNo = ""
   self.selectPetIndex = -1
-  Panel_Window_PetList_Renew:SetShow(false)
+  self:setConfirmIconPosition()
 end
 function petList:open()
+  local petListUI = self._ui
   Panel_Window_PetList_Renew:SetShow(true)
+  petListUI._static_FocusBg:SetShow(false)
+  self:SetButtonPosition(true)
+  self:resetData()
   self:setPosition()
   self:setPetList()
   self:initSkillFrame()
   self:setSkillFrame()
 end
 function petList:close()
-  self.selectPetNo = -1
-  self.selectPetIndex = -1
-  self._ui._static_FocusBg:SetShow(false)
+  local petListUI = self._ui
+  if true == petListUI._static_FocusBg:GetShow() then
+    petList:closeFunctionPopup()
+    return
+  end
+  FGlobal_PetFeedClose()
+  FGlobal_PetInfo_Close()
+  PaGlobalFunc_PetExchange_Close()
+  FGlobal_PetCommand_Close()
+  petListUI._static_FocusBg:SetShow(false)
   Panel_Window_PetList_Renew:SetShow(false)
 end
-function petList:openFunctionPopup(petIndex, petNo, isSealPet, isSpecialPet)
+function petList:openFunctionPopup(petIndex, petNoStr, isSealPet, isSpecialPet)
   local petListUI = self._ui
-  self.selectPetNo = petNo
+  self.selectPetNo = petNoStr
   self.selectPetIndex = petIndex
-  petListUI._static_FocusBg:SetShow(true)
-  petListUI._button_Seal:SetShow(not isSealPet)
-  petListUI._button_Seal:SetCheck(false)
-  petListUI._button_Feed:SetShow(not isSealPet)
-  petListUI._button_Feed:SetCheck(false)
-  petListUI._button_ShowInfo:SetShow(not isSealPet)
-  petListUI._button_ShowInfo:SetCheck(false)
-  petListUI._button_Order:SetShow(not isSealPet)
-  petListUI._button_Order:SetCheck(false)
-  petListUI._button_Compose:SetShow(isSealPet)
-  petListUI._button_Compose:SetCheck(false)
-  petListUI._button_Compose:SetMonoTone(isSpecialPet)
-  petListUI._button_Compose:SetEnable(not isSpecialPet)
-  petListUI._button_Unseal:SetShow(isSealPet)
-  petListUI._button_Unseal:SetCheck(false)
+  self:SetButtonPosition(false)
+  ToClient_padSnapResetControl()
+  if false == petListUI._static_FocusBg:GetShow() then
+    petListUI._static_FocusBg:SetShow(true)
+  else
+    petListUI._static_FocusBg:SetShow(false)
+    petListUI._static_FocusBg:SetShow(true)
+  end
+  self:setConfirmIconPosition()
+  petListUI._button_Seal:SetShow(false)
+  petListUI._button_Feed:SetShow(false)
+  petListUI._button_ShowInfo:SetShow(false)
+  petListUI._button_Order:SetShow(false)
+  petListUI._button_Compose:SetShow(false)
+  petListUI._button_Unseal:SetShow(false)
+  if false == isSealPet then
+    petListUI._button_Seal:SetShow(true)
+    petListUI._button_Feed:SetShow(true)
+    petListUI._button_ShowInfo:SetShow(true)
+    petListUI._button_Order:SetShow(true)
+    petListUI._button_Seal:SetCheck(false)
+    petListUI._button_Feed:SetCheck(false)
+    petListUI._button_ShowInfo:SetCheck(false)
+    petListUI._button_Order:SetCheck(false)
+  else
+    petListUI._button_Compose:SetShow(true)
+    petListUI._button_Compose:SetCheck(false)
+    if true == isSpecialPet then
+      petListUI._button_Unseal:SetPosY(petListUI._button_Compose:GetPosY())
+      petListUI._button_Compose:SetShow(false)
+    else
+      petListUI._button_Unseal:SetPosY(petListUI._button_Order:GetPosY())
+      petListUI._button_Compose:SetShow(true)
+    end
+    petListUI._button_Unseal:SetShow(true)
+    petListUI._button_Unseal:SetCheck(false)
+  end
 end
 function petList:closeFunctionPopup()
+  self:resetData()
+  petList:update(true)
+  self:SetButtonPosition(true)
   self._ui._static_FocusBg:SetShow(false)
+end
+function petList:SetButtonPosition(isConfirmOn)
+  local petListUI = self._ui
+  local xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Exit:GetTextSizeX() - self._config._buttonGap
+  if true == isConfirmOn then
+    petListUI._static_Confirm:SetShow(true)
+    petListUI._static_Confirm:SetPosX(xPos)
+    petListUI._static_Confirm:SetPosY(petListUI._static_Exit:GetPosY())
+    xPos = xPos - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
+  else
+    petListUI._static_Confirm:SetShow(false)
+  end
+  petListUI._staticText_FeedAll:SetPosX(xPos)
+  xPos = xPos - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
+  petListUI._staticText_CheckInAll:SetPosX(xPos)
 end
 function petList:selectShowInfo()
   audioPostEvent_SystemUi(1, 40)
@@ -146,7 +262,8 @@ function petList:selectFeed()
 end
 function petList:selectSeal()
   audioPostEvent_SystemUi(1, 40)
-  ToClient_requestPetSeal(self.selectPetNo)
+  ToClient_requestPetSeal(tonumber64(self.selectPetNo))
+  self:resetData()
   self:updateHungry()
   self:closeFunctionPopup()
   self:initSkillFrame()
@@ -154,11 +271,11 @@ function petList:selectSeal()
 end
 function petList:selectCommand()
   audioPostEvent_SystemUi(1, 40)
-  if nil == self.selectPetNo then
+  if nil == self.selectPetNo or "" == self.selectPetNo then
     return
   end
   for typeIndex = 0, PaGlobal_petCommandType._typeCount - 1 do
-    FGlobal_PetList_setPetCondition(typeIndex, self.petCommandCondition[tostring(self.selectPetNo)][typeIndex])
+    FGlobal_PetList_setPetCondition(typeIndex, self.petCommandCondition[self.selectPetNo][typeIndex])
   end
   FGlobal_PetCommand_Init(self.selectPetIndex)
 end
@@ -168,7 +285,9 @@ function petList:selectUnseal()
     Proc_ShowMessage_Ack_WithOut_ChattingMessage(PAGetString(Defines.StringSheet_GAME, "LUA_UNABLE_SUMMON_PET"))
     return
   end
-  ToClient_requestPetUnseal(self.selectPetNo)
+  ToClient_padSnapResetControl()
+  ToClient_padSnapSetTargetGroup(self._ui._list2_PetList)
+  ToClient_requestPetUnseal(tonumber64(self.selectPetNo))
   self:updateHungry()
   self:closeFunctionPopup()
   self:initSkillFrame()
@@ -176,45 +295,48 @@ function petList:selectUnseal()
 end
 function petList:selectCompose()
   audioPostEvent_SystemUi(1, 40)
-  FGlobal_PetExchange_Open(self.selectPetNo)
+  PaGlobalFunc_PetExchange_Open(self.selectPetNo)
 end
 function petList:setPosition()
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_PetList_Renew:GetSizeX()
   local panelSizeY = Panel_Window_PetList_Renew:GetSizeY()
-  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2)
+  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX)
   Panel_Window_PetList_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
-function petList:initControl()
+function FGlobal_PopUpButton_SetIconPosition(buttonID)
+  petList:setConfirmIconPosition(buttonID)
+end
+function petList:setConfirmIconPosition(buttonID)
+  local confBtnID = self._config._ButtonID
+  local confirmIconPos = self._config._ConfirmIcon
   local petListUI = self._ui
-  petListUI._static_TitleText = UI.getChildControl(Panel_Window_PetList_Renew, "Static_MainTitleBar")
-  petListUI._list2_1_VerticalScroll = UI.getChildControl(petListUI._list2_PetList, "List2_1_VerticalScroll")
-  petListUI._list2_1_HorizontalScroll = UI.getChildControl(petListUI._list2_PetList, "List2_1_HorizontalScroll")
-  petListUI._button_Feed = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Feed")
-  petListUI._button_Feed:addInputEvent("Mouse_LUp", "FGlobal_PetFeed_Open()")
-  petListUI._button_Order = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Order")
-  petListUI._button_Order:addInputEvent("Mouse_LUp", "FGlobal_PetCommand_Open()")
-  petListUI._button_ShowInfo = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Info")
-  petListUI._button_ShowInfo:addInputEvent("Mouse_LUp", "FGlobal_PetShowInfo_Open()")
-  petListUI._button_Seal = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Unseal_Seal")
-  petListUI._button_Seal:addInputEvent("Mouse_LUp", "FGlobal_PetSeal_Open()")
-  petListUI._button_Compose = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Seal_Compose")
-  petListUI._button_Compose:addInputEvent("Mouse_LUp", "FGlobal_PetCompose_Open()")
-  petListUI._button_Unseal = UI.getChildControl(petListUI._static_FocusBg, "RadioButton_Seal_Unseal")
-  petListUI._button_Unseal:addInputEvent("Mouse_LUp", "FGlobal_PetUnseal_Open()")
-  petListUI._static_SkillMainIcon = UI.getChildControl(petListUI._static_AdjustSkillList, "Static_SkillMainIcon")
-  petListUI._static_SkillEffectTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_SkillEffectTitle")
-  petListUI._static_SkillEffectDesc = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_SkillEffectDesc")
-  petListUI._static_ApplyOnlySkillTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_ApplyOnlySkillTitle")
-  petListUI._static_ApplyOnlySkillDesc = UI.getChildControl(petListUI._static_ApplyOnlySkillTitle, "StaticText_ApplyOnlySkillDesc")
-  petListUI._static_ApplySkillTitle = UI.getChildControl(petListUI._static_AdjustSkillList, "StaticText_ApplySkillTitle")
-  petListUI._static_ApplySkillDesc = UI.getChildControl(petListUI._static_ApplySkillTitle, "StaticText_ApplySkillDesc")
-  petListUI._static_Exit = UI.getChildControl(petListUI._static_BottomBG, "StaticText_Close_ConsoleUI")
-  petListUI._ExitButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, petListUI._static_BottomBG, "Exit_button")
-  CopyBaseProperty(petListUI._static_Exit, petListUI._ExitButton)
-  petListUI._ExitButton:addInputEvent("Mouse_LUp", "FGlobal_PetList_Close()")
-  Panel_Window_PetList_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetList_Close()")
+  local x, y, Onbutton
+  if buttonID == confBtnID._FeedBtn then
+    Onbutton = petListUI._button_Feed
+  elseif buttonID == confBtnID._SealBtn then
+    Onbutton = petListUI._button_Seal
+    ToClient_padSnapIgnoreGroupMove()
+  elseif buttonID == confBtnID._CommandBtn then
+    Onbutton = petListUI._button_Order
+  elseif buttonID == confBtnID._InfoBtn then
+    Onbutton = petListUI._button_ShowInfo
+  elseif buttonID == confBtnID._UnsealBtn then
+    Onbutton = petListUI._button_Unseal
+    ToClient_padSnapIgnoreGroupMove()
+  elseif buttonID == confBtnID._ExchangeBtn then
+    Onbutton = petListUI._button_Compose
+  else
+    Onbutton = petListUI._button_Feed
+  end
+  if nil == Onbutton then
+    return
+  end
+  x = Onbutton:GetPosX()
+  y = Onbutton:GetPosY()
+  petListUI._staticText_Confirm:SetPosX(x + confirmIconPos._posX)
+  petListUI._staticText_Confirm:SetPosY(y + confirmIconPos._posY)
 end
 function petList:setPetList(isResetScroll)
   if not Panel_Window_PetList_Renew:GetShow() then
@@ -286,7 +408,7 @@ function petList:petCommandConditionInit(petNo)
     [PaGlobal_petCommandType._follow] = true,
     [PaGlobal_petCommandType._getItem] = true,
     [PaGlobal_petCommandType._lootingType] = CppEnums.PetLootingType.Normal,
-    [PaGlobal_petCommandType._find] = true
+    [PaGlobal_petCommandType._find] = false
   }
 end
 function petListCreate(control, key)
@@ -367,6 +489,13 @@ function petListCreate(control, key)
   end
   _static_SealPetBG:SetShow(not isUnseal)
   _static_UnsealPetBG:SetShow(isUnseal)
+  if tostring(key) ~= self.selectPetNo then
+    _static_SealPetBG:SetCheck(false)
+    _static_UnsealPetBG:SetCheck(false)
+  else
+    _static_SealPetBG:SetCheck(true)
+    _static_UnsealPetBG:SetCheck(true)
+  end
   _staticText_PetTier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
   _static_PetIcon:ChangeTextureInfoNameAsync(iconPath)
   local hungryPercent = pethungry / petMaxHungry * 100
@@ -378,8 +507,10 @@ function petListCreate(control, key)
   local isPassive = false
   if nil ~= skillData then
     local skillString = FGlobal_SetPetSkillTextByType(petData, self._config._defaultSkillIndex)
-    if true == isSealPet then
+    if true == isUnseal then
+      _staticText_PetSkill:SetFontColor(self._config._FontColor._specialSkill_UnSeal)
     else
+      _staticText_PetSkill:SetFontColor(self._config._FontColor._specialSkill_Seal)
     end
     if nil == skillString then
       _staticText_PetSkill:SetText("")
@@ -396,6 +527,7 @@ function petListCreate(control, key)
       self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._find] = isPassive
     end
     local x1, y1, x2, y2
+    _button_Talent:ChangeTextureInfoNameAsync(self._config._IconPath)
     if self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._find] then
       x1, y1, x2, y2 = setTextureUV_Func(_button_Talent, 30, 30, 58, 58)
     else
@@ -404,6 +536,7 @@ function petListCreate(control, key)
     _button_Talent:getBaseTexture():setUV(x1, y1, x2, y2)
     _button_Talent:setRenderTexture(_button_Talent:getBaseTexture())
     _button_Talent:SetShow(true)
+    _button_Follow:ChangeTextureInfoNameAsync(self._config._IconPath)
     if self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._follow] then
       x1, y1, x2, y2 = setTextureUV_Func(_button_Follow, 30, 59, 58, 87)
     else
@@ -412,6 +545,7 @@ function petListCreate(control, key)
     _button_Follow:getBaseTexture():setUV(x1, y1, x2, y2)
     _button_Follow:setRenderTexture(_button_Follow:getBaseTexture())
     _button_Follow:SetShow(true)
+    _button_GetItem:ChangeTextureInfoNameAsync(self._config._IconPath)
     if self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._getItem] then
       x1, y1, x2, y2 = setTextureUV_Func(_button_GetItem, 1, 30, 29, 58)
     else
@@ -420,6 +554,7 @@ function petListCreate(control, key)
     _button_GetItem:getBaseTexture():setUV(x1, y1, x2, y2)
     _button_GetItem:setRenderTexture(_button_GetItem:getBaseTexture())
     _button_GetItem:SetShow(true)
+    _button_Speed:ChangeTextureInfoNameAsync(self._config._IconPath)
     if CppEnums.PetLootingType.Celerity == self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._lootingType] then
       x1, y1, x2, y2 = setTextureUV_Func(_button_Speed, 1, 59, 29, 87)
     elseif CppEnums.PetLootingType.Precision == self.petCommandCondition[tostring(key)][PaGlobal_petCommandType._lootingType] then
@@ -460,8 +595,8 @@ function petListCreate(control, key)
     petList:petCommandConditionInit(key)
   end
   local isSpecialPet = petRace == self._config._SpecailPetRace
-  _static_UnsealPetBG:addInputEvent("Mouse_LUp", "FGlobal_PetList_OpenPopupMenu(" .. petIndex .. ", " .. tostring(key) .. " , false," .. tostring(isSpecialPet) .. ")")
-  _static_SealPetBG:addInputEvent("Mouse_LUp", "FGlobal_PetList_OpenPopupMenu(" .. petIndex .. ", " .. tostring(key) .. " , true ," .. tostring(isSpecialPet) .. ")")
+  _static_UnsealPetBG:addInputEvent("Mouse_LUp", "FGlobal_PetList_OpenPopupMenu(" .. petIndex .. ",\"" .. tostring(key) .. "\" , false," .. tostring(isSpecialPet) .. ")")
+  _static_SealPetBG:addInputEvent("Mouse_LUp", "FGlobal_PetList_OpenPopupMenu(" .. petIndex .. ", \"" .. tostring(key) .. "\" , true ," .. tostring(isSpecialPet) .. ")")
 end
 function petList:initSkillFrame()
   for skillTypeIndex = 0, self._config._maxskillTypeCount - 1 do
@@ -537,9 +672,13 @@ function petList:setSkillFrame()
         petSkillGrade = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_POTENLEVEL")
       end
       if "" == petSkillGradeText then
-        petSkillGradeText = string.gsub(Config._skillTypeString[skillTypeIndex], "-", "") .. self.skillInfo.plusCount[skillTypeIndex] .. petSkillGrade
+        petSkillGradeText = string.gsub(Config._skillTypeString[skillTypeIndex], "\226\134\145", "+")
+        petSkillGradeText = string.gsub(petSkillGradeText, "-", "")
+        petSkillGradeText = petSkillGradeText .. self.skillInfo.plusCount[skillTypeIndex] .. petSkillGrade
       else
-        petSkillGradeText = petSkillGradeText .. "\n" .. string.gsub(Config._skillTypeString[skillTypeIndex], "-", "") .. self.skillInfo.plusCount[skillTypeIndex] .. petSkillGrade
+        local tempString = string.gsub(Config._skillTypeString[skillTypeIndex], "\226\134\145", "+")
+        tempString = string.gsub(tempString, "-", "")
+        petSkillGradeText = petSkillGradeText .. "\n" .. tempString .. self.skillInfo.plusCount[skillTypeIndex] .. petSkillGrade
       end
       hasSkill = true
     end
@@ -571,7 +710,7 @@ function petList:updateHungry()
       local petMaxHungry = petStaticStatus._maxHungry
       local petHungryPercent = petHungry / petMaxHungry * 100
       local content = self._ui._list2_PetList:GetContentByKey(petNo)
-      if nli ~= content then
+      if nil ~= content then
         local progressControl = UI.getChildControl(content, "Progress2_Hungry")
         progressControl:SetProgressRate(petHungryPercent)
         local progressControlIcon = UI.getChildControl(content, "StaticText_HungryIcon")
@@ -642,19 +781,24 @@ function petList:setCommand(petNo, orderType, value)
   self.petCommandCondition[tostring(petNo)][orderType] = value
   self._ui._list2_PetList:requestUpdateByKey(petNo)
 end
-function FromClient_luaLoadComplete_PetList()
-  petList:initialize()
-  local btnPetIcon = UI.getChildControl(Panel_Window_PetIcon, "Button_PetIcon")
-  btnPetIcon:addInputEvent("Mouse_LUp", "FGlobal_PetList_Open()")
-end
-function FromClient_PetUpdate()
+function petList:update(isNotScroll)
   if not Panel_Window_PetList_Renew:GetShow() then
     return
   end
-  petList:updateHungry()
-  petList:setPetList(true)
-  petList:initSkillFrame()
-  petList:setSkillFrame()
+  self:updateHungry()
+  self:setPetList(isNotScroll)
+  self:initSkillFrame()
+  self:setSkillFrame()
+  ToClient_padSnapSetTargetGroup(self._ui._list2_PetList)
+end
+function FromClient_luaLoadComplete_PetList()
+  petList:initialize()
+end
+function FromClient_PetUpdate()
+  petList:update(false)
+end
+function FromClient_PetUpdate_Unscroll()
+  petList:update(true)
 end
 function FGlobal_PetList_Open()
   if Panel_Window_PetList_Renew:GetShow() then
@@ -663,10 +807,11 @@ function FGlobal_PetList_Open()
     petList:open()
   end
 end
+function FGlobal_PetListNew_Toggle()
+  FGlobal_PetList_Open()
+end
 function FGlobal_PetList_Close()
   petList:close()
-  FGlobal_PetFeedClose()
-  FGlobal_PetInfo_Close()
 end
 function FGlobal_PetFeed_Open()
   petList:selectFeed()
@@ -699,49 +844,55 @@ function FGlobal_PetList_setSkillFrame()
   petList:initSkillFrame()
   petList:setSkillFrame()
 end
+function FGlobal_PetList_PetAddList()
+  FGlobal_PetList_Open()
+  FromClient_PetUpdate_Unscroll()
+end
+function petList:feedAll()
+  if self.unsealPetCount <= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
+    return
+  end
+  FGlobal_PetFeedOpen(nil, true)
+end
+function FGlobal_PetList_FeedAll()
+  petList:feedAll()
+end
+function FGlobal_PetList_CheckInAll()
+  petList:checkInAll()
+end
+function petList:checkInAll()
+  if self.unsealPetCount <= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
+    return
+  end
+  audioPostEvent_SystemUi(1, 40)
+  local unsealPetCount = ToClient_getPetUnsealedList()
+  if 0 == unsealPetCount then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
+    return
+  end
+  for index = 0, unsealPetCount - 1 do
+    local petData = ToClient_getPetUnsealedDataByIndex(index)
+    if nil ~= petData then
+      local petNo = petData:getPcPetNo()
+      ToClient_requestPetSeal(petNo)
+    end
+  end
+  self:updateHungry()
+  self:closeFunctionPopup()
+  self:initSkillFrame()
+  self:setSkillFrame()
+end
 function petList:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetList")
-  registerEvent("FromClient_PetAddList", "FromClient_PetUpdate")
-  registerEvent("FromClient_PetInfoChanged", "FromClient_PetUpdate")
-  registerEvent("FromClient_PetAddSealedList", "FromClient_PetUpdate")
+  registerEvent("FromClient_PetAddList", "FromClient_PetUpdate_Unscroll")
+  registerEvent("FromClient_PetInfoChanged", "FromClient_PetUpdate_Unscroll")
+  registerEvent("FromClient_PetAddSealedList", "FromClient_PetUpdate_Unscroll")
   registerEvent("FromClient_PetDelSealedList", "FromClient_PetUpdate")
   self._ui._list2_PetList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "petListCreate")
   self._ui._list2_PetList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
 end
 function FGlobal_PetListNew_NoPet()
-  if isFlushedUI() then
-    return
-  end
-  if true == PaGlobal_TutorialManager:isDoingTutorial() then
-    Panel_Window_PetIcon:SetShow(false)
-    return
-  end
-  local petCount = ToClient_getPetSealedList()
-  local unSealPetCount = ToClient_getPetUnsealedList()
-  local PcPetData = ToClient_getPetUnsealedDataByIndex(0)
-  if 0 == petCount and nil == PcPetData then
-    Panel_Window_PetIcon:SetShow(false)
-  else
-    Panel_Window_PetIcon:SetShow(true)
-    local iconCount = FGlobal_HouseIconCount() + FGlobal_ServantIconCount()
-    local posX, posY
-    if 0 < FGlobal_HouseIconCount() and Panel_MyHouseNavi:GetShow() then
-      posX = Panel_MyHouseNavi:GetPosX() + 60 * FGlobal_HouseIconCount() - 3
-      posY = Panel_MyHouseNavi:GetPosY() - 2
-    elseif 0 < FGlobal_ServantIconCount() and Panel_Window_Servant:GetShow() then
-      posX = Panel_Window_Servant:GetPosX() + 60 * FGlobal_ServantIconCount() - 3
-      posY = Panel_Window_Servant:GetPosY() - 2
-    else
-      posX = 10
-      posY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
-    end
-    Panel_Window_PetIcon:SetPosX(posX)
-    Panel_Window_PetIcon:SetPosY(posY)
-  end
-  FGlobal_MaidIcon_SetPos(false)
-  PaGlobal_Camp:setPos()
-  if true == _ContentsGroup_RenewUI_Main then
-    Panel_Window_PetIcon:SetShow(false)
-  end
 end
 petList:registEventHandler()

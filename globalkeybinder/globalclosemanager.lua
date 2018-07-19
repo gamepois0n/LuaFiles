@@ -190,7 +190,15 @@ local panel_WindowList = {
   Panel_Window_Mail_Renew,
   Panel_Console_Window_GuildCreate,
   Panel_Window_MailDetail_Renew,
-  Panel_Dialog_NpcGift_Renew
+  Panel_Dialog_NpcGift_Renew,
+  Panel_Window_BlackDesertLab,
+  Panel_Window_Delivery_Renew,
+  Panel_BossAlert_SettingV2,
+  Panel_Window_PartySetting,
+  Panel_Window_PartyInvite,
+  Panel_Widow_ChattingHistory_Renew,
+  Panel_PartyRecruite,
+  Panel_Window_LinkServantInfo
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -262,6 +270,8 @@ registerEscapeLuaEvent(Panel_Window_Exchange, "PanelEscapeFunc_Exchange()")
 registerEscapeLuaEvent(Panel_TransferLifeExperience, "PanelEscapeFunc_TransferLifeExperience()")
 registerEscapeLuaEvent(Panel_DyePalette, "PanelEscapeFunc_DyePalette()")
 registerEscapeLuaEvent(Panel_SetShortCut, "PanelEscapeFunc_SetShortCut()")
+registerEscapeLuaEvent(Panel_Window_Manufacture, "PanelEscapeFunc_Manufacture()")
+registerEscapeLuaEvent(Panel_Window_Alchemy, "PanelEscapeFunc_Alchemy()")
 registerEscapeLuaEvent(Panel_Window_Inventory, "PanelEscapeFunc_Inventory()")
 registerEscapeLuaEvent(Panel_Window_Exchange_Number, "PanelEscapeFunc_ExchangeNumber()")
 registerEscapeLuaEvent(Panel_Window_cOption, "PanelEscapeFunc_Option()")
@@ -314,6 +324,8 @@ registerEscapeLuaEvent(Panel_Console_Window_GuildCreate, "PanelEscapeFunc_GuildC
 registerEscapeLuaEvent(Panel_Console_Dialog_GuildPopup, "PanelEscapeFunc_GuildPopup_Close()")
 registerEscapeLuaEvent(Panel_Knowledge_Main, "Panel_Knowledge_Hide()")
 registerEscapeLuaEvent(Panel_IngameCashShop_GoodsTooltip, "FGlobal_CashShop_GoodsTooltipInfo_Close()")
+registerEscapeLuaEvent(Panel_Widget_Chatting_Renew, "Input_ChattingInfo_OnPadBNotEditting()")
+registerEscapeLuaEvent(Panel_Widow_ChattingHistory_Renew, "PaGlobalFunc_ChattingHistory_Close()")
 registerEscapeLuaEvent(Panel_Dialog_NpcGift_Renew, "PanelEscapeFunc_NpcGift_Close()")
 registerEscapeLuaEvent(Panel_Customizing_BodyShape, "PanelEscapeFunc_Customization_BodyShape_Close()")
 registerEscapeLuaEvent(Panel_Customizing_BodyPose, "PanelEscapeFunc_Customization_BodyPose_Close()")
@@ -327,6 +339,60 @@ registerEscapeLuaEvent(Panel_Customizing_ShowPose, "PanelEscapeFunc_Customizatio
 registerEscapeLuaEvent(Panel_Customizing_Skin, "PanelEscapeFunc_Customization_Skin_Close()")
 registerEscapeLuaEvent(Panel_Customizing_Voice, "PanelEscapeFunc_Customization_Voice_Close()")
 registerEscapeLuaEvent(Panel_Window_Mail_Renew, "PanelEscapeFunc_MailRenew_Close()")
+registerEscapeLuaEvent(Panel_Window_PetList_Renew, "PanelEscapeFunc_PetList_Close()")
+registerEscapeLuaEvent(Panel_Window_PetFood_Renew, "FGlobal_PetFeedClose()")
+registerEscapeLuaEvent(Panel_Window_PetCommand_Renew, "FGlobal_PetCommand_Close()")
+registerEscapeLuaEvent(Panel_Window_PetInfo_Renew, "FGlobal_PetInfo_Close()")
+registerEscapeLuaEvent(Panel_Window_PetExchange_Renew, "PaGlobalFunc_PetExchange_Close()")
+registerEscapeLuaEvent(Panel_Window_Delivery_Renew, "PanelEscapeFunc_PanelDelivery_Close()")
+registerEscapeLuaEvent(Panel_Window_Expedition, "PanelEscapeFunc_PanelExpedition_Close()")
+registerEscapeLuaEvent(Panel_Window_PartyInvite, "PaGlobalFunc_PartyInvite_Exit()")
+registerEscapeLuaEvent(Panel_Window_PartySetting, "PaGlobalFunc_PartySetting_Exit()")
+registerEscapeLuaEvent(Panel_PartyList, "PaGlobalFunc_FindParty_Exit()")
+registerEscapeLuaEvent(Panel_Worldmap_NodeInfo, "PanelEscapeFunc_WorldMap_NodeInfo_Close()")
+registerEscapeLuaEvent(Panel_Worldmap_NodeManagement, "PanelEscapeFunc_WorldMap_NodeManagement_Close()")
+registerEscapeLuaEvent(Panel_Window_ServantInfo, "PanelEscapeFunc_ServantInfo_Horse_Close()")
+registerEscapeLuaEvent(Panel_CarriageInfo, "PanelEscapeFunc_ServantInfo_Carriage_Close()")
+registerEscapeLuaEvent(Panel_ShipInfo, "PanelEscapeFunc_ServantInfo_Ship_Close()")
+function PanelEscapeFunc_ServantInfo_Horse_Close()
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    ServantInfo_Close()
+  else
+    PaGlobalFunc_HorseInfo_Exit()
+  end
+end
+function PanelEscapeFunc_ServantInfo_Carriage_Close()
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    CarriageInfo_Close()
+  else
+    PaGlobalFunc_CarriageInfo_Exit()
+  end
+end
+function PanelEscapeFunc_ServantInfo_Ship_Close()
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    ShipInfo_Close()
+  else
+    PaGlobalFunc_ShipInfo_Exit()
+  end
+end
+function PanelEscapeFunc_WorldMap_NodeManagement_Close()
+  PaGlobalFunc_WorldMap_NodeManagement_Close()
+end
+function PanelEscapeFunc_WorldMap_NodeManagement_Close()
+  PaGlobalFunc_WorldMap_NodeManagement_Close()
+end
+function PanelEscapeFunc_WorldMap_NodeInfo_Close()
+  PaGlobalFunc_WorldMap_NodeInfo_Close()
+end
+function PanelEscapeFunc_ImprovementInfo_Discard()
+  PaGlobalFunc_ImprovementInfo_Discard()
+end
+function PanelEscapeFunc_PanelDelivery_Close()
+  DeliveryRequestWindow_Close()
+end
+function PanelEscapeFunc_PetList_Close()
+  FGlobal_PetList_Close()
+end
 function PanelEscapeFunc_MailRenew_Close()
   Mail_Close()
 end
@@ -381,8 +447,7 @@ function PanelEscapeFunc_GuildSignOption()
   end
 end
 function PanelEscapeFunc_QuickMenuCustom()
-  Panel_QuickMenuCustom:SetShow(false)
-  Panel_QuickMenuCustom_RightRing:SetShow(false)
+  FGlobal_ConsoleQuickMenuSetting_Close()
 end
 function PanelEscapeFunc_GuildAgreementClose()
   Panel_Console_Window_GuildAgreement:SetShow(false, false)
@@ -485,7 +550,11 @@ function PanelEscapeFunc_HarvestList()
   HarvestList_Close()
 end
 function PanelEscapeFunc_PartyRecruite()
-  PartyListRecruite_Close()
+  if true == _ContentsGroup_RenewUI_Party then
+    PaGlobalFunc_FindPartyRecruite_Exit()
+  else
+    PartyListRecruite_Close()
+  end
 end
 function PanelEscapeFunc_ServantResurrection()
   Panel_ServantResurrection_Close()
@@ -581,7 +650,23 @@ end
 function PanelEscapeFunc_SetShortCut()
   FGlobal_NewShortCut_Close()
 end
+function PanelEscapeFunc_Alchemy()
+  if _ContentsGroup_RenewUI_Alchemy then
+    return PaGlobalFunc_AlchemyBack()
+  end
+end
+function PanelEscapeFunc_Manufacture()
+  if _ContentsGroup_RenewUI_Manufacture then
+    return PaGlobalFunc_ManufactureBack()
+  end
+end
 function PanelEscapeFunc_Inventory()
+  if _ContentsGroup_RenewUI_Manufacture and PaGlobalFunc_ManufactureCheckShow() then
+    return PaGlobalFunc_ManufactureBack()
+  end
+  if _ContentsGroup_RenewUI_Alchemy and PaGlobalFunc_AlchemyCheckShow() then
+    return PaGlobalFunc_AlchemyBack()
+  end
   InventoryWindow_Close()
   if Panel_Equipment:GetShow() then
     Equipment_SetShow(false)
@@ -723,6 +808,9 @@ function PanelEscapeFunc_MessageBox()
 end
 function PanelEscapeFunc_MessageBoxCheck()
   messageBoxCheck_CloseButtonUp()
+end
+function PanelEscapeFunc_PanelExpedition_Close()
+  PaGlobalFunc_ExpeditionInfoClose()
 end
 local Panel_LowLevelGuide_Value_IsCheckMoviePlay = Panel_LowLevelGuide_Value_IsCheckMoviePlay
 function FromClient_EscapeEtcClose()

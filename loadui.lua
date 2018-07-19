@@ -10,6 +10,7 @@ function isUseNewGlobalKeyBinder_chk()
   return isUseNewGlobalKeyBinder
 end
 GlobalSwitch_UseOldAlchemy = false
+GlobalSwitch_UseDummyPlayerSkillWindow = false and ToClient_IsDevelopment()
 isRecordMode = false
 isLuaLoadingComplete = false
 local RenderMode = Defines.RenderMode
@@ -154,7 +155,7 @@ function loadServerSelectUI()
   end
   basicLoadUI("UI_Data/Window/MessageBox/Panel_ScreenShot_For_Desktop.XML", "Panel_ScreenShot_For_Desktop", UIGroup.PAGameUIGroup_ModalDialog)
   basicLoadUI("UI_Data/Widget/UIcontrol/UI_SpecialCharacter.XML", "Panel_SpecialCharacter", UIGroup.PAGameUIGroup_ModalDialog)
-  basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_ModalDialog)
+  basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_SimpleTooltip)
   basicLoadUI("UI_Data/Window/MessageBox/Panel_KickOff.XML", "Panel_KickOff", UIGroup.PAGameUIGroup_ModalDialog)
   basicLoadUI("UI_Data/UI_Lobby/UI_GamerTag.XML", "Panel_GamerTag", UIGroup.PAGameUIGroup_GameSystemMenu, RenderModeAllModeOpen)
   runLua("UI_Data/Script/Panel_GamerTag.lua")
@@ -174,7 +175,7 @@ function loadLoadingUI()
     RenderMode.eRenderMode_Loading
   }))
   runLua("UI_Data/Script/Panel_Loading.lua")
-  loadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_ModalDialog, RenderModeAllModeOpen)
+  loadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_SimpleTooltip, RenderModeAllModeOpen)
   runLua("UI_Data/Script/Widget/ToolTip/Panel_Tooltip_SimpleText.lua")
   basicLoadUI("UI_Data/Window/Worldmap/UI_New_Worldmap_NodeName.XML", "Panel_NodeName", UIGroup.PAGameUIGroup_Interaction)
   basicLoadUI("UI_Data/Window/Worldmap_Grand/Worldmap_Grand_InSideNode.XML", "Panel_NodeMenu", UIGroup.PAGameUIGroup_WorldMap_Popups)
@@ -355,7 +356,7 @@ function preloadCustomizationUI()
     RenderMode.eRenderMode_customScreenShot,
     RenderMode.eRenderMode_IngameCustomize
   }))
-  loadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_ModalDialog, RenderModeAllModeOpen)
+  loadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_SimpleTooltip, RenderModeAllModeOpen)
 end
 function loadCustomizationUI()
   if true == _ContentsGroup_RenewUI_Customization then
@@ -512,6 +513,8 @@ function preLoadGameUI()
   end
   basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_GuildWarInfo.XML", "Panel_GuildWarInfo", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_GuildWarScore.XML", "Panel_GuildWarScore", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_Window_GuildWarInfo.XML", "Panel_Window_GuildWarInfo", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_Window_GuildWarScore.XML", "Panel_Window_GuildWarScore", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/HorseBattle/Panel_HorseBattleList.XML", "Panel_HorseBattleList", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_Window_GuildBattle.XML", "Panel_Window_GuildBattle", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_GuildBattle_JoinMember.XML", "Panel_GuildBattle_JoinMember", UIGroup.PAGameUIGroup_Widget)
@@ -597,7 +600,7 @@ function preLoadGameUI()
     Defines.RenderMode.eRenderMode_Dye
   }))
   basicLoadUI("UI_Data/Window/Dye/Panel_ColorBalance.XML", "Panel_ColorBalance", UIGroup.PAGameUIGroup_Window_Progress)
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Inventory then
     loadUI("UI_Data/Window/Inventory/Console/Panel_Window_Inventory_Renew.xml", "Panel_Window_Inventory", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
       RenderMode.eRenderMode_Dialog
@@ -694,6 +697,12 @@ function preLoadGameUI()
       RenderMode.eRenderMode_Dialog
     }))
   end
+  if true == GlobalSwitch_UseDummyPlayerSkillWindow then
+    loadUI("UI_Data/Window/Skill/Panel_Test_SkillView_Control.XML", "Panel_Test_SkillView_Control", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_Dialog
+    }))
+  end
   basicLoadUI("UI_Data/Window/SkillAwaken/UI_Frame_SkillAwaken_Options.xml", "Panel_Frame_AwkOptions", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/SkillAwaken/UI_Frame_SkillAwaken_List.xml", "Panel_Frame_AwkSkillList", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Skill/UI_Window_SkillGuide.xml", "Panel_Window_SkillGuide", UIGroup.PAGameUIGroup_Windows)
@@ -725,7 +734,7 @@ function preLoadGameUI()
   loadUI("UI_Data/Window/SaveSetting/Panel_SaveSetting.XML", "Panel_SaveSetting", UIGroup.PAGameUIGroup_Windows, RenderModeAllModeOpen)
   basicLoadUI("UI_Data/Window/Quest/UI_Window_Quest_Option.XML", "Panel_Window_Quest_New_Option", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Quest/UI_Window_Quest_History.xml", "Panel_Window_Quest_History", UIGroup.PAGameUIGroup_Windows)
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Quest then
     loadUI("UI_Data/Window/Quest/Console/Panel_Window_QuestInfo.xml", "Panel_Window_QuestInfo", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default
     }))
@@ -803,11 +812,18 @@ function preLoadGameUI()
   basicLoadUI("UI_Data/Window/Servant/UI_TopIcon_Servant.XML", "Panel_Window_Servant", UIGroup.PAGameUIGroup_Widget)
   basicLoadUI("UI_Data/Window/Servant/UI_HorseMp.XML", "Panel_HorseMp", UIGroup.PAGameUIGroup_Widget)
   basicLoadUI("UI_Data/Window/Servant/UI_HorseHp.XML", "Panel_HorseHp", UIGroup.PAGameUIGroup_Widget)
-  basicLoadUI("UI_Data/Window/Servant/UI_ServantInfo.xml", "Panel_Window_ServantInfo", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Servant/UI_CarriageInfo.xml", "Panel_CarriageInfo", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Servant/UI_LinkedHorse_Skill.XML", "Panel_LinkedHorse_Skill", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Servant/UI_ShipInfo.xml", "Panel_ShipInfo", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Servant/UI_WorkerShipInfo.xml", "Panel_WorkerShipInfo", UIGroup.PAGameUIGroup_Windows)
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    basicLoadUI("UI_Data/Window/Servant/UI_ServantInfo.xml", "Panel_Window_ServantInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/UI_CarriageInfo.xml", "Panel_CarriageInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/UI_LinkedHorse_Skill.XML", "Panel_LinkedHorse_Skill", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/UI_ShipInfo.xml", "Panel_ShipInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/UI_WorkerShipInfo.xml", "Panel_WorkerShipInfo", UIGroup.PAGameUIGroup_Windows)
+  else
+    basicLoadUI("UI_Data/Window/Servant/Console/Panel_Window_HorseInfo.XML", "Panel_Window_ServantInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/Console/Panel_Window_CarriageInfo.xml", "Panel_CarriageInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/Console/Panel_Window_LinkedHorseInfo.XML", "Panel_Window_LinkServantInfo", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Servant/Console/Panel_Window_ShipInfo.xml", "Panel_ShipInfo", UIGroup.PAGameUIGroup_Windows)
+  end
   basicLoadUI("UI_Data/Window/Servant/Panel_GuildServantList.xml", "Panel_GuildServantList", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Servant/Panel_GuildeServant_RevivalList.xml", "Panel_GuildServant_RevivalList", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Servant/UI_HorseRace.xml", "Panel_Window_HorseRace", UIGroup.PAGameUIGroup_Windows)
@@ -1123,6 +1139,17 @@ function preLoadGameUI()
   loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_Finance.XML", "Panel_Worldmap_Finance", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
   loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_HouseCraft.XML", "Panel_Worldmap_HouseCraft", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
   loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_BuyHouse.XML", "Panel_Worldmap_BuyHouse", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+  if true == _ContentsGroup_RenewUI_WorldMap then
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_RingMenu_Renew.XML", "Panel_Worldmap_RingMenu", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_TopMenu_Renew.XML", "Panel_Worldmap_TopMenu", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_BottomMenu_Renew.XML", "Panel_Worldmap_BottomMenu", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeInfo_Renew.XML", "Panel_Worldmap_NodeInfo", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeManagement_Renew.XML", "Panel_Worldmap_NodeManagement", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_RightMenu_Renew.XML", "Panel_Worldmap_RightMenu", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_StableList_Renew.XML", "Panel_Worldmap_Stable", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_HouseList_Renew.XML", "Panel_Worldmap_HouseList", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+    loadUI("UI_Data/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeProduct_Renew.XML", "Panel_Worldmap_NodeProduct", UIGroup.PAGameUIGroup_WorldMap_Popups, RenderModeWorldMapBitSet)
+  end
   basicLoadUI("UI_Data/Widget/Alert/Panel_Alert_Message.XML", "Panel_Alert_Message", UIGroup.PAGameUIGroup_Windows)
   loadUI("UI_Data/Window/Worldmap_Grand/WordMap_Craft/Worldmap_Grand_GuildCraft.XML", "Worldmap_Grand_GuildCraft", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_WorldMap
@@ -1402,7 +1429,11 @@ function preLoadGameUI()
       RenderMode.eRenderMode_Default,
       RenderMode.eRenderMode_WorldMap
     }))
-    loadUI("UI_Data/Widget/Chatting/Console/Panel_Widget_ChattingHistory_Renew.XML", "Panel_Widget_ChattingHistory_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+    loadUI("UI_Data/Widget/Chatting/Console/Panel_Window_ChattingHistory_Renew.XML", "Panel_Window_ChattingHistory_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Widget/Chatting/Console/Panel_Widget_ChattingViewer_Renew.XML", "Panel_Widget_ChattingViewer_Renew", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
       RenderMode.eRenderMode_WorldMap
     }))
@@ -1648,7 +1679,7 @@ function preLoadGameUI()
     RenderMode.eRenderMode_Default,
     RenderMode.eRenderMode_WorldMap
   }))
-  if _ContentsGroup_RenewUI then
+  if _ContentsGroup_RenewUI_Quest then
     loadUI("UI_Data/Widget/QuestList/Console/Panel_MainQuest_Renew.XML", "Panel_MainQuest", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
       RenderMode.eRenderMode_WorldMap
@@ -2103,18 +2134,37 @@ function preLoadGameUI()
   loadUI("UI_Data/Window/UI_Setting/Panel_SaveFreeSet.XML", "Panel_SaveFreeSet", UIGroup.PAGameUIGroup_Window_Progress, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_UISetting
   }))
-  loadUI("UI_Data/Window/WorkerManager/UI_WorkerManager.XML", "Panel_WorkerManager", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_Default,
-    RenderMode.eRenderMode_WorldMap
-  }))
-  loadUI("UI_Data/Window/WorkerManager/UI_WorkerRestoreAll.XML", "Panel_WorkerRestoreAll", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_Default,
-    RenderMode.eRenderMode_WorldMap
-  }))
-  loadUI("UI_Data/Window/WorkerManager/UI_WorkerChangeSkill.XML", "Panel_WorkerChangeSkill", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_Default,
-    RenderMode.eRenderMode_WorldMap
-  }))
+  if false == _ContentsGroup_RenewUI_Worker then
+    loadUI("UI_Data/Window/WorkerManager/UI_WorkerManager.XML", "Panel_WorkerManager", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Window/WorkerManager/UI_WorkerRestoreAll.XML", "Panel_WorkerRestoreAll", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Window/WorkerManager/UI_WorkerChangeSkill.XML", "Panel_WorkerChangeSkill", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+  else
+    loadUI("UI_Data/Window/WorkerManager/Console/Panel_Window_WorkerManager_Renew.XML", "Panel_Window_WorkerManager_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Window/WorkerManager/Console/Panel_Window_WorkerManager_Restore_Renew.XML", "Panel_Window_WorkerManager_Restore_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Window/WorkerManager/Console/Panel_Window_WorkerManager_ChangeSkill_Renew.XML", "Panel_Window_WorkerManager_ChangeSkill_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+    loadUI("UI_Data/Window/WorkerManager/Console/Panel_Window_WorkerManager_Filter_Renew.XML", "Panel_Window_WorkerManager_Filter_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_Default,
+      RenderMode.eRenderMode_WorldMap
+    }))
+  end
   if false == _ContentsGroup_RenewUI_Worker then
     loadUI("UI_Data/Window/Auction/Panel_Worker_Auction.XML", "Panel_Worker_Auction", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
@@ -2179,6 +2229,8 @@ function preLoadGameUI()
     basicLoadUI("UI_Data/Window/Party/Panel_PartyList.xml", "Panel_PartyList", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/Party/Panel_PartyRecruite.xml", "Panel_PartyRecruite", UIGroup.PAGameUIGroup_Windows)
   else
+    basicLoadUI("UI_Data/Window/Party/Console/Panel_Window_FindParty_Recruite_Renew.xml", "Panel_PartyRecruite", UIGroup.PAGameUIGroup_Window_Progress)
+    basicLoadUI("UI_Data/Window/Party/Console/Panel_Window_FindParty_Renew.xml", "Panel_PartyList", UIGroup.PAGameUIGroup_Windows)
   end
   basicLoadUI("UI_Data/Window/Servant/Panel_ServantResurrection.xml", "Panel_ServantResurrection", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Widget/TimeAttack/Panel_TimeAttack.xml", "Panel_TimeAttack", UIGroup.PAGameUIGroup_Widget)
@@ -2309,7 +2361,7 @@ function preLoadGameOptionUI()
   basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Common.XML", "Panel_Tooltip_Common", UIGroup.PAGameUIGroup_GameMenu)
   basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Worker.XML", "Panel_Worker_Tooltip", UIGroup.PAGameUIGroup_GameMenu)
   basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Work.XML", "Panel_Tooltip_Work", UIGroup.PAGameUIGroup_GameMenu)
-  basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_ModalDialog)
+  basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_SimpleText.XML", "Panel_Tooltip_SimpleText", UIGroup.PAGameUIGroup_SimpleTooltip)
 end
 function loadGameOptionUI()
   if true == _ContentsGroup_isNewOption then
@@ -2357,6 +2409,8 @@ function loadGameUI()
   runLua("UI_Data/Script/Widget/Rader/Radar_GlobalValue.lua")
   runLua("UI_Data/Script/Window/GuildWarInfo/GuildWarInfo.lua")
   runLua("UI_Data/Script/Window/GuildWarInfo/GuildWarScore.lua")
+  runLua("UI_Data/Script/Window/GuildWarInfo/GuildWarInfo_renew.lua")
+  runLua("UI_Data/Script/Window/GuildWarInfo/GuildWarScore_renew.lua")
   runLua("UI_Data/Script/Window/HorseBattle/Panel_HorseBattleList.lua")
   runLua("UI_Data/Script/Window/OneOnOne/Panel_Guild_OneOnOne_Control.lua")
   runLua("UI_Data/Script/Window/OneOnOne/Panel_Guild_OneOnOneClock.lua")
@@ -2391,7 +2445,8 @@ function loadGameUI()
   runLua("UI_Data/Script/Widget/FieldViewMode/FieldViewMode.lua")
   if true == _ContentsGroup_RenewUI_Chatting then
     runLua("UI_Data/Script/Widget/Chatting/Console/Panel_Widget_Chatting_Renew.lua")
-    runLua("UI_Data/Script/Widget/Chatting/Console/Panel_Widget_ChattingHistory_Renew.lua")
+    runLua("UI_Data/Script/Widget/Chatting/Console/Panel_Window_ChattingHistory_Renew.lua")
+    runLua("UI_Data/Script/Widget/Chatting/Console/Panel_Widget_ChattingViewer_Renew.lua")
   else
     runLua("UI_Data/Script/Widget/Chatting/Panel_ChatNew.lua")
     runLua("UI_Data/Script/Widget/Chatting/Panel_Chatting_Input.lua")
@@ -2433,9 +2488,9 @@ function loadGameUI()
       runLua("UI_Data/Script/Window/Enchant/SpiritEnchant_Control.lua")
     end
     runLua("UI_Data/Script/Window/Socket/Socket.lua")
+    runLua("UI_Data/Script/Window/Enchant/Panel_Improvement.lua")
   end
   runLua("UI_Data/Script/Window/Enchant/SpiritEnchant_Animation.lua")
-  runLua("UI_Data/Script/Window/Enchant/Panel_Improvement.lua")
   runLua("UI_Data/Script/Window/Enchant/Panel_BonusEnchant.lua")
   runLua("UI_Data/Script/Window/DeadMessage/DeadMessage.lua")
   runLua("UI_Data/Script/Window/Looting/Panel_Looting.lua")
@@ -2459,7 +2514,7 @@ function loadGameUI()
   end
   runLua("UI_Data/Script/Widget/CraftLevInfo/UI_Lua_CraftLevInfo.lua")
   runLua("UI_Data/Script/Widget/PotenGradeInfo/UI_Lua_PotenGradeInfo.lua")
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Inventory then
     runLua("UI_Data/Script/Window/Inventory/Console/Panel_Window_Inventory_Renew.lua")
     runLua("UI_Data/Script/Window/Inventory/Console/Panel_Window_MultiButtonPopup.lua")
     if false == _ContentsGroup_RenewUI_Party then
@@ -2527,6 +2582,9 @@ function loadGameUI()
     runLua("UI_Data/Script/Window/Skill/Panel_Window_Skill_Combination.lua")
     runLua("UI_Data/Script/Window/Skill/Panel_Window_Skill_Animation.lua")
     runLua("UI_Data/Script/Window/Skill/Panel_EnableSkill.lua")
+  end
+  if true == GlobalSwitch_UseDummyPlayerSkillWindow then
+    runLua("UI_Data/Script/Window/Skill/Test_SkillView_Control.lua")
   end
   runLua("UI_Data/Script/Window/SkillAwaken/Panel_Window_SkillAwaken.lua")
   runLua("UI_Data/Script/Window/Skill/Panel_Window_SkillGuide.lua")
@@ -2602,10 +2660,18 @@ function loadGameUI()
   else
   end
   runLua("UI_Data/Script/Window/Servant/Panel_Window_Servant.lua")
-  runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo.lua")
-  runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_Carriage.lua")
-  runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_Ship.lua")
-  runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_WorkerShip.lua")
+  if false == _ContentsGroup_RenewUI_StableInfo then
+    runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo.lua")
+    runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_Carriage.lua")
+    runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_Ship.lua")
+    runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantInfo_WorkerShip.lua")
+  else
+    runLua("UI_Data/Script/Window/Servant/Console/Servant_Info_Manager_Renew.lua")
+    runLua("UI_Data/Script/Window/Servant/Console/Info/Panel_Window_HorseInfo_Renew.lua")
+    runLua("UI_Data/Script/Window/Servant/Console/Info/Panel_Window_CarriageInfo_Renew.lua")
+    runLua("UI_Data/Script/Window/Servant/Console/Info/Panel_Window_LinkHorseInfo_Renew.lua")
+    runLua("UI_Data/Script/Window/Servant/Console/Info/Panel_Window_ShipInfo_Renew.lua")
+  end
   runLua("UI_Data/Script/Window/Servant/HorseMp.lua")
   runLua("UI_Data/Script/Window/Servant/HorseHp.lua")
   runLua("UI_Data/Script/Window/Inventory/Panel_Window_ServantInventory.lua")
@@ -3091,7 +3157,7 @@ function loadGameUI()
   runLua("UI_Data/Script/Window/Delivery/Panel_Window_Delivery_Person.lua")
   runLua("UI_Data/Script/Window/Delivery/Panel_Window_Delivery_GameExit.lua")
   runLua("UI_Data/Script/Window/Quest/Panel_Quest_History_New.lua")
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Quest then
     runLua("UI_Data/Script/Window/Quest/Console/Panel_Window_QuestInfo_Renew.lua")
   else
     runLua("UI_Data/Script/Window/Quest/Panel_Quest_Window_160525.lua")
@@ -3108,11 +3174,23 @@ function loadGameUI()
     runLua("UI_Data/Script/Widget/RecentMemory/RecentMemory.lua")
   end
   ToClient_initializeWorldMap("UI_Data/Window/Worldmap_Grand/Worldmap_Grand_Base.XML")
-  if true == _ContentsGroup_ForXBoxFinalCert then
+  if true == _ContentsGroup_RenewUI_WorldMap then
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_RingMenu_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_TopMenu_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_BottomMenu_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_Town_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_Main_Renew.lua")
     runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_WorldMapSidebar_Renew.lua")
-    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_WorldMapNodeInfo_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_WorldmapNodeInfo_Renew.lua")
     runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_WorldMapHouseCraft_Renew.lua")
-  else
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeInfo_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeManagement_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_RightMenu_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_Stable_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_BuyHouse_Renew.lua")
+    runLua("UI_Data/Script/Window/Worldmap_Grand/Console/Panel_Worldmap_NodeProduct_Renew.lua")
+  end
+  if false == _ContentsGroup_ForXBoxFinalCert then
     runLua("UI_Data/Script/Window/WorldMap_Grand/Grand_WorldMap_MenuPanel.lua")
     runLua("UI_Data/Script/Window/WorldMap_Grand/Grand_WorldMap_MainPanel.lua")
     runLua("UI_Data/Script/Window/WorldMap_Grand/Grand_WorldMap_NodeMenu.lua")
@@ -3206,9 +3284,16 @@ function loadGameUI()
   runLua("UI_Data/Script/Window/CarveSeal/Panel_ResetSeal.lua")
   runLua("UI_Data/Script/Window/ClearVested/Panel_ClearVested.lua")
   runLua("UI_Data/Script/Window/UI_Setting/Panel_UI_Setting.lua")
-  runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerManager.lua")
-  runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerRestoreAll.lua")
-  runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerChangeSkill.lua")
+  if false == _ContentsGroup_RenewUI_Worker then
+    runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerManager.lua")
+    runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerRestoreAll.lua")
+    runLua("UI_Data/Script/Window/WorkerManager/Panel_WorkerChangeSkill.lua")
+  else
+    runLua("UI_Data/Script/Window/WorkerManager/Console/Panel_Window_WorkerManager_Renew.lua")
+    runLua("UI_Data/Script/Window/WorkerManager/Console/Panel_Window_WorkerManager_Restore_Renew.lua")
+    runLua("UI_Data/Script/Window/WorkerManager/Console/Panel_Window_WorkerManager_ChangeSkill_Renew.lua")
+    runLua("UI_Data/Script/Window/WorkerManager/Console/Panel_Window_WorkerManager_Filter_Renew.lua")
+  end
   runLua("UI_Data/Script/Window/TransferLifeExperience/Panel_TransferLifeExperience.lua")
   runLua("UI_Data/Script/Window/ChangeItem/Panel_ChangeItem.lua")
   runLua("UI_Data/Script/Window/ChangeItem/Panel_ChangeWeapon.lua")
@@ -3245,6 +3330,8 @@ function loadGameUI()
     runLua("UI_Data/Script/Window/Party/Panel_PartyList.lua")
     runLua("UI_Data/Script/Window/Party/Panel_PartyRecruite.lua")
   else
+    runLua("UI_Data/Script/Window/Party/Console/Panel_Window_FindParty_Renew.lua")
+    runLua("UI_Data/Script/Window/Party/Console/Panel_Window_FindPartyRecruite_Renew.lua")
   end
   runLua("UI_Data/Script/Window/Servant/Panel_Window_ServantResurrection.lua")
   runLua("UI_Data/Script/Window/BlackSpiritAdventure/Panel_BlackSpiritAdventure2.lua")

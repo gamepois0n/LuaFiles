@@ -1,4 +1,4 @@
-Panel_Customizing_FaceShape:ignorePanelMoveSnapping()
+Panel_Customizing_FaceShape:ignorePadSnapMoveToOtherPanel()
 local Customization_FaceBoneInfo = {
   _ui = {
     _static_ButtonGroup = UI.getChildControl(Panel_Customizing_FaceShape, "Static_ButtonGroup"),
@@ -22,7 +22,8 @@ local Customization_FaceBoneInfo = {
   _selectedScaleMax,
   _currentTranslation,
   _currentRotation,
-  _currentScale
+  _currentScale,
+  _isBoneControl = false
 }
 function PaGlobalFunc_Customization_FaceBone_OpenFaceShapeUi(classType, uiId)
   local self = Customization_FaceBoneInfo
@@ -38,6 +39,29 @@ function PaGlobalFunc_Customization_FaceBone_CloseFaceShapeUi()
   PaGlobalFunc_Customization_CameraLookEnable(true)
   endPickingMode()
   PaGlobalFunc_Customization_FaceBone_Close()
+end
+function PaGlobalFunc_Customization_FaceBone_SetBoneControl(isSet)
+  local self = Customization_FaceBoneInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(2)
+    Panel_Customizing_FaceShape:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(6)
+    Panel_Customizing_FaceShape:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
+end
+function PaGlobalFunc_Customization_FaceBone_UpdatePerFrame(deltaTime)
+  local self = Customization_FaceBoneInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_FaceBone_SetBoneControl(false)
+    end
+    return
+  end
 end
 function PaGlobalFunc_Customization_FaceBone_CursorSelect(luaControlModeIndex)
   local self = Customization_FaceBoneInfo
@@ -69,6 +93,7 @@ function PaGlobalFunc_Customization_FaceBone_SliderOn(sliderType, sliderIndex)
   elseif 3 == sliderType then
     self._ui._slider_ScaleFocus[sliderIndex]:SetShow(true)
   end
+  PaGlobalFunc_Customization_SetKeyGuide(4)
 end
 function PaGlobalFunc_Customization_FaceBone_SliderOut(sliderType, sliderIndex)
   local self = Customization_FaceBoneInfo
@@ -79,6 +104,9 @@ function PaGlobalFunc_Customization_FaceBone_SliderOut(sliderType, sliderIndex)
   elseif 3 == sliderType then
     self._ui._slider_ScaleFocus[sliderIndex]:SetShow(false)
   end
+  if false == self._isBoneControl and true == PaGlobalFunc_Customization_FaceBone_GetShow() then
+    PaGlobalFunc_Customization_SetKeyGuide(2)
+  end
 end
 function PaGlobalFunc_Customization_FaceBone_UpdateSlider(updateControlMode)
   local self = Customization_FaceBoneInfo
@@ -87,26 +115,22 @@ function PaGlobalFunc_Customization_FaceBone_UpdateSlider(updateControlMode)
   end
   PaGlobalFunc_Customization_FaceBone_CursorSelect(updateControlMode)
   if 1 == updateControlMode then
-    if true == self._ui._sliderButton_Position[0]:IsEnable() then
-      local x = self:CalculateSliderValue(self._ui._slider_Position[0], self._selectedTransMin.x, self._selectedTransMax.x)
-      local y = self:CalculateSliderValue(self._ui._slider_Position[1], self._selectedTransMin.y, self._selectedTransMax.y)
-      local z = self:CalculateSliderValue(self._ui._slider_Position[2], self._selectedTransMin.z, self._selectedTransMax.z)
-      self._currentTranslation.x = x
-      self._currentTranslation.y = y
-      self._currentTranslation.z = z
-      applyTranslationValue(x, y, z)
-    end
+    local x = self:CalculateSliderValue(self._ui._slider_Position[0], self._selectedTransMin.x, self._selectedTransMax.x)
+    local y = self:CalculateSliderValue(self._ui._slider_Position[1], self._selectedTransMin.y, self._selectedTransMax.y)
+    local z = self:CalculateSliderValue(self._ui._slider_Position[2], self._selectedTransMin.z, self._selectedTransMax.z)
+    self._currentTranslation.x = x
+    self._currentTranslation.y = y
+    self._currentTranslation.z = z
+    applyTranslationValue(x, y, z)
   elseif 2 == updateControlMode then
-    if true == self._ui._slider_Rotation[0]:IsEnable() then
-      local x = self:CalculateSliderValue(self._ui._slider_Rotation[0], self._selectedRotMin.x, self._selectedRotMax.x)
-      local y = self:CalculateSliderValue(self._ui._slider_Rotation[1], self._selectedRotMin.y, self._selectedRotMax.y)
-      local z = self:CalculateSliderValue(self._ui._slider_Rotation[2], self._selectedRotMin.z, self._selectedRotMax.z)
-      self._currentRotation.x = x
-      self._currentRotation.y = y
-      self._currentRotation.z = z
-      applyRotationValue(x, y, z)
-    end
-  elseif 3 == updateControlMode and true == self._ui._slider_Scale[0]:IsEnable() then
+    local x = self:CalculateSliderValue(self._ui._slider_Rotation[0], self._selectedRotMin.x, self._selectedRotMax.x)
+    local y = self:CalculateSliderValue(self._ui._slider_Rotation[1], self._selectedRotMin.y, self._selectedRotMax.y)
+    local z = self:CalculateSliderValue(self._ui._slider_Rotation[2], self._selectedRotMin.z, self._selectedRotMax.z)
+    self._currentRotation.x = x
+    self._currentRotation.y = y
+    self._currentRotation.z = z
+    applyRotationValue(x, y, z)
+  elseif 3 == updateControlMode then
     local x = self:CalculateSliderValue(self._ui._slider_Scale[0], self._selectedScaleMin.x, self._selectedScaleMax.x)
     local y = self:CalculateSliderValue(self._ui._slider_Scale[1], self._selectedScaleMin.y, self._selectedScaleMax.y)
     local z = self:CalculateSliderValue(self._ui._slider_Scale[2], self._selectedScaleMin.z, self._selectedScaleMax.z)
@@ -226,6 +250,7 @@ function Customization_FaceBoneInfo:EnableFaceSlide(enable)
 end
 function Customization_FaceBoneInfo:InitControl()
   self._ui._checkBox_ShowPart = UI.getChildControl(self._ui._static_ButtonGroup, "CheckButton_ShowPart")
+  self._ui._checkBox_ShowPart:SetCheck(true)
   self._ui._checkBox_Symmetry = UI.getChildControl(self._ui._static_ButtonGroup, "CheckButton_Symmetry")
   self._ui._checkBox_ShowUpperHair = UI.getChildControl(self._ui._static_ButtonGroup, "CheckButton_ShowUpperHair")
   self._ui._checkBox_ShowUpperHair:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONFRAME_USEFACECUSTOMIZATIONHAIR"))
@@ -281,32 +306,34 @@ function Customization_FaceBoneInfo:InitControl()
     self._ui._slider_ScaleFocus[index]:SetShow(false)
   end
 end
+function PaGlobalFunc_Customization_FaceBone_ClearCustomizedBoneInfo()
+  clearCustomizedBoneInfo()
+end
 function Customization_FaceBoneInfo:InitEvent()
   for index = 0, 2 do
+    self._ui._slider_Position[index]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_FaceBone_UpdateSlider(1)")
     self._ui._sliderButton_Position[index]:SetIgnore(true)
-    self._ui._slider_Position[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(1)")
-    self._ui._slider_Position[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(1)")
     self._ui._slider_Position[index]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_FaceBone_SliderOn(1," .. index .. ")")
     self._ui._slider_Position[index]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_FaceBone_SliderOut(1," .. index .. ")")
+    self._ui._slider_Rotation[index]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_FaceBone_UpdateSlider(2)")
     self._ui._sliderButton_Rotation[index]:SetIgnore(true)
-    self._ui._slider_Rotation[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(2)")
-    self._ui._slider_Rotation[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(2)")
     self._ui._slider_Rotation[index]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_FaceBone_SliderOn(2," .. index .. ")")
     self._ui._slider_Rotation[index]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_FaceBone_SliderOut(2," .. index .. ")")
+    self._ui._slider_Scale[index]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_FaceBone_UpdateSlider(3)")
     self._ui._sliderButton_Scale[index]:SetIgnore(true)
-    self._ui._slider_Scale[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LEFT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(3)")
-    self._ui._slider_Scale[index]:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RIGHT, "PaGlobalFunc_Customization_FaceBone_UpdateSlider(3)")
     self._ui._slider_Scale[index]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_FaceBone_SliderOn(3," .. index .. ")")
     self._ui._slider_Scale[index]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_FaceBone_SliderOut(3," .. index .. ")")
   end
   self._ui._checkBox_ShowPart:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_ShowControlPart()")
   self._ui._checkBox_Symmetry:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_SymmetryChecked()")
   self._ui._checkBox_ShowUpperHair:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_UpperHairChecked()")
-  self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
+  self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_ClearCustomizedBoneInfo()")
   self._ui._button_ResetAll:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomIzationCommon_ClearGroupCustomizedBonInfoLua()")
   self._ui._button_Position:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_CursorSelect(1)")
   self._ui._button_Rotation:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_CursorSelect(2)")
   self._ui._button_Scale:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_FaceBone_CursorSelect(3)")
+  Panel_Customizing_FaceShape:RegisterUpdateFunc("PaGlobalFunc_Customization_FaceBone_UpdatePerFrame")
+  Panel_Customizing_FaceShape:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_FaceBone_SetBoneControl(true)")
 end
 function Customization_FaceBoneInfo:InitRegister()
   registerEvent("EventSelectSculptingBoneControl", "PaGlobalFunc_Customization_FaceBone_SelectSculptingBoneControl")
@@ -329,17 +356,26 @@ function PaGlobalFunc_FromClient_Customization_FaceBone_luaLoadComplete()
   self:Initialize()
 end
 function PaGlobalFunc_Customization_FaceBone_Close()
+  local self = Customization_FaceBoneInfo
   if false == PaGlobalFunc_Customization_FaceBone_GetShow() then
-    return
+    return false
+  end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_FaceBone_SetBoneControl(false)
+    return false
   end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
+  endPickingMode()
   PaGlobalFunc_Customization_FaceBone_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_FaceBone_Open()
   if true == PaGlobalFunc_Customization_FaceBone_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(2)
+  PaGlobalFunc_Customization_FaceBone_ShowControlPart()
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_FaceBone_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_FaceBone_Close()")
   PaGlobalFunc_Customization_FaceBone_SetShow(true, false)

@@ -74,7 +74,155 @@ local WorldMapHouseCraft = {
   _detailListRowMax = 3,
   _receipeIconColumnMax = 6,
   _receipeIconCountMax = 18,
-  _receipeIconDefaultGap = 50
+  _receipeIconDefaultGap = 50,
+  _purposeFliterUVConfig = {
+    [0] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [1] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [2] = {
+      x1 = 1,
+      y1 = 319,
+      x2 = 28,
+      y2 = 346
+    },
+    [3] = {
+      x1 = 1,
+      y1 = 347,
+      x2 = 28,
+      y2 = 374
+    },
+    [4] = {
+      x1 = 225,
+      y1 = 347,
+      x2 = 252,
+      y2 = 374
+    },
+    [5] = {
+      x1 = 57,
+      y1 = 347,
+      x2 = 84,
+      y2 = 374
+    },
+    [6] = {
+      x1 = 197,
+      y1 = 347,
+      x2 = 224,
+      y2 = 374
+    },
+    [7] = {
+      x1 = 113,
+      y1 = 347,
+      x2 = 140,
+      y2 = 374
+    },
+    [8] = {
+      x1 = 225,
+      y1 = 319,
+      x2 = 252,
+      y2 = 346
+    },
+    [9] = {
+      x1 = 113,
+      y1 = 319,
+      x2 = 140,
+      y2 = 346
+    },
+    [10] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [11] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [12] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [13] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [14] = {
+      x1 = 141,
+      y1 = 347,
+      x2 = 168,
+      y2 = 374
+    },
+    [15] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [16] = {
+      x1 = 169,
+      y1 = 347,
+      x2 = 196,
+      y2 = 374
+    },
+    [17] = {
+      x1 = 281,
+      y1 = 319,
+      x2 = 308,
+      y2 = 346
+    },
+    [18] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [19] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [20] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [21] = {
+      x1 = 253,
+      y1 = 319,
+      x2 = 280,
+      y2 = 346
+    },
+    [22] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    },
+    [23] = {
+      x1 = 29,
+      y1 = 319,
+      x2 = 56,
+      y2 = 346
+    }
+  },
+  _progressType = -1,
+  _progressingUseType = -1
 }
 local _slotOption = {createIcon = true, createBorder = true}
 local _starUV = {
@@ -148,7 +296,7 @@ function WorldMapHouseCraft:initialize()
   self._ui.txt_processingProgressVal = UI.getChildControl(self._ui.stc_processingBG, "StaticText_Progress_Val")
   self._ui.progress_bar = UI.getChildControl(self._ui.stc_processingBG, "Progress2_Bar")
   self._ui.txt_houseImage = UI.getChildControl(self._ui.stc_manageBG, "StaticText_House_Image")
-  self._ui.chk_buyOrSell = UI.getChildControl(self._ui.stc_manageBG, "Checkbox_Confirm")
+  self._ui.chk_buyOrSell = UI.getChildControl(self._ui.stc_manageBG, "Button_Confirm")
 end
 function WorldMapHouseCraft:initDetailList()
   self._ui.txt_detailTitle = UI.getChildControl(self._ui.stc_typeBG, "StaticText_DetailTitle")
@@ -172,15 +320,31 @@ function WorldMapHouseCraft:initDetailList()
     self._ui.stc_itemSlotBG[ii]:SetPosY(startY - 12 + math.floor((ii - 1) / self._receipeIconColumnMax) * self._receipeIconDefaultGap)
     UIScroll.InputEventByControl(self._ui.stc_itemSlotBG[ii], "InputScroll_WorldMapHouseCraft_DetailList")
   end
+  self:registMessageHandler()
+  self:registEvent()
 end
 function WorldMapHouseCraft:registEvent()
+  Panel_Worldmap_HouseCraft:RegisterUpdateFunc("PaGlobalFunc_WorldMapHouseCraft_UpdatePerFrame")
 end
 function WorldMapHouseCraft:registMessageHandler()
   registerEvent("FromClient_ReceiveBuyHouse", "FromClient_WorldMapHouseCraft_ReceiveBuyHouse")
+  registerEvent("FromClient_ReceiveReturnHouse", "FromClient_WorldMapHouseCraft_ReceiveReturnHouse")
   registerEvent("WorldMap_WorkerDataUpdate", "FromClient_WorldMapHouseCraft_WorkerDataUpdate")
+  registerEvent("FromClient_ReceiveChangeUseType", "FromClient_WorldMapHouseCraft_ReceiveChangeUseType")
+  registerEvent("FromClient_AppliedChangeUseType", "FromClient_WorldMapHouseCraft_AppliedChangeUseType")
+end
+function PaGlobalFunc_WorldMapHouseCraft_UpdatePerFrame(deltaTime)
+  local self = WorldMapHouseCraft
+  if -1 == self._progressType then
+    return
+  end
+  self:updateWorkingState(self._progressType)
 end
 function PaGlobalFunc_WorldMapHouseCraft_IsShow()
   return _panel:GetShow()
+end
+function PaGlobalFunc_WorldMapHouseCraft_Close()
+  _panel:SetShow(false)
 end
 function PaGlobalFunc_WorldMapHouseCraft_Open(houseInfoSSWrapper)
   WorldMapHouseCraft:open(houseInfoSSWrapper)
@@ -189,7 +353,6 @@ function WorldMapHouseCraft:open(houseInfoSSWrapper)
   _panel:SetShow(true)
   self._selected = nil
   self._ui.chk_buyOrSell:SetIgnore(false)
-  self._ui.chk_buyOrSell:SetCheck(false)
   self:lateInit()
   self:update(houseInfoSSWrapper)
 end
@@ -200,6 +363,7 @@ function WorldMapHouseCraft:update(houseInfoSSWrapper)
     return
   end
   local houseInfoSS = houseInfoSSWrapper:get()
+  self._houseInfoSS = houseInfoSSWrapper:get()
   self._houseKey = houseInfoSSWrapper:getHouseKey()
   self._screenShotPath = ToClient_getScreenShotPath(houseInfoSS, 0)
   self._isSalable = houseInfoSSWrapper:isSalable()
@@ -208,8 +372,19 @@ function WorldMapHouseCraft:update(houseInfoSSWrapper)
   self._isSet = houseInfoSSWrapper:isSet()
   self._receipeCount = houseInfoSSWrapper:getReceipeCount()
   self._houseName = houseInfoSSWrapper:getName()
+  self._ui.txt_houseImage:ChangeTextureInfoName(self._screenShotPath)
   self:updateTypeList(houseInfoSSWrapper)
   local rentHouse = ToClient_GetRentHouseWrapper(self._houseKey)
+  local stc_stars = {}
+  for ii = 1, #self._ui.rdo_houseTypes do
+    for jj = 1, self._starCountMax do
+      stc_stars[jj] = UI.getChildControl(self._ui.rdo_houseTypes[ii], "Static_Star_" .. jj)
+      stc_stars[jj]:ChangeTextureInfoName("renewal/ui_icon/console_icon_worldmap_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(stc_stars[jj], _starUV.empty[1], _starUV.empty[2], _starUV.empty[3], _starUV.empty[4])
+      stc_stars[jj]:getBaseTexture():setUV(x1, y1, x2, y2)
+      stc_stars[jj]:setRenderTexture(stc_stars[jj]:getBaseTexture())
+    end
+  end
   if nil ~= rentHouse and true == rentHouse:isSet() then
     _PA_LOG("\235\176\149\235\178\148\236\164\128", "updateRentedHouse")
     self:updateRentedHouse(rentHouse, houseInfoSSWrapper)
@@ -242,6 +417,10 @@ function WorldMapHouseCraft:updateTypeList(houseInfoSSWrapper)
       self._useTypeData[ii].name = houseInfoCraftWrapper:getReciepeName()
       local txt_name = UI.getChildControl(self._ui.rdo_houseTypes[ii], "StaticText_Name")
       txt_name:SetText(self._useTypeData[ii].name)
+      txt_name:ChangeTextureInfoName("renewal/ui_icon/console_icon_worldmap_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(txt_name, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[ii].useType].x1, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[ii].useType].y1, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[ii].useType].x2, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[ii].useType].y2)
+      txt_name:getBaseTexture():setUV(x1, y1, x2, y2)
+      txt_name:setRenderTexture(txt_name:getBaseTexture())
       self._useTypeData[ii].maxLevel = houseInfoCraftWrapper:getLevel()
       for jj = 1, self._starCountMax do
         if jj <= self._useTypeData[ii].maxLevel then
@@ -269,13 +448,13 @@ function WorldMapHouseCraft:updateRentedHouse(rentHouse, houseInfoStaticStatusWr
   self._rentedUseType = rentHouse:getHouseUseType()
   self._isRentedHouse = true
   self._ui.txt_normalTimeCost:SetShow(false)
-  self._ui.chk_buyOrSell:SetMonoTone(false)
   self._ui.chk_buyOrSell:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_RENEW_RETURN"))
+  self._ui.chk_buyOrSell:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMapHouseCraft_SellHouse()")
   self._ui.txt_normalNeedPoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_WITHDRAWEXPLORE"))
   self._ui.btn_upgradeOrChange:SetShow(true)
   local rentedIndex
   for ii = 1, #self._useTypeData do
-    if self._rentedUseType == self._useTypeData[ii].receipeKey then
+    if self._rentedUseType == self._useTypeData[ii].useType then
       rentedIndex = ii
       if nil == self._selected then
         Input_WorldMapHouseCraft_SetUseType(ii)
@@ -286,6 +465,7 @@ function WorldMapHouseCraft:updateRentedHouse(rentHouse, houseInfoStaticStatusWr
   local stc_stars = {}
   for ii = 1, self._starCountMax do
     stc_stars[ii] = UI.getChildControl(self._ui.rdo_houseTypes[rentedIndex], "Static_Star_" .. ii)
+    stc_stars[ii]:ChangeTextureInfoName("renewal/ui_icon/console_icon_worldmap_00.dds")
     if ii <= self._rentedLevel then
       local x1, y1, x2, y2 = setTextureUV_Func(stc_stars[ii], _starUV.full[1], _starUV.full[2], _starUV.full[3], _starUV.full[4])
       stc_stars[ii]:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -320,15 +500,6 @@ function WorldMapHouseCraft:updateEmptyHouse(houseInfoSSWrapper)
   else
     self._ui.chk_buyOrSell:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_HOUSECONTROL_BTN_CANTBUY"))
     self._ui.chk_buyOrSell:addInputEvent("Mouse_LUp", "Input_WorldMapHouseCraft_SeePrevHouse()")
-  end
-  local stc_stars = {}
-  for ii = 1, #self._ui.rdo_houseTypes do
-    for jj = 1, self._starCountMax do
-      stc_stars[jj] = UI.getChildControl(self._ui.rdo_houseTypes[ii], "Static_Star_" .. jj)
-      local x1, y1, x2, y2 = setTextureUV_Func(stc_stars[jj], _starUV.empty[1], _starUV.empty[2], _starUV.empty[3], _starUV.empty[4])
-      stc_stars[jj]:getBaseTexture():setUV(x1, y1, x2, y2)
-      stc_stars[jj]:setRenderTexture(stc_stars[jj]:getBaseTexture())
-    end
   end
 end
 function WorldMapHouseCraft:updateDetailList()
@@ -390,9 +561,9 @@ end
 function WorldMapHouseCraft:updateDetailData()
   local houseInfoSSW = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey)
   local houseInfoCraftWrapper = houseInfoSSW:getHouseCraftWrapperByIndex(self._selected - 1)
-  local maxLevel = houseInfoCraftWrapper:getLevel()
-  local receipeKey = houseInfoSSW:getReceipeByIndex(self._selected - 1)
-  local houseUseType = houseInfoSSW:getGroupTypeByIndex(self._selected - 1)
+  local maxLevel = self._useTypeData[self._selected].maxLevel
+  local receipeKey = self._useTypeData[self._selected].receipeKey
+  local houseUseType = self._useTypeData[self._selected].useType
   local workCount = ToClient_getHouseWorkableListByData(self._houseKey, receipeKey, maxLevel)
   self._detailListData = {}
   local data = self._detailListData
@@ -454,25 +625,67 @@ end
 function WorldMapHouseCraft:updateBottomBox()
   local workingcnt = getWorkingListAtRentHouse(self._houseKey)
   local isUsable = ToClient_IsUsable(self._houseKey)
+  local houseInfoSS = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey):get()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "updateBottomBox, workingcnt : " .. workingcnt)
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "updateBottomBox, isUsable : " .. tostring(isUsable))
-  if true == self._isRentedHouse then
+  self._ui.stc_normalBG:SetShow(false)
+  self._ui.stc_processingBG:SetShow(false)
+  local isLargeCraft = ToClient_getLargeCraftExchangeKeyRaw(houseInfoSS)
+  if false == isUsable then
+    self._ui.stc_processingBG:SetShow(true)
+    self._progressType = eWorkType.changeHouseUseType
+  elseif isLargeCraft > 0 then
+    self._ui.stc_processingBG:SetShow(true)
+    self._progressType = eWorkType.largeCraft
+  elseif workingcnt > 0 then
+    self._ui.stc_processingBG:SetShow(true)
+    self._progressType = eWorkType.craft
   else
+    self._ui.stc_normalBG:SetShow(true)
+    if true == self._isRentedHouse then
+      self:updateBottomAsNormalState(true)
+    else
+      self:updateBottomAsNormalState(false)
+    end
   end
-  self:updateBottomAsNormalState()
 end
-function WorldMapHouseCraft:updateBottomAsNormalState()
+function WorldMapHouseCraft:updateWorkingState(state)
+  if self._progressingUseType ~= self._useTypeData[self._selected].receipeKey then
+    self._ui.stc_normalBG:SetShow(true)
+    self._ui.stc_processingBG:SetShow(false)
+    return
+  end
+  if eWorkType.changeHouseUseType == state then
+    local remineTime = Util.Time.timeFormatting(ToClient_GetLeftTimeChangeHouseUseType(self._houseKey))
+    local progressVal = ToClient_GetProgressRateChangeHouseUseType(self._houseKey)
+    self._ui.txt_processingTimeLeftVal:SetText(remineTime)
+    self._ui.txt_processingProgressVal:SetText(string.format("%3.1f%%", progressVal))
+    self._ui.progress_bar:SetProgressRate(progressVal)
+  elseif eWorkType.largeCraft == state then
+  elseif eWorkType.craft == state then
+  end
+end
+function WorldMapHouseCraft:updateBottomAsNormalState(isRentedHouse)
   local houseInfoSSW = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey)
   local rentHouseWrapper = ToClient_GetRentHouseWrapper(self._houseKey)
   local isMyHouse = ToClient_IsMyHouse(self._houseKey)
   local isMaxLevel = false
   local isUsable = ToClient_IsUsable(self._houseKey)
-  local currentUseType = self._useTypeData[self._selected].useType
-  local houseUseType, nextRentHouseLevel
-  if nil ~= rentHouseWrapper and rentHouseWrapper:isSet() then
-    local nextRentHouseLevel = rentHouseWrapper:getLevel()
-    if false == isMaxLevel then
-      nextRentHouseLevel = nextRentHouseLevel + 1
+  local currentUseType = self._useTypeData[self._selected].receipeKey
+  local houseUseType
+  local nextRentHouseLevel = 1
+  if false == self._isSet then
+    return
+  end
+  if true == isMyHouse and rentHouseWrapper:isSet() then
+    isMaxLevel = rentHouseWrapper:isMaxLevel()
+    houseUseType = rentHouseWrapper:getType()
+    if currentUseType == houseUseType then
+      if isUsable and false == isMaxLevel then
+        nextRentHouseLevel = rentHouseWrapper:getLevel() + 1
+      elseif false == isUsable then
+        nextRentHouseLevel = rentHouseWrapper:getLevel()
+      end
     end
   end
   local itemKey = {}
@@ -493,7 +706,7 @@ function WorldMapHouseCraft:updateBottomAsNormalState()
   local myMoney = Int64toInt32(inventory:getMoney_s64())
   local myMoneyDot = makeDotMoney(myMoney)
   self._ui.txt_normalMySilverVal:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_HAVEMONEY", "myMoney", myMoneyDot))
-  if nil ~= nextRentHouseLevel and nil ~= itemCount[0] and nil ~= itemName[0] then
+  if nil ~= itemCount[0] and nil ~= itemName[0] then
     if currentUseType == houseUseType and true == isMaxLevel and true == isUsable then
       self._ui.txt_normalSilverCostVal:SetText("--")
     else
@@ -510,10 +723,10 @@ function WorldMapHouseCraft:updateBottomAsNormalState()
   end
   self._needTime = -1
   local needTime = "--"
-  if nil ~= nextRentHouseLevel and currentUseType ~= houseUseType and false == isMaxLevel and false == isUsable then
-    self._needTime = houseInfoSSW:getTransperTime(currentUseType, nextRentHouseLevel, nextRentHouseLevel)
-  else
+  if currentUseType == houseUseType and true == isMaxLevel and true == isUsable then
     self._needTime = 0
+  else
+    self._needTime = houseInfoSSW:getTransperTime(currentUseType, nextRentHouseLevel, nextRentHouseLevel)
   end
   if 0 ~= self._needTime then
     needTime = Util.Time.timeFormatting(self._needTime)
@@ -549,6 +762,48 @@ function WorldMapHouseCraft:updateBottomButtons()
   else
     self._ui.btn_upgradeOrChange:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_BTN_MAXLEVEL_2"))
     self._ui.btn_upgradeOrChange:SetMonoTone(true)
+  end
+end
+function PaGlobalFunc_WorldMapHouseCraft_SellHouse()
+  local self = WorldMapHouseCraft
+  local houseInfoSS = self._houseInfoSS
+  local workingcnt = ToClient_getHouseWorkingWorkerList(houseInfoSS)
+  local returnPoint = self._needExplorePoint
+  local houseName = self._houseName
+  local function handleClickedHouseControlSellHouseContinue()
+    local houseKey = self._houseKey
+    ToClient_RequestReturnHouse(houseKey)
+    PaGlobal_TutorialManager:handleClickedHouseControlSellHouseContinue(houseKey)
+  end
+  if false == ToClient_IsUsable(self._houseKey) then
+    local sellHouseContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_SELLHOUSE_ONCHANGEUSETYPE", "houseName", houseName) .. [[
+
+
+]] .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_RETURNPOINT", "returnPoint", returnPoint)
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_SELLHOUSE_TITLE"),
+      content = sellHouseContent,
+      functionYes = handleClickedHouseControlSellHouseContinue,
+      functionCancel = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData, "top")
+  elseif workingcnt > 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_SELLHOUSE_ONCRAFT"))
+    return
+  else
+    local sellHouseContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_SELLHOUSE_DEFAULT", "houseName", houseName) .. [[
+
+
+]] .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_RETURNPOINT", "returnPoint", returnPoint)
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_SELLHOUSE_TITLE"),
+      content = sellHouseContent,
+      functionYes = handleClickedHouseControlSellHouseContinue,
+      functionCancel = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData, "top")
   end
 end
 function Input_WorldMapHouseCraft_Buy()
@@ -600,9 +855,6 @@ function Input_WorldMapHouseCraft_Buy()
     functionCancel = MessageBox_Empty_function
   }
   MessageBox.showMessageBox(messageboxData, "top")
-  self._ui.chk_buyOrSell:SetIgnore(true)
-  self._ui.stc_normalBG:SetShow(false)
-  self._ui.stc_processingBG:SetShow(true)
 end
 function Input_WorldMapHouseCraft_SeePrevHouse()
 end
@@ -617,6 +869,11 @@ function Input_WorldMapHouseCraft_SetUseType(index)
     self._ui.rdo_houseTypes[ii]:SetCheck(false)
   end
   self._ui.rdo_houseTypes[index]:SetCheck(true)
+  self._ui.txt_manageTitle:SetText(self._useTypeData[index].name)
+  self._ui.txt_manageTitle:ChangeTextureInfoName("renewal/ui_icon/console_icon_worldmap_00.dds")
+  local x1, y1, x2, y2 = setTextureUV_Func(self._ui.txt_manageTitle, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[index].useType].x1, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[index].useType].y1, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[index].useType].x2, WorldMapHouseCraft._purposeFliterUVConfig[self._useTypeData[index].useType].y2)
+  self._ui.txt_manageTitle:getBaseTexture():setUV(x1, y1, x2, y2)
+  self._ui.txt_manageTitle:setRenderTexture(self._ui.txt_manageTitle:getBaseTexture())
   self._detailListScrollAmount = 0
   self._ui.scroll_detailList:SetControlTop()
   self:updateDetailList()
@@ -630,18 +887,31 @@ function InputScroll_WorldMapHouseCraft_DetailList(isUp)
     self:updateDetailList()
   end
 end
+function PaGlobalFunc_WorldMapHouseCraft_ChangeStateHouseContinue()
+  local self = WorldMapHouseCraft
+  local rentHouseWrapper = ToClient_GetRentHouseWrapper(self._houseKey)
+  local useType = rentHouseWrapper:getType()
+  local level = 1
+  if useType == self._useTypeData[self._selected].receipeKey and eHouseUseGroupType.Count ~= self._currentGroupType then
+    level = rentHouseWrapper:getLevel() + 1
+  end
+  ToClient_RequestChangeHouseUseType(self._houseKey, self._useTypeData[self._selected].receipeKey, level)
+end
 function Input_WorldMapHouseCraft_UpgradeOrChange()
+  local self = WorldMapHouseCraft
   local rentHouseWrapper = ToClient_GetRentHouseWrapper(self._houseKey)
   local houseInfoStaticStatusWrapper = rentHouseWrapper:getStaticStatus()
   local rentedReceipeKey = rentHouseWrapper:getType()
   local nextRentHouseLevel = 1
-  local selectedUseType = self._useTypeData[self._selected].useType
+  local selectedUseType = self._useTypeData[self._selected].receipeKey
   if selectedUseType == rentedReceipeKey and eHouseUseGroupType.Count ~= self._currentGroupType then
     nextRentHouseLevel = rentHouseWrapper:getLevel() + 1
   end
-  local houseInfoCraftWrapper = houseInfoStaticStatusWrapper:getHouseCraftWrapperByIndex(self._selected - 1)
+  local realIndex = houseInfoStaticStatusWrapper:getIndexByReceipeKey(selectedUseType)
+  local houseInfoCraftWrapper = houseInfoStaticStatusWrapper:getHouseCraftWrapperByIndex(realIndex)
   local targetUseTypeName = houseInfoCraftWrapper:getReciepeName()
-  houseInfoCraftWrapper = houseInfoStaticStatusWrapper:getHouseCraftWrapperByIndex(rentedReceipeKey)
+  realIndex = houseInfoStaticStatusWrapper:getIndexByReceipeKey(rentedReceipeKey)
+  houseInfoCraftWrapper = houseInfoStaticStatusWrapper:getHouseCraftWrapperByIndex(realIndex)
   local currentUseTypeName = houseInfoCraftWrapper:getReciepeName()
   local rentHouseLevel = rentHouseWrapper:getLevel()
   local listCount = houseInfoStaticStatusWrapper:getNeedItemListCount(selectedUseType, nextRentHouseLevel)
@@ -687,22 +957,48 @@ function Input_WorldMapHouseCraft_UpgradeOrChange()
   local messageboxData = {
     title = _title,
     content = itemExplain,
-    functionYes = handleClickedHouseControlChangeStateHouseContinue,
+    functionYes = PaGlobalFunc_WorldMapHouseCraft_ChangeStateHouseContinue,
     functionCancel = MessageBox_Empty_function,
-    priority = UI_PP.PAUIMB_PRIORITY_LOW
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData, "top")
 end
+function FromClient_WorldMapHouseCraft_ReceiveChangeUseType(houseInfoSSWrapper, hasPreviouseHouse)
+  local self = WorldMapHouseCraft
+  if true == hasPreviouseHouse then
+    self._progressType = -1
+    self._progressingUseType = -1
+    self._progressingUseType = houseInfoSSWrapper:getReceipeByIndex(self._selected - 1)
+    self._ui.btn_upgradeOrChange:SetMonoTone(hasPreviouseHouse)
+    self._ui.btn_upgradeOrChange:SetIgnore(hasPreviouseHouse)
+    self._ui.chk_buyOrSell:SetMonoTone(hasPreviouseHouse)
+    self._ui.chk_buyOrSell:SetIgnore(hasPreviouseHouse)
+  end
+  _PA_LOG("\236\157\180\237\152\184\236\132\156", "hasPreviouseHouse : " .. tostring(hasPreviouseHouse))
+  self:update(houseInfoSSWrapper)
+end
+function FromClient_WorldMapHouseCraft_ReceiveReturnHouse(houseInfoSSWrapper)
+  local self = WorldMapHouseCraft
+  self:update(houseInfoSSWrapper)
+end
+function FromClient_WorldMapHouseCraft_AppliedChangeUseType(houseInfoSSWrapper)
+  local self = WorldMapHouseCraft
+  self._progressType = -1
+  self._progressingUseType = -1
+  self._ui.btn_upgradeOrChange:SetMonoTone(false)
+  self._ui.btn_upgradeOrChange:SetIgnore(false)
+  self._ui.chk_buyOrSell:SetMonoTone(false)
+  self._ui.chk_buyOrSell:SetIgnore(false)
+  self:update(houseInfoSSWrapper)
+end
 function FromClient_WorldMapHouseCraft_ReceiveBuyHouse(houseInfoSSWrapper)
   local self = WorldMapHouseCraft
-  Refresh_HouseIcon_Texture(houseInfoSSWrapper)
-  local NextHouseCount = houseInfoSSWrapper:getNextHouseCount()
-  for idx = 0, NextHouseCount - 1 do
-    local NextHouseInfoStaticStatusWrapper = houseInfoSSWrapper:getNextHouseInfoStaticStatusWrapper(idx)
-    Refresh_HouseIcon_Texture(NextHouseInfoStaticStatusWrapper)
-  end
+  self._ui.btn_upgradeOrChange:SetMonoTone(true)
+  self._ui.btn_upgradeOrChange:SetIgnore(true)
+  self._ui.chk_buyOrSell:SetMonoTone(true)
+  self._ui.chk_buyOrSell:SetIgnore(true)
+  self._progressingUseType = houseInfoSSWrapper:getReceipeByIndex(self._selected - 1)
   self:update(houseInfoSSWrapper)
-  PaGlobalFunc_WorldMapNodeInfo_UpdateExplorePoint()
 end
 function FromClient_WorldMapHouseCraft_WorkerDataUpdate()
   HouseProgressSection_Init()

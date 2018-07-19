@@ -196,6 +196,7 @@ function MainStatusInfo:registMessageHandler()
   _panel:RegisterUpdateFunc("PaGlobalFunc_MainStatusInfo_PerFrame")
   registerEvent("EventCharacterInfoUpdate", "PaGlobalFunc_MainStatusInfo_Update")
   registerEvent("FromClient_SelfPlayerHpChanged", "PaGlobalFunc_MainStatusInfo_UpdateHPAndMP")
+  registerEvent("FromClient_SelfPlayerMpChanged", "PaGlobalFunc_MainStatusInfo_UpdateHPAndMP")
   registerEvent("subResourceChanged", "FromClient_MainStatusInfo_UpdateClassResource")
   registerEvent("EventSelfPlayerLevelUp", "FromClient_MainStatusInfo_UpdateLV")
   registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "PaGlobalFunc_MainStatusInfo_UpdateEXP")
@@ -412,6 +413,7 @@ end
 function MainStatusInfo:updateRage()
   local selfPlayer = getSelfPlayer()
   local adrenallin = selfPlayer:getAdrenalin()
+  adrenallin = adrenallin / 100
   self._ui.progress_rage:SetProgressRate(adrenallin)
 end
 function MainStatusInfo:showUseableBlackSpirit()
@@ -541,6 +543,7 @@ function MainStatusInfo:updateClassResource()
       self._ui.stc_resource0Elements[ii]:SetShow(ii <= showCount)
     end
     self._ui.txt_resourceNum:SetText(self._resourceCount)
+    self._ui.txt_resourceNum:SetShow(true)
   elseif CppEnums.ClassType.ClassType_Combattant == classType or CppEnums.ClassType.ClassType_CombattantWomen == classType then
     self._ui.stc_resourceType0:SetShow(false)
     self._ui.stc_resourceType1:SetShow(true)

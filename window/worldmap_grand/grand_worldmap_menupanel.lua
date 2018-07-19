@@ -226,7 +226,7 @@ function FGlobal_WorldMapOpenForMenu()
   makePopupPanelList()
   Panel_WorldMap:SetShow(true, false)
   Panel_Worldmap_MovieGuide_Init()
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeGT() then
     HelpMenu_Btn:SetShow(false)
   end
 end

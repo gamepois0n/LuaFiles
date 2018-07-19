@@ -159,6 +159,9 @@ function servantInventory:updateByIndex(index)
   if nil == vehicleActor then
     return
   end
+  local vehicleType = vehicleActor:getVehicleType()
+  local titleStringKey = vehicleType == UI_VT.Type_CampingTent and "PANEL_SERVANTINVENTORY_TENT_TITLE" or "UI_SERVANTINVENTORY_TITLE"
+  self._txt_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, titleStringKey))
   local inventory = vehicleActor:getInventory()
   if nil == inventory then
     return
@@ -354,7 +357,7 @@ function ServantInventory_DropHandler(index, toSlotNo)
   return (DragManager:itemDragMove(self._inventory[index]._type, self._inventory[index]._actorKeyRaw))
 end
 function ServantInventoryOpenWithInventory(actorKeyRaw)
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Inventory then
     PaGlobalFunc_InventoryInfo_Open(4)
     return
   end
@@ -434,14 +437,13 @@ function ServantInventory_OpenAll()
 end
 function ServantInventory_Open()
   Inventory_SetIgnoreMoneyButton(true)
-  if Panel_Window_ServantInventory:GetShow() then
-    return
-  end
   if GetUIMode() == Defines.UIMode.eUIMode_NpcDialog then
     Panel_Window_ServantInventory:SetPosX(getScreenSizeY() / 2 - Panel_Window_Warehouse:GetSizeY() / 2)
   end
   servantInventory:update()
-  Panel_Window_ServantInventory:SetShow(true)
+  if not Panel_Window_ServantInventory:GetShow() then
+    return Panel_Window_ServantInventory:SetShow(true)
+  end
 end
 function ServantInventory_Close()
   Inventory_SetIgnoreMoneyButton(false)

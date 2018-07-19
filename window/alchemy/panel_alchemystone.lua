@@ -493,6 +493,11 @@ function HandleClicked_AlchemyStone_Doit()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_WARN_2"))
     end
   else
+    local alchemystoneExp = itemWrapper:getExperience() / 10000
+    if alchemystoneExp >= 150 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_EXPMAX_WARRING"))
+      return
+    end
     AlchemyStone.isPushDoit = true
   end
   doItType = AlchemyStone.selectedTabIdx

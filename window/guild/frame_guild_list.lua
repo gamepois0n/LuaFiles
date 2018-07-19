@@ -196,7 +196,8 @@ function _guildListInfoPage_titleTooltipShow(isShow, titleType)
   elseif 5 == titleType then
     control = staticText_WarGrade
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME")
-    desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC", "grade1", tostring(siegeGradeCount.grade1), "grade2", tostring(siegeGradeCount.grade2), "grade3", tostring(siegeGradeCount.grade3), "grade4", tostring(siegeGradeCount.grade4)) .. "\n 1\237\154\140 \236\176\184\234\176\128 \236\157\184\236\155\144: " .. tostring(siegeGradeCount.grade5) .. " \235\170\133"
+    local desc2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC_2", "grade5", tostring(siegeGradeCount.grade5))
+    desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC", "grade1", tostring(siegeGradeCount.grade1), "grade2", tostring(siegeGradeCount.grade2), "grade3", tostring(siegeGradeCount.grade3), "grade4", tostring(siegeGradeCount.grade4)) .. desc2
   end
   if true == isShow then
     registTooltipControl(control, Panel_Tooltip_SimpleText)

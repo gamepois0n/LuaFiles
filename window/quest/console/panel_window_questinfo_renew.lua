@@ -351,12 +351,9 @@ function PaGlobalFunc_Quest_List2EventControlCreate(list_content, key)
       FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
       questUI._staticText_QuestName:SetText(questInfo._questName)
     end
-    if false == _ContentsGroup_isConsolePadControl then
-      questUI._radioButton_QuestBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
-    else
-      questUI._radioButton_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
-      questUI._radioButton_QuestBg:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SelectQuestClear(" .. id .. ")")
-    end
+    questUI._radioButton_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
+    questUI._radioButton_QuestBg:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SelectQuestClear(" .. id .. ")")
+    questUI._radioButton_QuestBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. id .. ",false)")
   end
   self._qusetUI[id] = questUI
 end
@@ -459,10 +456,10 @@ function FromClient_luaLoadComplete()
   self._ui._radioButton_SetQuestType = UI.getChildControl(self._ui._static_KeyGuideBg, "Radiobutton_SetQuestType")
   self._ui._radioButton_Close = UI.getChildControl(self._ui._static_KeyGuideBg, "Radiobutton_Close")
   self:InitInputEvent()
-  self:InitResisterEvent()
+  self:InitRegisterEvent()
   PaGlobalFunc_Quest_UpdateList()
 end
-function Window_QuestInfo:InitResisterEvent()
+function Window_QuestInfo:InitRegisterEvent()
   registerEvent("EventQuestListChanged", "PaGlobalFunc_Quest_UpdateList")
   registerEvent("onScreenResize", "PaGlobalFunc_Quest_Resize")
 end
@@ -495,16 +492,15 @@ function PaGlobalFunc_Quest_SelectQuest(index)
   condition:SetAutoResize(true)
   condition:SetPosY(self._ui._questDetail._staticText_Desc:GetPosY() + self._ui._questDetail._staticText_Desc:GetSizeY() + 5)
   condition:SetText(questInfo._questCondition)
-  self._ui._frameContent_1_Content:SetSize(self._ui._questDetail._staticText_Desc:GetSizeY() + self._ui._questDetail._staticText_Condition:GetSizeY())
+  self._ui._frameContent_1_Content:SetSize(self._ui._frameContent_1_Content:GetSizeX(), self._ui._frameContent_1_Content:GetPosY() + title:GetSizeY() + questType:GetSizeY() + desc:GetSizeY() + condition:GetSizeY())
   self._ui._frame_Detail:UpdateContentScroll()
   self._ui._scroll_FrameVertical:SetControlPos(0)
   self._ui._frame_Detail:UpdateContentPos()
-  self._ui._radioButton_autoFindWay:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. index .. ",false)")
-  self._ui._radioButton_QuestGiveUp:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
-  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_Quest_FindWay(" .. index .. ",false)")
-  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "")
+  self._ui._radioButton_autoFindWay:SetShow(true)
+  Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   if self._config._title._progress == self._currentTitleType then
-    Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
+    self._ui._radioButton_QuestGiveUp:SetShow(true)
+    Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Quest_GiveUp(" .. index .. ")")
   end
   self._ui._list2_Quest:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._list2_Quest:requestUpdateByKey(toInt64(0, index))
@@ -652,9 +648,10 @@ function PaGlobalFunc_Quest_GiveUp(index)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return
   end
+  local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
   local messageboxContent = PAGetString(Defines.StringSheet_GAME, "PANEL_QUESTLIST_REAL_GIVEUP_QUESTION")
   local messageboxData = {
-    title = messageboxTitle,
+    title = messageBoxtitle,
     content = messageboxContent,
     functionYes = PaGlobalFunc_Quest_GiveUpConfirm,
     functionNo = MessageBox_Empty_function,
@@ -731,17 +728,21 @@ function Window_QuestInfo:SlotClear()
   end
 end
 function Window_QuestInfo:DetailClear()
+  self._ui._questDetail._staticText_Title:SetAutoResize(true)
+  self._ui._questDetail._staticText_Desc:SetAutoResize(true)
+  self._ui._questDetail._staticText_Condition:SetAutoResize(true)
+  self._ui._questDetail._staticText_Type:SetAutoResize(true)
   self._ui._questDetail._staticText_Title:SetText("")
   self._ui._questDetail._staticText_Desc:SetText("")
-  self._ui._questDetail._staticText_Condition:SetText("")
   self._ui._questDetail._staticText_Type:SetText("")
-  self._ui._radioButton_autoFindWay:addInputEvent("Mouse_LUp", "")
-  self._ui._radioButton_QuestGiveUp:addInputEvent("Mouse_LUp", "")
-  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "")
-  Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "")
-  self._ui._questDetail._staticText_Desc:SetSize(self._ui._questDetail._staticText_Desc:GetSizeX(), 10)
-  self._ui._questDetail._staticText_Condition:SetSize(self._ui._questDetail._staticText_Condition:GetSizeX(), 10)
-  self._ui._questDetail._staticText_Type:SetSize(self._ui._questDetail._staticText_Type:GetSizeX(), 10)
+  self._ui._questDetail._staticText_Condition:SetText("")
+  self._ui._questDetail._staticText_Desc:SetPosY(0)
+  self._ui._questDetail._staticText_Condition:SetPosY(0)
+  self._ui._questDetail._staticText_Type:SetPosY(0)
+  self._ui._radioButton_autoFindWay:SetShow(false)
+  self._ui._radioButton_QuestGiveUp:SetShow(false)
+  Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
+  Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   self._ui._frameContent_1_Content:SetSize(self._ui._frameContent_1_Content:GetSizeX(), 10)
   self._ui._frame_Detail:UpdateContentScroll()
   self._ui._scroll_FrameVertical:SetControlPos(0)
@@ -814,7 +815,6 @@ function PaGlobalFunc_Quest_ShowAni()
   local self = Window_QuestInfo
   local panel = Panel_Window_QuestInfo
   self._currentTabIndex = 0
-  PaGlobalFunc_Quest_SelectQuestTitle(self._config._title._progress)
   panel:ResetVertexAni()
   local aniInfo = panel:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo:SetStartPosition(getScreenSizeX(), 0)
@@ -858,6 +858,7 @@ function PaGlobalFunc_Quest_SetShow(value)
       Panel_TimeBar:SetShow(false, true)
       FGlobal_QuestWidget_Close()
     end
+    PaGlobalFunc_Quest_UpdateList()
   elseif false == PaGlobalFunc_InventoryInfo_GetShow() then
     FGlobal_Panel_Radar_Show(true, true)
     Panel_TimeBar:SetShow(true, true)
@@ -885,8 +886,8 @@ function Toggle_QuestTab_forPadEventFunc(value)
     PaGlobalFunc_Quest_SelectQuestTitle(self._config._title._main)
   end
 end
-Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "Toggle_QuestTab_forPadEventFunc(-1)")
-Panel_Window_QuestInfo:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "Toggle_QuestTab_forPadEventFunc(1)")
+Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_QuestTab_forPadEventFunc(-1)")
+Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_QuestTab_forPadEventFunc(1)")
 function Window_QuestInfo:Resize()
   Panel_Window_QuestInfo:SetSize(Panel_Window_QuestInfo:GetSizeX(), getScreenSizeY())
   self._ui._static_Title:ComputePos()

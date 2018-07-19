@@ -67,17 +67,17 @@ function CharacterInfo:init()
   self._ui.stc_RB = UI.getChildControl(self._ui.stc_TabGroup, "Static_RB")
   self._ui.stc_RB:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterInfo_ShowRightNextTab()")
   if true == _ContentsGroup_RenewUI then
-    self._maxPanelTypeNumber = 4
+    self._maxPanelTypeNumber = 3
     self._ui.radioButton = {
       [1] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Basic"),
       [2] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Named"),
-      [3] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Dairy"),
-      [4] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_FootStep")
+      [3] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Dairy")
     }
     for ii = 1, self._maxPanelTypeNumber do
       self._ui.radioButton[ii]:addInputEvent("Mouse_LUp", "InputMLUp_TapToOpenWindow(" .. ii .. ")")
       local radioButtonXAxis = self._ui.radioButton[1]:GetPosX()
-      self._ui.radioButton[ii]:SetPosX(radioButtonXAxis + 165 * (ii - 1))
+      self._ui.radioButton[ii]:SetPosX(radioButtonXAxis + 245 * (ii - 1))
+      self._ui.radioButton[ii]:SetShow(true)
     end
     local taskTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Task")
     local lifeTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Life")
@@ -95,6 +95,7 @@ function CharacterInfo:init()
     }
     for ii = 1, self._maxPanelTypeNumber do
       self._ui.radioButton[ii]:addInputEvent("Mouse_LUp", "InputMLUp_TapToOpenWindow(" .. ii .. ")")
+      self._ui.radioButton[ii]:SetShow(true)
     end
   end
   self._ui.txt_CharacterName = UI.getChildControl(self._ui.stc_CharacterInfoBg, "StaticText_CharacterName")
@@ -211,14 +212,34 @@ function CharacterInfo:mpTitle_Init()
   self._player = getSelfPlayer()
   if UI_classType.ClassType_Ranger == self._player:getClassType() then
     self._ui.txt_MentalTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EP"))
+    self._ui.progress_Mental:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_Mental, 2, 71, 232, 76)
+    self._ui.progress_Mental:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   elseif UI_classType.ClassType_Warrior == self._player:getClassType() or UI_classType.ClassType_Giant == self._player:getClassType() or UI_classType.ClassType_BladeMaster == self._player:getClassType() or UI_classType.ClassType_BladeMasterWomen == self._player:getClassType() or UI_classType.ClassType_NinjaWomen == self._player:getClassType() or UI_classType.ClassType_NinjaMan == self._player:getClassType() or UI_classType.ClassType_Combattant == self._player:getClassType() or UI_classType.ClassType_CombattantWomen == self._player:getClassType() then
     self._ui.txt_MentalTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FP"))
+    self._ui.progress_Mental:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_Mental, 2, 57, 232, 62)
+    self._ui.progress_Mental:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   elseif UI_classType.ClassType_Sorcerer == self._player:getClassType() or UI_classType.ClassType_Tamer == self._player:getClassType() or UI_classType.ClassType_Wizard == self._player:getClassType() or UI_classType.ClassType_WizardWomen == self._player:getClassType() then
     self._ui.txt_MentalTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP"))
+    self._ui.progress_Mental:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_Mental, 2, 64, 232, 69)
+    self._ui.progress_Mental:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   elseif UI_classType.ClassType_Valkyrie == self._player:getClassType() then
     self._ui.txt_MentalTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_BP"))
+    self._ui.progress_Mental:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_Mental, 2, 250, 232, 255)
+    self._ui.progress_Mental:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   elseif UI_classType.ClassType_DarkElf == self._player:getClassType() then
     self._ui.txt_MentalTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP_DARKELF"))
+    self._ui.progress_Mental:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/default_gauges_03.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_Mental, 1, 1, 256, 10)
+    self._ui.progress_Mental:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   end
 end
 function InputMLUp_TapToOpenWindow(index)
@@ -230,10 +251,8 @@ function InputMLUp_TapToOpenWindow(index)
     panelDisplay = {
       [1] = self._ui.stc_CharacterInfoBg,
       [2] = self._ui.stc_TitleInfoBg,
-      [3] = self._ui.stc_HistoryInfoBg,
-      [4] = self._ui.stc_ProfileInfoBg
+      [3] = self._ui.stc_HistoryInfoBg
     }
-    self._tapName[4] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_PROFILETABNAME")
   else
     panelDisplay = {
       [1] = self._ui.stc_CharacterInfoBg,
@@ -268,11 +287,7 @@ function InputMLUp_TapToOpenWindow(index)
   elseif 3 == index then
     PaGlobalFunc_CharacterHistoryInfo_Open()
   elseif 4 == index then
-    if true == _ContentsGroup_RenewUI then
-      InputMLUp_CharacterChallengeInfo_TapToOpen(0)
-    else
-      InputMLUp_CharacterProfileInfo_TapToOpen(0)
-    end
+    InputMLUp_CharacterChallengeInfo_TapToOpen(0)
   elseif 5 == index and false == _ContentsGroup_RenewUI then
     InputMLUp_CharacterProfileInfo_TapToOpen(0)
   elseif 6 == index and false == _ContentsGroup_RenewUI then
@@ -341,7 +356,7 @@ function PaGlobalFunc_CharacterLifeInfo_ClearFocus()
   ToClient_RequestSetUserIntroduction(self._ui.txt_Introduce:GetText())
   ClearFocusEdit()
   self._ui.txt_Introduce:addInputEvent("Mouse_LUp", "InputMLUp_CharacterInfo_Edit_Introduce()")
-  self._ui.stc_CharacterInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
+  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
 end
 function InputMLUp_CharacterInfo_Edit_Introduce()
   local self = CharacterInfo
@@ -351,7 +366,7 @@ function InputMLUp_CharacterInfo_Edit_Introduce()
   self._ui.txt_Introduce:SetMaxInput(120)
   self._ui.txt_Introduce:SetEditText(self._ui.txt_Introduce:GetEditText(), true)
   self._ui.txt_Introduce:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterLifeInfo_ClearFocus()")
-  self._ui.stc_CharacterInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_CharacterLifeInfo_ClearFocus()")
+  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_CharacterLifeInfo_ClearFocus()")
 end
 function PaGlobalFunc_CharacterInfo_UpdateFacePhoto()
   local self = CharacterInfo
@@ -716,15 +731,15 @@ function PaGlobalFunc_CharacterInfoTab_PadControl(index)
   end
 end
 function CharacterInfo:XB_Contorl_Init()
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_CharacterInfoTab_PadControl(0)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_CharacterInfoTab_PadControl(1)")
-  self._ui.stc_CharacterInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
-  self._ui.stc_TitleInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(0)")
-  self._ui.stc_TitleInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(1)")
-  self._ui.stc_HistoryInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "InputMLUp_CharacterHistoryInfo_DecreaseMonth()")
-  self._ui.stc_HistoryInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "InputMLUp_CharacterHistoryInfo_IncreaseMonth()")
-  self._ui.stc_ChallengeInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(0)")
-  self._ui.stc_ChallengeInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(1)")
-  self._ui.stc_ProfileInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(0)")
-  self._ui.stc_ProfileInfoBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(1)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_CharacterInfoTab_PadControl(0)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_CharacterInfoTab_PadControl(1)")
+  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
+  self._ui.stc_TitleInfoBg:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(0)")
+  self._ui.stc_TitleInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_CharacterTitleInfoTab_PadControl(1)")
+  self._ui.stc_HistoryInfoBg:registerPadEvent(__eConsoleUIPadEvent_LT, "InputMLUp_CharacterHistoryInfo_DecreaseMonth()")
+  self._ui.stc_HistoryInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "InputMLUp_CharacterHistoryInfo_IncreaseMonth()")
+  self._ui.stc_ChallengeInfoBg:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(0)")
+  self._ui.stc_ChallengeInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(1)")
+  self._ui.stc_ProfileInfoBg:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(0)")
+  self._ui.stc_ProfileInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(1)")
 end

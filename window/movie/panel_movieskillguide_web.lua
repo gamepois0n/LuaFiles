@@ -12,6 +12,10 @@ function PaGlobal_MovieSkillGuide_Web:init()
   self.btn_Close:addInputEvent("Mouse_LUp", "PaGlobal_MovieSkillGuide_Web:Close()")
 end
 function PaGlobal_MovieSkillGuide_Web:Open()
+  if isGameTypeGT() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
+    return
+  end
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
     return

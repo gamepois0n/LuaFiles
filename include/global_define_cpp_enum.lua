@@ -2489,7 +2489,8 @@ CppEnums.GlobalUIOptionType = {
   BossAlertOnOff = 65,
   BossAlertTime = 66,
   BossAlertKeep = 67,
-  CharacterInfo = 68
+  CharacterInfo = 68,
+  ValuePackage = 69
 }
 CppEnums.MembershipType = {
   default = 0,

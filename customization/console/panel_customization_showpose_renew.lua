@@ -1,4 +1,4 @@
-Panel_Customizing_ShowPose:ignorePanelMoveSnapping()
+Panel_Customizing_ShowPose:ignorePadSnapMoveToOtherPanel()
 local Customization_ShowPoseInfo = {
   _ui = {
     _static_TypeGroup = UI.getChildControl(Panel_Customizing_ShowPose, "Static_TypeGroup")
@@ -6,14 +6,15 @@ local Customization_ShowPoseInfo = {
   _config = {
     _textureColumnCount = 4,
     _columnCount = 4,
-    _imageGap = 10,
+    _imageGap = 6,
     _columnWidth,
     _columnHeight,
-    _contentsOffsetX = 10,
-    _contentsOffsetY = 10
+    _contentsOffsetX = 6,
+    _contentsOffsetY = 6
   },
   _contentImage = {},
-  _selectedClassType
+  _selectedClassType,
+  _isBoneControl = false
 }
 local none = 100
 local social = 1000
@@ -60,6 +61,29 @@ local MotionTable = {
   [38] = combat,
   [39] = combat
 }
+function PaGlobalFunc_Customization_ShowPose_UpdatePerFrame(deltaTime)
+  local self = Customization_ShowPoseInfo
+  if true == self._isBoneControl then
+    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
+      PaGlobalFunc_Customization_ShowPose_SetBoneControl(false)
+    end
+    return
+  end
+end
+function PaGlobalFunc_Customization_ShowPose_SetBoneControl(isSet)
+  local self = Customization_ShowPoseInfo
+  if false == isSet then
+    self._isBoneControl = false
+    PaGlobalFunc_Customization_SetKeyGuide(1)
+    Panel_Customizing_ShowPose:ignorePadSnapUpdate(false)
+    ToClient_StartOrEndShapeBoneControlStart(false)
+  else
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(9)
+    Panel_Customizing_ShowPose:ignorePadSnapUpdate(true)
+    ToClient_StartOrEndShapeBoneControlStart(true)
+  end
+end
 function Customization_ShowPoseInfo:ClearContent()
   for _, content in pairs(self._contentImage) do
     if nil ~= content then
@@ -108,13 +132,14 @@ function Customization_ShowPoseInfo:CreateMotionList()
       tempContentImage:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/" .. textureName)
       local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
       tempContentImage:getBaseTexture():setUV(x1, y1, x2, y2)
-      tempContentImage:SetPosX(itemIdx % (self._config._columnCount + 1) * self._config._columnWidth + self._config._contentsOffsetX)
+      tempContentImage:SetPosX(10 + itemIdx % (self._config._columnCount + 1) * self._config._columnWidth + self._config._contentsOffsetX)
       tempContentImage:SetPosY(math.floor(itemIdx / (self._config._columnCount + 1)) * self._config._columnHeight + self._config._contentsOffsetY)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       tempContentImage:SetShow(true)
       self._contentImage[itemIdx] = tempContentImage
     end
   end
+  ToClient_padSnapRefreshTarget(self._ui._static_TypeGroup)
 end
 function PaGlobalFunc_Customization_ShowPose_OpenMotionUi(classType)
   local self = Customization_ShowPoseInfo
@@ -128,19 +153,19 @@ function PaGlobalFunc_Customization_ShowPose_OpenMotionUi(classType)
 end
 function PaGlobalFunc_Customization_ShowPose_closeMotionUi()
   local self = Customization_ShowPoseInfo
-  applyMotion(-1)
-  self:ClearContent()
-  selectPoseControl(0)
-  setPresetCamera(10)
   PaGlobalFunc_Customization_ShowPose_Close()
 end
 function Customization_ShowPoseInfo:InitControl()
   self._ui._radioButton_TypeTemplate = UI.getChildControl(self._ui._static_TypeGroup, "RadioButton_TypeImage_Template")
+  self._ui._radioButton_TypeTemplate:SetShow(false)
   self._ui._static_typeSelect = UI.getChildControl(self._ui._static_TypeGroup, "Static_SelectedSlot")
+  self._ui._static_typeSelect:SetShow(false)
   self._config._columnWidth = self._ui._radioButton_TypeTemplate:GetSizeX() + self._config._imageGap
   self._config._columnHeight = self._ui._radioButton_TypeTemplate:GetSizeY() + self._config._imageGap
 end
 function Customization_ShowPoseInfo:InitEvent()
+  Panel_Customizing_ShowPose:RegisterUpdateFunc("PaGlobalFunc_Customization_ShowPose_UpdatePerFrame")
+  Panel_Customizing_ShowPose:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_ShowPose_SetBoneControl(true)")
 end
 function Customization_ShowPoseInfo:InitRegister()
   registerEvent("EventOpenMotionUI", "PaGlobalFunc_Customization_ShowPose_OpenMotionUi")
@@ -156,17 +181,28 @@ function PaGlobalFunc_FromClient_Customization_ShowPose_luaLoadComplete()
   self:Initialize()
 end
 function PaGlobalFunc_Customization_ShowPose_Close()
+  local self = Customization_ShowPoseInfo
   if false == PaGlobalFunc_Customization_ShowPose_GetShow() then
-    return
+    return false
   end
+  if true == self._isBoneControl then
+    PaGlobalFunc_Customization_ShowPose_SetBoneControl(false)
+    return false
+  end
+  applyMotion(-1)
+  self:ClearContent()
+  selectPoseControl(0)
+  setPresetCamera(10)
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_ShowPose_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_ShowPose_Open()
   if true == PaGlobalFunc_Customization_ShowPose_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_SetKeyGuide(1)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_ShowPose_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_ShowPose_Close()")
   PaGlobalFunc_Customization_ShowPose_SetShow(true, false)

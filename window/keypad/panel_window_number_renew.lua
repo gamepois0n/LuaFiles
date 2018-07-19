@@ -1,4 +1,4 @@
-Panel_Window_Exchange_Number:ignorePanelMoveSnapping()
+Panel_Window_Exchange_Number:ignorePadSnapMoveToOtherPanel()
 Panel_Window_Exchange_Number:SetShow(false, false)
 Panel_Window_Exchange_Number:setMaskingChild(true)
 Panel_Window_Exchange_Number:ActiveMouseEventEffect(true)

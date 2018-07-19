@@ -1,7 +1,8 @@
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
+Panel_Win_System:ignorePadSnapMoveToOtherPanel()
 Panel_Win_System:RegisterShowEventFunc(true, "MessageBox_ShowAni()")
 Panel_Win_System:RegisterShowEventFunc(false, "MessageBox_HideAni()")
-Panel_Win_System:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "MessageBox.keyProcessEnter()")
+Panel_Win_System:registerPadEvent(__eConsoleUIPadEvent_Up_A, "MessageBox.keyProcessEnter()")
 Panel_Win_System:SetShow(false, false)
 Panel_Win_System:setMaskingChild(true)
 Panel_Win_System:setGlassBackground(true)
@@ -137,15 +138,17 @@ function messageBoxComputePos()
   staticText_NO_ConsoleUI:ComputePos()
   button_Ok:ComputePos()
   button_No:ComputePos()
-  local consoleSize = staticText_OK_ConsoleUI:GetSizeX() + staticText_OK_ConsoleUI:GetTextSpan().x
+  local consoleSizeOk = staticText_OK_ConsoleUI:GetSizeX() + staticText_OK_ConsoleUI:GetTextSizeX()
+  local consoleSizeNO = staticText_NO_ConsoleUI:GetSizeX() + staticText_NO_ConsoleUI:GetTextSizeX()
   if 1 == globalButtonShowCount then
-    staticText_OK_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSize / 2)
-    staticText_NO_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSize / 2)
+    staticText_OK_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSizeOk / 2)
+    staticText_NO_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSizeNO / 2)
     button_Ok:SetPosX(Panel_Win_System:GetSizeX() / 2 - button_Ok:GetSizeX() / 2)
     button_No:SetPosX(Panel_Win_System:GetSizeX() / 2 - button_No:GetSizeX() / 2)
   elseif 2 == globalButtonShowCount then
-    staticText_OK_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSize - consoleSize / 2)
-    staticText_NO_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 + consoleSize / 2)
+    local space = (Panel_Win_System:GetSizeX() - consoleSizeOk - consoleSizeNO) / 4
+    staticText_OK_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSizeOk / 2 - space)
+    staticText_NO_ConsoleUI:SetPosX(Panel_Win_System:GetSizeX() / 2 - consoleSizeNO / 2 + space)
     button_Ok:SetPosX(Panel_Win_System:GetSizeX() / 2 - button_Ok:GetSizeX() - 10)
     button_No:SetPosX(Panel_Win_System:GetSizeX() / 2 + 10)
   elseif 3 == globalButtonShowCount then
@@ -404,6 +407,18 @@ function Event_MessageBox_NotifyMessage(message)
   }
   MessageBox.showMessageBox(messageboxData)
 end
+function Event_MessageBox_NotifyMessage_EnablePriority(message)
+  local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
+  local messageboxData = {
+    title = titleText,
+    content = message,
+    functionApply = MessageBox_Empty_function,
+    priority = UI_PP.PAUIMB_PRIORITY_2,
+    exitButton = false,
+    enablePriority = true
+  }
+  MessageBox.showMessageBox(messageboxData)
+end
 function Event_MessageBox_NotifyMessage_FreeButton(message)
   local messageboxData = {
     title = "",
@@ -449,6 +464,7 @@ local function postRestoreEvent()
   setCurrentMessageData(_currentMessageBoxData)
 end
 registerEvent("EventNotifyMessage", "Event_MessageBox_NotifyMessage")
+registerEvent("EventNotifyMessageEnablePriority", "Event_MessageBox_NotifyMessage_EnablePriority")
 registerEvent("EventNotifyMessageFreeButton", "Event_MessageBox_NotifyMessage_FreeButton")
 registerEvent("EventNotifyFreeButtonMessageProcess", "postProcessMessageData")
 registerEvent("EventNotifyAllClearMessageData", "allClearMessageData")

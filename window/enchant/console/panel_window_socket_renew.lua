@@ -41,11 +41,11 @@ local socketInfo = {
   },
   slotMain = nil,
   slotSocket = Array.new(),
-  _indexSocket = nil,
   _jewelInvenSlotNo = nil,
-  _currentSlot = 0
+  _currentSocket = 1
 }
 local isItemLock = false
+local _snappedOnThisPanel = false
 local _onlySocketListBG = {}
 function FromClient_luaLoadComplete_SocketInfo_Init()
   socketInfo:initialize()
@@ -89,9 +89,10 @@ function socketInfo:initialize()
   self:registMessageHandler()
 end
 function socketInfo:registEventHandler()
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "Socket_SlotRClick()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Socket_SlotRClick()")
 end
 function socketInfo:registMessageHandler()
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_SocketInfo_PadSnapChangePanel")
   registerEvent("EventSocketResult", "PaGlobalFunc_SocketInfo_Result")
 end
 function socketInfo:createControl()
@@ -113,15 +114,17 @@ function socketInfo:createControl()
       desc = self._ui.staticSocketDesc[ii]
     }
     slotSocket.desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-    function slotSocket:setShow(bShow)
+    function slotSocket:setOpen(bShow)
       self.icon:SetShow(bShow)
+      self.iconBg:SetShow(bShow)
       self.name:SetShow(bShow)
       self.desc:SetShow(bShow)
     end
     _onlySocketListBG[ii]:SetShow(true)
     SlotItem.new(slotSocket, "Socket_" .. ii, ii, _panel, self.slotConfig)
     slotSocket:createChild()
-    slotSocket.iconBg:addInputEvent("Mouse_On", "Input_SocketInfo_Select(" .. ii .. ", \"Socket_Insert\", true)")
+    slotSocket.iconBg:addInputEvent("Mouse_On", "InputMOn_SocketInfo_Socket(" .. ii .. ", true)")
+    slotSocket.icon:addInputEvent("Mouse_Out", "InputMOn_SocketInfo_Socket(" .. ii .. ", false)")
     Panel_Tooltip_Item_SetPosition(ii, slotSocket, "Socket_Insert")
     slotSocket.empty = true
     self.slotSocket:push_back(slotSocket)
@@ -140,10 +143,10 @@ function PaGlobalFunc_SocketInfo_Open()
   local self = socketInfo
   _panel:SetShow(true, true)
   Input_SocketInfo_Select(1)
-  self._ui.txt_keyGuideDiscard:SetText("Exit")
-  Inventory_SetFunctor(Socket_InvenFiler_EquipItem, Panel_Socket_InteractortionFromInventory, nil, nil)
+  self._ui.txt_keyGuideDiscard:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
+  PaGlobalFunc_InventoryInfo_Open(1)
+  Inventory_SetFunctor(Socket_InvenFiler_EquipItem, PaGlobalFunc_SocketInfo_OnRClick, nil, nil)
   self:clearData()
-  InventoryWindow_Show()
 end
 function socketInfo:clearData(uiOnly)
   self.slotMain:clearItem()
@@ -156,7 +159,7 @@ function socketInfo:clearData(uiOnly)
     socketBG_1:SetStartColor(UI_color.C_FFFFFFFF)
     socketBG_1:SetEndColor(UI_color.C_FF626262)
     _onlySocketListBG[ii]:EraseAllEffect()
-    self.slotSocket[ii]:setShow(false)
+    self.slotSocket[ii]:setOpen(false)
     self.slotSocket[ii]:clearItem()
     self.slotSocket[ii].empty = true
     self._ui.staticSocketName[ii]:SetText("")
@@ -182,7 +185,7 @@ function socketInfo:updateSocket()
     self.slotSocket[ii].icon:SetShow(true)
     local socketSlot = self.slotSocket[ii]
     local itemStaticWrapper = invenItemWrapper:getPushedItem(ii - 1)
-    socketSlot:setShow(true)
+    socketSlot:setOpen(true)
     _onlySocketListBG[ii]:EraseAllEffect()
     if nil == itemStaticWrapper then
       if ii == 1 then
@@ -223,7 +226,7 @@ function socketInfo:updateSocket()
         _onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -222, 40)
+        _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -242, 40)
       elseif ii == 2 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -233,7 +236,7 @@ function socketInfo:updateSocket()
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -217, 0)
+        _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -237, 0)
       elseif ii == 3 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -245,7 +248,7 @@ function socketInfo:updateSocket()
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -212, -30)
+        _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -232, -30)
       end
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false
@@ -271,30 +274,50 @@ function socketInfo:updateSocket()
   end
   for ii = maxCount + 1, self.config.socketSlotCount do
     local socketSlot = self.slotSocket[ii]
-    socketSlot:setShow(false)
+    socketSlot:setOpen(false)
     socketSlot:clearItem()
   end
-  self:checkSocketAndShowKeyGuide()
+end
+function FromClient_SocketInfo_PadSnapChangePanel(fromPanel, toPanel)
+  if nil ~= toPanel and _panel:GetKey() == toPanel:GetKey() then
+    _snappedOnThisPanel = true
+  else
+    _snappedOnThisPanel = false
+  end
+  Input_SocketInfo_Select(socketInfo._currentSocket)
+end
+function InputMOn_SocketInfo_Socket(index, isOn)
+  _snappedOnThisPanel = isOn
+  Input_SocketInfo_Select(index)
 end
 function Input_SocketInfo_Select(index, socketInsert, isShowTooltip)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "Input_SocketInfo_Select : " .. index)
   local self = socketInfo
-  self._currentSlot = index
+  local maxCount = 0
+  if nil ~= self.slotMain.whereType and nil ~= self.slotMain.slotNo then
+    local invenItemWrapper = getInventoryItemByType(self.slotMain.whereType, self.slotMain.slotNo)
+    if nil ~= invenItemWrapper then
+      maxCount = invenItemWrapper:get():getUsableItemSocketCount()
+    end
+  end
+  self._currentSocket = index
+  self._ui.stc_focusBox:SetMonoTone(not _snappedOnThisPanel)
+  self._ui.txt_keyGuideDestroy:SetMonoTone(false ~= self.slotSocket[self._currentSocket].empty or not _snappedOnThisPanel)
   self._ui.stc_focusBox:SetPosY(self._ui.staticSocketBackground[index]:GetPosY() - 12)
   self._ui.txt_keyGuideDestroy:SetPosY(120 + (index - 1) * 75)
-  self:checkSocketAndShowKeyGuide()
 end
 local function Socket_Pop_Confirm()
   local self = socketInfo
-  Socket_PopJewelFromSocket(self._currentSlot, CppEnums.ItemWhereType.eCount, CppEnums.TInventorySlotNoUndefined)
-  if true == self.slotSocket[self._currentSlot].empty then
-    self._ui.txt_keyGuideDestroy:SetShow(false)
-  else
-    self._ui.txt_keyGuideDestroy:SetShow(true)
+  if 0 == self._currentSocket then
+    return
   end
+  Socket_PopJewelFromSocket(self._currentSocket - 1, CppEnums.ItemWhereType.eCount, CppEnums.TInventorySlotNoUndefined)
+  self._ui.txt_keyGuideDestroy:SetMonoTone(false ~= self.slotSocket[self._currentSocket].empty or not _snappedOnThisPanel)
 end
 local function Socket_Push_Confirm()
   local self = socketInfo
+  if 0 == self._currentSocket then
+    return
+  end
   local socketInfo = getSocketInformation()
   local index = socketInfo._indexPush
   local socketSlot = self.slotSocket[index + 1]
@@ -322,10 +345,13 @@ local function Socket_Push_Confirm()
 end
 local function Socket_OverWrite_Confirm()
   local self = socketInfo
-  local rv = Socket_OverWriteToSocket(self.slotMain.whereType, self.slotMain.slot, self._currentSlot)
+  if 0 == self._currentSocket then
+    return
+  end
+  local rv = Socket_OverWriteToSocket(self.slotMain.whereType, self.slotMain.slot, self._currentSocket)
   if 0 ~= rv then
     self:clearData()
-    Inventory_SetFunctor(Socket_InvenFiler_EquipItem, Panel_Socket_InteractortionFromInventory, PaGlobalFunc_SocketInfo_Close, nil)
+    Inventory_SetFunctor(Socket_InvenFiler_EquipItem, PaGlobalFunc_SocketInfo_OnRClick, PaGlobalFunc_SocketInfo_Close, nil)
   end
 end
 local Socket_Deny = function()
@@ -367,12 +393,11 @@ function SocketItem_FromItemWrapper()
 end
 function Socket_SlotRClick()
   local self = socketInfo
-  if true == self.slotSocket[self._currentSlot].empty then
+  if true == self.slotSocket[self._currentSocket].empty then
     return
   end
-  socketInfo._indexSocket = indexSocket
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_SOCKET_REMOVE_TITLE")
-  local contentString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SOCKET_REMOVE_MESSAGE", "socketNum", string.format("%d", indexSocket + 1))
+  local contentString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SOCKET_REMOVE_MESSAGE", "socketNum", string.format("%d", self._currentSocket))
   local messageboxData = {
     title = titleString,
     content = contentString,
@@ -386,6 +411,7 @@ function PaGlobalFunc_SocketInfo_OnPadB()
   local self = socketInfo
   if nil ~= self.slotMain.slotNo then
     Socket_EquipSlotRClick()
+    Input_SocketInfo_Select(self._currentSocket)
     return false
   else
     PaGlobalFunc_SocketInfo_Close()
@@ -396,22 +422,22 @@ function Socket_EquipSlotRClick()
   local self = socketInfo
   getSocketInformation():popEquip()
   socketInfo:clearData()
-  self._ui.txt_keyGuideDiscard:SetText("Exit")
-  Inventory_SetFunctor(Socket_InvenFiler_EquipItem, Panel_Socket_InteractortionFromInventory, PaGlobalFunc_SocketInfo_Close, nil)
+  self._ui.txt_keyGuideDiscard:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
+  Inventory_SetFunctor(Socket_InvenFiler_EquipItem, PaGlobalFunc_SocketInfo_OnRClick, PaGlobalFunc_SocketInfo_Close, nil)
 end
-function Panel_Socket_InteractortionFromInventory(slotNo, itemWrapper, count_s64, inventoryType)
+function PaGlobalFunc_SocketInfo_OnRClick(slotNo, itemWrapper, count_s64, inventoryType)
   local self = socketInfo
-  local socketInfo = getSocketInformation()
+  local _socketInfo = getSocketInformation()
   local success = 0 == Socket_SetItemHaveSocket(inventoryType, slotNo)
   if not success then
     self:clearData()
-    self._ui.txt_keyGuideDiscard:SetText("Exit")
-    Inventory_SetFunctor(Socket_InvenFiler_EquipItem, Panel_Socket_InteractortionFromInventory, PaGlobalFunc_SocketInfo_Close, nil)
+    self._ui.txt_keyGuideDiscard:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
+    Inventory_SetFunctor(Socket_InvenFiler_EquipItem, PaGlobalFunc_SocketInfo_OnRClick, PaGlobalFunc_SocketInfo_Close, nil)
     return
   end
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
   UI.ASSERT(nil ~= itemWrapper, "Item Is Null?!?!?!")
-  if socketInfo._setEquipItem then
+  if _socketInfo._setEquipItem then
     self.slotMain.empty = false
     self.slotMain.whereType = inventoryType
     self.slotMain.slotNo = slotNo
@@ -419,13 +445,13 @@ function Panel_Socket_InteractortionFromInventory(slotNo, itemWrapper, count_s64
     self.slotMain.icon:SetShow(true)
     Panel_Tooltip_Item_SetPosition(slotNo, self.slotMain, "SocketItem")
     self:updateSocket()
-    self._ui.txt_keyGuideDiscard:SetText("Discard")
-    Inventory_SetFunctor(Socket_InvenFiler_Jewel, Panel_Socket_InteractortionFromInventory, PaGlobalFunc_SocketInfo_Close, nil)
+    self._ui.txt_keyGuideDiscard:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_DISCARD"))
+    Inventory_SetFunctor(Socket_InvenFiler_Jewel, PaGlobalFunc_SocketInfo_OnRClick, PaGlobalFunc_SocketInfo_Close, nil)
   else
-    local rv = self:checkPushJewelToEmptySoket(inventoryType, slotNo)
+    local rv = _socketInfo:checkPushJewelToEmptySoket(inventoryType, slotNo)
     isItemLock = ToClient_Inventory_CheckItemLock(self.slotMain.slotNo)
     if 0 == rv then
-      local index = self._indexPush
+      local index = _socketInfo._indexPush
       local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_SOCKET_INSERT_TITLE")
       local contentString = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SOCKET_INSERT_MESSAGE", "socketNum", string.format("%d", index + 1), "itemName", itemWrapper:getStaticStatus():getName())
       local messageboxData = {
@@ -438,14 +464,13 @@ function Panel_Socket_InteractortionFromInventory(slotNo, itemWrapper, count_s64
       MessageBox.showMessageBox(messageboxData)
     end
   end
-  self:checkSocketAndShowKeyGuide()
+  self._ui.txt_keyGuideDestroy:SetMonoTone(false ~= self.slotSocket[self._currentSocket].empty or not _snappedOnThisPanel)
 end
 function socketInfo:checkSocketAndShowKeyGuide()
-  if true == self.slotSocket[self._currentSlot].empty then
-    self._ui.txt_keyGuideDestroy:SetShow(false)
-  else
-    self._ui.txt_keyGuideDestroy:SetShow(true)
+  if 0 == self._currentSocket then
+    return
   end
+  self._ui.txt_keyGuideDestroy:SetMonoTone(false ~= self.slotSocket[self._currentSocket].empty or not _snappedOnThisPanel)
 end
 function PaGlobalFunc_SocketInfo_Result()
   if _panel:GetShow() then

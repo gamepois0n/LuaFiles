@@ -1573,7 +1573,7 @@ function PaGlobal_Enchant:removeApplyButtonEffect()
   self._ui._button_Apply:EraseAllEffect()
 end
 function PaGlobal_Enchant:showPanel()
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RenewUI_Inventory then
     PaGlobalFunc_InventoryInfo_Open()
     Panel_Window_Enchant:SetShow(true, true)
     self:clearEnchantSlot()

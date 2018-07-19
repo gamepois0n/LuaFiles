@@ -40,7 +40,8 @@ local Window_GuildInfo = {
   _memberListInfo = {},
   _memberListUI = {},
   _tabIndex = 0,
-  _selectMemberIndex = -1
+  _selectMemberIndex = -1,
+  _deleteMemberIndex = -1
 }
 function Window_GuildInfo:SetSortFunc()
   function self._listSort._gradeSort(w1, w2)
@@ -1061,6 +1062,9 @@ function Window_GuildInfo:CheckVoiceChatListenTexture(control, onOff)
 end
 function PaGlobalFunc_Guild_HandleClickedMemberDel()
   local self = Window_GuildInfo
+  if 1 ~= self._tabIndex then
+    return
+  end
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if nil == myGuildListInfo then
     return
@@ -1069,6 +1073,7 @@ function PaGlobalFunc_Guild_HandleClickedMemberDel()
   if nil == myGuildMemberInfo then
     return
   end
+  self._deleteMemberIndex = self._selectMemberIndex
   local messageTitle = ""
   local messageContent = ""
   local yesFunction
@@ -1077,11 +1082,10 @@ function PaGlobalFunc_Guild_HandleClickedMemberDel()
   local isOnlineMember = myGuildMemberInfo:isOnline()
   messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_EXPEL_GUILDMEMBER")
   messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_EXPEL_GUILDMEMBER_QUESTION", "target", "[" .. tostring(targetName) .. "]")
-  yesFunction = PaGlobalFunc_Guild_MessageBoxYesFunction_ExpelMember
   local messageboxData = {
     title = messageTitle,
     content = messageContent,
-    functionYes = yesFunction,
+    functionYes = PaGlobalFunc_Guild_MessageBoxYesFunction_ExpelMember,
     functionNo = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
@@ -1089,10 +1093,15 @@ function PaGlobalFunc_Guild_HandleClickedMemberDel()
 end
 function PaGlobalFunc_Guild_MessageBoxYesFunction_ExpelMember()
   local self = Window_GuildInfo
-  local checkedUserNo = self._memberListInfo[self._selectMemberIndex]._userNo
-  ToClient_RequestExpelMemberFromGuild(self._selectMemberIndex, checkedUserNo)
+  local checkedUserNo = self._memberListInfo[self._deleteMemberIndex]._userNo
+  ToClient_RequestExpelMemberFromGuild(self._deleteMemberIndex, checkedUserNo)
+  self._deleteMemberIndex = -1
 end
 function PaGlobalFunc_Guild_HandleClickedGuildDel()
+  local self = Window_GuildInfo
+  if 1 ~= self._tabIndex then
+    return
+  end
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if nil == myGuildInfo then
     _PA_ASSERT(false, "ResponseGuildInviteForGuildGrade \236\151\144\236\132\156 \234\184\184\235\147\156 \236\160\149\235\179\180\234\176\128 \236\151\134\236\138\181\235\139\136\235\139\164.")
@@ -1101,7 +1110,7 @@ function PaGlobalFunc_Guild_HandleClickedGuildDel()
   local guildGrade = myGuildInfo:getGuildGrade()
   local messageboxData
   if true == getSelfPlayer():get():isGuildMaster() then
-    if myGuildInfo:getMemberCount() <= 1 then
+    if 1 >= myGuildInfo:getMemberCount() then
       messageboxData = {
         title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD"),
         content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD_ASK"),
@@ -1145,10 +1154,10 @@ function Window_GuildInfo:InitEvent()
   local bottom = self._ui._bottom
   self._ui._radioButton._radioButton_GuildInfo:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_InfoOpen()")
   self._ui._radioButton._radioButton_GuildList:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_ListOpen()")
-  Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_XB_Control_Tap(-1)")
-  Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_XB_Control_Tap(1)")
+  Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_XB_Control_Tap(-1)")
+  Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_XB_Control_Tap(1)")
   if _ContentsGroup_isConsolePadControl then
-    Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, " PaGlobalFunc_Guild_ContractButton()")
+    Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_Up_A, " PaGlobalFunc_Guild_ContractButton()")
   else
     bottom._button_Contract:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_ContractButton()")
   end
@@ -1263,14 +1272,14 @@ function PaGlobalFunc_Guild_Open()
     if 1 == memberCount then
       self._ui._bottom._button_Leave:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD"))
       if _ContentsGroup_isConsolePadControl then
-        Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_Guild_HandleClickedGuildDisPerse()")
+        Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Guild_HandleClickedGuildDisPerse()")
       else
         self._ui._bottom._button_Leave:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_HandleClickedGuildDisPerse()")
       end
     else
       self._ui._bottom._button_Leave:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_COMPETITIONGAME_USERKICK"))
       if _ContentsGroup_isConsolePadControl then
-        Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_Guild_HandleClickedMemberDel()")
+        Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Guild_HandleClickedMemberDel()")
       else
         self._ui._bottom._button_Leave:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_HandleClickedMemberDel()")
       end
@@ -1278,7 +1287,7 @@ function PaGlobalFunc_Guild_Open()
   else
     self._ui._bottom._button_Leave:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PARTYOPTION_BTN_LEAVE"))
     if _ContentsGroup_isConsolePadControl then
-      Panel_Console_Window_Guild:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "PaGlobalFunc_Guild_HandleClickedGuildDel()")
+      Panel_Console_Window_Guild:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Guild_HandleClickedGuildDel()")
     else
       self._ui._bottom._button_Leave:addInputEvent("Mouse_LUp", "PaGlobalFunc_Guild_HandleClickedGuildDel()")
     end
@@ -1290,6 +1299,10 @@ function PaGlobalFunc_Guild_Open()
   PaGlobalFunc_Guild_InfoOpen()
 end
 function PaGlobalFunc_Guild_HandleClickedGuildDisPerse()
+  local self = Window_GuildInfo
+  if 1 ~= self._tabIndex then
+    return
+  end
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if nil == myGuildInfo then
     _PA_ASSERT(false, "ResponseGuildInviteForGuildGrade \236\151\144\236\132\156 \234\184\184\235\147\156 \236\160\149\235\179\180\234\176\128 \236\151\134\236\138\181\235\139\136\235\139\164.")
@@ -1300,7 +1313,7 @@ function PaGlobalFunc_Guild_HandleClickedGuildDisPerse()
   end
   local guildGrade = myGuildInfo:getGuildGrade()
   local messageboxData
-  if myGuildInfo:getMemberCount() <= 1 then
+  if 1 >= myGuildInfo:getMemberCount() then
     messageboxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD"),
       content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD_ASK"),

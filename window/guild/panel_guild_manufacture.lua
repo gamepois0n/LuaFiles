@@ -53,7 +53,6 @@ function PaGlobal_Guild_Manufacture:createControl()
           _productSlot = nil,
           _productItemName = nil,
           _productItemCount = nil,
-          _productItemLimit = nil,
           _selectButton = nil,
           _setButton = nil
         },
@@ -120,8 +119,6 @@ function PaGlobal_Guild_Manufacture:createControl()
       noneSlot._productSlot = tempProductSlot_0
       noneSlot._stateDesc = UI.getChildControl(noneSlot._backGround, "StaticText_Desc")
       noneSlot._productItemName = UI.getChildControl(noneSlot._backGround, "Static_Result_Name")
-      noneSlot._productItemLimit = UI.getChildControl(noneSlot._backGround, "StaticText_CountLimit")
-      noneSlot._productItemLimit:SetShow(false)
       noneSlot._selectButton = UI.getChildControl(noneSlot._backGround, "Button_Select")
       noneSlot._setButton = UI.getChildControl(noneSlot._backGround, "Button_Set")
       noneSlot._setButton:SetShow(false)
@@ -231,7 +228,6 @@ function PaGlobal_Guild_Manufacture:itemUnSet(index)
   local slot = self._slot[index][__eGuildManufactureStateNone]
   slot._productSlot.bg:SetShow(false)
   slot._productItemName:SetShow(false)
-  slot._productItemLimit:SetShow(false)
   slot._setButton:SetShow(false)
   slot._stateDesc:SetShow(true)
   slot._productSlot:clearItem()
@@ -244,7 +240,6 @@ function PaGlobal_Guild_Manufacture:__updateNoneState(index, infoWrapper)
   slot._backGround:SetShow(true)
   slot._productSlot.bg:SetShow(false)
   slot._productItemName:SetShow(false)
-  slot._productItemLimit:SetShow(false)
   slot._setButton:SetShow(false)
   slot._stateDesc:SetShow(true)
   slot._productSlot:clearItem()
@@ -509,18 +504,11 @@ function PaGlobal_Guild_Manufacture:setProductItem(index, itemEnchantKey)
   self._slot[index]._productItemEnchantKey = itemEnchantKey
   self._slot[index]._productItemCount_s64 = toInt64(0, 1)
   local slot = self._slot[index][__eGuildManufactureStateNone]
-  local limitCount = __eGuildManufactureProductItemCountRateMax
-  local manufactureStatic = ToClient_GetGuildManufactureStaticStatusWrapper(itemEnchantKey)
-  if nil ~= manufactureStatic then
-    limitCount = manufactureStatic:getDailyLimitCount()
-  end
   slot._productSlot:setItemByStaticStatus(itemStatic)
   slot._productSlot.bg:SetShow(true)
   slot._backGround:SetShow(true)
   slot._productItemName:SetText(itemStatic:getName())
   slot._productItemName:SetShow(true)
-  slot._productItemLimit:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_MANUFACTURE_COUNT_LIMIT", "itemLimit", tostring(limitCount)))
-  slot._productItemLimit:SetShow(true)
   slot._stateDesc:SetShow(false)
   slot._setButton:SetShow(true)
 end
@@ -609,4 +597,4 @@ function FGlobal_Guild_Manufacture_Update_RequiredItemCount(inputNumber, slotNo,
   local itemEnchantKey = slot._requiredItem[subIndex].enchantKey
   ToClient_Guild_Manufacture_Update(mainIndex, subIndex, itemEnchantKey, CppEnums.ItemWhereType.eInventory, slotNo, inputNumber)
 end
-PaGlobal_Guild_Manufacture:initialize()
+registerEvent("FromClient_luaLoadComplete", "FromClient_Init_Guild_Manufacture")

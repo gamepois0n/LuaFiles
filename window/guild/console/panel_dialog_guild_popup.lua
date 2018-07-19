@@ -72,11 +72,14 @@ function GuildPopup:update()
   else
     desc = ""
   end
+  self._currentBtn = nil
   self._ui.txt_Tip:SetText(desc)
 end
 function GuildPopup:registEventHandler()
   self._ui.btn_ClanMark:addInputEvent("Mouse_LUp", "InputMLUp_GuildPopup_SelectBtn(" .. self._selectBtnIdx.clan .. ")")
+  self._ui.btn_ClanMark:addInputEvent("Mouse_On", "InputMO_GuildPopup_SetKeyguide(" .. self._selectBtnIdx.clan .. ")")
   self._ui.btn_GuildMark:addInputEvent("Mouse_LUp", "InputMLUp_GuildPopup_SelectBtn(" .. self._selectBtnIdx.guild .. ")")
+  self._ui.btn_GuildMark:addInputEvent("Mouse_On", "InputMO_GuildPopup_SetKeyguide(" .. self._selectBtnIdx.guild .. ")")
   self._ui.txt_Apply:addInputEvent("Mouse_LUp", "InputMLUp_GuildPopup_Confirm()")
 end
 function PaGlobalFunc_GuildPopup_Open()
@@ -89,12 +92,25 @@ function PaGlobalFunc_GuildPopup_Close()
 end
 function InputMLUp_GuildPopup_SelectBtn(btnIdx)
   self = GuildPopup
+  if self._currentBtn == btnIdx then
+    InputMLUp_GuildPopup_Confirm()
+    return
+  end
   if btnIdx == self._selectBtnIdx.clan then
     self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
   elseif btnIdx == self._selectBtnIdx.guild then
     self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
   end
   self._currentBtn = btnIdx
+  InputMO_GuildPopup_SetKeyguide(btnIdx)
+end
+function InputMO_GuildPopup_SetKeyguide(btnIdx)
+  self = GuildPopup
+  if self._currentBtn == btnIdx then
+    self._ui.txt_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOBBY_CREATE"))
+  else
+    self._ui.txt_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_SELECT"))
+  end
 end
 function InputMLUp_GuildPopup_Confirm()
   self = GuildPopup

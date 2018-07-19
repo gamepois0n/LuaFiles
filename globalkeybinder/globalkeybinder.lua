@@ -148,6 +148,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
         end
         return
       end
+      if true == PaGlobalFunc_ImprovementInfo_GetShow() then
+        if true == PaGlobalFunc_ImprovementInfo_Discard() then
+          PaGlobalFunc_MainDialog_ReOpen()
+        end
+        return
+      end
     elseif Panel_Window_Enchant:GetShow() then
       PaGlobal_Enchant:enchantClose()
       return
@@ -188,8 +194,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
     else
       FGlobal_HideDialog()
     end
-    ServantInfo_Close()
-    CarriageInfo_Close()
+    if false == _ContentsGroup_RenewUI_StableInfo then
+      ServantInfo_Close()
+      CarriageInfo_Close()
+    else
+      PaGlobalFunc_ServantInfo_Exit()
+    end
     ServantInventory_Close()
     return
   end
@@ -232,63 +242,102 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Trade(deltaTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap(deltaTime)
-  if FGlobal_IsFadeOutState() then
-    return
-  end
-  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    if false == _ContentsGroup_RenewUI and Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
-      Panel_Window_QuestNew_Show(false)
+  if false == _ContentsGroup_RenewUI_WorldMap then
+    if FGlobal_IsFadeOutState() then
       return
     end
-    if Panel_ItemMarket_BidDesc:GetShow() then
-      Panel_ItemMarket_BidDesc_Hide()
-      return
-    end
-    if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
-      FGolbal_ItemMarketNew_Close()
-      return
-    end
-    if Panel_Window_ItemMarket_ItemSet:GetShow() then
-      FGlobal_ItemMarketItemSet_Close()
-      return
-    end
-    if Panel_MovieWorldMapGuide_Web:GetShow() then
-      PaGlobal_MovieGuide_Weblist:Close()
-      return
-    end
-    FGlobal_WorldMapWindowEscape()
-  elseif FGlobal_AskCloseWorldMap() then
-    FGlobal_PopCloseWorldMap()
-  elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
-    if false == _ContentsGroup_RenewUI_Chatting then
-      if not Panel_Window_ItemMarket:GetShow() then
-        ChatInput_Show()
-        return
-      else
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      if false == _ContentsGroup_RenewUI and Panel_Window_Quest_New:GetShow() and Panel_Window_Quest_New:IsUISubApp() == false then
+        Panel_Window_QuestNew_Show(false)
         return
       end
+      if Panel_ItemMarket_BidDesc:GetShow() then
+        Panel_ItemMarket_BidDesc_Hide()
+        return
+      end
+      if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
+        FGolbal_ItemMarketNew_Close()
+        return
+      end
+      if Panel_Window_ItemMarket_ItemSet:GetShow() then
+        FGlobal_ItemMarketItemSet_Close()
+        return
+      end
+      if Panel_MovieWorldMapGuide_Web:GetShow() then
+        PaGlobal_MovieGuide_Weblist:Close()
+        return
+      end
+      FGlobal_WorldMapWindowEscape()
+    elseif FGlobal_AskCloseWorldMap() then
+      FGlobal_PopCloseWorldMap()
+    elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
+      if false == _ContentsGroup_RenewUI_Chatting then
+        if not Panel_Window_ItemMarket:GetShow() then
+          ChatInput_Show()
+          return
+        else
+          return
+        end
+      end
+    elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_WorldMap) then
+      FGlobal_CloseWorldmapForLuaKeyHandling()
+      return
     end
-  elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_WorldMap) then
-    FGlobal_CloseWorldmapForLuaKeyHandling()
-    return
-  end
-  if FGlobal_isOpenItemMarketBackPage() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) and false == FGlobal_isItemMarketBuyConfirm() then
-    FGlobal_HandleClicked_ItemMarketBackPage()
-  end
-  if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= CppEnums.ContentsServiceType.eContentsServiceType_CBT and GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_ProductionNote) then
-    if nil ~= Panel_ProductNote then
-      Panel_ProductNote_ShowToggle()
+    if FGlobal_isOpenItemMarketBackPage() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) and false == FGlobal_isItemMarketBuyConfirm() then
+      FGlobal_HandleClicked_ItemMarketBackPage()
     end
-    return
-  end
-  if isKeyPressed(VCK.KeyCode_CONTROL) then
-    ToClient_showWorldmapKeyGuide(true)
-  elseif isKeyPressed(VCK.KeyCode_SHIFT) then
-    ToClient_showWorldmapKeyGuide(true)
-  elseif isKeyPressed(VCK.KeyCode_MENU) then
-    ToClient_showWorldmapKeyGuide(true)
+    if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= CppEnums.ContentsServiceType.eContentsServiceType_CBT and GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_ProductionNote) then
+      if nil ~= Panel_ProductNote then
+        Panel_ProductNote_ShowToggle()
+      end
+      return
+    end
+    if isKeyPressed(VCK.KeyCode_CONTROL) then
+      ToClient_showWorldmapKeyGuide(true)
+    elseif isKeyPressed(VCK.KeyCode_SHIFT) then
+      ToClient_showWorldmapKeyGuide(true)
+    elseif isKeyPressed(VCK.KeyCode_MENU) then
+      ToClient_showWorldmapKeyGuide(true)
+    else
+      ToClient_showWorldmapKeyGuide(false)
+    end
   else
-    ToClient_showWorldmapKeyGuide(false)
+    if PaGlobalFunc_WorldMap_GetIsFadeOut() then
+      return
+    end
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      if Panel_ItemMarket_BidDesc:GetShow() then
+        Panel_ItemMarket_BidDesc_Hide()
+        return
+      end
+      if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
+        FGolbal_ItemMarketNew_Close()
+        return
+      end
+      if Panel_Window_ItemMarket_ItemSet:GetShow() then
+        FGlobal_ItemMarketItemSet_Close()
+        return
+      end
+      if Panel_MovieWorldMapGuide_Web:GetShow() then
+        PaGlobal_MovieGuide_Weblist:Close()
+        return
+      end
+      PaGlobalFunc_WorldMap_WindowEscape()
+    elseif PaGlobalFunc_WorldMap_GetIsClose() then
+      PaGlobalFunc_WorldMap_PopClose()
+    elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_WorldMap) then
+      PaGlobalFunc_WorldMap_CloseForLuaKeyHandling()
+      return
+    end
+    if FGlobal_isOpenItemMarketBackPage() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_BACK) and false == FGlobal_isItemMarketBuyConfirm() then
+      FGlobal_HandleClicked_ItemMarketBackPage()
+    end
+    if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= CppEnums.ContentsServiceType.eContentsServiceType_CBT and GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_ProductionNote) then
+      if nil ~= Panel_ProductNote then
+        Panel_ProductNote_ShowToggle()
+      end
+      return
+    end
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_WorldMapSearch(deltaTime)
@@ -1235,9 +1284,27 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     FGlobal_PetInfoNew_Close()
     return true
   end
-  if true == _ContentsGroup_RenewUI_Worker and Panel_Dialog_WorkerTrade_Renew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    FGlobal_WorkerTrade_Close()
-    return true
+  if true == _ContentsGroup_RenewUI_Worker and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    if Panel_Dialog_WorkerTrade_Renew:GetShow() then
+      FGlobal_WorkerTrade_Close()
+      return true
+    end
+    if Panel_Window_WorkerManager_ChangeSkill_Renew:GetShow() then
+      PaGlobalFunc_WorkerManager_ChangeSkill_Close()
+      return true
+    end
+    if Panel_Window_WorkerManager_Filter_Renew:GetShow() then
+      PaGlobalFunc_WorkerManager_Filter_Close()
+      return true
+    end
+    if Panel_Window_WorkerManager_Restore_Renew:GetShow() then
+      PaGlobalFunc_WorkerManager_Restore_Close()
+      return true
+    end
+    if Panel_Window_WorkerManager_Renew:GetShow() then
+      PaGlobalFunc_WorkerManager_Close()
+      return true
+    end
   end
   return false
 end
@@ -1789,15 +1856,9 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
     PaGlobal_Memo:ListClose()
     return
   end
-  if true == _ContentsGroup_RenewUI then
-    if true == Panel_Window_CharacterInfo_Renew:GetShow() then
-      PaGlobalFunc_Window_CharacterInfo_Close()
-      return
-    end
-    if true == Panel_Window_PetList_Renew:GetShow() then
-      FGlobal_PetList_Close()
-      return
-    end
+  if true == _ContentsGroup_RenewUI and true == Panel_Window_CharacterInfo_Renew:GetShow() then
+    PaGlobalFunc_Window_CharacterInfo_Close()
+    return
   end
   if Panel_CustomizingAlbum:GetShow() == true then
     CustomizingAlbum_Close()

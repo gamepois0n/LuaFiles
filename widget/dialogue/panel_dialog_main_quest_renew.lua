@@ -239,7 +239,7 @@ function Panel_Dialog_Main_Quest_Info:update()
       return
     end
     local funcButtonType = tonumber(funcButton._param)
-    if funcButtonType == CppEnums.ContentsType.Contents_NewQuest or funcButtonType == CppEnums.ContentsType.Contents_Quest then
+    if (funcButtonType == CppEnums.ContentsType.Contents_NewQuest or funcButtonType == CppEnums.ContentsType.Contents_Quest) and false == PaGlobalFunc_MainDialog_Quest_GetFirstSet() then
       self:openAndSetData(dialogData)
     end
   end
@@ -298,7 +298,8 @@ function Panel_Dialog_Main_Quest_Info:Quest_InfomationSetData(dialogData)
     return
   end
   local npcWord = simplequestData:getQuestDialog()
-  local realWord = ToClient_getReplaceDialog(npcWord)
+  local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
+  local realWord = ToClient_getReplaceDialog(ignoreWord)
   if realWord ~= nil and realWord ~= "" then
     local newNpcWord = ""
     local stringList = string.split(realWord, "\n")
@@ -320,7 +321,8 @@ function Panel_Dialog_Main_Quest_Info:Quest_InfomationSetData(dialogData)
     self._ui.staticText_Quest_Npc_Words:SetText(newNpcWord)
   end
   local preDesc = simplequestData:getQuestDesc()
-  local questDesc = ToClient_getReplaceDialog(preDesc)
+  local ignoreDesc = PaGlobalFunc_MainDialog_Right_CheckSceneChange(preDesc)
+  local questDesc = ToClient_getReplaceDialog(ignoreDesc)
   if questDesc ~= nil and questDesc ~= "" then
     self._ui.staticText_Quest_Detail:SetAutoResize(true)
     self._ui.staticText_Quest_Detail:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -336,9 +338,11 @@ function Panel_Dialog_Main_Quest_Info:Quest_InfomationSetData(dialogData)
  -]] .. desc
     end
   end
+  local ignoreCompleteDesc = PaGlobalFunc_MainDialog_Right_CheckSceneChange(completeDesc)
+  local newCompleteDesc = ToClient_getReplaceDialog(ignoreCompleteDesc)
   self._ui.staticText_Quest_Condition:SetAutoResize(true)
   self._ui.staticText_Quest_Condition:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.staticText_Quest_Condition:SetText(completeDesc)
+  self._ui.staticText_Quest_Condition:SetText(newCompleteDesc)
   self:SetQuestReward(simplequestData)
   if _ContentsGroup_RenewUI_Dailog then
     self:QuestButtonUpdateXBox(dialogData)
@@ -447,7 +451,32 @@ function Panel_Dialog_Main_Quest_Info:SetRewardIcon(slot, reward, index, rewardS
     return
   end
   slot._type = rewardType
-  if __eRewardItem == rewardType then
+  if __eRewardExp == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"Exp\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"Exp\", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:SetShow(true)
+  elseif __eRewardSkillExp == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"SkillExp\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"SkillExp\", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:SetShow(true)
+  elseif __eRewardExpGrade == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/ExpGrade.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"ExpGrade\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"ExpGrade\", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:SetShow(true)
+  elseif __eRewardSkillExpGrade == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExpGrade.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"SkillExpGrade\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"SkillExpGrade\", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:SetShow(true)
+  elseif __eRewardLifeExp == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"ProductExp\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"ProductExp\", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:SetShow(true)
+  elseif __eRewardItem == rewardType then
     local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward:getItemEnchantKey()))
     if nil == itemStatic then
       return
@@ -455,28 +484,34 @@ function Panel_Dialog_Main_Quest_Info:SetRewardIcon(slot, reward, index, rewardS
     slot.icon:SetShow(true)
     if 0 ~= reward:getItemCount() and nil == slot.count then
       slot.count = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, slot.icon, "StaticText_" .. slot.id .. "_Count")
-      slot.count:SetHorizonRight()
-      slot.count:SetVerticalBottom()
-      slot.count:SetTextHorizonRight()
-      slot.count:SetIgnore(true)
     end
     slot:setItemByStaticStatus(itemStatic, reward:getItemCount())
     slot._item = reward:getItemEnchantKey()
     if "base" == rewardStr then
       slot.icon:addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Base\",true)")
       slot.icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Base\",false)")
-      Panel_Tooltip_Item_SetPosition(index, slot, "Dialog_QuestReward_Base")
     end
     if "select" == rewardStr then
       slot.icon:addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Select\",true)")
       slot.icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"Dialog_QuestReward_Select\",false)")
-      Panel_Tooltip_Item_SetPosition(index, slot, "Dialog_QuestReward_Select")
     end
-  else
-    slot.icon:ChangeTextureInfoName(self._rewardIconPath[rewardType])
-    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_MainDialog_Quest_RewardToolTip(" .. rewardType .. ", true,\"" .. rewardStr .. "\"," .. index .. " )")
-    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_MainDialog_Quest_RewardToolTip(" .. rewardType .. ", false,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.count:SetSize(42, 21)
+    slot.count:SetPosY(slot.count:GetPosY() + slot.count:GetSizeY())
+    slot.count:SetTextHorizonRight()
+    slot.count:SetVerticalBottom()
+  elseif __eRewardIntimacy == rewardType then
+    slot.icon:ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"Intimacy\", true,\"" .. rewardStr .. "\"," .. index .. " )")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"Intimacy\", false,\"" .. rewardStr .. "\"," .. index .. " )")
     slot.icon:SetShow(true)
+  else
+    if __eRewardKnowledge == rewardType then
+      slot.icon:ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/00000000_know_icon.dds")
+      slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SetTooltip( \"Knowledge\", true,\"" .. rewardStr .. "\"," .. index .. "," .. reward:getMentalCardKey() .. " )")
+      slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SetTooltip( \"Knowledge\", false,\"" .. rewardStr .. "\"," .. index .. "," .. reward:getMentalCardKey() .. " )")
+      slot.icon:SetShow(true)
+    else
+    end
   end
 end
 function Panel_Dialog_Main_Quest_Info:CreateRewardToolTipControl()
@@ -672,7 +707,7 @@ function FromClient_InitMainDialog_Quest()
   local self = Panel_Dialog_Main_Quest_Info
   self:initialize()
   self:Resize()
-  self._ui.static_QuestBg:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_MainDialog_Quest_InteractionCheck()")
+  self._ui.static_QuestBg:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_MainDialog_Quest_InteractionCheck()")
 end
 function FromClient_onScreenResize_MainDialog_Quest()
   local self = Panel_Dialog_Main_Quest_Info

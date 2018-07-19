@@ -348,6 +348,7 @@ function PaGlobal_CharacterSelect_CharacterList_ControlCreate(content, key)
     stc_LockIcon:SetShow(true)
     Btn_CharSlot:SetShow(true)
   end
+  content:ComputePos()
 end
 function PaGlobal_CharacterSelect_BackToServerSelect()
   local self = CharacterSelect
@@ -466,7 +467,7 @@ function InputMLUp_CharacterSelect_PlayGame()
     if false == isComplete then
       local messageboxData = {
         title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
-        content = "Fail to GameStart Because not Installation Xbox data, Please wait for second : Data installation percent : " .. tostring(percent),
+        content = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MESSAGEBOX_XBOX_DATAINSTALLATION_DESC") .. tostring(percent),
         functionApply = MessageBox_Empty_function,
         priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
       }
@@ -560,18 +561,18 @@ function InputMO_CharacterSelect_SaveCurrentIdx(index)
       self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
       self._ui.txt_Delete_ConsoleUI:SetShow(false)
-      _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "InputMLUp_CharacterSelect_DeleteCancelCharacter()")
+      _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCancelCharacter()")
     else
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
       self._ui.txt_Delete_ConsoleUI:SetShow(true)
-      _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "InputMLUp_CharacterSelect_DeleteCharacter()")
+      _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCharacter()")
     end
   else
     self._isCharacterSelected = false
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_SELECT"))
     self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
     self._ui.txt_Delete_ConsoleUI:SetShow(false)
-    _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
 end
 function InputMO_CharacterSelect_CharacterCreate()
@@ -581,7 +582,7 @@ function InputMO_CharacterSelect_CharacterCreate()
   self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOBBY_SELECTCLASS_CREATE"))
   self._ui.txt_Delete_ConsoleUI:SetShow(false)
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
 end
 function InputMO_CharacterSelect_LockedCharacterSlot()
   local self = CharacterSelect
@@ -589,7 +590,7 @@ function InputMO_CharacterSelect_LockedCharacterSlot()
   self._ui.txt_Select_ConsoleUI:SetShow(false)
   self._ui.txt_Delete_ConsoleUI:SetShow(false)
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
 end
 function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()
   local self = CharacterSelect
@@ -716,7 +717,7 @@ function PaGlobal_CharacterSelect_MakeWaitingUserMsg(receiveTicketNoMyRegion)
   local regionWaitStr = PAGetStringParam1(Defines.StringSheet_GAME, "CHARACTER_REGION_WAIT_COUNT", "iCount", tostring(myRegionWaitingPlayerCount))
   local emptyStr = PAGetString(Defines.StringSheet_GAME, "CHARACTER_WAITING_PLAYER_EMPTY")
   local taiwanMsg = ""
-  if isGameTypeTaiwan() then
+  if isGameTypeTaiwan() or isGameTypeGT() then
     taiwanMsg = "\n\n\233\187\145\232\137\178\230\178\153\230\188\160\231\130\186\229\150\174\228\184\128\228\184\150\231\149\140\229\133\168\228\188\186\230\156\141\229\153\168\229\133\177\233\128\154\239\188\140\229\156\168\233\129\138\230\136\178\230\153\130\229\143\175\229\156\168\229\144\132\233\160\187\233\129\147\233\150\147\232\135\170\231\148\177\231\167\187\229\139\149\239\188\140\232\171\139\233\129\184\230\147\135\233\128\178\232\161\140\232\188\131\233\160\134\229\136\169\231\154\132\233\160\187\233\129\147\231\153\187\229\133\165\233\129\138\230\136\178\229\141\179\229\143\175"
   end
   if const_64.s64_m1 == firstTicketNoByAll and const_64.s64_m1 ~= ticketCountByRegion then

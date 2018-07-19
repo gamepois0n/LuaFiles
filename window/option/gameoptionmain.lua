@@ -65,6 +65,7 @@ function PaGlobal_Option:CreateEventControl(category, detail)
       self._elements[elementName]._curvalueControl[order] = UI.getChildControlNoneAssert(parent, "StaticText_Current_" .. elementName)
     end
     if true == isComboBox then
+      eventControl[order]:setListTextHorizonCenter()
       eventControl[order]:addInputEvent("Mouse_LUp", "PaGlobal_Option:EventComboBoxOpenXXX(" .. "\"" .. elementName .. "\"" .. ", " .. order .. " ) ")
       eventControl[order]:GetListControl():addInputEvent("Mouse_LUp", "PaGlobal_Option:EventXXX(" .. "\"" .. controlName .. "\"" .. ", " .. order .. " ) ")
       parent:getParent():SetChildIndex(parent, 9999)

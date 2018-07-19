@@ -11,6 +11,7 @@ local ExtendExpiration = {
     _btn_Confirm = UI.getChildControl(Panel_ExtendExpiration, "Button_Confirm"),
     _btn_Cancel = UI.getChildControl(Panel_ExtendExpiration, "Button_Cancel"),
     _btn_Close = UI.getChildControl(Panel_ExtendExpiration, "Button_Win_Close"),
+    _btn_Question = UI.getChildControl(Panel_ExtendExpiration, "Button_Question"),
     material = {},
     item = {}
   },
@@ -52,6 +53,7 @@ function ExtendExpiration:Init()
   else
     self.ui._desc:SetSize(self.ui._desc:GetSizeX(), 30)
   end
+  self.ui._btn_Question:SetShow(false)
 end
 function ExtendExpiration:registEventHandler()
   self.ui.item.icon:addInputEvent("Mouse_RUp", "HandleClicked_ExtendExpiration_UnSetItem()")
@@ -62,7 +64,9 @@ function ExtendExpiration:registEventHandler()
   self.ui._btn_Close:addInputEvent("Mouse_LUp", "HandleClicked_ExtendExpiration_Close()")
 end
 function ExtendExpiration:registMessageHandler()
-  registerEvent("FromClient_ClickedExtendExpirationPeriodMaterial", "FromClient_ClickedExtendExpirationPeriodMaterial")
+  if false == _ContentsGroup_RenewUI then
+    registerEvent("FromClient_ClickedExtendExpirationPeriodMaterial", "FromClient_ClickedExtendExpirationPeriodMaterial")
+  end
   registerEvent("FromClient_SucceedExtendedExpirationPeriod", "FromClient_SucceedExtendedExpirationPeriod")
   Panel_ExtendExpiration:RegisterUpdateFunc("ExtendExpiration_TimeChecker")
 end
@@ -179,6 +183,9 @@ function FromClient_ClickedExtendExpirationPeriodMaterial(materialWhereType, mat
     Panel_ExtendExpiration:SetShow(true)
     Panel_ExtendExpiration:ComputePos()
     Inventory_SetFunctor(ExtendExpiration_Inventory_Filter, ExtendExpiration_Inventory_Rclick, ExtendExpiration_Close, nil)
+    local isStackable = materialItemSSW:isStackable()
+    ExtendExpiration.ui._btn_materialMinus:SetShow(isStackable)
+    ExtendExpiration.ui._btn_materialPlus:SetShow(isStackable)
   end
   doitExtendExpiration()
 end

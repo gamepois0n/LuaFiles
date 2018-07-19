@@ -287,6 +287,10 @@ function PackageIconPosition()
 end
 local _PremiumPackageToolTipOnce = true
 function Panel_PersonalIcon_Left:calculateAlertBox(applyStarter, applyPremium, applyDyeingPackage, starter, premium, dyeingPackage, applyRussiaPack3, russiaPack3Time, applyRussiaKamasilv, russiaKamasilv)
+  local CheckToday = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ValuePackage)
+  if ToClient_GetToday() == CheckToday then
+    return
+  end
   local applyFlag = {
     applyStarter,
     applyPremium,
@@ -891,6 +895,7 @@ function _premiumAlert_HideAni()
   _pearlPallete:EraseAllEffect()
   _russiaPack3:EraseAllEffect()
   _russiaKamasilv:EraseAllEffect()
+  ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ValuePackage, ToClient_GetToday(), CppEnums.VariableStorageType.eVariableStorageType_User)
   _premiumAlert:SetShow(false)
 end
 function _premiumAlert_ShowAni(control, showTime)

@@ -46,6 +46,9 @@ registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_FixMaxEn
 function FixMaxEnduranceInfo:initialize()
   self._ui.txt_title = UI.getChildControl(self._ui.stc_titleBar, "StaticText_Title")
   self._ui.stc_titleIcon = UI.getChildControl(self._ui.stc_titleBar, "Static_TitleIcon")
+  self._ui.txt_description = UI.getChildControl(self._ui.stc_bodyBG, "StaticText_Description")
+  self._ui.txt_description:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_description:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_FIXHELP"))
   self._ui.stc_itemSlotLeft = UI.getChildControl(self._ui.stc_bodyBG, "Static_ItemSlot_1")
   self._ui.stc_itemSlotRight = UI.getChildControl(self._ui.stc_bodyBG, "Static_ItemSlot_2")
   self._ui.slot_targetItem = {}
@@ -79,8 +82,8 @@ function FixMaxEnduranceInfo:initialize()
   self:registMessageHandler()
 end
 function FixMaxEnduranceInfo:registEventHandler()
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "Input_FixMaxEndurance_FixMaxEndurance(true)")
-  _panel:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_Y, "Input_FixMaxEndurance_FixMaxEndurance(false)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_FixMaxEndurance_FixMaxEndurance(false)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_FixMaxEndurance_FixMaxEndurance(true)")
 end
 function FixMaxEnduranceInfo:registMessageHandler()
 end
@@ -93,11 +96,9 @@ end
 function FixMaxEnduranceInfo:open()
   _panel:SetShow(true)
   self:cleanAll()
+  self:updateMoneyDisplay()
 end
 function FixMaxEnduranceInfo:cleanAll()
-  if nil == self._ui.slot_targetItem.slotNo and nil == self._ui.slot_subjectItem.slotNo then
-    return true
-  end
   self._ui.slot_targetItem:clearItem()
   self._ui.slot_targetItem.slotNo = nil
   self._ui.slot_subjectItem:clearItem()
@@ -106,12 +107,9 @@ function FixMaxEnduranceInfo:cleanAll()
   self._ui.progress_red:SetProgressRate(0)
   self._ui.txt_enduranceVal:SetText("")
   self._ui.txt_expectedVal:SetText("")
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideLeft, XBOX_PAD_BUTTON.EMPTY)
-  PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideRight, XBOX_PAD_BUTTON.EMPTY)
-  ToClient_setTargetPanel(Panel_Window_Inventory)
+  self:evaluateAndSetMonoTone()
   Inventory_SetFunctor(PaGlobalFunc_FixMaxEnduranceInfo_FilterTarget, PaGlobalFunc_FixMaxEnduranceInfo_PickTargetOrSubject, nil, nil)
   self._ui.txt_keyGuideDiscard:SetText("Exit")
-  self:updateMoneyDisplay()
   return false
 end
 function PaGlobalFunc_FixMaxEnduranceInfo_Close()
@@ -120,6 +118,10 @@ end
 function FixMaxEnduranceInfo:close()
   _panel:SetShow(false)
   Inventory_SetFunctor(nil, nil, nil, nil)
+  self._ui.slot_targetItem:clearItem()
+  self._ui.slot_subjectItem:clearItem()
+  self._ui.slot_targetItem.slotNo = nil
+  self._ui.slot_subjectItem.slotNo = nil
   if Defines.UIMode.eUIMode_Repair == GetUIMode() then
     PaGlobalFunc_RepairInfo_Open()
   end
@@ -139,8 +141,13 @@ function PaGlobalFunc_FixMaxEnduranceInfo_OnPadB()
   local self = FixMaxEnduranceInfo
   if nil ~= self._ui.slot_subjectItem.slotNo then
     InputMRUp_FixMaxEndurance_SubjectSlot()
-  elseif FixMaxEnduranceInfo:cleanAll() then
+    return
+  elseif nil ~= self._ui.slot_targetItem.slotNo then
+    InputMRUp_FixMaxEndurance_TargetSlot()
+    return
+  else
     PaGlobalFunc_FixMaxEnduranceInfo_Close()
+    return
   end
 end
 function PaGlobalFunc_FixMaxEnduranceInfo_FilterTarget(slotNo, itemWrapper)
@@ -192,20 +199,46 @@ function PaGlobalFunc_FixMaxEnduranceInfo_PickTargetOrSubject(slotNo, itemWrappe
     UI.ASSERT(false, "Client data, UI data is Mismatch!!!!!")
     return
   end
-  local hasCashItem = doHaveContentsItem(27, 0, false)
-  if hasCashItem then
-    self._ui.btn_Right:SetIgnore(false)
-    self._ui.txt_keyGuideLeft:SetMonoTone(false)
-  else
+  self:evaluateAndSetMonoTone()
+end
+function FixMaxEnduranceInfo:evaluateAndSetMonoTone()
+  local haveCashItem = doHaveContentsItem(27, 0, false)
+  local itemWrapper = getInventoryItemByType(self._ui.slot_targetItem.whereType, self._ui.slot_targetItem.slotNo)
+  if nil == itemWrapper then
+    self._ui.btn_Left:SetIgnore(true)
     self._ui.btn_Right:SetIgnore(true)
     self._ui.txt_keyGuideLeft:SetMonoTone(true)
+    self._ui.txt_keyGuideRight:SetMonoTone(true)
+    ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
+    return
   end
   local isReady = self:isReadyToRepairMaxEndurance()
   if isReady == true then
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideLeft, XBOX_PAD_BUTTON.Y)
-    PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideRight, XBOX_PAD_BUTTON.X)
-    ToClient_setTargetPanel(_panel)
+    if haveCashItem then
+      self._ui.btn_Left:SetIgnore(false)
+      self._ui.txt_keyGuideLeft:SetMonoTone(false)
+    else
+      self._ui.btn_Left:SetIgnore(true)
+      self._ui.txt_keyGuideLeft:SetMonoTone(true)
+    end
+    self._ui.btn_Right:SetIgnore(false)
+    self._ui.txt_keyGuideRight:SetMonoTone(false)
+    local maxEndurance = itemWrapper:getStaticStatus():get():getMaxEndurance()
+    local dynamicMaxEndurance = itemWrapper:get():getMaxEndurance()
+    if maxEndurance <= dynamicMaxEndurance then
+      self._ui.btn_Left:SetIgnore(true)
+      self._ui.btn_Right:SetIgnore(true)
+      self._ui.txt_keyGuideLeft:SetMonoTone(true)
+      self._ui.txt_keyGuideRight:SetMonoTone(true)
+      return
+    end
+    ToClient_padSnapSetTargetPanel(_panel)
   else
+    ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
+    self._ui.btn_Left:SetIgnore(true)
+    self._ui.btn_Right:SetIgnore(true)
+    self._ui.txt_keyGuideLeft:SetMonoTone(true)
+    self._ui.txt_keyGuideRight:SetMonoTone(true)
   end
 end
 function PaGlobalFunc_FixMaxEnduranceInfo_FilterSubject(slotNo, itemWrapper, inventoryType)
@@ -264,8 +297,7 @@ function FixMaxEnduranceInfo:cleanSubject()
     self._ui.slot_subjectItem.slotNo = nil
     self._ui.slot_subjectItem.itemKey = nil
     self._ui.txt_expectedVal:SetText("")
-  else
-    self:cleanAll()
+    self:evaluateAndSetMonoTone()
   end
 end
 function Input_FixMaxEndurance_FixMaxEndurance(isHelpRepair)
@@ -274,6 +306,13 @@ end
 function FixMaxEnduranceInfo:fixEquip_ApplyButton(isHelpRepair)
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
+    return
+  end
+  if isHelpRepair and not doHaveContentsItem(27, 0, false) then
+    return
+  end
+  local target = getInventoryItemByType(self._ui.slot_targetItem.whereType, self._ui.slot_targetItem.slotNo)
+  if 100 <= target:get():getMaxEndurance() then
     return
   end
   local moneyWhereType = CppEnums.ItemWhereType.eInventory
@@ -287,7 +326,6 @@ function FixMaxEnduranceInfo:fixEquip_ApplyButton(isHelpRepair)
     repair_MaxEndurance(self._ui.slot_targetItem.whereType, self._ui.slot_targetItem.slotNo, self._ui.slot_subjectItem.whereType, self._ui.slot_subjectItem.slotNo, moneyWhereType, isHelpRepair)
     self:updateMoneyDisplay()
     self:cleanSubject()
-    return
   end
   if nil ~= self._ui.slot_targetItem.slotNo and nil ~= self._ui.slot_subjectItem.slotNo then
     local itemWrapper = getInventoryItemByType(self._ui.slot_targetItem.whereType, self._ui.slot_targetItem.slotNo)
@@ -301,17 +339,17 @@ function FixMaxEnduranceInfo:fixEquip_ApplyButton(isHelpRepair)
     end
     local contentString = ""
     if isMemoryFlag and true == isHelpRepair then
-      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount * 4)
+      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount * 4)
     elseif isMemoryFlag and false == isHelpRepair then
-      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount)
+      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", memoryFlagRecoveryCount)
     elseif isDriganFlag and true == isHelpRepair then
-      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(20))
+      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(20))
     elseif isDriganFlag and false == isHelpRepair then
-      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(5))
+      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERYCOUNT", "count", tostring(5))
     elseif isHelpRepair then
       contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERY_FIX_COUNT_30")
     else
-      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERY_FIX_COUNT_10")
+      contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_ONLYITEMCHECK_CONTENTSTRING") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_MAXENDURANCERECOVERY_FIX_COUNT_10")
     end
     if true == isHelpRepair and maxEndurance - currentEndurance < 15 then
       contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_DURABILITY_SHORTAGE") .. contentString
@@ -380,48 +418,4 @@ function FixMaxEnduranceInfo:fixEquipContinue(slotNo)
   else
     PaGlobal_FixEquip:fixEquipData_Clear()
   end
-end
-XBOX_PAD_BUTTON = {
-  X = 8,
-  Y = 9,
-  A = 10,
-  B = 11,
-  EMPTY = -1
-}
-local _buttonUV = {
-  [XBOX_PAD_BUTTON.X] = {
-    136,
-    1,
-    180,
-    45
-  },
-  [XBOX_PAD_BUTTON.Y] = {
-    46,
-    1,
-    90,
-    45
-  },
-  [XBOX_PAD_BUTTON.A] = {
-    1,
-    1,
-    45,
-    45
-  },
-  [XBOX_PAD_BUTTON.B] = {
-    91,
-    1,
-    135,
-    45
-  },
-  [XBOX_PAD_BUTTON.EMPTY] = {
-    0,
-    0,
-    2,
-    2
-  }
-}
-function PaGlobalFunc_SetKeyGuideUVTo(control, XBOX_PAD_BUTTON)
-  local x1, y1, x2, y2 = setTextureUV_Func(control, _buttonUV[XBOX_PAD_BUTTON][1], _buttonUV[XBOX_PAD_BUTTON][2], _buttonUV[XBOX_PAD_BUTTON][3], _buttonUV[XBOX_PAD_BUTTON][4])
-  control:getBaseTexture():setUV(x1, y1, x2, y2)
-  control:setRenderTexture(control:getBaseTexture())
 end

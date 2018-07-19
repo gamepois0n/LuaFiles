@@ -1,7 +1,8 @@
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
+Panel_Win_Check:ignorePadSnapMoveToOtherPanel()
 Panel_Win_Check:RegisterShowEventFunc(true, "MessageBoxCheck_ShowAni()")
 Panel_Win_Check:RegisterShowEventFunc(false, "MessageBoxCheck_HideAni()")
-Panel_Win_Check:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "MessageBoxCheck.keyProcessEnter()")
+Panel_Win_Check:registerPadEvent(__eConsoleUIPadEvent_Up_A, "MessageBoxCheck.keyProcessEnter()")
 Panel_Win_Check:SetShow(false, false)
 Panel_Win_Check:setMaskingChild(true)
 Panel_Win_Check:setGlassBackground(true)
@@ -384,4 +385,16 @@ button_No:addInputEvent("Mouse_LUp", "messageBoxCheck_CancelButtonUp()")
 button_OK_ConsoleUI:addInputEvent("Mouse_LUp", "messageBoxCheck_ApplyButtonUp()")
 button_NO_ConsoleUI:addInputEvent("Mouse_LUp", "messageBoxCheck_CancelButtonUp()")
 registerEvent("EventNotifyMessageCashAlert", "Event_MessageBoxCheck_NotifyMessage_CashAlert")
+if true == _ContentsGroup_RenewUI_MessageBox then
+  Panel_Win_Check:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_MessageCheck_Check_Up()")
+  Panel_Win_Check:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "PaGlobalFunc_MessageCheck_Check_Down()")
+end
+function PaGlobalFunc_MessageCheck_Check_Up()
+  radioButton_Me:SetCheck(true)
+  radioButton_All:SetCheck(false)
+end
+function PaGlobalFunc_MessageCheck_Check_Down()
+  radioButton_Me:SetCheck(false)
+  radioButton_All:SetCheck(true)
+end
 Panel_Win_Check:RegisterUpdateFunc("messageBoxCheck_UpdatePerFrame")

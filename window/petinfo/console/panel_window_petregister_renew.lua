@@ -1,3 +1,4 @@
+Panel_Window_PetRegister_Renew:ignorePadSnapMoveToOtherPanel()
 Panel_Window_PetRegister_Renew:SetShow(false)
 local petRegister = {
   _ui = {
@@ -19,7 +20,8 @@ local petRegister = {
       [8] = "Bailey",
       [9] = "Wichita",
       [10] = "Buck"
-    }
+    },
+    _ButtonGap = 50
   },
   _fromWhereType = -1,
   _fromSlotNo = -1
@@ -33,19 +35,14 @@ function petRegister:initControl()
   petRegisterUI._staticText_Confirm_ConsoleUI = UI.getChildControl(petRegisterUI._static_BottomKeyBG, "StaticText_Confirm_ConsoleUI")
   petRegisterUI._staticText_Cancel_ConsoleUI = UI.getChildControl(petRegisterUI._static_BottomKeyBG, "StaticText_Cancel_ConsoleUI")
   petRegisterUI._staticText_ChangeName_ConsoleUI = UI.getChildControl(petRegisterUI._static_BottomKeyBG, "StaticText_ChangeName_ConsoleUI")
-  local UCT = CppEnums.PA_UI_CONTROL_TYPE
-  petRegisterUI._button_Confirm = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, petRegisterUI._static_BottomKeyBG, "button_confirm")
-  CopyBaseProperty(petRegisterUI._staticText_Confirm_ConsoleUI, petRegisterUI._button_Confirm)
-  petRegisterUI._button_Confirm:addInputEvent("Mouse_LUp", "FGlobal_PetRegister_Confirm()")
-  petRegisterUI._button_Cancle = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, petRegisterUI._static_BottomKeyBG, "button_cancle")
-  CopyBaseProperty(petRegisterUI._staticText_Cancel_ConsoleUI, petRegisterUI._button_Cancle)
-  petRegisterUI._button_Cancle:addInputEvent("Mouse_LUp", "FGlobal_PetRegister_Cancle()")
-  petRegisterUI._button_ChangeName = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, petRegisterUI._static_BottomKeyBG, "button_changeName")
-  CopyBaseProperty(petRegisterUI._staticText_ChangeName_ConsoleUI, petRegisterUI._button_ChangeName)
-  petRegisterUI._button_ChangeName:addInputEvent("Mouse_LUp", "FGlobal_PetRegister_ChangeName()")
-  Panel_Window_PetRegister_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "FGlobal_PetRegister_Confirm()")
-  Panel_Window_PetRegister_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetRegister_Cancle()")
-  Panel_Window_PetRegister_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "FGlobal_PetRegister_ChangeName()")
+  local xPos = petRegisterUI._staticText_Cancel_ConsoleUI:GetPosX() - petRegisterUI._staticText_Confirm_ConsoleUI:GetTextSizeX() - self._config._ButtonGap
+  petRegisterUI._staticText_Confirm_ConsoleUI:SetPosX(xPos)
+  xPos = xPos - petRegisterUI._staticText_ChangeName_ConsoleUI:GetTextSizeX() - self._config._ButtonGap
+  petRegisterUI._staticText_ChangeName_ConsoleUI:SetPosX(xPos)
+  Panel_Window_PetRegister_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "FGlobal_PetRegister_Confirm()")
+  Panel_Window_PetRegister_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobal_PetRegister_ChangeName()")
+  petRegisterUI._edit_Search:setXboxVirtualKeyBoardEndEvent("Input_PetRegisterName_KeyboardEnd")
+  petRegisterUI._edit_Search:RegistReturnKeyEvent("FGlobal_PetRegister_Confirm()")
 end
 function petRegister:setPosition()
   local scrSizeX = getScreenSizeX()
@@ -56,7 +53,10 @@ function petRegister:setPosition()
   Panel_Window_PetRegister_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function petRegister:open()
+  self._fromWhereType = -1
+  self._fromSlotNo = -1
   if true == Panel_Window_PetRegister_Renew:GetShow() then
+    Panel_Window_PetRegister_Renew:SetShow(false)
     return
   end
   self:setPosition()
@@ -68,7 +68,7 @@ function petRegister:close()
     return
   end
   Panel_Window_PetRegister_Renew:SetShow(false)
-  ClearFocusEdit(petRegisterUI._staticText_RegisterDesc)
+  ClearFocusEdit()
 end
 function petRegister:initialize()
   local petRegisterUI = self._ui
@@ -93,20 +93,25 @@ function petRegister:resetData()
   self._fromSlotNo = -1
   petRegisterUI._edit_Search:SetEditText("", true)
 end
+function Input_PetRegisterName_KeyboardEnd(str)
+  petRegister._ui._edit_Search:SetEditText(str)
+  ClearFocusEdit()
+  HandleClicked_PetRegister_Register()
+end
 function FGlobal_PetRegister_Confirm()
   HandleClicked_PetRegister_Register()
-  petRegister:close()
 end
 function FGlobal_PetRegister_Cancle()
   ClearFocusEdit()
   petRegister:close()
 end
 function FGlobal_PetRegister_ChangeName()
-  local petRegisterUI = self._ui
+  local petRegisterUI = petRegister._ui
   if true == petRegisterUI._edit_Search:GetFocusEdit() then
+    return
   else
     petRegisterUI._edit_Search:SetMaxInput(getGameServiceTypePetNameLength())
-    SetFocusEdit(petRegisterUIs._edit_Search)
+    SetFocusEdit(petRegisterUI._edit_Search)
     petRegisterUI._edit_Search:SetEditText("", true)
   end
 end
@@ -140,18 +145,46 @@ function FromClient_InputPetName_Renew(fromWhereType, fromSlotNo)
 end
 function HandleClicked_PetRegister_Register()
   local petNaming = petRegister._ui._edit_Search
-  local fromWhereType = petRegister._fromWhereType
-  local fromSlotNo = petRegister._fromSlotNo
   local petName = petNaming:GetEditText()
-  ToClient_requestPetRegister(petName, fromWhereType, fromSlotNo)
-  petRegister:close()
+  ClearFocusEdit()
+  local function confirm_Regist()
+    local fromWhereType = petRegister._fromWhereType
+    local fromSlotNo = petRegister._fromSlotNo
+    ToClient_requestPetRegister(petName, fromWhereType, fromSlotNo)
+    petRegister:close()
+  end
+  local messageBoxMemo = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REGISTPET_CONTINUE")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_RESOURCE, "PET_FUNCTION_REGISTERPET"),
+    content = messageBoxMemo,
+    functionYes = confirm_Regist,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
 end
 function FromClient_luaLoadComplete_PetRegister()
   petRegister:initControl()
   petRegister:initialize()
 end
+function FromClient_PetAddSealedList(petNo, reason, petType)
+  if reason == nil then
+    return
+  end
+  if reason == 1 then
+    if petType == __ePetType_Normal then
+      FGlobal_PetList_Open()
+    else
+      return
+    end
+  end
+end
 function petRegister:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetRegister")
+  registerEvent("FromClient_PetAddSealedList", "FromClient_PetAddSealedList")
   registerEvent("FromClient_InputPetName", "FromClient_InputPetName_Renew")
+end
+function FGlobal_EscapeEditBox_PetCompose(bool)
+  ClearFocusEdit()
 end
 petRegister:registEventHandler()

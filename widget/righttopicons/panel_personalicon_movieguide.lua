@@ -180,6 +180,9 @@ function MovieGuide_SimpleTooltip(isShow, index)
   TooltipSimple_Show(control, name, desc)
 end
 function Panel_MovieGuide_ShowToggle()
+  if isGameTypeGT() then
+    return
+  end
   local isShow = Panel_MovieGuide:IsShow()
   _btn_MovieGuide:ResetVertexAni()
   _moviePlus:SetShow(false)

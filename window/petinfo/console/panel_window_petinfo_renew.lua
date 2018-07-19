@@ -1,4 +1,5 @@
 Panel_Window_PetInfo_Renew:SetShow(false)
+Panel_Window_PetInfo_Renew:ignorePadSnapMoveToOtherPanel()
 local petInfo = {
   _ui = {
     _static_subFrameBG = UI.getChildControl(Panel_Window_PetInfo_Renew, "Static_SubFrameBG"),
@@ -88,8 +89,7 @@ function petInfo:update()
   end
   local skillBtn = self._ui._petInfoFrame._radioBtn_Skills
   for idx = 0, self._config._skill_MaxCount - 1 do
-    skillBtn[idx]._button:SetShow(false)
-    skillBtn[idx]._button:ChangeTextureInfoNameAsync("")
+    skillBtn[idx]._slot:SetShow(false)
   end
   uiIdx = 0
   local baseSkillIndex = PcPetData:getPetBaseSkillIndex()
@@ -98,11 +98,9 @@ function petInfo:update()
     local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
     if nil ~= skillTypeStaticWrapper then
       local skillNo = skillStaticStatus:getSkillNo()
-      skillBtn[uiIdx]._button:SetShow(true)
-      skillBtn[uiIdx]._slot:ChangeTextureInfoNameAsync("Icon/" .. skillTypeStaticWrapper:getIconPath())
-      skillBtn[uiIdx]._slot:addInputEvent("Mouse_LUp", "FGlobal_PetInfo_SkillTooltipOpen(" .. baseSkillIndex .. ", true, true)")
+      skillBtn[uiIdx]._slot:SetShow(true)
       skillBtn[uiIdx]._slot:addInputEvent("Mouse_On", "FGlobal_PetInfo_SkillTooltipOpen(" .. baseSkillIndex .. ", true, true)")
-      skillBtn[uiIdx]._slot:addInputEvent("Mouse_Out", "FGlobal_PetInfo_SkillTooltipOpen(" .. baseSkillIndex .. ", true, false)")
+      skillBtn[uiIdx]._icon:ChangeTextureInfoNameAsync("Icon/" .. skillTypeStaticWrapper:getIconPath())
     end
   end
   uiIdx = uiIdx + 1
@@ -114,11 +112,9 @@ function petInfo:update()
       local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
       if nil ~= skillTypeStaticWrapper then
         local skillNo = skillStaticStatus:getSkillNo()
-        skillBtn[uiIdx]._button:SetShow(true)
-        skillBtn[uiIdx]._slot:ChangeTextureInfoNameAsync("Icon/" .. skillTypeStaticWrapper:getIconPath())
-        skillBtn[uiIdx]._slot:addInputEvent("Mouse_LUp", "FGlobal_PetInfo_SkillTooltipOpen(" .. index .. ", true, true)")
+        skillBtn[uiIdx]._slot:SetShow(true)
         skillBtn[uiIdx]._slot:addInputEvent("Mouse_On", "FGlobal_PetInfo_SkillTooltipOpen(" .. index .. ",false, true)")
-        skillBtn[uiIdx]._slot:addInputEvent("Mouse_Out", "FGlobal_PetInfo_SkillTooltipOpen(" .. index .. ",false, false)")
+        skillBtn[uiIdx]._icon:ChangeTextureInfoNameAsync("Icon/" .. skillTypeStaticWrapper:getIconPath())
       end
       uiIdx = uiIdx + 1
       if uiIdx >= self._config._skill_MaxCount then
@@ -161,6 +157,9 @@ function petInfo:setPosition()
   Panel_Window_PetInfo_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function petInfo:registEventHandler()
+  registerEvent("FromClient_luaLoadComplete", "FromClient_PetInfo_luaLoadComplete")
+end
+function FromClient_PetInfo_luaLoadComplete()
   petInfo:initialize()
 end
 function petInfo:initControl()
@@ -187,7 +186,7 @@ function petInfo:initControl()
   petInfoUI._petInfoFrame._ExitButton = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, BottonBG, "ExitButton")
   CopyBaseProperty(StaticClose, petInfoUI._petInfoFrame._ExitButton)
   petInfoUI._petInfoFrame._ExitButton:addInputEvent("Mouse_LUp", "FGlobal_PetInfo_Close()")
-  Panel_Window_PetInfo_Renew:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetInfo_Close()")
+  Panel_Window_PetInfo_Renew:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetInfo_Close()")
 end
 function petInfo:createButton()
   local UCT = CppEnums.PA_UI_CONTROL_TYPE
@@ -202,13 +201,13 @@ function petInfo:createButton()
   local actionBtn = self._ui._petInfoFrame._radioBtn_Actions
   for idx = 0, self._config._skill_MaxCount - 1 do
     local info = {}
-    info._button = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, petInfoFrame, "skillBtn_" .. idx)
-    CopyBaseProperty(_skillBtn, info._button)
-    info._slot = UI.createControl(UCT.PA_UI_CONTROL_STATIC, info._button, "skillSlot_" .. idx)
-    CopyBaseProperty(_skillSlot, info._slot)
+    info._slot = UI.cloneControl(_skillBtn, petInfoFrame, "SkillSlot_" .. idx)
+    info._slot:SetIgnore(false)
+    info._icon = UI.getChildControl(info._slot, "Static_SkillSlot")
+    info._icon:ActiveMouseEventEffect(true)
     local slotConfig = self._config._skillBtn
-    info._button:SetPosX(slotConfig._startX + slotConfig._gapX * idx)
-    info._button:SetPosY(slotConfig._startY)
+    info._slot:SetPosX(slotConfig._startX + slotConfig._gapX * idx)
+    info._slot:SetPosY(slotConfig._startY)
     skillBtn[idx] = info
   end
   for idx = 0, self._config._action_MaxCount - 1 do
@@ -256,10 +255,14 @@ function petInfo:setToolTipInfo(SkillIndex, isBase, isShow)
   if nil ~= skillTypeStaticWrapper then
     Panel_Tooltip._static_skillIcon:ChangeTextureInfoNameAsync("icon/" .. skillTypeStaticWrapper:getIconPath())
     Panel_Tooltip._static_skillIconSlot:SetShow(true)
-    Panel_Tooltip._static_skillName:SetText(skillTypeStaticWrapper:getName())
+    Panel_Tooltip._static_skillName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    Panel_Tooltip._static_skillName:SetAutoResize(true)
     Panel_Tooltip._static_skillName:SetShow(true)
-    Panel_Tooltip._static_skillDesc:SetAutoResize(true)
+    Panel_Tooltip._static_skillName:SetText(skillTypeStaticWrapper:getName())
     Panel_Tooltip._static_skillDesc:SetText(skillTypeStaticWrapper:getDescription())
+    Panel_Tooltip._static_skillDesc:SetPosY(Panel_Tooltip._static_skillName:GetTextSizeY() + 30)
+    local SizeY = Panel_Tooltip._static_skillName:GetTextSizeY() + Panel_Tooltip._static_skillDesc:GetTextSizeY() + 50
+    Panel_Tooltip:SetSize(Panel_Tooltip:GetSizeX(), SizeY)
   else
     Panel_Tooltip._static_skillIconSlot:SetShow(false)
     Panel_Tooltip._static_skillName:SetShow(false)

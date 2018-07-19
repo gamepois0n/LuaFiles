@@ -514,7 +514,14 @@ function StableMating_UpdateMoney()
   end
   local self = stableMating
   self._staticInven:SetText(makeDotMoney(getSelfPlayer():get():getInventory():getMoney_s64()))
-  self._staticWarehouse:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  local warehouseMoney = warehouse_moneyFromNpcShop_s64()
+  self._staticWarehouse:SetText(makeDotMoney(warehouseMoney))
+  local warehouseMoneyEnabledFlag = warehouseMoney > Defines.s64_const.s64_0
+  self._radioWarehouse:SetEnable(warehouseMoneyEnabledFlag)
+  if not warehouseMoneyEnabledFlag then
+    self._radioInven:SetCheck(true)
+    self._radioWarehouse:SetCheck(false)
+  end
 end
 function StableMating_TabEvent(tab)
   local self = stableMating

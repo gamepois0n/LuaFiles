@@ -255,10 +255,12 @@ local comboBox = {
 }
 local townList = UI.getChildControl(comboBox.town, "Combobox_List")
 local gradeList = UI.getChildControl(comboBox.grade, "Combobox_List")
+comboBox.town:setListTextHorizonCenter()
 comboBox.town:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_FILTER_TOWN"))
 comboBox.town:addInputEvent("Mouse_LUp", "HandleClicked_WorkerManager_Town()")
 comboBox.town:GetListControl():addInputEvent("Mouse_LUp", "WorkerManager_SetTown()")
 Panel_WorkerManager:SetChildIndex(comboBox.town, 9999)
+comboBox.grade:setListTextHorizonCenter()
 comboBox.grade:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_FILTER_GRADE"))
 comboBox.grade:addInputEvent("Mouse_LUp", "HandleClicked_WorkerManager_Grade()")
 comboBox.grade:GetListControl():addInputEvent("Mouse_LUp", "WorkerManager_SetGrade()")

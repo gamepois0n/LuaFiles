@@ -68,14 +68,19 @@ function Window_GameExitInfo:SetHistory()
     return
   end
   local journalListStr = ""
+  journalList:SetText("")
   for index = 0, journalCount - 1 do
     local journalWrapper = ToClient_GetRecentJournalByIndex(index)
     if nil ~= journalWrapper then
-      journalListStr = journalListStr .. "\194\183 " .. "[" .. string.format("%.02d", journalWrapper:getJournalHour()) .. ":" .. string.format("%.02d", journalWrapper:getJournalMinute()) .. "] " .. journalWrapper:getName() .. "\n"
+      journalListStr = "\194\183 [" .. string.format("%.02d", journalWrapper:getJournalHour()) .. ":" .. string.format("%.02d", journalWrapper:getJournalMinute()) .. "] " .. journalWrapper:getName()
+      journalList:SetText(journalList:GetText() .. journalListStr .. "\n")
     end
   end
   journalList:SetShow(true)
-  journalList:SetText(journalListStr)
+end
+function PaGlobalFunc_GameExit_SetCharacterInfoTable()
+  local self = Window_GameExitInfo
+  self:SetCharacterInfoTable()
 end
 function Window_GameExitInfo:SetCharacterInfoTable()
   local characterCount = getCharacterDataCount()
@@ -154,7 +159,9 @@ function Window_GameExitInfo:SetCharacterSlot(charInfo, charSlot)
   end
   local isCaptureExist = charSlot._static_Picture:ChangeTextureInfoNameNotDDS(charInfo._textureName, charInfo._classType, self._isTakePhoto)
   if true == isCaptureExist then
+    charSlot._static_Picture:ChangeTextureInfoName(charSlot._static_Picture:getBaseTexture())
     charSlot._static_Picture:getBaseTexture():setUV(0, 0, 1, 1)
+    charSlot._static_Picture:setRenderTexture(charSlot._static_Picture:getBaseTexture())
   else
     if false == _ContentsGroup_isUsedNewCharacterInfo then
       if charInfo._classType == CppEnums.ClassType.ClassType_Warrior then
@@ -497,6 +504,20 @@ function PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
   self._currentExitType = -1
   self._ui._button_NoticeMsg:SetShow(false)
 end
+function PaGlobalFunc_GameExit_ButtonClick_ChangeAccount()
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_CHANGEACCOUNT_MSGBOX")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+    content = messageBoxMemo,
+    functionYes = PaGlobalFunc_GameExit_ChangeAccount_MessageBoxConfirm,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData, "top")
+end
+function PaGlobalFunc_GameExit_ChangeAccount_MessageBoxConfirm()
+  ToClient_ChangeAccount()
+end
 function PaGlobalFunc_GameExit_GetCharInfoTable()
   local self = Window_GameExitInfo
   return self._characterInfoTable
@@ -519,6 +540,8 @@ function Window_GameExitInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:XB_Control_Init()
+  self:Clear()
+  self:Update()
 end
 function Window_GameExitInfo:InitControl()
   local body = self._ui._body
@@ -528,6 +551,7 @@ function Window_GameExitInfo:InitControl()
   body._button_ServerChange = UI.getChildControl(self._ui._static_MainBg, "Button_ServerChange")
   body._button_SelectCharacter = UI.getChildControl(self._ui._static_MainBg, "Button_SelectCharacter")
   body._button_CharacterMove = UI.getChildControl(self._ui._static_MainBg, "Button_CharacterMove")
+  body._button_ChangeAccount = UI.getChildControl(self._ui._static_MainBg, "Button_ChangeAccount_ConsoleUI")
   if true == ToClient_isXBox() then
     body._button_CharacterMove:SetShow(false)
   end
@@ -544,11 +568,12 @@ function Window_GameExitInfo:InitControl()
     [0] = body._button_GameExit,
     [1] = body._button_ServerChange,
     [2] = body._button_SelectCharacter,
-    [3] = body._button_CharacterMove,
-    ["totalCount"] = 4
+    [3] = body._button_ChangeAccount,
+    [4] = body._button_CharacterMove,
+    ["totalCount"] = 5
   }
   local _startX = body._button_GameExit:GetPosX() - 12
-  local _gapX = body._button_GameExit:GetSizeX() + 57
+  local _gapX = body._button_GameExit:GetSizeX() + 10
   if true == ToClient_isXBox() then
     _startX = body._button_GameExit:GetPosX() - 12 + _gapX * 0.5
   end
@@ -556,7 +581,7 @@ function Window_GameExitInfo:InitControl()
     body._button_Tray:SetIgnore(true)
     body._button_Tray:SetShow(false)
     for ii = 0, _button_DisPlay.totalCount - 1 do
-      _button_DisPlay[ii]:SetSize(220, 62)
+      _button_DisPlay[ii]:SetSize(172, 62)
       _button_DisPlay[ii]:SetPosX(_startX + _gapX * ii)
     end
   end
@@ -627,6 +652,7 @@ function Window_GameExitInfo:InitEvent()
   body._button_Tray:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_Exit(1)")
   body._button_SelectCharacter:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_Exit(2)")
   body._button_ServerChange:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ServerChange()")
+  body._button_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ChangeAccount()")
   for index = 0, self._config._maxCharacterSlot - 1 do
     self._characterUITable[index]._radioButton_CharBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_CharacterSwap(" .. index .. ")")
     self._characterUITable[index]._button_ChangePicture:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ChangePhoto(" .. index .. ")")
@@ -658,12 +684,12 @@ function Window_GameExitInfo:InitRegister()
   registerEvent("FromClient_TrayIconMessageBox", "PaGlobalFunc_FromClient_GameExit_WindowTry")
   registerEvent("onScreenResize", "PaGlobalFunc_GameExit_Resize")
   registerEvent("progressEventCancelByAttacked", "PaGlobalFunc_FromClient_GameExit_Attacked")
+  registerEvent("FromClient_ResponseEnchantFailCountOfMyCharacters", "PaGlobalFunc_GameExit_SetCharacterInfoTable")
 end
 function PaGlobalFunc_FromClient_GameExit_luaLoadComplete()
   local self = Window_GameExitInfo
   self:Initialize()
   self:Clear()
-  self:Update()
 end
 function PaGlobalFunc_GameExit_SetShow(isShow, isAni, isAttacked)
   local self = Window_GameExitInfo
@@ -740,7 +766,7 @@ function PaGlobalFunc_CharChangePhoto_Y()
   self._isTakePhoto = true
 end
 function Window_GameExitInfo:XB_Control_Init()
-  Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_LB, "PaGlobalFunc_GameExit_UpdateCharList(-1)")
-  Panel_Window_GameExit:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_RB, "PaGlobalFunc_GameExit_UpdateCharList(1)")
+  Panel_Window_GameExit:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_GameExit_UpdateCharList(-1)")
+  Panel_Window_GameExit:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_GameExit_UpdateCharList(1)")
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_GameExit_luaLoadComplete")

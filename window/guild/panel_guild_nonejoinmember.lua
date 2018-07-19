@@ -16,6 +16,10 @@ function PaGlobal_Guild_NoneJoinMember:Initialize()
   self._frame_GuildContents:SetSize(self._frame_GuildContents:GetSizeX(), guildDesc:GetTextSizeY())
   self._frame:UpdateContentPos()
   self._frame:UpdateContentScroll()
+  if isGameTypeGT() then
+    self.btn_GuidlRank:SetShow(false)
+    self.btn_GuildNPCNavi:SetPosX(Panel_Guild_NoneJoinMember:GetSizeX() / 2 - self.btn_GuildNPCNavi:GetSizeX() / 2)
+  end
 end
 function PaGlobal_Guild_NoneJoinMember:Open()
   Panel_Guild_NoneJoinMember:SetShow(true)

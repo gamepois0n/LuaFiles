@@ -144,6 +144,9 @@ end
 local prevTitleNo = -1
 local titleNo = 0
 function Panel_MovieTheater_LowLevel_GameGuide_Func(movieNo)
+  if isGameTypeGT() then
+    return
+  end
   _movieTheater_640:SetUrl(450, 338, "coui://UI_Data/UI_Html/UI_Guide_Movie_450.html")
   _movieTheater_640:SetShow(countryType)
   _txt_Title:SetText(movieDesc[movieNo])

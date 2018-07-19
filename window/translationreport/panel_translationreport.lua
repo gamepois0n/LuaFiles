@@ -10,6 +10,10 @@ function Panel_TranslationReport:init()
   _translationReportWebControl:ResetUrl()
 end
 function Panel_TranslationReport:Open(staticType, key1, key2, key3, textNo)
+  if isGameTypeGT() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
+    return
+  end
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   local url = PaGlobal_URL_Check(worldNo)

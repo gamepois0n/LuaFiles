@@ -368,7 +368,11 @@ function HandleMOver_SkillWindow_ToolTipShow(skillNo, isShowNextLevel, SlotType,
     end
     if not skillStaticWrapper:isAutoLearnSkillByLevel() and not skillStaticWrapper:isLearnSkillByItem() and skillStaticWrapper:isLastSkill() then
       slots[skillNo].iconMinus:SetShow(true)
-      slots[skillNo].icon:addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. skillNo .. ")")
+      if false == GlobalSwitch_UseDummyPlayerSkillWindow then
+        slots[skillNo].icon:addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. skillNo .. ")")
+      else
+        slots[skillNo].icon:addInputEvent("Mouse_RUp", "TestFunc_SkillAction(" .. skillNo .. ")")
+      end
       Panel_SkillTooltip_Show(skillNo, false, SlotType, nil, true)
     end
   end

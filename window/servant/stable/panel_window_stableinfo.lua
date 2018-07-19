@@ -872,6 +872,22 @@ function Button_Skill_Delete(slotNo)
   MessageBox.showMessageBox(messageboxData)
 end
 function Button_SkillTraining(slotNo)
+  if isGameTypeKorea() and 0 == PaGlobal_Inventory:findItemCountByEventType(33, 0) then
+    local EasyBuyOpen = function()
+      PaGlobal_EasyBuy:Open(73)
+    end
+    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILLTRAININGTITLE")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_NOT_FOUND_ITEM_TRAINING1")
+    local messageboxData = {
+      title = messageBoxTitle,
+      content = messageBoxMemo,
+      functionYes = EasyBuyOpen,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+    return
+  end
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if CppEnums.ServantStateType.Type_StallionTraining == servantInfo:getStateType() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CONDITION_STALLIONDESC"))
@@ -916,6 +932,22 @@ function Button_SkillTraining(slotNo)
   MessageBox.showMessageBox(messageboxData)
 end
 function Button_AllSkillTraining()
+  if isGameTypeKorea() and 0 == PaGlobal_Inventory:findItemCountByEventType(33, 1) then
+    local EasyBuyOpen = function()
+      PaGlobal_EasyBuy:Open(73)
+    end
+    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILLTRAININGTITLE")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_NOT_FOUND_ITEM_TRAINING2")
+    local messageboxData = {
+      title = messageBoxTitle,
+      content = messageBoxMemo,
+      functionYes = EasyBuyOpen,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+    return
+  end
   if nil == StableList_SelectSlotNo() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_STABLE_ALERT"))
     return
@@ -946,6 +978,22 @@ function Button_AllSkillTraining()
   MessageBox.showMessageBox(messageboxData)
 end
 function Button_SkillChange(slotNo)
+  if isGameTypeKorea() and 0 == PaGlobal_Inventory:findItemCountByEventType(8) then
+    local EasyBuyOpen = function()
+      PaGlobal_EasyBuy:Open(71)
+    end
+    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_TITLE_CHANGE")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_MSG_CONTENT_CHANGE")
+    local messageboxData = {
+      title = messageBoxTitle,
+      content = messageBoxMemo,
+      functionYes = EasyBuyOpen,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+    return
+  end
   if nil == StableList_SelectSlotNo() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_STABLE_ALERT"))
     return

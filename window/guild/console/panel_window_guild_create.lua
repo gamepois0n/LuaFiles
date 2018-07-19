@@ -53,8 +53,8 @@ function Window_Guild_CreateInfo:InitEvent()
   if false == _ContentsGroup_isConsolePadControl then
     self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
   end
-  Panel_Console_Window_GuildCreate:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_GuildCreate_SetFocus()")
-  Panel_Console_Window_GuildCreate:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_GuildCreate_Confirm()")
+  Panel_Console_Window_GuildCreate:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildCreate_SetFocus()")
+  Panel_Console_Window_GuildCreate:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GuildCreate_Confirm()")
 end
 function Window_Guild_CreateInfo:InitControl()
   self._ui._edit_GuildName:SetMaxInput(getGameServiceTypeGuildNameLength())

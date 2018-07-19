@@ -1,11 +1,12 @@
 Panel_Login_Renew:SetSize(getScreenSizeX(), getScreenSizeY())
-_panel = Panel_Login_Renew
+local _panel = Panel_Login_Renew
 local PanelLogin = {
   _ui = {
     stc_EventBG = UI.getChildControl(_panel, "Static_EventBG"),
     stc_BI = UI.getChildControl(_panel, "Static_BI"),
     btn_Login = UI.getChildControl(_panel, "Button_Login"),
     btn_Exit = UI.getChildControl(_panel, "Button_Exit"),
+    btn_ChangeAccount = UI.getChildControl(_panel, "Button_ChangeAccount"),
     edit_ID = UI.getChildControl(_panel, "Edit_ID"),
     txt_InputID = UI.getChildControl(_panel, "StaticText_InputTxt"),
     stc_BlacklineUp = UI.getChildControl(_panel, "Static_Blackline_up"),
@@ -220,6 +221,7 @@ end
 function PanelLogin:registEvent()
   self._ui.btn_Login:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_BeforeOpen()")
   self._ui.btn_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
+  self._ui.btn_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_ButtonClick_ChangeAccount()")
   _panel:RegisterUpdateFunc("PaGlobal_PanelLogin_PerFrameUpdate")
   registerEvent("onScreenResize", "PaGlobal_PanelLogin_Resize")
 end
@@ -234,6 +236,7 @@ function PaGlobal_PanelLogin_Resize()
   self._ui.stc_EventBG:SetShow(false)
   self._ui.btn_Login:ComputePos()
   self._ui.btn_Exit:ComputePos()
+  self._ui.btn_ChangeAccount:ComputePos()
   self._ui.edit_ID:ComputePos()
   self._ui.txt_InputID:ComputePos()
   self._ui.stc_EventBG:ComputePos()
@@ -263,7 +266,7 @@ function PaGlobal_PanelLogin_Resize()
     self._ui.stc_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.stc_DaumCI:setRenderTexture(self._ui.stc_DaumCI:getBaseTexture())
     self._ui.stc_CI:SetSpanSize(self._ui.stc_DaumCI:GetSizeX() + 30, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
-  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
     self._ui.stc_DaumCI:SetShow(false)
     self._ui.stc_CI:SetSpanSize(10, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
   elseif isGameTypeSA() then
@@ -354,7 +357,7 @@ function PaGlobal_PanelLogin_PerFrameUpdate(deltaTime)
 end
 function PaGlobal_PanelLogin_BeforeOpen()
   local serviceType = getGameServiceType()
-  if (isGameTypeTaiwan() or isGameTypeKorea()) and 1 ~= serviceType then
+  if (isGameTypeTaiwan() or isGameTypeGT() or isGameTypeKorea()) and 1 ~= serviceType then
     FGlobal_TermsofGameUse_Open()
   else
     PaGlobal_PanelLogin_LoginEnter()
@@ -363,6 +366,20 @@ end
 function PaGlobal_PanelLogin_LoginEnter()
   local self = PanelLogin
   self:loginEnter()
+end
+function PaGlobal_PanelLogin_ButtonClick_ChangeAccount()
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_CHANGEACCOUNT_MSGBOX")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+    content = messageBoxMemo,
+    functionYes = PaGlobal_PanelLogin_ChangeAccount_MessageBoxConfirm,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData, "top")
+end
+function PaGlobal_PanelLogin_ChangeAccount_MessageBoxConfirm()
+  ToClient_ChangeAccount()
 end
 PaGlobal_PanelLogin_Init()
 PaGlobal_PanelLogin_Resize()

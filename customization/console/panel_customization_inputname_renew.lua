@@ -1,4 +1,4 @@
-Panel_Customizing_InputName:ignorePanelMoveSnapping()
+Panel_Customizing_InputName:ignorePadSnapMoveToOtherPanel()
 local Customization_InputNameInfo = {
   _ui = {
     _edit_InputName = UI.getChildControl(Panel_Customizing_InputName, "Edit_InputName"),
@@ -12,7 +12,7 @@ function PaGlobalFunc_Customization_InputName_Confirm(str)
   if nil == nameStr then
     nameStr = self._ui._edit_InputName:GetEditText()
   end
-  Panel_CharacterCreateOK_Renew(nameStr)
+  PaGlobalFunc_ClassSelect_CharacterCreate(nameStr)
 end
 function Customization_InputNameInfo:InitControl()
   self._ui._button_Confirm = UI.getChildControl(self._ui._static_KeyGuideBg, "Button_OK_ConsoleUI")
@@ -21,8 +21,8 @@ end
 function Customization_InputNameInfo:InitEvent()
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Confirm()")
   self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Close()")
-  Panel_Customizing_InputName:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_A, "PaGlobalFunc_Customization_InputName_Confirm()")
-  Panel_Customizing_InputName:registerPadUpEvent(__eCONSOLE_UI_INPUT_TYPE_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
+  Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Customization_InputName_Confirm()")
+  Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
   self._ui._edit_InputName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_Customization_InputName_Confirm")
 end
 function Customization_InputNameInfo:InitRegister()
@@ -34,6 +34,7 @@ function Customization_InputNameInfo:Initialize()
 end
 function PaGlobalFunc_Customization_InputName_SetFocus()
   local self = Customization_InputNameInfo
+  self._ui._edit_InputName:SetText("")
   SetFocusEdit(self._ui._edit_InputName)
 end
 function PaGlobalFunc_FromClient_Customization_InputName_luaLoadComplete()
@@ -43,16 +44,17 @@ end
 function PaGlobalFunc_Customization_InputName_Close()
   local self = Customization_InputNameInfo
   if false == PaGlobalFunc_Customization_InputName_GetShow() then
-    return
+    return false
   end
   if true == self._ui._edit_InputName:GetFocusEdit() then
     ClearFocusEdit()
-    return
+    return false
   end
   self._ui._edit_InputName:SetEditText("")
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_InputName_SetShow(false, false)
+  return true
 end
 function PaGlobalFunc_Customization_InputName_Open()
   local self = Customization_InputNameInfo

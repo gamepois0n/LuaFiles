@@ -51,12 +51,7 @@ function CursorUIEffect_UpdateCursorPos()
     end
   else
     _voidCursor:SetShow(false)
-    _consoleCursor:SetShow(true)
-    local snapControl = ToClient_getSnappedControl()
-    if nil == snapControl then
-      _consoleCursor:SetShow(false)
-      return
-    end
+    _consoleCursor:SetShow(false)
     local uiScale = ToClient_GetUIScale()
     local currentPosX = ToClient_getControlCurrentPositionX() / uiScale
     local currentPosY = ToClient_getControlCurrentPositionY() / uiScale
