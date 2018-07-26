@@ -225,12 +225,11 @@ function Panel_Dialog_Main_Quest_Info:update()
     return
   end
   local questCount = dialogData:getAcceptableQuestCount()
-  questCount = questCount + dialogData:getIsProgressingQuestCount()
   if 0 == questCount then
     return
   end
   local openCheck = PaGlobalFunc_Dialog_Main_GetShowCheckOnce()
-  if true == openCheck and false == PaGlobalFunc_MainDialog_Quest_GetFirstSet() then
+  if true == openCheck then
     self:openAndSetData(dialogData)
   else
     local leasFunButtomIndex = PaGlobalFunc_MainDialog_Bottom_GetLeastFunButtonIndex()

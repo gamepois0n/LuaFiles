@@ -21,7 +21,8 @@ local Window_WorldMap_RingMenuInfo = {
   },
   _isRingMenuOpen = false,
   _currentWorldNode = nil,
-  _currentRingMenuIndex = __eRingMenuPosition_Default
+  _currentRingMenuIndex = __eRingMenuPosition_Default,
+  _isTown = false
 }
 function Window_WorldMap_RingMenuInfo:RingMenuClear()
   self._ui._static_BlackBg:SetShow(false)
@@ -49,13 +50,19 @@ function Window_WorldMap_RingMenuInfo:ShowNodeInfo()
   PaGlobalFunc_WorldMap_NodeInfo_Open(nodeInfo)
   PaGlobalFunc_WorldMap_RingMenu_Close()
 end
+function Window_WorldMap_RingMenuInfo:WorkerManage()
+  local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
+  PaGlobalFunc_WorldMap_NodeProduct_Open(nodeInfo)
+end
 function Window_WorldMap_RingMenuInfo:ShowInvest()
   local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
   PaGlobalFunc_WorldMap_NodeManagement_Open(nodeInfo)
-  PaGlobalFunc_WorldMap_RingMenu_Close()
 end
 function Window_WorldMap_RingMenuInfo:TakeAll()
   local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
+  if true == self._isTown then
+    return
+  end
   PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeInfo)
 end
 function Window_WorldMap_RingMenuInfo:SetWayPoint()
@@ -92,6 +99,7 @@ function PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(index)
   elseif state._invest == index then
     self:ShowInvest()
   elseif state._makeAndServent == index then
+    self:WorkerManage()
   end
 end
 function PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(isShow)
@@ -104,6 +112,11 @@ end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapNode(explorationNode)
   local self = Window_WorldMap_RingMenuInfo
   self._ui._static_FocusKeyGuide:SetShow(false)
+  local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
+  local isTown = nodeInfo:getStaticStatus():getRegion():isMainTown()
+  self._ui._ringMenu[5]._button:SetMonoTone(isTown)
+  self._ui._ringMenu[5]._button:SetIgnore(isTown)
+  self._isTown = isTown
   PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(true)
 end
 function PaGlobalFunc_FromClient_WorldMpa_RingMenu_OnWorldMapNode(nodeBtn)
@@ -119,6 +132,9 @@ function PaGlobalFunc_WorldMap_RingMenu_SetPadEvent(type, func)
   Panel_Worldmap_RingMenu:registerPadEvent(type, func)
 end
 function Window_WorldMap_RingMenuInfo:UpdateRingMenu(position)
+  if true == self._isTown and 5 == position then
+    return
+  end
   for index = 0, self._config._count - 1 do
     if nil ~= self._ui._ringMenu[index] then
       self._ui._ringMenu[index]._decs:SetShow(index == position)
@@ -167,6 +183,9 @@ function PaGlobalFunc_WorldMap_RingMenu_UpdatePerFrame(deltaTime)
     self:UpdateRingMenu(pos)
   end
   ToClient_setMousePosition(self._config._centerX, self._config._centerY)
+  if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
+    ToClient_setMousePosition(0, 0)
+  end
 end
 function PaGlobalFunc_WorldMap_RingMenu_GetIsRingMenuOpen()
   local self = Window_WorldMap_RingMenuInfo
@@ -183,6 +202,7 @@ function PaGlobalFunc_WorldMap_RingMenu_Open()
   if true == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
     return
   end
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
   self:RingMenuClear()
   PaGlobalFunc_WorldMap_RingMenu_SetShow(true, false)
 end
@@ -191,6 +211,7 @@ function PaGlobalFunc_WorldMap_RingMenu_Close()
   if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
     return
   end
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   self:RingMenuClear()
   ToClient_SetIsIgnoreLStick(true)
   PaGlobalFunc_WorldMap_RingMenu_SetShow(false, false)

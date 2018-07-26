@@ -13,10 +13,10 @@ function PaGlobalFunc_WorldMap_RightMenu_SetCurrentNodeInfo(nodeInfo)
 end
 function Window_WorldMap_RightMenuInfo:InitControl()
 end
-function PaGlobalFunc_WorldMap_RightMenu_OpenBuyHouse()
+function PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
   local self = Window_WorldMap_RightMenuInfo
-  PaGlobalFunc_WorldMap_BuyHouse_SetCurrentNodeInfo(self._currentNodeInfo)
-  PaGlobalFunc_WorldMap_BuyHouse_Open()
+  PaGlobalFunc_WorldMap_HouseFilter_SetCurrentNodeInfo(self._currentNodeInfo)
+  PaGlobalFunc_WorldMap_HouseFilter_Open()
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenStable()
   local self = Window_WorldMap_RightMenuInfo
@@ -56,7 +56,7 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()
   end
 end
 function Window_WorldMap_RightMenuInfo:InitEvent()
-  self._ui._button_BuyHouse:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenBuyHouse()")
+  self._ui._button_BuyHouse:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()")
   self._ui._button_Stable:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenStable()")
   self._ui._button_WareHouse:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenWareHouse()")
   self._ui._button_Delivery:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()")

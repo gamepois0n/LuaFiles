@@ -25,6 +25,12 @@ local fishing_UI = {
 fishing_UI._fishWpDesc = UI.getChildControl(fishing_UI._fishWpDesc_BG, "StaticText_OnlyFishWpDesc")
 fishing_UI._fishingCancelDesc = UI.getChildControl(fishing_UI._fishWpDesc_BG, "StaticText_FishingCancel")
 fishing_UI._fishPoolIcon = UI.getChildControl(fishing_UI._fishWpDesc_BG, "Static_Fish_Pool_Icon")
+if _ContentsGroup_isConsolePadControl then
+  fishing_UI._fishWpDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  fishing_UI._fishWpDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBAL_MANUAL_ONLYFISHWPDESC"))
+  fishing_UI._fishingCancelDesc:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_XBOX1_MINIGAME_FISHING_CANCEL"))
+else
+end
 local fishGPoolValueUV = {
   [0] = {
     184,
@@ -79,12 +85,8 @@ function fishingGame_Initialize()
     value:SetShow(false)
     value:ComputePos()
   end
-  if _ContentsGroup_isConsolePadControl then
-    fishing_UI._fishWpDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    fishing_UI._fishWpDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBAL_MANUAL_ONLYFISHWPDESC"))
-    fishing_UI._fishingCancelDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_CANCEL"))
-  else
-  end
+  fishing_UI._fishWpDesc:SetShow(true)
+  fishing_UI._fishingCancelDesc:SetShow(true)
   local targetItemGrade = getSelfPlayer():getFishingAutoItemGrade()
   registerEvent("EventActionMiniGamePadDownOnce", "Panel_Minigame_Fishing_Info_PadPress")
 end
@@ -191,6 +193,9 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
+    PaGlobal_ConsoleQuickMenu:widgetOpen()
+    fishing_UI._fishWpDesc:SetShow(true)
+    fishing_UI._fishingCancelDesc:SetShow(true)
     Panel_Fishing:SetShow(true)
     Panel_Fishing:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Fishing, 0, 0.22)
@@ -204,7 +209,7 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
       actionString = keyCustom_GetString_ActionKey(gameOptionActionKey.Jump)
     end
     if _ContentsGroup_isConsolePadControl then
-      fishing_UI._purposeText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_START", "key", actionString))
+      fishing_UI._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_START"))
     else
       fishing_UI._purposeText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_START", "key", actionString))
     end
@@ -228,6 +233,8 @@ local function FishingGame_Manual_Fishing_0(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
+    fishing_UI._fishWpDesc:SetShow(true)
+    fishing_UI._fishingCancelDesc:SetShow(true)
     Panel_Fishing:SetShow(true)
     Panel_Fishing:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Fishing, 0, 0.22)
@@ -260,6 +267,8 @@ local function FishingGame_Manual_Fishing_1(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
+    fishing_UI._fishWpDesc:SetShow(true)
+    fishing_UI._fishingCancelDesc:SetShow(true)
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
     local actionString = ""
@@ -269,7 +278,7 @@ local function FishingGame_Manual_Fishing_1(actorKeyRaw, isSelf)
       actionString = keyCustom_GetString_ActionKey(gameOptionActionKey.Jump)
     end
     if _ContentsGroup_isConsolePadControl then
-      fishing_UI._purposeText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_1", "key", actionString))
+      fishing_UI._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_1"))
     else
       fishing_UI._purposeText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_1", "key", actionString))
     end
@@ -290,6 +299,8 @@ local function FishingGame_Manual_Fishing_2(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
+    fishing_UI._fishWpDesc:SetShow(true)
+    fishing_UI._fishingCancelDesc:SetShow(true)
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
     if _ContentsGroup_isConsolePadControl then

@@ -59,6 +59,7 @@ function MiniGame_BattleGauge:setProgress(isSetProgress)
 end
 function Panel_Minigame_BattleGauge_Start()
   local self = MiniGame_BattleGauge
+  self._ui.txt_TitleText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_BATTLEGAUGE_REPEAT_A"))
   self._ui.stc_MiddleLine:AddEffect("fUI_Repair01B", true, 0, 0)
   remainTime = 11
   Panel_BattleGauge:SetShow(true)

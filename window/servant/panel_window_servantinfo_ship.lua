@@ -212,7 +212,7 @@ function shipInfo:update()
   self._staticText_BrakeSpeedValue:SetText(string.format("%.1f", servantWrapper:getStat(CppEnums.ServantStatType.Type_BrakeSpeed) / 10000) .. "%")
   self._staticText_Value_Def:SetText(vehicleInfo:get():getEquipment():getDefense())
   local vehicleType = servantWrapper:getVehicleType()
-  if CppEnums.VehicleType.Type_PersonTradeShip == vehicleType then
+  if CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == vehicleType then
     self._mp:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP"))
   else
     self._mp:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_HEART"))

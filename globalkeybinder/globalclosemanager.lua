@@ -187,7 +187,6 @@ local panel_WindowList = {
   Panel_Knowledge_Main,
   Panel_IngameCashShop_GoodsTooltip,
   Panel_Console_Dialog_GuildPopup,
-  Panel_Window_Mail_Renew,
   Panel_Console_Window_GuildCreate,
   Panel_Window_MailDetail_Renew,
   Panel_Dialog_NpcGift_Renew,
@@ -198,7 +197,17 @@ local panel_WindowList = {
   Panel_Window_PartyInvite,
   Panel_Widow_ChattingHistory_Renew,
   Panel_PartyRecruite,
-  Panel_Window_LinkServantInfo
+  Panel_Window_LinkServantInfo,
+  Panel_Window_Guild_Renew,
+  Panel_Window_Guild_MemberFunction,
+  Panel_Window_Guild_MemberInfo,
+  Panel_Window_Guild_QuestInfo,
+  Panel_Window_GuildMark,
+  Panel_Window_Guild_WarDeclare,
+  Panel_Window_Guild_SkillInfo,
+  Panel_Window_Guild_Introduction,
+  Panel_Window_MailDetail_Renew,
+  Panel_Window_GuildWarInfo
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -311,7 +320,6 @@ registerEscapeLuaEvent(Panel_Win_System, "PanelEscapeFunc_MessageBox()")
 registerEscapeLuaEvent(Panel_Win_Check, "PanelEscapeFunc_MessageBoxCheck()")
 registerEscapeLuaEvent(Panel_LifeRanking, "PanelEscapeFunc_LifeRanking()")
 registerEscapeLuaEvent(Panel_ChannelSelect, "PanelEscapeFunc_ChannelSelect()")
-registerEscapeLuaEvent(Panel_Console_Window_Guild, "PanelEscapeFunc_GuildClose()")
 registerEscapeLuaEvent(Panel_Window_MentalGame, "PanelEscapeFunc_MentalGameClose()")
 registerEscapeLuaEvent(Panel_Dialog_SkillSpecialize, "PaGlobalFunc_Dialog_SkillSpecialize_Exit()")
 registerEscapeLuaEvent(Panel_QuickMenuCustom, "PanelEscapeFunc_QuickMenuCustom()")
@@ -354,6 +362,11 @@ registerEscapeLuaEvent(Panel_Worldmap_NodeManagement, "PanelEscapeFunc_WorldMap_
 registerEscapeLuaEvent(Panel_Window_ServantInfo, "PanelEscapeFunc_ServantInfo_Horse_Close()")
 registerEscapeLuaEvent(Panel_CarriageInfo, "PanelEscapeFunc_ServantInfo_Carriage_Close()")
 registerEscapeLuaEvent(Panel_ShipInfo, "PanelEscapeFunc_ServantInfo_Ship_Close()")
+registerEscapeLuaEvent(Panel_Window_WorkerManager_Renew, "PaGlobalFunc_WorkerManager_Close()")
+registerEscapeLuaEvent(Panel_Window_WorkerManager_Filter_Renew, "PaGlobalFunc_WorkerManager_Filter_Close()")
+registerEscapeLuaEvent(Panel_Window_WorkerManager_ChangeSkill_Renew, "PaGlobalFunc_WorkerManager_ChangeSkill_Close()")
+registerEscapeLuaEvent(Panel_Window_WorkerManager_Restore_Renew, "PaGlobalFunc_WorkerManager_Restore_Close()")
+registerEscapeLuaEvent(Panel_Resurrection_ItemSelect, "PaGlobalFunc_ResurrerectionItem_Close()")
 function PanelEscapeFunc_ServantInfo_Horse_Close()
   if false == _ContentsGroup_RenewUI_StableInfo then
     ServantInfo_Close()
@@ -455,11 +468,6 @@ end
 function PanelEscapeFunc_MentalGameClose()
   if true == PaGlobalFunc_MentalGame_Open() then
     PaGlobalFunc_MentalGame_Close()
-  end
-end
-function PanelEscapeFunc_GuildClose()
-  if true == PaGlobalFunc_Guild_GetShow() then
-    PaGlobalFunc_Guild_Close()
   end
 end
 function PanelEscapeFunc_VoiceChat()

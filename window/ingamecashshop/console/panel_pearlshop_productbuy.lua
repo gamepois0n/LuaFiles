@@ -1,7 +1,7 @@
 local pearlShopProductBuy = {
   _init = false,
   _panel = Panel_PearlShop_ProductBuy,
-  _productInfo = nil,
+  _productNoRaw = 0,
   _amount = 1,
   _ui = {
     _titleControl = nil,
@@ -107,10 +107,15 @@ function pearlShopProductBuy:open(productInfo)
   if not productInfo then
     return
   end
-  self._productInfo = productInfo
+  self._productNoRaw = productInfo:getNoRaw()
   self._amount = 1
   self:update()
   self._panel:SetShow(true)
+end
+function pearlShopProductBuy:getProductInfo()
+  if self._productNoRaw then
+    return getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
+  end
 end
 function PaGlobalFunc_PearlShopProductBuyOpen(productInfo)
   pearlShopProductBuy:open(productInfo)
@@ -119,7 +124,11 @@ function PaGlobalFunc_PearlShopProductBuyBuy()
   pearlShopProductBuy:buy()
 end
 function pearlShopProductBuy:buy()
-  getIngameCashMall():requestBuyItem(self._productInfo:getNoRaw(), self._amount, self._productInfo:getPrice(), false, toInt64(0, -1), 0, 0, CppEnums.ItemWhereType.eInventory)
+  local productInfo = self:getProductInfo()
+  if not productInfo then
+    return
+  end
+  getIngameCashMall():requestBuyItem(productInfo:getNoRaw(), self._amount, productInfo:getPrice(), false, toInt64(0, -1), 0, 0, CppEnums.ItemWhereType.eInventory)
 end
 function pearlShopProductBuy:close()
   self._panel:SetShow(false)
@@ -128,30 +137,34 @@ function PaGlobalFunc_PearlShopProductBuyClose()
   pearlShopProductBuy:close()
 end
 function pearlShopProductBuy:update()
-  self._mainSlot:setItemByStaticStatus(self._productInfo:getItemByIndex(0))
-  self._ui._titleControl:SetText(self._productInfo:getDisplayName())
-  local itemListCount = self._productInfo:getItemListCount()
+  local productInfo = self:getProductInfo()
+  if not productInfo then
+    return
+  end
+  self._mainSlot:setItemByStaticStatus(productInfo:getItemByIndex(0))
+  self._ui._titleControl:SetText(productInfo:getDisplayName())
+  local itemListCount = productInfo:getItemListCount()
   local firstPosX = self._ui._subItemSlotTemplateControl:GetPosX() - 0.5 * (self._ui._subItemSlotTemplateControl:GetSizeX() + 5) * (itemListCount - 1)
   local desc = ""
   for i = 0, self._ui._subItemSlotControlListSize - 1 do
     local control = self._ui._subItemSlotControlList[i]
     control:SetPosX(firstPosX + (self._ui._subItemSlotTemplateControl:GetSizeX() + 5) * i)
-    local showFlag = i < self._productInfo:getItemListCount()
+    local showFlag = i < productInfo:getItemListCount()
     control:SetShow(showFlag)
     if showFlag then
-      local itemInfo = self._productInfo:getItemByIndex(i)
+      local itemInfo = productInfo:getItemByIndex(i)
       self._slotList[i]:setItemByStaticStatus(itemInfo, 1)
       desc = desc .. itemInfo:getName() .. "\n"
     end
   end
   self._ui._descControl:SetText(desc)
   self._ui._amountControl:SetText(tostring(self._amount))
-  local priceStr = makeDotMoney(toInt64(0, self._amount) * self._productInfo:getPrice())
-  if toInt64(0, 0) < self._productInfo:getPearlPrice() then
+  local priceStr = makeDotMoney(toInt64(0, self._amount) * productInfo:getPrice())
+  if toInt64(0, 0) < productInfo:getPearlPrice() then
     self._ui._pearlControl:SetShow(true)
     self._ui._mileageControl:SetShow(false)
     self._ui._pearlControl:SetText(priceStr)
-  elseif toInt64(0, 0) < self._productInfo:getMileagePrice() then
+  elseif toInt64(0, 0) < productInfo:getMileagePrice() then
     self._ui._pearlControl:SetShow(false)
     self._ui._mileageControl:SetShow(true)
     self._ui._mileageControl:SetText(priceStr)

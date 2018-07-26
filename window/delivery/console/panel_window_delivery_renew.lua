@@ -58,10 +58,6 @@ function PanelDelivery:openTab(tabIdx)
     self._ui.btn_Delivery:SetFontColor(titleOnColor)
     self._ui.btn_Send:SetFontColor(titleOffColor)
     delivery_requsetList()
-    if ToClient_WorldMapIsShow() then
-      WorldMapPopupManager:increaseLayer(true)
-      WorldMapPopupManager:push(_panel, true)
-    end
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_PanelDelivery_ReceiveAll()")
     self:updateDeliveryList()
   elseif self._tabIdx.send == tabIdx then
@@ -69,10 +65,6 @@ function PanelDelivery:openTab(tabIdx)
     self._ui.stc_DeliveryBg:SetShow(false)
     self._ui.btn_Send:SetFontColor(titleOnColor)
     self._ui.btn_Delivery:SetFontColor(titleOffColor)
-    if ToClient_WorldMapIsShow() then
-      WorldMapPopupManager:increaseLayer(true)
-      WorldMapPopupManager:push(_panel, true)
-    end
     self._ui.txt_SendDest:SetText("")
     self.selectCarriageKeyRaw = 0
     self.selectWaypointKey = 0
@@ -86,11 +78,7 @@ function PanelDelivery:openTab(tabIdx)
 end
 function PanelDelivery:close()
   clearDeliveryPack()
-  if true == ToClient_WorldMapIsShow() then
-    if true == _panel:GetShow() then
-      WorldMapPopupManager:pop()
-    end
-  elseif true == _panel:GetShow() then
+  if true == _panel:GetShow() then
     _panel:SetShow(false)
     FromClient_WarehouseUpdate()
   end
@@ -121,8 +109,10 @@ function PanelDelivery:init()
   self._ui.txt_SendCarriageType = UI.getChildControl(self._ui.txt_SendCarriageTypeTitle, "StaticText_SelectedType")
   self._ui.frame_CarriageType = UI.getChildControl(self._ui.stc_SendLeftBg, "Frame_CarriageType")
   self._ui.stc_BottomBg = UI.getChildControl(self._ui.stc_SendBg, "Static_BottomBg")
-  self._ui.txt_PricePenalty = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_NoticePrice")
   self._ui.txt_SendConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Send_ConsoleUI")
+  self._ui.txt_PricePenalty = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_NoticePrice")
+  self._ui.txt_PricePenalty:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_PricePenalty:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_WINDOW_DELIVERY_REQUEST_WAYPOINTPENALTY"))
   self._ui.stc_ItemBg = UI.getChildControl(self._ui.stc_SendBg, "Static_ItemListBg")
   for slotIdx = 0, self.maxSendItemIdx - 1 do
     local row = math.floor(slotIdx / self.slotCols)

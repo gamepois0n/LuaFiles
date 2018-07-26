@@ -179,6 +179,7 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   end
   ToClient_SetGuildMode(self._isGuildWarMode)
   handleGuildModeChange(self._isGuildWarMode)
+  PaGlobalFunc_FromClient_WorldMpa_RingMenu_OutWorldMapNode()
   ToClient_WorldmapStateChange(renderState)
   if 7 == index then
     self:UpdateFilder(index)
@@ -212,7 +213,6 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
   local self = Window_WorldMap_TopMenuInfo
   local eState = CppEnums.WorldMapState
   local eCheckState = CppEnums.WorldMapCheckState
-  PaGlobalFunc_FromClient_WorldMpa_RingMenu_OutWorldMapNode()
   if true == _ContentsGroup_ForXBoxFinalCert then
     FromClient_WorldMapSideBar_RenderStateChange(state)
     return

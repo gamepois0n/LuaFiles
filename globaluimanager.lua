@@ -161,7 +161,8 @@ local panel_WindowList = {
   Panel_Window_CharacterInfo_Renew,
   Panel_Dialog_SkillSpecialize,
   Panel_Window_Knowledge_Renew,
-  Panel_Guild_ManufactureSelect
+  Panel_Guild_ManufactureSelect,
+  Panel_Window_GuildWarInfo
 }
 local panel_SoundedWindowList = {
   Panel_Window_Inventory,
@@ -350,7 +351,7 @@ function close_WindowPanelList()
     FGlobal_TransferLife_Close()
     return
   end
-  if Panel_DyePalette:GetShow() then
+  if false == _ContentsGroup_RenewUI_Dyeing and Panel_DyePalette:GetShow() then
     FGlobal_DyePalette_Close()
   end
   if Panel_SetShortCut:GetShow() then
@@ -614,7 +615,7 @@ function close_force_WindowPanelList()
   if Panel_TransferLifeExperience:GetShow() then
     FGlobal_TransferLife_Close()
   end
-  if Panel_DyePalette:GetShow() then
+  if false == _ContentsGroup_RenewUI_Dyeing and Panel_DyePalette:GetShow() then
     FGlobal_DyePalette_Close()
   end
   if Panel_SetShortCut:GetShow() then

@@ -228,10 +228,12 @@ function FromClient_ConvertEnchantFailCountToItemAck()
 end
 function FromClient_ConvertEnchantFailItemToCountAck()
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_6"))
-  if _ContentsGroup_isUsedNewEnchant == true then
-    PaGlobal_Enchant:setEnchantFailCount()
-  else
-    PaGlobal_Enchant:enchantFailCount()
+  if false == _ContentsGroup_RenewUI_SpiritEnchant then
+    if _ContentsGroup_isUsedNewEnchant == true then
+      PaGlobal_Enchant:setEnchantFailCount()
+    else
+      PaGlobal_Enchant:enchantFailCount()
+    end
   end
 end
 function FromClient_ConvertEnchantFailCountToItem(fromWhereType, fromSlotNo)

@@ -75,6 +75,8 @@ local function MiniGame_Manual_Timing_0(actorKeyRaw, isSelf)
     Panel_Global_Manual:SetShow(true)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
+    _ui.txt_Purpose:SetSize(680, 98)
+    _ui.txt_Purpose:SetTextMode(UI_TM.eTextMode_AutoWrap)
     _ui.txt_Purpose:SetShow(true)
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_0"))
@@ -96,6 +98,7 @@ local function MiniGame_Manual_Timing_1(actorKeyRaw, isSelf)
     _ui.txt_HorseInfo:SetShow(true)
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Command_Info:SetShow(true)
+      _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_1"))
     else
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TIMING_1"))
@@ -111,6 +114,7 @@ local function MiniGame_Manual_Timing_2(actorKeyRaw, isSelf)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
     _ui.stc_Taming_Info:SetShow(true)
     _ui.txt_HorseInfo:SetShow(true)
+    _ui.txt_HorseInfo:SetTextMode(UI_TM.eTextMode_Autowrap)
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Command_Info:SetShow(false)
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_2"))
@@ -123,6 +127,7 @@ end
 local function MiniGame_Manual_Timing_3(actorKeyRaw, isSelf)
   if _ContentsGroup_isConsolePadControl then
     _ui.txt_Command_Info:SetShow(true)
+    _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
     _ui.stc_Taming_Info:SetShow(false)
     UIAni.AlphaAnimation(0.5, _ui.txt_Command_Info, 0.5, 0.75)
   else
@@ -277,6 +282,7 @@ end
 local function HerbMachine_ControlSelect()
   if _ContentsGroup_isConsolePadControl then
     _ui.txt_Command_Info:SetShow(true)
+    _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
   else
     _ui.stc_PC_Control_BG:SetShow(true)
     _ui.stc_SpaceBar:SetShow(true)
@@ -389,6 +395,7 @@ end
 local function Buoy_ControlSelect()
   if _ContentsGroup_isConsolePadControl then
     _ui.txt_Command_Info:SetShow(true)
+    _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
   else
     _ui.stc_PC_Control_BG:SetShow(true)
     _ui.stc_SpaceBar:SetShow(true)
@@ -702,7 +709,7 @@ local KeyGuide_Squat = function()
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_SQUAT"))
   useTab:SetShow(true)
   if true == ToClient_isXBox() then
-    PaGlobalFunc_ConsoleKeyGuide_SetState(4)
+    PaGlobalFunc_ConsoleKeyGuide_SetState(3)
     useTab:SetShow(false)
   end
 end
@@ -726,7 +733,7 @@ local KeyGuide_Down = function()
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_DOWN"))
   useTab:SetShow(true)
   if true == ToClient_isXBox() then
-    PaGlobalFunc_ConsoleKeyGuide_SetState(5)
+    PaGlobalFunc_ConsoleKeyGuide_SetState(4)
     useTab:SetShow(false)
   end
 end

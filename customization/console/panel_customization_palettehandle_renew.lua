@@ -41,7 +41,6 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateEyePalette(colorTempate,
     tempStatic:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_PaletteHandle_UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. "," .. colorIndex .. ")")
     self._colorStatic[colorIndex] = tempStatic
   end
-  ToClient_padSnapRefreshTarget(colorParent)
   local verticalCount = count / self._config._columnCount + 1
   colorParent:SetSize(colorParent:GetSizeX(), verticalCount * (self._config._imageSize + 2))
   colorParent:SetChildIndex(self._focusBox, 9999)
@@ -78,7 +77,6 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateCommonPalette(colorTempa
     tempStatic:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_PaletteHandle_UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. colorIndex .. ")")
     self._colorStatic[colorIndex] = tempStatic
   end
-  ToClient_padSnapRefreshTarget(colorParent)
   local verticalCount = count / self._config._columnCount + 1
   colorParent:SetSize(colorParent:GetSizeX(), verticalCount * (self._config._imageSize + 2))
   colorParent:SetChildIndex(self._focusBox, 9999)

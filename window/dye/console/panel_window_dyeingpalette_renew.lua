@@ -1,0 +1,457 @@
+local _panel = Panel_Window_DyeingPalette_Renew
+local PALETTE_TYPE = {
+  ALL = 1,
+  MINE = 2,
+  MERV = 3
+}
+local PALETTE_CATEGORY = {
+  NORMAL = 1,
+  OLVIA = 2,
+  VELIA = 3,
+  HEIDEL = 4,
+  KEPLAN = 5,
+  CALPHEON = 6,
+  MEDIAH = 7,
+  VALENCIA = 8
+}
+local DyeingPalette = {
+  _ui = {
+    stc_tabMenuBG = UI.getChildControl(_panel, "Static_TabMenuBG"),
+    stc_keyGuideLB = nil,
+    stc_keyGuideRB = nil,
+    rdo_paletteTypes = nil,
+    stc_body = UI.getChildControl(_panel, "Static_SubFrameBg"),
+    stc_subTabBG = nil,
+    stc_keyGuideLT = nil,
+    stc_keyGuideRT = nil,
+    rdo_categoryTypes = nil,
+    stc_partSelectBG = nil,
+    rdo_color = {},
+    stc_partColor = {},
+    stc_ampuleListBG = nil,
+    stc_ampuleSlotBG = {},
+    stc_garment = {},
+    txt_ampuleCount = {},
+    scroll_ampuleList = nil,
+    stc_bottomBG = UI.getChildControl(_panel, "Static_BottomBg"),
+    txt_keyGuideB = nil,
+    txt_keyGuideA = nil
+  },
+  _defaultXGap = 75,
+  _defaultYGap = 75,
+  _ampuleListColCount = 7,
+  _ampuleListRowCount = 7,
+  _ampuleListStartX = 30,
+  _ampuleListStartY = 40,
+  _nowPaletteIndex = 1,
+  _nowPaletteCategoryIndex = 1,
+  _nowPaletteDataIndex = -1,
+  _currentScrollAmount = 0,
+  _partDyeInfo = {},
+  _selectedDyePart = {},
+  _slotNo = nil,
+  _isPearlPalette = false,
+  _paletteShowAll = true
+}
+function FromClient_luaLoadComplete_DyeingPalette_Init()
+  DyeingPalette:initialize()
+end
+registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_DyeingPalette_Init")
+function DyeingPalette:initialize()
+  self._ui.stc_keyGuideLB = UI.getChildControl(self._ui.stc_tabMenuBG, "Static_LB")
+  self._ui.stc_keyGuideLB = UI.getChildControl(self._ui.stc_tabMenuBG, "Static_RB")
+  self._ui.rdo_paletteTypes = {
+    [PALETTE_TYPE.ALL] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_AllPalette"),
+    [PALETTE_TYPE.MINE] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_MyPallete")
+  }
+  self._ui.rdo_paletteTypes[1]:SetText("All")
+  self._ui.rdo_paletteTypes[2]:SetText("Mine")
+  self._ui.stc_subTabBG = UI.getChildControl(self._ui.stc_body, "Static_SubTabMenuBG")
+  self._ui.stc_keyGuideLT = UI.getChildControl(self._ui.stc_subTabBG, "Static_LT")
+  self._ui.stc_keyGuideRT = UI.getChildControl(self._ui.stc_subTabBG, "Static_RT")
+  self._ui.rdo_categoryTypes = {
+    [PALETTE_CATEGORY.NORMAL] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Normal"),
+    [PALETTE_CATEGORY.OLVIA] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Olvia"),
+    [PALETTE_CATEGORY.VELIA] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Velia"),
+    [PALETTE_CATEGORY.HEIDEL] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Heidel"),
+    [PALETTE_CATEGORY.KEPLAN] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Keplan"),
+    [PALETTE_CATEGORY.CALPHEON] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Calpheon"),
+    [PALETTE_CATEGORY.MEDIAH] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Mediah"),
+    [PALETTE_CATEGORY.VALENCIA] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_ValenCia")
+  }
+  self._ui.stc_partSelectBG = UI.getChildControl(self._ui.stc_body, "Static_PartSelect")
+  self._ui.txt_partSelectTitle = UI.getChildControl(self._ui.stc_partSelectBG, "StaticText_PartSelectTitle")
+  for ii = 1, 18 do
+    self._ui.rdo_color[ii] = UI.getChildControl(self._ui.stc_partSelectBG, "Radiobutton_ColorBg_" .. ii)
+    self._ui.stc_partColor[ii] = UI.getChildControl(self._ui.rdo_color[ii], "Static_Color_" .. ii)
+  end
+  self._ui.stc_ampuleListBG = UI.getChildControl(self._ui.stc_body, "Static_PaletteListBG")
+  self._ui.scroll_ampuleList = UI.getChildControl(self._ui.stc_ampuleListBG, "Scroll_PaletteItemList")
+  UIScroll.InputEvent(self._ui.scroll_ampuleList, "InputScroll_DyeingPalette_Scroll")
+  UIScroll.InputEventByControl(self._ui.stc_ampuleListBG, "InputScroll_DyeingPalette_Scroll")
+  self:initAmpuleList()
+  self:registEventHandler()
+end
+function DyeingPalette:initAmpuleList()
+  local ampuleSlotCount = self._ampuleListColCount * self._ampuleListRowCount
+  self._ui.stc_ampuleSlotBG = {}
+  local template = UI.getChildControl(self._ui.stc_ampuleListBG, "Static_PaletteItem_Template")
+  for ii = 1, ampuleSlotCount do
+    self._ui.stc_ampuleSlotBG[ii] = UI.cloneControl(template, self._ui.stc_ampuleListBG, "Static_PaletteItem_" .. ii)
+    self._ui.stc_garment[ii] = UI.getChildControl(self._ui.stc_ampuleSlotBG[ii], "Static_Garment")
+    self._ui.txt_ampuleCount[ii] = UI.getChildControl(self._ui.stc_ampuleSlotBG[ii], "StaticText_Count")
+    self._ui.stc_ampuleSlotBG[ii]:SetPosX(self._ampuleListStartX + (ii - 1) % self._ampuleListColCount * self._defaultXGap)
+    self._ui.stc_ampuleSlotBG[ii]:SetPosY(self._ampuleListStartY + math.floor((ii - 1) / self._ampuleListColCount) * self._defaultYGap)
+    self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
+    if ii <= self._ampuleListColCount then
+      self._ui.stc_ampuleSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_DyeingPalette_Scroll(true)")
+    elseif ii > ampuleSlotCount - self._ampuleListColCount then
+      self._ui.stc_ampuleSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "InputScroll_DyeingPalette_Scroll(false)")
+    end
+  end
+  template:SetShow(false)
+end
+function DyeingPalette:registEventHandler()
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LB, "Input_DyeingPalette_NextPalette(-1)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_RB, "Input_DyeingPalette_NextPalette(1)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "Input_DyeingPalette_NextCategory(-1)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "Input_DyeingPalette_NextCategory(1)")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_DyeingPalette_ApplyDye()")
+end
+function PaGlobalFunc_DyeingPalette_GetShow()
+  return _panel:GetShow()
+end
+function PaGlobalFunc_DyeingPalette_Open(targetType, slotNo)
+  DyeingPalette:open(targetType, slotNo)
+end
+function DyeingPalette:open(targetType, slotNo)
+  if false == _panel:GetShow() then
+    _panel:SetShow(true)
+  end
+  self._selected_CharacterTarget = targetType
+  self._slotNo = slotNo
+  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
+  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self:updateDyeParts()
+  self:updatePalette()
+end
+function PaGlobalFunc_DyeingPalette_Close()
+  DyeingPalette:close()
+end
+function DyeingPalette:close()
+  _panel:SetShow(false)
+  self._selectedDyePart = {}
+end
+function DyeingPalette:updateDyeParts()
+  if false == _panel:GetShow() then
+    return
+  end
+  ToClient_SetDyeingTargetInformationByEquipNo(self._slotNo)
+  local colorSlotCount = ToClient_getDyeingTargetInformationCount()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "colorSlotCount : " .. colorSlotCount)
+  for ii = 1, colorSlotCount do
+    self._ui.rdo_color[ii]:SetShow(true)
+    local partIdx = ToClient_getDyeingTargetPartIdxByIndex(ii - 1)
+    local slotIdx = ToClient_getDyeingTartSlotIndexByIndex(ii - 1)
+    local DyeSlotIdx = ToClient_getDyeingTargetDyeSlotIndexByIndex(ii - 1)
+    local PartSlot = self._ui.rdo_color[ii]
+    PartSlot:addInputEvent("Mouse_LUp", " Input_DyeingPalette_DyePart( " .. partIdx .. ", " .. slotIdx .. "," .. ii .. ")")
+    PartSlot:SetShow(true)
+    local getColorInfo = ToClient_RequestGetUsedPartColor(self._slotNo, partIdx, slotIdx)
+    self._ui.stc_partColor[ii]:SetAlphaIgnore(true)
+    self._ui.stc_partColor[ii]:SetColor(getColorInfo)
+    self._ui.stc_partColor[ii]:SetShow(true)
+    self._partDyeInfo[ii] = {
+      partIdx,
+      slotIdx,
+      DyeSlotIdx
+    }
+  end
+  for ii = colorSlotCount + 1, #self._ui.rdo_color do
+    self._ui.rdo_color[ii]:SetShow(false)
+  end
+end
+function Input_DyeingPalette_DyePart(partID, slotID, uiIdx)
+  local self = DyeingPalette
+  ToClient_RequestSelectedDyeingPartSlot(self._slotNo, partID, slotID)
+  for ii = 1, #self._ui.stc_partColor do
+    self._ui.stc_partColor[ii]:SetShow(true)
+  end
+  self._ui.stc_partColor[uiIdx]:SetShow(false)
+  self._nowClickPartId = partID
+  self._nowClickPartSlotId = slotID
+  self:updatePalette()
+end
+function DyeingPalette:updatePalette()
+  if false == _panel:GetShow() then
+    return
+  end
+  local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
+  local arrCount = 1
+  if nil ~= DyeingPaletteCategoryInfo then
+    arrCount = DyeingPaletteCategoryInfo:getListSize()
+    self._paletteCount = arrCount
+    for ii = 1, #self._ui.stc_ampuleSlotBG do
+      local dataIdx = self._currentScrollAmount + ii
+      if arrCount >= dataIdx then
+        self._ui.stc_ampuleSlotBG[ii]:SetShow(true)
+        self._ui.txt_ampuleCount[ii] = UI.getChildControl(self._ui.stc_ampuleSlotBG[ii], "StaticText_Count")
+        if false == self._isPearlPalette then
+          self._ui.txt_ampuleCount[ii]:SetShow(true)
+          self._ui.txt_ampuleCount[ii]:SetText(tostring(DyeingPaletteCategoryInfo:getCount(dataIdx - 1, true)))
+        else
+          self._ui.txt_ampuleCount[ii]:SetShow(false)
+        end
+        local itemEnchantKey = DyeingPaletteCategoryInfo:getItemEnchantKey(dataIdx - 1)
+        local garment = self._ui.stc_garment[ii]
+        garment:SetAlphaIgnore(true)
+        garment:SetColor(DyeingPaletteCategoryInfo:getColor(dataIdx - 1))
+        garment:addInputEvent("Mouse_LUp", "Input_DyeingPalette_Ampule(" .. dataIdx .. ")")
+      else
+        self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
+      end
+    end
+  else
+    for ii = 1, #self._ui.stc_ampuleSlotBG do
+      self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
+    end
+  end
+  UIScroll.SetButtonSize(self._ui.scroll_ampuleList, self._ampuleListColCount * self._ampuleListRowCount, arrCount)
+end
+function Input_DyeingPalette_Ampule(dataIdx)
+  local self = DyeingPalette
+  self._nowPaletteDataIndex = dataIdx
+  if -1 == self._selected_EquipSlotNo or -1 == self._nowClickPartId then
+    return
+  end
+  local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
+  local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex - 1, true)
+  local convertCount = tostring(ampuleCount)
+  convertCount = tonumber(convertCount)
+  if convertCount >= 1 then
+    self._ampuleCountCheck = false
+  else
+    self._ampuleCountCheck = true
+    if true == self._isPearlPalette then
+      self._ampuleCountCheck = false
+    end
+  end
+  ToClient_RequestSelectedDyeingPalette(self._slotNo, self._nowClickPartId, self._nowClickPartSlotId, self._nowPaletteCategoryIndex - 1, dataIdx - 1, self._paletteShowAll)
+  if 0 < ToClient_RequestGetPartDyeingSlotCount(self._slotNo, 0) then
+    table.insert(self._selectedDyePart, self._slotNo)
+  end
+  self:updateDyeParts()
+end
+function InputScroll_DyeingPalette_Scroll(isUp)
+  local self = DyeingPalette
+  if nil ~= self._paletteCount then
+    self._currentScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_ampuleList, isUp, self._ampuleListRowCount, self._paletteCount, self._currentScrollAmount, self._ampuleListColCount)
+  end
+  self:updatePalette()
+end
+function Input_DyeingPalette_NextPalette(nextPaletteIndex)
+  local self = DyeingPalette
+  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
+  local targetPalette = self._nowPaletteIndex + nextPaletteIndex
+  if targetPalette < 1 then
+    targetPalette = #self._ui.rdo_paletteTypes
+  elseif targetPalette > #self._ui.rdo_paletteTypes then
+    targetPalette = 1
+  end
+  if PALETTE_TYPE.MERV == targetPalette and not self:isPlayerHaveActivedMerv() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_MUST_ACTIVE_PEARLCOLOR"))
+    targetPalette = self._nowPaletteIndex
+  end
+  if PALETTE_TYPE.MERV == targetPalettethen then
+    ToClient_RequestClearDyeingSlot(self._slotNo)
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_PALETTE_PREVIEW_ACK"))
+  end
+  self._nowPaletteIndex = targetPalette
+  self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
+  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
+  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
+  self:updatePalette()
+end
+function DyeingPalette:isPlayerHaveActivedMerv()
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return false
+  end
+  return selfPlayer:get():isApplyChargeSkill(CppEnums.UserChargeType.eUserChargeType_DyeingPackage)
+end
+function Input_DyeingPalette_NextCategory(nextCategoryIndex)
+  local self = DyeingPalette
+  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(false)
+  local targetCategory = self._nowPaletteCategoryIndex + nextCategoryIndex
+  if targetCategory < 1 then
+    targetCategory = #self._ui.rdo_categoryTypes
+  elseif targetCategory > #self._ui.rdo_categoryTypes then
+    targetCategory = 1
+  end
+  self._nowPaletteCategoryIndex = targetCategory
+  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self:updatePalette()
+end
+local dyePartString = {
+  [0] = {
+    [0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_MAINHAND"),
+    [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_SUBHAND"),
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CHARACTER_ARMOR"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_GLOVES"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_BOOTS"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_HELM"),
+    [18] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_MAINHAND"),
+    [19] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_SUBHAND"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BODY"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HANDS"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BOOTS"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HELM"),
+    [20] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_UNDERWEAR"),
+    [21] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CHARACTER_ACC_0"),
+    [22] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CHARACTER_ACC_1"),
+    [23] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CHARACTER_ACC_2"),
+    [29] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_awakenWeapon"),
+    [30] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_avatarAwakenWeapon")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BARD"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_STIRRUP"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SADDLE"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HORSEHEAD"),
+    [12] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_FOOT"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_ARMOR"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_STIRRUP"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_SADDLE"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_FACE")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_BODY"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_TIRE"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_FLAG"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_INSIGNIA"),
+    [13] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_LAMP"),
+    [25] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_CORVER"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_AVATAR_BODY"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_AVATAR_TIRE"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_AVATAR_FLAG"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_AVATAR_INSIGNIA"),
+    [26] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_CARRIAGE_AVATAR_CORVER")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BARD"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_STIRRUP"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SADDLE"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HORSEHEAD"),
+    [12] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_FOOT"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_ARMOR"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_STIRRUP"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_SADDLE"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_FACE")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BARD"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_STIRRUP"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SADDLE"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HORSEHEAD"),
+    [12] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_FOOT"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_ARMOR"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_STIRRUP"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_SADDLE"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_FACE")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BARD"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_STIRRUP"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SADDLE"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_HORSEHEAD"),
+    [12] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_FOOT"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_ARMOR"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_STIRRUP"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_SADDLE"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_DYEPART_HORSE_AVATAR_FACE")
+  },
+  {
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_WAREHOUSE"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_REPAIRSHOP"),
+    [5] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_SHOP"),
+    [6] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_TENT"),
+    [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_WAREHOUSE"),
+    [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_REPAIRSHOP"),
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_SHOP"),
+    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DYERENEW_DYEPART_CAMPTENT_TENT")
+  }
+}
+function Input_DyeingPalette_ApplyDye()
+  local self = DyeingPalette
+  local _dyePartString = ""
+  local equipSlotNo = self._slotNo
+  if -1 == self._nowPaletteDataIndex then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_FIRSTSELECTDYENOGETITEM"))
+    return
+  end
+  if true == self._ampuleCountCheck then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_AMPULEALERT"))
+    return
+  end
+  local noAction = function()
+    return
+  end
+  local function doDye()
+    ToClient_RequestDye(self._isPearlPalette)
+    PaGlobalFunc_Dyeing_CloseAll()
+  end
+  local function askDoDye()
+    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
+    local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_DYENEW_SURE_DYE_THIS_PART", "partString", _dyePartString)
+    local messageBoxData = {
+      title = messageBoxTitle,
+      content = messageBoxMemo,
+      functionYes = doDye,
+      functionNo = noAction,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+    return
+  end
+  local function alreadyPearlDye()
+    local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_ALREADY_PEARLCOLOR")
+    local messageBoxData = {
+      title = messageBoxTitle,
+      content = messageBoxMemo,
+      functionYes = askDoDye,
+      functionNo = noAction,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+    return
+  end
+  table.sort(self._selectedDyePart)
+  for index, value in pairs(self._selectedDyePart) do
+    if "" == _dyePartString then
+      _dyePartString = "<" .. dyePartString[self._selected_CharacterTarget][self._selectedDyePart[index]] .. ">"
+    elseif self._selectedDyePart[index] ~= self._selectedDyePart[index - 1] then
+      _dyePartString = _dyePartString .. ", <" .. dyePartString[self._selected_CharacterTarget][self._selectedDyePart[index]] .. ">"
+    end
+  end
+  if self._isPearlPalette then
+    local isAlreadyDye = ToClient_isAllreadyDyeing(equipSlotNo)
+    if true == isAlreadyDye then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_ALREADY_NORMALCOLOR"))
+      return
+    elseif "" == _dyePartString then
+      doDye()
+    else
+      askDoDye()
+    end
+  else
+    local isAlreadyPearlDye = ToClient_isExpirationDyeing(equipSlotNo)
+    if true == isAlreadyPearlDye then
+      alreadyPearlDye()
+    elseif "" == _dyePartString then
+      doDye()
+    else
+      askDoDye()
+    end
+  end
+end

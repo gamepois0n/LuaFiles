@@ -184,6 +184,7 @@ function pearlShop:getProductInfoByIndex(index)
 end
 function pearlShop:frameUpdate(delta)
   local frameTop = self._ui._frameControl:GetParentPosY()
+  local frameShowingTop = frameTop - self._productControlSmallSize
   local frameBottom = frameTop + self._ui._frameControl:GetSizeY()
   if 0 <= self._showingDescIndex then
     local showingControl = self:getProductControlByIndex(self._showingDescIndex)
@@ -198,7 +199,7 @@ function pearlShop:frameUpdate(delta)
   for i = 0, self._ui._productControlListSize - 1 do
     local control = self:getProductControlByIndex(i)
     local controlBottom = control:GetParentPosY() + control:GetSizeY()
-    if frameTop > controlBottom then
+    if frameShowingTop > controlBottom then
       hideIndex = i
       break
     end
@@ -214,8 +215,8 @@ function pearlShop:frameUpdate(delta)
     return true
   end
   local firstControlTop = self:getProductControlByIndex(0):GetParentPosY()
-  if frameTop < firstControlTop then
-    local gapSizeY = firstControlTop - frameTop
+  if frameShowingTop < firstControlTop then
+    local gapSizeY = firstControlTop - frameShowingTop
     local showCount = math.ceil(gapSizeY / (self._productControlSmallSize + self._listItemGapY))
     if self:addProductInfoOffset(-1 * showCount) then
       self._frameContentOffset = self._frameContentOffset - showCount * (self._productControlSmallSize + self._listItemGapY)
@@ -241,6 +242,7 @@ function pearlShop:changePlatformSpecKey()
 end
 function FromClient_PearlShopInit()
   pearlShop:initialize()
+  ToClient_setPearlShopUIPanel_XX(Panel_PearlShop)
 end
 function pearlShop:showDesc(index)
   if self._showingDescIndex == index then

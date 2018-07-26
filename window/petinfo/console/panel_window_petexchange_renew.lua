@@ -242,6 +242,13 @@ function petExchange:updateSlot()
     self._slidIndex = 0
     self._ui._frame_VerticalScroll:SetShow(false)
   end
+  if 0 == self._totalPetCount then
+    self._ui._frame_Right:SetShow(false)
+    self._ui._frame_Right:SetIgnore(true)
+  else
+    self._ui._frame_Right:SetShow(true)
+    self._ui._frame_Right:SetIgnore(false)
+  end
 end
 function petExchange_UpdateSlot()
   petExchange:updateSlot()

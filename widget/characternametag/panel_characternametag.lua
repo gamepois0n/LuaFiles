@@ -1730,7 +1730,7 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
         local resourceBack = UI.getChildControl(targetPanel, "Static_SiegeResourcesStackBg")
         local resourceMain = UI.getChildControl(targetPanel, "Progress2_SiegeResourcesStack")
         local prevResources = resourceMain:GetProgressRate()
-        local resourceRate = ToClient_GetMyGuildAllianceSiegeResource() * 100 / 100
+        local resourceRate = ToClient_GetMyGuildAllianceSiegeResource() * 100 / ToClient_GetSiegeMaxResources()
         resourceMain:SetProgressRate(resourceRate)
         resourceBack:SetShow(true)
         resourceMain:SetShow(true)
@@ -1766,7 +1766,6 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
     if actorProxy:isVehicle() then
       local vehicleActorWrapper = getVehicleActorByProxy(actorProxy)
       if nil ~= vehicleActorWrapper and (CppEnums.VehicleType.Type_ThrowStone == vehicleActorWrapper:get():getVehicleType() or CppEnums.VehicleType.Type_ThrowFire == vehicleActorWrapper:get():getVehicleType() or CppEnums.VehicleType.Type_WoodenFence == vehicleActorWrapper:get():getVehicleType()) then
-        _PA_LOG("LUA", "name show : " .. tostring(actorProxyWrapper:getName()))
         local prevRate = hpMain:GetProgressRate()
         local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
         hpMain:SetProgressRate(hpRate)
@@ -1906,7 +1905,6 @@ local function settingMpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
       if true == isShowMp then
         local mp = actorProxyWrapper:get():getMp()
         local maxMp = actorProxyWrapper:get():getMaxMp()
-        _PA_LOG("\236\156\160\237\157\165\236\139\160", "settingMpBar " .. tostring(mp) .. "/" .. tostring(maxMp))
         local mpRate = mp * 100 / maxMp
         mpMain:SetProgressRate(mpRate)
         mpMain:SetCurrentProgressRate(mpRate)
@@ -1935,7 +1933,6 @@ local function settingMpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
       if true == isShowMp then
         local mp = actorProxyWrapper:get():getMp()
         local maxMp = actorProxyWrapper:get():getMaxMp()
-        _PA_LOG("\236\156\160\237\157\165\236\139\160", "settingMpBar " .. tostring(mp) .. "/" .. tostring(maxMp))
         local mpRate = mp * 100 / maxMp
         mpMain:SetProgressRate(mpRate)
         mpMain:SetCurrentProgressRate(mpRate)

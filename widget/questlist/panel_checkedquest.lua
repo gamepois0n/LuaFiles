@@ -1831,8 +1831,16 @@ function HandleClicked_QuestWidget_FindTarget(questGroupId, questId, condition, 
       end
     else
       _naviInfoAgain = false
-      ToClient_DeleteNaviGuideByGroup(0)
       _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, isAuto)
+      local questInfo = questList_getQuestStatic(questGroupId, questId)
+      if nil ~= questInfo then
+        local questPosCount = questInfo:getQuestPositionCount()
+        if 0 == questPosCount and 0 ~= condition and 99 ~= condition then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PROCMESSAGE_QUEST_NO_FINDWAY"))
+        else
+          Proc_ShowMessage_Ack("Navigation is not available for this quest.")
+        end
+      end
     end
   else
     _questGroupId = questGroupId

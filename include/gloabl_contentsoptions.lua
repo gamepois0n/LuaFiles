@@ -78,3 +78,4 @@ _ContetnsGroup_BossAlert = ToClient_IsContentsGroupOpen("451")
 _ContetnsGroup_SiegeResource = ToClient_IsContentsGroupOpen("398")
 _ContentsGroup_RenewUI_Dyeing = _ContentsGroup_RenewUI
 _ContentsGroup_EnhanceCollect = ToClient_IsContentsGroupOpen("367")
+_ContentsGroup_RenewUI_DeadMessage = _ContentsGroup_RenewUI

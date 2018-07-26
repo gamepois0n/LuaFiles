@@ -231,7 +231,6 @@ function PaGlobalFunc_WorldMap_NodeManagement_List2EventControlCreate(list_conte
   local nodeName = UI.getChildControl(list_content, "StaticText_SubNodeType")
   local nodeIcon = UI.getChildControl(list_content, "Static_NodeTypeIcon")
   local button = UI.getChildControl(list_content, "Button_Invest")
-  local workerButton = UI.getChildControl(list_content, "Button_Worker")
   local energyValue = UI.getChildControl(button, "StaticText_ContributePoint")
   nodeName:SetText(nodeInfo._name)
   energyValue:SetText(nodeInfo._needPoint)
@@ -269,7 +268,6 @@ function PaGlobalFunc_WorldMap_NodeManagement_List2EventControlCreate(list_conte
     button:SetText("Invest")
     button:addInputEvent("Mouse_LUp", "")
   end
-  workerButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_WorkerManager(" .. id .. ")")
   self:CreateNodeIcon(nodeIcon, nodeInfo._nodeType)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_InvestNodeLevelNumpad(wayPointKey)
@@ -293,15 +291,6 @@ function PaGlobalFunc_WorldMap_NodeManagement_InvestNodeLevelExecute(inputNumber
   local self = Window_WorldMap_NodeManagementInfo
   local wpCount = Int64toInt32(inputNumber) * 10
   ToClient_RequestIncreaseExperienceNode(param, wpCount)
-end
-function PaGlobalFunc_WorldMap_NodeManagement_WorkerManager(id)
-  local self = Window_WorldMap_NodeManagementInfo
-  local nodeInfo = self._subNodeInfoList[id]
-  if nil == nodeInfo then
-    _PA_LOG("\236\157\180\237\152\184\236\132\156", "\235\133\184\235\147\156 \236\160\149\235\179\180\234\176\128 \236\157\180\236\131\129\237\149\169\235\139\136\235\139\164.")
-    return
-  end
-  PaGlobalFunc_WorldMap_NodeProduct_Open(nodeInfo._explorationNodeInClient)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeContribute(nodeKey)
   local self = Window_WorldMap_NodeManagementInfo
@@ -356,6 +345,9 @@ function PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(nodeKey)
 end
 function PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNode(explorationNodeInClient)
   local self = Window_WorldMap_NodeManagementInfo
+  if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
+    return
+  end
   self._subNodeInfoList[self._currentSubNodeIndex] = {}
   self._subNodeInfoList[self._currentSubNodeIndex]._explorationNodeInClient = explorationNodeInClient
   self._subNodeInfoList[self._currentSubNodeIndex]._nodeSS = explorationNodeInClient:getStaticStatus()
@@ -384,15 +376,16 @@ function PaGlobalFunc_WorldMap_NodeManagement_Open(nodeData)
     _PA_ASSERT(false, "WorldMap NodeInfo\236\151\144 nodeData\235\138\148 \237\149\132\236\136\152 \236\158\133\235\139\136\235\139\164.")
     return
   end
-  self._currentWorldNode = nodeData
   PaGlobalFunc_WorldMap_NodeManagement_SetShow(true, false)
+  self._currentWorldNode = nodeData
   PaGlobalFunc_WorldMap_RingMenu_Close()
   self:SetNodeData(nodeData)
   self:Update()
-  WorldMapPopupManager:increaseLayer()
-  WorldMapPopupManager:push(Panel_Worldmap_NodeManagement, true, nil, PaGlobalFunc_WorldMap_NodeManagement_Close)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_Close()
+  if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
+    return
+  end
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_NodeManagement_SetShow(false, false)
 end

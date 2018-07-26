@@ -163,13 +163,6 @@ local InventoryInfo = {
   _otherWindowOpenFunc = nil,
   _effect = nil,
   _currentUpperTab = 0,
-  _upperTabsData = {
-    [UPPER_TAB_TYPE.EQUIPMENT_TAB] = {},
-    [UPPER_TAB_TYPE.COSTUME_TAB] = {},
-    [UPPER_TAB_TYPE.INFORMATION_TAB] = {},
-    [UPPER_TAB_TYPE.SERVANT_TAB] = {},
-    [UPPER_TAB_TYPE.AUXILIARY_TAB] = {}
-  },
   _currentLowerTab = 0,
   _slotRingIndex = 0,
   _slotEarringIndex = 0,
@@ -1378,7 +1371,6 @@ function InventoryInfo:initInventory()
   end
   slotTemplate:SetShow(false)
   self._ui.scroll_inven = UI.getChildControl(self._ui.stc_subWindowLower, "Scroll_Inventory")
-  self._ui.scroll_inven:SetShow(false)
   UIScroll.InputEvent(self._ui.scroll_inven, "InputScroll_InventoryInfo_Inventory")
   UIScroll.InputEventByControl(self._ui.stc_invenBG, "InputScroll_InventoryInfo_Inventory")
   self._ui.btn_invenPuzzle = UI.getChildControl(self._ui.stc_subWindowLower, "Button_Puzzle")
@@ -1436,7 +1428,6 @@ end
 function InventoryInfo:open(openType)
   self:setServantTabPictogram()
   _panel:SetShow(true, false)
-  _panel:SetPosY(-50)
   if _ContentsGroup_RenewUI_Chatting then
     PaGlobalFunc_ChattingInfo_Close()
   end
@@ -2259,9 +2250,6 @@ function InventoryInfo:updateInventory(ignorePanelVisibility)
     else
       self._ui.stc_lockedSlots[ii]:SetShow(true)
     end
-  end
-  if self._invenCapacity > self._invenSlotMax then
-    self._ui.scroll_inven:SetShow(true)
   end
   PaGlobal_TutorialManager:handleOpenedInventory()
   self:findPuzzle()
@@ -4274,6 +4262,10 @@ function InventoryInfo:setItemInfoUseWrapper(slot, itemWrapper, isMono, isExtend
 end
 function PaGlobalFunc_InventoryInfo_GetSlotBorder()
   return InventoryInfo._ui.stc_slotBorder
+end
+function HandleClicked_Inventory_Palette_Open()
+  audioPostEvent_SystemUi(1, 24)
+  PaGlobalFunc_Dyeing_Open()
 end
 function PaGlobalFunc_InventoryInfo_PopMoney()
   if false == PaGlobalFunc_Warehouse_GetShow() then

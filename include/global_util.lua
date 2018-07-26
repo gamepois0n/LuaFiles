@@ -717,8 +717,10 @@ function Chatting_MessageColor(msgChatType, msgNoticeType, panelIndex)
       return msgColor
     end
   elseif UI_CT.Alliance == msgChatType then
-    msgColor = UI_color.C_FF84FFF5
-    return msgColor
+    if -1 == chatColorIndex then
+      msgColor = 4285842942
+      return msgColor
+    end
   elseif UI_CT.WorldWithItem == msgChatType then
     if -1 == chatColorIndex then
       msgColor = UI_color.C_FF00F3A0

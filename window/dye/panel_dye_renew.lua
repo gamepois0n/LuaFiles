@@ -46,6 +46,7 @@ local enCharacterType = {
   Horse = 1,
   Car = 2,
   Camel = 3,
+  Ship = 4,
   Tent = 6
 }
 local EquipSlotIcon = {
@@ -576,6 +577,106 @@ local EquipSlotIcon = {
       0,
       0
     }
+  },
+  [enCharacterType.Ship] = {
+    {
+      26,
+      361,
+      30,
+      389,
+      58
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    },
+    {
+      0,
+      0,
+      0,
+      0,
+      0
+    }
   }
 }
 local DyeReNew = {
@@ -613,7 +714,8 @@ local DyeReNew = {
   _enableDyePearl = false,
   _enableCamel = false,
   _enableAwaken = false,
-  _enableTent = false
+  _enableTent = false,
+  _enableShip = false
 }
 function FGlobal_DyeReNew_GetInstance()
   return DyeReNew
@@ -630,6 +732,9 @@ end
 function FGlobal_DyeReNew_GetEnableTent()
   return DyeReNew._enableTent
 end
+function FGlobal_DyeReNew_GetEnableShip()
+  return DyeReNew._enableShip
+end
 function FGlobal_DyeReNew_GetEnableKR2()
   return isKR2
 end
@@ -638,6 +743,7 @@ function DyeReNew:Initialize()
   self._enableDyePearl = ToClient_IsContentsGroupOpen("82")
   self._enableCamel = ToClient_IsContentsGroupOpen("4")
   self._enableTent = ToClient_IsContentsGroupOpen("253")
+  self._enableShip = ToClient_IsContentsGroupOpen("461")
   self._enableAwaken = awakenWeapon[self._classType]
   local numbering = 0
   local ampuleSlotConfig = {
@@ -787,6 +893,8 @@ function DyeReNew:Change_EquipIcon()
     textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_00.dds"
   elseif enCharacterType.Horse == characterType or enCharacterType.Camel == characterType then
     textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_01.dds"
+  elseif enCharacterType.Ship == characterType then
+    textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_02.dds"
   end
   targetSlot = EquipSlotIcon[characterType]
   for idx, equipSlotIdx in pairs(targetSlot) do

@@ -376,7 +376,12 @@ function FromClient_OnWorldMapNode(nodeBtn)
         else
           villageWar.nodeWarJoinCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAP_ACTORTOLTIP_JOINNODEWAR_COUNT", "siegeTentCount", siegeTentCount))
         end
-        local isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), villageWar.guildMark)
+        local isAlliance = siegeWrapper:isOccupantGuildAlliance()
+        if true == isAlliance then
+          setGuildTextureByAllianceNo(siegeWrapper:getGuildNo(), villageWar.guildMark)
+        else
+          setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), villageWar.guildMark)
+        end
         villageWar.nodeState:SetShow(false)
         villageWar.nodeStateDesc:SetShow(false)
         villageWar.guildMasterName:SetShow(true)

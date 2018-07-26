@@ -1263,12 +1263,14 @@ function warInfo_onScreenResize()
   local self = warInfo
   local scrX = getScreenSizeX()
   self._uiWarInfo:SetPosX(scrX - (FRAME_SERVERLIST:GetSizeX() + self._uiWarInfo:GetSizeX() + 55))
-  if isGameTypeSA() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-    self._uiWarInfo:SetPosY(channelSelectInfo._mainBG:GetPosY() + channelSelectInfo._mainBG:GetSizeY() + 10)
-  elseif isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() then
+  if channelPKInfo._pkMainBG:GetShow() then
     self._uiWarInfo:SetPosY(channelPKInfo._pkMainBG:GetPosY() + channelPKInfo._pkMainBG:GetSizeY() + 10)
-  else
+  elseif channelSpeedInfo._speedMainBG:GetShow() then
     self._uiWarInfo:SetPosY(channelSpeedInfo._speedMainBG:GetPosY() + channelSpeedInfo._speedMainBG:GetSizeY() + 10)
+  elseif channelSelectInfo._mainBG:GetShow() then
+    self._uiWarInfo:SetPosY(channelSelectInfo._mainBG:GetPosY() + channelSelectInfo._mainBG:GetSizeY() + 10)
+  else
+    self._uiWarInfo:SetPosY(10)
   end
 end
 function ChannelSelectInfo_Show()

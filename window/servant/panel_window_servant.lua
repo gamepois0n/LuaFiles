@@ -609,6 +609,7 @@ function Servant_Call(index)
     return
   end
   if servantIcon.const.SeaVehicle == index then
+    ToClient_AutoRideOnShip()
     return
   end
   if servantIcon.const.TamerSummon == index then

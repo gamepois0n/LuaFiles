@@ -396,6 +396,10 @@ function CharacterTag:LoadList()
     if 0 ~= pcDeliveryRegionKey:get() and serverUtc64 < characterData._arrivalTime then
       self:SetMonotoneIgnore(targetUI, targetImage, true)
       targetState:SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_WORKING_TEXT_DELIVERY"))
+    elseif 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
+      local retionInfoArrival = getRegionInfoByRegionKey(pcDeliveryRegionKey)
+      self:SetMonotoneIgnore(targetUI, targetImage, false)
+      targetState:SetText(tostring(retionInfoArrival:getAreaName()))
     elseif "" ~= workingText then
       targetState:SetText(workingText)
       self:SetMonotoneIgnore(targetUI, targetImage, true)

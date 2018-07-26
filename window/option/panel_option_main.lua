@@ -62,7 +62,11 @@ function PaGlobal_Option:InitUi()
   buttonAdmin:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "Confirm" .. "\"" .. ")")
   buttonAdmin:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "Confirm" .. "\"" .. ")")
   UI.getChildControl(self._ui._staticMainBottomBg, "Button_License"):addInputEvent("Mouse_LUp", "PaGlobal_Copyright_ShowWindow()")
-  UI.getChildControl(self._ui._staticMainBottomBg, "Button_License"):SetShow(not isGameTypeGT())
+  if not isGameTypeGT() then
+    UI.getChildControl(self._ui._staticMainBottomBg, "Button_License"):SetShow(true)
+  else
+    UI.getChildControl(self._ui._staticMainBottomBg, "Button_License"):SetShow(false)
+  end
   self._ui._buttonResetFrame:addInputEvent("Mouse_LUp", "PaGlobal_Option:ClickedResetFrame()")
   self._ui._buttonResetFrame:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "ResetFrame" .. "\"" .. ")")
   self._ui._buttonResetFrame:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "ResetFrame" .. "\"" .. ")")
@@ -1314,7 +1318,7 @@ function PaGlobal_Option:SetContentsOption()
       bg:SetMonoTone(true)
       bg:SetIgnore(true)
       checkbutton:SetIgnore(true)
-      title:SetText(title:GetText() .. " (XBox X Only)")
+      title:SetText(title:GetText() .. " (Xbox One X Only)")
     end
     local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
     UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)

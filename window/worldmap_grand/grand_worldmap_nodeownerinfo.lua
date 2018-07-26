@@ -87,7 +87,13 @@ function nodeOwnerInfo:Update(nodeStaticStatus)
         end
         self.ui._txt_NodeBonus_Value:SetText(dropTypeValue)
       elseif true == hasOccupantExist then
-        local isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), self.ui._static_GuildMark)
+        local isAlliance = siegeWrapper:isOccupantGuildAlliance()
+        local isSet = false
+        if true == isAlliance then
+          isSet = setGuildTextureByAllianceNo(siegeWrapper:getGuildNo(), self.ui._static_GuildMark)
+        else
+          isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), self.ui._static_GuildMark)
+        end
         if not isSet then
           self.ui._static_GuildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
           local x1, y1, x2, y2 = setTextureUV_Func(self.ui._static_GuildMark, 183, 1, 188, 6)

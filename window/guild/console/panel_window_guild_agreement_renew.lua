@@ -25,6 +25,31 @@ local Window_GuildAgreementInfo = {
   _dailyPayment,
   _penaltyCost
 }
+function Window_GuildAgreementInfo:Initialize()
+  self:InitControl()
+  self:InitEvent()
+end
+function Window_GuildAgreementInfo:InitControl()
+  self._ui._staticText_Content = UI.getChildControl(self._ui._static_AgreementContentBg, "StaticText_Content")
+  self._ui._staticText_Content:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_Content:SetAutoResize(true)
+  self._ui._staticText_Content:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_3"))
+  self._ui._staticText_ContentTitle = UI.getChildControl(self._ui._static_AgreementContentBg, "StaticText_GuildName")
+  self._ui._staticText_Periodvalue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_PeriodValue")
+  self._ui._staticText_DailyPaymentValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_DailyPaymentValue")
+  self._ui._staticText_PenaltyCostValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_PenaltyCostValue")
+  self._ui._staticText_FromValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_FromValue")
+  self._ui._staticText_ToValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_ToValue")
+  self._ui._staticText_Title = UI.getChildControl(self._ui._static_TopBg, "StaticText_TitleIcon")
+  self._ui._staticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_2"))
+  self._ui._button_Confirm = UI.getChildControl(self._ui._static_BottomBg, "Button_Confirm")
+  self._ui._button_Option = UI.getChildControl(self._ui._static_BottomBg, "Button_Option")
+  self._ui._button_Close = UI.getChildControl(self._ui._static_BottomBg, "Button_Close")
+end
+function Window_GuildAgreementInfo:InitEvent()
+  self._ui._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_Close()")
+  self._ui._button_Option:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_Open()")
+end
 function PaGlobalFunc_AgreementGuild_Master_ContractOpen(memberIndex, requesterMemberGrade, usableActivity)
   local self = Window_GuildAgreementInfo
   self._isJoin = false
@@ -32,27 +57,27 @@ function PaGlobalFunc_AgreementGuild_Master_ContractOpen(memberIndex, requesterM
     usableActivity = 10000
   end
   self._usableActivity = usableActivity
-  self._ui._staticText_Content:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_3"))
   local memberInfo = ToClient_GetMyGuildInfoWrapper():getMember(memberIndex)
   if nil == memberInfo then
     _PA_ASSERT(false, "FGlobal_AgreementGuild_Master_Open \236\157\152 \235\169\164\235\178\132\236\157\184\235\141\177\236\138\164\234\176\128 \235\185\132\236\160\149\236\131\129\236\158\133\235\139\136\235\139\164 " .. tostring(memberIndex))
   end
-  self._memberIndex = memberIndex
   local name = memberInfo:getName()
   local expiration = memberInfo:getContractedExpirationUtc()
+  self._memberIndex = memberIndex
   self._memberBenefit = memberInfo:getContractedBenefit()
   self._memberPenalty = memberInfo:getContractedPenalty()
-  local temp1
+  self._ui._staticText_Content:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_3"))
+  local periodText
   if 0 < Int64toInt32(getLeftSecond_TTime64(expiration)) then
-    temp1 = convertStringFromDatetime(getLeftSecond_TTime64(expiration))
+    periodText = convertStringFromDatetime(getLeftSecond_TTime64(expiration))
   else
-    temp1 = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_REMAINPERIOD")
+    periodText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_REMAINPERIOD")
   end
   self._ui._staticText_Periodvalue:SetShow(true)
-  self._ui._staticText_Periodvalue:SetText(temp1)
+  self._ui._staticText_Periodvalue:SetText(periodText)
   self._ui._staticText_DailyPaymentValue:SetShow(true)
-  self._ui._staticText_PenaltyCostValue:SetShow(true)
   self._ui._staticText_DailyPaymentValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._memberBenefit)))
+  self._ui._staticText_PenaltyCostValue:SetShow(true)
   self._ui._staticText_PenaltyCostValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._memberPenalty)))
   self._targetName = name
   self._ui._staticText_ToValue:SetText(name)
@@ -86,7 +111,7 @@ function PaGlobalFunc_AgreementGuild_Master_ContractOpen(memberIndex, requesterM
     self._ui._button_Option:SetShow(false)
     self._ui._button_Confirm:SetShow(false)
   end
-  if _ContentsGroup_isConsolePadControl then
+  if true == _ContentsGroup_isConsolePadControl then
     if true == isRenew then
       Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_SendReContract()")
       Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
@@ -199,29 +224,6 @@ function PaGlobalFunc_AgreementGuild_AgreementSetData(contractPeriod, dailyPayme
   self._ui._staticText_DailyPaymentValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._sendDailyPayment)))
   self._ui._staticText_PenaltyCostValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_MONEY", "money", makeDotMoney(self._sendPenaltyCost)))
 end
-function Window_GuildAgreementInfo:InitControl()
-  self._ui._staticText_Content = UI.getChildControl(self._ui._static_AgreementContentBg, "StaticText_Content")
-  self._ui._staticText_Content:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui._staticText_Content:SetAutoResize(true)
-  self._ui._staticText_Content:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_3"))
-  self._ui._staticText_ContentTitle = UI.getChildControl(self._ui._static_AgreementContentBg, "StaticText_GuildName")
-  self._ui._staticText_Periodvalue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_PeriodValue")
-  self._ui._staticText_DailyPaymentValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_DailyPaymentValue")
-  self._ui._staticText_PenaltyCostValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_PenaltyCostValue")
-  self._ui._staticText_FromValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_FromValue")
-  self._ui._staticText_FromValue:SetTextHorizonLeft(true)
-  self._ui._staticText_ToValue = UI.getChildControl(self._ui._static_ConstractInfoBg, "StaticText_ToValue")
-  self._ui._staticText_ToValue:SetTextHorizonLeft(true)
-  self._ui._staticText_Title = UI.getChildControl(self._ui._static_TopBg, "StaticText_TitleIcon")
-  self._ui._staticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_2"))
-  self._ui._button_Confirm = UI.getChildControl(self._ui._static_BottomBg, "Button_Confirm")
-  self._ui._button_Option = UI.getChildControl(self._ui._static_BottomBg, "Button_Option")
-  self._ui._button_Close = UI.getChildControl(self._ui._static_BottomBg, "Button_Close")
-end
-function Window_GuildAgreementInfo:InitEvent()
-  self._ui._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_Close()")
-  self._ui._button_Option:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_Open()")
-end
 function PaGlobalFunc_AgreementGuild_GetIsJoin()
   local self = Window_GuildAgreementInfo
   return self._isJoin
@@ -229,10 +231,6 @@ end
 function PaGlobalFunc_AgreementGuild_GetData()
   local self = Window_GuildAgreementInfo
   return self._usableActivity, self._memberBenefit, self._memberPenalty
-end
-function Window_GuildAgreementInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
 end
 function PaGlobalFunc_AgreementGuild_Master_GetShow()
   return Panel_Console_Window_GuildAgreement:GetShow()

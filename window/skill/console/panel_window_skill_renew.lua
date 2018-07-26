@@ -24,7 +24,7 @@ local Window_SkillInfo = {
   },
   _currentSkillListInfo = {},
   _currentSkillListUI = {},
-  _currentSkillIndex = nil,
+  _currentSkillIndex = 0,
   _lastSelectedUI = nil,
   _currentTitle = 0,
   _renderMode,
@@ -501,7 +501,7 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
   body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
-  body._staticText_Command:SetText(skillInfo._command)
+  body._staticText_Command:SetText("")
   body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2)
   local resourcePosY = body._staticText_NeedResource:GetPosY() + body._staticText_NeedResource:GetSizeY()
   local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY()
@@ -880,6 +880,7 @@ function PaGlobalFunc_Skill_Open(isDialog)
   self._renderMode:set()
   self:SkillDetailClear()
   self:Update()
+  ToClient_LearnSkillCameraSetRotation(6.5, -0.25)
   ToClient_LearnSkillCameraSetZoom(400)
   ToClient_LearnSkillCameraSetPosition(2.5, -0.5)
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)

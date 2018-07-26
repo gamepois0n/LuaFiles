@@ -2709,6 +2709,22 @@ function HandleClickedDialogButtonReal(index)
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData)
+      elseif true == ToClient_isAnyLockedItem(ItemEnchantKey(dialogButton:getNeedItemKey())) then
+        local CancelExchange = function()
+          return
+        end
+        local function GoExchange()
+          HandleClickedDialogButton_ShowData(index)
+        end
+        local stringExchange = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_ITEMEXCHANGE_ITEMLOCKED")
+        local messageboxData = {
+          title = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_ITEMEXCHANGE_TITLE"),
+          content = stringExchange,
+          functionYes = GoExchange,
+          functionNo = CancelExchange,
+          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+        }
+        MessageBox.showMessageBox(messageboxData, nil, false, false)
       else
         do
           local needItemCount = dialogButton:getNeedItemCount()
@@ -2730,13 +2746,16 @@ function HandleClickedDialogButtonReal(index)
                       dialogData:setExchangeCount(1)
                       clickDialogButtonReq()
                     end
+                    local CancelExchange = function()
+                      return
+                    end
                     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
-                    local messageBoxMemo = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_EXCHANGEITEM", "itemName", itemStaticWrapper:getName(), "count", _exchangeCount * needItemCount)
+                    local messageBoxMemo = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_EXCHANGEITEM_CANCLE", "itemName", itemStaticWrapper:getName(), "count", _exchangeCount * needItemCount)
                     local messageBoxData = {
                       title = messageBoxTitle,
                       content = messageBoxMemo,
                       functionYes = doExchange,
-                      functionNo = exchangeOne,
+                      functionNo = CancelExchange,
                       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
                     }
                     MessageBox.showMessageBox(messageBoxData, "middle")
@@ -3525,7 +3544,7 @@ function FGlobal_CloseNpcDialogForDetail()
     Panel_Knowledge_Hide()
     return true
   end
-  if Panel_DyeNew_CharacterController:GetShow() then
+  if false == _ContentsGroup_RenewUI_Dyeing and Panel_DyeNew_CharacterController:GetShow() then
     FGlobal_Panel_DyeReNew_Hide()
     return true
   end

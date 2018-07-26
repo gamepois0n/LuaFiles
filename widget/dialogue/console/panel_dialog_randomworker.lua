@@ -126,9 +126,10 @@ function randomWorker:update(workerShopSlotNo)
       currentWP = string.gsub(currentWP, ":", " ")
       RandomWorkerUI._staticText_Title:SetText(workerColorSet .. getWorkerName(plantWorkerStaticStatus) .. "<PAOldColor>")
       RandomWorkerUI._staticText_WorkerImage:ChangeTextureInfoNameAsync(workerIconPath)
-      local posX = RandomWorkerUI._staticText_WorkerImage:GetPosX() + self._config._workerCenterX
-      local posY = RandomWorkerUI._staticText_WorkerImage:GetPosY() + self._config._workerCenterY
-      RandomWorkerUI._staticText_WorkerImage:SetCircularClip(self._config._workerIconRadius, float2(posX, posY))
+      local radius = RandomWorkerUI._staticText_WorkerImage:GetSizeX() * 0.5
+      local posX = RandomWorkerUI._staticText_WorkerImage:GetPosX() + radius * 0.2
+      local posY = RandomWorkerUI._staticText_WorkerImage:GetPosY() + radius * 0.44
+      RandomWorkerUI._staticText_WorkerImage:SetCircularClip(radius, float2(posX, posY))
       RandomWorkerUI._staticText_MoveSpeed_Value:SetText(plantWorkerStaticStatus._moveSpeed / 100)
       RandomWorkerUI._staticText_WorkSpeed_Value:SetText(efficiency / 1000000)
       RandomWorkerUI._staticText_Luck_Value:SetText(plantWorkerStaticStatus._luck / 10000)

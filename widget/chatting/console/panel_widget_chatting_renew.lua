@@ -82,7 +82,12 @@ local _chatTypeUV = {
     136
   },
   [CHAT_TYPE.Client] = nil,
-  [CHAT_TYPE.Alliance] = nil,
+  [CHAT_TYPE.Alliance] = {
+    54,
+    96,
+    108,
+    120
+  },
   [CHAT_TYPE.Friend] = nil,
   [CHAT_TYPE.GameInfo3] = nil,
   [CHAT_TYPE.WorldWithItem] = {
@@ -225,6 +230,12 @@ function ChattingInfo:open()
   end
   if Panel_Window_VoiceChat:GetShow() then
     PaGlobalFunc_VoiceChat_Close()
+  end
+  if PaGlobal_MailDetail_GetShow() then
+    PaGlobal_MailDetail_Close()
+  end
+  if Panel_Window_Mail_Renew:GetShow() then
+    Mail_Close()
   end
   _panel:SetShow(true)
   PaGlobalFunc_ChattingInfo_UpdatePermission()

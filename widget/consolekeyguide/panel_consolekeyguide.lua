@@ -265,6 +265,9 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLT
     }, "Crouch")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLB
+    }, "(hold) PC Interaction")
   elseif state_ == self._guideState.cameraMode then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonDpad
@@ -382,7 +385,8 @@ local crouchActionString = {
   "HUNKERDOWN_ROLL_F_CONTIUE",
   "HUNKERDOWN_ROLL_L",
   "HUNKERDOWN_ROLL_R",
-  "HUNKERDOWN_ROLL_B"
+  "HUNKERDOWN_ROLL_B",
+  "HUNKERDOWN_AUTORUN"
 }
 local creepActionString = {
   "HUNKERDOWN_CREEP_WAIT",
@@ -493,7 +497,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
     self._specifyGuideState = nil
   else
     local vehicleType = vehicleProxy:get():getVehicleType()
-    if CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Elephant == vehicleType or CppEnums.VehicleType.Type_RidableBabyElephant == vehicleType then
+    if CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Elephant == vehicleType or CppEnums.VehicleType.Type_Carriage == vehicleType or CppEnums.VehicleType.Type_CowCarriage == vehicleType or CppEnums.VehicleType.Type_RidableBabyElephant == vehicleType then
       self._specifyGuideState = self._guideState.rideHorse
     elseif CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType or CppEnums.VehicleType.Type_FishingBoat == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType then
       self._specifyGuideState = self._guideState.rideShip
@@ -501,6 +505,13 @@ function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
       self._specifyGuideState = nil
     end
   end
+end
+function PaGlobalFunc_ConsoleKeyGuide_On()
+  local currentState = ConsoleKeyGuide:getState()
+  ConsoleKeyGuide:setGuide(currentState)
+end
+function PaGlobalFunc_ConsoleKeyGuide_Off()
+  ConsoleKeyGuide:hideAllGuide()
 end
 function PaGlobalFunc_ConsoleKeyGuide_SetPos()
   _panel:SetPosX(getScreenSizeX() - _panel:GetSizeX())

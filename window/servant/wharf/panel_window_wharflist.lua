@@ -390,7 +390,7 @@ function WharfList_ButtonOpen(eType, slotNo)
       buttonList[button_Index] = self._buttonMove
       button_Index = button_Index + 1
     end
-    if true == _ContentsGroup_SailBoatCash and CppEnums.VehicleType.Type_PersonTradeShip == servantInfo:getVehicleType() then
+    if true == _ContentsGroup_SailBoatCash and (CppEnums.VehicleType.Type_PersonTradeShip == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_PersonalBattleShip == servantInfo:getVehicleType()) then
       buttonList[button_Index] = self._buttonTransform
       button_Index = button_Index + 1
       self._buttonTransform:addInputEvent("Mouse_LUp", "WharfList_LookChange(" .. slotNo .. ")")
@@ -587,7 +587,9 @@ function WharfLookChange_Set(isNext, index)
   local transformManager = getServantTransformManager()
   local lookCount = 1
   PaGlobal_ServantChangeFormPanel._LCSelectSlot:SetShow(false)
-  transformManager:size()
+  if transformManager:size() <= 0 then
+    return
+  end
   if nil ~= isNext then
     currentPage = currentPage + isNext
   end

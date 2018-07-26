@@ -78,7 +78,8 @@ local WarehouseListMenu = {
   _separatorNumber = 100,
   _currentTerritoryKey = -1,
   _selectWaypointKey = -1,
-  _isFirstOpened = false
+  _isFirstOpened = false,
+  _isSetWarehouseList = nil
 }
 function Warehouse:isNpc()
   return eWarehouseTypeNpc == self._fromType
@@ -125,6 +126,7 @@ function Warehouse:init()
   self._ui.stc_ItemSlotFrame = UI.getChildControl(self._ui.stc_CenterBg, "Static_ItemSlotFrame")
   self._ui.scroll_Warehouse = UI.getChildControl(self._ui.stc_CenterBg, "Scroll_Warehouse")
   self._ui.list_Warehouse = UI.getChildControl(self._ui.stc_LeftBg, "List2_WareHouse")
+  self._ui.txt_NotAvaliable = UI.getChildControl(self._ui.stc_LeftBg, "StaticText_NotAvaliable")
   self._ui.txt_Select = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A")
   self._ui.txt_Silver = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_X")
   self._ui.txt_Manufacture = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y")
@@ -187,10 +189,11 @@ function Warehouse:init()
   WarehouseListMenu._selectIndex = -1
   self:registEvent()
 end
-function Warehouse:open(waypointKey, fromType)
+function Warehouse:open(waypointKey, fromType, isSetWarehouseList)
   self._currentWaypointKey = waypointKey
   self._fromType = fromType
   self._currentRegionName = getRegionNameByWaypointKey(self._currentWaypointKey)
+  WarehouseListMenu._isSetWarehouseList = isSetWarehouseList
   self._ui.txt_WarehouseName:SetText(self._currentRegionName)
   if eWarehouseTypeWorldmap == self._fromType then
     local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(waypointKey)
@@ -448,9 +451,16 @@ function WarehouseListMenu:updateWarehouseList()
   self._selectIndex = -1
   self._selectWaypointKey = -1
   self._list:getElementManager():clearKey()
-  for index = 0, self._maxTerritoryKeyCount - 1 do
-    if nil ~= self._warehouseInfo.territoryGroup[index] then
-      self._list:getElementManager():pushKey(toInt64(0, index))
+  if false == self._isSetWarehouseList then
+    Warehouse._ui.txt_NotAvaliable:SetShow(true)
+    self._list:SetShow(false)
+  else
+    Warehouse._ui.txt_NotAvaliable:SetShow(false)
+    self._list:SetShow(true)
+    for index = 0, self._maxTerritoryKeyCount - 1 do
+      if nil ~= self._warehouseInfo.territoryGroup[index] then
+        self._list:getElementManager():pushKey(toInt64(0, index))
+      end
     end
   end
   InputMLUp_WarehouseListMenu_TerritoryOpen(currentTerritoryKey, true)
@@ -593,7 +603,6 @@ function Warehouse_Close()
       _panel:SetShow(false, false)
     end
   else
-    WorldMapPopupManager:pop()
     _panel:SetShow(false, false)
   end
   Panel_Tooltip_Item_hideTooltip()
@@ -635,6 +644,7 @@ function PaGlobalFunc_Warehouse_CreateWarehouseListControl(content, key)
   local btn_Town = UI.getChildControl(content, "RadioButton_Town")
   local txt_Capacitry = UI.getChildControl(content, "StaticText_Capacity")
   local stc_IconMywarehouse = UI.getChildControl(content, "Static_Icon_MywareHouse")
+  stc_IconMywarehouse:SetShow(false)
   btn_Territory:SetCheck(false)
   btn_Town:SetCheck(false)
   if warehouseIdx < self._separatorNumber then
@@ -642,6 +652,7 @@ function PaGlobalFunc_Warehouse_CreateWarehouseListControl(content, key)
     local territoryWarehouseCount = self._warehouseInfo.territoryGroup[warehouseIdx].count
     btn_Territory:SetText(territoryName .. " (" .. territoryWarehouseCount .. ")")
     btn_Territory:addInputEvent("Mouse_LUp", "InputMLUp_WarehouseListMenu_TerritoryOpen(" .. warehouseIdx .. ")")
+    btn_Territory:SetMonoTone(false)
     btn_Territory:SetShow(true)
     btn_Town:SetShow(false)
     txt_Capacitry:SetShow(false)
@@ -667,6 +678,7 @@ function PaGlobalFunc_Warehouse_CreateWarehouseListControl(content, key)
     txt_Capacitry:SetText("(" .. itemCount .. "/" .. useMaxCount - 1 .. ")")
     txt_Capacitry:SetShow(true)
     btn_Town:addInputEvent("Mouse_LUp", "InputMLUp_WarehouseListMenu_ClickOtherTown(" .. waypointKey .. ")")
+    btn_Town:SetMonoTone(false)
   end
   content:ComputePos()
 end
@@ -718,7 +730,8 @@ function Warehouse_OpenPanelFromDialog()
   end
   self._sellCheck = false
   warehouse_clearSellToSystem()
-  self:open(getCurrentWaypointKey(), eWarehouseTypeNpc)
+  local isSetWarehouseList = true
+  self:open(getCurrentWaypointKey(), eWarehouseTypeNpc, isSetWarehouseList)
   Warehouse_SetIgnoreMoneyButton(false)
   if false == ToClient_WorldMapIsShow() then
     _panel:SetVerticalTop()
@@ -734,7 +747,8 @@ function Warehouse_OpenPanelFromDialogWithoutInventory(waypointKey, fromType)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Warehouse")
     return
   end
-  self:open(waypointKey, fromType)
+  local isSetWarehouseList = false
+  self:open(waypointKey, fromType, isSetWarehouseList)
   Warehouse_SetIgnoreMoneyButton(true)
   if true == ToClient_WorldMapIsShow() then
     _panel:SetVerticalTop()
@@ -746,12 +760,18 @@ function Warehouse_OpenPanelFromWorldmap(waypointKey, fromType)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Warehouse")
     return
   end
-  if true == ToClient_WorldMapIsShow() then
-    WorldMapPopupManager:increaseLayer(true)
-    WorldMapPopupManager:push(_panel, true)
+  if false == _ContentsGroup_RenewUI_WorldMap then
+    if true == ToClient_WorldMapIsShow() then
+      WorldMapPopupManager:increaseLayer(true)
+      WorldMapPopupManager:push(_panel, true)
+      _panel:SetVerticalTop()
+    end
+  else
+    _panel:SetShow(true)
     _panel:SetVerticalTop()
   end
-  self:open(waypointKey, fromType)
+  local isSetWarehouseList = false
+  self:open(waypointKey, fromType, isSetWarehouseList)
   Warehouse_SetIgnoreMoneyButton(true)
   if false == FGlobal_Warehouse_IsMoveItem() then
     DeliveryRequestWindow_Close()
@@ -783,7 +803,8 @@ function Warehouse_OpenPanelFromMaid()
   end
   self._currentWaypointKey = plantWayKey
   Warehouse_SetIgnoreMoneyButton(false)
-  self:open(plantWayKey, eWarehouseTypeMaid)
+  local isSetWarehouseList = false
+  self:open(plantWayKey, eWarehouseTypeMaid, isSetWarehouseList)
   PaGlobalFunc_Warehouse_OpenWithInventory()
 end
 function Warehouse_OpenPanelFromManufacture()
@@ -792,7 +813,8 @@ function Warehouse_OpenPanelFromManufacture()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Warehouse")
     return
   end
-  self:open(getCurrentWaypointKey(), eWarehouseTypeManufacture)
+  local isSetWarehouseList = false
+  self:open(getCurrentWaypointKey(), eWarehouseTypeManufacture, isSetWarehouseList)
 end
 function Warehouse_SetFunctor(filterFunc, rClickFunc)
   local self = Warehouse
@@ -965,7 +987,8 @@ function FromClient_Warehouse_OpenByInstallation(actorKeyRaw, waypointKey)
     return
   end
   self._installationActorKeyRaw = actorKeyRaw
-  self:open(waypointKey, eWarehouseTypeInstallation)
+  local isSetWarehouseList = false
+  self:open(waypointKey, eWarehouseTypeInstallation, isSetWarehouseList)
   Warehouse_SetIgnoreMoneyButton(false)
   PaGlobalFunc_Warehouse_OpenWithInventory()
 end

@@ -153,7 +153,7 @@ function FriendNew_InviteGuild(targetName, value)
     MessageBox.showMessageBox(messageBoxData)
     return
   end
-  PaGlobalFunc_FromClient_ResponseGuildInviteForGuildGrade(0, targetName, 0)
+  FromClient_GuildMain_ResponseGuildInviteForGuild(0, targetName, 0)
 end
 function FriendNew_CreateFriendList(control, key)
   local self = PaGlobal_FriendNew

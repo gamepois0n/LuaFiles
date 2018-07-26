@@ -383,10 +383,12 @@ function PaGlobalFunc_WorldMap_NodeInfo_Open(nodeData)
   self:SetNodeData(nodeData)
   self:Update()
   PaGlobalFunc_WorldMap_RingMenu_Close()
-  WorldMapPopupManager:increaseLayer()
-  WorldMapPopupManager:push(Panel_Worldmap_NodeInfo, true, nil, PaGlobalFunc_WorldMap_NodeInfo_Close)
+  PaGlobalFunc_WorldMap_NodeInfo_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_NodeInfo_Close()
+  if false == PaGlobalFunc_WorldMap_NodeInfo_GetShow() then
+    return
+  end
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_NodeInfo_SetShow(false, false)
 end

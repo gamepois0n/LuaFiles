@@ -139,6 +139,9 @@ function FGlobal_Panel_Dye_ReNew_AddEvent()
     if 6 == ii and false == FGlobal_DyeReNew_GetEnableTent() then
       radioButton_CharacterType:SetShow(false)
     end
+    if 4 == ii and false == FGlobal_DyeReNew_GetEnableShip() then
+      radioButton_CharacterType:SetShow(false)
+    end
   end
   local buttonQuestion = UI.getChildControl(Panel_Dye_ReNew, "Button_Question")
   buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"Dye\" )")

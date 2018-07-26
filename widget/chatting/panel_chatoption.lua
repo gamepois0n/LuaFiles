@@ -30,6 +30,7 @@ local channel_Battle = false
 local channel_RolePlay = false
 local channel_Arsha = false
 local channel_Team = false
+local channel_Alliance = false
 local color_Notice = UI_color.C_FFFFEF82
 local color_World = UI_color.C_FFFF973A
 local color_Public = UI_color.C_FFE7E7E7
@@ -40,6 +41,7 @@ local color_WorldWithItem = UI_color.C_FF00F3A0
 local color_RolePlay = UI_color.C_FF00B4FF
 local color_Arsha = UI_color.C_FFFFD237
 local color_Team = UI_color.C_FFB97FEF
+local color_Alliance = 4285842942
 local savedChatColorIndex = Array.new()
 local channel_SystemUndefine = false
 local channel_SystemPrivateItem = false
@@ -62,7 +64,8 @@ local eChatButtonType = {
   eChatPrivate = 7,
   eChatRolePlay = 8,
   eChatArsha = 9,
-  eChatTeam = 10
+  eChatTeam = 10,
+  eChatAlliance = 11
 }
 local eChatSystemButtonType = {
   eChatSystem = 0,
@@ -219,6 +222,12 @@ function HandleClicked_ChattingTypeFilter_Team(panelIdex)
   channel_Team = check
   TooltipSimple_Hide()
 end
+function HandleClicked_ChattingTypeFilter_Alliance(panelIdex)
+  local self = chatOptionData
+  local check = btnFilter[eChatButtonType.eChatAlliance].chatFilter:IsCheck()
+  channel_Alliance = check
+  TooltipSimple_Hide()
+end
 function HandleClicked_ChattingColor_Notice(panelIndex)
   local self = chatOptionData
   local checkColor = btnFilter[eChatButtonType.eChatNotice].chatColor:SetColor(UI_color.C_FFFFEF82)
@@ -288,6 +297,13 @@ function HandleClicked_ChattingColor_Team(panelIndex)
   local checkColor = btnFilter[eChatButtonType.eChatTeam].chatColor:SetColor(UI_color.C_FFB97FEF)
   color_Team = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Team, eChatButtonType.eChatTeam, false)
+  TooltipSimple_Hide()
+end
+function HandleClicked_ChattingColor_Alliance(panelIndex)
+  local self = chatOptionData
+  local checkColor = btnFilter[eChatButtonType.eChatAlliance].chatColor:SetColor(color_Alliance)
+  color_Team = checkColor
+  FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Alliance, eChatButtonType.eChatAlliance, false)
   TooltipSimple_Hide()
 end
 function HandleClicked_ChattingColor_MainSystem(panelIndex)
@@ -404,168 +420,7 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
   if not chatPanel[panelIdex] then
     local optionCount = 0
     local idx = 0
-    for idx = 0, self.chatFilterCount - 1 do
-      local tempBtn = {}
-      tempBtn.chatFilter = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_CHECKBUTTON, _msgFilter_BG, "ChatOption_Btn_" .. idx .. "_" .. panelIdex)
-      CopyBaseProperty(msgFilter_Chkbox, tempBtn.chatFilter)
-      tempBtn.chatFilter:SetShow(false)
-      tempBtn.chatColor = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, _msgFilter_BG, "ChatOption_Color_Btn_" .. idx .. "_" .. panelIdex)
-      CopyBaseProperty(selectColor_btn, tempBtn.chatColor)
-      tempBtn.chatColor:SetShow(false)
-      local isRoleplay = eChatButtonType.eChatRolePlay == idx and not roleplayTypeOpen
-      if isGameTypeTaiwan() or isGameTypeJapan() then
-        if idx >= 10 then
-          if isArshaOpen then
-            index = idx - 1
-          else
-            index = idx - 2
-          end
-        else
-          index = idx
-        end
-      end
-      if (isGameTypeKorea() or isGameTypeRussia()) and not isGameServiceTypeDev() then
-        if idx >= 8 then
-          index = idx - 1
-        else
-          index = idx
-        end
-      elseif isGameServiceTypeDev() or isGameTypeEnglish() then
-        if idx >= 9 then
-          if isLocalWarOpen or isArshaOpen then
-            index = idx
-          else
-            index = idx - 1
-          end
-        else
-          index = idx
-        end
-      elseif isGameTypeJapan() then
-        if idx >= 8 then
-          index = idx - 1
-        else
-          index = idx
-        end
-      elseif isGameTypeKR2() then
-        index = idx
-      elseif isGameTypeSA() then
-        if idx >= 8 then
-          index = idx - 1
-        else
-          index = idx
-        end
-      elseif isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-        if idx >= 8 then
-          index = idx - 1
-        else
-          index = idx
-        end
-      else
-        index = idx
-      end
-      local row = math.floor(index / self._slotsCols)
-      local col = index % self._slotsCols
-      optionCount = index + 1
-      tempBtn.chatFilter:SetPosX(self.slotStartX + self.slotGapX * col)
-      tempBtn.chatFilter:SetPosY(self.slotStartY + self.slotGapY * row)
-      btnFilter[idx] = tempBtn
-      if eChatButtonType.eChatNotice == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFFEF82)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Notice))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Notice( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 0, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatWorldWithItem == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF00F3A0)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.WorldWithItem))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_WorldWithItem( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 1, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatWorld == idx then
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.World))
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFF973A)
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SERVERGROUP"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_World( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 2, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatGuild == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF84FFF5)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Guild))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_GUILD"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Guild( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 3, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatParty == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF8EBD00)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Party))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_PARTY"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Party( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 4, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatBattle == idx then
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Battle))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_BATTLE"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Battle( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 5, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-        btnFilter[idx].chatColor:SetShow(false)
-        btnFilter[idx].chatColor:SetPosX(btnFilter[idx].chatFilter:GetPosX() + btnFilter[idx].chatFilter:GetSizeX() + btnFilter[idx].chatFilter:GetTextSizeX() + 10)
-      elseif eChatButtonType.eChatPublic == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFE7E7E7)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Public))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_GENERAL"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Public( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 6, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatRolePlay == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF00B4FF)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.RolePlay))
-        btnFilter[idx].chatFilter:SetText("RolePlay")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_RolePlay( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 7, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-        btnFilter[idx].chatFilter:SetShow(roleplayTypeOpen)
-        btnFilter[idx].chatColor:SetShow(roleplayTypeOpen)
-      elseif eChatButtonType.eChatPrivate == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFF601FF)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Private))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WHISPER"))
-        btnFilter[idx].chatFilter:SetShow(true)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Private( " .. panelIdex .. " )")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 8, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatArsha == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFFD237)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Arsha))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_ARSHA"))
-        btnFilter[idx].chatFilter:SetShow(isArshaOpen)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Arsha( " .. panelIdex .. " )")
-        btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Arsha( " .. panelIdex .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 9, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      elseif eChatButtonType.eChatTeam == idx then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFB97FEF)
-        btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Team))
-        btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_TEAM"))
-        btnFilter[idx].chatFilter:SetShow(isArshaOpen or isLocalWarOpen or isSavageDefenceOpen)
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Team( " .. panelIdex .. " )")
-        btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Team( " .. panelIdex .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 10, " .. idx .. ")")
-        btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-      end
-      btnFilter[idx].chatColor:SetPosY(self.slotStartY + self.slotGapY * row)
-      btnFilter[idx].chatColor:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 99, " .. idx .. ")")
-      btnFilter[idx].chatColor:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-    end
+    chatFilter_Initialize(panelIdex, self, chat)
     local posX = 0
     local posY = 0
     for idx = 0, self.chatSystemFilterCount - 1 do
@@ -740,17 +595,31 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
         btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Arsha( " .. panelIdex .. ")")
         btnFilter[idx].chatColor:SetShow(true)
       end
-    elseif eChatButtonType.eChatTeam == idx and (isArshaOpen or isLocalWarOpen or isSavageDefenceOpen) then
-      local chatColorIndex = chat:getChatColorIndex(UI_CT.Team)
+    elseif eChatButtonType.eChatTeam == idx then
+      if isArshaOpen or isLocalWarOpen or isSavageDefenceOpen then
+        local chatColorIndex = chat:getChatColorIndex(UI_CT.Team)
+        if -1 == chatColorIndex then
+          btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFB97FEF)
+          btnFilter[idx].chatColor:SetColor(UI_color.C_FFB97FEF)
+        else
+          btnFilter[idx].chatFilter:SetFontColor(FGlobal_ColorList(chatColorIndex))
+          btnFilter[idx].chatColor:SetColor(FGlobal_ColorList(chatColorIndex))
+        end
+        btnFilter[idx].chatColor:SetPosX(btnFilter[idx].chatFilter:GetPosX() + btnFilter[idx].chatFilter:GetSizeX() + btnFilter[idx].chatFilter:GetTextSizeX() + 10)
+        btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Team( " .. panelIdex .. ")")
+        btnFilter[idx].chatColor:SetShow(true)
+      end
+    elseif eChatButtonType.eChatAlliance == idx and _ContentsGroup_guildAlliance then
+      local chatColorIndex = chat:getChatColorIndex(UI_CT.Alliance)
       if -1 == chatColorIndex then
-        btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFB97FEF)
-        btnFilter[idx].chatColor:SetColor(UI_color.C_FFB97FEF)
+        btnFilter[idx].chatFilter:SetFontColor(color_Alliance)
+        btnFilter[idx].chatColor:SetColor(color_Alliance)
       else
         btnFilter[idx].chatFilter:SetFontColor(FGlobal_ColorList(chatColorIndex))
         btnFilter[idx].chatColor:SetColor(FGlobal_ColorList(chatColorIndex))
       end
       btnFilter[idx].chatColor:SetPosX(btnFilter[idx].chatFilter:GetPosX() + btnFilter[idx].chatFilter:GetSizeX() + btnFilter[idx].chatFilter:GetTextSizeX() + 10)
-      btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Team( " .. panelIdex .. ")")
+      btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Alliance( " .. panelIdex .. ")")
       btnFilter[idx].chatColor:SetShow(true)
     end
   end
@@ -793,6 +662,9 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
   if roleplayTypeOpen then
     btnFilter[eChatButtonType.eChatRolePlay].chatFilter:SetCheck(chat:isShowChatType(UI_CT.RolePlay))
   end
+  if _ContentsGroup_guildAlliance then
+    btnFilter[eChatButtonType.eChatAlliance].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Alliance))
+  end
   btnSystemFilter[eChatSystemButtonType.eChatSystem].chatFilter:SetCheck(chat:isShowChatType(UI_CT.System))
   btnSystemFilter[eChatSystemButtonType.eChatSystemUndefine].chatFilter:SetCheck(chat:isShowChatSystemType(UI_CST.Undefine))
   btnSystemFilter[eChatSystemButtonType.eChatSystemPrivateItem].chatFilter:SetCheck(chat:isShowChatSystemType(UI_CST.PrivateItem))
@@ -810,6 +682,7 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
   channel_Battle = chat:isShowChatType(UI_CT.Battle)
   channel_Arsha = chat:isShowChatType(UI_CT.Arsha)
   channel_Team = chat:isShowChatType(UI_CT.Team)
+  channel_Alliance = chat:isShowChatType(UI_CT.Alliance)
   if roleplayTypeOpen then
     channel_RolePlay = chat:isShowChatType(UI_CT.RolePlay)
   end
@@ -847,6 +720,186 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
   else
     _check_Division:SetCheck(ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.ChatDivision))
   end
+  ChattingOption_InitailizeChattingAnimationControl()
+  FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
+  registEvent_Initialize(panelIdex)
+end
+function chatFilter_Initialize(panelIdex, self, chat)
+  local idx = 0
+  for idx = 0, self.chatFilterCount - 1 do
+    local tempBtn = {}
+    tempBtn.chatFilter = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_CHECKBUTTON, _msgFilter_BG, "ChatOption_Btn_" .. idx .. "_" .. panelIdex)
+    CopyBaseProperty(msgFilter_Chkbox, tempBtn.chatFilter)
+    tempBtn.chatFilter:SetShow(false)
+    tempBtn.chatColor = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, _msgFilter_BG, "ChatOption_Color_Btn_" .. idx .. "_" .. panelIdex)
+    CopyBaseProperty(selectColor_btn, tempBtn.chatColor)
+    tempBtn.chatColor:SetShow(false)
+    local isRoleplay = eChatButtonType.eChatRolePlay == idx and not roleplayTypeOpen
+    if isGameTypeTaiwan() or isGameTypeJapan() then
+      if idx >= 10 then
+        if isArshaOpen then
+          index = idx - 1
+        else
+          index = idx - 2
+        end
+      else
+        index = idx
+      end
+    end
+    if (isGameTypeKorea() or isGameTypeRussia()) and not isGameServiceTypeDev() then
+      if idx >= 8 then
+        index = idx - 1
+      else
+        index = idx
+      end
+    elseif isGameServiceTypeDev() or isGameTypeEnglish() then
+      if idx >= 9 then
+        if isLocalWarOpen or isArshaOpen then
+          index = idx
+        else
+          index = idx - 1
+        end
+      else
+        index = idx
+      end
+    elseif isGameTypeJapan() then
+      if idx >= 8 then
+        index = idx - 1
+      else
+        index = idx
+      end
+    elseif isGameTypeKR2() then
+      index = idx
+    elseif isGameTypeSA() then
+      if idx >= 8 then
+        index = idx - 1
+      else
+        index = idx
+      end
+    elseif isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+      if idx >= 8 then
+        index = idx - 1
+      else
+        index = idx
+      end
+    else
+      index = idx
+    end
+    local row = math.floor(index / self._slotsCols)
+    local col = index % self._slotsCols
+    optionCount = index + 1
+    tempBtn.chatFilter:SetPosX(self.slotStartX + self.slotGapX * col)
+    tempBtn.chatFilter:SetPosY(self.slotStartY + self.slotGapY * row)
+    btnFilter[idx] = tempBtn
+    if eChatButtonType.eChatNotice == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFFEF82)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Notice))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Notice( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 0, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatWorldWithItem == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF00F3A0)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.WorldWithItem))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_WorldWithItem( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 1, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatWorld == idx then
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.World))
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFF973A)
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SERVERGROUP"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_World( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 2, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatGuild == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF84FFF5)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Guild))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_GUILD"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Guild( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 3, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatParty == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF8EBD00)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Party))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_PARTY"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Party( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 4, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatBattle == idx then
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Battle))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_BATTLE"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Battle( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 5, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+      btnFilter[idx].chatColor:SetShow(false)
+      btnFilter[idx].chatColor:SetPosX(btnFilter[idx].chatFilter:GetPosX() + btnFilter[idx].chatFilter:GetSizeX() + btnFilter[idx].chatFilter:GetTextSizeX() + 10)
+    elseif eChatButtonType.eChatPublic == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFE7E7E7)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Public))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_GENERAL"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Public( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 6, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatRolePlay == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FF00B4FF)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.RolePlay))
+      btnFilter[idx].chatFilter:SetText("RolePlay")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_RolePlay( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 7, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+      btnFilter[idx].chatFilter:SetShow(roleplayTypeOpen)
+      btnFilter[idx].chatColor:SetShow(roleplayTypeOpen)
+    elseif eChatButtonType.eChatPrivate == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFF601FF)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Private))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WHISPER"))
+      btnFilter[idx].chatFilter:SetShow(true)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Private( " .. panelIdex .. " )")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 8, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatArsha == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFFFD237)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Arsha))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_ARSHA"))
+      btnFilter[idx].chatFilter:SetShow(isArshaOpen)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Arsha( " .. panelIdex .. " )")
+      btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Arsha( " .. panelIdex .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 9, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatTeam == idx then
+      btnFilter[idx].chatFilter:SetFontColor(UI_color.C_FFB97FEF)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Team))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_TEAM"))
+      btnFilter[idx].chatFilter:SetShow(isArshaOpen or isLocalWarOpen or isSavageDefenceOpen)
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Team( " .. panelIdex .. " )")
+      btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Team( " .. panelIdex .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 10, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    elseif eChatButtonType.eChatAlliance == idx then
+      btnFilter[idx].chatFilter:SetFontColor(color_Alliance)
+      btnFilter[idx].chatFilter:SetCheck(chat:isShowChatType(UI_CT.Alliance))
+      btnFilter[idx].chatFilter:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_TITLE"))
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Alliance( " .. panelIdex .. " )")
+      btnFilter[idx].chatColor:addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Alliance( " .. panelIdex .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 101, " .. idx .. ")")
+      btnFilter[idx].chatFilter:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+      btnFilter[idx].chatFilter:SetShow(_ContentsGroup_guildAlliance)
+      btnFilter[idx].chatColor:SetShow(_ContentsGroup_guildAlliance)
+    end
+    btnFilter[idx].chatColor:SetPosY(self.slotStartY + self.slotGapY * row)
+    btnFilter[idx].chatColor:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 99, " .. idx .. ")")
+    btnFilter[idx].chatColor:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+  end
+end
+function registEvent_Initialize(panelIdex)
   _button_resetColor:addInputEvent("Mouse_LUp", "HandledClicked_ChattingColorReset(" .. panelIdex .. ")")
   _button_resetColor:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 28)")
   _button_resetColor:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
@@ -871,8 +924,6 @@ function ChattingOption_Initialize(panelIdex, _transparency, isCombinedMainPanel
   rdo_FontSizeNormal2:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
   rdo_FontSizeBig:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 22)")
   rdo_FontSizeBig:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
-  ChattingOption_InitailizeChattingAnimationControl()
-  FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
 end
 function HandledClicked_ChattingColorReset(panelIndex)
   local self = chatOptionData
@@ -887,6 +938,7 @@ function HandledClicked_ChattingColorReset(panelIndex)
   chat:setChatColor(UI_CT.RolePlay, -1)
   chat:setChatColor(UI_CT.Arsha, -1)
   chat:setChatColor(UI_CT.Team, -1)
+  chat:setChatColor(UI_CT.Alliance, -1)
   chat:setChatSystemColorIndex(UI_CT.System, -1)
   if eChatSystemButtonType.eChatSystem == 0 then
     local chatColorIndex = chat:getChatSystemColorIndex(UI_CT.System)
@@ -991,6 +1043,15 @@ function HandledClicked_ChattingColorReset(panelIndex)
         btnFilter[idx].chatFilter:SetFontColor(FGlobal_ColorList(chatColorIndex))
         btnFilter[idx].chatColor:SetColor(FGlobal_ColorList(chatColorIndex))
       end
+    elseif eChatButtonType.eChatAlliance == idx then
+      local chatColorIndex = chat:getChatColorIndex(UI_CT.Alliance)
+      if -1 == chatColorIndex then
+        btnFilter[idx].chatFilter:SetFontColor(color_Alliance)
+        btnFilter[idx].chatColor:SetColor(color_Alliance)
+      else
+        btnFilter[idx].chatFilter:SetFontColor(FGlobal_ColorList(chatColorIndex))
+        btnFilter[idx].chatColor:SetColor(FGlobal_ColorList(chatColorIndex))
+      end
     end
   end
 end
@@ -1012,6 +1073,7 @@ function HandleClicked_ChattingOption_SetFilter(panelIdex)
   chat:setShowChatType(UI_CT.RolePlay, channel_RolePlay)
   chat:setShowChatType(UI_CT.Arsha, channel_Arsha)
   chat:setShowChatType(UI_CT.Team, channel_Team)
+  chat:setShowChatType(UI_CT.Alliance, channel_Alliance)
   chat:setShowChatSystemType(UI_CST.Undefine, channel_SystemUndefine)
   chat:setShowChatSystemType(UI_CST.PrivateItem, channel_SystemPrivateItem)
   chat:setShowChatSystemType(UI_CST.PartyItem, channel_SystemPartyItem)
@@ -1503,6 +1565,10 @@ function HandleOn_ChattingOption_Tooltip(isShow, tipType, idx)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_DESC")
     control = btnFilter[idx].chatColor
+  elseif 101 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTIONTOOLTIP_ALLIANCE_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTIONTOOLTIP_ALLIANCE_DESC")
+    control = btnFilter[idx].chatFilter
   end
   TooltipSimple_Show(control, name, desc)
 end

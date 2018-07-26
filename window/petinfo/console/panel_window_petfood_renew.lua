@@ -16,7 +16,8 @@ local petFood = {
   },
   _selectItemIndex,
   _feedingPetIndex,
-  _isFeedAll
+  _isFeedAll,
+  _isFoodEmpty
 }
 function petFood:initialize()
   self:initControl()
@@ -25,6 +26,7 @@ function petFood:initialize()
   self._selectItemIndex = -1
   self._feedingPetIndex = -1
   self._isFeedAll = false
+  self._isFoodEmpty = false
 end
 function petFood:initControl()
   local petInfoUI = self._ui
@@ -78,12 +80,14 @@ function petFood:update()
     petInfoUI._static_FoodEmpty:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PET_FOOD_EMPTY"))
     petInfoUI._static_FeedFull:SetShow(false)
     petInfoUI._static_Feed:SetShow(false)
+    self._isFoodEmpty = true
   else
     petInfoUI._static_FoodEmpty:SetShow(false)
     petInfoUI._static_Feed:SetShow(true)
     if true == self._isFeedAll then
       petInfoUI._static_FeedFull:SetShow(false)
     end
+    self._isFoodEmpty = false
   end
   for i = 0, self._config._feedStaticItemCount - 1 do
     local targetSlot = petInfoUI._static_ItemSlots[i]
@@ -111,6 +115,9 @@ function petFood:update()
   end
 end
 function petFood:useFeedOneItem()
+  if true == self._isFoodEmpty then
+    return
+  end
   if self._selectItemIndex < 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
     return
@@ -120,6 +127,9 @@ function petFood:useFeedOneItem()
   ToClient_Pet_UseFeedItemByIndex(self._selectItemIndex, petNo)
 end
 function petFood:useFeedFullItem()
+  if true == self._isFoodEmpty then
+    return
+  end
   if self._selectItemIndex < 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
     return
@@ -129,6 +139,9 @@ function petFood:useFeedFullItem()
   ToClient_Pet_UseFeedItemFullByIndex(self._selectItemIndex, petNo)
 end
 function petFood:useFeedItemToAll()
+  if true == self._isFoodEmpty then
+    return
+  end
   if self._selectItemIndex < 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
     return
@@ -143,6 +156,7 @@ function petFood:open(isFeedAll)
     self._selectItemIndex = -1
     self._feedingPetIndex = -1
   end
+  self._isFoodEmpty = false
   if Panel_Window_PetFood_Renew:GetShow() then
     Panel_Window_PetFood_Renew:SetShow(false)
   end

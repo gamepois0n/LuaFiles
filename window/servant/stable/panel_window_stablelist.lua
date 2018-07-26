@@ -1077,16 +1077,16 @@ function StableList_RecoveryUnseal()
   end
   if servantWrapper:isImprint() then
     if servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
-      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
     else
       Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
     end
   elseif servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
     Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_NOT")
   elseif servantWrapper:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney)
   else
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney)
   end
   local RecoveryUnseal = function()
     StableList_RecoveryUnsealXXX()
@@ -1128,16 +1128,16 @@ function StableList_Recovery()
   end
   if servantInfo:isImprint() then
     if vehicleType == CppEnums.VehicleType.Type_RepairableCarriage then
-      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
     else
       Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
     end
   elseif vehicleType == CppEnums.VehicleType.Type_Horse or vehicleType == CppEnums.VehicleType.Type_Camel or vehicleType == CppEnums.VehicleType.Type_Donkey or vehicleType == CppEnums.VehicleType.Type_Elephant then
     Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_NOT")
   elseif vehicleType == CppEnums.VehicleType.Type_RepairableCarriage then
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney)
   else
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG2", "needMoney", imprintMoney)
   end
   local Recovery_Notify_Title = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE")
   if CppEnums.VehicleType.Type_Carriage == vehicleType or CppEnums.VehicleType.Type_CowCarriage == vehicleType or CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType then

@@ -190,7 +190,7 @@ function CannonShip_Show(actorKeyRaw)
   end
   local seatPosition = selfPlayer:get():getVehicleSeatIndex()
   local isVehicleType = getVehicleActor(actorKeyRaw):get():getVehicleType()
-  if CppEnums.VehicleType.Type_SailingBoat == isVehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == isVehicleType or CppEnums.VehicleType.Type_PersonTradeShip == isVehicleType or CppEnums.VehicleType.Type_PersonalBoat == isVehicleType then
+  if CppEnums.VehicleType.Type_SailingBoat == isVehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == isVehicleType or CppEnums.VehicleType.Type_PersonTradeShip == isVehicleType or CppEnums.VehicleType.Type_PersonalBoat == isVehicleType or CppEnums.VehicleType.Type_CashPersonalBattleShip == isVehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == isVehicleType then
     if 0 ~= seatPosition and 13 ~= seatPosition and 4 ~= seatPosition and 3 ~= seatPosition and 1 ~= seatPosition and 2 ~= seatPosition then
       Panel_CannonShip:SetShow(true, true)
       progresssBG:SetShow(true)
@@ -235,7 +235,7 @@ function CannonShip_HideGauge()
   end
 end
 function FromClient_UpdateCannonShipBallCount(count, VehicleTpye)
-  if UI_VT.Type_SailingBoat ~= VehicleTpye and UI_VT.Type_PersonalBattleShip ~= VehicleTpye and UI_VT.Type_PersonTradeShip ~= VehicleTpye and UI_VT.Type_PersonalBoat ~= VehicleTpye then
+  if UI_VT.Type_SailingBoat ~= VehicleTpye and UI_VT.Type_PersonalBattleShip ~= VehicleTpye and UI_VT.Type_PersonTradeShip ~= VehicleTpye and UI_VT.Type_PersonalBoat ~= VehicleTpye and UI_VT.Type_CashPersonalTradeShip ~= VehicleTpye and UI_VT.Type_CashPersonalBattleShip ~= VehicleTpye then
     return
   end
   local shootCountValue = Int64toInt32(count)

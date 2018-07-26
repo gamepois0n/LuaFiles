@@ -43,7 +43,7 @@ function SinGauge_RePosition()
   sizeX = Panel_SinGauge:GetSizeX() / 2
   sizeY = Panel_SinGauge:GetSizeY() / 2
   Panel_SinGauge:SetPosX(screenX / 2 - sizeX)
-  Panel_SinGauge:SetPosY(screenY / 2 + 240)
+  Panel_SinGauge:SetPosY(screenY / 2 + 180)
 end
 local function SinGaugeBar_OnFail()
   if isFinished then
@@ -77,7 +77,7 @@ function SinGaugeBar_UpdateGauge()
     elseif gaugeIsGrowing == false and gaugeBarSizeX > 10 and checkGaugeCount < 5 then
       gaugeBarSizeX = gaugeBarSizeX - (gaugeBarSizeX + 1) / gaugeSize * gaugeSize * 2.5 * deltaTime
       if gaugeBarSizeX < 10 then
-        gaugeBarSizeX = 10
+        gaugeBarSizeX = 0
         gaugeIsGrowing = true
         checkGaugeCount = checkGaugeCount + 1
         _txt_Checking_Count:SetText("(" .. checkGaugeCount .. "/3)")

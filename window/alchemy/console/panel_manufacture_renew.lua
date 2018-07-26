@@ -291,6 +291,7 @@ function manufacture:initMaterial()
     SlotItem.new(slotItem, "Slot" .. i, i, bgControl, slotItemConfig)
     slotItem:createChild()
     slotItem.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureSelectMultipleMaterials()")
+    slotItem.icon:SetEnableDragAndDrop(false)
     material.slotItem = slotItem
     table.insert(self._materialTable, material)
   end
@@ -478,7 +479,7 @@ function manufacture:initAction()
     descString = PAGetString(Defines.StringSheet_GAME, ""),
     desc2String = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANUFACTURE_SUBDESC"),
     disabledDescString = "",
-    isEnabled = ToClient_IsContentsGroupOpen("36"),
+    isEnabled = ToClient_IsContentsGroupOpen("382"),
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 5,
     installationType = CppEnums.InstallationType.TypeCount,
@@ -539,6 +540,7 @@ function manufacture:initialize()
   if _ContentsGroup_LifeStatManufacturing then
     massButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDoMass()")
   end
+  self._panel:ignorePadSnapMoveToOtherPanel()
   self._panel:RegisterUpdateFunc("PaGlobalFunc_ManufacturePerFrameUpdate")
   registerEvent("Event_ManufactureResultList", "PaGlobalFunc_ManufactureResponse")
 end
@@ -573,7 +575,7 @@ end
 function manufacture:replaceMaterialSlotNo()
   for i = 1, table.getn(self._materialTable) do
     local material = self._materialTable[i]
-    if material:replaceSlotNo() then
+    if not material:checkEmpty() and not material:replaceSlotNo() then
       return false
     end
   end
@@ -687,7 +689,7 @@ function manufacture:filterImpl(slotNo, itemWhereType, itemWrapper)
   if action.materialCount <= self:getInsertedMaterialCount() and not self:getMaterialBySlotNoAndItemWhereType(slotNo, itemWhereType) then
     return true
   end
-  if action.name == "MANUFACTURE_HEAT" and not itemWrapper:checkToRepairItem() then
+  if action.name == "REPAIR_ITEM" and not itemWrapper:checkToRepairItem() then
     return true
   end
   return false
@@ -700,7 +702,7 @@ function manufacture:filterInventory(slotNo, itemWrapper, inventoryType)
   if not action then
     return false
   end
-  if action.name ~= "MANUFACTURE_HEAT" and not isManufactureItem(inventoryType, slotNo, action.name) then
+  if action.name ~= "REPAIR_ITEM" and not isManufactureItem(inventoryType, slotNo, action.name) then
     return true
   end
   return false
@@ -714,7 +716,7 @@ function manufacture:rightClickInventory(slotNo, itemWrapper, count, inventoryTy
   if material then
     return self:removeMaterialByIndex(material.index)
   else
-    return self:insertMaterial(slotNo, itemWrapper, count, CppEnums.ItemWhereType.eInventory)
+    return self:insertMaterial(slotNo, itemWrapper, count, inventoryType)
   end
 end
 function PaGlobalFunc_ManufactureRightClickInventory(slotNo, itemWrapper, count, inventoryType)
@@ -818,6 +820,11 @@ function manufacture:open(initFlag)
   end
   if selfPlayerIsInCompetitionArea() then
     return false
+  end
+  if _ContentsGroup_RenewUI_Inventory then
+    PaGlobalFunc_InventoryInfo_Close()
+  else
+    InventoryWindow_Close()
   end
   if Panel_AlchemyFigureHead:GetShow() then
     FGlobal_AlchemyFigureHead_Close()
@@ -925,6 +932,9 @@ end
 function manufacture:checkActionVisible(actionIndex)
   local action = self:getAction(actionIndex)
   if not action then
+    return false
+  end
+  if not action.isEnabled then
     return false
   end
   if not isVisibleManufactureAction(action.name) then
@@ -1036,7 +1046,8 @@ function manufacture:updateKnowledge()
     self._ui.knowledgeTitleControl:SetText("")
     self._ui.knowledgeDescControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_1"))
   end
-  self._ui.knowledgeFrameContentControl:SetSize(self._ui.knowledgeFrameContentControl:GetSizeX(), self._ui.knowledgeDescControl:GetTextSizeY())
+  local bottomPosY = self._ui.knowledgeDescControl:GetPosY() + self._ui.knowledgeDescControl:GetTextSizeY()
+  self._ui.knowledgeFrameContentControl:SetSize(self._ui.knowledgeFrameContentControl:GetSizeX(), bottomPosY)
   self._ui.knowledgeFrameControl:UpdateContentScroll()
   self._ui.knowledgeFrameControl:UpdateContentPos()
 end
@@ -1109,7 +1120,7 @@ function manufacture:responseSuccess(itemDynamicListWrapper)
   if self._repeatActionFlag then
     if self:replaceMaterialSlotNo() then
       StopManufactureAction()
-      luaTimer_AddEvent(PaGlobalFunc_ManufactureManufactureXXX, 500, false, 0)
+      luaTimer_AddEvent(PaGlobalFunc_ManufactureDoXXX, 500, false, 0)
     else
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_COMPLETE_REPEAT"))
     end

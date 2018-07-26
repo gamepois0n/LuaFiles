@@ -122,7 +122,7 @@ function MiniGame_GaugeBarMoveCalc(fDeltaTime)
   end
   data.currentPos = currentPos
   data.currentSpeed = data.currentSpeed - (0.5 - currentPos) * define.speedWeight * fDeltaTime
-  local redArea = 76
+  local redArea = 80
   local controlPos = _math_lerp(self._ui.stc_gaugeBG:GetPosX(), self._ui.stc_gaugeBG:GetPosX() + self._ui.stc_gaugeBG:GetSizeX(), currentPos)
   local left_Bad_Start = self._ui.stc_gaugeBG:GetPosX() + redArea
   local right_Bad_Start = self._ui.stc_gaugeBG:GetPosX() + self._ui.stc_gaugeBG:GetSizeX() - redArea

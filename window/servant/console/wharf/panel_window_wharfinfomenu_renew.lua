@@ -175,7 +175,7 @@ function Panel_Window_WharfInfo_Menu_info:setSealedButton(selectServantNo)
     if nowHp < maxHp then
       self:setButton(self._enumButtonType.eREPAIR, self._string.repair)
     end
-    if nowHp == maxHp and nowMp < maxMp and (CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType) then
+    if nowHp == maxHp and nowMp < maxMp and (CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip or CppEnums.VehicleType.Type_PersonTradeShip) then
       self:setButton(self._enumButtonType.eREPAIR, self._string.repair)
     end
     if FGlobal_IsCommercialService() then

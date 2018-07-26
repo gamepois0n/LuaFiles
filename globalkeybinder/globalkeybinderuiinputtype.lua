@@ -211,6 +211,9 @@ function Process_UIMode_CommonWindow_Dyeing()
   if MiniGame_Manual_Value_FishingStart == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_FISHING_ACK"))
     return
+  elseif true == _ContentsGroup_RenewUI_Dyeing then
+    audioPostEvent_SystemUi(1, 24)
+    PaGlobalFunc_Dyeing_Open()
   elseif not Panel_Dye_ReNew:GetShow() then
     audioPostEvent_SystemUi(1, 24)
     FGlobal_Panel_Dye_ReNew_Open()
@@ -306,12 +309,12 @@ function Process_UIMode_CommonWindow_Guild()
         audioPostEvent_SystemUi(1, 31)
         FGlobal_ClanList_Close()
       end
-    elseif false == PaGlobalFunc_Guild_GetShow() then
+    elseif false == PaGlobalFunc_GuildMain_GetShow() then
       audioPostEvent_SystemUi(1, 36)
-      PaGlobalFunc_Guild_Open()
+      PaGlobalFunc_GuildMain_Open()
     else
       audioPostEvent_SystemUi(1, 31)
-      PaGlobalFunc_Guild_Close()
+      PaGlobalFunc_GuildMain_Close()
     end
   else
     local messageBoxData = {

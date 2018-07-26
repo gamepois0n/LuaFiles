@@ -32,6 +32,15 @@ local workerManager = {
       _Master = 4,
       _All = 5
     },
+    _workType = {
+      _HouseCraft = 0,
+      _LargeCraft = 1,
+      _PlantWork = 2,
+      _Building = 3,
+      _RegionWork = 4,
+      _upgrade = 5,
+      _harvest = 6
+    },
     _workerUpgradeTextureType = {
       _Fail = 0,
       _Upgradable = 1,
@@ -201,25 +210,29 @@ end
 function PaGlobalFunc_WorkerManager_SetSortInfo()
   workerManager:setSortInfo()
 end
-function workerManager:update()
+function workerManager:update(notSetScroll)
   local toIndex = 0
   local scrollvalue = 0
   local vscroll = self._ui._list2_Worker:GetVScroll()
   local hscroll = self._ui._list2_Worker:GetHScroll()
-  toIndex = self._ui._list2_Worker:getCurrenttoIndex()
-  if false == self._ui._list2_Worker:IsIgnoreVerticalScroll() then
-    scrollvalue = vscroll:GetControlPos()
-  elseif false == sself._ui._list2_Worker:IsIgnoreHorizontalScroll() then
-    scrollvalue = hscroll:GetControlPos()
+  if nil == notSetScroll then
+    toIndex = self._ui._list2_Worker:getCurrenttoIndex()
+    if false == self._ui._list2_Worker:IsIgnoreVerticalScroll() then
+      scrollvalue = vscroll:GetControlPos()
+    elseif false == sself._ui._list2_Worker:IsIgnoreHorizontalScroll() then
+      scrollvalue = hscroll:GetControlPos()
+    end
   end
-  workerManager:setSortInfo()
-  workerManager:updateListData()
-  workerManager:setRightPanelInfo(self._selectedWorker)
+  self:setSortInfo()
+  self:updateListData()
+  self:setRightPanelInfo(self._selectedWorker)
   self._ui._list2_Worker:setCurrenttoIndex(toIndex)
-  if false == self._ui._list2_Worker:IsIgnoreVerticalScroll() then
-    vscroll:SetControlPos(scrollvalue)
-  elseif false == self._ui._list2_Worker:IsIgnoreHorizontalScroll() then
-    hscroll:SetControlPos(scrollvalue)
+  if nil == notSetScroll then
+    if false == self._ui._list2_Worker:IsIgnoreVerticalScroll() then
+      vscroll:SetControlPos(scrollvalue)
+    elseif false == self._ui._list2_Worker:IsIgnoreHorizontalScroll() then
+      hscroll:SetControlPos(scrollvalue)
+    end
   end
 end
 function PaGlobalFunc_WorkerManager_WorkerListUpdate()
@@ -254,12 +267,8 @@ function workerManager:updateListData()
   local gradeSort_do = function(a, b)
     return a._grade < b._grade
   end
-  self._townList = {
-    [999] = self._config._workerTownString[0]
-  }
-  self._gradeList = {
-    [999] = self._config._workerGradeString[5]
-  }
+  self._townList = {}
+  self._gradeList = {}
   local townIndex = 1
   for plantRawIdx = 1, #plantArray do
     local plantKey = plantArray[plantRawIdx]
@@ -308,6 +317,11 @@ function workerManager:updateListData()
     end
   end
   self._workerCount = workerCount
+  if workerCount <= 0 then
+    self._selectedWorker = nil
+  end
+  self._townList[-1] = self._config._workerTownString[0]
+  self._gradeList[-1] = self._config._workerGradeString[5]
 end
 function workerManager:open()
   if true == Panel_Window_WorkerManager_Renew:GetShow() then
@@ -344,6 +358,7 @@ function workerManager:changeTab(changeValue)
 end
 function PaGlobalFunc_WorkerManager_ChangeTab(changeValue)
   workerManager:changeTab(changeValue)
+  workerManager:update()
 end
 function workerManager:selectTab(tabIndex)
   for _, controlName in pairs(self._ui._tabText) do
@@ -362,15 +377,18 @@ function workerManager:selectTab(tabIndex)
     self._ui._tabText._radioButton_Upgrade:SetFontColor(Defines.Color.C_FFEEEEEE)
   end
   self._selectedTab = tabIndex
-  if nil ~= self._selectedWorker then
-    self:selectWorker(self._selectedWorker)
-    self:setRightPanelInfo(self._selectedWorker)
-  end
+  self:selectWorker(self._selectedWorker)
+  self:setRightPanelInfo(self._selectedWorker)
 end
 function PaGlobalFunc_WorkerManager_SelectTab(tabIndex)
   workerManager:selectTab(tabIndex)
+  workerManager:update()
 end
 function workerManager:workerRestore(isRestoreAll)
+  if self._workerCount <= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_RentHouseNoWorkingByWorkerNotSelect"))
+    return
+  end
   PaGlobalFunc_WorkerManager_Restore_Open(isRestoreAll)
 end
 function PaGlobalFunc_WorkerManager_WorkerRestore(isRestoreAll)
@@ -585,12 +603,7 @@ function PaGlobalFunc_WorkerManager_listCreat(control, key)
   workerManager:listCreate(control, key)
 end
 function workerManager:selectWorker(workerNoRawStr)
-  local workerWrapperLua = getWorkerWrapper(tonumber64(workerNoRawStr))
-  if nil == workerWrapperLua then
-    return
-  end
   self._selectedWorker = workerNoRawStr
-  local workingState = workerWrapperLua:getWorkingType()
   self._ui._xboxUI._staticText_Restore_ConsoleUI:SetShow(false)
   self._ui._xboxUI._staticText_Redo_ConsoleUI:SetShow(false)
   self._ui._xboxUI._staticText_DoFire_ConsoleUI:SetShow(false)
@@ -599,6 +612,14 @@ function workerManager:selectWorker(workerNoRawStr)
   Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
   Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  if nil == workerNoRawStr then
+    return
+  end
+  local workerWrapperLua = getWorkerWrapper(tonumber64(workerNoRawStr))
+  if nil == workerWrapperLua then
+    return
+  end
+  local workingState = workerWrapperLua:getWorkingType()
   if self._config._Tab._Base == self._selectedTab then
     self._ui._xboxUI._staticText_Restore_ConsoleUI:SetShow(true)
     self._ui._xboxUI._staticText_Redo_ConsoleUI:SetShow(true)
@@ -731,13 +752,14 @@ function workerManager:setWorkerUpgradeTexture(upgradeSlot, upgradeTextureType)
   upgradeSlot:setRenderTexture(upgradeSlot:getBaseTexture())
 end
 function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
+  self._ui._static_UpgradeBg:SetShow(true)
+  self._ui._static_DescBg:SetShow(true)
+  local upgradeSlot = self._ui._upgradeSlot
   local textureType = self._config._workerUpgradeTextureType
   if workerNoRawStr == nil or workerNoRawStr == "" then
-    local upgradeSlot = self._ui._upgradeSlot
     for index = 1, self._config._upgradeSlotCount do
-      self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._InActivation)
-      upgradeSlot[index]._staticText_UpgradeLevel:SetFontColor(self._config._fontColor._InActivation)
-      upgradeSlot[index]._staticText_UpgradeState:SetFontColor(self._config._fontColor._InActivation)
+      upgradeSlot[index]._staticText_UpgradeLevel:SetShow(false)
+      upgradeSlot[index]._staticText_UpgradeState:SetShow(false)
     end
     return
   end
@@ -747,8 +769,6 @@ function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
   local maxUpgradePoint = math.floor(workeLv / 10)
   local upgradeFailCount = maxUpgradePoint - upgradableCount
   local isUpgradable = workerWrapperLua:isUpgradable()
-  self._ui._static_UpgradeBg:SetShow(true)
-  self._ui._static_DescBg:SetShow(true)
   if CppEnums.NpcWorkingType.eNpcWorkingType_Upgrade == workerWrapperLua:getWorkingType() then
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetShow(true)
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_UPGRADENOW"))
@@ -758,7 +778,6 @@ function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_UPGRADERESETBUTTON"))
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_ResetUpgradeCount()")
   end
-  local upgradeSlot = self._ui._upgradeSlot
   for index = 1, self._config._upgradeSlotCount do
     if upgradeFailCount > 0 then
       self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._Fail)
@@ -782,15 +801,16 @@ function workerManager:setRightPanelInfo(workerNoRawStr)
   self._ui._static_UpgradeBg:SetShow(false)
   self._ui._static_DescBg:SetShow(false)
   if self._config._Tab._Base == self._selectedTab then
-    workerManager:setWorkerBaseInfo(workerNoRawStr)
-    workerManager:setWorkerSkillInfo(workerNoRawStr)
+    self:setWorkerBaseInfo(workerNoRawStr)
+    self:setWorkerSkillInfo(workerNoRawStr)
   elseif self._config._Tab._Upgrade == self._selectedTab then
-    workerManager:setWorkerBaseInfo(workerNoRawStr)
-    workerManager:setWorkerUpgradeInfo(workerNoRawStr)
+    self:setWorkerBaseInfo(workerNoRawStr)
+    self:setWorkerUpgradeInfo(workerNoRawStr)
   elseif self._config._Tab._Skill == self._selectedTab then
-    workerManager:setWorkerBaseInfo(workerNoRawStr)
-    workerManager:setWorkerSkillInfo(workerNoRawStr)
+    self:setWorkerBaseInfo(workerNoRawStr)
+    self:setWorkerSkillInfo(workerNoRawStr)
   end
+  self:selectWorker(workerNoRawStr)
 end
 function PaGlobalFunc_WorkerManager_SetRightPanelInfo(workerNoRawStr)
   workerManager:selectWorker(workerNoRawStr)
@@ -843,7 +863,7 @@ function PaGlobalFunc_WorkerManager_GetGradeList()
   return workerManager._gradeList
 end
 function workerManager:setFilter(townFilter, gradeFilter)
-  workerManager._selectedWorker = nil
+  self._selectedWorker = nil
   if nil == townFilter then
     self._filterTown = self._config._workerTownString[0]
   else
@@ -854,12 +874,13 @@ function workerManager:setFilter(townFilter, gradeFilter)
   else
     self._filterGrade = gradeFilter
   end
-  self:update()
+  self:update(true)
 end
 function PaGlobalFunc_WorkerManager_SetFilter(townFilter, gradeFilter)
   workerManager:setFilter(townFilter, gradeFilter)
 end
-function Push_Work_Start_Message(workerNo, _workType, buildingInfoSS)
+function workerManager:pushStartMessage(workerNo, _workType, buildingInfoSS)
+  local workType = self._config._workType
   if _workType == workType._HouseCraft then
     local esSSW = ToClient_getItemExchangeSourceStaticStatusWrapperByWorker(workerNo)
     if esSSW:isSet() then
@@ -900,7 +921,10 @@ function Push_Work_Start_Message(workerNo, _workType, buildingInfoSS)
   elseif _workType == workType._RegionWork then
   end
 end
-function Push_Worker_StopWork_Message(workerNo, isUserRequest, working)
+function Push_Work_Start_Message(workerNo, _workType, buildingInfoSS)
+  workerManager:pushStartMessage(workerNo, _workType, buildingInfoSS)
+end
+function workerManager:pushStopMessage(workerNo, isUserRequest, working)
   local npcWorkerWrapper = ToClient_getNpcWorkerByWorkerNo(workerNo)
   local workerName = npcWorkerWrapper:getName()
   local workingArea = working:getWorkingNodeName()
@@ -915,7 +939,10 @@ function Push_Worker_StopWork_Message(workerNo, isUserRequest, working)
     end
   end
 end
-function Push_Work_ResultItem_Message(WorkerNoRaw)
+function Push_Worker_StopWork_Message(workerNo, isUserRequest, working)
+  workerManager:pushStopMessage(workerNo, isUserRequest, working)
+end
+function workerManager:pushWorkerResultItemMessage(WorkerNoRaw)
   local result_Count = ToClient_getLastestWorkingResultCount(WorkerNoRaw)
   for idx = 1, result_Count do
     local itemWrapper = ToClient_getLastestWorkingResult(WorkerNoRaw, idx - 1)
@@ -927,7 +954,11 @@ function Push_Work_ResultItem_Message(WorkerNoRaw)
     end
   end
 end
-function FromClient_WorkerDataUpdate_HeadingPlant(ExplorationNode, workerNo)
+function Push_Work_ResultItem_Message(WorkerNoRaw)
+  workerManager:pushWorkerResultItemMessage(WorkerNoRaw)
+end
+function workerManager:workerDataUpdateHeadingPlant(ExplorationNode, workerNo)
+  local workType = self._config._workType
   if 0 ~= Int64toInt32(workerNo) and false == ExplorationNode:getStaticStatus():getRegion():isMainOrMinorTown() then
     Push_Work_Start_Message(workerNo, workType._PlantWork)
   end
@@ -941,9 +972,13 @@ function FromClient_WorkerDataUpdate_HeadingPlant(ExplorationNode, workerNo)
   if plantKey == nil then
     return
   end
-  workerManager:update()
+  self:update()
 end
-function FromClient_WorkerDataUpdate_HeadingHouse(rentHouseWrapper, workerNo)
+function FromClient_WorkerDataUpdate_HeadingPlant(ExplorationNode, workerNo)
+  workerManager:workerDataUpdateHeadingPlant(ExplorationNode, workerNo)
+end
+function workerManager:workerDataUpdateHeadingHouse(rentHouseWrapper, workerNo)
+  local workType = self._config._workType
   if 0 ~= Int64toInt32(workerNo) then
     local UseGroupType = rentHouseWrapper:getHouseUseType()
     if UseGroupType == 12 or UseGroupType == 13 or UseGroupType == 14 then
@@ -957,9 +992,13 @@ function FromClient_WorkerDataUpdate_HeadingHouse(rentHouseWrapper, workerNo)
   end
   local houseInfoSS = rentHouseWrapper:getStaticStatus():get()
   local affiliatedTownKey = ToClient_getHouseAffiliatedWaypointKey(houseInfoSS)
-  workerManager:update()
+  self:update()
 end
-function FromClient_WorkerDataUpdate_HeadingBuilding(buildingInfoSS, workerNo)
+function FromClient_WorkerDataUpdate_HeadingHouse(rentHouseWrapper, workerNo)
+  workerManager:workerDataUpdateHeadingHouse(rentHouseWrapper, workerNo)
+end
+function workerManager:workerDataUpdateHeadingBuilding(buildingInfoSS, workerNo)
+  local workType = self._config._workType
   if 0 ~= Int64toInt32(workerNo) then
     Push_Work_Start_Message(workerNo, workType._Building, buildingInfoSS)
   end
@@ -969,11 +1008,18 @@ function FromClient_WorkerDataUpdate_HeadingBuilding(buildingInfoSS, workerNo)
   local affiliatedTownKey = ToClient_getBuildingAffiliatedWaypointKey(buildingInfoSS)
   workerManager:update()
 end
-function FromClient_WorkerDataUpdate_HeadingRegionManaging(regionGroupInfo, workerNo)
+function FromClient_WorkerDataUpdate_HeadingBuilding(buildingInfoSS, workerNo)
+  workerManager:workerDataUpdateHeadingBuilding(buildingInfoSS, workerNo)
+end
+function workerManager:workerDataUpdateHeadingRegionManaging(regionGroupInfo, workerNo)
+  local workType = self._config._workType
   if 0 ~= Int64toInt32(workerNo) then
     Push_Work_Start_Message(workerNo, workType._RegionWork)
   end
   workerManager:update()
+end
+function FromClient_WorkerDataUpdate_HeadingRegionManaging(regionGroupInfo, workerNo)
+  workerManager:workerDataUpdateHeadingRegionManaging(regionGroupInfo, workerNo)
 end
 function workerManager:upgradeNow()
   local workerNoRaw = tonumber64(self._selectedWorker)

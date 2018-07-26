@@ -15,6 +15,7 @@ local PanelInteraction = {
     txt_TargetType = UI.getChildControl(_panel, "StaticText_Type"),
     txt_TargetName = UI.getChildControl(_panel, "StaticText_Name"),
     stc_Key = UI.getChildControl(_panel, "Static_InteractionKey"),
+    txt_HoldToInteract = UI.getChildControl(_panel, "StaticText_InteractionKey"),
     btn_Template = UI.getChildControl(_panel, "Button_Interaction_Template"),
     needCollectTool = UI.getChildControl(_panel, "Static_Cant")
   },
@@ -405,10 +406,10 @@ local _button_TextureUV = {
     y2 = 136
   },
   {
-    x1 = 0,
-    y1 = 0,
-    x2 = 0,
-    y2 = 0
+    x1 = 281,
+    y1 = 13,
+    x2 = 311,
+    y2 = 43
   },
   {
     x1 = 95,
@@ -524,7 +525,7 @@ function PanelInteraction:show(actor)
   if true == ToClient_isXBox() then
     for ii = 0, #_interactionTargetUIList do
       local isShow = actor:isSetInteracatbleFrag(ii)
-      if isShow and (ii == CppEnums.InteractionType.InteractionType_OpenDoor or ii == CppEnums.InteractionType.InteractionType_Observer or ii == CppEnums.InteractionType.InteractionType_PvPBattle or ii == CppEnums.InteractionType.InteractionType_RankerHouseList) then
+      if isShow and (ii == CppEnums.InteractionType.InteractionType_OpenDoor or ii == CppEnums.InteractionType.InteractionType_Observer or ii == CppEnums.InteractionType.InteractionType_RankerHouseList) then
         _panel:SetShow(false)
         return
       end
@@ -568,6 +569,9 @@ function PanelInteraction:show(actor)
   self._SHOW_BUTTON_COUNT = 0
   for ii = 0, #_interactionTargetUIList do
     local isShow = actor:isSetInteracatbleFrag(ii)
+    if true == ToClient_isXBox() and CppEnums.InteractionType.InteractionType_PvPBattle == ii then
+      isShow = false
+    end
     _interactionTargetUIList[ii]:SetShow(isShow)
     if isShow then
       if CppEnums.InteractionType.InteractionType_Observer == ii then
@@ -896,6 +900,9 @@ function PaGlobalFunc_PanelInteraction_ButtonPushed(interactionType)
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_INTERACTION_IN_WATER"))
     return
   elseif CppEnums.InteractionType.InteractionType_PvPBattle == interactionType then
+    if true == ToClient_isXBox() then
+      return
+    end
     local actor = interaction_getInteractable()
     if nil == actor then
       return
@@ -1014,7 +1021,11 @@ function PaGlobalFunc_PanelInteraction_ChangeString(index)
 end
 function PaGlobalFunc_PanelInteraction_TypeCheck(interactionType)
   if interactionType == CppEnums.InteractionType.InteractionType_ExchangeItem or interactionType == CppEnums.InteractionType.InteractionType_InvitedParty or interactionType == CppEnums.InteractionType.InteractionType_GuildInvite then
-    return true
+    if true == ToClient_isXBox() then
+      return false
+    else
+      return true
+    end
   end
   return false
 end
@@ -1333,6 +1344,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
     self:updatePressedInteractionKey(0)
     _currentInteractionKeyPressedTime = 0
     _xboxInteractionAvailable = true
+    self._ui.txt_HoldToInteract:SetShow(false)
   elseif keyCustom_IsPressed_Action(CppEnums.ActionInputType.ActionInputType_Interaction) then
     _currentInteractionKeyPressedTime = _currentInteractionKeyPressedTime + deltaTime
     if _currentInteractionKeyPressedTime > 0.5 then
@@ -1351,6 +1363,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
       }
       local keycode = keyCodeTable[_currentInteractionSelectIndex]
       self:updatePressedInteractionKey(0)
+      self._ui.txt_HoldToInteract:SetShow(true)
       return keycode
     else
       self:updatePressedInteractionKey(_currentInteractionKeyPressedTime)
@@ -1362,6 +1375,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
     _currentInteractionKeyPressedTime = 0
     _xboxInteractionAvailable = false
     self:updatePressedInteractionKey(0)
+    self._ui.txt_HoldToInteract:SetShow(true)
   end
   if true == _isInteractionRolling then
     _currentInteractionKeyPressedTime = 0

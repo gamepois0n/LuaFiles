@@ -1500,7 +1500,12 @@ CppEnums.VehicleType = {
   Type_Bungalow = 49,
   Type_Summer = 50,
   Type_Training = 51,
-  Type_PersonalBoat = 52
+  Type_PersonalBoat = 52,
+  Type_RaceHorse = 53,
+  Type_GuildTeamBattleNPC = 54,
+  Type_FastShip = 55,
+  Type_CashPersonalTradeShip = 56,
+  Type_CashPersonalBattleShip = 57
 }
 CppEnums.ServantKind = {
   Type_Horse = 0,

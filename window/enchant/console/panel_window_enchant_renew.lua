@@ -114,6 +114,7 @@ end
 function EnchantInfo:registMessageHandler()
   registerEvent("EventEnchantResultShow", "FromClient_EnchantInfo_ResultShow")
   registerEvent("FromClient_UpdateEnchantFailCount", "FromClient_EnchantInfo_UpdateBonus")
+  registerEvent("FromClient_ConvertEnchantFailItemToCountAck", "FromClient_EnchantInfo_UpdateBonus")
   _panel:RegisterUpdateFunc("FromClient_EnchantInfo_PerFrame")
 end
 function PaGlobalFunc_EnchantInfo_Open()
@@ -336,7 +337,7 @@ function EnchantInfo:enableApplyButton(isTrue)
   self._ui.btn_normal:SetMonoTone(not isTrue)
   if true == isTrue then
     local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
-    if needCountForPerfectEnchant_s64 > toInt64(0, 0) then
+    if needCountForPerfectEnchant_s64 > toInt64(0, 0) and true == self:forcedEnchantIsReady() then
       self._ui.btn_forced:SetMonoTone(false)
       self._ui.btn_forced:SetIgnore(false)
       self._ui.txt_keyGuideForced:SetMonoTone(false)
@@ -372,13 +373,16 @@ function Input_EnchantInfo_TryEnchant(isForcedEnchant)
   if 0 == self._ui.slot_subjectItem.slotNo then
     return
   end
-  local val = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
-  local forcedEnchantEnable = val > toInt64(0, 0)
-  if true == isForcedEnchant and not forcedEnchantEnable then
+  if true == isForcedEnchant and not self:forcedEnchantIsReady() then
     return
   end
   self._forcedEnchant = isForcedEnchant
   self:tryEnchant()
+end
+function EnchantInfo:forcedEnchantIsReady()
+  local val = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
+  local targetItemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+  return val > toInt64(0, 0) and targetItemWrapper:get():getMaxEndurance() >= self._enchantInfo:ToClient_getDecMaxEnduraPerfect()
 end
 function EnchantInfo:tryEnchant()
   if self._isAnimating == true then

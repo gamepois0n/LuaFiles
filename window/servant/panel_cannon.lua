@@ -326,7 +326,7 @@ function FromClient_Cannon_Hide()
   Panel_Cannon_Value_IsCannon = false
 end
 function FromClient_UpdateCannonBallCount(count, VehicleTpye)
-  if UI_VT.Type_SailingBoat == VehicleTpye or UI_VT.Type_PersonalBattleShip == VehicleTpye or UI_VT.Type_PersonTradeShip == VehicleTpye then
+  if UI_VT.Type_SailingBoat == VehicleTpye or UI_VT.Type_PersonalBattleShip == VehicleTpye or UI_VT.Type_PersonTradeShip == VehicleTpye or UI_VT.Type_CashPersonalBattleShip == VehicleTpye or UI_VT.Type_CashPersonalTradeShip == VehicleTpye then
     return
   end
   local shootCountValue = Int64toInt32(count)

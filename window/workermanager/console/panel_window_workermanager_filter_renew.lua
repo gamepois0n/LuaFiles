@@ -71,9 +71,14 @@ function workerSortFilter:setList(selectedType)
   if nil == contentsList then
     return
   end
+  local keyArray = Array:new()
   for key, value in pairs(contentsList) do
+    keyArray:push_back(key)
+  end
+  table.sort(keyArray)
+  for index = 1, #keyArray do
     self._dataCount = self._dataCount + 1
-    self._ui._list2_1_SelectFilter:getElementManager():pushKey(key)
+    self._ui._list2_1_SelectFilter:getElementManager():pushKey(keyArray[index])
   end
 end
 function workerSortFilter:listCreate(contorl, key)

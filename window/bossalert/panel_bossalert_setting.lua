@@ -242,8 +242,10 @@ function PaGlobal_BossAlertSet_ReturnNameAlert()
     timeCount = 3
   elseif tonumber(19) == tonumber(isHour) or tonumber(18) == tonumber(isHour) then
     timeCount = 4
-  elseif tonumber(23) == tonumber(isHour) or tonumber(0) == tonumber(isHour) or tonumber(24) == tonumber(isHour) then
+  elseif tonumber(23) == tonumber(isHour) then
     timeCount = 5
+  elseif tonumber(0) == tonumber(isHour) then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS")
   end
   rv = self.bossName[timeCount][isWeekly]
   return rv
@@ -304,15 +306,7 @@ function PaGlobal_BossAlertSet_BossTimeCalc()
     isBoss4_1 = tonumber(19) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
     isBoss4_2 = tonumber(19) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
     isBoss4_3 = tonumber(19) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-    if tonumber(12) < tonumber(os.date("%H")) then
-      isBoss5_1 = tonumber(23) == tonumber(os.date("%H")) and tonumber(40) == tonumber(os.date("%M"))
-      isBoss5_2 = tonumber(23) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-      isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M"))
-    else
-      isBoss5_1 = tonumber(0) == tonumber(os.date("%H")) and tonumber(10) == tonumber(os.date("%M")) or tonumber(24) == tonumber(os.date("%H")) and tonumber(10) == tonumber(os.date("%M"))
-      isBoss5_2 = tonumber(0) == tonumber(os.date("%H")) and tonumber(0) == tonumber(os.date("%M")) or tonumber(24) == tonumber(os.date("%H")) and tonumber(0) == tonumber(os.date("%M"))
-      isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M"))
-    end
+    isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M"))
   end
   local isTimeCount = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.BossAlertTime)
   if 1110 == isTimeCount then

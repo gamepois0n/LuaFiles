@@ -81,7 +81,6 @@ function PaGlobal_TutorialPhase_FindRequestTarget:endPhase()
   self._nextStep = 1
   PaGlobal_TutorialManager:setAllowMainQuestWidget(true)
   Panel_MainQuest:SetShow(true, true)
-  Panel_ConsoleKeyGuide:SetShow(true)
   PaGlobal_TutorialManager:endTutorial()
   PaGlobal_TutorialUiManager:setShowAllDefaultUi(true)
 end
@@ -186,7 +185,7 @@ function PaGlobal_TutorialPhase_FindRequestTarget:eventCallClearBlackSpiritQuest
   end
 end
 function PaGlobal_TutorialPhase_FindRequestTarget:eventCallAfterBlackSpiritDialogClose()
-  if (1 == self._currentProgress or true == isSatisfiedCondition) and true == isClearQuest then
+  if 1 == self._currentProgress or true == isSatisfiedCondition or true == isClearQuest then
     self:endPhase()
   end
 end

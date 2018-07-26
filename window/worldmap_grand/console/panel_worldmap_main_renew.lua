@@ -8,7 +8,8 @@ local Window_WorldMap_MainInfo = {
   _isPrevShowQuestWigetPanel = false,
   _isPrevShowMainQuestPanel = false,
   _townModeWaypointKey = nil,
-  _isTownMode = false
+  _isTownMode = false,
+  _isAllowTutorialPanelShow = false
 }
 function PaGlobalFunc_WorldMap_SetIsTownMode(isTown)
   local self = Window_WorldMap_MainInfo
@@ -168,12 +169,17 @@ function PaGlobalFunc_FromClient_WorldMap_SetTownMode(waypointKey)
   end
   ToClient_SetGuildMode(false)
   Panel_NodeSiegeTooltip:SetShow(false)
-  PaGlobal_TutorialManager:handleSetTownMode(waypointKey)
   PaGlobalFunc_WorldMap_SetIsTownMode(true)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
-  WorldMapPopupManager:increaseLayer()
-  WorldMapPopupManager:push(Panel_Worldmap_NodeInfo_Console, false)
+end
+function FGlobal_WorldmapMain_IsAllowTutorialPanelShow()
+  local self = Window_WorldMap_MainInfo
+  return self._isAllowTutorialPanelShow
+end
+function FGlobal_WorldmapMain_SetAllowTutorialPanelShow(bAllow)
+  local self = Window_WorldMap_MainInfo
+  self._isAllowTutorialPanelShow = bAllow
 end
 function PaGlobalFunc_FromClient_WorldMap_Open()
   local self = Window_WorldMap_MainInfo
@@ -194,7 +200,6 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
   if ToClient_CheckExistSummonMaid() or Panel_Window_Warehouse:GetShow() then
     Warehouse_Close()
   end
-  PaGlobal_TutorialManager:handleBeforeWorldmapOpen()
   Panel_MovieTheater640_Initialize()
   SetUIMode(Defines.UIMode.eUIMode_WorldMap)
   ToClient_openWorldMap()
@@ -241,9 +246,6 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
   Panel_Tooltip_Item_hideTooltip()
   delivery_requsetList()
   self._renderMode:set()
-  if true == ToClient_WorldMapIsShow() then
-    PaGlobal_TutorialManager:handleWorldMapOpenComplete()
-  end
   if true == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
     ToClient_WorldmapCheckState(0, false, false)
     ToClient_WorldmapCheckState(1, false, false)
@@ -255,6 +257,7 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
     ToClient_WorldmapCheckState(7, false, false)
     ToClient_WorldmapCheckState(8, false, false)
   end
+  PaGlobalFunc_WorldMap_SetIsTownMode(false)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
@@ -300,6 +303,18 @@ function PaGlobalFunc_WorldMap_WindowEscape()
     PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(false)
     return
   end
+  if true == PaGlobalFunc_WorldMap_NodeInfo_GetShow() then
+    PaGlobalFunc_WorldMap_NodeInfo_Close()
+    return
+  end
+  if true == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
+    PaGlobalFunc_WorldMap_NodeManagement_Close()
+    return
+  end
+  if true == PaGlobalFunc_WorldMap_NodeProduct_GetShow() then
+    PaGlobalFunc_WorldMap_NodeProduct_Close()
+    return
+  end
   if true == PaGlobalFunc_Warehouse_GetShow() then
     Warehouse_Close()
     DeliveryRequestWindow_Close()
@@ -312,19 +327,20 @@ function PaGlobalFunc_WorldMap_WindowEscape()
     PaGlobalFunc_WorldMap_Stable_Close()
     return
   end
-  if true == PaGlobalFunc_WorldMap_BuyHouse_GetShow() then
-    PaGlobalFunc_WorldMap_BuyHouse_Close()
+  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
+    PaGlobalFunc_WorldMap_HouseFilter_Close()
     return
   end
   if true == ToClient_WorldMapIsShow() then
-    ToClient_WorldMapPushEscape()
+    if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+      ToClient_WorldMapPushEscape()
+      return
+    end
     if false ~= _ContentsGroup_ForXBoxXR or false == _ContentsGroup_ForXBoxFinalCert then
     end
-    if not WorldMapPopupManager:pop() then
-      FGlobal_PopCloseWorldMap()
-    end
+    PaGlobalFunc_WorldMap_PopClose()
   end
-  if 0 > WorldMapPopupManager._currentMode then
+  if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
     PaGlobalFunc_WorldMap_CloseSubPanel()
     FGlobal_HideAll_Tooltip_Work_Copy()
   end
@@ -424,6 +440,9 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
       PaGlobalFunc_WorldMap_TopMenu_ToggleTownMenu()
     end
   end
+  if false == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
+    return
+  end
   if true == isPadUp(__eJoyPadInputType_RightTrigger) then
     if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
       PaGlobalFunc_WorldMap_BottomMenu_UpdateWayPoint()
@@ -456,9 +475,15 @@ function Window_WorldMap_MainInfo:Initialize()
   self:InitRegister()
 end
 function PaGlobalFunc_FromClient_WorldMap_ChangedExplorationNode()
+  if false == ToClient_WorldMapIsShow() then
+    return
+  end
   ToClient_reloadNodeLine(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode(), CppEnums.WaypointKeyUndefined)
 end
 function PaGlobalFunc_FromClient_WorldMap_UpdateExplorationNode()
+  if false == ToClient_WorldMapIsShow() then
+    return
+  end
   ToClient_reloadNodeLine(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode(), CppEnums.WaypointKeyUndefined)
 end
 function PaGlobalFunc_WorldMap_Open()

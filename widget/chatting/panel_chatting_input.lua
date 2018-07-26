@@ -46,6 +46,7 @@ local chatInput = {
     [5] = "Button_System",
     [6] = "Button_Party",
     [7] = "Button_Guild",
+    [9] = "Button_GuildAlliance",
     [12] = "Button_WorldWithItem",
     [15] = "Button_RolePlay",
     [17] = "Button_Arsha",
@@ -106,7 +107,7 @@ local chatShortCutKey = {
   VCK.KeyCode_4,
   VCK.KeyCode_5,
   -1,
-  -1,
+  VCK.KeyCode_7,
   -1,
   -1,
   VCK.KeyCode_6,
@@ -126,7 +127,7 @@ local chatShortCutKey_Value = {
   4,
   5,
   -1,
-  -1,
+  7,
   -1,
   -1,
   6,
@@ -384,6 +385,9 @@ function ChatInput_UpdatePermission()
     if true == isLocalWar or true == isArsha or true == isSavageDefence then
       self.permissions[UI_CT.Team] = true
     end
+    if _ContentsGroup_guildAlliance then
+      self.permissions[UI_CT.Alliance] = true
+    end
   end
   for chatType, btn in pairs(self.control.buttons) do
     local perm = self.permissions[chatType]
@@ -534,6 +538,9 @@ end
 function ChatInput_IsInstantCommand_Team(str)
   return str == "/t" or str == "/\227\133\133" or str == "/team" or str == "/\237\140\128"
 end
+function ChatInput_IsInstantCommand_Alliance(str)
+  return str == "/u" or str == "/\227\133\149" or str == "/alliance" or str == "/\236\151\176\237\149\169"
+end
 function moveChatInput(moveTo)
   local isChanged = false
   local tempValue = 0
@@ -596,6 +603,10 @@ function ChatInput_CheckInstantCommand()
     isProcess = true
   elseif ChatInput_IsInstantCommand_Team(chatMessage) then
     toChangeChatType = CppEnums.ChatType.Team
+    ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.MemoryRecentChat, CppEnums.ChatType.Team, CppEnums.VariableStorageType.eVariableStorageType_User)
+    isProcess = true
+  elseif ChatInput_IsInstantCommand_Alliance(chatMessage) then
+    toChangeChatType = CppEnums.ChatType.Alliance
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.MemoryRecentChat, CppEnums.ChatType.Team, CppEnums.VariableStorageType.eVariableStorageType_User)
     isProcess = true
   elseif isWhisper or isReply then

@@ -167,6 +167,10 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
         FGlobalFunc_Cancel_WorkerContract()
         return
       end
+      if true == Panel_Dialog_WorkerTrade_Renew:GetShow() then
+        FGlobal_WorkerTrade_Close()
+        return
+      end
     end
     if true == _ContentsGroup_RenewUI_NpcShop and true == PaGlobalFunc_Dialog_NPCShop_GetShow() then
       PaGlobalFunc_Dialog_NPCShop_Close()
@@ -437,8 +441,17 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_DeadMessage(deltaTime)
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
     end
   end
-  if Panel_DeadMessage:GetShow() then
-    GuildManager:Hide()
+  if false == _ContentsGroup_RenewUI_DeadMessage then
+    if Panel_DeadMessage:GetShow() then
+      GuildManager:Hide()
+    end
+  else
+    if Panel_DeadMessage_Renew:GetShow() then
+      GuildManager:Hide()
+    end
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PaGlobalFunc_ResurrerectionItem_Close()
+    end
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_PreventMoveNSkill(deltaTime)
@@ -810,9 +823,13 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCashShop(delataTime)
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_Dye(delataTime)
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Dyeing) then
-    audioPostEvent_SystemUi(1, 23)
-    FGlobal_Panel_DyeReNew_Hide()
-    SetUIMode(Defines.UIMode.eUIMode_Default)
+    if true == _ContentsGroup_RenewUI_Dyeing then
+      PaGlobalFunc_Dyeing_OnPadB()
+    else
+      audioPostEvent_SystemUi(1, 23)
+      FGlobal_Panel_DyeReNew_Hide()
+      SetUIMode(Defines.UIMode.eUIMode_Default)
+    end
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_SkillWindow(delataTime)
@@ -1284,28 +1301,6 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     FGlobal_PetInfoNew_Close()
     return true
   end
-  if true == _ContentsGroup_RenewUI_Worker and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    if Panel_Dialog_WorkerTrade_Renew:GetShow() then
-      FGlobal_WorkerTrade_Close()
-      return true
-    end
-    if Panel_Window_WorkerManager_ChangeSkill_Renew:GetShow() then
-      PaGlobalFunc_WorkerManager_ChangeSkill_Close()
-      return true
-    end
-    if Panel_Window_WorkerManager_Filter_Renew:GetShow() then
-      PaGlobalFunc_WorkerManager_Filter_Close()
-      return true
-    end
-    if Panel_Window_WorkerManager_Restore_Renew:GetShow() then
-      PaGlobalFunc_WorkerManager_Restore_Close()
-      return true
-    end
-    if Panel_Window_WorkerManager_Renew:GetShow() then
-      PaGlobalFunc_WorkerManager_Close()
-      return true
-    end
-  end
   return false
 end
 function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
@@ -1421,6 +1416,13 @@ function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
       FGlobal_GuildNoticeClearFocusEdit()
     end
     return true
+  elseif true == _ContentsGroup_RenewUI_Guild then
+    if PaGlobalFunc_GuildIntro_CheckNoticeUiEdit(uiEdit) then
+      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        PaGlobalFunc_GuildIntro_EndFocusEdit()
+      end
+      return true
+    end
   elseif FGlobal_CheckGuildIncentiveUiEdit(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       FGlobal_GuildIncentiveClearFocusEdit()

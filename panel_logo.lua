@@ -90,6 +90,8 @@ function setWarningText()
   else
     staticText_Warning:SetText("")
   end
+  staticText_Warning:SetSize(getScreenSizeX(), staticText_Warning:GetTextSizeY())
+  staticText_Warning:ComputePos()
 end
 Panel_Logo_Init()
 Panel_Logo:ComputePos()

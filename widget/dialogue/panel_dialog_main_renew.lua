@@ -110,7 +110,7 @@ function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
     GameOption_Cancel()
     TooltipSimple_Hide()
   end
-  if Panel_ColorBalance:GetShow() then
+  if false == _ContentsGroup_RenewUI_Dyeing and Panel_ColorBalance:GetShow() then
     Panel_ColorBalance_Close()
   end
   if false == _ContentsGroup_RenewUI_Worker then
@@ -548,7 +548,7 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     PaGlobalFunc_Window_Knowledge_Exit()
     retval = true
   end
-  if Panel_DyeNew_CharacterController:GetShow() then
+  if false == _ContentsGroup_RenewUI_Dyeing and Panel_DyeNew_CharacterController:GetShow() then
     FGlobal_Panel_DyeReNew_Hide()
     retval = true
   end

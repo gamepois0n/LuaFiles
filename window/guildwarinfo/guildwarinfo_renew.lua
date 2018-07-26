@@ -29,6 +29,7 @@ local ui_defenceGuild_info_bg = UI.getChildControl(ui_main.leftGuild_Bg, "Static
 local ui_defenceGuild_progress_Bg = UI.getChildControl(ui_defenceGuild_info_bg, "Static_ProgressBg")
 local ui_defenceGuild_info = {
   static_GuildIcon = UI.getChildControl(ui_defenceGuild_flags, "Static_GuildIcon"),
+  static_OccupyIcon = UI.getChildControl(ui_defenceGuild_flags, "StaticText_OccupyIcon"),
   static_GuildName = UI.getChildControl(ui_defenceGuild_flags, "StaticText_GuildName"),
   static_MasterName = UI.getChildControl(ui_defenceGuild_flags, "StaticText_MasterName"),
   progress_Castle = UI.getChildControl(ui_defenceGuild_progress_Bg, "Progress2_1"),
@@ -145,6 +146,9 @@ function PAGlobal_GuildWarInfo:UpdateGuildScoreDetail(isDefence, guildWrapper, b
       guildInfo.static_GuildName:SetText(guildWrapper:getName())
     else
       guildInfo.static_GuildName:SetText(guildAllianceName)
+    end
+    if true == isDefence then
+      guildInfo.static_OccupyIcon:SetPosX(_posX)
     end
     guildInfo.static_MasterName:SetText(guildWrapper:getGuildMasterName())
     local isSet = setGuildTextureByGuildNo(guildWrapper:getGuildNo_s64(), guildInfo.static_GuildIcon)

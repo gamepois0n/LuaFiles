@@ -498,7 +498,6 @@ function Inventory_TabSound()
   if DragManager:isDragging() then
     DragManager:clearInfo()
   end
-  audioPostEvent_SystemUi(0, 0)
   if isFirstTab == true then
     isFirstTab = false
   else

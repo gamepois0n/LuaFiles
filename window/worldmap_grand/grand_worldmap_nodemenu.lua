@@ -703,7 +703,13 @@ function worldmapNodeIcon_GuildWarSet(nodeBtn)
       else
         warStateIcon:setUpdateTextureAni(false)
         if true == siegeWrapper:doOccupantExist() then
-          local isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), guildMark)
+          local isAlliance = siegeWrapper:isOccupantGuildAlliance()
+          local isSet = false
+          if true == isAlliance then
+            isSet = setGuildTextureByAllianceNo(siegeWrapper:getGuildNo(), guildMark)
+          else
+            isSet = setGuildTextureByGuildNo(siegeWrapper:getGuildNo(), guildMark)
+          end
           if false == isSet then
             guildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
             local x1, y1, x2, y2 = setTextureUV_Func(guildMark, 183, 1, 188, 6)

@@ -30,6 +30,7 @@ function ChattingViewer:initialize()
   }
   _panel:SetShow(true)
   self:registMessageHandler()
+  ToClient_getFontWrapper("BaseFont_10_Chat"):changeFontSize(20)
   _isInitialized = true
 end
 function ChattingViewer:createPool()
@@ -84,6 +85,7 @@ function ChattingViewer:createPool()
       ChatUIPool._list_At[ii] = UI.createAndCopyBasePropertyControl(ch._ui.stc_sampleBG, "Static_At", ch._ui.stc_sampleBG, "Static_At" .. ii)
     end
     ChatUIPool._list_PanelBG[0] = _panel
+    ChattingOption_SelectFontSize(20)
   end
   function ChatUIPool:newChattingIcon()
     self._count_ChattingIcon = self._count_ChattingIcon + 1
@@ -244,34 +246,32 @@ function FromClient_ChattingViewer_Update()
   if not _isInitialized then
     return
   end
-  self._messageData = {}
-  local allData = {}
-  for ii = 1, self._chattingPanelCount do
-    local chattingPanel = ToClient_getChattingPanel(ii - 1)
-    local thisPanelMessageCount = chattingPanel:getMessageCount()
-    for jj = 1, thisPanelMessageCount do
-      local message = chattingPanel:getChattingMessageByIndex(thisPanelMessageCount - jj)
-      if CppEnums.ChatType.Notice == message.chatType or CppEnums.ChatType.World == message.chatType or CppEnums.ChatType.Public == message.chatType or CppEnums.ChatType.Private == message.chatType or CppEnums.ChatType.Battle == message.chatType or CppEnums.ChatType.Guild == message.chatType or CppEnums.ChatType.Party == message.chatType then
-        allData[#allData + 1] = message
-        if _reserveDataMax < #allData then
-          break
-        end
-      end
-    end
-  end
-  table.sort(allData, PaGlobalFunc_ChattingViewer_MessageComparer)
-  for ii = 1, self._displayableMessageCount do
-    self._messageData[ii] = allData[ii]
+  if false == CheckTutorialEnd() and true == PaGlobal_TutorialManager:isDoingTutorial() then
+    return
   end
   self._uiPool:clear()
   local chatting_content_PosY = _panel:GetSizeY() - 10
+  local chattingPanel = ToClient_getChattingPanel(0)
   for ii = 1, self._displayableMessageCount do
-    if nil ~= self._messageData[ii] then
-      chatting_content_PosY = Chatnew_CreateChattingContent(self._messageData[ii], self._uiPool, chatting_content_PosY, ii, nil, 1, false, 0)
+    local message = chattingPanel:getChattingMessageByIndex(ii - 1)
+    if nil ~= message and (CppEnums.ChatType.Notice == message.chatType or CppEnums.ChatType.World == message.chatType or CppEnums.ChatType.Public == message.chatType or CppEnums.ChatType.Private == message.chatType or CppEnums.ChatType.Battle == message.chatType or CppEnums.ChatType.Guild == message.chatType or CppEnums.ChatType.Party == message.chatType) then
+      chatting_content_PosY = Chatnew_CreateChattingContent(message, self._uiPool, chatting_content_PosY, ii, nil, 1, false, 0)
     end
   end
   self._uiPool:hideNotUse()
 end
 function PaGlobalFunc_ChattingViewer_MessageComparer(ii, jj)
   return ii._time_s64 > jj._time_s64
+end
+function PaGlobalFunc_ChattingViewer_On()
+  if true == Panel_Widget_ChattingViewer_Renew:GetShow() then
+    return
+  end
+  Panel_Widget_ChattingViewer_Renew:SetShow(true)
+end
+function PaGlobalFunc_ChattingViewer_Off()
+  if false == Panel_Widget_ChattingViewer_Renew:GetShow() then
+    return
+  end
+  Panel_Widget_ChattingViewer_Renew:SetShow(false)
 end

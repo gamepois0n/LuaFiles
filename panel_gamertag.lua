@@ -17,12 +17,12 @@ function PaGlobal_CheckGamerTag()
   end
 end
 function FGlobal_DataInstallation_PerFrameUpdate()
-  if true == ToClient_isDataDownloadComplete() then
+  local bg = UI.getChildControl(Panel_GamerTag, "Static_GameTagBG")
+  local percentText = UI.getChildControl(bg, "StaticText_GameTagPercentText")
+  if true == ToClient_isDataDownloadComplete() or 100 <= ToClient_getDataDownloadProgress() then
     percentText:SetText("Installation Complete")
     return
   end
-  local bg = UI.getChildControl(Panel_GamerTag, "Static_GameTagBG")
-  local percentText = UI.getChildControl(bg, "StaticText_GameTagPercentText")
   percentText:SetText("Installation : " .. tostring(ToClient_getDataDownloadProgress()) .. "%")
 end
 Panel_GamerTag:RegisterUpdateFunc("FGlobal_DataInstallation_PerFrameUpdate")

@@ -192,8 +192,11 @@ function workerTrade:updateMarketWorkerList()
       local actionPoint = workerWrapperLua:getMaxActionPoint()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
+      local radius = info._static_Image:GetSizeX() * 0.5
+      local posX = info._static_Image:GetPosX() + radius * 0.67
+      local posY = info._static_Image:GetPosY() + radius * 0.85
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
-      info._static_Image:SetCircularClip(self._config._workerIconRadius, float2(info._static_Image:GetPosX() + self._config._workerIconX, info._static_Image:GetPosY() + self._config._workerIconY))
+      info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       if 4 <= workerWrapperLua:getGrade() then
         info._staticText_Upgrade:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_CANNOTUPGRADE"))
@@ -257,8 +260,11 @@ function workerTrade:updateMyRegistedWorkerList()
       local actionPoint = workerWrapperLua:getMaxActionPoint()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
+      local radius = info._static_Image:GetSizeX() * 0.5
+      local posX = info._static_Image:GetPosX() + radius * 0.67
+      local posY = info._static_Image:GetPosY() + radius * 0.85
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
-      info._static_Image:SetCircularClip(self._config._workerIconRadius, float2(info._static_Image:GetPosX() + self._config._workerIconX, info._static_Image:GetPosY() + self._config._workerIconY))
+      info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       info._staticText_Upgrade:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_UPGRADECOUNT", "upgradecount", workerUpgradeCount))
       info._staticText_Work_Speed_Val:SetText(string.format("%.2f", tostring(_tempWorkEfficiency / 1000000)))
@@ -326,7 +332,10 @@ function workerTrade:updateMyWorkerList()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
-      info._static_Image:SetCircularClip(self._config._workerIconRadius, float2(info._static_Image:GetPosX() + self._config._workerIconX, info._static_Image:GetPosY() + self._config._workerIconY))
+      local radius = info._static_Image:GetSizeX() * 0.5
+      local posX = info._static_Image:GetPosX() + radius * 0.67
+      local posY = info._static_Image:GetPosY() + radius * 0.85
+      info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       info._staticText_Upgrade:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_UPGRADECOUNT", "upgradecount", workerUpgradeCount))
       info._staticText_Work_Speed_Val:SetText(string.format("%.2f", tostring(_tempWorkEfficiency / 1000000)))
@@ -513,6 +522,7 @@ function workerTrade:changeTab(changeValue)
     requestMyWorkerList()
   end
   workerTrade:update()
+  ToClient_padSnapResetControl()
 end
 function workerTrade:changePage(changeValue)
   local pageIndex = self._currentPage + changeValue
@@ -533,6 +543,7 @@ function workerTrade:changePage(changeValue)
   end
   self._currentPage = pageIndex
   workerTrade:update()
+  ToClient_padSnapResetControl()
 end
 function workerTrade:open()
   if true == Panel_Dialog_WorkerTrade_Renew:GetShow() then

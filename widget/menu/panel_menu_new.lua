@@ -275,7 +275,8 @@ PaGlobal_Menu._bannerNew = {
   _blackDesertTv = 3,
   _memo = 4,
   _blackDesertLab = 5,
-  _count = 6
+  _bossAlert = 6,
+  _count = 7
 }
 PaGlobal_Menu._bannerData = {
   _hot = {
@@ -434,6 +435,15 @@ PaGlobal_Menu._bannerData = {
       _x2 = 376,
       _y2 = 522,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackDesertLab
+    },
+    [PaGlobal_Menu._bannerNew._bossAlert] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSALERTSET_TITLE"),
+      _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds",
+      _x1 = 1,
+      _y1 = 523,
+      _x2 = 188,
+      _y2 = 580,
+      _isContentOpen = isGameTypeKorea()
     },
     ["_count"] = PaGlobal_Menu._bannerNew._count
   }
@@ -808,8 +818,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 434,
       _y2 = 62,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isSavageOpen,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 22
     },
     [PaGlobal_Menu._cooperation._arsha] = {
@@ -860,8 +870,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 558,
       _y2 = 248,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isTeamDuelOpen,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 61
     },
     ["_name"] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_2"),
@@ -916,8 +926,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 150,
       _y2 = 457,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isButtonShortCut,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 29
     },
     [PaGlobal_Menu._infomation._fishEncyclopedia] = {
@@ -1072,8 +1082,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 434,
       _y2 = 496,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isMasterpieceOpen,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 53
     },
     [PaGlobal_Menu._infomation._dropItem] = {
@@ -1085,8 +1095,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 558,
       _y2 = 124,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isDropItemOpen,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 60
     },
     [PaGlobal_Menu._infomation._knownIssue] = {
@@ -1232,8 +1242,8 @@ PaGlobal_Menu._categoryData = {
       _x2 = 372,
       _y2 = 496,
       _isContentOpen = not PaGlobal_Menu._contentsGroup._isTestServer,
-      _isNew = true,
-      _isHot = false,
+      _isNew = false,
+      _isHot = true,
       _index = 49
     },
     [PaGlobal_Menu._community._socialAction] = {
@@ -1245,7 +1255,7 @@ PaGlobal_Menu._categoryData = {
       _x2 = 372,
       _y2 = 186,
       _isContentOpen = true,
-      _isNew = true,
+      _isNew = false,
       _isHot = false,
       _index = 50
     },
@@ -1258,7 +1268,7 @@ PaGlobal_Menu._categoryData = {
       _x2 = 496,
       _y2 = 496,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isMemoOpen,
-      _isNew = true,
+      _isNew = false,
       _isHot = false,
       _index = 58
     },
@@ -2635,6 +2645,8 @@ function PaGlobal_Menu:HandleClicked_Banner(isHot)
       if 55 < player:get():getLevel() then
         PaGlobal_BlackDesertLab_Show()
       end
+    elseif self._bannerNew._bossAlert == index then
+      PaGlobal_BossAlertSet_Show()
     end
   end
 end

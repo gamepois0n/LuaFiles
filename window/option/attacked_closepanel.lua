@@ -50,8 +50,8 @@ function FromClient_CancelByAttacked()
   if true == _ContentsGroup_RenewUI_VoiceChat and true == PaGlobalFunc_VoiceChat_GetShow() then
     PaGlobalFunc_VoiceChat_Close()
   end
-  if true == _ContentsGroup_RenewUI_Guild and true == PaGlobalFunc_Guild_GetShow() then
-    PaGlobalFunc_Guild_Close()
+  if true == _ContentsGroup_RenewUI_Guild and true == PaGlobalFunc_GuildMain_GetShow() then
+    PaGlobalFunc_GuildMain_Close()
   end
   if isPhotoMode() then
     audioPostEvent_SystemUi(8, 14)

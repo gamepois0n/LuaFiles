@@ -29,7 +29,9 @@ function FGlobal_Inventory_WeightCheck()
   local invenWeight = allWeight - equipmentWeight - moneyWeight
   local sumtotalWeight = allWeight / maxWeight * 100
   local totalWeight = string.format("%.0f", sumtotalWeight)
-  if sumtotalWeight >= 90 then
+  local decreaseFairyWeight = Int64toInt32(ToClient_getDecreaseWeightByFairy()) / 10000
+  local weightText = 100 + decreaseFairyWeight
+  if sumtotalWeight - decreaseFairyWeight >= 90 then
     if self.repair_AutoNavi:GetShow() then
       self.weight:SetPosY(self.panel:GetSizeY() + 50)
     else
@@ -43,6 +45,7 @@ function FGlobal_Inventory_WeightCheck()
     end
     self.panel:SetShow(true)
     self.weight:SetShow(true)
+    self.weightText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEIGHT_MAIN_DEFAULT_VISUAL_WITH_FAIRY", "weight", tostring(weightText)))
     self.weightText:SetShow(true)
     self.weightText:SetPosX(self.weight:GetPosX() - self.weightText:GetTextSizeX() - 25)
     self.weightText:SetPosY(self.weight:GetPosY() - 4)
@@ -57,6 +60,8 @@ function FGlobal_Inventory_WeightCheck()
     elseif sumtotalWeight <= 99 then
       self.weight:SetFontColor(Defines.Color.C_FFC4BEBE)
     end
+    self.weight:addInputEvent("Mouse_On", "PaGlobalPlayerWeightList_MouseOver(true," .. tostring(weightText) .. " )")
+    self.weight:addInputEvent("Mouse_Out", "PaGlobalPlayerWeightList_MouseOver(false," .. tostring(weightText) .. " )")
   else
     self.weight:SetShow(false)
     self.weightText:SetShow(false)
@@ -64,6 +69,8 @@ function FGlobal_Inventory_WeightCheck()
       local tutorialMenuShow = PaGlobal_TutorialMenu:checkShowCondition()
       PaGlobal_TutorialMenu:setShow(tutorialMenuShow, tutorialMenuShow)
     end
+    self.weight:addInputEvent("Mouse_On", "PaGlobalPlayerWeightList_MouseOver(true, 100)")
+    self.weight:addInputEvent("Mouse_Out", "PaGlobalPlayerWeightList_MouseOver(false, 100)")
   end
   if sumtotalWeight >= 100 and false == isOnEffect then
     self.weight:EraseAllEffect()

@@ -59,36 +59,36 @@ local _tabData = {
   [1] = {
     true,
     true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
     true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
   },
   [2] = {
-    false,
-    false,
-    false,
+    true,
     true,
     false,
     false,
     false,
     false,
     false,
+    false,
+    false,
+    false,
+    false,
     true,
-    false,
-    false,
     false,
     false,
     false,
@@ -97,6 +97,26 @@ local _tabData = {
     false
   },
   [3] = {
+    false,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  },
+  [4] = {
     false,
     false,
     false,
@@ -116,34 +136,14 @@ local _tabData = {
     false,
     true
   },
-  [4] = {
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  },
   [5] = {
     false,
     false,
-    false,
-    false,
-    false,
+    true,
     false,
     true,
+    false,
+    false,
     false,
     false,
     false,
@@ -675,10 +675,14 @@ function ChattingHistory:open(chatType)
       self._listPanel[ii]:SetSize(self._listPanel[ii]:GetSizeX(), 963)
     end
   end
-  if nil ~= chatType and chatType > 0 and chatType < CHAT_TYPE.Count then
-    self:setTabTo(self:chatTypeToTabType(chatType))
+  if 0 == self._currentTab then
+    if nil ~= chatType and chatType > 0 and chatType < CHAT_TYPE.Count then
+      self:setTabTo(self:chatTypeToTabType(chatType))
+    else
+      self:setTabTo(self._defaultTab)
+    end
   else
-    self:setTabTo(self._defaultTab)
+    self:setTabTo(self._currentTab)
   end
   self:selectMessage(self._currentSelectedMessage[self._currentTab])
 end

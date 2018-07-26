@@ -28,28 +28,28 @@ local gameOptionActionKey = {
 }
 local CommandTextureUV = {
   [0] = {
-    46,
-    1,
-    90,
-    45
+    96,
+    417,
+    139,
+    460
   },
   [1] = {
-    1,
-    1,
-    45,
-    45
+    140,
+    417,
+    183,
+    460
   },
   [2] = {
-    136,
-    1,
-    180,
-    45
+    96,
+    461,
+    139,
+    504
   },
   [3] = {
-    91,
-    1,
-    135,
-    45
+    140,
+    461,
+    183,
+    504
   }
 }
 local _commandEffectBG = UI.getChildControl(Panel_Command, "Static_CommandEffect")
@@ -73,7 +73,7 @@ local fishCommandCount = {
   {min = 10, max = 10}
 }
 local function CommandTextureChange(contorl, index)
-  contorl:ChangeTextureInfoName("renewal/ui_icon/console_xboxkey_00.dds")
+  contorl:ChangeTextureInfoName("renewal/etc/minigame/console_etc_minigame_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(contorl, CommandTextureUV[index][1], CommandTextureUV[index][2], CommandTextureUV[index][3], CommandTextureUV[index][4])
   contorl:getBaseTexture():setUV(x1, y1, x2, y2)
   contorl:setRenderTexture(contorl:getBaseTexture())
@@ -122,7 +122,7 @@ function Command_RePosition()
   screenX = getScreenSizeX()
   screenY = getScreenSizeY()
   Panel_Command:SetPosX(screenX / 2 - Panel_Command:GetSizeX() / 2)
-  Panel_Command:SetPosY(screenY / 2 + 140)
+  Panel_Command:SetPosY(screenY / 2 + 100)
 end
 local _math_random = math.random
 local _math_randomSeed = math.randomseed
@@ -173,6 +173,8 @@ local function Command_CreateRandomText()
 end
 function Panel_Minigame_Command_Start()
   Panel_Command:SetShow(true, false)
+  ToClient_setAvailableInputWidget(false)
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   _CommandTimeBG:SetShow(true)
   for ii = 0, 9 do
     checkIconList[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_EDIT, Panel_Command, "Static_CheckIcon" .. ii)
@@ -290,8 +292,10 @@ function Command_UpdateText(deltaTime)
   local rate = passedTimePerNext / 5
   if rate > 1 then
     rate = 1
+  else
+    local x = (1 - rate) * 300
+    _CommandTimerBar:SetSize(x, 16)
   end
-  _CommandTimerBar:SetSize((1 - rate) * 304, 16)
   if isCommandFinished then
     return
   end
@@ -311,14 +315,14 @@ local gameOptionActionKey = {
   Jump = 7
 }
 function MiniGame_Command_PadKeyPress(keyType)
-  local changeKeyType = 9
-  if __eQuickTimeEventPadType_Y == keyType then
+  local changeKeyType = 0
+  if __eQuickTimeEventPadType_Up == keyType or __eQuickTimeEventPadType_DpadUp == keyType then
     changeKeyType = gameOptionActionKey.Forward
-  elseif __eQuickTimeEventPadType_A == keyType then
+  elseif __eQuickTimeEventPadType_Down == keyType or __eQuickTimeEventPadType_DpadDown == keyType then
     changeKeyType = gameOptionActionKey.Back
-  elseif __eQuickTimeEventPadType_X == keyType then
+  elseif __eQuickTimeEventPadType_Left == keyType or __eQuickTimeEventPadType_DpadLeft == keyType then
     changeKeyType = gameOptionActionKey.Left
-  elseif __eQuickTimeEventPadType_B == keyType then
+  elseif __eQuickTimeEventPadType_Right == keyType or __eQuickTimeEventPadType_DpadRight == keyType then
     changeKeyType = gameOptionActionKey.Right
   end
   MiniGame_Command_keyPress(changeKeyType)

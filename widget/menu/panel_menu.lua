@@ -982,8 +982,11 @@ function GameMenu_Init()
       menuButtonIcon[index]:SetTextSpan(0, 42)
     end
     menuTextPool[index]:SetText(MenuButtonTextId[index])
-    if MenuButtonId.btn_BlackDesertLab == index and isGameServiceTypeKor() then
+    if MenuButtonId.btn_BlackDesertLab == index and (isGameServiceTypeKor() or isGameServiceTypeDev()) then
       menuTextPool[index]:SetText("\234\178\128\236\157\128\236\130\172\235\167\137\n\236\151\176\234\181\172\236\134\140")
+    end
+    if MenuButtonId.btn_BossAlert == index and (isGameServiceTypeKor() or isGameServiceTypeDev()) then
+      menuTextPool[index]:SetText("\236\154\176\235\145\144\235\168\184\235\166\172\n\236\149\140\235\166\188")
     end
     GameMenu_ChangeButtonTexture(index)
   end
@@ -1157,11 +1160,7 @@ function GameMenu_CheckEnAble(buttonType)
     end
   end
   if buttonType == MenuButtonId.btn_Twitch then
-    if isGameTypeTH() or isGameTypeID() then
-      returnValue = false
-    else
-      returnValue = true
-    end
+    returnValue = true
   end
   if buttonType == MenuButtonId.btn_Copyright then
     returnValue = isGameServiceTypeDev()
@@ -1208,7 +1207,7 @@ function GameMenu_CheckEnAble(buttonType)
   end
   if not isGameTypeKR2() then
     menuNewPool[buttonType]:ResetVertexAni()
-    if buttonType == MenuButtonId.btn_ShortCut or buttonType == MenuButtonId.btn_DropItem or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_KnownIssue or buttonType == MenuButtonId.btn_BlackDesertLab then
+    if buttonType == MenuButtonId.btn_BlackDesertLab or buttonType == MenuButtonId.btn_BossAlert then
       menuNewPool[buttonType]:SetShow(true)
       menuNewPool[buttonType]:SetVertexAniRun("Ani_Color_New", true)
     else

@@ -235,7 +235,7 @@ function workerShipInfo:update()
   local deadCount = servantWrapper:getDeadCount()
   self._deadCountValue:SetText(deadCount * 10 .. "%")
   local vehicleType = servantWrapper:getVehicleType()
-  if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType then
+  if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_CashPersonalTradeShip == vehicleType or UI_VT.Type_CashPersonalBattleShip == vehicleType then
     self._deadCountTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_DEADCOUNT"))
     self._deadCountValue:SetText(deadCount)
   end

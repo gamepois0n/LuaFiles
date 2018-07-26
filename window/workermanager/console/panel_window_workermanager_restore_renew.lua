@@ -78,6 +78,19 @@ function workerRestore:setPanelSize()
   sizeY = sizeY + subFrameSize
   self._ui._static_SubFrameBG:SetSize(self._ui._static_SubFrameBG:GetSizeX(), subFrameSize)
   Panel_Window_WorkerManager_Restore_Renew:SetSize(sizeX, sizeY)
+  if true == self._isRestoreAll then
+    self._ui._static_HorizontalLine3:ComputePos()
+    local addSize = config._slotBgSize * (math.ceil(self._totalItemCount / self._config._maxItemRow) - 1)
+    local orginPos = self._ui._static_HorizontalLine3:GetPosY()
+    local newPos = orginPos + addSize
+    self._ui._static_HorizontalLine3:SetPosY(newPos)
+    newPos = newPos + 25
+    self._ui._staticText_RestoreWorkerCount:SetPosY(newPos)
+    newPos = newPos + 25
+    self._ui._staticText_RestroreActionPoint:SetPosY(newPos)
+    newPos = newPos + 25
+    self._ui._staticText_NeedItem:SetPosY(newPos)
+  end
   self._ui._static_HorizontalLine4:ComputePos()
   self._ui._static_BottomKeyBG:ComputePos()
   self._ui._staticText_FeedAll_ConsoleUI:ComputePos()
@@ -170,9 +183,11 @@ function PaGlobalFunc_WorkerManager_Restore_Close()
 end
 function workerRestore:update()
   self:setRestoreItemData()
-  self:setPanelSize()
-  self:setPosition()
-  ToClient_padSnapResetControl()
+  if 0 < self._totalItemCount then
+    self:setPanelSize()
+    self:setPosition()
+    ToClient_padSnapResetControl()
+  end
 end
 function workerRestore:selectItem(itemIndex)
   self._selectItemIndex = itemIndex
@@ -271,7 +286,7 @@ end
 function PaGlobalFunc_WorkerManager_RestoreAll_Confirm()
   workerRestore:restoreAllConfirm()
 end
-function FromClient_PetList_UpdateRestoreItem()
+function FromClient_WorkerManager_UpdateRestoreItem()
   if false == Panel_Window_WorkerManager_Restore_Renew:GetShow() then
     return
   end
@@ -279,6 +294,6 @@ function FromClient_PetList_UpdateRestoreItem()
 end
 function workerRestore:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_WorkerManager_Restore")
-  registerEvent("FromClient_InventoryUpdate", "FromClient_PetList_UpdateRestoreItem")
+  registerEvent("FromClient_InventoryUpdate", "FromClient_WorkerManager_UpdateRestoreItem")
 end
 workerRestore:registEventHandler()

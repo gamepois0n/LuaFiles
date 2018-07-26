@@ -80,7 +80,7 @@ function PaGlobal_TutorialUiManager:restoreAllUiByUserSetting()
   if isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_KOR) or isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_JAP) then
     FGlobal_PersonalIcon_ButtonPosUpdate()
   end
-  self:showConditionalUi()
+  self:setShowAllDefaultUi(true)
 end
 function PaGlobal_TutorialUiManager:showConditionalUi()
   FGlobal_MyHouseNavi_Update()
@@ -90,15 +90,17 @@ function PaGlobal_TutorialUiManager:showConditionalUi()
   PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
   PaGlobal_CharacterTag_SetPosIcon()
   FGlobal_ResetRadarUI(false)
-  Panel_ConsoleKeyGuide:SetShow(true)
+  PaGlobalFunc_ConsoleKeyGuide_On()
 end
 function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
   if false == isShow then
-    Panel_ConsoleKeyGuide:SetShow(false)
-    PaGlobal_ConsoleQuickMenu:widgetClose()
+    PaGlobalFunc_ConsoleKeyGuide_Off()
+    PaGlobalFunc_ChattingViewer_Off()
+    PaGlobal_ConsoleQuickMenu:widgetClose(true)
   else
-    Panel_ConsoleKeyGuide:SetShow(true)
-    PaGlobal_ConsoleQuickMenu:widgetOpen()
+    PaGlobalFunc_ConsoleKeyGuide_On()
+    PaGlobalFunc_ChattingViewer_On()
+    PaGlobal_ConsoleQuickMenu:widgetOpen(true)
     PaGlobal_ConsoleQuickMenu:setWidget()
   end
 end

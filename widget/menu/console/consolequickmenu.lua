@@ -34,7 +34,12 @@ local Type = {
   Friend = 32,
   PearlShop = 33,
   PartySetting = 34,
-  Undefined = 35
+  BeautyAlbum = 35,
+  PhotoGallery = 36,
+  ProductNote = 37,
+  GuildRank = 38,
+  BlackSpiritAdventure = 39,
+  Undefined = 40
 }
 PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local function getTypeName(index)
@@ -146,6 +151,24 @@ end
 function ExecuteFunction.PartySetting()
   Process_UIMode_CommonWindow_PartySetting()
 end
+function ExecuteFunction.PartySetting()
+  Process_UIMode_CommonWindow_PartySetting()
+end
+function ExecuteFunction.BeautyAlbum()
+  FGlobal_CustomizingAlbum_Show(false, CppEnums.ClientSceneState.eClientSceneStateType_InGame)
+end
+function ExecuteFunction.PhotoGallery()
+  ScreenshotAlbum_Open()
+end
+function ExecuteFunction.ProductNote()
+  Panel_ProductNote_ShowToggle()
+end
+function ExecuteFunction.GuildRank()
+  GuildRank_Web_Show()
+end
+function ExecuteFunction.BlackSpiritAdventure()
+  FGlobal_BlackSpiritAdventure_Open()
+end
 function PaGlobal_ConsoleQuickMenu:initialize()
 end
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
@@ -185,7 +208,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction = {
     [Type.Guild] = ExecuteFunction.Guild,
     [Type.Friend] = ExecuteFunction.Friend,
     [Type.PearlShop] = ExecuteFunction.PearlShop,
-    [Type.PartySetting] = ExecuteFunction.PartySetting
+    [Type.PartySetting] = ExecuteFunction.PartySetting,
+    [Type.BeautyAlbum] = ExecuteFunction.BeautyAlbum,
+    [Type.PhotoGallery] = ExecuteFunction.PhotoGallery,
+    [Type.ProductNote] = ExecuteFunction.ProductNote,
+    [Type.GuildRank] = ExecuteFunction.GuildRank,
+    [Type.BlackSpiritAdventure] = ExecuteFunction.BlackSpiritAdventure
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
@@ -434,6 +462,41 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y1 = 343,
       _x2 = 357,
       _y2 = 393
+    },
+    [Type.BeautyAlbum] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 64,
+      _y1 = 374,
+      _x2 = 124,
+      _y2 = 434
+    },
+    [Type.PhotoGallery] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 2,
+      _y1 = 250,
+      _x2 = 62,
+      _y2 = 310
+    },
+    [Type.ProductNote] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 188,
+      _y1 = 64,
+      _x2 = 248,
+      _y2 = 124
+    },
+    [Type.GuildRank] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 436,
+      _y1 = 250,
+      _x2 = 496,
+      _y2 = 310
+    },
+    [Type.BlackSpiritAdventure] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 126,
+      _y1 = 436,
+      _x2 = 186,
+      _y2 = 496
     }
   }
 }
@@ -473,7 +536,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.Guild] = "GUILD",
     [Type.Friend] = "FRIEND",
     [Type.PearlShop] = "CASH SHOP",
-    [Type.PartySetting] = "PARTY SETTING"
+    [Type.PartySetting] = "PARTY SETTING",
+    [Type.BeautyAlbum] = "BEAUTY ALBUM",
+    [Type.PhotoGallery] = "PHOTO GALLERY",
+    [Type.ProductNote] = "PRODUCT NOTE",
+    [Type.GuildRank] = "GUILD RANK",
+    [Type.BlackSpiritAdventure] = "BLACKSPIRIT ADVENTURE"
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
@@ -482,7 +550,7 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.BlackSpirit] = true,
     [Type.WorldMap] = true,
     [Type.Skill] = true,
-    [Type.Mail] = false,
+    [Type.Mail] = true,
     [Type.CharacterChallange] = false,
     [Type.ItemMarket] = false,
     [Type.Quest] = true,
@@ -512,7 +580,12 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.Guild] = true,
     [Type.Friend] = true,
     [Type.PearlShop] = true,
-    [Type.PartySetting] = true
+    [Type.PartySetting] = true,
+    [Type.BeautyAlbum] = true,
+    [Type.PhotoGallery] = true,
+    [Type.ProductNote] = true,
+    [Type.GuildRank] = true,
+    [Type.BlackSpiritAdventure] = true
   }
 }
 function varify()
@@ -537,12 +610,18 @@ function FromClient_ConsoleQuickMenu_ExecuteFunctionType(datatype, functionType)
   executeFunc()
 end
 registerEvent("FromClient_ConsoleQuickMenu_ExecuteFunctionType", "FromClient_ConsoleQuickMenu_ExecuteFunctionType")
-function PaGlobal_ConsoleQuickMenu:widgetOpen()
+function PaGlobal_ConsoleQuickMenu:widgetOpen(invisibleOnly)
   Panel_Widget_QuickMenu:SetShow(true)
+  if true == invisibleOnly then
+    return
+  end
   ToClient_setAvailableInputWidget(true)
 end
-function PaGlobal_ConsoleQuickMenu:widgetClose()
+function PaGlobal_ConsoleQuickMenu:widgetClose(invisibleOnly)
   Panel_Widget_QuickMenu:SetShow(false)
+  if true == invisibleOnly then
+    return
+  end
   ToClient_setAvailableInputWidget(false)
 end
 function PaGlobal_ConsoleQuickMenu:setDefaultSetting()

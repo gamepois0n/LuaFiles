@@ -30,7 +30,7 @@ function Mail_HideAni()
   local aniInfo = UIAni.AlphaAnimation(0, _panel, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
-local defalut_Control = {
+local MailInfo = {
   _ui = {
     stc_topBG = UI.getChildControl(_panel, "Static_TopBg"),
     stc_centerBG = UI.getChildControl(_panel, "Static_CenterBg"),
@@ -42,16 +42,20 @@ local defalut_Control = {
     _mailNo = {},
     _mail_GetItem = {},
     _mail_GetDate = {},
-    isSelectAll = false
+    isSelectAll = false,
+    stc_haveItemEnclosed = {},
+    txt_keyGuideA = nil,
+    txt_keyGuideX = nil,
+    txt_keyGuideB = nil
   },
   _rowMax = 8,
-  _currentSelect = 1
+  _currentSelect = nil
 }
 function FromClient_luaLoadComplete_MailInfo_Init()
-  defalut_Control:Init_Control()
+  MailInfo:Init_Control()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_MailInfo_Init")
-function defalut_Control:Init_Control()
+function MailInfo:Init_Control()
   self._ui._page_Count = UI.getChildControl(self._ui.stc_topBG, "StaticText_PageNumber")
   self._ui.mailTemplate = UI.getChildControl(self._ui.stc_centerBG, "RadioButton_MailTemplate")
   for ii = 1, self._rowMax do
@@ -61,23 +65,30 @@ function defalut_Control:Init_Control()
     self._ui._Sender_Name[ii]:SetTextMode(UI_TM.eTextMode_LimitText)
     self._ui._Mail_Title[ii] = UI.getChildControl(self._ui._List_BG[ii], "StaticText_Title")
     self._ui._Mail_Title[ii]:SetTextMode(UI_TM.eTextMode_LimitText)
+    self._ui.stc_haveItemEnclosed[ii] = UI.getChildControl(self._ui._List_BG[ii], "Static_GiftIcon")
+    self._ui.stc_haveItemEnclosed[ii]:SetShow(false)
   end
   self._ui.mailTemplate:SetShow(false)
-  defalut_Control:registEventHandler()
-  defalut_Control:registMessageHandler()
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideA")
+  self._ui.txt_keyGuideX = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideX")
+  self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideB")
+  self:registEventHandler()
+  self:registMessageHandler()
 end
-function defalut_Control:registEventHandler()
+function MailInfo:registEventHandler()
   _panel:registerPadEvent(__eConsoleUIPadEvent_DpadLeft, "MailList_Change_Page(false)")
   _panel:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "MailList_Change_Page(true)")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGloba_Mail_GetDetail()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Mail_GetDetail()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "MailList_ReceiveAll()")
   for key, value in pairs(self._ui._List_BG) do
     value:addInputEvent("Mouse_On", "MailList_SelectMailWithIndex(" .. tostring(key) .. ")")
-    value:addInputEvent("Mouse_LUp", "PaGloba_Mail_GetDetail()")
+    value:addInputEvent("Mouse_LUp", "PaGlobalFunc_Mail_GetDetail()")
   end
 end
-function defalut_Control:registMessageHandler()
+function MailInfo:registMessageHandler()
   registerEvent("ResponseMail_showList", "Mail_UpdateList")
   registerEvent("onScreenResize", "Mail_onScreenResize")
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_MailInfo_PadSnapChangePanel")
 end
 local _mail_Data = {
   _Page_Total = 0,
@@ -87,7 +98,7 @@ local _mail_Data = {
 }
 function _mail_Data:setData()
   local mailCount = RequestMail_mailCount()
-  local SlotMax = defalut_Control._rowMax
+  local SlotMax = MailInfo._rowMax
   self._Data = {}
   local pageNo = 0
   for index = 1, mailCount do
@@ -98,29 +109,32 @@ function _mail_Data:setData()
       self._Data[pageNo] = {}
     end
     local mail_Info = RequestMail_getMailAt(index - 1)
-    defalut_Control._ui._mailNo[index] = mail_Info:getMailNo()
+    MailInfo._ui._mailNo[index] = mail_Info:getMailNo()
     local sender_Name = mail_Info:getSender()
     local mail_Title = mail_Info:getTitle()
     local mail_No = mail_Info:getMailNo()
+    local mail_isExistItem = mail_Info:isExistItem()
     local mail_getMailReceiveDate = mail_Info:getMailReceiveDate()
     local idx = (index - 1) % SlotMax + 1
     self._Data[pageNo][idx] = {
       _indx = index - 1,
       _sender_Name = sender_Name,
       _mail_Title = mail_Title,
+      _mail_GetItem = mail_isExistItem,
       _mail_GetDate = mail_getMailReceiveDate
     }
   end
   self._Page_Total = pageNo
 end
 function _mail_Data:clear()
-  local SlotMax = defalut_Control._rowMax
+  local SlotMax = MailInfo._rowMax
   for index = 1, SlotMax do
-    defalut_Control._ui._List_BG[index]:SetShow(false)
-    defalut_Control._ui._Sender_Name[index]:SetShow(false)
-    defalut_Control._ui._Mail_Title[index]:SetShow(false)
+    MailInfo._ui._List_BG[index]:SetShow(false)
+    MailInfo._ui._Sender_Name[index]:SetShow(false)
+    MailInfo._ui._Mail_Title[index]:SetShow(false)
+    MailInfo._ui.stc_haveItemEnclosed[index]:SetShow(false)
   end
-  defalut_Control._ui._page_Count:SetText("-- / --")
+  MailInfo._ui._page_Count:SetText("-- / --")
 end
 function _mail_Data:Update_MailPage()
   local pageNo = self._Page_Current
@@ -129,7 +143,7 @@ function _mail_Data:Update_MailPage()
     self._Page_Current = self._Page_Total
     pageNo = self._Page_Current
   end
-  local SlotMax = defalut_Control._rowMax
+  local SlotMax = MailInfo._rowMax
   local mailCount = RequestMail_mailCount()
   _mail_Data:clear()
   for index = 1, SlotMax do
@@ -138,34 +152,40 @@ function _mail_Data:Update_MailPage()
         local _sender_Name = self._Data[pageNo][index]._sender_Name
         local _mail_Title = self._Data[pageNo][index]._mail_Title
         local _indx = self._Data[pageNo][index]._indx
+        local _getItem = self._Data[pageNo][index]._mail_GetItem
         local _getDate = self._Data[pageNo][index]._mail_GetDate
         local _mail_num = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_NO") .. "." .. tostring(_indx + 1)
-        defalut_Control._ui._Sender_Name[index]:SetText(_sender_Name .. "(" .. _getDate .. ")")
-        defalut_Control._ui._Mail_Title[index]:SetText(_mail_Title)
+        MailInfo._ui._Sender_Name[index]:SetText(_sender_Name .. "(" .. _getDate .. ")")
+        MailInfo._ui._Mail_Title[index]:SetText(_mail_Title)
         if self._Selected._indx == _indx and self._Selected._sender_Name == _sender_Name and self._Selected._mail_Title == _mail_Title then
-          defalut_Control._ui._List_BG[index]:SetCheck(true)
+          MailInfo._ui._List_BG[index]:SetCheck(true)
         else
-          defalut_Control._ui._List_BG[index]:SetCheck(false)
+          MailInfo._ui._List_BG[index]:SetCheck(false)
         end
-        defalut_Control._ui._List_BG[index]:SetShow(true)
-        defalut_Control._ui._Sender_Name[index]:SetShow(true)
-        defalut_Control._ui._Mail_Title[index]:SetShow(true)
+        MailInfo._ui._List_BG[index]:SetShow(true)
+        MailInfo._ui._Sender_Name[index]:SetShow(true)
+        MailInfo._ui._Mail_Title[index]:SetShow(true)
+        MailInfo._ui.stc_haveItemEnclosed[index]:SetShow(true == _getItem)
       end
     else
-      defalut_Control._ui._List_BG[index]:SetShow(false)
-      defalut_Control._ui._Sender_Name[index]:SetShow(false)
-      defalut_Control._ui._Mail_Title[index]:SetShow(false)
+      MailInfo._ui._List_BG[index]:SetShow(false)
+      MailInfo._ui._Sender_Name[index]:SetShow(false)
+      MailInfo._ui._Mail_Title[index]:SetShow(false)
+      MailInfo._ui.stc_haveItemEnclosed[index]:SetShow(false)
     end
   end
   if pageNo_Total > 0 then
     local pageCount = tostring(pageNo) .. "/" .. tostring(pageNo_Total)
-    defalut_Control._ui._page_Count:SetText(pageCount)
+    MailInfo._ui._page_Count:SetText(pageCount)
   end
 end
-function PaGloba_Mail_GetDetail()
+function PaGlobalFunc_Mail_GetDetail()
+  if nil == MailInfo._currentSelect then
+    return
+  end
   local pageNo = _mail_Data._Page_Current
-  local SlotMax = defalut_Control._rowMax
-  local index = defalut_Control._currentSelect
+  local SlotMax = MailInfo._rowMax
+  local index = MailInfo._currentSelect
   if pageNo < 1 then
     return
   end
@@ -193,28 +213,28 @@ function MailList_Change_Page(isNext)
       _mail_Data._Page_Current = pageNo_Current - 1
     end
   end
-  defalut_Control._ui.isSelectAll = false
+  MailInfo._ui.isSelectAll = false
   _mail_Data:Update_MailPage()
 end
 function MailList_SelectMailWithIndex(index)
-  defalut_Control._currentSelect = index
-  for ii = 1, defalut_Control._rowMax do
-    defalut_Control._ui._List_BG[ii]:SetCheck(false)
+  MailInfo._currentSelect = index
+  for ii = 1, MailInfo._rowMax do
+    MailInfo._ui._List_BG[ii]:SetCheck(false)
   end
-  defalut_Control._ui._List_BG[defalut_Control._currentSelect]:SetCheck(true)
+  MailInfo._ui._List_BG[MailInfo._currentSelect]:SetCheck(true)
 end
 function MailList_SelectAll()
   local self = _mail_Data
-  local SlotMax = defalut_Control._rowMax
-  local stat_checkBtn = defalut_Control._ui.isSelectAll
-  defalut_Control._ui.isSelectAll = not stat_checkBtn
+  local SlotMax = MailInfo._rowMax
+  local stat_checkBtn = MailInfo._ui.isSelectAll
+  MailInfo._ui.isSelectAll = not stat_checkBtn
 end
 function MailList_SelectDelete()
   local self = _mail_Data
   local pageNo = self._Page_Current
-  local SlotMax = defalut_Control._rowMax
+  local SlotMax = MailInfo._rowMax
   local lastMailIndex = 0
-  defalut_Control._ui.isSelectAll = false
+  MailInfo._ui.isSelectAll = false
 end
 function MailList_ReceiveAll()
   local recievemail = function()
@@ -241,6 +261,13 @@ function Mail_Open()
   RequestMail_requestMailList()
   RequestMail_setNewMailFlag(false)
 end
+function PaGlobalFunc_MailInfo_OnPadB()
+  if PaGlobal_MailDetail_GetShow() then
+    PaGlobal_MailDetail_Close()
+    return
+  end
+  Mail_Close()
+end
 function Mail_Close()
   audioPostEvent_SystemUi(1, 21)
   if _panel:IsShow() then
@@ -254,6 +281,19 @@ function Mail_UpdateList(isCheck)
   _mail_Data:Update_MailPage()
 end
 function FromClient_NewMail()
+end
+function FromClient_MailInfo_PadSnapChangePanel(fromPanel, toPanel)
+  if nil ~= toPanel then
+    if _panel:GetKey() == toPanel:GetKey() then
+      MailInfo._ui.txt_keyGuideA:SetMonoTone(false)
+      MailInfo._ui.txt_keyGuideX:SetMonoTone(false)
+      MailInfo._ui.txt_keyGuideB:SetMonoTone(false)
+    else
+      MailInfo._ui.txt_keyGuideA:SetMonoTone(true)
+      MailInfo._ui.txt_keyGuideX:SetMonoTone(true)
+      MailInfo._ui.txt_keyGuideB:SetMonoTone(true)
+    end
+  end
 end
 function Mail_onScreenResize()
   _panel:SetPosX(getScreenSizeX() - _panel:GetSizeX())

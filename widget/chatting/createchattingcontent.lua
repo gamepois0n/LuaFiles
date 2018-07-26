@@ -729,6 +729,15 @@ function UiPrivateChatType(chatType, chatting_Icon, msgColor, isChatDivision, se
       chatting_Icon:SetShow(false)
       chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
     end
+  elseif UI_CT.Alliance == chatType then
+    if isChatDivision then
+      local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 54, 96, 108, 120)
+      chatting_Icon:getBaseTexture():setUV(x1, y1, x2, y2)
+      chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+    else
+      chatting_Icon:SetShow(false)
+      chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+    end
   end
 end
 function GetMessageFontColor(msg, color)

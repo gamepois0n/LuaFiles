@@ -76,7 +76,6 @@ PaGlobal_ConsoleQuickMenu = {
   },
   _slotConfig = {
     createIcon = true,
-    createBorder = true,
     createCount = true,
     createEnchant = false,
     createCooltime = true,
@@ -252,6 +251,9 @@ function PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position, delt
       slot.cooltime:SetShow(false)
       slot.cooltimeText:SetShow(false)
     end
+  elseif slot.cooltime:GetShow() then
+    slot.cooltime:SetShow(false)
+    slot.cooltimeText:SetShow(false)
   end
 end
 function FGlobal_Console_Widget_QuickMenuCustom_UpdatePerFrame(deltaTime)
@@ -551,9 +553,8 @@ function PaGlobal_ConsoleQuickMenu:setWidget()
         local itemWrapper = getInventoryItemByType(whereType, slotNo)
         if nil ~= itemWrapper then
           widget._slot:setItem(itemWrapper)
-        else
-          self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
         end
+        self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
       else
         self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
       end

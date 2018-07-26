@@ -248,6 +248,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
     PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
   end
   self:UpdatePanelSize()
+  ToClient_padSnapRefreshTarget(Panel_Customizing_CommonDecoration)
 end
 function Customization_DecoInfo:UpdatePanelSize()
   local buttonGroup = self._ui._static_ButtonGroup
@@ -424,6 +425,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
       tempContentImage:SetShow(true)
       self._typeList[itemIndex] = tempContentImage
     end
+    ToClient_padSnapRefreshTarget(Panel_Customizing_CommonDecoration)
     local param = getParam(listParamType, listParamIndex)
     self:UpdateTypeFocus(param)
     self._currentTypeCount = paramMax
@@ -469,6 +471,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
     PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
   end
   self:UpdatePanelSize()
+  ToClient_padSnapRefreshTarget(Panel_Customizing_CommonDecoration)
 end
 function PaGlobalFunc_Customization_Deco_CloseEyeDecorationUi()
   PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
@@ -546,6 +549,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoList(paramType, paramIndex
   if true == self._ui._checkBox_RightEye:IsCheck() then
     setParam(self._currentClassType, paramType, paramIndex2, itemIndex)
   end
+  self:UpdateTypeFocus(itemIndex)
 end
 function PaGlobalFunc_Customization_Deco_EnableDecorationSlide(enable)
   local self = Customization_DecoInfo
