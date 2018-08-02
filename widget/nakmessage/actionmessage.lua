@@ -34,11 +34,13 @@ function ActionMessageHideAni()
   aniInfo1:SetDisableWhileAni(true)
 end
 function ActionMessageShowByObservertory()
-  if Panel_WatchingMode:GetShow() then
-    return
+  if false == _ContentsGroup_RenewUI_WatchMode then
+    if Panel_WatchingMode:GetShow() then
+      return
+    end
+    _text_Msg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACTIONNAKMESSAGE"))
+    Panel_ActionMessage:SetShow(true, true)
   end
-  _text_Msg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACTIONNAKMESSAGE"))
-  Panel_ActionMessage:SetShow(true, true)
 end
 function ActionMessageHide()
   Panel_ActionMessage:SetShow(false, true)

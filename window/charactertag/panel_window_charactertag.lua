@@ -396,9 +396,9 @@ function CharacterTag:LoadList()
     if 0 ~= pcDeliveryRegionKey:get() and serverUtc64 < characterData._arrivalTime then
       self:SetMonotoneIgnore(targetUI, targetImage, true)
       targetState:SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_WORKING_TEXT_DELIVERY"))
-    elseif 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
+    elseif selfPlayerRegionInfoKey ~= pcDeliveryRegionKey:get() and 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
       local retionInfoArrival = getRegionInfoByRegionKey(pcDeliveryRegionKey)
-      self:SetMonotoneIgnore(targetUI, targetImage, false)
+      self:SetMonotoneIgnore(targetUI, targetImage, true)
       targetState:SetText(tostring(retionInfoArrival:getAreaName()))
     elseif "" ~= workingText then
       targetState:SetText(workingText)
@@ -409,6 +409,10 @@ function CharacterTag:LoadList()
     elseif selfPlayerRegionInfoKey ~= regionInfo:getRegionKey() or false == regionInfo:get():isMainOrMinorTown() then
       self:SetMonotoneIgnore(targetUI, targetImage, true)
       targetState:SetText(tostring(regionInfo:getAreaName()))
+    end
+    if selfPlayerRegionInfoKey == pcDeliveryRegionKey:get() and 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
+      self:SetMonotoneIgnore(targetUI, targetImage, false)
+      targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANDO"))
     end
     local removeTime = getCharacterDataRemoveTime(idx)
     if nil ~= removeTime then
@@ -421,6 +425,7 @@ function CharacterTag:LoadList()
     end
     if true == self._currentTagState then
       self:SetMonotoneIgnore(targetUI, targetImage, true)
+      targetState:SetText(tostring(regionInfo:getAreaName()))
     end
   end
 end

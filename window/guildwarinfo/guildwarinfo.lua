@@ -378,7 +378,12 @@ function FromClient_WarInfoContent_Set(territoryKey)
     end
     warInfoContent[territoryKey][index].guildMaster:SetText(warInfoContent[territoryKey][index]._guildMaster)
     warInfoContent[territoryKey][index]._guildMp = currentGuildWrapper:getGuildMp()
-    local isSet = setGuildTextureByGuildNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+    local isSet = false
+    if false == guildWrapper:isAllianceGuild() then
+      isSet = setGuildTextureByGuildNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+    else
+      isSet = setGuildTextureByAllianceNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+    end
     if false == isSet then
       warInfoContent[territoryKey][index].guildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(warInfoContent[territoryKey][index].guildMark, 183, 1, 188, 6)
@@ -658,7 +663,12 @@ function FromClient_WarInfoContent_Set(territoryKey)
         warInfoContent[territoryKey][index]._cannonCountValue = _cannonCountValue
         cannonCountEffect = true
       end
-      local isSet = setGuildTextureByGuildNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+      local isSet = false
+      if false == guildWrapper:isAllianceGuild() then
+        isSet = setGuildTextureByGuildNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+      else
+        isSet = setGuildTextureByAllianceNo(warInfoContent[territoryKey][index]._guildNo, warInfoContent[territoryKey][index].guildMark)
+      end
       if false == isSet then
         warInfoContent[territoryKey][index].guildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
         local x1, y1, x2, y2 = setTextureUV_Func(warInfoContent[territoryKey][index].guildMark, 183, 1, 188, 6)

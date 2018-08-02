@@ -30,6 +30,7 @@ function Panel_ProductNote_HideAni()
 end
 local _btn_Close = UI.getChildControl(Panel_ProductNote, "Button_Close")
 local _btn_PopUp = UI.getChildControl(Panel_ProductNote, "CheckButton_PopUp")
+local _titleBar = UI.getChildControl(Panel_ProductNote, "StaticText_Title")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 _btn_PopUp:SetShow(isPopUpContentsEnable)
 _btn_PopUp:addInputEvent("Mouse_LUp", "HandleClicked_ProductNote_PopUp()")
@@ -39,7 +40,7 @@ local _buttonQuestion = UI.getChildControl(Panel_ProductNote, "Button_Question")
 _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"ProductNote\" )")
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"ProductNote\", \"true\")")
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"ProductNote\", \"false\")")
-local _productWeb
+local _productWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
 function Panel_ProductNote_Initialize()
   _productWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_ProductNote, "WebControl_ProductNote")
   _productWeb:SetShow(true)
@@ -70,7 +71,7 @@ function Panel_ProductNote_ShowToggle()
     audioPostEvent_SystemUi(13, 6)
     Panel_ProductNote:SetShow(true, true)
     FGlobal_SetCandidate()
-    _productWeb:SetUrl(700, 558, "coui://UI_Data/UI_Html/Window/ProductNote/ProductNote_CategoryItemList.html?nodeProduct")
+    _productWeb:SetUrl(sizeX, sizeY, "coui://UI_Data/UI_Html/Window/ProductNote/ProductNote_CategoryItemList.html?nodeProduct")
     _productWeb:SetIME(true)
     return true
   end
@@ -98,11 +99,37 @@ function ProductNote_Item_ShowToggle(itemKey)
     audioPostEvent_SystemUi(13, 6)
     Panel_ProductNote:SetShow(true, true)
     FGlobal_SetCandidate()
-    _productWeb:SetUrl(700, 558, "coui://UI_Data/UI_Html/Window/ProductNote/ProductNote_CategoryItemList.html?manufacture&" .. itemKey)
+    _productWeb:SetUrl(sizeX, sizeY, "coui://UI_Data/UI_Html/Window/ProductNote/ProductNote_CategoryItemList.html?manufacture&" .. itemKey)
     _productWeb:SetIME(true)
   end
 end
 function ProductNote_onScreenResize()
+  local screenSizeX = getScreenSizeX()
+  if screenSizeX < 1920 then
+    sizeX = 700
+    sizeY = 558
+    panelSizeX = 754
+    panelSizeY = 647
+    titleBarSizeX = 739
+  elseif screenSizeX >= 1920 and screenSizeX < 3840 then
+    sizeX = 1050
+    sizeY = 837
+    panelSizeX = 1104
+    panelSizeY = 928
+    titleBarSizeX = 1089
+  else
+    sizeX = 1400
+    sizeY = 1116
+    panelSizeX = 1454
+    panelSizeY = 1205
+    titleBarSizeX = 1439
+  end
+  Panel_ProductNote:SetSize(panelSizeX, panelSizeY)
+  _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
+  _productWeb:SetHorizonCenter()
+  _productWeb:SetVerticalTop()
+  _productWeb:SetSpanSize(0, 62)
+  _productWeb:SetSize(sizeX, sizeY)
   Panel_ProductNote:SetPosX(math.floor((getScreenSizeX() - Panel_ProductNote:GetSizeX()) / 2))
   Panel_ProductNote:SetPosY(math.floor((getScreenSizeY() - Panel_ProductNote:GetSizeY()) / 2))
 end

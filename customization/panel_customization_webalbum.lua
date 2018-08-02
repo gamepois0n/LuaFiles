@@ -27,9 +27,10 @@ function Panel_CustomizingAlbum_HideAni()
   local aniInfo = UIAni.AlphaAnimation(0, Panel_CustomizingAlbum, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
+local _titleBar = UI.getChildControl(Panel_CustomizingAlbum, "StaticText_Title")
 local _btn_Close = UI.getChildControl(Panel_CustomizingAlbum, "Button_Close")
 _btn_Close:addInputEvent("Mouse_LUp", "CustomizingAlbum_Close()")
-local _customizingAlbumWeb
+local _customizingAlbumWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
 function Panel_CustomizingAlbum_Initialize()
   _customizingAlbumWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_CustomizingAlbum, "WebControl_CustomizingAlbum")
   _customizingAlbumWeb:SetShow(true)
@@ -69,10 +70,11 @@ function CustomizingAlbum_Open(isCTMode, isSceneState)
     userNo = getSelfPlayer():get():getUserNo()
   end
   url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true == isCTMode) .. "&isGm=" .. tostring(isGm)
-  _customizingAlbumWeb:SetUrl(870, 630, url, false, true)
+  _customizingAlbumWeb:SetUrl(sizeX, sizeY, url, false, true)
   _customizingAlbumWeb:SetIME(true)
   isCustomizationMode = isCTMode
-  Panel_CustomizingAlbum:SetPosX(getScreenSizeX() / 2 - Panel_CustomizingAlbum:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_CustomizingAlbum:GetSizeY() / 2)
+  Panel_CustomizingAlbum:SetPosX(getScreenSizeX() / 2 - Panel_CustomizingAlbum:GetSizeX() / 2)
+  Panel_CustomizingAlbum:SetPosY(getScreenSizeY() / 2 - Panel_CustomizingAlbum:GetSizeY() / 2)
 end
 function CustomizingAlbum_Close()
   audioPostEvent_SystemUi(13, 5)
@@ -90,3 +92,31 @@ end
 function FGlobal_CustomizingAlbum_Close()
   Panel_CustomizingAlbum:SetShow(false, false)
 end
+function CustomizingAlbum_Resize()
+  local screenSizeX = getScreenSizeX()
+  if screenSizeX < 1920 then
+    sizeX = 870
+    sizeY = 630
+    panelSizeX = 900
+    panelSizeY = 700
+    titleBarSizeX = 887
+  elseif screenSizeX >= 1920 and screenSizeX < 3840 then
+    sizeX = 1305
+    sizeY = 945
+    panelSizeX = 1335
+    panelSizeY = 1015
+    titleBarSizeX = 1322
+  else
+    sizeX = 1740
+    sizeY = 1260
+    panelSizeX = 1770
+    panelSizeY = 1330
+    titleBarSizeX = 1757
+  end
+  Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY)
+  _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
+  _customizingAlbumWeb:SetPosX(15)
+  _customizingAlbumWeb:SetPosY(55)
+  _customizingAlbumWeb:SetSize(sizeX, sizeY)
+end
+registerEvent("onScreenResize", "CustomizingAlbum_Resize")

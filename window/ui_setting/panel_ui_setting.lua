@@ -1248,107 +1248,109 @@ function UiSet_update()
   UiSet.txt_UI_HIGH:SetText(UiSet.maxScale)
   for idx = 1, UiSet.panelCount do
     local slot = UiSet.panelPool[idx]
-    slot.control:SetScale(1, 1)
-    slot.control:SetShow(true)
-    if idx == panelID.LargeParty and false == isLargePartyOpen then
-      slot.control:SetShow(false)
-    end
-    slot.originPosX = panelControl[idx].control:GetPosX()
-    slot.originPosY = panelControl[idx].control:GetPosY()
-    slot.originSizeX = panelControl[idx].control:GetSizeX()
-    slot.originSizeY = panelControl[idx].control:GetSizeY()
-    slot.control:SetPosX(slot.originPosX)
-    slot.control:SetPosY(slot.originPosY)
-    slot.control:SetSize(slot.originSizeX, slot.originSizeY)
-    slot.close:SetScale(1, 1)
-    slot.close:SetShow(true)
-    slot.close:SetPosX(slot.control:GetSizeX() - slot.close:GetSizeX() - 3)
-    slot.close:SetPosY(3)
-    slot.close:SetCheck(panelControl[idx].isShow)
-    if idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
-      local chatPanel = ToClient_getChattingPanel(idx - panelID.Chat0)
-      if chatPanel:isOpen() then
-        if idx == panelID.Chat0 then
+    if nil ~= slot and nil ~= slot.control then
+      slot.control:SetScale(1, 1)
+      slot.control:SetShow(true)
+      if idx == panelID.LargeParty and false == isLargePartyOpen then
+        slot.control:SetShow(false)
+      end
+      slot.originPosX = panelControl[idx].control:GetPosX()
+      slot.originPosY = panelControl[idx].control:GetPosY()
+      slot.originSizeX = panelControl[idx].control:GetSizeX()
+      slot.originSizeY = panelControl[idx].control:GetSizeY()
+      slot.control:SetPosX(slot.originPosX)
+      slot.control:SetPosY(slot.originPosY)
+      slot.control:SetSize(slot.originSizeX, slot.originSizeY)
+      slot.close:SetScale(1, 1)
+      slot.close:SetShow(true)
+      slot.close:SetPosX(slot.control:GetSizeX() - slot.close:GetSizeX() - 3)
+      slot.close:SetPosY(3)
+      slot.close:SetCheck(panelControl[idx].isShow)
+      if idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
+        local chatPanel = ToClient_getChattingPanel(idx - panelID.Chat0)
+        if chatPanel:isOpen() then
+          if idx == panelID.Chat0 then
+            slot.control:SetShow(true)
+            slot.close:SetShow(true)
+          elseif chatPanel:isCombinedToMainPanel() then
+            slot.control:SetShow(false)
+            slot.close:SetShow(false)
+          else
+            slot.control:SetShow(true)
+            slot.close:SetShow(true)
+          end
+        elseif chatPanel:isCombinedToMainPanel() == false or idx == panelID.Chat0 then
           slot.control:SetShow(true)
           slot.close:SetShow(true)
-        elseif chatPanel:isCombinedToMainPanel() then
+        else
           slot.control:SetShow(false)
           slot.close:SetShow(false)
-        else
+        end
+      elseif idx == panelID.ClassResource then
+        if CppEnums.ClassType.ClassType_Sorcerer == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
           slot.control:SetShow(true)
           slot.close:SetShow(true)
+          if CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
+            panelControl[panelID.ClassResource].name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
+          end
+        else
+          slot.control:SetShow(false)
+          slot.close:SetShow(false)
         end
-      elseif chatPanel:isCombinedToMainPanel() == false or idx == panelID.Chat0 then
-        slot.control:SetShow(true)
-        slot.close:SetShow(true)
-      else
-        slot.control:SetShow(false)
-        slot.close:SetShow(false)
-      end
-    elseif idx == panelID.ClassResource then
-      if CppEnums.ClassType.ClassType_Sorcerer == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
-        slot.control:SetShow(true)
-        slot.close:SetShow(true)
-        if CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
-          panelControl[panelID.ClassResource].name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
+      elseif idx == panelID.ActionGuide then
+        if true == isChecked_SkillCommand then
+          UiSet_ChangeTexture_BG(idx, 2)
+        else
+          UiSet_ChangeTexture_BG(idx, 1)
         end
-      else
+        slot.close:SetCheck(isChecked_SkillCommand)
+        panelControl[idx].isShow = isChecked_SkillCommand
+      elseif idx == panelID.KeyGuide then
+        if true == isChecked_KeyViewer then
+          UiSet_ChangeTexture_BG(idx, 2)
+        else
+          UiSet_ChangeTexture_BG(idx, 1)
+        end
+      elseif idx == panelID.Adrenallin then
+        if getSelfPlayer():isEnableAdrenalin() then
+          slot.control:SetShow(true)
+          slot.close:SetShow(true)
+        else
+          slot.control:SetShow(false)
+          slot.close:SetShow(false)
+        end
+      elseif idx == panelID.Pvp then
+        if isPvpEnable() then
+          slot.control:SetShow(true)
+          slot.close:SetShow(true)
+        else
+          slot.control:SetShow(false)
+          slot.close:SetShow(false)
+        end
+      elseif idx == panelID.UIMain and true == _ContentsGroup_RenewUI_Main then
         slot.control:SetShow(false)
-        slot.close:SetShow(false)
       end
-    elseif idx == panelID.ActionGuide then
-      if true == isChecked_SkillCommand then
-        UiSet_ChangeTexture_BG(idx, 2)
+      if panelControl[idx].isShow then
+        if panelControl[idx].posFixed then
+          slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", panelControl[idx].name))
+        else
+          slot.control:SetText(panelControl[idx].name)
+        end
+      elseif 21 == idx then
+        slot.control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
       else
-        UiSet_ChangeTexture_BG(idx, 1)
+        slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", panelControl[idx].name))
       end
-      slot.close:SetCheck(isChecked_SkillCommand)
-      panelControl[idx].isShow = isChecked_SkillCommand
-    elseif idx == panelID.KeyGuide then
-      if true == isChecked_KeyViewer then
-        UiSet_ChangeTexture_BG(idx, 2)
+      local stateValue = 0
+      if not panelControl[idx].isShow then
+        stateValue = 1
+      elseif panelControl[idx].posFixed then
+        stateValue = 3
       else
-        UiSet_ChangeTexture_BG(idx, 1)
+        stateValue = 2
       end
-    elseif idx == panelID.Adrenallin then
-      if getSelfPlayer():isEnableAdrenalin() then
-        slot.control:SetShow(true)
-        slot.close:SetShow(true)
-      else
-        slot.control:SetShow(false)
-        slot.close:SetShow(false)
-      end
-    elseif idx == panelID.Pvp then
-      if isPvpEnable() then
-        slot.control:SetShow(true)
-        slot.close:SetShow(true)
-      else
-        slot.control:SetShow(false)
-        slot.close:SetShow(false)
-      end
-    elseif idx == panelID.UIMain and true == _ContentsGroup_RenewUI_Main then
-      slot.control:SetShow(false)
+      UiSet_ChangeTexture_BG(idx, stateValue)
     end
-    if panelControl[idx].isShow then
-      if panelControl[idx].posFixed then
-        slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", panelControl[idx].name))
-      else
-        slot.control:SetText(panelControl[idx].name)
-      end
-    elseif 21 == idx then
-      slot.control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
-    else
-      slot.control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", panelControl[idx].name))
-    end
-    local stateValue = 0
-    if not panelControl[idx].isShow then
-      stateValue = 1
-    elseif panelControl[idx].posFixed then
-      stateValue = 3
-    else
-      stateValue = 2
-    end
-    UiSet_ChangeTexture_BG(idx, stateValue)
   end
 end
 function HandleClicked_UiSet_MoveControlSet_Start(idx)
@@ -2274,7 +2276,6 @@ function FromClient_getUiSettingPanelInfo(panelIndex, posX, posY, isShow, chatWi
   UiSet.panelPool[panelIndex].control:SetShow(isShow)
   panelControl[panelIndex].control:SetShow(isShow)
   if true == _ContentsGroup_RenewUI_Main then
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_getUiSettingPanelInfo")
     panelControl[panelID.UIMain].control:SetShow(false)
   end
   if closeEmptyPanelState[panelIndex - panelID.Chat0] == false then

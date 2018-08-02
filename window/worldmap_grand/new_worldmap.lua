@@ -589,7 +589,6 @@ function FGlobal_WorldMapClose()
   FGlobal_Panel_MovieTheater640_WindowClose()
 end
 function FGlobal_WorldMapCloseSubPanel()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FGlobal_WorldMapCloseSubPanel")
   Panel_Window_Warehouse:SetShow(false)
   if false == _ContentsGroup_RenewUI_Worker then
     Panel_manageWorker:SetShow(false)
@@ -614,7 +613,7 @@ function FGlobal_WorldMapCloseSubPanel()
 end
 local eCheckState = CppEnums.WorldMapCheckState
 local eWorldmapState = CppEnums.WorldMapState
-function FromClient_RenderStateChange(state)
+function FromClient_NewWorldMap_RenderStateChange(state)
   if true == _ContentsGroup_ForXBoxFinalCert then
     FromClient_WorldMapSideBar_RenderStateChange(state)
     return
@@ -694,7 +693,6 @@ function FromClient_RenderStateChange(state)
 end
 local _townModeWaypointKey
 function FromClient_SetTownMode(waypointKey)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_SetTownMode ___ 1")
   _townModeWaypointKey = waypointKey
   local explorationNodeInClient = ToClient_getExploratioNodeInClientByWaypointKey(waypointKey)
   if nil ~= explorationNodeInClient then
@@ -774,7 +772,7 @@ end
 function FromClient_HideAutoCompletedNaviBtn(isShow)
   HideAutoCompletedNaviBtn = isShow
 end
-registerEvent("FromClient_RenderStateChange", "FromClient_RenderStateChange")
+registerEvent("FromClient_RenderStateChange", "FromClient_NewWorldMap_RenderStateChange")
 if false == _ContentsGroup_RenewUI_WorldMap then
   registerEvent("FromClient_WorldMapOpen", "FromClient_WorldMapOpen")
   registerEvent("FromClient_LClickedWorldMapNode", "FromClient_LClickedWorldMapNode")

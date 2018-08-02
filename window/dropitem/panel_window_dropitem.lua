@@ -218,14 +218,6 @@ function PaGlobal_WorldDropItem:SetNavi()
       local pos3D = float3(-337181.94, 10127, -248922)
       ToClient_DeleteNaviGuideByGroup(0)
       ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, false)
-    elseif 948 == self._selectedRegionKey then
-      local pos3D = float3(32478, -8076, 254519)
-      ToClient_DeleteNaviGuideByGroup(0)
-      ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, false)
-    elseif 949 == self._selectedRegionKey then
-      local pos3D = float3(143790, -7280, 423527)
-      ToClient_DeleteNaviGuideByGroup(0)
-      ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, false)
     elseif 688 == self._selectedRegionKey or 689 == self._selectedRegionKey then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_DESERTALERT"))
     end

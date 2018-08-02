@@ -2913,8 +2913,8 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
     target.useLimit_dynamic_endurance_gage_value:SetShow(false)
     target.useLimit_endurance_gage:SetShow(false)
   end
-  local check_fishingRod = function(itemKey)
-    if 17591 == itemKey or 17592 == itemKey or 17596 == itemKey or 17612 == itemKey or 17613 == itemKey or 17669 == itemKey then
+  local checkEnduranceShowItem = function(itemKey)
+    if 17591 == itemKey or 17592 == itemKey or 17596 == itemKey or 17612 == itemKey or 17613 == itemKey or 17669 == itemKey or 570001 == itemKey or 570002 == itemKey or 18861 == itemKey or 18862 == itemKey then
       return true
     else
       return false
@@ -2922,7 +2922,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
   end
   if nil ~= itemWrapper then
     local isCash = itemWrapper:getStaticStatus():get():isCash()
-    if true == isCash and false == check_fishingRod(itemSSW:get()._key:getItemKey()) then
+    if true == isCash and false == checkEnduranceShowItem(itemSSW:get()._key:getItemKey()) then
       target.useLimit_endurance:SetShow(false)
       target.useLimit_endurance_value:SetShow(false)
       target.useLimit_endurance_gage_value:SetShow(false)
@@ -2931,7 +2931,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
     end
   elseif nil ~= itemSSW then
     local isCash = itemSSW:get():isCash()
-    if true == isCash and false == check_fishingRod(itemSSW:get()._key:getItemKey()) then
+    if true == isCash and false == checkEnduranceShowItem(itemSSW:get()._key:getItemKey()) then
       target.useLimit_endurance:SetShow(false)
       target.useLimit_endurance_value:SetShow(false)
       target.useLimit_endurance_gage_value:SetShow(false)

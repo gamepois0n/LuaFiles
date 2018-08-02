@@ -77,8 +77,12 @@ function FromClient_CancelByAttacked()
     if true == PaGlobalFunc_GameExit_GetShow() then
       PaGlobalFunc_GameExit_SetShow(false, false)
     end
-    if Panel_ChannelSelect:GetShow() then
-      FGlobal_ChannelSelect_Hide()
+    if false == _ContentsGroup_RenewUI_ServerSelect then
+      if Panel_ChannelSelect:GetShow() then
+        FGlobal_ChannelSelect_Hide()
+      end
+    elseif true == PaGlobalFunc_ServerSelect_GetShow() then
+      PaGlobalFunc_ServerSelect_Close()
     end
     PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
   end

@@ -1696,11 +1696,6 @@ function PaGlobal_CheckedQuest:setShowFunctionButtons(isMouseOver)
     PaGlobal_CheckedQuest._uiScrollBar:SetShow(false)
   end
 end
-function questWidget_ShowTooptip(questGroupId, questId, isMouseShow)
-  local mousePosX = getMousePosX()
-  local mousePosY = getMousePosY()
-  questInfo_TooltipShow(true, questGroupId, questId, mousePosX, mousePosY, isMouseShow)
-end
 function HandleMouseOver_CheckedQuestGroup(show, bgIndex, naviBtnShow)
   if true == _ContentsGroup_RenewUI then
     return
@@ -1726,7 +1721,9 @@ function HandleMouseOver_CheckedQuestGroup(show, bgIndex, naviBtnShow)
     if false == uiNaviBtn:IsCheck() then
       uiSelectBG:SetShow(false)
     end
-    questInfo_TooltipShow(false)
+    if false == _ContentsGroup_RenewUI_WorldMap then
+      questInfo_TooltipShow(false)
+    end
     FGlobal_QuestWidget_MouseOver(false)
     if true == PaGlobal_CheckedQuest:isHitTestQuestGroup(uiGroupBG) then
       return
@@ -1784,7 +1781,9 @@ end
 function FGlobal_QuestWidget_Close()
   Panel_CheckedQuest:SetShow(false, false)
   Panel_MainQuest:SetShow(false, false)
-  questInfo_TooltipShow(false)
+  if false == _ContentsGroup_RenewUI_WorldMap then
+    questInfo_TooltipShow(false)
+  end
   TooltipSimple_Hide()
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:pop()

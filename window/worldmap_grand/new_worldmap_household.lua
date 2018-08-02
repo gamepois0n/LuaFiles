@@ -234,11 +234,11 @@ function FromClient_HouseFilterOnByHouse(house_btn)
   btn:AddEffect("UI_ArrowMark_Diagonal01", true, 70, 80)
   temp_houseEffectArray:push_back(btn)
 end
-registerEvent("FromClient_LClickedWorldMapHouse", "FromClient_LClickedWorldMapHouse")
 registerEvent("FromClient_SetHouseTexture", "FGlobal_HouseHoldButtonSetBaseTexture")
 registerEvent("FromClient_AppliedChangeUseType", "FromClient_AppliedChangeUseType_Ack")
-registerEvent("FromClient_RClickedWorldMapHouse", "FromClient_RClickedWorldMapHouse")
 if false == _ContentsGroup_RenewUI_WorldMap then
+  registerEvent("FromClient_RClickedWorldMapHouse", "FromClient_RClickedWorldMapHouse")
+  registerEvent("FromClient_LClickedWorldMapHouse", "FromClient_LClickedWorldMapHouse")
   registerEvent("FromClient_HouseFilterOn", "FromClient_HouseFilterOn")
   registerEvent("FromClient_HouseFilterOnByHouse", "FromClient_HouseFilterOnByHouse")
 end

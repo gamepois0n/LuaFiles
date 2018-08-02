@@ -763,7 +763,9 @@ function Interaction_UpdateDesc(indteractionType)
   end
 end
 function FromClient_NotifyObserverModeEnd()
-  Panel_WatchingMode:SetShow(false)
+  if false == _ContentsGroup_RenewUI_WatchMode then
+    Panel_WatchingMode:SetShow(false)
+  end
   local selfPlayer = getSelfPlayer()
   if selfPlayer:isDead() then
     Panel_DeadMessage:SetShow(true, true)

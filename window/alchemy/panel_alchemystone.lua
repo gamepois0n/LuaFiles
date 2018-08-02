@@ -881,7 +881,7 @@ function FGlobal_AlchemyStone_Open()
   if Panel_AlchemyFigureHead:GetShow() then
     FGlobal_AlchemyFigureHead_Close()
   end
-  if Panel_Manufacture:GetShow() then
+  if not _ContentsGroup_RenewUI_Manufacture and Panel_Manufacture:GetShow() then
     Manufacture_Close()
   end
   if Panel_DyePalette:GetShow() then

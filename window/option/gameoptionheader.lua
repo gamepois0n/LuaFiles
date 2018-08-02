@@ -22,7 +22,8 @@ PaGlobal_Option = {
     Medium = 2,
     High = 3,
     VeryHigh = 4,
-    VeryVeryHigh = 5
+    VeryVeryHigh = 5,
+    UltraHigh = 8
   },
   ALERT = {
     ChangeRegion = 0,
@@ -295,10 +296,6 @@ PaGlobal_Option = {
       _defaultValue = false,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON,
       _isPictureTooltipOn = true
-    },
-    GraphicUltra = {
-      _defaultValue = false,
-      _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
     },
     Dof = {
       _defaultValue = true,
@@ -1402,9 +1399,6 @@ function PaGlobal_Option._functions.PostFilter(value)
 end
 function PaGlobal_Option._functions.Tessellation(value)
   setTessellation(value)
-end
-function PaGlobal_Option._functions.GraphicUltra(value)
-  setGraphicUltra(value)
 end
 function PaGlobal_Option._functions.Dof(value)
   setDof(value)

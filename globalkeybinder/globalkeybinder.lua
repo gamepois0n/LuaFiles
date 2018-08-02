@@ -11,26 +11,123 @@ function PaGlobal_GlobalKeyBinder.Process_GameMode()
   if false == _ContentsGroup_RenewUI_Party and Panel_PartyOption:GetShow() then
     PartyOption_Hide()
   end
+  if true == _ContentsGroup_RenewUI_Housing then
+    if false == PaGlobalFunc_HousingName_GetShow() then
+      return
+    end
+    if isPadUp(__eJoyPadInputType_DPad_Up) then
+      PaGlobalFunc_HousingName_InstallationMode()
+    end
+    if isPadUp(__eJoyPadInputType_DPad_Down) then
+      PaGlobalFunc_HousingName_ShowInven()
+    end
+    if isPadUp(__eJoyPadInputType_DPad_Left) then
+      PaGlobalFunc_HousingName_ToggleHideWear()
+    end
+    if isPadUp(__eJoyPadInputType_DPad_Right) then
+      PaGlobalFunc_HousingName_ToggleHideMadeAndPet()
+    end
+  end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_Housing(deltaTime)
-  if Panel_House_InstallationMode_VillageTent:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    VillageTent_Close()
-    return
-  elseif Panel_Housing_FarmInfo_New:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    PAHousing_FarmInfo_Close()
-    return
-  elseif Panel_House_InstallationMode_ObjectControl:GetShow() and housing_isBuildMode() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    FGlobal_HouseInstallationControl_Move()
-    return
-  elseif Panel_House_InstallationMode_ObjectControl:GetShow() and not housing_isBuildMode() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    FGlobal_HouseInstallationControl_Close()
-    return
-  elseif Panel_House_InstallationMode_ObjectControl:GetShow() and not housing_isBuildMode() and true == FGlobal_HouseInstallationControl_IsConfirmStep() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
-    FGlobal_HouseInstallationControl_Confirm()
-    return
-  elseif not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    Panel_Housing_CancelModeFromKeyBinder()
-    return
+  if false == _ContentsGroup_RenewUI_Housing then
+    if Panel_House_InstallationMode_VillageTent:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      VillageTent_Close()
+      return
+    elseif Panel_Housing_FarmInfo_New:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PAHousing_FarmInfo_Close()
+      return
+    elseif Panel_House_InstallationMode_ObjectControl:GetShow() and housing_isBuildMode() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      FGlobal_HouseInstallationControl_Move()
+      return
+    elseif Panel_House_InstallationMode_ObjectControl:GetShow() and not housing_isBuildMode() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      FGlobal_HouseInstallationControl_Close()
+      return
+    elseif Panel_House_InstallationMode_ObjectControl:GetShow() and not housing_isBuildMode() and true == FGlobal_HouseInstallationControl_IsConfirmStep() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
+      FGlobal_HouseInstallationControl_Confirm()
+      return
+    elseif not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      Panel_Housing_CancelModeFromKeyBinder()
+      return
+    end
+  end
+  if true == _ContentsGroup_RenewUI_Housing then
+    if true == PaGlobalFunc_InstallationMode_PlantInfo_GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PaGlobalFunc_InstallationMode_PlantInfo_Exit()
+      return
+    end
+    if PaGlobalFunc_InstallationMode_House_GetShow() then
+      if PaGlobalFunc_InstallationMode_Manager_CanGetInput() then
+        if PaGlobalFunc_InstallationMode_Manager_CanGetConfirm() and isPadUp(__eJoyPadInputType_A) then
+          PaGlobalFunc_InstallationMode_House_ClickConfirm()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetMove() and isPadUp(__eJoyPadInputType_Y) then
+          PaGlobalFunc_InstallationMode_House_ClickMove()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetDelete() and isPadUp(__eJoyPadInputType_X) then
+          PaGlobalFunc_InstallationMode_House_ClickDelete()
+          return
+        end
+        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          PaGlobalFunc_InstallationMode_House_ClickCancel()
+          return
+        end
+      end
+      if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        Panel_Housing_CancelModeFromKeyBinder()
+        return
+      end
+    end
+    if PaGlobalFunc_InstallationMode_Item_GetShow() then
+      if PaGlobalFunc_InstallationMode_Manager_CanGetInput() then
+        if PaGlobalFunc_InstallationMode_Manager_CanGetConfirm() and isPadUp(__eJoyPadInputType_A) then
+          PaGlobalFunc_InstallationMode_Item_ClickConfirm()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetMove() and isPadUp(__eJoyPadInputType_Y) then
+          PaGlobalFunc_InstallationMode_Item_ClickMove()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetDelete() and isPadUp(__eJoyPadInputType_X) then
+          PaGlobalFunc_InstallationMode_Item_ClickDelete()
+          return
+        end
+        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          Panel_Housing_CancelModeFromKeyBinder()
+          return
+        end
+      end
+      if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        Panel_Housing_CancelModeFromKeyBinder()
+        return
+      end
+    end
+    if PaGlobalFunc_InstallationMode_Farm_GetShow() then
+      if PaGlobalFunc_InstallationMode_Manager_CanGetInput() then
+        if PaGlobalFunc_InstallationMode_Manager_CanGetConfirm() and isPadUp(__eJoyPadInputType_A) then
+          PaGlobalFunc_InstallationMode_Farm_ClickConfirm()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetMove() and isPadUp(__eJoyPadInputType_Y) then
+          PaGlobalFunc_InstallationMode_Farm_ClickMove()
+          return
+        end
+        if PaGlobalFunc_InstallationMode_Manager_CanGetDelete() and isPadUp(__eJoyPadInputType_X) then
+          PaGlobalFunc_InstallationMode_Farm_ClickDelete()
+          return
+        end
+        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+          Panel_Housing_CancelModeFromKeyBinder()
+          return
+        end
+      end
+      if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        Panel_Housing_CancelModeFromKeyBinder()
+        return
+      end
+    end
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_Mental(deltaTime)
@@ -177,10 +274,16 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       PaGlobalFunc_MainDialog_ReOpen()
       return
     end
-    if true == _ContentsGroup_RenewUI_Dailog and true == PaGlobalFunc_MainDialog_Quest_GetShow() then
-      PaGlobalFunc_MainDialog_Quest_Close()
-      PaGlobalFunc_MainDialog_Right_ReOpen()
-      return
+    if true == _ContentsGroup_RenewUI_Dailog then
+      if true == PaGlobalFunc_Reward_Select_GetShow() then
+        PaGlobalFunc_Reward_Select_Exit()
+        return
+      end
+      if true == PaGlobalFunc_MainDialog_Quest_GetShow() then
+        PaGlobalFunc_MainDialog_Quest_Close()
+        PaGlobalFunc_MainDialog_Right_ReOpen()
+        return
+      end
     end
     if true == _ContentsGroup_RenewUI_Detect and true == PaGlobalFunc_DetectPlayer_GetShow() then
       PaGlobalFunc_DetectPlayer_Exit()
@@ -219,19 +322,39 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       return
     end
   end
-  if Panel_Dialog_Search:GetShow() then
-    if isKeyPressed(VCK.KeyCode_A) then
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    if Panel_Dialog_Search:GetShow() then
+      if isKeyPressed(VCK.KeyCode_A) then
+        searchView_PushLeft()
+      elseif isKeyPressed(VCK.KeyCode_S) then
+        searchView_PushBottom()
+      elseif isKeyPressed(VCK.KeyCode_D) then
+        searchView_PushRight()
+      elseif isKeyPressed(VCK.KeyCode_W) then
+        searchView_PushTop()
+      elseif isKeyPressed(VCK.KeyCode_Q) then
+        searchView_ZoomIn()
+      elseif isKeyPressed(VCK.KeyCode_E) then
+        searchView_ZoomOut()
+      end
+      searchView_CheckDistance()
+    end
+  elseif PaGlobalFunc_SearchMode_IsSearchMode() then
+    if isPadPressed(__eJoyPadInputType_RightStick_Left) then
       searchView_PushLeft()
-    elseif isKeyPressed(VCK.KeyCode_S) then
-      searchView_PushBottom()
-    elseif isKeyPressed(VCK.KeyCode_D) then
+    end
+    if isPadPressed(__eJoyPadInputType_RightStick_Right) then
       searchView_PushRight()
-    elseif isKeyPressed(VCK.KeyCode_W) then
-      searchView_PushTop()
-    elseif isKeyPressed(VCK.KeyCode_Q) then
+    end
+    if isPadPressed(__eJoyPadInputType_LeftTrigger) and isPadPressed(__eJoyPadInputType_RightStick_Up) then
       searchView_ZoomIn()
-    elseif isKeyPressed(VCK.KeyCode_E) then
+    elseif isPadPressed(__eJoyPadInputType_RightStick_Up) then
+      searchView_PushTop()
+    end
+    if isPadPressed(__eJoyPadInputType_LeftTrigger) and isPadPressed(__eJoyPadInputType_RightStick_Down) then
       searchView_ZoomOut()
+    elseif isPadPressed(__eJoyPadInputType_RightStick_Down) then
+      searchView_PushBottom()
     end
     searchView_CheckDistance()
   end
@@ -414,40 +537,40 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_MiniGame(deltaTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_DeadMessage(deltaTime)
-  if GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
-    ChatInput_Show()
-    return
-  end
-  if GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Guild) then
-    local guildWrapper = ToClient_GetMyGuildInfoWrapper()
-    if nil ~= guildWrapper then
-      local guildGrade = guildWrapper:getGuildGrade()
-      if 0 == guildGrade then
-        if false == Panel_ClanList:IsShow() then
+  if false == _ContentsGroup_RenewUI_DeadMessage then
+    if GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
+      ChatInput_Show()
+      return
+    end
+    if GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Guild) then
+      local guildWrapper = ToClient_GetMyGuildInfoWrapper()
+      if nil ~= guildWrapper then
+        local guildGrade = guildWrapper:getGuildGrade()
+        if 0 == guildGrade then
+          if false == Panel_ClanList:IsShow() then
+            audioPostEvent_SystemUi(1, 36)
+            FGlobal_ClanList_Open()
+          else
+            audioPostEvent_SystemUi(1, 31)
+            FGlobal_ClanList_Close()
+          end
+        elseif false == Panel_Window_Guild:IsShow() and not Panel_DeadMessage:GetShow() then
           audioPostEvent_SystemUi(1, 36)
-          FGlobal_ClanList_Open()
+          GuildManager:Show()
         else
           audioPostEvent_SystemUi(1, 31)
-          FGlobal_ClanList_Close()
+          GuildManager:Hide()
         end
-      elseif false == Panel_Window_Guild:IsShow() and not Panel_DeadMessage:GetShow() then
-        audioPostEvent_SystemUi(1, 36)
-        GuildManager:Show()
       else
-        audioPostEvent_SystemUi(1, 31)
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
+      end
+      if Panel_DeadMessage:GetShow() then
         GuildManager:Hide()
       end
-    else
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
-    end
-  end
-  if false == _ContentsGroup_RenewUI_DeadMessage then
-    if Panel_DeadMessage:GetShow() then
-      GuildManager:Hide()
     end
   else
-    if Panel_DeadMessage_Renew:GetShow() then
-      GuildManager:Hide()
+    if GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
+      return
     end
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       PaGlobalFunc_ResurrerectionItem_Close()
@@ -490,7 +613,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_GameExit(deltaTime)
         PaGlobalFunc_GameExitConfirm_SetShow(false, false)
         return
       end
-      if true == Panel_ChannelSelect:GetShow() then
+      if true == _ContentsGroup_RenewUI_ServerSelect then
+        if true == PaGlobalFunc_ServerSelect_GetShow() then
+          PaGlobalFunc_ServerSelect_Close()
+          return
+        end
+      elseif true == Panel_ChannelSelect:GetShow() then
         FGlobal_ChannelSelect_Hide()
         return
       end

@@ -1344,7 +1344,7 @@ function UIMain_SkillPointUpdateRemove()
   menuBadgePool[MenuButtonId.btn_Skill]:SetShow(false)
 end
 function Panel_Menu_ShowToggle()
-  if _ContentsGroup_RenewUI then
+  if _ContentsGroup_Menu_Xbox then
     Panel_Window_Menu_ShowToggle()
     return
   end

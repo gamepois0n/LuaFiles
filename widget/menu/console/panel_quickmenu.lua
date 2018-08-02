@@ -1,4 +1,5 @@
 PaGlobal_ConsoleQuickMenu = {
+  _widgetForceClose = false,
   _inventoryData = {},
   _skillData = {},
   _functionTypeData = {},
@@ -90,14 +91,18 @@ PaGlobal_ConsoleQuickMenu = {
     createBagIcon = true,
     createSoulComplete = true
   },
-  _maxMenuTabType = 4
+  _maxMenuTabType = 4,
+  _widgetState = {},
+  _widgetStateEnum = {
+    None = 0,
+    Exist = 1,
+    Cooltime = 2,
+    Empty = 3
+  }
 }
 function PaGlobal_ConsoleQuickMenu:initializeUI()
   local centerX, centerY, radius
-  for ii = 0, __eQuickMenuStickPosition_Count do
-    if __eQuickMenuStickPosition_QuickSlot == ii then
-      break
-    end
+  for ii = 0, __eQuickMenuStickPosition_Count - 1 do
     self._ui._quickMenuPosition[ii] = UI.getChildControl(Panel_QuickMenu, "Button_Templete" .. tostring(ii))
     self._ui._quickMenuPositionIcon[ii] = UI.getChildControl(self._ui._quickMenuPosition[ii], "Static_Icon")
     self._ui._quickMenuPositionSlot[ii] = {}
@@ -113,14 +118,12 @@ function PaGlobal_ConsoleQuickMenu:initializeUI()
     self._ui._quickMenuPositionSlot[ii].cooltime:SetCircularClip(radius, float2(centerX, centerY))
   end
   self._ui._center = UI.getChildControl(Panel_QuickMenu, "Static_CenterPoint")
-  for ii = 0, __eQuickMenuStickPosition_Count do
-    if __eQuickMenuStickPosition_QuickSlot == ii then
-      break
-    end
+  for ii = 0, __eQuickMenuStickPosition_Count - 1 do
     self._ui._line[ii] = UI.getChildControl(self._ui._center, "Static_Line" .. ii)
     self._ui._line[ii]:SetShow(false)
   end
   self._ui._widget = {}
+  self._widgetState = {}
   for group = 0, __eQuickMenuDpadGroup_Count - 1 do
     local bg = UI.getChildControl(Panel_Widget_QuickMenu, "Static_Bg" .. tostring(group))
     self._ui._widget[group] = {}
@@ -139,11 +142,10 @@ function PaGlobal_ConsoleQuickMenu:initializeUI()
     self._ui._widget[group]._selected = UI.getChildControl(bg, "Static_SelectedPad")
     self._ui._widget[group]._ring = UI.getChildControl(bg, "Static_Ring")
     self._ui._widget[group]._ringPosition = {}
+    self._widgetState[group] = {}
     for position = 0, __eQuickMenuStickPosition_Count - 1 do
-      if position == __eQuickMenuStickPosition_QuickSlot then
-        break
-      end
       self._ui._widget[group]._ringPosition[position] = UI.getChildControl(self._ui._widget[group]._ring, "Static_" .. tostring(position))
+      self._widgetState[group][position] = nil
     end
   end
   self._ui._rightMenuPanel._stc_LeftBg = UI.getChildControl(Panel_QuickMenuCustom, "Static_LeftBg")
@@ -166,26 +168,15 @@ function PaGlobal_ConsoleQuickMenu:initializeUI()
   self._ui._rightMenuPanel._btn_TabBtn[__eQuickMenuDataType_Function] = UI.getChildControl(self._ui._rightMenuPanel._stc_TabBg, "RadioButton_Menu")
   self._ui._rightMenuPanel._btn_TabBtn[__eQuickMenuDataType_SocialAction] = UI.getChildControl(self._ui._rightMenuPanel._stc_TabBg, "RadioButton_Social")
 end
-function PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position, deltaTime)
-  local quickSlot = ToClient_getAtQuickMenu(group, position)
-  local quickSlotInfo = self:GetPositionInfo(quickSlot)
-  local slot
-  if position == __eQuickMenuStickPosition_QuickSlot then
-    slot = self._ui._widget[group]._slot
-  else
-    slot = self._ui._quickMenuPositionSlot[position]
-  end
-  if nil == slot then
-    return
-  end
+function PaGlobal_ConsoleQuickMenu:setCoolTime(slot, quickMenu)
   slot.count:SetShow(false)
   slot.icon:SetMonoTone(false)
-  if __eQuickMenuDataType_Skill == quickSlotInfo._type then
-    local skillStaticWrapper = getSkillStaticStatus(quickSlot._skillKey:getSkillNo(), 1)
+  if __eQuickMenuDataType_Skill == quickMenu._type then
+    local skillStaticWrapper = getSkillStaticStatus(quickMenu._skillKey:getSkillNo(), 1)
     if nil == skillStaticWrapper then
       return
     end
-    local remainTime = ToClient_getSkillCooltimebySkillNo(quickSlot._skillKey:getSkillNo())
+    local remainTime = ToClient_getSkillCooltimebySkillNo(quickMenu._skillKey:getSkillNo())
     local skillReuseTime = skillStaticWrapper:get()._reuseCycle / 1000
     local realRemainTime = remainTime * skillReuseTime
     local intRemainTime = realRemainTime - realRemainTime % 1 + 1
@@ -202,8 +193,8 @@ function PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position, delt
       slot.cooltime:SetShow(false)
       slot.cooltimeText:SetShow(false)
     end
-  elseif __eQuickMenuDataType_Item == quickSlotInfo._type then
-    local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickSlot._itemKey)
+  elseif __eQuickMenuDataType_Item == quickMenu._type then
+    local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickMenu._itemKey)
     if nil == itemStaticStatusWrapper then
       return
     end
@@ -215,7 +206,7 @@ function PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position, delt
     end
     local selfPlayer = getSelfPlayer():get()
     local inventory = selfPlayer:getInventoryByType(whereType)
-    local slotNo = inventory:getSlot(quickSlot._itemKey)
+    local slotNo = inventory:getSlot(quickMenu._itemKey)
     local itemWrapper = getInventoryItemByType(whereType, slotNo)
     if nil ~= itemWrapper then
       local itemCount = Int64toInt32(itemWrapper:get():getCount_s64())
@@ -256,21 +247,90 @@ function PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position, delt
     slot.cooltimeText:SetShow(false)
   end
 end
+function PaGlobal_ConsoleQuickMenu:setWidgetRingPosition(group, position, control)
+  local quickMenu = ToClient_getAtQuickMenu(group, position)
+  local beforeState = self._widgetState[group][position]
+  local currentState = self._widgetStateEnum.None
+  if __eQuickMenuDataType_Empty == quickMenu._type then
+    currentState = self._widgetStateEnum.None
+  else
+    currentState = self._widgetStateEnum.Exist
+  end
+  if __eQuickMenuDataType_Skill == quickMenu._type then
+    local skillStaticWrapper = getSkillStaticStatus(quickMenu._skillKey:getSkillNo(), 1)
+    if nil == skillStaticWrapper then
+      return
+    end
+    local remainTime = ToClient_getSkillCooltimebySkillNo(quickMenu._skillKey:getSkillNo())
+    if remainTime > 0 then
+      currentState = self._widgetStateEnum.Cooltime
+    end
+  elseif __eQuickMenuDataType_Item == quickMenu._type then
+    local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickMenu._itemKey)
+    if nil == itemStaticStatusWrapper then
+      return
+    end
+    local whereType
+    if true == itemStaticStatusWrapper:get():isCash() then
+      whereType = CppEnums.ItemWhereType.eCashInventory
+    else
+      whereType = CppEnums.ItemWhereType.eInventory
+    end
+    local selfPlayer = getSelfPlayer():get()
+    local inventory = selfPlayer:getInventoryByType(whereType)
+    local slotNo = inventory:getSlot(quickMenu._itemKey)
+    local itemWrapper = getInventoryItemByType(whereType, slotNo)
+    local remainTime = getItemCooltime(whereType, slotNo)
+    if remainTime > 0 then
+      currentState = self._widgetStateEnum.Cooltime
+    end
+    if nil ~= itemWrapper then
+      local itemCount = Int64toInt32(itemWrapper:get():getCount_s64())
+      if itemCount <= 0 then
+        currentState = self._widgetStateEnum.Empty
+      end
+    else
+      currentState = self._widgetStateEnum.Empty
+    end
+  end
+  if currentState ~= beforeState then
+    self._widgetState[group][position] = currentState
+    self:setWidgetState(control, self._widgetState[group][position])
+  end
+end
+function PaGlobal_ConsoleQuickMenu:setWidgetState(control, state)
+  control:ChangeTextureInfoName("Renewal/Function/Console_Function_RingMenu_01.dds")
+  if state == self._widgetStateEnum.None then
+    control:SetShow(false)
+  elseif state == self._widgetStateEnum.Exist then
+    control:getBaseTexture():setUV(setTextureUV_Func(control, 333, 97, 342, 106))
+    control:SetShow(true)
+  elseif state == self._widgetStateEnum.Cooltime then
+    control:getBaseTexture():setUV(setTextureUV_Func(control, 343, 97, 352, 106))
+    control:SetShow(true)
+  elseif state == self._widgetStateEnum.Empty then
+    control:getBaseTexture():setUV(setTextureUV_Func(control, 353, 97, 362, 106))
+    control:SetShow(true)
+  end
+  control:setRenderTexture(control:getBaseTexture())
+end
 function FGlobal_Console_Widget_QuickMenuCustom_UpdatePerFrame(deltaTime)
   local self = PaGlobal_ConsoleQuickMenu
   for group = 0, __eQuickMenuDpadGroup_Count - 1 do
-    local groupSlot = self._ui._widget[group]
     if true == ToClient_isQuickMenuQuickMode(group) then
-      self:QuickMenuUpdatePerFrame(group, __eQuickMenuStickPosition_QuickSlot, deltaTime)
+      local quickSlot = ToClient_getQuickModeValue(group)
+      local slot = self._ui._widget[group]._slot
+      self:setCoolTime(slot, quickSlot)
+    else
+      for position = 0, __eQuickMenuStickPosition_Count - 1 do
+        self:setWidgetRingPosition(group, position, self._ui._widget[group]._ringPosition[position])
+      end
     end
   end
 end
 function FGlobal_ConsoleQuickMenu_Update(position)
-  if __eQuickMenuStickPosition_QuickSlot == position then
-    return
-  end
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
-    PaGlobal_ConsoleQuickMenu:widgetClose()
+    PaGlobal_ConsoleQuickMenu:widgetClose(true)
     return
   end
   local quickMenuPosition = PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition
@@ -329,10 +389,7 @@ function PaGlobal_ConsoleQuickMenu:setButtonPos(selectedIndex)
   end
 end
 function PaGlobal_ConsoleQuickMenu:moveButtonAni(currentPosition)
-  if __eQuickMenuStickPosition_QuickSlot == currentPosition then
-    return
-  end
-  if nil == currentPosition or currentPosition < 0 or currentPosition >= __eQuickMenuStickPosition_Count or __eQuickMenuStickPosition_QuickSlot == currentPosition then
+  if nil == currentPosition or currentPosition < 0 or currentPosition >= __eQuickMenuStickPosition_Count then
     return
   end
   local control = self._ui._quickMenuPosition[currentPosition]
@@ -408,6 +465,9 @@ function PaGlobal_ConsoleQuickMenu:SetUICurrentGroup(group)
   end
 end
 function PaGlobal_ConsoleQuickMenu:GetPositionInfo(quickMenu)
+  if nil == quickMenu then
+    return nil
+  end
   local name = ""
   local icon = ""
   local uv
@@ -458,9 +518,6 @@ function PaGlobal_ConsoleQuickMenu:GetCurrentGroupInfo(group)
   end
   local table = {}
   for position = 0, __eQuickMenuStickPosition_Count - 1 do
-    if __eQuickMenuStickPosition_QuickSlot == position then
-      break
-    end
     local quickMenu = ToClient_getAtQuickMenu(group, position)
     if nil == quickMenu then
       return
@@ -498,6 +555,10 @@ function PaGlobal_ConsoleQuickMenu:setIcon(control, icon, uv)
   if nil == control then
     return
   end
+  control:SetShow(false)
+  if nil == icon then
+    return
+  end
   control:ChangeTextureInfoName(icon)
   if nil ~= uv then
     control:getBaseTexture():setUV(setTextureUV_Func(control, uv._x1, uv._y1, uv._x2, uv._y2))
@@ -505,6 +566,7 @@ function PaGlobal_ConsoleQuickMenu:setIcon(control, icon, uv)
     control:getBaseTexture():setUV(0, 0, 1, 1)
   end
   control:setRenderTexture(control:getBaseTexture())
+  control:SetShow(true)
 end
 function PaGlobal_ConsoleQuickMenu:CrossTextureChange(currentGroup)
   local bottomControl = self._ui._staticTextIconName
@@ -519,6 +581,9 @@ function PaGlobal_ConsoleQuickMenu:CrossTextureChange(currentGroup)
   centerControl:setRenderTexture(centerControl:getBaseTexture())
 end
 function PaGlobal_ConsoleQuickMenu:setWidget()
+  if nil == self._ui._widget then
+    return
+  end
   for group = 0, __eQuickMenuDpadGroup_Count - 1 do
     local widget = self._ui._widget[group]
     if ToClient_isQuickMenuQuickMode(group) then
@@ -534,7 +599,7 @@ function PaGlobal_ConsoleQuickMenu:setWidget()
     if ToClient_isQuickMenuQuickMode(group) then
       widget._ring:SetShow(false)
       widget._slot.icon:SetShow(true)
-      local quickSlot = ToClient_getAtQuickMenu(group, __eQuickMenuStickPosition_QuickSlot)
+      local quickSlot = ToClient_getQuickModeValue(group)
       local quickSlotInfo = self:GetPositionInfo(quickSlot)
       if __eQuickMenuDataType_Item == quickSlotInfo._type then
         local itemStaticStatusWrapper = getItemEnchantStaticStatus(quickSlot._itemKey)
@@ -558,11 +623,6 @@ function PaGlobal_ConsoleQuickMenu:setWidget()
       else
         self:setIcon(widget._slot.icon, quickSlotInfo._icon, quickSlotInfo._uv)
       end
-    else
-      local groupInfo = self:GetCurrentGroupInfo(group)
-      for index, info in ipairs(groupInfo) do
-        widget._ringPosition[index - 1]:SetShow(__eQuickMenuDataType_Empty ~= info._type)
-      end
     end
   end
 end
@@ -570,7 +630,10 @@ function FromClient_ConsoleQuickMenu_luaLoadComplete()
   PaGlobal_ConsoleQuickMenu:initializeUI()
   PaGlobal_ConsoleQuickMenu:setDefaultSetting()
   PaGlobal_ConsoleQuickMenu:setWidget()
-  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  if false == PaGlobal_TutorialManager:isDoingTutorial() then
+    Panel_Widget_QuickMenu:SetShow(true)
+  end
+  ToClient_setAvailableInputWidget(true)
 end
 function FromClient_ConsoleQuickMenu_Open(group)
   PaGlobal_ConsoleQuickMenu:Open(group)
@@ -578,9 +641,6 @@ end
 function FromClient_ConsoleQuickMenu_Execute(position)
 end
 function FromClient_ConsoleQuickMenu_Selecting(group, position)
-  if position == __eQuickMenuStickPosition_QuickSlot then
-    return
-  end
   if __eQuickMenuStickPosition_Count == position then
     for ii = 0, __eQuickMenuStickPosition_Count do
       local control = PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[ii]
@@ -603,7 +663,21 @@ function FromClient_ConsoleQuickMenu_Selecting(group, position)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetCheck(true)
   end
   for position = 0, __eQuickMenuStickPosition_Count - 1 do
-    PaGlobal_ConsoleQuickMenu:QuickMenuUpdatePerFrame(group, position)
+    local quickSlot = ToClient_getAtQuickMenu(group, position)
+    local slot = PaGlobal_ConsoleQuickMenu._ui._quickMenuPositionSlot[position]
+    PaGlobal_ConsoleQuickMenu:setCoolTime(slot, quickSlot)
+  end
+end
+function FGlobal_InputModeChangeForQuickMenu(prevMode, currentMode)
+  if true == PaGlobal_ConsoleQuickMenu._widgetForceClose then
+    return
+  end
+  if currentMode == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
+    if false == PaGlobal_TutorialManager:isDoingTutorial() then
+      Panel_Widget_QuickMenu:SetShow(true)
+    end
+  else
+    Panel_Widget_QuickMenu:SetShow(false)
   end
 end
 Panel_Widget_QuickMenu:RegisterUpdateFunc("FGlobal_Console_Widget_QuickMenuCustom_UpdatePerFrame")
@@ -615,3 +689,4 @@ registerEvent("FromClient_ConsoleQuickMenu_Open", "FromClient_ConsoleQuickMenu_O
 registerEvent("FromClient_ConsoleQuickMenu_Close", "FromClient_ConsoleQuickMenu_Close")
 registerEvent("FromClient_ConsoleQuickMenu_Execute", "FromClient_ConsoleQuickMenu_Execute")
 registerEvent("FromClient_ConsoleQuickMenu_Selecting", "FromClient_ConsoleQuickMenu_Selecting")
+registerEvent("EventProcessorInputModeChange", "FGlobal_InputModeChangeForQuickMenu")

@@ -534,7 +534,11 @@ local function PreclosePanel_OpenDialog()
     InventoryWindow_Close()
     ClothInventory_Close()
   end
-  if Panel_Dialog_Search:IsShow() then
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    if Panel_Dialog_Search:IsShow() then
+      searchView_Close()
+    end
+  elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
   end
 end
@@ -1954,7 +1958,9 @@ function ClickFunctionButtonByType(type)
   Panel_Dialogue_Itemtake:SetShow(false)
   LordMenu_Hide()
   CreateClan_Close()
-  Manufacture_Close()
+  if not _ContentsGroup_RenewUI_Manufacture then
+    Manufacture_Close()
+  end
   WorkerAuction_Close()
   Panel_Exchange_Item_Hide()
   Panel_Window_ReinforceSkill_Close()
@@ -2278,7 +2284,9 @@ function HandleClickedFuncButton(index)
   Panel_Dialogue_Itemtake:SetShow(false)
   LordMenu_Hide()
   CreateClan_Close()
-  Manufacture_Close()
+  if not _ContentsGroup_RenewUI_Manufacture then
+    Manufacture_Close()
+  end
   WorkerAuction_Close()
   Panel_Exchange_Item_Hide()
   Panel_Window_ReinforceSkill_Close()
@@ -2973,7 +2981,11 @@ function HandleClickedBackButton()
   if Panel_TerritoryAuth_Auction:IsShow() then
     TerritoryAuth_Auction_Close()
   end
-  if Panel_Dialog_Search:IsShow() then
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    if Panel_Dialog_Search:IsShow() then
+      searchView_Close()
+    end
+  elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
   end
   if Panel_Window_ReinforceSkill:GetShow() then

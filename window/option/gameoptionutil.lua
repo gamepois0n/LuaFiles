@@ -24,7 +24,8 @@ function PaGlobal_Option:radioButtonMapping_GraphicOption(value, fromRadioButton
     [3] = 2,
     [4] = 1,
     [5] = 0,
-    [6] = 6
+    [6] = 6,
+    [7] = 8
   }
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
@@ -51,13 +52,13 @@ function PaGlobal_Option:radioButtonMapping_AudioResourceType(value, fromRadioBu
     }
   elseif isGameTypeTaiwan() then
     radioMap = {
-      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_JP,
       [2] = CppEnums.ServiceResourceType.eServiceResourceType_KR
     }
   elseif isGameTypeTR() then
     radioMap = {
-      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TR
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_EN
     }
   elseif isGameTypeID() then
     radioMap = {
@@ -69,7 +70,7 @@ function PaGlobal_Option:radioButtonMapping_AudioResourceType(value, fromRadioBu
     }
   elseif isGameTypeGT() then
     radioMap = {
-      [0] = CppEnums.ServiceResourceType.eServiceResourceType_TW,
+      [0] = CppEnums.ServiceResourceType.eServiceResourceType_EN,
       [1] = CppEnums.ServiceResourceType.eServiceResourceType_JP,
       [2] = CppEnums.ServiceResourceType.eServiceResourceType_KR
     }
@@ -402,75 +403,36 @@ function PaGlobal_Option:SpecialCreateRadioButton(elementName)
         return
       end
     end
-    if isGameTypeKorea() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
-        self._elements[elementName]._eventControl1[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
-        self._elements[elementName]._eventControl2[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+    for index = 0, controlCount - 1 do
+      local serviceType = self:radioButtonMapping_AudioResourceType(index)
+      local text
+      if CppEnums.ServiceResourceType.eServiceResourceType_KR == serviceType then
+        text = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN")
+      elseif CppEnums.ServiceResourceType.eServiceResourceType_EN == serviceType then
+        text = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH")
+      elseif CppEnums.ServiceResourceType.eServiceResourceType_JP == serviceType then
+        text = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE")
+      else
+        text = nil
       end
-    elseif isGameTypeJapan() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
-        self._elements[elementName]._eventControl1[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
-        self._elements[elementName]._eventControl2[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+      for controlIndex, eventControl in pairs(self._elements[elementName]._eventControl) do
+        local control
+        if 0 == index then
+          control = self._elements[elementName]._eventControl[controlIndex]
+        elseif 1 == index then
+          control = self._elements[elementName]._eventControl1[controlIndex]
+        elseif 2 == index then
+          control = self._elements[elementName]._eventControl2[controlIndex]
+        end
+        if nil ~= text then
+          control:SetText(text)
+          control:SetShow(true)
+        else
+          control:SetShow(false)
+        end
       end
-    elseif isGameTypeRussia() then
-    elseif isGameTypeEnglish() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
-        self._elements[elementName]._eventControl1[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
-        self._elements[elementName]._eventControl2[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
-      end
-    elseif isGameTypeTaiwan() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
-        self._elements[elementName]._eventControl1[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
-        self._elements[elementName]._eventControl2[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
-      end
-    elseif isGameTypeTR() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
-        self._elements[elementName]._eventControl1[index]:SetShow(false)
-        self._elements[elementName]._eventControl2[index]:SetShow(false)
-      end
-    elseif isGameTypeID() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
-        self._elements[elementName]._eventControl1[index]:SetShow(false)
-        self._elements[elementName]._eventControl2[index]:SetShow(false)
-      end
-    elseif isGameTypeTH() then
-      for index, eventControl in pairs(self._elements[elementName]._eventControl) do
-        self._elements[elementName]._eventControl[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
-        self._elements[elementName]._eventControl1[index]:SetShow(false)
-        self._elements[elementName]._eventControl2[index]:SetShow(false)
-      end
-    else
-      _PA_LOG("LUA", "\234\188\173 \234\181\173\234\176\128 \235\166\172\236\134\140\236\138\164\234\176\128 \236\182\148\234\176\128\235\144\152\235\169\180 \236\157\180 \234\179\179\235\143\132 \236\136\152\236\160\149 \237\140\144\235\139\168 \237\149\180\236\163\188\236\150\180\236\149\188\237\149\169\235\139\136\235\139\164.")
     end
   end
-end
-function PaGlobal_Option:SetUltra(value)
-  local graphicOption = self._elements.GraphicOption
-  if true == value then
-    self:SetGraphicOption(self.GRAPHIC.VeryVeryHigh, true)
-    graphicOption._beforeValue = graphicOption._initValue
-    if nil ~= graphicOption._applyValue then
-      graphicOption._beforeValue = graphicOption._applyValue
-    end
-    if nil ~= graphicOption._curValue then
-      graphicOption._beforeValue = graphicOption._curValue
-    end
-    graphicOption._curValue = self.GRAPHIC.VeryVeryHigh
-  else
-    if nil == graphicOption._beforeValue then
-      return
-    end
-    graphicOption._curValue = graphicOption._beforeValue
-    self:SetGraphicOption(graphicOption._curValue, false)
-  end
-  self:ResetControlSettingTable(graphicOption)
-  self:SetControlSettingTable(graphicOption, graphicOption._curValue)
 end
 function PaGlobal_Option:SetGraphicOption(value, isIncrease)
   local _SSAO = self._elements.SSAO
@@ -545,7 +507,7 @@ function PaGlobal_Option:SetGraphicOption(value, isIncrease)
       eventControl:SetMonoTone(false)
       eventControl:SetEnable(true)
     end
-  elseif self.GRAPHIC.VeryVeryHigh == value then
+  elseif self.GRAPHIC.VeryVeryHigh == value or self.GRAPHIC.UltraHigh == vlaue then
     if true == isIncrease then
       _SSAO._curValue = true
       _AntiAliasing._curValue = true
@@ -663,7 +625,6 @@ function PaGlobal_Option:SetSpecSetting(value)
     options.WorkerVisible._curValue = false
     options.PetRender._curValue = PETRENDER.ONLYME
   end
-  options.GraphicUltra._curValue = false
   self:ClickedConfirmOption()
   self:MoveUi(self.UIMODE.Main)
 end

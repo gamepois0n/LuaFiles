@@ -254,7 +254,11 @@ end
 function PaGlobal_TutorialManager:handleWorldMapImmediatelyClose()
   if true == self:isDoingTutorial() then
     if false == FGlobal_WorldmapMain_IsAllowTutorialPanelShow() then
-      Panel_Tutorial:SetShow(true, true)
+      if false == _ContentsGroup_RenewUI_Tutorial then
+        Panel_Tutorial:SetShow(true, true)
+      else
+        Panel_Tutorial_Renew:SetShow(true, true)
+      end
     end
     if nil ~= self:getCurrentPhase() and nil ~= self:getCurrentPhase().handleWorldMapImmediatelyClose then
       self:getCurrentPhase():handleWorldMapImmediatelyClose()

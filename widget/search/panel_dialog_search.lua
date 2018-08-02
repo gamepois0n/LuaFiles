@@ -34,6 +34,10 @@ local findCameraAngle = 0
 local moveAbleAngleUp = 60
 local moveAbleAngleDown = -40
 local isShowSearchObject = false
+local searchState = {_isSearchMode = false}
+function PaGlobalFunc_SearchMode_IsSearchMode()
+  return searchState._isSearchMode
+end
 function searchView_Open()
   variable.currentNpcCharacterKey = dialog_getTalkNpcKey()
   if 0 == variable.currentNpcCharacterKey then
@@ -43,7 +47,12 @@ function searchView_Open()
     return
   end
   searchClearQuest[variable.currentNpcCharacterKey] = nil
-  Panel_Dialog_Search:SetShow(true)
+  searchState._isSearchMode = true
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    Panel_Dialog_Search:SetShow(true)
+  else
+    PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  end
   isShowSearchObject = false
   setCutSceneCameraEditMode(true)
   openClientChangeScene(variable.currentNpcCharacterKey, 1)
@@ -54,7 +63,12 @@ function searchView_Open()
   moveAbleAngleDown = search_getMoveAbleAngleDown()
 end
 function searchView_Close()
-  Panel_Dialog_Search:SetShow(false)
+  searchState._isSearchMode = false
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    Panel_Dialog_Search:SetShow(false)
+  else
+    PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  end
   additionYaw = 0
   search_additionYaw2(additionYaw)
   additionPitch = 0
@@ -213,6 +227,7 @@ local function Alpha_Rate_Setting(alpha)
 end
 local function initialize()
   Panel_Dialog_Search:SetShow(false, false)
+  searchState._isSearchMode = false
   searchView_ScreenResize()
   registerEvent("onScreenResize", "searchView_ScreenResize")
   registerEvent("EventQuestSearch", "searchView_Open")

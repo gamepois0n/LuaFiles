@@ -328,10 +328,16 @@ function housing:ShowInstallationMenu(isShow, posX, posY, isHarvest, isShowMove,
     return
   end
   audioPostEvent_SystemUi(12, 16)
-  if isHarvest then
-    PAHousing_FarmInfo_Open(housing._staticCheckBack:GetPosX() + 10, housing._staticCheckBack:GetPosY() + housing._staticCheckBack:GetSizeY() + 100)
+  if false == _ContentsGroup_RenewUI_Housing then
+    if isHarvest then
+      PAHousing_FarmInfo_Open(housing._staticCheckBack:GetPosX() + 10, housing._staticCheckBack:GetPosY() + housing._staticCheckBack:GetSizeY() + 100)
+    else
+      PAHousing_FarmInfo_Close()
+    end
+  elseif isHarvest then
+    PaGlobalFunc_InstallationMode_PlantInfo_Show()
   else
-    PAHousing_FarmInfo_Close()
+    PaGlobalFunc_InstallationMode_PlantInfo_Exit()
   end
   housing.FixingBG:SetShow(isShow)
   housing._btnObjectMove:SetShow(isShowMove)
@@ -482,15 +488,25 @@ function Panel_Housing_Mode_Click()
   end
   if housing._isShow == false then
     local rv = housing_changeHousingMode(true, housing._isMyHouse)
-    FGlobal_House_InstallationMode_Open()
+    if false == _ContentsGroup_RenewUI_Housing then
+      FGlobal_House_InstallationMode_Open()
+    else
+      PaGlobalFunc_InstallationMode_Manager_Show()
+    end
   else
     housing_changeHousingMode(false, housing._isMyHouse)
-    FGlobal_House_InstallationMode_Close()
+    if false == _ContentsGroup_RenewUI_Housing then
+      FGlobal_House_InstallationMode_Close()
+    else
+      PaGlobalFunc_InstallationMode_Manager_Exit()
+    end
   end
-  if false == houseInstallationMode then
-    FGlobal_FarmGuide_Open()
-  else
-    FGlobal_FarmGuide_Close()
+  if false == _ContentsGroup_RenewUI_Housing then
+    if false == houseInstallationMode then
+      FGlobal_FarmGuide_Open()
+    else
+      FGlobal_FarmGuide_Close()
+    end
   end
 end
 function Panel_Housing_ObjectRotation_Click(rotateType)
@@ -701,7 +717,11 @@ function Event_Housing_ShowHousingModeUI(isShow)
     crossHair_SetShow(true)
     setShowLine(true)
     InventoryWindow_Close()
-    FGlobal_House_InstallationMode_Close()
+    if false == _ContentsGroup_RenewUI_Housing then
+      FGlobal_House_InstallationMode_Close()
+    else
+      PaGlobalFunc_InstallationMode_Manager_Exit()
+    end
   end
   housing:ShowMode(isShow)
   housing._isShow = isShow

@@ -516,17 +516,8 @@ function PaGlobal_Option._elements.GraphicOption:EventException(value, beforeVal
     if GraphicEnum.VeryVeryLow == beforeValue then
       isIncrease = true
     end
-    if GraphicEnum.VeryVeryHigh ~= value then
-      local ultra = PaGlobal_Option._elements.GraphicUltra
-      ultra._curValue = false
-      PaGlobal_Option:ResetControlSettingTable(ultra)
-      PaGlobal_Option:SetControlSettingTable(ultra, ultra._curValue)
-    end
     PaGlobal_Option:SetGraphicOption(value, isIncrease)
   end
-end
-function PaGlobal_Option._elements.GraphicUltra:EventException(value)
-  PaGlobal_Option:SetUltra(value)
 end
 function PaGlobal_Option:KeyCustomInitValue()
   for elementName, element in pairs(self._elements) do
@@ -737,7 +728,6 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
   elems_.SSAO._initValue = gameOptionSetting:getSSAO()
   elems_.PostFilter._initValue = 2 == gameOptionSetting:getPostFilter()
   elems_.Tessellation._initValue = gameOptionSetting:getTessellation()
-  elems_.GraphicUltra._initValue = gameOptionSetting:getGraphicUltra()
   elems_.Dof._initValue = gameOptionSetting:getDof()
   elems_.Representative._initValue = gameOptionSetting:getRepresentative()
   elems_.CharacterEffect._initValue = gameOptionSetting:getCharacterEffect()
@@ -892,7 +882,6 @@ function FGlobal_Option_luaLoadComplete()
     keyCustom_StartEdit()
   end
   if true == ToClient_isXBox() then
-    PaGlobal_Option:SetUltra(true)
     setConsoleKeySet(1)
   end
 end

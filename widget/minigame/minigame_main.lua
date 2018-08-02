@@ -46,7 +46,11 @@ function ActionMiniGame_Main(gameIndex)
     PaGlobal_HammerGame:Start()
   end
   lastUIMode = GetUIMode()
-  FGlobal_CloseWorldmapForLuaKeyHandling()
+  if false == _ContentsGroup_RenewUI_WorldMap then
+    FGlobal_CloseWorldmapForLuaKeyHandling()
+  else
+    PaGlobalFunc_WorldMap_CloseForLuaKeyHandling()
+  end
   SetUIMode(Defines.UIMode.eUIMode_MiniGame)
   currentMiniGame = gameIndex
 end

@@ -139,6 +139,10 @@ function HandleClicked_HouseNaviSearch()
 end
 function WorldMap_HouseNavi_Resize()
   filterBG:ComputePos()
+  local scrX = getScreenSizeX()
+  local sizeX = filterBG:GetSizeX()
+  local XGap = 10
+  filterBG:SetPosX(scrX - sizeX - XGap)
 end
 Worldmap_HouseNavi_Init()
 registerEvent("FromClient_SetTownMode", "FromClient_WorldMap_HouseNaviShow")

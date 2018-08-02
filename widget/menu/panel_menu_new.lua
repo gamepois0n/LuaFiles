@@ -2118,13 +2118,17 @@ function PaGlobal_Menu:SaveChangeMenu()
   local afterCategoryData = self._categoryData[self._afterMenu._categoryIndex][self._afterMenu._menuIndex]
   local afterIndex = afterCategoryData._index
   local beforeIndex = self._categoryData[self._beforeMenu._categoryIndex][self._beforeMenu._menuIndex]._index
+  local idxTemp_same = -1
+  local idxTemp_dif = -1
   for cIndex = 0, #self._customIndex do
-    if afterIndex == self._customIndex[cIndex] then
+    if afterIndex == self._customIndex[cIndex] and idxTemp_same == -1 then
       ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType["Menu" .. cIndex], beforeIndex, CppEnums.VariableStorageType.eVariableStorageType_User)
       self._customIndex[cIndex] = beforeIndex
-    elseif beforeIndex == self._customIndex[cIndex] then
+      idxTemp_same = cIndex
+    elseif beforeIndex == self._customIndex[cIndex] and idxTemp_dif == -1 then
       ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType["Menu" .. cIndex], afterIndex, CppEnums.VariableStorageType.eVariableStorageType_User)
       self._customIndex[cIndex] = afterIndex
+      idxTemp_dif = cIndex
     end
   end
   self:CustomWindow_Init()

@@ -79,6 +79,9 @@ function WatchingModeInt()
   showToogleBtn:addInputEvent("Mouse_LUp", "ShowCommandFunc()")
 end
 function ShowCommandFunc(respawnTime, isMast)
+  if true == _ContentsGroup_RenewUI_WatchMode then
+    return
+  end
   local self = watchingMode
   local checkToggleBtn = showToogleBtn:IsCheck()
   Panel_WatchingMode:SetShow(true)
@@ -145,9 +148,17 @@ function ShowCommandFunc(respawnTime, isMast)
   end
 end
 function FromClient_NotifyObserverModeEnd_ReturnTime()
-  deadMessage_ResurrectionTimeReturn(resurrectionTime)
-  resurrectionTime = nil
-  onShip = false
+  if true == _ContentsGroup_RenewUI_WatchMode then
+    PaGlobal_ConsoleQuickMenu:widgetOpen()
+    local actor = interaction_getInteractable()
+    if actor ~= nil then
+      Interaction_Show(actor)
+    end
+  else
+    deadMessage_ResurrectionTimeReturn(resurrectionTime)
+    resurrectionTime = nil
+    onShip = false
+  end
 end
 function WatchingMode_UpdatePerFrame(deltaTime)
   if nil ~= resurrectionTime then
@@ -186,7 +197,13 @@ function FromClient_FrameEventCallBack_Observer()
     ShowCommandFunc(nil, true)
   end
 end
+function PaGlobal_StartObserverMode()
+  if true == _ContentsGroup_RenewUI_WatchMode and true == isObserverMode() then
+    PaGlobal_ConsoleQuickMenu:widgetClose()
+  end
+end
 Panel_WatchingMode:RegisterUpdateFunc("WatchingMode_UpdatePerFrame")
 registerEvent("FromClient_NotifyObserverModeEnd", "FromClient_NotifyObserverModeEnd_ReturnTime")
 registerEvent("FromClient_FrameEventCallBack_Observer", "FromClient_FrameEventCallBack_Observer")
+registerEvent("FromClient_NotifyObserverModeStart", "PaGlobal_StartObserverMode")
 WatchingModeInt()

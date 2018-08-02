@@ -20,7 +20,10 @@ PaGlobal_TutorialManager = {
     [7] = {_questGroupNo = 2039, _questId = 2},
     [8] = {_questGroupNo = 2039, _questId = 3},
     [10] = {_questGroupNo = 654, _questId = 4},
-    [11] = {_questGroupNo = 658, _questId = 8}
+    [11] = {_questGroupNo = 658, _questId = 8},
+    [12] = {_questGroupNo = 21001, _questId = 1},
+    [13] = {_questGroupNo = 21001, _questId = 2},
+    [14] = {_questGroupNo = 21001, _questId = 3}
   },
   _checkPointList = {
     [1] = {_phaseNo = 1, _stepNo = 1},
@@ -83,34 +86,50 @@ function PaGlobal_TutorialManager:setDoingTutorial(bDoing)
 end
 function PaGlobal_TutorialManager:findCheckPointNoForContinue()
   local checkPointNo = -1
-  if false == questList_isClearQuest(650, 1) and false == questList_hasProgressQuest(650, 1) then
+  if false == _ContentsGroup_RenewUI_Tutorial then
+    if false == questList_isClearQuest(650, 1) and false == questList_hasProgressQuest(650, 1) then
+      checkPointNo = 1
+    elseif true == questList_hasProgressQuest(650, 1) then
+      checkPointNo = 2
+    elseif true == questList_isClearQuest(650, 1) and false == questList_isClearQuest(650, 2) and false == questList_hasProgressQuest(650, 2) then
+      checkPointNo = 2
+    elseif true == questList_hasProgressQuest(650, 2) then
+      checkPointNo = 3
+    elseif true == questList_isClearQuest(650, 2) and false == questList_isClearQuest(650, 3) and false == questList_hasProgressQuest(650, 3) then
+      checkPointNo = 4
+    elseif true == questList_hasProgressQuest(650, 3) and false == self:isSatisfiedQuestCondition(650, 3) then
+      checkPointNo = 5
+    elseif true == questList_hasProgressQuest(650, 3) and true == self:isSatisfiedQuestCondition(650, 3) then
+      checkPointNo = 6
+    end
+    if true == questList_hasProgressQuest(653, 5) and false == questList_isClearQuest(1001, 71) and false == questList_hasProgressQuest(1001, 71) then
+      checkPointNo = 7
+    elseif true == questList_hasProgressQuest(653, 5) and true == questList_hasProgressQuest(1001, 71) and false == self:isSatisfiedQuestCondition(1001, 71) then
+      checkPointNo = 8
+    end
+    if true == questList_isClearQuest(653, 5) and true == questList_hasProgressQuest(653, 7) then
+      checkPointNo = 9
+    end
+    if true == questList_hasProgressQuest(2039, 2) and false == self:isSatisfiedQuestCondition(2039, 2) then
+      checkPointNo = 10
+    end
+    if true == questList_hasProgressQuest(658, 8) and false == self:isSatisfiedQuestCondition(658, 8) then
+      checkPointNo = 15
+    end
+  elseif false == questList_isClearQuest(21001, 1) and false == questList_hasProgressQuest(21001, 1) then
     checkPointNo = 1
-  elseif true == questList_hasProgressQuest(650, 1) then
+  elseif true == questList_hasProgressQuest(21001, 1) then
     checkPointNo = 2
-  elseif true == questList_isClearQuest(650, 1) and false == questList_isClearQuest(650, 2) and false == questList_hasProgressQuest(650, 2) then
+  elseif true == questList_isClearQuest(21001, 1) and false == questList_isClearQuest(21001, 2) and false == questList_hasProgressQuest(21001, 2) then
     checkPointNo = 2
-  elseif true == questList_hasProgressQuest(650, 2) then
+  elseif true == questList_hasProgressQuest(21001, 2) then
     checkPointNo = 3
-  elseif true == questList_isClearQuest(650, 2) and false == questList_isClearQuest(650, 3) and false == questList_hasProgressQuest(650, 3) then
+  elseif true == questList_isClearQuest(21001, 2) and false == questList_isClearQuest(21001, 3) and false == questList_hasProgressQuest(21001, 3) then
     checkPointNo = 4
-  elseif true == questList_hasProgressQuest(650, 3) and false == self:isSatisfiedQuestCondition(650, 3) then
+  elseif true == questList_hasProgressQuest(21001, 3) then
+    checkPointNo = 4
+  elseif true == questList_hasProgressQuest(21001, 3) and true == self:isSatisfiedQuestCondition(21001, 3) then
     checkPointNo = 5
-  elseif true == questList_hasProgressQuest(650, 3) and true == self:isSatisfiedQuestCondition(650, 3) then
-    checkPointNo = 6
-  end
-  if true == questList_hasProgressQuest(653, 5) and false == questList_isClearQuest(1001, 71) and false == questList_hasProgressQuest(1001, 71) then
-    checkPointNo = 7
-  elseif true == questList_hasProgressQuest(653, 5) and true == questList_hasProgressQuest(1001, 71) and false == self:isSatisfiedQuestCondition(1001, 71) then
-    checkPointNo = 8
-  end
-  if true == questList_isClearQuest(653, 5) and true == questList_hasProgressQuest(653, 7) then
-    checkPointNo = 9
-  end
-  if true == questList_hasProgressQuest(2039, 2) and false == self:isSatisfiedQuestCondition(2039, 2) then
-    checkPointNo = 10
-  end
-  if true == questList_hasProgressQuest(658, 8) and false == self:isSatisfiedQuestCondition(658, 8) then
-    checkPointNo = 15
   end
   return checkPointNo
 end
@@ -234,7 +253,7 @@ function PaGlobal_TutorialManager:startTutorial(phaseNo, stepNo, typeNo)
     _PA_LOG("\234\179\189\235\175\188\236\154\176", "\236\139\156\236\158\145\237\149\152\235\160\164\235\138\148 \237\142\152\236\157\180\236\166\136\234\176\128 \236\151\134\236\138\181\235\139\136\235\139\164. destPhaseNo : " .. tostring(destPhaseNo))
     return
   end
-  if true == _ContentsGroup_RenewUI and destPhaseNo >= 8 then
+  if true == _ContentsGroup_RenewUI and destPhaseNo >= 7 then
     self._isDoingTutorial = false
     self:endTutorial()
     return
@@ -261,7 +280,7 @@ function PaGlobal_TutorialManager:startNextPhase()
     else
       self._phaseList[self._currentPhaseNo]:startPhase(1, 1)
     end
-  elseif self._currentPhaseNo >= 8 then
+  elseif self._currentPhaseNo >= 7 then
     self:endTutorial()
   else
     self._phaseList[self._currentPhaseNo]:startPhase(1, 1)

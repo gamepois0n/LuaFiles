@@ -39,7 +39,8 @@ local Type = {
   ProductNote = 37,
   GuildRank = 38,
   BlackSpiritAdventure = 39,
-  Undefined = 40
+  Manufacture = 40,
+  Undefined = 41
 }
 PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local function getTypeName(index)
@@ -169,6 +170,9 @@ end
 function ExecuteFunction.BlackSpiritAdventure()
   FGlobal_BlackSpiritAdventure_Open()
 end
+function ExecuteFunction.Manufacture()
+  PaGlobalFunc_ManufactureOpen(true)
+end
 function PaGlobal_ConsoleQuickMenu:initialize()
 end
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
@@ -213,7 +217,8 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction = {
     [Type.PhotoGallery] = ExecuteFunction.PhotoGallery,
     [Type.ProductNote] = ExecuteFunction.ProductNote,
     [Type.GuildRank] = ExecuteFunction.GuildRank,
-    [Type.BlackSpiritAdventure] = ExecuteFunction.BlackSpiritAdventure
+    [Type.BlackSpiritAdventure] = ExecuteFunction.BlackSpiritAdventure,
+    [Type.Manufacture] = ExecuteFunction.Manufacture
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
@@ -497,6 +502,13 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y1 = 436,
       _x2 = 186,
       _y2 = 496
+    },
+    [Type.Manufacture] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 126,
+      _y1 = 188,
+      _x2 = 186,
+      _y2 = 248
     }
   }
 }
@@ -541,7 +553,8 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.PhotoGallery] = "PHOTO GALLERY",
     [Type.ProductNote] = "PRODUCT NOTE",
     [Type.GuildRank] = "GUILD RANK",
-    [Type.BlackSpiritAdventure] = "BLACKSPIRIT ADVENTURE"
+    [Type.BlackSpiritAdventure] = "BLACKSPIRIT ADVENTURE",
+    [Type.Manufacture] = "Manufacture"
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
@@ -585,7 +598,8 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.PhotoGallery] = true,
     [Type.ProductNote] = true,
     [Type.GuildRank] = true,
-    [Type.BlackSpiritAdventure] = true
+    [Type.BlackSpiritAdventure] = true,
+    [Type.Manufacture] = true
   }
 }
 function varify()
@@ -611,6 +625,7 @@ function FromClient_ConsoleQuickMenu_ExecuteFunctionType(datatype, functionType)
 end
 registerEvent("FromClient_ConsoleQuickMenu_ExecuteFunctionType", "FromClient_ConsoleQuickMenu_ExecuteFunctionType")
 function PaGlobal_ConsoleQuickMenu:widgetOpen(invisibleOnly)
+  PaGlobal_ConsoleQuickMenu._widgetForceClose = false
   Panel_Widget_QuickMenu:SetShow(true)
   if true == invisibleOnly then
     return
@@ -618,6 +633,7 @@ function PaGlobal_ConsoleQuickMenu:widgetOpen(invisibleOnly)
   ToClient_setAvailableInputWidget(true)
 end
 function PaGlobal_ConsoleQuickMenu:widgetClose(invisibleOnly)
+  PaGlobal_ConsoleQuickMenu._widgetForceClose = true
   Panel_Widget_QuickMenu:SetShow(false)
   if true == invisibleOnly then
     return

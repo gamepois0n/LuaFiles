@@ -408,7 +408,7 @@ function FGlobal_DyePalette_Open()
   if Panel_AlchemyStone:GetShow() then
     FGlobal_AlchemyStone_Close()
   end
-  if Panel_Manufacture:GetShow() then
+  if not _ContentsGroup_RenewUI_Manufacture and Panel_Manufacture:GetShow() then
     Manufacture_Close()
   end
   if not _ContentsGroup_RenewUI and Panel_Equipment:GetShow() then

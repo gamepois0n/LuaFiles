@@ -236,8 +236,8 @@ function PKChannelInfo_Init()
   elseif isGameTypeJapan() or isGameTypeTaiwan() then
     ChannelSelectInfo_Show()
     SpeedChannelInfo_Show()
-    warInfo_Show()
     PKChannelInfo_Hide()
+    warInfo_Show()
   elseif isGameTypeRussia() then
     ChannelSelectInfo_Hide()
     SpeedChannelInfo_Show()
@@ -254,10 +254,10 @@ function PKChannelInfo_Init()
     PKChannelInfo_Show()
     warInfo_Show()
   elseif isGameTypeTR() then
-    SpeedChannelInfo_Show()
     ChannelSelectInfo_Show()
-    warInfo_Show()
+    SpeedChannelInfo_Show()
     PKChannelInfo_Hide()
+    warInfo_Show()
   elseif isGameTypeEnglish() then
     ChannelSelectInfo_Show()
     SpeedChannelInfo_Show()
@@ -266,8 +266,8 @@ function PKChannelInfo_Init()
   else
     ChannelSelectInfo_Hide()
     SpeedChannelInfo_Hide()
-    warInfo_Hide()
     PKChannelInfo_Hide()
+    warInfo_Hide()
   end
 end
 WORLD_BG_BTN:SetShow(false)
@@ -1257,7 +1257,13 @@ function PKChannelInfo_onScreenResize()
   local self = channelPKInfo
   local scrX = getScreenSizeX()
   self._pkMainBG:SetPosX(scrX - (FRAME_SERVERLIST:GetSizeX() + channelSpeedInfo._speedMainBG:GetSizeX() + 55))
-  self._pkMainBG:SetPosY(channelSpeedInfo._speedMainBG:GetPosY() + channelSpeedInfo._speedMainBG:GetSizeY() + 10)
+  if channelSpeedInfo._speedMainBG:GetShow() then
+    self._pkMainBG:SetPosY(channelSpeedInfo._speedMainBG:GetPosY() + channelSpeedInfo._speedMainBG:GetSizeY() + 10)
+  elseif channelSelectInfo._mainBG:GetShow() then
+    self._pkMainBG:SetPosY(channelSelectInfo._mainBG:GetPosY() + channelSelectInfo._mainBG:GetSizeY() + 10)
+  else
+    self._pkMainBG:SetPosY(10)
+  end
 end
 function warInfo_onScreenResize()
   local self = warInfo

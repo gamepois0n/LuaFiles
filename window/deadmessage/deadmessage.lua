@@ -606,8 +606,12 @@ function deadMessage_Show(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreE
     if true == PaGlobalFunc_GameExit_GetShow() then
       PaGlobalFunc_GameExit_SetShow(false, false)
     end
-    if Panel_ChannelSelect:GetShow() then
-      FGlobal_ChannelSelect_Hide()
+    if false == _ContentsGroup_RenewUI_ServerSelect then
+      if Panel_ChannelSelect:GetShow() then
+        FGlobal_ChannelSelect_Hide()
+      end
+    else
+      PaGlobalFunc_ServerSelect_Close()
     end
   end
   SetUIMode(Defines.UIMode.eUIMode_DeadMessage)

@@ -438,6 +438,8 @@ Defines.RenderMode = {
   eRenderMode_UISetting = 5,
   eRenderMode_Count = 6
 }
+Defines.TooltipDataType = {ItemWrapper = 1, ItemSSWrapper = 2}
+Defines.TooltipTargetType = {Item = 1, ItemWithoutCompare = 2}
 Defines.RenderMode.eRenderMode_LuaMode = Defines.RenderMode.eRenderMode_Count
 Defines.RenderMode.eRenderMode_Dye = Defines.RenderMode.eRenderMode_LuaMode + 0
 Defines.RenderMode.eRenderMode_InGameCashShop = Defines.RenderMode.eRenderMode_LuaMode + 1
