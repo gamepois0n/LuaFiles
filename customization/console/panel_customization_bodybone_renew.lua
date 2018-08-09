@@ -120,18 +120,11 @@ function PaGlobalFunc_Customization_BodyBone_SliderOn(sliderType, sliderIndex)
   local self = Customization_BodyBoneInfo
   if 0 == sliderType then
     if 0 == sliderIndex then
-      self._ui._slider_HeightFocus:SetShow(true)
-    elseif 1 == sliderIndex then
-      self._ui._slider_WeightFocus:SetShow(true)
+    else
     end
-  elseif 1 == sliderType then
-    if 0 == sliderIndex then
-      self._ui._slider_ScaleXFocus:SetShow(true)
-    elseif 1 == sliderIndex then
-      self._ui._slider_ScaleYFocus:SetShow(true)
-    elseif 2 == sliderIndex then
-      self._ui._slider_ScaleZFocus:SetShow(true)
-    end
+  elseif 1 ~= sliderIndex or 1 ~= sliderType or 0 == sliderIndex then
+  elseif 1 == sliderIndex then
+  elseif 2 == sliderIndex then
   end
   PaGlobalFunc_Customization_SetKeyGuide(4)
 end
@@ -139,18 +132,11 @@ function PaGlobalFunc_Customization_BodyBone_SliderOut(sliderType, sliderIndex)
   local self = Customization_BodyBoneInfo
   if 0 == sliderType then
     if 0 == sliderIndex then
-      self._ui._slider_HeightFocus:SetShow(false)
-    elseif 1 == sliderIndex then
-      self._ui._slider_WeightFocus:SetShow(false)
+    else
     end
-  elseif 1 == sliderType then
-    if 0 == sliderIndex then
-      self._ui._slider_ScaleXFocus:SetShow(false)
-    elseif 1 == sliderIndex then
-      self._ui._slider_ScaleYFocus:SetShow(false)
-    elseif 2 == sliderIndex then
-      self._ui._slider_ScaleZFocus:SetShow(false)
-    end
+  elseif 1 ~= sliderIndex or 1 ~= sliderType or 0 == sliderIndex then
+  elseif 1 == sliderIndex then
+  elseif 2 == sliderIndex then
   end
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_BodyBone_GetShow() then
     PaGlobalFunc_Customization_SetKeyGuide(2)
@@ -255,10 +241,6 @@ function Customization_BodyBoneInfo:InitControl()
   self._ui._staticText_WeightSliderValue = UI.getChildControl(self._ui._static_WeightSliderBg, "StaticText_WeightValue")
   self._ui._slider_Height = UI.getChildControl(self._ui._static_HeightSliderBg, "Slider_Height")
   self._ui._slider_Weight = UI.getChildControl(self._ui._static_WeightSliderBg, "Slider_Weight")
-  self._ui._slider_HeightFocus = UI.getChildControl(self._ui._static_HeightSliderBg, "Static_FocusBox")
-  self._ui._slider_HeightFocus:SetShow(false)
-  self._ui._slider_WeightFocus = UI.getChildControl(self._ui._static_WeightSliderBg, "Static_FocusBox")
-  self._ui._slider_WeightFocus:SetShow(false)
   self._ui._sliderButton_Height = UI.getChildControl(self._ui._slider_Height, "Slider_Button")
   self._ui._sliderButton_Weight = UI.getChildControl(self._ui._slider_Weight, "Slider_Button")
   self._ui._static_ScaleSliderXBg = UI.getChildControl(self._ui._static_ScaleSliderGroup, "Static_XBg")
@@ -270,12 +252,6 @@ function Customization_BodyBoneInfo:InitControl()
   self._ui._slider_ScaleX = UI.getChildControl(self._ui._static_ScaleSliderXBg, "Slider_X")
   self._ui._slider_ScaleY = UI.getChildControl(self._ui._static_ScaleSliderYBg, "Slider_Y")
   self._ui._slider_ScaleZ = UI.getChildControl(self._ui._static_ScaleSliderZBg, "Slider_Z")
-  self._ui._slider_ScaleXFocus = UI.getChildControl(self._ui._static_ScaleSliderXBg, "Static_FocusBox")
-  self._ui._slider_ScaleYFocus = UI.getChildControl(self._ui._static_ScaleSliderYBg, "Static_FocusBox")
-  self._ui._slider_ScaleZFocus = UI.getChildControl(self._ui._static_ScaleSliderZBg, "Static_FocusBox")
-  self._ui._slider_ScaleXFocus:SetShow(false)
-  self._ui._slider_ScaleYFocus:SetShow(false)
-  self._ui._slider_ScaleZFocus:SetShow(false)
   self._ui._sliderButton_ScaleX = UI.getChildControl(self._ui._slider_ScaleX, "Slider_Button")
   self._ui._sliderButton_ScaleY = UI.getChildControl(self._ui._slider_ScaleY, "Slider_Button")
   self._ui._sliderButton_ScaleZ = UI.getChildControl(self._ui._slider_ScaleZ, "Slider_Button")

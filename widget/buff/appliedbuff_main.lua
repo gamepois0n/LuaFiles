@@ -44,7 +44,7 @@ function PaGlobalAppliedBuffList:initialize()
   self._uiBackDeBuff:SetIgnore(true)
   Panel_AppliedBuffList:addInputEvent("Mouse_On", "HandleMOnAppliedBuffPenel()")
   Panel_AppliedBuffList:addInputEvent("Mouse_Out", "HandleMOutAppliedBuffPenel()")
-  Panel_AppliedBuffList:addInputEvent("Mouse_Lup", "ResetPos_WidgetButton()")
+  Panel_AppliedBuffList:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
 end
 function PaGlobalAppliedBuffList:setMovableUIForControlMode()
   self._buffText:SetShow(false)

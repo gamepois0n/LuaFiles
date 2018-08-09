@@ -80,7 +80,7 @@ function PaGlobal_CharacterTag_SetPosIcon()
   else
     Panel_Icon_CharacterTag:SetShow(false)
   end
-  if true == _ContentsGroup_isFairy then
+  if true == _ContentsGroup_isFairy and nil ~= PaGlobal_Fairy_SetPosIcon then
     PaGlobal_Fairy_SetPosIcon()
   end
   if true == _ContentsGroup_RenewUI_Main then

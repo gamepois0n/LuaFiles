@@ -69,7 +69,9 @@ function mailDetail:init()
   self._ui._frameContents = self._ui._frame:GetFrameContent()
   self._ui._frameScroll = self._ui._frame:GetVScroll()
   self._ui._sender = UI.getChildControl(self._ui.stc_centerBG, "StaticText_Sender")
+  self._ui._sender:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   self._ui._title = UI.getChildControl(self._ui.stc_centerBG, "StaticText_Title")
+  self._ui._title:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   self._ui._contents = UI.getChildControl(self._ui._frameContents, "StaticText_MailContent")
   self._ui.txt_itemEnclosed = UI.getChildControl(self._ui.stc_centerBG, "StaticText_ItemEnclosed")
   self._ui.stc_slotBG = UI.getChildControl(self._ui.stc_centerBG, "Static_ItemSlotBg")
@@ -138,11 +140,6 @@ function Mail_Detail_Open(mailNo)
       self._ui.txt_itemEnclosed:SetShow(true)
       self._ui.txt_keyGuideA:SetMonoTone(false)
       self._ui.txt_keyGuideX:SetMonoTone(false)
-      if isGameTypeKorea() then
-        self._ui.txt_itemEnclosed:SetSpanSize(30, 485)
-      else
-        self._ui.txt_itemEnclosed:SetSpanSize(10, 485)
-      end
     else
       self._ui.slot_item:clearItem()
       self._ui.stc_slotBG:SetShow(false)

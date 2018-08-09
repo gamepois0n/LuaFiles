@@ -25,7 +25,8 @@ function PaGlobal_Option:radioButtonMapping_GraphicOption(value, fromRadioButton
     [4] = 1,
     [5] = 0,
     [6] = 6,
-    [7] = 8
+    [7] = 8,
+    [8] = 9
   }
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
@@ -304,11 +305,27 @@ end
 function PaGlobal_Option:GetControlTypeByControlName(controlName)
   local controlTypeEnum
   if "CheckButton" == controlName then
-    controlTypeEnum = CONTROL.PA_UI_CONTROL_CHECKBUTTON
+    if _ContentsGroup_RenewUI_RenewOPtion then
+      controlTypeEnum = OPTION_TYPE.CHECKBUTTON
+    else
+      controlTypeEnum = CONTROL.PA_UI_CONTROL_CHECKBUTTON
+    end
   elseif "RadioButton" == controlName then
-    controlTypeEnum = CONTROL.PA_UI_CONTROL_RADIOBUTTON
+    if _ContentsGroup_RenewUI_RenewOPtion then
+      controlTypeEnum = OPTION_TYPE.RADIOBUTTON
+    else
+      controlTypeEnum = CONTROL.PA_UI_CONTROL_RADIOBUTTON
+    end
   elseif "Slider" == controlName then
-    controlTypeEnum = CONTROL.PA_UI_CONTROL_SLIDER
+    if _ContentsGroup_RenewUI_RenewOPtion then
+      controlTypeEnum = OPTION_TYPE.SLIDER
+    else
+      controlTypeEnum = CONTROL.PA_UI_CONTROL_SLIDER
+    end
+  elseif "KeyCustomize" == controlName then
+    if _ContentsGroup_RenewUI_RenewOPtion then
+      controlTypeEnum = OPTION_TYPE.KEYCUSTOMIZE
+    end
   elseif "ComboBox" == controlName then
     controlTypeEnum = CONTROL.PA_UI_CONTROL_COMBOBOX
   elseif "Button" == controlName then
@@ -507,7 +524,7 @@ function PaGlobal_Option:SetGraphicOption(value, isIncrease)
       eventControl:SetMonoTone(false)
       eventControl:SetEnable(true)
     end
-  elseif self.GRAPHIC.VeryVeryHigh == value or self.GRAPHIC.UltraHigh == vlaue then
+  elseif self.GRAPHIC.VeryVeryHigh == value or self.GRAPHIC.UltraHigh == vlaue or self.GRAPHIC.UltraLow == vlaue then
     if true == isIncrease then
       _SSAO._curValue = true
       _AntiAliasing._curValue = true

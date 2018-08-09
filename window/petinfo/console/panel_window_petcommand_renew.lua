@@ -33,6 +33,7 @@ function petCommand:close()
     return
   end
   Panel_Window_PetCommand_Renew:SetShow(false)
+  PaGlobalFunc_Petlist_TemporaryOpen()
 end
 function petCommand:initPetCondition()
   for index = 0, PaGlobal_petCommandType._typeCount - 1 do
@@ -92,7 +93,6 @@ function petCommand:initControl()
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_LUp", "PetCommand_SelectOrder(" .. orderType._getItem .. ", false)")
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_On", "PetCommand_ChangeIcon_On(" .. orderType._getItem .. ", false)")
   petCommandUI._radioButton_GetItemOff:addInputEvent("Mouse_Out", "PetCommand_ChangeIcon_Off(" .. orderType._getItem .. ", false)")
-  Panel_Window_PetCommand_Renew:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetCommand_Close()")
   petCommandUI._staticText_Cancle = UI.getChildControl(petCommandUI._static_BottomKeyBG, "StaticText_Cansel_ConsoleUI")
   petCommandUI._ExitButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, petCommandUI._static_BottomKeyBG, "_exit_Button")
   CopyBaseProperty(petCommandUI._staticText_Cancle, petCommandUI._ExitButton)

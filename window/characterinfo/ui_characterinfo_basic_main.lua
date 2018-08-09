@@ -245,7 +245,6 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   self._ui._buttonCloseIntroduce = UI.getChildControl(self._ui._staticIntroduceBG, "Button_CloseIntroduce")
   local staticFacePhotoBG = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "Static_CharSlot_BG")
   local staticSymbolBG = UI.getChildControl(staticFacePhotoBG, "Static_ClassSymbol_BG")
-  self._ui._staticTextCharacterLevel = UI.getChildControl(staticFacePhotoBG, "StaticText_PlayerLevel_Value")
   self._ui._staticCharSlot = UI.getChildControl(staticFacePhotoBG, "Static_CharSlot")
   local staticFamily = UI.getChildControl(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyBG")
   for key, index in pairs(self._familyPoint) do

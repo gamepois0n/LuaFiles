@@ -186,11 +186,19 @@ function MainStatusInfo:initialize()
   self._ui.txt_contributePoint:useGlowFont(true, "BaseFont_12_Glow", 4284572001)
 end
 function MainStatusInfo:registEventHandler()
-  self._ui.chk_pvp:addInputEvent("Mouse_LUp", "requestTogglePvP()")
+  self._ui.chk_pvp:addInputEvent("Mouse_LUp", "PaGlobalFunc_RequestTogglePvP()")
   self._ui.stc_resourceType0:addInputEvent("Mouse_On", "PhantomCount_HelpComment(true)")
   self._ui.stc_resourceType0:addInputEvent("Mouse_Out", "PhantomCount_HelpComment(false)")
   self._ui.stc_resourceType1:addInputEvent("Mouse_On", "FighterIcon_HelpComment(true)")
   self._ui.stc_resourceType1:addInputEvent("Mouse_Out", "FighterIcon_HelpComment(false)")
+end
+function PaGlobalFunc_RequestTogglePvP(input)
+  local selfProxy = getSelfPlayer()
+  if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
+    return
+  end
+  requestTogglePvP(input)
 end
 function MainStatusInfo:registMessageHandler()
   _panel:RegisterUpdateFunc("PaGlobalFunc_MainStatusInfo_PerFrame")

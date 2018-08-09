@@ -4,19 +4,18 @@ local manufacture = {
   _ui = {
     radioButtonControlList = {},
     radioButtonControlListSize = 0,
-    knowledgeFrameControl,
-    knowledgeFrameContentControl,
-    knowledgeFrameScroll,
-    knowledgeTitleControl = nil,
-    knowledgeDescControl = nil,
+    tabGroupControl,
+    lbButtonControl,
+    rbButtonControl,
     materialGroupControl = nil,
     materialDescControl = nil,
     actionIconControl = nil,
     actionTitleControl = nil,
     actionDescControl = nil,
+    selectButtonControl = nil,
+    removeMaterialButtonControl = nil,
+    closeButtonControl = nil,
     doButtonControl = nil,
-    doRepeatButtonControl = nil,
-    doMassButtonControl = nil,
     list2 = nil
   },
   _actionListSize = 14,
@@ -24,13 +23,13 @@ local manufacture = {
   _warehouseWayPointKey = 0,
   _installationType = CppEnums.InstallationType.TypeCount,
   _selectedActionIndex = -1,
-  _selectedKnowledgeIndex = -1,
-  _actionButtonGapX = 5,
+  _doButtonGapX = 10,
   _materialListSize = 5,
   _materialTable = {},
   _massActionFlag = false,
   _repeatActionFlag = false,
-  _failCount = 0
+  _failCount = 0,
+  _readyToSelectFlag = false
 }
 local Material = {}
 Material.__index = Material
@@ -100,8 +99,8 @@ function Material:getNextSlotNo()
   end
   return -1
 end
-function Material:getItem()
-  return Material.getItemXXX(self.itemWhereType, self.slotNo, manufacture._warehouseWayPointKey)
+function Material:getItem(warehouseWaypointKey)
+  return Material.getItemXXX(self.itemWhereType, self.slotNo, warehouseWaypointKey or manufacture._warehouseWayPointKey)
 end
 function manufacture:checkToDo(showMessage)
   if Panel_Win_System:GetShow() then
@@ -109,6 +108,9 @@ function manufacture:checkToDo(showMessage)
   end
   local action = self:getSelectedAction()
   if not action then
+    return false
+  end
+  if not self:checkActionEnabled(self._selectedActionIndex) then
     return false
   end
   if self:getInsertedMaterialCount() <= 0 then
@@ -172,17 +174,6 @@ function manufacture:checkToDo(showMessage)
     end
     return false
   end
-  if "REPAIR_ITEM" == action.name then
-    for i = 1, table.getn(self._materialTable) do
-      local material = self._materialTable[i]
-      if not material:checkEmpty() then
-        local rv = repair_RepairItemBySelf(material.slotNo)
-        if 0 ~= rv then
-          return false
-        end
-      end
-    end
-  end
   return true
 end
 function manufacture:selectAction(actionIndex)
@@ -203,7 +194,6 @@ function manufacture:selectAction(actionIndex)
   return true
 end
 function manufacture:clearKnowledge()
-  self._selectedKnowledgeIndex = -1
   self._ui.list2:getElementManager():clearKey()
 end
 function manufacture:initKnowledgeList()
@@ -226,6 +216,9 @@ function manufacture:changeAction(diffIndex)
       return true
     end
     nextActionIndex = nextActionIndex + diffIndex
+    if nextActionIndex > self._actionListSize then
+      break
+    end
   end
   return false
 end
@@ -235,16 +228,23 @@ function PaGlobalFunc_ManufactureChangeAction(diffIndex)
   end
 end
 function manufacture:selectKnowledge(knowledgeIndex)
-  local prevIndex = self._selectedKnowledgeIndex
-  self._selectedKnowledgeIndex = knowledgeIndex
-  self._ui.list2:requestUpdateByKey(toInt64(0, prevIndex))
-  self._ui.list2:requestUpdateByKey(toInt64(0, knowledgeIndex))
-  self._ui.knowledgeFrameScroll:SetControlTop()
-  return true
+  local knowledge = getAlchemyKnowledge(knowledgeIndex)
+  if knowledge then
+    PaGlobalFunc_AlchemyKnowledgeOpen(knowledge)
+    return true
+  end
 end
 function PaGlobalFunc_ManufactureSelectKnowledge(knowledgeIndex)
   if manufacture:selectKnowledge(knowledgeIndex) then
-    return manufacture:updateKnowledge()
+  end
+end
+function manufacture:handleKnowledgeFocus(flag)
+  self._knowledgeFocusFlag = flag
+  return true
+end
+function PaGlobalFunc_ManufactureHandleKnowledgeFocus(flag)
+  if manufacture:handleKnowledgeFocus(flag) then
+    return manufacture:update()
   end
 end
 function manufacture:createListItem(content, key)
@@ -255,9 +255,9 @@ function manufacture:createListItem(content, key)
   end
   local buttonControl = UI.getChildControl(content, "RadioButton_Item")
   buttonControl:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-  buttonControl:addInputEvent("Mouse_On", "PaGlobalFunc_ManufactureSelectKnowledge(" .. knowledgeIndex .. ")")
-  local checkFlag = false
-  buttonControl:SetCheck(checkFlag)
+  buttonControl:addInputEvent("Mouse_On", "PaGlobalFunc_ManufactureHandleKnowledgeFocus(true)")
+  buttonControl:addInputEvent("Mouse_Out", "PaGlobalFunc_ManufactureHandleKnowledgeFocus(false)")
+  buttonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureSelectKnowledge(" .. knowledgeIndex .. ")")
   local learnFlag = isLearnMentalCardForAlchemy(knowledge:getKey())
   if learnFlag then
     buttonControl:SetFontColor(Defines.Color.C_FF84FFF5)
@@ -297,10 +297,12 @@ function manufacture:initMaterial()
   end
 end
 function manufacture:initAction()
-  local tabGroupControl = UI.getChildControl(self._panel, "Static_TapGroup")
+  self._ui.tabGroupControl = UI.getChildControl(self._panel, "Static_TapGroup")
+  self._ui.lbButtonControl = UI.getChildControl(self._ui.tabGroupControl, "Static_LB")
+  self._ui.rbButtonControl = UI.getChildControl(self._ui.tabGroupControl, "Static_RB")
   for i = 0, self._actionListSize - 1 do
     local radioButtonKey = "RadioButton_Action" .. i + 1
-    local radioButtonControl = UI.getChildControlNoneAssert(tabGroupControl, radioButtonKey)
+    local radioButtonControl = UI.getChildControlNoneAssert(self._ui.tabGroupControl, radioButtonKey)
     if radioButtonControl then
       radioButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureSelectAction(" .. i .. ")")
       self._ui.radioButtonControlList[i] = radioButtonControl
@@ -318,7 +320,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 2,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30200
+    knowledgeMentalThemeKey = 30200,
+    textureUvPos = {
+      x1 = 2,
+      y1 = 2,
+      x2 = 50,
+      y2 = 50
+    }
   }
   self._actionList[0] = action
   action = {
@@ -330,8 +338,14 @@ function manufacture:initAction()
     isEnabled = true,
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 2,
-    installationType = CppEnums.InstallationType.eType_Stump,
-    knowledgeMentalThemeKey = 30500
+    installationType = CppEnums.InstallationType.TypeCount,
+    knowledgeMentalThemeKey = 30500,
+    textureUvPos = {
+      x1 = 52,
+      y1 = 2,
+      x2 = 100,
+      y2 = 50
+    }
   }
   self._actionList[1] = action
   action = {
@@ -344,7 +358,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 1,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30700
+    knowledgeMentalThemeKey = 30700,
+    textureUvPos = {
+      x1 = 100,
+      y1 = 2,
+      x2 = 150,
+      y2 = 50
+    }
   }
   self._actionList[2] = action
   action = {
@@ -357,7 +377,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 1,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30300
+    knowledgeMentalThemeKey = 30300,
+    textureUvPos = {
+      x1 = 302,
+      y1 = 2,
+      x2 = 350,
+      y2 = 50
+    }
   }
   self._actionList[3] = action
   action = {
@@ -370,7 +396,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 1,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30400
+    knowledgeMentalThemeKey = 30400,
+    textureUvPos = {
+      x1 = 152,
+      y1 = 2,
+      x2 = 200,
+      y2 = 50
+    }
   }
   self._actionList[4] = action
   action = {
@@ -382,8 +414,14 @@ function manufacture:initAction()
     isEnabled = true,
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 2,
-    installationType = CppEnums.InstallationType.eType_FireBowl,
-    knowledgeMentalThemeKey = 30600
+    installationType = CppEnums.InstallationType.TypeCount,
+    knowledgeMentalThemeKey = 30600,
+    textureUvPos = {
+      x1 = 352,
+      y1 = 2,
+      x2 = 400,
+      y2 = 50
+    }
   }
   self._actionList[5] = action
   action = {
@@ -396,7 +434,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 1,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30800
+    knowledgeMentalThemeKey = 30800,
+    textureUvPos = {
+      x1 = 52,
+      y1 = 102,
+      x2 = 100,
+      y2 = 150
+    }
   }
   self._actionList[6] = action
   action = {
@@ -409,7 +453,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_REPAIR"),
     materialCount = 1,
     installationType = CppEnums.InstallationType.eType_Anvil,
-    knowledgeMentalThemeKey = -1
+    knowledgeMentalThemeKey = -1,
+    textureUvPos = {
+      x1 = 202,
+      y1 = 2,
+      x2 = 250,
+      y2 = 50
+    }
   }
   self._actionList[7] = action
   action = {
@@ -422,7 +472,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 5,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 31009
+    knowledgeMentalThemeKey = 31009,
+    textureUvPos = {
+      x1 = 402,
+      y1 = 2,
+      x2 = 450,
+      y2 = 50
+    }
   }
   self._actionList[8] = action
   action = {
@@ -435,7 +491,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 2,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30109
+    knowledgeMentalThemeKey = 30109,
+    textureUvPos = {
+      x1 = 252,
+      y1 = 2,
+      x2 = 300,
+      y2 = 50
+    }
   }
   self._actionList[9] = action
   if ToClient_IsContentsGroupOpen("327") then
@@ -457,7 +519,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 3,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30110
+    knowledgeMentalThemeKey = 30110,
+    textureUvPos = {
+      x1 = 2,
+      y1 = 102,
+      x2 = 50,
+      y2 = 150
+    }
   }
   self._actionList[10] = action
   action = {
@@ -470,7 +538,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 3,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 31012
+    knowledgeMentalThemeKey = 31012,
+    textureUvPos = {
+      x1 = 452,
+      y1 = 2,
+      x2 = 500,
+      y2 = 50
+    }
   }
   self._actionList[11] = action
   action = {
@@ -483,7 +557,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 5,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 31013
+    knowledgeMentalThemeKey = 31013,
+    textureUvPos = {
+      x1 = 52,
+      y1 = 102,
+      x2 = 100,
+      y2 = 150
+    }
   }
   self._actionList[12] = action
   action = {
@@ -496,7 +576,13 @@ function manufacture:initAction()
     doActionButtonString = PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"),
     materialCount = 5,
     installationType = CppEnums.InstallationType.TypeCount,
-    knowledgeMentalThemeKey = 30800
+    knowledgeMentalThemeKey = 30800,
+    textureUvPos = {
+      x1 = 52,
+      y1 = 102,
+      x2 = 100,
+      y2 = 150
+    }
   }
   self._actionList[13] = action
 end
@@ -510,12 +596,6 @@ function manufacture:initialize()
   self._ui.list2:changeAnimationSpeed(10)
   self._ui.list2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_ManufactureCreateListItem")
   self._ui.list2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
-  self._ui.knowledgeFrameControl = UI.getChildControl(listBgControl, "Frame_Knowledge")
-  self._ui.knowledgeFrameContentControl = UI.getChildControl(self._ui.knowledgeFrameControl, "Frame_1_Content")
-  self._ui.knowledgeFrameScroll = UI.getChildControl(self._ui.knowledgeFrameControl, "Frame_1_VerticalScroll")
-  self._ui.knowledgeTitleControl = UI.getChildControl(self._ui.knowledgeFrameContentControl, "StaticText_Item_Name")
-  self._ui.knowledgeDescControl = UI.getChildControl(self._ui.knowledgeFrameContentControl, "StaticText_Item_Desc")
-  self._ui.knowledgeDescControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.actionIconControl = UI.getChildControl(self._panel, "Static_Type_Icon")
   self._ui.actionTitleControl = UI.getChildControl(self._panel, "StaticText_Type_Name")
   self._ui.actionDescControl = UI.getChildControl(self._panel, "StaticText_Type_Desc")
@@ -524,24 +604,26 @@ function manufacture:initialize()
   local recipeGroupControl = UI.getChildControl(self._ui.materialGroupControl, "Static_Recipe")
   self._ui.materialDescControl = UI.getChildControl(recipeGroupControl, "StaticText_Material")
   self._ui.materialDescControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.materialDescControl:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SLOT_EMPTY"))
   self._panel:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_ManufactureChangeAction(-1)")
   self._panel:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_ManufactureChangeAction(1)")
+  self._panel:registerPadEvent(__eConsoleUIPadEvent_Y, "PaGlobalFunc_ManufactureReadyToSelect()")
+  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_ManufactureSelectMultipleMaterials()")
   self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_ManufactureDo()")
   UI.getChildControl(self._panel, "StaticText_Do_ConsoleUI"):addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDo()")
-  self._ui.doRepeatButtonControl = UI.getChildControl(self._panel, "StaticText_RepeatDo_ConsoleUI")
-  self._ui.doRepeatButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDoRepeat()")
-  self._ui.doMassButtonControl = UI.getChildControl(self._panel, "StaticText_MessDo_ConsoleUI")
-  self._ui.doMassButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDoMass()")
+  self._ui.knowledgeButtonControl = UI.getChildControl(self._panel, "StaticText_Knowledge_ConsoleUI")
+  self._ui.selectButtonControl = UI.getChildControl(self._panel, "StaticText_Select_ConsoleUI")
+  self._ui.removeMaterialButtonControl = UI.getChildControl(self._panel, "StaticText_RemoveMaterial_ConsoleUI")
+  self._ui.closeButtonControl = UI.getChildControl(self._panel, "StaticText_Close_ConsoleUI")
+  self._ui.doButtonControl = UI.getChildControl(self._panel, "StaticText_Do_ConsoleUI")
+  self._ui.selectButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureSelectMultipleMaterials()")
+  self._ui.removeMaterialButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureBack()")
+  self._ui.closeButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureBack()")
+  self._ui.doButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDoXXX()")
   self:initAction()
   self:initMaterial()
-  local massButton = UI.getChildControl(self._panel, "StaticText_MessDo_ConsoleUI")
-  massButton:SetShow(_ContentsGroup_LifeStatManufacturing)
-  if _ContentsGroup_LifeStatManufacturing then
-    massButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_ManufactureDoMass()")
-  end
   self._panel:ignorePadSnapMoveToOtherPanel()
   self._panel:RegisterUpdateFunc("PaGlobalFunc_ManufacturePerFrameUpdate")
+  registerEvent("EventShowManufactureWindow", "PaGlobalFunc_ManufactureOpenUsingInstallation")
   registerEvent("Event_ManufactureResultList", "PaGlobalFunc_ManufactureResponse")
 end
 function manufacture:doXXX()
@@ -549,13 +631,26 @@ function manufacture:doXXX()
   if not action then
     return
   end
-  local actionName = action.name
-  if _ContentsGroup_LifeStatManufacturing and self._massActionFlag then
-    actionName = actionName .. "_MASS"
+  if "REPAIR_ITEM" == action.name then
+    for i = 1, table.getn(self._materialTable) do
+      local material = self._materialTable[i]
+      if not material:checkEmpty() then
+        local rv = repair_RepairItemBySelf(material.slotNo)
+        if 0 ~= rv then
+          return false
+        end
+      end
+    end
+  else
+    local actionName = action.name
+    if _ContentsGroup_LifeStatManufacturing and self._massActionFlag then
+      actionName = actionName .. "_MASS"
+    end
+    self._failCount = 0
+    Manufacture_Do(self._installationType, actionName, self._materialTable[1].itemWhereType, self._materialTable[1].slotNo, self._materialTable[2].slotNo, self._materialTable[3].slotNo, self._materialTable[4].slotNo, self._materialTable[5].slotNo)
+    PaGlobalFunc_ManufactureNotifierOpen(self._materialTable, self._warehouseWayPointKey)
   end
-  self._failCount = 0
-  self:close()
-  return Manufacture_Do(self._installationType, actionName, self._materialTable[1].itemWhereType, self._materialTable[1].slotNo, self._materialTable[2].slotNo, self._materialTable[3].slotNo, self._materialTable[4].slotNo, self._materialTable[5].slotNo)
+  return self:close()
 end
 function PaGlobalFunc_ManufactureDoXXX()
   return manufacture:doXXX()
@@ -566,7 +661,45 @@ function manufacture:doManufacture()
   end
   self._massActionFlag = false
   self._repeatActionFlag = false
-  return self:doXXX()
+  function gotoNextRepeatStep(selectedButtonIndex)
+    if 2 == selectedButtonIndex then
+      self._repeatActionFlag = true
+    end
+    self:doXXX()
+  end
+  function gotoNextMassStep(selectedButtonIndex)
+    if 2 == selectedButtonIndex then
+      self._massActionFlag = true
+    end
+    self:doXXX()
+  end
+  if self:checkToDoRepeat(false) then
+    MessageBoxCheck.showMessageBox({
+      title = PAGetString(Defines.StringSheet_GAME, "PANEL_WINDOW_MANUFACTURE_TITLE"),
+      content = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_ASK_MULTIPLE_TIMES"),
+      functionApply = gotoNextRepeatStep,
+      functionCancel = MessageBox_Empty_function,
+      buttonStrings = {
+        PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_BUTTON_TEXT_ONE_TIME"),
+        PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_BUTTON_TEXT_MULTIPLE_TIMES")
+      },
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }, "middle")
+  elseif self:checkToDoMass(false) then
+    MessageBoxCheck.showMessageBox({
+      title = PAGetString(Defines.StringSheet_GAME, "PANEL_WINDOW_MANUFACTURE_TITLE"),
+      content = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_ASK_MASS_CRAFT"),
+      functionApply = gotoNextMassStep,
+      functionCancel = MessageBox_Empty_function,
+      buttonStrings = {
+        PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_BUTTON_TEXT_NORMAL_CRAFT"),
+        PAGetString(Defines.StringSheet_GAME, "PANEL_MANUFACTURE_MASSBUTTON")
+      },
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }, "middle")
+  else
+    return self:doXXX()
+  end
 end
 function PaGlobalFunc_ManufactureDo()
   if manufacture:doManufacture() then
@@ -595,25 +728,6 @@ function manufacture:checkToDoRepeat(showMessage)
     end
   end
   return self:checkToDo(showMessage)
-end
-function manufacture:doRepeat()
-  if not self:checkToDoRepeat(true) then
-    return false
-  end
-  self._massActionFlag = false
-  self._repeatActionFlag = true
-  local messageBoxData = {
-    title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
-    content = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CONTINUEGRIND_MSGBOX_DESC"),
-    functionYes = PaGlobalFunc_ManufactureDoXXX,
-    functionNo = MessageBox_Empty_function,
-    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-  }
-  MessageBox.showMessageBox(messageBoxData, "middle")
-end
-function PaGlobalFunc_ManufactureDoRepeat()
-  if manufacture:doRepeat() then
-  end
 end
 function manufacture:checkMassActionEnabled(actionIndex)
   if not _ContentsGroup_LifeStatManufacturing then
@@ -659,6 +773,9 @@ function manufacture:checkToDoMass(showMessage)
   return self:checkToDo(showMessage)
 end
 function manufacture:doMass()
+  if PaGlobalFunc_InventoryInfo_GetShow() then
+    return false
+  end
   if not self:checkToDoMass(true) then
     return false
   end
@@ -711,7 +828,6 @@ function PaGlobalFunc_ManufactureFilterInventory(slotNo, itemWrapper, inventoryT
   return manufacture:filterInventory(slotNo, itemWrapper, inventoryType)
 end
 function manufacture:rightClickInventory(slotNo, itemWrapper, count, inventoryType)
-  PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo - 1, inventoryType)
   local material = self:getMaterialBySlotNoAndItemWhereType(slotNo, inventoryType)
   if material then
     return self:removeMaterialByIndex(material.index)
@@ -723,6 +839,10 @@ function PaGlobalFunc_ManufactureRightClickInventory(slotNo, itemWrapper, count,
   if manufacture:rightClickInventory(slotNo, itemWrapper, count, inventoryType) then
     return manufacture:update()
   end
+end
+function manufacture:clearAction()
+  self._selectedActionIndex = -1
+  self:changeAction(1)
 end
 function manufacture:clearMaterial()
   for i = 1, table.getn(self._materialTable) do
@@ -788,32 +908,48 @@ function manufacture:removeMaterialByIndex(index)
 end
 function manufacture:completeMultipleSelection()
   if PaGlobalFunc_InventoryInfo_GetShow() then
+    Inventory_SetFunctor(nil, nil, nil, nil)
     InventoryWindow_Close()
     return true
   end
 end
 function PaGlobalFunc_ManufactureCompleteMultipleSelection()
-  return manufacture:completeMultipleSelection()
+  if manufacture:completeMultipleSelection() then
+    return manufacture:update()
+  end
 end
 function manufacture:selectMultipleMaterials()
-  PaGlobalFunc_InventoryInfo_Open()
-  PaGlobalFunc_InventoryInfo_InitMultipleSelect()
-  for i = 1, table.getn(self._materialTable) do
-    local material = self._materialTable[i]
-    if not material:checkEmpty() then
-      PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(material.slotNo - 1, material.itemWhereType)
-    end
+  if not _ContentsGroup_RenewUI_Inventory then
+    return false
   end
-  Inventory_SetFunctor(PaGlobalFunc_ManufactureFilterInventory, PaGlobalFunc_ManufactureRightClickInventory, nil, nil, {multipleSelectEndFunc = PaGlobalFunc_ManufactureCompleteMultipleSelection, button = __eConsoleUIPadEvent_Up_X})
+  if not self._readyToSelectFlag then
+    return false
+  end
+  self._readyToSelectFlag = false
+  if not self:checkActionEnabled(self._selectedActionIndex) then
+    return false
+  end
+  PaGlobalFunc_InventoryInfo_Open()
+  Inventory_SetFunctor(PaGlobalFunc_ManufactureFilterInventory, PaGlobalFunc_ManufactureRightClickInventory, nil, nil, {func = PaGlobalFunc_ManufactureCompleteMultipleSelection})
   Inventory_updateSlotData()
+  return true
 end
 function PaGlobalFunc_ManufactureSelectMultipleMaterials()
-  return manufacture:selectMultipleMaterials()
+  if manufacture:selectMultipleMaterials() then
+    return manufacture:update()
+  end
 end
-function manufacture:open(initFlag)
+function manufacture:readyToSelect()
+  self._readyToSelectFlag = true
+end
+function PaGlobalFunc_ManufactureReadyToSelect()
+  manufacture:readyToSelect()
+end
+function manufacture:open(installationType, initFlag)
   if self:checkShow() then
     return false
   end
+  self._installationType = installationType
   if 0 ~= ToClient_GetMyTeamNoLocalWar() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_LOCALWAR_ALERT"))
     return false
@@ -846,17 +982,18 @@ function manufacture:open(initFlag)
   if initFlag then
     self:clearMaterial()
     self:clearKnowledge()
-    self:selectAction(0)
+    self:clearAction()
   end
-  self:update()
   self._panel:SetShow(true, true)
-  if Panel_Window_Inventory:IsUISubApp() then
-    self:OpenUISubApp()
-  end
   return true
 end
 function PaGlobalFunc_ManufactureOpen(initFlag)
-  if manufacture:open(initFlag) then
+  if manufacture:open(CppEnums.InstallationType.TypeCount, initFlag) then
+    return manufacture:update()
+  end
+end
+function PaGlobalFunc_ManufactureOpenUsingInstallation(installationType, isClear)
+  if manufacture:open(installationType, true) then
     return manufacture:update()
   end
 end
@@ -866,8 +1003,11 @@ end
 function PaGlobalFunc_ManufactureCheckShow()
   return manufacture:checkShow()
 end
+function manufacture:checkToPop()
+  return 0 < self:getInsertedMaterialCount()
+end
 function manufacture:popMaterial()
-  if 0 < self:getInsertedMaterialCount() then
+  if self:checkToPop() then
     return self:removeMaterialByIndex(self:getInsertedMaterialCount())
   end
 end
@@ -876,7 +1016,8 @@ function manufacture:back()
     return true
   end
   if PaGlobalFunc_InventoryInfo_GetShow() then
-    return InventoryWindow_Close()
+    InventoryWindow_Close()
+    return true
   end
   if not self:checkShow() then
     return false
@@ -920,12 +1061,6 @@ function manufacture:getAction(i)
   end
   return self._actionList[i]
 end
-function manufacture:getSelectedKnowledge()
-  if self._selectedKnowledgeIndex < 0 or getCountAlchemyKnowledge() <= self._selectedKnowledgeIndex then
-    return
-  end
-  return getAlchemyKnowledge(self._selectedKnowledgeIndex)
-end
 function manufacture:getSelectedAction()
   return self:getAction(self._selectedActionIndex)
 end
@@ -957,7 +1092,7 @@ function manufacture:checkActionEnabled(actionIndex)
   if not isEnableManufactureAction(action.name) then
     return false
   end
-  if actionIndex == 1 then
+  if "REPAIR_ITEM" == action.name then
     if not isNearInstallation(CppEnums.InstallationType.eType_Anvil) then
       return false
     end
@@ -976,22 +1111,38 @@ function manufacture:checkActionEnabled(actionIndex)
   return true
 end
 function manufacture:updateAction()
-  local posX = 60
+  local openActionCount = 0
   for i = 0, self._actionListSize - 1 do
     local actionButton = self:getActionButton(i)
     if actionButton then
       local visibleFlag = self:checkActionVisible(i)
       actionButton:SetShow(visibleFlag)
       if visibleFlag then
-        actionButton:SetPosX(posX)
-        posX = posX + actionButton:GetSizeX() + self._actionButtonGapX
+        openActionCount = openActionCount + 1
       end
       local checkedFlag = self._selectedActionIndex == i
       actionButton:SetCheck(checkedFlag)
     end
   end
+  local totalWidth = self._ui.tabGroupControl:GetSizeX() - self:getActionButton(0):GetPosX() * 2
+  local posX = self:getActionButton(0):GetPosX()
+  local gapX = 0
+  if openActionCount > 1 then
+    gapX = (totalWidth - self:getActionButton(0):GetSizeX() * openActionCount) / (openActionCount - 1)
+  end
+  for i = 0, self._actionListSize - 1 do
+    local actionButton = self:getActionButton(i)
+    if actionButton:GetShow() then
+      actionButton:SetPosX(posX)
+      posX = posX + actionButton:GetSizeX() + gapX
+    end
+  end
   local action = self:getSelectedAction()
   if action then
+    self._ui.actionIconControl:ChangeTextureInfoName("renewal/button/console_tapbtn_01.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.actionIconControl, action.textureUvPos.x1, action.textureUvPos.y1, action.textureUvPos.x2, action.textureUvPos.y2)
+    self._ui.actionIconControl:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.actionIconControl:setRenderTexture(self._ui.actionIconControl:getBaseTexture())
     self._ui.actionTitleControl:SetText(action.titleString)
     self._ui.actionTitleControl:SetShow(true)
     if self:checkActionEnabled(self._selectedActionIndex) then
@@ -1033,70 +1184,107 @@ function manufacture:getSlotNoByKey(itemWhereType, itemKey, excludeIndex)
   end
   return -1
 end
-function manufacture:updateKnowledge()
-  local knowledge = self:getSelectedKnowledge()
-  if knowledge then
-    self._ui.knowledgeTitleControl:SetText(knowledge:getName())
-    if isLearnMentalCardForAlchemy(knowledge:getKey()) then
-      self._ui.knowledgeDescControl:SetText(knowledge:getDesc())
-    else
-      self._ui.knowledgeDescControl:SetText("???")
-    end
-  else
-    self._ui.knowledgeTitleControl:SetText("")
-    self._ui.knowledgeDescControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_1"))
-  end
-  local bottomPosY = self._ui.knowledgeDescControl:GetPosY() + self._ui.knowledgeDescControl:GetTextSizeY()
-  self._ui.knowledgeFrameContentControl:SetSize(self._ui.knowledgeFrameContentControl:GetSizeX(), bottomPosY)
-  self._ui.knowledgeFrameControl:UpdateContentScroll()
-  self._ui.knowledgeFrameControl:UpdateContentPos()
-end
 function manufacture:updateMaterial()
   local action = self:getAction(self._selectedActionIndex)
   if not action then
     return
   end
-  PaGlobalFunc_InventoryInfo_InitMultipleSelect()
+  if _ContentsGroup_RenewUI_Inventory then
+    PaGlobalFunc_InventoryInfo_InitMultipleSelect()
+  end
+  local SLOT_POSITION = {}
+  SLOT_POSITION[0] = {
+    [0] = {183, 33}
+  }
+  SLOT_POSITION[1] = {
+    [0] = {13, 343},
+    [1] = {353, 123}
+  }
+  SLOT_POSITION[2] = {
+    [0] = {183, 33},
+    [1] = {13, 343},
+    [2] = {353, 343}
+  }
+  SLOT_POSITION[3] = {
+    [0] = {13, 123},
+    [1] = {13, 343},
+    [2] = {353, 343},
+    [3] = {353, 123}
+  }
+  SLOT_POSITION[4] = {
+    [0] = {183, 33},
+    [1] = {13, 123},
+    [2] = {13, 343},
+    [3] = {353, 343},
+    [4] = {353, 123}
+  }
   for i = 1, table.getn(self._materialTable) do
     local material = self._materialTable[i]
     local enabledFlag = i <= action.materialCount
-    material.bgControl:SetMonoTone(not enabledFlag)
+    material.bgControl:SetShow(enabledFlag)
+    if enabledFlag then
+      local posArray = SLOT_POSITION[action.materialCount - 1][i - 1]
+      material.bgControl:SetPosX(posArray[1])
+      material.bgControl:SetPosY(posArray[2])
+    end
     if material:checkEmpty() then
       material.slotItem:clearItem()
     else
       local item = material:getItem()
       material.slotItem:setItemByStaticStatus(item:getStaticStatus(), item:get():getCount_s64())
-      PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(material.slotNo - 1, material.itemWhereType)
+      if _ContentsGroup_RenewUI_Inventory then
+        PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(material.slotNo, material.itemWhereType)
+      end
     end
   end
-  local showMaterialDescFlag = self:getInsertedMaterialCount() <= 0
+  local showMaterialDescFlag = 0 >= self:getInsertedMaterialCount()
   self._ui.materialDescControl:SetShow(showMaterialDescFlag)
 end
 function manufacture:update()
   self:updateAction()
   self:updateMaterial()
-  self:updateKnowledge()
-  self:updateDoButton()
+  self:updateButton()
   if CppEnums.WaypointKeyUndefined == self._warehouseWayPointKey then
     Inventory_updateSlotData()
   else
     Warehouse_updateSlotData()
   end
 end
-function manufacture:updateDoButton()
-  local showRepeatButton = false
-  local showMassButton = false
-  if self:checkToDoRepeat() then
-    showRepeatButton = true
-    self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_ManufactureDoRepeat()")
-  elseif self:checkToDoMass() then
-    showMassButton = true
-    self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_ManufactureDoMass()")
-  else
-    self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+function manufacture:updateButton()
+  local showTabNavButton = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow()
+  self._ui.lbButtonControl:SetShow(showTabNavButton)
+  self._ui.rbButtonControl:SetShow(showTabNavButton)
+  local showKnowledgeFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and 0 < getCountAlchemyKnowledge() and self._knowledgeFocusFlag
+  local showSelectFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and self:checkActionEnabled(self._selectedActionIndex)
+  local showDoFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and self:checkToDo(false)
+  local showRemoveMaterialFlag = not PaGlobalFunc_InventoryInfo_GetShow() and self:checkToPop() and not PaGlobalFunc_AlchemyKnowledgeCheckShow()
+  local showCloseFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not self:checkToPop() and not PaGlobalFunc_AlchemyKnowledgeCheckShow()
+  local nextButtonPosX = self._ui.knowledgeButtonControl:GetPosX()
+  self._ui.knowledgeButtonControl:SetShow(showKnowledgeFlag)
+  if showKnowledgeFlag then
+    self._ui.knowledgeButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.knowledgeButtonControl:GetPosX() + self._ui.knowledgeButtonControl:GetSizeX() + self._ui.knowledgeButtonControl:GetTextSizeX() + self._doButtonGapX
   end
-  self._ui.doRepeatButtonControl:SetShow(showRepeatButton)
-  self._ui.doMassButtonControl:SetShow(showMassButton)
+  self._ui.selectButtonControl:SetShow(showSelectFlag)
+  if showSelectFlag then
+    self._ui.selectButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.selectButtonControl:GetPosX() + self._ui.selectButtonControl:GetSizeX() + self._ui.selectButtonControl:GetTextSizeX() + self._doButtonGapX
+  end
+  self._ui.doButtonControl:SetShow(showDoFlag)
+  if showDoFlag then
+    self._ui.doButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.doButtonControl:GetPosX() + self._ui.doButtonControl:GetSizeX() + self._ui.doButtonControl:GetTextSizeX() + self._doButtonGapX
+  end
+  self._ui.removeMaterialButtonControl:SetShow(showRemoveMaterialFlag)
+  if showRemoveMaterialFlag then
+    self._ui.removeMaterialButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.removeMaterialButtonControl:GetPosX() + self._ui.removeMaterialButtonControl:GetSizeX() + self._ui.removeMaterialButtonControl:GetTextSizeX() + self._doButtonGapX
+  end
+  self._ui.closeButtonControl:SetShow(showCloseFlag)
+  if showCloseFlag then
+    self._ui.closeButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.closeButtonControl:GetPosX() + self._ui.closeButtonControl:GetSizeX() + self._ui.closeButtonControl:GetTextSizeX() + self._doButtonGapX
+  end
 end
 function PaGlobalFunc_ManufacturePerFrameUpdate()
 end
@@ -1125,6 +1313,7 @@ function manufacture:responseSuccess(itemDynamicListWrapper)
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_COMPLETE_REPEAT"))
     end
   end
+  return PaGlobalFunc_ManufactureNotifierResponseSuccess(itemDynamicListWrapper)
 end
 function manufacture:responseFail(failReason)
   local message
@@ -1160,6 +1349,7 @@ function manufacture:responseFail(failReason)
     self._failCount = 0
     Manufacture_Response()
   end
+  return PaGlobalFunc_ManufactureNotifierResponseFail(failReason)
 end
 function manufacture:checkFailCount(currentFailCount)
   local defaultFailCount = 30
@@ -1170,5 +1360,12 @@ function manufacture:checkFailCount(currentFailCount)
 end
 function PaGlobalFunc_ManufactureResponse(itemDynamicListWrapper, failReason)
   return manufacture:response(itemDynamicListWrapper, failReason)
+end
+function manufacture:getCurrentActionNameKey()
+  local action = self:getSelectedAction()
+  return action.name
+end
+function PaGlobalFunc_ManufactureGetCurrentActionNameKey()
+  return manufacture:getCurrentActionNameKey()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_ManufactureInit")

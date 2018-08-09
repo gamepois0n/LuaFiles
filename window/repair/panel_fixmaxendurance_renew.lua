@@ -208,7 +208,9 @@ function FixMaxEnduranceInfo:evaluateAndSetMonoTone()
     self._ui.btn_Left:SetIgnore(true)
     self._ui.btn_Right:SetIgnore(true)
     self._ui.txt_keyGuideLeft:SetMonoTone(true)
+    self._ui.txt_keyGuideLeft:SetFontColor(Defines.Color.C_FF525B6D)
     self._ui.txt_keyGuideRight:SetMonoTone(true)
+    self._ui.txt_keyGuideRight:SetFontColor(Defines.Color.C_FF525B6D)
     ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
     return
   end
@@ -217,19 +219,24 @@ function FixMaxEnduranceInfo:evaluateAndSetMonoTone()
     if haveCashItem then
       self._ui.btn_Left:SetIgnore(false)
       self._ui.txt_keyGuideLeft:SetMonoTone(false)
+      self._ui.txt_keyGuideLeft:SetFontColor(Defines.Color.C_FFFFFFFF)
     else
       self._ui.btn_Left:SetIgnore(true)
       self._ui.txt_keyGuideLeft:SetMonoTone(true)
+      self._ui.txt_keyGuideLeft:SetFontColor(Defines.Color.C_FF525B6D)
     end
     self._ui.btn_Right:SetIgnore(false)
     self._ui.txt_keyGuideRight:SetMonoTone(false)
+    self._ui.txt_keyGuideRight:SetFontColor(Defines.Color.C_FFFFFFFF)
     local maxEndurance = itemWrapper:getStaticStatus():get():getMaxEndurance()
     local dynamicMaxEndurance = itemWrapper:get():getMaxEndurance()
     if maxEndurance <= dynamicMaxEndurance then
       self._ui.btn_Left:SetIgnore(true)
       self._ui.btn_Right:SetIgnore(true)
       self._ui.txt_keyGuideLeft:SetMonoTone(true)
+      self._ui.txt_keyGuideLeft:SetFontColor(Defines.Color.C_FF525B6D)
       self._ui.txt_keyGuideRight:SetMonoTone(true)
+      self._ui.txt_keyGuideRight:SetFontColor(Defines.Color.C_FF525B6D)
       return
     end
     ToClient_padSnapSetTargetPanel(_panel)
@@ -238,7 +245,9 @@ function FixMaxEnduranceInfo:evaluateAndSetMonoTone()
     self._ui.btn_Left:SetIgnore(true)
     self._ui.btn_Right:SetIgnore(true)
     self._ui.txt_keyGuideLeft:SetMonoTone(true)
+    self._ui.txt_keyGuideLeft:SetFontColor(Defines.Color.C_FF525B6D)
     self._ui.txt_keyGuideRight:SetMonoTone(true)
+    self._ui.txt_keyGuideRight:SetFontColor(Defines.Color.C_FF525B6D)
   end
 end
 function PaGlobalFunc_FixMaxEnduranceInfo_FilterSubject(slotNo, itemWrapper, inventoryType)

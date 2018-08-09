@@ -704,6 +704,10 @@ function Panel_GameExit_ChangeCharacter(index)
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "GAME_MESSAGE_CLOSE_CHARACTER_SLOT"))
     return
   end
+  if true == ToClient_CheckDuelCharacterInPrison(index) then
+    NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_LOGIN"))
+    return
+  end
   local contentString = ""
   if const_64.s64_m1 ~= characterData._lastTicketNoByRegion then
     contentString = PAGetString(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_WAIT") .. "\n"

@@ -60,6 +60,7 @@ function workerChangeSkill:close()
     return
   end
   Panel_Window_WorkerManager_ChangeSkill_Renew:SetShow(false)
+  PaGlobalFunc_WorkerManager_TemporaryOpen()
 end
 function workerChangeSkill:confirm()
   local prevWorkerSkillKeyRaw = self._selectedSkillKeyRaw

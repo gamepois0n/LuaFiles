@@ -40,8 +40,8 @@ local DyeingTake = {
   _ampuleListRowCount = 10,
   _ampuleListStartX = 0,
   _ampuleListStartY = 0,
-  _nowPaletteCategoryIndex = 1,
-  _nowPaletteIndex = 1,
+  _nowPaletteIndex = PALETTE_TYPE.MINE,
+  _nowPaletteCategoryIndex = PALETTE_CATEGORY.NORMAL,
   _nowPaletteDataIndex = -1,
   _currentScrollAmount = 0,
   _paletteShowAll = true
@@ -71,10 +71,34 @@ function DyeingTake:initialize()
     [PALETTE_CATEGORY.MEDIAH] = UI.getChildControl(self._ui.stc_paletteCategoryBG, "RadioButton_Mediah"),
     [PALETTE_CATEGORY.VALENCIA] = UI.getChildControl(self._ui.stc_paletteCategoryBG, "RadioButton_ValenCia")
   }
+  if not ToClient_IsContentsGroupOpen("3") then
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH]:SetShow(false)
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH] = nil
+  end
+  if not ToClient_IsContentsGroupOpen("4") then
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.VALENCIA]:SetShow(false)
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.VALENCIA] = nil
+  end
+  local centerX = self._ui.stc_paletteCategoryBG:GetSizeX() / 2
+  local iconGap = self._ui.rdo_categoryTypes[1]:GetSizeX() + 12
+  local tabCount = #self._ui.rdo_categoryTypes
+  local startX = centerX - tabCount * iconGap / 2
+  for ii = 1, tabCount do
+    self._ui.rdo_categoryTypes[ii]:SetPosX(startX + iconGap * (ii - 1))
+  end
   self._ui.stc_ampuleListBG = UI.getChildControl(self._ui.stc_bodyBG, "Static_PaletteListBG")
   self._ui.scroll_ampuleList = UI.getChildControl(self._ui.stc_ampuleListBG, "Scroll_PaletteItemList")
   self._ui.stc_itemFocus = UI.getChildControl(self._ui.stc_ampuleListBG, "Static_Item_Focus")
   self._ui.stc_itemFocus:SetShow(false)
+  self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI")
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_A_ConsoleUI")
+  self._ui.txt_keyGuideY = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_Y_ConsoleUI")
+  self._ui.txt_keyGuideY:SetShow(false)
+  local keyGuideList = {
+    self._ui.txt_keyGuideA,
+    self._ui.txt_keyGuideB
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.stc_bottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self:initAmpuleList()
   self:registEventHandler()
   self:registMessageHandler()
@@ -105,6 +129,7 @@ function DyeingTake:registEventHandler()
   _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "Input_DyeingTake_NextCategory(1)")
 end
 function DyeingTake:registMessageHandler()
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_DyeingTake_PadSnapChangePanel")
   registerEvent("FromClient_UpdateDyeingPalette", "FromClient_DyeingTake_Update")
 end
 function PaGlobalFunc_DyeingTake_GetShow()
@@ -115,16 +140,21 @@ function PaGlobalFunc_DyeingTake_Open()
 end
 function DyeingTake:open()
   _panel:SetShow(true)
+  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
   self._nowPaletteIndex = PALETTE_TYPE.MINE
   self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
+  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(false)
 end
 function PaGlobalFunc_DyeingTake_Close()
   DyeingTake:close()
 end
 function DyeingTake:close()
+  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(true)
   _panel:SetShow(false)
 end
 function DyeingTake:updatePalette()
@@ -174,6 +204,8 @@ function Input_DyeingTake_NextPalette(nextPaletteIndex)
   self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
   self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
 end
 function DyeingTake:isPlayerHaveActivedMerv()
@@ -194,6 +226,8 @@ function Input_DyeingTake_NextCategory(nextCategoryIndex)
   end
   self._nowPaletteCategoryIndex = targetCategory
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
 end
 function Input_DyeingTake_Ampule(ii)
@@ -239,4 +273,22 @@ function InputScroll_DyeingTake_Scroll(isUp)
 end
 function FromClient_DyeingTake_Update()
   DyeingTake:updatePalette()
+end
+function FromClient_DyeingTake_PadSnapChangePanel(fromPanel, toPanel)
+  local self = DyeingTake
+  if nil ~= toPanel and _panel:GetKey() == toPanel:GetKey() then
+    self._ui.stc_keyGuideLB:SetShow(true)
+    self._ui.stc_keyGuideRB:SetShow(true)
+    self._ui.stc_keyGuideLT:SetShow(true)
+    self._ui.stc_keyGuideRT:SetShow(true)
+    self._ui.txt_keyGuideB:SetShow(true)
+    self._ui.txt_keyGuideA:SetShow(true)
+  else
+    self._ui.stc_keyGuideLB:SetShow(false)
+    self._ui.stc_keyGuideRB:SetShow(false)
+    self._ui.stc_keyGuideLT:SetShow(false)
+    self._ui.stc_keyGuideRT:SetShow(false)
+    self._ui.txt_keyGuideB:SetShow(false)
+    self._ui.txt_keyGuideA:SetShow(false)
+  end
 end

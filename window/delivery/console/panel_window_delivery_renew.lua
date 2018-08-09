@@ -110,6 +110,7 @@ function PanelDelivery:init()
   self._ui.frame_CarriageType = UI.getChildControl(self._ui.stc_SendLeftBg, "Frame_CarriageType")
   self._ui.stc_BottomBg = UI.getChildControl(self._ui.stc_SendBg, "Static_BottomBg")
   self._ui.txt_SendConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Send_ConsoleUI")
+  self._ui.txt_SelectConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "Button_A_ConsoleUI")
   self._ui.txt_PricePenalty = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_NoticePrice")
   self._ui.txt_PricePenalty:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_PricePenalty:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_WINDOW_DELIVERY_REQUEST_WAYPOINTPENALTY"))
@@ -122,6 +123,8 @@ function PanelDelivery:init()
     local slotGapY = self._sendItemSlotBgs[slotIdx]:GetSizeY() + 8
     self._sendItemSlotBgs[slotIdx]:SetPosX(self._sendItemSlotBgs[slotIdx]:GetPosX() + slotGapX * col)
     self._sendItemSlotBgs[slotIdx]:SetPosY(self._sendItemSlotBgs[slotIdx]:GetPosY() + slotGapY * row)
+    self._sendItemSlotBgs[slotIdx]:addInputEvent("Mouse_On", "InputMO_PanelDelivery_ShowSlotHighlight(true, " .. slotIdx .. ")")
+    self._sendItemSlotBgs[slotIdx]:addInputEvent("Mouse_Out", "InputMO_PanelDelivery_ShowSlotHighlight(false, " .. slotIdx .. ")")
     local slot = {}
     slot.slotNo = slotIdx
     slot.panel = _panel
@@ -130,7 +133,11 @@ function PanelDelivery:init()
     slot.base:createChild()
     slot.base.icon:SetVerticalMiddle()
     slot.base.icon:SetHorizonCenter()
-    slot.base.icon:addInputEvent("Mouse_RUp", "PaGlobalFunc_PanelDelivery_SlotRClick(" .. slotIdx .. ")")
+    if true == ToClient_isXBox() then
+      slot.base.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_PanelDelivery_SlotRClick(" .. slotIdx .. ")")
+    else
+      slot.base.icon:addInputEvent("Mouse_RUp", "PaGlobalFunc_PanelDelivery_SlotRClick(" .. slotIdx .. ")")
+    end
     slot.base.icon:addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralNormal(" .. slotIdx .. ", \"DeliveryRequest\",true)")
     slot.base.icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralNormal(" .. slotIdx .. ", \"DeliveryRequest\",false)")
     slot.base.icon:SetIgnore(false)
@@ -171,6 +178,9 @@ function PanelDelivery:updateSendList()
     local itemWrapper = delivery_packItem(slotIdx)
     if nil ~= itemWrapper then
       self._sendItemSlots[slotIdx].base:setItem(itemWrapper)
+      self._sendItemSlots[slotIdx].base.icon:addInputEvent("Mouse_On", "InputMO_PanelDelivery_KeyGuideUpdate(true)")
+    else
+      self._sendItemSlots[slotIdx].base.icon:addInputEvent("Mouse_On", "InputMO_PanelDelivery_KeyGuideUpdate(false)")
     end
   end
 end
@@ -203,6 +213,7 @@ function PanelDelivery:updateDestination()
       slot:SetText(waypointKeyList:atPointer(listIdx):getName())
       slot:SetPosY(slot:GetPosY() + listIdx * (slot:GetSizeY() + 3))
       slot:addInputEvent("Mouse_LUp", "InputMLUp_PanelDelivery_SelectDestination(" .. listIdx .. ")")
+      slot:addInputEvent("Mouse_On", "InputMO_PanelDelivery_KeyGuideUpdate(true)")
       self._sendDestList[listIdx] = slot
     end
   end
@@ -238,6 +249,7 @@ function PanelDelivery:updateCarriageTypeList()
       slot:SetText(carriageList:atPointer(listIdx):getName())
       slot:SetPosY(slot:GetPosY() + listIdx * (slot:GetSizeY() + 3))
       slot:addInputEvent("Mouse_LUp", "InputMLUp_PanelDelivery_SelectCarriage(" .. listIdx .. ")")
+      slot:addInputEvent("Mouse_On", "InputMO_PanelDelivery_KeyGuideUpdate(true)")
       self._sendCarriageList[listIdx] = slot
     end
   end
@@ -614,6 +626,25 @@ function InputMO_PanelDelivery_SetDeliveryUI(_type)
     self._ui.txt_RecvConsoleUI:SetShow(false)
   end
 end
+function InputMO_PanelDelivery_ShowSlotHighlight(isShow, idx)
+  local self = PanelDelivery
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : PanelDelivery")
+    return
+  end
+  local slot = self._sendItemSlotBgs[idx]
+  if nil == slot then
+    return
+  end
+  if true == isShow then
+    local x1, y1, x2, y2 = setTextureUV_Func(slot, 50, 195, 94, 239)
+    slot:getBaseTexture():setUV(x1, y1, x2, y2)
+  else
+    local x1, y1, x2, y2 = setTextureUV_Func(slot, 143, 195, 187, 239)
+    slot:getBaseTexture():setUV(x1, y1, x2, y2)
+  end
+  slot:setRenderTexture(slot:getBaseTexture())
+end
 function DeliveryRequest_UpdateRequestSlotData()
   local self = PanelDelivery
   if nil == self then
@@ -625,6 +656,14 @@ end
 function PaGlobalFunc_PanelDelivery_ShowAni()
 end
 function PaGlobalFunc_PanelDelivery_HideAni()
+end
+function InputMO_PanelDelivery_KeyGuideUpdate(isShow)
+  local self = PanelDelivery
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : PanelDelivery")
+    return
+  end
+  self._ui.txt_SelectConsoleUI:SetShow(isShow)
 end
 function PaGlobalFunc_PanelDelivery_MoveTabLeft()
   local self = PanelDelivery

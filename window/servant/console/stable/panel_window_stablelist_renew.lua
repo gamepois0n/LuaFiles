@@ -72,7 +72,7 @@ local Panel_Window_StableList_info = {
     buttonSizeX = 0,
     buttonSpaceSizeX = 10,
     stableInfoButtonSize = 0,
-    stableInfoButtonSpace = 10,
+    stableInfoButtonSpace = 20,
     keyGuideButtonSize = 0,
     keyGuideButtonSpace = 10
   },
@@ -99,8 +99,7 @@ local Panel_Window_StableList_info = {
       y2 = 20
     }
   },
-  _slots = {},
-  _
+  _slots = {}
 }
 local stable = CppEnums.ServantStateType.Type_Stable
 local nowMating = CppEnums.ServantStateType.Type_Mating
@@ -138,6 +137,7 @@ function Panel_Window_StableList_info:registerMessageHandler()
   registerEvent("FromClient_ServantBuyMarket", "FromClient_StableList_ServantBuyMarket")
   registerEvent("FromClient_ServantStartMating", "FromClient_StableList_ServantStartMating")
   registerEvent("FromClient_ServantChildMating", "FromClient_StableList_ServantChildMating")
+  registerEvent("FromClient_ServantEndMating", "FromClien_StableList_ServantEndMating")
   registerEvent("FromClient_ServantClearDeadCount", "FromClient_StableList_ServantClearDeadCount")
   registerEvent("FromClient_ServantImprint", "FromClient_StableList_ServantImprint")
   registerEvent("FromClient_ServantClearMatingCount", "FromClient_StableList_ServantClearMatingCount")
@@ -1008,6 +1008,13 @@ function FromClient_StableList_ServantChildMating(servantNo)
     return
   end
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_GETCOLT_ACK"))
+end
+function FromClien_StableList_ServantEndMating(servantNo)
+  local servantInfo = stable_getServantByServantNo(servantNo)
+  if nil == servantInfo then
+    return
+  end
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CONDITION_MATINGCOMPLETEDESC"))
 end
 function FromClient_StableList_ServantClearDeadCount()
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_KILLCOUNTRESET_ACK"))

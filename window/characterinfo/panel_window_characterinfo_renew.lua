@@ -13,7 +13,10 @@ local CharacterInfo = {
     stc_HistoryInfoBg = UI.getChildControl(_panel, "Static_HistoryInfoBg"),
     stc_ChallengeInfoBg = UI.getChildControl(_panel, "Static_ChallengeInfoBg"),
     stc_ProfileInfoBg = UI.getChildControl(_panel, "Static_ProfileInfoBg"),
-    txt_toolTip = UI.getChildControl(_panel, "StaticText_ToolTip")
+    stc_questInfo = UI.getChildControl(_panel, "Static_QuestInfoBg"),
+    txt_toolTip = UI.getChildControl(_panel, "StaticText_ToolTip"),
+    txt_keyGuideA = UI.getChildControl(_panel, "StaticText_A_ConsoleUI"),
+    txt_keyGuideB = UI.getChildControl(_panel, "StaticText_B_ConsoleUI")
   },
   _potentialUIData = {
     limitPotentialLevel = 5,
@@ -52,37 +55,45 @@ local CharacterInfo = {
     [1] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_BASICTAPNAME"),
     [2] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_TITLETAPNAME"),
     [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_HISTORYTABNAME"),
-    [4] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_CHALLENGETABNAME"),
+    [4] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTOPTION_TITLE"),
     [5] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_PROFILETABNAME"),
-    [6] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_LIFEINFOTABNAME")
+    [6] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_LIFEINFOTABNAME"),
+    [7] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_CHALLENGETABNAME")
   }
 }
-function FromClient_luaLoadComplete_CharaterInfo_Init()
-  CharacterInfo:init()
+function CharacterInfo:close()
+  audioPostEvent_SystemUi(1, 1)
+  Panel_Window_CharacterInfo_Renew:SetShow(false, false)
+  UI.ClearFocusEdit()
+  Panel_Window_CharacterInfo_Renew:CloseUISubApp()
+  HelpMessageQuestion_Out()
+  Panel_Tooltip_Item_hideTooltip()
 end
-registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CharaterInfo_Init")
 function CharacterInfo:init()
   self._ui.stc_LB = UI.getChildControl(self._ui.stc_TabGroup, "Static_LB")
   self._ui.stc_LB:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterInfo_ShowLeftNextTab()")
   self._ui.stc_RB = UI.getChildControl(self._ui.stc_TabGroup, "Static_RB")
   self._ui.stc_RB:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterInfo_ShowRightNextTab()")
   if true == _ContentsGroup_RenewUI then
-    self._maxPanelTypeNumber = 3
+    self._maxPanelTypeNumber = 4
     self._ui.radioButton = {
       [1] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Basic"),
       [2] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Named"),
-      [3] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Dairy")
+      [3] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Dairy"),
+      [4] = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Quest")
     }
     for ii = 1, self._maxPanelTypeNumber do
       self._ui.radioButton[ii]:addInputEvent("Mouse_LUp", "InputMLUp_TapToOpenWindow(" .. ii .. ")")
       local radioButtonXAxis = self._ui.radioButton[1]:GetPosX()
-      self._ui.radioButton[ii]:SetPosX(radioButtonXAxis + 245 * (ii - 1))
+      self._ui.radioButton[ii]:SetPosX(radioButtonXAxis + 200 * (ii - 1))
       self._ui.radioButton[ii]:SetShow(true)
     end
-    local taskTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Task")
     local lifeTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Life")
+    local taskTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_Task")
+    local footStepTabControl = UI.getChildControl(self._ui.stc_TabGroup, "RadioButton_FootStep")
     taskTabControl:SetShow(false)
     lifeTabControl:SetShow(false)
+    footStepTabControl:SetShow(false)
   else
     self._maxPanelTypeNumber = 6
     self._ui.radioButton = {
@@ -146,6 +157,7 @@ function CharacterInfo:init()
     self._ui.txt_AwakenAtkPoint:SetShow(false)
   end
   self._ui.txt_SKillPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Skill_Point")
+  self._ui.txt_AtkSpeed = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Speed")
   self._ui.txt_AtkSpeedLevel = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Speed_Level")
   self._ui.txt_MoveSpeedLevel = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Move_Speed_Level")
   self._ui.txt_CriticalLevel = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Cri_Level")
@@ -184,6 +196,30 @@ function CharacterInfo:init()
   self:XB_Contorl_Init()
   _panel:RegisterUpdateFunc("CoolTimeCountdown_UpdatePerFrame")
   self:registMessageHandler()
+end
+function CharacterInfo:registMessageHandler()
+  registerEvent("progressEventCancelByAttacked", "PaGlobalFunc_Window_CharacterInfo_Close")
+  registerEvent("FromClient_SelfPlayerTendencyChanged", "FromClient_CharacterInfo_Basic_TendencyChanged")
+  registerEvent("FromClient_WpChanged", "FromClient_CharacterInfo_Basic_MentalChanged")
+  registerEvent("FromClient_UpdateExplorePoint", "FromClient_CharacterInfo_Basic_ContributionChanged")
+  registerEvent("FromClient_SelfPlayerExpChanged", "FromClient_CharacterInfo_Basic_LevelChanged")
+  registerEvent("EventSelfPlayerLevelUp", "FromClient_CharacterInfo_Basic_LevelChanged")
+  registerEvent("FromClient_SelfPlayerHpChanged", "FromClient_CharacterInfo_Basic_HpChanged")
+  registerEvent("FromClient_SelfPlayerMpChanged", "FromClient_CharacterInfo_Basic_MpChanged")
+  registerEvent("FromClient_InventoryUpdate", "FromClient_CharacterInfo_Basic_WeightChanged")
+  registerEvent("FromClient_WeightChanged", "FromClient_CharacterInfo_WeightChanged")
+  registerEvent("EventEquipmentUpdate", "FromClient_CharacterInfo_Basic_AttackChanged")
+  registerEvent("EventStaminaUpdate", "FromClient_CharacterInfo_Basic_StaminaChanged")
+  registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "FromClient_CharacterInfo_Basic_SkillPointChanged")
+  registerEvent("FromClient_UpdateTolerance", "FromClient_CharacterInfo_Basic_ResistChanged")
+  registerEvent("FromClient_UpdateSelfPlayerLifeExp", "FromClient_UI_CharacterInfo_Basic_CraftLevelChanged")
+  registerEvent("FromClient_UpdateSelfPlayerStatPoint", "FromClient_CharacterInfo_Basic_PotentialChanged")
+  registerEvent("FromClientFitnessUp", "FromClient_CharacterInfo_Basic_FitnessChanged")
+  registerEvent("FromClient_ShowLifeRank", "FromClient_UI_CharacterInfo_Basic_RankChanged")
+  registerEvent("onScreenResize", "FromClient_UI_CharacterInfo_Basic_ScreenResize")
+  registerEvent("FromClient_PlayerTotalStat_Changed", "FromClient_CharacterInfo_PlayerTotalStat_Changed")
+  _panel:RegisterShowEventFunc(true, "PaGlobalFunc_CharacterInfo_ShowAni()")
+  _panel:RegisterShowEventFunc(false, "PaGlobalFunc_CharacterInfo_HideAni()")
 end
 function CharacterInfo:potentialGauge_Init()
   local _sizeX = math.floor(self._potentialUIData.maxX / self._potentialUIData.limitPotentialLevel)
@@ -242,58 +278,6 @@ function CharacterInfo:mpTitle_Init()
     self._ui.progress_Mental:setRenderTexture(self._ui.progress_Mental:getBaseTexture())
   end
 end
-function InputMLUp_TapToOpenWindow(index)
-  local self = CharacterInfo
-  Panel_Tooltip_Item_hideTooltip()
-  self._currentPanelType = index
-  local panelDisplay = {}
-  if true == _ContentsGroup_RenewUI then
-    panelDisplay = {
-      [1] = self._ui.stc_CharacterInfoBg,
-      [2] = self._ui.stc_TitleInfoBg,
-      [3] = self._ui.stc_HistoryInfoBg
-    }
-  else
-    panelDisplay = {
-      [1] = self._ui.stc_CharacterInfoBg,
-      [2] = self._ui.stc_TitleInfoBg,
-      [3] = self._ui.stc_HistoryInfoBg,
-      [4] = self._ui.stc_ChallengeInfoBg,
-      [5] = self._ui.stc_ProfileInfoBg,
-      [6] = self._ui.stc_LifeInfoBg
-    }
-  end
-  for ii = 1, self._maxPanelTypeNumber do
-    panelDisplay[ii]:SetShow(false)
-    self._ui.radioButton[ii]:SetCheck(false)
-  end
-  panelDisplay[index]:SetShow(true)
-  self._ui.radioButton[index]:SetCheck(true)
-  local radioButtonXAxis = self._ui.radioButton[index]:GetPosX()
-  self._ui.txt_toolTip:SetText(self._tapName[index])
-  self._ui.txt_toolTip:SetPosX(radioButtonXAxis - 20)
-  local toolTipLen = string.len(self._ui.txt_toolTip:GetText())
-  if toolTipLen > 9 then
-    self._ui.txt_toolTip:SetSize(10 * toolTipLen, 30)
-    self._ui.txt_toolTip:SetPosX(self._ui.txt_toolTip:GetPosX() - (toolTipLen - 9) * 5)
-  else
-    self._ui.txt_toolTip:SetSize(90, 30)
-  end
-  self._ui.stc_ToolTipArrow:ComputePos()
-  if 1 == index then
-    self:update()
-  elseif 2 == index then
-    InputMLUp_CharacterTitleInfo_TapToOpen(0)
-  elseif 3 == index then
-    PaGlobalFunc_CharacterHistoryInfo_Open()
-  elseif 4 == index then
-    InputMLUp_CharacterChallengeInfo_TapToOpen(0)
-  elseif 5 == index and false == _ContentsGroup_RenewUI then
-    InputMLUp_CharacterProfileInfo_TapToOpen(0)
-  elseif 6 == index and false == _ContentsGroup_RenewUI then
-    PaGlobalFunc_CharacterLifeInfo_Update()
-  end
-end
 function CharacterInfo:update()
   self._player = getSelfPlayer()
   self._playerGet = self._player:get()
@@ -309,6 +293,7 @@ function CharacterInfo:update()
   local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
   self._ui.txt_Journey:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
   self._ui.txt_Journey:SetSize(self._ui.txt_Journey:GetTextSizeX(), self._ui.txt_Journey:GetSizeY())
+  self._ui.txt_Journey:ComputePos()
   local battleFP = self._playerGet:getBattleFamilyPoint()
   local lifeFP = self._playerGet:getLifeFamilyPoint()
   local etcFP = self._playerGet:getEtcFamilyPoint()
@@ -318,11 +303,10 @@ function CharacterInfo:update()
   self._ui.txt_LifePoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_LIFE_TOOLTIP_TITLE") .. " " .. tostring(lifeFP))
   self._ui.txt_SpecialPoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_ETC_TOOLTIP_TITLE") .. " " .. tostring(etcFP))
   local msg = ToClient_GetUserIntroduction()
-  local oneLineMsg = string.gsub(msg, "\n", " ")
-  self._ui.txt_Introduce:SetEditText(oneLineMsg)
-  self._ui.txt_Introduce:SetEditText(self._ui.txt_Introduce:GetEditText(), true)
+  self._ui.txt_Introduce:SetEditText(msg, true)
   self._ui.txt_Introduce:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.txt_Introduce:SetMaxEditLine(2)
+  self._ui.txt_Introduce:SetMaxEditLine(3)
+  self._ui.txt_Introduce:SetMaxInput(70)
   self._ui.txt_Introduce:addInputEvent("Mouse_LUp", "InputMLUp_CharacterInfo_Edit_Introduce()")
   self:updateFacePhoto()
   FromClient_CharacterInfo_Basic_HpChanged()
@@ -343,12 +327,22 @@ function CharacterInfo:update()
   FromClient_CharacterInfo_Basic_FitnessChanged(0, 0, 0, 0)
   FromClient_CharacterInfo_Basic_ResistChanged()
 end
-function FromClient_CharacterInfo_Basic_LevelChanged()
-  local self = CharacterInfo
-  local _playerLevel = self._player:get():getLevel()
-  local _famiName = self._player:getUserNickname()
-  local _charName = self._player:getOriginalName()
-  self._ui.txt_CharacterName:SetText("LV." .. _playerLevel .. " " .. tostring(_charName) .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_FAMILYNAME", "name", tostring(_famiName)) .. ")")
+function CharacterInfo:ShowNextTab(isLeft)
+  if true == isLeft then
+    if 1 < self._currentPanelType then
+      self._currentPanelType = self._currentPanelType - 1
+    else
+      self._currentPanelType = self._maxPanelTypeNumber
+    end
+    InputMLUp_TapToOpenWindow(self._currentPanelType)
+  else
+    if self._currentPanelType < self._maxPanelTypeNumber then
+      self._currentPanelType = self._currentPanelType + 1
+    else
+      self._currentPanelType = 1
+    end
+    InputMLUp_TapToOpenWindow(self._currentPanelType)
+  end
 end
 function PaGlobalFunc_CharacterLifeInfo_ClearFocus()
   local self = CharacterInfo
@@ -362,11 +356,8 @@ function InputMLUp_CharacterInfo_Edit_Introduce()
   local self = CharacterInfo
   ClearFocusEdit()
   SetFocusEdit(self._ui.txt_Introduce)
-  self._ui.txt_Introduce:SetMaxEditLine(2)
-  self._ui.txt_Introduce:SetMaxInput(120)
   self._ui.txt_Introduce:SetEditText(self._ui.txt_Introduce:GetEditText(), true)
   self._ui.txt_Introduce:addInputEvent("Mouse_LUp", "PaGlobalFunc_CharacterLifeInfo_ClearFocus()")
-  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_CharacterLifeInfo_ClearFocus()")
 end
 function PaGlobalFunc_CharacterInfo_UpdateFacePhoto()
   local self = CharacterInfo
@@ -498,6 +489,12 @@ function FromClient_CharacterInfo_Basic_PotentialChanged()
     [5] = self._player:getCharacterStatPointCollection(),
     [6] = self._player:getCharacterStatPointDropItem()
   }
+  local battleSpeed = CppEnums.ClassType_BattleSpeed[classType]
+  if battleSpeed == CppEnums.BattleSpeedType.SpeedType_Cast then
+    self._ui.txt_AtkSpeed:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CASTSPEED"))
+  else
+    self._ui.txt_AtkSpeed:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_ATTACKSPEED"))
+  end
   for ii = 1, self.POTENTIAL_TYPE.TOTALCOUNT do
     if self._potentialUIData.limitPotentialLevel <= _potentialData[ii] then
       _potentialData[ii] = self._potentialUIData.limitPotentialLevel
@@ -636,29 +633,6 @@ function FromClient_CharacterInfo_Basic_ResistChanged()
     _registTextDisplay[ii]:SetText(math.floor(_dataDisplay[ii] / 10000) .. "%")
   end
 end
-function CharacterInfo:registMessageHandler()
-  registerEvent("FromClient_SelfPlayerTendencyChanged", "FromClient_CharacterInfo_Basic_TendencyChanged")
-  registerEvent("FromClient_WpChanged", "FromClient_CharacterInfo_Basic_MentalChanged")
-  registerEvent("FromClient_UpdateExplorePoint", "FromClient_CharacterInfo_Basic_ContributionChanged")
-  registerEvent("FromClient_SelfPlayerExpChanged", "FromClient_CharacterInfo_Basic_LevelChanged")
-  registerEvent("EventSelfPlayerLevelUp", "FromClient_CharacterInfo_Basic_LevelChanged")
-  registerEvent("FromClient_SelfPlayerHpChanged", "FromClient_CharacterInfo_Basic_HpChanged")
-  registerEvent("FromClient_SelfPlayerMpChanged", "FromClient_CharacterInfo_Basic_MpChanged")
-  registerEvent("FromClient_InventoryUpdate", "FromClient_CharacterInfo_Basic_WeightChanged")
-  registerEvent("FromClient_WeightChanged", "FromClient_CharacterInfo_WeightChanged")
-  registerEvent("EventEquipmentUpdate", "FromClient_CharacterInfo_Basic_AttackChanged")
-  registerEvent("EventStaminaUpdate", "FromClient_CharacterInfo_Basic_StaminaChanged")
-  registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "FromClient_CharacterInfo_Basic_SkillPointChanged")
-  registerEvent("FromClient_UpdateTolerance", "FromClient_CharacterInfo_Basic_ResistChanged")
-  registerEvent("FromClient_UpdateSelfPlayerLifeExp", "FromClient_UI_CharacterInfo_Basic_CraftLevelChanged")
-  registerEvent("FromClient_UpdateSelfPlayerStatPoint", "FromClient_CharacterInfo_Basic_PotentialChanged")
-  registerEvent("FromClientFitnessUp", "FromClient_CharacterInfo_Basic_FitnessChanged")
-  registerEvent("FromClient_ShowLifeRank", "FromClient_UI_CharacterInfo_Basic_RankChanged")
-  registerEvent("onScreenResize", "FromClient_UI_CharacterInfo_Basic_ScreenResize")
-  registerEvent("FromClient_PlayerTotalStat_Changed", "FromClient_CharacterInfo_PlayerTotalStat_Changed")
-  _panel:RegisterShowEventFunc(true, "PaGlobalFunc_CharacterInfo_ShowAni()")
-  _panel:RegisterShowEventFunc(false, "PaGlobalFunc_CharacterInfo_HideAni()")
-end
 function PaGlobalFunc_Window_CharacterInfo_Open()
   CharacterInfo:open()
 end
@@ -668,59 +642,131 @@ function CharacterInfo:open()
   InputMLUp_TapToOpenWindow(1)
 end
 function PaGlobalFunc_Window_CharacterInfo_Close()
-  CharacterInfo:close()
-end
-function PaGlobalFunc_Window_CharacterInfo_GetShow()
-  Panel_Window_CharacterInfo_Renew:GetShow()
-end
-function PaGlobalFunc_Window_CharacterInfo_SaveUserIntroduction()
-  if nil == CharacterInfo then
+  local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
     return
   end
-  self = CharacterInfo
-  ToClient_RequestSetUserIntroduction(self._ui.txt_Introduce:GetText())
+  self:close()
 end
-function CharacterInfo:close()
-  audioPostEvent_SystemUi(1, 1)
-  Panel_Window_CharacterInfo_Renew:SetShow(false, false)
-  UI.ClearFocusEdit()
-  Panel_Window_CharacterInfo_Renew:CloseUISubApp()
-  HelpMessageQuestion_Out()
-  Panel_Tooltip_Item_hideTooltip()
+function PaGlobalFunc_Window_CharacterInfo_GetShow()
+  return _panel:GetShow()
+end
+function PaGlobalFunc_Window_CharacterInfo_SaveUserIntroduction()
+  local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
+  end
+  ToClient_RequestSetUserIntroduction(self._ui.txt_Introduce:GetText())
 end
 function PaGlobalFunc_CharacterInfo_CheckIntroduceUiEdit(targetUI)
   local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
+  end
   return nil ~= targetUI and targetUI:GetKey() == self._ui.txt_Introduce:GetKey()
 end
 function PaGlobalFunc_CharacterInfo_ShowRightNextTab()
   local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
+  end
   self:ShowNextTab(false)
 end
 function PaGlobalFunc_CharacterInfo_ShowLeftNextTab()
   local self = CharacterInfo
-  self:ShowNextTab(true)
-end
-function CharacterInfo:ShowNextTab(isLeft)
-  if true == isLeft then
-    if 1 < self._currentPanelType then
-      self._currentPanelType = self._currentPanelType - 1
-    else
-      self._currentPanelType = self._maxPanelTypeNumber
-    end
-    InputMLUp_TapToOpenWindow(self._currentPanelType)
-  else
-    if self._currentPanelType < self._maxPanelTypeNumber then
-      self._currentPanelType = self._currentPanelType + 1
-    else
-      self._currentPanelType = 1
-    end
-    InputMLUp_TapToOpenWindow(self._currentPanelType)
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
   end
+  self:ShowNextTab(true)
 end
 function PaGlobalFunc_CharacterInfo_ShowAni()
 end
 function PaGlobalFunc_CharacterInfo_HideAni()
 end
+function InputMLUp_TapToOpenWindow(index)
+  local self = CharacterInfo
+  Panel_Tooltip_Item_hideTooltip()
+  self._currentPanelType = index
+  local panelDisplay = {}
+  if true == _ContentsGroup_RenewUI then
+    panelDisplay = {
+      [1] = self._ui.stc_CharacterInfoBg,
+      [2] = self._ui.stc_TitleInfoBg,
+      [3] = self._ui.stc_HistoryInfoBg,
+      [4] = self._ui.stc_questInfo
+    }
+  else
+    panelDisplay = {
+      [1] = self._ui.stc_CharacterInfoBg,
+      [2] = self._ui.stc_TitleInfoBg,
+      [3] = self._ui.stc_HistoryInfoBg,
+      [4] = self._ui.stc_ChallengeInfoBg,
+      [5] = self._ui.stc_ProfileInfoBg,
+      [6] = self._ui.stc_LifeInfoBg
+    }
+  end
+  for ii = 1, self._maxPanelTypeNumber do
+    panelDisplay[ii]:SetShow(false)
+    self._ui.radioButton[ii]:SetCheck(false)
+  end
+  panelDisplay[index]:SetShow(true)
+  self._ui.radioButton[index]:SetCheck(true)
+  local radioButtonXAxis = self._ui.radioButton[index]:GetPosX()
+  self._ui.txt_toolTip:SetText(self._tapName[index])
+  self._ui.txt_toolTip:SetPosX(radioButtonXAxis - 20)
+  local toolTipLen = string.len(self._ui.txt_toolTip:GetText())
+  if toolTipLen > 9 then
+    self._ui.txt_toolTip:SetSize(10 * toolTipLen, 30)
+    self._ui.txt_toolTip:SetPosX(self._ui.txt_toolTip:GetPosX() - (toolTipLen - 9) * 5)
+  else
+    self._ui.txt_toolTip:SetSize(90, 30)
+  end
+  self._ui.stc_ToolTipArrow:ComputePos()
+  if 1 == index then
+    self:update()
+    self._ui.txt_keyGuideA:SetShow(false)
+  elseif 2 == index then
+    InputMLUp_CharacterTitleInfo_TapToOpen(0)
+    self._ui.txt_keyGuideA:SetShow(true)
+  elseif 3 == index then
+    PaGlobalFunc_CharacterHistoryInfo_Open()
+    self._ui.txt_keyGuideA:SetShow(false)
+  elseif 4 == index then
+    PaGlobalFunc_CharacterQuestInfo_Open()
+    self._ui.txt_keyGuideA:SetShow(true)
+  elseif 5 == index and false == _ContentsGroup_RenewUI then
+    InputMLUp_CharacterProfileInfo_TapToOpen(0)
+    self._ui.txt_keyGuideA:SetShow(false)
+  elseif 6 == index and false == _ContentsGroup_RenewUI then
+    PaGlobalFunc_CharacterLifeInfo_Update()
+    self._ui.txt_keyGuideA:SetShow(false)
+  end
+end
+function FromClient_CharacterInfo_Basic_LevelChanged()
+  local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
+  end
+  local _playerLevel = self._player:get():getLevel()
+  local _famiName = self._player:getUserNickname()
+  local _charName = self._player:getOriginalName()
+  self._ui.txt_CharacterName:SetText("LV." .. _playerLevel .. " " .. tostring(_charName) .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_FAMILYNAME", "name", tostring(_famiName)) .. ")")
+end
+function FromClient_luaLoadComplete_CharaterInfo_Init()
+  local self = CharacterInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : CharacterInfo")
+    return
+  end
+  self:init()
+end
+registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CharaterInfo_Init")
 function PaGlobalFunc_CharacterInfoTab_PadControl(index)
   local self = CharacterInfo
   _PA_LOG("\236\155\144\236\132\160", "PaGlobalFunc_CharacterInfoTab_PadControl" .. index)

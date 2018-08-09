@@ -2,11 +2,17 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-Panel_Window_GuildWarScore:SetShow(flase)
+Panel_Window_GuildWarScore:SetShow(false)
 PAGlobal_GuildWarScore = {
   _scoreList = {},
   _constGuildListMaxCount = 11,
-  _selectedGuildNo = 0
+  _selectedGuildNo = 0,
+  _ui = {
+    _buildingTitle = UI.getChildControl(Panel_Window_GuildWarScore, "Static_M_Destroyed"),
+    _killTitle = UI.getChildControl(Panel_Window_GuildWarScore, "Static_M_Kill"),
+    _deathTitle = UI.getChildControl(Panel_Window_GuildWarScore, "Static_M_Dead"),
+    _vehicleTitle = UI.getChildControl(Panel_Window_GuildWarScore, "Static_M_StableDead")
+  }
 }
 function PAGlobal_GuildWarScore:init()
   local copyCharName = UI.getChildControl(Panel_Window_GuildWarScore, "StaticText_CharacterName")
@@ -69,6 +75,37 @@ function PAGlobal_GuildWarScore:init()
   UI.deleteControl(copyDead)
   UI.deleteControl(copyVehicle)
   copyCharName, copyBuilding, copyKill, copyDead, copyVehicle = nil, nil, nil, nil, nil
+  self._ui._buildingTitle:addInputEvent("Mouse_On", "GuildWarScore_Tooltip_Show(" .. 0 .. ")")
+  self._ui._buildingTitle:addInputEvent("Mouse_Out", "GuildWarScore_Tooltip_Hide()")
+  self._ui._killTitle:addInputEvent("Mouse_On", "GuildWarScore_Tooltip_Show(" .. 1 .. ")")
+  self._ui._killTitle:addInputEvent("Mouse_Out", "GuildWarScore_Tooltip_Hide()")
+  self._ui._deathTitle:addInputEvent("Mouse_On", "GuildWarScore_Tooltip_Show(" .. 2 .. ")")
+  self._ui._deathTitle:addInputEvent("Mouse_Out", "GuildWarScore_Tooltip_Hide()")
+  self._ui._vehicleTitle:addInputEvent("Mouse_On", "GuildWarScore_Tooltip_Show(" .. 3 .. ")")
+  self._ui._vehicleTitle:addInputEvent("Mouse_Out", "GuildWarScore_Tooltip_Hide()")
+end
+function GuildWarScore_Tooltip_Show(controlType)
+  local self = PAGlobal_GuildWarScore
+  local control, name
+  if 0 == controlType then
+    control = self._ui._buildingTitle
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_OBJECTKILLCOUNTTITLE")
+  elseif 1 == controlType then
+    control = self._ui._killTitle
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_PLAYERKILLCOUNTTITLE")
+  elseif 2 == controlType then
+    control = self._ui._deathTitle
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_DEATHCOUNTTITLE")
+  elseif 3 == controlType then
+    control = self._ui._vehicleTitle
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_SERVANTKILLCOUNTTITLE")
+  else
+    return
+  end
+  TooltipSimple_Show(control, name)
+end
+function GuildWarScore_Tooltip_Hide()
+  TooltipSimple_Hide()
 end
 function PAGlobal_GuildWarScore:UpdateData(guildNo)
   for index = 0, self._constGuildListMaxCount - 1 do
@@ -127,5 +164,6 @@ end
 function FGlobal_GuildWarScore_renew_Close()
   PAGlobal_GuildWarScore._selectedGuildNo = 0
   Panel_Window_GuildWarScore:SetShow(false)
+  TooltipSimple_Hide()
 end
 PAGlobal_GuildWarScore:init()

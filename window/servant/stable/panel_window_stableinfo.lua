@@ -801,6 +801,7 @@ function stableInfo:registMessageHandler()
   registerEvent("onScreenResize", "StableInfo_Resize")
   registerEvent("FromClient_ServantChangeSkill", "ServantChangeSkill_Complete")
   registerEvent("FromClient_ForgetServantSkill", "FromClient_ForgetServantSkill")
+  registerEvent("FromClient_SetBeginningLevelServant", "FromClient_SetBeginningLevelServant")
 end
 function StableInfo_Resize()
   Panel_Window_StableInfo:SetSpanSize(20, 30)
@@ -1116,6 +1117,16 @@ function FromClient_ForgetServantSkill(servantNo, skillKey)
   end
   Proc_ShowMessage_Ack_WithOut_ChattingMessage(msg)
   deleteSkillName = nil
+  local self = stableInfo
+  if nil ~= self.currentServantType then
+    self:update(self.currentServantType)
+  else
+    self:update()
+  end
+end
+function FromClient_SetBeginningLevelServant(servantNo)
+  local msg = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_COMPLETE_SETBEGINNINGLEVEL")
+  Proc_ShowMessage_Ack_WithOut_ChattingMessage(msg)
   local self = stableInfo
   if nil ~= self.currentServantType then
     self:update(self.currentServantType)

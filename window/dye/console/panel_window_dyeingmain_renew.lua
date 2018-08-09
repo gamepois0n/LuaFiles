@@ -6,18 +6,29 @@ local UI_BUFFTYPE = CppEnums.UserChargeType
 local ENUM_EQUIP = CppEnums.EquipSlotNoClient
 local CT = CppEnums.ClassType
 local DyeingMain = {
-  _ui = {},
-  _movePosX = 0,
-  _movePosY = 0,
+  _ui = {
+    stc_bottomBG = UI.getChildControl(_panel, "Static_BottomBg"),
+    txt_keyGuides = {}
+  },
   _isLDown = false,
   _isRDown = false
 }
+local _padLTIsPressed = false
 function FromClient_luaLoadComplete_DyeingMain_Init()
   DyeingMain:initialize()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_DyeingMain_Init")
 function DyeingMain:initialize()
+  self._ui.txt_keyGuides = {
+    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_RS2_ConsoleUI"),
+    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_RS_ConsoleUI"),
+    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI"),
+    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideDPad")
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._ui.txt_keyGuides, self._ui.stc_bottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   _panel:RegisterUpdateFunc("PaGlobalFunc_Dyeing_UpdatePerFrame")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "Input_DyeingMain_PressedLT()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_LT, "Input_DyeingMain_ReleasedLT()")
 end
 function PaGlobalFunc_Dyeing_Open()
   DyeingMain:open()
@@ -52,15 +63,15 @@ function DyeingMain:open()
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
-  self._movePosX = getMousePosX()
-  self._movePosY = getMousePosX()
-  ToClient_DyeingManagerShow()
-  ToClient_RequestSetTargetType(0)
   SetUIMode(Defines.UIMode.eUIMode_DyeNew)
   renderMode:set()
+  ToClient_DyeingManagerShow()
+  ToClient_RequestSetTargetType(0)
   Panel_Tooltip_Item_hideTooltip()
   _panel:SetShow(true)
   PaGlobalFunc_DyeingMenu_Open()
+  renderMode:set()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_DYEING")
 end
 function PaGlobalFunc_Dyeing_CloseAll()
   PaGlobalFunc_DyeingTake_Close()
@@ -75,6 +86,7 @@ function PaGlobalFunc_Dyeing_OnPadB()
   end
   if PaGlobalFunc_DyeingTake_GetShow() then
     PaGlobalFunc_DyeingTake_Close()
+    PaGlobalFunc_DyeingMenu_Open()
     return
   end
   if PaGlobalFunc_DyeingPalette_GetShow() then
@@ -91,6 +103,7 @@ function PaGlobalFunc_Dyeing_OnPadB()
 end
 function PaGlobalFunc_Dyeing_Close()
   DyeingMain:close()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function DyeingMain:close()
   if Panel_Win_System:GetShow() then
@@ -113,19 +126,25 @@ function DyeingMain:close()
 end
 function PaGlobalFunc_Dyeing_UpdatePerFrame(deltaTime)
   local self = DyeingMain
-  local currentPosX = getMousePosX()
-  local currentPosY = getMousePosY()
-  if currentPosX == self._movePosX and currentPosY == self._movePosY then
-    return
+  local RSX = getPadRightStickMoveX()
+  local RSY = getPadRightStickMoveY()
+  if 0 ~= RSX or 0 ~= RSY then
+    if true == _padLTIsPressed then
+      ToClient_RequestUpdateDyeVaryZoom(RSY * deltaTime * 400)
+    else
+      ToClient_RequestUpdateDyeVaryRotation(RSX * -0.8 * deltaTime, -(RSY * -2) * deltaTime)
+    end
   end
-  local radianAngle = (self._movePosX - currentPosX) / (getScreenSizeX() / 10)
-  local cameraPitch = (currentPosY - self._movePosY) / (getScreenSizeY() / 2)
-  self._movePosX = currentPosX
-  self._movePosY = currentPosY
-  if true == self._isLDown then
-    ToClient_LearnSkillCameraSetRotation(radianAngle * 30, cameraPitch * 90)
-  end
-  if true == self._isRDown then
-    ToClient_LearnSkillCameraSetPosition(radianAngle * 0.8, -(cameraPitch * 2))
-  end
+end
+function PaGlobalFunc_DyeingMain_ShowLTKeyGuide(isShow)
+  DyeingMain._ui.txt_keyGuides[1]:SetShow(isShow)
+end
+function Input_DyeingMain_PressedLT()
+  _padLTIsPressed = true
+end
+function Input_DyeingMain_ReleasedLT()
+  _padLTIsPressed = false
+end
+function PaGlobalFunc_DyeingMain_MoveKeyGuide(toX)
+  DyeingMain._ui.stc_bottomBG:SetPosX(toX - DyeingMain._ui.stc_bottomBG:GetSizeX())
 end

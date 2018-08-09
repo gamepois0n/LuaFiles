@@ -567,6 +567,7 @@ function HouseInstallation:Open()
     self:Open_ItemInstallMode(isShow)
   end
   Panel_House_InstallationMode:SetShow(true)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_BUILDMODE")
 end
 function HouseInstallation:Open_ObjectInstallMode(isShow)
   if not IsSelfPlayerWaitAction() and not IsSelfPlayerBattleWaitAction() then
@@ -728,6 +729,7 @@ function HouseInstallation_Hide()
   InventoryWindow_Close()
   FGlobal_FarmGuide_Close()
   InitializeModeClose_PetMaidInit()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function _houseInstallation_UpdateScroll(isDown)
   local self = HouseInstallation

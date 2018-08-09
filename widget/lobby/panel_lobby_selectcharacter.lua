@@ -14,6 +14,7 @@ local SpecialCharacterListIndex = 1
 local isChangeCharacterTab = false
 local enablePremiumCharacterEverywhere = true
 local isGhostMode = false
+local TUserCharacterNoDefault = -1
 Panel_CharacterSelectNew:SetShow(false)
 local SelectCharacter = {
   panelTitle = UI.getChildControl(Panel_CharacterSelectNew, "StaticText_CharacterSelect"),
@@ -1046,16 +1047,28 @@ function CharacterSelect_PlayGame(index)
             priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
           }
           MessageBox.showMessageBox(messageboxData)
-        elseif ToClient_IsCustomizeOnlyClass(classType) then
-          local messageboxData = {
-            title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
-            content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"),
-            functionApply = MessageBox_Empty_function,
-            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-          }
-          MessageBox.showMessageBox(messageboxData)
-        elseif true == selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) then
-          Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+        else
+          if false == isSpecialCharacter and true == ToClient_CheckDuelCharacterInPrison(index) then
+            local messageboxData = {
+              title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+              content = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_LOGIN"),
+              functionApply = MessageBox_Empty_function,
+              priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+            }
+            MessageBox.showMessageBox(messageboxData)
+            return
+          end
+          if ToClient_IsCustomizeOnlyClass(classType) then
+            local messageboxData = {
+              title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+              content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"),
+              functionApply = MessageBox_Empty_function,
+              priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+            }
+            MessageBox.showMessageBox(messageboxData)
+          elseif true == selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) then
+            Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+          end
         end
       end
     else

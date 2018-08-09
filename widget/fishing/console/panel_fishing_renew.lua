@@ -178,6 +178,9 @@ function FromClient_ReconnectCheckItemGrade(itemgrade)
   getSelfPlayer():setFishingAutoItemGrade(itemGrade)
   FGlobal_RemoteControl_FishCheck(fishing_UI._fishCheckBtn:IsCheck())
 end
+function PaGlobalFunc_Fishing_GetFishingMiniGame_3()
+  return ui_Value.isFirstTime_Manual_Fishing_3
+end
 registerEvent("FromClient_ReconnectCheckItemGrade", "FromClient_ReconnectCheckItemGrade")
 local IsHideFishingGame = function()
   local uiMode = GetUIMode()
@@ -202,6 +205,7 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
     FGlobal_EquipFishingToolCheck()
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
     local actionString = ""
     if getGamePadEnable() then
       actionString = keyCustom_GetString_ActionPad(gameOptionActionKey.Jump)
@@ -239,6 +243,7 @@ local function FishingGame_Manual_Fishing_0(actorKeyRaw, isSelf)
     Panel_Fishing:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Fishing, 0, 0.22)
     FGlobal_EquipFishingToolCheck()
+    PaGlobalFunc_ConsoleKeyGuide_SetFishingWaitHookMode()
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
     if _ContentsGroup_isConsolePadControl then
@@ -246,7 +251,6 @@ local function FishingGame_Manual_Fishing_0(actorKeyRaw, isSelf)
     else
       fishing_UI._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_0"))
     end
-    setFishingResourcePool_text()
     fishing_UI._fishBG:SetSize(fishing_UI._fishComment:GetTextSizeX() + 10, fishing_UI._fishPercent:GetSizeY() + fishing_UI._fishComment:GetSizeY() + 10)
     fishing_UI._fishWpDesc_BG:SetShow(false)
     ui_Value.isFirstTime_Manual_Fishing_0 = false
@@ -271,6 +275,7 @@ local function FishingGame_Manual_Fishing_1(actorKeyRaw, isSelf)
     fishing_UI._fishingCancelDesc:SetShow(true)
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini1()
     local actionString = ""
     if getGamePadEnable() then
       actionString = keyCustom_GetString_ActionPad(gameOptionActionKey.Jump)
@@ -303,6 +308,7 @@ local function FishingGame_Manual_Fishing_2(actorKeyRaw, isSelf)
     fishing_UI._fishingCancelDesc:SetShow(true)
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini2()
     if _ContentsGroup_isConsolePadControl then
       fishing_UI._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_2"))
     else
@@ -319,6 +325,7 @@ local function FishingGame_Manual_Fishing_3(actorKeyRaw, isSelf)
   end
   local autoFishingEnalbe = selfplayer:get():isAutoFishingable()
   if ui_Value.isFirstTime_Manual_Fishing_3 == true then
+    PaGlobal_ConsoleQuickMenu:widgetClose(false)
     for _, v in pairs(uiPress) do
       v:SetShow(false)
       v:ComputePos()
@@ -333,6 +340,7 @@ local function FishingGame_Manual_Fishing_3(actorKeyRaw, isSelf)
     end
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
+    PaGlobalFunc_ConsoleKeyGuide_SetfishingStartHook()
     local actionString = ""
     if getGamePadEnable() then
       actionString = keyCustom_GetString_ActionPad(gameOptionActionKey.Jump)
@@ -348,7 +356,7 @@ local function FishingGame_Manual_Fishing_3(actorKeyRaw, isSelf)
     else
       fishing_UI._fishWpDesc_BG:SetShow(false)
     end
-    ui_Value.isFirstTime_Manual_Fishing_2 = false
+    ui_Value.isFirstTime_Manual_Fishing_3 = false
   end
 end
 local function FishingGame_Manual_Fishing_Auto()
@@ -546,6 +554,10 @@ end
 function Panel_Fishing_End(actorKeyRaw, isSelf)
   if false == isSelf then
     return
+  end
+  if false == ui_Value.isFirstTime_Manual_Fishing_Start then
+    PaGlobalFunc_ConsoleKeyGuide_SetState()
+    PaGlobal_ConsoleQuickMenu:widgetOpen()
   end
   Panel_Fishing:SetShow(false)
   Panel_ConsoleKeyGuide:SetShow(true)

@@ -8,7 +8,7 @@ local Window_WorldMap_BottomMenuInfo = {
   },
   _config = {
     _bookMarkCount = 10,
-    _findCount = 18,
+    _findCount = 17,
     _bookMarkMode = 0,
     _findMode = 1
   },
@@ -29,8 +29,7 @@ local Window_WorldMap_BottomMenuInfo = {
     [13] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_21"),
     [14] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_29"),
     [15] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_22"),
-    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_25"),
-    [17] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_27")
+    [16] = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_TOWNNPCNAVI_NPCTYPETEXT_25")
   },
   _spawnType = {
     [0] = CppEnums.SpawnType.eSpawnType_SkillTrainer,
@@ -49,8 +48,7 @@ local Window_WorldMap_BottomMenuInfo = {
     [13] = CppEnums.SpawnType.eSpawnType_Fish,
     [14] = CppEnums.SpawnType.eSpawnType_Cook,
     [15] = CppEnums.SpawnType.eSpawnType_Worker,
-    [16] = CppEnums.SpawnType.eSpawnType_ItemMarket,
-    [17] = CppEnums.SpawnType.eSpawnType_TerritoryTrade
+    [16] = CppEnums.SpawnType.eSpawnType_ItemMarket
   },
   _currentIndex = 0
 }
@@ -134,13 +132,10 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateWayPoint()
 end
 function PaGlobalFunc_WorldMap_BottomMenu_ModeChange()
   local self = Window_WorldMap_BottomMenuInfo
-  self._ui._static_BookMarkBg:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
-  self._ui._staticText_BookMarkTitle:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._static_FindBg:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._staticText_FindTitle:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._staticText_FindDecs:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
-    self._ui._currentList = self._ui._bookMarkList
   else
     self._ui._currentList = self._ui._findList
   end
@@ -151,19 +146,21 @@ end
 function PaGlobalFunc_WorldMap_BottomMenu_SetShow(isShow, isAni)
   Panel_Worldmap_BottomMenu:SetShow(isShow, isAni)
 end
-function PaGlobalFunc_WorldMap_BottomMenu_Open(isBookMarkMode)
+function PaGlobalFunc_WorldMap_BottomMenu_Open()
   local self = Window_WorldMap_BottomMenuInfo
   PaGlobalFunc_WorldMap_BottomMenu_ModeChange()
   PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(0)
   if true == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
     return
   end
+  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(true)
   PaGlobalFunc_WorldMap_BottomMenu_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_BottomMenu_Close()
   if false == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
     return
   end
+  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(false)
   PaGlobalFunc_WorldMap_BottomMenu_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_BottomMenu_luaLoadComplete()

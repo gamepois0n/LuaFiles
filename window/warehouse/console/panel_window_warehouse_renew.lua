@@ -127,13 +127,12 @@ function Warehouse:init()
   self._ui.scroll_Warehouse = UI.getChildControl(self._ui.stc_CenterBg, "Scroll_Warehouse")
   self._ui.list_Warehouse = UI.getChildControl(self._ui.stc_LeftBg, "List2_WareHouse")
   self._ui.txt_NotAvaliable = UI.getChildControl(self._ui.stc_LeftBg, "StaticText_NotAvaliable")
+  self._ui.txt_Close = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_B")
   self._ui.txt_Select = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A")
-  self._ui.txt_Silver = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_X")
-  self._ui.txt_Manufacture = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y")
-  self._ui.txt_Manufacture:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_BTNTEXT_1"))
+  self._ui.txt_Silver = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y")
   self._ui.txt_RegistMarket = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_LT")
   self._ui.txt_RegistMarket:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_BTNTEXT_2"))
-  self._defaultKeyGuideXpos = self._ui.txt_Select:GetPosX()
+  self._defaultKeyGuideXpos = self._ui.txt_Close:GetPosX()
   self._config.slotRows = self._config.slotCount / self._config.slotCols
   self._maxSlotRow = math.floor((self._config.slotCount - 1) / self._config.slotCols)
   for slotIdx = 0, self._config.slotCount - 1 do
@@ -156,6 +155,9 @@ function Warehouse:init()
         slot.base:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "PaGlobalFunc_Warehouse_Scroll(false)")
       end
     end
+    slot.base:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_Warehouse_ShowTooltip(" .. slotIdx .. ", true)")
+    slot.base:addInputEvent("Mouse_On", "InputMO_Warehouse_ShowSlotHighlight(true, " .. slotIdx .. ")")
+    slot.base:addInputEvent("Mouse_Out", "InputMO_Warehouse_ShowSlotHighlight(false, " .. slotIdx .. ")")
     self._slotBgData[slotIdx] = slot
   end
   for slotIdx = 0, self._config.slotCount - 1 do
@@ -175,7 +177,6 @@ function Warehouse:init()
     end
     slot.icon:addInputEvent("Mouse_On", "InputMO_Warehouse_IconOver(" .. slotIdx .. ")")
     slot.icon:addInputEvent("Mouse_Out", "InputMOut_Warehouse_IconOut(" .. slotIdx .. ")")
-    Panel_Tooltip_Item_SetPosition(slotIdx, slot, "WareHouse")
     if true == ToClient_isXBox() then
       if 0 == row then
         slot.icon:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_Warehouse_Scroll(true)")
@@ -214,10 +215,9 @@ function Warehouse:open(waypointKey, fromType, isSetWarehouseList)
   else
     self._buttonData.marketRegist = false
   end
-  if true == FGlobal_Warehouse_IsMoveItem() then
+  self._buttonData.sendMoney = false
+  if true == FGlobal_Warehouse_IsMoveItem() and false == self:isDeliveryWindow() then
     self._buttonData.sendMoney = true
-  else
-    self._buttonData.sendMoney = false
   end
   self._buttonData.guildUpdate = false
   self:panelSizeChange(self:isNpc())
@@ -417,7 +417,11 @@ function Warehouse:update()
   local showCheck = true == self:isGuildHouse() or true == self:isFurnitureWareHouse()
   self._ui.txt_AssetTitle:SetShow(not showCheck)
   self._ui.txt_AssetValue:SetShow(not showCheck)
-  Panel_Tooltip_Item_hideTooltip()
+  if true == ToClient_isXBox() then
+    self._ui.txt_AssetTitle:SetShow(false)
+    self._ui.txt_AssetValue:SetShow(false)
+  end
+  PaGlobalFunc_FloatingTooltip_Close()
   self:panelSizeChange(self:isNpc())
 end
 function WarehouseListMenu:updateWarehouseList()
@@ -471,7 +475,11 @@ function WarehouseListMenu:ClickOtherTown(waypointKey)
   else
     if true == PaGlobalFunc_InventoryInfo_GetShow() then
       local filterFunc = Warehouse._invenFilterFunc
-      Inventory_SetFunctor(filterFunc, FGlobal_PopupMoveItem_InitByInventory, nil, nil)
+      local optionalEvent = {
+        func = PaGlobalFunc_InventoryInfo_PopMoney,
+        keyGuideString = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_DEPOSIT_TITLE")
+      }
+      Inventory_SetFunctor(filterFunc, FGlobal_PopupMoveItem_InitByInventory, nil, nil, optionalEvent)
       PaGlobalFunc_InventoryInfo_SetMoneyButton(false)
       PaGlobalFunc_InventoryInfo_Close()
     end
@@ -496,21 +504,24 @@ function Warehouse:updateButtonInfo()
   local keyGuideXpos = self._defaultKeyGuideXpos
   self._ui.txt_Select:SetShow(self._buttonData.selectItem)
   if true == self._ui.txt_Select:GetShow() then
+    keyGuideXpos = keyGuideXpos - 120
     self._ui.txt_Select:SetPosX(keyGuideXpos)
-    keyGuideXpos = keyGuideXpos - 150
   end
   self._ui.txt_Silver:SetShow(self._buttonData.sendMoney)
   if true == self._ui.txt_Silver:GetShow() then
-    self._ui.txt_Silver:SetPosX(keyGuideXpos)
     keyGuideXpos = keyGuideXpos - 150
+    self._ui.txt_Silver:SetPosX(keyGuideXpos)
   end
-  self._ui.txt_Manufacture:SetShow(false)
   self._ui.txt_RegistMarket:SetShow(false)
 end
 function Warehouse:popWarehouseItem(slotNo)
   local warehouseWrapper = self:getWarehouse()
   local itemWrapper = warehouseWrapper:getItem(slotNo)
   if nil == itemWrapper then
+    if slotNo == getMoneySlotNo() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEMANAGEMENT_ACK_MAKEBOOK"))
+      return
+    end
     return
   end
   if Defines.s64_const.s64_0 == itemWrapper:get():getCount_s64() then
@@ -605,7 +616,7 @@ function Warehouse_Close()
   else
     _panel:SetShow(false, false)
   end
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
   if true == ToClient_CheckExistSummonMaid() then
     ToClient_CallHandlerMaid("_maidLogOut")
   end
@@ -715,12 +726,18 @@ function PaGlobalFunc_Warehouse_OpenWithInventory(filterFunc)
     return
   end
   self._invenFilterFunc = filterFunc
-  Inventory_SetFunctor(filterFunc, FGlobal_PopupMoveItem_InitByInventory, Warehouse_Close, nil)
+  local optionalEvent = {
+    func = PaGlobalFunc_InventoryInfo_PopMoney,
+    keyGuideString = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WAREHOUSE_PUTINMONEY")
+  }
+  Inventory_SetFunctor(filterFunc, FGlobal_PopupMoveItem_InitByInventory, Warehouse_Close, nil, optionalEvent)
   PaGlobalFunc_InventoryInfo_SetMoneyButton(true)
   InventoryWindow_Show()
   self._startSlotIndex = 0
   self._ui.scroll_Warehouse:SetControlTop()
-  ServantInventory_OpenAll()
+  if false == _ContentsGroup_RenewUI_Inventory then
+    ServantInventory_OpenAll()
+  end
 end
 function Warehouse_OpenPanelFromDialog()
   local self = Warehouse
@@ -730,8 +747,6 @@ function Warehouse_OpenPanelFromDialog()
   end
   self._sellCheck = false
   warehouse_clearSellToSystem()
-  local isSetWarehouseList = true
-  self:open(getCurrentWaypointKey(), eWarehouseTypeNpc, isSetWarehouseList)
   Warehouse_SetIgnoreMoneyButton(false)
   if false == ToClient_WorldMapIsShow() then
     _panel:SetVerticalTop()
@@ -740,6 +755,8 @@ function Warehouse_OpenPanelFromDialog()
   if nil ~= Panel_Window_ItemMarket_RegistItem and true == Panel_Window_ItemMarket_RegistItem:GetShow() then
     FGlobal_ItemMarketRegistItem_Close()
   end
+  local isSetWarehouseList = true
+  self:open(getCurrentWaypointKey(), eWarehouseTypeNpc, isSetWarehouseList)
 end
 function Warehouse_OpenPanelFromDialogWithoutInventory(waypointKey, fromType)
   local self = Warehouse
@@ -854,10 +871,11 @@ function Warehouse_SetIgnoreMoneyButton(isIgnore)
   local set = not isIgnore
   self._buttonData.sendMoney = set
   if true == set then
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "InputMLUp_Warehouse_WarehousePopMoney()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_Warehouse_WarehousePopMoney()")
   else
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
+  self:updateButtonInfo()
 end
 function Warehouse_PushFromInventoryItem(s64_count, whereType, slotNo, fromActorKeyRaw)
   local self = Warehouse
@@ -1098,9 +1116,15 @@ function InputMO_Warehouse_IconOver(index)
   else
     self._slotNilEffect[index] = slot.icon:AddEffect("UI_Inventory_EmptySlot", false, -0.5, -0.5)
   end
-  self._tooltipSlotNo = slot.slotNo
   self:updateButtonInfo()
-  Panel_Tooltip_Item_Show_GeneralNormal(index, "WareHouse", true)
+  local warehouseWrapper = self:getWarehouse()
+  if nil == warehouseWrapper then
+    return
+  end
+  local itemWrapper = warehouseWrapper:getItem(slot.slotNo)
+  if nil ~= itemWrapper then
+    PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, self._slotBgData[index].base)
+  end
 end
 function InputMOut_Warehouse_IconOut(index)
   local self = Warehouse
@@ -1110,7 +1134,7 @@ function InputMOut_Warehouse_IconOut(index)
   end
   local slot = self._slotItemData[index]
   self._tooltipSlotNo = nil
-  Panel_Tooltip_Item_Show_GeneralNormal(index, "WareHouse", false)
+  PaGlobalFunc_TooltipInfo_Close()
 end
 function Warehouse_GetToolTipItemNo()
   local self = Warehouse
@@ -1170,6 +1194,21 @@ function PaGlobalFunc_Warehouse_Scroll(isUp)
   self._startSlotIndex = UIScroll.ScrollEvent(self._ui.scroll_Warehouse, isUp, self._config.slotRows, maxSize, self._startSlotIndex, self._config.slotCols)
   self:update()
 end
+function Input_Warehouse_ShowTooltip(slotIdx, isShow)
+  local self = Warehouse
+  if isShow then
+    local warehouseWrapper = self:getWarehouse()
+    if nil == warehouseWrapper then
+      return
+    end
+    local itemWrapper = warehouseWrapper:getItem(self._slotItemData[slotIdx].slotNo)
+    if nil ~= itemWrapper then
+      PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, 0, getScreenSizeX())
+    end
+  else
+    PaGlobalFunc_TooltipInfo_Close()
+  end
+end
 function InputMLUp_Warehouse_WarehousePopMoney()
   local self = Warehouse
   if nil == self then
@@ -1181,6 +1220,25 @@ function InputMLUp_Warehouse_WarehousePopMoney()
     return
   end
   self:popWarehouseItem(slotNo)
+end
+function InputMO_Warehouse_ShowSlotHighlight(isShow, idx)
+  local self = Warehouse
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Warehouse")
+    return
+  end
+  local slot = self._slotBgData[idx].base
+  if nil == slot then
+    return
+  end
+  if true == isShow then
+    local x1, y1, x2, y2 = setTextureUV_Func(slot, 50, 195, 94, 239)
+    slot:getBaseTexture():setUV(x1, y1, x2, y2)
+  else
+    local x1, y1, x2, y2 = setTextureUV_Func(slot, 143, 195, 187, 239)
+    slot:getBaseTexture():setUV(x1, y1, x2, y2)
+  end
+  slot:setRenderTexture(slot:getBaseTexture())
 end
 function InputMLUp_WarehouseListMenu_TerritoryOpen(territoryKey, isFirstOpen)
   local self = WarehouseListMenu

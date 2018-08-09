@@ -14,6 +14,7 @@ function appear_blackSpirit(questNo, blackSpiritUIType)
       Panel_Npc_Dialog:SetShow(false)
       FGlobal_Dialog_renderMode:set()
     end
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_BLACKSPIRIT")
   else
     SetUIMode(preUIMode)
     ToClient_PopBlackSpiritFlush()

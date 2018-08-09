@@ -281,6 +281,9 @@ function PaGlobal_Camp:setPos()
   Panel_Icon_Camp:SetPosY(posY)
   PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
   PaGlobal_CharacterTag_SetPosIcon()
+  if nil ~= PaGlobal_Fairy_SetPosIcon then
+    PaGlobal_Fairy_SetPosIcon()
+  end
 end
 function PaGlobal_Camp:register()
   FGlobal_CampRegister_Open()

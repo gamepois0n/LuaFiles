@@ -7,7 +7,7 @@ PaGlobal_TutorialPhase_BasicMove = {
   _classStringData = {},
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15
 }
 local classType = 0

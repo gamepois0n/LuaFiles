@@ -33,16 +33,21 @@ function LoginNickname_OK()
   end
   local createFamilyName = function()
     registerNickname()
+    LoginNickname_Open(false)
+  end
+  local cancelFamilyName = function()
+    LoginNickname_Open(false)
   end
   local messageBoxContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOGIN_NICKNAME_FIRSTCREATE", "name", self.edit_nickname:GetEditText())
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
     content = messageBoxContent,
     functionYes = createFamilyName,
-    functionNo = MessageBox_Empty_function,
+    functionNo = cancelFamilyName,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
+  LoginNickname_Close(false)
 end
 function Input_loginNickname_Edit()
   SetFocusEdit(loginNickname.edit_nickname)
@@ -55,20 +60,26 @@ function LoginNickname_Cancel_End()
   disConnectToGame()
   GlobalExitGameClient()
 end
-function LoginNickname_Open()
+function LoginNickname_Open(clearStr)
   if _panel:GetShow() then
     return
   end
   local self = loginNickname
-  self.edit_nickname:SetEditText("")
+  if nil == clearStr or true == clearStr then
+    self.edit_nickname:SetEditText("")
+  end
   self.edit_nickname:SetMaxInput(getGameServiceTypeUserNickNameLength())
   ClearFocusEdit()
   _panel:SetShow(true)
-  PaGlobal_Policy_ShowWindow(true)
+  if nil == clearStr or true == clearStr then
+    PaGlobal_Policy_ShowWindow(true)
+  end
 end
-function LoginNickname_Close()
+function LoginNickname_Close(clearStr)
   local self = loginNickname
-  self.edit_nickname:SetEditText("")
+  if nil == clearStr or true == clearStr then
+    self.edit_nickname:SetEditText("")
+  end
   if _panel:GetShow() then
     _panel:SetShow(false)
   end

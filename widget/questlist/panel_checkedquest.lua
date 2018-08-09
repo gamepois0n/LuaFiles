@@ -1835,9 +1835,9 @@ function HandleClicked_QuestWidget_FindTarget(questGroupId, questId, condition, 
       if nil ~= questInfo then
         local questPosCount = questInfo:getQuestPositionCount()
         if 0 == questPosCount and 0 ~= condition and 99 ~= condition then
-          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PROCMESSAGE_QUEST_NO_FINDWAY"))
-        else
           Proc_ShowMessage_Ack("Navigation is not available for this quest.")
+        else
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PROCMESSAGE_QUEST_ALEADY_FINDWAY"))
         end
       end
     end
@@ -1951,6 +1951,9 @@ function _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, i
       end
     else
     end
+  end
+  if true == _ContentsGroup_RenewUI then
+    PaGlobalFunc_Quest_UpdateFindingQuestInfo(questGroupId, questId, true)
   end
 end
 local questConditionType = {
@@ -2549,6 +2552,8 @@ end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_FromClient_questWidget_ResetPosition")
 function TutorialQuestCompleteCheck()
   return questList_isClearQuest(104, 1) or 15 <= getSelfPlayer():get():getLevel()
+end
+function QuestWidget_DefaultTextureFunction()
 end
 registerEvent("updateProgressQuestList", "FromClient_UpdateQuestSetPos")
 registerEvent("FromClient_UpdateProgressGuildQuestList", "FromClient_UpdateQuestSetPos")

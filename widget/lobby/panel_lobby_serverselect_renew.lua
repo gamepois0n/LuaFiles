@@ -199,30 +199,6 @@ function ServerSelect:init()
   self._ui.txt_Back_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_Back_ConsoleUI")
   self:initListData()
 end
-local isXboxDownlosdShowMessageBox = false
-function ServerSelect:checkXBoxInstallation()
-  if isXboxDownlosdShowMessageBox then
-    return
-  end
-  if ToClient_isDataDownloadStart() then
-    local isComplete = ToClient_isDataDownloadComplete()
-    local percent = ToClient_getDataDownloadProgress()
-    if false == isComplete then
-      local messageboxData = {
-        title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
-        content = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MESSAGEBOX_XBOX_DATAINSTALLATION_DESC") .. tostring(percent),
-        functionApply = ServerSelect_XboxDownload_MessgaeBoxYes,
-        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-      }
-      MessageBox.showMessageBox(messageboxData)
-      return
-    end
-  end
-  isXboxDownlosdShowMessageBox = false
-end
-function ServerSelect_XboxDownload_MessgaeBoxYes()
-  isXboxDownlosdShowMessageBox = true
-end
 function ServerSelect:updateListData()
   local channelIdx = 0
   local worldServerData = getGameWorldServerDataByIndex(self._selectedWorldIndex)
@@ -481,7 +457,6 @@ function PaGlobal_ServerSelect_PerFrameUpdate(deltaTime)
     _updateTimeAcc = 15
     local self = ServerSelect
     self:updateListData()
-    self:checkXBoxInstallation()
     if _isScope then
       _stc_BackgroundImage[currentBackIndex]:SetShow(true)
       _isScope = false

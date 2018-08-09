@@ -93,7 +93,7 @@ function PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorial(text1, text2, isI
     self._ui._staticText_Title:SetShow(true)
   end
   if nil ~= text2 then
-    local scrX = self._ui._staticText_Key2_ConsoleUI:GetPosX() - self._ui._static_BlackSpiritEffect:GetSizeX()
+    local scrX = self._ui._staticText_Key2_ConsoleUI:GetPosX() - self._ui._static_BlackSpiritEffect:GetSizeX() - 50
     self._ui._staticText_Desc:SetSize(scrX, self._ui._staticText_Desc:GetSizeY())
     self._ui._staticText_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self._ui._staticText_Desc:SetText(text2)

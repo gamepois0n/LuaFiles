@@ -43,22 +43,16 @@ end
 function PaGlobalFunc_Customization_BodyPose_SliderOn(sliderType)
   local self = Customization_BodyPoseInfo
   if 0 == sliderType then
-    self._ui._slider_RotationXFocus:SetShow(true)
   elseif 1 == sliderType then
-    self._ui._slider_RotationYFocus:SetShow(true)
   elseif 2 == sliderType then
-    self._ui._slider_RotationZFocus:SetShow(true)
   end
   PaGlobalFunc_Customization_SetKeyGuide(4)
 end
 function PaGlobalFunc_Customization_BodyPose_SliderOut(sliderType)
   local self = Customization_BodyPoseInfo
   if 0 == sliderType then
-    self._ui._slider_RotationXFocus:SetShow(false)
   elseif 1 == sliderType then
-    self._ui._slider_RotationYFocus:SetShow(false)
   elseif 2 == sliderType then
-    self._ui._slider_RotationZFocus:SetShow(false)
   end
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_BodyPose_GetShow() then
     PaGlobalFunc_Customization_SetKeyGuide(2)
@@ -275,12 +269,6 @@ function Customization_BodyPoseInfo:InitControl()
   self._ui._slider_RotationX = UI.getChildControl(self._ui._static_RotationSliderXBg, "Slider_X")
   self._ui._slider_RotationY = UI.getChildControl(self._ui._static_RotationSliderYBg, "Slider_Y")
   self._ui._slider_RotationZ = UI.getChildControl(self._ui._static_RotationSliderZBg, "Slider_Z")
-  self._ui._slider_RotationXFocus = UI.getChildControl(self._ui._static_RotationSliderXBg, "Static_FocusBox")
-  self._ui._slider_RotationYFocus = UI.getChildControl(self._ui._static_RotationSliderYBg, "Static_FocusBox")
-  self._ui._slider_RotationZFocus = UI.getChildControl(self._ui._static_RotationSliderZBg, "Static_FocusBox")
-  self._ui._slider_RotationXFocus:SetShow(false)
-  self._ui._slider_RotationYFocus:SetShow(false)
-  self._ui._slider_RotationZFocus:SetShow(false)
   self._ui._sliderButton_RotationX = UI.getChildControl(self._ui._slider_RotationX, "Slider_Button")
   self._ui._sliderButton_RotationY = UI.getChildControl(self._ui._slider_RotationY, "Slider_Button")
   self._ui._sliderButton_RotationZ = UI.getChildControl(self._ui._slider_RotationZ, "Slider_Button")

@@ -51,6 +51,18 @@ function resurrectionItem:resetData()
   self._cashRevivalCount = 0
   self._selectSpawnType = 0
 end
+function PaGlobalFunc_ResurrerectionItem_TemporaryClose()
+  resurrectionItem:temporaryClose()
+end
+function PaGlobalFunc_ResurrerectionItem_TemporaryOpen()
+  resurrectionItem:temporaryOpen()
+end
+function resurrectionItem:temporaryClose()
+  Panel_Resurrection_ItemSelect:SetShow(false)
+end
+function resurrectionItem:temporaryOpen()
+  Panel_Resurrection_ItemSelect:SetShow(true)
+end
 function resurrectionItem:open()
   if true == Panel_Resurrection_ItemSelect:GetShow() then
     return
@@ -104,6 +116,7 @@ function resurrectionItem:setPosition()
 end
 function resurrectionItem:selectItem(index)
   self._selectItemNo = index
+  PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, self._cashRivivalData[index].slotNo), Defines.TooltipTargetType.Item, 0)
 end
 function PaGlobalFunc_ResurrectionItem_SelectItem(index)
   resurrectionItem:selectItem(index)
@@ -113,10 +126,9 @@ function resurrectionItem:updateItemInfo()
   self._selectItemNo = 0
   self._cashRivivalData = {}
   local cashRevivalData = self._cashRivivalData
-  local cashInvenItem
   local cashItemCount = 0
   for cashInvenIdx = 0, ToClient_InventoryGetSize(CppEnums.ItemWhereType.eCashInventory) - 1 do
-    cashInvenItem = ToClient_GetInventoryItemByProductCategory(CppEnums.ItemWhereType.eCashInventory, CppEnums.ItemProductCategory.eItemProductCategory_Revival, cashInvenIdx)
+    local cashInvenItem = ToClient_GetInventoryItemByProductCategory(CppEnums.ItemWhereType.eCashInventory, CppEnums.ItemProductCategory.eItemProductCategory_Revival, cashInvenIdx)
     if cashInvenItem ~= nil then
       cashRevivalData[idx] = {}
       cashRevivalData[idx].name = cashInvenItem:getStaticStatus():getName()
@@ -153,9 +165,10 @@ function resurrectionItem:applyItem(respawnType)
     title = msgTitle,
     content = msgContent,
     functionYes = ToClient_CashRevivalBuy_Confirm,
-    functionNo = MessageBox_Empty_function,
+    functionNo = PaGlobalFunc_ResurrerectionItem_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  resurrectionItem:temporaryClose()
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobalFunc_ResurrerectionItem_ApplyItem(respawnType)
@@ -175,9 +188,10 @@ function resurrectionItem:buyItem(respawnType)
     title = msgTitle,
     content = msgContent,
     functionYes = ToClient_BuyCashRevival,
-    functionNo = MessageBox_Empty_function,
+    functionNo = PaGlobalFunc_ResurrerectionItem_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  PaGlobalFunc_ResurrerectionItem_TemporaryClose()
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobalFunc_ResurrerectionItem_buyItem(respawnType)
@@ -196,9 +210,10 @@ function resurrectionItem:BuyConfirm()
     title = msgTitle,
     content = msgContent,
     functionYes = ToClient_CashRevivalBuy_Confirm,
-    functionNo = MessageBox_Empty_function,
+    functionNo = PaGlobalFunc_ResurrerectionItem_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  PaGlobalFunc_ResurrerectionItem_TemporaryClose()
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobalFunc_ResurrerectionItem_BuyConfirm()

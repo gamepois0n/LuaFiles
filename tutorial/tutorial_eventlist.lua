@@ -17,8 +17,13 @@ function PaGlobal_TutorialManager:handleLuaLoadComplete(isTool)
   _PA_LOG("\234\179\189\235\175\188\236\154\176", "@@@\235\163\168\236\149\132\235\161\156\235\147\156\236\153\132\235\163\140!!@@@")
 end
 function PaGlobal_TutorialManager:handleTutorialUiManagerInitialize()
-  if true == _ContentsGroup_RenewUI_Tutorial and (true == Panel_IntroMovie:GetShow() or false == isMoviePlayMode()) then
-    return
+  if true == _ContentsGroup_RenewUI_Tutorial then
+    if true == Panel_IntroMovie:GetShow() or true == isMoviePlayMode() then
+      return
+    end
+    if 1 == getSelfPlayer():get():getLevel() then
+      return
+    end
   end
   if false == isMoviePlayMode() then
     self:continueTutorial()

@@ -826,6 +826,7 @@ function DyeReNew:Open()
   HandleClicked_LUp_Ampule_SelectedType(false, false)
   self._selectedDyePart = {}
   HandleOpen_RadioButton_AmpuleReset()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_DYEING")
 end
 function DyeReNew:Close()
   audioPostEvent_SystemUi(1, 23)
@@ -837,6 +838,7 @@ function DyeReNew:Close()
     WeaponChange_Close()
   end
   Panel_Tooltip_Item_hideTooltip()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function DyeReNew:Reset_Position()
   local UIStaticBG = UI.getChildControl(Panel_Dye_ReNew, "Static_BG")

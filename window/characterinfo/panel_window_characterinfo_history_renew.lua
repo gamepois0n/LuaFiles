@@ -28,6 +28,11 @@ local CharacterHistoryInfo = {
     [11] = 30,
     [12] = 31
   },
+  _hitoryContainer = {},
+  _specifyKey = 100,
+  _minYear = 2014,
+  _minMonth = 1,
+  _currentContainerIdx = 1,
   _circleRightPosModification = 51,
   _circleLeftPosModification = -80,
   _datePosModification = 100,
@@ -94,19 +99,46 @@ function CharacterHistoryInfo:init()
   self._ui.txt_Date_R:SetShow(false)
   self._ui.stc_Circle_L:SetShow(false)
   self._ui.stc_Circle_R:SetShow(false)
+  self:updateHistoryContainer()
 end
 function FromClient_CharacterHistoryInfo_updateInfo()
   if nil == CharacterHistoryInfo then
     return
   end
   self = CharacterHistoryInfo
-  self:updateInfo(self.currentValue._year, self.currentValue._month)
+  self:updateInfo(self._currentContainerIdx)
 end
-function CharacterHistoryInfo:updateInfo(indexYear, indexMonth)
-  local _journalListCount = ToClient_GetJournalListCount(indexYear, indexMonth, self.currentValue._myHistory)
-  if _journalListCount <= 0 and (indexYear ~= ToClient_GetThisYear() or indexMonth ~= ToClient_GetThisMonth()) then
-    return false
+function CharacterHistoryInfo:updateHistoryContainer()
+  local currentYear = ToClient_GetThisYear()
+  local indexMonth = 0
+  local containerIdx = 1
+  for yearIdx = currentYear, self._minYear, -1 do
+    if yearIdx == currentYear then
+      indexMonth = ToClient_GetThisMonth()
+    else
+      indexMonth = 12
+    end
+    for monthIdx = indexMonth, 1, -1 do
+      local journalListCount = ToClient_GetJournalListCount(yearIdx, monthIdx, self.currentValue._myHistory)
+      if journalListCount > 0 or yearIdx == currentYear and monthIdx == ToClient_GetThisMonth() then
+        local container = {}
+        container.year = yearIdx
+        container.month = monthIdx
+        self._hitoryContainer[containerIdx] = container
+        containerIdx = containerIdx + 1
+      end
+    end
   end
+end
+function CharacterHistoryInfo:updateInfo(containerIdx)
+  local container = self._hitoryContainer[containerIdx]
+  if nil == container then
+    return
+  end
+  self._currentContainerIdx = containerIdx
+  local indexYear = container.year
+  local indexMonth = container.month
+  local _journalListCount = ToClient_GetJournalListCount(indexYear, indexMonth, self.currentValue._myHistory)
   local _historyRightValueIdx = 0
   local _historyLeftValueIdx = 0
   local _dateValueIdx = 0
@@ -241,12 +273,21 @@ function CharacterHistoryInfo:updateInfo(indexYear, indexMonth)
     self._ui.frameBG:SetIgnore(false)
     self._ui.frame_VScroll:SetShow(true)
   end
-  return true
+  local prevContainer = self._hitoryContainer[self._currentContainerIdx - 1]
+  local nextContainer = self._hitoryContainer[self._currentContainerIdx + 1]
+  if nil == prevContainer then
+    self._ui.stc_RB:SetShow(false)
+  else
+    self._ui.stc_RB:SetShow(true)
+  end
+  if nil == nextContainer then
+    self._ui.stc_LB:SetShow(false)
+  else
+    self._ui.stc_LB:SetShow(true)
+  end
 end
 function CharacterHistoryInfo:registEvent()
   registerEvent("FromClient_JournalInfo_UpdateText", "FromClient_CharacterHistoryInfo_updateInfo")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "InputMLUp_CharacterHistoryInfo_IncreaseMonth()")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "InputMLUp_CharacterHistoryInfo_DecreaseMonth()")
 end
 function PaGlobalFunc_CharacterHistoryInfo_Open()
   if nil == CharacterHistoryInfo then
@@ -266,7 +307,6 @@ function FromClient_luaLoadComplete_Panel_Window_CharacterInfo_History()
   self.defaultFrameBG_CharacterInfo_History:MoveChilds(self.defaultFrameBG_CharacterInfo_History:GetID(), _panel)
   deletePanel(_panel:GetID())
   self:registEvent()
-  self:open()
 end
 function InputMLUp_CharacterHistoryInfo_TapToOpen(monthIdx)
   local self = CharacterHistoryInfo
@@ -275,42 +315,10 @@ function InputMLUp_CharacterHistoryInfo_TapToOpen(monthIdx)
 end
 function InputMLUp_CharacterHistoryInfo_DecreaseMonth()
   local self = CharacterHistoryInfo
-  if self.currentValue._year < 2015 then
-    self.currentValue._year = self._lastShowedYear
-    self.currentValue._month = self._lastShowedMonth
-    return
-  end
-  self.currentValue._month = self.currentValue._month - 1
-  if self.currentValue._month < 0 then
-    self.currentValue._year = self.currentValue._year - 1
-    self.currentValue._month = 12
-  end
-  if false == self:updateInfo(self.currentValue._year, self.currentValue._month) then
-    InputMLUp_CharacterHistoryInfo_DecreaseMonth()
-  else
-    self._lastShowedYear = self.currentValue._year
-    self._lastShowedMonth = self.currentValue._month
-  end
+  self:updateInfo(self._currentContainerIdx + 1)
 end
 function InputMLUp_CharacterHistoryInfo_IncreaseMonth()
   local self = CharacterHistoryInfo
-  if ToClient_GetThisYear() < self.currentValue._year then
-    return
-  elseif ToClient_GetThisYear() == self.currentValue._year and ToClient_GetThisMonth() < self.currentValue._month then
-    self.currentValue._year = self._lastShowedYear
-    self.currentValue._month = self._lastShowedMonth
-    return
-  end
-  self.currentValue._month = self.currentValue._month + 1
-  if self.currentValue._month > 12 then
-    self.currentValue._year = self.currentValue._year + 1
-    self.currentValue._month = 1
-  end
-  if false == self:updateInfo(self.currentValue._year, self.currentValue._month) then
-    InputMLUp_CharacterHistoryInfo_IncreaseMonth()
-  else
-    self._lastShowedYear = self.currentValue._year
-    self._lastShowedMonth = self.currentValue._month
-  end
+  self:updateInfo(self._currentContainerIdx - 1)
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Panel_Window_CharacterInfo_History")

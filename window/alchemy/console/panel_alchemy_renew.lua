@@ -2,15 +2,16 @@ local alchemy = {
   _init = false,
   _panel = Panel_Window_Alchemy,
   _ui = {
-    typeControl,
-    titleControl,
-    iconControl,
-    descControl,
+    cookTitleControl,
+    alchemyTitleControl,
     tipControl,
-    knowledgeTypeTitleControl,
-    knowledgeTitleControl,
-    knowledgeDescControl,
-    filterCheckControl,
+    focusGroupControl,
+    knowledgeButtonControl,
+    selectButtonControl,
+    doCookButtonControl,
+    doAlchemyButtonControl,
+    removeMaterialButtonControl,
+    closeButtonControl,
     cookingPotFrontControl,
     cookingPotBackControl,
     alchemyPotFrontControl,
@@ -22,12 +23,15 @@ local alchemy = {
   },
   _materialCount = 5,
   _materialSlotItemTable = {},
+  _materialSlotItemBgTable = {},
   _cookingMaterialEffectSlotItem = {},
   _alchemyMaterialEffectSlotItem = {},
   _knownKnowledgeOnlyFlag = false,
   _isCook = false,
-  _selectedKnowledgeIndex = -1,
-  _knowledgeFilterKeyword = ""
+  _installationType = 0,
+  _focusedMaterialSlotIndex = 0,
+  _buttonGapX = 10,
+  _readyToSelectFlag = false
 }
 function alchemy:initialize()
   if self._init then
@@ -35,12 +39,12 @@ function alchemy:initialize()
   end
   self._init = true
   local titleBarControl = UI.getChildControl(self._panel, "Static_TitleBG")
-  self._ui.typeControl = UI.getChildControl(titleBarControl, "StaticText_Title")
-  self._ui.titleControl = UI.getChildControl(self._panel, "StaticText_Type_Name")
-  self._ui.iconControl = UI.getChildControl(self._panel, "Static_Type_Icon")
-  self._ui.descControl = UI.getChildControl(self._panel, "StaticText_Type_Desc")
+  self._ui.cookTitleControl = UI.getChildControl(titleBarControl, "StaticText_CookTitle")
+  self._ui.alchemyTitleControl = UI.getChildControl(titleBarControl, "StaticText_AlchemyTitle")
+  local leftGroupControl = UI.getChildControl(self._panel, "LeftGroup")
   for i = 1, self._materialCount do
-    local slotBgControl = UI.getChildControl(self._panel, "Static_Item_Slot" .. i)
+    local slotBgControl = UI.getChildControl(leftGroupControl, "Static_Item_Slot" .. i)
+    table.insert(self._materialSlotItemBgTable, slotBgControl)
     local slot = {}
     SlotItem.new(slot, "Slot" .. i, i, slotBgControl, {
       createIcon = true,
@@ -50,30 +54,32 @@ function alchemy:initialize()
     })
     slot:createChild()
     table.insert(self._materialSlotItemTable, slot)
-    slot.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemySelectMultipleMaterials()")
+    slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_AlchemyHandleSlotFocus(" .. i .. ", true)")
+    slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_AlchemyHandleSlotFocus(" .. i .. ", false)")
     slotBgControl:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_AlchemyChangeMaterialCount(" .. i .. ", 1)")
     slotBgControl:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "PaGlobalFunc_AlchemyChangeMaterialCount(" .. i .. ", -1)")
   end
-  local tipBgControl = UI.getChildControl(self._panel, "Static_Tip")
+  local tipBgControl = UI.getChildControl(leftGroupControl, "Static_Tip")
   self._ui.tipControl = UI.getChildControl(tipBgControl, "StaticText_Tip1")
   self._ui.tipControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.focusGroupControl = UI.getChildControl(leftGroupControl, "Static_Focus")
   local knowledgeControl = UI.getChildControl(self._panel, "Static_List_BG")
-  self._ui.knowledgeTypeTitleControl = UI.getChildControl(knowledgeControl, "StaticText_Title")
-  self._ui.knowledgeTitleControl = UI.getChildControl(knowledgeControl, "StaticText_Item_Name")
-  self._ui.knowledgeDescControl = UI.getChildControl(knowledgeControl, "StaticText_Item_Desc")
-  self._ui.knowledgeDescControl:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui.filterCheckControl = UI.getChildControl(knowledgeControl, "StaticText_Filter")
-  self._ui.filterCheckControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemyToggleKnownKnowledgeOnly()")
   self._ui.list2 = UI.getChildControl(knowledgeControl, "List2_Alchemy")
   self._ui.list2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_AlchemyUpdateListItem")
   self._ui.list2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
-  UI.getChildControl(self._panel, "StaticText_Do_ConsoleUI"):addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemyAlchemy()")
-  UI.getChildControl(self._panel, "StaticText_Continue_ConsoleUI"):addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemyAlchemyRepeat()")
-  self._ui.cookingPotFrontControl = UI.getChildControl(self._panel, "Static_Cook_Pot_Front")
-  self._ui.cookingPotBackControl = UI.getChildControl(self._panel, "Static_Cook_Pot_Back")
+  self._ui.knowledgeButtonControl = UI.getChildControl(self._panel, "StaticText_Knowledge_ConsoleUI")
+  self._ui.selectButtonControl = UI.getChildControl(self._panel, "StaticText_Select_ConsoleUI")
+  self._ui.doCookButtonControl = UI.getChildControl(self._panel, "StaticText_DoCook_ConsoleUI")
+  self._ui.doAlchemyButtonControl = UI.getChildControl(self._panel, "StaticText_DoAlchemy_ConsoleUI")
+  self._ui.removeMaterialButtonControl = UI.getChildControl(self._panel, "StaticText_RemoveMaterial_ConsoleUI")
+  self._ui.closeButtonControl = UI.getChildControl(self._panel, "StaticText_Close_ConsoleUI")
+  self._ui.doCookButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemyDo()")
+  self._ui.doAlchemyButtonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemyDo()")
+  self._ui.cookingPotFrontControl = UI.getChildControl(leftGroupControl, "Static_Cook_Pot_Front")
+  self._ui.cookingPotBackControl = UI.getChildControl(leftGroupControl, "Static_Cook_Pot_Back")
   self._ui.cookingPotBackControl:AddEffect("fUI_AlchemyCook01", true, 0, 0)
-  self._ui.alchemyPotFrontControl = UI.getChildControl(self._panel, "Static_Alchemy_Pot_Front")
-  self._ui.alchemyPotBackControl = UI.getChildControl(self._panel, "Static_Alchemy_Pot_Back")
+  self._ui.alchemyPotFrontControl = UI.getChildControl(leftGroupControl, "Static_Alchemy_Pot_Front")
+  self._ui.alchemyPotBackControl = UI.getChildControl(leftGroupControl, "Static_Alchemy_Pot_Back")
   self._ui.alchemyPotBackControl:AddEffect("fUI_AlchemyCook01", true, 0, 0)
   SlotItem.new(self._cookingMaterialEffectSlotItem, "AnimPushItemCook", 0, self._ui.cookingPotBackControl, {
     createIcon = true,
@@ -89,10 +95,25 @@ function alchemy:initialize()
   })
   self._alchemyMaterialEffectSlotItem:createChild()
   self._alchemyMaterialEffectSlotItem.icon:SetShow(false)
-  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_AlchemyAlchemy()")
-  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AlchemyAlchemyRepeat()")
+  self._panel:registerPadEvent(__eConsoleUIPadEvent_Y, "PaGlobalFunc_AlchemyReadyToSelect()")
+  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AlchemySelectMultipleMaterials()")
+  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_AlchemyDo()")
+  self._panel:ignorePadSnapMoveToOtherPanel()
   registerEvent("ResponseShowAlchemy", "PaGlobalFunc_AlchemyOpen")
   registerEvent("FromClient_AlchemyFailAck", "PaGlobalFunc_AlchemyResponse")
+end
+function alchemy:handleSlotFocus(index, flag)
+  if flag then
+    self._focusedMaterialSlotIndex = index
+  else
+    self._focusedMaterialSlotIndex = 0
+  end
+  return true
+end
+function PaGlobalFunc_AlchemyHandleSlotFocus(index, flag)
+  if alchemy:handleSlotFocus(index, flag) then
+    return alchemy:update()
+  end
 end
 function alchemy:completeMultipleSelection()
   if PaGlobalFunc_InventoryInfo_GetShow() then
@@ -104,19 +125,28 @@ function PaGlobalFunc_AlchemyCompleteMultipleSelection()
   return alchemy:completeMultipleSelection()
 end
 function alchemy:selectMultipleMaterials()
-  PaGlobalFunc_InventoryInfo_Open()
-  PaGlobalFunc_InventoryInfo_InitMultipleSelect()
-  for i = 1, self._materialCount do
-    local slotNo = ToClient_AlchemyGetMaterialSlotNoByIndex(i - 1)
-    if CppEnums.TInventorySlotNoUndefined ~= slotNo then
-      PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo - 1, CppEnums.ItemWhereType.eInventory)
-    end
+  if not _ContentsGroup_RenewUI_Inventory then
+    return false
   end
-  Inventory_SetFunctor(PaGlobalFunc_AlchemyFilter, PaGlobalFunc_AlchemyHandleInventoryRightClick, nil, nil, {multipleSelectEndFunc = PaGlobalFunc_AlchemyCompleteMultipleSelection, button = __eConsoleUIPadEvent_X})
+  if not self._readyToSelectFlag then
+    return false
+  end
+  self._readyToSelectFlag = false
+  PaGlobalFunc_InventoryInfo_Open()
+  Inventory_SetFunctor(PaGlobalFunc_AlchemyFilter, PaGlobalFunc_AlchemyHandleInventoryRightClick, nil, nil, {func = PaGlobalFunc_AlchemyCompleteMultipleSelection})
   Inventory_updateSlotData()
+  return true
 end
 function PaGlobalFunc_AlchemySelectMultipleMaterials()
-  return alchemy:selectMultipleMaterials()
+  if alchemy:selectMultipleMaterials() then
+    return alchemy:update()
+  end
+end
+function alchemy:readyToSelect()
+  self._readyToSelectFlag = true
+end
+function PaGlobalFunc_AlchemyReadyToSelect()
+  alchemy:readyToSelect()
 end
 function alchemy:changeMaterialCount(materialIndex, diffCount)
   local slotNo = ToClient_AlchemyGetMaterialSlotNoByIndex(materialIndex - 1)
@@ -129,18 +159,24 @@ function PaGlobalFunc_AlchemyChangeMaterialCount(materialIndex, diffCount)
   end
 end
 function alchemy:selectKnowledge(knowledgeIndex)
-  local prevIndex = self._selectedKnowledgeIndex
-  if prevIndex == knowledgeIndex then
-    return false
+  local knowledge = ToClient_AlchemyGetKnowledge(knowledgeIndex)
+  if knowledge then
+    PaGlobalFunc_AlchemyKnowledgeOpen(knowledge)
+    return true
   end
-  self._selectedKnowledgeIndex = knowledgeIndex
-  self._ui.list2:requestUpdateByKey(toInt64(0, prevIndex))
-  self._ui.list2:requestUpdateByKey(toInt64(0, knowledgeIndex))
-  return true
 end
 function PaGlobalFunc_AlchemySelectKnowledge(knowledgeIndex)
   if alchemy:selectKnowledge(knowledgeIndex) then
-    return alchemy:updateKnowledge()
+    return alchemy:update()
+  end
+end
+function alchemy:handleKnowledgeFocus(flag)
+  self._knowledgeFocusFlag = flag
+  return true
+end
+function PaGlobalFunc_AlchemyHandleKnowledgeFocus(flag)
+  if alchemy:handleKnowledgeFocus(flag) then
+    return alchemy:update()
   end
 end
 function alchemy:updateListItem(content, key)
@@ -151,9 +187,9 @@ function alchemy:updateListItem(content, key)
   end
   local buttonControl = UI.getChildControl(content, "RadioButton_Item")
   buttonControl:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-  buttonControl:addInputEvent("Mouse_On", "PaGlobalFunc_AlchemySelectKnowledge(" .. knowledgeIndex .. ")")
-  local selectFlag = self._selectedKnowledgeIndex == knowledgeIndex
-  buttonControl:SetCheck(selectFlag)
+  buttonControl:addInputEvent("Mouse_On", "PaGlobalFunc_AlchemyHandleKnowledgeFocus(true)")
+  buttonControl:addInputEvent("Mouse_Out", "PaGlobalFunc_AlchemyHandleKnowledgeFocus(false)")
+  buttonControl:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlchemySelectKnowledge(" .. knowledgeIndex .. ")")
   local learnFlag = isLearnMentalCardForAlchemy(knowledge:getKey())
   if learnFlag then
     buttonControl:SetFontColor(Defines.Color.C_FF84FFF5)
@@ -169,7 +205,7 @@ function PaGlobalFunc_AlchemyUpdateListItem(content, key)
   if alchemy:updateListItem(content, key) then
   end
 end
-function alchemy:checkToAlchemy()
+function alchemy:checkToDo()
   if ToClient_AlchemyGetCountSlotWithMaterial() <= 0 then
     return false
   end
@@ -200,7 +236,7 @@ function PaGlobalFunc_AlchemyResume()
   end
 end
 function alchemy:alchemyXXX(count)
-  if not self:checkToAlchemy() then
+  if not self:checkToDo() then
     return false
   end
   if not ToClient_AlchemySetupMaterialsForMassProduction(count) then
@@ -221,34 +257,45 @@ function PaGlobalFunc_AlchemyAlchemyXXX(count)
     return alchemy:update()
   end
 end
-function alchemy:alchemy()
-  return self:alchemyXXX(Defines.s64_const.s64_1)
-end
-function PaGlobalFunc_AlchemyAlchemy()
-  if alchemy:alchemy() then
-    return alchemy:update()
-  end
-end
-function alchemy:alchemyRepeatStep2()
-  if not self:checkToAlchemy() then
+function alchemy:doAlchemy()
+  if not self:checkToDo() then
     return false
   end
-  Panel_NumberPad_Show(true, ToClient_AlchemyGetMaxMassProductionCount(), nil, PaGlobalFunc_AlchemyAlchemyXXX)
-  return false
+  function gotoNextStep(selectedButtonIndex)
+    if 1 == selectedButtonIndex then
+      self:alchemyXXX(Defines.s64_const.s64_1)
+    elseif 2 == selectedButtonIndex then
+      self:alchemyRepeat()
+    end
+  end
+  MessageBoxCheck.showMessageBox({
+    title = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_COOKING" or "LUA_ALCHEMY_ALCHEMY"),
+    content = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_ASK_MULTIPLE_TIMES_COOK" or "LUA_ALCLUA_ALCHEMY_ASK_MULTIPLE_TIMESHEMY_ALCHEMY"),
+    functionApply = gotoNextStep,
+    functionCancel = MessageBox_Empty_function,
+    buttonStrings = {
+      PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_BUTTON_TEXT_ONE_TIME"),
+      PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_BUTTON_TEXT_MULTIPLE_TIMES")
+    },
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }, "middle")
 end
-function PaGlobalFunc_AlchemyRepeatStep2()
-  if alchemy:alchemyRepeatStep2() then
+function PaGlobalFunc_AlchemyDo()
+  if alchemy:doAlchemy() then
     return alchemy:update()
   end
 end
 function alchemy:alchemyRepeat()
-  if not self:checkToAlchemy() then
+  if not self:checkToDo() then
     return false
+  end
+  function gotoNextStep()
+    Panel_NumberPad_Show(true, ToClient_AlchemyGetMaxMassProductionCount(), nil, PaGlobalFunc_AlchemyAlchemyXXX)
   end
   local msgBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
     content = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_MSGBOX_COOK_SEQUENCE_MSG" or "LUA_ALCHEMY_MSGBOX_ALCHEMY_SEQUENCE_MSG"),
-    functionYes = PaGlobalFunc_AlchemyRepeatStep2,
+    functionYes = gotoNextStep,
     functionNo = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
@@ -263,11 +310,6 @@ end
 function alchemy:toggleKnownKnowledgeOnly()
   self._knownKnowledgeOnlyFlag = not self._knownKnowledgeOnlyFlag
   return self:initKnowledge()
-end
-function PaGlobalFunc_AlchemyToggleKnownKnowledgeOnly()
-  if alchemy:toggleKnownKnowledgeOnly() then
-    return alchemy:updateKnowledge()
-  end
 end
 function alchemy:cancel()
   ToClient_AlchemyCancel()
@@ -385,7 +427,7 @@ function alchemy:insertMaterial(slotNo)
   return true
 end
 function alchemy:handleInventoryRightClick(slotNo, itemWrapper, count)
-  PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo - 1, CppEnums.ItemWhereType.eInventory)
+  PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo, CppEnums.ItemWhereType.eInventory)
   if ToClient_AlchemyIsInvenSlotPushedInMaterialSlot(slotNo) then
     return self:removeMaterial(slotNo)
   else
@@ -399,7 +441,6 @@ function PaGlobalFunc_AlchemyHandleInventoryRightClick(slotNo, itemWrapper, coun
   end
 end
 function alchemy:initKnowledge()
-  self._selectedKnowledgeIndex = -1
   self._ui.list2:getElementManager():clearKey()
   if self._isCook then
     ToClient_AlchemyReconstructAlchemyKnowledge(30010)
@@ -412,26 +453,6 @@ function alchemy:initKnowledge()
   end
   return true
 end
-function alchemy:getSelectedKnowledge()
-  if 0 <= self._selectedKnowledgeIndex and self._selectedKnowledgeIndex < ToClient_AlchemyGetCountFilteredKnowledge() then
-    return ToClient_AlchemyGetKnowledge(self._selectedKnowledgeIndex)
-  end
-end
-function alchemy:updateKnowledge()
-  local typeString = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_COOKING" or "LUA_ALCHEMY_ALCHEMY")
-  self._ui.knowledgeTypeTitleControl:SetText(typeString)
-  local knowledge = self:getSelectedKnowledge()
-  if knowledge then
-    self._ui.knowledgeTitleControl:SetText(knowledge:getName())
-    self._ui.knowledgeTitleControl:SetShow(true)
-    local learnFlag = isLearnMentalCardForAlchemy(knowledge:getKey())
-    self._ui.knowledgeDescControl:SetText(learnFlag and knowledge:getDesc() or "???")
-  else
-    self._ui.knowledgeTitleControl:SetShow(false)
-    local descString = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_WANTMORE_SELECT_COOKKNOWLEDGE" or "LUA_ALCHEMY_WANTMORE_SELECT_ALCHEMYKNOWLEDGE")
-    self._ui.knowledgeDescControl:SetText(descString)
-  end
-end
 function alchemy:open(isCook, installationType)
   if self:checkShow() then
     self:close()
@@ -443,8 +464,8 @@ function alchemy:open(isCook, installationType)
   self._ui.alchemyPotBackControl:SetShow(not isCook)
   self:hideEffect()
   self._isCook = isCook
+  self._installationType = installationType
   self:initKnowledge()
-  self._knowledgeFilterKeyword = ""
   self._knownKnowledgeOnlyFlag = false
   ToClient_AlchemyClearMaterialSlot()
   Inventory_SetFunctor(PaGlobalFunc_AlchemyFilter, PaGlobalFunc_AlchemyHandleInventoryRightClick, PaGlobalFunc_AlchemyClose, nil)
@@ -465,32 +486,80 @@ function PaGlobalFunc_AlchemyClose()
   return alchemy:close()
 end
 function alchemy:updateMaterial()
-  PaGlobalFunc_InventoryInfo_InitMultipleSelect()
+  if _ContentsGroup_RenewUI_Inventory then
+    PaGlobalFunc_InventoryInfo_InitMultipleSelect()
+  end
+  local showFocusGroupControlFlag = 0 < self._focusedMaterialSlotIndex
+  self._ui.focusGroupControl:SetShow(showFocusGroupControlFlag)
   for i = 1, table.getn(self._materialSlotItemTable) do
-    local slotItem = self._materialSlotItemTable[i]
     local slotNo = ToClient_AlchemyGetMaterialSlotNoByIndex(i - 1)
-    if CppEnums.TInventorySlotNoUndefined == slotNo then
+    local showMaterialFlag = CppEnums.TInventorySlotNoUndefined ~= slotNo
+    if self._focusedMaterialSlotIndex == i then
+      local slotItemBg = self._materialSlotItemBgTable[i]
+      self._ui.focusGroupControl:SetPosX(slotItemBg:GetPosX())
+      self._ui.focusGroupControl:SetPosY(slotItemBg:GetPosY())
+      UI.getChildControl(self._ui.focusGroupControl, "Static_Up"):SetShow(showMaterialFlag)
+      UI.getChildControl(self._ui.focusGroupControl, "Static_Down"):SetShow(showMaterialFlag)
+    end
+    local slotItem = self._materialSlotItemTable[i]
+    if not showMaterialFlag then
       slotItem:clearItem()
     else
-      PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo - 1, CppEnums.ItemWhereType.eInventory)
+      if _ContentsGroup_RenewUI_Inventory then
+        PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo, CppEnums.ItemWhereType.eInventory)
+      end
       local item = ToClient_AlchemyGetItemStaticAtMaterialSlot(i - 1)
       local count = ToClient_AlchemyGetCountItemAtMaterialSlot_s64(i - 1)
       slotItem:setItemByStaticStatus(item, count)
     end
   end
 end
+function alchemy:updateButton()
+  local showKnowledgeFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and self._knowledgeFocusFlag and self._focusedMaterialSlotIndex <= 0
+  local showSelectFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and not MessageBoxCheck.isPopUp() and self._focusedMaterialSlotIndex > 0
+  local showDoCookFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and not MessageBoxCheck.isPopUp() and 0 < ToClient_AlchemyGetCountSlotWithMaterial() and self._isCook
+  local showDoAlchemyFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and not MessageBoxCheck.isPopUp() and 0 < ToClient_AlchemyGetCountSlotWithMaterial() and not self._isCook
+  local showRemoveMateiralFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and self:checkToPop() and not MessageBoxCheck.isPopUp()
+  local showCloseFlag = not PaGlobalFunc_InventoryInfo_GetShow() and not PaGlobalFunc_AlchemyKnowledgeCheckShow() and not self:checkToPop() and not MessageBoxCheck.isPopUp()
+  local nextButtonPosX = self._ui.knowledgeButtonControl:GetPosX()
+  self._ui.knowledgeButtonControl:SetShow(showKnowledgeFlag)
+  if showKnowledgeFlag then
+    self._ui.knowledgeButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.knowledgeButtonControl:GetPosX() + self._ui.knowledgeButtonControl:GetSizeX() + self._ui.knowledgeButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+  self._ui.selectButtonControl:SetShow(showSelectFlag)
+  if showSelectFlag then
+    self._ui.selectButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.selectButtonControl:GetPosX() + self._ui.selectButtonControl:GetSizeX() + self._ui.selectButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+  self._ui.doCookButtonControl:SetShow(showDoCookFlag)
+  if showDoCookFlag then
+    self._ui.doCookButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.doCookButtonControl:GetPosX() + self._ui.doCookButtonControl:GetSizeX() + self._ui.doCookButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+  self._ui.doAlchemyButtonControl:SetShow(showDoAlchemyFlag)
+  if showDoAlchemyFlag then
+    self._ui.doAlchemyButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.doAlchemyButtonControl:GetPosX() + self._ui.doAlchemyButtonControl:GetSizeX() + self._ui.doAlchemyButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+  self._ui.removeMaterialButtonControl:SetShow(showRemoveMateiralFlag)
+  if showRemoveMateiralFlag then
+    self._ui.removeMaterialButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.removeMaterialButtonControl:GetPosX() + self._ui.removeMaterialButtonControl:GetSizeX() + self._ui.removeMaterialButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+  self._ui.closeButtonControl:SetShow(showCloseFlag)
+  if showCloseFlag then
+    self._ui.closeButtonControl:SetPosX(nextButtonPosX)
+    nextButtonPosX = self._ui.closeButtonControl:GetPosX() + self._ui.closeButtonControl:GetSizeX() + self._ui.closeButtonControl:GetTextSizeX() + self._buttonGapX
+  end
+end
 function alchemy:update()
-  local typeString = PAGetString(Defines.StringSheet_GAME, self._isCook and "LUA_ALCHEMY_COOKING" or "LUA_ALCHEMY_ALCHEMY")
-  self._ui.typeControl:SetText(typeString)
-  self._ui.titleControl:SetText(typeString)
-  self._ui.descControl:SetText(self._isCook and "desc for cook" or "desc for alchemy")
+  self._ui.cookTitleControl:SetShow(self._isCook)
+  self._ui.alchemyTitleControl:SetShow(not self._isCook)
   self:updateMaterial()
   local tip = PAGetString(Defines.StringSheet_RESOURCE, "ALCHEMY_COOK_TEXT_DESCRPITION")
-  if self._isCook then
-    tip = tip .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "ALCHEMY_COOK_TEXT_DESCRPITION2")
-  end
   self._ui.tipControl:SetText(tip)
-  self:updateKnowledge()
+  self:updateButton()
   return true
 end
 function alchemy:removeMaterial(slotNo)
@@ -500,10 +569,12 @@ function alchemy:removeMaterial(slotNo)
     return true
   end
 end
+function alchemy:checkToPop()
+  return 0 < ToClient_AlchemyGetCountSlotWithMaterial()
+end
 function alchemy:popMaterial()
-  local materialCount = ToClient_AlchemyGetCountSlotWithMaterial()
-  if materialCount > 0 then
-    ToClient_AlchemyPopMaterial(materialCount - 1)
+  if self:checkToPop() then
+    ToClient_AlchemyPopMaterial(ToClient_AlchemyGetCountSlotWithMaterial() - 1)
     return true
   end
 end
@@ -541,6 +612,3 @@ function PaGlobalFunc_AlchemyInit()
   alchemy:initialize()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_AlchemyInit")
-function PaGlobalFunc_AlchemyTest()
-  return PaGlobalFunc_AlchemyOpen(false)
-end

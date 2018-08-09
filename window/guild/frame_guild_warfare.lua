@@ -7,7 +7,8 @@ local frame_Warfare, content_Warfare
 GuildWarfareInfoPage = {
   _frameDefaultBG_Warfare = UI.getChildControl(Panel_Window_Guild, "Static_Frame_WarfareBG"),
   _scrollBar,
-  _list = {}
+  _list = {},
+  _initComplete = false
 }
 local _iconHelper = UI.getChildControl(Panel_Guild_Warfare, "StaticText_IconHelper")
 local ui_Icons = {
@@ -252,6 +253,7 @@ function GuildWarfareInfoPage:initialize()
   self._frameDefaultBG_Warfare:MoveChilds(self._frameDefaultBG_Warfare:GetID(), Panel_Guild_Warfare)
   UI.deletePanel(Panel_Guild_Warfare:GetID())
   Panel_Guild_Warfare = nil
+  self._initComplete = true
 end
 function GuildWarfareMouseScrollEvent(isUpScroll)
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
@@ -572,6 +574,9 @@ function GuildWarfareInfoPage:updateSort()
   end
 end
 function GuildWarfareInfoPage:UpdateData()
+  if false == self._initComplete then
+    return
+  end
   GuildWarfareInfoPage:SetGuildList()
   GuildWarfareInfoPage:updateSort()
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()

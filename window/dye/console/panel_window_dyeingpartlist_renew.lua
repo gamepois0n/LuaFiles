@@ -13,7 +13,7 @@ local DyeingPartList = {
     stc_slotFocus = nil,
     txt_keyGuideA = UI.getChildControl(_panel, "StaticText_A_ConsoleUI")
   },
-  _currentTargetType = nil,
+  _currentTargetIndex = nil,
   _equipSlotCountMax = 1,
   _costumeSlotCountMax = 1,
   _defaultGap = 64,
@@ -440,6 +440,7 @@ function DyeingPartList:initialize()
     slot:createChild()
     slot.icon:SetHorizonCenter()
     slot.icon:SetVerticalMiddle()
+    slot.icon:SetIgnore(true)
   end
   for ii = 1, self._costumeSlotCountMax do
     self._ui.stc_costumeSlotBG[ii] = UI.createAndCopyBasePropertyControl(self._ui.stc_listBG, "Static_CostumeBg_Templete", self._ui.stc_listBG, "Static_CostumeBg_" .. ii)
@@ -450,7 +451,10 @@ function DyeingPartList:initialize()
     slot:createChild()
     slot.icon:SetHorizonCenter()
     slot.icon:SetVerticalMiddle()
+    slot.icon:SetIgnore(true)
   end
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "Input_DyeingMain_PressedLT()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_LT, "Input_DyeingMain_ReleasedLT()")
 end
 function PaGlobalFunc_DyeingPartList_GetShow()
   return _panel:GetShow()
@@ -461,7 +465,7 @@ end
 function DyeingPartList:open(index)
   self._ui.txt_keyGuideA:SetShow(false == PaGlobalFunc_DyeingPalette_GetShow())
   _panel:SetShow(true)
-  self._currentTargetType = index
+  self._currentTargetIndex = index
   self:update()
 end
 function PaGlobalFunc_DyeingPartList_Close()
@@ -471,10 +475,14 @@ function DyeingPartList:close()
   _panel:SetShow(false)
 end
 function DyeingPartList:update()
-  local targetData = _targetData[self._currentTargetType]
+  local targetData = _targetData[self._currentTargetIndex]
+  if nil == targetData or nil == targetData.equipSlotNoList then
+    return
+  end
   local equipSlotCount = #targetData.equipSlotNoList
   for ii = 1, equipSlotCount do
     local slotNo = targetData.equipSlotNoList[ii]
+    self._ui.stc_equipSlotBG[ii]:SetShow(true)
     self._ui.stc_equipSlotBG[ii]:SetPosX(self._startX + (ii - 1) % self._columnMax * self._defaultGap)
     self._ui.stc_equipSlotBG[ii]:SetPosY(self._startY + math.floor((ii - 1) / self._columnMax) * self._defaultGap)
     local itemWrapper = ToClient_RequestGetDyeingTargetItemWrapper(slotNo)
@@ -484,20 +492,27 @@ function DyeingPartList:update()
     if nil ~= itemWrapper then
       slot:setItem(itemWrapper, slotNo)
       slot.icon:SetMonoTone(not itemWrapper:isDyeable())
-      slot.icon:addInputEvent("Mouse_LUp", "Input_DyeingPartList_SelectEquip( " .. slotNo .. ")")
+      self._ui.stc_equipSlotBG[ii]:addInputEvent("Mouse_LUp", "Input_DyeingPartList_SelectEquip( " .. slotNo .. ")")
       pictogram:SetShow(false)
-    elseif nil ~= targetData.pictogramUV then
-      pictogram:SetShow(true)
-      pictogram:ChangeTextureInfoName("renewal/ui_icon/console_icon_equip.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(pictogram, targetData.pictogramUV[slotNo][1], targetData.pictogramUV[slotNo][2], targetData.pictogramUV[slotNo][3], targetData.pictogramUV[slotNo][4])
-      pictogram:getBaseTexture():setUV(x1, y1, x2, y2)
-      pictogram:setRenderTexture(pictogram:getBaseTexture())
     else
-      pictogram:SetShow(false)
+      self._ui.stc_equipSlotBG[ii]:removeInputEvent("Mouse_LUp")
+      if nil ~= targetData.pictogramUV then
+        pictogram:SetShow(true)
+        pictogram:ChangeTextureInfoName("renewal/ui_icon/console_icon_equip.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(pictogram, targetData.pictogramUV[slotNo][1], targetData.pictogramUV[slotNo][2], targetData.pictogramUV[slotNo][3], targetData.pictogramUV[slotNo][4])
+        pictogram:getBaseTexture():setUV(x1, y1, x2, y2)
+        pictogram:setRenderTexture(pictogram:getBaseTexture())
+      else
+        pictogram:SetShow(false)
+      end
     end
+  end
+  if nil == targetData.costumeSlotNoList then
+    return
   end
   for ii = 1, #targetData.costumeSlotNoList do
     local slotNo = targetData.costumeSlotNoList[ii]
+    self._ui.stc_costumeSlotBG[ii]:SetShow(true)
     self._ui.stc_costumeSlotBG[ii]:SetPosX(self._startX + (ii + equipSlotCount - 1) % self._columnMax * self._defaultGap)
     self._ui.stc_costumeSlotBG[ii]:SetPosY(self._startY + math.floor((ii + equipSlotCount - 1) / self._columnMax) * self._defaultGap)
     local itemWrapper = ToClient_RequestGetDyeingTargetItemWrapper(slotNo)
@@ -507,16 +522,19 @@ function DyeingPartList:update()
     if nil ~= itemWrapper then
       slot:setItem(itemWrapper, slotNo)
       slot.icon:SetMonoTone(not itemWrapper:isDyeable())
-      slot.icon:addInputEvent("Mouse_LUp", "Input_DyeingPartList_SelectEquip( " .. slotNo .. ")")
+      self._ui.stc_costumeSlotBG[ii]:addInputEvent("Mouse_LUp", "Input_DyeingPartList_SelectEquip( " .. slotNo .. ")")
       pictogram:SetShow(false)
-    elseif nil ~= targetData.pictogramUV then
-      pictogram:SetShow(true)
-      pictogram:ChangeTextureInfoName("renewal/ui_icon/console_icon_equip.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(pictogram, targetData.pictogramUV[slotNo][1], targetData.pictogramUV[slotNo][2], targetData.pictogramUV[slotNo][3], targetData.pictogramUV[slotNo][4])
-      pictogram:getBaseTexture():setUV(x1, y1, x2, y2)
-      pictogram:setRenderTexture(pictogram:getBaseTexture())
     else
-      pictogram:SetShow(false)
+      self._ui.stc_costumeSlotBG[ii]:removeInputEvent("Mouse_LUp")
+      if nil ~= targetData.pictogramUV then
+        pictogram:SetShow(true)
+        pictogram:ChangeTextureInfoName("renewal/ui_icon/console_icon_equip.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(pictogram, targetData.pictogramUV[slotNo][1], targetData.pictogramUV[slotNo][2], targetData.pictogramUV[slotNo][3], targetData.pictogramUV[slotNo][4])
+        pictogram:getBaseTexture():setUV(x1, y1, x2, y2)
+        pictogram:setRenderTexture(pictogram:getBaseTexture())
+      else
+        pictogram:SetShow(false)
+      end
     end
   end
   for ii = equipSlotCount + 1, #self._ui.slot_equipItem do
@@ -530,11 +548,8 @@ function DyeingPartList:update()
 end
 function Input_DyeingPartList_SelectEquip(slotNo)
   local self = DyeingPartList
-  ToClient_RequestSelectedEquipItem(slotNo)
   if false == PaGlobalFunc_DyeingPalette_GetShow() then
-    PaGlobalFunc_DyeingPalette_Open(TARGET_TYPE_ENUM[self._currentTargetType], slotNo)
+    PaGlobalFunc_DyeingPalette_Open(TARGET_TYPE_ENUM[self._currentTargetIndex], slotNo)
   end
   ToClient_padSnapSetTargetPanel(Panel_Window_DyeingPalette_Renew)
-end
-function Input_DyeingPartList_OnPadB()
 end

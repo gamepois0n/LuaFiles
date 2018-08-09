@@ -6,7 +6,7 @@ local Window_WorldMap_TopMenuInfo = {
     _menuButtonList = {}
   },
   _config = {
-    _menuCount = 8,
+    _menuCount = 9,
     _buttonGapX = 70,
     _isEnablePlunderGame = ToClient_IsContentsGroupOpen("360"),
     _isEnableBattle = ToClient_IsContentsGroupOpen("21")
@@ -19,11 +19,12 @@ local Window_WorldMap_TopMenuInfo = {
     [4] = PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_PANEL_TOOLTIP_HUMIDITY_NAME"),
     [5] = PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_PANEL_TOOLTIP_GUILDWAR_NAME"),
     [6] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_TOOLTIP_NODEFILTER"),
-    [7] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_PANEL_TOOLTIP_MONSTERINFO_NAME")
+    [7] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_PANEL_TOOLTIP_MONSTERINFO_NAME"),
+    [8] = PAGetString(Defines.StringSheet_GAME, "INTIMACYINFORMATION_TYPE_KNOWLEDGE")
   },
   _stateFilterConfig = {
     [0] = {
-      false,
+      true,
       false,
       false,
       true,
@@ -109,6 +110,17 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       true
+    },
+    [8] = {
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
     }
   },
   _currentMenuIndex = 0,
@@ -153,12 +165,18 @@ end
 function Window_WorldMap_TopMenuInfo:UpdateButtonTownMode()
   self._ui._static_MenuBg:SetShow(false)
   self._ui._static_SubMenuBg:SetShow(true)
+  self._ui._staticRoundBg:SetShow(true)
   self._ui._staticText_Tooltip:SetText("Menu Open")
+  local receipeCount = ToClient_getTownReceipeList()
+  if 0 == receipeCount then
+    self._ui._staticRoundBg:SetShow(false)
+    self._ui._staticText_Tooltip:SetText("")
+  end
 end
 function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   local eState = CppEnums.WorldMapState
   local renderState = index + 1
-  if 7 == index then
+  if index >= 7 then
     renderState = eState.eWMS_EXPLORE_PLANT
   end
   self._isBlackFog = false
@@ -166,7 +184,6 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
     self._isGuildWarMode = false
   elseif eState.eWMS_GUILD_WAR == renderState then
     if true == self._config._isEnablePlunderGame then
-      FGlobal_ApprovalRating_SetShow(true)
     end
     self._isGuildWarMode = true
     renderState = eState.eWMS_EXPLORE_PLANT
@@ -178,24 +195,15 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
     self._isGuildWarMode = false
   end
   ToClient_SetGuildMode(self._isGuildWarMode)
-  handleGuildModeChange(self._isGuildWarMode)
-  PaGlobalFunc_FromClient_WorldMpa_RingMenu_OutWorldMapNode()
+  ToClient_reloadNodeLine(self._isGuildWarMode, CppEnums.WaypointKeyUndefined)
+  PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapNode()
   ToClient_WorldmapStateChange(renderState)
-  if 7 == index then
+  if index >= 7 then
     self:UpdateFilder(index)
   else
     self:UpdateFilder(renderState - 1)
   end
   ToClient_setDoTerrainHide(self._isBlackFog)
-  if renderState == eState.eWMS_EXPLORE_PLANT then
-    if true == self._stateFilterConfig[index][CppEnums.WorldMapCheckState.eCheck_Postions] then
-      FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
-    else
-      FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
-    end
-  else
-    FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
-  end
 end
 function Window_WorldMap_TopMenuInfo:InitGuildWarFilter()
 end
@@ -311,6 +319,7 @@ function Window_WorldMap_TopMenuInfo:InitControl()
       posXIndex = posXIndex + 1
     end
   end
+  self._ui._staticRoundBg = UI.getChildControl(self._ui._static_SubMenuBg, "Static_RoundBg")
   self._ui._staticText_Tooltip = UI.getChildControl(self._ui._static_MenuBg, "StaticText_SelectedMenu")
 end
 function Window_WorldMap_TopMenuInfo:InitEvent()

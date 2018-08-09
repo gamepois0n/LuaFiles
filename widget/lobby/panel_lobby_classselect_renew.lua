@@ -263,9 +263,13 @@ function PaGlobalFunc_ClassSelect_CharacterCreate(characterName)
     return
   end
   local _edit_CharacterName = characterName
+  PaGlobalFunc_Customization_InputName_Close(false)
   local function createCharacterFunc()
     chracterCreate(self._currentSelectType, _edit_CharacterName, _isSpecialCharacter)
-    PaGlobalFunc_Customization_InputName_Close()
+    PaGlobalFunc_Customization_InputName_Open(false)
+  end
+  local cancelCharacterFunc = function()
+    PaGlobalFunc_Customization_InputName_Open(false)
   end
   local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
   local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_CHARACTERCREATE_RECONFIRM_CHARACTERNAME", "name", _edit_CharacterName)
@@ -273,7 +277,7 @@ function PaGlobalFunc_ClassSelect_CharacterCreate(characterName)
     title = messageBoxTitle,
     content = messageBoxMemo,
     functionYes = createCharacterFunc,
-    functionNo = MessageBox_Empty_function,
+    functionNo = cancelCharacterFunc,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData)

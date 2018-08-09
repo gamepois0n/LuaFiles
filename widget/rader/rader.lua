@@ -1050,7 +1050,7 @@ function RadarMap_updateRegion(regionData)
 end
 function NodeLevelRegionNameShow(wayPointKey)
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
-  if "" == nodeName or nil == nodeName then
+  if "" == nodeName or nil == nodeName or true == ToClient_isXBox() then
     radar_regionNodeName:SetShow(false)
   else
     radar_regionNodeName:SetShow(true)
@@ -1058,7 +1058,7 @@ function NodeLevelRegionNameShow(wayPointKey)
     radar_regionNodeName:SetSize(radar_regionNodeName:GetTextSizeX() + 40, radar_regionNodeName:GetSizeY() + 3)
     radar_regionNodeName:ComputePos()
   end
-  if "" == nodeWarRegionName or nil == nodeWarRegionName then
+  if "" == nodeWarRegionName or nil == nodeWarRegionName or true == ToClient_isXBox() then
     radar_regionWarName:SetShow(false)
   else
     radar_regionWarName:SetShow(true)

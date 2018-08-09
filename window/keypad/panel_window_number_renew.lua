@@ -75,6 +75,8 @@ if false == _ContentsGroup_RenewUI_Number then
 else
   _checkButton_MaxCount:SetShow(false)
 end
+local _button_AllCount = UI.getChildControl(Panel_Window_Exchange_Number, "Button_All")
+_button_AllCount:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(1)")
 function numberPad:init()
   for ii = 1, numberPad.MAX_NUMBER_BTN_COUNT do
     local btn = UI.getChildControl(Panel_Window_Exchange_Number, "Button_" .. ii - 1)
@@ -394,7 +396,7 @@ function Panel_NumberPad_ButtonConfirm_Mouse_Click()
     Panel_NumberPad_Show(false, Defines.s64_const.s64_0, 0, nil)
   end
 end
-function Panel_NumberPad_ButtonAllSelect_Mouse_Click(isType)
+function Panel_NumberPad_Button_AutoAll_Mouse_Click()
   local value
   if Defines.s64_const.s64_0 ~= numberPad.s64_weightMaxNumber and Defines.s64_const.s64_0 ~= numberPad.s64_moneyMaxNumber then
     if numberPad.s64_weightMaxNumber < numberPad.s64_moneyMaxNumber then
@@ -408,17 +410,46 @@ function Panel_NumberPad_ButtonAllSelect_Mouse_Click(isType)
     value = numberPad.s64_weightMaxNumber
   end
   numberPad.s64_inputNumber = value
-  if _checkButton_MaxCount:IsCheck() then
-    _checkButton_MaxCount:SetCheck(true)
+  if false == _ContentsGroup_isConsolePadControl then
+    SetFocusEdit(_edit_Number)
+  end
+  _edit_Number:SetEditText(makeDotMoney(value))
+  realNumber = value
+  numberPad:updateConfirmButton()
+end
+function Panel_NumberPad_ButtonAllSelect_Mouse_Click(isType)
+  if 1 == isType then
+    numberPad.s64_inputNumber = numberPad.s64_moneyMaxNumber
     if false == _ContentsGroup_isConsolePadControl then
       SetFocusEdit(_edit_Number)
     end
-    _edit_Number:SetEditText(makeDotMoney(value))
-    realNumber = value
-  else
-    _checkButton_MaxCount:SetCheck(false)
-    _edit_Number:SetEditText(makeDotMoney(Defines.s64_const.s64_1))
-    realNumber = Defines.s64_const.s64_1
+    _edit_Number:SetEditText(makeDotMoney(numberPad.s64_moneyMaxNumber))
+    realNumber = numberPad.s64_moneyMaxNumber
+    Panel_NumberPad_ButtonConfirm_Mouse_Click()
+  elseif 0 == isType then
+    numberPad.s64_inputNumber = numberPad.s64_moneyMaxNumber
+    if Defines.s64_const.s64_1 == numberPad.s64_maxNumber then
+      Panel_NumberPad_ButtonConfirm_Mouse_Click()
+    else
+      if false == _ContentsGroup_isConsolePadControl then
+        SetFocusEdit(_edit_Number)
+      end
+      _edit_Number:SetEditText(makeDotMoney(numberPad.s64_moneyMaxNumber))
+      realNumber = numberPad.s64_moneyMaxNumber
+      Panel_NumberPad_ButtonConfirm_Mouse_Click()
+    end
+  elseif 2 == isType then
+    numberPad.s64_inputNumber = numberPad.s64_weightMaxNumber
+    if Defines.s64_const.s64_1 == numberPad.s64_weightMaxNumber then
+      Panel_NumberPad_ButtonConfirm_Mouse_Click()
+    else
+      if false == _ContentsGroup_isConsolePadControl then
+        SetFocusEdit(_edit_Number)
+      end
+      _textNumber:SetEditText(makeDotMoney(numberPad.s64_weightMaxNumber))
+      realNumber = numberPad.s64_weightMaxNumber
+      Panel_NumberPad_ButtonConfirm_Mouse_Click()
+    end
   end
   numberPad:updateConfirmButton()
 end

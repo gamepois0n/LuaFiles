@@ -2364,7 +2364,7 @@ function Inventory_DropHandler(index)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM"))
     return false
   end
-  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() then
+  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() or FGlobal_Enchant_SetTargetItem() then
     DragManager:clearInfo()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM_WHILE_UI"))
     return false

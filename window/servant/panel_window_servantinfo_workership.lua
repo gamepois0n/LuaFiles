@@ -44,7 +44,7 @@ local workerShipInfo = {
       14,
       15,
       16,
-      26
+      17
     },
     _slotID = {
       [3] = "equipIcon_hull",
@@ -55,7 +55,7 @@ local workerShipInfo = {
       [14] = "equipIcon_AvatarSaddle",
       [15] = "equipIcon_AvatarHull",
       [16] = "equipIcon_AvatarWheel",
-      [26] = "equipIcon_AvatarBody"
+      [17] = "equipIcon_AvatarBody"
     },
     _slotEmptyBG = {
       [3] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_Hull"),
@@ -66,7 +66,7 @@ local workerShipInfo = {
       [14] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_AvatarSaddle"),
       [15] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_AvatarHull"),
       [16] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_AvatarWheel"),
-      [26] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_AvatarBody")
+      [17] = UI.getChildControl(Panel_WorkerShipInfo, "equipIconEmpty_AvatarBody")
     },
     _skill = {
       startX = 1,

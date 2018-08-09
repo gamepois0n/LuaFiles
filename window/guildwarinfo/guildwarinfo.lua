@@ -95,7 +95,6 @@ local warInfo_Content = {
   deathCountValue = UI.getChildControl(Panel_GuildWarInfo, "StaticText_DeathCountValue"),
   cannonCountIcon = UI.getChildControl(Panel_GuildWarInfo, "Static_CanonCountIcon"),
   cannonCountValue = UI.getChildControl(Panel_GuildWarInfo, "StaticText_CanonCountValue"),
-  descBG = UI.getChildControl(Panel_GuildWarInfo, "Static_DescBg"),
   moraleIcon = UI.getChildControl(Panel_GuildWarInfo, "Static_MoraleIcon"),
   moraleProgressBg = UI.getChildControl(Panel_GuildWarInfo, "Static_Morale_ProgressBg"),
   moraleProgress = UI.getChildControl(Panel_GuildWarInfo, "Progress2_Morale"),
@@ -1082,14 +1081,13 @@ function FromClient_NotifySiegeScoreToLog()
       end
     end
   end
-  local descBgSize = warInfo_Content.descBG:GetSizeY()
   warInfo_Log.frame_SiegeLog:UpdateContentScroll()
   if true == guildWarInfo_ShowCheck then
     log_Content._scroll:SetControlPos(1)
     guildWarInfo_ShowCheck = false
   end
   warInfo_Log.frame_SiegeLog:UpdateContentPos()
-  if descBgSize >= textSizeY then
+  if textSizeY <= descBgSize then
     log_Content._scroll:SetShow(false)
     log_Content.frame_content:SetSize(log_Content.frame_content:GetSizeX(), defaultLogFrameSize)
   else

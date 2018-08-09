@@ -7,6 +7,14 @@ local Window_WorldMap_RightMenuInfo = {
   },
   _currentNodeInfo = nil
 }
+function Window_WorldMap_RightMenuInfo:ButtonFilter()
+  local isTown = self._currentNodeInfo:getStaticStatus():getRegion():isMainOrMinorTown()
+  local receipeCount = ToClient_getTownReceipeList()
+  self._ui._button_BuyHouse:SetShow(receipeCount > 0)
+  self._ui._button_Stable:SetShow(isTown)
+  self._ui._button_WareHouse:SetShow(isTown)
+  self._ui._button_Delivery:SetShow(isTown)
+end
 function PaGlobalFunc_WorldMap_RightMenu_SetCurrentNodeInfo(nodeInfo)
   local self = Window_WorldMap_RightMenuInfo
   self._currentNodeInfo = nodeInfo
@@ -38,8 +46,8 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenWareHouse()
     local waypointKey = self._currentNodeInfo:getPlantKey():getWaypointKey()
     Warehouse_OpenPanelFromWorldmap(waypointKey, CppEnums.WarehoouseFromType.eWarehoouseFromType_Worldmap)
     PaGlobalFunc_WorldMap_TopMenu_Close()
-    PaGlobalFunc_WorldMap_BottomMenu_Close()
     PaGlobalFunc_WorldMap_RightMenu_Close()
+    PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()
@@ -51,8 +59,8 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()
     Warehouse_OpenPanelFromWorldmap(waypointKey, CppEnums.WarehoouseFromType.eWarehoouseFromType_Worldmap)
     PaGlobalFunc_PanelDelivery_OpenDeliveryTab()
     PaGlobalFunc_WorldMap_TopMenu_Close()
-    PaGlobalFunc_WorldMap_BottomMenu_Close()
     PaGlobalFunc_WorldMap_RightMenu_Close()
+    PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
 end
 function Window_WorldMap_RightMenuInfo:InitEvent()
@@ -69,11 +77,17 @@ function Window_WorldMap_RightMenuInfo:Initialize()
   self:InitRegister()
 end
 function PaGlobalFunc_WorldMap_RightMenu_Toggle()
+  local receipeCount = ToClient_getTownReceipeList()
+  if 0 == receipeCount then
+    return
+  end
   if true == PaGlobalFunc_WorldMap_RightMenu_GetShow() then
     PaGlobalFunc_WorldMap_RingMenu_Open()
+    PaGlobalFunc_WorldMap_BottomMenu_Open()
     PaGlobalFunc_WorldMap_RightMenu_Close()
   else
     PaGlobalFunc_WorldMap_RingMenu_Close()
+    PaGlobalFunc_WorldMap_BottomMenu_Close()
     PaGlobalFunc_WorldMap_RightMenu_Open()
   end
 end
@@ -88,6 +102,7 @@ function PaGlobalFunc_WorldMap_RightMenu_Open()
   if true == PaGlobalFunc_WorldMap_RightMenu_GetShow() then
     return
   end
+  self:ButtonFilter()
   PaGlobalFunc_WorldMap_RightMenu_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_RightMenu_Close()

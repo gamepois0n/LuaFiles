@@ -93,26 +93,11 @@ function FGlobal_CustomizingAlbum_Close()
   Panel_CustomizingAlbum:SetShow(false, false)
 end
 function CustomizingAlbum_Resize()
-  local screenSizeX = getScreenSizeX()
-  if screenSizeX < 1920 then
-    sizeX = 870
-    sizeY = 630
-    panelSizeX = 900
-    panelSizeY = 700
-    titleBarSizeX = 887
-  elseif screenSizeX >= 1920 and screenSizeX < 3840 then
-    sizeX = 1305
-    sizeY = 945
-    panelSizeX = 1335
-    panelSizeY = 1015
-    titleBarSizeX = 1322
-  else
-    sizeX = 1740
-    sizeY = 1260
-    panelSizeX = 1770
-    panelSizeY = 1330
-    titleBarSizeX = 1757
-  end
+  sizeX = 870
+  sizeY = 630
+  panelSizeX = 900
+  panelSizeY = 700
+  titleBarSizeX = 887
   Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY)
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
   _customizingAlbumWeb:SetPosX(15)

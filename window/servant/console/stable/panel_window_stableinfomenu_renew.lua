@@ -41,6 +41,7 @@ local Panel_Window_StableInfo_Menu_info = {
     move = nil,
     skillChange = nil,
     mateImmediately = nil,
+    showBreedingMarket = nil,
     seal = nil,
     remote = nil
   },
@@ -67,6 +68,7 @@ local Panel_Window_StableInfo_Menu_info = {
     eSTALLION_TRAINFINISH = 19,
     eSKILLCHANGE = 20,
     eMATING_IMMEDIATELY = 21,
+    eSHOW_BREEDING_MARKET = 22,
     eSEAL = 31,
     eREMOTE = 32,
     eRECOVERY_UNSEAL = 33,
@@ -162,6 +164,7 @@ function Panel_Window_StableInfo_Menu_info:getStringTable()
   self._string.move = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_BUTTONMOVE")
   self._string.skillChange = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_CHANGESKILL_TITLE")
   self._string.mateImmediately = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_INFO_BTN_MATINGIMMEDIATELY")
+  self._string.showBreedingMarket = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_TITLE")
   self._string.seal = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_FUNCTION_BTN_SEAL")
   self._string.remote = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REMOTE")
 end
@@ -187,6 +190,7 @@ function Panel_Window_StableInfo_Menu_info:linkButtonFunction()
   self._buttonFunc[self._enumButtonType.eSTALLION_TRAINFINISH] = PaGlobalFunc_StableInfo_Menu_StallionTrainFinish
   self._buttonFunc[self._enumButtonType.eSKILLCHANGE] = PaGlobalFunc_StableInfo_Menu_ChangSKill
   self._buttonFunc[self._enumButtonType.eMATING_IMMEDIATELY] = PaGlobalFunc_StableInfo_Menu_MatingImmediately
+  self._buttonFunc[self._enumButtonType.eSHOW_BREEDING_MARKET] = PaGlobalFunc_StableInfo_Menu_SeeBreedingMarket
   self._buttonFunc[self._enumButtonType.eSEAL] = PaGlobalFunc_StableInfo_Menu_Seal
   self._buttonFunc[self._enumButtonType.eREMOTE] = PaGlobalFunc_StableInfo_Menu_RemoteSeal
   self._buttonFunc[self._enumButtonType.eRECOVERY_UNSEAL] = PaGlobalFunc_StableInfo_Menu_RecoveryUnseal
@@ -301,11 +305,14 @@ function Panel_Window_StableInfo_Menu_info:setSealedButton(selectServantNo)
             self:setButton(self._enumButtonType.eDEAD_RESET, self._string.destroyCountReset)
           end
         end
-        if servantInfo:doClearCountByMating() and servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and training ~= getState and FGlobal_IsCommercialService() and stallionTraining ~= getState then
+        if servantInfo:doClearCountByMating() and servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and training ~= getState and FGlobal_IsCommercialService() and stallionTraining ~= getState and nowMating ~= getState and regMarket ~= getState and regMating ~= getState then
           self:setButton(self._enumButtonType.eCLEAR_MATING_COUNT, self._string.clearMatingCount)
         end
         if CppEnums.ServantStateType.Type_Mating == servantInfo:getStateType() and FGlobal_IsCommercialService() and not servantInfo:isMale() and not servantInfo:isMatingComplete() then
           self:setButton(self._enumButtonType.eMATING_IMMEDIATELY, self._string.mateImmediately)
+        end
+        if CppEnums.ServantStateType.Type_RegisterMating == getState then
+          self:setButton(self._enumButtonType.eSHOW_BREEDING_MARKET, self._string.showBreedingMarket)
         end
         if false == isPcroomOnly and servantInfo:doImprint() and FGlobal_IsCommercialService() and stallionTraining ~= getState then
           self:setButton(self._enumButtonType.eSTAMPING, self._string.stamping)
@@ -691,6 +698,14 @@ function PaGlobalFunc_StableInfo_Menu_MatingImmediately()
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
+end
+function PaGlobalFunc_StableInfo_Menu_SeeBreedingMarket()
+  audioPostEvent_SystemUi(0, 0)
+  local self = Panel_Window_StableInfo_Menu_info
+  if nil == self._value.selectedServantSlotNo then
+    return
+  end
+  PaGlobalFunc_StableFunction_SelectButton(3, 1)
 end
 function PaGlobalFunc_StableInfo_Menu_Stamping(isImprint)
   audioPostEvent_SystemUi(0, 0)

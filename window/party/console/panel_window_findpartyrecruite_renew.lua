@@ -2,11 +2,16 @@ local Panel_Window_FindPartyRecruite_info = {
   _ui = {
     static_CenterBg = nil,
     edit_AdDesc = nil,
-    static_Level = nil
+    static_Level = nil,
+    static_BottomBg = nil,
+    staticText_X_ConsoleUI = nil,
+    staticText_A_ConsoleUI = nil,
+    staticText_B_ConsoleUI = nil
   },
   _value = {selectLevel = 1},
   _config = {maxlevel = 60},
-  _enum = {}
+  _enum = {},
+  _keyGuide = {}
 }
 function Panel_Window_FindPartyRecruite_info:registEventHandler()
   Panel_PartyRecruite:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_FindPartyRecruite_SetLevel(1)")
@@ -21,6 +26,7 @@ end
 function Panel_Window_FindPartyRecruite_info:initialize()
   self:childControl()
   self:initValue()
+  self:resize()
   self:registerMessageHandler()
   self:registEventHandler()
 end
@@ -28,11 +34,21 @@ function Panel_Window_FindPartyRecruite_info:initValue()
   self._value.selectLevel = 1
 end
 function Panel_Window_FindPartyRecruite_info:resize()
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._keyGuide, self._ui.static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_FindPartyRecruite_info:childControl()
   self._ui.static_CenterBg = UI.getChildControl(Panel_PartyRecruite, "Static_CenterBg")
   self._ui.edit_AdDesc = UI.getChildControl(self._ui.static_CenterBg, "Edit_AdDesc")
   self._ui.static_Level = UI.getChildControl(self._ui.static_CenterBg, "Static_Level")
+  self._ui.static_BottomBg = UI.getChildControl(Panel_PartyRecruite, "Static_BottomBg")
+  self._ui.staticText_X_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_X_ConsoleUI")
+  self._ui.staticText_A_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_A_ConsoleUI")
+  self._ui.staticText_B_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_B_ConsoleUI")
+  self._keyGuide = {
+    self._ui.staticText_X_ConsoleUI,
+    self._ui.staticText_A_ConsoleUI,
+    self._ui.staticText_B_ConsoleUI
+  }
 end
 function Panel_Window_FindPartyRecruite_info:setBaseText()
   local baseText = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLISTRECRUITE_DEFALUTTEXT")
@@ -63,6 +79,7 @@ function PaGlobalFunc_FindPartyRecruite_Show()
   self:initValue()
   self:setBaseText()
   self:setBaseLevel()
+  self:resize()
   self:open()
 end
 function PaGlobalFunc_FindPartyRecruite_Exit()

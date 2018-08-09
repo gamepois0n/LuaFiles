@@ -271,7 +271,9 @@ function Process_UIMode_CommonWindow_Manufacture()
         Manufacture_Show(nil, CppEnums.ItemWhereType.eInventory, true)
       else
         audioPostEvent_SystemUi(1, 25)
-        Manufacture_Close()
+        if not _ContentsGroup_RenewUI_Manufacture then
+          Manufacture_Close()
+        end
       end
     end
   end

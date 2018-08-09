@@ -9,7 +9,8 @@ local deadMessage = {
     _staticText_DropItem = {},
     _button_Respawn = {},
     _staticText_A_ConsoleUI = UI.getChildControl(Panel_DeadMessage_Renew, "StaticText_A_ConsoleUI"),
-    _staticText_X_ConsoleUI = UI.getChildControl(Panel_DeadMessage_Renew, "StaticText_X_ConsoleUI")
+    _staticText_X_ConsoleUI = UI.getChildControl(Panel_DeadMessage_Renew, "StaticText_X_ConsoleUI"),
+    _static_Bg = UI.getChildControl(Panel_DeadMessage_Renew, "Static_Bg")
   },
   _config = {
     _eRespawnType = {
@@ -272,6 +273,21 @@ function deadMessage:resetData()
   self._ui._staticText_A_ConsoleUI:SetShow(false)
   self._ui._staticText_X_ConsoleUI:SetShow(false)
 end
+function PaGlobalFunc_DeadMessage_TemporaryOpen()
+  deadMessage:temporaryOpen()
+end
+function PaGlobalFunc_DeadMessage_TemporaryClose()
+  deadMessage:temporaryClose()
+end
+function deadMessage:temporaryOpen()
+end
+function deadMessage:temporaryClose()
+  self._ui._staticText_A_ConsoleUI:SetShow(false)
+  self._ui._staticText_X_ConsoleUI:SetShow(false)
+end
+function PaGlobalFunc_DeadMessage_Open()
+  deadMessage:open()
+end
 function PaGlobalFunc_DeadMessage_Open()
   deadMessage:open()
 end
@@ -303,6 +319,9 @@ function deadMessage:setSize()
   self._ui._staticText_resurrectionTime:ComputePos()
   self._ui._staticText_A_ConsoleUI:ComputePos()
   self._ui._staticText_X_ConsoleUI:ComputePos()
+  local sizeY = self._ui._static_Bg:GetSizeY()
+  self._ui._static_Bg:SetSize(scrSizeX, sizeY)
+  self._ui._static_Bg:ComputePos()
   self._ui._staticText_A_ConsoleUI:SetPosX(scrSizeX * 0.5 - self._ui._staticText_A_ConsoleUI:GetSizeX() - 50)
   self._ui._staticText_X_ConsoleUI:SetPosX(scrSizeX * 0.5 + self._ui._staticText_X_ConsoleUI:GetSizeX())
   if nil == self._buttonTypeArray then
@@ -370,7 +389,7 @@ function deadMessage:perFrameUpdate(deltaTime)
       deadMessage_Revival(self._config._eRespawnType.respawnType_TimeOver, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
     elseif true == isMyChannelSiegeBeing or 0 ~= getSelfPlayer():get():getVolunteerTeamNoForLua() then
     elseif true == ToClient_IsSelfInGuildTeamBattle() then
-      deadMessage_Revival(enRespawnType.respawnType_GuildTeamBattle, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
+      deadMessage_Revival(self._config._eRespawnType.respawnType_GuildTeamBattle, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
     else
       Panel_DeadMessage_Renew:SetShowWithFade(CppEnums.PAUI_SHOW_FADE_TYPE.PAUI_ANI_TYPE_FADE_OUT)
       local aniInfo1 = Panel_DeadMessage_Renew:addColorAnimation(0, 1, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
@@ -404,8 +423,8 @@ function deadMessage:closeChannelMoveWindow()
     if true == PaGlobalFunc_GameExit_GetShow() then
       PaGlobalFunc_GameExit_SetShow(false, false)
     end
-    if Panel_ChannelSelect:GetShow() then
-      FGlobal_ChannelSelect_Hide()
+    if true == _ContentsGroup_RenewUI_ServerSelect and true == PaGlobalFunc_ServerSelect_GetShow() then
+      PaGlobalFunc_ServerSelect_Close()
     end
   end
 end
@@ -532,6 +551,7 @@ function deadMessage:setAniToControl(control, aniType, startTime, endTime, start
   end
   aniInfo.IsChangeChild = true
   if true == isDisable then
+    aniInfo:SetIgnoreUpdateSnapping(true)
     aniInfo:SetDisableWhileAni(true)
   end
 end
@@ -565,16 +585,17 @@ function deadMessage:setDeadMessageAni()
   self:setAniToControl(messageControl, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
   self:setAniToControl(messageControl, aniType._changeColor, 1.5, 2.3, Defines.Color.C_00FFFFFF, Defines.Color.C_FFFFFFFF)
   self:setAniToControl(messageControl, aniType._changeScale, 0.7, 2.5, 0.5, 1)
+  messageControl = self._ui._static_Bg
+  self:setAniToControl(messageControl, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
+  self:setAniToControl(messageControl, aniType._changeColor, 1.5, 2.3, Defines.Color.C_00FFFFFF, Defines.Color.C_FFFFFFFF)
   messageControl = self._ui._staticText_resurrectionTime
   self:setAniToControl(messageControl, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
   self:setAniToControl(messageControl, aniType._changeColor, 2.2, 2.7, Defines.Color.C_00FFFFFF, Defines.Color.C_FFFFFFFF)
-  local keyGuid = self._ui._staticText_A_ConsoleUI
-  self:setAniToControl(keyGuid, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
-  self:setAniToControl(keyGuid, aniType._changeColor, 3, 3.4, Defines.Color.C_00FFFFFF, Defines.Color.C_FFFFFFFF)
 end
 function deadMessage:showDeadMessage(attackerActorKeyRaw, isSkipDeathPenalty)
   local _eDeadType = self._config._eDeadType
   local deadType = self._currentDeadType
+  local aniType = self._config._aniType
   local selfProxy = getSelfPlayer()
   local attackerActorProxyWrapper = getActor(attackerActorKeyRaw)
   local isMilitia = false
@@ -587,7 +608,6 @@ function deadMessage:showDeadMessage(attackerActorKeyRaw, isSkipDeathPenalty)
   if _eDeadType.DeadLocate_InGuildTeamBattle == deadType then
     deadMessageString = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDTEAMBATTLE_DEADATFIGHT")
   elseif attackerActorKeyRaw == selfProxy:getActorKey() then
-    deadWhoString = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg")
   elseif nil ~= attackerActorProxyWrapper then
     if true == isMilitia then
       deadWhoString = PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA"))
@@ -607,6 +627,8 @@ function deadMessage:showDeadMessage(attackerActorKeyRaw, isSkipDeathPenalty)
     local control = self:getPaneltyStringControl()
     control:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_NoDeathPenalty"))
     control:SetShow(true)
+    self:setAniToControl(control, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
+    self:setAniToControl(control, aniType._changeColor, 3, 3.4, Defines.Color.C_00FFFFFF, Defines.Color.C_FFFFFFFF)
   end
   self:open()
   self:setDeadMessageAni()
@@ -811,6 +833,7 @@ function deadMessage:buttonMouseOnEvent(buttonType)
   self._ui._staticText_A_ConsoleUI:SetShow(true)
   self._ui._staticText_X_ConsoleUI:SetShow(isSetXKey)
   Panel_DeadMessage_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, buttonEvent .. "()")
+  Panel_DeadMessage_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   if true == isSetXKey then
     Panel_DeadMessage_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, buttonEvent .. "(true)")
     self._ui._staticText_A_ConsoleUI:SetPosX(scrSizeX * 0.5 - self._ui._staticText_A_ConsoleUI:GetTextSizeX() - 44)
@@ -833,15 +856,16 @@ function deadMessage:buttonPushedEvent_Immediate()
   local freeRevivalLevel = FromClient_getFreeRevivalLevel()
   local isFreeArea = regionInfo:get():isFreeRevivalArea()
   if self._config._eDeadType.DeadLocate_InGuildBattle == self._currentDeadType or true == isArena or isFreeArea and freeRevivalLevel >= selfProxy:get():getLevel() then
-    deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
+    deadMessage_Revival(self._config._eRespawnType.respawnType_Immediate, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
   elseif self._config._eDeadType.DeadLocate_InCompetition == self._currentDeadType or true == self._isAblePvPMatchRevive then
-    deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), self._isAblePvPMatchRevive, toInt64(0, 0))
+    deadMessage_Revival(self._config._eRespawnType.respawnType_Immediate, 0, CppEnums.ItemWhereType.eCashInventory, getSelfPlayer():getRegionKey(), self._isAblePvPMatchRevive, toInt64(0, 0))
   elseif 1 == revivalItemCount then
     PaGlobalFunc_ResurrerectionItem_ApplyItem(self._config._eRespawnType.respawnType_Immediate)
   elseif revivalItemCount > 1 then
+    PaGlobalFunc_DeadMessage_TemporaryClose()
     PaGlobalFunc_ResurrerectionItem_Open(self._config._eRespawnType.respawnType_Immediate)
   else
-    Proc_ShowMessage_Ack(PAGetString(StringSheet_GAME, "LUA_GRAND_GUILDCRAFT_WRONG_ITEM"))
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GRAND_GUILDCRAFT_WRONG_ITEM"))
   end
   FGlobal_ImmediatelyResurrection(selfProxy:get():getMaxHp())
 end
@@ -934,13 +958,13 @@ function deadMessage:buttonPushedEvent_InSiegeingFortress()
   else
     buildingRegionKey = currentBuildInfo:getAffiliatedRegionKey()
   end
-  deadMessage_Revival(enRespawnType.respawnType_InSiegeingFortress, 255, 0, buildingRegionKey, false, toInt64(0, 0))
+  deadMessage_Revival(self._config._eRespawnType.respawnType_InSiegeingFortress, 255, 0, buildingRegionKey, false, toInt64(0, 0))
 end
 function PaGlobalFunc_DeadMessage_ButtonPushEvent_LocalWar()
   deadMessage:buttonPushedEvent_LocalWar()
 end
 function deadMessage:buttonPushedEvent_LocalWar()
-  deadMessage_Revival(self._config._enRespawnType.respawnType_LocalWar, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
+  deadMessage_Revival(self._config._eRespawnType.respawnType_LocalWar, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
 end
 function PaGlobalFunc_DeadMessage_ButtonPushEvent_AdvancedBase()
   deadMessage:buttonPushedEvent_AdvancedBase()
@@ -1086,9 +1110,10 @@ function deadMessage:respawnWithCashItem(respawnType)
   elseif 1 == revivalItemCount then
     PaGlobalFunc_ResurrerectionItem_ApplyItem(respawnType)
   elseif revivalItemCount > 1 then
+    PaGlobalFunc_DeadMessage_TemporaryClose()
     PaGlobalFunc_ResurrerectionItem_Open(respawnType)
   else
-    Proc_ShowMessage_Ack(PAGetString(StringSheet_GAME, "LUA_GRAND_GUILDCRAFT_WRONG_ITEM"))
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GRAND_GUILDCRAFT_WRONG_ITEM"))
   end
 end
 function deadMessage:getPaneltyStringControl()
@@ -1128,7 +1153,8 @@ function deadMessage:Event_WeakEquip(slotNo)
   if nil == control then
     return
   end
-  control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DownEnchantMsg", "enchantDownSlot", CPP_slotNoString[slotNo]))
+  local aniType = self._config._aniType
+  control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DownEnchantMsg", "enchantDownSlot", CppEnums.EquipSlotNoString[slotNo]))
   control:SetFontColor(Defines.Color.C_FF96D4FC)
   control:SetShow(true)
   self:setAniToControl(control, aniType._changeColor, 0, 0.5, Defines.Color.C_00FFFFFF, Defines.Color.C_00FFFFFF)
@@ -1142,6 +1168,7 @@ function deadMessage:Event_WeakEquipCantPushInventory(notify)
   if nil == control then
     return
   end
+  local aniType = self._config._aniType
   control:SetText(notify)
   control:SetFontColor(Defines.Color.C_FF96D4FC)
   control:SetShow(true)
@@ -1156,6 +1183,7 @@ function deadMessage:Event_DestroyJewel(destoryJewel01, destoryJewel02, destoryJ
   if nil == control then
     return
   end
+  local aniType = self._config._aniType
   local jewelKey = {
     [0] = destoryJewel01,
     [1] = destoryJewel02,
@@ -1237,6 +1265,10 @@ function deadMessage:notifySiegeShowWatchPanel(isShow)
     ToClient_CanOpenGuildBattleCam(isShow)
     Panel_DeadMessage_Renew:SetShow(true, true)
   end
+end
+function deadMessage_ResurrectionTimeReturn(Rtime)
+  deadMessage._resurrectionTime = Rtime
+  deadMessage._buttonAbleTime = Rtime
 end
 function FromClient_NotifySiegeShowWatchPanel(isShow)
   deadMessage:notifySiegeShowWatchPanel(isShow)

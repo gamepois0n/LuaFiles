@@ -32,14 +32,16 @@ end
 function Window_WorldMap_NodeProductInfo:SetWorkerData()
   self._workerInfoList = {}
   self._ui._list2_Worker:getElementManager():clearKey()
+  local workingWorkerList = {}
   local sortMethod = 0
   local waitingWorkerCount = ToClient_getPlantWaitWorkerListCount(self._currentNodeInfo._plantKey, self._currentNodeInfo._workableType, self._currentNodeInfo._workKey, sortMethod)
   local workerIndex = 0
+  local workingWorkerIndex = 0
   for index = 0, waitingWorkerCount - 1 do
     local npcWaitingWorker = ToClient_getPlantWaitWorkerByIndex(self._currentNodeInfo._plantKey, index)
     local workerNoRaw = npcWaitingWorker:getWorkerNo():get_s64()
     local workerWrapperLua = getWorkerWrapper(workerNoRaw, false)
-    if true == ToClient_isWaitWorker(npcWaitingWorker) and false == workerWrapperLua:getIsAuctionInsert() then
+    if false == workerWrapperLua:getIsAuctionInsert() and true == ToClient_getWorkerWorkerablePlant(npcWaitingWorker:getHomeWaypoint(), self._currentNodeInfo._plantKey:getWaypointKey()) then
       if nil == self._workerInfoList[workerIndex] then
         self._workerInfoList[workerIndex] = {}
       end
@@ -61,26 +63,50 @@ function Window_WorldMap_NodeProductInfo:SetWorkerData()
       local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS)
       local regionName = "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
       local homeWaypoint = npcWaitingWorker:getHomeWaypoint()
-      self._workerInfoList[workerIndex] = {
-        _workerNo = workerNo,
-        _workerNo_s64 = workerNoChar,
-        _workerNoChar = Int64toInt32(workerNoChar),
-        _name = name,
-        _regionName = regionName,
-        _workSpeed = workSpeed / 1000000,
-        _moveSpeed = moveSpeed,
-        _luck = luck / 10000,
-        _maxPoint = maxPoint,
-        _currentPoint = currentPoint,
-        _homeWaypoint = homeWaypoint,
-        _workerGrade = workerGrade
-      }
-      self._ui._list2_Worker:getElementManager():pushKey(toInt64(0, workerIndex))
-      self._ui._list2_Worker:requestUpdateByKey(toInt64(0, workerIndex))
-      workerIndex = workerIndex + 1
+      if true == ToClient_isWaitWorker(npcWaitingWorker) then
+        self._workerInfoList[workerIndex] = {
+          _workerNo = workerNo,
+          _workerNo_s64 = workerNoChar,
+          _workerNoChar = Int64toInt32(workerNoChar),
+          _name = name,
+          _regionName = regionName,
+          _workSpeed = workSpeed / 1000000,
+          _moveSpeed = moveSpeed,
+          _luck = luck / 10000,
+          _maxPoint = maxPoint,
+          _currentPoint = currentPoint,
+          _homeWaypoint = homeWaypoint,
+          _workerGrade = workerGrade
+        }
+        self._ui._list2_Worker:getElementManager():pushKey(toInt64(0, workerIndex))
+        self._ui._list2_Worker:requestUpdateByKey(toInt64(0, workerIndex))
+        workerIndex = workerIndex + 1
+      else
+        workingWorkerList[workingWorkerIndex] = {
+          _workerNo = workerNo,
+          _workerNo_s64 = workerNoChar,
+          _workerNoChar = Int64toInt32(workerNoChar),
+          _name = name,
+          _regionName = regionName,
+          _workSpeed = workSpeed / 1000000,
+          _moveSpeed = moveSpeed,
+          _luck = luck / 10000,
+          _maxPoint = maxPoint,
+          _currentPoint = currentPoint,
+          _homeWaypoint = homeWaypoint,
+          _workerGrade = workerGrade
+        }
+        workingWorkerIndex = workingWorkerIndex + 1
+      end
     end
-    self._workerCount = workerIndex
   end
+  for index = 0, workingWorkerIndex - 1 do
+    self._workerInfoList[workerIndex] = workingWorkerList[index]
+    self._ui._list2_Worker:getElementManager():pushKey(toInt64(0, workerIndex))
+    self._ui._list2_Worker:requestUpdateByKey(toInt64(0, workerIndex))
+    workerIndex = workerIndex + 1
+  end
+  self._workerCount = workerIndex
 end
 function Window_WorldMap_NodeProductInfo:InitControl()
   self._config._panelDefaultSizeY = Panel_Worldmap_NodeProduct:GetSizeY()
@@ -90,7 +116,6 @@ function Window_WorldMap_NodeProductInfo:InitControl()
   self._ui._static_InfoBg = UI.getChildControl(self._ui._static_CenterBg, "Static_InfoBg")
   self._ui._radioButton_NodeTemplate = UI.getChildControl(self._ui._static_NodeListBg, "RadioButton_NodeTemplate")
   self._ui._static_ProductIcon = UI.getChildControl(self._ui._static_InfoBg, "Static_Icon")
-  self._ui._staticText_NeedItem = UI.getChildControl(self._ui._static_InfoBg, "StaticText_NeedItem")
   self._ui._staticText_ProductDesc = UI.getChildControl(self._ui._static_InfoBg, "StaticText_Desc")
   self._ui._staticText_ProductDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._staticText_FinanceDesc = UI.getChildControl(self._ui._static_FinanceBg, "StaticText_Desc")
@@ -99,6 +124,7 @@ function Window_WorldMap_NodeProductInfo:InitControl()
   self._ui._static_Icon = UI.getChildControl(self._ui._static_FinanceBg, "Static_Icon")
   self._ui._staticText_ProductName = UI.getChildControl(self._ui._static_InfoBg, "StaticText_Desc")
   self._ui._staticText_LeftTime = UI.getChildControl(self._ui._static_InfoBg, "StaticText_LeftTimeValue")
+  self._ui._progress2_WorkTime = UI.getChildControl(self._ui._static_InfoBg, "Progress2_WorkTime")
   self._ui._staticText_WorkCount = UI.getChildControl(self._ui._static_InfoBg, "StaticText_WorkCountValue")
   self._ui._staticText_Distance = UI.getChildControl(self._ui._static_InfoBg, "StaticText_DistanceValue")
   self._ui._staticText_WorkSpeed = UI.getChildControl(self._ui._static_InfoBg, "StaticText_WorkSpeedValue")
@@ -107,12 +133,15 @@ function Window_WorldMap_NodeProductInfo:InitControl()
   self._ui._static_WarningIcon = UI.getChildControl(self._ui._static_BottomBg, "StaticText_WarningIcon")
   self._ui._static_KeyGuideLB = UI.getChildControl(self._ui._static_NodeListBg, "Static_LB_ConsoleUI")
   self._ui._static_KeyGuideRB = UI.getChildControl(self._ui._static_NodeListBg, "Static_RB_ConsoleUI")
+  self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
+  self._ui._static_KeyGuide_DoWork = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
 end
 function Window_WorldMap_NodeProductInfo:InitEvent()
   self._ui._list2_Worker:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate")
   self._ui._list2_Worker:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   Panel_Worldmap_NodeProduct:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_WorldMap_NodeProduct_SelectNode(-1)")
   Panel_Worldmap_NodeProduct:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_WorldMap_NodeProduct_SelectNode(1)")
+  Panel_Worldmap_NodeProduct:RegisterUpdateFunc("PaGlobalFunc_WorldMap_NodeProduct_UpdatePerFrame")
 end
 function Window_WorldMap_NodeProductInfo:InitRegister()
   registerEvent("FromClient_FindSubNode", "PaGlobalFunc_FromCLient_WorldMap_NodeProduct_FindSubNode")
@@ -126,6 +155,30 @@ function Window_WorldMap_NodeProductInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+end
+function PaGlobalFunc_WorldMap_NodeProduct_UpdatePerFrame(deltaTime)
+  local self = Window_WorldMap_NodeProductInfo
+  for index = 0, self._workerCount - 1 do
+    self._ui._list2_Worker:requestUpdateByKey(toInt64(0, index))
+  end
+  local currentPlant = self._subNodeInfoList[self._currentNodeIndex]
+  if nil == currentPlant then
+    return
+  end
+  local plant = getPlant(currentPlant._plantKey)
+  local workingCount = getWorkingList(plant)
+  if 0 == workingCount then
+    self._ui._progress2_WorkTime:SetProgressRate(0)
+    return
+  end
+  for index = 0, workingCount - 1 do
+    local worker = getWorkingByIndex(index).workerNo
+    local workerNo = worker:get_s64()
+    local workingProgress = getWorkingProgress(workerNo) * 100000
+    local remainTime = Util.Time.timeFormatting(ToClient_getWorkingTime(workerNo))
+    self._ui._staticText_LeftTime:SetText(remainTime)
+    self._ui._progress2_WorkTime:SetProgressRate(workingProgress)
+  end
 end
 function PaGlobalFunc_FromCLient_WorldMap_NodeProduct_NotifyChangeRegionProductivity()
   local self = Window_WorldMap_NodeProductInfo
@@ -261,6 +314,11 @@ function PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate(list_content,
   button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeProduct_SelectWorker(" .. id .. ")")
   workerImage:ChangeTextureInfoName(workerIcon)
   workerTown:SetText(workerInfo._regionName)
+  local progressRate = ToClient_getWorkingProgress(workerInfo._workerNo_s64) * 100000
+  local remainTime = Util.Time.timeFormatting(ToClient_getLeftWorkingTime(workerInfo._workerNo_s64))
+  workingCount:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  workingCount:SetText(workerWrapperLua:getWorkString())
+  remainTimeProgress:SetProgressRate(progressRate)
 end
 function PaGlobalFunc_WorldMap_NodeProduct_SelectWorker(id)
   local self = Window_WorldMap_NodeProductInfo
@@ -290,6 +348,8 @@ end
 function Window_WorldMap_NodeProductInfo:Clear()
   self._prevGetWearHouseKey = -1
   self._ui._list2_Worker:getElementManager():clearKey()
+  self._ui._static_KeyGuide_Select:SetShow(false)
+  self._ui._static_KeyGuide_DoWork:SetShow(false)
   self._ui._radioButton_NodeTemplate:SetText("--")
   self._ui._staticText_LeftTime:SetText("--")
   self._ui._staticText_WorkCount:SetText("--")
@@ -302,7 +362,6 @@ function Window_WorldMap_NodeProductInfo:Clear()
   Panel_Worldmap_NodeProduct:SetSize(Panel_Worldmap_NodeProduct:GetSizeX(), self._config._panelDefaultSizeY - self._config._financeGapY)
   self._ui._static_CenterBg:SetPosY(self._config._centerBgDefaultPosY - self._config._financeGapY)
   self._ui._static_BottomBg:SetPosY(self._config._bottomBgDefaultPosY - self._config._financeGapY)
-  self._ui._staticText_NeedItem:SetShow(false)
   self._ui._static_WarningIcon:SetShow(false)
   self._ui._static_FinanceBg:SetShow(false)
 end
@@ -338,7 +397,8 @@ function Window_WorldMap_NodeProductInfo:UpdateNodeUI(id)
     self._ui._staticText_MoveSpeed:SetText("--")
     self._ui._staticText_Luck:SetText("--")
   end
-  self._ui._staticText_NeedItem:SetShow(false)
+  self._ui._static_KeyGuide_Select:SetShow(nil ~= workerInfo)
+  self._ui._static_KeyGuide_DoWork:SetShow(nil ~= workerInfo)
   self._ui._static_WarningIcon:SetShow(false)
   self._ui._static_FinanceBg:SetShow(false)
   Panel_Worldmap_NodeProduct:SetSize(Panel_Worldmap_NodeProduct:GetSizeX(), self._config._panelDefaultSizeY - self._config._financeGapY)
@@ -362,12 +422,11 @@ function Window_WorldMap_NodeProductInfo:UISetForFinance(workerIndex)
   self._ui._static_Icon:ChangeTextureInfoName(nodeInfo._financeIcon)
   self._ui._staticText_FinanceTitle:SetText(nodeInfo._nodeName)
   self._ui._staticText_FinanceDesc:SetText(nodeInfo._isFinanceDesc)
-  self._ui._staticText_NeedItem:SetShow(true)
-  self._ui._static_WarningIcon:SetShow(true)
+  self._ui._static_WarningIcon:SetShow(nil ~= workerInfo)
   if true == self._currentResourceList[0]._isCraftable then
     self._ui._static_WarningIcon:SetShow(false)
   end
-  self._ui._staticText_NeedItem:SetText(self._currentResourceList[0]._haveCount .. " / " .. self._currentResourceList[0]._needCount)
+  self._ui._staticText_ProductName:SetText(self._ui._staticText_ProductName:GetText() .. "(" .. self._currentResourceList[0]._haveCount .. " / " .. self._currentResourceList[0]._needCount .. ")")
 end
 function Window_WorldMap_NodeProductInfo:DataSetForFinance(workerIndex)
   local workerInfo = self._workerInfoList[workerIndex]
@@ -405,6 +464,9 @@ function Window_WorldMap_NodeProductInfo:DataSetForFinance(workerIndex)
 end
 function PaGlobalFunc_WorldMap_NodeProduct_DoWork(id)
   local self = Window_WorldMap_NodeProductInfo
+  if false == self._ui._static_KeyGuide_DoWork:GetShow() then
+    return
+  end
   if workerManager_CheckWorkingOtherChannelAndMsg() then
     return
   end

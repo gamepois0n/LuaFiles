@@ -49,6 +49,7 @@ function IngameCustomize_Show()
   audioPostEvent_SystemUi(1, 2)
   SetUIMode(Defines.UIMode.eUIMode_InGameCustomize)
   renderMode:set()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_CUSTOMIZE")
 end
 function IngameCustomize_Hide()
   if nil == getCustomizingManager() then
@@ -88,6 +89,7 @@ function IngameCustomize_Hide()
   if false == _ContentsGroup_RenewUI_Customization then
     faceHairCustomUpdate(false)
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function HandleClicked_CloseIngameCustomization()
   if false == _ContentsGroup_RenewUI_Customization then

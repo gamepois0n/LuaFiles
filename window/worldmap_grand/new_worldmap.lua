@@ -452,7 +452,7 @@ function FromClient_WorldMapOpen()
     Panel_CheckedQuestInfo:SetShow(false)
   end
   FGolbal_ItemMarketNew_Close()
-  if Panel_Window_ItemMarket_ItemSet:GetShow() then
+  if PaGlobalFunc_ItemMarketItemSet_GetShow() then
     FGlobal_ItemMarketItemSet_Close()
   end
   if Panel_ChatOption:GetShow() then
@@ -466,17 +466,9 @@ function FromClient_WorldMapOpen()
   if true == ToClient_WorldMapIsShow() then
     PaGlobal_TutorialManager:handleWorldMapOpenComplete()
   end
-  if true == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
-    ToClient_WorldmapCheckState(0, false, false)
-    ToClient_WorldmapCheckState(1, false, false)
-    ToClient_WorldmapCheckState(2, false, false)
-    ToClient_WorldmapCheckState(3, true, false)
-    ToClient_WorldmapCheckState(4, true, false)
-    ToClient_WorldmapCheckState(5, true, false)
-    ToClient_WorldmapCheckState(6, false, false)
-    ToClient_WorldmapCheckState(7, false, false)
-    ToClient_WorldmapCheckState(8, false, false)
+  if true ~= _ContentsGroup_ForXBoxXR or false == _ContentsGroup_ForXBoxFinalCert then
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_WORLDMAP")
 end
 function FGlobal_Worldmap_SetRenderMode(renderModeList)
   renderMode:setRenderMode(renderModeList)
@@ -517,7 +509,7 @@ function FGlobal_WorldMapWindowEscape()
     if true == _ContentsGroup_ForXBoxFinalCert then
       _panel_houseControl = Panel_Worldmap_HouseCraft
     end
-    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and PaGlobalFunc_PanelDelivery_GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (Panel_Window_ItemMarket:GetShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true) and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Window_WorkerManager_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true)) and Panel_WorldMap_MovieGuide:GetShow() == false and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Dialog_WorkerTrade_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade:GetShow() == false) and (true == _ContentsGroup_RenewUI_Worker or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade_Caravan:GetShow() == false) then
+    if _panel_houseControl:GetShow() == false and Panel_LargeCraft_WorkManager:GetShow() == false and Panel_RentHouse_WorkManager:GetShow() == false and Panel_Building_WorkManager:GetShow() == false and Panel_House_SellBuy_Condition:GetShow() == false and PaGlobalFunc_PanelDelivery_GetShow() == false and Panel_Trade_Market_Graph_Window:GetShow() == false and (_panel_TradeMarket_EventInfo:GetShow() == false or _panel_TradeMarket_EventInfo:IsUISubApp() == true) and Worldmap_Grand_GuildHouseControl:GetShow() == false and Worldmap_Grand_GuildCraft:GetShow() == false and Panel_NodeStable:GetShow() == false and Panel_Window_Warehouse:GetShow() == false and (Panel_CheckedQuest:GetShow() == false or Panel_CheckedQuest:IsUISubApp() == true) and Panel_Window_Delivery_InformationView:GetShow() == false and (PaGlobalFunc_ItemMarket_GetShow() == false or PaGlobalFunc_ItemMarket_IsUISubApp() == true) and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Window_WorkerManager_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and (Panel_WorkerManager:GetShow() == false or Panel_WorkerManager:IsUISubApp() == true)) and Panel_WorldMap_MovieGuide:GetShow() == false and (true == _ContentsGroup_RenewUI_Worker and false == Panel_Dialog_WorkerTrade_Renew:GetShow() or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade:GetShow() == false) and (true == _ContentsGroup_RenewUI_Worker or false == _ContentsGroup_RenewUI_Worker and Panel_WorkerTrade_Caravan:GetShow() == false) then
       ToClient_WorldMapPushEscape()
     end
     if false == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
@@ -587,6 +579,7 @@ function FGlobal_WorldMapClose()
     PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   end
   FGlobal_Panel_MovieTheater640_WindowClose()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function FGlobal_WorldMapCloseSubPanel()
   Panel_Window_Warehouse:SetShow(false)

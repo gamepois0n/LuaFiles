@@ -383,6 +383,7 @@ function PaGlobal_HouseInstallation:open()
     self:open_ItemInstallMode(isShow)
   end
   Panel_House_InstallationMode:SetShow(true)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_BUILDMODE")
 end
 function PaGlobal_HouseInstallation:open_ObjectInstallMode(isShow)
   if not IsSelfPlayerWaitAction() and not IsSelfPlayerBattleWaitAction() then
@@ -1136,6 +1137,7 @@ function HandleClicked_HouseInstallation_Exit_ByAttacked()
 end
 function HouseInstallation_Hide()
   PaGlobal_HouseInstallation:close()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobal_HouseInstallation:registEventHandler()
   self._ui._itemListBg:addInputEvent("Mouse_DownScroll", "PaGlobal_HouseInstallation:updateScroll( true )")

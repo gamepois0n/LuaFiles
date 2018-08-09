@@ -1,3 +1,4 @@
+PaGlobal_registerPanelOnBlackBackground(Panel_Window_GameExit_Confirm)
 local Window_GameExit_ConfirmInfo = {
   _ui = {
     _staticText_Title = UI.getChildControl(Panel_Window_GameExit_Confirm, "StaticText_Title"),
@@ -62,6 +63,8 @@ function Window_GameExit_ConfirmInfo:Initialize()
 end
 function Window_GameExit_ConfirmInfo:InitControl()
   self._ui._staticText_TrayHelp:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_TrayHelp:SetAutoResize(true)
+  self._ui._staticText_GameExit:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._staticText_TrayHelp:SetAutoResize(true)
   if _ContentsGroup_isConsolePadControl then
     self._ui._staticText_TrayHelp:SetShow(false)

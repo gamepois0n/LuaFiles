@@ -91,9 +91,12 @@ function Window_SkillInfo:GetSkillFromCell(cellTable)
     for col = 0, cols - 1 do
       local cell = cellTable:atPointer(col, row)
       local skillNo = cell._skillNo
-      if 90 ~= skillNo and true == cell:isSkillType() then
-        table[index] = self:SetSkillInfo(skillNo)
-        index = index + 1
+      if true == cell:isSkillType() then
+        local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
+        if 90 ~= skillNo and true == skillTypeStaticWrapper:isValidLocalizing() then
+          table[index] = self:SetSkillInfo(skillNo)
+          index = index + 1
+        end
       end
     end
   end
@@ -207,7 +210,7 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
   Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   if self._config._title_Learn == titleType then
     tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_TAB_LEARNABLE"))
-    tooltip:SetPosX(learnSkill:GetPosX() - learnSkill:GetSizeX() / 2)
+    tooltip:SetPosX(learnSkill:GetPosX() + learnSkill:GetSizeX() / 2 - tooltip:GetSizeX() / 2)
     self._currentTitle = self._config._title_Learn
     self._ui._right._radioButton_learnSkillKey:SetShow(true)
     self._ui._right._radiobutton_ResetSkillKey:SetShow(false)
@@ -216,7 +219,7 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
     self:SetLearnableSkillList()
   elseif self._config._title_Basic == titleType then
     tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_COMBAT"))
-    tooltip:SetPosX(basicSkill:GetPosX() - basicSkill:GetSizeX() / 2)
+    tooltip:SetPosX(basicSkill:GetPosX() + basicSkill:GetSizeX() / 2 - tooltip:GetSizeX() / 2)
     self._currentTitle = self._config._title_Basic
     self._ui._right._radioButton_learnSkillKey:SetShow(false)
     self._ui._right._radiobutton_ResetSkillKey:SetShow(true)
@@ -236,25 +239,6 @@ function Window_SkillInfo:SetLearnableSkillList()
   for tableIndex = 0, #self._combatTable do
     local skillCount = self._combatTable[tableIndex]._skillCount
     local skillTable = self._combatTable[tableIndex]._skillTable
-    if nil == skillTable then
-      return
-    end
-    for skillIndex = 0, skillCount - 1 do
-      local skillInfo = skillTable[skillIndex]
-      if nil == skillInfo then
-        return
-      end
-      if true == skillInfo._learnable then
-        self._currentSkillListInfo[index] = skillInfo
-        self._ui._right._list2_Skill:getElementManager():pushKey(toInt64(0, index))
-        self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, index))
-        index = index + 1
-      end
-    end
-  end
-  for tableIndex = 0, #self._awakenTable do
-    local skillCount = self._awakenTable[tableIndex]._skillCount
-    local skillTable = self._awakenTable[tableIndex]._skillTable
     if nil == skillTable then
       return
     end
@@ -501,7 +485,7 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
   body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
-  body._staticText_Command:SetText("")
+  body._staticText_Command:SetText(skillInfo._command)
   body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2)
   local resourcePosY = body._staticText_NeedResource:GetPosY() + body._staticText_NeedResource:GetSizeY()
   local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY()
@@ -760,7 +744,6 @@ end
 function Window_SkillInfo:InitEvent()
   local right = self._ui._right
   local body = self._ui._body
-  Panel_Window_Skill:RegisterUpdateFunc("PaGlobalFunc_Skill_UpdatePanelView")
   self._ui._static_BodyBg:addInputEvent("Mouse_LDown", "PaGlobalFunc_Skill_SetPanelViewStart(true)")
   self._ui._static_BodyBg:addInputEvent("Mouse_RDown", "PaGlobalFunc_Skill_SetPanelViewStart(false)")
   self._ui._static_BodyBg:addInputEvent("Mouse_Out", "PaGlobalFunc_Skill_SetPanelViewEnd()")
@@ -880,10 +863,11 @@ function PaGlobalFunc_Skill_Open(isDialog)
   self._renderMode:set()
   self:SkillDetailClear()
   self:Update()
-  ToClient_LearnSkillCameraSetRotation(6.5, -0.25)
+  ToClient_LearnSkillCameraSetRotation(-0.25, 0)
   ToClient_LearnSkillCameraSetZoom(400)
   ToClient_LearnSkillCameraSetPosition(2.5, -0.5)
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_SKILL")
 end
 function PaGlobalFunc_Skill_Close()
   local self = Window_SkillInfo
@@ -901,6 +885,7 @@ function PaGlobalFunc_Skill_Close()
   else
     SetUIMode(Defines.UIMode.eUIMode_Default)
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_Skill_GetShow()
   return Panel_Window_Skill:GetShow()

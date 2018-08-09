@@ -646,6 +646,7 @@ function StableMating_Open()
   if Panel_Window_StableMix:GetShow() then
     StableMix_Close()
   end
+  PaGlobalFunc_ServantRentPromoteMarketClose()
   warehouse_requestInfoFromNpc()
   self._radioInven:SetEnableArea(0, 0, 230, self._radioInven:GetSizeY())
   self._radioWarehouse:SetEnableArea(0, 0, 230, self._radioInven:GetSizeY())

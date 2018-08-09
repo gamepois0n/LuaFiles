@@ -7,7 +7,7 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot = {
   _returnProgress = 0,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15
 }
 local beginnerPotionItemKey = 502

@@ -17,7 +17,10 @@ local Panel_Window_StableChangeSkill_info = {
     staticText_Skill_Name = nil,
     staticText_Skill_Stack = nil,
     staticText_StackTitle = nil,
-    static_BottomBg = nil
+    static_BottomBg = nil,
+    staticText_Confirm_ConsoleUI = nil,
+    static_CircleProgress_PressBG = nil,
+    circularProgress_Press = nil
   },
   _value = {
     servantInfo = nil,
@@ -132,6 +135,9 @@ function Panel_Window_StableChangeSkill_info:childControl()
   self._ui.staticText_Skill_Stack = UI.getChildControl(self._ui.static_TopBg, "StaticText_Skill_Stack")
   self._ui.staticText_StackTitle = UI.getChildControl(self._ui.static_TopBg, "StaticText_StackTitle")
   self._ui.static_BottomBg = UI.getChildControl(Panel_Window_Stable_ChangeSkill, "Static_BottomBg")
+  self._ui.staticText_Confirm_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Confirm_ConsoleUI")
+  self._ui.static_CircleProgress_PressBG = UI.getChildControl(self._ui.staticText_Confirm_ConsoleUI, "Static_CircleProgress_PressBG")
+  self._ui.circularProgress_Press = UI.getChildControl(self._ui.static_CircleProgress_PressBG, "CircularProgress_Press")
 end
 function Panel_Window_StableChangeSkill_info:createSkillSlot()
   for index = 0, self._config.maxSlotCount - 1 do
@@ -668,9 +674,11 @@ function PaGlobalFunc_StableChangeSkill_UpdatePerFrame(deltaTime)
   local self = Panel_Window_StableChangeSkill_info
   if self._value.isAction == true then
     self._value.isActionTime = self._value.isActionTime + deltaTime
+    self._ui.circularProgress_Press:SetProgressRate(self._value.isActionTime / self._config.actionYTime * 100)
     if self._config.actionYTime < self._value.isActionTime then
       self._value.isAction = false
       self._value.isActionTime = 0
+      self._ui.circularProgress_Press:SetProgressRate(0)
       PaGlobalFunc_StableChangeSkill_SelectTainingALL()
     end
   else

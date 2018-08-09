@@ -91,7 +91,7 @@ local petList = {
       _UnsealBtn = 4,
       _ExchangeBtn = 5
     },
-    _buttonGap = 70,
+    _buttonGap = 50,
     _IconPath = "renewal/ui_icon/pc_icon_pet_00.dds"
   },
   selectPetNo,
@@ -148,11 +148,11 @@ function petList:initControl()
   petListUI._static_Confirm = UI.getChildControl(petListUI._static_BottomBG, "StaticText_Confirm_ConsoleUI")
   petListUI._staticText_FeedAll = UI.getChildControl(petListUI._static_BottomBG, "StaticText_FeedAll_ConsoleUI")
   petListUI._staticText_CheckInAll = UI.getChildControl(petListUI._static_BottomBG, "StaticText_SealAll_ConsoleUI")
-  local xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Exit:GetTextSizeX() - self._config._buttonGap
+  local xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
   petListUI._static_Confirm:SetPosX(xPos)
-  xPos = xPos - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
-  petListUI._staticText_FeedAll:SetPosX(xPos)
   xPos = xPos - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
+  petListUI._staticText_FeedAll:SetPosX(xPos)
+  xPos = xPos - petListUI._staticText_CheckInAll:GetTextSizeX() - self._config._buttonGap
   petListUI._staticText_CheckInAll:SetPosX(xPos)
   petListUI._static_Exit:addInputEvent("Mouse_LUp", "FGlobal_PetList_Close()")
   petListUI._staticText_FeedAll:addInputEvent("Mouse_LUp", "FGlobal_PetList_FeedAll()")
@@ -176,6 +176,27 @@ function petList:open()
   self:initSkillFrame()
   self:setSkillFrame()
 end
+function PaGlobalFunc_Petlist_TemporaryClose()
+  petList:tmporaryClose()
+end
+function PaGlobalFunc_Petlist_TemporaryOpen()
+  petList:tmporaryOpen()
+  petList:update()
+end
+function petList:tmporaryClose()
+  Panel_Window_PetList_Renew:SetShow(false)
+end
+function petList:tmporaryOpen()
+  Panel_Window_PetList_Renew:SetShow(true)
+  self._ui._static_FocusBg:SetShow(false)
+  self._ui._static_FocusBg:SetShow(true)
+  self._ui._button_Seal:SetCheck(false)
+  self._ui._button_Feed:SetCheck(false)
+  self._ui._button_ShowInfo:SetCheck(false)
+  self._ui._button_Order:SetCheck(false)
+  self._ui._button_Compose:SetCheck(false)
+  self._ui._button_Unseal:SetCheck(false)
+end
 function petList:close()
   local petListUI = self._ui
   if true == petListUI._static_FocusBg:GetShow() then
@@ -194,7 +215,6 @@ function petList:openFunctionPopup(petIndex, petNoStr, isSealPet, isSpecialPet)
   self.selectPetNo = petNoStr
   self.selectPetIndex = petIndex
   self:SetButtonPosition(false)
-  ToClient_padSnapResetControl()
   if false == petListUI._static_FocusBg:GetShow() then
     petListUI._static_FocusBg:SetShow(true)
   else
@@ -221,15 +241,14 @@ function petList:openFunctionPopup(petIndex, petNoStr, isSealPet, isSpecialPet)
     petListUI._button_Compose:SetShow(true)
     petListUI._button_Compose:SetCheck(false)
     if true == isSpecialPet then
-      petListUI._button_Unseal:SetPosY(petListUI._button_Compose:GetPosY())
       petListUI._button_Compose:SetShow(false)
     else
-      petListUI._button_Unseal:SetPosY(petListUI._button_Order:GetPosY())
       petListUI._button_Compose:SetShow(true)
     end
     petListUI._button_Unseal:SetShow(true)
     petListUI._button_Unseal:SetCheck(false)
   end
+  ToClient_padSnapResetControl()
 end
 function petList:closeFunctionPopup()
   self:resetData()
@@ -239,17 +258,19 @@ function petList:closeFunctionPopup()
 end
 function petList:SetButtonPosition(isConfirmOn)
   local petListUI = self._ui
-  local xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Exit:GetTextSizeX() - self._config._buttonGap
+  local xPos = 0
   if true == isConfirmOn then
     petListUI._static_Confirm:SetShow(true)
+    xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
     petListUI._static_Confirm:SetPosX(xPos)
     petListUI._static_Confirm:SetPosY(petListUI._static_Exit:GetPosY())
-    xPos = xPos - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
+    xPos = xPos - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
   else
+    xPos = petListUI._static_Exit:GetPosX() - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
     petListUI._static_Confirm:SetShow(false)
   end
   petListUI._staticText_FeedAll:SetPosX(xPos)
-  xPos = xPos - petListUI._staticText_FeedAll:GetTextSizeX() - self._config._buttonGap
+  xPos = xPos - petListUI._staticText_CheckInAll:GetTextSizeX() - self._config._buttonGap
   petListUI._staticText_CheckInAll:SetPosX(xPos)
 end
 function petList:selectShowInfo()
@@ -302,7 +323,7 @@ function petList:setPosition()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_PetList_Renew:GetSizeX()
   local panelSizeY = Panel_Window_PetList_Renew:GetSizeY()
-  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX)
+  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2)
   Panel_Window_PetList_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function FGlobal_PopUpButton_SetIconPosition(buttonID)
@@ -324,9 +345,9 @@ function petList:setConfirmIconPosition(buttonID)
     Onbutton = petListUI._button_ShowInfo
   elseif buttonID == confBtnID._UnsealBtn then
     Onbutton = petListUI._button_Unseal
-    ToClient_padSnapIgnoreGroupMove()
   elseif buttonID == confBtnID._ExchangeBtn then
     Onbutton = petListUI._button_Compose
+    ToClient_padSnapIgnoreGroupMove()
   else
     Onbutton = petListUI._button_Feed
   end
@@ -815,21 +836,25 @@ function FGlobal_PetList_Close()
 end
 function FGlobal_PetFeed_Open()
   petList:selectFeed()
+  petList:tmporaryClose()
 end
 function FGlobal_PetCommand_Open()
   petList:selectCommand()
+  petList:tmporaryClose()
 end
 function FGlobal_PetCommand_Setting(petNo, orderType, value)
   petList:setCommand(petNo, orderType, value)
 end
 function FGlobal_PetShowInfo_Open()
   petList:selectShowInfo()
+  petList:tmporaryClose()
 end
 function FGlobal_PetSeal_Open()
   petList:selectSeal()
 end
 function FGlobal_PetCompose_Open()
   petList:selectCompose()
+  petList:tmporaryClose()
 end
 function FGlobal_PetUnseal_Open()
   petList:selectUnseal()
@@ -857,6 +882,7 @@ function petList:feedAll()
 end
 function FGlobal_PetList_FeedAll()
   petList:feedAll()
+  petList:tmporaryClose()
 end
 function FGlobal_PetList_CheckInAll()
   petList:checkInAll()

@@ -312,9 +312,11 @@ function PaGlobalFunc_PartyInvite_ClickInvite(index)
   if self._value.currentTabIndex == self._enum.eTAB_GUILD then
     local name = self._guildOnlineMemberListInfo[index].name
     RequestParty_inviteCharacter(name)
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", name))
   elseif self._value.currentTabIndex == self._enum.eTAB_FRIEND then
     local name = self._friendOnlineMemberListInfo[index].name
     RequestParty_inviteCharacter(name)
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", name))
   end
 end
 function FromClient_PartyInvite_Init()

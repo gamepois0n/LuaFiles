@@ -220,7 +220,7 @@ function CreateClan_PressCreate()
     if false == _ContentsGroup_RenewUI_Guild then
       Guild_PopupCreate(1)
     else
-      PaGlobalFunc_GuildCreate_Open()
+      PaGlobalFunc_GuildCreate_Open(1)
     end
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_CLANORGUILD_SELECT_ACK"))

@@ -188,8 +188,7 @@ function PaGlobalFunc_GuildQuestList_CreateQuest(content, key)
     local questTime = PaGlobalFunc_GuildQuestList_QuestTime(questInfo:getLimitMinute())
     txt_Time:SetText(questTime)
     txt_Time:SetShow(true)
-    local needMoney = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_PREGOLD", "pre_gold", Uint64toUint32(questInfo:getPreGoldCount()))
-    txt_NeedMoney:SetText(needMoney)
+    txt_NeedMoney:SetText(tostring(questInfo:getPreGoldCount()))
     txt_NeedMoney:SetShow(true)
     btn_QuestSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_ShowQuestInfo(" .. questIdx .. ")")
   else
@@ -360,6 +359,7 @@ function PaGlobalFunc_GuildQuestList_ResponseQuest()
   if nil ~= Panel_Window_Guild_QuestInfo and true == PaGlobalFunc_GuildQuestInfo_GetShow() then
     PaGlobalFunc_GuildQuestInfo_Close()
   end
+  PaGlobalFunc_GuildQuestWidget_Update()
   InputMLUp_GuildQuestList_OpenQuestTab(self._currentQuestTab)
 end
 function FromClient_GuildQuestList_UpdateQuestList(actorName, characterName)

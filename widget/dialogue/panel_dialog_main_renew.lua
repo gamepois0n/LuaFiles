@@ -79,6 +79,7 @@ function Panel_Dialog_Main_Info:open(showAni)
   else
     Panel_Dialog_Main:SetShow(true, showAni)
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_DIALOG")
 end
 function Panel_Dialog_Main_Info:close(showAni)
   if nil == showAni then
@@ -87,6 +88,7 @@ function Panel_Dialog_Main_Info:close(showAni)
   else
     Panel_Dialog_Main:SetShow(false, showAni)
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function Panel_Dialog_Main_Info:update()
   PaGlobalFunc_MainDialog_Bottom_Update()
@@ -100,7 +102,7 @@ function Panel_Dialog_Main_Info:setIgnoreShowDialog(value)
   self._value.ignoreShowDialog = value
 end
 function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
-  if Panel_QuestInfo:GetShow() then
+  if false == _ContentsGroup_RenewUI_WorldMap and Panel_QuestInfo:GetShow() then
     questInfo_TooltipShow(false)
   end
   if Panel_Window_ItemMarket_RegistItem:GetShow() then
@@ -128,7 +130,7 @@ function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
     PaGlobal_Camp:close()
   end
   PaGlobalFunc_DetectPlayer_ExitAll()
-  if Panel_Window_ItemMarket:GetShow() then
+  if PaGlobalFunc_ItemMarket_GetShow() then
     FGolbal_ItemMarketNew_Close()
     if Panel_Win_System:GetShow() then
       messageBox_NoButtonUp()
@@ -140,7 +142,11 @@ function Panel_Dialog_Main_Info:preclosePanel_OpenMainDialog()
   if Panel_Window_ClothInventory:GetShow() then
     ClothInventory_Close()
   end
-  if Panel_Dialog_Search:IsShow() then
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    if Panel_Dialog_Search:IsShow() then
+      searchView_Close()
+    end
+  elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
   end
   if true == PaGlobalFunc_GameExit_GetShow() then
@@ -236,6 +242,7 @@ function Panel_Dialog_Main_Info:hideMainDialog(isSetWait)
     ToClient_SaveUiInfo(false)
     ToClient_SetSavedUi(false)
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function Panel_Dialog_Main_Info:closeNpcTalk(isSetWait)
   if FGlobal_IsChecked_SkillCommand() == true then
@@ -328,7 +335,7 @@ function PaGlobalFunc_MainDialog_ReOpen(showAni)
   if nil ~= mainCameraName then
     changeCameraScene(mainCameraName, 0.3)
   end
-  PaGlobalFunc_MainDialog_Bottom_Open()
+  PaGlobalFunc_MainDialog_Bottom_Update()
   PaGlobalFunc_MainDialog_Right_ReOpen()
 end
 function PaGlobalFunc_MainDialog_ExecuteAfterDialogLoad()
@@ -487,7 +494,7 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
   end
   if Panel_Window_ItemMarket_Function:GetShow() then
     FGolbal_ItemMarket_Function_Close()
-    if Panel_Window_ItemMarket_RegistItem:GetShow() then
+    if PaGlobalFunc_ItemMarketRegistItem_GetShow() then
       FGlobal_ItemMarketRegistItem_Close()
       retval = true
     end
@@ -499,7 +506,7 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
       FGlobal_ItemMarketItemSet_Close()
       retval = true
     end
-    if Panel_Window_ItemMarket:GetShow() then
+    if PaGlobalFunc_ItemMarket_GetShow() then
       FGolbal_ItemMarketNew_Close()
       retval = true
     end

@@ -155,15 +155,21 @@ function Panel_Window_WharfRegister_info:createControl()
         selected = false,
         slotNo = 0,
         itemSlotNo = -1,
+        invenType = 0,
         radioButton_SlotBgTemplate = nil
       }
       function slot:setPos(cols)
         local registerInfo = Panel_Window_WharfRegister_info
         self.radioButton_SlotBgTemplate:SetPosX(registerInfo._pos.startMapaePos + (registerInfo._pos.spaceXMapae + registerInfo._pos.sizeXMapae) * cols)
       end
-      function slot:setItemSlot(itemSlotNo)
-        local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eInventory, itemSlotNo)
+      function slot:setItemSlot(itemSlotNo, invenType)
+        local itemWrapper
+        itemWrapper = getInventoryItemByType(invenType, itemSlotNo)
+        if nil == itemWrapper then
+          return
+        end
         self.itemSlotNo = itemSlotNo
+        self.invenType = invenType
         slot:setItem(itemWrapper)
       end
       function slot:setShow(bShow)
@@ -177,6 +183,7 @@ function Panel_Window_WharfRegister_info:createControl()
         self:setShow(false)
         self:selectSlot(false)
         self.itemSlotNo = -1
+        self.invenType = 0
       end
       slot.radioButton_SlotBgTemplate = UI.createAndCopyBasePropertyControl(self._ui.static_SlotItemBg, "RadioButton_SlotBgTemplate", self._ui.static_SlotItemBg, "RadioButton_ItemSlot_" .. index)
       slot:setPos(index)
@@ -241,7 +248,25 @@ function Panel_Window_WharfRegister_info:setWharfList()
     if nil ~= itemWrapper then
       local isMapae = InvenFiler_Mapae(slotNo, itemWrapper)
       if false == isMapae then
-        self._wharfDataList[mapeCount] = slotNo
+        local data = {}
+        data.itemSlotNo = slotNo
+        data.invenType = CppEnums.ItemWhereType.eInventory
+        self._wharfDataList[mapeCount] = data
+        mapeCount = mapeCount + 1
+      end
+    end
+  end
+  local cashInventory = selfPlayer:getInventoryByType(CppEnums.ItemWhereType.eCashInventory)
+  local cashInvenMaxSize = cashInventory:sizeXXX()
+  for slotNoCash = 0, cashInvenMaxSize - 1 do
+    local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, slotNoCash)
+    if nil ~= itemWrapper then
+      local isMapae = InvenFiler_Mapae(slotNoCash, itemWrapper)
+      if false == isMapae then
+        local data = {}
+        data.itemSlotNo = slotNoCash
+        data.invenType = CppEnums.ItemWhereType.eCashInventory
+        self._wharfDataList[mapeCount] = data
         mapeCount = mapeCount + 1
       end
     end
@@ -263,7 +288,7 @@ function Panel_Window_WharfRegister_info:updateMapaeList()
       end
       slot:setShow(true)
       slot:setPos(index)
-      slot:setItemSlot(self._wharfDataList[slot.slotNo])
+      slot:setItemSlot(self._wharfDataList[slot.slotNo].itemSlotNo, self._wharfDataList[slot.slotNo].invenType)
       slot.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_WharfRegister_ClickList(" .. index .. ")")
     end
   end
@@ -292,7 +317,12 @@ function Panel_Window_WharfRegister_info:setBaseInfo()
   local servantInfo
   if CppEnums.ServantRegist.eEventType_Inventory == self._value.currentOpenType then
     local inventorySlotNo = self._wharfSlotList[self._value.currentMapaeIndex].itemSlotNo
-    local itemWrapper = getInventoryItemByType(CppEnums.ServantRegist.eEventType_Inventory, inventorySlotNo)
+    local invenType = self._wharfSlotList[self._value.currentMapaeIndex].invenType
+    local itemWrapper
+    itemWrapper = getInventoryItemByType(invenType, inventorySlotNo)
+    if nil == itemWrapper then
+      return
+    end
     local chracterkey = itemWrapper:getStaticStatus():getObjectKey()
     servantInfo = stable_getServantByCharacterKey(chracterkey, self._value.level)
   else
@@ -448,8 +478,9 @@ function PaGlobalFunc_WharfRegister_Register()
       stable_register(name)
     elseif CppEnums.ServantRegist.eEventType_Inventory == self._value.currentOpenType then
       local invenSlotNo = self._wharfSlotList[self._value.currentMapaeIndex].itemSlotNo
+      local invenType = self._wharfSlotList[self._value.currentMapaeIndex].invenType
       if -1 ~= invenSlotNo then
-        stable_registerByItem(CppEnums.ItemWhereType.eInventory, invenSlotNo, name)
+        stable_registerByItem(invenType, invenSlotNo, name)
       end
     elseif CppEnums.ServantRegist.eEventType_ChangeName == self._value.currentOpenType then
       local servantCount = stable_count()

@@ -625,6 +625,7 @@ function Servant_Call(index)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Vehicle)
   if nil == servantInfo then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
     return
   end
   servant_callServant()
@@ -644,6 +645,7 @@ function Servant_Navi(index)
   if servantIcon.const.SeaVehicle == index and isCheckSeaNavi == false then
     local seaVehicleWrapper = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Ship)
     if nil == seaVehicleWrapper then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
       return
     end
     local position = float3(seaVehicleWrapper:getPositionX(), seaVehicleWrapper:getPositionY(), seaVehicleWrapper:getPositionZ())
@@ -656,6 +658,7 @@ function Servant_Navi(index)
   elseif servantIcon.const.LandVehicle == index and isCheckLandNavi == false then
     local servantInfo = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Vehicle)
     if nil == servantInfo then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
       return
     end
     local position = float3(servantInfo:getPositionX(), servantInfo:getPositionY(), servantInfo:getPositionZ())
@@ -668,6 +671,7 @@ function Servant_Navi(index)
   elseif servantIcon.const.Pet == index and isCheckPetNavi == false then
     local servantInfo = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Pet)
     if nil == servantInfo then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
       return
     end
     local position = float3(servantInfo:getPositionX(), servantInfo:getPositionY(), servantInfo:getPositionZ())

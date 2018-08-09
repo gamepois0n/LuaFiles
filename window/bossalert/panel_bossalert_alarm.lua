@@ -47,8 +47,10 @@ function PaGlobal_BossAlert_NewAlarmShow(deltaTime)
   if self.updateTime < 60 then
     return
   end
+  PaGlobal_BossAlertSet_ReturnTimeAfterAlertEnd()
   self.updateTime = 0
-  if not PaGlobal_BossAlertSet_BossTimeCalc() then
+  local bossTime, bossName = PaGlobal_BossAlertSet_ReturnTimeBeforeAlert()
+  if "" == bossTime or "" == bossName then
     return
   end
   local isYear = ToClient_GetThisYear()
@@ -57,9 +59,7 @@ function PaGlobal_BossAlert_NewAlarmShow(deltaTime)
   local isHour = os.date("%H")
   local isMinute = os.date("%M")
   local isSecond = os.date("%S")
-  local beforeTimeAlert = PaGlobal_BossAlertSet_ReturnTimeBeforeAlert()
-  local bossTimeName = PaGlobal_BossAlertSet_ReturnNameAlert()
-  self._ui._date:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BOSSALERT_ALARM_NAME_TIME", "bossName", tostring(bossTimeName), "bossTime", tostring(beforeTimeAlert)))
+  self._ui._date:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BOSSALERT_ALARM_NAME_TIME", "bossName", tostring(bossName), "bossTime", tostring(bossTime)))
   self._ui._desc:SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_BOSSALERT_ALARM_DATE", "year", tostring(isYear), "month", tostring(isMonth), "day", tostring(isDay)) .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BOSSALERT_ALARM_TIME", "hour", tostring(isHour), "minute", tostring(isMinute)))
   Panel_BossAlertV2:SetShow(true)
   self._aniTime = 0

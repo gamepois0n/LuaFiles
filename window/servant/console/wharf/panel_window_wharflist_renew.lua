@@ -48,7 +48,7 @@ local Panel_Window_WharfList_info = {
     buttonSizeX = 0,
     buttonSpaceSizeX = 10,
     stableInfoButtonSize = 0,
-    stableInfoButtonSpace = 10,
+    stableInfoButtonSpace = 20,
     keyGuideButtonSize = 0,
     keyGuideButtonSpace = 10
   },

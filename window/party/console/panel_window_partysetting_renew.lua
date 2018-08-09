@@ -646,8 +646,6 @@ function Panel_Window_PartySetting_info:updateBottomTab()
     self._ui.radioButton[self._value.currentLootType]:SetFontColor(self._color.selected)
   elseif self._value.currentLootType ~= lootType then
     self._value.currentLootType = lootType
-    local rottingMsg = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE1", "plt2s_lootType", PLT2S[lootType])
-    Proc_ShowMessage_Ack(rottingMsg)
     self:clearBottomTab()
     self._ui.radioButton[self._value.currentLootType]:SetFontColor(self._color.selected)
   end

@@ -169,6 +169,7 @@ PaGlobal_ServantChangeFormPanel = {
   _textPage = UI.getChildControl(Panel_Window_HorseLookChange, "StaticText_Page"),
   _btnChange = UI.getChildControl(Panel_Window_HorseLookChange, "Button_LookChange"),
   _btnPremium = UI.getChildControl(Panel_Window_HorseLookChange, "Button_PremiumLookChange"),
+  _btnShipChange = UI.getChildControl(Panel_Window_HorseLookChange, "Button_ShipLookChange"),
   _textCurrentLook = UI.getChildControl(Panel_Window_HorseLookChange, "StaticText_CurrentLook"),
   _comboBox = UI.getChildControl(Panel_Window_HorseLookChange, "Combobox_Tier"),
   _staticText = UI.getChildControl(Panel_Window_HorseLookChange, "Action_Title")
@@ -186,6 +187,7 @@ function registEventHandler()
   PaGlobal_ServantChangeFormPanel._btnLeft:addInputEvent("Mouse_LUp", "LookChange_Set(" .. -1 .. ")")
   PaGlobal_ServantChangeFormPanel._btnRight:addInputEvent("Mouse_LUp", "LookChange_Set(" .. 1 .. ")")
   PaGlobal_ServantChangeFormPanel._btnChange:addInputEvent("Mouse_LUp", "LookChange_ChangeConfirm()")
+  PaGlobal_ServantChangeFormPanel._btnShipChange:addInputEvent("Mouse_LUp", "LookChange_ChangeConfirm()")
   PaGlobal_ServantChangeFormPanel._btnPremium:addInputEvent("Mouse_LUp", "HorseLookChange_PremiumChangeConfirm()")
   PaGlobal_ServantChangeFormPanel._comboBox:addInputEvent("Mouse_LUp", "HandleClicked_LookCombo()")
   PaGlobal_ServantChangeFormPanel._comboBox:GetListControl():addInputEvent("Mouse_LUp", "Set_LookChange()")

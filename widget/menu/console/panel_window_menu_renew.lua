@@ -5,7 +5,8 @@ PaGlobal_Menu_Renew_Renew = {
     _hotKey = {},
     _newIcon = {},
     _hotIcon = {},
-    _checkIcon = {}
+    _checkIcon = {},
+    _topBg = UI.getChildControl(Panel_Window_Menu_Renew, "Static_TopBg")
   },
   _xbox = {}
 }
@@ -30,6 +31,11 @@ PaGlobal_Menu_Renew_Renew._xbox = {
   _partyRecruite = 17,
   _count = 18
 }
+local index = 1
+while index * index < PaGlobal_Menu_Renew_Renew._xbox._count do
+  index = index + 1
+end
+local horizontalCount = math.max(4, index)
 PaGlobal_Menu_Renew_Renew._categoryData = {
   [PaGlobal_Menu_Renew_Renew._xbox._help] = {
     _string = "Policy",
@@ -204,21 +210,33 @@ function PaGlobal_Menu_Renew_Renew:Init()
   Panel_Window_Menu_Renew:ActiveMouseEventEffect(true)
   Panel_Window_Menu_Renew:RegisterShowEventFunc(true, "PaGlobal_Menu_Renew_Renew:ShowAni()")
   Panel_Window_Menu_Renew:RegisterShowEventFunc(false, "PaGlobal_Menu_Renew_Renew:HideAni()")
+  local buttonTemplate = UI.getChildControl(Panel_Window_Menu_Renew, "StaticText_ButtonBg_Template")
+  buttonTemplate:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   for index = 0, self._xbox._count - 1 do
-    self._ui._subButton[index] = UI.getChildControl(Panel_Window_Menu_Renew, "StaticText_ButtonBg_" .. index)
+    self._ui._subButton[index] = UI.createAndCopyBasePropertyControl(Panel_Window_Menu_Renew, "StaticText_ButtonBg_Template", Panel_Window_Menu_Renew, "StaticText_ButtonBg_" .. index)
     self._ui._subButton[index]:SetText(self._categoryData[index]._string)
     self._ui._subButton[index]:addInputEvent("Mouse_LUp", "PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(" .. index .. ")")
-    self._ui._subIcon[index] = UI.getChildControl(self._ui._subButton[index], "Button_MenuIcon")
-    self._ui._hotKey[index] = UI.getChildControl(self._ui._subButton[index], "StaticText_HotKey")
-    self._ui._newIcon[index] = UI.getChildControl(self._ui._subButton[index], "Static_NewIcon")
-    self._ui._hotIcon[index] = UI.getChildControl(self._ui._subButton[index], "Static_HotIcon")
-    self._ui._checkIcon[index] = UI.getChildControl(self._ui._subButton[index], "Static_CheckIcon")
+    self._ui._subButton[index]:SetPosX(20 + index % horizontalCount * (self._ui._subButton[index]:GetSizeX() + 10))
+    self._ui._subButton[index]:SetPosY(90 + math.floor(index / horizontalCount) * (self._ui._subButton[index]:GetSizeX() + 10))
+    self._ui._subIcon[index] = UI.createAndCopyBasePropertyControl(buttonTemplate, "Button_MenuIcon", self._ui._subButton[index], "Button_MenuIcon")
+    self._ui._hotKey[index] = UI.createAndCopyBasePropertyControl(buttonTemplate, "StaticText_HotKey", self._ui._subButton[index], "StaticText_HotKey")
+    self._ui._newIcon[index] = UI.createAndCopyBasePropertyControl(buttonTemplate, "Static_NewIcon", self._ui._subButton[index], "Static_NewIcon")
+    self._ui._hotIcon[index] = UI.createAndCopyBasePropertyControl(buttonTemplate, "Static_HotIcon", self._ui._subButton[index], "Static_HotIcon")
+    self._ui._checkIcon[index] = UI.createAndCopyBasePropertyControl(buttonTemplate, "Static_CheckIcon", self._ui._subButton[index], "Static_CheckIcon")
     local categoryData = self._categoryData[index]
     self._ui._subIcon[index]:ChangeTextureInfoName(categoryData._path)
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui._subIcon[index], categoryData._x1, categoryData._y1, categoryData._x2, categoryData._y2)
     self._ui._subIcon[index]:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui._subIcon[index]:setRenderTexture(self._ui._subIcon[index]:getBaseTexture())
+    self._ui._hotKey[index]:SetShow(false)
+    self._ui._newIcon[index]:SetShow(false)
+    self._ui._hotIcon[index]:SetShow(false)
+    self._ui._checkIcon[index]:SetShow(false)
   end
+  Panel_Window_Menu_Renew:SetSize((self._ui._subButton[index]:GetSizeX() + 10) * horizontalCount + 30, (self._ui._subButton[index]:GetSizeY() + 10) * math.ceil(self._xbox._count / horizontalCount) + 110)
+  Panel_Window_Menu_Renew:SetPosX(getScreenSizeX() / 2 - Panel_Window_Menu_Renew:GetSizeX() / 2)
+  Panel_Window_Menu_Renew:SetPosY(getScreenSizeY() / 2 - Panel_Window_Menu_Renew:GetSizeY() / 2)
+  self._ui._topBg:SetSize(Panel_Window_Menu_Renew:GetSizeX() - 10, self._ui._topBg:GetSizeY())
 end
 function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
   audioPostEvent_SystemUi(0, 0)

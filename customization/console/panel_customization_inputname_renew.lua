@@ -17,6 +17,7 @@ end
 function Customization_InputNameInfo:InitControl()
   self._ui._button_Confirm = UI.getChildControl(self._ui._static_KeyGuideBg, "Button_OK_ConsoleUI")
   self._ui._button_Cancel = UI.getChildControl(self._ui._static_KeyGuideBg, "Button_NO_ConsoleUI")
+  self._ui._edit_InputName:SetMaxInput(getGameServiceTypeCharacterNameLength())
 end
 function Customization_InputNameInfo:InitEvent()
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Confirm()")
@@ -34,14 +35,14 @@ function Customization_InputNameInfo:Initialize()
 end
 function PaGlobalFunc_Customization_InputName_SetFocus()
   local self = Customization_InputNameInfo
-  self._ui._edit_InputName:SetText("")
+  self._ui._edit_InputName:SetEditText("")
   SetFocusEdit(self._ui._edit_InputName)
 end
 function PaGlobalFunc_FromClient_Customization_InputName_luaLoadComplete()
   local self = Customization_InputNameInfo
   self:Initialize()
 end
-function PaGlobalFunc_Customization_InputName_Close()
+function PaGlobalFunc_Customization_InputName_Close(clearStr)
   local self = Customization_InputNameInfo
   if false == PaGlobalFunc_Customization_InputName_GetShow() then
     return false
@@ -50,15 +51,20 @@ function PaGlobalFunc_Customization_InputName_Close()
     ClearFocusEdit()
     return false
   end
-  self._ui._edit_InputName:SetEditText("")
+  if nil == clearStr or true == clearStr then
+    self._ui._edit_InputName:SetEditText("")
+  end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_InputName_SetShow(false, false)
   return true
 end
-function PaGlobalFunc_Customization_InputName_Open()
+function PaGlobalFunc_Customization_InputName_Open(clearStr)
   local self = Customization_InputNameInfo
-  self._ui._edit_InputName:SetText(self._defaultEditText)
+  if nil == clearStr or true == clearStr then
+    self._ui._edit_InputName:SetEditText("")
+    self._ui._edit_InputName:SetText(self._defaultEditText)
+  end
   if true == PaGlobalFunc_Customization_InputName_GetShow() then
     return
   end

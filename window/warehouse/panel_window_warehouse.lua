@@ -1017,7 +1017,7 @@ function Warehouse_OpenPanelFromDialog()
     Panel_Window_Warehouse:SetSpanSize(invenSizeX, 0)
   end
   Warehouse_OpenWithInventory()
-  if Panel_Window_ItemMarket_RegistItem:GetShow() then
+  if PaGlobalFunc_ItemMarketRegistItem_GetShow() then
     FGlobal_ItemMarketRegistItem_Close()
   end
 end

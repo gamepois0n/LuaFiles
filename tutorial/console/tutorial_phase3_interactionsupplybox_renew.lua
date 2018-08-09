@@ -6,8 +6,14 @@ PaGlobal_TutorialPhase_InteractionSupplyBox = {
   _updateTime = 0,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
-  _startLimitLevel = 15
+  _regionKeyRawList = {9},
+  _startLimitLevel = 15,
+  _destination = {
+    [0] = float3(-61741.2, -3875.45, 47009.27),
+    [1] = float3(-63456.71, -3841.63, 47345.69),
+    [2] = float3(-61741.2, -3875.45, 47009.27),
+    [3] = float3(-61320.2, -3828.62, 47866.29)
+  }
 }
 local supplyBoxCharacterKey = 35634
 local beginnerPotion = 502
@@ -68,9 +74,6 @@ function PaGlobal_TutorialPhase_InteractionSupplyBox:startPhaseXXX(stepNo)
   classType = getSelfPlayer():getClassType()
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
-  PaGlobal_TutorialManager:setAllowShowQuickSlot(false)
-  PaGlobal_TutorialManager:setAllowNewQuickSlot(false)
-  PaGlobal_TutorialManager:setAllowMainQuestWidget(false)
   PaGlobal_TutorialUiManager:setShowAllDefaultUi(false)
   PaGlobal_TutorialUiManager:hideAllTutorialUi()
   Panel_ConsoleKeyGuide:SetShow(false)
@@ -109,34 +112,44 @@ function PaGlobal_TutorialPhase_InteractionSupplyBox:handleChangeStep(currentSte
 end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:changeStepMoveDestination()
   navigationGuideParam = NavigationGuideParam()
+  local pathfindResult = 0
   if 1 == self._currentProgress then
-    worldmapNavigatorStart(float3(-156384.67, -518.35, 134599.7), navigationGuideParam, false, false, true)
+    pathfindResult = worldmapNavigatorStart(self._destination[0], navigationGuideParam, false, false, true)
     FGlobal_Panel_Radar_Show_AddEffect()
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_90") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_7"))
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   elseif 2 == self._currentProgress then
-    worldmapNavigatorStart(float3(-153560.58, -300.81, 134786.77), navigationGuideParam, false, false, true)
+    pathfindResult = worldmapNavigatorStart(self._destination[1], navigationGuideParam, false, false, true)
+    PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+      PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_92") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_7"))
+      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
+    end)
+  elseif 3 == self._currentProgress then
+    pathfindResult = worldmapNavigatorStart(self._destination[2], navigationGuideParam, false, false, true)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_92") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_93"))
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   end
+  if -1 == pathfindResult and 1 == self._currentStep then
+    self:eventCallDeleteNavigationGuide()
+  end
 end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:eventCallDeleteNavigationGuide(key)
-  if 1 == self._currentProgress then
+  if 1 == self._currentProgress or 2 == self._currentProgress then
     audioPostEvent_SystemUi(4, 12)
     self._currentProgress = self._currentProgress + 1
     self:handleChangeStep(self._currentStep)
-  elseif 2 == self._currentProgress then
+  elseif 3 == self._currentProgress then
     self._nextStep = self._nextStep + 1
   end
 end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:changeStepCheckInteraction()
   navigationGuideParam = NavigationGuideParam()
   navigationGuideParam._isAutoErase = false
-  worldmapNavigatorStart(float3(-151500.78, -243.44, 132849.84), navigationGuideParam, false, false, true)
+  worldmapNavigatorStart(self._destination[3], navigationGuideParam, false, false, true)
 end
 local currentInteractableActor, isMatchCharacterKey
 function PaGlobal_TutorialPhase_InteractionSupplyBox:updateCheckInteraction()

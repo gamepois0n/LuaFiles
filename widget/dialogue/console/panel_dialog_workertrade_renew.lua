@@ -192,9 +192,10 @@ function workerTrade:updateMarketWorkerList()
       local actionPoint = workerWrapperLua:getMaxActionPoint()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
-      local radius = info._static_Image:GetSizeX() * 0.5
-      local posX = info._static_Image:GetPosX() + radius * 0.67
-      local posY = info._static_Image:GetPosY() + radius * 0.85
+      local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
+      local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
@@ -260,9 +261,10 @@ function workerTrade:updateMyRegistedWorkerList()
       local actionPoint = workerWrapperLua:getMaxActionPoint()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
-      local radius = info._static_Image:GetSizeX() * 0.5
-      local posX = info._static_Image:GetPosX() + radius * 0.67
-      local posY = info._static_Image:GetPosY() + radius * 0.85
+      local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
+      local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
@@ -332,9 +334,10 @@ function workerTrade:updateMyWorkerList()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
-      local radius = info._static_Image:GetSizeX() * 0.5
-      local posX = info._static_Image:GetPosX() + radius * 0.67
-      local posY = info._static_Image:GetPosY() + radius * 0.85
+      local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
+      local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       info._staticText_Upgrade:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_UPGRADECOUNT", "upgradecount", workerUpgradeCount))
@@ -385,6 +388,7 @@ function workerTrade:buyWorker(workerIndex)
   local workerName = workerWrapper:getGradeToColorString() .. workerWrapper:getName()
   local workerPrice = auctionInfo:getWorkerAuctionPrice(workerNoRaw)
   local function WorkerAuction_BuyXXX()
+    PaGlobalFunc_WorkerTrade_TemporaryOpen()
     local fromWhereType = CppEnums.ItemWhereType.eInventory
     if self._ui._radioButton_Silver_Storage:IsCheck() then
       fromWhereType = CppEnums.ItemWhereType.eWarehouse
@@ -392,13 +396,14 @@ function workerTrade:buyWorker(workerIndex)
     local workerNoRaw = self._workerAuction:getWorkerAuction(self._selectedWorker)
     self._workerAuction:requestBuyItNowWorker(workerNoRaw, fromWhereType)
   end
+  PaGlobalFunc_WorkerTrade_TemporaryClose()
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_BUYCONFIRM")
   local contentString = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_BUYCONFIRM_TITLE", "level", tostring(workerLv), "name", workerName, "price", makeDotMoney(workerPrice)) .. "<PAOldColor>"
   local messageboxData = {
     title = titleString,
     content = contentString,
     functionYes = WorkerAuction_BuyXXX,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerTrade_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
@@ -416,6 +421,7 @@ function workerTrade:registCancle(workerIndex)
   self._selectedWorker = workerIndex
   local auctionInfo = self._workerAuction
   local function WorkerAuction_CancelXXX()
+    PaGlobalFunc_WorkerTrade_TemporaryOpen()
     local workerNoRaw = self._workerAuction:getWorkerAuction(self._selectedWorker)
     ToClient_requestCancelRegisterMyWorkerAuction(workerNoRaw)
   end
@@ -429,9 +435,10 @@ function workerTrade:registCancle(workerIndex)
     title = titleString,
     content = contentString,
     functionYes = WorkerAuction_CancelXXX,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerTrade_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  PaGlobalFunc_WorkerTrade_TemporaryClose()
   MessageBox.showMessageBox(messageboxData)
 end
 function workerTrade:closeWorkerSkillToolTip()
@@ -492,6 +499,7 @@ function workerTrade:registWorkerToMarket(workerIndex)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw, false)
   local transferType = 0
   local function requestRegist()
+    PaGlobalFunc_WorkerTrade_TemporaryOpen()
     ToClient_requestRegisterNpcWorkerAuction(workerNoRaw, transferType, workerWrapperLua:getWorkerMaxPrice())
   end
   local titleString = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_NAMING_INPUT_TITLE")
@@ -500,19 +508,18 @@ function workerTrade:registWorkerToMarket(workerIndex)
     title = titleString,
     content = contentString,
     functionYes = requestRegist,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerTrade_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  PaGlobalFunc_WorkerTrade_TemporaryClose()
   MessageBox.showMessageBox(messageboxData)
 end
 function workerTrade:changeTab(changeValue)
   local tabIndex = self._selectedTab + changeValue
   if tabIndex < 0 then
-    tabIndex = 0
-    return
-  elseif tabIndex >= self._config._Tab._tabCount then
     tabIndex = self._config._Tab._tabCount - 1
-    return
+  elseif tabIndex >= self._config._Tab._tabCount then
+    tabIndex = 0
   end
   workerTrade:resetPageData()
   self._selectedTab = tabIndex
@@ -544,6 +551,18 @@ function workerTrade:changePage(changeValue)
   self._currentPage = pageIndex
   workerTrade:update()
   ToClient_padSnapResetControl()
+end
+function workerTrade:temporaryOpen()
+  Panel_Dialog_WorkerTrade_Renew:SetShow(true)
+end
+function workerTrade:temporaryClose()
+  Panel_Dialog_WorkerTrade_Renew:SetShow(false)
+end
+function PaGlobalFunc_WorkerTrade_TemporaryOpen()
+  workerTrade:temporaryOpen()
+end
+function PaGlobalFunc_WorkerTrade_TemporaryClose()
+  workerTrade:temporaryClose()
 end
 function workerTrade:open()
   if true == Panel_Dialog_WorkerTrade_Renew:GetShow() then

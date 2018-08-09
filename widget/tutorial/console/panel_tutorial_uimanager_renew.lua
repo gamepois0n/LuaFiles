@@ -15,14 +15,14 @@ function PaGlobal_TutorialUiManager:initialize()
   self._uiList._uiHeadlineMessage:initialize()
   self._uiList._uiMasking = PaGlobal_TutorialUiMasking
   _PA_LOG("\234\179\189\235\175\188\236\154\176", "PaGlobal_TutorialUiManager:initialize() UI \235\167\164\235\139\136\236\160\128 \236\180\136\234\184\176\237\153\148 \236\153\132\235\163\140!")
-  Panel_Tutorial_Renew:RegisterShowEventFunc(true, "FGlobal_Tutorial_ShowAni()")
-  Panel_Tutorial_Renew:RegisterShowEventFunc(false, "FGlobal_Tutorial_HideAni()")
+  Panel_Tutorial_Renew:RegisterShowEventFunc(true, "PaGlobalFunc_Tutorial_ShowAni()")
+  Panel_Tutorial_Renew:RegisterShowEventFunc(false, "PaGlobalFunc_Tutorial_HideAni()")
   PaGlobal_TutorialManager:handleTutorialUiManagerInitialize()
 end
-function FGlobal_Tutorial_ShowAni()
+function PaGlobalFunc_Tutorial_ShowAni()
   PaGlobal_TutorialUiManager:showAni()
 end
-function FGlobal_Tutorial_HideAni()
+function PaGlobalFunc_Tutorial_HideAni()
   PaGlobal_TutorialUiManager:hideAni()
 end
 function PaGlobal_TutorialUiManager:showAni()
@@ -44,8 +44,7 @@ function PaGlobal_TutorialUiManager:hideAni()
   aniInfo:SetDisableWhileAni(true)
 end
 function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
-end
-function onReSizePanel(key)
+  self:setShowAllDefaultUi(true)
 end
 function FromClient_TutorialScreenReposition()
   PaGlobal_TutorialUiManager:repositionScreen()
@@ -82,16 +81,6 @@ function PaGlobal_TutorialUiManager:restoreAllUiByUserSetting()
   end
   self:setShowAllDefaultUi(true)
 end
-function PaGlobal_TutorialUiManager:showConditionalUi()
-  FGlobal_MyHouseNavi_Update()
-  FGlobal_PersonalIcon_ButtonPosUpdate()
-  Panel_Widget_TownNpcNavi:SetShow(true, true)
-  FGlobal_Party_ConditionalShow()
-  PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
-  PaGlobal_CharacterTag_SetPosIcon()
-  FGlobal_ResetRadarUI(false)
-  PaGlobalFunc_ConsoleKeyGuide_On()
-end
 function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
   if false == isShow then
     PaGlobalFunc_ConsoleKeyGuide_Off()
@@ -111,8 +100,6 @@ function PaGlobal_TutorialUiManager:hideAllTutorialUi()
     end
   end
 end
-function PaGlobal_TutorialUiManager:setShowChattingPanel(isShow)
-end
 function FromClient_luaLoadComplete_TutorialUiManager()
   PaGlobal_TutorialUiManager:initialize()
 end
@@ -123,9 +110,6 @@ function FromClient_EventSelfPlayerLevelUp_TutorialUiManager()
 end
 function PaGlobal_TutorialUiManager:getUiBlackSpirit()
   return self._uiList._uiBlackSpirit
-end
-function PaGlobal_TutorialUiManager:getUiKeyButton()
-  return nil
 end
 function PaGlobal_TutorialUiManager:getUiHeadlineMessage()
   return self._uiList._uiHeadlineMessage

@@ -570,6 +570,8 @@ function WharfList_LookChange(slotNo)
   PaGlobal_ServantChangeFormPanel._staticText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WHARFLIST_CHANGECONFIRM_TITLE"))
   PaGlobal_ServantChangeFormPanel._comboBox:SetShow(false)
   PaGlobal_ServantChangeFormPanel._btnPremium:SetShow(false)
+  PaGlobal_ServantChangeFormPanel._btnChange:SetShow(false)
+  PaGlobal_ServantChangeFormPanel._btnShipChange:SetShow(true)
   WharfInfo_Close()
   WharfLookChange_Set()
 end
@@ -642,12 +644,12 @@ function WharfLookChange_Set(isNext, index)
   PaGlobal_ServantChangeFormPanel._textCurrentLook:SetShow(false)
   formInfo = transformManager:getFormStaticWrapper(fromCharacterKey, lookIndex)
   if isSet == false or nil ~= formInfo and fromCharacterKey == formInfo:getTransformCharacterKey() then
-    PaGlobal_ServantChangeFormPanel._btnChange:SetIgnore(true)
-    PaGlobal_ServantChangeFormPanel._btnChange:SetMonoTone(true)
+    PaGlobal_ServantChangeFormPanel._btnShipChange:SetIgnore(true)
+    PaGlobal_ServantChangeFormPanel._btnShipChange:SetMonoTone(true)
   else
     PaGlobal_ServantChangeFormPanel._LCSelectSlot:SetShow(true)
-    PaGlobal_ServantChangeFormPanel._btnChange:SetIgnore(false)
-    PaGlobal_ServantChangeFormPanel._btnChange:SetMonoTone(false)
+    PaGlobal_ServantChangeFormPanel._btnShipChange:SetIgnore(false)
+    PaGlobal_ServantChangeFormPanel._btnShipChange:SetMonoTone(false)
     self._selectSceneIndex = Servant_ScenePushObjectByKey(formInfo:getTransformCharacterKey(), self._selectSceneIndex)
   end
 end

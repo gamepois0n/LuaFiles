@@ -8,6 +8,8 @@ local pearlShopCategory = {
     _subCategoryGroupControl = nil,
     _subCategoryControlList = {},
     _subCategoryControlListSize = 30,
+    _bottomControl,
+    _selectControl,
     _pearlControl = nil
   },
   _mainCategoryGapY = 10,
@@ -89,11 +91,12 @@ function pearlShopCategory:initialize()
   self:initMainCategory()
   self:initSubCategory()
   local bottomControl = UI.getChildControl(self._panel, "Static_BottomBg")
+  self._ui._bottomControl = bottomControl
+  self._ui._selectControl = UI.getChildControl(bottomControl, "StaticText_Select_ConsoleUI")
   local pearlBgControl = UI.getChildControl(bottomControl, "Static_MoneyType2BG")
   self._ui._pearlControl = UI.getChildControl(pearlBgControl, "StaticText_MoneyType_Price1")
   local bannerControl = UI.getChildControl(self._panel, "Static_RightBannerBg")
   bannerControl:SetShow(false)
-  self._panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_PearlShopCategoryRefresh()")
   registerEvent("FromClient_UpdateCashShop", "PaGlobalFunc_PearlShopCategoryUpdate")
   registerEvent("FromClient_UpdateCash", "PaGlobalFunc_PearlShopCategoryUpdate")
   registerEvent("FromClient_InventoryUpdate", "PaGlobalFunc_PearlShopCategoryUpdate")
@@ -112,12 +115,14 @@ function pearlShopCategory:back()
   InGameShop_Close()
 end
 function PaGlobalFunc_PearlShopCategoryFocusMainCategory(index)
-  pearlShopCategory:focusMainCategory(index)
+  if pearlShopCategory:focusMainCategory(index) then
+    return pearlShopCategory:update()
+  end
 end
 function pearlShopCategory:focusMainCategory(index)
   self._selectedMainCategoryIndex = index
   self._selectedSubCategoryIndex = -1
-  self:update()
+  return true
 end
 function PaGlobalFunc_PearlShopCategorySelectMainCategory(index)
   pearlShopCategory:selectMainCategory(index)
@@ -135,11 +140,13 @@ function pearlShopCategory:checkValidMainCategory(index)
   return index >= 0 and index < getCashMainCategorySize()
 end
 function PaGlobalFunc_PearlShopCategoryFocusSubCategory(index)
-  pearlShopCategory:focusSubCategory(index)
+  if pearlShopCategory:focusSubCategory(index) then
+    return pearlShopCategory:update()
+  end
 end
 function pearlShopCategory:focusSubCategory(index)
   self._selectedSubCategoryIndex = index
-  self:update()
+  return true
 end
 function PaGlobalFunc_PearlShopCategorySelectSubCategory(selectedIndex)
   pearlShopCategory:selectSubCategory(selectedIndex)
@@ -174,7 +181,7 @@ function pearlShopCategory:gotoNextStep()
     return ToClient_XboxShowStore()
   end
   PaGlobalFunc_PearlShopOpen()
-  self:close()
+  self:showXXX(false)
 end
 function pearlShopCategory:getCurrentCategoryTitle()
   if self:checkValidSubCategory(self._selectedSubCategoryIndex) then
@@ -190,13 +197,19 @@ function pearlShopCategory:updateMainCategory()
     local control = self._ui._mainCategoryControlList[i]
     local selectControl = UI.getChildControl(control, "Static_SelectLine")
     local radioControl = UI.getChildControl(control, "RadioButton_MainMenu_Category")
+    radioControl:ChangeTextureInfoName("renewal/button/console_tapbtn_00.dds")
     if i == self._selectedMainCategoryIndex then
       selectControl:SetShow(true)
       radioControl:SetFontColor(4293848814)
+      local x1, y1, x2, y2 = setTextureUV_Func(radioControl, 440, 119, 460, 139)
+      radioControl:getBaseTexture():setUV(x1, y1, x2, y2)
     else
       selectControl:SetShow(false)
       radioControl:SetFontColor(4287862695)
+      local x1, y1, x2, y2 = setTextureUV_Func(radioControl, 440, 98, 460, 118)
+      radioControl:getBaseTexture():setUV(x1, y1, x2, y2)
     end
+    radioControl:setRenderTexture(radioControl:getBaseTexture())
   end
 end
 function pearlShopCategory:updateSubCategory()
@@ -221,6 +234,22 @@ function pearlShopCategory:updateSubCategory()
     self._ui._subCategoryGroupControl:SetShow(false)
   end
 end
+function pearlShopCategory:checkLeafCategorySelected()
+  if self:checkValidMainCategory(self._selectedMainCategoryIndex) then
+    local info = ToClient_GetMainCategoryStaticStatusWrapperByKeyRaw(self._selectedMainCategoryIndex + 1)
+    if info then
+      if getCashMiddleCategorySize(info:getNoRaw()) <= 0 then
+        return true
+      else
+        return self:checkValidSubCategory(self._selectedSubCategoryIndex)
+      end
+    end
+  end
+  return false
+end
+function pearlShopCategory:updateButton()
+  self._ui._selectControl:SetShow(self:checkLeafCategorySelected())
+end
 function pearlShopCategory:update()
   if not self._init then
     return
@@ -228,22 +257,10 @@ function pearlShopCategory:update()
   self:updateMainCategory()
   self:updateSubCategory()
   self:updatePearl()
+  self:updateButton()
 end
 function PaGlobalFunc_PearlShopCategoryUpdate()
   return pearlShopCategory:update()
-end
-function pearlShopCategory:refresh()
-  if ToClient_isXBox() then
-    ToClient_CashShopResetCashFlag()
-    cashShop_requestCash()
-    return true
-  end
-  return false
-end
-function PaGlobalFunc_PearlShopCategoryRefresh()
-  if pearlShopCategory:refresh() then
-    return pearlShopCategory:update()
-  end
 end
 function pearlShopCategory:updatePearl()
   local pearl = toInt64(0, 0)
@@ -253,25 +270,30 @@ function pearlShopCategory:updatePearl()
   end
   self._ui._pearlControl:SetText(makeDotMoney(pearl))
 end
+function pearlShopCategory:showXXX(flag)
+  self._ui._mainCategoryGroupControl:SetShow(flag)
+  self._ui._subCategoryGroupControl:SetShow(flag)
+  self._ui._bottomControl:SetShow(flag)
+end
 function pearlShopCategory:open(initIndexFlag)
-  if initIndexFlag then
+  if self:checkShow() then
+    self:showXXX(true)
+  else
     self._selectedMainCategoryIndex = 0
     self._selectedSubCategoryIndex = -1
-  end
-  if self:checkValidSubCategory(self._selectedSubCategoryIndex) then
-    ToClient_padSnapSetTargetGroup(self._ui._subCategoryGroupControl)
-  else
-    ToClient_padSnapSetTargetGroup(self._ui._mainCategoryGroupControl)
   end
   getIngameCashMall():clearEquipViewList()
   getIngameCashMall():changeViewMyCharacter()
   getIngameCashMall():hide()
   getIngameCashMall():show()
-  self:update()
-  self._panel:SetShow(true)
+  if not self:checkShow() then
+    self._panel:SetShow(true)
+  end
 end
 function PaGlobalFunc_PearlShopCategoryOpen(initIndexFlag)
-  pearlShopCategory:open(initIndexFlag)
+  if pearlShopCategory:open(initIndexFlag) then
+    return pearlShopCategory:update()
+  end
 end
 function pearlShopCategory:close()
   self._panel:SetShow(false)
@@ -283,5 +305,6 @@ function pearlShopCategory:changePlatformSpecKey()
 end
 function FromClient_PearlShopCategoryInit()
   pearlShopCategory:initialize()
+  ToClient_setPearlShopUIPanel_XX(Panel_Pearlshop_Category)
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_PearlShopCategoryInit")

@@ -3,9 +3,11 @@ local Window_WorldMap_NodeManagementInfo = {
     _static_TopBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_TopBg"),
     _static_NodeManagementBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_NodeManagementBg"),
     _static_NodeInvestmentBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_NodeInvestmentBg"),
-    _static_SubNodeBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_SubNodeBg")
+    _static_SubNodeBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_SubNodeBg"),
+    _static_BottomBg = UI.getChildControl(Panel_Worldmap_NodeManagement, "Static_BottomBg")
   },
   _subNodeIconTexture = "renewal/ui_icon/console_icon_worldmap_00.dds",
+  _config = {_defaultPanelSizeY = 0, _defaultPanelPosY = 0},
   _subNodeIconUV = {
     [4] = {
       _x1 = 1,
@@ -66,8 +68,45 @@ local Window_WorldMap_NodeManagementInfo = {
   _currentSubNodeIndex = 0,
   _subNodeInfoList = {},
   _deleteNodeKey = nil,
-  _currentWorldNode = nil
+  _currentWorldNode = nil,
+  _isMaxSubNode = false,
+  _isTown = false
 }
+function Window_WorldMap_NodeManagementInfo:SetTownManagementUI()
+  self._ui._static_SubNodeBg:SetShow(false)
+  self._ui._static_NodeManagementBg:SetShow(false)
+  self._ui._static_NodeInvestmentBg:SetPosY(self._ui._static_TopBg:GetPosY() + self._ui._static_TopBg:GetSizeY() + 15)
+  local offsetY = self._ui._static_SubNodeBg:GetSizeY() + self._ui._static_NodeManagementBg:GetSizeY() + 40
+  Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY - offsetY)
+  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY + offsetY / 2)
+  self._ui._static_BottomBg:ComputePos()
+end
+function Window_WorldMap_NodeManagementInfo:SetNoneTownManagementUI()
+  self._ui._static_SubNodeBg:SetShow(true)
+  self._ui._static_NodeManagementBg:SetShow(true)
+  self._ui._static_NodeInvestmentBg:SetPosY(self._ui._static_NodeManagementBg:GetPosY() + self._ui._static_NodeManagementBg:GetSizeY() + 15)
+  Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY)
+  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY)
+  self._ui._static_BottomBg:ComputePos()
+  if 0 == self._currentSubNodeIndex then
+    self:WithOutSubNode()
+  else
+    self:WithSubNode()
+  end
+end
+function Window_WorldMap_NodeManagementInfo:WithOutSubNode()
+  self._ui._static_SubNodeBg:SetShow(false)
+  local offsetY = self._ui._static_SubNodeBg:GetSizeY() + 20
+  Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY - offsetY)
+  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY + offsetY / 2)
+  self._ui._static_BottomBg:ComputePos()
+end
+function Window_WorldMap_NodeManagementInfo:WithSubNode()
+  self._ui._static_SubNodeBg:SetShow(true)
+  Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY)
+  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY)
+  self._ui._static_BottomBg:ComputePos()
+end
 function Window_WorldMap_NodeManagementInfo:SetTopTitle()
   if nil == self._currentNodeData then
     return
@@ -86,28 +125,26 @@ function Window_WorldMap_NodeManagementInfo:SetContribute()
   local needPoint = nodeStaticStatus._needPoint
   self._ui._button_Contribute:addInputEvent("Mouse_LUp", "")
   self._ui._button_ContributeValue:SetText(needPoint)
+  self._ui._button_Contribute:SetCheck(false)
   if true == isExploreUpgradable(nodeKey) then
     if isMaxLevel == false then
       self._ui._button_Contribute:SetMonoTone(false)
-      self._ui._button_Contribute:SetIgnore(false)
       self._ui._button_Contribute:SetText("Invest")
       self._ui._button_Contribute:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(" .. tostring(nodeKey) .. ")")
-    elseif true == isWithdrawablePlant(nodeKey) then
-      self._ui._button_Contribute:SetMonoTone(false)
-      self._ui._button_Contribute:SetIgnore(false)
-      self._ui._button_Contribute:SetText("Take")
-      self._ui._button_ContributeValue:SetText(needPoint)
-      self._ui._button_Contribute:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_TakeContribute( " .. tostring(nodeKey) .. ")")
     else
-      self._ui._button_Contribute:SetMonoTone(true)
-      self._ui._button_Contribute:SetIgnore(true)
-      self._ui._button_Contribute:SetText("Take")
-      self._ui._button_ContributeValue:SetText(needPoint)
-      self._ui._button_Contribute:addInputEvent("Mouse_LUp", "")
+      self._ui._button_Contribute:SetCheck(true)
+      if true == isWithdrawablePlant(nodeKey) then
+        self._ui._button_Contribute:SetText("Take")
+        self._ui._button_ContributeValue:SetText(needPoint)
+        self._ui._button_Contribute:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_TakeContribute( " .. tostring(nodeKey) .. ")")
+      else
+        self._ui._button_Contribute:SetText("Take")
+        self._ui._button_ContributeValue:SetText(needPoint)
+        self._ui._button_Contribute:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_ShowReason(" .. tostring(nodeKey) .. ")")
+      end
     end
   else
     self._ui._button_Contribute:SetMonoTone(false)
-    self._ui._button_Contribute:SetIgnore(false)
     self._ui._button_Contribute:SetText("Find NearNode")
     self._ui._button_Contribute:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(" .. tostring(nodeKey) .. ")")
   end
@@ -121,17 +158,21 @@ function Window_WorldMap_NodeManagementInfo:SetEnergyInvest()
   if true == isExploreUpgradable(nodeKey) then
     if isMaxLevel == false then
       self._ui._button_EnergyInvest:SetMonoTone(true)
-      self._ui._button_EnergyInvest:SetIgnore(true)
-      self._ui._button_EnergyInvest:addInputEvent("Mouse_LUp", "")
+      self._ui._button_EnergyInvest:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_Update")
     else
       self._ui._button_EnergyInvest:SetMonoTone(false)
-      self._ui._button_EnergyInvest:SetIgnore(false)
       self._ui._button_EnergyInvest:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_InvestNodeLevelNumpad(" .. tostring(nodeKey) .. ")")
     end
   else
     self._ui._button_EnergyInvest:SetMonoTone(true)
-    self._ui._button_EnergyInvest:SetIgnore(true)
-    self._ui._button_EnergyInvest:addInputEvent("Mouse_LUp", "")
+    self._ui._button_EnergyInvest:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_Update")
+  end
+end
+function PaGlobalFunc_WorldMap_NodeManagement_Update()
+  local self = Window_WorldMap_NodeManagementInfo
+  Window_WorldMap_NodeManagementInfo:Update()
+  for i = 0, self._currentSubNodeIndex - 1 do
+    self._ui._list2_SubNode:requestUpdateByKey(toInt64(0, i))
   end
 end
 function Window_WorldMap_NodeManagementInfo:Update()
@@ -159,6 +200,7 @@ function Window_WorldMap_NodeManagementInfo:SetNodeData(nodeData)
   self._currentNodeData._territoryKeyRaw = getNodeTerritoryKeyRaw(nodeData:getStaticStatus())
   self._currentNodeData._territoryInfo = getNodeTerritoryInfo(nodeData:getStaticStatus())
   self._currentNodeData._isMaxLevel = nodeData:isMaxLevel()
+  self._isMaxSubNode = false
   ToClient_FindSubNode(nodeData:getPlantKey())
 end
 function Window_WorldMap_NodeManagementInfo:InitControl()
@@ -168,15 +210,20 @@ function Window_WorldMap_NodeManagementInfo:InitControl()
   self._ui._staticText_NodeNpcValue = UI.getChildControl(self._ui._static_TopBg, "StaticText_NodeNpcValue")
   self._ui._staticText_ContributeTitle = UI.getChildControl(self._ui._static_NodeManagementBg, "StaticText_Title")
   self._ui._staticText_ContributeDesc = UI.getChildControl(self._ui._static_NodeManagementBg, "StaticText_Desc")
+  self._ui._staticText_ContributeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._button_Contribute = UI.getChildControl(self._ui._static_NodeManagementBg, "Button_Contribute")
   self._ui._button_ContributeValue = UI.getChildControl(self._ui._button_Contribute, "StaticText_ContributePoint")
   self._ui._staticText_NodeTitle = UI.getChildControl(self._ui._static_NodeInvestmentBg, "StaticText_Title")
   self._ui._staticText_NodeTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EXPGUAGE_CONTRIBUTE_VALUE_2"))
   self._ui._staticText_NodeDesc = UI.getChildControl(self._ui._static_NodeInvestmentBg, "StaticText_Desc")
+  self._ui._staticText_NodeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._button_EnergyInvest = UI.getChildControl(self._ui._static_NodeInvestmentBg, "Button_Invest")
   self._ui._staticText_SubNodeTitle = UI.getChildControl(self._ui._static_SubNodeBg, "StaticText_Title")
   self._ui._staticText_SubNodeDesc = UI.getChildControl(self._ui._static_SubNodeBg, "StaticText_Desc")
+  self._ui._staticText_SubNodeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._list2_SubNode = UI.getChildControl(self._ui._static_SubNodeBg, "List2_SubNode")
+  self._config._defaultPanelSizeY = Panel_Worldmap_NodeManagement:GetSizeY()
+  self._config._defaultPanelPosY = Panel_Worldmap_NodeManagement:GetPosY()
 end
 function Window_WorldMap_NodeManagementInfo:InitEvent()
   self._ui._list2_SubNode:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_NodeManagement_List2EventControlCreate")
@@ -184,6 +231,7 @@ function Window_WorldMap_NodeManagementInfo:InitEvent()
 end
 function Window_WorldMap_NodeManagementInfo:InitRegister()
   registerEvent("FromClient_FindSubNode", "PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNode")
+  registerEvent("FromClient_FindSubNodeFinish", "PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNodeFinish")
   registerEvent("FromClint_EventChangedExplorationNode", "PaGlobalFunc_FromClient_WorldMap_NodeManagement_ChangedExplorationNode")
   registerEvent("FromClint_EventUpdateExplorationNode", "PaGlobalFunc_FromClient_WorldMap_NodeManagement_UpdateExplorationNode")
 end
@@ -240,35 +288,41 @@ function PaGlobalFunc_WorldMap_NodeManagement_List2EventControlCreate(list_conte
   local needPoint = nodeStaticStatus._needPoint
   local parentNodeKey = self._currentNodeData._wayPointKey
   local parentIsMaxLevel = self._currentNodeData._isMaxLevel
+  button:SetCheck(false)
   if true == isExploreUpgradable(parentNodeKey) then
     if false == parentIsMaxLevel then
       button:SetMonoTone(true)
-      button:SetIgnore(true)
       button:SetText("Invest")
-      button:addInputEvent("Mouse_LUp", "")
+      button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_Update")
     elseif false == isMaxLevel then
       button:SetMonoTone(false)
-      button:SetIgnore(false)
       button:SetText("Invest")
       button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(" .. tostring(nodeKey) .. ")")
-    elseif true == isWithdrawablePlant(nodeKey) then
-      button:SetMonoTone(false)
-      button:SetIgnore(false)
-      button:SetText("Take")
-      button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_TakeContribute( " .. tostring(nodeKey) .. ")")
     else
-      button:SetMonoTone(true)
-      button:SetIgnore(true)
-      button:SetText("Take")
-      button:addInputEvent("Mouse_LUp", "")
+      button:SetCheck(true)
+      if true == isWithdrawablePlant(nodeKey) then
+        button:SetText("Take")
+        button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_TakeContribute( " .. tostring(nodeKey) .. ")")
+        self._isMaxSubNode = true
+      else
+        button:SetText("Take")
+        button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_ShowReason()")
+      end
     end
   else
     button:SetMonoTone(true)
-    button:SetIgnore(true)
     button:SetText("Invest")
-    button:addInputEvent("Mouse_LUp", "")
+    button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeManagement_Update")
   end
   self:CreateNodeIcon(nodeIcon, nodeInfo._nodeType)
+end
+function PaGlobalFunc_WorldMap_NodeManagement_ShowReason()
+  if true == Window_WorldMap_NodeManagementInfo._isMaxSubNode then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORLDMAP_CANTRETURN_CONT_NODE"))
+    return
+  end
+  displayCantWithdrawReason()
+  PaGlobalFunc_WorldMap_NodeManagement_Update()
 end
 function PaGlobalFunc_WorldMap_NodeManagement_InvestNodeLevelNumpad(wayPointKey)
   if false == ToClient_WorldMapIsShow() then
@@ -306,6 +360,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeContribute(nodeKey)
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData, "top")
+  PaGlobalFunc_WorldMap_NodeManagement_Update()
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeData)
   local self = Window_WorldMap_NodeManagementInfo
@@ -341,13 +396,15 @@ function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(nodeKey)
   local self = Window_WorldMap_NodeManagementInfo
+  if false == ToClient_isAbleInvestnWithdraw(nodeKey) then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_WORLDMAP_FINDNODEMANAGER"))
+    return
+  end
   ToClient_WorldMapRequestUpgradeExplorationNode(nodeKey)
+  PaGlobalFunc_WorldMap_NodeManagement_Update()
 end
 function PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNode(explorationNodeInClient)
   local self = Window_WorldMap_NodeManagementInfo
-  if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
-    return
-  end
   self._subNodeInfoList[self._currentSubNodeIndex] = {}
   self._subNodeInfoList[self._currentSubNodeIndex]._explorationNodeInClient = explorationNodeInClient
   self._subNodeInfoList[self._currentSubNodeIndex]._nodeSS = explorationNodeInClient:getStaticStatus()
@@ -357,9 +414,19 @@ function PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNode(exploration
   self._subNodeInfoList[self._currentSubNodeIndex]._needPoint = explorationNodeInClient:getStaticStatus()._needPoint
   self._subNodeInfoList[self._currentSubNodeIndex]._isMaxLevel = explorationNodeInClient:isMaxLevel()
   self._subNodeInfoList[self._currentSubNodeIndex]._nodeType = explorationNodeInClient:getStaticStatus()._nodeType
-  self._ui._list2_SubNode:getElementManager():pushKey(toInt64(0, self._currentSubNodeIndex))
-  self._ui._list2_SubNode:requestUpdateByKey(toInt64(0, self._currentSubNodeIndex))
+  if true == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
+    self._ui._list2_SubNode:getElementManager():pushKey(toInt64(0, self._currentSubNodeIndex))
+    self._ui._list2_SubNode:requestUpdateByKey(toInt64(0, self._currentSubNodeIndex))
+  end
   self._currentSubNodeIndex = self._currentSubNodeIndex + 1
+end
+function PaGlobalFunc_FromCLient_WorldMap_NodeManagement_FindSubNodeFinish()
+  local self = Window_WorldMap_NodeManagementInfo
+  if true == self._isTown then
+    self:SetTownManagementUI()
+  else
+    self:SetNoneTownManagementUI()
+  end
 end
 function PaGlobalFunc_WorldMap_NodeManagement_GetShow()
   return Panel_Worldmap_NodeManagement:GetShow()
@@ -377,6 +444,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_Open(nodeData)
     return
   end
   PaGlobalFunc_WorldMap_NodeManagement_SetShow(true, false)
+  self._isTown = nodeData:getStaticStatus():getRegion():isMainOrMinorTown()
   self._currentWorldNode = nodeData
   PaGlobalFunc_WorldMap_RingMenu_Close()
   self:SetNodeData(nodeData)

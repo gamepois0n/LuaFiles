@@ -2,30 +2,6 @@ Panel_BossAlert_SettingV2:SetShow(false)
 Panel_BossAlert_SettingV2:RegisterShowEventFunc(true, "PaGlobal_BossAlertSet_ShowAni()")
 Panel_BossAlert_SettingV2:RegisterShowEventFunc(false, "PaGlobal_BossAlertSet_HideAni()")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-function PaGlobal_BossAlertSet_ShowAni()
-  audioPostEvent_SystemUi(0, 22)
-  UIAni.fadeInSCR_Down(Panel_BossAlert_SettingV2)
-  local aniInfo1 = Panel_BossAlert_SettingV2:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
-  aniInfo1:SetStartScale(0.5)
-  aniInfo1:SetEndScale(1.2)
-  aniInfo1.AxisX = Panel_BossAlert_SettingV2:GetSizeX() / 2
-  aniInfo1.AxisY = Panel_BossAlert_SettingV2:GetSizeY() / 2
-  aniInfo1.ScaleType = 2
-  aniInfo1.IsChangeChild = true
-  local aniInfo2 = Panel_BossAlert_SettingV2:addScaleAnimation(0.08, 0.15, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
-  aniInfo2:SetStartScale(1.2)
-  aniInfo2:SetEndScale(1)
-  aniInfo2.AxisX = Panel_BossAlert_SettingV2:GetSizeX() / 2
-  aniInfo2.AxisY = Panel_BossAlert_SettingV2:GetSizeY() / 2
-  aniInfo2.ScaleType = 2
-  aniInfo2.IsChangeChild = true
-end
-function PaGlobal_BossAlertSet_HideAni()
-  audioPostEvent_SystemUi(1, 1)
-  Panel_BossAlert_SettingV2:SetAlpha(1)
-  local aniInfo = UIAni.AlphaAnimation(0, Panel_BossAlert_SettingV2, 0, 0.1)
-  aniInfo:SetHideAtEnd(true)
-end
 local PaGlobal_BossAlertSet = {
   _ui = {
     btnClose = UI.getChildControl(Panel_BossAlert_SettingV2, "Button_CloseIcon"),
@@ -50,67 +26,804 @@ local PaGlobal_BossAlertSet = {
   savedPointSum = 0,
   returnValue = false,
   updateTime = 0,
-  bossTime = {
-    {
-      2,
-      11,
-      16,
-      20,
-      23
+  bossRaidCount = 0,
+  currentNation = 0,
+  bossRaidTime = -1,
+  weekly = 0
+}
+local nation = {
+  _korea = 1,
+  _japan = 2,
+  _russia = 3,
+  _notrhAmerica = 4,
+  _europe = 5,
+  _taiwan = 6,
+  _turkey = 7,
+  _southAmerica = 8,
+  _thailand = 9,
+  _southeastAsia = 10
+}
+local bossNo = {
+  _kzaka = 1,
+  _karanda = 2,
+  _nuver = 3,
+  _kutum = 4,
+  _opin = 5,
+  _gamos = 6,
+  _guint = 7,
+  _muraka = 8,
+  _vell = 9
+}
+local bossName = {
+  [bossNo._kzaka] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA"),
+  [bossNo._karanda] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA"),
+  [bossNo._nuver] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER"),
+  [bossNo._kutum] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KUTUM"),
+  [bossNo._opin] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_OPIN"),
+  [bossNo._gamos] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS"),
+  [bossNo._guint] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GUINT"),
+  [bossNo._muraka] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_MURAKA"),
+  [bossNo._vell] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_VELL")
+}
+local PaGlobal_BossAlert = {
+  [nation._korea] = {
+    _alertTime = {
+      {2, 0},
+      {11, 0},
+      {16, 0},
+      {19, 0},
+      {20, 0},
+      {21, 0},
+      {23, 45},
+      {0, 15}
     },
-    {
-      0,
-      0,
-      0,
-      0,
-      45
+    _bossAppearOrder = {
+      {
+        {2},
+        {1, 3},
+        {2, 4},
+        {0},
+        {3, 4},
+        {0},
+        {2},
+        {0}
+      },
+      {
+        {1},
+        {1, 3},
+        {1, 4},
+        {0},
+        {2, 3},
+        {0},
+        {5},
+        {0}
+      },
+      {
+        {1},
+        {1, 4},
+        {1, 3},
+        {0},
+        {2, 4},
+        {0},
+        {6},
+        {0}
+      },
+      {
+        {3},
+        {3, 4},
+        {1, 3},
+        {0},
+        {2, 1},
+        {0},
+        {5},
+        {0}
+      },
+      {
+        {4},
+        {1, 3},
+        {2, 4},
+        {0},
+        {3, 4},
+        {0},
+        {6},
+        {0}
+      },
+      {
+        {2},
+        {1, 4},
+        {2, 3},
+        {0},
+        {1, 4},
+        {0},
+        {5},
+        {0}
+      },
+      {
+        {2},
+        {3, 4},
+        {2, 1},
+        {7, 8},
+        {0},
+        {0},
+        {0},
+        {6}
+      }
     }
   },
-  bossName = {
-    {
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA")
+  [nation._japan] = {
+    _alertTime = {
+      {11, 0},
+      {14, 0},
+      {16, 0},
+      {19, 0},
+      {20, 0},
+      {23, 0},
+      {1, 30}
     },
-    {
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER_KUTUM")
+    _bossAppearOrder = {
+      {
+        {2, 4},
+        {9},
+        {2, 4},
+        {6},
+        {0},
+        {5},
+        {1, 3}
+      },
+      {
+        {1},
+        {0},
+        {1, 4},
+        {2, 3},
+        {0},
+        {2, 4},
+        {1, 3}
+      },
+      {
+        {1},
+        {0},
+        {4, 1},
+        {3, 4},
+        {0},
+        {2, 4},
+        {1, 3}
+      },
+      {
+        {0},
+        {0},
+        {4, 3},
+        {2, 1},
+        {0},
+        {6},
+        {2, 1}
+      },
+      {
+        {1},
+        {0},
+        {3, 4},
+        {3, 4},
+        {0},
+        {5},
+        {2, 1}
+      },
+      {
+        {1},
+        {0},
+        {4, 3},
+        {7, 8},
+        {0},
+        {2, 4},
+        {5}
+      },
+      {
+        {1, 3},
+        {0},
+        {2, 4},
+        {1, 2},
+        {0},
+        {0},
+        {6}
+      }
+    }
+  },
+  [nation._russia] = {
+    _alertTime = {
+      {7, 0},
+      {11, 0},
+      {15, 0},
+      {18, 0},
+      {19, 0},
+      {20, 0},
+      {23, 0},
+      {0, 30}
     },
-    {
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_KZAKA")
+    _bossAppearOrder = {
+      {
+        {2},
+        {2, 4},
+        {9},
+        {5},
+        {0},
+        {0},
+        {1, 4},
+        {3, 2}
+      },
+      {
+        {3},
+        {1},
+        {1, 3},
+        {1, 4},
+        {0},
+        {0},
+        {1, 3},
+        {5}
+      },
+      {
+        {1, 4},
+        {0},
+        {1, 4},
+        {1, 3},
+        {0},
+        {0},
+        {2, 4},
+        {3}
+      },
+      {
+        {2, 3},
+        {0},
+        {1, 4},
+        {1, 3},
+        {0},
+        {0},
+        {2, 1},
+        {0}
+      },
+      {
+        {1},
+        {4},
+        {1, 3},
+        {2, 4},
+        {0},
+        {0},
+        {4, 3},
+        {0}
+      },
+      {
+        {0},
+        {2},
+        {1, 4},
+        {2, 3},
+        {0},
+        {0},
+        {1, 4},
+        {3}
+      },
+      {
+        {0},
+        {2, 3},
+        {7, 8},
+        {5},
+        {0},
+        {0},
+        {2, 4},
+        {3}
+      }
+    }
+  },
+  [nation._notrhAmerica] = {
+    _alertTime = {
+      {7, 0},
+      {10, 0},
+      {14, 0},
+      {17, 0},
+      {18, 0},
+      {20, 15},
+      {22, 15},
+      {0, 0},
+      {3, 0}
     },
-    {
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_NUVER"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA_KZAKA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_NUVER_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KZAKA_KUTUM"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GUINT_MURAKA")
+    _bossAppearOrder = {
+      {
+        {3},
+        {1},
+        {9},
+        {2},
+        {0},
+        {4, 3},
+        {4},
+        {2},
+        {1}
+      },
+      {
+        {1},
+        {3},
+        {4},
+        {3},
+        {0},
+        {1},
+        {2},
+        {4},
+        {1}
+      },
+      {
+        {4},
+        {5},
+        {3},
+        {2},
+        {0},
+        {3, 1},
+        {4},
+        {2},
+        {0}
+      },
+      {
+        {2},
+        {3},
+        {1},
+        {4},
+        {0},
+        {2},
+        {3},
+        {4},
+        {1}
+      },
+      {
+        {4},
+        {3},
+        {4},
+        {5},
+        {0},
+        {2},
+        {1},
+        {3},
+        {2}
+      },
+      {
+        {4},
+        {2},
+        {3},
+        {1},
+        {0},
+        {4, 1},
+        {2},
+        {5},
+        {3}
+      },
+      {
+        {4},
+        {3},
+        {7, 8},
+        {1, 2},
+        {0},
+        {0},
+        {3, 4},
+        {1},
+        {4}
+      }
+    }
+  },
+  [nation._europe] = {
+    _alertTime = {
+      {9, 0},
+      {12, 0},
+      {16, 0},
+      {19, 0},
+      {20, 0},
+      {22, 15},
+      {0, 15},
+      {2, 0},
+      {5, 0}
     },
-    {
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_KARANDA"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_OPIN"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_OPIN"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_OPIN"),
-      PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS")
+    _bossAppearOrder = {
+      {
+        {3},
+        {1},
+        {9},
+        {2},
+        {0},
+        {4, 3},
+        {4},
+        {2},
+        {1}
+      },
+      {
+        {1},
+        {3},
+        {4},
+        {3},
+        {0},
+        {1},
+        {2},
+        {4},
+        {1}
+      },
+      {
+        {4},
+        {5},
+        {3},
+        {2},
+        {0},
+        {3},
+        {4},
+        {2},
+        {1}
+      },
+      {
+        {2},
+        {0},
+        {1},
+        {4},
+        {0},
+        {2},
+        {3},
+        {4},
+        {3}
+      },
+      {
+        {4},
+        {3},
+        {4},
+        {5},
+        {0},
+        {2},
+        {1},
+        {3},
+        {2}
+      },
+      {
+        {4},
+        {2},
+        {3},
+        {1},
+        {0},
+        {4, 1},
+        {2},
+        {5},
+        {3}
+      },
+      {
+        {4},
+        {3},
+        {7, 8},
+        {1, 2},
+        {0},
+        {0},
+        {3, 4},
+        {1},
+        {4}
+      }
+    }
+  },
+  [nation._taiwan] = {
+    _alertTime = {
+      {2, 0},
+      {11, 0},
+      {15, 0},
+      {19, 0},
+      {20, 0},
+      {23, 30}
+    },
+    _bossAppearOrder = {
+      {
+        {2, 3},
+        {1, 3},
+        {9},
+        {2, 4},
+        {0},
+        {5}
+      },
+      {
+        {1, 4},
+        {2},
+        {1, 4},
+        {2},
+        {0},
+        {1, 4}
+      },
+      {
+        {3},
+        {1, 4},
+        {3},
+        {4},
+        {0},
+        {1, 3}
+      },
+      {
+        {2},
+        {1, 4},
+        {3},
+        {1, 4},
+        {0},
+        {3, 2}
+      },
+      {
+        {4},
+        {4},
+        {1, 3},
+        {3},
+        {0},
+        {2, 4}
+      },
+      {
+        {1, 3},
+        {5},
+        {2, 3},
+        {4, 1},
+        {0},
+        {7, 8}
+      },
+      {
+        {1, 4},
+        {2, 4},
+        {5},
+        {1, 3},
+        {0},
+        {0}
+      }
+    }
+  },
+  [nation._southAmerica] = {
+    _alertTime = {
+      {2, 0},
+      {11, 0},
+      {16, 0},
+      {20, 0},
+      {21, 0},
+      {23, 30}
+    },
+    _bossAppearOrder = {
+      {
+        {3},
+        {4, 3},
+        {1, 2},
+        {3, 2},
+        {0},
+        {5}
+      },
+      {
+        {2},
+        {3},
+        {4, 1},
+        {3, 4},
+        {0},
+        {1}
+      },
+      {
+        {4},
+        {1},
+        {3, 4},
+        {1, 2},
+        {0},
+        {5}
+      },
+      {
+        {1},
+        {4},
+        {1, 3},
+        {3, 4},
+        {0},
+        {2}
+      },
+      {
+        {2},
+        {3},
+        {4, 1},
+        {3, 4},
+        {0},
+        {2, 4}
+      },
+      {
+        {2},
+        {3},
+        {4, 1},
+        {3, 1},
+        {0},
+        {5}
+      },
+      {
+        {1},
+        {1, 2},
+        {3, 4},
+        {0},
+        {0},
+        {0}
+      }
+    }
+  },
+  [nation._turkey] = {
+    _alertTime = {
+      {1, 0},
+      {11, 0},
+      {16, 0},
+      {19, 0},
+      {20, 0},
+      {21, 0},
+      {23, 15}
+    },
+    _bossAppearOrder = {
+      {
+        {2, 3},
+        {3, 4},
+        {1, 2},
+        {0},
+        {3, 2},
+        {0},
+        {1, 4}
+      },
+      {
+        {2},
+        {3},
+        {1, 4},
+        {0},
+        {3},
+        {0},
+        {1}
+      },
+      {
+        {4},
+        {1},
+        {3, 4},
+        {0},
+        {1, 2},
+        {0},
+        {3}
+      },
+      {
+        {1},
+        {4},
+        {1, 3},
+        {0},
+        {3, 4},
+        {0},
+        {2}
+      },
+      {
+        {2},
+        {3},
+        {1, 4},
+        {0},
+        {3, 4},
+        {0},
+        {1, 2}
+      },
+      {
+        {2},
+        {3},
+        {1, 4},
+        {0},
+        {3, 1},
+        {0},
+        {4}
+      },
+      {
+        {1},
+        {1, 4},
+        {3, 4},
+        {7, 8},
+        {0},
+        {0},
+        {0}
+      }
+    }
+  },
+  [nation._thailand] = {
+    _alertTime = {
+      {10, 0},
+      {14, 0},
+      {18, 0},
+      {20, 0},
+      {0, 15}
+    },
+    _bossAppearOrder = {
+      {
+        {1, 3},
+        {4},
+        {1, 3},
+        {0},
+        {0}
+      },
+      {
+        {4},
+        {1, 3},
+        {4},
+        {0},
+        {0}
+      },
+      {
+        {0},
+        {4},
+        {1, 3},
+        {0},
+        {1}
+      },
+      {
+        {3},
+        {1},
+        {4},
+        {0},
+        {4}
+      },
+      {
+        {1},
+        {4, 3},
+        {1},
+        {0},
+        {0}
+      },
+      {
+        {4, 3},
+        {1},
+        {4, 3},
+        {0},
+        {0}
+      },
+      {
+        {0},
+        {4, 3},
+        {1, 3},
+        {0},
+        {1}
+      }
+    }
+  },
+  [nation._southeastAsia] = {
+    _alertTime = {
+      {11, 0},
+      {15, 0},
+      {19, 0},
+      {21, 0},
+      {1, 15}
+    },
+    _bossAppearOrder = {
+      {
+        {1, 3},
+        {4},
+        {1, 3},
+        {0},
+        {0}
+      },
+      {
+        {4},
+        {1, 3},
+        {4},
+        {0},
+        {0}
+      },
+      {
+        {0},
+        {4},
+        {1, 3},
+        {0},
+        {1}
+      },
+      {
+        {3},
+        {1},
+        {4},
+        {0},
+        {4}
+      },
+      {
+        {1},
+        {4, 3},
+        {1},
+        {0},
+        {0}
+      },
+      {
+        {4, 3},
+        {1},
+        {4, 3},
+        {0},
+        {0}
+      },
+      {
+        {0},
+        {4, 3},
+        {1, 3},
+        {0},
+        {1}
+      }
     }
   }
 }
@@ -129,23 +842,51 @@ function PaGlobal_BossAlertSet:Init()
   self._ui.allAlert_30m:addInputEvent("Mouse_LUp", "PaGlobal_BossAlertSet_CheckAlert()")
   self._ui.allAlert_15m:addInputEvent("Mouse_LUp", "PaGlobal_BossAlertSet_CheckAlert()")
   self._ui.allAlert_5m:addInputEvent("Mouse_LUp", "PaGlobal_BossAlertSet_CheckAlert()")
+  if isGameTypeJapan() then
+    self.currentNation = nation._japan
+  elseif isGameTypeRussia() then
+    self.currentNation = nation._russia
+  elseif isGameTypeEnglish() and 0 == getServiceNationType() then
+    self.currentNation = nation._notrhAmerica
+  elseif isGameTypeEnglish() and 1 == getServiceNationType() then
+    self.currentNation = nation._europe
+  elseif isGameTypeTaiwan() then
+    self.currentNation = nation._taiwan
+  elseif isGameTypeSA() then
+    self.currentNation = nation._southAmerica
+  elseif isGameTypeTH() then
+    self.currentNation = nation._thailand
+  elseif isGameTypeTR() then
+    self.currentNation = nation._turkey
+  elseif isGameTypeID() then
+    self.currentNation = nation._southeastAsia
+  elseif isGameTypeKorea() then
+    self.currentNation = nation._korea
+  elseif isGameTypeGT() then
+    self.currentNation = nation._korea
+  elseif _ContentsGroup_RenewUI then
+    self.currentNation = nation._notrhAmerica
+  end
+  local isAdult = ToClient_isAdultUser()
+  if false == isAdult then
+    PaGlobal_BossAlert[nation._korea]._alertTime[7] = {23, 30}
+    PaGlobal_BossAlert[nation._korea]._bossAppearOrder[7][7] = {6}
+    PaGlobal_BossAlert[nation._korea]._bossAppearOrder[7][8] = {0}
+  end
   self._ui.checkPopUp:SetShow(false)
   self._ui.txt_BottomDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_BottomDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSALERTSET_BOTTOMDESC"))
-  self._ui.txt_BottomDesc:SetSize(360, self._ui.txt_BottomDesc:GetTextSizeY())
   self._ui.bottomDescBG:SetSize(380, self._ui.txt_BottomDesc:GetTextSizeY() + 10)
+  self._ui.txt_BottomDesc:SetSize(360, self._ui.txt_BottomDesc:GetTextSizeY())
   Panel_BossAlert_SettingV2:SetSize(406, self._ui.alertOnOffBG:GetSizeY() + self._ui.alertBG:GetSizeY() + self._ui.alertKeepBG:GetSizeY() + self._ui.bottomDescBG:GetSizeY() + 140)
   self._ui.bottomDescBG:ComputePos()
   self._ui.txt_BottomDesc:ComputePos()
-  if isGameTypeJapan() then
-  elseif isGameTypeRussia() then
-  elseif isGameTypeEnglish() then
-  elseif isGameTypeTaiwan() then
-  elseif isGameTypeSA() then
-  elseif isGameTypeTH() then
-  elseif isGameTypeTR() then
-  elseif isGameTypeID() then
+  if self.currentNation ~= nation._korea then
+    local _center = Panel_BossAlert_SettingV2:GetSizeX() / 2 - self._ui.btn_Setting:GetSizeX() / 2
+    self._ui.btn_Setting:SetSpanSize(0, 16)
+    self._ui.btn_BossTime:SetShow(false)
   end
+  self.bossRaidCount = #PaGlobal_BossAlert[self.currentNation]._alertTime
 end
 function PaGlobal_BossAlertSet_Show()
   if not _ContetnsGroup_BossAlert then
@@ -216,39 +957,70 @@ function PaGlobal_BossAlertSet_SetTime()
   end
 end
 function PaGlobal_BossAlertSet_ReturnTimeBeforeAlert()
-  local rv = 0
-  if tonumber(1) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(10) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(15) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(18) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(19) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M")) or tonumber(23) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) then
-    rv = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_BEFORE30")
+  local self = PaGlobal_BossAlertSet
+  local bossTime = ""
+  local currentHour = tonumber(os.date("%H"))
+  local currentMinute = tonumber(os.date("%M"))
+  local alertEnd = false
+  local lastMinute = 0
+  self.bossRaidTime = -1
+  self.weekly = tonumber(os.date("*t").wday)
+  for ii = 1, self.bossRaidCount do
+    local bossHour = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][1]
+    if 0 == bossHour then
+      bossHour = 24
+    end
+    local bossMinute = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][2]
+    lastMinute = (bossHour - currentHour) * 60 + bossMinute - currentMinute
+    if 30 == lastMinute and self._ui.allAlert_30m:IsCheck() or 15 == lastMinute and self._ui.allAlert_15m:IsCheck() or 5 == lastMinute and self._ui.allAlert_5m:IsCheck() then
+      bossTime = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_BEFORE" .. lastMinute)
+      self.bossRaidTime = ii
+      break
+    end
   end
-  if tonumber(1) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) or tonumber(10) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) or tonumber(15) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) or tonumber(18) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) or tonumber(19) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M")) or tonumber(23) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M")) or tonumber(0) == tonumber(os.date("%H")) and tonumber(0) == tonumber(os.date("%M")) then
-    rv = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_BEFORE15")
+  if -1 == self.bossRaidTime then
+    return bossTime
   end
-  if tonumber(1) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M")) or tonumber(10) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M")) or tonumber(15) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M")) or tonumber(18) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M")) or tonumber(19) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M")) or tonumber(23) == tonumber(os.date("%H")) and tonumber(40) == tonumber(os.date("%M")) or tonumber(0) == tonumber(os.date("%H")) and tonumber(10) == tonumber(os.date("%M")) then
-    rv = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_BEFORE5")
+  local bossName = PaGlobal_BossAlertSet_ReturnNameAlert()
+  return bossTime, bossName
+end
+function PaGlobal_BossAlertSet_ReturnTimeAfterAlertEnd()
+  if not Panel_BossAlertV2:GetShow() then
+    return
   end
-  return rv
+  local self = PaGlobal_BossAlertSet
+  local currentHour = tonumber(os.date("%H"))
+  local currentMinute = tonumber(os.date("%M"))
+  for ii = 1, self.bossRaidCount do
+    local bossHour = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][1]
+    local bossMinute = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][2] + 30
+    if bossMinute >= 60 then
+      bossMinute = bossMinute - 60
+      bossHour = bossHour + 1
+      if 24 == bossHour then
+        bossHour = 0
+      end
+    end
+    if currentHour == bossHour and currentMinute == bossMinute then
+      PaGlobal_BossAlert_NewAlarmClose()
+    end
+  end
 end
 function PaGlobal_BossAlertSet_ReturnNameAlert()
   local self = PaGlobal_BossAlertSet
-  local rv = "\237\129\172\236\158\144\236\185\180"
-  local timeCount = 1
-  local isWeekly = os.date("*t").wday
-  local isHour = os.date("%H")
-  if tonumber(1) == tonumber(isHour) then
-    timeCount = 1
-  elseif tonumber(10) == tonumber(isHour) then
-    timeCount = 2
-  elseif tonumber(15) == tonumber(isHour) then
-    timeCount = 3
-  elseif tonumber(19) == tonumber(isHour) or tonumber(18) == tonumber(isHour) then
-    timeCount = 4
-  elseif tonumber(23) == tonumber(isHour) then
-    timeCount = 5
-  elseif tonumber(0) == tonumber(isHour) then
-    return PAGetString(Defines.StringSheet_GAME, "LUA_BOSSALERT_SETTING_GAMOS")
+  local rv = ""
+  if 0 == PaGlobal_BossAlert[self.currentNation]._bossAppearOrder[self.weekly][self.bossRaidTime][1] then
+    return rv
+  else
+    for ii = 1, #PaGlobal_BossAlert[self.currentNation]._bossAppearOrder[self.weekly][self.bossRaidTime] do
+      if "" == rv then
+        rv = bossName[PaGlobal_BossAlert[self.currentNation]._bossAppearOrder[self.weekly][self.bossRaidTime][1]]
+      else
+        rv = rv .. ", " .. bossName[PaGlobal_BossAlert[self.currentNation]._bossAppearOrder[self.weekly][self.bossRaidTime][ii]]
+      end
+    end
+    return rv
   end
-  rv = self.bossName[timeCount][isWeekly]
-  return rv
 end
 function PaGlobal_BossAlertSet:SetCheckUpdate()
   local isCheckCount = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.BossAlertTime)
@@ -273,61 +1045,6 @@ function PaGlobal_BossAlertSet:SetCheckUpdate()
     self._ui.allAlert_15m:SetCheck(100 == isCheckCount)
     self._ui.allAlert_5m:SetCheck(1000 == isCheckCount)
   end
-end
-function PaGlobal_BossAlertSet_BossTimeCalc()
-  local self = PaGlobal_BossAlertSet
-  local isYear = ToClient_GetThisYear()
-  local isMonth = ToClient_GetThisMonth()
-  local isDay = ToClient_GetToday()
-  local isHour = os.date("%H")
-  local isMinute = os.date("%M")
-  local isSecond = os.date("%S")
-  local isBoss1_1 = tonumber(1) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-  local isBoss1_2 = tonumber(1) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-  local isBoss1_3 = tonumber(1) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-  local isBoss2_1 = tonumber(10) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-  local isBoss2_2 = tonumber(10) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-  local isBoss2_3 = tonumber(10) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-  local isBoss3_1 = tonumber(15) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-  local isBoss3_2 = tonumber(15) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-  local isBoss3_3 = tonumber(15) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-  local isBoss4_1 = tonumber(19) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-  local isBoss4_2 = tonumber(19) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-  local isBoss4_3 = tonumber(19) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-  local isBoss5_1 = tonumber(23) == tonumber(os.date("%H")) and tonumber(40) == tonumber(os.date("%M"))
-  local isBoss5_2 = tonumber(23) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-  local isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M"))
-  if "6" == os.date("%w") then
-    isBoss4_1 = tonumber(18) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-    isBoss4_2 = tonumber(18) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-    isBoss4_3 = tonumber(18) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-    isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-  elseif "0" == os.date("%w") then
-    isBoss4_1 = tonumber(19) == tonumber(os.date("%H")) and tonumber(55) == tonumber(os.date("%M"))
-    isBoss4_2 = tonumber(19) == tonumber(os.date("%H")) and tonumber(45) == tonumber(os.date("%M"))
-    isBoss4_3 = tonumber(19) == tonumber(os.date("%H")) and tonumber(30) == tonumber(os.date("%M"))
-    isBoss5_3 = tonumber(23) == tonumber(os.date("%H")) and tonumber(15) == tonumber(os.date("%M"))
-  end
-  local isTimeCount = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.BossAlertTime)
-  if 1110 == isTimeCount then
-    self.returnValue = isBoss1_1 or isBoss1_2 or isBoss1_3 or isBoss2_1 or isBoss2_2 or isBoss2_3 or isBoss3_1 or isBoss3_2 or isBoss3_3 or isBoss4_1 or isBoss4_2 or isBoss4_3 or isBoss5_1 or isBoss5_2 or isBoss5_3
-  elseif 100 == isTimeCount then
-    self.returnValue = isBoss1_2 or isBoss2_2 or isBoss3_2 or isBoss4_2 or isBoss5_2
-  elseif 1000 == isTimeCount then
-    self.returnValue = isBoss1_1 or isBoss2_1 or isBoss3_1 or isBoss4_1 or isBoss5_1
-  elseif 10 == isTimeCount then
-    self.returnValue = isBoss1_3 or isBoss2_3 or isBoss3_3 or isBoss4_3 or isBoss5_3
-  elseif 1100 == isTimeCount then
-    self.returnValue = isBoss1_1 or isBoss1_2 or isBoss2_1 or isBoss2_2 or isBoss3_1 or isBoss3_2 or isBoss4_1 or isBoss4_2 or isBoss5_1 or isBoss5_2
-  elseif 1010 == isTimeCount then
-    self.returnValue = isBoss1_1 or isBoss1_3 or isBoss2_1 or isBoss2_3 or isBoss3_1 or isBoss3_3 or isBoss4_1 or isBoss4_3 or isBoss5_1 or isBoss5_3
-  elseif 110 == isTimeCount then
-    self.returnValue = isBoss1_2 or isBoss1_3 or isBoss2_2 or isBoss2_3 or isBoss3_2 or isBoss3_3 or isBoss4_2 or isBoss4_3 or isBoss5_2 or isBoss5_3
-  else
-    self.returnValue = false
-  end
-  self.updateTime = 0
-  return self.returnValue
 end
 function PaGlobal_BossAlertSet_PopUp()
   local self = PaGlobal_BossAlertSet
@@ -360,5 +1077,29 @@ function PaGlobal_BossAlertSet_PopUp_ShowIconToolTip(isShow)
   else
     TooltipSimple_Hide()
   end
+end
+function PaGlobal_BossAlertSet_ShowAni()
+  audioPostEvent_SystemUi(0, 22)
+  UIAni.fadeInSCR_Down(Panel_BossAlert_SettingV2)
+  local aniInfo1 = Panel_BossAlert_SettingV2:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfo1:SetStartScale(0.5)
+  aniInfo1:SetEndScale(1.2)
+  aniInfo1.AxisX = Panel_BossAlert_SettingV2:GetSizeX() / 2
+  aniInfo1.AxisY = Panel_BossAlert_SettingV2:GetSizeY() / 2
+  aniInfo1.ScaleType = 2
+  aniInfo1.IsChangeChild = true
+  local aniInfo2 = Panel_BossAlert_SettingV2:addScaleAnimation(0.08, 0.15, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfo2:SetStartScale(1.2)
+  aniInfo2:SetEndScale(1)
+  aniInfo2.AxisX = Panel_BossAlert_SettingV2:GetSizeX() / 2
+  aniInfo2.AxisY = Panel_BossAlert_SettingV2:GetSizeY() / 2
+  aniInfo2.ScaleType = 2
+  aniInfo2.IsChangeChild = true
+end
+function PaGlobal_BossAlertSet_HideAni()
+  audioPostEvent_SystemUi(1, 1)
+  Panel_BossAlert_SettingV2:SetAlpha(1)
+  local aniInfo = UIAni.AlphaAnimation(0, Panel_BossAlert_SettingV2, 0, 0.1)
+  aniInfo:SetHideAtEnd(true)
 end
 PaGlobal_BossAlertSet:Init()

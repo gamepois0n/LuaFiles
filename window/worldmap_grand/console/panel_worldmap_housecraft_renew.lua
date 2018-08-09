@@ -13,15 +13,11 @@ local Window_WorldMap_HouseCraftInfo = {
     _craftItemStartPosX,
     _resourceItemStartPosX
   },
-  _craftringConfig = {
-    _none = 0,
-    _craft = 1,
-    _largeCraft = 2
-  },
+  _craftringConfig = {_none = 0, _craft = 1},
   _houseInfoSS,
   _houseKey,
   _param,
-  _prevGetWearHouseKey,
+  _prevGetWareHouseKey,
   _workList_Count,
   _workerList = {},
   _craftItemList = {},
@@ -89,9 +85,6 @@ function Window_WorldMap_HouseCraftInfo:SetWorkListData()
         _workKey = workKey,
         _workIcon = workIcon,
         _workVolume = workVolume,
-        _resultIcon = resultIcon,
-        _resultName = resultName,
-        _resultKey = resultKey,
         _gradeType = gradeType,
         _exchangeKeyRaw = exchangeKeyRaw,
         _isCraftable = true,
@@ -148,12 +141,14 @@ function Window_WorldMap_HouseCraftInfo:SetCraftItem()
     if nil ~= craftItemInfo and nil ~= esSSW then
       local slot = self._craftSlotList[index]
       if nil == slot then
-        local control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._static_CraftItemListBg, "static_craftItem_" .. index)
-        CopyBaseProperty(self._ui._static_CraftItemTemplate, control)
+        local control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_CraftItemListBg, "radioButton_craftItem_" .. index)
+        CopyBaseProperty(self._ui._radioButton_CraftItemTemplate, control)
         slot = {}
         slot._bg = control
         SlotItem.new(slot, "craftSlot_" .. index, index, control, self._craftSlotConfig)
         slot:createChild()
+        slot.icon:SetPosX(slot.icon:GetPosX() + 3)
+        slot.icon:SetPosY(slot.icon:GetPosY() + 3)
       end
       local itemStaticWrapper = esSSW:getResultItemStaticStatusWrapper()
       slot:setItemByStaticStatus(itemStaticWrapper)
@@ -176,22 +171,24 @@ function Window_WorldMap_HouseCraftInfo:SetCraftItem()
 end
 function PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(iconIndex, craftIndex)
   local self = Window_WorldMap_HouseCraftInfo
-  local uiBase = self._craftSlotList[iconIndex].icon
   local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(craftIndex)
   if esSSW:isSet() then
-    FGlobal_Show_Tooltip_Work(esSSW, uiBase)
+    local esSS = esSSW:get()
+    local itemKey = esSS:getFirstDropGroup()._itemKey
+    local staticStatusWrapper = getItemEnchantStaticStatus(itemKey)
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, staticStatusWrapper, Defines.TooltipTargetType.Item, getScreenSizeX())
   end
 end
 function PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip(craftIndex)
   local self = Window_WorldMap_HouseCraftInfo
-  local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(craftIndex)
-  if esSSW:isSet() then
-    FGlobal_Hide_Tooltip_Work(esSSW, false)
-  end
+  PaGlobalFunc_TooltipInfo_Close()
 end
 function PaGlobalFunc_WorldMap_HouseCraft_SelectCraftItem(id)
   local self = Window_WorldMap_HouseCraftInfo
   self._currentCraftIndex = id
+  for index = 0, #self._craftItemList do
+    self._craftSlotList[index]._bg:SetCheck(index == self._currentCraftIndex)
+  end
   self:SetResourceItem()
   self:SetInfo()
 end
@@ -220,6 +217,8 @@ function Window_WorldMap_HouseCraftInfo:SetInfo()
     self._ui._staticText_WorkSpeed:SetText("--")
     self._ui._staticText_MoveSpeed:SetText("--")
     self._ui._staticText_leftTime:SetText("--")
+    self._ui._static_WarningIcon:SetShow(false)
+    self._ui._keyGuide_DoWork:SetShow(false)
   end
   if true == self._isCraftable then
     Panel_Worldmap_HouseCraft:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WorldMap_HouseCraft_DoWork()")
@@ -267,6 +266,8 @@ function Window_WorldMap_HouseCraftInfo:SetResourceItem()
         slot._bg = control
         SlotItem.new(slot, "needSlot_" .. index, index, slot._bg, self._resourceSlotConfig)
         slot:createChild()
+        slot.icon:SetPosX(slot.icon:GetPosX() + 3)
+        slot.icon:SetPosY(slot.icon:GetPosY() + 3)
       end
       local itemStaticWrapper = getItemEnchantStaticStatus(resourceInfo._itemKey)
       slot:setItemByStaticStatus(itemStaticWrapper)
@@ -293,11 +294,11 @@ function PaGlobalFunc_WorldMap_HouseCraft_ShowResourceTooltip(resourceIndex)
   local uiBase = self._resourceSlotList[resourceIndex].icon
   local resourceKey = self._craftItemList[self._currentCraftIndex]._resource[resourceIndex]._resourceKey
   local staticStatusWrapper = getItemEnchantStaticStatus(resourceKey)
-  Panel_Tooltip_Item_Show(staticStatusWrapper, uiBase, true, false)
+  PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, staticStatusWrapper, Defines.TooltipTargetType.Item, getScreenSizeX())
 end
 function PaGlobalFunc_WorldMap_HouseCraft_HideResourceTooltip()
   local self = Window_WorldMap_HouseCraftInfo
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
 end
 function Window_WorldMap_HouseCraftInfo:SetWorkerList()
   local esSSW = ToClient_getHouseWorkableItemExchangeByIndex(self._houseInfoSS, 0)
@@ -313,11 +314,13 @@ function Window_WorldMap_HouseCraftInfo:SetWorkerList()
     end
     self._workerList = {}
     local realIndex = 0
+    local workingWorkerList = {}
+    local workingWorkerIndex = 0
     for index = 0, waitingWorkerCount - 1 do
       local npcWaitingWorker = ToClient_getHouseWaitWorkerByIndex(self._houseInfoSS, index)
       local workerNoRaw = npcWaitingWorker:getWorkerNo():get_s64()
       local workerWrapperLua = getWorkerWrapper(workerNoRaw, false)
-      if true == ToClient_isWaitWorker(npcWaitingWorker) and false == workerWrapperLua:getIsAuctionInsert() and true == ToClient_getWorkerWorkerableHouse(self._houseInfoSS, index) then
+      if false == workerWrapperLua:getIsAuctionInsert() and true == ToClient_getWorkerWorkerableHouse(self._houseInfoSS, index) then
         self._workerList[realIndex] = {}
         local checkData = npcWaitingWorker:getStaticSkillCheckData()
         checkData:set(CppEnums.NpcWorkingType.eNpcWorkingType_PlantRentHouse, self._param._houseUseType, 0)
@@ -335,23 +338,46 @@ function Window_WorldMap_HouseCraftInfo:SetWorkerList()
         local homeWaypoint = npcWaitingWorker:getHomeWaypoint()
         local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS)
         local workerGrade = npcWaitingWorkerSS:getCharacterStaticStatus()._gradeType:get()
-        self._workerList[realIndex] = {
-          _workerNo = workerNo,
-          _workerNo_s64 = workerNoChar,
-          _workerNoChar = Int64toInt32(workerNoChar),
-          _name = name,
-          _workSpeed = workSpeed / 1000000,
-          _moveSpeed = moveSpeed,
-          _maxPoint = maxPoint,
-          _currentPoint = currentPoint,
-          _homeWaypoint = homeWaypoint,
-          _workerGrade = workerGrade,
-          _regionName = regionName
-        }
-        self._ui._list2_WorkerList:getElementManager():pushKey(toInt64(0, realIndex))
-        self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, realIndex))
-        realIndex = realIndex + 1
+        if true == ToClient_isWaitWorker(npcWaitingWorker) then
+          self._workerList[realIndex] = {
+            _workerNo = workerNo,
+            _workerNo_s64 = workerNoChar,
+            _workerNoChar = Int64toInt32(workerNoChar),
+            _name = name,
+            _workSpeed = workSpeed / 1000000,
+            _moveSpeed = moveSpeed,
+            _maxPoint = maxPoint,
+            _currentPoint = currentPoint,
+            _homeWaypoint = homeWaypoint,
+            _workerGrade = workerGrade,
+            _regionName = regionName
+          }
+          self._ui._list2_WorkerList:getElementManager():pushKey(toInt64(0, realIndex))
+          self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, realIndex))
+          realIndex = realIndex + 1
+        else
+          workingWorkerList[workingWorkerIndex] = {
+            _workerNo = workerNo,
+            _workerNo_s64 = workerNoChar,
+            _workerNoChar = Int64toInt32(workerNoChar),
+            _name = name,
+            _workSpeed = workSpeed / 1000000,
+            _moveSpeed = moveSpeed,
+            _maxPoint = maxPoint,
+            _currentPoint = currentPoint,
+            _homeWaypoint = homeWaypoint,
+            _workerGrade = workerGrade,
+            _regionName = regionName
+          }
+          workingWorkerIndex = workingWorkerIndex + 1
+        end
       end
+    end
+    for index = 0, workingWorkerIndex - 1 do
+      self._workerList[realIndex] = workingWorkerList[index]
+      self._ui._list2_WorkerList:getElementManager():pushKey(toInt64(0, realIndex))
+      self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, realIndex))
+      realIndex = realIndex + 1
     end
   end
 end
@@ -363,15 +389,11 @@ function Window_WorldMap_HouseCraftInfo:InitData(houseInfoSSWrapper, _param)
   self._houseInfoSS = houseInfoSSWrapper:get()
   self._houseKey = houseInfoSSWrapper:getHouseKey()
   self._param = _param
-  self._prevGetWearHouseKey = nil
+  self._prevGetWareHouseKey = nil
   local workingcnt = getWorkingListAtRentHouse(self._houseKey)
-  local isLargeCraft = ToClient_getLargeCraftExchangeKeyRaw(self._houseInfoSS)
-  self:SetWorkListData()
   self:SetWorkerList()
-  if isLargeCraft > 0 then
-    self._isCraftingWorkCountCheck = false
-    self._craftingType = self._craftringConfig._largeCraft
-  elseif workingcnt > 0 then
+  self:SetWorkListData()
+  if workingcnt > 0 then
     self._isCraftingWorkCountCheck = false
     self._craftingType = self._craftringConfig._craft
   end
@@ -383,9 +405,9 @@ function Window_WorldMap_HouseCraftInfo:InitControl()
   self._ui._staticText_CraftDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._list2_WorkerList = UI.getChildControl(self._ui._static_CenterBg, "List2_Worker")
   self._ui._static_CraftItemListBg = UI.getChildControl(self._ui._static_CenterBg, "Static_CraftItemListBg")
-  self._ui._static_CraftItemTemplate = UI.getChildControl(self._ui._static_CraftItemListBg, "Static_CraftItemSlotBg_Template")
-  self._ui._static_CraftItemTemplate:SetShow(false)
-  self._config._craftItemStartPosX = self._ui._static_CraftItemTemplate:GetPosX()
+  self._ui._radioButton_CraftItemTemplate = UI.getChildControl(self._ui._static_CraftItemListBg, "Radiobutton_CraftItemSlotBg_Template")
+  self._ui._radioButton_CraftItemTemplate:SetShow(false)
+  self._config._craftItemStartPosX = self._ui._radioButton_CraftItemTemplate:GetPosX()
   self._ui._static_InfoBg = UI.getChildControl(self._ui._static_CenterBg, "Static_InfoBg")
   self._ui._staticText_ItemName = UI.getChildControl(self._ui._static_InfoBg, "StaticText_ItemName")
   self._ui._static_NeedItemTemplate = UI.getChildControl(self._ui._static_InfoBg, "Static_MaterialItemSlotBg_Template")
@@ -405,6 +427,7 @@ function Window_WorldMap_HouseCraftInfo:InitEvent()
   self._ui._list2_WorkerList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate")
   self._ui._list2_WorkerList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   Panel_Worldmap_HouseCraft:RegisterUpdateFunc("PaGlobalFunc_WorldMap_HouseCraft_UpdatePerFrame")
+  UIScroll.InputEvent(self._ui._scroll_CraftList, "PaGlobalFunc_WorldMap_HouseCraft_ScrollHandle")
 end
 function Window_WorldMap_HouseCraftInfo:InitRegister()
   registerEvent("EventWarehouseUpdate", "PaGlobalFunc_FromClient_WorldMap_HouseCraft_Update")
@@ -421,14 +444,24 @@ function PaGlobalFunc_WorldMap_HouseCraft_UpdatePerFrame(deltaTime)
   local workName = self._craftingWorkName
   for index = 0, workingcnt - 1 do
     local worker = getWorkingByIndex(index).workerNo
-    local workerNo = worker:get_s64()
-    local workingProgress = getWorkingProgress(workerNo) * 100000
-    local remainTime = Util.Time.timeFormatting(ToClient_getWorkingTime(workerNo))
-    self._ui._progress2_WorkTime:SetProgressRate(workingProgress)
-    self._ui._staticText_leftTime:SetText(remainTime)
-    if 0 < ToClient_getNpcWorkerWorkingCount(workerNo) then
-      self._ui._staticText_ItemName:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_HOUSECONTROL_WORKNAME", "workName", workName, "workerNo", ToClient_getNpcWorkerWorkingCount(workerNo)))
+    local exchangeStaticStatus = getWorkingByIndex(index):getWorkingExchangeStaticStatus()
+    local itemKey = exchangeStaticStatus._key:get()
+    local currentItemKey = self._craftItemList[self._currentCraftIndex]._exchangeKeyRaw
+    if itemKey == currentItemKey then
+      local workerNo = worker:get_s64()
+      local workingProgress = getWorkingProgress(workerNo) * 100000
+      local remainTime = Util.Time.timeFormatting(ToClient_getWorkingTime(workerNo))
+      self._ui._progress2_WorkTime:SetProgressRate(workingProgress)
+      self._ui._staticText_leftTime:SetText(remainTime)
+      if 0 < ToClient_getNpcWorkerWorkingCount(workerNo) then
+        self._ui._staticText_ItemName:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_HOUSECONTROL_WORKNAME", "workName", workName, "workerNo", ToClient_getNpcWorkerWorkingCount(workerNo)))
+      end
+    else
+      self._ui._progress2_WorkTime:SetProgressRate(0)
     end
+  end
+  for index = 0, #self._workerList do
+    self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, index))
   end
 end
 function PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate(list_content, key)
@@ -438,21 +471,21 @@ function PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate(list_content, 
   if nil == workerInfo then
     return
   end
-  local static_button = UI.getChildControl(list_content, "Button_ButtonBg")
+  local static_button = UI.getChildControl(list_content, "Radiobutton_ButtonBg")
   local static_image = UI.getChildControl(list_content, "Static_WorkerImage")
   local progress2_EnergyProgress = UI.getChildControl(list_content, "Progress2_EnergyProgress")
-  local progress2_remainTimeProgress = UI.getChildControl(list_content, "Progress2_RemainTimeProgress")
-  local staticText_remainTime = UI.getChildControl(list_content, "StaticText_RemainTime")
-  local staticText_workingName = UI.getChildControl(list_content, "StaticText_WorkingNameCount")
   local staticText_name = UI.getChildControl(list_content, "StaticText_WorkerTitle")
   local staticText_town = UI.getChildControl(list_content, "StaticText_Node")
   local static_CheckIcon = UI.getChildControl(list_content, "Static_CheckIcon")
+  local staticText_workingNameCount = UI.getChildControl(list_content, "StaticText_WorkingNameCount")
+  local progress2_RemainTimeProgress = UI.getChildControl(list_content, "Progress2_RemainTimeProgress")
   local maxPoint = workerInfo._maxPoint
   local currentPoint = workerInfo._currentPoint
   local rate = math.ceil(100 * currentPoint / maxPoint)
   progress2_EnergyProgress:SetCurrentProgressRate(rate)
   progress2_EnergyProgress:SetProgressRate(rate)
   static_CheckIcon:SetShow(id == self._currentWorkerIndex)
+  static_button:SetCheck(id == self._currentWorkerIndex)
   local workerWrapperLua = getWorkerWrapper(workerInfo._workerNo_s64, true)
   local workerIcon = workerWrapperLua:getWorkerIcon()
   local workerGrade = workerWrapperLua:getGrade()
@@ -463,14 +496,18 @@ function PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate(list_content, 
   static_button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(" .. id .. ")")
   static_image:ChangeTextureInfoName(workerIcon)
   staticText_town:SetText(workerInfo._regionName)
+  staticText_workingNameCount:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  staticText_workingNameCount:SetText(workerWrapperLua:getWorkString())
+  local progressRate = ToClient_getWorkingProgress(workerInfo._workerNo_s64) * 100000
+  progress2_RemainTimeProgress:SetProgressRate(progressRate)
 end
 function PaGlobalFunc_WorldMap_HouseCraft_ScrollHandle(isUp)
   local self = Window_WorldMap_HouseCraftInfo
   local prevScrollValue = self._currentScrollValue
   self._currentScrollValue = UIScroll.ScrollEvent(self._ui._scroll_CraftList, isUp, self._config._rowCount, self._scrollMax, self._currentScrollValue, 1)
-  ToClient_padSnapIgnoreGroupMove()
   if prevScrollValue ~= self._currentScrollValue then
     self:SetCraftItem()
+    ToClient_padSnapIgnoreGroupMove()
   end
 end
 function PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(id)
@@ -480,7 +517,7 @@ function PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(id)
   local workerInfo = self._workerList[self._currentWorkerIndex]
   if nil ~= workerInfo then
     local affiliatedTownKey = workerInfo._homeWaypoint
-    if self._prevGetWearHouseKey ~= affiliatedTownKey then
+    if self._prevGetWareHouseKey ~= affiliatedTownKey then
       warehouse_requestInfo(affiliatedTownKey)
     end
   end
@@ -508,14 +545,16 @@ function PaGlobalFunc_FromClient_WorldMap_HouseCraft_Update(affiliatedTownKey)
   if false == PaGlobalFunc_WorldMap_HouseCraft_GetShow() then
     return
   end
-  if self._prevGetWearHouseKey == affiliatedTownKey then
+  if self._prevGetWareHouseKey == affiliatedTownKey then
     return
   end
-  self._prevGetWearHouseKey = affiliatedTownKey
+  self._prevGetWareHouseKey = affiliatedTownKey
+  local prevScrollIndex = self._ui._list2_WorkerList:getCurrenttoIndex()
   self:SetWorkListData()
   self:SetWorkerList()
   self:SetCraftItem()
   self:SetInfo()
+  self._ui._list2_WorkerList:moveIndex(prevScrollIndex)
 end
 function PaGlobalFunc_WorldMap_HouseCraft_GetShow()
   return Panel_Worldmap_HouseCraft:GetShow()

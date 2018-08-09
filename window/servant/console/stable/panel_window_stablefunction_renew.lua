@@ -297,13 +297,13 @@ function StableFunction_Close()
   PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate()
   Servant_SceneClose(Panel_Window_StableFunction)
 end
-function PaGlobalFunc_StableFunction_SelectButton(index)
+function PaGlobalFunc_StableFunction_SelectButton(index, optionalParam)
   local self = Panle_Window_StableFunction_Info
   self._value.lastIndex = self._value.currentIndex
   self._value.currentIndex = index
   local buttonFunc = self._funcButtonList[index].buttonFunc
   if nil ~= buttonFunc then
-    buttonFunc()
+    buttonFunc(optionalParam)
   end
   if nil ~= self._funcButtonList[self._value.lastIndex].radioButton then
     self._funcButtonList[self._value.lastIndex].radioButton:SetFontColor(Defines.Color.C_FF525B6D)
@@ -327,10 +327,10 @@ function PaGlobalFunc_StableFunction_Carriage()
   self:closeStableSubPanel()
   PaGlobalFunc_StableExchange_ShowByLink()
 end
-function PaGlobalFunc_StableFunction_Mating()
+function PaGlobalFunc_StableFunction_Mating(tab)
   local self = Panle_Window_StableFunction_Info
   self:closeStableSubPanel()
-  PaGlobalFunc_StableMating_Show()
+  PaGlobalFunc_StableMating_Show(tab)
 end
 function PaGlobalFunc_StableFunction_Market()
   local self = Panle_Window_StableFunction_Info

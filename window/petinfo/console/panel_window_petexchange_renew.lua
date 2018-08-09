@@ -292,6 +292,7 @@ function petExchange:close()
     return
   end
   Panel_Window_PetExchange_Renew:SetShow(false)
+  PaGlobalFunc_Petlist_TemporaryOpen()
 end
 function petExchange:update()
   ClearFocusEdit(self._ui._edit_Search)

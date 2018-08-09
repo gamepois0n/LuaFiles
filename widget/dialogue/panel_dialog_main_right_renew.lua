@@ -29,7 +29,18 @@ local Panel_Dialog_Main_Right_Info = {
     staticText_AfterTemplete = nil,
     list2_3_VerticalScroll = nil
   },
-  _config = {maxButtonDialogCount = 6, maxExchangeSlotCount = 6},
+  _config = {
+    maxButtonDialogCount = 6,
+    maxExchangeSlotCount = 6,
+    itemSlot = {
+      createIcon = true,
+      createBorder = true,
+      createCount = true,
+      createEnchant = false,
+      createCash = false,
+      createEnduranceIcon = false
+    }
+  },
   _enum = {eDefaultIndex = -1, eDefaultDialogSize = 4},
   _value = {
     currentDialogButtonIndex = 0,
@@ -101,6 +112,9 @@ end
 function Panel_Dialog_Main_Right_Info:close()
   self._ui.static_RightBg:SetShow(false)
 end
+function Panel_Dialog_Main_Right_Info:sizeX()
+  return self._ui.static_RightBg:GetSizeX()
+end
 function Panel_Dialog_Main_Right_Info:update()
   self:close()
   local dialogData = ToClient_GetCurrentDialogData()
@@ -126,7 +140,10 @@ function Panel_Dialog_Main_Right_Info:update()
   local openCheck = PaGlobalFunc_Dialog_Main_GetShowCheckOnce()
   if true == openCheck then
     self._value.isSetData = true
-    self:openAndSetData(dialogData, realDialog)
+    self:openAndSetData(dialogData, realDialog, true, true)
+  elseif true == PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault() then
+    self._value.isSetData = true
+    self:openAndSetData(dialogData, realDialog, true, true)
   else
     local leasFunButtomIndex = PaGlobalFunc_MainDialog_Bottom_GetLeastFunButtonIndex()
     local funcButton = dialogData:getFuncButtonAt(leasFunButtomIndex)
@@ -136,13 +153,13 @@ function Panel_Dialog_Main_Right_Info:update()
     local QuestCount = dialogData:getHaveQuestCount()
     local funcButtonType = tonumber(funcButton._param)
     if funcButtonType == CppEnums.ContentsType.Contents_HelpDesk then
-      self._value.isSetData = false
-      self:openAndSetData(dialogData, realDialog)
+      self._value.isSetData = true
+      self:openAndSetData(dialogData, realDialog, true, false)
     elseif false then
     end
   end
 end
-function Panel_Dialog_Main_Right_Info:setData(dialogData, realDialog)
+function Panel_Dialog_Main_Right_Info:setData(dialogData, realDialog, showButton, showExchange)
   local npcName = dialogData:getContactNpcName()
   local talkerNpcKey = dialog_getTalkNpcKey()
   if 0 == talkerNpcKey then
@@ -173,9 +190,9 @@ function Panel_Dialog_Main_Right_Info:setData(dialogData, realDialog)
     self._ui.staticText_Dialog_Text:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self._ui.staticText_Dialog_Text:SetText(newNpcWord)
   end
-  self:ResizeContents(dialogData, true, true)
-  self:updateDialogList(dialogData)
-  self:updateExchange(dialogData)
+  self:ResizeContents(dialogData, showButton, showExchange)
+  self:updateDialogList(dialogData, showButton)
+  self:updateExchange(dialogData, showExchange)
 end
 function Panel_Dialog_Main_Right_Info:setDataOnlyMent(dialogData, realDialog)
   local npcName = dialogData:getContactNpcName()
@@ -210,24 +227,31 @@ function Panel_Dialog_Main_Right_Info:setDataOnlyMent(dialogData, realDialog)
   end
   self:ResizeContents(dialogData, false, false)
 end
-function Panel_Dialog_Main_Right_Info:openAndSetData(dialogData, realDialog)
+function Panel_Dialog_Main_Right_Info:openAndSetData(dialogData, realDialog, showButton, showExchange)
   if false == self._ui.static_RightBg:GetShow() then
     self:open()
   end
-  self:setData(dialogData, realDialog)
+  self:setData(dialogData, realDialog, showButton, showExchange)
 end
-function Panel_Dialog_Main_Right_Info:updateExchange(dialogData)
+function Panel_Dialog_Main_Right_Info:updateExchange(dialogData, showExchange)
   self:closeExchange()
-  local exchangeShow = false
+  showExchange = false
+  if false == showExchange then
+    return
+  end
   if true == exchangeShow then
     self:openExchange()
     self:updateExchangeList(displayExchangeWrapper)
   end
 end
-function Panel_Dialog_Main_Right_Info:updateDialogList(dialogData)
+function Panel_Dialog_Main_Right_Info:updateDialogList(dialogData, showButton)
   self._ui.list2_Dialog_List:getElementManager():clearKey()
   for k in pairs(self._dialogId) do
     self._dialogId[k] = nil
+  end
+  if false == showButton then
+    self._ui.list2_Dialog_List:SetShow(false)
+    return
   end
   local dialogCount = dialogData:getDialogButtonCount()
   if 0 == dialogCount then
@@ -288,8 +312,8 @@ function Panel_Dialog_Main_Right_Info:HandleClickedDialogButton_ShowData(index)
   if displayData:empty() then
     Dialog_clickDialogButtonReq(index)
   else
-    TalkPopup_SelectedIndex(index)
-    TalkPopup_Show(displayData)
+    PaGlobalFunc_Dialog_ItemTake_SelectedIndex(index)
+    PaGlobalFunc_Dialog_ItemTake_Show(displayData)
   end
 end
 function Panel_Dialog_Main_Right_Info:Resize()
@@ -315,7 +339,6 @@ function Panel_Dialog_Main_Right_Info:ResizeContents(dialogData, showDialogButto
   else
     dialogCount = 0
   end
-  local dialogCount = dialogData:getDialogButtonCount()
   if dialogCount > 0 then
     self._ui.list2_Dialog_List:SetPosY(self._pos.liststartPosY)
     if dialogCount < self._enum.eDefaultDialogSize then
@@ -328,11 +351,9 @@ function Panel_Dialog_Main_Right_Info:ResizeContents(dialogData, showDialogButto
   end
   local exchangeShow = false
   if nil == showExchange or true == showExchange then
-    exchangeShow = true
   else
     exchangeShow = false
   end
-  exchangeShow = false
   if true == exchangeShow then
     self._ui.static_ExchangeBg:SetPosY(self._pos.exchangePosY)
     self._value.allContentsSize = self._pos.exchangePosY + self._ui.static_ExchangeBg:GetSizeY() + self._space.contentsSpace
@@ -456,6 +477,10 @@ function PaGlobalFunc_MainDialog_Right_Close()
   local self = Panel_Dialog_Main_Right_Info
   self:close()
 end
+function PaGlobalFunc_MainDialog_Right_GetSizeX()
+  local self = Panel_Dialog_Main_Right_Info
+  return self:sizeX()
+end
 function PaGlobalFunc_MainDialog_Right_GetShow()
   local self = Panel_Dialog_Main_Right_Info
   return self._ui.static_RightBg:GetShow()
@@ -467,7 +492,7 @@ end
 function PaGlobalFunc_MainDialog_Right_InitValue()
   Panel_Dialog_Main_Right_Info._value.isSetData = false
 end
-function PaGlobalFunc_MainDialog_Right_ReOpen()
+function PaGlobalFunc_MainDialog_Right_ReOpen(isButton)
   local self = Panel_Dialog_Main_Right_Info
   if true == self._value.isSetData then
     local dialogData = ToClient_GetCurrentDialogData()
@@ -477,7 +502,15 @@ function PaGlobalFunc_MainDialog_Right_ReOpen()
     local npcWord = dialogData:getMainDialog()
     local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
     local realDialog = ToClient_getReplaceDialog(ignoreWord)
-    self:openAndSetData(dialogData, realDialog)
+    if nil == isButton or true == isButton then
+      if true == PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault() then
+        self:openAndSetData(dialogData, realDialog, true, false)
+      else
+        self:openAndSetData(dialogData, realDialog, false, false)
+      end
+    else
+      self:openAndSetData(dialogData, realDialog, false, false)
+    end
   end
 end
 function PaGlobalFunc_MainDialog_Right_ReOpenWithOtherMent(npcWord)
@@ -510,6 +543,8 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   local textNeed_Dialog = UI.getChildControl(list_content, "StaticText_Dialog_Needs")
   local button_A = UI.getChildControl(list_content, "Button_A")
   button_A:SetShow(false)
+  local needItemIcon = UI.getChildControl(list_content, "Static_NeedItemIcon")
+  local needWpIcon = UI.getChildControl(list_content, "Static_NeedEnergyIcon")
   local dialogText = dialogButton:getText()
   btn_Dialog:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(" .. id .. ")")
   btn_Dialog:addInputEvent("Mouse_On", "PaGlobalFunc_MainDialog_Right_HandleOnDialogButton(" .. id .. ")")
@@ -520,8 +555,9 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   static_TypeIcon:SetShow(false)
   textNeed_Dialog:SetShow(false)
   btn_Dialog:SetMonoTone(false)
-  btn_Dialog:SetIgnore(false)
   text_Dialog:SetText(dialogText)
+  needItemIcon:SetShow(false)
+  needWpIcon:SetShow(false)
   local linkType = dialogButton._linkType
   if CppEnums.DialogState.eDialogState_ReContact == tostring(linkType) then
     return
@@ -546,25 +582,30 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   end
   local needThings = ""
   local isNeedThings = false
+  local isNeedItem = false
+  local isNeedWp = false
   local itemStaticWrapper
   local selfPlayer = getSelfPlayer()
   local Wp = selfPlayer:getWp()
   local needWp = dialogButton:getNeedWp()
+  local needItemCount = 0
   if CppEnums.DialogState.eDialogState_Talk == tostring(linkType) and needWp > 0 then
-    needThings = needThings .. PAGetStringParam1(Defines.StringSheet_GAME, "DIALOG_NEED_WP", "wp", needWp) .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_WP_GOT") .. "" .. Wp .. ") "
     isNeedThings = true
+    isNeedWp = true
     if 0 < dialogButton:getNeedItemCount() then
       itemStaticWrapper = getItemEnchantStaticStatus(ItemEnchantKey(dialogButton:getNeedItemKey()))
       if itemStaticWrapper ~= nil then
-        needThings = needThings .. itemStaticWrapper:getName() .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "DIALOG_NEEDCOUNT", "item_count", tostring(dialogButton:getNeedItemCount()))
+        isNeedItem = true
+        needItemCount = dialogButton:getNeedItemCount()
       end
     end
   else
     if 0 < dialogButton:getNeedItemCount() then
       itemStaticWrapper = getItemEnchantStaticStatus(ItemEnchantKey(dialogButton:getNeedItemKey()))
       if itemStaticWrapper ~= nil then
-        needThings = needThings .. itemStaticWrapper:getName() .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "DIALOG_NEEDCOUNT", "item_count", tostring(dialogButton:getNeedItemCount()))
         isNeedThings = true
+        isNeedItem = true
+        needItemCount = dialogButton:getNeedItemCount()
         if dialogButton:getNeedItemKey() == self._value.promiseTokenKey then
         end
       end
@@ -573,8 +614,26 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   end
   if isNeedThings then
     if dialogButton._invenPushable then
-      textNeed_Dialog:SetShow(true)
-      textNeed_Dialog:SetText(needThings)
+      textNeed_Dialog:SetShow(false)
+      if true == isNeedItem then
+        needItemIcon:SetShow(true)
+        needItemIcon:ChangeTextureInfoName("Icon/" .. itemStaticWrapper:getIconPath())
+        local x1, y1, x2, y2 = setTextureUV_Func(needItemIcon, 0, 0, 47, 47)
+        needItemIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+        needItemIcon:setRenderTexture(needItemIcon:getBaseTexture())
+        needItemIcon:SetText("x " .. needItemCount)
+        local posX = button_A:GetPosX() - needItemIcon:GetSizeX() - needItemIcon:GetTextSizeX()
+        needItemIcon:SetPosX(posX)
+      end
+      if true == isNeedWp then
+        needWpIcon:SetShow(true)
+        needWpIcon:SetText(needWp .. "/" .. Wp)
+        local posX = button_A:GetPosX() - needWpIcon:GetSizeX() - needWpIcon:GetTextSizeX()
+        if needItemIcon:GetShow() then
+          posX = needItemIcon:GetPosX() - needWpIcon:GetSizeX() - needWpIcon:GetTextSizeX() - 10
+        end
+        needWpIcon:SetPosX(posX)
+      end
     else
       textNeed_Dialog:SetShow(true)
       textNeed_Dialog:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PLAYER_INVENTORY_FULL"))
@@ -584,7 +643,6 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   end
   if false == dialogButton._enable then
     btn_Dialog:SetMonoTone(true)
-    btn_Dialog:SetIgnore(true)
   end
 end
 function PaGlobalFunc_MainDialog_Right_List2EventControlCreateExchange(list_content, key)
@@ -646,6 +704,12 @@ function PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(index, type)
   local dlgBtnCnt = dialogData:getDialogButtonCount()
   if dlgBtnCnt <= 0 then
     _PA_LOG("\234\185\128\235\175\188\234\181\172", "0\236\157\188\235\166\172\234\176\128 \236\151\134\235\138\148\235\141\176 \235\176\156\236\131\157\237\149\168 \237\153\149\236\157\184 \237\149\132\236\154\148.")
+    return
+  end
+  local dialogButton = dialogData:getDialogButtonAt(index)
+  if nil == dialogButton or false == dialogButton._enable then
+    local msg = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTWIDGET_NEXTQUEST_NOTYET_BLACKSPIRIT")
+    Proc_ShowMessage_Ack(msg)
     return
   end
   if type == "trade" then

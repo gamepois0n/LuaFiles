@@ -23,7 +23,8 @@ PaGlobal_Option = {
     High = 3,
     VeryHigh = 4,
     VeryVeryHigh = 5,
-    UltraHigh = 8
+    UltraHigh = 8,
+    UltraLow = 7
   },
   ALERT = {
     ChangeRegion = 0,

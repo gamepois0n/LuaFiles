@@ -102,6 +102,7 @@ PaGlobal_ConsoleQuickMenu = {
 }
 function PaGlobal_ConsoleQuickMenu:initializeUI()
   local centerX, centerY, radius
+  local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
   for ii = 0, __eQuickMenuStickPosition_Count - 1 do
     self._ui._quickMenuPosition[ii] = UI.getChildControl(Panel_QuickMenu, "Button_Templete" .. tostring(ii))
     self._ui._quickMenuPositionIcon[ii] = UI.getChildControl(self._ui._quickMenuPosition[ii], "Static_Icon")
@@ -112,9 +113,9 @@ function PaGlobal_ConsoleQuickMenu:initializeUI()
     self._ui._quickMenuPositionSlot[ii].icon:SetPosX(self._ui._quickMenuPositionIcon[ii]:GetPosX())
     self._ui._quickMenuPositionSlot[ii].icon:SetPosY(self._ui._quickMenuPositionIcon[ii]:GetPosY())
     self._ui._quickMenuPositionSlot[ii].cooltime:SetSize(self._ui._quickMenuPositionSlot[ii].icon:GetSizeX(), self._ui._quickMenuPositionSlot[ii].icon:GetSizeY())
-    centerX = self._ui._quickMenuPositionSlot[ii].cooltime:GetPosX() + 27
-    centerY = self._ui._quickMenuPositionSlot[ii].cooltime:GetPosY() + 25
-    radius = self._ui._quickMenuPositionSlot[ii].cooltime:GetSizeX() / 2 + 2
+    radius = self._ui._quickMenuPositionSlot[ii].cooltime:GetSizeX() * 0.5 * uiScale
+    centerX = self._ui._quickMenuPositionSlot[ii].cooltime:GetPosX() + 22
+    centerY = self._ui._quickMenuPositionSlot[ii].cooltime:GetPosY() + 22
     self._ui._quickMenuPositionSlot[ii].cooltime:SetCircularClip(radius, float2(centerX, centerY))
   end
   self._ui._center = UI.getChildControl(Panel_QuickMenu, "Static_CenterPoint")
@@ -137,7 +138,7 @@ function PaGlobal_ConsoleQuickMenu:initializeUI()
     self._ui._widget[group]._slot.cooltime:SetSize(self._ui._widget[group]._slotBg:GetSizeX(), self._ui._widget[group]._slotBg:GetSizeY())
     centerX = self._ui._widget[group]._slot.cooltime:GetPosX() + 22
     centerY = self._ui._widget[group]._slot.cooltime:GetPosY() + 22
-    radius = self._ui._widget[group]._slot.cooltime:GetSizeX() / 2
+    radius = self._ui._widget[group]._slot.cooltime:GetSizeX() * 0.5 * uiScale
     self._ui._widget[group]._slot.cooltime:SetCircularClip(radius, float2(centerX, centerY))
     self._ui._widget[group]._selected = UI.getChildControl(bg, "Static_SelectedPad")
     self._ui._widget[group]._ring = UI.getChildControl(bg, "Static_Ring")
@@ -443,6 +444,7 @@ function PaGlobal_ConsoleQuickMenu:Open(currentGroup)
   self:setButtonPos(__eQuickMenuStickPosition_Count)
   self:CrossTextureChange(currentGroup)
   Panel_QuickMenu:SetShow(true, true)
+  PaGlobal_ConsoleQuickMenu._ui._staticTextIconName:SetText("")
 end
 function FromClient_ConsoleQuickMenu_Close(currentPosition)
   PaGlobal_ConsoleQuickMenu:moveButtonAni(currentPosition)
@@ -634,6 +636,12 @@ function FromClient_ConsoleQuickMenu_luaLoadComplete()
     Panel_Widget_QuickMenu:SetShow(true)
   end
   ToClient_setAvailableInputWidget(true)
+  registerEvent("FromClient_ConsoleQuickMenu_OpenCustomPage", "FromClient_ConsoleQuickMenu_OpenCustomPage")
+  registerEvent("FromClient_ConsoleQuickMenu_Open", "FromClient_ConsoleQuickMenu_Open")
+  registerEvent("FromClient_ConsoleQuickMenu_Close", "FromClient_ConsoleQuickMenu_Close")
+  registerEvent("FromClient_ConsoleQuickMenu_Execute", "FromClient_ConsoleQuickMenu_Execute")
+  registerEvent("FromClient_ConsoleQuickMenu_Selecting", "FromClient_ConsoleQuickMenu_Selecting")
+  registerEvent("EventProcessorInputModeChange", "FGlobal_InputModeChangeForQuickMenu")
 end
 function FromClient_ConsoleQuickMenu_Open(group)
   PaGlobal_ConsoleQuickMenu:Open(group)
@@ -659,6 +667,8 @@ function FromClient_ConsoleQuickMenu_Selecting(group, position)
       control:SetMonoTone(true)
       control:SetCheck(false)
     end
+    local name = PaGlobal_ConsoleQuickMenu:GetCurrentQuickMenuName(PaGlobal_ConsoleQuickMenu._curGroup, position)
+    PaGlobal_ConsoleQuickMenu._ui._staticTextIconName:SetText(name)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetMonoTone(false)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetCheck(true)
   end
@@ -684,9 +694,3 @@ Panel_Widget_QuickMenu:RegisterUpdateFunc("FGlobal_Console_Widget_QuickMenuCusto
 Panel_QuickMenu:RegisterShowEventFunc(true, "QuickMenu_ShowAni()")
 Panel_QuickMenu:RegisterShowEventFunc(false, "QuickMenu_HideAni()")
 registerEvent("FromClient_luaLoadComplete", "FromClient_ConsoleQuickMenu_luaLoadComplete")
-registerEvent("FromClient_ConsoleQuickMenu_OpenCustomPage", "FromClient_ConsoleQuickMenu_OpenCustomPage")
-registerEvent("FromClient_ConsoleQuickMenu_Open", "FromClient_ConsoleQuickMenu_Open")
-registerEvent("FromClient_ConsoleQuickMenu_Close", "FromClient_ConsoleQuickMenu_Close")
-registerEvent("FromClient_ConsoleQuickMenu_Execute", "FromClient_ConsoleQuickMenu_Execute")
-registerEvent("FromClient_ConsoleQuickMenu_Selecting", "FromClient_ConsoleQuickMenu_Selecting")
-registerEvent("EventProcessorInputModeChange", "FGlobal_InputModeChangeForQuickMenu")

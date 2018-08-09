@@ -239,6 +239,7 @@ function StableMix_Open()
   if Panel_AddToCarriage:GetShow() then
     stableCarriage_Close()
   end
+  PaGlobalFunc_ServantRentPromoteMarketClose()
   self:init()
   self._chkInven:SetCheck(false)
   self._chkWare:SetCheck(true)

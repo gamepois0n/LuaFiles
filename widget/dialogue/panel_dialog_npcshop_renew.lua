@@ -90,6 +90,9 @@ local Panel_Dialog_NPCShop_Info = {
 }
 local UI_color = Defines.Color
 local _const = Defines.s64_const
+local _buttonAIsPressed = false
+local _elapsedTime = 0
+local _buttonHoldThreshold = 0.3
 local ItemSlotTemplete = {}
 function ItemSlotTemplete:New()
   local slot = {
@@ -246,6 +249,7 @@ end
 function Panel_Dialog_NPCShop_Info:registerMessageHandler()
   Panel_Dialog_NPCShop:RegisterShowEventFunc(true, "PaGlobalFunc_Dialog_NPCShop_ShowAni()")
   Panel_Dialog_NPCShop:RegisterShowEventFunc(false, "PaGlobalFunc_Dialog_NPCShop_HideAni()")
+  Panel_Dialog_NPCShop:RegisterUpdateFunc("FromClient_Dialog_NPCShop_UpdatePerFrame")
   registerEvent("onScreenResize", "FromClient_onScreenResize_Dialog_NPCShop")
   registerEvent("EventNpcShopUpdate", "FromClient_Dialog_NPCShop_UpdateContent")
   registerEvent("FromClient_InventoryUpdate", "FromClient_Dialog_NPCShop_UpdateMoney")
@@ -323,10 +327,24 @@ function Panel_Dialog_NPCShop_Info:childControl()
   self._ui.static_Key_Guide_ConsoleUI = UI.getChildControl(Panel_Dialog_NPCShop, "Static_Key_Guide_ConsoleUI")
   self._ui.staticText_Move_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_Move_ConsoleUI")
   self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_Cancel_ConsoleUI")
-  self._ui.staticText_SomeOrAll_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_SomeOrAll_ConsoleUI")
-  self._ui.staticText_BuyOrSell_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_BuyOrSell_ConsoleUI")
+  self._ui.staticText_SomeOrAll_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_A2_ConsoleUI")
+  self._ui.staticText_BuyOrSell_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_A_ConsoleUI")
+  self._ui.staticText_XForDetail_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_XForDetail_ConsoleUI")
+  self._ui.stc_cirprogressBG = UI.getChildControl(self._ui.staticText_SomeOrAll_ConsoleUI, "Static_CircleProgress_PressBG")
+  self._ui.cirprogress_buttonHold = UI.getChildControl(self._ui.stc_cirprogressBG, "CircularProgress_Press")
+  local keyGuideList = {
+    self._ui.staticText_SomeOrAll_ConsoleUI,
+    self._ui.staticText_BuyOrSell_ConsoleUI,
+    self._ui.staticText_XForDetail_ConsoleUI,
+    self._ui.staticText_Move_ConsoleUI,
+    self._ui.staticText_Cancel_ConsoleUI
+  }
+  self._ui.staticText_SomeOrAll_ConsoleUI:SetText("(Hold)" .. self._ui.staticText_SomeOrAll_ConsoleUI:GetText())
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.static_Key_Guide_ConsoleUI, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Dialog_NPCShop_Info:open(showAni)
+  _elapsedTime = 0
+  self._ui.stc_cirprogressBG:SetShow(false)
   if nil == showAni then
     Panel_Dialog_NPCShop:SetShow(true, false)
     return
@@ -391,14 +409,10 @@ function Panel_Dialog_NPCShop_Info:createSlot()
         CopyBaseProperty(self._ui.staticText_Price_Right_templete, slot.staticText_Price)
         slot.staticText_Name:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
       end
-      if true == _ContentsGroup_RenewUI_NpcShop then
-        slot.radioButton:addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(" .. index .. ")")
-        slot.radioButton:addInputEvent("Mouse_RUp", "PaGlobalFunc_Dialog_NPCShop_OnRSlotClicked(" .. index .. ")")
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
-      else
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(" .. index .. ")")
-        slot.radioButton:addInputEvent("Mouse_RUp", "PaGlobalFunc_Dialog_NPCShop_OnRSlotClicked(" .. index .. ")")
-      end
+      slot.radioButton:addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(" .. index .. ")")
+      slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_A, "Input_Dialog_NPCShop_PressedA()")
+      slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_Up_A, "Input_Dialog_NPCShop_ReleasedA()")
+      slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_Dialog_NPCShop_ShowTooltip(" .. index .. ", true)")
       slot.radioButton:addInputEvent("Mouse_UpScroll", "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( true )")
       slot.radioButton:addInputEvent("Mouse_DownScroll", "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( false )")
       slot.icon = {}
@@ -454,7 +468,7 @@ end
 function Panel_Dialog_NPCShop_Info:updateContentData()
   if self._enum.etabIndexBuy ~= self._value.lastTabIndex and self._value.itemListSize >= self._config.slotRows and self._value.itemListSize < self._value.startSlotIndex + self._config.slotRows then
     self._value.startSlotIndex = self._value.startSlotIndex
-    self.scroll:SetControlBottom()
+    self._ui.frame_VerticalScroll:SetControlBottom()
   end
   self._value.lastStartSlotNo = self._value.startSlotIndex
   local newSelectSlot
@@ -495,12 +509,10 @@ function Panel_Dialog_NPCShop_Info:updateContentData()
           slot:setItem(shopItemWrapper:getStaticStatus(), shopItem.leftCount_s64, itemPrice_s64, s64_inventoryItemCount, shopItem:getItemUsablePeriod(), shopItem:getNeedIntimacy())
         end
         if true == _ContentsGroup_RenewUI_NpcShop then
-          slot.radioButton:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false, nil," .. self._pos.toolTipPosX .. "," .. self._pos.toolTipPosY .. ")")
         else
           slot.icon.icon:addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", true, nil," .. self._pos.toolTipPosX .. "," .. self._pos.toolTipPosY .. ")")
           slot.icon.icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false, nil," .. self._pos.toolTipPosX .. "," .. self._pos.toolTipPosY .. ")")
         end
-        Panel_Tooltip_Item_SetPosition(slot.slotNo, slot.icon, "shop")
       end
       local moneyItemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eInventory, getMoneySlotNo())
       local myInvenMoney_s64 = toInt64(0, 0)
@@ -625,6 +637,14 @@ function Panel_Dialog_NPCShop_Info:setKeyguide()
   end
   self._ui.staticText_SomeOrAll_ConsoleUI:SetEnable(false)
   self._ui.staticText_SomeOrAll_ConsoleUI:SetMonoTone(true)
+  local keyGuideList = {
+    self._ui.staticText_SomeOrAll_ConsoleUI,
+    self._ui.staticText_BuyOrSell_ConsoleUI,
+    self._ui.staticText_XForDetail_ConsoleUI,
+    self._ui.staticText_Move_ConsoleUI,
+    self._ui.staticText_Cancel_ConsoleUI
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.static_Key_Guide_ConsoleUI, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Dialog_NPCShop_Info:updateKeyguide()
   self:setKeyguide()
@@ -821,7 +841,7 @@ function PaGlobalFunc_Dialog_NPCShop_InvenRClick_SellItem(itemCount, slotNo)
       Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_MONEYFORWAREHOUSE_ACK", "getMoney", makeDotMoney(sellPrice)), 6)
     end
   end
-  if false == _ContentsGroup_ForXBoxFinalCert and true == _ContentsGroup_ForXBoxXR then
+  if false == _ContentsGroup_RenewUI_ItemMarketPlace then
     sellDoit()
     return
   end
@@ -905,7 +925,6 @@ function PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(slotIdx)
     self._value.enableTrade = false
     local slot = self._slots[self._value.lastSelectedSlotIndex]
     if nil ~= slot then
-      Panel_Tooltip_Item_Show_GeneralStatic(slot.slotNo, "shop", false, nil, self._pos.toolTipPosX, self._pos.toolTipPosY)
       slot:setSelect(false)
       slot.radioButton:addInputEvent("Mouse_LUp", "")
       self._ui.staticText_SomeOrAll_ConsoleUI:SetEnable(false)
@@ -918,7 +937,6 @@ function PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(slotIdx)
     self._value.enableTrade = true
     self._value.selectedSlotIndex = slotIdx
     local slot = self._slots[self._value.selectedSlotIndex]
-    Panel_Tooltip_Item_Show_GeneralStatic(slot.slotNo, "shop", true, nil, self._pos.toolTipPosX, self._pos.toolTipPosY)
     slot:setSelect(true)
     self._value.selectedSlotKeyValue = slot.keyValue
     self._ui.staticText_BuyOrSell_ConsoleUI:SetEnable(true)
@@ -933,15 +951,50 @@ function PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(slotIdx)
       self._ui.staticText_SomeOrAll_ConsoleUI:SetEnable(true)
       self._ui.staticText_SomeOrAll_ConsoleUI:SetMonoTone(false)
       if self._enum.etabIndexBuy == self._value.lastTabIndex then
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
       elseif self._enum.etabIndexSell == self._value.lastTabIndex then
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
       else
         slot.radioButton:addInputEvent("Mouse_LUp", "")
       end
     end
   else
   end
+end
+function Input_Dialog_NPCShop_ShowTooltip(index, isShow)
+  local self = Panel_Dialog_NPCShop_Info
+  if isShow then
+    slotNo = self._value.startSlotIndex + index
+    local shopItemWrapper
+    if self._enum.etabIndexBuy == self._value.lastTabIndex then
+      shopItemWrapper = npcShop_getItemBuy(slotNo)
+    elseif self._enum.etabIndexSell == self._value.lastTabIndex then
+      shopItemWrapper = npcShop_getItemSell(slotNo)
+    else
+      shopItemWrapper = npcShop_getItemRepurchase(self._value.itemListSize - slotNo - 1)
+    end
+    if nil ~= shopItemWrapper then
+      local itemSSW = shopItemWrapper:getStaticStatus()
+      PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.Item, 0, getScreenSizeX())
+    end
+  else
+    PaGlobalFunc_TooltipInfo_Close()
+  end
+end
+function Input_Dialog_NPCShop_PressedA()
+  local self = Panel_Dialog_NPCShop_Info
+  if true == self._ui.staticText_SomeOrAll_ConsoleUI:IsEnable() then
+    _buttonAIsPressed = true
+    self._ui.stc_cirprogressBG:SetShow(true)
+  end
+end
+function Input_Dialog_NPCShop_ReleasedA()
+  local self = Panel_Dialog_NPCShop_Info
+  if _buttonHoldThreshold > _elapsedTime then
+    PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
+  end
+  _buttonAIsPressed = false
+  _elapsedTime = 0
+  self._ui.cirprogress_buttonHold:SetProgressRate(0)
+  self._ui.stc_cirprogressBG:SetShow(false)
 end
 function PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(slotIdx)
   local self = Panel_Dialog_NPCShop_Info
@@ -981,9 +1034,7 @@ function PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(slotIdx)
       self._ui.staticText_SomeOrAll_ConsoleUI:SetEnable(true)
       self._ui.staticText_SomeOrAll_ConsoleUI:SetMonoTone(false)
       if self._enum.etabIndexBuy == self._value.lastTabIndex then
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
       elseif self._enum.etabIndexSell == self._value.lastTabIndex then
-        slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
       else
         slot.radioButton:addInputEvent("Mouse_LUp", "")
       end
@@ -997,6 +1048,7 @@ function PaGlobalFunc_Dialog_NPCShop_OnRSlotClicked(slotIdx)
 end
 function PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()
   local self = Panel_Dialog_NPCShop_Info
+  self._ui.stc_cirprogressBG:SetShow(false)
   if nil ~= self._value.selectedSlotIndex then
     local slot = self._slots[self._value.selectedSlotIndex]
     if self._enum.etabIndexBuy == self._value.lastTabIndex then
@@ -1110,18 +1162,22 @@ function PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
               Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_MONEYFORWAREHOUSE_ACK", "getMoney", makeDotMoney(pricePiece)), 6)
             end
           end
-          local itemKeyForTradeInfo = shopItemWrapper:getStaticStatus():get()._key:get()
-          local tradeMasterInfo = getItemMarketMasterByItemEnchantKey(itemKeyForTradeInfo)
-          if nil ~= tradeMasterInfo and 0 ~= shopItemEndurance then
-            local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
-            local messageBoxData = {
-              title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
-              content = messageBoxMemo,
-              functionYes = sellDoit,
-              functionNo = MessageBox_Empty_function,
-              priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-            }
-            MessageBox.showMessageBox(messageBoxData)
+          if true == _ContentsGroup_RenewUI_ItemMarketPlace then
+            local itemKeyForTradeInfo = shopItemWrapper:getStaticStatus():get()._key:get()
+            local tradeMasterInfo = getItemMarketMasterByItemEnchantKey(itemKeyForTradeInfo)
+            if nil ~= tradeMasterInfo and 0 ~= shopItemEndurance then
+              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
+              local messageBoxData = {
+                title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
+                content = messageBoxMemo,
+                functionYes = sellDoit,
+                functionNo = MessageBox_Empty_function,
+                priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+              }
+              MessageBox.showMessageBox(messageBoxData)
+            else
+              sellDoit()
+            end
           else
             sellDoit()
           end
@@ -1415,8 +1471,8 @@ function FromClient_Dialog_NPCShop_UpdateContent()
   end
   self:preShow()
   self._ui.frame_VerticalScroll:SetControlPos(0)
-  self:updateContent(true)
   Inventory_SetFunctor(PaGlobalFunc_Dialog_NPCShop_IsExchangeItem, PaGlobalFunc_Dialog_NPCShop_InvenRClick, PaGlobalFunc_Dialog_NPCShop_Close, nil)
+  self:updateContent(true)
   FromClient_Dialog_NPCShop_UpdateMoney()
   FromClient_Dialog_NPCShop_UpdateMoneyWarehouse()
   FromClient_Dialog_NPCShop_UpdateGuildPriceLimit()
@@ -1488,6 +1544,19 @@ function FromClient_Dialog_NPCShop_UpdateGuildPriceLimit()
     self._ui.staticText_Storage:SetText(makeDotMoney(myGuildListInfo:getGuildBusinessFunds_s64()))
     self._ui.radioButton_Inventory:SetCheck(false)
     self._ui.radioButton_Storage:SetCheck(false)
+  end
+end
+function FromClient_Dialog_NPCShop_UpdatePerFrame(deltaTime)
+  local self = Panel_Dialog_NPCShop_Info
+  if true == _buttonAIsPressed then
+    _elapsedTime = _elapsedTime + deltaTime
+    self._ui.cirprogress_buttonHold:SetProgressRate(_elapsedTime / _buttonHoldThreshold * 100)
+    if _buttonHoldThreshold < _elapsedTime then
+      _elapsedTime = 0
+      _buttonAIsPressed = false
+      self._ui.cirprogress_buttonHold:SetProgressRate(0)
+      PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()
+    end
   end
 end
 function Toggle_NPCShopTab_forPadEventFunc(value)

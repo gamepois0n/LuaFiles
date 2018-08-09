@@ -242,7 +242,6 @@ function pearlShop:changePlatformSpecKey()
 end
 function FromClient_PearlShopInit()
   pearlShop:initialize()
-  ToClient_setPearlShopUIPanel_XX(Panel_PearlShop)
 end
 function pearlShop:showDesc(index)
   if self._showingDescIndex == index then

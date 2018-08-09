@@ -165,6 +165,7 @@ function workerRestore:open(isRestoreAll)
   self:setPosition()
   if self._totalItemCount <= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_NO_HAVE_ITEM"))
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     return
   end
   Panel_Window_WorkerManager_Restore_Renew:SetShow(true)
@@ -177,6 +178,7 @@ function workerRestore:close()
     return
   end
   Panel_Window_WorkerManager_Restore_Renew:SetShow(false)
+  PaGlobalFunc_WorkerManager_TemporaryOpen()
 end
 function PaGlobalFunc_WorkerManager_Restore_Close()
   workerRestore:close()
@@ -190,14 +192,15 @@ function workerRestore:update()
   end
 end
 function workerRestore:selectItem(itemIndex)
+  local selectItem = ToClient_getNpcRecoveryItemByIndex(itemIndex)
+  if nil == selectItem then
+    return
+  end
+  PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(CppEnums.ItemWhereType.eInventory, selectItem._slotNo), Defines.TooltipTargetType.Item, 0)
   self._selectItemIndex = itemIndex
   if true == self._isRestoreAll then
     local selectWorkerCount = PaGlobalFunc_WorkerManager_GetSelectWorkerCount()
     local totalPoint = PaGlobalFunc_WorkerManager_GetTotalRestoreCount(itemIndex)
-    local selectItem = ToClient_getNpcRecoveryItemByIndex(itemIndex)
-    if nil == selectItem then
-      return
-    end
     local selectItemCount = Int64toInt32(selectItem._itemCount_s64)
     local selectItemPoint = selectItem._contentsEventParam1
     local totalselectItemPoint = selectItemCount * selectItemPoint

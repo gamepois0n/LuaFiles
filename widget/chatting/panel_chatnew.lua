@@ -2665,12 +2665,15 @@ function ResetAllScroll()
     FromClient_ChatUpdate(true)
   end
 end
+function FromClient_ChatNew_luaLoadComplete()
+  ResetAllScroll()
+  registerEvent("EventProcessorInputModeChange", "FGlobal_InputModeChangeForChatting")
+end
 registerEvent("EventSimpleUIEnable", "Chatting_EnableSimpleUI")
 registerEvent("EventSimpleUIDisable", "Chatting_EnableSimpleUI")
 registerEvent("EventChattingMessageUpdate", "FromClient_ChatUpdate")
 registerEvent("onScreenResize", "Chatting_OnResize")
-registerEvent("EventProcessorInputModeChange", "FGlobal_InputModeChangeForChatting")
 registerEvent("FromClient_requestInviteGuildByChatSubMenu", "FromClient_requestInviteGuildByChatSubMenu")
 registerEvent("FromClient_PrivateChatMessageUpdate", "FromClient_PrivateChatMessageUpdate")
 registerEvent("FromClient_RenderModeChangeState", "Chatting_OnResize")
-registerEvent("FromClient_luaLoadComplete", "ResetAllScroll")
+registerEvent("FromClient_luaLoadComplete", "FromClient_ChatNew_luaLoadComplete")

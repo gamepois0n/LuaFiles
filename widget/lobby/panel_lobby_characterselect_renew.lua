@@ -364,6 +364,7 @@ function PaGlobal_CharacterSelect_Open(charIdx)
   self:close()
   if true == _ContentsGroup_RenewUI_Customization then
     PaGlobalFunc_Customization_Close()
+    PaGlobalFunc_Customization_InputName_Close()
   end
   if -1 == charIdx or charIdx >= self._playerData.haveCount then
     self._selectedCharIdx = 0

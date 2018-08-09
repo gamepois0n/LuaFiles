@@ -121,6 +121,7 @@ function stableCarriage_Open()
   if Panel_Window_StableMix:GetShow() then
     StableMix_Close()
   end
+  PaGlobalFunc_ServantRentPromoteMarketClose()
   local self = stableCarriage
   self:init()
   self:update()

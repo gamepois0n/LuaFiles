@@ -654,6 +654,7 @@ function PaGlobalFunc_FromClient_MentalGame_Open()
   self:SetSelectCardPos()
   self:UpdateState()
   PaGlobalFunc_MentalGame_Open()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_STORY")
 end
 function Window_MentalGameInfo:SetZodiac()
   local mentalObject = getMentalgameObject()
@@ -1469,6 +1470,7 @@ function PaGlobalFunc_MentalGame_HideByDead()
   setShowNpcDialog(false)
   setShowLine(true)
   ToClient_PopDialogueFlush()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_MentalGame_HideByDamage()
   local self = Window_MentalGameInfo
@@ -1498,6 +1500,7 @@ function PaGlobalFunc_MentalGame_HideByDamage()
   setShowNpcDialog(false)
   setShowLine(true)
   ToClient_PopDialogueFlush()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_FromClient_MentalGame_luaLoadComplete()
   local self = Window_MentalGameInfo
@@ -1526,6 +1529,7 @@ function PaGlobalFunc_MentalGame_Close(isDead)
     FromClient_ShowDialog()
   end
   SetUIMode(Defines.UIMode.eUIMode_NpcDialog)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_MentalGame_Open()
   Panel_Window_MentalGame:SetShow(true)

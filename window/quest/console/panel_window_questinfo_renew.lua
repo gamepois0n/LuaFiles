@@ -2,18 +2,21 @@ local Window_QuestInfo = {
   _ui = {
     _questTitle = {},
     _questDetail = {},
+    _static_RadioGroup = UI.getChildControl(Panel_Window_QuestInfo, "Static_RadioGroup"),
+    _list2_Quest = UI.getChildControl(Panel_Window_QuestInfo, "List2_Quest"),
+    _staticText_RadioButtonTooltip = UI.getChildControl(Panel_Window_QuestInfo, "StaticText_RadioButtonTooltip"),
+    _static_KeyGuideBg = UI.getChildControl(Panel_Window_QuestInfo, "Static_KeyGuideBg"),
+    _static_Title = UI.getChildControl(Panel_Window_QuestInfo, "Static_Title"),
     _baseRewardSlot = {},
     _baseRewardControl = {},
     _selectRewardSlot = {},
     _selectRewardControl = {},
-    _static_RadioGroup = UI.getChildControl(Panel_Window_QuestInfo, "Static_RadioGroup"),
-    _list2_Quest = UI.getChildControl(Panel_Window_QuestInfo, "List2_Quest"),
-    _frame_Detail = UI.getChildControl(Panel_Window_QuestInfo, "Frame_Detail"),
-    _static_BaseReward = UI.getChildControl(Panel_Window_QuestInfo, "Static_BaseReward"),
-    _static_SelectReward = UI.getChildControl(Panel_Window_QuestInfo, "Static_SelectReward"),
-    _staticText_RadioButtonTooltip = UI.getChildControl(Panel_Window_QuestInfo, "StaticText_RadioButtonTooltip"),
-    _static_KeyGuideBg = UI.getChildControl(Panel_Window_QuestInfo, "Static_KeyGuideBg"),
-    _static_Title = UI.getChildControl(Panel_Window_QuestInfo, "Static_Title"),
+    _questDetail_Title = UI.getChildControl(Panel_Window_QuestInfo_Detail, "StaticText_QuestNameLine"),
+    _questName = UI.getChildControl(Panel_Window_QuestInfo_Detail, "StaticText_QuestNameLine"),
+    _frame_Detail = UI.getChildControl(Panel_Window_QuestInfo_Detail, "Frame_Detail"),
+    _static_BaseReward = UI.getChildControl(Panel_Window_QuestInfo_Detail, "Static_BaseReward"),
+    _static_SelectReward = UI.getChildControl(Panel_Window_QuestInfo_Detail, "Static_SelectReward"),
+    _staticText_ConditionList = {},
     _expToolTip
   },
   _config = {
@@ -23,8 +26,8 @@ local Window_QuestInfo = {
       _recommend = 2,
       _repeat = 3
     },
-    _selectRewardMax = 6,
-    _baseRewardMax = 6,
+    _selectRewardMax = 8,
+    _baseRewardMax = 8,
     _questRewardSlotConfig = {
       _createIcon = true,
       _createBorder = true,
@@ -44,7 +47,9 @@ local Window_QuestInfo = {
   _repetitionTable = {},
   _treeIndexMap = {},
   _currentTabIndex = 0,
-  _giveUpQuestIndex = 0
+  _giveUpQuestIndex = 0,
+  _findingQuest = {_groupId = 0, _qusetId = 0},
+  _currentQuestCount = 0
 }
 local questRegion = {
   [CppEnums.QuestRegionType.eQuestRegionType_None] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_99"),
@@ -59,6 +64,32 @@ local questRegion = {
   [CppEnums.QuestRegionType.eQuestRegionType_Kamasylvia] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_9"),
   [CppEnums.QuestRegionType.eQuestRegionType_Drigan] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_REGION_10")
 }
+function PaGlobalFunc_Quest_RClickWorldmapQuest(groupId, questId)
+  PaGlobalFunc_Quest_UpdateFindingQuestInfo(groupId, questId, true)
+end
+function PaGlobalFunc_Quest_DeleteNavigation()
+  PaGlobalFunc_Quest_UpdateFindingQuestInfo()
+end
+function Window_QuestInfo:RefreshList()
+  for index = 0, self._currentQuestCount - 1 do
+    self._ui._list2_Quest:requestUpdateByKey(toInt64(0, index))
+  end
+end
+function PaGlobalFunc_Quest_UpdateFindingQuestInfo(groupId, questId, isFinding)
+  local self = Window_QuestInfo
+  if true == isFinding and nil ~= groupId and nil ~= questId then
+    self._findingQuest._groupId = groupId
+    self._findingQuest._questId = questId
+  else
+    self._findingQuest._groupId = 0
+    self._findingQuest._questId = 0
+  end
+  self:RefreshList()
+end
+function PaGlobalFunc_Quest_IsFindingQuest(groupId, qusetId)
+  local self = Window_QuestInfo
+  return groupId == self._findingQuest._groupId and qusetId == self._findingQuest._questId
+end
 function PaGlobalFunc_Quest_SelectTitleButton(value)
   local self = Window_QuestInfo
   self._currentTitleType = self._currentTitleType + value
@@ -73,6 +104,7 @@ end
 function PaGlobalFunc_Quest_SelectQuestTitle(questType)
   local self = Window_QuestInfo
   self._currentQuestIndex = -1
+  ToClient_padSnapResetControl()
   self._currentTitleType = questType
   if self._config._title._progress == self._currentTitleType then
     self._ui._radioButton_autoFindWay:SetShow(true)
@@ -137,6 +169,7 @@ function Window_QuestInfo:ShowListByGroup(groupTable)
       end
     end
   end
+  self._currentQuestCount = list2Index
   self._ui._list2_Quest:getElementManager():refillKeyList()
 end
 function Window_QuestInfo:SetProgressGroupData(questGroupCount, questGroupList)
@@ -226,6 +259,7 @@ function Window_QuestInfo:SetQuestData(uiQuestInfo)
     return
   end
   local questInfo = {
+    _uiQuestInfo = uiQuestInfo,
     _isCleared = uiQuestInfo._isCleared,
     _isProgressing = uiQuestInfo._isProgressing,
     _isContinueQuest = false,
@@ -237,7 +271,7 @@ function Window_QuestInfo:SetQuestData(uiQuestInfo)
     _questNo = uiQuestInfo:getQuestNo(),
     _questName = uiQuestInfo:getTitle(),
     _completeNpc = uiQuestInfo:getCompleteDisplay(),
-    _questCondition = 0,
+    _questCondition = {},
     _desc = ToClient_getReplaceDialog(uiQuestInfo:getDesc()),
     _isSatisfied = uiQuestInfo:isSatisfied(),
     _regionType = uiQuestInfo:getQuestRegion(),
@@ -263,11 +297,8 @@ function Window_QuestInfo:SetQuestData(uiQuestInfo)
   local demandCount = uiQuestInfo:getDemandCount()
   for demandIndex = 0, demandCount - 1 do
     demand = uiQuestInfo:getDemandAt(demandIndex)
-    questCondition = questCondition .. [[
-
- -]] .. demand._desc
+    questInfo._questCondition[demandCount] = demand
   end
-  questInfo._questCondition = questCondition
   return questInfo
 end
 function Window_QuestInfo:CreateGroupData(groupTable)
@@ -320,29 +351,29 @@ function PaGlobalFunc_Quest_List2EventControlCreate(list_content, key)
     return
   end
   local questUI = {
-    _radioButton_QuestBg = UI.getChildControl(list_content, "RadioButton_QuestBg"),
+    _button_QuestBg = UI.getChildControl(list_content, "Button_QuestBg"),
     _static_QuesetTypeIcon = UI.getChildControl(list_content, "Static_QuestTypeIcon"),
     _staticText_QuestName = UI.getChildControl(list_content, "StaticText_QuestName"),
-    _staticText_ProgressCount = UI.getChildControl(list_content, "StaticText_ProgressCount")
+    _staticText_ProgressCount = UI.getChildControl(list_content, "StaticText_ProgressCount"),
+    _static_PathIcon = UI.getChildControl(list_content, "Static_QuestIsPathIcon"),
+    _static_StateIcon = UI.getChildControl(list_content, "Static_QuestStateIcon")
   }
   questUI._staticText_QuestName:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-  questUI._staticText_QuestName:SetPosX(self._ui._list2_Quest:GetPosX() - 30)
-  questUI._static_QuesetTypeIcon:SetPosX(self._ui._list2_Quest:GetPosX() - 30)
-  questUI._radioButton_QuestBg:SetCheck(id == self._currentQuestIndex)
+  questUI._staticText_QuestName:ComputePos()
+  questUI._static_QuesetTypeIcon:ComputePos()
   questUI._staticText_ProgressCount:SetText("")
-  questUI._radioButton_QuestBg:addInputEvent("Mouse_LUp", "")
-  questUI._radioButton_QuestBg:addInputEvent("Mouse_On", "")
-  questUI._radioButton_QuestBg:SetIgnore(false)
+  questUI._button_QuestBg:addInputEvent("Mouse_LUp", "")
+  questUI._button_QuestBg:addInputEvent("Mouse_On", "")
+  questUI._static_PathIcon:SetShow(false)
+  questUI._static_StateIcon:SetShow(false)
   if true == questInfo._isGroup then
     questUI._static_QuesetTypeIcon:SetShow(false)
-    questUI._radioButton_QuestBg:SetIgnore(true)
     questUI._staticText_QuestName:SetText(questInfo._questName)
-    questUI._radioButton_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SimpleToolTipShow(" .. id .. ")")
-    questUI._radioButton_QuestBg:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+    questUI._button_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SimpleToolTipShow(" .. id .. ")")
   else
     questUI._static_QuesetTypeIcon:SetShow(true)
-    questUI._static_QuesetTypeIcon:SetPosX(30)
-    questUI._staticText_QuestName:SetPosX(60)
+    questUI._static_QuesetTypeIcon:SetPosX(60)
+    questUI._staticText_QuestName:SetPosX(90)
     if true == questInfo._isContinueQuest then
       FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
       questUI._staticText_QuestName:SetText(questInfo._continueQuestName)
@@ -351,9 +382,25 @@ function PaGlobalFunc_Quest_List2EventControlCreate(list_content, key)
       FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
       questUI._staticText_QuestName:SetText(questInfo._questName)
     end
-    questUI._radioButton_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
-    questUI._radioButton_QuestBg:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SelectQuestClear(" .. id .. ")")
-    questUI._radioButton_QuestBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. id .. ",false)")
+    questUI._button_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
+    questUI._button_QuestBg:addInputEvent("Mouse_Out", "PaGlobalFunc_Quest_SelectQuestClear(" .. id .. ")")
+    questUI._button_QuestBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Quest_FindWay(" .. id .. ",false)")
+    local isNext = not questInfo._isCleared and not questInfo._isProgressing
+    local stateIconPosX = questUI._staticText_QuestName:GetPosX() + questUI._staticText_QuestName:GetTextSizeX() + 10
+    questUI._static_StateIcon:SetPosX(stateIconPosX)
+    if true == questInfo._isSatisfied then
+      questUI._static_StateIcon:SetShow(true)
+      questUI._static_StateIcon:SetColor(Defines.Color.C_FFFF0000)
+    elseif false ~= questInfo._isCleared or true == isNext then
+    else
+      questUI._static_StateIcon:SetShow(true)
+      questUI._static_StateIcon:SetColor(Defines.Color.C_FFEEEEEE)
+    end
+    local groupNo = questInfo._questNo._group
+    local questNo = questInfo._questNo._quest
+    if true == PaGlobalFunc_Quest_IsFindingQuest(groupNo, questNo) then
+      questUI._static_PathIcon:SetShow(true)
+    end
   end
   self._qusetUI[id] = questUI
 end
@@ -363,6 +410,7 @@ function PaGlobalFunc_Quest_SelectQuestClear(index)
   self._currentQuestIndex = -1
   self._ui._list2_Quest:requestUpdateByKey(toInt64(0, prevIndex))
   self:DetailClear()
+  PaGlobalFunc_Quest_Detail_Close()
 end
 function PaGlobalFunc_Quest_SimpleToolTipShow(id)
   local self = Window_QuestInfo
@@ -377,7 +425,7 @@ function PaGlobalFunc_Quest_SimpleToolTipShow(id)
   if false == questUI._staticText_QuestName:IsLimitText() then
     return
   end
-  TooltipSimple_Show(questUI._radioButton_QuestBg, qusetInfo._questName)
+  TooltipSimple_Show(questUI._button_QuestBg, qusetInfo._questName)
 end
 function Window_QuestInfo:GetTableByTitleType(titleType)
   if self._config._title._progress == titleType then
@@ -422,13 +470,13 @@ function FromClient_luaLoadComplete()
   self._ui._questTitle._buttonRB = UI.getChildControl(self._ui._static_RadioGroup, "Button_RB")
   self._ui._frameContent_1_Content = UI.getChildControl(self._ui._frame_Detail, "Frame_1_Content")
   self._ui._scroll_FrameVertical = UI.getChildControl(self._ui._frame_Detail, "Frame_1_VerticalScroll")
-  self._ui._questDetail._staticText_Title = UI.getChildControl(self._ui._frameContent_1_Content, "StaticText_Title")
   self._ui._questDetail._staticText_Type = UI.getChildControl(self._ui._frameContent_1_Content, "StaticText_Type")
   self._ui._questDetail._staticText_Desc = UI.getChildControl(self._ui._frameContent_1_Content, "StaticText_Desc")
-  self._ui._questDetail._staticText_Condition = UI.getChildControl(self._ui._frameContent_1_Content, "StaticText_Condition")
+  self._ui._questDetail._staticText_ConditionTemplate = UI.getChildControl(self._ui._frameContent_1_Content, "StaticText_ConditionTemplate")
+  self._ui._questDetail._staticText_ConditionTemplate:SetShow(false)
   self._ui._frameContent_1_Content:SetIgnore(false)
   self._ui._questDetail._staticText_Desc:SetIgnore(false)
-  self._ui._questDetail._staticText_Condition:SetIgnore(false)
+  self._ui._questDetail._staticText_ConditionTemplate:SetIgnore(false)
   for index = 0, self._config._baseRewardMax - 1 do
     local control = UI.getChildControl(self._ui._static_BaseReward, "Static_Item0" .. index)
     local slot = {}
@@ -462,37 +510,66 @@ end
 function Window_QuestInfo:InitRegisterEvent()
   registerEvent("EventQuestListChanged", "PaGlobalFunc_Quest_UpdateList")
   registerEvent("onScreenResize", "PaGlobalFunc_Quest_Resize")
+  registerEvent("FromClient_DeleteNavigation", "PaGlobalFunc_Quest_DeleteNavigation")
+  registerEvent("FromClient_RClickWorldmapQuest", "PaGlobalFunc_Quest_RClickWorldmapQuest")
 end
 function PaGlobalFunc_Quest_SelectQuest(index)
   local self = Window_QuestInfo
   self:DetailClear()
   local questInfo = self._questInfo[index]
   if nil == questInfo then
+    PaGlobalFunc_Quest_Detail_Close()
     return
   end
   if true == questInfo._isGroup then
     _PA_LOG("\236\157\180\237\152\184\236\132\156", "\236\157\180\234\178\131\236\157\128 \234\183\184\235\163\185\236\157\180\235\139\164")
+    PaGlobalFunc_Quest_Detail_Close()
     return
   end
   local prevIndex = self._currentQuestIndex
   self._currentQuestIndex = index
-  local title = self._ui._questDetail._staticText_Title
+  PaGlobalFunc_Quest_Detail_Open()
+  local title = self._ui._questDetail_Title
   title:SetText(questInfo._questName)
   local questType = self._ui._questDetail._staticText_Type
-  questType:SetPosX(title:GetPosX())
-  questType:SetPosY(title:GetPosY() + title:GetSizeY() + 7)
   questType:SetText(questInfo._continueQuestDetail)
   local desc = self._ui._questDetail._staticText_Desc
   desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   desc:SetAutoResize(true)
   desc:SetPosY(questType:GetPosY() + questType:GetSizeY() + 5)
   desc:SetText(questInfo._desc)
-  local condition = self._ui._questDetail._staticText_Condition
-  condition:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  condition:SetAutoResize(true)
-  condition:SetPosY(self._ui._questDetail._staticText_Desc:GetPosY() + self._ui._questDetail._staticText_Desc:GetSizeY() + 5)
-  condition:SetText(questInfo._questCondition)
-  self._ui._frameContent_1_Content:SetSize(self._ui._frameContent_1_Content:GetSizeX(), self._ui._frameContent_1_Content:GetPosY() + title:GetSizeY() + questType:GetSizeY() + desc:GetSizeY() + condition:GetSizeY())
+  local conditionStartPosY = self._ui._questDetail._staticText_Desc:GetPosY() + self._ui._questDetail._staticText_Desc:GetSizeY() + 5
+  local demandCount = questInfo._uiQuestInfo:getDemandCount()
+  for index = 0, demandCount - 1 do
+    local conditionUI = self._ui._staticText_ConditionList[index]
+    if nil == conditionUI then
+      conditionUI = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._ui._frameContent_1_Content, "staticText_questCondition_" .. index)
+      CopyBaseProperty(self._ui._questDetail._staticText_ConditionTemplate, conditionUI)
+    end
+    conditionUI:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    conditionUI:SetAutoResize(true)
+    conditionUI:SetFontColor(Defines.Color.C_FFC4BEBE)
+    local conditionInfo = questInfo._uiQuestInfo:getDemandAt(index)
+    local conditionText
+    if conditionInfo._currentCount == conditionInfo._destCount or conditionInfo._destCount <= conditionInfo._currentCount then
+      conditionText = "- " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
+      conditionUI:SetText(ToClient_getReplaceDialog(conditionText))
+      conditionUI:SetLineRender(true)
+      conditionUI:SetFontColor(Defines.Color.C_FF626262)
+    elseif 1 == conditionInfo._destCount then
+      conditionText = "- " .. conditionInfo._desc
+      conditionUI:SetText(ToClient_getReplaceDialog(conditionText))
+      conditionUI:SetLineRender(false)
+    else
+      conditionText = "- " .. conditionInfo._desc .. " (" .. conditionInfo._currentCount .. "/" .. conditionInfo._destCount .. ")"
+      conditionUI:SetText(ToClient_getReplaceDialog(conditionText))
+      conditionUI:SetLineRender(false)
+    end
+    conditionUI:SetPosY(conditionStartPosY + conditionUI:GetSizeY() * index)
+    conditionUI:SetShow(true)
+    self._ui._staticText_ConditionList[index] = conditionUI
+  end
+  self._ui._frameContent_1_Content:SetSize(self._ui._frameContent_1_Content:GetSizeX(), self._ui._frameContent_1_Content:GetPosY() + title:GetSizeY() + questType:GetSizeY() + desc:GetSizeY() + self._ui._staticText_ConditionList[0]:GetSizeY() * #questInfo._questCondition)
   self._ui._frame_Detail:UpdateContentScroll()
   self._ui._scroll_FrameVertical:SetControlPos(0)
   self._ui._frame_Detail:UpdateContentPos()
@@ -644,7 +721,7 @@ function PaGlobalFunc_Quest_GiveUp(index)
     return
   end
   self._giveUpQuestIndex = index
-  if true == PaGlobal_TutorialManager:isBeginnerTutorialQuest(groupId, questId) and true == PaGlobal_TutorialManager:isDoingTutorial() then
+  if true == PaGlobal_TutorialManager:isBeginnerTutorialQuest(questInfo._questNo._group, questInfo._questNo._quest) and true == PaGlobal_TutorialManager:isDoingTutorial() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return
   end
@@ -728,17 +805,19 @@ function Window_QuestInfo:SlotClear()
   end
 end
 function Window_QuestInfo:DetailClear()
-  self._ui._questDetail._staticText_Title:SetAutoResize(true)
   self._ui._questDetail._staticText_Desc:SetAutoResize(true)
-  self._ui._questDetail._staticText_Condition:SetAutoResize(true)
   self._ui._questDetail._staticText_Type:SetAutoResize(true)
-  self._ui._questDetail._staticText_Title:SetText("")
   self._ui._questDetail._staticText_Desc:SetText("")
   self._ui._questDetail._staticText_Type:SetText("")
-  self._ui._questDetail._staticText_Condition:SetText("")
   self._ui._questDetail._staticText_Desc:SetPosY(0)
-  self._ui._questDetail._staticText_Condition:SetPosY(0)
   self._ui._questDetail._staticText_Type:SetPosY(0)
+  for _, control in pairs(self._ui._staticText_ConditionList) do
+    if nil ~= control then
+      control:SetAutoResize(true)
+      control:SetText("")
+      control:SetPosY(0)
+    end
+  end
   self._ui._radioButton_autoFindWay:SetShow(false)
   self._ui._radioButton_QuestGiveUp:SetShow(false)
   Panel_Window_QuestInfo:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
@@ -847,9 +926,16 @@ end
 function PaGlobalFunc_Quest_Close()
   Panel_Window_QuestInfo:SetShow(false, false)
 end
+function PaGlobalFunc_Quest_Detail_Open()
+  Panel_Window_QuestInfo_Detail:SetShow(true, false)
+end
+function PaGlobalFunc_Quest_Detail_Close()
+  Panel_Window_QuestInfo_Detail:SetShow(flase, false)
+end
 function PaGlobalFunc_Quest_SetShow(value)
   local self = Window_QuestInfo
   Panel_Window_QuestInfo:SetShow(value, false)
+  self._currentQuestCount = 0
   if true == value then
     if true == PaGlobalFunc_InventoryInfo_GetShow() then
       PaGlobalFunc_InventoryInfo_Close()
@@ -859,10 +945,15 @@ function PaGlobalFunc_Quest_SetShow(value)
       FGlobal_QuestWidget_Close()
     end
     PaGlobalFunc_Quest_UpdateList()
-  elseif false == PaGlobalFunc_InventoryInfo_GetShow() then
-    FGlobal_Panel_Radar_Show(true, true)
-    Panel_TimeBar:SetShow(true, true)
-    FGlobal_QuestWidget_Open()
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_QUEST")
+  else
+    if false == PaGlobalFunc_InventoryInfo_GetShow() then
+      FGlobal_Panel_Radar_Show(true, true)
+      Panel_TimeBar:SetShow(true, true)
+      FGlobal_QuestWidget_Open()
+    end
+    PaGlobalFunc_Quest_Detail_Close()
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   end
   PaGlobal_TutorialManager:handleShowQuestNewWindow(value)
 end

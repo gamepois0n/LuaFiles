@@ -254,6 +254,9 @@ function Panel_MyHouseNavi_Update(init, listCount)
     PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
   end
   PaGlobal_CharacterTag_SetPosIcon()
+  if nil ~= PaGlobal_Fairy_SetPosIcon then
+    PaGlobal_Fairy_SetPosIcon()
+  end
 end
 function return_ServantIconNums(icons)
   if Panel_MyHouseNavi:GetPosX() <= 60 * icons then

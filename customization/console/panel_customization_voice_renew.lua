@@ -325,8 +325,6 @@ function Customization_VoiceInfo:InitControl()
   self._ui._staticText_SlierVoiceMin = UI.getChildControl(self._ui._static_SliderVoiceBg, "StaticText_Min")
   self._ui._staticText_SlierVoiceMax = UI.getChildControl(self._ui._static_SliderVoiceBg, "StaticText_Max")
   self._ui._slider_Voice = UI.getChildControl(self._ui._static_SliderVoiceBg, "Slider_Voice")
-  self._ui._slider_VoiceFocus = UI.getChildControl(self._ui._static_SliderVoiceBg, "Static_FocusBox")
-  self._ui._slider_VoiceFocus:SetShow(false)
   self._ui._sliderButton_Voice = UI.getChildControl(self._ui._slider_Voice, "Slider_Button")
   self._ui._sliderButton_Voice:SetIgnore(true)
   if true == _ContentsGroup_isContentsCustomizationVoice then

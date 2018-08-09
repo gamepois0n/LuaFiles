@@ -46,6 +46,7 @@ local Customization_DecoInfo = {
   _isExpression = false,
   _isBoneControl = false
 }
+local _decoIconUV = {}
 function PaGlobalFunc_Customization_Deco_UpdatePerFrame(deltaTime)
   local self = Customization_DecoInfo
   if true == self._isBoneControl then
@@ -521,14 +522,12 @@ end
 function PaGlobalFunc_Customization_Deco_SliderFocusOn(sliderindex)
   local self = Customization_DecoInfo
   PaGlobalFunc_Customization_SetKeyGuide(3)
-  self._ui._sliderFocus[sliderindex]:SetShow(true)
 end
 function PaGlobalFunc_Customization_Deco_SliderFocusOut(sliderindex)
   local self = Customization_DecoInfo
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_Deco_GetShow() then
     PaGlobalFunc_Customization_SetKeyGuide(1)
   end
-  self._ui._sliderFocus[sliderindex]:SetShow(false)
 end
 function PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(sliderIndex)
   local self = Customization_DecoInfo
@@ -586,7 +585,6 @@ function Customization_DecoInfo:InitControl()
   self._ui._staticText_SliderValue = {}
   self._ui._slider = {}
   self._ui._sliderButton = {}
-  self._ui._sliderFocus = {}
   for index = 0, 6 do
     self._ui._static_SliderBg[index] = UI.getChildControl(self._ui._static_SliderGroup, "Static_SliderBg_" .. index)
     self._ui._staticText_SliderTitle[index] = UI.getChildControl(self._ui._static_SliderBg[index], "StaticText_Title")
@@ -594,8 +592,6 @@ function Customization_DecoInfo:InitControl()
     self._ui._slider[index] = UI.getChildControl(self._ui._static_SliderBg[index], "Slider_" .. index)
     self._ui._sliderButton[index] = UI.getChildControl(self._ui._slider[index], "Slider_Button")
     self._ui._sliderButton[index]:SetIgnore(true)
-    self._ui._sliderFocus[index] = UI.getChildControl(self._ui._static_SliderBg[index], "Static_FocusBox")
-    self._ui._sliderFocus[index]:SetShow(false)
   end
   self._config._listColumnWidth = self._ui._typeTemplate:GetSizeX() + self._config._listOffset
   self._config._listColumnHeight = self._ui._typeTemplate:GetSizeY() + self._config._listOffset

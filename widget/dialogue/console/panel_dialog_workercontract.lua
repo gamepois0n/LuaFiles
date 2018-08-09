@@ -25,13 +25,11 @@ function workerContract:initControl()
   if false == ToClient_isXBox() then
     ContractUI._button_Cancel:SetShow(true)
     ContractUI._button_Hire:SetShow(true)
-    ContractUI._button_Hire:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ"))
     ContractUI._staticText_Cancel:SetShow(false)
     ContractUI._staticText_Hire:SetShow(false)
   else
     ContractUI._staticText_Cancel:SetShow(true)
     ContractUI._staticText_Hire:SetShow(true)
-    ContractUI._staticText_Hire:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ"))
     ContractUI._button_Cancel:SetShow(false)
     ContractUI._button_Hire:SetShow(false)
   end

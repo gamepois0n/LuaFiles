@@ -307,7 +307,7 @@ function Panel_WebControl_TakeAndShow(helpType)
   else
     html_WebHelper_Control:SetUrl(960, 600, PAGetString(Defines.StringSheet_GAME, "WEBHELPER_GAMEGUIDE"))
   end
-  if isGameTypeTaiwan() or isGameTypeKorea() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
+  if isGameTypeTaiwan() or isGameTypeEnglish() or isGameTypeKorea() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
     html_WebHelper_Control:SetIME(true)
   end
   html_WebHelper_Control:SetSize(960, 600)

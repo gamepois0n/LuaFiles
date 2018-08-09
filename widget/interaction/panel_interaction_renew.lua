@@ -17,7 +17,8 @@ local PanelInteraction = {
     stc_Key = UI.getChildControl(_panel, "Static_InteractionKey"),
     txt_HoldToInteract = UI.getChildControl(_panel, "StaticText_InteractionKey"),
     btn_Template = UI.getChildControl(_panel, "Button_Interaction_Template"),
-    needCollectTool = UI.getChildControl(_panel, "Static_Cant")
+    needCollectTool = UI.getChildControl(_panel, "Static_Cant"),
+    stc_QuestComplete = UI.getChildControl(_panel, "Static_QuestCompleate")
   },
   _preUIMode = nil,
   _isReloadState = true,
@@ -118,10 +119,10 @@ local _button_TextureUV = {
     y2 = 74
   },
   {
-    x1 = 312,
-    y1 = 75,
-    x2 = 342,
-    y2 = 105
+    x1 = 281,
+    y1 = 44,
+    x2 = 311,
+    y2 = 74
   },
   {
     x1 = 2,
@@ -519,18 +520,6 @@ function PanelInteraction:show(actor)
   if nil == _desc_Text[firstInteractionType] then
     return
   end
-  if ToClient_isXBox() and actor:get():isHouseHold() then
-    return
-  end
-  if true == ToClient_isXBox() then
-    for ii = 0, #_interactionTargetUIList do
-      local isShow = actor:isSetInteracatbleFrag(ii)
-      if isShow and (ii == CppEnums.InteractionType.InteractionType_OpenDoor or ii == CppEnums.InteractionType.InteractionType_Observer or ii == CppEnums.InteractionType.InteractionType_RankerHouseList) then
-        _panel:SetShow(false)
-        return
-      end
-    end
-  end
   _panel:SetShow(true)
   local actor = interaction_getInteractable()
   local actorKey = 0
@@ -569,7 +558,7 @@ function PanelInteraction:show(actor)
   self._SHOW_BUTTON_COUNT = 0
   for ii = 0, #_interactionTargetUIList do
     local isShow = actor:isSetInteracatbleFrag(ii)
-    if true == ToClient_isXBox() and CppEnums.InteractionType.InteractionType_PvPBattle == ii then
+    if true == ToClient_isXBox() and (CppEnums.InteractionType.InteractionType_PvPBattle == ii or CppEnums.InteractionType.InteractionType_WaitComment == ii) then
       isShow = false
     end
     _interactionTargetUIList[ii]:SetShow(isShow)
@@ -603,6 +592,16 @@ function PanelInteraction:show(actor)
       end
       _linkButtonAction[self._SHOW_BUTTON_COUNT] = ii
       self._SHOW_BUTTON_COUNT = self._SHOW_BUTTON_COUNT + 1
+    end
+  end
+  local npcActorProxyWrapper = getNpcActor(actor:getActorKey())
+  if nil ~= npcActorProxyWrapper then
+    local currentType = npcActorProxyWrapper:get():getOverHeadQuestInfoType()
+    if true == actor:isSetInteracatbleFrag(4) and 3 == currentType then
+      local textControl = UI.getChildControl(self._ui.stc_QuestComplete, "StaticText_QuestCompleate")
+      self._ui.stc_QuestComplete:SetShow(true)
+    else
+      self._ui.stc_QuestComplete:SetShow(false)
     end
   end
   self._ui.needCollectTool:SetShow(false)
@@ -708,6 +707,7 @@ function PanelInteraction:updatePerFrame_Desc()
   if self._focusInteractionType == CppEnums.InteractionType.InteractionType_Sympathetic then
     self:updateDesc(self._focusInteractionType)
   elseif self._focusInteractionType == CppEnums.InteractionType.InteractionType_Observer then
+    self:updateDesc(self._focusInteractionType)
   end
   local actor = interaction_getInteractable()
   if actor == nil then
@@ -768,12 +768,16 @@ function PanelInteraction:updateDesc(indteractionType)
       end
     end
   elseif indteractionType == CppEnums.InteractionType.InteractionType_Observer and isObserverMode() then
-    if indteractionType == basicInteractionType then
-      interactionDesc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTERACTION_PURPOSE_1", "interactionkey", keyCustom_GetWSymbol_ActionPad(CppEnums.ActionInputType.ActionInputType_Interaction), "interaction", interactionTargetTextList[indteractionType])
+    if false == _ContentsGroup_RenewUI_WatchMode then
+      if indteractionType == basicInteractionType then
+        interactionDesc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTERACTION_PURPOSE_1", "interactionkey", keyCustom_GetWSymbol_ActionPad(CppEnums.ActionInputType.ActionInputType_Interaction), "interaction", interactionTargetTextList[indteractionType])
+      else
+        interactionDesc = _desc_Text[indteractionType]
+      end
+      ShowCommandFunc()
     else
-      interactionDesc = _desc_Text[indteractionType]
+      _panel:SetShow(false)
     end
-    ShowCommandFunc()
   end
   if nil == interactionDesc or "" == interactionDesc then
     self._ui.txt_TargetDesc:SetShow(false)
@@ -1294,10 +1298,12 @@ function FromClient_PanelInteraction_InstallationBuff(currentEndurance)
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobalFunc_Interaction_InstallationBuffConfirm()
-  toClient_RequestBuildingUpgradeient_RequestInstallationBuff()
+  toClient_RequestInstallationBuff()
 end
 function FromClient_PanelInteraction_NotifyObserverModeEnd()
-  Panel_WatchingMode:SetShow(false)
+  if false == _ContentsGroup_RenewUI_WatchMode then
+    Panel_WatchingMode:SetShow(false)
+  end
   local selfPlayer = getSelfPlayer()
   if true == selfPlayer:isDead() then
     Panel_DeadMessage:SetShow(true, true)
@@ -1330,7 +1336,10 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : PanelInteraction")
     return nil
   end
-  if getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_UiMode then
+  if false == PaGlobalFunc_Fishing_GetFishingMiniGame_3() then
+    return
+  end
+  if getInputMode() ~= CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
     if false == self._keyguideIsMonotone then
       self._ui.stc_Key:SetMonoTone(true)
       self._keyguideIsMonotone = true

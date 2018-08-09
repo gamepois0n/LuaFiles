@@ -8,6 +8,7 @@ PaGlobal_ConsoleQuickMenuSetting = {
     _staticTextName = {},
     _buttonPosition = {},
     _buttonPositionIcon = {},
+    _buttonPositionRemoveIcon = {},
     _rightBg = UI.getChildControl(Panel_QuickMenuCustom, "Static_RightBg"),
     _list2Skill,
     _list2Menu,
@@ -18,10 +19,12 @@ PaGlobal_ConsoleQuickMenuSetting = {
     _oneSlotBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_OneSlotBg"),
     _ringCrossHair = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_CrossHair"),
     _crossHairText = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "StaticText_CrossText"),
-    _registerModeBlackBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_BlackBg")
+    _registerModeBlackBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_BlackBg"),
+    _RSGuideBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_GuideBg")
   },
   _registMode = {
     _isStart = false,
+    _isRemoveStart = false,
     _stickPosition = __eQuickMenuStickPosition_Count,
     _index = -1
   },
@@ -51,22 +54,13 @@ function PaGlobal_ConsoleQuickMenuSetting:GoCategory(category)
 end
 function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
   for ii = 0, __eQuickMenuStickPosition_Count - 1 do
-    if __eQuickMenuStickPosition_QuickSlot == ii then
-      break
-    end
     self._ui._buttonPosition[ii] = UI.getChildControl(self._ui._ringBg, "Button_Templete" .. tostring(ii))
     self._ui._buttonPosition[ii]:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu( " .. ii .. ")")
     self._ui._buttonPositionIcon[ii] = UI.getChildControl(self._ui._buttonPosition[ii], "Static_Icon")
+    self._ui._buttonPositionRemoveIcon[ii] = UI.getChildControl(self._ui._buttonPosition[ii], "Static_MinusIcon")
   end
   self._ui._registerModeSelectItem = UI.getChildControl(self._ui._ringBg, "StaticText_SelectMenu")
   self._ui._registerModeSelectItemIcon = UI.getChildControl(self._ui._registerModeSelectItem, "Static_Icon")
-  self._ui._oneSlotButton = UI.getChildControl(self._ui._oneSlotBg, "Button_OneSlot")
-  self._ui._oneSlotButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu( " .. __eQuickMenuStickPosition_QuickSlot .. ")")
-  self._ui._oneSlotButton:SetShow(true)
-  self._ui._oneSlotIcon = UI.getChildControl(self._ui._oneSlotButton, "Static_Icon")
-  self._ui._oneSlotIcon:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu( " .. __eQuickMenuStickPosition_QuickSlot .. ")")
-  self._ui._changeSlot = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "StaticText_ChangeSlot")
-  self._ui._changeSlot:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:changeMenuMode()")
   local tabBg = UI.getChildControl(Panel_QuickMenuCustom, "Static_TabBg")
   UI.getChildControl(tabBg, "RadioButton_Skill"):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:GoCategory(" .. __eQuickMenuDataType_Skill .. ")")
   UI.getChildControl(tabBg, "RadioButton_Item"):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:GoCategory(" .. __eQuickMenuDataType_Item .. ")")
@@ -124,8 +118,16 @@ function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
     end
     self._ui._slots[index] = item
   end
+  self._ui._ringBg:SetShow(true)
+  self._ui._oneSlotBg:SetShow(false)
+  self._ui._RSGuideText = UI.getChildControl(self._ui._RSGuideBg, "StaticText_GuideText")
+  self._ui._RSGuideText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_RINGMENUSETTING_RSKEYGUIDE"))
+  self._ui._RSGuideText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 end
 function PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(type, index)
+  if self:isRegisterOrRemoveMode() then
+    return
+  end
   self._registMode._isStart = true
   self._registMode._stickPosition = __eQuickMenuStickPosition_Count
   local data
@@ -140,48 +142,88 @@ function PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(type, index)
   end
   self._registMode._settingData = data
   self:ShowBlackBg(true, data)
-  if true == ToClient_isQuickMenuQuickMode(self._curGroup) then
-    self:quitRegistQuickMenu(__eQuickMenuStickPosition_QuickSlot)
+end
+function PaGlobal_ConsoleQuickMenuSetting:startRegistRemoveQuickMenu()
+  if self:isRegisterOrRemoveMode() then
+    return
   end
+  self._registMode._isStart = false
+  self._registMode._isRemoveStart = true
+  self._registMode._stickPosition = __eQuickMenuStickPosition_Count
+  self._registMode._settingData = nil
+  self:ShowBlackBg(true, data)
+  self:showRemoveIcon(true)
 end
 function PaGlobal_ConsoleQuickMenuSetting:ShowBlackBg(show, data)
+  self._ui._RSGuideBg:SetShow(show)
   self._ui._registerModeBlackBg:SetShow(show)
   self._ui._ringCrossHair:SetShow(not show)
   self._ui._registerModeSelectItem:SetShow(show)
+  self:setCenterSlotIconAtregisterMode(data)
+end
+function PaGlobal_ConsoleQuickMenuSetting:setCenterSlotIconAtregisterMode(data)
+  local control = self._ui._registerModeSelectItemIcon
   if nil ~= data then
-    local control = self._ui._registerModeSelectItemIcon
     if __eQuickMenuDataType_Skill == data._type then
       PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon)
     elseif __eQuickMenuDataType_Item == data._type then
       PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon)
     elseif __eQuickMenuDataType_Function == data._type then
-      control:ChangeTextureInfoName(data._icon._path)
-      control:getBaseTexture():setUV(setTextureUV_Func(control, data._icon._x1, data._icon._y1, data._icon._x2, data._icon._y2))
-      control:setRenderTexture(control:getBaseTexture())
+      PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon, data._uv)
     elseif __eQuickMenuDataType_SocialAction == data._type then
       PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon)
+    else
+      PaGlobal_ConsoleQuickMenu:setIcon(control)
     end
+  else
+    PaGlobal_ConsoleQuickMenu:setIcon(control)
   end
 end
 function PaGlobal_ConsoleQuickMenuSetting:SetSkillDataMonoTone(index)
 end
+function PaGlobal_ConsoleQuickMenuSetting:isRegisterOrRemoveMode()
+  if true == self._registMode._isRemoveStart or true == self._registMode._isStart then
+    return true
+  end
+  return false
+end
 function PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu(executePosition)
   local registData = self._registMode._settingData
   self:clearRegistCustomSetting()
-  self:ShowBlackBg(false)
   if nil == executePosition or __eQuickMenuStickPosition_Count == executePosition then
     return
   end
   if nil == registData then
+    return
   end
   self:registQuickMenu(registData, executePosition)
   PaGlobal_ConsoleQuickMenu:setWidget()
   self._isRegisterQuickMenu = true
 end
+function PaGlobal_ConsoleQuickMenuSetting:quitRegistRemoveQuickMenu(executePosition)
+  local removeData = self._registMode._settingData
+  self:clearRegistCustomSetting()
+  self:ShowBlackBg(false)
+  if nil == executePosition or __eQuickMenuStickPosition_Count == executePosition then
+    return
+  end
+  if nil == removeData then
+    return
+  end
+  local rv = ToClient_removeQuickMenu(self._curGroup, executePosition)
+  if true == rv then
+    self:updateIcon(nil, executePosition)
+  end
+  self:showRemoveIcon(false)
+  PaGlobal_ConsoleQuickMenu:setWidget()
+  self._isRegisterQuickMenu = true
+end
 function PaGlobal_ConsoleQuickMenuSetting:clearRegistCustomSetting()
   self._registMode._isStart = false
+  self._registMode._isRemoveStart = false
   self._registMode._stickPosition = __eQuickMenuStickPosition_Count
   self._registMode._settingData = nil
+  self:ShowBlackBg(false)
 end
 function PaGlobal_ConsoleQuickMenuSetting:registQuickMenu(data, position)
   if nil == data then
@@ -233,14 +275,25 @@ function PaGlobal_ConsoleQuickMenuSetting:registSocialAction(data, position)
     self:updateIcon(data, position)
   end
 end
-function PaGlobal_ConsoleQuickMenuSetting:updateIcon(data, position)
-  local control
-  if __eQuickMenuStickPosition_QuickSlot == position then
-    control = self._ui._oneSlotIcon
+function PaGlobal_ConsoleQuickMenuSetting:setRemoveMode(state)
+  if true == state then
+    self:startRegistRemoveQuickMenu()
   else
-    control = self._ui._buttonPositionIcon[position]
+    self:clearRegistCustomSetting()
   end
+end
+function PaGlobal_ConsoleQuickMenuSetting:showRemoveIcon(state)
+  for ii = 0, __eQuickMenuStickPosition_Count - 1 do
+    self._ui._buttonPositionRemoveIcon[ii]:SetShow(state)
+  end
+end
+function PaGlobal_ConsoleQuickMenuSetting:updateIcon(data, position)
+  local control = self._ui._buttonPositionIcon[position]
   if nil == control then
+    return
+  end
+  if nil == data then
+    PaGlobal_ConsoleQuickMenu:setIcon(control)
     return
   end
   if __eQuickMenuDataType_Skill == data._type then
@@ -248,9 +301,7 @@ function PaGlobal_ConsoleQuickMenuSetting:updateIcon(data, position)
   elseif __eQuickMenuDataType_Item == data._type then
     PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon)
   elseif __eQuickMenuDataType_Function == data._type then
-    control:ChangeTextureInfoName(data._icon._path)
-    control:getBaseTexture():setUV(setTextureUV_Func(control, data._icon._x1, data._icon._y1, data._icon._x2, data._icon._y2))
-    control:setRenderTexture(control:getBaseTexture())
+    PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon, data._uv)
   elseif __eQuickMenuDataType_SocialAction == data._type then
     PaGlobal_ConsoleQuickMenu:setIcon(control, data._icon)
   end
@@ -262,11 +313,19 @@ function PaGlobal_ConsoleQuickMenuSetting:setFunctionTypeData()
   end
   for index = 0, PaGlobal_ConsoleQuickMenu._functionTypeCount do
     if true == PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption[__eQuickMenuDataType_Function][index] then
+      local iconUV = PaGlobal_ConsoleQuickMenu._functionTypeList._icon[__eQuickMenuDataType_Function][index]
+      uv = {
+        _x1 = iconUV._x1,
+        _y1 = iconUV._y1,
+        _x2 = iconUV._x2,
+        _y2 = iconUV._y2
+      }
       self._functionTypeData[#self._functionTypeData + 1] = {
         _type = __eQuickMenuDataType_Function,
         _enumType = index,
         _name = PaGlobal_ConsoleQuickMenu._functionTypeList._name[__eQuickMenuDataType_Function][index],
-        _icon = PaGlobal_ConsoleQuickMenu._functionTypeList._icon[__eQuickMenuDataType_Function][index]
+        _icon = PaGlobal_ConsoleQuickMenu._functionTypeList._icon[__eQuickMenuDataType_Function][index]._path,
+        _uv = uv
       }
     end
   end
@@ -441,18 +500,16 @@ function QuickMenuSeting_List2Event_Menu(content, key)
     leftText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     leftText:SetAutoResize(true)
     leftText:SetText(leftFunctiondata._name)
-    leftIcon:ChangeTextureInfoName(leftFunctiondata._icon._path)
-    leftIcon:getBaseTexture():setUV(setTextureUV_Func(leftIcon, leftFunctiondata._icon._x1, leftFunctiondata._icon._y1, leftFunctiondata._icon._x2, leftFunctiondata._icon._y2))
-    leftIcon:setRenderTexture(leftIcon:getBaseTexture())
+    leftText:SetPosY(leftLine:GetPosY() + leftLine:GetSizeY() / 2 - leftText:GetTextSizeY() / 2)
+    PaGlobal_ConsoleQuickMenu:setIcon(leftIcon, leftFunctiondata._icon, leftFunctiondata._uv)
     leftButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_Function .. "," .. id .. "  )")
   end
   if rightOk then
     rightText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     rightText:SetAutoResize(true)
     rightText:SetText(rightFunctiondata._name)
-    rightIcon:ChangeTextureInfoName(rightFunctiondata._icon._path)
-    rightIcon:getBaseTexture():setUV(setTextureUV_Func(rightIcon, rightFunctiondata._icon._x1, rightFunctiondata._icon._y1, rightFunctiondata._icon._x2, rightFunctiondata._icon._y2))
-    rightIcon:setRenderTexture(rightIcon:getBaseTexture())
+    rightText:SetPosY(rightLine:GetPosY() + rightLine:GetSizeY() / 2 - rightText:GetTextSizeY() / 2)
+    PaGlobal_ConsoleQuickMenu:setIcon(rightIcon, rightFunctiondata._icon, rightFunctiondata._uv)
     rightButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_Function .. "," .. tostring(id + 1) .. "  )")
   end
 end
@@ -525,7 +582,6 @@ function FromClient_ConsoleQuickMenu_OpenCustomPage(currentSettingGroup)
   self._curGroup = currentSettingGroup
   Panel_QuickMenuCustom_RightRing:SetShow(true)
   self:SetUICusttomSettingCurrentGroup(currentSettingGroup)
-  self:setMenuMode(currentSettingGroup)
   self:rotateDpadCrossHair(currentSettingGroup)
   PaGlobal_ConsoleQuickMenuSetting:ShowBlackBg(false)
   if true == _ContentsGroup_RenewUI_Chatting and true == Panel_Widget_Chatting_Renew:GetShow() then
@@ -534,6 +590,8 @@ function FromClient_ConsoleQuickMenu_OpenCustomPage(currentSettingGroup)
   if nil == _blueprintQuickMenuWhenOpen then
     _blueprintQuickMenuWhenOpen = {}
   end
+  self:clearRegistCustomSetting()
+  self:showRemoveIcon(false)
 end
 function PaGlobal_ConsoleQuickMenuSetting:rotateDpadCrossHair(group)
   local control = PaGlobal_ConsoleQuickMenuSetting._ui._ringCrossHair
@@ -556,9 +614,6 @@ function PaGlobal_ConsoleQuickMenuSetting:SetUICusttomSettingCurrentGroup(group)
     end
     PaGlobal_ConsoleQuickMenu:setIcon(control, info._icon, info._uv)
   end
-  local quickSlot = ToClient_getAtQuickMenu(group, __eQuickMenuStickPosition_QuickSlot)
-  local quickSlotInfo = PaGlobal_ConsoleQuickMenu:GetPositionInfo(quickSlot)
-  PaGlobal_ConsoleQuickMenu:setIcon(self._ui._oneSlotIcon, quickSlotInfo._icon, quickSlotInfo._uv)
 end
 function FGlobal_ConsoleQuickMenuSetting_RegistMode()
   local self = PaGlobal_ConsoleQuickMenuSetting
@@ -572,15 +627,28 @@ function FGlobal_ConsoleQuickMenuSetting_RegistMode()
   end
   PaGlobal_ConsoleQuickMenuSetting:updatePosition(registPosition)
 end
-function PaGlobal_ConsoleQuickMenuSetting:updatePosition(registPosition)
+function FGlobal_ConsoleQuickMenuSetting_RemoveMode()
+  local self = PaGlobal_ConsoleQuickMenuSetting
+  local registPosition = ToClient_checkQuickMenuCurrentPosition()
   if __eQuickMenuStickPosition_Count == registPosition then
     if __eQuickMenuStickPosition_Count ~= self._registMode._stickPosition then
-      self:quitRegistQuickMenu(self._registMode._stickPosition)
+      self:quitRegistRemoveQuickMenu(self._registMode._stickPosition)
     end
+  else
+    self._registMode._stickPosition = registPosition
+    self._registMode._settingData = ToClient_getAtQuickMenu(self._curGroup, self._registMode._stickPosition)
+    local data = PaGlobal_ConsoleQuickMenu:GetPositionInfo(self._registMode._settingData)
+    self:setCenterSlotIconAtregisterMode(data)
+  end
+  PaGlobal_ConsoleQuickMenuSetting:updatePosition(registPosition)
+end
+function PaGlobal_ConsoleQuickMenuSetting:updatePosition(registPosition)
+  if __eQuickMenuStickPosition_Count == registPosition then
     for _, control in pairs(self._ui._buttonPosition) do
       control:SetMonoTone(false)
       control:SetCheck(false)
     end
+    self._ui._registerModeSelectItem:SetText("")
   else
     for _, control in pairs(self._ui._buttonPosition) do
       control:SetMonoTone(true)
@@ -588,25 +656,10 @@ function PaGlobal_ConsoleQuickMenuSetting:updatePosition(registPosition)
     end
     self._ui._buttonPosition[registPosition]:SetMonoTone(false)
     self._ui._buttonPosition[registPosition]:SetCheck(true)
+    local string = PaGlobal_ConsoleQuickMenu:GetCurrentQuickMenuName(self._curGroup, self._registMode._stickPosition)
+    self._ui._registerModeSelectItem:SetText(string)
+    self._ui._RSGuideBg:SetShow(false)
   end
-end
-function PaGlobal_ConsoleQuickMenuSetting:setMenuMode(group)
-  if true == ToClient_isQuickMenuQuickMode(group) then
-    self._ui._ringBg:SetShow(false)
-    self._ui._oneSlotBg:SetShow(true)
-  else
-    self._ui._ringBg:SetShow(true)
-    self._ui._oneSlotBg:SetShow(false)
-  end
-end
-function PaGlobal_ConsoleQuickMenuSetting:changeMenuMode()
-  if true == ToClient_isQuickMenuQuickMode(self._curGroup) then
-    ToClient_changeQuickMenuMode(self._curGroup, false)
-  else
-    ToClient_changeQuickMenuMode(self._curGroup, true)
-  end
-  self:setMenuMode(self._curGroup)
-  PaGlobal_ConsoleQuickMenu:setWidget()
 end
 function FromClient_ConsoleQuickMenuSetting_luaLoadComplete()
   PaGlobal_ConsoleQuickMenuSetting:initializeUI()
@@ -616,9 +669,17 @@ function FGlobal_ConsoleQuickMenu_PerFrame()
   if true == PaGlobal_ConsoleQuickMenuSetting._registMode._isStart then
     FGlobal_ConsoleQuickMenuSetting_RegistMode()
   else
+    if true == PaGlobal_ConsoleQuickMenuSetting._registMode._isRemoveStart then
+      FGlobal_ConsoleQuickMenuSetting_RemoveMode()
+    else
+    end
   end
 end
 function FGlobal_ConsoleQuickMenuSetting_Close()
+  if PaGlobal_ConsoleQuickMenuSetting:isRegisterOrRemoveMode() then
+    PaGlobal_ConsoleQuickMenuSetting:clearRegistCustomSetting()
+    return
+  end
   Panel_QuickMenuCustom:SetShow(false)
   Panel_QuickMenuCustom_RightRing:SetShow(false)
   if true == PaGlobal_ConsoleQuickMenuSetting._isRegisterQuickMenu then
@@ -650,10 +711,17 @@ end
 function PaGlobal_QuickMenuSetting_GetShow()
   return Panel_QuickMenuCustom:GetShow()
 end
+function Toggle_QuickMenuSetting_removeMode()
+  if false == PaGlobal_ConsoleQuickMenuSetting._registMode._isRemoveStart then
+    PaGlobal_ConsoleQuickMenuSetting:setRemoveMode(true)
+  else
+    PaGlobal_ConsoleQuickMenuSetting:setRemoveMode(false)
+  end
+end
 Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_RT, "FGlobal_ConsoleQuickMenu_ChangeDpadGroup(false)")
 Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_QuickMenuSetting_forPadEventFunc(true)")
 Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_QuickMenuSetting_forPadEventFunc(false)")
-Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_ConsoleQuickMenuSetting:changeMenuMode()")
+Panel_QuickMenuCustom:registerPadEvent(__eConsoleUIPadEvent_Y, "Toggle_QuickMenuSetting_removeMode()")
 Panel_QuickMenuCustom:RegisterUpdateFunc("FGlobal_ConsoleQuickMenu_PerFrame")
 registerEvent("FromClient_luaLoadComplete", "FromClient_ConsoleQuickMenuSetting_luaLoadComplete")
 registerEvent("FromClient_ConsoleQuickMenu_OpenCustomPage", "FromClient_ConsoleQuickMenu_OpenCustomPage")

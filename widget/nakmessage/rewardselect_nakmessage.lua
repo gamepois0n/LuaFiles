@@ -605,6 +605,9 @@ function Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(message, 
   if not TutorialQuestCompleteCheck() and (msgType >= 10 and msgType < 22 or msgType > 32) then
     return
   end
+  if true == ToClient_isXBox() and messageType.characterHPwarning == msgType then
+    return
+  end
   if Panel_Global_Manual:GetShow() or Panel_Fishing:GetShow() then
     return
   end
@@ -1039,9 +1042,6 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         nakItemIcon:SetShow(true)
         nakItemIcon:ChangeTextureInfoName(MessageData._Msg[processIndex].msg.addMsg)
       elseif messageType.characterHPwarning == MessageData._Msg[processIndex].type then
-        if true == ToClient_isXBox() then
-          Panel_RewardSelect_NakMessage:SetShow(false, false)
-        end
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_ffff8181)
         audioPostEvent_SystemUi(8, 15)

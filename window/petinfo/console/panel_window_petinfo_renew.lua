@@ -47,6 +47,7 @@ function petInfo:close()
   if Panel_Tooltip:GetShow() then
     Panel_Tooltip:SetShow(false)
   end
+  PaGlobalFunc_Petlist_TemporaryOpen()
 end
 function petInfo:update()
   local PcPetData
@@ -186,7 +187,6 @@ function petInfo:initControl()
   petInfoUI._petInfoFrame._ExitButton = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, BottonBG, "ExitButton")
   CopyBaseProperty(StaticClose, petInfoUI._petInfoFrame._ExitButton)
   petInfoUI._petInfoFrame._ExitButton:addInputEvent("Mouse_LUp", "FGlobal_PetInfo_Close()")
-  Panel_Window_PetInfo_Renew:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobal_PetInfo_Close()")
 end
 function petInfo:createButton()
   local UCT = CppEnums.PA_UI_CONTROL_TYPE

@@ -129,6 +129,10 @@ function PaGlobal_IsTagChange()
   return retBool
 end
 function PaGlobal_TagCharacter_Change()
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
   local index = ToClient_GetMyDuelCharacterIndex()
   if localDefine.NODUEL == index then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CURRENT_NOT_TAGGING"))
@@ -136,6 +140,11 @@ function PaGlobal_TagCharacter_Change()
   end
   if true == ToClient_getJoinGuildBattle() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANTDO_GUILDBATTLE"))
+    return
+  end
+  local regionInfo = getRegionInfoByPosition(selfPlayer:get():getPosition())
+  if true == regionInfo:isPrison() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_TAG"))
     return
   end
   CharacterTag._doTag = true

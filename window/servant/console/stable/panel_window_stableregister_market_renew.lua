@@ -1,5 +1,7 @@
 local Panel_Window_StableRegister_Market_info = {
   _ui = {
+    staticText_Title = nil,
+    staticText_Price = nil,
     static_Profile = nil,
     static_Gender = nil,
     staticText_Tier = nil,
@@ -55,6 +57,8 @@ function Panel_Window_StableRegister_Market_info:initValue()
   self._value.openType = CppEnums.ServantRegist.eEventType_RegisterMarket
 end
 function Panel_Window_StableRegister_Market_info:childControl()
+  self._ui.staticText_Title = UI.getChildControl(Panel_Window_StableRegister_Market, "StaticText_Title")
+  self._ui.staticText_Price = UI.getChildControl(Panel_Window_StableRegister_Market, "StaticText_Price")
   self._ui.static_Profile = UI.getChildControl(Panel_Window_StableRegister_Market, "Static_Profile")
   self._ui.static_Gender = UI.getChildControl(Panel_Window_StableRegister_Market, "Static_Gender")
   self._ui.staticText_Tier = UI.getChildControl(Panel_Window_StableRegister_Market, "StaticText_Tier")
@@ -73,6 +77,13 @@ function Panel_Window_StableRegister_Market_info:setContent()
   servantInfo = stable_getServant(self._value.selectServantNo)
   if nil == servantInfo then
     return
+  end
+  if CppEnums.ServantRegist.eEventType_RegisterMarket == self._value.openType then
+    self._ui.staticText_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_MARKETREGISTER"))
+    self._ui.staticText_Price:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CONSIGN_BUYPRICE"))
+  elseif CppEnums.ServantRegist.eEventType_RegisterMating == self._value.openType then
+    self._ui.staticText_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_MATINGREGISTER"))
+    self._ui.staticText_Price:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_STABLEREGISTER_MATING_PRICE"))
   end
   self._ui.static_Profile:ChangeTextureInfoName(servantInfo:getIconPath1())
   if servantInfo:isMale() then

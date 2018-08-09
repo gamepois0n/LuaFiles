@@ -122,7 +122,7 @@ local InventoryInfo = {
     stc_keyGuide = UI.getChildControl(_panel, "Static_Key_Guide"),
     txt_keyGuideA = nil,
     txt_keyGuideA2 = nil,
-    txt_keyGuideX = nil,
+    txt_keyGuideSort = nil,
     txt_keyGuideY = nil,
     txt_keyGuideB = nil,
     txt_keyGuideDPad = nil,
@@ -158,8 +158,8 @@ local InventoryInfo = {
   _tooltipSlotNo = nil,
   _rClickFunc = nil,
   _filterFunc = nil,
-  _multipleSelectEndFunc = nil,
-  _multipleSelectEndButton = nil,
+  _optionalPadEventFunc = nil,
+  _optionalPadEventButton = nil,
   _otherWindowOpenFunc = nil,
   _effect = nil,
   _currentUpperTab = 0,
@@ -905,7 +905,7 @@ local _costumeSlotNo = {
 local KEY_GUIDE_TYPE = {
   A = 1,
   A_HOLD = 2,
-  X = 3,
+  LS_CLICK = 3,
   Y = 4,
   B = 5,
   D_PAD = 6
@@ -914,7 +914,7 @@ local _keyGuideData = {
   ["InventoryInfo_InvenSlotBG_"] = {
     [KEY_GUIDE_TYPE.A] = "Select",
     [KEY_GUIDE_TYPE.A_HOLD] = "(Hold to) Move",
-    [KEY_GUIDE_TYPE.X] = "Arranged",
+    [KEY_GUIDE_TYPE.LS_CLICK] = "Arranged",
     [KEY_GUIDE_TYPE.Y] = "Delete",
     [KEY_GUIDE_TYPE.B] = "Exit",
     [KEY_GUIDE_TYPE.D_PAD] = "Navigate"
@@ -972,7 +972,7 @@ local _keyGuideData = {
   [UPPER_TAB_TYPE.INFORMATION_TAB] = {
     [KEY_GUIDE_TYPE.A] = "",
     [KEY_GUIDE_TYPE.A_HOLD] = "",
-    [KEY_GUIDE_TYPE.X] = "",
+    [KEY_GUIDE_TYPE.LS_CLICK] = "",
     [KEY_GUIDE_TYPE.Y] = "",
     [KEY_GUIDE_TYPE.D_PAD] = ""
   }
@@ -999,6 +999,7 @@ local _configForEquip = {
   createBorder = true,
   createCount = false,
   createCash = true,
+  createExpiration = true,
   createEnchant = true,
   createEnduranceIcon = true,
   createItemLock = true
@@ -1008,6 +1009,7 @@ local _configForCostume = {
   createBorder = true,
   createCount = false,
   createCash = true,
+  createExpiration = true,
   createEnchant = true,
   createEnduranceIcon = true,
   createItemLock = true
@@ -1058,17 +1060,17 @@ function InventoryInfo:initialize()
   self._ui.stc_xBoxKey_RT = UI.getChildControl(self._ui.stc_subWindowLower, "Static_XBoxKey_RT")
   self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideA")
   self._ui.txt_keyGuideA2 = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideA2")
-  self._ui.txt_keyGuideX = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideX")
+  self._ui.txt_keyGuideSort = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideSort")
   self._ui.txt_keyGuideY = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideY")
   self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideB")
   self._ui.txt_keyGuideDPad = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideDPad")
   self._keyGuideList = {
-    [1] = self._ui.txt_keyGuideA,
-    [2] = self._ui.txt_keyGuideA2,
-    [3] = self._ui.txt_keyGuideX,
-    [4] = self._ui.txt_keyGuideY,
-    [5] = self._ui.txt_keyGuideB,
-    [6] = self._ui.txt_keyGuideDPad
+    [KEY_GUIDE_TYPE.A] = self._ui.txt_keyGuideA,
+    [KEY_GUIDE_TYPE.A_HOLD] = self._ui.txt_keyGuideA2,
+    [KEY_GUIDE_TYPE.LS_CLICK] = self._ui.txt_keyGuideSort,
+    [KEY_GUIDE_TYPE.Y] = self._ui.txt_keyGuideY,
+    [KEY_GUIDE_TYPE.B] = self._ui.txt_keyGuideB,
+    [KEY_GUIDE_TYPE.D_PAD] = self._ui.txt_keyGuideDPad
   }
   self._ui.txt_keyGuideB:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
   self._ui.txt_keyGuideSetFunctorAlterKey = UI.getChildControl(self._ui.stc_keyGuideSetFunctor, "StaticText_KeyGuideAlter")
@@ -1124,12 +1126,13 @@ function InventoryInfo:initEquipmentUIControls()
       slot:createChild()
       if ToClient_isXBox() or ToClient_IsDevelopment() then
         slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_EquipSlot(" .. _equipSlotNo[ii] .. ")")
+        slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowEquipTooltip(" .. _equipSlotNo[ii] .. ", true)")
       else
         slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_InventoryInfo_EquipSlot(" .. _equipSlotNo[ii] .. ")")
         slot.icon:addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_EquipSlot(" .. _equipSlotNo[ii] .. ")")
       end
-      slot.icon:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_equipShowTooltip(" .. _equipSlotNo[ii] .. ", true)")
-      slot.icon:addInputEvent("Mouse_Out", "InputMOn_InventoryInfo_equipShowTooltip(" .. _equipSlotNo[ii] .. ", false)")
+      slot.icon:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_equipShowTooltip(true, " .. ii .. ", true)")
+      slot.icon:addInputEvent("Mouse_Out", "InputMOn_InventoryInfo_equipShowTooltip(true, " .. ii .. ", false)")
       Panel_Tooltip_Item_SetPosition(_equipSlotNo[ii], slot, "equipment")
     end
   end
@@ -1164,12 +1167,13 @@ function InventoryInfo:initCostumeUIControls()
     slot:createChild()
     if ToClient_isXBox() or ToClient_IsDevelopment() then
       slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_EquipSlot(" .. _costumeSlotNo[ii] .. ")")
+      slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowEquipTooltip(" .. _costumeSlotNo[ii] .. ", true)")
     else
       slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_InventoryInfo_EquipSlot(" .. _costumeSlotNo[ii] .. ")")
       slot.icon:addInputEvent("Mouse_LUp", "InputMLUp_InventoryInfo_EquipSlot(" .. _costumeSlotNo[ii] .. ")")
     end
-    slot.icon:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_equipShowTooltip(" .. _costumeSlotNo[ii] .. ", true)")
-    slot.icon:addInputEvent("Mouse_Out", "InputMOn_InventoryInfo_equipShowTooltip(" .. _costumeSlotNo[ii] .. ", false)")
+    slot.icon:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_equipShowTooltip(false, " .. ii .. ", true)")
+    slot.icon:addInputEvent("Mouse_Out", "InputMOn_InventoryInfo_equipShowTooltip(false, " .. ii .. ", false)")
     slot.pictogram = pictogram
     slot.chk_toggleButton = UI.getChildControl(slotBG, "CheckButton_ShowToggle")
     slot.chk_toggleButton:addInputEvent("Mouse_LUp", "Input_InventoryInfo_CostumeShowToggle(" .. ii .. ")")
@@ -1179,22 +1183,80 @@ function InventoryInfo:initCostumeUIControls()
     self._ui.slot_costumes[ii] = slot
   end
   self._ui.costumeSlotTemplate:SetShow(false)
-  self._ui.chk_HideHelmet = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "CheckButton_ToggleHelmet")
-  self._ui.chk_openHelmet = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "CheckButton_ToggleHelmetOpen")
-  self._ui.chk_showUnderwear = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "CheckButton_ToggleUnderwear")
-  self._ui.chk_toggleCloak = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "CheckButton_ToggleCloak")
-  self._ui.chk_toggleNameWhenCamo = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "CheckButton_ToggleShowNameWhenCamouflage")
-  self._ui.chk_HideHelmet:SetCheck(not ToClient_IsShowHelm())
+  local toggleUV = {
+    {
+      263,
+      3,
+      300,
+      40
+    },
+    {
+      225,
+      3,
+      262,
+      40
+    },
+    {
+      301,
+      3,
+      338,
+      40
+    },
+    {
+      339,
+      3,
+      376,
+      40
+    },
+    {
+      377,
+      3,
+      414,
+      40
+    }
+  }
+  local togglesBG = {}
+  local toggleButtons = {}
+  local toggleTemplate = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "Static_ToggleBG1")
+  for ii = 1, 5 do
+    togglesBG[ii] = UI.cloneControl(toggleTemplate, self._ui.stc_upperGroups[UPPER_TAB_TYPE.COSTUME_TAB], "Static_ToggleBG_Copy_" .. ii)
+    togglesBG[ii]:SetPosX(toggleTemplate:GetPosX() + (ii - 1) * 50)
+    toggleButtons[ii] = UI.getChildControl(togglesBG[ii], "Checkbox_TogglePictogram")
+    toggleButtons[ii]:ChangeTextureInfoName("renewal/function/console_function_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(toggleButtons[ii], toggleUV[ii][1], toggleUV[ii][2], toggleUV[ii][3], toggleUV[ii][4])
+    toggleButtons[ii]:getBaseTexture():setUV(x1, y1, x2, y2)
+    toggleButtons[ii]:setRenderTexture(toggleButtons[ii]:getBaseTexture())
+    toggleButtons[ii]:getClickTexture():setUV(x1, y1, x2, y2)
+  end
+  toggleTemplate:SetShow(false)
+  self._ui.chk_hideHelmet = toggleButtons[1]
+  self._ui.chk_openHelmet = toggleButtons[2]
+  self._ui.chk_showUnderwear = toggleButtons[3]
+  self._ui.chk_toggleCloak = toggleButtons[4]
+  self._ui.chk_toggleNameWhenCamo = toggleButtons[5]
+  togglesBG[1]:addInputEvent("Mouse_LUp", "Input_InventoryInfo_HideHelmet()")
+  togglesBG[2]:addInputEvent("Mouse_LUp", "Input_InventoryInfo_OpenHelmet()")
+  togglesBG[3]:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleUnderwear()")
+  togglesBG[4]:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleCloak()")
+  togglesBG[5]:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleNameWhenCamo()")
+  self._ui.chk_hideHelmet:SetCheck(ToClient_IsShowHelm())
+  self:setToggleImageColor(self._ui.chk_hideHelmet, ToClient_IsShowHelm())
   self._ui.chk_openHelmet:SetCheck(ToClient_IsShowBattleHelm())
+  self:setToggleImageColor(self._ui.chk_openHelmet, ToClient_IsShowBattleHelm())
   getSelfPlayer():get():setUnderwearModeInhouse(false)
-  self._ui.chk_showUnderwear:SetCheck(getSelfPlayer():get():getUnderwearModeInhouse())
-  self._ui.chk_toggleCloak:SetCheck(not ToClient_IsShowCloak())
+  self._ui.chk_showUnderwear:SetCheck(false)
+  self:setToggleImageColor(self._ui.chk_showUnderwear, false)
+  self._ui.chk_toggleCloak:SetCheck(ToClient_IsShowCloak())
+  self:setToggleImageColor(self._ui.chk_toggleCloak, ToClient_IsShowCloak())
   self._ui.chk_toggleNameWhenCamo:SetCheck(Toclient_setShowNameWhenCamouflage())
-  self._ui.chk_HideHelmet:addInputEvent("Mouse_LUp", "Input_InventoryInfo_HideHelmet()")
-  self._ui.chk_openHelmet:addInputEvent("Mouse_LUp", "Input_InventoryInfo_OpenHelmet()")
-  self._ui.chk_showUnderwear:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleUnderwear()")
-  self._ui.chk_toggleCloak:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleCloak()")
-  self._ui.chk_toggleNameWhenCamo:addInputEvent("Mouse_LUp", "Input_InventoryInfo_ToggleNameWhenCamo()")
+  self:setToggleImageColor(self._ui.chk_toggleNameWhenCamo, self._ui.chk_toggleNameWhenCamo:IsCheck())
+end
+function InventoryInfo:setToggleImageColor(control, isCheck)
+  if isCheck then
+    control:SetColor(Defines.Color.C_FFFFFFFF)
+  else
+    control:SetColor(Defines.Color.C_FF525B6D)
+  end
 end
 function InventoryInfo:initInformationUIControl()
   self._ui.frame_characterInfo = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.INFORMATION_TAB], "Frame_CharacterInfo")
@@ -1287,6 +1349,7 @@ function InventoryInfo:initServantUIControl()
     SlotItem.new(slot[ii], "ServantInvenSlot_" .. ii, ii, slotBG[ii], _configForInven)
     slot[ii]:createChild()
     slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_ServantInvenSlot(" .. ii .. ")")
+    slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowServantInvenTooltip(" .. ii .. ", true)")
     slot[ii].icon:addInputEvent("Mouse_On", "Input_InventoryInfo_ServantInvenTooltip(" .. ii .. ", true)")
     slot[ii].icon:addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantInvenTooltip(" .. ii .. ", false)")
   end
@@ -1301,6 +1364,7 @@ function InventoryInfo:initServantUIControl()
     stc_servantEquipSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_A, "InputMLUp_InventoryInfo_ServantEquipDropHandler()")
     stc_servantEquipSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_ServantEquipSlot(true, " .. ii .. ")")
     stc_servantEquipSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_InventoryInfo_ServantEquipToggle(true, " .. ii .. ")")
+    stc_servantEquipSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowServantEquipTooltip(true," .. ii .. ", true)")
     slot_servantEquip[ii].icon:addInputEvent("Mouse_On", "Input_InventoryInfo_ServantEquipShowTooltip(true," .. ii .. ", true)")
     slot_servantEquip[ii].icon:addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantEquipShowTooltip(true," .. ii .. ", false)")
     slot_servantEquip[ii].pictogram = UI.getChildControl(stc_servantEquipSlotBG[ii], "Static_ItemPictogram")
@@ -1318,6 +1382,7 @@ function InventoryInfo:initServantUIControl()
     stc_servantCostumeSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_A, "InputMLUp_InventoryInfo_ServantEquipDropHandler()")
     stc_servantCostumeSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_ServantEquipSlot(false, " .. ii .. ")")
     stc_servantCostumeSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_InventoryInfo_ServantEquipToggle(false, " .. ii .. ")")
+    stc_servantCostumeSlotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowServantEquipTooltip(false," .. ii .. ", true)")
     slot_servantCostume[ii].icon:addInputEvent("Mouse_On", "Input_InventoryInfo_ServantEquipShowTooltip(false," .. ii .. ", true)")
     slot_servantCostume[ii].icon:addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantEquipShowTooltip(false," .. ii .. ", false)")
     slot_servantCostume[ii].pictogram = UI.getChildControl(stc_servantCostumeSlotBG[ii], "Static_ItemPictogram")
@@ -1344,12 +1409,13 @@ function InventoryInfo:initInventory()
     slot[ii] = {}
     SlotItem.new(slot[ii], "InvenSlot_" .. ii, ii, slotBG[ii], _configForInven)
     slot[ii]:createChild()
-    slot[ii].icon:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_invenShowTooltip(" .. ii .. ")")
     slot[ii].icon:addInputEvent("Mouse_Out", "InputMOut_InventoryInfo_invenHideTooltip(" .. ii .. ")")
     slot[ii].icon:addInputEvent("Mouse_PressMove", "InputDrag_InventoryInfo_invenDrag(" .. ii .. ")")
     slot[ii].icon:SetEnableDragAndDrop(true)
+    slotBG[ii]:addInputEvent("Mouse_On", "InputMOn_InventoryInfo_invenShowTooltip(" .. ii .. ")")
     slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Y, "Input_InventoryInfo_ItemDelete(" .. ii .. ")")
     slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_InvenSlot(" .. ii .. ")")
+    slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowTooltip(" .. ii .. ", true)")
     UIScroll.InputEventByControl(slotBG[ii], "InputScroll_InventoryInfo_Inventory")
     UIScroll.InputEventByControl(slot[ii].icon, "InputScroll_InventoryInfo_Inventory")
     slot[ii].icon:SetPosX(1)
@@ -1383,7 +1449,7 @@ function InventoryInfo:registEventHandler()
   end
   _panel:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_InventoryTab_forPadEventFunc(-1)")
   _panel:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_InventoryTab_forPadEventFunc(1)")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_AutoSort()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LSClick, "Input_InventoryInfo_AutoSort()")
   self._ui.stc_xBoxKey_LB:addInputEvent("Mouse_LUp", "Input_InventoryInfo_SetUpperTabLeft()")
   self._ui.stc_xBoxKey_RB:addInputEvent("Mouse_LUp", "Input_InventoryInfo_SetUpperTabRight()")
   self._ui.stc_xBoxKey_LT:addInputEvent("Mouse_LUp", "Input_InventoryInfo_SetLowerTabLeft()")
@@ -1393,6 +1459,7 @@ function InventoryInfo:registMessageHandler()
   _panel:RegisterShowEventFunc(true, "PaGlobalFunc_InventoryInfo_ShowAni()")
   _panel:RegisterShowEventFunc(false, "PaGlobalFunc_InventoryInfo_HideAni()")
   _panel:RegisterUpdateFunc("PaGlobalFunc_Window_InventoryInfo_PerFrameUpdate")
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_InventoryInfo_PadSnapChangePanel")
   registerEvent("FromClient_PadSnapChangeTarget", "FromClient_InventoryInfo_PadSnapChangeTarget")
   registerEvent("progressEventCancelByAttacked", "PaGlobalFunc_InventoryInfo_Close")
   registerEvent("onScreenResize", "FromClient_InventoryInfo_OnScreenResize")
@@ -1431,7 +1498,6 @@ function InventoryInfo:open(openType)
   if _ContentsGroup_RenewUI_Chatting then
     PaGlobalFunc_ChattingInfo_Close()
   end
-  self._ui.stc_keyGuideSetFunctor:SetShow(false)
   if Defines.UIMode.eUIMode_Default == GetUIMode() then
     if _ContentsGroup_RenewUI_Quest and true == PaGlobalFunc_Quest_GetShow() then
       PaGlobalFunc_Quest_Close()
@@ -1448,6 +1514,10 @@ function InventoryInfo:open(openType)
     self._ui.rdo_tabButtons[UPPER_TAB_TYPE.EQUIPMENT_TAB]:SetCheck(true)
     self:setTabTo(UPPER_TAB_TYPE.EQUIPMENT_TAB)
   end
+  local snappedControl = ToClient_getSnappedControl()
+  if nil == self._filterFunc or nil ~= snappedControl and _panel:GetKey() ~= snappedControl:GetParentPanel():GetKey() then
+    self._ui.stc_keyGuideSetFunctor:SetShow(false)
+  end
   self:initMultipleSelect()
   self:updateInventory()
   self:updateWeight()
@@ -1457,7 +1527,9 @@ function PaGlobalFunc_InventoryInfo_Close()
   InventoryInfo:close()
 end
 function InventoryInfo:close()
+  PaGlobalFunc_TooltipInfo_Close()
   Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_FloatingTooltip_Close()
   TooltipSimple_Hide()
   if nil ~= self._otherWindowOpenFunc then
     local callFunc = self._otherWindowOpenFunc
@@ -1514,7 +1586,9 @@ function PaGlobalFunc_InventoryInfo_HideAni()
   aniInfo1:SetDisableWhileAni(true)
   aniInfo1:SetIgnoreUpdateSnapping(true)
   Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
   TooltipSimple_Hide()
+  PaGlobalFunc_FloatingTooltip_Close()
 end
 function InventoryInfo:updateAllUpperTab()
   self:updateEquipment()
@@ -1576,6 +1650,8 @@ function InventoryInfo:updateSilverIcon(control, silver)
 end
 function InventoryInfo:updateUpperTab(tab)
   Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
+  PaGlobalFunc_FloatingTooltip_Close()
   TooltipSimple_Hide()
   if tab == UPPER_TAB_TYPE.EQUIPMENT_TAB then
     self:updateEquipment()
@@ -1728,6 +1804,7 @@ function InventoryInfo:checkUnderwearState()
   local equippedUnderwearWrapper = ToClient_getEquipmentItem(20)
   if nil ~= equippedUnderwearWrapper then
     self._ui.chk_showUnderwear:SetCheck(getSelfPlayer():get():getUnderwearModeInhouse())
+    self:setToggleImageColor(self._ui.chk_showUnderwear, getSelfPlayer():get():getUnderwearModeInhouse())
     self._ui.chk_showUnderwear:SetEnable(true)
     self._ui.chk_showUnderwear:SetMonoTone(false)
     self._ui.slot_costumes[self:getIndexFromCostumeSlotNo(20)].chk_toggleButton:SetCheck(ToClient_IsSetAvatarEquipSlotFlag(_avatarCheckFlag[20]))
@@ -1737,6 +1814,7 @@ function InventoryInfo:checkUnderwearState()
       Toclient_setShowAvatarEquip()
     end
     self._ui.chk_showUnderwear:SetCheck(false)
+    self:setToggleImageColor(self._ui.chk_showUnderwear, false)
     self._ui.chk_showUnderwear:SetEnable(false)
     self._ui.chk_showUnderwear:SetMonoTone(true)
     self._ui.slot_costumes[self:getIndexFromCostumeSlotNo(20)].chk_toggleButton:SetCheck(true)
@@ -1774,7 +1852,9 @@ function InventoryInfo:updateInformation()
     [5] = selfPlayer:getCharacterStatPointLimitedCollection(),
     [6] = selfPlayer:getCharacterStatPointLimitedDropItem()
   }
-  if CppEnums.ClassType.ClassType_WizardWomen == classtype or CppEnums.ClassType.ClassType_Wizard == classtype then
+  local classType = selfPlayer:getClassType()
+  local battleSpeed = CppEnums.ClassType_BattleSpeed[classType]
+  if battleSpeed == CppEnums.BattleSpeedType.SpeedType_Cast then
     potencialValues[1] = selfPlayer:characterStatPointSpeed(potentialType.cast)
     potencialValueLimit[1] = selfPlayer:characterStatPointLimitedSpeed(potentialType.cast)
   end
@@ -1855,6 +1935,7 @@ function InventoryInfo:updateInformation()
         txt_titles[self._setItemEffectTitleCount] = UI.createAndCopyBasePropertyControl(self._ui.frame_setEffect:GetFrameContent(), "StaticText_SetItemEffectTitle", self._ui.frame_setEffect:GetFrameContent(), "StaticText_SetItemEffectTitle" .. ii)
       end
       txt_titles[self._setItemEffectTitleCount]:SetShow(true)
+      txt_titles[self._setItemEffectTitleCount]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       txt_titles[self._setItemEffectTitleCount]:SetText(data[ii].groupTitle)
       txt_titles[self._setItemEffectTitleCount]:SetPosX(50)
       txt_titles[self._setItemEffectTitleCount]:SetPosY(startY)
@@ -1871,6 +1952,7 @@ function InventoryInfo:updateInformation()
     else
       txt_values[self._setItemEffectValueCount]:SetFontColor(Defines.Color.C_FFC4BEBE)
     end
+    txt_values[self._setItemEffectValueCount]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     txt_values[self._setItemEffectValueCount]:SetText(data[ii].descTitle .. " : " .. data[ii].desc)
     txt_values[self._setItemEffectValueCount]:SetPosX(50)
     txt_values[self._setItemEffectValueCount]:SetPosY(startY)
@@ -2276,9 +2358,9 @@ function InventoryInfo:findPuzzle()
   end
   local whereType = _lowerTabData[self._currentLowerTab].whereType
   local isFind = findPuzzleAndReadyMake(whereType)
+  self._ui.btn_invenPuzzle:SetShow(false)
+  self._puzzleCompleteSlot = nil
   if not isFind or true == ToClient_IsSortedInventory() then
-    self._ui.btn_invenPuzzle:SetShow(false)
-    self._puzzleCompleteSlot = nil
     return
   end
   local count = getPuzzleSlotCount()
@@ -2431,16 +2513,20 @@ function InventoryInfo:setTabTo(tabIndex)
   self._ui.stc_upperGroups[tabIndex]:SetShow(true)
   if tabIndex == UPPER_TAB_TYPE.INFORMATION_TAB then
     self._ui.stc_subWindowLower:SetShow(false)
+    self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_TITLE"))
   else
     self._ui.stc_subWindowLower:SetShow(true)
   end
   self._ui.txt_noServant:SetShow(false)
   if tabIndex == UPPER_TAB_TYPE.COSTUME_TAB then
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.CASH_INVEN_TAB)
+    self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_INVENTORY_BTN_CASHINVENTORY"))
   elseif tabIndex == UPPER_TAB_TYPE.EQUIPMENT_TAB then
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
+    self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "INVENTORY_TEXT_TITLE"))
   elseif tabIndex == UPPER_TAB_TYPE.SERVANT_TAB then
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
+    self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_SERVANTINVENTORY_TITLE"))
   end
   self:updateUpperTab(tabIndex)
   if DragManager:isDragging() then
@@ -2520,6 +2606,8 @@ function InputMRUp_InventoryInfo_EquipSlot(slotNo)
       else
         equipmentDoUnequip(slotNo)
       end
+      PaGlobalFunc_TooltipInfo_Close()
+      PaGlobalFunc_FloatingTooltip_Close()
     end
   end
 end
@@ -2546,24 +2634,29 @@ function Input_InventoryInfo_AutoActive()
   ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.AlchemyStone, InventoryInfo._ui.chk_autoActive:IsCheck(), CppEnums.VariableStorageType.eVariableStorageType_Character)
 end
 function Input_InventoryInfo_HideHelmet()
-  selfPlayerShowHelmet(not InventoryInfo._ui.chk_HideHelmet:IsCheck())
+  selfPlayerShowHelmet(not ToClient_IsShowHelm())
+  InventoryInfo:setToggleImageColor(InventoryInfo._ui.chk_hideHelmet, ToClient_IsShowHelm())
 end
 function Input_InventoryInfo_OpenHelmet()
-  selfPlayerShowBattleHelmet(InventoryInfo._ui.chk_openHelmet:IsCheck())
+  selfPlayerShowBattleHelmet(not ToClient_IsShowBattleHelm())
+  InventoryInfo:setToggleImageColor(InventoryInfo._ui.chk_openHelmet, ToClient_IsShowBattleHelm())
 end
 function Input_InventoryInfo_ToggleUnderwear()
   local self = InventoryInfo
   local itemWrapper = ToClient_getEquipmentItem(20)
   if nil == itemWrapper then
     self._ui.chk_showUnderwear:SetCheck(false)
+    self:setToggleImageColor(self._ui.chk_showUnderwear, false)
     return
   end
   if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
     if getSelfPlayer():get():getUnderwearModeInhouse() then
       self._ui.chk_showUnderwear:SetCheck(false)
+      self:setToggleImageColor(self._ui.chk_showUnderwear, false)
     else
       self._ui.chk_showUnderwear:SetCheck(true)
+      self:setToggleImageColor(self._ui.chk_showUnderwear, true)
     end
     return
   end
@@ -2573,6 +2666,8 @@ function Input_InventoryInfo_ToggleUnderwear()
   if isSafeZone then
     if selfPlayer:get():getUnderwearModeInhouse() then
       selfPlayer:get():setUnderwearModeInhouse(false)
+      self._ui.chk_showUnderwear:SetCheck(false)
+      self:setToggleImageColor(self._ui.chk_showUnderwear, false)
       Toclient_setShowAvatarEquip()
     else
       local index = self:getIndexFromCostumeSlotNo(20)
@@ -2580,17 +2675,24 @@ function Input_InventoryInfo_ToggleUnderwear()
         Input_InventoryInfo_CostumeShowToggle(index)
       end
       selfPlayer:get():setUnderwearModeInhouse(true)
+      self._ui.chk_showUnderwear:SetCheck(true)
+      self:setToggleImageColor(self._ui.chk_showUnderwear, true)
     end
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EQUIP_UNDERWARE_ALERT"))
     self._ui.chk_showUnderwear:SetCheck(false)
+    self:setToggleImageColor(self._ui.chk_showUnderwear, false)
   end
+  FGlobal_CheckUnderwear()
 end
 function Input_InventoryInfo_ToggleCloak()
-  selfPlayerShowCloak(not InventoryInfo._ui.chk_toggleCloak:IsCheck())
+  selfPlayerShowCloak(not ToClient_IsShowCloak())
+  InventoryInfo:setToggleImageColor(InventoryInfo._ui.chk_toggleCloak, ToClient_IsShowCloak())
 end
 function Input_InventoryInfo_ToggleNameWhenCamo()
-  Toclient_setShowNameWhenCamouflage(not getSelfPlayer():get():isShowNameWhenCamouflage())
+  InventoryInfo._ui.chk_toggleNameWhenCamo:SetCheck(not InventoryInfo._ui.chk_toggleNameWhenCamo:IsCheck())
+  Toclient_setShowNameWhenCamouflage(InventoryInfo._ui.chk_toggleNameWhenCamo:IsCheck())
+  InventoryInfo:setToggleImageColor(InventoryInfo._ui.chk_toggleNameWhenCamo, InventoryInfo._ui.chk_toggleNameWhenCamo:IsCheck())
 end
 function InputMRUp_InventoryInfo_ServantInvenSlot(index)
   if InputMLUp_InventoryInfo_ServantInvenDropHandler() then
@@ -2629,8 +2731,14 @@ function InputMLUp_InventoryInfo_ServantInvenDropHandler()
 end
 function Input_InventoryInfo_ServantInvenTooltip(index, isShow)
   local self = InventoryInfo
-  Panel_Tooltip_Item_SetPosition(index - 1 + __eTInventorySlotNoUseStart, self._ui.slot_servantInven[index], "servant_inventory")
-  Panel_Tooltip_Item_Show_GeneralNormal(index - 1 + __eTInventorySlotNoUseStart, "servant_inventory", isShow, nil, _panel:GetPosX() - 20, getScreenSizeY() - 100)
+  if isShow and nil ~= self._servantActorKeyRaw[1] then
+    local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index - 1 + __eTInventorySlotNoUseStart)
+    if nil ~= itemWrapper then
+      PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, self._ui.stc_servantInvenSlotBG[index])
+    end
+  else
+    PaGlobalFunc_FloatingTooltip_Close()
+  end
 end
 function InputMRUp_InventoryInfo_ServantEquipSlot(isEquipment, index)
   local self = InventoryInfo
@@ -2649,11 +2757,25 @@ function InputMRUp_InventoryInfo_ServantEquipSlot(isEquipment, index)
   else
     slotNo = _servantData[dataType].costumeSlotNoList[index]
   end
-  local itemWrapper = servantWrapper:getEquipItem(slotNo)
-  if nil == itemWrapper then
+  if DragManager:isDragging() and _panel == DragManager.dragStartPanel then
+    local itemWrapper = getInventoryItemByType(Inventory_GetCurrentInventoryType(), DragManager.dragSlotInfo)
+    if nil ~= itemWrapper then
+      local itemSSW = itemWrapper:getStaticStatus()
+      if true == itemSSW:isVehicleItem() then
+        inventoryUseItem(Inventory_GetCurrentInventoryType(), DragManager.dragSlotInfo, nil)
+      end
+    end
+    DragManager:clearInfo()
     return
   end
-  servant_doUnequip(servantWrapper:getActorKeyRaw(), slotNo)
+  local itemWrapper = servantWrapper:getEquipItem(slotNo)
+  if nil ~= itemWrapper then
+    servant_doUnequip(servantWrapper:getActorKeyRaw(), slotNo)
+  elseif isEquipment then
+    Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
+  else
+    Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.CASH_INVEN_TAB)
+  end
 end
 function InputMLUp_InventoryInfo_ServantEquipDropHandler()
   local self = InventoryInfo
@@ -2703,6 +2825,10 @@ function Input_InventoryInfo_ServantEquipToggle(isEquipment, index)
 end
 function Input_InventoryInfo_ServantEquipShowTooltip(isEquipment, index, isShow)
   local self = InventoryInfo
+  if false == isShow then
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
   local servantWrapper = getServantInfoFromActorKey(self._servantActorKeyRaw[1])
   if nil == servantWrapper then
     return
@@ -2711,12 +2837,16 @@ function Input_InventoryInfo_ServantEquipShowTooltip(isEquipment, index, isShow)
   local dataType = _vehicleTypeToSERVANT_TYPE[vehicleType]
   local slotNo = _servantData[dataType].equipSlotNoList[index]
   local slot = self._ui.slot_servantEquip[index]
+  local slotBG = self._ui.stc_servantEquipSlotBG[index]
   if false == isEquipment then
     slotNo = _servantData[dataType].costumeSlotNoList[index]
     slot = self._ui.slot_servantCostume[index]
+    slotBG = self._ui.stc_servantCostumeSlotBG[index]
   end
-  Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantEquipment")
-  Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "ServantEquipment", isShow, nil, _panel:GetPosX() - 20, getScreenSizeY() - 100)
+  local itemWrapper = servantWrapper:getEquipItem(slotNo)
+  if nil ~= itemWrapper then
+    PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, slotBG)
+  end
 end
 function InputMRUp_InventoryInfo_InvenSlot(index)
   local self = InventoryInfo
@@ -2731,7 +2861,7 @@ function InputMRUp_InventoryInfo_InvenSlot(index)
           PaGlobalFunc_FixMaxEnduranceInfo_PickTargetOrSubject(slotNo, itemWrapper, itemWrapper:get():getCount_s64(), whereType)
         end
       else
-        PaGlobalFunc_RepairInfo_InvenRClick(slotNo, itemWrapper, itemWrapper:get():getCount_s64(), whereType)
+        PaGlobalFunc_RepairInfo_InvenRClick(slotNo, itemWrapper, nil, whereType)
       end
     end
   elseif DragManager:isDragging() then
@@ -2739,6 +2869,8 @@ function InputMRUp_InventoryInfo_InvenSlot(index)
   else
     self:onInventoryItemRClick(index)
   end
+  PaGlobalFunc_FloatingTooltip_Close()
+  PaGlobalFunc_TooltipInfo_Close()
 end
 function InputMLUp_InventoryInfo_InvenSlot(index)
   local self = InventoryInfo
@@ -2777,7 +2909,7 @@ function Input_InventoryInfo_AutoSort()
   end
   local isSorted = ToClient_IsSortedInventory()
   ToClient_SetSortedInventory(not isSorted)
-  self._ui.txt_keyGuideX:SetText(self:getXKeyGuideString(not isSorted))
+  self._ui.txt_keyGuideSort:SetText(self:getSortKeyGuideString(not isSorted))
   DragManager:clearInfo()
   if false == isSorted then
     self._ui.btn_invenPuzzle:SetShow(false)
@@ -2785,7 +2917,7 @@ function Input_InventoryInfo_AutoSort()
   end
   self:updateInventory()
 end
-function InventoryInfo:getXKeyGuideString(isSorted)
+function InventoryInfo:getSortKeyGuideString(isSorted)
   if true == isSorted then
     return "Arranged"
   else
@@ -2798,6 +2930,9 @@ function InputMOn_InventoryInfo_invenShowTooltip(index)
     return
   end
   local slotNo
+  if nil == self._ui.slot_inven[index] or nil == self._ui.slot_inven[index].slotNo then
+    return
+  end
   if index + self._invenStartSlotIndex <= self._invenCapacity then
     slotNo = self._ui.slot_inven[index].slotNo
   end
@@ -2810,18 +2945,23 @@ function InputMOn_InventoryInfo_invenShowTooltip(index)
     if nil ~= effectScene.newItem[slotNo] then
       self._ui.slot_inven[index].icon:EraseEffect(effectScene.newItem[slotNo])
     end
-  elseif true == _ContentsGroup_ForXBoxXR and true == _ContentsGroup_ForXBoxFinalCert and index + self._invenStartSlotIndex == self._invenCapacity + 1 then
-    local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
-    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
-    local control = self._ui.slot_inven[index].icon
-    TooltipSimple_Show(control, name, desc)
-    return
   else
-    TooltipSimple_Hide()
+    if true == _ContentsGroup_ForXBoxXR and true == _ContentsGroup_ForXBoxFinalCert and index + self._invenStartSlotIndex == self._invenCapacity + 1 then
+      local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
+      local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
+      local control = self._ui.slot_inven[index].icon
+      TooltipSimple_Show(control, name, desc)
+    else
+      TooltipSimple_Hide()
+    end
+    return
   end
   self._tooltipWhereType = _lowerTabData[self._currentLowerTab].whereType
   self._tooltipSlotNo = slotNo
-  Panel_Tooltip_Item_Show_GeneralNormal(index, "inventory", true, false, _panel:GetPosX() - 20, getScreenSizeY() - 100)
+  local itemWrapper = getInventoryItemByType(_lowerTabData[self._currentLowerTab].whereType, slotNo)
+  if nil ~= itemWrapper then
+    PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, self._ui.stc_invenSlotBG[index])
+  end
 end
 function InputMOut_InventoryInfo_invenHideTooltip(index)
   local self = InventoryInfo
@@ -2830,8 +2970,9 @@ function InputMOut_InventoryInfo_invenHideTooltip(index)
   end
   self._tooltipWhereType = nil
   self._tooltipSlotNo = nil
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
   TooltipSimple_Hide()
+  PaGlobalFunc_FloatingTooltip_Close()
 end
 function InputDrag_InventoryInfo_invenDrag(index)
   local self = InventoryInfo
@@ -3010,6 +3151,8 @@ function InventoryInfo:onInventoryItemRClick(index)
       return
     elseif itemEnchantWrapper:isPopupItem() then
       Panel_Tooltip_Item_hideTooltip()
+      PaGlobalFunc_TooltipInfo_Close()
+      PaGlobalFunc_FloatingTooltip_Close()
       local function onClickYesButton()
         Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
       end
@@ -3073,11 +3216,29 @@ function InventoryInfo:onInventoryItemRClickAtServant(index)
   FGlobal_PopupMoveItem_InitByInventory(slotNo, itemWrapper, itemWrapper:get():getCount_s64(), whereType)
   HandleClickedMoveItemButtonXXX(moveToType, self._servantActorKeyRaw[1])
 end
-function InputMOn_InventoryInfo_equipShowTooltip(slotNo, isOn)
+function InputMOn_InventoryInfo_equipShowTooltip(isEquip, index, isOn)
+  local self = InventoryInfo
   if true == InventoryInfo._showAniIsPlaying then
     return
   end
-  Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "equipment", isOn, false, _panel:GetPosX() - 20, 200)
+  if false == isOn then
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  local slotBG, slotNo
+  if isEquip then
+    slotBG = self._ui.stc_equipSlotBG[index]
+    slotNo = _equipSlotNo[index]
+  else
+    slotBG = self._ui.stc_costumeSlotBG[index]
+    slotNo = _costumeSlotNo[index]
+  end
+  local itemWrapper = ToClient_getEquipmentItem(slotNo)
+  if nil ~= itemWrapper then
+    PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, slotBG)
+  else
+    PaGlobalFunc_FloatingTooltip_Close()
+  end
 end
 function Input_InventoryInfo_CostumeShowToggle(index)
   local self = InventoryInfo
@@ -3090,6 +3251,7 @@ function Input_InventoryInfo_CostumeShowToggle(index)
       getSelfPlayer():get():setUnderwearModeInhouse(false)
       Toclient_setShowAvatarEquip()
       self._ui.chk_showUnderwear:SetCheck(false)
+      self:setToggleImageColor(self._ui.chk_showUnderwear, false)
     end
   else
     ToClient_ResetAvatarEquipSlotFlag(_avatarCheckFlag[_costumeSlotNo[index]])
@@ -3120,6 +3282,59 @@ function Input_InventoryInfo_ItemDelete(index)
     Inventory_ItemDelete_Check(Defines.s64_const.s64_1, slotNo, whereType)
   else
     Panel_NumberPad_Show(true, itemCount, slotNo, Inventory_ItemDelete_Check, nil, whereType)
+  end
+end
+function Input_InventoryInfo_ShowTooltip(index, isShow)
+  local self = InventoryInfo
+  if isShow then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(_lowerTabData[self._currentLowerTab].whereType, self._ui.slot_inven[index].slotNo), Defines.TooltipTargetType.Item, _panel:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+  else
+    PaGlobalFunc_TooltipInfo_Close()
+  end
+end
+function Input_InventoryInfo_ShowEquipTooltip(slotNo, isShow)
+  local self = InventoryInfo
+  if isShow then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, ToClient_getEquipmentItem(slotNo), Defines.TooltipTargetType.ItemWithoutCompare, _panel:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+  else
+    PaGlobalFunc_TooltipInfo_Close()
+  end
+end
+function Input_InventoryInfo_ShowServantInvenTooltip(index, isShow)
+  local self = InventoryInfo
+  if isShow then
+    if nil ~= self._servantActorKeyRaw[1] then
+      local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index - 1 + __eTInventorySlotNoUseStart)
+      PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, _panel:GetPosX())
+      PaGlobalFunc_FloatingTooltip_Close()
+    end
+  else
+    PaGlobalFunc_TooltipInfo_Close()
+  end
+end
+function Input_InventoryInfo_ShowServantEquipTooltip(isEquipment, index, isShow)
+  local self = InventoryInfo
+  if isShow then
+    if nil ~= self._servantActorKeyRaw[1] then
+      local servantWrapper = getServantInfoFromActorKey(self._servantActorKeyRaw[1])
+      if nil ~= servantWrapper then
+        local slotNo
+        local vehicleType = servantWrapper:getVehicleType()
+        local dataType = _vehicleTypeToSERVANT_TYPE[vehicleType]
+        if true == isEquipment then
+          slotNo = _servantData[dataType].equipSlotNoList[index]
+        else
+          slotNo = _servantData[dataType].costumeSlotNoList[index]
+        end
+        local itemWrapper = servantWrapper:getEquipItem(slotNo)
+        PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.ItemWithoutCompare, _panel:GetPosX())
+        PaGlobalFunc_FloatingTooltip_Close()
+      end
+    end
+  else
+    PaGlobalFunc_TooltipInfo_Close()
   end
 end
 function Inventory_ItemDelete_Check(count, slotNo, whereType)
@@ -3309,6 +3524,12 @@ end
 function FromClient_InventoryInfo_FitnessChanged()
   InventoryInfo:updateInformation()
 end
+function FromClient_InventoryInfo_PadSnapChangePanel(fromPanel, toPanel)
+  if nil ~= toPanel and _panel:GetKey() ~= toPanel:GetKey() then
+    PaGlobalFunc_TooltipInfo_Close()
+    PaGlobalFunc_FloatingTooltip_Close()
+  end
+end
 function FromClient_InventoryInfo_PadSnapChangeTarget(fromControl, toControl)
   local self = InventoryInfo
   if UPPER_TAB_TYPE.INFORMATION_TAB == self._currentUpperTab then
@@ -3361,12 +3582,14 @@ function InventoryInfo:setKeyGuideWithControl(controlName)
   if UPPER_TAB_TYPE.SERVANT_TAB == self._currentUpperTab then
     self._keyGuideList[KEY_GUIDE_TYPE.A]:SetText("Move")
   end
-  self._keyGuideList[KEY_GUIDE_TYPE.X]:SetText(self:getXKeyGuideString(ToClient_IsSortedInventory()))
+  self._keyGuideList[KEY_GUIDE_TYPE.LS_CLICK]:SetText(self:getSortKeyGuideString(ToClient_IsSortedInventory()))
 end
 function Inventory_SetShow(isInvenShow)
   if not isInvenShow then
     InventoryWindow_Close()
     Panel_Tooltip_Item_hideTooltip()
+    PaGlobalFunc_TooltipInfo_Close()
+    PaGlobalFunc_FloatingTooltip_Close()
     PaGlobal_TutorialUiManager:getUiMasking():hideQuestMasking()
   else
     InventoryWindow_Show()
@@ -3407,28 +3630,24 @@ function InventoryInfo:getMultipleSelect()
   return rv
 end
 function InventoryInfo:handleCompleteMultipleSelection()
-  if not self._multipleSelectEndFunc then
+  if not self._optionalPadEventFunc then
     return
   end
   local multipleSelectInfo = self:getMultipleSelect()
-  self._multipleSelectEndFunc(multipleSelectInfo)
+  self._optionalPadEventFunc(multipleSelectInfo)
 end
 function PaGlobalFunc_InventoryInfo_HandleCompleteMultipleSelection()
   return InventoryInfo:handleCompleteMultipleSelection()
 end
-function PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(index, whereType)
+function PaGlobalFunc_InventoryInfo_ToggleMultipleSelect(slotNo, whereType)
   local self = InventoryInfo
-  local slotNo = self._ui.slot_inven[index].slotNo
-  if nil == slotNo then
-    return
-  end
-  if nil == whereType then
+  if nil == slotNo or nil == whereType then
     return
   end
   self._multipleSelect[whereType][slotNo] = true ~= self._multipleSelect[whereType][slotNo]
   self:updateInventory()
 end
-function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFunction, effect, multiSelectParam)
+function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFunction, effect, optionalPadEvent)
   local self = InventoryInfo
   DragManager:clearInfo()
   if nil ~= self._otherWindowOpenFunc and nil ~= otherWindowOpenFunction then
@@ -3456,30 +3675,26 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
   if nil ~= rClickFunction and "function" == type(rClickFunction) then
     self._ui.stc_keyGuide:SetShow(false)
     self._ui.stc_keyGuideSetFunctor:SetShow(true)
-    if nil ~= multiSelectParam then
-      if nil ~= multiSelectParam.multipleSelectEndFunc and "function" == type(multiSelectParam.multipleSelectEndFunc) then
-        self._multipleSelectEndFunc = multiSelectParam.multipleSelectEndFunc
-        self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(true)
-        self._ui.txt_keyGuideSetFunctorAlterKey:SetText(PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_STATE_FINAL_CHECK"))
-        if nil ~= multiSelectParam.button then
-          self._multipleSelectEndButton = multiSelectParam.button
-          _panel:registerPadEvent(self._multipleSelectEndButton, "PaGlobalFunc_InventoryInfo_HandleCompleteMultipleSelection()")
-          PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideSetFunctorAlterKey, self._multipleSelectEndButton)
-        else
-          _panel:registerPadEvent(self._multipleSelectEndButton, "")
-          self._multipleSelectEndButton = nil
-          PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideSetFunctorAlterKey, self._multipleSelectEndButton)
-        end
-        if nil ~= multiSelectParam.keyGuideString then
-          self._ui.txt_keyGuideSetFunctorAlterKey:SetText(tostring(multiSelectParam.keyGuideString))
-        end
+    local snappedControl = ToClient_getSnappedControl()
+    if nil ~= snappedControl and _panel:GetKey() ~= snappedControl:GetParentPanel():GetKey() then
+      self._ui.stc_keyGuideSetFunctor:SetShow(false)
+    end
+    if nil ~= optionalPadEvent and nil ~= optionalPadEvent.func and "function" == type(optionalPadEvent.func) then
+      self._optionalPadEventFunc = optionalPadEvent.func
+      self._optionalPadEventButton = __eConsoleUIPadEvent_Up_Y
+      _panel:registerPadEvent(self._optionalPadEventButton, "PaGlobalFunc_InventoryInfo_HandleCompleteMultipleSelection()")
+      PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideSetFunctorAlterKey, self._optionalPadEventButton)
+      self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(true)
+      self._ui.txt_keyGuideSetFunctorAlterKey:SetText(PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_STATE_FINAL_CHECK"))
+      if nil ~= optionalPadEvent.keyGuideString then
+        self._ui.txt_keyGuideSetFunctorAlterKey:SetText(tostring(optionalPadEvent.keyGuideString))
       end
     else
-      if nil ~= self._multipleSelectEndButton then
-        _panel:registerPadEvent(self._multipleSelectEndButton, "")
+      if nil ~= self._optionalPadEventButton then
+        _panel:registerPadEvent(self._optionalPadEventButton, "")
       end
-      self._multipleSelectEndFunc = nil
-      self._multipleSelectEndButton = nil
+      self._optionalPadEventFunc = nil
+      self._optionalPadEventButton = nil
       self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(false)
     end
   else
@@ -3538,6 +3753,7 @@ function FGlobal_CheckUnderwear()
   local isSafeZone = regionInfo:get():isSafeZone()
   if not isSafeZone then
     self._ui.chk_showUnderwear:SetCheck(false)
+    self:setToggleImageColor(self._ui.chk_showUnderwear, false)
   end
 end
 function PaGlobalFunc_InventoryInfo_ItemComparer(ii, jj)
@@ -4267,8 +4483,9 @@ function HandleClicked_Inventory_Palette_Open()
   audioPostEvent_SystemUi(1, 24)
   PaGlobalFunc_Dyeing_Open()
 end
+local _depositPossible = true
 function PaGlobalFunc_InventoryInfo_PopMoney()
-  if false == PaGlobalFunc_Warehouse_GetShow() then
+  if false == PaGlobalFunc_Warehouse_GetShow() or false == _depositPossible then
     return
   end
   local self = InventoryInfo
@@ -4277,10 +4494,13 @@ function PaGlobalFunc_InventoryInfo_PopMoney()
   FGlobal_PopupMoveItem_Init(whereType, slotNo, CppEnums.MoveItemToType.Type_Player, getSelfPlayer():getActorKey(), true)
 end
 function PaGlobalFunc_InventoryInfo_SetMoneyButton(setUp)
+  local self = InventoryInfo
   if true == setUp then
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_InventoryInfo_PopMoney()")
+    _depositPossible = true
+    self._ui.txt_keyGuideSetFunctorAlterKey:SetMonoTone(false)
   else
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_AutoSort()")
+    _depositPossible = false
+    self._ui.txt_keyGuideSetFunctorAlterKey:SetMonoTone(true)
   end
 end
 function InventoryInfo:generateXBoxKeyGuide(key, str)
@@ -4306,7 +4526,19 @@ local _buttonUV = {
     90,
     45
   },
+  [__eConsoleUIPadEvent_Up_Y] = {
+    46,
+    1,
+    90,
+    45
+  },
   [__eConsoleUIPadEvent_A] = {
+    1,
+    1,
+    45,
+    45
+  },
+  [__eConsoleUIPadEvent_Up_A] = {
     1,
     1,
     45,
@@ -4324,4 +4556,11 @@ function PaGlobalFunc_SetKeyGuideUVTo(control, buttonIndex)
   local x1, y1, x2, y2 = setTextureUV_Func(control, _buttonUV[buttonIndex][1], _buttonUV[buttonIndex][2], _buttonUV[buttonIndex][3], _buttonUV[buttonIndex][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
+end
+function inventoryKeyGuideTest()
+  if 0 == _panel:GetPosY() then
+    _panel:SetPosY(-50)
+  else
+    _panel:SetPosY(0)
+  end
 end

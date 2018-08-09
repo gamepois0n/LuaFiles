@@ -35,9 +35,13 @@ function petFood:initControl()
   petInfoUI._static_ButtonTemplate = UI.getChildControl(petInfoUI._static_SubFrameBG, "Static_ItemSlotBg_Template")
   petInfoUI._static_ButtonTemplate:SetShow(false)
   petInfoUI._static_templateSlot = UI.getChildControl(petInfoUI._static_ButtonTemplate, "Static_ItemIcon")
-  petInfoUI._static_Feed = UI.getChildControl(petInfoUI._static_BottomKeyBG, "StaticText_Feed_ConsoleUI")
   petInfoUI._static_Cancle = UI.getChildControl(petInfoUI._static_BottomKeyBG, "StaticText_Cancel_ConsoleUI")
+  petInfoUI._static_Feed = UI.getChildControl(petInfoUI._static_BottomKeyBG, "StaticText_Feed_ConsoleUI")
   petInfoUI._static_FeedFull = UI.getChildControl(petInfoUI._static_BottomKeyBG, "StaticText_FeedAll_ConsoleUI")
+  local xPos = petInfoUI._static_Cancle:GetPosX() - petInfoUI._static_Feed:GetTextSizeX() - self._config._gapX
+  petInfoUI._static_Feed:SetPosX(xPos)
+  xPos = xPos - petInfoUI._static_FeedFull:GetTextSizeX() - self._config._gapX
+  petInfoUI._static_FeedFull:SetPosX(xPos)
   local UCT = CppEnums.PA_UI_CONTROL_TYPE
   petInfoUI._static_Feed:addInputEvent("Mouse_LUp", "FromClient_FeedItem()")
   petInfoUI._static_Cancle:addInputEvent("Mouse_LUp", "FGlobal_PetFeedClose()")
@@ -89,6 +93,10 @@ function petFood:update()
     end
     self._isFoodEmpty = false
   end
+  local xPos = petInfoUI._static_Cancle:GetPosX() - petInfoUI._static_Feed:GetTextSizeX() - self._config._gapX
+  petInfoUI._static_Feed:SetPosX(xPos)
+  xPos = xPos - petInfoUI._static_FeedFull:GetTextSizeX() - self._config._gapX
+  petInfoUI._static_FeedFull:SetPosX(xPos)
   for i = 0, self._config._feedStaticItemCount - 1 do
     local targetSlot = petInfoUI._static_ItemSlots[i]
     if userFeedItemCount > i then
@@ -183,6 +191,7 @@ function petFood:close()
     return
   end
   Panel_Window_PetFood_Renew:SetShow(false)
+  PaGlobalFunc_Petlist_TemporaryOpen()
 end
 function petFood:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetFood")
@@ -226,5 +235,6 @@ function HandleClicked_FeedItem(itemIndex)
     petInfoUI._static_ItemSlots[i]._button:SetCheck(false)
   end
   petInfoUI._static_ItemSlots[itemIndex]._button:SetCheck(true)
+  PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, feedItem, Defines.TooltipTargetType.Item, 0)
 end
 petFood:registEventHandler()

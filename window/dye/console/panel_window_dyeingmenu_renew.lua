@@ -77,7 +77,6 @@ function DyeingMenu:initialize()
     [DYEING_SUBMENU.TENT] = UI.getChildControl(self._ui.stc_subMenuGroup[ROOT_MENU.DYEING], "RadioButton_Tent")
   }
   if not ToClient_IsContentsGroupOpen("4") then
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "ToClient_IsContentsGroupOpen 4")
     self._ui.rdo_subMenu[ROOT_MENU.DYEING][DYEING_SUBMENU.CAMEL]:SetShow(false)
   end
   if not _ContentsGroup_isCamp then
@@ -90,7 +89,8 @@ function DyeingMenu:initialize()
       self._ui.rdo_subMenu[ii][jj]:addInputEvent("Mouse_Out", "InputMOut_DyeingMenu_SubMenu(" .. ii .. "," .. jj .. ")")
     end
   end
-  _panel:RegisterUpdateFunc("PaGlobalFunc_Dyeing_UpdatePerFrame")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "Input_DyeingMain_PressedLT()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_LT, "Input_DyeingMain_ReleasedLT()")
 end
 function PaGlobalFunc_DyeingMenu_GetShow()
   return _panel:GetShow()
@@ -100,6 +100,7 @@ function PaGlobalFunc_DyeingMenu_Open()
 end
 function DyeingMenu:open()
   _panel:SetShow(true)
+  self:setVisibleMenu(true)
   self._ui.rdo_rootMenu[2]:SetColor(Defines.Color.C_FF525B6D)
   self._ui.rdo_rootMenu[2]:SetFontColor(Defines.Color.C_FF525B6D)
   self._ui.stc_rootLine[2]:SetShow(false)
@@ -120,22 +121,6 @@ function InputMOn_DyeingMenu_RootMenu(rootIndex)
 end
 function InputMOut_DyeingMenu_RootMenu(rootIndex)
   local self = DyeingMenu
-end
-function Input_DyeingMenu_SubMenu(rootIndex, subIndex)
-  local self = DyeingMenu
-  if ROOT_MENU.PALETTE == rootIndex then
-    PaGlobalFunc_DyeingTake_Open()
-    if 1 == subIndex then
-      PaGlobalFunc_DyeingRegister_Open()
-    end
-  elseif ROOT_MENU.DYEING == rootIndex then
-    local dyeAvailable = ToClient_RequestSetTargetType(TARGET_NUM[subIndex])
-    if dyeAvailable then
-      DyeingMenu:close()
-      PaGlobalFunc_DyeingPartList_Open(subIndex)
-      self._ui.txt_keyGuideA:SetShow(false)
-    end
-  end
 end
 function InputMOn_DyeingMenu_SubMenu(rootIndex, subIndex)
   local self = DyeingMenu
@@ -172,6 +157,26 @@ function DyeingMenu:browseMenu(rootIndex, subIndex)
     self._ui.txt_keyGuideA:SetShow(false)
   end
 end
-function PaGlobalFunc_Dyeing_UpdatePerFrame(deltaTime)
+function Input_DyeingMenu_SubMenu(rootIndex, subIndex)
   local self = DyeingMenu
+  if ROOT_MENU.PALETTE == rootIndex then
+    PaGlobalFunc_DyeingTake_Open()
+    if 1 == subIndex then
+      PaGlobalFunc_DyeingRegister_Open()
+    end
+    self:setVisibleMenu(false)
+  elseif ROOT_MENU.DYEING == rootIndex then
+    local dyeAvailable = ToClient_RequestSetTargetType(TARGET_NUM[subIndex])
+    if dyeAvailable then
+      DyeingMenu:close()
+      PaGlobalFunc_DyeingPartList_Open(subIndex)
+      self:setVisibleMenu(false)
+    end
+  end
+end
+function DyeingMenu:setVisibleMenu(isShow)
+  self._ui.stc_rootGroup:SetShow(isShow)
+  self._ui.stc_subMenuGroup[ROOT_MENU.PALETTE]:SetShow(isShow)
+  self._ui.stc_subMenuGroup[ROOT_MENU.DYEING]:SetShow(isShow)
+  self._ui.txt_keyGuideA:SetShow(isShow)
 end

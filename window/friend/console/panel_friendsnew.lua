@@ -20,7 +20,8 @@ PaGlobal_FriendNew = {
     _XBOX_PROFILE = PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_XBOX_PROFILE"),
     _XBOX_GAMERTAG = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FRIENDNEW_XBOXNAME"),
     _CHARACTERNAME = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FRIENDNEW_CHARACTERNAME"),
-    _GUILD_INVITE = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_INVITE")
+    _GUILD_INVITE = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_INVITE"),
+    _XBOX_INVITE = PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_FRIEND_GAMEINVITE")
   },
   _isPCFriendTab = true,
   _isFriendListTab = true,
@@ -43,6 +44,10 @@ function PaGlobal_FriendNew:Open()
   RequestFriendList_getAddFriendList()
 end
 function PaGlobal_FriendNew:Close()
+  if true == self._ui._Static_AddFriendBg:GetShow() then
+    PaGlobal_FriendNew:CloseAddFriendEdit()
+    return
+  end
   Panel_FriendList:SetShow(false)
   Panel_FriendList:SetMonoTone(false)
   self._ui._Static_AddFriendBg:SetShow(false)
@@ -67,7 +72,7 @@ function PaGlobal_FriendNew:UpdatePcFriendTab()
     self._ui._StaticText_InviteParty:SetShow(true)
     self._ui._StaticText_DeleteFriend:SetShow(true)
     self._ui._StaticText_InviteParty:SetText(self._STRING._ACCEPT_ADDREQUEST)
-    self._ui._StaticText_DeleteFriend:SetText(self._STRING._DECLINE_ADDREQUEST)
+    self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
     self:UpdateOfferList()
   end
 end
@@ -78,8 +83,9 @@ function PaGlobal_FriendNew:UpdateXboxFriendTab()
   self._ui._List2_FriendBg:SetShow(true)
   self._ui._List2_OfferBg:SetShow(false)
   self._ui._StaticText_InviteParty:SetShow(true)
-  self._ui._StaticText_DeleteFriend:SetShow(false)
+  self._ui._StaticText_DeleteFriend:SetShow(true)
   self._ui._StaticText_InviteParty:SetText(self._STRING._XBOX_PROFILE)
+  self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
   self._ui._StaticText_CharactorNameTitle:SetText(self._STRING._XBOX_GAMERTAG)
   self._ui._StaticText_AddFriend:SetShow(false)
   self:UpdateXboxFriendList()
@@ -121,8 +127,10 @@ function PaGlobal_FriendNew:UpdateXboxFriendList()
   end
   if xboxFriendSize < 1 then
     self._ui._StaticText_InviteParty:SetShow(false)
+    self._ui._StaticText_DeleteFriend:SetShow(false)
   else
     self._ui._StaticText_InviteParty:SetShow(true)
+    self._ui._StaticText_DeleteFriend:SetShow(true)
   end
 end
 function FriendNew_CreateOfferList(control, key)
@@ -151,6 +159,11 @@ function FriendNew_InviteGuild(targetName, value)
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    return
+  end
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  if nil ~= guildInfo and nil ~= guildInfo:getMemberByUserNo() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_ALREADY_JOIN_CLAN_OR_GUILD"))
     return
   end
   FromClient_GuildMain_ResponseGuildInviteForGuild(0, targetName, 0)
@@ -216,14 +229,20 @@ function FriendNew_CreateFriendList(control, key)
     end
     if _ContentsGroup_isConsolePadControl then
       control:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_FriendNew:ShowXBoxProfile(" .. tostring(key) .. ")")
+      control:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_FriendNew:SendXboxInvite(" .. tostring(key) .. ")")
     else
       uiButton:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:ShowXBoxProfile(" .. tostring(key) .. ")")
+      uiButton:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:SendXboxInvite(" .. tostring(key) .. ")")
     end
   end
 end
 function PaGlobal_FriendNew:ShowXBoxProfile(index)
   local xboxFriendInfo = ToClient_getXboxFriendInfoByIndex(Int64toInt32(index))
   ToClient_showXboxFriendProfile(xboxFriendInfo:getXuid())
+end
+function PaGlobal_FriendNew:SendXboxInvite(index)
+  local xboxFriendInfo = ToClient_getXboxFriendInfoByIndex(Int64toInt32(index))
+  ToClient_sendXboxInvite(xboxFriendInfo:getXuid(), "Hello!")
 end
 function PaGlobal_FriendNew:ClickedFriendList(index)
   local prevFriendIdx = self._currentFriendIdx
@@ -387,6 +406,12 @@ function PaGlobal_FriendNew:EnterAddFriendEdit(str)
   }
   MessageBox.showMessageBox(messageBoxData)
 end
+function PaGlobal_FriendNew:CloseAddFriendEdit()
+  Panel_FriendList:SetMonoTone(false)
+  self._ui._Edit_Nickname:SetEditText("", true)
+  self._ui._Static_AddFriendBg:SetShow(false)
+  ClearFocusEdit()
+end
 function PaGlobal_FriendNew_EnterAddFriendFunctionYes()
   requestFriendList_addFriend(PaGlobal_FriendNew._tempAddFriendStr, true)
   PaGlobal_FriendNew._tempAddFriendStr = ""
@@ -399,6 +424,7 @@ function PaGlobal_FriendNew:OpenAddFriendEdit()
     return
   end
   Panel_FriendList:SetMonoTone(true)
+  self._ui._Static_AddFriendBg:SetMonoTone(false)
   self._ui._Static_AddFriendBg:SetShow(true)
   self._ui._Edit_Nickname:SetEditText("", true)
   SetFocusEdit(self._ui._Edit_Nickname)

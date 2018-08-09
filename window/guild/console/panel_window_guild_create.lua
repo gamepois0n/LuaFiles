@@ -1,24 +1,54 @@
-local Window_Guild_CreateInfo = {
+local _panel = Panel_Console_Window_GuildCreate
+local GuildCreate = {
   _ui = {
-    _edit_GuildName = UI.getChildControl(Panel_Console_Window_GuildCreate, "Edit_Name"),
-    _edit_GuildCost = UI.getChildControl(Panel_Console_Window_GuildCreate, "Edit_GuildCost"),
-    _button_Cancel = UI.getChildControl(Panel_Console_Window_GuildCreate, "Button_Cancel"),
-    _button_Confirm = UI.getChildControl(Panel_Console_Window_GuildCreate, "Button_Confirm"),
-    _staticText_NamingPolicy = UI.getChildControl(Panel_Console_Window_GuildCreate, "StaticText_NamingPolicy")
-  }
+    _edit_GuildName = UI.getChildControl(_panel, "Edit_Name"),
+    _edit_GuildCost = UI.getChildControl(_panel, "Edit_GuildCost"),
+    _button_Cancel = UI.getChildControl(_panel, "Button_Cancel"),
+    _button_Confirm = UI.getChildControl(_panel, "Button_Confirm"),
+    _staticText_NamingPolicy = UI.getChildControl(_panel, "StaticText_NamingPolicy")
+  },
+  _createGuildGrade = nil,
+  _isRaisingGuildGrade = false
 }
+function GuildCreate:init()
+  self:InitControl()
+  self:InitEvent()
+end
+function GuildCreate:InitControl()
+  self._ui._edit_GuildName:SetMaxInput(getGameServiceTypeGuildNameLength())
+  self._ui._button_EditGuildName = UI.getChildControl(self._ui._edit_GuildName, "StaticText_Key_ConsoleUI")
+  self._ui._staticText_NamingPolicy:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_NamingPolicy:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_POPUP_1"))
+end
+function GuildCreate:InitEvent()
+  self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Confirm()")
+  self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Close()")
+  if false == _ContentsGroup_isConsolePadControl then
+    self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
+  end
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildCreate_SetFocus()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GuildCreate_Confirm()")
+end
+function GuildCreate:open()
+  _panel:SetShow(true)
+end
+function GuildCreate:close()
+  _panel:SetShow(false)
+end
+function PaGlobalFunc_GuildCreate_GetShow()
+  return _panel:GetShow()
+end
 function PaGlobalFunc_GuildCreate_Confirm()
-  local self = Window_Guild_CreateInfo
+  local self = GuildCreate
   if "" == self._ui._edit_GuildName:GetEditText() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_POPUP_ENTER_GUILDNAME"))
     ClearFocusEdit()
     return
   end
   local isRaisingGuildGrade = false
-  local guildGrade = 0
+  local guildGrade = self._createGuildGrade
   local guildName = self._ui._edit_GuildName:GetEditText()
   local businessFunds = 100000
-  guildGrade = 1
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if nil ~= myGuildListInfo then
     local myGuildGrade = myGuildListInfo:getGuildGrade()
@@ -38,56 +68,30 @@ function PaGlobalFunc_GuildCreate_Confirm()
   ClearFocusEdit()
 end
 function PaGlobalFunc_GuildCreate_ClearFocus()
-  local self = Window_Guild_CreateInfo
+  local self = GuildCreate
   ClearFocusEdit()
   self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
 end
 function PaGlobalFunc_GuildCreate_SetFocus()
-  local self = Window_Guild_CreateInfo
+  local self = GuildCreate
   SetFocusEdit(self._ui._edit_GuildName)
   self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_ClearFocus()")
 end
-function Window_Guild_CreateInfo:InitEvent()
-  self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Confirm()")
-  self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Close()")
-  if false == _ContentsGroup_isConsolePadControl then
-    self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
-  end
-  Panel_Console_Window_GuildCreate:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildCreate_SetFocus()")
-  Panel_Console_Window_GuildCreate:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GuildCreate_Confirm()")
-end
-function Window_Guild_CreateInfo:InitControl()
-  self._ui._edit_GuildName:SetMaxInput(getGameServiceTypeGuildNameLength())
-  self._ui._button_EditGuildName = UI.getChildControl(self._ui._edit_GuildName, "StaticText_Key_ConsoleUI")
-  self._ui._staticText_NamingPolicy:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui._staticText_NamingPolicy:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_POPUP_1"))
-end
-function PaGlobalFunc_GuildCreate_GetShow()
-  return Panel_Console_Window_GuildCreate:GetShow()
-end
-function PaGlobalFunc_GuildCreate_Open()
+function PaGlobalFunc_GuildCreate_Open(createGuildGrade)
   if true == PaGlobalFunc_GuildCreate_GetShow() then
     return
   end
-  local self = Window_Guild_CreateInfo
+  local self = GuildCreate
+  self._createGuildGrade = createGuildGrade
   self._ui._edit_GuildName:SetEditText("")
-  PaGlobalFunc_GuildCreate_SetShow(true, false)
+  self:open()
 end
 function PaGlobalFunc_GuildCreate_Close()
-  if false == PaGlobalFunc_GuildCreate_GetShow() then
-    return
-  end
-  PaGlobalFunc_GuildCreate_SetShow(false, false)
+  local self = GuildCreate
+  self:close()
 end
-function PaGlobalFunc_GuildCreate_SetShow(isShow, isAni)
-  Panel_Console_Window_GuildCreate:SetShow(isShow, isAni)
+function FromClient_GuildCreate_luaLoadComplete()
+  local self = GuildCreate
+  self:init()
 end
-function Window_Guild_CreateInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
-end
-function PaGlobalFunc_FromClient_GuildCreate_luaLoadComplete()
-  local self = Window_Guild_CreateInfo
-  self:Initialize()
-end
-registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_GuildCreate_luaLoadComplete")
+registerEvent("FromClient_luaLoadComplete", "FromClient_GuildCreate_luaLoadComplete")

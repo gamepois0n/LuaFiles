@@ -503,7 +503,7 @@ local function PreclosePanel_OpenDialog()
   if Panel_QuestInfo:GetShow() then
     questInfo_TooltipShow(false)
   end
-  if Panel_Window_ItemMarket_RegistItem:GetShow() then
+  if PaGlobalFunc_ItemMarketRegistItem_GetShow() then
     FGlobal_ItemMarketRegistItem_Close()
   end
   if FGlobal_Option_GetShow() then
@@ -524,7 +524,7 @@ local function PreclosePanel_OpenDialog()
     PaGlobal_Camp:close()
   end
   DetectPlayer_Close()
-  if Panel_Window_ItemMarket:GetShow() then
+  if PaGlobalFunc_ItemMarket_GetShow() then
     FGolbal_ItemMarketNew_Close()
     if Panel_Win_System:GetShow() then
       messageBox_NoButtonUp()
@@ -712,6 +712,7 @@ function FromClient_ShowDialog()
   end
   PaGlobal_TutorialManager:handleShowDialog(dialogData)
   _uiNpcDialog:SetShow(not _uiFilterRadioButton[0]:GetShow())
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_DIALOG")
 end
 function HandleClickedDialogNextButton()
   _currentLine = _currentLine + 1
@@ -1404,16 +1405,31 @@ function Dialog_updateButtons(isVisible)
         else
           _uiFuncBG[index]:SetShow(false)
         end
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
+        local NpcDialogData = ToClient_GetCurrentDialogData()
+        _PA_LOG("\236\155\144\236\132\160", "test" .. tostring(NpcDialogData:isWharf()))
+        if true == NpcDialogData:isWharf() then
+          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 100, 155, 132)
+          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
+          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
+          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 100, 310, 132)
+          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
+          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 100, 465, 132)
+          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
+        else
+          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
+          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
+          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
+          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
+          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
+          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
+          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
+        end
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Transfer then
         _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
@@ -1883,7 +1899,7 @@ function FromClient_hideDialog(isSetWait)
   Panel_WorkerResist_Auction:SetShow(false)
   Panel_WorkerList_Auction:SetShow(false)
   FGolbal_ItemMarketNew_Close()
-  Panel_Window_ItemMarket_RegistItem:SetShow(false)
+  PaGlobalFunc_ItemMarketRegistItem_SetShow(false)
   Panel_Window_Delivery_Information:SetShow(false)
   Panel_Window_Delivery_Request:SetShow(false)
   Panel_Dialogue_Itemtake:SetShow(false)
@@ -2236,11 +2252,11 @@ function ClickFunctionButtonByType(type)
   elseif CppEnums.ContentsType.Contents_GuildShop == funcButtonType then
     npcShop_requestList(funcButtonType)
   elseif CppEnums.ContentsType.Contents_ItemMarket == funcButtonType then
-    if Panel_Window_ItemMarket:IsUISubApp() then
+    if PaGlobalFunc_ItemMarket_IsUISubApp() then
       Panel_Window_ItemMarket:CloseUISubApp()
       Panel_Window_ItemMarket:SetShow(false)
     end
-    if not Panel_Window_ItemMarket:GetShow() then
+    if not PaGlobalFunc_ItemMarket_GetShow() then
       FGolbal_ItemMarket_Function_Open()
     else
       FGolbal_ItemMarket_Function_Close()
@@ -2577,11 +2593,11 @@ function HandleClickedFuncButton(index)
   elseif CppEnums.ContentsType.Contents_GuildShop == funcButtonType then
     npcShop_requestList(funcButtonType)
   elseif CppEnums.ContentsType.Contents_ItemMarket == funcButtonType then
-    if Panel_Window_ItemMarket:IsUISubApp() then
+    if PaGlobalFunc_ItemMarket_IsUISubApp() then
       Panel_Window_ItemMarket:CloseUISubApp()
       Panel_Window_ItemMarket:SetShow(false)
     end
-    if not Panel_Window_ItemMarket:GetShow() then
+    if not PaGlobalFunc_ItemMarket_GetShow() then
       FGolbal_ItemMarket_Function_Open()
     else
       FGolbal_ItemMarket_Function_Close()
@@ -2955,6 +2971,7 @@ function HandleClickedExitButton(isSetWait)
   GuildServantList_Close()
   LordMenu_Hide()
   PaGlobal_MasterpieceAuction:close()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function HandleClickedBackButton()
   if Panel_Win_System:GetShow() then
@@ -3523,19 +3540,19 @@ function FGlobal_CloseNpcDialogForDetail()
     GuildStableFunction_Close()
     return true
   end
-  if Panel_Window_ItemMarket_Function:GetShow() then
+  if PaGlobalFunc_ItemMarketFunction_GetShow() then
     FGolbal_ItemMarket_Function_Close()
-    if Panel_Window_ItemMarket_RegistItem:GetShow() then
+    if PaGlobalFunc_ItemMarketRegistItem_GetShow() then
       FGlobal_ItemMarketRegistItem_Close()
     end
-    if Panel_Window_ItemMarket_BuyConfirm:GetShow() then
+    if PaGlobalFunc_ItemMarketBuyConfirm_GetShow() then
       FGlobal_ItemMarket_BuyConfirm_Close()
       return true
     end
-    if Panel_Window_ItemMarket_ItemSet:GetShow() then
+    if PaGlobalFunc_ItemMarketItemSet_GetShow() then
       FGlobal_ItemMarketItemSet_Close()
     end
-    if Panel_Window_ItemMarket:GetShow() then
+    if PaGlobalFunc_ItemMarket_GetShow() then
       FGolbal_ItemMarketNew_Close()
     end
     return true

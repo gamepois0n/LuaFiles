@@ -158,7 +158,7 @@ function PaGlobal_MainQuest:setQuestTitleInfo(uiQuestInfo)
   self._uiQuestTitle:SetIgnore(true)
   self._uiQuestTitle:SetFontColor(UI_color.C_FFEFEFEF)
   if _ContentsGroup_RenewUI then
-    self._uiQuestTitle:useGlowFont(true, "BaseFont_12_Glow", 4287655978)
+    self._uiQuestTitle:useGlowFont(true, "SubTitleFont_14_Glow", 4287655978)
   else
     self._uiQuestTitle:useGlowFont(true, "BaseFont_8_Glow", 4287655978)
   end

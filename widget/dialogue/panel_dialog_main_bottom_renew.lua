@@ -23,7 +23,7 @@ local Panel_Dialog_Main_Bottom_Info = {
     btn_RB = nil,
     static_ConsoleKeyGuide = nil,
     btn_B = nil,
-    btn_RT = nil
+    btn_A = nil
   },
   _config = {
     maxFuncButtonCount = 10,
@@ -228,7 +228,7 @@ local Panel_Dialog_Main_Bottom_Info = {
     }
   },
   _hideDialog = {
-    [-1] = true,
+    [-1] = false,
     [0] = false,
     [1] = false,
     [2] = true,
@@ -338,6 +338,9 @@ function FGlobal_Dialog_FindFuncButtonIndexByType(targetFuncButtonType)
 end
 function Panel_Dialog_Main_Bottom_Info:registerMessageHandler()
   registerEvent("onScreenResize", "FromClient_onScreenResize_MainDialog_Bottom")
+  Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_DialogMainTab_forPadEventFunc(-1)")
+  Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_DialogMainTab_forPadEventFunc(1)")
+  Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_Up_A, "Toggle_DialogMainTab_Enter_A()")
 end
 function Panel_Dialog_Main_Bottom_Info:initialize()
   self:close()
@@ -370,8 +373,8 @@ function Panel_Dialog_Main_Bottom_Info:initControl()
   self._ui.btn_RB = UI.getChildControl(self._ui.static_BottomBG, "Button_RB")
   self._ui.static_ConsoleKeyGuide = UI.getChildControl(self._ui.static_BottomBG, "Static_ConsoleKeyGuide")
   self._ui.btn_B = UI.getChildControl(self._ui.static_ConsoleKeyGuide, "Button_B")
-  self._ui.btn_RT = UI.getChildControl(self._ui.static_ConsoleKeyGuide, "Button_RT")
-  self._ui.btn_RT:SetShow(false)
+  self._ui.btn_A = UI.getChildControl(self._ui.static_ConsoleKeyGuide, "Button_A")
+  self._ui.btn_A:SetShow(false)
   Toggle_DialogMainTab_forPadEventFunc(0)
 end
 function Panel_Dialog_Main_Bottom_Info:open()
@@ -414,9 +417,9 @@ function Panel_Dialog_Main_Bottom_Info:guideButtonSetting(dialogData)
   local buttonType = self._ui.btn_Func_List[self._currentTabIndex].funcButtonType
   local funcButtonCount = dialogData:getFuncButtonCount()
   if 0 == funcButtonCount then
-    self._ui.btn_RT:SetShow(false)
+    self._ui.btn_A:SetShow(false)
   elseif nil ~= buttonType and self._hideDialog[buttonType] == false then
-    self._ui.btn_RT:SetShow(false)
+    self._ui.btn_A:SetShow(false)
   end
   self._ui.btn_B:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Hide()")
 end
@@ -605,12 +608,11 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
       local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
       local s64_allWeight = Int64toInt32(getSelfPlayer():get():getCurrentWeight_s64())
       local s64_maxWeight = Int64toInt32(getSelfPlayer():get():getPossessableWeight_s64())
-      PaGlobalFunc_MainDialog_ReOpen()
       if s64_allWeight >= s64_maxWeight then
         local messageboxData = {
           title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"),
           content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"),
-          functionApply = MessageBox_Empty_function,
+          functionApply = PaGlobalFunc_MainDialog_ReOpen,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData)
@@ -620,7 +622,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         local messageboxData3 = {
           title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
           content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"),
-          functionApply = MessageBox_Empty_function,
+          functionApply = PaGlobalFunc_MainDialog_ReOpen,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData3)
@@ -630,7 +632,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         local messageboxData = {
           title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
           content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
-          functionApply = MessageBox_Empty_function,
+          functionApply = PaGlobalFunc_MainDialog_ReOpen,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData)
@@ -651,6 +653,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
         end
       elseif true == _ContentsGroup_RenewUI_Worker then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERRANDOMSELECT_SHORTAGE_WP_ACK"))
+        PaGlobalFunc_MainDialog_ReOpen()
       end
       return
     end
@@ -854,11 +857,11 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   elseif CppEnums.ContentsType.Contents_GuildShop == buttonType then
     npcShop_requestList(buttonType)
   elseif CppEnums.ContentsType.Contents_ItemMarket == buttonType then
-    if Panel_Window_ItemMarket:IsUISubApp() then
+    if PaGlobalFunc_ItemMarket_IsUISubApp() then
       Panel_Window_ItemMarket:CloseUISubApp()
       Panel_Window_ItemMarket:SetShow(false)
     end
-    if not Panel_Window_ItemMarket:GetShow() then
+    if not PaGlobalFunc_ItemMarket_GetShow() then
       FGolbal_ItemMarket_Function_Open()
     else
       FGolbal_ItemMarket_Function_Close()
@@ -1002,7 +1005,11 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()
   if Panel_TerritoryAuth_Auction:IsShow() then
     TerritoryAuth_Auction_Close()
   end
-  if Panel_Dialog_Search:IsShow() then
+  if false == _ContentsGroup_RenewUI_SearchMode then
+    if Panel_Dialog_Search:IsShow() then
+      searchView_Close()
+    end
+  elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
   end
   if true == _ContentsGroup_RenewUI_ReinforceSkill then
@@ -1045,7 +1052,9 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(index)
   else
     CreateClan_Close()
   end
-  Manufacture_Close()
+  if not _ContentsGroup_RenewUI_Manufacture then
+    Manufacture_Close()
+  end
   if false == _ContentsGroup_RenewUI_Worker then
     WorkerAuction_Close()
   else
@@ -1185,14 +1194,22 @@ function Toggle_DialogMainTab_forPadEventFunc(value)
     if self._hideDialog[buttonType] == false then
       PaGlobalFunc_MainDialog_Right_Close()
       Toggle_DialogMainTab_Enter()
-      self._ui.btn_RT:SetShow(false)
+      self._ui.btn_A:SetShow(false)
     else
-      if false == PaGlobalFunc_MainDialog_Right_GetShow() then
-        PaGlobalFunc_MainDialog_Right_ReOpen()
-      end
-      self._ui.btn_RT:SetShow(true)
+      PaGlobalFunc_MainDialog_Right_ReOpen(false)
+      self._ui.btn_A:SetShow(true)
     end
   end
+end
+function Toggle_DialogMainTab_Enter_A()
+  local self = Panel_Dialog_Main_Bottom_Info
+  if self._currentMaxFuncButtonCount == 1 then
+    return
+  end
+  if nil ~= self._ui.btn_Func_List[self._currentTabIndex] and nil ~= self._ui.btn_Func_List[self._currentTabIndex].funcButtonType and self._hideDialog[self._ui.btn_Func_List[self._currentTabIndex].funcButtonType] == false then
+    return
+  end
+  Toggle_DialogMainTab_Enter()
 end
 function Toggle_DialogMainTab_Enter()
   local self = Panel_Dialog_Main_Bottom_Info
@@ -1200,6 +1217,7 @@ function Toggle_DialogMainTab_Enter()
     return
   end
   if self._config.firstFuncButtonIndex == self._currentTabIndex then
+    PaGlobalFunc_MainDialog_Bottom_SetLeastFunButtonIndex(self._currentTabIndex)
     PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()
   else
     PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(self._currentTabIndex)
@@ -1229,9 +1247,6 @@ function PaGlobalFunc_Main_Dialog_Bottom_Index_Init()
   end
   _currentBottomButton[self._currentTabIndex]:setRenderTexture(_currentBottomButton[self._currentTabIndex]:getOnTexture())
 end
-Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_DialogMainTab_forPadEventFunc(-1)")
-Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_DialogMainTab_forPadEventFunc(1)")
-Panel_Dialog_Main:registerPadEvent(__eConsoleUIPadEvent_RT, "Toggle_DialogMainTab_Enter()")
 function FromClient_InitMainDialog_Bottom()
   local self = Panel_Dialog_Main_Bottom_Info
   self:initialize()

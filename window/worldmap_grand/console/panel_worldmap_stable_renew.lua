@@ -107,9 +107,9 @@ function PaGlobalFunc_WorldMap_Stable_Open()
   else
     self:SetStable()
     PaGlobalFunc_WorldMap_TopMenu_Close()
-    PaGlobalFunc_WorldMap_BottomMenu_Close()
     PaGlobalFunc_WorldMap_RightMenu_Close()
     PaGlobalFunc_WorldMap_RingMenu_Close()
+    PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
   PaGlobalFunc_WorldMap_Stable_SetShow(true, false)
 end

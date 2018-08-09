@@ -43,15 +43,16 @@ local DyeingPalette = {
   _ampuleListRowCount = 7,
   _ampuleListStartX = 30,
   _ampuleListStartY = 40,
-  _nowPaletteIndex = 1,
-  _nowPaletteCategoryIndex = 1,
+  _nowPaletteIndex = PALETTE_TYPE.ALL,
+  _nowPaletteCategoryIndex = PALETTE_CATEGORY.NORMAL,
   _nowPaletteDataIndex = -1,
   _currentScrollAmount = 0,
   _partDyeInfo = {},
   _selectedDyePart = {},
   _slotNo = nil,
   _isPearlPalette = false,
-  _paletteShowAll = true
+  _paletteShowAll = true,
+  _currentDyePartIndex = nil
 }
 function FromClient_luaLoadComplete_DyeingPalette_Init()
   DyeingPalette:initialize()
@@ -59,16 +60,18 @@ end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_DyeingPalette_Init")
 function DyeingPalette:initialize()
   self._ui.stc_keyGuideLB = UI.getChildControl(self._ui.stc_tabMenuBG, "Static_LB")
-  self._ui.stc_keyGuideLB = UI.getChildControl(self._ui.stc_tabMenuBG, "Static_RB")
+  self._ui.stc_keyGuideRB = UI.getChildControl(self._ui.stc_tabMenuBG, "Static_RB")
   self._ui.rdo_paletteTypes = {
     [PALETTE_TYPE.ALL] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_AllPalette"),
-    [PALETTE_TYPE.MINE] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_MyPallete")
+    [PALETTE_TYPE.MINE] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_MyPallete"),
+    [PALETTE_TYPE.MERV] = UI.getChildControl(self._ui.stc_tabMenuBG, "RadioButton_MervPallete")
   }
-  self._ui.rdo_paletteTypes[1]:SetText("All")
-  self._ui.rdo_paletteTypes[2]:SetText("Mine")
   self._ui.stc_subTabBG = UI.getChildControl(self._ui.stc_body, "Static_SubTabMenuBG")
   self._ui.stc_keyGuideLT = UI.getChildControl(self._ui.stc_subTabBG, "Static_LT")
   self._ui.stc_keyGuideRT = UI.getChildControl(self._ui.stc_subTabBG, "Static_RT")
+  self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI")
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_A_ConsoleUI")
+  self._ui.txt_keyGuideY = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_Y_ConsoleUI")
   self._ui.rdo_categoryTypes = {
     [PALETTE_CATEGORY.NORMAL] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Normal"),
     [PALETTE_CATEGORY.OLVIA] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Olvia"),
@@ -79,6 +82,21 @@ function DyeingPalette:initialize()
     [PALETTE_CATEGORY.MEDIAH] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_Mediah"),
     [PALETTE_CATEGORY.VALENCIA] = UI.getChildControl(self._ui.stc_subTabBG, "RadioButton_ValenCia")
   }
+  if not ToClient_IsContentsGroupOpen("3") then
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH]:SetShow(false)
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH] = nil
+  end
+  if not ToClient_IsContentsGroupOpen("4") then
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.VALENCIA]:SetShow(false)
+    self._ui.rdo_categoryTypes[PALETTE_CATEGORY.VALENCIA] = nil
+  end
+  local centerX = self._ui.stc_subTabBG:GetSizeX() / 2
+  local iconGap = self._ui.rdo_categoryTypes[1]:GetSizeX() + 12
+  local tabCount = #self._ui.rdo_categoryTypes
+  local startX = centerX - tabCount * iconGap / 2
+  for ii = 1, tabCount do
+    self._ui.rdo_categoryTypes[ii]:SetPosX(startX + iconGap * (ii - 1))
+  end
   self._ui.stc_partSelectBG = UI.getChildControl(self._ui.stc_body, "Static_PartSelect")
   self._ui.txt_partSelectTitle = UI.getChildControl(self._ui.stc_partSelectBG, "StaticText_PartSelectTitle")
   for ii = 1, 18 do
@@ -89,8 +107,15 @@ function DyeingPalette:initialize()
   self._ui.scroll_ampuleList = UI.getChildControl(self._ui.stc_ampuleListBG, "Scroll_PaletteItemList")
   UIScroll.InputEvent(self._ui.scroll_ampuleList, "InputScroll_DyeingPalette_Scroll")
   UIScroll.InputEventByControl(self._ui.stc_ampuleListBG, "InputScroll_DyeingPalette_Scroll")
+  local keyGuideList = {
+    self._ui.txt_keyGuideA,
+    self._ui.txt_keyGuideY,
+    self._ui.txt_keyGuideB
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.stc_bottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self:initAmpuleList()
   self:registEventHandler()
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_DyeingPalette_PadSnapChangePanel")
 end
 function DyeingPalette:initAmpuleList()
   local ampuleSlotCount = self._ampuleListColCount * self._ampuleListRowCount
@@ -128,27 +153,52 @@ function DyeingPalette:open(targetType, slotNo)
   if false == _panel:GetShow() then
     _panel:SetShow(true)
   end
+  PaGlobalFunc_DyeingMain_MoveKeyGuide(_panel:GetPosX())
+  ToClient_RequestSelectedEquipItem(slotNo)
   self._selected_CharacterTarget = targetType
   self._slotNo = slotNo
+  for ii = 1, #self._ui.rdo_color do
+    self._ui.rdo_color[ii]:SetCheck(false)
+  end
+  for ii = 1, #self._ui.rdo_paletteTypes do
+    self._ui.rdo_paletteTypes[ii]:SetCheck(false)
+  end
+  self._nowPaletteIndex = PALETTE_TYPE.ALL
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updateDyeParts()
-  self:updatePalette()
+  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(false)
 end
 function PaGlobalFunc_DyeingPalette_Close()
   DyeingPalette:close()
 end
 function DyeingPalette:close()
-  _panel:SetShow(false)
+  PaGlobalFunc_DyeingMain_MoveKeyGuide(getScreenSizeX())
   self._selectedDyePart = {}
+  if self._ui.stc_ampuleListBG:GetShow() then
+    self._ui.stc_ampuleListBG:SetShow(false)
+    if nil ~= self._currentDyePartIndex then
+      for ii = 1, #self._ui.rdo_color do
+        self._ui.stc_partColor[ii]:SetShow(true)
+        self._ui.rdo_color[ii]:SetCheck(false)
+      end
+    end
+    self._currentDyePartIndex = nil
+  else
+    _panel:SetShow(false)
+    ToClient_RequestSetTargetType(self._selected_CharacterTarget)
+  end
+  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(true)
 end
 function DyeingPalette:updateDyeParts()
   if false == _panel:GetShow() then
     return
   end
+  self._ui.stc_ampuleListBG:SetShow(false)
   ToClient_SetDyeingTargetInformationByEquipNo(self._slotNo)
   local colorSlotCount = ToClient_getDyeingTargetInformationCount()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "colorSlotCount : " .. colorSlotCount)
   for ii = 1, colorSlotCount do
     self._ui.rdo_color[ii]:SetShow(true)
     local partIdx = ToClient_getDyeingTargetPartIdxByIndex(ii - 1)
@@ -177,9 +227,11 @@ function Input_DyeingPalette_DyePart(partID, slotID, uiIdx)
   for ii = 1, #self._ui.stc_partColor do
     self._ui.stc_partColor[ii]:SetShow(true)
   end
+  self._currentDyePartIndex = uiIdx
   self._ui.stc_partColor[uiIdx]:SetShow(false)
   self._nowClickPartId = partID
   self._nowClickPartSlotId = slotID
+  self._ui.stc_ampuleListBG:SetShow(true)
   self:updatePalette()
 end
 function DyeingPalette:updatePalette()
@@ -188,10 +240,14 @@ function DyeingPalette:updatePalette()
   end
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
   local arrCount = 1
+  for ii = 1, #self._ui.stc_ampuleSlotBG do
+    self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
+  end
   if nil ~= DyeingPaletteCategoryInfo then
     arrCount = DyeingPaletteCategoryInfo:getListSize()
     self._paletteCount = arrCount
     for ii = 1, #self._ui.stc_ampuleSlotBG do
+      self._ui.stc_ampuleSlotBG[ii]:SetShow(true)
       local dataIdx = self._currentScrollAmount + ii
       if arrCount >= dataIdx then
         self._ui.stc_ampuleSlotBG[ii]:SetShow(true)
@@ -216,7 +272,7 @@ function DyeingPalette:updatePalette()
       self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
     end
   end
-  UIScroll.SetButtonSize(self._ui.scroll_ampuleList, self._ampuleListColCount * self._ampuleListRowCount, arrCount)
+  UIScroll.SetButtonSize(self._ui.scroll_ampuleList, #self._ui.stc_ampuleSlotBG, arrCount)
 end
 function Input_DyeingPalette_Ampule(dataIdx)
   local self = DyeingPalette
@@ -247,6 +303,9 @@ function InputScroll_DyeingPalette_Scroll(isUp)
   if nil ~= self._paletteCount then
     self._currentScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_ampuleList, isUp, self._ampuleListRowCount, self._paletteCount, self._currentScrollAmount, self._ampuleListColCount)
   end
+  if ToClient_isXBox() or ToClient_IsDevelopment() then
+    ToClient_padSnapIgnoreGroupMove()
+  end
   self:updatePalette()
 end
 function Input_DyeingPalette_NextPalette(nextPaletteIndex)
@@ -268,8 +327,10 @@ function Input_DyeingPalette_NextPalette(nextPaletteIndex)
   end
   self._nowPaletteIndex = targetPalette
   self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
-  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
+  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex or PALETTE_TYPE.MERV == self._nowPaletteIndex
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
 end
 function DyeingPalette:isPlayerHaveActivedMerv()
@@ -290,6 +351,8 @@ function Input_DyeingPalette_NextCategory(nextCategoryIndex)
   end
   self._nowPaletteCategoryIndex = targetCategory
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
 end
 local dyePartString = {
@@ -453,5 +516,11 @@ function Input_DyeingPalette_ApplyDye()
     else
       askDoDye()
     end
+  end
+end
+function FromClient_DyeingPalette_PadSnapChangePanel(fromPanel, toPanel)
+  if nil ~= toPanel and _panel:GetKey() ~= toPanel:GetKey() and Panel_Win_System:GetKey() ~= toPanel:GetKey() and _panel:GetShow() then
+    _panel:SetShow(false)
+    ToClient_RequestSetTargetType(DyeingPalette._selected_CharacterTarget)
   end
 end

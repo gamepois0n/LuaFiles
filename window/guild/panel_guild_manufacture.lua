@@ -41,8 +41,6 @@ function PaGlobal_Guild_Manufacture:createControl()
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW,
     index = nil
   }
-  local baseRequiredSlot = UI.getChildControl(self._ui._baseProceedingStateBG, "Static_Resource_IconBG")
-  local baseRequiredSlotText = UI.getChildControl(self._ui._baseProceedingStateBG, "StaticText_ResourcesCount")
   for ii = 0, __eGuildManufactureProductItemCount - 1 do
     do
       local slot = {

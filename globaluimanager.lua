@@ -481,7 +481,7 @@ function close_WindowPanelList()
   if Panel_MovieTheater_320:IsShow() then
     Panel_MovieTheater320_JustClose()
   end
-  if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
+  if PaGlobalFunc_ItemMarket_GetShow() and PaGlobalFunc_ItemMarket_IsUISubApp() == false then
     FGolbal_ItemMarketNew_Close()
   end
   if Panel_CharacterTag:GetShow() then

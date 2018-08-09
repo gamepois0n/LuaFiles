@@ -6,7 +6,7 @@ PaGlobal_TutorialPhase_FindRequestTarget = {
   _updateTime = 0,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15,
   _questData = {
     [1] = {_questGroupNo = 650, _questId = 3}

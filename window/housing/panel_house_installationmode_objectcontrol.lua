@@ -411,6 +411,7 @@ function FGlobal_HouseInstallationControl_Close()
   Panel_House_InstallationMode_ObjectControl:SetShow(false)
   HouseInstallationControl_Is_Open = false
   VillageTent_Close()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function FGlobal_HouseInstallationControl_Move()
   housing_moveObject()

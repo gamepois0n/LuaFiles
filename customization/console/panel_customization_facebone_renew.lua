@@ -291,19 +291,10 @@ function Customization_FaceBoneInfo:InitControl()
   self._ui._sliderButton_Position = {}
   self._ui._sliderButton_Rotation = {}
   self._ui._sliderButton_Scale = {}
-  self._ui._slider_PositionFocus = {}
-  self._ui._slider_RotationFocus = {}
-  self._ui._slider_ScaleFocus = {}
   for index = 0, 2 do
     self._ui._sliderButton_Position[index] = UI.getChildControl(self._ui._slider_Position[index], "Slider_Button")
     self._ui._sliderButton_Rotation[index] = UI.getChildControl(self._ui._slider_Rotation[index], "Slider_Button")
     self._ui._sliderButton_Scale[index] = UI.getChildControl(self._ui._slider_Scale[index], "Slider_Button")
-    self._ui._slider_PositionFocus[index] = UI.getChildControl(self._ui._static_PositionSliderBg[index], "Static_FocusBox")
-    self._ui._slider_RotationFocus[index] = UI.getChildControl(self._ui._static_RotationSliderBg[index], "Static_FocusBox")
-    self._ui._slider_ScaleFocus[index] = UI.getChildControl(self._ui._static_ScaleSliderBg[index], "Static_FocusBox")
-    self._ui._slider_PositionFocus[index]:SetShow(false)
-    self._ui._slider_RotationFocus[index]:SetShow(false)
-    self._ui._slider_ScaleFocus[index]:SetShow(false)
   end
 end
 function PaGlobalFunc_Customization_FaceBone_ClearCustomizedBoneInfo()

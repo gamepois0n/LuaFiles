@@ -11,7 +11,15 @@ local ConsoleKeyGuide = {
     crouch = 3,
     creep = 4,
     rideHorse = 5,
-    rideShip = 6
+    rideShip = 6,
+    watchingMode = 7,
+    searchMode = 8,
+    fishingIdleMode = 9,
+    fishingWaitHookMode = 10,
+    fishingStartHook = 11,
+    fishingHookMini1 = 12,
+    fishingHookMini2 = 13,
+    rideCarriage = 14
   },
   _isChange = false,
   _beforeState = -1,
@@ -177,6 +185,14 @@ function ConsoleKeyGuide:init()
   self._ui._keyGuide[self._guideState.creep] = self:makeNewGuide(self._guideState.creep)
   self._ui._keyGuide[self._guideState.rideHorse] = self:makeNewGuide(self._guideState.rideHorse)
   self._ui._keyGuide[self._guideState.rideShip] = self:makeNewGuide(self._guideState.rideShip)
+  self._ui._keyGuide[self._guideState.watchingMode] = self:makeNewGuide(self._guideState.watchingMode)
+  self._ui._keyGuide[self._guideState.searchMode] = self:makeNewGuide(self._guideState.searchMode)
+  self._ui._keyGuide[self._guideState.fishingIdleMode] = self:makeNewGuide(self._guideState.fishingIdleMode)
+  self._ui._keyGuide[self._guideState.fishingWaitHookMode] = self:makeNewGuide(self._guideState.fishingWaitHookMode)
+  self._ui._keyGuide[self._guideState.fishingStartHook] = self:makeNewGuide(self._guideState.fishingStartHook)
+  self._ui._keyGuide[self._guideState.fishingHookMini1] = self:makeNewGuide(self._guideState.fishingHookMini1)
+  self._ui._keyGuide[self._guideState.fishingHookMini2] = self:makeNewGuide(self._guideState.fishingHookMini2)
+  self._ui._keyGuide[self._guideState.rideCarriage] = self:makeNewGuide(self._guideState.rideCarriage)
   self:hideAllGuide()
   self:registEvent()
 end
@@ -184,15 +200,15 @@ function ConsoleKeyGuide:registEvent()
   registerEvent("onScreenResize", "PaGlobalFunc_ConsoleKeyGuide_SetPos")
   registerEvent("EventSelfPlayerRideOn", "PaGlobalFunc_ConsoleKeyGuide_SetRideState()")
   registerEvent("EventSelfPlayerRideOff", "PaGlobalFunc_ConsoleKeyGuide_SetRideState()")
+  registerEvent("EventQuestSearch", "PaGlobalFunc_ConsoleKeyGuide_SetSearchState()")
 end
 function ConsoleKeyGuide:SetKeyString(inputType)
 end
 function ConsoleKeyGuide:setGlowFont(control)
-  control:useGlowFont(true, "BaseFont_12_Glow", self._glowFontColor)
+  control:useGlowFont(true, "SubTitleFont_14_Glow", self._glowFontColor)
 end
 function ConsoleKeyGuide:setGuide(currentState)
   if currentState == self._beforeState then
-    return
   end
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
     ConsoleKeyGuide:hideAllGuide()
@@ -320,8 +336,90 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonY
     }, "Ride off")
+  elseif state_ == self._guideState.rideShip then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonStart
+    }, "Menu")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSC
+    }, "(hold) Adjust Camera")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSC
+    }, "Auto run")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonY
+    }, "Ride off")
+  elseif state_ == self._guideState.watchingMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonB
+    }, "Close")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRT
+    }, "Camera Speed Fast")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRB
+    }, "Camera Speed Slow")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonX
+    }, "Change Camera Speed")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSM,
+      _consoleUIIconName.IconPlus,
+      _consoleUIIconName.buttonA
+    }, "Move Camera Faster ")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM,
+      _consoleUIIconName.IconPlus,
+      _consoleUIIconName.buttonLT
+    }, "Zoom In / Zoom out")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSM,
+      _consoleUIIconName.IconPlus,
+      _consoleUIIconName.buttonLT
+    }, "Move Camera( Up / Down )")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM
+    }, "Change Camera Viewpoint")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSM
+    }, "Move Camera")
+  elseif state_ == self._guideState.searchMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM,
+      _consoleUIIconName.IconPlus,
+      _consoleUIIconName.buttonLT
+    }, "Zoom In / Zoom out")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM
+    }, "Change Viewpoint")
+  elseif state_ == self._guideState.fishingIdleMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonB
+    }, "Start fishing")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonB
+    }, "(hold)Start fishing")
+  elseif state_ == self._guideState.fishingWaitHookMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRT
+    }, "Cancel")
+  elseif state_ == self._guideState.fishingStartHook then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonB
+    }, "Hook")
+  elseif state_ == self._guideState.fishingHookMini1 then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonA
+    }, "Hook")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRT
+    }, "Cancel")
+  elseif state_ == self._guideState.fishingHookMini2 then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonDpad
+    }, "Input")
   else
-    if state_ == self._guideState.rideShip then
+    if state_ == self._guideState.rideCarriage then
       self:addGuide(newGuide, {
         _consoleUIIconName.buttonStart
       }, "Menu")
@@ -404,9 +502,20 @@ function ConsoleKeyGuide:getState()
   if ToClient_isCameraControlModeForConsole() then
     return self._guideState.cameraMode
   end
+  if true == isObserverMode() then
+    return self._guideState.watchingMode
+  end
+  if GetUIMode() == Defines.UIMode.eUIMode_NpcDialog then
+    if nil ~= self._specifyGuideState and self._specifyGuideState == self._guideState.searchMode then
+      return self._specifyGuideState
+    end
+    if PaGlobalFunc_SearchMode_IsSearchMode() then
+      return self._guideState.searchMode
+    end
+  end
   if getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
     if nil ~= self._specifyGuideState then
-      if self._specifyGuideState == self._guideState.rideHorse or self._specifyGuideState == self._guideState.rideShip then
+      if self._specifyGuideState == self._guideState.rideHorse or self._specifyGuideState == self._guideState.rideShip or self._specifyGuideState == self._guideState.rideCarriage or self._specifyGuideState == self._guideState.fishingIdleMode or self._specifyGuideState == self._guideState.fishingWaitHookMode or self._specifyGuideState == self._guideState.fishingStartHook or self._specifyGuideState == self._guideState.fishingHookMini1 or self._specifyGuideState == self._guideState.fishingHookMini2 then
         return self._specifyGuideState
       end
       local actionIdx = 1
@@ -497,14 +606,92 @@ function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
     self._specifyGuideState = nil
   else
     local vehicleType = vehicleProxy:get():getVehicleType()
-    if CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Elephant == vehicleType or CppEnums.VehicleType.Type_Carriage == vehicleType or CppEnums.VehicleType.Type_CowCarriage == vehicleType or CppEnums.VehicleType.Type_RidableBabyElephant == vehicleType then
+    if CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Elephant == vehicleType or CppEnums.VehicleType.Type_RidableBabyElephant == vehicleType then
       self._specifyGuideState = self._guideState.rideHorse
+    elseif CppEnums.VehicleType.Type_Carriage == vehicleType or CppEnums.VehicleType.Type_CowCarriage == vehicleType then
+      self._specifyGuideState = self._guideState.rideCarriage
     elseif CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType or CppEnums.VehicleType.Type_FishingBoat == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType then
       self._specifyGuideState = self._guideState.rideShip
     else
       self._specifyGuideState = nil
     end
   end
+end
+function ConsoleKeyGuide:setSearchState()
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.searchMode)
+  self:setGuide(self._guideState.searchMode)
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetSearchState()
+  ConsoleKeyGuide:setSearchState()
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.fishingIdleMode)
+  self:setGuide(self._guideState.fishingIdleMode)
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetFishingWaitHookMode()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.fishingWaitHookMode)
+  self:setGuide(self._guideState.fishingWaitHookMode)
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetfishingStartHook()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.fishingStartHook)
+  self:setGuide(self._guideState.fishingStartHook)
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini1()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.fishingHookMini1)
+  self:setGuide(self._guideState.fishingHookMini1)
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini2()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  if false == ToClient_isXBox() then
+    return
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetPos()
+  PaGlobalFunc_ConsoleKeyGuide_SetState(self._guideState.fishingHookMini2)
+  self:setGuide(self._guideState.fishingHookMini2)
 end
 function PaGlobalFunc_ConsoleKeyGuide_On()
   local currentState = ConsoleKeyGuide:getState()
@@ -514,36 +701,43 @@ function PaGlobalFunc_ConsoleKeyGuide_Off()
   ConsoleKeyGuide:hideAllGuide()
 end
 function PaGlobalFunc_ConsoleKeyGuide_SetPos()
-  _panel:SetPosX(getScreenSizeX() - _panel:GetSizeX())
-  _panel:SetPosY(getScreenSizeY() - _panel:GetSizeY() - 50)
+  if false == PaGlobalFunc_SearchMode_IsSearchMode() then
+    _panel:SetPosX(getScreenSizeX() - _panel:GetSizeX() - 50)
+    _panel:SetPosY(getScreenSizeY() - _panel:GetSizeY() - 50)
+  elseif true == _ContentsGroup_RenewUI_SearchMode then
+    _panel:SetPosX(getScreenSizeX() - PaGlobalFunc_MainDialog_Right_GetSizeX() - _panel:GetSizeX() / 2 - 50)
+    _panel:SetPosY(getScreenSizeY() / 2 - _panel:GetSizeY() / 2 - 50)
+  end
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_ConsoleKeyGuide_Init")
 function PaGlobalFunc_ConsoleKeyGuide_GetKeyGuideIconUV(key)
   local IconIndex = _consoleUIIconName[key]
   if nil == IconIndex then
-    _PA_LOG("\236\157\180\235\139\164\237\152\156", "IconIndex is NULL " .. key)
     return 0, 0, 0, 0
   end
   local IconUV = _consoleUIIconUV[IconIndex]
   if nil == IconUV then
-    _PA_LOG("\236\157\180\235\139\164\237\152\156", "IconUV is NULL " .. IconIndex)
     return 0, 0, 0, 0
   end
   return IconUV.x1, IconUV.y1, IconUV.x2, IconUV.y2
 end
-ConsloeKeyGuide_Horizntal_TYPE = {
+CONSOLEKEYGUID_ALIGN_TYPE = {
   eALIGN_TYPE_LEFT = 0,
   eALIGN_TYPE_RIGHT = 1,
   eALIGN_TYPE_CENTER = 2,
-  eALIGN_TYPE_COUNT = 3
+  eALIGN_TYPE_TOP = 3,
+  eALIGN_TYPE_MIDDLE = 4,
+  eALIGN_TYPE_BOTTOM = 5,
+  eALIGN_TYPE_COUNT = 6
 }
-function PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(listKeyGuid, parentControl, alignType, keySize, keySpace)
+function PaGlobalFunc_ConsoleKeyGuide_SetAlign(listKeyGuid, parentControl, alignType, keySize, keySpace)
   local defualtKeySize = 44
   local defualtKeySpace = 20
   if #listKeyGuid < 1 or nil == parentControl then
     return
   end
   local parantSizeX = parentControl:GetSizeX()
+  local parantSizeY = parentControl:GetSizeY()
   if nil == keySize then
     keySize = defualtKeySize
   end
@@ -551,10 +745,10 @@ function PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(listKeyGuid, parentControl
     keySpace = defualtKeySpace
   end
   local space = keySize + keySpace
-  if nil == alignType or alignType < 0 or alignType >= ConsloeKeyGuide_Horizntal_TYPE.eALIGN_TYPE_COUNT then
-    keySpaalignTypece = ConsloeKeyGuide_Horizntal_TYPE.eALIGN_TYPE_RIGHT
+  if nil == alignType or alignType < 0 or alignType >= CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_COUNT then
+    keySpaalignTypece = CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT
   end
-  if ConsloeKeyGuide_Horizntal_TYPE.eALIGN_TYPE_LEFT == alignType then
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_LEFT == alignType then
     local length = keySpace
     for key, value in ipairs(listKeyGuid) do
       if true == value:GetShow() then
@@ -563,7 +757,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(listKeyGuid, parentControl
       end
     end
   end
-  if ConsloeKeyGuide_Horizntal_TYPE.eALIGN_TYPE_RIGHT == alignType then
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT == alignType then
     local reversedTable = {}
     local keyCount = #listKeyGuid
     for key, value in ipairs(listKeyGuid) do
@@ -578,7 +772,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(listKeyGuid, parentControl
       end
     end
   end
-  if ConsloeKeyGuide_Horizntal_TYPE.eALIGN_TYPE_CENTER == alignType then
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_CENTER == alignType then
     local totalSizeX = 0
     for key, value in ipairs(listKeyGuid) do
       if true == value:GetShow() then
@@ -591,6 +785,47 @@ function PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(listKeyGuid, parentControl
       if true == value:GetShow() then
         value:SetPosX(length)
         length = length + space + value:GetTextSizeX()
+      end
+    end
+  end
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_TOP == alignType then
+    local length = keySpace
+    for key, value in ipairs(listKeyGuid) do
+      if true == value:GetShow() then
+        value:SetPosY(length)
+        length = length + space
+      end
+    end
+  end
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_MIDDLE == alignType then
+    local totalSizeY = 0
+    for key, value in ipairs(listKeyGuid) do
+      if true == value:GetShow() then
+        totalSizeY = totalSizeY + space
+      end
+    end
+    local startPosY = (parantSizeY - totalSizeY) / 2
+    local length = startPosY
+    for key, value in ipairs(listKeyGuid) do
+      if true == value:GetShow() then
+        value:SetPosY(length)
+        length = length + space
+      end
+    end
+  end
+  if CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_BOTTOM == alignType then
+    local totalSizeY = 0
+    for key, value in ipairs(listKeyGuid) do
+      if true == value:GetShow() then
+        totalSizeY = totalSizeY + space
+      end
+    end
+    local startPosY = parantSizeY - totalSizeY
+    local length = startPosY
+    for key, value in ipairs(listKeyGuid) do
+      if true == value:GetShow() then
+        value:SetPosY(length)
+        length = length + space
       end
     end
   end

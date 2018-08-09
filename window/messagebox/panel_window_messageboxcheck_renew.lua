@@ -3,6 +3,7 @@ Panel_Win_Check:ignorePadSnapMoveToOtherPanel()
 Panel_Win_Check:RegisterShowEventFunc(true, "MessageBoxCheck_ShowAni()")
 Panel_Win_Check:RegisterShowEventFunc(false, "MessageBoxCheck_HideAni()")
 Panel_Win_Check:registerPadEvent(__eConsoleUIPadEvent_Up_A, "MessageBoxCheck.keyProcessEnter()")
+UI.getChildControl(Panel_Win_Check, "Button_OK_ConsoleUI"):addInputEvent("Mouse_LUp", "MessageBoxCheck.keyProcessEnter()")
 Panel_Win_Check:SetShow(false, false)
 Panel_Win_Check:setMaskingChild(true)
 Panel_Win_Check:setGlassBackground(true)
@@ -127,24 +128,44 @@ function MessageBoxCheck.showMessageBox(MessageCheckData, position, keyUse)
       list = list.next
     end
   end
-  if ToClient_HasWareHouseFromNpc() then
-    if toInt64(0, 0) == warehouse_moneyFromNpcShop_s64() then
+  local useCustomButtonFlag = MessageCheckData.buttonStrings and 2 <= table.getn(MessageCheckData.buttonStrings)
+  if useCustomButtonFlag then
+    staticText_SilverIven:SetShow(false)
+    staticText_SilverInInven:SetShow(false)
+    staticText_SilverStorage:SetShow(false)
+    staticText_SilverInStorage:SetShow(false)
+    local firstButton = MessageBoxCheck.getButtonByIndex(1)
+    firstButton:SetText(MessageCheckData.buttonStrings[1])
+    firstButton:SetCheck(true)
+    local secondButton = MessageBoxCheck.getButtonByIndex(2)
+    secondButton:SetText(MessageCheckData.buttonStrings[2])
+    secondButton:SetCheck(false)
+  else
+    staticText_SilverIven:SetShow(true)
+    staticText_SilverInInven:SetShow(true)
+    staticText_SilverStorage:SetShow(true)
+    staticText_SilverInStorage:SetShow(true)
+    radioButton_Me:SetText("")
+    radioButton_All:SetText("")
+    if ToClient_HasWareHouseFromNpc() then
+      if toInt64(0, 0) == warehouse_moneyFromNpcShop_s64() then
+        radioButton_Me:SetCheck(true)
+        radioButton_All:SetCheck(false)
+      else
+        radioButton_Me:SetCheck(false)
+        radioButton_All:SetCheck(true)
+      end
+      staticText_SilverInStorage:SetShow(true)
+      radioButton_All:SetShow(true)
+    else
       radioButton_Me:SetCheck(true)
       radioButton_All:SetCheck(false)
-    else
-      radioButton_Me:SetCheck(false)
-      radioButton_All:SetCheck(true)
+      staticText_SilverInStorage:SetShow(false)
+      radioButton_All:SetShow(false)
     end
-    staticText_SilverInStorage:SetShow(true)
-    radioButton_All:SetShow(true)
-  else
-    radioButton_Me:SetCheck(true)
-    radioButton_All:SetCheck(false)
-    staticText_SilverInStorage:SetShow(false)
-    radioButton_All:SetShow(false)
+    staticText_SilverInInven:SetText(makeDotMoney(myInvenMoney))
+    staticText_SilverInStorage:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
   end
-  staticText_SilverInInven:SetText(makeDotMoney(myInvenMoney))
-  staticText_SilverInStorage:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
   staticText_Desc:ComputePos()
   messageBoxCheckComputePos()
 end
@@ -224,6 +245,21 @@ function MessageBoxCheck.isCheck()
   end
   return isMoneyWhereType
 end
+function MessageBoxCheck.getSelectedButtonIndex()
+  if radioButton_Me:IsCheck() then
+    return 1
+  elseif radioButton_All:IsCheck() then
+    return 2
+  end
+  return 0
+end
+function MessageBoxCheck.getButtonByIndex(i)
+  if 1 == i then
+    return radioButton_Me
+  elseif 2 == i then
+    return radioButton_All
+  end
+end
 function MessageBoxCheck.isCurrentOpen(title)
   if nil ~= _currentMessageBoxCheckData and _currentMessageBoxCheckData.title == title then
     return true
@@ -235,7 +271,7 @@ function MessageBoxCheck.keyProcessEnter()
     return
   end
   if list ~= nil and list.data.functionApply ~= nil then
-    list.data.functionApply()
+    list.data.functionApply(MessageBoxCheck.getSelectedButtonIndex())
   end
   if list ~= nil and nil == list.data.functionApply then
     return
@@ -288,7 +324,7 @@ function messageBoxCheck_ApplyButtonUp()
   end
   postProcessMessageCheckData()
   if functionApply ~= nil then
-    functionApply()
+    functionApply(MessageBoxCheck.getSelectedButtonIndex())
   end
 end
 function messageBoxCheck_CancelButtonUp()
@@ -299,7 +335,7 @@ function messageBoxCheck_CancelButtonUp()
   end
   postProcessMessageCheckData()
   if functionCancel ~= nil then
-    functionCancel()
+    functionCancel(MessageBoxCheck.getSelectedButtonIndex())
   end
 end
 function messageBoxCheck_CloseButtonUp()
@@ -311,7 +347,7 @@ function messageBoxCheck_CloseButtonUp()
   end
   postProcessMessageCheckData()
   if functionCancel ~= nil then
-    functionCancel()
+    functionCancel(MessageBoxCheck.getSelectedButtonIndex())
   end
 end
 function Event_MessageBoxCheck_NotifyMessage_CashAlert(message)

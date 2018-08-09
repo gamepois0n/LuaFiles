@@ -139,7 +139,19 @@ function ChattingInfo:initialize()
   self._ui.stc_triangleRight = UI.getChildControl(self._ui.stc_BG, "Static_TriangleRight")
   self._ui.stc_keyGuide = UI.getChildControl(_panel, "Static_KeyGuide")
   self._ui.txt_keyGuideLTForHistory = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideLTForHistory")
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideA")
   self._ui.txt_keyGuideXForEdit = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideX")
+  self._ui.txt_keyGuideY = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideY")
+  self._ui.txt_keyGuideRT = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideRT")
+  self._ui.txt_keyGuideDPad = UI.getChildControl(self._ui.stc_keyGuide, "StaticText_KeyGuideDPadLeftRight")
+  local keyGuides = {
+    self._ui.txt_keyGuideLTForHistory,
+    self._ui.txt_keyGuideDPad,
+    self._ui.txt_keyGuideY,
+    self._ui.txt_keyGuideRT,
+    self._ui.txt_keyGuideA
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.stc_keyGuide, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self._ui.stc_keyGuideInHistory = UI.getChildControl(_panel, "Static_KeyGuideInList")
   self.permissions:resize(CHAT_TYPE.Count, false)
   self._ui.edit_whisperTarget = UI.getChildControl(self._ui.stc_whisperBG, "Edit_WhisperTarget")
@@ -236,6 +248,18 @@ function ChattingInfo:open()
   end
   if Panel_Window_Mail_Renew:GetShow() then
     Mail_Close()
+  end
+  if Panel_Window_Menu_Renew:GetShow() then
+    Panel_Window_Menu_ShowToggle()
+  end
+  if Panel_Window_PetList_Renew:GetShow() then
+    FGlobal_PetList_Close()
+  end
+  if Panel_Window_WorkerManager_Renew:GetShow() then
+    PaGlobalFunc_WorkerManager_Close()
+  end
+  if PaGlobalFunc_AlchemyKnowledgeCheckShow() then
+    PaGlobalFunc_AlchemyKnowledgeClose()
   end
   _panel:SetShow(true)
   PaGlobalFunc_ChattingInfo_UpdatePermission()
@@ -430,7 +454,7 @@ function Input_ChattingInfo_OnPadBNotEditting()
     PaGlobalFunc_ChattingInfo_CancelMessage()
     return
   end
-  if PaGlobalFunc_ChattingHistory_GetShow() then
+  if true == PaGlobalFunc_ChattingHistory_GetShow() then
     Input_ChattingInfo_HistoryHide()
     return
   else

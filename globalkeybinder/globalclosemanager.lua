@@ -2,6 +2,7 @@ local panel_WindowList = {
   Panel_Window_ServantInfo,
   Panel_PartyOption,
   Panel_Alchemy,
+  Panel_Window_Alchemy,
   Panel_Window_StableFunction,
   Panel_Window_StableList,
   Panel_Window_StableInfo,
@@ -90,6 +91,7 @@ local panel_WindowList = {
   Panel_RallyRanking,
   Panel_Window_Warehouse,
   Panel_Manufacture,
+  Panel_Window_Manufacture,
   Panel_EnchantExtraction,
   Panel_Join,
   Panel_Window_PetMarket,
@@ -195,7 +197,6 @@ local panel_WindowList = {
   Panel_BossAlert_SettingV2,
   Panel_Window_PartySetting,
   Panel_Window_PartyInvite,
-  Panel_Widow_ChattingHistory_Renew,
   Panel_PartyRecruite,
   Panel_Window_LinkServantInfo,
   Panel_Window_Guild_Renew,
@@ -207,7 +208,13 @@ local panel_WindowList = {
   Panel_Window_Guild_SkillInfo,
   Panel_Window_Guild_Introduction,
   Panel_Window_MailDetail_Renew,
-  Panel_Window_GuildWarInfo
+  Panel_Window_GuildWarInfo,
+  Panel_House_InstallationMode_PlantInfo,
+  Panel_Window_Clan_Renew,
+  Panel_Introduction,
+  Panel_Window_MarketPlace,
+  Panel_Window_MarketPlaceWallet,
+  Panel_Window_Option_Main
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -333,7 +340,6 @@ registerEscapeLuaEvent(Panel_Console_Dialog_GuildPopup, "PanelEscapeFunc_GuildPo
 registerEscapeLuaEvent(Panel_Knowledge_Main, "Panel_Knowledge_Hide()")
 registerEscapeLuaEvent(Panel_IngameCashShop_GoodsTooltip, "FGlobal_CashShop_GoodsTooltipInfo_Close()")
 registerEscapeLuaEvent(Panel_Widget_Chatting_Renew, "Input_ChattingInfo_OnPadBNotEditting()")
-registerEscapeLuaEvent(Panel_Widow_ChattingHistory_Renew, "PaGlobalFunc_ChattingHistory_Close()")
 registerEscapeLuaEvent(Panel_Dialog_NpcGift_Renew, "PanelEscapeFunc_NpcGift_Close()")
 registerEscapeLuaEvent(Panel_Customizing_BodyShape, "PanelEscapeFunc_Customization_BodyShape_Close()")
 registerEscapeLuaEvent(Panel_Customizing_BodyPose, "PanelEscapeFunc_Customization_BodyPose_Close()")
@@ -352,11 +358,12 @@ registerEscapeLuaEvent(Panel_Window_PetFood_Renew, "FGlobal_PetFeedClose()")
 registerEscapeLuaEvent(Panel_Window_PetCommand_Renew, "FGlobal_PetCommand_Close()")
 registerEscapeLuaEvent(Panel_Window_PetInfo_Renew, "FGlobal_PetInfo_Close()")
 registerEscapeLuaEvent(Panel_Window_PetExchange_Renew, "PaGlobalFunc_PetExchange_Close()")
+registerEscapeLuaEvent(Panel_Window_PetRegister_Renew, "PaGlobalFunc_PetRegister_Cancle()")
 registerEscapeLuaEvent(Panel_Window_Delivery_Renew, "PanelEscapeFunc_PanelDelivery_Close()")
 registerEscapeLuaEvent(Panel_Window_Expedition, "PanelEscapeFunc_PanelExpedition_Close()")
 registerEscapeLuaEvent(Panel_Window_PartyInvite, "PaGlobalFunc_PartyInvite_Exit()")
 registerEscapeLuaEvent(Panel_Window_PartySetting, "PaGlobalFunc_PartySetting_Exit()")
-registerEscapeLuaEvent(Panel_PartyList, "PaGlobalFunc_FindParty_Exit()")
+registerEscapeLuaEvent(Panel_PartyList, "PanelEscapeFunc_FindParty_Close()")
 registerEscapeLuaEvent(Panel_Worldmap_NodeInfo, "PanelEscapeFunc_WorldMap_NodeInfo_Close()")
 registerEscapeLuaEvent(Panel_Worldmap_NodeManagement, "PanelEscapeFunc_WorldMap_NodeManagement_Close()")
 registerEscapeLuaEvent(Panel_Window_ServantInfo, "PanelEscapeFunc_ServantInfo_Horse_Close()")
@@ -367,6 +374,22 @@ registerEscapeLuaEvent(Panel_Window_WorkerManager_Filter_Renew, "PaGlobalFunc_Wo
 registerEscapeLuaEvent(Panel_Window_WorkerManager_ChangeSkill_Renew, "PaGlobalFunc_WorkerManager_ChangeSkill_Close()")
 registerEscapeLuaEvent(Panel_Window_WorkerManager_Restore_Renew, "PaGlobalFunc_WorkerManager_Restore_Close()")
 registerEscapeLuaEvent(Panel_Resurrection_ItemSelect, "PaGlobalFunc_ResurrerectionItem_Close()")
+registerEscapeLuaEvent(Panel_ServerSelect_Renew, "PaGlobalFunc_ServerSelect_Close()")
+registerEscapeLuaEvent(Panel_Window_MarketPlace, "PanelEscapeFunc_MarketPlace_Close()")
+registerEscapeLuaEvent(Panel_Window_MarketPlaceWallet, "PanelEscapeFunc_MarketWallet_Close()")
+function PanelEscapeFunc_FindParty_Close()
+  if false == _ContentsGroup_RenewUI_Party then
+    FGlobal_PartyList_ShowToggle()
+  else
+    PaGlobalFunc_FindParty_Exit()
+  end
+end
+function PanelEscapeFunc_MarketWallet_Close()
+  PaGlobalFunc_MarketWallet_Close()
+end
+function PanelEscapeFunc_MarketPlace_Close()
+  FGolbal_ItemMarketNew_Close()
+end
 function PanelEscapeFunc_ServantInfo_Horse_Close()
   if false == _ContentsGroup_RenewUI_StableInfo then
     ServantInfo_Close()
@@ -896,7 +919,7 @@ function close_UISubAppPanelList()
   elseif Panel_TradeMarket_EventInfo:IsShow() and Panel_TradeMarket_EventInfo:IsUISubApp() then
     TradeEventInfo_Close()
   end
-  if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() then
+  if PaGlobalFunc_ItemMarket_GetShow() and PaGlobalFunc_ItemMarket_IsUISubApp() then
     HandleClicked_ItemMarket_Close()
   end
   if Panel_Window_BlackSpiritAdventure:GetShow() and Panel_Window_BlackSpiritAdventure:IsUISubApp() then

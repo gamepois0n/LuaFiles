@@ -649,7 +649,8 @@ function FGlobal_Guild_AllianceInfo_MarkToolTip()
   local control = self._infoUi.btnGuildAllianceMark
   TooltipSimple_Show(control, name, desc)
 end
-function PaGlobal_Guild_AllianceInfo:FGlobal_GuildAllianceInfoOnMarkChanged()
+function FGlobal_GuildAllianceInfoOnMarkChanged()
+  local self = PaGlobal_Guild_AllianceInfo
   if self:isShowing() then
     self:InfoInitialize()
   end

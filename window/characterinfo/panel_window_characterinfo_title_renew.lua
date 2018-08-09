@@ -73,7 +73,7 @@ function CharacterTitleInfo:titleListCheck(categoryIdx)
   self._currentCategoryIdx = categoryIdx
   local _fontColor = {
     selected = Defines.Color.C_FFEEEEEE,
-    defalut = Defines.Color.C_FFC4BEBE
+    defalut = Defines.Color.C_FF525B6D
   }
   ToClient_SetCurrentTitleCategory(categoryIdx)
   for ii = 0, 3 do

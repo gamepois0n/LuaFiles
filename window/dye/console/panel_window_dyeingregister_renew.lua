@@ -70,6 +70,8 @@ function PaGlobalFunc_DyeingRegister_Close()
 end
 function DyeingRegister:open()
   _panel:SetShow(true)
+  self._scrollAmount = 0
+  self._ui.scroll_itemList:SetControlPos(0)
   self:updateList()
 end
 function DyeingRegister:close()
@@ -84,29 +86,34 @@ function FromClient_DyeingRegister_Update()
   self._ui.txt_keyGuideA:SetMonoTone(false)
 end
 function DyeingRegister:updateList()
-  local playerLevel = getSelfPlayer():get():getLevel()
   local selfPlayer = getSelfPlayer()
+  local playerLevel = selfPlayer:get():getLevel()
   local pearlInvenUseSize = selfPlayer:get():getInventorySlotCount(true)
-  local occupiedSlotCount = 0
+  local dyeSlotNo = {}
   for ii = 1, #self._ui.slot_dyes do
     self._ui.slot_dyes[ii]:clearItem()
   end
   for ii = __eTInventorySlotNoUseStart, pearlInvenUseSize do
-    local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, ii + self._scrollAmount)
+    local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, ii)
     if nil ~= itemWrapper then
       local isDyeAble = itemWrapper:getStaticStatus():get():isDyeingStaticStatus()
       if isDyeAble then
-        if occupiedSlotCount < #self._ui.slot_dyes then
-          self._ui.slot_dyes[occupiedSlotCount + 1]:setItem(itemWrapper, ii + self._scrollAmount)
-          self._ui.slot_dyes[occupiedSlotCount + 1].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. ii + self._scrollAmount .. ")")
-        end
-        occupiedSlotCount = occupiedSlotCount + 1
+        dyeSlotNo[#dyeSlotNo + 1] = ii
       end
     end
   end
-  if occupiedSlotCount > #self._ui.slot_dyes then
+  for ii = 1, #self._ui.slot_dyes do
+    if nil ~= dyeSlotNo[ii + self._scrollAmount] then
+      local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, dyeSlotNo[ii + self._scrollAmount])
+      if nil ~= itemWrapper then
+        self._ui.slot_dyes[ii]:setItem(itemWrapper, dyeSlotNo[ii + self._scrollAmount])
+        self._ui.slot_dyes[ii].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
+      end
+    end
+  end
+  if #dyeSlotNo > #self._ui.slot_dyes then
     self._ui.scroll_itemList:SetShow(true)
-    UIScroll.SetButtonSize(self._ui.scroll_itemList, #self._ui.slot_dyes, occupiedSlotCount)
+    UIScroll.SetButtonSize(self._ui.scroll_itemList, #self._ui.slot_dyes, #dyeSlotNo)
   else
     self._ui.scroll_itemList:SetShow(false)
   end

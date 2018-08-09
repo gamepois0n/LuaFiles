@@ -1,7 +1,7 @@
 local pearlShopProductInfo = {
   _init = false,
   _panel = Panel_PearlShop_ProductInfo,
-  _productInfo = nil,
+  _productNoRaw = 0,
   _focusedIndex = -1,
   _ui = {
     _itemSlotControlListSize = 5,
@@ -26,7 +26,6 @@ local pearlShopProductInfo = {
   }
 }
 function pearlShopProductInfo:initialize()
-  _PA_LOG("cylee", "pearlShopProductInfo:initialize()")
   if self._init then
     return
   end
@@ -66,33 +65,36 @@ function PaGlobalFunc_PearlShopProductInfoBack()
   pearlShopProductInfo:back()
 end
 function pearlShopProductInfo:back()
-  _PA_LOG("cylee", "pearlShopProductInfo:back()")
   self:close()
 end
+function pearlShopProductInfo:getInfo()
+  if self._productNoRaw then
+    return getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
+  end
+end
 function pearlShopProductInfo:open(productInfo)
-  _PA_LOG("cylee", "pearlShopProductInfo:open() productInfo:" .. tostring(productInfo))
   if not productInfo then
     return
   end
-  _PA_LOG("cylee", "pearlShopProductInfo:open() productName:" .. productInfo:getDisplayName())
-  self._productInfo = productInfo
+  self._productNoRaw = productInfo:getNoRaw()
   self:focus(0)
   self._panel:SetShow(true)
 end
 function PaGlobalFunc_PearlShopProductInfoOpen(productInfo)
-  _PA_LOG("cylee", "PaGlobalFunc_PearlShopProductInfoOpen()")
   pearlShopProductInfo:open(productInfo)
 end
 function pearlShopProductInfo:close()
-  _PA_LOG("cylee", "pearlShopProductInfo:close()")
   self._panel:SetShow(false)
 end
 function PaGlobalFunc_PearlShopProductInfoClose()
   pearlShopProductInfo:close()
 end
 function pearlShopProductInfo:focus(controlIndex)
-  _PA_LOG("cylee", "pearlShopProductInfo:focus() controlIndex:" .. tostring(controlIndex))
-  if controlIndex >= self._productInfo:getItemListCount() then
+  local info = self:getInfo()
+  if not info then
+    return
+  end
+  if controlIndex >= info:getItemListCount() then
     return
   end
   self._focusedIndex = controlIndex
@@ -102,20 +104,23 @@ function PaGlobalFunc_PearlShopProductInfoFocus(controlIndex)
   pearlShopProductInfo:focus(controlIndex)
 end
 function pearlShopProductInfo:update()
-  _PA_LOG("cylee", "pearlShopProductInfo:update()")
-  local itemListCount = self._productInfo:getItemListCount()
+  local info = self:getInfo()
+  if not info then
+    return
+  end
+  local itemListCount = info:getItemListCount()
   local firstPosX = self._ui._itemSlotBgTemplateControl:GetPosX() - 0.5 * (self._ui._itemSlotBgTemplateControl:GetSizeX() + 5) * (itemListCount - 1)
   for i = 0, self._ui._itemSlotControlListSize - 1 do
     local control = self._ui._itemSlotControlList[i]
     control:SetPosX(firstPosX + (self._ui._itemSlotBgTemplateControl:GetSizeX() + self._slotGapX) * i)
-    local showFlag = i < self._productInfo:getItemListCount()
+    local showFlag = i < info:getItemListCount()
     control:SetShow(showFlag)
     if showFlag then
-      local itemInfo = self._productInfo:getItemByIndex(i)
+      local itemInfo = info:getItemByIndex(i)
       self._slotList[i]:setItemByStaticStatus(itemInfo, 1)
     end
   end
-  local focusedItemInfo = self._productInfo:getItemByIndex(self._focusedIndex)
+  local focusedItemInfo = info:getItemByIndex(self._focusedIndex)
   self._ui._titleControl:SetText(focusedItemInfo:getName())
   self._ui._descControl:SetText(focusedItemInfo:getDescription())
   self._bottomLineControl:SetPosY(self._ui._descControl:GetPosY() + self._ui._descControl:GetTextSizeY() + 10)
@@ -126,10 +131,8 @@ function pearlShopProductInfo:update()
   self._ui._sellTypeControl:SetShow(false)
 end
 function pearlShopProductInfo:changePlatformSpecKey()
-  _PA_LOG("cylee", "pearlShopProductInfo:changePlatformSpecKey()")
 end
 function FromClient_PearlShopProductInfoInit()
-  _PA_LOG("cylee", "FromClient_PearlShopProductInfoInit()")
   pearlShopProductInfo:initialize()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_PearlShopProductInfoInit")

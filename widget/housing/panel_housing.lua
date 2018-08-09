@@ -676,6 +676,7 @@ end
 function Panel_Housing_CancelBuildTent_InteractionFromMessageBox()
   Event_Housing_ShowHousingModeUI(false)
   housing_CancelBuildTent()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function Panel_Housing_CancelInstallObject_InteractionFromMessageBox()
   housing:ShowInstallationMenu(false, 0, 0, false, false, false, false, false)

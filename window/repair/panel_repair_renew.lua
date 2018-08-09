@@ -118,7 +118,8 @@ function RepairInfo:initialize()
   self._ui.txt_moneyInCharVal = UI.getChildControl(self._ui.stc_bottomLeft, "StaticText_MoneyInCharacterVal")
   self._ui.txt_moneyInWarehouse = UI.getChildControl(self._ui.stc_bottomRight, "StaticText_MoneyInWarehouse")
   self._ui.txt_moneyInWarehouseVal = UI.getChildControl(self._ui.stc_bottomRight, "StaticText_MoneyInWarehouseVal")
-  self._ui.txt_keyGuide:SetText("Exit")
+  self._ui.txt_keyGuide:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_GENERIC_KEYGUIDE_XBOX_EXIT"))
+  self:lateInit()
   self:registMessageHandler()
   self:initLuckyRepair()
 end
@@ -131,6 +132,7 @@ function RepairInfo:lateInit()
   if true == self._lateInitDone then
     return
   end
+  self._ui.stc_clipAreas = {}
   self._ui.stc_buttonBGs = {}
   self._ui.txt_buttonNames = {}
   for ii = 1, REPAIR_TYPE.COUNT do
@@ -150,7 +152,6 @@ function PaGlobalFunc_RepairInfo_Open()
   RepairInfo:open()
 end
 function RepairInfo:open()
-  self:lateInit()
   self._isCamping = PaGlobal_Camp:getIsCamping()
   PaGlobalFunc_MainDialog_setIgnoreShowDialog(true)
   if Defines.UIMode.eUIMode_Repair ~= GetUIMode() then
@@ -297,17 +298,10 @@ function PaGlobalFunc_RepairInfo_EquipRClick(equipSlotNo, itemWrapper)
     return
   end
   local function onConfirmButton()
-    local invenMoney = MessageBoxCheck.isCheck()
-    local moneyWhereType = CppEnums.ItemWhereType.eInventory
-    if invenMoney then
-      moneyWhereType = CppEnums.ItemWhereType.eInventory
-    else
-      moneyWhereType = CppEnums.ItemWhereType.eWarehouse
-    end
     if PaGlobal_Camp:getIsCamping() then
       repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, CppEnums.ServantType.Type_Count)
     else
-      repair_Item(self._repairWhereType, self._repairSlotNo, moneyWhereType, CppEnums.ServantType.Type_Count)
+      repair_Item(self._repairWhereType, self._repairSlotNo, MessageBoxCheck.isCheck(), CppEnums.ServantType.Type_Count)
     end
   end
   local repairPrice = repair_getRepairPrice_s64(CppEnums.ItemWhereType.eEquip, equipSlotNo, CppEnums.ServantType.Type_Count, PaGlobal_Camp:getIsCamping())
@@ -454,7 +448,6 @@ end
 function RepairInfo:onClickInvenRepair()
   local inventory_s64 = repair_RepairAllPrice_s64(CppEnums.ItemWhereType.eInventory, true, CppEnums.ServantType.Type_Count, false, PaGlobal_Camp:getIsCamping())
   local totalPrices_64 = repair_RepairAllPrice_s64(CppEnums.ItemWhereType.eCashInventory, false, CppEnums.ServantType.Type_Count, false, PaGlobal_Camp:getIsCamping())
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "totalPrices_64 : " .. tostring(totalPrices_64))
   if totalPrices_64 > Defines.s64_const.s64_0 then
     local strPrice = string.format("%d", Int64toInt32(totalPrices_64))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_INVENTORY_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -479,13 +472,7 @@ function RepairInfo:onClickInvenRepair()
 end
 function PaGlobalFunc_RepairInfo_RepairAll()
   local self = RepairInfo
-  local invenMoney = MessageBoxCheck.isCheck()
-  local moneyWhereType = CppEnums.ItemWhereType.eInventory
-  if invenMoney then
-    moneyWhereType = CppEnums.ItemWhereType.eInventory
-  else
-    moneyWhereType = CppEnums.ItemWhereType.eWarehouse
-  end
+  local moneyWhereType = MessageBoxCheck.isCheck()
   if PaGlobal_Camp:getIsCamping() then
     repair_AllItemByCamping()
   else

@@ -249,6 +249,7 @@ function stableList:init()
   self._buttonRepairUnseal = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_RepairUnseal", self._staticButtonListBG, "StableList_Button_RepairUnseal")
   self._buttonUnseal = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Unseal", self._staticButtonListBG, "StableList_Button_Unseal")
   self._buttonMove = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Move", self._staticButtonListBG, "StableList_Button_Move")
+  self._buttonRegisterForRent = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_RegisterForRent", self._staticButtonListBG, "StableList_Button_RegisterForRent")
   self._buttonRepair = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Repair", self._staticButtonListBG, "StableList_Button_Repair")
   self._buttonRecovery = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Recovery", self._staticButtonListBG, "StableList_Button_Recovery")
   self._buttonSell = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Sell", self._staticButtonListBG, "StableList_Button_Sell")
@@ -268,6 +269,7 @@ function stableList:init()
   self._buttonHorseLookChange = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_LookChange", self._staticButtonListBG, "StableList_Button_LookChange")
   self._buttonTrainingFinish = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_TrainingFinish", self._staticButtonListBG, "StableList_Button_TrainingFinish")
   self._buttonStallionTraining = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_StallionTraining", self._staticButtonListBG, "StableList_Button_StallionTraining")
+  self._buttonSetBeginningLevelServant = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_SetBeginningLevelServant", self._staticButtonListBG, "StableList_Button_SetBeginningLevelServant")
   self._buttonRelease:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_TITLE"))
   self._scroll:SetControlPos(0)
   self._sealedCount:addInputEvent("Mouse_On", "stableList_ShowCountTooltip(" .. 0 .. ")")
@@ -559,6 +561,7 @@ function stableList:registEventHandler()
   self._buttonReleaseImprint:addInputEvent("Mouse_LUp", "StableList_Imprint( false )")
   self._buttonReleaseCarriage:addInputEvent("Mouse_LUp", "StableList_Unlink()")
   self._buttonStallionTraining:addInputEvent("Mouse_LUp", "StableList_StartStallionTraining()")
+  self._buttonSetBeginningLevelServant:addInputEvent("Mouse_LUp", "StableList_SetBeginningLevelServant()")
 end
 function stableList:registMessageHandler()
   registerEvent("onScreenResize", "StableList_Resize")
@@ -640,11 +643,15 @@ function StableList_HandleMoveButtonClick()
   local posY = stableList._staticButtonListBG:GetParentPosY()
   changeServantRegion:open(currentButtonServantNo, posX, posY)
 end
+function StableList_HandleRegisterForRentButtonClick()
+  PaGlobalFunc_ServantRentPromoteAuthOpen(currentButtonServantNo)
+end
 function StableList_RegistButtonEventHandler(servantInfo)
   local self = stableList
   currentButtonServantNo = servantInfo:getServantNo()
   self._buttonUnseal:addInputEvent("Mouse_LUp", "StableList_UnsealByServantNo()")
   self._buttonMove:addInputEvent("Mouse_LUp", "StableList_HandleMoveButtonClick()")
+  self._buttonRegisterForRent:addInputEvent("Mouse_LUp", "StableList_HandleRegisterForRentButtonClick()")
 end
 local beforeSlotNo, beforeEType
 function StableList_ButtonOpen(eType, slotNo)
@@ -665,6 +672,7 @@ function StableList_ButtonOpen(eType, slotNo)
   self._buttonRegister:SetShow(false)
   self._buttonSeal:SetShow(false)
   self._buttonMove:SetShow(false)
+  self._buttonRegisterForRent:SetShow(false)
   self._buttonCompulsionSeal:SetShow(false)
   self._buttonRecoveryUnseal:SetShow(false)
   self._buttonRepairUnseal:SetShow(false)
@@ -688,6 +696,7 @@ function StableList_ButtonOpen(eType, slotNo)
   self._buttonHorseLookChange:SetShow(false)
   self._buttonTrainingFinish:SetShow(false)
   self._buttonStallionTraining:SetShow(false)
+  self._buttonSetBeginningLevelServant:SetShow(false)
   local buttonList = {}
   local buttonConfig = self._config.button
   local positionX = 0
@@ -817,6 +826,10 @@ function StableList_ButtonOpen(eType, slotNo)
           buttonList[buttonSlotNo] = self._buttonStallionTraining
           buttonSlotNo = buttonSlotNo + 1
         end
+        if true == _ContentsGroup_SetBeginningLevelServant and false == isPcroomOnly and (CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_RidableBabyElephant == vehicleType) and stable == getState and regionName == servantRegionName then
+          buttonList[buttonSlotNo] = self._buttonSetBeginningLevelServant
+          buttonSlotNo = buttonSlotNo + 1
+        end
       end
     elseif not isLinkedHorse and 0 == servantInfo:getHp() and (CppEnums.VehicleType.Type_Horse == vehicleType or CppEnums.VehicleType.Type_Donkey == vehicleType or CppEnums.VehicleType.Type_Camel == vehicleType or CppEnums.VehicleType.Type_MountainGoat == vehicleType) and not servantInfo:isMatingComplete() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState and stallionTraining ~= getState then
       buttonList[buttonSlotNo] = self._buttonRecovery
@@ -835,6 +848,10 @@ function StableList_ButtonOpen(eType, slotNo)
     end
     if showChangeRegionButtonFlag and changeServantRegion:isEnabled() then
       buttonList[buttonSlotNo] = self._buttonMove
+      buttonSlotNo = buttonSlotNo + 1
+    end
+    if PaGlobalFunc_ServantRentCheckToShowRegisterForRentButton(servantInfo) then
+      buttonList[buttonSlotNo] = self._buttonRegisterForRent
       buttonSlotNo = buttonSlotNo + 1
     end
     positionX = self._slots[slotNo].button:GetPosX() + buttonConfig.startX
@@ -916,6 +933,7 @@ function StableList_ButtonClose()
   self._staticButtonListBG:SetShow(false)
   changeServantRegion:close()
   Panel_HorseLookChange_Close()
+  PaGlobalFunc_ServantRentPromoteAuthClose()
   return false
 end
 function StableList_SlotSelect(slotNo)
@@ -1406,6 +1424,22 @@ function StableList_StartStallionTraining()
   end
   ToClient_startStallionSkillExpTraining(servantNo)
 end
+function StableList_SetBeginningLevelServant()
+  StableList_ButtonClose()
+  audioPostEvent_SystemUi(0, 0)
+  local setBeginningLevelServant = function()
+    ToClient_requestSetBeginningLevelServant(StableList_SelectSlotNo())
+  end
+  messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_SETBEGINNINGLEVEL_INFO")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+    content = messageBoxMemo,
+    functionYes = setBeginningLevelServant,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
+end
 function FromClient_StartStallionSkillTraining(servantNo)
   Panel_Window_StableStallion:SetShow(true)
 end
@@ -1505,6 +1539,7 @@ function HorseLookChange_Set(isNext, index)
     end
     Servant_ScenePopObject(self._selectSceneIndex)
     local actionIndex = formInfo:getActionIndex()
+    PaGlobal_ServantChangeFormPanel._btnShipChange:SetShow(false)
     if servantActionIndex == actionIndex then
       PaGlobal_ServantChangeFormPanel._btnChange:SetIgnore(true)
       PaGlobal_ServantChangeFormPanel._btnChange:SetMonoTone(true)

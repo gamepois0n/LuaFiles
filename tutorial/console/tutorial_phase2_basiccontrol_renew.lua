@@ -6,7 +6,7 @@ PaGlobal_TutorialPhase_BasicControl = {
   _updateTime = 0,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15
 }
 function PaGlobal_TutorialPhase_BasicControl:checkPossibleForPhaseStart(stepNo)
@@ -63,9 +63,6 @@ function PaGlobal_TutorialPhase_BasicControl:startPhaseXXX(stepNo)
   self._currentProgress = 1
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
-  PaGlobal_TutorialManager:setAllowShowQuickSlot(false)
-  PaGlobal_TutorialManager:setAllowNewQuickSlot(false)
-  PaGlobal_TutorialManager:setAllowMainQuestWidget(false)
   PaGlobal_TutorialUiManager:setShowAllDefaultUi(false)
   PaGlobal_TutorialUiManager:hideAllTutorialUi()
   PaGlobal_TutorialUiManager:repositionScreen()

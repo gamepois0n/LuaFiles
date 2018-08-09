@@ -143,7 +143,10 @@ function workerManager:initContorl()
   upgradInfo3._staticText_UpgradeTitle = UI.getChildControl(workerManagerUI._static_UpgradeBg, "StaticText_ThirdUpgradeTitle")
   workerManagerUI._upgradeSlot[3] = upgradInfo3
   workerManagerUI._xboxUI._staticText_Close_ConsoleUI = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_Close_ConsoleUI")
+  workerManagerUI._xboxUI._staticText_Align_ConsoleUI = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_Align_ConsoleUI")
   workerManagerUI._xboxUI._staticText_SortInfo = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_AlignInfo")
+  workerManagerUI._xboxUI._staticText_SortInfo:SetShow(false)
+  workerManagerUI._xboxUI._staticText_Align_ConsoleUI:SetShow(false)
   workerManagerUI._xboxUI._staticText_AllRestore1_ConsoleUI = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_AllRestore1_ConsoleUI")
   workerManagerUI._xboxUI._staticText_AllRestore2_ConsoleUI = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_AllRestore2_ConsoleUI")
   workerManagerUI._xboxUI._staticText_AllRestore3_ConsoleUI = UI.getChildControl(workerManagerUI._static_BottomBg, "StaticText_AllRestore3_ConsoleUI")
@@ -163,7 +166,6 @@ function workerManager:registInputEvent()
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_WorkerManager_ChangeTab(1)")
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_RTPress_A, "PaGlobalFunc_WorkerManager_WorkerRestore(true)")
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_RTPress_X, "PaGlobalFunc_WorkerManager_WorkerRepeatAll()")
-    Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_WorkerManager_Filter_Open()")
   else
     self._ui._pcUI._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorkerManager_Close()")
     self._ui._tabText._radioButton_BaseOrder:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorkerManager_SelectTab(" .. self._config._Tab._Base .. ")")
@@ -178,7 +180,7 @@ function workerManager:setButtonString()
     workerManagerUI._xboxUI._staticText_Redo_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_TOOLTIP_REPEAT_NAME"))
     workerManagerUI._xboxUI._staticText_DoFire_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_BUTTONFIRE"))
     workerManagerUI._xboxUI._staticText_ChangeSkill_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_TOOLTIP_CHANGESKILL_NAME"))
-    workerManagerUI._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_SUBMENU_UPGRADE"))
+    workerManagerUI._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_PROMOTION"))
   else
     workerManagerUI._pcUI._button_Restore:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_RESTORE"))
     workerManagerUI._pcUI._button_Redo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_TOOLTIP_REPEAT_NAME"))
@@ -201,11 +203,8 @@ function workerManager:setShowUI(controTable, isShow)
   end
 end
 function workerManager:setSortInfo()
-  local sortInfoString = ""
-  if nil ~= self._filterTown and nil ~= self._filterGrade then
-    sortInfoString = "(" .. self._filterTown .. " / " .. self._filterGrade .. ")"
-    self._ui._xboxUI._staticText_SortInfo:SetText(sortInfoString)
-  end
+  self._ui._xboxUI._staticText_SortInfo:SetShow(false)
+  self._ui._xboxUI._staticText_Align_ConsoleUI:SetShow(false)
 end
 function PaGlobalFunc_WorkerManager_SetSortInfo()
   workerManager:setSortInfo()
@@ -338,6 +337,18 @@ function PaGlobalFunc_WorkerManager_Open()
   workerManager:selectTab(workerManager._selectedTab)
   workerManager:update()
 end
+function workerManager:temporaryOpen()
+  Panel_Window_WorkerManager_Renew:SetShow(true)
+end
+function workerManager:temporaryClose()
+  Panel_Window_WorkerManager_Renew:SetShow(false)
+end
+function PaGlobalFunc_WorkerManager_TemporaryOpen()
+  workerManager:temporaryOpen()
+end
+function PaGlobalFunc_WorkerManager_TemporaryClose()
+  workerManager:temporaryClose()
+end
 function workerManager:close()
   if false == Panel_Window_WorkerManager_Renew:GetShow() then
     return
@@ -350,9 +361,9 @@ end
 function workerManager:changeTab(changeValue)
   local tabIndex = self._selectedTab + changeValue
   if tabIndex < 0 then
-    tabIndex = self._config._Tab._Base
-  elseif tabIndex >= self._config._Tab._TabCount then
     tabIndex = self._config._Tab._TabCount - 1
+  elseif tabIndex >= self._config._Tab._TabCount then
+    tabIndex = self._config._Tab._Base
   end
   self:selectTab(tabIndex)
 end
@@ -389,6 +400,7 @@ function workerManager:workerRestore(isRestoreAll)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_RentHouseNoWorkingByWorkerNotSelect"))
     return
   end
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   PaGlobalFunc_WorkerManager_Restore_Open(isRestoreAll)
 end
 function PaGlobalFunc_WorkerManager_WorkerRestore(isRestoreAll)
@@ -402,6 +414,7 @@ function workerManager:workerRepeat(workerNoRaw)
   local currentActionPoint = workerWrapperLua:getActionPoint()
   local workerWorkingPrimitiveWrapper = workerWrapperLua:getWorkerRepeatableWorkingWrapper()
   if nil == workerWorkingPrimitiveWrapper then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_CANTREPEAT_WORK"))
     return
   end
   if workerWrapperLua:isWorkerRepeatable() then
@@ -412,6 +425,7 @@ function workerManager:workerRepeat(workerNoRaw)
       ToClient_requestRepeatWork(WorkerNo(workerNoRaw), currentActionPoint)
     end
   else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_CANTREPEAT_WORK"))
   end
 end
 function PaGlobalFunc_WorkerManager_WorkerRepeat()
@@ -439,14 +453,16 @@ end
 function workerManager:clearWorkerRepeatInfo(workerNoRaw)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw)
   local function doUnRepeatWork()
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     ToClient_requestEraseRepeat(WorkerNo(workerNoRaw))
     self:update()
   end
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
     content = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_MESSAGEBOX_UNREPEATCONFIRM"),
     functionYes = doUnRepeatWork,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerManager_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
@@ -462,18 +478,20 @@ function workerManager:workerFire()
     return
   end
   local function do_CheckedWorker_Fire()
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     local workerNo_64 = tonumber64(self._selectedWorker)
     ToClient_requestDeleteMyWorker(WorkerNo(workerNo_64))
     self._selectedWorker = nil
     self:update()
   end
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
-  local messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_FIREWORKERDESC", "count", 1)
+  local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_QUESTION_FIRE")
   local messageboxData = {
     title = messageTitle,
     content = messageContent,
     functionYes = do_CheckedWorker_Fire,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerManager_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData, "middle")
@@ -504,15 +522,17 @@ function workerManager:workerStop()
         return
       else
         local function cancelDoWork()
+          PaGlobalFunc_WorkerManager_TemporaryOpen()
           ToClient_requestCancelNextWorking(WorkerNo(workerNo))
         end
         local workName = workerWrapperLua:getWorkString()
         local cancelWorkContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TOWN_WORKERMANAGE_CONFIRM_WORKCANCEL", "workName", workName)
+        PaGlobalFunc_WorkerManager_TemporaryClose()
         local messageboxData = {
           title = PAGetString(Defines.StringSheet_GAME, "LUA_WORKINGPROGRESS_CANCELWORK_TITLE"),
           content = cancelWorkContent,
           functionYes = cancelDoWork,
-          functionCancel = MessageBox_Empty_function,
+          functionCancel = PaGlobalFunc_WorkerManager_TemporaryOpen,
           priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
         }
         MessageBox.showMessageBox(messageboxData, "top")
@@ -527,6 +547,7 @@ function workerManager:workerChangeSkill()
   PaGlobalFunc_WorkerManager_ChangeSkill_Open()
 end
 function PaGlobalFunc_WorkerManager_WorkerChangeSkill()
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   workerManager:workerChangeSkill()
 end
 function workerManager:workerUpgrade()
@@ -535,6 +556,7 @@ function workerManager:workerUpgrade()
   end
   local workerWrapperLua = getWorkerWrapper(tonumber64(self._selectedWorker))
   local function do_Upgrade_Worker()
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     workerWrapperLua:requestUpgrade()
     self:update()
   end
@@ -542,11 +564,12 @@ function workerManager:workerUpgrade()
   local workingTime = workerWrapperLua:getLeftWorkingTime()
   local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
   local messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_UPGRADEDESC", "name", workerName)
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   local messageboxData = {
     title = messageTitle,
     content = messageContent,
     functionYes = do_Upgrade_Worker,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerManager_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData, "top")
@@ -640,7 +663,7 @@ function workerManager:selectWorker(workerNoRawStr)
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_WorkerManager_WorkerChangeSkill()")
   else
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetShow(true)
-    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_TOOLTIP_UPGRADE_NAME"))
+    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_PROMOTION"))
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_WorkerManager_WorkerUpgrade()")
   end
 end
@@ -684,8 +707,9 @@ function workerManager:setWorkerBaseInfo(workerNoRawStr)
   local leftTimeText = leftMin .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_TIME_MINUTE") .. " " .. leftSec .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_TIME_SECOND")
   local leftTimePercent = leftTime / totalWorkTime * 100
   workerManagerUI._static_WorkerImage:ChangeTextureInfoName(workerWrapperLua:getWorkerIcon())
-  local radius = workerManagerUI._static_WorkerImage:GetSizeX() / 2
-  local position = float2(workerManagerUI._static_WorkerImage:GetPosX() + radius / 2 - 3, workerManagerUI._static_WorkerImage:GetPosY() + radius / 2 - 3)
+  local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
+  local radius = workerManagerUI._static_WorkerImage:GetSizeX() * 0.5 * uiScale
+  local position = float2(workerManagerUI._static_WorkerImage:GetPosX() + radius / 2 / uiScale - 3, workerManagerUI._static_WorkerImage:GetPosY() + radius / 2 / uiScale - 3)
   workerManagerUI._static_WorkerImage:SetCircularClip(radius, position)
   workerManagerUI._staticText_WorkerTitle:SetText(titleText)
   workerManagerUI._staticText_Node:SetText(ToClient_GetNodeNameByWaypointKey(workerWrapperLua:getHomeWaypoint()))
@@ -771,11 +795,11 @@ function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
   local isUpgradable = workerWrapperLua:isUpgradable()
   if CppEnums.NpcWorkingType.eNpcWorkingType_Upgrade == workerWrapperLua:getWorkingType() then
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetShow(true)
-    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_UPGRADENOW"))
+    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_PROMOTION_NOW"))
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_SorkerManager_WorkerUpgradeNow()")
   elseif upgradeFailCount >= 3 then
     self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetShow(true)
-    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_UPGRADERESETBUTTON"))
+    self._ui._xboxUI._staticText_Upgrade_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERMANAGER_PROMOTION_RESET"))
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_ResetUpgradeCount()")
   end
   for index = 1, self._config._upgradeSlotCount do
@@ -783,16 +807,19 @@ function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
       self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._Fail)
       upgradeSlot[index]._staticText_UpgradeLevel:SetFontColor(self._config._fontColor._upgrade_Fail)
       upgradeSlot[index]._staticText_UpgradeState:SetFontColor(self._config._fontColor._upgrade_Fail)
+      upgradeSlot[index]._staticText_UpgradeState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKER_UPGRADE_FAIL"))
       upgradeFailCount = upgradeFailCount - 1
     elseif upgradableCount > 0 and true == isUpgradable then
       self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._Upgradable)
       upgradeSlot[index]._staticText_UpgradeLevel:SetFontColor(self._config._fontColor._upgrade_NormalLevel)
       upgradeSlot[index]._staticText_UpgradeState:SetFontColor(self._config._fontColor._upgrade_NormalState)
+      upgradeSlot[index]._staticText_UpgradeState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKER_UPGRADE_AVAILABLE"))
       isUpgradable = false
     else
       self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._InActivation)
       upgradeSlot[index]._staticText_UpgradeLevel:SetFontColor(self._config._fontColor._upgrade_Inactivation)
       upgradeSlot[index]._staticText_UpgradeState:SetFontColor(self._config._fontColor._upgrade_Inactivation)
+      upgradeSlot[index]._staticText_UpgradeState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKER_UPGRADE_AVAILABLE"))
     end
   end
 end
@@ -1026,16 +1053,18 @@ function workerManager:upgradeNow()
   local remainTimeInt = ToClient_getWorkingTime(workerNoRaw)
   local needPearl = ToClient_GetUsingPearlByRemainingPearl(CppEnums.InstantCashType.eInstant_CompleteNpcWorkerUpgrade, remainTimeInt)
   local function doUpgradeNow()
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     ToClient_requestQuickComplete(WorkerNo(workerNoRaw), needPearl)
     self._selectedWorker = nil
   end
+  PaGlobalFunc_WorkerManager_TemporaryClose()
   local messageboxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_IMMEDIATELYCOMPLETE_MSGBOX_TITLE")
   local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_UPGRADENOW_CONFIRM", "pearl", tostring(needPearl))
   local messageboxData = {
     title = messageboxTitle,
     content = messageBoxMemo,
     functionYes = doUpgradeNow,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = PaGlobalFunc_WorkerManager_TemporaryOpen,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData, "middle")
@@ -1056,17 +1085,19 @@ function workerManager:resetUpgradeCount()
   local upgradableCount = maxUpgradePoint - workerUpgradeCount
   local worker_Name = workerWrapperLua:getName()
   local function doReset()
+    PaGlobalFunc_WorkerManager_TemporaryOpen()
     ToClient_requestClearWorkerUpgradePoint(workerNoRaw)
   end
   if upgradableCount > 0 then
     local title = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_MSGTITLE")
     local msg = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
     local content = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_MSGCONTENT", "msg", msg, "count", upgradableCount, "maxCount", maxUpgradePoint)
+    PaGlobalFunc_WorkerManager_TemporaryClose()
     local messageBoxData = {
       title = title,
       content = content,
       functionYes = doReset,
-      functionNo = MessageBox_Empty_function,
+      functionNo = PaGlobalFunc_WorkerManager_TemporaryOpen,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -1114,5 +1145,8 @@ function workerManager:registEventHandler()
   registerEvent("WorldMap_WorkerDataUpdateByRegionManaging", "FromClient_WorkerDataUpdate_HeadingRegionManaging")
   registerEvent("FromClient_UpdateLastestWorkingResult", "Push_Work_ResultItem_Message")
   Panel_Window_WorkerManager_Renew:RegisterUpdateFunc("PaGlobalFunc_WorkerManager_PerFrameUpdate")
+end
+function FGlobal_WorkerManger_ShowToggle()
+  PaGlobalFunc_WorkerManager_Open()
 end
 workerManager:registEventHandler()

@@ -1053,6 +1053,7 @@ local function endUIProcess()
   if false == isClose then
     return
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   if true == _ContentsGroup_RenewUI_Dailog then
     PaGlobalFunc_MainDialog_ReOpen()
   else
@@ -1080,6 +1081,7 @@ function MentalGame_HideByDamage()
   setShowLine(true)
   ToClient_PopDialogueFlush()
   mouseInputer:SetAlpha(0)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function MentalGame_HideByDead()
   local isClose = endUIProcessMentalOnly(true)
@@ -1098,6 +1100,7 @@ function MentalGame_HideByDead()
   setShowLine(true)
   ToClient_PopDialogueFlush()
   mouseInputer:SetAlpha(0)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 local function gameStartInit()
   _bestPoint = 0
@@ -1287,6 +1290,7 @@ function MentalGame_Show()
     return
   end
   mentalObject:scaling(-0.2)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_STORY")
 end
 function MentalGame_ScreenResize()
   local sizeX = getScreenSizeX()

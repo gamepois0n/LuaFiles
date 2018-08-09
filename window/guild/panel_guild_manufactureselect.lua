@@ -126,8 +126,8 @@ function PaGlobal_Guild_ManufactureSelect:open(index)
   Panel_Guild_ManufactureSelect:SetShow(true)
 end
 function PaGlobal_Guild_ManufactureSelect:close()
+  self:itemTooltip_Hide(self._index)
   self._index = -1
-  self:itemTooltip_Hide()
   Panel_Guild_ManufactureSelect:SetShow(false)
 end
 function PaGlobal_Guild_ManufactureSelect:select(index)
@@ -146,8 +146,10 @@ function PaGlobal_Guild_ManufactureSelect:itemTooltip_Show(index)
   end
 end
 function PaGlobal_Guild_ManufactureSelect:itemTooltip_Hide(index)
-  local itemStatic = ToClient_getItemExchangeSourceStaticStatusWrapper(self._itemEnchantKey[index])
-  FGlobal_Hide_Tooltip_Work(itemStatic, true)
+  if index >= 0 then
+    local itemStatic = ToClient_getItemExchangeSourceStaticStatusWrapper(self._itemEnchantKey[index])
+    FGlobal_Hide_Tooltip_Work(itemStatic, true)
+  end
 end
 function FromClient_Init_Guild_ManufactureSelect()
   PaGlobal_Guild_ManufactureSelect:initialize()

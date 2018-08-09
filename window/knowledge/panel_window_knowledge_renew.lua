@@ -56,7 +56,8 @@ local Panel_Window_Knowledge_Renew_info = {
     stepTextList = {
       [0] = "",
       [1] = "",
-      [2] = ""
+      [2] = "",
+      [3] = ""
     },
     step0_currentIndex = 0,
     step0_selectMentalObjectKey = 0,
@@ -67,8 +68,12 @@ local Panel_Window_Knowledge_Renew_info = {
     step2_lastIndex = -1,
     step2_currentIndex = 0,
     step2_selectMentalObjectKey = 0,
+    step3_useCard = false,
     step3_lastIndex = -1,
-    step3_currentIndex = 0
+    step3_currentIndex = 0,
+    step3_selectMentalObjectKey = 0,
+    step4_lastIndex = -1,
+    step4_currentIndex = 0
   },
   _text = {arrow = " > "},
   _enum = {
@@ -77,7 +82,8 @@ local Panel_Window_Knowledge_Renew_info = {
     eSTEP_CATEGORY = 0,
     eSETP_SUBCATEGORY = 1,
     eSTEP_GROUP_1 = 2,
-    eSTEP_GROUP_2 = 3
+    eSTEP_GROUP_2 = 3,
+    eSTEP_GROUP_3 = 4
   },
   _icon = {
     ["texture"] = "Renewal/UI_Icon/Console_Icon_02.dds",
@@ -168,7 +174,7 @@ function Panel_Window_Knowledge_Renew_info:setContentInfo()
   if false == self:getShowInfo() then
     self:openInfo()
   end
-  local currentIndex = self._value.step3_currentIndex
+  local currentIndex = self._value.step4_currentIndex
   local knowledge = getSelfPlayer():get():getMentalKnowledge()
   local childkey = knowledge:getCurrentThemeChildCardKeyByIndex(currentIndex)
   local card = knowledge:getCardByKeyRaw(childkey)
@@ -217,8 +223,9 @@ end
 function Panel_Window_Knowledge_Renew_info:initValue()
   self._value.currentStep = 0
   self._value.stepTextList[0] = ""
-  self._value.stepTextList[0] = ""
+  self._value.stepTextList[1] = ""
   self._value.stepTextList[2] = ""
+  self._value.stepTextList[3] = ""
   self._value.step0_currentIndex = 0
   self._value.step0_selectMentalObjectKey = 0
   self._value.step1_lastIndex = -1
@@ -228,8 +235,8 @@ function Panel_Window_Knowledge_Renew_info:initValue()
   self._value.step2_lastIndex = -1
   self._value.step2_currentIndex = 0
   self._value.step2_selectMentalObjectKey = 0
-  self._value.step3_lastIndex = -1
-  self._value.step3_currentIndex = 0
+  self._value.step4_lastIndex = -1
+  self._value.step4_currentIndex = 0
 end
 function Panel_Window_Knowledge_Renew_info:resize()
   Panel_Window_Knowledge_Renew:SetSize(Panel_Window_Knowledge_Renew:GetSizeX(), getScreenSizeY())
@@ -255,7 +262,7 @@ function Panel_Window_Knowledge_Renew_info:childControl()
   self._ui.static_SubCategoryBg = UI.getChildControl(Panel_Window_Knowledge_Renew, "Static_SubCategoryBg")
   self._ui.staticText_Title_1 = UI.getChildControl(self._ui.static_SubCategoryBg, "StaticText_Title_1")
   self._ui.list2_Category = UI.getChildControl(self._ui.static_SubCategoryBg, "List2_Category")
-  self._ui.list2_Category:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Window_Knowledge_Step_1And2List")
+  self._ui.list2_Category:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Window_Knowledge_Step_123List")
   self._ui.list2_Category:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.list2_1_Content = UI.getChildControl(self._ui.list2_Category, "List2_1_Content")
   self._ui.button_CategoryName = UI.getChildControl(self._ui.list2_1_Content, "Button_CategoryName")
@@ -266,7 +273,7 @@ function Panel_Window_Knowledge_Renew_info:childControl()
   self._ui.static_CategoryItemBg = UI.getChildControl(Panel_Window_Knowledge_Renew, "Static_CategoryItemBg")
   self._ui.staticText_Title_2 = UI.getChildControl(self._ui.static_CategoryItemBg, "StaticText_Title_2")
   self._ui.list2_CategoryItem = UI.getChildControl(self._ui.static_CategoryItemBg, "List2_CategoryItem")
-  self._ui.list2_CategoryItem:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Window_Knowledge_Step_3List")
+  self._ui.list2_CategoryItem:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Window_Knowledge_Step_4List")
   self._ui.list2_CategoryItem:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.list2_2_Content = UI.getChildControl(self._ui.list2_CategoryItem, "List2_2_Content")
   self._ui.list2_2_VerticalScroll = UI.getChildControl(self._ui.list2_CategoryItem, "List2_2_VerticalScroll")
@@ -275,9 +282,79 @@ function Panel_Window_Knowledge_Renew_info:childControl()
   self._ui.staticText_Back_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Back_ConsoleUI")
   self._ui.button_Back = UI.getChildControl(self._ui.static_BottomBg, "Button_Back")
   self._ui.staticText_TooltipBg = UI.getChildControl(Panel_Window_Knowledge_Renew, "StaticText_TooltipBg")
-  for index = 0, self._enum.ePOINT_COUNT - 1 do
-    self._ui.toolTip_Point[index] = UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_" .. index)
-    self._ui.toolTip_PointDesc[index] = UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GreDesc_" .. index)
+  self._ui.toolTip_Grade = {
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_Grade_S"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_Grade_APlus"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_Grade_A"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_Grade_B"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_Grade_C")
+  }
+  self._ui.toolTip_GradeDesc = {
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GradeDesc_S"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GradeDesc_APlus"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GradeDesc_A"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GradeDesc_B"),
+    UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GradeDesc_C")
+  }
+  local textData = {
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 500",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_2")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 1000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_3")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 1500",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_5")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 2000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_7")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 3000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_10")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 4000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_12")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 5000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_14")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 6000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_16")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 7000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_18")
+    },
+    {
+      "<PAColor0xFF9397a7>Over<PAOldColor> 8000",
+      PAGetString(Defines.StringSheet_RESOURCE, "PANEL_KNOWLEDGEPOINT_MONSTERKNOWLEDGE_DROPRATE_20")
+    }
+  }
+  for ii = 1, #self._ui.toolTip_Grade do
+    self._ui.toolTip_Grade[ii]:SetPosX(210)
+    self._ui.toolTip_Grade[ii]:SetPosY(180 + (ii - 1) * 40)
+    self._ui.toolTip_GradeDesc[ii]:SetPosX(340)
+    self._ui.toolTip_GradeDesc[ii]:SetPosY(180 + (ii - 1) * 40)
+  end
+  for ii = 0, self._enum.ePOINT_COUNT - 1 do
+    self._ui.toolTip_Point[ii] = UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_" .. ii)
+    self._ui.toolTip_PointDesc[ii] = UI.getChildControl(self._ui.staticText_TooltipBg, "StaticText_GreDesc_" .. ii)
+    self._ui.toolTip_Point[ii]:SetFontColor(Defines.Color.C_FFEEEEEE)
+    self._ui.toolTip_Point[ii]:SetText(textData[ii + 1][1])
+    self._ui.toolTip_Point[ii]:SetPosX(210)
+    self._ui.toolTip_Point[ii]:SetPosY(580 + (ii - 1) * 40)
+    self._ui.toolTip_PointDesc[ii]:SetText(textData[ii + 1][2])
+    self._ui.toolTip_PointDesc[ii]:SetFontColor(Defines.Color.C_FFEEEEEE)
+    self._ui.toolTip_PointDesc[ii]:SetPosX(340)
+    self._ui.toolTip_PointDesc[ii]:SetPosY(580 + (ii - 1) * 40)
   end
   self._ui.static_Knowledge_Icon2 = UI.getChildControl(Panel_Window_KnowledgeInfo_Renew, "Static_Knowledge_Icon")
   self._ui.staticText_Knowledge_Story2 = UI.getChildControl(Panel_Window_KnowledgeInfo_Renew, "StaticText_Knowledge_Story")
@@ -324,14 +401,9 @@ function Panel_Window_Knowledge_Renew_info:preOpenTooltip()
   end
   if titleTextSizeX > 70 then
     local dif = self._ui.staticText_TooltipBg:GetPosX()
-    self._ui.staticText_TooltipBg:SetSize(20 + titleTextSizeX + 5 + descTextSizeX + 10, self.staticText_TooltipBg:GetSizeY())
-    self._ui.staticText_TooltipBg:SetPosX(-10 - self._ui.staticText_TooltipBg:GetSizeX())
     for index = 0, self._enum.ePOINT_COUNT - 1 do
-      self._ui.toolTip_PointDesc[index]:SetPosX(20 + titleTextSizeX + 5)
     end
   else
-    self._ui.staticText_TooltipBg:SetSize(math.max(300, 90 + descTextSizeX + 10), self._ui.staticText_TooltipBg:GetSizeY())
-    self._ui.staticText_TooltipBg:SetPosX(-10 - self._ui.staticText_TooltipBg:GetSizeX())
   end
   self._ui.staticText_TooltipBg:SetShow(false)
 end
@@ -350,6 +422,7 @@ end
 function Panel_Window_Knowledge_Renew_info:clearContentPage1()
   self._value.stepTextList[1] = ""
   self._value.stepTextList[2] = ""
+  self._value.stepTextList[3] = ""
   self._value.step1_lastIndex = -1
   self._value.step1_currentIndex = 0
   self._value.step1_selectMentalObjectKey = 0
@@ -357,27 +430,48 @@ function Panel_Window_Knowledge_Renew_info:clearContentPage1()
   self._value.step2_lastIndex = -1
   self._value.step2_currentIndex = 0
   self._value.step2_selectMentalObjectKey = 0
+  self._value.step3_useCard = false
   self._value.step3_lastIndex = -1
   self._value.step3_currentIndex = 0
+  self._value.step3_selectMentalObjectKey = 0
+  self._value.step4_lastIndex = -1
+  self._value.step4_currentIndex = 0
   self._ui.static_CategoryBg:SetShow(false)
   self._ui.static_SubCategoryBg:SetShow(true)
   self._ui.static_CategoryItemBg:SetShow(false)
 end
 function Panel_Window_Knowledge_Renew_info:clearContentPage2()
   self._value.stepTextList[2] = ""
+  self._value.stepTextList[3] = ""
   self._value.step2_useCard = false
   self._value.step2_lastIndex = -1
   self._value.step2_currentIndex = 0
   self._value.step2_selectMentalObjectKey = 0
+  self._value.step3_useCard = false
   self._value.step3_lastIndex = -1
   self._value.step3_currentIndex = 0
+  self._value.step3_selectMentalObjectKey = 0
+  self._value.step4_lastIndex = -1
+  self._value.step4_currentIndex = 0
   self._ui.static_CategoryBg:SetShow(false)
   self._ui.static_SubCategoryBg:SetShow(true)
   self._ui.static_CategoryItemBg:SetShow(false)
 end
 function Panel_Window_Knowledge_Renew_info:clearContentPage3()
+  self._value.stepTextList[3] = ""
+  self._value.step3_useCard = false
   self._value.step3_lastIndex = -1
   self._value.step3_currentIndex = 0
+  self._value.step3_selectMentalObjectKey = 0
+  self._value.step4_lastIndex = -1
+  self._value.step4_currentIndex = 0
+  self._ui.static_CategoryBg:SetShow(false)
+  self._ui.static_SubCategoryBg:SetShow(true)
+  self._ui.static_CategoryItemBg:SetShow(false)
+end
+function Panel_Window_Knowledge_Renew_info:clearContentPage4()
+  self._value.step4_lastIndex = -1
+  self._value.step4_currentIndex = 0
   self._ui.static_CategoryBg:SetShow(false)
   self._ui.static_SubCategoryBg:SetShow(false)
   self._ui.static_CategoryItemBg:SetShow(true)
@@ -419,7 +513,7 @@ function Panel_Window_Knowledge_Renew_info:updateTopText()
     for index = 0, count do
       if self._value.stepTextList[index] ~= "" then
         textAll = textAll .. self._value.stepTextList[index]
-        if count ~= index then
+        if nil ~= self._value.stepTextList[index + 1] and "" ~= self._value.stepTextList[index + 1] then
           textAll = textAll .. self._text.arrow
         end
       else
@@ -432,25 +526,30 @@ function Panel_Window_Knowledge_Renew_info:updateTopText()
     self._ui.staticText_Depth:SetShow(true)
     self._ui.staticText_Depth:SetText(textAll)
   end
+  self._ui.staticText_Depth:SetShow(false)
 end
 function Panel_Window_Knowledge_Renew_info:setContent()
   ToClient_padSnapResetControl()
-  if self._value.currentStep == 0 then
+  if self._value.currentStep == self._enum.eSTEP_CATEGORY then
     self:clearContentPage0()
     self:updateTopText()
     self:setContentPage0()
-  elseif self._value.currentStep == 1 then
+  elseif self._value.currentStep == self._enum.eSETP_SUBCATEGORY then
     self:clearContentPage1()
     self:updateTopText()
     self:setContentPage1()
-  elseif self._value.currentStep == 2 then
+  elseif self._value.currentStep == self._enum.eSTEP_GROUP_1 then
     self:clearContentPage2()
     self:updateTopText()
     self:setContentPage2()
-  elseif self._value.currentStep == 3 then
+  elseif self._value.currentStep == self._enum.eSTEP_GROUP_2 then
     self:clearContentPage3()
     self:updateTopText()
     self:setContentPage3()
+  elseif self._value.currentStep == self._enum.eSTEP_GROUP_3 then
+    self:clearContentPage4()
+    self:updateTopText()
+    self:setContentPage4()
   end
 end
 function Panel_Window_Knowledge_Renew_info:setContentPage0()
@@ -458,7 +557,6 @@ function Panel_Window_Knowledge_Renew_info:setContentPage0()
   local childKnowledgeCount = knowledge:getMainKnowledgeCount()
   for index = 0, self._enum.eKNOWLEDGE_MAX - 1 do
     self._ui.button_Category[index].button:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_KNOWLEDGE_NOTHING"))
-    self._ui.button_Category[index].button:SetEnable(false)
     self._ui.button_Category[index].percent:SetText("")
     self._ui.button_Category[index].button:SetFontColor(Defines.Color.C_FFFFFFFF)
     local iconData = self._icon[0]
@@ -466,6 +564,8 @@ function Panel_Window_Knowledge_Renew_info:setContentPage0()
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.button_Category[index].icon, iconData.x1, iconData.y1, iconData.x2, iconData.y2)
     self._ui.button_Category[index].icon:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.button_Category[index].icon:setRenderTexture(self._ui.button_Category[index].icon:getBaseTexture())
+    self._ui.button_Category[index].button:addInputEvent("Mouse_On", "")
+    self._ui.button_Category[index].button:addInputEvent("Mouse_LUp", "")
   end
   for index = 0, childKnowledgeCount do
     local mentalCardKeyRaw = knowledge:getMainKnowledgeKeyByIndex(index)
@@ -479,7 +579,6 @@ function Panel_Window_Knowledge_Renew_info:setContentPage0()
         self._ui.button_Category[controlIndex].icon:getBaseTexture():setUV(x1, y1, x2, y2)
         self._ui.button_Category[controlIndex].icon:setRenderTexture(self._ui.button_Category[controlIndex].icon:getBaseTexture())
       end
-      self._ui.button_Category[controlIndex].button:SetEnable(true)
       local mentalObject = knowledge:getThemeByKeyRaw(mentalCardKeyRaw)
       local categoryName = mentalObject:getName()
       if mentalObject:getCardCollectedCount() == mentalObject:getCardCollectMaxCount() then
@@ -520,6 +619,7 @@ function Panel_Window_Knowledge_Renew_info:setContentPage2()
       return
     else
       self._value.step2_useCard = true
+      self._value.step3_useCard = true
       PaGlobalFunc_Window_Knowledge_Page2_Pass()
     end
   end
@@ -529,8 +629,30 @@ function Panel_Window_Knowledge_Renew_info:setContentPage2()
   end
 end
 function Panel_Window_Knowledge_Renew_info:setContentPage3()
-  local title
-  if false == self._value.step2_useCard then
+  local title = self._value.stepTextList[self._enum.eSTEP_GROUP_1]
+  self._ui.staticText_Title_1:SetText(title)
+  self._ui.list2_Category:getElementManager():clearKey()
+  local knowledge = getSelfPlayer():get():getMentalKnowledge()
+  local childCount = knowledge:getCurrentThemeChildThemeCount()
+  if 0 == childCount then
+    childCount = knowledge:getCurrentThemeChildCardCount()
+    if 0 == childCount then
+      return
+    else
+      self._value.step3_useCard = true
+      PaGlobalFunc_Window_Knowledge_Page3_Pass()
+    end
+  end
+  for index = 0, childCount - 1 do
+    self._ui.list2_Category:getElementManager():pushKey(toInt64(0, index))
+    self._ui.list2_Category:requestUpdateByKey(toInt64(0, index))
+  end
+end
+function Panel_Window_Knowledge_Renew_info:setContentPage4()
+  local title = ""
+  if false == self._value.step3_useCard and false == self._value.step2_useCard then
+    title = self._value.stepTextList[self._enum.eSTEP_GROUP_2]
+  elseif true == self._value.step3_useCard and false == self._value.step2_useCard then
     title = self._value.stepTextList[self._enum.eSTEP_GROUP_1]
   else
     title = self._value.stepTextList[self._enum.eSETP_SUBCATEGORY]
@@ -590,6 +712,17 @@ function PaGlobalFunc_Window_Knowledge_GOBackStep()
     self:closeInfo()
   end
   self._value.currentStep = self._value.currentStep - 1
+  if self._value.currentStep == self._enum.eSTEP_GROUP_2 then
+    if true == self._value.step3_useCard then
+      self._value.currentStep = self._value.currentStep - 1
+    else
+      local knowledge = getSelfPlayer():get():getMentalKnowledge()
+      local theme = knowledge:getThemeByKeyRaw(self._value.step2_selectMentalObjectKey)
+      knowledge:setCurrentTheme(theme)
+      self:setContent()
+      return
+    end
+  end
   if self._value.currentStep == self._enum.eSTEP_GROUP_1 then
     if true == self._value.step2_useCard then
       self._value.currentStep = self._value.currentStep - 1
@@ -619,21 +752,56 @@ function PaGlobalFunc_Window_Knowledge_GOBackStep()
 end
 function PaGlobalFunc_Window_Knowledge_Page2_Pass()
   local self = Panel_Window_Knowledge_Renew_info
-  self._value.currentStep = self._enum.eSTEP_GROUP_2
+  self._value.currentStep = self._enum.eSTEP_GROUP_3
   self:updateTopText()
   self:setContent()
 end
+function PaGlobalFunc_Window_Knowledge_Page3_Pass()
+  local self = Panel_Window_Knowledge_Renew_info
+  self._value.currentStep = self._enum.eSTEP_GROUP_3
+  self:updateTopText()
+  self:setContent()
+end
+function PaGlobalFunc_Window_Knowledge_Page4_SelectButton(index)
+  local self = Panel_Window_Knowledge_Renew_info
+  self._value.step4_lastIndex = self._value.step4_currentIndex
+  self._value.step4_currentIndex = index
+  self._ui.list2_CategoryItem:requestUpdateByKey(toInt64(0, self._value.step4_lastIndex))
+  self._ui.list2_CategoryItem:requestUpdateByKey(toInt64(0, self._value.step4_currentIndex))
+end
+function PaGlobalFunc_Window_Knowledge_Page4_ClickButton(index)
+  local self = Panel_Window_Knowledge_Renew_info
+  PaGlobalFunc_Window_Knowledge_Page4_SelectButton(index)
+  self:setContentInfo()
+end
 function PaGlobalFunc_Window_Knowledge_Page3_SelectButton(index)
   local self = Panel_Window_Knowledge_Renew_info
+  if self._value.step3_currentIndex == index then
+    return
+  end
   self._value.step3_lastIndex = self._value.step3_currentIndex
   self._value.step3_currentIndex = index
-  self._ui.list2_CategoryItem:requestUpdateByKey(toInt64(0, self._value.step3_lastIndex))
-  self._ui.list2_CategoryItem:requestUpdateByKey(toInt64(0, self._value.step3_currentIndex))
+  self._ui.list2_Category:requestUpdateByKey(toInt64(0, self._value.step3_lastIndex))
+  self._ui.list2_Category:requestUpdateByKey(toInt64(0, self._value.step3_currentIndex))
 end
-function PaGlobalFunc_Window_Knowledge_Page3_ClickButton(index)
+function PaGlobalFunc_Window_Knowledge_Page3_ClickButton(index, subCategory)
   local self = Panel_Window_Knowledge_Renew_info
   PaGlobalFunc_Window_Knowledge_Page3_SelectButton(index)
-  self:setContentInfo()
+  self._value.stepTextList[self._enum.eSTEP_GROUP_2] = subCategory
+  self._value.currentStep = self._enum.eSTEP_GROUP_3
+  local knowledge = getSelfPlayer():get():getMentalKnowledge()
+  local childkey = knowledge:getCurrentThemeChildThemeKeyByIndex(index)
+  self._value.step3_selectMentalObjectKey = childkey
+  local mentalObjectKey = self._value.step3_selectMentalObjectKey
+  if mentalObjectKey > 0 then
+    local theme = knowledge:getThemeByKeyRaw(mentalObjectKey)
+    if nil == theme then
+      return
+    end
+    knowledge:setCurrentTheme(theme)
+    self:updateTopText()
+    self:setContent()
+  end
 end
 function PaGlobalFunc_Window_Knowledge_Page2_SelectButton(index)
   local self = Panel_Window_Knowledge_Renew_info
@@ -718,14 +886,18 @@ function PaGlobalFunc_Window_Knowledge_Page0_ClickButton(index, category)
     self:setContent()
   end
 end
-function PaGlobalFunc_Window_Knowledge_Step_1And2List(list_content, key)
+function PaGlobalFunc_Window_Knowledge_Step_123List(list_content, key)
   local id = Int64toInt32(key)
   local button = UI.getChildControl(list_content, "Button_CategoryName")
+  local text = UI.getChildControl(button, "StaticText_CategoryName")
   local energyIcon = UI.getChildControl(list_content, "StaticText_EnergyIcon")
   local key_A = UI.getChildControl(list_content, "Static_Key_ConsoleUI")
   local self = Panel_Window_Knowledge_Renew_info
   key_A:SetShow(false)
-  button:SetFontColor(Defines.Color.C_FFFFFFFF)
+  local textSizeX = button:GetSizeX() - key_A:GetSizeX()
+  text:SetSize(textSizeX, text:GetSizeY())
+  text:SetFontColor(Defines.Color.C_FFFFFFFF)
+  text:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   if self._enum.eSETP_SUBCATEGORY == self._value.currentStep then
     if self._value.step1_currentIndex == id then
       key_A:SetShow(true)
@@ -742,12 +914,13 @@ function PaGlobalFunc_Window_Knowledge_Step_1And2List(list_content, key)
     if 0 < theme:getMaxIncreaseWp() then
       energyIcon:SetShow(true)
       energyIcon:SetText(theme:getIncreaseWp() .. "/" .. theme:getMaxIncreaseWp() .. " ")
+      text:SetSize(textSizeX - energyIcon:GetSizeX() - energyIcon:GetTextSizeX(), text:GetSizeY())
     end
     if theme:getCardCollectedCount() == theme:getCardCollectMaxCount() then
-      button:SetFontColor(Defines.Color.C_FF6DC6FF)
+      text:SetFontColor(Defines.Color.C_FF6DC6FF)
     else
     end
-    button:SetText(subCategoryName .. addText)
+    text:SetText(subCategoryName .. addText)
     button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page1_SelectButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
     button:addInputEvent("Mouse_LUp", "PaGlobalFunc_Window_Knowledge_Page1_ClickButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
   end
@@ -759,8 +932,39 @@ function PaGlobalFunc_Window_Knowledge_Step_1And2List(list_content, key)
       key_A:SetShow(false)
     end
     energyIcon:SetShow(false)
+    do
+      local knowledge = getSelfPlayer():get():getMentalKnowledge()
+      if false == self._value.step2_useCard then
+        local childkey = knowledge:getCurrentThemeChildThemeKeyByIndex(id)
+        local theme = knowledge:getThemeByKeyRaw(childkey)
+        local subCategoryName = theme:getName()
+        local addText = ""
+        if 0 < theme:getMaxIncreaseWp() then
+          energyIcon:SetShow(true)
+          energyIcon:SetText(theme:getIncreaseWp() .. "/" .. theme:getMaxIncreaseWp() .. " ")
+          text:SetSize(textSizeX - energyIcon:GetSizeX() - energyIcon:GetTextSizeX(), text:GetSizeY())
+        end
+        if theme:getCardCollectedCount() == theme:getCardCollectMaxCount() then
+          text:SetFontColor(Defines.Color.C_FF6DC6FF)
+        else
+        end
+        text:SetText(subCategoryName .. addText)
+        button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page2_SelectButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
+        button:addInputEvent("Mouse_LUp", "PaGlobalFunc_Window_Knowledge_Page2_ClickButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
+      end
+    end
+  else
+  end
+  if self._enum.eSTEP_GROUP_2 == self._value.currentStep then
+    if self._value.step3_currentIndex == id then
+      key_A:SetShow(true)
+    end
+    if self._value.step3_lastIndex == id then
+      key_A:SetShow(false)
+    end
+    energyIcon:SetShow(false)
     local knowledge = getSelfPlayer():get():getMentalKnowledge()
-    if false == self._value.step2_useCard then
+    if false == self._value.step3_useCard then
       local childkey = knowledge:getCurrentThemeChildThemeKeyByIndex(id)
       local theme = knowledge:getThemeByKeyRaw(childkey)
       local subCategoryName = theme:getName()
@@ -768,19 +972,20 @@ function PaGlobalFunc_Window_Knowledge_Step_1And2List(list_content, key)
       if 0 < theme:getMaxIncreaseWp() then
         energyIcon:SetShow(true)
         energyIcon:SetText(theme:getIncreaseWp() .. "/" .. theme:getMaxIncreaseWp() .. " ")
+        text:SetSize(textSizeX - energyIcon:GetSizeX() - energyIcon:GetTextSizeX(), text:GetSizeY())
       end
       if theme:getCardCollectedCount() == theme:getCardCollectMaxCount() then
-        button:SetFontColor(Defines.Color.C_FF6DC6FF)
+        text:SetFontColor(Defines.Color.C_FF6DC6FF)
       else
       end
-      button:SetText(subCategoryName .. addText)
-      button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page2_SelectButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
-      button:addInputEvent("Mouse_LUp", "PaGlobalFunc_Window_Knowledge_Page2_ClickButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
+      text:SetText(subCategoryName .. addText)
+      button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page3_SelectButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
+      button:addInputEvent("Mouse_LUp", "PaGlobalFunc_Window_Knowledge_Page3_ClickButton(" .. id .. ",\"" .. subCategoryName .. "\"" .. ")")
     end
   else
   end
 end
-function PaGlobalFunc_Window_Knowledge_Step_3List(list_content, key)
+function PaGlobalFunc_Window_Knowledge_Step_4List(list_content, key)
   local self = Panel_Window_Knowledge_Renew_info
   local id = Int64toInt32(key)
   local button = UI.getChildControl(list_content, "Button_CategoryItemName")
@@ -789,8 +994,9 @@ function PaGlobalFunc_Window_Knowledge_Step_3List(list_content, key)
   local card = knowledge:getCardByKeyRaw(childkey)
   if nil ~= card then
     local cardName = card:getName()
+    button:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
     button:SetText(cardName)
-    button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page3_ClickButton(" .. id .. ")")
+    button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page4_ClickButton(" .. id .. ")")
   end
 end
 function PaGlobalFunc_Window_Knowledge_ToggleTooltip()

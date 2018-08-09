@@ -40,7 +40,9 @@ local Type = {
   GuildRank = 38,
   BlackSpiritAdventure = 39,
   Manufacture = 40,
-  Undefined = 41
+  TogglePVP = 41,
+  PearInven = 42,
+  Undefined = 43
 }
 PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local function getTypeName(index)
@@ -118,7 +120,7 @@ function ExecuteFunction.Mercenary()
 end
 function ExecuteFunction.VillageSiegeArea()
   if true == _ContentsGroup_SeigeSeason5 then
-    FGlobal_GuildWarInfo_Show()
+    FGlobal_GuildWarInfo_renew_Open()
   else
     FGlobal_GuildWarInfo_Show()
   end
@@ -173,6 +175,19 @@ end
 function ExecuteFunction.Manufacture()
   PaGlobalFunc_ManufactureOpen(true)
 end
+function ExecuteFunction.TogglePVP()
+  if true == ToClient_isXBox() then
+    local selfProxy = getSelfPlayer()
+    if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
+      return
+    end
+  end
+  requestTogglePvP(true)
+end
+function ExecuteFunction.PearInven()
+  PaGlobalFunc_InventoryInfo_Open(2)
+end
 function PaGlobal_ConsoleQuickMenu:initialize()
 end
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
@@ -218,7 +233,9 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction = {
     [Type.ProductNote] = ExecuteFunction.ProductNote,
     [Type.GuildRank] = ExecuteFunction.GuildRank,
     [Type.BlackSpiritAdventure] = ExecuteFunction.BlackSpiritAdventure,
-    [Type.Manufacture] = ExecuteFunction.Manufacture
+    [Type.Manufacture] = ExecuteFunction.Manufacture,
+    [Type.TogglePVP] = ExecuteFunction.TogglePVP,
+    [Type.PearInven] = ExecuteFunction.PearInven
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
@@ -509,6 +526,20 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y1 = 188,
       _x2 = 186,
       _y2 = 248
+    },
+    [Type.TogglePVP] = {
+      _path = "Renewal/Function/Console_Function_RingMenu.dds",
+      _x1 = 1087,
+      _y1 = 654,
+      _x2 = 1137,
+      _y2 = 704
+    },
+    [Type.PearInven] = {
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 358,
+      _y1 = 190,
+      _x2 = 408,
+      _y2 = 240
     }
   }
 }
@@ -554,7 +585,9 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.ProductNote] = "PRODUCT NOTE",
     [Type.GuildRank] = "GUILD RANK",
     [Type.BlackSpiritAdventure] = "BLACKSPIRIT ADVENTURE",
-    [Type.Manufacture] = "Manufacture"
+    [Type.Manufacture] = "Manufacture",
+    [Type.TogglePVP] = "TOGGLE PVP",
+    [Type.PearInven] = "CASH INVENTORY"
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
@@ -599,7 +632,9 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.ProductNote] = true,
     [Type.GuildRank] = true,
     [Type.BlackSpiritAdventure] = true,
-    [Type.Manufacture] = true
+    [Type.Manufacture] = true,
+    [Type.TogglePVP] = true,
+    [Type.PearInven] = true
   }
 }
 function varify()

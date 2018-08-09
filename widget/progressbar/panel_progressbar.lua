@@ -163,7 +163,9 @@ function collectBar:Update(fDeltaTime)
       local curEndurance = repair_getSelfRepairItemEndurance()
       local strEndurance = string.format("%d", curEndurance)
       collectBar._titleText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PROGRESSBAR_REPAIRING_P1", "endurance", strEndurance))
-      Manufacture_UpdateRepairTime()
+      if not _ContentsGroup_RenewUI_Manufacture then
+        Manufacture_UpdateRepairTime()
+      end
     end
   end
 end

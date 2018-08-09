@@ -133,7 +133,6 @@ end
 function FGlobal_NpcGift_Propose()
   ToClient_proposeToNpc()
   resultProposeToNpc()
-  luaTimer_AddEvent(FromClient_NewMailAlram, 300000, false, 0)
 end
 function FGlobal_NpcGift_Confirm()
   local self = NpcGift

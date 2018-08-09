@@ -12,7 +12,8 @@ local workerSortFilter = {
       _startX = 10,
       _startY = 10,
       _gabY = 45
-    }
+    },
+    _maxViewDataCount = 3
   },
   _selectedType = nil,
   _townFilter = nil,
@@ -38,24 +39,30 @@ function workerSortFilter:setPosition(selectedType)
   local workerConfig = self._config._postition
   workerFilterUi._button_AreaFilter:SetPosX(workerConfig._startX)
   workerFilterUi._button_AreaFilter:SetPosY(workerConfig._startY)
+  local buttonSizeY = workerFilterUi._button_AreaFilter:GetSizeY()
   if nil == selectedType then
     workerFilterUi._list2_1_SelectFilter:SetShow(false)
     workerFilterUi._button_GradelFilter:SetPosX(workerConfig._startX)
-    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + workerConfig._gabY)
+    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + buttonSizeY)
   elseif self._config._filterType._town == selectedType then
     workerFilterUi._list2_1_SelectFilter:SetShow(true)
     workerFilterUi._list2_1_SelectFilter:SetPosX(workerConfig._startX)
-    workerFilterUi._list2_1_SelectFilter:SetPosY(workerConfig._startY + workerConfig._gabY)
-    local posY = workerFilterUi._list2_1_SelectFilter:GetPosY()
-    posY = posY + workerFilterUi._list2_1_SelectFilter:GetSizeY()
+    workerFilterUi._list2_1_SelectFilter:SetPosY(workerConfig._startY + buttonSizeY)
+    local sizeX = workerFilterUi._list2_1_SelectFilter:GetSizeX()
+    if 0 < self._dataCount and self._dataCount < self._config._maxViewDataCount then
+      workerFilterUi._list2_1_SelectFilter:SetSize(sizeX, buttonSizeY * self._dataCount)
+    else
+      workerFilterUi._list2_1_SelectFilter:SetSize(sizeX, buttonSizeY * self._config._maxViewDataCount)
+    end
+    local posY = workerFilterUi._list2_1_SelectFilter:GetSizeY()
     workerFilterUi._button_GradelFilter:SetPosX(workerConfig._startX)
-    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + posY)
+    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + buttonSizeY + posY)
   else
     workerFilterUi._button_GradelFilter:SetPosX(workerConfig._startX)
-    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + workerConfig._gabY)
+    workerFilterUi._button_GradelFilter:SetPosY(workerConfig._startY + buttonSizeY)
     workerFilterUi._list2_1_SelectFilter:SetShow(true)
     workerFilterUi._list2_1_SelectFilter:SetPosX(workerConfig._startX)
-    workerFilterUi._list2_1_SelectFilter:SetPosY(workerConfig._startY + workerConfig._gabY * 2)
+    workerFilterUi._list2_1_SelectFilter:SetPosY(workerConfig._startY + buttonSizeY * 2)
   end
 end
 function workerSortFilter:setList(selectedType)
@@ -138,9 +145,11 @@ end
 function PaGlobalFunc_WorkerManager_FilterSetData(selectedType)
   workerSortFilter:setList(selectedType)
   workerSortFilter:setPosition(selectedType)
+  ToClient_padSnapResetControl()
 end
 function workerSortFilter:open()
   self._selectedType = nil
+  self._dataCount = 0
   self._gradeFilter = PaGlobalFunc_WorkerManager_GetGradeFilter()
   self._townFilter = PaGlobalFunc_WorkerManager_GetTownFilter()
   if true == Panel_Window_WorkerManager_Filter_Renew:GetShow() then

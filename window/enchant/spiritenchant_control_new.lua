@@ -73,15 +73,27 @@ function PaGlobal_Enchant:setEnchantTarget(slotNo, itemWrapper, inventoryType, r
       if 15 == enchantLevel then
         self._grantItemSlotNo = nil
         self._grantItemWhereType = nil
-        self:setEnchantMaterial(true)
+        self._materialItemSlotNo = nil
+        self._materialItemWhereType = nil
+        self._isSetNewPerfectItemMaterial = false
         self:didsetEnchantTarget(true)
         return true
       end
     end
   end
+  local materialItemWrapper = getInventoryItemByType(self._materialItemWhereType, self._materialItemSlotNo)
+  local isStackMaterial = false
+  if nil ~= materialItemWrapper then
+    isStackMaterial = materialItemWrapper:getStaticStatus():isStackable()
+  end
   local equipType = itemWrapper:getStaticStatus():getItemClassify()
-  if CppEnums.ItemClassifyType.eItemClassify_Accessory == equipType then
+  if CppEnums.ItemClassifyType.eItemClassify_Accessory == equipType and false == isStackMaterial then
     isMonotone = true
+  end
+  if true == isMonotone then
+    self._materialItemSlotNo = nil
+    self._materialItemWhereType = nil
+    self._isSetNewPerfectItemMaterial = false
   end
   self._grantItemSlotNo = slotNo
   self._grantItemWhereType = inventoryType
@@ -120,6 +132,12 @@ function PaGlobal_Enchant:didsetEnchantTarget(isMonotone, isRadioClick)
   else
     self:showDifficultEnchantButton(false)
   end
+  if true == self._isSetNewPerfectItemMaterial then
+    self:setEnable_CheckboxUseCron(false)
+    self:setText_NumOfCron(0, 0)
+    self:setEnable_CheckboxForcedEnchant(false)
+    self:showDifficultEnchantButton(false)
+  end
   self:setText_EnchantInfo(self._ui._checkbox_ForcedEnchant:IsCheck() and self._ui._checkbox_ForcedEnchant:GetShow())
   self:showNoticeEnchantApply(enchantType)
   if nil == isRadioClick then
@@ -128,16 +146,30 @@ function PaGlobal_Enchant:didsetEnchantTarget(isMonotone, isRadioClick)
   self:showDifficulty(self._grantItemWhereType, self._grantItemSlotNo)
 end
 function PaGlobal_Enchant:setEnchantMaterial(isMonotone)
-  local slotNo = self._enchantInfo:ToClient_getNeedItemSlotNo()
-  local inventoryType = self._enchantInfo:ToClient_getNeedItemWhereType()
-  if true == isMonotone or 0 ~= self._enchantInfo:ToClient_setEnchantSlot(inventoryType, slotNo) then
+  if true == isMonotone or 0 ~= self._enchantInfo:ToClient_setEnchantSlot(self._materialItemWhereType, self._materialItemSlotNo) then
     self:setItemToSlotMonoTone(self._ui._slot_EnchantMaterial, self._enchantInfo:ToClient_getNeedItemStaticInformation())
     self:setEnable_button_Apply(false)
     self._enchantInfo:materialClearData()
+    local newPerfectNeedItem = self._enchantInfo:ToClient_getNeedNewPerfectItemStaticInformation()
+    if true == newPerfectNeedItem:isSet() then
+      self._isSlotChangeAnimation = true
+    else
+      self._isSlotChangeAnimation = false
+    end
     return
+  elseif true == self._isSetNewPerfectItemMaterial then
+    if 0 < self._enchantInfo:ToClient_getDecMaxEnduraNewPerfect() then
+      local str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT_PENALTY", "maxEndurance", tostring(self._enchantInfo:ToClient_getDecMaxEnduraNewPerfect()), "currentEndurance", tostring(self._enchantInfo:ToClient_getCurMaxEndura()))
+      self._ui._statictext_EnchantInfo:SetText(str)
+    else
+      self._ui._statictext_EnchantInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT"))
+    end
+  else
+    self:setText_EnchantInfo(self._ui._checkbox_ForcedEnchant:IsCheck() and self._ui._checkbox_ForcedEnchant:GetShow())
   end
-  local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
-  self:setItemToSlot(self._ui._slot_EnchantMaterial, slotNo, itemWrapper, inventoryType)
+  self._isSlotChangeAnimation = false
+  local itemWrapper = getInventoryItemByType(self._materialItemWhereType, self._materialItemSlotNo)
+  self:setItemToSlot(self._ui._slot_EnchantMaterial, self._materialItemSlotNo, itemWrapper, self._materialItemWhereType)
   self:didsetEnchantMaterial()
 end
 function PaGlobal_Enchant:didsetEnchantMaterial()
@@ -542,7 +574,14 @@ function FGlobal_Enchant_RClickMaterialItem(slotNo, itemWrapper, Count, inventor
   end
   self._isLastEnchant = false
   self:clearItemSlot(self._ui._slot_EnchantMaterial)
-  self:setEnchantMaterial(false)
+  self._materialItemSlotNo = slotNo
+  self._materialItemWhereType = inventoryType
+  if slotNo == self._enchantInfo:ToClient_getNeedNewPerfectItemSlotNo() and inventoryType == self._enchantInfo:ToClient_getNeedNewPerfectItemWhereType() then
+    self._isSetNewPerfectItemMaterial = true
+  else
+    self._isSetNewPerfectItemMaterial = false
+  end
+  self:didsetEnchantTarget(false)
 end
 function FGlobal_Enchant_RClickCronItem(slotNo, itemWrapper, Count, inventoryType)
   local self = PaGlobal_Enchant
@@ -598,7 +637,9 @@ function FGlobal_Enchant_InvenFilerSubItem(slotNo, notUse_itemWrappers, whereTyp
     return true
   end
   local returnValue = true
-  if slotNo ~= getEnchantInformation():ToClient_getNeedItemSlotNo() then
+  if slotNo == getEnchantInformation():ToClient_getNeedNewPerfectItemSlotNo() then
+    returnValue = false
+  elseif slotNo ~= getEnchantInformation():ToClient_getNeedItemSlotNo() then
     returnValue = true
   else
     returnValue = false
@@ -689,7 +730,7 @@ function PaGlobal_Enchant:handleLUpEnchantApplyButton()
             enchantAlert = true
           end
         end
-        if true == self._ui._checkbox_ForcedEnchant:IsCheck() then
+        if true == self._ui._checkbox_ForcedEnchant:IsCheck() or true == self._isSetNewPerfectItemMaterial then
           enchantAlert = false
         end
         if enchantAlert then
@@ -709,7 +750,7 @@ function PaGlobal_Enchant:handleLUpEnchantApplyButton()
         else
           self:willStartEnchant()
         end
-      elseif 0 < itemWrapper:getCronEnchantFailCount() and enchantLevel > 17 then
+      elseif 0 < itemWrapper:getCronEnchantFailCount() and enchantLevel > 17 and false == self._isSetNewPerfectItemMaterial then
         local function goEnchant()
           self:willStartEnchant()
         end
@@ -781,11 +822,15 @@ function PaGlobal_Enchant:handleMOutCronIconTooltip()
   TooltipSimple_Hide()
 end
 function PaGlobal_Enchant:handleMOnEnchantMaterialTooltip()
+  self._isSlotChangeMouseOver = true
   if true == self._ui._slot_EnchantMaterial.empty then
   elseif CppEnums.TInventorySlotNoUndefined == self._ui._slot_EnchantMaterial.inventoryType then
     local needSSW
     if self:isEnchantTab() == true then
-      needSSW = self._enchantInfo:ToClient_getNeedItemStaticInformation()
+      needSSW = self._enchantInfo:ToClient_getNeedNewPerfectItemStaticInformation()
+      if true == self._slotChangeFlag or false == needSSW:isSet() then
+        needSSW = self._enchantInfo:ToClient_getNeedItemStaticInformation()
+      end
     else
       needSSW = ToClient_getPromotionEnchantItem()
     end
@@ -795,6 +840,7 @@ function PaGlobal_Enchant:handleMOnEnchantMaterialTooltip()
   end
 end
 function PaGlobal_Enchant:handleMOutEnchantMaterialTooltip()
+  self._isSlotChangeMouseOver = false
   if true == self._ui._slot_EnchantMaterial.empty then
   elseif CppEnums.TInventorySlotNoUndefined == self._ui._slot_EnchantMaterial.inventoryType then
     Panel_Tooltip_Item_hideTooltip()
@@ -878,12 +924,57 @@ function PaGlobal_Enchant:SetAnimation()
   self._ui._statictext_EnchantResult:SetVertexAniRun("Ani_Scale_New", true)
   self._isResulTextAnimation = true
 end
+function PaGlobal_Enchant:enchatSlotAnimation(flag)
+  local control = self._ui._slot_EnchantMaterial.icon
+  self:changeSlotIconTexture(self._ui._slot_EnchantMaterial, flag)
+  if true == flag then
+    local ImageMoveAni = control:addMoveAnimation(0, self._slotChangeMoveTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+    ImageMoveAni:SetStartPosition(self._ui._slot_EnchantMaterial.icon:GetPosX(), self._ui._slot_EnchantMaterial.icon:GetPosY())
+    ImageMoveAni:SetEndPosition(self._ui._slot_EnchantMaterial.icon:GetPosX(), self._ui._slot_EnchantMaterial.icon:GetPosY())
+    control:CalcUIAniPos(ImageMoveAni)
+    ImageMoveAni:SetDisableWhileAni(true)
+  else
+    local ImageMoveAni = control:addMoveAnimation(0, self._slotChangeMoveTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+    ImageMoveAni:SetStartPosition(self._ui._slot_EnchantMaterial.icon:GetPosX(), self._ui._slot_EnchantMaterial.icon:GetPosY())
+    ImageMoveAni:SetEndPosition(self._ui._slot_EnchantMaterial.icon:GetPosX(), self._ui._slot_EnchantMaterial.icon:GetPosY())
+    control:CalcUIAniPos(ImageMoveAni)
+    ImageMoveAni:SetDisableWhileAni(true)
+  end
+end
+function PaGlobal_Enchant:changeSlotIconTexture(control, flag)
+  if false == flag then
+    self:setItemToSlotMonoTone(control, self._enchantInfo:ToClient_getNeedItemStaticInformation())
+  else
+    local newPerfectNeedItem = self._enchantInfo:ToClient_getNeedNewPerfectItemStaticInformation()
+    if true == newPerfectNeedItem:isSet() then
+      self:setItemToSlotMonoTone(control, newPerfectNeedItem)
+    end
+  end
+end
+function FGlobal_Enchant_SetTargetItem()
+  local self = PaGlobal_Enchant
+  if true == self._ui._slot_TargetItem.empty then
+    return false
+  else
+    return true
+  end
+end
 function FromClient_ProtmotionItem(mainWhereType, mainSlotNo, variedCount)
   local self = PaGlobal_Enchant
   self:didCronEnchant(mainWhereType, mainSlotNo, variedCount)
 end
 function UpdateFunc_checkAnimation(deltaTime)
   local self = PaGlobal_Enchant
+  if false == self._isSlotChangeAnimation or true == self._isSlotChangeMouseOver then
+    self._slotChangeDelayTime = 0
+  else
+    self._slotChangeDelayTime = self._slotChangeDelayTime + deltaTime
+    if self._slotChangeWaitTime < self._slotChangeDelayTime then
+      self:enchatSlotAnimation(self._slotChangeFlag)
+      self._slotChangeDelayTime = 0
+      self._slotChangeFlag = not self._slotChangeFlag
+    end
+  end
   if true == self._isAnimating then
     self._animationTimeStamp = self._animationTimeStamp + deltaTime
     if self._const._effectTime_Enchant <= self._animationTimeStamp then

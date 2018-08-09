@@ -16,16 +16,15 @@ local Panel_Widget_Party_info = {
     static_ClassIcon = nil,
     static_HpBg = nil,
     progress2_Hp = nil,
-    progress2_1_Bar_Head = nil,
     static_MpBg = nil,
     progress2_Mp = nil,
-    progress2_1_Bar_Head = nil,
     staticText_Level = nil,
     staticText_Name = nil
   },
   _value = {
     partyType = CppEnums.PartyType.ePartyType_Normal,
     isMaster = false,
+    lootType = nil,
     partyMemberCount = 0,
     invitePartyType = 0,
     inviteName = ""
@@ -328,10 +327,8 @@ function Panel_Widget_Party_info:childControl()
   self._ui.static_ClassIcon = UI.getChildControl(self._ui.static_ClassIconBg, "Static_ClassIcon")
   self._ui.static_HpBg = UI.getChildControl(self._ui.static_Party_Template, "Static_HpBg")
   self._ui.progress2_Hp = UI.getChildControl(self._ui.static_HpBg, "Progress2_Hp")
-  self._ui.progress2_1_Bar_Head = UI.getChildControl(self._ui.progress2_Hp, "progress2_1_Bar_Head")
   self._ui.static_MpBg = UI.getChildControl(self._ui.static_Party_Template, "Static_MpBg")
   self._ui.progress2_Mp = UI.getChildControl(self._ui.static_MpBg, "Progress2_Mp")
-  self._ui.progress2_1_Bar_Head = UI.getChildControl(self._ui.progress2_Mp, "Progress2_1_Bar_Head")
   self._ui.staticText_Level = UI.getChildControl(self._ui.static_Party_Template, "StaticText_Level")
   self._ui.staticText_Name = UI.getChildControl(self._ui.static_Party_Template, "StaticText_Name")
 end
@@ -346,10 +343,8 @@ function Panel_Widget_Party_info:createControl()
       static_ClassIcon = nil,
       static_HpBg = nil,
       progress2_Hp = nil,
-      progress2_1_Bar_Head = nil,
       static_MpBg = nil,
       progress2_Mp = nil,
-      progress2_1_Bar_Head = nil,
       staticText_Level = nil,
       staticText_Name = nil
     }
@@ -375,10 +370,8 @@ function Panel_Widget_Party_info:createControl()
     slot.static_ClassIcon = UI.createAndCopyBasePropertyControl(self._ui.static_ClassIconBg, "Static_ClassIcon", slot.static_ClassIconBg, "Static_ClassIcon_" .. index)
     slot.static_HpBg = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "Static_HpBg", slot.templete, "Static_HpBg_" .. index)
     slot.progress2_Hp = UI.createAndCopyBasePropertyControl(self._ui.static_HpBg, "Progress2_Hp", slot.static_HpBg, "Progress2_Hp_" .. index)
-    slot.progress2_1_Bar_Head = UI.createAndCopyBasePropertyControl(self._ui.progress2_Hp, "Progress2_1_Bar_Head", slot.progress2_Hp, "Progress2_1_Bar_Head_" .. index)
     slot.static_MpBg = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "Static_MpBg", slot.templete, "Static_MpBg_" .. index)
     slot.progress2_Mp = UI.createAndCopyBasePropertyControl(self._ui.static_MpBg, "Progress2_Mp", slot.static_MpBg, "Progress2_Mp_" .. index)
-    slot.progress2_1_Bar_Head = UI.createAndCopyBasePropertyControl(self._ui.progress2_Mp, "Progress2_1_Bar_Head", slot.progress2_Mp, "Progress2_1_Bar_Head_" .. index)
     slot.staticText_Level = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "StaticText_Level", slot.templete, "StaticText_Level_" .. index)
     slot.staticText_Name = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "StaticText_Name", slot.templete, "StaticText_Name_" .. index)
     slot.slotNo = index
@@ -446,6 +439,12 @@ function Panel_Widget_Party_info:updatePartyList()
       self:setInfo(index)
     end
   end
+  local lootType = RequestParty_getPartyLootType()
+  if nil ~= self._value.lootType and self._value.lootType ~= lootType then
+    local rottingMsg = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE1", "plt2s_lootType", PLT2S[lootType])
+    Proc_ShowMessage_Ack(rottingMsg)
+  end
+  self._value.lootType = lootType
 end
 function Panel_Widget_Party_info:partyAccept()
   self._requestPlayerList = {}

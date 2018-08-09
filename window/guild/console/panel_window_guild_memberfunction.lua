@@ -21,7 +21,8 @@ local GuildMemberFunction = {
     cancelCommander = 12,
     leaveGuild = 13,
     disperseGuild = 14,
-    showContract = 15
+    showContract = 15,
+    clanDeportation = 16
   },
   _btnControl = {},
   _startBtnPos = 20,
@@ -37,7 +38,7 @@ function GuildMemberFunction:init()
   self:registEvent()
 end
 function GuildMemberFunction:open()
-  local memberInfo = PaGlobalFunc_GuildMemberList_GetMemberInfoWithIndex(self._currentMemberIdx)
+  local memberInfo = self._currentMemberInfo
   if nil == memberInfo then
     _PA_ASSERT(false, "\234\184\184\235\147\156 \235\169\164\235\178\132 \236\160\149\235\179\180\234\176\128 \236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberFunction:open")
     return
@@ -45,13 +46,13 @@ function GuildMemberFunction:open()
   self._currentBtnPos = self._startBtnPos
   local selfPlayer = getSelfPlayer()
   self:clearButton()
-  if memberInfo._name == selfPlayer:getUserNickname() then
+  if memberInfo:getName() == selfPlayer:getUserNickname() then
     self:addButton(self._btnType.showInfo)
-    if self._currentMemberInfo:isCollectableBenefit() and false == self._currentMemberInfo:isFreeAgent() and toInt64(0, 0) < self._currentMemberInfo:getContractedBenefit() then
+    if memberInfo:isCollectableBenefit() and false == memberInfo:isFreeAgent() and toInt64(0, 0) < memberInfo:getContractedBenefit() then
       self:addButton(self._btnType.recvPay)
     end
   elseif true == selfPlayer:get():isGuildMaster() then
-    if 1 == memberInfo._grade then
+    if 1 == memberInfo:getGrade() then
       self:addButton(self._btnType.showInfo)
       self:addButton(self._btnType.deportation)
       self:addButton(self._btnType.cancelCommander)
@@ -79,14 +80,35 @@ function GuildMemberFunction:openGuildSetting()
     self:addButton(self._btnType.guildNotice)
     self:addButton(self._btnType.guildIntro)
     self:addButton(self._btnType.declareWar)
+    self:addButton(self._btnType.guildMark)
     self:addButton(self._btnType.disperseGuild)
   elseif true == isGuildSubMaster then
     self:addButton(self._btnType.guildNotice)
     self:addButton(self._btnType.guildIntro)
     self:addButton(self._btnType.declareWar)
+    self:addButton(self._btnType.guildMark)
     self:addButton(self._btnType.leaveGuild)
   else
     self:addButton(self._btnType.leaveGuild)
+  end
+  _panel:SetShow(true)
+end
+function GuildMemberFunction:openClanMemberSetting()
+  self._currentBtnPos = self._startBtnPos
+  self:clearButton()
+  local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+  local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
+  if true == isGuildMaster then
+    if 1 == self._currentMemberInfo:getGrade() then
+      self:addButton(self._btnType.cancelCommander)
+    else
+      self:addButton(self._btnType.appointCommander)
+    end
+    self:addButton(self._btnType.clanDeportation)
+  elseif true == isGuildSubMaster then
+    self:addButton(self._btnType.clanDeportation)
+  else
+    return
   end
   _panel:SetShow(true)
 end
@@ -124,6 +146,8 @@ function GuildMemberFunction:addButton(btnType)
     btnTemplate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISPERSE_GUILD"))
   elseif btnType == self._btnType.showContract then
     btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_SHOWCONTRACT"))
+  elseif btnType == self._btnType.clanDeportation then
+    btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GULD_BUTTON1"))
   end
   btnTemplate:SetPosY(self._currentBtnPos)
   self._currentBtnPos = self._currentBtnPos + self._btnYGap
@@ -175,6 +199,25 @@ function PaGlobalFunc_GuildMemberFunction_Open(index)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberFunction")
     return
   end
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  if nil == guildInfo then
+    return
+  end
+  local memberInfo = PaGlobalFunc_GuildMemberList_GetMemberInfoWithIndex(index)
+  self._currentMemberIdx = memberInfo._idx
+  local guildMemberInfo = guildInfo:getMember(self._currentMemberIdx)
+  if nil == guildMemberInfo then
+    return
+  end
+  self._currentMemberInfo = guildMemberInfo
+  self:open()
+end
+function PaGlobalFunc_GuildMemberFunction_ClanOpen(index)
+  local self = GuildMemberFunction
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberFunction")
+    return
+  end
   self._currentMemberIdx = index
   local guildInfo = ToClient_GetMyGuildInfoWrapper()
   if nil == guildInfo then
@@ -185,7 +228,7 @@ function PaGlobalFunc_GuildMemberFunction_Open(index)
     return
   end
   self._currentMemberInfo = guildMemberInfo
-  self:open()
+  self:openClanMemberSetting()
 end
 function PaGlobalFunc_GuildSettingFunction_Open()
   local self = GuildMemberFunction
@@ -233,6 +276,8 @@ function InputMLUp_GuildMemberFunction_PressButton(btnType)
     PaGlobalFunc_WarDeclare_Open()
   elseif btnType == self._btnType.showContract then
     PaGlobalFunc_GuildMemberInfo_OpenContract()
+  elseif btnType == self._btnType.clanDeportation then
+    PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
   end
   self:close()
 end
@@ -402,6 +447,10 @@ function PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
     messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_APPOINT_GUILDMEMBER")
     messageContent = "'" .. tostring(targetName) .. "'" .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_APPOINT_GUILDMEMBER_QUESTION")
     yesFunction = MessageBoxYesFunction_GuildMemberFunction_CancelAppoint
+  elseif btnType == self._btnType.clanDeportation then
+    messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_EXPEL_CLANMEMBER")
+    messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CLAN_TEXT_EXPEL_CLANMEMBER_QUESTION", "name", targetName)
+    yesFunction = MessageBoxYesFunction_GuildMemberFunction_ExpelMember
   else
     UI.ASSERT(false, "\236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\157\128 \237\131\128\236\158\133\236\158\133\235\139\136\235\139\164!! : PaGlobalFunc_GuildMemberInfo_MessageboxFunction")
     return

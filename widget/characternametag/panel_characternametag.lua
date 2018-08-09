@@ -773,7 +773,9 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
   local guildMark = UI.getChildControl(targetPanel, "Static_GuildMark")
   local guildOccupyIcon = UI.getChildControl(targetPanel, "Static_Icon_GuildMaster")
   local guildBack = UI.getChildControl(targetPanel, "Static_GuildBackGround")
-  if nil == guildName or nil == guildMark or nil == guildOccupyIcon or nil == guildBack then
+  local guildMarkXBOXBg = UI.getChildControl(targetPanel, "Static_XBOXGuildMarkBg")
+  local guildMarkXBOXIcon = UI.getChildControl(targetPanel, "Static_XBOXGuildMarkIcon")
+  if nil == guildName or nil == guildMark or nil == guildOccupyIcon or nil == guildBack or nil == guildMarkXBOXBg or nil == guildMarkXBOXIcon then
     return
   end
   guildOccupyIcon:SetIgnore(true)
@@ -799,6 +801,8 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
       guildName:SetShow(false)
       guildMark:SetShow(false)
       guildBack:SetShow(false)
+      guildMarkXBOXBg:SetShow(false)
+      guildMarkXBOXIcon:SetShow(false)
       return
     end
   end
@@ -807,14 +811,20 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
     guildName:SetMonoTone(true)
     guildMark:SetMonoTone(true)
     guildBack:SetMonoTone(true)
+    guildMarkXBOXBg:SetMonoTone(true)
+    guildMarkXBOXIcon:SetMonoTone(true)
   elseif false == playerActorProxy:isFlashBanged() and true == playerActorProxy:isConcealCharacter() then
     guildName:SetMonoTone(true)
     guildMark:SetMonoTone(true)
     guildBack:SetMonoTone(true)
+    guildMarkXBOXBg:SetMonoTone(true)
+    guildMarkXBOXIcon:SetMonoTone(true)
   else
     guildName:SetMonoTone(false)
     guildMark:SetMonoTone(false)
     guildBack:SetMonoTone(false)
+    guildMarkXBOXBg:SetMonoTone(false)
+    guildMarkXBOXIcon:SetMonoTone(false)
   end
   local isShowForAlli = false
   if true == playerActorProxyWrapper:get():isHideCharacterName() and true == playerActorProxyWrapper:get():isShowNameWhenCamouflage() and getSelfPlayer():getActorKey() ~= playerActorProxyWrapper:getActorKey() then
@@ -824,11 +834,15 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
     guildName:SetShow(false)
     guildMark:SetShow(false)
     guildBack:SetShow(false)
+    guildMarkXBOXBg:SetShow(false)
+    guildMarkXBOXIcon:SetShow(false)
     return
   else
     guildName:SetShow(hasGuild)
     guildMark:SetShow(hasGuild)
     guildBack:SetShow(hasGuild)
+    guildMarkXBOXBg:SetShow(hasGuild)
+    guildMarkXBOXIcon:SetShow(hasGuild)
   end
   if hasGuild then
     local isAllianceMember = playerActorProxy:isGuildAllianceMember()
@@ -857,6 +871,8 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
     if CppEnums.GuildGrade.GuildGrade_Clan == guildGrade then
       guildMark:SetShow(false)
       guildBack:SetShow(false)
+      guildMarkXBOXBg:SetShow(false)
+      guildMarkXBOXIcon:SetShow(false)
     else
     end
     if false == isbadGuildName then
@@ -884,30 +900,38 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
         guildOccupyIcon:SetMonoTone(false)
       end
     end
-    local isSet = setGuildTexture(actorKeyRaw, guildMark)
-    if false == isSet then
-      guildMarkInit(guildMark)
+    if true == _ContentsGroup_RenewUI_Guild and true == ToClient_isXBox() then
+      PaGlobalFunc_GuildMark_SetGuildMarkControl(guildMarkXBOXBg, guildMarkXBOXIcon, actorKeyRaw)
+      guildBack:SetShow(false)
+      guildMark:SetShow(false)
     else
-      guildMark:getBaseTexture():setUV(0, 0, 1, 1)
-      guildMark:setRenderTexture(guildMark:getBaseTexture())
-    end
-    if playerActorProxy:isGuildAllianceChair() then
-      guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 1, 1, 43, 43)
-      guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
-      guildBack:setRenderTexture(guildBack:getBaseTexture())
-    elseif playerActorProxy:isGuildMaster() then
-      guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 87, 1, 129, 43)
-      guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
-      guildBack:setRenderTexture(guildBack:getBaseTexture())
-    elseif playerActorProxy:isGuildSubMaster() then
-      guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 44, 1, 86, 43)
-      guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
-      guildBack:setRenderTexture(guildBack:getBaseTexture())
-    else
-      guildBack:ChangeTextureInfoNameAsync("")
+      local isSet = setGuildTexture(actorKeyRaw, guildMark)
+      if false == isSet then
+        guildMarkInit(guildMark)
+      else
+        guildMark:getBaseTexture():setUV(0, 0, 1, 1)
+        guildMark:setRenderTexture(guildMark:getBaseTexture())
+      end
+      if playerActorProxy:isGuildAllianceChair() then
+        guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 1, 1, 43, 43)
+        guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
+        guildBack:setRenderTexture(guildBack:getBaseTexture())
+      elseif playerActorProxy:isGuildMaster() then
+        guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 87, 1, 129, 43)
+        guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
+        guildBack:setRenderTexture(guildBack:getBaseTexture())
+      elseif playerActorProxy:isGuildSubMaster() then
+        guildBack:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 44, 1, 86, 43)
+        guildBack:getBaseTexture():setUV(x1, y1, x2, y2)
+        guildBack:setRenderTexture(guildBack:getBaseTexture())
+      else
+        guildBack:ChangeTextureInfoNameAsync("")
+      end
+      guildMarkXBOXBg:SetShow(false)
+      guildMarkXBOXIcon:SetShow(false)
     end
   else
     guildOccupyIcon:SetShow(false)

@@ -6,11 +6,19 @@ local GuildMemberList = {
   _ui = {
     list_MemberList = UI.getChildControl(_panel, "List2_MemberList")
   },
+  _listSortFunction = {
+    gradeSort,
+    levelSort,
+    nameSort,
+    apSort
+  },
   _memberListInfo = {},
-  _parentBg = nil
+  _parentBg = nil,
+  _currentSortType = nil
 }
 function GuildMemberList:init()
   self:registEvent()
+  self:setSortFunc()
 end
 function GuildMemberList:SetMemberInfo()
   self._memberListInfo = {}
@@ -35,10 +43,28 @@ function GuildMemberList:SetMemberInfo()
         _expiration = memberInfo:getContractedExpirationUtc(),
         _wp = memberInfo:getMaxWp(),
         _kp = memberInfo:getExplorationPoint(),
-        _userNo = memberInfo:getUserNo()
+        _userNo = memberInfo:getUserNo(),
+        _contractable = memberInfo:getContractableUtc()
       }
       self._memberListInfo[memberIdx] = info
     end
+  end
+end
+function GuildMemberList:setSortFunc()
+  function self._listSortFunction.gradeSort(w1, w2)
+    local w1Grade = w1._grade
+    local w2Grade = w2._grade
+    if 2 == w1Grade then
+      w1Grade = 3
+    elseif 3 == w1Grade then
+      w1Grade = 2
+    end
+    if 2 == w2Grade then
+      w2Grade = 3
+    elseif 3 == w2Grade then
+      w2Grade = 2
+    end
+    return w1Grade < w2Grade
   end
 end
 function GuildMemberList:registEvent()
@@ -55,6 +81,7 @@ function GuildMemberList:open()
   self:clearAndUpdateList()
 end
 function GuildMemberList:clearAndUpdateList()
+  PaGlobalFunc_GuildMemberList_MemberSort(0)
   self._ui.list_MemberList:getElementManager():clearKey()
   for memberIdx = 0, #self._memberListInfo do
     self._ui.list_MemberList:getElementManager():pushKey(toInt64(0, memberIdx))
@@ -92,6 +119,22 @@ function PaGlobalFunc_GuildMemberList_Init()
   self._parentBg:MoveChilds(self._parentBg:GetID(), _panel)
   UI.deletePanel(_panel:GetID())
   self:init()
+end
+function PaGlobalFunc_GuildMemberList_MemberSort(sortType)
+  local self = GuildMemberList
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
+    return
+  end
+  self._currentSortType = sortType
+  if 0 == sortType then
+    table.sort(self._memberListInfo, self._listSortFunction.gradeSort)
+  elseif 1 == sortType then
+  elseif 2 == sortType then
+  elseif 3 == sortType then
+  elseif 4 == sortType then
+  elseif 5 == sortType then
+  end
 end
 function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   local self = GuildMemberList
@@ -153,6 +196,14 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Name:SetFontColor(_disableColor)
     txt_Class:SetText("-")
     txt_Class:SetFontColor(_disableColor)
+  end
+  if 0 < Int64toInt32(getLeftSecond_TTime64(memberInfo._expiration)) then
+    stc_Contract:SetColor(Defines.Color.C_FFD20000)
+    if 0 >= Int64toInt32(getLeftSecond_TTime64(memberInfo._contractable)) then
+      stc_Contract:SetColor(Defines.Color.C_FFF0D147)
+    end
+  else
+    stc_Contract:SetColor(Defines.Color.C_FF309BF5)
   end
   btn_GuildSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildMemberList_MemberFunctionOpen(" .. memberIdx .. ")")
 end

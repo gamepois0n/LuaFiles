@@ -148,6 +148,10 @@ function click_DeliveryForPerson_GetOn()
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_CHARACTER_DELETE"))
     return
   end
+  if true == ToClient_CheckDuelCharacterInPrison(deliveryForPerson._selectCharacterIndex) then
+    NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_LOGIN"))
+    return
+  end
   local messageContent = PAGetStringParam2(Defines.StringSheet_RESOURCE, "DELIVERY_PERSON_READY_CHK", "now_character", getSelfPlayer():getName(), "change_character", getCharacterName(getCharacterDataByIndex(deliveryForPerson._selectCharacterIndex)))
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_Information"),

@@ -337,7 +337,11 @@ function EnchantInfo:enableApplyButton(isTrue)
   self._ui.btn_normal:SetMonoTone(not isTrue)
   if true == isTrue then
     local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
-    if needCountForPerfectEnchant_s64 > toInt64(0, 0) and true == self:forcedEnchantIsReady() then
+    local slotNo = self._enchantInfo:ToClient_getNeedItemSlotNo()
+    local inventoryType = self._enchantInfo:ToClient_getNeedItemWhereType()
+    local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
+    local itemCount = itemWrapper:get():getCount_s64()
+    if needCountForPerfectEnchant_s64 > toInt64(0, 0) and true == self:forcedEnchantIsReady() and nil ~= itemWrapper and needCountForPerfectEnchant_s64 <= itemCount then
       self._ui.btn_forced:SetMonoTone(false)
       self._ui.btn_forced:SetIgnore(false)
       self._ui.txt_keyGuideForced:SetMonoTone(false)

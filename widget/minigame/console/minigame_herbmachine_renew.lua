@@ -10,7 +10,8 @@ local MiniGame_HerbMachine = {
     stc_Result_Bad = UI.getChildControl(Panel_MiniGame_Timing, "Static_Result_Bad"),
     txt_Result = UI.getChildControl(Panel_MiniGame_Timing, "StaticText_Result_Text")
   },
-  _isGameStart = false
+  _isGameStart = false,
+  _isGameWin = false
 }
 local _math_random = math.random
 local _math_randomSeed = math.randomseed
@@ -189,19 +190,22 @@ function Panel_Minigame_HerbMachine_Start()
   end
   isBarMoveStart = false
   self._isGameStart = true
+  self._isGameWin = false
 end
 function Panel_Minigame_HerbMachine_ResetCount()
   herbMachine_WinCount = 0
 end
 function Panel_Minigame_HerbMachine_End()
   local self = MiniGame_HerbMachine
+  if true == self._isGameWin then
+    FGlobal_MiniGame_HerbMachine()
+    ToClient_MinigameResult(2, true)
+  end
   self._isGameStart = false
+  self._isGameWin = false
   Panel_MiniGame_Timing:SetShow(false, false)
 end
 function Panel_Minigame_HerbMachine_End_UI()
-  if herbMachine_WinCount >= 5 then
-    FGlobal_MiniGame_HerbMachine()
-  end
   if isWin then
     getSelfPlayer():get():SetMiniGameResult(0)
   else
@@ -245,6 +249,9 @@ function Panel_Minigame_HerbMachine_Freeze(keyType)
       audioPostEvent_SystemUi(11, 1)
       self:endUIShow_HerbMachine(self._ui.txt_Result, self._ui.stc_Result_Good, UI_color.C_FF96D4FC, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_HerbMachine_0"), "Good")
       herbMachine_WinCount = herbMachine_WinCount + 1
+      if herbMachine_WinCount >= 5 then
+        self._isGameWin = true
+      end
       getSelfPlayer():get():SetMiniGameResult(0)
     else
       audioPostEvent_SystemUi(11, 2)

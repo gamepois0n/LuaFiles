@@ -5,19 +5,19 @@ PaGlobal_TutorialPhase_CallBlackSpirit = {
   _currentProgress = 1,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15,
   _questData = {
-    [1] = {_questGroupNo = 650, _questId = 1},
-    [2] = {_questGroupNo = 650, _questId = 2}
+    [1] = {_questGroupNo = 21001, _questId = 1},
+    [2] = {_questGroupNo = 21001, _questId = 2}
   },
   _posData = {
-    [1] = float3(-140042, 1181.99, 117240.02),
-    [2] = float3(-140212, 1157.95, 114325)
+    [1] = float3(-60165.2, -3857.59, 47040.2),
+    [2] = float3(-65848.13, -3927.43, 46123.3)
   },
   _NpcKeyData = {
-    [1] = 40720,
-    [2] = 40603
+    [1] = 40751,
+    [2] = 40036
   },
   _lastSpiritUiData = {
     _posX = 0,

@@ -9,15 +9,18 @@ local GuildPopup = {
 function GuildPopup:init()
   self._ui.txt_Title = UI.getChildControl(self._ui.stc_Create_Guild, "StaticText_Title")
   self._ui.stc_Main = UI.getChildControl(self._ui.stc_Create_Guild, "Static_Main")
+  self._ui.txt_SubTitle = UI.getChildControl(self._ui.stc_Main, "StaticText_Sub_Title")
   self._ui.btn_ClanMark = UI.getChildControl(self._ui.stc_Main, "RadioButton_Clan_Mark")
-  self._ui.btn_ClanMark:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
   self._ui.btn_GuildMark = UI.getChildControl(self._ui.stc_Main, "RadioButton_Guild_Mark")
-  self._ui.btn_GuildMark:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
   self._ui.txt_Tip = UI.getChildControl(self._ui.stc_Main, "StaticText_Tip")
   self._ui.txt_Tip:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_Tip:SetText(" ")
   self._ui.stc_BottomBg = UI.getChildControl(self._ui.stc_Create_Guild, "Static_BottomBg")
   self._ui.txt_Apply = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Apply")
+  self._ui.txt_SubTitle:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_SubTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CREATECLAN_1"))
+  self._ui.btn_ClanMark:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
+  self._ui.btn_GuildMark:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
   self:registEventHandler()
 end
 function GuildPopup:open()
@@ -29,51 +32,44 @@ function GuildPopup:close()
   ClearFocusEdit()
 end
 function GuildPopup:update()
-  self._ui.btn_ClanMark:SetCheck(false)
   self._ui.btn_ClanMark:SetMonoTone(false)
-  self._ui.btn_ClanMark:SetEnable(true)
-  self._ui.btn_GuildMark:SetCheck(false)
+  self._ui.btn_ClanMark:SetIgnore(false)
+  self._ui.btn_ClanMark:SetAlpha(1)
   self._ui.btn_GuildMark:SetMonoTone(false)
-  self._ui.btn_GuildMark:SetEnable(true)
+  self._ui.btn_GuildMark:SetIgnore(false)
+  self._ui.btn_GuildMark:SetAlpha(1)
   if false == ToClient_CanMakeGuild() then
-    self._ui.btn_GuildMark:SetEnable(false)
     self._ui.btn_GuildMark:SetMonoTone(true)
+    self._ui.btn_GuildMark:SetIgnore(true)
+    self._ui.btn_GuildMark:SetAlpha(0.6)
   end
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if nil ~= myGuildListInfo then
     local guildGrade = myGuildListInfo:getGuildGrade()
     local isGuildMaster = getSelfPlayer():get():isGuildMaster()
-    if 0 ~= guildGrade then
+    if 0 == guildGrade then
       self._ui.btn_ClanMark:SetMonoTone(true)
-      self._ui.btn_ClanMark:SetEnable(false)
+      self._ui.btn_ClanMark:SetIgnore(true)
+      self._ui.btn_ClanMark:SetAlpha(0.6)
       self._ui.btn_GuildMark:SetMonoTone(true)
-      self._ui.btn_GuildMark:SetEnable(false)
-    elseif true == isGuildMaster then
-      self._ui.btn_ClanMark:SetCheck(false)
+      self._ui.btn_GuildMark:SetIgnore(true)
+      self._ui.btn_GuildMark:SetAlpha(0.6)
+      if true == isGuildMaster then
+        self._ui.btn_GuildMark:SetMonoTone(false)
+        self._ui.btn_GuildMark:SetIgnore(false)
+        self._ui.btn_GuildMark:SetAlpha(1)
+      end
+    elseif 1 == guildGrade then
       self._ui.btn_ClanMark:SetMonoTone(true)
-      self._ui.btn_ClanMark:SetEnable(false)
-      self._ui.btn_GuildMark:SetCheck(true)
-      self._ui.btn_GuildMark:SetMonoTone(false)
-      self._ui.btn_GuildMark:SetEnable(true)
-    else
-      self._ui.btn_ClanMark:SetCheck(true)
-      self._ui.btn_ClanMark:SetMonoTone(false)
-      self._ui.btn_ClanMark:SetEnable(true)
-      self._ui.btn_GuildMark:SetCheck(false)
-      self._ui.btn_GuildMark:SetMonoTone(false)
-      self._ui.btn_GuildMark:SetEnable(true)
+      self._ui.btn_ClanMark:SetIgnore(true)
+      self._ui.btn_ClanMark:SetAlpha(0.6)
+      self._ui.btn_GuildMark:SetMonoTone(true)
+      self._ui.btn_GuildMark:SetIgnore(true)
+      self._ui.btn_GuildMark:SetAlpha(0.6)
     end
   end
-  local desc
-  if true == self._ui.btn_ClanMark:IsCheck() then
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN")
-  elseif true == self._ui.btn_GuildMark:IsCheck() then
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD")
-  else
-    desc = ""
-  end
   self._currentBtn = nil
-  self._ui.txt_Tip:SetText(desc)
+  self._ui.txt_Tip:SetText("")
 end
 function GuildPopup:registEventHandler()
   self._ui.btn_ClanMark:addInputEvent("Mouse_LUp", "InputMLUp_GuildPopup_SelectBtn(" .. self._selectBtnIdx.clan .. ")")
@@ -92,38 +88,55 @@ function PaGlobalFunc_GuildPopup_Close()
 end
 function InputMLUp_GuildPopup_SelectBtn(btnIdx)
   self = GuildPopup
-  if self._currentBtn == btnIdx then
-    InputMLUp_GuildPopup_Confirm()
-    return
-  end
-  if btnIdx == self._selectBtnIdx.clan then
-    self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
-  elseif btnIdx == self._selectBtnIdx.guild then
-    self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
-  end
   self._currentBtn = btnIdx
-  InputMO_GuildPopup_SetKeyguide(btnIdx)
+  InputMLUp_GuildPopup_Confirm()
 end
 function InputMO_GuildPopup_SetKeyguide(btnIdx)
   self = GuildPopup
-  if self._currentBtn == btnIdx then
-    self._ui.txt_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOBBY_CREATE"))
-  else
-    self._ui.txt_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_SELECT"))
+  self._ui.btn_ClanMark:SetAlpha(1)
+  self._ui.btn_GuildMark:SetAlpha(1)
+  if btnIdx == self._selectBtnIdx.clan then
+    self._ui.btn_GuildMark:SetMonoTone(true)
+    self._ui.btn_ClanMark:SetMonoTone(false)
+    self._ui.btn_GuildMark:SetAlpha(0.6)
+    self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
+  elseif btnIdx == self._selectBtnIdx.guild then
+    self._ui.btn_GuildMark:SetMonoTone(false)
+    self._ui.btn_ClanMark:SetMonoTone(true)
+    self._ui.btn_ClanMark:SetAlpha(0.6)
+    self._ui.txt_Tip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
   end
 end
 function InputMLUp_GuildPopup_Confirm()
   self = GuildPopup
   if self._currentBtn == self._selectBtnIdx.clan then
+    PaGlobalFunc_GuildCreate_Open(0)
   elseif self._currentBtn == self._selectBtnIdx.guild then
-    if getSelfPlayer():get():getLevel() < 1 then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
-      return
+    local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+    if nil ~= myGuildListInfo then
+      local myGuildGrade = myGuildListInfo:getGuildGrade()
+      local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+      if 1 == myGuildGrade then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_CURRENT_ACK"))
+        return
+      end
+      if true == isGuildMaster and 0 == myGuildGrade then
+        ToClient_RequestRaisingGuildGrade(1, 100000)
+      elseif false == isGuildMaster then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_ONLYGUILDMASTER_ACK"))
+        return
+      end
+    else
+      if 1 > getSelfPlayer():get():getLevel() then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
+        return
+      end
+      PaGlobalFunc_GuildCreate_Open(1)
     end
-    PaGlobalFunc_GuildCreate_Open()
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_CLANORGUILD_SELECT_ACK"))
   end
+  self:close()
 end
 function FromClient_luaLoadComplete_GuildPopup_Init()
   self = GuildPopup

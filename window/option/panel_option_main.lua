@@ -1110,7 +1110,7 @@ function PaGlobal_Option:SetContentsOption()
         if ii > 0 then
           addStr = tostring(ii)
         end
-        local control = UI.getChildControl(nationBgOrder2, "RadioButton_ServiceResourceType" .. addStr)
+        local control = UI.getChildControlNoneAssert(nationBgOrder2, "RadioButton_ServiceResourceType" .. addStr)
         if nil ~= control then
           control:SetShow(false)
         else
@@ -1143,6 +1143,12 @@ function PaGlobal_Option:SetContentsOption()
     fairyVoiceBG:SetPosY(npcvoicebg:GetPosY())
     self._elements.AudioResourceType = nil
   end
+  if false == ToClient_IsDevelopment() then
+    local bg = UI.getChildControl(self._frames.Graphic.Quality._uiFrameContent, "StaticText_BgOrder1_Import")
+    UI.getChildControl(bg, "RadioButton_GraphicOption8"):SetShow(false)
+    bg = UI.getChildControl(self._frames.Performance.GraphicQuality._uiFrameContent, "StaticText_BgOrder1_Import")
+    UI.getChildControl(bg, "RadioButton_GraphicOption8"):SetShow(false)
+  end
   if false == isNeedGameOptionFromServer() then
     return
   end
@@ -1170,28 +1176,6 @@ function PaGlobal_Option:SetContentsOption()
     local bg = UI.getChildControl(self._frames.Function.Convenience._uiFrameContent, "StaticText_BgOrder1_Import")
     bg:SetShow(false)
     self._elements.UIFontSizeType = nil
-  end
-  if false == _ContentsGroup_isConsoleTest then
-    bg = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
-    local bg1 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder1_Import")
-    local bg2 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder2_Import")
-    local bg3 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder3_Import")
-    local bg4 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder4_Import")
-    bg3:SetPosY(bg4:GetPosY())
-    bg1:SetShow(false)
-    bg2:SetShow(false)
-    bg4:SetShow(false)
-  else
-    local bg2 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder2_Import")
-    local bg4 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder4_Import")
-    local button1 = UI.getChildControl(bg2, "RadioButton_ConsolePadHotKeyType")
-    local button2 = UI.getChildControl(bg2, "RadioButton_ConsolePadHotKeyType1")
-    local button3 = UI.getChildControl(bg2, "RadioButton_ConsolePadHotKeyType2")
-    button1:addInputEvent("Mouse_LUp", "setConsoleKeySet(0)")
-    button2:addInputEvent("Mouse_LUp", "setConsoleKeySet(1)")
-    button3:addInputEvent("Mouse_LUp", "setConsoleKeySet(2)")
-    local topviewMode = UI.getChildControl(bg4, "CheckButton_GamePadTopView")
-    topviewMode:addInputEvent("Mouse_LUp", "FGlobal_ToggleTopViewMode()")
   end
   if false == _ContentsGroup_isFairy then
     local fairyRenderBG = UI.getChildControl(self._frames.Function.View._uiFrameContent, "StaticText_BgOrder4_Import")
@@ -1250,6 +1234,13 @@ function PaGlobal_Option:SetContentsOption()
     UI.getChildControl(bg00, "StaticText_EnableTraySoundOnOff_Desc"):SetShow(false)
     UI.getChildControl(bg00, "CheckButton_EnableRidingSound"):SetShow(false)
     UI.getChildControl(bg00, "StaticText_EnableRidingSound_Desc"):SetShow(false)
+    local bg11 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder1_Import")
+    if nil ~= bg11 then
+      local x = UI.getChildControl(bg11, "RadioButton_BattleSoundType2")
+      if nil ~= x then
+        x:SetShow(false)
+      end
+    end
     local bg22 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder2_Import")
     local bg33 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder3_Import")
     local bg77 = UI.getChildControl(self._frames.Sound.Volume._uiFrameContent, "StaticText_BgOrder7_Import")
@@ -1265,16 +1256,11 @@ function PaGlobal_Option:SetContentsOption()
     bg1:SetShow(false)
     bg2:SetPosY(bg0:GetPosY())
     local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
-    local bg1 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder1_Import")
-    local bg2 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder2_Import")
-    local bg3 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder3_Import")
-    local bg4 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder4_Import")
-    bg4:SetShow(false)
-    bg3:SetPosY(bg3:GetPosY() - bg4:GetSizeY())
-    bg2:SetPosY(bg2:GetPosY() - bg4:GetSizeY())
-    bg1:SetPosY(bg1:GetPosY() - bg4:GetSizeY())
     UI.getChildControl(bg0, "CheckButton_GamePadEnable"):SetShow(false)
     UI.getChildControl(bg0, "StaticText_UsePadDesc"):SetShow(false)
+    UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)
+    UI.getChildControl(bg0, "StaticText_ShowKeyGuideDesc"):SetShow(false)
+    bg0:SetSize(bg0:GetSizeX(), bg0:GetSizeY() - 30)
     local bg1 = UI.getChildControl(self._frames.Function.Etc._uiFrameContent, "StaticText_BgOrder1_Import")
     UI.getChildControl(bg1, "CheckButton_IsPvpRefuse"):SetShow(false)
     UI.getChildControl(bg1, "StaticText_IsPvpRefuse_Desc"):SetShow(false)
@@ -1320,10 +1306,6 @@ function PaGlobal_Option:SetContentsOption()
       checkbutton:SetIgnore(true)
       title:SetText(title:GetText() .. " (Xbox One X Only)")
     end
-    local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
-    UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)
-    UI.getChildControl(bg0, "StaticText_ShowKeyGuideDesc"):SetShow(false)
-    bg0:SetSize(bg0:GetSizeX(), bg0:GetSizeY() - 30)
   else
     local bg0 = UI.getChildControl(self._frames.Interface.Pad._uiFrameContent, "StaticText_BgOrder0_Import")
     UI.getChildControl(bg0, "CheckButton_ShowKeyGuide"):SetShow(false)

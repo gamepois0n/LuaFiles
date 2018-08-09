@@ -205,11 +205,8 @@ end
 function HandleClicked_Customization_HairShape_SliderFocusOn(sliderType, sliderIndex)
   local self = Customization_HairShapeInfo
   if 1 == sliderType then
-    self._ui._slider_PositionFocus[sliderIndex]:SetShow(true)
   elseif 2 == sliderType then
-    self._ui._slider_RotationFocus[sliderIndex]:SetShow(true)
   elseif 3 == sliderType then
-    self._ui._slider_LengthFocus[sliderIndex]:SetShow(true)
   end
   if true == self._isExistBone then
     PaGlobalFunc_Customization_SetKeyGuide(4)
@@ -220,11 +217,8 @@ end
 function HandleClicked_Customization_HairShape_SliderFocusOut(sliderType, sliderIndex)
   local self = Customization_HairShapeInfo
   if 1 == sliderType then
-    self._ui._slider_PositionFocus[sliderIndex]:SetShow(false)
   elseif 2 == sliderType then
-    self._ui._slider_RotationFocus[sliderIndex]:SetShow(false)
   elseif 3 == sliderType then
-    self._ui._slider_LengthFocus[sliderIndex]:SetShow(false)
   end
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_HairShape_GetShow() then
     if true == self._isExistBone then
@@ -386,19 +380,6 @@ function Customization_HairShapeInfo:InitControl()
   self._ui._sliderButton_Length[2] = UI.getChildControl(self._ui._slider_Length[2], "Slider_Button")
   self._ui._sliderButton_Length[3] = UI.getChildControl(self._ui._slider_Length[3], "Slider_Button")
   self._ui._sliderButton_Length[4] = UI.getChildControl(self._ui._slider_Length[4], "Slider_Button")
-  self._ui._slider_LengthFocus = {}
-  for index = 0, 4 do
-    self._ui._slider_LengthFocus[index] = UI.getChildControl(self._ui._static_LengthSliderBg[index], "Static_FocusBox")
-    self._ui._slider_LengthFocus[index]:SetShow(false)
-  end
-  self._ui._slider_PositionFocus = {}
-  self._ui._slider_RotationFocus = {}
-  for index = 0, 2 do
-    self._ui._slider_PositionFocus[index] = UI.getChildControl(self._ui._static_PositionSliderBg[index], "Static_FocusBox")
-    self._ui._slider_RotationFocus[index] = UI.getChildControl(self._ui._static_RotationSliderBg[index], "Static_FocusBox")
-    self._ui._slider_PositionFocus[index]:SetShow(false)
-    self._ui._slider_RotationFocus[index]:SetShow(false)
-  end
 end
 function Customization_HairShapeInfo:InitEvent()
   self._ui._button_Position:addInputEvent("Mouse_LUp", "HandleClicked_Customization_HairShape_CursorSelect(1)")

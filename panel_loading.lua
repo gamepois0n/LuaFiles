@@ -239,15 +239,6 @@ local function LoadingPanel_GetRandomKnowledge()
     LoadingPanel_PlayKnowledgeAni()
   end
   if true == _ContentsGroup_RenewUI then
-    ToClient_WorldmapCheckState(0, false, false)
-    ToClient_WorldmapCheckState(1, false, false)
-    ToClient_WorldmapCheckState(2, false, false)
-    ToClient_WorldmapCheckState(3, true, false)
-    ToClient_WorldmapCheckState(4, true, false)
-    ToClient_WorldmapCheckState(5, true, false)
-    ToClient_WorldmapCheckState(6, false, false)
-    ToClient_WorldmapCheckState(7, false, false)
-    ToClient_WorldmapCheckState(8, false, false)
   end
 end
 local function LoadingPanel_GetBackGroundImage()

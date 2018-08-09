@@ -4,7 +4,6 @@ PaGlobal_MonsterRanking = {
     _btn_ListBtn = UI.getChildControl(Panel_Window_MonsterRanking, "RadioButton_Tab"),
     _titleList2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingTitleList"),
     _list2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingList"),
-    _btn_Name = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_Name"),
     _nameTitle = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_NameTitle"),
     _btn_Close = UI.getChildControl(Panel_Window_MonsterRanking, "Button_Win_Close")
   },

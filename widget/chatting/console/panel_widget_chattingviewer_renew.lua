@@ -252,10 +252,17 @@ function FromClient_ChattingViewer_Update()
   self._uiPool:clear()
   local chatting_content_PosY = _panel:GetSizeY() - 10
   local chattingPanel = ToClient_getChattingPanel(0)
-  for ii = 1, self._displayableMessageCount do
+  local thisPanelMessageCount = chattingPanel:getMessageCount()
+  local messageData = {}
+  local shownCount = 0
+  for ii = 1, thisPanelMessageCount do
     local message = chattingPanel:getChattingMessageByIndex(ii - 1)
     if nil ~= message and (CppEnums.ChatType.Notice == message.chatType or CppEnums.ChatType.World == message.chatType or CppEnums.ChatType.Public == message.chatType or CppEnums.ChatType.Private == message.chatType or CppEnums.ChatType.Battle == message.chatType or CppEnums.ChatType.Guild == message.chatType or CppEnums.ChatType.Party == message.chatType) then
       chatting_content_PosY = Chatnew_CreateChattingContent(message, self._uiPool, chatting_content_PosY, ii, nil, 1, false, 0)
+      shownCount = shownCount + 1
+      if shownCount > self._displayableMessageCount then
+        break
+      end
     end
   end
   self._uiPool:hideNotUse()

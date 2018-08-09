@@ -7,7 +7,7 @@ PaGlobal_TutorialPhase_BasicSkill_Warrior = {
   _updateTime = 0,
   _isPhaseOpen = true,
   _isSkippable = true,
-  _regionKeyRawList = {88, 349},
+  _regionKeyRawList = {9},
   _startLimitLevel = 15,
   _totalScoldingCount = 3,
   _usedSkillCount = 0,
@@ -96,7 +96,6 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:startPhaseXXX(stepNo, typeNo)
   if 1 == self._currentType then
     classType = getSelfPlayer():getClassType()
     PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
-    PaGlobal_TutorialManager:setAllowMainQuestWidget(false)
     navigationGuideParam = NavigationGuideParam()
     navigationGuideParam._isAutoErase = false
     ToClient_DeleteNaviGuideByGroup()
@@ -310,34 +309,19 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:eventCallUsedSkill_TrySkillCo
     end
   end
 end
-local isAcceptedQuest = false
-local isClearQuest = false
 function PaGlobal_TutorialPhase_BasicSkill_Warrior:changeStepSuggestCallBlackSpirit()
   if 1 == self._currentProgress then
     PaGlobal_TutorialUiManager:getUiBlackSpirit():showSuggestCallSpiritUi()
     PaGlobal_TutorialManager:setAllowCallBlackSpirit(true)
   end
 end
-function PaGlobal_TutorialPhase_BasicSkill_Warrior:eventCallAcceptBlackSpiritQuest(isAccept, questGroupNo, questId)
-  if 1 == self._currentProgress and questGroupNo == self._questData[1]._questGroupNo and questId == self._questData[1]._questId then
-    isAcceptedQuest = true
-  end
-end
 function PaGlobal_TutorialPhase_BasicSkill_Warrior:eventCallAfterBlackSpiritDialogClose()
-  if 1 == self._currentProgress and true == isAcceptedQuest then
-    isAcceptedQuest = false
+  if 1 == self._currentProgress then
     Panel_CheckedQuest:SetShow(false)
     Panel_CheckedQuest:SetShow(true, true)
     self._currentProgress = 1
     self._nextStep = self._nextStep + 1
     self:handleChangeStep(self._currentStep)
-  end
-end
-function PaGlobal_TutorialPhase_BasicSkill_Warrior:handleEventQuestUpdateNotify(isAccept, questNoRaw)
-  local questGroupNo = PaGlobal_TutorialManager:getQuestGroupNoByQuestNoRaw(questNoRaw)
-  local questId = PaGlobal_TutorialManager:getQuestIdByQuestNoRaw(questNoRaw)
-  if 1 == self._currentType and 3 == self._currentStep and true == isAccept then
-    self:eventCallAcceptBlackSpiritQuest(isAccept, questGroupNo, questId)
   end
 end
 function PaGlobal_TutorialPhase_BasicSkill_Warrior:handleAfterAndPopFlush()

@@ -36,6 +36,8 @@ end
 function Panel_Window_FindParty_info:registerMessageHandler()
   registerEvent("FromClient_ResponsePartyRecruitmentInfo", "FromClientw_FindParty_RecruitmentInfo")
   registerEvent("FromClient_RequestPartyJoin", "FromClientw_FindParty_Join")
+  registerEvent("ResponseParty_createPartyList", "PaGlobalFunc_FindParty_Update")
+  registerEvent("ResponseParty_withdraw", "PaGlobalFunc_FindParty_Update")
 end
 function Panel_Window_FindParty_info:initialize()
   self:childControl()
@@ -58,10 +60,12 @@ function Panel_Window_FindParty_info:childControl()
   self._ui.staticText_A_ConsoleUI = UI.getChildControl(self._ui.static_BottomBG, "StaticText_A_ConsoleUI")
   self._ui.staticText_B_ConsoleUI = UI.getChildControl(self._ui.static_BottomBG, "StaticText_B_ConsoleUI")
   self._keyGuideControl[__eConsoleUIPadEvent_A] = self._ui.staticText_A_ConsoleUI
-  table.insert(self._keyGuideAlign, self._ui.staticText_Y_ConsoleUI)
-  table.insert(self._keyGuideAlign, self._ui.staticText_X_ConsoleUI)
-  table.insert(self._keyGuideAlign, self._ui.staticText_A_ConsoleUI)
-  table.insert(self._keyGuideAlign, self._ui.staticText_B_ConsoleUI)
+  self._keyGuideAlign = {
+    self._ui.staticText_Y_ConsoleUI,
+    self._ui.staticText_X_ConsoleUI,
+    self._ui.staticText_A_ConsoleUI,
+    self._ui.staticText_B_ConsoleUI
+  }
   self._ui.list2_PartyList = UI.getChildControl(Panel_PartyList, "List2_PartyList")
   self._ui.list2_PartyList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_FindParty_List")
   self._ui.list2_PartyList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
@@ -105,7 +109,7 @@ function Panel_Window_FindParty_info:close()
   Panel_PartyList:SetShow(false)
 end
 function Panel_Window_FindParty_info:setKeyGuidePos()
-  PaGlobalFunc_ConsoleKeyGuide_SetHorizonAlign(self._keyGuideAlign, Panel_PartyList, 1)
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._keyGuideAlign, Panel_PartyList, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_FindParty_info:setButtonText(eType)
   if self._enum.eTYPE_RECRUITE_NONE == eType then
@@ -271,6 +275,7 @@ function Panel_Window_FindParty_info:moveServer(serverNo, partyNo)
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_FindParty_GetShow()
+  return Panel_PartyList:GetShow()
 end
 function PaGlobalFunc_FindParty_Open()
   local self = Panel_Window_FindParty_info
@@ -293,6 +298,11 @@ function PaGlobalFunc_FindParty_Exit()
 end
 function PaGlobalFunc_FindParty_RecruiteShow()
   PaGlobalFunc_FindPartyRecruite_Show()
+end
+function PaGlobalFunc_FindParty_Update()
+  if true == PaGlobalFunc_FindParty_GetShow() then
+    ToClient_RequestListPartyRecruitment()
+  end
 end
 function PaGlobalFunc_FindParty_ReLoad()
   ToClient_RequestListPartyRecruitment()

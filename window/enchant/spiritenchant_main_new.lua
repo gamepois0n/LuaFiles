@@ -86,9 +86,18 @@ PaGlobal_Enchant = {
   _resultTimeCheck = false,
   _grantItemSlotNo = nil,
   _grantItemWhereType = nil,
+  _materialItemSlotNo = nil,
+  _materialItemWhereType = nil,
+  _isSetNewPerfectItemMaterial = false,
   _isLastEnchant = false,
   _isResulTextAnimation = false,
   _isPossiblePromotion = false,
+  _isSlotChangeAnimation = false,
+  _isSlotChangeMouseOver = false,
+  _slotChangeFlag = true,
+  _slotChangeMoveTime = 0.5,
+  _slotChangeWaitTime = 7,
+  _slotChangeDelayTime = 0,
   _isContentsEnable = ToClient_IsContentsGroupOpen("74"),
   _isCronBonusOpen = ToClient_IsContentsGroupOpen("222"),
   _isCronEnchantOpen = ToClient_IsContentsGroupOpen("234"),
@@ -1367,6 +1376,8 @@ function PaGlobal_Enchant:init_EnchantFrame()
   self:setText_NumOfCron(0, 0)
   self:setAsEnchantButton()
   self:showDifficultEnchantButton(false)
+  self._isSlotChangeAnimation = false
+  self._isSlotChangeMouseOver = false
   if not self._isContentsEnable then
     self._ui._useCronIcon:SetShow(false)
   end

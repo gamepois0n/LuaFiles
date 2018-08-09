@@ -47,13 +47,19 @@ function randomWorker:initControl()
   RandomWorkerUI._static_BottomBg = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "Static_BottomBg")
   RandomWorkerUI._staticText_Change_Worker = UI.getChildControl(RandomWorkerUI._static_BottomBg, "StaticText_Change_Worker")
   RandomWorkerUI._staticText_Hire = UI.getChildControl(RandomWorkerUI._static_BottomBg, "StaticText_Hire")
-  local xPos = RandomWorkerUI._staticText_Hire:GetPosX() - RandomWorkerUI._staticText_Change_Worker:GetTextSizeX() - 50
-  RandomWorkerUI._staticText_Change_Worker:SetPosX(xPos)
+  RandomWorkerUI._staticText_Energy = UI.getChildControl(RandomWorkerUI._static_BottomBg, "Static_NeedEnergyIcon")
+  RandomWorkerUI._staticText_Exit = UI.getChildControl(RandomWorkerUI._static_BottomBg, "StaticText_Exit")
   RandomWorkerUI._button_NextWorker = UI.getChildControl(RandomWorkerUI._static_BottomBg, "Button_NextWorker")
   RandomWorkerUI._button_Hire = UI.getChildControl(RandomWorkerUI._static_BottomBg, "Button_Hire")
   Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_A, "FGlobalFunc_Hire_RandomWorker()")
-  Panel_Dialog_RandomWorker:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "FGlobalFunc_Close_RandomWorker()")
   Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobalFunc_NextWorker_RandomWorker()")
+  local keyGuide = {
+    RandomWorkerUI._staticText_Change_Worker,
+    RandomWorkerUI._staticText_Energy,
+    RandomWorkerUI._staticText_Hire,
+    RandomWorkerUI._staticText_Exit
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuide, RandomWorkerUI._static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function randomWorker:resetData()
   self._selectWorkerSlotNo = -1
@@ -66,9 +72,6 @@ function randomWorker:open()
   Panel_Dialog_RandomWorker:SetShow(true)
 end
 function randomWorker:close()
-  if false == Panel_Dialog_RandomWorker:GetShow() then
-    return
-  end
   ToClient_padSnapResetControl()
   PaGlobalFunc_MainDialog_ReOpen()
   Panel_Dialog_RandomWorker:SetShow(false)
@@ -126,9 +129,10 @@ function randomWorker:update(workerShopSlotNo)
       currentWP = string.gsub(currentWP, ":", " ")
       RandomWorkerUI._staticText_Title:SetText(workerColorSet .. getWorkerName(plantWorkerStaticStatus) .. "<PAOldColor>")
       RandomWorkerUI._staticText_WorkerImage:ChangeTextureInfoNameAsync(workerIconPath)
-      local radius = RandomWorkerUI._staticText_WorkerImage:GetSizeX() * 0.5
-      local posX = RandomWorkerUI._staticText_WorkerImage:GetPosX() + radius * 0.2
-      local posY = RandomWorkerUI._staticText_WorkerImage:GetPosY() + radius * 0.44
+      local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
+      local radius = RandomWorkerUI._staticText_WorkerImage:GetSizeX() * 0.5 * uiScale
+      local posX = RandomWorkerUI._staticText_WorkerImage:GetPosX() + radius * 0.2 / uiScale
+      local posY = RandomWorkerUI._staticText_WorkerImage:GetPosY() + radius * 0.44 / uiScale
       RandomWorkerUI._staticText_WorkerImage:SetCircularClip(radius, float2(posX, posY))
       RandomWorkerUI._staticText_MoveSpeed_Value:SetText(plantWorkerStaticStatus._moveSpeed / 100)
       RandomWorkerUI._staticText_WorkSpeed_Value:SetText(efficiency / 1000000)
@@ -139,7 +143,7 @@ function randomWorker:update(workerShopSlotNo)
       local IconPosX = RandomWorkerUI._staticText_Cost_Value:GetPosX() + RandomWorkerUI._staticText_Cost_Value:GetSizeX() - RandomWorkerUI._staticText_Cost_Value:GetTextSizeX()
       IconPosX = IconPosX - self._config._coinIconGapX
       RandomWorkerUI._static_Cost_Icon:SetPosX(IconPosX)
-      RandomWorkerUI._staticText_LeftCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERRANDOMSELECT_WORKERCOUNTVALUE", "value", maxWorkerCount - waitWorkerCount))
+      RandomWorkerUI._staticText_LeftCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIREABLE_COUNT", "count", maxWorkerCount - waitWorkerCount))
       local myInvenMoney = selfPlayer:get():getInventory():getMoney_s64()
       local myWareHouseMoney = warehouse_moneyFromNpcShop_s64()
       RandomWorkerUI._staticText_InventoryMoneyValue:SetText(makeDotMoney(myInvenMoney))
@@ -189,6 +193,10 @@ function randomWorker:hire()
     self:resetData()
     FGlobalFunc_Close_RandomWorker()
   end
+  local Worker_RequestCanle = function()
+    Panel_Dialog_RandomWorker:SetShow(true)
+  end
+  Panel_Dialog_RandomWorker:SetShow(false)
   if myInvenMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_InventoryMoney:IsCheck() or myWareHouseMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_WarehouseMoney:IsCheck() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEMANAGEMENT_ACK_MAKEBOOK"))
   else
@@ -196,7 +204,7 @@ function randomWorker:hire()
       title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ"),
       content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ_Question"),
       functionYes = Worker_RequestDoBuy,
-      functionCancel = MessageBox_Empty_function,
+      functionCancel = Worker_RequestCanle,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageboxData)
@@ -229,11 +237,15 @@ function randomWorker:getNextWorker()
       npcShop_requestList(CppEnums.ContentsType.Contents_Shop)
     end
   end
+  local Worker_RequestCanle = function()
+    Panel_Dialog_RandomWorker:SetShow(true)
+  end
+  Panel_Dialog_RandomWorker:SetShow(false)
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
     content = contentString,
     functionYes = Worker_RequestShopList,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = Worker_RequestCanle,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
@@ -246,6 +258,7 @@ end
 function randomWorker:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_RandomWorker")
   registerEvent("FromClient_EventRandomShopShow", "FGlobalFunc_Open_RandomWorker")
+  registerEvent("FromClient_ChangeWorkerCount", "FromClient_ChangeWorkerCount")
 end
 function FromClient_MoneyButtonOn(isInventyroy)
   randomWorker:moneyButtonOn(isInventyroy)
@@ -270,5 +283,11 @@ function FGlobalFunc_Hire_RandomWorker()
 end
 function FGlobalFunc_NextWorker_RandomWorker()
   randomWorker:getNextWorker()
+end
+function randomWorker:changeWorkerCount()
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIRE_WORKER"))
+end
+function FromClient_ChangeWorkerCount()
+  randomWorker:changeWorkerCount()
 end
 randomWorker:registEventHandler()

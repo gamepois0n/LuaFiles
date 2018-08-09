@@ -651,14 +651,14 @@ function PaGlobalFunc_ChattingHistory_Open(chatType, byParty)
   if nil == byParty or false == byParty then
     _openByParty = false
     _panel:SetHorizonLeft()
-    if true == PaGlobalFunc_ChattingInfo_GetShow() then
-      ToClient_padSnapSetTargetPanel(Panel_Widget_Chatting_Renew)
-    end
   else
     _openByParty = true
     _panel:SetHorizonRight()
   end
   ChattingHistory:open(chatType)
+  if false == _openByParty and true == PaGlobalFunc_ChattingInfo_GetShow() then
+    ToClient_padSnapSetTargetPanel(Panel_Widget_Chatting_Renew)
+  end
 end
 function ChattingHistory:open(chatType)
   _panel:SetShow(true)
@@ -1280,6 +1280,7 @@ function PaGlobalFunc_ChattingInfo_InviteParty_InParty()
     return
   end
   RequestParty_inviteCharacter(name)
+  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", name))
 end
 function PaGlobalFunc_ChattingInfo_Close_InParty()
   if false == PaGlobalFunc_PartySetting_GetShow() then

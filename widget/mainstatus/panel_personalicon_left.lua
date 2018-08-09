@@ -31,7 +31,6 @@ local _goldenBell = UI.getChildControl(Panel_PersonalIcon_Left, "Static_GoldenBe
 local _skillReset = UI.getChildControl(Panel_PersonalIcon_Left, "Static_SkillReset")
 local _awakenSkillReset = UI.getChildControl(Panel_PersonalIcon_Left, "Static_AwakenSkillReset")
 local _blackSpiritTraining = UI.getChildControl(Panel_PersonalIcon_Left, "Static_BlackSpiritTraining")
-local _expVehicleEvent = UI.getChildControl(Panel_PersonalIcon_Left, "Static_HorseExpUp")
 local _pcRoomUserHomeBuff = UI.getChildControl(Panel_PersonalIcon_Left, "Static_PcRoomBuff")
 local _goldPremiumBuff = UI.getChildControl(Panel_PersonalIcon_Left, "Static_GoldPremiumBuff")
 local _challengeReward = UI.getChildControl(Panel_PersonalIcon_Left, "Static_Challenge")
@@ -78,8 +77,6 @@ local function registEventHandler()
   _awakenSkillReset:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 14 )")
   _blackSpiritTraining:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 16 )")
   _blackSpiritTraining:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 16 )")
-  _expVehicleEvent:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 17 )")
-  _expVehicleEvent:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false )")
   _pcRoomUserHomeBuff:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 18 )")
   _pcRoomUserHomeBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false )")
   _goldPremiumBuff:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 19)")
@@ -207,11 +204,6 @@ function PackageIconPosition()
     _dropEvent:SetPosX(iconPosX)
     _dropEvent:SetPosY(iconPosY)
     iconPosX = iconPosX + _dropEvent:GetSizeX() + iconGapX
-  end
-  if _expVehicleEvent:GetShow() then
-    _expVehicleEvent:SetPosX(iconPosX)
-    _expVehicleEvent:SetPosY(iconPosY)
-    iconPosX = iconPosX + _expVehicleEvent:GetSizeX() + iconGapX
   end
   if applyCustomize then
     _customize:SetPosX(iconPosX)
@@ -643,10 +635,6 @@ function BuffIcon_ShowSimpleToolTip(isShow, iconType)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_DESC")
     uiControl = _ExpFix
-  elseif iconType == 17 then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF")
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF_TOOLTIP_DESC", "percent", expEventVehiclePercentShow)
-    uiControl = _expVehicleEvent
   elseif iconType == 18 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF")
     uiControl = _pcRoomUserHomeBuff
@@ -881,11 +869,6 @@ function FromClient_ResponseChangeExpAndDropPercent()
     _dropEvent:SetShow(true)
   else
     _dropEvent:SetShow(false)
-  end
-  if expEventVehicle > _defaultEventExp then
-    _expVehicleEvent:SetShow(true)
-  else
-    _expVehicleEvent:SetShow(false)
   end
   PackageIconPosition()
 end

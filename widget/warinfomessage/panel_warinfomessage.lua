@@ -205,9 +205,9 @@ function FromClient_NotifyKingOrLordTentChange(notifyType, regionKeyRaw, guildNa
       msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_MILITIA", "guildName", guildName)
     elseif true == _ContentsGroup_guildAlliance then
       if true == isAlliance then
-        msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_ALLIANCE_MAIN", "guildNamePeer", guildNamePeer)
+        msg_Main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_ALLIANCE_MAIN", "guildNamePeer", guildNamePeer, "guildName", guildName)
       else
-        msg_Main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_GUILD_MAIN", "guildNamePeer", guildNamePeer)
+        msg_Main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_GUILD_MAIN", "guildNamePeer", guildNamePeer, "guildName", guildName)
       end
     else
       msg_Main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_NOTIFYKINGORLORDTENTCHANGE_DESTORY_MAIN", "guildNamePeer", guildNamePeer, "guildName", guildName)

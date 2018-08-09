@@ -37,7 +37,6 @@ function GuildSkillList:open()
   self:updateData()
 end
 function GuildSkillList:updateData()
-  _PA_LOG("\236\162\133\237\152\132", "???????????????")
   local isGuildMaster = getSelfPlayer():get():isGuildMaster()
   local guildSkillPoint = ToClient_getSkillPointInfo(3)
   local pointPercent = string.format("%.0f", guildSkillPoint._currentExp / guildSkillPoint._nextLevelExp * 100)
@@ -321,7 +320,51 @@ function InputMLUp_GuildSkillList_LearnSkill(skillNo)
     return
   end
   if false == skillLevelInfo._learnable then
-    return
+    local skillSS = getSkillStaticStatus(skillNo, 1)
+    if nil == skillSS then
+      return
+    end
+    local skillTypeSS = getSkillTypeStaticStatus(skillNo)
+    if 0 < getLearnedSkillLevel(skillTypeSS) then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_CANNOTLEARNNOMORE"))
+      return
+    end
+    local requiredList = skillSS:getAllPreRequiredSkillNoList()
+    if #requiredList > 0 then
+      local skillNameStr = ""
+      for _, key in pairs(requiredList) do
+        local requiredSkillNo = key:getSkillNo()
+        local requiredSkillTypeSS = getSkillTypeStaticStatus(requiredSkillNo)
+        if nil ~= requiredSkillTypeSS and nil ~= requiredSkillTypeSS:getName() then
+          local level = getLearnedSkillLevel(requiredSkillTypeSS)
+          if 0 == level then
+            if "" == skillNameStr then
+              skillNameStr = requiredSkillTypeSS:getName()
+            else
+              skillNameStr = skillNameStr .. ", " .. requiredSkillTypeSS:getName()
+            end
+          end
+        end
+      end
+      if "" == skillNameStr then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_SKILLPOINTLESS"))
+        return
+      end
+      allClearMessageData()
+      local messageData = {
+        content = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_BLOCKED_NOTICE") .. [[
+
+
+]] .. skillNameStr,
+        functionCancel = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageData)
+      return
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "LUA_QUESTWIDGET_NEXTQUEST_NOTYET_BLACKSPIRIT"))
+      return
+    end
   end
   local function doLearnGuildSkill()
     local self = GuildSkillList

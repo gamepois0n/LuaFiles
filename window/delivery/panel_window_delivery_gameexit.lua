@@ -157,6 +157,10 @@ function click_DeliveryForGameExit_GetOn()
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_CHARACTER_DELETE"))
     return
   end
+  if true == ToClient_CheckDuelCharacterInPrison(deliveryForGameExit._selectCharacterIndex) then
+    NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_LOGIN"))
+    return
+  end
   local preText = ""
   local serverUtc64 = getServerUtc64()
   if 0 ~= characterData._arrivalRegionKey:get() and serverUtc64 < characterData._arrivalTime then

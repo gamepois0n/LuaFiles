@@ -177,6 +177,7 @@ function socketInfo:updateSocket()
   end
   local invenItemWrapper = getInventoryItemByType(self.slotMain.whereType, self.slotMain.slotNo)
   local maxCount = invenItemWrapper:get():getUsableItemSocketCount()
+  local is4k = UI.checkResolution4KForXBox()
   local classType = getSelfPlayer():getClassType()
   for ii = 1, self.config.socketSlotCount do
     self.slotSocket[ii].icon:SetShow(false)
@@ -226,7 +227,11 @@ function socketInfo:updateSocket()
         _onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -242, 40)
+        if is4k then
+          _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -484, 80)
+        else
+          _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -242, 40)
+        end
       elseif ii == 2 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -236,7 +241,11 @@ function socketInfo:updateSocket()
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -237, 0)
+        if is4k then
+          _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_TopLoop", true, -474, 0)
+        else
+          _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -237, 0)
+        end
       elseif ii == 3 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -248,7 +257,11 @@ function socketInfo:updateSocket()
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
         audioPostEvent_SystemUi(5, 6)
-        _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -232, -30)
+        if is4k then
+          _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_TopLoop", true, -464, -60)
+        else
+          _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -232, -30)
+        end
       end
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false

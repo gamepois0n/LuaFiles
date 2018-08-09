@@ -1,3 +1,4 @@
+local _panel = Panel_Window_GameExit
 local Window_GameExitInfo = {
   _ui = {
     _static_MainBg = UI.getChildControl(Panel_Window_GameExit, "Static_MainBg"),
@@ -470,7 +471,11 @@ function PaGlobalFunc_GameExit_ButtonClick_ServerChange()
   if true == self._ui._button_NoticeMsg:GetShow() then
     return
   end
-  FGlobal_ChannelSelect_Show()
+  if false == _ContentsGroup_RenewUI_ServerSelect then
+    FGlobal_ChannelSelect_Show()
+  else
+    PaGlobalFunc_ServerSelect_Open()
+  end
 end
 function PaGlobalFunc_GameExit_ButtonClick_Exit(exitType)
   local self = Window_GameExitInfo
@@ -640,6 +645,9 @@ function Window_GameExitInfo:InitControl()
     control:SetShow(false)
     UI.deleteControl(control)
   end
+  self._ui.stc_KeyGuideBg = UI.getChildControl(_panel, "Static_KeyGuideBg")
+  self._ui.btn_AConsoleUI = UI.getChildControl(self._ui.stc_KeyGuideBg, "Radiobutton_A_ConsoleUI")
+  self._ui.btn_BConsoleUI = UI.getChildControl(self._ui.stc_KeyGuideBg, "Radiobutton_B_ConsoleUI")
 end
 function Window_GameExitInfo:InitEvent()
   local body = self._ui._body
@@ -653,9 +661,14 @@ function Window_GameExitInfo:InitEvent()
   body._button_SelectCharacter:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_Exit(2)")
   body._button_ServerChange:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ServerChange()")
   body._button_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ChangeAccount()")
+  body._button_GameExit:addInputEvent("Mouse_On", "InputMO_GameExit_UpdateKeyGuide(" .. 0 .. ")")
+  body._button_SelectCharacter:addInputEvent("Mouse_On", "InputMO_GameExit_UpdateKeyGuide(" .. 0 .. ")")
+  body._button_ServerChange:addInputEvent("Mouse_On", "InputMO_GameExit_UpdateKeyGuide(" .. 0 .. ")")
+  body._button_ChangeAccount:addInputEvent("Mouse_On", "InputMO_GameExit_UpdateKeyGuide(" .. 0 .. ")")
   for index = 0, self._config._maxCharacterSlot - 1 do
     self._characterUITable[index]._radioButton_CharBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_CharacterSwap(" .. index .. ")")
     self._characterUITable[index]._button_ChangePicture:addInputEvent("Mouse_LUp", "PaGlobalFunc_GameExit_ButtonClick_ChangePhoto(" .. index .. ")")
+    self._characterUITable[index]._radioButton_CharBg:addInputEvent("Mouse_On", "InputMO_GameExit_UpdateKeyGuide(" .. 1 .. "," .. index .. ")")
   end
 end
 function PaGlobalFunc_GameExit_Resize()
@@ -752,6 +765,34 @@ function PaGlobalFunc_GameExit_ExitHandler(ExitType)
     ToClient_UnCheckTrayIcon()
   else
     _PA_LOG("\236\157\180\237\152\184\236\132\156", "\236\162\133\235\163\140 \237\131\128\236\158\133\236\157\180 \236\158\152\235\170\187\235\144\144\236\138\181\235\139\136\235\139\164.")
+  end
+end
+function InputMO_GameExit_UpdateKeyGuide(type, idx)
+  local self = Window_GameExitInfo
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Window_GameExitInfo")
+    return
+  end
+  local originPos = self._ui.btn_BConsoleUI:GetPosX()
+  if 0 == type then
+    self._ui.btn_AConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_COMMON_CONFIRM"))
+    self._ui.btn_AConsoleUI:SetPosX(originPos - 140)
+    self._ui.btn_AConsoleUI:SetShow(true)
+  elseif 1 == type then
+    if nil == idx then
+      self._ui.btn_AConsoleUI:SetShow(false)
+      return
+    end
+    local charInfo = self._currentCharacterInfoTable[idx]
+    if true == charInfo._isSelfPlayer then
+      self._ui.btn_AConsoleUI:SetShow(false)
+      return
+    end
+    self._ui.btn_AConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "GAMEEXIT_SWAP_CHARACTER_TITLE"))
+    self._ui.btn_AConsoleUI:SetPosX(originPos - 220)
+    self._ui.btn_AConsoleUI:SetShow(true)
+  else
+    self._ui.btn_AConsoleUI:SetShow(false)
   end
 end
 function PaGlobalFunc_CharChangePhoto_Y()

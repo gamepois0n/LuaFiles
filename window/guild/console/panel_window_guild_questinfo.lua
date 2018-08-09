@@ -30,6 +30,8 @@ function GuildQuestInfo:init()
   self._ui.txt_BConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_B_ConsoleUI")
   self._ui.txt_AConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
   self._ui.txt_YConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y_ConsoleUI")
+  self._ui.txt_AcceptConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_AcceptConsoleUI")
+  self._ui.txt_AConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTACQUIRE_COMPLETE"))
   self:initRewardSlot()
   self:registEvent()
 end
@@ -100,14 +102,15 @@ function GuildQuestInfo:update()
   end
   local isProgressing = ToClient_isProgressingGuildQuest()
   if true == isProgressing or true == isShowPreOcc then
-    self._ui.txt_AConsoleUI:SetShow(false)
-    self._ui.txt_AConsoleUI:addInputEvent("Mouse_LUp", "")
+    self._ui.txt_AcceptConsoleUI:SetShow(false)
+    self._ui.txt_AcceptConsoleUI:addInputEvent("Mouse_LUp", "")
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
   else
-    self._ui.txt_AConsoleUI:SetShow(true)
-    self._ui.txt_AConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_AcceptQuest()")
+    self._ui.txt_AcceptConsoleUI:SetShow(true)
+    self._ui.txt_AcceptConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_AcceptQuest()")
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_GuildQuestList_AcceptQuest()")
   end
+  self._ui.txt_AConsoleUI:SetShow(false)
   self._ui.txt_YConsoleUI:SetShow(false)
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
 end
@@ -154,6 +157,7 @@ function GuildQuestInfo:updateProgressingQuest()
   self._ui.txt_AConsoleUI:addInputEvent("Mouse_LUp", "")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
   if true == ToClient_isSatisfyCurrentGuildQuest() and (getSelfPlayer():get():isGuildMaster() or getSelfPlayer():get():isGuildSubMaster()) then
+    self._ui.txt_AConsoleUI:SetShow(true)
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_GuildQuestList_ClearQuest()")
   end
   self._ui.txt_YConsoleUI:SetShow(true)

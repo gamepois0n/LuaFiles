@@ -1,4 +1,5 @@
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
+PaGlobal_registerPanelOnBlackBackground(Panel_Win_System)
 Panel_Win_System:ignorePadSnapMoveToOtherPanel()
 Panel_Win_System:RegisterShowEventFunc(true, "MessageBox_ShowAni()")
 Panel_Win_System:RegisterShowEventFunc(false, "MessageBox_HideAni()")
@@ -11,6 +12,11 @@ local UI_PP = CppEnums.PAUIMB_PRIORITY
 local UI_color = Defines.Color
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
+local static_Inner = UI.getChildControl(Panel_Win_System, "Static_Inner2")
+local static_InnerLine1 = UI.getChildControl(static_Inner, "Static_Line1")
+local static_InnerLine3 = UI.getChildControl(static_Inner, "Static_Line3")
+local defaultPanelSize = Panel_Win_System:GetSizeY()
+local defaultContentSize = static_Inner:GetSizeY()
 local staticText_Title = UI.getChildControl(Panel_Win_System, "StaticText_Title")
 local staticText_Desc = UI.getChildControl(Panel_Win_System, "StaticText_Desc")
 local staticText_OK_ConsoleUI = UI.getChildControl(Panel_Win_System, "StaticText_OK_ConsoleUI")
@@ -72,6 +78,14 @@ function setCurrentMessageData(currentData, position)
       staticText_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       staticText_Desc:SetText(currentData.content)
       staticText_Desc:ComputePos()
+      if staticText_Desc:GetTextSizeY() <= defaultContentSize then
+        Panel_Win_System:SetSize(Panel_Win_System:GetSizeX(), defaultPanelSize)
+        static_Inner:SetSize(static_Inner:GetSizeX(), defaultContentSize)
+      else
+        local gap = staticText_Desc:GetTextSizeY() - defaultContentSize + 20
+        Panel_Win_System:SetSize(Panel_Win_System:GetSizeX(), defaultPanelSize + gap)
+        static_Inner:SetSize(static_Inner:GetSizeX(), defaultContentSize + gap)
+      end
     end
     local buttonShowCount = 0
     if currentData.functionYes ~= nil then
@@ -132,6 +146,9 @@ function setCurrentMessageData(currentData, position)
 end
 function messageBoxComputePos()
   Panel_Win_System:ComputePos()
+  static_Inner:ComputePos()
+  static_InnerLine1:ComputePos()
+  static_InnerLine3:ComputePos()
   staticText_Title:ComputePos()
   staticText_Desc:ComputePos()
   staticText_OK_ConsoleUI:ComputePos()

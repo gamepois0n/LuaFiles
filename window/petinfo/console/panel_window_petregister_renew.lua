@@ -61,6 +61,7 @@ function petRegister:open()
   end
   self:setPosition()
   Panel_Window_PetRegister_Renew:SetShow(true)
+  PaGlobalFunc_InventoryInfo_Close()
 end
 function petRegister:close()
   local petRegisterUI = self._ui
@@ -101,8 +102,9 @@ end
 function FGlobal_PetRegister_Confirm()
   HandleClicked_PetRegister_Register()
 end
-function FGlobal_PetRegister_Cancle()
+function PaGlobalFunc_PetRegister_Cancle()
   ClearFocusEdit()
+  PaGlobalFunc_InventoryInfo_Open()
   petRegister:close()
 end
 function FGlobal_PetRegister_ChangeName()
@@ -153,12 +155,16 @@ function HandleClicked_PetRegister_Register()
     ToClient_requestPetRegister(petName, fromWhereType, fromSlotNo)
     petRegister:close()
   end
+  local cancle_Regist = function()
+    Panel_Window_PetRegister_Renew:SetShow(true)
+  end
+  Panel_Window_PetRegister_Renew:SetShow(false)
   local messageBoxMemo = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REGISTPET_CONTINUE")
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "PET_FUNCTION_REGISTERPET"),
     content = messageBoxMemo,
     functionYes = confirm_Regist,
-    functionNo = MessageBox_Empty_function,
+    functionNo = cancle_Regist,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData)

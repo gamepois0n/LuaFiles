@@ -358,7 +358,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
     end
     searchView_CheckDistance()
   end
-  if Panel_Window_ItemMarket_RegistItem:GetShow() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE)) then
+  if PaGlobalFunc_ItemMarketRegistItem_GetShow() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE)) then
     FGlobal_ItemMarketRegistItem_RegistDO()
   end
 end
@@ -378,15 +378,15 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap(deltaTime)
         Panel_Window_QuestNew_Show(false)
         return
       end
-      if Panel_ItemMarket_BidDesc:GetShow() then
+      if PaGlobalFunc_ItemMarketBidDesc_GetShow() then
         Panel_ItemMarket_BidDesc_Hide()
         return
       end
-      if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
+      if PaGlobalFunc_ItemMarket_GetShow() and PaGlobalFunc_ItemMarket_IsUISubApp() == false then
         FGolbal_ItemMarketNew_Close()
         return
       end
-      if Panel_Window_ItemMarket_ItemSet:GetShow() then
+      if PaGlobalFunc_ItemMarketItemSet_GetShow() then
         FGlobal_ItemMarketItemSet_Close()
         return
       end
@@ -399,7 +399,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap(deltaTime)
       FGlobal_PopCloseWorldMap()
     elseif GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Chat) then
       if false == _ContentsGroup_RenewUI_Chatting then
-        if not Panel_Window_ItemMarket:GetShow() then
+        if not PaGlobalFunc_ItemMarket_GetShow() then
           ChatInput_Show()
           return
         else
@@ -433,15 +433,15 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap(deltaTime)
       return
     end
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-      if Panel_ItemMarket_BidDesc:GetShow() then
+      if PaGlobalFunc_ItemMarketBidDesc_GetShow() then
         Panel_ItemMarket_BidDesc_Hide()
         return
       end
-      if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
+      if PaGlobalFunc_ItemMarket_GetShow() and PaGlobalFunc_ItemMarket_IsUISubApp() == false then
         FGolbal_ItemMarketNew_Close()
         return
       end
-      if Panel_Window_ItemMarket_ItemSet:GetShow() then
+      if PaGlobalFunc_ItemMarketItemSet_GetShow() then
         FGlobal_ItemMarketItemSet_Close()
         return
       end
@@ -970,6 +970,19 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_SkillWindow(delataTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket(delataTime)
+  if true == _ContentsGroup_RenewUI_ItemMarketPlace then
+    if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      if true == PaGlobalFunc_MarketWallet_GetShow() then
+        PaGlobalFunc_MarketWallet_Close()
+        return
+      end
+      if true == PaGlobalFunc_MarketPlace_GetShow() then
+        FGolbal_ItemMarket_Function_Close()
+        return
+      end
+    end
+    return
+  end
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
@@ -1075,7 +1088,13 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_UiSetting(deltaTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_Gacha_Roulette(deltaTime)
-  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
+  if _ContentsGroup_RenewUI_GachaRoulette then
+    if isPadUp(__eJoyPadInputType_A) then
+      FGlobal_gacha_Roulette_OnPressSpace()
+    elseif isPadUp(__eJoyPadInputType_B) then
+      FGlobal_gacha_Roulette_OnPressEscape()
+    end
+  elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
     FGlobal_gacha_Roulette_OnPressSpace()
   elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_gacha_Roulette_OnPressEscape()
@@ -1413,7 +1432,7 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     SavageDefenceShop_CloseByKey()
     return true
   end
-  if Panel_Window_ItemMarketAlarmList_New:GetShow() and not Panel_Window_ItemMarketAlarmList_New:IsUISubApp() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+  if PaGlobalFunc_ItemMarketAlarmList_GetShow() and not PaGlobalFunc_ItemMarketAlarmList_IsUISubApp() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     ItemMarket_AlarmList_Close()
     return true
   end
@@ -1427,6 +1446,10 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
   end
   if false == _ContentsGroup_RenewUI_Pet and Panel_Window_PetInfoNew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_PetInfoNew_Close()
+    return true
+  end
+  if Panel_Window_GuildWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    FGlobal_GuildWarInfo_renew_Close()
     return true
   end
   return false
@@ -1789,7 +1812,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
     end
     return
   end
-  if nil ~= Panel_Interaction and Panel_Interaction:IsShow() or nil ~= Panel_Widget_PanelInteraction_Renew and Panel_Widget_PanelInteraction_Renew:IsShow() and false == Panel_Widget_Chatting_Renew:GetShow() then
+  if nil ~= Panel_Interaction and Panel_Interaction:IsShow() or nil ~= Panel_Widget_PanelInteraction_Renew and Panel_Widget_PanelInteraction_Renew:IsShow() then
     local keyCode
     if _ContentsGroup_isConsoleTest and isPadInputIn() then
       keyCode = FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
@@ -1807,6 +1830,13 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
   end
   if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_C) then
     if not isPvpEnable() then
+      if true == ToClient_isXBox() then
+        local selfProxy = getSelfPlayer()
+        if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
+          return
+        end
+      end
       return
     else
       requestTogglePvP()

@@ -4,13 +4,47 @@ local Window_WorldMap_MainInfo = {
   }, false),
   _isFadeOutWindow = false,
   _isClose = false,
-  _isCullingnaviBtn = false,
   _isPrevShowQuestWigetPanel = false,
   _isPrevShowMainQuestPanel = false,
   _townModeWaypointKey = nil,
   _isTownMode = false,
-  _isAllowTutorialPanelShow = false
+  _isAllowTutorialPanelShow = false,
+  _hideAutoCompletedNaviBtn,
+  _isDialog = false
 }
+function StartLoopNavi()
+  ToClient_OnCompletedNodeLoop(NavigationGuideParam())
+end
+function FGlobal_WorldmapShowAni()
+  local worldmapRenderUI = ToClient_getWorldmapRenderBase()
+  worldmapRenderUI:ResetVertexAni()
+  ToClient_WorldmapSetShowWithFade(CppEnums.PAUI_SHOW_FADE_TYPE.PAUI_ANI_TYPE_FADE_IN)
+  if CppEnums.WorldMapAnimationStyle.noAnimation == ToClient_getGameOptionControllerWrapper():getWorldmapOpenType() then
+    local aniInfo = worldmapRenderUI:addColorAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+    aniInfo:SetStartColor(Defines.Color.C_00FFFFFF)
+    aniInfo:SetEndColor(Defines.Color.C_FFFFFFFF)
+    aniInfo.IsChangeChild = false
+  elseif nil == selfPlayer or selfPlayer:getRegionInfoWrapper():isDesert() and false == selfPlayer:isResistDesert() then
+    local aniInfo = worldmapRenderUI:addColorAnimation(0, 0.2, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+    aniInfo:SetStartColor(Defines.Color.C_FFFFFFFF)
+    aniInfo:SetEndColor(Defines.Color.C_FFFFFFFF)
+    aniInfo.IsChangeChild = false
+  else
+    local aniInfo = worldmapRenderUI:addColorAnimation(0, 0.8, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+    aniInfo:SetStartColor(Defines.Color.C_00FFFFFF)
+    aniInfo:SetEndColor(2147483647)
+    aniInfo.IsChangeChild = false
+    aniInfo = worldmapRenderUI:addColorAnimation(0.8, 1, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+    aniInfo:SetStartColor(2147483647)
+    aniInfo:SetEndColor(Defines.Color.C_FFFFFFFF)
+    aniInfo.IsChangeChild = false
+  end
+  Panel_WorldMap:ResetVertexAni()
+  ToClient_WorldmapSetAlpha(0)
+  audioPostEvent_SystemUi(1, 2)
+end
+function FGlobal_WorldmapHideAni()
+end
 function PaGlobalFunc_WorldMap_SetIsTownMode(isTown)
   local self = Window_WorldMap_MainInfo
   self._isTownMode = isTown
@@ -118,37 +152,32 @@ function PaGlobalFunc_FromClient_WorldMap_ReSetTownMode()
     if Panel_NodeStable:GetShow() then
       StableClose_FromWorldMap()
     end
-    ToClient_SetGuildMode(PaGlobalFunc_WorldMapSideBar_IsGuildWarMode())
+    ToClient_SetGuildMode(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode())
     PaGlobalFunc_WorldMapSideBar_EraseArrow()
     FGlobal_FilterEffectClear()
   else
-    FGlobal_WorldMapStateMaintain()
-    if Panel_NodeStable:GetShow() then
-      StableClose_FromWorldMap()
-    end
-    FGlobal_nodeOwnerInfo_Close()
-    ToClient_SetGuildMode(FGlobal_isGuildWarMode())
-    WorldMapArrowEffectEraseClear()
-    FGlobal_FilterEffectClear()
-    FGlobal_GrandWorldMap_SearchToWorldMapMode()
+    ToClient_SetGuildMode(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode())
     FGlobal_Hide_Tooltip_Work(nil, true)
   end
   PaGlobalFunc_WorldMap_SetIsTownMode(false)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
-  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_RightMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function PaGlobalFunc_FromClient_WorldMap_SetTownMode(waypointKey)
   local self = Window_WorldMap_MainInfo
+  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+    _PA_LOG("\236\157\180\237\152\184\236\132\156", "\237\131\128\236\154\180 \235\170\168\235\147\156\235\165\188 \236\151\172\235\159\172\235\178\136 \237\152\184\236\182\156 \237\150\136\236\138\181\235\139\136\235\139\164.")
+    return
+  end
   self._townModeWaypointKey = waypointKey
   local eCheckState = CppEnums.WorldMapCheckState
   local explorationNodeInClient = ToClient_getExploratioNodeInClientByWaypointKey(waypointKey)
   if nil ~= explorationNodeInClient then
     self:UpdateWorldMapNode(explorationNodeInClient)
   end
-  FGlobal_WarInfo_Close()
-  FGlobal_NodeWarInfo_Close()
   local knowledgeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Knowledge)
   local fishNChipShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_FishnChip)
   local tradeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Trade)
@@ -165,13 +194,12 @@ function PaGlobalFunc_FromClient_WorldMap_SetTownMode(waypointKey)
     PaGlobalFunc_WorldMapSideBar_Close()
     PaGlobalFunc_WorldMapSideBar_RetreatToWorldMapMode()
   else
-    Panel_WorldMap_Main:SetShow(false)
   end
   ToClient_SetGuildMode(false)
-  Panel_NodeSiegeTooltip:SetShow(false)
   PaGlobalFunc_WorldMap_SetIsTownMode(true)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function FGlobal_WorldmapMain_IsAllowTutorialPanelShow()
   local self = Window_WorldMap_MainInfo
@@ -180,6 +208,12 @@ end
 function FGlobal_WorldmapMain_SetAllowTutorialPanelShow(bAllow)
   local self = Window_WorldMap_MainInfo
   self._isAllowTutorialPanelShow = bAllow
+end
+function PaGlobalFunc_FromClient_WorldMap_OpenFromExplore(waypointKey)
+  local self = Window_WorldMap_MainInfo
+  self._isDialog = true
+  local explorationNodeInClient = ToClient_getExploratioNodeInClientByWaypointKey(waypointKey)
+  PaGlobalFunc_WorldMap_NodeManagement_Open(explorationNodeInClient)
 end
 function PaGlobalFunc_FromClient_WorldMap_Open()
   local self = Window_WorldMap_MainInfo
@@ -205,11 +239,6 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
   ToClient_openWorldMap()
   setFullSizeMode(true, FullSizeMode.fullSizeModeEnum.Worldmap)
   FGlobal_NpcNavi_ShowRequestOuter()
-  if true == _ContentsGroup_RenewUI_Dailog then
-    PaGlobalFunc_MainDialog_Close()
-  else
-    Panel_Npc_Dialog:SetShow(false)
-  end
   if false == _ContentsGroup_RenewUI_Worker then
     workerManager_Close()
   else
@@ -242,29 +271,20 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
   if Panel_ChatOption:GetShow() then
     ChattingOption_Close()
   end
-  Panel_WorldMapNaviBtn()
   Panel_Tooltip_Item_hideTooltip()
   delivery_requsetList()
   self._renderMode:set()
-  if true == _ContentsGroup_ForXBoxXR and false == _ContentsGroup_ForXBoxFinalCert then
-    ToClient_WorldmapCheckState(0, false, false)
-    ToClient_WorldmapCheckState(1, false, false)
-    ToClient_WorldmapCheckState(2, false, false)
-    ToClient_WorldmapCheckState(3, true, false)
-    ToClient_WorldmapCheckState(4, true, false)
-    ToClient_WorldmapCheckState(5, true, false)
-    ToClient_WorldmapCheckState(6, false, false)
-    ToClient_WorldmapCheckState(7, false, false)
-    ToClient_WorldmapCheckState(8, false, false)
+  if true ~= _ContentsGroup_ForXBoxXR or false == _ContentsGroup_ForXBoxFinalCert then
   end
   PaGlobalFunc_WorldMap_SetIsTownMode(false)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
-  PaGlobalFunc_WorldMap_BottomMenu_Open()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_WORLDMAP")
 end
 function PaGlobalFunc_FromClient_WorldMap_Close()
   local self = Window_WorldMap_MainInfo
   self._isClose = true
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_WorldMap_CloseSubPanel()
   local self = Window_WorldMap_MainInfo
@@ -277,58 +297,89 @@ function PaGlobalFunc_WorldMap_CloseSubPanel()
   Panel_Working_Progress:SetShow(false)
   FGlobal_ItemMarketItemSet_Close()
   FGolbal_ItemMarketNew_Close()
-  FromClient_OutWorldMapQuestInfo()
-  FromClient_OnTerritoryTooltipHide()
-  NodeName_ShowToggle(false)
   if not _ContentsGroup_isUsedNewTradeEventNotice and not Panel_TradeMarket_EventInfo:IsUISubApp() then
     TradeEventInfo_Close()
   end
-  if true == _ContentsGroup_ForXBoxFinalCert then
-    PaGlobalFunc_WorldMapSideBar_ResetFilter()
-  else
-    FGlobal_SetNodeFilter()
-  end
-  self._isCullingnaviBtn = true
 end
-function PaGlobalFunc_WorldMap_WindowEscape()
+function Window_WorldMap_MainInfo:ClosePanel()
   if false == _ContentsGroup_RenewUI_Worker then
     if Panel_WorkerTrade_Caravan:GetShow() then
       FGlobal_WorkerTradeCaravan_Hide()
-      return
+      return false
     end
   else
     FGlobal_WorkerTrade_Close()
   end
   if true == PaGlobalFunc_WorldMap_RingMenu_GetIsRingMenuOpen() then
     PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(false)
-    return
+    return false
   end
   if true == PaGlobalFunc_WorldMap_NodeInfo_GetShow() then
     PaGlobalFunc_WorldMap_NodeInfo_Close()
-    return
+    return false
   end
   if true == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
     PaGlobalFunc_WorldMap_NodeManagement_Close()
-    return
+    return false
   end
   if true == PaGlobalFunc_WorldMap_NodeProduct_GetShow() then
     PaGlobalFunc_WorldMap_NodeProduct_Close()
-    return
+    return false
+  end
+  return true
+end
+function Window_WorldMap_MainInfo:ClosePanelInTown()
+  if true == PaGlobalFunc_WorldMap_HouseCraft_GetShow() then
+    PaGlobalFunc_WorldMap_HouseCraft_Close()
+    return false
+  end
+  if true == PaGlobalFunc_WorldMap_HouseCraftLarge_GetShow() then
+    PaGlobalFunc_WorldMap_HouseCraftLarge_Close()
+    return false
+  end
+  if true == PaGlobalFunc_WorldMapHouseManager_IsShow() then
+    PaGlobalFunc_WorldMapHouseManager_Close()
+    return false
+  end
+  if true == PaGlobalFunc_WorldMap_RightMenu_GetShow() then
+    PaGlobalFunc_WorldMap_RightMenu_Toggle()
+    return false
   end
   if true == PaGlobalFunc_Warehouse_GetShow() then
     Warehouse_Close()
     DeliveryRequestWindow_Close()
+    return false
+  end
+  if true == PaGlobalFunc_WorldMap_Stable_GetShow() then
+    PaGlobalFunc_WorldMap_Stable_Close()
+    return false
+  end
+  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
+    PaGlobalFunc_WorldMap_HouseFilter_Close()
+    return false
+  end
+  FGlobal_ClearWorldmapIconTooltip()
+  return true
+end
+function Window_WorldMap_MainInfo:PrepareClosePanel()
+  if true == PaGlobalFunc_WorldMap_SellBuyHouse_GetShow() then
+    PaGlobalFunc_WorldMap_SellBuyHouse_Close()
+    return false
+  end
+  return true
+end
+function PaGlobalFunc_WorldMap_WindowEscape()
+  local self = Window_WorldMap_MainInfo
+  if false == self:PrepareClosePanel() then
+    return
+  end
+  if false == self:ClosePanelInTown() then
     PaGlobalFunc_WorldMap_TopMenu_Open()
     PaGlobalFunc_WorldMap_BottomMenu_Open()
     PaGlobalFunc_WorldMap_RingMenu_Open()
     return
   end
-  if true == PaGlobalFunc_WorldMap_Stable_GetShow() then
-    PaGlobalFunc_WorldMap_Stable_Close()
-    return
-  end
-  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
-    PaGlobalFunc_WorldMap_HouseFilter_Close()
+  if false == self:ClosePanel() then
     return
   end
   if true == ToClient_WorldMapIsShow() then
@@ -344,6 +395,7 @@ function PaGlobalFunc_WorldMap_WindowEscape()
     PaGlobalFunc_WorldMap_CloseSubPanel()
     FGlobal_HideAll_Tooltip_Work_Copy()
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobalFunc_WorldMap_GetIsClose()
   local self = Window_WorldMap_MainInfo
@@ -360,7 +412,6 @@ function PaGlobalFunc_WorldMap_PopClose()
   if true == _ContentsGroup_ForXBoxFinalCert then
     PaGlobalFunc_WorldMapSideBar_EraseArrow()
   else
-    WorldMapArrowEffectErase()
   end
   DeliveryCarriageInformationWindow_Close()
   PaGlobalFunc_WorldMap_TopMenu_Close()
@@ -394,8 +445,6 @@ function PaGlobalFunc_FromClient_WorldMap_ImmediatelyClose()
   PaGlobalFunc_WorldMap_TopMenu_Close()
   PaGlobalFunc_WorldMap_RingMenu_Close()
   PaGlobalFunc_WorldMap_BottomMenu_Close()
-  FGlobal_WarInfo_Close()
-  FGlobal_NodeWarInfo_Close()
   self._isClose = false
   Panel_CheckedQuest:SetShow(self._isPrevShowQuestWigetPanel)
   Panel_MainQuest:SetShow(self._isPrevShowMainQuestPanel)
@@ -408,7 +457,13 @@ function PaGlobalFunc_FromClient_WorldMap_ImmediatelyClose()
   end
   FGlobal_TownfunctionNavi_UnSetWorldMap()
   FGlobal_HouseInstallation_MinorWar_Close()
-  SetUIMode(Defines.UIMode.eUIMode_Default)
+  if true == self._isDialog then
+    ToClient_AddDialogueFlush()
+    PaGlobalFunc_MainDialog_ReOpen()
+  else
+    SetUIMode(Defines.UIMode.eUIMode_Default)
+  end
+  self._isDialog = false
   CheckChattingInput()
   if ToClient_IsSavedUi() then
     ToClient_SaveUiInfo(false)
@@ -424,6 +479,8 @@ end
 function Window_WorldMap_MainInfo:InitEvent()
   self._renderMode:setClosefunctor(self._renderMode, PaGlobalFunc_WorldMap_CloseForLuaKeyHandling)
   Panel_WorldMap:RegisterUpdateFunc("PaGlobalFunc_WorldMap_UpdatePerFrame")
+  ToClient_WorldmapRegisterShowEventFunc(true, "FGlobal_WorldmapShowAni()")
+  ToClient_WorldmapRegisterShowEventFunc(false, "FGlobal_WorldmapHideAni()")
 end
 function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
   local self = Window_WorldMap_MainInfo
@@ -435,6 +492,9 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
       return
     end
     if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
+      if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
+        return
+      end
       PaGlobalFunc_WorldMap_TopMenu_NextMenu()
     else
       PaGlobalFunc_WorldMap_TopMenu_ToggleTownMenu()
@@ -443,12 +503,12 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
   if false == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
     return
   end
-  if true == isPadUp(__eJoyPadInputType_RightTrigger) then
-    if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
-      PaGlobalFunc_WorldMap_BottomMenu_UpdateWayPoint()
-    else
-      PaGlobalFunc_WorldMap_BottomMenu_FindNPC()
-    end
+  if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
+    return
+  end
+  if true ~= isPadUp(__eJoyPadInputType_RightTrigger) or false == PaGlobalFunc_WorldMap_GetIsTownMode() then
+  else
+    PaGlobalFunc_WorldMap_BottomMenu_FindNPC()
   end
   if true == isPadUp(__eJoyPadInputType_RightShoulder) then
     PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(1)
@@ -459,6 +519,7 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
 end
 function Window_WorldMap_MainInfo:InitRegister()
   registerEvent("FromClient_WorldMapOpen", "PaGlobalFunc_FromClient_WorldMap_Open")
+  registerEvent("FromClient_WorldMapOpenFromExplore", "PaGlobalFunc_FromClient_WorldMap_OpenFromExplore")
   registerEvent("FromClient_ExitWorldMap", "PaGlobalFunc_FromClient_WorldMap_Close")
   registerEvent("FromClient_ImmediatelyCloseWorldMap", "PaGlobalFunc_FromClient_WorldMap_ImmediatelyClose")
   registerEvent("FromClient_WorldMapFadeOut", "PaGlobalFunc_FromClient_WorldMap_FadeOut")
@@ -468,11 +529,57 @@ function Window_WorldMap_MainInfo:InitRegister()
   registerEvent("FromClient_WorldMapNodeUpgrade", "PaGlobalFunc_FromClient_WorldMap_UpdateWorldMapNode")
   registerEvent("FromClint_EventChangedExplorationNode", "PaGlobalFunc_FromClient_WorldMap_ChangedExplorationNode")
   registerEvent("FromClint_EventUpdateExplorationNode", "PaGlobalFunc_FromClient_WorldMap_UpdateExplorationNode")
+  registerEvent("FromClient_RClickWorldmapPanel", "FromClient_RClickWorldmapPanel")
+  registerEvent("FromClient_DeleteNaviGuidOnTheWorldmapPanel", "PaGlobalFunc_FromClient_WorldMap_DeleteNaviGuidOnTheWorldmapPanel")
+  registerEvent("FromClient_HideAutoCompletedNaviBtn", "PaGlobalFunc_FromClient_WorldMap_HideAutoCompletedNaviBtn")
+  registerEvent("FromClient_DeliveryRequestAck", "DeliveryRequest_UpdateRequestSlotData")
+  registerEvent("EventDeliveryInfoUpdate", "DeliveryInformation_UpdateSlotData")
+  registerEvent("EventSelfPlayerPreDead", "PaGlobalFunc_FromClient_WorldMap_EventSelfPlayerPreDead")
 end
 function Window_WorldMap_MainInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+end
+function PaGlobalFunc_FromClient_WorldMap_EventSelfPlayerPreDead()
+  PaGlobalFunc_WorldMap_CloseForLuaKeyHandling()
+end
+function FromClient_RClickWorldmapPanel(pos3D, immediately, isTopPicking)
+  local self = Window_WorldMap_MainInfo
+  local selfPlayer = getSelfPlayer()
+  if false == immediately and ToClient_IsShowNaviGuideGroup(0) then
+    if selfPlayer:get():getLevel() < 11 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TUTORIAL_ACK"))
+      return
+    end
+    if isKeyPressed(CppEnums.VirtualKeyCode.KeyCode_MENU) then
+      ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
+    else
+      ToClient_DeleteNaviGuideByGroup(0)
+      audioPostEvent_SystemUi(0, 15)
+    end
+    return
+  end
+  if 0 ~= ToClient_GetMyTeamNoLocalWar() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_LOCALWAR_CANTNAVI_ACK"))
+    return
+  end
+  if getSelfPlayer():get():getLevel() < 11 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TUTORIAL_ACK"))
+    return
+  end
+  if false == isKeyPressed(CppEnums.VirtualKeyCode.KeyCode_MENU) then
+    ToClient_DeleteNaviGuideByGroup(0)
+  end
+  ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
+  audioPostEvent_SystemUi(0, 14)
+end
+function PaGlobalFunc_FromClient_WorldMap_HideAutoCompletedNaviBtn(isShow)
+  local self = Window_WorldMap_MainInfo
+  self._hideAutoCompletedNaviBtn = isShow
+end
+function PaGlobalFunc_FromClient_WorldMap_DeleteNaviGuidOnTheWorldmapPanel()
+  ToClient_DeleteNaviGuideByGroup(0)
 end
 function PaGlobalFunc_FromClient_WorldMap_ChangedExplorationNode()
   if false == ToClient_WorldMapIsShow() then
@@ -498,7 +605,6 @@ function PaGlobalFunc_WorldMap_Open()
     return
   end
   FGlobal_HideWorkerTooltip()
-  PaGlobalFunc_MainDialog_Hide()
   PaGlobalFunc_ChattingInfo_Close()
   ToClient_AddWorldMapFlush()
 end

@@ -21,6 +21,13 @@ local Panel_Window_StableExchange_info = {
     staticText_Name_Right = nil,
     staticText_Location_Right = nil,
     right_VerticalScroll = nil,
+    static_Mating_Right = nil,
+    static_Mating_Right = nil,
+    static_Image_Mating_Right = nil,
+    static_SexIcon_Mating_Right = nil,
+    staticText_Tier_Mating_Right = nil,
+    staticText_Name_Mating_Right = nil,
+    staticText_Location_Mating_Right = nil,
     static_BottomBg = nil,
     staticText_Select_ConsoleUI = nil,
     staticText_Exchange_ConsoleUI = nil
@@ -37,6 +44,7 @@ local Panel_Window_StableExchange_info = {
     rightStartIndex = 0,
     rightSlotCount = 0,
     currentOpenType = 0,
+    matingPrice = nil,
     matingSlotNo = nil,
     transferType = nil
   },
@@ -126,6 +134,7 @@ function Panel_Window_StableExchange_info:initValue()
   self._value.rightStartIndex = 0
   self._value.rightSlotCount = 0
   self._value.currentOpenType = 0
+  self._value.matingPrice = 0
   self._value.matingSlotNo = nil
   self._value.transferType = CppEnums.TransferType.TransferType_Normal
 end
@@ -157,6 +166,14 @@ function Panel_Window_StableExchange_info:childControl()
   self._ui.staticText_Location_Right = UI.getChildControl(self._ui.radioButton_Horse_Right, "StaticText_Location_Right")
   self._ui.radioButton_Horse_Right:SetShow(false)
   self._ui.right_VerticalScroll = UI.getChildControl(self._ui.static_Right, "Right_VerticalScroll")
+  self._ui.static_Mating_Right = UI.getChildControl(Panel_Window_Stable_Exchange, "Static_Mating_Right")
+  self._ui.static_Horse_Mating_Right = UI.getChildControl(self._ui.static_Mating_Right, "Static_Horse_Mating_Right")
+  self._ui.static_Image_Mating_Right = UI.getChildControl(self._ui.static_Horse_Mating_Right, "Static_Image_Mating_Right")
+  self._ui.static_SexIcon_Mating_Right = UI.getChildControl(self._ui.static_Horse_Mating_Right, "Static_SexIcon_Mating_Right")
+  self._ui.staticText_Tier_Mating_Right = UI.getChildControl(self._ui.static_Horse_Mating_Right, "StaticText_Tier_Mating_Right")
+  self._ui.staticText_Name_Mating_Right = UI.getChildControl(self._ui.static_Horse_Mating_Right, "StaticText_Name_Mating_Right")
+  self._ui.staticText_Location_Mating_Right = UI.getChildControl(self._ui.static_Horse_Mating_Right, "StaticText_Location_Mating_Right")
+  self._ui.radioButton_Horse_Right:SetShow(false)
   self._ui.static_BottomBg = UI.getChildControl(Panel_Window_Stable_Exchange, "Static_BottomBg")
   self._ui.staticText_Select_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Select_ConsoleUI")
   self._ui.staticText_Exchange_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Exchange_ConsoleUI")
@@ -205,6 +222,7 @@ function Panel_Window_StableExchange_info:createSlot()
         else
           self.staticText_Tier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", auctionServantInfo:getTier()))
         end
+        self.staticText_Name:SetShow(false)
         self.staticText_Location:SetShow(true)
         self.staticText_Location:SetText(auctionServantInfo:getRegionName())
       end
@@ -335,16 +353,19 @@ function Panel_Window_StableExchange_info:setTextByType(eOpenType)
     self._ui.staticText_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_TITLE"))
     self._ui.staticText_SubTitle1:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_MALEDESC"))
     self._ui.staticText_SubTitle2:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_FEMAILDESC"))
+    self._ui.staticText_SubTitle2:SetShow(true)
     self._ui.staticText_Exchange_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_EXCHANGE"))
   elseif self._enum.eTYPE_MATING == eOpenType then
     self._ui.staticText_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_MARKET_REQUEST"))
     self._ui.staticText_SubTitle1:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_MATING_FEMALEDESC"))
     self._ui.staticText_SubTitle2:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_MATING_MALEDESC"))
+    self._ui.staticText_SubTitle2:SetShow(false)
     self._ui.staticText_Exchange_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_MARKET_REQUEST"))
   elseif self._enum.eTYPE_LINK == eOpenType then
     self._ui.staticText_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_STABLEFUNCTION_HORSELINK"))
     self._ui.staticText_SubTitle1:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_EXCHANGE_SELECT_CARRiAGE"))
     self._ui.staticText_SubTitle2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_EXCHANGE_SELECT_HORSE"))
+    self._ui.staticText_SubTitle2:SetShow(true)
     self._ui.staticText_Exchange_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_STABLEFUNCTION_HORSELINK"))
   end
 end
@@ -431,6 +452,8 @@ function Panel_Window_StableExchange_info:setContentExchange(isBoth, isLeft)
       end
     end
   end
+  self._ui.static_Mating_Right:SetShow(false)
+  self._ui.static_Right:SetShow(true)
   if true == isBoth or false == isLeft then
     for index = 0, self._config.maxSlotCount - 1 do
       local slot = self._rightSlot[index]
@@ -444,6 +467,38 @@ function Panel_Window_StableExchange_info:setContentExchange(isBoth, isLeft)
       end
     end
   end
+end
+function Panel_Window_StableExchange_info:setMatingSlot(slotNo)
+  local self = Panel_Window_StableExchange_info
+  local myAuctionInfo = RequestGetAuctionInfo()
+  if nil == myAuctionInfo then
+    return
+  end
+  local auctionServantInfo = myAuctionInfo:getServantAuctionListAt(slotNo)
+  if nil == auctionServantInfo then
+    return
+  end
+  self._ui.static_Image_Mating_Right:ChangeTextureInfoName(auctionServantInfo:getIconPath1())
+  if auctionServantInfo:isMale() then
+    self._ui.static_SexIcon_Mating_Right:ChangeTextureInfoName(self._texture.sexIcon)
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.static_SexIcon_Mating_Right, self._texture.male.x1, self._texture.male.y1, self._texture.male.x2, self._texture.male.y2)
+    self._ui.static_SexIcon_Mating_Right:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.static_SexIcon_Mating_Right:setRenderTexture(self._ui.static_SexIcon_Mating_Right:getBaseTexture())
+  else
+    self._ui.static_SexIcon_Mating_Right:ChangeTextureInfoName(self._texture.sexIcon)
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.static_SexIcon_Mating_Right, self._texture.female.x1, self._texture.female.y1, self._texture.female.x2, self._texture.female.y2)
+    self._ui.static_SexIcon_Mating_Right:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.static_SexIcon_Mating_Right:setRenderTexture(self._ui.static_SexIcon_Mating_Right:getBaseTexture())
+  end
+  self._ui.staticText_Tier_Mating_Right:SetShow(true)
+  if 9 == auctionServantInfo:getTier() then
+    self._ui.staticText_Tier_Mating_Right:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9"))
+  else
+    self._ui.staticText_Tier_Mating_Right:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", auctionServantInfo:getTier()))
+  end
+  self._ui.staticText_Name_Mating_Right:SetShow(false)
+  self._ui.staticText_Location_Mating_Right:SetShow(true)
+  self._ui.staticText_Location_Mating_Right:SetText(auctionServantInfo:getRegionName())
 end
 function Panel_Window_StableExchange_info:setContentMating()
   if nil == isBoth then
@@ -462,6 +517,9 @@ function Panel_Window_StableExchange_info:setContentMating()
       end
     end
   end
+  self._ui.static_Mating_Right:SetShow(true)
+  self._ui.static_Right:SetShow(false)
+  self:setMatingSlot(self._value.matingSlotNo)
   if true == isBoth or false == isLeft then
     for index = 0, self._config.maxSlotCount - 1 do
       local slot = self._rightSlot[index]
@@ -492,6 +550,8 @@ function Panel_Window_StableExchange_info:setContentLink(isBoth, isLeft)
       end
     end
   end
+  self._ui.static_Mating_Right:SetShow(false)
+  self._ui.static_Right:SetShow(true)
   if true == isBoth or false == isLeft then
     for index = 0, self._config.maxSlotCount - 1 do
       local slot = self._rightSlot[index]
@@ -515,7 +575,7 @@ function Panel_Window_StableExchange_info:setMatingData()
   for index = 0, stable_count() - 1 do
     local servantInfo = stable_getServant(index)
     if regionName == servantInfo:getRegionName() then
-      local isUnLinkedHorse = not servantInfo:isLink() and CppEnums.VehicleType.Type_Horse == servantInfo:getVehicleType() and not servantInfo:isSeized() and CppEnums.ServantStateType.Type_Stable == servantInfo:getStateType()
+      local isUnLinkedHorse = not servantInfo:isLink() and CppEnums.VehicleType.Type_Horse == servantInfo:getVehicleType() and not servantInfo:isSeized() and CppEnums.ServantStateType.Type_Stable == servantInfo:getStateType() and 0 ~= servantInfo:getMatingCount()
       if isUnLinkedHorse and not servantInfo:isMale() then
         self._leftDataIndex[femaleHorse] = index
         femaleHorse = femaleHorse + 1
@@ -685,7 +745,7 @@ function PaGlobalFunc_StableExchange_ShowByExchange()
   self:setContent(self._enum.eTYPE_EXCHANGE)
   self:open()
 end
-function PaGlobalFunc_StableExchange_ShowByMating(matingSlotNo, transferType)
+function PaGlobalFunc_StableExchange_ShowByMating(matingSlotNo, transferType, price)
   local self = Panel_Window_StableExchange_info
   if nil == matingSlotNo then
     return
@@ -702,6 +762,7 @@ function PaGlobalFunc_StableExchange_ShowByMating(matingSlotNo, transferType)
     self:close()
     return
   end
+  self._value.matingPrice = price
   self._value.matingSlotNo = matingSlotNo
   self._value.currentOpenType = self._enum.eTYPE_MATING
   self:setContent(self._enum.eTYPE_MATING)
@@ -800,7 +861,7 @@ function PaGlobalFunc_StableExchange_DoExchange()
 end
 function PaGlobalFunc_StableExchange_DoMate()
   local self = Panel_Window_StableExchange_info
-  if nil == self._value.leftCurrnetSlotIndex or nil == self._value.rightCurrnetSlotIndex then
+  if nil == self._value.leftCurrnetSlotIndex then
     return
   end
   if nil == self._value.matingSlotNo then
@@ -811,8 +872,11 @@ function PaGlobalFunc_StableExchange_DoMate()
     local leftSlot = self._value.leftStartIndex + self._value.leftCurrnetSlotIndex
     local leftSlotNo = self._leftDataIndex[leftSlot]
     stable_startServantMating(leftSlotNo, self._value.matingSlotNo, self._value.transferType, whereType)
+    if true == PaGlobalFunc_StableExchange_Exit() then
+      PaGlobalFunc_StableMating_Show()
+    end
   end
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_MATING_NOTIFY")
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_MATING_NOTIFY") .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_MATING_PRICE", "matingPrice", self._value.matingPrice)
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
     content = messageBoxMemo,

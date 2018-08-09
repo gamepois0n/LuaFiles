@@ -3257,6 +3257,7 @@ function InGameShop_Open()
     end
     isFirstRespone = false
   end
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_CASHSHOP")
 end
 function FGlobal_CheckPromotionTab()
   local self = inGameShop
@@ -3326,6 +3327,7 @@ function InGameShop_Close()
   FGlobal_CashShop_GoodsTooltipInfo_Close()
   Panel_IngameCashShop_HowUsePearlShop_Close()
   reloadGameUI()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function InGameShop_UpdateCartButton()
   local cartListCount = getIngameCashMall():getCartListCount()

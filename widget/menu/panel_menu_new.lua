@@ -2337,7 +2337,7 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       end
     elseif PaGlobal_Menu._infomation._warInfo == index then
       if true == _ContentsGroup_SeigeSeason5 then
-        FGlobal_GuildWarInfo_Show()
+        FGlobal_GuildWarInfo_renew_Open()
       else
         FGlobal_GuildWarInfo_Show()
       end

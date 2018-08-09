@@ -1727,6 +1727,9 @@ function HandleClicked_UiSet_ConfirmSetting(isReset)
     Panel_Window_Skill:SetShow(true, true)
     PaGlobal_Window_Skill_CoolTimeSlot:showFunc()
   end
+  if false == ToClient_isXBox() then
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
+  end
 end
 function UiSet_Panel_ShowValueUpdate()
   for idx = 1, UiSet.panelCount do
@@ -1873,6 +1876,9 @@ function FGlobal_UiSet_Open(isMenu)
   else
     _isMenu = isMenu
   end
+  if false == ToClient_isXBox() then
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_UIEDIT")
+  end
 end
 function FGlobal_UiSet_Close()
   PaGlobal_UiSet_FreeSet_Close()
@@ -1899,6 +1905,9 @@ function FGlobal_UiSet_Close()
       HandleClicked_Chatting_Close(idx)
     end
     closePanelState[idx] = false
+  end
+  if false == ToClient_isXBox() then
+    ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   end
 end
 function UiSet_OnScreenEvent()
@@ -2142,6 +2151,9 @@ function HandleClicked_Reset_UiSetting_Msg()
     UiSet_update()
     ToClient_SaveUiInfo(true)
     FGlobal_MyHouseNavi_Update()
+    if false == ToClient_isXBox() then
+      ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
+    end
   end
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_ALLINTERFACERESET_CONFIRM")
   local messageBoxData = {

@@ -228,6 +228,7 @@ function ScreenShotFrame_Show()
   btnDecrease:addInputEvent("Mouse_LUp", "ScreenShotFrameSize_Decrease()")
   ScreenshotFrame_PhotoFilterHide()
   ToClient_setScreenShotModeState(true)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_CUSTOMSCREENSHOT")
 end
 function ScreenShotFrameSize_Increase()
   if isFullScreenShotMode then
@@ -320,6 +321,7 @@ function ScreenShotFrame_Close()
   end
   Panel_Widget_ScreenShotFrame:SetIgnore(false)
   ToClient_setScreenShotModeState(false)
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function FGlobal_ScreenShotFrame_Close()
   ScreenShotFrame_Close()

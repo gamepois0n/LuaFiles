@@ -15,6 +15,7 @@ local stableFunction = {
   _buttonMix = UI.getChildControl(Panel_Window_StableFunction, "Button_HorseMix"),
   _buttonMating = UI.getChildControl(Panel_Window_StableFunction, "Button_ListMating"),
   _buttonMarket = UI.getChildControl(Panel_Window_StableFunction, "Button_ListMarket"),
+  _buttonRent = UI.getChildControl(Panel_Window_StableFunction, "Button_ListRent"),
   _buttonExit = UI.getChildControl(Panel_Window_StableFunction, "Button_Exit"),
   _buttonLink = UI.getChildControl(Panel_Window_StableFunction, "Button_HorseLink"),
   textCaution = UI.getChildControl(Panel_Window_StableFunction, "StaticText_Caution")
@@ -32,6 +33,8 @@ function stableFunction:SetBtnPosition()
   local btnMatingTextPosX = btnMatingSizeX - btnMatingSizeX / 2 - self._buttonMating:GetTextSizeX() / 2
   local btnMarketSizeX = self._buttonMarket:GetSizeX() + 23
   local btnMarketTextPosX = btnMarketSizeX - btnMarketSizeX / 2 - self._buttonMarket:GetTextSizeX() / 2
+  local btnRentSizeX = self._buttonRent:GetSizeX() + 23
+  local btnRentTextPosX = btnRentSizeX - btnRentSizeX / 2 - self._buttonRent:GetTextSizeX() / 2
   local btnExitSizeX = self._buttonExit:GetSizeX() + 23
   local btnExitTextPosX = btnExitSizeX - btnExitSizeX / 2 - self._buttonExit:GetTextSizeX() / 2
   local btnLinkSizeX = self._buttonLink:GetSizeX() + 23
@@ -40,6 +43,7 @@ function stableFunction:SetBtnPosition()
   self._buttonMix:SetTextSpan(btnMixTextPosX, 5)
   self._buttonMating:SetTextSpan(btnMatingTextPosX, 5)
   self._buttonMarket:SetTextSpan(btnMarketTextPosX, 5)
+  self._buttonRent:SetTextSpan(btnRentTextPosX, 5)
   self._buttonExit:SetTextSpan(btnExitTextPosX, 5)
   self._buttonLink:SetTextSpan(btnLinkTextPosX, 5)
 end
@@ -47,6 +51,7 @@ function stableFunction:registEventHandler()
   self._buttonRegister:addInputEvent("Mouse_LUp", "StableFunction_Button_RegisterReady()")
   self._buttonMating:addInputEvent("Mouse_LUp", "StableFunction_Button_Mating()")
   self._buttonMarket:addInputEvent("Mouse_LUp", "StableFunction_Button_Market()")
+  self._buttonRent:addInputEvent("Mouse_LUp", "StableFunction_Button_Rent()")
   self._buttonMix:addInputEvent("Mouse_LUp", "StableFunction_Button_Mix()")
   self._buttonLink:addInputEvent("Mouse_LUp", "StableFunction_Button_Link()")
   self._buttonExit:addInputEvent("Mouse_LUp", "StableFunction_Close()")
@@ -66,6 +71,7 @@ function StableFunction_Resize()
   self._buttonRegister:ComputePos()
   self._buttonMating:ComputePos()
   self._buttonMarket:ComputePos()
+  self._buttonRent:ComputePos()
   self._buttonMix:ComputePos()
   self._buttonExit:ComputePos()
   self._textRegist:ComputePos()
@@ -83,6 +89,7 @@ function StableFunction_Button_RegisterReady(slotNo)
   if Panel_Window_StableMix:GetShow() then
     StableMix_Close()
   end
+  PaGlobalFunc_ServantRentPromoteMarketClose()
   Inventory_SetFunctor(InvenFiler_Mapae, StableFunction_Button_Register, Servant_InventoryClose, nil)
   Inventory_ShowToggle()
   audioPostEvent_SystemUi(0, 0)
@@ -95,6 +102,16 @@ function StableFunction_Button_Mating()
   StableList_ButtonClose()
   audioPostEvent_SystemUi(1, 0)
   StableMating_Open(CppEnums.AuctionType.AuctionGoods_ServantMating)
+end
+function StableFunction_Button_Rent()
+  _PA_LOG("cylee", "StableFunction_Button_Rent()")
+  if not PaGlobalFunc_ServantRentCheckEnabled() then
+    return
+  end
+  audioPostEvent_SystemUi(0, 0)
+  StableList_ButtonClose()
+  audioPostEvent_SystemUi(1, 0)
+  PaGlobalFunc_ServantRentPromoteMarketOpen()
 end
 function StableFunction_Button_Market()
   audioPostEvent_SystemUi(0, 0)
@@ -179,6 +196,7 @@ function StableFunction_Open()
   end
   self._buttonMating:SetShow(false)
   self._buttonMarket:SetShow(false)
+  self._buttonRent:SetShow(false)
   if stable_isMating() then
     self._buttonMating:SetShow(true)
     funcBtnRePos[funcBtnCount] = self._buttonMating
@@ -188,6 +206,11 @@ function StableFunction_Open()
     self._buttonMarket:SetShow(true)
     funcBtnRePos[funcBtnCount] = self._buttonMarket
     funcBtnCount = funcBtnCount + 1
+    if PaGlobalFunc_ServantRentCheckEnabled() then
+      self._buttonRent:SetShow(true)
+      funcBtnRePos[funcBtnCount] = self._buttonRent
+      funcBtnCount = funcBtnCount + 1
+    end
   end
   if stable_doHaveRegisterItem() then
     local messageboxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
@@ -235,6 +258,7 @@ function StableFunction_Close()
   StableMating_Close()
   StableMarket_Close()
   StableMix_Close()
+  PaGlobalFunc_ServantRentPromoteMarketClose()
   if not Panel_Window_StableFunction:GetShow() then
     return
   end

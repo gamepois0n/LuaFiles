@@ -77,14 +77,12 @@ end
 function HandleClicked_Customization_Skin_SliderOn()
   local self = Customization_SkinInfo
   PaGlobalFunc_Customization_SetKeyGuide(3)
-  self._ui._slider_TwinkleFocus:SetShow(true)
 end
 function HandleClicked_Customization_Skin_SliderOut()
   local self = Customization_SkinInfo
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_Skin_GetShow() then
     PaGlobalFunc_Customization_SetKeyGuide(1)
   end
-  self._ui._slider_TwinkleFocus:SetShow(false)
 end
 function HandleClicked_Customization_Skin_UpdateSkinSlider()
   local self = Customization_SkinInfo
@@ -102,8 +100,6 @@ function Customization_SkinInfo:InitControl()
   self._ui._staticText_TwinkleSliderTitle = UI.getChildControl(self._ui._static_TwinkleSliderBg, "StaticText_Title")
   self._ui._slider_Twinkle = UI.getChildControl(self._ui._static_TwinkleSliderBg, "Slider_Twinkle")
   self._ui._sliderButton_Twinkle = UI.getChildControl(self._ui._slider_Twinkle, "Slider_Button")
-  self._ui._slider_TwinkleFocus = UI.getChildControl(self._ui._static_TwinkleSliderBg, "Static_FocusBox")
-  self._ui._slider_TwinkleFocus:SetShow(false)
   self._ui._colorTemplate = UI.getChildControl(self._ui._static_ColorGroup, "Button_ColorTemplate")
   self._ui._colorTemplate:SetShow(false)
   self._ui._colorSelect = UI.getChildControl(self._ui._static_ColorGroup, "Static_SelectedColor")

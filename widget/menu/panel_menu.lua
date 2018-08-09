@@ -94,8 +94,9 @@ local MenuButtonId = {
   btn_KnownIssue = 57,
   btn_BlackDesertLab = 58,
   btn_BossAlert = 59,
-  btn_GameOption = 60,
-  btn_GameExit = 61
+  btn_CardGame = 60,
+  btn_GameOption = 61,
+  btn_GameExit = 62
 }
 local MenuButtonTextId = {
   [MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"),
@@ -158,7 +159,8 @@ local MenuButtonTextId = {
   [MenuButtonId.btn_SaveSetting] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_SAVESETTING"),
   [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING"),
   [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
-  [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BOSS_ALERT")
+  [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BOSS_ALERT"),
+  [MenuButtonId.btn_CardGame] = "\236\185\180\235\147\156 \234\178\140\236\158\132"
 }
 local MenuButtonHotKeyID = {
   [MenuButtonId.btn_HelpGuide] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help),
@@ -221,7 +223,8 @@ local MenuButtonHotKeyID = {
   [MenuButtonId.btn_SaveSetting] = "",
   [MenuButtonId.btn_KnownIssue] = "",
   [MenuButtonId.btn_BlackDesertLab] = "",
-  [MenuButtonId.btn_BossAlert] = ""
+  [MenuButtonId.btn_BossAlert] = "",
+  [MenuButtonId.btn_CardGame] = ""
 }
 local contry = {
   kr = 0,
@@ -663,6 +666,12 @@ local buttonTexture = {
     219,
     460,
     263
+  },
+  [MenuButtonId.btn_CardGame] = {
+    416,
+    219,
+    460,
+    263
   }
 }
 function TargetWindow_ShowToggle(index)
@@ -735,7 +744,7 @@ function TargetWindow_ShowToggle(index)
     FGlobal_KeyboardHelpShow()
   elseif MenuButtonId.btn_Siege == index then
     if true == _ContentsGroup_SeigeSeason5 then
-      FGlobal_GuildWarInfo_Show()
+      FGlobal_GuildWarInfo_renew_Open()
     else
       FGlobal_GuildWarInfo_Show()
     end
@@ -901,6 +910,8 @@ function TargetWindow_ShowToggle(index)
     PaGlobal_BlackDesertLab_Show()
   elseif MenuButtonId.btn_BossAlert == index then
     PaGlobal_BossAlertSet_Show()
+  elseif MenuButtonId.btn_CardGame == index then
+    FGlobal_CardGame_Open()
   end
   if Panel_Menu:GetShow() then
     Panel_Menu:SetShow(false, false)
@@ -1201,6 +1212,9 @@ function GameMenu_CheckEnAble(buttonType)
   end
   if buttonType == MenuButtonId.btn_BossAlert then
     returnValue = isBossAlert
+  end
+  if buttonType == MenuButtonId.btn_CardGame then
+    returnValue = isGameServiceTypeDev()
   end
   if isTestServer and (buttonType == MenuButtonId.btn_HelpGuide or buttonType == MenuButtonId.btn_Productnote or buttonType == MenuButtonId.btn_Beauty or buttonType == MenuButtonId.btn_GuildRanker or buttonType == MenuButtonId.btn_Event or buttonType == MenuButtonId.btn_Notice or buttonType == MenuButtonId.btn_BlackSpritAdventure or buttonType == MenuButtonId.btn_BSAdventure2 or buttonType == MenuButtonId.btn_WebAlbum or buttonType == MenuButtonId.btn_ScreenShotAlbum or buttonType == MenuButtonId.btn_Steam or buttonType == MenuButtonId.btn_Update or buttonType == MenuButtonId.btn_Twitch or buttonType == MenuButtonId.btn_Copyright or buttonType == MenuButtonId.btn_KnownIssue or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_CashShop) then
     returnValue = false

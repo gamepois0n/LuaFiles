@@ -62,4 +62,7 @@ function CursorUIEffect_UpdateCursorPos()
   end
 end
 Panel_Cursor:RegisterUpdateFunc("CursorUIEffect_UpdateCursorPos")
-registerEvent("EventProcessorInputModeChange", "ProcessorInputModeChange")
+function FromClient_GlobalPreloadui_luaLoadComplete()
+  registerEvent("EventProcessorInputModeChange", "ProcessorInputModeChange")
+end
+registerEvent("FromClient_luaLoadComplete", "FromClient_GlobalPreloadui_luaLoadComplete")

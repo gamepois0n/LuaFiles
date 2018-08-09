@@ -173,6 +173,15 @@ local Customization_MenuHandlerInfo = {
   _currentKeyGuideCount = 0,
   _keyGuideStartPosX = 0
 }
+function FGlobal_Customization_UiShow()
+  PaGlobalFunc_Customization_SetShow(true, false)
+end
+function FGlobal_Customization_UiClose()
+  PaGlobalFunc_Customization_SetShow(false, false)
+end
+function isShowCustomizationMain()
+  return PaGlobalFunc_Customization_GetShow()
+end
 function PaGlobalFunc_Customization_IsInGame()
   local self = Customization_MenuHandlerInfo
   return self._isInGame
@@ -325,14 +334,12 @@ function Customization_MenuHandlerInfo:MainMenuOpen()
     if true == HideAlbumAndPopular then
       if true == PaGlobalFunc_Customization_IsInGame() then
         if index == self._mainInGameMenuConfig._BeautyAlbum then
-          mainButton:SetShow(false)
         end
         if index == self._mainInGameMenuConfig._popular then
           mainButton:SetShow(false)
         end
       else
         if index == self._mainMenuConfig._BeautyAlbum then
-          mainButton:SetShow(false)
         end
         if index == self._mainMenuConfig._popular then
           mainButton:SetShow(false)

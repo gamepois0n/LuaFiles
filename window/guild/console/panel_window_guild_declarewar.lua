@@ -22,6 +22,7 @@ function WarDeclare:close()
 end
 function WarDeclare:init()
   self._ui.edit_GuildName = UI.getChildControl(self._ui.stc_CenterBg, "Edit_GuildName")
+  self._ui.edit_GuildName:SetMaxInput(getGameServiceTypeGuildNameLength())
   self._ui.txt_Desc = UI.getChildControl(self._ui.stc_CenterBg, "StaticText_Desc")
   self._ui.txt_XConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_X_ConsoleUI")
   self._ui.txt_AConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
@@ -29,10 +30,6 @@ function WarDeclare:init()
   self:registEvent()
 end
 function WarDeclare:registEvent()
-  self._ui.txt_AConsoleUI:SetIgnore(false)
-  self._ui.txt_AConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_WarDeclare_Confirm()")
-  self._ui.txt_XConsoleUI:SetIgnore(false)
-  self._ui.txt_XConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_WarDeclare_SetFocusEdit()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_WarDeclare_Confirm()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WarDeclare_SetFocusEdit()")
 end

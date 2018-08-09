@@ -1,6 +1,21 @@
 searchClearQuest = {}
 function checkClearSearchQuest(npcCharacterKey)
-  return nil ~= searchClearQuest[npcCharacterKey]
+  if true == _ContentsGroup_RenewUI_SearchMode then
+    if nil == searchClearQuest[npcCharacterKey] then
+      return false
+    end
+    local count = questList_getCheckedProgressQuestCount()
+    for index = 0, count - 1 do
+      local questData = questList_getCheckedProgressQuestAt(index)
+      local result = questData:getDetectConditionByCharacterKey(npcCharacterKey)
+      if true == result then
+        return false
+      end
+    end
+    return true
+  else
+    return nil ~= searchClearQuest[npcCharacterKey]
+  end
 end
 local var_UI = {
   panel = Panel_Dialog_Search,
@@ -61,6 +76,9 @@ function searchView_Open()
   findCameraAngle = search_conditionAngle()
   moveAbleAngleUp = search_getMoveAbleAngleUp()
   moveAbleAngleDown = search_getMoveAbleAngleDown()
+  if true == _ContentsGroup_RenewUI_SearchMode then
+    ToClient_padSnapResetControl()
+  end
 end
 function searchView_Close()
   searchState._isSearchMode = false
@@ -76,6 +94,9 @@ function searchView_Close()
   moveAbleAngleDown = -40
   search_additionPitch2(additionPitch)
   setCutSceneCameraEditMode(false)
+  if true == _ContentsGroup_RenewUI_SearchMode then
+    ToClient_padSnapResetControl()
+  end
 end
 function searchView_ScreenResize()
   var_UI.panel:SetSize(getScreenSizeX(), getScreenSizeY())

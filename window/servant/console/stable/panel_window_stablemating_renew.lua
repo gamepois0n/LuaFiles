@@ -449,11 +449,14 @@ function PaGlobalFunc_StableMating_Close()
   local self = Panel_Window_StableMating_info
   self:close()
 end
-function PaGlobalFunc_StableMating_Show()
+function PaGlobalFunc_StableMating_Show(tab)
   local self = Panel_Window_StableMating_info
   self:initValue()
   warehouse_requestInfoFromNpc()
   self._value.currentTab = self._enum.eNORMAL
+  if nil ~= tab then
+    self._value.currentTab = tab
+  end
   self:closeSkill()
   self:setTab()
   self:open()
@@ -653,7 +656,16 @@ function PaGlobalFunc_StableMating_MatingXXX()
   local self = Panel_Window_StableMating_info
   local transferType = PaGlobalFunc_StableMating_TransferType(PaGlobalFunc_StableMating_GetCurrentTab())
   local matingSlotNo = self._slotMating[self._value.currentMatingIndex].slotNo
-  PaGlobalFunc_StableExchange_ShowByMating(matingSlotNo, transferType)
+  local myAuctionInfo = RequestGetAuctionInfo()
+  if nil == myAuctionInfo then
+    return
+  end
+  local auctionServantInfo = myAuctionInfo:getServantAuctionListAt(matingSlotNo)
+  if nil == auctionServantInfo then
+    return
+  end
+  local price32 = Int64toInt32(auctionServantInfo:getAuctoinPrice_s64())
+  PaGlobalFunc_StableExchange_ShowByMating(matingSlotNo, transferType, price32)
 end
 function PaGlobalFunc_StableMating_SkillEventControlCreate(list_content, key)
   local self = Panel_Window_StableMating_info
