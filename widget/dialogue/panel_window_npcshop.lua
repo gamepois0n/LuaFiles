@@ -43,6 +43,7 @@ npcShop = {
     button = UI.getChildControl(Panel_Window_NpcShop, "Button_List"),
     buttonSelected = UI.getChildControl(Panel_Window_NpcShop, "Button_List_Effect"),
     staticCurrentPrice = UI.getChildControl(Panel_Window_NpcShop, "StaticText_CurrentPrice"),
+    static_CoinIcon = UI.getChildControl(Panel_Window_NpcShop, "Static_CoinIcon"),
     staticRemainCount = UI.getChildControl(Panel_Window_NpcShop, "StaticText_RemainCount"),
     staticTrend = UI.getChildControl(Panel_Window_NpcShop, "StaticText_Trend"),
     staticInvenCount = UI.getChildControl(Panel_Window_NpcShop, "StaticText_InventoryCount"),
@@ -154,6 +155,8 @@ function npcShop:createSlot()
       npcShop.template.panel:addInputEvent("Mouse_DownScroll", "NpcShop_ScrollEvent( false )")
       slot.price = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_NpcShop, "StaticText_Price_" .. strId)
       CopyBaseProperty(self.template.staticCurrentPrice, slot.price)
+      slot.coinIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Window_NpcShop, "Static_CoinIcon_" .. strId)
+      CopyBaseProperty(self.template.static_CoinIcon, slot.coinIcon)
       slot.remainCount = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_NpcShop, "StaticText_RemainCount_" .. strId)
       CopyBaseProperty(self.template.staticRemainCount, slot.remainCount)
       slot.trend = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_NpcShop, "StaticText_Trend_" .. strId)
@@ -171,14 +174,13 @@ function npcShop:createSlot()
         self.button:SetPosX(posX)
         self.button:SetPosY(posY)
         if isGameTypeTH() or isGameTypeID() then
-          param.pricePosX = 258
-          self.price:SetTextSpan(-90, -3)
+          param.pricePosX = 308
         else
-          param.pricePosX = 268
-          self.price:SetTextSpan(-75, -3)
+          param.pricePosX = 308
         end
         self.price:SetPosX(posX + param.pricePosX)
         self.price:SetPosY(posY + param.pricePosY)
+        self.coinIcon:SetPosY(posY + param.pricePosY)
         self.remainCount:SetPosX(posX + param.remainCountPosX + 20)
         self.remainCount:SetPosY(posY + param.remainCountPosY)
         self.trend:SetPosX(posX + param.trendPosX)
@@ -215,6 +217,7 @@ function npcShop:createSlot()
         self.icon:setItemByStaticStatus(itemStaticWrapper)
         self.icon.icon:SetMonoTone(not enable)
         self.price:SetText(makeDotMoney(s64_price))
+        self.coinIcon:SetPosX(self.price:GetPosX() - (self.price:GetTextSizeX() - self.price:GetSizeX() + self.coinIcon:GetSizeX() + 3))
         local strCount = string.format("%d", Int64toInt32(s64_stackCount))
         self.remainCount:SetFontColor(UI_color.C_FF3BD3FF)
         self.remainCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "NPCSHOP_REMAIN_COUNT", "count", strCount))
@@ -223,6 +226,7 @@ function npcShop:createSlot()
           self.icon.icon:SetMonoTone(false)
           self.trend:SetMonoTone(false)
           self.price:SetMonoTone(false)
+          self.coinIcon:SetMonoTone(false)
           self.remainCount:SetMonoTone(false)
         end
         if nil ~= rentTime and rentTime > 0 then
@@ -238,6 +242,7 @@ function npcShop:createSlot()
             self.icon.icon:SetMonoTone(true)
             self.trend:SetMonoTone(true)
             self.price:SetMonoTone(true)
+            self.coinIcon:SetMonoTone(true)
             self.remainCount:SetMonoTone(true)
           end
         end
@@ -294,12 +299,14 @@ function npcShop:createSlot()
           self.icon.icon:SetMonoTone(true)
           self.trend:SetMonoTone(true)
           self.price:SetMonoTone(true)
+          self.coinIcon:SetMonoTone(true)
           self.remainCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ALREADYHASINTIMACY"))
         else
           self.button:SetIgnore(false)
           self.icon.icon:SetMonoTone(false)
           self.trend:SetMonoTone(false)
           self.price:SetMonoTone(false)
+          self.coinIcon:SetMonoTone(false)
         end
         self.keyValue = itemStatic._key:get()
         self:setShow(true)
@@ -308,6 +315,7 @@ function npcShop:createSlot()
         bShow = bShow or false
         self.button:SetShow(bShow)
         self.price:SetShow(bShow)
+        self.coinIcon:SetShow(bShow)
         self.remainCount:SetShow(bShow)
         self.trend:SetShow(false)
         self.icon.icon:SetShow(bShow)

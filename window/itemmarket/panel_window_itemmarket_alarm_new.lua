@@ -157,6 +157,7 @@ function PaGlobal_ItemMarket_Alarm_Delete(index)
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobal_ItemMarket_Alarm_TooltipShow(index)
+  local self = PaGlobal_ItemMarket_Alarm
   local info = toClient_GetItemMarketFavoriteItemAlarmRecode(index)
   local itemSSW = getItemEnchantStaticStatus(info:getItemEnchantKey())
   if nil == itemSSW then
@@ -228,17 +229,18 @@ function PaGlobal_ItemMarket_Alarm:Update(enchantItemKey, playerName)
 end
 function PaGlobal_ItemMarket_Alarm:Reload()
   self._ui._alramList:getElementManager():clearKey()
-  for index = 0, toClient_GetItemMarketFavoriteItemAlarmRecodeSize() - 1 do
+  for index = toClient_GetItemMarketFavoriteItemAlarmRecodeSize() - 1, 0, -1 do
     self._ui._alramList:getElementManager():pushKey(toInt64(0, index))
   end
-  self._ui._alramList:moveBottomIndex()
 end
 function FromClient_NotifySellByreservation(characterName, enchantItemKey)
   local self = PaGlobal_ItemMarket_Alarm
-  if not Panel_Window_ItemMarketAlarmList_New:GetShow() then
-    self._unreadCount = math.min(self._unreadCount + 1, self._maxCount)
+  if true == self:checkItmeKey(ItemEnchantKey(enchantItemKey)) then
+    if not Panel_Window_ItemMarketAlarmList_New:GetShow() then
+      self._unreadCount = math.min(self._unreadCount + 1, self._maxCount)
+    end
+    self:Update(ItemEnchantKey(enchantItemKey), characterName)
   end
-  self:Update(ItemEnchantKey(enchantItemKey), characterName)
 end
 function PaGlobal_ItemMarket_Alarm:checkItmeKey(enchantItemKey)
   local inputKey = enchantItemKey:get()
@@ -256,10 +258,10 @@ function PaGlobal_ItemMarket_Alarm:checkItmeKey(enchantItemKey)
 end
 function FGlobal_ItemMarketAlarm_Open(enchantItemKey)
   local self = PaGlobal_ItemMarket_Alarm
-  if not Panel_Window_ItemMarketAlarmList_New:GetShow() then
-    self._unreadCount = math.min(self._unreadCount + 1, self._maxCount)
-  end
-  if self:checkItmeKey(enchantItemKey) then
+  if true == self:checkItmeKey(enchantItemKey) then
+    if not Panel_Window_ItemMarketAlarmList_New:GetShow() then
+      self._unreadCount = math.min(self._unreadCount + 1, self._maxCount)
+    end
     self:Update(enchantItemKey)
   end
 end
@@ -268,6 +270,7 @@ function FGlobal_ItemMarketAlarmList_New_Open()
   PaGlobal_ItemMarket_Alarm._unreadCount = 0
   FGlobal_ItemMarket_SetCount()
   PaGlobal_ItemMarket_Alarm:Reload()
+  FGlobal_ItemMarket_NewAlarmClose()
 end
 function FGlobal_ItemMarketAlarm_UnreadCount()
   return PaGlobal_ItemMarket_Alarm._unreadCount

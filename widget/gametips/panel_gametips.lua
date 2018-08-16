@@ -4,7 +4,7 @@ Panel_GameTips:SetShow(true)
 Panel_GameTipMask:setMaskingChild(true)
 Panel_GameTipMask:SetShow(true)
 Panel_GameTips:SetDragEnable(false)
-local msgCount = 319
+local msgCount = 329
 local MessageData = {}
 local txt_GameTip = UI.getChildControl(Panel_GameTips, "StaticText_Tip")
 function gameTip_setMessageData()

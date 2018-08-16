@@ -497,7 +497,7 @@ function servantIcon:update()
   for index = 0, elephantCount - 1 do
     local servantWrapper = guildStable_getUnsealGuildServantAt(index)
     local vehicleType = servantWrapper:getVehicleType()
-    if UI_VT.Type_Elephant == vehicleType or UI_VT.Type_Train == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_SiegeTower == vehicleType or UI_VT.Type_LargeSiegeTower == vehicleType then
+    if UI_VT.Type_Elephant == vehicleType or UI_VT.Type_Train == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_CashPersonalBattleShip == vehicleType or UI_VT.Type_SiegeTower == vehicleType or UI_VT.Type_LargeSiegeTower == vehicleType then
       self._slots[3].icon:ChangeTextureInfoName("New_UI_Common_forLua/Window/Horse/servant_icon_01.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self._slots[3].icon, 123, 184, 183, 244)
       self._slots[3].icon:getBaseTexture():setUV(x1, y1, x2, y2)

@@ -1030,6 +1030,7 @@ local _txt_Help_GuildMember = UI.getChildControl(Panel_Window_Guild, "StaticText
 local _txt_Help_GuildQuest = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_WarInfo")
+local guildManagerButtonPositionList = {}
 function GuildManager:initialize()
   self.mainBtn_Main = UI.getChildControl(Panel_Window_Guild, "Button_Tab_Main")
   self.mainBtn_History = UI.getChildControl(Panel_Window_Guild, "Button_Tab_History")
@@ -1042,6 +1043,7 @@ function GuildManager:initialize()
   self.mainBtn_GuildBattle = UI.getChildControl(Panel_Window_Guild, "Button_Tab_GuildBattle")
   self.mainBtn_GuildManufacture = UI.getChildControl(Panel_Window_Guild, "Button_Tab_GuildManufacture")
   self.mainBtn_GuildAlliance = UI.getChildControl(Panel_Window_Guild, "Button_Tab_GuildAlliance")
+  self.mainBtn_GuildAllianceList = UI.getChildControl(Panel_Window_Guild, "Button_Tab_AllianceList")
   self.closeButton = UI.getChildControl(Panel_Window_Guild, "Button_Close")
   self._buttonQuestion = UI.getChildControl(Panel_Window_Guild, "Button_Question")
   self.historyBG = UI.getChildControl(Panel_Window_Guild, "Static_Frame_HistoryBG")
@@ -1056,6 +1058,7 @@ function GuildManager:initialize()
   self.mainBtn_GuildBattle:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 7 )")
   self.mainBtn_GuildManufacture:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 8 )")
   self.mainBtn_GuildAlliance:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 9 )")
+  self.mainBtn_GuildAllianceList:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 10 )")
   self.closeButton:addInputEvent("Mouse_LUp", "HandleClickedGuildHideButton()")
   self._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelGuild\" )")
   self._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelGuild\", \"true\")")
@@ -1071,6 +1074,7 @@ function GuildManager:initialize()
   self.mainBtn_GuildBattle:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 12, true )")
   self.mainBtn_GuildManufacture:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 13, true )")
   self.mainBtn_GuildAlliance:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 14, true )")
+  self.mainBtn_GuildAllianceList:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 15, true )")
   self.mainBtn_Main:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 99, false )")
   self.mainBtn_History:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 5, false )")
   self.mainBtn_Info:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 0, false )")
@@ -1082,6 +1086,7 @@ function GuildManager:initialize()
   self.mainBtn_GuildBattle:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 12, false )")
   self.mainBtn_GuildManufacture:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 13, false )")
   self.mainBtn_GuildAlliance:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 14, false )")
+  self.mainBtn_GuildAllianceList:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 15, false )")
   if true == _ContentsGroup_GuildManufacture then
     self.mainBtn_GuildManufacture:SetShow(true)
     self.mainBtn_CraftInfo:SetShow(false)
@@ -1091,8 +1096,10 @@ function GuildManager:initialize()
   end
   if true == _ContentsGroup_guildAlliance then
     self.mainBtn_GuildAlliance:SetShow(true)
+    self.mainBtn_GuildAllianceList:SetShow(true)
   else
     self.mainBtn_GuildAlliance:SetShow(false)
+    self.mainBtn_GuildAllianceList:SetShow(false)
   end
   GuildInfoPage:initialize()
   GuildLetsWarPage:initialize()
@@ -1109,6 +1116,17 @@ function GuildManager:initialize()
     self._mainTagName:getBaseTexture():setUV(x1, y1, x2, y2)
     self._mainTagName:setRenderTexture(self._mainTagName:getBaseTexture())
   end
+  guildManagerButtonPositionList[0] = self.mainBtn_Main:GetPosX()
+  guildManagerButtonPositionList[1] = self.mainBtn_Info:GetPosX()
+  guildManagerButtonPositionList[2] = self.mainBtn_Quest:GetPosX()
+  guildManagerButtonPositionList[3] = self.mainBtn_Tree:GetPosX()
+  guildManagerButtonPositionList[4] = self.mainBtn_Warfare:GetPosX()
+  guildManagerButtonPositionList[5] = self.mainBtn_History:GetPosX()
+  guildManagerButtonPositionList[6] = self.mainBtn_Recruitment:GetPosX()
+  guildManagerButtonPositionList[7] = self.mainBtn_GuildManufacture:GetPosX()
+  guildManagerButtonPositionList[8] = self.mainBtn_GuildBattle:GetPosX()
+  guildManagerButtonPositionList[9] = self.mainBtn_GuildAlliance:GetPosX()
+  guildManagerButtonPositionList[10] = self.mainBtn_GuildAllianceList:GetPosX()
 end
 function HandleClickedGuildHideButton()
   Panel_Window_Guild:CloseUISubApp()
@@ -1178,6 +1196,10 @@ function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
       uiControl = GuildManager.mainBtn_GuildAlliance
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_TITLE")
       desc = nil
+    elseif 15 == tabNo then
+      uiControl = GuildManager.mainBtn_GuildAllianceList
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TAB_ALLIANCELISTITLE")
+      desc = nil
     elseif 99 == tabNo then
       uiControl = GuildManager.mainBtn_Main
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE")
@@ -1246,6 +1268,26 @@ function GuildSimplTooltips(isShow, tipType)
 end
 local _index
 function GuildManager:TabToggle(index)
+  if 10 == index then
+    local _isGuildAllianceMember = getSelfPlayer():get():isGuildAllianceMember()
+    if true ~= _isGuildAllianceMember then
+      local _allianceYet = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_CAUTION_MESSAGE_TEXT")
+      Proc_ShowMessage_Ack(_allianceYet)
+      self.mainBtn_Main:SetCheck(tabNumber == 99)
+      self.mainBtn_History:SetCheck(tabNumber == 0)
+      self.mainBtn_Info:SetCheck(tabNumber == 1)
+      self.mainBtn_Quest:SetCheck(tabNumber == 2)
+      self.mainBtn_Tree:SetCheck(tabNumber == 3)
+      self.mainBtn_Warfare:SetCheck(tabNumber == 4)
+      self.mainBtn_Recruitment:SetCheck(tabNumber == 5)
+      self.mainBtn_CraftInfo:SetCheck(tabNumber == 6)
+      self.mainBtn_GuildBattle:SetCheck(tabNumber == 7)
+      self.mainBtn_GuildManufacture:SetCheck(8 == tabNumber)
+      self.mainBtn_GuildAlliance:SetCheck(9 == tabNumber)
+      self.mainBtn_GuildAllianceList:SetCheck(10 == tabNumber)
+      return
+    end
+  end
   self._mainTagName:ChangeTextureInfoName("New_UI_Common_forLua/Window/Guild/Guild_00.dds")
   tabNumber = 99
   self.mainBtn_Main:SetCheck(index == 99)
@@ -1259,6 +1301,7 @@ function GuildManager:TabToggle(index)
   self.mainBtn_GuildBattle:SetCheck(index == 7)
   self.mainBtn_GuildManufacture:SetCheck(8 == index)
   self.mainBtn_GuildAlliance:SetCheck(9 == index)
+  self.mainBtn_GuildAllianceList:SetCheck(10 == index)
   if getSelfPlayer():get():isGuildMaster() and getSelfPlayer():get():isGuildSubMaster() then
     FGlobal_ClearCandidate()
     _Web:ResetUrl()
@@ -1278,6 +1321,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 0
   elseif 1 == index then
     local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -1302,6 +1346,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 1
   elseif 2 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDQUEST"), 122, 1, 134, 15)
@@ -1317,6 +1362,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 2
   elseif 3 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDSKILL"), 137, 1, 149, 15)
@@ -1332,6 +1378,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 3
   elseif 4 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDWARFAREINFO"), 152, 1, 164, 15)
@@ -1347,6 +1394,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 4
   elseif 5 == index then
     local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -1365,6 +1413,7 @@ function GuildManager:TabToggle(index)
       self.mainBtn_CraftInfo:SetCheck(_index == 6)
       self.mainBtn_GuildBattle:SetCheck(_index == 7)
       self.mainBtn_GuildAlliance:SetCheck(_index == 9)
+      self.mainBtn_GuildAllianceList:SetCheck(_index == 10)
       return
     end
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENTGUILD"), 152, 1, 164, 15)
@@ -1380,6 +1429,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 5
   elseif 99 == index then
     GuildMainInfo_Show()
@@ -1394,6 +1444,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 99
   elseif 6 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE"), 107, 1, 119, 15)
@@ -1409,6 +1460,7 @@ function GuildManager:TabToggle(index)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 6
   elseif 7 == index then
     if false == ToClient_isGuildBattle() then
@@ -1429,6 +1481,7 @@ function GuildManager:TabToggle(index)
     btn_GuildMasterMandate:SetShow(false)
     FGlobal_GuildAlliance_Show(false)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 7
   elseif 8 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDMANUFACTURE"), 122, 1, 134, 15)
@@ -1445,6 +1498,7 @@ function GuildManager:TabToggle(index)
     FGlobal_GuildAlliance_Show(false)
     PaGlobal_Guild_Manufacture:SetShow(true)
     self.historyBG:SetShow(true)
+    FGlobal_GuildAllianceList_Open(false)
     tabNumber = 8
   elseif 9 == index then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_TITLE"), 122, 1, 134, 15)
@@ -1459,6 +1513,7 @@ function GuildManager:TabToggle(index)
     btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     self.historyBG:SetShow(false)
+    FGlobal_GuildAllianceList_Open(false)
     local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
     local _isGuildMaster = getSelfPlayer():get():isGuildMaster()
     local _isGuildAllianceMember = getSelfPlayer():get():isGuildAllianceMember()
@@ -1473,6 +1528,22 @@ function GuildManager:TabToggle(index)
       FGlobal_GuildAlliance_Show(true)
     end
     tabNumber = 9
+  elseif 10 == index then
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TAB_ALLIANCELISTITLE"), 122, 1, 134, 15)
+    FGlobal_GuildHistory_Show(false)
+    GuildListInfoPage:Hide()
+    GuildQuestInfoPage:Hide()
+    GuildWarfareInfoPage:Hide()
+    GuildSkillFrame_Hide()
+    Guild_Recruitment_Close()
+    GuildMainInfo_Hide()
+    btn_GuildMasterMandateBG:SetShow(false)
+    btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
+    self.historyBG:SetShow(false)
+    FGlobal_GuildAlliance_Show(false)
+    FGlobal_GuildAllianceList_Open(true)
+    tabNumber = 10
   end
   FGlobal_Guild_CraftInfo_Open(6 == index)
   FGlobal_GuildMenuButtonHide()
@@ -1517,14 +1588,34 @@ function GuildManager:Show()
     if isGuildMaster or isGuildSubMaster then
       isAdmin = 1
     end
-    self.mainBtn_Main:SetCheck(true)
+    local _isGuildAllianceMember = getSelfPlayer():get():isGuildAllianceMember()
+    if _isGuildAllianceMember then
+      self.mainBtn_GuildAlliance:SetPosX(guildManagerButtonPositionList[0])
+      self.mainBtn_GuildAllianceList:SetPosX(guildManagerButtonPositionList[1])
+      self.mainBtn_Main:SetPosX(guildManagerButtonPositionList[2])
+      self.mainBtn_Info:SetPosX(guildManagerButtonPositionList[3])
+      self.mainBtn_Quest:SetPosX(guildManagerButtonPositionList[4])
+      self.mainBtn_Tree:SetPosX(guildManagerButtonPositionList[5])
+      self.mainBtn_Warfare:SetPosX(guildManagerButtonPositionList[6])
+      self.mainBtn_History:SetPosX(guildManagerButtonPositionList[7])
+      self.mainBtn_Recruitment:SetPosX(guildManagerButtonPositionList[8])
+      self.mainBtn_GuildManufacture:SetPosX(guildManagerButtonPositionList[9])
+      self.mainBtn_GuildBattle:SetPosX(guildManagerButtonPositionList[10])
+    end
+    if _isGuildAllianceMember then
+      self.mainBtn_GuildAlliance:SetCheck(true)
+      self.mainBtn_Main:SetCheck(false)
+    else
+      self.mainBtn_Main:SetCheck(true)
+      self.mainBtn_GuildAlliance:SetCheck(false)
+    end
     self.mainBtn_Info:SetCheck(false)
     self.mainBtn_Quest:SetCheck(false)
     self.mainBtn_Tree:SetCheck(false)
     self.mainBtn_Warfare:SetCheck(false)
     self.mainBtn_History:SetCheck(false)
     self.mainBtn_Recruitment:SetCheck(false)
-    self.mainBtn_GuildAlliance:SetCheck(false)
+    self.mainBtn_GuildAllianceList:SetCheck(false)
     self.mainBtn_Main:SetIgnore(false)
     self.mainBtn_Info:SetIgnore(false)
     self.mainBtn_Quest:SetIgnore(false)
@@ -1535,6 +1626,7 @@ function GuildManager:Show()
     self.mainBtn_CraftInfo:SetIgnore(false)
     self.mainBtn_GuildBattle:SetIgnore(false)
     self.mainBtn_GuildAlliance:SetIgnore(false)
+    self.mainBtn_GuildAllianceList:SetIgnore(false)
     self.mainBtn_Main:SetMonoTone(false)
     self.mainBtn_Info:SetMonoTone(false)
     self.mainBtn_Quest:SetMonoTone(false)
@@ -1542,6 +1634,7 @@ function GuildManager:Show()
     self.mainBtn_Warfare:SetMonoTone(false)
     self.mainBtn_History:SetMonoTone(false)
     self.mainBtn_GuildAlliance:SetMonoTone(false)
+    self.mainBtn_GuildAllianceList:SetMonoTone(false)
     if getSelfPlayer():get():isGuildMaster() or getSelfPlayer():get():isGuildSubMaster() then
       self.mainBtn_Recruitment:SetMonoTone(false)
     else
@@ -1565,6 +1658,7 @@ function GuildManager:Show()
       self.mainBtn_GuildBattle:SetCheck(false)
       self.mainBtn_GuildAlliance:SetCheck(false)
       self.mainBtn_GuildManufacture:SetCheck(false)
+      self.mainBtn_GuildAllianceList:SetCheck(false)
       self.mainBtn_Main:SetIgnore(true)
       self.mainBtn_Info:SetIgnore(true)
       self.mainBtn_Quest:SetIgnore(true)
@@ -1576,6 +1670,7 @@ function GuildManager:Show()
       self.mainBtn_GuildBattle:SetIgnore(true)
       self.mainBtn_GuildAlliance:SetIgnore(true)
       self.mainBtn_GuildManufacture:SetIgnore(true)
+      self.self.mainBtn_GuildAllianceList:SetIgnore(true)
       self.mainBtn_Main:SetMonoTone(true)
       self.mainBtn_Info:SetMonoTone(true)
       self.mainBtn_Quest:SetMonoTone(true)
@@ -1587,6 +1682,9 @@ function GuildManager:Show()
       self.mainBtn_GuildBattle:SetMonoTone(true)
       self.mainBtn_GuildAlliance:SetMonoTone(true)
       self.mainBtn_GuildManufacture:SetMonoTone(true)
+      self.mainBtn_GuildAllianceList:SetMonoTone(true)
+    elseif _isGuildAllianceMember then
+      GuildManager:TabToggle(9)
     else
       GuildManager:TabToggle(99)
     end

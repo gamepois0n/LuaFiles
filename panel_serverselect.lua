@@ -233,7 +233,12 @@ function PKChannelInfo_Init()
       PKChannelInfo_Hide()
       warInfo_Hide()
     end
-  elseif isGameTypeJapan() or isGameTypeTaiwan() then
+  elseif isGameTypeJapan() then
+    ChannelSelectInfo_Show()
+    SpeedChannelInfo_Show()
+    PKChannelInfo_Show()
+    warInfo_Show()
+  elseif isGameTypeTaiwan() then
     ChannelSelectInfo_Show()
     SpeedChannelInfo_Show()
     PKChannelInfo_Hide()
@@ -256,7 +261,7 @@ function PKChannelInfo_Init()
   elseif isGameTypeTR() then
     ChannelSelectInfo_Show()
     SpeedChannelInfo_Show()
-    PKChannelInfo_Hide()
+    PKChannelInfo_Show()
     warInfo_Show()
   elseif isGameTypeEnglish() then
     ChannelSelectInfo_Show()
@@ -752,6 +757,8 @@ function Panel_SelectServer_ReCreateChannelCtrl(worldIndex)
     CopyBaseProperty(channel_PvPIcon, tempPvPIcon)
     tempPvPIcon:SetShow(false)
     tempPvPIcon:ActiveMouseEventEffect(true)
+    tempPvPIcon:addInputEvent("Mouse_On", "PkIcon_SimpleTooltip(true)")
+    tempPvPIcon:addInputEvent("Mouse_Out", "PkIcon_SimpleTooltip(false)")
     local tempMainIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, tempBG, "ChannelMainIcon_" .. tostring(worldIndex) .. "_" .. tostring(idx))
     CopyBaseProperty(CHANNEL_MAINICON_STATIC, tempMainIcon)
     tempMainIcon:SetShow(false)
@@ -1419,6 +1426,14 @@ function ServerSelect_Simpletooltip(isShow, tipType, index, idx)
   name = warName
   control = _worldServerCtrls[index]._channelCtrls[idx]._bgStatic
   TooltipSimple_Show(control, name, desc)
+end
+function PkIcon_SimpleTooltip(isShow)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK")
+  TooltipSimple_Show(channel_PvPIcon, name)
 end
 function ServerList_EnterMainServer()
   if PaGlobalFunc_ServerSelectAutoConnectToLastServer() then

@@ -301,20 +301,22 @@ function ChannelSelect_Init()
   else
     sizeControl = channelMainDesc._speedDesc
   end
-  if isCalpheon and isSiegeEnable then
-    channelMainDesc._siegeCalpheon:SetShow(true)
-  else
-    channelMainDesc._siegeCalpheon:SetShow(false)
-  end
-  if isMedia and isSiegeEnable then
-    channelMainDesc._siegeMedia:SetShow(true)
-  else
-    channelMainDesc._siegeMedia:SetShow(false)
-  end
-  if isValencia and isSiegeEnable then
-    channelMainDesc._siegeValencia:SetShow(true)
-  else
-    channelMainDesc._siegeValencia:SetShow(false)
+  if channelMainDesc._siegeTitle:GetShow() then
+    if isCalpheon and isSiegeEnable then
+      channelMainDesc._siegeCalpheon:SetShow(true)
+    else
+      channelMainDesc._siegeCalpheon:SetShow(false)
+    end
+    if isMedia and isSiegeEnable then
+      channelMainDesc._siegeMedia:SetShow(true)
+    else
+      channelMainDesc._siegeMedia:SetShow(false)
+    end
+    if isValencia and isSiegeEnable then
+      channelMainDesc._siegeValencia:SetShow(true)
+    else
+      channelMainDesc._siegeValencia:SetShow(false)
+    end
   end
   channelMainDesc._speedTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
   channelMainDesc._speedTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_TITLE"))

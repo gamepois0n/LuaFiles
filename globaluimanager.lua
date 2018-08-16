@@ -162,7 +162,8 @@ local panel_WindowList = {
   Panel_Dialog_SkillSpecialize,
   Panel_Window_Knowledge_Renew,
   Panel_Guild_ManufactureSelect,
-  Panel_Window_GuildWarInfo
+  Panel_Window_GuildWarInfo,
+  Panel_Window_DailyChallenge
 }
 local panel_SoundedWindowList = {
   Panel_Window_Inventory,

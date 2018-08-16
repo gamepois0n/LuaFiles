@@ -104,11 +104,26 @@ function ProductNote_Item_ShowToggle(itemKey)
   end
 end
 function ProductNote_onScreenResize()
-  sizeX = 700
-  sizeY = 558
-  panelSizeX = 754
-  panelSizeY = 647
-  titleBarSizeX = 739
+  local screenSizeX = getScreenSizeX()
+  if screenSizeX < 1900 then
+    sizeX = 700
+    sizeY = 558
+    panelSizeX = 754
+    panelSizeY = 647
+    titleBarSizeX = 739
+  elseif screenSizeX >= 1900 and screenSizeX < 3800 then
+    sizeX = 1050
+    sizeY = 837
+    panelSizeX = 1104
+    panelSizeY = 928
+    titleBarSizeX = 1089
+  else
+    sizeX = 1400
+    sizeY = 1116
+    panelSizeX = 1454
+    panelSizeY = 1205
+    titleBarSizeX = 1439
+  end
   Panel_ProductNote:SetSize(panelSizeX, panelSizeY)
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
   _productWeb:SetHorizonCenter()

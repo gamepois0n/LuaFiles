@@ -61,7 +61,8 @@ PaGlobal_Menu = {
     _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350"),
     _isButtonShortCut = ToClient_IsContentsGroupOpen("351"),
     _isBlackDesertLab = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType(),
-    _isTestServer = isGameTypeGT()
+    _isTestServer = isGameTypeGT(),
+    _isExpeditionOpen = _ContentsGroup_Expedition
   },
   _categoryData = {},
   _mainButtonCount = 5,
@@ -201,7 +202,8 @@ PaGlobal_Menu._contents = {
   _beautyAlbum = 12,
   _photoGallery = 13,
   _blackDesertLab = 14,
-  _count = 15
+  _expedition = 15,
+  _count = 16
 }
 PaGlobal_Menu._cooperation = {
   _localWar = 0,
@@ -276,7 +278,8 @@ PaGlobal_Menu._bannerNew = {
   _memo = 4,
   _blackDesertLab = 5,
   _bossAlert = 6,
-  _count = 7
+  _expedition = 7,
+  _count = 8
 }
 PaGlobal_Menu._bannerData = {
   _hot = {
@@ -444,6 +447,15 @@ PaGlobal_Menu._bannerData = {
       _x2 = 188,
       _y2 = 580,
       _isContentOpen = isGameTypeKorea()
+    },
+    [PaGlobal_Menu._bannerNew._expedition] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "LUA_MENU_EXPEDITION"),
+      _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds",
+      _x1 = 189,
+      _y1 = 523,
+      _x2 = 376,
+      _y2 = 580,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isExpeditionOpen
     },
     ["_count"] = PaGlobal_Menu._bannerNew._count
   }
@@ -775,6 +787,19 @@ PaGlobal_Menu._categoryData = {
       _x2 = 558,
       _y2 = 434,
       _isContentOpen = PaGlobal_Menu._contentsGroup._isBlackDesertLab,
+      _isNew = false,
+      _isHot = false,
+      _index = 63
+    },
+    [PaGlobal_Menu._contents._expedition] = {
+      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
+      _hotKey = "",
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 498,
+      _y1 = 498,
+      _x2 = 558,
+      _y2 = 558,
+      _isContentOpen = PaGlobal_Menu._contentsGroup._isExpeditionOpen,
       _isNew = true,
       _isHot = false,
       _index = 63
@@ -1121,7 +1146,7 @@ PaGlobal_Menu._categoryData = {
       _x2 = 558,
       _y2 = 496,
       _isContentOpen = isGameTypeKorea(),
-      _isNew = true,
+      _isNew = false,
       _isHot = false,
       _index = 64
     },
@@ -2217,6 +2242,8 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       if 55 < player:get():getLevel() then
         PaGlobal_BlackDesertLab_Show()
       end
+    elseif PaGlobal_Menu._contents._expedition == index then
+      PaGlobalFunc_ExpeditionSettingInfo_Open()
     end
   elseif 2 == categoryIndex then
     if PaGlobal_Menu._cooperation._localWar == index then
@@ -2651,6 +2678,9 @@ function PaGlobal_Menu:HandleClicked_Banner(isHot)
       end
     elseif self._bannerNew._bossAlert == index then
       PaGlobal_BossAlertSet_Show()
+    elseif self._bannerNew._expedition == index then
+      _PA_LOG("\235\176\149\235\178\148\236\164\128", "_expedition")
+      PaGlobalFunc_ExpeditionSettingInfo_Open()
     end
   end
 end

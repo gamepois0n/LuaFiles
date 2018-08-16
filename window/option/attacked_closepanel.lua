@@ -28,8 +28,12 @@ function FromClient_CancelByAttacked()
   if Panel_Chatting_Filter:GetShow() then
     FGlobal_ChattingFilterList_Close()
   end
-  if Panel_LocalWarInfo:GetShow() then
-    FGlobal_LocalWarInfo_Close()
+  if false == _ContentsGroup_RenewUI_Party then
+    if Panel_LocalWarInfo:GetShow() then
+      FGlobal_LocalWarInfo_Close()
+    end
+  elseif PaGlobalFunc_LocalWarInfo_GetShow() then
+    PaGlobalFunc_LocalWarInfo_Exit()
   end
   if Panel_SetShortCut:GetShow() then
     FGlobal_NewShortCut_Close()

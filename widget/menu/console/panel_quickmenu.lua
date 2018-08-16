@@ -7,7 +7,8 @@ PaGlobal_ConsoleQuickMenu = {
     _quickMenuPosition = {},
     _quickMenuPositionIcon = {},
     _quickMenuPositionSlot = {},
-    _staticTextIconName = UI.getChildControl(Panel_QuickMenu, "StaticText_SelectedButtonTitle"),
+    _staticIconName = UI.getChildControl(Panel_QuickMenu, "Static_SelectedButton"),
+    _staticTextIconNameDesc = UI.getChildControl(Panel_QuickMenu, "StaticText_SelectedButtonTitleDesc"),
     _staticTextIconDesc = UI.getChildControl(Panel_QuickMenu, "StaticText_SelectedButtonDesc"),
     _centerDeco = UI.getChildControl(Panel_QuickMenu, "Static_CenterDeco"),
     _line = {},
@@ -354,7 +355,7 @@ function FGlobal_ConsoleQuickMenu_Update(position)
   end
   PaGlobal_ConsoleQuickMenu:setButtonPos(position)
   local name = PaGlobal_ConsoleQuickMenu:GetCurrentQuickMenuName(PaGlobal_ConsoleQuickMenu._curGroup, position)
-  PaGlobal_ConsoleQuickMenu._ui._staticTextIconName:SetText(name)
+  PaGlobal_ConsoleQuickMenu._ui._staticTextIconNameDesc:SetText(name)
   PaGlobal_ConsoleQuickMenu._ui._staticTextIconDesc:SetText("")
 end
 function PaGlobal_ConsoleQuickMenuCustom_HighlightCategory(category)
@@ -444,7 +445,7 @@ function PaGlobal_ConsoleQuickMenu:Open(currentGroup)
   self:setButtonPos(__eQuickMenuStickPosition_Count)
   self:CrossTextureChange(currentGroup)
   Panel_QuickMenu:SetShow(true, true)
-  PaGlobal_ConsoleQuickMenu._ui._staticTextIconName:SetText("")
+  PaGlobal_ConsoleQuickMenu._ui._staticTextIconNameDesc:SetText("")
 end
 function FromClient_ConsoleQuickMenu_Close(currentPosition)
   PaGlobal_ConsoleQuickMenu:moveButtonAni(currentPosition)
@@ -571,7 +572,7 @@ function PaGlobal_ConsoleQuickMenu:setIcon(control, icon, uv)
   control:SetShow(true)
 end
 function PaGlobal_ConsoleQuickMenu:CrossTextureChange(currentGroup)
-  local bottomControl = self._ui._staticTextIconName
+  local bottomControl = self._ui._staticIconName
   local iconPathData1 = self._textureIcon._bottom[currentGroup]
   bottomControl:ChangeTextureInfoName("Renewal/Function/Console_Function_RingMenu.dds")
   bottomControl:getBaseTexture():setUV(setTextureUV_Func(bottomControl, iconPathData1._x1, iconPathData1._y1, iconPathData1._x2, iconPathData1._y2))
@@ -668,7 +669,7 @@ function FromClient_ConsoleQuickMenu_Selecting(group, position)
       control:SetCheck(false)
     end
     local name = PaGlobal_ConsoleQuickMenu:GetCurrentQuickMenuName(PaGlobal_ConsoleQuickMenu._curGroup, position)
-    PaGlobal_ConsoleQuickMenu._ui._staticTextIconName:SetText(name)
+    PaGlobal_ConsoleQuickMenu._ui._staticTextIconNameDesc:SetText(name)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetMonoTone(false)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetCheck(true)
   end

@@ -15,6 +15,9 @@ local currentModeCache
 local posX = -10000
 local posY = -10000
 function ProcessorInputModeChange(prevMode, currentMode)
+  if true == _ContentsGroup_RenewUI then
+    return
+  end
   _voidCursor:SetPosX(getMousePosX())
   _voidCursor:SetPosY(getMousePosY())
   if nil == currentModeCache then

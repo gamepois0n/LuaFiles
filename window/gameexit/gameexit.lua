@@ -124,7 +124,10 @@ function btn_Click_ExitClose()
 end
 function btn_Click_Back_CharacterSelect()
   exitMode = enum_ExitMode.eExitMode_BackCharacter
-  sendCharacterSelect()
+  if false == sendCharacterSelect() then
+    exitMode = -1
+    return
+  end
   _buttonExitConfirm:SetShow(false)
   _buttonExitClose:SetShow(false)
   _buttonExitCancel:SetShow(true)

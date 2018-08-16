@@ -42,7 +42,8 @@ local Type = {
   Manufacture = 40,
   TogglePVP = 41,
   PearInven = 42,
-  Undefined = 43
+  Dyeing = 43,
+  Undefined = 44
 }
 PaGlobal_ConsoleQuickMenu._functionTypeCount = Type.Undefined - 1
 local function getTypeName(index)
@@ -188,6 +189,9 @@ end
 function ExecuteFunction.PearInven()
   PaGlobalFunc_InventoryInfo_Open(2)
 end
+function ExecuteFunction.Dyeing()
+  PaGlobalFunc_Dyeing_Open()
+end
 function PaGlobal_ConsoleQuickMenu:initialize()
 end
 PaGlobal_ConsoleQuickMenu._functionTypeList = {}
@@ -235,7 +239,8 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ExecuteFunction = {
     [Type.BlackSpiritAdventure] = ExecuteFunction.BlackSpiritAdventure,
     [Type.Manufacture] = ExecuteFunction.Manufacture,
     [Type.TogglePVP] = ExecuteFunction.TogglePVP,
-    [Type.PearInven] = ExecuteFunction.PearInven
+    [Type.PearInven] = ExecuteFunction.PearInven,
+    [Type.Dyeing] = ExecuteFunction.Dyeing
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
@@ -540,6 +545,13 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y1 = 190,
       _x2 = 408,
       _y2 = 240
+    },
+    [Type.Dyeing] = {
+      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
+      _x1 = 2,
+      _y1 = 126,
+      _x2 = 62,
+      _y2 = 186
     }
   }
 }
@@ -585,9 +597,10 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._name = {
     [Type.ProductNote] = "PRODUCT NOTE",
     [Type.GuildRank] = "GUILD RANK",
     [Type.BlackSpiritAdventure] = "BLACKSPIRIT ADVENTURE",
-    [Type.Manufacture] = "Manufacture",
+    [Type.Manufacture] = "MANUFACTURE",
     [Type.TogglePVP] = "TOGGLE PVP",
-    [Type.PearInven] = "CASH INVENTORY"
+    [Type.PearInven] = "CASH INVENTORY",
+    [Type.Dyeing] = "DYEING"
   }
 }
 PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
@@ -625,16 +638,17 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.WharfNavi] = true,
     [Type.Guild] = true,
     [Type.Friend] = true,
-    [Type.PearlShop] = true,
+    [Type.PearlShop] = false,
     [Type.PartySetting] = true,
     [Type.BeautyAlbum] = true,
-    [Type.PhotoGallery] = true,
-    [Type.ProductNote] = true,
-    [Type.GuildRank] = true,
-    [Type.BlackSpiritAdventure] = true,
+    [Type.PhotoGallery] = false,
+    [Type.ProductNote] = false,
+    [Type.GuildRank] = false,
+    [Type.BlackSpiritAdventure] = false,
     [Type.Manufacture] = true,
-    [Type.TogglePVP] = true,
-    [Type.PearInven] = true
+    [Type.TogglePVP] = false,
+    [Type.PearInven] = true,
+    [Type.Dyeing] = true
   }
 }
 function varify()

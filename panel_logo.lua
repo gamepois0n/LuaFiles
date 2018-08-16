@@ -10,6 +10,8 @@ local static_Movie
 local setDivisionTime = 6
 if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
   setDivisionTime = 14.5
+elseif ToClient_isXBox() then
+  setDivisionTime = 2.5
 else
   setDivisionTime = 6
 end

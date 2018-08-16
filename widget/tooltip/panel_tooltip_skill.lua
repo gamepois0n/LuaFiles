@@ -66,6 +66,33 @@ local ToolTipSkillUI_learning = {
   reservation_helpMsg = UI.getChildControl(Panel_Tooltip_Skill_forLearning, "StaticText_Reservation_Help"),
   skill_Movie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Tooltip_Skill_forLearning, "WebControl_Skill_Movie")
 }
+local ToolTipSkillUI_blackSpirit = {
+  main = Panel_Tooltip_Skill_forBlackSpirit,
+  skillName = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Name"),
+  skillIcon = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Icon"),
+  skillLevel = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Level"),
+  useCondition_category = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_category"),
+  useCondition_category_panel = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_panel"),
+  needHP = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needHP"),
+  needHP_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needHP_value"),
+  needMP = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needMP"),
+  needMP_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needMP_value"),
+  needSP = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needSP"),
+  needSP_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needSP_value"),
+  needItem = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needItem"),
+  needItem_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_needItem_value"),
+  reuseCycle = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_reuseCycle"),
+  reuseCycle_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseCondition_reuseCycle_value"),
+  useMethod = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_UseMethod"),
+  skillEffect_category = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_SkillEffect_category"),
+  skillEffect_panel = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_SkillEffect_panel"),
+  skillEffect_value = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_SkillEffect_buff_value"),
+  awakeningEffect_category = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_AwakeningEffect_category"),
+  awakeningEffect_panel = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_AwakeningEffect_panel"),
+  awakeningeffect = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_AwakeningEffect_effect"),
+  skillDescription = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Description"),
+  skill_Movie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Tooltip_Skill_forBlackSpirit, "WebControl_Skill_Movie")
+}
 local Tooltip_SkillData = {}
 local positionSet = {}
 local currentTooltip = {
@@ -82,7 +109,6 @@ local function initialize()
   ToolTipSkillUI.main:SetIgnore(true)
   ToolTipSkillUI.main:setGlassBackground(true)
   ToolTipSkillUI.skill_Movie:SetHorizonCenter()
-  ToolTipSkillUI.skill_Movie:SetUrl(320, 240, "coui://UI_Data/UI_Html/Skill_Movie.html")
   ToolTipSkillUI.skill_Movie:SetSize(320, 240)
   ToolTipSkillUI.skill_Movie:SetSpanSize(-1, 0)
   ToolTipSkillUI.skill_Movie:SetShow(false)
@@ -96,6 +122,14 @@ local function initialize()
   ToolTipSkillUI_learning.skill_Movie:SetSize(320, 240)
   ToolTipSkillUI_learning.skill_Movie:SetSpanSize(-1, 0)
   ToolTipSkillUI_learning.skill_Movie:SetShow(false)
+  ToolTipSkillUI_blackSpirit.main:SetShow(false, false)
+  ToolTipSkillUI_blackSpirit.main:setMaskingChild(true)
+  ToolTipSkillUI_blackSpirit.main:SetIgnore(true)
+  ToolTipSkillUI_blackSpirit.main:setGlassBackground(true)
+  ToolTipSkillUI_blackSpirit.skill_Movie:SetHorizonCenter()
+  ToolTipSkillUI_blackSpirit.skill_Movie:SetSize(320, 240)
+  ToolTipSkillUI_blackSpirit.skill_Movie:SetSpanSize(-1, 0)
+  ToolTipSkillUI_blackSpirit.skill_Movie:SetShow(false)
 end
 function Panel_SkillTooltip_Hide()
   if Panel_Tooltip_Skill:IsShow() then
@@ -113,6 +147,14 @@ function Panel_SkillTooltip_Hide()
       Panel_Tooltip_Skill_forLearning:CloseUISubApp()
     end
     ToolTipSkillUI_learning.skill_Movie:TriggerEvent("StopMovie", "test")
+    currMovieName = nil
+    currentTooltip.slotNo = -1
+  end
+  if Panel_Tooltip_Skill_forBlackSpirit:IsShow() then
+    Panel_Tooltip_Skill_forBlackSpirit:SetShow(false, false)
+    if Panel_Tooltip_Skill_forBlackSpirit:IsUISubApp() then
+      Panel_Tooltip_Skill_forBlackSpirit:CloseUISubApp()
+    end
     currMovieName = nil
     currentTooltip.slotNo = -1
   end
@@ -161,6 +203,14 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
   else
     Tooltip_SkillData:showTooltip_Skill_Real(ToolTipSkillUI_learning, skillNo, skillTypeSS, false, isReserveSkillOn)
   end
+  local skillStatic = getSkillStaticStatus(skillNo, 1)
+  if nil ~= skillStatic then
+    local blackSkillNo = skillStatic:getlinkBlackSkillNo()
+    local blackSkillTypeSS = getSkillTypeStaticStatus(blackSkillNo)
+    if nil ~= blackSkillTypeSS and blackSkillTypeSS:isValidLocalizing() then
+      Tooltip_SkillData:showTooltip_Skill_Real(ToolTipSkillUI_blackSpirit, blackSkillNo, blackSkillTypeSS, false, false)
+    end
+  end
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   local positionData
@@ -177,6 +227,7 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
   local isTop = posY > screenSizeY / 2
   local tooltipSize = {width = 0, height = 0}
   local tooltipLearningSize = {width = 0, height = 0}
+  local tooltipBlackSpiritSize = {width = 0, height = 0}
   local sumSize = {width = 0, height = 0}
   if Panel_Tooltip_Skill:GetShow() then
     tooltipSize.width = Panel_Tooltip_Skill:GetSizeX()
@@ -193,6 +244,12 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
     sumSize.width = sumSize.width + tooltipLearningSize.width
     sumSize.height = math.max(sumSize.height, tooltipLearningSize.height)
   end
+  if Panel_Tooltip_Skill_forBlackSpirit:GetShow() then
+    tooltipBlackSpiritSize.width = Panel_Tooltip_Skill_forBlackSpirit:GetSizeX()
+    tooltipBlackSpiritSize.height = Panel_Tooltip_Skill_forBlackSpirit:GetSizeY()
+    sumSize.width = sumSize.width + tooltipBlackSpiritSize.width
+    sumSize.height = math.max(sumSize.height, tooltipBlackSpiritSize.height)
+  end
   if not isLeft then
     posX = posX + positionData:GetSizeX()
   end
@@ -208,16 +265,19 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
       posY = posY + yDiff
     end
   end
+  local blackSkillPosY = 0
   local isUISubAppMode = false
   if nil ~= positionData then
     local parentPanel = positionData:GetParentPanel()
     if nil ~= parentPanel and parentPanel:IsUISubApp() then
       posX = parentPanel:GetScreenParentPosX()
       posY = parentPanel:GetScreenParentPosY()
-      tooltipLearningSize.width = Panel_Tooltip_Skill_forLearning:GetSizeX()
-      tooltipLearningSize.height = Panel_Tooltip_Skill_forLearning:GetSizeY()
       tooltipSize.width = parentPanel:GetSizeX()
       tooltipSize.height = parentPanel:GetSizeY()
+      tooltipLearningSize.width = Panel_Tooltip_Skill_forLearning:GetSizeX()
+      tooltipLearningSize.height = Panel_Tooltip_Skill_forLearning:GetSizeY()
+      tooltipBlackSpiritSize.width = Panel_Tooltip_Skill_forBlackSpirit:GetSizeX()
+      tooltipBlackSpiritSize.height = Panel_Tooltip_Skill_forBlackSpirit:GetSizeY()
       isUISubAppMode = true
     end
   end
@@ -231,6 +291,10 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
     end
     Panel_Tooltip_Skill:SetPosX(posX)
     Panel_Tooltip_Skill:SetPosY(yTmp)
+    blackSkillPosY = Panel_Tooltip_Skill:GetPosY()
+    if not isLeft then
+      posX = posX + tooltipSize.width
+    end
     if isUISubAppMode then
       Panel_Tooltip_Skill:OpenUISubApp()
     end
@@ -238,8 +302,6 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
   if Panel_Tooltip_Skill_forLearning:GetShow() then
     if isLeft then
       posX = posX - tooltipLearningSize.width
-    else
-      posX = posX + tooltipSize.width
     end
     local yTmp = posY
     if isTop then
@@ -247,8 +309,25 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
     end
     Panel_Tooltip_Skill_forLearning:SetPosX(posX)
     Panel_Tooltip_Skill_forLearning:SetPosY(yTmp)
+    blackSkillPosY = Panel_Tooltip_Skill_forLearning:GetPosY()
+    if not isLeft then
+      posX = posX + tooltipLearningSize.width
+    end
     if isUISubAppMode then
       Panel_Tooltip_Skill_forLearning:OpenUISubApp()
+    end
+  end
+  if Panel_Tooltip_Skill_forBlackSpirit:GetShow() then
+    if isLeft then
+      posX = posX - tooltipBlackSpiritSize.width
+    end
+    Panel_Tooltip_Skill_forBlackSpirit:SetPosX(posX)
+    Panel_Tooltip_Skill_forBlackSpirit:SetPosY(blackSkillPosY)
+    if not isLeft then
+      posX = posX + tooltipBlackSpiritSize.width
+    end
+    if isUISubAppMode then
+      Panel_Tooltip_Skill_forBlackSpirit:OpenUISubApp()
     end
   end
 end
@@ -262,7 +341,7 @@ end
 local isShowSp = false
 function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, isShowNextLevel, isReserveSkillOn, isResetable)
   target.main:SetShow(false, false)
-  local isNextLvWidget = target.main ~= Panel_Tooltip_Skill
+  local isNextLvWidget = target.main ~= Panel_Tooltip_Skill and target.main ~= Panel_Tooltip_Skill_forBlackSpirit
   local level = getLearnedSkillLevel(skillTypeSS)
   local skillStatic, nextLevelStatic
   if isNextLvWidget then
@@ -606,8 +685,10 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
 end
 function FGlobal_SetUrl_Tooltip_SkillForLearning()
   ToolTipSkillUI_learning.skill_Movie:SetUrl(320, 240, "coui://UI_Data/UI_Html/Skill_Movie.html")
+  ToolTipSkillUI.skill_Movie:SetUrl(320, 240, "coui://UI_Data/UI_Html/Skill_Movie.html")
 end
 function FGlobal_ResetUrl_Tooltip_SkillForLearning()
   ToolTipSkillUI_learning.skill_Movie:ResetUrl()
+  ToolTipSkillUI.skill_Movie:ResetUrl()
 end
 initialize()

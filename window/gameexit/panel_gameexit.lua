@@ -661,7 +661,10 @@ end
 function Panel_GameExit_CharSelect_Yes()
   exitMode = enum_ExitMode.eExitMode_BackCharacter
   FGlobal_gameExit_saveCurrentData()
-  sendCharacterSelect()
+  if false == sendCharacterSelect() then
+    exitMode = -1
+    return
+  end
   _btn_selectCharacter:SetShow(false)
   _btn_gameExit:SetShow(false)
   _btn_Tray:SetShow(false)

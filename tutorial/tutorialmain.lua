@@ -56,9 +56,11 @@ function executeLuaFunc(funcText)
   elseif funcText == "findTargetMovieGuide" then
     FGlobal_Panel_LowLevelGuide_MovePlay_FindTarget()
   elseif funcText == "learnSkillMovieGuide" then
-    FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
-    FGlobal_FirstLearnSkill_WindowShow()
-    Panel_SkillCommand:SetShow(false)
+    if false == _ContentsGroup_RenewUI_Skill then
+      FGlobal_Panel_LowLevelGuide_MovePlay_LearnSkill()
+      FGlobal_FirstLearnSkill_WindowShow()
+      Panel_SkillCommand:SetShow(false)
+    end
   elseif funcText == "acceptQuestMovieGuide" then
     FGlobal_Panel_LowLevelGuide_MovePlay_AcceptQuest()
     Panel_SkillCommand:SetShow(false)

@@ -1622,7 +1622,10 @@ CppEnums.AuctionType = {
   AuctionGoods_ServantMarket = 4,
   AuctionGoods_TerritoryTradeAuthority = 5,
   AuctionGoods_Villa = 6,
-  AuctionGoods_Count = 7
+  AuctionGoods_Pet = 7,
+  AuctionGoods_ServantRent = 8,
+  AuctionGoods_ServantReturn = 9,
+  AuctionGoods_Count = 10
 }
 CppEnums.AuctionTabType = {
   AuctionTab_SellItem = 0,
@@ -1642,7 +1645,11 @@ CppEnums.AuctionTabType = {
   AuctionTab_SellVilla = 14,
   AuctionTab_Pet = 15,
   AuctionTab_MyPet = 16,
-  AuctionTab_Count = 17
+  AuctionTab_ServantRent = 17,
+  AuctionTab_ServantReturn = 18,
+  AuctionTab_MyServantRent = 19,
+  AuctionTab_MyServantReturn = 20,
+  AuctionTab_Count = 21
 }
 CppEnums.WaitWorkerSortMethod = {
   eSortWorkSpeed = 0,
@@ -2742,6 +2749,18 @@ CppEnums.EventCartDiscountType = {
   eEventCartDiscountType_Subtraction = 0,
   eEventCartDiscountType_Rate = 1,
   eEventCartDiscountType_Count = 2
+}
+CppEnums.ChallengeType = {
+  eChallengeType_Benefit = 0,
+  eChallengeType_Event = 1,
+  eChallengeType_ShortTerm = 2,
+  eChallengeType_LongTerm = 3,
+  eChallengeType_PcRoom = 4,
+  eChallengeType_EnchantPcRoomCount = 5,
+  eChallengeType_EnchantValuePackCount = 6,
+  eChallengeType_PremiumPackage = 7,
+  eChallengeType_Coupon = 8,
+  eChallengeType_Count = 9
 }
 function getNameSize()
   if isGameServiceTypeKor() or isGameServiceTypeJp() then

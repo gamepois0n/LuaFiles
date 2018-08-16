@@ -1143,11 +1143,30 @@ function PaGlobal_Option:SetContentsOption()
     fairyVoiceBG:SetPosY(npcvoicebg:GetPosY())
     self._elements.AudioResourceType = nil
   end
-  if false == ToClient_IsDevelopment() then
+  if false == ToClinet_isGraphicUltraAvailable() then
     local bg = UI.getChildControl(self._frames.Graphic.Quality._uiFrameContent, "StaticText_BgOrder1_Import")
+    local bg1 = UI.getChildControl(self._frames.Performance.GraphicQuality._uiFrameContent, "StaticText_BgOrder1_Import")
+    UI.getChildControl(bg, "RadioButton_GraphicOption7"):SetShow(false)
+    UI.getChildControl(bg1, "RadioButton_GraphicOption7"):SetShow(false)
     UI.getChildControl(bg, "RadioButton_GraphicOption8"):SetShow(false)
-    bg = UI.getChildControl(self._frames.Performance.GraphicQuality._uiFrameContent, "StaticText_BgOrder1_Import")
-    UI.getChildControl(bg, "RadioButton_GraphicOption8"):SetShow(false)
+    UI.getChildControl(bg1, "RadioButton_GraphicOption8"):SetShow(false)
+  else
+    local bg = UI.getChildControl(self._frames.Graphic.Quality._uiFrameContent, "StaticText_BgOrder1_Import")
+    local bg1 = UI.getChildControl(self._frames.Performance.GraphicQuality._uiFrameContent, "StaticText_BgOrder1_Import")
+    local ultra1 = UI.getChildControl(bg, "RadioButton_GraphicOption8")
+    local ultra2 = UI.getChildControl(bg1, "RadioButton_GraphicOption8")
+    self._tooltip.GraphicUltra1 = {
+      control = ultra1,
+      desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_GRAPHIC_QUALITY_GraphicUltraHigh_Tooltip")
+    }
+    self._tooltip.GraphicUltra2 = {
+      control = ultra2,
+      desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_GRAPHIC_QUALITY_GraphicUltraHigh_Tooltip")
+    }
+    ultra1:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true, \"GraphicUltra1\" )")
+    ultra2:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true, \"GraphicUltra2\" )")
+    ultra1:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false, \"GraphicUltra1\" )")
+    ultra2:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false, \"GraphicUltra2\" )")
   end
   if false == isNeedGameOptionFromServer() then
     return

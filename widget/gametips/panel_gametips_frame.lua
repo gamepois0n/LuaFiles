@@ -28,7 +28,7 @@ function Panel_GameTips_HideAni()
   local aniInfo = UIAni.AlphaAnimation(0, Panel_Window_GameTips, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
-local msgCnt = 319
+local msgCnt = 329
 local gameTipsUIPool = {}
 local gameTipsWindow = {
   closeX = UI.getChildControl(Panel_Window_GameTips, "Button_Win_Close"),

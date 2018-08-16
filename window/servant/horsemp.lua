@@ -51,7 +51,7 @@ function HorseMp_InitStaminaAlertText(vehicleType)
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_1")
   elseif CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType or CppEnums.VehicleType.Type_FishingBoat == vehicleType then
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
-  elseif CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType or CppEnums.VehicleType.Type_RepairableCarriage == vehicleType then
+  elseif CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType or CppEnums.VehicleType.Type_RepairableCarriage == vehicleType then
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
   else
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
@@ -71,7 +71,7 @@ function HorseMP_Update()
   local vehicleType = vehicleProxy:get():getVehicleType()
   local staminaPercent
   staminaPercent = vehicleProxy:get():getMp() / vehicleProxy:get():getMaxMp() * 100
-  if CppEnums.VehicleType.Type_Carriage ~= vehicleType and CppEnums.VehicleType.Type_CowCarriage ~= vehicleType and CppEnums.VehicleType.Type_Boat ~= vehicleType and CppEnums.VehicleType.Type_Raft ~= vehicleType and CppEnums.VehicleType.Type_FishingBoat ~= vehicleType and CppEnums.VehicleType.Type_SailingBoat ~= vehicleType and CppEnums.VehicleType.Type_PersonalBattleShip ~= vehicleType and CppEnums.VehicleType.Type_PersonalBoat ~= vehicleType and CppEnums.VehicleType.Type_PersonTradeShip ~= vehicleType then
+  if CppEnums.VehicleType.Type_Carriage ~= vehicleType and CppEnums.VehicleType.Type_CowCarriage ~= vehicleType and CppEnums.VehicleType.Type_Boat ~= vehicleType and CppEnums.VehicleType.Type_Raft ~= vehicleType and CppEnums.VehicleType.Type_FishingBoat ~= vehicleType and CppEnums.VehicleType.Type_SailingBoat ~= vehicleType and CppEnums.VehicleType.Type_PersonalBattleShip ~= vehicleType and CppEnums.VehicleType.Type_PersonalBoat ~= vehicleType and CppEnums.VehicleType.Type_CashPersonalTradeShip ~= vehicleType and CppEnums.VehicleType.Type_CashPersonalBattleShip ~= vehicleType and CppEnums.VehicleType.Type_PersonTradeShip ~= vehicleType then
     if staminaPercent < 10 then
       self._staticBarBG:EraseAllEffect()
       self._staticBarBG:AddEffect("fUI_Horse_Gauge01", true, 0, 0)
@@ -100,7 +100,7 @@ function HorseMP_Update()
       self._staticBar:addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 0, " .. staminaPercent .. ")")
       self._staticBar:addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 0 )")
       self._staticBar:setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 0, " .. staminaPercent .. ")")
-    elseif UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType then
+    elseif UI_VT.Type_CashPersonalTradeShip == vehicleType or UI_VT.Type_CashPersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType then
       self._staticText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_GUILDSHIP_NAME") .. " : " .. makeDotMoney(vehicleProxy:get():getMp()) .. "/" .. makeDotMoney(vehicleProxy:get():getMaxMp()))
       self._staticBar:addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 4, " .. staminaPercent .. ")")
       self._staticBar:addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 4 )")
@@ -114,7 +114,7 @@ function HorseMP_Update()
     end
   end
   if getSelfPlayer():isNavigationLoop() and getSelfPlayer():isNavigationMoving() then
-    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
+    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_CashPersonalTradeShip == vehicleType or UI_VT.Type_CashPersonalBattleShip == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
       servantMpBar._button_AutoCarrot:SetShow(false)
     else
       servantMpBar._button_AutoCarrot:SetShow(true)

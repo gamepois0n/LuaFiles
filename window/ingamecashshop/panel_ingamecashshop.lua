@@ -3104,6 +3104,9 @@ function InGameShop_Open()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   ToClient_SaveUiInfo(false)
   if isFlushedUI() then
     return

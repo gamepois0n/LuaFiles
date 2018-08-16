@@ -811,6 +811,7 @@ function LordMenu_MouseEvent_PayInfoShow()
   showToggleElements(false, ui_Ter)
   showToggleElements(true, ui_Pay)
   showToggleElements(false, ui_Tax)
+  ui_Pay._btn_GetMoney:SetShow(false)
   Panel_LordMenu_PayInfoUpdate()
   ui_Main.panel_desc:SetShow(false)
 end

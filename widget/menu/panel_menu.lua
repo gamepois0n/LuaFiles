@@ -95,8 +95,9 @@ local MenuButtonId = {
   btn_BlackDesertLab = 58,
   btn_BossAlert = 59,
   btn_CardGame = 60,
-  btn_GameOption = 61,
-  btn_GameExit = 62
+  btn_Expedition = 61,
+  btn_GameOption = 62,
+  btn_GameExit = 63
 }
 local MenuButtonTextId = {
   [MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"),
@@ -160,7 +161,8 @@ local MenuButtonTextId = {
   [MenuButtonId.btn_KnownIssue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_KNOWNISSUE_STRING"),
   [MenuButtonId.btn_BlackDesertLab] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
   [MenuButtonId.btn_BossAlert] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BOSS_ALERT"),
-  [MenuButtonId.btn_CardGame] = "\236\185\180\235\147\156 \234\178\140\236\158\132"
+  [MenuButtonId.btn_CardGame] = "\236\185\180\235\147\156 \234\178\140\236\158\132",
+  [MenuButtonId.btn_Expedition] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXPEDITION")
 }
 local MenuButtonHotKeyID = {
   [MenuButtonId.btn_HelpGuide] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help),
@@ -224,7 +226,8 @@ local MenuButtonHotKeyID = {
   [MenuButtonId.btn_KnownIssue] = "",
   [MenuButtonId.btn_BlackDesertLab] = "",
   [MenuButtonId.btn_BossAlert] = "",
-  [MenuButtonId.btn_CardGame] = ""
+  [MenuButtonId.btn_CardGame] = "",
+  [MenuButtonId.btn_Expedition] = ""
 }
 local contry = {
   kr = 0,
@@ -672,6 +675,12 @@ local buttonTexture = {
     219,
     460,
     263
+  },
+  [MenuButtonId.btn_Expedition] = {
+    416,
+    265,
+    460,
+    309
   }
 }
 function TargetWindow_ShowToggle(index)
@@ -912,6 +921,8 @@ function TargetWindow_ShowToggle(index)
     PaGlobal_BossAlertSet_Show()
   elseif MenuButtonId.btn_CardGame == index then
     FGlobal_CardGame_Open()
+  elseif MenuButtonId.btn_Expedition == index then
+    PaGlobalFunc_ExpeditionSettingInfo_Open()
   end
   if Panel_Menu:GetShow() then
     Panel_Menu:SetShow(false, false)
@@ -1216,12 +1227,15 @@ function GameMenu_CheckEnAble(buttonType)
   if buttonType == MenuButtonId.btn_CardGame then
     returnValue = isGameServiceTypeDev()
   end
+  if buttonType == MenuButtonId.btn_Expedition then
+    returnValue = _ContentsGroup_Expedition
+  end
   if isTestServer and (buttonType == MenuButtonId.btn_HelpGuide or buttonType == MenuButtonId.btn_Productnote or buttonType == MenuButtonId.btn_Beauty or buttonType == MenuButtonId.btn_GuildRanker or buttonType == MenuButtonId.btn_Event or buttonType == MenuButtonId.btn_Notice or buttonType == MenuButtonId.btn_BlackSpritAdventure or buttonType == MenuButtonId.btn_BSAdventure2 or buttonType == MenuButtonId.btn_WebAlbum or buttonType == MenuButtonId.btn_ScreenShotAlbum or buttonType == MenuButtonId.btn_Steam or buttonType == MenuButtonId.btn_Update or buttonType == MenuButtonId.btn_Twitch or buttonType == MenuButtonId.btn_Copyright or buttonType == MenuButtonId.btn_KnownIssue or buttonType == MenuButtonId.btn_SaveSetting or buttonType == MenuButtonId.btn_CashShop) then
     returnValue = false
   end
   if not isGameTypeKR2() then
     menuNewPool[buttonType]:ResetVertexAni()
-    if buttonType == MenuButtonId.btn_BlackDesertLab or buttonType == MenuButtonId.btn_BossAlert then
+    if buttonType == MenuButtonId.btn_Expedition then
       menuNewPool[buttonType]:SetShow(true)
       menuNewPool[buttonType]:SetVertexAniRun("Ani_Color_New", true)
     else

@@ -250,6 +250,7 @@ function stableList:init()
   self._buttonUnseal = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Unseal", self._staticButtonListBG, "StableList_Button_Unseal")
   self._buttonMove = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Move", self._staticButtonListBG, "StableList_Button_Move")
   self._buttonRegisterForRent = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_RegisterForRent", self._staticButtonListBG, "StableList_Button_RegisterForRent")
+  self._buttonRegisterForReturn = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_RegisterForReturn", self._staticButtonListBG, "StableList_Button_RegisterForReturn")
   self._buttonRepair = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Repair", self._staticButtonListBG, "StableList_Button_Repair")
   self._buttonRecovery = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Recovery", self._staticButtonListBG, "StableList_Button_Recovery")
   self._buttonSell = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Button_Sell", self._staticButtonListBG, "StableList_Button_Sell")
@@ -646,12 +647,27 @@ end
 function StableList_HandleRegisterForRentButtonClick()
   PaGlobalFunc_ServantRentPromoteAuthOpen(currentButtonServantNo)
 end
+function StableList_HandleRegisterForReturnButtonClick()
+  _PA_LOG("cylee", "StableList_HandleRegisterForReturnButtonClick()")
+  function handleYesClick()
+    _PA_LOG("cylee", "StableList_HandleRegisterForReturnButtonClick() yes clicked")
+    ToClient_RegisterServantForReturn(currentButtonServantNo)
+  end
+  MessageBox.showMessageBox({
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+    content = "do you want to return?",
+    functionYes = handleYesClick,
+    functionCancel = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  })
+end
 function StableList_RegistButtonEventHandler(servantInfo)
   local self = stableList
   currentButtonServantNo = servantInfo:getServantNo()
   self._buttonUnseal:addInputEvent("Mouse_LUp", "StableList_UnsealByServantNo()")
   self._buttonMove:addInputEvent("Mouse_LUp", "StableList_HandleMoveButtonClick()")
   self._buttonRegisterForRent:addInputEvent("Mouse_LUp", "StableList_HandleRegisterForRentButtonClick()")
+  self._buttonRegisterForReturn:addInputEvent("Mouse_LUp", "StableList_HandleRegisterForReturnButtonClick()")
 end
 local beforeSlotNo, beforeEType
 function StableList_ButtonOpen(eType, slotNo)
@@ -673,6 +689,7 @@ function StableList_ButtonOpen(eType, slotNo)
   self._buttonSeal:SetShow(false)
   self._buttonMove:SetShow(false)
   self._buttonRegisterForRent:SetShow(false)
+  self._buttonRegisterForReturn:SetShow(false)
   self._buttonCompulsionSeal:SetShow(false)
   self._buttonRecoveryUnseal:SetShow(false)
   self._buttonRepairUnseal:SetShow(false)
@@ -852,6 +869,10 @@ function StableList_ButtonOpen(eType, slotNo)
     end
     if PaGlobalFunc_ServantRentCheckToShowRegisterForRentButton(servantInfo) then
       buttonList[buttonSlotNo] = self._buttonRegisterForRent
+      buttonSlotNo = buttonSlotNo + 1
+    end
+    if PaGlobalFunc_ServantRentCheckToShowReturnButton(servantInfo) then
+      buttonList[buttonSlotNo] = self._buttonRegisterForReturn
       buttonSlotNo = buttonSlotNo + 1
     end
     positionX = self._slots[slotNo].button:GetPosX() + buttonConfig.startX

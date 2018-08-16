@@ -103,6 +103,13 @@ function Region_OnChangeRegion(regionData)
     elseif Panel_Npc_Dialog:GetShow() then
       return
     end
+    if true == ToClient_IsDevelopment() then
+      if true == regionData:get():isSafeZone() then
+        audioPostEvent_SystemUi(23, 0)
+      else
+        audioPostEvent_SystemUi(23, 1)
+      end
+    end
     Panel_Region:SetShow(true, true)
     siegeHouse:SetShow(false)
     local siegeWrapper = ToClient_GetSiegeWrapperByRegionKey(regionData:getRegionKey())

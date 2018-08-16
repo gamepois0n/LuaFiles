@@ -349,6 +349,9 @@ function FGlobal_PushOpenWorldMap()
   if CppEnums.worldmapRenderState.NOT_RENDER ~= ToClient_getWorldmapRenderState() then
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   if Panel_Casting_Bar:GetShow() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NOTOPEN_INGACTION"))
     return

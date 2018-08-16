@@ -193,6 +193,7 @@ local typeDepth = {
   [radorType.radorType_installation] = -20,
   [radorType.radorType_kingGuildTent] = -20,
   [radorType.radorType_lordGuildTent] = -20,
+  [radorType.radorType_villageGuildTent] = -20,
   [radorType.radorType_selfDeadBody] = -40,
   [radorType.radorType_advancedBase] = -30,
   [radorType.radorType_Raft] = -100,
@@ -667,6 +668,7 @@ local function controlInit()
   radar_SizeSlider:SetControlPos(ToClient_GetRaderScale() * 100)
   local scaleSlideValue = 1 - radar_SizeSlider:GetControlPos()
   updateWorldMapDistance(scaleMinValue + scaleSlideValue * 100)
+  raderAlert_Resize()
 end
 local weatherTooltip = 0
 local buildingTooltip = 0
@@ -2203,6 +2205,7 @@ end
 function Radar_luaLoadComplete()
   controlAlign()
   PaGlobal_Radar_GuildTeamBattleAlert(false)
+  raderAlert_Resize()
 end
 registerEvent("FromClient_luaLoadComplete", "Radar_luaLoadComplete")
 registerEvent("FromClient_setNameOfMouseOverIcon", "FromClient_setNameOfMouseOverIcon")

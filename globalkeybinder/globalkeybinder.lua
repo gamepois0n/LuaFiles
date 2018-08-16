@@ -499,6 +499,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Stable(deltaTime)
           StableFunction_Close()
           GuildStableFunction_Close()
         end
+        PaGlobalFunc_ServantRentPromoteMarketClose()
       elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
         WharfFunction_Close()
         GuildWharfFunction_Close()
@@ -525,6 +526,11 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_MiniGame(deltaTime)
     close_WindowPanelList()
     if Panel_Window_DailyStamp:GetShow() then
       DailStamp_Hide()
+      return
+    end
+    if Panel_Window_DailyChallenge:GetShow() then
+      PaGlobalFunc_DailyChallenge_Close()
+      TooltipSimple_Hide()
       return
     end
   end
@@ -681,7 +687,7 @@ end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPad(deltaTime)
   local isEnd = false
   local inputType
-  if true == _ContentsGroup_isNewOption and true == PaGlobal_Option:isOpen() then
+  if nil ~= PaGlobal_Option and true == PaGlobal_Option:isOpen() then
     inputType = PaGlobal_Option:GetKeyCustomInputType()
   else
     inputType = KeyCustom_Action_GetInputType()
@@ -702,12 +708,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPad(deltaTime)
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode(Defines.UIMode.eUIMode_Default)
-    if true == _ContentsGroup_isNewOption and true == PaGlobal_Option:isOpen() then
-      PaGlobal_Option:CompleteKeyCustomMode()
-      return
-    end
-    KeyCustom_Action_UpdateButtonText_Pad()
-    KeyCustom_Action_PadButtonCheckReset(inputType)
+    PaGlobal_Option:CompleteKeyCustomMode()
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_UiKey(deltaTime)
@@ -879,8 +880,26 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCustomize(deltaTime)
         FGlobal_TakeAScreenShot()
       end
     end
-  elseif true == PaGlobalFunc_Customization_GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
-    PaGlobalFunc_Customization_Back()
+  else
+    if true == PaGlobalFunc_Customization_GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+      PaGlobalFunc_Customization_Back()
+    end
+    if Panel_Widget_ScreenShotFrame:GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+      local screenShotFrame_Close = function()
+        FGlobal_ScreenShotFrame_Close()
+      end
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_CONTENT")
+      local messageBoxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_TITLE"),
+        content = messageBoxMemo,
+        functionYes = screenShotFrame_Close,
+        functionNo = MessageBox_Empty_function,
+        exitButton = true,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageBoxData)
+      return
+    end
   end
 end
 local prevPressControl
@@ -1420,7 +1439,7 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     Panel_Party_ItemList_Close()
     return true
   end
-  if Panel_LocalWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+  if false == _ContentsGroup_RenewUI_LocalWar and Panel_LocalWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_LocalWarInfo_Close()
     return true
   end
@@ -1877,6 +1896,11 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
   if Panel_Window_DailyStamp:GetShow() then
     DailStamp_Hide()
     Panel_Tooltip_Item_hideTooltip()
+    TooltipSimple_Hide()
+    return
+  end
+  if Panel_Window_DailyChallenge:GetShow() then
+    PaGlobalFunc_DailyChallenge_Close()
     TooltipSimple_Hide()
     return
   end

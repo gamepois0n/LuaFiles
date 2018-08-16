@@ -130,7 +130,7 @@ function NodeWarMenuUpdate()
       if toInt64(0, 0) == nodeTax_s64 then
         self._btn_GetTax:SetShow(false)
       else
-        self._btn_GetTax:SetShow(true)
+        self._btn_GetTax:SetShow(false)
       end
       self._txt_tax:SetShow(true)
       self._txt_taxValue:SetShow(true)

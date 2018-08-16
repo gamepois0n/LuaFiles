@@ -125,12 +125,14 @@ function EnchantExtraction_SetItem(slotNo, itemWrapper, count, inventoryType)
   self._blacksmithIcon:setItem(itemWrapper)
   self._blacksmithIcon.icon:SetShow(true)
   self._selectSlotNo = slotNo
+  local balksItemItemKey
   local failCount = getSelfPlayer():get():getEnchantFailCount()
   local itemFailCount = failCount
   if itemFailCount > 100 then
-    itemFailCount = 100
+    balksItemItemKey = itemFailCount + 288900
+  else
+    balksItemItemKey = itemFailCount + 17799
   end
-  local balksItemItemKey = itemFailCount + 17799
   local balsksItemSSW = getItemEnchantStaticStatus(ItemEnchantKey(balksItemItemKey))
   self._balksIcon:setItemByStaticStatus(balsksItemSSW, 1)
   self._blacksmithIcon.icon:addInputEvent("Mouse_On", "EnchantExtraction_IconOverShow(" .. 0 .. ")")
@@ -167,10 +169,12 @@ function EnchantExtraction_IconOverShow(controlId)
     control = self._balksIcon.icon
     local failCount = getSelfPlayer():get():getEnchantFailCount()
     local itemFailCount = failCount
+    local balksItemItemKey
     if itemFailCount > 100 then
-      itemFailCount = 100
+      balksItemItemKey = itemFailCount + 288900
+    else
+      balksItemItemKey = itemFailCount + 17799
     end
-    local balksItemItemKey = itemFailCount + 17799
     local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(balksItemItemKey))
     Panel_Tooltip_Item_Show(itemSSW, control, true, false, nil, nil, nil)
   end

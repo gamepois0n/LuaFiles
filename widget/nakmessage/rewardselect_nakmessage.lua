@@ -1389,12 +1389,25 @@ function FromClient_NoticeChatMessageUpdate_Arsha(_noticeSender, _noticeContent)
   Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(msg, 3.5, messageType.arshaNotify, false)
 end
 function FromClient_ArrestAToB(attacker, attackee)
-  local msg = {
-    main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_MAIN", "attacker", attacker, "attackee", attackee),
-    sub = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_SUB"),
-    addMsg = ""
-  }
-  Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.playerKiller)
+  local curChannelData = getCurrentChannelServerData()
+  if nil == curChannelData then
+    return
+  end
+  if true == curChannelData._isBalanceChannel then
+    local msg = {
+      main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_MAIN", "attacker", attacker, "attackee", attackee),
+      sub = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_SUB_BALANCE"),
+      addMsg = ""
+    }
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.playerKiller)
+  else
+    local msg = {
+      main = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_MAIN", "attacker", attacker, "attackee", attackee),
+      sub = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_DESERTCHAOKILL_MSG_SUB"),
+      addMsg = ""
+    }
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.playerKiller)
+  end
 end
 function FromClient_RegistGuildServant(vehicleType, guildName)
   local msg = {

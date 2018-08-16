@@ -1106,6 +1106,9 @@ function FGlobal_Panel_DyeReNew_Show()
   if selfPlayerIsInCompetitionArea() then
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end

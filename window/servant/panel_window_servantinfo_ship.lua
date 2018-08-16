@@ -275,7 +275,7 @@ function ShipInfo_ChangeEquipItem(slotNo)
     return
   end
   local vehicleType = vehicleWrapper:getVehicleType()
-  if UI_VT.Type_Boat ~= vehicleType or UI_VT.Type_Raft ~= vehicleType or UI_VT.Type_FishingBoat ~= vehicleType or UI_VT.Type_SailingBoat ~= vehicleType or UI_VT.Type_PersonalBattleShip ~= vehicleType then
+  if UI_VT.Type_Boat ~= vehicleType or UI_VT.Type_Raft ~= vehicleType or UI_VT.Type_FishingBoat ~= vehicleType or UI_VT.Type_SailingBoat ~= vehicleType or UI_VT.Type_PersonalBattleShip ~= vehicleType or UI_VT.Type_CashPersonalBattleShip ~= vehicleType then
     return
   end
   slot.icon:AddEffect("UI_ItemInstall", false, 0, 0)

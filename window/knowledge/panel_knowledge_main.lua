@@ -876,6 +876,9 @@ function Panel_Knowledge_Show()
   if selfPlayerIsInCompetitionArea() then
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   TooltipSimple_Hide()
   audioPostEvent_SystemUi(1, 32)
   local isShowable = knowledge:show()

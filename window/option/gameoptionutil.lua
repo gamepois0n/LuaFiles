@@ -25,8 +25,8 @@ function PaGlobal_Option:radioButtonMapping_GraphicOption(value, fromRadioButton
     [4] = 1,
     [5] = 0,
     [6] = 6,
-    [7] = 8,
-    [8] = 9
+    [7] = 9,
+    [8] = 8
   }
   return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
@@ -524,7 +524,7 @@ function PaGlobal_Option:SetGraphicOption(value, isIncrease)
       eventControl:SetMonoTone(false)
       eventControl:SetEnable(true)
     end
-  elseif self.GRAPHIC.VeryVeryHigh == value or self.GRAPHIC.UltraHigh == vlaue or self.GRAPHIC.UltraLow == vlaue then
+  elseif self.GRAPHIC.VeryVeryHigh == value or self.GRAPHIC.UltraHigh == value or self.GRAPHIC.UltraLow == value then
     if true == isIncrease then
       _SSAO._curValue = true
       _AntiAliasing._curValue = true

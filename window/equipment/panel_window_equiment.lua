@@ -519,10 +519,11 @@ function Equipment_SetShow(isShow)
   end
   local alchemyStoneQuickKeyString = keyCustom_GetString_UiKey(CppEnums.UiInputType.UiInputType_AlchemySton)
   alchemyStoneQuickKey:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_QUICKCOMMAND", "keyString", alchemyStoneQuickKeyString))
-  if true == getSelfPlayer():get():isWearingSwimmingSuit() then
-    self.checkUnderwear:SetCheck(getSelfPlayer():get():getSwimmingSuitMode())
-  elseif true == getSelfPlayer():get():isWearingUnderwear() then
-    self.checkUnderwear:SetCheck(getSelfPlayer():get():getUnderwearModeInhouse())
+  local selfPlayer = getSelfPlayer()
+  if nil ~= selfPlayer and true == selfPlayer:get():isWearingSwimmingSuit() then
+    self.checkUnderwear:SetCheck(selfPlayer:get():getSwimmingSuitMode())
+  elseif nil ~= selfPlayer and true == selfPlayer:get():isWearingUnderwear() then
+    self.checkUnderwear:SetCheck(selfPlayer:get():getUnderwearModeInhouse())
   else
     self.checkUnderwear:SetCheck(false)
   end

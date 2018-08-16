@@ -164,16 +164,6 @@ function Guild_Incentive:UpdateData()
   _guildFoundationValue:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_FOUNDATIONVALUE", "businessFunds", makeDotMoney(businessFunds), "totalMoney64", makeDotMoney(totalMoney64)))
   local memberCount = myGuildListInfo:getMemberCount()
   local leftTime = myGuildListInfo:getIncentiveDate()
-  if 0 < Int64toInt32(leftTime) then
-    local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(leftTime))
-    _leftTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_LEFTTIMETEXT", "lefttimeText", lefttimeText))
-    _leftTime:SetShow(true)
-    _leftTimeValue:SetShow(false)
-  else
-    _leftTimeValue:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_LEFTTIMEVALUE"))
-    _leftTimeValue:SetShow(true)
-    _leftTime:SetShow(false)
-  end
   for i = 1, memberCount do
     local index = i - 1
     local dataIdx = tempGuildIncentive[index + 1].idx

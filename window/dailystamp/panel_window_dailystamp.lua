@@ -738,6 +738,7 @@ function FromClient_receiveAttendanceReward(attendanceKey)
   end
 end
 local secondAttendanceCheck = false
+local isDailyChallengeShow = false
 function FromClient_AttendanceUpdate(attendanceKey)
   secondAttendanceCheck = dailyStamp.secondAttendanceCheck
   for index = 1, dailyStampCount do
@@ -765,8 +766,14 @@ function FromClient_AttendanceUpdate(attendanceKey)
     dailyStamp.nextDayShow = false
   end
   if not Panel_Window_DailyStamp:GetShow() then
+    isDailyChallengeShow = true
     Panel_Window_DailyStamp:SetShow(true, true)
   end
+end
+function PaGlobalFunc_IsDailyChallengeShow()
+  local result = isDailyChallengeShow
+  isDailyChallengeShow = false
+  return result
 end
 function FromClient_AttendanceUpdateAll(isNextDay)
   if isNextDay then
