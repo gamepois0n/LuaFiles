@@ -107,7 +107,11 @@ function voiceSet:close()
   ToClient_setMicAdjustment(micAmplification)
   ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, selfPlayer:getUserNo(), isMicOn, isHeadphoneOn, false)
   Panel_SetVoiceChat:SetShow(false)
-  FGlobal_VoiceChatState()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_VoiceChatState()
+  else
+    PaGlobalFunc_Widget_FunctionButton_HandleUpdate(Widget_Function_Type.SetVoice)
+  end
 end
 function HandleMove_VoiceChat_Volume(sliderIdx)
   local slider = voiceSet.uiPool[sliderIdx].vol_Slider
@@ -135,7 +139,11 @@ function HandleMove_VoiceChat_Volume(sliderIdx)
     ToClient_setMicAdjustment(posPercent)
   end
   HandleClick_VoiceChat_SetOnOff()
-  FGlobal_VoiceChatState()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_VoiceChatState()
+  else
+    PaGlobalFunc_Widget_FunctionButton_HandleUpdate(Widget_Function_Type.SetVoice)
+  end
 end
 function HandleClick_VoiceChat_SetOnOff()
   local isMicOn = voiceSet.ui.micOnOff:IsCheck()
@@ -151,7 +159,11 @@ function HandleClick_VoiceChat_SetOnOff()
   end
   ToClient_setSpeakerOnOff(voiceSet.enumVoiceType.enVoiceChatType_Guild, isHeadphoneOn)
   ToClient_setPushToTalkOnOff(isPushToTalk)
-  FGlobal_VoiceChatState()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_VoiceChatState()
+  else
+    PaGlobalFunc_Widget_FunctionButton_HandleUpdate(Widget_Function_Type.SetVoice)
+  end
 end
 function HandleClick_VoiceChat_Confirm()
   voiceSet.config.openIsMicOn = voiceSet.ui.micOnOff:IsCheck()
@@ -176,7 +188,12 @@ function FGlobal_SetVoiceChat_Toggle()
   if Panel_SetVoiceChat:GetShow() then
     Panel_SetVoiceChat:SetShow(false)
   else
-    local voiceChatButton = FGlobal_GetPersonalIconControl(2)
+    local voiceChatButton
+    if false == _ContentsGroup_RemasterUI_Main_RightTop then
+      voiceChatButton = FGlobal_GetPersonalIconControl(2)
+    else
+      voiceChatButton = PaGlobalFunc_Widget_FunctionButton_Control(Widget_Function_Type.SetVoice)
+    end
     Panel_SetVoiceChat:SetShow(true)
     Panel_SetVoiceChat:SetPosX(Panel_Radar:GetPosX() - Panel_SetVoiceChat:GetSizeX())
     Panel_SetVoiceChat:SetPosY(voiceChatButton:GetPosY() + voiceChatButton:GetSizeY() + 5)

@@ -697,6 +697,7 @@ function HandleClicked_ManufactureOpen()
     return
   end
   Manufacture_Show(nil, CppEnums.ItemWhereType.eWarehouse, true, nil, self._currentWaypointKey)
+  PaGlobal_SearchMenuWarehouse:Close()
 end
 function Warehouse_CheckBoxSet(slotNo)
   warehouse_checkSellToSystem(slotNo)

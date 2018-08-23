@@ -3,6 +3,7 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
 local UI_PLT = CppEnums.CashPurchaseLimitType
 local UI_CCC = CppEnums.CashProductCategory
+local UI_EventCart = CppEnums.EventCartDiscountType
 Panel_IngameCashShop_BuyOrGift:SetShow(false)
 Panel_IngameCashShop_BuyOrGift:setGlassBackground(true)
 Panel_IngameCashShop_BuyOrGift:ActiveMouseEventEffect(true)
@@ -79,7 +80,8 @@ local inGameShopBuy = {
   _radio_PayWarehouse = UI.getChildControl(Panel_IngameCashShop_BuyOrGift, "RadioButton_WarehouseMoney"),
   _staticText_PayInven = UI.getChildControl(Panel_IngameCashShop_BuyOrGift, "StaticText_InvenMoney"),
   _staticText_PayWarehouse = UI.getChildControl(Panel_IngameCashShop_BuyOrGift, "StaticText_WarehouseMoney"),
-  _bool_payInSilverFromWarehouse = false
+  _bool_payInSilverFromWarehouse = false,
+  _currentSelectedEventTab = 0
 }
 inGameShopBuy.icon_Pearl = UI.getChildControl(inGameShopBuy._static_GiftListMiddleBG, "StaticText_TotalPearlIcon")
 local contry = {
@@ -127,14 +129,18 @@ local isKorea = eCountryType.NONE == gameServiceType or eCountryType.DEV == game
 local isNaver = CppEnums.MembershipType.naver == getMembershipType()
 function inGameShopBuy:init()
   local slotConfig = self._config._slot
+  local gapCount = 0
   for ii = 0, self._slotCount - 1 do
     local slot = {}
     slot.iconBG = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop_BuyOrGift, "Static_SubItemSlotBG", Panel_IngameCashShop_BuyOrGift, "InGameShopBuy_Sub_" .. ii)
     slot.icon = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop_BuyOrGift, "Static_SubItemSlot", slot.iconBG, "InGameShopBuy_Sub_Icon_" .. ii)
     slot._itemRaw = 0
     slot._itemCount = 0
-    slot.iconBG:SetPosX(slotConfig._startX + slotConfig._gapX * ii)
-    slot.iconBG:SetPosY(slotConfig._startY)
+    if ii > 0 and 0 == ii % 10 then
+      gapCount = gapCount + 1
+    end
+    slot.iconBG:SetPosX(slotConfig._startX + slotConfig._gapX * (ii - 10 * gapCount))
+    slot.iconBG:SetPosY(slotConfig._startY + 36 * gapCount)
     self._slots[ii] = slot
   end
   self._static_BuyLineBG = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop_BuyOrGift, "Static_BuyLineBG", Panel_IngameCashShop_BuyOrGift, "InGameShopBuy_Buy")
@@ -262,7 +268,7 @@ function inGameShopBuy:updateByEventCart()
   self._static_CouponApplyBG:SetShow(false)
   self._txt_CouponApplyIcon:SetShow(false)
   self._txt_PearlIconPrice:SetFontColor(UI_color.C_FFEFEFEF)
-  self.savedCouponApply = isCouponApply
+  self.savedCouponApply = false
   self._radio_PayInven:SetShow(false)
   self._radio_PayWarehouse:SetShow(false)
   self._staticText_PayInven:SetShow(false)
@@ -273,13 +279,13 @@ function inGameShopBuy:updateByEventCart()
     slot._itemCount = 0
     slot.iconBG:SetShow(false)
   end
-  local eventCartProductCount = getIngameCashMall():getEventCartListCount()
+  local eventCartProductCount = getIngameCashMall():getEventCartListCount(self._currentSelectedEventTab)
   local itemListCount = 0
   local nextProductCount = 0
   local realCount = 0
   local lastCashProduct
   for jj = 0, eventCartProductCount - 1 do
-    local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(getIngameCashMall():getEventCartListByIndex(jj))
+    local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(getIngameCashMall():getEventCartListByIndex(jj, self._currentSelectedEventTab))
     if nil == cashProduct then
       return
     end
@@ -303,8 +309,8 @@ function inGameShopBuy:updateByEventCart()
       else
         slot = self._slots[realCount]
         slot.icon:ChangeTextureInfoName("icon/" .. item:getIconPath())
-        slot.icon:addInputEvent("Mouse_On", "InGameShopBuy_ShowEventCartItemToolTip( true, " .. getIngameCashMall():getEventCartListByIndex(jj) .. "," .. ii .. "," .. ii - itemListCount .. " )")
-        slot.icon:addInputEvent("Mouse_Out", "InGameShopBuy_ShowEventCartItemToolTip( false, " .. getIngameCashMall():getEventCartListByIndex(jj) .. "," .. ii .. "," .. ii - itemListCount .. " )")
+        slot.icon:addInputEvent("Mouse_On", "InGameShopBuy_ShowEventCartItemToolTip( true, " .. getIngameCashMall():getEventCartListByIndex(jj, self._currentSelectedEventTab) .. "," .. ii .. "," .. ii - itemListCount .. " )")
+        slot.icon:addInputEvent("Mouse_Out", "InGameShopBuy_ShowEventCartItemToolTip( false, " .. getIngameCashMall():getEventCartListByIndex(jj, self._currentSelectedEventTab) .. "," .. ii .. "," .. ii - itemListCount .. " )")
         slot.icon:SetText(tostring(itemCount))
         slot._itemCount = itemCount
         slot._itemRaw = item:get()._key:get()
@@ -316,41 +322,69 @@ function inGameShopBuy:updateByEventCart()
     lastCashProduct = cashProduct
   end
   InGameShopBuy_ChangeMoneyIconTexture(lastCashProduct:getMainCategory(), lastCashProduct:isMoneyPrice())
+  local giftGap = 0
+  self._static_Gift:SetShow(false)
+  self._edit_Gift:SetShow(false)
+  if self._isGift then
+    self._static_Gift:SetShow(true)
+    self._edit_Gift:SetShow(true)
+    self._edit_Gift:SetIgnore(false)
+    self._edit_Gift:SetEnable(true)
+    self._edit_Gift:SetDisableColor(false)
+    giftGap = self._config._sizeGift
+  end
   local buyConfig = self._config._buy
   self._static_BuyLineBG:SetPosX(buyConfig._startX)
   self._static_BuyLineBG:SetPosY(buyConfig._startY + buyConfig._gapX + 10)
-  self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
-  self._static_PearlBG:SetPosY(210)
-  if isCouponApply then
-    self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 70)
+  if self._isGift then
+    self._static_BuyLineBG:SetShow(false)
+    self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 600 + buyConfig._gapX)
+    self._static_GiftListBG:SetPosY(180 + buyConfig._gapX)
+    self._static_GiftListTopBG:SetPosY(185 + buyConfig._gapX)
+    self._static_GiftListMiddleBG:SetPosY(280 + buyConfig._gapX)
+    self._static_GiftListBotBG:SetPosY(335 + buyConfig._gapX)
+    self._static_GiftListBG:SetShow(true)
+    self._static_GiftListTopBG:SetShow(true)
+    self._static_GiftListMiddleBG:SetShow(true)
+    self._static_GiftListBotBG:SetShow(true)
+    self._button_AddUser:SetShow(true)
+    self._static_PearlBG:SetShow(false)
+    self._txt_PearlIconPrice:SetShow(false)
+    self._static_PearlIcon:SetShow(false)
+    self._static_selectStampBG:SetShow(false)
+    inGameShopBuy:AddedListUpdate()
+    inGameShopBuy:UserListUpdate()
   else
+    self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
+    self._static_PearlBG:SetPosY(210)
     self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 30)
+    self._static_CouponApplyBG:SetPosY(self._static_PearlBG:GetPosY() + 10)
+    self._txt_CouponApplyIcon:ComputePos()
+    local couponBGSizeX = self._static_CouponApplyBG:GetSizeX()
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
+    local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
+    self._static_PearlBG:SetShow(true)
+    self._static_GiftListBG:SetShow(false)
+    self._static_GiftListTopBG:SetShow(false)
+    self._static_GiftListBotBG:SetShow(false)
+    self._static_GiftListMiddleBG:SetShow(false)
+    self._button_AddUser:SetShow(false)
+    self._txt_PearlIconPrice:SetShow(true)
+    self.savedCouponDiscountTextSizeX = 0
+    local couponIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - self._txt_CouponApplyIcon:GetTextSizeX() / 2 - 25
+    self._txt_CouponApplyIcon:SetPosX(couponIconTextPosX)
+    self._txt_DiscountDirection:SetPosY(pearlIconPriceByCoupon + 7)
+    local pearIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - self._txt_PearlIconPrice:GetTextSizeX() / 2 - self.savedCouponDiscountTextSizeX
+    self._txt_PearlIconPrice:SetPosX(pearIconTextPosX)
+    self._txt_PearlIconPrice:SetPosY(pearlIconPriceByCoupon)
+    self._static_DiscountPrice:SetPosX(self._txt_PearlIconPrice:GetPosX() + self._txt_PearlIconPrice:GetTextSizeX() + self._static_DiscountPrice:GetTextSizeX() + 60)
+    self._static_DiscountPrice:SetPosY(pearlIconPriceByCoupon)
+    self._static_selectStampBG:SetShow(false)
+    self._radioButtonSelectPearl:SetShow(false)
+    local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
+    FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(0, 0)
   end
-  self._static_CouponApplyBG:SetPosY(self._static_PearlBG:GetPosY() + 10)
-  self._txt_CouponApplyIcon:ComputePos()
-  local couponBGSizeX = self._static_CouponApplyBG:GetSizeX()
-  Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
-  local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
-  self._static_PearlBG:SetShow(true)
-  self._static_GiftListBG:SetShow(false)
-  self._static_GiftListTopBG:SetShow(false)
-  self._static_GiftListBotBG:SetShow(false)
-  self._static_GiftListMiddleBG:SetShow(false)
-  self._button_AddUser:SetShow(false)
-  self._txt_PearlIconPrice:SetShow(true)
-  self.savedCouponDiscountTextSizeX = 0
-  local couponIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - self._txt_CouponApplyIcon:GetTextSizeX() / 2 - 25
-  self._txt_CouponApplyIcon:SetPosX(couponIconTextPosX)
-  self._txt_DiscountDirection:SetPosY(pearlIconPriceByCoupon + 7)
-  local pearIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - self._txt_PearlIconPrice:GetTextSizeX() / 2 - self.savedCouponDiscountTextSizeX
-  self._txt_PearlIconPrice:SetPosX(pearIconTextPosX)
-  self._txt_PearlIconPrice:SetPosY(pearlIconPriceByCoupon)
-  self._static_DiscountPrice:SetPosX(self._txt_PearlIconPrice:GetPosX() + self._txt_PearlIconPrice:GetTextSizeX() + self._static_DiscountPrice:GetTextSizeX() + 60)
-  self._static_DiscountPrice:SetPosY(pearlIconPriceByCoupon)
-  self._static_selectStampBG:SetShow(false)
-  self._radioButtonSelectPearl:SetShow(false)
-  local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
-  FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(0, 0)
   self._static_Gift:ComputePos()
   self._edit_Gift:ComputePos()
   self._button_AddUser:ComputePos()
@@ -468,6 +502,10 @@ function inGameShopBuy:update(isCouponApply)
     self._static_BuyLineBG:SetShow(false)
     self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), 130)
     Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 600)
+    self._static_GiftListBG:SetPosY(180)
+    self._static_GiftListTopBG:SetPosY(185)
+    self._static_GiftListMiddleBG:SetPosY(280)
+    self._static_GiftListBotBG:SetPosY(335)
     self._static_GiftListBG:SetShow(true)
     self._static_GiftListTopBG:SetShow(true)
     self._static_GiftListMiddleBG:SetShow(true)
@@ -681,12 +719,18 @@ function inGameShopBuy:AddedListUpdate()
     slot.name:SetShow(false)
   end
   self._config._giftTopListCount = getIngameCashMall():getGiftListCount()
-  local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
-  if nil == cashProduct then
-    return
+  local totalPearl = 0
+  if self._eventCart then
+    self.icon_Pearl:SetText("0")
+    totalPearl = self._config._giftTopListCount * Int64toInt32(FGlobal_IngameCashShopEventCart_TotalPriceByIndex(self._currentSelectedEventTab))
+  else
+    local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
+    if nil == cashProduct then
+      return
+    end
+    self.icon_Pearl:SetText("0")
+    totalPearl = self._config._giftTopListCount * Int64toInt32(cashProduct:getPrice())
   end
-  self.icon_Pearl:SetText("0")
-  local totalPearl = self._config._giftTopListCount * Int64toInt32(cashProduct:getPrice())
   self.icon_Pearl:SetText(makeDotMoney(totalPearl))
   local uiIdx = 0
   for idx = self._config._giftTopListStart, self._config._giftTopListCount - 1 do
@@ -698,6 +742,13 @@ function inGameShopBuy:AddedListUpdate()
       slot.count:SetEditText(data:getCount(), true)
       slot.btnPlus:addInputEvent("Mouse_LUp", "HandleClicked_InGameShop_ChangeGiftCount( true, " .. idx .. " )")
       slot.btnMinus:addInputEvent("Mouse_LUp", "HandleClicked_InGameShop_ChangeGiftCount( false, " .. idx .. " )")
+      if self._eventCart then
+        slot.btnPlus:SetEnable(false)
+        slot.btnMinus:SetEnable(false)
+      else
+        slot.btnPlus:SetEnable(true)
+        slot.btnMinus:SetEnable(true)
+      end
       slot.btnDelete:addInputEvent("Mouse_LUp", "HandleClicked_InGameShop_DeleteGiftList( " .. idx .. " )")
       uiIdx = uiIdx + 1
     end
@@ -828,8 +879,51 @@ function InGameShopBuy_ConfirmMSG()
   MessageBox.showMessageBox(messageBoxData, "middle")
 end
 function InGameShopBuy_ConfirmEventCart()
-  FGlobal_IngameCashShopEventCart_Confirm()
-  InGameShopBuy_Close()
+  local self = inGameShopBuy
+  if not self._isGift then
+    FGlobal_IngameCashShopEventCart_Confirm(self._currentSelectedEventTab)
+  else
+    local userCount = inGameShopBuy._config._giftTopListCount
+    if userCount <= 0 then
+      local msg = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_INGAMECASHSHOP_BUYORGIFT_MUST_SELECT_USER")
+      Proc_ShowMessage_Ack(msg)
+      return
+    end
+    local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING")
+    local messageBoxMemo = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_PANEL_INGAMECASHSHOP_BUYORGIFT_GIFT_CONFIRM", "countUser", userCount, "itemName", PAGetString(Defines.StringSheet_GAME, "LUA_EVENTCART_ITEM"))
+    local messageBoxData = {
+      title = messageBoxtitle,
+      content = messageBoxMemo,
+      functionYes = _InGameShopBuy_Confirm_EnoughMoneyForGiftEventCart,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData, "middle")
+  end
+end
+function _InGameShopBuy_Confirm_EnoughMoneyForGiftEventCart()
+  local selfPlayerWrapper = getSelfPlayer()
+  local selfPlayer = selfPlayerWrapper:get()
+  local isCreatePasword = selfPlayer:isPaymentPassword()
+  if false == isCreatePasword then
+    InGameShopBuy_GiftMyFriendEventCart()
+  else
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_GIFTMYFRIEND")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+      content = messageBoxMemo,
+      functionApply = InGameShopBuy_GiftMyFriendEventCart,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+  end
+end
+function InGameShopBuy_GiftMyFriendEventCart()
+  PaymentPassword(FGlobal_InGameShopBuy_GiftEventCart)
+end
+function FGlobal_InGameShopBuy_GiftEventCart()
+  local self = inGameShopBuy
+  FGlobal_IngameCashShopEventCartGift_Confirm(self._currentSelectedEventTab)
 end
 function InGameShopBuy_CouponCheck_BeforeConfirm()
   if nil == FGlobal_IngameCashShopCoupon_ReturnValue() and true == Panel_IngameCashShop_Coupon:GetShow() then
@@ -1248,11 +1342,15 @@ function HandleClicked_AddGiftTopList(botIdx)
   local botUserNo = inGameShopBuy.giftUserList[botIdx].userNo
   local botSendType = inGameShopBuy.giftUserList[botIdx].sendType
   if "" ~= botName or nil ~= botName then
-    getIngameCashMall():pushGiftToUser(botName, botUserNo)
+    getIngameCashMall():pushGiftToUser(botName, botUserNo, inGameShopBuy._eventCart)
   else
     _PA_ASSERT(false, "\235\141\176\236\157\180\237\132\176\234\176\128 \235\185\132\236\160\149\236\131\129\236\158\133\235\139\136\235\139\164. giftUserList \235\176\176\236\151\180\236\151\144 \237\149\180\235\139\185\237\149\152\235\138\148 idx \237\152\185\236\157\128 name \234\176\146\236\157\180 \236\151\134\236\138\181\235\139\136\235\139\164.")
   end
-  inGameShopBuy:update()
+  if inGameShopBuy._eventCart then
+    inGameShopBuy:updateByEventCart()
+  else
+    inGameShopBuy:update()
+  end
 end
 function HandleClicked_InGameShop_ChangeGiftCount(isPlus, dataIdx)
   local self = inGameShopBuy
@@ -1279,14 +1377,18 @@ function HandleClicked_InGameShop_DeleteGiftList(dataIdx)
   inGameShopBuy:AddedListUpdate()
 end
 function HandelClicked_InGameShopBuy_FriendGuild()
-  inGameShopBuy:update()
+  if inGameShopBuy._eventCart then
+    inGameShopBuy:updateByEventCart()
+  else
+    inGameShopBuy:update()
+  end
 end
 function HandelClicked_InGameShopBuy_SetAddUser()
   inGameShopBuy._edit_Gift:SetEditText("", true)
 end
 function HandelClicked_InGameShopBuy_AddUser()
   local userName = inGameShopBuy._edit_Gift:GetEditText()
-  getIngameCashMall():pushGiftToCharacter(userName)
+  getIngameCashMall():pushGiftToCharacter(userName, inGameShopBuy._eventCart)
   inGameShopBuy:AddedListUpdate()
   inGameShopBuy._edit_Gift:SetEditText("", true)
   ClearFocusEdit()
@@ -1359,6 +1461,7 @@ function FGlobal_InGameShopBuy_Open(productNoRaw, isGift, byCart, isEasy, isEven
   self._eventCart = isEventCart
   self._edit_count:SetEditText(1, false)
   self.savedProductCount = 1
+  self._currentSelectedEventTab = FGlobal_IngameCashShop_EventCart_SelectedTab()
   self._static_ItemIconBG:SetShow(true)
   self._static_ItemIcon:SetShow(true)
   self._static_ItemName:SetShow(true)
@@ -1373,24 +1476,44 @@ function FGlobal_InGameShopBuy_Open(productNoRaw, isGift, byCart, isEasy, isEven
     self._buttonFriendList:SetCheck(true)
     self._buttonGuildList:SetCheck(false)
     self._radioButtonSelectPearl:SetShow(false)
-  elseif true == isEventCart then
-    self._panelTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPTITLE"))
-    self._button_Confirm:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUY"))
-    self._static_BuyCountTitle:SetShow(false)
-    self._static_BuyLineBG:SetShow(false)
-    self._edit_count:SetShow(false)
-    self._edit_Gift:SetShow(false)
-    self._static_Gift:SetShow(false)
-    self._static_ItemIconBG:SetShow(false)
-    self._static_ItemIcon:SetShow(false)
-    self._static_ItemName:SetShow(false)
-    self._txt_PearlIconPrice:SetText(makeDotMoney(FGlobal_IngameCashShopEventCart_TotalPrice()))
-    self._static_Caution:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    self._static_Caution:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPCAUTION", "discountpearl", FGlobal_IngameCashShop_EventCart_DiscountValue()))
-    self._static_Caution:SetShow(true)
+    if true == isEventCart then
+      self._panelTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPTITLE_GIFT"))
+      self._static_ItemIconBG:SetShow(false)
+      self._static_ItemIcon:SetShow(false)
+      self._static_ItemName:SetShow(false)
+      self._txt_PearlIconPrice:SetText(makeDotMoney(FGlobal_IngameCashShopEventCart_TotalPriceByIndex(self._currentSelectedEventTab)))
+      self._static_Caution:SetTextMode(UI_TM.eTextMode_AutoWrap)
+      local eventType = FGlobal_IngameCashShop_EventCart_EventType(self._currentSelectedEventTab)
+      if eventType == UI_EventCart.eEventCartDiscountType_Subtraction then
+        self._static_Caution:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPCAUTIONPRICE", "discountpearl", FGlobal_IngameCashShop_EventCart_DiscountValue(self._currentSelectedEventTab)))
+      elseif eventType == UI_EventCart.eEventCartDiscountType_Rate then
+        self._static_Caution:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPCAUTION", "discountpearl", FGlobal_IngameCashShop_EventCart_DiscountValue(self._currentSelectedEventTab)))
+      end
+      self._static_Caution:SetShow(true)
+    end
   else
     self._panelTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUYPRODUCT"))
     self._button_Confirm:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUY"))
+    if true == isEventCart then
+      self._panelTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPTITLE"))
+      self._static_BuyCountTitle:SetShow(false)
+      self._static_BuyLineBG:SetShow(false)
+      self._edit_count:SetShow(false)
+      self._edit_Gift:SetShow(false)
+      self._static_Gift:SetShow(false)
+      self._static_ItemIconBG:SetShow(false)
+      self._static_ItemIcon:SetShow(false)
+      self._static_ItemName:SetShow(false)
+      self._txt_PearlIconPrice:SetText(makeDotMoney(FGlobal_IngameCashShopEventCart_TotalPriceByIndex(self._currentSelectedEventTab)))
+      self._static_Caution:SetTextMode(UI_TM.eTextMode_AutoWrap)
+      local eventType = FGlobal_IngameCashShop_EventCart_EventType(self._currentSelectedEventTab)
+      if eventType == UI_EventCart.eEventCartDiscountType_Subtraction then
+        self._static_Caution:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPCAUTIONPRICE", "discountpearl", FGlobal_IngameCashShop_EventCart_DiscountValue(self._currentSelectedEventTab)))
+      elseif eventType == UI_EventCart.eEventCartDiscountType_Rate then
+        self._static_Caution:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCART_POPUPCAUTION", "discountpearl", FGlobal_IngameCashShop_EventCart_DiscountValue(self._currentSelectedEventTab)))
+      end
+      self._static_Caution:SetShow(true)
+    end
   end
   self.giftUserList = {}
   self._config._giftTopListCount = 0
@@ -1433,6 +1556,12 @@ function InGameShopBuy_Close(isCouponCheck)
   Panel_IngameCashShop_BuyOrGift:SetShow(false)
   IngameCashShopCoupon_Close(isCouponCheck)
   inGameShopBuy.savedCouponDiscountTextSizeX = 0
+end
+function InGameShopBuy_IsOpen()
+  if Panel_IngameCashShop_BuyOrGift:GetShow() then
+    return true
+  end
+  return false
 end
 function InGameShopBuy_CheckAddUser()
   if Panel_Win_System:GetShow() then

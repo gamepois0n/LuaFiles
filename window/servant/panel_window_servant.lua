@@ -327,6 +327,9 @@ function servantIcon:update()
   if true == _ContentsGroup_RenewUI_Main then
     return
   end
+  if true == _ContentsGroup_RemasterUI_Main then
+    return
+  end
   local temporaryWrapper = getTemporaryInformationWrapper()
   local landVehicleWrapper = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Vehicle)
   if nil ~= landVehicleWrapper then
@@ -760,6 +763,9 @@ registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Servant_Upda
 function FGlobal_Window_Servant_Update()
   local self = servantIcon
   self:update()
+end
+function Panel_Window_Servant_GetShow()
+  return Panel_Window_Servant:GetShow()
 end
 function FGlobal_Window_Servant_ColorBlindUpdate()
   local self = servantIcon

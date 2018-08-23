@@ -94,7 +94,8 @@ local inGameShop = {
     _btn_BigBuy_Silver = nil,
     _btn_BigCart = nil,
     _btn_BigGift = nil,
-    _btn_BigECart = nil
+    _btn_BigECart = nil,
+    _btn_BigECartSlot = nil
   },
   _subItemButton = Array.new(),
   _subItemCount = 20,
@@ -143,7 +144,8 @@ local inGameShop = {
   _currentProductKeyRaw = -1,
   _cashProductNoData = -1,
   _cashProductIndex = 1,
-  _ViewingRecommend = false
+  _ViewingRecommend = false,
+  _static_EquipSlots = Array.new()
 }
 inGameShop._scrollBTN_IngameCash = UI.getChildControl(inGameShop._scroll_IngameCash, "Scroll_CtrlButton")
 inGameShop._combo_ClassList = UI.getChildControl(inGameShop._combo_Class, "Combobox_List")
@@ -551,7 +553,8 @@ function inGameShop:init()
         mainTabInfo:getTabImageNo(),
         mainTabInfo:getIconPath(),
         mainTabInfo:getCategoryType(),
-        mainTabInfo:getEventKey()
+        mainTabInfo:getEventKey(),
+        mainTabInfo:getEventSlotKey()
       }
     end
   end
@@ -981,8 +984,23 @@ function inGameShop:updateSlot()
       if self._currentPos < pos + slot.static:GetSizeY() + self._goodDescBG:GetSizeY() and pos + slot.static:GetSizeY() < self._currentPos + areaSizeY and 1 < self._goodDescBG:GetSizeY() then
         self._goodDescBG:SetPosY(pos - self._currentPos + slot.static:GetSizeY())
         self._goodDescBG:SetShow(true)
-        self.desc._btn_BigGift:SetSpanSize(100, 10)
-        self.desc._btn_BigECart:SetSpanSize(60, 10)
+        if 0 < inGameShop._currentTab and inGameShop._currentTab <= getCashMainCategorySize() and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
+          if 0 < tabIndexList[inGameShop._currentTab][6] and 0 < tabIndexList[inGameShop._currentTab][7] then
+            self.desc._btn_BigGift:SetSpanSize(140, 10)
+            self.desc._btn_BigECart:SetSpanSize(100, 10)
+            self.desc._btn_BigECartSlot:SetSpanSize(60, 10)
+          elseif 0 < tabIndexList[inGameShop._currentTab][7] then
+            self.desc._btn_BigGift:SetSpanSize(100, 10)
+            self.desc._btn_BigECartSlot:SetSpanSize(60, 10)
+          elseif 0 < tabIndexList[inGameShop._currentTab][6] then
+            self.desc._btn_BigGift:SetSpanSize(100, 10)
+            self.desc._btn_BigECart:SetSpanSize(60, 10)
+          end
+        else
+          self.desc._btn_BigGift:SetSpanSize(100, 10)
+          self.desc._btn_BigECart:SetSpanSize(60, 10)
+          self.desc._btn_BigECartSlot:SetSpanSize(60, 10)
+        end
         self.desc._btn_BigCart:SetSpanSize(60, 10)
         self.desc._btn_BigBuy:SetSpanSize(20, 10)
         self.desc._btn_BigBuy_C:SetSpanSize(20, 10)
@@ -1138,13 +1156,14 @@ function InGameShop_TabEvent(tab)
     self._categoryWeb:SetShow(true)
   end
   if self._currentTab > 0 and self._currentTab <= getCashMainCategorySize() then
-    if 0 < tabIndexList[tab][6] and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
-      local eventWrapper = ToClient_GetEventCategoryStaticStatusWrapperByKeyRaw(tabIndexList[tab][6])
-      if nil ~= eventWrapper then
+    if (0 < tabIndexList[tab][6] or 0 < tabIndexList[tab][7]) and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
+      local eventListWrapper = ToClient_GetEventCategoryStaticStatusWrapperByKeyRaw(tabIndexList[tab][6])
+      local eventSlotWrapper = ToClient_GetEventCategoryStaticStatusWrapperByKeyRaw(tabIndexList[tab][7])
+      if nil ~= eventListWrapper or nil ~= eventSlotWrapper then
         if self._previousTab ~= self._currentTab then
           IngameCashShopEventCart_Clear()
         end
-        IngameCashShopEventCart_Open(tabIndexList[tab][6])
+        IngameCashShopEventCart_Open(tabIndexList[tab][6], tabIndexList[tab][7])
       end
     else
       IngameCashShopEventCart_Close()
@@ -1756,6 +1775,7 @@ function IngameCashShop_Descinit()
   self._btn_BigCart = UI.getChildControl(inGameShop._goodDescBG, "Button_BigCart")
   self._btn_BigGift = UI.getChildControl(inGameShop._goodDescBG, "Button_BigGift")
   self._btn_BigECart = UI.getChildControl(inGameShop._goodDescBG, "Button_BigECart")
+  self._btn_BigECartSlot = UI.getChildControl(inGameShop._goodDescBG, "Button_BigECartSlot")
   self._staticText_Title:SetAutoResize(true)
   self._static_Desc:SetAutoResize(true)
   self._staticText_Title:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -1809,6 +1829,11 @@ function IngameCashShop_Descinit()
     chooseProduct.staticEditCount:SetShow(false)
     chooseProduct.staticEditCount:SetIgnore(true)
     selfPanel._chooseProductList[jj] = chooseProduct
+  end
+  for ii = 0, 3 do
+    local slotIcon = {}
+    slotIcon = UI.createAndCopyBasePropertyControl(inGameShop._goodDescBG, "Static_EquipSlotIcons_" .. ii, inGameShop._goodDescBG, "InGameShop_EquipSlotIcons_" .. ii)
+    selfPanel._static_EquipSlots[ii] = slotIcon
   end
 end
 function IngameCashShop_DescUpdate()
@@ -2065,16 +2090,47 @@ function IngameCashShop_DescUpdate()
   end
   self._btn_BigCart:SetShow(true)
   self._btn_BigECart:SetShow(false)
-  if 0 < inGameShop._currentTab and inGameShop._currentTab <= getCashMainCategorySize() and 0 < tabIndexList[inGameShop._currentTab][6] and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
-    self._btn_BigECart:SetShow(true)
-    self._btn_BigCart:SetShow(false)
+  self._btn_BigECartSlot:SetShow(false)
+  local evantType = cashProduct:getEventCartType()
+  if 0 < inGameShop._currentTab and inGameShop._currentTab <= getCashMainCategorySize() and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
+    local isOnListButton = 0 == evantType or 1 == evantType
+    local isOnSlotButton = 0 == evantType or 2 == evantType
+    if 0 < tabIndexList[inGameShop._currentTab][6] and 0 < tabIndexList[inGameShop._currentTab][7] then
+      self._btn_BigECart:SetShow(true)
+      self._btn_BigECartSlot:SetShow(true)
+      self._btn_BigECart:SetMonoTone(false == isOnListButton)
+      self._btn_BigECartSlot:SetMonoTone(false == isOnSlotButton)
+      self._btn_BigECart:SetEnable(isOnListButton)
+      self._btn_BigECartSlot:SetEnable(isOnSlotButton)
+      self._btn_BigCart:SetShow(false)
+    elseif 0 < tabIndexList[inGameShop._currentTab][7] then
+      self._btn_BigECart:SetShow(false)
+      self._btn_BigECartSlot:SetShow(true)
+      self._btn_BigECart:SetMonoTone(true)
+      self._btn_BigECartSlot:SetMonoTone(false == isOnSlotButton)
+      self._btn_BigECart:SetEnable(false)
+      self._btn_BigECartSlot:SetEnable(isOnSlotButton)
+      self._btn_BigCart:SetShow(false)
+    elseif 0 < tabIndexList[inGameShop._currentTab][6] then
+      self._btn_BigECart:SetShow(true)
+      self._btn_BigECartSlot:SetShow(false)
+      self._btn_BigECart:SetMonoTone(false == isOnListButton)
+      self._btn_BigECartSlot:SetMonoTone(false)
+      self._btn_BigECart:SetEnable(isOnListButton)
+      self._btn_BigECartSlot:SetEnable(false)
+      self._btn_BigCart:SetShow(false)
+    end
+  end
+  for _, slotIcon in pairs(inGameShop._static_EquipSlots) do
+    slotIcon:SetPosY(optionDesc_PosY)
   end
   self._btn_BigGift:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigCart:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedCartItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigBuy:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigBuy_C:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigBuy_M:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
-  self._btn_BigECart:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ")")
+  self._btn_BigECart:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ", 0)")
+  self._btn_BigECartSlot:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ", 1)")
   self._btn_BigBuy_Silver:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
 end
 function IngameCashShop_initSubItemButton()
@@ -2659,6 +2715,11 @@ function IngameCashShop_GiftItem(index)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return
   end
+  if myLevel < 56 and isGameTypeTaiwan() then
+    limitLevel = 56
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return
+  end
   local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(slot.productNoRaw)
   if nil == cashProduct then
     return
@@ -2696,6 +2757,11 @@ function IngameCashShop_DescSelectedGiftItem(productNoRaw)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return
   end
+  if myLevel < 56 and isGameTypeTaiwan() then
+    limitLevel = 56
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return
+  end
   local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(productNoRaw)
   if nil == cashProduct then
     return
@@ -2714,9 +2780,10 @@ function IngameCashShop_DescSelectedGiftItem(productNoRaw)
   end
   FGlobal_InGameShopBuy_Open(tempSaveProductKeyRaw, true)
 end
-function IngameCashShop_DescSelectedEcartItem(productNoRaw)
-  IngameCashShopEventCart_Update(productNoRaw)
-  ToClient_RequestRecommendList(productNoRaw)
+function IngameCashShop_DescSelectedEcartItem(productNoRaw, index)
+  if true == IngameCashShopEventCart_Update(productNoRaw, index) then
+    ToClient_RequestRecommendList(productNoRaw)
+  end
 end
 function IngameCashShop_BuyItem(index)
   local self = inGameShop
@@ -3082,6 +3149,13 @@ function InGameCashshopDescUpdate(deltaTime)
       chooseProduct.staticEditCount:SetShow(0 < chooseProduct.staticEditCount:GetPosY() + chooseProduct.staticEditCount:GetSizeY() and chooseProduct.staticEditCount:GetPosY() + chooseProduct.staticEditCount:GetSizeY() < self._goodDescBG:GetSizeY())
     end
   end
+  for key, slotIcon in pairs(inGameShop._static_EquipSlots) do
+    if nil ~= cashProduct and true == cashProduct:isShowSlotIcon(key) then
+      slotIcon:SetShow(0 < slotIcon:GetPosY() + slotIcon:GetSizeY() and slotIcon:GetPosY() + slotIcon:GetSizeY() < self._goodDescBG:GetSizeY())
+    else
+      slotIcon:SetShow(false)
+    end
+  end
   IngameCashShop_DescUpdate()
   self:updateSlot()
 end
@@ -3307,7 +3381,9 @@ function InGameShop_Close()
   if Panel_IngameCashShop_NewCart:GetShow() then
     FGlobal_Close_IngameCashShop_NewCart()
   end
-  FGlobal_RightBottomIconReposition()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_RightBottomIconReposition()
+  end
   self._promotionWeb:ResetUrl()
   self._promotionWeb:SetShow(false)
   self._categoryWeb:ResetUrl()

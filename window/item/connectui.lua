@@ -21,7 +21,7 @@ function ConnectUI(connectUiType)
     end
     ToClient_AddBlackSpiritFlush(0, true, CppEnums.EFlush_BlackSpirit_Ui_Type.eFlush_BlackSpirit_Ui_Socket)
   elseif eConnectUiType.eConnectUi_Beer == connectUiType then
-    WorkerManager_ShowToggle()
+    FGlobal_WorkerManger_ShowToggle()
   elseif eConnectUiType.eConnectUi_Improve == connectUiType then
     if not IsSelfPlayerWaitAction() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SUMMON_BLACKSPIRIT"))

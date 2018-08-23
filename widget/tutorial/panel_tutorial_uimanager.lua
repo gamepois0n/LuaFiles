@@ -20,7 +20,6 @@ PaGlobal_TutorialUiManager._uiPanelInfo = {
   [Panel_Radar] = CppEnums.PAGameUIType.PAGameUIPanel_RadarMap,
   [Panel_QuickSlot] = CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot,
   [Panel_MainStatus_User_Bar] = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar,
-  [Panel_Party] = CppEnums.PAGameUIType.PAGameUIPanel_Party,
   [Panel_CheckedQuest] = CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest,
   [Panel_MyHouseNavi] = CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi,
   [Panel_Window_Servant] = CppEnums.PAGameUIType.PAGameUIPanel_ServantWindow,
@@ -53,8 +52,15 @@ PaGlobal_TutorialUiManager._uiPanelInfo = {
   [Panel_NewQuickSlot_10] = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_10,
   [Panel_SkillCooltime] = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime,
   [Panel_Movie_KeyViewer] = CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer,
-  [Panel_MainQuest] = CppEnums.PAGameUIType.PAGameUIPanel_MainQuest
+  [Panel_MainQuest] = CppEnums.PAGameUIType.PAGameUIPanel_MainQuest,
+  [Panel_MainStatus_Remaster] = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster,
+  [Panel_Widget_ServantIcon] = CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon
 }
+if true == _ContentsGroup_RemasterUI_Main then
+  PaGlobal_TutorialUiManager._uiPanelInfo[Panel_Widget_Party] = CppEnums.PAGameUIType.PAGameUIPanel_Party
+else
+  PaGlobal_TutorialUiManager._uiPanelInfo[Panel_Party] = CppEnums.PAGameUIType.PAGameUIPanel_Party
+end
 function PaGlobal_TutorialUiManager:initialize()
   self._uiList._uiBlackSpirit = PaGlobal_TutorialUiBlackSpirit
   self._uiList._uiKeyButton = PaGlobal_TutorialUiKeyButton
@@ -124,8 +130,12 @@ function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
     end
   end
   if false == _ContentsGroup_RenewUI_Main then
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
   end
+  Panel_Widget_Function:SetShow(true)
+  Panel_PersonalIcon_Left:SetShow(true)
+  Panel_Widget_ServantIcon:SetShow(true)
+  FGlobal_MaidIcon_SetPos()
   if not _ContentsGroup_RenewUI_Chatting then
     local chattingPanelCount = ToClient_getChattingPanelCount()
     for panelIndex = 0, chattingPanelCount - 1 do
@@ -152,7 +162,9 @@ function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
 end
 function onReSizePanel(key)
   if key == Panel_NewEquip then
-    Panel_NewEquip_ScreenResize()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      Panel_NewEquip_ScreenResize()
+    end
   elseif key == Panel_MainStatus_User_Bar then
     if false == _ContentsGroup_RenewUI_Main then
       Panel_MainStatus_User_Bar_Onresize()
@@ -177,6 +189,8 @@ function onReSizePanel(key)
     end
   elseif key == Panel_QuickSlot then
     QuickSlot_OnscreenResize()
+  elseif key == Panel_Widget_ServantIcon then
+    PaGlobalFunc_ServantIcon_OnResize()
   end
 end
 function FromClient_TutorialScreenReposition()
@@ -212,16 +226,24 @@ function PaGlobal_TutorialUiManager:restoreAllUiByUserSetting()
     end
   end
   if isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_KOR) or isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_JAP) then
-    FGlobal_PersonalIcon_ButtonPosUpdate()
+    if false == _ContentsGroup_RemasterUI_Main_RightTop then
+      FGlobal_PersonalIcon_ButtonPosUpdate()
+    else
+      FromClient_Widget_FunctionButton_Resize()
+    end
   end
   self:showConditionalUi()
   if false == _ContentsGroup_RenewUI_Main then
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
   end
 end
 function PaGlobal_TutorialUiManager:showConditionalUi()
   FGlobal_MyHouseNavi_Update()
-  FGlobal_PersonalIcon_ButtonPosUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
   Panel_Widget_TownNpcNavi:SetShow(true, true)
   if false == _ContentsGroup_RenewUI_Pet then
     FGlobal_PetControl_CheckUnSealPet()
@@ -243,13 +265,13 @@ function PaGlobal_TutorialUiManager:showConditionalUi()
   FGlobal_ResetRadarUI(false)
 end
 function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
-  Panel_SelfPlayerExpGage:SetShow(isShow)
+  Panel_SelfPlayerExpGage_SetShow(isShow)
   Panel_PersonalIcon:SetShow(isShow)
   Panel_PersonalIcon_Left:SetShow(isShow)
   Panel_TimeBar:SetShow(isShow)
   FGlobal_Panel_Radar_Show(isShow)
   FGlobal_Panel_RadarRealLine_Show(isShow)
-  Panel_Adrenallin:SetShow(isShow)
+  Panel_Adrenallin_SetShow(isShow)
   Panel_CheckedQuest:SetShow(isShow)
   Panel_MainQuest:SetShow(isShow)
   PaGlobal_TutorialUiManager:setShowChattingPanel(isShow)
@@ -257,7 +279,14 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     Panel_GameTips:SetShow(isShow)
     Panel_GameTipMask:SetShow(isShow)
   end
-  Panel_MainStatus_User_Bar:SetShow(isShow)
+  local remasterUIOption = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  if true == remasterUIOption then
+    Panel_MainStatus_Remaster:SetShow(isShow)
+    Panel_MainStatus_User_Bar:SetShow(false)
+  else
+    Panel_MainStatus_User_Bar:SetShow(isShow)
+    Panel_MainStatus_Remaster:SetShow(false)
+  end
   if true == Panel_MainStatus_User_Bar:GetShow() then
     FGlobal_ClassResource_SetShowControl(true)
   elseif false == Panel_MainStatus_User_Bar:GetShow() then
@@ -270,9 +299,18 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
   else
     Panel_UIMain:SetShow(isShow)
   end
+  Panel_Widget_Function:SetShow(isShow)
+  Panel_UIMain:SetShow(isShow)
+  Panel_Widget_ItemMarketPlace:SetShow(isShow)
+  Panel_NewEventProduct_Alarm:SetShow(isShow)
+  Panel_Widget_ServantIcon:SetShow(isShow)
   Panel_SkillCommand:SetShow(isShow)
   if true == isShow then
-    FGlobal_PersonalIcon_ButtonPosUpdate()
+    if false == _ContentsGroup_RemasterUI_Main_RightTop then
+      FGlobal_PersonalIcon_ButtonPosUpdate()
+    else
+      FromClient_Widget_FunctionButton_Resize()
+    end
     FGlobal_MyHouseNavi_Update()
     Panel_NewEventProduct_Alarm:SetShow(isShow)
     if false == _ContentsGroup_RenewUI_Pet then
@@ -280,7 +318,7 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
     end
     PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
     PaGlobal_CharacterTag_SetPosIcon()
-  elseif false == isShow and false == _ContentsGroup_RenewUI_Main then
+  elseif false == isShow and false == _ContentsGroup_RenewUI_Main and false == _ContentsGroup_RemasterUI_Main_RightTop then
     local navi = FGlobal_GetPersonalIconControl(0)
     local movie = FGlobal_GetPersonalIconControl(1)
     local voiceChat = FGlobal_GetPersonalIconControl(2)

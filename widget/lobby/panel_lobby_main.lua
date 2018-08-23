@@ -439,6 +439,8 @@ end
 function Panel_Lobby_Function_showCharacterCreate_SelectClass()
   if true == _ContentsGroup_RenewUI then
     PaGlobal_CharacterSelect_Close()
+  elseif true == _ContentsGroup_RemasterUI_Lobby then
+    PaGlobalFunc_CharacterSelectRemaster_Close()
   else
     FGlobal_CharacterSelect_Close()
   end

@@ -64,11 +64,19 @@ function FromClient_RegisterCampingTent(fromWhereType, fromSlotNo)
   MessageBox.showMessageBox(messageboxData)
 end
 function FromClient_CampingServantListUpdate()
-  local isShow = ToClient_isCampingReigsted()
-  Panel_Icon_Camp:SetShow(isShow)
-  PaGlobal_Camp:setPos()
-  if true == _ContentsGroup_RenewUI then
+  if true == _ContentsGroup_RemasterUI_Main then
+    if nil ~= PaGlobalFunc_ServantIcon_UpdateOtherIcon then
+      PaGlobalFunc_ServantIcon_UpdateOtherIcon(11)
+      return
+    end
     Panel_Icon_Camp:SetShow(false)
+  else
+    local isShow = ToClient_isCampingReigsted()
+    Panel_Icon_Camp:SetShow(isShow)
+    PaGlobal_Camp:setPos()
+    if true == _ContentsGroup_RenewUI then
+      Panel_Icon_Camp:SetShow(false)
+    end
   end
 end
 function PaGlobal_CampRegister:CampRegister_InputCampName(fromWhereType, fromSlotNo)

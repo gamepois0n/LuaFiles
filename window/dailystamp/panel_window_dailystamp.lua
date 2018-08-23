@@ -866,7 +866,9 @@ function isPossibleAttandanceCheck()
       DailyStamp_SetData(dailyStamp.tapIndex)
     end
   end
-  FGlobal_DailyStamp_CheckAttendance(isPossibleAttendance_AnyType(waitingTime))
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_DailyStamp_CheckAttendance(isPossibleAttendance_AnyType(waitingTime))
+  end
   return attendanceTimeCheck
 end
 function isPossibleAttendance_AnyType(waitingTime)

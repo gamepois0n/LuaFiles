@@ -226,8 +226,13 @@ function Panel_Party_ItemList_Open()
     return
   end
   Panel_Party_ItemList:SetShow(true)
-  Panel_Party_ItemList:SetPosX(Panel_Party:GetPosX() + Panel_Party:GetSizeX() + 10)
-  Panel_Party_ItemList:SetPosY(Panel_Party:GetPosY())
+  if false == _ContentsGroup_RemasterUI_Party then
+    Panel_Party_ItemList:SetPosX(Panel_Party:GetPosX() + Panel_Party:GetSizeX() + 10)
+    Panel_Party_ItemList:SetPosY(Panel_Party:GetPosY())
+  else
+    Panel_Party_ItemList:SetPosX(Panel_Widget_Party:GetPosX() + Panel_Widget_Party:GetSizeX() + 10)
+    Panel_Party_ItemList:SetPosY(Panel_Widget_Party:GetPosY())
+  end
   if ToClient_HasWareHouseFromNpc() then
     if toInt64(0, 0) == warehouse_moneyByCurrentRegionMainTown_s64() then
       partyItemList._radioBag:SetCheck(true)

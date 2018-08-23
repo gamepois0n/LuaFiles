@@ -189,6 +189,9 @@ function HandleCliekedGuildQuestGiveup()
   MessageBox.showMessageBox(messageboxData)
 end
 function HandleCliekedGuildQuestReward()
+  if true == _ContentsGroup_RemasterUI_QuestWidget then
+    TooltipSimple_Hide()
+  end
   local baseCount = ToClient_getCurrentGuildQuestBaseRewardCount()
   local selectCount = ToClient_getCurrentGuildQuestSelectRewardCount()
   local _baseReward = {}

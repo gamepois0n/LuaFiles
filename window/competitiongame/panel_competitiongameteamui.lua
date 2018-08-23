@@ -1096,14 +1096,22 @@ function CompetitionGameTeamUI_Open()
   Panel_CompetitionGame_TeamUi:SetShow(true)
   local selfActorKeyRaw = getSelfPlayer():getActorKey()
   if true == getSelfPlayer():isPartyMemberActorKey(selfActorKeyRaw) then
-    Panel_Party:SetShow(false)
+    if false == _ContentsGroup_RemasterUI_Party then
+      Panel_Party:SetShow(false)
+    else
+      Panel_Widget_Party:SetShow(false)
+    end
   end
 end
 function CompetitionGameTeamUI_Close()
   Panel_CompetitionGame_TeamUi:SetShow(false)
   local selfActorKeyRaw = getSelfPlayer():getActorKey()
   if true == getSelfPlayer():isPartyMemberActorKey(selfActorKeyRaw) then
-    Panel_Party:SetShow(true)
+    if false == _ContentsGroup_RemasterUI_Party then
+      Panel_Party:SetShow(true)
+    else
+      Panel_Widget_Party:SetShow(true)
+    end
   end
   if 0 == ToClient_CompetitionMatchType() then
     CompetitionGameTeamUI_StatSlotClose_Round()

@@ -1732,7 +1732,9 @@ function Inventory_updateSlotData(isLoad)
   Panel_Inventory_isBlackStone_16001 = false
   Panel_Inventory_isBlackStone_16002 = false
   Panel_Inventory_isSocketItem = false
-  Panel_NewEquip_EffectClear()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_NewEquip_EffectClear()
+  end
   for ii = 0, self.config.slotCount - 1 do
     local slot = self.slots[ii]
     slot:clearItem()
@@ -1825,13 +1827,17 @@ function Inventory_updateSlotData(isLoad)
         if isEquip and nil ~= defencePoint and nil ~= offencePoint and currentEndurance > 0 and true == matchEquip and false == isAccessory and defencePoint + offencePoint > equipDefencePoint + equipOffencePoint then
           slot.icon:AddEffect("fUI_BetterItemAura01", true, 0, 0)
           local equipPos = itemWrapper:getStaticStatus():getEquipSlotNo()
-          Panel_NewEquip_Update(equipPos)
+          if false == _ContentsGroup_RemasterUI_Main_Alert then
+            Panel_NewEquip_Update(equipPos)
+          end
           PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
         end
         if currentEndurance > 0 and true == matchEquip and true == isAccessory and offencePoint + defencePoint > equipOffencePoint + equipDefencePoint then
           slot.icon:AddEffect("fUI_BetterItemAura01", true, 0, 0)
           local equipPos = itemWrapper:getStaticStatus():getEquipSlotNo()
-          Panel_NewEquip_Update(equipPos)
+          if false == _ContentsGroup_RemasterUI_Main_Alert then
+            Panel_NewEquip_Update(equipPos)
+          end
         end
         if slotNo < self.config.slotCount and true == inven.slotEtcData[slotNo].isFirstItem and inven.slotEtcData[slotNo].itemKey == itemWrapper:get():getKey():getItemKey() then
           local newItemEffectSceneId = slot.icon:AddEffect("fUI_NewItem02", true, 0, 0)
@@ -1899,12 +1905,14 @@ function Inventory_updateSlotData(isLoad)
     Panel_Tooltip_Item_Refresh()
   end
   Inven_FindPuzzle()
-  Panel_NewEquip_EffectLastUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_NewEquip_EffectLastUpdate()
+    FGlobal_Inventory_WeightCheck()
+  end
   if true == Panel_Window_Inventory:GetShow() then
     Panel_Tooltip_Item_Refresh()
   end
-  FGlobal_Inventory_WeightCheck()
-  if Panel_Window_Servant:GetShow() then
+  if Panel_Window_Servant_GetShow() then
     Panel_Window_Servant_Update()
   end
   if Panel_IngameCashShop_EasyPayment:IsShow() then

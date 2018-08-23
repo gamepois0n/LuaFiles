@@ -15,6 +15,10 @@ local progressHead = UI.getChildControl(progressRate, "Progress2_Bar_Head")
 local staticBack = UI.getChildControl(Panel_Loading, "Static_Progress_Back")
 local goblinRun = UI.getChildControl(Panel_Loading, "Static_GoblinRun")
 local backGroundEvnetImage = UI.getChildControl(Panel_Loading, "Static_BackImage")
+local stc_movieBG = UI.getChildControl(backGroundEvnetImage, "Static_MovieBG")
+local _ui_web_loadingMovie
+local stc_fade = UI.getChildControl(Panel_Loading, "Static_Fade")
+local stc_bi = UI.getChildControl(Panel_Loading, "Static_BI")
 local isDraganOpen = ToClient_IsContentsGroupOpen("6")
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 local isBgOpen = isDraganOpen
@@ -22,6 +26,22 @@ local bgImageTexture = {}
 if true == ToClient_isXBox() then
   isBgOpen = true
 end
+local _movieLength = {
+  10000,
+  10000,
+  10000
+}
+local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+}
+local _movieOrder = {
+  1,
+  2,
+  3
+}
+local _currentMovieIndex
 if isBgOpen then
   bgImageTexture = {
     [0] = "New_UI_Common_ForLua/Window/Loading/Dragan_01.dds",
@@ -105,6 +125,9 @@ if isGameTypeKR2() then
     ["count"] = 1
   }
 end
+if true == _ContentsGroup_RemasterUI_Lobby then
+  isBgOpen = true
+end
 local UI_color = Defines.Color
 progressRate:SetCurrentProgressRate(0)
 _knowLedge_TitleSizeX = 0
@@ -123,6 +146,17 @@ function LoadingPanel_Resize()
   staticBack:ComputePos()
   backGroundEvnetImage:SetSize(screenX, screenY)
   backGroundEvnetImage:SetShow(isBgOpen)
+  stc_movieBG:SetSize(screenX, screenY)
+  stc_fade:SetSize(screenX, screenY)
+  if nil ~= _ui_web_loadingMovie and true == _ContentsGroup_RemasterUI_Lobby then
+    backGroundEvnetImage:SetShow(true)
+  end
+  if true == _ContentsGroup_RemasterUI_Lobby then
+    stc_bi:ComputePos()
+    stc_bi:SetShow(true)
+  else
+    stc_bi:SetShow(false)
+  end
 end
 local addXpos = 0
 function LoadingPanel_Init()
@@ -148,6 +182,90 @@ function LoadingPanel_Init()
   end
   goblinRun:SetPosX(progressRateX + progressHeadX + progressHead:GetSizeX() + addXpos)
   goblinRun:SetPosY(progressRateY + progressHeadY + 25)
+  stc_movieBG:SetShow(false)
+  if _ContentsGroup_RemasterUI_Lobby then
+    stc_movieBG:SetShow(true)
+    _currentMovieIndex = 1
+    LoadingPanel_ShuffleOrder(_movieOrder)
+  end
+end
+function LoadingPanel_ShuffleOrder(table)
+  if nil == table or nil == #table then
+    return
+  end
+  if #table <= 1 then
+    return
+  end
+  for ii = 1, #table do
+    local temp = table[ii]
+    local posToShuffle = getRandomValue(1, #table)
+    table[ii] = table[posToShuffle]
+    table[posToShuffle] = temp
+  end
+end
+function LoadingPanel_LoadMovie()
+  if false == _ContentsGroup_RemasterUI_Lobby then
+    return
+  end
+  stc_movieBG:SetShow(true)
+  if nil == _ui_web_loadingMovie then
+    _ui_web_loadingMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, backGroundEvnetImage, "Static_LoadingMovie")
+  end
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 1080 / 1920
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 1920 / 1080
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  local marginX = movieSizeX * 0.013
+  local marginY = movieSizeY * 0.013
+  _ui_web_loadingMovie:SetPosX(posX - marginX / 2)
+  _ui_web_loadingMovie:SetPosY(posY - marginY / 2)
+  _ui_web_loadingMovie:SetSize(movieSizeX + marginX, movieSizeY + marginY)
+  _ui_web_loadingMovie:SetUrl(1920, 1080, "coui://UI_Data/UI_Html/LobbyBG_Movie.html")
+end
+function FromClient_LoadingPanel_OnMovieEvent(param)
+  if false == _ContentsGroup_RemasterUI_Lobby then
+    return
+  end
+  if 1 == param then
+    LoadingPanel_StartFadeIn()
+    if nil ~= _ui_web_loadingMovie then
+      _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+    end
+  elseif 2 == param then
+    _currentMovieIndex = _currentMovieIndex + 1
+    if nil == _movieOrder[_currentMovieIndex] then
+      _currentMovieIndex = 1
+    end
+    _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+    LoadingPanel_StartFadeIn()
+  end
+end
+local _fadeTime = 1
+function LoadingPanel_StartFadeIn()
+  local ImageAni = stc_fade:addColorAnimation(0.3, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_FF000000)
+  ImageAni:SetEndColor(Defines.Color.C_00000000)
+  ImageAni:SetHideAtEnd(true)
+  luaTimer_AddEvent(LoadingPanel_StartFadeOut, _movieLength[_movieOrder[_currentMovieIndex]] - _fadeTime * 1000, false, 0)
+end
+function LoadingPanel_StartFadeOut()
+  stc_fade:SetShow(true)
+  local ImageAni = stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_00000000)
+  ImageAni:SetEndColor(Defines.Color.C_FF000000)
+  ImageAni:SetHideAtEnd(false)
 end
 function LoadingPanel_SetProgress(rate)
   progressRate:SetProgressRate(rate)
@@ -241,8 +359,8 @@ local function LoadingPanel_GetRandomKnowledge()
   if true == _ContentsGroup_RenewUI then
   end
 end
-local function LoadingPanel_GetBackGroundImage()
-  if isBgOpen then
+function LoadingPanel_GetBackGroundImage()
+  if isBgOpen and false == _ContentsGroup_RemasterUI_Lobby then
     local loadingImageIndex = math.random(0, bgImageTexture.count - 1)
     loadingImageIndex = (loadingImageIndex + 1) % bgImageTexture.count
     backGroundEvnetImage:ChangeTextureInfoName(bgImageTexture[loadingImageIndex])
@@ -251,6 +369,9 @@ end
 local updateTime = 0
 local isScope = false
 function LoadingPanel_UpdatePerFrame(deltaTime)
+  if true == _ContentsGroup_RemasterUI_Lobby then
+    luaTimer_UpdatePerFrame(deltaTime)
+  end
   _currentTime = _currentTime + deltaTime
   updateTime = updateTime - deltaTime
   if _currentTime > 8 then
@@ -258,8 +379,10 @@ function LoadingPanel_UpdatePerFrame(deltaTime)
     LoadingPanel_GetRandomKnowledge()
   end
 end
+registerEvent("ToClient_EndGuideMovie", "FromClient_LoadingPanel_OnMovieEvent")
 registerEvent("EventMapLoadProgress", "LoadingPanel_SetProgress")
 registerEvent("onScreenResize", "LoadingPanel_Resize")
 Panel_Loading:RegisterUpdateFunc("LoadingPanel_UpdatePerFrame")
 LoadingPanel_Resize()
 LoadingPanel_GetBackGroundImage()
+LoadingPanel_LoadMovie()

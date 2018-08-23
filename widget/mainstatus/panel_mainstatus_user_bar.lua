@@ -1,4 +1,4 @@
-Panel_MainStatus_User_Bar:SetShow(true)
+Panel_MainStatus_User_Bar:SetShow(not PaGlobalFunc_IsRemasterUIOption())
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(true, "mainStatus_AniOpen()")
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(false, "mainStatus_AniClose()")
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
@@ -192,7 +192,7 @@ local function checkHpAlert(hp, maxHp, isLevelUp)
     _alertDanger:SetVertexAniRun("Ani_Color_Danger1", true)
   end
 end
-function FGlobal_DangerAlert_Show(isShow)
+function PaGlobalFunc_DangerAlert_Show(isShow)
   if false == isShow then
     Panel_Danger:SetShow(false, false)
     strongMonsterAlert = false
@@ -208,7 +208,7 @@ function FGlobal_DangerAlert_Show(isShow)
   end
   _alertDanger:SetVertexAniRun("Ani_Color_Danger1", true)
 end
-function checkHpAlertPostEvent()
+function PaGlobalFunc_CheckHpAlertPostEvent()
   checkHpAlert(1, 1, false)
 end
 function renderModeChange_checkHpAlertPostEvent(prevRenderModeList, nextRenderModeList)
@@ -217,9 +217,9 @@ function renderModeChange_checkHpAlertPostEvent(prevRenderModeList, nextRenderMo
     Defines.RenderMode.eRenderMode_WorldMap
   }
   if CheckRenderModebyGameMode(nextRenderModeList) or CheckRenderMode(prevRenderModeList, currentRenderMode) then
-    checkHpAlertPostEvent()
+    PaGlobalFunc_CheckHpAlertPostEvent()
   end
-  Panel_MainStatus_User_Bar_Onresize()
+  PaGlobalFunc_UserBar_Onresize()
 end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_checkHpAlertPostEvent")
 local function checkMpAlert(mp, maxMp)
@@ -315,10 +315,10 @@ function FGlobal_MainStatus_FadeIn(viewTime)
   SimpleUIFadeRate = viewTime
 end
 Panel_MainStatus_User_Bar:RegisterUpdateFunc("DamageByOtherPlayer_chkOnEffectTime")
-function FGlobal_ImmediatelyResurrection(resurrFunc)
+function FGlobal_UserBar_ImmediatelyResurrection(resurrFunc)
   prevHp = resurrFunc
 end
-function Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate()
+function PaGlobalFunc_UserBar_CharacterInfoWindowUpdate()
   local self = selfPlayerStatusBar
   local playerWrapper = getSelfPlayer()
   local classType = playerWrapper:getClassType()
@@ -456,7 +456,7 @@ function Panel_MainStatus_UserBar_SetRuler(maxHp)
     beforeMaxHp = maxHp
   end
 end
-function Panel_MainStatus_User_Bar_Onresize()
+function PaGlobalFunc_UserBar_Onresize()
   Panel_Danger:SetPosX(0)
   _alertDanger:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_MainStatus_User_Bar:ComputePos()
@@ -489,6 +489,7 @@ function Panel_MainStatus_User_Bar_Onresize()
     Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_MainStatus_User_Bar)
+  FGlobal_User_Bar_Show(true, false)
 end
 function refreshHpAlertForLevelup()
   local playerWrapper = getSelfPlayer()
@@ -498,10 +499,10 @@ function refreshHpAlertForLevelup()
   checkHpAlert(hp, maxHp, true)
 end
 function selfPlayerStatusBar:registMessageHandler()
-  registerEvent("EventCharacterInfoUpdate", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
-  registerEvent("FromClient_SelfPlayerHpChanged", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
-  registerEvent("FromClient_SelfPlayerMpChanged", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
-  registerEvent("onScreenResize", "Panel_MainStatus_User_Bar_Onresize")
+  registerEvent("EventCharacterInfoUpdate", "PaGlobalFunc_UserBar_CharacterInfoWindowUpdate")
+  registerEvent("FromClient_SelfPlayerHpChanged", "PaGlobalFunc_UserBar_CharacterInfoWindowUpdate")
+  registerEvent("FromClient_SelfPlayerMpChanged", "PaGlobalFunc_UserBar_CharacterInfoWindowUpdate")
+  registerEvent("onScreenResize", "PaGlobalFunc_UserBar_Onresize")
   registerEvent("EventSelfPlayerLevelUp", "refreshHpAlertForLevelup")
   registerEvent("FromClient_DamageByOtherPlayer", "DamageByOtherPlayer")
   selfPlayerStatusBar._staticHP_BG:addInputEvent("Mouse_On", "HP_TextOn()")
@@ -569,6 +570,9 @@ function Panel_MainStatus_User_Bar.MainStatusShowToggle()
   end
 end
 function FGlobal_Panel_MainStatus_User_Bar_Show()
+  if true == PaGlobalFunc_IsRemasterUIOption() then
+    return
+  end
   Panel_MainStatus_User_Bar:SetShow(true, true)
   Panel_MainStatus_User_Bar:AddEffect("UI_Tuto_Hp_1", false, 0, -4)
   Panel_MainStatus_User_Bar:AddEffect("fUI_Tuto_Hp_01A", false, 0, -4)
@@ -614,4 +618,14 @@ function HP_TextOff()
 end
 function MP_TextOff()
 end
+function FGlobal_User_Bar_Show(isShow, isAni)
+  local isGetUIInfo = false
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isGetUIInfo = true
+  else
+    isGetUIInfo = false
+  end
+  Panel_MainStatus_User_Bar:SetShow(isShow and isGetUIInfo and not PaGlobalFunc_IsRemasterUIOption(), isAni)
+end
 changePositionBySever(Panel_MainStatus_User_Bar, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
+FGlobal_User_Bar_Show(true, false)

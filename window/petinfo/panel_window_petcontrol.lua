@@ -613,16 +613,22 @@ function Panel_Window_PetControl_ShowToggle()
   PetControl_RePos()
   PetControl.Btn_AllSeal:SetShow(true)
   FGlobal_AllSealButtonPosition()
-  if Panel_Party:GetShow() and Panel_Window_PetControl:GetShow() then
+  local panelParty
+  if false == _ContentsGroup_RemasterUI_Party then
+    panelParty = Panel_Party
+  else
+    panelParty = Panel_Widget_Party
+  end
+  if panelParty:GetShow() and Panel_Window_PetControl:GetShow() then
     local petCount = ToClient_getPetUnsealedList()
     local isOverlap = false
-    for overlapY = Panel_Party:GetPosY(), Panel_Party:GetPosY() + Panel_Party:GetSizeY(), Panel_Party:GetSizeY() do
+    for overlapY = panelParty:GetPosY(), panelParty:GetPosY() + panelParty:GetSizeY(), panelParty:GetSizeY() do
       if overlapY >= Panel_Window_PetControl:GetPosY() and overlapY <= Panel_Window_PetControl:GetPosY() + Panel_Window_PetControl:GetSizeY() then
         isOverlap = true
       end
     end
     if isOverlap then
-      for overlapX = Panel_Party:GetPosX(), Panel_Party:GetPosX() + Panel_Party:GetSizeX(), Panel_Party:GetSizeX() do
+      for overlapX = panelParty:GetPosX(), panelParty:GetPosX() + panelParty:GetSizeX(), panelParty:GetSizeX() do
         if overlapX >= Panel_Window_PetControl:GetPosX() and overlapX <= Panel_Window_PetControl:GetPosX() + (Panel_Window_PetControl:GetSizeX() + 10) * petCount + 60 then
           PartyPanel_Repos()
           return
@@ -632,8 +638,8 @@ function Panel_Window_PetControl_ShowToggle()
   end
 end
 function PetControl_RePos()
-  local posX = Panel_Window_PetIcon:GetPosX()
-  local posY = Panel_Window_PetIcon:GetPosY()
+  local posX = PaGlobalFunc_PetIcon_GetPosX()
+  local posY = PaGlobalFunc_PetIcon_GetPosY()
   local screenX = getScreenSizeX()
   if posX < screenX / 4 then
     Panel_Window_PetControl:SetPosX(10)
@@ -646,7 +652,7 @@ function PetControl_RePos()
       Panel_Window_PetControl:SetPosX(screenX - controlSizeX)
     end
   end
-  Panel_Window_PetControl:SetPosY(posY + Panel_Window_PetIcon:GetSizeY() + 10)
+  Panel_Window_PetControl:SetPosY(posY + PaGlobalFunc_PetIcon_GetSizeY() + 10)
 end
 function petControl_Button_Tooltip(isShow, buttonType, index)
   if false == isShow then
@@ -847,3 +853,24 @@ function renderModeChange_PetControl_RestoreUI(prevRenderModeList, nextRenderMod
   FGlobal_PetControl_RestoreUI()
 end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_PetControl_RestoreUI")
+function PaGlobalFunc_PetIcon_GetPosX()
+  if true == _ContentsGroup_RemasterUI_Main then
+    return PaGlobalFunc_ServantIcon_GetIconPosX(9)
+  else
+    return Panel_Window_PetIcon:GetPosX()
+  end
+end
+function PaGlobalFunc_PetIcon_GetPosY()
+  if true == _ContentsGroup_RemasterUI_Main then
+    return PaGlobalFunc_ServantIcon_GetIconPosY(9)
+  else
+    return Panel_Window_PetIcon:GetPosY()
+  end
+end
+function PaGlobalFunc_PetIcon_GetSizeY()
+  if true == _ContentsGroup_RemasterUI_Main then
+    return PaGlobalFunc_ServantIcon_GetIconSizeY(9)
+  else
+    return Panel_Window_PetIcon:GetSizeY()
+  end
+end

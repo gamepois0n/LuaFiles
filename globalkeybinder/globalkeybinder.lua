@@ -8,7 +8,7 @@ function PaGlobal_GlobalKeyBinder.Process_GameMode()
     Panel_UIControl_SetShow(false)
     Panel_Menu_ShowToggle()
   end
-  if false == _ContentsGroup_RenewUI_Party and Panel_PartyOption:GetShow() then
+  if false == _ContentsGroup_RenewUI_Party and false == _ContentsGroup_RemasterUI_Party and Panel_PartyOption:GetShow() then
     PartyOption_Hide()
   end
   if true == _ContentsGroup_RenewUI_Housing then
@@ -287,6 +287,10 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
     end
     if true == _ContentsGroup_RenewUI_Detect and true == PaGlobalFunc_DetectPlayer_GetShow() then
       PaGlobalFunc_DetectPlayer_Exit()
+      return
+    end
+    if Panel_Window_BlackSpiritAdventure:GetShow() then
+      BlackSpiritAd_Hide()
       return
     end
     if check_ShowWindow() then
@@ -1427,8 +1431,13 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
       FGlobal_PearlStamp_Close()
       return true
     end
-  elseif true == Panel_Window_MacroCheckQuizKeyPad:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    PaGlobal_MacroCheckQuizkeyPadClose()
+  elseif true == Panel_Window_MacroCheckQuizKeyPad:GetShow() then
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PaGlobal_MacroCheckQuizkeyPadClose()
+      return true
+    end
+  elseif Panel_Window_HorseRace:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    PaGlobalFunc_RaceInfo_Hide()
     return true
   end
   if false == _ContentsGroup_RenewUI and Panel_RecentMemory:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
@@ -1469,6 +1478,18 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
   end
   if Panel_Window_GuildWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_GuildWarInfo_renew_Close()
+    return true
+  end
+  if true == _ContentsGroup_Expedition and true == Panel_ArmyUnitSetting:IsShow() and true == GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    if true == Panel_Subjugation_SelectCharacter:IsShow() then
+      PaGlobalFunc_ExpeditionCharacterSelectInfo_Close()
+    elseif true == Panel_SubjugationAreaSelect:IsShow() then
+      PaGlobalFunc_ExpeditionAreaSelectInfo_Close()
+    elseif true == Panel_Subjugation_SelectArmyUnit:IsShow() then
+      PaGlobalFunc_ExpeditionUnitSelectInfo_Close()
+    else
+      PaGlobalFunc_ExpeditionSettingInfo_Close()
+    end
     return true
   end
   return false

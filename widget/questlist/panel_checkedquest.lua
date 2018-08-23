@@ -311,6 +311,9 @@ local UIRect = {
   right,
   bottom
 }
+function PaGlobalFunc_Quest_UpdatePosition()
+  PaGlobal_CheckedQuest:checkPosition()
+end
 function PaGlobal_CheckedQuest:checkPosition()
   local Rect1 = {}
   local Rect2 = {}
@@ -322,9 +325,7 @@ function PaGlobal_CheckedQuest:checkPosition()
   Rect2.top = Panel_CheckedQuest:GetPosY()
   Rect2.right = Rect2.left + Panel_CheckedQuest:GetSizeX()
   Rect2.bottom = Rect2.top + Panel_CheckedQuest:GetSizeY()
-  if Rect1.left < Rect2.right and Rect1.top < Rect2.bottom and Rect1.right > Rect2.left and Rect1.bottom > Rect2.top then
-    Panel_CheckedQuest:SetPosY(Rect1.bottom + 5)
-  end
+  Panel_CheckedQuest:SetPosY(Rect1.bottom + 5)
 end
 function PaGlobal_CheckedQuest:findShownQuestUiInCheckedQuest(questGroupNo, questId)
   local shownIndex = -1
@@ -545,7 +546,9 @@ function FGlobal_UpdateQuestFavorType()
     FGlobal_CheckedQuestFaverTypeUpdate()
   end
   PaGlobal_CheckedQuest:updateQuestWidgetFavorType()
-  UIMain_QuestUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    UIMain_QuestUpdate()
+  end
 end
 function PaGlobal_CheckedQuest:updateQuestWidgetFavorType()
   local allButtonCheck = true

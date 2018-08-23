@@ -1034,6 +1034,8 @@ function showStaticUI(show)
     aniInfo_ui:SetHideAtEnd(true)
     local aniInfo_ScreenShotFolder = UIAni.AlphaAnimation(0, Button_ScreenShotFolder, 0, 0.2)
     aniInfo_ui:SetHideAtEnd(true)
+    local aniInfo_ScreenShotFolder = UIAni.AlphaAnimation(0, Button_ScreenShotFolder_Title, 0, 0.2)
+    aniInfo_ui:SetHideAtEnd(true)
     local aniInfo_cam_Title = UIAni.AlphaAnimation(0, CheckButton_CameraLook_Title, 0, 0.2)
     aniInfo_cam_Title:SetHideAtEnd(true)
     local aniInfo_ui_Title = UIAni.AlphaAnimation(0, CheckButton_ToggleUi_Title, 0, 0.2)
@@ -1284,6 +1286,9 @@ function EventSelectClass()
   changeCreateCharacterMode_SelectClass(FGlobal_getIsSpecialCharacter())
 end
 function EventSelectBack()
+  if true == _ContentsGroup_RemasterUI_Lobby then
+    showAllUI(false)
+  end
   showStaticUI(false)
   Panel_CustomizationMain:SetShow(false)
   restoreUIScale()

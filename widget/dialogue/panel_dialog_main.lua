@@ -1042,7 +1042,7 @@ function Dialog_updateButtons(isVisible)
         _uiNoticeNeedInfo[_dialogCount]:SetSize(_uiNoticeNeedInfo[_dialogCount]:GetTextSizeX() + 10, 23)
         _uiNoticeNeedInfo[_dialogCount]:SetAutoResize(true)
         _uiNoticeNeedInfo[_dialogCount]:SetShow(true)
-        if dialogButton._enable and false == isExchangalbeButtonCheck and UI_BTN_TYPE.eDialogButton_CutScene ~= dialogButton._dialogButtonType and UI_BTN_TYPE.eDialogButton_ExceptExchange ~= dialogButton._dialogButtonType then
+        if dialogButton._enable and false == isExchangalbeButtonCheck and UI_BTN_TYPE.eDialogButton_CutScene ~= dialogButton._dialogButtonType and UI_BTN_TYPE.eDialogButton_ExceptExchange ~= dialogButton._dialogButtonType and UI_BTN_TYPE.eDialogButton_Exchange ~= dialogButton._dialogButtonType then
           _exchangalbeButtonPosY = _uiDialogButton[_dialogCount]:GetPosY()
           _rBtnPlusPosX = _uiNoticeNeedInfo[_dialogCount]:GetSizeX()
           isExchangalbeButtonCheck = true
@@ -1749,6 +1749,18 @@ function Dialog_updateButtons(isVisible)
         local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 133, 465, 165)
         _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
+      elseif funcButtonType == CppEnums.ContentsType.Contents_DiceGame then
+        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 133, 155, 165)
+        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
+        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
+        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 133, 310, 165)
+        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
+        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 133, 465, 165)
+        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
+        _uiFuncButton[index]:SetMonoTone(false)
       end
     else
       _uiFuncButton[index]:SetShow(false)
@@ -1909,6 +1921,7 @@ function FromClient_hideDialog(isSetWait)
   Panel_Window_WorkerRandomSelect:SetShow(false)
   randomSelectHide()
   DetectPlayer_Close()
+  BlackSpiritAd_Hide()
   dialog_CloseNpcTalk(isSetWait)
   Panel_Npc_Dialog:ResetVertexAni()
   searchView_Close()
@@ -1942,9 +1955,11 @@ function FromClient_hideDialog(isSetWait)
   end
   Panel_Exchange_Item_Hide()
   Panel_Interest_Knowledge_Hide()
-  FGlobal_Inventory_WeightCheck()
   Inventory_PosLoadMemory()
-  UIMain_QuestUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_Inventory_WeightCheck()
+    UIMain_QuestUpdate()
+  end
   if ToClient_IsSavedUi() then
     ToClient_SaveUiInfo(false)
     ToClient_SetSavedUi(false)
@@ -2307,6 +2322,7 @@ function HandleClickedFuncButton(index)
   Panel_Exchange_Item_Hide()
   Panel_Window_ReinforceSkill_Close()
   Panel_SkillReinforce_Close()
+  BlackSpiritAd_Hide()
   if true == _ContentsGroup_RenewUI_Gift then
     PaGlobalFunc_NpcGift_Close()
   else
@@ -2610,6 +2626,7 @@ function HandleClickedFuncButton(index)
     FGlobal_NpcGift_Open()
   elseif CppEnums.ContentsType.Contents_WeakenEnchant == funcButtonType then
     PuriManager:Open()
+  elseif CppEnums.ContentsType.Contents_DiceGame == funcButtonType then
   end
   PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
   Dialog_clickFuncButtonReq(index)
@@ -2938,7 +2955,9 @@ function Panel_Dialog_RestoreUI()
     setTutorialQuestNo(-1)
   end
   Inven_FindPuzzle()
-  Panel_NewEquip_EffectLastUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_NewEquip_EffectLastUpdate()
+  end
   if ExitStable_VehicleInfo_Off() == true then
     Panel_ServantInfo:SetShow(false)
     Panel_CarriageInfo:SetShow(false)
@@ -3019,6 +3038,7 @@ function HandleClickedBackButton()
     _uiFilterRadioButton[index]:SetShow(false)
     _uiFilterRadioButton[index]:SetCheck(0 == index)
   end
+  BlackSpiritAd_Hide()
   _dialogIndex = 0
   Dialog_PageButton_Init()
   ReqeustDialog_retryTalk()
@@ -3417,6 +3437,9 @@ function Dialog_MouseToolTips(isShow, tipType, index)
     name = funcButton:getText()
     control = _uiFuncButton[index]
   elseif tipType == CppEnums.ContentsType.Contents_WeakenEnchant then
+    name = funcButton:getText()
+    control = _uiFuncButton[index]
+  elseif tipType == CppEnums.ContentsType.Contents_DiceGame then
     name = funcButton:getText()
     control = _uiFuncButton[index]
   end

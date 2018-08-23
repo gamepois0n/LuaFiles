@@ -31,6 +31,9 @@ function PaGlobal_CharacterTag_CheckShow()
   return returnBool
 end
 function PaGlobal_CharacterTag_SetPosIcon()
+  if true == _ContentsGroup_RemasterUI_Main then
+    return
+  end
   if isFlushedUI() then
     return
   end
@@ -99,6 +102,9 @@ function PaGlobal_CharacterTag_IconMouseToolTip(isShow)
   TooltipSimple_Show(control, name, desc)
 end
 function InitializeTagIcon()
+  if true == _ContentsGroup_RemasterUI_Main then
+    return
+  end
   Panel_Icon_CharacterTag:SetIgnore(false)
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Icon_CharacterTag:SetShow(false)
@@ -117,13 +123,17 @@ function InitializeTagIcon()
   PaGlobal_CharacterTag_SetPosIcon()
 end
 function FromClient_Tag_SelfPlayerLevelUp()
-  local player = getSelfPlayer()
-  if nil == player then
-    return
-  end
-  local curLevel = player:get():getLevel()
-  if curLevel > 55 and false == Panel_Icon_CharacterTag:GetShow() then
-    PaGlobal_CharacterTag_SetPosIcon()
+  if true == _ContentsGroup_RemasterUI_Main then
+    PaGlobalFunc_ServantIcon_UpdateOtherIcon(13)
+  else
+    local player = getSelfPlayer()
+    if nil == player then
+      return
+    end
+    local curLevel = player:get():getLevel()
+    if curLevel > 55 and false == Panel_Icon_CharacterTag:GetShow() then
+      PaGlobal_CharacterTag_SetPosIcon()
+    end
   end
 end
 registerEvent("FromClient_luaLoadComplete", "InitializeTagIcon")

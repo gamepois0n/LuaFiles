@@ -46,6 +46,16 @@ function Panel_PvpMode_UpdateSimpleUI(fDeltaTime)
   _pvpButton:SetAlpha(Panel_MainStatus_User_Bar:GetAlpha())
   _bubbleNotice:SetAlpha(Panel_MainStatus_User_Bar:GetAlpha())
 end
+function Panel_PvpMode_UpdateState()
+  if isPvpEnable() then
+    isPvPOn = getPvPMode()
+    _pvpButton:EraseAllEffect()
+    if true == isPvPOn then
+      _pvpButton:AddEffect("fUI_SkillButton02", true, 0, 0)
+      _pvpButton:AddEffect("fUI_PvPButtonLoop", true, 0, 0)
+    end
+  end
+end
 registerEvent("SimpleUI_UpdatePerFrame", "Panel_PvpMode_UpdateSimpleUI")
 registerEvent("EventSimpleUIEnable", "Panel_PvpMode_EnableSimpleUI")
 registerEvent("EventSimpleUIDisable", "Panel_PvpMode_DisableSimpleUI")
@@ -74,6 +84,9 @@ function FromClient_PvpMode_changeMode(where, actorKeyRaw)
     if not actorProxyWrapper:get():isSelfPlayer() then
       return
     end
+  end
+  if true == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting) then
+    return
   end
   if isPvpEnable() and false == isFlushedUI() then
     PvpMode_ShowButton(true)
@@ -122,7 +135,7 @@ function PvpMode_ButtonTextureChange(isPvp)
     _pvpButton:setRenderTexture(_pvpButton:getBaseTexture())
   end
 end
-function PvpMode_ShowButton(isShow)
+function PaGlobalFunc_PvpMode_ShowButton(isShow, isAni)
   Panel_PvpMode:SetShow(isShow)
   _pvpButton:SetShow(isShow)
   _pvpButton:ResetVertexAni()

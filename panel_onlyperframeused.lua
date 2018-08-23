@@ -1,5 +1,6 @@
 local luaLoadAfterTime = 0
 local luaLoadAfterFrameCount = 0
+local whaleTimeCheck = 0
 function FGlobal_getLuaLoadTime()
   return luaLoadAfterTime
 end
@@ -64,6 +65,22 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
   end
   if nil ~= UpdateFunc_FairyRegisterAni then
     UpdateFunc_FairyRegisterAni(deltaTime)
+  end
+  whaleTimeCheck = whaleTimeCheck + deltaTime
+  if whaleTimeCheck > 30 then
+    whaleTimeCheck = 0
+    if nil ~= FGlobal_WhaleConditionCheck then
+      FGlobal_WhaleConditionCheck()
+    end
+    if nil ~= FGlobal_TerritoryWar_Caution then
+      FGlobal_TerritoryWar_Caution()
+    end
+    if nil ~= FGlobal_SummonPartyCheck then
+      FGlobal_SummonPartyCheck()
+    end
+    if nil ~= FGlobal_ReturnStoneCheck then
+      FGlobal_ReturnStoneCheck()
+    end
   end
   if ToClient_isXBox() then
     FGlobal_KeyGuideTypeCheck(deltaTime)

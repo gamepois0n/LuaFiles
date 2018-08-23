@@ -2,7 +2,6 @@ local UI_TM = CppEnums.TextMode
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
-Panel_PvpMode:SetShow(not isRecordMode, false)
 local pvpText = UI.getChildControl(Panel_PvpMode, "StaticText_pvpText")
 local _bubbleNotice = UI.getChildControl(Panel_PvpMode, "StaticText_Notice")
 _pvpButton = UI.getChildControl(Panel_PvpMode, "CheckButton_PvpButton")
@@ -75,6 +74,9 @@ function FromClient_PvpMode_changeMode(where, actorKeyRaw)
       return
     end
   end
+  if true == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting) then
+    return
+  end
   if isPvpEnable() and false == isFlushedUI() then
     PvpMode_ShowButton(true)
     if getPvPMode() then
@@ -108,7 +110,7 @@ function PvpMode_PlayerPvPAbleChanged(actorKeyRaw)
     FromClient_PvpMode_changeMode(selfWrapper)
   end
 end
-function PvpMode_ShowButton(isShow)
+function PaGlobalFunc_PvpMode_ShowButton(isShow)
   if false == ToClient_isAdultUser() then
     _pvpButton:SetShow(false)
     return
@@ -153,9 +155,34 @@ function PvpMode_Resize()
     changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, false, true, false)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_PvpMode)
+  PaGlobalFunc_PvpMode_SetShow(true, false)
+end
+function PaGlobalFunc_PvpMode_SetShow(isShow, isAni)
+  local isGetUIInfo = false
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isGetUIInfo = true
+  else
+    isGetUIInfo = false
+  end
+  Panel_PvpMode:SetShow(isShow and isGetUIInfo and not isRecordMode and not PaGlobalFunc_IsRemasterUIOption())
+  Panel_PvpMode_UpdateState()
+end
+function Panel_PvpMode_UpdateState()
+  if isPvpEnable() then
+    _pvpButton:SetShow(true)
+    isPvPOn = getPvPMode()
+    _pvpButton:EraseAllEffect()
+    if true == isPvPOn then
+      _pvpButton:AddEffect("fUI_SkillButton02", true, 0, 0)
+      _pvpButton:AddEffect("fUI_PvPButtonLoop", true, 0, 0)
+    end
+  else
+    _pvpButton:SetShow(false)
+  end
 end
 registerEvent("EventPvPModeChanged", "pvpMode_changedMode1")
 registerEvent("EventPlayerPvPAbleChanged", "PvpMode_PlayerPvPAbleChanged")
 registerEvent("onScreenResize", "PvpMode_Resize")
 registerEvent("FromClient_RenderModeChangeState", "PvpMode_Resize")
 changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, true, true, false)
+PaGlobalFunc_PvpMode_SetShow(true, false)

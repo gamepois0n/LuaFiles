@@ -46,7 +46,7 @@ _Web:SetPosX(11)
 _Web:SetPosY(50)
 _Web:SetSize(918, 655)
 _Web:ResetUrl()
-function BlackSpiritAd_Show()
+function BlackSpiritAd_Show(cooltimeOff)
   if isBlackSpiritAdventure then
     Panel_Window_BlackSpiritAdventure:SetShow(true, true)
     Panel_Window_BlackSpiritAdventure:SetPosX(getScreenSizeX() / 2 - Panel_Window_BlackSpiritAdventure:GetSizeX() / 2)
@@ -83,7 +83,8 @@ function BlackSpiritAd_Show()
     isNationType = "KR"
   end
   if nil ~= bAdventureWebUrl then
-    local url = bAdventureWebUrl .. "/BoardGame?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&nationCode=" .. tostring(isNationType)
+    local url = bAdventureWebUrl .. "/BoardGame?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&nationCode=" .. tostring(isNationType) .. "&cooltimeOff=" .. tostring(cooltimeOff)
+    _PA_LOG("\234\180\145\236\154\180", "url : " .. tostring(url))
     _Web:SetUrl(918, 655, url)
   end
 end
@@ -96,6 +97,9 @@ function HandleClicked_BlackSpiritAdventure_PopUp()
   TooltipSimple_Hide()
 end
 function BlackSpiritAd_Hide()
+  if nil == Panel_Window_BlackSpiritAdventure then
+    return
+  end
   audioPostEvent_SystemUi(1, 1)
   Panel_Window_BlackSpiritAdventure:SetShow(false, false)
   Panel_Window_BlackSpiritAdventure:CloseUISubApp()
@@ -103,7 +107,7 @@ function BlackSpiritAd_Hide()
   _Web:ResetUrl()
 end
 function FGlobal_BlackSpiritAdventure_Open()
-  BlackSpiritAd_Show()
+  BlackSpiritAd_Show(false)
 end
 function BlackSpirit_PopUp_ShowIconToolTip(isShow)
   if isShow then
@@ -122,3 +126,7 @@ end
 function Web_BlackSpirit_DiceSound()
   audioPostEvent_SystemUi(11, 16)
 end
+function FromClient_openDiceGamebyNpcTalk()
+  BlackSpiritAd_Show(true)
+end
+registerEvent("FromClient_openDiceGamebyNpcTalk", "FromClient_openDiceGamebyNpcTalk")

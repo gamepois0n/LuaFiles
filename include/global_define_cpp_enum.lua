@@ -1290,7 +1290,9 @@ CppEnums.PAGameUIType = {
   PAGameUIPanel_SkillCoolTimeQuickSlot_6 = 134,
   PAGameUIPanel_SkillCoolTimeQuickSlot_7 = 135,
   PAGameUIPanel_SkillCoolTimeQuickSlot_8 = 136,
-  PAGameUIPanel_SkillCoolTimeQuickSlot_9 = 137
+  PAGameUIPanel_SkillCoolTimeQuickSlot_9 = 137,
+  PAGameUIPanel_MainStatusRemaster = 138,
+  PAGameUIPanel_ServantIcon = 139
 }
 if CppDefine.ChangeUIAndResolution == true then
   CppEnums.PanelSaveType = {
@@ -1453,7 +1455,11 @@ CppEnums.ServantStateType = {
   Type_Mating = 4,
   Type_Coma = 5,
   Type_SkillTraining = 6,
-  Type_StallionTraining = 7
+  Type_StallionTraining = 7,
+  Type_SealTentExistInvenItem = 8,
+  Type_Rent = 9,
+  Type_Return = 10,
+  Type_Count = 11
 }
 CppEnums.ServantToRewardType = {Type_Money = 0, Type_Experience = 1}
 CppEnums.VehicleType = {
@@ -1606,7 +1612,8 @@ CppEnums.ContentsType = {
   Contents_GuildSupplyShop = 30,
   Contents_Improve = 31,
   Contents_NpcGift = 32,
-  Contents_WeakenEnchant = 33
+  Contents_WeakenEnchant = 33,
+  Contents_DiceGame = 34
 }
 CppEnums.TransferType = {
   TransferType_Normal = 0,
@@ -2502,7 +2509,12 @@ CppEnums.GlobalUIOptionType = {
   BossAlertTime = 66,
   BossAlertKeep = 67,
   CharacterInfo = 68,
-  ValuePackage = 69
+  ValuePackage = 69,
+  InitRemasterUI = 70,
+  SwapRemasterUISetting = 71,
+  SwapRemasterUISettingPreset0 = 72,
+  SwapRemasterUISettingPreset1 = 73,
+  SwapRemasterUISettingPreset2 = 74
 }
 CppEnums.MembershipType = {
   default = 0,

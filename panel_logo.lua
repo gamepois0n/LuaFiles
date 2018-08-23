@@ -177,12 +177,29 @@ end
 local updateTime = 0
 function Panel_Logo_Update()
   static_Movie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Logo, "WebControl_Movie")
-  local sizeX = getScreenSizeX()
-  local sizeY = getScreenSizeY()
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 9 / 16
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 16 / 9
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  Panel_Logo:SetPosX(0)
+  Panel_Logo:SetPosY(0)
+  Panel_Logo:SetSize(sizeX, sizeY)
   static_Movie:SetIgnore(true)
-  static_Movie:SetPosX(-8)
-  static_Movie:SetPosY(-8)
-  static_Movie:SetSize(sizeX + 34, sizeY + 19)
+  static_Movie:SetPosX(posX)
+  static_Movie:SetPosY(posY)
+  static_Movie:SetSize(movieSizeX, movieSizeY)
   if true == ToClient_isXBox() then
     static_XboxScreen:SetPosX(-8)
     static_XboxScreen:SetPosY(-8)

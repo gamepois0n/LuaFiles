@@ -138,6 +138,8 @@ function stableList:init()
     slot.mating = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_Mating", slot.button, "ServantList_Slot_Mating_" .. ii)
     slot.matingComplete = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_MatingComplete", slot.button, "ServantList_Slot_MatingCompletes_" .. ii)
     slot.regionChanging = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RegionChanging", slot.button, "ServantList_Slot_RegionChanging_" .. ii)
+    slot.registerForRentTag = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RegisterForRentTag", slot.button, "ServantList_Slot_RegisterForRentTag_" .. ii)
+    slot.rentTag = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RentTag", slot.button, "ServantList_Slot_RentTag_" .. ii)
     slot.training = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_Training", slot.button, "ServantList_Slot_Training_" .. ii)
     slot.isSeized = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_Attachment", slot.button, "ServantList_Slot_Seized" .. ii)
     slot.stallion = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_iconStallion", slot.button, "ServantList_Slot_Stallion" .. ii)
@@ -184,6 +186,10 @@ function stableList:init()
     slot.matingComplete:SetPosY(iconConfig.startStateY)
     slot.regionChanging:SetPosX(iconConfig.startStateX)
     slot.regionChanging:SetPosY(iconConfig.startStateY)
+    slot.registerForRentTag:SetPosX(iconConfig.startStateX)
+    slot.registerForRentTag:SetPosY(iconConfig.startStateY)
+    slot.rentTag:SetPosX(iconConfig.startStateX)
+    slot.rentTag:SetPosY(iconConfig.startStateY)
     slot.training:SetPosX(iconConfig.startStateX)
     slot.training:SetPosY(iconConfig.startStateY)
     slot.isSeized:SetPosX(iconConfig.startStateX)
@@ -368,6 +374,8 @@ function stableList:update()
         slot.mating:SetShow(false)
         slot.matingComplete:SetShow(false)
         slot.regionChanging:SetShow(false)
+        slot.registerForRentTag:SetShow(false)
+        slot.rentTag:SetShow(false)
         slot.stallion:SetShow(false)
         slot.training:SetShow(false)
         if isLinkedHorse then
@@ -421,6 +429,13 @@ function stableList:update()
           end
           slot.regionChanging:SetShow(true)
           slot.button:SetMonoTone(true)
+        end
+        if CppEnums.ServantStateType.Type_Rent == servantInfo:getStateType() then
+          slot.registerForRentTag:SetShow(true)
+        end
+        local hasRentOwnerFlag = Defines.s64_const.s64_0 < servantInfo:getRentOwnerNo()
+        if hasRentOwnerFlag then
+          slot.rentTag:SetShow(true)
         end
         if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse then
           if servantInfo:isMale() then
@@ -648,9 +663,7 @@ function StableList_HandleRegisterForRentButtonClick()
   PaGlobalFunc_ServantRentPromoteAuthOpen(currentButtonServantNo)
 end
 function StableList_HandleRegisterForReturnButtonClick()
-  _PA_LOG("cylee", "StableList_HandleRegisterForReturnButtonClick()")
   function handleYesClick()
-    _PA_LOG("cylee", "StableList_HandleRegisterForReturnButtonClick() yes clicked")
     ToClient_RegisterServantForReturn(currentButtonServantNo)
   end
   MessageBox.showMessageBox({
@@ -2216,7 +2229,6 @@ function changeServantRegion:open(servantNo, posX, posY)
   Panel_ServantMove:SetShow(true)
 end
 function changeServantRegion:close()
-  _PA_LOG("cylee", "changeServantRegion:close()")
   if MessageBoxCheck.isCurrentOpen(self._changeServantRegionCostPopupTitle) then
     messageBoxCheck_CancelButtonUp()
   end
@@ -2233,7 +2245,6 @@ function ChangeServantRegion_HandleListChange(control, key)
   local regionKey = Int64toInt32(key)
   local regionInfo = getRegionInfoWrapper(regionKey)
   if not regionInfo then
-    _PA_LOG("cylee", "ChangeServantRegion_HandleListChange() no region info")
     return
   end
   local regionControl = UI.getChildControl(control, "RadioButton_StableName")

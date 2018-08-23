@@ -85,7 +85,12 @@ function PaGlobal_TutorialPhase_InventoryAndQuickSlot:startPhaseXXX(stepNo)
     GameTips_Reposition()
   end
   FGlobal_NewQuickSlot_Update()
-  Panel_MainStatus_User_Bar:SetShow(true, false)
+  local remasterUIOption = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  if true == remasterUIOption then
+    Panel_MainStatus_Remaster:SetShow(true)
+  else
+    Panel_MainStatus_User_Bar:SetShow(true, false)
+  end
   FGlobal_ClassResource_SetShowControl(true)
   Panel_Tutorial:SetShow(true, true)
 end

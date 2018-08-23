@@ -131,7 +131,9 @@ end
 function FromClient_NoticeNewMessage(isSoundNotice, isEffectNotice)
   if isEffectNotice and false == Panel_FriendList:GetShow() then
     UIMain_FriendListUpdate()
-    UIMain_FriendsUpdate()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      UIMain_FriendsUpdate()
+    end
   end
   if isSoundNotice then
     audioPostEvent_SystemUi(3, 11)
@@ -184,7 +186,9 @@ function FriendRequestList:UpdateList()
   if friendCount > 0 then
     self:SetShow(true)
   end
-  FGlobal_NewFriendAlertOff()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_NewFriendAlertOff()
+  end
 end
 function FriendRequestList:Show()
   self._selectFriendIndex = -1
@@ -613,8 +617,10 @@ function PaGlobal_FriendList:MoveGroup(groupIndex)
   PopupGroupList:SetShow(false)
 end
 function PaGlobal_FriendList:Show()
-  local friendsBTN = UI.getChildControl(Panel_UIMain, "Button_FriendList")
-  friendsBTN:EraseAllEffect()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    local friendsBTN = UI.getChildControl(Panel_UIMain, "Button_FriendList")
+    friendsBTN:EraseAllEffect()
+  end
   FGlobal_NewMessage_Close()
   ToClient_updateAddFriendAllowed()
   Panel_FriendList:SetShow(true, true)

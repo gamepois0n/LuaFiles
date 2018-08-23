@@ -205,6 +205,10 @@ function Panel_MovieTheater320_ShowToggle()
   local playerGet = player:get()
   local playerLevel = playerGet:getLevel()
   local isShow = Panel_MovieTheater_320:IsShow()
+  local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
+  if false == gameOptionSetting:getShowComboGuide() and false == isShow then
+    return
+  end
   if playerLevel >= 36 or playerLevel <= 6 then
     return
   end

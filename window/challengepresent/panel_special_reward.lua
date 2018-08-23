@@ -4,14 +4,7 @@ local pcRoomGift_Text = UI.getChildControl(Panel_NewEventProduct_Alarm, "StaticT
 Panel_NewEventProduct_Alarm:SetShow(false)
 local nextPcRoomGiftRewardTime = toInt64(0, 0)
 local messagePosition = function()
-  Panel_ChallengeReward_Alert:SetSpanSize(0, 10)
-  Panel_SpecialReward_Alert:SetSpanSize(50, 10)
-  Panel_NewEventProduct_Alarm:SetSpanSize(10, 10)
-  Panel_ChallengeReward_Alert:ComputePos()
-  Panel_SpecialReward_Alert:ComputePos()
-  Panel_NewMail_Alarm:ComputePos()
-  Panel_NewQuest_Alarm:ComputePos()
-  Panel_NewEventProduct_Alarm:ComputePos()
+  Panel_NewEventProduct_Alarm:SetSpanSize(70, 10)
 end
 local isNewbie = function()
   return questList_hasProgressQuest(118, 1) or questList_hasProgressQuest(138, 1) or questList_hasProgressQuest(120, 1) or questList_hasProgressQuest(121, 1) or questList_hasProgressQuest(161, 1) or questList_hasProgressQuest(160, 1)
@@ -103,7 +96,9 @@ function FromClient_CompleteChallengeReward()
     else
       FromClient_ChallengeReward_UpdateText()
     end
-    FGlobal_RightBottomIconReposition()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      FGlobal_RightBottomIconReposition()
+    end
     PcRoomGift_TimeCheck()
     PackageIconPosition()
     FromClient_PackageIconUpdate()
@@ -179,7 +174,9 @@ function PcRoomGift_TimeCheck()
   if (isPremiumPcRoom or isRussiaPremiumPack) and not Panel_NewEventProduct_Alarm:GetShow() and 0 ~= checkCount then
     Panel_NewEventProduct_Alarm:SetShow(true)
     messagePosition()
-    FGlobal_RightBottomIconReposition()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      FGlobal_RightBottomIconReposition()
+    end
   end
 end
 function renderModeChange_PcRoomGift_TimeCheck(prevRenderModeList, nextRenderModeList)
@@ -240,6 +237,39 @@ function SpecialReward_registMessageHandler()
   pcRoomGift_icon:addInputEvent("Mouse_LUp", "HandleClicked_PcRoomJackPotBox()")
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Special_Reward")
+if _ContentsGroup_RemasterUI_Main_Alert then
+  function AlarmIcon_SetPos()
+    local spanPosX = 60
+    if Panel_NewEventProduct_Alarm:GetShow() then
+      spanPosX = spanPosX + 60
+    end
+    Panel_ItemMarket_Alert:SetSpanSize(spanPosX, 10)
+  end
+  do
+    local itemMarketIcon = UI.getChildControl(Panel_ItemMarket_Alert, "Static_Icon")
+    local itemMarketAlarmCount = UI.getChildControl(Panel_ItemMarket_Alert, "StaticText_Number")
+    itemMarketIcon:addInputEvent("Mouse_LUp", "FGlobal_ItemMarketAlarmList_New_Open()")
+    itemMarketIcon:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
+    function FGlobal_ItemMarket_AlarmIcon_Show()
+      Panel_ItemMarket_Alert:SetShow(true)
+      FGlobal_ItemMarket_SetCount()
+      AlarmIcon_SetPos()
+    end
+    function FGlobal_ItemMarket_SetCount()
+      local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
+      itemMarketAlarmCount:SetText(alarmCount)
+      itemMarketAlarmCount:SetShow(alarmCount > 0)
+      itemMarketIcon:EraseAllEffect()
+      if alarmCount > 0 then
+        itemMarketIcon:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
+      end
+    end
+    Panel_Widget_ItemMarketPlace:SetShow(true)
+    Panel_Widget_ItemMarketPlace:ComputePos()
+    local cashShopIcon = UI.getChildControl(Panel_Widget_ItemMarketPlace, "Static_Icon")
+    cashShopIcon:addInputEvent("Mouse_LUp", "GlobalKeyBinder_MouseKeyMap(18)")
+  end
+end
 function FromClient_luaLoadComplete_Special_Reward()
   FromClient_CompleteBenefitReward()
   FromClient_CompleteChallengeReward()

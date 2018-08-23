@@ -541,7 +541,7 @@ function Panel_KeyViewer_KeyUpdate()
 end
 local forMovieRecord = function()
   Panel_MainStatus_User_Bar:SetShow(false)
-  Panel_SelfPlayerExpGage:SetShow(false)
+  Panel_SelfPlayerExpGage_SetShow(false)
   if false == _ContentsGroup_RenewUI_Chatting then
     Panel_Chat0:SetShow(false)
   end

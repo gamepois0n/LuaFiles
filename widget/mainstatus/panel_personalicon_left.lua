@@ -37,6 +37,7 @@ local _challengeReward = UI.getChildControl(Panel_PersonalIcon_Left, "Static_Cha
 local _challengeNumber = UI.getChildControl(_challengeReward, "StaticText_ChallengeNumber")
 local _blackSpiritSkillTraining = UI.getChildControl(Panel_PersonalIcon_Left, "Static_BlackSpiritSkillTraining")
 local _memoryOfMaetsro = UI.getChildControl(Panel_PersonalIcon_Left, "Static_MaestroMemory")
+local _arshaItemDropBuff = UI.getChildControl(Panel_PersonalIcon_Left, "Static_ArchaBuff")
 local _russiaKamasilv = UI.getChildControl(Panel_PersonalIcon_Left, "Static_RussiaKamasilv")
 local _russiaPack3 = UI.getChildControl(Panel_PersonalIcon_Left, "Static_RussiaPack3")
 local _currentNodeLv = 0
@@ -83,11 +84,15 @@ local function registEventHandler()
   _goldPremiumBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
   _challengeReward:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 20)")
   _challengeReward:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
-  _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
+  end
   _blackSpiritSkillTraining:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 21 )")
   _blackSpiritSkillTraining:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 21 )")
   _memoryOfMaetsro:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 22 )")
   _memoryOfMaetsro:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 22 )")
+  _arshaItemDropBuff:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 23 )")
+  _arshaItemDropBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 23 )")
   _btnCashShop:addInputEvent("Mouse_LUp", "PearlShop_Open()")
   _btnAlertClose:addInputEvent("Mouse_LUp", "PremiumNotice_Close()")
   _russiaPack3:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 15 )")
@@ -145,6 +150,7 @@ function PackageIconPosition()
   local applyPremiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local applyBlackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local applyMemoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
+  local applyArshaBuff = ToClient_isAbleArshaItemDropBuffRate()
   if _pcRoomIcon:GetShow() then
     _pcRoomIcon:SetPosX(iconPosX)
     iconPosX = iconPosX + _pcRoomIcon:GetSizeX() + iconGapX
@@ -270,6 +276,11 @@ function PackageIconPosition()
     _goldPremiumBuff:SetPosX(iconPosX)
     _goldPremiumBuff:SetPosY(iconPosY)
     iconPosX = iconPosX + _goldPremiumBuff:GetSizeX() + iconGapX
+  end
+  if applyArshaBuff then
+    _arshaItemDropBuff:SetPosX(iconPosX)
+    _arshaItemDropBuff:SetPosY(iconPosY)
+    iconPosX = iconPosX + _arshaItemDropBuff:GetSizeX() + iconGapX
   end
   Panel_PersonalIcon_Left:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
   Panel_PersonalIcon_Left:SetPosY(5)
@@ -666,6 +677,11 @@ function BuffIcon_ShowSimpleToolTip(isShow, iconType)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_MAESTROTITLE")
     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_MAESTRODESC", "time", convertStringFromDatetime(toInt64(0, memoryOfMaestroTime)))
     uiControl = _memoryOfMaetsro
+  elseif iconType == 23 then
+    local arshaItemDropBuffRate = ToClient_getArshaItemDropBuffRate() / 10000
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_ITEMDROPBUFF_NAME")
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_ITEMDROPBUFF_DESC", "dropRate", arshaItemDropBuffRate)
+    uiControl = _arshaItemDropBuff
   end
   if true == isShow then
     TooltipSimple_Show(uiControl, name, desc)
@@ -735,6 +751,7 @@ function FromClient_PackageIconUpdate()
   local premiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local blackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local memoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
+  local applyArshaBuff = ToClient_isAbleArshaItemDropBuffRate()
   _pcRoomIcon:SetShow(false)
   _fixedChargeIcon:SetShow(false)
   _starterPackage:SetShow(false)
@@ -848,7 +865,16 @@ function FromClient_PackageIconUpdate()
   else
     _challengeReward:SetShow(false)
   end
-  FGlobal_PersonalIcon_ButtonPosUpdate()
+  if applyArshaBuff then
+    _arshaItemDropBuff:SetShow(true)
+  else
+    _arshaItemDropBuff:SetShow(false)
+  end
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
   PackageIconPosition()
 end
 function FromClient_ResponseChangeExpAndDropPercent()

@@ -63,7 +63,6 @@ local defalut_Control = {
     }
   }
 }
-local _btn_Mail = UI.getChildControl(Panel_UIMain, "Button_Mail")
 function defalut_Control:Init_Control()
   self._mail._Template._Sender_Name:SetTextMode(UI_TM.eTextMode_LimitText)
   self._mail._Template._Mail_Title:SetTextMode(UI_TM.eTextMode_LimitText)
@@ -327,16 +326,19 @@ function Mail_Close()
 end
 local newMailAlarm_icon = UI.getChildControl(Panel_NewMail_Alarm, "Static_MailIcon")
 local newMailAlarm_call = UI.getChildControl(Panel_NewMail_Alarm, "StaticText_CallingYou")
-local newMailEffectIcon = UI.getChildControl(Panel_UIMain, "Button_Mail")
-newMailAlarm_call:SetShow(false, false)
-newMailEffectIcon:EraseAllEffect()
+local newMailEffectIcon
+if false == _ContentsGroup_RemasterUI_Main_Alert then
+  newMailEffectIcon = UI.getChildControl(Panel_UIMain, "Button_Mail")
+  newMailAlarm_call:SetShow(false, false)
+  newMailEffectIcon:EraseAllEffect()
+end
 Panel_NewMail_Alarm:SetShow(false)
 newMailAlarm_icon:addInputEvent("Mouse_LUp", "Mail_Open()")
 function init_newMailAlarm()
   local bNewFlag = RequestMail_getNewMailFlag()
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
   Panel_NewMail_Alarm:SetShow(false)
-  if bNewFlag then
+  if false == _ContentsGroup_RemasterUI_Main_Alert and bNewFlag then
     if 0 == isColorBlindMode then
       newMailEffectIcon:EraseAllEffect()
       newMailEffectIcon:AddEffect("fUI_Letter_01A", true, 0, 2.1)
@@ -350,22 +352,26 @@ function init_newMailAlarm()
   end
 end
 function Mail_UpdateList(isCheck)
-  newMailEffectIcon:EraseAllEffect()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    newMailEffectIcon:EraseAllEffect()
+  end
   _mail_Data:setData()
   _mail_Data:Update_MailPage()
 end
 function FromClient_NewMail()
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "FROMCLIENT_NEWMAIL"))
-  if 0 == isColorBlindMode then
-    newMailEffectIcon:EraseAllEffect()
-    newMailEffectIcon:AddEffect("fUI_Letter_01A", true, 0, 2.1)
-  elseif 1 == isColorBlindMode then
-    newMailEffectIcon:EraseAllEffect()
-    newMailEffectIcon:AddEffect("fUI_Letter_01B", true, 0, 2.1)
-  elseif 2 == isColorBlindMode then
-    newMailEffectIcon:EraseAllEffect()
-    newMailEffectIcon:AddEffect("fUI_Letter_01B", true, 0, 2.1)
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    if 0 == isColorBlindMode then
+      newMailEffectIcon:EraseAllEffect()
+      newMailEffectIcon:AddEffect("fUI_Letter_01A", true, 0, 2.1)
+    elseif 1 == isColorBlindMode then
+      newMailEffectIcon:EraseAllEffect()
+      newMailEffectIcon:AddEffect("fUI_Letter_01B", true, 0, 2.1)
+    elseif 2 == isColorBlindMode then
+      newMailEffectIcon:EraseAllEffect()
+      newMailEffectIcon:AddEffect("fUI_Letter_01B", true, 0, 2.1)
+    end
   end
 end
 function Mail_onScreenResize()

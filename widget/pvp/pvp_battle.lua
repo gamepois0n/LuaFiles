@@ -186,11 +186,19 @@ end
 function PvPBattle_ReceiveStart(matchType, roundId, isFight)
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_ACK_MSG_START"))
   isPlaying = true
-  PaGlobal_PvPBattle:setPosMatchIcon()
+  if true == _ContentsGroup_RemasterUI_Main then
+    PaGlobalFunc_ServantIcon_UpdateOtherIcon(12)
+  else
+    PaGlobal_PvPBattle:setPosMatchIcon()
+  end
 end
 function PvPBattle_ReceiveEnd(matchType, roundId, isFight)
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_ACK_MSG_END"))
   isPlaying = false
-  PaGlobal_PvPBattle:setPosMatchIcon()
+  if true == _ContentsGroup_RemasterUI_Main then
+    PaGlobalFunc_ServantIcon_UpdateOtherIcon(12)
+  else
+    PaGlobal_PvPBattle:setPosMatchIcon()
+  end
 end
 PaGlobal_PvPBattle:initialize()

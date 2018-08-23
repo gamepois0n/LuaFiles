@@ -26,7 +26,7 @@ local isFighter = false
 local function init()
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
-    FGlobal_ClassResource_SetShowControl(false)
+    PaGlobalFunc_ClassResource_SetShowControl(false)
     return
   end
   resourceValue:SetShow(false)
@@ -36,22 +36,22 @@ local function init()
   if CppEnums.ClassType.ClassType_Sorcerer == classType then
     isSorcerer = true
     local phantomCount = selfPlayer:get():getSubResourcePoint()
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
     resourceValue:SetText("X " .. phantomCount)
     resourceValue:SetShow(true)
     _phantomCount_Icon:SetShow(true)
   elseif CppEnums.ClassType.ClassType_Combattant == classType or CppEnums.ClassType.ClassType_CombattantWomen == classType then
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
     _fighterIcon:SetShow(true)
     isFighter = true
   else
-    FGlobal_ClassResource_SetShowControl(false)
+    PaGlobalFunc_ClassResource_SetShowControl(false)
   end
 end
 local function ResizeInit()
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
-    FGlobal_ClassResource_SetShowControl(false)
+    PaGlobalFunc_ClassResource_SetShowControl(false)
     return
   end
   resourceValue:SetShow(false)
@@ -62,11 +62,11 @@ local function ResizeInit()
     isSorcerer = true
     local phantomCount = selfPlayer:get():getSubResourcePoint()
     resourceValue:SetText("X " .. phantomCount)
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
     resourceValue:SetShow(true)
     _phantomCount_Icon:SetShow(true)
     if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
       if Panel_ClassResource:GetShow() == true then
         resourceValue:SetShow(true)
         _phantomCount_Icon:SetShow(true)
@@ -77,18 +77,18 @@ local function ResizeInit()
     end
   elseif CppEnums.ClassType.ClassType_Combattant == classType or CppEnums.ClassType.ClassType_CombattantWomen == classType then
     isFighter = true
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
     if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
     end
     if Panel_ClassResource:GetShow() then
       _fighterIcon:SetShow(true)
     end
   else
-    FGlobal_ClassResource_SetShowControl(false)
+    PaGlobalFunc_ClassResource_SetShowControl(false)
   end
 end
-function FGlobal_ClassResource_SetShowControl(isShow)
+function PaGlobalFunc_ClassResource_SetShowControl(isShow, isAni)
   if true == isShow then
     local selfPlayer = getSelfPlayer()
     if nil == selfPlayer then
@@ -292,9 +292,6 @@ function Phantom_Locate()
   if nil == selfPlayer then
     return
   end
-  if isFlushedUI() then
-    return
-  end
   if CppDefine.ChangeUIAndResolution == true then
     if Panel_ClassResource:GetRelativePosX() == -1 and Panel_ClassResource:GetRelativePosY() == -1 then
       local initPosX = Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5
@@ -311,7 +308,7 @@ function Phantom_Locate()
       Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
     end
     if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
     end
   else
     Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
@@ -341,7 +338,7 @@ function Phantom_Resize()
       Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
     end
     if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
     end
   else
     Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
@@ -356,9 +353,9 @@ function Phantom_Resize()
 end
 function Panel_ClassResource_ShowToggle()
   if Panel_ClassResource:IsShow() then
-    Panel_ClassResource:SetShow(false)
+    Panel_ClassResource_SetShow(false)
   else
-    Panel_ClassResource:SetShow(true)
+    Panel_ClassResource_SetShow(true)
   end
 end
 function renderModeChange_Phantom_Locate(prevRenderModeList, nextRenderModeList)
@@ -366,6 +363,15 @@ function renderModeChange_Phantom_Locate(prevRenderModeList, nextRenderModeList)
     return
   end
   Phantom_Locate()
+end
+function Panel_ClassResource_SetShow(isShow, isAni)
+  local isGetUIInfo = false
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isGetUIInfo = true
+  else
+    isGetUIInfo = false
+  end
+  Panel_ClassResource:SetShow(isShow and isGetUIInfo and not PaGlobalFunc_IsRemasterUIOption())
 end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Phantom_Locate")
 init()

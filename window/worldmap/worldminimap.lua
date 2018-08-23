@@ -28,6 +28,7 @@ local swapRadar = function(radarType)
     Panel_Radar:SetShow(true)
     setRotateRadarMode(radarMap.isRotateMode)
     Panel_Radar:ComputePos()
+    FGlobal_ResetRadarUI(false)
   end
   local self = PaGlobal_WorldMiniMap
   self._panelSizeScale = true
@@ -46,7 +47,7 @@ function FromClient_SetRotateMode(isRotate)
   if false == isRotate then
     rot = 0
   else
-    resetRadorActorListRotateValue()
+    resetRadarActorListRotateValue()
     rot = math.pi
   end
   self._isRotate = isRotate
@@ -73,19 +74,28 @@ function PaGlobal_WorldMiniMap:resetPanelSize()
   self._ui.static_selfPlayerArrow:ComputePos()
   PaGlobal_WorldMiniMap:setPositionRegionNameList()
   self._panelSizeScale = false
-  FGlobal_PersonalIcon_ButtonPosUpdate()
-  Panel_PlayerEndurance_Position()
-  Panel_HorseEndurance_Position()
-  Panel_ShipEndurance_Position()
-  Panel_CarriageEndurance_Position()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_PlayerEndurance_Position()
+    Panel_HorseEndurance_Position()
+    Panel_ShipEndurance_Position()
+    Panel_CarriageEndurance_Position()
+  end
 end
 function PaGlobal_WorldMiniMap:changePanelSize()
   local miniMap = ToClient_getWorldMiniMapPanel()
+  if false == Panel_WorldMiniMap:GetShow() then
+    return
+  end
   local iconPath = "new_ui_common_forlua/Widget/Rader/Minimap_01.dds"
   if true == self._panelSizeScale then
-    miniMap:SetSize(300, 260)
-    Panel_WorldMiniMap:SetSize(300, 260)
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    miniMap:SetSize(302, 263)
+    Panel_WorldMiniMap:SetSize(302, 263)
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 18)
     self._ui.btn_changeScale:ChangeTextureInfoName(iconPath)
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.btn_changeScale, 157, 54, 182, 79)
     self._ui.btn_changeScale:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -99,7 +109,7 @@ function PaGlobal_WorldMiniMap:changePanelSize()
   else
     miniMap:SetSize(500, 460)
     Panel_WorldMiniMap:SetSize(500, 460)
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 18)
     self._ui.btn_changeScale:ChangeTextureInfoName(iconPath)
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.btn_changeScale, 79, 54, 104, 79)
     self._ui.btn_changeScale:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -117,11 +127,23 @@ function PaGlobal_WorldMiniMap:changePanelSize()
   self._ui.static_selfPlayerArrow:ComputePos()
   PaGlobal_WorldMiniMap:setPositionRegionNameList()
   self._panelSizeScale = not self._panelSizeScale
-  FGlobal_PersonalIcon_ButtonPosUpdate()
-  Panel_PlayerEndurance_Position()
-  Panel_HorseEndurance_Position()
-  Panel_ShipEndurance_Position()
-  Panel_CarriageEndurance_Position()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_PlayerEndurance_Position()
+    Panel_HorseEndurance_Position()
+    Panel_ShipEndurance_Position()
+    Panel_CarriageEndurance_Position()
+  end
+  FromClient_MainQuestWidget_ResetPosition()
+  if false == _ContentsGroup_RemasterUI_QuestWidget then
+    PaGlobalFunc_Quest_UpdatePosition()
+  end
+  Panel_TimeBar:SetSize(Panel_WorldMiniMap:GetSizeX() + 10, Panel_WorldMiniMap:GetSizeY() + 31)
+  Panel_TimeBar:SetPosX(Panel_WorldMiniMap:GetPosX() - 5)
 end
 function PaGlobal_WorldMiniMap:changePanelAlpha(isIncrease)
   local currentAlphaValue = ToClient_get3DMiniMapAlpha()
@@ -397,6 +419,12 @@ function FGlobal_Panel_WorldMiniMapPosX()
 end
 function FGlobal_Panel_WorldMiniMapPosY()
   return Panel_WorldMiniMap:GetPosY()
+end
+function FGlobal_Panel_WorldMiniMapSizeX()
+  return Panel_WorldMiniMap:GetSizeX()
+end
+function FGlobal_Panel_WorldMiniMapSizeY()
+  return Panel_WorldMiniMap:GetSizeY()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobal_WorldMiniMap_luaLoadComplete")
 registerEvent("FromClient_worldMiniMapNameOff", "FromClient_worldMiniMapNameOff")

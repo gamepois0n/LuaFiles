@@ -77,3 +77,43 @@ function CheckRenderMode(nextRenderModeList, renderModeArray)
   end
   return false
 end
+local renderModeBitSet = {
+  default = PAUIRenderModeBitSet({
+    Defines.RenderMode.eRenderMode_Default
+  }),
+  worldmap = PAUIRenderModeBitSet({
+    Defines.RenderMode.eRenderMode_WorldMap
+  }),
+  cashShop = PAUIRenderModeBitSet({
+    Defines.RenderMode.eRenderMode_InGameCashShop
+  }),
+  allRender = PAUIRenderModeBitSet({
+    Defines.RenderMode.eRenderMode_Default,
+    Defines.RenderMode.eRenderMode_WorldMap,
+    Defines.RenderMode.eRenderMode_Knowledge,
+    Defines.RenderMode.eRenderMode_Dialog,
+    Defines.RenderMode.eRenderMode_Dye,
+    Defines.RenderMode.eRenderMode_InGameCashShop,
+    Defines.RenderMode.eRenderMode_HouseInstallation,
+    Defines.RenderMode.eRenderMode_BlackSpirit,
+    Defines.RenderMode.eRenderMode_MentalGame,
+    Defines.RenderMode.eRenderMode_customScreenShot,
+    Defines.RenderMode.eRenderMode_UISetting,
+    Defines.RenderMode.eRenderMode_CutScene,
+    Defines.RenderMode.eRenderMode_IngameCustomize,
+    Defines.RenderMode.eRenderMode_SkillWindow,
+    Defines.RenderMode.eRenderMode_SniperGame
+  })
+}
+function SETRENDERMODE_BITSET_DEFULAT()
+  return renderModeBitSet.default
+end
+function SETRENDERMODE_BITSET_WORLDMAP()
+  return renderModeBitSet.worldmap
+end
+function SETRENDERMODE_BITSET_INGAMECASHSHOP()
+  return renderModeBitSet.cashShop
+end
+function SETRENDERMODE_BITSET_ALLRENDER()
+  return renderModeBitSet.allRender
+end

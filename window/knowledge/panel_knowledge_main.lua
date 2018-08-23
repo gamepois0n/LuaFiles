@@ -896,8 +896,13 @@ function Panel_Knowledge_Show()
   PaGlobal_Knowledge_Point_Show()
   uiConst.list_GetKnowledgeCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_GETKNOWLEDGECOUNT", "count", ToClient_GetTotalMentalCardCount()))
   onShowLoadControls()
-  if _cardKeyRaw ~= FGlobal_CardKeyReturn() then
-    _cardKeyRaw = FGlobal_CardKeyReturn()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    if _cardKeyRaw ~= FGlobal_CardKeyReturn() then
+      _cardKeyRaw = FGlobal_CardKeyReturn()
+      Panel_Knowledge_SelectAnotherCard(_cardKeyRaw)
+    end
+  elseif _cardKeyRaw ~= PaGlobalFunc_Widget_Alert_NewKnowledge_CardKeyReturn() then
+    _cardKeyRaw = PaGlobalFunc_Widget_Alert_NewKnowledge_CardKeyReturn()
     Panel_Knowledge_SelectAnotherCard(_cardKeyRaw)
   end
   Panel_KnowledgeBuff_Update()

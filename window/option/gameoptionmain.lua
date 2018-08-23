@@ -270,6 +270,15 @@ function PaGlobal_Option:EventXXX(controlName, controlIndex, order, param)
       end
     end
     option._curValue = order
+    if "RadioButton_GraphicOption" == controlName and (1 == controlIndex or 2 == controlIndex) and (7 == order or 8 == order) then
+      local messageBoxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTTITLE"),
+        content = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTDESC"),
+        functionApply = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageBoxData)
+    end
   elseif CONTROL.PA_UI_CONTROL_SLIDER == controlType then
     option._curValue = option._eventControl[controlIndex]:GetControlPos()
   elseif CONTROL.PA_UI_CONTROL_COMBOBOX == controlType then
@@ -475,15 +484,6 @@ function PaGlobal_Option._elements.ServiceResourceType:EventException(value)
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
     content = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_LANGUAGESETTING"),
-    functionApply = MessageBox_Empty_function,
-    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-  }
-  MessageBox.showMessageBox(messageboxData)
-end
-function PaGlobal_Option._elements.AudioResourceType:EventException(value)
-  local messageboxData = {
-    title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
-    content = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_NPCVOICE_RESTART"),
     functionApply = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
@@ -760,8 +760,8 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
   elems_.GamePadVibration._initValue = gameOptionSetting:getGamePadVibration()
   elems_.GamePadInvertX._initValue = gameOptionSetting:getGamePadInvertX()
   elems_.GamePadInvertY._initValue = gameOptionSetting:getGamePadInvertY()
-  elems_.GamePadSensitivityX._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityX(), 0.1, 2)
-  elems_.GamePadSensitivityY._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityY(), 0.1, 2)
+  elems_.GamePadSensitivityX._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityX(), 0.2, 2)
+  elems_.GamePadSensitivityY._initValue = self:FromRealValueToSliderValue(gameOptionSetting:getGamePadSensitivityY(), 0.2, 2)
   if true == _ContentsGroup_isConsoleTest then
     elems_.ConsolePadKeyType._initValue = gameOptionSetting:getConsoleKeyType()
   else

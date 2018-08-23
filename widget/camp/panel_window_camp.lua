@@ -64,6 +64,12 @@ function PaGlobal_Camp:initialize()
   PaGlobal_Camp:setPos()
   local isShow = ToClient_isCampingReigsted()
   Panel_Icon_Camp:SetShow(isShow)
+  if true == _ContentsGroup_RemasterUI_Main then
+    if nil ~= PaGlobalFunc_ServantIcon_UpdateOtherIcon then
+      PaGlobalFunc_ServantIcon_UpdateOtherIcon(11)
+    end
+    Panel_Icon_Camp:SetShow(false)
+  end
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Icon_Camp:SetShow(false)
   end
@@ -256,33 +262,41 @@ function PaGlobal_Camp:getActorKeyRaw()
   return self._actorKeyRaw
 end
 function PaGlobal_Camp:setPos()
-  local posX = 0
-  local posY = 0
-  if Panel_Icon_Duel:GetShow() then
-    posX = Panel_Icon_Duel:GetPosX() + Panel_Icon_Duel:GetSizeX() - 3
-    posY = Panel_Icon_Duel:GetPosY()
-  elseif Panel_Icon_Maid:GetShow() then
-    posX = Panel_Icon_Maid:GetPosX() + Panel_Icon_Maid:GetSizeX() - 3
-    posY = Panel_Icon_Maid:GetPosY()
-  elseif false == _ContentsGroup_RenewUI_Pet and Panel_Window_PetIcon:GetShow() then
-    posX = Panel_Window_PetIcon:GetPosX() + Panel_Window_PetIcon:GetSizeX() - 3
-    posY = Panel_Window_PetIcon:GetPosY()
-  elseif 0 < FGlobal_HouseIconCount() and Panel_MyHouseNavi:GetShow() then
-    posX = Panel_MyHouseNavi:GetPosX() + 60 * FGlobal_HouseIconCount() - 3
-    posY = Panel_MyHouseNavi:GetPosY()
-  elseif 0 < FGlobal_ServantIconCount() and Panel_Window_Servant:GetShow() then
-    posX = Panel_Window_Servant:GetPosX() + 60 * FGlobal_ServantIconCount() - 3
-    posY = Panel_Window_Servant:GetPosY()
+  if true == _ContentsGroup_RemasterUI_Main then
+    if nil ~= PaGlobalFunc_ServantIcon_UpdateOtherIcon then
+      PaGlobalFunc_ServantIcon_UpdateOtherIcon(11)
+      return
+    end
+    Panel_Icon_Camp:SetShow(false)
   else
-    posX = 0
-    posY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
-  end
-  Panel_Icon_Camp:SetPosX(posX)
-  Panel_Icon_Camp:SetPosY(posY)
-  PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
-  PaGlobal_CharacterTag_SetPosIcon()
-  if nil ~= PaGlobal_Fairy_SetPosIcon then
-    PaGlobal_Fairy_SetPosIcon()
+    local posX = 0
+    local posY = 0
+    if Panel_Icon_Duel:GetShow() then
+      posX = Panel_Icon_Duel:GetPosX() + Panel_Icon_Duel:GetSizeX() - 3
+      posY = Panel_Icon_Duel:GetPosY()
+    elseif Panel_Icon_Maid:GetShow() then
+      posX = Panel_Icon_Maid:GetPosX() + Panel_Icon_Maid:GetSizeX() - 3
+      posY = Panel_Icon_Maid:GetPosY()
+    elseif false == _ContentsGroup_RenewUI_Pet and Panel_Window_PetIcon:GetShow() then
+      posX = Panel_Window_PetIcon:GetPosX() + Panel_Window_PetIcon:GetSizeX() - 3
+      posY = Panel_Window_PetIcon:GetPosY()
+    elseif 0 < FGlobal_HouseIconCount() and Panel_MyHouseNavi:GetShow() then
+      posX = Panel_MyHouseNavi:GetPosX() + 60 * FGlobal_HouseIconCount() - 3
+      posY = Panel_MyHouseNavi:GetPosY()
+    elseif 0 < FGlobal_ServantIconCount() and Panel_Window_Servant:GetShow() then
+      posX = Panel_Window_Servant:GetPosX() + 60 * FGlobal_ServantIconCount() - 3
+      posY = Panel_Window_Servant:GetPosY()
+    else
+      posX = 0
+      posY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
+    end
+    Panel_Icon_Camp:SetPosX(posX)
+    Panel_Icon_Camp:SetPosY(posY)
+    PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
+    PaGlobal_CharacterTag_SetPosIcon()
+    if nil ~= PaGlobal_Fairy_SetPosIcon then
+      PaGlobal_Fairy_SetPosIcon()
+    end
   end
 end
 function PaGlobal_Camp:register()
@@ -349,10 +363,15 @@ function PaGlobal_Camp:setIsCamping(isCamping)
   PaGlobal_Camp._isCamping = isCamping
 end
 function FromClient_InitializeCamp()
-  local isShow = ToClient_isCampingReigsted()
-  Panel_Icon_Camp:SetShow(isShow)
-  if true == _ContentsGroup_RenewUI_Main then
+  if true == _ContentsGroup_RemasterUI_Main then
     Panel_Icon_Camp:SetShow(false)
+    PaGlobalFunc_ServantIcon_UpdateOtherIcon(11)
+  else
+    local isShow = ToClient_isCampingReigsted()
+    Panel_Icon_Camp:SetShow(isShow)
+    if true == _ContentsGroup_RenewUI_Main then
+      Panel_Icon_Camp:SetShow(false)
+    end
   end
 end
 function PaGlobal_Camp:isUnsealShow(isShow)
@@ -430,5 +449,8 @@ function PaGlobal_Camp:registMessageHandler()
   registerEvent("FromClient_CampingTentUnSeal", "FromClient_CampingUpdate")
   registerEvent("FromClient_InitializeCamp", "FromClient_InitializeCamp")
 end
-PaGlobal_Camp:initialize()
-PaGlobal_Camp:registMessageHandler()
+function PaGlobal_Camp_Initialize()
+  PaGlobal_Camp:initialize()
+  PaGlobal_Camp:registMessageHandler()
+end
+registerEvent("FromClient_luaLoadComplete", "PaGlobal_Camp_Initialize")

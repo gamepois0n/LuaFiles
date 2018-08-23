@@ -26,7 +26,7 @@ local isTeamDuelOpen = ToClient_IsContentsGroupOpen("350")
 local isButtonShortCut = ToClient_IsContentsGroupOpen("351")
 local isKnownIssue = isGameTypeKorea() or isGameTypeTH() or isGameTypeID() or isGameTypeTaiwan()
 local isBlackDesertLabOpen = _ContentsGroup_BlackDesertLab or 0 == getServiceNationType()
-local isBossAlert = isGameTypeKorea()
+local isBossAlert = _ContetnsGroup_BossAlert
 local isTestServer = isGameTypeGT()
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
@@ -1007,8 +1007,8 @@ function GameMenu_Init()
     if MenuButtonId.btn_BlackDesertLab == index and (isGameServiceTypeKor() or isGameServiceTypeDev()) then
       menuTextPool[index]:SetText("\234\178\128\236\157\128\236\130\172\235\167\137\n\236\151\176\234\181\172\236\134\140")
     end
-    if MenuButtonId.btn_BossAlert == index and (isGameServiceTypeKor() or isGameServiceTypeDev()) then
-      menuTextPool[index]:SetText("\236\154\176\235\145\144\235\168\184\235\166\172\n\236\149\140\235\166\188")
+    if MenuButtonId.btn_BossAlert == index and _ContetnsGroup_BossAlert then
+      menuTextPool[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BUTTON_BOSSALERT_TITLE"))
     end
     GameMenu_ChangeButtonTexture(index)
   end

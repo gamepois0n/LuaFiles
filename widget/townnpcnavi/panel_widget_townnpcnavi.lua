@@ -382,13 +382,18 @@ local iconTexture = {
     334
   }
 }
-local toggleBtn = FGlobal_GetPersonalIconControl(0)
-if false == _ContentsGroup_RenewUI_VoiceChat then
-  toggleBtn:SetShow(true)
+local toggleBtn
+if false == _ContentsGroup_RemasterUI_Main_RightTop then
+  toggleBtn = FGlobal_GetPersonalIconControl(0)
+  if false == _ContentsGroup_RenewUI_VoiceChat then
+    toggleBtn:SetShow(true)
+  else
+    toggleBtn:SetShow(false)
+  end
+  toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
 else
-  toggleBtn:SetShow(false)
+  toggleBtn = PaGlobalFunc_Widget_FunctionButton_Control(Widget_Function_Type.FindNPC)
 end
-toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
 local iconBG = UI.getChildControl(Panel_Widget_TownNpcNavi, "StaticText_ToolTip")
 local npcIcon = UI.getChildControl(Panel_Widget_TownNpcNavi, "StaticText_TownNpcNavi_Icon")
 iconBG:SetShow(false)

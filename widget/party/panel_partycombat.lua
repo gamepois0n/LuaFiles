@@ -12,18 +12,6 @@ local matchType = 0
 local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
 local regionName = regionInfo:getAreaName()
 local matchInfo = {
-  _Button_Info = UI.getChildControl(Panel_Party, "Match_Button_MatchInfo"),
-  _Button_Combat = UI.getChildControl(Panel_Party, "Match_Button_Combat"),
-  _BG = UI.getChildControl(Panel_Party, "Match_BG"),
-  _Party_Icon = UI.getChildControl(Panel_Party, "Match_Party_Icon"),
-  _Party_Text = UI.getChildControl(Panel_Party, "Match_Party_Text"),
-  _Party_Value = UI.getChildControl(Panel_Party, "Match_Party_Value"),
-  _Time_Icon = UI.getChildControl(Panel_Party, "Match_Time_Icon"),
-  _RemainTime_Text = UI.getChildControl(Panel_Party, "Match_RemainTime_Text"),
-  _RemainTime_Value = UI.getChildControl(Panel_Party, "Match_RemainTime_Value"),
-  _State_BG = UI.getChildControl(Panel_Party, "Match_State_BG"),
-  _State = UI.getChildControl(Panel_Party, "Match_State"),
-  _RegStatus_Text = UI.getChildControl(Panel_Party, "Match_RegStatus_Text"),
   config = {
     sizeX = 170,
     sizeY = 75,
@@ -122,6 +110,26 @@ local matchResult = {
     [5] = 249
   }
 }
+function matchInfo:initControl()
+  local panel
+  if false == _ContentsGroup_RemasterUI_Party then
+    panel = Panel_Party
+  else
+    panel = Panel_Widget_Party
+  end
+  matchInfo._Button_Info = UI.getChildControl(panel, "Match_Button_MatchInfo")
+  matchInfo._Button_Combat = UI.getChildControl(panel, "Match_Button_Combat")
+  matchInfo._BG = UI.getChildControl(panel, "Match_BG")
+  matchInfo._Party_Icon = UI.getChildControl(panel, "Match_Party_Icon")
+  matchInfo._Party_Text = UI.getChildControl(panel, "Match_Party_Text")
+  matchInfo._Party_Value = UI.getChildControl(panel, "Match_Party_Value")
+  matchInfo._Time_Icon = UI.getChildControl(panel, "Match_Time_Icon")
+  matchInfo._RemainTime_Text = UI.getChildControl(panel, "Match_RemainTime_Text")
+  matchInfo._RemainTime_Value = UI.getChildControl(panel, "Match_RemainTime_Value")
+  matchInfo._State_BG = UI.getChildControl(panel, "Match_State_BG")
+  matchInfo._State = UI.getChildControl(panel, "Match_State")
+  matchInfo._RegStatus_Text = UI.getChildControl(panel, "Match_RegStatus_Text")
+end
 function matchInfo:init(isEnableChannel)
   matchInfo:setPosition()
   Party_MatchClose()
@@ -594,6 +602,7 @@ function isShow_PartyMatchBg()
   end
   return sizeY
 end
+matchInfo:initControl()
 if isContentsEnablePvp then
   matchInfo:init()
   matchInfo:updateRegisterState()

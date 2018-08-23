@@ -451,11 +451,13 @@ function PaGlobal_Option:SpecialCreateRadioButton(elementName)
     end
   end
 end
+PaGlobal_Option._lutCaching = nil
 function PaGlobal_Option:SetGraphicOption(value, isIncrease)
   local _SSAO = self._elements.SSAO
   local _AntiAliasing = self._elements.AntiAliasing
   local _Dof = self._elements.Dof
   local _Tessellation = self._elements.Tessellation
+  local _LUT = self._elements.LUT
   if self.GRAPHIC.VeryVeryLow == value then
     _SSAO._curValue = false
     _AntiAliasing._curValue = false
@@ -535,10 +537,21 @@ function PaGlobal_Option:SetGraphicOption(value, isIncrease)
       eventControl:SetEnable(true)
     end
   end
+  if self.GRAPHIC.UltraHigh == value or self.GRAPHIC.UltraLow == value then
+    if true == isIncrease then
+      self._lutCaching = PaGlobal_Option:Get("LUT")
+      _LUT._curValue = PaGlobal_Option:GetLUTIndex("NonContrast")
+    end
+  elseif nil ~= self._lutCaching then
+    _LUT._curValue = self._lutCaching
+  elseif self.GRAPHIC.UltraHigh == PaGlobal_Option:Get("GraphicOption") or self.GRAPHIC.UltraLow == PaGlobal_Option:Get("GraphicOption") then
+    _LUT._curValue = PaGlobal_Option:GetLUTIndex("Vibrance")
+  end
   self:SetControlSettingTable(_SSAO, _SSAO._curValue)
   self:SetControlSettingTable(_AntiAliasing, _AntiAliasing._curValue)
   self:SetControlSettingTable(_Dof, _Dof._curValue)
   self:SetControlSettingTable(_Tessellation, _Tessellation._curValue)
+  self:SetControlSettingTable(_LUT, _LUT._curValue)
 end
 function PaGlobal_Option:SetSpecSetting(value)
   local PETRENDER = {
@@ -654,6 +667,14 @@ local LUTRecommandation = -1
 local LUTRecommandation2 = -1
 local LUTRecommandationName = "Vibrance"
 local LUTRecommandationName2 = "NonContrast"
+function PaGlobal_Option:GetLUTIndex(str)
+  for idx = 0, 30 do
+    if getCameraLUTFilterName(idx) == str then
+      return idx
+    end
+  end
+  return nil
+end
 function PaGlobal_Option:SetRecommandationLUT()
   if LUTRecommandation == -1 then
     for idx = 0, 30 do

@@ -13,7 +13,12 @@ local whereUseItem = {
   widgetItemKey = nil,
   slot = {}
 }
-local weightOver = UI.getChildControl(Panel_Endurance, "StaticText_WeightOver")
+local weightOver
+if false == _ContentsGroup_RemasterUI_Main_Alert then
+  weightOver = UI.getChildControl(Panel_Endurance, "StaticText_WeightOver")
+else
+  weightOver = nil
+end
 function WhereUseItemDirectionInit()
   local self = whereUseItem
   SlotItem.new(self.slot, "ItemSlot", 0, self._slot, self._slotConfig)
@@ -23,12 +28,17 @@ function WhereUseItemDirectionInit()
   self.slot.count:SetHorizonCenter()
   self.slot.count:SetVerticalBottom()
   self.slot.count:SetSpanSize(0, -24)
-  if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
-    if PcEnduranceToggle() then
-      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 280)
-      Panel_WhereUseItemDirection:SetPosY(FGlobal_Panel_Radar_GetSizeY() - 180)
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
+      if PcEnduranceToggle() then
+        Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 280)
+        Panel_WhereUseItemDirection:SetPosY(FGlobal_Panel_Radar_GetSizeY() - 180)
+      else
+        Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 190)
+        Panel_WhereUseItemDirection:SetPosY(FGlobal_Panel_Radar_GetSizeY() - 180)
+      end
     else
-      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 190)
+      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 70)
       Panel_WhereUseItemDirection:SetPosY(FGlobal_Panel_Radar_GetSizeY() - 180)
     end
   else
@@ -96,15 +106,24 @@ function WhereUseItemDirectionUpdate(itemSSW, slotNo, isShow)
   end
 end
 function PcEnduranceToggle()
-  return weightOver:GetShow()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    return weightOver:GetShow()
+  else
+    return false
+  end
 end
 function whereUseItemDirectionPosition()
-  if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
-    if PcEnduranceToggle() then
-      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - 280)
-      Panel_WhereUseItemDirection:SetPosY(Panel_Radar:GetSizeY() - 100)
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
+      if PcEnduranceToggle() then
+        Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - 280)
+        Panel_WhereUseItemDirection:SetPosY(Panel_Radar:GetSizeY() - 100)
+      else
+        Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - 190)
+        Panel_WhereUseItemDirection:SetPosY(Panel_Radar:GetSizeY() - 100)
+      end
     else
-      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - 190)
+      Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - Panel_Radar:GetSizeX() - 150)
       Panel_WhereUseItemDirection:SetPosY(Panel_Radar:GetSizeY() - 100)
     end
   else

@@ -230,7 +230,7 @@ function quickSlot:createSlot()
         end
         tmp = self.number
         tmp:SetPosX(posX + (bgSizeX - tmp:GetSizeX()) / 2)
-        tmp:SetPosY(posY - tmp:GetSizeY() / 2)
+        tmp:SetPosY(posY - tmp:GetSizeY() / 2 + bgSizeX)
       end
       function slot:setItem(slotNo, quickSlotInfo)
         if CppEnums.QuickSlotType.eItem ~= self.slotType and CppEnums.QuickSlotType.eCashItem ~= self.slotType then

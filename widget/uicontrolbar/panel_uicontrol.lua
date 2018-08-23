@@ -19,9 +19,8 @@ if false == _ContentsGroup_RenewUI_Main then
 end
 local mainBarText = UI.getChildControl(Panel_MainStatus_User_Bar, "StaticText_MainBarText")
 local quickSlotText = UI.getChildControl(Panel_QuickSlot, "StaticText_quickSlot")
-local questListText = UI.getChildControl(Panel_CheckedQuest, "StaticText_questText")
 local fieldViewText = UI.getChildControl(Panel_FieldViewMode, "StaticText_viewModeText")
-local raderText = UI.getChildControl(Panel_Radar, "StaticText_raderText")
+local radarText = UI.getChildControl(Panel_Radar, "StaticText_radarText")
 local npcNaviText = UI.getChildControl(Panel_NpcNavi, "StaticText_npcNaviText")
 local pvpText = UI.getChildControl(Panel_PvpMode, "StaticText_pvpText")
 local servantText = UI.getChildControl(Panel_Window_Servant, "StaticText_servantText")
@@ -49,8 +48,13 @@ function Movable_UI()
   Panel_ClassResource:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
   npcNaviText:SetShow(false)
   Panel_NpcNavi:SetDragEnable(true)
-  Panel_Party:SetDragAll(true)
-  Panel_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
+  if false == _ContentsGroup_RemasterUI_Party then
+    Panel_Party:SetDragAll(true)
+    Panel_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
+  else
+    Panel_Widget_Party:SetDragAll(true)
+    Panel_Widget_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
+  end
   FGlobal_Panel_Radar_Movable_UI()
   Panel_CheckedQuest:SetDragEnable(true)
   Panel_CheckedQuest:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
@@ -104,8 +108,13 @@ function Movable_UI_Cancel()
   Panel_FieldViewMode:SetDragAll(false)
   Panel_FieldViewMode:SetDragEnable(false)
   Panel_FieldViewMode:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
-  Panel_Party:SetDragEnable(false)
-  Panel_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
+  if false == _ContentsGroup_RemasterUI_Party then
+    Panel_Party:SetDragEnable(false)
+    Panel_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
+  else
+    Panel_Widget_Party:SetDragEnable(false)
+    Panel_Widget_Party:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
+  end
   Panel_SkillCommand:SetIgnore(true)
   Panel_SkillCommand:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
   FGlobal_SetMovableMode(false)

@@ -16,7 +16,7 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
       return true
     end
   end
-  if (nil == Panel_Login or not Panel_Login:GetShow()) and (nil == Panel_Login_Renew or not Panel_Login_Renew:GetShow()) or nil ~= Panel_Window_Policy and Panel_Window_Policy:GetShow() then
+  if (nil == Panel_Login or not Panel_Login:GetShow()) and (nil == Panel_Login_Renew or not Panel_Login_Renew:GetShow()) and (nil == Panel_Login_Remaster or not Panel_Login_Remaster:GetShow()) or nil ~= Panel_Window_Policy and Panel_Window_Policy:GetShow() then
   elseif nil ~= Panel_TermsofGameUse and Panel_TermsofGameUse:GetShow() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
       FGlobal_HandleClicked_TermsofGameUse_Next()
@@ -52,11 +52,32 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
   if nil ~= Panel_CharacterSelect_Renew and Panel_CharacterSelect_Renew:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     PaGlobal_CharacterSelect_BackToServerSelect()
   end
+  if nil ~= Panel_Lobby_CharacterSelect_Remaster and Panel_Lobby_CharacterSelect_Remaster:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    InputMLUp_CharacterSelect_ExitToServerSelect()
+  end
   if nil ~= Panel_Window_cOption and Panel_Window_cOption:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_Window_cOption:SetShow(false, true)
   end
-  if true == _ContentsGroup_RenewUI_Customization and nil ~= Panel_Customizing and true == PaGlobalFunc_Customization_GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-    PaGlobalFunc_Customization_Back()
+  if true == _ContentsGroup_RenewUI_Customization then
+    if nil ~= Panel_Customizing and true == PaGlobalFunc_Customization_GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      PaGlobalFunc_Customization_Back()
+    end
+    if nil ~= Panel_Widget_ScreenShotFrame and Panel_Widget_ScreenShotFrame:GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+      local screenShotFrame_Close = function()
+        FGlobal_ScreenShotFrame_Close()
+      end
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_CONTENT")
+      local messageBoxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFRAME_MSGBOX_TITLE"),
+        content = messageBoxMemo,
+        functionYes = screenShotFrame_Close,
+        functionNo = MessageBox_Empty_function,
+        exitButton = true,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageBoxData)
+      return
+    end
   end
 end
 registerEvent("EventGlobalKeyBinderNotPlay", "GlobalKeyBinder_UpdateNotPlay")

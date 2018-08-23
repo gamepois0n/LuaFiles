@@ -391,6 +391,10 @@ function FGlobal_MaidIcon_SetPos(resetScroll)
   if isFlushedUI() or getSelfPlayer():get():getLevel() < 7 then
     return
   end
+  if true == _ContentsGroup_RemasterUI_Main then
+    PaGlobalFunc_ServantIcon_UpdateMaidIcon(resetScroll)
+    return
+  end
   local warehouseInMaid = checkMaid_WarehouseIn(true)
   local warehouseOutMaid = checkMaid_WarehouseOut(true)
   local marketMaid = checkMaid_SubmitMarket(true)
@@ -496,6 +500,11 @@ function renderModeChange_FGlobal_MaidIcon_SetPos(prevRenderModeList, nextRender
 end
 function FromClient_Refresh()
   FGlobal_MaidIcon_SetPos(true)
+end
+function PaGlobalFunc_IconMaid_ResetScroll()
+  maidList.startIndex = 0
+  MaidList_Set(maidList.startIndex)
+  maidList.scroll:SetControlPos(0)
 end
 Panel_Window_MaidList:RegisterUpdateFunc("MaidCoolTime_Update")
 registerEvent("FromClient_RefreshMaidList", "FromClient_Refresh")

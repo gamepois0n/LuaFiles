@@ -102,7 +102,12 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:startPhaseXXX(stepNo)
   end
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()
-  Panel_MainStatus_User_Bar:SetShow(true, false)
+  local remasterUIOption = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  if true == remasterUIOption then
+    Panel_MainStatus_Remaster:SetShow(true)
+  else
+    Panel_MainStatus_User_Bar:SetShow(true, false)
+  end
   FGlobal_ClassResource_SetShowControl(true)
   Panel_UIMain:SetShow(not _ContentsGroup_RenewUI_Main, true)
   Panel_MainQuest:SetShow(true, true)
@@ -289,7 +294,7 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:eventCallClearFindSkillInstructo
 end
 function PaGlobal_TutorialPhase_CallBlackSpirit:eventCallAfterSkillInstructorDialogClose()
   if 1 == self._currentProgress and true == isClearQuest then
-    Panel_SelfPlayerExpGage:SetShow(true, true)
+    Panel_SelfPlayerExpGage_SetShow(true, true)
     isClearQuest = false
     isAcceptedQuest = false
     FGlobal_EraseAllEffect_ExitButton()

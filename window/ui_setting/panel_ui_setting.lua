@@ -4,6 +4,8 @@ local renderMode = RenderModeWrapper.new(100, {
   Defines.RenderMode.eRenderMode_UISetting
 }, false)
 local _isMenu = true
+local _prevRemasterUI
+local _isShowRemasterUI = true
 local UiSet = {
   title = UI.getChildControl(Panel_UI_Setting, "StaticText_Title"),
   main_BG = UI.getChildControl(Panel_UI_Setting, "Static_MainBG"),
@@ -11,6 +13,7 @@ local UiSet = {
   btn_save = UI.getChildControl(Panel_UI_Setting, "Button_Save"),
   btn_cancel = UI.getChildControl(Panel_UI_Setting, "Button_Cancel"),
   btn_reset = UI.getChildControl(Panel_UI_Setting, "Button_Reset"),
+  btn_remsaterUI = UI.getChildControl(Panel_UI_Setting, "CheckButton_Remaster"),
   bg_Grid = UI.getChildControl(Panel_UI_Setting, "Static_Grid"),
   btn_FieldView = UI.getChildControl(Panel_UI_Setting, "CheckButton_FieldView"),
   btn_QuickSlotMagnetic = UI.getChildControl(Panel_UI_Setting, "CheckButton_QuickSlot"),
@@ -63,6 +66,7 @@ UiSet.title:AddChild(UiSet.slider_UI_Scale)
 UiSet.title:AddChild(UiSet.btn_UIFreeSet1)
 UiSet.title:AddChild(UiSet.btn_UIFreeSet2)
 UiSet.title:AddChild(UiSet.btn_UIFreeSet3)
+UiSet.title:AddChild(UiSet.btn_remsaterUI)
 UiSet.title:AddChild(UiSet.btn_Win_Close)
 Panel_UI_Setting:RemoveControl(UiSet.main_BG)
 Panel_UI_Setting:RemoveControl(UiSet.btn_save)
@@ -79,6 +83,7 @@ Panel_UI_Setting:RemoveControl(UiSet.slider_UI_Scale)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet1)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet2)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet3)
+Panel_UI_Setting:RemoveControl(UiSet.btn_remsaterUI)
 Panel_UI_Setting:RemoveControl(UiSet.btn_Win_Close)
 UiSet.main_BG:ComputePos()
 UiSet.title:ComputePos()
@@ -96,10 +101,12 @@ UiSet.slider_UI_Scale:ComputePos()
 UiSet.btn_UIFreeSet1:ComputePos()
 UiSet.btn_UIFreeSet2:ComputePos()
 UiSet.btn_UIFreeSet3:ComputePos()
+UiSet.btn_remsaterUI:ComputePos()
 UiSet.btn_Win_Close:ComputePos()
 UiSet.btn_FieldView:SetEnableArea(0, 0, UiSet.btn_FieldView:GetTextSizeX() + 25, UiSet.btn_FieldView:GetSizeY())
 UiSet.btn_QuickSlotMagnetic:SetEnableArea(0, 0, UiSet.btn_QuickSlotMagnetic:GetTextSizeX() + 25, UiSet.btn_QuickSlotMagnetic:GetSizeY())
 UiSet.chk_GridView:SetEnableArea(0, 0, UiSet.chk_GridView:GetTextSizeX() + 25, UiSet.chk_GridView:GetSizeY())
+UiSet.btn_remsaterUI:SetEnableArea(0, 0, UiSet.btn_remsaterUI:GetTextSizeX() + 25, UiSet.btn_remsaterUI:GetSizeY())
 local Template = {
   static_able = UI.getChildControl(Panel_UI_Setting, "Static_Able"),
   static_disAble = UI.getChildControl(Panel_UI_Setting, "Static_DisAble"),
@@ -184,7 +191,9 @@ local panelID = {
   SkillCoolTimeQuickSlot6 = 52,
   SkillCoolTimeQuickSlot7 = 53,
   SkillCoolTimeQuickSlot8 = 54,
-  SkillCoolTimeQuickSlot9 = 55
+  SkillCoolTimeQuickSlot9 = 55,
+  MainStatusRemaster = 56,
+  ServantIconRemaster = 57
 }
 local panelControl = {}
 if CppDefine.ChangeUIAndResolution == true then
@@ -340,7 +349,7 @@ if CppDefine.ChangeUIAndResolution == true then
       PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi,
       prePos = {x = 0, y = 0},
       name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_17"),
-      isShow = true
+      isShow = false
     },
     [panelID.NewEquip] = {
       control = Panel_NewEquip,
@@ -683,6 +692,24 @@ if CppDefine.ChangeUIAndResolution == true then
       prePos = {x = 0, y = 0},
       name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_10"),
       isShow = false
+    },
+    [panelID.MainStatusRemaster] = {
+      control = Panel_MainStatus_Remaster,
+      posFixed = true,
+      isChange = false,
+      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
+      isShow = true
+    },
+    [panelID.ServantIconRemaster] = {
+      control = Panel_Widget_ServantIcon,
+      posFixed = false,
+      isChange = false,
+      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
+      isShow = true
     }
   }
 else
@@ -804,7 +831,7 @@ else
       posFixed = false,
       prePos = {x = 0, y = 0},
       name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_17"),
-      isShow = true
+      isShow = false
     },
     [panelID.NewEquip] = {
       control = Panel_NewEquip,
@@ -1071,9 +1098,31 @@ else
       prePos = {x = 0, y = 0},
       name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_10"),
       isShow = false
+    },
+    [panelID.MainStatusRemaster] = {
+      control = Panel_MainStatus_Remaster,
+      posFixed = true,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
+      isShow = true
+    },
+    [panelID.ServantIconRemaster] = {
+      control = Panel_Widget_ServantIcon,
+      posFixed = false,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
+      isShow = true
     }
   }
 end
+local swapPanelList = {
+  panelID.ExpGage,
+  panelID.Pvp,
+  panelID.Adrenallin,
+  panelID.HPBar,
+  panelID.MainStatusRemaster,
+  panelID.ClassResource
+}
 UiSet.panelCount = #panelControl
 function setChangeUiSettingRadarUI(panel)
   panelControl[panelID.Radar].control = panel
@@ -1157,6 +1206,43 @@ local ChatPanelIsOpenState = {
   [5] = false
 }
 function UiSet_Initialize()
+  if false == ToClient_isXBox() and true == _ContentsGroup_RemasterUI_Party then
+    if CppDefine.ChangeUIAndResolution == true then
+      panelControl[panelID.LargeParty] = {
+        control = Panel_Widget_Raid,
+        posFixed = false,
+        isChange = false,
+        PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_LargeParty,
+        prePos = {x = 0, y = 0},
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
+        isShow = true
+      }
+      panelControl[panelID.Party] = {
+        control = Panel_Widget_Party,
+        posFixed = false,
+        isChange = false,
+        PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Party,
+        prePos = {x = 0, y = 0},
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
+        isShow = true
+      }
+    else
+      panelControl[panelID.LargeParty] = {
+        control = Panel_Widget_Raid,
+        posFixed = false,
+        prePos = {x = 0, y = 0},
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
+        isShow = true
+      }
+      panelControl[panelID.Party] = {
+        control = Panel_Widget_Party,
+        posFixed = false,
+        prePos = {x = 0, y = 0},
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
+        isShow = true
+      }
+    end
+  end
   for idx = 1, UiSet.panelCount do
     if nil ~= panelControl[idx].control then
       local slot = {}
@@ -1240,8 +1326,16 @@ function UiSet_Initialize()
   end
   UiSet.slider_UI_Scale:SetInterval(160)
 end
-function UiSet_update()
-  UiSet.slider_UI_Scale:SetControlPos(UiSet.nowCurrentPercent)
+function UiSet_update(isRemasterSwap)
+  if true == isRemasterSwap then
+    for _, pID in pairs(swapPanelList) do
+      if nil ~= panelControl[pID] then
+        panelControl[pID].isShow = true
+      end
+    end
+  else
+    UiSet.slider_UI_Scale:SetControlPos(UiSet.nowCurrentPercent)
+  end
   local scaleText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SCALETEXT", "currentScale", UiSet.currentScale)
   UiSet.txt_UISize:SetText(tostring(scaleText))
   UiSet.txt_UI_LOW:SetText(UiSet.minScale)
@@ -1254,13 +1348,15 @@ function UiSet_update()
       if idx == panelID.LargeParty and false == isLargePartyOpen then
         slot.control:SetShow(false)
       end
-      slot.originPosX = panelControl[idx].control:GetPosX()
-      slot.originPosY = panelControl[idx].control:GetPosY()
-      slot.originSizeX = panelControl[idx].control:GetSizeX()
-      slot.originSizeY = panelControl[idx].control:GetSizeY()
-      slot.control:SetPosX(slot.originPosX)
-      slot.control:SetPosY(slot.originPosY)
-      slot.control:SetSize(slot.originSizeX, slot.originSizeY)
+      if true ~= isRemasterSwap then
+        slot.originPosX = panelControl[idx].control:GetPosX()
+        slot.originPosY = panelControl[idx].control:GetPosY()
+        slot.originSizeX = panelControl[idx].control:GetSizeX()
+        slot.originSizeY = panelControl[idx].control:GetSizeY()
+        slot.control:SetPosX(slot.originPosX)
+        slot.control:SetPosY(slot.originPosY)
+        slot.control:SetSize(slot.originSizeX, slot.originSizeY)
+      end
       slot.close:SetScale(1, 1)
       slot.close:SetShow(true)
       slot.close:SetPosX(slot.control:GetSizeX() - slot.close:GetSizeX() - 3)
@@ -1288,14 +1384,16 @@ function UiSet_update()
         end
       elseif idx == panelID.ClassResource then
         if CppEnums.ClassType.ClassType_Sorcerer == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
-          slot.control:SetShow(true)
-          slot.close:SetShow(true)
+          slot.control:SetShow(not _isShowRemasterUI)
+          slot.close:SetShow(not _isShowRemasterUI)
+          panelControl[pID].isShow = not _isShowRemasterUI
           if CppEnums.ClassType.ClassType_Combattant == getSelfPlayer():getClassType() or CppEnums.ClassType.ClassType_CombattantWomen == getSelfPlayer():getClassType() then
             panelControl[panelID.ClassResource].name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
           end
         else
           slot.control:SetShow(false)
           slot.close:SetShow(false)
+          panelControl[pID].isShow = false
         end
       elseif idx == panelID.ActionGuide then
         if true == isChecked_SkillCommand then
@@ -1313,19 +1411,23 @@ function UiSet_update()
         end
       elseif idx == panelID.Adrenallin then
         if getSelfPlayer():isEnableAdrenalin() then
-          slot.control:SetShow(true)
-          slot.close:SetShow(true)
+          slot.control:SetShow(not _isShowRemasterUI)
+          slot.close:SetShow(not _isShowRemasterUI)
+          panelControl[pID].isShow = not _isShowRemasterUI
         else
           slot.control:SetShow(false)
           slot.close:SetShow(false)
+          panelControl[pID].isShow = false
         end
       elseif idx == panelID.Pvp then
         if isPvpEnable() then
-          slot.control:SetShow(true)
-          slot.close:SetShow(true)
+          slot.control:SetShow(not _isShowRemasterUI)
+          slot.close:SetShow(not _isShowRemasterUI)
+          panelControl[pID].isShow = not _isShowRemasterUI
         else
           slot.control:SetShow(false)
           slot.close:SetShow(false)
+          panelControl[pID].isShow = false
         end
       elseif idx == panelID.UIMain and true == _ContentsGroup_RenewUI_Main then
         slot.control:SetShow(false)
@@ -1350,6 +1452,19 @@ function UiSet_update()
         stateValue = 2
       end
       UiSet_ChangeTexture_BG(idx, stateValue)
+      if true == _ContentsGroup_RemasterUI_Main then
+        if idx == panelID.House or idx == panelID.NewEquip or idx == panelID.ServantIcon then
+          slot.control:SetShow(false)
+        elseif idx == panelID.ExpGage or idx == panelID.HPBar then
+          slot.control:SetShow(not _isShowRemasterUI)
+          slot.close:SetShow(not _isShowRemasterUI)
+          panelControl[pID].isShow = not _isShowRemasterUI
+        elseif idx == panelID.MainStatusRemaster then
+          slot.control:SetShow(_isShowRemasterUI)
+          slot.close:SetShow(_isShowRemasterUI)
+          panelControl[pID].isShow = _isShowRemasterUI
+        end
+      end
     end
   end
 end
@@ -1450,7 +1565,13 @@ function HandleClicked_UiSet_ControlShowToggle(idx)
       _PA_ASSERT(false, "SelfPlayer\234\176\128 nil \236\158\133\235\139\136\235\139\164.")
       return
     end
-    if getSelfPlayer():get():getLevel() < PaGlobal_MainQuest._closeableLevel and true == Panel_MainQuest:GetShow() then
+    local closableLevel = 0
+    if true == _ContentsGroup_RemasterUI_QuestWidget then
+      closableLevel = PaGlobalFunc_MainQuestWidget_GetClosableLevel()
+    else
+      closableLevel = PaGlobal_MainQuest._closeableLevel
+    end
+    if closableLevel > getSelfPlayer():get():getLevel() and true == Panel_MainQuest:GetShow() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_MAINQUESTWIDGET_NOTYETCLOSEABLELEVEL_ACK"))
       return
     end
@@ -1463,7 +1584,7 @@ function HandleClicked_UiSet_ControlShowToggle(idx)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_NOTYETSPRIT_ACK"))
     UiSet.panelPool[idx].close:SetCheck(panelControl[idx].isShow)
     return
-  elseif idx == panelID.ServantIcon or idx == panelID.House or idx == panelID.NewEquip or idx == panelID.Party or idx == panelID.QuickSlot or idx == panelID.Adrenallin or idx == panelID.LargeParty then
+  elseif idx == panelID.ServantIcon or idx == panelID.House or idx == panelID.NewEquip or idx == panelID.Party or idx == panelID.QuickSlot or idx == panelID.Adrenallin or idx == panelID.LargeParty or idx == panelID.ServantIconRemaster then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_NOTRANDOMHIDE_ACK"))
     UiSet.panelPool[idx].close:SetCheck(panelControl[idx].isShow)
     return
@@ -1489,7 +1610,11 @@ function HandleClicked_UiSet_ControlShowToggle(idx)
       UiSet_ChangeTexture_BG(idx, 2)
     end
     panelControl[idx].isShow = true
-    UiSet.panelPool[idx].control:SetText(panelControl[idx].name)
+    if panelControl[idx].posFixed then
+      UiSet.panelPool[idx].control:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", panelControl[idx].name))
+    else
+      UiSet.panelPool[idx].control:SetText(panelControl[idx].name)
+    end
     panelOpen = true
   end
   if idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
@@ -1702,6 +1827,7 @@ function UiSet_ConfrimSetting_Sub(isReset)
       panelControl[idx].control:SetShow(panelControl[idx].isShow)
     end
   end
+  UISetting_CheckOldMainStatus()
   ToClient_SaveUiInfo(true)
   return scale
 end
@@ -1709,8 +1835,14 @@ function HandleClicked_UiSet_ConfirmSetting(isReset)
   PaGlobal_UiSet_FreeSet_Close()
   SetUIMode(Defines.UIMode.eUIMode_Default)
   renderMode:reset()
+  ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting, _isShowRemasterUI, CppEnums.VariableStorageType.eVariableStorageType_User)
+  if _prevRemasterUI ~= _isShowRemasterUI then
+    FromClient_MainStatus_SwapUIOption(_isShowRemasterUI)
+  end
   local scale = UiSet_ConfrimSetting_Sub(isReset)
-  Panel_NewEquip_EffectLastUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    Panel_NewEquip_EffectLastUpdate()
+  end
   FGlobal_PetListNew_NoPet()
   scale = scale + 0.002
   local uiScale_Percent = math.floor(scale * 100)
@@ -1744,6 +1876,14 @@ function HandleClicked_UiSet_FieldViewToggle()
   else
     FieldViewMode_ShowToggle(false)
   end
+end
+function HandleClicked_UiSet_SwapRemasterUI()
+  if UiSet.btn_remsaterUI:IsCheck() then
+    _isShowRemasterUI = false
+  else
+    _isShowRemasterUI = true
+  end
+  UiSet_update(true)
 end
 function HandleClicked_UiSet_ChangeScale()
   local nowPercent = UiSet.slider_UI_Scale:GetControlPos()
@@ -1832,6 +1972,13 @@ function FGlobal_UiSet_Open(isMenu)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_NOTCURRENTACTION_ACK"))
     return
   end
+  if true == _ContentsGroup_RemasterUI_Radar then
+    FGlobal_ResetTimeBar()
+  end
+  local remasterUIOption = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  UiSet.btn_remsaterUI:SetCheck(not remasterUIOption)
+  _prevRemasterUI = remasterUIOption
+  _isShowRemasterUI = remasterUIOption
   Panel_FieldViewMode:SetShow(false)
   UiSet_Panel_ShowValueUpdate()
   SetUIMode(Defines.UIMode.eUIMode_UiSetting)
@@ -1884,6 +2031,9 @@ function FGlobal_UiSet_Close()
   PaGlobal_UiSet_FreeSet_Close()
   if false == Panel_UI_Setting:IsShow() then
     return
+  end
+  if true == _ContentsGroup_RemasterUI_Radar then
+    PaGlobalFunc_Radar_Resize()
   end
   PaGlobal_UiSet_FreeSet_Close()
   SetUIMode(Defines.UIMode.eUIMode_Default)
@@ -1939,6 +2089,7 @@ function UiSet_registEventHandler()
   UiSet.btn_Scale:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   UiSet.slider_UI_Scale:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   UiSet.btn_FieldView:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_FieldViewToggle()")
+  UiSet.btn_remsaterUI:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_SwapRemasterUI()")
 end
 function HandleClicked_Reset_UiSetting_Msg()
   local function reset_GameUI()
@@ -1981,7 +2132,7 @@ function HandleClicked_Reset_UiSetting_Msg()
       end
     end
     for idx = 1, UiSet.panelCount do
-      if idx == panelID.ServantIcon or idx == panelID.House or idx == panelID.NewEquip or idx == panelID.Party or idx == panelID.Adrenallin or idx == panelID.QuickSlot or idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 or idx == panelID.LargeParty then
+      if idx == panelID.ServantIcon or idx == panelID.House or idx == panelID.NewEquip or idx == panelID.Party or idx == panelID.Adrenallin or idx == panelID.QuickSlot or idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 or idx == panelID.LargeParty or idx == panelID.ServantIconRemaster then
       else
         panelControl[idx].isShow = true
       end
@@ -2073,6 +2224,9 @@ function HandleClicked_Reset_UiSetting_Msg()
         if idx == panelID.ServantIcon then
           cachePosX[idx] = 10
           cachePosY[idx] = UiSet.panelPool[panelID.ExpGage].control:GetPosY() + UiSet.panelPool[panelID.ExpGage].control:GetSizeY() + 15
+        elseif idx == panelID.ServantIconRemaster then
+          cachePosX[idx] = 10
+          cachePosY[idx] = UiSet.panelPool[panelID.MainStatusRemaster].control:GetPosY() + UiSet.panelPool[panelID.MainStatusRemaster].control:GetSizeY() - 50
         elseif idx == panelID.Quest then
           cachePosX[idx] = screenSizeX - UiSet.panelPool[panelID.Quest].control:GetSizeX() - 20
           cachePosY[idx] = UiSet.panelPool[panelID.Radar].control:GetPosY() + UiSet.panelPool[panelID.Radar].control:GetSizeY() + UiSet.panelPool[panelID.MainQuest].control:GetSizeY() + 20 + UiSet.panelPool[panelID.NewEquip].control:GetSizeY()
@@ -2128,7 +2282,9 @@ function HandleClicked_Reset_UiSetting_Msg()
         end
       end
     end
-    Panel_NewEquip_EffectLastUpdate()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      Panel_NewEquip_EffectLastUpdate()
+    end
     FGlobal_ResetRadarUI(true)
     if nil ~= PaGlobal_WorldMiniMap then
       PaGlobal_WorldMiniMap:resetPanelSize()
@@ -2147,6 +2303,10 @@ function HandleClicked_Reset_UiSetting_Msg()
     FGlobal_NewQuickSlot_InitPos(false)
     PaGlobal_SkillCoolTimeQuickSlot:settingPos(false)
     FGlobal_SkillCommand_ResetPosition()
+    _isShowRemasterUI = true
+    ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting, _isShowRemasterUI, CppEnums.VariableStorageType.eVariableStorageType_User)
+    FromClient_MainStatus_SwapUIOption(_isShowRemasterUI)
+    UISetting_CheckOldMainStatus()
     resetGameUI()
     UiSet_update()
     ToClient_SaveUiInfo(true)
@@ -2208,12 +2368,37 @@ function savePresetInfo(presetIndex)
   ToClient_getGameUIManagerWrapper():saveUISettingPresetInfo(presetIndex)
   ToClient_getGameUIManagerWrapper():saveUISettingChattingPresetInfo(presetIndex)
   HandleClicked_UiSet_ConfirmSetting()
+  local remasterUIIndex = 0
+  if 0 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset0
+  elseif 1 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset1
+  elseif 2 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset2
+  end
+  ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(remasterUIIndex, not UiSet.btn_remsaterUI:IsCheck(), CppEnums.VariableStorageType.eVariableStorageType_User)
 end
 function applyPresetInfo(presetIndex)
   if ToClient_getGameUIManagerWrapper():isPresetListEmpty(presetIndex) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_NOPRESET"))
     return
   end
+  local remasterUIIndex = 0
+  local isSetRemasterUI = false
+  if 0 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset0
+  elseif 1 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset1
+  elseif 2 == presetIndex then
+    remasterUIIndex = CppEnums.GlobalUIOptionType.SwapRemasterUISettingPreset2
+  end
+  if false == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(remasterUIIndex) then
+    isSetRemasterUI = false
+  else
+    isSetRemasterUI = true
+  end
+  _isShowRemasterUI = isSetRemasterUI
+  UiSet.btn_remsaterUI:SetCheck(not isSetRemasterUI)
   for idx = 1, UiSet.panelCount do
     local chatWindowIndex = 0
     if idx >= panelID.Chat0 and idx <= panelID.Chat4 then
@@ -2222,7 +2407,9 @@ function applyPresetInfo(presetIndex)
     end
     ToClient_getUISettingPanelInfo(presetIndex, idx, panelControl[idx].PAGameUIType, chatWindowIndex)
   end
-  UiSet_update()
+  ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting, _isShowRemasterUI, CppEnums.VariableStorageType.eVariableStorageType_User)
+  FromClient_MainStatus_SwapUIOption(_isShowRemasterUI)
+  UiSet_update(true)
   UiSet_ConfrimSetting_Sub(false)
 end
 function FromClient_getUiSettingChattingPanelInfo(chatWindowIndex, isOpen, isCombined, sizeX, sizeY, isUsedSmoothChattingup)
@@ -2300,7 +2487,7 @@ function FromClient_getUiSettingPanelInfo(panelIndex, posX, posY, isShow, chatWi
     if panelIndex == panelID.ActionGuide then
       isChecked_SkillCommand = isShow
     end
-    if panelIndex ~= panelID.ServantIcon and panelIndex ~= panelID.House and panelIndex ~= panelID.NewEquip and panelIndex ~= panelID.Party and panelIndex ~= panelID.QuickSlot and panelIndex ~= panelID.Adrenallin and panelIndex ~= panelID.LargeParty then
+    if panelIndex ~= panelID.ServantIcon and panelIndex ~= panelID.House and panelIndex ~= panelID.NewEquip and panelIndex ~= panelID.Party and panelIndex ~= panelID.QuickSlot and panelIndex ~= panelID.Adrenallin and panelIndex ~= panelID.LargeParty and panelIndex ~= panelID.ServantIconRemaster then
       HandleClicked_UiSet_ControlShowToggle(panelIndex)
     end
   end
@@ -2368,6 +2555,19 @@ function FromClient_applyChattingOptionToLua(presetIndex, chatWindowIndex, chatF
   Chatting_setUsedSmoothChattingUp(isUsedSmoothChattingUp)
   ChattingOption_UpdateChattingAnimationControl(isUsedSmoothChattingUp)
   setisChangeFontSize(true)
+end
+function UISetting_CheckOldMainStatus()
+  if true == _ContentsGroup_RemasterUI_Main then
+    panelControl[panelID.MainStatusRemaster].control:SetShow(panelControl[panelID.MainStatusRemaster].isShow and PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.ExpGage].control:SetShow(panelControl[panelID.ExpGage].isShow and not PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.Adrenallin].control:SetShow(panelControl[panelID.Adrenallin].isShow and not PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.Pvp].control:SetShow(panelControl[panelID.Pvp].isShow and not PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.ClassResource].control:SetShow(panelControl[panelID.ClassResource].isShow and not PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.HPBar].control:SetShow(panelControl[panelID.HPBar].isShow and not PaGlobalFunc_IsRemasterUIOption())
+    panelControl[panelID.House].control:SetShow(false)
+    panelControl[panelID.ServantIcon].control:SetShow(false)
+    panelControl[panelID.NewEquip].control:SetShow(false)
+  end
 end
 registerEvent("FromClient_getUiSettingPanelInfo", "FromClient_getUiSettingPanelInfo")
 registerEvent("FromClient_getUiSettingChattingPanelInfo", "FromClient_getUiSettingChattingPanelInfo")

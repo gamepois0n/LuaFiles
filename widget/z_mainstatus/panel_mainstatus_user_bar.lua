@@ -231,7 +231,7 @@ end
 function Panel_MainStatus_User_Bar_Update()
   PaGlobal_MainStatus_User_Bar:Update()
 end
-function Panel_MainStatus_User_Bar_Onresize()
+function PaGlobalFunc_UserBar_Onresize()
   local self = PaGlobal_MainStatus_User_Bar
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()

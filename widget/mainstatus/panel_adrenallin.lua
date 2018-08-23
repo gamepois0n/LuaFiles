@@ -11,6 +11,9 @@ _transLockButton:addInputEvent("Mouse_LUp", "requestBlackSpritSkill()")
 _staticLockButton = UI.getChildControl(Panel_Adrenallin, "Static_Lock")
 _staticLockButton:SetShow(false)
 function UseableBlackSpritSkill()
+  if true == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting) then
+    return
+  end
   local selfPlayer = getSelfPlayer()
   if true == selfPlayer:isUseableBlackSpritSkill() then
     _staticLockButton:SetShow(false)
@@ -32,6 +35,8 @@ function adrenallin_Update()
     FGlobal_MainStatus_FadeIn(5)
   end
   prevAdrenallin = adrenallin
+  local isUseRage = getSelfPlayer():isUseableBlackSpritSkill()
+  _staticLockButton:SetShow(not isUseRage)
 end
 function Panel_adrenallin_EnableSimpleUI()
   Panel_adrenallin_SetAlphaAllChild(Panel_MainStatus_User_Bar:GetAlpha())
@@ -59,7 +64,7 @@ function FromClient_UpdateAdrenalin()
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Adrenallin:SetShow(false)
   else
-    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode)
+    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode and not PaGlobalFunc_IsRemasterUIOption())
   end
   adrenallin_Update()
 end
@@ -95,7 +100,7 @@ function FromClient_ChangeAdrenalinMode()
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Adrenallin:SetShow(false)
   else
-    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode)
+    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode and not PaGlobalFunc_IsRemasterUIOption())
   end
 end
 function Adrenallin_ShowSimpleToolTip(isShow)
@@ -154,7 +159,7 @@ function Panel_Adrenallin_OnSreenResize()
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Adrenallin:SetShow(false)
   else
-    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode)
+    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode and not PaGlobalFunc_IsRemasterUIOption())
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_Adrenallin)
 end
@@ -175,7 +180,11 @@ function Panel_Adrenallin_InitShow()
   if true == _ContentsGroup_RenewUI_Main then
     Panel_Adrenallin:SetShow(false)
   else
-    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode)
+    Panel_Adrenallin:SetShow(getSelfPlayer():isEnableAdrenalin() and not isRecordMode and not PaGlobalFunc_IsRemasterUIOption())
   end
+end
+function Panel_Adrenallin_SetShow(isShow, isAni)
+  Panel_Adrenallin:SetShow(isShow and not PaGlobalFunc_IsRemasterUIOption())
+  adrenallin_Update()
 end
 Panel_Adrenallin_InitShow()

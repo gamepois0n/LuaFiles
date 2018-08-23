@@ -844,7 +844,11 @@ function HandleClicked_VoiceChatListening()
   listeningVol = math.ceil(listening_VolumeSlider:GetControlPos() * 100)
   listening_VolumeValue:SetText(listeningVol .. "%")
   ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, myGuildMemberInfo:getUserNo(), isSaying, isListening, not isSelf)
-  FGlobal_VoiceChatState()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_VoiceChatState()
+  else
+    PaGlobalFunc_Widget_FunctionButton_HandleUpdate(Widget_Function_Type.SetVoice)
+  end
 end
 local prevVoiceChatListen = false
 function HandleClicked_VoiceChatListeningVolume()
@@ -870,7 +874,11 @@ function HandleClicked_VoiceChatListeningVolume()
     if prevVoiceChatListen ~= isListening then
       ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, myGuildMemberInfo:getUserNo(), isSaying, isListening, false)
     end
-    FGlobal_VoiceChatState()
+    if false == _ContentsGroup_RemasterUI_Main_RightTop then
+      FGlobal_VoiceChatState()
+    else
+      PaGlobalFunc_Widget_FunctionButton_HandleUpdate(Widget_Function_Type.SetVoice)
+    end
   else
     ToClient_VoiceChatChangeVolume(CppEnums.VoiceChatType.eVoiceChatType_Guild, myGuildMemberInfo:getUserNo(), volume)
   end

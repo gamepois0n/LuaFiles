@@ -564,6 +564,9 @@ end
 function UserLevel_Update()
   PaGlobal_SelfPlayerExpGage:UserLevel_Update()
 end
+function PaGlobalFunc_SelfPlayerExpGage_SetShow(isShow, isAni)
+  Panel_SelfPlayerExpGage:SetShow(isShow, isAni)
+end
 Panel_SelfPlayerExpGage_CharacterInfoWindowUpdate()
 PaGlobal_SelfPlayerExpGage:UserLevel_Update()
 UserSkillPoint_Update()

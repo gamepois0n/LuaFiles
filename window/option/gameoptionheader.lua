@@ -638,7 +638,7 @@ PaGlobal_Option = {
       _settingRightNow = true
     },
     BattleSoundType = {
-      _defaultValue = 2,
+      _defaultValue = 1,
       _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON,
       _settingRightNow = true
     },
@@ -1535,11 +1535,11 @@ function PaGlobal_Option._functions.GamePadInvertY(value)
   setGamePadInvertY(value)
 end
 function PaGlobal_Option._functions.GamePadSensitivityX(value)
-  local convertedValue = value * 1.9 + 0.1
+  local convertedValue = value * 1.8 + 0.2
   setGamePadSensitivityX(convertedValue)
 end
 function PaGlobal_Option._functions.GamePadSensitivityY(value)
-  local convertedValue = value * 1.9 + 0.1
+  local convertedValue = value * 1.8 + 0.2
   setGamePadSensitivityY(convertedValue)
 end
 function PaGlobal_Option._functions.ConsolePadKeyType(value)
@@ -1631,10 +1631,12 @@ end
 function PaGlobal_Option._functions.ColorBlind(value)
   ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode, value, CppEnums.VariableStorageType.eVariableStorageType_User)
   ToClient_ChangeColorBlindMode(value)
-  FGlobal_Rador_SetColorBlindMode()
-  FGlobal_ChangeEffectCheck()
+  FGlobal_Radar_SetColorBlindMode()
   FGlobal_Window_Servant_ColorBlindUpdate()
-  UIMain_QuestUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_ChangeEffectCheck()
+    UIMain_QuestUpdate()
+  end
 end
 function PaGlobal_Option._functions.BlackSpiritNotice(value)
   setBlackSpiritNotice(value)

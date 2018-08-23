@@ -21,10 +21,15 @@ partyInven = {
     createCount = true
   }
 }
-local btnPartyInven = UI.getChildControl(Panel_Party, "Button_PartyInven")
+local btnPartyInven
 local btnClose = UI.getChildControl(Panel_Window_PartyInventory, "Button_Win_Close")
 local btnQuestion = UI.getChildControl(Panel_Window_PartyInventory, "StaticText_Desc")
 function partyInven:Init()
+  if false == _ContentsGroup_RemasterUI_Party then
+    btnPartyInven = UI.getChildControl(Panel_Party, "Button_PartyInven")
+  else
+    btnPartyInven = UI.getChildControl(Panel_Widget_Party, "Button_PartyInven")
+  end
   for listIdx = 0, self.slotCount - 1 do
     local slot = {}
     slot.empty = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Window_PartyInventory, "PartyInventory_Slot_Base_" .. listIdx)

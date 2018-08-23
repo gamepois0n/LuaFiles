@@ -368,7 +368,10 @@ registerEvent("FromClient_FriendListOpenMessanger", "FromClient_FriendListOpenMe
 local styleFriendGroup = UI.getChildControl(Panel_FriendList, "Style_FriendGroup")
 local styleFriendGroupName = UI.getChildControl(Panel_FriendList, "StyleGroupName")
 local styleName = UI.getChildControl(Panel_FriendList, "Style_Name")
-local friendsBTN = UI.getChildControl(Panel_UIMain, "Button_FriendList")
+local friendsBTN
+if false == _ContentsGroup_RemasterUI_Main_Alert then
+  friendsBTN = UI.getChildControl(Panel_UIMain, "Button_FriendList")
+end
 styleFriendGroup:SetShow(false)
 styleFriendGroupName:SetShow(false)
 styleFriendGroupName:SetIgnore(false)
@@ -567,7 +570,9 @@ end
 function FromClient_NoticeNewMessage(isSoundNotice, isEffectNotice)
   if isEffectNotice and false == Panel_FriendList:GetShow() then
     UIMain_FriendListUpdate()
-    UIMain_FriendsUpdate()
+    if false == _ContentsGroup_RemasterUI_Main_Alert then
+      UIMain_FriendsUpdate()
+    end
   end
   if isSoundNotice then
     audioPostEvent_SystemUi(3, 11)
@@ -647,7 +652,9 @@ function RequestFriendList:updateList()
   if friendCount > 0 then
     self:SetShow(true)
   end
-  FGlobal_NewFriendAlertOff()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    FGlobal_NewFriendAlertOff()
+  end
 end
 RequestFriendList:initialize()
 registerEvent("ResponseFriendList_updateAddFriends", "ResponseFriendList_updateAddFriends")
@@ -1197,7 +1204,9 @@ function FriendList_ShowToggle()
 end
 function FriendList_show()
   ToClient_updateAddFriendAllowed()
-  friendsBTN:EraseAllEffect()
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    friendsBTN:EraseAllEffect()
+  end
   Panel_FriendList:SetShow(true, true)
 end
 function FriendList_hide()

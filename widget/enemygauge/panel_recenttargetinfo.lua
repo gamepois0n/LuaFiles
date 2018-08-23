@@ -85,7 +85,7 @@ end
 function targetHpInfo_Update_Monster(actorKey, nowHP)
   local targetActor = getCharacterActor(actorKey)
   if nil == targetActor then
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
     return
   end
   local monsterLevel = targetActor:get():getCharacterStaticStatus().level
@@ -230,11 +230,11 @@ function targetHpInfo_Update_Monster(actorKey, nowHP)
       _checkBtnAlert:SetPosX(_RunawayBG:GetPosX() + 10)
       _checkBtnAlert:SetPosY(_RunawayBG:GetPosY())
       if Panel_Monster_Bar:GetShow() then
-        _dangerAlert_Show(true)
+        FGlobal_DangerAlert_Show(true)
         FGlobal_ChattingAlert_Call()
       end
     else
-      _dangerAlert_Show(false)
+      FGlobal_DangerAlert_Show(false)
     end
   end
 end
@@ -403,7 +403,7 @@ function panel_Update_Monster_Info(actorKey)
   if curHP < 1 then
     Panel_Monster_Bar:SetShow(false, false)
     monsterList = {}
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
   end
   if targetActor:get():isMonster() then
     targetHpInfo_Update_Monster(actorKey, nowHP)
@@ -518,7 +518,7 @@ function updateTargetInfoCheckTime(fDeltatime)
     monsterList = {}
     Panel_Monster_Bar:SetShow(false, false)
     clearTargetActor()
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
   end
 end
 function FGlobal_Panel_Monster_Bar_RePos()
@@ -533,7 +533,7 @@ end
 function hideRecentTargetInfo()
   monsterList = {}
   Panel_Monster_Bar:SetShow(false, false)
-  _dangerAlert_Show(false)
+  FGlobal_DangerAlert_Show(false)
 end
 function GameOption_NearMonsterAlertOff()
   ToClient_SetMessageFilter(10, true)

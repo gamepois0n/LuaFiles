@@ -39,7 +39,11 @@ function PaGlobal_TutorialMenu:initialize()
   self._isFold = true
   self:setShow(false, false)
   self:alignPosByPivotUi()
-  self._refWeightOverUi = PaGlobalPlayerWeightList.weight
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    self._refWeightOverUi = PaGlobalPlayerWeightList.weight
+  else
+    self._refWeightOverUi = nil
+  end
   self._ui._buttonTutorialMenu:addInputEvent("Mouse_LUp", "PaGlobal_TutorialMenu:handleClickedMenuButton()")
   self._ui._buttonTutorialStart1:addInputEvent("Mouse_LUp", "PaGlobal_TutorialMenu:handleClickedTutorialStartButton(1)")
   self._ui._buttonTutorialStart2:addInputEvent("Mouse_LUp", "PaGlobal_TutorialMenu:handleClickedTutorialStartButton(2)")

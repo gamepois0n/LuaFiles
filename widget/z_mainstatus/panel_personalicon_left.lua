@@ -82,7 +82,9 @@ local function registEventHandler()
   _goldPremiumBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
   _challengeReward:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 20)")
   _challengeReward:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
-  _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
+  if false == _ContentsGroup_RemasterUI_Main_Alert then
+    _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
+  end
   _btnCashShop:addInputEvent("Mouse_LUp", "PearlShop_Open()")
   _btnAlertClose:addInputEvent("Mouse_LUp", "PremiumNotice_Close()")
   _russiaPack3:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 15 )")
@@ -705,7 +707,11 @@ function FromClient_PackageIconUpdate()
   if false == _ContentsGroup_RenewUI_Main then
     _challengeReward:SetShow(false)
   end
-  FGlobal_PersonalIcon_ButtonPosUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
   PackageIconPosition()
 end
 function FromClient_ResponseChangeExpAndDropPercent()

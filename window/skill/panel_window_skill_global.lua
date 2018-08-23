@@ -293,6 +293,7 @@ function FromClient_responseLearnFusionSkill(learnCombiSkillNo, slotNo)
 end
 function FromClient_responseClearFusionSkill()
   PaGlobal_Skill:initTabControl_Combination(false)
+  PaGlobal_SkillCombination:update()
 end
 function PaGlobal_Skill:initTabControl(cellTable, parent, container)
   if nil == cellTable then

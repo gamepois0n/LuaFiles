@@ -4,7 +4,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_color = Defines.Color
 local UI_BUFFTYPE = CppEnums.UserChargeType
-Panel_SelfPlayerExpGage:SetShow(true, false)
+Panel_SelfPlayerExpGage:SetShow(not PaGlobalFunc_IsRemasterUIOption(), false)
 Panel_SelfPlayerExpGage:SetIgnore(true)
 Panel_SelfPlayerExpGage:ActiveMouseEventEffect(false)
 Panel_SelfPlayerExpGage:RegisterShowEventFunc(true, "SelfPlayerExpGageShowAni()")
@@ -494,6 +494,9 @@ function ExpGauge_ChangeTexture_Off()
   expText:SetText(PAGetString(Defines.StringSheet_GAME, "MAINSTATUS_SKILLEXP"))
 end
 function SelfPlayerExpGauge_ShowToggle()
+  if true == PaGlobalFunc_IsRemasterUIOption() then
+    return
+  end
   local isShow = Panel_SelfPlayerExpGage:IsShow()
   if isShow == true then
     ExpGague_ClearReservedLearningSkill()
@@ -641,9 +644,19 @@ function SelfPlayer_ExpTooltip(isShow, iconType)
     TooltipSimple_Hide()
   end
 end
+function PaGlobalFunc_SelfPlayerExpGage_SetShow(isShow, isAni)
+  local isGetUIInfo = false
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isGetUIInfo = true
+  else
+    isGetUIInfo = false
+  end
+  Panel_SelfPlayerExpGage:SetShow(isShow and isGetUIInfo and not PaGlobalFunc_IsRemasterUIOption(), isAni)
+end
 contributePoint_UpdateFunc()
 Panel_SelfPlayerExpGage_CharacterInfoWindowUpdate()
 UserSkillPoint_Update()
 registEventHandler()
 registMessageHandler()
 changePositionBySever(Panel_SelfPlayerExpGage, CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage, true, false, false)
+PaGlobalFunc_SelfPlayerExpGage_SetShow(true, false)

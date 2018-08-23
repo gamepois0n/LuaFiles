@@ -483,7 +483,12 @@ function WhaleHuntingEvent(message, noticeMsgType, noticeValue)
     addMsg = ""
   }
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, msgType)
-  FGlobal_WhaleConditionCheck()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_WhaleConditionCheck()
+  end
+  if true == _ContentsGroup_RemasterUI_Main_Alert then
+    PaGlobalFunc_Widget_Alert_Check_Hunting()
+  end
 end
 function FGlobal_WorldBossShow(message, noticeType, noticeValue)
   local msg = {
