@@ -7,6 +7,9 @@ function PaGlobal_Option:isOpen()
 end
 function PaGlobal_Option:InitUi()
   self._ui._list2 = UI.getChildControl(Panel_Window_Option_Main, "List2_LeftMenu")
+  Panel_Window_Option_Main:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_Option:ClickedConfirmOption()")
+  local versionUI = UI.getChildControl(self._ui._titleBg, "StaticText_Version")
+  versionUI:SetText("ver." .. tostring(ToClient_getVersionString()))
 end
 function PaGlobal_Option:ListInit()
   local tree2 = self._ui._list2
@@ -185,14 +188,6 @@ function PaGlobal_Option:Open()
   audioPostEvent_SystemUi(1, 0)
 end
 function PaGlobal_Option:Close()
-  self:MoveUi(self.UIMODE.Main)
-  for elemeneName, option in pairs(self._elements) do
-    if true == option._settingRightNow and nil == option._applyValue and nil ~= option._curValue then
-      self:SetXXX(elemeneName, option._initValue)
-    end
-    option._curValue = nil
-  end
-  keyCustom_RollBack()
   setKeyCustomizing(false)
   SetUIMode(Defines.UIMode.eUIMode_Default)
   Panel_Window_Option_Main:SetShow(false, true)
@@ -204,36 +199,29 @@ end
 function PaGlobal_Option:ClickedCancelOption()
   for elementName, option in pairs(self._elements) do
     local check = false
-    if nil ~= option._curValue then
-      if true == option._settingRightNow then
-        check = true
-      else
-        self:ResetControlSetting(elementName)
-        self:SetControlSetting(elementName, option._initValue)
-      end
+    if nil ~= option._curValue and true == option._settingRightNow then
+      check = true
     end
     if nil ~= option._applyValue then
       check = true
     end
     if true == check then
-      self:ResetControlSetting(elementName)
-      self:SetXXX(elementName, option._initValue)
+      self:SetXXX(option, option._initValue)
     end
   end
   audioPostEvent_SystemUi(1, 0)
   setAudioOptionByConfig()
   keyCustom_RollBack()
   self:CompleteKeyCustomMode()
-  self:ApplyButtonEnable(false)
   ClearFocusEdit()
 end
 function PaGlobal_Option:ClickedApplyOption()
   local displayChange = false
   for elementName, option in pairs(self._elements) do
-    if nil ~= option.uiInputType or nil ~= option.actionInputType then
+    if OPTION_TYPE.KEYCUSTOMIZE == option._type then
       option._curValue = nil
     elseif nil ~= option._curValue then
-      self:SetXXX(elementName, option._curValue)
+      self:SetXXX(option, option._curValue)
       if true == option._isChangeDisplay then
         displayChange = true
       end
@@ -483,10 +471,22 @@ function FromClient_ChangeScreenMode()
   }
   MessageBox.showMessageBox(messageBoxData)
 end
+function FromClient_Option_PadSnapChangeTarget(fromControl, toControl)
+  if false == FGlobal_Option_GetShow() then
+    return
+  end
+  local aButton = UI.getChildControl(PaGlobal_Option._ui._bottomBg, "StaticText_A_ConsoleUI")
+  if nil ~= toControl and toControl:GetType() == CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_SLIDER then
+    aButton:SetShow(false)
+    return
+  end
+  aButton:SetShow(true)
+end
 Panel_Window_Option_Main:RegisterUpdateFunc("FGlobal_PerFrameFPSTextUpdate")
 registerEvent("EventGameOptionToggle", "FGlobal_Option_TogglePanel")
 registerEvent("onScreenResize", "FGlobal_Option_OnScreenResize")
 registerEvent("FromClient_ChangeScreenMode", "FromClient_ChangeScreenMode")
+registerEvent("FromClient_PadSnapChangeTarget", "FromClient_Option_PadSnapChangeTarget")
 function PaGlobal_Option:CheckEnableSimpleUI()
   local selfPlayer = getSelfPlayer()
   if nil ~= selfPlayer then

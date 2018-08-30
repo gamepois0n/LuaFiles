@@ -12,6 +12,7 @@ local isContentsEnable = ToClient_IsContentsGroupOpen("61")
 local isContentsEnableSupply = ToClient_IsContentsGroupOpen("42")
 local isContentsStallionEnable = ToClient_IsContentsGroupOpen("243")
 local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
+local isContentsNineTierTraining = ToClient_IsContentsGroupOpen("469")
 function StableListShowAni()
   local isShow = Panel_Window_StableList:IsShow()
   if isShow then
@@ -418,7 +419,7 @@ function stableList:update()
             slot.training:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
           end
           slot.training:SetShow(true)
-        elseif CppEnums.ServantStateType.Type_StallionTraining == getState and isContentsStallionEnable and isContentsNineTierEnable then
+        elseif CppEnums.ServantStateType.Type_StallionTraining == getState and isContentsStallionEnable and isContentsNineTierEnable and isContentsNineTierTraining then
           slot.training:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
           slot.training:SetShow(true)
         elseif servantInfo:isChangingRegion() then
@@ -464,7 +465,7 @@ function stableList:update()
         slot.button:SetShow(true)
         slot.index = ii
         slotNo = slotNo + 1
-        if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and 9 ~= servantInfo:getTier() and false == servantInfo:isPcroomOnly() and isContentsStallionEnable then
+        if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and 9 ~= servantInfo:getTier() and false == servantInfo:isPcroomOnly() and isContentsStallionEnable and isContentsNineTierTraining then
           slot.stallion:SetShow(true)
           local stallion = servantInfo:isStallion()
           if true == stallion and regionName == servantRegionName then
@@ -486,7 +487,7 @@ function stableList:update()
     if servantInfo:getVehicleType() ~= CppEnums.VehicleType.Type_BabyElephant then
       self._unseal._icon:ChangeTextureInfoName(servantInfo:getIconPath1())
       self._unseal._bg:SetShow(true)
-      if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and 9 ~= servantInfo:getTier() and false == servantInfo:isPcroomOnly() and isContentsStallionEnable then
+      if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and 9 ~= servantInfo:getTier() and false == servantInfo:isPcroomOnly() and isContentsStallionEnable and isContentsNineTierTraining then
         self._unseal._stallion:SetShow(true)
         local isStallion = servantInfo:isStallion()
         if true == isStallion then
@@ -852,7 +853,7 @@ function StableList_ButtonOpen(eType, slotNo)
             buttonSlotNo = buttonSlotNo + 1
           end
         end
-        if CppEnums.VehicleType.Type_Horse == servantInfo:getVehicleType() and true == servantInfo:isStallion() and stable_isPossibleStallionSkillExpTraining() and isContentsStallionEnable and isContentsNineTierEnable and 30 == servantInfo:getLevel() and 8 == servantInfo:getTier() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
+        if CppEnums.VehicleType.Type_Horse == servantInfo:getVehicleType() and true == servantInfo:isStallion() and stable_isPossibleStallionSkillExpTraining() and isContentsStallionEnable and isContentsNineTierEnable and isContentsNineTierTraining and 30 == servantInfo:getLevel() and 8 == servantInfo:getTier() and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
           buttonList[buttonSlotNo] = self._buttonStallionTraining
           buttonSlotNo = buttonSlotNo + 1
         end
@@ -871,7 +872,7 @@ function StableList_ButtonOpen(eType, slotNo)
       buttonList[buttonSlotNo] = self._buttonTrainingFinish
       self._buttonTrainingFinish:addInputEvent("Mouse_LUp", "StableList_TrainFinish(" .. index .. ")")
       buttonSlotNo = buttonSlotNo + 1
-    elseif isContentsStallionEnable and stable_isEndStallionSkillExpTraining(index) and isContentsNineTierEnable then
+    elseif isContentsStallionEnable and stable_isEndStallionSkillExpTraining(index) and isContentsNineTierEnable and isContentsNineTierTraining then
       buttonList[buttonSlotNo] = self._buttonTrainingFinish
       self._buttonTrainingFinish:addInputEvent("Mouse_LUp", "StableList_StallionTrainFinish(" .. index .. ")")
       buttonSlotNo = buttonSlotNo + 1
@@ -953,6 +954,9 @@ function StableList_ButtonOpen(eType, slotNo)
     self._staticButtonListBG:SetPosX(positionX)
     self._staticButtonListBG:SetPosY(positionY)
     self._staticButtonListBG:SetSize(sizeX, sizeY)
+    if getScreenSizeY() < self._staticButtonListBG:GetPosY() + self._staticButtonListBG:GetSizeY() + 50 then
+      self._staticButtonListBG:SetPosY(getScreenSizeY() - self._staticButtonListBG:GetSizeY() - 50)
+    end
     self._staticButtonListBG:SetShow(true)
   else
     self._staticButtonListBG:SetShow(false)
@@ -1437,7 +1441,7 @@ function StableList_TrainFinish(index)
   stable_endServantSkillExpTraining(index)
 end
 function StableList_StartStallionTraining()
-  if not isContentsStallionEnable and not isContentsNineTierEnable then
+  if not isContentsStallionEnable and not isContentsNineTierEnable and isContentsNineTierTraining then
     return
   end
   StableList_ButtonClose()
@@ -2085,7 +2089,7 @@ function FromClient_ServantEndSkillTraining(servantNo)
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINEND", "servantName", servantInfo:getName()))
 end
 function FromClient_StartStallionSkillTraining(servantNo)
-  if not isContentsStallionEnable and not isContentsNineTierEnable then
+  if not isContentsStallionEnable or not isContentsNineTierEnable or not isContentsNineTierTraining then
     return
   end
   local servantInfo = stable_getServantByServantNo(servantNo)

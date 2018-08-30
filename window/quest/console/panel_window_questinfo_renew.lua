@@ -368,18 +368,20 @@ function PaGlobalFunc_Quest_List2EventControlCreate(list_content, key)
   questUI._static_StateIcon:SetShow(false)
   if true == questInfo._isGroup then
     questUI._static_QuesetTypeIcon:SetShow(false)
+    questUI._staticText_QuestName:SetSize(questUI._button_QuestBg:GetSizeX() - 40, questUI._staticText_QuestName:GetSizeY())
     questUI._staticText_QuestName:SetText(questInfo._questName)
-    questUI._button_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SimpleToolTipShow(" .. id .. ")")
+    questUI._staticText_QuestName:ComputePos()
   else
     questUI._static_QuesetTypeIcon:SetShow(true)
     questUI._static_QuesetTypeIcon:SetPosX(60)
+    questUI._staticText_QuestName:SetSize(questUI._button_QuestBg:GetSizeX() - 180, questUI._staticText_QuestName:GetSizeY())
     questUI._staticText_QuestName:SetPosX(90)
     if true == questInfo._isContinueQuest then
-      FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
+      FGlobal_ChangeOnTextureForConsoleDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
       questUI._staticText_QuestName:SetText(questInfo._continueQuestName)
       questUI._staticText_ProgressCount:SetText(questInfo._currentProgressCount .. "/" .. questInfo._totalProgressCount)
     else
-      FGlobal_ChangeOnTextureForDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
+      FGlobal_ChangeOnTextureForConsoleDialogQuestIcon(questUI._static_QuesetTypeIcon, questInfo._questType)
       questUI._staticText_QuestName:SetText(questInfo._questName)
     end
     questUI._button_QuestBg:addInputEvent("Mouse_On", "PaGlobalFunc_Quest_SelectQuest(" .. id .. ")")
@@ -390,7 +392,7 @@ function PaGlobalFunc_Quest_List2EventControlCreate(list_content, key)
     questUI._static_StateIcon:SetPosX(stateIconPosX)
     if true == questInfo._isSatisfied then
       questUI._static_StateIcon:SetShow(true)
-      questUI._static_StateIcon:SetColor(Defines.Color.C_FFFF0000)
+      questUI._static_StateIcon:SetColor(Defines.Color.C_FFF55839)
     elseif false ~= questInfo._isCleared or true == isNext then
     else
       questUI._static_StateIcon:SetShow(true)
@@ -509,7 +511,6 @@ function FromClient_luaLoadComplete()
 end
 function Window_QuestInfo:InitRegisterEvent()
   registerEvent("EventQuestListChanged", "PaGlobalFunc_Quest_UpdateList")
-  registerEvent("onScreenResize", "PaGlobalFunc_Quest_Resize")
   registerEvent("FromClient_DeleteNavigation", "PaGlobalFunc_Quest_DeleteNavigation")
   registerEvent("FromClient_RClickWorldmapQuest", "PaGlobalFunc_Quest_RClickWorldmapQuest")
 end
@@ -530,6 +531,7 @@ function PaGlobalFunc_Quest_SelectQuest(index)
   self._currentQuestIndex = index
   PaGlobalFunc_Quest_Detail_Open()
   local title = self._ui._questDetail_Title
+  title:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   title:SetText(questInfo._questName)
   local questType = self._ui._questDetail._staticText_Type
   questType:SetText(questInfo._continueQuestDetail)
@@ -930,7 +932,7 @@ function PaGlobalFunc_Quest_Detail_Open()
   Panel_Window_QuestInfo_Detail:SetShow(true, false)
 end
 function PaGlobalFunc_Quest_Detail_Close()
-  Panel_Window_QuestInfo_Detail:SetShow(flase, false)
+  Panel_Window_QuestInfo_Detail:SetShow(false, false)
 end
 function PaGlobalFunc_Quest_SetShow(value)
   local self = Window_QuestInfo

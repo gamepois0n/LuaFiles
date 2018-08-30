@@ -100,7 +100,6 @@ end
 function mailDetail:registMessageHandler()
   registerEvent("ResponseMail_showDetail", "Mail_Detail_Open")
   registerEvent("FromClient_ResponseMailGetItem", "FromClient_ResponseMailGetItem")
-  registerEvent("FromClient_PadSnapChangePanel", "FromClient_MailDetail_PadSnapChangePanel")
 end
 function Mail_Detail_Open(mailNo)
   if not _panel:IsShow() then
@@ -138,15 +137,15 @@ function Mail_Detail_Open(mailNo)
       self._ui.stc_slotBG:SetShow(true)
       self._ui.slot_item.icon:SetShow(true)
       self._ui.txt_itemEnclosed:SetShow(true)
-      self._ui.txt_keyGuideA:SetMonoTone(false)
-      self._ui.txt_keyGuideX:SetMonoTone(false)
+      self._ui.txt_keyGuideA:SetShow(true)
+      self._ui.txt_keyGuideX:SetShow(true)
     else
       self._ui.slot_item:clearItem()
       self._ui.stc_slotBG:SetShow(false)
       self._ui.slot_item.icon:SetShow(false)
       self._ui.txt_itemEnclosed:SetShow(false)
-      self._ui.txt_keyGuideA:SetMonoTone(true)
-      self._ui.txt_keyGuideX:SetMonoTone(true)
+      self._ui.txt_keyGuideA:SetShow(false)
+      self._ui.txt_keyGuideX:SetShow(false)
     end
   else
     local mailItem = mail_getMailItemStatic()
@@ -156,8 +155,8 @@ function Mail_Detail_Open(mailNo)
       self._ui.stc_slotBG:SetShow(true)
       self._ui.slot_item.icon:SetShow(true)
       self._ui.txt_itemEnclosed:SetShow(true)
-      self._ui.txt_keyGuideA:SetMonoTone(false)
-      self._ui.txt_keyGuideX:SetMonoTone(false)
+      self._ui.txt_keyGuideA:SetShow(true)
+      self._ui.txt_keyGuideX:SetShow(true)
       local isMoney = mailItem:isMoney()
       if true == isMoney then
       else
@@ -167,8 +166,8 @@ function Mail_Detail_Open(mailNo)
       self._ui.stc_slotBG:SetShow(false)
       self._ui.slot_item.icon:SetShow(false)
       self._ui.txt_itemEnclosed:SetShow(false)
-      self._ui.txt_keyGuideA:SetMonoTone(true)
-      self._ui.txt_keyGuideX:SetMonoTone(true)
+      self._ui.txt_keyGuideA:SetShow(false)
+      self._ui.txt_keyGuideX:SetShow(false)
     end
   end
 end
@@ -192,6 +191,9 @@ function PaGlobal_MailDetail_Delete()
 end
 function Mail_Detail_GetItem(toWarehouse)
   local self = mailDetail
+  if false == self._ui.txt_keyGuideA:GetShow() or false == self._ui.txt_keyGuideX:GetShow() then
+    return
+  end
   warehouse_requestInfoByCurrentRegionMainTown()
   local itemWhereType = CppEnums.ItemWhereType.eInventory
   if true == toWarehouse then
@@ -202,6 +204,7 @@ function Mail_Detail_GetItem(toWarehouse)
     RequestMail_receiveMailItem(count_s64, itemWhereType)
     return
   end
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "MailDetail getIetem")
   Panel_NumberPad_Show(true, giftCount_s64, nil, getMygift, false, nil)
 end
 function FromClient_ResponseMailGetItem(itemKey, itemCount_s64, immediateItem, isRelay)
@@ -215,24 +218,5 @@ function FromClient_ResponseMailGetItem(itemKey, itemCount_s64, immediateItem, i
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIL_DETAIL_ALERT_IMMEDIATEITEM", "itemName", itemName))
   elseif 1 == itemKey and (isWarehouse or isRelay) then
     Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MAIL_DETAIL_ALERT_GET_WAREHOUSE", "itemName", itemName, "itemCount", makeDotMoney(itemCount_s64)))
-  end
-end
-function FromClient_MailDetail_PadSnapChangePanel(fromPanel, toPanel)
-  if nil ~= toPanel then
-    if _panel:GetKey() == toPanel:GetKey() then
-      mailDetail._ui.txt_keyGuideA:SetMonoTone(false)
-      mailDetail._ui.txt_keyGuideX:SetMonoTone(false)
-      mailDetail._ui.txt_keyGuideY:SetMonoTone(false)
-      mailDetail._ui.txt_keyGuideB:SetMonoTone(false)
-      if false == mailDetail._ui.slot_item.icon:GetShow() then
-        mailDetail._ui.txt_keyGuideA:SetMonoTone(true)
-        mailDetail._ui.txt_keyGuideX:SetMonoTone(true)
-      end
-    else
-      mailDetail._ui.txt_keyGuideA:SetMonoTone(true)
-      mailDetail._ui.txt_keyGuideX:SetMonoTone(true)
-      mailDetail._ui.txt_keyGuideY:SetMonoTone(true)
-      mailDetail._ui.txt_keyGuideB:SetMonoTone(true)
-    end
   end
 end

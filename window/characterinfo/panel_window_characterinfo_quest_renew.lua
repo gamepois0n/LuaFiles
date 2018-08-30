@@ -17,7 +17,8 @@ local CharacterQuestInfo = {
     chk_quest = {},
     stc_checkImage = {},
     txt_selectedType = UI.getChildControl(_panel, "StaticText_SelectedTypeTitle"),
-    txt_selectedTypeDesc = UI.getChildControl(_panel, "StaticText_SelectedTypeDesc")
+    txt_selectedTypeDesc = UI.getChildControl(_panel, "StaticText_SelectedTypeDesc"),
+    txt_keyGuideSelect = nil
   }
 }
 local _questTypeData = {
@@ -52,6 +53,7 @@ function FromClient_luaLoadComplete_CharacterQuestInfo_Title()
   self._ui.stc_questInfoBG = UI.getChildControl(_mainPanel, "Static_QuestInfoBg")
   self._ui.stc_questInfoBG:SetShow(false)
   self._ui.stc_questInfoBG:MoveChilds(self._ui.stc_questInfoBG:GetID(), _panel)
+  self._ui.txt_keyGuideSelect = PaGlobalFunc_CharacterInfo_GetKeyGuideA()
   deletePanel(_panel:GetID())
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CharacterQuestInfo_Title")
@@ -80,13 +82,17 @@ function PaGlobalFunc_CharacterQuestInfo_Open()
 end
 function CharacterQuestInfo:open()
   self:update()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "open, self._ui.txt_keyGuideSelect : " .. self._ui.txt_keyGuideSelect:GetID())
+  self._ui.txt_keyGuideSelect:SetShow(false)
 end
 function CharacterQuestInfo:update()
   local QuestListInfo = ToClient_GetQuestList()
-  for ii = 2, #self._ui.chk_quest do
-    local isOn = QuestListInfo:isQuestSelectType(ii - 2)
-    self._ui.chk_quest[ii]:SetCheck(isOn)
-    self._ui.stc_checkImage[ii]:SetShow(isOn)
+  for ii = 1, #self._ui.chk_quest do
+    if 1 ~= ii then
+      local isOn = QuestListInfo:isQuestSelectType(ii - 1)
+      self._ui.chk_quest[ii]:SetCheck(isOn)
+      self._ui.stc_checkImage[ii]:SetShow(isOn)
+    end
   end
   self._ui.chk_quest[1]:SetCheck(true)
   self._ui.stc_checkImage[1]:SetShow(true)
@@ -100,11 +106,12 @@ function CharacterQuestInfo:checkButton(buttonIndex)
   end
   local QuestListInfo = ToClient_GetQuestList()
   local bool = QuestListInfo:isQuestSelectType(buttonIndex - 1)
-  self._ui.chk_quest[buttonIndex]:SetCheck(not bool)
-  self._ui.stc_checkImage[buttonIndex]:SetShow(not bool)
   QuestListInfo:setQuestSelectType(buttonIndex - 1, not bool)
+  self._ui.chk_quest[buttonIndex]:SetCheck(QuestListInfo:isQuestSelectType(buttonIndex - 1))
+  self._ui.stc_checkImage[buttonIndex]:SetShow(QuestListInfo:isQuestSelectType(buttonIndex - 1))
 end
 function Input_CharacterQuestInfo_ShowDescription(index)
+  self._ui.txt_keyGuideSelect:SetShow(QUEST_TYPE.BLACK_SPIRIT ~= index)
   self._ui.txt_selectedType:SetText(_questTypeData[index].title)
   self._ui.txt_selectedTypeDesc:SetText(_questTypeData[index].titleDesc)
 end

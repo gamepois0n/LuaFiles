@@ -1,7 +1,8 @@
 local Window_WorldMap_HouseFilterInfo = {
   _ui = {
-    _static_FilterBg = UI.getChildControl(Panel_Worldmap_HouseList, "Static_FilterBg"),
-    _static_List2Bg = UI.getChildControl(Panel_Worldmap_HouseList, "Static_HouseListBg"),
+    _static_FilterBg = UI.getChildControl(Panel_Worldmap_HouseFilter, "Static_FilterBg"),
+    _static_List2Bg = UI.getChildControl(Panel_Worldmap_HouseFilter, "Static_HouseListBg"),
+    _static_BottomBg = UI.getChildControl(Panel_Worldmap_HouseFilter, "Static_BottomBg"),
     _purposeFilterList = {},
     _houseFilterList = {},
     _gradeFilterList = {},
@@ -13,6 +14,12 @@ local Window_WorldMap_HouseFilterInfo = {
     _buyPerpose = 2,
     _other = 3,
     _count = 4
+  },
+  _filterConfig = {
+    _house = 0,
+    _grade = 1,
+    _purpose = 2,
+    _mainFilter = 3
   },
   _houseFilterStrConfig = {
     [0] = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_OWNERRFILTER_ALL"),
@@ -379,8 +386,13 @@ local Window_WorldMap_HouseFilterInfo = {
       y2 = 346
     }
   },
-  _config = {_gradeCount = 5, _purposeFilterStartPosY},
+  _config = {
+    _focusOut = -10,
+    _gradeCount = 5,
+    _purposeFilterStartPosY
+  },
   _currentNodeInfo,
+  _currentFilterIndex = -1,
   _currentHouseFilterIndex = 0,
   _currentGradeFilterIndex = 0,
   _currentPurposeFilterIndex = -1,
@@ -388,13 +400,10 @@ local Window_WorldMap_HouseFilterInfo = {
   _currnetHouseListIndex = 0,
   _houseListInfo = {},
   _prevScrollIndex = 0,
-  _currentHouseButton = nil
+  _currentHouseButton = nil,
+  _isOpenFromCraftManage = false
 }
 function Window_WorldMap_HouseFilterInfo:Clear()
-  self._currentHouseFilterIndex = 0
-  self._currentPurposeFilterType = -1
-  self._currentPurposeFilterIndex = -1
-  self._currentGradeFilterIndex = 0
   self:UpdateHouseList()
 end
 function PaGlobalFunc_WorldMap_HouseFilter_SetCurrentNodeInfo(nodeInfo)
@@ -409,13 +418,31 @@ function Window_WorldMap_HouseFilterInfo:ClearPurposeFilter()
     end
   end
 end
+function PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(index, filterType)
+  local self = Window_WorldMap_HouseFilterInfo
+  local isShow = false
+  if self._filterConfig._house == filterType then
+    isShow = index ~= self._currentHouseFilterIndex
+  elseif self._filterConfig._grade == filterType then
+    isShow = index ~= self._currentGradeFilterIndex
+  elseif self._filterConfig._purpose == filterType then
+    isShow = index ~= self._currentPurposeFilterIndex
+  elseif self._filterConfig._mainFilter == filterType then
+    isShow = index ~= self._currentFilterIndex
+  end
+  self._ui._static_KeyGuide_Select:SetShow(isShow)
+  if self._config._focusOut == index then
+    self._ui._static_KeyGuide_Select:SetShow(true)
+  end
+end
 function Window_WorldMap_HouseFilterInfo:SetPurposeFilter()
   local allFilter = self._ui._purposeFilterList[0]
   if nil == allFilter then
     allFilter = {}
-    local allButtonControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, self._ui._static_PurposeBg, "button_Purpose_" .. 0)
+    local allButtonControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_PurposeBg, "Radiobutton_Purpose_" .. 0)
     CopyBaseProperty(self._ui._purposeButtonTemplete, allButtonControl)
     allButtonControl:addInputEvent("Mouse_LDown", "PaGlobalFunc_WorldMap_HouseFilter_SelectPurposeFilter(-1)")
+    allButtonControl:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton( -1 ," .. self._filterConfig._purpose .. ")")
     local allIconControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, allButtonControl, "button_Purpose_" .. 0)
     CopyBaseProperty(self._ui._purposeIconTemplete, allIconControl)
     allIconControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_OWNERRFILTER_ALL"))
@@ -437,7 +464,7 @@ function Window_WorldMap_HouseFilterInfo:SetPurposeFilter()
     local filter = self._ui._purposeFilterList[index]
     if nil == filter then
       filter = {}
-      local buttonControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, self._ui._static_PurposeBg, "button_Purpose_" .. index)
+      local buttonControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_PurposeBg, "Radiobutton_Purpose_" .. index)
       CopyBaseProperty(self._ui._purposeButtonTemplete, buttonControl)
       buttonControl:SetPosY(buttonControl:GetPosY() + buttonControl:GetSizeY() * index)
       local iconControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, buttonControl, "button_Purpose_" .. index)
@@ -446,6 +473,7 @@ function Window_WorldMap_HouseFilterInfo:SetPurposeFilter()
       filter._icon = iconControl
     end
     filter._button:addInputEvent("Mouse_LDown", "PaGlobalFunc_WorldMap_HouseFilter_SelectPurposeFilter(" .. index .. ")")
+    filter._button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(" .. index .. ", " .. self._filterConfig._purpose .. ")")
     filter._icon:SetText(ToClient_getReceipeName(ToClient_getReceipeTypeByIndex(index - 1)))
     local houseType = ToClient_getGroupType(ToClient_getReceipeTypeByIndex(index - 1))
     local houseTypeForOther = ToClient_getReceipeTypeByIndex(index - 1)
@@ -487,7 +515,7 @@ function Window_WorldMap_HouseFilterInfo:InitControl()
   end
   self._ui._button_PurposeFilter = UI.getChildControl(self._ui._static_FilterBg, "Button_Purpose")
   self._ui._staticText_PurposeFilter = UI.getChildControl(self._ui._button_PurposeFilter, "StaticText_Purpose")
-  self._ui._purposeButtonTemplete = UI.getChildControl(self._ui._static_PurposeBg, "Button_Template")
+  self._ui._purposeButtonTemplete = UI.getChildControl(self._ui._static_PurposeBg, "Radiobutton_Template")
   self._ui._purposeButtonTemplete:SetShow(false)
   self._ui._purposeIconTemplete = UI.getChildControl(self._ui._purposeButtonTemplete, "StaticText_Icon")
   self._ui._purposeIconTemplete:SetShow(false)
@@ -496,24 +524,30 @@ function Window_WorldMap_HouseFilterInfo:InitControl()
   self._ui._houseFilterList = {}
   for index = 0, self._houseFilterConfig._count - 1 do
     self._ui._houseFilterList[index] = {}
-    self._ui._houseFilterList[index]._button = UI.getChildControl(self._ui._static_HouseFilterBg, "Button_" .. index + 1)
+    self._ui._houseFilterList[index]._button = UI.getChildControl(self._ui._static_HouseFilterBg, "Radiobutton_" .. index + 1)
     self._ui._houseFilterList[index]._icon = UI.getChildControl(self._ui._houseFilterList[index]._button, "StaticText_Icon")
     self._ui._houseFilterList[index]._icon:SetText(self._houseFilterStrConfig[index])
   end
   self._ui._gradeFilterList = {}
   for index = 0, self._config._gradeCount - 1 do
-    self._ui._gradeFilterList[index] = UI.getChildControl(self._ui._static_gradeBg, "Button_" .. index + 1)
+    self._ui._gradeFilterList[index] = UI.getChildControl(self._ui._static_gradeBg, "Radiobutton_" .. index + 1)
   end
+  self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
 end
 function Window_WorldMap_HouseFilterInfo:InitEvent()
   self._ui._button_HouseFilter:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseFilter_OpenFilter(0)")
   self._ui._button_GradeFilter:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseFilter_OpenFilter(1)")
   self._ui._button_PurposeFilter:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseFilter_OpenFilter(2)")
+  self._ui._button_HouseFilter:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(0, " .. self._filterConfig._mainFilter .. ")")
+  self._ui._button_GradeFilter:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(1, " .. self._filterConfig._mainFilter .. ")")
+  self._ui._button_PurposeFilter:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(2, " .. self._filterConfig._mainFilter .. ")")
   for index = 0, self._houseFilterConfig._count - 1 do
     self._ui._houseFilterList[index]._button:addInputEvent("Mouse_LDown", "PaGlobalFunc_WorldMap_HouseFilter_SelectHouseFilter(" .. index .. ")")
+    self._ui._houseFilterList[index]._button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(" .. index .. ", " .. self._filterConfig._house .. ")")
   end
   for index = 0, self._config._gradeCount - 1 do
     self._ui._gradeFilterList[index]:addInputEvent("Mouse_LDown", "PaGlobalFunc_WorldMap_HouseFilter_SelectGradeFilter(" .. index .. ")")
+    self._ui._gradeFilterList[index]:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(" .. index .. ", " .. self._filterConfig._grade .. ")")
   end
   self._ui._list2_HouseList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_HouseFilter_List2EventControlCreate")
   self._ui._list2_HouseList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
@@ -522,6 +556,7 @@ function Window_WorldMap_HouseFilterInfo:InitRegister()
   registerEvent("FromClient_SetTownMode", "PaGlobalFunc_FromClient_WorldMap_HouseFilter_HouseNaviShow")
   registerEvent("FromClient_HouseFilterOn", "PaGlobalFunc_FromClient_WorldMap_HouseFilter_HouseFilterOn")
   registerEvent("FromClient_RefreshHouseList", "PaGlobalFunc_FromClient_WorldMap_HouseFilter_RefreshHouseList")
+  registerEvent("FromClient_RefreshHouseListFinish", "PaGlobalFunc_FromClient_WorldMap_HouseFilter_RefreshHouseListFinish")
 end
 function Window_WorldMap_HouseFilterInfo:Initialize()
   self:InitControl()
@@ -543,30 +578,55 @@ function PaGlobalFunc_WorldMap_HouseFilter_SelectHouseFilter(index)
   local self = Window_WorldMap_HouseFilterInfo
   self._currentHouseFilterIndex = index
   self:UpdateHouseList()
+  PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._currentHouseFilterIndex, self._filterConfig._house)
 end
 function PaGlobalFunc_WorldMap_HouseFilter_SelectGradeFilter(gradeValue)
   local self = Window_WorldMap_HouseFilterInfo
   self._currentGradeFilterIndex = gradeValue
   self:UpdateHouseList()
+  PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._currentGradeFilterIndex, self._filterConfig._grade)
 end
 function PaGlobalFunc_WorldMap_HouseFilter_SelectPurposeFilter(index)
   local self = Window_WorldMap_HouseFilterInfo
   self._currentPurposeFilterIndex = index
   self._currentPurposeFilterType = ToClient_getReceipeTypeByIndex(index - 1)
   self:UpdateHouseList()
+  PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._currentPurposeFilterIndex, self._filterConfig._purpose)
 end
-function PaGlobalFunc_WorldMap_HouseFilter_OpenFilter(index)
+function PaGlobalFunc_WorldMap_HouseFilter_OpenFilter(filterIndex)
   local self = Window_WorldMap_HouseFilterInfo
   self._ui._static_HouseFilterBg:SetShow(false)
   self._ui._static_gradeBg:SetShow(false)
   self._ui._static_PurposeBg:SetShow(false)
-  if 0 == index then
+  if 0 == filterIndex then
     self._ui._static_HouseFilterBg:SetShow(true)
-  elseif 1 == index then
+  elseif 1 == filterIndex then
     self._ui._static_gradeBg:SetShow(true)
-  elseif 2 == index then
+  elseif 2 == filterIndex then
     self._ui._static_PurposeBg:SetShow(true)
   end
+  self._currentFilterIndex = filterIndex
+  for index = 0, self._houseFilterConfig._count - 1 do
+    self._ui._houseFilterList[index]._button:SetCheck(index == self._currentHouseFilterIndex)
+  end
+  for index = 0, self._config._gradeCount - 1 do
+    self._ui._gradeFilterList[index]:SetCheck(index == self._currentGradeFilterIndex)
+  end
+  for index = 0, #self._ui._purposeFilterList do
+    self._ui._purposeFilterList[index]._button:SetCheck(index == self._currentPurposeFilterIndex)
+  end
+  if -1 == self._currentPurposeFilterIndex then
+    self._ui._purposeFilterList[0]._button:SetCheck(true)
+  end
+  self._ui._static_KeyGuide_Select:SetShow(false)
+end
+function PaGlobalFunc_WorldMap_HouseFilter_ClearSubFilter()
+  local self = Window_WorldMap_HouseFilterInfo
+  self._currentFilterIndex = -1
+  self._ui._static_HouseFilterBg:SetShow(false)
+  self._ui._static_gradeBg:SetShow(false)
+  self._ui._static_PurposeBg:SetShow(false)
+  PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._config._focusOut)
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseFilter_HouseNaviShow(isShow)
   local self = Window_WorldMap_HouseFilterInfo
@@ -584,6 +644,13 @@ function PaGlobalFunc_FromClient_WorldMap_HouseFilter_RefreshHouseList()
   self._currnetHouseListIndex = 0
   self._houseListInfo = {}
   self._ui._list2_HouseList:getElementManager():clearKey()
+end
+function PaGlobalFunc_FromClient_WorldMap_HouseFilter_RefreshHouseListFinish()
+  local self = Window_WorldMap_HouseFilterInfo
+  if 0 == self._currnetHouseListIndex and true == self._isOpenFromCraftManage then
+    PaGlobalFunc_WorldMap_HouseFilter_SelectHouseFilter(0)
+    self._isOpenFromCraftManage = false
+  end
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseFilter_HouseFilterOn(houseBtn)
   local self = Window_WorldMap_HouseFilterInfo
@@ -616,10 +683,12 @@ function PaGlobalFunc_WorldMap_HouseFilter_SelectHouseList(index)
   if nil == houseInfo then
     return
   end
-  PaGlobalFunc_WorldMapHouseManager_Open(houseInfo._button:FromClient_getStaticStatus())
+  PaGlobalFunc_WorldMap_HouseFilter_CloseSubFilter()
+  PaGlobalFunc_WorldMapHouseManager_Open(houseInfo._button, true)
 end
 function PaGlobalFunc_WorldMap_HouseFilter_SetHouseListEffect(index)
   local self = Window_WorldMap_HouseFilterInfo
+  self._ui._static_KeyGuide_Select:SetShow(true)
   local houseInfo = self._houseListInfo[index]
   if nil == houseInfo then
     return
@@ -684,46 +753,86 @@ function PaGlobalFunc_WorldMap_HouseFilter_List2EventControlCreate(list_content,
   end
 end
 function PaGlobalFunc_WorldMap_HouseFilter_GetShow()
-  return Panel_Worldmap_HouseList:GetShow()
+  return Panel_Worldmap_HouseFilter:GetShow()
 end
 function PaGlobalFunc_WorldMap_HouseFilter_SetShow(isShow, isAni)
-  Panel_Worldmap_HouseList:SetShow(isShow, isAni)
+  Panel_Worldmap_HouseFilter:SetShow(isShow, isAni)
+end
+function Window_WorldMap_HouseFilterInfo:CommonOpen()
+  PaGlobalFunc_WorldMap_RingMenu_Close()
+  PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_RightMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
+  PaGlobalFunc_WorldMap_HouseFilter_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_HouseFilter_Open()
   local self = Window_WorldMap_HouseFilterInfo
   if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
     return
   end
-  PaGlobalFunc_WorldMap_RingMenu_Close()
-  PaGlobalFunc_WorldMap_TopMenu_Close()
-  PaGlobalFunc_WorldMap_RightMenu_Close()
-  PaGlobalFunc_WorldMap_BottomMenu_Close()
-  PaGlobalFunc_WorldMap_HouseFilter_SetShow(true, false)
+  self:CommonOpen()
   self:Clear()
+  self._isOpenFromCraftManage = false
+  self._currentFilterIndex = -1
+end
+function PaGlobalFunc_WorldMap_HouseFilter_OpenFromCraftManage()
+  local self = Window_WorldMap_HouseFilterInfo
+  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
+    return
+  end
+  self:CommonOpen()
+  self._isOpenFromCraftManage = true
+  PaGlobalFunc_WorldMap_HouseFilter_SelectHouseFilter(2)
 end
 function PaGlobalFunc_WorldMap_HouseFilter_Close()
   local self = Window_WorldMap_HouseFilterInfo
   if false == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
     return
   end
-  if true == self._ui._static_HouseFilterBg:GetShow() then
-    self._ui._static_HouseFilterBg:SetShow(false)
-    return
-  end
-  if true == self._ui._static_gradeBg:GetShow() then
-    self._ui._static_gradeBg:SetShow(false)
-    return
-  end
-  if true == self._ui._static_PurposeBg:GetShow() then
-    self._ui._static_PurposeBg:SetShow(false)
-    return
-  end
   self:Clear()
-  PaGlobalFunc_WorldMap_HouseFilter_HouseListEffectHide()
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
+  PaGlobalFunc_WorldMap_HouseFilter_HouseListEffectHide()
   PaGlobalFunc_WorldMap_HouseFilter_SetShow(false, false)
+end
+function PaGlobalFunc_WorldMap_HouseFilter_CloseSubFilter()
+  local self = Window_WorldMap_HouseFilterInfo
+  self._currentFilterIndex = -1
+  if true == self._ui._static_HouseFilterBg:GetShow() then
+    self._ui._static_HouseFilterBg:SetShow(false)
+    PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._config._focusOut)
+    return false
+  end
+  if true == self._ui._static_gradeBg:GetShow() then
+    self._ui._static_gradeBg:SetShow(false)
+    PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._config._focusOut)
+    return false
+  end
+  if true == self._ui._static_PurposeBg:GetShow() then
+    self._ui._static_PurposeBg:SetShow(false)
+    PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._config._focusOut)
+    return false
+  end
+  return true
+end
+function PaGlobalFunc_WorldMap_HouseFilter_CloseedByOpenManager()
+  local self = Window_WorldMap_HouseFilterInfo
+  self._currentFilterIndex = -1
+  self._ui._static_HouseFilterBg:SetShow(false)
+  self._ui._static_gradeBg:SetShow(false)
+  self._ui._static_PurposeBg:SetShow(false)
+  self:Clear()
+  PaGlobalFunc_WorldMap_HouseFilter_SetSelectButton(self._config._focusOut)
+  PaGlobalFunc_WorldMap_HouseFilter_HouseListEffectHide()
+  PaGlobalFunc_WorldMap_HouseFilter_SetShow(false, false)
+end
+function PaGlobalFunc_WorldMap_HouseFilter_FilterClear()
+  local self = Window_WorldMap_HouseFilterInfo
+  self._currentHouseFilterIndex = 0
+  self._currentPurposeFilterType = -1
+  self._currentPurposeFilterIndex = -1
+  self._currentGradeFilterIndex = 0
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseFilter_luaLoadComplete()
   local self = Window_WorldMap_HouseFilterInfo

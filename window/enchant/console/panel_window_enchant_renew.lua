@@ -54,6 +54,7 @@ local EnchantInfo = {
     _error = 5
   }
 }
+local _snappedOnThisPanel = false
 function FromClient_luaLoadComplete_EnchantInfo_Init()
   EnchantInfo:initialize()
 end
@@ -112,6 +113,7 @@ function EnchantInfo:registEventHandler()
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "Input_EnchantInfo_TryEnchant(true)")
 end
 function EnchantInfo:registMessageHandler()
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_EnchantInfo_PadSnapChangePanel")
   registerEvent("EventEnchantResultShow", "FromClient_EnchantInfo_ResultShow")
   registerEvent("FromClient_UpdateEnchantFailCount", "FromClient_EnchantInfo_UpdateBonus")
   registerEvent("FromClient_ConvertEnchantFailItemToCountAck", "FromClient_EnchantInfo_UpdateBonus")
@@ -248,7 +250,7 @@ function EnchantInfo:setItemToSlot(uiSlot, slotNo, itemWrapper, inventoryType)
   uiSlot.icon:SetMonoTone(false)
   uiSlot:setItem(getInventoryItemByType(inventoryType, slotNo))
 end
-function EnchantInfo:evaluateEnchantTarget(isMonotone, isRadioClick)
+function EnchantInfo:evaluateEnchantTarget(isMonotone)
   local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
   if nil == itemWrapper then
     return
@@ -262,9 +264,7 @@ function EnchantInfo:evaluateEnchantTarget(isMonotone, isRadioClick)
   else
   end
   self:setText_EnchantInfo()
-  if nil == isRadioClick then
-    self:setEnchantMaterial(isMonotone)
-  end
+  self:setEnchantMaterial(isMonotone)
 end
 function EnchantInfo:setText_EnchantInfo()
   local enchantType = self._enchantInfo:ToClient_getEnchantType()
@@ -335,6 +335,8 @@ end
 function EnchantInfo:enableApplyButton(isTrue)
   self._ui.btn_normal:SetIgnore(not isTrue)
   self._ui.btn_normal:SetMonoTone(not isTrue)
+  self._normalEnchantEnabled = isTrue
+  self._forcedEnchantEnabled = false
   if true == isTrue then
     local needCountForPerfectEnchant_s64 = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
     local slotNo = self._enchantInfo:ToClient_getNeedItemSlotNo()
@@ -345,6 +347,7 @@ function EnchantInfo:enableApplyButton(isTrue)
       self._ui.btn_forced:SetMonoTone(false)
       self._ui.btn_forced:SetIgnore(false)
       self._ui.txt_keyGuideForced:SetMonoTone(false)
+      self._forcedEnchantEnabled = true
     else
       self._ui.btn_forced:SetMonoTone(true)
       self._ui.btn_forced:SetIgnore(true)
@@ -358,6 +361,11 @@ function EnchantInfo:enableApplyButton(isTrue)
     self._ui.txt_keyGuideForced:SetMonoTone(true)
   end
 end
+function EnchantInfo:updateApplyButton()
+  local self = EnchantInfo
+  self._ui.txt_keyGuideNormal:SetMonoTone(not self._normalEnchantEnabled or not _snappedOnThisPanel)
+  self._ui.txt_keyGuideForced:SetMonoTone(not self._forcedEnchantEnabled or not _snappedOnThisPanel)
+end
 function InputRUp_EnchantInfo_TargetSlot()
   EnchantInfo:clearEnchantData()
   ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
@@ -370,11 +378,14 @@ function Input_EnchantInfo_TryEnchant(isForcedEnchant)
     self:removeEnchantEffect()
     return
   end
+  if nil == self._grantItemWhereType or nil == self._grantItemSlotNo then
+    return
+  end
   local targetItemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
   if nil == targetItemWrapper then
     return
   end
-  if 0 == self._ui.slot_subjectItem.slotNo then
+  if nil == self._ui.slot_subjectItem or 0 == self._ui.slot_subjectItem.slotNo then
     return
   end
   if true == isForcedEnchant and not self:forcedEnchantIsReady() then
@@ -382,6 +393,9 @@ function Input_EnchantInfo_TryEnchant(isForcedEnchant)
   end
   self._forcedEnchant = isForcedEnchant
   self:tryEnchant()
+end
+function Input_EnchantInfo_IgnoreGroupMove()
+  ToClient_padSnapIgnoreGroupMove()
 end
 function EnchantInfo:forcedEnchantIsReady()
   local val = self._enchantInfo:ToClient_getNeedCountForPerfectEnchant_s64()
@@ -453,8 +467,6 @@ function EnchantInfo:tryEnchant()
 end
 function EnchantInfo:startEnchant()
   self._enchantInfo:ToClient_doEnchant(self._forcedEnchant, false)
-  audioPostEvent_SystemUi(5, 6)
-  audioPostEvent_SystemUi(5, 9)
 end
 function EnchantInfo:startEnchantAnimation()
   self._ui.slot_targetItem.icon:EraseAllEffect()
@@ -463,13 +475,13 @@ function EnchantInfo:startEnchantAnimation()
   self._ui.slot_subjectItem.icon:AddEffect("fUI_LimitOver01A", false, 0, 0)
   if self._enchantInfo:ToClient_getEquipType() == 0 then
     self._ui.stc_enchantArtwork:EraseAllEffect()
-    self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver02A", true, 0, 0)
     self._ui.stc_enchantArtwork:AddEffect("UI_LimitOverLine_Red", false, 0, 0)
+    self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver02A", true, 0, 0)
     self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver_Spark", false, 0, 0)
   else
     self._ui.stc_enchantArtwork:EraseAllEffect()
-    self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver02A", true, 0, 0)
     self._ui.stc_enchantArtwork:AddEffect("UI_LimitOverLine", false, 0, 0)
+    self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver02A", true, 0, 0)
     self._ui.stc_enchantArtwork:AddEffect("fUI_LimitOver_Spark", false, 0, 0)
   end
   ToClient_BlackspiritEnchantStart()
@@ -529,6 +541,18 @@ function FromClient_EnchantInfo_PerFrame(deltaTime)
       self._resultTimeCheck = false
       self._ui.txt_result:SetShow(false)
     end
+  end
+end
+function FromClient_EnchantInfo_PadSnapChangePanel(fromPanel, toPanel)
+  if nil ~= toPanel then
+    if _panel:GetKey() ~= toPanel:GetKey() then
+      _snappedOnThisPanel = false
+    else
+      _snappedOnThisPanel = true
+    end
+  end
+  if _panel:GetShow(true) then
+    EnchantInfo:updateApplyButton()
   end
 end
 function FromClient_EnchantInfo_ResultShow(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)

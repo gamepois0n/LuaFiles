@@ -8,8 +8,9 @@ local deadMessage = {
     _button_Template = UI.getChildControl(Panel_DeadMessage_Renew, "Button_Template"),
     _staticText_DropItem = {},
     _button_Respawn = {},
-    _staticText_A_ConsoleUI = UI.getChildControl(Panel_DeadMessage_Renew, "StaticText_A_ConsoleUI"),
-    _staticText_X_ConsoleUI = UI.getChildControl(Panel_DeadMessage_Renew, "StaticText_X_ConsoleUI"),
+    _staticText_A_ConsoleUI = nil,
+    _staticText_X_ConsoleUI = nil,
+    _static_BottomBg = UI.getChildControl(Panel_DeadMessage_Renew, "Static_BottomBg"),
     _static_Bg = UI.getChildControl(Panel_DeadMessage_Renew, "Static_Bg")
   },
   _config = {
@@ -113,12 +114,15 @@ function deadMessage:createControl()
   startY = scrSizeY * 0.7
   for index = 0, self._config._respawnButtonMaxCount - 1 do
     local respawnButton = UI.cloneControl(self._ui._button_Template, Panel_DeadMessage_Renew, "_respawn_Button_" .. index)
+    respawnButton:SetIgnore(false)
     respawnButton:SetPosY(startY + respawnButton:GetSizeY() * 1.2 * index)
     respawnButton:SetShow(false)
     self._ui._button_Respawn[index] = respawnButton
   end
   self._ui._button_Template:SetShow(false)
   self._ui._staticText_DropItem_Template:SetShow(false)
+  self._ui._staticText_A_ConsoleUI = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
+  self._ui._staticText_X_ConsoleUI = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
   self._ui._staticText_A_ConsoleUI:SetShow(false)
   self._ui._staticText_X_ConsoleUI:SetShow(false)
 end
@@ -314,6 +318,8 @@ function deadMessage:setSize()
   local scrSizeY = getScreenSizeY()
   Panel_DeadMessage_Renew:SetSize(scrSizeX, scrSizeY)
   Panel_DeadMessage_Renew:ComputePos()
+  self._ui._static_BottomBg:SetSize(scrSizeX, self._ui._static_BottomBg:GetSizeY())
+  self._ui._static_BottomBg:ComputePos()
   self._ui._staticText_Dead:ComputePos()
   self._ui._staticText_Who:ComputePos()
   self._ui._staticText_resurrectionTime:ComputePos()

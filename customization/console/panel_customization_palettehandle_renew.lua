@@ -38,6 +38,7 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateEyePalette(colorTempate,
     tempStatic:setRenderTexture(tempStatic:getBaseTexture())
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
+    tempStatic:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_PaletteHandle_SetSelectButton(" .. colorIndex .. ")")
     tempStatic:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_PaletteHandle_UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. "," .. colorIndex .. ")")
     self._colorStatic[colorIndex] = tempStatic
   end
@@ -47,6 +48,7 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateEyePalette(colorTempate,
 end
 function PaGlobalFunc_Customization_PaletteHandle_UpdateEyePalette(classType, paramType, paramIndex, paramIndex2, colorIndex)
   local self = Customization_PaletteHandleInfo
+  self._currentColorIndex = colorIndex
   self._focusBox:SetPosX(self._colorStatic[colorIndex]:GetPosX() - 2)
   self._focusBox:SetPosY(self._colorStatic[colorIndex]:GetPosY() - 2)
   self._focusBox:SetShow(true)
@@ -56,6 +58,7 @@ function PaGlobalFunc_Customization_PaletteHandle_UpdateEyePalette(classType, pa
   if true == self._checkBox_RightEye:IsCheck() then
     setParam(classType, paramType, paramIndex2, colorIndex)
   end
+  PaGlobalFunc_Customization_PaletteHandle_SetSelectButton(colorIndex)
 end
 function PaGlobalFunc_Customization_PaletteHandle_CreateCommonPalette(colorTempate, colorParent, focusBox, classType, paramType, paramIndex, PaletteIndex)
   local self = Customization_PaletteHandleInfo
@@ -74,6 +77,7 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateCommonPalette(colorTempa
     tempStatic:setRenderTexture(tempStatic:getBaseTexture())
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
+    tempStatic:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_PaletteHandle_SetSelectButton(" .. colorIndex .. ")")
     tempStatic:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_PaletteHandle_UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. colorIndex .. ")")
     self._colorStatic[colorIndex] = tempStatic
   end
@@ -83,10 +87,12 @@ function PaGlobalFunc_Customization_PaletteHandle_CreateCommonPalette(colorTempa
 end
 function PaGlobalFunc_Customization_PaletteHandle_UpdateCommonPalette(classType, paramType, paramIndex, colorIndex)
   local self = Customization_PaletteHandleInfo
+  self._currentColorIndex = colorIndex
   self._focusBox:SetPosX(self._colorStatic[colorIndex]:GetPosX() - 2)
   self._focusBox:SetPosY(self._colorStatic[colorIndex]:GetPosY() - 2)
   self._focusBox:SetShow(true)
   setParam(classType, paramType, paramIndex, colorIndex)
+  PaGlobalFunc_Customization_PaletteHandle_SetSelectButton(colorIndex)
 end
 function PaGlobalFunc_Customization_PaletteHandle_UpdateFocusBox(colorIndex)
   local self = Customization_PaletteHandleInfo
@@ -98,4 +104,13 @@ function PaGlobalFunc_Customization_PaletteHandle_UpdateFocusBox(colorIndex)
   self._focusBox:SetPosX(colorControl:GetPosX() - 2)
   self._focusBox:SetPosY(colorControl:GetPosY() - 2)
   self._focusBox:SetShow(true)
+  self._currentColorIndex = colorIndex
+end
+function PaGlobalFunc_Customization_PaletteHandle_SetSelectButton(colorIndex)
+  local self = Customization_PaletteHandleInfo
+  if self._currentColorIndex == colorIndex then
+    PaGlobalFunc_Customization_SetKeyGuide(6)
+  else
+    PaGlobalFunc_Customization_SetKeyGuide(0)
+  end
 end

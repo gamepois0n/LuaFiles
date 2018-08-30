@@ -154,6 +154,8 @@ function DyeingPalette:open(targetType, slotNo)
     _panel:SetShow(true)
   end
   PaGlobalFunc_DyeingMain_MoveKeyGuide(_panel:GetPosX())
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(false)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideLT(false)
   ToClient_RequestSelectedEquipItem(slotNo)
   self._selected_CharacterTarget = targetType
   self._slotNo = slotNo
@@ -169,13 +171,14 @@ function DyeingPalette:open(targetType, slotNo)
   self._currentScrollAmount = 0
   self._ui.scroll_ampuleList:SetControlPos(0)
   self:updateDyeParts()
-  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(false)
 end
 function PaGlobalFunc_DyeingPalette_Close()
   DyeingPalette:close()
 end
 function DyeingPalette:close()
   PaGlobalFunc_DyeingMain_MoveKeyGuide(getScreenSizeX())
+  PaGlobalFunc_DyeingMain_ShowKeyGuideLT(true)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
   self._selectedDyePart = {}
   if self._ui.stc_ampuleListBG:GetShow() then
     self._ui.stc_ampuleListBG:SetShow(false)
@@ -190,7 +193,6 @@ function DyeingPalette:close()
     _panel:SetShow(false)
     ToClient_RequestSetTargetType(self._selected_CharacterTarget)
   end
-  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(true)
 end
 function DyeingPalette:updateDyeParts()
   if false == _panel:GetShow() then
@@ -238,6 +240,7 @@ function DyeingPalette:updatePalette()
   if false == _panel:GetShow() then
     return
   end
+  self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
   local arrCount = 1
   for ii = 1, #self._ui.stc_ampuleSlotBG do
@@ -262,7 +265,7 @@ function DyeingPalette:updatePalette()
         local garment = self._ui.stc_garment[ii]
         garment:SetAlphaIgnore(true)
         garment:SetColor(DyeingPaletteCategoryInfo:getColor(dataIdx - 1))
-        garment:addInputEvent("Mouse_LUp", "Input_DyeingPalette_Ampule(" .. dataIdx .. ")")
+        self._ui.stc_ampuleSlotBG[ii]:addInputEvent("Mouse_LUp", "Input_DyeingPalette_Ampule(" .. dataIdx .. ")")
       else
         self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
       end
@@ -519,8 +522,4 @@ function Input_DyeingPalette_ApplyDye()
   end
 end
 function FromClient_DyeingPalette_PadSnapChangePanel(fromPanel, toPanel)
-  if nil ~= toPanel and _panel:GetKey() ~= toPanel:GetKey() and Panel_Win_System:GetKey() ~= toPanel:GetKey() and _panel:GetShow() then
-    _panel:SetShow(false)
-    ToClient_RequestSetTargetType(DyeingPalette._selected_CharacterTarget)
-  end
 end

@@ -1251,8 +1251,6 @@ function PaGlobal_Option:SetContentsOption()
     UI.getChildControl(bg00, "StaticText_EnableWhisperMusic_Desc"):SetShow(false)
     UI.getChildControl(bg00, "CheckButton_EnableTraySoundOnOff"):SetShow(false)
     UI.getChildControl(bg00, "StaticText_EnableTraySoundOnOff_Desc"):SetShow(false)
-    UI.getChildControl(bg00, "CheckButton_EnableRidingSound"):SetShow(false)
-    UI.getChildControl(bg00, "StaticText_EnableRidingSound_Desc"):SetShow(false)
     local bg11 = UI.getChildControl(self._frames.Sound.OnOff._uiFrameContent, "StaticText_BgOrder1_Import")
     if nil ~= bg11 then
       local x = UI.getChildControl(bg11, "RadioButton_BattleSoundType2")

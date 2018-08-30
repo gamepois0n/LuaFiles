@@ -14,6 +14,9 @@ function Window_WorldMap_RightMenuInfo:ButtonFilter()
   self._ui._button_Stable:SetShow(isTown)
   self._ui._button_WareHouse:SetShow(isTown)
   self._ui._button_Delivery:SetShow(isTown)
+  if false == ToClient_IsContentsGroupOpen("2") then
+    self._ui._button_Delivery:SetShow(false)
+  end
 end
 function PaGlobalFunc_WorldMap_RightMenu_SetCurrentNodeInfo(nodeInfo)
   local self = Window_WorldMap_RightMenuInfo
@@ -25,6 +28,11 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
   local self = Window_WorldMap_RightMenuInfo
   PaGlobalFunc_WorldMap_HouseFilter_SetCurrentNodeInfo(self._currentNodeInfo)
   PaGlobalFunc_WorldMap_HouseFilter_Open()
+end
+function PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilterFromCraftManage()
+  local self = Window_WorldMap_RightMenuInfo
+  PaGlobalFunc_WorldMap_HouseFilter_SetCurrentNodeInfo(self._currentNodeInfo)
+  PaGlobalFunc_WorldMap_HouseFilter_OpenFromCraftManage()
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenStable()
   local self = Window_WorldMap_RightMenuInfo

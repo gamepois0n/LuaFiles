@@ -52,7 +52,7 @@ function PaGlobal_Option:CreateEventControl(category, detail)
     eventControl[order]:addInputEvent(eventType, functionText)
     curAccumulateSize = curAccumulateFrameSize + control:GetSpanSize().y
     self._elements[elementName]._isScrollEnd[order] = limitFrameSizeY < curAccumulateSize
-    if true == isCheckButton then
+    if true == isCheckButton or true == isRadioButton then
       eventControl[order]:SetEnableArea(0, 0, eventControl[order]:GetSizeX() + eventControl[order]:GetTextSizeX(), eventControl[order]:GetSizeY())
     end
     if true == isSliderButton then
@@ -99,6 +99,7 @@ function PaGlobal_Option:CreateEventControl(category, detail)
       local functionTextParam = "PaGlobal_Option:EventXXX(" .. "\"" .. controlName .. "\"" .. ", " .. order .. ", " .. radioIndex .. " ) "
       eventControlParam[order2] = elemParam
       eventControlParam[order2]:addInputEvent(eventType, functionTextParam)
+      eventControlParam[order2]:SetEnableArea(0, 0, eventControlParam[order2]:GetSizeX() + eventControlParam[order2]:GetTextSizeX() + 10, eventControlParam[order2]:GetSizeY())
       self._elements[elementName]._eventControlCount = radioIndex
     end
     if true == self._elements[elementName]._isPictureTooltipOn then
@@ -270,14 +271,24 @@ function PaGlobal_Option:EventXXX(controlName, controlIndex, order, param)
       end
     end
     option._curValue = order
-    if "RadioButton_GraphicOption" == controlName and (1 == controlIndex or 2 == controlIndex) and (7 == order or 8 == order) then
-      local messageBoxData = {
-        title = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTTITLE"),
-        content = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTDESC"),
-        functionApply = MessageBox_Empty_function,
-        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-      }
-      MessageBox.showMessageBox(messageBoxData)
+    if "RadioButton_GraphicOption" == controlName and (1 == controlIndex or 2 == controlIndex) then
+      if 7 == order then
+        local messageBoxData = {
+          title = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTTITLE"),
+          content = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTDESC"),
+          functionApply = MessageBox_Empty_function,
+          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+        }
+        MessageBox.showMessageBox(messageBoxData)
+      elseif 8 == order then
+        local messageBoxData = {
+          title = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTTITLE"),
+          content = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_GRAPHICMODE_ALERTDESC2"),
+          functionApply = MessageBox_Empty_function,
+          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+        }
+        MessageBox.showMessageBox(messageBoxData)
+      end
     end
   elseif CONTROL.PA_UI_CONTROL_SLIDER == controlType then
     option._curValue = option._eventControl[controlIndex]:GetControlPos()

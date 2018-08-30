@@ -556,7 +556,11 @@ function TestGuildTeamBattleMessage(mode, param1, param2)
   end
 end
 function FGlobal_Update_ShowGuildTeamBattlePing(prevIsShouldPlayMusic, isShouldPlayMusic, currentState)
-  FGlobal_PersonalIcon_ButtonPosUpdate()
+  if false == _ContentsGroup_RemasterUI_Main_RightTop then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+  else
+    FromClient_Widget_FunctionButton_Resize()
+  end
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_Guild_OneOnOneControl_Initialize")
 registerEvent("FromClient_GuildTeamBattle_End", "FromClient_GuildTeamBattle_End")

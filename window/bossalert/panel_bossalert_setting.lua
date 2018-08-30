@@ -41,7 +41,8 @@ local nation = {
   _turkey = 7,
   _southAmerica = 8,
   _thailand = 9,
-  _southeastAsia = 10
+  _southeastAsia = 10,
+  _koreaTeen = 11
 }
 local bossNo = {
   _kzaka = 1,
@@ -71,6 +72,7 @@ local PaGlobal_BossAlert = {
       {2, 0},
       {11, 0},
       {16, 0},
+      {17, 0},
       {19, 0},
       {20, 0},
       {21, 0},
@@ -82,6 +84,7 @@ local PaGlobal_BossAlert = {
         {2},
         {1, 3},
         {2, 4},
+        {9},
         {0},
         {3, 4},
         {0},
@@ -93,6 +96,7 @@ local PaGlobal_BossAlert = {
         {1, 3},
         {1, 4},
         {0},
+        {0},
         {2, 3},
         {0},
         {5},
@@ -102,6 +106,7 @@ local PaGlobal_BossAlert = {
         {1},
         {1, 4},
         {1, 3},
+        {0},
         {0},
         {2, 4},
         {0},
@@ -113,6 +118,7 @@ local PaGlobal_BossAlert = {
         {3, 4},
         {1, 3},
         {0},
+        {0},
         {2, 1},
         {0},
         {5},
@@ -122,6 +128,7 @@ local PaGlobal_BossAlert = {
         {4},
         {1, 3},
         {2, 4},
+        {0},
         {0},
         {3, 4},
         {0},
@@ -133,6 +140,7 @@ local PaGlobal_BossAlert = {
         {1, 4},
         {2, 3},
         {0},
+        {0},
         {1, 4},
         {0},
         {5},
@@ -142,6 +150,7 @@ local PaGlobal_BossAlert = {
         {2},
         {3, 4},
         {2, 1},
+        {0},
         {7, 8},
         {0},
         {0},
@@ -708,121 +717,221 @@ local PaGlobal_BossAlert = {
   },
   [nation._thailand] = {
     _alertTime = {
+      {0, 30},
+      {6, 0},
       {10, 0},
       {14, 0},
-      {18, 0},
+      {19, 0},
       {20, 0},
-      {0, 15}
+      {23, 0}
     },
     _bossAppearOrder = {
       {
-        {1, 3},
+        {1, 2},
         {4},
-        {1, 3},
+        {1, 2},
+        {4, 3},
+        {2},
         {0},
-        {0}
+        {3}
       },
       {
-        {4},
-        {1, 3},
-        {4},
+        {1},
+        {2},
         {0},
-        {0}
-      },
-      {
-        {0},
-        {4},
-        {1, 3},
-        {0},
-        {1}
-      },
-      {
         {3},
         {1},
-        {4},
         {0},
         {4}
       },
       {
-        {1},
-        {4, 3},
-        {1},
+        {3},
+        {4},
+        {1, 2},
+        {4},
+        {3},
         {0},
-        {0}
+        {3}
       },
       {
-        {4, 3},
         {1},
-        {4, 3},
-        {0},
-        {0}
-      },
-      {
-        {0},
-        {4, 3},
-        {1, 3},
+        {3},
+        {1},
+        {2},
+        {4},
         {0},
         {1}
+      },
+      {
+        {4},
+        {0},
+        {1},
+        {4},
+        {1, 2},
+        {0},
+        {3}
+      },
+      {
+        {0},
+        {0},
+        {4},
+        {1},
+        {3},
+        {0},
+        {2}
+      },
+      {
+        {4},
+        {3},
+        {4},
+        {1, 3},
+        {4},
+        {0},
+        {0}
       }
     }
   },
   [nation._southeastAsia] = {
     _alertTime = {
+      {1, 30},
+      {7, 0},
       {11, 0},
       {15, 0},
-      {19, 0},
+      {20, 0},
       {21, 0},
-      {1, 15}
+      {0, 0}
     },
     _bossAppearOrder = {
       {
-        {1, 3},
+        {1, 2},
         {4},
-        {1, 3},
+        {1, 2},
+        {4, 3},
+        {2},
         {0},
-        {0}
+        {3}
       },
       {
-        {4},
-        {1, 3},
-        {4},
+        {1},
+        {2},
         {0},
-        {0}
-      },
-      {
-        {0},
-        {4},
-        {1, 3},
-        {0},
-        {1}
-      },
-      {
         {3},
         {1},
-        {4},
         {0},
         {4}
       },
       {
-        {1},
-        {4, 3},
-        {1},
+        {3},
+        {4},
+        {1, 2},
+        {4},
+        {3},
         {0},
-        {0}
+        {3}
       },
       {
-        {4, 3},
         {1},
-        {4, 3},
-        {0},
-        {0}
-      },
-      {
-        {0},
-        {4, 3},
-        {1, 3},
+        {3},
+        {1},
+        {2},
+        {4},
         {0},
         {1}
+      },
+      {
+        {4},
+        {0},
+        {1},
+        {4},
+        {1, 2},
+        {0},
+        {3}
+      },
+      {
+        {0},
+        {0},
+        {4},
+        {1},
+        {3},
+        {0},
+        {2}
+      },
+      {
+        {4},
+        {3},
+        {4},
+        {1, 3},
+        {4},
+        {0},
+        {0}
+      }
+    }
+  },
+  [nation._koreaTeen] = {
+    _alertTime = {
+      {11, 0},
+      {14, 30},
+      {17, 0},
+      {19, 0},
+      {21, 0},
+      {23, 0}
+    },
+    _bossAppearOrder = {
+      {
+        {1, 4},
+        {2, 1},
+        {0},
+        {3, 4},
+        {1, 3},
+        {2}
+      },
+      {
+        {0},
+        {0},
+        {1},
+        {3},
+        {2, 4},
+        {5}
+      },
+      {
+        {0},
+        {0},
+        {3},
+        {4},
+        {2, 1},
+        {6}
+      },
+      {
+        {0},
+        {0},
+        {4},
+        {1},
+        {2, 3},
+        {5}
+      },
+      {
+        {0},
+        {0},
+        {1},
+        {3},
+        {2, 4},
+        {6}
+      },
+      {
+        {0},
+        {0},
+        {3},
+        {4},
+        {2, 1},
+        {5}
+      },
+      {
+        {1, 3},
+        {3, 4},
+        {0},
+        {7, 8},
+        {2, 4},
+        {6}
       }
     }
   }
@@ -869,9 +978,7 @@ function PaGlobal_BossAlertSet:Init()
   end
   local isAdult = ToClient_isAdultUser()
   if false == isAdult then
-    PaGlobal_BossAlert[nation._korea]._alertTime[7] = {23, 30}
-    PaGlobal_BossAlert[nation._korea]._bossAppearOrder[7][7] = {6}
-    PaGlobal_BossAlert[nation._korea]._bossAppearOrder[7][8] = {0}
+    self.currentNation = nation._koreaTeen
   end
   self._ui.checkPopUp:SetShow(false)
   self._ui.txt_BottomDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -969,6 +1076,9 @@ function PaGlobal_BossAlertSet_ReturnTimeBeforeAlert()
     local bossHour = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][1]
     if 0 == bossHour then
       bossHour = 24
+    end
+    if 0 == currentHour then
+      currentHour = 24
     end
     local bossMinute = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][2]
     lastMinute = (bossHour - currentHour) * 60 + bossMinute - currentMinute

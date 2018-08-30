@@ -134,8 +134,14 @@ function Panel_NumberPad_Init(param0, confirmFunction, isShow, param1, param2)
   _edit_Number:SetNumberMode(true)
   numberPad:updateConfirmButton(true)
   if not Panel_Window_Exchange_Number:GetShow() then
-    Panel_Window_Exchange_Number:SetPosX(getMousePosX())
-    Panel_Window_Exchange_Number:SetPosY(getMousePosY())
+    local snappedControl = ToClient_getSnappedControl()
+    if nil ~= snappedControl then
+      Panel_Window_Exchange_Number:SetPosX(getMousePosX())
+      Panel_Window_Exchange_Number:SetPosY(getMousePosY())
+    else
+      Panel_Window_Exchange_Number:SetPosX(getScreenSizeX() / 2 - Panel_Window_Exchange_Number:GetSizeX() / 2)
+      Panel_Window_Exchange_Number:SetPosY(getScreenSizeY() / 2 - Panel_Window_Exchange_Number:GetSizeY() / 2)
+    end
   end
   local keyPadPosY = Panel_Window_Exchange_Number:GetPosY()
   keyPadPosY = keyPadPosY + Panel_Window_Exchange_Number:GetSizeY()

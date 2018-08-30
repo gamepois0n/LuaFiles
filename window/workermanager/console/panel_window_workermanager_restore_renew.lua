@@ -96,6 +96,10 @@ function workerRestore:setPanelSize()
   self._ui._staticText_FeedAll_ConsoleUI:ComputePos()
   self._ui._staticText_Feed_ConsoleUI:ComputePos()
   self._ui._staticText_Cancel_ConsoleUI:ComputePos()
+  local newPosX = self._ui._staticText_Cancel_ConsoleUI:GetPosX() - self._ui._staticText_Feed_ConsoleUI:GetTextSizeX() - 50
+  self._ui._staticText_Feed_ConsoleUI:SetPosX(newPosX)
+  newPosX = newPosX - self._ui._staticText_FeedAll_ConsoleUI:GetTextSizeX() - 50
+  self._ui._staticText_FeedAll_ConsoleUI:SetPosX(newPosX)
 end
 function workerRestore:setPosition()
   local scrSizeX = getScreenSizeX()
@@ -196,6 +200,11 @@ function workerRestore:selectItem(itemIndex)
   if nil == selectItem then
     return
   end
+  for index = 0, self._config._maxItemCount - 1 do
+    local slot = self._ui._restoreItemSlot[index].slotBG
+    slot:SetCheck(false)
+  end
+  self._ui._restoreItemSlot[itemIndex].slotBG:SetCheck(true)
   PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(CppEnums.ItemWhereType.eInventory, selectItem._slotNo), Defines.TooltipTargetType.Item, 0)
   self._selectItemIndex = itemIndex
   if true == self._isRestoreAll then

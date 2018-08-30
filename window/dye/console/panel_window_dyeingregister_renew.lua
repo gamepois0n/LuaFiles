@@ -46,6 +46,7 @@ function DyeingRegister:initialize()
     local slot = self._ui.slot_dyes[ii]
     SlotItem.new(slot, "CampEquip_" .. ii, ii, self._ui.stc_slotBG[ii], slotConfig)
     slot:createChild()
+    slot.icon:SetIgnore(true)
     if ii <= self._colMax then
       self._ui.stc_slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_DyeingRegister_Inventory(true)")
     elseif ii > self._colMax * (self._rowMax - 1) then
@@ -70,12 +71,14 @@ function PaGlobalFunc_DyeingRegister_Close()
 end
 function DyeingRegister:open()
   _panel:SetShow(true)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(false)
   self._scrollAmount = 0
   self._ui.scroll_itemList:SetControlPos(0)
   self:updateList()
 end
 function DyeingRegister:close()
   _panel:SetShow(false)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
 end
 function FromClient_DyeingRegister_Update()
   local self = DyeingRegister
@@ -107,7 +110,7 @@ function DyeingRegister:updateList()
       local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, dyeSlotNo[ii + self._scrollAmount])
       if nil ~= itemWrapper then
         self._ui.slot_dyes[ii]:setItem(itemWrapper, dyeSlotNo[ii + self._scrollAmount])
-        self._ui.slot_dyes[ii].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
+        self._ui.stc_slotBG[ii]:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
       end
     end
   end

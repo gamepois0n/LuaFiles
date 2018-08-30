@@ -1,3 +1,4 @@
+local _panel = Panel_FriendList
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local IM = CppEnums.EProcessorInputMode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
@@ -5,12 +6,12 @@ local UI_color = Defines.Color
 local UnDefinedFriendIdx = -1
 PaGlobal_FriendNew = {
   _ui = {
-    _Static_TabTypeBg = UI.getChildControl(Panel_FriendList, "Static_TabTypeBg"),
-    _Static_TabListBg = UI.getChildControl(Panel_FriendList, "Static_TabListBg"),
-    _Static_FriendBg = UI.getChildControl(Panel_FriendList, "Static_FriendBg"),
-    _List2_OfferBg = UI.getChildControl(Panel_FriendList, "List2_OfferBg"),
-    _Static_BottomBg = UI.getChildControl(Panel_FriendList, "Static_BottomBg"),
-    _Static_AddFriendBg = UI.getChildControl(Panel_FriendList, "Static_AddFriendBg")
+    _Static_TabTypeBg = UI.getChildControl(_panel, "Static_TabTypeBg"),
+    _Static_TabListBg = UI.getChildControl(_panel, "Static_TabListBg"),
+    _Static_FriendBg = UI.getChildControl(_panel, "Static_FriendBg"),
+    _List2_OfferBg = UI.getChildControl(_panel, "List2_OfferBg"),
+    _Static_BottomBg = UI.getChildControl(_panel, "Static_BottomBg"),
+    _Static_AddFriendBg = UI.getChildControl(_panel, "Static_AddFriendBg")
   },
   _STRING = {
     _INVITE_PARTY = PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU3"),
@@ -34,10 +35,10 @@ function PaGlobal_FriendNew:Clear()
   self._currentFriendIdx = UnDefinedFriendIdx
 end
 function PaGlobal_FriendNew:Open()
-  Panel_FriendList:SetShow(true)
-  Panel_FriendList:setMaskingChild(true)
-  Panel_FriendList:ActiveMouseEventEffect(true)
-  Panel_FriendList:setGlassBackground(true)
+  _panel:SetShow(true)
+  _panel:setMaskingChild(true)
+  _panel:ActiveMouseEventEffect(true)
+  _panel:setGlassBackground(true)
   self:Clear()
   self:Update()
   RequestFriendList_getFriendList()
@@ -48,8 +49,8 @@ function PaGlobal_FriendNew:Close()
     PaGlobal_FriendNew:CloseAddFriendEdit()
     return
   end
-  Panel_FriendList:SetShow(false)
-  Panel_FriendList:SetMonoTone(false)
+  _panel:SetShow(false)
+  _panel:SetMonoTone(false)
   self._ui._Static_AddFriendBg:SetShow(false)
 end
 function PaGlobal_FriendNew:UpdatePcFriendTab()
@@ -60,10 +61,16 @@ function PaGlobal_FriendNew:UpdatePcFriendTab()
     self._ui._List2_OfferBg:SetShow(false)
     self._ui._StaticText_InviteParty:SetShow(true)
     self._ui._StaticText_DeleteFriend:SetShow(true)
+    self._ui._StaticText_AddFriend:SetShow(true)
     self._ui._StaticText_InviteParty:SetText(self._STRING._GUILD_INVITE)
     self._ui._StaticText_DeleteFriend:SetText(self._STRING._DELETE_FRIEND)
     self._ui._StaticText_CharactorNameTitle:SetText(self._STRING._CHARACTERNAME)
-    self._ui._StaticText_AddFriend:SetShow(true)
+    local keyGuideList = {
+      self._ui._StaticText_InviteParty,
+      self._ui._StaticText_DeleteFriend,
+      self._ui._StaticText_Close
+    }
+    PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
     self:UpdatePCFriendList()
   else
     self._ui._Static_FriendBg:SetShow(false)
@@ -73,6 +80,12 @@ function PaGlobal_FriendNew:UpdatePcFriendTab()
     self._ui._StaticText_DeleteFriend:SetShow(true)
     self._ui._StaticText_InviteParty:SetText(self._STRING._ACCEPT_ADDREQUEST)
     self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
+    local keyGuideList = {
+      self._ui._StaticText_InviteParty,
+      self._ui._StaticText_DeleteFriend,
+      self._ui._StaticText_Close
+    }
+    PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
     self:UpdateOfferList()
   end
 end
@@ -84,10 +97,16 @@ function PaGlobal_FriendNew:UpdateXboxFriendTab()
   self._ui._List2_OfferBg:SetShow(false)
   self._ui._StaticText_InviteParty:SetShow(true)
   self._ui._StaticText_DeleteFriend:SetShow(true)
+  self._ui._StaticText_AddFriend:SetShow(false)
   self._ui._StaticText_InviteParty:SetText(self._STRING._XBOX_PROFILE)
   self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
   self._ui._StaticText_CharactorNameTitle:SetText(self._STRING._XBOX_GAMERTAG)
-  self._ui._StaticText_AddFriend:SetShow(false)
+  local keyGuideList = {
+    self._ui._StaticText_InviteParty,
+    self._ui._StaticText_DeleteFriend,
+    self._ui._StaticText_Close
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self:UpdateXboxFriendList()
 end
 function PaGlobal_FriendNew:UpdateOfferList()
@@ -347,7 +366,7 @@ function FriendList_hide()
   PaGlobal_FriendNew:Close()
 end
 function PaGlobal_FriendNew:Init()
-  Panel_FriendList:SetShow(false)
+  _panel:SetShow(false)
   self._ui._RadioButton_PCFrined = UI.getChildControl(PaGlobal_FriendNew._ui._Static_TabTypeBg, "RadioButton_PCFrined")
   self._ui._RadioButton_XBoxFrined = UI.getChildControl(PaGlobal_FriendNew._ui._Static_TabTypeBg, "RadioButton_XBoxFrined")
   self._ui._Static_LB = UI.getChildControl(PaGlobal_FriendNew._ui._Static_TabTypeBg, "Static_LB")
@@ -366,17 +385,20 @@ function PaGlobal_FriendNew:Init()
   self._ui._List2_OfferBg:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FriendNew_CreateOfferList")
   self._ui._StaticText_InviteParty = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_InviteParty")
   self._ui._StaticText_DeleteFriend = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_DeleteFriend")
+  self._ui._StaticText_Close = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_Close")
   self._ui._Button_InviteParty = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_InviteParty")
   self._ui._Button_Delete = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_Delete")
   self._ui._Button_Close = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_Close")
   self._ui._StaticText_AddFriend = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_AddFriend")
-  self._ui._Edit_Nickname = UI.getChildControl(PaGlobal_FriendNew._ui._Static_AddFriendBg, "Edit_Nickname")
-  self._ui._Button_Delete:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:DeleteFriend()")
+  self._ui._Static_CenterBG = UI.getChildControl(PaGlobal_FriendNew._ui._Static_AddFriendBg, "Static_CenterBg")
+  self._ui._Edit_Nickname = UI.getChildControl(PaGlobal_FriendNew._ui._Static_CenterBG, "Edit_Nickname")
   self._ui._Edit_Nickname:setXboxVirtualKeyBoardEndEvent("PaGlobal_FriendNew_EnterAddFriendEdit")
+  self._ui._Edit_Nickname:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_FriendNew:OpenAddFriendEdit()")
+  self._ui._Button_Delete:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:DeleteFriend()")
   if _ContentsGroup_isConsolePadControl then
-    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobal_FriendNew:OpenAddFriendEdit()")
-    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobal_FriendNew:ClickLB()")
-    Panel_FriendList:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobal_FriendNew:ClickRB()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobal_FriendNew:OpenAddFriendEdit()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobal_FriendNew:ClickLB()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobal_FriendNew:ClickRB()")
   end
 end
 function PaGlobal_FriendNew_IsFriendAddEdit(targetUI)
@@ -384,7 +406,8 @@ function PaGlobal_FriendNew_IsFriendAddEdit(targetUI)
   return nil ~= targetUI and targetUI:GetKey() == self._ui._Edit_Nickname:GetKey()
 end
 function PaGlobal_FriendNew:ClearAddFriendEdit()
-  Panel_FriendList:SetMonoTone(false)
+  _panel:SetMonoTone(false)
+  self._ui._Static_BottomBg:SetShow(true)
   self._ui._Edit_Nickname:SetEditText("", true)
   self._ui._Static_AddFriendBg:SetShow(false)
   ClearFocusEdit()
@@ -393,8 +416,9 @@ function PaGlobal_FriendNew_EnterAddFriendEdit(str)
   PaGlobal_FriendNew:EnterAddFriendEdit(str)
 end
 function PaGlobal_FriendNew:EnterAddFriendEdit(str)
-  Panel_FriendList:SetMonoTone(false)
+  _panel:SetMonoTone(false)
   self._tempAddFriendStr = str
+  self._ui._Static_BottomBg:SetShow(true)
   self._ui._Static_AddFriendBg:SetShow(false)
   ClearFocusEdit()
   local messageBoxData = {
@@ -407,7 +431,8 @@ function PaGlobal_FriendNew:EnterAddFriendEdit(str)
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobal_FriendNew:CloseAddFriendEdit()
-  Panel_FriendList:SetMonoTone(false)
+  _panel:SetMonoTone(false)
+  self._ui._Static_BottomBg:SetShow(true)
   self._ui._Edit_Nickname:SetEditText("", true)
   self._ui._Static_AddFriendBg:SetShow(false)
   ClearFocusEdit()
@@ -423,7 +448,8 @@ function PaGlobal_FriendNew:OpenAddFriendEdit()
   if false == self._isPCFriendTab then
     return
   end
-  Panel_FriendList:SetMonoTone(true)
+  _panel:SetMonoTone(true)
+  self._ui._Static_BottomBg:SetShow(false)
   self._ui._Static_AddFriendBg:SetMonoTone(false)
   self._ui._Static_AddFriendBg:SetShow(true)
   self._ui._Edit_Nickname:SetEditText("", true)
@@ -460,17 +486,17 @@ registerEvent("ResponseFriendList_updateAddFriends", "ResponseFriendList_updateA
 registerEvent("FromClient_FriendDirectlyMessage", "FromClient_FriendDirectlyMessage")
 registerEvent("FromClient_CantFindFriendForXbox", "FromClient_CantFindFriendForXbox")
 function ResponseFriendList_updateFriends()
-  if true == Panel_FriendList:GetShow() then
+  if true == _panel:GetShow() then
     PaGlobal_FriendNew:Update()
   end
 end
 function ResponseFriendList_updateAddFriends()
-  if true == Panel_FriendList:GetShow() then
+  if true == _panel:GetShow() then
     PaGlobal_FriendNew:Update()
   end
 end
 function FromClient_NoticeNewMessage(isSoundNotice, isEffectNotice)
-  if isEffectNotice and false == Panel_FriendList:GetShow() then
+  if isEffectNotice and false == _panel:GetShow() then
     UIMain_FriendListUpdate()
     UIMain_FriendsUpdate()
   end
@@ -554,6 +580,9 @@ function FromClient_ResponseFriendResult(fromUserName, isAccept)
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData)
+end
+function addFriendXbox(characterName)
+  ToClinet_RequestDirectyleComplete(characterName)
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_FriendNew_luaLoadComplete")
 registerEvent("FromClient_ResponseFriendResult", "FromClient_ResponseFriendResult")

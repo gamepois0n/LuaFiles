@@ -108,9 +108,9 @@ function PaGlobal_Option:CreateControl_KeyCustomizeButton(cacheNo, order, option
     local buttonTemplate = UI.getChildControl(group, "CheckButton_Template")
     buttonTemplate:addInputEvent("Mouse_LUp", "PaGlobal_Option:EventXXX(\"" .. tostring("KeyCustomize_" .. tostring(option._name)) .. "\" ," .. tostring(cacheNo) .. ")")
     buttonTemplate:SetShow(true)
-    self._controlCache[OPTION_TYPE.CHECKBUTTON][cacheNo] = group
+    self._controlCache[OPTION_TYPE.KEYCUSTOMIZE][cacheNo] = group
   end
-  return self._controlCache[OPTION_TYPE.CHECKBUTTON][cacheNo]
+  return self._controlCache[OPTION_TYPE.KEYCUSTOMIZE][cacheNo]
 end
 function PaGlobal_Option:SetTitleAndDescription(groupBg, option)
   if nil == groupBg then
@@ -119,9 +119,13 @@ function PaGlobal_Option:SetTitleAndDescription(groupBg, option)
   end
   local title = UI.getChildControl(groupBg, "StaticText_Title")
   local desc = UI.getChildControl(groupBg, "StaticText_Desc")
-  title:SetText(PAGetString(Defines.StringSheet_RESOURCE, option._title))
-  desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  desc:SetText(PAGetString(Defines.StringSheet_RESOURCE, option._desc))
+  if nil ~= option._title then
+    title:SetText(PAGetString(Defines.StringSheet_RESOURCE, option._title))
+  end
+  if nil ~= option._desc then
+    desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    desc:SetText(PAGetString(Defines.StringSheet_RESOURCE, option._desc))
+  end
   if option._type == OPTION_TYPE.RADIOBUTTON then
     for ii = 0, option._radioButtonMapping._count - 1 do
       local radioButton = UI.getChildControl(groupBg, "RadioButton_" .. tostring(ii))
@@ -157,39 +161,46 @@ function PaGlobal_Option:CreateFrame(category, detail)
     end
   end
   local offset = self:CreateFrameException(category, detail)
+  if nil ~= self._currentFrame then
+    for index, option in ipairs(self._currentFrame) do
+      option._element._eventGroup = nil
+    end
+  end
   local frameInfo = PaGlobal_Option._frames[category][detail]
+  self._currentFrame = frameInfo
   local tempPosY = offset
   for index, option in ipairs(frameInfo) do
     if true == option._contentsOption or nil == option._contentsOption then
-      local eventControlBg
+      local eventGroup
       if OPTION_TYPE.RADIOBUTTON == option._element._type then
-        eventControlBg = self:CreateControl_RadioButton(radioButtonCacheNo, index, option._element)
+        eventGroup = self:CreateControl_RadioButton(radioButtonCacheNo, index, option._element)
         radioButtonCacheNo = radioButtonCacheNo + 1
       elseif OPTION_TYPE.SLIDER == option._element._type then
-        eventControlBg = self:CreateControl_Slider(sliderCacheNo, index, option._element)
+        eventGroup = self:CreateControl_Slider(sliderCacheNo, index, option._element)
         sliderCacheNo = sliderCacheNo + 1
       elseif OPTION_TYPE.CHECKBUTTON == option._element._type then
-        eventControlBg = self:CreateControl_CheckButton(checkButtonCacheNo, index, option._element)
+        eventGroup = self:CreateControl_CheckButton(checkButtonCacheNo, index, option._element)
         checkButtonCacheNo = checkButtonCacheNo + 1
       elseif OPTION_TYPE.KEYCUSTOMIZE == option._element._type then
-        eventControlBg = self:CreateControl_KeyCustomizeButton(keyCustomizeCacheNo, index, option._element)
+        eventGroup = self:CreateControl_KeyCustomizeButton(keyCustomizeCacheNo, index, option._element)
         keyCustomizeCacheNo = keyCustomizeCacheNo + 1
       end
-      if nil == eventControlBg then
+      if nil == eventGroup then
         _PA_LOG("\237\155\132\236\167\132", "caching \236\157\180 \236\158\152\235\170\187\235\144\152\236\151\136\236\138\181\235\139\136\235\139\164.")
       end
-      self:SetTitleAndDescription(eventControlBg, option._element)
-      eventControlBg:SetShow(true)
-      eventControlBg:SetPosY(tempPosY)
-      tempPosY = tempPosY + eventControlBg:GetSizeY()
+      self:SetTitleAndDescription(eventGroup, option._element)
+      eventGroup:SetShow(true)
+      eventGroup:SetPosY(tempPosY)
+      tempPosY = tempPosY + eventGroup:GetSizeY()
       local value = option._element._initValue
       if nil ~= option._element._curValue then
         value = option._element._curValue
       elseif nil ~= option._element._applyValue then
         value = option._element._applyValue
       end
+      option._element._eventGroup = eventGroup
       if nil ~= value then
-        self:SetControlSetting(eventControlBg, option._element, value)
+        self:SetControlSetting(option._element, value)
       end
     end
   end
@@ -204,8 +215,12 @@ end
 function PaGlobal_Option:RemoveEventControl()
 end
 function PaGlobal_Option:SetXXX(option, value)
-  if nil == value then
+  if nil == value or nil == option then
     return false
+  end
+  if nil == option.set then
+    _PA_LOG("\237\155\132\236\167\132", "[GameOption] set \237\149\168\236\136\152\234\176\128 \236\160\149\236\157\152\235\144\152\236\150\180\236\158\136\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164. :" .. option._name)
+    return
   end
   local executeResult = option:set(value)
   if false == executeResult then
@@ -250,15 +265,17 @@ function PaGlobal_Option:EventXXX(controlName, cacheNo, order)
   if nil == option._curValue then
     return
   end
-  self:SetControlSetting(groupBg, option, option._curValue)
-  local tempCurValue = option._curValue
-  self:SetXXX(option, option._curValue)
-  option._curValue = tempCurValue
-  option._applyValue = nil
+  self:SetControlSetting(option, option._curValue)
+  if true == option._settingRightNow then
+    local tempCurValue = option._curValue
+    self:SetXXX(option, option._curValue)
+    option._curValue = tempCurValue
+    option._applyValue = nil
+  end
 end
-function PaGlobal_Option:SetControlSetting(groupBg, option, value)
+function PaGlobal_Option:SetControlSetting(option, value)
   if OPTION_TYPE.CHECKBUTTON == option._type then
-    local checkButton = UI.getChildControl(groupBg, "CheckButton_Template")
+    local checkButton = UI.getChildControl(option._eventGroup, "CheckButton_Template")
     checkButton:SetCheck(value)
     if checkButton:IsCheck() then
       checkButton:SetText("ON")
@@ -267,11 +284,11 @@ function PaGlobal_Option:SetControlSetting(groupBg, option, value)
     end
   elseif OPTION_TYPE.RADIOBUTTON == option._type then
     for ii = 0, option._radioButtonMapping._count - 1 do
-      local radioButton = UI.getChildControl(groupBg, "RadioButton_" .. tostring(ii))
+      local radioButton = UI.getChildControl(option._eventGroup, "RadioButton_" .. tostring(ii))
       radioButton:SetCheck(value == ii)
     end
   elseif OPTION_TYPE.SLIDER == option._type then
-    local slider = UI.getChildControl(groupBg, "Slider_Template")
+    local slider = UI.getChildControl(option._eventGroup, "Slider_Template")
     slider:SetControlPos(value * 100)
     local displayButton = UI.getChildControl(slider, "Slider_DisplayButton")
     displayButton:SetPosX(slider:GetControlButton():GetPosX())
@@ -281,50 +298,11 @@ function PaGlobal_Option:SetControlSetting(groupBg, option, value)
     progress:SetProgressRate(value * 100 + offset)
     local displayValue = self:FromSliderValueToRealValue(value, option._sliderValueMin, option._sliderValueMax)
     displayValue = math.floor(displayValue + 0.5)
-    local sliderCurrentText = UI.getChildControl(groupBg, "StaticText_Current")
+    local sliderCurrentText = UI.getChildControl(option._eventGroup, "StaticText_Current")
     sliderCurrentText:SetText(self._sliderButtonString .. displayValue .. "<PAOldColor>")
   elseif OPTION_TYPE.KEYCUSTOMIZE == option._type then
-    local button = UI.getChildControl(groupBg, "CheckButton_Template")
+    local button = UI.getChildControl(option._eventGroup, "CheckButton_Template")
     button:SetText(value)
-  end
-end
-function PaGlobal_Option:ResetControlSetting(elementName)
-  local option = self._elements[elementName]
-  self:ResetControlSettingTable(option, elementName)
-end
-function PaGlobal_Option:ResetControlSettingTable(option, elementName)
-  if nil == elementName then
-    elementName = ""
-  end
-  if "table" ~= type(option) then
-    return
-  end
-  if nil == option._eventControl then
-    return
-  end
-  if OPTION_TYPE.CHECKBUTTON == option._type then
-    for i, eventControl in pairs(option._eventControl) do
-      eventControl:SetCheck(false)
-    end
-  elseif OPTION_TYPE.RADIOBUTTON == option._type then
-    for i, eventControl in pairs(option._eventControl) do
-      eventControl:SetCheck(false)
-    end
-    if nil == option._eventControlCount or option._eventControlCount < 1 then
-      return
-    end
-    for index = 1, option._eventControlCount do
-      for i, eventControl in pairs(option["_eventControl" .. index]) do
-        eventControl:SetCheck(false)
-      end
-    end
-  else
-    if OPTION_TYPE.SLIDER == option._type then
-      for i, eventControl in pairs(option._eventControl) do
-        eventControl:SetControlPos(50)
-      end
-    else
-    end
   end
 end
 function PaGlobal_Option:SearchOption(inputString)
@@ -416,11 +394,6 @@ function PaGlobal_Option._elements.GraphicOption:EventException(value, beforeVal
     PaGlobal_Option:SetGraphicOption(value, isIncrease)
   end
 end
-function PaGlobal_Option:KeyCustomInitValue()
-  for elementName, element in pairs(self._elements) do
-    element._initValue = self:KeyCustomGetString(elementName)
-  end
-end
 function PaGlobal_Option:GetKeyCustomInputType()
   if nil == self._keyCustomInputType then
     _PA_LOG("\237\155\132\236\167\132", "[GetKeyCustomInputType][ RETURN ] \236\157\180\236\131\129\237\149\152\235\139\164....")
@@ -476,12 +449,9 @@ function PaGlobal_Option:CompleteKeyCustomMode()
   end
   self._elements[elementName]._keyCustomInputType = nil
   self._elements[elementName]._curValue = ""
-  self:ApplyButtonEnable(true)
-  self:ResetControlSetting(elementName)
   self:ResetKeyCustomString()
 end
-function PaGlobal_Option:KeyCustomGetString(elementName)
-  local option = self._elements[elementName]
+function PaGlobal_Option:KeyCustomGetString(option)
   local keyCustomString
   if nil ~= option.uiInputType then
     if true == self._keyCustomPadMode then
@@ -504,25 +474,26 @@ function PaGlobal_Option:KeyCustomGetString(elementName)
   end
   return keyCustomString
 end
-function PaGlobal_Option._functions.KeyCustomMode(value)
-  local global = PaGlobal_Option
-  local beforekeyCustomPadMode = global._keyCustomPadMode
-  global._keyCustomPadMode = 1 == value
-  if global._keyCustomPadMode == beforekeyCustomPadMode then
-    return
-  end
-  global:ResetKeyCustomString()
+function PaGlobal_Option:InitKeyCustomize()
+  local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
 end
 function PaGlobal_Option:ResetKeyCustomString()
-  for elementName, option in pairs(self._elements) do
-    if nil ~= option.actionInputType or nil ~= option.uiInputType then
-      self:SetControlSetting(elementName, self:KeyCustomGetString(elementName))
+  if nil == self._currentFrame then
+    return
+  end
+  for frame, frameElement in pairs(self._currentFrame) do
+    local option = frameElement._element
+    if OPTION_TYPE.KEYCUSTOMIZE == option._type then
+      local checkbutton = UI.getChildControl(option._eventGroup, "CheckButton_Template")
+      checkbutton:SetShow(false)
+      self:SetControlSetting(option, self:KeyCustomGetString(option))
     end
   end
 end
 function PaGlobal_Option:Init()
   self:InitUi()
   self:ListInit()
+  self:InitKeyCustomize()
 end
 function PaGlobal_Option:InitValue(gameOptionSetting)
   for name, option in pairs(self._elements) do
@@ -531,6 +502,12 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
     option._name = name
     if nil ~= option.get then
       option._initValue = option:get(gameOptionSetting)
+    end
+  end
+  self._keyCustomPadMode = gameOptionSetting:getGamePadEnable()
+  for name, option in pairs(self._elements) do
+    if OPTION_TYPE.KEYCUSTOMIZE == option._type then
+      option._initValue = self:KeyCustomGetString(option)
     end
   end
 end

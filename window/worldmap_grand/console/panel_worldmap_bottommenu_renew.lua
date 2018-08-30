@@ -64,6 +64,7 @@ function Window_WorldMap_BottomMenuInfo:InitControl()
   for index = 0, self._config._findCount - 1 do
     self._ui._findList[index] = UI.getChildControl(self._ui._static_FindBg, "RadioButton_" .. index + 11)
   end
+  self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui._static_FindBg, "StaticText_RT_ConsoleUI")
 end
 function Window_WorldMap_BottomMenuInfo:InitEvent()
 end
@@ -87,12 +88,21 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(value)
   for index = 0, count - 1 do
     self._ui._currentList[index]:SetCheck(self._currentIndex == index)
   end
+  self._ui._static_KeyGuide_Select:SetPosX(self._ui._currentList[self._currentIndex]:GetPosX() + 5)
   self._ui._staticText_FindDecs:SetText(self._strConfig[self._currentIndex])
 end
 function Window_WorldMap_BottomMenuInfo:FindNPC(index)
   local spawnType = self._spawnType[index]
   local player = getSelfPlayer()
   if nil == player then
+    return
+  end
+  if player:get():getLevel() < 11 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TUTORIAL_ACK"))
+    return
+  end
+  if 0 ~= ToClient_GetMyTeamNoLocalWar() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_LOCALWAR_CANTNAVI_ACK"))
     return
   end
   audioPostEvent_SystemUi(0, 0)

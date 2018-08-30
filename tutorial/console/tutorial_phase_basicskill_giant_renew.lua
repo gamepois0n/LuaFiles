@@ -265,6 +265,7 @@ function PaGlobal_TutorialPhase_BasicSkill_Giant:eventCallUsedSkill_TryBasicSkil
       audioPostEvent_SystemUi(4, 12)
       self._usedSkillCount = self._usedSkillCount + 1
       self:handleChangeStep(self._currentStep)
+      break
     end
   end
 end

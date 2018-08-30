@@ -85,6 +85,7 @@ function searchView_Close()
   if false == _ContentsGroup_RenewUI_SearchMode then
     Panel_Dialog_Search:SetShow(false)
   else
+    PaGlobalFunc_ConsoleKeyGuide_SetState(nil)
     PaGlobalFunc_ConsoleKeyGuide_SetPos()
   end
   additionYaw = 0

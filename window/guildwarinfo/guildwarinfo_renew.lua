@@ -60,12 +60,24 @@ function PAGlobal_GuildWarInfo:InitDefenceGuild()
     text_Vehicle = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_ObjectDeathvalue"),
     text_Member = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_KillValue"),
     text_Die = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_DeathValue"),
-    btn_TopMember = UI.getChildControl(ui_main.leftGuild_Bg, "Button_Record")
+    btn_TopMember = UI.getChildControl(ui_main.leftGuild_Bg, "Button_Record"),
+    title = {}
   }
+  self._defenceGuildInfo.title[0] = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_Castle")
+  self._defenceGuildInfo.title[1] = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_DestroyTitle")
+  self._defenceGuildInfo.title[2] = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_KillTitle")
+  self._defenceGuildInfo.title[3] = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_ObjectDeathTitle")
+  self._defenceGuildInfo.title[4] = UI.getChildControl(ui_main.leftGuild_Bg, "StaticText_DeathTitle")
   self._defenceGuildInfo.btn_TopMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_renew_TopMember(0)")
   local noOccupyDesc = UI.getChildControl(ui_main.notOccupying, "StaticText_NoOccupantInfo_Desc")
   noOccupyDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   noOccupyDesc:SetText(noOccupyDesc:GetText())
+  for tIndex = 0, 4 do
+    self._defenceGuildInfo.title[tIndex]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+    self._defenceGuildInfo.title[tIndex]:SetText(self._defenceGuildInfo.title[tIndex]:GetText())
+    self._defenceGuildInfo.title[tIndex]:addInputEvent("Mouse_On", "PAGlobal_GuildWarInfo_TitleTooltipShow(" .. 0 .. "," .. tIndex .. ")")
+    self._defenceGuildInfo.title[tIndex]:addInputEvent("Mouse_Out", "PAGlobal_GuildWarInfo_TitleTooltipHide()")
+  end
 end
 function PAGlobal_GuildWarInfo:InitOffenceGuild()
   ui_main.rightGuild_Bg_2:SetShow(false)
@@ -86,10 +98,22 @@ function PAGlobal_GuildWarInfo:InitOffenceGuild()
       text_Vehicle = UI.getChildControl(ui_guild_bg, "StaticText_ObjectDeathvalue"),
       text_Member = UI.getChildControl(ui_guild_bg, "StaticText_KillValue"),
       text_Die = UI.getChildControl(ui_guild_bg, "StaticText_DeathValue"),
-      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record")
+      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record"),
+      title = {}
     }
+    self._offenceGuildInfo_2[index].title[0] = UI.getChildControl(ui_guild_bg, "StaticText_Castle")
+    self._offenceGuildInfo_2[index].title[1] = UI.getChildControl(ui_guild_bg, "StaticText_DestroyTitle")
+    self._offenceGuildInfo_2[index].title[2] = UI.getChildControl(ui_guild_bg, "StaticText_KillTitle")
+    self._offenceGuildInfo_2[index].title[3] = UI.getChildControl(ui_guild_bg, "StaticText_ObjectDeathTitle")
+    self._offenceGuildInfo_2[index].title[4] = UI.getChildControl(ui_guild_bg, "StaticText_DeathTitle")
     ui_guild_bg:SetShow(false)
     self._offenceGuildInfo_2[index].btn_TopMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_renew_TopMember(" .. tostring(index + 1) .. ")")
+    for tIndex = 0, 4 do
+      self._offenceGuildInfo_2[index].title[tIndex]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+      self._offenceGuildInfo_2[index].title[tIndex]:SetText(self._offenceGuildInfo_2[index].title[tIndex]:GetText())
+      self._offenceGuildInfo_2[index].title[tIndex]:addInputEvent("Mouse_On", "PAGlobal_GuildWarInfo_TitleTooltipShow(" .. 1 .. "," .. tIndex .. "," .. index .. ")")
+      self._offenceGuildInfo_2[index].title[tIndex]:addInputEvent("Mouse_Out", "PAGlobal_GuildWarInfo_TitleTooltipHide()")
+    end
   end
   for index = 0, 2 do
     local ui_guild_bg = UI.getChildControl(ui_main.rightGuild_Bg_3, "Static_Guild3_" .. tostring(index + 1) .. "_Bg")
@@ -105,10 +129,20 @@ function PAGlobal_GuildWarInfo:InitOffenceGuild()
       text_Vehicle = UI.getChildControl(ui_guild_bg, "StaticText_ObjectDeathvalue"),
       text_Member = UI.getChildControl(ui_guild_bg, "StaticText_KillValue"),
       text_Die = UI.getChildControl(ui_guild_bg, "StaticText_DeathValue"),
-      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record")
+      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record"),
+      title = {}
     }
+    self._offenceGuildInfo_3[index].title[0] = UI.getChildControl(ui_guild_bg, "Static_CatsleIcon")
+    self._offenceGuildInfo_3[index].title[1] = UI.getChildControl(ui_guild_bg, "StaticText_DestroyIcon")
+    self._offenceGuildInfo_3[index].title[2] = UI.getChildControl(ui_guild_bg, "Static_KillIcon")
+    self._offenceGuildInfo_3[index].title[3] = UI.getChildControl(ui_guild_bg, "Static_ObjectDeathIcon")
+    self._offenceGuildInfo_3[index].title[4] = UI.getChildControl(ui_guild_bg, "Static_DeathIcon")
     ui_guild_bg:SetShow(false)
     self._offenceGuildInfo_3[index].btn_TopMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_renew_TopMember(" .. tostring(index + 1) .. ")")
+    for tIndex = 0, 4 do
+      self._offenceGuildInfo_3[index].title[tIndex]:addInputEvent("Mouse_On", "PAGlobal_GuildWarInfo_TitleTooltipShow(" .. 2 .. "," .. tIndex .. "," .. index .. ")")
+      self._offenceGuildInfo_3[index].title[tIndex]:addInputEvent("Mouse_Out", "PAGlobal_GuildWarInfo_TitleTooltipHide()")
+    end
   end
   for index = 0, 3 do
     local ui_guild_bg = UI.getChildControl(ui_main.rightGuild_Bg_4, "Static_Guild4_" .. tostring(index + 1) .. "_Bg")
@@ -124,10 +158,20 @@ function PAGlobal_GuildWarInfo:InitOffenceGuild()
       text_Vehicle = UI.getChildControl(ui_guild_bg, "StaticText_ObjectDeathvalue"),
       text_Member = UI.getChildControl(ui_guild_bg, "StaticText_KillValue"),
       text_Die = UI.getChildControl(ui_guild_bg, "StaticText_DeathValue"),
-      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record")
+      btn_TopMember = UI.getChildControl(ui_guild_bg, "Button_Record"),
+      title = {}
     }
+    self._offenceGuildInfo_4[index].title[0] = UI.getChildControl(ui_guild_bg, "Static_CatsleIcon")
+    self._offenceGuildInfo_4[index].title[1] = UI.getChildControl(ui_guild_bg, "StaticText_DestroyIcon")
+    self._offenceGuildInfo_4[index].title[2] = UI.getChildControl(ui_guild_bg, "Static_KillIcon")
+    self._offenceGuildInfo_4[index].title[3] = UI.getChildControl(ui_guild_bg, "Static_ObjectDeathIcon")
+    self._offenceGuildInfo_4[index].title[4] = UI.getChildControl(ui_guild_bg, "Static_DeathIcon")
     ui_guild_bg:SetShow(false)
     self._offenceGuildInfo_4[index].btn_TopMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_renew_TopMember(" .. tostring(index + 1) .. ")")
+    for tIndex = 0, 4 do
+      self._offenceGuildInfo_4[index].title[tIndex]:addInputEvent("Mouse_On", "PAGlobal_GuildWarInfo_TitleTooltipShow(" .. 3 .. "," .. tIndex .. "," .. index .. ")")
+      self._offenceGuildInfo_4[index].title[tIndex]:addInputEvent("Mouse_Out", "PAGlobal_GuildWarInfo_TitleTooltipHide()")
+    end
   end
   ui_main.rightGuild_Bg_list:changeAnimationSpeed(10)
   ui_main.rightGuild_Bg_list:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FGlobal_GuildWarInfo_ListUpdate")
@@ -158,8 +202,18 @@ function FGlobal_GuildWarInfo_List_Content_Update(contents, guildWrapper, buildi
     text_Vehicle = UI.getChildControl(contents, "StaticText_ObjectDeathvalue"),
     text_Member = UI.getChildControl(contents, "StaticText_KillValue"),
     text_Die = UI.getChildControl(contents, "StaticText_DeathValue"),
-    btn_TopMember = UI.getChildControl(contents, "Button_Record")
+    btn_TopMember = UI.getChildControl(contents, "Button_Record"),
+    title = {}
   }
+  guildInfo.title[0] = UI.getChildControl(contents, "Static_CatsleIcon")
+  guildInfo.title[1] = UI.getChildControl(contents, "StaticText_DestroyIcon")
+  guildInfo.title[2] = UI.getChildControl(contents, "Static_KillIcon")
+  guildInfo.title[3] = UI.getChildControl(contents, "Static_ObjectDeathIcon")
+  guildInfo.title[4] = UI.getChildControl(contents, "Static_DeathIcon")
+  for index = 0, 4 do
+    guildInfo.title[index]:addInputEvent("Mouse_On", "PAGlobal_GuildWarInfo_ListTitleTooltipShow(" .. index .. ")")
+    guildInfo.title[index]:addInputEvent("Mouse_Out", "PAGlobal_GuildWarInfo_ListTitleTooltipHide()")
+  end
   guildInfo.btn_TopMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_renew_TopMember(" .. tostring(rightGuildIndex + 1) .. ")")
   local guildAllianceName = guildWrapper:getAllianceName()
   if "" == guildAllianceName then
@@ -190,6 +244,25 @@ function FGlobal_GuildWarInfo_List_Content_Update(contents, guildWrapper, buildi
   local hpPercent = string.format("%.0f", buildingInfo:getRemainHp() / 10000)
   guildInfo.text_CastleHp:SetText(tostring(hpPercent) .. "%")
   contents:SetShow(true)
+  function PAGlobal_GuildWarInfo_ListTitleTooltipShow(index)
+    local uiControl, name
+    if 0 == index then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_ENDURANCETITLE")
+    elseif 1 == index then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_OBJECTKILLCOUNTTITLE")
+    elseif 2 == index then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_PLAYERKILLCOUNTTITLE")
+    elseif 3 == index then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_SERVANTKILLCOUNTTITLE")
+    elseif 4 == index then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_DEATHCOUNTTITLE")
+    end
+    uiControl = guildInfo.title[index]
+    TooltipSimple_Show(uiControl, name)
+  end
+  function PAGlobal_GuildWarInfo_ListTitleTooltipHide()
+    TooltipSimple_Hide()
+  end
 end
 function FGlobal_GuildWarInfo_renew_Open()
   if false == Panel_Window_GuildWarInfo:GetShow() then
@@ -361,6 +434,7 @@ end
 function FGlobal_GuildWarInfo_renew_Close()
   Panel_Window_GuildWarInfo:SetShow(false)
   FGlobal_GuildWarScore_renew_Close()
+  TooltipSimple_Hide()
 end
 function HandleClicked_GuildWarInfo_renew_Territory(territoryKey)
   local self = PAGlobal_GuildWarInfo
@@ -393,6 +467,34 @@ function GuildWarInfo_renew_UpdatePerFrame(deltaTime)
     ToClient_RequestSiegeScore()
     self._guildWarInfo_renew_UpdateTimer = 0
   end
+end
+function PAGlobal_GuildWarInfo_TitleTooltipShow(uiIndex, tIndex, index)
+  local self = PAGlobal_GuildWarInfo
+  local uiControl, name
+  if 0 == uiIndex then
+    uiControl = self._defenceGuildInfo.title[tIndex]
+  elseif 1 == uiIndex then
+    uiControl = self._offenceGuildInfo_2[index].title[tIndex]
+  elseif 2 == uiIndex then
+    uiControl = self._offenceGuildInfo_3[index].title[tIndex]
+  elseif 3 == uiIndex then
+    uiControl = self._offenceGuildInfo_4[index].title[tIndex]
+  end
+  if 0 == tIndex then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_ENDURANCETITLE")
+  elseif 1 == tIndex then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_OBJECTKILLCOUNTTITLE")
+  elseif 2 == tIndex then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_PLAYERKILLCOUNTTITLE")
+  elseif 3 == tIndex then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_SERVANTKILLCOUNTTITLE")
+  elseif 4 == tIndex then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDWARINFO_DEATHCOUNTTITLE")
+  end
+  TooltipSimple_Show(uiControl, name)
+end
+function PAGlobal_GuildWarInfo_TitleTooltipHide()
+  TooltipSimple_Hide()
 end
 registerEvent("Event_SiegeScoreUpdateData", "FromClient_GuildWarInfoUpdate_renew")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PAGlobal_GuildWarInfo_renew")

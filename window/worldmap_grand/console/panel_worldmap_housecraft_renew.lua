@@ -11,7 +11,8 @@ local Window_WorldMap_HouseCraftInfo = {
     _rowCount = 4,
     _slotMax = 24,
     _craftItemStartPosX,
-    _resourceItemStartPosX
+    _resourceItemStartPosX,
+    _doWorkDefaultPosX
   },
   _craftringConfig = {_none = 0, _craft = 1},
   _houseInfoSS,
@@ -28,6 +29,7 @@ local Window_WorldMap_HouseCraftInfo = {
   _resourceSlotConfig = {createIcon = true, createCount = true},
   _currentWorkerIndex = 0,
   _currentCraftIndex = 0,
+  _onCraftIndex = 0,
   _isCraftable = false,
   _currentScrollValue = 0,
   _scrollMax = 0,
@@ -155,8 +157,8 @@ function Window_WorldMap_HouseCraftInfo:SetCraftItem()
       slot._bg:SetPosX(self._config._craftItemStartPosX + slot._bg:GetSizeX() * Int64toInt32(index % self._config._columnCount))
       slot._bg:SetPosY(self._config._craftItemStartPosX + slot._bg:GetSizeY() * Int64toInt32(index / self._config._columnCount))
       slot.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseCraft_SelectCraftItem(" .. craftItemInfo._index .. ")")
-      slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(" .. index .. "," .. craftItemInfo._index .. ",true)")
-      slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip(" .. craftItemInfo._index .. ")")
+      slot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(" .. craftItemInfo._index .. ")")
+      slot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip()")
       if index < self._config._columnCount then
         slot._bg:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_WorldMap_HouseCraft_ScrollHandle(true)")
       end
@@ -165,11 +167,12 @@ function Window_WorldMap_HouseCraftInfo:SetCraftItem()
       end
       slot._bg:SetShow(true)
       self._craftSlotList[index] = slot
+      slot._bg:SetCheck(itemIndex == self._currentCraftIndex)
     end
   end
   ToClient_padSnapRefreshTarget(self._ui._static_CraftItemListBg)
 end
-function PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(iconIndex, craftIndex)
+function PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(craftIndex)
   local self = Window_WorldMap_HouseCraftInfo
   local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(craftIndex)
   if esSSW:isSet() then
@@ -177,20 +180,21 @@ function PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(iconIndex, craftIndex
     local itemKey = esSS:getFirstDropGroup()._itemKey
     local staticStatusWrapper = getItemEnchantStaticStatus(itemKey)
     PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, staticStatusWrapper, Defines.TooltipTargetType.Item, getScreenSizeX())
+    self._onCraftIndex = craftIndex
   end
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(craftIndex, false)
 end
-function PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip(craftIndex)
+function PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip()
   local self = Window_WorldMap_HouseCraftInfo
   PaGlobalFunc_TooltipInfo_Close()
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(-1, false)
 end
 function PaGlobalFunc_WorldMap_HouseCraft_SelectCraftItem(id)
   local self = Window_WorldMap_HouseCraftInfo
   self._currentCraftIndex = id
-  for index = 0, #self._craftItemList do
-    self._craftSlotList[index]._bg:SetCheck(index == self._currentCraftIndex)
-  end
   self:SetResourceItem()
   self:SetInfo()
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(self._currentCraftIndex, false)
 end
 function Window_WorldMap_HouseCraftInfo:SetInfo()
   local craftItemInfo = self._craftItemList[self._currentCraftIndex]
@@ -295,10 +299,12 @@ function PaGlobalFunc_WorldMap_HouseCraft_ShowResourceTooltip(resourceIndex)
   local resourceKey = self._craftItemList[self._currentCraftIndex]._resource[resourceIndex]._resourceKey
   local staticStatusWrapper = getItemEnchantStaticStatus(resourceKey)
   PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, staticStatusWrapper, Defines.TooltipTargetType.Item, getScreenSizeX())
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(-1, false)
 end
 function PaGlobalFunc_WorldMap_HouseCraft_HideResourceTooltip()
   local self = Window_WorldMap_HouseCraftInfo
   PaGlobalFunc_TooltipInfo_Close()
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(-1, false)
 end
 function Window_WorldMap_HouseCraftInfo:SetWorkerList()
   local esSSW = ToClient_getHouseWorkableItemExchangeByIndex(self._houseInfoSS, 0)
@@ -422,6 +428,8 @@ function Window_WorldMap_HouseCraftInfo:InitControl()
   self._ui._scroll_CraftList = UI.getChildControl(self._ui._static_CraftItemListBg, "Scroll_CraftItem")
   self._ui._static_WarningIcon = UI.getChildControl(self._ui._static_BottomBg, "StaticText_WarningIcon")
   self._ui._keyGuide_DoWork = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
+  self._ui._keyGuide_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
+  self._config._doWorkDefaultPosX = self._ui._keyGuide_DoWork:GetPosX()
 end
 function Window_WorldMap_HouseCraftInfo:InitEvent()
   self._ui._list2_WorkerList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate")
@@ -494,6 +502,8 @@ function PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate(list_content, 
   staticText_name:SetFontColor(ConvertFromGradeToColor(workerGrade))
   staticText_name:SetText(workerInfo._name)
   static_button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(" .. id .. ")")
+  static_button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(" .. id .. ",true)")
+  static_button:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(-1,true)")
   static_image:ChangeTextureInfoName(workerIcon)
   staticText_town:SetText(workerInfo._regionName)
   staticText_workingNameCount:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
@@ -508,6 +518,34 @@ function PaGlobalFunc_WorldMap_HouseCraft_ScrollHandle(isUp)
   if prevScrollValue ~= self._currentScrollValue then
     self:SetCraftItem()
     ToClient_padSnapIgnoreGroupMove()
+    local itemIndex = self._onCraftIndex
+    if true == isUp then
+      itemIndex = itemIndex - self._config._columnCount
+    else
+      itemIndex = itemIndex + self._config._columnCount
+    end
+    if itemIndex < 0 or itemIndex > #self._craftItemList + 1 then
+      PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip()
+      return
+    end
+    PaGlobalFunc_WorldMap_HouseCraft_HideCraftTooltip()
+    PaGlobalFunc_WorldMap_HouseCraft_ShowCraftTooltip(itemIndex)
+  end
+end
+function PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(id, isWorker)
+  local self = Window_WorldMap_HouseCraftInfo
+  if true == isWorker then
+    self._ui._keyGuide_Select:SetShow(id ~= self._currentWorkerIndex)
+  else
+    self._ui._keyGuide_Select:SetShow(id ~= self._currentCraftIndex)
+  end
+  if -1 == id then
+    self._ui._keyGuide_Select:SetShow(false)
+  end
+  if true == self._ui._keyGuide_Select:GetShow() then
+    self._ui._keyGuide_DoWork:SetPosX(self._config._doWorkDefaultPosX)
+  else
+    self._ui._keyGuide_DoWork:SetPosX(self._ui._keyGuide_Select:GetPosX() - 20)
   end
 end
 function PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(id)
@@ -525,6 +563,7 @@ function PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(id)
   self:SetInfo()
   self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, self._currentWorkerIndex))
+  PaGlobalFunc_WorldMap_HouseCraft_SetSelectButton(self._currentWorkerIndex, true)
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseCraft_WorkerDataUpdateByHouse(rentHouseWrapper)
   local self = Window_WorldMap_HouseCraftInfo
@@ -571,6 +610,7 @@ function PaGlobalFunc_WorldMap_HouseCraft_Open(houseInfoSSWrapper, _param)
     PaGlobalFunc_WorldMap_HouseCraft_Close()
     return
   end
+  self._currentCraftIndex = 0
   self:InitData(houseInfoSSWrapper, _param)
   PaGlobalFunc_WorldMap_HouseCraft_SelectWorker(0)
   PaGlobalFunc_WorldMap_HouseCraft_SelectCraftItem(0)
@@ -584,6 +624,7 @@ function PaGlobalFunc_WorldMap_HouseCraft_Close()
   self._ui._progress2_WorkTime:SetProgressRate(0)
   FGlobal_Hide_Tooltip_Work(nil, true)
   Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_WorldMapHouseManager_Open()
   PaGlobalFunc_WorldMap_HouseCraft_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseCraft_luaLoadComplete()

@@ -88,29 +88,6 @@ local MotionTable = {
   [38] = combat,
   [39] = combat
 }
-function PaGlobalFunc_Customization_Voice_UpdatePerFrame(deltaTime)
-  local self = Customization_VoiceInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_Voice_SetBoneControl(false)
-    end
-    return
-  end
-end
-function PaGlobalFunc_Customization_Voice_SetBoneControl(isSet)
-  local self = Customization_VoiceInfo
-  if false == isSet then
-    self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(1)
-    Panel_Customizing_Voice:ignorePadSnapUpdate(false)
-    ToClient_StartOrEndShapeBoneControlStart(false)
-  else
-    self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(9)
-    Panel_Customizing_Voice:ignorePadSnapUpdate(true)
-    ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
 function Customization_VoiceInfo:ClearContentList()
   for _, content in pairs(self._typeImage) do
     if nil ~= content then
@@ -288,23 +265,25 @@ function Customization_VoiceInfo:UpdateMotionFocus(index)
     self._ui._static_motionSelect:SetShow(false)
   end
 end
+function PaGlobalFunc_Customization_Voice_UpdateSlide()
+  local self = Customization_VoiceInfo
+  local range = 100
+  local value = self._ui._slider_Voice:GetControlPos() * range
+  local slider = self._ui._slider_Voice
+  local offset = math.cos(value / 100 * math.pi) * 2
+  self._ui._slider_Progress:SetProgressRate(value)
+  self._ui._slider_DisplayBtn:SetPosX(slider:GetControlButton():GetPosX())
+  applyVoicePitch(value)
+end
 function PaGlobalFunc_Customization_Voice_SlideOn()
   local self = Customization_VoiceInfo
-  PaGlobalFunc_Customization_SetKeyGuide(3)
-  self._ui._slider_VoiceFocus:SetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(6)
 end
 function PaGlobalFunc_Customization_Voice_SlideOut()
   local self = Customization_VoiceInfo
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_Voice_GetShow() then
-    PaGlobalFunc_Customization_SetKeyGuide(1)
+    PaGlobalFunc_Customization_SetKeyGuide(0)
   end
-  self._ui._slider_VoiceFocus:SetShow(false)
-end
-function PaGlobalFunc_Customization_Voice_UpdateSlide()
-  local self = Customization_VoiceInfo
-  local range = 100
-  local ratio = self._ui._slider_Voice:GetControlPos()
-  applyVoicePitch(ratio * range)
 end
 function Customization_VoiceInfo:InitControl()
   self._ui._radioButton_TypeTemplate = UI.getChildControl(self._ui._static_TypeGroup, "RadioButton_TypeImage_Template")
@@ -327,6 +306,8 @@ function Customization_VoiceInfo:InitControl()
   self._ui._slider_Voice = UI.getChildControl(self._ui._static_SliderVoiceBg, "Slider_Voice")
   self._ui._sliderButton_Voice = UI.getChildControl(self._ui._slider_Voice, "Slider_Button")
   self._ui._sliderButton_Voice:SetIgnore(true)
+  self._ui._slider_Progress = UI.getChildControl(self._ui._slider_Voice, "Progress2_1")
+  self._ui._slider_DisplayBtn = UI.getChildControl(self._ui._slider_Voice, "Slider_DisplayButton")
   if true == _ContentsGroup_isContentsCustomizationVoice then
     self._ui._slider_Voice:SetInterval(290)
   else
@@ -337,8 +318,6 @@ function Customization_VoiceInfo:InitEvent()
   self._ui._slider_Voice:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Voice_UpdateSlide()")
   self._ui._slider_Voice:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Voice_SlideOn()")
   self._ui._slider_Voice:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Voice_SlideOut()")
-  Panel_Customizing_Voice:RegisterUpdateFunc("PaGlobalFunc_Customization_Voice_UpdatePerFrame")
-  Panel_Customizing_Voice:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Voice_SetBoneControl(true)")
 end
 function Customization_VoiceInfo:InitRegister()
   registerEvent("EventCloseVoiceUI", "PaGlobalFunc_Customization_Voice_CloseVoiceUI")
@@ -371,15 +350,19 @@ function PaGlobalFunc_Customization_Voice_Open()
   if true == PaGlobalFunc_Customization_Voice_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(1)
+  PaGlobalFunc_Customization_Voice_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Voice_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Voice_Close()")
-  PaGlobalFunc_Customization_Voice_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_Voice_SetShow(isShow, isAni)
   Panel_Customizing_Voice:SetShow(isShow, isAni)
 end
 function PaGlobalFunc_Customization_Voice_GetShow()
   return Panel_Customizing_Voice:GetShow()
+end
+function PaGlobalFunc_Customization_Voice_GetPanel()
+  return Panel_Customizing_Voice
 end
 PaGlobalFunc_FromClient_Customization_Voice_luaLoadComplete()

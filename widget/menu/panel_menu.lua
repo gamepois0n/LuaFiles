@@ -1410,6 +1410,9 @@ function Panel_Menu_ShowToggle()
   return false
 end
 function _Panel_Menu_OpenLimit()
+  if nil == getSelfPlayer() then
+    return
+  end
   local playerLevel = getSelfPlayer():get():getLevel()
   for index = 1, maxButtonCount do
     menuButtonBG[index]:SetShow(false)

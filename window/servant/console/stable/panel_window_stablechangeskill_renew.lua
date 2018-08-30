@@ -657,6 +657,7 @@ function PaGlobalFunc_StableChangeSkill_PadButtonUP_Y()
   local self = Panel_Window_StableChangeSkill_info
   self._value.isAction = false
   self._value.isActionTime = 0
+  self._ui.circularProgress_Press:SetProgressRate(0)
   local slot = self._skillSlot[self._value.currentSlotIndex]
   if nil == slot then
     return

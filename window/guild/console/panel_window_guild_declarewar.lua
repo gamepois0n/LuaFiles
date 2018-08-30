@@ -15,6 +15,7 @@ function WarDeclare:open()
   else
     self._ui.txt_Desc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_LETSWARHELP"))
   end
+  self._ui.edit_GuildName:SetEditText("", true)
   _panel:SetShow(true)
 end
 function WarDeclare:close()
@@ -30,8 +31,10 @@ function WarDeclare:init()
   self:registEvent()
 end
 function WarDeclare:registEvent()
+  self._ui.edit_GuildName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_WarDeclare_ClearFocusEdit()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_WarDeclare_Confirm()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WarDeclare_SetFocusEdit()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_B, "PaGlobalFunc_WarDeclare_ClearFocusEdit()")
 end
 function PaGlobalFunc_WarDeclare_Open()
   local self = WarDeclare
@@ -63,7 +66,19 @@ function PaGlobalFunc_WarDeclare_SetFocusEdit()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
     return
   end
+  ClearFocusEdit()
   SetFocusEdit(self._ui.edit_GuildName)
+  self._ui.edit_GuildName:SetEditText(self._ui.edit_GuildName:GetEditText(), true)
+end
+function PaGlobalFunc_WarDeclare_ClearFocusEdit()
+  local self = WarDeclare
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
+    return
+  end
+  self._ui.edit_GuildName:SetEditText(self._ui.edit_GuildName:GetEditText(), true)
+  ClearFocusEdit()
+  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WarDeclare_SetFocusEdit()")
 end
 function InputMLUp_WarDeclare_Confirm()
   local self = WarDeclare

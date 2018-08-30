@@ -542,19 +542,15 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   local text_Dialog = UI.getChildControl(list_content, "StaticText_Dialog_Name")
   local textNeed_Dialog = UI.getChildControl(list_content, "StaticText_Dialog_Needs")
   local button_A = UI.getChildControl(list_content, "Button_A")
-  button_A:SetShow(false)
   local needItemIcon = UI.getChildControl(list_content, "Static_NeedItemIcon")
   local needWpIcon = UI.getChildControl(list_content, "Static_NeedEnergyIcon")
   local dialogText = dialogButton:getText()
   btn_Dialog:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(" .. id .. ")")
   btn_Dialog:addInputEvent("Mouse_On", "PaGlobalFunc_MainDialog_Right_HandleOnDialogButton(" .. id .. ")")
-  button_A:SetShow(false)
-  if self._value.currentDialogButtonIndex == id then
-    button_A:SetShow(true)
-  end
   static_TypeIcon:SetShow(false)
   textNeed_Dialog:SetShow(false)
   btn_Dialog:SetMonoTone(false)
+  btn_Dialog:setRenderTexture(btn_Dialog:getBaseTexture())
   text_Dialog:SetText(dialogText)
   needItemIcon:SetShow(false)
   needWpIcon:SetShow(false)
@@ -690,10 +686,6 @@ function PaGlobalFunc_MainDialog_Right_HandleOnDialogButton(id)
   local self = Panel_Dialog_Main_Right_Info
   self._value.lastDialogButtonIndex = self._value.currentDialogButtonIndex
   self._value.currentDialogButtonIndex = id
-  self._ui.list2_Dialog_List:requestUpdateByKey(toInt64(0, self._value.currentDialogButtonIndex))
-  if -1 ~= self._value.lastDialogButtonIndex then
-    self._ui.list2_Dialog_List:requestUpdateByKey(toInt64(0, self._value.lastDialogButtonIndex))
-  end
 end
 function PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(index, type)
   local self = Panel_Dialog_Main_Right_Info
@@ -760,9 +752,16 @@ function PaGlobalFunc_MainDialog_Right_CheckSceneChange(_npcWord)
     return _npcWord
   end
   local secondParam = string.split(firstParam[2], "(")
-  local rawMessage = firstParam[1]
+  local firstMessage = firstParam[1]
   if "ChangeScene" == secondParam[1] then
-    return rawMessage
+    local returntext = firstMessage
+    local afterChangeScene = string.split(secondParam[2], "}")
+    if nil == afterChangeScene[2] then
+      return returntext
+    else
+      returntext = returntext .. afterChangeScene[2]
+      return returntext
+    end
   else
     return _npcWord
   end

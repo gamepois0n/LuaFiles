@@ -114,6 +114,8 @@ function deliveryRequest:init()
   end
   UI.deleteControl(self.slotBG)
   self.slotBG = nil
+  Panel_Window_Delivery_Request:SetChildIndex(self.comboBox_Carriage, Panel_Window_Delivery_Request:getChildControlCount())
+  Panel_Window_Delivery_Request:SetChildIndex(self.comboBox_Destination, Panel_Window_Delivery_Request:getChildControlCount())
 end
 function deliveryRequest:update()
   local basePrice = 0

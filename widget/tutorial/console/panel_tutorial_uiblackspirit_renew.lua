@@ -75,7 +75,6 @@ function PaGlobal_TutorialUiBlackSpirit:showSuggestCallSpiritUi()
   local blackSpiritKeyString = keyCustom_GetString_UiKey(CppEnums.UiInputType.UiInputType_BlackSpirit)
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_46") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_14"))
-    PaGlobal_TutorialUiBlackSpirit:setGuideKey("buttonDpadDown", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_XBOX_SUMMON_BLACKSPIRIT"))
   end)
 end
 function PaGlobal_TutorialUiBlackSpirit:resetSpiritUiForTutorial()

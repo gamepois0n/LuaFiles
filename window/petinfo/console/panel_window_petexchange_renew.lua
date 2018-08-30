@@ -78,14 +78,12 @@ function petExchange:initControl()
   petExchangeUI._radioButton_Bface:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_PetExchange_Buttoncheck( true, " .. self._config._BPetInfo .. " )")
   petExchangeUI._radioButton_Noface:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_PetExchange_Buttoncheck( true )")
   petExchangeUI._edit_Search = UI.getChildControl(petExchangeUI._static_BottomBG, "Edit_Search")
+  petExchangeUI._staticText_ChangeName_ConsoleUI = UI.getChildControl(petExchangeUI._edit_Search, "StaticText_ChangeName_ConsoleUI")
   petExchangeUI._staticText_Exchange_ConsoleUI = UI.getChildControl(petExchangeUI._static_BottomKeyBG, "StaticText_Exchange_ConsoleUI")
   petExchangeUI._staticText_Cancel_ConsoleUI = UI.getChildControl(petExchangeUI._static_BottomKeyBG, "StaticText_Cancel_ConsoleUI")
-  petExchangeUI._staticText_ChangeName_ConsoleUI = UI.getChildControl(petExchangeUI._static_BottomKeyBG, "StaticText_ChangeName_ConsoleUI")
   petExchangeUI._staticText_Confirm_ConsoleUI = UI.getChildControl(petExchangeUI._static_BottomKeyBG, "StaticText_Confirm_ConsoleUI")
   local xPos = petExchangeUI._staticText_Cancel_ConsoleUI:GetPosX() - petExchangeUI._staticText_Confirm_ConsoleUI:GetTextSizeX() - self._config._buttonGap
   petExchangeUI._staticText_Confirm_ConsoleUI:SetPosX(xPos)
-  xPos = xPos - petExchangeUI._staticText_ChangeName_ConsoleUI:GetTextSizeX() - self._config._buttonGap
-  petExchangeUI._staticText_ChangeName_ConsoleUI:SetPosX(xPos)
   xPos = xPos - petExchangeUI._staticText_Exchange_ConsoleUI:GetTextSizeX() - self._config._buttonGap
   petExchangeUI._staticText_Exchange_ConsoleUI:SetPosX(xPos)
   petExchangeUI._staticText_Exchange_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_ExchangeConfirm()")
@@ -210,6 +208,7 @@ function petExchange:updateSlot()
         if ExchangablePetCount >= self._slidIndex and ExchangablePetCount < self._slidIndex + FrameConfig._SlotCount then
           local slot = self._BSlotContents[UIIndex]
           slot._static_PetIcon:ChangeTextureInfoNameAsync(petIconPath)
+          slot._staticText_Name:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
           slot._staticText_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. petLevel .. " " .. petName)
           slot._staticText_Tier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
           slot._static_PetIcon:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_SelectBPet(\"" .. tostring(petNo) .. "\")")
@@ -325,6 +324,7 @@ function petExchange:setAPetSlotData(petData)
   local isJokerPetUse = petStaticStatus._isJokerPetUse
   local petExchangeUI = self._ui
   petExchangeUI._static_PetIconA:ChangeTextureInfoNameAsync(petIconPath)
+  petExchangeUI._staticText_NameA:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   petExchangeUI._staticText_NameA:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. petLevel .. " " .. petName)
   petExchangeUI._staticText_TierA:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
   self._select_APetRace = petRace
@@ -363,15 +363,22 @@ function petExchange:confirm()
       LookChange = self._config._BPetInfo
     end
     ToClient_requestPetFusion(petName, tonumber64(self._select_APetNo), tonumber64(self._select_BPetNo), SkillInherit, LookChange)
+    petExchange:close()
+    PaGlobalFunc_Petlist_TemporaryOpen()
+    FGlobal_PetList_ClosePopupMenu()
+  end
+  local cancle_compose = function()
+    Panel_Window_PetExchange_Renew:SetShow(true)
   end
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "PANEL_PETLIST_PETCOMPOSE_MSGCONTENT")
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANTMIX_TITLE"),
     content = messageBoxMemo,
     functionYes = confirm_compose,
-    functionNo = MessageBox_Empty_function,
+    functionNo = cancle_compose,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
+  Panel_Window_PetExchange_Renew:SetShow(false)
   MessageBox.showMessageBox(messageBoxData)
 end
 function petExchange:setPosition()
@@ -408,8 +415,6 @@ function Input_PetExchangeName_KeyboardEnd(str)
 end
 function PaGlobalFunc_PetExchange_ExchangeConfirm()
   petExchange:confirm()
-  petExchange:close()
-  FGlobal_PetList_ClosePopupMenu()
 end
 function petExchange:selectBPet(petNoStr, UIIndex)
   self._select_BPetNo = petNoStr

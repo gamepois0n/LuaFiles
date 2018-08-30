@@ -512,6 +512,37 @@ local baseCount = 0
 function Fglobal_Challenge_UpdateData()
   Challenge_Update()
 end
+local GetChallengeRewardFirstIndex = function(groupIndex)
+  local length = ToClient_GetChallengeRewardInfoCount()
+  local count = -1
+  local prevGroup = -1
+  for index = 0, length - 1 do
+    local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(index)
+    if nil ~= rewardWrapper and (prevGroup ~= rewardWrapper:getOptionalType() or 0 == rewardWrapper:getOptionalType()) then
+      count = count + 1
+      prevGroup = rewardWrapper:getOptionalType()
+    end
+    if count == groupIndex then
+      return index
+    end
+  end
+  _PA_ASSERT(false, "\235\143\132\236\160\132\234\179\188\236\160\156 \235\179\180\236\131\129 \235\166\172\236\138\164\237\138\184\236\151\144 \236\151\134\235\138\148 GroupIndex\234\176\128 \235\147\164\236\150\180\236\153\148\236\138\181\235\139\136\235\139\164. GroupIndex = " .. tostring(groupIndex))
+  return -1
+end
+local GetChallengeRewardGroupCount = function()
+  local length = ToClient_GetChallengeRewardInfoCount()
+  local count = 0
+  local prevGroup = -1
+  local optionalCount = 0
+  for index = 0, length - 1 do
+    local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(index)
+    if nil ~= rewardWrapper and (prevGroup ~= rewardWrapper:getOptionalType() or 0 == rewardWrapper:getOptionalType()) then
+      count = count + 1
+      prevGroup = rewardWrapper:getOptionalType()
+    end
+  end
+  return count
+end
 function Challenge_Update()
   totalSlotCount = 0
   _selectedReward_ChallengeIndex = nil
@@ -590,7 +621,7 @@ function Challenge_Update()
           baseCount = challengeWrapper:getBaseRewardCount()
         end
       elseif 5 == _tapValue then
-        challengeWrapper = ToClient_GetChallengeRewardInfoWrapper(list_Idx + _scrollIndex)
+        challengeWrapper = ToClient_GetChallengeRewardInfoWrapper(GetChallengeRewardFirstIndex(list_Idx + _scrollIndex))
         if nil ~= challengeWrapper then
           baseCount = challengeWrapper:getBaseRewardCount()
         end
@@ -743,7 +774,7 @@ function Challenge_Update()
       end
     end
   elseif 5 == _tapValue then
-    controlValueCount = rewardCompleteCount
+    controlValueCount = GetChallengeRewardGroupCount()
     UIScroll.SetButtonSize(_scroll, controlCount, controlValueCount)
     if controlValueCount > 0 then
       if controlValueCount < controlCount then
@@ -761,7 +792,8 @@ function Challenge_Update()
       maxCount = controlValueCount
       local viewCount = 4
       for challenge_Idx = 0, controlValueCount - 1 do
-        local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(challenge_Idx + _scrollIndex)
+        local firstIndex = GetChallengeRewardFirstIndex(challenge_Idx + _scrollIndex)
+        local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(firstIndex)
         if nil ~= rewardWrapper then
           _content[challenge_Idx].Title:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
           _content[challenge_Idx].Title:SetText(rewardWrapper:getName())
@@ -769,7 +801,12 @@ function Challenge_Update()
           _content[challenge_Idx].BG:SetShow(true)
           _content[challenge_Idx].Title:SetShow(true)
           _content[challenge_Idx].Desc:SetShow(true)
-          local existRewardCount = rewardWrapper:getRewardCount()
+          local existRewardCount
+          if 0 == rewardWrapper:getOptionalType() then
+            existRewardCount = rewardWrapper:getRewardCount()
+          else
+            existRewardCount = ToClient_GetChallengeRewardCountByOptionalType(rewardWrapper:getOptionalType())
+          end
           if existRewardCount > 0 then
             _content[challenge_Idx].contentComplete:SetShow(false)
             _content[challenge_Idx].normalText:SetShow(true)
@@ -777,13 +814,13 @@ function Challenge_Update()
             _content[challenge_Idx].rewardBG:SetShow(true)
             _content[challenge_Idx].btnGetReward:SetShow(true)
             _content[challenge_Idx].btnGetReward:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_BTNGETREWARD", "existRewardCount", existRewardCount))
-            _content[challenge_Idx].btnGetReward:addInputEvent("Mouse_LUp", "HandleClicked_Reward_Show( " .. challenge_Idx + _scrollIndex .. ", " .. _scrollIndex .. " )")
+            _content[challenge_Idx].btnGetReward:addInputEvent("Mouse_LUp", "HandleClicked_Reward_Show( " .. firstIndex .. ", " .. _scrollIndex .. " )")
             _content[challenge_Idx].BG:SetIgnore(false)
             _content[challenge_Idx].btnGetReward:SetMonoTone(false)
             _content[challenge_Idx].btnGetReward:SetIgnore(false)
           else
           end
-          ChallengeReward_Update(rewardWrapper, challenge_Idx + _scrollIndex, challenge_Idx)
+          ChallengeReward_Update(rewardWrapper, firstIndex, challenge_Idx)
           if challenge_Idx == viewCount - 1 then
             return
           end

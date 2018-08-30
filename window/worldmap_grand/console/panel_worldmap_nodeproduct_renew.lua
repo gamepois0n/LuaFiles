@@ -9,13 +9,15 @@ local Window_WorldMap_NodeProductInfo = {
     _financeGapY = 110,
     _panelDefaultSizeY,
     _centerBgDefaultPosY,
-    _bottomBgDefaultPosY
+    _bottomBgDefaultPosY,
+    _doWorkDefaultPosX
   },
   _nodeTitleStartPosX = 0,
   _workerInfoList = {},
   _currentNodeInfo = {},
   _currentNodeIndex = 0,
   _currentWorkerIndex = 0,
+  _currentFocusWorkerIndex = 0,
   _workerCount = 0,
   _subNodeCount = 0,
   _subNodeInfoList = {},
@@ -135,6 +137,7 @@ function Window_WorldMap_NodeProductInfo:InitControl()
   self._ui._static_KeyGuideRB = UI.getChildControl(self._ui._static_NodeListBg, "Static_RB_ConsoleUI")
   self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
   self._ui._static_KeyGuide_DoWork = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
+  self._config._doWorkDefaultPosX = self._ui._static_KeyGuide_DoWork:GetPosX()
 end
 function Window_WorldMap_NodeProductInfo:InitEvent()
   self._ui._list2_Worker:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate")
@@ -283,6 +286,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_SelectNode(value)
   self._ui._radioButton_NodeTemplate:SetText(self._currentNodeInfo._nodeName)
   PaGlobalFunc_WorldMap_NodeProduct_SelectWorker(self._currentWorkerIndex)
   self:UpdateNodeUI(self._currentWorkerIndex)
+  ToClient_padSnapResetControl()
 end
 function PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate(list_content, key)
   local self = Window_WorldMap_NodeProductInfo
@@ -291,7 +295,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate(list_content,
   if nil == workerInfo then
     return
   end
-  local button = UI.getChildControl(list_content, "Button_ButtonBg")
+  local button = UI.getChildControl(list_content, "Radiobutton_ButtonBg")
   local workerImage = UI.getChildControl(list_content, "Static_WorkerImage")
   local EnergyProgress = UI.getChildControl(list_content, "Progress2_EnergyProgress")
   local workerName = UI.getChildControl(list_content, "StaticText_WorkerTitle")
@@ -301,6 +305,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate(list_content,
   local workingCount = UI.getChildControl(list_content, "StaticText_WorkingNameCount")
   local checkIcon = UI.getChildControl(list_content, "Static_CheckIcon")
   checkIcon:SetShow(id == self._currentWorkerIndex)
+  button:SetCheck(id == self._currentWorkerIndex)
   local workerWrapperLua = getWorkerWrapper(workerInfo._workerNo_s64, true)
   local workerIcon = workerWrapperLua:getWorkerIcon()
   local workerGrade = workerWrapperLua:getGrade()
@@ -312,6 +317,8 @@ function PaGlobalFunc_WorldMap_NodeProduct_List2EventControlCreate(list_content,
   workerName:SetFontColor(ConvertFromGradeToColor(workerGrade))
   workerName:SetText(workerInfo._name)
   button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_NodeProduct_SelectWorker(" .. id .. ")")
+  button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_NodeProduct_SetSelectButton(" .. id .. ")")
+  button:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_NodeProduct_SetSelectButton(-1)")
   workerImage:ChangeTextureInfoName(workerIcon)
   workerTown:SetText(workerInfo._regionName)
   local progressRate = ToClient_getWorkingProgress(workerInfo._workerNo_s64) * 100000
@@ -344,6 +351,20 @@ function PaGlobalFunc_WorldMap_NodeProduct_SelectWorker(id)
   self._ui._list2_Worker:requestUpdateByKey(toInt64(0, prevWorker))
   self._ui._list2_Worker:requestUpdateByKey(toInt64(0, self._currentWorkerIndex))
   self:UpdateNodeUI(self._currentWorkerIndex)
+  PaGlobalFunc_WorldMap_NodeProduct_SetSelectButton(-1)
+end
+function PaGlobalFunc_WorldMap_NodeProduct_SetSelectButton(index)
+  local self = Window_WorldMap_NodeProductInfo
+  self._currentFocusWorkerIndex = index
+  self._ui._static_KeyGuide_Select:SetShow(self._currentWorkerIndex ~= index)
+  if -1 == index then
+    self._ui._static_KeyGuide_Select:SetShow(false)
+  end
+  if true == self._ui._static_KeyGuide_Select:GetShow() then
+    self._ui._static_KeyGuide_DoWork:SetPosX(self._config._doWorkDefaultPosX)
+  else
+    self._ui._static_KeyGuide_DoWork:SetPosX(self._ui._static_KeyGuide_Select:GetPosX() - 20)
+  end
 end
 function Window_WorldMap_NodeProductInfo:Clear()
   self._prevGetWearHouseKey = -1
@@ -423,8 +444,10 @@ function Window_WorldMap_NodeProductInfo:UISetForFinance(workerIndex)
   self._ui._staticText_FinanceTitle:SetText(nodeInfo._nodeName)
   self._ui._staticText_FinanceDesc:SetText(nodeInfo._isFinanceDesc)
   self._ui._static_WarningIcon:SetShow(nil ~= workerInfo)
+  self._ui._static_KeyGuide_DoWork:SetShow(false)
   if true == self._currentResourceList[0]._isCraftable then
     self._ui._static_WarningIcon:SetShow(false)
+    self._ui._static_KeyGuide_DoWork:SetShow(true)
   end
   self._ui._staticText_ProductName:SetText(self._ui._staticText_ProductName:GetText() .. "(" .. self._currentResourceList[0]._haveCount .. " / " .. self._currentResourceList[0]._needCount .. ")")
 end
@@ -497,6 +520,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_Open(explorationNodeInClient)
   PaGlobalFunc_WorldMap_NodeProduct_SetShow(true, false)
   self:SetNodeData(explorationNodeInClient)
   PaGlobalFunc_WorldMap_RingMenu_Close()
+  PaGlobalFunc_WorldMap_TopMenu_Close()
 end
 function PaGlobalFunc_WorldMap_NodeProduct_Close()
   local self = Window_WorldMap_NodeProductInfo
@@ -505,6 +529,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_Close()
   end
   self:Clear()
   PaGlobalFunc_WorldMap_RingMenu_Open()
+  PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_NodeProduct_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_NodeProduct_luaLoadComplete()

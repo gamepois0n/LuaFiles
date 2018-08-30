@@ -125,7 +125,6 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:showSuggestInteraction(isInterac
   elseif true == isInteractable then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_9") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_10"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonY", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_ActionInteraction"))
     end)
   end
 end
@@ -178,7 +177,6 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:changeStepFollowQuest()
     self._lastSpiritUiData._stringYellow = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_75")
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_74") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_75"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonRSM", PAGetString(Defines.StringSheet_GAME, "PANEL_DIALOG_NPCSHOP_KEY_MOVE"), "buttonA", PAGetString(Defines.StringSheet_RESOURCE, "INTERACTION_BTN_USEITEM"))
     end)
   end
 end
@@ -226,7 +224,6 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:changeStepFindSkillInstructor()
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", self._lastSpiritUiData._stringBlack .. " " .. self._lastSpiritUiData._stringYellow)
     end)
-    PaGlobal_TutorialUiBlackSpirit:setGuideKey("buttonLSC", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_ActionAutoRun"))
   end
 end
 function PaGlobal_TutorialPhase_CallBlackSpirit:eventCallClearFindSkillInstructorQuest(isAccept, questGroupNo, questId)

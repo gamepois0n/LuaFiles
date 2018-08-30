@@ -19,7 +19,12 @@ local Panel_Widget_Party_info = {
     static_MpBg = nil,
     progress2_Mp = nil,
     staticText_Level = nil,
-    staticText_Name = nil
+    staticText_Name = nil,
+    static_ExpBonusBg = nil,
+    static_Bubble1 = nil,
+    static_Bubble2 = nil,
+    static_Bubble3 = nil,
+    static_Bubble4 = nil
   },
   _value = {
     partyType = CppEnums.PartyType.ePartyType_Normal,
@@ -268,7 +273,6 @@ function Panel_Widget_Party_info:registerMessageHandler()
   registerEvent("ResponseParty_refuse", "FromClient_ResponseParty_refuse")
   registerEvent("ResponseParty_changeLeader", "FromClient_ResponseParty_changeLeader")
   registerEvent("ResponseParty_withdraw", "FromClient_ResponseParty_withdraw")
-  registerEvent("FromClient_UpdatePartyExperiencePenalty", "FromClient_UpdatePartyExperiencePenalty")
   registerEvent("FromClient_NotifyPartyMemberPickupItem", "FromClient_NotifyPartyMemberPickupItem")
   registerEvent("FromClient_NotifyPartyMemberPickupItemFromPartyInventory", "FromClient_NotifyPartyMemberPickupItemFromPartyInventory")
   registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_Party")
@@ -316,9 +320,15 @@ function Panel_Widget_Party_info:resize()
     changePositionBySever(Panel_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_Party)
+  if true == PaGlobalFunc_TopIcon_GetShowAllCheck() then
+    Panel_Party:SetPosY(PaGlobalFunc_TopIcon_GetPartyWidgetPosY() + 10)
+  else
+    Panel_Party:ComputePos()
+  end
 end
 function Panel_Widget_Party_info:childControl()
   self._ui.static_Party_Template = UI.getChildControl(Panel_Party, "Static_Party_Template")
+  self._ui.static_ExpBonusBg = UI.getChildControl(self._ui.static_Party_Template, "Static_ExpBonusBg")
   self._ui.static_Party_Template:SetShow(false)
   self._pos.templeteSizeX = self._ui.static_Party_Template:GetSizeX()
   self._pos.templeteSizeY = self._ui.static_Party_Template:GetSizeY()
@@ -345,6 +355,11 @@ function Panel_Widget_Party_info:createControl()
       progress2_Hp = nil,
       static_MpBg = nil,
       progress2_Mp = nil,
+      static_ExpBonusBg = nil,
+      static_Bubble1 = nil,
+      static_Bubble2 = nil,
+      static_Bubble3 = nil,
+      static_Bubble4 = nil,
       staticText_Level = nil,
       staticText_Name = nil
     }
@@ -374,6 +389,11 @@ function Panel_Widget_Party_info:createControl()
     slot.progress2_Mp = UI.createAndCopyBasePropertyControl(self._ui.static_MpBg, "Progress2_Mp", slot.static_MpBg, "Progress2_Mp_" .. index)
     slot.staticText_Level = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "StaticText_Level", slot.templete, "StaticText_Level_" .. index)
     slot.staticText_Name = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "StaticText_Name", slot.templete, "StaticText_Name_" .. index)
+    slot.static_ExpBonusBg = UI.createAndCopyBasePropertyControl(self._ui.static_Party_Template, "Static_ExpBonusBg", slot.templete, "Static_ExpBonusBg_" .. index)
+    slot.static_Bubble1 = UI.createAndCopyBasePropertyControl(self._ui.static_ExpBonusBg, "Static_Bubble1", slot.static_ExpBonusBg, "Static_Bubble1_" .. index)
+    slot.static_Bubble2 = UI.createAndCopyBasePropertyControl(self._ui.static_ExpBonusBg, "Static_Bubble2", slot.static_ExpBonusBg, "Static_Bubble2_" .. index)
+    slot.static_Bubble3 = UI.createAndCopyBasePropertyControl(self._ui.static_ExpBonusBg, "Static_Bubble3", slot.static_ExpBonusBg, "Static_Bubble3_" .. index)
+    slot.static_Bubble4 = UI.createAndCopyBasePropertyControl(self._ui.static_ExpBonusBg, "Static_Bubble4", slot.static_ExpBonusBg, "Static_Bubble4_" .. index)
     slot.slotNo = index
     slot:setPos(index)
     self._partyMemberUI[index] = slot
@@ -396,6 +416,32 @@ function Panel_Widget_Party_info:setInfo(index)
     self._partyMemberUI[index].static_ClassIcon:SetColor(self._color.dead)
   elseif self._partyMemberData[index]._nowHp >= 1 then
     self._partyMemberUI[index].static_ClassIcon:SetColor(self._color.default)
+  end
+  if true == self._partyMemberData[index]._isSelf then
+    self._partyMemberUI[index].static_ExpBonusBg:SetShow(false)
+  else
+    self._partyMemberUI[index].static_ExpBonusBg:SetShow(true)
+    if 0 == self._partyMemberData[index]._distance then
+      self._partyMemberUI[index].static_Bubble1:SetShow(true)
+      self._partyMemberUI[index].static_Bubble2:SetShow(false)
+      self._partyMemberUI[index].static_Bubble3:SetShow(false)
+      self._partyMemberUI[index].static_Bubble4:SetShow(false)
+    elseif 1 == self._partyMemberData[index]._distance then
+      self._partyMemberUI[index].static_Bubble1:SetShow(true)
+      self._partyMemberUI[index].static_Bubble2:SetShow(true)
+      self._partyMemberUI[index].static_Bubble3:SetShow(false)
+      self._partyMemberUI[index].static_Bubble4:SetShow(false)
+    elseif 2 == self._partyMemberData[index]._distance then
+      self._partyMemberUI[index].static_Bubble1:SetShow(true)
+      self._partyMemberUI[index].static_Bubble2:SetShow(true)
+      self._partyMemberUI[index].static_Bubble3:SetShow(true)
+      self._partyMemberUI[index].static_Bubble4:SetShow(false)
+    elseif 3 == self._partyMemberData[index]._distance then
+      self._partyMemberUI[index].static_Bubble1:SetShow(true)
+      self._partyMemberUI[index].static_Bubble2:SetShow(true)
+      self._partyMemberUI[index].static_Bubble3:SetShow(true)
+      self._partyMemberUI[index].static_Bubble4:SetShow(true)
+    end
   end
 end
 function Panel_Widget_Party_info:setIcon(index)
@@ -722,14 +768,6 @@ function FromClient_ResponseParty_withdraw(withdrawType, actorKey, isMe)
   NakMessagePanel_Reset()
   if "" ~= message and nil ~= message then
     Proc_ShowMessage_Ack(message)
-  end
-end
-function FromClient_UpdatePartyExperiencePenalty(isPenalty)
-  if nil == isPenalty then
-    return
-  end
-  if isPenalty then
-  else
   end
 end
 function FromClient_NotifyPartyMemberPickupItem(userName, itemName)

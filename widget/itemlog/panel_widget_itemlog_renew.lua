@@ -12,7 +12,7 @@ local ItemLogManager = {
   _moveUpDurationTime = 0.5,
   _showDurationTime = 1.5,
   _hideDurationTime = 0.2,
-  _startAniTime = 0.8,
+  _startAniTime = 1,
   _rowPaddingY = 3,
   _updateTime = 0
 }
@@ -96,7 +96,7 @@ end
 function ItemLog:reset()
   self.bgControl:SetAlpha(1)
   self.iconControl:SetAlpha(1)
-  self.titleControl:SetAlpha(1)
+  self.titleControl:SetFontAlpha(1)
 end
 function ItemLog:moveUp(duration)
   if self:checkEmpty() then
@@ -113,22 +113,11 @@ function ItemLog:fadeOut(duration, startTime)
   if self:checkEmpty() then
     return false
   end
-  local aniInfo = self.bgControl:addColorAnimation(0, startTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  local aniInfo = self.bgControl:addColorAnimation(startTime, duration, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
   aniInfo:SetStartColor(Defines.Color.C_FFFFFFFF)
-  aniInfo:SetEndColor(Defines.Color.C_FFFFFFFF)
-  local aniInfo5 = self.bgControl:addColorAnimation(startTime, duration, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  aniInfo5:SetStartColor(Defines.Color.C_FFFFFFFF)
-  aniInfo5:SetEndColor(Defines.Color.C_00FFFFFF)
-  aniInfo5:SetHideAtEnd(true)
-  local aniInfo1 = self.iconControl:addColorAnimation(startTime, duration, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  aniInfo1:SetStartColor(Defines.Color.C_FFFFFFFF)
-  aniInfo1:SetEndColor(Defines.Color.C_00FFFFFF)
-  local aniInfo2 = self.titleControl:addColorAnimation(0, startTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  aniInfo2:SetStartColor(Defines.Color.C_FFFFFFFF)
-  aniInfo2:SetEndColor(Defines.Color.C_FFFFFFFF)
-  local aniInfo3 = self.titleControl:addColorAnimation(startTime, duration, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  aniInfo3:SetStartColor(Defines.Color.C_FFFFFFFF)
-  aniInfo3:SetEndColor(Defines.Color.C_00FFFFFF)
+  aniInfo:SetEndColor(Defines.Color.C_00FFFFFF)
+  aniInfo:SetHideAtEnd(true)
+  aniInfo.IsChangeChild = true
   return true
 end
 function ItemLogManager:initialize()

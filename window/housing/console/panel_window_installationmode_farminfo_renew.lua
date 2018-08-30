@@ -749,42 +749,47 @@ function Panel_Window_InstallationMode_Farm_info:setItemSlot()
       self._itemSlotBG[index].bg:SetShow(true)
       if true == Data._isInstalled then
         if index == self._value.focusIndex then
-          PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(Data._invenSlotNo, index)
+          PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(true, Data._invenSlotNo, index)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip( " .. Data._invenSlotNo .. ", " .. index .. " )")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(true, " .. Data._invenSlotNo .. ", " .. index .. " )")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_Farm_DeleteInstalledObject( " .. Data._invenSlotNo .. " )")
         self._itemSlot[index].isCash:SetShow(false)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(false, " .. Data._invenSlotNo .. ", " .. index .. " )")
         self._itemSlotBG[index].check:SetShow(true)
       elseif not Data._isCashProduct then
         if index == self._value.focusIndex then
-          PaGlobalFunc_InstallationMode_Farm_showToolTip(Data._invenType, Data._invenSlotNo, index)
+          PaGlobalFunc_InstallationMode_Farm_showToolTip(true, Data._invenType, Data._invenSlotNo, index)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_showToolTip( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. ")")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_showToolTip(true, " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. ")")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_Farm_installFurniture( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", false, " .. 0 .. ")")
         self._itemSlot[index].isCash:SetShow(false)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_Farm_showToolTip(false, " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. ")")
         self._itemSlotBG[index].check:SetShow(false)
       else
         if index == self._value.focusIndex then
-          PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(Data._productNoRaw, index)
+          PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(true, Data._productNoRaw, index)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip( " .. Data._productNoRaw .. ", " .. index .. " )")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(true, " .. Data._productNoRaw .. ", " .. index .. " )")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_Farm_installFurniture( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", true, " .. Data._productNoRaw .. ")")
         self._itemSlot[index].isCash:SetShow(true)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(false, " .. Data._productNoRaw .. ", " .. index .. " )")
         self._itemSlotBG[index].check:SetShow(false)
       end
       self._itemSlot[index]:setItemByStaticStatus(Data:getItemStaticStatusWrapper(), 0)
       self._itemSlot[index].icon:SetAlpha(1)
       self._itemSlot[index].icon:SetShow(true)
-      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_Farm_HideTooltip()")
     else
       self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "")
-      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_Farm_HideTooltip()")
+      self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "")
       self._itemSlotBG[index].check:SetShow(false)
     end
     if slotIndex >= self._value.itemDataCount then
       self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "")
-      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_Farm_HideTooltip()")
       self._itemSlot[index].icon:SetShow(false)
+      self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "")
     end
   end
 end
@@ -924,27 +929,39 @@ function PaGlobalFunc_InstallationMode_Farm_ToogleTab(value)
   newTabIndex = newTabIndex % self._menu_Top_Enum.Count
   self._value.currentTabIndex = newTabIndex
   self:setTab(newTabIndex)
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_InstallationMode_Farm_HideTooltip()
 end
-function PaGlobalFunc_InstallationMode_Farm_showToolTip(invenType, invenSlotNo, slot_Idx)
+function PaGlobalFunc_InstallationMode_Farm_showToolTip(showFlating, invenType, invenSlotNo, slot_Idx)
   local itemWrapper = getInventoryItemByType(invenType, invenSlotNo)
   local self = Panel_Window_InstallationMode_Farm_info
   local slot = self._itemSlot[slot_Idx]
-  Panel_Tooltip_Item_Show(itemWrapper, self._ui.static_TabMenuBG, false, false, nil)
+  local slotBGControl = self._itemSlot[slot_Idx].icon
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_Farm_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(self._panelKeyGuideEnum.Select)
 end
-function PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(productNoRaw, slot_Idx)
+function PaGlobalFunc_InstallationMode_Farm_CashItemShowToolTip(showFlating, showFlating, productNoRaw, slot_Idx)
   local cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(productNoRaw)
   local itemSSW = cPSSW:getItemByIndex(0)
   local self = Panel_Window_InstallationMode_Farm_info
   local slot = self._itemSlot[slot_Idx]
+  local slotBGControl = self._itemSlot[slot_Idx].icon
   if nil == itemSSW then
     return
   end
-  Panel_Tooltip_Item_Show(itemSSW, self._ui.static_TabMenuBG, true, false)
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_Farm_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(self._panelKeyGuideEnum.Select)
 end
-function PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(invenSlotNo, slot_Idx)
+function PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(showFlating, invenSlotNo, slot_Idx)
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local itemSSW = houseWrapper:getCurrentItemEnchantStatStaticWrapper(invenSlotNo)
   if nil == itemSSW then
@@ -952,7 +969,13 @@ function PaGlobalFunc_InstallationMode_Farm_showInstalledItemToolTip(invenSlotNo
   end
   local self = Panel_Window_InstallationMode_Farm_info
   local slot = self._itemSlot[slot_Idx]
-  Panel_Tooltip_Item_Show(itemSSW, self._ui.static_TabMenuBG, true, false, nil)
+  local slotBGControl = self._itemSlot[slot_Idx].icon
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_Farm_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(self._panelKeyGuideEnum.CollectDelete)
 end
 function PaGlobalFunc_InstallationMode_Farm_DeleteInstalledObject(idx)
@@ -1056,6 +1079,10 @@ function PaGlobalFunc_InstallationMode_Farm_installFurniture(invenType, invenSlo
     housing_selectInstallationItemForCashShop(productNo)
   end
 end
+function PaGlobalFunc_InstallationMode_Farm_HideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
+  PaGlobalFunc_FloatingTooltip_Close()
+end
 function FromClient_InstallationMode_Init()
   local self = Panel_Window_InstallationMode_Farm_info
   self:initialize()
@@ -1078,10 +1105,16 @@ function FromClient_ShowInstallationMenu_Farm_Renew(installMode, isShow, isShowM
 end
 function FromClient_InstallationMode_UpdateInventory_Farm_Renew()
   local self = Panel_Window_InstallationMode_Farm_info
+  if false == PaGlobalFunc_InstallationMode_Farm_GetShow() then
+    return
+  end
   self:updateItemContent(true)
 end
 function FromClient_InstallationMode_UpdateInstallationActor_Farm_Renew(isAdd)
   local self = Panel_Window_InstallationMode_Farm_info
+  if false == PaGlobalFunc_InstallationMode_Farm_GetShow() then
+    return
+  end
   self:updateItemContent(true)
 end
 function FromClient_ChangeHousingInstallMode_Farm_Renew(preMode, nowMode)

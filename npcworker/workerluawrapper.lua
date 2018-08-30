@@ -204,8 +204,10 @@ function workerWrapper:getWorkString()
     local isWorkInTrade = self._workerWrapper:isWorkerInWorkerTrade()
     if true == isWorkInTrade then
       workString = "\236\157\188\234\190\188 \235\172\180\236\151\173 \236\164\145"
-    else
+    elseif false == _ContentsGroup_RenewUI_Worker then
       workString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERLUAWRAPPER_WORKER_WAITING", "getAreaName", workerRegionWrapper:getAreaName())
+    else
+      workString = "<PAColor0xffaaaaaa>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_WAIT") .. ":" .. workerRegionWrapper:getAreaName() .. "]<PAOldColor>"
     end
   end
   return workString

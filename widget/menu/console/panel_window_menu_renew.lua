@@ -25,11 +25,10 @@ PaGlobal_Menu_Renew_Renew._xbox = {
   _guild = 11,
   _friend = 12,
   _ringMenu = 13,
-  _cashShop = 14,
-  _pet = 15,
-  _beauty = 16,
-  _partyRecruite = 17,
-  _count = 18
+  _pet = 14,
+  _beauty = 15,
+  _partyRecruite = 16,
+  _count = 17
 }
 local index = 1
 while index * index < PaGlobal_Menu_Renew_Renew._xbox._count do
@@ -163,15 +162,6 @@ PaGlobal_Menu_Renew_Renew._categoryData = {
     _x2 = 255,
     _y2 = 495
   },
-  [PaGlobal_Menu_Renew_Renew._xbox._cashShop] = {
-    _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_UiCashShop"),
-    _hotKey = "",
-    _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds",
-    _x1 = 449,
-    _y1 = 189,
-    _x2 = 509,
-    _y2 = 249
-  },
   [PaGlobal_Menu_Renew_Renew._xbox._pet] = {
     _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PET"),
     _hotKey = "",
@@ -275,8 +265,6 @@ function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_FriendList)
   elseif self._xbox._ringMenu == index then
     FromClient_ConsoleQuickMenu_OpenCustomPage(2)
-  elseif self._xbox._cashShop == index then
-    GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_CashShop)
   elseif self._xbox._pet == index then
     FGlobal_PetListNew_Toggle()
   elseif self._xbox._beauty == index then

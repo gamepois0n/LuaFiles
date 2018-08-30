@@ -79,6 +79,7 @@ function ClassSelect:init()
   self._ui.txt_SelectConsoleUI = UI.getChildControl(self._ui.stc_BottomGroup, "StaticText_Create_ConsoleUI")
   self._ui.txt_ShowSkillConsoleUI = UI.getChildControl(self._ui.stc_BottomGroup, "StaticText_ShowSkill_ConsoleUI")
   self._ui.txt_ShowSkillConsoleUI:SetShow(false)
+  self._ui.txt_SelectConsoleUI:SetPosX(self._ui.txt_ExitConsoleUI:GetPosX() - self._ui.txt_SelectConsoleUI:GetTextSizeX() - self._ui.txt_SelectConsoleUI:GetSizeX() - 34)
   if false == _ContentsGroup_RenewUI_Customization then
     self._Edit_CharacterName = UI.getChildControl(Panel_CustomizationMain, "Edit_CharacterName")
   end
@@ -271,6 +272,17 @@ function PaGlobalFunc_ClassSelect_CharacterCreate(characterName)
   local cancelCharacterFunc = function()
     PaGlobalFunc_Customization_InputName_Open(false)
   end
+  if nil == characterName or "" == characterName then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_AGREEMENTGUILD_EDIT")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+      content = messageBoxMemo,
+      functionApply = cancelCharacterFunc,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+    return
+  end
   local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
   local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_CHARACTERCREATE_RECONFIRM_CHARACTERNAME", "name", _edit_CharacterName)
   local messageBoxData = {
@@ -386,6 +398,7 @@ function InputMO_ClassSelect_SelectClassType(classType)
     selectText = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_MAIN_SELECT")
   end
   self._ui.txt_SelectConsoleUI:SetText(selectText)
+  self._ui.txt_SelectConsoleUI:SetPosX(self._ui.txt_ExitConsoleUI:GetPosX() - self._ui.txt_SelectConsoleUI:GetTextSizeX() - self._ui.txt_SelectConsoleUI:GetSizeX() - 34)
 end
 function PaGlobalFunc_ClassSelect_ReSize()
   local self = ClassSelect

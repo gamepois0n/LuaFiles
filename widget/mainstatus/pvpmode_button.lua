@@ -5,12 +5,12 @@ local UI_color = Defines.Color
 local pvpText = UI.getChildControl(Panel_PvpMode, "StaticText_pvpText")
 local _bubbleNotice = UI.getChildControl(Panel_PvpMode, "StaticText_Notice")
 _pvpButton = UI.getChildControl(Panel_PvpMode, "CheckButton_PvpButton")
-_pvpButton:addInputEvent("Mouse_LUp", "requestTogglePvP()")
+_pvpButton:addInputEvent("Mouse_LUp", "HandleClicked_PvpModeChange()")
 Panel_PvpMode:addInputEvent("Mouse_On", "Panel_PvpMode_ChangeTexture_On()")
 Panel_PvpMode:addInputEvent("Mouse_Out", "Panel_PvpMode_ChangeTexture_Off()")
 Panel_PvpMode:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
 Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
-Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
+Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 40)
 posX = Panel_PvpMode:GetPosX()
 posY = Panel_PvpMode:GetPosY()
 local isPvPOn = true
@@ -110,6 +110,10 @@ function PvpMode_PlayerPvPAbleChanged(actorKeyRaw)
     FromClient_PvpMode_changeMode(selfWrapper)
   end
 end
+function HandleClicked_PvpModeChange()
+  _pvpButton:SetCheck(isPvPOn)
+  requestTogglePvP()
+end
 function PaGlobalFunc_PvpMode_ShowButton(isShow)
   if false == ToClient_isAdultUser() then
     _pvpButton:SetShow(false)
@@ -137,21 +141,21 @@ function PvpMode_Resize()
   if CppDefine.ChangeUIAndResolution == true then
     if Panel_PvpMode:GetRelativePosX() == -1 and Panel_PvpMode:GetRelativePosY() == -1 then
       local initPosX = Panel_MainStatus_User_Bar:GetPosX() - 20
-      local initPosY = Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47
+      local initPosY = Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 40
       Panel_PvpMode:SetPosX(initPosX)
       Panel_PvpMode:SetPosY(initPosY)
       changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, false, true, false)
       FGlobal_InitPanelRelativePos(Panel_PvpMode, initPosX, initPosY)
     elseif Panel_PvpMode:GetRelativePosX() == 0 and Panel_PvpMode:GetRelativePosY() == 0 then
       Panel_PvpMode:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 - 20)
-      Panel_PvpMode:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_PvpMode:GetSizeY())
+      Panel_PvpMode:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_PvpMode:GetSizeY() + 6)
     else
       Panel_PvpMode:SetPosX(Panel_PvpMode:GetRelativePosX() * getScreenSizeX() - Panel_PvpMode:GetSizeX() / 2)
       Panel_PvpMode:SetPosY(Panel_PvpMode:GetRelativePosY() * getScreenSizeY() - Panel_PvpMode:GetSizeY() / 2)
     end
   else
     Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
-    Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
+    Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 40)
     changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, false, true, false)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_PvpMode)
@@ -176,6 +180,7 @@ function Panel_PvpMode_UpdateState()
       _pvpButton:AddEffect("fUI_SkillButton02", true, 0, 0)
       _pvpButton:AddEffect("fUI_PvPButtonLoop", true, 0, 0)
     end
+    _pvpButton:SetCheck(isPvPOn)
   else
     _pvpButton:SetShow(false)
   end

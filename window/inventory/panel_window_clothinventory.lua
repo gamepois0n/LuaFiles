@@ -149,6 +149,9 @@ function ClothInven_Filter(slotNo, itemWrapper, count, inventoryType)
   if not itemSSW:get():checkToPushToInventoryBag() then
     return true
   end
+  if CppEnums.InventoryBagType.eInventoryBagType_Misc == self.inventoryBagType and false == itemSSW:isUserVested() and true == itemWrapper:get():isVested() then
+    return true
+  end
   if not ToClient_CheckToPushToInventoryBag(self.fromWhereType, self.fromSlotNo, self.fromWhereType, slotNo) then
     return true
   end

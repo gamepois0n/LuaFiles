@@ -2,7 +2,7 @@ local NewMailAlarm = {_animationTime = 0, _remainTime = 4}
 local _panel = Panel_Widget_NewMailAlarm_Renew
 function NewMailAlarm:initialize()
   _panel:RegisterUpdateFunc("FromClient_NewMailAlarm_UpdatePerFrame")
-  registerEvent("FromClient_NewMail", "FromClient_NewMailAlram")
+  registerEvent("FromClient_NewMail", "FromClient_NewMailAlarm")
 end
 function FromClient_luaLoadComplete_NewMailAlarm_Init()
   NewMailAlarm:initialize()
@@ -35,7 +35,7 @@ function FromClient_NewMailAlarm_UpdatePerFrame(deltaTime)
     self:HideAni()
   end
 end
-function FromClient_NewMailAlram()
+function FromClient_NewMailAlarm()
   audioPostEvent_SystemUi(10, 1)
   local self = NewMailAlarm
   self._animationTime = 0

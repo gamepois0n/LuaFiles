@@ -121,6 +121,7 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
   if nil == skillStatic then
     return
   end
+  local havePrevActionHashKey = ToClient_LearnSkillCameraHavePrevActionHashKey(skillStatic)
   local skillInfo = {
     _name = skillTypeStaticWrapper:getName(),
     _learndLevel = skillLearndLevel,
@@ -145,7 +146,8 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
     _isLock = ToClient_isBlockSkillCommand(skillLevelInfo._skillKey),
     _isFusion = skillStaticWrapper:isFusionSkill(),
     _learndLevelMainSkill = 0,
-    _learndLevelSubSkill = 0
+    _learndLevelSubSkill = 0,
+    _havePrevActionHashKey = havePrevActionHashKey
   }
   return skillInfo
 end
@@ -205,7 +207,6 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
   local awakenSkill = self._ui._right._radioButton_SkillAwaken
   self._currentTabIndex = titleType
   self:Clear()
-  self:Update()
   Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   if self._config._title_Learn == titleType then
@@ -236,6 +237,7 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
 end
 function Window_SkillInfo:SetLearnableSkillList()
   local index = 0
+  self._ui._right._list2_Skill:getElementManager():clearKey()
   for tableIndex = 0, #self._combatTable do
     local skillCount = self._combatTable[tableIndex]._skillCount
     local skillTable = self._combatTable[tableIndex]._skillTable
@@ -260,28 +262,37 @@ function Window_SkillInfo:SetLearnableSkillList()
 end
 function Window_SkillInfo:SetSkillList(table)
   local index = 0
+  self._ui._right._list2_Skill:getElementManager():clearKey()
+  local isNext = false
   for tableIndex = 0, #table do
     local skillCount = table[tableIndex]._skillCount
     local skillTable = table[tableIndex]._skillTable
     if nil == skillTable then
       return
     end
+    isNext = false
     for skillIndex = 0, skillCount - 1 do
       local skillInfo = skillTable[skillIndex]
       if nil == skillInfo then
         return
       end
-      if 0 == skillIndex and 0 == skillInfo._learndLevel then
-        self._currentSkillListInfo[index] = skillInfo
-        self._ui._right._list2_Skill:getElementManager():pushKey(toInt64(0, index))
-        self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, index))
-        index = index + 1
-      end
-      if 1 == skillInfo._learndLevel and true == skillInfo._usable then
-        self._currentSkillListInfo[index] = skillInfo
-        self._ui._right._list2_Skill:getElementManager():pushKey(toInt64(0, index))
-        self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, index))
-        index = index + 1
+      if true == isNext then
+        skillIndex = skillCount
+      else
+        if 0 == skillIndex and 0 == skillInfo._learndLevel then
+          self._currentSkillListInfo[index] = skillInfo
+          self._ui._right._list2_Skill:getElementManager():pushKey(toInt64(0, index))
+          self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, index))
+          index = index + 1
+          isNext = true
+        end
+        if 1 == skillInfo._learndLevel and true == skillInfo._usable then
+          self._currentSkillListInfo[index] = skillInfo
+          self._ui._right._list2_Skill:getElementManager():pushKey(toInt64(0, index))
+          self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, index))
+          index = index + 1
+          isNext = true
+        end
       end
     end
   end
@@ -334,13 +345,6 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
   end
   if _ContentsGroup_isConsolePadControl then
     uiInfo._radioButton_SkillBg:addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
-  end
-  if false == skillInfo._isPassive then
-    self._ui._right._radioButton_SkillDemo:SetShow(true)
-    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Skill_SkillAction()")
-  else
-    self._ui._right._radioButton_SkillDemo:SetShow(false)
-    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   end
 end
 function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
@@ -471,31 +475,51 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_EffectDesc:SetPosY(getScreenSizeY() - body._staticText_EffectDesc:GetSizeY() - 100)
   body._staticText_EffectTitle:SetPosY(body._staticText_EffectDesc:GetPosY() - body._staticText_EffectTitle:GetSizeY() - 5)
   local needResource = ""
+  local haveResource = false
   if 1 < skillInfo._requireHp then
     needResource = needResource .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILL_TXT_NEEDHP") .. " " .. skillInfo._requireHp .. "\n"
+    haveResource = true
   end
   if 1 < skillInfo._requireMp then
     needResource = needResource .. self._needMantalString .. " " .. skillInfo._requireMp .. "\n"
+    haveResource = true
   end
   if 1 < skillInfo._requireSp then
     needResource = needResource .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILL_TXT_NEEDSP") .. " " .. skillInfo._requireSp .. "\n"
+    haveResource = true
   end
-  body._staticText_NeedResource:SetText(needResource)
   body._staticText_NeedResource:SetPosY(self._ui._body._staticText_Desc:GetPosY() + self._ui._body._staticText_Desc:GetSizeY())
+  body._staticText_NeedResource:SetText(needResource)
+  body._staticText_NeedResource:SetSize(body._staticText_NeedResource:GetSizeX(), body._staticText_NeedResource:GetTextSizeY())
   body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
   body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
   body._staticText_Command:SetText(skillInfo._command)
-  body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2)
-  local resourcePosY = body._staticText_NeedResource:GetPosY() + body._staticText_NeedResource:GetSizeY()
-  local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY()
+  local yGap = 0
+  if body._staticText_Command:GetSizeY() >= 90 then
+    yGap = (body._staticText_Command:GetTextSizeY() - 90) / 2
+  end
+  body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2 + yGap)
+  local resourcePosY
+  if true == haveResource then
+    resourcePosY = body._staticText_NeedResource:GetPosY() + body._staticText_NeedResource:GetSizeY() + 10
+  else
+    resourcePosY = body._staticText_Desc:GetPosY() + body._staticText_Desc:GetSizeY() + 10
+  end
+  local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY() + 10
   local needResourcePosY = math.max(resourcePosY, commendPosY)
-  local needResourcePosY = resourcePosY
   local dividerPosY = body._static_Divider2:GetPosY()
   body._static_Divider2:SetPosY(math.max(needResourcePosY, dividerPosY))
   self._lastSelectedUI = skillUI
   local prevIndex = self._currentSkillIndex
   self._currentSkillIndex = id
+  if true == skillInfo._havePrevActionHashKey then
+    self._ui._right._radioButton_SkillDemo:SetShow(true)
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Skill_SkillAction()")
+  else
+    self._ui._right._radioButton_SkillDemo:SetShow(false)
+    Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+  end
   self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, id))
 end
@@ -524,18 +548,21 @@ function Window_SkillInfo:UpdateSkillData()
   if nil == cellTable then
     return
   end
+  self._combatSkill = {}
   self._combatSkill = self:GetSkillFromCell(cellTable)
   cellTable = nil
   cellTable = getAwakeningWeaponSkillTree(classType)
   if nil == cellTable then
     return
   end
+  self._awakenSkill = {}
   self._awakenSkill = self:GetSkillFromCell(cellTable)
   cellTable = nil
   cellTable = getFusionSkillTree()
   if nil == cellTable then
     return
   end
+  self._fusionSkill = {}
   self._fusionSkill = self:GetFusionSkillFromCell(cellTable)
   cellTable = nil
   for index = 0, #self._fusionSkill do
@@ -546,6 +573,7 @@ function Window_SkillInfo:InitResisterEvent()
   registerEvent("progressEventCancelByAttacked", "PaGlobalFunc_FromClient_Skill_CancelByAttacked")
   registerEvent("EventSelfPlayerPreDead", "PaGlobalFunc_FromClient_Skill_HideByDead")
   registerEvent("EventSkillWindowUpdate", "PaGlobalFunc_FromClient_Skill_WindowUpdate")
+  registerEvent("EventSkillWindowClearSkillAll", "PaGlobalFunc_FromClient_Skill_WindowUpdate")
   registerEvent("onScreenResize", "PaGlobalFunc_Skill_Resize")
 end
 function PaGlobalFunc_FromClient_Skill_CancelByAttacked()
@@ -593,7 +621,6 @@ function Window_SkillInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitResisterEvent()
-  self:Update()
 end
 function PaGlobalFunc_Skill_PreRenderMode()
 end
@@ -602,25 +629,19 @@ function PaGlobalFunc_Skill_CloseRenderMode()
   PaGlobalFunc_Skill_Close()
 end
 function Window_SkillInfo:Clear()
-  self._combatSkill = {}
-  self._awakenSkill = {}
-  self._fusionSkill = {}
-  self._combatTable = {}
-  self._awakenTable = {}
   self._currentSkillListInfo = {}
   self._currentSkillListUI = {}
   self:SkillDetailClear()
-  self._currentSkillIndex = nil
-  self._ui._right._list2_Skill:getElementManager():clearKey()
+  self._currentSkillIndex = 0
   self._ui._right._radioButton_LearnSkill:SetCheck(false)
   self._ui._right._radioButton_SkillBasic:SetCheck(false)
   self._ui._right._radioButton_SkillAwaken:SetCheck(false)
-  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_SkillTab_forPadEventFunc(-1)")
-  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_SkillTab_forPadEventFunc(1)")
 end
 function Window_SkillInfo:Update()
   self:UpdateStat()
   self:UpdateSkillData()
+  self._combatTable = {}
+  self._awakenTable = {}
   self:UpdateSkillTable(self._combatSkill, self._combatTable)
   self:UpdateSkillTable(self._awakenSkill, self._awakenTable)
 end
@@ -639,7 +660,6 @@ function Window_SkillInfo:UpdateSkillTable(oldTable, newTable)
     skillName = string.gsub(skillInfo._name, "I", "")
     skillName = string.gsub(skillName, "V", "")
     skillName = string.gsub(skillName, "X", "")
-    skillName = string.gsub(skillName, "\234\183\185", "")
     skillName = string.gsub(skillName, ":", "")
     skillName = string.gsub(skillName, " ", "")
     currentOldIndex = #oldSkillTable
@@ -760,6 +780,8 @@ function Window_SkillInfo:InitEvent()
   right._list2_Skill:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   right._radioButton_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_Close()")
   right._radioButton_SkillDemo:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_SkillAction()")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_SkillTab_forPadEventFunc(-1)")
+  Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_SkillTab_forPadEventFunc(1)")
 end
 function PaGlobalFunc_Skill_UpdatePanelView()
   local self = Window_SkillInfo
@@ -853,6 +875,9 @@ function PaGlobalFunc_Skill_Open(isDialog)
   if true == selfPlayerIsInCompetitionArea() then
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   if true == Panel_Win_System:GetShow() then
     allClearMessageData()
   end
@@ -863,9 +888,8 @@ function PaGlobalFunc_Skill_Open(isDialog)
   self._renderMode:set()
   self:SkillDetailClear()
   self:Update()
-  ToClient_LearnSkillCameraSetRotation(-0.25, 0)
-  ToClient_LearnSkillCameraSetZoom(400)
-  ToClient_LearnSkillCameraSetPosition(2.5, -0.5)
+  ToClient_LearnSkillCameraSetRotation(-0.5, 0)
+  ToClient_LearnSkillCameraSetPosition(2.5, -20)
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_SKILL")
 end

@@ -1,6 +1,7 @@
 Panel_Customizing_CommonDecoration:ignorePadSnapMoveToOtherPanel()
 local Customization_DecoInfo = {
   _ui = {
+    _static_TabGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_TabGroup"),
     _static_ButtonGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_ButtonGroup"),
     _static_EyeDecoGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_EyeDecoGroup"),
     _static_TypeGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_TypeGroup"),
@@ -9,7 +10,7 @@ local Customization_DecoInfo = {
     _static_KeyGuideGroup = UI.getChildControl(Panel_Customizing_CommonDecoration, "Static_KeyGuideBg")
   },
   _config = {
-    _buttonColumnCount = 4,
+    _buttonColumnCount = 6,
     _listTextureColumnCount = 4,
     _listColumnCount = 5,
     _imageFrameSizeY = 125,
@@ -41,20 +42,68 @@ local Customization_DecoInfo = {
   _selectedItemIndex,
   _isTattooMode = false,
   _currentSliderCount,
-  _currentButtonCount,
+  _currentButtonCount = 0,
   _currentTypeCount,
   _isExpression = false,
-  _isBoneControl = false
+  _isBoneControl = false,
+  _currentTabIdx = 0,
+  _currentTabCount = 0
 }
-local _decoIconUV = {}
-function PaGlobalFunc_Customization_Deco_UpdatePerFrame(deltaTime)
-  local self = Customization_DecoInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_Deco_SetBoneControl(false)
-    end
-    return
+function Customization_DecoInfo:Initialize()
+  self:InitControl()
+  self:InitEvent()
+  self:InitRegister()
+end
+function Customization_DecoInfo:InitControl()
+  self._ui.txt_LBConsoleUI = UI.getChildControl(self._ui._static_TabGroup, "StaticText_LB_ConsoleUI")
+  self._ui.txt_RBConsoleUI = UI.getChildControl(self._ui._static_TabGroup, "StaticText_RB_ConsoleUI")
+  self._ui._checkBox_LeftEye = UI.getChildControl(self._ui._static_EyeDecoGroup, "CheckButton_Left")
+  self._ui._checkBox_RightEye = UI.getChildControl(self._ui._static_EyeDecoGroup, "CheckButton_Right")
+  self._ui._checkBox_LeftEye:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYELEFT"))
+  self._ui._checkBox_RightEye:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYERIGHT"))
+  self._ui._buttonTemplate = UI.getChildControl(self._ui._static_ButtonGroup, "Radiobutton_Tamplate")
+  self._ui._buttonTemplate:SetShow(false)
+  self._ui._typeTemplate = UI.getChildControl(self._ui._static_TypeGroup, "RadioButton_TypeImage_Template")
+  self._ui._typeTemplate:SetShow(false)
+  self._ui._typeSelect = UI.getChildControl(self._ui._static_TypeGroup, "Static_SelectedSlot")
+  self._ui._typeSelect:SetShow(false)
+  self._ui._static_TypeGroup:SetChildIndex(self._ui._typeSelect, 9999)
+  self._ui._colorTemplate = UI.getChildControl(self._ui._static_ColorGroup, "Button_ColorTemplate")
+  self._ui._colorTemplate:SetShow(false)
+  self._ui._colorSelect = UI.getChildControl(self._ui._static_ColorGroup, "Static_SelectedColor")
+  self._ui._static_ColorGroup:SetChildIndex(self._ui._colorSelect, 9999)
+  self._ui._colorSelect:SetShow(false)
+  self._ui._static_SliderBg = {}
+  self._ui._staticText_SliderTitle = {}
+  self._ui._staticText_SliderValue = {}
+  self._ui._slider = {}
+  self._ui._sliderButton = {}
+  self._ui._sliderProgress = {}
+  for index = 0, 6 do
+    self._ui._static_SliderBg[index] = UI.getChildControl(self._ui._static_SliderGroup, "Static_SliderBg_" .. index)
+    self._ui._staticText_SliderTitle[index] = UI.getChildControl(self._ui._static_SliderBg[index], "StaticText_Title")
+    self._ui._staticText_SliderValue[index] = UI.getChildControl(self._ui._static_SliderBg[index], "StaticText_SliderValue")
+    self._ui._slider[index] = UI.getChildControl(self._ui._static_SliderBg[index], "Slider_" .. index)
+    self._ui._sliderButton[index] = UI.getChildControl(self._ui._slider[index], "Slider_DisplayButton")
+    self._ui._sliderProgress[index] = UI.getChildControl(self._ui._slider[index], "Progress2_1")
   end
+  self._config._listColumnWidth = self._ui._typeTemplate:GetSizeX() + self._config._listOffset
+  self._config._listColumnHeight = self._ui._typeTemplate:GetSizeY() + self._config._listOffset
+end
+function Customization_DecoInfo:InitEvent()
+  Panel_Customizing_CommonDecoration:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Deco_MoveTab(true)")
+  Panel_Customizing_CommonDecoration:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_Customization_Deco_MoveTab(false)")
+end
+function Customization_DecoInfo:InitRegister()
+  registerEvent("EventOpenCommonDecorationUi", "PaGlobalFunc_Customization_Deco_OpenCommonDecorationUi")
+  registerEvent("EventCloseCommonDecorationUi", "PaGlobalFunc_Customization_Deco_CloseCommonDecorationUi")
+  registerEvent("EventOpenEyeDecorationUi", "PaGlobalFunc_Customization_Deco_OpenEyeDecorationUi")
+  registerEvent("EventCloseEyeDecorationUi", "PaGlobalFunc_Customization_Deco_CloseEyeDecorationUi")
+  registerEvent("EventOpenTattooDecorationUi", "PaGlobalFunc_Customization_Deco_OpenTattooDecorationUi")
+  registerEvent("EventCloseTattooDecorationUi", "PaGlobalFunc_Customization_Deco_CloseTattooDecorationUi")
+  registerEvent("EventEnableDecorationSlide", "PaGlobalFunc_Customization_Deco_EnableDecorationSlide")
+  registerEvent("EventOpenCommonExpressionUi", "PaGlobalFunc_Customization_Deco_OpenCommonExpressionUi")
+  registerEvent("EventCloseCommonExpressionUi", "PaGlobalFunc_Customization_Deco_CloseCommonExpressionUi")
 end
 function Customization_DecoInfo:ClearRadioButton()
   for _, control in pairs(self._buttonList) do
@@ -84,29 +133,28 @@ function Customization_DecoInfo:UpdateTypeFocus(itemIndex)
   self._ui._typeSelect:SetShow(true)
   self._ui._typeSelect:SetPosX(item:GetPosX())
   self._ui._typeSelect:SetPosY(item:GetPosY())
+  self._selectedItemIndex = itemIndex
+  PaGlobalFunc_Customization_Deco_SetSelectButton(itemIndex)
 end
 function Customization_DecoInfo:UpdateDecorationList()
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, self._selectedItemIndex)
   self:UpdateTypeFocus(self._selectedItemIndex)
 end
-function PaGlobalFunc_Customization_Deco_SetBoneControl(isSet)
-  local self = Customization_DecoInfo
-  if false == isSet then
-    self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(1)
-    Panel_Customizing_CommonDecoration:ignorePadSnapUpdate(false)
-    ToClient_StartOrEndShapeBoneControlStart(false)
-  else
-    self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(9)
-    Panel_Customizing_CommonDecoration:ignorePadSnapUpdate(true)
-    ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
 function PaGlobalFunc_Customization_Deco_UpdateDecorationPose()
   local self = Customization_DecoInfo
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, self._selectedItemIndex)
   self:UpdateTypeFocus(self._selectedItemIndex)
+end
+function PaGlobalFunc_Customization_Deco_SetSelectButton(itemIndex)
+  local self = Customization_DecoInfo
+  if true == self._isExpression then
+    return
+  end
+  if self._selectedItemIndex == itemIndex then
+    PaGlobalFunc_Customization_SetKeyGuide(6)
+  else
+    PaGlobalFunc_Customization_SetKeyGuide(0)
+  end
 end
 function PaGlobalFunc_Customization_Deco_UpdateType(paramType, paramIndex, itemIndex)
   local self = Customization_DecoInfo
@@ -119,10 +167,11 @@ function PaGlobalFunc_Customization_Deco_UpdateType(paramType, paramIndex, itemI
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
       functionYes = PaGlobalFunc_Customization_Deco_UpdateDecorationPose,
-      functionNo = MessageBox_Empty_function,
+      functionNo = PaGlobalFunc_Customization_Deco_CancelDecorationPose,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData, "top")
+    PaGlobalFunc_Customization_SetKeyGuide(-1)
     return
   end
   if self._isTattooMode then
@@ -131,17 +180,15 @@ function PaGlobalFunc_Customization_Deco_UpdateType(paramType, paramIndex, itemI
   end
   self:UpdateDecorationList()
 end
+function PaGlobalFunc_Customization_Deco_CancelDecorationPose()
+  PaGlobalFunc_Customization_SetKeyGuide(0)
+end
 function PaGlobalFunc_Customization_Deco_UpdateDecorationPose()
   local self = Customization_DecoInfo
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, self._selectedItemIndex)
   self:UpdateTypeFocus(self._selectedItemIndex)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   Panel_Win_System:SetShow(false)
-end
-function PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
-  local self = Customization_DecoInfo
-  local value = PaGlobalFunc_CustomIzationCommon_GetSliderValue(self._ui._slider[sliderIndex], self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
-  setParam(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex], value)
-  self._ui._staticText_SliderValue[sliderIndex]:SetText(value)
 end
 function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex, currentClassType, currentuiId)
   local self = Customization_DecoInfo
@@ -177,6 +224,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
         CopyBaseProperty(self._ui._typeTemplate, tempContentImage)
       end
       tempContentImage:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Deco_UpdateType(" .. listParamType .. "," .. listParamIndex .. "," .. itemIndex .. ")")
+      tempContentImage:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SetSelectButton(" .. itemIndex .. ")")
       local mod = itemIndex % self._config._listTextureColumnCount
       local divi = math.floor(itemIndex / self._config._listTextureColumnCount)
       local texUV = {
@@ -223,8 +271,8 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
     self._sliderParamDefault[sliderIndex] = getParamDefault(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     PaGlobalFunc_CustomIzationCommon_SetSliderValue(self._ui._slider[sliderIndex], sliderParam, self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Deco_UpdateSlider(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut(" .. sliderIndex .. ")")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn()")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut()")
     local sliderDesc = getUiSliderDescName(self._currentClassType, self._currentUiId, contentsIndex, sliderIndex)
     self._ui._staticText_SliderTitle[sliderIndex]:SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
     self._ui._staticText_SliderTitle[sliderIndex]:SetShow(true)
@@ -232,6 +280,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex,
     self._ui._sliderButton[sliderIndex]:SetShow(true)
     self._ui._staticText_SliderValue[sliderIndex]:SetText(sliderParam)
     self._ui._staticText_SliderValue[sliderIndex]:SetShow(true)
+    PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
     if nil == ToClient_getGameOptionControllerWrapper() or 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
     else
     end
@@ -263,25 +312,14 @@ function Customization_DecoInfo:UpdatePanelSize()
   VerticalCount = Int64toInt32(buttonCount / self._config._buttonColumnCount + 1)
   sizeY = VerticalCount * (self._ui._buttonTemplate:GetSizeY() + 5)
   buttonGroup:SetSize(buttonGroup:GetSizeX(), sizeY - 10)
-  if false == self._ui._static_ButtonGroup:GetShow() then
-    if false == eyeGroup:GetShow() then
-      typeGroup:SetPosY(20)
-      sliderGroup:SetPosY(20)
-      colorGroup:SetPosY(20)
-    else
-      typeGroup:SetPosY(125)
-      sliderGroup:SetPosY(125)
-      colorGroup:SetPosY(125)
-    end
-  elseif false == eyeGroup:GetShow() then
-    typeGroup:SetPosY(buttonGroup:GetPosY() + buttonGroup:GetSizeY() + 20)
-    sliderGroup:SetPosY(buttonGroup:GetPosY() + buttonGroup:GetSizeY() + 20)
-    colorGroup:SetPosY(buttonGroup:GetPosY() + buttonGroup:GetSizeY() + 20)
+  if false == eyeGroup:GetShow() then
+    typeGroup:SetPosY(20)
+    sliderGroup:SetPosY(20)
+    colorGroup:SetPosY(20)
   else
-    eyeGroup:SetPosY(buttonGroup:GetPosY() + buttonGroup:GetSizeY() + 20)
-    typeGroup:SetPosY(eyeGroup:GetPosY() + eyeGroup:GetSizeY() + 10)
-    sliderGroup:SetPosY(eyeGroup:GetPosY() + eyeGroup:GetSizeY() + 10)
-    colorGroup:SetPosY(eyeGroup:GetPosY() + eyeGroup:GetSizeY() + 10)
+    typeGroup:SetPosY(125)
+    sliderGroup:SetPosY(125)
+    colorGroup:SetPosY(125)
   end
   if true == typeGroup:GetShow() then
     local typeCount = self._currentTypeCount + 1
@@ -315,32 +353,36 @@ function PaGlobalFunc_Customization_Deco_OpenCommonDecorationUi(classType, uiId,
   self._ui._checkBox_RightEye:SetShow(false)
   self._ui._static_EyeDecoGroup:SetShow(false)
   local contentsCount = getUiContentsCount(classType, uiId)
+  self._currentTabCount = contentsCount
   if contentsCount > 1 then
+    self._ui._static_TabGroup:SetShow(true)
+    local panelSizeX = Panel_Customizing_CommonDecoration:GetSizeX()
+    local keyGuideSize = 42
+    panelSizeX = panelSizeX - keyGuideSize * 2
+    local iconSortPos = panelSizeX / (contentsCount + 1)
     for contentsIndex = 0, contentsCount - 1 do
       local tempRadioButton = self._buttonList[contentsIndex]
       if nil == tempRadioButton then
-        tempRadioButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, self._ui._static_ButtonGroup, "RadioButton_" .. contentsIndex)
-        CopyBaseProperty(self._ui._buttonTemplate, tempRadioButton)
+        tempRadioButton = UI.createAndCopyBasePropertyControl(self._ui._static_TabGroup, "RadioButton_Template", self._ui._static_TabGroup, "RadioButton_" .. contentsIndex)
       end
       local contentsDesc = getUiContentsDescName(classType, uiId, contentsIndex)
-      tempRadioButton:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-      tempRadioButton:SetText(PAGetString(Defines.StringSheet_GAME, contentsDesc))
-      tempRadioButton:SetPosX(contentsIndex % self._config._buttonColumnCount * (tempRadioButton:GetSizeX() + 5))
-      tempRadioButton:SetPosY(math.floor(contentsIndex / self._config._buttonColumnCount) * (tempRadioButton:GetSizeY() + 5))
-      tempRadioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Deco_UpdateDecorationContents(" .. contentsIndex .. ")")
+      PaGlobalFunc_Customization_Deco_GetIconUV(contentsDesc, tempRadioButton)
+      tempRadioButton:SetPosX(iconSortPos * (contentsIndex + 1) - tempRadioButton:GetSizeX() / 2 + keyGuideSize)
+      tempRadioButton:SetCheck(false)
       tempRadioButton:SetShow(true)
       self._buttonList[contentsIndex] = tempRadioButton
     end
     self._ui._static_ButtonGroup:SetShow(true)
+    self._buttonList[0]:SetCheck(true)
   else
     self._ui._static_ButtonGroup:SetShow(false)
+    self._ui._static_TabGroup:SetShow(false)
   end
   self._currentButtonCount = contentsCount - 1
   PaGlobalFunc_Customization_Deco_UpdateDecorationContents(0)
   PaGlobalFunc_Customization_Deco_Open()
 end
 function PaGlobalFunc_Customization_Deco_CloseCommonDecorationUi()
-  local self = Customization_DecoInfo
   PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
   PaGlobalFunc_Customization_Deco_Close()
 end
@@ -356,25 +398,158 @@ function PaGlobalFunc_Customization_Deco_OpenEyeDecorationUi(classType, uiId)
   self._ui._checkBox_RightEye:SetCheck(true)
   self._ui._static_EyeDecoGroup:SetShow(true)
   local contentsCount = getUiContentsCount(classType, uiId) / 2
+  self._currentTabCount = contentsCount
   if contentsCount > 1 then
+    self._ui._static_TabGroup:SetShow(true)
+    local panelSizeX = Panel_Customizing_CommonDecoration:GetSizeX()
+    local keyGuideSize = 42
+    panelSizeX = panelSizeX - keyGuideSize * 2
+    local iconSortPos = panelSizeX / (contentsCount + 1)
     for contentsIndex = 0, contentsCount - 1 do
-      local tempRadioButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, self._ui._static_ButtonGroup, "RadioButton_" .. contentsIndex)
-      CopyBaseProperty(self._ui._buttonTemplate, tempRadioButton)
+      local tempRadioButton = UI.createAndCopyBasePropertyControl(self._ui._static_TabGroup, "RadioButton_Template", self._ui._static_TabGroup, "RadioButton_" .. contentsIndex)
       local contentsDesc = getUiContentsDescName(classType, uiId, contentsIndex)
-      tempRadioButton:SetText(PAGetString(Defines.StringSheet_GAME, contentsDesc))
-      tempRadioButton:SetPosX(contentsIndex % self._config._buttonColumnCount * (tempRadioButton:GetSizeX() + 5))
-      tempRadioButton:SetPosY(math.floor(contentsIndex / self._config._buttonColumnCount) * (tempRadioButton:GetSizeY() + 5))
-      tempRadioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(" .. contentsIndex .. ", " .. 0 .. ")")
+      PaGlobalFunc_Customization_Deco_GetIconUV(contentsDesc, tempRadioButton)
+      tempRadioButton:SetPosX(iconSortPos * (contentsIndex + 1) - tempRadioButton:GetSizeX() / 2 + keyGuideSize)
+      tempRadioButton:SetCheck(false)
       tempRadioButton:SetShow(true)
       self._buttonList[contentsIndex] = tempRadioButton
     end
     self._ui._static_ButtonGroup:SetShow(true)
+    self._buttonList[0]:SetCheck(true)
   else
     self._ui._static_ButtonGroup:SetShow(false)
+    self._ui._static_TabGroup:SetShow(false)
   end
   self._currentButtonCount = contentsCount - 1
   PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(0, 0)
   PaGlobalFunc_Customization_Deco_Open()
+end
+function PaGlobalFunc_Customization_Deco_CloseEyeDecorationUi()
+  PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
+  PaGlobalFunc_Customization_Deco_Close()
+end
+function PaGlobalFunc_Customization_Deco_GetIconUV(contentsDesc, control)
+  if nil == control then
+    return
+  end
+  local baseX1, baseY1, baseX2, baseY2, onX1, onY1, onX2, onY2
+  control:ChangeTextureInfoName("Renewal/Button/Console_TapBtn_01.dds")
+  if "XML_CUSTOMIZATION_EYELASH" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 102, 352, 150, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 102, 302, 150, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_EYELINE" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 52, 352, 100, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 52, 302, 100, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_UNDERLINE" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 2, 352, 50, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 2, 302, 50, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_PUPIL" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 202, 352, 250, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 202, 302, 250, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_IRIS" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 152, 352, 200, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 152, 302, 200, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_LENS" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 252, 352, 300, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 252, 302, 300, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_EYE_MAKEUP" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 302, 252, 350, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 302, 202, 350, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_LIP" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 452, 252, 500, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 452, 202, 500, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_EYEBROW" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 52, 452, 100, 500)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 52, 402, 100, 450)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_BASE_EYEBROW" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 2, 452, 50, 500)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 2, 402, 50, 450)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_SIDEBURNS" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 452, 352, 500, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 452, 302, 500, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_MUSTACHE" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 402, 352, 450, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 402, 302, 450, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_BEARD" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 302, 352, 350, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 302, 302, 350, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_BASE_BEARD" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 352, 352, 400, 400)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 352, 302, 400, 350)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_CHEEKTOUCH" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 402, 252, 450, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 402, 202, 450, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_BASE" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 202, 252, 250, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 202, 202, 250, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_HAIR_END" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 252, 252, 300, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 252, 202, 300, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  elseif "XML_CUSTOMIZATION_IN_HAIR" == contentsDesc then
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 152, 252, 200, 300)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 152, 202, 200, 250)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  else
+    baseX1, baseY1, baseX2, baseY2 = setTextureUV_Func(control, 0, 0, 1, 1)
+    control:getBaseTexture():setUV(baseX1, baseY1, baseX2, baseY2)
+    onX1, onY1, onX2, onY2 = setTextureUV_Func(control, 0, 0, 1, 1)
+    control:getOnTexture():setUV(onX1, onY1, onX2, onY2)
+    control:getClickTexture():setUV(onX1, onY1, onX2, onY2)
+  end
+  control:setRenderTexture(control:getBaseTexture())
 end
 function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, addHistory, currentclassType, currentuiId)
   local self = Customization_DecoInfo
@@ -405,6 +580,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
         CopyBaseProperty(self._ui._typeTemplate, tempContentImage)
       end
       tempContentImage:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_Deco_UpdateEyeDecoList(" .. listParamType .. "," .. listParamIndex .. "," .. listParamIndex2 .. "," .. itemIndex .. ")")
+      tempContentImage:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SetSelectButton(" .. itemIndex .. ")")
       local mod = itemIndex % self._config._listTextureColumnCount
       local divi = math.floor(itemIndex / self._config._listTextureColumnCount)
       local texUV = {
@@ -448,8 +624,8 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
     self._sliderParamDefault[sliderIndex] = getParamDefault(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex])
     PaGlobalFunc_CustomIzationCommon_SetSliderValue(self._ui._slider[sliderIndex], sliderParam, self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
     self._ui._slider[sliderIndex]:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn(" .. sliderIndex .. ")")
-    self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut(" .. sliderIndex .. ")")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_Deco_SliderFocusOn()")
+    self._ui._slider[sliderIndex]:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_Deco_SliderFocusOut()")
     local sliderDesc = getUiSliderDescName(self._currentClassType, self._currentUiId, contentsIndex, sliderIndex)
     self._ui._staticText_SliderTitle[sliderIndex]:SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
     self._ui._staticText_SliderTitle[sliderIndex]:SetShow(true)
@@ -457,6 +633,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
     self._ui._sliderButton[sliderIndex]:SetShow(true)
     self._ui._staticText_SliderValue[sliderIndex]:SetText(sliderParam)
     self._ui._staticText_SliderValue[sliderIndex]:SetShow(true)
+    PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
   end
   local paletteCount = getUiPaletteCount(self._currentClassType, self._currentUiId, contentsIndex)
   if paletteCount == 1 then
@@ -473,10 +650,6 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(contentsIndex, ad
   end
   self:UpdatePanelSize()
   ToClient_padSnapRefreshTarget(Panel_Customizing_CommonDecoration)
-end
-function PaGlobalFunc_Customization_Deco_CloseEyeDecorationUi()
-  PaGlobalFunc_Customization_PaletteHandle_ClearPalette()
-  PaGlobalFunc_Customization_Deco_Close()
 end
 function PaGlobalFunc_Customization_Deco_OpenTattooDecorationUi(classType, uiId)
   local self = Customization_DecoInfo
@@ -519,14 +692,14 @@ function PaGlobalFunc_Customization_Deco_CloseCommonExpressionUi()
   self._currentCheckType = -1
   PaGlobalFunc_Customization_Deco_CloseCommonDecorationUi()
 end
-function PaGlobalFunc_Customization_Deco_SliderFocusOn(sliderindex)
+function PaGlobalFunc_Customization_Deco_SliderFocusOn()
   local self = Customization_DecoInfo
-  PaGlobalFunc_Customization_SetKeyGuide(3)
+  PaGlobalFunc_Customization_SetKeyGuide(6)
 end
-function PaGlobalFunc_Customization_Deco_SliderFocusOut(sliderindex)
+function PaGlobalFunc_Customization_Deco_SliderFocusOut()
   local self = Customization_DecoInfo
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_Deco_GetShow() then
-    PaGlobalFunc_Customization_SetKeyGuide(1)
+    PaGlobalFunc_Customization_SetKeyGuide(0)
   end
 end
 function PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(sliderIndex)
@@ -539,6 +712,7 @@ function PaGlobalFunc_Customization_Deco_UpdateEyeDecoSlider(sliderIndex)
     setParam(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex2[sliderIndex], value)
   end
   self._ui._staticText_SliderValue[sliderIndex]:SetText(value)
+  PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
 end
 function PaGlobalFunc_Customization_Deco_UpdateEyeDecoList(paramType, paramIndex, paramIndex2, itemIndex)
   local self = Customization_DecoInfo
@@ -559,62 +733,10 @@ function PaGlobalFunc_Customization_Deco_EnableDecorationSlide(enable)
   for index = 0, 4 do
     self._ui._sliderButton[index]:SetMonoTone(not enable)
     self._ui._slider[index]:SetEnable(enable)
+    self._ui._slider[index]:SetIgnore(not enable)
     self._ui._staticText_SliderTitle[index]:SetFontColor(color)
     self._ui._staticText_SliderValue[index]:SetFontColor(color)
   end
-end
-function Customization_DecoInfo:InitControl()
-  self._ui._checkBox_LeftEye = UI.getChildControl(self._ui._static_EyeDecoGroup, "CheckButton_Left")
-  self._ui._checkBox_RightEye = UI.getChildControl(self._ui._static_EyeDecoGroup, "CheckButton_Right")
-  self._ui._checkBox_LeftEye:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYELEFT"))
-  self._ui._checkBox_RightEye:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONEYE_EYERIGHT"))
-  self._ui._buttonTemplate = UI.getChildControl(self._ui._static_ButtonGroup, "Button_Tamplate")
-  self._ui._buttonTemplate:SetShow(false)
-  self._ui._typeTemplate = UI.getChildControl(self._ui._static_TypeGroup, "RadioButton_TypeImage_Template")
-  self._ui._typeTemplate:SetShow(false)
-  self._ui._typeSelect = UI.getChildControl(self._ui._static_TypeGroup, "Static_SelectedSlot")
-  self._ui._typeSelect:SetShow(false)
-  self._ui._static_TypeGroup:SetChildIndex(self._ui._typeSelect, 9999)
-  self._ui._colorTemplate = UI.getChildControl(self._ui._static_ColorGroup, "Button_ColorTemplate")
-  self._ui._colorTemplate:SetShow(false)
-  self._ui._colorSelect = UI.getChildControl(self._ui._static_ColorGroup, "Static_SelectedColor")
-  self._ui._static_ColorGroup:SetChildIndex(self._ui._colorSelect, 9999)
-  self._ui._colorSelect:SetShow(false)
-  self._ui._static_SliderBg = {}
-  self._ui._staticText_SliderTitle = {}
-  self._ui._staticText_SliderValue = {}
-  self._ui._slider = {}
-  self._ui._sliderButton = {}
-  for index = 0, 6 do
-    self._ui._static_SliderBg[index] = UI.getChildControl(self._ui._static_SliderGroup, "Static_SliderBg_" .. index)
-    self._ui._staticText_SliderTitle[index] = UI.getChildControl(self._ui._static_SliderBg[index], "StaticText_Title")
-    self._ui._staticText_SliderValue[index] = UI.getChildControl(self._ui._static_SliderBg[index], "StaticText_SliderValue")
-    self._ui._slider[index] = UI.getChildControl(self._ui._static_SliderBg[index], "Slider_" .. index)
-    self._ui._sliderButton[index] = UI.getChildControl(self._ui._slider[index], "Slider_Button")
-    self._ui._sliderButton[index]:SetIgnore(true)
-  end
-  self._config._listColumnWidth = self._ui._typeTemplate:GetSizeX() + self._config._listOffset
-  self._config._listColumnHeight = self._ui._typeTemplate:GetSizeY() + self._config._listOffset
-end
-function Customization_DecoInfo:InitEvent()
-  Panel_Customizing_CommonDecoration:RegisterUpdateFunc("PaGlobalFunc_Customization_Deco_UpdatePerFrame")
-  Panel_Customizing_CommonDecoration:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Deco_SetBoneControl(true)")
-end
-function Customization_DecoInfo:InitRegister()
-  registerEvent("EventOpenCommonDecorationUi", "PaGlobalFunc_Customization_Deco_OpenCommonDecorationUi")
-  registerEvent("EventCloseCommonDecorationUi", "PaGlobalFunc_Customization_Deco_CloseCommonDecorationUi")
-  registerEvent("EventOpenEyeDecorationUi", "PaGlobalFunc_Customization_Deco_OpenEyeDecorationUi")
-  registerEvent("EventCloseEyeDecorationUi", "PaGlobalFunc_Customization_Deco_CloseEyeDecorationUi")
-  registerEvent("EventOpenTattooDecorationUi", "PaGlobalFunc_Customization_Deco_OpenTattooDecorationUi")
-  registerEvent("EventCloseTattooDecorationUi", "PaGlobalFunc_Customization_Deco_CloseTattooDecorationUi")
-  registerEvent("EventEnableDecorationSlide", "PaGlobalFunc_Customization_Deco_EnableDecorationSlide")
-  registerEvent("EventOpenCommonExpressionUi", "PaGlobalFunc_Customization_Deco_OpenCommonExpressionUi")
-  registerEvent("EventCloseCommonExpressionUi", "PaGlobalFunc_Customization_Deco_CloseCommonExpressionUi")
-end
-function Customization_DecoInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
-  self:InitRegister()
 end
 function PaGlobalFunc_FromClient_Customization_Deco_luaLoadComplete()
   local self = Customization_DecoInfo
@@ -626,9 +748,9 @@ function PaGlobalFunc_Customization_Deco_Close()
     return false
   end
   if true == self._isBoneControl then
-    PaGlobalFunc_Customization_Deco_SetBoneControl(false)
     return false
   end
+  self._currentTabIdx = 0
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_Deco_SetShow(false, false)
@@ -638,15 +760,48 @@ function PaGlobalFunc_Customization_Deco_Open()
   if true == PaGlobalFunc_Customization_Deco_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(1)
+  PaGlobalFunc_Customization_Deco_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Deco_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Deco_Close()")
-  PaGlobalFunc_Customization_Deco_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_Deco_SetShow(isShow, isAni)
   Panel_Customizing_CommonDecoration:SetShow(isShow, isAni)
 end
 function PaGlobalFunc_Customization_Deco_GetShow()
   return Panel_Customizing_CommonDecoration:GetShow()
+end
+function PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
+  local self = Customization_DecoInfo
+  local value = PaGlobalFunc_CustomIzationCommon_GetSliderValue(self._ui._slider[sliderIndex], self._sliderParamMin[sliderIndex], self._sliderParamMax[sliderIndex])
+  setParam(self._currentClassType, self._sliderParamType[sliderIndex], self._sliderParamIndex[sliderIndex], value)
+  self._ui._staticText_SliderValue[sliderIndex]:SetText(value)
+  self._ui._sliderButton[sliderIndex]:SetPosX(self._ui._slider[sliderIndex]:GetControlButton():GetPosX())
+  local offset = math.cos(value / 100 * math.pi) * 2
+  self._ui._sliderProgress[sliderIndex]:SetProgressRate(value + offset)
+end
+function PaGlobalFunc_Customization_Deco_MoveTab(isLeft)
+  local self = Customization_DecoInfo
+  if 0 >= self._currentTabCount then
+    return
+  end
+  if true == isLeft and 0 < self._currentTabIdx then
+    self._currentTabIdx = self._currentTabIdx - 1
+  elseif false == isLeft and self._currentTabIdx < self._currentTabCount - 1 then
+    self._currentTabIdx = self._currentTabIdx + 1
+  end
+  if true == self._ui._static_EyeDecoGroup:GetShow() then
+    PaGlobalFunc_Customization_Deco_UpdateEyeDecoContents(self._currentTabIdx, 0)
+  else
+    PaGlobalFunc_Customization_Deco_UpdateDecorationContents(self._currentTabIdx)
+  end
+  for idx, button in pairs(self._buttonList) do
+    button:SetCheck(false)
+  end
+  self._buttonList[self._currentTabIdx]:SetCheck(true)
+end
+function PaGlobalFunc_Customization_Deco_GetPanel()
+  return Panel_Customizing_CommonDecoration
 end
 PaGlobalFunc_FromClient_Customization_Deco_luaLoadComplete()

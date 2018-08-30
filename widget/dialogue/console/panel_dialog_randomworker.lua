@@ -60,6 +60,7 @@ function randomWorker:initControl()
     RandomWorkerUI._staticText_Exit
   }
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuide, RandomWorkerUI._static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
+  RandomWorkerUI._staticText_Energy:SetPosX(RandomWorkerUI._staticText_Energy:GetPosX() - 15)
 end
 function randomWorker:resetData()
   self._selectWorkerSlotNo = -1
@@ -196,10 +197,10 @@ function randomWorker:hire()
   local Worker_RequestCanle = function()
     Panel_Dialog_RandomWorker:SetShow(true)
   end
-  Panel_Dialog_RandomWorker:SetShow(false)
   if myInvenMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_InventoryMoney:IsCheck() or myWareHouseMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_WarehouseMoney:IsCheck() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEMANAGEMENT_ACK_MAKEBOOK"))
   else
+    Panel_Dialog_RandomWorker:SetShow(false)
     local messageboxData = {
       title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ"),
       content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Employ_Question"),

@@ -2,7 +2,7 @@ Panel_WorldmapKeyGuide:SetShow(false)
 function PaGlobal_ConsoleWorldMapKeyGuide_SetPos(isBottomPanelShow)
   local offsetY
   if true == isBottomPanelShow then
-    offsetY = 100
+    offsetY = 120
   else
     offsetY = 50
   end

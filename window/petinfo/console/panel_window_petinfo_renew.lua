@@ -17,14 +17,14 @@ local petInfo = {
     _skill_MaxCount = 5,
     _action_MaxCount = 10,
     _skillBtn = {
-      _startX = 30,
-      _startY = 240,
-      _gapX = 80
+      _startX = 80,
+      _startY = 270,
+      _gapX = 100
     },
     _actionBtn = {
-      _startX = 30,
-      _startY = 370,
-      _gapX = 80,
+      _startX = 80,
+      _startY = 400,
+      _gapX = 100,
       _gapY = 80,
       _action_lineMaxCount = 5
     }
@@ -229,6 +229,7 @@ function petInfo:setSkillInfoByType(PcPetData, skillNo)
     self._ui._petInfoFrame._static_defaultSkill:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_BASESKILL", "paramText", paramText))
   elseif self._config._skillType_Special == skillNo then
     self._ui._petInfoFrame._static_specialSkill:SetShow(true)
+    self._ui._petInfoFrame._static_specialSkill:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
     self._ui._petInfoFrame._static_specialSkill:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_SPECIALSKILL", "paramText", paramText))
   end
 end
@@ -259,8 +260,9 @@ function petInfo:setToolTipInfo(SkillIndex, isBase, isShow)
     Panel_Tooltip._static_skillName:SetAutoResize(true)
     Panel_Tooltip._static_skillName:SetShow(true)
     Panel_Tooltip._static_skillName:SetText(skillTypeStaticWrapper:getName())
+    Panel_Tooltip._static_skillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     Panel_Tooltip._static_skillDesc:SetText(skillTypeStaticWrapper:getDescription())
-    Panel_Tooltip._static_skillDesc:SetPosY(Panel_Tooltip._static_skillName:GetTextSizeY() + 30)
+    Panel_Tooltip._static_skillDesc:SetPosY(Panel_Tooltip._static_skillName:GetTextSizeY() + Panel_Tooltip._static_skillDesc:GetTextSizeY())
     local SizeY = Panel_Tooltip._static_skillName:GetTextSizeY() + Panel_Tooltip._static_skillDesc:GetTextSizeY() + 50
     Panel_Tooltip:SetSize(Panel_Tooltip:GetSizeX(), SizeY)
   else

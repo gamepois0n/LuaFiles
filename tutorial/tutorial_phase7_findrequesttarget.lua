@@ -90,6 +90,12 @@ function PaGlobal_TutorialPhase_FindRequestTarget:startPhaseXXX(stepNo)
   QuickSlot_UpdateData()
   Panel_UIMain:SetShow(not _ContentsGroup_RenewUI_Main, true)
   Panel_SelfPlayerExpGage_SetShow(true, false)
+  local remasterUIOption = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  if true == remasterUIOption then
+    Panel_MainStatus_Remaster:SetShow(true)
+  else
+    Panel_MainStatus_User_Bar:SetShow(true, false)
+  end
   FGlobal_Panel_MainStatus_User_Bar_Show()
   FGlobal_ClassResource_SetShowControl(true)
   Panel_CheckedQuest:SetShow(true, false)

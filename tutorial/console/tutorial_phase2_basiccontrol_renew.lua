@@ -97,7 +97,6 @@ end
 function PaGlobal_TutorialPhase_BasicControl:changeStepLookAround()
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_8"))
-    PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonRSM", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CUSTERMIZING_KEYGUIDE_2"))
   end)
   PaGlobal_TutorialUiBlackSpirit:showRotateArrow(true)
 end

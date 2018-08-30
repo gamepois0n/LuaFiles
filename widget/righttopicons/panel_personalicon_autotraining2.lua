@@ -59,6 +59,9 @@ function FromClient_SetAutoLevelUp(isAuto)
     PaGlobal_AutoPlay:Close()
   end
 end
-PaGlobal_AutoPlay:Init()
-registerEvent("FromClient_CantIncreaseExpWithAutoLevelUp", "FromClient_CantIncreaseExpWithAutoLevelUp")
-registerEvent("FromClient_SetAutoLevelUp", "FromClient_SetAutoLevelUp")
+registerEvent("FromClient_luaLoadComplete", "FromClient_AutoTraining2_luaLoadComplete")
+function FromClient_AutoTraining2_luaLoadComplete()
+  PaGlobal_AutoPlay:Init()
+  registerEvent("FromClient_CantIncreaseExpWithAutoLevelUp", "FromClient_CantIncreaseExpWithAutoLevelUp")
+  registerEvent("FromClient_SetAutoLevelUp", "FromClient_SetAutoLevelUp")
+end

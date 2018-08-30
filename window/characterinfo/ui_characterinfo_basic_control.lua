@@ -227,6 +227,16 @@ function FromClient_UI_CharacterInfo_Basic_PotentialChanged()
   end
 end
 function FromClient_UI_CharacterInfo_Basic_FitnessChanged(addSp, addWeight, addHp, addMp)
+  self._player = getSelfPlayer()
+  self._playerGet = self._player:get()
+  local _mentalType = self._player:getCombatResourceType()
+  local _mpName = {
+    [CombatType.CombatType_MP] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP"),
+    [CombatType.CombatType_FP] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FP_NEW"),
+    [CombatType.CombatType_EP] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EP"),
+    [CombatType.CombatType_BP] = PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_BP")
+  }
+  self._mpTypeName = _mpName[_mentalType]
   if addSp > 0 then
     FGlobal_FitnessLevelUp(addSp, addWeight, addHp, addMp, self._fitness._stamina)
   elseif addWeight > 0 then
@@ -236,6 +246,7 @@ function FromClient_UI_CharacterInfo_Basic_FitnessChanged(addSp, addWeight, addH
   end
   if Panel_Window_CharInfo_Status:IsShow() == false then
     return
+  else
   end
   local titleString = {
     [self._fitness._stamina] = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_STAMINA_TITLE"),
@@ -260,16 +271,24 @@ function FromClient_UI_CharacterInfo_Basic_FitnessChanged(addSp, addWeight, addH
     local max = Int64toInt32(self._playerGet:getDemandFItnessExperiencePoint(index))
     local rate = current / max * 100
     local level = self._playerGet:getFitnessLevel(index)
+    local _hpIncrease = tostring(ToClient_GetFitnessLevelStatus(index, 0))
+    local _mpIncrease = tostring(ToClient_GetFitnessLevelStatus(index, 1))
+    local _heathInfo
     self._ui._progress2Fitness[index]:SetProgressRate(rate)
     self._ui._staticTextFitness_Level[index]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_CRAFTLEVEL") .. tostring(level))
     if index ~= self._fitness._strength then
       if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
-        self._ui._staticTextFitness_Title[index]:SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index)))
+        if self._fitness._health == index then
+          _heathInfo = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_HEALTHINFO_NEW", "hpIncrease", _hpIncrease, "mpTypeName", self._mpTypeName, "mpIncrease", _mpIncrease)
+        else
+          _heathInfo = titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index, 0))
+        end
+        self._ui._staticTextFitness_Title[index]:SetText(_heathInfo)
       else
         self._ui._staticTextFitness_Title[index]:SetText(titleString[index])
       end
     elseif isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
-      self._ui._staticTextFitness_Title[index]:SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index) / 10000))
+      self._ui._staticTextFitness_Title[index]:SetText(titleString[index] .. tostring(ToClient_GetFitnessLevelStatus(index, 0) / 10000))
     else
       self._ui._staticTextFitness_Title[index]:SetText(titleString[index])
     end
@@ -413,7 +432,13 @@ function PaGlobal_CharacterInfoBasic:handleMouseOver_Fitness(isShow, _tipType)
     name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_STRENGTH_MSG", "type", tostring(ToClient_GetFitnessLevelStatus(_tipType) / 10000))
   elseif self._fitness._health == _tipType then
     control = self._ui._staticTextFitness_Title[self._fitness._health]
-    name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_HEALTH_MSG", "type", tostring(ToClient_GetFitnessLevelStatus(_tipType)))
+    local _hpIncrease = tostring(ToClient_GetFitnessLevelStatus(_tipType, 0))
+    local _mpIncrease = tostring(ToClient_GetFitnessLevelStatus(_tipType, 1))
+    if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+      name = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FITNESS_HEALTH_MSG_NEW", "hpIncrease", _hpIncrease, "mpTypeName", self._mpTypeName, "mpIncrease", _mpIncrease)
+    else
+      name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_FITNESS_HEALTH_MSG", "type", _hpIncrease)
+    end
   else
     return
   end

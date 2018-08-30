@@ -40,15 +40,15 @@ function Panel_CustomizingAlbum_Initialize()
   elseif screenSizeX >= 1920 and screenSizeX < 3840 then
     sizeX = 1305
     sizeY = 945
-    panelSizeX = 1370
+    panelSizeX = 1335
     panelSizeY = 1060
-    titleBarSizeX = 1357
+    titleBarSizeX = 1322
   else
     sizeX = 1740
     sizeY = 1260
-    panelSizeX = 1810
+    panelSizeX = 1770
     panelSizeY = 1375
-    titleBarSizeX = 1797
+    titleBarSizeX = 1757
   end
   Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY)
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
@@ -111,4 +111,7 @@ function FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
 end
 function FGlobal_CustomizingAlbum_Close()
   Panel_CustomizingAlbum:SetShow(false, false)
+end
+function FGlobal_CustomizingAlbum_GetShow()
+  return Panel_CustomizingAlbum:GetShow()
 end

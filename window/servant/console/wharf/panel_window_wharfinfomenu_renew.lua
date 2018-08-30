@@ -175,7 +175,7 @@ function Panel_Window_WharfInfo_Menu_info:setSealedButton(selectServantNo)
     if nowHp < maxHp then
       self:setButton(self._enumButtonType.eREPAIR, self._string.repair)
     end
-    if nowHp == maxHp and nowMp < maxMp and (CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip or CppEnums.VehicleType.Type_PersonTradeShip) then
+    if nowHp == maxHp and nowMp < maxMp and (CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalBattleShip == vehicleType) then
       self:setButton(self._enumButtonType.eREPAIR, self._string.repair)
     end
     if FGlobal_IsCommercialService() then
@@ -345,7 +345,7 @@ function PaGlobalFunc_WharfInfo_Menu_Recovery()
     needMoney = Int64toInt32(servantInfo:getRecoveryCost_s64())
     confirmFunction = PaGlobalFunc_WharfInfo_Menu_RecoveryXXX
   end
-  if CppEnums.VehicleType.Type_SailingBoat == isVehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == isVehicleType or CppEnums.VehicleType.Type_PersonTradeShip == isVehicleType then
+  if CppEnums.VehicleType.Type_SailingBoat == isVehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == isVehicleType or CppEnums.VehicleType.Type_PersonTradeShip == isVehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == isVehicleType or CppEnums.VehicleType.Type_CashPersonalBattleShip == isVehicleType then
     Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SHIP_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
   else
     Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_CARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)

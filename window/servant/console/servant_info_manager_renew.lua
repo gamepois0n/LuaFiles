@@ -22,7 +22,9 @@ local CONVERT_VT = {
   [CppEnums.VehicleType.Type_SailingBoat] = ENUM_NEW_VT.WORKSHIP,
   [CppEnums.VehicleType.Type_PersonalBattleShip] = ENUM_NEW_VT.WORKSHIP,
   [CppEnums.VehicleType.Type_PersonTradeShip] = ENUM_NEW_VT.WORKSHIP,
-  [CppEnums.VehicleType.Type_PersonalBoat] = ENUM_NEW_VT.WORKSHIP
+  [CppEnums.VehicleType.Type_PersonalBoat] = ENUM_NEW_VT.WORKSHIP,
+  [CppEnums.VehicleType.Type_CashPersonalBattleShip] = ENUM_NEW_VT.WORKSHIP,
+  [CppEnums.VehicleType.Type_CashPersonalTradeShip] = ENUM_NEW_VT.WORKSHIP
 }
 local Servant_Info_Manager_info = {
   _showFunc = {

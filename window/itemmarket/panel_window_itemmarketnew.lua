@@ -3207,6 +3207,9 @@ function ItemMarket_SingleItemBuy()
   FGlobal_HandleClicked_ItemMarket_SingleItem_Do(1)
 end
 local isOpenByMaid = false
+function PaGlobalFunc_ItemMarkey_isOpenByMaid()
+  return isOpenByMaid
+end
 function ItemMarket_UpdateMoneyByWarehouse()
   local self = ItemMarket
   self.invenMoney:SetText(makeDotMoney(getSelfPlayer():get():getInventory():getMoney_s64()))

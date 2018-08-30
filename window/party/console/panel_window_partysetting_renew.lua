@@ -10,6 +10,7 @@ local Panel_Window_PartySetting_info = {
     staticText_Close_ConsoleUI = nil,
     static_DropOption = nil,
     radioButton = {},
+    radioButtonText = nil,
     static_LT_ConsoleUI = nil,
     static_RT_ConsoleUI = nil,
     static_CharacterSlot_Template = nil,
@@ -23,13 +24,15 @@ local Panel_Window_PartySetting_info = {
     staticText_Recruite = nil,
     staticText_Invite_ConsoleUI = nil,
     static_LeaderIcon = nil,
-    static_FocusSlot = nil
+    static_FocusSlot = nil,
+    static_NoExpAlertBg = nil
   },
   _value = {
     isMaster = false,
     partyMemberCount = 0,
     currentIndex = nil,
-    currentLootType = nil
+    currentLootType = nil,
+    isOnPanel = true
   },
   _config = {
     maxBigSlot = 5,
@@ -363,6 +366,8 @@ function Panel_Window_PartySetting_info:registerMessageHandler()
   registerEvent("ResponseParty_refuse", "FromClient_ResponseParty_updatePartySettingList")
   registerEvent("ResponseParty_changeLeader", "FromClient_ResponseParty_updatePartySettingList")
   registerEvent("ResponseParty_withdraw", "FromClient_ResponseParty_updatePartySettingList")
+  registerEvent("FromClient_PadSnapChangePanel", "FromClient_PartySetting_PadSnapChangePanel")
+  registerEvent("FromClient_UpdatePartyExperiencePenalty", "FromClient_PartySetting_UpdatePartyExperiencePenalty")
 end
 function Panel_Window_PartySetting_info:initialize()
   self:childControl()
@@ -382,8 +387,6 @@ function Panel_Window_PartySetting_info:initValue()
   self._stringLooting[CppEnums.PartyLootType.LootType_Random] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_RANDOM")
   self._stringLooting[CppEnums.PartyLootType.LootType_Master] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_LEADERONLY")
   for index = 0, self._config.lootingOptionCount - 1 do
-    self._ui.radioButton[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-    self._ui.radioButton[index]:SetText(self._stringLooting[self._enumMachingIndex[index]])
   end
 end
 function Panel_Window_PartySetting_info:resize()
@@ -398,6 +401,7 @@ function Panel_Window_PartySetting_info:childControl()
   for index = 0, self._config.lootingOptionCount - 1 do
     self._ui.radioButton[index] = UI.getChildControl(self._ui.static_DropOption, "RadioButton_" .. index + 1)
   end
+  self._ui.radioButtonText = UI.getChildControl(self._ui.static_DropOption, "StaticText_SelectedLootOption")
   self._ui.static_LT_ConsoleUI = UI.getChildControl(self._ui.static_DropOption, "Static_LT_ConsoleUI")
   self._ui.static_RT_ConsoleUI = UI.getChildControl(self._ui.static_DropOption, "Static_RT_ConsoleUI")
   self._ui.static_CharacterSlot_Template = UI.getChildControl(self._ui.static_Content, "Static_CharacterSlot_Template")
@@ -418,6 +422,8 @@ function Panel_Window_PartySetting_info:childControl()
   self._ui.static_CharacterSlot_Template:SetShow(false)
   self._ui.static_FocusSlot = UI.getChildControl(self._ui.static_Content, "Static_FocusSlot")
   self._ui.static_FocusSlot:SetShow(true)
+  self._ui.static_NoExpAlertBg = UI.getChildControl(self._ui.static_Content, "Static_NoExpAlertBg")
+  self._ui.static_ExpBonusIcon = UI.getChildControl(self._ui.static_Content, "Static_ExpBonusIcon")
 end
 function Panel_Window_PartySetting_info:createTemplate()
   for index = 0, self._config.maxBigSlot - 1 do
@@ -459,6 +465,7 @@ function Panel_Window_PartySetting_info:createTemplate()
     slot:setPos(index)
     slot.static_CharacterSlot_Template:addInputEvent("Mouse_On", "PaGlobalFunc_PartySetting_OnSelectParty(" .. index .. ")")
     slot.static_CharacterSlot_Template:addInputEvent("Mouse_Out", "PaGlobalFunc_PartySetting_OutSelectParty(" .. index .. ")")
+    self._ui.static_Content:SetChildOrder(slot.static_CharacterSlot_Template:GetKey(), self._ui.static_FocusSlot:GetKey())
     self._partyMemberUIBig[index] = slot
   end
 end
@@ -579,7 +586,9 @@ function Panel_Window_PartySetting_info:setBigInfo(index)
   self._partyMemberUIBig[index].staticText_Name:SetText(self._partyMemberData[index]._name)
   self:setBigIcon(index)
   self._partyMemberUIBig[index].classType = self._partyMemberData[index]._class
-  self:setBigButtonIcon(self._value.currentIndex)
+  if true == self._value.isOnPanel then
+    self:setBigButtonIcon(self._value.currentIndex)
+  end
 end
 function Panel_Window_PartySetting_info:setBigInviteInfo(index)
   self:clearButton(index)
@@ -589,7 +598,7 @@ function Panel_Window_PartySetting_info:setBigInviteInfo(index)
   self._partyMemberUIBig[index].static_LeaderIcon:SetShow(false)
   self:setBigInviteIcon(index)
   self._partyMemberUIBig[index].classType = -1
-  if index == self._value.currentIndex then
+  if true == self._value.isOnPanel and index == self._value.currentIndex then
     self._partyMemberUIBig[index].staticText_Invite_ConsoleUI:SetShow(true)
   end
 end
@@ -629,6 +638,7 @@ end
 function Panel_Window_PartySetting_info:clearBottomTab()
   for index = 0, self._config.lootingOptionCount - 1 do
     self._ui.radioButton[index]:SetFontColor(self._color.unSelected)
+    self._ui.radioButton[index]:SetCheck(false)
   end
 end
 function Panel_Window_PartySetting_info:updateBottomTab()
@@ -649,8 +659,17 @@ function Panel_Window_PartySetting_info:updateBottomTab()
     self:clearBottomTab()
     self._ui.radioButton[self._value.currentLootType]:SetFontColor(self._color.selected)
   end
+  for index = 0, self._config.lootingOptionCount - 1 do
+    self._ui.radioButton[index]:SetCheck(index == self._value.currentLootType)
+  end
+  self._ui.radioButtonText:SetText(self._stringLooting[self._enumMachingIndex[self._value.currentLootType]])
 end
 function Panel_Window_PartySetting_info:updateDefaultPartySettingList()
+  self._ui.radioButtonText:SetText("")
+  if 0 == self._value.partyMemberCount then
+    self._ui.static_FocusSlot:SetShow(false)
+    self._ui.static_NoExpAlertBg:SetShow(false)
+  end
   for index = 0, self._config.maxBigSlot - 1 do
     self._partyMemberUIBig[index]:setShow(false)
     if index < self._value.partyMemberCount then
@@ -846,6 +865,34 @@ function FromClient_ResponseParty_updatePartySettingList()
   local self = Panel_Window_PartySetting_info
   if PaGlobalFunc_PartySetting_GetShow() then
     self:updatePartySettingList()
+  end
+end
+function FromClient_PartySetting_PadSnapChangePanel(fromPanel, toPanel)
+  local self = Panel_Window_PartySetting_info
+  local thisPanelKey = Panel_Window_PartySetting:GetKey()
+  if nil ~= toPanel then
+    if thisPanelKey ~= toPanel:GetKey() then
+      self._value.isOnPanel = false
+    end
+    if thisPanelKey == toPanel:GetKey() then
+      self._value.isOnPanel = true
+    end
+  end
+end
+function FromClient_PartySetting_UpdatePartyExperiencePenalty(isPenalty)
+  local self = Panel_Window_PartySetting_info
+  if nil == isPenalty then
+    return
+  end
+  if isPenalty then
+    self._ui.static_NoExpAlertBg:SetShow(true)
+    self._ui.static_ExpBonusIcon:SetShow(false)
+  else
+    self._ui.static_NoExpAlertBg:SetShow(false)
+    self._ui.static_ExpBonusIcon:SetShow(true)
+  end
+  if 0 == self._value.partyMemberCount then
+    self._ui.static_NoExpAlertBg:SetShow(false)
   end
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_PartySetting_Init")

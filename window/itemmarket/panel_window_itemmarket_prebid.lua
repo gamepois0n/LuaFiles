@@ -69,6 +69,9 @@ end
 function ItemMarketPreBid:updateSilver()
   local invenMoney = getSelfPlayer():get():getInventory():getMoney_s64()
   local wareHouseMoney = warehouse_moneyByCurrentRegionMainTown_s64(true)
+  if false == PaGlobalFunc_ItemMarkey_isOpenByMaid() then
+    wareHouseMoney = warehouse_moneyFromNpcShop_s64()
+  end
   self.value.invenMoney = invenMoney
   self.value.wareHouseMoney = wareHouseMoney
   self.ui.hasSilver_Inven:SetText(makeDotMoney(invenMoney))

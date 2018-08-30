@@ -53,6 +53,9 @@ function MarketWallet:init()
   self._ui.txt_InvenMoney = UI.getChildControl(self._ui.stc_RightBg, "StaticText_MoneyValue")
   self._ui.scroll_RightSlot = UI.getChildControl(self._ui.stc_RightBg, "Scroll_RightSlot")
   self._ui.btn_BConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "Button_B_ConsoleUI")
+  self._ui.txt_MoneyValue = UI.getChildControl(self._ui.stc_LeftBg, "StaticText_MoneyValue")
+  self._ui.txt_Weight = UI.getChildControl(self._ui.stc_LeftBg, "StaticText_Weight")
+  self._ui.txt_Count = UI.getChildControl(self._ui.stc_LeftBg, "StaticText_Count")
   self._config.slotRows = self._config.slotCount / self._config.slotCols
   self._maxSlotRow = math.floor((self._config.slotCount - 1) / self._config.slotCols)
   for slotIdx = 0, self._config.slotCount - 1 do
@@ -103,7 +106,7 @@ function MarketWallet:init()
   end
   for slotIdx = 0, self._config.slotCount - 1 do
     local slot = {}
-    SlotItem.new(slot, "WalletItem_" .. slotIdx, slotIdx, self._ui.stc_RightSlotBG, self._slotConfig)
+    SlotItem.new(slot, "InventoryItem_" .. slotIdx, slotIdx, self._ui.stc_RightSlotBG, self._slotConfig)
     slot:createChild()
     local row = math.floor(slotIdx / self._config.slotCols)
     local column = slotIdx % self._config.slotCols
@@ -120,6 +123,26 @@ function MarketWallet:init()
     end
     UIScroll.InputEventByControl(slot.icon, "PaGlobalFunc_MarketWallet_Scroll")
     self._slotInvenItemData[slotIdx] = slot
+  end
+  for slotIdx = 0, self._config.slotCount - 1 do
+    local slot = {}
+    SlotItem.new(slot, "WalletItem_" .. slotIdx, slotIdx, self._ui.stc_LeftSlotBG, self._slotConfig)
+    slot:createChild()
+    local row = math.floor(slotIdx / self._config.slotCols)
+    local column = slotIdx % self._config.slotCols
+    slot.icon:SetPosX(self._config.slotStartX + self._config.slotGapX * column + 2)
+    slot.icon:SetPosY(self._config.slotStartY + self._config.slotGapY * row + 2)
+    slot.icon:SetEnableDragAndDrop(false)
+    slot.icon:SetAutoDisableTime(0.5)
+    if true == ToClient_isXBox() then
+      if 0 == row then
+        slot.icon:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "")
+      elseif self._maxSlotRow == row then
+        slot.icon:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "")
+      end
+    end
+    UIScroll.InputEventByControl(slot.icon, "PaGlobalFunc_MarketWallet_Scroll")
+    self._slotWalletItemData[slotIdx] = slot
   end
   self:registEvent()
 end
@@ -170,7 +193,7 @@ function MarketWallet:updateInventory()
         else
           slot.icon:addInputEvent("Mouse_On", "InputMO_MarketWallet_ShowSlotFocus(" .. slotIdx .. ", false)")
           slot.icon:addInputEvent("Mouse_Out", "InputMO_MarketWallet_HideSlotFocus()")
-          slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_MarketWallet_MoveInvenToWallet(" .. slotIdx .. ")")
+          slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_MarketWallet_MoveInvenToWallet(" .. slotNo .. ")")
           slot.icon:SetAlpha(1)
         end
         local isSoulCollector = itemWrapper:isSoulCollector()
@@ -208,6 +231,46 @@ function MarketWallet:updateInventory()
   UIScroll.SetButtonSize(self._ui.scroll_RightSlot, self._config.slotCount, invenMaxSize - useStartSlot)
 end
 function MarketWallet:updateWallet()
+  local currentWeight = getWorldMarketCurrentWeight()
+  local maxWeight = getWorldMarketMaxWeight()
+  local silverInfo = getWorldMarketSilverInfo()
+  if 0 ~= currentWeight then
+    currentWeight = currentWeight / 100
+  end
+  if 0 ~= maxWeight then
+    maxWeight = maxWeight / 100
+  end
+  self._ui.txt_MoneyValue:SetText(tostring(silverInfo:getItemCount()))
+  self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
+  local slotNoList = Array.new()
+  local walletItemCount = getWorldMarketMyWalletListCount()
+  self._ui.txt_Count:SetText(tostring(walletItemCount))
+  slotNoList:fill(0, self._config.slotCount - 1)
+  for slotIdx = 0, self._config.slotCount - 1 do
+    local slot = self._slotWalletItemData[slotIdx]
+    local slotBg = self._slotWalletBgData[slotIdx]
+    local slotNo = slotNoList[slotIdx + 1 + self._startInvenSlotIndex]
+    slot:clearItem()
+    slot.slotNo = slotNo
+    slot.icon:EraseAllEffect()
+    slot.icon:addInputEvent("Mouse_On", "")
+    slot.icon:addInputEvent("Mouse_Out", "")
+    if walletItemCount > slotIdx then
+      local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(slotIdx)
+      local itemWrapper = itemMyWalletInfo:getItemEnchantStaticStatusWrapper()
+      if nil ~= itemWrapper then
+        local s64_inventoryItemCount
+        slot:setItemByStaticStatus(itemWrapper, itemMyWalletInfo:getItemCount(), -1, false, nil, false, 0, 0, nil)
+        slot.isEmpty = false
+        slot.icon:addInputEvent("Mouse_On", "InputMO_MarketWallet_ShowSlotFocus(" .. slotIdx .. ", true)")
+        slot.icon:addInputEvent("Mouse_Out", "InputMO_MarketWallet_HideSlotFocus()")
+        slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_MarketWallet_MoveWalletToInven(" .. slotIdx .. ")")
+        slot.icon:SetAlpha(1)
+      end
+    end
+    slotBg.lock:SetShow(false)
+  end
+  UIScroll.SetButtonSize(self._ui.scroll_RightSlot, self._config.slotCount, self._config.slotCount)
 end
 function MarketWallet:marketFilter(slotNo, itemWrapper, invenWhereType)
   if nil == itemWrapper then
@@ -311,13 +374,22 @@ function InputMO_MarketWallet_ShowSlotFocus(slotIdx, isLeft)
     self._ui.stc_RightSlotFocus:SetShow(true)
   end
 end
-function InputMRUp_MarketWallet_MoveInvenToWallet(slotIdx)
+function InputMRUp_MarketWallet_MoveInvenToWallet(slotNo)
   local self = MarketWallet
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketWallet")
     return
   end
-  _PA_LOG("\236\162\133\237\152\132", slotIdx)
+  requestMoveItemInventoryToWallet(CppEnums.ItemWhereType.eInventory, slotNo, 1, FGlobal_ItemMarket_IsOpenByMaid())
+end
+function InputMRUp_MarketWallet_MoveWalletToInven(slotIdx)
+  local self = MarketWallet
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketWallet")
+    return
+  end
+  local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(slotIdx)
+  requestMoveItemWalletToInventory(itemMyWalletInfo:getEnchantKey())
 end
 function InputMO_MarketWallet_HideSlotFocus()
   local self = MarketWallet
@@ -341,6 +413,7 @@ function PaGlobalFunc_MarketWallet_Scroll(isUp)
   self:updateInventory()
 end
 function FromClient_MarketPlace_RequestMyWalletList()
+  PaGlobalFunc_MarketPlace_UpdateWalletInfo()
   local self = MarketWallet
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketWallet")

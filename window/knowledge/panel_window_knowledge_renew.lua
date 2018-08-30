@@ -39,6 +39,7 @@ local Panel_Window_Knowledge_Renew_info = {
     list2_2_VerticalScroll = nil,
     list2_2_HorizontalScroll = nil,
     static_BottomBg = nil,
+    staticText_Select_ConsoleUI = nil,
     staticText_Back_ConsoleUI = nil,
     button_Back = nil,
     staticText_TooltipBg = nil,
@@ -279,6 +280,7 @@ function Panel_Window_Knowledge_Renew_info:childControl()
   self._ui.list2_2_VerticalScroll = UI.getChildControl(self._ui.list2_CategoryItem, "List2_2_VerticalScroll")
   self._ui.list2_2_HorizontalScroll = UI.getChildControl(self._ui.list2_CategoryItem, "List2_2_HorizontalScroll")
   self._ui.static_BottomBg = UI.getChildControl(Panel_Window_Knowledge_Renew, "Static_BottomBg")
+  self._ui.staticText_Select_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Select_ConsoleUI")
   self._ui.staticText_Back_ConsoleUI = UI.getChildControl(self._ui.static_BottomBg, "StaticText_Back_ConsoleUI")
   self._ui.button_Back = UI.getChildControl(self._ui.static_BottomBg, "Button_Back")
   self._ui.staticText_TooltipBg = UI.getChildControl(Panel_Window_Knowledge_Renew, "StaticText_TooltipBg")
@@ -534,22 +536,27 @@ function Panel_Window_Knowledge_Renew_info:setContent()
     self:clearContentPage0()
     self:updateTopText()
     self:setContentPage0()
+    self._ui.staticText_Select_ConsoleUI:SetShow(true)
   elseif self._value.currentStep == self._enum.eSETP_SUBCATEGORY then
     self:clearContentPage1()
     self:updateTopText()
     self:setContentPage1()
+    self._ui.staticText_Select_ConsoleUI:SetShow(false)
   elseif self._value.currentStep == self._enum.eSTEP_GROUP_1 then
     self:clearContentPage2()
     self:updateTopText()
     self:setContentPage2()
+    self._ui.staticText_Select_ConsoleUI:SetShow(false)
   elseif self._value.currentStep == self._enum.eSTEP_GROUP_2 then
     self:clearContentPage3()
     self:updateTopText()
     self:setContentPage3()
+    self._ui.staticText_Select_ConsoleUI:SetShow(false)
   elseif self._value.currentStep == self._enum.eSTEP_GROUP_3 then
     self:clearContentPage4()
     self:updateTopText()
     self:setContentPage4()
+    self._ui.staticText_Select_ConsoleUI:SetShow(false)
   end
 end
 function Panel_Window_Knowledge_Renew_info:setContentPage0()
@@ -564,7 +571,7 @@ function Panel_Window_Knowledge_Renew_info:setContentPage0()
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.button_Category[index].icon, iconData.x1, iconData.y1, iconData.x2, iconData.y2)
     self._ui.button_Category[index].icon:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.button_Category[index].icon:setRenderTexture(self._ui.button_Category[index].icon:getBaseTexture())
-    self._ui.button_Category[index].button:addInputEvent("Mouse_On", "")
+    self._ui.button_Category[index].button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page0_HideButtonA(false)")
     self._ui.button_Category[index].button:addInputEvent("Mouse_LUp", "")
   end
   for index = 0, childKnowledgeCount do
@@ -588,7 +595,7 @@ function Panel_Window_Knowledge_Renew_info:setContentPage0()
       self._ui.button_Category[controlIndex].mentalCardKeyRaw = mentalCardKeyRaw
       self._ui.button_Category[controlIndex].button:SetText(categoryName)
       self._ui.button_Category[controlIndex].percent:SetText(percent .. "%")
-      self._ui.button_Category[controlIndex].button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page0_SelectButton(" .. controlIndex .. ")")
+      self._ui.button_Category[controlIndex].button:addInputEvent("Mouse_On", "PaGlobalFunc_Window_Knowledge_Page0_SelectButton(" .. controlIndex .. "," .. tostring(hideButtonA) .. ")")
       self._ui.button_Category[controlIndex].button:addInputEvent("Mouse_LUp", "PaGlobalFunc_Window_Knowledge_Page0_ClickButton(" .. controlIndex .. ",\"" .. categoryName .. "\"" .. ")")
     end
   end
@@ -861,8 +868,19 @@ function PaGlobalFunc_Window_Knowledge_Page1_ClickButton(index, subCategory)
     self:setContent()
   end
 end
-function PaGlobalFunc_Window_Knowledge_Page0_SelectButton(index)
+function PaGlobalFunc_Window_Knowledge_Page0_HideButtonA(hideButtonA)
   local self = Panel_Window_Knowledge_Renew_info
+  if nil == hideButtonA then
+    hideButtonA = true
+  end
+  self._ui.staticText_Select_ConsoleUI:SetShow(hideButtonA)
+end
+function PaGlobalFunc_Window_Knowledge_Page0_SelectButton(index, hideButtonA)
+  local self = Panel_Window_Knowledge_Renew_info
+  if nil == hideButtonA then
+    hideButtonA = true
+  end
+  self._ui.staticText_Select_ConsoleUI:SetShow(hideButtonA)
   self._value.step0_currentIndex = index
 end
 function PaGlobalFunc_Window_Knowledge_Page0_ClickButton(index, category)

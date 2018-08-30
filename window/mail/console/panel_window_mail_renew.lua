@@ -56,6 +56,7 @@ function FromClient_luaLoadComplete_MailInfo_Init()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_MailInfo_Init")
 function MailInfo:Init_Control()
+  self:init_newMailAlarm()
   self._ui._page_Count = UI.getChildControl(self._ui.stc_topBG, "StaticText_PageNumber")
   self._ui.mailTemplate = UI.getChildControl(self._ui.stc_centerBG, "RadioButton_MailTemplate")
   for ii = 1, self._rowMax do
@@ -88,7 +89,6 @@ end
 function MailInfo:registMessageHandler()
   registerEvent("ResponseMail_showList", "Mail_UpdateList")
   registerEvent("onScreenResize", "Mail_onScreenResize")
-  registerEvent("FromClient_PadSnapChangePanel", "FromClient_MailInfo_PadSnapChangePanel")
 end
 local _mail_Data = {
   _Page_Total = 0,
@@ -276,24 +276,17 @@ function Mail_Close()
   end
   HelpMessageQuestion_Out()
 end
+function MailInfo:init_newMailAlarm()
+  local bNewFlag = RequestMail_getNewMailFlag()
+  if bNewFlag then
+    FromClient_NewMailAlarm()
+  end
+end
 function Mail_UpdateList(isCheck)
   _mail_Data:setData()
   _mail_Data:Update_MailPage()
 end
 function FromClient_NewMail()
-end
-function FromClient_MailInfo_PadSnapChangePanel(fromPanel, toPanel)
-  if nil ~= toPanel then
-    if _panel:GetKey() == toPanel:GetKey() then
-      MailInfo._ui.txt_keyGuideA:SetMonoTone(false)
-      MailInfo._ui.txt_keyGuideX:SetMonoTone(false)
-      MailInfo._ui.txt_keyGuideB:SetMonoTone(false)
-    else
-      MailInfo._ui.txt_keyGuideA:SetMonoTone(true)
-      MailInfo._ui.txt_keyGuideX:SetMonoTone(true)
-      MailInfo._ui.txt_keyGuideB:SetMonoTone(true)
-    end
-  end
 end
 function Mail_onScreenResize()
   _panel:SetPosX(getScreenSizeX() - _panel:GetSizeX())

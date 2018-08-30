@@ -281,7 +281,7 @@ function Panel_Window_HorseInfo_info:updateBaseInfo()
     self._ui.staticText_MatingVal:SetShow(false)
   end
   if "" ~= descText then
-    descText = descText .. " "
+    descText = descText .. "\n"
   end
   local deadCount = servantInfo:getDeadCount()
   self._ui.staticText_DeadVal:SetText(deadCount)

@@ -8,7 +8,7 @@ local Window_WorldMap_RingMenuInfo = {
   },
   _config = {
     _enter = 0,
-    _bookMark = 1,
+    _craftManage = 1,
     _showInfo = 2,
     _vehiclePos = 3,
     _waypoint = 4,
@@ -18,6 +18,16 @@ local Window_WorldMap_RingMenuInfo = {
     _count = 8,
     _centerX,
     _centerY
+  },
+  _strConfig = {
+    [0] = "Enter",
+    [1] = "Craft Manage",
+    [2] = PAGetString(Defines.StringSheet_RESOURCE, "INTERACTION_BTN_CHARINFO"),
+    [3] = "Vehicle Position",
+    [4] = "Waypoint",
+    [5] = PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_NODE_BTN_WITHDRAW"),
+    [6] = "Node Manage",
+    [7] = "Product Manage"
   },
   _uiTypeConfig = {
     _node = 0,
@@ -42,8 +52,11 @@ local Window_WorldMap_RingMenuInfo = {
   _currentWorldNode = nil,
   _currentRingMenuIndex = __eRingMenuPosition_Default,
   _isTakeAble = false,
+  _houseCount = 0,
   _prevRightStickValue = {_x = 0, _y = 0},
-  _currentHousekey = nil
+  _currentHousekey = nil,
+  _currentQuestKey = nil,
+  _currentFocusedNodeCount = 0
 }
 function Window_WorldMap_RingMenuInfo:RingMenuClear()
   self._ui._static_BlackBg:SetShow(false)
@@ -53,11 +66,19 @@ function Window_WorldMap_RingMenuInfo:RingMenuClear()
   self._isRingMenuOpen = false
   self._currentRingMenuIndex = __eRingMenuPosition_Default
   PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(false)
+  for index = 0, self._config._count - 1 do
+    if nil ~= self._ui._ringMenu[index] then
+      self._ui._ringMenu[index]._button:SetCheck(false)
+    end
+  end
 end
 function Window_WorldMap_RingMenuInfo:FocusOn(uiType)
   if uiType >= self._uiTypeConfig._count then
     return
   end
+  self._ui._static_Aim:ResetVertexAni()
+  self._ui._static_Aim:ResetVertexAni()
+  self._ui._static_AimColor:ResetVertexAni()
   self._ui._static_Aim:SetVertexAniRun("Ani_Scale_Set", true)
   self._ui._static_Aim:SetVertexAniRun("Ani_Move_Pos_Set", true)
   self._ui._static_AimColor:SetVertexAniRun("Ani_Color_Set", true)
@@ -66,9 +87,15 @@ function Window_WorldMap_RingMenuInfo:FocusOn(uiType)
   self._ui._static_FocusKeyGuide:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui._static_FocusKeyGuide:setRenderTexture(self._ui._static_FocusKeyGuide:getBaseTexture())
   self._ui._static_FocusKeyGuide:SetShow(true)
+  if self._uiTypeConfig._quest == uiType then
+    self._ui._static_FocusKeyGuide:SetShow(false)
+  end
 end
 function Window_WorldMap_RingMenuInfo:FocusOut()
   self._ui._static_FocusKeyGuide:SetShow(false)
+  self._ui._static_Aim:ResetVertexAni()
+  self._ui._static_Aim:ResetVertexAni()
+  self._ui._static_AimColor:ResetVertexAni()
   self._ui._static_Aim:SetVertexAniRun("Ani_Scale_Reset", true)
   self._ui._static_Aim:SetVertexAniRun("Ani_Move_Pos_Reset", true)
   self._ui._static_AimColor:SetVertexAniRun("Ani_Color_Reset", true)
@@ -114,7 +141,7 @@ function PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(index)
     PaGlobalFunc_WorldMap_TopMenu_SetCurrentNodeInfo(nodeInfo)
     PaGlobalFunc_WorldMap_RightMenu_SetCurrentNodeInfo(nodeInfo)
     ToClient_setTownMode(plantKey)
-  elseif state._bookMark == index then
+  elseif state._craftManage == index then
     local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
     local plantKey = nodeInfo:getPlantKey()
     PaGlobalFunc_WorldMap_TopMenu_SetCurrentNodeInfo(nodeInfo)
@@ -123,8 +150,7 @@ function PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(index)
     if 0 == ToClient_getTownReceipeList() then
       return
     end
-    PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
-    PaGlobalFunc_WorldMap_HouseFilter_SelectHouseFilter(2)
+    PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilterFromCraftManage()
   elseif state._showInfo == index then
     self:ShowNodeInfo()
   elseif state._vehiclePos == index then
@@ -144,17 +170,28 @@ function PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(isShow)
   self._ui._static_BlackBg:SetShow(isShow)
   self._ui._static_RingMenuBg:SetShow(isShow)
   ToClient_SetIsIgnoreLStick(isShow)
+  if true == isShow then
+    PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
+    PaGlobalFunc_WorldMap_TopMenu_Close()
+  else
+    PaGlobalFunc_WorldMap_TopMenu_Open()
+    PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+  end
   self._isRingMenuOpen = isShow
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapNode(explorationNode)
   local self = Window_WorldMap_RingMenuInfo
+  self._currentWorldNode = explorationNode
   self._ui._static_FocusKeyGuide:SetShow(false)
+  self._ui._staticText_Tooltip:SetShow(false)
   PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(true)
   local nodeInfo = self._currentWorldNode:FromClient_getExplorationNodeInClient()
   local isTown = nodeInfo:getStaticStatus():getRegion():isMainOrMinorTown()
   local isInvest = nodeInfo:isMaxLevel()
   self._isTakeAble = not isTown and isInvest
-  self._ui._ringMenu[5]._button:SetMonoTone(not self._isTakeAble)
+  self._ui._ringMenu[self._config._take]._button:SetMonoTone(not self._isTakeAble)
+  self._houseCount = ToClient_getHouseCountByPlantKey(nodeInfo:getPlantKey())
+  self._ui._ringMenu[self._config._craftManage]._button:SetMonoTone(0 == self._houseCount)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_RClickedWorldMapNode(nodeBtn)
   local node = nodeBtn:FromClient_getExplorationNodeInClient()
@@ -175,7 +212,6 @@ function PaGlobalFunc_FromClient_WorldMap_RingMenu_OnWorldMapHouse(nodeBtn)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapHouse(nodeBtn)
   local self = Window_WorldMap_RingMenuInfo
-  FGlobal_ClearWorldmapIconTooltip()
   if nil == self._currentHousekey then
     self:FocusOut()
   end
@@ -184,27 +220,42 @@ function PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapHouse(nodeBtn)
     self._currentHousekey = nil
   end
 end
+function PaGlobalFunc_FromClient_WorldMap_RingMenu_OnWorldMapQuestInfo(uiQuest)
+  local self = Window_WorldMap_RingMenuInfo
+  self._currentQuestKey = uiQuest:ToClient_GetQuestStaticStatusWrapper():getKey()
+  self:FocusOn(1)
+end
+function PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapQuestInfo()
+  local self = Window_WorldMap_RingMenuInfo
+  self._currentQuestKey = nil
+  if 0 == self._currentFocusedNodeCount then
+    self:FocusOut()
+  end
+end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapHouse(nodeBtn)
   if nil == nodeBtn then
     return
   end
-  PaGlobalFunc_WorldMapHouseManager_Open(nodeBtn:FromClient_getStaticStatus())
+  PaGlobalFunc_WorldMapHouseManager_Open(nodeBtn, false)
   FGlobal_ClearWorldmapIconTooltip()
   PaGlobalFunc_WorldMap_BottomMenu_Close()
-  PaGlobalFunc_WorldMap_TopMenu_Close()
   PaGlobalFunc_WorldMap_RingMenu_Close()
+  PaGlobalFunc_WorldMap_TopMenu_Close()
 end
-function PaGlobalFunc_FromClient_WorldMpa_RingMenu_OnWorldMapNode(nodeBtn)
-  local self = Window_WorldMap_RingMenuInfo
-  self._currentWorldNode = nodeBtn
-end
-function PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapNode(nodeBtn)
-  local self = Window_WorldMap_RingMenuInfo
+function PaGlobalFunc_FromClient_WorldMap_RingMenu_RClickedWorldMapHouse(houseBtn)
+  local houseInfo = houseBtn:FromClient_getStaticStatus()
+  if nil == houseInfo then
+    return
+  end
+  FromClient_RClickWorldmapPanel(houseInfo:getPosition(), false, true)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_FocusUpdate(size, type)
   local self = Window_WorldMap_RingMenuInfo
+  self._currentFocusedNodeCount = Int64toInt32(size)
   if 0 == Int64toInt32(size) then
-    self:FocusOut()
+    if nil == self._currentQuestKey then
+      self:FocusOut()
+    end
   else
     self:FocusOn(Int64toInt32(type))
   end
@@ -212,17 +263,31 @@ end
 function PaGlobalFunc_WorldMap_RingMenu_SetPadEvent(type, func)
   Panel_Worldmap_RingMenu:registerPadEvent(type, func)
 end
+function Window_WorldMap_RingMenuInfo:ConditionCheck(position)
+  if false == self._isTakeAble and self._config._take == position then
+    return false
+  end
+  if 0 == self._houseCount and self._config._craftManage == position then
+    return false
+  end
+  return true
+end
 function Window_WorldMap_RingMenuInfo:UpdateRingMenu(position)
-  if false == self._isTakeAble and 5 == position then
+  if false == self:ConditionCheck(position) then
     return
   end
-  for index = 0, self._config._count - 1 do
-    if nil ~= self._ui._ringMenu[index] then
-      self._ui._ringMenu[index]._decs:SetShow(index == position)
+  if position == __eRingMenuPosition_Default then
+    if __eRingMenuPosition_Default ~= self._currentRingMenuIndex then
+      PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(self._currentRingMenuIndex)
     end
-  end
-  if position == __eRingMenuPosition_Default and __eRingMenuPosition_Default ~= self._currentRingMenuIndex then
-    PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(self._currentRingMenuIndex)
+  else
+    for index = 0, self._config._count - 1 do
+      if nil ~= self._ui._ringMenu[index] then
+        self._ui._ringMenu[index]._button:SetCheck(index == position)
+      end
+    end
+    self._ui._staticText_Tooltip:SetShow(true)
+    self._ui._staticText_Tooltip:SetText(self._strConfig[position])
   end
   local RSX = getPadRightStickMoveX()
   local RSY = getPadRightStickMoveY()
@@ -239,14 +304,10 @@ end
 function Window_WorldMap_RingMenuInfo:InitControl()
   for index = 0, self._config._count - 1 do
     self._ui._ringMenu[index] = {}
-    self._ui._ringMenu[index]._button = UI.getChildControl(self._ui._static_RingMenuBg, "Button_" .. index)
-    self._ui._ringMenu[index]._decs = UI.getChildControl(self._ui._static_RingMenuBg, "StaticText_Desc" .. index)
-    self._ui._ringMenu[index]._decs:SetShow(false)
+    self._ui._ringMenu[index]._button = UI.getChildControl(self._ui._static_RingMenuBg, "Radiobutton_" .. index)
   end
-  self._config._centerX = getScreenSizeX() / 2
-  self._config._centerY = getScreenSizeY() / 2
-  Panel_Worldmap_RingMenu:SetPosX(self._config._centerX - Panel_Worldmap_RingMenu:GetSizeX() / 2)
-  Panel_Worldmap_RingMenu:SetPosY(self._config._centerY - Panel_Worldmap_RingMenu:GetSizeY() / 2)
+  self._ui._staticText_Tooltip = UI.getChildControl(self._ui._static_RingMenuBg, "StaticText_Tooltip")
+  PaGlobalFunc_FromClient_WorldMap_RingMenu_ScreenResize()
   self._ui._static_AimColor = UI.getChildControl(self._ui._static_Aim, "Static_Focus")
   self._ui._static_AimColor:SetIgnore(true)
   self._ui._static_BlackBg:SetShow(false)
@@ -257,15 +318,16 @@ function Window_WorldMap_RingMenuInfo:InitEvent()
   Panel_Worldmap_RingMenu:RegisterUpdateFunc("PaGlobalFunc_WorldMap_RingMenu_UpdatePerFrame")
 end
 function Window_WorldMap_RingMenuInfo:InitRegister()
-  registerEvent("FromClient_OnWorldMapNode", "PaGlobalFunc_FromClient_WorldMpa_RingMenu_OnWorldMapNode")
-  registerEvent("FromClient_OutWorldMapNode", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapNode")
   registerEvent("FromClient_LClickedWorldMapNode", "PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapNode")
   registerEvent("FromClient_RClickedWorldMapNode", "PaGlobalFunc_FromClient_WorldMap_RingMenu_RClickedWorldMapNode")
   registerEvent("FromClient_getCurrentFocusedUiCount", "PaGlobalFunc_FromClient_WorldMap_RingMenu_FocusUpdate")
   registerEvent("FromClient_OnWorldMapHouse", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OnWorldMapHouse")
   registerEvent("FromClient_OutWorldMapHouse", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapHouse")
   registerEvent("FromClient_LClickedWorldMapHouse", "PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapHouse")
+  registerEvent("FromClient_RClickedWorldMapHouse", "PaGlobalFunc_FromClient_WorldMap_RingMenu_RClickedWorldMapHouse")
   registerEvent("onScreenResize", "PaGlobalFunc_FromClient_WorldMap_RingMenu_ScreenResize")
+  registerEvent("FromClient_OnWorldMapQuestInfo", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OnWorldMapQuestInfo")
+  registerEvent("FromClient_OutWorldMapQuestInfo", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapQuestInfo")
 end
 function Window_WorldMap_RingMenuInfo:Initialize()
   self:InitControl()
@@ -284,6 +346,7 @@ function PaGlobalFunc_WorldMap_RingMenu_UpdatePerFrame(deltaTime)
   if true == PaGlobalFunc_WorldMap_RingMenu_GetIsRingMenuOpen() then
     ToClient_setMousePosition(0, 0)
   else
+    PaGlobalFunc_FromClient_WorldMap_RingMenu_ScreenResize()
     ToClient_setMousePosition(self._config._centerX, self._config._centerY)
   end
 end
@@ -302,8 +365,8 @@ function PaGlobalFunc_WorldMap_RingMenu_Open()
   if true == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
     return
   end
-  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
   self:RingMenuClear()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
   PaGlobalFunc_WorldMap_RingMenu_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_RingMenu_Close()
@@ -311,17 +374,17 @@ function PaGlobalFunc_WorldMap_RingMenu_Close()
   if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
     return
   end
-  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   self:RingMenuClear()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   ToClient_SetIsIgnoreLStick(true)
   PaGlobalFunc_WorldMap_RingMenu_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_ScreenResize()
   local self = Window_WorldMap_RingMenuInfo
-  self._config._centerX = getScreenSizeX() / 2
-  self._config._centerY = getScreenSizeY() / 2
-  Panel_Worldmap_RingMenu:SetPosX(self._config._centerX - Panel_Worldmap_RingMenu:GetSizeX() / 2)
-  Panel_Worldmap_RingMenu:SetPosY(self._config._centerY - Panel_Worldmap_RingMenu:GetSizeY() / 2)
+  self._config._centerX = getScreenSizeX() / 2 * ToClient_getGameOptionControllerWrapper():getUIScale()
+  self._config._centerY = getScreenSizeY() / 2 * ToClient_getGameOptionControllerWrapper():getUIScale()
+  Panel_Worldmap_RingMenu:SetPosX(getScreenSizeX() / 2 - Panel_Worldmap_RingMenu:GetSizeX() / 2)
+  Panel_Worldmap_RingMenu:SetPosY(getScreenSizeY() / 2 - Panel_Worldmap_RingMenu:GetSizeY() / 2)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_luaLoadComplete()
   local self = Window_WorldMap_RingMenuInfo

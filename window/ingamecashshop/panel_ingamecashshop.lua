@@ -3150,7 +3150,7 @@ function InGameCashshopDescUpdate(deltaTime)
     end
   end
   for key, slotIcon in pairs(inGameShop._static_EquipSlots) do
-    if nil ~= cashProduct and true == cashProduct:isShowSlotIcon(key) then
+    if nil ~= cashProduct and false == cashProduct:isChooseCash() and true == cashProduct:isShowSlotIcon(key) then
       slotIcon:SetShow(0 < slotIcon:GetPosY() + slotIcon:GetSizeY() and slotIcon:GetPosY() + slotIcon:GetSizeY() < self._goodDescBG:GetSizeY())
     else
       slotIcon:SetShow(false)

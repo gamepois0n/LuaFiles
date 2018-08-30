@@ -15,6 +15,8 @@ PaGlobal_ConsoleQuickMenuSetting = {
     _frameItem,
     _list2SocialAction,
     _slots = {},
+    _static_BottomBg = UI.getChildControl(Panel_QuickMenuCustom, "Static_BottomBg"),
+    _staticText_Select = nil,
     _ringBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_RingBg"),
     _oneSlotBg = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_OneSlotBg"),
     _ringCrossHair = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "Static_CrossHair"),
@@ -34,6 +36,7 @@ PaGlobal_ConsoleQuickMenuSetting = {
   _curGroup = __eQuickMenuDpadGroup_Count,
   _curCategory = 0,
   _startColumn = 0,
+  _curItemIndex = 0,
   _isRegisterQuickMenu = false
 }
 function PaGlobal_ConsoleQuickMenuSetting:GoCategory(category)
@@ -53,6 +56,7 @@ function PaGlobal_ConsoleQuickMenuSetting:GoCategory(category)
   PaGlobal_ConsoleQuickMenuCustom_HighlightCategory(category)
 end
 function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
+  self._ui._staticText_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_Select")
   for ii = 0, __eQuickMenuStickPosition_Count - 1 do
     self._ui._buttonPosition[ii] = UI.getChildControl(self._ui._ringBg, "Button_Templete" .. tostring(ii))
     self._ui._buttonPosition[ii]:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:quitRegistQuickMenu( " .. ii .. ")")
@@ -61,6 +65,7 @@ function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
   end
   self._ui._registerModeSelectItem = UI.getChildControl(self._ui._ringBg, "StaticText_SelectMenu")
   self._ui._registerModeSelectItemIcon = UI.getChildControl(self._ui._registerModeSelectItem, "Static_Icon")
+  self._ui._changeSlot = UI.getChildControl(Panel_QuickMenuCustom_RightRing, "StaticText_ChangeSlot")
   local tabBg = UI.getChildControl(Panel_QuickMenuCustom, "Static_TabBg")
   UI.getChildControl(tabBg, "RadioButton_Skill"):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:GoCategory(" .. __eQuickMenuDataType_Skill .. ")")
   UI.getChildControl(tabBg, "RadioButton_Item"):addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:GoCategory(" .. __eQuickMenuDataType_Item .. ")")
@@ -124,6 +129,13 @@ function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
   self._ui._RSGuideText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_RINGMENUSETTING_RSKEYGUIDE"))
   self._ui._RSGuideText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 end
+function PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(show, index)
+  if nil == show then
+    show = false
+  end
+  self._curItemIndex = index
+  self._ui._staticText_Select:SetShow(show)
+end
 function PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(type, index)
   if self:isRegisterOrRemoveMode() then
     return
@@ -159,6 +171,7 @@ function PaGlobal_ConsoleQuickMenuSetting:ShowBlackBg(show, data)
   self._ui._registerModeBlackBg:SetShow(show)
   self._ui._ringCrossHair:SetShow(not show)
   self._ui._registerModeSelectItem:SetShow(show)
+  self._ui._changeSlot:SetShow(not show)
   self:setCenterSlotIconAtregisterMode(data)
 end
 function PaGlobal_ConsoleQuickMenuSetting:setCenterSlotIconAtregisterMode(data)
@@ -451,11 +464,14 @@ function PaGlobal_ConsoleQuickMenuSetting:setInventoryUi()
       local itemWrapper = getInventoryItemByType(data._whereType, data._slotNo)
       if nil ~= itemWrapper and false == itemWrapper:empty() and true == ToClient_isVaildItemRegistQuickMenu(itemWrapper:getStaticStatus()) then
         item:setItem(itemWrapper, data._slotNo, false, false)
+        item.icon:addInputEvent("Mouse_On", "PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(true," .. index .. ")")
         item.icon:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_Item .. "," .. dataIndex .. "  )")
       else
+        item.icon:addInputEvent("Mouse_On", "PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(false," .. index .. ")")
         item:clearItem()
       end
     else
+      item.icon:addInputEvent("Mouse_On", "PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(false," .. index .. ")")
       item:clearItem()
     end
   end
@@ -463,7 +479,18 @@ end
 function PaGlobal_ConsoleQuickMenuSetting_scrollInventory(isUp)
   local self = PaGlobal_ConsoleQuickMenuSetting
   local startIndex = UIScroll.ScrollEvent(self._ui._scrollItem, isUp, 9, 192, 1 + self._startColumn * 8, 8)
-  self._startColumn = math.floor(startIndex / 8)
+  local newColumn = math.floor(startIndex / 8)
+  if nil ~= self._curItemIndex and self._startColumn ~= newColumn then
+    local rowMax = 8
+    local dataIndex = self._curItemIndex + newColumn * rowMax
+    local data = self._inventoryData[dataIndex]
+    if nil ~= data then
+      PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(true, self._curItemIndex)
+    else
+      PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(false, self._curItemIndex)
+    end
+  end
+  self._startColumn = newColumn
   self:setInventoryUi()
 end
 function PaGlobal_ConsoleQuickMenuSetting:setFunctionTypeUi()
@@ -707,6 +734,7 @@ function Toggle_QuickMenuSetting_forPadEventFunc(left)
   end
   PaGlobal_ConsoleQuickMenuSetting._curCategory = PaGlobal_ConsoleQuickMenuSetting._curCategory % 4
   PaGlobal_ConsoleQuickMenuSetting:GoCategory(PaGlobal_ConsoleQuickMenuSetting._curCategory)
+  PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(true)
 end
 function PaGlobal_QuickMenuSetting_GetShow()
   return Panel_QuickMenuCustom:GetShow()

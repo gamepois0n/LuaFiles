@@ -69,7 +69,6 @@ function Window_GameExit_ConfirmInfo:InitControl()
   if _ContentsGroup_isConsolePadControl then
     self._ui._staticText_TrayHelp:SetShow(false)
     self._ui._checkBox_Tray:SetShow(false)
-    self._ui._staticText_GameExit:SetPosY(150)
   end
 end
 function Window_GameExit_ConfirmInfo:InitEvent()

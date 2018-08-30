@@ -220,6 +220,7 @@ function CharacterInfo:registMessageHandler()
   registerEvent("FromClient_PlayerTotalStat_Changed", "FromClient_CharacterInfo_PlayerTotalStat_Changed")
   _panel:RegisterShowEventFunc(true, "PaGlobalFunc_CharacterInfo_ShowAni()")
   _panel:RegisterShowEventFunc(false, "PaGlobalFunc_CharacterInfo_HideAni()")
+  self._ui.txt_Introduce:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_CharacterLifeInfo_EndVirtualKeyBoard")
 end
 function CharacterInfo:potentialGauge_Init()
   local _sizeX = math.floor(self._potentialUIData.maxX / self._potentialUIData.limitPotentialLevel)
@@ -350,6 +351,13 @@ function PaGlobalFunc_CharacterLifeInfo_ClearFocus()
   ToClient_RequestSetUserIntroduction(self._ui.txt_Introduce:GetText())
   ClearFocusEdit()
   self._ui.txt_Introduce:addInputEvent("Mouse_LUp", "InputMLUp_CharacterInfo_Edit_Introduce()")
+  self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
+end
+function PaGlobalFunc_CharacterLifeInfo_EndVirtualKeyBoard(str)
+  local self = CharacterInfo
+  ToClient_RequestSetUserIntroduction(str)
+  self._ui.txt_Introduce:SetEditText(str, true)
+  ClearFocusEdit()
   self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "InputMLUp_CharacterInfo_Edit_Introduce()")
 end
 function InputMLUp_CharacterInfo_Edit_Introduce()
@@ -727,24 +735,19 @@ function InputMLUp_TapToOpenWindow(index)
     self._ui.txt_toolTip:SetSize(90, 30)
   end
   self._ui.stc_ToolTipArrow:ComputePos()
+  self._ui.txt_keyGuideA:SetShow(false)
   if 1 == index then
     self:update()
-    self._ui.txt_keyGuideA:SetShow(false)
   elseif 2 == index then
     InputMLUp_CharacterTitleInfo_TapToOpen(0)
-    self._ui.txt_keyGuideA:SetShow(true)
   elseif 3 == index then
     PaGlobalFunc_CharacterHistoryInfo_Open()
-    self._ui.txt_keyGuideA:SetShow(false)
   elseif 4 == index then
     PaGlobalFunc_CharacterQuestInfo_Open()
-    self._ui.txt_keyGuideA:SetShow(true)
   elseif 5 == index and false == _ContentsGroup_RenewUI then
     InputMLUp_CharacterProfileInfo_TapToOpen(0)
-    self._ui.txt_keyGuideA:SetShow(false)
   elseif 6 == index and false == _ContentsGroup_RenewUI then
     PaGlobalFunc_CharacterLifeInfo_Update()
-    self._ui.txt_keyGuideA:SetShow(false)
   end
 end
 function FromClient_CharacterInfo_Basic_LevelChanged()
@@ -788,4 +791,7 @@ function CharacterInfo:XB_Contorl_Init()
   self._ui.stc_ChallengeInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_CharacterChallengeInfoTab_PadControl(1)")
   self._ui.stc_ProfileInfoBg:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(0)")
   self._ui.stc_ProfileInfoBg:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_CharacterProfileInfoTab_PadControl(1)")
+end
+function PaGlobalFunc_CharacterInfo_GetKeyGuideA()
+  return CharacterInfo._ui.txt_keyGuideA
 end

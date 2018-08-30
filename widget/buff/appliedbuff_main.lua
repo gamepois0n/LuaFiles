@@ -50,24 +50,24 @@ function PaGlobalAppliedBuffList:setMovableUIForControlMode()
   self._buffText:SetShow(false)
   Panel_AppliedBuffList:SetIgnore(false)
   Panel_AppliedBuffList:SetDragEnable(true)
-  Panel_AppliedBuffList:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
+  Panel_AppliedBuffList:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/window_sample_isWidget.dds")
 end
 function PaGlobalAppliedBuffList:cancelMovableUIForControlMode()
   self._buffText:SetShow(false)
   Panel_AppliedBuffList:SetDragEnable(false)
-  Panel_AppliedBuffList:ChangeTextureInfoName("New_UI_Common_forLua/Default/window_sample_empty.dds")
+  Panel_AppliedBuffList:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Default/window_sample_empty.dds")
 end
 function PaGlobalAppliedBuffList:changeOnOffTexture(isOn)
   if true == isOn then
     if Panel_UIControl:IsShow() then
-      Panel_AppliedBuffList:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_drag.dds")
+      Panel_AppliedBuffList:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/window_sample_drag.dds")
       self._buffText:SetText(PAGetString(Defines.StringSheet_GAME, "BUFF_LIST_MOVE"))
     end
   elseif Panel_UIControl:IsShow() then
-    Panel_AppliedBuffList:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_isWidget.dds")
+    Panel_AppliedBuffList:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/window_sample_isWidget.dds")
     self._buffText:SetText(PAGetString(Defines.StringSheet_GAME, "BUFF_LIST"))
   else
-    Panel_AppliedBuffList:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_empty.dds")
+    Panel_AppliedBuffList:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/window_sample_empty.dds")
   end
 end
 function PaGlobalAppliedBuffList:show()

@@ -179,11 +179,11 @@ function MainStatusInfo:initialize()
   self._ui.progress_MP:setRenderTexture(self._ui.progress_MP:getBaseTexture())
   Panel_UIMain:SetShow(false)
   self._ui.txt_skillPoint:SetFontColor(4293848814)
-  self._ui.txt_skillPoint:useGlowFont(true, "BaseFont_12_Glow", 4284572001)
+  self._ui.txt_skillPoint:useGlowFont(true, "SubTitleFont_14_Glow", 4284572001)
   self._ui.txt_energyPoint:SetFontColor(4293848814)
-  self._ui.txt_energyPoint:useGlowFont(true, "BaseFont_12_Glow", 4284572001)
+  self._ui.txt_energyPoint:useGlowFont(true, "SubTitleFont_14_Glow", 4284572001)
   self._ui.txt_contributePoint:SetFontColor(4293848814)
-  self._ui.txt_contributePoint:useGlowFont(true, "BaseFont_12_Glow", 4284572001)
+  self._ui.txt_contributePoint:useGlowFont(true, "SubTitleFont_14_Glow", 4284572001)
 end
 function MainStatusInfo:registEventHandler()
   self._ui.chk_pvp:addInputEvent("Mouse_LUp", "PaGlobalFunc_RequestTogglePvP()")
@@ -616,6 +616,7 @@ function FromClient_MainStatusInfo_changeMode(where, actorKeyRaw)
   else
     self:pvpButtonShow(false)
   end
+  self:pvpButtonShow(false)
 end
 function MainStatusInfo:pvpButtonShow(isShow)
   if false == ToClient_isAdultUser() then

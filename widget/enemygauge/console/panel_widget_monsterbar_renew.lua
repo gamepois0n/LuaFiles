@@ -92,7 +92,7 @@ end
 function targetHpInfo_Update_Monster(actorKey, nowHP)
   local targetActor = getCharacterActor(actorKey)
   if nil == targetActor then
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
     return
   end
   local monsterLevel = targetActor:get():getCharacterStaticStatus().level
@@ -304,7 +304,7 @@ function panel_Update_Monster_Info(actorKey)
         appliedBuff_UIPool_Last = appliedBuff_Idx
       end
     end
-    appliedBuff_UIPool[appliedBuff_Idx]:ChangeTextureInfoName("icon/" .. appliedBuff:getIconName())
+    appliedBuff_UIPool[appliedBuff_Idx]:ChangeTextureInfoNameAsync("icon/" .. appliedBuff:getIconName())
     local x1, y1, x2, y2 = setTextureUV_Func(appliedBuff_UIPool[appliedBuff_Idx], 0, 0, 32, 32)
     appliedBuff_UIPool[appliedBuff_Idx]:getBaseTexture():setUV(x1, y1, x2, y2)
     appliedBuff_UIPool[appliedBuff_Idx]:setRenderTexture(appliedBuff_UIPool[appliedBuff_Idx]:getBaseTexture())
@@ -333,7 +333,7 @@ function panel_Update_Monster_Info(actorKey)
   if curHP < 1 then
     Panel_Monster_Bar:SetShow(false, false)
     monsterList = {}
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
   end
   if targetActor:get():isMonster() then
     targetHpInfo_Update_Monster(actorKey, nowHP)
@@ -381,25 +381,25 @@ function panel_Update_Monster_Info(actorKey)
     local monsterType = ""
     local checkMonsterType = targetActor:getCharacterStaticStatusWrapper():getTribeType()
     if CppEnums.TribeType.eTribe_Human == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUMAN"))
     elseif CppEnums.TribeType.eTribe_Ain == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_AIN"))
     elseif CppEnums.TribeType.eTribe_ETC == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
       lua_EnemyTypeText:SetText("")
     elseif CppEnums.TribeType.eTribe_Boss == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNDEAD"))
     elseif CppEnums.TribeType.eTribe_Reptile == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_ETRIBEREPTILE"))
     elseif CppEnums.TribeType.eTribe_Untribe == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNTRIBE"))
     elseif CppEnums.TribeType.eTribe_Hunting == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUNT"))
     end
     lua_EnemyTypeText:SetText("")
@@ -448,7 +448,7 @@ function updateTargetInfoCheckTime(fDeltatime)
     monsterList = {}
     Panel_Monster_Bar:SetShow(false, false)
     clearTargetActor()
-    _dangerAlert_Show(false)
+    FGlobal_DangerAlert_Show(false)
   end
 end
 function FGlobal_Panel_Monster_Bar_RePos()
@@ -463,7 +463,7 @@ end
 function hideRecentTargetInfo()
   monsterList = {}
   Panel_Monster_Bar:SetShow(false, false)
-  _dangerAlert_Show(false)
+  FGlobal_DangerAlert_Show(false)
 end
 function GameOption_NearMonsterAlertOff()
   ToClient_SetMessageFilter(10, true)

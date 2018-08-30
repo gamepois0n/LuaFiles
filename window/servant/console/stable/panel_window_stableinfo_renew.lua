@@ -14,14 +14,18 @@ local Panel_Window_StableInfo_info = {
     static_InfoBg = nil,
     staticText_HPVal = nil,
     progress2_HP = nil,
+    staticText_SP = nil,
     staticText_SPVal = nil,
     progress2_SP = nil,
+    staticText_EXP = nil,
     staticText_EXPVal = nil,
+    static_EXP_BG = nil,
     progress2_EXP = nil,
     staticText_SpeedVal = nil,
     staticText_Dead = nil,
     staticText_DeadVal = nil,
     staticText_AccVal = nil,
+    staticText_Life = nil,
     staticText_LifeVal = nil,
     staticText_RotateVal = nil,
     staticText_Stamping = nil,
@@ -54,6 +58,21 @@ local Panel_Window_StableInfo_info = {
       y1 = 1,
       x2 = 81,
       y2 = 20
+    }
+  },
+  _progressTexture = {
+    path = "renewal/Progress/console_Progressbar_01.dds",
+    blue = {
+      420,
+      324,
+      456,
+      330
+    },
+    yellow = {
+      467,
+      276,
+      503,
+      282
     }
   },
   _equipSlotNo = {
@@ -238,14 +257,18 @@ function Panel_Window_StableInfo_info:childControl()
   self._ui.static_InfoBg = UI.getChildControl(Panel_Window_StableInfo, "Static_InfoBg")
   self._ui.staticText_HPVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_HPVal")
   self._ui.progress2_HP = UI.getChildControl(self._ui.static_InfoBg, "Progress2_HP")
+  self._ui.staticText_SP = UI.getChildControl(self._ui.static_InfoBg, "StaticText_SP")
   self._ui.staticText_SPVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_SPVal")
   self._ui.progress2_SP = UI.getChildControl(self._ui.static_InfoBg, "Progress2_SP")
+  self._ui.staticText_EXP = UI.getChildControl(self._ui.static_InfoBg, "StaticText_EXP")
   self._ui.staticText_EXPVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_EXPVal")
+  self._ui.static_EXP_BG = UI.getChildControl(self._ui.static_InfoBg, "Static_EXP_BG")
   self._ui.progress2_EXP = UI.getChildControl(self._ui.static_InfoBg, "Progress2_EXP")
   self._ui.staticText_SpeedVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_SpeedVal")
   self._ui.staticText_Dead = UI.getChildControl(self._ui.static_InfoBg, "StaticText_Dead")
   self._ui.staticText_DeadVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_DeadVal")
   self._ui.staticText_AccVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_AccVal")
+  self._ui.staticText_Life = UI.getChildControl(self._ui.static_InfoBg, "StaticText_Life")
   self._ui.staticText_LifeVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_LifeVal")
   self._ui.staticText_RotateVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_RotateVal")
   self._ui.staticText_Stamping = UI.getChildControl(self._ui.static_InfoBg, "StaticText_Stamping")
@@ -304,7 +327,8 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
     showSceneCharacter(self._value.selectSceneIndex, false)
     showSceneCharacter(self._value.selectSceneIndex, true, servantInfo:getActionIndex())
   end
-  if servantInfo:getVehicleType() ~= CppEnums.VehicleType.Type_Horse then
+  local vehicleType = servantInfo:getVehicleType()
+  if vehicleType ~= CppEnums.VehicleType.Type_Horse then
     self._ui.staticText_LeftMatingTimeTitle:SetShow(false)
     self._ui.staticText_LeftMatingTimeValue:SetShow(false)
     self._ui.staticText_Swift:SetShow(false)
@@ -343,6 +367,46 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
   else
     self._ui.staticText_Swift:SetShow(false)
   end
+  local isCarriage = false
+  if vehicleType == CppEnums.VehicleType.Type_Carriage or vehicleType == CppEnums.VehicleType.Type_CowCarriage or vehicleType == CppEnums.VehicleType.Type_Train or vehicleType == CppEnums.VehicleType.Type_RepairableCarriage then
+    isCarriage = true
+  end
+  if true == isCarriage then
+    self._ui.staticText_SP:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_INFO_LIFECOUNT"))
+    self._ui.progress2_SP:ChangeTextureInfoName(self._progressTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress2_SP, self._progressTexture.yellow[1], self._progressTexture.yellow[2], self._progressTexture.yellow[3], self._progressTexture.yellow[4])
+    self._ui.progress2_SP:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress2_SP:setRenderTexture(self._ui.progress2_SP:getBaseTexture())
+    self._ui.staticText_EXP:SetShow(false)
+    self._ui.staticText_EXPVal:SetShow(false)
+    self._ui.static_EXP_BG:SetShow(false)
+    self._ui.progress2_EXP:SetShow(false)
+    self._ui.staticText_Stamping:SetShow(false)
+    self._ui.staticText_StampingVal:SetShow(false)
+    self._ui.staticText_LifeVal:SetShow(false)
+    self._ui.staticText_Life:SetShow(false)
+  else
+    self._ui.staticText_SP:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SERVANT_INFO_TEXT_STAMINA"))
+    self._ui.progress2_SP:ChangeTextureInfoName(self._progressTexture.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress2_SP, self._progressTexture.blue[1], self._progressTexture.blue[2], self._progressTexture.blue[3], self._progressTexture.blue[4])
+    self._ui.progress2_SP:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress2_SP:setRenderTexture(self._ui.progress2_SP:getBaseTexture())
+    self._ui.staticText_EXP:SetShow(true)
+    self._ui.staticText_EXPVal:SetShow(true)
+    self._ui.static_EXP_BG:SetShow(true)
+    self._ui.progress2_EXP:SetShow(true)
+    if servantInfo:isImprint() then
+      self._ui.staticText_Stamping:SetShow(true)
+      self._ui.staticText_StampingVal:SetShow(true)
+      self._ui.staticText_StampingVal:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTING"))
+    else
+      self._ui.staticText_Stamping:SetShow(true)
+      self._ui.staticText_StampingVal:SetShow(true)
+      self._ui.staticText_StampingVal:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTPOSSIBLE"))
+    end
+    self._ui.staticText_LifeVal:SetShow(true)
+    self._ui.staticText_Life:SetShow(true)
+  end
   self._ui.staticText_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel() .. " " .. servantInfo:getName()))
   self._ui.staticText_Weight:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SERVANT_INFO_TEXT_WEIGHT") .. ":" .. makeDotMoney(servantInfo:getMaxWeight_s64() / Defines.s64_const.s64_10000))
   self._ui.static_Image:SetShow(true)
@@ -353,7 +417,8 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
   self._ui.staticText_SPVal:SetText(makeDotMoney(servantInfo:getMp()) .. " / " .. makeDotMoney(servantInfo:getMaxMp()))
   self._ui.progress2_SP:SetProgressRate(servantInfo:getMp() * 100 / servantInfo:getMaxMp())
   self._ui.staticText_EXPVal:SetText(makeDotMoney(servantInfo:getExp_s64()) .. " / " .. makeDotMoney(servantInfo:getNeedExp_s64()))
-  self._ui.progress2_EXP:SetProgressRate(servantInfo:getExp_s64() * 100 / servantInfo:getNeedExp_s64())
+  local expRate = Int64toInt32(servantInfo:getExp_s64() * 100 / servantInfo:getNeedExp_s64())
+  self._ui.progress2_EXP:SetProgressRate(expRate)
   if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse then
     self._ui.staticText_Tier:SetShow(true)
     if 9 == servantInfo:getTier() then
@@ -390,7 +455,7 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
     self._ui.staticText_MatingVal:SetShow(false)
   end
   if "" ~= descText then
-    descText = descText .. " "
+    descText = descText .. "\n"
   end
   local deadCount = servantInfo:getDeadCount()
   if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
@@ -413,18 +478,8 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
     self._ui.staticText_Desc:SetShow(false)
   else
     self._ui.staticText_Desc:SetShow(true)
+    self._ui.staticText_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self._ui.staticText_Desc:SetText(descText)
-  end
-  self._ui.staticText_Stamping:SetShow(false)
-  self._ui.staticText_StampingVal:SetShow(false)
-  if servantInfo:isImprint() then
-    self._ui.staticText_Stamping:SetShow(true)
-    self._ui.staticText_StampingVal:SetShow(true)
-    self._ui.staticText_StampingVal:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTING"))
-  else
-    self._ui.staticText_Stamping:SetShow(true)
-    self._ui.staticText_StampingVal:SetShow(true)
-    self._ui.staticText_StampingVal:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ISIMPRINTPOSSIBLE"))
   end
 end
 function Panel_Window_StableInfo_info:setEquipment()

@@ -4,6 +4,7 @@ local eHouseUseGroupType = CppEnums.eHouseUseType
 local WorldMapHouseManager = {
   _ui = {
     stc_BG = UI.getChildControl(_panel, "Static_BG_House"),
+    stc_KeyGudideBg = UI.getChildControl(_panel, "Static_KeyGuideBg"),
     txt_title = nil,
     stc_tipBG = nil,
     txt_tipIcon = nil,
@@ -42,7 +43,7 @@ local WorldMapHouseManager = {
     txt_processingProgress = nil,
     txt_processingProgressVal = nil,
     progress_bar = nil,
-    txt_houseImage = nil,
+    stc_houseImage = nil,
     chk_buyOrSell = nil
   },
   _houseInfoSSWrapper = nil,
@@ -427,7 +428,15 @@ local WorldMapHouseManager = {
       y2 = 346
     }
   },
-  _progressType = -1
+  _progressType = -1,
+  _currentSlotInfo = {
+    _slotIndex = 0,
+    _index = 0,
+    _itemIndex = 0
+  },
+  _currentTooltipSlot = -1,
+  _currentHouseButton = nil,
+  _isOpenFromFilter = false
 }
 local _slotOption = {createIcon = true}
 local _starUV = {
@@ -451,6 +460,7 @@ registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_WorldMap
 function WorldMapHouseManager:initialize()
   self._ui.txt_title = UI.getChildControl(self._ui.stc_BG, "StaticText_Title")
   self._ui.stc_tipBG = UI.getChildControl(self._ui.stc_BG, "Static_Tip")
+  self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui.stc_KeyGudideBg, "StaticText_A_ConsoleUI")
   self._ui.txt_tipIcon = UI.getChildControl(self._ui.stc_tipBG, "StaticText_Icon")
   self._ui.txt_tipDesc = UI.getChildControl(self._ui.stc_tipBG, "StaticText_Desc")
   self._ui.txt_tipDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -464,6 +474,8 @@ function WorldMapHouseManager:initialize()
     self._ui.rdo_houseTypes[ii] = UI.getChildControl(frameContent, "RadioButton_Content_" .. ii)
     self._ui.rdo_houseTypes[ii]:SetPosY(self._listStartY + (ii - 1) * self._listDefaultYGap)
     self._ui.rdo_houseTypes[ii]:addInputEvent("Mouse_LUp", "Input_WorldMapHouseManager_SetUseType(" .. ii .. ")")
+    self._ui.rdo_houseTypes[ii]:addInputEvent("Mouse_On", "Input_WorldMapHouseManager_SetSelectButton(" .. ii .. ")")
+    self._ui.rdo_houseTypes[ii]:addInputEvent("Mouse_Out", "Input_WorldMapHouseManager_SetSelectButton(-1)")
     self._ui.rdo_houseTypes[ii]:SetShow(false)
   end
   self._ui.stc_stars = {}
@@ -492,6 +504,7 @@ function WorldMapHouseManager:initialize()
   self._ui.txt_normalMySilver = UI.getChildControl(self._ui.stc_normalBG, "StaticText_Silver")
   self._ui.txt_normalMySilverVal = UI.getChildControl(self._ui.stc_normalBG, "StaticText_Silver_Val")
   self._ui.btn_upgradeOrChange = UI.getChildControl(self._ui.stc_normalBG, "Button_UpgradeOrChange")
+  self._ui.btn_upgradeOrChange:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(false)")
   self._ui.btn_upgradeOrChange:addInputEvent("Mouse_LUp", "Input_WorldMapHouseManager_UpgradeOrChange()")
   self._ui.stc_processingBG = UI.getChildControl(self._ui.stc_manageBG, "Static_Progress")
   self._ui.txt_processingTimeLeft = UI.getChildControl(self._ui.stc_processingBG, "StaticText_Time_Left")
@@ -499,19 +512,21 @@ function WorldMapHouseManager:initialize()
   self._ui.txt_processingProgress = UI.getChildControl(self._ui.stc_processingBG, "StaticText_Progress")
   self._ui.txt_processingProgressVal = UI.getChildControl(self._ui.stc_processingBG, "StaticText_Progress_Val")
   self._ui.progress_bar = UI.getChildControl(self._ui.stc_processingBG, "Progress2_Bar")
-  self._ui.txt_houseImage = UI.getChildControl(self._ui.stc_manageBG, "StaticText_House_Image")
+  self._ui.stc_houseImage = UI.getChildControl(self._ui.stc_manageBG, "static_House_Image")
   self._ui.chk_buyOrSell = UI.getChildControl(self._ui.stc_manageBG, "Button_Confirm")
+  self._ui.chk_buyOrSell:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(false)")
   self._ui.btn_CraftManage = UI.getChildControl(self._ui.stc_manageBG, "Button_CraftManage")
   self._ui.btn_CraftManage:addInputEvent("Mouse_LUp", "Input_WorldMapHouseManager_CraftManage()")
+  self._ui.txt_detailTitle:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(true)")
+  self._ui.txt_detailTitle:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(false)")
 end
 function WorldMapHouseManager:initDetailList()
   self._ui.stc_line = UI.getChildControl(self._ui.stc_typeBG, "Static_Line")
   self._ui.stc_detailBG = UI.getChildControl(self._ui.stc_typeBG, "Static_DetailListBG")
   self._ui.txt_detailTitle = UI.getChildControl(self._ui.stc_detailBG, "StaticText_DetailTitle")
   self._ui.txt_detailTitle:SetAutoResize(true)
-  self._ui.txt_detailTitle:SetEnable(false)
-  UIScroll.InputEventByControl(self._ui.stc_detailBG, "InputScroll_WorldMapHouseManager_DetailList")
   self._ui.scroll_detailList = UI.getChildControl(self._ui.stc_detailBG, "Scroll_DetailList")
+  self._ui.scroll_ctrlButton = UI.getChildControl(self._ui.scroll_detailList, "Frame_1_VerticalScroll_CtrlButton")
   UIScroll.InputEvent(self._ui.scroll_detailList, "InputScroll_WorldMapHouseManager_DetailList")
   self._ui.txt_descriptions = {}
   local startX, startY = self._ui.stc_line:GetPosX(), self._ui.stc_line:GetPosY() + 25
@@ -519,14 +534,12 @@ function WorldMapHouseManager:initDetailList()
     self._ui.txt_descriptions[ii] = UI.createAndCopyBasePropertyControl(self._ui.stc_detailBG, "StaticText_DescTemplete", self._ui.stc_detailBG, "StaticText_DescTemplete_" .. ii)
     self._ui.txt_descriptions[ii]:SetPosX(20)
     self._ui.txt_descriptions[ii]:SetPosY(startY + (ii - 1) * self._receipeIconDefaultGap)
-    UIScroll.InputEventByControl(self._ui.txt_descriptions[ii], "InputScroll_WorldMapHouseManager_DetailList")
   end
   self._ui.stc_itemSlotBG = {}
   for ii = 1, self._receipeIconCountMax do
     self._ui.stc_itemSlotBG[ii] = UI.createAndCopyBasePropertyControl(self._ui.stc_detailBG, "Static_ItemSlotBgTemplete", self._ui.stc_detailBG, "Static_ItemSlotBgTemplete" .. ii)
     self._ui.stc_itemSlotBG[ii]:SetPosX(20 + (ii - 1) % self._receipeIconColumnMax * self._receipeIconDefaultGap)
     self._ui.stc_itemSlotBG[ii]:SetPosY(startY - 12 + math.floor((ii - 1) / self._receipeIconColumnMax) * self._receipeIconDefaultGap)
-    UIScroll.InputEventByControl(self._ui.stc_itemSlotBG[ii], "InputScroll_WorldMapHouseManager_DetailList")
   end
   self:registMessageHandler()
   self:registEvent()
@@ -540,6 +553,11 @@ function WorldMapHouseManager:registMessageHandler()
   registerEvent("FromClient_ReceiveChangeUseType", "FromClient_WorldMapHouseManager_ReceiveChangeUseType")
   registerEvent("FromClient_AppliedChangeUseType", "FromClient_WorldMapHouseManager_AppliedChangeUseType")
   registerEvent("WorldMap_WorkerDataUpdateByHouse", "FromClient_WorldMapHouseManager_WorkerDataUpdateByHouse")
+end
+function PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(isFocus)
+  local self = WorldMapHouseManager
+  self._ui.scroll_ctrlButton:SetShow(isFocus)
+  self._ui._static_KeyGuide_Select:SetShow(not isFocus)
 end
 function FromClient_WorldMapHouseManager_WorkerDataUpdateByHouse(rentHouseWrapper)
   local self = WorldMapHouseManager
@@ -565,11 +583,30 @@ function PaGlobalFunc_WorldMapHouseManager_IsShow()
   return _panel:GetShow()
 end
 function PaGlobalFunc_WorldMapHouseManager_Close()
-  FGlobal_Hide_Tooltip_Work(nil, true)
+  local self = WorldMapHouseManager
+  PaGlobalFunc_WorldMapHouseManager_HideTooltip()
+  if true == self._isOpenFromFilter then
+    PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
+  else
+    PaGlobalFunc_WorldMap_TopMenu_Open()
+    PaGlobalFunc_WorldMap_BottomMenu_Open()
+    PaGlobalFunc_WorldMap_RingMenu_Open()
+  end
   _panel:SetShow(false)
 end
-function PaGlobalFunc_WorldMapHouseManager_Open(houseInfoSSWrapper)
-  WorldMapHouseManager:open(houseInfoSSWrapper)
+function PaGlobalFunc_WorldMapHouseManager_CloseByCraftManage()
+  PaGlobalFunc_WorldMapHouseManager_HideTooltip()
+  _panel:SetShow(false)
+end
+function PaGlobalFunc_WorldMapHouseManager_Open(houseBtn, isFilter)
+  local self = WorldMapHouseManager
+  if nil ~= houseBtn then
+    self._currentHouseButton = houseBtn
+  end
+  if nil ~= isFilter then
+    self._isOpenFromFilter = isFilter
+  end
+  WorldMapHouseManager:open(self._currentHouseButton:FromClient_getStaticStatus())
 end
 function WorldMapHouseManager:open(houseInfoSSWrapper)
   self._selected = nil
@@ -591,7 +628,9 @@ function WorldMapHouseManager:update(houseInfoSSWrapper)
   self._isSet = houseInfoSSWrapper:isSet()
   self._receipeCount = houseInfoSSWrapper:getReceipeCount()
   self._houseName = houseInfoSSWrapper:getName()
-  self._ui.txt_houseImage:ChangeTextureInfoName(self._screenShotPath)
+  self._ui.stc_houseImage:ChangeTextureInfoName(self._screenShotPath)
+  self._ui.frame_houseType:GetVScroll():SetControlPos(0)
+  self._ui.frame_houseType:UpdateContentPos()
   self:updateTypeList(houseInfoSSWrapper)
   local rentHouse = ToClient_GetRentHouseWrapper(self._houseKey)
   local stc_stars = {}
@@ -628,6 +667,7 @@ function WorldMapHouseManager:updateTypeList(houseInfoSSWrapper)
   end
   local rentHouseWrapper = ToClient_GetRentHouseWrapper(self._houseKey)
   local frameContent = self._ui.frame_houseType:GetFrameContent()
+  self._useTypeData = {}
   for ii = 1, self._houseTypeMax do
     if nil == self._ui.rdo_houseTypes[ii] then
       self._ui.rdo_houseTypes[ii] = UI.cloneControl(self._ui.rdo_houseTypeTemplate, frameContent, "RadioButton_HouseType_" .. ii)
@@ -666,7 +706,7 @@ function WorldMapHouseManager:updateTypeList(houseInfoSSWrapper)
       self._ui.rdo_houseTypes[ii]:SetShow(false)
     end
   end
-  frameContent:SetSize(frameContent:GetSizeX(), self._receipeCount * self._listDefaultYGap + self._ui.rdo_houseTypes[1]:GetSizeY() + self._listStartY)
+  frameContent:SetSize(frameContent:GetSizeX(), self._receipeCount * (self._ui.rdo_houseTypes[1]:GetSizeY() + self._listStartY))
   self._ui.stc_houseTypeContentBG:SetSize(frameContent:GetSizeX(), frameContent:GetSizeY())
   local scroll = self._ui.frame_houseType:GetVScroll()
   if frameContent:GetSizeY() > self._ui.frame_houseType:GetSizeY() then
@@ -781,10 +821,18 @@ function WorldMapHouseManager:updateDetailList()
           local slotBG = self._ui.stc_itemSlotBG[slotIndex]
           slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "")
           slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "")
-          if 1 == ii or nil ~= data[index - 1] and nil ~= data[index - 1].desc then
+          if 1 == ii then
             slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_WorldMapHouseManager_DetailList(true)")
           end
-          if self._detailListRowMax == ii or nil ~= data[index + 1] and nil ~= data[index + 1].desc then
+          if 2 == ii then
+            if nil ~= data[index - 1] and nil ~= data[index - 1].desc then
+              slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_WorldMapHouseManager_DetailList(true)")
+            end
+            if nil ~= data[index + 1] and nil ~= data[index + 1].desc then
+              slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "InputScroll_WorldMapHouseManager_DetailList(false)")
+            end
+          end
+          if self._detailListRowMax == ii then
             slotBG:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "InputScroll_WorldMapHouseManager_DetailList(false)")
           end
           if nil ~= data[index].itemIndexList[jj] then
@@ -807,7 +855,7 @@ function WorldMapHouseManager:updateDetailList()
                   self._ui.itemSlots[slotIndex] = slot
                 end
                 self._ui.itemSlots[slotIndex].icon:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMapHouseManager_ShowTooltip(" .. slotIndex .. "," .. index .. "," .. jj .. ")")
-                self._ui.itemSlots[slotIndex].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMapHouseManager_HideTooltip(" .. index .. "," .. jj .. ")")
+                self._ui.itemSlots[slotIndex].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMapHouseManager_HideTooltip(" .. slotIndex .. ")")
                 self._ui.itemSlots[slotIndex]:setItemByStaticStatus(staticStatusWrapper)
               end
             end
@@ -827,17 +875,30 @@ end
 function PaGlobalFunc_WorldMapHouseManager_ShowTooltip(slotIndex, index, jj)
   local self = WorldMapHouseManager
   local uiBase = self._ui.itemSlots[slotIndex].icon
-  local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(self._detailListData[index].itemIndexList[jj])
+  local data = self._detailListData[index]
+  local item = data.itemIndexList[jj]
+  if nil == item then
+    return
+  end
+  local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(item)
   if esSSW:isSet() then
     local esSS = esSSW:get()
     local itemKey = esSS:getFirstDropGroup()._itemKey
     local staticStatusWrapper = getItemEnchantStaticStatus(itemKey)
     PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, staticStatusWrapper, Defines.TooltipTargetType.Item, getScreenSizeX())
   end
+  self._currentTooltipSlot = slotIndex
+  self._currentSlotInfo._slotIndex = slotIndex
+  self._currentSlotInfo._index = index
+  self._currentSlotInfo._itemIndex = jj
+  PaGlobalFunc_WorldMapHouseManager_SetDetailFocus(true)
 end
-function PaGlobalFunc_WorldMapHouseManager_HideTooltip(index, jj)
+function PaGlobalFunc_WorldMapHouseManager_HideTooltip(slotIndex)
   local self = WorldMapHouseManager
-  PaGlobalFunc_TooltipInfo_Close()
+  if self._currentTooltipSlot == slotIndex then
+    PaGlobalFunc_TooltipInfo_Close()
+    self._currentTooltipSlot = -1
+  end
 end
 function WorldMapHouseManager:updateDetailData()
   local houseInfoSSW = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey)
@@ -1188,6 +1249,10 @@ function Input_WorldMapHouseManager_BuyCondition(isRefresh)
   local self = WorldMapHouseManager
   PaGlobalFunc_WorldMap_SellBuyHouse_Open(false)
 end
+function Input_WorldMapHouseManager_SetSelectButton(index)
+  local self = WorldMapHouseManager
+  self._ui._static_KeyGuide_Select:SetShow(index ~= self._selected)
+end
 function Input_WorldMapHouseManager_SetUseType(index)
   local self = WorldMapHouseManager
   local houseInfoSSW = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey)
@@ -1210,18 +1275,51 @@ function Input_WorldMapHouseManager_SetUseType(index)
   self._ui.txt_manageTitle:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.txt_manageTitle:setRenderTexture(self._ui.txt_manageTitle:getBaseTexture())
   self._detailListScrollAmount = 0
-  self._ui.scroll_detailList:SetControlTop()
+  self._ui.scroll_detailList:SetControlPos(0)
   self:updateDetailList()
   self:updateBottomBox()
+  local maxLevel = self._useTypeData[self._selected].maxLevel
+  local receipeKey = self._useTypeData[self._selected].receipeKey
+  local workCount = ToClient_getHouseWorkableListByData(self._houseKey, receipeKey, maxLevel)
+  if workCount < 1 then
+    self._ui.txt_detailTitle:SetIgnore(false)
+  else
+    self._ui.txt_detailTitle:SetIgnore(true)
+  end
+  self._ui.frame_houseType:GetVScroll():SetControlPos(0)
+  self._ui.frame_houseType:UpdateContentPos()
+  self._ui.scroll_detailList:SetControlPos(0)
+  self._ui.scroll_ctrlButton:SetShow(false)
+  Input_WorldMapHouseManager_SetSelectButton(index)
 end
 function InputScroll_WorldMapHouseManager_DetailList(isUp)
   local self = WorldMapHouseManager
   local prevScrollAmount = self._detailListScrollAmount
+  if false == self._ui.scroll_ctrlButton:GetShow() then
+    return
+  end
   self._detailListScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_detailList, isUp, self._detailListRowMax, #self._detailListData, self._detailListScrollAmount, 1)
   if prevScrollAmount ~= self._detailListScrollAmount then
-    FGlobal_Hide_Tooltip_Work(nil, true)
-    ToClient_padSnapIgnoreGroupMove()
     self:updateDetailList()
+    ToClient_padSnapIgnoreGroupMove()
+    local index = self._currentSlotInfo._index
+    if true == isUp then
+      index = self._currentSlotInfo._index - 1
+    else
+      index = self._currentSlotInfo._index + 1
+    end
+    local data = self._detailListData[index]
+    if nil == data then
+      return
+    end
+    if nil ~= data.desc then
+      return
+    end
+    if 0 == self._useTypeData[self._selected].useType then
+      return
+    end
+    PaGlobalFunc_WorldMapHouseManager_HideTooltip()
+    PaGlobalFunc_WorldMapHouseManager_ShowTooltip(self._currentSlotInfo._slotIndex, index, self._currentSlotInfo._itemIndex)
   end
 end
 function PaGlobalFunc_WorldMapHouseManager_ChangeStateHouseContinue()
@@ -1261,7 +1359,7 @@ function Input_WorldMapHouseManager_CraftManage()
   else
     PaGlobalFunc_WorldMap_HouseCraft_Open(houseInfoSSW, param)
   end
-  PaGlobalFunc_WorldMapHouseManager_Close()
+  PaGlobalFunc_WorldMapHouseManager_CloseByCraftManage()
 end
 function Input_WorldMapHouseManager_UpgradeOrChange()
   local self = WorldMapHouseManager

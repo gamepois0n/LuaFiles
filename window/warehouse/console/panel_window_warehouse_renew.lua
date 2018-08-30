@@ -130,8 +130,6 @@ function Warehouse:init()
   self._ui.txt_Close = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_B")
   self._ui.txt_Select = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A")
   self._ui.txt_Silver = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y")
-  self._ui.txt_RegistMarket = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_LT")
-  self._ui.txt_RegistMarket:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_BTNTEXT_2"))
   self._defaultKeyGuideXpos = self._ui.txt_Close:GetPosX()
   self._config.slotRows = self._config.slotCount / self._config.slotCols
   self._maxSlotRow = math.floor((self._config.slotCount - 1) / self._config.slotCols)
@@ -494,6 +492,7 @@ function WarehouseListMenu:ClickOtherTown(waypointKey)
     self._list:requestUpdateByKey(toInt64(0, beforeWaypointKey + self._separatorNumber))
   end
   self._list:requestUpdateByKey(toInt64(0, waypointKey + self._separatorNumber))
+  InputMO_WarehouseListMenu_SetAKeyGuide(false)
 end
 function WarehouseListMenu:ClickCurrentTown()
   self._selectIndex = -1
@@ -512,7 +511,6 @@ function Warehouse:updateButtonInfo()
     keyGuideXpos = keyGuideXpos - 150
     self._ui.txt_Silver:SetPosX(keyGuideXpos)
   end
-  self._ui.txt_RegistMarket:SetShow(false)
 end
 function Warehouse:popWarehouseItem(slotNo)
   local warehouseWrapper = self:getWarehouse()
@@ -667,17 +665,11 @@ function PaGlobalFunc_Warehouse_CreateWarehouseListControl(content, key)
     btn_Territory:SetShow(true)
     btn_Town:SetShow(false)
     txt_Capacitry:SetShow(false)
+    btn_Territory:addInputEvent("Mouse_On", "InputMO_WarehouseListMenu_SetAKeyGuide(true)")
   else
     btn_Territory:SetShow(false)
     btn_Town:SetShow(true)
     local waypointKey = warehouseIdx - self._separatorNumber
-    if waypointKey == self._selectWaypointKey then
-      btn_Town:SetFontColor(Defines.Color.C_FFACE400)
-      btn_Town:SetCheck(true)
-    else
-      btn_Town:SetFontColor(Defines.Color.C_FFC4BEBE)
-      btn_Town:SetCheck(false)
-    end
     local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(waypointKey)
     btn_Town:SetText(regionInfoWrapper:getAreaName())
     local warehouseWrapper = warehouse_get(waypointKey)
@@ -688,8 +680,19 @@ function PaGlobalFunc_Warehouse_CreateWarehouseListControl(content, key)
     local useMaxCount = warehouseWrapper:getUseMaxCount()
     txt_Capacitry:SetText("(" .. itemCount .. "/" .. useMaxCount - 1 .. ")")
     txt_Capacitry:SetShow(true)
-    btn_Town:addInputEvent("Mouse_LUp", "InputMLUp_WarehouseListMenu_ClickOtherTown(" .. waypointKey .. ")")
     btn_Town:SetMonoTone(false)
+    if waypointKey == self._selectWaypointKey then
+      btn_Territory:addInputEvent("Mouse_On", "")
+      btn_Town:addInputEvent("Mouse_LUp", "")
+      btn_Town:addInputEvent("Mouse_On", "InputMO_WarehouseListMenu_SetAKeyGuide(false)")
+      btn_Town:SetFontColor(Defines.Color.C_FFACE400)
+      btn_Town:SetCheck(true)
+    else
+      btn_Town:addInputEvent("Mouse_LUp", "InputMLUp_WarehouseListMenu_ClickOtherTown(" .. waypointKey .. ")")
+      btn_Town:addInputEvent("Mouse_On", "InputMO_WarehouseListMenu_SetAKeyGuide(true)")
+      btn_Town:SetFontColor(Defines.Color.C_FFC4BEBE)
+      btn_Town:SetCheck(false)
+    end
   end
   content:ComputePos()
 end
@@ -1123,7 +1126,7 @@ function InputMO_Warehouse_IconOver(index)
   end
   local itemWrapper = warehouseWrapper:getItem(slot.slotNo)
   if nil ~= itemWrapper then
-    PaGlobalFunc_FloatingTooltip_Open(itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, self._slotBgData[index].base)
+    PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemSSWrapper, itemWrapper:getStaticStatus(), Defines.TooltipTargetType.Item, self._slotBgData[index].base)
   end
 end
 function InputMOut_Warehouse_IconOut(index)
@@ -1204,6 +1207,7 @@ function Input_Warehouse_ShowTooltip(slotIdx, isShow)
     local itemWrapper = warehouseWrapper:getItem(self._slotItemData[slotIdx].slotNo)
     if nil ~= itemWrapper then
       PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, 0, getScreenSizeX())
+      PaGlobalFunc_FloatingTooltip_Close()
     end
   else
     PaGlobalFunc_TooltipInfo_Close()
@@ -1277,6 +1281,15 @@ function InputMLUp_WarehouseListMenu_ClickOtherTown(waypointKey)
     return
   end
   self:ClickOtherTown(waypointKey)
+end
+function InputMO_WarehouseListMenu_SetAKeyGuide(isShow)
+  local self = Warehouse
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : Warehouse")
+    return
+  end
+  self._buttonData.selectItem = isShow
+  self:updateButtonInfo()
 end
 function FromClient_WarehouseListMenu_UpdateList(waypointKey)
   local self = WarehouseListMenu

@@ -6,6 +6,7 @@ local CharacterTitleInfo = {
     stc_TitleTapBg = UI.getChildControl(_panel, "Static_Title_Tap"),
     list_TitleList = UI.getChildControl(_panel, "List2_Title_List"),
     stc_TotalInfoBg = UI.getChildControl(_panel, "Static_Total_Progress_BG"),
+    stc_KeyGuide_Select = UI.getChildControl(_mainPanel, "StaticText_A_ConsoleUI"),
     radiobutton_Category = {}
   },
   _currentCategoryCount = 0,
@@ -158,31 +159,25 @@ function CharacterInfo_TitleList_ControlCreate(content, key)
   end
   local titleBG = UI.getChildControl(content, "RadioButton_Select_Title_Template")
   local titleName = UI.getChildControl(content, "StaticText_Title_Name_Template")
-  local titleSet = UI.getChildControl(content, "StaticText_Status_Template")
   local radioButton_NA = UI.getChildControl(content, "RadioButton_NA_Template")
   local stc_Selected = UI.getChildControl(content, "Static_Selected")
-  titleBG:SetUnchecked()
   titleBG:SetIgnore(false)
+  stc_Selected:SetShow(false)
   radioButton_NA:SetIgnore(true)
   titleName:SetText(titleWrapper:getName())
   titleName:SetShow(true)
   if titleWrapper:isAcquired() == true then
-    titleSet:SetShow(true)
     radioButton_NA:SetShow(false)
     titleBG:addInputEvent("Mouse_LUp", "InputMLUp_CharacterTitleInfo_TitleSet(" .. self._currentCategoryIdx .. ", " .. titleIndex .. " )")
     if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
-      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, ""))
       stc_Selected:SetShow(true)
-    else
-      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
-      stc_Selected:SetShow(false)
     end
   else
     radioButton_NA:SetIgnore(false)
     radioButton_NA:SetShow(true)
-    titleSet:SetShow(false)
     stc_Selected:SetShow(false)
     titleBG:addInputEvent("Mouse_LUp", "")
+    radioButton_NA:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. titleIndex .. " )")
   end
   titleBG:addInputEvent("Mouse_On", "InputMOn_CharacterTitleInfo_ShowDescription(" .. titleIndex .. " )")
 end
@@ -197,6 +192,7 @@ function InputMOn_CharacterTitleInfo_ShowDescription(titleIdx)
   if nil == titleWrapper then
     return
   end
+  self._ui.stc_KeyGuide_Select:SetShow(titleWrapper:isAcquired())
   self._ui.txt_Title_Name_Info:SetText(titleWrapper:getDescription())
 end
 function InputMOut_CharacterTitleInfo_CloseDescription()

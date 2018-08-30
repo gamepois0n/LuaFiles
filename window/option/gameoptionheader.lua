@@ -622,11 +622,6 @@ PaGlobal_Option = {
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON,
       _settingRightNow = true
     },
-    EnableRidingSound = {
-      _defaultValue = true,
-      _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON,
-      _settingRightNow = true
-    },
     EnableWhisperMusic = {
       _defaultValue = true,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON,

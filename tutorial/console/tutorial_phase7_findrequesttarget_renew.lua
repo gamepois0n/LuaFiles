@@ -110,12 +110,10 @@ function PaGlobal_TutorialPhase_FindRequestTarget:changeStepOpenQuestWindow()
   if 1 == self._currentProgress then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_76") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_12"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonRSM", PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_QUEST_M_QUESTLIST"), "buttonDpadUp", "+")
     end)
   elseif 2 == self._currentProgress then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_78") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_13"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonB", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_COMMON_CLOSE"))
     end)
   elseif 3 == self._currentProgress then
     isNeedToCheckUpdateTime = true

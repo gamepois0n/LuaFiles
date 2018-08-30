@@ -5,6 +5,7 @@ local Panle_Window_StableFunction_Info = {
     funcButtonPanel = Panel_Window_StableFunction,
     static_LB_ConsoleUI = nil,
     static_RB_ConsoleUI = nil,
+    staticText_Exit_ConsoleUI = nil,
     radioButton_Tempelate = nil
   },
   _value = {
@@ -173,6 +174,7 @@ end
 function Panle_Window_StableFunction_Info:childControl()
   self._ui.static_LB_ConsoleUI = UI.getChildControl(Panel_Window_StableFunction, "Static_LB_ConsoleUI")
   self._ui.static_RB_ConsoleUI = UI.getChildControl(Panel_Window_StableFunction, "Static_RB_ConsoleUI")
+  self._ui.staticText_Exit_ConsoleUI = UI.getChildControl(Panel_Window_StableFunction, "StaticText_Exit_ConsoleUI")
   self._ui.radioButton_Tempelate = UI.getChildControl(Panel_Window_StableFunction, "RadioButton_Tempelate")
 end
 function Panle_Window_StableFunction_Info:createFunButton()
@@ -316,11 +318,13 @@ function PaGlobalFunc_StableFunction_List()
   local self = Panle_Window_StableFunction_Info
   self:closeStableSubPanelWithoutList()
   PaGlobalFunc_StableList_Show()
+  self._ui.staticText_Exit_ConsoleUI:SetShow(false)
 end
 function PaGlobalFunc_StableFunction_ExChange()
   local self = Panle_Window_StableFunction_Info
   self:closeStableSubPanel()
   PaGlobalFunc_StableExchange_ShowByExchange()
+  self._ui.staticText_Exit_ConsoleUI:SetShow(true)
 end
 function PaGlobalFunc_StableFunction_Carriage()
   local self = Panle_Window_StableFunction_Info
@@ -336,6 +340,7 @@ function PaGlobalFunc_StableFunction_Market()
   local self = Panle_Window_StableFunction_Info
   self:closeStableSubPanel()
   PaGlobalFunc_StableMarket_Show()
+  self._ui.staticText_Exit_ConsoleUI:SetShow(true)
 end
 function PaGlobalFunc_StableFunction_UpAni()
   Panel_Window_StableFunction:SetPosY(Panel_Window_StableFunction:GetPosY() - Panel_Window_StableList:GetSizeY())

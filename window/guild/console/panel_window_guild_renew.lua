@@ -6,6 +6,7 @@ local VCK = CppEnums.VirtualKeyCode
 local _panel = Panel_Window_Guild_Renew
 local GuildMain = {
   _ui = {
+    stc_TopBg = UI.getChildControl(_panel, "Static_TopBg"),
     stc_RadioBtnBg = UI.getChildControl(_panel, "Static_RadioButtonBg"),
     stc_BottomBg = UI.getChildControl(_panel, "Static_BottomBg")
   },
@@ -49,6 +50,7 @@ function GuildMain:openTab(tabIdx_)
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   self._ui.txt_YConsoleUI:SetShow(false)
   self._ui.txt_XConsoleUI:SetShow(false)
+  PaGlobalFunc_GuildMain_SetKeyGuide(1, true)
   if tabIdx_ == self._tabIdxData.guildInfo then
     self:updateGuildInfo()
     self:updateDeclareInfo()
@@ -58,6 +60,7 @@ function GuildMain:openTab(tabIdx_)
   elseif tabIdx_ == self._tabIdxData.guildMember then
     PaGlobalFunc_GuildMemberList_Open()
   elseif tabIdx_ == self._tabIdxData.guildQuest then
+    PaGlobalFunc_GuildMain_SetKeyGuide(1, false)
     PaGlobalFunc_GuildQuestList_Open()
   else
     if tabIdx_ == self._tabIdxData.guildSkill then
@@ -67,6 +70,7 @@ function GuildMain:openTab(tabIdx_)
   end
 end
 function GuildMain:init()
+  self._ui.stc_TopBg:SetShow(true)
   self._btnCtrl[self._tabIdxData.guildInfo] = UI.getChildControl(self._ui.stc_RadioBtnBg, "RadioButton_Information")
   self._btnCtrl[self._tabIdxData.guildMember] = UI.getChildControl(self._ui.stc_RadioBtnBg, "RadioButton_MemberList")
   self._btnCtrl[self._tabIdxData.guildQuest] = UI.getChildControl(self._ui.stc_RadioBtnBg, "RadioButton_Quest")
@@ -258,6 +262,16 @@ function PaGlobalFunc_GuildMain_GetKeyGuide(keyType)
   local control = self._keyGuideList[keyType]
   if nil ~= control then
     return control
+  end
+end
+function PaGlobalFunc_GuildMain_SetKeyGuide(keyType, isShow)
+  local self = GuildMain
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMain")
+    return
+  end
+  if nil ~= self._keyGuideList[keyType] then
+    self._keyGuideList[keyType]:SetShow(isShow)
   end
 end
 function InputMLUp_GuildMain_MoveTabToRight()

@@ -166,12 +166,9 @@ function Window_WorldMap_TopMenuInfo:UpdateButtonTownMode()
   self._ui._static_MenuBg:SetShow(false)
   self._ui._static_SubMenuBg:SetShow(true)
   self._ui._staticRoundBg:SetShow(true)
-  self._ui._staticText_Tooltip:SetText("Menu Open")
   local receipeCount = ToClient_getTownReceipeList()
-  if 0 == receipeCount then
-    self._ui._staticRoundBg:SetShow(false)
-    self._ui._staticText_Tooltip:SetText("")
-  end
+  self._ui._staticRoundBg:SetShow(0 ~= receipeCount)
+  self._ui._staticText_TownTooltip:SetShow(0 ~= receipeCount)
 end
 function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   local eState = CppEnums.WorldMapState
@@ -196,7 +193,6 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   end
   ToClient_SetGuildMode(self._isGuildWarMode)
   ToClient_reloadNodeLine(self._isGuildWarMode, CppEnums.WaypointKeyUndefined)
-  PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapNode()
   ToClient_WorldmapStateChange(renderState)
   if index >= 7 then
     self:UpdateFilder(index)
@@ -320,6 +316,7 @@ function Window_WorldMap_TopMenuInfo:InitControl()
     end
   end
   self._ui._staticRoundBg = UI.getChildControl(self._ui._static_SubMenuBg, "Static_RoundBg")
+  self._ui._staticText_TownTooltip = UI.getChildControl(self._ui._static_SubMenuBg, "StaticText_SelectedMenu")
   self._ui._staticText_Tooltip = UI.getChildControl(self._ui._static_MenuBg, "StaticText_SelectedMenu")
 end
 function Window_WorldMap_TopMenuInfo:InitEvent()

@@ -276,10 +276,8 @@ function Panel_SelfPlayerExpGage_CharacterInfoWindowUpdate()
   if 49 == player:getLevel() and rate >= 99 and not MaxLevQuestInfo then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_50UP"))
   end
-  _staticLevelSub:SetFontColor(4294899677)
-  _staticLevelSub:useGlowFont(true, "BaseFont_Glow", 4289951243)
-  _staticLvText:SetFontColor(4294899677)
-  _staticLvText:useGlowFont(true, "BaseFont_8_Glow", 4289951243)
+  _staticLevelSub:useGlowFont(true, "BaseFont_Glow", 4284572001)
+  _staticLvText:useGlowFont(true, "BaseFont_8_Glow", 4284572001)
 end
 function UserSkillPoint_Update()
   local selfPlayer = getSelfPlayer()
@@ -301,7 +299,7 @@ function UserSkillPoint_Update()
     _staticSkillPointMain:AddEffect("UI_LevelUP_Skill", false, -28, 1)
     _staticSkillPointMain:AddEffect("fUI_LevelUP_Skill02", false, -28, 1)
   end
-  _staticSkillPointMain:SetPosX(_staticSkillPoint:GetSizeX() + _staticSkillPoint:GetPosX() + 5)
+  _staticSkillPointMain:SetPosX(_staticSkillPoint:GetSizeX() + _staticSkillPoint:GetPosX() + 40)
   _staticSkillPointMain:SetText(tostring(player:getRemainSkillPoint()))
   if CppEnums.CountryType.DEV == getGameServiceType() then
     local skillPointInfo = ToClient_getSkillPointInfo(0)
@@ -328,10 +326,8 @@ function UserSkillPoint_Update()
     end
     ExpGauge_UpdateReservedSkillCircularProgress()
   end
-  _staticSkillPointMain:SetFontColor(4294899677)
-  _staticSkillPointMain:useGlowFont(true, "BaseFont_Glow", 4289951243)
-  _staticSkillPointSub:SetFontColor(4294899677)
-  _staticSkillPointSub:useGlowFont(true, "BaseFont_10_Glow", 4289951243)
+  _staticSkillPointMain:useGlowFont(true, "BaseFont_Glow", 4284572001)
+  _staticSkillPointSub:useGlowFont(true, "BaseFont_10_Glow", 4284572001)
   if false == _ContentsGroup_RenewUI_Skill then
     enableSkill_UpdateData()
   end
@@ -367,10 +363,9 @@ function UserLevel_Update()
     return
   end
   staticLevelBg:SetShow(true)
-  staticLevelBg:SetAlpha(0.6)
+  staticLevelBg:SetAlpha(0.8)
   _staticLevel:SetText(tostring(player:get():getLevel()))
-  _staticLevel:SetFontColor(4294899677)
-  _staticLevel:useGlowFont(true, "BaseFont_26_Glow", 4289951243)
+  _staticLevel:useGlowFont(true, "BaseFont_26_Glow", 4284572001)
   if _lastLevel < player:get():getLevel() and 0 ~= _lastLevel then
     _staticLevel:EraseAllEffect()
     _staticLevel:AddEffect("fUI_NewSkill01", false, 0, 0)
@@ -412,13 +407,15 @@ function wpPoint_UpdateFunc()
     _wpGauge:AddEffect("UI_Gauge_Experience02", false, 0, 0)
     _wpGauge_Head:AddEffect("fUI_Repair01", false, 0, 0)
   end
-  _Wp_Main:SetPosX(_Wp:GetSizeX() + _Wp:GetPosX() + 5)
+  _wpGaugeBG:SetPosX(255)
+  _wpGauge:SetPosX(255)
+  _Wp:SetPosX(255)
+  _Wp_Main:SetPosX(_Wp:GetSizeX() + _Wp:GetPosX() + 50)
   _Wp_Main:SetText(tostring(Wp) .. " / " .. maxWp)
   _wpGauge:SetProgressRate(wpSetProgress)
   _Wp_Main:SetSize(_Wp_Main:GetTextSizeX() + 10, _Wp_Main:GetSizeY())
   _Wp_Main:SetEnableArea(0, 0, _Wp_Main:GetTextSizeX(), _Wp_Main:GetSizeY())
-  _Wp_Main:SetFontColor(4294899677)
-  _Wp_Main:useGlowFont(true, "BaseFont_Glow", 4289951243)
+  _Wp_Main:useGlowFont(true, "BaseFont_Glow", 4284572001)
   _lastWP = Wp
 end
 local lastContRate = 0
@@ -438,7 +435,10 @@ function contributePoint_UpdateFunc()
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
   local nowRemainExpPoint = tostring(explorePoint:getRemainedPoint())
   local nowExpPoint = tostring(explorePoint:getAquiredPoint())
-  _contribute_Main:SetPosX(_contribute_txt:GetSizeX() + _contribute_txt:GetPosX() + 5)
+  _contribute_BG:SetPosX(410)
+  _contribute_progress:SetPosX(410)
+  _contribute_txt:SetPosX(410)
+  _contribute_Main:SetPosX(_contribute_txt:GetSizeX() + _contribute_txt:GetPosX() + 55)
   _contribute_Main:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
   if isGameServiceTypeDev() then
     _contribute_Main:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. "      (" .. Int64toInt32(explorePoint:getExperience_s64()) .. " / " .. Int64toInt32(getRequireExplorationExperience_s64()) .. ")")
@@ -472,8 +472,7 @@ function contributePoint_UpdateFunc()
     _contribute_Main:EraseAllEffect()
     _contribute_Icon:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end
-  _contribute_Main:SetFontColor(4294899677)
-  _contribute_Main:useGlowFont(true, "BaseFont_Glow", 4289951243)
+  _contribute_Main:useGlowFont(true, "BaseFont_Glow", 4284572001)
   lastContRate = cont_expRate
   lastRemainExplorePoint = tostring(explorePoint:getRemainedPoint())
   lastExplorePoint = tostring(explorePoint:getAquiredPoint())

@@ -1,6 +1,7 @@
 Panel_Customizing_HairShape:ignorePadSnapMoveToOtherPanel()
 local Customization_HairShapeInfo = {
   _ui = {
+    _static_TabGroup = UI.getChildControl(Panel_Customizing_HairShape, "Static_TabGroup"),
     _static_KeyGuideBg = UI.getChildControl(Panel_Customizing_HairShape, "Static_KeyGuideBg"),
     _static_ButtonBg = UI.getChildControl(Panel_Customizing_HairShape, "Static_ButtonGroup"),
     _button_Position = UI.getChildControl(Panel_Customizing_HairShape, "Button_Position"),
@@ -29,6 +30,7 @@ local Customization_HairShapeInfo = {
   _isBoneControl = false
 }
 function Customization_HairShapeInfo:ShowBoneControls(isShow)
+  self._ui._static_TabGroup:SetShow(isShow)
   self._ui._button_Position:SetShow(isShow)
   self._ui._button_Rotation:SetShow(isShow)
   for index = 0, 2 do
@@ -40,14 +42,16 @@ function Customization_HairShapeInfo:ShowBoneControls(isShow)
   self._ui._button_ResetAll:SetShow(isShow)
   self._ui._static_PositionSliderGroup:SetShow(isShow)
   self._ui._static_RotationSliderGroup:SetShow(isShow)
+  self._ui._static_KeyGuideBg:SetPosY(Panel_Customizing_HairShape:GetPosY() + Panel_Customizing_HairShape:GetSizeY() - 50)
   if false == isShow then
     self._ui._static_LenghtSliderGroup:SetPosY(25)
     Panel_Customizing_HairShape:SetSize(Panel_Customizing_HairShape:GetSizeX(), 200)
   else
     self._ui._static_LenghtSliderGroup:SetPosY(373)
     Panel_Customizing_HairShape:SetSize(Panel_Customizing_HairShape:GetSizeX(), 548)
+    Panel_Customizing_HairShape:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_HairShape_SetBoneControl(true)")
+    PaGlobalFunc_Customization_HairShape_Update()
   end
-  self._ui._static_KeyGuideBg:SetPosY(Panel_Customizing_HairShape:GetPosY() + Panel_Customizing_HairShape:GetSizeY() - 50)
 end
 function PaGlobalFunc_Customization_HairShape_CloseHairShapeUi()
   endPickingMode()
@@ -121,8 +125,9 @@ function PaGlobalFunc_Customization_HairShape_OpenHairShapeUi(classType, uiId)
     self._ui._staticText_LengthSlider[sliderIndex]:SetText(PAGetString(Defines.StringSheet_GAME, sliderText))
     self._ui._staticText_LengthValue[sliderIndex]:SetText(param)
     self:SetValueSlider(self._ui._slider_Length[sliderIndex], param, self._paramMin[sliderIndex], self._paramMax[sliderIndex])
-    PaGlobalFunc_Customization_HairShape_Open()
+    HandleClicked_Customization_HairShape_UpdateHairLength(sliderIndex)
   end
+  PaGlobalFunc_Customization_HairShape_Open()
 end
 function PaGlobalFunc_Customization_HairShape_EnalbeSlide(textControl, sliderControl, currentValueControl, enable)
   local color = Defines.Color.C_FF444444
@@ -131,12 +136,18 @@ function PaGlobalFunc_Customization_HairShape_EnalbeSlide(textControl, sliderCon
   end
   sliderControl:SetMonoTone(not enable)
   sliderControl:SetEnable(enable)
+  sliderControl:SetIgnore(not enable)
   textControl:SetFontColor(color)
   currentValueControl:SetFontColor(color)
 end
 function Customization_HairShapeInfo:CalculateSliderValue(sliderControl, valueMin, valueMax)
   local ratio = sliderControl:GetControlPos()
   local val = valueMax - valueMin
+  local progress = UI.getChildControl(sliderControl, "Progress2_1")
+  local button = UI.getChildControl(sliderControl, "Slider_DisplayButton")
+  button:SetPosX(sliderControl:GetControlButton():GetPosX())
+  local offset = math.cos(ratio * math.pi) * 2
+  progress:SetProgressRate(ratio * 100 + offset)
   return ratio * val - (val - math.abs(valueMax))
 end
 function Customization_HairShapeInfo:SetValueSlider(sliderControl, value, valueMin, valueMax)
@@ -194,37 +205,33 @@ function PaGlobalFunc_Customization_HairShape_EnableHairSlide(enable)
     color = Defines.Color.C_FFFFFFFF
   end
   for index = 0, 2 do
-    self._ui._static_PositionSliderBg[index]:SetEnable(enable)
-    self._ui._static_RotationSliderBg[index]:SetEnable(enable)
+    self._ui._slider_Rotation[index]:SetIgnore(not enable)
+    self._ui._slider_Position[index]:SetIgnore(not enable)
+    self._ui._slider_Rotation[index]:SetEnable(enable)
+    self._ui._slider_Position[index]:SetEnable(enable)
+    self._ui._slider_Rotation[index]:SetMonoTone(not enable)
+    self._ui._slider_Position[index]:SetMonoTone(not enable)
     self._ui._sliderButton_Position[index]:SetMonoTone(not enable)
     self._ui._sliderButton_Rotation[index]:SetMonoTone(not enable)
     self._ui._staticText_PositionSlider[index]:SetFontColor(color)
     self._ui._staticText_RotationSlider[index]:SetFontColor(color)
   end
 end
-function HandleClicked_Customization_HairShape_SliderFocusOn(sliderType, sliderIndex)
+function HandleClicked_Customization_HairShape_SliderFocusOn()
   local self = Customization_HairShapeInfo
-  if 1 == sliderType then
-  elseif 2 == sliderType then
-  elseif 3 == sliderType then
-  end
   if true == self._isExistBone then
-    PaGlobalFunc_Customization_SetKeyGuide(4)
+    PaGlobalFunc_Customization_SetKeyGuide(5)
   else
-    PaGlobalFunc_Customization_SetKeyGuide(3)
+    PaGlobalFunc_Customization_SetKeyGuide(6)
   end
 end
-function HandleClicked_Customization_HairShape_SliderFocusOut(sliderType, sliderIndex)
+function HandleClicked_Customization_HairShape_SliderFocusOut()
   local self = Customization_HairShapeInfo
-  if 1 == sliderType then
-  elseif 2 == sliderType then
-  elseif 3 == sliderType then
-  end
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_HairShape_GetShow() then
     if true == self._isExistBone then
-      PaGlobalFunc_Customization_SetKeyGuide(2)
+      PaGlobalFunc_Customization_SetKeyGuide(3)
     else
-      PaGlobalFunc_Customization_SetKeyGuide(1)
+      PaGlobalFunc_Customization_SetKeyGuide(0)
     end
   end
 end
@@ -271,6 +278,12 @@ function HandleClicked_Customization_HairShape_UpdateHairLength(sliderIndex)
   local value = PaGlobalFunc_CustomIzationCommon_GetSliderValue(self._ui._slider_Length[sliderIndex], self._paramMin[sliderIndex], self._paramMax[sliderIndex])
   setParam(self._currentClassType, self._paramType[sliderIndex], self._paramIndex[sliderIndex], value)
   self._ui._staticText_LengthValue[sliderIndex]:SetText(value)
+  local progress = UI.getChildControl(self._ui._slider_Length[sliderIndex], "Progress2_1")
+  local button = UI.getChildControl(self._ui._slider_Length[sliderIndex], "Slider_DisplayButton")
+  local progressValue = (value - self._paramMin[sliderIndex]) / (self._paramMax[sliderIndex] - self._paramMin[sliderIndex])
+  local offset = math.cos(progressValue * math.pi) * 2
+  progress:SetProgressRate(progressValue * 100 + offset)
+  button:SetPosX(self._ui._slider_Length[sliderIndex]:GetControlButton():GetPosX())
 end
 function Customization_HairShapeInfo:UpdateHairRadioButtons(updateControlMode)
   if updateControlMode == 1 then
@@ -286,31 +299,21 @@ function PaGlobalFunc_Customization_HairShape_SetBoneControl(isSet)
   local self = Customization_HairShapeInfo
   if false == isSet then
     self._isBoneControl = false
-    if true == self._isExistBone then
-      PaGlobalFunc_Customization_SetKeyGuide(2)
-    else
-      PaGlobalFunc_Customization_SetKeyGuide(1)
-    end
+    PaGlobalFunc_Customization_SetKeyGuide(3)
     Panel_Customizing_HairShape:ignorePadSnapUpdate(false)
     ToClient_StartOrEndShapeBoneControlStart(false)
+    PaGlobalFunc_Customization_HairShape_Update()
+    PaGlobalFunc_Customization_HairShape_SetShow(true)
   else
-    self._isBoneControl = true
-    if true == self._isExistBone then
-      PaGlobalFunc_Customization_SetKeyGuide(5)
-    else
-      PaGlobalFunc_Customization_SetKeyGuide(9)
+    if true ~= self._isExistBone then
+      return
     end
+    self._isBoneControl = true
+    PaGlobalFunc_Customization_SetKeyGuide(4)
     Panel_Customizing_HairShape:ignorePadSnapUpdate(true)
     ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
-function PaGlobalFunc_Customization_HairShape_UpdatePerFrame(deltaTime)
-  local self = Customization_HairShapeInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_HairShape_SetBoneControl(false)
-    end
-    return
+    PaGlobalFunc_CustomizingKeyGuide_Open(PaGlobalFunc_Customization_HairShape_SetBoneControl, 0)
+    PaGlobalFunc_Customization_HairShape_SetShow(false)
   end
 end
 function Customization_HairShapeInfo:InitControl()
@@ -387,24 +390,22 @@ function Customization_HairShapeInfo:InitEvent()
   for index = 0, 2 do
     self._ui._slider_Position[index]:addInputEvent("Mouse_LPress", "HandleClicked_Customization_HairShape_UpdateHairBone(1)")
     self._ui._sliderButton_Position[index]:SetIgnore(true)
-    self._ui._slider_Position[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn(1," .. index .. ")")
-    self._ui._slider_Position[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut(1," .. index .. ")")
+    self._ui._slider_Position[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn()")
+    self._ui._slider_Position[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut()")
     self._ui._slider_Rotation[index]:addInputEvent("Mouse_LPress", "HandleClicked_Customization_HairShape_UpdateHairBone(2)")
     self._ui._sliderButton_Rotation[index]:SetIgnore(true)
-    self._ui._slider_Rotation[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn(2," .. index .. ")")
-    self._ui._slider_Rotation[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut(2," .. index .. ")")
+    self._ui._slider_Rotation[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn()")
+    self._ui._slider_Rotation[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut()")
   end
   for index = 0, 4 do
     self._ui._slider_Length[index]:addInputEvent("Mouse_LPress", "HandleClicked_Customization_HairShape_UpdateHairLength(" .. index .. ")")
     self._ui._sliderButton_Length[index]:SetIgnore(true)
-    self._ui._slider_Length[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn(3," .. index .. ")")
-    self._ui._slider_Length[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut(3," .. index .. ")")
+    self._ui._slider_Length[index]:addInputEvent("Mouse_On", "HandleClicked_Customization_HairShape_SliderFocusOn()")
+    self._ui._slider_Length[index]:addInputEvent("Mouse_Out", "HandleClicked_Customization_HairShape_SliderFocusOut()")
   end
   self._ui._checkBox_ShowPart:addInputEvent("Mouse_LUp", "HandleClicked_Customization_HairShape_ToggleShowHairBoneControlPart()")
   self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "HandleClicked_Customization_HairShape_ClearCustomizedBoneInfo()")
   self._ui._button_ResetAll:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomIzationCommon_ClearGroupCustomizedBonInfoLua()")
-  Panel_Customizing_HairShape:RegisterUpdateFunc("PaGlobalFunc_Customization_HairShape_UpdatePerFrame")
-  Panel_Customizing_HairShape:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_HairShape_SetBoneControl(true)")
 end
 function Customization_HairShapeInfo:InitRegister()
   registerEvent("EventOpenHairShapeUi", "PaGlobalFunc_Customization_HairShape_OpenHairShapeUi")
@@ -425,6 +426,13 @@ function PaGlobalFunc_FromClient_Customization_HairShape_luaLoadComplete()
   local self = Customization_HairShapeInfo
   self:Initialize()
 end
+function PaGlobalFunc_Customization_HairShape_IsBone()
+  local self = Customization_HairShapeInfo
+  return self._isExistBone
+end
+function PaGlobalFunc_Customization_HairShape_GetPanel()
+  return Panel_Customizing_HairShape
+end
 function PaGlobalFunc_Customization_HairShape_GetShow()
   return Panel_Customizing_HairShape:GetShow()
 end
@@ -436,15 +444,16 @@ function PaGlobalFunc_Customization_HairShape_Open()
   if true == PaGlobalFunc_Customization_HairShape_GetShow() then
     return
   end
+  PaGlobalFunc_Customization_HairShape_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
   if true == self._isExistBone then
-    PaGlobalFunc_Customization_SetKeyGuide(2)
+    PaGlobalFunc_Customization_SetKeyGuide(3)
   else
-    PaGlobalFunc_Customization_SetKeyGuide(1)
+    PaGlobalFunc_Customization_SetKeyGuide(0)
   end
   HandleClicked_Customization_HairShape_ToggleShowHairBoneControlPart()
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_HairShape_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_HairShape_Close()")
-  PaGlobalFunc_Customization_HairShape_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_HairShape_Close()
   local self = Customization_HairShapeInfo
@@ -457,9 +466,23 @@ function PaGlobalFunc_Customization_HairShape_Close()
   end
   endPickingMode()
   self._isExistBone = true
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_HairShape_SetShow(false, false)
   return true
+end
+function PaGlobalFunc_Customization_HairShape_Update()
+  local self = Customization_HairShapeInfo
+  self._selectedTransMin = getSelectedBoneMinTrans()
+  self._selectedTransMax = getSelectedBoneMaxTrans()
+  self._selectedRotMin = getSelectedBoneMinRot()
+  self._selectedRotMax = getSelectedBoneMaxRot()
+  self:CalculateSliderValue(self._ui._slider_Position[0], self._selectedTransMin.x, self._selectedTransMax.x)
+  self:CalculateSliderValue(self._ui._slider_Position[1], self._selectedTransMin.y, self._selectedTransMax.y)
+  self:CalculateSliderValue(self._ui._slider_Position[2], self._selectedTransMin.z, self._selectedTransMax.z)
+  self:CalculateSliderValue(self._ui._slider_Rotation[0], self._selectedRotMin.x, self._selectedRotMax.x)
+  self:CalculateSliderValue(self._ui._slider_Rotation[1], self._selectedRotMin.y, self._selectedRotMax.y)
+  self:CalculateSliderValue(self._ui._slider_Rotation[2], self._selectedRotMin.z, self._selectedRotMax.z)
 end
 PaGlobalFunc_FromClient_Customization_HairShape_luaLoadComplete()

@@ -6,6 +6,7 @@ local PanelLogin = {
     stc_BI = UI.getChildControl(_panel, "Static_BI"),
     btn_Login = UI.getChildControl(_panel, "Button_Login"),
     btn_Exit = UI.getChildControl(_panel, "Button_Exit"),
+    btn_GameOption = UI.getChildControl(_panel, "Button_GameOption_Login"),
     btn_ChangeAccount = UI.getChildControl(_panel, "Button_ChangeAccount"),
     edit_ID = UI.getChildControl(_panel, "Edit_ID"),
     txt_InputID = UI.getChildControl(_panel, "StaticText_InputTxt"),
@@ -222,20 +223,26 @@ function PanelLogin:registEvent()
   self._ui.btn_Login:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_BeforeOpen()")
   self._ui.btn_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
   self._ui.btn_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_ButtonClick_ChangeAccount()")
+  self._ui.btn_GameOption:addInputEvent("Mouse_LUp", "showGameOption()")
+  if ToClient_isXBox() then
+    self._ui.btn_GameOption:SetShow(false)
+  else
+    self._ui.btn_ChangeAccount:SetShow(false)
+  end
   _panel:RegisterUpdateFunc("PaGlobal_PanelLogin_PerFrameUpdate")
   registerEvent("onScreenResize", "PaGlobal_PanelLogin_Resize")
 end
+local self = PanelLogin
 function PaGlobal_PanelLogin_Init()
-  local self = PanelLogin
   self:init()
   self:registEvent()
 end
 function PaGlobal_PanelLogin_Resize()
-  Panel_Login_Renew:SetSize(getScreenSizeX(), getScreenSizeY())
-  local self = PanelLogin
+  _panel:SetSize(getScreenSizeX(), getScreenSizeY())
   self._ui.stc_EventBG:SetShow(false)
   self._ui.btn_Login:ComputePos()
   self._ui.btn_Exit:ComputePos()
+  self._ui.btn_GameOption:ComputePos()
   self._ui.btn_ChangeAccount:ComputePos()
   self._ui.edit_ID:ComputePos()
   self._ui.txt_InputID:ComputePos()
@@ -343,29 +350,65 @@ function PaGlobal_PanelLogin_PerFrameUpdate(deltaTime)
       fadeColor2:SetEndColor(Defines.Color.C_FFFFFFFF)
     end
   end
-  if ToClient_isXBox() then
-    if isPadUp(__eJoyPadInputType_A) then
-      PaGlobal_Policy_Close()
-    elseif Panel_Window_Policy:GetShow() and isPadUp(__eJoyPadInputType_B) then
-      PaGlobal_Policy_Close()
-      LoginNickname_Close()
-      if nil ~= ToClient_SetProcessor_XboxHome() then
-        ToClient_SetProcessor_XboxHome()
-      end
-    end
-  end
 end
 function PaGlobal_PanelLogin_BeforeOpen()
   local serviceType = getGameServiceType()
   if (isGameTypeTaiwan() or isGameTypeGT() or isGameTypeKorea()) and 1 ~= serviceType then
     FGlobal_TermsofGameUse_Open()
   else
-    PaGlobal_PanelLogin_LoginEnter()
+    FGlobal_Panel_Login_Enter()
   end
 end
-function PaGlobal_PanelLogin_LoginEnter()
-  local self = PanelLogin
+function Panel_Login_BeforOpen()
+  PaGlobal_PanelLogin_BeforeOpen()
+end
+function FGlobal_Panel_Login_Enter()
   self:loginEnter()
+end
+function PanelLogin:animateControl(deltaTime, control, target)
+  local currentPos = control:GetPosX()
+  local distance = _rightBgTargetX - currentPos
+  local acc = distance / 40 * deltaTime * 500
+  if acc > -1 and acc < 0 then
+    acc = -1
+  elseif acc < 1 and acc > 0 then
+    acc = 1
+  end
+  if 1 < math.abs(distance) then
+    control:SetPosX(currentPos + acc)
+  else
+    control:SetPosX(_rightBgTargetX)
+    _startAnimationFlag = false
+  end
+end
+function Panel_Login_ButtonDisable(bool)
+  if true == bool then
+    PanelLogin._ui.btn_Login:SetEnable(false)
+    PanelLogin._ui.btn_Login:SetMonoTone(true)
+    PanelLogin._ui.btn_Login:SetIgnore(true)
+    PanelLogin._ui.btn_Exit:SetEnable(false)
+    PanelLogin._ui.btn_Exit:SetMonoTone(true)
+    PanelLogin._ui.btn_Exit:SetIgnore(true)
+    PanelLogin._ui.btn_GameOption:SetEnable(false)
+    PanelLogin._ui.btn_GameOption:SetMonoTone(true)
+    PanelLogin._ui.btn_GameOption:SetIgnore(true)
+    PanelLogin._ui.btn_ChangeAccount:SetEnable(false)
+    PanelLogin._ui.btn_ChangeAccount:SetMonoTone(true)
+    PanelLogin._ui.btn_ChangeAccount:SetIgnore(true)
+  else
+    PanelLogin._ui.btn_Login:SetEnable(true)
+    PanelLogin._ui.btn_Login:SetMonoTone(false)
+    PanelLogin._ui.btn_Login:SetIgnore(false)
+    PanelLogin._ui.btn_Exit:SetEnable(true)
+    PanelLogin._ui.btn_Exit:SetMonoTone(false)
+    PanelLogin._ui.btn_Exit:SetIgnore(false)
+    PanelLogin._ui.btn_GameOption:SetEnable(true)
+    PanelLogin._ui.btn_GameOption:SetMonoTone(false)
+    PanelLogin._ui.btn_GameOption:SetIgnore(false)
+    PanelLogin._ui.btn_ChangeAccount:SetEnable(true)
+    PanelLogin._ui.btn_ChangeAccount:SetMonoTone(false)
+    PanelLogin._ui.btn_ChangeAccount:SetIgnore(false)
+  end
 end
 function PaGlobal_PanelLogin_ButtonClick_ChangeAccount()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_CHANGEACCOUNT_MSGBOX")
@@ -383,4 +426,4 @@ function PaGlobal_PanelLogin_ChangeAccount_MessageBoxConfirm()
 end
 PaGlobal_PanelLogin_Init()
 PaGlobal_PanelLogin_Resize()
-Panel_Login_Renew:SetShow(true)
+_panel:SetShow(true)

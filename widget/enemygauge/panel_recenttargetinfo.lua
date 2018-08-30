@@ -374,7 +374,7 @@ function panel_Update_Monster_Info(actorKey)
         appliedBuff_UIPool_Last = appliedBuff_Idx
       end
     end
-    appliedBuff_UIPool[appliedBuff_Idx]:ChangeTextureInfoName("icon/" .. appliedBuff:getIconName())
+    appliedBuff_UIPool[appliedBuff_Idx]:ChangeTextureInfoNameAsync("icon/" .. appliedBuff:getIconName())
     local x1, y1, x2, y2 = setTextureUV_Func(appliedBuff_UIPool[appliedBuff_Idx], 0, 0, 32, 32)
     appliedBuff_UIPool[appliedBuff_Idx]:getBaseTexture():setUV(x1, y1, x2, y2)
     appliedBuff_UIPool[appliedBuff_Idx]:setRenderTexture(appliedBuff_UIPool[appliedBuff_Idx]:getBaseTexture())

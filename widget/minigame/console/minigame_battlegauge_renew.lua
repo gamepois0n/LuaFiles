@@ -18,7 +18,7 @@ local remainTime = 11
 function MiniGame_BattleGauge:init()
   self._ui.txt_TitleText = UI.getChildControl(self._ui.stc_InfoBG, "StaticText_TitleText")
   self._ui.progress2_MyGauge = UI.getChildControl(self._ui.stc_BattleGauge_BG, "Progress2_MyGauge")
-  self._ui.stc_ButtonA = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_A")
+  self._ui.stc_ButtonB = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_B")
   self._ui.stc_SpaceBar = UI.getChildControl(self._ui.stc_PC_Control_BG, "Static_SpaceBar")
   self._ui.stc_SpaceBar_Effect = UI.getChildControl(self._ui.stc_SpaceBar, "Static_SpaceBar_Effect")
   self._ui.stc_MyGauge_Head = UI.getChildControl(self._ui.progress2_MyGauge, "Progress2_MyBar_Head")
@@ -27,10 +27,10 @@ function MiniGame_BattleGauge:init()
   self._ui.stc_Result_Lose = UI.getChildControl(self._ui.stc_BattleGauge_BG, "Static_Result_Lose")
   if _ContentsGroup_isConsolePadControl then
     self._ui.stc_SpaceBar:SetShow(false)
-    self._ui.stc_ButtonA:SetShow(true)
+    self._ui.stc_ButtonB:SetShow(true)
   else
     self._ui.stc_SpaceBar:SetShow(true)
-    self._ui.stc_ButtonA:SetShow(false)
+    self._ui.stc_ButtonB:SetShow(false)
   end
   Panel_BattleGauge:RegisterUpdateFunc("BattleGauge_UpdatePerFrame")
   BattleGauge_RePosition()
@@ -59,7 +59,8 @@ function MiniGame_BattleGauge:setProgress(isSetProgress)
 end
 function Panel_Minigame_BattleGauge_Start()
   local self = MiniGame_BattleGauge
-  self._ui.txt_TitleText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_BATTLEGAUGE_REPEAT_A"))
+  self._ui.txt_TitleText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_TitleText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_BATTLEGAUGE_REPEAT_B"))
   self._ui.stc_MiddleLine:AddEffect("fUI_Repair01B", true, 0, 0)
   remainTime = 11
   Panel_BattleGauge:SetShow(true)
@@ -117,7 +118,7 @@ function Panel_Minigame_SpaceBar(keyType)
   end
 end
 function Panel_Minigame_BattleGauge_PadPress(keyType)
-  if __eQuickTimeEventPadType_A == keyType then
+  if __eQuickTimeEventPadType_B == keyType then
     BattleGauge_UpdateGauge(deltaTime)
   end
 end

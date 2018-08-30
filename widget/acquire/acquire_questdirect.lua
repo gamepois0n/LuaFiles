@@ -143,7 +143,7 @@ function AcquireQuestDirect_UpdateQuestDemand(questData, demand, isComplete)
     ui._text_QuestTitle_2:SetText("")
     ui._text_QuestDemand_2:SetText("")
     ui._text_QuestTitle:SetText(ToClient_getReplaceDialog(demand._desc))
-    chatting_sendMessage("", PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AQUIREMESSAGE_QUESTCOMPLETE", "desc", demand._desc), CppEnums.ChatType.System)
+    chatting_sendMessage("", PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AQUIREMESSAGE_QUESTCOMPLETE", "desc", ToClient_getReplaceDialog(demand._desc)), CppEnums.ChatType.System)
     if isComplete then
       audioPostEvent_SystemUi(4, 2)
       ui._text_QuestDirect:SetFontColor(UI_color.C_FFB5FF6D)

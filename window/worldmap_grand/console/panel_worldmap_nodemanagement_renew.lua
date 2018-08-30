@@ -78,7 +78,7 @@ function Window_WorldMap_NodeManagementInfo:SetTownManagementUI()
   self._ui._static_NodeInvestmentBg:SetPosY(self._ui._static_TopBg:GetPosY() + self._ui._static_TopBg:GetSizeY() + 15)
   local offsetY = self._ui._static_SubNodeBg:GetSizeY() + self._ui._static_NodeManagementBg:GetSizeY() + 40
   Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY - offsetY)
-  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY + offsetY / 2)
+  Panel_Worldmap_NodeManagement:ComputePos()
   self._ui._static_BottomBg:ComputePos()
 end
 function Window_WorldMap_NodeManagementInfo:SetNoneTownManagementUI()
@@ -86,7 +86,7 @@ function Window_WorldMap_NodeManagementInfo:SetNoneTownManagementUI()
   self._ui._static_NodeManagementBg:SetShow(true)
   self._ui._static_NodeInvestmentBg:SetPosY(self._ui._static_NodeManagementBg:GetPosY() + self._ui._static_NodeManagementBg:GetSizeY() + 15)
   Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY)
-  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY)
+  Panel_Worldmap_NodeManagement:ComputePos()
   self._ui._static_BottomBg:ComputePos()
   if 0 == self._currentSubNodeIndex then
     self:WithOutSubNode()
@@ -98,13 +98,13 @@ function Window_WorldMap_NodeManagementInfo:WithOutSubNode()
   self._ui._static_SubNodeBg:SetShow(false)
   local offsetY = self._ui._static_SubNodeBg:GetSizeY() + 20
   Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY - offsetY)
-  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY + offsetY / 2)
+  Panel_Worldmap_NodeManagement:ComputePos()
   self._ui._static_BottomBg:ComputePos()
 end
 function Window_WorldMap_NodeManagementInfo:WithSubNode()
   self._ui._static_SubNodeBg:SetShow(true)
   Panel_Worldmap_NodeManagement:SetSize(Panel_Worldmap_NodeManagement:GetSizeX(), self._config._defaultPanelSizeY)
-  Panel_Worldmap_NodeManagement:SetPosY(self._config._defaultPanelPosY)
+  Panel_Worldmap_NodeManagement:ComputePos()
   self._ui._static_BottomBg:ComputePos()
 end
 function Window_WorldMap_NodeManagementInfo:SetTopTitle()
@@ -211,16 +211,19 @@ function Window_WorldMap_NodeManagementInfo:InitControl()
   self._ui._staticText_ContributeTitle = UI.getChildControl(self._ui._static_NodeManagementBg, "StaticText_Title")
   self._ui._staticText_ContributeDesc = UI.getChildControl(self._ui._static_NodeManagementBg, "StaticText_Desc")
   self._ui._staticText_ContributeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_ContributeDesc:SetText(self._ui._staticText_ContributeDesc:GetText())
   self._ui._button_Contribute = UI.getChildControl(self._ui._static_NodeManagementBg, "Button_Contribute")
   self._ui._button_ContributeValue = UI.getChildControl(self._ui._button_Contribute, "StaticText_ContributePoint")
   self._ui._staticText_NodeTitle = UI.getChildControl(self._ui._static_NodeInvestmentBg, "StaticText_Title")
   self._ui._staticText_NodeTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EXPGUAGE_CONTRIBUTE_VALUE_2"))
   self._ui._staticText_NodeDesc = UI.getChildControl(self._ui._static_NodeInvestmentBg, "StaticText_Desc")
   self._ui._staticText_NodeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_NodeDesc:SetText(self._ui._staticText_NodeDesc:GetText())
   self._ui._button_EnergyInvest = UI.getChildControl(self._ui._static_NodeInvestmentBg, "Button_Invest")
   self._ui._staticText_SubNodeTitle = UI.getChildControl(self._ui._static_SubNodeBg, "StaticText_Title")
   self._ui._staticText_SubNodeDesc = UI.getChildControl(self._ui._static_SubNodeBg, "StaticText_Desc")
   self._ui._staticText_SubNodeDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._staticText_SubNodeDesc:SetText(self._ui._staticText_SubNodeDesc:GetText())
   self._ui._list2_SubNode = UI.getChildControl(self._ui._static_SubNodeBg, "List2_SubNode")
   self._config._defaultPanelSizeY = Panel_Worldmap_NodeManagement:GetSizeY()
   self._config._defaultPanelPosY = Panel_Worldmap_NodeManagement:GetPosY()
@@ -365,29 +368,37 @@ end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeData)
   local self = Window_WorldMap_NodeManagementInfo
   self:SetNodeData(nodeData)
-  local function NodeWithdrawExecute()
-    local parentTakeAble = true
-    for index = 0, self._currentSubNodeIndex - 1 do
-      if true == isWithdrawablePlant(self._subNodeInfoList[index]._wayPointKey) then
-        ToClient_WorldMapRequestWithdrawPlant(self._subNodeInfoList[index]._wayPointKey)
-        parentTakeAble = false
-      end
-    end
-    self._deleteNodeKey = self._currentNodeData._wayPointKey
-    if true == parentTakeAble then
-      ToClient_WorldMapRequestWithdrawPlant(self._deleteNodeKey)
-      self._deleteNodeKey = nil
-    end
-  end
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
+  PaGlobalFunc_WorldMap_TopMenu_Close()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_WORLDMAP_NODE_WITHDRAWCONFIRM")
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
     content = messageBoxMemo,
-    functionYes = NodeWithdrawExecute,
-    functionNo = MessageBox_Empty_function,
+    functionYes = PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue,
+    functionNo = PaGlobalFunc_WorldMap_NodeManagement_TakeAllCancel,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData, "top")
+end
+function PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue()
+  local parentTakeAble = true
+  for index = 0, self._currentSubNodeIndex - 1 do
+    if true == isWithdrawablePlant(self._subNodeInfoList[index]._wayPointKey) then
+      ToClient_WorldMapRequestWithdrawPlant(self._subNodeInfoList[index]._wayPointKey)
+      parentTakeAble = false
+    end
+  end
+  self._deleteNodeKey = self._currentNodeData._wayPointKey
+  if true == parentTakeAble then
+    ToClient_WorldMapRequestWithdrawPlant(self._deleteNodeKey)
+    self._deleteNodeKey = nil
+  end
+  PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+end
+function PaGlobalFunc_WorldMap_NodeManagement_TakeAllCancel()
+  PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
   ToClient_DeleteNaviGuideByGroup(0)
@@ -449,11 +460,13 @@ function PaGlobalFunc_WorldMap_NodeManagement_Open(nodeData)
   PaGlobalFunc_WorldMap_RingMenu_Close()
   self:SetNodeData(nodeData)
   self:Update()
+  PaGlobalFunc_WorldMap_TopMenu_Close()
 end
 function PaGlobalFunc_WorldMap_NodeManagement_Close()
   if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
     return
   end
+  PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_NodeManagement_SetShow(false, false)
 end

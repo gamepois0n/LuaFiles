@@ -290,7 +290,9 @@ end
 function TooltipInfo:close()
   _panel:SetShow(false)
   PaGlobalFunc_MainStatusInfo_Open()
-  PaGlobalFunc_ChattingViewer_On()
+  if false == PaGlobal_TutorialManager:isDoingTutorial() then
+    PaGlobalFunc_ChattingViewer_On()
+  end
   self._compareItemWrapper = nil
 end
 local colorTable = {

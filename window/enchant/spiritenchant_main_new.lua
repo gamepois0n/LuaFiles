@@ -1805,15 +1805,7 @@ function PaGlobal_Enchant:setEnchantFailCount()
   local valksCount = self._enchantInfo:ToClient_getValksCount()
   self._ui._statictext_EnchantFailCount:SetShow(true)
   self._ui._statictext_EnchantFailCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELP", "failCount", failCount))
-  if isGameTypeJapan() then
-    self._ui._statictext_ValksCount:SetShow(true)
-  elseif isGameTypeRussia() then
-    self._ui._statictext_ValksCount:SetShow(true)
-  elseif isGameTypeKorea() then
-    self._ui._statictext_ValksCount:SetShow(true)
-  elseif isGameTypeEnglish() then
-    self._ui._statictext_ValksCount:SetShow(false)
-  end
+  self._ui._statictext_ValksCount:SetShow(true)
   self._ui._statictext_ValksCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_VALKSCOUNT", "count", valksCount))
   self._ui._statictext_TotalEnchantCount:SetText("<PAColor0xffffbc1a>+" .. failCount + valksCount)
   self:showEnchantProbability(failCount + valksCount)

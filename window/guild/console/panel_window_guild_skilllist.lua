@@ -235,6 +235,10 @@ function InputMO_GuildSkillList_SetGuide(isActive)
   Xcontrol:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_MESSAGEBOX_TITLE"))
   Ycontrol:SetShow(isActive)
   Xcontrol:SetShow(isActive)
+  local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+  if true ~= isGuildMaster then
+    Xcontrol:SetShow(false)
+  end
 end
 function PaGlobalFunc_GuildSkill_CreateControl(content, key)
   local self = GuildSkillList
@@ -302,6 +306,7 @@ function InputMLUp_GuildSkillList_LearnSkill(skillNo)
   end
   local isGuildMaster = getSelfPlayer():get():isGuildMaster()
   if false == isGuildMaster then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_ONLYMASTERCANLEARNSKILL"))
     return
   end
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -387,6 +392,10 @@ function InputMLUp_GuildSkillList_LearnSkill(skillNo)
   MessageBox.showMessageBox(messageBoxData, "middle")
 end
 function InputMRUp_GuildSkillList_ActiveSkill(skillNo)
+  local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+  if true ~= isGuildMaster then
+    return
+  end
   ToClient_RequestUseGuildSkill(skillNo)
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildSkillList_Init")

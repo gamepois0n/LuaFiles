@@ -36,7 +36,9 @@ PaGlobal_Option = {
   },
   _ui = {
     _frame = UI.getChildControl(Panel_Window_Option_Main, "Frame_Option"),
-    _frameContent = UI.getChildControl(UI.getChildControl(Panel_Window_Option_Main, "Frame_Option"), "Frame_1_Content")
+    _frameContent = UI.getChildControl(UI.getChildControl(Panel_Window_Option_Main, "Frame_Option"), "Frame_1_Content"),
+    _bottomBg = UI.getChildControl(Panel_Window_Option_Main, "Static_BottomBg"),
+    _titleBg = UI.getChildControl(Panel_Window_Option_Main, "Static_TitleBg")
   },
   _list2 = {
     _curCategory = nil,
@@ -44,1325 +46,6 @@ PaGlobal_Option = {
     _tree2IndexMap = {},
     _selectedKey = nil,
     _selectedSubKey = nil
-  },
-  _elements = {
-    AimAssist = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AimAssist",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_AimAssist_DESC"
-    },
-    UseNewQuickSlot = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_UseNewQuickSlot",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_UseNewQuickSlot_DESC"
-    },
-    EnableSimpleUI = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_EnableSimpleUI",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_EnableSimpleUI_DESC"
-    },
-    IsOnScreenSaver = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_IsOnScreenSaver",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_IsOnScreenSaver_DESC"
-    },
-    UIFontSizeType = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_UIFontSizeType",
-      _desc = ""
-    },
-    ShowNavPathEffectType = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_ShowNavPathEffectType",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_AimAssist_DESC"
-    },
-    RefuseRequests = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_RefuseRequests",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_RefuseRequests_DESC"
-    },
-    IsPvpRefuse = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_IsPvpRefuse",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_IsPvpRefuse_DESC"
-    },
-    IsExchangeRefuse = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_IsExchangeRefuse",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_IsExchangeRefuse_DESC"
-    },
-    RotateRadarMode = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_RotateRadarMode",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_RotateRadarMode_DESC"
-    },
-    HideWindowByAttacked = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_HideWindowByAttacked",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_HideWindowByAttacked_DESC"
-    },
-    AudioResourceType = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ServiceResourceType = {
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    UseChattingFilter = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ChatChannelType = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    SelfPlayerNameTagVisible = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_FUNCTION_VIEW_CHARACTERNAMETITLE",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_VIEW_SelfPlayerNameTagVisible_DESC_0"
-    },
-    OtherPlayerNameTagVisible = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    PartyPlayerNameTagVisible = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuildPlayerNameTagVisible = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    RankingPlayerNameTagVisible = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineZoneChange = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineQuestNPC = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineNpcIntimacy = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineWarAlly = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineNonWarPlayer = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineEnemy = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineGuild = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLineParty = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GuideLinePartyMemberEffect = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    PetRender = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    FairyRender = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    MaidView = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    ShowReputation = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    RenderHitEffect = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    DamageMeter = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ShowComboGuide = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    HideMastOnCarrier = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WorkerVisible = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WorldMapOpenType = {
-      _defaultValue = 3,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WorldmapCameraPitchType = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    TextureQuality = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    GraphicOption = {
-      _defaultValue = 2,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    AntiAliasing = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    SSAO = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    PostFilter = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    Tessellation = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    Dof = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    Representative = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _isPictureTooltipOn = true,
-      _title = "",
-      _desc = ""
-    },
-    CharacterEffect = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    SnowPoolOnlyInSafeZone = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    BloodEffect = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    LensBlood = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    AutoOptimization = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    AutoOptimizationFrameLimit = {
-      _defaultValue = 0.33333,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 60,
-      _title = "",
-      _desc = ""
-    },
-    UpscaleEnable = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    SelfPlayerOnlyEffect = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    NearestPlayerOnlyEffect = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    SelfPlayerOnlyLantern = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    PresentLock = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ShowStackHp = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    UseEffectFrameOptimization = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    EffectFrameOptimization = {
-      _defaultValue = 0.03,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0.1,
-      _sliderValueMax = 25,
-      _title = "",
-      _desc = ""
-    },
-    UsePlayerEffectDistOptimization = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    PlayerEffectDistOptimization = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 10,
-      _sliderValueMax = 50,
-      _title = "",
-      _desc = ""
-    },
-    UseCharacterUpdateFrameOptimize = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    UseOtherPlayerUpdate = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    Fov = {
-      _defaultValue = 0.33333,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 40,
-      _sliderValueMax = 70,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    CameraEffectMaster = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    CameraShakePower = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    MotionBlurPower = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    CameraTranslatePower = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    CameraFovPower = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    LUT = {
-      _defaultValue = 8,
-      _type = CONTROL.PA_UI_CONTROL_BUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    HDRDisplayGamma = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 50,
-      _sliderValueMax = 150,
-      _settingRightNow = true,
-      _title = "PANEL_GAMEOPTION_HDR_GAMMA_TITLE",
-      _desc = "PANEL_GAMEOPTION_HDR_GAMMA"
-    },
-    HDRDisplayMaxNits = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 500,
-      _sliderValueMax = 10000,
-      _settingRightNow = true,
-      _title = "PANEL_GAMEOPTION_HDR_NITS_TITLE",
-      _desc = "PANEL_GAMEOPTION_HDR_BRIGHT"
-    },
-    UltraHighDefinition = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_GAMEOPTION_4K_TITLE",
-      _desc = "PANEL_GAMEOPTION_4K_DESC"
-    },
-    MouseInvertX = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    MouseInvertY = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    MouseSensitivityX = {
-      _defaultValue = 0.473684,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    MouseSensitivityY = {
-      _defaultValue = 0.473684,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    GameMouseMode = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    IsUIModeMouseLock = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    GamePadEnable = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_GamePadEnable",
-      _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadEnable_DESC"
-    },
-    GamePadVibration = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_GamePadVibration",
-      _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadVibration_DESC"
-    },
-    GamePadInvertX = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_GamePadInvertX",
-      _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadInvertX_DESC"
-    },
-    GamePadInvertY = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_GamePadInvertY",
-      _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadInvertY_DESC"
-    },
-    GamePadSensitivityX = {
-      _defaultValue = 0.473684,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadSensitivity",
-      _desc = ""
-    },
-    GamePadSensitivityY = {
-      _defaultValue = 0.315789,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadSensitivity",
-      _desc = ""
-    },
-    ConsolePadKeyType = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ScreenShotQuality = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ScreenShotFormat = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WatermarkAlpha = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 20,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    WatermarkScale = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WatermarkPosition = {
-      _defaultValue = 3,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    WatermarkService = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ScreenMode = {
-      _defaultValue = 2,
-      _isChangeDisplay = true,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    ScreenResolution = {
-      _isChangeDisplay = true,
-      _type = CONTROL.PA_UI_CONTROL_COMBOBOX,
-      _comboBoxList = nil,
-      _title = "",
-      _desc = ""
-    },
-    CropModeEnable = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    CropModeScaleX = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 50,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    CropModeScaleY = {
-      _defaultValue = 0.6,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 50,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    UIScale = {
-      _defaultValue = 0.3333,
-      _isChangeDisplay = true,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 50,
-      _sliderValueMax = 200,
-      _title = "",
-      _desc = ""
-    },
-    GammaValue = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = -50,
-      _sliderValueMax = 50,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    ContrastValue = {
-      _defaultValue = 0.7,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = -50,
-      _sliderValueMax = 50,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EffectAlpha = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 30,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    SkillPostEffect = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _title = "",
-      _desc = ""
-    },
-    ColorBlind = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    BlackSpiritNotice = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_BlackSpiritNotice",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_BlackSpiritNotice_DESC"
-    },
-    ShowCashAlert = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_ShowCashAlert",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_ShowCashAlert_DESC"
-    },
-    ShowGuildLoginMessage = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_ShowGuildLoginMessage",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_ShowGuildLoginMessage_DESC"
-    },
-    EnableMusic = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EnableSound = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EnableEnv = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EnableRidingSound = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EnableWhisperMusic = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    EnableTraySoundOnOff = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    BattleSoundType = {
-      _defaultValue = false,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_BattleSoundType",
-      _desc = ""
-    },
-    EnableAudioFairy = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _title = "",
-      _desc = ""
-    },
-    VolumeMaster = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeMaster",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeMaster_DESC"
-    },
-    VolumeMusic = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeMusic",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeMusic_DESC"
-    },
-    VolumeFx = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeFx",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeFx_DESC"
-    },
-    VolumeEnv = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeEnv",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeEnv_DESC"
-    },
-    VolumeDlg = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeDlg",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeDlg_DESC"
-    },
-    VolumeHitFxVolume = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeHitFxVolume",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeHitFxVolume_DESC"
-    },
-    VolumeHitFxWeight = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeHitFxWeight",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeHitFxWeight_DESC"
-    },
-    VolumeOtherPlayer = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "PANEL_NEWGAMEOPTION_VolumeOtherPlayer",
-      _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeOtherPlayer_DESC"
-    },
-    VolumeFairy = {
-      _defaultValue = 0.5,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 0,
-      _sliderValueMax = 100,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    AlertNormalTrade = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertNormalTrade",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertNormalTrade_DESC"
-    },
-    AlertRoyalTrade = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertRoyalTrade",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertRoyalTrade_DESC"
-    },
-    AlertOtherPlayerGetItem = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertOtherPlayerGetItem",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertOtherPlayerGetItem_DESC"
-    },
-    AlertLifeLevelUp = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertLifeLevelUp",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertLifeLevelUp_DESC"
-    },
-    AlertItemMarket = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertItemMarket",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertItemMarket_DESC"
-    },
-    AlertOtherMarket = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertOtherMarket",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertOtherMarket_DESC"
-    },
-    AlertChangeRegion = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertChangeRegion",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertChangeRegion_DESC"
-    },
-    AlertFitnessLevelUp = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertFitnessLevelUp",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertFitnessLevelUp_DESC"
-    },
-    AlertTerritoryWar = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertTerritoryWar",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertTerritoryWar_DESC"
-    },
-    AlertGuildWar = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertGuildWar",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertGuildWar_DESC"
-    },
-    AlertEnchantSuccess = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertEnchantSuccess",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertEnchantSuccess_DESC"
-    },
-    AlertEnchantFail = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertEnchantFail",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertEnchantFail_DESC"
-    },
-    AlertGuildQuestMessage = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertGuildQuestMessage",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertGuildQuestMessage_DESC"
-    },
-    AlertNearMonster = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AlertNearMonster",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertNearMonster_DESC"
-    },
-    AutoRunCamera = {
-      _defaultValue = true,
-      _type = OPTION_TYPE.CHECKBUTTON,
-      _title = "PANEL_NEWGAMEOPTION_AutoRunCamera",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_AutoRunCamera_DESC"
-    },
-    AutoRunCameraRotation = {
-      _defaultValue = 1,
-      _type = OPTION_TYPE.SLIDER,
-      _sliderValueMin = 10,
-      _sliderValueMax = 30,
-      _title = "PANEL_NEWGAMEOPTION_AutoRunCameraRotation",
-      _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_AutoRunCameraRotation_DESC"
-    },
-    KeyCustomMode = {
-      _defaultValue = 0,
-      _type = OPTION_TYPE.RADIOBUTTON,
-      _settingRightNow = true,
-      _title = "",
-      _desc = ""
-    },
-    PadFunction1 = {
-      actionInputType = "PadFunction1",
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    PadFunction2 = {
-      actionInputType = "PadFunction2",
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionMoveFront = {
-      actionInputType = 0,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionMoveBack = {
-      actionInputType = 1,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionMoveLeft = {
-      actionInputType = 2,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionMoveRight = {
-      actionInputType = 3,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionAttack1 = {
-      actionInputType = 4,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionAttack2 = {
-      actionInputType = 5,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionDash = {
-      actionInputType = 6,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionJump = {
-      actionInputType = 7,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionInteraction = {
-      actionInputType = 8,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionAutoRun = {
-      actionInputType = 9,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionWeaponInOut = {
-      actionInputType = 10,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraReset = {
-      actionInputType = 11,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCrouchOrSkill = {
-      actionInputType = 12,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionGrabOrGuard = {
-      actionInputType = 13,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionKick = {
-      actionInputType = 14,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionServantOrder1 = {
-      actionInputType = 15,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionServantOrder2 = {
-      actionInputType = 16,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionServantOrder3 = {
-      actionInputType = 17,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionServantOrder4 = {
-      actionInputType = 18,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot1 = {
-      actionInputType = 19,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot2 = {
-      actionInputType = 20,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot3 = {
-      actionInputType = 21,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot4 = {
-      actionInputType = 22,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot5 = {
-      actionInputType = 23,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot6 = {
-      actionInputType = 24,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot7 = {
-      actionInputType = 25,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot8 = {
-      actionInputType = 26,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot9 = {
-      actionInputType = 27,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot10 = {
-      actionInputType = 28,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot11 = {
-      actionInputType = 29,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot12 = {
-      actionInputType = 30,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot13 = {
-      actionInputType = 31,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot14 = {
-      actionInputType = 32,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot15 = {
-      actionInputType = 33,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot16 = {
-      actionInputType = 34,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot17 = {
-      actionInputType = 35,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot18 = {
-      actionInputType = 36,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot19 = {
-      actionInputType = 37,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionQuickSlot20 = {
-      actionInputType = 38,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionComplicated0 = {
-      actionInputType = 39,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionComplicated1 = {
-      actionInputType = 40,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionComplicated2 = {
-      actionInputType = 41,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionComplicated3 = {
-      actionInputType = 42,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionAutoMoveWalkMode = {
-      actionInputType = 43,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraUp = {
-      actionInputType = 44,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraDown = {
-      actionInputType = 45,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraLeft = {
-      actionInputType = 46,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraRight = {
-      actionInputType = 47,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionCameraRotateGameMode = {
-      actionInputType = 48,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionPushToTalk = {
-      actionInputType = 49,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    ActionWalkMode = {
-      actionInputType = 50,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiCursorOnOff = {
-      uiInputType = 0,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiHelp = {
-      uiInputType = 1,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiMentalKnowledge = {
-      uiInputType = 2,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInventory = {
-      uiInputType = 3,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiBlackSpirit = {
-      uiInputType = 4,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiChat = {
-      uiInputType = 5,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiPlayerInfo = {
-      uiInputType = 6,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiSkill = {
-      uiInputType = 7,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiWorldMap = {
-      uiInputType = 8,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiDyeing = {
-      uiInputType = 9,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiProductionNote = {
-      uiInputType = 10,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiManufacture = {
-      uiInputType = 11,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiGuild = {
-      uiInputType = 12,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiMail = {
-      uiInputType = 13,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiFriendList = {
-      uiInputType = 14,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiPresent = {
-      uiInputType = 15,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiQuestHistory = {
-      uiInputType = 16,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiCashShop = {
-      uiInputType = 18,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiBeautyShop = {
-      uiInputType = 19,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiAlchemyStone = {
-      uiInputType = 20,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiHouse = {
-      uiInputType = 21,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiWorker = {
-      uiInputType = 22,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiPet = {
-      uiInputType = 23,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiMaid = {
-      uiInputType = 24,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiServant = {
-      uiInputType = 25,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiGuildServant = {
-      uiInputType = 26,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiDeleteNavigation = {
-      uiInputType = 27,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiCameraSpeedUp = {
-      uiInputType = 28,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiCameraSpeedDown = {
-      uiInputType = 29,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiPositionNotify = {
-      uiInputType = 30,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInteraction1 = {
-      uiInputType = 31,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInteraction2 = {
-      uiInputType = 32,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInteraction3 = {
-      uiInputType = 33,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInteraction4 = {
-      uiInputType = 34,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiInteraction5 = {
-      uiInputType = 35,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiChatTabPrev = {
-      uiInputType = 36,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    },
-    UiChatTabNext = {
-      uiInputType = 37,
-      _type = OPTION_TYPE.KEYCUSTOMIZE
-    }
   },
   _controlCache = {
     [OPTION_TYPE.RADIOBUTTON] = {},
@@ -1381,6 +64,1438 @@ PaGlobal_Option = {
   _screenResolutionCount = nil,
   _fpsTextControl = {},
   _sliderButtonString = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_CURRENT_SLIDERVALUE") .. " <PAColor0xffddcd82>"
+}
+PaGlobal_Option._elements = {
+  AimAssist = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AimAssist",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_AimAssist_DESC"
+  },
+  UseNewQuickSlot = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_UseNewQuickSlot",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_UseNewQuickSlot_DESC"
+  },
+  EnableSimpleUI = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_EnableSimpleUI",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_EnableSimpleUI_DESC"
+  },
+  IsOnScreenSaver = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_IsOnScreenSaver",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_IsOnScreenSaver_DESC"
+  },
+  UIFontSizeType = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_UIFontSizeType",
+    _desc = ""
+  },
+  ShowNavPathEffectType = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_ShowNavPathEffectType",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_CONVENIENCE_AimAssist_DESC"
+  },
+  RefuseRequests = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_RefuseRequests",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_RefuseRequests_DESC"
+  },
+  IsPvpRefuse = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_IsPvpRefuse",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_IsPvpRefuse_DESC"
+  },
+  IsExchangeRefuse = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_IsExchangeRefuse",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_IsExchangeRefuse_DESC"
+  },
+  RotateRadarMode = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_RotateRadarMode",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_RotateRadarMode_DESC"
+  },
+  HideWindowByAttacked = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_HideWindowByAttacked",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_HideWindowByAttacked_DESC"
+  },
+  AudioResourceType = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ServiceResourceType = {
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  UseChattingFilter = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ChatChannelType = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  SelfPlayerNameTagVisible = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_FUNCTION_VIEW_CHARACTERNAMETITLE",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_VIEW_SelfPlayerNameTagVisible_DESC_0"
+  },
+  OtherPlayerNameTagVisible = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  PartyPlayerNameTagVisible = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuildPlayerNameTagVisible = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  RankingPlayerNameTagVisible = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineZoneChange = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineQuestNPC = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineNpcIntimacy = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineWarAlly = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineNonWarPlayer = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineEnemy = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineGuild = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLineParty = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GuideLinePartyMemberEffect = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  PetRender = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  FairyRender = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  MaidView = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  ShowReputation = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  RenderHitEffect = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  DamageMeter = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ShowComboGuide = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  HideMastOnCarrier = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WorkerVisible = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WorldMapOpenType = {
+    _defaultValue = 3,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WorldmapCameraPitchType = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  TextureQuality = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  GraphicOption = {
+    _defaultValue = 2,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  AntiAliasing = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  SSAO = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  PostFilter = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  Tessellation = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  Dof = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  Representative = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _isPictureTooltipOn = true,
+    _title = "",
+    _desc = ""
+  },
+  CharacterEffect = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  SnowPoolOnlyInSafeZone = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  BloodEffect = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  LensBlood = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  AutoOptimization = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  AutoOptimizationFrameLimit = {
+    _defaultValue = 0.33333,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 60,
+    _title = "",
+    _desc = ""
+  },
+  UpscaleEnable = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  SelfPlayerOnlyEffect = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  NearestPlayerOnlyEffect = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  SelfPlayerOnlyLantern = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  PresentLock = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ShowStackHp = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  UseEffectFrameOptimization = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  EffectFrameOptimization = {
+    _defaultValue = 0.03,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0.1,
+    _sliderValueMax = 25,
+    _title = "",
+    _desc = ""
+  },
+  UsePlayerEffectDistOptimization = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  PlayerEffectDistOptimization = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 10,
+    _sliderValueMax = 50,
+    _title = "",
+    _desc = ""
+  },
+  UseCharacterUpdateFrameOptimize = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  UseOtherPlayerUpdate = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  Fov = {
+    _defaultValue = 0.33333,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 40,
+    _sliderValueMax = 70,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  CameraEffectMaster = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  CameraShakePower = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  MotionBlurPower = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  CameraTranslatePower = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  CameraFovPower = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  LUT = {
+    _defaultValue = 8,
+    _type = CONTROL.PA_UI_CONTROL_BUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  HDRDisplayGamma = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 50,
+    _sliderValueMax = 150,
+    _settingRightNow = true,
+    _title = "PANEL_GAMEOPTION_HDR_GAMMA_TITLE",
+    _desc = "PANEL_GAMEOPTION_HDR_GAMMA"
+  },
+  HDRDisplayMaxNits = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 500,
+    _sliderValueMax = 10000,
+    _settingRightNow = true,
+    _title = "PANEL_GAMEOPTION_HDR_NITS_TITLE",
+    _desc = "PANEL_GAMEOPTION_HDR_BRIGHT"
+  },
+  UltraHighDefinition = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_GAMEOPTION_4K_TITLE",
+    _desc = "PANEL_GAMEOPTION_4K_DESC"
+  },
+  MouseInvertX = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  MouseInvertY = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  MouseSensitivityX = {
+    _defaultValue = 0.473684,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  MouseSensitivityY = {
+    _defaultValue = 0.473684,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  GameMouseMode = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  IsUIModeMouseLock = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  GamePadEnable = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_GamePadEnable",
+    _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadEnable_DESC"
+  },
+  GamePadVibration = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_GamePadVibration",
+    _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadVibration_DESC"
+  },
+  GamePadInvertX = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_GamePadInvertX",
+    _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadInvertX_DESC"
+  },
+  GamePadInvertY = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_GamePadInvertY",
+    _desc = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadInvertY_DESC"
+  },
+  GamePadSensitivityX = {
+    _defaultValue = 0.473684,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadSensitivityX",
+    _desc = ""
+  },
+  GamePadSensitivityY = {
+    _defaultValue = 0.315789,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "PANEL_NEWGAMEOPTION_INTERFACE_PAD_GamePadSensitivityY",
+    _desc = ""
+  },
+  ConsolePadKeyType = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ScreenShotQuality = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ScreenShotFormat = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WatermarkAlpha = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 20,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  WatermarkScale = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WatermarkPosition = {
+    _defaultValue = 3,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  WatermarkService = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ScreenMode = {
+    _defaultValue = 2,
+    _isChangeDisplay = true,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  ScreenResolution = {
+    _isChangeDisplay = true,
+    _type = CONTROL.PA_UI_CONTROL_COMBOBOX,
+    _comboBoxList = nil,
+    _title = "",
+    _desc = ""
+  },
+  CropModeEnable = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  CropModeScaleX = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 50,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  CropModeScaleY = {
+    _defaultValue = 0.6,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 50,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  UIScale = {
+    _defaultValue = 0.3333,
+    _isChangeDisplay = true,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 50,
+    _sliderValueMax = 200,
+    _title = "",
+    _desc = ""
+  },
+  GammaValue = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = -50,
+    _sliderValueMax = 50,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  ContrastValue = {
+    _defaultValue = 0.7,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = -50,
+    _sliderValueMax = 50,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EffectAlpha = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 30,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  SkillPostEffect = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _title = "",
+    _desc = ""
+  },
+  ColorBlind = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  BlackSpiritNotice = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_BlackSpiritNotice",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_BlackSpiritNotice_DESC"
+  },
+  ShowCashAlert = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_ShowCashAlert",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_ShowCashAlert_DESC"
+  },
+  ShowGuildLoginMessage = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_ShowGuildLoginMessage",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_ShowGuildLoginMessage_DESC"
+  },
+  EnableMusic = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EnableSound = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EnableEnv = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EnableRidingSound = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EnableWhisperMusic = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  EnableTraySoundOnOff = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  BattleSoundType = {
+    _defaultValue = false,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_BattleSoundType",
+    _desc = ""
+  },
+  EnableAudioFairy = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _title = "",
+    _desc = ""
+  },
+  VolumeMaster = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeMaster",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeMaster_DESC"
+  },
+  VolumeMusic = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeMusic",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeMusic_DESC"
+  },
+  VolumeFx = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeFx",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeFx_DESC"
+  },
+  VolumeEnv = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeEnv",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeEnv_DESC"
+  },
+  VolumeDlg = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeDlg",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeDlg_DESC"
+  },
+  VolumeHitFxVolume = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeHitFxVolume",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeHitFxVolume_DESC"
+  },
+  VolumeHitFxWeight = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeHitFxWeight",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeHitFxWeight_DESC"
+  },
+  VolumeOtherPlayer = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "PANEL_NEWGAMEOPTION_VolumeOtherPlayer",
+    _desc = "PANEL_NEWGAMEOPTION_SOUND_VOLUME_VolumeOtherPlayer_DESC"
+  },
+  VolumeFairy = {
+    _defaultValue = 0.5,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 0,
+    _sliderValueMax = 100,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  AlertNormalTrade = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertNormalTrade",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertNormalTrade_DESC"
+  },
+  AlertRoyalTrade = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertRoyalTrade",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertRoyalTrade_DESC"
+  },
+  AlertOtherPlayerGetItem = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertOtherPlayerGetItem",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertOtherPlayerGetItem_DESC"
+  },
+  AlertLifeLevelUp = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertLifeLevelUp",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertLifeLevelUp_DESC"
+  },
+  AlertItemMarket = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertItemMarket",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertItemMarket_DESC"
+  },
+  AlertOtherMarket = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertOtherMarket",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertOtherMarket_DESC"
+  },
+  AlertChangeRegion = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertChangeRegion",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertChangeRegion_DESC"
+  },
+  AlertFitnessLevelUp = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertFitnessLevelUp",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertFitnessLevelUp_DESC"
+  },
+  AlertTerritoryWar = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertTerritoryWar",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertTerritoryWar_DESC"
+  },
+  AlertGuildWar = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertGuildWar",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertGuildWar_DESC"
+  },
+  AlertEnchantSuccess = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertEnchantSuccess",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertEnchantSuccess_DESC"
+  },
+  AlertEnchantFail = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertEnchantFail",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertEnchantFail_DESC"
+  },
+  AlertGuildQuestMessage = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertGuildQuestMessage",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertGuildQuestMessage_DESC"
+  },
+  AlertNearMonster = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AlertNearMonster",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ALERT_AlertNearMonster_DESC"
+  },
+  AutoRunCamera = {
+    _defaultValue = true,
+    _type = OPTION_TYPE.CHECKBUTTON,
+    _title = "PANEL_NEWGAMEOPTION_AutoRunCamera",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_AutoRunCamera_DESC"
+  },
+  AutoRunCameraRotation = {
+    _defaultValue = 1,
+    _type = OPTION_TYPE.SLIDER,
+    _sliderValueMin = 10,
+    _sliderValueMax = 30,
+    _title = "PANEL_NEWGAMEOPTION_AutoRunCameraRotation",
+    _desc = "PANEL_NEWGAMEOPTION_FUNCTION_ETC_AutoRunCameraRotation_DESC"
+  },
+  KeyCustomMode = {
+    _defaultValue = 0,
+    _type = OPTION_TYPE.RADIOBUTTON,
+    _settingRightNow = true,
+    _title = "",
+    _desc = ""
+  },
+  PadFunction1 = {
+    actionInputType = "PadFunction1",
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  PadFunction2 = {
+    actionInputType = "PadFunction2",
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionMoveFront = {
+    actionInputType = 0,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionMoveBack = {
+    actionInputType = 1,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionMoveLeft = {
+    actionInputType = 2,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionMoveRight = {
+    actionInputType = 3,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionAttack1 = {
+    actionInputType = 4,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionAttack2 = {
+    actionInputType = 5,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionDash = {
+    actionInputType = 6,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionJump = {
+    actionInputType = 7,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionInteraction = {
+    actionInputType = 8,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionAutoRun = {
+    actionInputType = 9,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionWeaponInOut = {
+    actionInputType = 10,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraReset = {
+    actionInputType = 11,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCrouchOrSkill = {
+    actionInputType = 12,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionGrabOrGuard = {
+    actionInputType = 13,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionKick = {
+    actionInputType = 14,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionServantOrder1 = {
+    actionInputType = 15,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionServantOrder2 = {
+    actionInputType = 16,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionServantOrder3 = {
+    actionInputType = 17,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionServantOrder4 = {
+    actionInputType = 18,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot1 = {
+    actionInputType = 19,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot2 = {
+    actionInputType = 20,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot3 = {
+    actionInputType = 21,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot4 = {
+    actionInputType = 22,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot5 = {
+    actionInputType = 23,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot6 = {
+    actionInputType = 24,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot7 = {
+    actionInputType = 25,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot8 = {
+    actionInputType = 26,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot9 = {
+    actionInputType = 27,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot10 = {
+    actionInputType = 28,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot11 = {
+    actionInputType = 29,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot12 = {
+    actionInputType = 30,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot13 = {
+    actionInputType = 31,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot14 = {
+    actionInputType = 32,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot15 = {
+    actionInputType = 33,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot16 = {
+    actionInputType = 34,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot17 = {
+    actionInputType = 35,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot18 = {
+    actionInputType = 36,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot19 = {
+    actionInputType = 37,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionQuickSlot20 = {
+    actionInputType = 38,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionComplicated0 = {
+    actionInputType = 39,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionComplicated1 = {
+    actionInputType = 40,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionComplicated2 = {
+    actionInputType = 41,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionComplicated3 = {
+    actionInputType = 42,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionAutoMoveWalkMode = {
+    actionInputType = 43,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraUp = {
+    actionInputType = 44,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraDown = {
+    actionInputType = 45,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraLeft = {
+    actionInputType = 46,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraRight = {
+    actionInputType = 47,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionCameraRotateGameMode = {
+    actionInputType = 48,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionPushToTalk = {
+    actionInputType = 49,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  ActionWalkMode = {
+    actionInputType = 50,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiCursorOnOff = {
+    uiInputType = 0,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiHelp = {
+    uiInputType = 1,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiMentalKnowledge = {
+    uiInputType = 2,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInventory = {
+    uiInputType = 3,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiBlackSpirit = {
+    uiInputType = 4,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiChat = {
+    uiInputType = 5,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiPlayerInfo = {
+    uiInputType = 6,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiSkill = {
+    uiInputType = 7,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiWorldMap = {
+    uiInputType = 8,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiDyeing = {
+    uiInputType = 9,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiProductionNote = {
+    uiInputType = 10,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiManufacture = {
+    uiInputType = 11,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiGuild = {
+    uiInputType = 12,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiMail = {
+    uiInputType = 13,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiFriendList = {
+    uiInputType = 14,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiPresent = {
+    uiInputType = 15,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiQuestHistory = {
+    uiInputType = 16,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiCashShop = {
+    uiInputType = 18,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiBeautyShop = {
+    uiInputType = 19,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiAlchemyStone = {
+    uiInputType = 20,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiHouse = {
+    uiInputType = 21,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiWorker = {
+    uiInputType = 22,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiPet = {
+    uiInputType = 23,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiMaid = {
+    uiInputType = 24,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiServant = {
+    uiInputType = 25,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiGuildServant = {
+    uiInputType = 26,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiDeleteNavigation = {
+    uiInputType = 27,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiCameraSpeedUp = {
+    uiInputType = 28,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiCameraSpeedDown = {
+    uiInputType = 29,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiPositionNotify = {
+    uiInputType = 30,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInteraction1 = {
+    uiInputType = 31,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInteraction2 = {
+    uiInputType = 32,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInteraction3 = {
+    uiInputType = 33,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInteraction4 = {
+    uiInputType = 34,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiInteraction5 = {
+    uiInputType = 35,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiChatTabPrev = {
+    uiInputType = 36,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  },
+  UiChatTabNext = {
+    uiInputType = 37,
+    _type = OPTION_TYPE.KEYCUSTOMIZE
+  }
+}
+PaGlobal_Option._frames = {
+  Performance = {
+    Optimize = {},
+    OptimizeBeta = {},
+    GraphicQuality = {},
+    Camera = {},
+    Npc = {}
+  },
+  Graphic = {
+    Window = {},
+    Quality = {},
+    Effect = {},
+    Camera = {},
+    ScreenShot = {},
+    HDR = {
+      {
+        _element = PaGlobal_Option._elements.HDRDisplayGamma,
+        _contentsOption = getHdrDiplayEnable()
+      },
+      {
+        _element = PaGlobal_Option._elements.HDRDisplayMaxNits,
+        _contentsOption = getHdrDiplayEnable()
+      },
+      {
+        _element = PaGlobal_Option._elements.UltraHighDefinition,
+        _contentsOption = isXBoxDevice_X()
+      }
+    }
+  },
+  Sound = {
+    OnOff = {},
+    Volume = {
+      {
+        _element = PaGlobal_Option._elements.VolumeMaster
+      },
+      {
+        _element = PaGlobal_Option._elements.VolumeMusic
+      },
+      {
+        _element = PaGlobal_Option._elements.VolumeFx
+      },
+      {
+        _element = PaGlobal_Option._elements.VolumeEnv
+      },
+      {
+        _element = PaGlobal_Option._elements.VolumeDlg
+      },
+      {
+        _element = PaGlobal_Option._elements.BattleSoundType
+      }
+    }
+  },
+  Function = {
+    Convenience = {},
+    View = {},
+    Alert = {},
+    Worldmap = {},
+    Nation = {},
+    Etc = {
+      {
+        _element = PaGlobal_Option._elements.ShowNavPathEffectType
+      },
+      {
+        _element = PaGlobal_Option._elements.RefuseRequests
+      },
+      {
+        _element = PaGlobal_Option._elements.IsPvpRefuse
+      },
+      {
+        _element = PaGlobal_Option._elements.IsExchangeRefuse
+      },
+      {
+        _element = PaGlobal_Option._elements.RotateRadarMode
+      },
+      {
+        _element = PaGlobal_Option._elements.HideWindowByAttacked
+      },
+      {
+        _element = PaGlobal_Option._elements.AutoRunCamera
+      },
+      {
+        _element = PaGlobal_Option._elements.AutoRunCameraRotation
+      },
+      {
+        _element = PaGlobal_Option._elements.ShowGuildLoginMessage
+      }
+    }
+  },
+  Interface = {
+    Action = {},
+    UI = {},
+    QuickSlot = {},
+    Function = {},
+    Mouse = {},
+    Pad = {
+      {
+        _element = PaGlobal_Option._elements.GamePadVibration
+      },
+      {
+        _element = PaGlobal_Option._elements.GamePadInvertX
+      },
+      {
+        _element = PaGlobal_Option._elements.GamePadInvertY
+      },
+      {
+        _element = PaGlobal_Option._elements.GamePadSensitivityX
+      },
+      {
+        _element = PaGlobal_Option._elements.GamePadSensitivityY
+      }
+    }
+  }
 }
 if true == ToClient_isXBox() then
   PaGlobal_Option._elements.TextureQuality._defaultValue = 0
@@ -1859,7 +1974,7 @@ end
 function PaGlobal_Option._elements.ColorBlind:set(value)
   ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode, value, CppEnums.VariableStorageType.eVariableStorageType_User)
   ToClient_ChangeColorBlindMode(value)
-  FGlobal_Rador_SetColorBlindMode()
+  FGlobal_Radar_SetColorBlindMode()
   FGlobal_ChangeEffectCheck()
   FGlobal_Window_Servant_ColorBlindUpdate()
   UIMain_QuestUpdate()
@@ -1906,7 +2021,11 @@ function PaGlobal_Option._elements.EnableTraySoundOnOff:set(value)
   setEnableSoundTray(value)
 end
 function PaGlobal_Option._elements.BattleSoundType:set(value)
-  setEnableBattleSoundType(value)
+  if true == value then
+    setEnableBattleSoundType(1)
+  else
+    setEnableBattleSoundType(0)
+  end
 end
 function PaGlobal_Option._elements.EnableAudioFairy:set(value)
   setEnableFairySound(value)
@@ -2294,7 +2413,7 @@ function PaGlobal_Option._elements.CropModeScaleY:get(wrapper)
 end
 function PaGlobal_Option._elements.UIScale:get(wrapper)
   if true == UI.checkResolution4KForXBox() then
-    elems_.UIScale._initValue = 2
+    PaGlobal_Option._elements.UIScale._initValue = 2
   end
   return PaGlobal_Option:FromRealValueToSliderValue(wrapper:getUIScale(), 0.5, 2)
 end
@@ -2344,7 +2463,11 @@ function PaGlobal_Option._elements.EnableTraySoundOnOff:get(wrapper)
   return wrapper:getEnableTraySound()
 end
 function PaGlobal_Option._elements.BattleSoundType:get(wrapper)
-  return wrapper:getEnableBattleSoundType()
+  if 0 == wrapper:getEnableBattleSoundType() then
+    return false
+  else
+    return true
+  end
 end
 function PaGlobal_Option._elements.EnableAudioFairy:get(wrapper)
   return wrapper:getEnableFairySound()
@@ -2431,7 +2554,7 @@ function PaGlobal_Option._elements.ShowStackHp:get(wrapper)
   return wrapper:getIsShowHpBar()
 end
 function PaGlobal_Option._elements.HDRDisplayGamma:get(wrapper)
-  return PaGlobal_Option:FromRealValueToSliderValue(wrapper:getHdrDisplayGamma(), PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax)
+  return PaGlobal_Option:FromRealValueToSliderValue(wrapper:getHdrDisplayGamma(), PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMin * 0.01, PaGlobal_Option._elements.HDRDisplayGamma._sliderValueMax * 0.01)
 end
 function PaGlobal_Option._elements.HDRDisplayMaxNits:get(wrapper)
   return PaGlobal_Option:FromRealValueToSliderValue(wrapper:getHdrDisplayMaxNits(), PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMin, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMax)
@@ -2445,119 +2568,6 @@ function PaGlobal_Option._elements.UltraHighDefinition:get(wrapper)
     return false
   end
 end
-PaGlobal_Option._frames = {
-  Performance = {
-    Optimize = {},
-    OptimizeBeta = {},
-    GraphicQuality = {},
-    Camera = {},
-    Npc = {}
-  },
-  Graphic = {
-    Window = {},
-    Quality = {},
-    Effect = {},
-    Camera = {},
-    ScreenShot = {},
-    HDR = {
-      {
-        _element = PaGlobal_Option._elements.HDRDisplayGamma,
-        _contentsOption = getHdrDiplayEnable()
-      },
-      {
-        _element = PaGlobal_Option._elements.HDRDisplayMaxNits,
-        _contentsOption = getHdrDiplayEnable()
-      },
-      {
-        _element = PaGlobal_Option._elements.UltraHighDefinition,
-        _contentsOption = isXBoxDevice_X()
-      }
-    }
-  },
-  Sound = {
-    OnOff = {},
-    Volume = {
-      {
-        _element = PaGlobal_Option._elements.VolumeMaster
-      },
-      {
-        _element = PaGlobal_Option._elements.VolumeMusic
-      },
-      {
-        _element = PaGlobal_Option._elements.VolumeFx
-      },
-      {
-        _element = PaGlobal_Option._elements.VolumeEnv
-      },
-      {
-        _element = PaGlobal_Option._elements.VolumeDlg
-      },
-      {
-        _element = PaGlobal_Option._elements.BattleSoundType
-      }
-    }
-  },
-  Function = {
-    Convenience = {},
-    View = {},
-    Alert = {},
-    Worldmap = {},
-    Nation = {},
-    Etc = {
-      {
-        _element = PaGlobal_Option._elements.ShowNavPathEffectType
-      },
-      {
-        _element = PaGlobal_Option._elements.RefuseRequests
-      },
-      {
-        _element = PaGlobal_Option._elements.IsPvpRefuse
-      },
-      {
-        _element = PaGlobal_Option._elements.IsExchangeRefuse
-      },
-      {
-        _element = PaGlobal_Option._elements.RotateRadarMode
-      },
-      {
-        _element = PaGlobal_Option._elements.HideWindowByAttacked
-      },
-      {
-        _element = PaGlobal_Option._elements.AutoRunCamera
-      },
-      {
-        _element = PaGlobal_Option._elements.AutoRunCameraRotation
-      },
-      {
-        _element = PaGlobal_Option._elements.ShowGuildLoginMessage
-      }
-    }
-  },
-  Interface = {
-    Action = {},
-    UI = {},
-    QuickSlot = {},
-    Function = {},
-    Mouse = {},
-    Pad = {
-      {
-        _element = PaGlobal_Option._elements.GamePadVibration
-      },
-      {
-        _element = PaGlobal_Option._elements.GamePadInvertX
-      },
-      {
-        _element = PaGlobal_Option._elements.GamePadInvertY
-      },
-      {
-        _element = PaGlobal_Option._elements.GamePadSensitivityX
-      },
-      {
-        _element = PaGlobal_Option._elements.GamePadSensitivityY
-      }
-    }
-  }
-}
 local elements = PaGlobal_Option._elements
 elements.UIFontSizeType._radioButtonMapping = {}
 elements.ShowNavPathEffectType._radioButtonMapping = {

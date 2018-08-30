@@ -25,7 +25,8 @@ local Window_WorldMap_SellBuyHouseInfo = {
   _isAllBuy = false,
   _isAllSell = false,
   _isMonotone = false,
-  _houseCount = 0
+  _houseCount = 0,
+  _currentOnButtonIndex = 0
 }
 function clear_HouseSelectedAni_bySellBuy()
 end
@@ -69,26 +70,26 @@ function Window_WorldMap_SellBuyHouseInfo:SetInfo()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   self._ui._staticText_haveValue:SetText(explorePoint:getRemainedPoint())
   self._ui._staticText_listTitle:SetText(self._listTitleStr .. "(" .. #self._houselist + 1 .. ")")
-  self._ui._button_All:SetText(self._totalButtonStr .. "(" .. self._buttonSignStr .. self._totalValue .. ")")
+  self._ui._radiobutton_All:SetText(self._totalButtonStr .. "(" .. self._buttonSignStr .. self._totalValue .. ")")
   self._ui._staticText_subInfoDesc:SetText(self._subInfoDesc)
   self:AllButtonCondition()
 end
 function Window_WorldMap_SellBuyHouseInfo:AllButtonCondition()
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
-  self._ui._button_All:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_SellBuyHouse_Focus(true)")
-  self._ui._button_All:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_SellBuyHouse_Focus(false)")
+  self._ui._radiobutton_All:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_SellBuyHouse_Focus(true)")
+  self._ui._radiobutton_All:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_SellBuyHouse_Focus(false)")
   self._isMonotone = false
   if true == self._isSell then
-    self._ui._button_All:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_AllSell()")
+    self._ui._radiobutton_All:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_AllSell()")
   elseif explorePoint:getRemainedPoint() < self._totalValue then
-    self._ui._button_All:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_HOUSECONTROL_BTN_LOWPOINT"))
-    self._ui._button_All:SetMonoTone(true)
+    self._ui._radiobutton_All:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_HOUSECONTROL_BTN_LOWPOINT"))
+    self._ui._radiobutton_All:SetMonoTone(true)
     self._isMonotone = true
-    self._ui._button_All:addInputEvent("Mouse_LUp", "")
+    self._ui._radiobutton_All:addInputEvent("Mouse_LUp", "")
   else
-    self._ui._button_All:SetMonoTone(false)
-    self._ui._button_All:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_AllBuy()")
+    self._ui._radiobutton_All:SetMonoTone(false)
+    self._ui._radiobutton_All:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_AllBuy()")
   end
 end
 function PaGlobalFunc_WorldMap_SellBuyHouse_Focus(isFocus)
@@ -140,8 +141,9 @@ function Window_WorldMap_SellBuyHouseInfo:InitControl()
   self._ui._staticText_listTitle = UI.getChildControl(self._ui._static_InnerBg, "StaticText_Condition")
   self._ui._list2_HouseList = UI.getChildControl(self._ui._static_InnerBg, "List2_HouseList")
   self._ui._staticText_subInfoDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui._button_All = UI.getChildControl(self._ui._static_InnerBg, "Button_BatchBuy")
-  self._ui._static_KeyGuide_All = UI.getChildControl(self._ui._button_All, "StaticText_A_ConsoleUI")
+  self._ui._radiobutton_All = UI.getChildControl(self._ui._static_InnerBg, "Radiobutton_BatchBuy")
+  self._ui._static_KeyGuide_All = UI.getChildControl(self._ui._radiobutton_All, "StaticText_A_ConsoleUI")
+  self._ui._static_KeyGuide_All:SetShow(false)
 end
 function Window_WorldMap_SellBuyHouseInfo:InitEvent()
   self._ui._list2_HouseList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_SellBuyCondition_List2EventControlCreate")
@@ -184,6 +186,13 @@ function PaGlobalFunc_FromClient_WorldMap_SellBuyCondition_GetNextHouseKey(house
   self._houseCount = self._houseCount + 1
   self._totalValue = self._totalValue + houseInfo._needValue
 end
+function PaGlobalFunc_WorldMap_SellBuyHouse_OnButton(index)
+  local self = Window_WorldMap_SellBuyHouseInfo
+  local prevOnButtonIndex = self._currentOnButtonIndex
+  self._currentOnButtonIndex = index
+  self._ui._list2_HouseList:requestUpdateByKey(toInt64(0, prevOnButtonIndex))
+  self._ui._list2_HouseList:requestUpdateByKey(toInt64(0, self._currentOnButtonIndex))
+end
 function PaGlobalFunc_WorldMap_SellBuyCondition_List2EventControlCreate(list_content, key)
   local self = Window_WorldMap_SellBuyHouseInfo
   local id = Int64toInt32(key)
@@ -197,10 +206,11 @@ function PaGlobalFunc_WorldMap_SellBuyCondition_List2EventControlCreate(list_con
   local staticText_KeyGuide_Select = UI.getChildControl(list_content, "StaticText_A_ConsoleUI")
   button:SetText(houseInfo._name)
   staticText_KeyGuide_Select:SetText(self._buttonStr .. "(" .. self._buttonSignStr .. houseInfo._needValue .. ")")
+  button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_SellBuyHouse_OnButton(" .. id .. ")")
   if true == self._isSell then
     if true == houseInfoStaticStatusWrapper:isSalable() then
       button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_Sell(" .. id .. ")")
-      staticText_KeyGuide_Select:SetShow(true)
+      staticText_KeyGuide_Select:SetShow(id == self._currentOnButtonIndex)
     else
       button:addInputEvent("Mouse_LUp", "")
       staticText_KeyGuide_Select:SetShow(false)
@@ -209,12 +219,15 @@ function PaGlobalFunc_WorldMap_SellBuyCondition_List2EventControlCreate(list_con
   if true == self._isBuy then
     if 0 == id then
       button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_Buy(" .. id .. ")")
-      staticText_KeyGuide_Select:SetShow(true)
+      staticText_KeyGuide_Select:SetShow(id == self._currentOnButtonIndex)
     else
       button:addInputEvent("Mouse_LUp", "")
       staticText_KeyGuide_Select:SetShow(false)
     end
   end
+  local standX = button:GetPosX() + button:GetSizeX()
+  local keyGuideSizeX = staticText_KeyGuide_Select:GetSizeX() + staticText_KeyGuide_Select:GetTextSizeX()
+  staticText_KeyGuide_Select:SetPosX(standX - keyGuideSizeX - 10)
 end
 function PaGlobalFunc_WorldMap_SellBuyHouse_Sell(id)
   local self = Window_WorldMap_SellBuyHouseInfo
@@ -255,7 +268,6 @@ function PaGlobalFunc_WorldMap_SellBuyHouse_Buy(id)
   end
   if houseInfo._houseKey == self._targetHouseKey and nil ~= self._targetUseType then
     ToClient_RequestBuyHouse(houseInfo._houseKey, self._targetUseType, 1)
-    self._targetUseType = nil
   else
     ToClient_RequestBuyHouse(houseInfo._houseKey, 2, 1)
   end
@@ -368,6 +380,8 @@ function PaGlobalFunc_WorldMap_SellBuyHouse_Close()
   if false == PaGlobalFunc_WorldMap_SellBuyHouse_GetShow() then
     return
   end
+  self._targetUseType = nil
+  self._ui._static_KeyGuide_All:SetShow(false)
   PaGlobalFunc_WorldMap_SellBuyHouse_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_SellBuyHouse_luaLoadComplete()

@@ -7,7 +7,7 @@ local Panel_Window_FindParty_info = {
     staticText_A_ConsoleUI = nil,
     staticText_B_ConsoleUI = nil
   },
-  _value = {},
+  _value = {canInvite = true},
   _config = {},
   _enum = {
     eTYPE_RECRUITE_NONE = -1,
@@ -25,7 +25,8 @@ local Panel_Window_FindParty_info = {
     changeServer = ""
   },
   _keyGuideControl = {
-    [__eConsoleUIPadEvent_A] = nil
+    [__eConsoleUIPadEvent_A] = nil,
+    [__eConsoleUIPadEvent_X] = nil
   },
   _keyGuideAlign = {}
 }
@@ -47,6 +48,7 @@ function Panel_Window_FindParty_info:initialize()
   self:registEventHandler()
 end
 function Panel_Window_FindParty_info:initValue()
+  self._value.canInvite = true
 end
 function Panel_Window_FindParty_info:initString()
   self._string.recruite = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_SUPPORT")
@@ -60,6 +62,7 @@ function Panel_Window_FindParty_info:childControl()
   self._ui.staticText_A_ConsoleUI = UI.getChildControl(self._ui.static_BottomBG, "StaticText_A_ConsoleUI")
   self._ui.staticText_B_ConsoleUI = UI.getChildControl(self._ui.static_BottomBG, "StaticText_B_ConsoleUI")
   self._keyGuideControl[__eConsoleUIPadEvent_A] = self._ui.staticText_A_ConsoleUI
+  self._keyGuideControl[__eConsoleUIPadEvent_X] = self._ui.staticText_X_ConsoleUI
   self._keyGuideAlign = {
     self._ui.staticText_Y_ConsoleUI,
     self._ui.staticText_X_ConsoleUI,
@@ -69,6 +72,17 @@ function Panel_Window_FindParty_info:childControl()
   self._ui.list2_PartyList = UI.getChildControl(Panel_PartyList, "List2_PartyList")
   self._ui.list2_PartyList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_FindParty_List")
   self._ui.list2_PartyList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+end
+function Panel_Window_FindParty_info:checkAddAlready(index, isPartyLeader)
+  local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
+  if nil == partyWrapper then
+    return
+  end
+  local myPartyNo = ToClient_GetPartyNo()
+  local partyNo = partyWrapper:getPartyNo()
+  if true == isPartyLeader and myPartyNo == partyNo then
+    self._value.canInvite = false
+  end
 end
 function Panel_Window_FindParty_info:checkBlocked(index)
   local partyWrapper = ToClient_GetRecruitmentPartyListAt(index)
@@ -90,10 +104,13 @@ function Panel_Window_FindParty_info:checkBlocked(index)
 end
 function Panel_Window_FindParty_info:updateContent()
   self._ui.list2_PartyList:getElementManager():clearKey()
+  local isPartyLeader = RequestParty_isLeader()
+  self._value.canInvite = true
   local partyListCount = ToClient_GetRecruitmentPartyListCount()
   if partyListCount > 0 then
     for index = 0, partyListCount - 1 do
       if self:checkBlocked(index) then
+        self:checkAddAlready(index, isPartyLeader)
         self._ui.list2_PartyList:getElementManager():pushKey(toInt64(0, index))
       end
     end
@@ -109,7 +126,7 @@ function Panel_Window_FindParty_info:close()
   Panel_PartyList:SetShow(false)
 end
 function Panel_Window_FindParty_info:setKeyGuidePos()
-  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._keyGuideAlign, Panel_PartyList, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._keyGuideAlign, self._ui.static_BottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_FindParty_info:setButtonText(eType)
   if self._enum.eTYPE_RECRUITE_NONE == eType then
@@ -125,7 +142,12 @@ function Panel_Window_FindParty_info:setButtonText(eType)
     self._keyGuideControl[__eConsoleUIPadEvent_A]:SetShow(true)
   else
     self._keyGuideControl[__eConsoleUIPadEvent_A]:SetText(self._string.recruite)
-    self._keyGuideControl[__eConsoleUIPadEvent_A]:SetShow(true)
+    self._keyGuideControl[__eConsoleUIPadEvent_A]:SetShow(false)
+  end
+  if false == self._value.canInvite then
+    self._keyGuideControl[__eConsoleUIPadEvent_X]:SetShow(false)
+  else
+    self._keyGuideControl[__eConsoleUIPadEvent_X]:SetShow(true)
   end
   self:setKeyGuidePos()
 end
@@ -297,6 +319,11 @@ function PaGlobalFunc_FindParty_Exit()
   PaGlobalFunc_FindPartyRecruite_ExitAll()
 end
 function PaGlobalFunc_FindParty_RecruiteShow()
+  local self = Panel_Window_FindParty_info
+  if false == self._value.canInvite then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_FAVORITE_ALREADYREGIST"))
+    return
+  end
   PaGlobalFunc_FindPartyRecruite_Show()
 end
 function PaGlobalFunc_FindParty_Update()

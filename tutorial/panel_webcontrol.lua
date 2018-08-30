@@ -18,6 +18,9 @@ local ui = {
 ui._btn_Close:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle()")
 ui._btn_CloseWin:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle()")
 function Panel_WebHelper_ShowToggle(helpType)
+  if true == ToClient_isXBox() then
+    return
+  end
   if isDeadInWatchingMode() then
     return
   end
@@ -144,6 +147,9 @@ elseif isGameTypeSA() then
   end
 end
 function Panel_WebControl_TakeAndShow(helpType)
+  if true == ToClient_isXBox() then
+    return
+  end
   Panel_WebControl:SetShow(true, true)
   html_WebHelper_Control:SetHorizonCenter()
   if helpType == "GUIDE" then
@@ -316,6 +322,9 @@ function Panel_WebControl_TakeAndShow(helpType)
   html_WebHelper_Control:SetShow(true)
 end
 function Panel_WebControl_LevelUpGuide(isString)
+  if true == ToClient_isXBox() then
+    return
+  end
   if nil == isString then
     return
   end

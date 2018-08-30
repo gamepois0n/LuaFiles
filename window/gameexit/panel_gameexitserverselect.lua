@@ -282,7 +282,7 @@ function ChannelSelect_Init()
     channelMainDesc._scheduleSiege:SetShow(false)
     channelMainDesc._scheduleNodeWar:SetShow(false)
     sizeControl = channelMainDesc._serverDesc
-  elseif isGameTypeRussia() or isGameTypeEnglish() then
+  elseif isGameTypeRussia() or isGameTypeEnglish() or isGameTypeJapan() or isGameTypeTR() then
     channelMainDesc._pkTitle:SetShow(true)
     channelMainDesc._pkDesc:SetShow(true)
     sizeControl = channelMainDesc._pkDesc
@@ -395,7 +395,7 @@ function ChannelSelect_Init()
   self._PremiumIcon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PCROOMSERVER"))
   self._PKIcon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK"))
   if isChannelCountLow then
-    if isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() then
+    if isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() or isGameTypeJapan() or isGameTypeTR() then
       Panel_ChannelSelect:SetSize(410, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 90)
     else
       Panel_ChannelSelect:SetSize(410, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 70)
@@ -420,7 +420,7 @@ function ChannelSelect_Init()
     self._PKIcon:SetPosX(15)
     self._PKIcon:SetPosY(self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 55)
   else
-    if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
+    if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeJapan() or isGameTypeTR() then
       Panel_ChannelSelect:SetSize(796, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 70)
     else
       Panel_ChannelSelect:SetSize(796, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 50)
@@ -448,7 +448,7 @@ function ChannelSelect_Init()
   else
     self._PremiumIcon:SetShow(false)
   end
-  if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
+  if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeJapan() or isGameTypeTR() then
     self._PKIcon:SetShow(true)
   else
     self._PKIcon:SetShow(false)

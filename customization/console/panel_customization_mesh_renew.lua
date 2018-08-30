@@ -24,34 +24,13 @@ local Customization_MeshInfo = {
   _currentMeshIndex = -1,
   _isBoneControl = false
 }
-function PaGlobalFunc_Customization_Mesh_UpdatePerFrame(deltaTime)
+function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(itemIndex)
   local self = Customization_MeshInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_Mesh_SetBoneControl(false)
-    end
-    return
-  end
-end
-function PaGlobalFunc_Customization_Mesh_SetBoneControl(isSet)
-  local self = Customization_MeshInfo
-  if false == isSet then
-    self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(1)
-    Panel_Customizing_Mesh:ignorePadSnapUpdate(false)
-    ToClient_StartOrEndShapeBoneControlStart(false)
+  if self._selectedItemIndex == itemIndex then
+    PaGlobalFunc_Customization_SetKeyGuide(6)
   else
-    self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(9)
-    Panel_Customizing_Mesh:ignorePadSnapUpdate(true)
-    ToClient_StartOrEndShapeBoneControlStart(true)
+    PaGlobalFunc_Customization_SetKeyGuide(0)
   end
-end
-function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(listParamType, listParamIndex, itemIndex)
-  local self = Customization_MeshInfo
-  self._selectedListParamType = listParamType
-  self._selectedListParamIndex = listParamIndex
-  self._selectedItemIndex = itemIndex
 end
 function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(listParamType, listParamIndex, itemIndex)
   local self = Customization_MeshInfo
@@ -77,6 +56,7 @@ function PaGlobalFunc_Customization_Mesh_UpdateMeshIndexMessage(listParamType, l
     PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
     self:UpdateTypeFocus(self._selectedItemIndex)
   end
+  PaGlobalFunc_Customization_Mesh_UpdateMeshIndexOn(itemIndex)
 end
 function PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
   local self = Customization_MeshInfo
@@ -219,6 +199,7 @@ function Customization_MeshInfo:UpdateTypeFocus(itemIndex)
   self._ui._hairTypeSelect:SetShow(true)
   self._ui._hairTypeSelect:SetPosX(item:GetPosX() - 1)
   self._ui._hairTypeSelect:SetPosY(item:GetPosY() - 1)
+  self._selectedItemIndex = itemIndex
 end
 function Customization_MeshInfo:InitControl()
   self._ui._hairTypeTemplate = UI.getChildControl(self._ui._static_TypeBg, "RadioButton_TypeImage_Template")
@@ -229,8 +210,6 @@ function Customization_MeshInfo:InitControl()
   self._config._columnHeight = self._ui._hairTypeTemplate:GetSizeY() + self._config._meshImageGap
 end
 function Customization_MeshInfo:InitEvent()
-  Panel_Customizing_Mesh:RegisterUpdateFunc("PaGlobalFunc_Customization_Mesh_UpdatePerFrame")
-  Panel_Customizing_Mesh:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_Mesh_SetBoneControl(true)")
 end
 function Customization_MeshInfo:InitRegister()
   registerEvent("EventOpenSelectMeshUi", "HandleClicked_Customization_Mesh_Open")
@@ -251,10 +230,11 @@ function PaGlobalFunc_Customization_Mesh_Open()
   if true == PaGlobalFunc_Customization_Mesh_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(1)
+  PaGlobalFunc_Customization_Mesh_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_Mesh_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_Mesh_Close()")
-  PaGlobalFunc_Customization_Mesh_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_Mesh_Close()
   local self = Customization_MeshInfo
@@ -262,7 +242,6 @@ function PaGlobalFunc_Customization_Mesh_Close()
     return false
   end
   if true == self._isBoneControl then
-    PaGlobalFunc_Customization_Mesh_SetBoneControl(false)
     return false
   end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
@@ -273,5 +252,8 @@ end
 function PaGlobalFunc_FromClient_Customization_Mesh_luaLoadComplete()
   local self = Customization_MeshInfo
   self:Initialize()
+end
+function PaGlobalFunc_Customization_Mesh_GetPanel()
+  return Panel_Customizing_Mesh
 end
 PaGlobalFunc_FromClient_Customization_Mesh_luaLoadComplete()

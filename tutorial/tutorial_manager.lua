@@ -126,6 +126,8 @@ function PaGlobal_TutorialManager:findCheckPointNoForContinue()
     checkPointNo = 3
   elseif true == questList_isClearQuest(21001, 2) and false == questList_isClearQuest(21001, 3) and false == questList_hasProgressQuest(21001, 3) then
     checkPointNo = 4
+  elseif true == questList_hasProgressQuest(21001, 3) then
+    checkPointNo = 5
   elseif true == questList_hasProgressQuest(21001, 3) and true == self:isSatisfiedQuestCondition(21001, 3) then
     checkPointNo = 5
   end

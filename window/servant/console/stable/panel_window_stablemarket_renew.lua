@@ -18,7 +18,6 @@ local Panel_Window_StableMarket_info = {
     staticText_Acc = nil,
     staticText_Rotate = nil,
     staticText_Break = nil,
-    staticText_Death = nil,
     staticText_LeftMatingCountTitle = nil,
     static_Image = nil,
     static_Gender = nil,
@@ -31,7 +30,6 @@ local Panel_Window_StableMarket_info = {
     staticText_AccVal = nil,
     staticText_RotateVal = nil,
     staticText_BreakVal = nil,
-    staticText_DeathVal = nil,
     staticText_LeftMatingCountValue = nil,
     staticText_Silver = nil,
     staticText_Select_ConsoleUI = nil,
@@ -157,7 +155,6 @@ function Panel_Window_StableMarket_info:childControl()
   self._ui.staticText_Acc = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Acc")
   self._ui.staticText_Rotate = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Rotate")
   self._ui.staticText_Break = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Break")
-  self._ui.staticText_Death = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Death")
   self._ui.staticText_LeftMatingCountTitle = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_LeftMatingCountTitle")
   self._ui.static_Image = UI.getChildControl(self._ui.radioButton_List_Templete, "Static_Image")
   self._ui.static_Gender = UI.getChildControl(self._ui.radioButton_List_Templete, "Static_Gender")
@@ -170,7 +167,6 @@ function Panel_Window_StableMarket_info:childControl()
   self._ui.staticText_AccVal = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_AccVal")
   self._ui.staticText_RotateVal = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_RotateVal")
   self._ui.staticText_BreakVal = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_BreakVal")
-  self._ui.staticText_DeathVal = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_DeathVal")
   self._ui.staticText_LeftMatingCountValue = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_LeftMatingCountValue")
   self._ui.staticText_Silver = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Silver")
   self._ui.staticText_Select_ConsoleUI = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Select_ConsoleUI")
@@ -204,7 +200,6 @@ function Panel_Window_StableMarket_info:createMarketSlot()
       staticText_Acc = nil,
       staticText_Rotate = nil,
       staticText_Break = nil,
-      staticText_Death = nil,
       staticText_LeftMatingCountTitle = nil,
       static_Image = nil,
       static_Gender = nil,
@@ -217,7 +212,6 @@ function Panel_Window_StableMarket_info:createMarketSlot()
       staticText_AccVal = nil,
       staticText_RotateVal = nil,
       staticText_BreakVal = nil,
-      staticText_DeathVal = nil,
       staticText_LeftMatingCountValue = nil,
       staticText_Silver = nil,
       staticText_Select_ConsoleUI = nil
@@ -289,16 +283,10 @@ function Panel_Window_StableMarket_info:createMarketSlot()
         deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETNO", "deadCount", deadCount)
       end
       local servantInfo = stable_getServantByServantNo(auctionServantInfo:getServantNo())
-      if nil ~= servantInfo then
-        if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_KILLCOUNT"))
-        elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
-        elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
-        end
+      if nil == servantInfo or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
+      elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
+      elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat then
       end
-      self.staticText_DeathVal:SetText(deadCount)
     end
     function slot:setShow(bShow)
       bShow = bShow or false
@@ -325,7 +313,6 @@ function Panel_Window_StableMarket_info:createMarketSlot()
     slot.staticText_Acc = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Acc", slot.radiobutton, "StaticText_Acc_" .. index)
     slot.staticText_Rotate = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Rotate", slot.radiobutton, "StaticText_Rotate_" .. index)
     slot.staticText_Break = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Break", slot.radiobutton, "StaticText_Break_" .. index)
-    slot.staticText_Death = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Death", slot.radiobutton, "StaticText_Death_" .. index)
     slot.staticText_LeftMatingCountTitle = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_LeftMatingCountTitle", slot.radiobutton, "StaticText_LeftMatingCountTitle_" .. index)
     slot.static_Image = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "Static_Image", slot.radiobutton, "Static_Image_" .. index)
     slot.static_Gender = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "Static_Gender", slot.radiobutton, "Static_Gender_" .. index)
@@ -338,7 +325,6 @@ function Panel_Window_StableMarket_info:createMarketSlot()
     slot.staticText_AccVal = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_AccVal", slot.radiobutton, "StaticText_AccVal_" .. index)
     slot.staticText_RotateVal = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_RotateVal", slot.radiobutton, "StaticText_RotateVal_" .. index)
     slot.staticText_BreakVal = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_BreakVal", slot.radiobutton, "StaticText_BreakVal_" .. index)
-    slot.staticText_DeathVal = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_DeathVal", slot.radiobutton, "StaticText_DeathVal_" .. index)
     slot.staticText_LeftMatingCountValue = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_LeftMatingCountValue", slot.radiobutton, "StaticText_LeftMatingCountValue_" .. index)
     slot.staticText_Silver = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Silver", slot.radiobutton, "StaticText_Silver_" .. index)
     slot.staticText_Select_ConsoleUI = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Select_ConsoleUI", slot.radiobutton, "StaticText_Select_ConsoleUI_" .. index)
@@ -382,6 +368,7 @@ function Panel_Window_StableMarket_info:setContentIsMine()
       slot:setServant(myAuctionInfo, slot.slotNo)
       slot.radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableMarket_ClickList(" .. index .. ")")
       slot.radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_StableMarket_SelectList(" .. index .. ")")
+      slot.radiobutton:addInputEvent("Mouse_Out", "PaGlobalFunc_StableMarket_OutList(" .. index .. ")")
     end
   end
 end
@@ -399,6 +386,7 @@ function Panel_Window_StableMarket_info:setContentIsMarket()
       slot:setServant(myAuctionInfo, slot.slotNo)
       slot.radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableMarket_ClickList(" .. index .. ")")
       slot.radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_StableMarket_SelectList(" .. index .. ")")
+      slot.radiobutton:addInputEvent("Mouse_Out", "PaGlobalFunc_StableMarket_OutList(" .. index .. ")")
     end
   end
 end
@@ -540,6 +528,12 @@ function PaGlobalFunc_StableMarket_TabEventFromRegister()
     return
   end
   PaGlobalFunc_StableMarket_TabEventXXX(PaGlobalFunc_StableMarket_ChecKTabMy())
+end
+function PaGlobalFunc_StableMarket_OutList(index)
+  local self = Panel_Window_StableMarket_info
+  if nil ~= self._slotMarket[index] then
+    self._slotMarket[index].staticText_Select_ConsoleUI:SetShow(false)
+  end
 end
 function PaGlobalFunc_StableMarket_SelectList(index)
   local self = Panel_Window_StableMarket_info

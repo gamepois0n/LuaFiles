@@ -374,7 +374,7 @@ function Panel_Window_StableExchange_info:setKeyGuidePos()
   local space = self._pos.keyGuideButtonSize + self._pos.keyGuideButtonSpace
   local textLength1 = self._ui.staticText_Select_ConsoleUI:GetTextSizeX()
   local textLength2 = self._ui.staticText_Exchange_ConsoleUI:GetTextSizeX()
-  self._ui.staticText_Exchange_ConsoleUI:SetPosX(parantSizeX - (space * 2 + textLength1 + textLength2))
+  self._ui.staticText_Exchange_ConsoleUI:SetPosX(parantSizeX - (space * 2 + textLength1 + textLength2) - 20)
   self._ui.staticText_Select_ConsoleUI:SetPosX(parantSizeX - (space + textLength1))
 end
 function Panel_Window_StableExchange_info:setContent(eOpenType)
@@ -795,7 +795,26 @@ function PaGlobalFunc_StableExchange_PadButton_X()
 end
 function PaGlobalFunc_StableExchange_DoLink()
   local self = Panel_Window_StableExchange_info
-  if nil == self._value.leftCurrnetSlotIndex or nil == self._value.rightCurrnetSlotIndex then
+  if nil == self._value.leftCurrnetSlotIndex then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_EXCHANGE_NOT_SATISFIED_EXCHANGE")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+      content = messageBoxMemo,
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+    return
+  end
+  if nil == self._value.rightCurrnetSlotIndex then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLE_EXCHANGE_SELECT_HORSE")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+      content = messageBoxMemo,
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
     return
   end
   local leftSlot = self._value.leftStartIndex + self._value.leftCurrnetSlotIndex
@@ -828,6 +847,14 @@ end
 function PaGlobalFunc_StableExchange_DoExchange()
   local self = Panel_Window_StableExchange_info
   if nil == self._value.leftCurrnetSlotIndex or nil == self._value.rightCurrnetSlotIndex then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_SELECTMIX_PLS")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+      content = messageBoxMemo,
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
     return
   end
   local function servantMix()
@@ -862,6 +889,14 @@ end
 function PaGlobalFunc_StableExchange_DoMate()
   local self = Panel_Window_StableExchange_info
   if nil == self._value.leftCurrnetSlotIndex then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABLE_MATING_PLZSELECT")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+      content = messageBoxMemo,
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
     return
   end
   if nil == self._value.matingSlotNo then

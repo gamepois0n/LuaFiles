@@ -214,7 +214,9 @@ local panel_WindowList = {
   Panel_Introduction,
   Panel_Window_MarketPlace,
   Panel_Window_MarketPlaceWallet,
-  Panel_Window_Option_Main
+  Panel_Window_Option_Main,
+  Panel_LocalWarInfo,
+  Panel_LocalWarRule
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -377,6 +379,24 @@ registerEscapeLuaEvent(Panel_Resurrection_ItemSelect, "PaGlobalFunc_Resurrerecti
 registerEscapeLuaEvent(Panel_ServerSelect_Renew, "PaGlobalFunc_ServerSelect_Close()")
 registerEscapeLuaEvent(Panel_Window_MarketPlace, "PanelEscapeFunc_MarketPlace_Close()")
 registerEscapeLuaEvent(Panel_Window_MarketPlaceWallet, "PanelEscapeFunc_MarketWallet_Close()")
+registerEscapeLuaEvent(Panel_Window_Option_Main, "PanelEscapeFunc_RenewOption_Close()")
+registerEscapeLuaEvent(Panel_LocalWarInfo, "PanelEscapeFunc_LocalWarInfo_Close()")
+registerEscapeLuaEvent(Panel_Window_DailyChallenge, "PaGlobalFunc_DailyChallenge_Close()")
+registerEscapeLuaEvent(Panel_Interaction_HouseList, "PanelEscapeFunc_Interaction_HouseList_Close()")
+function PanelEscapeFunc_Interaction_HouseList_Close()
+  PaGlobalFunc_Interaction_HouseList_Close()
+end
+function PanelEscapeFunc_LocalWarInfo_Close()
+  if false == _ContentsGroup_RenewUI_LocalWar then
+    FGlobal_LocalWarInfo_Close()
+  else
+    PaGlobalFunc_LocalWarInfo_Exit()
+  end
+end
+function PanelEscapeFunc_RenewOption_Close()
+  PaGlobal_Option:ClickedCancelOption()
+  PaGlobal_Option:Close()
+end
 function PanelEscapeFunc_FindParty_Close()
   if false == _ContentsGroup_RenewUI_Party then
     FGlobal_PartyList_ShowToggle()

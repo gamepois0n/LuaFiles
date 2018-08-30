@@ -350,9 +350,8 @@ function PaGlobalFunc_WorkerManager_TemporaryClose()
   workerManager:temporaryClose()
 end
 function workerManager:close()
-  if false == Panel_Window_WorkerManager_Renew:GetShow() then
-    return
-  end
+  PaGlobalFunc_WorkerManager_Restore_Close()
+  PaGlobalFunc_WorkerManager_ChangeSkill_Close()
   Panel_Window_WorkerManager_Renew:SetShow(false)
 end
 function PaGlobalFunc_WorkerManager_Close()
@@ -588,6 +587,7 @@ function workerManager:perFrameUpdate(deltaTime)
   end
 end
 function workerManager:listCreate(control, key)
+  control:SetIgnore(false)
   local _button_ButtonBg = UI.getChildControl(control, "Button_ButtonBg")
   local _static_WorkerImage = UI.getChildControl(control, "Static_WorkerImage")
   local _staticText_WorkerTitle = UI.getChildControl(control, "StaticText_WorkerTitle")
@@ -757,6 +757,7 @@ end
 function workerManager:setSkillInfoToSlot(skillIdx, skillStaticStatusWrapper)
   local slotControl = self._ui._skillSlot[skillIdx]
   slotControl._static_SkillSlot:ChangeTextureInfoNameAsync(skillStaticStatusWrapper:getIconPath())
+  slotControl._staticText_SkillTitle:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   slotControl._staticText_SkillTitle:SetText(skillStaticStatusWrapper:getName())
   slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   slotControl._staticText_SkillDesc:SetAutoResize(true)
@@ -803,6 +804,7 @@ function workerManager:setWorkerUpgradeInfo(workerNoRawStr)
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_ResetUpgradeCount()")
   end
   for index = 1, self._config._upgradeSlotCount do
+    upgradeSlot[index]._staticText_UpgradeState:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     if upgradeFailCount > 0 then
       self:setWorkerUpgradeTexture(upgradeSlot[index]._static_UpgradeStateBg, textureType._Fail)
       upgradeSlot[index]._staticText_UpgradeLevel:SetFontColor(self._config._fontColor._upgrade_Fail)

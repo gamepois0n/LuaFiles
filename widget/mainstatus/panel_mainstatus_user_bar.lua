@@ -36,13 +36,15 @@ local selfPlayerStatusBar = {
     MP = 0,
     FP = 1,
     EP = 2,
-    BP = 3
+    BP = 3,
+    DK = 4
   },
   _combatResources = {
     [0] = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_MPGauge"),
     UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_FPGauge"),
     UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_EPGauge"),
-    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_BPGauge")
+    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_BPGauge"),
+    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_DarkGauge")
   },
   _combatResources_Later = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress2_MpGaugeLater"),
   _combatResources_LaterHead = UI.getChildControl(UI.getChildControl(Panel_MainStatus_User_Bar, "Progress2_MpGaugeLater"), "Progress2_1_Bar_Head"),
@@ -89,6 +91,9 @@ end
 function selfPlayerStatusBar:resourceTypeCheck(selfPlayerWrapper)
   local resourceType = selfPlayerWrapper:getCombatResourceType()
   local classType = selfPlayerWrapper:getClassType()
+  if classType == CppEnums.ClassType.ClassType_DarkElf then
+    resourceType = 4
+  end
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
   if resourceType >= self.define.MP then
     self._staticGage_CombatResource = self._combatResources[resourceType]
@@ -97,47 +102,6 @@ function selfPlayerStatusBar:resourceTypeCheck(selfPlayerWrapper)
   end
   for _, control in pairs(self._combatResources) do
     control:SetShow(false)
-  end
-  if 0 == isColorBlindMode then
-    self._staticGage_CombatResource:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 0, 52, 255, 61)
-    if 0 == resourceType then
-      x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 0, 52, 255, 61)
-    elseif 1 == resourceType then
-      x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 0, 42, 255, 51)
-    elseif 2 == resourceType then
-      x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 0, 62, 255, 71)
-      if classType == CppEnums.ClassType.ClassType_DarkElf then
-        self._staticGage_CombatResource:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_03.dds")
-        x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 1, 1, 256, 10)
-      end
-    elseif 3 == resourceType then
-      x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 0, 226, 256, 235)
-    end
-    self._staticGage_CombatResource:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._staticGage_CombatResource:setRenderTexture(self._staticGage_CombatResource:getBaseTexture())
-    self._staticGage_HP:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 0, 0, 255, 9)
-    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
-    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
-  elseif 1 == isColorBlindMode then
-    self._staticGage_CombatResource:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 1, 236, 256, 244)
-    self._staticGage_CombatResource:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._staticGage_CombatResource:setRenderTexture(self._staticGage_CombatResource:getBaseTexture())
-    self._staticGage_HP:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 1, 226, 256, 234)
-    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
-    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
-  elseif 2 == isColorBlindMode then
-    self._staticGage_CombatResource:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self._staticGage_CombatResource, 1, 236, 256, 244)
-    self._staticGage_CombatResource:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._staticGage_CombatResource:setRenderTexture(self._staticGage_CombatResource:getBaseTexture())
-    self._staticGage_HP:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 1, 226, 256, 234)
-    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
-    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
   end
   self._staticGage_CombatResource:SetShow(true)
   self._combatResources_Later:SetShow(true)
@@ -360,11 +324,6 @@ function PaGlobalFunc_UserBar_CharacterInfoWindowUpdate()
   local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
   local isMP_Character = not isEP_Character and not isFP_Character and not isBP_Character
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
-  self._staticTexture_EP:SetShow(isEP_Character)
-  self._staticTexture_MP:SetShow(isMP_Character)
-  self._staticTexture_FP:SetShow(isFP_Character)
-  self._staticTexture_BP:SetShow(isBP_Character)
-  self._staticTexture_Dark:SetShow(isEP_Character)
   if isEP_Character then
     if classType == CppEnums.ClassType.ClassType_DarkElf then
       effectName = "fUI_Gauge_Green"
@@ -397,12 +356,12 @@ function PaGlobalFunc_UserBar_CharacterInfoWindowUpdate()
     checkMpAlert(mp, maxMp)
     prevMaxMP = maxMp
   end
-  self._staticText_HP:SetPosX(3.09 * self._staticGage_HP:GetProgressRate() + 30)
-  self._staticText_MP:SetPosX(3.09 * self._staticGage_CombatResource:GetProgressRate() + 30)
-  self._staticShowHp:SetPosX(3.09 * self._staticGage_HP:GetProgressRate() + 40)
+  self._staticText_HP:SetPosX(2.85 * self._staticGage_HP:GetProgressRate() + 43)
+  self._staticText_MP:SetPosX(2.85 * self._staticGage_CombatResource:GetProgressRate() + 43)
+  self._staticShowHp:SetPosX(2.85 * self._staticGage_HP:GetProgressRate() + 50)
   self._staticShowHp:SetPosY(10)
-  self._staticShowMp:SetPosX(3.09 * self._staticGage_CombatResource:GetProgressRate() + 40)
-  self._staticShowMp:SetPosY(55)
+  self._staticShowMp:SetPosX(2.85 * self._staticGage_CombatResource:GetProgressRate() + 50)
+  self._staticShowMp:SetPosY(61)
   FGlobal_SettingMpBarTemp()
 end
 local beforeMaxHp = 0

@@ -24,10 +24,12 @@ local Panel_Window_StableRegister_info = {
     static_LT_ConsoleUI = nil,
     static_RT_ConsoleUI = nil,
     radioButton_SlotBgTemplate = nil,
+    static_Bottombg = nil,
     staticText_Confirm_ConsoleUI = nil,
     staticText_Cancel_ConsoleUI = nil,
     staticText_ChangeName_ConsoleUI = nil,
-    txt_emblemName = nil
+    txt_emblemName = nil,
+    txt_keyGuides = {}
   },
   _enum = {
     eTYEP_OPEN_NONE = -1,
@@ -114,17 +116,12 @@ function Panel_Window_StableRegister_info:registerMessageHandler()
 end
 function Panel_Window_StableRegister_info:initialize()
   self:childControl()
-  self._ui.txt_keyGuides = {
-    UI.getChildControl(Panel_Window_StableRegister, "StaticText_ChangeName"),
-    UI.getChildControl(Panel_Window_StableRegister, "StaticText_Confirm_ConsoleUI"),
-    UI.getChildControl(Panel_Window_StableRegister, "StaticText_Cancel_ConsoleUI")
-  }
-  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._ui.txt_keyGuides, Panel_Window_StableRegister, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self:initValue()
   self:initPosValue()
   self:createControl()
   self:registerEventHandler()
   self:registEventHandler()
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._ui.txt_keyGuides, self._ui.static_Bottombg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_StableRegister_info:initPosValue()
   self._ui.spaceXMapae = 10
@@ -233,9 +230,15 @@ function Panel_Window_StableRegister_info:childControl()
   self._ui.static_RT_ConsoleUI = UI.getChildControl(self._ui.static_SlotItemBg, "Static_RT_ConsoleUI")
   self._ui.radioButton_SlotBgTemplate = UI.getChildControl(self._ui.static_SlotItemBg, "RadioButton_SlotBgTemplate")
   self._ui.radioButton_SlotBgTemplate:SetShow(false)
-  self._ui.staticText_Confirm_ConsoleUI = UI.getChildControl(Panel_Window_StableRegister, "StaticText_Confirm_ConsoleUI")
-  self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(Panel_Window_StableRegister, "StaticText_Cancel_ConsoleUI")
-  self._ui.staticText_ChangeName_ConsoleUI = UI.getChildControl(Panel_Window_StableRegister, "StaticText_ChangeName")
+  self._ui.static_Bottombg = UI.getChildControl(Panel_Window_StableRegister, "Static_Bottombg")
+  self._ui.staticText_Confirm_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_Confirm_ConsoleUI")
+  self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_Cancel_ConsoleUI")
+  self._ui.staticText_ChangeName_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_ChangeName")
+  self._ui.txt_keyGuides = {
+    self._ui.staticText_ChangeName_ConsoleUI,
+    self._ui.staticText_Confirm_ConsoleUI,
+    self._ui.staticText_Cancel_ConsoleUI
+  }
   self._ui.txt_emblemName = UI.getChildControl(Panel_Window_StableRegister, "StaticText_EmblemName")
   self._ui.txt_emblemName:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
 end

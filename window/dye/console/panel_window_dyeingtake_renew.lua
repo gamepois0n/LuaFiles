@@ -110,6 +110,7 @@ function DyeingTake:initAmpuleList()
   for ii = 1, ampuleSlotCount do
     self._ui.stc_ampuleSlotBG[ii] = UI.cloneControl(template, self._ui.stc_ampuleListBG, "Static_PaletteItem_" .. ii)
     self._ui.stc_garment[ii] = UI.getChildControl(self._ui.stc_ampuleSlotBG[ii], "Static_Garment")
+    self._ui.stc_garment[ii]:SetIgnore(true)
     self._ui.txt_ampuleCount[ii] = UI.getChildControl(self._ui.stc_ampuleSlotBG[ii], "StaticText_Count")
     self._ui.stc_ampuleSlotBG[ii]:SetPosX(self._ampuleListStartX + (ii - 1) % self._ampuleListColCount * self._defaultXGap)
     self._ui.stc_ampuleSlotBG[ii]:SetPosY(self._ampuleListStartY + math.floor((ii - 1) / self._ampuleListColCount) * self._defaultYGap)
@@ -148,19 +149,22 @@ function DyeingTake:open()
   self._currentScrollAmount = 0
   self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
-  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(false)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(false)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideLT(false)
 end
 function PaGlobalFunc_DyeingTake_Close()
   DyeingTake:close()
 end
 function DyeingTake:close()
-  PaGlobalFunc_DyeingMain_ShowLTKeyGuide(true)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideLT(true)
   _panel:SetShow(false)
 end
 function DyeingTake:updatePalette()
   if false == _panel:GetShow() then
     return
   end
+  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
   local arrCount = 1
   if nil ~= DyeingPaletteCategoryInfo then
@@ -176,7 +180,7 @@ function DyeingTake:updatePalette()
         local garment = self._ui.stc_garment[ii]
         garment:SetAlphaIgnore(true)
         garment:SetColor(DyeingPaletteCategoryInfo:getColor(dataIdx - 1))
-        garment:addInputEvent("Mouse_LUp", "Input_DyeingTake_Ampule(" .. ii .. ")")
+        self._ui.stc_ampuleSlotBG[ii]:addInputEvent("Mouse_LUp", "Input_DyeingTake_Ampule(" .. ii .. ")")
       else
         self._ui.stc_ampuleSlotBG[ii]:SetShow(false)
       end
@@ -260,6 +264,7 @@ function Input_DyeingTake_Ampule(ii)
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideB(false)
 end
 function InputScroll_DyeingTake_Scroll(isUp)
   local self = DyeingTake

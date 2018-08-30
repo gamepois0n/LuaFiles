@@ -30,7 +30,12 @@ function PadSnapTargetEffect:reset()
   self._sinCurveTheta = 0
 end
 function PadSnapTargetEffect:isAvailableUpdate()
-  if false == self._ui._rectangleEffect:GetShow() or nil == self._targetControl then
+  if false == self._ui._rectangleEffect:GetShow() then
+    return false
+  end
+  if nil == self._targetControl then
+    return false
+  elseif __ePadSnapAttrType_NoTargetEffect == self._targetControl:getPadSnapAttrType() then
     return false
   end
   return true

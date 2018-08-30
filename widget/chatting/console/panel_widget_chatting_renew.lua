@@ -14,6 +14,7 @@ local ChattingInfo = {
     txt_keyGuideXForEdit = nil,
     stc_keyGuideInHistory = nil,
     stc_whisperBG = UI.getChildControl(_panel, "Static_WhisperBG"),
+    txt_keyGuideLTForWhisper = nil,
     edit_whisperTarget = nil,
     stc_macroBG = UI.getChildControl(_panel, "Static_MacroListBG"),
     list2_macro = nil,
@@ -153,6 +154,7 @@ function ChattingInfo:initialize()
   }
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.stc_keyGuide, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self._ui.stc_keyGuideInHistory = UI.getChildControl(_panel, "Static_KeyGuideInList")
+  self._ui.txt_keyGuideLTForWhisper = UI.getChildControl(self._ui.stc_keyGuideInHistory, "StaticText_KeyGuideLT")
   self.permissions:resize(CHAT_TYPE.Count, false)
   self._ui.edit_whisperTarget = UI.getChildControl(self._ui.stc_whisperBG, "Edit_WhisperTarget")
   for ii = 1, CHAT_TYPE.Count - 1 do
@@ -227,7 +229,7 @@ function ChattingInfo:open()
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
-      functionConfirm = MessageBox_Empty_function,
+      functionYes = MessageBox_Empty_function,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -252,12 +254,8 @@ function ChattingInfo:open()
   if Panel_Window_Menu_Renew:GetShow() then
     Panel_Window_Menu_ShowToggle()
   end
-  if Panel_Window_PetList_Renew:GetShow() then
-    FGlobal_PetList_Close()
-  end
-  if Panel_Window_WorkerManager_Renew:GetShow() then
-    PaGlobalFunc_WorkerManager_Close()
-  end
+  FGlobal_PetList_Close(true)
+  PaGlobalFunc_WorkerManager_Close()
   if PaGlobalFunc_AlchemyKnowledgeCheckShow() then
     PaGlobalFunc_AlchemyKnowledgeClose()
   end
@@ -339,6 +337,10 @@ function PaGlobalFunc_ChattingInfo_PressedEnter(str)
     if nil ~= str then
       ChattingInfo._ui.edit_chatContent:SetEditText(str)
     end
+    if 0 == string.len(ChattingInfo._ui.edit_chatContent:GetEditText()) then
+      Input_ChattingInfo_OnPadX()
+      return
+    end
     PaGlobalFunc_ChattingInfo_CancelAction()
     ChattingInfo:sendMessage()
     ClearFocusEdit()
@@ -357,6 +359,10 @@ function Input_ChattingInfo_PressedRT()
   if nil ~= whisperHistory then
     self:setChatTypeTo(CHAT_TYPE.Private)
     self._ui.edit_whisperTarget:SetEditText(whisperHistory)
+  else
+    local string = PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_CHATTING_NO_REPLY")
+    string = "No one to reply"
+    Proc_ShowMessage_Ack(string)
   end
 end
 function ChattingInfo:sendMessage()
@@ -597,6 +603,9 @@ function PaGlobalFunc_ChattingInfo_UpdatePermission()
       self._availableChannelList[#self._availableChannelList + 1] = ii
     end
   end
+end
+function PaGlobalFunc_ChattingInfo_SetShowLTForWhisper(isShow)
+  ChattingInfo._ui.txt_keyGuideLTForWhisper:SetShow(isShow)
 end
 local lastWhispersId = ""
 local lastWhispersTick = 0

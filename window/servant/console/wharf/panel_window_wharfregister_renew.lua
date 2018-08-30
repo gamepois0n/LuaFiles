@@ -23,9 +23,11 @@ local Panel_Window_WharfRegister_info = {
     static_LT_ConsoleUI = nil,
     static_RT_ConsoleUI = nil,
     radioButton_SlotBgTemplate = nil,
+    static_Bottombg = nil,
     staticText_Confirm_ConsoleUI = nil,
     staticText_Cancel_ConsoleUI = nil,
-    staticText_ChangeName_ConsoleUI = nil
+    staticText_ChangeName_ConsoleUI = nil,
+    txt_keyGuides = {}
   },
   _enum = {
     eTYEP_OPEN_NONE = -1,
@@ -116,6 +118,7 @@ function Panel_Window_WharfRegister_info:initialize()
   self:createControl()
   self:registerEventHandler()
   self:registEventHandler()
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._ui.txt_keyGuides, self._ui.static_Bottombg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_WharfRegister_info:initPosValue()
   self._ui.spaceXMapae = 10
@@ -223,9 +226,15 @@ function Panel_Window_WharfRegister_info:childControl()
   self._ui.static_RT_ConsoleUI = UI.getChildControl(self._ui.static_SlotItemBg, "Static_RT_ConsoleUI")
   self._ui.radioButton_SlotBgTemplate = UI.getChildControl(self._ui.static_SlotItemBg, "RadioButton_SlotBgTemplate")
   self._ui.radioButton_SlotBgTemplate:SetShow(false)
-  self._ui.staticText_Confirm_ConsoleUI = UI.getChildControl(Panel_Window_WharfRegister, "StaticText_Confirm_ConsoleUI")
-  self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(Panel_Window_WharfRegister, "StaticText_Cancel_ConsoleUI")
-  self._ui.staticText_ChangeName_ConsoleUI = UI.getChildControl(Panel_Window_WharfRegister, "StaticText_ChangeName_ConsoleUI")
+  self._ui.static_Bottombg = UI.getChildControl(Panel_Window_WharfRegister, "Static_Bottombg")
+  self._ui.staticText_Confirm_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_Confirm_ConsoleUI")
+  self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_Cancel_ConsoleUI")
+  self._ui.staticText_ChangeName_ConsoleUI = UI.getChildControl(self._ui.static_Bottombg, "StaticText_ChangeName_ConsoleUI")
+  self._ui.txt_keyGuides = {
+    self._ui.staticText_ChangeName_ConsoleUI,
+    self._ui.staticText_Confirm_ConsoleUI,
+    self._ui.staticText_Cancel_ConsoleUI
+  }
 end
 function Panel_Window_WharfRegister_info:setKeyguide()
   if 0 < self._value.mapaeItemCount then

@@ -73,6 +73,7 @@ function PanelDelivery:openTab(tabIdx)
     self:updateCarriageTypeList()
     self:updateSendList()
   end
+  InputMO_PanelDelivery_KeyGuideUpdate(false)
   FromClient_WarehouseUpdate()
   FGlobal_WarehouseTownListCheck()
 end
@@ -515,6 +516,7 @@ function PaGlobalFunc_PanelDelivery_SendAll()
   local packingItemCount = delivery_packCountType(false)
   local packingTradeItemCount = delivery_packCountType(true)
   if packingItemCount + packingTradeItemCount < 1 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_NO_HAVE_ITEM"))
     return
   end
   local selected_Destination = self.selectWaypointKey

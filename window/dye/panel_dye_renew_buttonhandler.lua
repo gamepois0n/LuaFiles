@@ -7,8 +7,10 @@ local enToggleIndex = {
   AwakenWeapon = 3,
   FaceViewHair = 4,
   FaceGuard = 5,
-  WarStance = 6
+  WarStance = 6,
+  Cloak = 7
 }
+local _isCloakOn = false
 function FGlobal_Panel_Dye_ReNew_Reset()
   for idx = 0, 6 do
     local static_BG = UI.getChildControl(Panel_Dye_ReNew, "Static_BG")
@@ -25,15 +27,18 @@ function FGlobal_Panel_Dye_ReNew_Reset()
   local checkButton_ToggleHideHair = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_HideHair")
   local checkButton_ToggleHideHelmet = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_HideHelmet")
   local checkButton_ToggleOpenFaceGuard = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_OpenFaceGuard")
+  local checkButton_ToggleCloakInvisual = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_Cloak_Invisual")
   local checkButton_ToggleAwakenWeapon = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_AwakenWeapon")
   local txt_Endurance = UI.getChildControl(Panel_Dye_ReNew, "StaticText_Endurance")
   local slider_Endurance = UI.getChildControl(Panel_Dye_ReNew, "Slider_Endurance")
+  _isCloakOn = true
   checkButton_ToggleWarStance:SetCheck(true)
   checkButton_ToggleShowUnderwear:SetCheck(true)
   checkButton_ToggleHideAvatar:SetCheck(true)
   checkButton_ToggleHideHair:SetCheck(false)
   checkButton_ToggleHideHelmet:SetCheck(false)
   checkButton_ToggleOpenFaceGuard:SetCheck(false)
+  checkButton_ToggleCloakInvisual:SetCheck(_isCloakOn)
   checkButton_ToggleAwakenWeapon:SetCheck(false)
   slider_Endurance:SetControlPos(100)
 end
@@ -187,6 +192,10 @@ function FGlobal_Panel_Dye_ReNew_AddEvent()
   checkButton_ToggleOpenFaceGuard:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetFaceGuard()")
   checkButton_ToggleOpenFaceGuard:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.FaceGuard .. ")")
   checkButton_ToggleOpenFaceGuard:addInputEvent("Mouse_Out", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(false," .. enToggleIndex.FaceGuard .. ")")
+  local checkButton_ToggleCloakInvisual = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_Cloak_Invisual")
+  checkButton_ToggleCloakInvisual:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetCloakInvisual()")
+  checkButton_ToggleCloakInvisual:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.Cloak .. ")")
+  checkButton_ToggleCloakInvisual:addInputEvent("Mouse_Out", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(false," .. enToggleIndex.Cloak .. ")")
   local checkButton_ToggleAwakenWeapon = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_AwakenWeapon")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetAwakenWeapon()")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.AwakenWeapon .. ")")
@@ -532,6 +541,10 @@ function HandleClicked_DyeReNew_SetFaceGuard()
   self._bOpenFaceGuard = not self._bOpenFaceGuard
   ToClient_RequestHideBattleHelmet(self._bOpenFaceGuard)
 end
+function HandleClicked_DyeReNew_SetCloakInvisual()
+  _isCloakOn = not _isCloakOn
+  ToClient_RequestHideCloak(_isCloakOn)
+end
 function PaGlobal_DyeReNew_GetAwakenWeapon()
   local self = FGlobal_DyeReNew_GetInstance()
   return self._bShowAwakenWeapon
@@ -564,6 +577,9 @@ function HandleOver_DyeReNew_SimpleTooltipCheckbutton(isShow, tipType)
   elseif enToggleIndex.WarStance == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_TOOLTIP_WARSTANCE")
     control = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_WarStance")
+  elseif enToggleIndex.Cloak == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_NAME")
+    control = UI.getChildControl(Panel_Dye_ReNew, "CheckButton_Cloak_Invisual")
   end
   registTooltipControl(control, Panel_Tooltip_SimpleText)
   if isShow == true then

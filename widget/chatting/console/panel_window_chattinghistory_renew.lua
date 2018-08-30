@@ -18,7 +18,8 @@ local ChattingHistory = {
     scroll_list = {},
     stc_poolBase = UI.getChildControl(_panel, "Static_Empty"),
     stc_selectedLine = UI.getChildControl(_panel, "Static_SelectionBox"),
-    stc_keyGuideGroup = UI.getChildControl(_panel, "Static_KeyGuideGroup")
+    stc_keyGuideGroup = UI.getChildControl(_panel, "Static_KeyGuideGroup"),
+    txt_keyGuideA = nil
   },
   _uiPool = {},
   _listPanel = {},
@@ -55,6 +56,7 @@ local ChattingHistory = {
     [5] = 1
   }
 }
+local _snappedOnThisPanel = false
 local _tabData = {
   [1] = {
     true,
@@ -355,6 +357,7 @@ function ChattingHistory:initialize()
     chatPanel:setChatFontSizeType(self:getFontType(currentFontSize))
     self._currentSelectedMessage[panelIdx] = 0
   end
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_keyGuideGroup, "StaticText_KeyGuideA")
   self:registEventHandler()
   self:registMessageHandler()
   _isInitialized = true
@@ -1363,6 +1366,9 @@ function ChattingHistory:updateSelectionBox()
   local selectYPos = contentControl:GetPosY() + self._ui.stc_sampleBG:GetPosY() - 4
   self._ui.stc_selectedLine:SetPosY(selectYPos)
   self._ui.stc_selectedLine:SetSize(self._ui.stc_selectedLine:GetSizeX(), selectionYSize + 2)
+  local sender = PaGlobalFunc_ChattingHistory_GetSelectedSender(ToClient_getChatNameType())
+  self._ui.txt_keyGuideA:SetShow(nil ~= sender and "" ~= sender)
+  PaGlobalFunc_ChattingInfo_SetShowLTForWhisper(nil ~= sender and "" ~= sender)
 end
 function Input_ChatHistory_ChangeToNextTab(isNext)
   local self = ChattingHistory
@@ -1414,7 +1420,6 @@ function FromClient_ChattingHistory_PrivateChat()
     sendPossibleTime = getTime() + checkWhistperTime
   end
 end
-local _snappedOnThisPanel = false
 function FromClient_ChattingHistory_PadSnapChangePanel(fromPanel, toPanel)
   if nil ~= toPanel and _panel:GetKey() == toPanel:GetKey() then
     _snappedOnThisPanel = true

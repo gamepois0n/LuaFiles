@@ -118,19 +118,16 @@ function PaGlobal_TutorialPhase_InteractionSupplyBox:changeStepMoveDestination()
     FGlobal_Panel_Radar_Show_AddEffect()
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_90") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_7"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   elseif 2 == self._currentProgress then
     pathfindResult = worldmapNavigatorStart(self._destination[1], navigationGuideParam, false, false, true)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_92") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_7"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   elseif 3 == self._currentProgress then
     pathfindResult = worldmapNavigatorStart(self._destination[2], navigationGuideParam, false, false, true)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_92") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_93"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   end
   if -1 == pathfindResult and 1 == self._currentStep then
@@ -161,12 +158,10 @@ function PaGlobal_TutorialPhase_InteractionSupplyBox:updateCheckInteraction()
   if false == isMatchCharacterKey then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_32") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_7"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
     end)
   elseif true == isMatchCharacterKey then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_36") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_9"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonY", PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU0"))
     end)
   end
 end

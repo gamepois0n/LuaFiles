@@ -15,7 +15,6 @@ local ServantRentPromoteAuth = {
   }
 }
 function ServantRentPromoteAuth:initialize()
-  _PA_LOG("cylee", "ServantRentPromoteAuth:initialize()")
   if self._init then
     return false
   end
@@ -50,11 +49,9 @@ function PaGlobalFunc_ServantRentPromoteAuthClearEdit()
   return ServantRentPromoteAuth:clearEdit()
 end
 function ServantRentPromoteAuth:checkShow()
-  _PA_LOG("cylee", "ServantRentPromoteAuth:checkShow()")
   return self._panel:GetShow()
 end
 function ServantRentPromoteAuth:close()
-  _PA_LOG("cylee", "ServantRentPromoteAuth:close()")
   if self:checkShow() then
     self._panel:SetShow(false)
   end
@@ -63,13 +60,11 @@ function PaGlobalFunc_ServantRentPromoteAuthClose()
   ServantRentPromoteAuth:close()
 end
 function ServantRentPromoteAuth:open(servantNo)
-  _PA_LOG("cylee", "ServantRentPromoteAuth:open() servantNo:" .. tostring(servantNo))
   if self:checkShow() then
     return
   end
   local info = stable_getServantByServantNo(servantNo)
   if not info then
-    _PA_LOG("cylee", "ServantRentPromoteAuth:open() no servant info!")
     return
   end
   self._ui.icon:ChangeTextureInfoName(info:getIconPath1())
@@ -96,11 +91,11 @@ function PaGlobalFunc_ServantRentPromoteAuthOpen(servantNo)
   return ServantRentPromoteAuth:open(servantNo)
 end
 function ServantRentPromoteAuth:register()
-  _PA_LOG("cylee", "ServantRentPromoteAuth:register()")
   local info = stable_getServantByServantNo(self._servantNo)
   if not info then
     return false
   end
+  ToClient_RegisterServantForRent(self._servantNo, self._ui.userNameEdit:GetEditText())
   return true
 end
 function PaGlobalFunc_ServantRentPromoteAuthRegister()

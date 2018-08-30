@@ -80,7 +80,7 @@ local petList = {
       [4] = 4
     },
     _PetInfoFrame = {_startX = 15, _startY = 10},
-    _ConfirmIcon = {_posX = 140, _posY = -2},
+    _ConfirmIcon = {_posX = 200, _posY = -2},
     _SpecailPetRace = 99,
     _FontColor = {_specialSkill_Seal = 4287862695, _specialSkill_UnSeal = 4287806957},
     _ButtonID = {
@@ -157,6 +157,8 @@ function petList:initControl()
   petListUI._static_Exit:addInputEvent("Mouse_LUp", "FGlobal_PetList_Close()")
   petListUI._staticText_FeedAll:addInputEvent("Mouse_LUp", "FGlobal_PetList_FeedAll()")
   petListUI._staticText_CheckInAll:addInputEvent("Mouse_LUp", "FGlobal_PetList_CheckInAll()")
+  petListUI._static_SkillEffectDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  petListUI._static_SkillEffectDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PETLIST_SKILLDESC"))
   Panel_Window_PetList_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobal_PetList_FeedAll()")
   Panel_Window_PetList_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "FGlobal_PetList_CheckInAll()")
 end
@@ -188,8 +190,10 @@ function petList:tmporaryClose()
 end
 function petList:tmporaryOpen()
   Panel_Window_PetList_Renew:SetShow(true)
-  self._ui._static_FocusBg:SetShow(false)
-  self._ui._static_FocusBg:SetShow(true)
+  if self._ui._static_FocusBg:GetShow() then
+    self._ui._static_FocusBg:SetShow(false)
+    self._ui._static_FocusBg:SetShow(true)
+  end
   self._ui._button_Seal:SetCheck(false)
   self._ui._button_Feed:SetCheck(false)
   self._ui._button_ShowInfo:SetCheck(false)
@@ -197,9 +201,9 @@ function petList:tmporaryOpen()
   self._ui._button_Compose:SetCheck(false)
   self._ui._button_Unseal:SetCheck(false)
 end
-function petList:close()
+function petList:close(closeAll)
   local petListUI = self._ui
-  if true == petListUI._static_FocusBg:GetShow() then
+  if not closeAll and true == petListUI._static_FocusBg:GetShow() then
     petList:closeFunctionPopup()
     return
   end
@@ -259,7 +263,11 @@ end
 function petList:SetButtonPosition(isConfirmOn)
   local petListUI = self._ui
   local xPos = 0
-  if true == isConfirmOn then
+  if nil == self.unsealPetCount or nil == self.sealPetCount then
+    self.unsealPetCount = ToClient_getPetUnsealedList()
+    self.sealPetCount = ToClient_getPetSealedList()
+  end
+  if true == isConfirmOn and 0 < self.unsealPetCount + self.sealPetCount then
     petListUI._static_Confirm:SetShow(true)
     xPos = petListUI._static_Exit:GetPosX() - petListUI._static_Confirm:GetTextSizeX() - self._config._buttonGap
     petListUI._static_Confirm:SetPosX(xPos)
@@ -323,7 +331,7 @@ function petList:setPosition()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_PetList_Renew:GetSizeX()
   local panelSizeY = Panel_Window_PetList_Renew:GetSizeY()
-  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2)
+  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2 - 180)
   Panel_Window_PetList_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function FGlobal_PopUpButton_SetIconPosition(buttonID)
@@ -806,10 +814,12 @@ function petList:update(isNotScroll)
   if not Panel_Window_PetList_Renew:GetShow() then
     return
   end
+  local isConfirmOn = false == self._ui._static_FocusBg:GetShow()
   self:updateHungry()
   self:setPetList(isNotScroll)
   self:initSkillFrame()
   self:setSkillFrame()
+  self:SetButtonPosition(isConfirmOn)
   ToClient_padSnapSetTargetGroup(self._ui._list2_PetList)
 end
 function FromClient_luaLoadComplete_PetList()
@@ -831,8 +841,8 @@ end
 function FGlobal_PetListNew_Toggle()
   FGlobal_PetList_Open()
 end
-function FGlobal_PetList_Close()
-  petList:close()
+function FGlobal_PetList_Close(closeAll)
+  petList:close(closeAll)
 end
 function FGlobal_PetFeed_Open()
   petList:selectFeed()
@@ -879,10 +889,10 @@ function petList:feedAll()
     return
   end
   FGlobal_PetFeedOpen(nil, true)
+  self:tmporaryClose()
 end
 function FGlobal_PetList_FeedAll()
   petList:feedAll()
-  petList:tmporaryClose()
 end
 function FGlobal_PetList_CheckInAll()
   petList:checkInAll()

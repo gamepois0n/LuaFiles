@@ -6,7 +6,7 @@ local Window_WorldMap_HouseCraftLargeInfo = {
     _static_CenterBg = UI.getChildControl(Panel_Worldmap_HouseCraftLarge, "Static_CenterBg"),
     _static_BottomBg = UI.getChildControl(Panel_Worldmap_HouseCraftLarge, "Static_BottomBg")
   },
-  _config = {_keyGuide_Cancel_DefaultPosX},
+  _config = {_keyGuide_Cancel_DefaultPosX, _keyGuide_DoWork_DefaultPosX},
   _craftSlotConfig = {createIcon = true},
   _resourceSlotConfig = {createIcon = true, createCount = true},
   _workerList = {},
@@ -263,12 +263,13 @@ function Window_WorldMap_HouseCraftLargeInfo:SetTopInfo()
 end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_SelectResourceItem(index)
   local self = Window_WorldMap_HouseCraftLargeInfo
-  local prevIndex = self._currentWorkerIndex
+  local prevIndex = self._currentResourceIndex
   self._currentResourceIndex = index
   self:SetInfo()
   self:SetDetailInfo()
   self._ui._list2_ResourceList:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._list2_ResourceList:requestUpdateByKey(toInt64(0, self._currentResourceIndex))
+  PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(-1, 1)
 end
 function Window_WorldMap_HouseCraftLargeInfo:SetResourceList()
   local craftItemInfo = self._craftItemList[self._currentCraftIndex]
@@ -332,12 +333,12 @@ function Window_WorldMap_HouseCraftLargeInfo:SetInfo()
   local workerInfo = self._workerList[self._currentWorkerIndex]
   self._ui._staticText_WorkCount:SetText(craftItemInfo._workVolume)
   if nil ~= self._onGoingIndex and self._currentCraftIndex ~= self._onGoingIndex then
-    self._ui._keyGuide_DoWork:SetShow(false)
+    self._ui._static_keyGuide_DoWork:SetShow(false)
     self._ui._static_Keyguide_Cancel:SetShow(false)
   else
     self._ui._static_Keyguide_Cancel:SetShow(true)
     self._ui._static_WarningIcon:SetShow(0 == resource._haveCount)
-    self._ui._keyGuide_DoWork:SetShow(0 < resource._haveCount)
+    self._ui._static_keyGuide_DoWork:SetShow(0 < resource._haveCount)
   end
   if nil ~= workerInfo then
     local distance = ToClient_getCalculateMoveDistance(workerInfo._workerNo, self._position) / 100
@@ -355,10 +356,10 @@ function Window_WorldMap_HouseCraftLargeInfo:SetInfo()
     self._ui._staticText_MoveSpeed:SetText("--")
     self._ui._staticText_LeftTime:SetText("--")
     self._ui._static_WarningIcon:SetShow(false)
-    self._ui._keyGuide_DoWork:SetShow(false)
+    self._ui._static_keyGuide_DoWork:SetShow(false)
   end
-  if false == self._ui._keyGuide_DoWork:GetShow() then
-    self._ui._static_Keyguide_Cancel:SetPosX(self._ui._keyGuide_DoWork:GetPosX())
+  if false == self._ui._static_keyGuide_DoWork:GetShow() then
+    self._ui._static_Keyguide_Cancel:SetPosX(self._ui._static_keyGuide_DoWork:GetPosX())
   else
     self._ui._static_Keyguide_Cancel:SetPosX(self._config._keyGuide_Cancel_DefaultPosX)
   end
@@ -419,7 +420,7 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_CraftCancelContinue()
 end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_DoWork()
   local self = Window_WorldMap_HouseCraftLargeInfo
-  if false == self._ui._keyGuide_DoWork:GetShow() then
+  if false == self._ui._static_keyGuide_DoWork:GetShow() then
     return
   end
   if workerManager_CheckWorkingOtherChannelAndMsg() then
@@ -647,7 +648,8 @@ function Window_WorldMap_HouseCraftLargeInfo:InitControl()
   self._ui._static_Keyguide_Cancel = UI.getChildControl(self._ui._static_BottomBg, "StaticText_Y_ConsoleUI")
   self._config._keyGuide_Cancel_DefaultPosX = self._ui._static_Keyguide_Cancel:GetPosX()
   self._ui._static_Keyguide_Select = UI.getChildControl(self._ui._static_BottomBg, "StaticText_A_ConsoleUI")
-  self._ui._keyGuide_DoWork = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
+  self._ui._static_keyGuide_DoWork = UI.getChildControl(self._ui._static_BottomBg, "StaticText_X_ConsoleUI")
+  self._config._keyGuide_DoWork_DefaultPosX = self._ui._static_keyGuide_DoWork:GetPosX()
 end
 function Window_WorldMap_HouseCraftLargeInfo:InitEvent()
   self._ui._list2_ResourceList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_HouseCraftLarge_List2EventControlCreate_ResourceList")
@@ -658,6 +660,8 @@ function Window_WorldMap_HouseCraftLargeInfo:InitEvent()
   self._ui._list2_CraftingWorker:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   Panel_Worldmap_HouseCraftLarge:RegisterUpdateFunc("PaGlobalFunc_WorldMap_HouseCraftLarge_UpdatePerFrame")
   self._ui._button_Repeat:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseCraftLarge_SelectRepeatButton()")
+  self._ui._button_Repeat:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(0,2)")
+  self._ui._button_Repeat:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(-1,2)")
   self._craftSlot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraftLarge_ShowTooltip(true)")
   self._resourceSlot.icon:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraftLarge_ShowTooltip(false)")
   self._craftSlot.icon:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraftLarge_HideTooltip()")
@@ -841,6 +845,8 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_List2EventControlCreate_ResourceL
   staticText_name:SetText(resource._itemName)
   button:SetCheck(id == self._currentResourceIndex)
   button:addInputEvent("Mouse_LDown", "PaGlobalFunc_WorldMap_HouseCraftLarge_SelectResourceItem(" .. id .. ")")
+  button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(" .. id .. ",1)")
+  button:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(-1,1)")
   local isOnGoing = self._currentCraftIndex == self._onGoingIndex
   if true == isOnGoing then
     local progressRate_Complete = math.floor(resource._progressCount / resource._fullCount * 100)
@@ -872,6 +878,8 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_List2EventControlCreate_WorkerLis
   staticText_name:SetFontColor(ConvertFromGradeToColor(workerGrade))
   staticText_name:SetText(workerInfo._name)
   button:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_HouseCraftLarge_SelectWorker(" .. id .. ")")
+  button:addInputEvent("Mouse_On", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(" .. id .. ",0)")
+  button:addInputEvent("Mouse_Out", "PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(-1,0)")
   staticText_ActionPoint:SetText(currentPoint .. " / " .. maxPoint)
 end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_SelectWorker(index)
@@ -891,6 +899,7 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_SelectWorker(index)
   self:SetInfo()
   self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._list2_WorkerList:requestUpdateByKey(toInt64(0, self._currentWorkerIndex))
+  PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(-1, 0)
 end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_SetGuideCraftingWorker(isCraftingWorker)
   local self = Window_WorldMap_HouseCraftLargeInfo
@@ -898,6 +907,24 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_SetGuideCraftingWorker(isCrafting
     self._ui._static_Keyguide_Select:SetText(PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_WOKRPROGRESS_BTN_CANCEL"))
   else
     self._ui._static_Keyguide_Select:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GENERIC_KEYGUIDE_XBOX_SELECT"))
+  end
+end
+function PaGlobalFunc_WorldMap_HouseCraftLarge_SetSelectButton(id, buttonType)
+  local self = Window_WorldMap_HouseCraftLargeInfo
+  if 0 == buttonType then
+    self._ui._static_Keyguide_Select:SetShow(id ~= self._currentWorkerIndex)
+  elseif 1 == buttonType then
+    self._ui._static_Keyguide_Select:SetShow(id ~= self._currentResourceIndex)
+  elseif 2 == buttonType then
+    self._ui._static_Keyguide_Select:SetShow(true)
+  end
+  if -1 == id then
+    self._ui._static_Keyguide_Select:SetShow(false)
+  end
+  if true == self._ui._static_Keyguide_Select:GetShow() then
+    self._ui._static_keyGuide_DoWork:SetPosX(self._config._keyGuide_DoWork_DefaultPosX)
+  else
+    self._ui._static_keyGuide_DoWork:SetPosX(self._ui._static_Keyguide_Select:GetPosX() - 20)
   end
 end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_CancelWork(id)
@@ -959,6 +986,7 @@ function PaGlobalFunc_WorldMap_HouseCraftLarge_Close()
   self._currentCraftIndex = 0
   self._currentResourceIndex = 0
   PaGlobalFunc_WorldMap_HouseCraftLarge_HideTooltip()
+  PaGlobalFunc_WorldMapHouseManager_Open()
   PaGlobalFunc_WorldMap_HouseCraftLarge_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_HouseCraftLarge_luaLoadComplete()

@@ -16,6 +16,7 @@ local Customization_BodyBoneInfo = {
   _lastScaleMin,
   _lastScaleMax,
   _lastScale,
+  _currentData = nil,
   _isBoneControl = false
 }
 function Customization_BodyBoneInfo:EnableBodySlide(enable)
@@ -29,6 +30,9 @@ function Customization_BodyBoneInfo:EnableBodySlide(enable)
   self._ui._slider_ScaleX:SetMonoTone(not enable)
   self._ui._slider_ScaleY:SetMonoTone(not enable)
   self._ui._slider_ScaleZ:SetMonoTone(not enable)
+  self._ui._slider_ScaleX:SetIgnore(not enable)
+  self._ui._slider_ScaleY:SetIgnore(not enable)
+  self._ui._slider_ScaleZ:SetIgnore(not enable)
   self._ui._slider_ScaleX:SetEnable(enable)
   self._ui._slider_ScaleY:SetEnable(enable)
   self._ui._slider_ScaleZ:SetEnable(enable)
@@ -36,6 +40,11 @@ end
 function Customization_BodyBoneInfo:CalculateSliderValue(sliderControl, valueMin, valueMax)
   local ratio = sliderControl:GetControlPos()
   local val = valueMax - valueMin
+  local progress = UI.getChildControl(sliderControl, "Progress2_1")
+  local button = UI.getChildControl(sliderControl, "Slider_DisplayButton")
+  button:SetPosX(sliderControl:GetControlButton():GetPosX())
+  local offset = math.cos(ratio * math.pi) * 2
+  progress:SetProgressRate(ratio * 100 + offset)
   return ratio * val - (val - math.abs(valueMax))
 end
 function Customization_BodyBoneInfo:SetValueSlider(sliderControl, value, valueMin, valueMax)
@@ -79,6 +88,7 @@ function PaGlobalFunc_Customization_BodyBone_AdjustBodyBoneScale(scaleX, scaleY,
 end
 function PaGlobalFunc_Customization_BodyBone_PickingBodyBone(customizationData)
   local self = Customization_BodyBoneInfo
+  self._currentData = customizationData
   self._selectScaleMin = customizationData:getSelectedBoneScaleMin()
   self._lastScaleMin = customizationData:getSelectedBoneScaleMin()
   self._selectScaleMax = customizationData:getSelectedBoneScaleMax()
@@ -93,6 +103,7 @@ function PaGlobalFunc_Customization_BodyBone_PickingBodyBone(customizationData)
   self._ui._slider_Weight:SetControlPos(getCustomizationBodyWeight())
   self._ui._staticText_HeightSliderValue:SetText(getCustomizationBodyHeight())
   self._ui._staticText_WeightSliderValue:SetText(getCustomizationBodyWeight())
+  PaGlobalFunc_Customization_BodyBone_Update()
 end
 function PaGlobalFunc_Customization_BodyBone_ShowBodyBoneEditor()
   local self = Customization_BodyBoneInfo
@@ -105,6 +116,8 @@ function PaGlobalFunc_Customization_BodyBone_ShowBodyBoneEditor()
   self._ui._staticText_WeightSliderValue:SetText(getCustomizationBodyWeight())
   setSymmetryBoneTransform(true)
   PaGlobalFunc_Customization_BodyBone_CursorSelect(3)
+  PaGlobalFunc_Customization_BodyBone_UpdateBodyHeight()
+  PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()
 end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()
   local self = Customization_BodyBoneInfo
@@ -116,35 +129,25 @@ function PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()
   self._currentScale.z = z
   applyScaleValue(x, y, z)
 end
-function PaGlobalFunc_Customization_BodyBone_SliderOn(sliderType, sliderIndex)
+function PaGlobalFunc_Customization_BodyBone_SliderOn()
   local self = Customization_BodyBoneInfo
-  if 0 == sliderType then
-    if 0 == sliderIndex then
-    else
-    end
-  elseif 1 ~= sliderIndex or 1 ~= sliderType or 0 == sliderIndex then
-  elseif 1 == sliderIndex then
-  elseif 2 == sliderIndex then
-  end
-  PaGlobalFunc_Customization_SetKeyGuide(4)
+  PaGlobalFunc_Customization_SetKeyGuide(5)
 end
-function PaGlobalFunc_Customization_BodyBone_SliderOut(sliderType, sliderIndex)
+function PaGlobalFunc_Customization_BodyBone_SliderOut()
   local self = Customization_BodyBoneInfo
-  if 0 == sliderType then
-    if 0 == sliderIndex then
-    else
-    end
-  elseif 1 ~= sliderIndex or 1 ~= sliderType or 0 == sliderIndex then
-  elseif 1 == sliderIndex then
-  elseif 2 == sliderIndex then
-  end
   if false == self._isBoneControl and true == PaGlobalFunc_Customization_BodyBone_GetShow() then
-    PaGlobalFunc_Customization_SetKeyGuide(2)
+    PaGlobalFunc_Customization_SetKeyGuide(3)
   end
 end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyHeight()
   local self = Customization_BodyBoneInfo
   if true == self._ui._slider_Height:IsEnable() then
+    local progress = UI.getChildControl(self._ui._slider_Height, "Progress2_1")
+    local button = UI.getChildControl(self._ui._slider_Height, "Slider_DisplayButton")
+    local ratio = self._ui._slider_Height:GetControlPos()
+    button:SetPosX(self._ui._slider_Height:GetControlButton():GetPosX())
+    local offset = math.cos(ratio * math.pi) * 2
+    progress:SetProgressRate(ratio * 100 + offset)
     self._ui._staticText_HeightSliderValue:SetText(Int64toInt32(self._ui._slider_Height:GetControlPos() * 100))
     applyBodyHeight(self._currentClassType, self._ui._slider_Height:GetControlPos() * 100)
     if true == self._ui._slider_ScaleY:IsEnable() then
@@ -156,6 +159,12 @@ end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()
   local self = Customization_BodyBoneInfo
   if true == self._ui._slider_Weight:IsEnable() then
+    local progress = UI.getChildControl(self._ui._slider_Weight, "Progress2_1")
+    local button = UI.getChildControl(self._ui._slider_Weight, "Slider_DisplayButton")
+    local ratio = self._ui._slider_Weight:GetControlPos()
+    button:SetPosX(self._ui._slider_Weight:GetControlButton():GetPosX())
+    local offset = math.cos(ratio * math.pi) * 2
+    progress:SetProgressRate(ratio * 100 + offset)
     self._ui._staticText_WeightSliderValue:SetText(Int64toInt32(self._ui._slider_Weight:GetControlPos() * 100))
     applyBodyWeight(self._currentClassType, self._ui._slider_Weight:GetControlPos() * 100)
     if true == self._ui._slider_ScaleY:IsEnable() then
@@ -177,23 +186,18 @@ function PaGlobalFunc_Customization_BodyBone_SetBoneControl(isSet)
   local self = Customization_BodyBoneInfo
   if false == isSet then
     self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(2)
+    PaGlobalFunc_Customization_SetKeyGuide(3)
     Panel_Customizing_BodyShape:ignorePadSnapUpdate(false)
     ToClient_StartOrEndShapeBoneControlStart(false)
+    PaGlobalFunc_Customization_BodyBone_Update()
+    PaGlobalFunc_Customization_BodyBone_SetShow(true)
   else
     self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(7)
+    PaGlobalFunc_Customization_SetKeyGuide(4)
     Panel_Customizing_BodyShape:ignorePadSnapUpdate(true)
     ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
-function PaGlobalFunc_Customization_BodyBone_UpdatePerFrame(deltaTime)
-  local self = Customization_BodyBoneInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_BodyBone_SetBoneControl(false)
-    end
-    return
+    PaGlobalFunc_CustomizingKeyGuide_Open(PaGlobalFunc_Customization_BodyBone_SetBoneControl, 2)
+    PaGlobalFunc_Customization_BodyBone_SetShow(false)
   end
 end
 function PaGlobalFunc_Customization_BodyBone_BoneInfoPostFunction()
@@ -236,7 +240,7 @@ function Customization_BodyBoneInfo:InitControl()
   self._ui._staticText_HeightSliderTitle = UI.getChildControl(self._ui._static_HeightSliderBg, "StaticText_Title")
   self._ui._staticText_WeightSliderTitle = UI.getChildControl(self._ui._static_WeightSliderBg, "StaticText_Title")
   self._ui._staticText_HeightSliderTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_HEIGHT"))
-  self._ui._staticText_WeightSliderTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_WEIGHT"))
+  self._ui._staticText_WeightSliderTitle:SetText("Shape")
   self._ui._staticText_HeightSliderValue = UI.getChildControl(self._ui._static_HeightSliderBg, "StaticText_HeigtValue")
   self._ui._staticText_WeightSliderValue = UI.getChildControl(self._ui._static_WeightSliderBg, "StaticText_WeightValue")
   self._ui._slider_Height = UI.getChildControl(self._ui._static_HeightSliderBg, "Slider_Height")
@@ -260,27 +264,26 @@ function Customization_BodyBoneInfo:InitEvent()
   self._ui._checkBox_ShowPart:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyBone_ToggleShowBodyBoneControlPart()")
   self._ui._button_ResetPart:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyBone_ClearCustomizedBoneInfo()")
   self._ui._button_ResetAll:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_BodyBone_ClearGroupCustomizedBonInfoLua()")
-  self._ui._slider_Height:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn(0,0)")
-  self._ui._slider_Height:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut(0,0)")
-  self._ui._slider_Weight:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn(0,1)")
-  self._ui._slider_Weight:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut(0,1)")
+  self._ui._slider_Height:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn( )")
+  self._ui._slider_Height:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut( )")
+  self._ui._slider_Weight:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn( )")
+  self._ui._slider_Weight:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut( )")
   self._ui._slider_Height:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyBone_UpdateBodyHeight()")
   self._ui._slider_Weight:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()")
   self._ui._sliderButton_Height:SetIgnore(true)
   self._ui._sliderButton_Weight:SetIgnore(true)
-  self._ui._slider_ScaleX:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn(1,0)")
-  self._ui._slider_ScaleX:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut(1,0)")
-  self._ui._slider_ScaleY:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn(1,1)")
-  self._ui._slider_ScaleY:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut(1,1)")
-  self._ui._slider_ScaleZ:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn(1,2)")
-  self._ui._slider_ScaleZ:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut(1,2)")
+  self._ui._slider_ScaleX:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn( )")
+  self._ui._slider_ScaleX:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut( )")
+  self._ui._slider_ScaleY:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn( )")
+  self._ui._slider_ScaleY:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut( )")
+  self._ui._slider_ScaleZ:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_BodyBone_SliderOn( )")
+  self._ui._slider_ScaleZ:addInputEvent("Mouse_Out", "PaGlobalFunc_Customization_BodyBone_SliderOut( )")
   self._ui._slider_ScaleX:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()")
   self._ui._slider_ScaleY:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()")
   self._ui._slider_ScaleZ:addInputEvent("Mouse_LPress", "PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()")
   self._ui._sliderButton_ScaleX:SetIgnore(true)
   self._ui._sliderButton_ScaleY:SetIgnore(true)
   self._ui._sliderButton_ScaleZ:SetIgnore(true)
-  Panel_Customizing_BodyShape:RegisterUpdateFunc("PaGlobalFunc_Customization_BodyBone_UpdatePerFrame")
   Panel_Customizing_BodyShape:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_BodyBone_SetBoneControl(true)")
 end
 function Customization_BodyBoneInfo:InitRegister()
@@ -310,27 +313,39 @@ function PaGlobalFunc_Customization_BodyBone_Close()
     PaGlobalFunc_Customization_BodyBone_SetBoneControl(false)
     return false
   end
+  self._currentData = nil
   endPickingMode()
   PaGlobalFunc_Customization_BodyPose_ToggleShowPosePreCheck()
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
-  PaGlobalFunc_Customization_BodyBone_SetShow(false, false)
+  PaGlobalFunc_Customization_BodyBone_SetShow(false)
   return true
 end
 function PaGlobalFunc_Customization_BodyBone_Open()
   if true == PaGlobalFunc_Customization_BodyBone_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(2)
+  PaGlobalFunc_Customization_BodyBone_SetShow(true)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(3)
   PaGlobalFunc_Customization_BodyBone_ToggleShowBodyBoneControlPart()
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_BodyBone_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_BodyBone_Close()")
-  PaGlobalFunc_Customization_BodyBone_SetShow(true, false)
 end
-function PaGlobalFunc_Customization_BodyBone_SetShow(isShow, isAni)
-  Panel_Customizing_BodyShape:SetShow(isShow, isAni)
+function PaGlobalFunc_Customization_BodyBone_SetShow(isShow)
+  Panel_Customizing_BodyShape:SetShow(isShow)
 end
 function PaGlobalFunc_Customization_BodyBone_GetShow()
   return Panel_Customizing_BodyShape:GetShow()
+end
+function PaGlobalFunc_Customization_BodyBone_Update()
+  local self = Customization_BodyBoneInfo
+  if nil == self._currentData then
+    return
+  end
+  self:CalculateSliderValue(self._ui._slider_ScaleX, self._selectScaleMin.x, self._selectScaleMax.x)
+  self:CalculateSliderValue(self._ui._slider_ScaleY, self._selectScaleMin.y, self._selectScaleMax.y)
+  self:CalculateSliderValue(self._ui._slider_ScaleZ, self._selectScaleMin.z, self._selectScaleMax.z)
 end
 PaGlobalFunc_FromClient_Customization_BodyBone_luaLoadComplete()

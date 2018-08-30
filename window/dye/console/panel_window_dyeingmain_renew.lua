@@ -60,6 +60,9 @@ function DyeingMain:open()
   if selfPlayerIsInCompetitionArea() then
     return
   end
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
@@ -136,8 +139,11 @@ function PaGlobalFunc_Dyeing_UpdatePerFrame(deltaTime)
     end
   end
 end
-function PaGlobalFunc_DyeingMain_ShowLTKeyGuide(isShow)
+function PaGlobalFunc_DyeingMain_ShowKeyGuideLT(isShow)
   DyeingMain._ui.txt_keyGuides[1]:SetShow(isShow)
+end
+function PaGlobalFunc_DyeingMain_ShowKeyGuideB(isShow)
+  DyeingMain._ui.txt_keyGuides[3]:SetShow(isShow)
 end
 function Input_DyeingMain_PressedLT()
   _padLTIsPressed = true

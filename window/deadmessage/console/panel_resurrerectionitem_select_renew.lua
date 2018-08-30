@@ -32,14 +32,18 @@ end
 function resurrectionItem:createControl()
   for index = 0, self._config._maxItemCount - 1 do
     local slotInfo = {}
-    local productControl = UI.cloneControl(self._ui._button_Item_Template, Panel_Resurrection_ItemSelect, "Button_Item_" .. index)
+    local productControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, Panel_Resurrection_ItemSelect, "Button_Item_" .. index)
+    CopyBaseProperty(self._ui._button_Item_Template, productControl)
     productControl:SetShow(false)
+    productControl:SetIgnore(false)
     productControl:SetPosX(self._config._buttonXPos[index])
     local itemSlot = {}
     SlotItem.new(itemSlot, "Item_Slot_" .. index, index, productControl, self._config._slotConfig)
     itemSlot:createChild()
     slotInfo.slot = productControl
     slotInfo.item = itemSlot
+    slotInfo.item.icon:SetPosX(3)
+    slotInfo.item.icon:SetPosY(3)
     self._itemSlot[index] = slotInfo
   end
   self._ui._button_Item_Template:SetShow(false)
@@ -97,11 +101,11 @@ function resurrectionItem:update()
   end
   local isOdd = slotCount % 2
   for index = 0, slotCount - 1 do
-    self._itemSlot[index].slot:SetShow(true)
     self._itemSlot[index].item.icon:ChangeTextureInfoName(self._cashRivivalData[index].icon)
     self._itemSlot[index].item.icon:SetShow(true)
     self._itemSlot[index].item.count:SetShow(true)
     self._itemSlot[index].item.count:SetText(tostring(self._cashRivivalData[index].count))
+    self._itemSlot[index].slot:SetShow(true)
     self._itemSlot[index].slot:addInputEvent("Mouse_On", "PaGlobalFunc_ResurrectionItem_SelectItem(" .. index .. ")")
     self._itemSlot[index].slot:SetPosX(self._config._buttonXPos[index] - 25 * isOdd)
   end
@@ -115,7 +119,11 @@ function resurrectionItem:setPosition()
   Panel_Resurrection_ItemSelect:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function resurrectionItem:selectItem(index)
+  for i = 0, self._config._maxItemCount - 1 do
+    self._itemSlot[i].slot:SetCheck(false)
+  end
   self._selectItemNo = index
+  self._itemSlot[index].slot:SetCheck(true)
   PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, self._cashRivivalData[index].slotNo), Defines.TooltipTargetType.Item, 0)
 end
 function PaGlobalFunc_ResurrectionItem_SelectItem(index)
@@ -165,7 +173,7 @@ function resurrectionItem:applyItem(respawnType)
     title = msgTitle,
     content = msgContent,
     functionYes = ToClient_CashRevivalBuy_Confirm,
-    functionNo = PaGlobalFunc_ResurrerectionItem_TemporaryOpen,
+    functionNo = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   resurrectionItem:temporaryClose()

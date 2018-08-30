@@ -5,8 +5,7 @@ local const_64 = Defines.s64_const
 local CharacterSelect = {
   _ui = {
     txt_CharacterSelect = UI.getChildControl(_panel, "StaticText_CharacterSelect"),
-    stc_RightBg = UI.getChildControl(_panel, "Static_RightBg"),
-    txt_Back_ConsoleUI = UI.getChildControl(_panel, "StaticText_Back_ConsoleUI")
+    stc_RightBg = UI.getChildControl(_panel, "Static_RightBg")
   },
   _playerData = {
     maxSlot = 0,
@@ -27,6 +26,7 @@ local CharacterSelect = {
 }
 function CharacterSelect:init()
   self._ui.txt_FamilyName = UI.getChildControl(self._ui.stc_RightBg, "StaticText_FamilyName")
+  self._ui.txt_FamilyNameStr = UI.getChildControl(self._ui.stc_RightBg, "StaticText_FamilyNameStr")
   self._ui.list2_Character = UI.getChildControl(self._ui.stc_RightBg, "List2_Character")
   self._ui.scroll_Vertical = UI.getChildControl(self._ui.list2_Character, "List2_1_VerticalScroll")
   self._ui.list2_Character:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_CharacterSelect_CharacterList_ControlCreate")
@@ -37,11 +37,14 @@ function CharacterSelect:init()
   self._ui.txt_Delete_ConsoleUI:SetShow(true)
   self._ui.txt_DeleteCancel_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_DeleteCancel_ConsoleUI")
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
+  self._ui.txt_Exit_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_Exit_ConsoleUI")
   if true == ToClient_IsDevelopment() then
     self._ui.txt_Select_ConsoleUI:SetIgnore(false)
     self._ui.txt_Delete_ConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_CharacterSelect_DeleteCharacter()")
     self._ui.txt_Delete_ConsoleUI:SetIgnore(false)
   end
+  self._ui.txt_Delete_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Delete_ConsoleUI:GetTextSizeX() - self._ui.txt_Delete_ConsoleUI:GetSizeX() - 34)
+  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_DeleteCancel_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
   self:registEventHandler()
   PaGlobal_CheckGamerTag()
 end
@@ -57,8 +60,8 @@ function CharacterSelect:updateData(isChangeSpecialTab)
   self._playerData.maxSlot = self:getCharacterMaxSlotData(isSpecialCharacter)
   self._playerData.haveCount = getCharacterDataCount(isSpecialCharacter)
   self._playerData.useAbleCount = getCharacterSlotLimit(isSpecialCharacter)
-  local familyNameStr = getFamilyName() .. " (" .. self._playerData.haveCount .. "/" .. self._playerData.useAbleCount .. ")"
-  self._ui.txt_FamilyName:SetText(familyNameStr)
+  self._ui.txt_FamilyName:SetText(getFamilyName())
+  self._ui.txt_FamilyNameStr:SetText(" (" .. self._playerData.haveCount .. "/" .. self._playerData.useAbleCount .. ")")
   self._ui.list2_Character:getElementManager():clearKey()
   for characterIdx = 0, self._playerData.useAbleCount - 1 do
     self._ui.list2_Character:getElementManager():pushKey(toInt64(0, characterIdx))
@@ -390,11 +393,6 @@ function PaGlobal_CharacterSelect_SelectCharacter(charIdx)
       self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
       self._ui.txt_Delete_ConsoleUI:SetShow(false)
-    else
-      self._isSelectDeletingChar = false
-      self._ui.txt_Select_ConsoleUI:SetShow(true)
-      self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
-      self._ui.txt_Delete_ConsoleUI:SetShow(true)
     end
     self._prevSelectedCharIdx = self._selectedCharIdx
     self._selectedCharIdx = charIdx
@@ -558,21 +556,27 @@ function InputMO_CharacterSelect_SaveCurrentIdx(index)
   if self._currentOveredCharIdx == self._selectedCharIdx then
     self._isCharacterSelected = true
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_SELECT_BTN_CONNECT"))
+    self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     if true == self._isSelectDeletingChar then
       self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
       self._ui.txt_Delete_ConsoleUI:SetShow(false)
       _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCancelCharacter()")
+      self._ui.txt_DeleteCancel_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_DeleteCancel_ConsoleUI:GetTextSizeX() - self._ui.txt_DeleteCancel_ConsoleUI:GetSizeX() - 34)
+      self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_DeleteCancel_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     else
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
       self._ui.txt_Delete_ConsoleUI:SetShow(true)
       _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCharacter()")
+      self._ui.txt_Delete_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Delete_ConsoleUI:GetTextSizeX() - self._ui.txt_Delete_ConsoleUI:GetSizeX() - 34)
+      self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Delete_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     end
   else
     self._isCharacterSelected = false
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_SELECT"))
     self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
     self._ui.txt_Delete_ConsoleUI:SetShow(false)
+    self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
 end
@@ -581,6 +585,7 @@ function InputMO_CharacterSelect_CharacterCreate()
   self._isCharacterSelected = false
   self._ui.txt_Select_ConsoleUI:SetShow(true)
   self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOBBY_SELECTCLASS_CREATE"))
+  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
   self._ui.txt_Delete_ConsoleUI:SetShow(false)
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
@@ -605,6 +610,7 @@ function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()
     self._isCharacterSelected = true
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_SELECT_BTN_CONNECT"))
   end
+  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
 end
 function InputMLUp_CharacterSelect_ChangeSlotPosition(index, isUp)
   if nil == index and nil == isUp then
@@ -652,7 +658,7 @@ function PaGlobal_CharacterSelect_CancelWaitingLine()
   end
 end
 function PaGlobal_CharacterSelect_ReceiveWaiting()
-  self = CharacterSelect
+  local self = CharacterSelect
   local isSpecialCharacter = self._isSpecialCharacter
   self._playerData.isWaitLine = true
   local characterData = getCharacterDataByIndex(self._selectedCharIdx, isSpecialCharacter)
@@ -671,7 +677,7 @@ function PaGlobal_CharacterSelect_ReceiveWaiting()
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobal_CharacterSelect_SetWaitingUserCount()
-  self = CharacterSelect
+  local self = CharacterSelect
   if false == self._playerData.isWaitLine then
     return
   end
@@ -690,7 +696,7 @@ function PaGlobal_CharacterSelect_SetWaitingUserCount()
   end
 end
 function PaGlobal_CharacterSelect_MakeWaitingUserMsg(receiveTicketNoMyRegion)
-  self = CharacterSelect
+  local self = CharacterSelect
   local isSpecialCharacter = self._isSpecialCharacter
   local ticketCountByRegion = receiveTicketNoMyRegion
   local waitingLineCancelCount = getCancelCount()
@@ -746,7 +752,7 @@ function PaGlobal_CharacterSelect_MakeWaitingUserMsg(receiveTicketNoMyRegion)
   return strWaitingMsg
 end
 function PaGlobal_CharacterSelect_ClickWaitingCancel()
-  self = CharacterSelect
+  local self = CharacterSelect
   allClearMessageData()
   if true == self._playerData.isWaitLine then
     sendEnterWaitingCancel()
@@ -765,7 +771,7 @@ function PaGlobal_CharacterSelect_Resize()
   self._ui.txt_Select_ConsoleUI:SetPosY(self._ui.txt_Select_ConsoleUI:GetPosY() * resizedRatioY)
   self._ui.txt_Delete_ConsoleUI:SetPosY(self._ui.txt_Delete_ConsoleUI:GetPosY() * resizedRatioY)
   self._ui.txt_DeleteCancel_ConsoleUI:SetPosY(self._ui.txt_DeleteCancel_ConsoleUI:GetPosY() * resizedRatioY)
-  self._ui.txt_Back_ConsoleUI:SetPosY(self._ui.txt_Back_ConsoleUI:GetPosY() * resizedRatioY)
+  self._ui.txt_Exit_ConsoleUI:SetPosY(self._ui.txt_Exit_ConsoleUI:GetPosY() * resizedRatioY)
   self._ui.scroll_Vertical:SetControlPos(0)
 end
 function PaGlobal_CharacterSelect_Init()

@@ -2,13 +2,15 @@ local _panel = Panel_Widget_FloatingTooltip_Renew
 local COMPONENT_TYPE = {
   HEADER = 1,
   WEIGHT_PRICE = 2,
-  KEY_GUIDE = 3
+  ENDURANCE = 3,
+  KEY_GUIDE = 4
 }
 local FloatingTooltip = {
   _ui = {
     stc_components = {
       [COMPONENT_TYPE.HEADER] = UI.getChildControl(_panel, "HEADER"),
       [COMPONENT_TYPE.WEIGHT_PRICE] = UI.getChildControl(_panel, "WEIGHT_PRICE"),
+      [COMPONENT_TYPE.ENDURANCE] = UI.getChildControl(_panel, "ENDURANCE"),
       [COMPONENT_TYPE.KEY_GUIDE] = UI.getChildControl(_panel, "StaticText_KeyGuideDetail")
     }
   },
@@ -21,11 +23,13 @@ local _targetData = {
   [Defines.TooltipTargetType.Item] = {
     COMPONENT_TYPE.HEADER,
     COMPONENT_TYPE.WEIGHT_PRICE,
+    COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.KEY_GUIDE
   },
   [Defines.TooltipTargetType.ItemWithoutCompare] = {
     COMPONENT_TYPE.HEADER,
     COMPONENT_TYPE.WEIGHT_PRICE,
+    COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.KEY_GUIDE
   }
 }
@@ -37,21 +41,28 @@ function FloatingTooltip:initialize()
   _componentOption = {
     [COMPONENT_TYPE.HEADER] = {fillDataFunc = FloatingTooltip_updateHEADER},
     [COMPONENT_TYPE.WEIGHT_PRICE] = {fillDataFunc = FloatingTooltip_updateWEIGHT_PRICE},
+    [COMPONENT_TYPE.ENDURANCE] = {fillDataFunc = FloatingTooltip_updateENDURANCE},
     [COMPONENT_TYPE.KEY_GUIDE] = {fillDataFunc = FloatingTooltip_updateKEY_GUIDE}
   }
   registerEvent("FromClient_PadSnapChangeTarget", "FromClient_FloatingTooltip_PadSnapChangeTarget")
 end
-function PaGlobalFunc_FloatingTooltip_Open(itemSSW, tooltipTargetType, targetControl)
-  FloatingTooltip:open(itemSSW, tooltipTargetType, targetControl)
+function PaGlobalFunc_FloatingTooltip_Open(tooltipDataType, data, tooltipTargetType, targetControl)
+  FloatingTooltip:open(tooltipDataType, data, tooltipTargetType, targetControl)
 end
-function FloatingTooltip:open(itemSSW, tooltipTargetType, targetControl)
-  if nil == itemSSW or nil == tooltipTargetType then
+function FloatingTooltip:open(tooltipDataType, data, tooltipTargetType, targetControl)
+  if nil == tooltipDataType or nil == data or nil == tooltipTargetType then
     self:close()
     return
   end
+  local itemWrapper
+  local itemSSW = data
+  if Defines.TooltipDataType.ItemWrapper == tooltipDataType then
+    itemWrapper = data
+    itemSSW = itemWrapper:getStaticStatus()
+  end
   _panel:SetShow(true)
   _currentYPos = 15
-  self:compose(itemSSW, tooltipTargetType)
+  self:compose(itemWrapper, itemSSW, tooltipTargetType)
   local defaultXPos = targetControl:GetParentPosX() + targetControl:GetSizeX() - _panel:GetSizeX()
   _panel:SetPosX(defaultXPos)
   if getScreenSizeY() < targetControl:GetParentPosY() + targetControl:GetSizeY() + _panel:GetSizeY() + self._defaultXGap then
@@ -61,13 +72,17 @@ function FloatingTooltip:open(itemSSW, tooltipTargetType, targetControl)
     _panel:SetPosY(targetControl:GetParentPosY() + targetControl:GetSizeY() + self._defaultXGap)
   end
 end
-function FloatingTooltip:compose(itemSSW, tooltipTargetType)
+function FloatingTooltip:compose(itemWrapper, itemSSW, tooltipTargetType)
+  for ii = 1, #self._ui.stc_components do
+    self._ui.stc_components[ii]:SetShow(false)
+  end
   for ii = 1, #_targetData[tooltipTargetType] do
     if nil ~= _targetData[tooltipTargetType][ii] then
       local componentIndex = _targetData[tooltipTargetType][ii]
       if nil ~= _componentOption[componentIndex] and nil ~= _componentOption[componentIndex].fillDataFunc then
         local updateFunc = _componentOption[componentIndex].fillDataFunc
-        if nil ~= updateFunc and "function" == type(updateFunc) and true == updateFunc(itemSSW) then
+        if nil ~= updateFunc and "function" == type(updateFunc) and true == updateFunc(itemWrapper, itemSSW) then
+          self._ui.stc_components[ii]:SetShow(true)
           self._ui.stc_components[componentIndex]:SetPosY(_currentYPos)
           _currentYPos = _currentYPos + self._ui.stc_components[componentIndex]:GetSizeY() + 5
         end
@@ -90,7 +105,7 @@ local colorTable = {
   [4] = Defines.Color.C_FFFF6244
 }
 local self = FloatingTooltip
-function FloatingTooltip_updateHEADER(itemSSW)
+function FloatingTooltip_updateHEADER(itemWrapper, itemSSW)
   local txt_name = UI.getChildControl(self._ui.stc_components[COMPONENT_TYPE.HEADER], "StaticText_ItemName")
   txt_name:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   local nameColorGrade = itemSSW:getGradeType()
@@ -103,7 +118,7 @@ function FloatingTooltip_updateHEADER(itemSSW)
   self._ui.stc_components[COMPONENT_TYPE.HEADER]:SetSize(_defaultWidth, txt_name:GetTextSizeY())
   return true
 end
-function FloatingTooltip_updateWEIGHT_PRICE(itemSSW)
+function FloatingTooltip_updateWEIGHT_PRICE(itemWrapper, itemSSW)
   local enchantLevel = itemSSW:get()._key:getEnchantLevel()
   local isTradeItem = itemSSW:isTradeAble()
   local s64_originalPrice = itemSSW:get()._originalPrice_s64
@@ -135,6 +150,48 @@ function FloatingTooltip_updateWEIGHT_PRICE(itemSSW)
   return true
 end
 function FloatingTooltip_updateKEY_GUIDE()
+  return true
+end
+function FloatingTooltip_updateENDURANCE(itemWrapper, itemSSW)
+  if nil == itemWrapper then
+    return false
+  end
+  local progress_endurance = UI.getChildControl(self._ui.stc_components[COMPONENT_TYPE.ENDURANCE], "Progress2_Endurance")
+  local progress_dynamicEndurance = UI.getChildControl(self._ui.stc_components[COMPONENT_TYPE.ENDURANCE], "Progress2_Dynamic")
+  local maxEndurance = 32767
+  local dynamicMaxEndurance = 32767
+  if false == itemSSW:get():isUnbreakable() then
+    maxEndurance = itemSSW:get():getMaxEndurance()
+  end
+  local currentEndurance = maxEndurance
+  if nil ~= itemWrapper then
+    dynamicMaxEndurance = itemWrapper:get():getMaxEndurance()
+    currentEndurance = itemWrapper:get():getEndurance()
+  end
+  local calcEndurance = currentEndurance / maxEndurance
+  local calcDynamicEndurance = dynamicMaxEndurance / maxEndurance
+  progress_endurance:SetCurrentProgressRate(calcEndurance * 100)
+  progress_endurance:SetProgressRate(calcEndurance * 100)
+  progress_endurance:SetAniSpeed(0)
+  progress_dynamicEndurance:SetCurrentProgressRate(calcDynamicEndurance * 100)
+  progress_dynamicEndurance:SetProgressRate(calcDynamicEndurance * 100)
+  progress_dynamicEndurance:SetAniSpeed(0)
+  if 32767 ~= dynamicMaxEndurance then
+  elseif 32767 ~= maxEndurance then
+  else
+    return false
+  end
+  local check_fishingRod = function(itemKey)
+    if 17591 == itemKey or 17592 == itemKey or 17596 == itemKey or 17612 == itemKey or 17613 == itemKey or 17669 == itemKey then
+      return true
+    else
+      return false
+    end
+  end
+  local isCash = itemSSW:get():isCash()
+  if true == isCash and false == check_fishingRod(itemSSW:get()._key:getItemKey()) then
+    return false
+  end
   return true
 end
 function FromClient_FloatingTooltip_PadSnapChangeTarget()

@@ -97,8 +97,8 @@ local function MiniGame_Manual_Timing_1(actorKeyRaw, isSelf)
     _ui.stc_Taming_Info:SetShow(true)
     _ui.txt_HorseInfo:SetShow(true)
     if _ContentsGroup_isConsolePadControl then
-      _ui.txt_Command_Info:SetShow(true)
-      _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
+      _ui.txt_Command_Info:SetShow(false)
+      _ui.txt_HorseInfo:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_1"))
     else
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TIMING_1"))
@@ -118,6 +118,7 @@ local function MiniGame_Manual_Timing_2(actorKeyRaw, isSelf)
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Command_Info:SetShow(false)
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_2"))
+      _ui.txt_HorseInfo:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     else
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TIMING_2"))
     end
@@ -129,7 +130,6 @@ local function MiniGame_Manual_Timing_3(actorKeyRaw, isSelf)
     _ui.txt_Command_Info:SetShow(true)
     _ui.txt_Command_Info:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_PRESS_B"))
     _ui.stc_Taming_Info:SetShow(false)
-    UIAni.AlphaAnimation(0.5, _ui.txt_Command_Info, 0.5, 0.75)
   else
   end
 end

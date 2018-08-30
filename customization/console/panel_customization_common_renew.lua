@@ -57,7 +57,7 @@ function PaGlobalFunc_CustomIzationCommon_GetSliderValue(SliderControl, valueMin
   if range < 0 then
     range = 0
   end
-  return math.floor(ratio * range + valueMin)
+  return math.floor(ratio * range + valueMin + 0.5)
 end
 function PaGlobalFunc_CustomIzationCommon_PushClearGroupCustomizedBonInfoPostFunction(functor)
   local self = Customization_CommonInfo

@@ -72,7 +72,7 @@ function PAGlobal_AutoTraining_Alarm_OnAutoTrainingEnd()
 end
 function PAGlobal_AutoTraining_Alarm_OnMessageConfirm()
 end
-registerEvent("FromClient_luaLoadComplete", "luaLoadComplete")
-function luaLoadComplete()
+registerEvent("FromClient_luaLoadComplete", "FromClient_AutoTraining_Alarm_luaLoadComplete")
+function FromClient_AutoTraining_Alarm_luaLoadComplete()
   AutoTraining_Alarm:initialize()
 end

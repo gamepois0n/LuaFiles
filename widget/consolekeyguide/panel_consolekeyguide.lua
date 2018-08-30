@@ -1,5 +1,6 @@
 Panel_ConsoleKeyGuide:SetShow(ToClient_isXBox())
 local _panel = Panel_ConsoleKeyGuide
+local _actionType = CppEnums.ActionInputType
 local ConsoleKeyGuide = {
   _ui = {
     _keyGuide = {}
@@ -19,8 +20,14 @@ local ConsoleKeyGuide = {
     fishingStartHook = 11,
     fishingHookMini1 = 12,
     fishingHookMini2 = 13,
-    rideCarriage = 14
+    rideCarriage = 14,
+    screenshotGuide = 15,
+    swimmingMode = 16,
+    swimWaitMode = 17,
+    swimRestMode = 18,
+    undefined = 999
   },
+  _actionStringTable = {},
   _isChange = false,
   _beforeState = -1,
   _glowFontColor = 4278190080,
@@ -175,11 +182,18 @@ local _consoleUIIconUV = {
   }
 }
 function ConsoleKeyGuide:init()
+  self:initActionString()
   self._ui.guideBg = UI.getChildControl(_panel, "Static_KeyGuideBg")
   self._ui.consoleUITemplate = UI.getChildControl(self._ui.guideBg, "Static_ConsoleKey")
   self._ui.keyStringTemplate = UI.getChildControl(self._ui.guideBg, "StaticText_KeyDesc")
+  self:updateGuide()
+  self:hideAllGuide()
+  self:registEvent()
+end
+function ConsoleKeyGuide:updateGuide()
   self._ui._keyGuide[self._guideState.battle] = self:makeNewGuide(self._guideState.battle)
   self._ui._keyGuide[self._guideState.common] = self:makeNewGuide(self._guideState.common)
+  self._ui._keyGuide[self._guideState.screenshotGuide] = self:makeNewGuide(self._guideState.screenshotGuide)
   self._ui._keyGuide[self._guideState.cameraMode] = self:makeNewGuide(self._guideState.cameraMode)
   self._ui._keyGuide[self._guideState.crouch] = self:makeNewGuide(self._guideState.crouch)
   self._ui._keyGuide[self._guideState.creep] = self:makeNewGuide(self._guideState.creep)
@@ -193,8 +207,21 @@ function ConsoleKeyGuide:init()
   self._ui._keyGuide[self._guideState.fishingHookMini1] = self:makeNewGuide(self._guideState.fishingHookMini1)
   self._ui._keyGuide[self._guideState.fishingHookMini2] = self:makeNewGuide(self._guideState.fishingHookMini2)
   self._ui._keyGuide[self._guideState.rideCarriage] = self:makeNewGuide(self._guideState.rideCarriage)
-  self:hideAllGuide()
-  self:registEvent()
+  self._ui._keyGuide[self._guideState.swimmingMode] = self:makeNewGuide(self._guideState.swimmingMode)
+  self._ui._keyGuide[self._guideState.swimWaitMode] = self:makeNewGuide(self._guideState.swimWaitMode)
+  self._ui._keyGuide[self._guideState.swimRestMode] = self:makeNewGuide(self._guideState.swimRestMode)
+  self._ui._keyGuide[self._guideState.undefined] = self:makeNewGuide(self._guideState.undefined)
+end
+function ConsoleKeyGuide:initActionString()
+  self._actionStringTable[_actionType.ActionInputType_Attack1] = "Main attack"
+  self._actionStringTable[_actionType.ActionInputType_Attack2] = "Secondary attack"
+  self._actionStringTable[_actionType.ActionInputType_WeaponInOut] = "Put Away Weapon"
+  self._actionStringTable[_actionType.ActionInputType_Jump] = "Jump"
+  self._actionStringTable[_actionType.ActionInputType_Dash] = "Sprint"
+  self._actionStringTable[_actionType.ActionInputType_Interaction] = "Interact"
+  self._actionStringTable[_actionType.ActionInputType_Kick] = "Kick(Combat Action 1)"
+  self._actionStringTable[_actionType.ActionInputType_CrouchOrSkill] = "Block(Combat Action 2)"
+  self._actionStringTable[_actionType.ActionInputType_GrabOrGuard] = "Grapple(Combat Action 3)"
 end
 function ConsoleKeyGuide:registEvent()
   registerEvent("onScreenResize", "PaGlobalFunc_ConsoleKeyGuide_SetPos")
@@ -202,13 +229,15 @@ function ConsoleKeyGuide:registEvent()
   registerEvent("EventSelfPlayerRideOff", "PaGlobalFunc_ConsoleKeyGuide_SetRideState()")
   registerEvent("EventQuestSearch", "PaGlobalFunc_ConsoleKeyGuide_SetSearchState()")
 end
-function ConsoleKeyGuide:SetKeyString(inputType)
-end
 function ConsoleKeyGuide:setGlowFont(control)
   control:useGlowFont(true, "SubTitleFont_14_Glow", self._glowFontColor)
 end
 function ConsoleKeyGuide:setGuide(currentState)
   if currentState == self._beforeState then
+  end
+  if self._guideState.undefined == currentState then
+    ConsoleKeyGuide:hideAllGuide()
+    return
   end
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
     ConsoleKeyGuide:hideAllGuide()
@@ -216,12 +245,16 @@ function ConsoleKeyGuide:setGuide(currentState)
   end
   self._beforeState = currentState
   for index = 0, self._maxConsoleGuideType - 1 do
-    self._ui._keyGuide[index].guideBg:SetShow(index == currentState)
+    if nil ~= self._ui._keyGuide[index] then
+      self._ui._keyGuide[index].guideBg:SetShow(index == currentState)
+    end
   end
 end
 function ConsoleKeyGuide:hideAllGuide()
   for index = 0, self._maxConsoleGuideType - 1 do
-    self._ui._keyGuide[index].guideBg:SetShow(false)
+    if nil ~= self._ui._keyGuide[index] then
+      self._ui._keyGuide[index].guideBg:SetShow(false)
+    end
   end
 end
 function ConsoleKeyGuide:makeNewGuide(state_)
@@ -235,55 +268,52 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRT
-    }, "Secondary attack")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonLT
-    }, "Block(Combat Action 2)")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRB
-    }, "Main attack")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonLB
-    }, "Kick(Combat Action 1)")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonY
-    }, "Interact")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonX
-    }, "Grapple(Combat Action 3)")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "Jump")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonA
-    }, "Sprint")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRSC
-    }, "Put Away Weapon")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Attack2, "Secondary attack")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_GrabOrGuard, "Grapple(Combat Action 3)")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Attack1, "Main attack")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Kick, "Kick(Combat Action 1)")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Interaction, "Interact")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_CrouchOrSkill, "Block(Combat Action 2)")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Jump")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "Put Away Weapon")
   elseif state_ == self._guideState.common then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonA
-    }, "Sprint")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRSC
-    }, "(hold) Adjust Camera")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRSC
-    }, "Draw Weapon")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Jump")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "Draw Weapon")
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLSC
     }, "Auto run")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_CrouchOrSkill, "Crouch")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+  elseif state_ == self._guideState.screenshotGuide then
     self:addGuide(newGuide, {
+      _consoleUIIconName.buttonB
+    }, "Back")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonY
+    }, "Take a photo")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRB
+    }, "Increase area")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRT
+    }, "Decrease area")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSM
+    }, "Move")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM
+    }, "Camera")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSM,
+      _consoleUIIconName.IconPlus,
       _consoleUIIconName.buttonLT
-    }, "Crouch")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonLB
-    }, "(hold) PC Interaction")
+    }, "Zoom")
   elseif state_ == self._guideState.cameraMode then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonDpad
@@ -295,47 +325,31 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonA
-    }, "Roll")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRSC
-    }, "Draw Weapon")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Roll")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "Draw Weapon")
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLSC
     }, "Auto run")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "Creep")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonLT
-    }, "Stand up")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Creep")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_CrouchOrSkill, "Stand up")
   elseif state_ == self._guideState.creep then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "Crouch")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Crouch")
   elseif state_ == self._guideState.rideHorse then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "(On sprint) Jump")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonA
-    }, "Sprint")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "(On sprint) Jump")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonRSC
     }, "(hold) Adjust Camera")
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLSC
     }, "Auto run")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonY
-    }, "Ride off")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Interaction, "Ride off")
   elseif state_ == self._guideState.rideShip then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
@@ -393,45 +407,57 @@ function ConsoleKeyGuide:makeNewGuide(state_)
       _consoleUIIconName.buttonRSM
     }, "Change Viewpoint")
   elseif state_ == self._guideState.fishingIdleMode then
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "Start fishing")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "(hold)Start fishing")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Start fishing")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "(hold)Start fishing")
   elseif state_ == self._guideState.fishingWaitHookMode then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonRT
     }, "Cancel")
   elseif state_ == self._guideState.fishingStartHook then
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonB
-    }, "Hook")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Hook")
   elseif state_ == self._guideState.fishingHookMini1 then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonA
     }, "Hook")
-    self:addGuide(newGuide, {
-      _consoleUIIconName.buttonRT
-    }, "Cancel")
   elseif state_ == self._guideState.fishingHookMini2 then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonDpad
     }, "Input")
+  elseif state_ == self._guideState.rideCarriage then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonStart
+    }, "Menu")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonRSC
+    }, "(hold) Adjust Camera")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLSC
+    }, "Auto run")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonY
+    }, "Ride off")
+  elseif state_ == self._guideState.swimmingMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonStart
+    }, "Menu")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Submerge")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+  elseif state_ == self._guideState.swimWaitMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonStart
+    }, "Menu")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLB
+    }, "Rest Mode")
   else
-    if state_ == self._guideState.rideCarriage then
+    if state_ == self._guideState.swimRestMode then
       self:addGuide(newGuide, {
-        _consoleUIIconName.buttonStart
-      }, "Menu")
-      self:addGuide(newGuide, {
-        _consoleUIIconName.buttonRSC
-      }, "(hold) Adjust Camera")
-      self:addGuide(newGuide, {
-        _consoleUIIconName.buttonLSC
-      }, "Auto run")
-      self:addGuide(newGuide, {
-        _consoleUIIconName.buttonY
-      }, "Ride off")
+        _consoleUIIconName.buttonLB
+      }, "Swim Mode")
     else
     end
   end
@@ -468,6 +494,14 @@ function ConsoleKeyGuide:addGuide(newGuide, consoleUI_, keyString_)
   newGuide.keyString[newGuide.guideIdx] = tableString
   newGuide.guideIdx = newGuide.guideIdx + 1
 end
+function ConsoleKeyGuide:addCustomizableGuide(newGuide, actionInputType, actionString)
+  local padKeyName = keyCustom_GetString_ActionPad(actionInputType)
+  if "" == padKeyName then
+    return
+  end
+  local iconName = PaGlobalFunc_ConsoleKeyGuide_ConvertKeyToIconIndex(padKeyName)
+  self:addGuide(newGuide, {iconName}, actionString, true)
+end
 local crouchActionString = {
   "HUNKERDOWN_WAIT",
   "HUNKERDOWN_START",
@@ -499,7 +533,7 @@ local creepActionString = {
   "HUNKERDOWN_CREEP_BACK_Speed"
 }
 function ConsoleKeyGuide:getState()
-  if ToClient_isCameraControlModeForConsole() then
+  if ToClient_isCameraControlModeForConsole() and true ~= Panel_Widget_ScreenShotFrame:GetShow() then
     return self._guideState.cameraMode
   end
   if true == isObserverMode() then
@@ -512,10 +546,11 @@ function ConsoleKeyGuide:getState()
     if PaGlobalFunc_SearchMode_IsSearchMode() then
       return self._guideState.searchMode
     end
+    return self._guideState._undefined
   end
   if getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
     if nil ~= self._specifyGuideState then
-      if self._specifyGuideState == self._guideState.rideHorse or self._specifyGuideState == self._guideState.rideShip or self._specifyGuideState == self._guideState.rideCarriage or self._specifyGuideState == self._guideState.fishingIdleMode or self._specifyGuideState == self._guideState.fishingWaitHookMode or self._specifyGuideState == self._guideState.fishingStartHook or self._specifyGuideState == self._guideState.fishingHookMini1 or self._specifyGuideState == self._guideState.fishingHookMini2 then
+      if self._specifyGuideState ~= self._guideState.crouch and self._specifyGuideState ~= self._guideState.creep then
         return self._specifyGuideState
       end
       local actionIdx = 1
@@ -536,12 +571,24 @@ function ConsoleKeyGuide:getState()
         return self._specifyGuideState
       end
     end
+    if true == IsSelfPlayerSwimmingAction() then
+      if true == ToClient_SelfPlayerCheckAction("Swimming_Recovery") then
+        return self._guideState.swimRestMode
+      end
+      if true == IsSelfPlayerSwimmingWaitAction() then
+        return self._guideState.swimWaitMode
+      end
+      return self._guideState.swimmingMode
+    end
     if ToClient_isWeaponOutForConsole() then
       return self._guideState.battle
     else
       return self._guideState.common
     end
+  elseif Panel_Widget_ScreenShotFrame:GetShow() then
+    return self._guideState.screenshotGuide
   end
+  return self._guideState.undefined
 end
 function FGlobal_KeyGuideTypeCheck(deltaTime)
   if false == _ContentsGroup_RenewUI then
@@ -563,6 +610,10 @@ function FGlobal_KeyGuideTypeCheck(deltaTime)
     ConsoleKeyGuide:hideAllGuide()
     return
   end
+  if Defines.UIMode.eUIMode_NpcDialog_Dummy == GetUIMode() then
+    ConsoleKeyGuide:hideAllGuide()
+    return
+  end
   local self = ConsoleKeyGuide
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
@@ -581,6 +632,40 @@ function PaGlobalFunc_ConsoleKeyGuide_Init()
     return
   end
   self:init()
+end
+function PaGlobalFunc_ConsoleKeyGuide_ConvertKeyToIconIndex(keyName)
+  local iconIdx
+  if "LeftShoulder" == keyName then
+    iconIdx = _consoleUIIconName.buttonLB
+  elseif "RightShoulder" == keyName then
+    iconIdx = _consoleUIIconName.buttonRB
+  elseif "A" == keyName then
+    iconIdx = _consoleUIIconName.buttonA
+  elseif "B" == keyName then
+    iconIdx = _consoleUIIconName.buttonB
+  elseif "X" == keyName then
+    iconIdx = _consoleUIIconName.buttonX
+  elseif "Y" == keyName then
+    iconIdx = _consoleUIIconName.buttonY
+  elseif "LTrigger" == keyName then
+    iconIdx = _consoleUIIconName.buttonLT
+  elseif "RTrigger" == keyName then
+    iconIdx = _consoleUIIconName.buttonRT
+  elseif "LeftThumb" == keyName then
+    iconIdx = _consoleUIIconName.buttonLSC
+  elseif "RightThumb" == keyName then
+    iconIdx = _consoleUIIconName.buttonRSC
+  elseif "Start" == keyName then
+    iconIdx = _consoleUIIconName.buttonStart
+  end
+  return iconIdx
+end
+function PaGlobalFunc_ConsoleKeyGuide_RefreshGuide()
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
 end
 function PaGlobalFunc_ConsoleKeyGuide_SetState(state_)
   local self = ConsoleKeyGuide
@@ -610,7 +695,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
       self._specifyGuideState = self._guideState.rideHorse
     elseif CppEnums.VehicleType.Type_Carriage == vehicleType or CppEnums.VehicleType.Type_CowCarriage == vehicleType then
       self._specifyGuideState = self._guideState.rideCarriage
-    elseif CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType or CppEnums.VehicleType.Type_FishingBoat == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType then
+    elseif CppEnums.VehicleType.Type_Boat == vehicleType or CppEnums.VehicleType.Type_Raft == vehicleType or CppEnums.VehicleType.Type_FishingBoat == vehicleType or CppEnums.VehicleType.Type_SailingBoat == vehicleType or CppEnums.VehicleType.Type_PersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonTradeShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalTradeShip == vehicleType or CppEnums.VehicleType.Type_CashPersonalBattleShip == vehicleType or CppEnums.VehicleType.Type_PersonalBoat == vehicleType then
       self._specifyGuideState = self._guideState.rideShip
     else
       self._specifyGuideState = nil

@@ -17,6 +17,8 @@ local Panel_Window_WharfList_info = {
     staticText_Name_Template = nil,
     staticText_Location_Template = nil,
     staticText_State_Template = nil,
+    static_StateBg = nil,
+    static_StateIcon = nil,
     radioButton_Slot_List = {},
     wharf_List_HorizontalScroll = nil,
     static_CountBg = nil,
@@ -59,6 +61,21 @@ local Panel_Window_WharfList_info = {
     slotCount = 7,
     maxSlotCount = 8,
     nowSlotCount = 7
+  },
+  _texture = {
+    stateIcon = "Renewal/UI_Icon/Console_Icon_03.dds",
+    isSeized = {
+      x1 = 282,
+      y1 = 103,
+      x2 = 332,
+      y2 = 153
+    },
+    recoveryWharf = {
+      x1 = 180,
+      y1 = 103,
+      x2 = 230,
+      y2 = 153
+    }
   },
   _slots = {}
 }
@@ -114,6 +131,8 @@ function Panel_Window_WharfList_info:childControl()
   self._ui.staticText_Name_Template = UI.getChildControl(self._ui.radioButton_Slot, "StaticText_Name_Template")
   self._ui.staticText_Location_Template = UI.getChildControl(self._ui.radioButton_Slot, "StaticText_Location_Template")
   self._ui.staticText_State_Template = UI.getChildControl(self._ui.radioButton_Slot, "StaticText_State_Template")
+  self._ui.static_StateBg = UI.getChildControl(self._ui.radioButton_Slot, "Static_StateBg")
+  self._ui.static_StateIcon = UI.getChildControl(self._ui.radioButton_Slot, "Static_StateIcon")
   self._ui.wharf_List_HorizontalScroll = UI.getChildControl(self._ui.static_Wharf_List, "Wharf_List_HorizontalScroll")
   self._ui.wharf_List_HorizontalScroll:SetEnable(false)
   self._pos.firstPosX = self._ui.radioButton_Slot:GetPosX()
@@ -139,7 +158,9 @@ function Panel_Window_WharfList_info:createSlot()
       static_Image = nil,
       staticText_Name = nil,
       staticText_Location = nil,
-      staticText_State = nil
+      staticText_State = nil,
+      static_StateBg = nil,
+      static_StateIcon = nil
     }
     function slot:setPos(index)
       local stableList = Panel_Window_WharfList_info
@@ -173,16 +194,32 @@ function Panel_Window_WharfList_info:createSlot()
         self.radioButton:SetMonoTone(true)
         self.slotEnable = false
       end
+      local wharfInfo = Panel_Window_WharfList_info
+      local showState = false
+      local x1, y1, x2, y2
       if nil ~= getState then
         self.staticText_State:SetShow(true)
         self.staticText_State:SetText("")
+        self.static_StateBg:SetShow(false)
+        self.static_StateIcon:SetShow(false)
       end
       if servantInfo:isSeized() then
         self.staticText_State:SetShow(true)
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_LIST_ATTACHMENT"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, wharfInfo._texture.isSeized.x1, wharfInfo._texture.isSeized.y1, wharfInfo._texture.isSeized.x2, wharfInfo._texture.isSeized.y2)
       elseif CppEnums.ServantStateType.Type_Coma == getState then
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REPAIR"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, wharfInfo._texture.recoveryWharf.x1, wharfInfo._texture.recoveryWharf.y1, wharfInfo._texture.recoveryWharf.x2, wharfInfo._texture.recoveryWharf.y2)
       elseif servantInfo:isChangingRegion() then
+      end
+      if true == showState then
+        self.staticText_State:SetShow(false)
+        self.static_StateBg:SetShow(true)
+        self.static_StateIcon:SetShow(true)
+        self.static_StateIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+        self.static_StateIcon:setRenderTexture(self.static_StateIcon:getBaseTexture())
       end
     end
     function slot:setShow(bShow)
@@ -219,6 +256,10 @@ function Panel_Window_WharfList_info:createSlot()
     CopyBaseProperty(self._ui.staticText_Location_Template, slot.staticText_Location)
     slot.staticText_State = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, slot.radioButton, "StaticText_State_Template_" .. index)
     CopyBaseProperty(self._ui.staticText_State_Template, slot.staticText_State)
+    slot.static_StateBg = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, slot.radioButton, "Static_StateBg_" .. index)
+    CopyBaseProperty(self._ui.static_StateBg, slot.static_StateBg)
+    slot.static_StateIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, slot.radioButton, "Static_StateIcon_" .. index)
+    CopyBaseProperty(self._ui.static_StateIcon, slot.static_StateIcon)
     slot.slotNo = index
     slot:setPos(index)
     self._slots[index] = slot
@@ -257,10 +298,12 @@ function Panel_Window_WharfList_info:setUnsealButton()
   self._ui.staticText_Unseal_Location:SetShow(false)
   self._ui.staticText_Unseal_NoUnseal:SetShow(true)
   self._ui.staticText_Unseal_NoUnseal:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
+  self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_On", "PaGlobalFunc_WharfList_ShowButtonA(false)")
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = temporaryWrapper:getUnsealVehicle(stable_getServantType())
   if nil ~= servantInfo then
     self._value.isUnseal = true
+    self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_On", "PaGlobalFunc_WharfList_ShowButtonA(true)")
     self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_LUp", "PaGlobalFunc_WharfList_ClickUnsealed()")
     local servantRegionName = servantInfo:getRegionName()
     local vehicleType = servantInfo:getVehicleType()
@@ -277,9 +320,11 @@ function Panel_Window_WharfList_info:setRegistButton()
     self._value.buttonPosCount = self._value.buttonPosCount + 1
     self._ui.button_WharfEmblem_Regist:SetShow(true)
     self._ui.button_WharfEmblem_Regist:addInputEvent("Mouse_LUp", "PaGlobalFunc_WharfList_ClickRegist()")
+    self._ui.button_WharfEmblem_Regist:addInputEvent("Mouse_On", "PaGlobalFunc_WharfList_ShowButtonA(true)")
   else
     self._ui.button_WharfEmblem_Regist:SetShow(false)
     self._ui.button_WharfEmblem_Regist:addInputEvent("Mouse_LUp", "")
+    self._ui.button_WharfEmblem_Regist:addInputEvent("Mouse_On", "")
   end
 end
 function Panel_Window_WharfList_info:setWharfListSizeAndPos()
@@ -334,6 +379,7 @@ function Panel_Window_WharfList_info:setWharfListButton()
       end
       slot:setShow(true)
       slot:setServant(slot.slotNo)
+      slot.radioButton:addInputEvent("Mouse_On", "PaGlobalFunc_WharfList_ShowButtonA(" .. tostring(slot.slotEnable) .. ")")
       slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_WharfList_ClickList(" .. slot.slotNo .. "," .. index .. ")")
     end
   end
@@ -345,14 +391,12 @@ function Panel_Window_WharfList_info:setRegion()
   self._ui.staticText_Region:SetText(regionName)
 end
 function Panel_Window_WharfList_info:setKeyGuidePos()
-  local parantSizeX = self._ui.static_KeyGuideBg:GetSizeX()
-  local space = self._pos.keyGuideButtonSize + self._pos.keyGuideButtonSpace
-  local textLength1 = self._ui.staticText_Exit_ConsoleUI:GetTextSizeX()
-  local textLength2 = self._ui.staticText_Confirm_ConsoleUI:GetTextSizeX()
-  local textLength3 = self._ui.staticText_Move_ConsoleUI:GetTextSizeX()
-  self._ui.staticText_Move_ConsoleUI:SetPosX(parantSizeX - (space * 3 + textLength1 + textLength2 + textLength3))
-  self._ui.staticText_Confirm_ConsoleUI:SetPosX(parantSizeX - (space * 2 + textLength1 + textLength2))
-  self._ui.staticText_Exit_ConsoleUI:SetPosX(parantSizeX - (space + textLength1))
+  local keyGuides = {
+    self._ui.staticText_Move_ConsoleUI,
+    self._ui.staticText_Confirm_ConsoleUI,
+    self._ui.staticText_Exit_ConsoleUI
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.static_KeyGuideBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_WharfList_info:readyToShow()
   self:setKeyGuidePos()
@@ -536,6 +580,14 @@ end
 function PaGlobalFunc_WharfList_UnClickList()
   local self = Panel_Window_WharfList_info
   self:clearCheck()
+end
+function PaGlobalFunc_WharfList_ShowButtonA(enable)
+  local self = Panel_Window_WharfList_info
+  if nil == enable then
+    enable = false
+  end
+  self._ui.staticText_Confirm_ConsoleUI:SetShow(enable)
+  self:setKeyGuidePos()
 end
 function PaGlobalFunc_WharfList_ClickList(slotNo, index)
   local self = Panel_Window_WharfList_info

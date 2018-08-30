@@ -13,9 +13,10 @@ local Panel_Window_StableList_info = {
     staticText_Unseal_NoUnseal = nil,
     static_Unseal_SwiftIcon = nil,
     button_HorseEmblem_Regist = nil,
+    static_HorseRegist_Icon = nil,
     staticText_HorseRegist_Icon = nil,
     button_WildHorse_Regist = nil,
-    staticText_WildHorse_Icon = nil,
+    staticText_WildRegist_Icon = nil,
     static_Horse_List = nil,
     radioButton_Slot = nil,
     static_Image_Template = nil,
@@ -25,6 +26,8 @@ local Panel_Window_StableList_info = {
     staticText_Location_Template = nil,
     staticText_State_Template = nil,
     static_SwiftIcon_Template = nil,
+    static_StateBg = nil,
+    static_StateIcon = nil,
     radioButton_Slot_List = {},
     horse_List_HorizontalScroll = nil,
     static_CountBg = nil,
@@ -97,6 +100,79 @@ local Panel_Window_StableList_info = {
       y1 = 1,
       x2 = 81,
       y2 = 20
+    },
+    stateIcon = "Renewal/UI_Icon/Console_Icon_03.dds",
+    registMarket = {
+      x1 = 129,
+      y1 = 1,
+      x2 = 179,
+      y2 = 51
+    },
+    registMating = {
+      x1 = 180,
+      y1 = 1,
+      x2 = 230,
+      y2 = 51
+    },
+    progressMating = {
+      x1 = 231,
+      y1 = 1,
+      x2 = 281,
+      y2 = 51
+    },
+    dead = {
+      x1 = 129,
+      y1 = 52,
+      x2 = 179,
+      y2 = 102
+    },
+    training = {
+      x1 = 180,
+      y1 = 52,
+      x2 = 230,
+      y2 = 102
+    },
+    stallionTraining = {
+      x1 = 231,
+      y1 = 52,
+      x2 = 281,
+      y2 = 102
+    },
+    linked = {
+      x1 = 282,
+      y1 = 1,
+      x2 = 332,
+      y2 = 51
+    },
+    isSeized = {
+      x1 = 282,
+      y1 = 103,
+      x2 = 332,
+      y2 = 153
+    },
+    completeMating = {
+      x1 = 282,
+      y1 = 52,
+      x2 = 332,
+      y2 = 102
+    },
+    recoveryCarriage = {
+      x1 = 180,
+      y1 = 103,
+      x2 = 230,
+      y2 = 153
+    },
+    recoveryHorse = {
+      x1 = 231,
+      y1 = 103,
+      x2 = 281,
+      y2 = 153
+    },
+    completeTraining = {
+      x1 = 129,
+      y1 = 103,
+      x2 = 179,
+      y2 = 153
     }
   },
   _slots = {}
@@ -189,9 +265,15 @@ function Panel_Window_StableList_info:childControl()
   self._ui.static_Unseal_SwiftIcon = UI.getChildControl(self._ui.button_Unseal_Vehicle, "Static_Unseal_SwiftIcon")
   self._ui.staticText_Unseal_NoUnseal:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.button_HorseEmblem_Regist = UI.getChildControl(Panel_Window_StableList, "Button_HorseEmblem_Regist")
+  self._ui.staticText_HorseRegist_Icon = UI.getChildControl(self._ui.button_HorseEmblem_Regist, "StaticText_HorseRegist_Icon")
   self._buttonPos[0] = self._ui.button_HorseEmblem_Regist:GetPosX()
   self._ui.button_WildHorse_Regist = UI.getChildControl(Panel_Window_StableList, "Button_WildHorse_Regist")
+  self._ui.staticText_WildRegist_Icon = UI.getChildControl(self._ui.button_WildHorse_Regist, "StaticText_WildRegist_Icon")
   self._buttonPos[1] = self._ui.button_WildHorse_Regist:GetPosX()
+  self._ui.staticText_HorseRegist_Icon:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.staticText_HorseRegist_Icon:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEFUNCTION_BTN_REGISTERBYITEM"))
+  self._ui.staticText_WildRegist_Icon:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.staticText_WildRegist_Icon:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_FUNCTION_BTN_REGISTHORSE"))
   self._ui.static_Horse_List = UI.getChildControl(Panel_Window_StableList, "Static_Horse_List")
   self._buttonPos[2] = self._ui.static_Horse_List:GetPosX()
   self._ui.radioButton_Slot = UI.getChildControl(self._ui.static_Horse_List, "RadioButton_Slot")
@@ -203,6 +285,8 @@ function Panel_Window_StableList_info:childControl()
   self._ui.staticText_Location_Template = UI.getChildControl(self._ui.radioButton_Slot, "StaticText_Location_Template")
   self._ui.staticText_State_Template = UI.getChildControl(self._ui.radioButton_Slot, "StaticText_State_Template")
   self._ui.static_SwiftIcon_Template = UI.getChildControl(self._ui.radioButton_Slot, "Static_SwiftIcon_Template")
+  self._ui.static_StateBg = UI.getChildControl(self._ui.radioButton_Slot, "Static_StateBg")
+  self._ui.static_StateIcon = UI.getChildControl(self._ui.radioButton_Slot, "Static_StateIcon")
   self._ui.horse_List_HorizontalScroll = UI.getChildControl(self._ui.static_Horse_List, "Horse_List_HorizontalScroll")
   self._ui.horse_List_HorizontalScroll:SetEnable(false)
   self._pos.firstPosX = self._ui.radioButton_Slot:GetPosX()
@@ -231,7 +315,9 @@ function Panel_Window_StableList_info:createSlot()
       staticText_State = nil,
       static_SexIcon = nil,
       staticText_Tier = nil,
-      staticText_SwiftIcon = nil
+      staticText_SwiftIcon = nil,
+      static_StateBg = nil,
+      static_StateIcon = nil
     }
     function slot:setPos(index)
       local stableList = Panel_Window_StableList_info
@@ -268,38 +354,75 @@ function Panel_Window_StableList_info:createSlot()
         self.radioButton:SetMonoTone(true)
         self.slotEnable = false
       end
+      local stableinfo = Panel_Window_StableList_info
+      local showState = false
+      local x1, y1, x2, y2
       if nil ~= getState then
         self.staticText_State:SetShow(true)
         self.staticText_State:SetText("")
+        self.static_StateBg:SetShow(false)
+        self.static_StateIcon:SetShow(false)
       end
       if servantInfo:isSeized() then
         self.staticText_State:SetShow(true)
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_LIST_ATTACHMENT"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.isSeized.x1, stableinfo._texture.isSeized.y1, stableinfo._texture.isSeized.x2, stableinfo._texture.isSeized.y2)
       elseif CppEnums.ServantStateType.Type_RegisterMarket == getState then
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_MARKETREGISTER"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.registMarket.x1, stableinfo._texture.registMarket.y1, stableinfo._texture.registMarket.x2, stableinfo._texture.registMarket.y2)
       elseif CppEnums.ServantStateType.Type_RegisterMating == getState then
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_MATINGREGISTER"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.registMating.x1, stableinfo._texture.registMating.y1, stableinfo._texture.registMating.x2, stableinfo._texture.registMating.y2)
       elseif CppEnums.ServantStateType.Type_Mating == getState then
         if servantInfo:isMatingComplete() then
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_MATED"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.completeMating.x1, stableinfo._texture.completeMating.y1, stableinfo._texture.completeMating.x2, stableinfo._texture.completeMating.y2)
         else
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_MATING"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.progressMating.x1, stableinfo._texture.progressMating.y1, stableinfo._texture.progressMating.x2, stableinfo._texture.progressMating.y2)
         end
       elseif CppEnums.ServantStateType.Type_Coma == getState then
         if vehicleType == CppEnums.VehicleType.Type_Carriage or vehicleType == CppEnums.VehicleType.Type_CowCarriage or vehicleType == CppEnums.VehicleType.Type_RepairableCarriage then
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REPAIR"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.recoveryCarriage.x1, stableinfo._texture.recoveryCarriage.y1, stableinfo._texture.recoveryCarriage.x2, stableinfo._texture.recoveryCarriage.y2)
         else
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_HURT"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.recoveryHorse.x1, stableinfo._texture.recoveryHorse.y1, stableinfo._texture.recoveryHorse.x2, stableinfo._texture.recoveryHorse.y2)
         end
       elseif CppEnums.ServantStateType.Type_SkillTraining == getState then
         if stable_isSkillExpTrainingComplete(sortIndex) then
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINFINISH"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.completeTraining.x1, stableinfo._texture.completeTraining.y1, stableinfo._texture.completeTraining.x2, stableinfo._texture.completeTraining.y2)
         else
           self.staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
+          showState = true
+          x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.training.x1, stableinfo._texture.training.y1, stableinfo._texture.training.x2, stableinfo._texture.training.y2)
         end
       elseif CppEnums.ServantStateType.Type_StallionTraining == getState and isContentsStallionEnable and isContentsNineTierEnable then
         self.staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINING"))
+        showState = true
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.stallionTraining.x1, stableinfo._texture.stallionTraining.y1, stableinfo._texture.stallionTraining.x2, stableinfo._texture.stallionTraining.y2)
       elseif servantInfo:isChangingRegion() then
+      end
+      if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and servantInfo:isLink() then
+        showState = true
+        self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_STABLEFUNCTION_HORSELINK"))
+        x1, y1, x2, y2 = setTextureUV_Func(self.static_StateIcon, stableinfo._texture.linked.x1, stableinfo._texture.linked.y1, stableinfo._texture.linked.x2, stableinfo._texture.linked.y2)
+      end
+      if true == showState then
+        self.staticText_State:SetShow(false)
+        self.static_StateBg:SetShow(true)
+        self.static_StateIcon:SetShow(true)
+        self.static_StateIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+        self.static_StateIcon:setRenderTexture(self.static_StateIcon:getBaseTexture())
       end
       if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse then
         self.static_SexIcon:SetShow(true)
@@ -334,8 +457,6 @@ function Panel_Window_StableList_info:createSlot()
         end
         if servantInfo:isLink() then
           self.staticText_Location:SetShow(false)
-          self.staticText_State:SetShow(true)
-          self.staticText_State:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_STABLEFUNCTION_HORSELINK"))
         else
           self.staticText_Location:SetShow(true)
         end
@@ -387,6 +508,10 @@ function Panel_Window_StableList_info:createSlot()
     CopyBaseProperty(self._ui.staticText_State_Template, slot.staticText_State)
     slot.staticText_SwiftIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, slot.radioButton, "Static_SwiftIcon_Template_" .. index)
     CopyBaseProperty(self._ui.static_SwiftIcon_Template, slot.staticText_SwiftIcon)
+    slot.static_StateBg = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, slot.radioButton, "Static_StateBg_" .. index)
+    CopyBaseProperty(self._ui.static_StateBg, slot.static_StateBg)
+    slot.static_StateIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, slot.radioButton, "Static_StateIcon_" .. index)
+    CopyBaseProperty(self._ui.static_StateIcon, slot.static_StateIcon)
     slot.slotNo = index
     slot:setPos(index)
     self._slots[index] = slot
@@ -419,14 +544,12 @@ function Panel_Window_StableList_info:setInfoCountPos()
   self._ui.staticText_MaxCount:SetPosX(space * 2 + textLength1 + textLength2)
 end
 function Panel_Window_StableList_info:setKeyGuidePos()
-  local parantSizeX = self._ui.static_KeyGuideBg:GetSizeX()
-  local space = self._pos.keyGuideButtonSize + self._pos.keyGuideButtonSpace
-  local textLength1 = self._ui.staticText_Exit_ConsoleUI:GetTextSizeX()
-  local textLength2 = self._ui.staticText_Confirm_ConsoleUI:GetTextSizeX()
-  local textLength3 = self._ui.staticText_Move_ConsoleUI:GetTextSizeX()
-  self._ui.staticText_Move_ConsoleUI:SetPosX(parantSizeX - (space * 3 + textLength1 + textLength2 + textLength3))
-  self._ui.staticText_Confirm_ConsoleUI:SetPosX(parantSizeX - (space * 2 + textLength1 + textLength2))
-  self._ui.staticText_Exit_ConsoleUI:SetPosX(parantSizeX - (space + textLength1))
+  local keyGuides = {
+    self._ui.staticText_Move_ConsoleUI,
+    self._ui.staticText_Confirm_ConsoleUI,
+    self._ui.staticText_Exit_ConsoleUI
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.static_KeyGuideBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_StableList_info:setUnsealButton()
   self._ui.button_Unseal_Vehicle:SetShow(true)
@@ -439,10 +562,12 @@ function Panel_Window_StableList_info:setUnsealButton()
   self._ui.staticText_Unseal_NoUnseal:SetShow(true)
   self._ui.staticText_Unseal_NoUnseal:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLELIST_NOT_UNSEAL_SERVANT"))
   self._buttonAble[self._enum.eBUTTON_UNSEAL] = true
+  self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_On", "PaGlobalFunc_StableList_ShowButtonA(false)")
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = temporaryWrapper:getUnsealVehicle(stable_getServantType())
   if nil ~= servantInfo then
     self._value.isUnseal = true
+    self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_On", "PaGlobalFunc_StableList_ShowButtonA(true)")
     self._ui.button_Unseal_Vehicle:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableList_ClickUnsealed()")
     local servantRegionName = servantInfo:getRegionName()
     local vehicleType = servantInfo:getVehicleType()
@@ -488,6 +613,7 @@ function Panel_Window_StableList_info:setRegistAndTameButton()
     self._value.buttonPosCount = self._value.buttonPosCount + 1
     self._buttonAble[self._enum.eBUTTON_MAPAE] = true
     self._ui.button_HorseEmblem_Regist:SetShow(true)
+    self._ui.button_HorseEmblem_Regist:addInputEvent("Mouse_On", "PaGlobalFunc_StableList_ShowButtonA(true)")
     self._ui.button_HorseEmblem_Regist:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableList_ClickMapae()")
   else
     self._ui.button_HorseEmblem_Regist:SetShow(false)
@@ -500,6 +626,7 @@ function Panel_Window_StableList_info:setRegistAndTameButton()
       self._value.buttonPosCount = self._value.buttonPosCount + 1
       self._buttonAble[self._enum.eBUTTON_TAMING] = true
       self._ui.button_WildHorse_Regist:SetShow(true)
+      self._ui.button_WildHorse_Regist:addInputEvent("Mouse_On", "PaGlobalFunc_StableList_ShowButtonA(true)")
       self._ui.button_WildHorse_Regist:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableList_ClickTaming()")
     end
   else
@@ -562,6 +689,7 @@ function Panel_Window_StableList_info:setStableListButton()
       end
       slot:setShow(true)
       slot:setServant(slot.slotNo)
+      slot.radioButton:addInputEvent("Mouse_On", "PaGlobalFunc_StableList_ShowButtonA(" .. tostring(slot.slotEnable) .. ")")
       slot.radioButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableList_ClickList(" .. slot.slotNo .. "," .. index .. ")")
     end
   end
@@ -793,6 +921,14 @@ function PaGlobalFunc_StableList_UnClickList()
   local self = Panel_Window_StableList_info
   self:clearCheck()
 end
+function PaGlobalFunc_StableList_ShowButtonA(enable)
+  local self = Panel_Window_StableList_info
+  if nil == enable then
+    enable = false
+  end
+  self._ui.staticText_Confirm_ConsoleUI:SetShow(enable)
+  self:setKeyGuidePos()
+end
 function PaGlobalFunc_StableList_ClickList(slotNo, index)
   local self = Panel_Window_StableList_info
   local slot = self._slots[index]
@@ -818,6 +954,7 @@ function PaGlobalFunc_StableList_ClickMapae()
     audioPostEvent_SystemUi(0, 0)
     PaGlobalFunc_StableRegister_OpenByMapae()
     self:close()
+    PaGlobalFunc_StableInfo_CloseWith()
   end
 end
 function PaGlobalFunc_StableList_ClickTaming()
@@ -825,6 +962,7 @@ function PaGlobalFunc_StableList_ClickTaming()
   audioPostEvent_SystemUi(0, 0)
   PaGlobalFunc_StableRegister_OpenByTaming()
   self:close()
+  PaGlobalFunc_StableInfo_CloseWith()
 end
 function PaGlobalFunc_StableList_forPadEventInite()
   local self = Panel_Window_StableList_info
@@ -833,50 +971,6 @@ function PaGlobalFunc_StableList_forPadEventInite()
       self._value.currentToggleIndex = key
       break
     end
-  end
-end
-function PaGlobalFunc_StableList_forPadEventEnter(ToggleIndex)
-  local self = Panel_Window_StableList_info
-  if self._enum.eBUTTON_UNSEAL == self._value.currentToggleIndex and true == self._buttonAble[self._enum.eBUTTON_UNSEAL] then
-    PaGlobalFunc_StableList_ClickUnsealed()
-  elseif self._enum.eBUTTON_MAPAE == self._value.currentToggleIndex and true == self._buttonAble[self._enum.eBUTTON_MAPAE] then
-    PaGlobalFunc_StableList_ClickMapae()
-  elseif self._enum.eBUTTON_TAMING == self._value.currentToggleIndex and true == self._buttonAble[self._enum.eBUTTON_TAMING] then
-    PaGlobalFunc_StableList_ClickTaming()
-  elseif self._enum.eBUTTON_SEAL == self._value.currentToggleIndex and true == self._buttonAble[self._enum.eBUTTON_SEAL] then
-    self._value.currentButtonSlotNo = PaGlobalFunc_StableList_SortByWayPointKey(self._value.startButtonIndex + self._value.currentButtonIndex)
-    PaGlobalFunc_StableList_ClickList(self._value.currentButtonSlotNo, self._value.currentButtonIndex)
-  end
-end
-function PaGlobalFunc_StableList_forPadEventFunc(value)
-  local self = Panel_Window_StableList_info
-  if self._enum.eBUTTON_SEAL == self._value.currentToggleIndex then
-    if 1 == value then
-      local beforeSlotNo = self._value.startButtonIndex + self._value.currentButtonIndex
-      self._value.currentButtonIndex = self._value.currentButtonIndex + 1
-      if self._value.stableSlotCount < self._value.currentButtonIndex then
-        self._value.currentButtonIndex = self._value.currentButtonIndex
-      end
-      if beforeIndex ~= self._value.currentButtonIndex then
-        self._value.currentButtonSlotNo = PaGlobalFunc_StableList_SortByWayPointKey(self._value.startButtonIndex + self._value.currentButtonIndex)
-        PaGlobalFunc_StableList_ClickList(self._value.currentButtonSlotNo, self._value.currentButtonIndex)
-      end
-    elseif 0 == self._value.currentButtonIndex then
-      local beforeSlotNo = self._value.startButtonIndex + self._value.currentButtonIndex
-      local currentSlotNo = self._value.startButtonIndex + self._value.currentButtonIndex
-      if beforeSlotNo ~= currentSlotNo then
-        self._value.currentButtonSlotNo = PaGlobalFunc_StableList_SortByWayPointKey(self._value.startButtonIndex + self._value.currentButtonIndex)
-        PaGlobalFunc_StableList_ClickList(self._value.currentButtonSlotNo, self._value.currentButtonIndex)
-      elseif true == self:findPossibleToggle(value) then
-        PaGlobalFunc_StableList_forPadEventEnter(self._value.currentToggleIndex)
-      end
-    else
-      self._value.currentButtonIndex = self._value.currentButtonIndex - 1
-      self._value.currentButtonSlotNo = PaGlobalFunc_StableList_SortByWayPointKey(self._value.startButtonIndex + self._value.currentButtonIndex)
-      PaGlobalFunc_StableList_ClickList(self._value.currentButtonSlotNo, self._value.currentButtonIndex)
-    end
-  elseif true == self:findPossibleToggle(value) then
-    PaGlobalFunc_StableList_forPadEventEnter(self._value.currentToggleIndex)
   end
 end
 function FromClient_StableList_Init()

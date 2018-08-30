@@ -10,7 +10,9 @@ local GuildMark = {
   _maxMarkBg = 9,
   _maxMarkIcon = 9,
   _currentBgIdx = 0,
-  _currentIconIdx = 0
+  _currentIconIdx = 0,
+  _prevBgIdx = -1,
+  _prevIconIdx = -1
 }
 local _markBgUV = {
   [0] = {
@@ -162,7 +164,6 @@ function GuildMark:registEvent()
   self._ui.txt_BConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_GuildMark_Close()")
   self._ui.txt_YConsoleUI:SetIgnore(false)
   self._ui.txt_BConsoleUI:SetIgnore(false)
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_GuildMark_Confirm()")
 end
 function GuildMark:open()
   self:update()
@@ -177,12 +178,23 @@ function GuildMark:update()
   local data = getGuildMarkIndexByGuildNoForXBox(guildWrapper:getGuildNo_s64())
   self._currentIconIdx = data:getIconIdx()
   self._currentBgIdx = data:getBackGroundIdx()
+  self._prevIconIdx = data:getIconIdx()
+  self._prevBgIdx = data:getBackGroundIdx()
   InputMLUp_GuildMark_SelectMarkBackground(self._currentBgIdx)
   InputMLUp_GuildMark_SelectMarkIcon(self._currentIconIdx)
   self._ui.txt_GuildName:SetText(guildWrapper:getName())
 end
 function GuildMark:close()
   _panel:SetShow(false)
+end
+function GuildMark:isCanRegistMark()
+  if self._prevBgIdx == self._currentBgIdx and self._prevIconIdx == self._currentIconIdx then
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+    self._ui.txt_YConsoleUI:SetShow(false)
+  else
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_GuildMark_Confirm()")
+    self._ui.txt_YConsoleUI:SetShow(true)
+  end
 end
 function PaGlobalFunc_GuildMark_Open()
   local self = GuildMark
@@ -210,19 +222,26 @@ function PaGlobalFunc_GuildMark_SetGuildMarkControl(bgControl, iconControl, acto
   if nil == actorKey then
     return
   end
+  local self = GuildMark
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMark")
+    return
+  end
+  local iconIdx = 0
+  local bgIdx = 0
   local idxData = getGuildMarkIndexByActorKeyForXBox(actorKey)
   if nil == idxData then
     return
   end
-  local iconIdx = idxData:getIconIdx()
-  local bgIdx = idxData:getBackGroundIdx()
-  if nil ~= bgControl then
+  iconIdx = idxData:getIconIdx()
+  bgIdx = idxData:getBackGroundIdx()
+  if nil ~= bgControl and bgIdx >= 0 and bgIdx <= self._maxMarkBg then
     bgControl:ChangeTextureInfoNameAsync("renewal/commonicon/guildmark/console_icon_guildmark_00.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(bgControl, _markBgUV[bgIdx].x1, _markBgUV[bgIdx].y1, _markBgUV[bgIdx].x2, _markBgUV[bgIdx].y2)
     bgControl:getBaseTexture():setUV(x1, y1, x2, y2)
     bgControl:setRenderTexture(bgControl:getBaseTexture())
   end
-  if nil ~= iconControl then
+  if nil ~= iconControl and iconIdx >= 0 and iconIdx <= self._maxMarkIcon then
     iconControl:ChangeTextureInfoNameAsync("renewal/commonicon/guildmark/console_icon_guildmark_00.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(iconControl, _markIconUV[iconIdx].x1, _markIconUV[iconIdx].y1, _markIconUV[iconIdx].x2, _markIconUV[iconIdx].y2)
     iconControl:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -248,9 +267,12 @@ function InputMLUp_GuildMark_Confirm()
     Proc_ShowMessage_Ack(text)
     return
   end
+  if self._prevBgIdx == self._currentBgIdx and self._prevIconIdx == self._currentIconIdx then
+    return
+  end
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ADDMARK_MESSAGEBOX_TITLE"),
-    content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ADDMARK_MESSAGEBOX_TEXT"),
+    content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ADDMARK_MESSAGEBOX_TEXT2"),
     functionYes = PaGlobalFunc_GuildMark_ChangeMarkContinue,
     functionNo = MessageBox_Empty_function,
     priority = CppEnums.PA_UI_CONTROL_TYPE.PAUIMB_PRIORITY_LOW
@@ -285,6 +307,7 @@ function InputMLUp_GuildMark_SelectMarkBackground(idx)
   self._ui.stc_CurrentBg:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.stc_CurrentBg:setRenderTexture(self._ui.stc_CurrentBg:getBaseTexture())
   self._currentBgIdx = idx
+  self:isCanRegistMark()
 end
 function InputMLUp_GuildMark_SelectMarkIcon(idx)
   local self = GuildMark
@@ -305,5 +328,6 @@ function InputMLUp_GuildMark_SelectMarkIcon(idx)
   self._ui.stc_CurrentIcon:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.stc_CurrentIcon:setRenderTexture(self._ui.stc_CurrentIcon:getBaseTexture())
   self._currentIconIdx = idx
+  self:isCanRegistMark()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildMark_Init")

@@ -106,7 +106,6 @@ end
 function PaGlobal_TutorialPhase_InventoryAndQuickSlot:changeStepExceptionClosedInventory()
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_38") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_4"))
-    PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonRSM", PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_RENEW_TITLE"), "buttonDpadUp", "+")
   end)
   PaGlobal_TutorialUiManager:getUiMasking():hideQuestMasking()
 end
@@ -137,20 +136,17 @@ function PaGlobal_TutorialPhase_InventoryAndQuickSlot:changeStepUsePotionInInven
     end
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_38") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_4"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonRSM", PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_RENEW_TITLE"), "buttonDpadUp", "+")
     end)
   elseif 2 == self._currentProgress then
     Inventory_updateSlotData(true)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_70") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_5"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonDpad", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_NPCSHOP_KEY_MOVE"), "buttonA", PAGetString(Defines.StringSheet_RESOURCE, "INTERACTION_BTN_USEITEM"))
     end)
   elseif 3 == self._currentProgress then
     Inventory_updateSlotData(true)
     PaGlobal_TutorialUiManager:getUiMasking():hideQuestMasking()
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
       PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_6"))
-      PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonB", PAGetString(Defines.StringSheet_GAME, "LUA_MEMO_CLOSE"))
     end)
   end
 end

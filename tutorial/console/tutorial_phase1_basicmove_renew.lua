@@ -146,7 +146,6 @@ function PaGlobal_TutorialPhase_BasicMove:changeStepBasicMove()
   end
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_1"))
-    PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
   end)
 end
 function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
@@ -160,7 +159,6 @@ function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
       audioPostEvent_SystemUi(4, 12)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_3") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_2"))
-        PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
       end)
       self._updateTime = 0
       self._currentProgress = self._currentProgress + 1
@@ -178,7 +176,6 @@ function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
       audioPostEvent_SystemUi(4, 12)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "TUTORIAL_MOVE_STEP2_DARKSPIRIT") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_3"))
-        PaGlobal_TutorialUiManager:getUiBlackSpirit():setGuideKey("buttonA", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_INTERFACE_ACTION_Shift_1"), "buttonLSM", PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0"))
       end)
       self._updateTime = 0
       self._currentProgress = self._currentProgress + 1

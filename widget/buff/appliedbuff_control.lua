@@ -46,7 +46,7 @@ function PaGlobalAppliedBuffList:updateBuff(isDebuff)
       break
     end
     local u64_calc_time1 = appliedBuff:getRemainedTime_u64() / Defines.u64_const.u64_1000
-    uiBuffList[buffIndex]:ChangeTextureInfoName("icon/" .. appliedBuff:getIconName())
+    uiBuffList[buffIndex]:ChangeTextureInfoNameAsync("icon/" .. appliedBuff:getIconName())
     uiBuffList[buffIndex]:SetShow(true)
     uiBuffList[buffIndex]:SetText(Util.Time.inGameTimeFormattingTop(u64_calc_time1))
     appliedBuff = getSelfPlayer():getAppliedBuffNext(isDebuff)

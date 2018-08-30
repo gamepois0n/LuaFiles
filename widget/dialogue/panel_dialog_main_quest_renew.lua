@@ -86,69 +86,6 @@ local Panel_Dialog_Main_Quest_Info = {
     rewardTextPos = {X = nil, Y = nil}
   },
   _space = {QuestframeSpcae = 8},
-  _questIcon = {
-    ["texture"] = "Renewal/UI_Icon/Console_Icon_00.dds",
-    [0] = {
-      380,
-      31,
-      398,
-      50
-    },
-    {
-      475,
-      1,
-      493,
-      20
-    },
-    {
-      380,
-      11,
-      398,
-      30
-    },
-    {
-      418,
-      1,
-      436,
-      20
-    },
-    {
-      437,
-      1,
-      455,
-      20
-    },
-    {
-      456,
-      1,
-      474,
-      20
-    },
-    {
-      399,
-      1,
-      417,
-      20
-    },
-    {
-      380,
-      11,
-      398,
-      30
-    },
-    {
-      399,
-      21,
-      417,
-      40
-    },
-    {
-      456,
-      21,
-      474,
-      40
-    }
-  },
   _questId = {},
   _rewardIconPath = {
     [__eRewardExp] = "Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds",
@@ -626,7 +563,7 @@ function PaGlobalFunc_MainDialog_Quest_List2EventControlCreate(list_content, key
   local selecIndex = dialogData:getSelectedQuestIndex()
   radioButton_Quest:SetCheck(id == selecIndex)
   local questType = questInfo:getQuestType()
-  FGlobal_ChangeOnTextureForDialogQuestIcon(questTypeIcon, questType)
+  FGlobal_ChangeOnTextureForConsoleDialogQuestIcon(questTypeIcon, questType)
   radioButton_Quest:addInputEvent("Mouse_On", "PaGlobal_MainDialog_Quest_ClickQuestList(" .. id .. ")")
   radioButton_Quest:addInputEvent("Mouse_LUp", "PaGlobal_MainDialog_Quest_ClickConfirmQuestList()")
   questName:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)

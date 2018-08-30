@@ -34,6 +34,7 @@ local Panel_Window_StableMating_info = {
     staticText_DeathVal = nil,
     staticText_Silver = nil,
     staticText_Select_ConsoleUI = nil,
+    staticText_Select_Name = nil,
     staticText_Inven = nil,
     staticText_Inven_Val = nil,
     staticText_Storage = nil,
@@ -221,27 +222,23 @@ function Panel_Window_StableMating_info:createMatingSlot()
         deadCount = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLEINFO_RESETNO", "deadCount", deadCount)
       end
       local servantInfo = stable_getServantByServantNo(auctionServantInfo:getServantNo())
-      if nil ~= servantInfo then
-        if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_KILLCOUNT"))
-        elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
-        elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat then
-          self.staticText_Death:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_DESTROYCOUNT"))
-        end
+      if nil == servantInfo or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant then
+      elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
+      elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat then
       end
-      self.staticText_DeathVal:SetText(deadCount)
     end
     function slot:setSelect(bSelect)
       self.selected = bSelect
       self.radiobutton:SetCheck(bSelect)
       self.staticText_Select_ConsoleUI:SetShow(bSelect)
+      self.staticText_Select_Name:SetShow(bSelect)
     end
     function slot:clearServant()
       self.slotNo = 0
       self:setSelect(false)
       self:setShow(false)
       self.staticText_Select_ConsoleUI:SetShow(false)
+      self.staticText_Select_Name:SetShow(false)
     end
     slot.radiobutton = UI.createAndCopyBasePropertyControl(self._ui.static_CenterBg, "RadioButton_List_Templete", self._ui.static_CenterBg, "RadioButton_" .. index)
     slot.static_Profile = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "Static_Profile", slot.radiobutton, "Static_Profile_" .. index)
@@ -268,7 +265,9 @@ function Panel_Window_StableMating_info:createMatingSlot()
     slot.staticText_DeathVal = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_DeathVal", slot.radiobutton, "StaticText_DeathVal_" .. index)
     slot.staticText_Silver = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Silver", slot.radiobutton, "StaticText_Silver_" .. index)
     slot.staticText_Select_ConsoleUI = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Select_ConsoleUI", slot.radiobutton, "StaticText_Select_ConsoleUI_" .. index)
+    slot.staticText_Select_Name = UI.createAndCopyBasePropertyControl(self._ui.radioButton_List_Templete, "StaticText_Select_Name", slot.radiobutton, "StaticText_Select_Name" .. index)
     slot.staticText_Select_ConsoleUI:SetShow(false)
+    slot.staticText_Select_Name:SetShow(false)
     slot.slotNo = index
     slot:setPos(index)
     slot:setShow(false)
@@ -314,6 +313,7 @@ function Panel_Window_StableMating_info:childControl()
   self._ui.staticText_DeathVal = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_DeathVal")
   self._ui.staticText_Silver = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Silver")
   self._ui.staticText_Select_ConsoleUI = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Select_ConsoleUI")
+  self._ui.staticText_Select_Name = UI.getChildControl(self._ui.radioButton_List_Templete, "StaticText_Select_Name")
   self._ui.radioButton_List_Templete:SetShow(false)
   self._pos.firstPosX = self._ui.radioButton_List_Templete:GetPosX()
   self._pos.firstPosY = self._ui.radioButton_List_Templete:GetPosY()
@@ -378,6 +378,7 @@ function Panel_Window_StableMating_info:setContentIsMyList()
       slot:setServant(slot.slotNo)
       slot.radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableMating_ClickList(" .. index .. ")")
       slot.radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_StableMating_SelectList(" .. index .. ")")
+      slot.radiobutton:addInputEvent("Mouse_Out", "PaGlobalFunc_StableMating_OutList(" .. index .. ")")
     end
   end
 end
@@ -396,6 +397,7 @@ function Panel_Window_StableMating_info:setContentIsMarket()
       slot:setServant(slot.slotNo)
       slot.radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_StableMating_ClickList(" .. index .. ")")
       slot.radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_StableMating_SelectList(" .. index .. ")")
+      slot.radiobutton:addInputEvent("Mouse_Out", "PaGlobalFunc_StableMating_OutList(" .. index .. ")")
     end
   end
 end
@@ -551,6 +553,13 @@ function PaGlobalFunc_StableMating_PageChange(isNext)
     end
   end
 end
+function PaGlobalFunc_StableMating_OutList(index)
+  local self = Panel_Window_StableMating_info
+  if nil ~= self._slotMating[index] then
+    self._slotMating[index].staticText_Select_ConsoleUI:SetShow(false)
+    self._slotMating[index].staticText_Select_Name:SetShow(false)
+  end
+end
 function PaGlobalFunc_StableMating_SelectList(index)
   local self = Panel_Window_StableMating_info
   self._value.lastMatingIndex = self._value.currentMatingIndex
@@ -568,22 +577,24 @@ function PaGlobalFunc_StableMating_SelectList(index)
     local servantInfo = stable_getServantByServantNo(auctionServantInfo:getServantNo())
     if nil ~= servantInfo then
       self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetShow(true)
+      self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetShow(true)
+      self._ui.staticText_Select_Name:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       if CppEnums.ServantStateType.Type_RegisterMating == servantInfo:getStateType() then
         if isAuctionEnd then
-          self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_END"))
+          self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_END"))
         else
-          self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_CANCEL"))
+          self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_CANCEL"))
         end
       elseif CppEnums.ServantStateType.Type_Mating == servantInfo:getStateType() then
         if servantInfo:isMatingComplete() then
-          self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_RECEIVE"))
+          self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_RECEIVE"))
         else
-          self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_MATING"))
+          self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_MATING"))
         end
       end
     end
   else
-    self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_START"))
+    self._slotMating[self._value.currentMatingIndex].staticText_Select_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLEMATING_BTN_START"))
     self._slotMating[self._value.currentMatingIndex].staticText_Select_ConsoleUI:SetMonoTone(false)
   end
   self:setContentSkill()

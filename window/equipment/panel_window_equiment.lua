@@ -668,6 +668,10 @@ function Equipment_updateSlotData()
         end
         slot.icon:addInputEvent("Mouse_On", "Equipment_NilSlot_MouseOn(" .. v .. ",true)")
         slot.icon:addInputEvent("Mouse_Out", "Equipment_NilSlot_MouseOn(" .. v .. ",false)")
+        if 13 == v then
+          slot.icon:SetShow(false)
+          slotBG:SetShow(false)
+        end
       end
     end
   end

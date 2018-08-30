@@ -10,7 +10,24 @@ local MarketPlace = {
     stc_ItemDetailBg = UI.getChildControl(_panel, "Static_ItemDetailBg"),
     stc_BottomBg = UI.getChildControl(_panel, "Static_BottomBg")
   },
+  _slotConfig = {
+    createIcon = true,
+    createBorder = true,
+    createCount = true,
+    createEnchant = true,
+    createCooltime = true,
+    createExpiration = true,
+    createExpirationBG = true,
+    createExpiration2h = true,
+    createClassEquipBG = true,
+    createEnduranceIcon = true,
+    createCash = true,
+    createBagIcon = true,
+    createEnduranceIcon = true,
+    createCheckBox = true
+  },
   _tabIdx = {itemMarket = 1, myAsset = 2},
+  _biddingTabIdx = {sell = 1, buy = 2},
   _itemListType = {
     categoryList = 1,
     detailListByCategory = 2,
@@ -23,6 +40,7 @@ local MarketPlace = {
   _selectedSubKey = -1,
   _currentListType = nil,
   _prevListCount = 0,
+  _selectedBiddingTabIndex = 0,
   _isEsc = false,
   _isOpenFromDialog = false,
   _isOpenByMaid = false,
@@ -32,6 +50,9 @@ function MarketPlace:init()
   self._ui.btn_MarketPlace = UI.getChildControl(self._ui.stc_RadioButtonBg, "RadioButton_MarketPlace")
   self._ui.btn_MyAsset = UI.getChildControl(self._ui.stc_RadioButtonBg, "RadioButton_MyAsset")
   self._ui.stc_WalletBg = UI.getChildControl(self._ui.stc_LeftBg, "Static_WalletBg")
+  self._ui.txt_MoneyValue = UI.getChildControl(self._ui.stc_WalletBg, "StaticText_MoneyValue")
+  self._ui.txt_Weight = UI.getChildControl(self._ui.stc_WalletBg, "StaticText_Weight")
+  self._ui.txt_Count = UI.getChildControl(self._ui.stc_WalletBg, "StaticText_Count")
   self._ui.list_ItemCategory = UI.getChildControl(self._ui.stc_LeftBg, "List2_Category")
   self._ui.stc_AssetBg = UI.getChildControl(self._ui.stc_LeftBg, "Static_MarketInventoryBg")
   self._ui.btn_WalletConsoleUI = UI.getChildControl(self._ui.stc_AssetBg, "Button_X_ConsoleUI")
@@ -43,21 +64,33 @@ function MarketPlace:init()
   self._ui.btn_BConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "Button_B_ConsoleUI")
   self._ui.btn_AConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "Button_A_ConsoleUI")
   self._ui.btn_GiveUpConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "Button_X_ConsoleUI")
+  self._ui.stc_MyTabBg = UI.getChildControl(self._ui.stc_MyItemListBg, "Static_MyTabBg")
+  self._ui.btn_MySell = UI.getChildControl(self._ui.stc_MyTabBg, "RadioButton_Sell")
+  self._ui.btn_MyBuy = UI.getChildControl(self._ui.stc_MyTabBg, "RadioButton_Buy")
+  self._ui.stc_StatusBg = UI.getChildControl(self._ui.stc_MyItemListBg, "Static_StatusBg")
+  self._ui.list_MyBiddingList = UI.getChildControl(self._ui.stc_MyItemListBg, "List2_MyBiddingItemList")
+  self._ui.txt_Text1 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_1")
+  self._ui.txt_Text2 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_2")
   self:registEvent()
 end
 function MarketPlace:registEvent()
   self._ui.btn_MarketPlace:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_OpenItemMarketTab()")
   self._ui.btn_MyAsset:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_OpenMyAssetTab()")
   self._ui.btn_WalletConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_WalletOpen()")
+  self._ui.btn_MySell:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_OpenMySellTab()")
+  self._ui.btn_MyBuy:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_OpenMyBuyTab()")
   self._ui.list_ItemCategory:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_MarketPlace_CreateControlCategoryList")
   self._ui.list_ItemCategory:createChildContent(CppEnums.PAUIList2ElementManagerType.tree)
   self._ui.list_MarketItemList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_MarketPlace_CreateControlMarketItemList")
   self._ui.list_MarketItemList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  self._ui.list_MyBiddingList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_MarketPlace_CreateControlMyBiddingList")
+  self._ui.list_MyBiddingList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   registerEvent("FromClient_notifyItemMarketMessage", "FromClient_MarketPlace_NotifyMessage")
   registerEvent("FromClient_responseListByWorldMarket", "FromClient_MarketPlace_ResponseList")
   registerEvent("FromClient_responseDetailListByWorldMarketByGroupNo", "FromClient_MarketPlace_ResponseDetailListByCategory")
   registerEvent("FromClient_responseDetailListByWorldMarketByItemKey", "FromClient_MarketPlace_ResponseDetailListByKey")
   registerEvent("FromClient_responseGetBiddingList", "FromClient_MarketPlace_responseGetBiddingList")
+  registerEvent("FromClient_responseGetMyBiddingList", "FromClient_MarketPlace_responseGetMyBiddingList")
 end
 function MarketPlace:open(tabIdx)
   self._currentTabIdx = tabIdx
@@ -67,6 +100,7 @@ function MarketPlace:open(tabIdx)
   self._currentListType = nil
   requestOpenItemMarket()
   ToClient_requestCreateMyWallet()
+  ToClient_requestMyWalletList()
   self._ui.list_ItemCategory:SetShow(false)
   self._ui.stc_AssetBg:SetShow(false)
   self._ui.stc_MarketItemListBg:SetShow(false)
@@ -79,6 +113,7 @@ function MarketPlace:open(tabIdx)
   elseif self._currentTabIdx == self._tabIdx.myAsset then
     self._ui.stc_AssetBg:SetShow(true)
     self._ui.stc_MyItemListBg:SetShow(true)
+    ToClient_requestMyBiddingListByWorldMarket()
   end
   if true == self._isOpenFromDialog then
     self._ui.btn_WalletConsoleUI:SetShow(true)
@@ -91,6 +126,10 @@ function MarketPlace:open(tabIdx)
 end
 function MarketPlace:close()
   _panel:SetShow(false)
+end
+function MarketPlace:biddingOpen(tabIdx)
+  self._selectedBiddingTabIndex = tabIdx
+  self:updateMyBiddingItemList()
 end
 function MarketPlace:update()
   self._ui.list_ItemCategory:getElementManager():clearKey()
@@ -145,6 +184,43 @@ function MarketPlace:updateItemList()
   end
   self._prevListCount = itemListCount
   self._ui.list_MarketItemList:requestUpdateVisible()
+end
+function MarketPlace:updateMyBiddingItemList()
+  local itemListCount = 0
+  self._ui.list_MyBiddingList:getElementManager():clearKey()
+  if self._selectedBiddingTabIndex == self._biddingTabIdx.sell then
+    itemListCount = getWorldMarketSellBiddingListCount()
+    self._ui.txt_Text1:SetText("\237\140\144\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
+    self._ui.txt_Text2:SetText("\237\140\144\235\167\164 \236\153\132\235\163\140 00\234\177\180")
+  elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
+    itemListCount = getWorldMarketBuyBiddingListCount()
+    self._ui.txt_Text1:SetText("\234\181\172\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
+    self._ui.txt_Text2:SetText("\234\181\172\235\167\164 \236\153\132\235\163\140 00\234\177\180")
+  end
+  if itemListCount > 0 then
+    self._ui.list_MyBiddingList:SetShow(true)
+  else
+    self._ui.list_MyBiddingList:SetShow(false)
+  end
+  for idx = 0, itemListCount - 1 do
+    self._ui.list_MyBiddingList:getElementManager():pushKey(toInt64(0, idx))
+  end
+  self._ui.list_MyBiddingList:requestUpdateVisible()
+end
+function MarketPlace:updateMyInfo()
+  local currentWeight = getWorldMarketCurrentWeight()
+  local maxWeight = getWorldMarketMaxWeight()
+  local silverInfo = getWorldMarketSilverInfo()
+  local walletItemCount = getWorldMarketMyWalletListCount()
+  if 0 ~= currentWeight then
+    currentWeight = currentWeight / 100
+  end
+  if 0 ~= maxWeight then
+    maxWeight = maxWeight / 100
+  end
+  self._ui.txt_MoneyValue:SetText(tostring(silverInfo:getItemCount()))
+  self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
+  self._ui.txt_Count:SetText(tostring(walletItemCount))
 end
 function MarketPlace:setNameColor(nameColorGrade)
   local nameColor
@@ -219,8 +295,17 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     return
   end
   local idx = Int64toInt32(key)
-  local itemInfo
+  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlotBg")
+  local slot = {}
+  SlotItem.new(slot, "ItemList_" .. idx, idx, bg_ItemSlot, self._slotConfig)
+  slot:createChild()
+  slot:clearItem()
+  slot.icon:EraseAllEffect()
+  slot.icon:addInputEvent("Mouse_On", "")
+  slot.icon:addInputEvent("Mouse_Out", "")
   local txt_ItemName = UI.getChildControl(contents, "StaticText_ItemName")
+  local txt_ItemBasePrice = UI.getChildControl(contents, "StaticText_BasePrice")
+  local txt_ItemCount = UI.getChildControl(contents, "StaticText_Count")
   local btn_ButtonBg = UI.getChildControl(contents, "Button_Bg")
   if self._itemListType.detailListByKey == self._currentListType then
     local itemInfo = getWorldMarketDetailListByIdx(idx)
@@ -231,10 +316,16 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local itemSSW = itemInfo:getItemEnchantStaticStatusWrapper()
     local enchantLevel = itemSSW:get()._key:getEnchantLevel()
     local nameColorGrade = itemSSW:getGradeType()
+    local itemCount = itemInfo:getItemCount()
+    local itemBaseCount = itemInfo:getPricePerOne()
+    slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
+    slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     local itemNameStr = self:setNameAndEnchantLevel(enchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
     txt_ItemName:SetText(itemNameStr)
+    txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. tostring(itemBaseCount))
+    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestBiddingList(" .. idx .. ")")
   elseif self._itemListType.categoryList == self._currentListType then
     local itemInfo = getWorldMarketListByIdx(idx)
@@ -245,10 +336,73 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local itemSSW = itemInfo:getItemEnchantStaticStatusWrapper()
     local enchantLevel = itemSSW:get()._key:getEnchantLevel()
     local nameColorGrade = itemSSW:getGradeType()
+    local itemCount = itemInfo:getItemCount()
+    local totalTradeCount = itemInfo:getTotalTradeCount()
+    slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
+    slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     txt_ItemName:SetText(tostring(itemSSW:getName()))
+    txt_ItemBasePrice:SetText("\235\136\132\236\160\129 \234\177\176\235\158\152\235\159\137 : " .. tostring(totalTradeCount))
+    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestDetailListByKey(" .. itemInfo:getItemKeyRaw() .. ")")
+  end
+end
+function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  local idx = Int64toInt32(key)
+  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlotBg")
+  local slot = {}
+  SlotItem.new(slot, "ItemBiddingList_" .. idx, idx, bg_ItemSlot, self._slotConfig)
+  slot:createChild()
+  slot:clearItem()
+  slot.icon:EraseAllEffect()
+  slot.icon:addInputEvent("Mouse_On", "")
+  slot.icon:addInputEvent("Mouse_Out", "")
+  local txt_ItemName = UI.getChildControl(contents, "StaticText_ItemName")
+  local txt_ItemPrice = UI.getChildControl(contents, "StaticText_Price")
+  local txt_ItemCount = UI.getChildControl(contents, "StaticText_Count")
+  local btn_ButtonBg = UI.getChildControl(contents, "Button_Bg")
+  if self._selectedBiddingTabIndex == self._biddingTabIdx.sell then
+    local itemInfo = getWorldMarketSellBiddingListByIdx(idx)
+    if nil == itemInfo then
+      _PA_ASSERT(false, "\236\160\149\235\179\180\234\176\128 \236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : getWorldMarketSellBiddingListByIdx( idx )")
+      return
+    end
+    local itemSSW = itemInfo:getItemEnchantStaticStatusWrapper()
+    local enchantLevel = itemSSW:get()._key:getEnchantLevel()
+    local chooseEnchantLevel = itemInfo:getChooseEnchantLevel()
+    local nameColorGrade = itemSSW:getGradeType()
+    local pricePerOne = itemInfo:getPricePerOne()
+    local leftCount = itemInfo:getLeftCount()
+    slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
+    slot.isEmpty = false
+    local nameColor = self:setNameColor(nameColorGrade)
+    txt_ItemName:SetFontColor(nameColor)
+    local itemNameStr = self:setNameAndEnchantLevel(chooseEnchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
+    txt_ItemName:SetText(itemNameStr)
+    txt_ItemPrice:SetText("\237\140\144\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. tostring(pricePerOne))
+    txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
+  elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
+    local itemInfo = getWorldMarketBuyBiddingListByIdx(idx)
+    local itemSSW = itemInfo:getItemEnchantStaticStatusWrapper()
+    local enchantLevel = itemSSW:get()._key:getEnchantLevel()
+    local chooseEnchantLevel = itemInfo:getChooseEnchantLevel()
+    local nameColorGrade = itemSSW:getGradeType()
+    local pricePerOne = itemInfo:getPricePerOne()
+    local leftCount = itemInfo:getLeftCount()
+    slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
+    slot.isEmpty = false
+    local nameColor = self:setNameColor(nameColorGrade)
+    txt_ItemName:SetFontColor(nameColor)
+    local itemNameStr = self:setNameAndEnchantLevel(chooseEnchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
+    txt_ItemName:SetText(itemNameStr)
+    txt_ItemPrice:SetText("\234\181\172\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. tostring(pricePerOne))
+    txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
   end
 end
 function FGolbal_ItemMarketNew_Close()
@@ -356,6 +510,22 @@ function FGlobal_ItemMarket_OpenByMaid()
   _PA_ASSERT(false, "\237\149\180\235\139\185 \237\149\168\236\136\152\234\176\128 \236\149\132\236\167\129 \234\181\172\237\152\132\235\144\152\236\167\128 \236\149\138\236\149\152\236\138\181\235\139\136\235\139\164!! : FGlobal_ItemMarket_OpenByMaid")
   self:open(self._tabIdx.itemMarket)
 end
+function FGlobal_ItemMarket_IsOpenByMaid()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return false
+  end
+  return self._isOpenByMaid
+end
+function PaGlobalFunc_MarketPlace_UpdateWalletInfo()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:updateMyInfo()
+end
 function PaGlobalFunc_MarketPlace_Init()
   local self = MarketPlace
   if nil == self then
@@ -379,6 +549,22 @@ function InputMLUp_MarketPlace_OpenMyAssetTab()
     return
   end
   self:open(self._tabIdx.myAsset)
+end
+function InputMLUp_MarketPlace_OpenMySellTab()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.sell)
+end
+function InputMLUp_MarketPlace_OpenMyBuyTab()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.buy)
 end
 function InputMLUp_MarketPlace_WalletOpen()
   local self = MarketPlace
@@ -495,6 +681,14 @@ function FromClient_MarketPlace_ResponseDetailListByKey()
   end
   self._currentListType = 3
   self:updateItemList()
+end
+function FromClient_MarketPlace_responseGetMyBiddingList()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.sell)
 end
 function FromClient_MarketPlace_responseGetBiddingList()
   local self = MarketPlace

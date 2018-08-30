@@ -15,32 +15,10 @@ local Customization_ShowClothInfo = {
     _contentsOffsetY = 60
   },
   _selectedClassType,
+  _currentContentIndex = 0,
   _contentImage = {},
   _isBoneControl = false
 }
-function PaGlobalFunc_Customization_ShowCloth_UpdatePerFrame(deltaTime)
-  local self = Customization_ShowClothInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_ShowCloth_SetBoneControl(false)
-    end
-    return
-  end
-end
-function PaGlobalFunc_Customization_ShowCloth_SetBoneControl(isSet)
-  local self = Customization_ShowClothInfo
-  if false == isSet then
-    self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(1)
-    Panel_Customizing_ShowOutfit:ignorePadSnapUpdate(false)
-    ToClient_StartOrEndShapeBoneControlStart(false)
-  else
-    self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(9)
-    Panel_Customizing_ShowOutfit:ignorePadSnapUpdate(true)
-    ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
 function Customization_ShowClothInfo:ClearContent()
   for _, content in pairs(self._contentImage) do
     if nil ~= content then
@@ -58,10 +36,18 @@ function Customization_ShowClothInfo:UpdateFocus(index)
   else
     self._ui._typeSelect:SetShow(false)
   end
+  self._currentContentIndex = index
 end
 function PaGlobalFunc_Customization_ShowCloth_ShowHelmet()
   local self = Customization_ShowClothInfo
   setShowHelmet(self._ui._checkBox_ShowHelmet:IsCheck())
+end
+function PaGlobalFunc_Customization_ShowCloth_SetSelectButton(index)
+  if self._currentContentIndex == index then
+    PaGlobalFunc_Customization_SetKeyGuide(6)
+  else
+    PaGlobalFunc_Customization_SetKeyGuide(0)
+  end
 end
 function PaGlobalFunc_Customization_ShowCloth_UpdateCloth(index)
   local self = Customization_ShowClothInfo
@@ -77,6 +63,7 @@ function Customization_ShowClothInfo:CreateClothlist()
     local tempContentImage = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_RADIOBUTTON, self._ui._static_TypeGroup, "Frame_Image_" .. itemIdx)
     CopyBaseProperty(self._ui._radioButton_TypeTemplate, tempContentImage)
     tempContentImage:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_ShowCloth_UpdateCloth(" .. itemIdx .. ")")
+    tempContentImage:addInputEvent("Mouse_On", "PaGlobalFunc_Customization_ShowCloth_SetSelectButton(" .. itemIdx .. ")")
     local mod = itemIdx % self._config._textureColumnCount
     local divi = math.floor(itemIdx / self._config._textureColumnCount)
     local texUV = {
@@ -131,8 +118,6 @@ function Customization_ShowClothInfo:InitControl()
 end
 function Customization_ShowClothInfo:InitEvent()
   self._ui._checkBox_ShowHelmet:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_ShowCloth_ShowHelmet()")
-  Panel_Customizing_ShowOutfit:RegisterUpdateFunc("PaGlobalFunc_Customization_ShowCloth_UpdatePerFrame")
-  Panel_Customizing_ShowOutfit:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_ShowCloth_SetBoneControl(true)")
 end
 function Customization_ShowClothInfo:InitRegister()
   registerEvent("EventOpenClothUI", "PaGlobalFunc_Customization_ShowCloth_OpenClothUI")
@@ -152,10 +137,6 @@ function PaGlobalFunc_Customization_ShowCloth_Close()
   if false == PaGlobalFunc_Customization_ShowCloth_GetShow() then
     return false
   end
-  if true == self._isBoneControl then
-    PaGlobalFunc_Customization_ShowCloth_SetBoneControl(false)
-    return false
-  end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_ShowCloth_SetShow(false, false)
@@ -165,15 +146,19 @@ function PaGlobalFunc_Customization_ShowCloth_Open()
   if true == PaGlobalFunc_Customization_ShowCloth_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(1)
+  PaGlobalFunc_Customization_ShowCloth_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_ShowCloth_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_ShowCloth_Close()")
-  PaGlobalFunc_Customization_ShowCloth_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_ShowCloth_SetShow(isShow, isAni)
   Panel_Customizing_ShowOutfit:SetShow(isShow, isAni)
 end
 function PaGlobalFunc_Customization_ShowCloth_GetShow()
   return Panel_Customizing_ShowOutfit:GetShow()
+end
+function PaGlobalFunc_Customization_ShowCloth_GetPanel()
+  return Panel_Customizing_ShowOutfit
 end
 PaGlobalFunc_FromClient_Customization_ShowCloth_luaLoadComplete()

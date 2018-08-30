@@ -8,8 +8,7 @@ local Window_VoiceChatInfo = {
     _static_KeyGuide = UI.getChildControl(Panel_Window_VoiceChat, "Static_KeyGuide_ConsoleUI"),
     _slider = {},
     _button = {},
-    _buttonText = {},
-    _focusBox = {}
+    _buttonProgress2 = {}
   },
   _config = {
     _buttomType_Talk = 0,
@@ -48,19 +47,13 @@ local Window_VoiceChatInfo = {
   _isPressTalk = false,
   _arrowDefaultPosY
 }
-function PaGlobalFunc_VoiceChat_SliderHandleOn(sliderIdx)
-  local self = Window_VoiceChatInfo
-  for index = 0, self._config._maxSlider - 1 do
-    self._ui._focusBox[index]:SetShow(index == sliderIdx)
-  end
-end
 function PaGlobalFunc_VoiceChat_SliderHandle(sliderIdx)
   local self = Window_VoiceChatInfo
   local slider = self._ui._slider[sliderIdx]
   if nil == slider then
     return
   end
-  local posPercent = slider:GetControlPos() * 100
+  local posPercent = math.floor(slider:GetControlPos() * 100 + 0.5)
   if self._config._talkVol == sliderIdx then
     if posPercent > 0 then
       self:SetTalkButtonByCheck(true)
@@ -135,17 +128,11 @@ function Window_VoiceChatInfo:SetPressTalkButtonByCheck(isCheck)
   self._openIsPushToTalk = isCheck
   self:Update()
 end
-function PaGlobalFunc_VoiceChat_SliderHadleOut(index)
-  local self = Window_VoiceChatInfo
-  self._ui._focusBox[index]:SetShow(false)
-end
 function Window_VoiceChatInfo:InitEvent()
   self._ui._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_VoiceChat_Close()")
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_VoiceChat_Confirm()")
   for index = 0, self._config._maxSlider - 1 do
     if _ContentsGroup_isConsolePadControl then
-      self._ui._slider[index]:addInputEvent("Mouse_On", "PaGlobalFunc_VoiceChat_SliderHandleOn(" .. index .. ")")
-      self._ui._slider[index]:addInputEvent("Mouse_Out", "PaGlobalFunc_VoiceChat_SliderHadleOut(" .. index .. ")")
       self._ui._slider[index]:addInputEvent("Mouse_LPress", "PaGlobalFunc_VoiceChat_SliderHandle(" .. index .. ")")
     else
       self._ui._slider[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_VoiceChat_SliderHandle(" .. index .. ")")
@@ -189,17 +176,12 @@ function Window_VoiceChatInfo:InitControl()
   self._ui._staticText_MicSense:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SETVOICECHAT_MIC_SENSITIVITY"))
   self._ui._staticText_MicAmp = UI.getChildControl(self._ui._static_MicAmpGroup, "StaticText_SubTitle")
   self._ui._staticText_MicAmp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SETVOICECHAT_MIC_AMPLIFICATION"))
-  self._ui._focusBox[0] = UI.getChildControl(self._ui._static_MicVolGroup, "Static_FocusBox")
-  self._ui._focusBox[1] = UI.getChildControl(self._ui._static_ListenVolGroup, "Static_FocusBox")
-  self._ui._focusBox[2] = UI.getChildControl(self._ui._static_MicSenseGroup, "Static_FocusBox")
-  self._ui._focusBox[3] = UI.getChildControl(self._ui._static_MicAmpGroup, "Static_FocusBox")
   self._ui._button_Close = UI.getChildControl(self._ui._static_KeyGuide, "StaticText_Close_ConsoleUI")
   self._ui._button_Confirm = UI.getChildControl(self._ui._static_KeyGuide, "StaticText_Confirm_ConsoleUI")
   for index = 0, self._config._maxSlider - 1 do
-    self._ui._button[index] = UI.getChildControl(self._ui._slider[index], "Slider_Button")
+    self._ui._button[index] = UI.getChildControl(self._ui._slider[index], "Slider_DisplayButton")
     self._ui._button[index]:SetIgnore(true)
-    self._ui._buttonText[index] = UI.getChildControl(self._ui._button[index], "StaticText_Val")
-    self._ui._focusBox[index]:SetShow(false)
+    self._ui._buttonProgress2[index] = UI.getChildControl(self._ui._slider[index], "Progress2_1")
   end
 end
 function Window_VoiceChatInfo:Initialize()
@@ -229,10 +211,16 @@ function Window_VoiceChatInfo:Update()
   else
     self._ui._button_PressTalk:SetText("OFF")
   end
-  self._ui._buttonText[0]:SetText(Int64toInt32(self._openMicVolume))
-  self._ui._buttonText[1]:SetText(Int64toInt32(self._openHeadphoneVolume))
-  self._ui._buttonText[2]:SetText(Int64toInt32(self._openMicSensitivity))
-  self._ui._buttonText[3]:SetText(Int64toInt32(self._openMicAmplification))
+  self._ui._button[0]:SetText(Int64toInt32(self._openMicVolume))
+  self._ui._button[1]:SetText(Int64toInt32(self._openHeadphoneVolume))
+  self._ui._button[2]:SetText(Int64toInt32(self._openMicSensitivity))
+  self._ui._button[3]:SetText(Int64toInt32(self._openMicAmplification))
+  for index = 0, self._config._maxSlider - 1 do
+    self._ui._button[index]:SetPosX(self._ui._slider[index]:GetControlButton():GetPosX())
+    local value = self._ui._slider[index]:GetControlPos() * 100
+    local offset = math.cos(value / 100 * math.pi) * 2
+    self._ui._buttonProgress2[index]:SetProgressRate(value + offset)
+  end
 end
 function PaGlobalFunc_VoiceChat_Open()
   local self = Window_VoiceChatInfo
@@ -269,10 +257,16 @@ function PaGlobalFunc_VoiceChat_Open()
   self._ui._slider[1]:SetControlPos(self._openHeadphoneVolume)
   self._ui._slider[2]:SetControlPos(self._openMicSensitivity)
   self._ui._slider[3]:SetControlPos(self._openMicAmplification)
-  self._ui._buttonText[0]:SetText(Int64toInt32(self._openMicVolume))
-  self._ui._buttonText[1]:SetText(Int64toInt32(self._openHeadphoneVolume))
-  self._ui._buttonText[2]:SetText(Int64toInt32(self._openMicSensitivity))
-  self._ui._buttonText[3]:SetText(Int64toInt32(self._openMicAmplification))
+  self._ui._button[0]:SetText(Int64toInt32(self._openMicVolume))
+  self._ui._button[1]:SetText(Int64toInt32(self._openHeadphoneVolume))
+  self._ui._button[2]:SetText(Int64toInt32(self._openMicSensitivity))
+  self._ui._button[3]:SetText(Int64toInt32(self._openMicAmplification))
+  for index = 0, self._config._maxSlider - 1 do
+    self._ui._button[index]:SetPosX(self._ui._slider[index]:GetControlButton():GetPosX())
+    local value = self._ui._slider[index]:GetControlPos() * 100
+    local offset = math.cos(value / 100 * math.pi) * 2
+    self._ui._buttonProgress2[index]:SetProgressRate(value + offset)
+  end
   if true == Panel_Widget_Chatting_Renew:GetShow() then
     PaGlobalFunc_ChattingInfo_Close()
   end
@@ -299,9 +293,6 @@ function PaGlobalFunc_VoiceChat_Close()
   local headphoneVolume = self._prevOpenHeadphoneVolume
   local micSensitivity = self._prevOpenMicSensitivity
   local micAmplification = self._prevOpenMicAmplification
-  for index = 0, self._config._maxSlider - 1 do
-    self._ui._focusBox[index]:SetShow(false)
-  end
   if true == ToClient_IsConnectedMic() then
     ToClient_setMicOnOff(self._enumVoiceType._enVoiceChatType_Guild, isMicOn)
   else

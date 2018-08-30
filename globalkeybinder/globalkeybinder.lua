@@ -1132,6 +1132,9 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_EventNotify(deltaTime)
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_ScreenShotMode(delataTime)
+  if MessageBox.isPopUp() then
+    return
+  end
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     local screenShotFrame_Close = function()
       FGlobal_ScreenShotFrame_Close()
@@ -1480,6 +1483,9 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     FGlobal_GuildWarInfo_renew_Close()
     return true
   end
+  if true == _ContentsGroup_RenewUI_Customization and not PaGlobalFunc_Customization_GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and Panel_CustomizingAlbum:GetShow() then
+    CustomizingAlbum_Close()
+  end
   if true == _ContentsGroup_Expedition and true == Panel_ArmyUnitSetting:IsShow() and true == GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if true == Panel_Subjugation_SelectCharacter:IsShow() then
       PaGlobalFunc_ExpeditionCharacterSelectInfo_Close()
@@ -1487,6 +1493,8 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
       PaGlobalFunc_ExpeditionAreaSelectInfo_Close()
     elseif true == Panel_Subjugation_SelectArmyUnit:IsShow() then
       PaGlobalFunc_ExpeditionUnitSelectInfo_Close()
+    elseif true == Panel_Subjugation_Item:IsShow() then
+      PaGlobalFunc_ExpeditionRewardItemInfo_Close()
     else
       PaGlobalFunc_ExpeditionSettingInfo_Close()
     end
@@ -2089,4 +2097,6 @@ function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_ConsoleQuickMenu(deltaTime)
+end
+function PaGlobal_GlobalKeyBinder.Process_Default(deltaTime)
 end

@@ -15,14 +15,13 @@ local Panel_Window_InstallationMode_House_info = {
     radioButton_MaterialIcon = nil,
     radioButton_ToolIcon = nil,
     staticText_ToolTip = nil,
+    static_ToolTip_Arrow = nil,
     static_HousingItemListBG = nil,
     static_Item_Focus = nil,
     static_Item_Templete = nil,
     scroll_HousingItemList = nil,
     list2_HousingCategoryList = nil,
-    button_List_ButtonTemplete = nil,
     static_WishListBG = nil,
-    staticText_ItemValue = nil,
     static_WishItemListBG = nil,
     static_WishListItemTemplete = nil,
     static_WishItem_Focus = nil,
@@ -365,6 +364,7 @@ function Panel_Window_InstallationMode_House_info:childControl()
   self._ui.radioButton_MaterialIcon = UI.getChildControl(self._ui.static_TabMenuBG, "RadioButton_MaterialIcon")
   self._ui.radioButton_ToolIcon = UI.getChildControl(self._ui.static_TabMenuBG, "RadioButton_ToolIcon")
   self._ui.staticText_ToolTip = UI.getChildControl(self._ui.static_TabMenuBG, "StaticText_ToolTip")
+  self._ui.static_ToolTip_Arrow = UI.getChildControl(self._ui.staticText_ToolTip, "Static_ToolTip_Arrow")
   self._tabSlot[self._menu_Top_Enum.All] = self._ui.radioButton_AllIcon
   self._tabSlot[self._menu_Top_Enum.CategoryList] = self._ui.radioButton_ListIcon
   self._tabSlot[self._menu_Top_Enum.AllGoods] = self._ui.radioButton_TypeIcon
@@ -383,12 +383,10 @@ function Panel_Window_InstallationMode_House_info:childControl()
   self._ui.scroll_HousingItemList = UI.getChildControl(self._ui.static_HousingItemListBG, "Scroll_HousingItemList")
   UIScroll.InputEvent(self._ui.scroll_HousingItemList, "PaGlobalFunc_InstallationMode_House_ScrollItem")
   self._ui.list2_HousingCategoryList = UI.getChildControl(self._ui.static_House_InstallationMode_Right, "List2_HousingCategoryList")
-  self._ui.button_List_ButtonTemplete = UI.getChildControl(self._ui.list2_HousingCategoryList, "Button_List_ButtonTemplete")
   self._ui.list2_HousingCategoryList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_InstallationMode_House_FilterList")
   self._ui.list2_HousingCategoryList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.list2_HousingCategoryList:SetShow(false)
   self._ui.static_WishListBG = UI.getChildControl(self._ui.static_House_InstallationMode_Right, "Static_WishListBG")
-  self._ui.staticText_ItemValue = UI.getChildControl(self._ui.static_WishListBG, "StaticText_ItemValue")
   self._ui.static_WishItemListBG = UI.getChildControl(self._ui.static_WishListBG, "Static_WishItemListBG")
   self._ui.static_WishListItemTemplete = UI.getChildControl(self._ui.static_WishItemListBG, "Static_WishListItemTemplete")
   self._ui.static_WishListItemTemplete:SetShow(false)
@@ -709,8 +707,11 @@ function Panel_Window_InstallationMode_House_info:setList()
 end
 function Panel_Window_InstallationMode_House_info:setTab()
   self:clearTab()
-  self._ui.staticText_ToolTip:SetPosX(self._tabSlot[self._value.currentTabIndex]:GetPosX() - 22)
   self._ui.staticText_ToolTip:SetText(self._menu_Top_String[self._value.currentTabIndex])
+  local sizeX = self._ui.staticText_ToolTip:GetTextSizeX()
+  self._ui.staticText_ToolTip:SetSize(sizeX + 10, self._ui.staticText_ToolTip:GetSizeY())
+  self._ui.staticText_ToolTip:SetPosX(self._tabSlot[self._value.currentTabIndex]:GetPosX() - self._ui.staticText_ToolTip:GetSizeX() / 2 + self._tabSlot[self._value.currentTabIndex]:GetSizeX() / 2)
+  self._ui.static_ToolTip_Arrow:ComputePos()
   self._tabSlot[self._value.currentTabIndex]:SetCheck(true)
   self._ui.list2_HousingCategoryList:SetShow(false)
   ToClient_Housing_List_ClearFilter()
@@ -744,6 +745,7 @@ function Panel_Window_InstallationMode_House_info:setTab()
     ToClient_Housing_List_Filter_InstallType(self._categoryIndex[self._menu_Category_Enum.Alchemy])
     self:checkAndShowItem()
   end
+  ToClient_padSnapResetControl()
 end
 function Panel_Window_InstallationMode_House_info:setSubCategory(filter)
   self._ui.list2_HousingCategoryList:SetShow(false)
@@ -844,41 +846,46 @@ function Panel_Window_InstallationMode_House_info:setItemSlot()
       self._itemSlotBG[index].bg:SetShow(true)
       if true == Data._isInstalled then
         if index == self._value.currentItemIndex then
-          PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(Data._invenSlotNo, index)
+          PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(true, Data._invenSlotNo, index)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip( " .. Data._invenSlotNo .. ", " .. index .. " )")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(true, " .. Data._invenSlotNo .. ", " .. index .. " )")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_SelectInstalledObject( " .. Data._invenSlotNo .. " )")
         self._itemSlot[index].isCash:SetShow(false)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(false, " .. Data._invenSlotNo .. ", " .. index .. " )")
         self._itemSlotBG[index].bluebg:SetShow(false)
         self._itemSlotBG[index].check:SetShow(true)
       elseif not Data._isCashProduct then
         if index == self._value.currentItemIndex then
-          PaGlobalFunc_InstallationMode_House_showToolTip(Data._invenType, Data._invenSlotNo, index, self._panelKeyGuideEnum.Select)
+          PaGlobalFunc_InstallationMode_House_showToolTip(true, Data._invenType, Data._invenSlotNo, index, self._panelKeyGuideEnum.Select)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showToolTip( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. "," .. self._panelKeyGuideEnum.Select .. ")")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showToolTip(true, " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. "," .. self._panelKeyGuideEnum.Select .. ")")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_installFurniture( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", false, " .. 0 .. ")")
         self._itemSlot[index].isCash:SetShow(false)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_House_showToolTip(false, " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", " .. index .. "," .. self._panelKeyGuideEnum.Select .. ")")
         self._itemSlotBG[index].bluebg:SetShow(false)
         self._itemSlotBG[index].check:SetShow(false)
       else
         if index == self._value.currentItemIndex then
-          PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(Data._productNoRaw, index)
+          PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(true, Data._productNoRaw, index)
         end
-        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_CashItemShowToolTip( " .. Data._productNoRaw .. ", " .. index .. " )")
+        self._itemSlot[index].icon:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(false, " .. Data._productNoRaw .. ", " .. index .. " )")
+        self._itemSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(true, " .. Data._productNoRaw .. ", " .. index .. " )")
         self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_installFurniture( " .. Data._invenType .. ", " .. Data._invenSlotNo .. ", true, " .. Data._productNoRaw .. ")")
         self._itemSlot[index].isCash:SetShow(true)
+        self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(false, " .. Data._productNoRaw .. ", " .. index .. " )")
         self._itemSlotBG[index].bluebg:SetShow(true)
         self._itemSlotBG[index].check:SetShow(false)
       end
       self._itemSlot[index]:setItemByStaticStatus(Data:getItemStaticStatusWrapper(), 0)
       self._itemSlot[index].icon:SetAlpha(1)
       self._itemSlot[index].icon:SetShow(true)
-      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_House_HideTooltip()")
     end
     if slotIndex >= self._value.itemDataCount then
       self._itemSlot[index].icon:addInputEvent("Mouse_LUp", "")
-      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._itemSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_House_HideTooltip()")
       self._itemSlot[index].icon:SetShow(false)
+      self._itemSlotBG[index].bg:registerPadEvent(__eConsoleUIPadEvent_X, "")
       self._itemSlotBG[index].bluebg:SetShow(false)
     end
   end
@@ -962,14 +969,15 @@ function Panel_Window_InstallationMode_House_info:setWishSlot()
     if nil ~= cPSSW then
       local itemSSW = cPSSW:getItemByIndex(0)
       if index == self._value.currentWishIndex then
-        PaGlobalFunc_InstallationMode_House_showToolTip(slotIndex, index, nil, self._panelKeyGuideEnum.Collect)
+        PaGlobalFunc_InstallationMode_House_showToolTip(true, slotIndex, index, nil, self._panelKeyGuideEnum.Collect)
       end
       self._wishSlotBG[index].bg:SetShow(true)
       self._wishSlot[index]:setItemByStaticStatus(itemSSW, 0)
       self._wishSlot[index].icon:SetShow(true)
-      self._wishSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showToolTip(" .. slotIndex .. ", " .. index .. ",nil, " .. self._panelKeyGuideEnum.Collect .. ")")
+      self._itemSlot[index].icon:registerPadEvent(__eConsoleUIPadEvent_X, "")
+      self._wishSlot[index].icon:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_showToolTip(true," .. slotIndex .. ", " .. index .. ",nil, " .. self._panelKeyGuideEnum.Collect .. ")")
       self._wishSlot[index].icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_ClickWishSlot(" .. slotIndex .. ")")
-      self._wishSlot[index].icon:addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
+      self._wishSlot[index].icon:addInputEvent("Mouse_Out", "PaGlobalFunc_InstallationMode_House_HideTooltip()")
     end
     if slotIndex >= self._value.wishDataCount then
       self._wishSlot[index].icon:SetShow(false)
@@ -1064,7 +1072,7 @@ function PaGlobalFunc_InstallationMode_House_ToogleTab(value)
   newTabIndex = newTabIndex % self._menu_Top_Enum.Count
   self._value.currentTabIndex = newTabIndex
   self:setTab(newTabIndex)
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_InstallationMode_House_HideTooltip()
 end
 function PaGlobalFunc_InstallationMode_House_FilterList(list_content, key)
   local self = Panel_Window_InstallationMode_House_info
@@ -1075,7 +1083,8 @@ function PaGlobalFunc_InstallationMode_House_FilterList(list_content, key)
   local x1, y1, x2, y2 = setTextureUV_Func(icon, self._menu_Category_Texture[id][1], self._menu_Category_Texture[id][2], self._menu_Category_Texture[id][3], self._menu_Category_Texture[id][4])
   icon:getBaseTexture():setUV(x1, y1, x2, y2)
   icon:setRenderTexture(icon:getBaseTexture())
-  button:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_CliclSubCategory(" .. id .. ")")
+  button:addInputEvent("Mouse_On", "PaGlobalFunc_InstallationMode_House_OnSubCategory()")
+  button:addInputEvent("Mouse_LUp", "PaGlobalFunc_InstallationMode_House_CliclkSubCategory(" .. id .. ")")
 end
 function PaGlobalFunc_InstallationMode_House_installFurniture(invenType, invenSlotNo, iscash, productNo)
   if Panel_Win_System:GetShow() then
@@ -1087,25 +1096,37 @@ function PaGlobalFunc_InstallationMode_House_installFurniture(invenType, invenSl
     housing_selectInstallationItemForCashShop(productNo)
   end
 end
-function PaGlobalFunc_InstallationMode_House_showToolTip(invenType, invenSlotNo, slot_Idx, stringNum)
+function PaGlobalFunc_InstallationMode_House_showToolTip(showFlating, invenType, invenSlotNo, slot_Idx, stringNum)
   local itemWrapper = getInventoryItemByType(invenType, invenSlotNo)
   local self = Panel_Window_InstallationMode_House_info
   local slot = self._itemSlot[slot_Idx]
-  Panel_Tooltip_Item_Show(itemWrapper, self._ui.static_TabMenuBG, false, false, nil)
+  local slotBGControl = self._itemSlot[slot_Idx].icon
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_House_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(stringNum)
 end
-function PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(productNoRaw, slot_Idx)
+function PaGlobalFunc_InstallationMode_House_CashItemShowToolTip(showFlating, productNoRaw, slot_Idx)
   local cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(productNoRaw)
   local itemSSW = cPSSW:getItemByIndex(0)
   local self = Panel_Window_InstallationMode_House_info
   local slot = self._itemSlot[slot_Idx]
+  local slotBGControl = self._itemSlot[slot_Idx].icon
   if nil == itemSSW then
     return
   end
-  Panel_Tooltip_Item_Show(itemSSW, self._ui.static_TabMenuBG, true, false)
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_House_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(self._panelKeyGuideEnum.Select)
 end
-function PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(invenSlotNo, slot_Idx)
+function PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(showFlating, invenSlotNo, slot_Idx)
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local itemSSW = houseWrapper:getCurrentItemEnchantStatStaticWrapper(invenSlotNo)
   if nil == itemSSW then
@@ -1113,7 +1134,13 @@ function PaGlobalFunc_InstallationMode_House_showInstalledItemToolTip(invenSlotN
   end
   local self = Panel_Window_InstallationMode_House_info
   local slot = self._itemSlot[slot_Idx]
-  Panel_Tooltip_Item_Show(itemSSW, self._ui.static_TabMenuBG, true, false, nil)
+  local slotBGControl = self._itemSlot[slot_Idx].icon
+  if false == showFlating then
+    PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.ItemWithoutCompare, self._ui.static_House_InstallationMode_Right:GetPosX())
+    PaGlobalFunc_FloatingTooltip_Close()
+    return
+  end
+  PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemSSWrapper, itemSSW, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(self._panelKeyGuideEnum.Select)
 end
 function PaGlobalFunc_InstallationMode_House_SelectInstalledObject(idx)
@@ -1135,7 +1162,11 @@ function PaGlobalFunc_InstallationMode_House_ScrollWish(isUpScroll)
   local self = Panel_Window_InstallationMode_House_info
   self:updateWishScroll(isUpScroll)
 end
-function PaGlobalFunc_InstallationMode_House_CliclSubCategory(filter)
+function PaGlobalFunc_InstallationMode_House_OnSubCategory()
+  local self = Panel_Window_InstallationMode_House_info
+  self:setKeyGuideBottom(self._panelKeyGuideEnum.Select)
+end
+function PaGlobalFunc_InstallationMode_House_CliclkSubCategory(filter)
   local self = Panel_Window_InstallationMode_House_info
   self:setSubCategory(filter)
 end
@@ -1184,7 +1215,7 @@ end
 function PaGlobalFunc_InstallationMode_House_ClickWishSlot(slotIndex)
   housing_clearShoppingBasketItemByIndex(slotIndex)
   PaGlobalFunc_InstallationMode_House_UpdateWish()
-  Panel_Tooltip_Item_hideTooltip()
+  PaGlobalFunc_InstallationMode_House_HideTooltip()
 end
 function PaGlobalFunc_InstallationMode_House_ClickCancel()
   housing_CancelInstallObject()
@@ -1221,6 +1252,10 @@ function PaGlobalFunc_InstallationMode_House_FocusSlot(isOn, isWish, index)
     self:focusItem(isOn, index)
   end
 end
+function PaGlobalFunc_InstallationMode_House_HideTooltip()
+  PaGlobalFunc_TooltipInfo_Close()
+  PaGlobalFunc_FloatingTooltip_Close()
+end
 function FromClient_InstallationMode_House_Init()
   local self = Panel_Window_InstallationMode_House_info
   self:initialize()
@@ -1244,11 +1279,17 @@ function FromClient_ShowInstallationMenu_House_Renew(installMode, isShow, isShow
 end
 function FromClient_InstallationMode_UpdateInventory_House_Renew()
   local self = Panel_Window_InstallationMode_House_info
+  if false == PaGlobalFunc_InstallationMode_House_GetShow() then
+    return
+  end
   self:updateItemContent(true)
   self:updateWishContent()
 end
 function FromClient_InstallationMode_UpdateInstallationActor_House_Renew(isAdd)
   local self = Panel_Window_InstallationMode_House_info
+  if false == PaGlobalFunc_InstallationMode_House_GetShow() then
+    return
+  end
   self:updateItemContent(true)
   self:updateWishContent()
 end

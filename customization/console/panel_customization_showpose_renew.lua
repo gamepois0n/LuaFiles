@@ -61,29 +61,6 @@ local MotionTable = {
   [38] = combat,
   [39] = combat
 }
-function PaGlobalFunc_Customization_ShowPose_UpdatePerFrame(deltaTime)
-  local self = Customization_ShowPoseInfo
-  if true == self._isBoneControl then
-    if true == isPadUp(__eJoyPadInputType_RightShoulder) then
-      PaGlobalFunc_Customization_ShowPose_SetBoneControl(false)
-    end
-    return
-  end
-end
-function PaGlobalFunc_Customization_ShowPose_SetBoneControl(isSet)
-  local self = Customization_ShowPoseInfo
-  if false == isSet then
-    self._isBoneControl = false
-    PaGlobalFunc_Customization_SetKeyGuide(1)
-    Panel_Customizing_ShowPose:ignorePadSnapUpdate(false)
-    ToClient_StartOrEndShapeBoneControlStart(false)
-  else
-    self._isBoneControl = true
-    PaGlobalFunc_Customization_SetKeyGuide(9)
-    Panel_Customizing_ShowPose:ignorePadSnapUpdate(true)
-    ToClient_StartOrEndShapeBoneControlStart(true)
-  end
-end
 function Customization_ShowPoseInfo:ClearContent()
   for _, content in pairs(self._contentImage) do
     if nil ~= content then
@@ -164,8 +141,6 @@ function Customization_ShowPoseInfo:InitControl()
   self._config._columnHeight = self._ui._radioButton_TypeTemplate:GetSizeY() + self._config._imageGap
 end
 function Customization_ShowPoseInfo:InitEvent()
-  Panel_Customizing_ShowPose:RegisterUpdateFunc("PaGlobalFunc_Customization_ShowPose_UpdatePerFrame")
-  Panel_Customizing_ShowPose:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_Customization_ShowPose_SetBoneControl(true)")
 end
 function Customization_ShowPoseInfo:InitRegister()
   registerEvent("EventOpenMotionUI", "PaGlobalFunc_Customization_ShowPose_OpenMotionUi")
@@ -186,7 +161,6 @@ function PaGlobalFunc_Customization_ShowPose_Close()
     return false
   end
   if true == self._isBoneControl then
-    PaGlobalFunc_Customization_ShowPose_SetBoneControl(false)
     return false
   end
   applyMotion(-1)
@@ -202,15 +176,19 @@ function PaGlobalFunc_Customization_ShowPose_Open()
   if true == PaGlobalFunc_Customization_ShowPose_GetShow() then
     return
   end
-  PaGlobalFunc_Customization_SetKeyGuide(1)
+  PaGlobalFunc_Customization_ShowPose_SetShow(true, false)
+  PaGlobalFunc_Customization_KeyGuideSetShow(true)
+  PaGlobalFunc_Customization_SetKeyGuide(0)
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_ShowPose_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_ShowPose_Close()")
-  PaGlobalFunc_Customization_ShowPose_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_ShowPose_SetShow(isShow, isAni)
   Panel_Customizing_ShowPose:SetShow(isShow, isAni)
 end
 function PaGlobalFunc_Customization_ShowPose_GetShow()
   return Panel_Customizing_ShowPose:GetShow()
+end
+function PaGlobalFunc_Customization_ShowPose_GetPanel()
+  return Panel_Customizing_ShowPose
 end
 PaGlobalFunc_FromClient_Customization_ShowPose_luaLoadComplete()

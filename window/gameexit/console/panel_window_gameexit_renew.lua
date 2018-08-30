@@ -1,3 +1,4 @@
+local UI_TM = CppEnums.TextMode
 local _panel = Panel_Window_GameExit
 local Window_GameExitInfo = {
   _ui = {
@@ -14,7 +15,7 @@ local Window_GameExitInfo = {
     _exitType_UnTray = 3,
     _exitType_CharacterSwap = 4,
     _maxQuestList = 3,
-    _maxJournalList = 3,
+    _maxJournalList = 2,
     _maxCharacterSlot = 4
   },
   _currentExitType = -1,
@@ -26,7 +27,8 @@ local Window_GameExitInfo = {
   _characterInfoTable = {},
   _currentWheelValue = 0,
   _currentCharacterIndex = -1,
-  _selfPlayerIndex = -1
+  _selfPlayerIndex = -1,
+  _journalList = {}
 }
 function PaGlobalFunc_GameExit_workTypeToStringSwap(workingType)
   local workingText
@@ -48,7 +50,6 @@ function PaGlobalFunc_GameExit_workTypeToStringSwap(workingType)
 end
 function Window_GameExitInfo:SetHistory()
   local questList = self._ui._bottom._staticText_QuestList
-  local journalList = self._ui._bottom._staticText_JournalList
   local selfPlayerAPW = getSelfPlayer()
   if nil == selfPlayerAPW then
     return
@@ -68,16 +69,18 @@ function Window_GameExitInfo:SetHistory()
   if 0 == journalCount then
     return
   end
+  for index = 0, self._config._maxJournalList - 1 do
+    self._journalList[index]:SetShow(false)
+  end
   local journalListStr = ""
-  journalList:SetText("")
-  for index = 0, journalCount - 1 do
+  for index = 0, self._config._maxJournalList - 1 do
     local journalWrapper = ToClient_GetRecentJournalByIndex(index)
     if nil ~= journalWrapper then
       journalListStr = "\194\183 [" .. string.format("%.02d", journalWrapper:getJournalHour()) .. ":" .. string.format("%.02d", journalWrapper:getJournalMinute()) .. "] " .. journalWrapper:getName()
-      journalList:SetText(journalList:GetText() .. journalListStr .. "\n")
+      self._journalList[index]:SetShow(true)
+      self._journalList[index]:SetText(journalListStr)
     end
   end
-  journalList:SetShow(true)
 end
 function PaGlobalFunc_GameExit_SetCharacterInfoTable()
   local self = Window_GameExitInfo
@@ -565,8 +568,15 @@ function Window_GameExitInfo:InitControl()
   body._button_RB = UI.getChildControl(self._ui._static_MainBg, "Button_RB")
   bottom._staticText_QuestList = UI.getChildControl(self._ui._static_Bottom, "StaticText_QuestList")
   bottom._staticText_QuestList:SetTextVerticalTop()
-  bottom._staticText_JournalList = UI.getChildControl(self._ui._static_Bottom, "StaticText_JournalList")
-  bottom._staticText_JournalList:SetTextVerticalTop()
+  bottom._staticText_JournalListTemplate = UI.getChildControl(self._ui._static_Bottom, "StaticText_JournalListTemplate")
+  bottom._staticText_JournalListTemplate:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  bottom._staticText_JournalListTemplate:SetShow(false)
+  for index = 0, self._config._maxJournalList - 1 do
+    local control = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._ui._static_Bottom, "staticText_Journal_" .. index)
+    CopyBaseProperty(bottom._staticText_JournalListTemplate, control)
+    control:SetPosY(control:GetPosY() + control:GetSizeY() * index)
+    self._journalList[index] = control
+  end
   body._button_LB:SetShow(4 < getCharacterDataCount())
   body._button_RB:SetShow(4 < getCharacterDataCount())
   local _button_DisPlay = {

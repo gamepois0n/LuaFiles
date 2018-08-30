@@ -1,7 +1,9 @@
+local _panel = Panel_Console_Window_SignOption
+_panel:ignorePadSnapMoveToOtherPanel()
 local Window_GuildAgreementOptionInfo = {
   _ui = {
-    _static_ButtomBg = UI.getChildControl(Panel_Console_Window_SignOption, "Static_BottomBg"),
-    _static_SignContentBg = UI.getChildControl(Panel_Console_Window_SignOption, "Static_SignContentBg"),
+    _static_ButtomBg = UI.getChildControl(_panel, "Static_BottomBg"),
+    _static_SignContentBg = UI.getChildControl(_panel, "Static_SignContentBg"),
     _buttonList = {}
   },
   _currentContractDayIndex = -1,
@@ -42,6 +44,35 @@ local Window_GuildAgreementOptionInfo = {
   _maxBenefitValue,
   _maxpenaltyCostValue
 }
+function Window_GuildAgreementOptionInfo:Initialize()
+  self:InitControl()
+  self:InitEvent()
+  PaGlobal_registerPanelOnBlackBackground(_panel)
+end
+function Window_GuildAgreementOptionInfo:InitControl()
+  self._ui._buttonList[0] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_0D")
+  self._ui._buttonList[1] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_1D")
+  self._ui._buttonList[2] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_7D")
+  self._ui._buttonList[3] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_15D")
+  self._ui._buttonList[4] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_30D")
+  self._ui._buttonList[5] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_90D")
+  self._ui._buttonList[6] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_365D")
+  for index = 0, #self._ui._buttonList do
+    self._ui._buttonList[index]:SetText(self._periodValue[index] .. PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_LIFETIME"))
+  end
+  self._ui._edit_DailyPayment = UI.getChildControl(self._ui._static_SignContentBg, "Edit_DailyPayment")
+  self._ui._edit_PenaltyCost = UI.getChildControl(self._ui._static_SignContentBg, "Edit_PenaltyCost")
+  self._ui._staticText_DailyPaymentRange = UI.getChildControl(self._ui._static_SignContentBg, "StaticText_DailyPaymentRange")
+  self._ui._staticText_PenaltyRange = UI.getChildControl(self._ui._static_SignContentBg, "StaticText_PenaltyRange")
+end
+function Window_GuildAgreementOptionInfo:InitEvent()
+  for index = 0, #self._ui._buttonList do
+    self._ui._buttonList[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(" .. index .. ")")
+  end
+  self._ui._edit_DailyPayment:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()")
+  self._ui._edit_PenaltyCost:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_PenaltyEditClick()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Confirm()")
+end
 function PaGlobal_CheckGuildAgreement_DaliyPaymentUiEdit(targetUI)
   local self = Window_GuildAgreementOptionInfo
   return nil ~= targetUI and targetUI:GetKey() == self._ui._edit_DailyPayment:GetKey()
@@ -104,33 +135,6 @@ function PaGlobalFunc_AgreementGuild_SignOption_GetShow()
 end
 function PaGlobalFunc_AgreementGuild_SignOption_SetShow(isShow, isAni)
   Panel_Console_Window_SignOption:SetShow(isShow, isAni)
-end
-function Window_GuildAgreementOptionInfo:InitControl()
-  self._ui._button_Confirm = UI.getChildControl(self._ui._static_ButtomBg, "Button_Confirm")
-  self._ui._button_Close = UI.getChildControl(self._ui._static_ButtomBg, "Button_Close")
-  self._ui._buttonList[0] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_0D")
-  self._ui._buttonList[1] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_1D")
-  self._ui._buttonList[2] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_7D")
-  self._ui._buttonList[3] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_15D")
-  self._ui._buttonList[4] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_30D")
-  self._ui._buttonList[5] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_90D")
-  self._ui._buttonList[6] = UI.getChildControl(self._ui._static_SignContentBg, "RadioButton_365D")
-  for index = 0, #self._ui._buttonList do
-    self._ui._buttonList[index]:SetText(self._periodValue[index] .. PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_LIFETIME"))
-  end
-  self._ui._edit_DailyPayment = UI.getChildControl(self._ui._static_SignContentBg, "Edit_DailyPayment")
-  self._ui._edit_PenaltyCost = UI.getChildControl(self._ui._static_SignContentBg, "Edit_PenaltyCost")
-  self._ui._staticText_DailyPaymentRange = UI.getChildControl(self._ui._static_SignContentBg, "StaticText_DailyPaymentRange")
-  self._ui._staticText_PenaltyRange = UI.getChildControl(self._ui._static_SignContentBg, "StaticText_PenaltyRange")
-end
-function Window_GuildAgreementOptionInfo:InitEvent()
-  self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_Confirm()")
-  self._ui._button_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_Close()")
-  for index = 0, #self._ui._buttonList do
-    self._ui._buttonList[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(" .. index .. ")")
-  end
-  self._ui._edit_DailyPayment:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()")
-  self._ui._edit_PenaltyCost:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_PenaltyEditClick()")
 end
 function PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()
   local self = Window_GuildAgreementOptionInfo
@@ -204,6 +208,8 @@ function PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(index)
   if true == self._isJoin then
     self._ui._edit_DailyPayment:SetEditText(self._paymentPerDay[index])
     self._ui._edit_PenaltyCost:SetEditText(self._cancellationCharge[index])
+    self._ui._staticText_DailyPaymentRange:SetText(makeDotMoney(toInt64(0, self._paymentPerDay[index])) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
+    self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[index])) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
   else
     local usableActivity = self._usableActivity
     local tempBenefit32 = Int64toInt32(self._memberBenefit)
@@ -233,12 +239,8 @@ function Window_GuildAgreementOptionInfo:SetMaxDailyPayment(checkIndex, benefitM
   local maxBenefit = math.min(tonumber(benefitMax), tonumber(CppEnums.GuildBenefit.eMaxContractedBenefit))
   self._ui._staticText_DailyPaymentRange:SetText(makeDotMoney(toInt64(0, checkIndex)) .. " ~ " .. makeDotMoney(maxBenefit) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
 end
-function Window_GuildAgreementOptionInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
-end
-function PaGlobalFunc_FromClient_GuildAgreementOption_luaLoadComplete()
+function PaGlobalFunc_GuildAgreementOption_Init()
   local self = Window_GuildAgreementOptionInfo
   self:Initialize()
 end
-registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_FromClient_GuildAgreementOption_luaLoadComplete")
+registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildAgreementOption_Init")

@@ -94,6 +94,7 @@ local _buttonAIsPressed = false
 local _elapsedTime = 0
 local _buttonHoldThreshold = 0.3
 local ItemSlotTemplete = {}
+local _snappedOnToggleButton = false
 function ItemSlotTemplete:New()
   local slot = {
     selected = false,
@@ -139,8 +140,7 @@ function ItemSlotTemplete:New()
     self.staticText_Price:SetText(makeDotMoney(s64_price))
     local strCount = string.format("%d", Int64toInt32(s64_stackCount))
     if s64_stackCount < _const.s64_0 then
-      self.staticText_Desc:SetFontColor(UI_color.C_FF3BD3FF)
-      self.staticText_Desc:SetText(PAGetString(Defines.StringSheet_GAME, "NPCSHOP_SOLDOUT"))
+      self.staticText_Desc:SetText("")
       self.icon.icon:SetMonoTone(false)
       self.staticText_Price:SetMonoTone(false)
     else
@@ -153,7 +153,7 @@ function ItemSlotTemplete:New()
     if nil ~= Intimacy and Intimacy > 0 and (false == shopInfo._value.isCamping or nil == shopInfo._value.isCamping) then
       self.staticText_Desc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "NPCSHOP_NEED_INTIMACY", "intimacy", Intimacy))
       if Intimacy > intimacyValue then
-        self.staticText_Desc:SetFontColor(UI_color.C_FFD20000)
+        self.staticText_Desc:SetFontColor(UI_color.C_FFBA2737)
         self.icon.icon:SetMonoTone(true)
         self.staticText_Price:SetMonoTone(true)
         self.staticText_Desc:SetMonoTone(true)
@@ -263,6 +263,10 @@ function Panel_Dialog_NPCShop_Info:registEventHandler()
   self._ui.staticText_Cancel_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_Close()")
   self._ui.staticText_BuyOrSell_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()")
   self._ui.staticText_SomeOrAll_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
+  self._ui.radioButton_Inventory:addInputEvent("Mouse_On", "InputMOn_Dialog_NPCShop_SnappedOnToggle(true)")
+  self._ui.radioButton_Inventory:addInputEvent("Mouse_Out", "InputMOn_Dialog_NPCShop_SnappedOnToggle(false)")
+  self._ui.radioButton_Storage:addInputEvent("Mouse_On", "InputMOn_Dialog_NPCShop_SnappedOnToggle(true)")
+  self._ui.radioButton_Storage:addInputEvent("Mouse_Out", "InputMOn_Dialog_NPCShop_SnappedOnToggle(false)")
 end
 function Panel_Dialog_NPCShop_Info:initialize()
   self._initialize = true
@@ -292,7 +296,6 @@ function Panel_Dialog_NPCShop_Info:childControl()
   self._ui.radioButton_Tab[1] = self._ui.radioButton_Sell
   self._ui.radioButton_Tab[2] = self._ui.radioButton_Re_Buy
   self._space.tabButtonSizeX = self._ui.radioButton_Buy:GetSizeX()
-  self._ui.static_Line = UI.getChildControl(self._ui.staticText_Tap_Group, "Static_Line")
   self._ui.frame_Item_List = UI.getChildControl(Panel_Dialog_NPCShop, "Frame_Item_List")
   self._ui.frame_Content = UI.getChildControl(self._ui.frame_Item_List, "Frame_Content")
   self._ui.radioButton_Left_templete = UI.getChildControl(self._ui.frame_Content, "RadioButton_Left")
@@ -323,7 +326,6 @@ function Panel_Dialog_NPCShop_Info:childControl()
   self._ui.staticText_Inventory = UI.getChildControl(self._ui.static_Silver, "StaticText_Inventory")
   self._ui.radioButton_Storage = UI.getChildControl(self._ui.static_Silver, "RadioButton_Storage")
   self._ui.staticText_Storage = UI.getChildControl(self._ui.static_Silver, "StaticText_Storage")
-  self._ui.static_Line = UI.getChildControl(self._ui.static_Silver, "Static_Line")
   self._ui.static_Key_Guide_ConsoleUI = UI.getChildControl(Panel_Dialog_NPCShop, "Static_Key_Guide_ConsoleUI")
   self._ui.staticText_Move_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_Move_ConsoleUI")
   self._ui.staticText_Cancel_ConsoleUI = UI.getChildControl(self._ui.static_Key_Guide_ConsoleUI, "StaticText_Cancel_ConsoleUI")
@@ -333,13 +335,11 @@ function Panel_Dialog_NPCShop_Info:childControl()
   self._ui.stc_cirprogressBG = UI.getChildControl(self._ui.staticText_SomeOrAll_ConsoleUI, "Static_CircleProgress_PressBG")
   self._ui.cirprogress_buttonHold = UI.getChildControl(self._ui.stc_cirprogressBG, "CircularProgress_Press")
   local keyGuideList = {
-    self._ui.staticText_SomeOrAll_ConsoleUI,
     self._ui.staticText_BuyOrSell_ConsoleUI,
     self._ui.staticText_XForDetail_ConsoleUI,
     self._ui.staticText_Move_ConsoleUI,
     self._ui.staticText_Cancel_ConsoleUI
   }
-  self._ui.staticText_SomeOrAll_ConsoleUI:SetText("(Hold)" .. self._ui.staticText_SomeOrAll_ConsoleUI:GetText())
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.static_Key_Guide_ConsoleUI, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Dialog_NPCShop_Info:open(showAni)
@@ -411,7 +411,7 @@ function Panel_Dialog_NPCShop_Info:createSlot()
       end
       slot.radioButton:addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_NPCShop_OnSlotClickedWithTooltip(" .. index .. ")")
       slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_A, "Input_Dialog_NPCShop_PressedA()")
-      slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_Up_A, "Input_Dialog_NPCShop_ReleasedA()")
+      slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()")
       slot.radioButton:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_Dialog_NPCShop_ShowTooltip(" .. index .. ", true)")
       slot.radioButton:addInputEvent("Mouse_UpScroll", "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( true )")
       slot.radioButton:addInputEvent("Mouse_DownScroll", "PaGlobalFunc_Dialog_NPCShop_ScrollEvent( false )")
@@ -446,6 +446,7 @@ Wrong NpcShop Tab Index!! : ]] .. self._value.lastTabIndex)
   else
     self._value.itemListSize = npcShop_getRepurchaseCount()
   end
+  self:setKeyguide()
   if self._value.itemListSize <= 0 then
     for index = 0, self._config.slotCount - 1 do
       self._slots[index]:clearItem()
@@ -524,15 +525,15 @@ function Panel_Dialog_NPCShop_Info:updateContentData()
         local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
         if nil ~= myGuildListInfo then
           if self._enum.etabIndexBuy == self._value.lastTabIndex and itemPrice_s64 > myGuildListInfo:getGuildBusinessFunds_s64() then
-            slot.staticText_Price:SetFontColor(UI_color.C_FFD20000)
+            slot.staticText_Price:SetFontColor(UI_color.C_FFBA2737)
           else
             slot.staticText_Price:SetFontColor(UI_color.C_FFE7E7E7)
           end
         else
-          slot.staticText_Price:SetFontColor(UI_color.C_FFD20000)
+          slot.staticText_Price:SetFontColor(UI_color.C_FFBA2737)
         end
       elseif self._enum.etabIndexBuy == self._value.lastTabIndex and itemPrice_s64 > myInvenMoney_s64 and itemPrice_s64 > myWareHouseMoney_s64 then
-        slot.staticText_Price:SetFontColor(UI_color.C_FFD20000)
+        slot.staticText_Price:SetFontColor(UI_color.C_FFBA2737)
       else
         slot.staticText_Price:SetFontColor(UI_color.C_FFE7E7E7)
       end
@@ -623,31 +624,30 @@ function Panel_Dialog_NPCShop_Info:controlInit()
 end
 function Panel_Dialog_NPCShop_Info:setKeyguide()
   if self._enum.etabIndexBuy == self._value.lastTabIndex then
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetShow(true)
+    self._ui.staticText_SomeOrAll_ConsoleUI:SetText("(Hold)" .. PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_MULTIBUY"))
     self._ui.staticText_BuyOrSell_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "NPCSHOP_BUY"))
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_MULTIBUY"))
   elseif self._enum.etabIndexSell == self._value.lastTabIndex then
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetShow(true)
+    self._ui.staticText_SomeOrAll_ConsoleUI:SetText("(Hold)" .. PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_MULTISELL"))
     self._ui.staticText_BuyOrSell_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "NPCSHOP_SELL"))
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_MULTISELL"))
   else
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetShow(false)
     self._ui.staticText_BuyOrSell_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "NPCSHOP_REPURCHASE"))
-    self._ui.staticText_SomeOrAll_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_MULTIBUY"))
   end
-  self._ui.staticText_SomeOrAll_ConsoleUI:SetEnable(false)
-  self._ui.staticText_SomeOrAll_ConsoleUI:SetMonoTone(true)
+  self._ui.staticText_SomeOrAll_ConsoleUI:SetShow(false)
   local keyGuideList = {
-    self._ui.staticText_SomeOrAll_ConsoleUI,
     self._ui.staticText_BuyOrSell_ConsoleUI,
     self._ui.staticText_XForDetail_ConsoleUI,
     self._ui.staticText_Move_ConsoleUI,
     self._ui.staticText_Cancel_ConsoleUI
   }
+  if 1 > self._value.itemListSize or true == _snappedOnToggleButton then
+    self._ui.staticText_XForDetail_ConsoleUI:SetShow(false)
+    keyGuideList[2] = self._ui.staticText_Move_ConsoleUI
+    keyGuideList[3] = self._ui.staticText_Cancel_ConsoleUI
+    keyGuideList[4] = nil
+  else
+    self._ui.staticText_XForDetail_ConsoleUI:SetShow(true)
+  end
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui.static_Key_Guide_ConsoleUI, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
-end
-function Panel_Dialog_NPCShop_Info:updateKeyguide()
-  self:setKeyguide()
 end
 function Panel_Dialog_NPCShop_Info:clearTabButton()
   for key, value in pairs(self._ui.radioButton_Tab) do
@@ -858,7 +858,7 @@ function PaGlobalFunc_Dialog_NPCShop_InvenRClick_SellItem(itemCount, slotNo)
         priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
       }
       MessageBox.showMessageBox(messageBoxData)
-    else
+    elseif true == _ContentsGroup_RenewUI_ItemMarketPlace then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
       local messageBoxData = {
         title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
@@ -980,21 +980,13 @@ function Input_Dialog_NPCShop_ShowTooltip(index, isShow)
   end
 end
 function Input_Dialog_NPCShop_PressedA()
-  local self = Panel_Dialog_NPCShop_Info
-  if true == self._ui.staticText_SomeOrAll_ConsoleUI:IsEnable() then
-    _buttonAIsPressed = true
-    self._ui.stc_cirprogressBG:SetShow(true)
-  end
 end
 function Input_Dialog_NPCShop_ReleasedA()
+end
+function InputMOn_Dialog_NPCShop_SnappedOnToggle(isOn)
   local self = Panel_Dialog_NPCShop_Info
-  if _buttonHoldThreshold > _elapsedTime then
-    PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
-  end
-  _buttonAIsPressed = false
-  _elapsedTime = 0
-  self._ui.cirprogress_buttonHold:SetProgressRate(0)
-  self._ui.stc_cirprogressBG:SetShow(false)
+  _snappedOnToggleButton = isOn
+  self:setKeyguide()
 end
 function PaGlobalFunc_Dialog_NPCShop_OnSlotClicked(slotIdx)
   local self = Panel_Dialog_NPCShop_Info
@@ -1120,6 +1112,8 @@ function PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
           local shopItemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
           local shopItemEndurance = shopItemSSW:get():getEndurance()
           local pricePiece = Int64toInt32(shopItemSSW:getSellPriceCalculate(shopItem:getItemPriceOption()))
+          local inventory = getSelfPlayer():get():getInventory()
+          local s64_inventoryItemCount = inventory:getItemCount_s64(shopItemWrapper:getStaticStatus():get()._key)
           local toWhereType = 0
           if self._ui.radioButton_Storage:IsCheck() then
             toWhereType = 2
@@ -1135,8 +1129,8 @@ function PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
           local function sellDoit()
             local itemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
             local isSocketed = false
-            local function sellConfirm()
-              npcShop_doSellByItemNo(slot.slotNo, 1, toWhereType, self._value.isCamping)
+            local function sellConfirm(count)
+              npcShop_doSellByItemNo(slot.slotNo, count, toWhereType, self._value.isCamping)
             end
             local socketMaxCount = ToClient_GetMaxItemSocketCount()
             for jewelIndex = 0, socketMaxCount - 1 do
@@ -1150,13 +1144,15 @@ function PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
               local messageBoxData = {
                 title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
                 content = messageBoxMemo,
-                functionYes = sellConfirm,
+                functionYes = function()
+                  Panel_NumberPad_Show(true, s64_inventoryItemCount, slot.slotNo, sellConfirm)
+                end,
                 functionNo = MessageBox_Empty_function,
                 priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
               }
               MessageBox.showMessageBox(messageBoxData)
             else
-              npcShop_doSellByItemNo(slot.slotNo, 1, toWhereType, self._value.isCamping)
+              Panel_NumberPad_Show(true, s64_inventoryItemCount, slot.slotNo, sellConfirm)
             end
             if pricePiece >= 500000 and ToClient_HasWareHouseFromNpc() then
               Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_MONEYFORWAREHOUSE_ACK", "getMoney", makeDotMoney(pricePiece)), 6)
@@ -1220,6 +1216,10 @@ function PaGlobalFunc_Dialog_NPCShop_BuySome()
     end
     money_s64 = myGuildListInfo:getGuildBusinessFunds_s64()
   end
+  if money_s64 < shopItem:getItemPriceWithOption() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_TradeMarket_Not_Enough_Money"))
+    return
+  end
   local s64_maxMoneyNumber = money_s64 / shopItem:getItemPriceWithOption()
   local s64_maxWeightNumber = Defines.s64_const.s64_0
   local itemWeight
@@ -1246,8 +1246,65 @@ function PaGlobalFunc_Dialog_NPCShop_BuySome()
       s64_maxWeightNumber = maxNumber
     end
   end
-  Panel_NumberPad_Show(true, s64_maxMoneyNumber, param, PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction, nil, nil, nil, nil, s64_maxWeightNumber)
-  Panel_NumberPad_SetType("NpcShop_BuySome")
+  if true == self:checkBuyPossible() then
+    if shopItemWrapper:getStaticStatus():get():isStackableXXX() then
+      Panel_NumberPad_Show(true, s64_maxMoneyNumber, nil, PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction, nil, nil, nil, nil, s64_maxWeightNumber)
+      Panel_NumberPad_SetType("NpcShop_BuySome")
+    else
+      PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction(Defines.s64_const.s64_1)
+    end
+  end
+end
+function Panel_Dialog_NPCShop_Info:checkBuyPossible()
+  local buyPossible = false
+  local moneyItemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eInventory, getMoneySlotNo())
+  local myInvenMoney_s64 = toInt64(0, 0)
+  if nil ~= moneyItemWrapper then
+    myInvenMoney_s64 = moneyItemWrapper:get():getCount_s64()
+  end
+  local myWareHouseMoney_s64 = warehouse_moneyFromNpcShop_s64()
+  local itemPrice_s64, shopItemWrapper
+  local slot = self._slots[self._value.selectedSlotIndex]
+  if nil == slot then
+    return
+  end
+  if self._enum.etabIndexBuy == self._value.lastTabIndex then
+    shopItemWrapper = npcShop_getItemBuy(slot.slotNo)
+  elseif self._enum.etabIndexSell == self._value.lastTabIndex then
+    shopItemWrapper = npcShop_getItemSell(slot.slotNo)
+  else
+    slot.slotNo = self._value.itemListSize - slot.slotNo - 1
+    shopItemWrapper = npcShop_getItemRepurchase(slot.slotNo)
+  end
+  if nil == shopItemWrapper then
+    return
+  end
+  local shopItem = shopItemWrapper:get()
+  if self._enum.etabIndexSell == self._value.lastTabIndex then
+    itemPrice_s64 = shopItem:getItemSellPriceWithOption()
+  elseif self._enum.etabIndexBuy == self._value.lastTabIndex then
+    itemPrice_s64 = shopItem:getItemPriceWithOption()
+  elseif self._enum.etabIndexRepurchase == self._value.lastTabIndex then
+    itemPrice_s64 = shopItem.price_s64
+  end
+  if npcShop_isGuildShopContents() then
+    local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+    if nil ~= myGuildListInfo then
+      if self._enum.etabIndexBuy == self._value.lastTabIndex and itemPrice_s64 > myGuildListInfo:getGuildBusinessFunds_s64() then
+        buyPossible = false
+      else
+        buyPossible = true
+      end
+    else
+      buyPossible = false
+      slot.staticText_Price:SetFontColor(UI_color.C_FFBA2737)
+    end
+  elseif self._enum.etabIndexBuy == self._value.lastTabIndex and myInvenMoney_s64 < itemPrice_s64 and myWareHouseMoney_s64 < itemPrice_s64 then
+    buyPossible = false
+  else
+    buyPossible = true
+  end
+  return buyPossible
 end
 function PaGlobalFunc_Dialog_NpcShop_BuySome_ConfirmFunction(inputNumber, param)
   local self = Panel_Dialog_NPCShop_Info
@@ -1331,8 +1388,8 @@ function PaGlobalFunc_Dialog_NpcShop_SellItemAll()
         local itemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
         local shopItemEndurance = itemSSW:get():getEndurance()
         local isSocketed = false
-        local function sellConfirm()
-          npcShop_doSellAll(slot.keyValue, toWhereType, self._value.isCamping)
+        local function sellConfirm(count, slotNo)
+          npcShop_doSellByItemNo(slotNo, count, toWhereType, self._value.isCamping)
         end
         local socketMaxCount = ToClient_GetMaxItemSocketCount()
         for jewelIndex = 0, socketMaxCount - 1 do
@@ -1346,13 +1403,15 @@ function PaGlobalFunc_Dialog_NpcShop_SellItemAll()
           local messageBoxData = {
             title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
             content = messageBoxMemo,
-            functionYes = sellConfirm,
+            functionYes = function()
+              Panel_NumberPad_Show(true, s64_inventoryItemCount, slot.slotNo, sellConfirm)
+            end,
             functionNo = MessageBox_Empty_function,
             priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
           }
           MessageBox.showMessageBox(messageBoxData)
         else
-          npcShop_doSellAll(slot.keyValue, toWhereType, self._value.isCamping)
+          Panel_NumberPad_Show(true, s64_inventoryItemCount, slot.slotNo, sellConfirm)
           if sellPrice >= 500000 and ToClient_HasWareHouseFromNpc() then
             Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_MONEYFORWAREHOUSE_ACK", "getMoney", makeDotMoney(sellPrice)), 6)
           end
@@ -1371,7 +1430,7 @@ function PaGlobalFunc_Dialog_NpcShop_SellItemAll()
             priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
           }
           MessageBox.showMessageBox(messageBoxData)
-        else
+        elseif true == _ContentsGroup_RenewUI_ItemMarketPlace then
           local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_ITEMMARKET_USE_MSGMEMO")
           local messageBoxData = {
             title = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_SELL_ALERT_2"),
@@ -1381,6 +1440,8 @@ function PaGlobalFunc_Dialog_NpcShop_SellItemAll()
             priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
           }
           MessageBox.showMessageBox(messageBoxData)
+        else
+          sellAllDoit()
         end
       elseif sellPrice >= 500000 and toWhereType ~= CppEnums.ItemWhereType.eGuildWarehouse and not ToClient_HasWareHouseFromNpc() then
         local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HIGHWEIGHT_WARNING")

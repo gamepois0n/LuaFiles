@@ -155,15 +155,15 @@ local _button_TextureUV = {
     y2 = 43
   },
   {
-    x1 = 126,
-    y1 = 13,
-    x2 = 156,
-    y2 = 43
-  },
-  {
     x1 = 157,
     y1 = 13,
     x2 = 187,
+    y2 = 43
+  },
+  {
+    x1 = 126,
+    y1 = 13,
+    x2 = 156,
     y2 = 43
   },
   {
@@ -594,14 +594,12 @@ function PanelInteraction:show(actor)
       self._SHOW_BUTTON_COUNT = self._SHOW_BUTTON_COUNT + 1
     end
   end
+  self._ui.stc_QuestComplete:SetShow(false)
   local npcActorProxyWrapper = getNpcActor(actor:getActorKey())
   if nil ~= npcActorProxyWrapper then
     local currentType = npcActorProxyWrapper:get():getOverHeadQuestInfoType()
     if true == actor:isSetInteracatbleFrag(4) and 3 == currentType then
-      local textControl = UI.getChildControl(self._ui.stc_QuestComplete, "StaticText_QuestCompleate")
       self._ui.stc_QuestComplete:SetShow(true)
-    else
-      self._ui.stc_QuestComplete:SetShow(false)
     end
   end
   self._ui.needCollectTool:SetShow(false)
@@ -621,7 +619,7 @@ function PanelInteraction:close()
     self._INTERACTABLE_ACTOR_KEY = 0
     self._INTERACTABLE_FRAG = 0
     Panel_Interaction_HouseRanke_Close()
-    FriendHouseRank_Close()
+    PaGlobalFunc_Interaction_HouseList_Close()
     RemoteControl_Interaction_ShowToggloe()
   end
 end
@@ -705,8 +703,6 @@ function PanelInteraction:updatePerFrame(deltaTime)
 end
 function PanelInteraction:updatePerFrame_Desc()
   if self._focusInteractionType == CppEnums.InteractionType.InteractionType_Sympathetic then
-    self:updateDesc(self._focusInteractionType)
-  elseif self._focusInteractionType == CppEnums.InteractionType.InteractionType_Observer then
     self:updateDesc(self._focusInteractionType)
   end
   local actor = interaction_getInteractable()
@@ -1405,7 +1401,7 @@ function PanelInteraction:RollingAnimation(deltaTime)
   local div = 1 / self._SHOW_BUTTON_COUNT
   local btnIdx = -_currentInteractionSelectIndex % self._SHOW_BUTTON_COUNT
   for ii = 0, #_interactionTargetUIList do
-    local isShow = actor:isSetInteracatbleFrag(ii)
+    local isShow = _interactionTargetUIList[ii]:GetShow()
     if isShow then
       local ANGLE_OFFSET = math.pi * (2 * btnIdx / self._SHOW_BUTTON_COUNT - 0.5)
       local buttonPosX = BUTTON_OFFSET_X + CIRCLE_RADIUS * math.cos(math.pi * 2 * div * -(_roleCheckTimeAcc / _rollingTime) + ANGLE_OFFSET)
@@ -1435,7 +1431,7 @@ function PanelInteraction:IncreaseSelectIndex()
   local ANGLE_OFFSET = math.pi * -0.5
   local jj = -_currentInteractionSelectIndex % self._SHOW_BUTTON_COUNT
   for ii = 0, #_interactionTargetUIList do
-    local isShow = actor:isSetInteracatbleFrag(ii)
+    local isShow = _interactionTargetUIList[ii]:GetShow()
     if isShow then
       local div = jj / self._SHOW_BUTTON_COUNT
       local buttonPosX = BUTTON_OFFSET_X + CIRCLE_RADIUS * math.cos(math.pi * 2 * div + ANGLE_OFFSET)

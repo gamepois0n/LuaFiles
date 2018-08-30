@@ -9,6 +9,7 @@ local expeditionUnitSelectInfo = {
   _selectUnitNo = nil
 }
 function expeditionUnitSelectInfo:initialize()
+  ToClient_getListExpeditionaryUnits()
   self:registEventHandler()
   Panel_Subjugation_SelectArmyUnit:SetShow(false)
 end
@@ -80,10 +81,10 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
       textStatus:SetFontColor(Defines.Color.C_FFC4BEBE)
     end
     textStatus:SetText(string.format("[%s] atk:%s/Energy:%s", unitName, atkPoint, curEnergyPoint))
-    unitInfoBG:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionAreaSelectInfo_ClickUnit(" .. unitNo .. ")")
+    unitInfoBG:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(" .. unitNo .. ")")
   end
 end
-function PaGlobalFunc_ExpeditionAreaSelectInfo_ClickUnit(unitNo)
+function PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(unitNo)
   local self = expeditionUnitSelectInfo
   if unitNo == self._selectUnitNo then
     return
@@ -95,4 +96,8 @@ function PaGlobalFunc_ExpeditionAreaSelectInfo_ClickUnit(unitNo)
     self._ui._list2_myUnitList:requestUpdateByKey(prevSelectUnitNo)
   end
 end
-expeditionUnitSelectInfo:initialize()
+function FromClient_ExpeditionUnitSelectInfo_Initialize()
+  local self = expeditionUnitSelectInfo
+  self:initialize()
+end
+registerEvent("FromClient_luaLoadComplete", "FromClient_ExpeditionUnitSelectInfo_Initialize")

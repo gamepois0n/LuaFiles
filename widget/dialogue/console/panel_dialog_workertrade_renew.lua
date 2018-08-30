@@ -194,7 +194,7 @@ function workerTrade:updateMarketWorkerList()
       local info = contents[uiIndex]
       local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
-      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
       local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
@@ -263,7 +263,7 @@ function workerTrade:updateMyRegistedWorkerList()
       local info = contents[uiIndex]
       local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
-      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
       local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
@@ -336,7 +336,7 @@ function workerTrade:updateMyWorkerList()
       info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
       local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
-      local posX = info._static_Image:GetPosX() + radius * 0.67 / uiScale
+      local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
       local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)

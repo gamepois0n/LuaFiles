@@ -82,7 +82,7 @@ function setCurrentMessageData(currentData, position)
         Panel_Win_System:SetSize(Panel_Win_System:GetSizeX(), defaultPanelSize)
         static_Inner:SetSize(static_Inner:GetSizeX(), defaultContentSize)
       else
-        local gap = staticText_Desc:GetTextSizeY() - defaultContentSize + 20
+        local gap = staticText_Desc:GetTextSizeY() - defaultContentSize + 40
         Panel_Win_System:SetSize(Panel_Win_System:GetSizeX(), defaultPanelSize + gap)
         static_Inner:SetSize(static_Inner:GetSizeX(), defaultContentSize + gap)
       end

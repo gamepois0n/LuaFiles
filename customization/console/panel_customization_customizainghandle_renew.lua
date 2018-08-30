@@ -1,15 +1,18 @@
-local Customization_CustomizingHandleInfo = {
+local CustomizingHandleInfo = {
   _ui = {
     _leafTree = {}
   },
   _currentPartCount = 0,
   _currentClassType
 }
-function PaGlobalFunc_Customization_ClickLeafTree(index)
-  selectCustomizationControlPart(index)
+function CustomizingHandleInfo:Initialize()
+  self:InitRegister()
+end
+function CustomizingHandleInfo:InitRegister()
+  registerEvent("EventOpenCustomizationUiGroupFrame", "PaGlobalFunc_FromClient_Customization_Open")
 end
 function PaGlobalFunc_FromClient_Customization_Open(classType, uiGroupIndex)
-  local self = Customization_CustomizingHandleInfo
+  local self = CustomizingHandleInfo
   self._ui._leafTree = PaGlobalFunc_Customization_GetLeafTree()
   self._ui._currentClassType = classType
   self._currentPartCount = getUiPartCount(classType, uiGroupIndex)
@@ -20,20 +23,11 @@ function PaGlobalFunc_FromClient_Customization_Open(classType, uiGroupIndex)
     self._ui._leafTree[uiPartIndex]:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_ClickLeafTree(" .. uiPartIndex .. ")")
   end
 end
-function Customization_CustomizingHandleInfo:InitControl()
+function PaGlobalFunc_Customization_ClickLeafTree(index)
+  selectCustomizationControlPart(index)
 end
-function Customization_CustomizingHandleInfo:InitEvent()
-end
-function Customization_CustomizingHandleInfo:InitRegister()
-  registerEvent("EventOpenCustomizationUiGroupFrame", "PaGlobalFunc_FromClient_Customization_Open")
-end
-function Customization_CustomizingHandleInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
-  self:InitRegister()
-end
-function PaGlobalFunc_FromClient_Customization_CustomizingHandle_luaLoadComplete()
-  local self = Customization_CustomizingHandleInfo
+function PaGlobalFunc_CustomizingHandle_luaLoadComplete()
+  local self = CustomizingHandleInfo
   self:Initialize()
 end
-PaGlobalFunc_FromClient_Customization_CustomizingHandle_luaLoadComplete()
+PaGlobalFunc_CustomizingHandle_luaLoadComplete()

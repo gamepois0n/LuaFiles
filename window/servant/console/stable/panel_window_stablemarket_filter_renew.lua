@@ -76,6 +76,7 @@ local skillFilterString = {
   [0] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_ALL")
 }
 function Panel_Window_StableMarket_Filter_info:registEventHandler()
+  PaGlobal_registerPanelOnBlackBackground(Panel_Window_StableMarket_Filter)
   Panel_Window_StableMarket_Filter:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_StableMarket_Filter_Confirm()")
 end
 function Panel_Window_StableMarket_Filter_info:registerMessageHandler()
@@ -180,19 +181,25 @@ function Panel_Window_StableMarket_Filter_info:setFilterButtonText()
 end
 function Panel_Window_StableMarket_Filter_info:setFilterListSex()
   self._ui.list2_1_SelectFilter:getElementManager():clearKey()
+  self._ui.list2_1_SelectFilter:SetShow(false)
   for index = 0, 2 do
     self._ui.list2_1_SelectFilter:getElementManager():pushKey(toInt64(0, index))
     self._ui.list2_1_SelectFilter:requestUpdateByKey(toInt64(0, index))
   end
+  self._ui.list2_1_SelectFilter:SetShow(true)
 end
 function Panel_Window_StableMarket_Filter_info:setFilterListTier()
   self._ui.list2_1_SelectFilter:getElementManager():clearKey()
+  self._ui.list2_1_SelectFilter:SetShow(false)
   local tierCount = 9
   if not isContentsNineTierEnable then
     tierCount = 8
   end
   if not isContentsEightTierEnable then
     tierCount = 7
+  end
+  if tierCount > 0 then
+    self._ui.list2_1_SelectFilter:SetShow(true)
   end
   for index = 0, tierCount do
     self._ui.list2_1_SelectFilter:getElementManager():pushKey(toInt64(0, index))
@@ -201,11 +208,10 @@ function Panel_Window_StableMarket_Filter_info:setFilterListTier()
 end
 function Panel_Window_StableMarket_Filter_info:setFilterListSkill()
   self._ui.list2_1_SelectFilter:getElementManager():clearKey()
-  if 0 == self._value.filterSkillCount then
-    self._ui.list2_1_SelectFilter:SetShow(false)
-    return
+  self._ui.list2_1_SelectFilter:SetShow(false)
+  if 0 < self._value.filterSkillCount then
+    self._ui.list2_1_SelectFilter:SetShow(true)
   end
-  self._ui.list2_1_SelectFilter:SetShow(true)
   for index = 0, self._value.filterSkillCount - 1 do
     self._ui.list2_1_SelectFilter:getElementManager():pushKey(toInt64(0, index))
     self._ui.list2_1_SelectFilter:requestUpdateByKey(toInt64(0, index))

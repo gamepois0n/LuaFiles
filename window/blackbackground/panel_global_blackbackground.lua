@@ -2,6 +2,8 @@ local BlackBackground = {
   _targetList = {},
   _current = nil
 }
+Panel_Global_BlackBackGround:SetIgnore(true)
+Panel_Global_BlackBackGround:SetEnable(false)
 function BlackBackground:show()
   Panel_Global_BlackBackGround:SetShow(true)
 end

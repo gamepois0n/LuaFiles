@@ -200,6 +200,7 @@ function PaGlobalFunc_FromClient_WorldMap_SetTownMode(waypointKey)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+  PaGlobalFunc_WorldMap_HouseFilter_FilterClear()
 end
 function FGlobal_WorldmapMain_IsAllowTutorialPanelShow()
   local self = Window_WorldMap_MainInfo
@@ -329,6 +330,10 @@ function Window_WorldMap_MainInfo:ClosePanel()
   return true
 end
 function Window_WorldMap_MainInfo:ClosePanelInTown()
+  if true == PaGlobalFunc_WorldMapHouseManager_IsShow() then
+    PaGlobalFunc_WorldMapHouseManager_Close()
+    return false
+  end
   if true == PaGlobalFunc_WorldMap_HouseCraft_GetShow() then
     PaGlobalFunc_WorldMap_HouseCraft_Close()
     return false
@@ -337,8 +342,8 @@ function Window_WorldMap_MainInfo:ClosePanelInTown()
     PaGlobalFunc_WorldMap_HouseCraftLarge_Close()
     return false
   end
-  if true == PaGlobalFunc_WorldMapHouseManager_IsShow() then
-    PaGlobalFunc_WorldMapHouseManager_Close()
+  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
+    PaGlobalFunc_WorldMap_HouseFilter_Close()
     return false
   end
   if true == PaGlobalFunc_WorldMap_RightMenu_GetShow() then
@@ -348,14 +353,13 @@ function Window_WorldMap_MainInfo:ClosePanelInTown()
   if true == PaGlobalFunc_Warehouse_GetShow() then
     Warehouse_Close()
     DeliveryRequestWindow_Close()
+    PaGlobalFunc_WorldMap_TopMenu_Open()
+    PaGlobalFunc_WorldMap_BottomMenu_Open()
+    PaGlobalFunc_WorldMap_RingMenu_Open()
     return false
   end
   if true == PaGlobalFunc_WorldMap_Stable_GetShow() then
     PaGlobalFunc_WorldMap_Stable_Close()
-    return false
-  end
-  if true == PaGlobalFunc_WorldMap_HouseFilter_GetShow() then
-    PaGlobalFunc_WorldMap_HouseFilter_Close()
     return false
   end
   FGlobal_ClearWorldmapIconTooltip()
@@ -366,6 +370,9 @@ function Window_WorldMap_MainInfo:PrepareClosePanel()
     PaGlobalFunc_WorldMap_SellBuyHouse_Close()
     return false
   end
+  if false == PaGlobalFunc_WorldMap_HouseFilter_CloseSubFilter() then
+    return false
+  end
   return true
 end
 function PaGlobalFunc_WorldMap_WindowEscape()
@@ -374,9 +381,6 @@ function PaGlobalFunc_WorldMap_WindowEscape()
     return
   end
   if false == self:ClosePanelInTown() then
-    PaGlobalFunc_WorldMap_TopMenu_Open()
-    PaGlobalFunc_WorldMap_BottomMenu_Open()
-    PaGlobalFunc_WorldMap_RingMenu_Open()
     return
   end
   if false == self:ClosePanel() then
@@ -598,6 +602,9 @@ function PaGlobalFunc_WorldMap_Open()
     return
   end
   if CppEnums.worldmapRenderState.NOT_RENDER ~= ToClient_getWorldmapRenderState() then
+    return
+  end
+  if true == ToClient_SniperGame_IsPlaying() then
     return
   end
   if Panel_Casting_Bar:GetShow() then

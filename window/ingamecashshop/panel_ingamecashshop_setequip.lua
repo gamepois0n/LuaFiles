@@ -35,7 +35,8 @@ local CashShopSetEquip = {
     21,
     22,
     23,
-    13
+    13,
+    25
   },
   SetCharacterEquipName = {
     [14] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BODY"),
@@ -48,7 +49,8 @@ local CashShopSetEquip = {
     [21] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_EARING"),
     [22] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_EYE"),
     [23] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_MOUTH"),
-    [13] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_LAMPLIGHT")
+    [13] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_LAMPLIGHT"),
+    [25] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_NAME")
   },
   SetHorseEquipName = {
     [14] = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_BARD"),
@@ -213,7 +215,7 @@ function cashShop_SetEquip_SetPosition()
   local panelSizeX = Panel_IngameCashShop_SetEquip:GetSizeX()
   local panelSizeY = Panel_IngameCashShop_SetEquip:GetSizeY()
   Panel_IngameCashShop_SetEquip:SetPosX(scrSizeX - panelSizeX - 20)
-  Panel_IngameCashShop_SetEquip:SetPosY(scrSizeY - panelSizeY - 60)
+  Panel_IngameCashShop_SetEquip:SetPosY(scrSizeY - panelSizeY - 25)
 end
 function HandleClicked_CashShopSetEquip_UnSetEquip(equipSlotNo)
   local self = CashShopSetEquip
@@ -483,6 +485,7 @@ local CashShopController = {
   btn_AwakenWeapon = UI.getChildControl(Panel_IngameCashShop_Controller, "CheckButton_AwakenWeapon"),
   btn_WarStance = UI.getChildControl(Panel_IngameCashShop_Controller, "CheckButton_WarStance"),
   btn_OpenHelm = UI.getChildControl(Panel_IngameCashShop_Controller, "CheckButton_OpenHelm"),
+  btn_Cloak_Invisual = UI.getChildControl(Panel_IngameCashShop_Controller, "CheckButton_Cloak_Invisual"),
   cameraControlBG = UI.getChildControl(Panel_IngameCashShop_Controller, "Static_CameraControlBG"),
   cameraControlTitle = UI.getChildControl(Panel_IngameCashShop_Controller, "StaticText_CameraControlTitle"),
   cameraControlMoveBG = UI.getChildControl(Panel_IngameCashShop_Controller, "Static_CameraControlMoveBG"),
@@ -526,6 +529,7 @@ function CashShopController:Initialize()
   self.static_SetOptionBG:AddChild(self.btn_HideHair)
   self.static_SetOptionBG:AddChild(self.btn_HideHelm)
   self.static_SetOptionBG:AddChild(self.btn_OpenHelm)
+  self.static_SetOptionBG:AddChild(self.btn_Cloak_Invisual)
   self.static_SetOptionBG:AddChild(self.btn_AwakenWeapon)
   self.static_SetOptionBG:AddChild(self.btn_WarStance)
   self.static_SetOptionBG:AddChild(self.btn_AllDoff)
@@ -537,6 +541,7 @@ function CashShopController:Initialize()
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_HideHair)
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_HideHelm)
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_OpenHelm)
+  Panel_IngameCashShop_Controller:RemoveControl(self.btn_Cloak_Invisual)
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_AwakenWeapon)
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_WarStance)
   Panel_IngameCashShop_Controller:RemoveControl(self.btn_AllDoff)
@@ -565,7 +570,9 @@ function CashShopController:Initialize()
   self.btn_HideHelm:SetPosY(45)
   self.btn_OpenHelm:SetPosX(self.btn_HideHelm:GetPosX() + self.btn_HideHelm:GetSizeX() - 1)
   self.btn_OpenHelm:SetPosY(45)
-  self.btn_AwakenWeapon:SetPosX(self.btn_OpenHelm:GetPosX() + self.btn_OpenHelm:GetSizeX() - 1)
+  self.btn_Cloak_Invisual:SetPosX(self.btn_OpenHelm:GetPosX() + self.btn_OpenHelm:GetSizeX() - 1)
+  self.btn_Cloak_Invisual:SetPosY(45)
+  self.btn_AwakenWeapon:SetPosX(self.btn_Cloak_Invisual:GetPosX() + self.btn_OpenHelm:GetSizeX() - 1)
   self.btn_AwakenWeapon:SetPosY(45)
   self.btn_WarStance:SetPosX(self.btn_AwakenWeapon:GetPosX() + self.btn_AwakenWeapon:GetSizeX() - 1)
   self.btn_WarStance:SetPosY(45)
@@ -638,9 +645,11 @@ function CashShopController:Initialize()
     self.btn_HideHair:SetPosY(15)
     self.btn_HideHelm:SetPosY(15)
     self.btn_OpenHelm:SetPosY(15)
+    self.btn_Cloak_Invisual:SetPosY(15)
     self.btn_AwakenWeapon:SetPosY(15)
     self.btn_WarStance:SetPosY(15)
   end
+  self.btn_Cloak_Invisual:SetCheck(false)
   if _ContentsGroup_RenewUI_PearlShop then
     UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_Exit"):SetShow(false)
     UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_QNA"):SetShow(false)
@@ -1039,6 +1048,11 @@ function HandleClicked_CashShopController_ToggleOpenHelm()
   local isChecked = self.btn_OpenHelm:IsCheck()
   getIngameCashMall():setIsShowBattleHelmet(isChecked)
 end
+function HandleClicked_CashShopController_ToggleCloakInvisual()
+  local self = CashShopController
+  local isChecked = self.btn_Cloak_Invisual:IsCheck()
+  getIngameCashMall():setIsShowCloak(isChecked)
+end
 function HandleClicked_CashShopController_ToggleAwakenWeapon()
   local isChecked = CashShopController.btn_AwakenWeapon:IsCheck()
   getIngameCashMall():setAwakenWeaponView(isChecked)
@@ -1074,6 +1088,10 @@ function CashShopController_ForceOffAllButton()
   if self.btn_OpenHelm:IsCheck() then
     self.btn_OpenHelm:SetCheck(false)
     getIngameCashMall():setIsShowBattleHelmet(false)
+  end
+  if self.btn_Cloak_Invisual:IsCheck() then
+    self.btn_Cloak_Invisual:SetCheck(false)
+    getIngameCashMall():setIsShowCloak(false)
   end
   if self.btn_AwakenWeapon:IsCheck() then
     self.btn_AwakenWeapon:SetCheck(false)
@@ -1167,6 +1185,10 @@ function _cashShopController_ButtonTooltip(isShow, buttonType)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_OPENHELM")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_CHECKHELMOPEN_DESC")
     uiControl = self.btn_OpenHelm
+  elseif buttonType == 12 then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_DESC")
+    uiControl = self.btn_Cloak_Invisual
   end
   if isShow == true then
     TooltipSimple_Show(uiControl, name, desc)
@@ -1365,6 +1387,7 @@ function CashShopController:registEventHandler()
   self.btn_HideHair:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleHideHair()")
   self.btn_HideHelm:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleHideHelm()")
   self.btn_OpenHelm:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleOpenHelm()")
+  self.btn_Cloak_Invisual:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleCloakInvisual()")
   self.btn_AwakenWeapon:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleAwakenWeapon()")
   self.btn_WarStance:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_ToggleWarStance()")
   self.btn_ShowUnderwear:addInputEvent("Mouse_On", "_cashShopController_ButtonTooltip( true, " .. 0 .. ")")
@@ -1377,6 +1400,8 @@ function CashShopController:registEventHandler()
   self.btn_HideHelm:addInputEvent("Mouse_Out", "_cashShopController_ButtonTooltip( false )")
   self.btn_OpenHelm:addInputEvent("Mouse_On", "_cashShopController_ButtonTooltip( true, " .. 11 .. ")")
   self.btn_OpenHelm:addInputEvent("Mouse_Out", "_cashShopController_ButtonTooltip( false )")
+  self.btn_Cloak_Invisual:addInputEvent("Mouse_On", "_cashShopController_ButtonTooltip( true, " .. 12 .. ")")
+  self.btn_Cloak_Invisual:addInputEvent("Mouse_Out", "_cashShopController_ButtonTooltip( false )")
   self.btn_AwakenWeapon:addInputEvent("Mouse_On", "_cashShopController_ButtonTooltip( true, " .. 8 .. ")")
   self.btn_AwakenWeapon:addInputEvent("Mouse_Out", "_cashShopController_ButtonTooltip( false )")
   self.btn_WarStance:addInputEvent("Mouse_On", "_cashShopController_ButtonTooltip( true, " .. 9 .. ")")

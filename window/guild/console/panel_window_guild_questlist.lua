@@ -42,6 +42,11 @@ function GuildQuestList:open()
 end
 function GuildQuestList:updateQuestList()
   local guildQuestListCount = ToClient_RequestGuildQuestCount()
+  if 0 == guildQuestListCount then
+    PaGlobalFunc_GuildMain_SetKeyGuide(1, false)
+  else
+    PaGlobalFunc_GuildMain_SetKeyGuide(1, true)
+  end
   self._ui.list_QestList:getElementManager():clearKey()
   for index = 0, guildQuestListCount - 1 do
     self._ui.list_QestList:getElementManager():pushKey(toInt64(0, index))
@@ -93,6 +98,7 @@ function GuildQuestList:updateProgressQuest()
     end
     self._ui.txt_ProgressCondition:SetText(conditionStr)
     self._ui.btn_ProgressQuestSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_ShowCurrentProgressingQuestInfo()")
+    self._ui.btn_ProgressQuestSlot:addInputEvent("Mouse_On", "PaGlobalFunc_GuildMain_SetKeyGuide(" .. 1 .. ", true)")
     self._ui.btn_ProgressQuestSlot:SetShow(true)
     self._ui.stc_ProgressQuestIcon:SetShow(true)
     self._ui.txt_ProgressQuestName:SetShow(true)
