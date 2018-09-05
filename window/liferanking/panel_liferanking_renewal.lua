@@ -367,7 +367,6 @@ function PaGlobal_LifeRanking:MyLifeRankingText_Refresh()
       end
     end
     local myLifeRanking = PaGlobal_LifeRanking:GetMyLifeRank(tab)
-    self._ui._tabMyTitle[tab]:SetText(tostring(self._ui._tabName[tab]))
     if self._ui._tabMyTitle[tab]:IsLimitText() then
       self._ui._tabMyTitle[tab]:addInputEvent("Mouse_On", "PaGlobal_LifeRanking:LifeTitleTooltip(true, " .. tab .. ")")
       self._ui._tabMyTitle[tab]:addInputEvent("Mouse_Out", "PaGlobal_LifeRanking:LifeTitleTooltip(false)")
@@ -511,6 +510,7 @@ function PaGlobal_LifeRanking:FillLifeRankList(lifeRanker, rankText, nameText, g
   guildText:SetFontColor(color)
   guildText:SetFontColor(color)
   rankText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LIFERANKING_RANK", "listIdx", listIdx + 1))
+  nameText:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   nameText:SetText(lifeRankerName .. "(" .. lifeRankerCharName .. ")")
   guildText:SetText(lifeRankerGuild)
   if self._selectedTabIdx <= 9 then

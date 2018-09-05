@@ -170,7 +170,7 @@ local function calcAllDistance()
 end
 local function init()
   Panel_MiniGame_Drag:SetShow(false, false)
-  Panel_MiniGame_Drag:RegisterUpdateFunc("Panel_Minigame_Drag_PerFrame")
+  Panel_MiniGame_Drag:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   calcAllDistance()
   Panel_Minigame_Drag_Start()
 end

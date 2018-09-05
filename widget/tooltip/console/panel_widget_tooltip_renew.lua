@@ -39,7 +39,8 @@ local COMPONENT_TYPE = {
   ITEM_MARKET_INFO = 9,
   ENDURANCE = 10,
   WEIGHT_PRICE = 11,
-  LINE_SPLIT = 12
+  TIME_LIMIT = 12,
+  LINE_SPLIT = 13
 }
 local SPLIT = -1
 local _slotBGUV = {
@@ -69,6 +70,7 @@ local _targetData = {
     COMPONENT_TYPE.ENCHANT_TYPE,
     COMPONENT_TYPE.DESCRIPTION,
     COMPONENT_TYPE.DYEING_INFO,
+    COMPONENT_TYPE.TIME_LIMIT,
     COMPONENT_TYPE.ITEM_MARKET_INFO,
     COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.WEIGHT_PRICE
@@ -85,6 +87,7 @@ local _targetData = {
     COMPONENT_TYPE.ENCHANT_TYPE,
     COMPONENT_TYPE.DESCRIPTION,
     COMPONENT_TYPE.DYEING_INFO,
+    COMPONENT_TYPE.TIME_LIMIT,
     COMPONENT_TYPE.ITEM_MARKET_INFO,
     COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.WEIGHT_PRICE
@@ -112,6 +115,7 @@ function TooltipInfo:initialize()
     [COMPONENT_TYPE.ENCHANT_TYPE] = {fillDataFunc = TooltipInfo_updateENCHANT_TYPE},
     [COMPONENT_TYPE.DESCRIPTION] = {fillDataFunc = TooltipInfo_updateDESCRIPTION},
     [COMPONENT_TYPE.DYEING_INFO] = {fillDataFunc = TooltipInfo_updateDYEING_INFO},
+    [COMPONENT_TYPE.TIME_LIMIT] = {fillDataFunc = TooltipInfo_updateTIME_LIMIT},
     [COMPONENT_TYPE.ITEM_MARKET_INFO] = {fillDataFunc = TooltipInfo_updateITEM_MARKET_INFO},
     [COMPONENT_TYPE.ENDURANCE] = {
       fillDataFunc = TooltipInfo_updateENDURANCE,
@@ -138,6 +142,7 @@ function TooltipInfo:initialize()
       [COMPONENT_TYPE.ITEM_MARKET_INFO] = UI.getChildControl(self._ui.stc_BG[1], "ITEM_MARKET_INFO"),
       [COMPONENT_TYPE.ENDURANCE] = UI.getChildControl(self._ui.stc_BG[1], "ENDURANCE"),
       [COMPONENT_TYPE.WEIGHT_PRICE] = UI.getChildControl(self._ui.stc_BG[1], "WEIGHT_PRICE"),
+      [COMPONENT_TYPE.TIME_LIMIT] = UI.getChildControl(self._ui.stc_BG[1], "TIME_LIMIT"),
       [COMPONENT_TYPE.LINE_SPLIT] = UI.getChildControl(self._ui.stc_BG[1], "LINE_SPLIT")
     }
   }
@@ -517,6 +522,44 @@ function TooltipInfo_updateDESCRIPTION(itemWrapper, itemSSW, tooltipTargetType)
   return "" ~= desc
 end
 function TooltipInfo_updateDYEING_INFO(itemWrapper, itemSSW, tooltipTargetType)
+end
+function TooltipInfo_updateTIME_LIMIT(itemWrapper, itemSSW, tooltipTargetType)
+  if nil == itemWrapper then
+    return false
+  end
+  local item = itemWrapper:get()
+  if nil == item or item:getExpirationDate():isIndefinite() then
+    return false
+  end
+  local txt = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.TIME_LIMIT], "StaticText_Content")
+  local s64_remainingTime = getLeftSecond_s64(item:getExpirationDate())
+  local fontColor = Defines.Color.C_FFEEEEEE
+  local itemExpiration = item:getExpirationDate()
+  local leftPeriod = FromClient_getTradeItemExpirationDate(itemExpiration, itemWrapper:getStaticStatus():get()._expirationPeriod)
+  local frontStr = ""
+  if not itemSSW:get():isCash() and itemSSW:isTradeAble() then
+    frontStr = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_PRICEREMAIN")
+  else
+    frontStr = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_REMAINTIME")
+  end
+  local backStr = ""
+  if Defines.s64_const.s64_0 == s64_remainingTime then
+    if not itemSSW:get():isCash() and itemSSW:isTradeAble() then
+      backStr = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME") .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)"
+    else
+      backStr = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME")
+    end
+    fontColor = Defines.Color.C_FFBA2737
+  elseif not itemSSW:get():isCash() and itemSSW:isTradeAble() then
+    backStr = convertStringFromDatetime(s64_remainingTime) .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)"
+  else
+    backStr = convertStringFromDatetime(s64_remainingTime)
+  end
+  txt:SetText(frontStr .. "\n" .. backStr)
+  self._ui.stc_components[_currentPool][COMPONENT_TYPE.TIME_LIMIT]:SetSize(_defaultSizeX, txt:GetTextSizeY())
+  txt:SetFontColor(fontColor)
+  txt:SetShow(true)
+  return true
 end
 function TooltipInfo_updateITEM_MARKET_INFO(itemWrapper, itemSSW, tooltipTargetType)
 end

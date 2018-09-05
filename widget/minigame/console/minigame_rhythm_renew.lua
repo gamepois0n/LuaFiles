@@ -159,6 +159,8 @@ function Panel_Minigame_Rhythm_Start()
   local self = MiniGame_Rhythm
   Rhythm_RePosition()
   Interaction_Close()
+  PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_ConsoleKeyGuide:SetShow(false)
   self._ui.stc_Result_Bad:SetShow(false)
   if _ContentsGroup_isConsolePadControl then
     cursorIndex = 2
@@ -183,6 +185,8 @@ function Panel_Minigame_Rhythm_Start()
   questCheckTime = 0
 end
 function Panel_Minigame_Rhythm_End()
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_ConsoleKeyGuide:SetShow(true)
   Panel_RhythmGame:SetShow(false, false)
 end
 function MiniGame_Rhythm:rhythmCursorAlign()

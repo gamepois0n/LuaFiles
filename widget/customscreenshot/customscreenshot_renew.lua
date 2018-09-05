@@ -185,6 +185,7 @@ function FullScreenShotFrame_Show()
 end
 function ScreenShotFrame_Show()
   isFullScreenShotMode = false
+  frameArea:SetShow(true)
   if ToClient_isLobbyProcessor() then
     if not isShowCustomizationMain() then
       Proc_ShowMessage_Ack_WithOut_ChattingMessage("\237\152\132\236\158\172 \235\139\168\234\179\132\236\151\144\236\132\156\235\138\148 \236\138\164\237\129\172\235\166\176\236\131\183\236\157\132 \236\176\141\236\157\132 \236\136\152 \236\151\134\236\138\181\235\139\136\235\139\164.")
@@ -283,7 +284,7 @@ function ScreenShotSave_ForWeb()
   local currentUiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
   posX = Panel_Widget_ScreenShotFrame:GetPosX() * currentUiScale
   posY = Panel_Widget_ScreenShotFrame:GetPosY() * currentUiScale
-  Panel_Widget_ScreenShotFrame:SetShow(false)
+  frameArea:SetShow(false)
   local gameoptionController = ToClient_getGameOptionControllerWrapper()
   if isFullScreenShotMode then
     if gameoptionController:getCropModeEnable() == false then
@@ -331,6 +332,9 @@ function FGlobal_TakeAScreenShot()
 end
 function ScreenShotFrame_RePos(deltaTime)
   if ToClient_isLobbyProcessor() then
+  end
+  if MessageBox.isPopUp() then
+    return
   end
   if isKeyUpFor(KeyCode_ESCAPE) then
   elseif isKeyDown_Once(KeyCode_SPACE) or isKeyDown_Once(KeyCode_RETURN) then

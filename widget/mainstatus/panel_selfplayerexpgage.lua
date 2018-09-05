@@ -644,13 +644,13 @@ function SelfPlayer_ExpTooltip(isShow, iconType)
   end
 end
 function PaGlobalFunc_SelfPlayerExpGage_SetShow(isShow, isAni)
-  local isGetUIInfo = false
-  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
-    isGetUIInfo = true
-  else
-    isGetUIInfo = false
+  if true == PaGlobalFunc_IsRemasterUIOption() then
+    isShow = false
   end
-  Panel_SelfPlayerExpGage:SetShow(isShow and isGetUIInfo and not PaGlobalFunc_IsRemasterUIOption(), isAni)
+  if true == isShow and -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isShow = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow)
+  end
+  Panel_SelfPlayerExpGage:SetShow(isShow, isAni)
 end
 contributePoint_UpdateFunc()
 Panel_SelfPlayerExpGage_CharacterInfoWindowUpdate()

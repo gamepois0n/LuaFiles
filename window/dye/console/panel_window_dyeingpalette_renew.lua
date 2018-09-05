@@ -153,8 +153,8 @@ function DyeingPalette:open(targetType, slotNo)
   if false == _panel:GetShow() then
     _panel:SetShow(true)
   end
-  PaGlobalFunc_DyeingMain_MoveKeyGuide(_panel:GetPosX())
   PaGlobalFunc_DyeingMain_ShowKeyGuideB(false)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideRS(false)
   PaGlobalFunc_DyeingMain_ShowKeyGuideLT(false)
   ToClient_RequestSelectedEquipItem(slotNo)
   self._selected_CharacterTarget = targetType
@@ -171,34 +171,23 @@ function DyeingPalette:open(targetType, slotNo)
   self._currentScrollAmount = 0
   self._ui.scroll_ampuleList:SetControlPos(0)
   self:updateDyeParts()
+  self:updatePalette()
 end
 function PaGlobalFunc_DyeingPalette_Close()
   DyeingPalette:close()
 end
 function DyeingPalette:close()
-  PaGlobalFunc_DyeingMain_MoveKeyGuide(getScreenSizeX())
   PaGlobalFunc_DyeingMain_ShowKeyGuideLT(true)
+  PaGlobalFunc_DyeingMain_ShowKeyGuideRS(true)
   PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
   self._selectedDyePart = {}
-  if self._ui.stc_ampuleListBG:GetShow() then
-    self._ui.stc_ampuleListBG:SetShow(false)
-    if nil ~= self._currentDyePartIndex then
-      for ii = 1, #self._ui.rdo_color do
-        self._ui.stc_partColor[ii]:SetShow(true)
-        self._ui.rdo_color[ii]:SetCheck(false)
-      end
-    end
-    self._currentDyePartIndex = nil
-  else
-    _panel:SetShow(false)
-    ToClient_RequestSetTargetType(self._selected_CharacterTarget)
-  end
+  _panel:SetShow(false)
+  ToClient_RequestSetTargetType(self._selected_CharacterTarget)
 end
 function DyeingPalette:updateDyeParts()
   if false == _panel:GetShow() then
     return
   end
-  self._ui.stc_ampuleListBG:SetShow(false)
   ToClient_SetDyeingTargetInformationByEquipNo(self._slotNo)
   local colorSlotCount = ToClient_getDyeingTargetInformationCount()
   for ii = 1, colorSlotCount do
@@ -303,10 +292,11 @@ function Input_DyeingPalette_Ampule(dataIdx)
 end
 function InputScroll_DyeingPalette_Scroll(isUp)
   local self = DyeingPalette
+  local oldAmount = self._currentScrollAmount
   if nil ~= self._paletteCount then
     self._currentScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_ampuleList, isUp, self._ampuleListRowCount, self._paletteCount, self._currentScrollAmount, self._ampuleListColCount)
   end
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
+  if oldAmount ~= self._currentScrollAmount and (ToClient_isXBox() or ToClient_IsDevelopment()) then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:updatePalette()

@@ -913,21 +913,17 @@ function QuickSlot_UpdateData()
     PaGlobalFunc_QuickSlot_SetShow(false, false)
     return
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
-      local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
-      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
-      changePositionBySever(Panel_QuickSlot, CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
-    elseif Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
-      Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
-    else
-      Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
-    end
-  else
+  if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
+    local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
+    local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
     changePositionBySever(Panel_QuickSlot, CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
+  elseif Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+    Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+  else
+    Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
   end
   if not Panel_QuickSlot:GetShow() then
     PaGlobalFunc_QuickSlot_SetShow(true, true)
@@ -1233,25 +1229,19 @@ function QuickSlot_GetInventoryTypeFrom(quickType)
   return CppEnums.ItemWhereType.eCashInventory
 end
 function QuickSlot_OnscreenResize()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
-      local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
-      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
-      Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
-      changePositionBySever(Panel_QuickSlot, CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
-    elseif Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
-      Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
-    else
-      Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
-    end
-  else
+  if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
+    local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
+    local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
     Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
     Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
     changePositionBySever(Panel_QuickSlot, CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
+  elseif Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+    Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+  else
+    Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_QuickSlot)
 end

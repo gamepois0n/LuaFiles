@@ -135,6 +135,8 @@ end
 function Panel_Minigame_Rhythm_Drum_Start()
   local self = MiniGame_Rhythm_Drum
   Interaction_Close()
+  PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_ConsoleKeyGuide:SetShow(false)
   self._ui.stc_Result_Bad:SetShow(false)
   if _ContentsGroup_isConsolePadControl then
     cursorIndex = 2
@@ -157,6 +159,8 @@ function Panel_Minigame_Rhythm_Drum_Start()
   self._ui.stc_Result_Bad:SetPosY(scrY / 2 - panelSetPosY)
 end
 function Panel_Minigame_Rhythm_Drum_End()
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_ConsoleKeyGuide:SetShow(true)
   Panel_RhythmGame_Drum:SetShow(false, false)
 end
 function MiniGame_Rhythm_Drum:rhythmCursorAlign()

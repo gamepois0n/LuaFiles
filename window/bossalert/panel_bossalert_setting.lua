@@ -89,7 +89,7 @@ local PaGlobal_BossAlert = {
         {3, 4},
         {0},
         {2},
-        {0}
+        {6}
       },
       {
         {1},
@@ -155,83 +155,83 @@ local PaGlobal_BossAlert = {
         {0},
         {0},
         {0},
-        {6}
+        {0}
       }
     }
   },
   [nation._japan] = {
     _alertTime = {
+      {1, 30},
       {11, 0},
       {14, 0},
       {16, 0},
       {19, 0},
       {20, 0},
-      {23, 0},
-      {1, 30}
+      {23, 0}
     },
     _bossAppearOrder = {
       {
+        {6},
         {2, 4},
         {9},
         {2, 4},
         {6},
         {0},
-        {5},
-        {1, 3}
+        {5}
       },
       {
+        {1, 3},
         {1},
         {0},
         {1, 4},
         {2, 3},
         {0},
-        {2, 4},
-        {1, 3}
+        {2, 4}
       },
       {
+        {1, 3},
         {1},
         {0},
         {4, 1},
         {3, 4},
         {0},
-        {2, 4},
-        {1, 3}
+        {2, 3}
       },
       {
+        {1, 3},
         {0},
         {0},
         {4, 3},
         {2, 1},
         {0},
-        {6},
-        {2, 1}
+        {6}
       },
       {
+        {2, 1},
         {1},
         {0},
         {3, 4},
         {3, 4},
         {0},
-        {5},
-        {2, 1}
+        {5}
       },
       {
-        {1},
+        {2, 1},
+        {3},
         {0},
         {4, 3},
         {7, 8},
         {0},
-        {2, 4},
-        {5}
+        {2, 4}
       },
       {
+        {5},
         {1, 3},
         {0},
         {2, 4},
         {1, 2},
         {0},
-        {0},
-        {6}
+        {0}
       }
     }
   },
@@ -264,7 +264,7 @@ local PaGlobal_BossAlert = {
         {1, 4},
         {0},
         {0},
-        {1, 3},
+        {2, 3},
         {5}
       },
       {
@@ -338,7 +338,7 @@ local PaGlobal_BossAlert = {
         {9},
         {2},
         {0},
-        {4, 3},
+        {1, 3},
         {4},
         {2},
         {1}
@@ -371,7 +371,7 @@ local PaGlobal_BossAlert = {
         {1},
         {4},
         {0},
-        {2},
+        {2, 1},
         {3},
         {4},
         {1}
@@ -430,7 +430,7 @@ local PaGlobal_BossAlert = {
         {9},
         {2},
         {0},
-        {4, 3},
+        {1, 3},
         {4},
         {2},
         {1}
@@ -463,7 +463,7 @@ local PaGlobal_BossAlert = {
         {1},
         {4},
         {0},
-        {2},
+        {2, 1},
         {3},
         {4},
         {3}
@@ -539,8 +539,8 @@ local PaGlobal_BossAlert = {
       },
       {
         {2},
-        {1, 4},
-        {3},
+        {1, 3},
+        {2},
         {1, 4},
         {0},
         {3, 2}
@@ -633,7 +633,7 @@ local PaGlobal_BossAlert = {
         {1},
         {1, 2},
         {3, 4},
-        {0},
+        {7, 8},
         {0},
         {0}
       }
@@ -755,7 +755,7 @@ local PaGlobal_BossAlert = {
       },
       {
         {1},
-        {3},
+        {0},
         {1},
         {2},
         {4},
@@ -764,7 +764,7 @@ local PaGlobal_BossAlert = {
       },
       {
         {4},
-        {0},
+        {3},
         {1},
         {4},
         {1, 2},
@@ -785,7 +785,7 @@ local PaGlobal_BossAlert = {
         {3},
         {4},
         {1, 3},
-        {4},
+        {2},
         {0},
         {0}
       }
@@ -793,76 +793,76 @@ local PaGlobal_BossAlert = {
   },
   [nation._southeastAsia] = {
     _alertTime = {
+      {0, 0},
       {1, 30},
       {7, 0},
       {11, 0},
       {15, 0},
       {20, 0},
-      {21, 0},
-      {0, 0}
+      {21, 0}
     },
     _bossAppearOrder = {
       {
+        {0},
         {1, 2},
         {4},
         {1, 2},
         {4, 3},
         {2},
-        {0},
-        {3}
+        {0}
       },
       {
+        {3},
         {1},
         {2},
         {0},
         {3},
         {1},
-        {0},
-        {4}
+        {0}
       },
       {
+        {4},
         {3},
         {4},
         {1, 2},
         {4},
         {3},
-        {0},
-        {3}
+        {0}
       },
       {
-        {1},
         {3},
+        {1},
+        {0},
         {1},
         {2},
         {4},
-        {0},
-        {1}
+        {0}
       },
       {
+        {1},
         {4},
-        {0},
+        {3},
         {1},
         {4},
         {1, 2},
-        {0},
-        {3}
+        {0}
       },
       {
+        {3},
         {0},
         {0},
         {4},
         {1},
         {3},
-        {0},
-        {2}
+        {0}
       },
       {
+        {2},
         {4},
         {3},
         {4},
         {1, 3},
-        {4},
-        {0},
+        {2},
         {0}
       }
     }
@@ -870,7 +870,7 @@ local PaGlobal_BossAlert = {
   [nation._koreaTeen] = {
     _alertTime = {
       {11, 0},
-      {14, 30},
+      {14, 0},
       {17, 0},
       {19, 0},
       {21, 0},
@@ -994,6 +994,7 @@ function PaGlobal_BossAlertSet:Init()
     self._ui.btn_BossTime:SetShow(false)
   end
   self.bossRaidCount = #PaGlobal_BossAlert[self.currentNation]._alertTime
+  self:SetCheckUpdate()
 end
 function PaGlobal_BossAlertSet_Show()
   if not _ContetnsGroup_BossAlert then
@@ -1019,7 +1020,6 @@ function PaGlobal_BossAlertSet_Show()
     self._ui.alertKeep:SetCheck(false)
     self._ui.alertNone:SetCheck(true)
   end
-  self:SetCheckUpdate()
 end
 function PaGlobal_BossAlertSet_CheckAlert()
   local self = PaGlobal_BossAlertSet
@@ -1074,11 +1074,20 @@ function PaGlobal_BossAlertSet_ReturnTimeBeforeAlert()
   self.weekly = tonumber(os.date("*t").wday)
   for ii = 1, self.bossRaidCount do
     local bossHour = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][1]
+    if 0 == currentHour and 0 == bossHour then
+      currentHour = 24
+    end
+    if 23 == currentHour and 0 == bossHour then
+      if 0 == self.weekly % 7 then
+        self.weekly = 1
+      else
+        self.weekly = self.weekly % 7 + 1
+      end
+    else
+      self.weekly = tonumber(os.date("*t").wday)
+    end
     if 0 == bossHour then
       bossHour = 24
-    end
-    if 0 == currentHour then
-      currentHour = 24
     end
     local bossMinute = PaGlobal_BossAlert[self.currentNation]._alertTime[ii][2]
     lastMinute = (bossHour - currentHour) * 60 + bossMinute - currentMinute
@@ -1155,6 +1164,7 @@ function PaGlobal_BossAlertSet:SetCheckUpdate()
     self._ui.allAlert_15m:SetCheck(100 == isCheckCount)
     self._ui.allAlert_5m:SetCheck(1000 == isCheckCount)
   end
+  PaGlobal_BossAlertSet_CheckAlert()
 end
 function PaGlobal_BossAlertSet_PopUp()
   local self = PaGlobal_BossAlertSet
@@ -1168,6 +1178,7 @@ end
 function PaGlobal_BossAlertSet_Hide()
   local self = PaGlobal_BossAlertSet
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_BossAlert_SettingV2:SetShow(false, false)
 end
 function PaGlobal_BossAlertSet_ReturnKeep()
@@ -1190,6 +1201,7 @@ function PaGlobal_BossAlertSet_PopUp_ShowIconToolTip(isShow)
 end
 function PaGlobal_BossAlertSet_ShowAni()
   audioPostEvent_SystemUi(0, 22)
+  _AudioPostEvent_SystemUiForXBOX(0, 22)
   UIAni.fadeInSCR_Down(Panel_BossAlert_SettingV2)
   local aniInfo1 = Panel_BossAlert_SettingV2:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -1208,6 +1220,7 @@ function PaGlobal_BossAlertSet_ShowAni()
 end
 function PaGlobal_BossAlertSet_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_BossAlert_SettingV2:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_BossAlert_SettingV2, 0, 0.1)
   aniInfo:SetHideAtEnd(true)

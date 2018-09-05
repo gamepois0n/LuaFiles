@@ -10,6 +10,7 @@ local HideAutoCompletedNaviBtn = false
 local isPrevShowMainQuestPanel = false
 local isPrevShowPanel = false
 local isCullingNaviBtn = true
+local isFirstCall = true
 local renderMode = RenderModeWrapper.new(100, {
   Defines.RenderMode.eRenderMode_WorldMap
 }, false)
@@ -563,10 +564,13 @@ function FGlobal_WorldMapClose()
   FGlobal_WarInfo_Close()
   FGlobal_NodeWarInfo_Close()
   isCloseWorldMap = false
-  Panel_CheckedQuest:SetShow(isPrevShowPanel)
-  Panel_MainQuest:SetShow(isPrevShowMainQuestPanel)
-  isPrevShowPanel = false
-  isPrevShowMainQuestPanel = false
+  if false == isFirstCall then
+    Panel_CheckedQuest:SetShow(isPrevShowPanel)
+    Panel_MainQuest:SetShow(isPrevShowMainQuestPanel)
+    isPrevShowPanel = false
+    isPrevShowMainQuestPanel = false
+  end
+  isFirstCall = false
   if false == _ContentsGroup_RenewUI_Worker then
     FGlobal_workerChangeSkill_Close()
   end
@@ -789,5 +793,9 @@ registerEvent("FromClient_DeleteNaviGuidOnTheWorldmapPanel", "FromClient_DeleteN
 registerEvent("FromClient_HideAutoCompletedNaviBtn", "FromClient_HideAutoCompletedNaviBtn")
 registerEvent("FromClient_DeliveryRequestAck", "DeliveryRequest_UpdateRequestSlotData")
 registerEvent("EventDeliveryInfoUpdate", "DeliveryInformation_UpdateSlotData")
+function FromClient_WorldMap_luaLoadComplete()
+  FGlobal_WorldMapClose()
+end
+registerEvent("FromClient_luaLoadComplete", "FromClient_WorldMap_luaLoadComplete")
 AltKeyGuide_ReSize()
 renderMode:setClosefunctor(renderMode, FGlobal_CloseWorldmapForLuaKeyHandling)

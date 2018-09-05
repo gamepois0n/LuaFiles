@@ -92,6 +92,12 @@ function PaGlobal_Policy:init()
   frameContent:SetSize(frameContent:GetSizeX(), posY + 10)
   self._defaultBtnConfirmPosX = self._ui.btnConfirm:GetPosX()
   self._defaultBtnCancelPosX = self._ui.btnCancel:GetPosX()
+  self:registEventHandler()
+end
+function PaGlobal_Policy:registEventHandler()
+  if true == ToClient_isXBox() then
+    Panel_Window_Policy:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobal_Policy_Confirm()")
+  end
 end
 function PaGlobal_Policy_ShowWindow(isLogin)
   local self = PaGlobal_Policy
@@ -109,5 +115,15 @@ end
 function PaGlobal_Policy_Close()
   local self = PaGlobal_Policy
   Panel_Window_Policy:SetShow(false)
+end
+function PaGlobal_Policy_Confirm()
+  PaGlobal_Policy_Close()
+end
+function PaGlobal_Policy_Decline()
+  PaGlobal_Policy_Close()
+  LoginNickname_Close()
+  if nil ~= ToClient_SetProcessor_XboxHome() then
+    ToClient_SetProcessor_XboxHome()
+  end
 end
 PaGlobal_Policy:init()

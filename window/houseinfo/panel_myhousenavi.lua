@@ -50,39 +50,9 @@ local function Panel_MyHouseNavi_Init()
     posX = 10
   end
   local servantIconCount = FGlobal_ServantIconCount()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MyHouseNavi:GetRelativePosX() == -1 and Panel_MyHouseNavi:GetRelativePosY() == -1 then
-      local isChangePosition = changePositionBySever(Panel_MyHouseNavi, CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi, false, true, false)
-      if not isChangePosition then
-        if Panel_Window_Servant:GetShow() then
-          Panel_MyHouseNavi:SetPosX(posX)
-          Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
-        else
-          Panel_MyHouseNavi:SetPosX(10)
-          Panel_MyHouseNavi:SetPosY(posY)
-        end
-      elseif Panel_Window_Servant:GetShow() then
-        local x1 = Panel_Window_Servant:GetPosX()
-        local y1 = Panel_Window_Servant:GetPosY()
-        local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
-        local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
-        for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
-          if x1 <= Panel_MyHouseNavi:GetPosX() + index and x2 >= Panel_MyHouseNavi:GetPosX() + index and (y1 <= Panel_MyHouseNavi:GetPosY() and y2 >= Panel_MyHouseNavi:GetPosY() or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY()) then
-            Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
-            Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
-          end
-        end
-      else
-        local lPanel = Panel_MyHouseNavi
-        if not isChangePosition then
-          lPanel:SetRelativePosX(0)
-          lPanel:SetRelativePosY(0)
-        else
-          lPanel:SetRelativePosX((lPanel:GetPosX() + lPanel:GetSizeX() / 2) / getScreenSizeX())
-          lPanel:SetRelativePosY((lPanel:GetPosY() + lPanel:GetSizeY() / 2) / getScreenSizeY())
-        end
-      end
-    elseif Panel_MyHouseNavi:GetRelativePosX() == 0 and Panel_MyHouseNavi:GetRelativePosY() == 0 then
+  if Panel_MyHouseNavi:GetRelativePosX() == -1 and Panel_MyHouseNavi:GetRelativePosY() == -1 then
+    local isChangePosition = changePositionBySever(Panel_MyHouseNavi, CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi, false, true, false)
+    if not isChangePosition then
       if Panel_Window_Servant:GetShow() then
         Panel_MyHouseNavi:SetPosX(posX)
         Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
@@ -95,8 +65,6 @@ local function Panel_MyHouseNavi_Init()
       local y1 = Panel_Window_Servant:GetPosY()
       local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
       local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
-      Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
-      Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
       for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
         if x1 <= Panel_MyHouseNavi:GetPosX() + index and x2 >= Panel_MyHouseNavi:GetPosX() + index and (y1 <= Panel_MyHouseNavi:GetPosY() and y2 >= Panel_MyHouseNavi:GetPosY() or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY()) then
           Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
@@ -104,10 +72,16 @@ local function Panel_MyHouseNavi_Init()
         end
       end
     else
-      Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
-      Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
+      local lPanel = Panel_MyHouseNavi
+      if not isChangePosition then
+        lPanel:SetRelativePosX(0)
+        lPanel:SetRelativePosY(0)
+      else
+        lPanel:SetRelativePosX((lPanel:GetPosX() + lPanel:GetSizeX() / 2) / getScreenSizeX())
+        lPanel:SetRelativePosY((lPanel:GetPosY() + lPanel:GetSizeY() / 2) / getScreenSizeY())
+      end
     end
-  elseif not changePositionBySever(Panel_MyHouseNavi, CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi, false, true, false) then
+  elseif Panel_MyHouseNavi:GetRelativePosX() == 0 and Panel_MyHouseNavi:GetRelativePosY() == 0 then
     if Panel_Window_Servant:GetShow() then
       Panel_MyHouseNavi:SetPosX(posX)
       Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
@@ -120,12 +94,17 @@ local function Panel_MyHouseNavi_Init()
     local y1 = Panel_Window_Servant:GetPosY()
     local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
     local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
+    Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
+    Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
     for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
       if x1 <= Panel_MyHouseNavi:GetPosX() + index and x2 >= Panel_MyHouseNavi:GetPosX() + index and (y1 <= Panel_MyHouseNavi:GetPosY() and y2 >= Panel_MyHouseNavi:GetPosY() or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and y2 >= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY()) then
         Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
         Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
       end
     end
+  else
+    Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
+    Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_MyHouseNavi)
   FGlobal_PetListNew_NoPet()

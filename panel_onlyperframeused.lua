@@ -37,7 +37,7 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
   if Panel_WhereUseItemDirection:GetShow() then
     WhereUseItemDirectionRestore()
   end
-  if nil ~= FGlobal_AlchemyStonCheck then
+  if nil ~= FGlobal_AlchemyStonCheck and true == PaGlobalFunc_Equipment_IsReuseTime(deltaTime) then
     local cooltime = FGlobal_AlchemyStonCheck()
     if cooltime > 0 then
       if true == ToClient_GetAlchemyStoneReuseNextTick() then

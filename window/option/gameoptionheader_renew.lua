@@ -552,6 +552,7 @@ PaGlobal_Option._elements = {
   UltraHighDefinition = {
     _defaultValue = false,
     _type = OPTION_TYPE.CHECKBUTTON,
+    _settingRightNow = true,
     _title = "PANEL_GAMEOPTION_4K_TITLE",
     _desc = "PANEL_GAMEOPTION_4K_DESC"
   },
@@ -2127,7 +2128,29 @@ function PaGlobal_Option._elements.HDRDisplayMaxNits:set(value)
 end
 function PaGlobal_Option._elements.UltraHighDefinition:set(value)
   _PA_LOG("\237\155\132\236\167\132", "UltraHighDefinition value : " .. tostring(value))
-  setUltraHighDefinition(value)
+  local wrapper = ToClient_getGameOptionControllerWrapper()
+  local currentMode = wrapper:getIsUHDMode()
+  local rv = setUltraHighDefinition(value)
+  if currentMode == value then
+    return
+  end
+  if true == rv then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+      content = "When you restart the game, it changes to resolution.",
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+  elseif true == value then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
+      content = "The monitor does not support 4k resolution",
+      functionApply = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+  end
 end
 function PaGlobal_Option._elements.AimAssist:get(wrapper)
   return wrapper:getAimAssist()
@@ -2560,13 +2583,7 @@ function PaGlobal_Option._elements.HDRDisplayMaxNits:get(wrapper)
   return PaGlobal_Option:FromRealValueToSliderValue(wrapper:getHdrDisplayMaxNits(), PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMin, PaGlobal_Option._elements.HDRDisplayMaxNits._sliderValueMax)
 end
 function PaGlobal_Option._elements.UltraHighDefinition:get(wrapper)
-  local ultraResolutionWidth = 3840
-  local ultraResolutionHeight = 2160
-  if ultraResolutionWidth <= wrapper:getScreenResolutionWidth() and ultraResolutionHeight <= wrapper:getScreenResolutionHeight() then
-    return true
-  else
-    return false
-  end
+  return wrapper:getIsUHDMode()
 end
 local elements = PaGlobal_Option._elements
 elements.UIFontSizeType._radioButtonMapping = {}

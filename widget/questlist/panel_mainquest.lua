@@ -484,33 +484,24 @@ registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_MainQu
 function FromClient_luaLoadComplete_MainQuest()
 end
 function FromClient_MainQuestWidget_ResetPosition()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MainQuest:GetRelativePosX() == -1 and Panel_MainQuest:GetRelativePosY() == -1 then
-      local initPosX = getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20
-      local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10
-      local haveServerPosition = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
-      if not haveServerPosition then
-        Panel_MainQuest:SetPosX(initPosX)
-        Panel_MainQuest:SetPosY(initPosY)
-      end
-      changePositionBySever(Panel_MainQuest, CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, true, true, true)
-      FGlobal_InitPanelRelativePos(Panel_MainQuest, initPosX, initPosY)
-    elseif Panel_MainQuest:GetRelativePosX() == 0 and Panel_MainQuest:GetRelativePosY() == 0 then
-      Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20)
-      Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
-    else
-      Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
-      Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
-    end
-    FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
-  else
+  if Panel_MainQuest:GetRelativePosX() == -1 and Panel_MainQuest:GetRelativePosY() == -1 then
+    local initPosX = getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20
+    local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10
     local haveServerPosition = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
     if not haveServerPosition then
-      Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20)
-      Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
+      Panel_MainQuest:SetPosX(initPosX)
+      Panel_MainQuest:SetPosY(initPosY)
     end
     changePositionBySever(Panel_MainQuest, CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, true, true, true)
+    FGlobal_InitPanelRelativePos(Panel_MainQuest, initPosX, initPosY)
+  elseif Panel_MainQuest:GetRelativePosX() == 0 and Panel_MainQuest:GetRelativePosY() == 0 then
+    Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20)
+    Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
+  else
+    Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
+    Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
   end
+  FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
 end
 function renderModeChange_Panel_MainQuest_ResetPosition(prevRenderModeList, nextRenderModeList)
   if CheckRenderModebyGameMode(nextRenderModeList) == false then

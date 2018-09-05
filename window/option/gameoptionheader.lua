@@ -346,10 +346,6 @@ PaGlobal_Option = {
       _defaultValue = false,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
     },
-    SelfPlayerOnlyLantern = {
-      _defaultValue = true,
-      _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
-    },
     PresentLock = {
       _defaultValue = true,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON

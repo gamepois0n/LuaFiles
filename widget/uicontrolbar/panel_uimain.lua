@@ -1,4 +1,3 @@
-Panel_UIMain:SetShow(true, false)
 if true == _ContentsGroup_RenewUI_Main then
   Panel_UIMain:SetShow(false, false)
 end
@@ -612,6 +611,21 @@ end
 function FGlobal_RightBottomIconReposition()
   FromClient_RegisterCoupon()
 end
+function PaGlobalFunc_UiMain_LuaLoadComplete()
+  PaGlobalFunc_UiMain_SetShow(true)
+  FromClient_RegisterCoupon()
+end
+function PaGlobalFunc_UiMain_SetShow(isShow)
+  if true == isShow then
+    if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      Panel_UIMain:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+    else
+      Panel_UIMain:SetShow(true, false)
+    end
+  else
+    Panel_UIMain:SetShow(false)
+  end
+end
 UIMain_QuestUpdate()
 UIMain_ChallengeUpdate()
 MenuButtons_SetAlpha()
@@ -621,5 +635,4 @@ registerEvent("FromClient_UpdateQuestList", "UIMain_QuestUpdate")
 registerEvent("onScreenResize", "ResetPos_WidgetButton")
 registerEvent("FromClient_NewFriend", "FromClient_NewFriendAlert")
 registerEvent("FromClient_RegisterCoupon", "FromClient_RegisterCoupon")
-registerEvent("FromClient_luaLoadComplete", "FromClient_RegisterCoupon")
-changePositionBySever(Panel_UIMain, CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, true, false, false)
+registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_UiMain_LuaLoadComplete")

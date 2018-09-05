@@ -3960,3 +3960,12 @@ function QAchangeitem()
   chatting_sendMessage("", "/mentalup 500", CppEnums.ChatType.Private)
   luaTimer_AddEvent(QAInteraction, 500, false, 0)
 end
+function setYaw(value)
+  selfPlayerSetCameraYaw(value)
+end
+function setPitch(value)
+  selfPlayerSetCameraPich(value)
+end
+function setRoll(value)
+  selfPlayerSetCameraRoll(value)
+end

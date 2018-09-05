@@ -174,7 +174,6 @@ end
 function Panel_Minigame_Command_Start()
   Panel_Command:SetShow(true, false)
   ToClient_setAvailableInputWidget(false)
-  PaGlobal_ConsoleQuickMenu:widgetClose()
   _CommandTimeBG:SetShow(true)
   for ii = 0, 9 do
     checkIconList[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_EDIT, Panel_Command, "Static_CheckIcon" .. ii)

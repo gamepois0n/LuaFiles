@@ -548,8 +548,6 @@ function DyeingPartList:update()
 end
 function Input_DyeingPartList_SelectEquip(slotNo)
   local self = DyeingPartList
-  if false == PaGlobalFunc_DyeingPalette_GetShow() then
-    PaGlobalFunc_DyeingPalette_Open(TARGET_TYPE_ENUM[self._currentTargetIndex], slotNo)
-  end
+  PaGlobalFunc_DyeingPalette_Open(TARGET_TYPE_ENUM[self._currentTargetIndex], slotNo)
   ToClient_padSnapSetTargetPanel(Panel_Window_DyeingPalette_Renew)
 end

@@ -79,6 +79,22 @@ function PaGlobalAppliedBuffList:updateBuffList()
     TooltipCommon_Hide(TooltipCommon_getCurrentIndex())
   end
 end
+function PaGlobalAppliedBuffList:getAlchemyStoneBuff_RemainTime()
+  self:updateBuff(false)
+  local BuffKey = getEquipedAlchemyStoneBuffkey()
+  if -1 == BuffKey then
+    return -1
+  end
+  local appliedBuff = getSelfPlayer():getAppliedBuffBegin(false)
+  while appliedBuff ~= nil do
+    if BuffKey == appliedBuff:getBuffKey() then
+      local u64_calc_time1 = appliedBuff:getRemainedTime_u64() / Defines.u64_const.u64_1000
+      return Int64toInt32(u64_calc_time1)
+    end
+    appliedBuff = getSelfPlayer():getAppliedBuffNext(false)
+  end
+  return -1
+end
 local _cumulateTime = 0
 function AppliedBuffList_Update(fDeltaTime)
   if isFlushedUI() then

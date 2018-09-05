@@ -1292,33 +1292,21 @@ CppEnums.PAGameUIType = {
   PAGameUIPanel_SkillCoolTimeQuickSlot_8 = 136,
   PAGameUIPanel_SkillCoolTimeQuickSlot_9 = 137,
   PAGameUIPanel_MainStatusRemaster = 138,
-  PAGameUIPanel_ServantIcon = 139
+  PAGameUIPanel_ServantIcon = 139,
+  PAGameUIPanel_WorldMiniMap = 140
 }
-if CppDefine.ChangeUIAndResolution == true then
-  CppEnums.PanelSaveType = {
-    PanelSaveType_PanelIndex = 0,
-    PanelSaveType_IsSaved = 1,
-    PanelSaveType_IsShow = 2,
-    PanelSaveType_PositionX = 3,
-    PanelSaveType_PositionY = 4,
-    PanelSaveType_SizeX = 5,
-    PanelSaveType_SizeY = 6,
-    PanelSaveType_Alpha = 7,
-    PanelSaveType_RelativePositionX = 8,
-    PanelSaveType_RelativePositionY = 9
-  }
-else
-  CppEnums.PanelSaveType = {
-    PanelSaveType_PanelIndex = 0,
-    PanelSaveType_IsSaved = 1,
-    PanelSaveType_IsShow = 2,
-    PanelSaveType_PositionX = 3,
-    PanelSaveType_PositionY = 4,
-    PanelSaveType_SizeX = 5,
-    PanelSaveType_SizeY = 6,
-    PanelSaveType_Alpha = 7
-  }
-end
+CppEnums.PanelSaveType = {
+  PanelSaveType_PanelIndex = 0,
+  PanelSaveType_IsSaved = 1,
+  PanelSaveType_IsShow = 2,
+  PanelSaveType_PositionX = 3,
+  PanelSaveType_PositionY = 4,
+  PanelSaveType_SizeX = 5,
+  PanelSaveType_SizeY = 6,
+  PanelSaveType_Alpha = 7,
+  PanelSaveType_RelativePositionX = 8,
+  PanelSaveType_RelativePositionY = 9
+}
 CppEnums.PAUIMB_PRIORITY = {
   PAUIMB_PRIORITY_0 = 10,
   PAUIMB_PRIORITY_1m = 99,

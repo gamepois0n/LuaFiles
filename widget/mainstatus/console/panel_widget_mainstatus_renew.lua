@@ -425,6 +425,9 @@ function MainStatusInfo:updateRage()
   self._ui.progress_rage:SetProgressRate(adrenallin)
 end
 function MainStatusInfo:showUseableBlackSpirit()
+  if false == getSelfPlayer():isEnableAdrenalin() then
+    return
+  end
   local selfPlayer = getSelfPlayer()
   if true == selfPlayer:isUseableBlackSpritSkill() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_USEABLE_BLACKSPRITSKILL"), 5)

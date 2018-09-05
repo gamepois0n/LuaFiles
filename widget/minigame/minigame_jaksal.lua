@@ -48,7 +48,7 @@ local jaksalFailCheck = true
 function Panel_MiniGame_Jaksal_Start()
   Panel_MiniGame_Jaksal:SetShow(true, false)
   ui._fish:SetIgnore(false)
-  Panel_MiniGame_Jaksal:RegisterUpdateFunc("Panel_MiniGame_PerFrameUpdate")
+  Panel_MiniGame_Jaksal:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   ui._crossHair:SetIgnore(true)
   ui._fishGet:SetShow(false)
   fishMoveData.position.x = ui._water:GetPosX() + math.random(0, ui._water:GetSizeX())

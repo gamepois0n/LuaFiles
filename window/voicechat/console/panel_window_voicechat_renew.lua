@@ -42,9 +42,6 @@ local Window_VoiceChatInfo = {
   _prevOpenHeadphoneVolume = 0,
   _prevOpenMicSensitivity = 0,
   _prevOpenMicAmplification = 0,
-  _isTalk = false,
-  _isListen = false,
-  _isPressTalk = false,
   _arrowDefaultPosY
 }
 function PaGlobalFunc_VoiceChat_SliderHandle(sliderIdx)
@@ -78,14 +75,17 @@ end
 function PaGlobalFunc_VoiceChat_LClick_SetTalk(isCheck)
   local self = Window_VoiceChatInfo
   self:SetTalkButtonByCheck(isCheck)
+  PaGlobalFunc_VoiceChat_EnableSlider()
 end
 function PaGlobalFunc_VoiceChat_LClick_SetListen(isCheck)
   local self = Window_VoiceChatInfo
   self:SetListenButtonByCheck(isCheck)
+  PaGlobalFunc_VoiceChat_EnableSlider()
 end
 function PaGlobalFunc_VoiceChat_LClick_SetPressTalk(isCheck)
   local self = Window_VoiceChatInfo
   self:SetPressTalkButtonByCheck(isCheck)
+  PaGlobalFunc_VoiceChat_EnableSlider()
 end
 function PaGlobalFunc_VoiceChat_ButtonClickHandle(index)
   local self = Window_VoiceChatInfo
@@ -104,6 +104,19 @@ function PaGlobalFunc_VoiceChat_ButtonClickHandle(index)
   elseif self._config._pressTalk == index then
     self._ui._button_LArrow:addInputEvent("Mouse_LUp", "PaGlobalFunc_VoiceChat_LClick_SetPressTalk(false)")
     self._ui._button_RArrow:addInputEvent("Mouse_LUp", "PaGlobalFunc_VoiceChat_LClick_SetPressTalk(true)")
+  end
+end
+function PaGlobalFunc_VoiceChat_EnableSlider()
+  local self = Window_VoiceChatInfo
+  local isEnable = {
+    [0] = self._openIsMicOn,
+    [1] = self._openIsHeadphoneOn,
+    [2] = self._openIsMicOn,
+    [3] = self._openIsMicOn
+  }
+  for index = 0, self._config._maxSlider - 1 do
+    self._ui._slider[index]:SetIgnore(not isEnable[index])
+    self._ui._slider[index]:SetMonoTone(not isEnable[index])
   end
 end
 function PaGlobalFunc_VoiceChat_ButtonHandleOut()
@@ -270,6 +283,7 @@ function PaGlobalFunc_VoiceChat_Open()
   if true == Panel_Widget_Chatting_Renew:GetShow() then
     PaGlobalFunc_ChattingInfo_Close()
   end
+  PaGlobalFunc_VoiceChat_EnableSlider()
   Panel_Window_VoiceChat:SetShow(true)
 end
 function PaGlobalFunc_VoiceChat_Confirm()
@@ -282,6 +296,10 @@ function PaGlobalFunc_VoiceChat_Confirm()
   self._prevOpenMicSensitivity = self._openMicSensitivity
   self._prevOpenMicAmplification = self._openMicAmplification
   PaGlobalFunc_VoiceChat_Close()
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer then
+    selfPlayer:saveCurrentDataForGameExit()
+  end
 end
 function PaGlobalFunc_VoiceChat_Close()
   local self = Window_VoiceChatInfo

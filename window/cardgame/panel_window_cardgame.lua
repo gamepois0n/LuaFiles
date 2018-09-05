@@ -27,7 +27,7 @@ local PaGlobal_CardGame = {
       [4] = {}
     }
   },
-  _maxValue = 55,
+  _maxValue = 53,
   _haveCount = 5,
   _totalValue = 0,
   _totalSelectedCount = 0,
@@ -184,6 +184,10 @@ function PaGlobal_CardGame:Init()
   self._ui._boardBg:SetShow(false)
 end
 function PaGlobal_CardGame:Open()
+  self._currentRount = 1
+  self._ui._cardSettingBg:SetShow(true)
+  self._ui._boardBg:SetShow(false)
+  PaGlobal_CardGame_Reset()
   Panel_Window_CardGame:SetShow(true)
 end
 function PaGlobal_CardGame:Close()
@@ -199,7 +203,7 @@ function PaGlobal_CardGame_SetCard(index, grade, value)
     end
     if self._maxValue < self._totalValue + self._grade[grade][value] then
       self._ui._card[grade][value]._check:SetCheck(false)
-      Proc_ShowMessage_Ack("55\236\160\144\236\157\132 \235\132\152\235\138\148 \236\160\144\236\136\152\235\165\188 \236\132\184\237\140\133\237\149\160 \236\136\152 \236\151\134\236\138\181\235\139\136\235\139\164.")
+      Proc_ShowMessage_Ack("53\236\160\144\236\157\132 \235\132\152\235\138\148 \236\160\144\236\136\152\235\165\188 \236\132\184\237\140\133\237\149\160 \236\136\152 \236\151\134\236\138\181\235\139\136\235\139\164.")
       return
     end
     self._totalSelectedCount = self._totalSelectedCount + 1
@@ -332,7 +336,7 @@ function PaGlobal_CardGame_Save()
   self._ui._score:SetText("\235\130\180 \236\160\144\236\136\152 : 0\236\160\144\n\235\157\188\235\157\188 \236\160\144\236\136\152 : 0\236\160\144")
   self._myScore = 0
   self._lalaScore = 0
-  self:bubbleAniRun("\236\149\136\235\133\149\237\149\152\236\132\184\236\154\148, \235\170\168\237\151\152\234\176\128\235\139\152. \236\160\128\235\158\145 \237\149\156 \234\178\156 \237\149\152\236\139\156\235\158\152\236\154\148?")
+  self:bubbleAniRun("\236\149\136\235\133\149\237\149\152\236\132\184\236\154\148, \235\170\168\237\151\152\234\176\128\235\139\152. \236\160\128\235\158\145 \237\149\156 \234\178\156 \237\149\152\236\139\164\235\158\152\236\154\148?")
   self._ui._cardSettingBg:SetShow(false)
   self._ui._boardBg:SetShow(true)
 end

@@ -95,36 +95,25 @@ function PaGlobal_SkillCoolTimeQuickSlot:updateSkill(panelIdx, skillNo)
 end
 function PaGlobal_SkillCoolTimeQuickSlot:settingPos(updateByServer)
   local self = PaGlobal_SkillCoolTimeQuickSlot
-  if CppDefine.ChangeUIAndResolution == true then
-    for panelIdx = 0, self._config.maxPanelCount - 1 do
-      local slot = self._panelPool[panelIdx]
-      if slot.Panel:GetRelativePosX() == -1 and slot.Panel:GetRelativePosY() == -1 then
-        local initPosX = getScreenSizeX() * 0.25 + slot.Panel:GetSizeX() * (panelIdx % 2)
-        local initPosY = getScreenSizeY() * 0.29 + slot.Panel:GetSizeY() * math.floor(panelIdx / 2)
-        slot.Panel:SetPosX(initPosX)
-        slot.Panel:SetPosY(initPosY)
-      elseif slot.Panel:GetRelativePosX() == 0 and slot.Panel:GetRelativePosY() == 0 then
-        slot.Panel:SetPosX(getScreenSizeX() * 0.25 + slot.Panel:GetSizeX() * (panelIdx % 2))
-        slot.Panel:SetPosY(getScreenSizeY() * 0.29 + slot.Panel:GetSizeY() * math.floor(panelIdx / 2))
-      else
-        slot.Panel:SetPosX(getScreenSizeX() * slot.Panel:GetRelativePosX() - slot.Panel:GetSizeX() / 2)
-        slot.Panel:SetPosY(getScreenSizeY() * slot.Panel:GetRelativePosY() - slot.Panel:GetSizeY() / 2)
-      end
-      if updateByServer then
-        changePositionBySever(slot.Panel, self._skillCoolTimeQuickSlot_PanelID[panelIdx], true, false, false)
-      end
-      FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
-      FGlobal_PanelRepostionbyScreenOut(slot.Panel)
-    end
-  else
-    for panelIdx = 0, self._config.maxPanelCount - 1 do
-      local slot = self._panelPool[panelIdx]
+  for panelIdx = 0, self._config.maxPanelCount - 1 do
+    local slot = self._panelPool[panelIdx]
+    if slot.Panel:GetRelativePosX() == -1 and slot.Panel:GetRelativePosY() == -1 then
+      local initPosX = getScreenSizeX() * 0.25 + slot.Panel:GetSizeX() * (panelIdx % 2)
+      local initPosY = getScreenSizeY() * 0.29 + slot.Panel:GetSizeY() * math.floor(panelIdx / 2)
+      slot.Panel:SetPosX(initPosX)
+      slot.Panel:SetPosY(initPosY)
+    elseif slot.Panel:GetRelativePosX() == 0 and slot.Panel:GetRelativePosY() == 0 then
       slot.Panel:SetPosX(getScreenSizeX() * 0.25 + slot.Panel:GetSizeX() * (panelIdx % 2))
       slot.Panel:SetPosY(getScreenSizeY() * 0.29 + slot.Panel:GetSizeY() * math.floor(panelIdx / 2))
-      if updateByServer then
-        changePositionBySever(slot.Panel, self._skillCoolTimeQuickSlot_PanelID[panelIdx], true, false, false)
-      end
+    else
+      slot.Panel:SetPosX(getScreenSizeX() * slot.Panel:GetRelativePosX() - slot.Panel:GetSizeX() / 2)
+      slot.Panel:SetPosY(getScreenSizeY() * slot.Panel:GetRelativePosY() - slot.Panel:GetSizeY() / 2)
     end
+    if updateByServer then
+      changePositionBySever(slot.Panel, self._skillCoolTimeQuickSlot_PanelID[panelIdx], true, false, false)
+    end
+    FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
+    FGlobal_PanelRepostionbyScreenOut(slot.Panel)
   end
 end
 local onEffectTime = 0

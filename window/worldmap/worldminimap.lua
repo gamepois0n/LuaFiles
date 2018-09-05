@@ -11,21 +11,22 @@ local swapRadar = function(radarType)
   if radarType == true then
     ToClient_setRadorUIPanel(Panel_WorldMiniMap)
     ToClient_updateCameraWorldMiniMap()
-    setChangeUiSettingRadarUI(Panel_WorldMiniMap)
+    setChangeUiSettingRadarUI(Panel_WorldMiniMap, CppEnums.PAGameUIType.PAGameUIPanel_WorldMiniMap)
   else
     ToClient_setRadorUIPanel(Panel_Radar)
-    setChangeUiSettingRadarUI(Panel_Radar)
+    setChangeUiSettingRadarUI(Panel_Radar, CppEnums.PAGameUIType.PAGameUIPanel_RadarMap)
   end
   ToClient_setRadarType(radarType)
   ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.RadarSwap, radarType, CppEnums.VariableStorageType.eVariableStorageType_User)
+  local isShowMap = true
   if true == radarType then
-    Panel_WorldMiniMap:SetShow(true)
+    Panel_WorldMiniMap:SetShow(isShowMap)
     Panel_Radar:SetShow(false)
     FromClient_SetRotateMode(radarMap.isRotateMode)
     FromClient_reSizeWorldMiniMap()
   else
     Panel_WorldMiniMap:SetShow(false)
-    Panel_Radar:SetShow(true)
+    Panel_Radar:SetShow(isShowMap)
     setRotateRadarMode(radarMap.isRotateMode)
     Panel_Radar:ComputePos()
     FGlobal_ResetRadarUI(false)
@@ -59,7 +60,7 @@ function PaGlobal_WorldMiniMap:resetPanelSize()
   local iconPath = "new_ui_common_forlua/Widget/Rader/Minimap_01.dds"
   miniMap:SetSize(300, 260)
   Panel_WorldMiniMap:SetSize(300, 260)
-  Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+  Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 18)
   self._ui.btn_changeScale:ChangeTextureInfoName(iconPath)
   local x1, y1, x2, y2 = setTextureUV_Func(self._ui.btn_changeScale, 157, 54, 182, 79)
   self._ui.btn_changeScale:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -142,8 +143,15 @@ function PaGlobal_WorldMiniMap:changePanelSize()
   if false == _ContentsGroup_RemasterUI_QuestWidget then
     PaGlobalFunc_Quest_UpdatePosition()
   end
-  Panel_TimeBar:SetSize(Panel_WorldMiniMap:GetSizeX() + 10, Panel_WorldMiniMap:GetSizeY() + 31)
-  Panel_TimeBar:SetPosX(Panel_WorldMiniMap:GetPosX() - 5)
+  self:setTimebarSize()
+end
+function PaGlobal_WorldMiniMap:setTimebarSize()
+  if false == GLOBAL_CHECK_WORLDMINIMAP or false == Panel_WorldMiniMap:GetShow() then
+    FGlobal_ResetTimeBar()
+  else
+    Panel_TimeBar:SetSize(Panel_WorldMiniMap:GetSizeX() + 10, Panel_WorldMiniMap:GetSizeY() + 31)
+    Panel_TimeBar:SetPosX(Panel_WorldMiniMap:GetPosX() - 5)
+  end
 end
 function PaGlobal_WorldMiniMap:changePanelAlpha(isIncrease)
   local currentAlphaValue = ToClient_get3DMiniMapAlpha()
@@ -343,7 +351,7 @@ end
 function PaGlobal_WorldMiniMap:InitWorldMiniMap()
   ToClient_initializeWorldMiniMap()
   if Panel_WorldMiniMap ~= nil then
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 18)
     Panel_WorldMiniMap:SetPosY(30)
     Panel_WorldMiniMap:SetShow(false)
   end
@@ -386,17 +394,28 @@ function PaGlobal_WorldMiniMap:InitWorldMiniMap()
   self._ui.static_selfPlayerArrow:ComputePos()
   self._ui.static_overName = UI.getChildControl(Panel_WorldMiniMap, "Static_OverName")
   GLOBAL_CHECK_WORLDMINIMAP = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.RadarSwap)
+  local isShow = true
+  if false == GLOBAL_CHECK_WORLDMINIMAP then
+    if 0 == ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_RadarMap, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      isShow = false
+    end
+  elseif 0 == ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_WorldMiniMap, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isShow = false
+  end
   local selfPlayer = getSelfPlayer():get()
   if ToClient_getTutorialLimitLevel() < selfPlayer:getLevel() then
     swapRadar(GLOBAL_CHECK_WORLDMINIMAP)
+    FGlobal_Panel_Radar_Show(isShow)
   else
     GLOBAL_CHECK_WORLDMINIMAP = false
     ToClient_setRadorUIPanel(Panel_Radar)
-    setChangeUiSettingRadarUI(Panel_Radar)
+    setChangeUiSettingRadarUI(Panel_Radar, CppEnums.PAGameUIType.PAGameUIPanel_RadarMap)
     ToClient_setRadarType(GLOBAL_CHECK_WORLDMINIMAP)
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.RadarSwap, GLOBAL_CHECK_WORLDMINIMAP, CppEnums.VariableStorageType.eVariableStorageType_User)
+    FGlobal_Panel_Radar_Show(isShow)
     ToClient_SaveUiInfo(false)
   end
+  PaGlobal_WorldMiniMap:setTimebarSize()
   local radarAlphaValue = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.RadarAlpha)
   if radarAlphaValue > 0 then
     ToClient_set3DMiniMapAlpha(radarAlphaValue / 100)
@@ -407,10 +426,11 @@ function PaGlobal_WorldMiniMap:InitWorldMiniMap()
   registerEvent("FromClient_RClickedWorldMiniMap", "FromClient_RClickedWorldMiniMap")
   registerEvent("FromClient_ChangeRadarRotateMode", "FromClient_SetRotateMode")
   PaGlobal_WorldMiniMap._initialize = true
+  FromClient_reSizeWorldMiniMap()
 end
 function FromClient_reSizeWorldMiniMap()
   if true == PaGlobal_WorldMiniMap._initialize and Panel_WorldMiniMap:GetShow() then
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 18)
     Panel_WorldMiniMap:ComputePos()
   end
 end

@@ -21,6 +21,7 @@ local DyeingRegister = {
   _rowMax = 8,
   _waitForMessage = false
 }
+local self = DyeingRegister
 function FromClient_luaLoadComplete_DyeingRegister_Init()
   DyeingRegister:initialize()
 end
@@ -55,9 +56,9 @@ function DyeingRegister:initialize()
   end
   self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI")
   self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_bottomBG, "StaticText_A_ConsoleUI")
-  self:registEventHandler()
+  self:registMessageHandler()
 end
-function DyeingRegister:registEventHandler()
+function DyeingRegister:registMessageHandler()
   registerEvent("FromClient_UpdateDyeingPalette", "FromClient_DyeingRegister_Update")
 end
 function PaGlobalFunc_DyeingRegister_GetShow()
@@ -81,7 +82,6 @@ function DyeingRegister:close()
   PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
 end
 function FromClient_DyeingRegister_Update()
-  local self = DyeingRegister
   if true == _panel:GetShow() then
     self:updateList()
   end
@@ -110,8 +110,12 @@ function DyeingRegister:updateList()
       local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, dyeSlotNo[ii + self._scrollAmount])
       if nil ~= itemWrapper then
         self._ui.slot_dyes[ii]:setItem(itemWrapper, dyeSlotNo[ii + self._scrollAmount])
-        self._ui.stc_slotBG[ii]:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
       end
+      self._ui.stc_slotBG[ii]:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
+      self._ui.stc_slotBG[ii]:addInputEvent("Mouse_On", "InputMOn_DyeingRegister_MouseOverAmpule(" .. dyeSlotNo[ii + self._scrollAmount] .. ")")
+    else
+      self._ui.stc_slotBG[ii]:addInputEvent("Mouse_LUp", "PaGlobalFunc_DyeingRegister_Regist()")
+      self._ui.stc_slotBG[ii]:addInputEvent("Mouse_On", "InputMOn_DyeingRegister_MouseOverAmpule()")
     end
   end
   if #dyeSlotNo > #self._ui.slot_dyes then
@@ -122,8 +126,7 @@ function DyeingRegister:updateList()
   end
 end
 function PaGlobalFunc_DyeingRegister_Regist(slotNo)
-  local self = DyeingRegister
-  if self._waitForMessage then
+  if self._waitForMessage or nil == slotNo then
     return
   end
   local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, slotNo)
@@ -149,8 +152,22 @@ function PaGlobalFunc_DyeingRegister_Regist(slotNo)
   }
   MessageBox.showMessageBox(messageBoxData)
 end
+function InputMOn_DyeingRegister_MouseOverAmpule(slotNo)
+  if nil ~= slotNo then
+    self._currentSlotNo = slotNo
+    local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, slotNo)
+    self._ui.txt_keyGuideA:SetShow(nil ~= itemWrapper)
+  else
+    self._currentSlotNo = nil
+    self._ui.txt_keyGuideA:SetShow(false)
+  end
+end
 function InputScroll_DyeingRegister_Inventory(isUp)
-  local self = DyeingRegister
+  local oldAmount = self._scrollAmount
   self._scrollAmount = UIScroll.ScrollEvent(self._ui.scroll_itemList, isUp, self._rowMax, 192, self._scrollAmount, self._colMax)
-  self:updateList()
+  if oldAmount ~= self._scrollAmount then
+    self:updateList()
+    self._currentSlotNo = self._currentSlotNo + self._scrollAmount - oldAmount
+    InputMOn_DyeingRegister_MouseOverAmpule(self._currentSlotNo)
+  end
 end

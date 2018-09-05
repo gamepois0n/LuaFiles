@@ -22,8 +22,7 @@ function DyeingMain:initialize()
   self._ui.txt_keyGuides = {
     UI.getChildControl(self._ui.stc_bottomBG, "StaticText_RS2_ConsoleUI"),
     UI.getChildControl(self._ui.stc_bottomBG, "StaticText_RS_ConsoleUI"),
-    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI"),
-    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_KeyGuideDPad")
+    UI.getChildControl(self._ui.stc_bottomBG, "StaticText_B_ConsoleUI")
   }
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(self._ui.txt_keyGuides, self._ui.stc_bottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   _panel:RegisterUpdateFunc("PaGlobalFunc_Dyeing_UpdatePerFrame")
@@ -141,6 +140,9 @@ function PaGlobalFunc_Dyeing_UpdatePerFrame(deltaTime)
 end
 function PaGlobalFunc_DyeingMain_ShowKeyGuideLT(isShow)
   DyeingMain._ui.txt_keyGuides[1]:SetShow(isShow)
+end
+function PaGlobalFunc_DyeingMain_ShowKeyGuideRS(isShow)
+  DyeingMain._ui.txt_keyGuides[2]:SetShow(isShow)
 end
 function PaGlobalFunc_DyeingMain_ShowKeyGuideB(isShow)
   DyeingMain._ui.txt_keyGuides[3]:SetShow(isShow)

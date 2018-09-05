@@ -318,6 +318,7 @@ function PaGlobal_FriendNew:AddFriendAccept(index)
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function PaGlobal_FriendNew:AddFriendDecline(index)

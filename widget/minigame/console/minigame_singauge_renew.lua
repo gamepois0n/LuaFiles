@@ -118,6 +118,7 @@ function Panel_Minigame_SinGauge_Start()
   preTick = getTickCount32()
 end
 function Panel_Minigame_SinGauge_End()
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   Panel_SinGauge:SetShow(false, false)
   _sinGaugeBarEffect:EraseAllEffect()
   isFinished = true

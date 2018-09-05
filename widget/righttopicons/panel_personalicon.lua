@@ -157,10 +157,6 @@ function FGlobal_PersonalIcon_ButtonPosUpdate()
   Panel_PersonalIcon:SetShow(true)
   radarPosX = FGlobal_Panel_Radar_GetPosX()
   radarPosY = FGlobal_Panel_Radar_GetPosY()
-  if CppDefine.ChangeUIAndResolution == true then
-    radarPosX = FGlobal_Panel_Radar_GetPosX()
-    radarPosY = FGlobal_Panel_Radar_GetPosY()
-  end
   if true == _ContentsGroup_RenewUI_Main then
     self._btn_VoiceChat:SetShow(false)
   end
@@ -388,7 +384,5 @@ function FGlobal_GetRegionKey_ByDropItem()
 end
 PersonalIcon_Initalize()
 FGlobal_PersonalIcon_ButtonPosUpdate()
-if CppDefine.ChangeUIAndResolution == true then
-  registerEvent("onScreenResize", "FGlobal_PersonalIcon_ButtonPosUpdate")
-  registerEvent("selfPlayer_regionChanged", "DropItemButton_RegionCheck")
-end
+registerEvent("onScreenResize", "FGlobal_PersonalIcon_ButtonPosUpdate")
+registerEvent("selfPlayer_regionChanged", "DropItemButton_RegionCheck")

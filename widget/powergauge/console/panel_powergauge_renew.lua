@@ -1,6 +1,7 @@
 Panel_PowerGauge:SetShow(false)
 local progress = UI.getChildControl(Panel_PowerGauge, "Progress2_Gauge")
 local progressValue = UI.getChildControl(Panel_PowerGauge, "StaticText_GaugeValue")
+local readyText = UI.getChildControl(Panel_PowerGauge, "StaticText_Ready")
 local wp = 0
 local checkValue = false
 local elapsTime = 0
@@ -13,11 +14,15 @@ function PowerGauge_FrameUpdate(deltaTime)
     if wp < math.floor(nowPower) or math.floor(nowPower) > 10 and math.floor(nowPower) < 0 then
       return
     end
-    progressValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_POWERGAUGE_PROGRESSVALUE", "percent", string.format("%d", math.floor(nowPower))))
+    readyText:SetShow(false)
+    progressValue:SetShow(true)
+    progressValue:SetText(math.floor(nowPower))
     progress:SetProgressRate(percent)
     progress:SetCurrentProgressRate(percent)
   else
-    progressValue:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_POWERGAUGE_READY"))
+    readyText:SetShow(true)
+    progressValue:SetShow(false)
+    readyText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_POWERGAUGE_READY"))
   end
 end
 local resetCheck = false

@@ -1753,35 +1753,30 @@ function Chatting_OnResize()
     local panelSizeY = divisionPanel:getPanelSizeY()
     local panelPosX = divisionPanel:getPositionX()
     local panelPosY = divisionPanel:getPositionY()
-    if CppDefine.ChangeUIAndResolution == true then
-      if panel:GetRelativePosX() == -1 and panel:GetRelativePosY() == -1 then
-        local initPosX = 0
-        local initPosY
-        if false == _ContentsGroup_RenewUI then
-          initPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
-        else
-          initPosY = getScreenSizeY() - panelSizeY
-        end
-        panelPosX = initPosX
-        panelPosY = initPosY
-        panel:SetPosX(panelPosX)
-        panel:SetPosY(panelPosY)
-        FGlobal_InitPanelRelativePos(panel, initPosX, initPosY)
+    if panel:GetRelativePosX() == -1 and panel:GetRelativePosY() == -1 then
+      local initPosX = 0
+      local initPosY
+      if false == _ContentsGroup_RenewUI then
+        initPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+      else
+        initPosY = getScreenSizeY() - panelSizeY
       end
-      if panel:GetRelativePosX() == 0 and panel:GetRelativePosY() == 0 then
-        panelPosX = 0
-        if false == _ContentsGroup_RenewUI then
-          panelPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
-        else
-          panelPosY = getScreenSizeY() - panelSizeY
-        end
-      elseif 0 < panel:GetRelativePosX() or 0 < panel:GetRelativePosY() then
-        panelPosX = panel:GetRelativePosX() * getScreenSizeX() - panel:GetSizeX() / 2
-        panelPosY = panel:GetRelativePosY() * getScreenSizeY() - panel:GetSizeY() / 2
+      panelPosX = initPosX
+      panelPosY = initPosY
+      panel:SetPosX(panelPosX)
+      panel:SetPosY(panelPosY)
+      FGlobal_InitPanelRelativePos(panel, initPosX, initPosY)
+    end
+    if panel:GetRelativePosX() == 0 and panel:GetRelativePosY() == 0 then
+      panelPosX = 0
+      if false == _ContentsGroup_RenewUI then
+        panelPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+      else
+        panelPosY = getScreenSizeY() - panelSizeY
       end
-    elseif -1 ~= panelPosX or -1 ~= panelPosY then
-      panelPosX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, poolIndex, CppEnums.PanelSaveType.PanelSaveType_PositionX)
-      panelPosY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, poolIndex, CppEnums.PanelSaveType.PanelSaveType_PositionY)
+    elseif 0 < panel:GetRelativePosX() or 0 < panel:GetRelativePosY() then
+      panelPosX = panel:GetRelativePosX() * getScreenSizeX() - panel:GetSizeX() / 2
+      panelPosY = panel:GetRelativePosY() * getScreenSizeY() - panel:GetSizeY() / 2
     end
     if panelSizeX > 25 and panelSizeY > 50 then
       panel:SetSize(panelSizeX, panelSizeY)
@@ -1827,16 +1822,10 @@ function Chatting_OnResize()
           panelPosX = getScreenSizeX() - panel:GetSizeX()
         end
       end
-      if CppDefine.ChangeUIAndResolution == true then
-        if panelPosY < 0 then
-          panelPosY = 0
-        elseif panelPosY == 0 then
-          panelPosY = defaultPosY
-        elseif panelPosY > getScreenSizeY() - panel:GetSizeY() then
-          panelPosY = defaultPosY
-        end
-      elseif panelPosY < 0 then
+      if panelPosY < 0 then
         panelPosY = 0
+      elseif panelPosY == 0 then
+        panelPosY = defaultPosY
       elseif panelPosY > getScreenSizeY() - panel:GetSizeY() then
         panelPosY = defaultPosY
       end
@@ -2055,9 +2044,7 @@ function HandleClicked_Chatting_Resize(drawPanelIndex, panelIdx)
   chatUI._list_ResizeButton[0]:SetPosX(sizeX - (chatUI._list_ResizeButton[0]:GetSizeX() + 5))
   chatUI._list_Scroll[0]:SetPosX(sizeX - (chatUI._list_Scroll[0]:GetSizeX() + 5))
   chatUI._list_Scroll[0]:SetControlBottom()
-  if CppDefine.ChangeUIAndResolution == true then
-    PAGlobal_setPanelChattingPoolRelativeSize(drawPanelIndex)
-  end
+  PAGlobal_setPanelChattingPoolRelativeSize(drawPanelIndex)
   FromClient_ChatUpdate(true, drawPanelIndex)
   ToClient_SaveUiInfo(false)
 end
@@ -2262,6 +2249,7 @@ function HandleClicked_ChatSubMenu_AddFriend()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
     return
   end
 end

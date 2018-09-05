@@ -292,64 +292,44 @@ function Phantom_Locate()
   if nil == selfPlayer then
     return
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_ClassResource:GetRelativePosX() == -1 and Panel_ClassResource:GetRelativePosY() == -1 then
-      local initPosX = Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5
-      local initPosY = Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5
-      Panel_ClassResource:SetPosX(initPosX)
-      Panel_ClassResource:SetPosY(initPosY)
-      changePositionBySever(Panel_ClassResource, CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, true, true, false)
-      FGlobal_InitPanelRelativePos(Panel_ClassResource, initPosX, initPosY)
-    elseif Panel_ClassResource:GetRelativePosX() == 0 and Panel_ClassResource:GetRelativePosY() == 0 then
-      Panel_ClassResource:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 + _phantomCount_Icon:GetSizeX() - 5)
-      Panel_ClassResource:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY() - _phantomCount_Icon:GetSizeY() + 5)
-    else
-      Panel_ClassResource:SetPosX(getScreenSizeX() * Panel_ClassResource:GetRelativePosX() - Panel_ClassResource:GetSizeX() / 2)
-      Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
-    end
-  else
-    Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
-    Panel_ClassResource:SetPosY(Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5)
+  if Panel_ClassResource:GetRelativePosX() == -1 and Panel_ClassResource:GetRelativePosY() == -1 then
+    local initPosX = Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5
+    local initPosY = Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5
+    Panel_ClassResource:SetPosX(initPosX)
+    Panel_ClassResource:SetPosY(initPosY)
     changePositionBySever(Panel_ClassResource, CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, true, true, false)
-  end
-  if CppDefine.ChangeUIAndResolution == true then
-    ResizeInit()
+    FGlobal_InitPanelRelativePos(Panel_ClassResource, initPosX, initPosY)
+  elseif Panel_ClassResource:GetRelativePosX() == 0 and Panel_ClassResource:GetRelativePosY() == 0 then
+    Panel_ClassResource:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 + _phantomCount_Icon:GetSizeX() - 5)
+    Panel_ClassResource:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY() - _phantomCount_Icon:GetSizeY() + 5)
   else
-    init()
+    Panel_ClassResource:SetPosX(getScreenSizeX() * Panel_ClassResource:GetRelativePosX() - Panel_ClassResource:GetSizeX() / 2)
+    Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
   end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+    Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+  end
+  ResizeInit()
 end
 function Phantom_Resize()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_ClassResource:GetRelativePosX() == -1 and Panel_ClassResource:GetRelativePosY() == -1 then
-      local initPosX = Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5
-      local initPosY = Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5
-      Panel_ClassResource:SetPosX(initPosX)
-      Panel_ClassResource:SetPosY(initPosY)
-      changePositionBySever(Panel_ClassResource, CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, true, true, false)
-      FGlobal_InitPanelRelativePos(Panel_ClassResource, initPosX, initPosY)
-    elseif Panel_ClassResource:GetRelativePosX() == 0 and Panel_ClassResource:GetRelativePosY() == 0 then
-      Panel_ClassResource:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 + _phantomCount_Icon:GetSizeX() - 5)
-      Panel_ClassResource:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY() - _phantomCount_Icon:GetSizeY() + 5)
-    else
-      Panel_ClassResource:SetPosX(getScreenSizeX() * Panel_ClassResource:GetRelativePosX() - Panel_ClassResource:GetSizeX() / 2)
-      Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
-    end
-  else
-    Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
-    Panel_ClassResource:SetPosY(Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5)
+  if Panel_ClassResource:GetRelativePosX() == -1 and Panel_ClassResource:GetRelativePosY() == -1 then
+    local initPosX = Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5
+    local initPosY = Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5
+    Panel_ClassResource:SetPosX(initPosX)
+    Panel_ClassResource:SetPosY(initPosY)
     changePositionBySever(Panel_ClassResource, CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, true, true, false)
-  end
-  if CppDefine.ChangeUIAndResolution == true then
-    ResizeInit()
+    FGlobal_InitPanelRelativePos(Panel_ClassResource, initPosX, initPosY)
+  elseif Panel_ClassResource:GetRelativePosX() == 0 and Panel_ClassResource:GetRelativePosY() == 0 then
+    Panel_ClassResource:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 + _phantomCount_Icon:GetSizeX() - 5)
+    Panel_ClassResource:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY() - _phantomCount_Icon:GetSizeY() + 5)
   else
-    init()
+    Panel_ClassResource:SetPosX(getScreenSizeX() * Panel_ClassResource:GetRelativePosX() - Panel_ClassResource:GetSizeX() / 2)
+    Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
   end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+    Panel_ClassResource_SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ClassResource, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+  end
+  ResizeInit()
 end
 function Panel_ClassResource_ShowToggle()
   if Panel_ClassResource:IsShow() then

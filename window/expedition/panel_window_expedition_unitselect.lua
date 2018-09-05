@@ -43,6 +43,11 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_Open(index)
   self:open()
   self._selectIndex = index
 end
+function PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
+  if true == Panel_Subjugation_SelectArmyUnit:IsShow() then
+    expeditionUnitSelectInfo:open()
+  end
+end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_Close()
   local self = expeditionUnitSelectInfo
   self:close()
@@ -62,6 +67,9 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
   local guageBar = UI.getChildControl(content, "Progress2_ExpGauge")
   local unitInfoBG = UI.getChildControl(content, "Static_Bg")
   local textLevel = UI.getChildControl(content, "StaticText_GradeEdge")
+  local textEnergy = UI.getChildControl(content, "StaticText_Energy")
+  local recoveryBtn = UI.getChildControl(content, "Button_Recover")
+  local promoteBtn = UI.getChildControl(content, "Button_Promote")
   local myUnit = ToClient_getMyExpeditionUnitInfo(key)
   local unitNo = Int64toInt32(key)
   if nil ~= myUnit then
@@ -80,8 +88,12 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
     else
       textStatus:SetFontColor(Defines.Color.C_FFC4BEBE)
     end
-    textStatus:SetText(string.format("[%s] atk:%s/Energy:%s", unitName, atkPoint, curEnergyPoint))
+    textStatus:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNITINFO", "name", unitName, "attack", atkPoint))
+    textEnergy:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_CURRENT_ENERGY", "energy", curEnergyPoint))
     unitInfoBG:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(" .. unitNo .. ")")
+    recoveryBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitRecoveryDetail(" .. unitNo .. ")")
+    promoteBtn:SetShow(myUnit:canUpgrade())
+    promoteBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitPromote(" .. unitNo .. ")")
   end
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(unitNo)
@@ -95,6 +107,21 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(unitNo)
   if nil ~= prevSelectUnitNo then
     self._ui._list2_myUnitList:requestUpdateByKey(prevSelectUnitNo)
   end
+end
+function PaGlobalFunc_ExpeditionUnitPromote(unitNo)
+  local function doPromote()
+    ToClient_requestUpgradeExpeditionUnit(unitNo)
+  end
+  local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_UPGRADE")
+  local messageBoxData = {
+    title = messageBoxTitle,
+    content = messageBoxMemo,
+    functionYes = doPromote,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData, "middle")
 end
 function FromClient_ExpeditionUnitSelectInfo_Initialize()
   local self = expeditionUnitSelectInfo

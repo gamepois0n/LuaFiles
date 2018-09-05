@@ -630,6 +630,7 @@ function friend_clickAcceptFriend()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function friend_clickRefuseFriend()
@@ -1188,6 +1189,7 @@ function friend_clickAddFriendButton()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   else
     PopupAddFriend:SetShow(true)
   end

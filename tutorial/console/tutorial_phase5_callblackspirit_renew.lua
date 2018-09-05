@@ -88,6 +88,7 @@ function PaGlobal_TutorialPhase_CallBlackSpirit:startPhaseXXX(stepNo)
   PaGlobal_TutorialUiManager:hideAllTutorialUi()
   PaGlobal_TutorialUiManager:setShowAllDefaultUi(false)
   PaGlobal_TutorialUiManager:repositionScreen()
+  Panel_Tutorial_Renew:SetShow(true, true)
 end
 function PaGlobal_TutorialPhase_CallBlackSpirit:endPhase()
   self._currentStep = 0

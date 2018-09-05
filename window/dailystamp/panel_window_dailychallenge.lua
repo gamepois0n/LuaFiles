@@ -32,7 +32,7 @@ local dailyChallenge = {
     }
   },
   _dataList = {},
-  _completeKeyList = {},
+  _completeGroupKeyList = {},
   _doneDataList = {},
   _selectItemData = {},
   _static_ItemSlotBg = {},
@@ -123,7 +123,7 @@ function dailyChallenge:resetData()
   self._selectItemData = {}
   self._doneDataList = {}
   self._dataList = {}
-  self._completeKeyList = {}
+  self._completeGroupKeyList = {}
   self._dataIndex = 0
 end
 function PaGlobalFunc_DailyChallenge_Open()
@@ -151,7 +151,7 @@ function dailyChallenge:pushDataList(challengeType, Index, optionalType, challen
   challengeInfo.optionalType = optionalType
   challengeInfo.key = challengeKey
   table.insert(self._dataList, challengeInfo)
-  self._completeKeyList[challengeKey] = true
+  self._completeGroupKeyList[optionalType] = true
 end
 function dailyChallenge:setCheckIconTexture(control, challnegeType)
   local eChallengeType = self._config._challengeType
@@ -207,7 +207,7 @@ function dailyChallenge:update()
   local eChallengeType = self._config._challengeType
   local dataIndex = 0
   self._dataList = {}
-  self._completeKeyList = {}
+  self._completeGroupKeyList = {}
   local totalCompleteCount = ToClient_GetCompletedChallengeCount()
   local rewardCompleteCount = ToClient_GetChallengeRewardInfoCount()
   local totalProgressCount = ToClient_GetProgressChallengeCount(1) + ToClient_GetProgressChallengeCount(2) + ToClient_GetProgressChallengeCount(3)
@@ -218,13 +218,16 @@ function dailyChallenge:update()
   else
     self._ui._staticText_UncollectedRewardCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_REWARDCOUNTVALUE_HAVE", "remainRewardCount", remainRewardCount))
   end
+  local prevGroup = -1
   local rewardCompleteCount = ToClient_GetChallengeRewardInfoCount()
   for index = 0, rewardCompleteCount - 1 do
     local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(index)
-    if nil ~= rewardWrapper and 0 < rewardWrapper:getOptionalType() then
+    if nil ~= rewardWrapper and 0 < rewardWrapper:getOptionalType() and prevGroup ~= rewardWrapper:getOptionalType() then
       self:pushDataList(eChallengeType.reward, index, rewardWrapper:getOptionalType(), rewardWrapper:getKey():get())
+      prevGroup = rewardWrapper:getOptionalType()
     end
   end
+  prevGroup = -1
   for challengeType = 0, CppEnums.ChallengeType.eChallengeType_Count - 1 do
     if challengeType == CppEnums.ChallengeType.eChallengeType_Coupon then
     elseif isGameTypeRussia() and challengeType == 4 then
@@ -233,24 +236,29 @@ function dailyChallenge:update()
       local controlValueCount = ToClient_GetProgressChallengeCount(challengeType)
       for index = 0, controlValueCount - 1 do
         local progressInfo = ToClient_GetProgressChallengeAt(challengeType, index)
-        if nil ~= progressInfo and 0 < progressInfo:getOptionalType() then
+        if nil ~= progressInfo and 0 < progressInfo:getOptionalType() and prevGroup ~= progressInfo:getOptionalType() then
           self:pushDataList(challengeType, index, progressInfo:getOptionalType(), progressInfo:getKey():get())
+          prevGroup = progressInfo:getOptionalType()
         end
       end
     end
   end
   local completedCount = ToClient_GetCompletedChallengeCount()
+  prevGroup = -1
   for index = 0, completedCount - 1 do
     local completedInfo = ToClient_GetCompletedChallengeAt(index)
-    if nil ~= completedInfo and true ~= self._completeKeyList[completedInfo:getKey():get()] and 0 < completedInfo:getOptionalType() then
+    if nil ~= completedInfo and true ~= self._completeGroupKeyList[completedInfo:getOptionalType()] and 0 < completedInfo:getOptionalType() and prevGroup ~= completedInfo:getOptionalType() then
       self:pushDataList(eChallengeType.completed, index, completedInfo:getOptionalType(), completedInfo:getKey():get())
+      prevGroup = completedInfo:getOptionalType()
     end
   end
   local optionalCompletedCount = ToClient_GetOptionalCompletedChallengeCount()
-  for index = 0, optionalCompletedCount - 1 do
+  prevGroup = -1
+  for index = optionalCompletedCount - 1, 0, -1 do
     local completedInfo = ToClient_GetOptionalCompletedChallengeAt(index)
-    if nil ~= completedInfo and true ~= self._completeKeyList[completedInfo:getKey():get()] and 0 < completedInfo:getOptionalType() then
+    if nil ~= completedInfo and true ~= self._completeGroupKeyList[completedInfo:getOptionalType()] and 0 < completedInfo:getOptionalType() and prevGroup ~= completedInfo:getOptionalType() then
       self:pushDataList(eChallengeType.optionalCompleted, index, completedInfo:getOptionalType(), completedInfo:getKey():get())
+      prevGroup = completedInfo:getOptionalType()
     end
   end
   if 0 >= table.getn(self._dataList) then
@@ -262,7 +270,7 @@ function dailyChallenge:update()
   end
   table.sort(self._dataList, sortByKeyFunction)
   local sortFunction = function(a, b)
-    return a.optionalType < b.optionalType
+    return a.optionalType > b.optionalType
   end
   table.sort(self._dataList, sortFunction)
   local UiIndex = 0
@@ -299,10 +307,10 @@ function dailyChallenge:createList(UiIndex, dataIndex)
     rewardInfo = ToClient_GetCompletedChallengeAt(challengeInfo.dataIndex)
   elseif eChallengeType.benefit == challengeInfo.challengeType then
     rewardInfo = ToClient_GetBenefitRewardInfoWrapper(challengeInfo.dataIndex)
-    rewardCount = rewardInfo:getRewardCount()
+    rewardCount = ToClient_GetBenefitRewardCountByOptionalType(rewardInfo:getOptionalType())
   elseif eChallengeType.reward == challengeInfo.challengeType then
     rewardInfo = ToClient_GetChallengeRewardInfoWrapper(challengeInfo.dataIndex)
-    rewardCount = rewardInfo:getRewardCount()
+    rewardCount = ToClient_GetChallengeRewardCountByOptionalType(rewardInfo:getOptionalType())
   else
     rewardInfo = ToClient_GetProgressChallengeAt(challengeInfo.challengeType, challengeInfo.dataIndex)
   end

@@ -778,7 +778,6 @@ function WorldMapHouseManager:updateEmptyHouse(houseInfoSSWrapper)
   if nil == self._selected then
     Input_WorldMapHouseManager_SetUseType(1)
   end
-  self:setBuyButton(houseInfoSSWrapper)
 end
 function WorldMapHouseManager:setBuyButton(houseInfoSSWrapper)
   local isPurchasable = houseInfoSSWrapper:isPurchasable(self._useTypeData[self._selected].receipeKey)
@@ -1291,6 +1290,11 @@ function Input_WorldMapHouseManager_SetUseType(index)
   self._ui.scroll_detailList:SetControlPos(0)
   self._ui.scroll_ctrlButton:SetShow(false)
   Input_WorldMapHouseManager_SetSelectButton(index)
+  local rentHouse = ToClient_GetRentHouseWrapper(self._houseKey)
+  if nil ~= rentHouse and true == rentHouse:isSet() then
+  else
+    self:setBuyButton(self._currentHouseButton:FromClient_getStaticStatus())
+  end
 end
 function InputScroll_WorldMapHouseManager_DetailList(isUp)
   local self = WorldMapHouseManager

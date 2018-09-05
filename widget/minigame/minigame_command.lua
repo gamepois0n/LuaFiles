@@ -293,7 +293,7 @@ function Panel_Minigame_Command_Start()
   _math_randomSeed(os.time())
   Command_CreateRandomText()
   currentCommandIndex = 1
-  Panel_Command:RegisterUpdateFunc("Command_UpdateText")
+  Panel_Command:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   passedTimePerNext = 0
   _sinGauge_Result_Bad:SetShow(false)
   _sinGauge_Result_Perfect:SetShow(false)
@@ -390,5 +390,4 @@ function Command_UpdateText(deltaTime)
   end
 end
 registerEvent("onScreenResize", "Command_RePosition")
-registerEvent("EventActionMiniGameKeyDownOnce", "MiniGame_Command_ddukdition")
 Command_RePosition()

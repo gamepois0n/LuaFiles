@@ -1373,6 +1373,7 @@ function HandleClicked_RandomBeautyMSG()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function HandleClicked_RandomBeauty()

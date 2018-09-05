@@ -107,10 +107,10 @@ function raidParty:SetInfo(index)
     self._uiPartyMemberList[index]._name:SetFontColor(Defines.Color.C_FFFFFFFF)
   end
   local isDead = self._partyMemberData[index]._currentHp <= 0
+  self._uiPartyMemberList[index]._hpBG:SetShow(not isDead)
   self._uiPartyMemberList[index]._deadConditionBG:SetShow(isDead)
   self._uiPartyMemberList[index]._base:SetShow(true)
   self._uiPartyMemberList[index]._name:SetShow(true)
-  self._uiPartyMemberList[index]._hpBG:SetShow(true)
   self._uiPartyMemberList[index]._hp:SetShow(true)
 end
 function PaGlobal_RaidParty_LimitTextTooptip(isShow, index)

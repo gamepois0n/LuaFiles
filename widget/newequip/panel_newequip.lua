@@ -43,23 +43,17 @@ function Panel_NewEquip_ScreenResize()
   local posX, posY
   posY = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
   posX = FGlobal_GetPersonalIconPosX(4)
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_NewEquip:GetRelativePosX() == -1 and Panel_NewEquip:GetRelativePosY() == -1 then
-      Panel_NewEquip:SetPosX(posX)
-      Panel_NewEquip:SetPosY(posY)
-      changePositionBySever(Panel_NewEquip, CppEnums.PAGameUIType.PAGameUIPanel_NewEquipment, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_NewEquip, initPosX, initPosY)
-    elseif Panel_NewEquip:GetRelativePosX() == 0 and Panel_NewEquip:GetRelativePosY() == 0 then
-      Panel_NewEquip:SetPosX(posX)
-      Panel_NewEquip:SetPosY(posY)
-    else
-      Panel_NewEquip:SetPosX(getScreenSizeX() * Panel_NewEquip:GetRelativePosX() - Panel_NewEquip:GetSizeX() / 2)
-      Panel_NewEquip:SetPosY(getScreenSizeY() * Panel_NewEquip:GetRelativePosY() - Panel_NewEquip:GetSizeY() / 2)
-    end
-  else
+  if Panel_NewEquip:GetRelativePosX() == -1 and Panel_NewEquip:GetRelativePosY() == -1 then
     Panel_NewEquip:SetPosX(posX)
     Panel_NewEquip:SetPosY(posY)
     changePositionBySever(Panel_NewEquip, CppEnums.PAGameUIType.PAGameUIPanel_NewEquipment, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_NewEquip, initPosX, initPosY)
+  elseif Panel_NewEquip:GetRelativePosX() == 0 and Panel_NewEquip:GetRelativePosY() == 0 then
+    Panel_NewEquip:SetPosX(posX)
+    Panel_NewEquip:SetPosY(posY)
+  else
+    Panel_NewEquip:SetPosX(getScreenSizeX() * Panel_NewEquip:GetRelativePosX() - Panel_NewEquip:GetSizeX() / 2)
+    Panel_NewEquip:SetPosY(getScreenSizeY() * Panel_NewEquip:GetRelativePosY() - Panel_NewEquip:GetSizeY() / 2)
   end
   if true == _ContentsGroup_RenewUI_Main then
     Panel_NewEquip:SetPosX(posX - 70)

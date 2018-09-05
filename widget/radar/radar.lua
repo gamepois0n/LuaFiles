@@ -3,7 +3,6 @@ Panel_TimeBar:RegisterShowEventFunc(true, "TimebarShowAni()")
 Panel_TimeBar:RegisterShowEventFunc(false, "TimebarHideAni()")
 Panel_TimeBar:SetIgnore(true)
 Panel_TimeBarNumber:SetIgnore(true)
-Panel_Radar:SetShow(true, false)
 Panel_Radar:SetIgnore(true)
 Panel_Radar:setGlassBackground(true)
 Panel_Radar:RegisterShowEventFunc(true, "RadarShowAni()")
@@ -780,7 +779,7 @@ local function controlAlignForRemaster()
   resetIcon:SetPosY(scl_plus:GetPosY() - resetIcon:GetSizeY() - 5)
   local timeBarSizeX = Panel_Radar:GetSizeX() - 20 * radarMap.scaleRateWidth + 10
   local timeBarSizeY = Panel_Radar:GetSizeY() - 10 * radarMap.scaleRateHeight + 23
-  Panel_TimeBar:SetSize(timeBarSizeX, timeBarSizeY)
+  Panel_TimeBar:SetSize(timeBarSizeX, 22)
   Panel_TimeBar:SetPosX(Panel_Radar:GetPosX() + 10 * radarMap.scaleRateWidth - 6)
   radar_MiniMapScl:SetPosX(radar_MiniMapScl:GetPosX() + 10 * radarMap.scaleRateWidth)
   radar_MiniMapScl:SetPosY(radar_MiniMapScl:GetPosY() - 10 * radarMap.scaleRateHeight)
@@ -2592,16 +2591,28 @@ function Radar_luaLoadComplete()
   controlAlign()
   PaGlobal_Radar_GuildTeamBattleAlert(false)
   radarAlert_Resize()
+  if false == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.RadarSwap) then
+    if 0 <= ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_RadarMap, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      Panel_Radar:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_RadarMap, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+    else
+      Panel_Radar:SetShow(true, false)
+    end
+  end
+  if 0 <= ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_TimeBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    Panel_TimeBar:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_TimeBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+  else
+    Panel_TimeBar:SetShow(true, false)
+  end
 end
 function PaGlobalFunc_Radar_Resize()
   controlAlign()
   radarAlert_Resize()
+  PaGlobal_WorldMiniMap:setTimebarSize()
 end
 registerEvent("FromClient_luaLoadComplete", "Radar_luaLoadComplete")
 registerEvent("FromClient_setNameOfMouseOverIcon", "FromClient_setNameOfMouseOverIcon")
 registerEvent("FromClient_NameOff", "FromClient_NameOff")
 registerEvent("FromClient_ChangeRadarRotateMode", "Radar_SetRotateMode")
 registerEvent("onScreenResize", "PaGlobalFunc_Radar_Resize")
-changePositionBySever(Panel_Radar, CppEnums.PAGameUIType.PAGameUIPanel_RadarMap, true, false, false)
 changePositionBySever(Panel_TimeBar, CppEnums.PAGameUIType.PAGameUIPanel_TimeBar, true, false, false)
 Panel_Radar:SetSpanSize(7, 20)

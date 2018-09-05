@@ -320,6 +320,14 @@ function partyWidget:initControl()
   self._ui._radioButton_Turn = UI.getChildControl(self._ui._static_OptionBg, "RadioButton_Turn")
   self._ui._radioButton_Random = UI.getChildControl(self._ui._static_OptionBg, "RadioButton_Random")
   self._ui._radioButton_LeaderOnly = UI.getChildControl(self._ui._static_OptionBg, "RadioButton_LeaderOnly")
+  self._ui._radioButton_Free:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._radioButton_Turn:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._radioButton_Random:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._radioButton_LeaderOnly:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._radioButton_Free:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_FREE"))
+  self._ui._radioButton_Turn:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_TURN"))
+  self._ui._radioButton_Random:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_RANDOM"))
+  self._ui._radioButton_LeaderOnly:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_LEADERONLY"))
   self._ui._checkButton_Money = UI.getChildControl(self._ui._static_MarketOptionBg, "CheckButton_Money")
   self._ui._checkButton_Grade = UI.getChildControl(self._ui._static_MarketOptionBg, "CheckButton_Grade")
   self._ui._staticText_MoneyValue = UI.getChildControl(self._ui._static_MarketOptionBg, "StaticText_MoneyValue")
@@ -352,6 +360,12 @@ function partyWidget:createControl()
     info._button_Leave = UI.getChildControl(info.control, "Button_Leave")
     info._button_SetLeader = UI.getChildControl(info.control, "Button_SetLeader")
     info._button_ForceOut = UI.getChildControl(info.control, "Button_ForceOut")
+    info._button_Leave:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    info._button_SetLeader:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    info._button_ForceOut:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    info._button_Leave:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_LEAVE"))
+    info._button_SetLeader:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_AUTORIZE"))
+    info._button_ForceOut:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_KICKOUT"))
     self._ui._static_PartyMember[index] = info
   end
 end
@@ -659,6 +673,9 @@ function ResponseParty_updatePartyList()
   partyWidget:updatePartyList()
 end
 function partyWidget:updatePartyList()
+  if not self._isInitailized then
+    return
+  end
   local partyMemberCount = RequestParty_getPartyMemberCount()
   if true == Panel_Widget_Party:GetShow() and CppEnums.PartyType.ePartyType_Normal == self._partyType then
     local lootType = RequestParty_getPartyLootType()
@@ -1160,21 +1177,17 @@ function partyWidget:setScreenSize()
     end
     self:updatePartyList()
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Widget_Party:GetRelativePosX() == -1 or Panel_Widget_Party:GetRelativePosY() == -1 then
-      local initPosX = 10
-      local initPosY = 200
-      changePositionBySever(Panel_Widget_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_Widget_Party, initPosX, initPosY)
-    elseif Panel_Widget_Party:GetRelativePosX() == 0 or Panel_Widget_Party:GetRelativePosY() == 0 then
-      Panel_Widget_Party:SetPosX(10)
-      Panel_Widget_Party:SetPosY(200)
-    else
-      Panel_Widget_Party:SetPosX(getScreenSizeX() * Panel_Widget_Party:GetRelativePosX() - Panel_Widget_Party:GetSizeX() / 2)
-      Panel_Widget_Party:SetPosY(getScreenSizeY() * Panel_Widget_Party:GetRelativePosY() - Panel_Widget_Party:GetSizeY() / 2)
-    end
-  else
+  if Panel_Widget_Party:GetRelativePosX() == -1 or Panel_Widget_Party:GetRelativePosY() == -1 then
+    local initPosX = 10
+    local initPosY = 200
     changePositionBySever(Panel_Widget_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_Widget_Party, initPosX, initPosY)
+  elseif Panel_Widget_Party:GetRelativePosX() == 0 or Panel_Widget_Party:GetRelativePosY() == 0 then
+    Panel_Widget_Party:SetPosX(10)
+    Panel_Widget_Party:SetPosY(200)
+  else
+    Panel_Widget_Party:SetPosX(getScreenSizeX() * Panel_Widget_Party:GetRelativePosX() - Panel_Widget_Party:GetSizeX() / 2)
+    Panel_Widget_Party:SetPosY(getScreenSizeY() * Panel_Widget_Party:GetRelativePosY() - Panel_Widget_Party:GetSizeY() / 2)
   end
   self._ui._static_OptionBg:ComputePos()
   FGlobal_PanelRepostionbyScreenOut(Panel_Widget_Party)

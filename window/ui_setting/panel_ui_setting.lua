@@ -195,926 +195,521 @@ local panelID = {
   MainStatusRemaster = 56,
   ServantIconRemaster = 57
 }
-local panelControl = {}
-if CppDefine.ChangeUIAndResolution == true then
-  panelControl = {
-    [panelID.ExpGage] = {
-      control = Panel_SelfPlayerExpGage,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
-      isShow = true
-    },
-    [panelID.ServantIcon] = {
-      control = Panel_Window_Servant,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ServantWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
-      isShow = true
-    },
-    [panelID.Radar] = {
-      control = Panel_Radar,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_RadarMap,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_3"),
-      isShow = true
-    },
-    [panelID.Quest] = {
-      control = Panel_CheckedQuest,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_4"),
-      isShow = true
-    },
-    [panelID.Chat0] = {
-      control = Panel_Chat0,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_5"),
-      isShow = true
-    },
-    [panelID.Chat1] = {
-      control = Panel_Chat1,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_6"),
-      isShow = false
-    },
-    [panelID.Chat2] = {
-      control = Panel_Chat2,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_7"),
-      isShow = false
-    },
-    [panelID.Chat3] = {
-      control = Panel_Chat3,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_8"),
-      isShow = false
-    },
-    [panelID.Chat4] = {
-      control = Panel_Chat4,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_9"),
-      isShow = false
-    },
-    [panelID.GameTip] = {
-      control = Panel_GameTips,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_GameTips,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_10"),
-      isShow = true
-    },
-    [panelID.QuickSlot] = {
-      control = Panel_QuickSlot,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_11"),
-      isShow = true
-    },
-    [panelID.HPBar] = {
-      control = Panel_MainStatus_User_Bar,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_12"),
-      isShow = false
-    },
-    [panelID.Pvp] = {
-      control = Panel_PvpMode,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_PvpMode,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_13"),
-      isShow = true
-    },
-    [panelID.ClassResource] = {
-      control = Panel_ClassResource,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ClassResource,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_14"),
-      isShow = true
-    },
-    [panelID.Adrenallin] = {
-      control = Panel_Adrenallin,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Adrenallin,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_15"),
-      isShow = true
-    },
-    [panelID.UIMain] = {
-      control = Panel_UIMain,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_UIMenu,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_16"),
-      isShow = true
-    },
-    [panelID.House] = {
-      control = Panel_MyHouseNavi,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_17"),
-      isShow = false
-    },
-    [panelID.NewEquip] = {
-      control = Panel_NewEquip,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewEquipment,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_18"),
-      isShow = true
-    },
-    [panelID.Party] = {
-      control = Panel_Party,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Party,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
-      isShow = true
-    },
-    [panelID.TimeBar] = {
-      control = Panel_TimeBar,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_TimeBar,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_20"),
-      isShow = true
-    },
-    [panelID.ActionGuide] = {
-      control = Panel_SkillCommand,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCommand,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_21"),
-      isShow = true
-    },
-    [panelID.KeyGuide] = {
-      control = Panel_Movie_KeyViewer,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_22"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot0] = {
-      control = Panel_NewQuickSlot_0,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_0,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_1"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot1] = {
-      control = Panel_NewQuickSlot_1,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_1,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_2"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot2] = {
-      control = Panel_NewQuickSlot_2,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_2,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_3"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot3] = {
-      control = Panel_NewQuickSlot_3,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_3,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_4"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot4] = {
-      control = Panel_NewQuickSlot_4,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_4,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_5"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot5] = {
-      control = Panel_NewQuickSlot_5,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_5,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_6"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot6] = {
-      control = Panel_NewQuickSlot_6,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_6,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_7"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot7] = {
-      control = Panel_NewQuickSlot_7,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_7,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_8"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot8] = {
-      control = Panel_NewQuickSlot_8,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_8,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_9"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot9] = {
-      control = Panel_NewQuickSlot_9,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_9,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_10"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot10] = {
-      control = Panel_NewQuickSlot_10,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_10,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_11"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot11] = {
-      control = Panel_NewQuickSlot_11,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_11,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_12"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot12] = {
-      control = Panel_NewQuickSlot_12,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_12,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_13"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot13] = {
-      control = Panel_NewQuickSlot_13,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_13,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_14"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot14] = {
-      control = Panel_NewQuickSlot_14,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_14,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_15"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot15] = {
-      control = Panel_NewQuickSlot_15,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_15,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_16"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot16] = {
-      control = Panel_NewQuickSlot_16,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_16,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_17"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot17] = {
-      control = Panel_NewQuickSlot_17,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_17,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_18"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot18] = {
-      control = Panel_NewQuickSlot_18,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_18,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_19"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot19] = {
-      control = Panel_NewQuickSlot_19,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_19,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_20"),
-      isShow = false
-    },
-    [panelID.SkillCoolTime] = {
-      control = Panel_SkillCooltime,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLCOOLTIME"),
-      isShow = false
-    },
-    [panelID.MainQuest] = {
-      control = Panel_MainQuest,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainQuest,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_MAINQUEST_TITLE"),
-      isShow = false
-    },
-    [panelID.LargeParty] = {
-      control = Panel_LargeParty,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_LargeParty,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
-      isShow = true
-    },
-    [panelID.SkillCoolTimeQuickSlot0] = {
-      control = Panel_SkillCoolTimeQuickSlot_0,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_0,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_1"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot1] = {
-      control = Panel_SkillCoolTimeQuickSlot_1,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_1,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_2"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot2] = {
-      control = Panel_SkillCoolTimeQuickSlot_2,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_2,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_3"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot3] = {
-      control = Panel_SkillCoolTimeQuickSlot_3,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_3,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_4"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot4] = {
-      control = Panel_SkillCoolTimeQuickSlot_4,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_4,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_5"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot5] = {
-      control = Panel_SkillCoolTimeQuickSlot_5,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_5,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_6"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot6] = {
-      control = Panel_SkillCoolTimeQuickSlot_6,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_6,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_7"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot7] = {
-      control = Panel_SkillCoolTimeQuickSlot_7,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_7,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_8"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot8] = {
-      control = Panel_SkillCoolTimeQuickSlot_8,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_8,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_9"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot9] = {
-      control = Panel_SkillCoolTimeQuickSlot_9,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_9,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_10"),
-      isShow = false
-    },
-    [panelID.MainStatusRemaster] = {
-      control = Panel_MainStatus_Remaster,
-      posFixed = true,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
-      isShow = true
-    },
-    [panelID.ServantIconRemaster] = {
-      control = Panel_Widget_ServantIcon,
-      posFixed = false,
-      isChange = false,
-      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
-      isShow = true
-    }
+local panelControl = {
+  [panelID.ExpGage] = {
+    control = Panel_SelfPlayerExpGage,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SelfPlayer_ExpGage,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
+    isShow = true
+  },
+  [panelID.ServantIcon] = {
+    control = Panel_Window_Servant,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ServantWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
+    isShow = true
+  },
+  [panelID.Radar] = {
+    control = Panel_Radar,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_RadarMap,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_3"),
+    isShow = true
+  },
+  [panelID.Quest] = {
+    control = Panel_CheckedQuest,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_4"),
+    isShow = true
+  },
+  [panelID.Chat0] = {
+    control = Panel_Chat0,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_5"),
+    isShow = true
+  },
+  [panelID.Chat1] = {
+    control = Panel_Chat1,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_6"),
+    isShow = false
+  },
+  [panelID.Chat2] = {
+    control = Panel_Chat2,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_7"),
+    isShow = false
+  },
+  [panelID.Chat3] = {
+    control = Panel_Chat3,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_8"),
+    isShow = false
+  },
+  [panelID.Chat4] = {
+    control = Panel_Chat4,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_9"),
+    isShow = false
+  },
+  [panelID.GameTip] = {
+    control = Panel_GameTips,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_GameTips,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_10"),
+    isShow = true
+  },
+  [panelID.QuickSlot] = {
+    control = Panel_QuickSlot,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_QuickSlot,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_11"),
+    isShow = true
+  },
+  [panelID.HPBar] = {
+    control = Panel_MainStatus_User_Bar,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_12"),
+    isShow = false
+  },
+  [panelID.Pvp] = {
+    control = Panel_PvpMode,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_PvpMode,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_13"),
+    isShow = true
+  },
+  [panelID.ClassResource] = {
+    control = Panel_ClassResource,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ClassResource,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_14"),
+    isShow = true
+  },
+  [panelID.Adrenallin] = {
+    control = Panel_Adrenallin,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Adrenallin,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_15"),
+    isShow = true
+  },
+  [panelID.UIMain] = {
+    control = Panel_UIMain,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_UIMenu,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_16"),
+    isShow = true
+  },
+  [panelID.House] = {
+    control = Panel_MyHouseNavi,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MyHouseNavi,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_17"),
+    isShow = false
+  },
+  [panelID.NewEquip] = {
+    control = Panel_NewEquip,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewEquipment,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_18"),
+    isShow = true
+  },
+  [panelID.Party] = {
+    control = Panel_Party,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Party,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
+    isShow = true
+  },
+  [panelID.TimeBar] = {
+    control = Panel_TimeBar,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_TimeBar,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_20"),
+    isShow = true
+  },
+  [panelID.ActionGuide] = {
+    control = Panel_SkillCommand,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCommand,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_21"),
+    isShow = true
+  },
+  [panelID.KeyGuide] = {
+    control = Panel_Movie_KeyViewer,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_22"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot0] = {
+    control = Panel_NewQuickSlot_0,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_0,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_1"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot1] = {
+    control = Panel_NewQuickSlot_1,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_1,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_2"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot2] = {
+    control = Panel_NewQuickSlot_2,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_2,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_3"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot3] = {
+    control = Panel_NewQuickSlot_3,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_3,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_4"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot4] = {
+    control = Panel_NewQuickSlot_4,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_4,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_5"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot5] = {
+    control = Panel_NewQuickSlot_5,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_5,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_6"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot6] = {
+    control = Panel_NewQuickSlot_6,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_6,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_7"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot7] = {
+    control = Panel_NewQuickSlot_7,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_7,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_8"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot8] = {
+    control = Panel_NewQuickSlot_8,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_8,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_9"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot9] = {
+    control = Panel_NewQuickSlot_9,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_9,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_10"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot10] = {
+    control = Panel_NewQuickSlot_10,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_10,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_11"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot11] = {
+    control = Panel_NewQuickSlot_11,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_11,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_12"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot12] = {
+    control = Panel_NewQuickSlot_12,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_12,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_13"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot13] = {
+    control = Panel_NewQuickSlot_13,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_13,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_14"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot14] = {
+    control = Panel_NewQuickSlot_14,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_14,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_15"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot15] = {
+    control = Panel_NewQuickSlot_15,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_15,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_16"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot16] = {
+    control = Panel_NewQuickSlot_16,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_16,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_17"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot17] = {
+    control = Panel_NewQuickSlot_17,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_17,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_18"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot18] = {
+    control = Panel_NewQuickSlot_18,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_18,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_19"),
+    isShow = false
+  },
+  [panelID.NewQuickSlot19] = {
+    control = Panel_NewQuickSlot_19,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_NewQuickSlot_19,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_20"),
+    isShow = false
+  },
+  [panelID.SkillCoolTime] = {
+    control = Panel_SkillCooltime,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLCOOLTIME"),
+    isShow = false
+  },
+  [panelID.MainQuest] = {
+    control = Panel_MainQuest,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainQuest,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_MAINQUEST_TITLE"),
+    isShow = false
+  },
+  [panelID.LargeParty] = {
+    control = Panel_LargeParty,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_LargeParty,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
+    isShow = true
+  },
+  [panelID.SkillCoolTimeQuickSlot0] = {
+    control = Panel_SkillCoolTimeQuickSlot_0,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_0,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_1"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot1] = {
+    control = Panel_SkillCoolTimeQuickSlot_1,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_1,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_2"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot2] = {
+    control = Panel_SkillCoolTimeQuickSlot_2,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_2,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_3"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot3] = {
+    control = Panel_SkillCoolTimeQuickSlot_3,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_3,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_4"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot4] = {
+    control = Panel_SkillCoolTimeQuickSlot_4,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_4,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_5"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot5] = {
+    control = Panel_SkillCoolTimeQuickSlot_5,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_5,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_6"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot6] = {
+    control = Panel_SkillCoolTimeQuickSlot_6,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_6,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_7"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot7] = {
+    control = Panel_SkillCoolTimeQuickSlot_7,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_7,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_8"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot8] = {
+    control = Panel_SkillCoolTimeQuickSlot_8,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_8,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_9"),
+    isShow = false
+  },
+  [panelID.SkillCoolTimeQuickSlot9] = {
+    control = Panel_SkillCoolTimeQuickSlot_9,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTimeQuickSlot_9,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_10"),
+    isShow = false
+  },
+  [panelID.MainStatusRemaster] = {
+    control = Panel_MainStatus_Remaster,
+    posFixed = true,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
+    isShow = true
+  },
+  [panelID.ServantIconRemaster] = {
+    control = Panel_Widget_ServantIcon,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
+    isShow = true
   }
-else
-  panelControl = {
-    [panelID.ExpGage] = {
-      control = Panel_SelfPlayerExpGage,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
-      isShow = true
-    },
-    [panelID.ServantIcon] = {
-      control = Panel_Window_Servant,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
-      isShow = true
-    },
-    [panelID.Radar] = {
-      control = Panel_Radar,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_3"),
-      isShow = true
-    },
-    [panelID.Quest] = {
-      control = Panel_CheckedQuest,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_4"),
-      isShow = true
-    },
-    [panelID.Chat0] = {
-      control = Panel_Chat0,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_5"),
-      isShow = true
-    },
-    [panelID.Chat1] = {
-      control = Panel_Chat1,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_6"),
-      isShow = false
-    },
-    [panelID.Chat2] = {
-      control = Panel_Chat2,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_7"),
-      isShow = false
-    },
-    [panelID.Chat3] = {
-      control = Panel_Chat3,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_8"),
-      isShow = false
-    },
-    [panelID.Chat4] = {
-      control = Panel_Chat4,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_9"),
-      isShow = false
-    },
-    [panelID.GameTip] = {
-      control = Panel_GameTips,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_10"),
-      isShow = true
-    },
-    [panelID.QuickSlot] = {
-      control = Panel_QuickSlot,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_11"),
-      isShow = true
-    },
-    [panelID.HPBar] = {
-      control = Panel_MainStatus_User_Bar,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_12"),
-      isShow = false
-    },
-    [panelID.Pvp] = {
-      control = Panel_PvpMode,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_13"),
-      isShow = true
-    },
-    [panelID.ClassResource] = {
-      control = Panel_ClassResource,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_14"),
-      isShow = true
-    },
-    [panelID.Adrenallin] = {
-      control = Panel_Adrenallin,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_15"),
-      isShow = true
-    },
-    [panelID.UIMain] = {
-      control = Panel_UIMain,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_16"),
-      isShow = true
-    },
-    [panelID.House] = {
-      control = Panel_MyHouseNavi,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_17"),
-      isShow = false
-    },
-    [panelID.NewEquip] = {
-      control = Panel_NewEquip,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_18"),
-      isShow = true
-    },
-    [panelID.Party] = {
-      control = Panel_Party,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
-      isShow = true
-    },
-    [panelID.TimeBar] = {
-      control = Panel_TimeBar,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_20"),
-      isShow = true
-    },
-    [panelID.ActionGuide] = {
-      control = Panel_SkillCommand,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_21"),
-      isShow = true
-    },
-    [panelID.KeyGuide] = {
-      control = Panel_Movie_KeyViewer,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_22"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot0] = {
-      control = Panel_NewQuickSlot_0,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_1"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot1] = {
-      control = Panel_NewQuickSlot_1,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_2"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot2] = {
-      control = Panel_NewQuickSlot_2,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_3"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot3] = {
-      control = Panel_NewQuickSlot_3,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_4"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot4] = {
-      control = Panel_NewQuickSlot_4,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_5"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot5] = {
-      control = Panel_NewQuickSlot_5,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_6"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot6] = {
-      control = Panel_NewQuickSlot_6,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_7"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot7] = {
-      control = Panel_NewQuickSlot_7,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_8"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot8] = {
-      control = Panel_NewQuickSlot_8,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_9"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot9] = {
-      control = Panel_NewQuickSlot_9,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_10"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot10] = {
-      control = Panel_NewQuickSlot_10,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_11"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot11] = {
-      control = Panel_NewQuickSlot_11,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_12"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot12] = {
-      control = Panel_NewQuickSlot_12,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_13"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot13] = {
-      control = Panel_NewQuickSlot_13,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_14"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot14] = {
-      control = Panel_NewQuickSlot_14,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_15"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot15] = {
-      control = Panel_NewQuickSlot_15,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_16"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot16] = {
-      control = Panel_NewQuickSlot_16,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_17"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot17] = {
-      control = Panel_NewQuickSlot_17,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_18"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot18] = {
-      control = Panel_NewQuickSlot_18,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_19"),
-      isShow = false
-    },
-    [panelID.NewQuickSlot19] = {
-      control = Panel_NewQuickSlot_19,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_QUICKSLOT_20"),
-      isShow = false
-    },
-    [panelID.SkillCoolTime] = {
-      control = Panel_SkillCooltime,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLCOOLTIME"),
-      isShow = false
-    },
-    [panelID.MainQuest] = {
-      control = Panel_MainQuest,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_MAINQUEST_TITLE"),
-      isShow = false
-    },
-    [panelID.LargeParty] = {
-      control = Panel_LargeParty,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
-      isShow = true
-    },
-    [panelID.SkillCoolTimeQuickSlot0] = {
-      control = Panel_SkillCoolTimeQuickSlot_0,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_1"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot1] = {
-      control = Panel_SkillCoolTimeQuickSlot_1,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_2"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot2] = {
-      control = Panel_SkillCoolTimeQuickSlot_2,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_3"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot3] = {
-      control = Panel_SkillCoolTimeQuickSlot_3,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_4"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot4] = {
-      control = Panel_SkillCoolTimeQuickSlot_4,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_5"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot5] = {
-      control = Panel_SkillCoolTimeQuickSlot_5,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_6"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot6] = {
-      control = Panel_SkillCoolTimeQuickSlot_6,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_7"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot7] = {
-      control = Panel_SkillCoolTimeQuickSlot_7,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_8"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot8] = {
-      control = Panel_SkillCoolTimeQuickSlot_8,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_9"),
-      isShow = false
-    },
-    [panelID.SkillCoolTimeQuickSlot9] = {
-      control = Panel_SkillCoolTimeQuickSlot_9,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_SKILLCOLLTIMEQUICKSLOT_10"),
-      isShow = false
-    },
-    [panelID.MainStatusRemaster] = {
-      control = Panel_MainStatus_Remaster,
-      posFixed = true,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_1"),
-      isShow = true
-    },
-    [panelID.ServantIconRemaster] = {
-      control = Panel_Widget_ServantIcon,
-      posFixed = false,
-      prePos = {x = 0, y = 0},
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
-      isShow = true
-    }
-  }
-end
+}
 local swapPanelList = {
   panelID.ExpGage,
   panelID.Pvp,
@@ -1124,8 +719,9 @@ local swapPanelList = {
   panelID.ClassResource
 }
 UiSet.panelCount = #panelControl
-function setChangeUiSettingRadarUI(panel)
+function setChangeUiSettingRadarUI(panel, uiType)
   panelControl[panelID.Radar].control = panel
+  panelControl[panelID.Radar].PAGameUIType = uiType
 end
 function PAGlobal_setIsChangePanelState(index, state, ischatPanel)
   if false == ischatPanel then
@@ -1152,25 +748,18 @@ function PAGlobal_setPanelChattingPoolRelativeSize(index, sizex, sizey)
   local posY = slot:GetPosY()
   local rateX = 0
   local rateY = 0
-  if CppDefine.ChangeUIAndResolution == true then
-    rateX = posX + slot:GetSizeX() / 2
-    rateY = posY + slot:GetSizeY() / 2
-    if panelControl[index].isChange == false then
-      panelControl[index].control:SetRelativePosX(0)
-      panelControl[index].control:SetRelativePosY(0)
-      slot:SetRelativePosX(0)
-      slot:SetRelativePosY(0)
-    else
-      panelControl[index].control:SetRelativePosX(rateX / currentScreenSize.x)
-      panelControl[index].control:SetRelativePosY(rateY / currentScreenSize.y)
-      slot:SetRelativePosX(rateX / currentScreenSize.x)
-      slot:SetRelativePosY(rateY / currentScreenSize.y)
-    end
+  rateX = posX + slot:GetSizeX() / 2
+  rateY = posY + slot:GetSizeY() / 2
+  if panelControl[index].isChange == false then
+    panelControl[index].control:SetRelativePosX(0)
+    panelControl[index].control:SetRelativePosY(0)
+    slot:SetRelativePosX(0)
+    slot:SetRelativePosY(0)
   else
-    rateX = posX / preScreenSize.x
-    rateY = posY / preScreenSize.y
-    panelControl[index].control:SetPosX(changeScreenSize.x * rateX)
-    panelControl[index].control:SetPosY(changeScreenSize.y * rateY)
+    panelControl[index].control:SetRelativePosX(rateX / currentScreenSize.x)
+    panelControl[index].control:SetRelativePosY(rateY / currentScreenSize.y)
+    slot:SetRelativePosX(rateX / currentScreenSize.x)
+    slot:SetRelativePosY(rateY / currentScreenSize.y)
   end
 end
 local BG_Texture = {
@@ -1207,41 +796,24 @@ local ChatPanelIsOpenState = {
 }
 function UiSet_Initialize()
   if false == ToClient_isXBox() and true == _ContentsGroup_RemasterUI_Party then
-    if CppDefine.ChangeUIAndResolution == true then
-      panelControl[panelID.LargeParty] = {
-        control = Panel_Widget_Raid,
-        posFixed = false,
-        isChange = false,
-        PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_LargeParty,
-        prePos = {x = 0, y = 0},
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
-        isShow = true
-      }
-      panelControl[panelID.Party] = {
-        control = Panel_Widget_Party,
-        posFixed = false,
-        isChange = false,
-        PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Party,
-        prePos = {x = 0, y = 0},
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
-        isShow = true
-      }
-    else
-      panelControl[panelID.LargeParty] = {
-        control = Panel_Widget_Raid,
-        posFixed = false,
-        prePos = {x = 0, y = 0},
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
-        isShow = true
-      }
-      panelControl[panelID.Party] = {
-        control = Panel_Widget_Party,
-        posFixed = false,
-        prePos = {x = 0, y = 0},
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
-        isShow = true
-      }
-    end
+    panelControl[panelID.LargeParty] = {
+      control = Panel_Widget_Raid,
+      posFixed = false,
+      isChange = false,
+      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_LargeParty,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_LARGEPARTY_TITLE"),
+      isShow = true
+    }
+    panelControl[panelID.Party] = {
+      control = Panel_Widget_Party,
+      posFixed = false,
+      isChange = false,
+      PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_Party,
+      prePos = {x = 0, y = 0},
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_19"),
+      isShow = true
+    }
   end
   for idx = 1, UiSet.panelCount do
     if nil ~= panelControl[idx].control then
@@ -1292,7 +864,7 @@ function UiSet_Initialize()
         stateValue = 2
       end
       UiSet_ChangeTexture_BG(idx, stateValue)
-      if CppDefine.ChangeUIAndResolution == true and 0 < ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+      if 0 < ToClient_GetUiInfo(panelControl[idx].PAGameUIType, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
         local relativePosX, relativePosY
         if idx >= panelID.Chat0 and idx <= panelID.Chat4 then
           relativePosX = ToClient_GetUiInfo(panelControl[idx].PAGameUIType, idx - panelID.Chat0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
@@ -1496,9 +1068,7 @@ function HandleClicked_UiSet_MoveControl(idx)
   cachePreScale[idx] = scale
   cacheSizeX[idx] = control:GetSizeX()
   cacheSizeY[idx] = control:GetSizeY()
-  if CppDefine.ChangeUIAndResolution == true then
-    panelControl[idx].isChange = true
-  end
+  panelControl[idx].isChange = true
 end
 function HandleClicked_UiSet_PositionCheck(index)
   local checkindex = false
@@ -1662,25 +1232,18 @@ function UiSet_ConfrimSetting_Sub(isReset)
     local posY = slot:GetPosY()
     local rateX = 0
     local rateY = 0
-    if CppDefine.ChangeUIAndResolution == true then
-      rateX = posX + slot:GetSizeX() / 2
-      rateY = posY + slot:GetSizeY() / 2
-      if panelControl[idx].isChange == false then
-        panelControl[idx].control:SetRelativePosX(0)
-        panelControl[idx].control:SetRelativePosY(0)
-        slot:SetRelativePosX(0)
-        slot:SetRelativePosY(0)
-      else
-        panelControl[idx].control:SetRelativePosX(rateX / currentScreenSize.x)
-        panelControl[idx].control:SetRelativePosY(rateY / currentScreenSize.y)
-        slot:SetRelativePosX(rateX / currentScreenSize.x)
-        slot:SetRelativePosY(rateY / currentScreenSize.y)
-      end
+    rateX = posX + slot:GetSizeX() / 2
+    rateY = posY + slot:GetSizeY() / 2
+    if panelControl[idx].isChange == false then
+      panelControl[idx].control:SetRelativePosX(0)
+      panelControl[idx].control:SetRelativePosY(0)
+      slot:SetRelativePosX(0)
+      slot:SetRelativePosY(0)
     else
-      rateX = posX / preScreenSize.x
-      rateY = posY / preScreenSize.y
-      panelControl[idx].control:SetPosX(changeScreenSize.x * rateX)
-      panelControl[idx].control:SetPosY(changeScreenSize.y * rateY)
+      panelControl[idx].control:SetRelativePosX(rateX / currentScreenSize.x)
+      panelControl[idx].control:SetRelativePosY(rateY / currentScreenSize.y)
+      slot:SetRelativePosX(rateX / currentScreenSize.x)
+      slot:SetRelativePosY(rateY / currentScreenSize.y)
     end
     if idx == panelID.Pvp then
       if isPvpEnable() then
@@ -2082,10 +1645,8 @@ function UiSet_registEventHandler()
   UiSet.btn_reset:addInputEvent("Mouse_LUp", "HandleClicked_Reset_UiSetting_Msg()")
   UiSet.btn_Win_Close:addInputEvent("Mouse_LUp", "FGlobal_UiSet_Close()")
   UiSet.chk_GridView:addInputEvent("Mouse_LUp", "UiSet_GridView()")
-  if CppDefine.ChangeUIAndResolution == true then
-    UiSet.btn_Scale:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_ChangeScale_LDown()")
-    UiSet.slider_UI_Scale:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_ChangeScale_LDown()")
-  end
+  UiSet.btn_Scale:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_ChangeScale_LDown()")
+  UiSet.slider_UI_Scale:addInputEvent("Mouse_LDown", "HandleClicked_UiSet_ChangeScale_LDown()")
   UiSet.btn_Scale:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   UiSet.slider_UI_Scale:addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   UiSet.btn_FieldView:addInputEvent("Mouse_LUp", "HandleClicked_UiSet_FieldViewToggle()")
@@ -2124,12 +1685,10 @@ function HandleClicked_Reset_UiSetting_Msg()
     UiSet.nowCurrentPercent = uiScale
     SetUIMode(Defines.UIMode.eUIMode_Default)
     renderMode:reset()
-    if CppDefine.ChangeUIAndResolution == true then
-      for idx = 1, UiSet.panelCount do
-        panelControl[idx].control:SetRelativePosX(0)
-        panelControl[idx].control:SetRelativePosY(0)
-        panelControl[idx].isChange = false
-      end
+    for idx = 1, UiSet.panelCount do
+      panelControl[idx].control:SetRelativePosX(0)
+      panelControl[idx].control:SetRelativePosY(0)
+      panelControl[idx].isChange = false
     end
     for idx = 1, UiSet.panelCount do
       if idx == panelID.ServantIcon or idx == panelID.House or idx == panelID.NewEquip or idx == panelID.Party or idx == panelID.Adrenallin or idx == panelID.QuickSlot or idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 or idx == panelID.LargeParty or idx == panelID.ServantIconRemaster then
@@ -2220,66 +1779,64 @@ function HandleClicked_Reset_UiSetting_Msg()
       else
         panelControl[idx].control:SetShow(true)
       end
-      if CppDefine.ChangeUIAndResolution == true then
-        if idx == panelID.ServantIcon then
-          cachePosX[idx] = 10
-          cachePosY[idx] = UiSet.panelPool[panelID.ExpGage].control:GetPosY() + UiSet.panelPool[panelID.ExpGage].control:GetSizeY() + 15
-        elseif idx == panelID.ServantIconRemaster then
-          cachePosX[idx] = 10
-          cachePosY[idx] = UiSet.panelPool[panelID.MainStatusRemaster].control:GetPosY() + UiSet.panelPool[panelID.MainStatusRemaster].control:GetSizeY() - 50
-        elseif idx == panelID.Quest then
-          cachePosX[idx] = screenSizeX - UiSet.panelPool[panelID.Quest].control:GetSizeX() - 20
-          cachePosY[idx] = UiSet.panelPool[panelID.Radar].control:GetPosY() + UiSet.panelPool[panelID.Radar].control:GetSizeY() + UiSet.panelPool[panelID.MainQuest].control:GetSizeY() + 20 + UiSet.panelPool[panelID.NewEquip].control:GetSizeY()
-        elseif idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
-          cachePosX[idx] = 0
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[idx].control:GetSizeY() - Panel_GameTips:GetSizeY()
-        elseif idx == panelID.QuickSlot then
-          cachePosX[idx] = (screenSizeX - UiSet.panelPool[panelID.QuickSlot].control:GetSizeX()) / 2
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY()
-        elseif idx == panelID.HPBar then
-          cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.HPBar].control:GetSizeY()
-        elseif idx == panelID.Pvp then
-          cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2 - 20
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.Pvp].control:GetSizeY()
-        elseif idx == panelID.ClassResource then
-          cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2 + UiSet.panelPool[panelID.ClassResource].control:GetSizeX() - 5
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.HPBar].control:GetSizeY() - UiSet.panelPool[panelID.ClassResource].control:GetSizeY() + 5
-        elseif idx == panelID.Adrenallin then
-          cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.Adrenallin].control:GetSizeX() / 2 + 225
-          cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - 76
-        elseif idx == panelID.House then
-          cachePosX[idx] = 10
-          if Panel_Window_Servant:GetShow() then
-            cachePosX[idx] = UiSet.panelPool[panelID.ServantIcon].control:GetSizeX() + 10
-          end
-          cachePosY[idx] = UiSet.panelPool[panelID.ExpGage].control:GetPosY() + UiSet.panelPool[panelID.ExpGage].control:GetSizeY() + 15
-        elseif idx == panelID.NewEquip then
-          cachePosX[idx] = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
-          cachePosY[idx] = FGlobal_GetPersonalIconPosX(4)
-        elseif idx == panelID.ActionGuide then
-          cacahePosX[idx] = screenSizeX / 2 * 1.2
-          cachePosY[idx] = screenSizeY / 2 * 0.85
-        elseif idx == panelID.KeyGuide then
-          cachePosX[idx] = UiSet.panelPool[panelID.KeyGuide].control:GetSizeX() / 3
-          cachePosY[idx] = UiSet.panelPool[panelID.KeyGuide].control:GetSizeY() * 2.3
-        elseif idx == panelID.SkillCoolTime then
-          cachePosX[idx] = screenSizeX * 0.33
-          cachePosY[idx] = screenSizeY * 0.42
-        elseif idx == panelID.MainQuest then
-          cachePosX[idx] = screenSizeX - UiSet.panelPool[panelID.MainQuest].control:GetSizeX() - 20
-          cachePosY[idx] = UiSet.panelPool[panelID.Radar].control:GetPosY() + UiSet.panelPool[panelID.Radar].control:GetSizeY() + 10
+      if idx == panelID.ServantIcon then
+        cachePosX[idx] = 10
+        cachePosY[idx] = UiSet.panelPool[panelID.ExpGage].control:GetPosY() + UiSet.panelPool[panelID.ExpGage].control:GetSizeY() + 15
+      elseif idx == panelID.ServantIconRemaster then
+        cachePosX[idx] = 10
+        cachePosY[idx] = UiSet.panelPool[panelID.MainStatusRemaster].control:GetPosY() + UiSet.panelPool[panelID.MainStatusRemaster].control:GetSizeY() - 50
+      elseif idx == panelID.Quest then
+        cachePosX[idx] = screenSizeX - UiSet.panelPool[panelID.Quest].control:GetSizeX() - 20
+        cachePosY[idx] = UiSet.panelPool[panelID.Radar].control:GetPosY() + UiSet.panelPool[panelID.Radar].control:GetSizeY() + UiSet.panelPool[panelID.MainQuest].control:GetSizeY() + 20 + UiSet.panelPool[panelID.NewEquip].control:GetSizeY()
+      elseif idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
+        cachePosX[idx] = 0
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[idx].control:GetSizeY() - Panel_GameTips:GetSizeY()
+      elseif idx == panelID.QuickSlot then
+        cachePosX[idx] = (screenSizeX - UiSet.panelPool[panelID.QuickSlot].control:GetSizeX()) / 2
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY()
+      elseif idx == panelID.HPBar then
+        cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.HPBar].control:GetSizeY()
+      elseif idx == panelID.Pvp then
+        cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2 - 20
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.Pvp].control:GetSizeY()
+      elseif idx == panelID.ClassResource then
+        cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.HPBar].control:GetSizeX() / 2 + UiSet.panelPool[panelID.ClassResource].control:GetSizeX() - 5
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - UiSet.panelPool[panelID.HPBar].control:GetSizeY() - UiSet.panelPool[panelID.ClassResource].control:GetSizeY() + 5
+      elseif idx == panelID.Adrenallin then
+        cachePosX[idx] = screenSizeX / 2 - UiSet.panelPool[panelID.Adrenallin].control:GetSizeX() / 2 + 225
+        cachePosY[idx] = screenSizeY - UiSet.panelPool[panelID.QuickSlot].control:GetSizeY() - 76
+      elseif idx == panelID.House then
+        cachePosX[idx] = 10
+        if Panel_Window_Servant:GetShow() then
+          cachePosX[idx] = UiSet.panelPool[panelID.ServantIcon].control:GetSizeX() + 10
         end
-        if idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 then
-          local panelIdx = idx - panelID.NewQuickSlot0
-          cachePosX[idx] = screenSizeX * 0.35 + (panelControl[idx].control:GetSizeX() + 5) * panelIdx
-          cachePosY[idx] = screenSizeY - panelControl[idx].control:GetSizeY() - 5
-        end
-        if idx >= panelID.SkillCoolTimeQuickSlot0 and idx <= panelID.SkillCoolTimeQuickSlot9 then
-          local panelIdx = idx - panelID.SkillCoolTimeQuickSlot0
-          cachePosX[idx] = screenSizeX * 0.25 + panelControl[idx].control:GetSizeX() * (panelIdx % 2)
-          cachePosY[idx] = screenSizeY * 0.29 + panelControl[idx].control:GetSizeY() * math.floor(panelIdx / 2)
-        end
+        cachePosY[idx] = UiSet.panelPool[panelID.ExpGage].control:GetPosY() + UiSet.panelPool[panelID.ExpGage].control:GetSizeY() + 15
+      elseif idx == panelID.NewEquip then
+        cachePosX[idx] = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
+        cachePosY[idx] = FGlobal_GetPersonalIconPosX(4)
+      elseif idx == panelID.ActionGuide then
+        cacahePosX[idx] = screenSizeX / 2 * 1.2
+        cachePosY[idx] = screenSizeY / 2 * 0.85
+      elseif idx == panelID.KeyGuide then
+        cachePosX[idx] = UiSet.panelPool[panelID.KeyGuide].control:GetSizeX() / 3
+        cachePosY[idx] = UiSet.panelPool[panelID.KeyGuide].control:GetSizeY() * 2.3
+      elseif idx == panelID.SkillCoolTime then
+        cachePosX[idx] = screenSizeX * 0.33
+        cachePosY[idx] = screenSizeY * 0.42
+      elseif idx == panelID.MainQuest then
+        cachePosX[idx] = screenSizeX - UiSet.panelPool[panelID.MainQuest].control:GetSizeX() - 20
+        cachePosY[idx] = UiSet.panelPool[panelID.Radar].control:GetPosY() + UiSet.panelPool[panelID.Radar].control:GetSizeY() + 10
+      end
+      if idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 then
+        local panelIdx = idx - panelID.NewQuickSlot0
+        cachePosX[idx] = screenSizeX * 0.35 + (panelControl[idx].control:GetSizeX() + 5) * panelIdx
+        cachePosY[idx] = screenSizeY - panelControl[idx].control:GetSizeY() - 5
+      end
+      if idx >= panelID.SkillCoolTimeQuickSlot0 and idx <= panelID.SkillCoolTimeQuickSlot9 then
+        local panelIdx = idx - panelID.SkillCoolTimeQuickSlot0
+        cachePosX[idx] = screenSizeX * 0.25 + panelControl[idx].control:GetSizeX() * (panelIdx % 2)
+        cachePosY[idx] = screenSizeY * 0.29 + panelControl[idx].control:GetSizeY() * math.floor(panelIdx / 2)
       end
     end
     if false == _ContentsGroup_RemasterUI_Main_Alert then

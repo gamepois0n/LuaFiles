@@ -221,6 +221,7 @@ function PaGlobal_FriendList:AcceptRequest()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function PaGlobal_FriendList:RefuseRequest()
@@ -601,6 +602,7 @@ function PaGlobal_FriendList:OpenMessanger()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function PaGlobal_FriendList:GroupMoveList()

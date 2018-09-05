@@ -28,7 +28,8 @@ PaGlobal_Menu_Renew_Renew._xbox = {
   _pet = 14,
   _beauty = 15,
   _partyRecruite = 16,
-  _count = 17
+  _localWar = 17,
+  _count = 18
 }
 local index = 1
 while index * index < PaGlobal_Menu_Renew_Renew._xbox._count do
@@ -188,6 +189,15 @@ PaGlobal_Menu_Renew_Renew._categoryData = {
     _y1 = 436,
     _x2 = 124,
     _y2 = 496
+  },
+  [PaGlobal_Menu_Renew_Renew._xbox._localWar] = {
+    _string = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_TAB_LOCALWAR"),
+    _hotKey = "",
+    _path = "Renewal/UI_Icon/Console_Icon_Title.dds",
+    _x1 = 344,
+    _y1 = 230,
+    _x2 = 399,
+    _y2 = 285
   }
 }
 function PaGlobal_Menu_Renew_Renew:ShowAni()
@@ -271,6 +281,8 @@ function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_BeautyShop)
   elseif self._xbox._partyRecruite == index then
     PaGlobalFunc_FindParty_Show()
+  elseif self._xbox._localWar == index then
+    PaGlobalFunc_LocalWarInfo_Show()
   end
   Panel_Window_Menu_ShowToggle()
 end

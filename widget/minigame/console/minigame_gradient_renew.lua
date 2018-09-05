@@ -83,6 +83,8 @@ function MiniGame_Gradient:init()
 end
 function Panel_Minigame_Gradient_Start(isRace)
   local self = MiniGame_Gradient
+  PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_ConsoleKeyGuide:SetShow(false)
   Panel_Minigame_Gradient:SetShow(true)
   Panel_Minigame_Gradient:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   local centerPos = self._ui.stc_gaugeBG:GetPosX() + self._ui.stc_gaugeBG:GetSizeX() / 2
@@ -172,6 +174,8 @@ function ScreenSize_RePosition_Gradient()
 end
 function Panel_Minigame_Gradient_End()
   local self = MiniGame_Gradient
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_ConsoleKeyGuide:SetShow(true)
   Panel_Minigame_Gradient:SetShow(false)
   isGradientPlay = false
 end

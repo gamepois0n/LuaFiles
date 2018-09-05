@@ -49,6 +49,8 @@ function pearlShop:initialize()
   self._init = true
   local topMenuControl = UI.getChildControl(self._panel, "Static_TopMenu")
   self._ui._categoryTitleControl = UI.getChildControl(topMenuControl, "StaticText_CategoryTitle")
+  self._ui._bottomKeyGuide = UI.getChildControl(self._panel, "Static_BottomBg")
+  self._ui._bottomKeyGuideA = UI.getChildControl(self._ui._bottomKeyGuide, "StaticText_A_ConsoleUI")
   self._ui._frameControl = UI.getChildControl(self._panel, "Panel_PearlShop_ProductListFrame")
   self._ui._frameContentControl = UI.getChildControl(self._ui._frameControl, "Panel_PearlShop_ProductListFrameContent")
   self._ui._bgControl = UI.getChildControl(self._ui._frameContentControl, "Static_MainBG")
@@ -101,6 +103,7 @@ function pearlShop:checkShow()
   return self._panel:GetShow()
 end
 function PaGlobalFunc_PearlShopBack()
+  pearlShop._ui._bottomKeyGuideA:SetShow(true)
   if pearlShop:back() then
     return pearlShop:update()
   end
@@ -391,6 +394,7 @@ function pearlShop:select(controlIndex)
   return self:showDesc(index)
 end
 function PaGlobalFunc_PearlShopSelect(controlIndex)
+  pearlShop._ui._bottomKeyGuideA:SetShow(false)
   if pearlShop:select(controlIndex) then
     return pearlShop:update()
   end

@@ -299,8 +299,8 @@ function Panel_Widget_Alert_info:registerMessageHandler()
   registerEvent("FromClient_NewFriend", "FromClient_Widget_Alert_NewFriendAlert")
   registerEvent("ResponseFriendList_updateAddFriends", "FromClient_Widget_Alert_Update_NewFriend")
   registerEvent("FromClient_UpdateQuestList", "FromClient_Widget_Alert_BlackSpiritQuest")
-  registerEvent("FromClient_WeightPenaltyChanged", "FromClient_Widget_Alert_WeightOver")
   registerEvent("FromClient_WeightChanged", "FromClient_Widget_Alert_WeightOver")
+  registerEvent("FromClient_InventoryUpdate", "FromClient_Widget_Alert_WeightOver")
   registerEvent("FromClient_EquipEnduranceChanged", "FromClient_Widget_Alert_EquipEnduranceChanged")
   registerEvent("EventEquipmentUpdate", "FromClient_Widget_Alert_PlayerEnduranceUpdate")
   registerEvent("EventServantEquipItem", "FromClient_Widget_Alert_ServantEnduranceUpdate")
@@ -537,11 +537,22 @@ function Panel_Widget_Alert_info:setNeedUpdate(alertType, value)
   end
   self._alertNeedUpdate[alertType] = value
 end
+function PaGlobalFunc_UiMain_SetShow(isShow)
+  if true == isShow then
+    if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      Panel_UIMain:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+    else
+      Panel_UIMain:SetShow(true, false)
+    end
+  else
+    Panel_UIMain:SetShow(false)
+  end
+end
 function Panel_Widget_Alert_info:open()
-  Panel_UIMain:SetShow(true)
+  PaGlobalFunc_UiMain_SetShow(true)
 end
 function Panel_Widget_Alert_info:close()
-  Panel_UIMain:SetShow(false)
+  PaGlobalFunc_UiMain_SetShow(false)
 end
 function Panel_Widget_Alert_info:setData(alertType)
   if alertType == AlertType.eALERT_Hunting then
@@ -1098,11 +1109,12 @@ function PaGlobalFunc_Widget_Alert_Check_BlackSpiritQuest()
   self._alertData[AlertType.eALERT_BlackSpiritQuest].name = name
   self._alertData[AlertType.eALERT_BlackSpiritQuest].desc = desc
 end
+local lastTotalWeight = 0
 function PaGlobalFunc_Widget_Alert_Check_WeightOver()
   local self = Panel_Widget_Alert_info
   local selfPlayerWrapper = getSelfPlayer()
   if nil == selfPlayerWrapper then
-    return
+    return false
   end
   local selfPlayer = selfPlayerWrapper:get()
   local s64_moneyWeight = selfPlayer:getInventory():getMoneyWeight_s64()
@@ -1115,6 +1127,12 @@ function PaGlobalFunc_Widget_Alert_Check_WeightOver()
   local maxWeight = Int64toInt32(s64_maxWeight) / 10000
   local invenWeight = allWeight - equipmentWeight - moneyWeight
   local sumtotalWeight = allWeight / maxWeight * 100
+  local totalWeightInt = sumtotalWeight / 1
+  if lastTotalWeight == totalWeightInt then
+    return false
+  else
+    lastTotalWeight = totalWeightInt
+  end
   local totalWeight = string.format("%.0f", sumtotalWeight)
   local decreaseFairyWeight = Int64toInt32(ToClient_getDecreaseWeightByFairy()) / 10000
   local weightText = 100 + decreaseFairyWeight
@@ -1614,7 +1632,9 @@ function FromClient_Widget_Alert_BlackSpiritQuest()
 end
 function FromClient_Widget_Alert_WeightOver()
   local self = Panel_Widget_Alert_info
-  PaGlobalFunc_Widget_Alert_Check_WeightOver()
+  if false == PaGlobalFunc_Widget_Alert_Check_WeightOver() then
+    return
+  end
   self:updateIcons(false, AlertType.eALERT_WeightOver)
 end
 function FromClient_Widget_Alert_EquipEnduranceChanged()
@@ -1658,3 +1678,4 @@ function FromClient_Widget_Alert_BatterEquipment()
   self:updateIcons(false, AlertType.eALERT_BatterEquipment)
 end
 changePositionBySever(Panel_UIMain, CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, true, false, false)
+PaGlobalFunc_UiMain_SetShow(true)

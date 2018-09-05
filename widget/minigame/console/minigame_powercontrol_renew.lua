@@ -27,6 +27,7 @@ local isSuccess = false
 local isFullMilk = false
 local isPressed_L = false
 local isPressed_R = false
+local elapsTime = 0
 function MiniGame_PowerControl:init()
   self._ui.stc_Gauge_L_BG = UI.getChildControl(self._ui.stc_Cow_BG, "Static_PowerGauge_BG_L")
   self._ui.stc_Gauge_R_BG = UI.getChildControl(self._ui.stc_Cow_BG, "Static_PowerGauge_BG_R")
@@ -62,11 +63,12 @@ function MiniGame_PowerControl:init()
   milkRate = 0
   gameEndTimer = 31
   endTimer = 0
+  elapsTime = 0
   if _ContentsGroup_isConsolePadControl then
-    AddMiniGameKeyDownOnce(MGT.MiniGameType_14, MiniGame_PowerControl_PadPressDown)
+    AddMiniGameKeyPress(MGT.MiniGameType_14, MiniGame_PowerControl_PadPressDown)
     AddMiniGameKeyUp(MGT.MiniGameType_14, MiniGame_PowerControl_PadPressUp)
   else
-    AddMiniGameKeyDownOnce(MGT.MiniGameType_14, MiniGame_PowerControl_PressDown)
+    AddMiniGameKeyPress(MGT.MiniGameType_14, MiniGame_PowerControl_PressDown)
     AddMiniGameKeyUp(MGT.MiniGameType_14, MiniGame_PowerControl_PressUp)
   end
 end
@@ -161,6 +163,8 @@ function Panel_MiniGame_PowerControl_Start()
   self._ui.stc_Result_Failed:SetShow(false)
   Panel_MiniGame_PowerControl:SetShow(true)
   self._ui.txt_Purpose:SetShow(true)
+  Panel_ConsoleKeyGuide:SetShow(false)
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   if _ContentsGroup_isConsolePadControl then
     self._ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_MINIGAME_MILKCOW_READY2"))
   else
@@ -172,6 +176,8 @@ function Panel_MiniGame_PowerControl_End()
   local self = MiniGame_PowerControl
   self._isGameStart = false
   getSelfPlayer():get():SetMiniGameResult(4)
+  Panel_ConsoleKeyGuide:SetShow(true)
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   Panel_MiniGame_PowerControl:SetShow(false)
   isPlayingMilky = false
   isSuccess = false
@@ -254,6 +260,11 @@ function MiniGame_PowerControl:updateLeftMilky(value)
 end
 function Panel_MiniGame_PowerControl_MouseClick_UpdateFunc(deltaTime)
   local self = MiniGame_PowerControl
+  elapsTime = elapsTime + deltaTime
+  if elapsTime < 0.016666666666666666 then
+    return
+  end
+  elapsTime = 0
   currTime = currTime + deltaTime
   gameEndTimer = gameEndTimer - deltaTime
   local _gameEndTimer = math.floor(gameEndTimer)
@@ -261,7 +272,7 @@ function Panel_MiniGame_PowerControl_MouseClick_UpdateFunc(deltaTime)
   if isPressed_L and 0 == directionType then
     self:updateLeftMilky(-175 * deltaTime)
     self:updateRightMilky(65 * deltaTime)
-    milkRate = milkRate + 0.3
+    milkRate = milkRate + 0.3 * (deltaTime * 60)
     if _ContentsGroup_isConsolePadControl then
     else
       ui._mouse_L:ResetVertexAni()
@@ -273,7 +284,7 @@ function Panel_MiniGame_PowerControl_MouseClick_UpdateFunc(deltaTime)
   elseif isPressed_R and 1 == directionType then
     self:updateRightMilky(-175 * deltaTime)
     self:updateLeftMilky(65 * deltaTime)
-    milkRate = milkRate + 0.3
+    milkRate = milkRate + 0.3 * (deltaTime * 60)
     if _ContentsGroup_isConsolePadControl then
     else
       self._ui.stc_Mouse_R:ResetVertexAni()

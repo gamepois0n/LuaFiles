@@ -22,6 +22,7 @@ local checkedQuestWidget = {
     _button_Option = UI.getChildControl(Panel_CheckedQuest, "Button_Option"),
     _staticText_Number = UI.getChildControl(Panel_CheckedQuest, "StaticText_Number"),
     _staticText_IconHelp_BG = UI.getChildControl(Panel_CheckedQuest, "StaticText_IconHelp_BG"),
+    _frame_NormalQuest = UI.getChildControl(Panel_CheckedQuest, "Frame_Template"),
     _static_Help_MouseL = nil,
     _static_Help_MouseR = nil
   },
@@ -91,7 +92,9 @@ local checkedQuestWidget = {
   _latestDataList = {},
   _normalDataList = {},
   _isGuildQuestProgressing = false,
-  _questCount = 0
+  _questCount = 0,
+  _questIndex = 0,
+  _prevPos = 0
 }
 function checkedQuestWidget:initialize()
   self:initControl()
@@ -100,16 +103,23 @@ function checkedQuestWidget:initialize()
 end
 function checkedQuestWidget:initControl()
   Panel_CheckedQuest:ActiveMouseEventEffect(true)
-  Panel_CheckedQuest:SetShow(true)
   Panel_CheckedQuest:setGlassBackground(true)
   Panel_CheckedQuest:SetDragEnable(false)
   self._ui._static_Help_MouseL = UI.getChildControl(self._ui._staticText_IconHelp_BG, "Static_Help_MouseL")
   self._ui._static_Help_MouseR = UI.getChildControl(self._ui._staticText_IconHelp_BG, "Static_Help_MouseR")
   self._ui._static_Eff_Complete_Eff1:SetShow(false)
+  self._ui._frame_Content = UI.getChildControl(self._ui._frame_NormalQuest, "Frame_Content")
+  self._ui._frame_VerticalScroll = UI.getChildControl(self._ui._frame_NormalQuest, "Frame_VerticalScroll")
   local startPosY = 0
   for index = 0, self._config._maxQuestListCnt - 1 do
     local elements = {}
-    elements._uiGroupBG = UI.createAndCopyBasePropertyControl(Panel_CheckedQuest, "Static_GroupBG", Panel_CheckedQuest, "uiGroupBG_" .. index)
+    local parentPanel
+    if index < 4 then
+      parentPanel = Panel_CheckedQuest
+    else
+      parentPanel = self._ui._frame_Content
+    end
+    elements._uiGroupBG = UI.createAndCopyBasePropertyControl(Panel_CheckedQuest, "Static_GroupBG", parentPanel, "uiGroupBG_" .. index)
     elements._uiTitleBG = UI.createAndCopyBasePropertyControl(Panel_CheckedQuest, "Static_TitleBG", elements._uiGroupBG, "uiTitleBG_" .. index)
     elements._uiQuestTitle = UI.createAndCopyBasePropertyControl(Panel_CheckedQuest, "StaticText_Quest_Title", elements._uiGroupBG, "uiQuestTitle_" .. index)
     elements._uiGroupTitle = UI.createAndCopyBasePropertyControl(Panel_CheckedQuest, "StaticText_WidgetGroupTitle", elements._uiGroupBG, "uiGroupTitle_" .. index)
@@ -146,12 +156,19 @@ function checkedQuestWidget:initControl()
     self._uiQuestList[ii]._uiGroupBG:SetChildIndex(self._uiQuestList[ii]._uiGiveupBtn, 9999)
     self._uiQuestList[ii]._uiCompleteEff:SetShow(false)
   end
+  self._ui._frame_VerticalScroll:SetEnable(false)
 end
 function checkedQuestWidget:addInputEvent()
   Panel_CheckedQuest:RegisterShowEventFunc(true, "QuestListShowAni()")
   Panel_CheckedQuest:RegisterShowEventFunc(false, "QuestListHideAni()")
   Panel_CheckedQuest:addInputEvent("Mouse_On", "FGlobal_QuestWidget_MouseOver( true )")
   Panel_CheckedQuest:addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver( false )")
+  self._ui._frame_NormalQuest:addInputEvent("Mouse_On", "FGlobal_QuestWidget_MouseOver( true )")
+  self._ui._frame_NormalQuest:addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver( false )")
+  self._ui._frame_Content:addInputEvent("Mouse_On", "FGlobal_QuestWidget_MouseOver( true )")
+  self._ui._frame_Content:addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver( false )")
+  self._ui._frame_Content:addInputEvent("Mouse_UpScroll", "PaGlobalFunc_CheckedQuestWidget_ScrollEvent( true )")
+  self._ui._frame_Content:addInputEvent("Mouse_DownScroll", "PaGlobalFunc_CheckedQuestWidget_ScrollEvent( false )")
   self._ui._button_Size:addInputEvent("Mouse_LPress", "HandleClicked_QuestWidgetPanelResize()")
   self._ui._button_Size:addInputEvent("Mouse_LDown", "HandleClicked_QuestWidgetPanelSize()")
   self._ui._button_Size:addInputEvent("Mouse_LUp", "HandleClicked_QuestWidgetSaveResize()")
@@ -164,6 +181,8 @@ function checkedQuestWidget:addInputEvent()
   self._ui._button_Option:addInputEvent("Mouse_On", "ShowTooltip_QuestWidget_OptionButton()")
   self._ui._button_Option:addInputEvent("Mouse_Out", "HideTooltip_QuestWidget_OptionButton()")
   self._ui._staticText_IconHelp_BG:addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver(false)")
+  self._ui._frame_VerticalScroll:addInputEvent("Mouse_UpScroll", "PaGlobalFunc_CheckedQuestWidget_ScrollEvent( true )")
+  self._ui._frame_VerticalScroll:addInputEvent("Mouse_DownScroll", "PaGlobalFunc_CheckedQuestWidget_ScrollEvent( false )")
   for ii = 0, self._config._maxQuestListCnt - 1 do
     self._uiQuestList[ii]._uiGroupBG:addInputEvent("Mouse_On", "FGlobal_QuestWidget_MouseOver(  true)")
     self._uiQuestList[ii]._uiGroupBG:addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver( false)")
@@ -187,13 +206,27 @@ function checkedQuestWidget:addInputEvent()
     end
   end
 end
+function PaGlobalFunc_CheckedQuestWidget_ScrollEvent(isUp)
+  checkedQuestWidget:scrollEventHandler(isUp)
+end
+function checkedQuestWidget:scrollEventHandler(isUp)
+  self:setShowConditionText()
+end
 function PaGlobalFunc_CheckedQuestWidget_ShowTitleBG(isShow, index)
-  checkedQuestWidget:showTitleBG(isShow, index)
   checkedQuestWidget:questWidget_MouseOver(isShow)
+  checkedQuestWidget:showTitleBG(isShow, index)
 end
 function checkedQuestWidget:showTitleBG(isShow, index)
-  if false == isShow and true == self:isHitTestQuestGroup(self._uiQuestList[index]._uiTitleBG, self._uiQuestList[index]._uiGroupBG:GetPosY()) then
-    return
+  if false == isShow then
+    local posY = self._uiQuestList[index]._uiGroupBG:GetPosY()
+    if index > 3 then
+      posY = posY + self._ui._frame_NormalQuest:GetPosY() + self._ui._frame_Content:GetPosY()
+      if true == self:isHitTestQuestGroup(self._uiQuestList[index]._uiTitleBG, posY) then
+        return
+      end
+    elseif true == self:isHitTestQuestGroup(self._uiQuestList[index]._uiTitleBG, self._uiQuestList[index]._uiGroupBG:GetPosY()) then
+      return
+    end
   end
   TooltipSimple_Hide()
   self:setVisibleConvenienceButtonByIndex(index, isShow)
@@ -367,6 +400,7 @@ function ShowTooltip_QuestWidget_OptionButton()
 end
 function HideTooltip_QuestWidget_OptionButton()
   TooltipSimple_Hide()
+  FGlobal_QuestWidget_MouseOver(false)
 end
 function QuestWidget_NationalCheck()
   if isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_RUS) then
@@ -559,30 +593,59 @@ function checkedQuestWidget:setQuestUIlist()
   if viewLimitCount > 0 then
     uiIndex = self:setLatestQuestUi(uiIndex)
   end
-  if 0 < table.getn(self._normalDataList) then
-    uiIndex = self:setNormalQuestUi(uiIndex)
-  end
-  self._questCount = uiIndex
-  local widgetType = FGlobal_GetSelectedWidgetType()
   local posY = 0
-  for ii = 0, uiIndex - 1 do
-    if Panel_CheckedQuest:GetSizeY() < posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + self._ui._button_Size:GetSizeY() then
-      if self._uiQuestList[ii]._questType ~= nil and self._config._questType._normal ~= self._uiQuestList[ii]._questType then
-        Panel_CheckedQuest:SetSize(Panel_CheckedQuest:GetSizeX(), posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + self._ui._button_Size:GetSizeY())
-      else
-        self._uiQuestList[ii]._uiGroupBG:SetShow(false)
-      end
+  for ii = 0, 3 do
+    if false == self._uiQuestList[ii]._uiGroupBG:GetShow() then
+      break
     end
-    if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType and self._config._questType._normal == self._uiQuestList[ii]._questType then
-      self._uiQuestList[ii]._uiGroupBG:SetShow(false)
+    if Panel_CheckedQuest:GetSizeY() < posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + self._ui._button_Size:GetSizeY() then
+      Panel_CheckedQuest:SetSize(Panel_CheckedQuest:GetSizeX(), posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + self._ui._button_Size:GetSizeY())
     end
     self._uiQuestList[ii]._uiGroupBG:SetPosY(posY)
     posY = posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + 10
+  end
+  if 0 < table.getn(self._normalDataList) then
+    uiIndex = self:setNormalQuestUi(4)
+  end
+  self._questCount = uiIndex
+  local sizeY = Panel_CheckedQuest:GetSizeY() - posY - self._ui._button_Size:GetSizeY()
+  self._ui._frame_NormalQuest:SetSize(self._ui._frame_NormalQuest:GetSizeX(), sizeY)
+  self._ui._frame_NormalQuest:SetPosX(0)
+  self._ui._frame_NormalQuest:SetPosY(posY)
+  posY = 0
+  for ii = 4, uiIndex - 1 do
+    if false == self._uiQuestList[ii]._uiGroupBG:GetShow() then
+      break
+    end
+    self._uiQuestList[ii]._uiGroupBG:SetPosY(posY)
+    posY = posY + self._uiQuestList[ii]._uiGroupBG:GetSizeY() + 10
+    self._ui._frame_Content:SetSize(self._ui._frame_Content:GetSizeX(), posY)
+    self._ui._frame_VerticalScroll:SetSize(self._ui._frame_VerticalScroll:GetSizeX(), posY)
+    self._ui._frame_VerticalScroll:SetPosY(posY)
+    self._ui._frame_VerticalScroll:SetEnableArea(0, 0, self._ui._frame_VerticalScroll:GetSizeX(), posY)
+  end
+  self:setShowConditionText()
+  local widgetType = FGlobal_GetSelectedWidgetType()
+  if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType or self._ui._frame_NormalQuest:GetSizeY() < 50 then
+    self._ui._frame_NormalQuest:SetShow(false)
+  else
+    self._ui._frame_NormalQuest:SetShow(true)
   end
   CheckedQuest_SizeY = Panel_CheckedQuest:GetSizeY()
   self._ui._button_Size:SetPosY(CheckedQuest_SizeY - self._ui._button_Size:GetSizeY())
   self._ui._button_WantGuild:SetPosY(CheckedQuest_SizeY - self._ui._button_Size:GetSizeY())
   self._ui._button_Option:SetPosY(CheckedQuest_SizeY - self._ui._button_Size:GetSizeY())
+end
+function checkedQuestWidget:setShowConditionText()
+  for index = 4, self._config._maxQuestListCnt - 1 do
+    for jj = 0, self._config._maxConditionCnt - 1 do
+      if 0 > self._ui._frame_Content:GetPosY() + self._uiQuestList[index]._uiGroupBG:GetPosY() + self._uiQuestList[index]._uiConditions[jj]:GetPosY() + self._uiQuestList[index]._uiConditions[jj]:GetSizeY() or self._ui._frame_NormalQuest:GetSizeY() < self._ui._frame_Content:GetPosY() + self._uiQuestList[index]._uiGroupBG:GetPosY() + self._uiQuestList[index]._uiConditions[jj]:GetPosY() then
+        self._uiQuestList[index]._uiConditions[jj]:SetShow(false)
+      elseif self._questCount ~= nil and index < self._questCount then
+        self._uiQuestList[index]._uiConditions[jj]:SetShow(true)
+      end
+    end
+  end
 end
 function checkedQuestWidget:setNormalQuestUi(uiIndex)
   for _, data in pairs(self._normalDataList) do
@@ -613,6 +676,9 @@ function checkedQuestWidget:setNormalQuestUi(uiIndex)
     self._nextPosY = questUi._uiGroupBG:GetPosY() + questUi._uiGroupBG:GetSizeY()
     local textSize = startPosition + 5
     local index = 0
+    for ii = 0, self._config._maxConditionCnt - 1 do
+      questUi._uiConditions[ii]:SetText("")
+    end
     for _, demandString in pairs(data.demand) do
       questUi._uiConditions[index]:SetText(demandString)
       questUi._uiConditions[index]:SetShow(true)
@@ -685,6 +751,9 @@ function checkedQuestWidget:setLatestQuestUi(uiIndex)
     self:setNaviButtonInfo(questUi, isDone, data.isCompleteBlackSpirit)
     self._nextPosY = questUi._uiGroupBG:GetPosY() + questUi._uiGroupBG:GetSizeY()
     uiIndex = uiIndex + 1
+    if uiIndex >= ToClient_GetLatestQuestShowCount() then
+      break
+    end
   end
   return uiIndex
 end
@@ -905,6 +974,7 @@ function QuestWidget_ProgressingGuildQuest_UpdateRemainTime(deltaTime)
 end
 function checkedQuestWidget:updatePerFrame(deltaTime)
   self._elapsedTime = self._elapsedTime + deltaTime
+  self:setShowConditionText()
   if 0 < self._updateTime then
     self._updateTime = self._updateTime + deltaTime
     if self._updateTime > 1 then
@@ -920,14 +990,9 @@ function checkedQuestWidget:updatePerFrame(deltaTime)
   if self._config._questType._guild ~= self._uiQuestList[0]._questType then
     return
   end
-  local remainTime = ToClient_getCurrentGuildQuestRemainedTime()
-  local strMinute = math.floor(remainTime / 60)
-  if remainTime <= 0 then
-    self._guildQuest.leftTime = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_TIMEOUT")
-  else
-    self._guildQuest.leftTime = " " .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_REMAINTIME", "time_minute", strMinute)
-  end
-  self._uiQuestList[0]._uiGroupTitle:SetText(self._guildQuest.leftTime)
+  self:setGuildQuest()
+  self:setGuildQuestUi(0)
+  self:questWidget_MouseOver(self._widgetMouseOn)
   self._elapsedTime = 0
 end
 function checkedQuestWidget:groupQuestInfo(questGroupInfo, questGroupIndex, questType)
@@ -1028,6 +1093,7 @@ function checkedQuestWidget:setDemandConditions(uiQuestInfo)
   return demandList
 end
 function checkedQuestWidget:setQuestBG(control, BGtype)
+  control:ChangeTextureInfoName("renewal/frame/console_frame_01.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, self._config._questBG[BGtype][1], self._config._questBG[BGtype][2], self._config._questBG[BGtype][3], self._config._questBG[BGtype][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
@@ -1246,7 +1312,25 @@ function checkedQuestWidget:isHitTestQuestGroup(groupControl, optionalY)
   if nil ~= optionalY then
     bgPosY = bgPosY + optionalY
   end
-  if mousePosX >= bgPosX and mousePosX <= bgPosX + bgSizeX and mousePosY >= bgPosY and mousePosY <= bgPosY + bgSizeY then
+  if mousePosX > bgPosX and mousePosX < bgPosX + bgSizeX and mousePosY > bgPosY and mousePosY < bgPosY + bgSizeY then
+    return true
+  end
+  return false
+end
+function checkedQuestWidget:isHitTestQuestGroup(groupControl, optionalY)
+  local mousePosX = getMousePosX()
+  local mousePosY = getMousePosY()
+  local panel = Panel_CheckedQuest
+  local panelPosX = panel:GetPosX() + groupControl:GetPosX()
+  local panelPosY = panel:GetPosY() + groupControl:GetPosY()
+  local bgPosX = panelPosX
+  local bgPosY = panelPosY
+  local bgSizeX = groupControl:GetSizeX()
+  local bgSizeY = groupControl:GetSizeY()
+  if nil ~= optionalY then
+    bgPosY = bgPosY + optionalY
+  end
+  if mousePosX > bgPosX and mousePosX < bgPosX + bgSizeX and mousePosY > bgPosY and mousePosY < bgPosY + bgSizeY then
     return true
   end
   return false
@@ -1339,10 +1423,8 @@ function checkedQuestWidget:questWidget_MouseOver(show)
     for ii = 0, self._config._maxQuestListCnt - 1 do
       self._uiQuestList[ii]._uiTitleBG:SetShow(true)
     end
-    for ii = 0, self._questCount - 1 do
-      if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType and self._uiQuestList[ii]._uiGroupBG:GetSizeY() + self._uiQuestList[ii]._uiGroupBG:GetPosY() + 20 < self._ui._button_Size:GetPosY() then
-        self._uiQuestList[ii]._uiGroupBG:SetShow(true)
-      end
+    if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType then
+      self._ui._frame_NormalQuest:SetShow(true)
     end
   else
     if false == self:Common_WidgetMouseOut() then
@@ -1358,10 +1440,8 @@ function checkedQuestWidget:questWidget_MouseOver(show)
       self._uiQuestList[ii]._uiGiveupBtn:SetShow(false)
       self._uiQuestList[ii]._uiHideBtn:SetShow(false)
     end
-    for ii = 0, self._questCount - 1 do
-      if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType and self._uiQuestList[ii]._questType == self._config._questType._normal then
-        self._uiQuestList[ii]._uiGroupBG:SetShow(false)
-      end
+    if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType then
+      self._ui._frame_NormalQuest:SetShow(false)
     end
   end
   PaGlobal_TutorialManager:handleQuestWidgetMouseOver(show)
@@ -1770,8 +1850,8 @@ function HandleClieked_CheckedQuest_WantJoinGuild()
   end
 end
 function HandleOn_CheckedQuest_WantJoinGuild(isShow)
-  FGlobal_QuestWidget_MouseOver(isShow)
   FindGuild_Button_Simpletooltips(isShow)
+  FGlobal_QuestWidget_MouseOver(isShow)
 end
 function EventRadingOnQuest(questStaticWrapper, index)
   if nil == questStaticWrapper then
@@ -1868,31 +1948,27 @@ function FromClient_questWidget_ResetPosition()
       end
     end
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_CheckedQuest:GetRelativePosX() == -1 and Panel_CheckedQuest:GetRelativePosY() == -1 then
-      local initPosX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 16
-      local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap
-      local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
-      if not haveServerPosotion then
-        Panel_CheckedQuest:SetPosX(initPosX)
-        Panel_CheckedQuest:SetPosY(initPosY)
-      end
-      changePositionBySever(Panel_CheckedQuest, CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_CheckedQuest, initPosX, initPosY)
-    elseif Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 16)
-      Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
-    else
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() * Panel_CheckedQuest:GetRelativePosX() - Panel_CheckedQuest:GetSizeX() / 2)
-      Panel_CheckedQuest:SetPosY(getScreenSizeY() * Panel_CheckedQuest:GetRelativePosY() - Panel_CheckedQuest:GetSizeY() / 2)
-    end
-  else
+  if Panel_CheckedQuest:GetRelativePosX() == -1 and Panel_CheckedQuest:GetRelativePosY() == -1 then
+    local initPosX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 16
+    local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap
     local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
     if not haveServerPosotion then
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 16)
-      Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap)
+      Panel_CheckedQuest:SetPosX(initPosX)
+      Panel_CheckedQuest:SetPosY(initPosY)
     end
     changePositionBySever(Panel_CheckedQuest, CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_CheckedQuest, initPosX, initPosY)
+  elseif Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
+    Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 16)
+    Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
+  else
+    Panel_CheckedQuest:SetPosX(getScreenSizeX() * Panel_CheckedQuest:GetRelativePosX() - Panel_CheckedQuest:GetSizeX() / 2)
+    Panel_CheckedQuest:SetPosY(getScreenSizeY() * Panel_CheckedQuest:GetRelativePosY() - Panel_CheckedQuest:GetSizeY() / 2)
+  end
+  if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    Panel_CheckedQuest:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+  else
+    Panel_CheckedQuest:SetShow(true)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_CheckedQuest)
 end
@@ -1928,8 +2004,10 @@ function FromClient_luaLoadComplete_CheckedQuest()
   changePositionBySever(Panel_CheckedQuest, CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, true, true, true)
   checkedQuestPanel_Init()
   PaGlobalFunc_QuestWidget_UpdateList()
-  if false == ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
-    Panel_CheckedQuest:SetShow(false)
+  if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    Panel_CheckedQuest:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
+  else
+    Panel_CheckedQuest:SetShow(true)
   end
 end
 function FromClient_StartQuestNavigationGuide(questNoRaw)
@@ -1944,7 +2022,6 @@ function FGlobal_WindowQuestToggle()
   Panel_Window_QuestNew_Toggle()
 end
 function checkedQuestWidget:registEventHandler()
-  registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CheckedQuest")
   registerEvent("FromClient_StartQuestNavigationGuide", "FromClient_StartQuestNavigationGuide")
   registerEvent("EventCharacterInfoUpdate", "FromClient_Panel_updateBlackSpirit")
   registerEvent("updateProgressQuestList", "FromClient_UpdateQuestSetPos")

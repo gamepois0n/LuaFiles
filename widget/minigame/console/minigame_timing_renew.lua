@@ -157,6 +157,7 @@ function MiniGame_Timing:endTimeUpdate(deltaTime)
 end
 function Panel_Minigame_Timing_Start()
   local self = MiniGame_Timing
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   ScreenSize_RePosition_TimingGame()
   _math_randomSeed(getTickCount32())
   self._ui.txt_Purpose:SetShow(false)
@@ -178,6 +179,7 @@ end
 function Panel_Minigame_Timing_End()
   local self = MiniGame_Timing
   self._isGameStart = false
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   Panel_MiniGame_Timing:SetShow(false, false)
 end
 function Panel_Minigame_Timing_End_UI()

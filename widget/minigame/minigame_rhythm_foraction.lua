@@ -159,7 +159,6 @@ function MiniGame_RhythmForAction_KeyPress(keyType)
     Panel_Minigame_Rhythm_GaugeMove_Right()
   end
 end
-registerEvent("EventActionMiniGameKeyDownOnce", "MiniGame_RhythmForAction_KeyPress")
 registerEvent("onScreenResize", "RhythmForAction_RePosition")
-Panel_RhythmGame_ForAction:RegisterUpdateFunc("RhythmGame_ForAction_UpdateFunc")
+Panel_RhythmGame_ForAction:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
 RhythmForAction_RePosition()

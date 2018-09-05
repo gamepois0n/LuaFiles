@@ -112,18 +112,14 @@ function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
       local posY = ToClient_GetUiInfo(value, 0, CppEnums.PanelSaveType.PanelSaveType_PositionY)
       local relativePosX = -1
       local relativePosY = -1
-      if CppDefine.ChangeUIAndResolution == true then
-        relativePosX = ToClient_GetUiInfo(value, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-        relativePosY = ToClient_GetUiInfo(value, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
-      end
+      relativePosX = ToClient_GetUiInfo(value, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+      relativePosY = ToClient_GetUiInfo(value, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
       if -1 ~= posX or -1 ~= posY then
         key:SetPosX(posX)
         key:SetPosY(posY)
-        if CppDefine.ChangeUIAndResolution == true then
-          key:SetRelativePosX(relativePosX)
-          key:SetRelativePosY(relativePosY)
-          PAGlobal_setIsChangePanelState(value, true, false)
-        end
+        key:SetRelativePosX(relativePosX)
+        key:SetRelativePosY(relativePosY)
+        PAGlobal_setIsChangePanelState(value, true, false)
         onReSizePanel(key)
       end
       checkAndSetPosInScreen(key)
@@ -146,13 +142,11 @@ function PaGlobal_TutorialUiManager:loadAllUiSavedInfo()
       local posY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_PositionY)
       chatPanelUI:SetPosX(posX)
       chatPanelUI:SetPosY(posY)
-      if CppDefine.ChangeUIAndResolution == true then
-        local relativePosX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-        local relativePosY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
-        chatPanelUI:SetRelativePosX(relativePosX)
-        chatPanelUI:SetRelativePosY(relativePosY)
-        PAGlobal_setIsChangePanelState(panelIndex + chattingPanelCount, true, true)
-      end
+      local relativePosX = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+      local relativePosY = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ChattingWindow, panelIndex, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+      chatPanelUI:SetRelativePosX(relativePosX)
+      chatPanelUI:SetRelativePosY(relativePosY)
+      PAGlobal_setIsChangePanelState(panelIndex + chattingPanelCount, true, true)
     end
     Chatting_OnResize()
   end
@@ -297,7 +291,7 @@ function PaGlobal_TutorialUiManager:setShowAllDefaultUi(isShow)
   if true == _ContentsGroup_RenewUI_Main then
     Panel_UIMain:SetShow(false)
   else
-    Panel_UIMain:SetShow(isShow)
+    PaGlobalFunc_UiMain_SetShow(isShow)
   end
   Panel_Widget_Function:SetShow(isShow)
   Panel_UIMain:SetShow(isShow)

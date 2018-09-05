@@ -77,9 +77,8 @@ local InventoryInfo = {
     stc_setEffectBG = nil,
     stc_noSetEffect = nil,
     potencialBars = {},
-    frame_servantInven = nil,
+    scroll_servantInven = nil,
     stc_servantInfoBG = nil,
-    stc_contentBG = nil,
     txt_servantName = nil,
     progress2_servantWeight = nil,
     txt_servantInvenCountDisplay = nil,
@@ -143,11 +142,12 @@ local InventoryInfo = {
   _setItemEffectData = nil,
   _invenSlotColumnMax = 8,
   _invenSlotRowMax = 9,
-  _invenSlotMax = 72,
+  _invenSlotCount = 72,
   _invenCapacity = nil,
   _invenStartSlotIndex = 0,
   _newItemAtSlot = {},
-  _servantInvenSlotMax = 80,
+  _servantInvenStartSlot = 0,
+  _servantInvenRowMax = 2,
   _servantEquipSlotMax = 6,
   _defaultXGap = 54,
   _defaultYGap = 54,
@@ -181,7 +181,8 @@ local InventoryInfo = {
   _deleteWhereType = nil,
   _deleteSlotNo = nil,
   _deleteCount = nil,
-  _currentInvenSlotIndex = 0
+  _currentInvenSlotIndex = 0,
+  _reuseAlchemyStoneCheckTime = 0
 }
 local _snappedOnThisPanel = false
 local _avatarCheckFlag = {
@@ -1320,11 +1321,7 @@ function InventoryInfo:initInformationUIControl()
   self._ui.stc_noSetEffect = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.INFORMATION_TAB], "StaticText_NoSetEffect")
 end
 function InventoryInfo:initServantUIControl()
-  self._ui.frame_servantInven = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "Frame_ServantInven")
-  local frameContent = self._ui.frame_servantInven:GetFrameContent()
-  self._ui.stc_servantInfoBG = UI.getChildControl(frameContent, "Static_ContentBG")
   local progressBG = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "Static_ServantWeightProgressBG")
-  self._ui.stc_contentBG = UI.getChildControl(frameContent, "Static_ContentBG")
   self._ui.txt_servantName = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "StaticText_ServantName")
   self._ui.progress2_servantWeight = UI.getChildControl(progressBG, "Progress2_ServantWeight")
   self._ui.txt_servantInvenCountDisplay = UI.getChildControl(progressBG, "StaticText_SlotCount")
@@ -1334,16 +1331,24 @@ function InventoryInfo:initServantUIControl()
   self._ui.txt_servantCostumeInfo = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "StaticText_ServantCostumeSlot")
   self._ui.txt_noServant = UI.getChildControl(self._ui.stc_subWindowUpper, "StaticText_NoServant")
   self._ui.txt_noServant:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NotVehicleNear"))
-  self._ui.servantInvenSlotTemplate = UI.getChildControl(frameContent, "Static_ServantSlotTemplate")
+  local servantInvenBG = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "Static_ServantInvenBG")
+  self._ui.servantInvenSlotTemplate = UI.getChildControl(servantInvenBG, "Static_ServantSlotTemplate")
   self._ui.servantEquipSlotTemplate = UI.getChildControl(self._ui.txt_servantEquipInfo, "Static_EquipItemSlot_Template")
   self._ui.servantCostumeSlotTemplate = UI.getChildControl(self._ui.txt_servantCostumeInfo, "Static_CostumeItemSlot_Template")
   self._ui.servantInvenSlotTemplate:SetShow(false)
   self._ui.servantEquipSlotTemplate:SetShow(false)
   self._ui.servantCostumeSlotTemplate:SetShow(false)
+  self._ui.scroll_servantInven = UI.getChildControl(self._ui.stc_upperGroups[UPPER_TAB_TYPE.SERVANT_TAB], "Scroll_ServantInventory")
   local slot = self._ui.slot_servantInven
   local slotBG = self._ui.stc_servantInvenSlotBG
-  for ii = 1, self._servantInvenSlotMax do
-    slotBG[ii] = UI.cloneControl(self._ui.servantInvenSlotTemplate, frameContent, "InventoryInfo_ServantInvenSlotBG_" .. ii)
+  local startX = self._ui.servantInvenSlotTemplate:GetPosX()
+  local startY = self._ui.servantInvenSlotTemplate:GetPosY()
+  local columnMax = self._invenSlotColumnMax
+  local slotCount = self._servantInvenRowMax * columnMax
+  for ii = 1, slotCount do
+    slotBG[ii] = UI.cloneControl(self._ui.servantInvenSlotTemplate, servantInvenBG, "InventoryInfo_ServantInvenSlotBG_" .. ii)
+    slotBG[ii]:SetPosX(startX + (ii - 1) % columnMax * self._defaultXGap)
+    slotBG[ii]:SetPosY(startY + math.floor((ii - 1) / columnMax) * self._defaultYGap)
     slot[ii] = {}
     SlotItem.new(slot[ii], "ServantInvenSlot_" .. ii, ii, slotBG[ii], _configForInven)
     slot[ii]:createChild()
@@ -1352,7 +1357,13 @@ function InventoryInfo:initServantUIControl()
     slot[ii].icon:SetIgnore(true)
     slotBG[ii]:addInputEvent("Mouse_On", "Input_InventoryInfo_ServantInvenFloatingTooltip(" .. ii .. ", true)")
     slotBG[ii]:addInputEvent("Mouse_Out", "Input_InventoryInfo_ServantInvenFloatingTooltip(" .. ii .. ", false)")
+    if ii <= columnMax then
+      slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_InventoryInfo_ServantInventory(true)")
+    elseif ii > columnMax * (self._servantInvenRowMax - 1) then
+      slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadDown, "InputScroll_InventoryInfo_ServantInventory(false)")
+    end
   end
+  UIScroll.InputEvent(self._ui.scroll_servantInven, "InputScroll_InventoryInfo_ServantInventory")
   local slot_servantEquip = self._ui.slot_servantEquip
   local stc_servantEquipSlotBG = self._ui.stc_servantEquipSlotBG
   for ii = 1, self._servantEquipSlotMax do
@@ -1406,7 +1417,7 @@ function InventoryInfo:initInventory()
   local columnMax = self._invenSlotColumnMax
   self._ui.slot_inven = Array.new()
   local slot = self._ui.slot_inven
-  for ii = 1, self._invenSlotMax do
+  for ii = 1, self._invenSlotCount do
     slotBG[ii] = UI.cloneControl(slotTemplate, self._ui.stc_invenBG, "InventoryInfo_InvenSlotBG_" .. ii)
     slotBG[ii]:SetPosX(startX + (ii - 1) % columnMax * xSize)
     slotBG[ii]:SetPosY(startY + math.floor((ii - 1) / columnMax) * ySize)
@@ -2065,45 +2076,34 @@ function InventoryInfo:updateServantInven(actorKeyRaw)
   local allWeight = string.format("%.1f", Int64toInt32(s64_weightAll_div) / 100)
   local maxWeight = string.format("%.0f", Int64toInt32(s64_weightMax_div) / 100)
   self._ui.txt_servantWeightValue:SetText(allWeight .. " /" .. maxWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
-  local fullCount = vehicleInven:size() - __eTInventorySlotNoUseStart
+  local capacity = vehicleInven:size() - __eTInventorySlotNoUseStart
   local freeCount = vehicleInven:getFreeCount()
-  local startX = self._ui.servantInvenSlotTemplate:GetPosX()
-  local startY = self._ui.servantInvenSlotTemplate:GetPosY()
-  local columnMax = self._invenSlotColumnMax
-  self._ui.txt_servantInvenCountDisplay:SetText(tostring(fullCount - freeCount .. "/" .. fullCount))
+  self._ui.txt_servantInvenCountDisplay:SetText(tostring(capacity - freeCount .. "/" .. capacity))
   for ii = 1, #self._ui.stc_servantInvenSlotBG do
     self._ui.stc_servantInvenSlotBG[ii]:SetShow(false)
   end
-  for ii = 1, fullCount do
+  local slotCount = self._servantInvenRowMax * self._invenSlotColumnMax
+  for ii = 1, slotCount do
     local slotBG = self._ui.stc_servantInvenSlotBG[ii]
     local slot = self._ui.slot_servantInven[ii]
-    slotBG:SetPosX(startX + (ii - 1) % columnMax * self._defaultXGap)
-    slotBG:SetPosY(startY + math.floor((ii - 1) / columnMax) * self._defaultYGap)
-    slotBG:SetShow(true)
-    local itemWrapper = getServantInventoryItemBySlotNo(actorKeyRaw, ii - 1 + __eTInventorySlotNoUseStart)
-    if nil ~= itemWrapper then
-      slot:setItem(itemWrapper)
+    slot:clearItem()
+    local index = ii + self._servantInvenStartSlot
+    if capacity > index then
+      local itemWrapper = getServantInventoryItemBySlotNo(actorKeyRaw, index - 1 + __eTInventorySlotNoUseStart)
+      if nil ~= itemWrapper then
+        slot:setItem(itemWrapper)
+      end
+      slotBG:SetShow(true)
     else
-      slot:clearItem()
+      slotBG:SetShow(false)
     end
   end
-  local rowCount = math.ceil(fullCount / columnMax)
-  local lastSlot = self._ui.stc_servantInvenSlotBG[fullCount]
-  self._ui.stc_contentBG:SetSize(self._ui.stc_contentBG:GetSizeX(), lastSlot:GetSizeY() + lastSlot:GetPosY())
-  local frameContent = self._ui.frame_servantInven:GetFrameContent()
-  frameContent:SetSize(frameContent:GetSizeX(), self._ui.stc_contentBG:GetSizeY())
-  if self._ui.stc_contentBG:GetSizeY() > self._ui.frame_servantInven:GetSizeY() then
-    self._ui.frame_servantInven:GetVScroll():SetShow(true)
-    self._ui.frame_servantInven:UpdateContentScroll()
-    self._ui.frame_servantInven:GetVScroll():SetControlPos(0)
-    self._ui.frame_servantInven:UpdateContentPos()
-  else
-    self._ui.frame_servantInven:GetVScroll():SetShow(false)
-  end
+  local lastSlot = self._ui.stc_servantInvenSlotBG[slotCount]
+  UIScroll.SetButtonSize(self._ui.scroll_servantInven, slotCount, capacity)
   if self:isSnappedOn("InventoryInfo_ServantInvenSlotBG_") then
     self:setKeyGuide("InventoryInfo_ServantInvenSlotBG_")
   end
-  return lastSlot:GetSizeY() + lastSlot:GetPosY() + self._ui.frame_servantInven:GetPosY()
+  return lastSlot:GetSizeY() + lastSlot:GetPosY()
 end
 function InventoryInfo:updateServantEquipOrCostume(isEquip)
   if nil == self._servantActorKeyRaw then
@@ -2221,7 +2221,7 @@ function InventoryInfo:updateInventory(ignorePanelVisibility)
   self._ui.stc_plusSlot:SetShow(false)
   Panel_NewEquip_EffectClear()
   self._invenCapacity = invenUseSize - useStartSlot
-  for ii = 1, self._invenSlotMax do
+  for ii = 1, self._invenSlotCount do
     local slot = self._ui.slot_inven[ii]
     slot:clearItem()
     slotNo = slotNoList[ii + self._invenStartSlotIndex]
@@ -2307,7 +2307,7 @@ function InventoryInfo:updateInventory(ignorePanelVisibility)
             local equipPos = itemWrapper:getStaticStatus():getEquipSlotNo()
             Panel_NewEquip_Update(equipPos)
           end
-          if slotNo < self._invenSlotMax and true == self._newItemAtSlot[slotNo] then
+          if slotNo < self._invenSlotCount and true == self._newItemAtSlot[slotNo] then
             local newItemEffectSceneId = slot.icon:AddEffect("fUI_NewItem02", true, 0, 0)
             effectScene.newItem[slotNo] = newItemEffectSceneId
             UIMain_ItemUpdate()
@@ -2360,6 +2360,7 @@ function InventoryInfo:updateInventory(ignorePanelVisibility)
   if true == _panel:GetShow() then
     Panel_Tooltip_Item_Refresh(_panel:GetPosX() - 20, getScreenSizeY() - 100)
   end
+  FGlobal_Inventory_WeightCheck()
   Panel_NewEquip_EffectLastUpdate()
   if _ContentsGroup_RenewUI_Repair and true == PaGlobalFunc_FixMaxEnduranceInfo_GetShow() then
     PaGlobalFunc_FixMaxEnduranceInfo_UpdateProgressBar()
@@ -2388,14 +2389,14 @@ function InventoryInfo:findPuzzle()
   local count = getPuzzleSlotCount()
   for ii = 1, count do
     local puzzleSlotNo = getPuzzleSlotAt(ii - 1)
-    for jj = 1, self._invenSlotMax do
+    for jj = 1, self._invenSlotCount do
       if puzzleSlotNo == self._ui.slot_inven[jj].slotNo then
         self._ui.slot_inven[jj].icon:AddEffect("UI_Item_MineCraft", true, -2, -2)
       end
     end
   end
   local slotNumber = getPuzzleSlotAt(0)
-  for ii = 1, self._invenSlotMax do
+  for ii = 1, self._invenSlotCount do
     if slotNumber == self._ui.slot_inven[ii].slotNo then
       local bg = self._ui.stc_invenSlotBG[ii]
       local spanX = self._ui.stc_invenBG:GetSpanSize().x
@@ -2468,7 +2469,7 @@ function PaGlobalFunc_Window_InventoryInfo_PerFrameUpdate(deltaTime)
     return
   end
   local currentWhereType = Inventory_GetCurrentInventoryType()
-  for ii = 1, self._invenSlotMax do
+  for ii = 1, self._invenSlotCount do
     local slot = self._ui.slot_inven[ii]
     local slotNo = slot.slotNo
     local remainTime = 0
@@ -2547,6 +2548,8 @@ function InventoryInfo:setTabTo(tabIndex)
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
     self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "INVENTORY_TEXT_TITLE"))
   elseif tabIndex == UPPER_TAB_TYPE.SERVANT_TAB then
+    self._servantInvenStartSlot = 0
+    self._ui.scroll_servantInven:SetControlTop(0)
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
     self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_SERVANTINVENTORY_TITLE"))
   end
@@ -2737,8 +2740,8 @@ function InputMRUp_InventoryInfo_ServantInvenSlot(index)
   local vehicleType = servantWrapper:getVehicleType()
   local servantType = _vehicleTypeToSERVANT_TYPE[vehicleType]
   local moveToType = _servantData[servantType].moveItemToType
-  FGlobal_PopupMoveItem_Init(CppEnums.ItemWhereType.eServantInventory, index - 1 + __eTInventorySlotNoUseStart, moveToType, self._servantActorKeyRaw[1], true)
-  Input_InventoryInfo_ServantInvenFloatingTooltip(index)
+  FGlobal_PopupMoveItem_Init(CppEnums.ItemWhereType.eServantInventory, index + self._servantInvenStartSlot - 1 + __eTInventorySlotNoUseStart, moveToType, self._servantActorKeyRaw[1], true)
+  Input_InventoryInfo_ServantInvenFloatingTooltip(index + self._servantInvenStartSlot)
 end
 function InputMLUp_InventoryInfo_ServantInvenDropHandler()
   local self = InventoryInfo
@@ -2761,7 +2764,7 @@ end
 function Input_InventoryInfo_ServantInvenFloatingTooltip(index, isShow)
   local self = InventoryInfo
   if isShow and nil ~= self._servantActorKeyRaw[1] then
-    local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index - 1 + __eTInventorySlotNoUseStart)
+    local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index + self._servantInvenStartSlot - 1 + __eTInventorySlotNoUseStart)
     if nil ~= itemWrapper then
       PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, self._ui.stc_servantInvenSlotBG[index])
     end
@@ -3084,7 +3087,7 @@ function InputScroll_InventoryInfo_Inventory(isUp)
   local maxSize = inventory:sizeXXX() - __eTInventorySlotNoUseStart
   local prevSlotIndex = self._invenStartSlotIndex
   self._invenStartSlotIndex = UIScroll.ScrollEvent(self._ui.scroll_inven, isUp, self._invenSlotRowMax, maxSize, self._invenStartSlotIndex, self._invenSlotColumnMax)
-  local intervalSlotIndex = INVEN_MAX_COUNT - self._invenSlotMax
+  local intervalSlotIndex = INVEN_MAX_COUNT - self._invenSlotCount
   if prevSlotIndex == 0 and self._invenStartSlotIndex == 0 or prevSlotIndex == intervalSlotIndex and self._invenStartSlotIndex == intervalSlotIndex then
     return
   end
@@ -3094,6 +3097,39 @@ function InputScroll_InventoryInfo_Inventory(isUp)
   self:updateInventory()
   InputMOut_InventoryInfo_invenHideTooltip(self._currentInvenSlotIndex)
   InputMOn_InventoryInfo_invenShowFloatingTooltip(self._currentInvenSlotIndex)
+end
+function InputScroll_InventoryInfo_ServantInventory(isUp)
+  local self = InventoryInfo
+  if nil == self._servantActorKeyRaw or nil == self._servantActorKeyRaw[1] then
+    return
+  end
+  local vehicleActorWrapper = getVehicleActor(self._servantActorKeyRaw[1])
+  if nil == vehicleActorWrapper then
+    return
+  end
+  local vehicleActor = vehicleActorWrapper:get()
+  if nil == vehicleActor then
+    return
+  end
+  local vehicleInven = vehicleActor:getInventory()
+  if nil == vehicleInven then
+    return
+  end
+  local capacity = vehicleInven:size() - __eTInventorySlotNoUseStart
+  local slotCount = self._servantInvenRowMax * self._invenSlotColumnMax
+  local extraRow = 0
+  if capacity > slotCount then
+    extraRow = math.ceil((capacity - slotCount) / self._invenSlotColumnMax)
+  end
+  local prevSlotIndex = self._servantInvenStartSlot
+  self._servantInvenStartSlot = UIScroll.ScrollEvent(self._ui.scroll_servantInven, isUp, self._servantInvenRowMax, slotCount + extraRow * self._invenSlotColumnMax, self._servantInvenStartSlot, self._invenSlotColumnMax)
+  if prevSlotIndex == self._servantInvenStartSlot then
+    return
+  end
+  if ToClient_isXBox() or ToClient_IsDevelopment() then
+    ToClient_padSnapIgnoreGroupMove()
+  end
+  self:updateServantInven(self._servantActorKeyRaw[1])
 end
 function InventoryInfo:onInventoryItemRClick(index)
   if nil == self._ui.slot_inven[index] or nil == self._ui.slot_inven[index].slotNo then
@@ -3299,6 +3335,9 @@ function InputMOn_InventoryInfo_equipShowFloatingTooltip(isEquip, index, isOn)
 end
 function Input_InventoryInfo_CostumeShowToggle(index)
   local self = InventoryInfo
+  if nil ~= self._rClickFunc or nil ~= self._filterFunc then
+    return
+  end
   local toggle = self._ui.slot_costumes[index].chk_toggleButton
   local isCheck = toggle:IsCheck()
   if false == isCheck then
@@ -3363,7 +3402,7 @@ function Input_InventoryInfo_ShowServantInvenTooltip(index, isShow)
   local self = InventoryInfo
   if isShow then
     if nil ~= self._servantActorKeyRaw[1] then
-      local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index - 1 + __eTInventorySlotNoUseStart)
+      local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index + self._servantInvenStartSlot - 1 + __eTInventorySlotNoUseStart)
       PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, _panel:GetPosX())
       PaGlobalFunc_FloatingTooltip_Close()
     end
@@ -3637,6 +3676,7 @@ function InventoryInfo:setKeyGuide(controlName)
       self:setKeyGuideWithTab()
       return
     end
+    self._ui.txt_keyGuideSort:SetText(self:getSortKeyGuideString(ToClient_IsSortedInventory()))
     local numStart, numEnd = string.find(controlName, "%d+")
     if nil ~= numStart then
       controlName = string.sub(controlName, 1, numStart - 1)
@@ -3674,9 +3714,10 @@ function Input_InventoryInfo_InvenSlotKeyGuide()
   local slotNo = self._ui.slot_inven[index].slotNo
   local itemWrapper = getInventoryItemByType(_lowerTabData[self._currentLowerTab].whereType, slotNo)
   local selectable = nil ~= slotNo and nil ~= itemWrapper and self._ui.slot_inven[index].icon:IsEnable() and self._ui.slot_inven[index].icon:GetShow()
-  self._ui.txt_keyGuideSetFunctorA:SetShow(selectable)
   self._ui.txt_keyGuideA:SetShow(selectable)
-  self._ui.txt_keyGuideA2:SetShow(selectable)
+  self._ui.txt_keyGuideA2:SetShow(selectable and not ToClient_IsSortedInventory())
+  self._ui.txt_keyGuideSetFunctorA:SetShow(selectable)
+  self._ui.txt_keyGuideSetFunctorA:SetText("Select")
   self._ui.txt_keyGuideY:SetShow(selectable)
 end
 function Input_InventoryInfo_EquipSlotKeyGuide()
@@ -4550,6 +4591,14 @@ function FGlobal_AlchemyStonCheck()
     end
   end
   return coolTime
+end
+function PaGlobalFunc_Equipment_IsReuseTime(deltaTime)
+  if 1 <= InventoryInfo._reuseAlchemyStoneCheckTime then
+    InventoryInfo._reuseAlchemyStoneCheckTime = 0
+    return true
+  end
+  InventoryInfo._reuseAlchemyStoneCheckTime = InventoryInfo._reuseAlchemyStoneCheckTime + deltaTime
+  return false
 end
 function Inventory_PosSaveMemory()
 end

@@ -214,8 +214,18 @@ function PersonalIcon:updatePos()
       currentPos = currentPos + self._iconGapPosX
     end
   end
-  local panelPosX = PaGlobalFunc_MainStatus_GetPosX() + PaGlobalFunc_MainStatus_GetSizeX() + 10
-  local panelPosY = 5
+  local panelPosX = 100
+  local panelPosY = 45
+  if Panel_MainStatus_Remaster:GetShow() then
+    panelPosX = PaGlobalFunc_MainStatus_GetPosX() + PaGlobalFunc_MainStatus_GetSizeX() + 10
+    panelPosY = 5
+  elseif Panel_SelfPlayerExpGage:GetShow() then
+    panelPosX = 100
+    panelPosY = 45
+  else
+    panelPosX = 10
+    panelPosY = 5
+  end
   _panel:SetPosXY(panelPosX, panelPosY)
 end
 function PersonalIcon:calculateAlertBox(applyStarter, applyPremium, applyDyeingPackage, starter, premium, dyeingPackage, applyRussiaPack3, russiaPack3Time, applyRussiaKamasilv, russiaKamasilv)

@@ -3548,6 +3548,10 @@ function FGlobal_CloseNpcDialogForDetail()
     StableFunction_Close()
     return true
   end
+  if Panel_Window_Extraction:IsShow() then
+    PaGlobal_Extraction:openPanel(false)
+    retval = true
+  end
   if Panel_FixEquip:GetShow() then
     handleMClickedRepairExitButton()
     PaGlobal_Repair:repair_OpenPanel(false)

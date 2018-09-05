@@ -995,6 +995,10 @@ function inGameShop:updateSlot()
           elseif 0 < tabIndexList[inGameShop._currentTab][6] then
             self.desc._btn_BigGift:SetSpanSize(100, 10)
             self.desc._btn_BigECart:SetSpanSize(60, 10)
+          else
+            self.desc._btn_BigGift:SetSpanSize(100, 10)
+            self.desc._btn_BigECart:SetSpanSize(60, 10)
+            self.desc._btn_BigECartSlot:SetSpanSize(60, 10)
           end
         else
           self.desc._btn_BigGift:SetSpanSize(100, 10)
@@ -2207,10 +2211,6 @@ function IngameCashShop_initDescData(cashProduct)
           elseif 5 == subProduct:getTag() then
             productName = "<PAColor0xff33c5b3>" .. productName
           end
-          inGameShop._subItemButton[ii].static:SetText(productName)
-          inGameShop._subItemButton[ii].static:SetShow(true)
-          inGameShop._subItemButton[ii].static:SetIgnore(false)
-          inGameShop._subItemButton[ii].productNo = inGameShop._comboList[ii]
           if inGameShop._cashProductNoData == inGameShop._subItemButton[ii].productNo then
             inGameShop._cashProductIndex = ii
           end
@@ -2226,6 +2226,11 @@ function IngameCashShop_initDescData(cashProduct)
           end
           inGameShop._subItemButton[ii].static:SetPosX(30 + (ii - 1 - positionBX) * sizeX - gapXpos)
           inGameShop._subItemButton[ii].static:SetPosY(40 + positionBY * configButton._subButton._gapY)
+          inGameShop._subItemButton[ii].static:SetTextMode(UI_TM.eTextMode_LimitText)
+          inGameShop._subItemButton[ii].static:SetText(productName)
+          inGameShop._subItemButton[ii].static:SetShow(true)
+          inGameShop._subItemButton[ii].static:SetIgnore(false)
+          inGameShop._subItemButton[ii].productNo = inGameShop._comboList[ii]
         else
           local productName = subProduct:getDisplaySubName()
           if subProduct:isApplyDiscount() then
@@ -2233,10 +2238,6 @@ function IngameCashShop_initDescData(cashProduct)
           elseif 5 == subProduct:getTag() then
             productName = "<PAColor0xff33c5b3>" .. productName
           end
-          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetText(productName)
-          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetShow(true)
-          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetIgnore(false)
-          inGameShop._subItemButton[ii + inGameShop._skipCount].productNo = inGameShop._comboList[ii]
           sizeX = configButton._subButtonSize._SmallX
           divide = 5
           inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetSize(sizeX, configButton._subButton._gapY)
@@ -2247,6 +2248,11 @@ function IngameCashShop_initDescData(cashProduct)
           end
           inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetPosX(30 + (realCount - 1 - positionSX) * sizeX)
           inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetPosY(40 + positionSY * configButton._subButton._gapY)
+          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetTextMode(UI_TM.eTextMode_LimitText)
+          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetText(productName)
+          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetShow(true)
+          inGameShop._subItemButton[ii + inGameShop._skipCount].static:SetIgnore(false)
+          inGameShop._subItemButton[ii + inGameShop._skipCount].productNo = inGameShop._comboList[ii]
         end
       end
     end

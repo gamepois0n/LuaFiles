@@ -129,7 +129,7 @@ end
 function Panel_Minigame_Rhythm_Start()
   Interaction_Close()
   _fontBad:SetShow(false)
-  cursorIndex = 3
+  cursorIndex = 2
   isFailed = false
   bufferIndex = 1
   for k, v in pairs(noteBuffer) do
@@ -185,7 +185,6 @@ function MiniGame_Rhythm_KeyPress(keyType)
     Panel_Minigame_Rhythm_GaugeMove_Right()
   end
 end
-registerEvent("EventActionMiniGameKeyDownOnce", "MiniGame_Rhythm_KeyPress")
 registerEvent("onScreenResize", "Rhythm_RePosition")
 Panel_RhythmGame:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
 Rhythm_RePosition()

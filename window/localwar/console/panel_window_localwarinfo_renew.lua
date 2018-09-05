@@ -14,7 +14,6 @@ local Panel_Window_LocalWarInfo_info = {
   _enum = {}
 }
 function Panel_Window_LocalWarInfo_info:registEventHandler()
-  Panel_LocalWarInfo:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_LocalWarRule_Show()")
 end
 function Panel_Window_LocalWarInfo_info:registerMessageHandler()
   registerEvent("onScreenResize", "FromClient_LocalWarInfo_Resize")
@@ -48,6 +47,7 @@ function Panel_Window_LocalWarInfo_info:childControl()
     self._ui.staticText_A_ConsoleUI,
     self._ui.staticText_B_ConsoleUI
   }
+  self._ui.staticText_Y_ConsoleUI:SetShow(false)
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.static_BottomBG, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Window_LocalWarInfo_info:setContent()

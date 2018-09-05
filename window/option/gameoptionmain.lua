@@ -388,7 +388,7 @@ function PaGlobal_Option:SetControlSettingTable(option, value, elementName)
     end
     for i, valueControl in pairs(option._curvalueControl) do
       local displayValue = self:FromSliderValueToRealValue(value, option._sliderValueMin, option._sliderValueMax)
-      displayValue = math.floor(displayValue + 0.5)
+      displayValue = math.floor(displayValue)
       valueControl:SetText(self._sliderButtonString .. displayValue .. "<PAOldColor>")
     end
   elseif CONTROL.PA_UI_CONTROL_COMBOBOX == option._controlType then

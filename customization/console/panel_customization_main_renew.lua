@@ -381,6 +381,7 @@ function PaGlobalFunc_Customization_RandomBeauty()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
   end
 end
 function PaGlobalFunc_Customization_ClickedMainMenu(index)

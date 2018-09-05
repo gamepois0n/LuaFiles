@@ -75,6 +75,7 @@ function Panel_Minigame_GradientY_Start()
     ui._txt_purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_HORSEDROP_0"))
   else
   end
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   Panel_MiniGame_Gradient_Y:SetShow(true, false)
   Panel_MiniGame_Gradient_Y:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   local centerPos = getScreenSizeX() / 2 - Panel_MiniGame_Gradient_Y:GetSizeX() / 2
@@ -92,6 +93,7 @@ function Panel_Minigame_GradientY_Start()
   isGradientYPlay = true
 end
 function Panel_Minigame_GradientY_End()
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   Panel_MiniGame_Gradient_Y:SetShow(false, false)
   isGradientYPlay = false
 end

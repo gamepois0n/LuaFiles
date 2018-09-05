@@ -168,7 +168,8 @@ local equip = {
   checkExtendedSlot = 0,
   checkBox_AlchemyStone = UI.getChildControl(Panel_Equipment, "CheckBox_AlchemyStone"),
   slotRingIndex = 0,
-  slotEaringIndex = 0
+  slotEaringIndex = 0,
+  reuseAlchemyStoneCheckTime = 0
 }
 local alchemyStoneQuickKey = UI.getChildControl(Panel_Equipment, "Static_Slot_AlchemyStone_Key")
 local isAlchemyStoneCheck = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.AlchemyStone)
@@ -998,9 +999,16 @@ function FromClient_ChangeSwimmingSuitMode_Equipment(isShowSwimmingSuit)
   equip.checkUnderwear:SetCheck(isShowSwimmingSuit)
 end
 function FGlobal_AlchemyStonCheck()
+  if not equip.checkBox_AlchemyStone:IsCheck() then
+    return 0
+  end
+  local coolTime = PaGlobalAppliedBuffList:getAlchemyStoneBuff_RemainTime()
+  if coolTime > -1 then
+    return coolTime + 3
+  end
+  coolTime = 0
   local itemWrapper = ToClient_getEquipmentItem(27)
-  local coolTime = 0
-  if nil ~= itemWrapper and equip.checkBox_AlchemyStone:IsCheck() then
+  if nil ~= itemWrapper then
     local alchemyStoneType = itemWrapper:getStaticStatus():get()._contentsEventParam1
     if 0 == alchemyStoneType or 3 == alchemyStoneType then
       coolTime = 302
@@ -1190,6 +1198,14 @@ function FGlobal_UpdateTotalStatValue_InEquipment(actorKeyRaw)
     self.BattlePointValue:SetText(tostring(battlePointValue))
     self.BonusBattlePointValue:SetShow(false)
   end
+end
+function PaGlobalFunc_Equipment_IsReuseTime(deltaTime)
+  if 3 <= equip.reuseAlchemyStoneCheckTime then
+    equip.reuseAlchemyStoneCheckTime = 0
+    return true
+  end
+  equip.reuseAlchemyStoneCheckTime = equip.reuseAlchemyStoneCheckTime + deltaTime
+  return false
 end
 registerEvent("FromClient_luaLoadComplete", "FGlobal_Equipment_Init")
 registerEvent("FromClient_ChangeUnderwearModeInHouse", "FromClient_ChangeUnderwearMode_Equipment")

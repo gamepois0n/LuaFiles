@@ -166,5 +166,5 @@ function Minigame_Steal_Cut()
   aniInfo1:SetEndPosition(ui._theifHand:GetPosX(), ui._theifHand:GetPosY())
 end
 Minigame_Steal_Initialize()
-Panel_MiniGame_Steal:RegisterUpdateFunc("Minigame_Steal_KeyPressTimeCheck")
+Panel_MiniGame_Steal:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
 registerEvent("onScreenResize", "Minigame_Steal_ScreenResize")

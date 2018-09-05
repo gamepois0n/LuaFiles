@@ -1,4 +1,3 @@
-Panel_MainStatus_User_Bar:SetShow(not PaGlobalFunc_IsRemasterUIOption())
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(true, "mainStatus_AniOpen()")
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(false, "mainStatus_AniClose()")
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
@@ -419,28 +418,19 @@ function PaGlobalFunc_UserBar_Onresize()
   Panel_Danger:SetPosX(0)
   _alertDanger:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_MainStatus_User_Bar:ComputePos()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MainStatus_User_Bar:GetRelativePosX() == -1 and Panel_MainStatus_User_Bar:GetRelativePosY() == -1 then
-      local initPosX = getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2
-      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY()
-      Panel_MainStatus_User_Bar:SetPosX(initPosX)
-      Panel_MainStatus_User_Bar:SetPosY(initPosY)
-      changePositionBySever(Panel_MainStatus_User_Bar, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
-      FGlobal_InitPanelRelativePos(Panel_MainStatus_User_Bar, initPosX, initPosY)
-    elseif Panel_MainStatus_User_Bar:GetRelativePosX() == 0 and Panel_MainStatus_User_Bar:GetRelativePosY() == 0 then
-      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
-    else
-      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() * Panel_MainStatus_User_Bar:GetRelativePosX() - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() * Panel_MainStatus_User_Bar:GetRelativePosY() - Panel_MainStatus_User_Bar:GetSizeY() / 2)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_MainStatus_User_Bar:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
-    end
-  else
+  if Panel_MainStatus_User_Bar:GetRelativePosX() == -1 and Panel_MainStatus_User_Bar:GetRelativePosY() == -1 then
+    local initPosX = getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2
+    local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY()
+    Panel_MainStatus_User_Bar:SetPosX(initPosX)
+    Panel_MainStatus_User_Bar:SetPosY(initPosY)
+    changePositionBySever(Panel_MainStatus_User_Bar, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
+    FGlobal_InitPanelRelativePos(Panel_MainStatus_User_Bar, initPosX, initPosY)
+  elseif Panel_MainStatus_User_Bar:GetRelativePosX() == 0 and Panel_MainStatus_User_Bar:GetRelativePosY() == 0 then
     Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
     Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
-    changePositionBySever(Panel_MainStatus_User_Bar, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
+  else
+    Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() * Panel_MainStatus_User_Bar:GetRelativePosX() - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+    Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() * Panel_MainStatus_User_Bar:GetRelativePosY() - Panel_MainStatus_User_Bar:GetSizeY() / 2)
   end
   if getScreenSizeX() < Panel_MainStatus_User_Bar:GetPosX() or getScreenSizeY() < Panel_MainStatus_User_Bar:GetPosY() then
     Panel_MainStatus_User_Bar:ComputePos()
@@ -525,7 +515,7 @@ function Panel_MainStatus_User_Bar.MainStatusShowToggle()
   if isShow == true then
     Panel_MainStatus_User_Bar:SetShow(false, true)
   else
-    Panel_MainStatus_User_Bar:SetShow(true, true)
+    FGlobal_User_Bar_Show(true, true)
   end
 end
 function FGlobal_Panel_MainStatus_User_Bar_Show()
@@ -578,13 +568,13 @@ end
 function MP_TextOff()
 end
 function FGlobal_User_Bar_Show(isShow, isAni)
-  local isGetUIInfo = false
-  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
-    isGetUIInfo = true
-  else
-    isGetUIInfo = false
+  if true == PaGlobalFunc_IsRemasterUIOption() then
+    isShow = false
   end
-  Panel_MainStatus_User_Bar:SetShow(isShow and isGetUIInfo and not PaGlobalFunc_IsRemasterUIOption(), isAni)
+  if true == isShow and -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    isShow = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow)
+  end
+  Panel_MainStatus_User_Bar:SetShow(isShow, isAni)
 end
 changePositionBySever(Panel_MainStatus_User_Bar, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
 FGlobal_User_Bar_Show(true, false)

@@ -28,7 +28,7 @@ local remainTime = 11
 local function init()
   registerEvent("onScreenResize", "BattleGauge_RePosition")
   registerEvent("EventActionMiniGameKeyDownOnce", "Panel_Minigame_SpaceBar")
-  Panel_BattleGauge:RegisterUpdateFunc("BattleGauge_UpdatePerFrame")
+  Panel_BattleGauge:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
   BattleGauge_RePosition()
   for k = 1, 50 do
     local ball = UI.createControl(UCT.PA_UI_CONTROL_STATIC, ui._myGauge, "ball_" .. tostring(k))

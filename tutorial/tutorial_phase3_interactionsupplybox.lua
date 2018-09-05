@@ -123,10 +123,23 @@ function PaGlobal_TutorialPhase_InteractionSupplyBox:handleChangeStep(currentSte
   end
 end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:changeStepWaitMainStatusUserBarComment()
-  FGlobal_Panel_MainStatus_User_Bar_Show()
+  local isRemaster = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting)
+  local spiritPosX, spiritPosY = 0, nil
+  local isSpiritLeft = false
+  if true == isRemaster then
+    PaGlobalFunc_MainStatus_ShowFromTutorial()
+    spiritPosX = PaGlobalFunc_MainStatus_GetPosX() + PaGlobalFunc_MainStatus_GetSizeX() * 1.1
+    spiritPosY = PaGlobalFunc_MainStatus_GetPosY() + PaGlobalFunc_MainStatus_GetSizeY()
+    isSpiritLeft = false
+  else
+    FGlobal_Panel_MainStatus_User_Bar_Show()
+    spiritPosX = Panel_MainStatus_User_Bar:GetPosX() + Panel_MainStatus_User_Bar:GetSizeX() * 1.1
+    spiritPosY = Panel_MainStatus_User_Bar:GetPosY() - Panel_MainStatus_User_Bar:GetSizeY()
+    isSpiritLeft = true
+  end
   FGlobal_ClassResource_SetShowControl(true)
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_88"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_89"), true, Panel_MainStatus_User_Bar:GetPosX() + Panel_MainStatus_User_Bar:GetSizeX() * 1.1, Panel_MainStatus_User_Bar:GetPosY() - Panel_MainStatus_User_Bar:GetSizeY())
+    PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_88"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_89"), isSpiritLeft, spiritPosX, spiritPosY)
   end)
 end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:updateWaitMainStatusUserBarComment(deltaTime)

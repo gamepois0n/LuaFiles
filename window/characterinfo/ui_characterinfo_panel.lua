@@ -57,6 +57,7 @@ function PaGlobal_CharacterInfo:initialize()
     UI.deletePanel(self._panel[index]:GetID())
   end
   self._ui._radioButton[self._tabButton._profile]:SetShow(self._isProfileOpen)
+  self._ui._radioButton[self._tabButton._life]:SetShow(_ContentsGroup_EnhanceCollect)
 end
 function PaGlobal_CharacterInfo:registEventHandler()
   Panel_Window_CharInfo_Status:RegisterShowEventFunc(true, "PaGlobal_CharacterInfo:showAni()")

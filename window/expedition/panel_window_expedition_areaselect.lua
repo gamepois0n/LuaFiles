@@ -135,9 +135,9 @@ function PaGlobalFunc_ExpeditionAreaSelectInfo_Click(groupKey)
     return
   end
   local TravelPoint = regionWrapper:getRecommendCombatPoint()
-  self._ui._text_travel:SetText("\234\182\140\236\158\165 \235\170\168\237\151\152\234\176\128 \235\170\133\236\132\177 : " .. tostring(TravelPoint))
+  self._ui._text_travel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_RECOMMEND_COMBATPOINT", "value", tostring(TravelPoint)))
   local selectRegionName = regionWrapper:getGroupName()
-  self._ui._text_areaName:SetText("\236\132\160\237\131\157 \236\167\128\236\151\173 : " .. selectRegionName)
+  self._ui._text_areaName:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_SELECT_REGION", "regionName", tostring(selectRegionName)))
   local dropItemList = regionWrapper:getDropItemList()
   if nil == dropItemList then
     return

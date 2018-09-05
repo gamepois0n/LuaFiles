@@ -94,8 +94,8 @@ function InputMLUp_WarDeclare_Confirm()
   local myGuildName = myGuildInfo:getName()
   local accumulateTax_s32 = Int64toInt32(myGuildInfo:getAccumulateTax())
   local accumulateCost_s32 = Int64toInt32(myGuildInfo:getAccumulateGuildHouseCost())
-  local close_function = function()
-    CheckChattingInput()
+  local function close_function()
+    self:close()
   end
   if accumulateTax_s32 > 0 or accumulateCost_s32 > 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_TAXFIRST"))
@@ -135,5 +135,6 @@ function PaGlobalFunc_WarDeclare_Confirm()
   local guildName = self._ui.edit_GuildName:GetEditText()
   ToClient_RequestDeclareGuildWar(0, guildName, false)
   self._ui.edit_GuildName:SetEditText("", true)
+  self:close()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_WarDeclare_Init")

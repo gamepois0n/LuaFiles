@@ -45,6 +45,7 @@ function Panel_Widget_FunctionButton_info:registEventHandler()
     self._button[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_Widget_FunctionButton_HandleLClick(" .. index .. ")")
     self._button[index]:addInputEvent("Mouse_RUp", "PaGlobalFunc_Widget_FunctionButton_HandleRClick(" .. index .. ")")
   end
+  self._ui.Button_FindNavi:setButtonShortcuts("PANEL_SIMPLESHORTCUT_FIND_NPC")
 end
 function Panel_Widget_FunctionButton_info:registerMessageHandler()
   registerEvent("onScreenResize", "FromClient_Widget_FunctionButton_Resize")

@@ -178,7 +178,7 @@ function GuildMain:updateDeclaredByInfo()
     self._ui.txt_NoDeclaredBy:SetShow(true)
   else
     self._ui.txt_NoDeclaredBy:SetShow(false)
-    for listIdx = 1, listCount do
+    for listIdx = 0, listCount - 1 do
       self._ui.list_DeclaredByGuild:getElementManager():pushKey(toInt64(0, listIdx))
     end
   end

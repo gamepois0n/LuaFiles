@@ -233,6 +233,7 @@ function ChattingInfo:open()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
     return
   end
   close_WindowPanelList()

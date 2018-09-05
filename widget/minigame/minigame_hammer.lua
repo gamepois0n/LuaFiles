@@ -27,6 +27,9 @@ function PaGlobal_HammerGame:Start()
   self._resultValue = 0
   self._countEnd = 0
 end
+function PaGlobal_HammerGame_KeyFunc(keyType)
+  PaGlobal_HammerGame:KeyFunc(keyType)
+end
 function PaGlobal_HammerGame:KeyFunc(keyType)
   _PA_LOG("\236\167\128\235\175\188\237\152\129", "function PaGlobal_HammerGame:KeyFunc( keyType ) : " .. tostring(keyType))
   if MGKT.MiniGameKeyType_Space == keyType then

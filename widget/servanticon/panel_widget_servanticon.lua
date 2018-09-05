@@ -740,7 +740,7 @@ function FGlobal_PetHungryAlert(petHungryCheck)
   end
   icon.btn:EraseAllEffect()
   if petHungryCheck and 0 < ToClient_getPetUnsealedList() then
-    icon.btn:AddEffect("fUI_Pet_01A", true, 0, -2)
+    icon.btn:AddEffect("fUI_Pet_01A", true, 0, -1)
   end
   self._hungryCheck = petHungryCheck
 end
@@ -1176,28 +1176,23 @@ function PaGlobalFunc_ServantIcon_OnResize()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ServantIcon")
     return
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if _panel:GetRelativePosX() == -1 and _panel:GetRelativePosY() == -1 then
-      local initPosX = 10
-      local initPosY = PaGlobalFunc_MainStatus_GetPosY() + PaGlobalFunc_MainStatus_GetSizeY() - 50
-      if false == changePositionBySever(_panel, CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, true, true, false) then
-        _panel:SetPosX(initPosX)
-        _panel:SetPosY(initPosY)
-      end
-      FGlobal_InitPanelRelativePos(_panel, initPosX, initPosY)
-    elseif _panel:GetRelativePosX() == 0 and _panel:GetRelativePosY() == 0 then
-      _panel:SetPosX(10)
-      _panel:SetPosY(PaGlobalFunc_MainStatus_GetPosY() + PaGlobalFunc_MainStatus_GetSizeY() - 50)
-    else
-      _panel:SetPosX(getScreenSizeX() * _panel:GetRelativePosX() - _panel:GetSizeX() / 2)
-      _panel:SetPosY(getScreenSizeY() * _panel:GetRelativePosY() - _panel:GetSizeY() / 2)
+  if _panel:GetRelativePosX() == -1 and _panel:GetRelativePosY() == -1 then
+    local initPosX = 10
+    local initPosY = PaGlobalFunc_MainStatus_GetPosY() + PaGlobalFunc_MainStatus_GetSizeY() - 50
+    if false == changePositionBySever(_panel, CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, true, true, false) then
+      _panel:SetPosX(initPosX)
+      _panel:SetPosY(initPosY)
     end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      _panel:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
-    end
-  elseif false == changePositionBySever(_panel, CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, true, true, false) then
+    FGlobal_InitPanelRelativePos(_panel, initPosX, initPosY)
+  elseif _panel:GetRelativePosX() == 0 and _panel:GetRelativePosY() == 0 then
     _panel:SetPosX(10)
     _panel:SetPosY(PaGlobalFunc_MainStatus_GetPosY() + PaGlobalFunc_MainStatus_GetSizeY() - 50)
+  else
+    _panel:SetPosX(getScreenSizeX() * _panel:GetRelativePosX() - _panel:GetSizeX() / 2)
+    _panel:SetPosY(getScreenSizeY() * _panel:GetRelativePosY() - _panel:GetSizeY() / 2)
+  end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+    _panel:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_ServantIcon, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
   end
   _panel:SetShow(_ContentsGroup_RemasterUI_Main)
   FGlobal_PanelRepostionbyScreenOut(_panel)

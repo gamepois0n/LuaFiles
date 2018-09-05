@@ -1029,21 +1029,17 @@ function partWidget_OnscreenEvent()
     end
     ResponseParty_updatePartyList()
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Party:GetRelativePosX() == -1 or Panel_Party:GetRelativePosY() == -1 then
-      local initPosX = 10
-      local initPosY = 200
-      changePositionBySever(Panel_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_Party, initPosX, initPosY)
-    elseif Panel_Party:GetRelativePosX() == 0 or Panel_Party:GetRelativePosY() == 0 then
-      Panel_Party:SetPosX(10)
-      Panel_Party:SetPosY(200)
-    else
-      Panel_Party:SetPosX(getScreenSizeX() * Panel_Party:GetRelativePosX() - Panel_Party:GetSizeX() / 2)
-      Panel_Party:SetPosY(getScreenSizeY() * Panel_Party:GetRelativePosY() - Panel_Party:GetSizeY() / 2)
-    end
-  else
+  if Panel_Party:GetRelativePosX() == -1 or Panel_Party:GetRelativePosY() == -1 then
+    local initPosX = 10
+    local initPosY = 200
     changePositionBySever(Panel_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_Party, initPosX, initPosY)
+  elseif Panel_Party:GetRelativePosX() == 0 or Panel_Party:GetRelativePosY() == 0 then
+    Panel_Party:SetPosX(10)
+    Panel_Party:SetPosY(200)
+  else
+    Panel_Party:SetPosX(getScreenSizeX() * Panel_Party:GetRelativePosX() - Panel_Party:GetSizeX() / 2)
+    Panel_Party:SetPosY(getScreenSizeY() * Panel_Party:GetRelativePosY() - Panel_Party:GetSizeY() / 2)
   end
   _uiComboLootingOption:ComputePos()
   FGlobal_PanelRepostionbyScreenOut(Panel_Party)

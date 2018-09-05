@@ -757,7 +757,7 @@ end
 function workerManager:setSkillInfoToSlot(skillIdx, skillStaticStatusWrapper)
   local slotControl = self._ui._skillSlot[skillIdx]
   slotControl._static_SkillSlot:ChangeTextureInfoNameAsync(skillStaticStatusWrapper:getIconPath())
-  slotControl._staticText_SkillTitle:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  slotControl._staticText_SkillTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   slotControl._staticText_SkillTitle:SetText(skillStaticStatusWrapper:getName())
   slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   slotControl._staticText_SkillDesc:SetAutoResize(true)

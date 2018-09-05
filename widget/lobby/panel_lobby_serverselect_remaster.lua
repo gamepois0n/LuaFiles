@@ -513,6 +513,7 @@ function ServerSelectRemaster:startFadeOut()
 end
 local _dummyData = {}
 function ServerSelectRemaster:initTreeData()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "initTreeData")
   local tree = self._ui.tree_server
   tree = UI.getChildControl(_panel, "List2_ServerList")
   tree:changeAnimationSpeed(11)
@@ -540,6 +541,7 @@ function ServerSelectRemaster:initTreeData()
     local channelCount = getGameChannelServerDataCount(worldServerData._worldNo)
     local tempTable = {}
     local tempOlviaTable = {}
+    _PA_LOG("\235\176\149\235\178\148\236\164\128", "channelCount : " .. channelCount)
     for jj = 1, channelCount do
       local channelServerData = getGameChannelServerDataByIndex(ii - 1, jj - 1)
       _PA_LOG("\235\176\149\235\178\148\236\164\128", "channel Name : " .. tostring(getChannelName(worldServerData._worldNo, channelServerData._serverNo)) .. ", isSpeedChannel : " .. tostring(channelServerData._isSpeedChannel))
@@ -592,6 +594,15 @@ function ServerSelectRemaster:initTreeData()
   _treeSize = key
   tree:getElementManager():refillKeyList()
   _listContentsCount = tree:getChildContentListSize()
+end
+local _lateUpdateFlag = false
+function ServerSelectRemaster:initTreeLateUpdate()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "initTreeLateUpdate(")
+  if true == _lateUpdateFlag then
+    return
+  end
+  self:initTreeData()
+  _lateUpdateFlag = true
 end
 function ServerSelectRemaster:updateListData()
   local worldServerData = getGameWorldServerDataByIndex(self._selectedWorldIndex - 1)
@@ -708,7 +719,6 @@ function PaGlobal_ServerSelect_CreateChannelBranch(content, key)
       isAdmission = true
     end
   end
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "restrictedServerNo : " .. tostring(restrictedServerNo) .. ", channelServerData._serverNo : " .. tostring(channelServerData._serverNo))
   local admissionDesc = ""
   if false == isAdmission then
     admissionDesc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ISADMISSION_LIMIT", "admissionDesc", admissionDesc)
@@ -734,7 +744,6 @@ function PaGlobal_ServerSelect_CreateChannelBranch(content, key)
   txt_State:SetText(stateStr)
   if true == isLoginIDShow() then
     if changeChannelTime > toInt64(0, 0) and not isAdmission then
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "CreateChannelBranch, key32 : " .. key32 .. ", not admission")
       txt_State:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_CHANGECHANNEL", "changeRealChannelTime", changeRealChannelTime))
     end
   elseif not isAdmission and busyState ~= 0 then
@@ -815,6 +824,8 @@ function PaGlobal_ServerSelect_CreateChannelBranch(content, key)
     else
       txt_enter:SetFontColor(Defines.Color.C_FFEEEEEE)
     end
+  else
+    stc_highlightBG:SetShow(false)
   end
   local stc_overBG = UI.getChildControl(channelButtonBG, "Static_SelectHighlight")
   if key32 == self._currentHoveredKey32 then
@@ -1156,9 +1167,12 @@ end
 function PaGlobal_ServerSelect_EventUpdateServerInfo()
   local isShow = _panel:IsShow()
   if false == isShow then
-    return
+    self:init()
+    PaGlobal_ServerSelect_Resize()
+    self:open()
+  else
+    self:initTreeData()
   end
-  PaGlobal_ServerSelect_Init()
 end
 function PaGlobal_ServerSelect_Resize()
   _panel:SetSize(getScreenSizeX(), getScreenSizeY())
@@ -1241,6 +1255,7 @@ function PaGlobal_ServerSelect_PerFrameUpdate(deltaTime)
       end
       _startAnimationFlag = true
       _startAnimationFinished = true
+      self:initTreeLateUpdate()
     end
   end
   for ii = 1, _treeSize do
@@ -1346,7 +1361,9 @@ function InputMOn_ServerSelect_OverChannelControl(key32)
   end
   local oldIndex = self._currentHoveredKey32
   self._currentHoveredKey32 = key32
-  self._ui.tree_server:requestUpdateByKey(toInt64(0, oldIndex))
+  if nil ~= oldIndex then
+    self._ui.tree_server:requestUpdateByKey(toInt64(0, oldIndex))
+  end
   self._ui.tree_server:requestUpdateByKey(toInt64(0, key32))
 end
 function ServerSelectRemaster:isHitTest(control)

@@ -265,13 +265,12 @@ function PaGlobal_Option:EventXXX(controlName, cacheNo, order)
   if nil == option._curValue then
     return
   end
-  self:SetControlSetting(option, option._curValue)
   if true == option._settingRightNow then
-    local tempCurValue = option._curValue
     self:SetXXX(option, option._curValue)
-    option._curValue = tempCurValue
+    option._curValue = option:get(ToClient_getGameOptionControllerWrapper())
     option._applyValue = nil
   end
+  self:SetControlSetting(option, option._curValue)
 end
 function PaGlobal_Option:SetControlSetting(option, value)
   if OPTION_TYPE.CHECKBUTTON == option._type then
@@ -297,7 +296,7 @@ function PaGlobal_Option:SetControlSetting(option, value)
     local offset = math.cos(value * math.pi) * 2
     progress:SetProgressRate(value * 100 + offset)
     local displayValue = self:FromSliderValueToRealValue(value, option._sliderValueMin, option._sliderValueMax)
-    displayValue = math.floor(displayValue + 0.5)
+    displayValue = math.floor(displayValue)
     local sliderCurrentText = UI.getChildControl(option._eventGroup, "StaticText_Current")
     sliderCurrentText:SetText(self._sliderButtonString .. displayValue .. "<PAOldColor>")
   elseif OPTION_TYPE.KEYCUSTOMIZE == option._type then

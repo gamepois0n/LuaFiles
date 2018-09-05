@@ -269,6 +269,7 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   end
   local showDetailBtn_LifeInfo = UI.getChildControl(self._ui._lifeInfoBg, "Button_ShowDetail")
   showDetailBtn_LifeInfo:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfo:showWindow(" .. 5 .. ")")
+  showDetailBtn_LifeInfo:SetShow(_ContentsGroup_EnhanceCollect)
   local viewType
   local currentInfoType = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo)
   if 0 == currentInfoType then
@@ -314,9 +315,25 @@ function PaGlobal_CharacterInfoBasic:update()
   local ZodiacName = self._player:getZodiacSignOrderStaticStatusWrapper():getZodiacName()
   self._ui._staticTextZodiac_Value:SetText(tostring(ZodiacName))
   local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
-  self._ui._staticTextPlayTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
-  self._ui._staticTextPlayTime:SetSize(self._ui._staticTextPlayTime:GetTextSizeX(), self._ui._staticTextPlayTime:GetSizeY())
-  self._ui._staticPlayTimeIcon:SetPosX(730 - (self._ui._staticPlayTimeIcon:GetSizeX() + self._ui._staticTextPlayTime:GetTextSizeX()))
+  local playTimePosX = self._ui._staticTextPlayerName_Value:GetPosX() + self._ui._staticTextPlayerName_Value:GetTextSizeX() + 20
+  if isGameTypeKorea() or isGameTypeJapan() or isGameTypeTaiwan() then
+    if playTimePosX < self._ui._staticPlayTimeIcon:GetPosX() then
+      self._ui._staticTextPlayTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
+      self._ui._staticTextPlayTime:SetSize(self._ui._staticTextPlayTime:GetTextSizeX(), self._ui._staticTextPlayTime:GetSizeY())
+      self._ui._staticPlayTimeIcon:SetPosX(730 - (self._ui._staticPlayTimeIcon:GetSizeX() + self._ui._staticTextPlayTime:GetTextSizeX()))
+    else
+      self._ui._staticPlayTimeIcon:SetPosX(playTimePosX)
+      self._ui._staticTextPlayTime:SetText("<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
+      self._ui._staticPlayTimeIcon:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:localTooltip(true)")
+      self._ui._staticPlayTimeIcon:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:localTooltip(false)")
+    end
+  else
+    self._ui._staticTextPlayTime:SetText("<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
+    self._ui._staticPlayTimeIcon:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:localTooltip(true)")
+    self._ui._staticPlayTimeIcon:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:localTooltip(false)")
+    self._ui._staticTextPlayTime:SetSize(self._ui._staticTextPlayTime:GetTextSizeX(), self._ui._staticTextPlayTime:GetSizeY())
+    self._ui._staticPlayTimeIcon:SetPosX(730 - (self._ui._staticPlayTimeIcon:GetSizeX() + self._ui._staticTextPlayTime:GetTextSizeX()))
+  end
   local msg = ToClient_GetUserIntroduction()
   local oneLineMsg = string.gsub(msg, "\n", " ")
   self._ui._multilineEditIntroduce:SetEditText(oneLineMsg)
@@ -339,6 +356,16 @@ function PaGlobal_CharacterInfoBasic:update()
   FromClient_UI_CharacterInfo_Basic_FitnessChanged(0, 0, 0, 0)
   FromClient_UI_CharacterInfo_Basic_NormalStackChanged()
   self:updatePlayerTotalStat()
+end
+function PaGlobal_CharacterInfoBasic:localTooltip(isOn)
+  if true == isOn then
+    local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. " " .. totalPlayTime
+    local control = self._ui._staticPlayTimeIcon
+    TooltipSimple_Show(control, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
 end
 function PaGlobal_CharacterInfoBasic:registEventHandler()
   for key, index in pairs(self._potential) do

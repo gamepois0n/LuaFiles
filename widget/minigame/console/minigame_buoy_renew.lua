@@ -90,6 +90,8 @@ function MiniGame_Buoy:endUIShow_Buoy(controlText, controlResult, color, text, a
 end
 function MiniGame_Buoy:successUIShow()
   self:endUIShow_Buoy(self._ui.txt_Result, self._ui.stc_Result_Good, UI_color.C_FF96D4FC, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_Buoy_0"), "Good")
+  self._ui.stc_Press_A:SetShow(false)
+  self._ui.stc_SpaceBar:SetShow(false)
 end
 function MiniGame_Buoy:failedUIShow_Buoy()
   self:endUIShow_Buoy(self._ui.txt_Result, self._ui.stc_Result_Bad, UI_color.C_FFF26A6A, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_Buoy_1"), "Bad")
@@ -175,6 +177,8 @@ function MiniGame_Buoy:endTimeUpdate_Buoy(deltaTime)
 end
 function Panel_Minigame_Buoy_Start()
   local self = MiniGame_Buoy
+  PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_ConsoleKeyGuide:SetShow(false)
   _math_randomSeed(getTickCount32())
   self._isGameStart = true
   self._ui.txt_Result:ResetVertexAni()
@@ -202,6 +206,8 @@ end
 function Panel_Minigame_Buoy_End()
   local self = MiniGame_Buoy
   self._isGameStart = false
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_ConsoleKeyGuide:SetShow(true)
   Panel_MiniGame_Timing:SetShow(false, false)
 end
 function Panel_Minigame_Buoy_End_UI()

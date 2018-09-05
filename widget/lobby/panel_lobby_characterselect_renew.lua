@@ -393,6 +393,11 @@ function PaGlobal_CharacterSelect_SelectCharacter(charIdx)
       self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
       self._ui.txt_Delete_ConsoleUI:SetShow(false)
+    else
+      self._isSelectDeletingChar = false
+      self._ui.txt_Select_ConsoleUI:SetShow(true)
+      self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
+      self._ui.txt_Delete_ConsoleUI:SetShow(true)
     end
     self._prevSelectedCharIdx = self._selectedCharIdx
     self._selectedCharIdx = charIdx

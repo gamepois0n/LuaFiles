@@ -191,11 +191,11 @@ function MarketPlace:updateMyBiddingItemList()
   if self._selectedBiddingTabIndex == self._biddingTabIdx.sell then
     itemListCount = getWorldMarketSellBiddingListCount()
     self._ui.txt_Text1:SetText("\237\140\144\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
-    self._ui.txt_Text2:SetText("\237\140\144\235\167\164 \236\153\132\235\163\140 00\234\177\180")
+    self._ui.txt_Text2:SetText("\237\140\144\235\167\164 \236\153\132\235\163\140 0\234\177\180")
   elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
     itemListCount = getWorldMarketBuyBiddingListCount()
     self._ui.txt_Text1:SetText("\234\181\172\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
-    self._ui.txt_Text2:SetText("\234\181\172\235\167\164 \236\153\132\235\163\140 00\234\177\180")
+    self._ui.txt_Text2:SetText("\234\181\172\235\167\164 \236\153\132\235\163\140 0\234\177\180")
   end
   if itemListCount > 0 then
     self._ui.list_MyBiddingList:SetShow(true)
@@ -213,12 +213,12 @@ function MarketPlace:updateMyInfo()
   local silverInfo = getWorldMarketSilverInfo()
   local walletItemCount = getWorldMarketMyWalletListCount()
   if 0 ~= currentWeight then
-    currentWeight = currentWeight / 100
+    currentWeight = makeDotMoney(toInt64(0, currentWeight / 100))
   end
   if 0 ~= maxWeight then
-    maxWeight = maxWeight / 100
+    maxWeight = makeDotMoney(toInt64(0, maxWeight / 100))
   end
-  self._ui.txt_MoneyValue:SetText(tostring(silverInfo:getItemCount()))
+  self._ui.txt_MoneyValue:SetText(makeDotMoney(silverInfo:getItemCount()))
   self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
   self._ui.txt_Count:SetText(tostring(walletItemCount))
 end
@@ -306,6 +306,8 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
   local txt_ItemName = UI.getChildControl(contents, "StaticText_ItemName")
   local txt_ItemBasePrice = UI.getChildControl(contents, "StaticText_BasePrice")
   local txt_ItemCount = UI.getChildControl(contents, "StaticText_Count")
+  local txt_MinPrice = UI.getChildControl(contents, "StaticText_MinPrice")
+  local txt_MaxPrice = UI.getChildControl(contents, "StaticText_MaxPrice")
   local btn_ButtonBg = UI.getChildControl(contents, "Button_Bg")
   if self._itemListType.detailListByKey == self._currentListType then
     local itemInfo = getWorldMarketDetailListByIdx(idx)
@@ -317,15 +319,19 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local enchantLevel = itemSSW:get()._key:getEnchantLevel()
     local nameColorGrade = itemSSW:getGradeType()
     local itemCount = itemInfo:getItemCount()
-    local itemBaseCount = itemInfo:getPricePerOne()
+    local itemBaseCount = Int64toInt32(itemInfo:getPricePerOne())
     slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     local itemNameStr = self:setNameAndEnchantLevel(enchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
     txt_ItemName:SetText(itemNameStr)
-    txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. tostring(itemBaseCount))
+    txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. makeDotMoney(toInt64(0, itemBaseCount)))
     txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
+    local minPrice = itemBaseCount * 800000 / 1000000
+    local maxPrice = itemBaseCount * 1200000 / 1000000
+    txt_MinPrice:SetText("\236\181\156\236\160\128\234\176\128 : " .. makeDotMoney(toInt64(0, minPrice)))
+    txt_MaxPrice:SetText("\236\181\156\234\179\160\234\176\128 : " .. makeDotMoney(toInt64(0, maxPrice)))
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestBiddingList(" .. idx .. ")")
   elseif self._itemListType.categoryList == self._currentListType then
     local itemInfo = getWorldMarketListByIdx(idx)
@@ -338,13 +344,17 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local nameColorGrade = itemSSW:getGradeType()
     local itemCount = itemInfo:getItemCount()
     local totalTradeCount = itemInfo:getTotalTradeCount()
+    local a = math.random(10000)
+    local b = Int64toInt32(totalTradeCount) * a
+    b = b % 1000
+    local c = b % 300
     slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     txt_ItemName:SetText(tostring(itemSSW:getName()))
-    txt_ItemBasePrice:SetText("\235\136\132\236\160\129 \234\177\176\235\158\152\235\159\137 : " .. tostring(totalTradeCount))
-    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
+    txt_ItemBasePrice:SetText("\235\136\132\236\160\129 \234\177\176\235\158\152\235\159\137 : " .. tostring(b))
+    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(c) .. "\234\176\156")
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestDetailListByKey(" .. itemInfo:getItemKeyRaw() .. ")")
   end
 end
@@ -385,7 +395,7 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     txt_ItemName:SetFontColor(nameColor)
     local itemNameStr = self:setNameAndEnchantLevel(chooseEnchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
     txt_ItemName:SetText(itemNameStr)
-    txt_ItemPrice:SetText("\237\140\144\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. tostring(pricePerOne))
+    txt_ItemPrice:SetText("\237\140\144\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. makeDotMoney(pricePerOne))
     txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
   elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
     local itemInfo = getWorldMarketBuyBiddingListByIdx(idx)
@@ -401,7 +411,7 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     txt_ItemName:SetFontColor(nameColor)
     local itemNameStr = self:setNameAndEnchantLevel(chooseEnchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
     txt_ItemName:SetText(itemNameStr)
-    txt_ItemPrice:SetText("\234\181\172\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. tostring(pricePerOne))
+    txt_ItemPrice:SetText("\234\181\172\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. makeDotMoney(pricePerOne))
     txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
   end
 end

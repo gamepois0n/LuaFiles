@@ -86,7 +86,7 @@ function MainStatus:init()
   self:setMPBarTexture()
   self:registEventHandler()
   self:updateAll()
-  _panel:SetShow(true == PaGlobalFunc_IsRemasterUIOption())
+  PaGlobalFunc_MainStatus_SetShow(true)
 end
 function MainStatus:registEventHandler()
   self._ui.btn_PVP:addInputEvent("Mouse_LUp", "requestTogglePvP()")
@@ -126,6 +126,8 @@ function MainStatus:addStatusEffect()
   self._ui.progress_HP:EraseAllEffect()
   self._ui.progress_Rage:EraseAllEffect()
   self._ui.stc_RageBG:EraseAllEffect()
+  self._ui.progress_HP:AddEffect("UI_Hp_Bar01A", true, 0, 0)
+  self._ui.progress_HP:AddEffect("UI_Hp_Bar01B", true, 0, 0)
   self._ui.progress_HP:AddEffect("UI_Hp_Bar02A", true, 0, 0)
   self._ui.progress_HP:AddEffect("UI_Hp_Bar02B", true, 0, 0)
   self._ui.progress_HP:AddEffect("fUI_Hp_Bar01", true, 0, 0)
@@ -388,7 +390,7 @@ function MainStatus:updateRage()
   self._ui.progress_Rage:SetShow(isAdrenalin and not isRecordMode)
   self._ui.txt_RageValue:SetShow(isAdrenalin and not isRecordMode)
   local isUseRage = getSelfPlayer():isUseableBlackSpritSkill()
-  self._ui.stc_RageLock:SetShow(not isUseRage)
+  self._ui.stc_RageLock:SetShow(isAdrenalin and not isUseRage)
 end
 function MainStatus:updateResource()
   local selfPlayer = getSelfPlayer()
@@ -595,13 +597,17 @@ function MainStatus:blackSpiritLock()
   if false == ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting) then
     return
   end
-  local isUseRage = getSelfPlayer():isUseableBlackSpritSkill()
-  if true == isUseRage then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_USEABLE_BLACKSPRITSKILL"), 5)
+  if false == getSelfPlayer():isEnableAdrenalin() then
+    self._ui.stc_RageLock:SetShow(false)
   else
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOTUSEABLE_BLACKSPRITSKILL"), 5)
+    local isUseRage = getSelfPlayer():isUseableBlackSpritSkill()
+    if true == isUseRage then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_USEABLE_BLACKSPRITSKILL"), 5)
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOTUSEABLE_BLACKSPRITSKILL"), 5)
+    end
+    self._ui.stc_RageLock:SetShow(not isUseRage)
   end
-  self._ui.stc_RageLock:SetShow(not isUseRage)
 end
 function PaGlobalFunc_MainStatus_UpdateAll()
   local self = MainStatus
@@ -759,6 +765,7 @@ function FromClient_MainStatus_CheckHpAlertPostEvent(prevRenderModeList, nextRen
     self:updateHP()
     self:updateMP()
   end
+  PaGlobalFunc_MainStatus_SetShow(true)
 end
 function FromClient_MainStatus_OnResize()
   local self = MainStatus
@@ -768,16 +775,28 @@ function FromClient_MainStatus_OnResize()
   FGlobal_PanelRepostionbyScreenOut(_panel)
   self:addStatusEffect()
   self:setMPBarTexture()
+  PaGlobalFunc_MainStatus_SetShow(true)
 end
 function PaGlobalFunc_MainStatus_SetShow(isShow, isAni)
   local self = MainStatus
   local isGetUIInfo = false
-  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+  if true == PaGlobalFunc_IsRemasterUIOption() and isShow then
     isGetUIInfo = true
-  else
-    isGetUIInfo = false
   end
-  _panel:SetShow(isShow and isGetUIInfo and PaGlobalFunc_IsRemasterUIOption())
+  if true == isShow then
+    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      isGetUIInfo = true
+    elseif ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) > -1 then
+      isGetUIInfo = false
+    else
+      isGetUIInfo = true
+    end
+  end
+  if nil == isAni then
+    _panel:SetShow(isGetUIInfo)
+  else
+    _panel:SetShow(isGetUIInfo, isAni)
+  end
   self:updateAll()
 end
 function FromClient_MainStatus_BlackSpiritLock()
@@ -796,5 +815,8 @@ end
 function PaGlobalFunc_MainStatus_ShowPVPButton(isShow)
   local self = MainStatus
   self:showPVPBtn(isShow)
+end
+function PaGlobalFunc_MainStatus_ShowFromTutorial()
+  _panel:SetShow(true)
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_MainStatus_Init")

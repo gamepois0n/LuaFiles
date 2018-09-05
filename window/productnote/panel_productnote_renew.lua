@@ -29,6 +29,7 @@ function Panel_ProductNote_HideAni()
   aniInfo:SetHideAtEnd(true)
 end
 local _titleBar = UI.getChildControl(Panel_ProductNote, "StaticText_TitleBg")
+local _stc_keyGuide = UI.getChildControl(Panel_ProductNote, "Static_BottomBg")
 local _productWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
 function Panel_ProductNote_Initialize()
   local screenSizeX = getScreenSizeX()
@@ -51,8 +52,10 @@ function Panel_ProductNote_Initialize()
     panelSizeY = 1238
     titleBarSizeX = 1449
   end
-  Panel_ProductNote:SetSize(panelSizeX, panelSizeY)
+  Panel_ProductNote:SetSize(panelSizeX, panelSizeY + _stc_keyGuide:GetSizeY())
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
+  _stc_keyGuide:SetSize(panelSizeX, _stc_keyGuide:GetSizeY())
+  _stc_keyGuide:ComputePos()
   _productWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_ProductNote, "WebControl_ProductNote")
   _productWeb:SetShow(true)
   _productWeb:SetHorizonCenter()

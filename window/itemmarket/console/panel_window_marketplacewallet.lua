@@ -235,12 +235,12 @@ function MarketWallet:updateWallet()
   local maxWeight = getWorldMarketMaxWeight()
   local silverInfo = getWorldMarketSilverInfo()
   if 0 ~= currentWeight then
-    currentWeight = currentWeight / 100
+    currentWeight = makeDotMoney(toInt64(0, currentWeight / 100))
   end
   if 0 ~= maxWeight then
-    maxWeight = maxWeight / 100
+    maxWeight = makeDotMoney(toInt64(0, maxWeight / 100))
   end
-  self._ui.txt_MoneyValue:SetText(tostring(silverInfo:getItemCount()))
+  self._ui.txt_MoneyValue:SetText(makeDotMoney(silverInfo:getItemCount()))
   self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
   local slotNoList = Array.new()
   local walletItemCount = getWorldMarketMyWalletListCount()

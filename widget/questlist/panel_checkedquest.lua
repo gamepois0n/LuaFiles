@@ -2518,31 +2518,22 @@ function FromClient_questWidget_ResetPosition()
       end
     end
   end
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_CheckedQuest:GetRelativePosX() == -1 and Panel_CheckedQuest:GetRelativePosY() == -1 then
-      local initPosX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20
-      local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap
-      local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
-      if not haveServerPosotion then
-        Panel_CheckedQuest:SetPosX(initPosX)
-        Panel_CheckedQuest:SetPosY(initPosY)
-      end
-      changePositionBySever(Panel_CheckedQuest, CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_CheckedQuest, initPosX, initPosY)
-    elseif Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
-      Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
-    else
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() * Panel_CheckedQuest:GetRelativePosX() - Panel_CheckedQuest:GetSizeX() / 2)
-      Panel_CheckedQuest:SetPosY(getScreenSizeY() * Panel_CheckedQuest:GetRelativePosY() - Panel_CheckedQuest:GetSizeY() / 2)
-    end
-  else
+  if Panel_CheckedQuest:GetRelativePosX() == -1 and Panel_CheckedQuest:GetRelativePosY() == -1 then
+    local initPosX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20
+    local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap
     local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
     if not haveServerPosotion then
-      Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
-      Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap)
+      Panel_CheckedQuest:SetPosX(initPosX)
+      Panel_CheckedQuest:SetPosY(initPosY)
     end
     changePositionBySever(Panel_CheckedQuest, CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_CheckedQuest, initPosX, initPosY)
+  elseif Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
+    Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
+    Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
+  else
+    Panel_CheckedQuest:SetPosX(getScreenSizeX() * Panel_CheckedQuest:GetRelativePosX() - Panel_CheckedQuest:GetSizeX() / 2)
+    Panel_CheckedQuest:SetPosY(getScreenSizeY() * Panel_CheckedQuest:GetRelativePosY() - Panel_CheckedQuest:GetSizeY() / 2)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_CheckedQuest)
 end

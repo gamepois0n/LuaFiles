@@ -26,6 +26,13 @@ function CheckTutorialEnd()
   end
   return ToClient_getTutorialLimitLevel() <= getSelfPlayer():get():getLevel()
 end
+function loadLogoUI()
+  if true == _IsXbox then
+    loadLogoUI_XB()
+  else
+    loadLogoUI_PC()
+  end
+end
 function loadLoginUI()
   if true == _IsXbox then
     loadLoginUI_XB()

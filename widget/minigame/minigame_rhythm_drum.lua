@@ -161,7 +161,6 @@ function MiniGame_Rhythm_Drum_KeyPress(keyType)
     Panel_Minigame_Rhythm_Drum_GaugeMove_Right()
   end
 end
-registerEvent("EventActionMiniGameKeyDownOnce", "MiniGame_Rhythm_Drum_KeyPress")
 registerEvent("onScreenResize", "Rhythm_Drum_RePosition")
-Panel_RhythmGame_Drum:RegisterUpdateFunc("RhythmGame_Drum_UpdateFunc")
+Panel_RhythmGame_Drum:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
 Rhythm_Drum_RePosition()

@@ -154,25 +154,19 @@ function PaGlobalFunc_PvpMode_ShowButton(isShow, isAni)
   end
 end
 function PvpMode_Resize()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_PvpMode:GetRelativePosX() == -1 and Panel_PvpMode:GetRelativePosY() == -1 then
-      local initPosX = Panel_MainStatus_User_Bar:GetPosX() - 20
-      local initPosY = Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47
-      Panel_PvpMode:SetPosX(initPosX)
-      Panel_PvpMode:SetPosY(initPosY)
-      changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_PvpMode, initPosX, initPosY)
-    elseif Panel_PvpMode:GetRelativePosX() == 0 and Panel_PvpMode:GetRelativePosY() == 0 then
-      Panel_PvpMode:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX() - 50)
-      Panel_PvpMode:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() - Panel_PvpMode:GetSizeY())
-    else
-      Panel_PvpMode:SetPosX(Panel_PvpMode:GetRelativePosX() * getScreenSizeX() - Panel_PvpMode:GetSizeX() / 2)
-      Panel_PvpMode:SetPosY(Panel_PvpMode:GetRelativePosY() * getScreenSizeY() - Panel_PvpMode:GetSizeY() / 2)
-    end
-  else
-    Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
-    Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
+  if Panel_PvpMode:GetRelativePosX() == -1 and Panel_PvpMode:GetRelativePosY() == -1 then
+    local initPosX = Panel_MainStatus_User_Bar:GetPosX() - 20
+    local initPosY = Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47
+    Panel_PvpMode:SetPosX(initPosX)
+    Panel_PvpMode:SetPosY(initPosY)
     changePositionBySever(Panel_PvpMode, CppEnums.PAGameUIType.PAGameUIPanel_PvpMode, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_PvpMode, initPosX, initPosY)
+  elseif Panel_PvpMode:GetRelativePosX() == 0 and Panel_PvpMode:GetRelativePosY() == 0 then
+    Panel_PvpMode:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX() - 50)
+    Panel_PvpMode:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() - Panel_PvpMode:GetSizeY())
+  else
+    Panel_PvpMode:SetPosX(Panel_PvpMode:GetRelativePosX() * getScreenSizeX() - Panel_PvpMode:GetSizeX() / 2)
+    Panel_PvpMode:SetPosY(Panel_PvpMode:GetRelativePosY() * getScreenSizeY() - Panel_PvpMode:GetSizeY() / 2)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_PvpMode)
 end

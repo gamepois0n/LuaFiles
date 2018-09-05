@@ -110,35 +110,24 @@ function SkillCooltime_Add(TSkillKey, TSkillNo)
 end
 function SkillCooltime_OnResize()
   local self = skillCooltime
-  local sizeX
-  if CppDefine.ChangeUIAndResolution == true then
-    sizeX = getScreenSizeX()
-  else
-    sizeX = getScreenSizeX() - 20
-  end
+  local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_SkillCooltime:GetRelativePosX() == -1 and Panel_SkillCooltime:GetRelativePosY() == -1 then
-      local initPosX = sizeX * self.config.screenPosX
-      local initPosY = sizeY * self.config.screenPosY
-      Panel_SkillCooltime:SetPosX(initPosX)
-      Panel_SkillCooltime:SetPosY(initPosY)
-      changePositionBySever(Panel_SkillCooltime, CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, true, true, false)
-      FGlobal_InitPanelRelativePos(Panel_SkillCooltime, initPosX, initPosY)
-    elseif Panel_SkillCooltime:GetRelativePosX() == 0 and Panel_SkillCooltime:GetRelativePosY() == 0 then
-      Panel_SkillCooltime:SetPosX(sizeX * self.config.screenPosX)
-      Panel_SkillCooltime:SetPosY(sizeY * self.config.screenPosY)
-    else
-      Panel_SkillCooltime:SetPosX(sizeX * Panel_SkillCooltime:GetRelativePosX() - Panel_SkillCooltime:GetSizeX() / 2)
-      Panel_SkillCooltime:SetPosY(sizeY * Panel_SkillCooltime:GetRelativePosY() - Panel_SkillCooltime:GetSizeY() / 2)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      Panel_SkillCooltime:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
-    end
-  else
+  if Panel_SkillCooltime:GetRelativePosX() == -1 and Panel_SkillCooltime:GetRelativePosY() == -1 then
+    local initPosX = sizeX * self.config.screenPosX
+    local initPosY = sizeY * self.config.screenPosY
+    Panel_SkillCooltime:SetPosX(initPosX)
+    Panel_SkillCooltime:SetPosY(initPosY)
+    changePositionBySever(Panel_SkillCooltime, CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, true, true, false)
+    FGlobal_InitPanelRelativePos(Panel_SkillCooltime, initPosX, initPosY)
+  elseif Panel_SkillCooltime:GetRelativePosX() == 0 and Panel_SkillCooltime:GetRelativePosY() == 0 then
     Panel_SkillCooltime:SetPosX(sizeX * self.config.screenPosX)
     Panel_SkillCooltime:SetPosY(sizeY * self.config.screenPosY)
-    changePositionBySever(Panel_SkillCooltime, CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, true, true, false)
+  else
+    Panel_SkillCooltime:SetPosX(sizeX * Panel_SkillCooltime:GetRelativePosX() - Panel_SkillCooltime:GetSizeX() / 2)
+    Panel_SkillCooltime:SetPosY(sizeY * Panel_SkillCooltime:GetRelativePosY() - Panel_SkillCooltime:GetSizeY() / 2)
+  end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+    Panel_SkillCooltime:SetShow(ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_SkillCoolTime, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow))
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_SkillCooltime)
 end

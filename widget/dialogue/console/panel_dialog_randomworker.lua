@@ -155,6 +155,7 @@ function randomWorker:update(workerShopSlotNo)
   if MyWp < self._config._needWP then
     if true == ToClient_isXBox() then
       RandomWorkerUI._staticText_Change_Worker:SetShow(false)
+      RandomWorkerUI._staticText_Energy:SetShow(false)
       Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
     else
       RandomWorkerUI._button_NextWorker:SetEnable(false)
@@ -162,6 +163,7 @@ function randomWorker:update(workerShopSlotNo)
     end
   elseif true == ToClient_isXBox() then
     RandomWorkerUI._staticText_Change_Worker:SetShow(true)
+    RandomWorkerUI._staticText_Energy:SetShow(true)
     Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobalFunc_NextWorker_RandomWorker()")
   else
     RandomWorkerUI._button_NextWorker:SetEnable(true)

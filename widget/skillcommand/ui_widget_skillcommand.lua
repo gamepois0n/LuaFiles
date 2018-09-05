@@ -364,25 +364,19 @@ end
 function FGlobal_SkillCommand_ResetPosition()
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_SkillCommand:GetRelativePosX() == -1 and Panel_SkillCommand:GetRelativePosY() == 1 then
-      local initPosX = scrX / 2 * 1.2
-      local initPosY = scrY / 2 * 0.85
-      Panel_SkillCommand:SetPosX(initPosX)
-      Panel_SkillCommand:SetPosY(initPosY)
-      changePositionBySever(Panel_SkillCommand, CppEnums.PAGameUIType.PAGameUIPanel_SkillCommand, false, true, false)
-      FGlobal_InitPanelRelativePos(Panel_SkillCommand, initPosX, initPosY)
-    elseif Panel_SkillCommand:GetRelativePosX() == 0 and Panel_SkillCommand:GetRelativePosY() == 0 then
-      Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
-      Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
-    else
-      Panel_SkillCommand:SetPosX(scrX * Panel_SkillCommand:GetRelativePosX() - Panel_SkillCommand:GetSizeX() / 2)
-      Panel_SkillCommand:SetPosY(scrY * Panel_SkillCommand:GetRelativePosY() - Panel_SkillCommand:GetSizeY() / 2)
-    end
-  else
+  if Panel_SkillCommand:GetRelativePosX() == -1 and Panel_SkillCommand:GetRelativePosY() == 1 then
+    local initPosX = scrX / 2 * 1.2
+    local initPosY = scrY / 2 * 0.85
+    Panel_SkillCommand:SetPosX(initPosX)
+    Panel_SkillCommand:SetPosY(initPosY)
+    changePositionBySever(Panel_SkillCommand, CppEnums.PAGameUIType.PAGameUIPanel_SkillCommand, false, true, false)
+    FGlobal_InitPanelRelativePos(Panel_SkillCommand, initPosX, initPosY)
+  elseif Panel_SkillCommand:GetRelativePosX() == 0 and Panel_SkillCommand:GetRelativePosY() == 0 then
     Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
     Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
-    changePositionBySever(Panel_SkillCommand, CppEnums.PAGameUIType.PAGameUIPanel_SkillCommand, false, true, false)
+  else
+    Panel_SkillCommand:SetPosX(scrX * Panel_SkillCommand:GetRelativePosX() - Panel_SkillCommand:GetSizeX() / 2)
+    Panel_SkillCommand:SetPosY(scrY * Panel_SkillCommand:GetRelativePosY() - Panel_SkillCommand:GetSizeY() / 2)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_SkillCommand)
 end

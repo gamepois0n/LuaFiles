@@ -669,6 +669,7 @@ function ChatInput_Show()
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
     return
   end
   local self = chatInput

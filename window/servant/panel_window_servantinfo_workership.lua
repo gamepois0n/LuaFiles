@@ -180,6 +180,26 @@ function workerShipInfo:init()
   self._staticTextValue_Sus:SetShow(false)
   self._lv_Title:SetShow(false)
   self._staticLevel:SetShow(false)
+  if true == _ContentsGroup_EnhanceSail then
+    self._staticGaugeBar_Hp:SetIgnore(false)
+    self._staticGaugeBar_Hp:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(1,true)")
+    self._staticGaugeBar_Hp:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(1,false)")
+    self._staticGaugeBar_Mp:SetIgnore(false)
+    self._staticGaugeBar_Mp:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(2,true)")
+    self._staticGaugeBar_Mp:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(2,false)")
+    self._staticText_MaxMoveSpeedValue:SetIgnore(false)
+    self._staticText_MaxMoveSpeedValue:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(3,true)")
+    self._staticText_MaxMoveSpeedValue:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(3,false)")
+    self._staticText_AccelerationValue:SetIgnore(false)
+    self._staticText_AccelerationValue:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(4,true)")
+    self._staticText_AccelerationValue:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(4,false)")
+    self._staticText_CorneringSpeedValue:SetIgnore(false)
+    self._staticText_CorneringSpeedValue:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(5,true)")
+    self._staticText_CorneringSpeedValue:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(5,false)")
+    self._staticText_BrakeSpeedValue:SetIgnore(false)
+    self._staticText_BrakeSpeedValue:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(6,true)")
+    self._staticText_BrakeSpeedValue:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(6,false)")
+  end
 end
 function workerShipInfo:clear()
   self._skillStart = 0
@@ -471,6 +491,59 @@ function WorkerShipInfo_Close()
   end
   TooltipSimple_Hide()
   Panel_WorkerShipInfo:SetShow(false, false)
+end
+function PaGlobal_SailStatToolTip(type, isShow)
+  if false == _ContentsGroup_EnhanceSail then
+    return
+  end
+  local self = workerShipInfo
+  if false == isShow then
+    TooltipSimple_Hide()
+  else
+    local name = ""
+    local desc = ""
+    local control
+    local data = 0
+    local sailStatStaticStatus = ToClient_getSailStatStaticStatus()
+    if nil == sailStatStaticStatus then
+      return
+    end
+    if 1 == type then
+      data = string.format("%.1f", sailStatStaticStatus._addMaxHp / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_HP")
+      control = self._staticTextValue_Hp
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC1", "varied", data)
+    elseif 2 == type then
+      data = string.format("%.1f", sailStatStaticStatus._addMaxMp / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP")
+      control = self._staticTextValue_Mp
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC2", "varied", data)
+    elseif 3 == type then
+      data = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(0) / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CARRIAGEINFO_MAXMOVESPEED")
+      control = self._staticText_MaxMoveSpeedValue
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC3", "varied", data)
+    elseif 4 == type then
+      data = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(1) / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CARRIAGEINFO_ACCELERATION")
+      control = self._staticText_AccelerationValue
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC4", "varied", data)
+    elseif 5 == type then
+      data = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(2) / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_CORNERING")
+      control = self._staticText_CorneringSpeedValue
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC5", "varied", data)
+    elseif 6 == type then
+      data = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(3) / 10000)
+      name = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_BRAKE")
+      control = self._staticText_BrakeSpeedValue
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC6", "varied", data)
+    end
+    if control == nil then
+      return
+    end
+    TooltipSimple_Show(control, name, desc)
+  end
 end
 workerShipInfo:init()
 workerShipInfo:registEventHandler()

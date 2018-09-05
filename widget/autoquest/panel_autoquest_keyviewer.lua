@@ -357,24 +357,21 @@ local panelKeyViewerPosY = Panel_Widget_Keyboard:GetPosY()
 function Panel_AutoQuest_KeyViewer_ScreenRePosition()
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Widget_Keyboard:GetRelativePosX() == -1 and Panel_Widget_Keyboard:GetRelativePosY() == -1 then
-      local initPosX = Panel_Widget_Keyboard:GetSizeX() / 3
-      local initPosY = Panel_Widget_Keyboard:GetSizeY() * 2.3
-      Panel_Widget_Keyboard:SetPosX(initPosX)
-      Panel_Widget_Keyboard:SetPosY(initPosY)
-      changePositionBySever(Panel_Widget_Keyboard, CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer, true, true, false)
-      FGlobal_InitPanelRelativePos(Panel_Widget_Keyboard, initPosX, initPosY)
-    elseif Panel_Widget_Keyboard:GetRelativePosX() == 0 and Panel_Widget_Keyboard:GetRelativePosY() == 0 then
-      Panel_Widget_Keyboard:SetPosX(Panel_Widget_Keyboard:GetSizeX() / 3)
-      Panel_Widget_Keyboard:SetPosY(Panel_Widget_Keyboard:GetSizeY() * 2.3)
-    else
-      Panel_Widget_Keyboard:SetPosX(scrX * Panel_Widget_Keyboard:GetRelativePosX() - Panel_Widget_Keyboard:GetSizeX() / 2)
-      Panel_Widget_Keyboard:SetPosY(scrY * Panel_Widget_Keyboard:GetRelativePosY() - Panel_Widget_Keyboard:GetSizeY() / 2)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-    end
+  if Panel_Widget_Keyboard:GetRelativePosX() == -1 and Panel_Widget_Keyboard:GetRelativePosY() == -1 then
+    local initPosX = Panel_Widget_Keyboard:GetSizeX() / 3
+    local initPosY = Panel_Widget_Keyboard:GetSizeY() * 2.3
+    Panel_Widget_Keyboard:SetPosX(initPosX)
+    Panel_Widget_Keyboard:SetPosY(initPosY)
+    changePositionBySever(Panel_Widget_Keyboard, CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer, true, true, false)
+    FGlobal_InitPanelRelativePos(Panel_Widget_Keyboard, initPosX, initPosY)
+  elseif Panel_Widget_Keyboard:GetRelativePosX() == 0 and Panel_Widget_Keyboard:GetRelativePosY() == 0 then
+    Panel_Widget_Keyboard:SetPosX(Panel_Widget_Keyboard:GetSizeX() / 3)
+    Panel_Widget_Keyboard:SetPosY(Panel_Widget_Keyboard:GetSizeY() * 2.3)
   else
+    Panel_Widget_Keyboard:SetPosX(scrX * Panel_Widget_Keyboard:GetRelativePosX() - Panel_Widget_Keyboard:GetSizeX() / 2)
+    Panel_Widget_Keyboard:SetPosY(scrY * Panel_Widget_Keyboard:GetRelativePosY() - Panel_Widget_Keyboard:GetSizeY() / 2)
+  end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_KeyViewer, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_Widget_Keyboard)
   for key, value in pairs(ui) do

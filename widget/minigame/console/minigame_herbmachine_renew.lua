@@ -169,6 +169,8 @@ function MiniGame_HerbMachine:endTimeUpdate_HurbMachine(deltaTime)
 end
 function Panel_Minigame_HerbMachine_Start()
   local self = MiniGame_HerbMachine
+  PaGlobal_ConsoleQuickMenu:widgetClose()
+  Panel_ConsoleKeyGuide:SetShow(false)
   _math_randomSeed(getTickCount32())
   self._ui.stc_Result_Good:SetShow(false)
   self._ui.stc_Result_Bad:SetShow(false)
@@ -203,6 +205,8 @@ function Panel_Minigame_HerbMachine_End()
   end
   self._isGameStart = false
   self._isGameWin = false
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
+  Panel_ConsoleKeyGuide:SetShow(true)
   Panel_MiniGame_Timing:SetShow(false, false)
 end
 function Panel_Minigame_HerbMachine_End_UI()

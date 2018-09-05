@@ -240,28 +240,22 @@ function PaGlobalFunc_UserBar_Onresize()
   self._ui._dangerPanel:SetPosX(0)
   self._ui._alertDanger:SetSize(screenSizeX, screenSizeY)
   self._ui._gaugePanel:ComputePos()
-  if CppDefine.ChangeUIAndResolution == true then
-    if self._ui._gaugePanel:GetRelativePosX() == -1 and self._ui._gaugePanel:GetRelativePosY() == -1 then
-      local initPosX = screenSizeX / 2 - self._ui._gaugePanel:GetSizeX() / 2
-      local initPosY = screenSizeY - Panel_QuickSlot:GetSizeY() - self._ui._gaugePanel:GetSizeY()
-      self._ui._gaugePanel:SetPosX(initPosX + gapX)
-      self._ui._gaugePanel:SetPosY(initPosY + gapY)
-      changePositionBySever(self._ui._gaugePanel, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
-      FGlobal_InitPanelRelativePos(self._ui._gaugePanel, initPosX, initPosY)
-    elseif self._ui._gaugePanel:GetRelativePosX() == 0 and self._ui._gaugePanel:GetRelativePosY() == 0 then
-      self._ui._gaugePanel:SetPosX(screenSizeX / 2 - self._ui._gaugePanel:GetSizeX() / 2 + gapX)
-      self._ui._gaugePanel:SetPosY(screenSizeY - Panel_QuickSlot:GetSizeY() - self._ui._gaugePanel:GetSizeY() + gapY)
-    else
-      self._ui._gaugePanel:SetPosX(screenSizeX * self._ui._gaugePanel:GetRelativePosX() - self._ui._gaugePanel:GetSizeX() / 2 + gapX)
-      self._ui._gaugePanel:SetPosY(screenSizeY * self._ui._gaugePanel:GetRelativePosY() - self._ui._gaugePanel:GetSizeY() / 2 + gapY)
-    end
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
-      self._ui._gaugePanel:SetShow(false)
-    end
-  else
+  if self._ui._gaugePanel:GetRelativePosX() == -1 and self._ui._gaugePanel:GetRelativePosY() == -1 then
+    local initPosX = screenSizeX / 2 - self._ui._gaugePanel:GetSizeX() / 2
+    local initPosY = screenSizeY - Panel_QuickSlot:GetSizeY() - self._ui._gaugePanel:GetSizeY()
+    self._ui._gaugePanel:SetPosX(initPosX + gapX)
+    self._ui._gaugePanel:SetPosY(initPosY + gapY)
+    changePositionBySever(self._ui._gaugePanel, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
+    FGlobal_InitPanelRelativePos(self._ui._gaugePanel, initPosX, initPosY)
+  elseif self._ui._gaugePanel:GetRelativePosX() == 0 and self._ui._gaugePanel:GetRelativePosY() == 0 then
     self._ui._gaugePanel:SetPosX(screenSizeX / 2 - self._ui._gaugePanel:GetSizeX() / 2 + gapX)
     self._ui._gaugePanel:SetPosY(screenSizeY - Panel_QuickSlot:GetSizeY() - self._ui._gaugePanel:GetSizeY() + gapY)
-    changePositionBySever(self._ui._gaugePanel, CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, true, true, false)
+  else
+    self._ui._gaugePanel:SetPosX(screenSizeX * self._ui._gaugePanel:GetRelativePosX() - self._ui._gaugePanel:GetSizeX() / 2 + gapX)
+    self._ui._gaugePanel:SetPosY(screenSizeY * self._ui._gaugePanel:GetRelativePosY() - self._ui._gaugePanel:GetSizeY() / 2 + gapY)
+  end
+  if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusBar, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved) then
+    self._ui._gaugePanel:SetShow(false)
   end
   if screenSizeX < self._ui._gaugePanel:GetPosX() or screenSizeY < self._ui._gaugePanel:GetPosY() then
     self._ui._gaugePanel:ComputePos()

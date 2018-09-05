@@ -174,37 +174,26 @@ function PaGlobal_NewQuickSlot:eraseSlotEffectForTutorial(slot)
   PaGlobal_TutorialUiManager:getUiMasking():hideQuestMasking()
 end
 function FGlobal_NewQuickSlot_InitPos(updateByServer)
-  if CppDefine.ChangeUIAndResolution == true then
-    for panelIdx = 0, NewQuickSlot.config.maxPanelCount - 1 do
+  for panelIdx = 0, NewQuickSlot.config.maxPanelCount - 1 do
+    local slot = NewQuickSlot.panelPool[panelIdx]
+    if slot.Panel:GetRelativePosX() == -1 and slot.Panel:GetRelativePosY() == -1 then
       local slot = NewQuickSlot.panelPool[panelIdx]
-      if slot.Panel:GetRelativePosX() == -1 and slot.Panel:GetRelativePosY() == -1 then
-        local slot = NewQuickSlot.panelPool[panelIdx]
-        local initPosX = getScreenSizeX() * 0.35 + (slot.Panel:GetSizeX() + 5) * panelIdx
-        local initPosY = getScreenSizeY() - slot.Panel:GetSizeY() - 5
-        slot.Panel:SetPosX(initPosX)
-        slot.Panel:SetPosY(initPosY)
-        if updateByServer then
-          changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
-        end
-        FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
-      elseif slot.Panel:GetRelativePosX() == 0 and slot.Panel:GetRelativePosY() == 0 then
-        slot.Panel:SetPosX(getScreenSizeX() * 0.35 + (slot.Panel:GetSizeX() + 5) * panelIdx)
-        slot.Panel:SetPosY(getScreenSizeY() - slot.Panel:GetSizeY() - 5)
-      else
-        slot.Panel:SetPosX(getScreenSizeX() * slot.Panel:GetRelativePosX() - slot.Panel:GetSizeX() / 2)
-        slot.Panel:SetPosY(getScreenSizeY() * slot.Panel:GetRelativePosY() - slot.Panel:GetSizeY() / 2)
-      end
-      FGlobal_PanelRepostionbyScreenOut(slot.Panel)
-    end
-  else
-    for panelIdx = 0, NewQuickSlot.config.maxPanelCount - 1 do
-      local slot = NewQuickSlot.panelPool[panelIdx]
-      slot.Panel:SetPosX(getScreenSizeX() * 0.35 + (slot.Panel:GetSizeX() + 5) * panelIdx)
-      slot.Panel:SetPosY(getScreenSizeY() - slot.Panel:GetSizeY() - 5)
+      local initPosX = getScreenSizeX() * 0.35 + (slot.Panel:GetSizeX() + 5) * panelIdx
+      local initPosY = getScreenSizeY() - slot.Panel:GetSizeY() - 5
+      slot.Panel:SetPosX(initPosX)
+      slot.Panel:SetPosY(initPosY)
       if updateByServer then
         changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
       end
+      FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
+    elseif slot.Panel:GetRelativePosX() == 0 and slot.Panel:GetRelativePosY() == 0 then
+      slot.Panel:SetPosX(getScreenSizeX() * 0.35 + (slot.Panel:GetSizeX() + 5) * panelIdx)
+      slot.Panel:SetPosY(getScreenSizeY() - slot.Panel:GetSizeY() - 5)
+    else
+      slot.Panel:SetPosX(getScreenSizeX() * slot.Panel:GetRelativePosX() - slot.Panel:GetSizeX() / 2)
+      slot.Panel:SetPosY(getScreenSizeY() * slot.Panel:GetRelativePosY() - slot.Panel:GetSizeY() / 2)
     end
+    FGlobal_PanelRepostionbyScreenOut(slot.Panel)
   end
 end
 function FGlobal_NewQuickSlot_Hide()

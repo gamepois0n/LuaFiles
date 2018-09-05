@@ -28,6 +28,7 @@ function Panel_CustomizingAlbum_HideAni()
   aniInfo:SetHideAtEnd(true)
 end
 local _titleBar = UI.getChildControl(Panel_CustomizingAlbum, "StaticText_TitleBg")
+local _stc_keyGuide = UI.getChildControl(Panel_CustomizingAlbum, "Static_BottomBg")
 local _customizingAlbumWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
 function Panel_CustomizingAlbum_Initialize()
   local screenSizeX = getScreenSizeX()
@@ -39,9 +40,9 @@ function Panel_CustomizingAlbum_Initialize()
     titleBarSizeX = 887
   elseif screenSizeX >= 1920 and screenSizeX < 3840 then
     sizeX = 1305
-    sizeY = 945
+    sizeY = 900
     panelSizeX = 1335
-    panelSizeY = 1060
+    panelSizeY = 1015
     titleBarSizeX = 1322
   else
     sizeX = 1740
@@ -50,8 +51,10 @@ function Panel_CustomizingAlbum_Initialize()
     panelSizeY = 1375
     titleBarSizeX = 1757
   end
-  Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY)
+  Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY + _stc_keyGuide:GetSizeY())
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
+  _stc_keyGuide:SetSize(panelSizeX, _stc_keyGuide:GetSizeY())
+  _stc_keyGuide:ComputePos()
   _customizingAlbumWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_CustomizingAlbum, "WebControl_CustomizingAlbum")
   _customizingAlbumWeb:SetShow(true)
   _customizingAlbumWeb:SetPosX(15)
@@ -62,18 +65,21 @@ end
 Panel_CustomizingAlbum_Initialize()
 local isCustomizationMode
 function CustomizingAlbum_Open(isCTMode, isSceneState)
+  if false == ToClient_isUserCreateContentsAllowed() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+      content = messageBoxMemo,
+      functionYes = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+    ToClient_showPrivilegeError()
+    return
+  end
   audioPostEvent_SystemUi(13, 6)
   Panel_CustomizingAlbum:SetShow(true, true)
   FGlobal_SetCandidate()
-  local UiConvertable = CppEnums.ClientSceneState.eUIConvertableType_showTime
-  if isSceneState == CppEnums.ClientSceneState.eClientSceneStateType_Customization then
-    UiConvertable = CppEnums.UIConvertableType.eUIConvertableType_none
-  elseif isSceneState == CppEnums.ClientSceneState.eClientSceneStateType_InGameCustomization then
-    UiConvertable = CppEnums.UIConvertableType.eUIConvertableType_none
-  elseif isSceneState == CppEnums.ClientSceneState.eClientSceneStateType_InGame then
-    UiConvertable = CppEnums.UIConvertableType.eUIConvertableType_showTime
-  end
-  Panel_CustomizingAlbum:setUiConvertableType(UiConvertable)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   local url = PaGlobal_URL_Check(worldNo)

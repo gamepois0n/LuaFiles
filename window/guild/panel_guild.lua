@@ -7,7 +7,6 @@ local UI_TM = CppEnums.TextMode
 local IM = CppEnums.EProcessorInputMode
 local UI_VT = CppEnums.VehicleType
 Panel_Window_Guild:SetShow(false)
-Panel_Window_Guild:setMaskingChild(true)
 Panel_Window_Guild:setGlassBackground(true)
 Panel_Window_Guild:SetDragAll(true)
 Panel_Window_Guild:RegisterShowEventFunc(true, "guild_ShowAni()")

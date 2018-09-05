@@ -59,6 +59,7 @@ function MiniGame_BattleGauge:setProgress(isSetProgress)
 end
 function Panel_Minigame_BattleGauge_Start()
   local self = MiniGame_BattleGauge
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   self._ui.txt_TitleText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_TitleText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_BATTLEGAUGE_REPEAT_B"))
   self._ui.stc_MiddleLine:AddEffect("fUI_Repair01B", true, 0, 0)
@@ -126,6 +127,7 @@ function BattleGauge_Result(timer)
   local remainTime = timer
 end
 function Panel_Minigame_BattleGauge_End()
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   Panel_BattleGauge:SetShow(false)
 end
 function FromClient_luaLoadComplete_MiniGame_BattleGauge_Init()

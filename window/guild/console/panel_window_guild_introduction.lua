@@ -54,6 +54,7 @@ function GuildIntro:init()
   self._ui.txt_AConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_GuildIntro_ConfirmEdit()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildIntro_SetFocusEdit()")
+  self._ui.edit_Text:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_GuildIntro_EndVirtualKeyboard")
   PaGlobal_registerPanelOnBlackBackground(_panel)
 end
 function PaGlobalFunc_GuildIntro_OpenIntroduce()
@@ -99,6 +100,15 @@ function PaGlobalFunc_GuildIntro_EndFocusEdit()
   CheckChattingInput()
   ClearFocusEdit()
   self._ui.edit_Text:SetEditText(self._ui.edit_Text:GetEditText(), true)
+end
+function PaGlobalFunc_GuildIntro_EndVirtualKeyboard(str)
+  local self = GuildIntro
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildIntro")
+    return
+  end
+  ClearFocusEdit()
+  self._ui.edit_Text:SetEditText(str, true)
 end
 function PaGlobalFunc_GuildIntro_CheckNoticeUiEdit(targetUI)
   local self = GuildIntro

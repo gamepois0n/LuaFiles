@@ -118,7 +118,6 @@ local function MiniGame_Manual_Timing_2(actorKeyRaw, isSelf)
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Command_Info:SetShow(false)
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_TIMING_2"))
-      _ui.txt_HorseInfo:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     else
       _ui.txt_HorseInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_TIMING_2"))
     end
@@ -407,12 +406,12 @@ local function MiniGame_Manual_Buoy_0(actorKeyRaw, isSelf)
     Panel_Global_Manual:SetShow(true)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
+    Buoy_ControlSelect()
     if _ContentsGroup_isConsolePadControl then
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_BUOY_0") .. " " .. "(0/3)")
     else
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_BUOY_0") .. " " .. "(0/3)")
     end
-    Buoy_ControlSelect()
     _ui.txt_Purpose:SetShow(true)
     _ui.txt_Purpose:AddEffect("UI_QustComplete01", false, 0, 0)
     ui_Value.isFirstTime_Manual_Buoy_0 = false
@@ -425,6 +424,7 @@ local function MiniGame_Manual_Buoy_1(actorKeyRaw, isSelf)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
     if _ContentsGroup_isConsolePadControl then
+      _ui.txt_Command_Info:SetShow(true)
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_BUOY_0") .. " " .. "(1/3)")
     else
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_BUOY_0") .. " " .. "(1/3)")
@@ -443,6 +443,7 @@ local function MiniGame_Manual_Buoy_2(actorKeyRaw, isSelf)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
     if _ContentsGroup_isConsolePadControl then
+      _ui.txt_Command_Info:SetShow(true)
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_BUOY_0") .. " " .. "(2/3)")
     else
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_BUOY_0") .. " " .. "(2/3)")
@@ -824,6 +825,9 @@ local function Panel_Global_Manual_End(actorKeyRaw, isSelf)
   ui_Value.isFirstTime_Manual_Bullet_0 = true
   IsChecked_WeaponOut = false
   ShowUseTab_Func()
+  if false == ui_Value.isFirstTime_Manual_Buoy_0 or false == ui_Value.isFirstTime_Manual_Buoy_1 or false == ui_Value.isFirstTime_Manual_Buoy_2 or false == ui_Value.isFirstTime_Manual_Buoy_3 then
+    _ui.txt_Command_Info:SetShow(false)
+  end
   if Panel_PowerGauge:GetShow() then
     FGlobal_PowerGauge_Close()
   end

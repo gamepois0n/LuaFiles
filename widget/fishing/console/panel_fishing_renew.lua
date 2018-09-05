@@ -219,7 +219,6 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
     end
     fishing_UI._fishPoolIcon:SetShow(true)
     if _ContentsGroup_isConsolePadControl then
-      setFishingResourcePool_text()
       ui_Value.isFirstTime_Manual_Fishing_Start = false
       MiniGame_Manual_Value_FishingStart = true
     end
@@ -228,6 +227,7 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
 end
 local function FishingGame_Manual_Fishing_0(actorKeyRaw, isSelf)
   FGlobal_PowerGauge_Close()
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   if ui_Value.isFirstTime_Manual_Fishing_0 == true then
     for _, v in pairs(fishing_UI) do
       v:SetShow(false)

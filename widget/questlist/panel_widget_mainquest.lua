@@ -1,4 +1,3 @@
-Panel_MainQuest:SetShow(true)
 Panel_MainQuest:SetDragEnable(false)
 local mainQuestWidget = {
   _ui = {
@@ -29,6 +28,7 @@ function mainQuestWidget:createControl()
     self._uiQuestConditions[index]:SetText("")
     self._uiQuestConditions[index]:SetIgnore(true)
     self._uiQuestConditions[index]:SetShow(false)
+    self._uiQuestConditions[index]:SetPosX(2)
   end
 end
 function mainQuestWidget:initControl()
@@ -38,6 +38,15 @@ function mainQuestWidget:initControl()
   self._ui._checkButton_AutoNavi:addInputEvent("Mouse_Out", "HandleMouseOver_Button( false ,1 )")
   self._ui._checkbox_Quest_Navi:addInputEvent("Mouse_On", "HandleMouseOver_Button( true , 2 )")
   self._ui._checkbox_Quest_Navi:addInputEvent("Mouse_Out", "HandleMouseOver_Button( false , 2 )")
+  if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      Panel_MainQuest:SetShow(true)
+    else
+      Panel_MainQuest:SetShow(false)
+    end
+  else
+    Panel_MainQuest:SetShow(true)
+  end
 end
 function PaGlobalFunc_MainQuestWidget_Open()
   mainQuestWidget:open()
@@ -67,12 +76,12 @@ function mainQuestWidget:setQuestGroupTitleInfo(uiQuestInfo)
   if nil ~= uiQuestGroupInfo and uiQuestGroupInfo:isGroupQuest() then
     local groupTitle = uiQuestGroupInfo:getTitle()
     local questGroupCount = uiQuestGroupInfo:getTotalQuestCount()
-    local groupQuestTitleInfo = groupTitle .. " (" .. questNo._quest .. "/" .. questGroupCount .. ")"
+    local groupQuestTitleInfo = " " .. groupTitle .. " (" .. questNo._quest .. "/" .. questGroupCount .. ")"
     self._ui._staticText_WidgetGroupTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_QUESTWIDGET_GROUPTITLEINFO", "titleinfo", groupQuestTitleInfo))
     self._ui._staticText_WidgetGroupTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
     self._ui._staticText_WidgetGroupTitle:SetSize(230, self._ui._staticText_Quest_Title:GetSizeY())
-    self._ui._staticText_WidgetGroupTitle:SetPosX(25)
-    self._ui._staticText_WidgetGroupTitle:SetPosY(self._ui._staticText_Quest_Title:GetPosY() + self._ui._staticText_Quest_Title:GetSizeY() + 5)
+    self._ui._staticText_WidgetGroupTitle:SetPosX(8)
+    self._ui._staticText_WidgetGroupTitle:SetPosY(self._ui._staticText_Quest_Title:GetPosY() + self._ui._staticText_Quest_Title:GetSizeY() + self._ui._staticText_Quest_Title:GetSizeY() + 5)
     self._ui._staticText_WidgetGroupTitle:SetAutoResize(true)
     self._ui._staticText_WidgetGroupTitle:SetIgnore(true)
     self._ui._staticText_WidgetGroupTitle:SetShow(true)
@@ -194,6 +203,7 @@ function mainQuestWidget:setConditionInfo(uiQuestInfo, startPosY)
     checkCondition = 1
   end
   local uiQuestCondition
+  self._ui._staticText_Quest_ClearNpc:SetLineRender(false)
   if not uiQuestInfo._isCleared and not uiQuestInfo._isProgressing then
     self._ui._staticText_Quest_ClearNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_MAINQUEST_ACCEPT_NOTICE"))
     self._ui._staticText_Quest_ClearNpc:SetFontColor(Defines.Color.C_FFC4BEBE)
@@ -206,21 +216,20 @@ function mainQuestWidget:setConditionInfo(uiQuestInfo, startPosY)
       uiQuestCondition:SetAutoResize(true)
       uiQuestCondition:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       uiQuestCondition:SetFontColor(Defines.Color.C_FFC4BEBE)
-      uiQuestCondition:SetPosX(0)
       uiQuestCondition:SetPosY(startPosY)
       uiQuestCondition:SetSize(self._ui._static_TitleBG:GetSizeX(), uiQuestCondition:GetTextSizeY())
       local conditionText
       if conditionInfo._currentCount == conditionInfo._destCount or conditionInfo._destCount <= conditionInfo._currentCount then
-        conditionText = "- " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
+        conditionText = " - " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
         uiQuestCondition:SetText(ToClient_getReplaceDialog(conditionText))
         uiQuestCondition:SetLineRender(true)
         uiQuestCondition:SetFontColor(Defines.Color.C_FF626262)
       elseif 1 == conditionInfo._destCount then
-        conditionText = "- " .. conditionInfo._desc
+        conditionText = " - " .. conditionInfo._desc
         uiQuestCondition:SetText(ToClient_getReplaceDialog(conditionText))
         uiQuestCondition:SetLineRender(false)
       else
-        conditionText = "- " .. conditionInfo._desc .. " (" .. conditionInfo._currentCount .. "/" .. conditionInfo._destCount .. ")"
+        conditionText = " - " .. conditionInfo._desc .. " (" .. conditionInfo._currentCount .. "/" .. conditionInfo._destCount .. ")"
         uiQuestCondition:SetText(ToClient_getReplaceDialog(conditionText))
         uiQuestCondition:SetLineRender(false)
       end
@@ -235,6 +244,7 @@ function mainQuestWidget:setConditionInfo(uiQuestInfo, startPosY)
       self._ui._static_Quest_Type:AddEffect("UI_Quest_Complete_GreenAura", true, 130, 0)
     end
     self._ui._staticText_Quest_ClearNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_QUESTCOMPLETENPC"))
+    self._ui._staticText_Quest_ClearNpc:SetLineRender(true)
     self._ui._staticText_Quest_ClearNpc:SetFontColor(Defines.Color.C_FFF26A6A)
     self._ui._staticText_Quest_ClearNpc:SetShow(true)
     FGlobal_ChangeOnTextureForDialogQuestIcon(self._ui._static_Quest_Type, 8)
@@ -264,7 +274,7 @@ function mainQuestWidget:setButtonCheckState(uiQuestInfo)
 end
 function mainQuestWidget:setButtonState(isMouseOver)
 end
-function HandleClicked_ShowMainQuestDetail(groupId, questId, checkCondition, groupTitle, questGrpoupCount)
+function HandleClicked_ShowMainQuestDetail(groupId, questId, checkCondition, groupTitle, questGroupCount)
   local fromQuestWidget = true
   FGlobal_QuestWindow_SetProgress()
   FGlobal_QuestInfoDetail(groupId, questId, checkCondition, groupTitle, questGroupCount, true)
@@ -392,34 +402,33 @@ function PaGlobalFunc_MainQuestWidget_GetClosableLevel()
   return mainQuestWidget._config._closableLevel
 end
 function FromClient_MainQuestWidget_ResetPosition()
-  if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MainQuest:GetRelativePosX() == -1 and Panel_MainQuest:GetRelativePosY() == -1 then
-      local initPosX = getScreenSizeX() - Panel_MainQuest:GetSizeX() - 16
-      local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10
-      local haveServerPosition = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
-      if not haveServerPosition then
-        Panel_MainQuest:SetPosX(initPosX)
-        Panel_MainQuest:SetPosY(initPosY)
-      end
-      changePositionBySever(Panel_MainQuest, CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, true, true, true)
-      FGlobal_InitPanelRelativePos(Panel_MainQuest, initPosX, initPosY)
-    elseif Panel_MainQuest:GetRelativePosX() == 0 and Panel_MainQuest:GetRelativePosY() == 0 then
-      Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 16)
-      Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
-      PaGlobalFunc_Quest_UpdatePosition()
-    else
-      Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
-      Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
-    end
-    FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
-  else
+  if Panel_MainQuest:GetRelativePosX() == -1 and Panel_MainQuest:GetRelativePosY() == -1 then
+    local initPosX = getScreenSizeX() - Panel_MainQuest:GetSizeX() - 16
+    local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10
     local haveServerPosition = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
     if not haveServerPosition then
-      Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 16)
-      Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 30)
+      Panel_MainQuest:SetPosX(initPosX)
+      Panel_MainQuest:SetPosY(initPosY)
     end
-    changePositionBySever(Panel_MainQuest, CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, true, true, true)
+    FGlobal_InitPanelRelativePos(Panel_MainQuest, initPosX, initPosY)
+  elseif Panel_MainQuest:GetRelativePosX() == 0 and Panel_MainQuest:GetRelativePosY() == 0 then
+    Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 16)
+    Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
+    PaGlobalFunc_Quest_UpdatePosition()
+  else
+    Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
+    Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
   end
+  if -1 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+      Panel_MainQuest:SetShow(true)
+    else
+      Panel_MainQuest:SetShow(false)
+    end
+  else
+    Panel_MainQuest:SetShow(true)
+  end
+  FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
 end
 function FGlobal_QuestWidget_CalcScrollButtonSize()
 end

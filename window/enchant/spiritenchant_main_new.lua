@@ -1381,6 +1381,11 @@ function PaGlobal_Enchant:init_EnchantFrame()
   if not self._isContentsEnable then
     self._ui._useCronIcon:SetShow(false)
   end
+  local _button_ApplySizeX = self._ui._button_Apply:GetSizeX()
+  if _button_ApplySizeX <= self._ui._button_Apply:GetTextSizeX() then
+    self._ui._button_Apply:SetSize(self._ui._button_Apply:GetTextSizeX() + 20, self._ui._button_Apply:GetSizeY())
+    self._ui._button_Apply:ComputePos()
+  end
 end
 function PaGlobal_Enchant:init_CronFrame()
   self:SetCheck_RadioButton(self._ui._radiobutton_EnchantTab, false)

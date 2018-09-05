@@ -11,7 +11,6 @@ function InitIntroMoviePanel()
     return
   end
   local selfPlayerLevel = selfPlayerWrapper:get():getLevel()
-  local selfPlayerExp = selfPlayerWrapper:get():getExp_s64()
   if 1 == selfPlayerLevel and false == isSwapCharacter() and static_IntroMovie == nil then
     ShowableFirstExperience(false)
     Panel_IntroMovie:SetShow(true, false)
@@ -57,6 +56,35 @@ function InitIntroMoviePanel()
   else
     introMoviePlayTime = 60
   end
+end
+function SetMovieSize()
+  local uiScale = getGlobalScale()
+  if static_IntroMovie == nil then
+    return
+  end
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 9 / 16
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 16 / 9
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  Panel_IntroMovie:SetPosX(0)
+  Panel_IntroMovie:SetPosY(0)
+  Panel_IntroMovie:SetSize(sizeX, sizeY)
+  static_IntroMovie:SetIgnore(false)
+  static_IntroMovie:SetPosX(posX)
+  static_IntroMovie:SetPosY(posY)
+  static_IntroMovie:SetSize(movieSizeX, movieSizeY)
+  isIntroMoviePlaying = true
 end
 function CloseIntroMovie()
   if static_IntroMovie ~= nil then
@@ -105,3 +133,4 @@ else
 end
 Panel_IntroMovie:RegisterUpdateFunc("UpdateIntroMovie")
 registerEvent("ToClient_EndGuideMovie", "ToClient_EndIntroMovie")
+registerEvent("onScreenResize", "SetMovieSize")

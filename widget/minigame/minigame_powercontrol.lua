@@ -80,10 +80,11 @@ function Panel_MiniGame_PowerControl_Initialize()
   milkRate = 0
   gameEndTimer = 31
   endTimer = 0
+  elapsTime = 0
   ui._progress_Milk:SetProgressRate(milkRate)
   ui._result_Success:SetShow(false)
   ui._resultFailed:SetShow(false)
-  AddMiniGameKeyDownOnce(MGT.MiniGameType_14, onKeyDown)
+  AddMiniGameKeyPress(MGT.MiniGameType_14, onKeyDown)
   AddMiniGameKeyUp(MGT.MiniGameType_14, onKeyUp)
 end
 function Panel_MiniGame_PowerControl_Start()
@@ -169,18 +170,18 @@ function Panel_MiniGame_PowerControl_MouseClick_UpdateFunc(deltaTime)
   local _gameEndTimer = math.floor(gameEndTimer)
   ui._txt_MilkyRate:SetText(math.floor(milkRate) .. " %")
   if isPressed_L and 0 == directionType then
-    updateLeftMilky(-175 * deltaTime)
+    updateLeftMilky(-110 * deltaTime)
     updateRightMilky(65 * deltaTime)
-    milkRate = milkRate + 0.3
+    milkRate = milkRate + 0.3 * (deltaTime * 60)
     ui._mouse_L:ResetVertexAni()
     ui._mouse_L:SetVertexAniRun("Ani_Color_Left", true)
     ui._milky_L:SetShow(true)
     ui._milky_R:SetShow(false)
     ui._progress_Milk:SetProgressRate(milkRate)
   elseif isPressed_R and 1 == directionType then
-    updateRightMilky(-175 * deltaTime)
+    updateRightMilky(-110 * deltaTime)
     updateLeftMilky(65 * deltaTime)
-    milkRate = milkRate + 0.3
+    milkRate = milkRate + 0.3 * (deltaTime * 60)
     ui._mouse_R:ResetVertexAni()
     ui._mouse_R:SetVertexAniRun("Ani_Color_Right", true)
     ui._milky_L:SetShow(false)
@@ -210,4 +211,4 @@ function Panel_MiniGame_PowerControl_MouseClick_UpdateFunc(deltaTime)
   end
 end
 Panel_MiniGame_PowerControl_Initialize()
-Panel_MiniGame_PowerControl:RegisterUpdateFunc("Panel_MiniGame_PowerControl_MouseClick_UpdateFunc")
+Panel_MiniGame_PowerControl:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")

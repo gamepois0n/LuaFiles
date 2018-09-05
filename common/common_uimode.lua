@@ -29,12 +29,10 @@ function changePositionBySever(panel, panelId, isShow, isChangePosition, isChang
     if isChangePosition then
       panel:SetPosX(ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_PositionX))
       panel:SetPosY(ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_PositionY))
-      if CppDefine.ChangeUIAndResolution == true then
-        local relativePosX = ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
-        local relativePosY = ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
-        panel:SetRelativePosX(relativePosX)
-        panel:SetRelativePosY(relativePosY)
-      end
+      local relativePosX = ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionX)
+      local relativePosY = ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_RelativePositionY)
+      panel:SetRelativePosX(relativePosX)
+      panel:SetRelativePosY(relativePosY)
     end
     if isChangeSize then
       panel:SetSize(ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_SizeX), ToClient_GetUiInfo(panelId, 0, CppEnums.PanelSaveType.PanelSaveType_SizeY))

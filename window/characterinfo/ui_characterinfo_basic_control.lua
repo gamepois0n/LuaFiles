@@ -132,9 +132,19 @@ function FromClient_UI_CharacterInfo_Basic_FamilyPointsChanged()
   local etcFP = self._playerGet:getEtcFamilyPoint()
   local sumFP = battleFP + lifeFP + etcFP
   self._ui._staticTextFamilyPoints[self._familyPoint._family]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FAMILYPOINT_TITLE", "familyPoint", tostring(sumFP)))
-  self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_BATTLEPOINT", "value", tostring(battleFP)))
-  self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_LIFEPOINT", "value", tostring(lifeFP)))
-  self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_ETCPOINT", "value", tostring(etcFP)))
+  if isGameTypeKorea() or isGameTypeJapan() or isGameTypeTaiwan() then
+    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_BATTLEPOINT", "value", tostring(battleFP)))
+    self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_LIFEPOINT", "value", tostring(lifeFP)))
+    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_ETCPOINT", "value", tostring(etcFP)))
+  else
+    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(tostring(battleFP))
+    self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(tostring(lifeFP))
+    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(tostring(etcFP))
+    local _combatPosX = self._ui._staticTextFamilyPoints[self._familyPoint._life]:GetPosX() - 120
+    local _etcPosX = self._ui._staticTextFamilyPoints[self._familyPoint._life]:GetPosX() + 120
+    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetSpanSize(_combatPosX, 0)
+    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetSpanSize(_etcPosX, 0)
+  end
 end
 function FromClient_UI_CharacterInfo_Basic_ResistChanged()
   if Panel_Window_CharInfo_Status:IsShow() == false then
@@ -643,9 +653,18 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
     self._lifeInfo[key]._ui._levelText:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(currentLevel))
     self._lifeInfo[key]._ui._progressBar:SetProgressRate(currentExpRate)
     self._lifeInfo[key]._ui._expText:SetText(currentExpRateString .. "%")
-    local commonPoint = ToClient_GetCommonLifeStat(key)
-    local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(commonPoint)
-    self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
+    if key == __ePlayerLifeStatType_Collecting or key == __ePlayerLifeStatType_Manufacture then
+      local commonPoint = ToClient_GetCommonLifeStat(key)
+      local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(commonPoint)
+      self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
+    else
+      local subPoint = selfPlayer:get():getLifeStat(key, 1)
+      local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(subPoint)
+      self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
+      self._lifeInfo[key]._ui._commonPoint:SetIgnore(false)
+      self._lifeInfo[key]._ui._commonPoint:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. ")")
+      self._lifeInfo[key]._ui._commonPoint:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. ")")
+    end
     for ii = 1, self._lifeSubTypeCount[key] - 1 do
       if nil ~= self._lifeInfo[key]._ui._subCategoryPoint[ii] then
         local subPoint = selfPlayer:get():getLifeStat(key, ii)
@@ -705,6 +724,7 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       local countRate = ToClient_getManufacturingStatCountRate(subType)
       name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MANUFACTURING_POWER_TOOLTIP_DESC", "data2", tostring(countRate))
+      control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
     elseif __ePlayerLifeStatType_Collecting == mainType then
       if false == _ContentsGroup_EnhanceCollect then
         return
@@ -735,8 +755,36 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
 
 %s]], PAGetString(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_MAIN"), tempString[0], tempString[1], tempString[2], PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_4", "charRate", tostring(characterCollectRate)), PAGetString(Defines.StringSheet_GAME, tostring(subStringName)))
       name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
+      control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
+    elseif __ePlayerLifeStatType_Sail == mainType then
+      if false == _ContentsGroup_EnhanceSail then
+        return
+      end
+      local sailStatStaticStatus = ToClient_getSailStatStaticStatus()
+      local hp = 0
+      local mp = 0
+      local acc = 0
+      local spd = 0
+      local cor = 0
+      local brk = 0
+      if nil ~= sailStatStaticStatus then
+        hp = string.format("%.1f", sailStatStaticStatus._addMaxHp / 10000)
+        mp = string.format("%.1f", sailStatStaticStatus._addMaxMp / 10000)
+        acc = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(0) / 10000)
+        spd = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(1) / 10000)
+        cor = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(2) / 10000)
+        brk = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(3) / 10000)
+      end
+      local desc1 = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_SAILSTAT_DESC_1", "rate1", tostring(hp), "rate2", tostring(mp), "rate3", tostring(acc))
+      local desc2 = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_SAILSTAT_DESC_2", "rate1", tostring(spd), "rate2", tostring(cor), "rate3", tostring(brk))
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE9")
+      desc = string.format([[
+%s
+%s]], desc1, desc2)
+      control = self._lifeInfo[mainType]._ui._commonPoint
+    else
+      return
     end
-    control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
     TooltipSimple_Show(control, name, desc)
   end
 end
