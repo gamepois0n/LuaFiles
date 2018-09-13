@@ -403,7 +403,7 @@ end
 function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(nodeKey, NavigationGuideParam())
-  audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(nodeKey)
   local self = Window_WorldMap_NodeManagementInfo

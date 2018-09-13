@@ -13,6 +13,7 @@ local GuildMemberList = {
     apSort
   },
   _memberListInfo = {},
+  _memberListControlData = {},
   _parentBg = nil,
   _currentSortType = nil
 }
@@ -44,7 +45,9 @@ function GuildMemberList:SetMemberInfo()
         _wp = memberInfo:getMaxWp(),
         _kp = memberInfo:getExplorationPoint(),
         _userNo = memberInfo:getUserNo(),
-        _contractable = memberInfo:getContractableUtc()
+        _contractable = memberInfo:getContractableUtc(),
+        _saying = memberInfo:isVoiceChatSpeak(),
+        _hearing = memberInfo:isVoiceChatListen()
       }
       self._memberListInfo[memberIdx] = info
     end
@@ -108,6 +111,15 @@ function PaGlobalFunc_GuildMemberList_GetMemberInfoWithIndex(index)
   end
   return self._memberListInfo[index]
 end
+function PaGlobalFunc_GuildMemberList_MemberVoiceUpdate(index, isSaying, isHearing)
+  local self = GuildMemberList
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
+    return
+  end
+  self._memberListControlData[index].check_Mice:SetCheck(isSaying)
+  self._memberListControlData[index].check_Headphone:SetCheck(isHearing)
+end
 function PaGlobalFunc_GuildMemberList_Init()
   local self = GuildMemberList
   if nil == self then
@@ -152,12 +164,15 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   if nil == memberInfo then
     return
   end
+  local control = {}
   local btn_GuildSlot = UI.getChildControl(content, "Button_GuildSlot")
   local txt_Grade = UI.getChildControl(content, "StaticText_Grade")
   local txt_Level = UI.getChildControl(content, "StaticText_Level")
   local txt_Name = UI.getChildControl(content, "StaticText_Name")
   local txt_Class = UI.getChildControl(content, "StaticText_Class")
   local stc_Contract = UI.getChildControl(content, "Static_Contract")
+  control.check_Mice = UI.getChildControl(content, "CheckButton_Mice")
+  control.check_Headphone = UI.getChildControl(content, "CheckButton_Headphone")
   txt_Grade:ChangeTextureInfoName("renewal/ui_icon/console_icon_guild_00.dds")
   if 0 == memberInfo._grade then
     local x1, y1, x2, y2 = setTextureUV_Func(txt_Grade, 1, 1, 37, 37)
@@ -188,6 +203,8 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Name:SetFontColor(_enableColor)
     txt_Class:SetText(CppEnums.ClassType2String[memberInfo._class])
     txt_Class:SetFontColor(_enableColor)
+    control.check_Mice:SetCheck(memberInfo._saying)
+    control.check_Headphone:SetCheck(memberInfo._hearing)
   else
     txt_Grade:SetFontColor(_disableColor)
     txt_Level:SetText("-")
@@ -196,6 +213,8 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Name:SetFontColor(_disableColor)
     txt_Class:SetText("-")
     txt_Class:SetFontColor(_disableColor)
+    control.check_Mice:SetCheck(false)
+    control.check_Headphone:SetCheck(false)
   end
   if 0 < Int64toInt32(getLeftSecond_TTime64(memberInfo._expiration)) then
     stc_Contract:SetColor(Defines.Color.C_FFD20000)
@@ -205,6 +224,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   else
     stc_Contract:SetColor(Defines.Color.C_FF309BF5)
   end
+  self._memberListControlData[memberIdx] = control
   btn_GuildSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildMemberList_MemberFunctionOpen(" .. memberIdx .. ")")
 end
 function InputMLUp_GuildMemberList_MemberFunctionOpen(index)
@@ -230,6 +250,7 @@ function FromClient_GuildMemberList_GuildListUpdate(userNo)
   if nil == requestIdx then
     return
   end
+  self:SetMemberInfo()
   self._ui.list_MemberList:requestUpdateByKey(toInt64(0, requestIdx))
 end
 function FromClient_GuildMemberList_RequestClearAndUpdateMember()

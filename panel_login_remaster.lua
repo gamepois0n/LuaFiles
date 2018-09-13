@@ -102,7 +102,7 @@ function PanelLogin:registEvent()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "PanelLogin:registEvent")
 end
 function FromClient_LoginRemaster_OnMovieEvent(param)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_LoginRemaster_OnMovieEvent")
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_LoginRemaster_OnMovieEvent" .. param)
   if 1 == param then
     self:startFadeIn()
     if nil ~= _ui_web_loadingMovie then
@@ -142,8 +142,7 @@ function PanelLogin:loginEnter()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "PanelLogin:loginEnter")
   connectToGame(self._ui.edit_ID:GetEditText(), "\234\178\128\236\157\128\236\160\132\236\130\172\235\185\132\235\178\136")
 end
-function PaGlobal_PanelLogin_Resize()
-  self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
+function PanelLoginMovieInit()
   if nil == _ui_web_loadingMovie then
     _ui_web_loadingMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, self._ui.stc_webUI, "Static_BgMovie")
   end
@@ -172,6 +171,36 @@ function PaGlobal_PanelLogin_Resize()
   _ui_web_loadingMovie:SetPosY(posY - marginY / 2)
   _ui_web_loadingMovie:SetSize(movieSizeX + marginX, movieSizeY + marginY)
   _ui_web_loadingMovie:SetUrl(1920, 1080, "coui://UI_Data/UI_Html/LobbyBG_Movie.html")
+end
+function PaGlobal_PanelLogin_Resize()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "PanelLogin:PaGlobal_PanelLogin_Resize")
+  self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 1080 / 1920
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 1920 / 1080
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  _panel:SetPosX(0)
+  _panel:SetPosY(0)
+  _panel:SetSize(sizeX, sizeY)
+  local marginX = movieSizeX * 0.013
+  local marginY = movieSizeY * 0.013
+  if nil ~= _ui_web_loadingMovie then
+    _ui_web_loadingMovie:SetPosX(posX - marginX / 2)
+    _ui_web_loadingMovie:SetPosY(posY - marginY / 2)
+    _ui_web_loadingMovie:SetSize(movieSizeX + marginX, movieSizeY + marginY)
+  end
   self._ui.btn_Login:ComputePos()
   self._ui.btn_Exit:ComputePos()
   self._ui.btn_GameOption:ComputePos()
@@ -332,3 +361,11 @@ end
 PaGlobal_PanelLogin_Init()
 PaGlobal_PanelLogin_Resize()
 _panel:SetShow(true)
+function InitLoginMoviePanel()
+  _PA_LOG("COHERENT", "PanelLoginMovieInit")
+  PanelLoginMovieInit()
+end
+function RegisterEvent()
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "InitLoginMoviePanel")
+end
+RegisterEvent()

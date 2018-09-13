@@ -1,5 +1,4 @@
 basicLoadUI("UI_Data/Widget/Buff/UI_BuffPanel.xml", "Panel_AppliedBuffList", Defines.UIGroup.PAGameUIGroup_MainUI)
-Panel_AppliedBuffList:SetShow(false, false)
 PaGlobalAppliedBuffList = {
   _uiBackBuff = UI.getChildControl(Panel_AppliedBuffList, "Static_Buff_BG"),
   _uiBackDeBuff = UI.getChildControl(Panel_AppliedBuffList, "Static_DeBuff_BG"),
@@ -7,14 +6,44 @@ PaGlobalAppliedBuffList = {
   _maxBuffCount = 20,
   _uiBuffList = {},
   _uiDeBuffList = {},
-  _isShow = false
+  _isShow = false,
+  _initialized = false
 }
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_classType = CppEnums.ClassType
 local UI_TIMETOP = Util.Time.inGameTimeFormattingTop
+function PaGlobalFunc_AppliedBuffList_ResetPosition()
+  local scrX = getScreenSizeX()
+  local scrY = getScreenSizeY()
+  if Panel_AppliedBuffList:GetRelativePosX() == -1 and Panel_AppliedBuffList:GetRelativePosY() == -1 then
+    local initPosX = scrX * 0.35
+    local initPosY = scrY * 0.75
+    local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_AppliedBuffList, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
+    if not haveServerPosotion then
+      Panel_AppliedBuffList:SetPosX(initPosX)
+      Panel_AppliedBuffList:SetPosY(initPosY)
+    end
+    changePositionBySever(Panel_AppliedBuffList, CppEnums.PAGameUIType.PAGameUIPanel_AppliedBuffList, true, true, false)
+    FGlobal_InitPanelRelativePos(Panel_AppliedBuffList, initPosX, initPosY)
+  elseif Panel_AppliedBuffList:GetRelativePosX() == 0 and Panel_AppliedBuffList:GetRelativePosY() == 0 then
+    Panel_AppliedBuffList:SetPosX(scrX * 0.35)
+    Panel_AppliedBuffList:SetPosY(scrY * 0.75)
+  else
+    Panel_AppliedBuffList:SetPosX(getScreenSizeX() * Panel_AppliedBuffList:GetRelativePosX() - Panel_AppliedBuffList:GetSizeX() / 2)
+    Panel_AppliedBuffList:SetPosY(getScreenSizeY() * Panel_AppliedBuffList:GetRelativePosY() - Panel_AppliedBuffList:GetSizeY() / 2)
+  end
+  local isShow = ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_AppliedBuffList, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow)
+  if isShow < 0 then
+    Panel_AppliedBuffList:SetShow(true)
+  else
+    Panel_AppliedBuffList:SetShow(isShow)
+  end
+  FGlobal_PanelRepostionbyScreenOut(Panel_AppliedBuffList)
+end
 function PaGlobalAppliedBuffList:initialize()
   local styleBuffIcon = UI.getChildControl(Panel_AppliedBuffList, "StaticText_Buff")
   local styleDeBuffIcon = UI.getChildControl(Panel_AppliedBuffList, "StaticText_deBuff")
+  PaGlobalFunc_AppliedBuffList_ResetPosition()
   styleBuffIcon:SetShow(false)
   styleDeBuffIcon:SetShow(false)
   self._uiBackBuff:SetShow(false)
@@ -45,6 +74,8 @@ function PaGlobalAppliedBuffList:initialize()
   Panel_AppliedBuffList:addInputEvent("Mouse_On", "HandleMOnAppliedBuffPenel()")
   Panel_AppliedBuffList:addInputEvent("Mouse_Out", "HandleMOutAppliedBuffPenel()")
   Panel_AppliedBuffList:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
+  self._initialized = true
+  ResponseBuff_changeBuffList()
 end
 function PaGlobalAppliedBuffList:setMovableUIForControlMode()
   self._buffText:SetShow(false)
@@ -71,17 +102,10 @@ function PaGlobalAppliedBuffList:changeOnOffTexture(isOn)
   end
 end
 function PaGlobalAppliedBuffList:show()
-  Panel_AppliedBuffList:SetShow(true, false)
+  PaGlobalFunc_AppliedBuffList_ResetPosition()
 end
 function PaGlobalAppliedBuffList:hide()
   Panel_AppliedBuffList:SetShow(false, false)
-end
-function PaGlobalAppliedBuffList:showToggle()
-  if Panel_AppliedBuffList:IsShow() then
-    Panel_AppliedBuffList:SetShow(false)
-  else
-    Panel_AppliedBuffList:SetShow(true)
-  end
 end
 function HandleMOnAppliedBuffPenel()
   AppliedBuffList:changeOnOffTexture(true)
@@ -95,4 +119,15 @@ end
 function HandleMOffAppliedBuff(buffIndex, isDebuff)
   HideBuffTooltip(buffIndex, isDebuff)
 end
-PaGlobalAppliedBuffList:initialize()
+function renderModeChange_FromClient_AppliedBuffList_ResetPosition(prevRenderModeList, nextRenderModeList)
+  if CheckRenderModebyGameMode(nextRenderModeList) == false then
+    return
+  end
+  PaGlobalFunc_AppliedBuffList_ResetPosition()
+end
+function FromClient_AppliedBuffList_luaLoadComplete()
+  PaGlobalAppliedBuffList:initialize()
+end
+registerEvent("onScreenResize", "PaGlobalFunc_AppliedBuffList_ResetPosition")
+registerEvent("FromClient_RenderModeChangeState", "renderModeChange_FromClient_AppliedBuffList_ResetPosition")
+registerEvent("FromClient_luaLoadComplete", "FromClient_AppliedBuffList_luaLoadComplete")

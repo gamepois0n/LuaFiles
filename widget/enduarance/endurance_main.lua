@@ -122,7 +122,7 @@ end
 function Panel_PlayerEndurance_Position()
   local self = PaGlobalPlayerEnduranceList
   self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
-  self.panel:SetPosX(getScreenSizeX() - self.radarSizeX - self.panel:GetSizeX())
+  self.panel:SetPosX(getScreenSizeX() - self.radarSizeX - self.panel:GetSizeX() - 15)
   self.panel:SetPosY(FGlobal_Panel_Radar_GetPosY())
   if Panel_Widget_TownNpcNavi:GetShow() then
     self.panel:SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 10)

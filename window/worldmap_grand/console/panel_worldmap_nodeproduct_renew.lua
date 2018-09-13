@@ -271,6 +271,7 @@ function PaGlobalFunc_FromCLient_WorldMap_NodeProduct_FindSubNode(explorationNod
 end
 function PaGlobalFunc_WorldMap_NodeProduct_SelectNode(value)
   local self = Window_WorldMap_NodeProductInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._currentNodeIndex = self._currentNodeIndex + value
   if self._currentNodeIndex < 0 then
     self._currentNodeIndex = self._subNodeCount - 1

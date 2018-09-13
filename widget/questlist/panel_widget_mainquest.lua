@@ -15,7 +15,8 @@ local mainQuestWidget = {
   _config = {_maxConditionCount = 5, _closableLevel = 50},
   _uiQuestConditions = {},
   _isButtonOn = false,
-  _mainQuestNo = nil
+  _mainQuestNo = nil,
+  _isInitialized = false
 }
 function mainQuestWidget:initialize()
   self:createControl()
@@ -46,6 +47,10 @@ function mainQuestWidget:initControl()
     end
   else
     Panel_MainQuest:SetShow(true)
+  end
+  self._isInitialized = true
+  if true == Panel_MainQuest:GetShow() then
+    self:update()
   end
 end
 function PaGlobalFunc_MainQuestWidget_Open()
@@ -93,6 +98,9 @@ function FGlobal_MainQuest_Update()
   mainQuestWidget:update()
 end
 function mainQuestWidget:update()
+  if false == self._isInitialized then
+    return
+  end
   local questList = ToClient_GetQuestList()
   if true == questList:isMainQuestClearAll() then
     self:close()
@@ -107,6 +115,8 @@ function mainQuestWidget:update()
     local startPosY = self:setQuestGroupTitleInfo(uiQuestInfo)
     self:setConditionInfo(uiQuestInfo, startPosY)
     self:setButtonCheckState(uiQuestInfo)
+  else
+    self:close()
   end
 end
 function mainQuestWidget:clearAll()
@@ -120,9 +130,11 @@ function mainQuestWidget:clearAll()
   self._ui._checkbox_Quest_Navi:SetShow(false)
   self._ui._button_Quest_Giveup:SetShow(false)
   for index = 0, self._config._maxConditionCount - 1 do
-    self._uiQuestConditions[index]:SetText("")
-    self._uiQuestConditions[index]:SetIgnore(true)
-    self._uiQuestConditions[index]:SetShow(false)
+    if nil ~= self._uiQuestConditions[index] then
+      self._uiQuestConditions[index]:SetText("")
+      self._uiQuestConditions[index]:SetIgnore(true)
+      self._uiQuestConditions[index]:SetShow(false)
+    end
   end
   self._isButtonOn = false
   self._mainQuestNo = nil
@@ -429,6 +441,9 @@ function FromClient_MainQuestWidget_ResetPosition()
     Panel_MainQuest:SetShow(true)
   end
   FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
+  if true == Panel_MainQuest:GetShow() then
+    FGlobal_MainQuest_Update()
+  end
 end
 function FGlobal_QuestWidget_CalcScrollButtonSize()
 end

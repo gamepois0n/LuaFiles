@@ -489,12 +489,15 @@ function close_WindowPanelList()
     PaGlobal_CharacterTag_Close()
   end
   if true == _ContentsGroup_isFairy and true == Panel_FairyInfo:GetShow() then
-    if false == Panel_Window_FairyUpgrade:GetShow() and false == Panel_Window_FairySetting:GetShow() then
+    if false == Panel_Window_FairyUpgrade:GetShow() and false == Panel_Window_FairySetting:GetShow() and false == PaGlobalFunc_fairySkill_GetShow() then
       PaGlobal_FairyInfo_Close()
     elseif true == Panel_Window_FairyUpgrade:GetShow() then
       PaGlobal_FairyUpgrade_Close()
     elseif true == Panel_Window_FairySetting:GetShow() then
       PaGlobal_FairySetting_Close()
+    elseif true == PaGlobalFunc_fairySkill_GetShow() then
+      PaGlobalFunc_fairySkill_Close()
+      return
     end
   end
   if Panel_LifeRanking:IsShow() then

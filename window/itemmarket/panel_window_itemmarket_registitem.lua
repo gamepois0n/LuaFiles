@@ -252,6 +252,9 @@ function itemMarket_afterRegist()
   ClearFocusEdit()
   local registedItemCount = getItemMarketMyItemsCount()
   self.sellItemTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ENABLE_REGISTCOUNT", "itemCount", 30 - registedItemCount))
+  if nil ~= PaGlobalFunc_ServantIcon_MaidCoolUpdate then
+    PaGlobalFunc_ServantIcon_MaidCoolUpdate()
+  end
   FGlobal_ItemMarketPassword_CanelPassword()
   FGlobal_ItemMarketRegistItem_CancelPassword()
 end
@@ -476,6 +479,7 @@ function FGlobal_ItemMarketRegistItem_Close(isItemMarketItemSet_Show)
     if Panel_Window_Warehouse:GetShow() then
       Warehouse_Close()
     end
+    PaGlobalFunc_ServantIcon_MaidCoolUpdate()
     return
   end
   if not Panel_Window_Warehouse:GetShow() then

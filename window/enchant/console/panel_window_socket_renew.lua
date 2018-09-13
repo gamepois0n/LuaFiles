@@ -81,6 +81,10 @@ function socketInfo:initialize()
     [2] = UI.getChildControl(self._ui.stc_innerBG, "Static_SocketFrame2"),
     [3] = UI.getChildControl(self._ui.stc_innerBG, "Static_SocketFrame3")
   }
+  for ii = 1, self.config.socketSlotCount do
+    self._ui.staticSocketName[ii]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    self._ui.staticSocketDesc[ii]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  end
   self._ui.stc_focusBox = UI.getChildControl(self._ui.stc_innerBG, "Static_FocusBox")
   self._ui.txt_keyGuideDestroy = UI.getChildControl(self._ui.stc_innerBG, "StaticText_Trash_ConsoleUI")
   self._ui.txt_keyGuideDiscard = UI.getChildControl(self._ui.stc_bottom, "StaticText_KeyGuideCancel_ConsoleUI")
@@ -227,11 +231,6 @@ function socketInfo:updateSocket()
         _onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        if is4k then
-          _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -484, 80)
-        else
-          _onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -242, 40)
-        end
       elseif ii == 2 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -241,11 +240,6 @@ function socketInfo:updateSocket()
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        if is4k then
-          _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_TopLoop", true, -474, 0)
-        else
-          _onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -237, 0)
-        end
       elseif ii == 3 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -257,11 +251,6 @@ function socketInfo:updateSocket()
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
         audioPostEvent_SystemUi(5, 6)
-        if is4k then
-          _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_TopLoop", true, -464, -60)
-        else
-          _onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -232, -30)
-        end
       end
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false
@@ -315,8 +304,8 @@ function Input_SocketInfo_Select(index, socketInsert, isShowTooltip)
   self._currentSocket = index
   self._ui.stc_focusBox:SetMonoTone(not _snappedOnThisPanel)
   self._ui.txt_keyGuideDestroy:SetMonoTone(false ~= self.slotSocket[self._currentSocket].empty or not _snappedOnThisPanel)
-  self._ui.stc_focusBox:SetPosY(self._ui.staticSocketBackground[index]:GetPosY() - 12)
-  self._ui.txt_keyGuideDestroy:SetPosY(120 + (index - 1) * 75)
+  self._ui.stc_focusBox:SetPosY(self._ui.staticSocketBackground[index]:GetPosY() - 44)
+  self._ui.txt_keyGuideDestroy:SetPosY(80 + (index - 1) * 133)
 end
 local function Socket_Pop_Confirm()
   local self = socketInfo
@@ -335,25 +324,15 @@ local function Socket_Push_Confirm()
   local index = socketInfo._indexPush
   local socketSlot = self.slotSocket[index + 1]
   if false == isItemLock then
-    socketSlot.iconBg:AddEffect("UI_ItemJewel02", false, 0, 0)
-    socketSlot.desc:AddEffect("UI_ItemJewel03", false, 0, 0)
-    socketSlot.iconBg:AddEffect("fUI_ItemJewel01", false, -1, -1)
-    self.slotMain.icon:AddEffect("fUI_ItemJewel01", false, -1, -1)
-    self.slotMain.icon:AddEffect("UI_LimitMetastasis_Box01", false, -1, -1)
-    socketSlot.icon:AddEffect("UI_LimitMetastasis_Box02", false, -1, -1)
+    socketSlot.iconBg:AddEffect("UI_ItemJewel02", false, -3, -3)
+    socketSlot.iconBg:AddEffect("fUI_ItemJewel01", false, 0, 0)
+    self.slotMain.icon:AddEffect("fUI_ItemJewel01", false, 0, 0)
+    self.slotMain.icon:AddEffect("UI_LimitMetastasis_Box01", false, 0, 0)
+    socketSlot.icon:AddEffect("UI_LimitMetastasis_Box02", false, 0, 0)
   end
   Socket_ConfirmPushJewel(true)
   if false == isItemLock then
-    if index == 0 then
-      audioPostEvent_SystemUi(0, 7)
-      self.slotMain.icon:AddEffect("UI_LimitMetastasis_Top01", false, -1, -1)
-    elseif index == 1 then
-      audioPostEvent_SystemUi(0, 7)
-      self.slotMain.icon:AddEffect("UI_LimitMetastasis_Mid01", false, -1, -1)
-    elseif index == 2 then
-      audioPostEvent_SystemUi(0, 7)
-      self.slotMain.icon:AddEffect("UI_LimitMetastasis_Bot01", false, -1, -1)
-    end
+    audioPostEvent_SystemUi(0, 7)
   end
 end
 local function Socket_OverWrite_Confirm()

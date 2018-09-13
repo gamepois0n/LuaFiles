@@ -824,7 +824,7 @@ function StableList_ButtonOpen(eType, slotNo)
             buttonSlotNo = buttonSlotNo + 1
           end
         end
-        if servantInfo:doClearCountByMating() and servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and training ~= getState and FGlobal_IsCommercialService() and stallionTraining ~= getState then
+        if servantInfo:doClearCountByMating() and servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse and regMarket ~= getState and nowMating ~= getState and regMating ~= getState and training ~= getState and FGlobal_IsCommercialService() and stallionTraining ~= getState then
           buttonList[buttonSlotNo] = self._buttonClearMatingCount
           buttonSlotNo = buttonSlotNo + 1
         end

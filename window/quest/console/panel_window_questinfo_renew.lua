@@ -109,6 +109,8 @@ function PaGlobalFunc_Quest_SelectQuestTitle(questType)
   if self._config._title._progress == self._currentTitleType then
     self._ui._radioButton_autoFindWay:SetShow(true)
     self._ui._radioButton_QuestGiveUp:SetShow(true)
+    self._ui._questTitle._progress:SetCheck(true)
+    self._ui._questTitle._main:SetCheck(false)
     titleType = self._config._title._progress
     self._ui._staticText_RadioButtonTooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_PROGRESS"))
     self._ui._staticText_RadioButtonTooltip:SetPosX(self._ui._questTitle._progress:GetPosX() - self._ui._questTitle._progress:GetSizeX() / 2)
@@ -116,6 +118,8 @@ function PaGlobalFunc_Quest_SelectQuestTitle(questType)
   elseif self._config._title._main == self._currentTitleType then
     self._ui._radioButton_autoFindWay:SetShow(true)
     self._ui._radioButton_QuestGiveUp:SetShow(false)
+    self._ui._questTitle._progress:SetCheck(false)
+    self._ui._questTitle._main:SetCheck(true)
     titleType = self._config._title._main
     self._ui._staticText_RadioButtonTooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_QUEST_MAIN"))
     self._ui._staticText_RadioButtonTooltip:SetPosX(self._ui._questTitle._main:GetPosX() - self._ui._questTitle._main:GetSizeX() / 2)
@@ -966,6 +970,7 @@ function PaGlobalFunc_Quest_Toggle()
   Panel_Window_QuestInfo:SetShow(not Panel_Window_QuestInfo:GetShow())
 end
 function Toggle_QuestTab_forPadEventFunc(value)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   local self = Window_QuestInfo
   self._currentTabIndex = self._currentTabIndex + value
   if self._currentTabIndex < 0 then

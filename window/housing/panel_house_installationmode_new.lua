@@ -549,6 +549,7 @@ function PaGlobal_HouseInstallation:close()
   InventoryWindow_Close()
   FGlobal_FarmGuide_Close()
   InitializeModeClose_PetMaidInit()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobal_HouseInstallation:eventHousingPointUpdateClear()
   self._ui._interiorPointBg:SetShow(false)
@@ -1137,7 +1138,6 @@ function HandleClicked_HouseInstallation_Exit_ByAttacked()
 end
 function HouseInstallation_Hide()
   PaGlobal_HouseInstallation:close()
-  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function PaGlobal_HouseInstallation:registEventHandler()
   self._ui._itemListBg:addInputEvent("Mouse_DownScroll", "PaGlobal_HouseInstallation:updateScroll( true )")

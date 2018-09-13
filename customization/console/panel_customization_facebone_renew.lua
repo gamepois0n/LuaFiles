@@ -30,19 +30,18 @@ function PaGlobalFunc_Customization_FaceBone_OpenFaceShapeUi(classType, uiId)
   local self = Customization_FaceBoneInfo
   self._currentClassType = classType
   self._currentUiId = uiId
-  PaGlobalFunc_Customization_CameraLookEnable(false)
   startFacePickingMode()
   self:EnableFaceSlide(false)
   PaGlobalFunc_Customization_FaceBone_showBoneSculptingSelector(true)
   PaGlobalFunc_Customization_FaceBone_Open()
 end
 function PaGlobalFunc_Customization_FaceBone_CloseFaceShapeUi()
-  PaGlobalFunc_Customization_CameraLookEnable(true)
   endPickingMode()
   PaGlobalFunc_Customization_FaceBone_Close()
 end
 function PaGlobalFunc_Customization_FaceBone_SetBoneControl(isSet)
   local self = Customization_FaceBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if false == isSet then
     self._isBoneControl = false
     PaGlobalFunc_Customization_SetKeyGuide(3)

@@ -289,7 +289,7 @@ function ConsoleKeyGuide:makeNewGuide(state_)
       _consoleUIIconName.buttonLSC
     }, "Auto run")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_CrouchOrSkill, "Crouch")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) Interact with users")
   elseif state_ == self._guideState.screenshotGuide then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonB
@@ -443,13 +443,13 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Submerge")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) Interact with users")
   elseif state_ == self._guideState.swimWaitMode then
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonStart
     }, "Menu")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) PC Interaction")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "(hold) Interact with users")
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLB
     }, "Rest Mode")

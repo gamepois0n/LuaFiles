@@ -279,6 +279,7 @@ function ChattingInfo:open()
 end
 function Input_ChattingInfo_PressedLT()
   local self = ChattingInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   if false == PaGlobalFunc_ChattingHistory_GetShow() then
     PaGlobalFunc_ChattingHistory_Open(self._availableChannelList[self._currentChatTypeIndex])
     self._ui.txt_keyGuideLTForHistory:SetShow(false)
@@ -352,6 +353,7 @@ function PaGlobalFunc_ChattingInfo_PressedEnter(str)
 end
 function Input_ChattingInfo_PressedRT()
   local self = ChattingInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   self._curWhisperMsgCnt = self._curWhisperMsgCnt - 1
   if self._curWhisperMsgCnt < 0 then
     self._curWhisperMsgCnt = chatting_getTargetHistoryCount() - 1
@@ -362,7 +364,6 @@ function Input_ChattingInfo_PressedRT()
     self._ui.edit_whisperTarget:SetEditText(whisperHistory)
   else
     local string = PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_CHATTING_NO_REPLY")
-    string = "No one to reply"
     Proc_ShowMessage_Ack(string)
   end
 end

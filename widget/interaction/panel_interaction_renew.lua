@@ -30,7 +30,8 @@ local PanelInteraction = {
   _INTERACTABLE_FRAG = 0,
   _SHOW_BUTTON_COUNT = 0,
   _buttonTimeAcc = 0,
-  _keyguideIsMonotone = false
+  _keyguideIsMonotone = false,
+  _isCanInteraction = true
 }
 local _button_ID = {
   [0] = "Button_GamePlay",
@@ -509,6 +510,7 @@ function PanelInteraction:init()
     _interactionTargetUIList[ii] = UI.createAndCopyBasePropertyControl(_panel, "Button_Interaction_Template", _panel, "Button_Interaction_" .. ii)
     self:getButtonIcon(_interactionTargetUIList[ii], ii)
   end
+  _panel:SetChildIndex(self._ui.needCollectTool, _panel:getChildControlCount() + 1)
   self:registEvent()
   self:tooltipResize_ByFontSize()
 end
@@ -718,6 +720,7 @@ function PanelInteraction:updateDesc(indteractionType)
   if false == actor:isSetInteracatbleFrag(indteractionType) then
     return
   end
+  self._isCanInteraction = true
   local interactionDesc
   if indteractionType == CppEnums.InteractionType.InteractionType_Collect then
     if actor:get():isCollect() or actor:get():isDeadBody() then
@@ -734,6 +737,7 @@ function PanelInteraction:updateDesc(indteractionType)
       end
       if collectWrapper:isCollectable() and false == collectWrapper:isCollectableUsingMyCollectTool() then
         self._ui.needCollectTool:SetShow(true)
+        self._isCanInteraction = false
         interactionDesc = ""
         for loop = 0, CppEnums.CollectToolType.TypeCount do
           local isAble = collectWrapper:getCharacterStaticStatusWrapper():isCollectableToolType(loop)
@@ -1335,15 +1339,10 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
   if false == PaGlobalFunc_Fishing_GetFishingMiniGame_3() then
     return
   end
-  if getInputMode() ~= CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
-    if false == self._keyguideIsMonotone then
-      self._ui.stc_Key:SetMonoTone(true)
-      self._keyguideIsMonotone = true
-    end
+  self._ui.stc_Key:SetMonoTone(false)
+  if getInputMode() ~= CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode or false == self._isCanInteraction then
+    self._ui.stc_Key:SetMonoTone(true)
     return nil
-  elseif true == self._keyguideIsMonotone then
-    self._ui.stc_Key:SetMonoTone(false)
-    self._keyguideIsMonotone = false
   end
   if keyCustom_IsDownOnce_Action(CppEnums.ActionInputType.ActionInputType_Interaction) then
     self:updatePressedInteractionKey(0)

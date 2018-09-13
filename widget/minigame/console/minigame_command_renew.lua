@@ -122,7 +122,7 @@ function Command_RePosition()
   screenX = getScreenSizeX()
   screenY = getScreenSizeY()
   Panel_Command:SetPosX(screenX / 2 - Panel_Command:GetSizeX() / 2)
-  Panel_Command:SetPosY(screenY / 2 + 100)
+  Panel_Command:SetPosY(screenY / 2 - 250)
 end
 local _math_random = math.random
 local _math_randomSeed = math.randomseed
@@ -165,7 +165,7 @@ local function Command_CreateRandomText()
       CommandTextureChange(textControl, 3)
       cmd = 3
     end
-    textControl:SetPosX(index * 50 - 50)
+    textControl:SetPosX(index * 50 - 100)
     textControl:SetPosY(80)
     textControl:SetShow(true)
     commands[index] = cmd
@@ -174,13 +174,14 @@ end
 function Panel_Minigame_Command_Start()
   Panel_Command:SetShow(true, false)
   ToClient_setAvailableInputWidget(false)
+  PaGlobal_ConsoleQuickMenu:widgetClose()
   _CommandTimeBG:SetShow(true)
-  for ii = 0, 9 do
+  for ii = 1, 10 do
     checkIconList[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_EDIT, Panel_Command, "Static_CheckIcon" .. ii)
     CopyBaseProperty(checkIcon, checkIconList[ii])
     checkIconList[ii]:SetShow(false)
-    CommandText[ii + 1]:SetShow(false)
-    CommandText[ii + 1]:SetColor(UIColor.C_FFFFFFFF)
+    CommandText[ii]:SetShow(false)
+    CommandText[ii]:SetColor(UIColor.C_FFFFFFFF)
   end
   FGlobal_MiniGame_FishingCheck()
   getFishCountCalc()
@@ -219,6 +220,7 @@ end
 function Panel_Minigame_Command_End()
   _commandEffectBG:EraseAllEffect()
   Panel_Command:SetShow(false, false)
+  PaGlobal_ConsoleQuickMenu:widgetOpen()
   isCommandFinished = true
 end
 local function MiniGame_Command_OnSuccess()

@@ -381,6 +381,7 @@ function Panel_Dialog_Main_Bottom_Info:open()
   self._ui.static_BottomBG:SetShow(true)
 end
 function Panel_Dialog_Main_Bottom_Info:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self._ui.static_BottomBG:SetShow(false)
 end
 function Panel_Dialog_Main_Bottom_Info:update()
@@ -518,7 +519,7 @@ function Panel_Dialog_Main_Bottom_Info:funcButton_CreatTypeBranch(IconControl, B
   ButtonControl:SetMonoTone(false)
   ButtonControl:SetFontColor(self._UI_color.C_FFFFFFFF)
   if funcButtonType == CppEnums.ContentsType.Contents_Quest or funcButtonType == CppEnums.ContentsType.Contents_NewQuest then
-    audioPostEvent_SystemUi(4, 4)
+    _AudioPostEvent_SystemUiForXBOX(4, 4)
     self._value.questFuncButtonIndex = index
   elseif funcButtonType == CppEnums.ContentsType.Contents_Shop then
     FGlobal_RemoteControl_Show(5)
@@ -587,7 +588,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   end
   local count = 0
   local targetWindowList = {}
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 2)
   local MyWp = getSelfPlayer():getWp()
   local inventory = getSelfPlayer():get():getInventory()
   local invenSize = inventory:getFreeCount()
@@ -1089,7 +1090,7 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(index)
   if Panel_Window_MasterpieceAuction:GetShow() then
     PaGlobal_MasterpieceAuction:close()
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 2)
   local dialogData = ToClient_GetCurrentDialogData()
   if nil == dialogData then
     return
@@ -1169,6 +1170,7 @@ function Toggle_DialogMainTab_forPadEventFunc(value)
   if self._currentMaxFuncButtonCount == 1 then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 5)
   local _currentBottomButton = {}
   local _lastArrayIndex = self._currentMaxFuncButtonCount - 2
   for ii = self._config.firstFuncButtonIndex, _lastArrayIndex do

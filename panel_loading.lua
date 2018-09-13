@@ -204,7 +204,7 @@ function LoadingPanel_ShuffleOrder(table)
   end
 end
 function LoadingPanel_LoadMovie()
-  if false == _ContentsGroup_RemasterUI_Lobby then
+  if false == _ContentsGroup_RemasterUI_Lobby or true == ToClient_isXBox() then
     return
   end
   stc_movieBG:SetShow(true)
@@ -385,4 +385,11 @@ registerEvent("onScreenResize", "LoadingPanel_Resize")
 Panel_Loading:RegisterUpdateFunc("LoadingPanel_UpdatePerFrame")
 LoadingPanel_Resize()
 LoadingPanel_GetBackGroundImage()
-LoadingPanel_LoadMovie()
+function InitLoadingMoviePanel()
+  _PA_LOG("COHERENT", "InitLoadingMoviePanel")
+  LoadingPanel_LoadMovie()
+end
+function RegisterEvent()
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "InitLoadingMoviePanel")
+end
+RegisterEvent()

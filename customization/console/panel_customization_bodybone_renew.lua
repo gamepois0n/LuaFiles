@@ -184,6 +184,7 @@ function PaGlobalFunc_Customization_BodyBone_CursorSelect(luaControlModeIndex)
 end
 function PaGlobalFunc_Customization_BodyBone_SetBoneControl(isSet)
   local self = Customization_BodyBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if false == isSet then
     self._isBoneControl = false
     PaGlobalFunc_Customization_SetKeyGuide(3)

@@ -58,6 +58,12 @@ local Window_WorldMap_RingMenuInfo = {
   _currentQuestKey = nil,
   _currentFocusedNodeCount = 0
 }
+function Window_WorldMap_RingMenuInfo:ClickableCheck()
+  if true == PaGlobalFunc_WorldMap_NodeInfo_GetShow() then
+    return false
+  end
+  return true
+end
 function Window_WorldMap_RingMenuInfo:RingMenuClear()
   self._ui._static_BlackBg:SetShow(false)
   self._ui._static_RingMenuBg:SetShow(false)
@@ -181,6 +187,9 @@ function PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(isShow)
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapNode(explorationNode)
   local self = Window_WorldMap_RingMenuInfo
+  if false == self:ClickableCheck() then
+    return
+  end
   self._currentWorldNode = explorationNode
   self._ui._static_FocusKeyGuide:SetShow(false)
   self._ui._staticText_Tooltip:SetShow(false)

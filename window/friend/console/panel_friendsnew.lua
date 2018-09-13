@@ -295,6 +295,7 @@ function PaGlobal_FriendNew:ClickLB()
   if true == self._isPCFriendTab then
     return false
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._isPCFriendTab = true
   PaGlobal_FriendNew:Update()
 end
@@ -302,6 +303,7 @@ function PaGlobal_FriendNew:ClickRB()
   if false == self._isPCFriendTab then
     return false
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._isPCFriendTab = false
   PaGlobal_FriendNew:Update()
 end
@@ -449,6 +451,7 @@ function PaGlobal_FriendNew:OpenAddFriendEdit()
   if false == self._isPCFriendTab then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   _panel:SetMonoTone(true)
   self._ui._Static_BottomBg:SetShow(false)
   self._ui._Static_AddFriendBg:SetMonoTone(false)
@@ -502,7 +505,7 @@ function FromClient_NoticeNewMessage(isSoundNotice, isEffectNotice)
     UIMain_FriendsUpdate()
   end
   if isSoundNotice then
-    audioPostEvent_SystemUi(3, 11)
+    _AudioPostEvent_SystemUiForXBOX(3, 11)
   end
 end
 function friend_clickAddFriendClose()

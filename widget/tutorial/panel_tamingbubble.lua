@@ -33,8 +33,8 @@ local tamingBubble_Desc = {
   [1010] = PAGetString(Defines.StringSheet_GAME, "LUA_HORSE_TAMING_TUTORIAL_10")
 }
 local isOpen = false
-local basePosX = Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX() + 150
-local basePosY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 50
+local basePosX = Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX() + 480
+local basePosY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 60
 local function updateDeltaTime_TamingBubble(deltaTime, index)
   _updateTime = _updateTime + deltaTime
   if 1 == index then

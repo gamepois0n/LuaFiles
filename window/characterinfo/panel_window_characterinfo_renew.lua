@@ -62,7 +62,7 @@ local CharacterInfo = {
   }
 }
 function CharacterInfo:close()
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_CharacterInfo_Renew:SetShow(false, false)
   UI.ClearFocusEdit()
   Panel_Window_CharacterInfo_Renew:CloseUISubApp()
@@ -532,7 +532,7 @@ function FromClient_CharacterInfo_Basic_MentalChanged()
   end
   local _mental = self._player:getWp()
   local _maxMental = self._player:getMaxWp()
-  self._ui.txt_Enegy:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_MENTAL") .. " " .. tostring(_mental) .. " / " .. tostring(_maxMental))
+  self._ui.txt_Enegy:SetText(tostring(_mental) .. " / " .. tostring(_maxMental))
 end
 function FromClient_CharacterInfo_Basic_ContributionChanged()
   local self = CharacterInfo
@@ -543,7 +543,7 @@ function FromClient_CharacterInfo_Basic_ContributionChanged()
   local _contribution = ToClient_getExplorePointByTerritoryRaw(_territoryKeyRaw)
   local _remainContribution = _contribution:getRemainedPoint()
   local _aquiredContribution = _contribution:getAquiredPoint()
-  self._ui.txt_Contribution:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CONTRIBUTION") .. " " .. tostring(_remainContribution) .. " / " .. tostring(_aquiredContribution))
+  self._ui.txt_Contribution:SetText(tostring(_remainContribution) .. " / " .. tostring(_aquiredContribution))
 end
 function FromClient_CharacterInfo_Basic_FitnessChanged(addSp, addWeight, addHp, addMp)
   local self = CharacterInfo
@@ -772,7 +772,7 @@ end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CharaterInfo_Init")
 function PaGlobalFunc_CharacterInfoTab_PadControl(index)
   local self = CharacterInfo
-  _PA_LOG("\236\155\144\236\132\160", "PaGlobalFunc_CharacterInfoTab_PadControl" .. index)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if 0 == index then
     self:ShowNextTab(true)
   else

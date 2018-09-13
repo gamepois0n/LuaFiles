@@ -44,6 +44,9 @@ local FairyInfo = {
   _fromSlotNo = 0,
   _currentExpRate = 0
 }
+function PaGloblFunc_FairyInfo_GetFairySkillCount()
+  return eFairyMaxEquipSkill
+end
 function PaGlobal_FairyInfo_GetFairyNo()
   return FairyInfo._fairyNo
 end
@@ -166,8 +169,8 @@ function FairyInfo:Update()
       self._UI._skillIcon[uiRow]:addInputEvent("Mouse_Out", "FairyInfo_SkillTooltip( false, " .. tostring(uiRow) .. ")")
     end
   end
+  uiRow = 1
   if nil ~= self._skillKey then
-    local uiRow = 1
     for key, value in pairs(self._skillKey) do
       local skillSSW = ToClient_Fairy_EquipSkillWrraper(key)
       if nil ~= skillSSW then
@@ -176,6 +179,7 @@ function FairyInfo:Update()
           self._UI._skillIconBg[uiRow]:SetShow(true)
           self._UI._skillIcon[uiRow]:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
           self._UI._skillIcon[uiRow]:SetShow(true)
+          self._UI._skillDesc[uiRow]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
           self._UI._skillDesc[uiRow]:SetText(skillTypeSSW:getDescription())
           if key >= 10 and key <= 13 and true == isUnseal then
             local remainTime = ToClient_getFairyRemainTime()
@@ -214,6 +218,28 @@ function FairyInfo:Update()
           uiRow = uiRow + 1
         end
       end
+    end
+  end
+  if true == self._isFairyMaxLevel then
+    self._UI._button_LearnableSkill:SetShow(false)
+  end
+  if uiRow < 5 then
+    if true == self._isFairyMaxLevel then
+      self._UI._skillIconBg[uiRow]:SetShow(false)
+      self._UI._skillName[uiRow]:SetShow(false)
+      self._UI._skillIcon[uiRow]:SetShow(false)
+    else
+      local posX = self._UI._skillBG:GetSizeX() - self._UI._button_LearnableSkill:GetSizeX() - 10
+      local posY = self._UI._skillName[uiRow]:GetPosY()
+      self._UI._button_LearnableSkill:SetShow(true)
+      self._UI._button_LearnableSkill:SetPosX(posX)
+      self._UI._button_LearnableSkill:SetPosY(posY)
+      self._UI._button_LearnableSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_fairySkill_Open()")
+    end
+    for index = uiRow + 1, 4 do
+      self._UI._skillIconBg[index]:SetShow(false)
+      self._UI._skillName[index]:SetShow(false)
+      self._UI._skillIcon[index]:SetShow(false)
     end
   end
   local SettingData = ToClient_getFairySettingData(fairyNo_s64)
@@ -302,6 +328,7 @@ function PaGlobal_ClickSummonButton()
   if nil == self._fairyNo then
     return
   end
+  PaGlobalFunc_fairySkill_Close()
   if true == self._isUnseal then
     ToClient_requestPetSeal(self._fairyNo)
     if Panel_Window_FairyUpgrade:GetShow() then
@@ -340,6 +367,9 @@ function PaGlobal_FairyInfo_Close()
   end
   if true == Panel_Window_FairyChoiseTheReset:GetShow() then
     PaGlobal_FairyChoice:Close()
+  end
+  if true == PaGlobalFunc_fairySkill_GetShow() then
+    PaGlobalFunc_fairySkill_Close()
   end
 end
 function FairyInfo:Clear()
@@ -387,6 +417,7 @@ function FairyInfo:SetPos()
   Panel_FairyInfo:ComputePos()
 end
 function PaGlobal_FairyInfo_RequestRebirth()
+  PaGlobalFunc_fairySkill_Close()
   local function FunctionYes()
     local self = FairyInfo
     if nil == self._fairyNo then
@@ -500,6 +531,7 @@ function FairyInfo:Initialize()
     [3] = UI.getChildControl(self._UI._skillBG, "StaticText_SkillDesc4"),
     [4] = UI.getChildControl(self._UI._skillBG, "StaticText_SkillDesc5")
   }
+  self._UI._button_LearnableSkill = UI.getChildControl(self._UI._skillBG, "Button_LearnableSkill")
   self._fairyAttrStr = {
     [1] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYINFO_ATTR_1"),
     [2] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYINFO_ATTR_2"),

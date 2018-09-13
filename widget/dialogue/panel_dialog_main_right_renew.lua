@@ -267,6 +267,7 @@ function Panel_Dialog_Main_Right_Info:updateDialogList(dialogData, showButton)
     self._ui.list2_Dialog_List:requestUpdateByKey(toInt64(0, self._dialogId[index]))
   end
   self._ui.list2_Dialog_List:SetSize(self._ui.list2_Dialog_List:GetSizeX(), self._ui.list2_Dialog_List:GetSizeY())
+  ToClient_padSnapResetControl()
 end
 function Panel_Dialog_Main_Right_Info:updateExchangeList(displayExchangeWrapper)
   self._ui.list2_Exchange_List:getElementManager():clearKey()
@@ -408,7 +409,7 @@ function Panel_Dialog_Main_Right_Info:ExchangeItem_HaveCount(itemKey)
   return itemCount
 end
 function Panel_Dialog_Main_Right_Info:HandleClickedDialogButton_Trade(index)
-  audioPostEvent_SystemUi(0, 17)
+  _AudioPostEvent_SystemUiForXBOX(0, 17)
   local dialogData = ToClient_GetCurrentDialogData()
   local dialogButton = dialogData:getDialogButtonAt(index)
   if self:ExpirationItemCheck(dialogButton:getNeedItemKey()) then
@@ -626,7 +627,7 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
         needWpIcon:SetText(needWp .. "/" .. Wp)
         local posX = button_A:GetPosX() - needWpIcon:GetSizeX() - needWpIcon:GetTextSizeX()
         if needItemIcon:GetShow() then
-          posX = needItemIcon:GetPosX() - needWpIcon:GetSizeX() - needWpIcon:GetTextSizeX() - 10
+          posX = needItemIcon:GetPosX() - needWpIcon:GetSizeX() - needWpIcon:GetTextSizeX() - 7
         end
         needWpIcon:SetPosX(posX)
       end
@@ -740,7 +741,7 @@ function PaGlobalFunc_MainDialog_Right_InteractionCheck()
   if nil == enableDailogButtonIndex then
     return
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 2)
   PaGlobalFunc_MainDialog_Right_HandleClickedDialogButton(enableDailogButtonIndex)
 end
 function PaGlobalFunc_MainDialog_Right_CheckSceneChange(_npcWord)

@@ -38,6 +38,7 @@ function ImprovementInfo:initialize()
   self._ui.txt_descTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_TITLE"))
   self._ui.txt_descSub = UI.getChildControl(self._ui.stc_mainBG, "StaticText_DescSub")
   self._ui.txt_descSub:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_descSub:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_DESC"))
   self._ui.stc_artworkBG = UI.getChildControl(self._ui.stc_innerBG, "Static_ImprovementFrame")
   self._ui.stc_leftSlotBG = UI.getChildControl(self._ui.stc_innerBG, "Static_SlotBase")
   self._ui.stc_rightSlotBG = UI.getChildControl(self._ui.stc_innerBG, "Static_SlotResult")
@@ -130,7 +131,7 @@ function PaGlobalFunc_ImprovementInfo_SelectTarget(slotNo, itemWrapper, count, i
   self._targetSlotNo = slotNo
   self._targetWhereType = inventoryType
   self:update()
-  audioPostEvent_SystemUi(0, 16)
+  _AudioPostEvent_SystemUiForXBOX(0, 16)
 end
 function PaGlobalFunc_ImprovementInfo_FilterSubject(slotNo, notUse_itemWrappers, whereType)
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
@@ -161,7 +162,7 @@ function PaGlobalFunc_ImprovementInfo_SelectSubject(slotNo, itemWrapper, count, 
   self._subjectSlotNo = slotNo
   self._subjectWhereType = inventoryType
   self:update()
-  audioPostEvent_SystemUi(0, 16)
+  _AudioPostEvent_SystemUiForXBOX(0, 16)
 end
 function Input_ImprovementInfo_ApplyImprove()
   ImprovementInfo:applyImprove()
@@ -169,8 +170,8 @@ end
 function ImprovementInfo:applyImprove()
   if false == self._isAnimating and true == self._improveReady then
     self._isAnimating = true
-    audioPostEvent_SystemUi(5, 6)
-    audioPostEvent_SystemUi(5, 9)
+    _AudioPostEvent_SystemUiForXBOX(5, 6)
+    _AudioPostEvent_SystemUiForXBOX(5, 9)
     self._ui.stc_artworkBG:EraseAllEffect()
     self._ui.stc_artworkBG:AddEffect("fUI_LimitOver02A", true, 0, 0)
     self._ui.stc_artworkBG:AddEffect("UI_LimitOverLine_02", false, 0, 0)

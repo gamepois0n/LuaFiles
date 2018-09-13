@@ -203,6 +203,9 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
     Panel_Fishing:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Fishing, 0, 0.22)
     FGlobal_EquipFishingToolCheck()
+    if true == ToClient_IsDevelopment() and nil ~= PaGlobalFunc_InventoryInfo_GetShow and true == PaGlobalFunc_InventoryInfo_GetShow() then
+      PaGlobalFunc_InventoryInfo_Close()
+    end
     fishing_UI._purposeText:SetShow(true)
     fishing_UI._purposeText:AddEffect("UI_QustComplete01", false, 0, 0)
     PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
@@ -370,6 +373,8 @@ local function FishingGame_Manual_Fishing_Auto()
     v:ComputePos()
   end
   if autoFishingEnalbe then
+    PaGlobal_ConsoleQuickMenu:widgetOpen()
+    fishing_UI._fishWpDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GLOBAL_MANUAL_ONLYFISHWPDESC"))
   else
   end
 end
@@ -557,7 +562,6 @@ function Panel_Fishing_End(actorKeyRaw, isSelf)
   end
   if false == ui_Value.isFirstTime_Manual_Fishing_Start then
     PaGlobalFunc_ConsoleKeyGuide_SetState()
-    PaGlobal_ConsoleQuickMenu:widgetOpen()
   end
   Panel_Fishing:SetShow(false)
   Panel_ConsoleKeyGuide:SetShow(true)

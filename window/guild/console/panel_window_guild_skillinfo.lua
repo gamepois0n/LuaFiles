@@ -41,7 +41,11 @@ function GuildSkillInfo:update()
   self._ui.txt_SkillName:SetText(skillTypeSS:getName())
   self._ui.txt_Condition:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._ui.txt_Condition:SetAutoResize(true)
-  self._ui.txt_Condition:SetText(skillTypeSSW:getDescription())
+  local _skillcondition = skillTypeSSW:getDescription()
+  if "null" == tostring(_skillcondition) then
+    _skillcondition = ""
+  end
+  self._ui.txt_Condition:SetText(_skillcondition)
   local pointStr = PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILLLEARN_TXT_NEEDSP")
   self._ui.txt_NeedPoint:SetText(pointStr .. " : " .. tostring(skillStatic:get()._needSkillPointForLearning))
   local isShowNeedItem = nil ~= skillStatic:getItemInfo() and nil ~= skillStatic:getItemInfo():get()

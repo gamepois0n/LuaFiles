@@ -87,6 +87,7 @@ function ServantIcon:registEventHandler()
   registerEvent("WorldMap_WorkerDataUpdate", "FGlobal_MyHouseNavi_Update")
   registerEvent("FromClient_ChangeWorkerCount", "FromClient_ServantIcon_ChangeWorkerCount")
   registerEvent("FromClient_RefreshMaidList", "FGlobal_MaidIcon_SetPos")
+  registerEvent("FromClient_UpdateMaidCoolTime", "PaGlobalFunc_ServantIcon_UpdateMaidIcon")
   registerEvent("FromClient_Fairy_Update", "PaGlobalFunc_ServantIcon_FairyUpdate")
   registerEvent("EventSimpleUIEnable", "Servant_UpdateSimpleUI_Force_Out")
   registerEvent("EventSimpleUIDisable", "Servant_UpdateSimpleUI_Force_Over")
@@ -374,14 +375,12 @@ function ServantIcon:updateOtherIcon(iconType)
       local x1, y1, x2, y2 = setTextureUV_Func(icon.btn, 209, 1, 260, 52)
       icon.btn:getBaseTexture():setUV(x1, y1, x2, y2)
       icon.btn:setRenderTexture(icon.btn:getBaseTexture())
-      local warehouseInMaid = checkMaid_WarehouseIn(true)
-      local warehouseOutMaid = checkMaid_WarehouseOut(true)
-      local marketMaid = checkMaid_SubmitMarket(true)
       icon.btn:EraseAllEffect()
-      if warehouseInMaid or warehouseOutMaid or marketMaid then
-        icon.btn:AddEffect("fUI_Maid_01A", false, 0, 0)
-      else
-        icon.btn:AddEffect("fUI_Maid_02A", false, 0, 0)
+      local allMaidInCool, someMaidInCool = self:maidCoolTime()
+      if allMaidInCool then
+        icon.btn:AddEffect("fUI_Maid_02A", true, 0, 0)
+      elseif someMaidInCool then
+        icon.btn:AddEffect("fUI_Maid_01A", true, 0, 0)
       end
       MaidList_SetScroll()
       isShow = true
@@ -423,6 +422,26 @@ function ServantIcon:updateOtherIcon(iconType)
   end
   icon.btn:SetShow(isShow)
   icon.btn:ActiveMouseEventEffect(isShow)
+end
+function ServantIcon:maidCoolTime()
+  if nil == getSelfPlayer() then
+    return
+  end
+  local count = getTotalMaidList()
+  local allMaidInCool = true
+  local someMaidInCool = false
+  for index = 0, count - 1 do
+    local maidInfoWrapper = getMaidDataByIndex(index)
+    if nil ~= maidInfoWrapper then
+      local coolTime = maidInfoWrapper:getCoolTime()
+      if coolTime > 0 then
+        someMaidInCool = true
+      else
+        allMaidInCool = false
+      end
+    end
+  end
+  return allMaidInCool, someMaidInCool
 end
 function ServantIcon:updateHouseIcon()
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
@@ -698,6 +717,7 @@ function Panel_MyHouseNavi_Update(init, listCount)
   self._workerListCount = listCount
   self:updateHouseIcon()
   self:updatePos()
+  self:updateOtherIcon(self._iconType.maid)
 end
 function FGlobal_MyHouseNavi_Update()
   local self = ServantIcon
@@ -707,6 +727,11 @@ function FGlobal_MyHouseNavi_Update()
   end
   self:updateHouseIcon()
   self:updatePos()
+  self:updateOtherIcon(self._iconType.maid)
+end
+function PaGlobalFunc_ServantIcon_MaidCoolUpdate()
+  local self = ServantIcon
+  self:updateOtherIcon(self._iconType.maid)
 end
 function PaGlobal_Fairy_SetPosIcon()
   PaGlobalFunc_ServantIcon_FairyUpdate()
@@ -1058,6 +1083,7 @@ function InputLUp_ServantIcon_LeftMouseFunction(index)
   elseif index == self._iconType.pet then
     FGlobal_PetListNew_Toggle()
   elseif index == self._iconType.maid then
+    self:updateOtherIcon(self._iconType.maid)
     MaidList_Open()
   elseif index == self._iconType.camp then
     PaGlobal_Camp:open()

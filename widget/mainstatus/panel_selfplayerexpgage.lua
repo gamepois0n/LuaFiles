@@ -45,33 +45,6 @@ local pcRoomRate = 0
 local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = 0
 local useTime = 0
-if false == isGameTypeKorea() and false == isGameTypeTaiwan() then
-  _levelBG:SetSize(100, _levelBG:GetSizeY())
-  local expGagePosX = _levelBG:GetPosX() + _levelBG:GetSizeX()
-  local gaugeBundle = {
-    _wpGaugeBG,
-    _Wp,
-    _Wp_Main,
-    _wpGauge,
-    _wpGauge_Head,
-    _WpHelpMSG,
-    _contribute_BG,
-    _contribute_progress,
-    _contribute_progress_Head,
-    _contribute_txt,
-    _contribute_Main,
-    _contribute_helpMsg,
-    _skillGaugeBG,
-    _staticSkillExp,
-    _staticSkillExp_Head,
-    _staticSkillPoint,
-    _staticSkillPointMain,
-    _staticSkillPointSub
-  }
-  for _, control in pairs(gaugeBundle) do
-    control:SetPosX(expGagePosX)
-  end
-end
 local initPosX = Panel_SelfPlayerExpGage:GetPosX()
 local initPosY = Panel_SelfPlayerExpGage:GetPosY()
 _close_ExpGauge:SetShow(false)
@@ -292,6 +265,8 @@ function UserSkillPoint_Update()
   else
     skillExpRate = 0
   end
+  local _tempSkillPoint = skillExpRate * 100
+  local skillPointExp = string.format("%.3f", _tempSkillPoint)
   if _lastSkillPoint < player:getRemainSkillPoint() and -1 ~= _lastSkillPoint then
     audioPostEvent_SystemUi(3, 7)
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SkillIconCheck, true, CppEnums.VariableStorageType.eVariableStorageType_User)
@@ -299,15 +274,12 @@ function UserSkillPoint_Update()
     _staticSkillPointMain:AddEffect("UI_LevelUP_Skill", false, -28, 1)
     _staticSkillPointMain:AddEffect("fUI_LevelUP_Skill02", false, -28, 1)
   end
-  _staticSkillPointMain:SetPosX(_staticSkillPoint:GetSizeX() + _staticSkillPoint:GetPosX() + 40)
-  _staticSkillPointMain:SetText(tostring(player:getRemainSkillPoint()))
+  _staticSkillPointMain:SetText(tostring(player:getRemainSkillPoint() .. " (" .. skillPointExp .. "%)"))
   if CppEnums.CountryType.DEV == getGameServiceType() then
     local skillPointInfo = ToClient_getSkillPointInfo(0)
     local skillPointLev = tostring(skillPointInfo._pointLevel)
-    _staticSkillPointMain:SetText("(" .. skillPointLev .. ")" .. tostring(player:getRemainSkillPoint()))
+    _staticSkillPointMain:SetText("(" .. skillPointLev .. ")" .. tostring(player:getRemainSkillPoint() .. " (" .. skillPointExp .. "%)"))
   end
-  _staticSkillPointMain:SetSize(_staticSkillPointMain:GetTextSizeX() + 5, _staticSkillPointMain:GetSizeY())
-  _staticSkillPointSub:SetPosX(_staticSkillPointMain:GetSizeX() + _staticSkillPointMain:GetPosX() - 5)
   _staticSkillExp:SetProgressRate(skillExpRate * 100)
   if _lastSkillExp ~= skillExpRate then
     _staticSkillExp:EraseAllEffect()
@@ -315,9 +287,6 @@ function UserSkillPoint_Update()
     _staticSkillExp:AddEffect("UI_Gauge_Experience02", false, 0, 0)
     _staticSkillExp_Head:AddEffect("fUI_Repair01", false, 0, 0)
   end
-  local _tempSkillPoint = skillExpRate * 100
-  local skillPointExp = string.format("%.3f", _tempSkillPoint)
-  _staticSkillPointSub:SetText(" (" .. skillPointExp .. "%)")
   _lastSkillPoint = player:getRemainSkillPoint()
   _lastSkillExp = skillExpRate
   if selfPlayer:get():getReservedLearningSkillKey():isDefined() then
@@ -327,7 +296,7 @@ function UserSkillPoint_Update()
     ExpGauge_UpdateReservedSkillCircularProgress()
   end
   _staticSkillPointMain:useGlowFont(true, "BaseFont_Glow", 4284572001)
-  _staticSkillPointSub:useGlowFont(true, "BaseFont_10_Glow", 4284572001)
+  _staticSkillPointSub:SetShow(false)
   if false == _ContentsGroup_RenewUI_Skill then
     enableSkill_UpdateData()
   end
@@ -407,13 +376,8 @@ function wpPoint_UpdateFunc()
     _wpGauge:AddEffect("UI_Gauge_Experience02", false, 0, 0)
     _wpGauge_Head:AddEffect("fUI_Repair01", false, 0, 0)
   end
-  _wpGaugeBG:SetPosX(255)
-  _wpGauge:SetPosX(255)
-  _Wp:SetPosX(255)
-  _Wp_Main:SetPosX(_Wp:GetSizeX() + _Wp:GetPosX() + 50)
   _Wp_Main:SetText(tostring(Wp) .. " / " .. maxWp)
   _wpGauge:SetProgressRate(wpSetProgress)
-  _Wp_Main:SetSize(_Wp_Main:GetTextSizeX() + 10, _Wp_Main:GetSizeY())
   _Wp_Main:SetEnableArea(0, 0, _Wp_Main:GetTextSizeX(), _Wp_Main:GetSizeY())
   _Wp_Main:useGlowFont(true, "BaseFont_Glow", 4284572001)
   _lastWP = Wp
@@ -435,16 +399,11 @@ function contributePoint_UpdateFunc()
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
   local nowRemainExpPoint = tostring(explorePoint:getRemainedPoint())
   local nowExpPoint = tostring(explorePoint:getAquiredPoint())
-  _contribute_BG:SetPosX(410)
-  _contribute_progress:SetPosX(410)
-  _contribute_txt:SetPosX(410)
-  _contribute_Main:SetPosX(_contribute_txt:GetSizeX() + _contribute_txt:GetPosX() + 55)
   _contribute_Main:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
   if isGameServiceTypeDev() then
-    _contribute_Main:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. "      (" .. Int64toInt32(explorePoint:getExperience_s64()) .. " / " .. Int64toInt32(getRequireExplorationExperience_s64()) .. ")")
+    _contribute_Main:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. " (" .. Int64toInt32(explorePoint:getExperience_s64()) .. " / " .. Int64toInt32(getRequireExplorationExperience_s64()) .. ")")
   end
   _contribute_progress:SetProgressRate(cont_expRate * 100)
-  _contribute_Main:SetSize(_contribute_Main:GetTextSizeX() + 10, _contribute_Main:GetSizeY())
   _contribute_Main:SetEnableArea(0, 0, _contribute_Main:GetTextSizeX(), _contribute_Main:GetSizeY())
   Panel_Expgauge_MyContributeValue = tostring(explorePoint:getRemainedPoint())
   if isFirstExplore == false then

@@ -28,8 +28,8 @@ function PaGlobal_ItemMarket_NewAlarm:Init()
 end
 function PaGlobal_ItemMarket_NewAlarm:ShowAni()
   local alarmMoveAni1 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 80)
-  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_ItemMarket_NewAlarm:GetSizeX() - 20, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 80)
+  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
+  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_ItemMarket_NewAlarm:GetSizeX() - 5, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
   alarmMoveAni1.IsChangeChild = true
   Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni1)
   alarmMoveAni1:SetDisableWhileAni(true)
@@ -39,8 +39,8 @@ function PaGlobal_ItemMarket_NewAlarm:ShowAni()
 end
 function PaGlobal_ItemMarket_NewAlarm:HideAni()
   local alarmMoveAni2 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni2:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 80)
-  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 80)
+  alarmMoveAni2:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
+  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
   alarmMoveAni2.IsChangeChild = true
   Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni2)
   alarmMoveAni2:SetDisableWhileAni(true)

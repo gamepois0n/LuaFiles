@@ -169,6 +169,9 @@ function chargeDaumCash_Open()
     url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_TEST")
   elseif CppEnums.CountryType.ID_REAL == getGameServiceType() then
     url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_REAL")
+  elseif isGameTypeJapan() then
+    local userID = ToClient_GetUserId()
+    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEPMANGCASH_URL_URL", "userid", userID)
   else
     url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
   end

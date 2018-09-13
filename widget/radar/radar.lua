@@ -821,12 +821,10 @@ function FromClient_MapSizeScale()
   controlAlign()
   NpcNavi_Reset_Posistion()
   TownNpcIcon_Resize()
-  if false == _ContentsGroup_RemasterUI_Main_Alert then
-    Panel_PlayerEndurance_Position()
-    Panel_CarriageEndurance_Position()
-    Panel_HorseEndurance_Position()
-    Panel_ShipEndurance_Position()
-  end
+  Panel_PlayerEndurance_Position()
+  Panel_CarriageEndurance_Position()
+  Panel_HorseEndurance_Position()
+  Panel_ShipEndurance_Position()
   if false == _ContentsGroup_RemasterUI_Main_RightTop then
     FGlobal_PersonalIcon_ButtonPosUpdate()
   else

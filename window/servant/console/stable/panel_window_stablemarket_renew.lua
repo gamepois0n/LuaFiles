@@ -726,12 +726,12 @@ function PaGlobalFunc_StableMarket_ResponseServantBuyItNowFail()
 end
 function PaGlobalFunc_StableMarket_Reload()
   local self = Panel_Window_StableMarket_info
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   RequestActionReloadPage(0, self._value.openByNpc)
 end
 function PaGlobalFunc_StableMarket_SetFilter()
   if not PaGlobalFunc_StableMarket_ChecKTabMy() then
-    audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     PaGlobalFunc_StableMarket_Filter_Show()
   end
 end

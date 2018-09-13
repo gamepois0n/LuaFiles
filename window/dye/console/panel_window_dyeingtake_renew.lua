@@ -194,6 +194,7 @@ function DyeingTake:updatePalette()
 end
 function Input_DyeingTake_NextPalette(nextPaletteIndex)
   local self = DyeingTake
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
   local targetPalette = self._nowPaletteIndex + nextPaletteIndex
   if targetPalette < 1 then
@@ -221,6 +222,7 @@ function DyeingTake:isPlayerHaveActivedMerv()
 end
 function Input_DyeingTake_NextCategory(nextCategoryIndex)
   local self = DyeingTake
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(false)
   local targetCategory = self._nowPaletteCategoryIndex + nextCategoryIndex
   if targetCategory < 1 then

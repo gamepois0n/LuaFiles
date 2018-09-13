@@ -398,6 +398,7 @@ function PaGlobalFunc_GameExit_UpdateCharList(value)
   if true == self._ui._button_NoticeMsg:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if self._currentWheelValue < 0 then
     self._currentWheelValue = 0
   end

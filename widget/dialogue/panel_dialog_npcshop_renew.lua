@@ -560,7 +560,7 @@ end
 function Panel_Dialog_NPCShop_Info:preShow()
   if not PaGlobalFunc_Dialog_NPCShop_GetShow() then
     local self = Panel_Dialog_NPCShop_Info
-    audioPostEvent_SystemUi(1, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
     InventoryWindow_Show()
     self:resize()
     self:controlInit()
@@ -722,7 +722,7 @@ end
 function PaGlobalFunc_Dialog_NPCShop_Close()
   if Panel_Dialog_NPCShop:GetShow() then
     Panel_Dialog_NPCShop:SetShow(false, false)
-    audioPostEvent_SystemUi(1, 1)
+    _AudioPostEvent_SystemUiForXBOX(1, 1)
     Inventory_SetFunctor(nil, nil, nil, nil)
     InventoryWindow_Close()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
@@ -742,7 +742,7 @@ end
 function PaGlobalFunc_Dialog_NPCShop_ExitButton()
   if PaGlobalFunc_Dialog_NPCShop_GetShow() then
     Panel_Dialog_NPCShop:SetShow(false, false)
-    audioPostEvent_SystemUi(1, 1)
+    _AudioPostEvent_SystemUiForXBOX(1, 1)
     InventoryWindow_Close()
     ReqeustDialog_retryTalk()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
@@ -1048,7 +1048,7 @@ function PaGlobalFunc_Dialog_NPCShop_BuySomeOrSellAllItem()
     elseif self._enum.etabIndexSell == self._value.lastTabIndex then
       PaGlobalFunc_Dialog_NpcShop_SellItemAll()
     elseif self._enum.etabIndexRepurchase == self._value.lastTabIndex then
-      PaGlobalFunc_Dialog_NPCShop_BuySome()
+      PaGlobalFunc_Dialog_NPCShop_BuyOrSellItem()
     end
   else
   end
@@ -1474,7 +1474,7 @@ function PaGlobalFunc_Dialog_NPCShop_ScrollEvent(isUpScroll)
   self:updateContent(false)
 end
 function PaGlobalFunc_Dialog_NPCShop_ShowAni()
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Dialog_NPCShop:SetAlpha(0)
   UIAni.AlphaAnimation(1, Panel_Dialog_NPCShop, 0, 0.3)
 end

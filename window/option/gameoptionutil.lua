@@ -660,8 +660,8 @@ function PaGlobal_Option:SetSpecSetting(value)
 end
 local InitSpectionOption_LUT = function()
   local parent = UI.getChildControl(PaGlobal_Option._frames.Graphic.Effect._uiFrameContent, "StaticText_BgOrder0_Import")
-  UI.getChildControl(parent, "Button_LUTReset"):addInputEvent("Mouse_LUp", "PaGlobal_Option:SetRecommandationLUT()")
-  UI.getChildControl(parent, "Button_LUTReset2"):addInputEvent("Mouse_LUp", "PaGlobal_Option:SetRecommandationLUT2()")
+  UI.getChildControl(parent, "Button_LUTReset"):addInputEvent("Mouse_LUp", "PaGlobal_Option:SetRecommandationLUT2()")
+  UI.getChildControl(parent, "Button_LUTReset2"):addInputEvent("Mouse_LUp", "PaGlobal_Option:SetRecommandationLUT()")
 end
 local LUTRecommandation = -1
 local LUTRecommandation2 = -1

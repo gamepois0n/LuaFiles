@@ -179,6 +179,7 @@ function FGlboal_PearlStamp_UpdatePage(pageno, from, to)
         self.pearlStampControl[index]._stamp:SetPosX(-15)
         self.pearlStampControl[index]._stamp:SetPosY(-15)
         audioPostEvent_SystemUi(0, 21)
+        _AudioPostEvent_SystemUiForXBOX(0, 21)
       else
         self.pearlStampControl[index]._stamp:SetVertexAniRun("Ani_Move_Pos_New", false)
         self.pearlStampControl[index]._stamp:SetVertexAniRun("Ani_Scale_New", false)

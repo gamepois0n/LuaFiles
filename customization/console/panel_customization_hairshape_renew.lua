@@ -55,20 +55,17 @@ function Customization_HairShapeInfo:ShowBoneControls(isShow)
 end
 function PaGlobalFunc_Customization_HairShape_CloseHairShapeUi()
   endPickingMode()
-  PaGlobalFunc_Customization_CameraLookEnable(true)
   PaGlobalFunc_Customization_HairShape_Close()
 end
 function PaGlobalFunc_Customization_HairShape_CloseHairShapeUiWithoutBoneControl()
   local self = Customization_HairShapeInfo
   endPickingMode()
-  PaGlobalFunc_Customization_CameraLookEnable(true)
   self._ui._checkBox_ShowPart:SetEnable(true)
   PaGlobalFunc_Customization_HairShape_Close()
 end
 function PaGlobalFunc_Customization_HairShape_OpenHairShapeUiWithoutBoneControl(classType, uiId)
   local self = Customization_HairShapeInfo
   self._ui._checkBox_ShowPart:SetEnable(false)
-  PaGlobalFunc_Customization_CameraLookEnable(false)
   self._isExistBone = false
   PaGlobalFunc_Customization_HairShape_OpenHairShapeUi(classType, uiId)
 end
@@ -76,7 +73,6 @@ function PaGlobalFunc_Customization_HairShape_OpenHairShapeUi(classType, uiId)
   local self = Customization_HairShapeInfo
   self._currentClassType = classType
   self._currentUiId = uiId
-  PaGlobalFunc_Customization_CameraLookEnable(false)
   HandleClicked_Customization_HairShape_CursorSelect(self._checkTransRot)
   PaGlobalFunc_Customization_HairShape_EnableHairSlide(false)
   startHairPickingMode()
@@ -297,6 +293,7 @@ function Customization_HairShapeInfo:UpdateHairRadioButtons(updateControlMode)
 end
 function PaGlobalFunc_Customization_HairShape_SetBoneControl(isSet)
   local self = Customization_HairShapeInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if false == isSet then
     self._isBoneControl = false
     PaGlobalFunc_Customization_SetKeyGuide(3)

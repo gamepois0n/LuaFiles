@@ -435,7 +435,6 @@ function Window_WorldMap_HouseCraftInfo:InitEvent()
   self._ui._list2_WorkerList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_WorldMap_HouseCraft_List2EventControlCreate")
   self._ui._list2_WorkerList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   Panel_Worldmap_HouseCraft:RegisterUpdateFunc("PaGlobalFunc_WorldMap_HouseCraft_UpdatePerFrame")
-  UIScroll.InputEvent(self._ui._scroll_CraftList, "PaGlobalFunc_WorldMap_HouseCraft_ScrollHandle")
 end
 function Window_WorldMap_HouseCraftInfo:InitRegister()
   registerEvent("EventWarehouseUpdate", "PaGlobalFunc_FromClient_WorldMap_HouseCraft_Update")

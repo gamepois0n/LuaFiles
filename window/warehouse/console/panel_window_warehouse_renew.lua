@@ -508,7 +508,7 @@ function Warehouse:updateButtonInfo()
   end
   self._ui.txt_Silver:SetShow(self._buttonData.sendMoney)
   if true == self._ui.txt_Silver:GetShow() then
-    keyGuideXpos = keyGuideXpos - 150
+    keyGuideXpos = keyGuideXpos - 200
     self._ui.txt_Silver:SetPosX(keyGuideXpos)
   end
 end
@@ -899,6 +899,7 @@ function Warehouse_PushFromInventoryItemXXX(s64_count, slotNo, whereType)
     warehouse_requestInfo(getCurrentWaypointKey())
     warehouse_pushFromInventoryItemByNpc(whereType, slotNo, s64_count, self._targetActorKeyRaw)
   elseif true == self:isInstallation() then
+    warehouse_requestInfo(getCurrentWaypointKey())
     warehouse_pushFromInventoryItemByInstallation(self._installationActorKeyRaw, whereType, slotNo, s64_count, self._targetActorKeyRaw)
   elseif true == self:isGuildHouse() then
     warehouse_pushFromInventoryItemByGuildHouse(whereType, slotNo, s64_count, self._targetActorKeyRaw)
@@ -959,6 +960,7 @@ function PaGlobalFunc_Warehouse_PopItem(s64_count, slotNo)
       warehouse_requestInfo(getCurrentWaypointKey())
       warehouse_popToInventoryByNpc(slotNo, s64_count, self._targetActorKeyRaw)
     elseif true == self:isInstallation() then
+      warehouse_requestInfo(getCurrentWaypointKey())
       warehouse_popToInventoryByInstallation(self._installationActorKeyRaw, slotNo, s64_count, self._targetActorKeyRaw)
     elseif true == self:isGuildHouse() then
       warehouse_popToInventoryByGuildHouse(slotNo, s64_count, self._targetActorKeyRaw)

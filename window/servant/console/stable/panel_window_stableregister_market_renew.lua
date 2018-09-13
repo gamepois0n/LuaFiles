@@ -182,7 +182,7 @@ function PaGlobalFunc_StableRegister_Market_Confirm()
     else
     end
   else
-    audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     stable_registerServantToSomeWhereElse(self._value.selectServantNo, CppEnums.AuctionType.AuctionGoods_ServantMarket, CppEnums.TransferType.TransferType_Normal, self._value.minPrice)
     self:close()
   end

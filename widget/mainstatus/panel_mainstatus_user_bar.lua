@@ -36,14 +36,16 @@ local selfPlayerStatusBar = {
     FP = 1,
     EP = 2,
     BP = 3,
-    DK = 4
+    DK = 4,
+    COLOR_BLIND = 5
   },
   _combatResources = {
     [0] = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_MPGauge"),
     UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_FPGauge"),
     UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_EPGauge"),
     UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_BPGauge"),
-    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_DarkGauge")
+    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_DarkGauge"),
+    UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_ColorBlindGauge")
   },
   _combatResources_Later = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress2_MpGaugeLater"),
   _combatResources_LaterHead = UI.getChildControl(UI.getChildControl(Panel_MainStatus_User_Bar, "Progress2_MpGaugeLater"), "Progress2_1_Bar_Head"),
@@ -64,11 +66,13 @@ local _fpGauge = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_FPGauge
 local _epGauge = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_EPGauge")
 local _bpGauge = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_BPGauge")
 local _darkGauge = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_DarkGauge")
+local _colorBlindGauge = UI.getChildControl(Panel_MainStatus_User_Bar, "Progress_ColorBlindGauge")
 local _mpGaugeHead = UI.getChildControl(_mpGauge, "Progress_MPHead")
 local _fpGaugeHead = UI.getChildControl(_fpGauge, "Progress_FPHead")
 local _epGaugeHead = UI.getChildControl(_epGauge, "Progress_EPHead")
 local _bpGaugeHead = UI.getChildControl(_bpGauge, "Progress_BPHead")
 local _darkGaugeHead = UI.getChildControl(_darkGauge, "Progress_DarkHead")
+local _colorBlindGaugeHead = UI.getChildControl(_colorBlindGauge, "Progress_ColorBlindHead")
 local _hpGauge_Back = UI.getChildControl(Panel_MainStatus_User_Bar, "Static_HPGage_Back")
 local _mpGauge_Back = UI.getChildControl(Panel_MainStatus_User_Bar, "Static_MPGage_Back")
 function selfPlayerStatusBar:init()
@@ -94,13 +98,29 @@ function selfPlayerStatusBar:resourceTypeCheck(selfPlayerWrapper)
     resourceType = 4
   end
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
-  if resourceType >= self.define.MP then
-    self._staticGage_CombatResource = self._combatResources[resourceType]
-  else
-    UI.ASSERT(false, "SelfPlayer Combat Resource Type is INVALID!!!!")
-  end
   for _, control in pairs(self._combatResources) do
     control:SetShow(false)
+  end
+  if 0 == isColorBlindMode then
+    if resourceType >= self.define.MP then
+      self._staticGage_CombatResource = self._combatResources[resourceType]
+    end
+    self._staticGage_HP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_03.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 380, 17, 413, 26)
+    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
+  elseif 1 == isColorBlindMode then
+    self._staticGage_HP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_03.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 448, 12, 481, 21)
+    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
+    self._staticGage_CombatResource = self._combatResources[self.define.COLOR_BLIND]
+  elseif 2 == isColorBlindMode then
+    self._staticGage_HP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_03.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._staticGage_HP, 448, 12, 481, 21)
+    self._staticGage_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    self._staticGage_HP:setRenderTexture(self._staticGage_HP:getBaseTexture())
+    self._staticGage_CombatResource = self._combatResources[self.define.COLOR_BLIND]
   end
   self._staticGage_CombatResource:SetShow(true)
   self._combatResources_Later:SetShow(true)
@@ -193,6 +213,7 @@ local function checkMpAlert(mp, maxMp)
     _epGaugeHead:SetShow(true)
     _bpGaugeHead:SetShow(true)
     _darkGaugeHead:SetShow(true)
+    _colorBlindGaugeHead:SetShow(true)
   end
   if totalMp == 100 then
     _fpGaugeHead:SetShow(false)
@@ -200,6 +221,7 @@ local function checkMpAlert(mp, maxMp)
     _epGaugeHead:SetShow(false)
     _bpGaugeHead:SetShow(false)
     _darkGaugeHead:SetShow(false)
+    _colorBlindGaugeHead:SetShow(false)
   end
 end
 function DamageByOtherPlayer()
@@ -269,6 +291,7 @@ function Panel_MainStatus_SetAlphaAllChild(alphaRate)
   _epGaugeHead:SetAlpha(alphaRate)
   _bpGaugeHead:SetAlpha(alphaRate)
   _darkGaugeHead:SetAlpha(alphaRate)
+  _colorBlindGaugeHead:SetAlpha(alphaRate)
   _hpGauge_Back:SetAlpha(alphaRate)
   _mpGauge_Back:SetAlpha(alphaRate)
   self._staticShowHp:SetFontAlpha(alphaRate)
@@ -339,21 +362,23 @@ function PaGlobalFunc_UserBar_CharacterInfoWindowUpdate()
   local mp = player:getMp()
   _prevMPSize = mp
   local maxMp = player:getMaxMp()
-  if 0 ~= maxMp and (mp ~= prevMP or maxMp ~= prevMaxMP) then
-    self._staticShowMp:SetText(tostring(mp) .. "/" .. tostring(maxMp))
+  if 0 ~= maxMp then
     self._staticGage_CombatResource:SetProgressRate(mp / maxMp * 100)
     self._staticGage_CombatResource:SetShow(true)
-    self._combatResources_Later:SetProgressRate(mp / maxMp * 100)
-    self._combatResources_Later:SetShow(true)
-    if mp - prevMP > 10 then
-      local MP_BG_PosX = self._staticMP_BG:GetPosX()
-      local MP_BG_PosY = self._staticMP_BG:GetPosY()
-      self._staticGage_CombatResource:AddEffect(effectName, false, 0, 0)
+    if mp ~= prevMP or maxMp ~= prevMaxMP then
+      self._staticShowMp:SetText(tostring(mp) .. "/" .. tostring(maxMp))
+      self._combatResources_Later:SetProgressRate(mp / maxMp * 100)
+      self._combatResources_Later:SetShow(true)
+      if mp - prevMP > 10 then
+        local MP_BG_PosX = self._staticMP_BG:GetPosX()
+        local MP_BG_PosY = self._staticMP_BG:GetPosY()
+        self._staticGage_CombatResource:AddEffect(effectName, false, 0, 0)
+      end
+      FGlobal_MainStatus_FadeIn(5)
+      prevMP = mp
+      checkMpAlert(mp, maxMp)
+      prevMaxMP = maxMp
     end
-    FGlobal_MainStatus_FadeIn(5)
-    prevMP = mp
-    checkMpAlert(mp, maxMp)
-    prevMaxMP = maxMp
   end
   self._staticText_HP:SetPosX(2.85 * self._staticGage_HP:GetProgressRate() + 43)
   self._staticText_MP:SetPosX(2.85 * self._staticGage_CombatResource:GetProgressRate() + 43)

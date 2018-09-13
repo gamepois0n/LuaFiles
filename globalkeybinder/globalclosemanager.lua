@@ -207,6 +207,7 @@ local panel_WindowList = {
   Panel_Window_Guild_WarDeclare,
   Panel_Window_Guild_SkillInfo,
   Panel_Window_Guild_Introduction,
+  Panel_Window_Guild_VoiceSet,
   Panel_Window_MailDetail_Renew,
   Panel_Window_GuildWarInfo,
   Panel_House_InstallationMode_PlantInfo,
@@ -216,7 +217,8 @@ local panel_WindowList = {
   Panel_Window_MarketPlaceWallet,
   Panel_Window_Option_Main,
   Panel_LocalWarInfo,
-  Panel_LocalWarRule
+  Panel_LocalWarRule,
+  Panel_Window_FaIryTierUpgrade
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -325,6 +327,7 @@ registerEscapeLuaEvent(Panel_CharacterTag, "PanelEscapeFunc_CharacterTag()")
 registerEscapeLuaEvent(Panel_FairyInfo, "PanelEscapeFunc_FairyInfo()")
 registerEscapeLuaEvent(Panel_Window_FairySetting, "PanelEscapeFunc_FairySetting()")
 registerEscapeLuaEvent(Panel_Window_FairyUpgrade, "PanelEscapeFunc_FairyUpgrade()")
+registerEscapeLuaEvent(Panel_Window_FaIryTierUpgrade, "PaGlobalFunc_fairySkill_Close()")
 registerEscapeLuaEvent(Panel_Win_System, "PanelEscapeFunc_MessageBox()")
 registerEscapeLuaEvent(Panel_Win_Check, "PanelEscapeFunc_MessageBoxCheck()")
 registerEscapeLuaEvent(Panel_LifeRanking, "PanelEscapeFunc_LifeRanking()")

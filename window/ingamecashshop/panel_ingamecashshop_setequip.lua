@@ -803,6 +803,17 @@ function FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
   else
     self.btn_petLookNext:SetShow(true)
   end
+  local specialMoveCheck = self.btn_SpecialMove:IsCheck()
+  local sunShineCheck = self.SunIcon:IsCheck()
+  if specialMoveCheck or sunShineCheck then
+    self.btn_Coupon:SetSpanSize(10, 140)
+    self.btn_StampCoupon:SetSpanSize(10, 180)
+    self.btn_FirstIgnore:SetSpanSize(10, 180)
+  else
+    self.btn_Coupon:SetSpanSize(10, 90)
+    self.btn_StampCoupon:SetSpanSize(10, 130)
+    self.btn_FirstIgnore:SetSpanSize(10, 130)
+  end
 end
 function CashShopController:SetPosition()
   local scrSizeX = getScreenSizeX()
@@ -1324,11 +1335,13 @@ function FGlobal_SpecialMoveSettingCheck()
   local sunShineCheck = self.SunIcon:IsCheck()
   if sunShineCheck or specialMoveCheck then
     self.btn_Coupon:SetSpanSize(10, 140)
+    self.btn_FirstIgnore:SetSpanSize(10, 180)
+    self.btn_StampCoupon:SetSpanSize(10, 180)
   else
     self.btn_Coupon:SetSpanSize(10, 90)
+    self.btn_FirstIgnore:SetSpanSize(10, 130)
+    self.btn_StampCoupon:SetSpanSize(10, 130)
   end
-  self.btn_StampCoupon:SetSpanSize(10, 130)
-  self.btn_FirstIgnore:SetSpanSize(10, 130)
 end
 function FGlobal_SpecialMoveSettingNoShow()
   local self = CashShopController

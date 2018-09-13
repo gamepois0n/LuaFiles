@@ -118,10 +118,12 @@ function occupyBenefit:SetInfo(territoryKeyRaw)
   end
   local siegeWrapper = ToClient_GetSiegeWrapper(territoryKeyRaw)
   if nil ~= siegeWrapper and siegeWrapper:doOccupantExist() then
+    self.sectionBG:SetSize(self.sectionBG:GetSizeX(), self.sectionDesc:GetTextSizeY() + 50)
     self.sectionBG:SetSpanSize(0, 400)
     self.sectionTitle:SetSpanSize(0, 410)
     self.sectionDesc:SetSpanSize(30, 440)
   else
+    self.sectionBG:SetSize(self.sectionBG:GetSizeX(), self.sectionDesc:GetTextSizeY() + 50)
     self.sectionBG:SetSpanSize(0, 240)
     self.sectionTitle:SetSpanSize(0, 250)
     self.sectionDesc:SetSpanSize(30, 280)
@@ -159,7 +161,7 @@ function commonInfoSection:SetInfo(territoryInfo, territoryKeyRaw)
   local siegeWrapper = ToClient_GetSiegeWrapper(territoryKeyRaw)
   local occupyBenefitSizeY = 0
   if occupyBenefit.sectionBG:GetShow() then
-    occupyBenefitSizeY = 100
+    occupyBenefitSizeY = math.max(100, occupyBenefit.sectionBG:GetSizeY() + 10)
   end
   if nil ~= siegeWrapper and siegeWrapper:doOccupantExist() then
     self.sectionBG:SetSpanSize(0, 400 + occupyBenefitSizeY)

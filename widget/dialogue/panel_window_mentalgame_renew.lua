@@ -297,7 +297,7 @@ function PaGlobalFunc_MentalGame_SelectClear()
   for index = 0, #self._selectCardTable do
     RequestMentalGame_clearSelectCard(index)
     if mentalObject:getCardBySlotIndex(index) ~= nil then
-      audioPostEvent_SystemUi(0, 2)
+      _AudioPostEvent_SystemUiForXBOX(0, 2)
     end
   end
 end
@@ -340,6 +340,7 @@ function PaGlobalFunc_MentalGame_LClick_Arrow(isleft)
   if nil == mentalObject or self._config._gameStep_CardSelect ~= self._gameStep then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if true == isleft then
     local maxValue = mentalObject:getCardCount() - 5
     self._scrollPositionResult = math.min(self._scrollPositionResult + 5, maxValue)
@@ -588,7 +589,7 @@ function PaGlobalFunc_MentalGame_RClick_BanedCard(index)
   end
   RequestMentalGame_clearSelectCard(index)
   if mentalObject:getCardBySlotIndex(key) ~= nil then
-    audioPostEvent_SystemUi(0, 2)
+    _AudioPostEvent_SystemUiForXBOX(0, 2)
   end
 end
 function PaGlobalFunc_MentalGame_RClick_BottomCard(index)
@@ -604,7 +605,7 @@ function PaGlobalFunc_MentalGame_RClick_BottomCard(index)
       local staticKey = value:getStaticStatus():getKey()
       if false == mentalObject:isSelectedCard(value) then
         RequestMentalGame_selectCardByKey(staticKey, 99)
-        audioPostEvent_SystemUi(0, 2)
+        _AudioPostEvent_SystemUiForXBOX(0, 2)
       end
     end
   end
@@ -1348,12 +1349,12 @@ function Window_MentalGameInfo:UpdateNextTryEvent()
       self._selectCardTable[index]._static_Success:SetVertexAniRun("Ani_Color_New", true)
       self._selectCardTable[index]._static_Success:SetVertexAniRun("Ani_Move_Pos_New", true)
       self._selectCardTable[index]._static_Success:SetShow(true)
-      audioPostEvent_SystemUi(4, 9)
+      _AudioPostEvent_SystemUiForXBOX(4, 9)
     else
       self._selectCardTable[index]._static_Failed:SetVertexAniRun("Ani_Color_New", true)
       self._selectCardTable[index]._static_Failed:SetVertexAniRun("Ani_Move_Pos_New", true)
       self._selectCardTable[index]._static_Failed:SetShow(true)
-      audioPostEvent_SystemUi(4, 8)
+      _AudioPostEvent_SystemUiForXBOX(4, 9)
     end
     local lastIndex = mentalObject:getOrderCount() - 1
     local nextIndex = mentalObject:getOrder(nextSlot)

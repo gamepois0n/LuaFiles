@@ -12,6 +12,7 @@ PaGlobal_FairyChoice = {
   }
 }
 function PaGlobal_FairyChoice:Open()
+  PaGlobalFunc_fairySkill_Close()
   if PaGlobal_FairyInfo_isUnseal() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoNeedSealFairy"))
     return

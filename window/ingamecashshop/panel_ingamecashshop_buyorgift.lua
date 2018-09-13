@@ -1212,7 +1212,7 @@ function InGameShopBuy_Count(isUp)
   self._txt_PearlIconPrice:SetText(makeDotMoney(sumPrice))
   if false == Panel_IngameCashShop_Coupon:GetShow() then
     local categoryType = cashProduct:getMainCategory()
-    if UI_CCC.eCashProductCategory_Pearl ~= categoryType and UI_CCC.eCashProductCategory_Mileage ~= categoryType then
+    if UI_CCC.eCashProductCategory_Pearl ~= categoryType and UI_CCC.eCashProductCategory_Mileage ~= categoryType and false == cashProduct:isMoneyPrice() then
       IngameCashShopCoupon_Open(0, self._productNoRaw, count)
     end
   else

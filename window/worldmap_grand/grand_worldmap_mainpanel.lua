@@ -139,15 +139,12 @@ function WorldMap_GuildWar_TaxGradeFilterShow()
       local tempString = ""
       local taxGrade = index - 1
       if true == _ContentsGroup_SeigeSeason5 then
-        if 0 == taxGrade then
-          tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_0")
-        elseif 1 == taxGrade then
-          tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_1")
-        elseif 2 == taxGrade then
-          tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_2")
-        elseif 3 == taxGrade then
-          tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_3")
+        if _ContentsGroup_NewSiegeRule then
+          tempString = "LUA_NODEGRADE_"
+        else
+          tempString = "LUA_NODEGRADE2_"
         end
+        tempString = PAGetString(Defines.StringSheet_GAME, tempString .. tostring(taxGrade))
         worldmapGrand.ui.comboBox_TaxGrade:AddItem(tempString)
       else
         if 0 == taxGrade then
@@ -180,15 +177,12 @@ function GuildWar_SetGrade()
     ToClient_setVisibleVillageSiegeTaxLevel(selectIndex)
     local taxGrade = selectIndex
     if true == _ContentsGroup_SeigeSeason5 then
-      if 0 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_0")
-      elseif 1 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_1")
-      elseif 2 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_2")
-      elseif 3 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_3")
+      if _ContentsGroup_NewSiegeRule then
+        tempString = "LUA_NODEGRADE_"
+      else
+        tempString = "LUA_NODEGRADE2_"
       end
+      tempString = PAGetString(Defines.StringSheet_GAME, tempString .. tostring(taxGrade))
       worldmapGrand.ui.comboBox_TaxGrade:SetText(tempString)
     else
       if 1 == taxGrade then

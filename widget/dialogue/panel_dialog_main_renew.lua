@@ -402,12 +402,12 @@ function PaGlobalFunc_MainDialog_CloseIniteValues()
   self._value.ignoreShowDialog = false
 end
 function PaGlobalFunc_MainDialog_MainDialogShowAni()
-  audioPostEvent_SystemUi(1, 19)
+  _AudioPostEvent_SystemUiForXBOX(1, 19)
   UIAni.fadeInSCR_Up(Panel_Dialog_Main)
   Inventory_PosSaveMemory()
 end
 function PaGlobalFunc_MainDialog_MainDialogHideAni()
-  audioPostEvent_SystemUi(1, 20)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Dialog_Main:ResetVertexAni()
   Panel_Dialog_Main:SetShowWithFade(CppEnums.PAUI_SHOW_FADE_TYPE.PAUI_ANI_TYPE_FADE_OUT)
   local Ani1 = Panel_Dialog_Main:addColorAnimation(0, 0.25, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)

@@ -1067,6 +1067,7 @@ function PaGlobalFunc_InstallationMode_House_UpdateWish()
   self:updateWishContent()
 end
 function PaGlobalFunc_InstallationMode_House_ToogleTab(value)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   local self = Panel_Window_InstallationMode_House_info
   local newTabIndex = self._value.currentTabIndex + self._menu_Top_Enum.Count + value
   newTabIndex = newTabIndex % self._menu_Top_Enum.Count

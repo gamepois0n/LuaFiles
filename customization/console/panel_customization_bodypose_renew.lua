@@ -217,6 +217,7 @@ function Customization_BodyPoseInfo:SetRotationSlider(sliderControl, value, valu
 end
 function PaGlobalFunc_Customization_BodyPose_SetBoneControl(isSet)
   local self = Customization_BodyPoseInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if false == isSet then
     self._isBoneControl = false
     PaGlobalFunc_Customization_SetKeyGuide(3)

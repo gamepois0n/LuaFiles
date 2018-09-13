@@ -487,8 +487,8 @@ function EnchantInfo:startEnchantAnimation()
   ToClient_BlackspiritEnchantStart()
   self._animationTimeStamp = 0
   self._isAnimating = true
-  audioPostEvent_SystemUi(5, 6)
-  audioPostEvent_SystemUi(5, 9)
+  _AudioPostEvent_SystemUiForXBOX(5, 6)
+  _AudioPostEvent_SystemUiForXBOX(5, 9)
 end
 function FromClient_EnchantInfo_UpdateBonus()
   if _panel:GetShow() then
@@ -592,22 +592,22 @@ function EnchantInfo:afterEnchant(resultType, mainWhereType, mainSlotNo, subWher
 end
 function EnchantInfo:showEnchantResultEffect(resultType)
   if resultType == self._enum_EnchantResult._success then
-    audioPostEvent_SystemUi(5, 1)
+    _AudioPostEvent_SystemUiForXBOX(5, 1)
     render_setChromaticBlur(40, 1)
     render_setPointBlur(0.05, 0.045)
     render_setColorBypass(0.85, 0.08)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_SUCCESSENCHANT"))
     ToClient_BlackspiritEnchantSuccess()
   else
-    audioPostEvent_SystemUi(0, 7)
+    _AudioPostEvent_SystemUiForXBOX(0, 7)
     if resultType == self._enum_EnchantResult._broken then
-      audioPostEvent_SystemUi(5, 8)
+      _AudioPostEvent_SystemUiForXBOX(5, 8)
     elseif resultType == self._enum_EnchantResult._gradeDown then
-      audioPostEvent_SystemUi(5, 2)
+      _AudioPostEvent_SystemUiForXBOX(5, 2)
     elseif resultType == self._enum_EnchantResult._fail then
-      audioPostEvent_SystemUi(5, 2)
+      _AudioPostEvent_SystemUiForXBOX(5, 2)
     elseif resultType == self._enum_EnchantResult._failAndPrevent then
-      audioPostEvent_SystemUi(5, 2)
+      _AudioPostEvent_SystemUiForXBOX(5, 2)
     end
     ToClient_BlackspiritEnchantCancel()
   end

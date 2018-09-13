@@ -478,7 +478,7 @@ function PaGlobalFunc_WharfRegister_ClickList(index)
   self:setContent(self._enum.eTYEP_OPEN_MAPAE)
 end
 function PaGlobalFunc_WharfRegister_Register()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfRegister_info
   local name = self._ui.edit_Name:GetEditText()
   local function do_regist()

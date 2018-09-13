@@ -342,8 +342,7 @@ function PaGlobalFunc_GuildMain_CreateDeclaredByGuild(content, key)
   local guildName = UI.getChildControl(content, "StaticText_GuildName")
   local guildMasterName = UI.getChildControl(content, "StaticText_MasterName")
   guildName:SetText(guildWrapper:getName())
-  local masterStr = "(" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_MASTERTITLE") .. " : " .. guildWrapper:getGuildMasterName() .. ")"
-  guildMasterName:SetText(masterStr)
+  guildMasterName:SetText(guildWrapper:getGuildMasterName())
 end
 function FromClient_GuildMain_ResponseGuildInviteForGuild(targetActorKeyRaw, targetName, preGuildActivity)
   local guildInfo = ToClient_GetMyGuildInfoWrapper()

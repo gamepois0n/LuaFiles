@@ -15,16 +15,8 @@ local MarketPlace = {
     createBorder = true,
     createCount = true,
     createEnchant = true,
-    createCooltime = true,
-    createExpiration = true,
-    createExpirationBG = true,
-    createExpiration2h = true,
-    createClassEquipBG = true,
-    createEnduranceIcon = true,
     createCash = true,
-    createBagIcon = true,
-    createEnduranceIcon = true,
-    createCheckBox = true
+    createEnduranceIcon = true
   },
   _tabIdx = {itemMarket = 1, myAsset = 2},
   _biddingTabIdx = {sell = 1, buy = 2},
@@ -57,6 +49,11 @@ function MarketPlace:init()
   self._ui.stc_AssetBg = UI.getChildControl(self._ui.stc_LeftBg, "Static_MarketInventoryBg")
   self._ui.btn_WalletConsoleUI = UI.getChildControl(self._ui.stc_AssetBg, "Button_X_ConsoleUI")
   self._ui.list_MarketItemList = UI.getChildControl(self._ui.stc_MarketItemListBg, "List2_ItemList")
+  local list2_Content = UI.getChildControl(self._ui.list_MarketItemList, "List2_1_Content")
+  local slot = {}
+  local list2_ItemSlot = UI.getChildControl(list2_Content, "Static_ItemSlot")
+  SlotItem.new(slot, "ItemList", 0, list2_ItemSlot, self._slotConfig)
+  slot:createChild()
   self._ui.stc_SortBg = UI.getChildControl(self._ui.stc_MarketItemListBg, "Static_SortBg")
   self._ui.txt_NoResult = UI.getChildControl(self._ui.stc_MarketItemListBg, "StaticText_NoSearchResult")
   self._ui.stc_ItemDetailInfoBg = UI.getChildControl(self._ui.stc_ItemDetailBg, "Static_ItemInfoBg")
@@ -69,6 +66,11 @@ function MarketPlace:init()
   self._ui.btn_MyBuy = UI.getChildControl(self._ui.stc_MyTabBg, "RadioButton_Buy")
   self._ui.stc_StatusBg = UI.getChildControl(self._ui.stc_MyItemListBg, "Static_StatusBg")
   self._ui.list_MyBiddingList = UI.getChildControl(self._ui.stc_MyItemListBg, "List2_MyBiddingItemList")
+  list2_Content = UI.getChildControl(self._ui.list_MyBiddingList, "List2_1_Content")
+  slot = {}
+  local list2_ItemSlot = UI.getChildControl(list2_Content, "Static_ItemSlot")
+  SlotItem.new(slot, "ItemBiddingList", 0, list2_ItemSlot, self._slotConfig)
+  slot:createChild()
   self._ui.txt_Text1 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_1")
   self._ui.txt_Text2 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_2")
   self:registEvent()
@@ -191,11 +193,11 @@ function MarketPlace:updateMyBiddingItemList()
   if self._selectedBiddingTabIndex == self._biddingTabIdx.sell then
     itemListCount = getWorldMarketSellBiddingListCount()
     self._ui.txt_Text1:SetText("\237\140\144\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
-    self._ui.txt_Text2:SetText("\237\140\144\235\167\164 \236\153\132\235\163\140 0\234\177\180")
+    self._ui.txt_Text2:SetText("\237\140\144\235\167\164 \236\153\132\235\163\140 00\234\177\180")
   elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
     itemListCount = getWorldMarketBuyBiddingListCount()
     self._ui.txt_Text1:SetText("\234\181\172\235\167\164 \235\140\128\234\184\176 " .. tostring(itemListCount) .. "\234\177\180")
-    self._ui.txt_Text2:SetText("\234\181\172\235\167\164 \236\153\132\235\163\140 0\234\177\180")
+    self._ui.txt_Text2:SetText("\234\181\172\235\167\164 \236\153\132\235\163\140 00\234\177\180")
   end
   if itemListCount > 0 then
     self._ui.list_MyBiddingList:SetShow(true)
@@ -295,11 +297,9 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     return
   end
   local idx = Int64toInt32(key)
-  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlotBg")
+  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlot")
   local slot = {}
-  SlotItem.new(slot, "ItemList_" .. idx, idx, bg_ItemSlot, self._slotConfig)
-  slot:createChild()
-  slot:clearItem()
+  SlotItem.reInclude(slot, "ItemList", 0, bg_ItemSlot, self._slotConfig)
   slot.icon:EraseAllEffect()
   slot.icon:addInputEvent("Mouse_On", "")
   slot.icon:addInputEvent("Mouse_Out", "")
@@ -328,10 +328,6 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     txt_ItemName:SetText(itemNameStr)
     txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. makeDotMoney(toInt64(0, itemBaseCount)))
     txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
-    local minPrice = itemBaseCount * 800000 / 1000000
-    local maxPrice = itemBaseCount * 1200000 / 1000000
-    txt_MinPrice:SetText("\236\181\156\236\160\128\234\176\128 : " .. makeDotMoney(toInt64(0, minPrice)))
-    txt_MaxPrice:SetText("\236\181\156\234\179\160\234\176\128 : " .. makeDotMoney(toInt64(0, maxPrice)))
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestBiddingList(" .. idx .. ")")
   elseif self._itemListType.categoryList == self._currentListType then
     local itemInfo = getWorldMarketListByIdx(idx)
@@ -344,17 +340,13 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local nameColorGrade = itemSSW:getGradeType()
     local itemCount = itemInfo:getItemCount()
     local totalTradeCount = itemInfo:getTotalTradeCount()
-    local a = math.random(10000)
-    local b = Int64toInt32(totalTradeCount) * a
-    b = b % 1000
-    local c = b % 300
-    slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
+    slot:setItemByStaticStatus(itemSSW)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     txt_ItemName:SetText(tostring(itemSSW:getName()))
-    txt_ItemBasePrice:SetText("\235\136\132\236\160\129 \234\177\176\235\158\152\235\159\137 : " .. tostring(b))
-    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(c) .. "\234\176\156")
+    txt_ItemBasePrice:SetText("\235\136\132\236\160\129 \234\177\176\235\158\152\235\159\137 : " .. tostring(totalTradeCount))
+    txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestDetailListByKey(" .. itemInfo:getItemKeyRaw() .. ")")
   end
 end
@@ -365,11 +357,9 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     return
   end
   local idx = Int64toInt32(key)
-  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlotBg")
+  local bg_ItemSlot = UI.getChildControl(contents, "Static_ItemSlot")
   local slot = {}
-  SlotItem.new(slot, "ItemBiddingList_" .. idx, idx, bg_ItemSlot, self._slotConfig)
-  slot:createChild()
-  slot:clearItem()
+  SlotItem.reInclude(slot, "ItemBiddingList", 0, bg_ItemSlot, self._slotConfig)
   slot.icon:EraseAllEffect()
   slot.icon:addInputEvent("Mouse_On", "")
   slot.icon:addInputEvent("Mouse_Out", "")

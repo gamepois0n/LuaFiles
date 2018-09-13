@@ -1378,6 +1378,7 @@ function Input_ChatHistory_ChangeToNextTab(isNext)
   else
     index = index - 1
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if index < TAB_TYPE.WORLD then
     index = TAB_TYPE.GUILD
   elseif index > #self._ui.rdo_chatTypeList then
@@ -1416,7 +1417,7 @@ local checkWhistperTime = toUint64(0, 60000)
 local sendPossibleTime = toUint64(0, 0)
 function FromClient_ChattingHistory_PrivateChat()
   if sendPossibleTime <= getTime() then
-    audioPostEvent_SystemUi(100, 0)
+    _AudioPostEvent_SystemUiForXBOX(100, 0)
     sendPossibleTime = getTime() + checkWhistperTime
   end
 end

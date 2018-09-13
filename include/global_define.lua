@@ -2,6 +2,7 @@ Defines = {}
 Defines.UIGroup = {
   PAGameUIGroup_ScreenEffect = 0,
   PAGameUIGroup_Widget = 50,
+  PAGameUIGroup_MiniGameUI = 90,
   PAGameUIGroup_MainUI = 100,
   PAGameUIGroup_MapRegion = 200,
   PAGameUIGroup_SkillAndBuff = 300,

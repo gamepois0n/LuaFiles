@@ -243,7 +243,7 @@ if _ContentsGroup_RemasterUI_Main_Alert then
     if Panel_NewEventProduct_Alarm:GetShow() then
       spanPosX = spanPosX + 60
     end
-    Panel_ItemMarket_Alert:SetSpanSize(spanPosX, 10)
+    Panel_ItemMarket_Alert:SetSpanSize(spanPosX, 0)
   end
   do
     local itemMarketIcon = UI.getChildControl(Panel_ItemMarket_Alert, "Static_Icon")

@@ -260,7 +260,7 @@ function MarketWallet:updateWallet()
       local itemWrapper = itemMyWalletInfo:getItemEnchantStaticStatusWrapper()
       if nil ~= itemWrapper then
         local s64_inventoryItemCount
-        slot:setItemByStaticStatus(itemWrapper, itemMyWalletInfo:getItemCount(), -1, false, nil, false, 0, 0, nil)
+        slot:setItemByStaticStatus(itemWrapper, itemMyWalletInfo:getItemCount(), -1, false, nil, false, 0, 0, nil, true)
         slot.isEmpty = false
         slot.icon:addInputEvent("Mouse_On", "InputMO_MarketWallet_ShowSlotFocus(" .. slotIdx .. ", true)")
         slot.icon:addInputEvent("Mouse_Out", "InputMO_MarketWallet_HideSlotFocus()")

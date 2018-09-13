@@ -520,6 +520,7 @@ function Input_WorldMapNodeInfo_OnNearNode()
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(self._wayPointKey, NavigationGuideParam())
   audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
   FGlobal_WorldMapWindowEscape()
 end
 function FromClient_WorldMapNodeInfo_CreateNodeIcon(nodeBtn)

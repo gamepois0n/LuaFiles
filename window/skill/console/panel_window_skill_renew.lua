@@ -179,7 +179,7 @@ function PaGlobalFunc_Skill_LearnConfirm()
   end
   local isSuccess = skillWindow_DoLearn(skillInfo._no)
   if true == isSuccess then
-    audioPostEvent_SystemUi(4, 2)
+    _AudioPostEvent_SystemUiForXBOX(4, 2)
   end
 end
 function PaGlobalFunc_Skill_ResetButton()
@@ -929,6 +929,7 @@ end
 function Toggle_SkillTab_forPadEventFunc(value)
   local self = Window_SkillInfo
   self._currentTabIndex = self._currentTabIndex + value
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if self._currentTabIndex < 0 then
     self._currentTabIndex = 1
   elseif self._currentTabIndex > 1 then

@@ -3969,3 +3969,18 @@ end
 function setRoll(value)
   selfPlayerSetCameraRoll(value)
 end
+function captureScreenShot()
+  ToClient_CaptureByFrameCheck()
+end
+function photoMode_On()
+  ToClient_InputPhotoModeFromLua()
+end
+function pa_sendMessage(message)
+  local memoryChatType = 1
+  local target = ""
+  chatting_sendMessage(target, message, memoryChatType)
+  chatting_saveMessageHistory(target, message)
+end
+function pa_useQuickSlot(num)
+  QuickSlot_DropHandler(num)
+end

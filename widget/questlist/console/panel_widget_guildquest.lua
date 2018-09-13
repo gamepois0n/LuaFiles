@@ -15,6 +15,9 @@ function GuildQuestWidget:open()
     return
   end
   _panel:SetShow(true)
+  if nil ~= Panel_MainQuest and true == Panel_MainQuest:GetShow() then
+    _panel:SetPosY(Panel_MainQuest:GetPosY() + Panel_MainQuest:GetSizeY() + 20)
+  end
 end
 function GuildQuestWidget:close()
   _panel:SetShow(false)
@@ -24,7 +27,7 @@ function GuildQuestWidget:init()
   self._ui.txt_QuestTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   self._ui.txt_QuestTitle:SetIgnore(true)
   self._ui.txt_QuestTitle:SetFontColor(UI_color.C_FFEFEFEF)
-  self._ui.txt_QuestTitle:useGlowFont(true, "BaseFont_12_Glow", 4287655978)
+  self._ui.txt_QuestTitle:useGlowFont(true, "SubTitleFont_14_Glow", 4287655978)
   self._ui.txt_QuestDemand:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._defaultPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 120
   self._defaultPosX = getScreenSizeX() - _panel:GetSizeX() - 20

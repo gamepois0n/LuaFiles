@@ -420,7 +420,7 @@ function panel_Update_Monster_Info(actorKey)
     lua_TargetInfo_PlayerEnemyGauge:SetShow(true)
     lua_TargetInfo_PlayerHpRate:SetShow(true)
     lua_TargetInfo_PlayerHpRate_Later:SetShow(true)
-    EnemyBuffListBoarder:SetSpanSize(-15, 15)
+    EnemyBuffListBoarder:SetSpanSize(-15, 0)
   else
     lua_TargetInfo_NormalEnemyGauge:SetShow(true)
     lua_TargetInfo_NormalHpRate:SetShow(true)
@@ -436,25 +436,25 @@ function panel_Update_Monster_Info(actorKey)
     local monsterType = ""
     local checkMonsterType = targetActor:getCharacterStaticStatusWrapper():getTribeType()
     if CppEnums.TribeType.eTribe_Human == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUMAN"))
     elseif CppEnums.TribeType.eTribe_Ain == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_AIN"))
     elseif CppEnums.TribeType.eTribe_ETC == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
       lua_EnemyTypeText:SetText("")
     elseif CppEnums.TribeType.eTribe_Boss == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNDEAD"))
     elseif CppEnums.TribeType.eTribe_Reptile == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_ETRIBEREPTILE"))
     elseif CppEnums.TribeType.eTribe_Untribe == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNTRIBE"))
     elseif CppEnums.TribeType.eTribe_Hunting == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
+      lua_EnemyTypeIcon:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
       lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUNT"))
     end
     lua_EnemyTypeText:SetText("")

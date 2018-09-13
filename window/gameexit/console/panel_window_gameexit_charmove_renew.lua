@@ -137,6 +137,7 @@ function PaGlobalFunc_GameExitCharMove_UpdateRegionList(value)
   if true == self._ui._button_NoticeMsg:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._regionWheelvalue = self._regionWheelvalue + value
   if self._regionWheelvalue < 0 then
     self._regionWheelvalue = 0
@@ -149,6 +150,7 @@ function PaGlobalFunc_GameExitCharMove_UpdateRegionList(value)
 end
 function PaGlobalFunc_GameExitCharMove_UpdateChararcterList(value)
   local self = Window_GameExit_CharMoveInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   self:Clear()
   self._characterWheelValue = self._characterWheelValue + value
   if self._characterWheelValue < 0 then

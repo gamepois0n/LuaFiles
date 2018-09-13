@@ -544,7 +544,7 @@ function SlotItem:setItem(itemWrapper, slotNo, equipment, warehouse)
     end
   end
 end
-function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax, isWidget)
+function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax, isWidget, isWorldMarket)
   s64_stackCount = s64_stackCount or toInt64(0, 0)
   if nil ~= self.icon then
     self.icon:ChangeTextureInfoNameAsync("Icon/" .. itemStaticWrapper:getIconPath())
@@ -575,8 +575,21 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
   if nil ~= self.count then
     local itemStatic = itemStaticWrapper:get()
     if itemStatic then
-      if itemStatic._isStack then
-        self.count:SetText(tostring(s64_stackCount))
+      if itemStatic._isStack or true == isWorldMarket then
+        if true == ToClient_isXBox() then
+          if s64_stackCount > toInt64(0, 1000000) then
+            local val = tostring(s64_stackCount / toInt64(0, 1000000))
+            self.count:SetText(tostring(val) .. " M")
+          elseif s64_stackCount > toInt64(0, 1000) then
+            local count = Int64toInt32(s64_stackCount)
+            local val = count / 1000
+            self.count:SetText(string.format("%.1f", tostring(val)) .. " K")
+          else
+            self.count:SetText(tostring(s64_stackCount))
+          end
+        else
+          self.count:SetText(tostring(s64_stackCount))
+        end
         self.count:SetShow(true)
       elseif true == isSoulCollecTor and nil ~= isWidget then
         if soulCount == soulMax then
@@ -748,7 +761,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
     else
       isUsableClass = false
     end
-    if true == itemSSW:get():isEquipable() and false == isUsableClass then
+    if true == itemSSW:get():isEquipable() and false == isUsableClass and false == isWorldMarket then
       self.classEquipBG:ChangeTextureInfoNameAsync("new_ui_common_forlua/window/inventory/Disable_Class.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(self.classEquipBG, 1, 1, 12, 12)
       self.classEquipBG:getBaseTexture():setUV(x1, y1, x2, y2)

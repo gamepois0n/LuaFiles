@@ -89,9 +89,9 @@ function IngameCustomize_Hide()
   if false == _ContentsGroup_RenewUI_Customization then
     faceHairCustomUpdate(false)
   end
-  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end
 function HandleClicked_CloseIngameCustomization()
+  ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   if false == _ContentsGroup_RenewUI_Customization then
     CloseCharacterCustomization()
     getCustomizingManager():hide()

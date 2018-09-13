@@ -22,6 +22,7 @@ local FairyUpgrade = {
 FairyUpgrade._UI._iconFairy = UI.getChildControl(FairyUpgrade._UI._mainBG, "Static_FairyBG")
 FairyUpgrade._UI._bottomDesc = UI.getChildControl(FairyUpgrade._UI._bottomDescBG, "StaticText_BottomDesc")
 function PaGlobal_FairyUpgrade_Open(PositionReset)
+  PaGlobalFunc_fairySkill_Close()
   ClothInventory_Close()
   if Panel_Window_FairySetting:GetShow() then
     PaGlobal_FairySetting_Close()

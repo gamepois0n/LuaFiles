@@ -423,6 +423,11 @@ function PaGlobal_Option:ClickedApplyOption()
       end
     end
   end
+  if nil ~= Panel_MainStatus_Remaster and Panel_MainStatus_Remaster:GetShow() then
+    PaGlobalFunc_MainStatus_SetMPBarTexture()
+  elseif nil ~= Panel_MainStatus_User_Bar and Panel_MainStatus_User_Bar:GetShow() then
+    PaGlobalFunc_UserBar_CharacterInfoWindowUpdate(true)
+  end
   if true == displayChange then
     self:DisplayChanged()
     self:Close()

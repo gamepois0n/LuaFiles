@@ -17,6 +17,7 @@ local CharacterSelect = {
     isWaitLine = false,
     slotUiPool = {}
   },
+  _keyguideTable = {},
   _selectedCharIdx = -1,
   _prevSelectedCharIdx = -1,
   _currentOveredCharIdx = 0,
@@ -43,10 +44,12 @@ function CharacterSelect:init()
     self._ui.txt_Delete_ConsoleUI:addInputEvent("Mouse_LUp", "InputMLUp_CharacterSelect_DeleteCharacter()")
     self._ui.txt_Delete_ConsoleUI:SetIgnore(false)
   end
-  self._ui.txt_Delete_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Delete_ConsoleUI:GetTextSizeX() - self._ui.txt_Delete_ConsoleUI:GetSizeX() - 34)
-  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_DeleteCancel_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
+  self._keyguideTable[0] = self._ui.txt_Select_ConsoleUI
+  self._keyguideTable[1] = self._ui.txt_Delete_ConsoleUI
+  self._keyguideTable[2] = self._ui.txt_DeleteCancel_ConsoleUI
   self:registEventHandler()
   PaGlobal_CheckGamerTag()
+  self:SetKeyGuidePos()
 end
 function CharacterSelect:close()
   _panel:SetShow(false)
@@ -75,6 +78,16 @@ function CharacterSelect:getCharacterMaxSlotData(isCharacterSpecial)
     maxcount = getCharacterDataCount(isCharacterSpecial)
   end
   return maxcount
+end
+function CharacterSelect:SetKeyGuidePos()
+  local guideXPos = 410
+  local guideXGap = 10
+  for idx = 0, #self._keyguideTable do
+    if true == self._keyguideTable[idx]:GetShow() then
+      guideXPos = guideXPos - self._keyguideTable[idx]:GetTextSizeX() - self._keyguideTable[idx]:GetSizeX() - guideXGap
+      self._keyguideTable[idx]:SetPosX(guideXPos)
+    end
+  end
 end
 function CharacterSelect:characterView(index, classType, isSpecialCharacter, isChangeSpecialTab)
   if classType == UI_Class.ClassType_Warrior then
@@ -388,15 +401,15 @@ function PaGlobal_CharacterSelect_SelectCharacter(charIdx)
   if nil ~= characterData then
     local classType = getCharacterClassType(characterData)
     local removeTime = getCharacterDataRemoveTime(charIdx, isSpecialCharacter)
+    self._ui.txt_Select_ConsoleUI:SetShow(false)
+    self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
+    self._ui.txt_Delete_ConsoleUI:SetShow(false)
     if nil ~= removeTime then
       self._isSelectDeletingChar = true
-      self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
-      self._ui.txt_Delete_ConsoleUI:SetShow(false)
     else
       self._isSelectDeletingChar = false
       self._ui.txt_Select_ConsoleUI:SetShow(true)
-      self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
       self._ui.txt_Delete_ConsoleUI:SetShow(true)
     end
     self._prevSelectedCharIdx = self._selectedCharIdx
@@ -405,6 +418,7 @@ function PaGlobal_CharacterSelect_SelectCharacter(charIdx)
     self._ui.list2_Character:requestUpdateByKey(toInt64(0, self._selectedCharIdx))
     self:characterView(self._selectedCharIdx, classType, isSpecialCharacter, false)
   end
+  self:SetKeyGuidePos()
 end
 function InputMLUp_CharacterSelect_CreateCharacter()
   if Panel_Win_System:GetShow() then
@@ -561,39 +575,34 @@ function InputMO_CharacterSelect_SaveCurrentIdx(index)
   if self._currentOveredCharIdx == self._selectedCharIdx then
     self._isCharacterSelected = true
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_SELECT_BTN_CONNECT"))
-    self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     if true == self._isSelectDeletingChar then
       self._ui.txt_Select_ConsoleUI:SetShow(false)
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(true)
       self._ui.txt_Delete_ConsoleUI:SetShow(false)
       _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCancelCharacter()")
-      self._ui.txt_DeleteCancel_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_DeleteCancel_ConsoleUI:GetTextSizeX() - self._ui.txt_DeleteCancel_ConsoleUI:GetSizeX() - 34)
-      self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_DeleteCancel_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     else
       self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
       self._ui.txt_Delete_ConsoleUI:SetShow(true)
       _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "InputMLUp_CharacterSelect_DeleteCharacter()")
-      self._ui.txt_Delete_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Delete_ConsoleUI:GetTextSizeX() - self._ui.txt_Delete_ConsoleUI:GetSizeX() - 34)
-      self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Delete_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     end
   else
     self._isCharacterSelected = false
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_STABLE_EXCHANGE_SELECT"))
     self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
     self._ui.txt_Delete_ConsoleUI:SetShow(false)
-    self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
+  self:SetKeyGuidePos()
 end
 function InputMO_CharacterSelect_CharacterCreate()
   local self = CharacterSelect
   self._isCharacterSelected = false
   self._ui.txt_Select_ConsoleUI:SetShow(true)
   self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOBBY_SELECTCLASS_CREATE"))
-  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
   self._ui.txt_Delete_ConsoleUI:SetShow(false)
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  self:SetKeyGuidePos()
 end
 function InputMO_CharacterSelect_LockedCharacterSlot()
   local self = CharacterSelect
@@ -602,6 +611,7 @@ function InputMO_CharacterSelect_LockedCharacterSlot()
   self._ui.txt_Delete_ConsoleUI:SetShow(false)
   self._ui.txt_DeleteCancel_ConsoleUI:SetShow(false)
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  self:SetKeyGuidePos()
 end
 function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()
   local self = CharacterSelect
@@ -609,13 +619,14 @@ function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()
     if true == self._isSelectDeletingChar then
       return
     end
+    _AudioPostEvent_SystemUiForXBOX(50, 8)
     InputMLUp_CharacterSelect_PlayGame()
   else
     PaGlobal_CharacterSelect_SelectCharacter(self._currentOveredCharIdx)
     self._isCharacterSelected = true
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_SELECT_BTN_CONNECT"))
   end
-  self._ui.txt_Select_ConsoleUI:SetPosX(self._ui.txt_Exit_ConsoleUI:GetPosX() - self._ui.txt_Select_ConsoleUI:GetTextSizeX() - self._ui.txt_Select_ConsoleUI:GetSizeX() - 34)
+  self:SetKeyGuidePos()
 end
 function InputMLUp_CharacterSelect_ChangeSlotPosition(index, isUp)
   if nil == index and nil == isUp then
@@ -778,6 +789,7 @@ function PaGlobal_CharacterSelect_Resize()
   self._ui.txt_DeleteCancel_ConsoleUI:SetPosY(self._ui.txt_DeleteCancel_ConsoleUI:GetPosY() * resizedRatioY)
   self._ui.txt_Exit_ConsoleUI:SetPosY(self._ui.txt_Exit_ConsoleUI:GetPosY() * resizedRatioY)
   self._ui.scroll_Vertical:SetControlPos(0)
+  self:SetKeyGuidePos()
 end
 function PaGlobal_CharacterSelect_Init()
   local self = CharacterSelect

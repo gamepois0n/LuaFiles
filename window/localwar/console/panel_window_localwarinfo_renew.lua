@@ -105,6 +105,10 @@ function PaGlobalFunc_LocalWarInfo_Exit()
   self:close()
   PaGlobalFunc_LocalWarRule_Close()
 end
+local limitLevel = 0
+local limitAP = 0
+local limitDP = 0
+local limitADP = 0
 function PaGlobalFunc_LocalWarInfo_Server_List(list_content, key)
   local self = Panel_Window_LocalWarInfo_info
   local id = Int64toInt32(key)
@@ -137,10 +141,10 @@ function PaGlobalFunc_LocalWarInfo_Server_List(list_content, key)
   end
   staticText_ServerName:SetText(channelName)
   if isLimitLocalWar then
-    local limitLevel = ToClient_GetLevelForLimitedLocalWar() - 1
-    local limitAP = ToClient_GetAttackForLimitedLocalWar() - 1
-    local limitDP = ToClient_GetDefenseForLimitedLocalWar() - 1
-    local limitADP = ToClient_GetADSummaryForLimitedLocalWar() - 1
+    limitLevel = ToClient_GetLevelForLimitedLocalWar() - 1
+    limitAP = ToClient_GetAttackForLimitedLocalWar() - 1
+    limitDP = ToClient_GetDefenseForLimitedLocalWar() - 1
+    limitADP = ToClient_GetADSummaryForLimitedLocalWar() - 1
     staticText_LevelValue:SetShow(true)
     staticText_AttackValue:SetShow(true)
     staticText_DefenceValue:SetShow(true)
@@ -150,6 +154,10 @@ function PaGlobalFunc_LocalWarInfo_Server_List(list_content, key)
     staticText_DefenceValue:SetText(limitDP)
     staticText_AttackDefence:SetText(limitADP)
   else
+    limitLevel = 0
+    limitAP = 0
+    limitDP = 0
+    limitADP = 0
     staticText_LevelValue:SetShow(true)
     staticText_AttackValue:SetShow(true)
     staticText_DefenceValue:SetShow(true)
@@ -195,18 +203,19 @@ function PaGlobalFunc_LocalWarInfo_GoLocalWar(index, isLimitLocalWar)
   local maxHp = player:getMaxHp()
   local isGameMaster = ToClient_SelfPlayerIsGM()
   local getLevel = playerWrapper:get():getLevel()
+  local isMineADSum = ToClient_getOffence() + ToClient_getDefence()
   if not isLimitLocalWar and getLevel < 50 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_LEVELLIMIT"))
     return
   end
   if isLimitLocalWar then
-    if getLevel >= litmitLevel then
+    if getLevel >= limitLevel then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_LEVEL_LIMIT"))
-    elseif limitAttack <= ToClient_getOffence() then
+    elseif limitAP <= ToClient_getOffence() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ATTACK_LIMIT"))
-    elseif limitDefence <= ToClient_getDefence() then
+    elseif limitDP <= ToClient_getDefence() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DEFENCE_LIMIT"))
-    elseif limitADSum <= isMineADSum then
+    elseif isMineADSum >= limitADP then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ADSUM_LIMIT"))
     end
   end

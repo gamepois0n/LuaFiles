@@ -64,6 +64,7 @@ function PaGlobalFunc_Interaction_HouseList_Update(type)
 end
 function PaGlobalFunc_Interaction_HouseList_SelectTab(value)
   local self = Interaction_HouseListInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._currentTabIndex = self._currentTabIndex + value
   if self._currentTabIndex < 0 then
     self._currentTabIndex = self._config._count - 1

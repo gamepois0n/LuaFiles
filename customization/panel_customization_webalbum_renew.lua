@@ -32,25 +32,11 @@ local _stc_keyGuide = UI.getChildControl(Panel_CustomizingAlbum, "Static_BottomB
 local _customizingAlbumWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
 function Panel_CustomizingAlbum_Initialize()
   local screenSizeX = getScreenSizeX()
-  if screenSizeX < 1920 then
-    sizeX = 870
-    sizeY = 630
-    panelSizeX = 900
-    panelSizeY = 745
-    titleBarSizeX = 887
-  elseif screenSizeX >= 1920 and screenSizeX < 3840 then
-    sizeX = 1305
-    sizeY = 900
-    panelSizeX = 1335
-    panelSizeY = 1015
-    titleBarSizeX = 1322
-  else
-    sizeX = 1740
-    sizeY = 1260
-    panelSizeX = 1770
-    panelSizeY = 1375
-    titleBarSizeX = 1757
-  end
+  sizeX = 870
+  sizeY = 630
+  panelSizeX = 900
+  panelSizeY = 745
+  titleBarSizeX = 887
   Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY + _stc_keyGuide:GetSizeY())
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
   _stc_keyGuide:SetSize(panelSizeX, _stc_keyGuide:GetSizeY())

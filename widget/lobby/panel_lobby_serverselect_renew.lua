@@ -1,6 +1,8 @@
 local _panel = Panel_ServerSelect_Renew
 local ServerSelect = {
   _ui = {
+    stc_movieBG = UI.getChildControl(_panel, "Static_MovieBG"),
+    stc_fade = UI.getChildControl(_panel, "Static_MovieFade"),
     txt_ServerSelectTitle = UI.getChildControl(_panel, "StaticText_ServerSelectTitle"),
     stc_RightBg = UI.getChildControl(_panel, "Static_RightBg")
   },
@@ -13,6 +15,22 @@ local ServerSelect = {
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 _stc_BackgroundImage = Array.new()
+local _movieLength = {
+  10000,
+  10000,
+  10000
+}
+local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+}
+local _movieOrder = {
+  1,
+  2,
+  3
+}
+local _currentMovieIndex, _currentMovieIndex, _ui_web_loadingMovie
 local bgItem = {
   "base",
   "calpeon",
@@ -260,9 +278,83 @@ end
 function ServerSelect:registEventHandler()
   if true == ToClient_IsDevelopment() then
   end
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "PaGlobalFunc_ServerSelect_LateUpdate")
   registerEvent("EventUpdateServerInformationForServerSelect", "PaGlobal_ServerSelect_EventUpdateServerInfo")
   registerEvent("onScreenResize", "PaGlobal_ServerSelect_Resize")
   _panel:RegisterUpdateFunc("PaGlobal_ServerSelect_PerFrameUpdate")
+end
+function PaGlobalFunc_ServerSelect_LateUpdate()
+  ServerSelect:startFadeIn()
+end
+function ServerSelect:playWebMovie()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelect:playWebMovie")
+  self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
+  self._ui.stc_movieBG:SetSize(getScreenSizeX(), getScreenSizeY())
+  if nil == _ui_web_loadingMovie then
+    _ui_web_loadingMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, self._ui.stc_movieBG, "Static_BgMovie")
+  end
+  _ui_web_loadingMovie:ResetUrl()
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 1080 / 1920
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 1920 / 1080
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  _panel:SetPosX(0)
+  _panel:SetPosY(0)
+  _panel:SetSize(sizeX, sizeY)
+  local marginX = movieSizeX * 0.013
+  local marginY = movieSizeY * 0.013
+  _ui_web_loadingMovie:SetPosX(posX - marginX / 2)
+  _ui_web_loadingMovie:SetPosY(posY - marginY / 2)
+  _ui_web_loadingMovie:SetSize(movieSizeX + marginX, movieSizeY + marginY)
+  _ui_web_loadingMovie:SetUrl(1920, 1080, "coui://UI_Data/UI_Html/LobbyBG_Movie.html")
+end
+local _moviePlayed = false
+local _fadeTime = 0.2
+function FromClient_ServerSelect_OnMovieEvent(param)
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_ServerSelect_OnMovieEvent param " .. param)
+  if 1 == param then
+    self:startFadeIn()
+    if nil ~= _ui_web_loadingMovie then
+      _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+      _moviePlayed = true
+    end
+  elseif 2 == param then
+    _currentMovieIndex = _currentMovieIndex + 1
+    if nil == _movieOrder[_currentMovieIndex] then
+      _currentMovieIndex = 1
+    end
+    _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+    self:startFadeIn()
+    luaTimer_AddEvent(PaGlobalFunc_ServerSelect_FadeOut, _movieLength[_movieOrder[_currentMovieIndex]] - _fadeTime * 1000, false, 0)
+  end
+end
+function ServerSelect:startFadeIn()
+  local ImageAni = self._ui.stc_fade:addColorAnimation(0.1, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_FF000000)
+  ImageAni:SetEndColor(Defines.Color.C_00000000)
+  ImageAni:SetHideAtEnd(true)
+end
+function PaGlobalFunc_ServerSelect_FadeOut()
+  self:startFadeOut()
+end
+function ServerSelect:startFadeOut()
+  self._ui.stc_fade:SetShow(true)
+  local ImageAni = self._ui.stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_00000000)
+  ImageAni:SetEndColor(Defines.Color.C_FF000000)
+  ImageAni:SetHideAtEnd(false)
 end
 function InputMLUp_ServerSelect_EnterServer(channelIdx)
   local self = ServerSelect

@@ -137,6 +137,12 @@ function MainStatus:addStatusEffect()
   self._ui.progress_Rage:AddEffect("fUI_Rage_Bar01", true, 0, 0)
   self._ui.stc_RageBG:AddEffect("fN_DarkSpirit_Gage_01A", true, -107, 0)
 end
+function PaGlobalFunc_MainStatus_SetMPBarTexture()
+  if false == _panel:GetShow() then
+    return
+  end
+  MainStatus:setMPBarTexture()
+end
 function MainStatus:setMPBarTexture()
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
@@ -206,6 +212,22 @@ function MainStatus:setMPBarTexture()
     self._ui.progress_MP:AddEffect("UI_Mp_P_Bar02A", true, 0, 0)
     self._ui.progress_MP:AddEffect("UI_Mp_P_Bar02B", true, 0, 0)
     self._ui.progress_MP:AddEffect("fUI_Mp_P_Bar01", true, 0, 0)
+  end
+  local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
+  if 1 == isColorBlindMode or 2 == isColorBlindMode then
+    self._ui.progress_HP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._ui.progress_HP, 1, 471, 156, 507)
+    self._ui.progress_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    self._ui.progress_HP:setRenderTexture(self._ui.progress_HP:getBaseTexture())
+    self._ui.progress_MP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_MP, 157, 483, 313, 507)
+    self._ui.progress_MP:getBaseTexture():setUV(x1, y1, x2, y2)
+    self._ui.progress_MP:setRenderTexture(self._ui.progress_MP:getBaseTexture())
+  else
+    self._ui.progress_HP:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_03.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._ui.progress_HP, 6, 315, 161, 351)
+    self._ui.progress_HP:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    self._ui.progress_HP:setRenderTexture(self._ui.progress_HP:getBaseTexture())
   end
 end
 function MainStatus:updateAll()
@@ -467,13 +489,14 @@ function MainStatus:updateContribute()
     return
   end
   local s64_exploreRequireExp = getRequireExperienceToExplorePointByTerritory_s64(territoryKeyRaw)
-  local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
+  local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64()) * 100
+  local expString = string.format("%.2f", cont_expRate) .. "%"
   local nowRemainExpPoint = tostring(explorePoint:getRemainedPoint())
   local nowExpPoint = tostring(explorePoint:getAquiredPoint())
   if true == isGameServiceTypeDev() then
-    self._ui.txt_ContributePoint:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. " (" .. Int64toInt32(explorePoint:getExperience_s64()) .. " / " .. Int64toInt32(getRequireExplorationExperience_s64()) .. ")")
+    self._ui.txt_ContributePoint:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. " (" .. expString .. ")" .. " (" .. Int64toInt32(explorePoint:getExperience_s64()) .. " / " .. Int64toInt32(getRequireExplorationExperience_s64()) .. ")")
   else
-    self._ui.txt_ContributePoint:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
+    self._ui.txt_ContributePoint:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()) .. " (" .. expString .. ")")
   end
   if self._isFirstExplore == false then
     self._lastRemainExplorePoint = 0
@@ -780,16 +803,10 @@ end
 function PaGlobalFunc_MainStatus_SetShow(isShow, isAni)
   local self = MainStatus
   local isGetUIInfo = false
-  if true == PaGlobalFunc_IsRemasterUIOption() and isShow then
+  if true == PaGlobalFunc_IsRemasterUIOption() then
     isGetUIInfo = true
-  end
-  if true == isShow then
-    if 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
-      isGetUIInfo = true
-    elseif ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) > -1 then
+    if true == isShow and 0 == ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
       isGetUIInfo = false
-    else
-      isGetUIInfo = true
     end
   end
   if nil == isAni then

@@ -1,3 +1,4 @@
+local _panel = Panel_Dialogue_Itemtake
 local Panel_Dialog_ItemTake_info = {
   _ui = {
     static_CenterBg = nil,
@@ -8,7 +9,10 @@ local Panel_Dialog_ItemTake_info = {
     staticText_NeedContributePointValue = nil,
     staticText_MyContributePointTitle = nil,
     staticText_MyContributePointValue = nil,
-    staticText_Desc = nil
+    staticText_Desc = nil,
+    stc_bottom = UI.getChildControl(_panel, "Static_BottomBg"),
+    txt_keyGuideA = nil,
+    txt_keyGuideB = nil
   },
   _value = {displayData = nil, selectIndex = 0},
   _config = {
@@ -57,6 +61,13 @@ function Panel_Dialog_ItemTake_info:childControl()
   self._ui.staticText_MyContributePointTitle = UI.getChildControl(self._ui.static_CenterBg, "StaticText_MyContributePointTitle")
   self._ui.staticText_MyContributePointValue = UI.getChildControl(self._ui.static_CenterBg, "StaticText_MyContributePointValue")
   self._ui.staticText_Desc = UI.getChildControl(Panel_Dialogue_Itemtake, "StaticText_Desc")
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.stc_bottom, "StaticText_A_ConsoleUI")
+  self._ui.txt_keyGuideB = UI.getChildControl(self._ui.stc_bottom, "StaticText_B_ConsoleUI")
+  local keyGuides = {
+    self._ui.txt_keyGuideA,
+    self._ui.txt_keyGuideB
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.stc_bottom, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function Panel_Dialog_ItemTake_info:setContent(displayData)
   self._itemSlot:clearItem()

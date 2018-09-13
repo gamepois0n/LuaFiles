@@ -768,8 +768,8 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       local cor = 0
       local brk = 0
       if nil ~= sailStatStaticStatus then
-        hp = string.format("%.1f", sailStatStaticStatus._addMaxHp / 10000)
-        mp = string.format("%.1f", sailStatStaticStatus._addMaxMp / 10000)
+        hp = string.format("%.1f", sailStatStaticStatus._addMaxHp)
+        mp = string.format("%.1f", sailStatStaticStatus._addMaxMp)
         acc = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(0) / 10000)
         spd = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(1) / 10000)
         cor = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(2) / 10000)

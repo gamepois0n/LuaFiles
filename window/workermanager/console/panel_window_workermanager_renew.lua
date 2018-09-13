@@ -120,7 +120,9 @@ function workerManager:initContorl()
     control._static_SkillSlotBg = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "Static_SkillSlotBg" .. index)
     control._static_SkillSlot = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "Static_SkillSlot" .. index)
     control._staticText_SkillTitle = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "StaticText_SkillTitle" .. index)
+    control._staticText_SkillTitle:SetSize(240, 20)
     control._staticText_SkillDesc = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "StaticText_SkillDesc" .. index)
+    control._staticText_SkillDesc:SetSize(240, 47)
     workerManagerUI._skillSlot[index] = control
   end
   workerManagerUI._upgradeSlot = {}
@@ -367,6 +369,7 @@ function workerManager:changeTab(changeValue)
   self:selectTab(tabIndex)
 end
 function PaGlobalFunc_WorkerManager_ChangeTab(changeValue)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   workerManager:changeTab(changeValue)
   workerManager:update()
 end
@@ -759,8 +762,8 @@ function workerManager:setSkillInfoToSlot(skillIdx, skillStaticStatusWrapper)
   slotControl._static_SkillSlot:ChangeTextureInfoNameAsync(skillStaticStatusWrapper:getIconPath())
   slotControl._staticText_SkillTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   slotControl._staticText_SkillTitle:SetText(skillStaticStatusWrapper:getName())
-  slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  slotControl._staticText_SkillDesc:SetAutoResize(true)
+  slotControl._staticText_SkillDesc:setLineCountByLimitAutoWrap(2)
+  slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
   slotControl._staticText_SkillDesc:SetText(skillStaticStatusWrapper:getDescription())
   return true
 end

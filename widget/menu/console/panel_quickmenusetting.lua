@@ -126,8 +126,8 @@ function PaGlobal_ConsoleQuickMenuSetting:initializeUI()
   self._ui._ringBg:SetShow(true)
   self._ui._oneSlotBg:SetShow(false)
   self._ui._RSGuideText = UI.getChildControl(self._ui._RSGuideBg, "StaticText_GuideText")
-  self._ui._RSGuideText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_RINGMENUSETTING_RSKEYGUIDE"))
   self._ui._RSGuideText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui._RSGuideText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_RINGMENUSETTING_RSKEYGUIDE"))
 end
 function PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(show, index)
   if nil == show then
@@ -216,7 +216,6 @@ end
 function PaGlobal_ConsoleQuickMenuSetting:quitRegistRemoveQuickMenu(executePosition)
   local removeData = self._registMode._settingData
   self:clearRegistCustomSetting()
-  self:ShowBlackBg(false)
   if nil == executePosition or __eQuickMenuStickPosition_Count == executePosition then
     return
   end
@@ -227,7 +226,6 @@ function PaGlobal_ConsoleQuickMenuSetting:quitRegistRemoveQuickMenu(executePosit
   if true == rv then
     self:updateIcon(nil, executePosition)
   end
-  self:showRemoveIcon(false)
   PaGlobal_ConsoleQuickMenu:setWidget()
   self._isRegisterQuickMenu = true
 end
@@ -237,6 +235,7 @@ function PaGlobal_ConsoleQuickMenuSetting:clearRegistCustomSetting()
   self._registMode._stickPosition = __eQuickMenuStickPosition_Count
   self._registMode._settingData = nil
   self:ShowBlackBg(false)
+  self:showRemoveIcon(false)
 end
 function PaGlobal_ConsoleQuickMenuSetting:registQuickMenu(data, position)
   if nil == data then
@@ -574,6 +573,7 @@ function QuickMenuSeting_List2Event_SocialAction(content, key)
     leftText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     leftText:SetAutoResize(true)
     leftText:SetText(leftData._name)
+    leftText:SetPosY(leftLine:GetPosY() + leftLine:GetSizeY() / 2 - leftText:GetTextSizeY() / 2)
     leftIcon:ChangeTextureInfoName(leftData._icon)
     leftButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_SocialAction .. "," .. id .. "  )")
   end
@@ -581,6 +581,7 @@ function QuickMenuSeting_List2Event_SocialAction(content, key)
     rightText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     rightText:SetAutoResize(true)
     rightText:SetText(rightData._name)
+    rightText:SetPosY(rightLine:GetPosY() + rightLine:GetSizeY() / 2 - rightText:GetTextSizeY() / 2)
     rightIcon:ChangeTextureInfoName(rightData._icon)
     rightButton:addInputEvent("Mouse_LUp", "PaGlobal_ConsoleQuickMenuSetting:startRegistQuickMenu(" .. __eQuickMenuDataType_SocialAction .. "," .. tostring(id + 1) .. "  )")
   end
@@ -648,6 +649,7 @@ function FGlobal_ConsoleQuickMenuSetting_RegistMode()
   if __eQuickMenuStickPosition_Count == registPosition then
     if __eQuickMenuStickPosition_Count ~= self._registMode._stickPosition then
       self:quitRegistQuickMenu(self._registMode._stickPosition)
+      _AudioPostEvent_SystemUiForXBOX(52, 1)
     end
   else
     self._registMode._stickPosition = registPosition
@@ -724,6 +726,7 @@ function FGlobal_ConsoleQuickMenu_ChangeDpadGroup(left)
   else
     changeGroup = (PaGlobal_ConsoleQuickMenuSetting._curGroup - 1) % __eQuickMenuDpadGroup_Count
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   FromClient_ConsoleQuickMenu_OpenCustomPage(changeGroup)
 end
 function Toggle_QuickMenuSetting_forPadEventFunc(left)
@@ -732,6 +735,7 @@ function Toggle_QuickMenuSetting_forPadEventFunc(left)
   else
     PaGlobal_ConsoleQuickMenuSetting._curCategory = PaGlobal_ConsoleQuickMenuSetting._curCategory + 1
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   PaGlobal_ConsoleQuickMenuSetting._curCategory = PaGlobal_ConsoleQuickMenuSetting._curCategory % 4
   PaGlobal_ConsoleQuickMenuSetting:GoCategory(PaGlobal_ConsoleQuickMenuSetting._curCategory)
   PaGlobal_ConsoleQuickMenuSetting:showSelectKeyGuideA(true)

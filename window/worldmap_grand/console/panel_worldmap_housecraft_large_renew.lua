@@ -211,6 +211,7 @@ end
 function PaGlobalFunc_WorldMap_HouseCraftLarge_SelectCraftItem(value)
   local self = Window_WorldMap_HouseCraftLargeInfo
   PaGlobalFunc_WorldMap_HouseCraftLarge_HideTooltip()
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   ToClient_padSnapResetControl()
   self._currentCraftIndex = self._currentCraftIndex + value
   if self._currentCraftIndex < 0 then

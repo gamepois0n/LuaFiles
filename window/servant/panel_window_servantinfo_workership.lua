@@ -509,12 +509,12 @@ function PaGlobal_SailStatToolTip(type, isShow)
       return
     end
     if 1 == type then
-      data = string.format("%.1f", sailStatStaticStatus._addMaxHp / 10000)
+      data = string.format("%.1f", sailStatStaticStatus._addMaxHp)
       name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_HP")
       control = self._staticTextValue_Hp
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC1", "varied", data)
     elseif 2 == type then
-      data = string.format("%.1f", sailStatStaticStatus._addMaxMp / 10000)
+      data = string.format("%.1f", sailStatStaticStatus._addMaxMp)
       name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP")
       control = self._staticTextValue_Mp
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC2", "varied", data)

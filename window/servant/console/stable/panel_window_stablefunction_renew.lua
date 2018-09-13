@@ -293,7 +293,7 @@ function PaGlobalFunc_StableFunction_Open()
 end
 function StableFunction_Close()
   local self = Panle_Window_StableFunction_Info
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:closeStableSubPanel()
   self:close()
   PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate()
@@ -350,6 +350,7 @@ function PaGlobalFunc_StableFunction_DownAni()
   Panel_Window_StableFunction:SetPosY(screenSizeY - Panel_Window_StableFunction:GetSizeY())
 end
 function PaGlobalFunc_StableFunction_forPadEventFunc(value)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   local self = Panle_Window_StableFunction_Info
   if self._value.currentFuncCount <= 1 then
     return

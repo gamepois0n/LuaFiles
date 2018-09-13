@@ -1,39 +1,37 @@
 function ResetPos_WidgetButton()
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
+AlwaysOpenType = {
+  eALERT_PearlShop = 0,
+  eALERT_PcRoomReward = 1,
+  eALERT_MarketPlace = 2,
+  count = 3
+}
 AlertType = {
   eALERT_Hunting = 0,
-  eALERT_GuildBusterCall = 1,
-  eALERT_SiegeWarCall = 2,
-  eALERT_PartySummon = 3,
-  eALERT_ReturnTown = 4,
-  eALERT_Coupon = 5,
-  eALERT_LearnSkill = 6,
-  eALERT_NewStoryKnowledge = 7,
-  eALERT_NewKnowledge = 8,
-  eALERT_Mail = 9,
-  eALERT_ChallengeReward = 10,
-  eALERT_PcRoomReward = 11,
-  eALERT_NewFriend = 12,
-  eALERT_BlackSpiritQuest = 13,
-  eALERT_WeightOver = 14,
-  eALERT_EndurancePc = 15,
-  eALERT_EnduranceHorse = 16,
-  eALERT_EnduranceCarriage = 17,
-  eALERT_EnduranceShip = 18,
-  eALERT_BatterEquipment = 19,
-  eALERT_Count = 20
+  eALERT_Coupon = 1,
+  eALERT_LearnSkill = 2,
+  eALERT_NewStoryKnowledge = 3,
+  eALERT_NewKnowledge = 4,
+  eALERT_Mail = 5,
+  eALERT_ChallengeReward = 6,
+  eALERT_NewFriend = 7,
+  eALERT_BlackSpiritQuest = 8,
+  eALERT_WeightOver = 9,
+  eALERT_EndurancePc = 10,
+  eALERT_EnduranceHorse = 11,
+  eALERT_EnduranceCarriage = 12,
+  eALERT_EnduranceShip = 13,
+  eALERT_BatterEquipment = 14,
+  eALERT_Count = 15
 }
 local Panel_Widget_Alert_info = {
   _ui = {
     Static_Bg = nil,
     Button_Spread = nil,
+    StaticText_SpreadCount = nil,
     Button_Hunting = nil,
     StaticText_HuntingCount = nil,
-    Button_GuildBusterCall = nil,
-    Button_SiegeWarCall = nil,
-    Button_PartySummon = nil,
-    Button_ReturnTown = nil,
     Button_Coupon = nil,
     StaticText_CouponCount = nil,
     Button_LearnSkill = nil,
@@ -45,7 +43,6 @@ local Panel_Widget_Alert_info = {
     Button_Mail = nil,
     Button_ChallengeReward = nil,
     StaticText_ChallengeRewardCount = nil,
-    Button_PcRoomReward = nil,
     Button_NewFriend = nil,
     Button_BlackSpiritQuest = nil,
     Button_WeightOver = nil,
@@ -53,28 +50,33 @@ local Panel_Widget_Alert_info = {
     Button_EnduranceHorse = nil,
     Button_EnduranceCarriage = nil,
     Button_EnduranceShip = nil,
-    Button_BatterEquipment = nil
+    Button_BatterEquipment = nil,
+    Button_CashShop = nil,
+    Button_PcRoomReward = nil,
+    StaticText_PcRoomRewardTime = nil,
+    Button_MarketPlace = nil,
+    StaticText_MarketPlaceCount = nil,
+    MessageBg = nil,
+    MsgCloseButton = nil,
+    MsgIcon = nil,
+    MsgTime = nil,
+    MsgContent = nil
   },
-  _value = {isSpread = false},
-  _config = {},
   _pos = {
-    baseSpcae = 4,
+    baseSpcae = 5,
     buttonBasePosY = 0,
     buttonSizeY = 35
   },
+  _speadCount = 0,
+  _alramTime = 0,
   _alertShow = {
     [AlertType.eALERT_Hunting] = false,
-    [AlertType.eALERT_GuildBusterCall] = false,
-    [AlertType.eALERT_SiegeWarCall] = false,
-    [AlertType.eALERT_PartySummon] = false,
-    [AlertType.eALERT_ReturnTown] = false,
     [AlertType.eALERT_Coupon] = false,
     [AlertType.eALERT_LearnSkill] = false,
     [AlertType.eALERT_NewStoryKnowledge] = false,
     [AlertType.eALERT_NewKnowledge] = false,
     [AlertType.eALERT_Mail] = false,
     [AlertType.eALERT_ChallengeReward] = false,
-    [AlertType.eALERT_PcRoomReward] = false,
     [AlertType.eALERT_NewFriend] = false,
     [AlertType.eALERT_BlackSpiritQuest] = false,
     [AlertType.eALERT_WeightOver] = false,
@@ -86,17 +88,12 @@ local Panel_Widget_Alert_info = {
   },
   _alertNeedUpdate = {
     [AlertType.eALERT_Hunting] = false,
-    [AlertType.eALERT_GuildBusterCall] = false,
-    [AlertType.eALERT_SiegeWarCall] = false,
-    [AlertType.eALERT_PartySummon] = false,
-    [AlertType.eALERT_ReturnTown] = false,
     [AlertType.eALERT_Coupon] = false,
     [AlertType.eALERT_LearnSkill] = false,
     [AlertType.eALERT_NewStoryKnowledge] = false,
     [AlertType.eALERT_NewKnowledge] = false,
     [AlertType.eALERT_Mail] = false,
     [AlertType.eALERT_ChallengeReward] = false,
-    [AlertType.eALERT_PcRoomReward] = false,
     [AlertType.eALERT_NewFriend] = false,
     [AlertType.eALERT_BlackSpiritQuest] = false,
     [AlertType.eALERT_WeightOver] = false,
@@ -108,17 +105,12 @@ local Panel_Widget_Alert_info = {
   },
   _alertButton = {
     [AlertType.eALERT_Hunting] = nil,
-    [AlertType.eALERT_GuildBusterCall] = nil,
-    [AlertType.eALERT_SiegeWarCall] = nil,
-    [AlertType.eALERT_PartySummon] = nil,
-    [AlertType.eALERT_ReturnTown] = nil,
     [AlertType.eALERT_Coupon] = nil,
     [AlertType.eALERT_LearnSkill] = nil,
     [AlertType.eALERT_NewStoryKnowledge] = nil,
     [AlertType.eALERT_NewKnowledge] = nil,
     [AlertType.eALERT_Mail] = nil,
     [AlertType.eALERT_ChallengeReward] = nil,
-    [AlertType.eALERT_PcRoomReward] = nil,
     [AlertType.eALERT_NewFriend] = nil,
     [AlertType.eALERT_BlackSpiritQuest] = nil,
     [AlertType.eALERT_WeightOver] = nil,
@@ -130,17 +122,12 @@ local Panel_Widget_Alert_info = {
   },
   _alertClosedButton = {
     [AlertType.eALERT_Hunting] = nil,
-    [AlertType.eALERT_GuildBusterCall] = nil,
-    [AlertType.eALERT_SiegeWarCall] = nil,
-    [AlertType.eALERT_PartySummon] = nil,
-    [AlertType.eALERT_ReturnTown] = nil,
     [AlertType.eALERT_Coupon] = nil,
     [AlertType.eALERT_LearnSkill] = nil,
     [AlertType.eALERT_NewStoryKnowledge] = nil,
     [AlertType.eALERT_NewKnowledge] = nil,
     [AlertType.eALERT_Mail] = nil,
     [AlertType.eALERT_ChallengeReward] = nil,
-    [AlertType.eALERT_PcRoomReward] = nil,
     [AlertType.eALERT_NewFriend] = nil,
     [AlertType.eALERT_BlackSpiritQuest] = nil,
     [AlertType.eALERT_WeightOver] = nil,
@@ -152,26 +139,6 @@ local Panel_Widget_Alert_info = {
   },
   _alertData = {
     [AlertType.eALERT_Hunting] = {
-      name = "",
-      desc = "",
-      count = 0
-    },
-    [AlertType.eALERT_GuildBusterCall] = {
-      name = "",
-      desc = "",
-      count = 0
-    },
-    [AlertType.eALERT_SiegeWarCall] = {
-      name = "",
-      desc = "",
-      count = 0
-    },
-    [AlertType.eALERT_PartySummon] = {
-      name = "",
-      desc = "",
-      count = 0
-    },
-    [AlertType.eALERT_ReturnTown] = {
       name = "",
       desc = "",
       count = 0
@@ -202,11 +169,6 @@ local Panel_Widget_Alert_info = {
       count = 0
     },
     [AlertType.eALERT_ChallengeReward] = {
-      name = "",
-      desc = "",
-      count = 0
-    },
-    [AlertType.eALERT_PcRoomReward] = {
       name = "",
       desc = "",
       count = 0
@@ -251,21 +213,124 @@ local Panel_Widget_Alert_info = {
       desc = "",
       count = 0
     }
+  },
+  _alertIconPath = {
+    [AlertType.eALERT_Hunting] = {
+      _x1 = 73,
+      _y1 = 301,
+      _x2 = 108,
+      _y2 = 336
+    },
+    [AlertType.eALERT_Coupon] = {
+      _x1 = 325,
+      _y1 = 301,
+      _x2 = 360,
+      _y2 = 336
+    },
+    [AlertType.eALERT_LearnSkill] = {
+      _x1 = 253,
+      _y1 = 301,
+      _x2 = 288,
+      _y2 = 336
+    },
+    [AlertType.eALERT_NewStoryKnowledge] = {
+      _x1 = 37,
+      _y1 = 301,
+      _x2 = 72,
+      _y2 = 336
+    },
+    [AlertType.eALERT_NewKnowledge] = {
+      _x1 = 1,
+      _y1 = 301,
+      _x2 = 36,
+      _y2 = 336
+    },
+    [AlertType.eALERT_Mail] = {
+      _x1 = 289,
+      _y1 = 301,
+      _x2 = 324,
+      _y2 = 336
+    },
+    [AlertType.eALERT_ChallengeReward] = {
+      _x1 = 361,
+      _y1 = 301,
+      _x2 = 396,
+      _y2 = 336
+    },
+    [AlertType.eALERT_NewFriend] = {
+      _x1 = 37,
+      _y1 = 409,
+      _x2 = 72,
+      _y2 = 444
+    },
+    [AlertType.eALERT_BlackSpiritQuest] = {
+      _x1 = 1,
+      _y1 = 409,
+      _x2 = 36,
+      _y2 = 444
+    },
+    [AlertType.eALERT_WeightOver] = {
+      _x1 = 217,
+      _y1 = 193,
+      _x2 = 252,
+      _y2 = 228
+    },
+    [AlertType.eALERT_EndurancePc] = {
+      _x1 = 217,
+      _y1 = 157,
+      _x2 = 252,
+      _y2 = 192
+    },
+    [AlertType.eALERT_EnduranceHorse] = {
+      _x1 = 253,
+      _y1 = 193,
+      _x2 = 288,
+      _y2 = 228
+    },
+    [AlertType.eALERT_EnduranceCarriage] = {
+      _x1 = 253,
+      _y1 = 157,
+      _x2 = 288,
+      _y2 = 192
+    },
+    [AlertType.eALERT_EnduranceShip] = {
+      _x1 = 217,
+      _y1 = 229,
+      _x2 = 252,
+      _y2 = 264
+    },
+    [AlertType.eALERT_BatterEquipment] = {
+      _x1 = 433,
+      _y1 = 301,
+      _x2 = 468,
+      _y2 = 336
+    }
+  },
+  _alertMessage = {
+    [AlertType.eALERT_Hunting] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_0"),
+    [AlertType.eALERT_Coupon] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_1"),
+    [AlertType.eALERT_LearnSkill] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_2"),
+    [AlertType.eALERT_NewStoryKnowledge] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_3"),
+    [AlertType.eALERT_NewKnowledge] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_4"),
+    [AlertType.eALERT_Mail] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_5"),
+    [AlertType.eALERT_ChallengeReward] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_6"),
+    [AlertType.eALERT_NewFriend] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_7"),
+    [AlertType.eALERT_BlackSpiritQuest] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_8"),
+    [AlertType.eALERT_WeightOver] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_9"),
+    [AlertType.eALERT_EndurancePc] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_10"),
+    [AlertType.eALERT_EnduranceHorse] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_11"),
+    [AlertType.eALERT_EnduranceCarriage] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_12"),
+    [AlertType.eALERT_EnduranceShip] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_13"),
+    [AlertType.eALERT_BatterEquipment] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_14")
   }
 }
 local cardListNormal = {}
 local cardListImportant = {}
-local equipItemData = {
-  _buttonWeapon = false,
-  _buttonSubWeapon = false,
-  _buttonHelm = false,
-  _buttonUpper = false,
-  _buttonHand = false,
-  _buttonFoot = false
-}
 local haveBatterEquip = false
 function Panel_Widget_Alert_info:registEventHandler()
   self._ui.Button_Spread:addInputEvent("Mouse_LUp", "PaGlobalFunc_Widget_Alert_ClickSpread()")
+  self._ui.Button_Spread:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 0 .. ")")
+  self._ui.Button_Spread:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   for index = 0, AlertType.eALERT_Count - 1 do
     if nil ~= self._alertButton[index] then
       self._alertButton[index]:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_HandleOver(" .. index .. ")")
@@ -280,14 +345,20 @@ function Panel_Widget_Alert_info:registEventHandler()
       end
     end
   end
+  self._ui.Button_CashShop:addInputEvent("Mouse_LUp", "GlobalKeyBinder_MouseKeyMap(18)")
+  self._ui.Button_CashShop:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 1 .. ")")
+  self._ui.Button_CashShop:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
+  self._ui.Button_PcRoomReward:addInputEvent("Mouse_LUp", "HandleClicked_PcRoomReward()")
+  self._ui.Button_PcRoomReward:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 2 .. ")")
+  self._ui.Button_PcRoomReward:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
+  self._ui.Button_MarketPlace:addInputEvent("Mouse_LUp", "FGlobal_ItemMarketAlarmList_New_Open()")
+  self._ui.Button_MarketPlace:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 3 .. ")")
+  self._ui.Button_MarketPlace:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
+  self._ui.MsgCloseButton:addInputEvent("Mouse_LUp", "Panel_Widget_Alert_info_AlramHide()")
 end
 function Panel_Widget_Alert_info:registerMessageHandler()
   Panel_UIMain:RegisterUpdateFunc("FromClient_Widget_Alert_UpdatePerFrame")
   registerEvent("onScreenResize", "FromClient_Widget_Alert_Resize")
-  registerEvent("FromClient_ResponseBustCall", "FromClient_Widget_Alert_ResponseBustCall")
-  registerEvent("FromClient_ResponseTeleportToSiegeTent", "FromClient_Widget_Alert_ResponseTeleportToSiegeTent")
-  registerEvent("FromClient_ResponseUseCompass", "FromClient_Widget_Alert_ResponseUseCompass")
-  registerEvent("FromClient_ResponseUseReturnStone", "FromClient_Widget_Alert_ResponseUseReturnStone")
   registerEvent("FromClient_UpdateCouponInfo", "FromClient_Widget_Alert_UpdateCoupon")
   registerEvent("FromClient_RegisterCoupon", "FromClient_Widget_Alert_UpdateCoupon")
   registerEvent("EventSkillWindowUpdate", "FromClient_Widget_Alert_EventSkillWindowUpdate")
@@ -310,32 +381,22 @@ function Panel_Widget_Alert_info:registerMessageHandler()
 end
 function Panel_Widget_Alert_info:initialize()
   self:childControl()
-  self:initValue()
   self:resize()
   self:setButton()
-  self:setClosedButton()
   self:registerMessageHandler()
   self:registEventHandler()
-end
-function Panel_Widget_Alert_info:initValue()
-  self._value.isSpread = false
 end
 function Panel_Widget_Alert_info:resize()
   Panel_UIMain:ComputePos()
 end
 function Panel_Widget_Alert_info:setButton()
   self._alertButton[AlertType.eALERT_Hunting] = self._ui.Button_Hunting
-  self._alertButton[AlertType.eALERT_GuildBusterCall] = self._ui.Button_GuildBusterCall
-  self._alertButton[AlertType.eALERT_SiegeWarCall] = self._ui.Button_SiegeWarCall
-  self._alertButton[AlertType.eALERT_PartySummon] = self._ui.Button_PartySummon
-  self._alertButton[AlertType.eALERT_ReturnTown] = self._ui.Button_ReturnTown
   self._alertButton[AlertType.eALERT_Coupon] = self._ui.Button_Coupon
   self._alertButton[AlertType.eALERT_LearnSkill] = self._ui.Button_LearnSkill
   self._alertButton[AlertType.eALERT_NewStoryKnowledge] = self._ui.Button_NewStoryKnowledge
   self._alertButton[AlertType.eALERT_NewKnowledge] = self._ui.Button_NewKnowledge
   self._alertButton[AlertType.eALERT_Mail] = self._ui.Button_Mail
   self._alertButton[AlertType.eALERT_ChallengeReward] = self._ui.Button_ChallengeReward
-  self._alertButton[AlertType.eALERT_PcRoomReward] = self._ui.Button_PcRoomReward
   self._alertButton[AlertType.eALERT_NewFriend] = self._ui.Button_NewFriend
   self._alertButton[AlertType.eALERT_BlackSpiritQuest] = self._ui.Button_BlackSpiritQuest
   self._alertButton[AlertType.eALERT_WeightOver] = self._ui.Button_WeightOver
@@ -345,37 +406,12 @@ function Panel_Widget_Alert_info:setButton()
   self._alertButton[AlertType.eALERT_EnduranceShip] = self._ui.Button_EnduranceShip
   self._alertButton[AlertType.eALERT_BatterEquipment] = self._ui.Button_BatterEquipment
 end
-function Panel_Widget_Alert_info:setClosedButton()
-  self._alertClosedButton[AlertType.eALERT_Hunting] = nil
-  self._alertClosedButton[AlertType.eALERT_GuildBusterCall] = nil
-  self._alertClosedButton[AlertType.eALERT_SiegeWarCall] = nil
-  self._alertClosedButton[AlertType.eALERT_PartySummon] = nil
-  self._alertClosedButton[AlertType.eALERT_ReturnTown] = nil
-  self._alertClosedButton[AlertType.eALERT_Coupon] = nil
-  self._alertClosedButton[AlertType.eALERT_LearnSkill] = nil
-  self._alertClosedButton[AlertType.eALERT_NewStoryKnowledge] = nil
-  self._alertClosedButton[AlertType.eALERT_NewKnowledge] = nil
-  self._alertClosedButton[AlertType.eALERT_Mail] = nil
-  self._alertClosedButton[AlertType.eALERT_ChallengeReward] = nil
-  self._alertClosedButton[AlertType.eALERT_PcRoomReward] = nil
-  self._alertClosedButton[AlertType.eALERT_NewFriend] = nil
-  self._alertClosedButton[AlertType.eALERT_BlackSpiritQuest] = nil
-  self._alertClosedButton[AlertType.eALERT_WeightOver] = UI.cloneControl(self._ui.Button_WeightOver, self._ui.Static_Bg, "Button_WeightOver_Close")
-  self._alertClosedButton[AlertType.eALERT_EndurancePc] = UI.cloneControl(self._ui.Button_EndurancePc, self._ui.Static_Bg, "Button_EndurancePc_Close")
-  self._alertClosedButton[AlertType.eALERT_EnduranceHorse] = UI.cloneControl(self._ui.Button_EnduranceHorse, self._ui.Static_Bg, "Button_EnduranceHorse_Close")
-  self._alertClosedButton[AlertType.eALERT_EnduranceCarriage] = UI.cloneControl(self._ui.Button_EnduranceCarriage, self._ui.Static_Bg, "Button_EnduranceCarriage_Close")
-  self._alertClosedButton[AlertType.eALERT_EnduranceShip] = UI.cloneControl(self._ui.Button_EnduranceShip, self._ui.Static_Bg, "Button_EnduranceShip_Close")
-  self._alertClosedButton[AlertType.eALERT_BatterEquipment] = nil
-end
 function Panel_Widget_Alert_info:childControl()
   self._ui.Static_Bg = UI.getChildControl(Panel_UIMain, "Static_Bg")
   self._ui.Button_Spread = UI.getChildControl(self._ui.Static_Bg, "Button_Spread")
+  self._ui.StaticText_SpreadCount = UI.getChildControl(self._ui.Button_Spread, "StaticText_Count")
   self._ui.Button_Hunting = UI.getChildControl(self._ui.Static_Bg, "Button_Hunting")
   self._ui.StaticText_HuntingCount = UI.getChildControl(self._ui.Button_Hunting, "StaticText_HuntingCount")
-  self._ui.Button_GuildBusterCall = UI.getChildControl(self._ui.Static_Bg, "Button_GuildBusterCall")
-  self._ui.Button_SiegeWarCall = UI.getChildControl(self._ui.Static_Bg, "Button_SiegeWarCall")
-  self._ui.Button_PartySummon = UI.getChildControl(self._ui.Static_Bg, "Button_PartySummon")
-  self._ui.Button_ReturnTown = UI.getChildControl(self._ui.Static_Bg, "Button_ReturnTown")
   self._ui.Button_Coupon = UI.getChildControl(self._ui.Static_Bg, "Button_Coupon")
   self._ui.StaticText_CouponCount = UI.getChildControl(self._ui.Button_Coupon, "StaticText_CouponCount")
   self._ui.Button_LearnSkill = UI.getChildControl(self._ui.Static_Bg, "Button_LearnSkill")
@@ -387,7 +423,6 @@ function Panel_Widget_Alert_info:childControl()
   self._ui.Button_Mail = UI.getChildControl(self._ui.Static_Bg, "Button_Mail")
   self._ui.Button_ChallengeReward = UI.getChildControl(self._ui.Static_Bg, "Button_ChallengeReward")
   self._ui.StaticText_ChallengeRewardCount = UI.getChildControl(self._ui.Button_ChallengeReward, "StaticText_ChallengeRewardCount")
-  self._ui.Button_PcRoomReward = UI.getChildControl(self._ui.Static_Bg, "Button_PcRoomReward")
   self._ui.Button_NewFriend = UI.getChildControl(self._ui.Static_Bg, "Button_NewFriend")
   self._ui.Button_BlackSpiritQuest = UI.getChildControl(self._ui.Static_Bg, "Button_BlackSpiritQuest")
   self._ui.Button_WeightOver = UI.getChildControl(self._ui.Static_Bg, "Button_WeightOver")
@@ -396,79 +431,39 @@ function Panel_Widget_Alert_info:childControl()
   self._ui.Button_EnduranceCarriage = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceCarriage")
   self._ui.Button_EnduranceShip = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceShip")
   self._ui.Button_BatterEquipment = UI.getChildControl(self._ui.Static_Bg, "Button_BatterEquipment")
+  self._ui.Button_CashShop = UI.getChildControl(self._ui.Static_Bg, "Button_CashShop")
+  self._ui.Button_PcRoomReward = UI.getChildControl(self._ui.Static_Bg, "Button_PCRoomReward")
+  self._ui.StaticText_PcRoomRewardTime = UI.getChildControl(self._ui.Button_PcRoomReward, "StaticText_Desc")
+  self._ui.Button_MarketPlace = UI.getChildControl(self._ui.Static_Bg, "Button_MarketPlaceAlert")
+  self._ui.StaticText_MarketPlaceCount = UI.getChildControl(self._ui.Button_MarketPlace, "StaticText_Count")
+  self._ui.MessageBg = UI.getChildControl(Panel_UIMain, "Static_AlertMessageBg")
+  self._ui.MsgCloseButton = UI.getChildControl(self._ui.MessageBg, "Button_Win_Close")
+  self._ui.MsgIcon = UI.getChildControl(self._ui.MessageBg, "Static_Icon")
+  self._ui.MsgTime = UI.getChildControl(self._ui.MessageBg, "StaticText_Time")
+  self._ui.MsgContent = UI.getChildControl(self._ui.MessageBg, "StaticText_Message")
+  self._ui.MsgContent:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 end
-function Panel_Widget_Alert_info:checkSpreadForced(alertType)
-  if nil == self._alertNeedUpdate[alertType] or nil == self._alertShow[alertType] then
-    return false
-  end
-  if true == self._alertShow[alertType] and false == self._value.isSpread then
-    PaGlobalFunc_Widget_Alert_ClickSpread()
-    return true
-  end
-  return false
-end
-function Panel_Widget_Alert_info:checkNeedUpdate()
+function Panel_Widget_Alert_info:updateIcons(forced, ignoerSetDataType1)
+  local spreadCount = 0
   for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertNeedUpdate[index] and true == self._alertNeedUpdate[index] then
-      return true
-    end
-  end
-  return false
-end
-function Panel_Widget_Alert_info:clearNeedUpdate()
-  for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertNeedUpdate[index] then
-      self._alertNeedUpdate[index] = false
-    end
-  end
-end
-function Panel_Widget_Alert_info:updateCloseIcons(ignoerSetDataType1, ignoerSetDataType2)
-  if true == self._value.isSpread then
-    return
-  end
-  for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertShow[index] and nil ~= self._alertClosedButton[index] then
+    if nil ~= self._alertShow[index] then
       self:setData(index)
+      if self._alertShow[index] then
+        spreadCount = spreadCount + 1
+      end
     end
   end
-  self:updateCloseIconPos()
-  for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertShow[index] and nil ~= self._alertClosedButton[index] then
-      self._alertClosedButton[index]:SetShow(self._alertShow[index])
-    end
-  end
-end
-function Panel_Widget_Alert_info:updateIcons(forced, ignoerSetDataType1, ignoerSetDataType2)
-  if false == self._value.isSpread then
-    self:updateCloseIcons()
+  if self._ui.Button_Spread:IsCheck() then
+    self._ui.StaticText_SpreadCount:SetText(spreadCount)
+    self._ui.StaticText_SpreadCount:SetShow(true)
     return
-  end
-  if true ~= forced and false == self:checkNeedUpdate() then
-    return
-  end
-  for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertShow[index] and (true == forced or true == self._alertNeedUpdate[index] and index ~= ignoerSetDataType1) then
-      self:setData(index)
-    end
+  else
+    self._ui.StaticText_SpreadCount:SetShow(false)
   end
   self:updateIconPos()
   for index = 0, AlertType.eALERT_Count - 1 do
     if nil ~= self._alertShow[index] then
       self._alertButton[index]:SetShow(self._alertShow[index])
-      self._alertButton[index]:ResetVertexAni()
-      local MoveAni = self._alertButton[index]:addMoveAnimation(0, 0.2, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
-      MoveAni:SetStartPosition(0, 0)
-      MoveAni:SetEndPosition(self._alertButton[index]:GetPosX(), 0)
-    end
-  end
-  self:clearNeedUpdate()
-end
-function Panel_Widget_Alert_info:updateCloseIconPos()
-  local basePosXRight = self._ui.Button_Spread:GetPosX() - self._ui.Button_Spread:GetSizeX() - self._pos.baseSpcae
-  for index = 0, AlertType.eALERT_Count - 1 do
-    if nil ~= self._alertShow[index] and true == self._alertShow[index] and nil ~= self._alertClosedButton[index] then
-      self._alertClosedButton[index]:SetPosX(basePosXRight)
-      basePosXRight = basePosXRight - 35 - self._pos.baseSpcae
     end
   end
 end
@@ -482,32 +477,8 @@ function Panel_Widget_Alert_info:updateIconPos()
   end
 end
 function Panel_Widget_Alert_info:showAllButton()
-  self._value.isSpread = true
   self:updateIcons(true)
   self._ui.Button_Spread:SetCheck(false)
-  self:hideAllCloseButton()
-end
-function Panel_Widget_Alert_info:hideAllCloseButton()
-  for index = AlertType.eALERT_Count - 1, 0, -1 do
-    if nil ~= self._alertShow[index] and nil ~= self._alertClosedButton[index] then
-      self._alertClosedButton[index]:SetShow(false)
-    end
-  end
-end
-function Panel_Widget_Alert_info:hideAllButton()
-  self._value.isSpread = false
-  for index = AlertType.eALERT_Count - 1, 0, -1 do
-    if nil ~= self._alertShow[index] then
-      self._alertButton[index]:ResetVertexAni()
-      local MoveAni = self._alertButton[index]:addMoveAnimation(0, 0.2, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-      MoveAni:SetStartPosition(self._alertButton[index]:GetPosX(), 0)
-      MoveAni:SetEndPosition(0, 0)
-      MoveAni:SetHideAtEnd(true)
-      MoveAni:SetDisableWhileAni(true)
-    end
-  end
-  self._ui.Button_Spread:SetCheck(true)
-  self:updateCloseIcons()
 end
 function Panel_Widget_Alert_info:setButtonShow(alertType, value, needUpdate)
   if nil == alertType then
@@ -519,23 +490,10 @@ function Panel_Widget_Alert_info:setButtonShow(alertType, value, needUpdate)
   if nil == self._alertShow[alertType] then
     return
   end
-  if self._alertShow[alertType] == value then
-    if true == needUpdate then
-      self:setNeedUpdate(alertType, true)
-    end
-  else
-    self._alertShow[alertType] = value
-    self:setNeedUpdate(alertType, true)
+  if not self._alertShow[alertType] and value then
+    Panel_Widget_Alert_info:AlramShow(alertType)
   end
-end
-function Panel_Widget_Alert_info:setNeedUpdate(alertType, value)
-  if alertType < 0 or alertType >= AlertType.eALERT_Count then
-    return
-  end
-  if nil == self._alertShow[alertType] then
-    return
-  end
-  self._alertNeedUpdate[alertType] = value
+  self._alertShow[alertType] = value
 end
 function PaGlobalFunc_UiMain_SetShow(isShow)
   if true == isShow then
@@ -557,14 +515,6 @@ end
 function Panel_Widget_Alert_info:setData(alertType)
   if alertType == AlertType.eALERT_Hunting then
     PaGlobalFunc_Widget_Alert_Check_Hunting()
-  elseif alertType == AlertType.eALERT_GuildBusterCall then
-    PaGlobalFunc_Widget_Alert_Check_GuildBusterCall()
-  elseif alertType == AlertType.eALERT_SiegeWarCall then
-    PaGlobalFunc_Widget_Alert_Check_SiegeWarCall()
-  elseif alertType == AlertType.eALERT_PartySummon then
-    PaGlobalFunc_Widget_Alert_Check_PartySummon()
-  elseif alertType == AlertType.eALERT_ReturnTown then
-    PaGlobalFunc_Widget_Alert_Check_ReturnTown()
   elseif alertType == AlertType.eALERT_Coupon then
     PaGlobalFunc_Widget_Alert_Check_Coupon()
   elseif alertType == AlertType.eALERT_LearnSkill then
@@ -577,8 +527,6 @@ function Panel_Widget_Alert_info:setData(alertType)
     PaGlobalFunc_Widget_Alert_Check_Mail()
   elseif alertType == AlertType.eALERT_ChallengeReward then
     PaGlobalFunc_Widget_Alert_Check_ChallengeReward()
-  elseif alertType == AlertType.eALERT_PcRoomReward then
-    PaGlobalFunc_Widget_Alert_Check_PcRoomReward()
   elseif alertType == AlertType.eALERT_NewFriend then
     PaGlobalFunc_Widget_Alert_Check_NewFriend()
   elseif alertType == AlertType.eALERT_BlackSpiritQuest then
@@ -601,36 +549,6 @@ function Panel_Widget_Alert_info:setData(alertType)
 end
 function Panel_Widget_Alert_info:handleLClick(alertType)
   if alertType == AlertType.eALERT_Hunt then
-  elseif alertType == AlertType.eALERT_GuildBusterCall then
-    ToClient_RequestTeleportGuildBustCall()
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, false)
-  elseif alertType == AlertType.eALERT_SiegeWarCall then
-    ToClient_RequestTeleportToSiegeTentCall()
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, false)
-  elseif alertType == AlertType.eALERT_PartySummon then
-    local remainTime_s64 = ToClient_GetLeftUsableTeleportCompassTime()
-    local remainTime = Int64toInt32(remainTime_s64)
-    if remainTime > 0 then
-      if IsSelfPlayerWaitAction() then
-        ToClient_RequestTeleportPosUseCompass()
-        self:setButtonShow(AlertType.eALERT_PartySummon, false)
-      else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
-      end
-    end
-  elseif alertType == AlertType.eALERT_ReturnTown then
-    local remainTime_s64 = ToClient_GetLeftReturnStoneTime()
-    local remainTime = Int64toInt32(remainTime_s64)
-    local returnPos3D = ToClient_GetPosUseReturnStone()
-    local regionInfo = getRegionInfoByPosition(returnPos3D)
-    if remainTime > 0 then
-      if IsSelfPlayerWaitAction() then
-        ToClient_RequestTeleportPosUseReturnStone()
-        self:setButtonShow(AlertType.eALERT_ReturnTown, false)
-      else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
-      end
-    end
   elseif alertType == AlertType.eALERT_Coupon then
     IngameCashShopCoupon_Open()
   elseif alertType == AlertType.eALERT_LearnSkill then
@@ -643,8 +561,6 @@ function Panel_Widget_Alert_info:handleLClick(alertType)
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_Mail)
     self:setButtonShow(AlertType.eALERT_Mail, true, true)
   elseif alertType == AlertType.eALERT_ChallengeReward then
-    GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_Present)
-  elseif alertType == AlertType.eALERT_PcRoomReward then
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_Present)
   elseif alertType == AlertType.eALERT_NewFriend then
     GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_FriendList)
@@ -667,17 +583,12 @@ function Panel_Widget_Alert_info:handleLClick(alertType)
 end
 function Panel_Widget_Alert_info:handleRClick(alertType)
   if alertType == AlertType.eALERT_Hunt then
-  elseif alertType == AlertType.eALERT_GuildBusterCall then
-  elseif alertType == AlertType.eALERT_SiegeWarCall then
-  elseif alertType == AlertType.eALERT_PartySummon then
-  elseif alertType == AlertType.eALERT_ReturnTown then
   elseif alertType == AlertType.eALERT_Coupon then
   elseif alertType == AlertType.eALERT_LearnSkill then
   elseif alertType == AlertType.eALERT_NewStoryKnowledge then
   elseif alertType == AlertType.eALERT_NewKnowledge then
   elseif alertType == AlertType.eALERT_Mail then
   elseif alertType == AlertType.eALERT_ChallengeReward then
-  elseif alertType == AlertType.eALERT_PcRoomReward then
   elseif alertType == AlertType.eALERT_NewFriend then
   elseif alertType == AlertType.eALERT_BlackSpiritQuest then
   elseif alertType == AlertType.eALERT_WeightOver then
@@ -698,18 +609,6 @@ function Panel_Widget_Alert_info:handleOver(alertType)
   if alertType == AlertType.eALERT_Hunting then
     showToolTip = true
     PaGlobalFunc_Widget_Alert_Check_Hunting()
-  elseif alertType == AlertType.eALERT_GuildBusterCall then
-    showToolTip = true
-    PaGlobalFunc_Widget_Alert_Check_GuildBusterCall()
-  elseif alertType == AlertType.eALERT_SiegeWarCall then
-    showToolTip = true
-    PaGlobalFunc_Widget_Alert_Check_SiegeWarCall()
-  elseif alertType == AlertType.eALERT_PartySummon then
-    showToolTip = true
-    PaGlobalFunc_Widget_Alert_Check_PartySummon()
-  elseif alertType == AlertType.eALERT_ReturnTown then
-    showToolTip = true
-    PaGlobalFunc_Widget_Alert_Check_ReturnTown()
   elseif alertType == AlertType.eALERT_Coupon then
     showToolTip = true
   elseif alertType == AlertType.eALERT_LearnSkill then
@@ -721,8 +620,6 @@ function Panel_Widget_Alert_info:handleOver(alertType)
   elseif alertType == AlertType.eALERT_Mail then
     showToolTip = true
   elseif alertType == AlertType.eALERT_ChallengeReward then
-    showToolTip = true
-  elseif alertType == AlertType.eALERT_PcRoomReward then
     showToolTip = true
   elseif alertType == AlertType.eALERT_NewFriend then
     showToolTip = true
@@ -747,6 +644,39 @@ function Panel_Widget_Alert_info:handleOver(alertType)
     registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(uiControl, name, desc)
   end
+end
+function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
+  local self = Panel_Widget_Alert_info
+  local name, desc, uiControl
+  if 0 == buttonType then
+    uiControl = self._ui.Button_Spread
+    local count = self._ui.StaticText_SpreadCount:GetText()
+    if not self._ui.Button_Spread:IsCheck() then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_0")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_1")
+    else
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_2")
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_3", "count", count)
+    end
+  elseif 1 == buttonType then
+    uiControl = self._ui.Button_CashShop
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_4")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_5")
+  elseif 2 == buttonType then
+    uiControl = self._ui.Button_PcRoomReward
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_6")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_7")
+  elseif 3 == buttonType then
+    uiControl = self._ui.Button_MarketPlace
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_8")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_9")
+  else
+    return
+  end
+  TooltipSimple_Show(uiControl, name, desc)
+end
+function PaGlobalFunc_Widget_Alert_ButtonTooltipHide()
+  TooltipSimple_Hide()
 end
 function PaGlobalFunc_Widget_Alert_GetShow()
   return Panel_Widget_Alert_info:GetShow()
@@ -785,16 +715,69 @@ function PaGlobalFunc_Widget_Alert_HandleOut()
 end
 function PaGlobalFunc_Widget_Alert_ClickSpread()
   local self = Panel_Widget_Alert_info
-  local timeRate = 1
   local rotateAni = self._ui.Button_Spread:addRotateAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   rotateAni:SetStartRotate(0)
   rotateAni:SetEndRotate(0)
   rotateAni:SetRotateCount(1)
-  if false == self._value.isSpread then
-    self:showAllButton()
+  local showIndex = 0
+  if not self._ui.Button_Spread:IsCheck() then
+    for index = 0, AlertType.eALERT_Count - 1 do
+      if self._alertShow[index] then
+        showIndex = showIndex + 1
+        local control = self._alertButton[index]
+        local MoveAni = control:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        MoveAni:SetStartPosition(self._ui.Button_Spread:GetPosX(), 0)
+        MoveAni:SetEndPosition(self._ui.Button_Spread:GetPosX() + (control:GetSizeX() + 5) * showIndex * -1, 0)
+        MoveAni:SetDisableWhileAni(true)
+        control:SetShow(true)
+      end
+    end
+    self._ui.StaticText_SpreadCount:SetShow(false)
   else
-    self:hideAllButton()
+    for index = 0, AlertType.eALERT_Count - 1 do
+      if self._alertShow[index] then
+        showIndex = showIndex + 1
+        local control = self._alertButton[index]
+        local MoveAni = control:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+        MoveAni:SetStartPosition(control:GetPosX(), 0)
+        MoveAni:SetEndPosition(self._ui.Button_Spread:GetPosX(), 0)
+        MoveAni:SetHideAtEnd(true)
+        MoveAni:SetDisableWhileAni(true)
+      end
+    end
+    self._ui.StaticText_SpreadCount:SetText(showIndex)
+    self._ui.StaticText_SpreadCount:SetShow(true)
   end
+  self._speadCount = showIndex
+  TooltipSimple_Hide()
+end
+function Panel_Widget_Alert_info:AlramShow(alertType)
+  local currentTime = ""
+  self._ui.MsgTime:SetText(currentTime)
+  self._ui.MsgContent:SetText(self._alertMessage[alertType])
+  local texture = self._alertIconPath[alertType]
+  self._ui.MsgIcon:ChangeTextureInfoNameAsync("renewal/button/console_btn_main.dds")
+  local x1, y1, x2, y2 = setTextureUV_Func(self._ui.MsgIcon, texture._x1, texture._y1, texture._x2, texture._y2)
+  self._ui.MsgIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+  self._ui.MsgIcon:setRenderTexture(self._ui.MsgIcon:getBaseTexture())
+  local control = self._ui.MessageBg
+  local moveAni1 = control:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  moveAni1:SetStartPosition(-40, control:GetPosY())
+  moveAni1:SetEndPosition(40 - control:GetSizeX(), control:GetPosY())
+  moveAni1:SetDisableWhileAni(true)
+  control:SetShow(true)
+  self._alramTime = 0
+end
+function Panel_Widget_Alert_info:AlramHide()
+  local control = self._ui.MessageBg
+  local moveAni2 = control:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  moveAni2:SetStartPosition(control:GetPosX(), control:GetPosY())
+  moveAni2:SetEndPosition(-40, control:GetPosY())
+  moveAni2:SetHideAtEnd(true)
+  moveAni2:SetDisableWhileAni(true)
+end
+function Panel_Widget_Alert_info_AlramHide()
+  Panel_Widget_Alert_info:AlramHide()
 end
 function PaGlobalFunc_Widget_Alert_Check_Hunting()
   local self = Panel_Widget_Alert_info
@@ -867,100 +850,6 @@ function PaGlobalFunc_Widget_Alert_Check_Hunting()
   end
   self:setButtonShow(AlertType.eALERT_Hunting, isHuntingButtonShow, true)
   self._ui.StaticText_HuntingCount:SetText(totalCount)
-end
-function PaGlobalFunc_Widget_Alert_Check_GuildBusterCall()
-  local self = Panel_Widget_Alert_info
-  local regionInfoWrapper = ToClient_getRegionInfoWrapperByPosition(ToClient_GetGuildBustCallPos())
-  if nil == regionInfoWrapper then
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, false)
-    return
-  end
-  local leftTime = Int64toInt32(getLeftSecond_TTime64(ToClient_GetGuildBustCallTime()))
-  if leftTime > 0 then
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, true, true)
-  else
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, false)
-    return
-  end
-  local areaName = regionInfoWrapper:getAreaName()
-  local usableTime64 = ToClient_GetGuildBustCallTime()
-  local name = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDE_BUSTERCALL_TOOLTIP_NAME")
-  local desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MOVIEGUIDE_BUSTERCALL_TOOLTIP_DESC", "areaName", areaName, "time", convertStringFromDatetime(getLeftSecond_TTime64(usableTime64)))
-  self._alertData[AlertType.eALERT_GuildBusterCall].name = name
-  self._alertData[AlertType.eALERT_GuildBusterCall].desc = desc
-end
-function PaGlobalFunc_Widget_Alert_Check_SiegeWarCall()
-  local self = Panel_Widget_Alert_info
-  local regionInfoWrapper = ToClient_getRegionInfoWrapperByPosition(ToClient_GetTeleportToSiegeTentPos())
-  if nil == regionInfoWrapper then
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, false)
-    return
-  end
-  local areaName = regionInfoWrapper:getAreaName()
-  local usableTime64 = ToClient_GetTeleportToSiegeTentTime()
-  local leftTime = Int64toInt32(usableTime64)
-  if leftTime > 0 then
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, true, true)
-  else
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, false)
-    return
-  end
-  local selfProxy = getSelfPlayer()
-  if nil ~= selfProxy then
-    if selfProxy:get():isVolunteer() then
-      descStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVIEGUIDE_BUSTERCALL_TOOLTIP_DESC2", "time", convertStringFromDatetime(getLeftSecond_TTime64(usableTime64)))
-    else
-      descStr = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MOVIEGUIDE_BUSTERCALL_TOOLTIP_DESC", "areaName", areaName, "time", convertStringFromDatetime(getLeftSecond_TTime64(usableTime64)))
-    end
-  end
-  local name, desc = PAGetString(Defines.StringSheet_GAME, "LUA_WARCALL_TOOLTIP_NAME"), descStr
-  self._alertData[AlertType.eALERT_SiegeWarCall].name = name
-  self._alertData[AlertType.eALERT_SiegeWarCall].desc = desc
-end
-function PaGlobalFunc_Widget_Alert_Check_PartySummon()
-  local self = Panel_Widget_Alert_info
-  local partyName = ToClient_GetCharacterNameUseCompass()
-  local partyActorKey = ToClient_GetCharacterActorKeyRawUseCompass()
-  local playerActorKey = getSelfPlayer():getActorKey()
-  local descStr = ""
-  local usableTime64 = ToClient_GetLeftUsableTeleportCompassTime()
-  local remainTime = Int64toInt32(usableTime64)
-  if remainTime > 0 then
-    self:setButtonShow(AlertType.eALERT_PartySummon, true)
-  else
-    self:setButtonShow(AlertType.eALERT_PartySummon, false)
-    return
-  end
-  if partyActorKey == playerActorKey then
-    descStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPASS_DESC_1", "remainTime", convertStringFromDatetime(usableTime64))
-  else
-    descStr = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPASS_DESC_2", "partyName", partyName, "partyName1", partyName, "remainTime", convertStringFromDatetime(usableTime64))
-  end
-  local name, desc = PAGetString(Defines.StringSheet_GAME, "LUA_COMPASS_NAME"), descStr
-  self._alertData[AlertType.eALERT_PartySummon].name = name
-  self._alertData[AlertType.eALERT_PartySummon].desc = desc
-end
-function PaGlobalFunc_Widget_Alert_Check_ReturnTown()
-  local self = Panel_Widget_Alert_info
-  local returnPos3D = ToClient_GetPosUseReturnStone()
-  local regionInfo = getRegionInfoByPosition(returnPos3D)
-  local regionName = ""
-  if nil ~= regionInfo then
-    regionName = regionInfo:getAreaName()
-  end
-  local returnTownRegionKey = ToClient_GetReturnStoneTownRegionKey()
-  local usableTime64 = ToClient_GetLeftReturnStoneTime()
-  local remainTime = Int64toInt32(usableTime64)
-  if remainTime > 0 then
-    self:setButtonShow(AlertType.eALERT_ReturnTown, true)
-  else
-    self:setButtonShow(AlertType.eALERT_ReturnTown, false)
-    return
-  end
-  local descStr = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_RETURNSTONE_DESC", "regionName", regionName, "remainTime", convertStringFromDatetime(usableTime64))
-  local name, desc = PAGetString(Defines.StringSheet_GAME, "LUA_RETURNSTONE_NAME"), descStr
-  self._alertData[AlertType.eALERT_ReturnTown].name = name
-  self._alertData[AlertType.eALERT_ReturnTown].desc = desc
 end
 function PaGlobalFunc_Widget_Alert_Check_Coupon()
   local self = Panel_Widget_Alert_info
@@ -1037,7 +926,7 @@ function PaGlobalFunc_Widget_Alert_Check_Mail()
 end
 function PaGlobalFunc_Widget_Alert_Check_ChallengeReward()
   local self = Panel_Widget_Alert_info
-  local challengeRWCount = ToClient_GetChallengeRewardInfoCount()
+  local challengeRWCount = PaGlobalFunc_Challenge_GetTotalRemainRewardCount()
   if challengeRWCount <= 0 then
     self:setButtonShow(AlertType.eALERT_ChallengeReward, false)
     return
@@ -1066,7 +955,7 @@ function PaGlobalFunc_Widget_Alert_Check_PcRoomReward()
     end
   end
   if pcRoomRewardCount == 0 then
-    self._alertShow[AlertType.eALERT_PcRoomReward] = false
+    self._ui.Button_PcRoomReward:SetShow(false)
     return needUpdate
   else
     needUpdate = true
@@ -1076,7 +965,7 @@ function PaGlobalFunc_Widget_Alert_Check_PcRoomReward()
   self._alertData[AlertType.eALERT_PcRoomReward].name = name
   self._alertData[AlertType.eALERT_PcRoomReward].desc = desc
   self._alertData[AlertType.eALERT_PcRoomReward].count = pcRoomRewardCount
-  self._alertShow[AlertType.eALERT_PcRoomReward] = true
+  self._ui.Button_PcRoomReward:SetShow(true)
   return needUpdate
 end
 function PaGlobalFunc_Widget_Alert_Check_NewFriend()
@@ -1329,83 +1218,129 @@ function PaGlobalFunc_Widget_Alert_CheckReal_BatterEquipment()
     self:setButtonShow(AlertType.eALERT_BatterEquipment, false)
   end
 end
+function PaGlobalFunc_Widget_Alert_Check_Pos()
+  local self = Panel_Widget_Alert_info
+  local spanX = 40
+  if self._ui.Button_PcRoomReward:GetShow() then
+    spanX = spanX + 40
+  end
+  self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
+  if self._ui.Button_MarketPlace:GetShow() then
+    spanX = spanX + 40
+  end
+  self._ui.Button_Spread:SetSpanSize(spanX, 0)
+  self:updateIconPos()
+end
 local updateTime = 30
 local currentTime = 0
+local pcroomTime = 0
+local nextPcRoomGiftRewardTime = toInt64(0, 0)
 function FromClient_Widget_Alert_UpdatePerFrame(deltaTime)
   local self = Panel_Widget_Alert_info
   currentTime = currentTime + deltaTime
+  pcroomTime = pcroomTime + deltaTime
   if updateTime < currentTime then
-    if true == self._value.isSpread then
-      self:updateIcons()
-    end
+    self:updateIconPos()
     currentTime = 0
+  end
+  if pcroomTime > 1 then
+    nextPcRoomGiftRewardTime = nextPcRoomGiftRewardTime - toInt64(0, pcroomTime)
+    self._ui.StaticText_PcRoomRewardTime:SetText(convertStringFromDatetime(nextPcRoomGiftRewardTime))
+    if nextPcRoomGiftRewardTime <= toInt64(0, 0) then
+      nextPcRoomGiftRewardTime = toInt64(0, 0)
+      PcRoomGift_TimeCheck()
+    end
+    pcroomTime = 0
+    PaGlobalFunc_Widget_Alert_Check_Pos()
+  end
+  if self._ui.MessageBg:GetShow() then
+    self._alramTime = self._alramTime + deltaTime
+    if self._alramTime > 60 then
+      self:AlramHide()
+      self._alramTime = 0
+    end
+  end
+end
+function PcRoomGift_TimeCheck()
+  local self = Panel_Widget_Alert_info
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+  local isRussiaPremiumPack = false
+  if isGameTypeRussia() then
+    isRussiaPremiumPack = selfPlayer:get():isApplyChargeSkill(9)
+  end
+  local nowPlayedTime = 0
+  local challengeType = 4
+  if isPremiumPcRoom then
+    nowPlayedTime = ToClient_GetPcRoomPlayTime()
+    challengeType = 4
+  end
+  if isRussiaPremiumPack then
+    nowPlayedTime = ToClient_GetUserPlayTimePerDay()
+    challengeType = 7
+  end
+  local checkCount = ToClient_GetProgressChallengeCount(challengeType)
+  if 0 == checkCount then
+    nextPcRoomGiftRewardTime = toInt64(0, 0)
+    self._ui.Button_PcRoomReward:SetShow(false)
+    return
+  end
+  for checkIdx = 0, checkCount - 1 do
+    local progressInfo = ToClient_GetProgressChallengeAt(challengeType, checkIdx)
+    local remainedTime = toInt64(0, 0)
+    if isPremiumPcRoom then
+      remainedTime = toInt64(0, progressInfo:getNeedTimeForPcRoom() * 60) - nowPlayedTime
+    end
+    if isRussiaPremiumPack then
+      remainedTime = toInt64(0, progressInfo:getNeedTimeForDay() * 60) - nowPlayedTime
+    end
+    if toInt64(0, 0) == nextPcRoomGiftRewardTime then
+      nextPcRoomGiftRewardTime = remainedTime
+    elseif remainedTime < nextPcRoomGiftRewardTime then
+      nextPcRoomGiftRewardTime = remainedTime
+    end
+  end
+  if (isPremiumPcRoom or isRussiaPremiumPack) and not Panel_NewEventProduct_Alarm:GetShow() and 0 ~= checkCount then
+    self._ui.Button_PcRoomReward:SetShow(true)
+  end
+end
+function HandleClicked_PcRoomReward()
+  PaGlobal_CharacterInfo:showWindow(3)
+  HandleClickedTapButton(5)
+end
+function FGlobal_ItemMarket_AlarmIcon_Show()
+  FGlobal_ItemMarket_SetCount()
+end
+function FGlobal_ItemMarket_SetCount()
+  local self = Panel_Widget_Alert_info
+  if nil == self._ui.StaticText_MarketPlaceCount then
+    return
+  end
+  local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
+  self._ui.StaticText_MarketPlaceCount:SetText(alarmCount)
+  self._ui.Button_MarketPlace:SetShow(alarmCount > 0)
+  self._ui.Button_MarketPlace:EraseAllEffect()
+  if alarmCount > 0 then
+    self._ui.Button_MarketPlace:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
   end
 end
 function FromClient_Widget_Alert_Init()
   local self = Panel_Widget_Alert_info
   self:initialize()
   PaGlobalFunc_Widget_Alert_Show()
+  FromClient_Widget_Alert_CompleteBenefitReward()
+  PcRoomGift_TimeCheck()
+  FGlobal_ItemMarket_AlarmIcon_Show()
 end
 function FromClient_Widget_Alert_Resize()
   local self = Panel_Widget_Alert_info
   self:resize()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_Widget_Alert_Init")
-function FromClient_Widget_Alert_ResponseBustCall(sendType)
-  local self = Panel_Widget_Alert_info
-  if 0 == sendType then
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, true)
-    luaTimer_AddEvent(PaGlobalFunc_Widget_Alert_Close_GuildBusterCall, 600000, false, 0)
-  else
-    self:setButtonShow(AlertType.eALERT_GuildBusterCall, false)
-  end
-  self:updateIcons()
-end
-function PaGlobalFunc_Widget_Alert_Close_GuildBusterCall()
-  local self = Panel_Widget_Alert_info
-  self:setButtonShow(AlertType.eALERT_GuildBusterCall, false)
-  self:updateIcons()
-end
-function FromClient_Widget_Alert_ResponseTeleportToSiegeTent(sendType, isVolunteer)
-  local self = Panel_Widget_Alert_info
-  if 0 == sendType then
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, true)
-    luaTimer_AddEvent(PaGlobalFunc_Widget_Alert_Close_SiegeWarCall, 600000, false, 0)
-  else
-    self:setButtonShow(AlertType.eALERT_SiegeWarCall, false)
-    PaGlobalFunc_Widget_Alert_Close_SiegeWarCall()
-  end
-  self:updateIcons()
-end
-function PaGlobalFunc_Widget_Alert_Close_SiegeWarCall()
-  local self = Panel_Widget_Alert_info
-  self:setButtonShow(AlertType.eALERT_SiegeWarCall, false)
-  self:updateIcons()
-end
-function FromClient_Widget_Alert_ResponseUseCompass()
-  local self = Panel_Widget_Alert_info
-  PaGlobalFunc_Widget_Alert_Check_PartySummon()
-  self:updateIcons(false, AlertType.eALERT_PartySummon)
-  local partyName = ""
-  partyName = ToClient_GetCharacterNameUseCompass()
-  local partyActorKey = ToClient_GetCharacterActorKeyRawUseCompass()
-  local playerActorKey = getSelfPlayer():getActorKey()
-  local msg = ""
-  if partyActorKey == playerActorKey then
-    msg = PAGetString(Defines.StringSheet_GAME, "LUA_COMPASS_MESSAGE_1")
-  else
-    msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPASS_MESSAGE_2", "partyName", partyName)
-  end
-  Proc_ShowMessage_Ack(msg)
-end
-function FromClient_Widget_Alert_ResponseUseReturnStone()
-  local self = Panel_Widget_Alert_info
-  local pos3D = ToClient_GetPosUseReturnStone()
-  ToClient_DeleteNaviGuideByGroup(0)
-  worldmapNavigatorStart(pos3D, NavigationGuideParam(), false, false)
-  PaGlobalFunc_Widget_Alert_Check_ReturnTown()
-  self:updateIcons(false, AlertType.eALERT_ReturnTown)
-end
 function FromClient_Widget_Alert_EventSkillWindowUpdate()
   local self = Panel_Widget_Alert_info
   PaGlobalFunc_Widget_Alert_Check_LearnSkill()

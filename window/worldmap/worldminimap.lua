@@ -133,12 +133,10 @@ function PaGlobal_WorldMiniMap:changePanelSize()
   else
     FromClient_Widget_FunctionButton_Resize()
   end
-  if false == _ContentsGroup_RemasterUI_Main_Alert then
-    Panel_PlayerEndurance_Position()
-    Panel_HorseEndurance_Position()
-    Panel_ShipEndurance_Position()
-    Panel_CarriageEndurance_Position()
-  end
+  Panel_PlayerEndurance_Position()
+  Panel_HorseEndurance_Position()
+  Panel_ShipEndurance_Position()
+  Panel_CarriageEndurance_Position()
   FromClient_MainQuestWidget_ResetPosition()
   if false == _ContentsGroup_RemasterUI_QuestWidget then
     PaGlobalFunc_Quest_UpdatePosition()

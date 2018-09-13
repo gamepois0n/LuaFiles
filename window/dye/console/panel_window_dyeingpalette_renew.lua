@@ -303,6 +303,7 @@ function InputScroll_DyeingPalette_Scroll(isUp)
 end
 function Input_DyeingPalette_NextPalette(nextPaletteIndex)
   local self = DyeingPalette
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
   local targetPalette = self._nowPaletteIndex + nextPaletteIndex
   if targetPalette < 1 then
@@ -335,6 +336,7 @@ function DyeingPalette:isPlayerHaveActivedMerv()
 end
 function Input_DyeingPalette_NextCategory(nextCategoryIndex)
   local self = DyeingPalette
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(false)
   local targetCategory = self._nowPaletteCategoryIndex + nextCategoryIndex
   if targetCategory < 1 then

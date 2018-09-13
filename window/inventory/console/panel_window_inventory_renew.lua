@@ -1574,7 +1574,7 @@ function InventoryInfo:close()
   self._slotEarringIndex = 0
 end
 function PaGlobalFunc_InventoryInfo_ShowAni()
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   local self = InventoryInfo
   self._showAniIsPlaying = true
   _panel:ResetVertexAni()
@@ -1593,7 +1593,7 @@ function PaGlobalFunc_InventoryInfo_ShowAni()
   self._ui.txt_topEndTitle:SetVertexAniRun("Ani_Move_Pos_Show", true)
 end
 function PaGlobalFunc_InventoryInfo_HideAni()
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   _panel:ResetVertexAni()
   local aniInfo1 = _panel:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartPosition(_panel:GetPosX(), 0)
@@ -2496,7 +2496,7 @@ function PaGlobalFunc_Window_InventoryInfo_PerFrameUpdate(deltaTime)
       slot.cooltimeText:SetShow(false)
       local skillSlotItemPosX = slot.cooltime:GetParentPosX()
       local skillSlotItemPosY = slot.cooltime:GetParentPosY()
-      audioPostEvent_SystemUi(2, 1)
+      _AudioPostEvent_SystemUiForXBOX(2, 1)
       Panel_Inventory_CoolTime_Effect_Item_Slot:SetShow(true, true)
       Panel_Inventory_CoolTime_Effect_Item_Slot:AddEffect("UI_Button_Hide", false, 2.5, 7)
       Panel_Inventory_CoolTime_Effect_Item_Slot:AddEffect("fUI_Button_Hide", false, 2.5, 7)
@@ -2571,6 +2571,7 @@ function Input_InventoryInfo_SetUpperTabLeft()
   self:setTabTo(self._currentUpperTab)
 end
 function Toggle_InventoryTab_forPadEventFunc(value)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if 1 == value then
     Input_InventoryInfo_SetUpperTabRight()
   else
@@ -3581,7 +3582,7 @@ function FromClient_InventoryInfo_UnequipItem(whereType, slotNo)
   if nil == itemStatic then
     return
   end
-  audioPostEvent_SystemUi(2, 0)
+  _AudioPostEvent_SystemUiForXBOX(2, 0)
 end
 function FromClient_InventoryInfo_UseItemAskFromOtherPlayer(fromName)
   local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_REQUEST", "for_name", fromName)
@@ -3931,9 +3932,12 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
   if nil ~= rClickFunction and "function" == type(rClickFunction) then
     self._ui.stc_keyGuide:SetShow(false)
     self._ui.stc_keyGuideSetFunctor:SetShow(_snappedOnThisPanel)
+    if false == _panel:GetShow() then
+      self._ui.stc_keyGuideSetFunctor:SetShow(true)
+    end
     if nil ~= optionalPadEvent and nil ~= optionalPadEvent.func and "function" == type(optionalPadEvent.func) then
       self._optionalPadEventFunc = optionalPadEvent.func
-      self._optionalPadEventButton = __eConsoleUIPadEvent_Up_Y
+      self._optionalPadEventButton = __eConsoleUIPadEvent_Y
       _panel:registerPadEvent(self._optionalPadEventButton, "PaGlobalFunc_InventoryInfo_HandleCompleteMultipleSelection()")
       PaGlobalFunc_SetKeyGuideUVTo(self._ui.txt_keyGuideSetFunctorAlterKey, self._optionalPadEventButton)
       self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(true)
@@ -4107,7 +4111,7 @@ function Inventory_UseItemTargetSelf(whereType, slotNo, equipSlotNo)
   end
   local itemKey = itemWrapper:get():getKey():getItemKey()
   if itemKey >= 41548 and itemKey <= 41570 or itemKey >= 42000 and itemKey <= 42010 or itemKey >= 42034 and itemKey <= 42040 or 42053 == itemKey or 42054 == itemKey then
-    audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
   end
   inventoryUseItem(whereType, slotNo, equipSlotNo, true)
   if (42000 == itemKey or 42001 == itemKey or 42002 == itemKey or 42010 == itemKey or 42003 == itemKey or 42004 == itemKey or 42034 == itemKey or 42035 == itemKey or 42037 == itemKey or 42036 == itemKey or 42006 == itemKey or 42008 == itemKey or 42039 == itemKey or 42038 == itemKey or 42007 == itemKey or 42053 == itemKey or 41610 == itemKey or 42009 == itemKey or 42054 == itemKey or 42057 == itemKey or 42061 == itemKey or 42066 == itemKey or 42055 == itemKey or 42056 == itemKey) and false == _ContentsGroup_RenewUI_Tutorial and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() then
@@ -4279,7 +4283,7 @@ function FindExchangeItemNPC(itemSSW)
   if nil ~= npcPosition[minIndex] then
     worldmapNavigatorStart(float3(npcPosition[minIndex].x, npcPosition[minIndex].y, npcPosition[minIndex].z), NavigationGuideParam(), false, false, true)
   end
-  audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
   selfProxy:setCurrentFindExchangeItemEnchantKey(itemKey)
 end
 function InventoryInfo:compareSpec(whereType, slotNo, isAccessory)
@@ -4516,7 +4520,7 @@ function FindExchangeItemNPC(itemSSW)
   if nil ~= npcPosition[minIndex] then
     worldmapNavigatorStart(float3(npcPosition[minIndex].x, npcPosition[minIndex].y, npcPosition[minIndex].z), NavigationGuideParam(), false, false, true)
   end
-  audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
   selfProxy:setCurrentFindExchangeItemEnchantKey(itemKey)
 end
 function HandleClickedWidget(slotNo)
@@ -4740,7 +4744,7 @@ function PaGlobalFunc_InventoryInfo_GetSlotBorder()
   return InventoryInfo._ui.stc_slotBorder
 end
 function HandleClicked_Inventory_Palette_Open()
-  audioPostEvent_SystemUi(1, 24)
+  _AudioPostEvent_SystemUiForXBOX(1, 24)
   PaGlobalFunc_Dyeing_Open()
 end
 local _depositPossible = true

@@ -783,6 +783,7 @@ function PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
 end
 function PaGlobalFunc_Customization_Deco_MoveTab(isLeft)
   local self = Customization_DecoInfo
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if 0 >= self._currentTabCount then
     return
   end

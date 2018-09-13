@@ -560,7 +560,11 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
       end
     end
-    chatting_Icon:SetPosY(PosY - deltaPosY)
+    if true == ToClient_isXBox() then
+      chatting_Icon:SetPosY(PosY - deltaPosY + 4)
+    else
+      chatting_Icon:SetPosY(PosY - deltaPosY)
+    end
     chatting_sender:SetPosY(PosY - deltaPosY)
     chatting_GuildMark:SetPosY(PosY - deltaPosY - guildMarkAdjY)
     PosY = PosY - 3
@@ -576,7 +580,11 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
       end
     end
-    chatting_Icon:SetPosY(PosY - deltaPosY)
+    if true == ToClient_isXBox() then
+      chatting_Icon:SetPosY(PosY - deltaPosY + 4)
+    else
+      chatting_Icon:SetPosY(PosY - deltaPosY)
+    end
     chatting_sender:SetPosY(PosY - deltaPosY)
     chatting_GuildMark:SetPosY(PosY - deltaPosY - guildMarkAdjY)
     PosY = PosY - 3

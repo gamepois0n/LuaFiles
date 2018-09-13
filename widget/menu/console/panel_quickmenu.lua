@@ -445,10 +445,12 @@ function PaGlobal_ConsoleQuickMenu:Open(currentGroup)
   self:setButtonPos(__eQuickMenuStickPosition_Count)
   self:CrossTextureChange(currentGroup)
   Panel_QuickMenu:SetShow(true, true)
+  _AudioPostEvent_SystemUiForXBOX(52, 0)
   PaGlobal_ConsoleQuickMenu._ui._staticTextIconNameDesc:SetText("")
 end
 function FromClient_ConsoleQuickMenu_Close(currentPosition)
   PaGlobal_ConsoleQuickMenu:moveButtonAni(currentPosition)
+  _AudioPostEvent_SystemUiForXBOX(52, 2)
   Panel_QuickMenu:SetShow(false, false)
 end
 function PaGlobal_ConsoleQuickMenu:SetUICurrentGroup(group)

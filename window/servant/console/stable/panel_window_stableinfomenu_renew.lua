@@ -460,7 +460,7 @@ function PaGlobalFunc_StableInfo_Menu_Unseal()
     return
   end
   local currentButtonServantNo = servantInfo:getServantNo()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   stable_unsealByServantNo(currentButtonServantNo)
   PaGlobalFunc_StableInfo_Exit()
 end
@@ -469,7 +469,7 @@ function PaGlobalFunc_StableInfo_Menu_RecoveryXXX()
   if nil == self._value.selectedServantSlotNo then
     return
   end
-  audioPostEvent_SystemUi(5, 7)
+  _AudioPostEvent_SystemUiForXBOX(5, 7)
   stable_recovery(self._value.selectedServantSlotNo, MessageBoxCheck.isCheck())
   PaGlobalFunc_StableInfo_Exit()
 end
@@ -478,7 +478,7 @@ function PaGlobalFunc_StableInfo_Menu_ReviveXXX()
   if nil == self._value.selectedServantSlotNo then
     return
   end
-  audioPostEvent_SystemUi(5, 7)
+  _AudioPostEvent_SystemUiForXBOX(5, 7)
   stable_revive(self._value.selectedServantSlotNo, MessageBoxCheck.isCheck())
   PaGlobalFunc_StableInfo_Exit()
 end
@@ -541,7 +541,7 @@ function PaGlobalFunc_StableInfo_Menu_Recovery()
 end
 function PaGlobalFunc_StableInfo_Menu_UnLink()
   local self = Panel_Window_StableInfo_Menu_info
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if nil == self._value.selectedServantSlotNo then
     return
   end
@@ -586,7 +586,7 @@ function PaGlobalFunc_StableInfo_Menu_RegisterMarketXXX()
   PaGlobalFunc_StableInfo_CloseWith()
 end
 function PaGlobalFunc_StableInfo_Menu_RegisterMarket()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -607,7 +607,7 @@ function PaGlobalFunc_StableInfo_Menu_RegisterMatingXXX()
   PaGlobalFunc_StableInfo_CloseWith()
 end
 function PaGlobalFunc_StableInfo_Menu_RegisterMating()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -615,7 +615,7 @@ function PaGlobalFunc_StableInfo_Menu_RegisterMating()
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMATING_NOTIFY_TITLE"), PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REGISTERMATING_NOTIFY_MSG"), PaGlobalFunc_StableInfo_Menu_RegisterMatingXXX, MessageBox_Empty_function)
 end
 function PaGlobalFunc_StableInfo_Menu_ChangeName()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -635,7 +635,7 @@ function PaGlobalFunc_StableInfo_Menu_ChangeName()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_StableInfo_Menu_ClearDeadCount()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -655,7 +655,7 @@ function PaGlobalFunc_StableInfo_Menu_ClearDeadCount()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_StableInfo_Menu_ClearMatingCount()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -675,7 +675,7 @@ function PaGlobalFunc_StableInfo_Menu_ClearMatingCount()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_StableInfo_Menu_MatingImmediately()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -700,7 +700,7 @@ function PaGlobalFunc_StableInfo_Menu_MatingImmediately()
   MessageBox.showMessageBox(messageboxData)
 end
 function PaGlobalFunc_StableInfo_Menu_SeeBreedingMarket()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -708,7 +708,7 @@ function PaGlobalFunc_StableInfo_Menu_SeeBreedingMarket()
   PaGlobalFunc_StableFunction_SelectButton(3, 1)
 end
 function PaGlobalFunc_StableInfo_Menu_Stamping(isImprint)
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -733,7 +733,7 @@ function PaGlobalFunc_StableInfo_Menu_Stamping(isImprint)
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_StableInfo_Menu_LookChange()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -747,7 +747,7 @@ function PaGlobalFunc_StableInfo_Menu_StartStallionTraining()
   if not isContentsStallionEnable and not isContentsNineTierEnable then
     return
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -773,7 +773,7 @@ function PaGlobalFunc_StableInfo_Menu_SellToNpcXXX()
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_Supply()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -800,7 +800,7 @@ function PaGlobalFunc_StableInfo_Menu_ReleaseXXX()
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_Release()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -816,7 +816,7 @@ function PaGlobalFunc_StableInfo_Menu_Release()
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_MSG", "resultMoney", resultMoney) .. servantInvenAlert, PaGlobalFunc_StableInfo_Menu_ReleaseXXX, MessageBox_Empty_function)
 end
 function PaGlobalFunc_StableInfo_Menu_SellToNpc()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -829,7 +829,7 @@ function PaGlobalFunc_StableInfo_Menu_SellToNpc()
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_MSG", "resultMoney", resultMoney) .. servantInvenAlert, PaGlobalFunc_StableInfo_Menu_ReleaseXXX, MessageBox_Empty_function)
 end
 function PaGlobalFunc_StableInfo_Menu_TrainFinish()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -838,7 +838,7 @@ function PaGlobalFunc_StableInfo_Menu_TrainFinish()
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_StallionTrainFinish()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -847,14 +847,14 @@ function PaGlobalFunc_StableInfo_Menu_StallionTrainFinish()
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_Move()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
   end
 end
 function PaGlobalFunc_StableInfo_Menu_ChangSKill()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_StableInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -862,12 +862,12 @@ function PaGlobalFunc_StableInfo_Menu_ChangSKill()
   PaGlobalFunc_StableChangeSkill_Show()
 end
 function PaGlobalFunc_StableInfo_Menu_Seal()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   stable_seal(false)
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_RemoteSeal()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local seal_Go = function()
     stable_seal(true)
     PaGlobalFunc_StableInfo_Exit()
@@ -883,12 +883,12 @@ function PaGlobalFunc_StableInfo_Menu_RemoteSeal()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_StableInfo_Menu_RecoveryUnsealXXX()
-  audioPostEvent_SystemUi(5, 7)
+  _AudioPostEvent_SystemUiForXBOX(5, 7)
   stable_recoveryUnseal(MessageBoxCheck.isCheck())
   PaGlobalFunc_StableInfo_Exit()
 end
 function PaGlobalFunc_StableInfo_Menu_RecoveryUnseal()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantWrapper = temporaryWrapper:getUnsealVehicle(CppEnums.ServantType.Type_Vehicle)
   if nil == servantWrapper then

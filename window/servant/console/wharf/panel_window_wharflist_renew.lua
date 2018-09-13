@@ -180,6 +180,7 @@ function Panel_Window_WharfList_info:createSlot()
       self:setShowInner(false)
       self.radioButton:SetEnable(true)
       self.staticText_Name:SetShow(true)
+      self.staticText_Name:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
       self.staticText_Name:SetText(servantInfo:getName())
       self.staticText_Location:SetShow(true)
       self.staticText_Location:SetText(servantInfo:getRegionName())
@@ -574,7 +575,7 @@ function PaGlobalFunc_WharfList_ClickUnsealed()
   if nil == servantInfo then
     return
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_WharfInfo_Show(self._enum.eTYPE_UNSEALED)
 end
 function PaGlobalFunc_WharfList_UnClickList()
@@ -611,7 +612,7 @@ end
 function PaGlobalFunc_WharfList_ClickRegist()
   local self = Panel_Window_WharfList_info
   if 0 < PaGlobalFunc_WharfRegister_CheckIsWharf() then
-    audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     PaGlobalFunc_WharfRegister_OpenByWharf()
     self:close()
   end

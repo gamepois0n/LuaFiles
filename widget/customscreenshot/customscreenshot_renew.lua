@@ -377,3 +377,16 @@ registerEvent("FromClient_OpenExplorer", "FromClient_OpenExplorer_CustomSizeScre
 registerEvent("FromClient_OpenExplorer", "FromClient_OpenExplorer_CustomizingCharacter")
 registerEvent("FromClient_CustomizedCaptureComplete", "FromClient_CustomizedCaptureComplete")
 renderMode:setClosefunctor(renderMode, FGlobal_ScreenShotFrame_Close)
+Panel_Widget_ScreenShotFrame:setConvetableInputMode(CppEnums.EProcessorInputMode.eProcessorInputMode_UiMode)
+function FGlobal_ScreenShotFrame_Close_ForDead()
+  if true == Panel_Widget_ScreenShotFrame:GetShow() then
+    Panel_Widget_ScreenShotFrame:SetShow(false)
+    ToClient_cancelRequestAddToFile()
+    Panel_Widget_ScreenShotFrame:SetIgnore(false)
+    ToClient_setScreenShotModeState(false)
+  end
+  if true == Panel_CustomizingAlbum:GetShow() then
+    CustomizingAlbum_Close()
+  end
+end
+registerEvent("EventSelfPlayerPreDead", "FGlobal_ScreenShotFrame_Close_ForDead")

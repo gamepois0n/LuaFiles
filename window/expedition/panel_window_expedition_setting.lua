@@ -405,8 +405,10 @@ function FromClient_fillExpeditionSuccess(unitNo)
       PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, unitNo)
     end
   end
-  PaGlobalFunc_ExpeditionUpdateSupplySetting()
   PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
+end
+function FromClient_refreshExpeditionSupplyPoint()
+  PaGlobalFunc_ExpeditionUpdateSupplySetting()
 end
 function FromClient_registerExpeditionUnitSuccess()
   local self = expeditionSettingInfo
@@ -429,5 +431,6 @@ end
 registerEvent("FromClient_luaLoadComplete", "FromClient_ExpeditionSettingInfo_Initialize")
 registerEvent("FromClient_registerExpeditionSuccess", "FromClient_registerExpeditionSuccess")
 registerEvent("FromClient_fillExpeditionSuccess", "FromClient_fillExpeditionSuccess")
+registerEvent("FromClient_refreshExpeditionSupplyPoint", "FromClient_refreshExpeditionSupplyPoint")
 registerEvent("FromClient_registerExpeditionUnitSuccess", "FromClient_registerExpeditionUnitSuccess")
 registerEvent("FromClient_updateExpeditionUnitSuccess", "FromClient_updateExpeditionUnitSuccess")

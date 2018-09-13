@@ -840,7 +840,7 @@ function PaGlobalFunc_Customization_Cancel()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_Customization_CameraLookEnable(lookEnable)
-  setCharacterLookAtCamera(lookEnable)
+  setCharacterLookAtCamera(false)
 end
 function PaGlobalFunc_FromClient_Customization_EventShowCharacterCustomization(customizationData, classIndex, isInGame)
   local self = CustomizationMain
@@ -883,6 +883,7 @@ function PaGlobalFunc_Customization_Open()
     return
   end
   self._isCameraMode = false
+  setCharacterLookAtCamera(false)
   self._ui._currentMainMenu = {}
   if false == PaGlobalFunc_Customization_IsInGame() then
     self._ui._button_Apply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_CREATE_TXT_TITLE"))

@@ -2099,7 +2099,11 @@ function IngameCashShop_DescUpdate()
   if 0 < inGameShop._currentTab and inGameShop._currentTab <= getCashMainCategorySize() and true == FGlobal_IngameCashShopEventCart_IsContentsOpen() then
     local isOnListButton = 0 == evantType or 1 == evantType
     local isOnSlotButton = 0 == evantType or 2 == evantType
-    if 0 < tabIndexList[inGameShop._currentTab][6] and 0 < tabIndexList[inGameShop._currentTab][7] then
+    local eventListKey = tabIndexList[inGameShop._currentTab][6]
+    local eventSlotKey = tabIndexList[inGameShop._currentTab][7]
+    local isOpenEventList = IngameCashShop_CheckOpenEventCart(eventListKey)
+    local isOpenEventSlot = IngameCashShop_CheckOpenEventCart(eventSlotKey)
+    if eventListKey > 0 and true == isOpenEventList and eventSlotKey > 0 and true == isOpenEventSlot then
       self._btn_BigECart:SetShow(true)
       self._btn_BigECartSlot:SetShow(true)
       self._btn_BigECart:SetMonoTone(false == isOnListButton)
@@ -2107,7 +2111,7 @@ function IngameCashShop_DescUpdate()
       self._btn_BigECart:SetEnable(isOnListButton)
       self._btn_BigECartSlot:SetEnable(isOnSlotButton)
       self._btn_BigCart:SetShow(false)
-    elseif 0 < tabIndexList[inGameShop._currentTab][7] then
+    elseif eventSlotKey > 0 and true == isOpenEventSlot then
       self._btn_BigECart:SetShow(false)
       self._btn_BigECartSlot:SetShow(true)
       self._btn_BigECart:SetMonoTone(true)
@@ -2115,7 +2119,7 @@ function IngameCashShop_DescUpdate()
       self._btn_BigECart:SetEnable(false)
       self._btn_BigECartSlot:SetEnable(isOnSlotButton)
       self._btn_BigCart:SetShow(false)
-    elseif 0 < tabIndexList[inGameShop._currentTab][6] then
+    elseif eventListKey > 0 and true == isOpenEventList then
       self._btn_BigECart:SetShow(true)
       self._btn_BigECartSlot:SetShow(false)
       self._btn_BigECart:SetMonoTone(false == isOnListButton)
@@ -2136,6 +2140,18 @@ function IngameCashShop_DescUpdate()
   self._btn_BigECart:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ", 0)")
   self._btn_BigECartSlot:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedEcartItem(" .. inGameShop._openProductKeyRaw .. ", 1)")
   self._btn_BigBuy_Silver:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
+end
+function IngameCashShop_CheckOpenEventCart(enventKey)
+  local eventListWrapper = ToClient_GetEventCategoryStaticStatusWrapperByKeyRaw(enventKey)
+  if nil ~= eventListWrapper then
+    local isSellinPeriod = eventListWrapper:isSellinPeriod()
+    local isDiscountPeriod = eventListWrapper:isDiscountPeriod()
+    if true == isSellinPeriod and false == isDiscountPeriod then
+      return false
+    end
+    return true
+  end
+  return false
 end
 function IngameCashShop_initSubItemButton()
   inGameShop._comboList = Array.new()
@@ -2702,28 +2718,34 @@ function IngameCashShop_DescSelectedCartItem(productKeyRaw)
   end
   ToClient_RequestRecommendList(productKeyRaw)
 end
-function IngameCashShop_GiftItem(index)
-  local self = inGameShop
-  local slot = self._slots[index]
+function IngameCashShop_CheckGiftLevel()
   local selfplayer = getSelfPlayer()
   if nil == selfplayer then
-    return
+    return false
   end
   local limitLevel = 50
   local myLevel = selfplayer:get():getLevel()
   if myLevel < 50 and (isGameTypeEnglish() or isGameTypeTH() or isGameTypeID()) then
     limitLevel = 50
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
-    return
+    return false
   end
   if myLevel < 56 and (isGameTypeSA() or isGameTypeTR()) then
     limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
-    return
+    return false
   end
   if myLevel < 56 and isGameTypeTaiwan() then
     limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return false
+  end
+  return true
+end
+function IngameCashShop_GiftItem(index)
+  local self = inGameShop
+  local slot = self._slots[index]
+  if false == IngameCashShop_CheckGiftLevel() then
     return
   end
   local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(slot.productNoRaw)
@@ -3470,6 +3492,9 @@ end
 function FGlobal_EscapeEditBox_IngameCashShop()
   local self = inGameShop
   ClearFocusEdit(self._edit_Search)
+end
+function FGlobal_CheckGiftLevel_IngameCashShop()
+  return IngameCashShop_CheckGiftLevel()
 end
 function InGameShop_MoneyIcon_Tooltip(isShow, tipType)
   local self = inGameShop

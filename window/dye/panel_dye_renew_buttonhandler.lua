@@ -420,6 +420,7 @@ function HandleClicked_LUp_Ampule_SelectedType(isShowAll, isPearl)
     local dyeingPackageTime = selfPlayer:get():isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_DyeingPackage)
     if not dyeingPackageTime then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_MUST_ACTIVE_PEARLCOLOR"))
+      PaGlobal_EasyBuy:Open(48)
       return
     end
   end

@@ -274,12 +274,12 @@ function PaGlobalFunc_WharfInfo_Menu_ClickButton(index)
   end
 end
 function PaGlobalFunc_WharfInfo_Menu_Seal()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   stable_seal(false)
   PaGlobalFunc_WharfInfo_Exit()
 end
 function PaGlobalFunc_WharfInfo_Menu_RemoteSeal()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local seal_Go = function()
     stable_seal(true)
     PaGlobalFunc_WharfInfo_Exit()
@@ -304,7 +304,7 @@ function PaGlobalFunc_WharfInfo_Menu_Unseal()
     return
   end
   local currentButtonServantNo = servantInfo:getServantNo()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   stable_unsealByServantNo(currentButtonServantNo)
   PaGlobalFunc_WharfInfo_Exit()
 end
@@ -313,7 +313,7 @@ function PaGlobalFunc_WharfInfo_Menu_RecoveryXXX()
   if nil == self._value.selectedServantSlotNo then
     return
   end
-  audioPostEvent_SystemUi(5, 7)
+  _AudioPostEvent_SystemUiForXBOX(5, 7)
   stable_recovery(self._value.selectedServantSlotNo, MessageBoxCheck.isCheck())
   PaGlobalFunc_WharfInfo_Exit()
 end
@@ -322,7 +322,7 @@ function PaGlobalFunc_WharfInfo_Menu_ReviveXXX()
   if nil == self._value.selectedServantSlotNo then
     return
   end
-  audioPostEvent_SystemUi(5, 7)
+  _AudioPostEvent_SystemUiForXBOX(5, 7)
   stable_revive(self._value.selectedServantSlotNo, MessageBoxCheck.isCheck())
   PaGlobalFunc_WharfInfo_Exit()
 end
@@ -352,7 +352,7 @@ function PaGlobalFunc_WharfInfo_Menu_Recovery()
   end
 end
 function PaGlobalFunc_WharfInfo_Menu_ChangeName()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -372,7 +372,7 @@ function PaGlobalFunc_WharfInfo_Menu_ChangeName()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_WharfInfo_Menu_ClearDeadCount()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -392,7 +392,7 @@ function PaGlobalFunc_WharfInfo_Menu_ClearDeadCount()
   MessageBox.showMessageBox(messageBoxData)
 end
 function PaGlobalFunc_WharfInfo_Menu_Stamping(isImprint)
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -419,7 +419,7 @@ end
 local lookIndex = 0
 local currentPage = 0
 function PaGlobalFunc_WharfInfo_Menu_LookChange()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -439,7 +439,7 @@ function PaGlobalFunc_WharfInfo_Menu_SellToNpcXXX()
   PaGlobalFunc_WharfInfo_Exit()
 end
 function PaGlobalFunc_WharfInfo_Menu_SellToNpc()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return
@@ -453,7 +453,7 @@ function PaGlobalFunc_WharfInfo_Menu_SellToNpc()
   Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SELL_NOTIFY_MSG", "resultMoney", resultMoney) .. wharfInvenAlert, PaGlobalFunc_WharfInfo_Menu_SellToNpcXXX, MessageBox_Empty_function)
 end
 function PaGlobalFunc_WharfInfo_Menu_Move()
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = Panel_Window_WharfInfo_Menu_info
   if nil == self._value.selectedServantSlotNo then
     return

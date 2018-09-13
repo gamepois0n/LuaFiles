@@ -29,7 +29,7 @@ function HideBuffTooltip(buffIndex, isDebuff)
   TooltipCommon_Hide(tooltipIndex)
 end
 local sumCount = 0
-local default_uiBackBuffPosX = PaGlobalAppliedBuffList._uiBackBuff:GetPosX()
+local default_uiBackBuffPosX = PaGlobalAppliedBuffList._uiBackBuff:GetPosX() + 50
 function PaGlobalAppliedBuffList:updateBuff(isDebuff)
   local uiBuffList = self._uiDeBuffList
   local uiBackBuff = self._uiBackDeBuff
@@ -72,6 +72,9 @@ function PaGlobalAppliedBuffList:updateBuff(isDebuff)
   end
 end
 function PaGlobalAppliedBuffList:updateBuffList()
+  if false == self._initialized then
+    return
+  end
   sumCount = 0
   PaGlobalAppliedBuffList:updateBuff(true)
   PaGlobalAppliedBuffList:updateBuff(false)
@@ -121,13 +124,8 @@ function buff_RunPostRestoreFunction(prevRenderModeList, nextRenderModeList)
   ResponseBuff_changeBuffList()
 end
 registerEvent("FromClient_RenderModeChangeState", "buff_RunPostRestoreFunction")
-function reloadAppliedBuffPanel()
-  PaGlobalAppliedBuffList:show()
-  ResponseBuff_changeBuffList()
-end
 function FGlobal_BuffTooltipOff()
   HideBuffTooltip(buffTooltipIndex, isTooltipDebuff)
 end
-reloadAppliedBuffPanel()
 registerEvent("ResponseBuff_changeBuffList", "ResponseBuff_changeBuffList")
 Panel_AppliedBuffList:RegisterUpdateFunc("AppliedBuffList_Update")

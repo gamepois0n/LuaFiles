@@ -193,7 +193,8 @@ local panelID = {
   SkillCoolTimeQuickSlot8 = 54,
   SkillCoolTimeQuickSlot9 = 55,
   MainStatusRemaster = 56,
-  ServantIconRemaster = 57
+  ServantIconRemaster = 57,
+  AppliedBuffList = 58
 }
 local panelControl = {
   [panelID.ExpGage] = {
@@ -708,6 +709,15 @@ local panelControl = {
     prePos = {x = 0, y = 0},
     name = PAGetString(Defines.StringSheet_GAME, "LUA_PANELCONTROL_2"),
     isShow = true
+  },
+  [panelID.AppliedBuffList] = {
+    control = Panel_AppliedBuffList,
+    posFixed = false,
+    isChange = false,
+    PAGameUIType = CppEnums.PAGameUIType.PAGameUIPanel_AppliedBuffList,
+    prePos = {x = 0, y = 0},
+    name = PAGetString(Defines.StringSheet_GAME, "BUFF_LIST"),
+    isShow = true
   }
 }
 local swapPanelList = {
@@ -727,7 +737,7 @@ function PAGlobal_setIsChangePanelState(index, state, ischatPanel)
   if false == ischatPanel then
     for idx = 1, UiSet.panelCount do
       if panelControl[idx].PAGameUIType == index then
-        panelControl[idx].isChange = sate
+        panelControl[idx].isChange = state
         return
       end
     end
@@ -1776,6 +1786,8 @@ function HandleClicked_Reset_UiSetting_Msg()
         panelControl[idx].control:SetShow(panelControl[idx].isShow)
       elseif idx >= panelID.SkillCoolTimeQuickSlot0 and idx <= panelID.SkillCoolTimeQuickSlot9 then
         panelControl[idx].control:SetShow(false)
+      elseif idx == panelID.AppliedBuffList then
+        panelControl[idx].control:SetShow(panelControl[idx].isShow)
       else
         panelControl[idx].control:SetShow(true)
       end
@@ -1860,6 +1872,7 @@ function HandleClicked_Reset_UiSetting_Msg()
     FGlobal_NewQuickSlot_InitPos(false)
     PaGlobal_SkillCoolTimeQuickSlot:settingPos(false)
     FGlobal_SkillCommand_ResetPosition()
+    PaGlobalFunc_AppliedBuffList_ResetPosition()
     _isShowRemasterUI = true
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SwapRemasterUISetting, _isShowRemasterUI, CppEnums.VariableStorageType.eVariableStorageType_User)
     FromClient_MainStatus_SwapUIOption(_isShowRemasterUI)

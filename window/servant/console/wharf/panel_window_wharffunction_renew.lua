@@ -188,7 +188,7 @@ function PaGlobalFunc_WharfFunction_Show()
 end
 function WharfFunction_Close()
   local self = Panle_Window_WharfFunction_Info
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:closeWharfSubPanel()
   self:close()
   PaGlobalFunc_MainDialog_Bottom_FuncButtonUpdate()
@@ -214,6 +214,7 @@ function PaGlobalFunc_WharfFunction_forPadEventFunc(value)
   elseif newIndex < 0 then
     newIndex = self._value.currentFuncCount - 1
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self:closeWharfSubPanel()
   PaGlobalFunc_WharfFunction_SelectButton(newIndex)
 end

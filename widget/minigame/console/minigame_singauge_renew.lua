@@ -43,7 +43,7 @@ function SinGauge_RePosition()
   sizeX = Panel_SinGauge:GetSizeX() / 2
   sizeY = Panel_SinGauge:GetSizeY() / 2
   Panel_SinGauge:SetPosX(screenX / 2 - sizeX)
-  Panel_SinGauge:SetPosY(screenY / 2 + 180)
+  Panel_SinGauge:SetPosY(screenY / 2 - 180)
 end
 local function SinGaugeBar_OnFail()
   if isFinished then

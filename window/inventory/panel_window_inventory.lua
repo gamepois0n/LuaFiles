@@ -637,9 +637,11 @@ function FGlobal_InventoryIsClosing()
   return self._isClosing
 end
 function InventoryWindow_Close()
-  _PA_LOG("cylee", "InventoryWindow_Close()")
   local self = inven
   self:setClosingFlag(true)
+  if nil ~= PaGlobalFunc_ServantIcon_MaidCoolUpdate then
+    PaGlobalFunc_ServantIcon_MaidCoolUpdate()
+  end
   if Panel_Window_Inventory:IsUISubApp() then
     Inventory_SetFunctor(nil, nil, nil, nil)
     return
@@ -1923,6 +1925,9 @@ function Inventory_updateSlotData(isLoad)
   PaGlobal_FixEquip:fixEquipMoneyUpdate()
   PaGlobal_Repair:repairMoneyUpdate()
   FGlobal_ItemRandom_Money_Update()
+  if nil ~= PaGlobalFunc_ServantIcon_UpdateMaidIcon then
+    PaGlobalFunc_ServantIcon_UpdateMaidIcon()
+  end
 end
 function _inventory_updateSlot_compareSpec(whereType, slotNo, isAccessory)
   local selfPlayerWrapper = getSelfPlayer()

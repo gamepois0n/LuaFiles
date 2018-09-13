@@ -4171,6 +4171,7 @@ function FGolbal_ItemMarketNew_Close()
   _itemMarket_HideToolTip()
   Panel_Window_ItemMarket:SetShow(false)
   if not Panel_Window_ItemMarket_Function:GetShow() and true == isOpenByMaid then
+    PaGlobalFunc_ServantIcon_MaidCoolUpdate()
     SetUIMode(Defines.UIMode.eUIMode_Default)
     ToClient_CallHandlerMaid("_maidLogOut")
     isOpenByMaid = false

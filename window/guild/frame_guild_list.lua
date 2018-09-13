@@ -64,6 +64,7 @@ GuildListInfoPage = {
   _btnDeposit,
   _btnPaypal,
   _btnWelfare,
+  _btnEndSiegeParticipant,
   decoIcon_Guild,
   decoIcon_Clan,
   _frameGuildList,
@@ -290,12 +291,14 @@ function GuildListInfoPage:initialize()
   local _copyContractButton = UI.getChildControl(self._contentGuildList, "Button_C_Contract")
   local _copyGuardHim = UI.getChildControl(self._contentGuildList, "Static_C_GuardHim")
   local _copyWarGradeButton = UI.getChildControl(self._contentGuildList, "Button_WarGrade")
+  local _copyWarStateButton = UI.getChildControl(self._contentGuildList, "Button_WarState")
   local _copyButton = UI.getChildControl(Panel_Guild_List, "Button_Function")
   GuildListInfoPage._textBusinessFundsBG = UI.getChildControl(Panel_Guild_List, "StaticText_GuildMoney")
   GuildListInfoPage._btnGiveIncentive = UI.getChildControl(Panel_Guild_List, "Button_Incentive")
   GuildListInfoPage._btnDeposit = UI.getChildControl(Panel_Guild_List, "Button_Deposit")
   GuildListInfoPage._btnPaypal = UI.getChildControl(Panel_Guild_List, "Button_Paypal")
   GuildListInfoPage._btnWelfare = UI.getChildControl(Panel_Guild_List, "Button_Welfare")
+  GuildListInfoPage._btnEndSiegeParticipant = UI.getChildControl(Panel_Guild_List, "Button_EndSiegeParticipant")
   GuildListInfoPage.decoIcon_Guild = UI.getChildControl(self._contentGuildList, "Static_DecoIcon_Guild")
   GuildListInfoPage.decoIcon_Clan = UI.getChildControl(self._contentGuildList, "Static_DecoIcon_Clan")
   if true == __Guild_LimitPrice then
@@ -307,12 +310,14 @@ function GuildListInfoPage:initialize()
   GuildListInfoPage._btnDeposit:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Deposit()")
   GuildListInfoPage._btnPaypal:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Paypal()")
   GuildListInfoPage._btnWelfare:addInputEvent("Mouse_LUp", "HandleClicked_GuildListWelfare_Request()")
+  GuildListInfoPage._btnEndSiegeParticipant:addInputEvent("Mouse_LUp", "HandleClicked_GuildEndToParticipantAtSiege_Request()")
   self._scrollBar = UI.getChildControl(self._frameGuildList, "VerticalScroll")
   UIScroll.InputEvent(self._scrollBar, "GuildListMouseScrollEvent")
   GuildListInfoPage._btnGiveIncentive:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnDeposit:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnPaypal:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnWelfare:SetTextMode(UI_TM.eTextMode_LimitText)
+  GuildListInfoPage._btnEndSiegeParticipant:SetTextMode(UI_TM.eTextMode_LimitText)
   local btnIncentiveSizeX = GuildListInfoPage._btnGiveIncentive:GetSizeX() + 20
   local btnIncentiveTextPosX = btnIncentiveSizeX - btnIncentiveSizeX / 2 - GuildListInfoPage._btnGiveIncentive:GetTextSizeX() / 2
   GuildListInfoPage._btnGiveIncentive:SetTextSpan(btnIncentiveTextPosX, 5)
@@ -439,6 +444,9 @@ function GuildListInfoPage:initialize()
       CopyBaseProperty(_copyWarGradeButton, rtGuildListInfo._warGradeBtn)
       rtGuildListInfo._warGradeBtn:SetPosY(pIndex * 30 + 6)
       rtGuildListInfo._warGradeBtn:addInputEvent("Mouse_LUp", "HandleClickedWarGrade(" .. pIndex .. ")")
+      rtGuildListInfo._warStateBtn = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, self._contentGuildList, "Button_C_WarState" .. pIndex)
+      CopyBaseProperty(_copyWarStateButton, rtGuildListInfo._warStateBtn)
+      rtGuildListInfo._warStateBtn:SetPosY(pIndex * 30 + 6)
     end
     function rtGuildListInfo:SetShow(isShow)
       rtGuildListInfo._grade:SetShow(isShow)
@@ -452,6 +460,7 @@ function GuildListInfoPage:initialize()
       end
       if true == isWarGradeOpen then
         rtGuildListInfo._warGradeBtn:SetShow(isShow)
+        rtGuildListInfo._warStateBtn:SetShow(isShow)
       end
       rtGuildListInfo._activity:SetShow(isShow)
       rtGuildListInfo._partLine:SetShow(isShow)
@@ -470,6 +479,7 @@ function GuildListInfoPage:initialize()
       end
       if true == isWarGradeOpen then
         rtGuildListInfo._warGradeBtn:SetIgnore(false)
+        rtGuildListInfo._warStateBtn:SetIgnore(false)
       end
       rtGuildListInfo._activity:SetIgnore(isIgnore)
       rtGuildListInfo._partLine:SetIgnore(isIgnore)
@@ -528,10 +538,11 @@ function GuildListInfoPage:initialize()
   UI.deleteControl(_copyButton)
   UI.deleteControl(_copyGuardHim)
   UI.deleteControl(_copyWarGradeButton)
+  UI.deleteControl(_copyWarStateButton)
   _copyGrade, _copyLevel, _copyClass, _copyCharName, _copyContributedTendency, _copySaying, _copyListening = nil, nil, nil, nil, nil, nil, nil
   _copyPartLine, _copyContractButton = nil, nil
   _copyButton = nil
-  _copyGuardHim, _copyWarGradeButton = nil, nil
+  _copyGuardHim, _copyWarGradeButton, _copyWarStateButton = nil, nil, nil
   frameSizeY = self._frameGuildList:GetSizeY()
   self._frameGuildList:UpdateContentScroll()
   self._frameGuildList:UpdateContentPos()
@@ -1415,12 +1426,12 @@ function GuildListInfoPage:UpdateData()
   for index = 0, _constGuildListMaxCount - 1 do
     self._list[index]:SetShow(false)
   end
+  tempGuildUserNolist = {}
   siegeGradeCount.grade1 = 0
   siegeGradeCount.grade2 = 0
   siegeGradeCount.grade3 = 0
   siegeGradeCount.grade4 = 0
   siegeGradeCount.grade5 = 0
-  tempGuildUserNolist = {}
   for index = 0, memberCount - 1 do
     local dataIdx = tempGuildList[index + 1].idx
     local myGuildMemberInfo = myGuildListInfo:getMember(dataIdx)
@@ -1428,191 +1439,15 @@ function GuildListInfoPage:UpdateData()
       _PA_ASSERT(false, "\235\169\164\235\178\132 \235\141\176\236\157\180\237\132\176\234\176\128 \236\151\134\236\157\132 \236\136\152 \236\158\136\235\130\152? \237\153\149\236\157\184 \235\176\148\235\158\141\235\139\136\235\139\164.")
       return
     end
-    local gradeType = myGuildMemberInfo:getGrade()
-    self._list[index]._grade:SetText("")
-    self._list[index]._grade:SetSize(43, 26)
-    if 0 == gradeType then
-      self._list[index]._grade:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._grade, 424, 159, 467, 185)
-      self._list[index]._grade:getBaseTexture():setUV(x1, y1, x2, y2)
-      self._list[index]._grade:setRenderTexture(self._list[index]._grade:getBaseTexture())
-    elseif 1 == gradeType then
-      self._list[index]._grade:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._grade, 468, 159, 511, 185)
-      self._list[index]._grade:getBaseTexture():setUV(x1, y1, x2, y2)
-      self._list[index]._grade:setRenderTexture(self._list[index]._grade:getBaseTexture())
-    elseif 2 == gradeType then
-      self._list[index]._grade:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._grade, 468, 219, 511, 245)
-      self._list[index]._grade:getBaseTexture():setUV(x1, y1, x2, y2)
-      self._list[index]._grade:setRenderTexture(self._list[index]._grade:getBaseTexture())
-    elseif 3 == gradeType then
-      self._list[index]._grade:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._grade, 424, 219, 467, 245)
-      self._list[index]._grade:getBaseTexture():setUV(x1, y1, x2, y2)
-      self._list[index]._grade:setRenderTexture(self._list[index]._grade:getBaseTexture())
-    end
-    self._list[index]._grade:addInputEvent("Mouse_On", "GuildListInfoTooltip_Grade( true, " .. index .. ", " .. gradeType .. " )")
-    self._list[index]._grade:addInputEvent("Mouse_Out", "GuildListInfoTooltip_Grade( false, " .. index .. ", " .. gradeType .. " )")
     local userNo = myGuildMemberInfo:getUserNo()
     tempGuildUserNolist[index] = userNo
-    if myGuildMemberInfo:isSelf() then
-      self._list[index]:SetIgnore(true)
-    else
-      self._list[index]:SetIgnore(false)
+    self:UpdateDataDetail(myGuildMemberInfo, index, dataIdx)
+    if true == myGuildMemberInfo:isSelf() then
     end
-    self._list[index]._level:SetText(myGuildMemberInfo:getLevel())
-    local classType = myGuildMemberInfo:getClassType()
-    if UI_Class.ClassType_Warrior == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WARRIOR"))
-    elseif UI_Class.ClassType_Ranger == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RANGER"))
-    elseif UI_Class.ClassType_Sorcerer == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_SORCERER"))
-    elseif UI_Class.ClassType_Giant == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT"))
-    elseif UI_Class.ClassType_Tamer == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER"))
-    elseif UI_Class.ClassType_BladeMaster == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER"))
-    elseif UI_Class.ClassType_Valkyrie == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE"))
-    elseif UI_Class.ClassType_BladeMasterWomen == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN"))
-    elseif UI_Class.ClassType_Kunoichi == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI"))
-    elseif UI_Class.ClassType_Wizard == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD"))
-    elseif UI_Class.ClassType_WizardWomen == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN"))
-    elseif UI_Class.ClassType_NinjaWomen == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN"))
-    elseif UI_Class.ClassType_NinjaMan == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN"))
-    elseif UI_Class.ClassType_DarkElf == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
-    elseif UI_Class.ClassType_Combattant == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
-    elseif UI_Class.ClassType_CombattantWomen == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
-    elseif UI_Class.ClassType_Lahn == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN"))
-    elseif UI_Class.ClassType_Orange == classType then
-      self._list[index]._class:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN") .. "\235\143\153\235\172\152")
+    if false == myGuildMemberInfo:isSelf() then
+      contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2
     end
-    local maxWp = myGuildMemberInfo:getMaxWp()
-    if 0 == maxWp then
-      maxWp = "-"
-    end
-    local explorationPoint = myGuildMemberInfo:getExplorationPoint()
-    self._list[index]._contributedTendency:SetText(maxWp .. "/" .. explorationPoint)
-    if true == isVoiceOpen then
-      if myGuildMemberInfo:isVoiceChatSpeak() then
-        if myGuildMemberInfo:isVoiceSpeaking() then
-          local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._saying, 422, 70, 451, 93)
-          self._list[index]._saying:getBaseTexture():setUV(x1, y1, x2, y2)
-          self._list[index]._saying:setRenderTexture(self._list[index]._saying:getBaseTexture())
-        else
-          checkVoiceChatMicTexture(index, true)
-        end
-      else
-        checkVoiceChatMicTexture(index, false)
-      end
-      checkVoiceChatListenTexture(index, myGuildMemberInfo:isVoiceChatListen())
-    end
-    if myGuildMemberInfo:isOnline() == true then
-      local usableActivity = myGuildMemberInfo:getUsableActivity()
-      if usableActivity > 10000 then
-        usableActivity = 10000
-      end
-      local textActivity = tostring(myGuildMemberInfo:getTotalActivity()) .. "(<PAColor0xfface400>+" .. tostring(usableActivity) .. "<PAOldColor>)"
-      self._list[index]._activity:SetText(textActivity)
-      self._list[index]._activity:SetFontColor(UI_color.C_FFC4BEBE)
-      self._list[index]._level:SetFontColor(UI_color.C_FFC4BEBE)
-      self._list[index]._class:SetFontColor(UI_color.C_FFC4BEBE)
-      self._list[index]._contributedTendency:SetFontColor(UI_color.C_FFC4BEBE)
-      if myGuildMemberInfo:isSelf() then
-        self._list[index]._charName:SetFontColor(UI_color.C_FFEF9C7F)
-      else
-        self._list[index]._charName:SetFontColor(UI_color.C_FFC4BEBE)
-      end
-      self._list[index]._charName:SetText(myGuildMemberInfo:getName() .. " (" .. myGuildMemberInfo:getCharacterName() .. ")")
-      self._list[index]._charName:addInputEvent("Mouse_On", "")
-      self._list[index]._charName:addInputEvent("Mouse_Out", "")
-      if isVoiceOpen and 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-        self._list[index]._charName:SetText(myGuildMemberInfo:getName())
-        self._list[index]._charName:addInputEvent("Mouse_On", "HandleToolTipCharacterName(true, " .. dataIdx .. "," .. index .. ")")
-        self._list[index]._charName:addInputEvent("Mouse_Out", "HandleToolTipCharacterName(false)")
-      end
-      if true == isVoiceOpen then
-        self._list[index]._saying:SetIgnore(false)
-        self._list[index]._listening:SetIgnore(false)
-      end
-      self._onlineCount = self._onlineCount + 1
-    else
-      local textActivity = tostring(myGuildMemberInfo:getTotalActivity()) .. "(+" .. tostring(myGuildMemberInfo:getUsableActivity()) .. ")"
-      self._list[index]._activity:SetText(textActivity)
-      self._list[index]._contributedTendency:SetFontColor(UI_color.C_FF515151)
-      self._list[index]._activity:SetFontColor(UI_color.C_FF515151)
-      self._list[index]._level:SetFontColor(UI_color.C_FF515151)
-      self._list[index]._class:SetFontColor(UI_color.C_FF515151)
-      self._list[index]._charName:SetFontColor(UI_color.C_FF515151)
-      self._list[index]._charName:SetText(myGuildMemberInfo:getName() .. " ( - )")
-      self._list[index]._level:SetText("-")
-      self._list[index]._class:SetText("-")
-      if true == isVoiceOpen then
-        self._list[index]._saying:SetIgnore(true)
-        self._list[index]._listening:SetIgnore(true)
-      end
-    end
-    self._list[index]._charName:addInputEvent("Mouse_LUp", "HandleClickedGuildMemberMenuButton( " .. index .. " )")
-    local contractAble = myGuildMemberInfo:getContractableUtc()
-    local expiration = myGuildMemberInfo:getContractedExpirationUtc()
-    local isContractState = 0
-    if 0 < Int64toInt32(getLeftSecond_TTime64(expiration)) then
-      isContractState = 1
-      if 0 >= Int64toInt32(getLeftSecond_TTime64(contractAble)) then
-        isContractState = 0
-      end
-    else
-      isContractState = 2
-    end
-    GuildListControl_ChangeTexture_Expiration(self._list[index]._contractBtn, isContractState)
-    self._list[index]._contractBtn:addInputEvent("Mouse_On", "_guildListInfoPage_MandateTooltipShow( true, " .. isContractState .. ", " .. index .. ")")
-    self._list[index]._contractBtn:addInputEvent("Mouse_Out", "_guildListInfoPage_MandateTooltipShow( false, " .. isContractState .. ", " .. index .. ")")
-    self._list[index]._contractBtn:setTooltipEventRegistFunc("_guildListInfoPage_MandateTooltipShow( true, " .. isContractState .. ", " .. index .. ")")
-    self._list[index]._contractBtn:addInputEvent("Mouse_LUp", "HandleClickedGuildMemberContractButton( " .. index .. " )")
-    self._list[index]:SetShow(true)
-    self._list[index]._guardHim:SetShow(myGuildMemberInfo:isProtectable())
-    if 0 == ToClient_GetMyGuildInfoWrapper():getGuildGrade() then
-      self._list[index]._contractBtn:SetIgnore(true)
-      self._list[index]._contractBtn:SetMonoTone(true)
-    else
-      self._list[index]._contractBtn:SetIgnore(false)
-      self._list[index]._contractBtn:SetMonoTone(false)
-    end
-    contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2
     btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
-    if isWarGradeOpen then
-      local siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_E")
-      if 1 == myGuildMemberInfo:getSiegeCombatantGrade() then
-        siegeGradeCount.grade1 = siegeGradeCount.grade1 + 1
-        siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_A")
-      elseif 2 == myGuildMemberInfo:getSiegeCombatantGrade() then
-        siegeGradeCount.grade2 = siegeGradeCount.grade2 + 1
-        siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_B")
-      elseif 3 == myGuildMemberInfo:getSiegeCombatantGrade() then
-        siegeGradeCount.grade3 = siegeGradeCount.grade3 + 1
-        siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_C")
-      elseif 4 == myGuildMemberInfo:getSiegeCombatantGrade() then
-        siegeGradeCount.grade4 = siegeGradeCount.grade4 + 1
-        siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_D")
-      elseif 5 == myGuildMemberInfo:getSiegeCombatantGrade() then
-        siegeGradeCount.grade5 = siegeGradeCount.grade5 + 1
-        siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_E")
-      end
-      self._list[index]._warGradeBtn:SetText(siegGradeTempText)
-    end
   end
   self._contentGuildList:SetSize(self._frameGuildList:GetSizeX(), contentSizeY)
   if contentSizeY <= frameSizeY then
@@ -1628,9 +1463,286 @@ function GuildListInfoPage:UpdateData()
   self._scrollBar:SetInterval(self._contentGuildList:GetSizeY() / 100 * 1.1)
   if (true == isGuildMaster or true == isGuildSubMaster) and 1 == guildGrade then
     self._btnWelfare:SetShow(true)
+    if _ContentsGroup_NewSiegeRule then
+      self._btnEndSiegeParticipant:SetShow(true)
+      if myGuildListInfo:isEndOfParticipationAtSiege() then
+        self._btnEndSiegeParticipant:SetMonoTone(true)
+        self._btnEndSiegeParticipant:SetIgnore(true)
+      else
+        self._btnEndSiegeParticipant:SetMonoTone(false)
+        self._btnEndSiegeParticipant:SetIgnore(false)
+      end
+    else
+      self._btnEndSiegeParticipant:SetShow(false)
+    end
   else
     self._btnWelfare:SetShow(false)
+    self._btnEndSiegeParticipant:SetShow(false)
   end
+  self._btnEndSiegeParticipant:SetText("\235\167\136\234\176\144" .. " (" .. tostring(myGuildListInfo:getSiegeParticipantCount()) .. "," .. myGuildListInfo:getMemberCount() .. ")")
+end
+function GuildListInfoPage:setGradeInfo(control, index, grade)
+  if nil == control then
+    return
+  end
+  control:SetText("")
+  control:SetSize(43, 26)
+  if 0 == grade then
+    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 424, 159, 467, 185)
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+  elseif 1 == grade then
+    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 468, 159, 511, 185)
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+  elseif 2 == grade then
+    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 468, 219, 511, 245)
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+  elseif 3 == grade then
+    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 424, 219, 467, 245)
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+  end
+  control:addInputEvent("Mouse_On", "GuildListInfoTooltip_Grade( true, " .. index .. ", " .. grade .. " )")
+  control:addInputEvent("Mouse_Out", "GuildListInfoTooltip_Grade( false, " .. index .. ", " .. grade .. " )")
+end
+function GuildListInfoPage:getClassText(classType)
+  if UI_Class.ClassType_Warrior == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WARRIOR")
+  elseif UI_Class.ClassType_Ranger == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RANGER")
+  elseif UI_Class.ClassType_Sorcerer == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_SORCERER")
+  elseif UI_Class.ClassType_Giant == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT")
+  elseif UI_Class.ClassType_Tamer == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER")
+  elseif UI_Class.ClassType_BladeMaster == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER")
+  elseif UI_Class.ClassType_Valkyrie == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE")
+  elseif UI_Class.ClassType_BladeMasterWomen == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN")
+  elseif UI_Class.ClassType_Kunoichi == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI")
+  elseif UI_Class.ClassType_Wizard == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD")
+  elseif UI_Class.ClassType_WizardWomen == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN")
+  elseif UI_Class.ClassType_NinjaWomen == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN")
+  elseif UI_Class.ClassType_NinjaMan == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN")
+  elseif UI_Class.ClassType_DarkElf == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF")
+  elseif UI_Class.ClassType_Combattant == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
+  elseif UI_Class.ClassType_CombattantWomen == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")
+  elseif UI_Class.ClassType_Lahn == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN")
+  elseif UI_Class.ClassType_Orange == classType then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN") .. "\235\143\153\235\172\152"
+  else
+    return "-"
+  end
+end
+function GuildListInfoPage:setOnline(isOnline, guildMemberInfo, elementControl, index, dataIdx)
+  if nil == guildMemberInfo or nil == elementControl then
+    return
+  end
+  if true == isOnline then
+    local usableActivity = guildMemberInfo:getUsableActivity()
+    if usableActivity > 10000 then
+      usableActivity = 10000
+    end
+    local textActivity = tostring(guildMemberInfo:getTotalActivity()) .. "(<PAColor0xfface400>+" .. tostring(usableActivity) .. "<PAOldColor>)"
+    elementControl._activity:SetText(textActivity)
+    elementControl._activity:SetFontColor(UI_color.C_FFC4BEBE)
+    elementControl._level:SetFontColor(UI_color.C_FFC4BEBE)
+    elementControl._class:SetFontColor(UI_color.C_FFC4BEBE)
+    elementControl._contributedTendency:SetFontColor(UI_color.C_FFC4BEBE)
+    if guildMemberInfo:isSelf() then
+      elementControl._charName:SetFontColor(UI_color.C_FFEF9C7F)
+    else
+      elementControl._charName:SetFontColor(UI_color.C_FFC4BEBE)
+    end
+    elementControl._charName:SetText(guildMemberInfo:getName() .. " (" .. guildMemberInfo:getCharacterName() .. ")")
+    elementControl._charName:addInputEvent("Mouse_On", "")
+    elementControl._charName:addInputEvent("Mouse_Out", "")
+    if isVoiceOpen and 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
+      elementControl._charName:SetText(guildMemberInfo:getName())
+      elementControl._charName:addInputEvent("Mouse_On", "HandleToolTipCharacterName(true, " .. dataIdx .. "," .. index .. ")")
+      elementControl._charName:addInputEvent("Mouse_Out", "HandleToolTipCharacterName(false)")
+    end
+    if true == isVoiceOpen then
+      elementControl._saying:SetIgnore(false)
+      elementControl._listening:SetIgnore(false)
+    end
+  else
+    local textActivity = tostring(guildMemberInfo:getTotalActivity()) .. "(+" .. tostring(guildMemberInfo:getUsableActivity()) .. ")"
+    elementControl._activity:SetText(textActivity)
+    elementControl._contributedTendency:SetFontColor(UI_color.C_FF515151)
+    elementControl._activity:SetFontColor(UI_color.C_FF515151)
+    elementControl._level:SetFontColor(UI_color.C_FF515151)
+    elementControl._class:SetFontColor(UI_color.C_FF515151)
+    elementControl._charName:SetFontColor(UI_color.C_FF515151)
+    elementControl._charName:SetText(guildMemberInfo:getName() .. " ( - )")
+    elementControl._level:SetText("-")
+    elementControl._class:SetText("-")
+    if true == isVoiceOpen then
+      elementControl._saying:SetIgnore(true)
+      elementControl._listening:SetIgnore(true)
+    end
+  end
+end
+function GuildListInfoPage:setContractButton(index, guildMember, contractButton)
+  local contractAble = guildMember:getContractableUtc()
+  local expiration = guildMember:getContractedExpirationUtc()
+  local isContractState = 0
+  if 0 < Int64toInt32(getLeftSecond_TTime64(expiration)) then
+    isContractState = 1
+    if 0 >= Int64toInt32(getLeftSecond_TTime64(contractAble)) then
+      isContractState = 0
+    end
+  else
+    isContractState = 2
+  end
+  GuildListControl_ChangeTexture_Expiration(contractButton, isContractState)
+  contractButton:addInputEvent("Mouse_On", "_guildListInfoPage_MandateTooltipShow( true, " .. isContractState .. ", " .. index .. ")")
+  contractButton:addInputEvent("Mouse_Out", "_guildListInfoPage_MandateTooltipShow( false, " .. isContractState .. ", " .. index .. ")")
+  contractButton:setTooltipEventRegistFunc("_guildListInfoPage_MandateTooltipShow( true, " .. isContractState .. ", " .. index .. ")")
+  contractButton:addInputEvent("Mouse_LUp", "HandleClickedGuildMemberContractButton( " .. index .. " )")
+  if 0 == ToClient_GetMyGuildInfoWrapper():getGuildGrade() then
+    contractButton:SetIgnore(true)
+    contractButton:SetMonoTone(true)
+  else
+    contractButton:SetIgnore(false)
+    contractButton:SetMonoTone(false)
+  end
+end
+function GuildListInfoPage:setSiegeParticipant(index, guildMember, control, isMyInfo)
+  if _ContentsGroup_NewSiegeRule then
+    local participantText = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_PARTICIPANT")
+    local nonparticipantText = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NONPARTICIPANT")
+    if true == guildMember:isSelf() then
+      control._warGradeBtn:SetShow(true)
+      control._warStateBtn:SetShow(false)
+      if guildMember:isSiegeParticipant() then
+        control._warGradeBtn:SetText(nonparticipantText)
+        control._warGradeBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiege( false )")
+        _PA_LOG("\237\155\132\236\167\132", "1")
+      else
+        control._warGradeBtn:SetText(participantText)
+        control._warGradeBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiege( true )")
+        _PA_LOG("\237\155\132\236\167\132", "2")
+      end
+    else
+      control._warGradeBtn:SetShow(false)
+      control._warStateBtn:SetShow(true)
+      if guildMember:isSiegeParticipant() then
+        control._warStateBtn:SetText(participantText)
+      else
+        control._warStateBtn:SetText(nonparticipantText)
+      end
+    end
+  elseif isWarGradeOpen then
+    local siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_E")
+    if 1 == guildMember:getSiegeCombatantGrade() then
+      if false == isMyInfo then
+        siegeGradeCount.grade1 = siegeGradeCount.grade1 + 1
+      end
+      siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_A")
+    elseif 2 == guildMember:getSiegeCombatantGrade() then
+      if false == isMyInfo then
+        siegeGradeCount.grade2 = siegeGradeCount.grade2 + 1
+      end
+      siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_B")
+    elseif 3 == guildMember:getSiegeCombatantGrade() then
+      if false == isMyInfo then
+        siegeGradeCount.grade3 = siegeGradeCount.grade3 + 1
+      end
+      siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_C")
+    elseif 4 == guildMember:getSiegeCombatantGrade() then
+      if false == isMyInfo then
+        siegeGradeCount.grade4 = siegeGradeCount.grade4 + 1
+      end
+      siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_D")
+    elseif 5 == guildMember:getSiegeCombatantGrade() then
+      if false == isMyInfo then
+        siegeGradeCount.grade5 = siegeGradeCount.grade5 + 1
+      end
+      siegGradeTempText = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME_E")
+    end
+    control._warGradeBtn:SetText(siegGradeTempText)
+    control._warGradeBtn:SetShow(true)
+    control._warStateBtn:SetShow(false)
+    if true == isMyInfo then
+      control._warGradeState:SetShow(true)
+      control._warGradeState:addInputEvent("Mouse_LUp", "HandleClickedWarGrade(" .. index .. ")")
+      control._warGradeState:SetText(siegGradeTempText)
+      control._warGradeBtn:SetShow(false)
+    end
+  end
+end
+function GuildListInfoPage:setVoiceButton(index, guildMember, control, isMyInfo)
+  if true == isVoiceOpen then
+    if guildMember:isVoiceChatSpeak() then
+      if guildMember:isVoiceSpeaking() then
+        local x1, y1, x2, y2 = setTextureUV_Func(control._saying, 422, 70, 451, 93)
+        control._saying:getBaseTexture():setUV(x1, y1, x2, y2)
+        control._saying:setRenderTexture(control._saying:getBaseTexture())
+      else
+        checkVoiceChatMicTexture(index, true)
+      end
+    else
+      checkVoiceChatMicTexture(index, false)
+    end
+    checkVoiceChatListenTexture(index, guildMember:isVoiceChatListen())
+  end
+end
+function GuildListInfoPage:UpdateDataDetail(guildMember, index, dataIdx, uiControlTable)
+  local guildMemberUiInfo = self._list[index]
+  if nil == guildMemberUiInfo then
+    return
+  end
+  local isMyInfo = nil ~= uiControlTable
+  if true == isMyInfo then
+    guildMemberUiInfo = uiControlTable
+  end
+  local gradeType = guildMember:getGrade()
+  self:setGradeInfo(guildMemberUiInfo._grade, index, gradeType)
+  guildMemberUiInfo._level:SetText(guildMember:getLevel())
+  local classTypeName = GuildListInfoPage:getClassText(guildMember:getClassType())
+  guildMemberUiInfo._class:SetText(classTypeName)
+  local maxWp = guildMember:getMaxWp()
+  if 0 == maxWp then
+    maxWp = "-"
+  end
+  local explorationPoint = guildMember:getExplorationPoint()
+  guildMemberUiInfo._contributedTendency:SetText(maxWp .. "/" .. explorationPoint)
+  if nil ~= guildMemberUiInfo.SetIgnore then
+    if guildMember:isSelf() then
+      guildMemberUiInfo:SetIgnore(true)
+    else
+      guildMemberUiInfo:SetIgnore(false)
+    end
+  end
+  self:setVoiceButton(index, guildMember, guildMemberUiInfo, isMyInfo)
+  local isOnline = guildMember:isOnline()
+  self:setOnline(isOnline, guildMember, guildMemberUiInfo, index, dataIdx)
+  guildMemberUiInfo._charName:addInputEvent("Mouse_LUp", "HandleClickedGuildMemberMenuButton( " .. index .. " )")
+  self:setContractButton(index, guildMember, guildMemberUiInfo._contractBtn)
+  if nil ~= guildMemberUiInfo.SetShow then
+    guildMemberUiInfo:SetShow(true)
+  end
+  self:setSiegeParticipant(index, guildMember, guildMemberUiInfo, isMyInfo)
+  guildMemberUiInfo._guardHim:SetShow(guildMember:isProtectable())
 end
 function GuildListInfoTooltip_Grade(isShow, index, gradeType)
   if nil == index then
@@ -1914,6 +2026,7 @@ function GuildList_PanelResize_ByFontSize()
     local rtGuildListInfo = GuildListInfoPage._list[index]
     if isWarGradeOpen then
       rtGuildListInfo._warGradeBtn:SetPosX(660)
+      rtGuildListInfo._warStateBtn:SetPosX(660)
       rtGuildListInfo._contractBtn:SetPosX(755)
     else
       rtGuildListInfo._contractBtn:SetPosX(705)
@@ -1949,6 +2062,14 @@ if false == _ContentsGroup_RenewUI_Guild then
   registerEvent("FromClient_RequestChangeGuildMemberGrade", "FromClient_RequestChangeGuildMemberGrade")
   registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_ResponseChangeProtectGuildMember")
   registerEvent("FromClient_ChangedSiegeGrade", "FromClient_ChangedSiegeGrade")
+  registerEvent("FromClient_ResponseParticipateSiege", "FromClient_ResponseParticipateSiege")
+  registerEvent("FromClient_ResponseEndToParticipationAtSiege", "FromClient_ResponseEndToParticipationAtSiege")
+end
+function FromClient_ResponseEndToParticipationAtSiege()
+  GuildListInfoPage:UpdateData()
+end
+function FromClient_ResponseParticipateSiege()
+  GuildListInfoPage:UpdateData()
 end
 function FromClient_ResponseGuildMasterChange(userNo, targetNo)
   local userNum = Int64toInt32(getSelfPlayer():get():getUserNo())
@@ -2032,6 +2153,59 @@ function FromClient_RequestChangeGuildMemberGrade(grade)
 end
 function HandleClicked_GuildListWelfare_Request()
   ToClient_RequestGuildWelfare()
+end
+function HandleClicked_GuildEndToParticipantAtSiege_Request()
+  local confirm = function()
+    ToClient_resquestEndToParticipantAtSiege()
+  end
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_ENDTOPARTICIPANTSIEGE")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+    content = messageBoxMemo,
+    functionYes = confirm,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
+end
+function FGlobal_requestParticipateAtSiege(isparticipant)
+  local function confirm()
+    ToClient_resquestParticipateSiege(isparticipant)
+  end
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_PARTICIPANT")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+    content = messageBoxMemo,
+    functionYes = confirm,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
+end
+function FGlobal_requestParticipateAtSiegeFromMaster(userNo)
+  local function confirm()
+    local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+    local isParticipant
+    if true == isGuildMaster then
+      local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+      local guildMember = myGuildListInfo:getMemberByUserNo(userNo)
+      local memberCount = myGuildListInfo:getMemberCount()
+      local targetUserNo
+      local isSiegeParticipant = not guildMember:isSiegeParticipant()
+      ToClient_resquestParticipateSiegeFromMaster(userNo, isSiegeParticipant)
+    end
+  end
+  local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+  local guildMember = myGuildListInfo:getMemberByUserNo(userNo)
+  local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_CHANGEPARTICIPANT", "GuildMember", guildMember:getName())
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+    content = messageBoxMemo,
+    functionYes = confirm,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
 end
 function FromClient_ChangedSiegeGrade(isNotify, userName, grade)
   if true == isNotify then

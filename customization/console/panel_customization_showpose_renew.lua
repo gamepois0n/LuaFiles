@@ -124,7 +124,6 @@ function PaGlobalFunc_Customization_ShowPose_OpenMotionUi(classType)
   clearAllPoseBone()
   self._selectedClassType = classType
   self:CreateMotionList()
-  PaGlobalFunc_Customization_CameraLookEnable(false)
   setPresetCamera(4)
   PaGlobalFunc_Customization_ShowPose_Open()
 end

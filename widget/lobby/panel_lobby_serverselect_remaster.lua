@@ -439,7 +439,6 @@ function ServerSelectRemaster:open()
   ImageMoveAni.IsChangeChild = true
   self._ui.stc_rightBg:CalcUIAniPos(ImageMoveAni)
   self:updateTextOnButtons()
-  self:PlayMovie()
 end
 function ServerSelectRemaster:PlayMovie()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelectRemaster:PlayMovie")
@@ -1394,3 +1393,11 @@ function PaGlobal_ServerSelect_Init()
   self:open()
 end
 PaGlobal_ServerSelect_Init()
+function InitServerSelectMoviePanel()
+  _PA_LOG("COHERENT", "InitServerSelectMoviePanel")
+  self:PlayMovie()
+end
+function RegisterEvent()
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "InitServerSelectMoviePanel")
+end
+RegisterEvent()

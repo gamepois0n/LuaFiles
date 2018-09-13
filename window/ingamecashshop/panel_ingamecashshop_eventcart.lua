@@ -521,25 +521,7 @@ function IngameCashShopEventCart_Buy()
 end
 function IngameCashShopEventCart_Gift()
   local self = EventCart
-  local selfplayer = getSelfPlayer()
-  if nil == selfplayer then
-    return
-  end
-  local limitLevel = 50
-  local myLevel = selfplayer:get():getLevel()
-  if myLevel < 50 and (isGameTypeEnglish() or isGameTypeTH() or isGameTypeID()) then
-    limitLevel = 50
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
-    return
-  end
-  if myLevel < 56 and (isGameTypeSA() or isGameTypeTR()) then
-    limitLevel = 56
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
-    return
-  end
-  if myLevel < 56 and isGameTypeTaiwan() then
-    limitLevel = 56
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+  if false == FGlobal_CheckGiftLevel_IngameCashShop() then
     return
   end
   if 0 ~= getIngameCashMall():getEventCartListCount(self.currentTab) then

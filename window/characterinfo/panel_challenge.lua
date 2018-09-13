@@ -554,7 +554,7 @@ function Challenge_Update()
   clearCount:SetText(totalCompleteCount .. " / " .. totalCompleteCount + totalProgressCount)
   shortClearCount:SetText("")
   dailyChallengeValue:SetText("")
-  local remainRewardCount = ToClient_GetChallengeRewardInfoCount()
+  local remainRewardCount = PaGlobalFunc_Challenge_GetTotalRemainRewardCount()
   if remainRewardCount <= 0 then
     remainRewardCountValue:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_REWARDCOUNTVALUE_EMPTY"))
     remainRewardCountValue:SetFontColor(UI_color.C_FF888888)
@@ -1065,6 +1065,20 @@ function Challenge_RewardTooltipShow(isShow, uiIdx, slotNo, rewardType)
 end
 function FromClient_ChallengeReward_UpdateText()
   Challenge_Update()
+end
+function PaGlobalFunc_Challenge_GetTotalRemainRewardCount()
+  local remainRewardGroupCount = GetChallengeRewardGroupCount()
+  local count = 0
+  for index = 0, remainRewardGroupCount - 1 do
+    local firstIndex = GetChallengeRewardFirstIndex(index)
+    local rewardWrapper = ToClient_GetChallengeRewardInfoWrapper(firstIndex)
+    if 0 == rewardWrapper:getOptionalType() then
+      count = count + rewardWrapper:getRewardCount()
+    else
+      count = count + ToClient_GetChallengeRewardCountByOptionalType(rewardWrapper:getOptionalType())
+    end
+  end
+  return count
 end
 registerEvent("FromClient_ChallengeReward_UpdateText", "FromClient_ChallengeReward_UpdateText")
 Challenge_Initialize()

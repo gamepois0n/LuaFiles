@@ -196,7 +196,7 @@ function workerTrade:updateMarketWorkerList()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
       local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
       local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
-      info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
+      info._static_Image:ChangeTextureInfoName(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       if 4 <= workerWrapperLua:getGrade() then
@@ -216,6 +216,8 @@ function workerTrade:updateMarketWorkerList()
       info._staticText_Buy_ConsoleUI:SetTextSpan(self._config._workerBuyTextX, self._config._workerBuyTextY)
       info._staticText_Buy_ConsoleUI:SetFontColor(self._config._activeColor)
       info._staticText_Buy_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERRANDOMSELECT_BTN_WORKERSELECT"))
+      info._staticText_Buy_ConsoleUI:ChangeTextureInfoName(self._config._keyGuideIconPath)
+      info._staticText_Buy_ConsoleUI:setRenderTexture(info._staticText_Buy_ConsoleUI:getBaseTexture())
       info._slot:SetShow(true)
       info._slot:addInputEvent("Mouse_LUp", "WorkerTrade_BuyWorker(" .. index .. ")")
       info._slot:addInputEvent("Mouse_On", "WorkerTrade_OpenWorkerSkillToolTip(" .. index .. ")")
@@ -265,7 +267,7 @@ function workerTrade:updateMyRegistedWorkerList()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
       local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
       local posY = info._static_Image:GetPosY() + radius * 0.85 / uiScale
-      info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
+      info._static_Image:ChangeTextureInfoName(workerIcon)
       info._static_Image:SetCircularClip(radius, float2(posX, posY))
       info._staticText_Name:SetText(workerName)
       info._staticText_Upgrade:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_UPGRADECOUNT", "upgradecount", workerUpgradeCount))
@@ -278,7 +280,8 @@ function workerTrade:updateMyRegistedWorkerList()
       info._static_Silver_Icon:SetPosX(iconPos)
       info._staticText_Buy_ConsoleUI:SetTextSpan(self._config._workerBuyTextX, self._config._workerBuyTextY)
       info._staticText_Buy_ConsoleUI:SetFontColor(self._config._activeColor)
-      info._staticText_Buy_ConsoleUI:ChangeTextureInfoNameAsync(self._config._keyGuideIconPath)
+      info._staticText_Buy_ConsoleUI:ChangeTextureInfoName(self._config._keyGuideIconPath)
+      info._staticText_Buy_ConsoleUI:setRenderTexture(info._staticText_Buy_ConsoleUI:getBaseTexture())
       local isEndAuction = auctionInfo:getWorkerAuctionEnd(workerNoRaw)
       if true == isEndAuction then
         info._staticText_Buy_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERAUCTION_WORKERGETPRICE"))
@@ -333,7 +336,7 @@ function workerTrade:updateMyWorkerList()
       local workerMaxPrice = workerWrapperLua:getWorkerMaxPrice()
       local _tempWorkEfficiency = PaGlobalFunc_GetWorkEfficiency(workerWrapperLua)
       local info = contents[uiIndex]
-      info._static_Image:ChangeTextureInfoNameAsync(workerIcon)
+      info._static_Image:ChangeTextureInfoName(workerIcon)
       local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
       local radius = info._static_Image:GetSizeX() * 0.5 * uiScale
       local posX = info._static_Image:GetPosX() + radius * 0.81 / uiScale
@@ -350,7 +353,7 @@ function workerTrade:updateMyWorkerList()
       local iconPos = info._staticText_Upgrade:GetPosX() - info._staticText_Price:GetTextSizeX() + info._staticText_Upgrade:GetSizeX() - 25
       info._static_Silver_Icon:SetPosX(iconPos)
       info._staticText_Buy_ConsoleUI:SetTextSpan(self._config._workerBuyTextX, self._config._workerBuyTextY)
-      info._staticText_Buy_ConsoleUI:ChangeTextureInfoNameAsync("")
+      info._staticText_Buy_ConsoleUI:ChangeTextureInfoName("")
       info._staticText_Buy_ConsoleUI:SetFontColor(self._config._disabledColor)
       if true == workerWrapperLua:getIsAuctionInsert() then
         info._staticText_Buy_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_REGISTINGNOW"))
@@ -369,7 +372,8 @@ function workerTrade:updateMyWorkerList()
         info._staticText_Buy_ConsoleUI:SetTextSpan(self._config._workerBuyTextX, self._config._workerBuyTextY - info._staticText_Buy_ConsoleUI:GetTextSizeY())
       else
         info._staticText_Buy_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERAUCTION_WORKERRESIST_BTN"))
-        info._staticText_Buy_ConsoleUI:ChangeTextureInfoNameAsync(self._config._keyGuideIconPath)
+        info._staticText_Buy_ConsoleUI:ChangeTextureInfoName(self._config._keyGuideIconPath)
+        info._staticText_Buy_ConsoleUI:setRenderTexture(info._staticText_Buy_ConsoleUI:getBaseTexture())
         info._slot:addInputEvent("Mouse_LUp", "WorkerTrade_RegistWorkerToMarket(" .. index .. ")")
         info._staticText_Buy_ConsoleUI:SetFontColor(self._config._activeColor)
       end
@@ -480,7 +484,7 @@ function workerTrade:setSkillInfoToSlot(skillIdx, skillStaticStatusWrapper)
   end
   local skill = self._ui._skillInfo[skillIdx]
   skill._slot:SetShow(true)
-  skill._static_SkillIcon:ChangeTextureInfoNameAsync(skillStaticStatusWrapper:getIconPath())
+  skill._static_SkillIcon:ChangeTextureInfoName(skillStaticStatusWrapper:getIconPath())
   skill._staticText_SkillName:SetText(skillStaticStatusWrapper:getName())
   skill._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   skill._staticText_SkillDesc:SetAutoResize(true)

@@ -41,7 +41,7 @@ function FGlobal_WorldmapShowAni()
   end
   Panel_WorldMap:ResetVertexAni()
   ToClient_WorldmapSetAlpha(0)
-  audioPostEvent_SystemUi(1, 2)
+  _AudioPostEvent_SystemUiForXBOX(1, 2)
 end
 function FGlobal_WorldmapHideAni()
 end
@@ -130,7 +130,7 @@ function PaGlobalFunc_FromClient_WorldMap_FadeOutHideUI(frameTime)
     aniInfo:SetDisableWhileAni(true)
   end
   ToClient_WorldmapSetAlpha(1)
-  audioPostEvent_SystemUi(1, 3)
+  _AudioPostEvent_SystemUiForXBOX(1, 3)
 end
 function PaGlobalFunc_FromClient_WorldMap_FadeOut()
   local self = Window_WorldMap_MainInfo
@@ -560,7 +560,7 @@ function FromClient_RClickWorldmapPanel(pos3D, immediately, isTopPicking)
       ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
     else
       ToClient_DeleteNaviGuideByGroup(0)
-      audioPostEvent_SystemUi(0, 15)
+      _AudioPostEvent_SystemUiForXBOX(0, 15)
     end
     return
   end
@@ -576,7 +576,7 @@ function FromClient_RClickWorldmapPanel(pos3D, immediately, isTopPicking)
     ToClient_DeleteNaviGuideByGroup(0)
   end
   ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
-  audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
 end
 function PaGlobalFunc_FromClient_WorldMap_HideAutoCompletedNaviBtn(isShow)
   local self = Window_WorldMap_MainInfo

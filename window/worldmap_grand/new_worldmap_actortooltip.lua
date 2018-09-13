@@ -289,14 +289,17 @@ function FromClient_OnWorldMapNode(nodeBtn)
     local taxGrade = siegeNode:getVillageTaxLevel()
     local tempString = ""
     if true == _ContentsGroup_SeigeSeason5 then
-      if 0 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_0")
-      elseif 1 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_1")
-      elseif 2 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_2")
-      elseif 3 == taxGrade then
-        tempString = PAGetString(Defines.StringSheet_GAME, "LUA_NODEGRADE_3")
+      if _ContentsGroup_NewSiegeRule then
+        tempString = "LUA_NODEGRADE_"
+      else
+        tempString = "LUA_NODEGRADE2_"
+      end
+      tempString = PAGetString(Defines.StringSheet_GAME, tempString .. tostring(taxGrade))
+      local minMemberAtSiege = siegeNode:getMinMemberAtSiege()
+      local maxMemberAtSiege = siegeNode:getMaxMemberAtSiege()
+      if 0 ~= maxMemberAtSiege and true == _ContentsGroup_NewSiegeRule then
+        local str = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGENODE_MINMAX_PARTICIPANT") .. " : "
+        tempString = tempString .. "(" .. str .. tostring(minMemberAtSiege) .. " ~ " .. tostring(maxMemberAtSiege) .. ")"
       end
       villageWar.nodeTaxGrade:SetText(tempString)
     else

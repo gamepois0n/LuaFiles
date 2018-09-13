@@ -366,6 +366,17 @@ function partyWidget:createControl()
     info._button_Leave:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_LEAVE"))
     info._button_SetLeader:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_AUTORIZE"))
     info._button_ForceOut:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PARTYSETTING_KICKOUT"))
+    local colorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
+    if colorBlindMode >= 1 then
+      info._progress2_Hp:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+      local xx1, yy1, xx2, yy2 = setTextureUV_Func(info._progress2_Hp, 314, 483, 492, 492)
+      info._progress2_Hp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+      info._progress2_Hp:setRenderTexture(info._progress2_Hp:getBaseTexture())
+      info._progress2_Mp:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+      local xx1, yy1, xx2, yy2 = setTextureUV_Func(info._progress2_Mp, 314, 493, 487, 497)
+      info._progress2_Mp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+      info._progress2_Mp:setRenderTexture(info._progress2_Mp:getBaseTexture())
+    end
     self._ui._static_PartyMember[index] = info
   end
 end
@@ -787,14 +798,22 @@ function partyWidget:setClassMpBar(control, class)
   if nil == control then
     return
   end
-  local mpBarTexture = self._config._textureMPBar[class]
-  if nil == mpBarTexture then
-    return
+  local colorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
+  if 0 == colorBlindMode then
+    local mpBarTexture = self._config._textureMPBar[class]
+    if nil == mpBarTexture then
+      return
+    end
+    control:ChangeTextureInfoName(self._config._textureMPBar.path)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, mpBarTexture[1], mpBarTexture[2], mpBarTexture[3], mpBarTexture[4])
+    control:getBaseTexture():setUV(x1, y1, x2, y2)
+    control:setRenderTexture(control:getBaseTexture())
+  elseif colorBlindMode >= 1 then
+    control:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(control, 314, 493, 487, 497)
+    control:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+    control:setRenderTexture(control:getBaseTexture())
   end
-  control:ChangeTextureInfoName(self._config._textureMPBar.path)
-  local x1, y1, x2, y2 = setTextureUV_Func(control, mpBarTexture[1], mpBarTexture[2], mpBarTexture[3], mpBarTexture[4])
-  control:getBaseTexture():setUV(x1, y1, x2, y2)
-  control:setRenderTexture(control:getBaseTexture())
 end
 function partyWidget:setStateIcon(memberControl, partyData)
   if nil == memberControl then

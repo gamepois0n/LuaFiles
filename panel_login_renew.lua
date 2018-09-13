@@ -2,6 +2,8 @@ Panel_Login_Renew:SetSize(getScreenSizeX(), getScreenSizeY())
 local _panel = Panel_Login_Renew
 local PanelLogin = {
   _ui = {
+    stc_webUI = UI.getChildControl(_panel, "Static_WebParent"),
+    stc_fade = UI.getChildControl(_panel, "Static_Fade"),
     stc_EventBG = UI.getChildControl(_panel, "Static_EventBG"),
     stc_BI = UI.getChildControl(_panel, "Static_BI"),
     btn_Login = UI.getChildControl(_panel, "Button_Login"),
@@ -16,6 +18,23 @@ local PanelLogin = {
     stc_DaumCI = UI.getChildControl(_panel, "Static_DaumCI")
   }
 }
+local _ui_web_loadingMovie
+local _movieLength = {
+  10000,
+  10000,
+  10000
+}
+local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+}
+local _movieOrder = {
+  1,
+  2,
+  3
+}
+local _currentMovieIndex
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 _stc_BackgroundImage = Array.new()
@@ -206,6 +225,7 @@ local startUV = 0.1
 local endUV = startUV + 0.04
 local startUV2 = 0.9
 local endUV2 = startUV2 + 0.04
+local self = PanelLogin
 function PanelLogin:init()
   if false == isLoginIDShow() then
     self._ui.edit_ID:SetShow(false)
@@ -215,9 +235,25 @@ function PanelLogin:init()
     self._ui.txt_InputID:SetShow(true)
     self._ui.edit_ID:SetEditText(getLoginID())
   end
+  _currentMovieIndex = 1
+  self:shuffleOrder(_movieOrder)
 end
 function PanelLogin:loginEnter()
   connectToGame(self._ui.edit_ID:GetEditText(), "\234\178\128\236\157\128\236\160\132\236\130\172\235\185\132\235\178\136")
+end
+function PanelLogin:shuffleOrder(table)
+  if nil == table or nil == #table then
+    return
+  end
+  if #table <= 1 then
+    return
+  end
+  for ii = 1, #table do
+    local temp = table[ii]
+    local posToShuffle = getRandomValue(1, #table)
+    table[ii] = table[posToShuffle]
+    table[posToShuffle] = temp
+  end
 end
 function PanelLogin:registEvent()
   self._ui.btn_Login:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_BeforeOpen()")
@@ -230,16 +266,104 @@ function PanelLogin:registEvent()
     self._ui.btn_ChangeAccount:SetShow(false)
   end
   _panel:RegisterUpdateFunc("PaGlobal_PanelLogin_PerFrameUpdate")
+  registerEvent("ToClient_EndGuideMovie", "FromClient_PanelLogin_OnMovieEvent")
   registerEvent("onScreenResize", "PaGlobal_PanelLogin_Resize")
+end
+function FromClient_PanelLogin_OnMovieEvent(param)
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_PanelLogin_OnMovieEvent")
+  if 1 == param then
+    self:startFadeIn()
+    if nil ~= _ui_web_loadingMovie then
+      _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+    end
+  elseif 2 == param then
+    _currentMovieIndex = _currentMovieIndex + 1
+    if nil == _movieOrder[_currentMovieIndex] then
+      _currentMovieIndex = 1
+    end
+    _ui_web_loadingMovie:TriggerEvent("PlayMovie", _movieURL[_movieOrder[_currentMovieIndex]])
+    self:startFadeIn()
+  end
+end
+function PaGlobalFunc_PanelLogin_FadeIn()
+  self:startFadeIn()
+end
+function PaGlobalFunc_PanelLogin_FadeOut()
+  self:startFadeOut()
+end
+local _fadeTime = 0.2
+function PanelLogin:startFadeIn()
+  local ImageAni = self._ui.stc_fade:addColorAnimation(0.1, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_FF000000)
+  ImageAni:SetEndColor(Defines.Color.C_00000000)
+  ImageAni:SetHideAtEnd(true)
+  luaTimer_AddEvent(PaGlobalFunc_PanelLogin_FadeOut, _movieLength[_movieOrder[_currentMovieIndex]] - _fadeTime * 1000, false, 0)
+end
+function PanelLogin:startFadeOut()
+  self._ui.stc_fade:SetShow(true)
+  local ImageAni = self._ui.stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
+  ImageAni:SetStartColor(Defines.Color.C_00000000)
+  ImageAni:SetEndColor(Defines.Color.C_FF000000)
+  ImageAni:SetHideAtEnd(false)
 end
 local self = PanelLogin
 function PaGlobal_PanelLogin_Init()
   self:init()
   self:registEvent()
 end
+function LoginRenewPanel_LoadMovie()
+  local self = PanelLogin
+  self._ui.stc_webUI:SetSize(getScreenSizeX(), getScreenSizeY())
+  self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
+  if nil == _ui_web_loadingMovie then
+    _ui_web_loadingMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, self._ui.stc_webUI, "Static_BgMovie")
+  end
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 1080 / 1920
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 1920 / 1080
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  local marginX = movieSizeX * 0.013
+  local marginY = movieSizeY * 0.013
+  _ui_web_loadingMovie:SetPosX(posX - marginX / 2)
+  _ui_web_loadingMovie:SetPosY(posY - marginY / 2)
+  _ui_web_loadingMovie:SetSize(movieSizeX + marginX, movieSizeY + marginY)
+  _ui_web_loadingMovie:SetUrl(1920, 1080, "coui://UI_Data/UI_Html/LobbyBG_Movie.html")
+end
 function PaGlobal_PanelLogin_Resize()
   _panel:SetSize(getScreenSizeX(), getScreenSizeY())
-  self._ui.stc_EventBG:SetShow(false)
+  self._ui.stc_webUI:SetSize(getScreenSizeX(), getScreenSizeY())
+  self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
+  local uiScale = getGlobalScale()
+  local sizeX = getResolutionSizeX()
+  local sizeY = getResolutionSizeY()
+  sizeX = sizeX / uiScale
+  sizeY = sizeY / uiScale
+  local movieSizeX = sizeX
+  local movieSizeY = sizeX * 1080 / 1920
+  local posX = 0
+  local posY = 0
+  if sizeY >= movieSizeY then
+    posY = (sizeY - movieSizeY) / 2
+  else
+    movieSizeX = sizeY * 1920 / 1080
+    movieSizeY = sizeY
+    posX = (sizeX - movieSizeX) / 2
+  end
+  _panel:SetPosX(0)
+  _panel:SetPosY(0)
+  _panel:SetSize(sizeX, sizeY)
   self._ui.btn_Login:ComputePos()
   self._ui.btn_Exit:ComputePos()
   self._ui.btn_GameOption:ComputePos()
@@ -250,8 +374,8 @@ function PaGlobal_PanelLogin_Resize()
   for _, bgImage in pairs(_stc_BackgroundImage) do
     bgImage:SetSize(getScreenSizeX(), getScreenSizeY())
   end
-  self._ui.stc_BlacklineUp:SetSize(getScreenSizeX(), getScreenSizeY() * 0.07)
-  self._ui.stc_BlacklineDown:SetSize(getScreenSizeX(), getScreenSizeY() * 0.07)
+  self._ui.stc_BlacklineUp:SetShow(false)
+  self._ui.stc_BlacklineDown:SetShow(false)
   if isGameTypeRussia() then
     self._ui.stc_DaumCI:SetSize(111, 29)
     self._ui.stc_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
@@ -311,6 +435,7 @@ _stc_BackgroundImage[currentBackIndex]:SetShow(true)
 _stc_BackgroundImage[currentBackIndex]:SetAlpha(1)
 function PaGlobal_PanelLogin_PerFrameUpdate(deltaTime)
   _updateTimeAcc = _updateTimeAcc - deltaTime
+  luaTimer_UpdatePerFrame(deltaTime)
   if _updateTimeAcc <= 0 then
     _updateTimeAcc = 15
     if _isScope then
@@ -363,6 +488,7 @@ function Panel_Login_BeforOpen()
   PaGlobal_PanelLogin_BeforeOpen()
 end
 function FGlobal_Panel_Login_Enter()
+  _AudioPostEvent_SystemUiForXBOX(50, 8)
   self:loginEnter()
 end
 function PanelLogin:animateControl(deltaTime, control, target)
@@ -427,3 +553,11 @@ end
 PaGlobal_PanelLogin_Init()
 PaGlobal_PanelLogin_Resize()
 _panel:SetShow(true)
+function InitLoginMoviePanel()
+  _PA_LOG("COHERENT", "InitLoginMoviePanel")
+  LoginRenewPanel_LoadMovie()
+end
+function RegisterEvent()
+  registerEvent("FromClient_luaLoadCompleteLateUdpate", "InitLoginMoviePanel")
+end
+RegisterEvent()

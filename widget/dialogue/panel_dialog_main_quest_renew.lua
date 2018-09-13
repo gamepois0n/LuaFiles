@@ -590,7 +590,7 @@ function PaGlobal_MainDialog_Quest_ClickConfirmQuestList()
   if 0 == questButtonCount then
     return
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local QuestButtonCount = dialogData:getQuestButtonCount()
   if QuestButtonCount == 1 then
     local QuestButton = dialogData:getQuestButtonAt(0)
@@ -674,7 +674,7 @@ function PaGlobalFunc_MainDialog_Quest_InteractionCheck()
   if 0 == questButtonCount then
     return
   end
-  audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local QuestButtonCount = dialogData:getQuestButtonCount()
   if QuestButtonCount == 1 then
     local QuestButton = dialogData:getQuestButtonAt(0)

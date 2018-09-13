@@ -8,6 +8,7 @@ local Panel_Window_StableInfo_info = {
     staticText_Tier = nil,
     static_SexIcon = nil,
     staticText_Name = nil,
+    staticText_Level = nil,
     staticText_Location = nil,
     staticText_Weight = nil,
     staticText_Swift = nil,
@@ -251,6 +252,7 @@ function Panel_Window_StableInfo_info:childControl()
   self._ui.static_Image = UI.getChildControl(self._ui.static_TopBg, "Static_Image")
   self._ui.static_SexIcon = UI.getChildControl(self._ui.static_TopBg, "Static_SexIcon")
   self._ui.staticText_Name = UI.getChildControl(self._ui.static_TopBg, "StaticText_Name")
+  self._ui.staticText_Level = UI.getChildControl(self._ui.static_TopBg, "StaticText_Level")
   self._ui.staticText_Location = UI.getChildControl(self._ui.static_TopBg, "StaticText_Location")
   self._ui.staticText_Weight = UI.getChildControl(self._ui.static_TopBg, "StaticText_Weight")
   self._ui.staticText_Swift = UI.getChildControl(self._ui.static_TopBg, "StaticText_Swift")
@@ -407,7 +409,8 @@ function Panel_Window_StableInfo_info:setContent(unsealType)
     self._ui.staticText_LifeVal:SetShow(true)
     self._ui.staticText_Life:SetShow(true)
   end
-  self._ui.staticText_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel() .. " " .. servantInfo:getName()))
+  self._ui.staticText_Name:SetText(servantInfo:getName())
+  self._ui.staticText_Level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel()))
   self._ui.staticText_Weight:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SERVANT_INFO_TEXT_WEIGHT") .. ":" .. makeDotMoney(servantInfo:getMaxWeight_s64() / Defines.s64_const.s64_10000))
   self._ui.static_Image:SetShow(true)
   self._ui.static_Image:ChangeTextureInfoName(servantInfo:getIconPath1())

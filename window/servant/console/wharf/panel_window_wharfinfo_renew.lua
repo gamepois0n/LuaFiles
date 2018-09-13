@@ -3,6 +3,7 @@ local Panel_Window_WharfInfo_info = {
     static_TopBg = nil,
     static_Image = nil,
     staticText_Name = nil,
+    staticText_Level = nil,
     staticText_Location = nil,
     static_InfoBg = nil,
     staticText_HPVal = nil,
@@ -85,6 +86,7 @@ function Panel_Window_WharfInfo_info:childControl()
   self._ui.static_TopBg = UI.getChildControl(Panel_Window_WharfInfo, "Static_TopBg")
   self._ui.static_Image = UI.getChildControl(self._ui.static_TopBg, "Static_Image")
   self._ui.staticText_Name = UI.getChildControl(self._ui.static_TopBg, "StaticText_Name")
+  self._ui.staticText_Level = UI.getChildControl(self._ui.static_TopBg, "StaticText_Level")
   self._ui.staticText_Location = UI.getChildControl(self._ui.static_TopBg, "StaticText_Location")
   self._ui.static_InfoBg = UI.getChildControl(Panel_Window_WharfInfo, "Static_InfoBg")
   self._ui.staticText_HPVal = UI.getChildControl(self._ui.static_InfoBg, "StaticText_HPVal")
@@ -154,7 +156,8 @@ function Panel_Window_WharfInfo_info:setContent(unsealType)
     showSceneCharacter(self._value.selectSceneIndex, false)
     showSceneCharacter(self._value.selectSceneIndex, true, servantInfo:getActionIndex())
   end
-  self._ui.staticText_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel() .. " " .. servantInfo:getName()))
+  self._ui.staticText_Name:SetText(servantInfo:getName())
+  self._ui.staticText_Level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel()))
   self._ui.static_Image:SetShow(true)
   self._ui.static_Image:ChangeTextureInfoName(servantInfo:getIconPath1())
   self._ui.staticText_Location:SetText(servantInfo:getRegionName())

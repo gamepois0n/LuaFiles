@@ -333,7 +333,7 @@ function MainStatusInfo:updateSkillPoint()
     skillExpRate = 0
   end
   if self._lastSkillPoint < player:getRemainSkillPoint() and -1 ~= self._lastSkillPoint then
-    audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SkillIconCheck, true, CppEnums.VariableStorageType.eVariableStorageType_User)
     self._ui.txt_skillPoint:EraseAllEffect()
     self._ui.txt_skillPoint:AddEffect("UI_LevelUP_Skill", false, -28, 1)
@@ -343,12 +343,20 @@ function MainStatusInfo:updateSkillPoint()
   local _tempSkillPoint = skillExpRate * 100
   local skillPointExp = string.format("%.1f", _tempSkillPoint)
   self._ui.txt_skillPoint:SetText(skillPoint .. " (" .. skillPointExp .. "%)")
+  self:updateTopTextPos()
   self._lastSkillPoint = player:getRemainSkillPoint()
   self._lastSkillExp = skillExpRate
   self._ui.txt_skillPoint:SetFontColor(4294899677)
   if false == _ContentsGroup_RenewUI_Skill then
     enableSkill_UpdateData()
   end
+end
+function MainStatusInfo:updateTopTextPos()
+  local skillPoint = self._ui.txt_skillPoint
+  local energy = self._ui.txt_energyPoint
+  local contrib = self._ui.txt_contributePoint
+  energy:SetPosX(skillPoint:GetPosX() + skillPoint:GetTextSpan().x + skillPoint:GetTextSizeX() + 5)
+  contrib:SetPosX(energy:GetPosX() + energy:GetTextSpan().x + energy:GetTextSizeX() + 5)
 end
 function PaGlobalFunc_MainStatusInfo_UpdateEnergy()
   MainStatusInfo:updateEnergy()
@@ -362,7 +370,7 @@ function MainStatusInfo:updateEnergy()
   local maxWp = selfPlayer:getMaxWp()
   local wpSetProgress = Wp / maxWp * 100
   if Wp > self._lastWP and -1 ~= self._lastWP then
-    audioPostEvent_SystemUi(3, 13)
+    _AudioPostEvent_SystemUiForXBOX(3, 13)
     self._ui.txt_energyPoint:EraseAllEffect()
     self._ui.txt_energyPoint:AddEffect("UI_LevelUP_Skill", false, -43, 1)
     self._ui.txt_energyPoint:AddEffect("fUI_LevelUP_Skill02", false, -43, 1)
@@ -404,12 +412,12 @@ function MainStatusInfo:updateContribute()
     self._ui.txt_contributePoint:AddEffect("fUI_Repair01", false, 0, 0)
   end
   if self._lastRemainExplorePoint ~= nowRemainExpPoint and self._isFirstExplore == true then
-    audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     self._ui.txt_contributePoint:EraseAllEffect()
     self._ui.txt_contributePoint:AddEffect("UI_LevelUP_Skill", false, 0, 1)
   end
   if self._lastExplorePoint ~= nowExpPoint and self._isFirstExplore == true then
-    audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     self._ui.txt_contributePoint:EraseAllEffect()
     self._ui.txt_contributePoint:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end
@@ -600,8 +608,8 @@ function FromClient_MainStatusInfo_changeMode(where, actorKeyRaw)
   if isPvpEnable() and false == isFlushedUI() then
     self:pvpButtonShow(true)
     if getPvPMode() then
-      audioPostEvent_SystemUi(0, 9)
-      audioPostEvent_SystemUi(9, 0)
+      _AudioPostEvent_SystemUiForXBOX(0, 9)
+      _AudioPostEvent_SystemUiForXBOX(9, 0)
       self._ui.chk_pvp:EraseAllEffect()
       self._ui.chk_pvp:AddEffect("fUI_SkillButton02", true, 0, 0)
       self._ui.chk_pvp:AddEffect("fUI_PvPButtonLoop", true, 0, 0)
@@ -610,7 +618,7 @@ function FromClient_MainStatusInfo_changeMode(where, actorKeyRaw)
       end
       isPvPOn = true
     elseif isPvPOn then
-      audioPostEvent_SystemUi(0, 11)
+      _AudioPostEvent_SystemUiForXBOX(0, 11)
       self._ui.chk_pvp:EraseAllEffect()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PVP_BUTTON_OFF"))
       isPvPOn = false

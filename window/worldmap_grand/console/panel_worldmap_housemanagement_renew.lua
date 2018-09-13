@@ -1250,6 +1250,7 @@ function Input_WorldMapHouseManager_BuyCondition(isRefresh)
 end
 function Input_WorldMapHouseManager_SetSelectButton(index)
   local self = WorldMapHouseManager
+  self._ui.scroll_ctrlButton:SetShow(false)
   self._ui._static_KeyGuide_Select:SetShow(index ~= self._selected)
 end
 function Input_WorldMapHouseManager_SetUseType(index)

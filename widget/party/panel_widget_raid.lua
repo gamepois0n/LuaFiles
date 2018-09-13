@@ -87,6 +87,18 @@ function raidParty:Update()
     if index <= self._partyMemberCount then
       self:SetInfo(index)
       self._uiPartyMemberList[index]._base:SetShow(true)
+      local colorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
+      if colorBlindMode >= 1 then
+        self._uiPartyMemberList[index]._hp:ChangeTextureInfoName("Renewal/Progress/Console_Progressbar_02.dds")
+        local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._uiPartyMemberList[index]._hp, 314, 498, 447, 509)
+        self._uiPartyMemberList[index]._hp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+        self._uiPartyMemberList[index]._hp:setRenderTexture(self._uiPartyMemberList[index]._hp:getBaseTexture())
+      else
+        self._uiPartyMemberList[index]._hp:ChangeTextureInfoName("Renewal/Progress/console_progressbar_03.dds")
+        local xx1, yy1, xx2, yy2 = setTextureUV_Func(self._uiPartyMemberList[index]._hp, 329, 415, 462, 426)
+        self._uiPartyMemberList[index]._hp:getBaseTexture():setUV(xx1, yy1, xx2, yy2)
+        self._uiPartyMemberList[index]._hp:setRenderTexture(self._uiPartyMemberList[index]._hp:getBaseTexture())
+      end
     end
   end
 end

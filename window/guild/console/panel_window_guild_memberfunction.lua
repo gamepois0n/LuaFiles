@@ -22,13 +22,15 @@ local GuildMemberFunction = {
     leaveGuild = 13,
     disperseGuild = 14,
     showContract = 15,
-    clanDeportation = 16
+    clanDeportation = 16,
+    voiceOption = 17
   },
   _btnControl = {},
   _startBtnPos = 20,
   _currentBtnPos = 0,
   _btnYGap = 45,
   _currentBtnCount = 0,
+  _currentMemberSortIdx = nil,
   _currentMemberIdx = nil,
   _currentMemberInfo = nil
 }
@@ -51,6 +53,7 @@ function GuildMemberFunction:open()
     if memberInfo:isCollectableBenefit() and false == memberInfo:isFreeAgent() and toInt64(0, 0) < memberInfo:getContractedBenefit() then
       self:addButton(self._btnType.recvPay)
     end
+    self:addButton(self._btnType.voiceOption)
   elseif true == selfPlayer:get():isGuildMaster() then
     if 1 == memberInfo:getGrade() then
       self:addButton(self._btnType.showInfo)
@@ -64,6 +67,7 @@ function GuildMemberFunction:open()
       self:addButton(self._btnType.appointCommander)
       self:addButton(self._btnType.inviteParty)
     end
+    self:addButton(self._btnType.voiceOption)
   else
     self:addButton(self._btnType.showInfo)
     self:addButton(self._btnType.inviteParty)
@@ -148,6 +152,8 @@ function GuildMemberFunction:addButton(btnType)
     btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_SHOWCONTRACT"))
   elseif btnType == self._btnType.clanDeportation then
     btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GULD_BUTTON1"))
+  elseif btnType == self._btnType.voiceOption then
+    btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDFUNCTION_SOUNDBTN"))
   end
   btnTemplate:SetPosY(self._currentBtnPos)
   self._currentBtnPos = self._currentBtnPos + self._btnYGap
@@ -185,6 +191,14 @@ function PaGlobalFunc_GuildMemberFunction_GetMemberIndex()
   end
   return self._currentMemberIdx
 end
+function PaGlobalFunc_GuildMemberFunction_GetMemberSortIndex()
+  local self = GuildMemberFunction
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberFunction")
+    return
+  end
+  return self._currentMemberSortIdx
+end
 function PaGlobalFunc_GuildMemberFunction_GetMemberInfo()
   local self = GuildMemberFunction
   if nil == self then
@@ -204,6 +218,7 @@ function PaGlobalFunc_GuildMemberFunction_Open(index)
     return
   end
   local memberInfo = PaGlobalFunc_GuildMemberList_GetMemberInfoWithIndex(index)
+  self._currentMemberSortIdx = index
   self._currentMemberIdx = memberInfo._idx
   local guildMemberInfo = guildInfo:getMember(self._currentMemberIdx)
   if nil == guildMemberInfo then
@@ -278,6 +293,8 @@ function InputMLUp_GuildMemberFunction_PressButton(btnType)
     PaGlobalFunc_GuildMemberInfo_OpenContract()
   elseif btnType == self._btnType.clanDeportation then
     PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
+  elseif btnType == self._btnType.voiceOption then
+    PaGlobalFunc_GuildVoiceSet_Open()
   end
   self:close()
 end

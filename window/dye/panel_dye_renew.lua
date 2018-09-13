@@ -1149,6 +1149,13 @@ function FGlobal_Panel_DyeReNew_Hide()
     Inventory_SetFunctor(nil, nil, nil, nil)
     Inventory_SetShow(true)
   end
+  if Panel_IngameCashShop_EasyPayment:GetShow() then
+    if Panel_IngameCashShop_BuyOrGift:GetShow() then
+      local couponOpen = Panel_IngameCashShop_Coupon:GetShow()
+      InGameShopBuy_Close(couponOpen)
+    end
+    PaGlobal_EasyBuy_Close()
+  end
   if Panel_ChangeWeapon:GetShow() then
     WeaponChange_Close()
   end
@@ -1229,7 +1236,18 @@ end
 function FGlobal_Panel_DyeReNew_updateColorAmpuleList()
   DyeReNew:Update_AmpuleList()
 end
+function FromClient_NotifyPearlCount()
+  if not Panel_Dye_ReNew:GetShow() then
+    return
+  end
+  Inventory_updateSlotData()
+  if Panel_IngameCashShop_EasyPayment:GetShow() then
+    PaGlobal_EasyBuy_Close()
+  end
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NOTIFY_BUYGOODS"))
+end
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)
 Panel_Dye_ReNew:SetShow(false)
 DyeReNew:Initialize()
 registerEvent("FromClient_updateDyeingTargetList", "FromClient_updateDyeingTargetList")
+registerEvent("FromClient_NotifyPearlCount", "FromClient_NotifyPearlCount")
