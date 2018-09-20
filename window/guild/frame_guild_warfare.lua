@@ -227,6 +227,11 @@ function GuildWarfareInfoPage:initialize()
       rtGuildWarfareInfo._txtDeath:SetShow(isShow)
       rtGuildWarfareInfo._txtKillBySiege:SetShow(isShow)
       rtGuildWarfareInfo._Partline:SetShow(isShow)
+      if _ContentsGroup_NewSiegeRule then
+        rtGuildWarfareInfo._txtHelp:SetShow(false)
+        rtGuildWarfareInfo._txtMaster:SetShow(false)
+        rtGuildWarfareInfo._txtCommander:SetShow(false)
+      end
     end
     return rtGuildWarfareInfo
   end
@@ -638,6 +643,10 @@ function GuildWarfareInfoPage:UpdateData()
     self._list[index]._txtMember:SetText(myGuildMemberInfo:squadMemberCount())
     self._list[index]._txtDeath:SetText(myGuildMemberInfo:deathCount())
     self._list[index]._txtKillBySiege:SetText(myGuildMemberInfo:killBySiegeWeaponCount())
+    if _ContentsGroup_NewSiegeRule then
+      local killCount = myGuildMemberInfo:guildMasterCount() + myGuildMemberInfo:squadLeaderCount() + myGuildMemberInfo:squadMemberCount()
+      self._list[index]._txtMember:SetText(killCount)
+    end
     contentSizeY = contentSizeY + self._list[index]._txtCharName:GetSizeY() + 2
     content_Warfare:SetSize(content_Warfare:GetSizeX(), contentSizeY)
   end

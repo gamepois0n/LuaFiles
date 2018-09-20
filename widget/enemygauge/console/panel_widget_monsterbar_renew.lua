@@ -79,10 +79,6 @@ local function updateStunGauge(targetActor, stun, maxStun)
   end
 end
 local nowTarget = {}
-local _dangerAlert_Show = FGlobal_DangerAlert_Show
-if true == _ContentsGroup_RenewUI_Main then
-  _dangerAlert_Show = PaGlobalFunc_MainStatusInfo_DangerAlertShow
-end
 function Panel_MonsterInfo_UpdateStun(actorKey, stun, maxStun)
   if targetActorKey == actorKey then
     local targetActor = getCharacterActor(actorKey)
@@ -92,7 +88,7 @@ end
 function targetHpInfo_Update_Monster(actorKey, nowHP)
   local targetActor = getCharacterActor(actorKey)
   if nil == targetActor then
-    FGlobal_DangerAlert_Show(false)
+    PaGlobalFunc_MainStatusInfo_DangerAlertShow(false)
     return
   end
   local monsterLevel = targetActor:get():getCharacterStaticStatus().level
@@ -333,7 +329,7 @@ function panel_Update_Monster_Info(actorKey)
   if curHP < 1 then
     Panel_Monster_Bar:SetShow(false, false)
     monsterList = {}
-    FGlobal_DangerAlert_Show(false)
+    PaGlobalFunc_MainStatusInfo_DangerAlertShow(false)
   end
   if targetActor:get():isMonster() then
     targetHpInfo_Update_Monster(actorKey, nowHP)
@@ -448,7 +444,7 @@ function updateTargetInfoCheckTime(fDeltatime)
     monsterList = {}
     Panel_Monster_Bar:SetShow(false, false)
     clearTargetActor()
-    FGlobal_DangerAlert_Show(false)
+    PaGlobalFunc_MainStatusInfo_DangerAlertShow(false)
   end
 end
 function FGlobal_Panel_Monster_Bar_RePos()
@@ -463,7 +459,7 @@ end
 function hideRecentTargetInfo()
   monsterList = {}
   Panel_Monster_Bar:SetShow(false, false)
-  FGlobal_DangerAlert_Show(false)
+  PaGlobalFunc_MainStatusInfo_DangerAlertShow(false)
 end
 function GameOption_NearMonsterAlertOff()
   ToClient_SetMessageFilter(10, true)

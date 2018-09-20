@@ -8,6 +8,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local isBlackSpiritAdventure = ToClient_IsContentsGroupOpen("277")
 function BlackSpiritAdventure2_ShowAni()
   audioPostEvent_SystemUi(0, 22)
+  _AudioPostEvent_SystemUiForXBOX(0, 22)
   UIAni.fadeInSCR_Down(Panel_Window_BlackSpiritAdventure_2)
   local aniInfo1 = Panel_Window_BlackSpiritAdventure_2:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -26,6 +27,7 @@ function BlackSpiritAdventure2_ShowAni()
 end
 function BlackSpiritAdventure2_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_BlackSpiritAdventure_2:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_Window_BlackSpiritAdventure_2, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -92,6 +94,7 @@ function BlackSpirit2_Show()
 end
 function BlackSpirit2_Hide()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_BlackSpiritAdventure_2:SetShow(false, false)
   _Web:ResetUrl()
 end

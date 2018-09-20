@@ -255,6 +255,12 @@ function PaGlobalFunc_FromClient_WorldMap_NodeManagement_ChangedExplorationNode(
   end
   self:SetNodeData(nodeData)
   self:Update()
+  local plantKey = nodeData:getPlantKey()
+  local isMaxLevel = nodeData:isMaxLevel()
+  local plantKeyActual = plantKey:get()
+  if (plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamLoggiaCorn or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamLoggiaFarm or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamAlehandroHoney or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamImpCave) and true == isMaxLevel then
+    FGlobal_MiniGame_RequestPlantInvest(plantKeyActual)
+  end
 end
 function PaGlobalFunc_FromClient_WorldMap_NodeManagement_UpdateExplorationNode()
   local self = Window_WorldMap_NodeManagementInfo
@@ -268,6 +274,12 @@ function PaGlobalFunc_FromClient_WorldMap_NodeManagement_UpdateExplorationNode()
   end
   self:SetNodeData(nodeData)
   self:Update()
+  local plantKey = nodeData:getPlantKey()
+  local isMaxLevel = nodeData:isMaxLevel()
+  local plantKeyActual = plantKey:get()
+  if (plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamLoggiaCorn or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamLoggiaFarm or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamAlehandroHoney or plantKeyActual == CppEnums.MiniGameParam.eMiniGameParamImpCave) and true == isMaxLevel then
+    FGlobal_MiniGame_RequestPlantInvest(plantKeyActual)
+  end
 end
 function PaGlobalFunc_WorldMap_NodeManagement_List2EventControlCreate(list_content, key)
   local self = Window_WorldMap_NodeManagementInfo

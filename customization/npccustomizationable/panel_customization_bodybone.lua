@@ -60,18 +60,15 @@ if false == _ContentsGroup_RenewUI_Customization then
   registerEvent("EventCloseBodyShapeUi", "CloseBodyShapeUi")
   registerEvent("EventEnableBodySlide", "EnableBodySlide")
 end
-local scaleMin, scaleMax, currentScale, selectedClassType
+local scaleMin, scaleMax, currentScale
 local SculptingUIRect = {
   left,
   top,
   right,
   bottom
 }
-local selectedCharacterClass = -1
 local sliderTextGap = 3
 local contentsGapHeight = 10
-local selectedClassIndex
-local currentclassType = -1
 local currentuiId = -1
 local function InitBodyBoneControls()
   if currentScale ~= nil then
@@ -98,7 +95,6 @@ function UpdateBodyWeight()
 end
 function historyInit()
   bonInfoPostFunction()
-  selectedClassType = getSelfPlayer():getClassType()
 end
 function UpdateBodyBoneScale()
   local x = calculateSliderValue(Slider_ScaleX, scaleMin.x, scaleMax.x)
@@ -115,12 +111,9 @@ function UpdateBodyBoneScale()
   StaticText_CurrValue_ScaleY:SetShow(false)
   StaticText_CurrValue_ScaleZ:SetShow(false)
 end
-function OpenBodyShapeUi(classType, uiId)
-  globalcurrentclassType = classType
+function OpenBodyShapeUi(uiId)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
-  selectedClassType = classType
   startBodyPickingMode()
   EnableBodySlide(false)
   ShowBodyBoneEditor()
@@ -133,7 +126,6 @@ end
 function CloseBodyShapeUi()
   endPickingMode()
   ToggleShowPosePreCheck()
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
   globalisCustomizationPicking = false
 end
@@ -203,9 +195,9 @@ function AdjustBodyBoneScale(scaleX, scaleY, scaleZ)
   currentScale.z = scaleZ
 end
 function BodyBoneHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
-  OpenBodyShapeUi(currentclassType, currentuiId)
+  OpenBodyShapeUi(currentuiId)
   PickingBodyBone(ToClient_getCharacterCustomizationUiWrapper())
 end

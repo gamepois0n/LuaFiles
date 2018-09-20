@@ -18,7 +18,7 @@ function ExtractionEnchantStone_InvenFiler_MainItem(slotNo, itemWrapper, whereTy
   if itemWrapper:isCash() then
     isNotCashItem = false
   end
-  if true == ToClient_Inventory_CheckItemLock(slotNo, whereType) then
+  if true == ToClient_Inventory_CheckItemLock(slotNo, Inventory_GetCurrentInventoryType()) then
     return true
   end
   return false == (0 < itemSSW._key:getEnchantLevel() and itemSSW._key:getEnchantLevel() < 16 and isNotAccessories and isNotCashItem)

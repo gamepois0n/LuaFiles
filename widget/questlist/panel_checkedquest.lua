@@ -124,7 +124,6 @@ function PaGlobal_CheckedQuest:initDefaults()
   self._uiNormalQuestGroup:SetPosX(2)
   self._uiNormalQuestGroup:SetIgnore(false)
   self._uiNormalQuestGroup:SetAlpha(0)
-  self._uiNormalQuestGroup:SetSize(Panel_CheckedQuest:GetSizeX(), Panel_CheckedQuest:GetSizeY())
   self._uiTransBG:SetNotAbleMasking(true)
   self._uiTransBG:SetIgnore(true)
   self._uiTransBG:SetPosX(0)
@@ -619,7 +618,6 @@ end
 function checkedQuestPanel_Init()
   local haveServerPosotion = 0 < ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_CheckedQuest, 0, CppEnums.PanelSaveType.PanelSaveType_IsSaved)
   if not haveServerPosotion then
-    Panel_CheckedQuest:SetSize(305, 350)
     local newEquipGap = 0
     local posY = 0
     if true == Panel_NewEquip:GetShow() then
@@ -1801,8 +1799,10 @@ function HandleClicked_ShowQuestInfo(questGroupId, questId, questCondition_Chk, 
     FGlobal_QuestWindow_SetProgress()
     FGlobal_QuestInfoDetail(questGroupId, questId, questCondition_Chk, groupTitle, questGroupCount, fromQuestWidget)
     audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   else
     audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     PaGlobalFunc_Quest_OpenDetail(questGroupId, questId, 0)
   end
 end
@@ -1826,6 +1826,7 @@ function HandleClicked_QuestWidget_FindTarget(questGroupId, questId, condition, 
       if false == _naviInfoAgain then
         ToClient_DeleteNaviGuideByGroup(0)
         audioPostEvent_SystemUi(0, 15)
+        _AudioPostEvent_SystemUiForXBOX(0, 15)
         _naviInfoAgain = true
       else
         _naviInfoAgain = false
@@ -1899,6 +1900,7 @@ function _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, i
       posZ = npcData:getPosition().z
       worldmapNavigatorStart(float3(posX, posY, posZ), navigationGuideParam, isAuto, false, true)
       audioPostEvent_SystemUi(0, 14)
+      _AudioPostEvent_SystemUiForXBOX(0, 14)
     end
   elseif 99 == condition then
     local npcData = npcByCharacterKey_getNpcInfo(questInfo:getAccecptNpc(), questInfo:getAccecptDialogIndex())
@@ -1912,6 +1914,7 @@ function _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, i
       posZ = npcData:getPosition().z
       worldmapNavigatorStart(float3(posX, posY, posZ), navigationGuideParam, isAuto, false, true)
       audioPostEvent_SystemUi(0, 14)
+      _AudioPostEvent_SystemUiForXBOX(0, 14)
     end
   else
     local questPosCount = questInfo:getQuestPositionCount()
@@ -1951,6 +1954,7 @@ function _QuestWidget_FindTarget_DrawMapPath(questGroupId, questId, condition, i
       end
       if TutorialQuestCompleteCheck() then
         audioPostEvent_SystemUi(0, 14)
+        _AudioPostEvent_SystemUiForXBOX(0, 14)
       end
     else
     end
@@ -2446,6 +2450,7 @@ function EventRadingOnQuest(questStaticWrapper, index)
 end
 function EventUnradingOnQuest(questStaticWrapper, index)
   audioPostEvent_SystemUi(0, 15)
+  _AudioPostEvent_SystemUiForXBOX(0, 15)
   ToClient_DeleteNaviGuideByGroup(0)
 end
 registerEvent("EventRadingOnQuest", "EventRadingOnQuest")

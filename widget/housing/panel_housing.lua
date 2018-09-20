@@ -328,6 +328,7 @@ function housing:ShowInstallationMenu(isShow, posX, posY, isHarvest, isShowMove,
     return
   end
   audioPostEvent_SystemUi(12, 16)
+  _AudioPostEvent_SystemUiForXBOX(12, 16)
   if false == _ContentsGroup_RenewUI_Housing then
     if isHarvest then
       PAHousing_FarmInfo_Open(housing._staticCheckBack:GetPosX() + 10, housing._staticCheckBack:GetPosY() + housing._staticCheckBack:GetSizeY() + 100)
@@ -483,8 +484,10 @@ function Panel_Housing_Mode_Click()
   local houseInstallationMode = houseWrapper:getStaticStatusWrapper():getObjectStaticStatus():isFixedHouse() or houseWrapper:getStaticStatusWrapper():getObjectStaticStatus():isInnRoom()
   if true == houseInstallationMode then
     audioPostEvent_SystemUi(1, 32)
+    _AudioPostEvent_SystemUiForXBOX(1, 32)
   else
     audioPostEvent_SystemUi(1, 32)
+    _AudioPostEvent_SystemUiForXBOX(1, 32)
   end
   if housing._isShow == false then
     local rv = housing_changeHousingMode(true, housing._isMyHouse)
@@ -529,8 +532,10 @@ function Panel_Housing_ObjectTranslation_Click()
       local isHarvest = characterStaticWrapper:getObjectStaticStatus():isHarvest()
       if isHarvest == true then
         audioPostEvent_SystemUi(12, 13)
+        _AudioPostEvent_SystemUiForXBOX(12, 13)
       else
         audioPostEvent_SystemUi(12, 17)
+        _AudioPostEvent_SystemUiForXBOX(12, 17)
       end
     end
   end
@@ -544,8 +549,10 @@ function Panel_Housing_ObjectFixing_Click()
       local isHarvest = characterStaticWrapper:getObjectStaticStatus():isHarvest()
       if isHarvest == true then
         audioPostEvent_SystemUi(12, 15)
+        _AudioPostEvent_SystemUiForXBOX(12, 15)
       else
         audioPostEvent_SystemUi(12, 19)
+        _AudioPostEvent_SystemUiForXBOX(12, 19)
         local itemEnchantStatic = characterStaticWrapper:get():getItemEnchantStatic()
         if nil ~= itemEnchantStatic then
           local itemKey = itemEnchantStatic._key:getItemKey()
@@ -661,8 +668,10 @@ function Panel_Housing_DeleteObject_InteractionFromMessageBox()
       local isHarvest = characterStaticWrapper:getObjectStaticStatus():isHarvest()
       if isHarvest == true then
         audioPostEvent_SystemUi(12, 14)
+        _AudioPostEvent_SystemUiForXBOX(12, 14)
       else
         audioPostEvent_SystemUi(12, 18)
+        _AudioPostEvent_SystemUiForXBOX(12, 18)
       end
     end
   end
@@ -772,6 +781,7 @@ function Event_HousingBuildTentMessageBox()
 end
 function Event_HousingCancelInstallModeMessageBox()
   audioPostEvent_SystemUi(1, 33)
+  _AudioPostEvent_SystemUiForXBOX(1, 33)
   housing:ShowInstallationMenu(false, 0, 0, false, false, false, false, false)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_MEMO")
   local messageboxData = {
@@ -1069,6 +1079,7 @@ function Panel_Housing_installationSlot_MouseLUp(index)
   local iconPosX = slot._staticImgSlot:GetPosX() + slot._staticBackSlot:GetPosX() + housing._staticBackInstallations:GetPosX() - 5
   local iconPosY = slot._staticImgSlot:GetPosY() + slot._staticBackSlot:GetPosY() + housing._staticBackInstallations:GetPosY() - 5
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if nil ~= slot then
     if slot._staticImgSlot:GetShow() then
       housing._staticSlotFront:SetShow(true)
@@ -1288,6 +1299,7 @@ function Panel_Housing_ThirdFloor_MouseLUp()
 end
 function Panel_Housing_installationSlot_MouseOver(isOn, index)
   audioPostEvent_SystemUi(0, 4)
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   if nil == housing._installationSlots[index] then
     return
   end

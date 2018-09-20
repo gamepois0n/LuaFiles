@@ -336,8 +336,10 @@ function HandleClicked_ShowMainQuestDetail(groupId, questId, checkCondition, gro
     FGlobal_QuestWindow_SetProgress()
     FGlobal_QuestInfoDetail(groupId, questId, checkCondition, groupTitle, questGroupCount, true)
     audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   else
     audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     PaGlobal_MainQuest:showAcceptConditionTooltip(false)
     PaGlobalFunc_Quest_OpenDetail(groupId, questId, 1)
   end

@@ -386,13 +386,13 @@ function PaGlobalFunc_Customization_RandomBeauty()
 end
 function PaGlobalFunc_Customization_ClickedMainMenu(index)
   local self = CustomizationMain
-  if 3 == index then
+  if 3 == index and true == _ContentsGroup_RenewUI_BeautyAlbum then
     PaGlobalFunc_Customization_SetKeyGuide(2)
     self:SetPadXButton(false)
     FGlobal_CustomizingAlbum_Show(true, CppEnums.ClientSceneState.eClientSceneStateType_Customization)
     return
   end
-  if 4 == index then
+  if 4 == index and true == _ContentsGroup_RenewUI_BeautyAlbum then
     PaGlobalFunc_Customization_RandomBeauty()
     return
   end
@@ -426,13 +426,15 @@ function CustomizationMain:MainMenuOpen()
     mainButton:SetPosY(self._focusMenuPosY + (mainButton:GetSizeY() + 30) * index)
     if true == HideAlbumAndPopular then
       if true == PaGlobalFunc_Customization_IsInGame() then
-        if index == self._mainInGameMenuConfig._BeautyAlbum then
+        if index == self._mainInGameMenuConfig._BeautyAlbum and false == _ContentsGroup_RenewUI_BeautyAlbum then
+          mainButton:SetShow(false)
         end
         if index == self._mainInGameMenuConfig._popular then
           mainButton:SetShow(false)
         end
       else
-        if index == self._mainMenuConfig._BeautyAlbum then
+        if index == self._mainMenuConfig._BeautyAlbum and false == _ContentsGroup_RenewUI_BeautyAlbum then
+          mainButton:SetShow(false)
         end
         if index == self._mainMenuConfig._popular then
           mainButton:SetShow(false)

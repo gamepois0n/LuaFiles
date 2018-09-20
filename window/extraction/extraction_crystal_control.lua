@@ -81,7 +81,7 @@ function Socket_Extraction_InvenFiler_EquipItem(slotNo, itemWrapper, WhereType)
       blankSlot_Count = blankSlot_Count - 1
     end
   end
-  if true == ToClient_Inventory_CheckItemLock(slotNo, whereType) then
+  if true == ToClient_Inventory_CheckItemLock(slotNo, Inventory_GetCurrentInventoryType()) then
     return true
   end
   return not itemWrapper:getStaticStatus():get():doHaveSocket() or 0 == blankSlot_Count

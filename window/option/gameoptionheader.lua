@@ -756,6 +756,10 @@ PaGlobal_Option = {
       _defaultValue = true,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
     },
+    ShowRightBottomAlarm = {
+      _defaultValue = true,
+      _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
+    },
     AutoRunCamera = {
       _defaultValue = true,
       _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON
@@ -1229,6 +1233,9 @@ function PaGlobal_Option._functions.RotateRadarMode(value)
 end
 function PaGlobal_Option._functions.HideWindowByAttacked(value)
   setHideWindowByAttacked(value)
+end
+function PaGlobal_Option._functions.ShowRightBottomAlarm(value)
+  setShowRightBottomAlarm(value)
 end
 function PaGlobal_Option._functions.AutoRunCamera(value)
   setAutoRunCamera(value)

@@ -274,6 +274,7 @@ function PaGlobal_TradeEventNotice_Renewal:Show()
     end
     PaGlobal_TradeEventNotice_Renewal:Resize()
     audioPostEvent_SystemUi(1, 8)
+    _AudioPostEvent_SystemUiForXBOX(1, 18)
   else
     PaGlobal_TradeEventNotice_Renewal:Close()
   end
@@ -287,6 +288,7 @@ function PaGlobal_TradeEventNotice_Renewal:Close()
     Panel_TradeEventNotice_Renewal:SetShow(false, true)
   end
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function PaGlobal_TradeEventNotice_Renewal:PopUp()
   if self._ui._btnCheckBoxPopUp:IsCheck() then
@@ -355,6 +357,7 @@ function PaGlobal_TradeEventNotice_Renewal:SupplyNPCNaviStart(territory)
     end
     ToClient_WorldMapNaviStart(npcData:getPosition(), NavigationGuideParam(), false, false)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
   end
 end
 function PaGlobal_TradeEventNotice_Renewal:TradeEventNPCNaviStart()
@@ -366,6 +369,7 @@ function PaGlobal_TradeEventNotice_Renewal:TradeEventNPCNaviStart()
     end
     ToClient_WorldMapNaviStart(npcData:getPosition(), NavigationGuideParam(), false, false)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
   end
 end
 function PaGlobal_TradeEventNotice_Renewal:GetTerritorySupplyIndex(itemKey)

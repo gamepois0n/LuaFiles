@@ -257,6 +257,7 @@ function HandleClicked_SocialIcon(iconIndex)
     return
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   Panel_SocialMenu_ResetVertexAni()
   _socialIconSlot[iconIndex]:ResetVertexAni()
   _socialIconSlot[iconIndex]:SetVertexAniRun("Ani_Color", true)
@@ -294,6 +295,7 @@ end
 function FGlobal_SocialAction_ShowToggle()
   if Panel_Chat_SocialMenu:GetShow() then
     audioPostEvent_SystemUi(1, 1)
+    _AudioPostEvent_SystemUiForXBOX(1, 1)
     Panel_Chat_SocialMenu:SetShow(false)
     FGlobal_SocialAction_SetCHK(false)
     TooltipSimple_Hide()
@@ -305,6 +307,7 @@ function FGlobal_SocialAction_ShowToggle()
     return true
   else
     audioPostEvent_SystemUi(1, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
     SocialAction_Icon_Initialize()
     Panel_Chat_SocialMenu:SetShow(true)
     return true

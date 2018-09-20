@@ -843,7 +843,7 @@ function SelectCustomizationGroup(idx)
 end
 function SelectCustomizationVoice()
   CustomizationMainUIShow(false)
-  createVoiceList(InGameMode, selectedClassType)
+  createVoiceList(InGameMode)
   showVoiceUI(true)
   closeExplorer()
 end

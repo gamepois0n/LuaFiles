@@ -169,6 +169,7 @@ function FGlobal_PopupMoveItem_Init(whereType, slotNo, fromWindowType, fromActor
     PopupMoveItem_Open()
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   local itemWrapper
   if CppEnums.MoveItemToType.Type_Player == fromWindowType then
     itemWrapper = getInventoryItemByType(whereType, slotNo)
@@ -228,6 +229,7 @@ function HandleClickedMoveItemButtonXXX(toWhereType, toActorKeyRaw)
   end
   PopupMoveItem_Close()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function PopupMoveItem_MoveInventoryItemFromActorToActor(toActorKeyRaw, s64_count, whereType, slotNo)
   local self = popupMoveItem

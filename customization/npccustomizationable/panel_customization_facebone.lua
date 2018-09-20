@@ -48,7 +48,6 @@ local Button_Reset = UI.getChildControl(Panel_CustomizationTest, "Button_Reset")
 local Button_Save = UI.getChildControl(Panel_CustomizationTest, "Button_SaveXml")
 local Button_DebugRot = UI.getChildControl(Panel_CustomizationTest, "Button_DebugRot")
 local Edit_DebugRotControl = UI.getChildControl(Panel_CustomizationTest, "Edit_DebugRotControl")
-local currentclassType = -1
 local currentuiId = -1
 RadioButton_Bone_Trans:SetCheck(true)
 StaticText_DefaultControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_SELECT_CONTROL"))
@@ -420,10 +419,8 @@ function CloseBoneSculptingSelector()
   EnableCursor(false)
   selectCustomizationControlPart(-1)
 end
-function OpenFaceShapeUi(classType, uiId)
-  globalcurrentclassType = classType
+function OpenFaceShapeUi(uiId)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
   CameraLookEnable(false)
   startFacePickingMode()
@@ -432,8 +429,7 @@ function OpenFaceShapeUi(classType, uiId)
 end
 function CloseFaceShapeUi()
   CameraLookEnable(true)
-  endPickingMode().globalcurrentclassType = -2
-  globalcurrentuiId = -2
+  endPickingMode().globalcurrentuiId = -2
   globalisCustomizationPicking = false
 end
 function showBoneSculptingSelector(show)
@@ -577,7 +573,7 @@ function ApplyCharacterRotateForDebugging()
   setCharacterRotateSpeedForDebugging(tonumber(Edit_DebugRotControl:GetEditText()))
 end
 function FaceBoneHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
   SelectSculptingBoneControl(ToClient_getCharacterCustomizationUiWrapper())

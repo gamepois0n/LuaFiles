@@ -869,22 +869,26 @@ function Panel_Knowledge_Show()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEOPENALERT_INDEAD"))
     return
   end
-  local knowledge = getSelfPlayer():get():getMentalKnowledge()
-  if knowledge:isShow() or GetUIMode() ~= Defines.UIMode.eUIMode_Default then
-    return
-  end
   if selfPlayerIsInCompetitionArea() then
     return
   end
   if true == ToClient_SniperGame_IsPlaying() then
     return
   end
-  TooltipSimple_Hide()
-  audioPostEvent_SystemUi(1, 32)
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(Panel_Knowledge_ShowActual)
+end
+function Panel_Knowledge_ShowActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
+  local knowledge = getSelfPlayer():get():getMentalKnowledge()
+  if knowledge:isShow() or GetUIMode() ~= Defines.UIMode.eUIMode_Default then
+    return
+  end
   local isShowable = knowledge:show()
   if false == isShowable then
     return
   end
+  TooltipSimple_Hide()
+  audioPostEvent_SystemUi(1, 32)
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
@@ -923,6 +927,11 @@ function Panel_Knowledge_Hide()
     TranslationReport_Close()
     return
   end
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(Panel_Knowledge_HideActual)
+end
+function Panel_Knowledge_HideActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
+  audioPostEvent_SystemUi(1, 33)
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then
     return
@@ -931,7 +940,6 @@ function Panel_Knowledge_Hide()
   if false == knowledge:isShow() then
     return
   end
-  audioPostEvent_SystemUi(1, 33)
   knowledge:hide()
   onHideCloseControls()
   PackageIconPosition()

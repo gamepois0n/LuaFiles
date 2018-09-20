@@ -30,7 +30,7 @@ local _badges = {
   Knowledge = false,
   FriendList = false
 }
-local isCouponOpen = ToClient_IsContentsGroupOpen("224")
+local isCouponOpen = _ContentsGroup_isConsoleTest
 local _badgeWidget = UI.getChildControl(Panel_UIMain, "StaticText_Number")
 local _gameExitButton = false
 Panel_UIMain:RegisterShowEventFunc(true, "Panel_UIMain_ShowAni()")
@@ -318,6 +318,7 @@ local bubbleNoticeData = {
 }
 function UIMain_MouseOverEvent(index)
   audioPostEvent_SystemUi(0, 13)
+  _AudioPostEvent_SystemUiForXBOX(0, 13)
   elapsedTime = 0
   isOn = true
   local button = MenuButtons[index]
@@ -447,6 +448,7 @@ function _challengeCall_byNewChallengeAlarm()
       PaGlobal_CharacterInfo:showAni()
     end
     audioPostEvent_SystemUi(1, 34)
+    _AudioPostEvent_SystemUiForXBOX(1, 34)
   end
   if _ContentsGroup_isUsedNewCharacterInfo == false then
     HandleClicked_CharacterInfo_Tab(3)

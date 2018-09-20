@@ -269,6 +269,7 @@ function UserSkillPoint_Update()
   local skillPointExp = string.format("%.3f", _tempSkillPoint)
   if _lastSkillPoint < player:getRemainSkillPoint() and -1 ~= _lastSkillPoint then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SkillIconCheck, true, CppEnums.VariableStorageType.eVariableStorageType_User)
     _staticSkillPointMain:EraseAllEffect()
     _staticSkillPointMain:AddEffect("UI_LevelUP_Skill", false, -28, 1)
@@ -368,6 +369,7 @@ function wpPoint_UpdateFunc()
   local wpSetProgress = Wp / maxWp * 100
   if Wp > _lastWP and -1 ~= _lastWP then
     audioPostEvent_SystemUi(3, 13)
+    _AudioPostEvent_SystemUiForXBOX(3, 13)
     _Wp_Main:EraseAllEffect()
     _Wp_Main:AddEffect("UI_LevelUP_Skill", false, -43, 1)
     _Wp_Main:AddEffect("fUI_LevelUP_Skill02", false, -43, 1)
@@ -423,11 +425,13 @@ function contributePoint_UpdateFunc()
   end
   if lastRemainExplorePoint ~= nowRemainExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     _contribute_Main:EraseAllEffect()
     _contribute_Main:AddEffect("UI_LevelUP_Skill", false, 0, 1)
   end
   if lastExplorePoint ~= nowExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     _contribute_Main:EraseAllEffect()
     _contribute_Icon:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end
@@ -596,6 +600,7 @@ function SelfPlayer_ExpTooltip(isShow, iconType)
   end
   if isShow then
     audioPostEvent_SystemUi(0, 13)
+    _AudioPostEvent_SystemUiForXBOX(0, 13)
     registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(uiControl, name, desc)
   else

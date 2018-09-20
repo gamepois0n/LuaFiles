@@ -11,6 +11,7 @@ Panel_Window_DailyStamp:RegisterShowEventFunc(true, "DailyStampShowAni()")
 Panel_Window_DailyStamp:RegisterShowEventFunc(false, "DailyStampHideAni()")
 function DailyStampShowAni()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_Window_DailyStamp:ChangeSpecialTextureInfoName("new_ui_common_forlua/Default/Mask_MidHorizon.dds")
   local FadeMaskAni = Panel_Window_DailyStamp:addTextureUVAnimation(0, 0.2, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   FadeMaskAni:SetTextureType(UI_TT.PAUI_TEXTURE_TYPE_MASK)
@@ -27,6 +28,7 @@ function DailyStampShowAni()
 end
 function DailyStampHideAni()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_Window_DailyStamp:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_Window_DailyStamp, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -963,6 +965,7 @@ function DailStamp_StampAnimation(deltaTime)
       end
     end
     audioPostEvent_SystemUi(0, 21)
+    _AudioPostEvent_SystemUiForXBOX(0, 21)
     self.animationTime = 5
   end
 end

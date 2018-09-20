@@ -294,6 +294,7 @@ function FromClient_RClickedWorldMiniMap(position, clickActor)
     end
     ToClient_WorldMapNaviStart(position, NavigationGuideParam(), false, true)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
   end
 end
 function FromClient_worldMiniMapSetNameOfMouseOverIcon(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)

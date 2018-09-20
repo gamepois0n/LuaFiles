@@ -11,7 +11,9 @@ function GuildReceivePay:open()
   _panel:SetShow(true)
 end
 function GuildReceivePay:update()
-  local memberInfo = PaGlobalFunc_GuildMemberFunction_GetMemberInfo()
+  local memberIdx = PaGlobalFunc_GuildMemberFunction_GetMemberIndex()
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  local memberInfo = guildInfo:getMember(memberIdx)
   if nil == memberInfo then
     self._ui.txt_PayValue:SetText("0")
     return

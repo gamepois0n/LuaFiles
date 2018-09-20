@@ -1439,6 +1439,30 @@ function FromClient_WorldMapHouseManager_ReceiveChangeUseType(houseInfoSSWrapper
   if self._houseKey == houseInfoSSWrapper:getHouseKey() then
     self:update(houseInfoSSWrapper)
   end
+  local rentHouse = ToClient_GetRentHouseWrapper(houseInfoSSWrapper:getHouseKey())
+  local eHouseUseGroupType = CppEnums.eHouseUseType
+  local _currentGroupType = eHouseUseGroupType.Count
+  if nil ~= rentHouse and true == rentHouse:isSet() then
+    _currentGroupType = rentHouse:getHouseUseType()
+  end
+  if _currentGroupType == eHouseUseGroupType.Empty then
+    FGlobal_MiniGame_HouseControl_Empty()
+    if true == hasPreviouseHouse then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHANGE_HOUSE_USETYPE_MYHOUSE"))
+    end
+  end
+  if _currentGroupType == eHouseUseGroupType.Depot then
+    FGlobal_MiniGame_HouseControl_Depot()
+  end
+  if _currentGroupType == eHouseUseGroupType.Refinery then
+    FGlobal_MiniGame_HouseControl_Refinery()
+  end
+  if _currentGroupType == eHouseUseGroupType.LocalSpecailtiesWorkshop then
+    FGlobal_MiniGame_HouseControl_LocalSpecailtiesWorkshop()
+  end
+  if _currentGroupType == eHouseUseGroupType.Shipyard then
+    FGlobal_MiniGame_HouseControl_Shipyard()
+  end
 end
 function FromClient_WorldMapHouseManager_ReceiveReturnHouse(houseInfoSSWrapper)
   local self = WorldMapHouseManager

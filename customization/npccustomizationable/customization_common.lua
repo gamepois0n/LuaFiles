@@ -1,4 +1,3 @@
-globalcurrentclassType = -2
 globalcurrentuiId = -2
 globalcheckSlider = false
 globalisCustomizationPicking = false

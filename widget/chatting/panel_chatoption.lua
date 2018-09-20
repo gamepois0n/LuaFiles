@@ -1150,6 +1150,7 @@ function ApplyHarfBuzzOption_Initialize()
 end
 function FGlobal_SetUseHarfBuzz(useHarfBuzz)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_setUseHarfBuzz(useHarfBuzz)
   FGlobal_ChattingcheckArabicType(useHarfBuzz)
 end
@@ -1258,6 +1259,7 @@ function ChattingOption_SelectFontSize(fontSize)
     return
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local count = ToClient_getChattingPanelCount()
   local fontType = ChattingOption_convertFontSizeToChatFontType(fontSize)
   for panelIdx = 0, count - 1 do
@@ -1577,6 +1579,7 @@ function ChattingOption_SelectNameType(nameType)
     return
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_setChatNameType(nameType)
 end
 function ChattingOption_InitailizeChattingAnimationControl()

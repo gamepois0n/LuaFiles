@@ -136,6 +136,7 @@ function OnNearNodeClick(nodeKey)
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(nodeKey, NavigationGuideParam())
   audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
   FGlobal_WorldMapWindowEscape()
 end
 function OnNodeUpgradeClick(nodeKey)

@@ -1261,6 +1261,7 @@ function InGameShop_SubTabEvent(mainTab, subTab)
   self._subTapSelect.static:SetShow(true)
   getIngameCashMall():setCurrentSubTab(subTab)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:initData()
   self:update()
 end
@@ -1642,6 +1643,7 @@ function FGlobal_InGameShop_OpenByEventAlarm()
     return
   end
   audioPostEvent_SystemUi(1, 39)
+  _AudioPostEvent_SystemUiForXBOX(1, 39)
   if not isNaver then
     cashShop_requestCash()
   end
@@ -2455,6 +2457,7 @@ function IngameCashShop_SelectedItem(index, bValue)
     return
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   FGlobal_SpecialMoveSettingCheck()
   IngameCashShop_SelectedItemXXX(slot.productNoRaw, nil, bValue)
   local tempSaveProductKeyRaw = slot.productNoRaw
@@ -2898,6 +2901,7 @@ function InGameShop_OpenClassList()
   local self = inGameShop
   local list = self._combo_Class:GetListControl()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_Class:ToggleListbox()
 end
 function InGameShop_SelectClass()
@@ -2913,6 +2917,7 @@ function InGameShop_SelectClass()
     getIngameCashMall():setCurrentClass(self._combo_Class:GetSelectKey())
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_Class:SetSelectItemIndex(selectIndex)
   self._currentPos = 0
   self._position = 0
@@ -2925,6 +2930,7 @@ function InGameShop_OpenSorList()
   local self = inGameShop
   local list = self._combo_Sort:GetListControl()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_Sort:ToggleListbox()
 end
 function InGameShop_SelectSort()
@@ -2935,6 +2941,7 @@ function InGameShop_SelectSort()
   end
   self._goodDescBG:SetShow(false)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_Sort:SetSelectItemIndex(selectIndex)
   if 0 == self._combo_Sort:GetSelectKey() then
     getIngameCashMall():setCurrentSort(-1)
@@ -2952,6 +2959,7 @@ function InGameShop_OpenSubFilterList()
   local self = inGameShop
   local list = self._combo_SubFilter:GetListControl()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_SubFilter:ToggleListbox()
 end
 function InGameShop_SelectSubFilter()
@@ -2962,6 +2970,7 @@ function InGameShop_SelectSubFilter()
   end
   self._goodDescBG:SetShow(false)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._combo_SubFilter:SetSelectItemIndex(selectIndex)
   if 0 == self._combo_SubFilter:GetSelectKey() then
     getIngameCashMall():setCurrentSubFilter(-1)
@@ -3188,6 +3197,10 @@ function InGameCashshopDescUpdate(deltaTime)
   self:updateSlot()
 end
 function InGameShop_Open()
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(InGameShop_OpenActual)
+end
+function InGameShop_OpenActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
   if isGameTypeGT() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
     return
@@ -3241,6 +3254,7 @@ function InGameShop_Open()
     allClearMessageData()
   end
   audioPostEvent_SystemUi(1, 39)
+  _AudioPostEvent_SystemUiForXBOX(1, 39)
   if not isNaver then
     cashShop_requestCash()
   end
@@ -3369,6 +3383,10 @@ function FGlobal_CheckPromotionTab()
   self._promotionTab.static:SetCheck(true)
 end
 function InGameShop_Close()
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(InGameShop_CloseActual)
+end
+function InGameShop_CloseActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
   local self = inGameShop
   if nil ~= getIngameCashMall() then
     getIngameCashMall():clearEquipViewList()

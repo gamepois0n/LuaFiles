@@ -174,6 +174,26 @@ function Window_MentalGameInfo:Clear()
       control._staticText_CardText:SetShow(false)
     end
   end
+  for _, from in pairs(self._animationUIList) do
+    if nil ~= from then
+      for __, to in pairs(from) do
+        if nil ~= to then
+          to._pointImage:SetShow(false)
+          to._nameTag:SetShow(false)
+        end
+      end
+    end
+  end
+  for _, from in pairs(self._infomationUIList) do
+    if nil ~= from then
+      for __, to in pairs(from) do
+        if nil ~= to then
+          to._pointImage:SetShow(false)
+          to._nameTag:SetShow(false)
+        end
+      end
+    end
+  end
   self._ui._static_Zodiac._control:SetShow(false)
   self:CircleLineAndObjectClear()
 end
@@ -636,9 +656,6 @@ function PaGlobalFunc_FromClient_MentalGame_Open()
   if false == isSuccess then
     return
   end
-  FGlobal_Panel_Radar_Show(false, true)
-  Panel_TimeBar:SetShow(false, true)
-  FGlobal_QuestWidget_Close()
   Panel_Window_MentalGame_Finish:SetShow(false)
   self._ui._static_LeftBg:SetShow(true)
   self._ui._static_BottomBg:SetShow(true)

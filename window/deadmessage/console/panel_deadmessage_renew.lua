@@ -373,6 +373,7 @@ function deadMessage:perFrameUpdate(deltaTime)
     end
   end
   if nil == self._resurrectionTime then
+    self._ui._staticText_resurrectionTime:SetShow(false)
     return
   end
   if 0 < self._resurrectionTime then
@@ -382,6 +383,7 @@ function deadMessage:perFrameUpdate(deltaTime)
       return
     end
     self._lastUpdateTime = regenTime
+    self._ui._staticText_resurrectionTime:SetShow(true)
     if true == self._isUseButtonAbleTime and false == isMyChannelSiegeBeing then
       self._ui._staticText_resurrectionTime:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_RespawnWaitting"))
     else

@@ -649,7 +649,6 @@ function CashShopController:Initialize()
     self.btn_AwakenWeapon:SetPosY(15)
     self.btn_WarStance:SetPosY(15)
   end
-  self.btn_Cloak_Invisual:SetCheck(false)
   if _ContentsGroup_RenewUI_PearlShop then
     UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_Exit"):SetShow(false)
     UI.getChildControl(Panel_IngameCashShop_SetEquip, "Button_QNA"):SetShow(false)
@@ -704,6 +703,8 @@ function CashShopController:Open()
   local isFirstIgnore = getIngameCashMall():isFirstIgnore()
   self.btn_FirstIgnore:SetCheck(isFirstIgnore)
   self.btn_FirstIgnore:SetSpanSize(10, 130)
+  self.btn_Cloak_Invisual:SetCheck(false)
+  getIngameCashMall():setIsShowCloak(not self.btn_Cloak_Invisual:IsCheck())
   Panel_IngameCashShop_Controller:SetShow(true)
   Panel_CustomizationMessage:SetShow(true, false)
   local message = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_CONTROLLER_MSG")
@@ -1062,7 +1063,7 @@ end
 function HandleClicked_CashShopController_ToggleCloakInvisual()
   local self = CashShopController
   local isChecked = self.btn_Cloak_Invisual:IsCheck()
-  getIngameCashMall():setIsShowCloak(isChecked)
+  getIngameCashMall():setIsShowCloak(not self.btn_Cloak_Invisual:IsCheck())
 end
 function HandleClicked_CashShopController_ToggleAwakenWeapon()
   local isChecked = CashShopController.btn_AwakenWeapon:IsCheck()
@@ -1102,7 +1103,7 @@ function CashShopController_ForceOffAllButton()
   end
   if self.btn_Cloak_Invisual:IsCheck() then
     self.btn_Cloak_Invisual:SetCheck(false)
-    getIngameCashMall():setIsShowCloak(false)
+    getIngameCashMall():setIsShowCloak(not self.btn_Cloak_Invisual:IsCheck())
   end
   if self.btn_AwakenWeapon:IsCheck() then
     self.btn_AwakenWeapon:SetCheck(false)

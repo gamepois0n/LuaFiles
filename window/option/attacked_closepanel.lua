@@ -1,7 +1,12 @@
+function PaGlobalFunc_CancelByAttackIsCalled()
+  return _cancelByAttackIsCalled
+end
+local _cancelByAttackIsCalled = false
 function FromClient_CancelByAttacked()
   if not _ContentsGroup_RenewUI_Chatting and not AllowChangeInputMode() then
     return
   end
+  _cancelByAttackIsCalled = true
   RenderModeAllClose()
   if Panel_PcRoomNotify:GetShow() then
     PcRoomNotify_Close()
@@ -101,5 +106,6 @@ function FromClient_CancelByAttacked()
     ResetKeyCustombyAttacked()
     close_WindowPanelList()
   end
+  _cancelByAttackIsCalled = false
 end
 registerEvent("progressEventCancelByAttacked", "FromClient_CancelByAttacked")

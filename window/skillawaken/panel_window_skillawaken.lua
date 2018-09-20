@@ -185,6 +185,7 @@ function awakening.createSlot(index)
 end
 function event_AwakenSkill(index)
   audioPostEvent_SystemUi(0, 7)
+  _AudioPostEvent_SystemUiForXBOX(0, 7)
   local skillWrapper = skillWindow_awakeningSkillAt(index)
   local skillTypeSSW = skillWrapper:getSkillTypeStaticStatusWrapper()
   ui._circleEff:ResetVertexAni()
@@ -241,6 +242,7 @@ function event_AwakenSkill(index)
 end
 function event_deleteCircleIcon()
   audioPostEvent_SystemUi(0, 11)
+  _AudioPostEvent_SystemUiForXBOX(0, 11)
   ui._circleEff:ResetVertexAni()
   ui._circleEff:EraseAllEffect()
   ui._circleEff:SetVertexAniRun("Ani_Color_Off", true)
@@ -321,6 +323,7 @@ function Update_CircularProgress(deltaTime, index)
 end
 function clickAwakeningSkill()
   audioPostEvent_SystemUi(3, 10)
+  _AudioPostEvent_SystemUiForXBOX(3, 10)
   isStartAwaken = true
   ui._circle_Icon:SetIgnore(true)
   ui._btn_doAwaken:EraseAllEffect()

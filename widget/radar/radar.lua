@@ -967,6 +967,7 @@ function RadarMap_Background_MouseRUp()
     float3Pos.y = selfPosition.y
     ToClient_WorldMapNaviStart(float3Pos, NavigationGuideParam(), false, true)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
   end
 end
 local function controlInit()
@@ -1569,6 +1570,7 @@ end
 Panel_Radar_NightAlert:RegisterUpdateFunc("Radar_NightAlert_Close")
 function Radar_NightAlert_ShowAni()
   audioPostEvent_SystemUi(1, 9)
+  _AudioPostEvent_SystemUiForXBOX(1, 9)
   UIAni.fadeInSCR_MidOut(Panel_Radar_NightAlert)
 end
 function Radar_NightAlert_HideAni()

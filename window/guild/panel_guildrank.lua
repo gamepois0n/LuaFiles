@@ -365,6 +365,7 @@ function FromClient_UpdateGuildRank(page)
   end
   self._selectPage = page
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   self:Update()
 end
 function FGlobal_guildRanking_Open()
@@ -388,6 +389,7 @@ function FGlobal_guildRanking_Close()
 end
 function guildRanking_NextBtn()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = guildRanking
   if self._selectMaxPage <= self._selectPage then
     return
@@ -397,6 +399,7 @@ function guildRanking_NextBtn()
 end
 function guildRanking_PrevBtn()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   _btn_Prev:DoAutoDisableTime()
   local self = guildRanking
   if 0 < self._selectPage then
@@ -520,6 +523,7 @@ function GuildRank_Web_Show()
     _Web:SetUrl(890, 645, url, false, true)
     _Web:SetIME(true)
     audioPostEvent_SystemUi(1, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
   end
 end
 function GuildRank_Web_Close()
@@ -527,4 +531,5 @@ function GuildRank_Web_Close()
   FGlobal_ClearCandidate()
   _Web:ResetUrl()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end

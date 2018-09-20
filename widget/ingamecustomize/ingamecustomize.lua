@@ -5,6 +5,10 @@ local gameExitPhoto = false
 local characterInfoPhoto = false
 local CharacterSlotIndex = 0
 function IngameCustomize_Show()
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(IngameCustomize_ShowActual)
+end
+function IngameCustomize_ShowActual()
+  PaGlobalFunc_FullScreenFade_FadeOut(2, 2)
   if isGameTypeGT() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOUSE_FUNCTION"))
     return
@@ -47,6 +51,7 @@ function IngameCustomize_Show()
   end
   FGlobal_WebHelper_ForceClose()
   audioPostEvent_SystemUi(1, 2)
+  _AudioPostEvent_SystemUiForXBOX(1, 2)
   SetUIMode(Defines.UIMode.eUIMode_InGameCustomize)
   renderMode:set()
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_CUSTOMIZE")
@@ -91,7 +96,11 @@ function IngameCustomize_Hide()
   end
 end
 function HandleClicked_CloseIngameCustomization()
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(HandleClicked_CloseIngameCustomizationActual)
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
+end
+function HandleClicked_CloseIngameCustomizationActual()
+  PaGlobalFunc_FullScreenFade_FadeOut(2, 2)
   if false == _ContentsGroup_RenewUI_Customization then
     CloseCharacterCustomization()
     getCustomizingManager():hide()

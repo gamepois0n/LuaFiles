@@ -51,6 +51,9 @@ end
 Panel_CustomizingAlbum_Initialize()
 local isCustomizationMode
 function CustomizingAlbum_Open(isCTMode, isSceneState)
+  if false == _ContentsGroup_RenewUI_BeautyAlbum then
+    return
+  end
   if false == ToClient_isUserCreateContentsAllowed() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
     local messageBoxData = {
@@ -98,6 +101,9 @@ function FGlobal_CustomizingAlbum_Show(isCTMode, isSceneState)
   CustomizingAlbum_Open(isCTMode, isSceneState)
 end
 function FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
+  if false == _ContentsGroup_RenewUI_BeautyAlbum then
+    return
+  end
   audioPostEvent_SystemUi(13, 6)
   Panel_CustomizingAlbum:SetShow(true, true)
 end

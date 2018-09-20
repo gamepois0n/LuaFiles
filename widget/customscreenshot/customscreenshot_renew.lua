@@ -308,10 +308,14 @@ function ScreenShotFrame_Close()
   ToClient_cancelRequestAddToFile()
   if ToClient_isLobbyProcessor() then
     FGlobal_Customization_UiShow()
-    FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
+    if true == _ContentsGroup_RenewUI_BeautyAlbum then
+      FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
+    end
   elseif Defines.UIMode.eUIMode_ScreenShotMode ~= GetUIMode() then
     FGlobal_Customization_UiShow()
-    FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
+    if true == _ContentsGroup_RenewUI_BeautyAlbum then
+      FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
+    end
   else
     SetUIMode(prevUiMode)
     setRenderCrossHair(true)

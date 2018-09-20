@@ -19,9 +19,19 @@ function PaGlobal_BossAlert:Init()
   Panel_BossAlertV2:RegisterUpdateFunc("UpdateFunc_checkBossAlramAnimation")
 end
 function PaGlobal_BossAlert:ShowAni()
+  local posY = 45
+  if Panel_ItemMarket_NewAlarm:GetShow() then
+    if FGlobal_AlertMsgBg_ShowCheck() then
+      posY = 205
+    else
+      posY = 130
+    end
+  elseif FGlobal_AlertMsgBg_ShowCheck() then
+    posY = 120
+  end
   local alarmMoveAni1 = Panel_BossAlertV2:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - 80)
-  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_BossAlertV2:GetSizeX() - 20, getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - 80)
+  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - posY)
+  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_BossAlertV2:GetSizeX() - 5, getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - posY)
   alarmMoveAni1.IsChangeChild = true
   Panel_BossAlertV2:CalcUIAniPos(alarmMoveAni1)
   alarmMoveAni1:SetDisableWhileAni(true)
@@ -29,14 +39,46 @@ function PaGlobal_BossAlert:ShowAni()
 end
 function PaGlobal_BossAlert:HideAni()
   local alarmMoveAni2 = Panel_BossAlertV2:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni2:SetStartPosition(Panel_BossAlertV2:GetPosX(), getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - 80)
-  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - 80)
+  alarmMoveAni2:SetStartPosition(Panel_BossAlertV2:GetPosX(), Panel_BossAlertV2:GetPosY())
+  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, Panel_BossAlertV2:GetPosY())
   alarmMoveAni2.IsChangeChild = true
   Panel_BossAlertV2:CalcUIAniPos(alarmMoveAni2)
   alarmMoveAni2:SetDisableWhileAni(true)
   alarmMoveAni2:SetHideAtEnd(true)
   alarmMoveAni2:SetDisableWhileAni(true)
   Panel_Tooltip_Item_hideTooltip()
+end
+function FGlobal_BossAlertMsg_ResetPos(alertShow, marketAlertShow, alertType)
+  if not Panel_BossAlertV2:GetShow() then
+    return
+  end
+  local posY, startTime, endTime = 45, 0, 0.1
+  if marketAlertShow then
+    if alertShow then
+      posY = 205
+    else
+      posY = 130
+    end
+  elseif alertShow then
+    posY = 120
+  end
+  if 0 == alertType then
+    if not alertShow then
+      startTime, endTime = 0.3, 0.4
+    end
+  elseif 1 == alertType then
+    if not marketAlertShow then
+      startTime, endTime = 0.3, 0.4
+    end
+  else
+    return
+  end
+  local alarmMoveAni3 = Panel_BossAlertV2:addMoveAnimation(startTime, endTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  alarmMoveAni3:SetStartPosition(Panel_BossAlertV2:GetPosX(), Panel_BossAlertV2:GetPosY())
+  alarmMoveAni3:SetEndPosition(Panel_BossAlertV2:GetPosX(), getScreenSizeY() - Panel_BossAlertV2:GetSizeY() - posY)
+  alarmMoveAni3.IsChangeChild = true
+  Panel_BossAlertV2:CalcUIAniPos(alarmMoveAni3)
+  alarmMoveAni3:SetDisableWhileAni(true)
 end
 function PaGlobal_BossAlert_NewAlarmShow(deltaTime)
   if not _ContetnsGroup_BossAlert then

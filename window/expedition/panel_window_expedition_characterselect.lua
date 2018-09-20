@@ -28,7 +28,7 @@ end
 function expeditionCharacterSelectInfo:createControl()
   local baseBorder = UI.getChildControl(self._ui._mainBG, "Static_CharacterImageBorder")
   local charList = ToClient_getMyCharacterInfo()
-  self._config._maxCharacterCount = #charList
+  self._config._maxCharacterCount = #charList + 1
   local maxStartIndex = self._config._maxCharacterCount - self._config._maxSlotRow * self._config._maxSlotCol + 1
   self._config._maxStartIndex = maxStartIndex
   if maxStartIndex % self._config._maxSlotRow > 0 then
@@ -86,7 +86,7 @@ function expeditionCharacterSelectInfo:loadImage()
       end
       slot._image:setRenderTexture(slot._image:getBaseTexture())
       slot._bottomText:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_LEVEL_CHARACTERNAME", "level", tostring(myCharData._level), "name", tostring(charName)))
-      slot._topText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_COMBATPOINT", "value", tostring(myCharData._totalStatValue)))
+      slot._topText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_COMBATPOINT", "value", tostring(math.floor(myCharData._totalStatValue))))
       slot._parent:SetShow(true)
       self._config._maxImageY = slot._parent:GetPosY() + slot._parent:GetSizeY()
       if self._config._scrollSizeY < self._config._maxImageY then

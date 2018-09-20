@@ -571,7 +571,12 @@ function PaGlobalFunc_Quest_SelectQuest(index)
       conditionUI:SetText(ToClient_getReplaceDialog(conditionText))
       conditionUI:SetLineRender(false)
     end
-    conditionUI:SetPosY(conditionStartPosY + conditionUI:GetSizeY() * index)
+    if 0 == index then
+      conditionUI:SetPosY(conditionStartPosY)
+    else
+      local prevUI = self._ui._staticText_ConditionList[index - 1]
+      conditionUI:SetPosY(prevUI:GetPosY() + prevUI:GetSizeY() + 5)
+    end
     conditionUI:SetShow(true)
     self._ui._staticText_ConditionList[index] = conditionUI
   end

@@ -493,7 +493,7 @@ end
 function PaGlobalFunc_MainDialog_Right_InitValue()
   Panel_Dialog_Main_Right_Info._value.isSetData = false
 end
-function PaGlobalFunc_MainDialog_Right_ReOpen(isButton)
+function PaGlobalFunc_MainDialog_Right_ReOpen(isButton, ignoreAction)
   local self = Panel_Dialog_Main_Right_Info
   if true == self._value.isSetData then
     local dialogData = ToClient_GetCurrentDialogData()
@@ -502,12 +502,16 @@ function PaGlobalFunc_MainDialog_Right_ReOpen(isButton)
     end
     local npcWord = dialogData:getMainDialog()
     local ignoreWord = PaGlobalFunc_MainDialog_Right_CheckSceneChange(npcWord)
+    if true == ignoreAction then
+      ignoreWord = PaGlobalFunc_MainDialog_Right_CheckChangeAction(ignoreWord)
+    end
     local realDialog = ToClient_getReplaceDialog(ignoreWord)
     if nil == isButton or true == isButton then
       if true == PaGlobalFunc_MainDialog_Bottom_IsLeastFunButtonDefault() then
         self:openAndSetData(dialogData, realDialog, true, false)
       else
         self:openAndSetData(dialogData, realDialog, false, false)
+        PaGlobalFunc_MainDialog_Bottom_resetBottomKeyguide()
       end
     else
       self:openAndSetData(dialogData, realDialog, false, false)
@@ -755,6 +759,29 @@ function PaGlobalFunc_MainDialog_Right_CheckSceneChange(_npcWord)
   local secondParam = string.split(firstParam[2], "(")
   local firstMessage = firstParam[1]
   if "ChangeScene" == secondParam[1] then
+    local returntext = firstMessage
+    local afterChangeScene = string.split(secondParam[2], "}")
+    if nil == afterChangeScene[2] then
+      return returntext
+    else
+      returntext = returntext .. afterChangeScene[2]
+      return returntext
+    end
+  else
+    return _npcWord
+  end
+end
+function PaGlobalFunc_MainDialog_Right_CheckChangeAction(_npcWord)
+  if nil == _npcWord or false == _ContentsGroup_RenewUI_Main then
+    return _npcWord
+  end
+  local firstParam = string.split(_npcWord, "{")
+  if nil == firstParam[2] then
+    return _npcWord
+  end
+  local secondParam = string.split(firstParam[2], "(")
+  local firstMessage = firstParam[1]
+  if "ChangeAction" == secondParam[1] then
     local returntext = firstMessage
     local afterChangeScene = string.split(secondParam[2], "}")
     if nil == afterChangeScene[2] then

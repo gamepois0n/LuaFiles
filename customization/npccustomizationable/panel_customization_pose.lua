@@ -128,7 +128,7 @@ end
 function PoseEditSymmetryChecked()
   setSymmetryBoneTransform(CheckButton_Symmetry:IsCheck())
 end
-function OpenPoseEditUi(classType, uiId)
+function OpenPoseEditUi(uiId)
   EnablePoseEditSlide(false)
   startPosePickingMode()
   Slider_X:SetControlPos(50)

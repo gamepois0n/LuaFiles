@@ -27,26 +27,55 @@ function PaGlobal_ItemMarket_NewAlarm:Init()
   self._itemSlot:createChild()
 end
 function PaGlobal_ItemMarket_NewAlarm:ShowAni()
+  local posY = 120
+  if false == FGlobal_AlertMsgBg_ShowCheck() then
+    posY = 45
+  end
   local alarmMoveAni1 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
-  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_ItemMarket_NewAlarm:GetSizeX() - 5, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
+  alarmMoveAni1:SetStartPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - posY)
+  alarmMoveAni1:SetEndPosition(getScreenSizeX() - Panel_ItemMarket_NewAlarm:GetSizeX() - 5, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - posY)
   alarmMoveAni1.IsChangeChild = true
   Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni1)
   alarmMoveAni1:SetDisableWhileAni(true)
   if FGlobal_ItemMarket_AlarmList_SoundCheck() then
     audioPostEvent_SystemUi(10, 1)
   end
+  FGlobal_BossAlertMsg_ResetPos(FGlobal_AlertMsgBg_ShowCheck(), true, 1)
 end
 function PaGlobal_ItemMarket_NewAlarm:HideAni()
+  if not Panel_ItemMarket_NewAlarm:GetShow() then
+    return
+  end
   local alarmMoveAni2 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  alarmMoveAni2:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
-  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
+  alarmMoveAni2:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), Panel_ItemMarket_NewAlarm:GetPosY())
+  alarmMoveAni2:SetEndPosition(getScreenSizeX() + 10, Panel_ItemMarket_NewAlarm:GetPosY())
   alarmMoveAni2.IsChangeChild = true
   Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni2)
   alarmMoveAni2:SetDisableWhileAni(true)
   alarmMoveAni2:SetHideAtEnd(true)
   alarmMoveAni2:SetDisableWhileAni(true)
   Panel_Tooltip_Item_hideTooltip()
+  FGlobal_BossAlertMsg_ResetPos(FGlobal_AlertMsgBg_ShowCheck(), false, 1)
+end
+function FGlobal_MarketAlertMsg_ResetPos(isShow)
+  if not Panel_ItemMarket_NewAlarm:GetShow() then
+    FGlobal_BossAlertMsg_ResetPos(isShow, false, 0)
+    return
+  end
+  if isShow then
+    local alarmMoveAni3 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0, 0.1, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+    alarmMoveAni3:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), Panel_ItemMarket_NewAlarm:GetPosY())
+    alarmMoveAni3:SetEndPosition(Panel_ItemMarket_NewAlarm:GetPosX(), getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 120)
+    alarmMoveAni3.IsChangeChild = true
+    Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni3)
+  else
+    local alarmMoveAni4 = Panel_ItemMarket_NewAlarm:addMoveAnimation(0.3, 0.4, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+    alarmMoveAni4:SetStartPosition(Panel_ItemMarket_NewAlarm:GetPosX(), Panel_ItemMarket_NewAlarm:GetPosY())
+    alarmMoveAni4:SetEndPosition(Panel_ItemMarket_NewAlarm:GetPosX(), getScreenSizeY() - Panel_ItemMarket_NewAlarm:GetSizeY() - 45)
+    alarmMoveAni4.IsChangeChild = true
+    Panel_ItemMarket_NewAlarm:CalcUIAniPos(alarmMoveAni4)
+  end
+  FGlobal_BossAlertMsg_ResetPos(isShow, true, 0)
 end
 function FGlobal_ItemMarket_NewAlarmShow(enchantItemKey, playerName, registTime)
   local self = PaGlobal_ItemMarket_NewAlarm
@@ -100,10 +129,11 @@ function FGlobal_ItemMarket_NewAlarmClose()
   PaGlobal_ItemMarket_NewAlarm:HideAni()
 end
 function UpdateFunc_checkAlramAnimation(deltaTime)
+  local self = PaGlobal_ItemMarket_NewAlarm
   if FGlobal_ItemMarketAlarm_CheckState() then
+    self._aniTime = 0
     return
   end
-  local self = PaGlobal_ItemMarket_NewAlarm
   self._aniTime = self._aniTime + deltaTime
   if self._maxTime < self._aniTime then
     self:HideAni()

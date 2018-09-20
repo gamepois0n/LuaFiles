@@ -261,6 +261,7 @@ function Find_TerritorySupplyNPC(territoryKey)
     end
   end
   audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
 end
 function Show_TerritorySupplyNpcName(territoryKey)
   local regionKeyRaw = territorySupplyNpcRegionKey[territoryKey]
@@ -306,6 +307,7 @@ function TradeEventInfo_Show()
     TradeEventInfo_Set()
     TradeEventInfo_Resize()
     audioPostEvent_SystemUi(1, 8)
+    _AudioPostEvent_SystemUiForXBOX(1, 18)
   else
     TradeEventInfo_Close()
   end

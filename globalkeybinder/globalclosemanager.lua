@@ -218,7 +218,8 @@ local panel_WindowList = {
   Panel_Window_Option_Main,
   Panel_LocalWarInfo,
   Panel_LocalWarRule,
-  Panel_Window_FaIryTierUpgrade
+  Panel_Window_FaIryTierUpgrade,
+  Panel_Window_PetFusion
 }
 local function closePanelListInitialize()
   for index, panel in pairs(panel_WindowList) do
@@ -386,6 +387,15 @@ registerEscapeLuaEvent(Panel_Window_Option_Main, "PanelEscapeFunc_RenewOption_Cl
 registerEscapeLuaEvent(Panel_LocalWarInfo, "PanelEscapeFunc_LocalWarInfo_Close()")
 registerEscapeLuaEvent(Panel_Window_DailyChallenge, "PaGlobalFunc_DailyChallenge_Close()")
 registerEscapeLuaEvent(Panel_Interaction_HouseList, "PanelEscapeFunc_Interaction_HouseList_Close()")
+registerEscapeLuaEvent(Panel_Window_PetFusion, "PanelEscapeFunc_PetFusion_Close()")
+registerEscapeLuaEvent(Panel_GuildList_SetAttendanceWar, "HandleClicked_SetAttendanceWar_Cancel()")
+registerEscapeLuaEvent(Panel_Window_CharInfo_Status, "PanelEscapeFunc_CharacterInfo_Close()")
+function PanelEscapeFunc_CharacterInfo_Close()
+  PaGlobal_CharacterInfo:hideWindow()
+end
+function PanelEscapeFunc_PetFusion_Close()
+  PaGlobalFunc_PetFusion_Close()
+end
 function PanelEscapeFunc_Interaction_HouseList_Close()
   PaGlobalFunc_Interaction_HouseList_Close()
 end

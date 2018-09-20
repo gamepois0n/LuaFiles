@@ -68,6 +68,7 @@ function Process_UIMode_CommonWindow_PlayerInfo()
     if Panel_Window_CharacterInfo_Renew ~= nil then
       if Panel_Window_CharacterInfo_Renew:GetShow() and not Panel_Window_CharacterInfo_Renew:IsUISubApp() then
         audioPostEvent_SystemUi(1, 31)
+        _AudioPostEvent_SystemUiForXBOX(1, 31)
         PaGlobalFunc_Window_CharacterInfo_Close()
       else
         if false == _ContentsGroup_RenewUI_StableInfo then
@@ -90,6 +91,7 @@ function Process_UIMode_CommonWindow_PlayerInfo()
   elseif Panel_Window_CharInfo_Status ~= nil then
     if Panel_Window_CharInfo_Status:GetShow() and not Panel_Window_CharInfo_Status:IsUISubApp() then
       audioPostEvent_SystemUi(1, 31)
+      _AudioPostEvent_SystemUiForXBOX(1, 31)
       if _ContentsGroup_isUsedNewCharacterInfo == false then
         CharacterInfoWindow_Hide()
       else
@@ -143,17 +145,21 @@ function Process_UIMode_CommonWindow_Skill()
     if nil ~= Panel_Window_Skill then
       if true == Panel_Window_Skill:IsShow() then
         audioPostEvent_SystemUi(1, 17)
+        _AudioPostEvent_SystemUiForXBOX(1, 17)
         HandleMLUp_SkillWindow_Close()
       else
         audioPostEvent_SystemUi(1, 18)
+        _AudioPostEvent_SystemUiForXBOX(1, 18)
         PaGlobal_Skill:SkillWindow_Show()
       end
     end
   elseif true == PaGlobalFunc_Skill_GetShow() then
     audioPostEvent_SystemUi(1, 17)
+    _AudioPostEvent_SystemUiForXBOX(1, 17)
     PaGlobalFunc_Skill_Close()
   else
     audioPostEvent_SystemUi(1, 18)
+    _AudioPostEvent_SystemUiForXBOX(1, 18)
     PaGlobalFunc_Skill_Open()
   end
 end
@@ -180,6 +186,7 @@ function Process_UIMode_CommonWindow_Inventory()
         Equipment_SetShow(true)
       end
       audioPostEvent_SystemUi(1, 16)
+      _AudioPostEvent_SystemUiForXBOX(1, 16)
       InventoryWindow_Show(true)
       if Panel_Window_ServantInventory:GetShow() then
         TooltipSimple_Hide()
@@ -196,6 +203,7 @@ function Process_UIMode_CommonWindow_Inventory()
         Equipment_SetShow(false)
       end
       audioPostEvent_SystemUi(1, 15)
+      _AudioPostEvent_SystemUiForXBOX(1, 15)
       InventoryWindow_Close()
       ServantInventory_Close()
       ClothInventory_Close()
@@ -213,9 +221,11 @@ function Process_UIMode_CommonWindow_Dyeing()
     return
   elseif true == _ContentsGroup_RenewUI_Dyeing then
     audioPostEvent_SystemUi(1, 24)
+    _AudioPostEvent_SystemUiForXBOX(1, 24)
     PaGlobalFunc_Dyeing_Open()
   elseif not Panel_Dye_ReNew:GetShow() then
     audioPostEvent_SystemUi(1, 24)
+    _AudioPostEvent_SystemUiForXBOX(1, 24)
     FGlobal_Panel_Dye_ReNew_Open()
   end
 end
@@ -225,6 +235,7 @@ function Process_UIMode_CommonWindow_Present()
   end
   if not Panel_Window_CharInfo_Status:GetShow() then
     audioPostEvent_SystemUi(1, 34)
+    _AudioPostEvent_SystemUiForXBOX(1, 34)
     if _ContentsGroup_isUsedNewCharacterInfo == false then
       FGlobal_Challenge_Show()
     else
@@ -233,6 +244,7 @@ function Process_UIMode_CommonWindow_Present()
     end
   else
     audioPostEvent_SystemUi(1, 31)
+    _AudioPostEvent_SystemUiForXBOX(1, 31)
     if _ContentsGroup_isUsedNewCharacterInfo == false then
       FGlobal_Challenge_Hide()
     else
@@ -258,9 +270,11 @@ function Process_UIMode_CommonWindow_Manufacture()
     if _ContentsGroup_RenewUI_Manufacture then
       if not PaGlobalFunc_ManufactureCheckShow() then
         audioPostEvent_SystemUi(1, 26)
+        _AudioPostEvent_SystemUiForXBOX(1, 26)
         PaGlobalFunc_ManufactureOpen(true)
       else
         audioPostEvent_SystemUi(1, 25)
+        _AudioPostEvent_SystemUiForXBOX(1, 25)
         PaGlobalFunc_ManufactureClose()
       end
     elseif Panel_Manufacture ~= nil and Panel_Window_Inventory ~= nil then
@@ -268,9 +282,11 @@ function Process_UIMode_CommonWindow_Manufacture()
       local isManufactureOpen = Panel_Manufacture:GetShow()
       if isManufactureOpen == false or isInvenOpen == false then
         audioPostEvent_SystemUi(1, 26)
+        _AudioPostEvent_SystemUiForXBOX(1, 26)
         Manufacture_Show(nil, CppEnums.ItemWhereType.eInventory, true)
       else
         audioPostEvent_SystemUi(1, 25)
+        _AudioPostEvent_SystemUiForXBOX(1, 25)
         if not _ContentsGroup_RenewUI_Manufacture then
           Manufacture_Close()
         end
@@ -286,16 +302,20 @@ function Process_UIMode_CommonWindow_Guild()
       if 0 == guildGrade then
         if false == Panel_ClanList:IsShow() then
           audioPostEvent_SystemUi(1, 36)
+          _AudioPostEvent_SystemUiForXBOX(1, 36)
           FGlobal_ClanList_Open()
         else
           audioPostEvent_SystemUi(1, 31)
+          _AudioPostEvent_SystemUiForXBOX(1, 31)
           FGlobal_ClanList_Close()
         end
       elseif false == Panel_Window_Guild:IsShow() then
         audioPostEvent_SystemUi(1, 36)
+        _AudioPostEvent_SystemUiForXBOX(1, 36)
         GuildManager:Show()
       else
         audioPostEvent_SystemUi(1, 31)
+        _AudioPostEvent_SystemUiForXBOX(1, 31)
         GuildManager:Hide()
       end
     elseif false == _ContentsGroup_RenewUI then
@@ -306,16 +326,20 @@ function Process_UIMode_CommonWindow_Guild()
     if 0 == guildGrade then
       if false == Panel_ClanList:IsShow() then
         audioPostEvent_SystemUi(1, 36)
+        _AudioPostEvent_SystemUiForXBOX(1, 36)
         FGlobal_ClanList_Open()
       else
         audioPostEvent_SystemUi(1, 31)
+        _AudioPostEvent_SystemUiForXBOX(1, 31)
         FGlobal_ClanList_Close()
       end
     elseif false == PaGlobalFunc_GuildMain_GetShow() then
       audioPostEvent_SystemUi(1, 36)
+      _AudioPostEvent_SystemUiForXBOX(1, 36)
       PaGlobalFunc_GuildMain_Open()
     else
       audioPostEvent_SystemUi(1, 31)
+      _AudioPostEvent_SystemUiForXBOX(1, 31)
       PaGlobalFunc_GuildMain_Close()
     end
   else
@@ -333,18 +357,22 @@ function Process_UIMode_CommonWindow_Mail()
     local isMailMain = Panel_Mail_Main:IsShow()
     if isMailMain == false then
       audioPostEvent_SystemUi(1, 22)
+      _AudioPostEvent_SystemUiForXBOX(1, 22)
       Mail_Open()
     else
       audioPostEvent_SystemUi(1, 21)
+      _AudioPostEvent_SystemUiForXBOX(1, 22)
       Mail_Close()
     end
   elseif Panel_Window_Mail_Renew ~= nil and Panel_Window_MailDetail_Renew ~= nil then
     local isMailMain = Panel_Window_Mail_Renew:IsShow()
     if isMailMain == false then
       audioPostEvent_SystemUi(1, 22)
+      _AudioPostEvent_SystemUiForXBOX(1, 22)
       Mail_Open()
     else
       audioPostEvent_SystemUi(1, 21)
+      _AudioPostEvent_SystemUiForXBOX(1, 21)
       Mail_Close()
     end
   end
@@ -355,9 +383,11 @@ function Process_UIMode_CommonWindow_FriendList()
     if isFriendList == false then
       FriendList_show()
       audioPostEvent_SystemUi(1, 28)
+      _AudioPostEvent_SystemUiForXBOX(1, 28)
     else
       FriendList_hide()
       audioPostEvent_SystemUi(1, 27)
+      _AudioPostEvent_SystemUiForXBOX(1, 27)
     end
   end
 end
@@ -365,16 +395,20 @@ function Process_UIMode_CommonWindow_QuestHistory()
   if false == _ContentsGroup_RenewUI then
     if Panel_Window_Quest_New:GetShow() then
       audioPostEvent_SystemUi(1, 27)
+      _AudioPostEvent_SystemUiForXBOX(1, 27)
       Panel_Window_QuestNew_Show(false)
     else
       audioPostEvent_SystemUi(1, 29)
+      _AudioPostEvent_SystemUiForXBOX(1, 29)
       Panel_Window_QuestNew_Show(true)
     end
   elseif true == PaGlobalFunc_Quest_GetShow() then
     audioPostEvent_SystemUi(1, 27)
+    _AudioPostEvent_SystemUiForXBOX(1, 27)
     PaGlobalFunc_Quest_SetShow(false)
   else
     audioPostEvent_SystemUi(1, 27)
+    _AudioPostEvent_SystemUiForXBOX(1, 27)
     PaGlobalFunc_Quest_SetShow(true)
   end
   TooltipSimple_Hide()
@@ -435,6 +469,7 @@ function Process_UIMode_CommonWindow_DeleteNavigation()
   ToClient_DeleteNaviGuideByGroup(0)
   Panel_NaviButton:SetShow(false)
   audioPostEvent_SystemUi(0, 15)
+  _AudioPostEvent_SystemUiForXBOX(0, 15)
 end
 function Process_UIMode_CommonWindow_PartySetting()
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
@@ -442,5 +477,6 @@ function Process_UIMode_CommonWindow_PartySetting()
     return
   end
   audioPostEvent_SystemUi(0, 16)
+  _AudioPostEvent_SystemUiForXBOX(0, 16)
   PaGlobalFunc_PartySetting_Show()
 end

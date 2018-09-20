@@ -115,8 +115,7 @@ function calculateGroupPartIndex(key)
 end
 function calculateText(GroupIndex, PartIndex)
   local text = {}
-  local classtype = getSelfPlayer():getClassType()
-  local partcount = ToClient_HistoryUIPartCount(classtype, GroupIndex)
+  local partcount = ToClient_HistoryUIPartCount(GroupIndex)
   if 0 == GroupIndex then
     text = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_HAIR") .. " - "
     if 0 == PartIndex then

@@ -43,6 +43,12 @@ function PaGlobal_GuildAllianceList:initialize()
   listGuild:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui_info._buttonShowAll:addInputEvent("Mouse_LUp", "HandleClicked_GuildAllianceList_ShowAll()")
 end
+local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Guild_Alliance_List, "WebControl_EventNotify_WebLink")
+_Web:SetShow(true)
+_Web:SetPosX(0)
+_Web:SetPosY(350)
+_Web:SetSize(315, 250)
+_Web:ResetUrl()
 function PaGlobal_GuildAllianceList:Update()
   local myAllianceWrapper = ToClient_GetMyGuildAllianceWrapper()
   if nil == myAllianceWrapper then
@@ -163,14 +169,57 @@ function FGlobal_GuildAllianceGuild_ListUpdate(contents, index)
   guildInfo.static_MemberCount:SetText(memberCount)
   guildInfo.btn_ShowMember:addInputEvent("Mouse_LUp", "HandleClicked_GuildAllianceList_Show(" .. tostring(index) .. ")")
 end
+function PaGlobal_GuildAllianceList:WebCommentLoad()
+  local myGuildWrapper = ToClient_GetMyGuildInfoWrapper()
+  if nil == myGuildWrapper then
+    return
+  end
+  local myGuildNo_s64 = myGuildWrapper:getGuildNo_s64()
+  local myAllianceWrapper = ToClient_GetMyGuildAllianceWrapper()
+  if nil == myAllianceWrapper then
+    return
+  end
+  local leaderGuildIndex = 0
+  local guildCount = myAllianceWrapper:getMemberCount()
+  for index = 0, guildCount - 1 do
+    local guildWrapper = myAllianceWrapper:getMemberGuild(index)
+    if guildWrapper:isAllianceChair() then
+      leaderGuildIndex = index
+      break
+    end
+  end
+  local guildWrapper = myAllianceWrapper:getMemberGuild(leaderGuildIndex)
+  local guildNo_s64 = guildWrapper:getGuildNo_s64()
+  local myUserNo = getSelfPlayer():get():getUserNo()
+  local cryptKey = getSelfPlayer():get():getWebAuthenticKeyCryptString()
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  guildCommentsWebUrl = PaGlobal_URL_Check(worldNo)
+  local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+  local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
+  local isAdmin = 0
+  if myGuildNo_s64 == guildNo_s64 and (isGuildMaster or isGuildSubMaster) then
+    isAdmin = 1
+  end
+  if nil ~= guildCommentsWebUrl then
+    FGlobal_SetCandidate()
+    local url = guildCommentsWebUrl .. "/guild?guildNo=" .. tostring(myGuildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin) .. "&chairGuildNo=" .. tostring(guildNo_s64)
+    _Web:SetUrl(315, 250, url, false, true)
+    _Web:SetIME(true)
+  end
+  self._ui_main._todayBoard:SetText("")
+end
 function FGlobal_GuildAllianceList_Open(isShow)
   local self = PaGlobal_GuildAllianceList
   if isShow == true then
     self:Update()
     HandleClicked_GuildAllianceList_ShowAll()
     self._defaultFrameBG_AllianceList:SetShow(true)
+    PaGlobal_GuildAllianceList:WebCommentLoad()
   else
     self._defaultFrameBG_AllianceList:SetShow(false)
+    FGlobal_ClearCandidate()
+    _Web:ResetUrl()
   end
 end
 function FGlobal_GuildAllianceMember_ListUpdate(contents, key)

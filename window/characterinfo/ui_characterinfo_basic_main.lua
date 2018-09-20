@@ -362,7 +362,7 @@ function PaGlobal_CharacterInfoBasic:localTooltip(isOn)
     local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. " " .. totalPlayTime
     local control = self._ui._staticPlayTimeIcon
-    TooltipSimple_Show(control, name, desc)
+    TooltipSimple_Show(control, name)
   else
     TooltipSimple_Hide()
   end

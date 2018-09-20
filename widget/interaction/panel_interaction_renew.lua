@@ -515,7 +515,7 @@ function PanelInteraction:init()
   self:tooltipResize_ByFontSize()
 end
 function PanelInteraction:show(actor)
-  audioPostEvent_SystemUi(1, 5)
+  _AudioPostEvent_SystemUiForXBOX(1, 5)
   local firstInteractionType = actor:getSettedFirstInteractionType()
   self._basicInteractionType = firstInteractionType
   self._focusInteractionType = firstInteractionType
@@ -523,6 +523,7 @@ function PanelInteraction:show(actor)
     return
   end
   _panel:SetShow(true)
+  _AudioPostEvent_SystemUiForXBOX(53, 5)
   local actor = interaction_getInteractable()
   local actorKey = 0
   local interactableFrag = 0
@@ -1366,6 +1367,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
         [6] = CppEnums.VirtualKeyCode.KeyCode_F10
       }
       local keycode = keyCodeTable[_currentInteractionSelectIndex]
+      _AudioPostEvent_SystemUiForXBOX(50, 4)
       self:updatePressedInteractionKey(0)
       self._ui.txt_HoldToInteract:SetShow(true)
       return keycode

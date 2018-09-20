@@ -217,7 +217,7 @@ function PersonalIcon:updatePos()
   local panelPosX = 100
   local panelPosY = 45
   if Panel_MainStatus_Remaster:GetShow() then
-    panelPosX = PaGlobalFunc_MainStatus_GetPosX() + PaGlobalFunc_MainStatus_GetSizeX() + 10
+    panelPosX = PaGlobalFunc_MainStatus_GetPosX() + PaGlobalFunc_MainStatus_GetSizeX() + 25
     panelPosY = 5
   elseif Panel_SelfPlayerExpGage:GetShow() then
     panelPosX = 100

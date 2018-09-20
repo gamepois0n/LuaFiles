@@ -912,7 +912,7 @@ function luaTimer_UpdatePerFrame(fDelta)
     if nil ~= timer then
       if currentTickCount >= timer._endTime then
         timer._function()
-        if false == timer._isRepeat then
+        if not timer._isRepeat then
           local tempIndex = timer._timerNo
           g_Timerlist[tempIndex] = nil
           g_TimerCount = g_TimerCount - 1

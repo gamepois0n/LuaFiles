@@ -18,7 +18,6 @@ local contentsOffsetX = 20
 local contentsOffsetY = 60
 local image
 local ContentImage = {}
-local selectedClassType
 Button_Close:addInputEvent("Mouse_LUp", "closeClothUI()")
 CheckButton_ShowHelmet:addInputEvent("Mouse_LUp", "ShowHelmet()")
 if false == _ContentsGroup_RenewUI_Customization then
@@ -83,8 +82,7 @@ function createClothList()
   Static_Frame:SetSize(Static_Frame:GetSizeX(), FrameSizeY)
   Panel_CustomizationCloth:SetSize(Panel_CustomizationCloth:GetSizeX(), frameStartY + FrameSizeY + contentsGap)
 end
-function openClothUI(classType, showHelmet)
-  selectedClassType = classType
+function openClothUI(showHelmet)
   UpdateMarkPosition(-1)
   createClothList()
   CheckButton_ShowHelmet:SetCheck(showHelmet)

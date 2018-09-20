@@ -131,6 +131,21 @@ function Window_VoiceChatInfo:SetTalkButtonByCheck(isCheck)
   else
     self._openIsMicOn = false
   end
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  if nil ~= guildInfo then
+    local myMemberInfo = guildInfo:getMemberByUserNo(getSelfPlayer():get():getUserNo())
+    if false == myMemberInfo:isVoicePermissionHas() then
+      local messageboxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+        content = PAGetString(Defines.StringSheet_GAME, "LUA_VOICECHAT_YOUHAVENOPERMISSION"),
+        functionYes = MessageBox_Empty_function,
+        functionNo = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageboxData)
+      self._openIsMicOn = false
+    end
+  end
   self:Update()
 end
 function Window_VoiceChatInfo:SetListenButtonByCheck(isCheck)
@@ -322,7 +337,12 @@ function PaGlobalFunc_VoiceChat_Close()
   ToClient_setSpeakerVolume(headphoneVolume)
   ToClient_setMicSensitivity(micSensitivity)
   ToClient_setMicAdjustment(micAmplification)
-  ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, selfPlayer:getUserNo(), isMicOn, isHeadphoneOn, false)
+  local isForce = false
+  local isGuildMaster = selfPlayer:isGuildMaster()
+  if true == isGuildMaster then
+    isForce = true
+  end
+  ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, selfPlayer:getUserNo(), isMicOn, isHeadphoneOn, isForce)
   Panel_Window_VoiceChat:SetShow(false)
 end
 function PaGlobalFunc_VoiceChat_GetShow()

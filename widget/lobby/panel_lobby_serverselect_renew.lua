@@ -206,6 +206,7 @@ local startUV = 0.1
 local endUV = startUV + 0.04
 local startUV2 = 0.9
 local endUV2 = startUV2 + 0.04
+local self = ServerSelect
 function ServerSelect:init()
   self._ui.txt_WorldName = UI.getChildControl(self._ui.stc_RightBg, "StaticText_WorldName")
   self._ui.list_Server = UI.getChildControl(self._ui.stc_RightBg, "List2_ServerList")
@@ -213,8 +214,10 @@ function ServerSelect:init()
   self._ui.list_Server:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.btn_WorldTemplate = UI.getChildControl(self._ui.stc_RightBg, "Button_WorldTemplate")
   self._ui.txt_Select_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_Select_ConsoleUI")
-  self:registEventHandler()
+  self._ui.stc_fade:SetShow(false)
   self._ui.txt_Back_ConsoleUI = UI.getChildControl(self._ui.stc_RightBg, "StaticText_Back_ConsoleUI")
+  self._ui.stc_movieBG:SetShow(false)
+  self:registEventHandler()
   self:initListData()
 end
 function ServerSelect:updateListData()
@@ -284,7 +287,7 @@ function ServerSelect:registEventHandler()
   _panel:RegisterUpdateFunc("PaGlobal_ServerSelect_PerFrameUpdate")
 end
 function PaGlobalFunc_ServerSelect_LateUpdate()
-  ServerSelect:startFadeIn()
+  self:startFadeIn()
 end
 function ServerSelect:playWebMovie()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelect:playWebMovie")

@@ -232,6 +232,8 @@ function mainQuestWidget:setConditionInfo(uiQuestInfo, startPosY)
       uiQuestCondition:SetSize(self._ui._static_TitleBG:GetSizeX(), uiQuestCondition:GetTextSizeY())
       local conditionText
       if conditionInfo._currentCount == conditionInfo._destCount or conditionInfo._destCount <= conditionInfo._currentCount then
+        uiQuestCondition:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+        uiQuestCondition:SetLineCount(1)
         conditionText = " - " .. conditionInfo._desc .. " (" .. PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_QUEST_COMPLETE") .. ")"
         uiQuestCondition:SetText(ToClient_getReplaceDialog(conditionText))
         uiQuestCondition:SetLineRender(true)

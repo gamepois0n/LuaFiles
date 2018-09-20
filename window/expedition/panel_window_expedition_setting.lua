@@ -2,9 +2,10 @@ local expeditionSettingInfo = {
   _ui = {
     _button_close = UI.getChildControl(Panel_ArmyUnitSetting, "Button_Win_Close"),
     _button_save = UI.getChildControl(Panel_ArmyUnitSetting, "Button_Save"),
+    _button_manage = UI.getChildControl(Panel_ArmyUnitSetting, "Button_Manage"),
     _button_allReceive = UI.getChildControl(Panel_ArmyUnitSetting, "Button_AllReceive"),
     _button_selectReceive = UI.getChildControl(Panel_ArmyUnitSetting, "Button_SelectReceive"),
-    _button_item = UI.getChildControl(Panel_ArmyUnitSetting, "Button_Item"),
+    _button_report = UI.getChildControl(Panel_ArmyUnitSetting, "Button_Report"),
     _text_time = UI.getChildControl(Panel_ArmyUnitSetting, "StaticText_Time"),
     _baseBG = UI.getChildControl(Panel_ArmyUnitSetting, "Static_LeftBG"),
     _txt_supply = UI.getChildControl(Panel_ArmyUnitSetting, "StaticText_Supply")
@@ -69,7 +70,8 @@ end
 function expeditionSettingInfo:registEventHandler()
   self._ui._button_close:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_Close()")
   self._ui._button_save:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_Save()")
-  self._ui._button_item:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_ClickRewardItem()")
+  self._ui._button_manage:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Open(0, true)")
+  self._ui._button_report:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_ClickReport()")
   self._ui._button_selectReceive:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_ReceiveItem(false)")
   self._ui._button_allReceive:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionSettingInfo_ReceiveItem(true)")
 end
@@ -81,7 +83,9 @@ function expeditionSettingInfo:createControl()
       _itemBG = nil,
       _areaDesc = nil,
       _image = nil,
-      _imageInfo = nil
+      _imageInfo = nil,
+      _warningText1 = nil,
+      _warningText2 = nil
     }
     local cloneBG = UI.cloneControl(self._ui._baseBG, Panel_ArmyUnitSetting, "SettingBG_" .. ii)
     settingBG._parent = cloneBG
@@ -98,12 +102,22 @@ function expeditionSettingInfo:createControl()
     button_areaSelect:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionAreaSelectInfo_Open(" .. ii .. ")")
     local unitSelect = UI.getChildControl(mainBG, "Static_MercenaryList")
     local button_change = UI.getChildControl(unitSelect, "Button_Change")
-    button_change:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Open(" .. ii .. ")")
+    button_change:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Open(" .. ii .. ", false )")
     local recovery = UI.getChildControl(unitSelect, "Button_Recover")
     recovery:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitRecovery(" .. ii .. ")")
     local text_desc = UI.getChildControl(mainBG, "StaticText_AreaDesc")
     text_desc:SetText("")
     settingBG._areaDesc = text_desc
+    local text_warning1 = UI.getChildControl(mainBG, "StaticText_ResultWarning1")
+    settingBG._warningText1 = text_warning1
+    settingBG._warningText1:SetShow(false)
+    settingBG._warningText1:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    settingBG._warningText1:SetText(settingBG._warningText1:GetText())
+    local text_warning2 = UI.getChildControl(mainBG, "StaticText_ResultWarning2")
+    settingBG._warningText2 = text_warning2
+    settingBG._warningText2:SetShow(false)
+    settingBG._warningText2:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+    settingBG._warningText2:SetText(settingBG._warningText2:GetText())
     local imageBorder = UI.getChildControl(mainBG, "Static_TemPleate_CharacterImageBorder")
     local image = UI.getChildControl(imageBorder, "Static_Image")
     local imageBtn = UI.getChildControl(imageBorder, "Static_Image_Button")
@@ -112,6 +126,7 @@ function expeditionSettingInfo:createControl()
     settingBG._image = image
     local imageInfo = UI.getChildControl(imageBorder, "StaticText_Info")
     settingBG._imageInfo = imageInfo
+    settingBG._imageInfo:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self._settingBG[ii] = settingBG
   end
   deleteControl(self._ui._baseBG)
@@ -119,19 +134,26 @@ function expeditionSettingInfo:createControl()
 end
 function expeditionSettingInfo:open()
   PaGlobalFunc_ExpeditionSettingInfo_ClickRadioButton(0)
+  expeditionSettingInfo:initSetting()
+  PaGlobalFunc_ExpeditionUpdateSupplySetting()
+  Panel_ArmyUnitSetting:SetShow(true)
+end
+function expeditionSettingInfo:initSetting()
+  if nil ~= ToClient_updateExpeditionSelfPlayerTotalStatValue() then
+    ToClient_updateExpeditionSelfPlayerTotalStatValue()
+  end
   for ii = 0, self._config._bgMaxCount - 1 do
     local expeditionInfo = ToClient_getExpeditionInfo(ii)
     if nil ~= expeditionInfo then
       PaGlobalFunc_ExpeditionSettingInfo_SelectCharacterSet(ii, expeditionInfo._characterNo)
       PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, expeditionInfo._unitNo)
-      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, expeditionInfo._groupKey)
+      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, expeditionInfo._groupKey, expeditionInfo._unitNo)
     end
   end
-  PaGlobalFunc_ExpeditionUpdateSupplySetting()
-  Panel_ArmyUnitSetting:SetShow(true)
 end
 function expeditionSettingInfo:close()
   Panel_ArmyUnitSetting:SetShow(false)
+  Panel_NumberPad_Close()
 end
 function expeditionSettingInfo:isRepetition()
   for ii = 0, self._config._bgMaxCount - 1 do
@@ -141,12 +163,14 @@ function expeditionSettingInfo:isRepetition()
       if nil ~= info1._characterNo and nil ~= info1._unitNo and info1._groupKey and nil ~= info2._characterNo and nil ~= info2._unitNo and info2._groupKey then
         if info1._characterNo == info2._characterNo then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_DUPLICATION_MESSAGE1"))
+          return 1
         elseif info1._unitNo == info2._unitNo then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_DUPLICATION_MESSAGE2"))
+          return 1
         elseif info1._groupKey == info2._groupKey then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_DUPLICATION_MESSAGE3"))
+          return 1
         end
-        return 1
       end
     end
   end
@@ -215,6 +239,7 @@ end
 function PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(index, unitNo)
   local myUnit = ToClient_getMyExpeditionUnitInfo(unitNo)
   if nil == myUnit then
+    PaGlobalFunc_ExpeditionSettingInfo_Reset(index)
     return
   end
   local self = expeditionSettingInfo
@@ -235,13 +260,13 @@ function PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(index, unitNo)
   textLevel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_LEVEL", "level", level))
   local expRate = curExp / maxExp * 100
   expValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_EXP", "exp", tostring(expRate)))
-  guageBar:SetProgressRate(expRate)
+  guageBar:SetProgressRate(curExp)
   textStatus:SetShow(true)
   textStatus:SetText(PAGetStringParam4(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_ENERGY", "unitname", unitName, "attack", atkPoint, "curenergy", curEnergyPoint, "maxenergy", maxEnergy))
   self._selectInfo[index]._unitNo = myUnit._expeditionUnitNo
   self._selectInfo[index]._reset = false
 end
-function PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(index, groupKey)
+function PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(index, groupKey, unitNo)
   local regionWrapper = ToClient_getExpeditionRegionWrapper(groupKey)
   if nil == regionWrapper then
     return
@@ -251,6 +276,23 @@ function PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(index, groupKey)
   self._settingBG[index]._areaDesc:SetText(desc)
   self._selectInfo[index]._groupKey = groupKey
   self._selectInfo[index]._reset = false
+  local myUnit = ToClient_getMyExpeditionUnitInfo(unitNo)
+  if nil ~= myUnit then
+    local curEnergyPoint = myUnit._energyPoint
+    if curEnergyPoint <= 0 then
+      self._settingBG[index]._warningText1:SetShow(true)
+    else
+      self._settingBG[index]._warningText1:SetShow(falses)
+    end
+  else
+    self._settingBG[index]._warningText1:SetShow(false)
+  end
+  local combatPoint = ToClient_getExpeditionTotalCombatPoint(index)
+  if false == self._settingBG[index]._warningText1:GetShow() and combatPoint < regionWrapper:getRecommendCombatPoint() then
+    self._settingBG[index]._warningText2:SetShow(true)
+  else
+    self._settingBG[index]._warningText2:SetShow(false)
+  end
 end
 function PaGlobalFunc_ExpeditionSettingInfo_GetMyCharacterData(characterNo)
   local charList = ToClient_getMyCharacterInfo()
@@ -281,7 +323,7 @@ function PaGlobalFunc_ExpeditionSettingInfo_SelectCharacterSet(index, characterN
   else
   end
   image:setRenderTexture(image:getBaseTexture())
-  travelValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_COMBATPOINT", "value", tostring(myCharData._totalStatValue)))
+  travelValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_COMBATPOINT", "value", tostring(math.floor(myCharData._totalStatValue))))
   settingBG._imageInfo:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_LEVEL_CHARACTERNAME", "level", myCharData._level, "name", charName))
   self._selectInfo[index]._characterNo = myCharData._characterNo
   self._selectInfo[index]._reset = false
@@ -386,25 +428,33 @@ end
 function PaGlobalFunc_ExpeditionSettingInfo_ClickRewardItem()
   PaGlobalFunc_ExpeditionRewardItemInfo_Open()
 end
+function PaGlobalFunc_ExpeditionSettingInfo_ClickReport()
+  PaGlobalFunc_ExpeditionReportInfo_Open()
+end
+function PaGlobalFunc_SellExpeditionUnit(unitNo)
+  ToClient_sellExpeditionUnit(unitNo)
+end
 function PaGlobalFunc_ExpeditionUpdateSupplySetting()
   local self = expeditionSettingInfo
   local totalPoint = ToClient_getExpeditionTotalSupplyEnergy()
   self._ui._txt_supply:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_SUPPLYPOINT_REMAIN", "value", tostring(totalPoint)))
 end
-function FromClient_registerExpeditionSuccess()
+function FromClient_registExpeditionSuccess()
   local self = expeditionSettingInfo
   if false == self._isShowMessageRegisterExpedition then
     self._isShowMessageRegisterExpedition = true
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_SUCCESS_SAVE"))
   end
+  expeditionSettingInfo:initSetting()
 end
 function FromClient_fillExpeditionSuccess(unitNo)
   local self = expeditionSettingInfo
-  for ii = 0, self._config._bgMaxCount - 1 do
-    if unitNo == self._selectInfo[ii]._unitNo then
-      PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, unitNo)
-    end
-  end
+  expeditionSettingInfo:initSetting()
+  PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
+end
+function FromClient_sellExpeditionSuccess(unitNo)
+  local self = expeditionSettingInfo
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_SELL_UNIT_SUCCESS"))
   PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
 end
 function FromClient_refreshExpeditionSupplyPoint()
@@ -419,18 +469,13 @@ function FromClient_updateExpeditionUnitSuccess()
   local self = expeditionSettingInfo
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_UPDATE_UNIT_SUCCESS"))
   PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
-  for ii = 0, self._config._bgMaxCount - 1 do
-    local expeditionInfo = ToClient_getExpeditionInfo(ii)
-    if nil ~= expeditionInfo then
-      PaGlobalFunc_ExpeditionSettingInfo_SelectCharacterSet(ii, expeditionInfo._characterNo)
-      PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, expeditionInfo._unitNo)
-      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, expeditionInfo._groupKey)
-    end
-  end
+  expeditionSettingInfo:initSetting()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_ExpeditionSettingInfo_Initialize")
+registerEvent("FromClient_registExpeditionSuccess", "FromClient_registExpeditionSuccess")
 registerEvent("FromClient_registerExpeditionSuccess", "FromClient_registerExpeditionSuccess")
 registerEvent("FromClient_fillExpeditionSuccess", "FromClient_fillExpeditionSuccess")
+registerEvent("FromClient_sellExpeditionSuccess", "FromClient_sellExpeditionSuccess")
 registerEvent("FromClient_refreshExpeditionSupplyPoint", "FromClient_refreshExpeditionSupplyPoint")
 registerEvent("FromClient_registerExpeditionUnitSuccess", "FromClient_registerExpeditionUnitSuccess")
 registerEvent("FromClient_updateExpeditionUnitSuccess", "FromClient_updateExpeditionUnitSuccess")

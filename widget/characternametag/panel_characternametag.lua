@@ -1175,7 +1175,11 @@ function ShowUseTab_Func()
   end
 end
 function HideUseTab_Func()
-  local targetPanel = getSelfPlayer():get():getUIPanel()
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  local targetPanel = selfPlayer:get():getUIPanel()
   if nil == targetPanel then
     return
   end

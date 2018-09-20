@@ -38,12 +38,14 @@ function randomWorker:initControl()
   RandomWorkerUI._staticText_Cost_Title = UI.getChildControl(RandomWorkerUI._static_CenterBg, "StaticText_Cost_Title")
   RandomWorkerUI._staticText_Cost_Value = UI.getChildControl(RandomWorkerUI._static_CenterBg, "StaticText_Cost_Value")
   RandomWorkerUI._static_Cost_Icon = UI.getChildControl(RandomWorkerUI._static_CenterBg, "Static_Cost_Icon")
-  RandomWorkerUI._radioButton_InventoryMoney = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "RadioButton_InventoryMoney")
-  RandomWorkerUI._staticText_InventoryMoneyValue = UI.getChildControl(RandomWorkerUI._radioButton_InventoryMoney, "StaticText_InventoryValue")
-  RandomWorkerUI._radioButton_WarehouseMoney = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "RadioButton_WarehouseMoney")
-  RandomWorkerUI._staticText_WarehouseMoneyValue = UI.getChildControl(RandomWorkerUI._radioButton_WarehouseMoney, "StaticText_WhareHouseValue")
-  RandomWorkerUI._radioButton_InventoryMoney:addInputEvent("Mouse_On", "FromClient_MoneyButtonOn( true )")
-  RandomWorkerUI._radioButton_WarehouseMoney:addInputEvent("Mouse_On", "FromClient_MoneyButtonOn( false)")
+  RandomWorkerUI._button_InventoryMoney = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "Button_InventoryMoney")
+  RandomWorkerUI._staticText_InventoryMoneyValue = UI.getChildControl(RandomWorkerUI._button_InventoryMoney, "StaticText_InventoryValue")
+  RandomWorkerUI._chk_InventoryMoney = UI.getChildControl(RandomWorkerUI._button_InventoryMoney, "CheckButton_1")
+  RandomWorkerUI._button_WarehouseMoney = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "Button_WarehouseMoney")
+  RandomWorkerUI._staticText_WarehouseMoneyValue = UI.getChildControl(RandomWorkerUI._button_WarehouseMoney, "StaticText_WhareHouseValue")
+  RandomWorkerUI._chk_WarehouseMoney = UI.getChildControl(RandomWorkerUI._button_WarehouseMoney, "CheckButton_1")
+  RandomWorkerUI._button_InventoryMoney:addInputEvent("Mouse_On", "Input_RandomWorker_MouseOverMoneyCheck( true )")
+  RandomWorkerUI._button_WarehouseMoney:addInputEvent("Mouse_On", "Input_RandomWorker_MouseOverMoneyCheck( false)")
   RandomWorkerUI._static_BottomBg = UI.getChildControl(RandomWorkerUI._static_Worker_BG, "Static_BottomBg")
   RandomWorkerUI._staticText_Change_Worker = UI.getChildControl(RandomWorkerUI._static_BottomBg, "StaticText_Change_Worker")
   RandomWorkerUI._staticText_Hire = UI.getChildControl(RandomWorkerUI._static_BottomBg, "StaticText_Hire")
@@ -171,15 +173,15 @@ function randomWorker:update(workerShopSlotNo)
   end
   if ToClient_HasWareHouseFromNpc() then
     if toInt64(0, 0) == warehouse_moneyFromNpcShop_s64() then
-      RandomWorkerUI._radioButton_InventoryMoney:SetCheck(true)
-      RandomWorkerUI._radioButton_WarehouseMoney:SetCheck(false)
+      RandomWorkerUI._chk_InventoryMoney:SetCheck(true)
+      RandomWorkerUI._chk_WarehouseMoney:SetCheck(false)
     else
-      RandomWorkerUI._radioButton_InventoryMoney:SetCheck(false)
-      RandomWorkerUI._radioButton_WarehouseMoney:SetCheck(true)
+      RandomWorkerUI._chk_InventoryMoney:SetCheck(false)
+      RandomWorkerUI._chk_WarehouseMoney:SetCheck(true)
     end
   else
-    RandomWorkerUI._radioButton_InventoryMoney:SetCheck(false)
-    RandomWorkerUI._radioButton_WarehouseMoney:SetCheck(true)
+    RandomWorkerUI._chk_InventoryMoney:SetCheck(false)
+    RandomWorkerUI._chk_WarehouseMoney:SetCheck(true)
   end
 end
 function randomWorker:hire()
@@ -189,7 +191,7 @@ function randomWorker:hire()
   local myWareHouseMoney = warehouse_moneyFromNpcShop_s64()
   local function Worker_RequestDoBuy()
     local fromWhereType = CppEnums.ItemWhereType.eWarehouse
-    if true == RandomWorkerUI._radioButton_InventoryMoney:IsCheck() then
+    if true == RandomWorkerUI._chk_InventoryMoney:IsCheck() then
       fromWhereType = CppEnums.ItemWhereType.eInventory
     end
     npcShop_doBuy(self._selectWorkerSlotNo, 1, fromWhereType, 0, false)
@@ -199,7 +201,7 @@ function randomWorker:hire()
   local Worker_RequestCanle = function()
     Panel_Dialog_RandomWorker:SetShow(true)
   end
-  if myInvenMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_InventoryMoney:IsCheck() or myWareHouseMoney < self._selectWorkerPrice and RandomWorkerUI._radioButton_WarehouseMoney:IsCheck() then
+  if myInvenMoney < self._selectWorkerPrice and RandomWorkerUI._chk_InventoryMoney:IsCheck() or myWareHouseMoney < self._selectWorkerPrice and RandomWorkerUI._chk_WarehouseMoney:IsCheck() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEMANAGEMENT_ACK_MAKEBOOK"))
   else
     Panel_Dialog_RandomWorker:SetShow(false)
@@ -255,15 +257,15 @@ function randomWorker:getNextWorker()
 end
 function randomWorker:moneyButtonOn(isInventyroy)
   local RandomWorkerUI = self._ui
-  RandomWorkerUI._radioButton_InventoryMoney:SetCheck(isInventyroy)
-  RandomWorkerUI._radioButton_WarehouseMoney:SetCheck(not isInventyroy)
+  RandomWorkerUI._chk_InventoryMoney:SetCheck(isInventyroy)
+  RandomWorkerUI._chk_WarehouseMoney:SetCheck(not isInventyroy)
 end
 function randomWorker:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_RandomWorker")
   registerEvent("FromClient_EventRandomShopShow", "FGlobalFunc_Open_RandomWorker")
   registerEvent("FromClient_ChangeWorkerCount", "FromClient_ChangeWorkerCount")
 end
-function FromClient_MoneyButtonOn(isInventyroy)
+function Input_RandomWorker_MouseOverMoneyCheck(isInventyroy)
   randomWorker:moneyButtonOn(isInventyroy)
 end
 function FromClient_luaLoadComplete_RandomWorker()

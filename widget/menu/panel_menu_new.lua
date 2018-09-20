@@ -449,7 +449,7 @@ PaGlobal_Menu._bannerData = {
       _isContentOpen = isGameTypeKorea()
     },
     [PaGlobal_Menu._bannerNew._expedition] = {
-      _string = PAGetString(Defines.StringSheet_RESOURCE, "LUA_MENU_EXPEDITION"),
+      _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXPEDITION"),
       _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds",
       _x1 = 189,
       _y1 = 523,
@@ -792,7 +792,7 @@ PaGlobal_Menu._categoryData = {
       _index = 63
     },
     [PaGlobal_Menu._contents._expedition] = {
-      _string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BLACKDESERTLAB_TITLE"),
+      _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXPEDITION"),
       _hotKey = "",
       _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
       _x1 = 498,
@@ -802,7 +802,7 @@ PaGlobal_Menu._categoryData = {
       _isContentOpen = PaGlobal_Menu._contentsGroup._isExpeditionOpen,
       _isNew = true,
       _isHot = false,
-      _index = 63
+      _index = 64
     },
     ["_name"] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_1"),
     ["_count"] = PaGlobal_Menu._contents._count
@@ -2679,7 +2679,6 @@ function PaGlobal_Menu:HandleClicked_Banner(isHot)
     elseif self._bannerNew._bossAlert == index then
       PaGlobal_BossAlertSet_Show()
     elseif self._bannerNew._expedition == index then
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "_expedition")
       PaGlobalFunc_ExpeditionSettingInfo_Open()
     end
   end

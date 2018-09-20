@@ -264,6 +264,7 @@ function HandleClickedGuildQuestClear_DontUseItem()
 end
 function HandleClickedGuildPreQuest()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_RequestGuildQuestList(true)
   GuildQuestInfoPage._preoccupancy = true
   GuildQuestInfoPage._btnPreocc:SetCheck(true)
@@ -274,6 +275,7 @@ function HandleClickedGuildPreQuest()
 end
 function HandleClickedGuildWideQuest()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_RequestGuildQuestList(false)
   GuildQuestInfoPage._preoccupancy = false
   GuildQuestInfoPage._btnPreocc:SetCheck(false)
@@ -284,6 +286,7 @@ function HandleClickedGuildWideQuest()
 end
 function HandleClickedGuildPreQuestInfo()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_RequestOtherGuildQuest()
   GuildQuestInfoPage._btnPreocc:SetCheck(false)
   GuildQuestInfoPage._btnWide:SetCheck(false)

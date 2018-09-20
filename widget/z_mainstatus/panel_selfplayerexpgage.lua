@@ -475,6 +475,7 @@ function PaGlobal_SelfPlayerExpGage:UserSkillPoint_Update()
   end
   if _lastSkillPoint < player:getRemainSkillPoint() and -1 ~= _lastSkillPoint then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListBool(CppEnums.GlobalUIOptionType.SkillIconCheck, true, CppEnums.VariableStorageType.eVariableStorageType_User)
     self._ui._StaticText_Sp:EraseAllEffect()
     self._ui._StaticText_Sp:AddEffect("UI_LevelUP_Skill", false, 0, 0)
@@ -515,6 +516,7 @@ function wpPoint_UpdateFunc()
   local wpSetProgress = Wp / maxWp * 100
   if Wp > _lastWP and -1 ~= _lastWP then
     audioPostEvent_SystemUi(3, 13)
+    _AudioPostEvent_SystemUiForXBOX(3, 13)
     PaGlobal_SelfPlayerExpGage._ui._StaticText_WP:EraseAllEffect()
     PaGlobal_SelfPlayerExpGage._ui._StaticText_WP:AddEffect("UI_LevelUP_Skill", false, 0, 0)
     PaGlobal_SelfPlayerExpGage._ui._StaticText_WP:AddEffect("fUI_LevelUP_Skill02", false, 0, 0)
@@ -549,11 +551,13 @@ function contributePoint_UpdateFunc()
   end
   if lastRemainExplorePoint ~= nowRemainExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     PaGlobal_SelfPlayerExpGage._ui._StaticText_ContributeP:EraseAllEffect()
     PaGlobal_SelfPlayerExpGage._ui._StaticText_ContributeP:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end
   if lastExplorePoint ~= nowExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
+    _AudioPostEvent_SystemUiForXBOX(3, 7)
     PaGlobal_SelfPlayerExpGage._ui._StaticText_ContributeP:EraseAllEffect()
     PaGlobal_SelfPlayerExpGage._ui._StaticText_ContributeP:AddEffect("UI_LevelUP_Skill", false, 0, 0)
   end

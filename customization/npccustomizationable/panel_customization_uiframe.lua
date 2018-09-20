@@ -149,7 +149,7 @@ end
 function CheckFaceCustomizationHair()
   setUseFaceCustomizationHair(CheckButton_UseFaceCustomizationHair:IsCheck())
 end
-function OpenCustomizationUiGroupFrame(classType, uiGroupIndex)
+function OpenCustomizationUiGroupFrame(uiGroupIndex)
   if true == _ContentsGroup_RenewUI_Customization then
     return
   end

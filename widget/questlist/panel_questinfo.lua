@@ -8,6 +8,7 @@ Panel_CheckedQuestInfo:RegisterShowEventFunc(true, "Panel_CheckedQuestInfo_ShowA
 Panel_CheckedQuestInfo:RegisterShowEventFunc(false, "Panel_CheckedQuestInfo_HideAni()")
 function Panel_CheckedQuestInfo_ShowAni()
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   Panel_CheckedQuestInfo:SetAlpha(0)
   UIAni.AlphaAnimation(1, Panel_CheckedQuestInfo, 0, 0.15)
   local aniInfo1 = Panel_CheckedQuestInfo:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
@@ -27,6 +28,7 @@ function Panel_CheckedQuestInfo_ShowAni()
 end
 function Panel_CheckedQuestInfo_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_CheckedQuestInfo:SetAlpha(1)
   local aniInfo1 = UIAni.AlphaAnimation(0, Panel_CheckedQuestInfo, 0, 0.1)
   aniInfo1:SetHideAtEnd(true)
@@ -360,6 +362,7 @@ function FGlobal_QuestInfoDetail_Close()
   FGlobal_QuestInfoDetail_ResetInfo()
   FGlobal_ResetUrl_Tooltip_SkillForLearning()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function FGlobal_QuestInfoDetail_ResetInfo()
   _questInfoDetailGroupId = 0

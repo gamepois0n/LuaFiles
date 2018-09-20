@@ -152,6 +152,7 @@ function PaGlobal_Tooltip_BattlePoint:show(showFlag)
 end
 function PaGlobal_Tooltip_BattlePoint:toggleDetail()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._isDetail = not self._isDetail
   self:updateUIPos()
   self:updateData()

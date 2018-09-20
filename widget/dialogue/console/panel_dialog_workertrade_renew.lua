@@ -49,12 +49,16 @@ function workerTrade:initControl()
   workerTradeUI._radioButton_Regi = UI.getChildControl(workerTradeUI._static_Tap_Group, "RadioButton_Regi")
   workerTradeUI._static_Key_Guide = UI.getChildControl(workerTradeUI._static_Inner_BG, "Static_Key_Guide")
   workerTradeUI._staticText_Page_Text = UI.getChildControl(workerTradeUI._static_Key_Guide, "StaticText_Page_Text")
-  workerTradeUI._radioButton_Silver_Inventory = UI.getChildControl(workerTradeUI._static_Inner_BG2, "RadioButton_Silver_Inventory")
-  workerTradeUI._radioButton_Silver_Inventory:addInputEvent("Mouse_On", "WorkerTrade_CloseWorkerSkillToolTip()")
-  workerTradeUI._staticText_Silver_Inventory = UI.getChildControl(workerTradeUI._radioButton_Silver_Inventory, "StaticText_Silver")
-  workerTradeUI._radioButton_Silver_Storage = UI.getChildControl(workerTradeUI._static_Inner_BG2, "RadioButton_Silver_Storage")
-  workerTradeUI._radioButton_Silver_Storage:addInputEvent("Mouse_On", "WorkerTrade_CloseWorkerSkillToolTip()")
-  workerTradeUI._staticText_Silver_Storage = UI.getChildControl(workerTradeUI._radioButton_Silver_Storage, "StaticText_Silver")
+  workerTradeUI._button_Silver_Inventory = UI.getChildControl(workerTradeUI._static_Inner_BG2, "Button_Silver_Inventory")
+  workerTradeUI._button_Silver_Inventory:addInputEvent("Mouse_On", "WorkerTrade_CloseWorkerSkillToolTip()")
+  workerTradeUI._button_Silver_Inventory:addInputEvent("Mouse_LUp", "WorkerTrade_ClickOnMoneyWhereType(true)")
+  workerTradeUI._staticText_Silver_Inventory = UI.getChildControl(workerTradeUI._button_Silver_Inventory, "StaticText_Silver")
+  workerTradeUI._chk_Silver_Inventory = UI.getChildControl(workerTradeUI._button_Silver_Inventory, "CheckButton_1")
+  workerTradeUI._button_Silver_Storage = UI.getChildControl(workerTradeUI._static_Inner_BG2, "Button_Silver_Storage")
+  workerTradeUI._button_Silver_Storage:addInputEvent("Mouse_On", "WorkerTrade_CloseWorkerSkillToolTip()")
+  workerTradeUI._button_Silver_Storage:addInputEvent("Mouse_LUp", "WorkerTrade_ClickOnMoneyWhereType(false)")
+  workerTradeUI._staticText_Silver_Storage = UI.getChildControl(workerTradeUI._button_Silver_Storage, "StaticText_Silver")
+  workerTradeUI._chk_Silver_Storage = UI.getChildControl(workerTradeUI._button_Silver_Storage, "CheckButton_1")
   workerTradeUI._static_WorkerSlotBg = UI.getChildControl(workerTradeUI._static_Inner_BG, "Static_WorkerSlotBg")
   workerTradeUI._radioButton_BG = UI.getChildControl(workerTradeUI._static_WorkerSlotBg, "RadioButton_BG")
   workerTradeUI._radioButton_BG:SetShow(false)
@@ -107,8 +111,8 @@ function workerTrade:resetData()
   self._currentPage = 1
   self._plantKey = nil
   self._workerAuction = nil
-  self._ui._radioButton_Silver_Inventory:SetCheck(true)
-  self._ui._radioButton_Silver_Storage:SetCheck(false)
+  self._ui._chk_Silver_Inventory:SetCheck(true)
+  self._ui._chk_Silver_Storage:SetCheck(false)
   workerTrade:resetPageData()
 end
 function workerTrade:setPlayerData()
@@ -394,7 +398,7 @@ function workerTrade:buyWorker(workerIndex)
   local function WorkerAuction_BuyXXX()
     PaGlobalFunc_WorkerTrade_TemporaryOpen()
     local fromWhereType = CppEnums.ItemWhereType.eInventory
-    if self._ui._radioButton_Silver_Storage:IsCheck() then
+    if self._ui._chk_Silver_Storage:IsCheck() then
       fromWhereType = CppEnums.ItemWhereType.eWarehouse
     end
     local workerNoRaw = self._workerAuction:getWorkerAuction(self._selectedWorker)
@@ -416,7 +420,7 @@ function workerTrade:getPrice(workerIndex)
   local auctionInfo = self._workerAuction
   local workerNoRaw = auctionInfo:getWorkerAuction(workerIndex)
   local fromWhereType = CppEnums.ItemWhereType.eInventory
-  if self._ui._radioButton_Silver_Storage:IsCheck() then
+  if self._ui._chk_Silver_Storage:IsCheck() then
     fromWhereType = CppEnums.ItemWhereType.eWarehouse
   end
   auctionInfo:requestPopWorkerPrice(workerNoRaw, fromWhereType)
@@ -645,6 +649,11 @@ function WorkerTrade_OpenWorkerSkillToolTip(workerIndex)
 end
 function WorkerTrade_CloseWorkerSkillToolTip()
   workerTrade:closeWorkerSkillToolTip()
+end
+function WorkerTrade_ClickOnMoneyWhereType(isInven)
+  local self = workerTrade
+  self._ui._chk_Silver_Inventory:SetCheck(isInven)
+  self._ui._chk_Silver_Storage:SetCheck(not isInven)
 end
 function WorkerTrade_RegistWorkerToMarket(workerIndex)
   workerTrade:registWorkerToMarket(workerIndex)

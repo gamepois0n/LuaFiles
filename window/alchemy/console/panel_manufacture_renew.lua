@@ -224,6 +224,7 @@ function manufacture:changeAction(diffIndex)
 end
 function PaGlobalFunc_ManufactureChangeAction(diffIndex)
   if manufacture:changeAction(diffIndex) then
+    _AudioPostEvent_SystemUiForXBOX(51, 6)
     return manufacture:update()
   end
 end

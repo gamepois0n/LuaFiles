@@ -159,7 +159,9 @@ function ExecuteFunction.PartySetting()
   Process_UIMode_CommonWindow_PartySetting()
 end
 function ExecuteFunction.BeautyAlbum()
-  FGlobal_CustomizingAlbum_Show(false, CppEnums.ClientSceneState.eClientSceneStateType_InGame)
+  if true == _ContentsGroup_RenewUI_BeautyAlbum then
+    FGlobal_CustomizingAlbum_Show(false, CppEnums.ClientSceneState.eClientSceneStateType_InGame)
+  end
 end
 function ExecuteFunction.PhotoGallery()
   ScreenshotAlbum_Open()
@@ -491,11 +493,11 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y2 = 393
     },
     [Type.BeautyAlbum] = {
-      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
-      _x1 = 64,
-      _y1 = 374,
-      _x2 = 124,
-      _y2 = 434
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 358,
+      _y1 = 241,
+      _x2 = 408,
+      _y2 = 291
     },
     [Type.PhotoGallery] = {
       _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
@@ -526,11 +528,11 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y2 = 496
     },
     [Type.Manufacture] = {
-      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
-      _x1 = 126,
-      _y1 = 188,
-      _x2 = 186,
-      _y2 = 248
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 358,
+      _y1 = 292,
+      _x2 = 408,
+      _y2 = 342
     },
     [Type.TogglePVP] = {
       _path = "Renewal/Function/Console_Function_RingMenu.dds",
@@ -547,11 +549,11 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
       _y2 = 240
     },
     [Type.Dyeing] = {
-      _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
-      _x1 = 2,
-      _y1 = 126,
-      _x2 = 62,
-      _y2 = 186
+      _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
+      _x1 = 256,
+      _y1 = 241,
+      _x2 = 306,
+      _y2 = 291
     }
   }
 }
@@ -640,7 +642,7 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._ContentOption = {
     [Type.Friend] = true,
     [Type.PearlShop] = false,
     [Type.PartySetting] = true,
-    [Type.BeautyAlbum] = true,
+    [Type.BeautyAlbum] = false,
     [Type.PhotoGallery] = false,
     [Type.ProductNote] = false,
     [Type.GuildRank] = false,

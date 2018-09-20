@@ -64,6 +64,13 @@ function PaGlobal_GlobalKeyBinder:Init()
   self:Register(UIMode.eUIMode_KeyCustom_ButtonShortcuts, self.Process_UIMode_KeyCustom_ButtonShortcuts)
   self:Register(UIMode.eUIMode_SkillWindow, self.Process_UIMode_SkillWindow)
 end
+local checkScreenIsNotFading = function()
+  if nil == PaGlobalFunc_FullScreenFade_IsFading then
+    return true
+  else
+    return not PaGlobalFunc_FullScreenFade_IsFading()
+  end
+end
 function PaGlobal_GlobalKeyBinder:Update(deltaTime)
   local curUIMode = GetUIMode()
   local rv
@@ -85,6 +92,9 @@ function PaGlobal_GlobalKeyBinder:Update(deltaTime)
   end
   if nil == self._uiMode[curUIMode] or nil == self._uiMode[curUIMode]._keyBinderData then
     self:Clear()
+    return
+  end
+  if false == checkScreenIsNotFading() then
     return
   end
   local KeyBinder = self._uiMode[curUIMode]._keyBinderData

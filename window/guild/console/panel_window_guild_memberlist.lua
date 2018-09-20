@@ -28,6 +28,7 @@ function GuildMemberList:SetMemberInfo()
     _PA_ASSERT(false, "\234\184\184\235\147\156 \236\160\149\235\179\180\234\176\128 \236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList:SetMemberInfo")
     return
   end
+  ToClient_updateXboxGuildUserGamerTag()
   local memberCount = guildInfo:getMemberCount()
   for memberIdx = 0, memberCount - 1 do
     local memberInfo = guildInfo:getMember(memberIdx)
@@ -47,9 +48,17 @@ function GuildMemberList:SetMemberInfo()
         _userNo = memberInfo:getUserNo(),
         _contractable = memberInfo:getContractableUtc(),
         _saying = memberInfo:isVoiceChatSpeak(),
-        _hearing = memberInfo:isVoiceChatListen()
+        _permissionHas = memberInfo:isVoicePermissionHas(),
+        _gamerTag = ToClient_getXboxGuildUserGamerTag(memberInfo:getUserNo())
       }
-      self._memberListInfo[memberIdx] = info
+      if memberInfo:getUserNo() == getSelfPlayer():get():getUserNo() then
+        info._hearing = memberInfo:isVoiceChatListen()
+      elseif 0 < memberInfo:getVoiceVolume() then
+        info._hearing = true
+      else
+        info._hearing = false
+      end
+      self._memberListInfo[memberIdx + 1] = info
     end
   end
 end
@@ -74,6 +83,7 @@ function GuildMemberList:registEvent()
   self._ui.list_MemberList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_GuildMemberList_CreateControl")
   self._ui.list_MemberList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   registerEvent("FromClient_GuildListUpdate", "FromClient_GuildMemberList_GuildListUpdate")
+  registerEvent("FromClient_VoiceChatState", "FromClient_GuildMemberList_RequestClearAndUpdateMember")
   registerEvent("FromClient_RequestExpelMemberFromGuild", "FromClient_GuildMemberList_RequestClearAndUpdateMember")
   registerEvent("FromClient_ResponseGuildMasterChange", "FromClient_GuildMemberList_ResponseGuildMasterChange")
   registerEvent("FromClient_RequestChangeGuildMemberGrade", "FromClient_GuildMemberList_RequestChangeMemberGrade")
@@ -86,13 +96,8 @@ end
 function GuildMemberList:clearAndUpdateList()
   PaGlobalFunc_GuildMemberList_MemberSort(0)
   self._ui.list_MemberList:getElementManager():clearKey()
-  for memberIdx = 0, #self._memberListInfo do
+  for memberIdx = 0, #self._memberListInfo - 1 do
     self._ui.list_MemberList:getElementManager():pushKey(toInt64(0, memberIdx))
-  end
-end
-function GuildMemberList:updateList()
-  for memberIdx = 0, #self._memberListInfo do
-    self._ui.list_MemberList:getElementManager():requestUpdateByKey(toInt64(0, memberIdx))
   end
 end
 function PaGlobalFunc_GuildMemberList_Open()
@@ -109,16 +114,17 @@ function PaGlobalFunc_GuildMemberList_GetMemberInfoWithIndex(index)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
     return
   end
-  return self._memberListInfo[index]
+  return self._memberListInfo[index + 1]
 end
-function PaGlobalFunc_GuildMemberList_MemberVoiceUpdate(index, isSaying, isHearing)
+function PaGlobalFunc_GuildMemberList_MemberVoiceUpdate(index, isSaying, isHearing, isForce)
   local self = GuildMemberList
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
     return
   end
-  self._memberListControlData[index].check_Mice:SetCheck(isSaying)
+  self._memberListControlData[index].check_Mice:SetCheck(true ~= isForce and false ~= isSaying)
   self._memberListControlData[index].check_Headphone:SetCheck(isHearing)
+  self._memberListControlData[index].stc_HasNoMicPermission:SetShow(not isForce or not isSaying)
 end
 function PaGlobalFunc_GuildMemberList_Init()
   local self = GuildMemberList
@@ -160,7 +166,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     return
   end
   local memberIdx = Int64toInt32(key)
-  local memberInfo = self._memberListInfo[memberIdx]
+  local memberInfo = self._memberListInfo[memberIdx + 1]
   if nil == memberInfo then
     return
   end
@@ -171,6 +177,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   local txt_Name = UI.getChildControl(content, "StaticText_Name")
   local txt_Class = UI.getChildControl(content, "StaticText_Class")
   local stc_Contract = UI.getChildControl(content, "Static_Contract")
+  control.stc_HasNoMicPermission = UI.getChildControl(content, "Static_Cant")
   control.check_Mice = UI.getChildControl(content, "CheckButton_Mice")
   control.check_Headphone = UI.getChildControl(content, "CheckButton_Headphone")
   txt_Grade:ChangeTextureInfoName("renewal/ui_icon/console_icon_guild_00.dds")
@@ -199,7 +206,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Grade:SetFontColor(_enableColor)
     txt_Level:SetText(memberInfo._level)
     txt_Level:SetFontColor(_enableColor)
-    txt_Name:SetText(memberInfo._name .. " (" .. memberInfo._charName .. ")")
+    txt_Name:SetText(memberInfo._name .. " (" .. memberInfo._charName .. ") (" .. memberInfo._gamerTag .. ")")
     txt_Name:SetFontColor(_enableColor)
     txt_Class:SetText(CppEnums.ClassType2String[memberInfo._class])
     txt_Class:SetFontColor(_enableColor)
@@ -224,6 +231,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   else
     stc_Contract:SetColor(Defines.Color.C_FF309BF5)
   end
+  control.stc_HasNoMicPermission:SetShow(not memberInfo._permissionHas)
   self._memberListControlData[memberIdx] = control
   btn_GuildSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildMemberList_MemberFunctionOpen(" .. memberIdx .. ")")
 end
@@ -241,16 +249,17 @@ function FromClient_GuildMemberList_GuildListUpdate(userNo)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
     return
   end
+  self:SetMemberInfo()
+  PaGlobalFunc_GuildMemberList_MemberSort(0)
   local requestIdx
-  for idx = 0, #self._memberListInfo do
-    if userNo == self._memberListInfo[idx]._userNo then
-      requestIdx = self._memberListInfo[idx]._idx
+  for idx = 0, #self._memberListInfo - 1 do
+    if userNo == self._memberListInfo[idx + 1]._userNo then
+      requestIdx = idx
     end
   end
   if nil == requestIdx then
     return
   end
-  self:SetMemberInfo()
   self._ui.list_MemberList:requestUpdateByKey(toInt64(0, requestIdx))
 end
 function FromClient_GuildMemberList_RequestClearAndUpdateMember()

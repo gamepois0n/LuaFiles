@@ -166,6 +166,11 @@ if isWarGradeOpen then
   staticText_WarGrade:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 7 .. " )")
   staticText_WarGrade:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 5 .. " )")
   staticText_WarGrade:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 5 .. " )")
+  if true == _ContentsGroup_NewSiegeRule then
+    staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE"))
+  else
+    staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE"))
+  end
 end
 local setVol_selectedMemberIdx = 0
 local setVol_selectedMemberVol = 0
@@ -198,7 +203,7 @@ function _guildListInfoPage_titleTooltipShow(isShow, titleType)
     control = staticText_WarGrade
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME")
     local desc2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC_2", "grade5", tostring(siegeGradeCount.grade5))
-    desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC", "grade1", tostring(siegeGradeCount.grade1), "grade2", tostring(siegeGradeCount.grade2), "grade3", tostring(siegeGradeCount.grade3), "grade4", tostring(siegeGradeCount.grade4)) .. desc2
+    desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC", "grade1", tostring(siegeGradeCount.grade1), "grade2", tostring(siegeGradeCount.grade2), "grade3", tostring(siegeGradeCount.grade3), "grade4", tostring(siegeGradeCount.grade4))
   end
   if true == isShow then
     registTooltipControl(control, Panel_Tooltip_SimpleText)
@@ -261,6 +266,13 @@ function _guildListInfoPage_MandateTooltipShow(isShow, titleType, controlIdx)
     TooltipSimple_Hide()
   end
 end
+function HandleOver_GuildFund_TooltipShow()
+  registTooltipControl(GuildListInfoPage._textBusinessFundsBG, Panel_Tooltip_SimpleText)
+  TooltipSimple_Show(GuildListInfoPage._textBusinessFundsBG, PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_GUILDMONEY"))
+end
+function HandleOver_GuildFund_TooltipHide()
+  TooltipSimple_Hide()
+end
 function GuildLogoutTimeConvert(s64_datetime)
   local s64_dayCycle = toInt64(0, 86400)
   local s64_hourCycle = toInt64(0, 3600)
@@ -294,6 +306,8 @@ function GuildListInfoPage:initialize()
   local _copyWarStateButton = UI.getChildControl(self._contentGuildList, "Button_WarState")
   local _copyButton = UI.getChildControl(Panel_Guild_List, "Button_Function")
   GuildListInfoPage._textBusinessFundsBG = UI.getChildControl(Panel_Guild_List, "StaticText_GuildMoney")
+  GuildListInfoPage._textBusinessFundsBG:addInputEvent("Mouse_On", "HandleOver_GuildFund_TooltipShow()")
+  GuildListInfoPage._textBusinessFundsBG:addInputEvent("Mouse_Out", "HandleOver_GuildFund_TooltipHide()")
   GuildListInfoPage._btnGiveIncentive = UI.getChildControl(Panel_Guild_List, "Button_Incentive")
   GuildListInfoPage._btnDeposit = UI.getChildControl(Panel_Guild_List, "Button_Deposit")
   GuildListInfoPage._btnPaypal = UI.getChildControl(Panel_Guild_List, "Button_Paypal")
@@ -310,7 +324,7 @@ function GuildListInfoPage:initialize()
   GuildListInfoPage._btnDeposit:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Deposit()")
   GuildListInfoPage._btnPaypal:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Paypal()")
   GuildListInfoPage._btnWelfare:addInputEvent("Mouse_LUp", "HandleClicked_GuildListWelfare_Request()")
-  GuildListInfoPage._btnEndSiegeParticipant:addInputEvent("Mouse_LUp", "HandleClicked_GuildEndToParticipantAtSiege_Request()")
+  GuildListInfoPage._btnEndSiegeParticipant:addInputEvent("Mouse_LUp", "FGlobal_SetAttendanceWar_Open()")
   self._scrollBar = UI.getChildControl(self._frameGuildList, "VerticalScroll")
   UIScroll.InputEvent(self._scrollBar, "GuildListMouseScrollEvent")
   GuildListInfoPage._btnGiveIncentive:SetTextMode(UI_TM.eTextMode_LimitText)
@@ -1201,7 +1215,8 @@ function GuildListInfoPage:SetGuildList()
       wp = myGuildMemberInfo:getMaxWp(),
       kp = myGuildMemberInfo:getExplorationPoint(),
       userNo = myGuildMemberInfo:getUserNo(),
-      siegegrade = myGuildMemberInfo:getSiegeCombatantGrade()
+      siegegrade = myGuildMemberInfo:getSiegeCombatantGrade(),
+      siegeParticipant = myGuildMemberInfo:isSiegeParticipant()
     }
   end
 end
@@ -1283,7 +1298,23 @@ local function guildListCompareWp(w1, w2)
   end
 end
 local function guildListSiegeGrade(w1, w2)
-  if true == _listSort.siegegrade then
+  if true == _ContentsGroup_NewSiegeRule then
+    if true == _listSort.siegegrade then
+      if true == w2.siegeParticipant and false == w1.siegeParticipant then
+        return true
+      elseif false == w2.siegeParticipant and true == w1.siegeParticipant then
+        return false
+      else
+        return guildListCompareGrade(w1, w2)
+      end
+    elseif true == w1.siegeParticipant and false == w2.siegeParticipant then
+      return true
+    elseif false == w1.siegeParticipant and true == w2.siegeParticipant then
+      return false
+    else
+      return guildListCompareGrade(w1, w2)
+    end
+  elseif true == _listSort.siegegrade then
     if w2.siegegrade < w1.siegegrade then
       return true
     end
@@ -1362,7 +1393,15 @@ function HandleClicked_GuildListSort(sortType)
     end
     table.sort(tempGuildList, guildListCompareWp)
   elseif 7 == sortType then
-    if false == _listSort.siegegrade then
+    if true == _ContentsGroup_NewSiegeRule then
+      if false == _listSort.siegegrade then
+        staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\178")
+        _listSort.siegegrade = true
+      else
+        staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\188")
+        _listSort.siegegrade = false
+      end
+    elseif false == _listSort.siegegrade then
       staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE") .. "\226\150\178")
       _listSort.siegegrade = true
     else
@@ -1407,17 +1446,7 @@ function GuildListInfoPage:UpdateData()
   end
   local businessFunds_s64 = myGuildListInfo:getGuildBusinessFunds_s64()
   local guildGrade = myGuildListInfo:getGuildGrade()
-  if 1 == getServiceNationType() then
-    GuildListInfoPage._textBusinessFundsBG:SetText(PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_GUILDMONEY") .. [[
-
-<PAColor0xffffebbc>]] .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
-    if false == _initMoney then
-      _initMoney = true
-      GuildListInfoPage._textBusinessFundsBG:SetPosY(GuildListInfoPage._textBusinessFundsBG:GetPosY() - GuildListInfoPage._textBusinessFundsBG:GetSizeY() / 5 * 2)
-    end
-  else
-    GuildListInfoPage._textBusinessFundsBG:SetText(PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_GUILDMONEY") .. " <PAColor0xffffebbc>" .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
-  end
+  GuildListInfoPage._textBusinessFundsBG:SetText("<PAColor0xffffebbc>" .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
   local memberCount = myGuildListInfo:getMemberCount()
   local isGuildMaster = getSelfPlayer():get():isGuildMaster()
   local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
@@ -1479,7 +1508,6 @@ function GuildListInfoPage:UpdateData()
     self._btnWelfare:SetShow(false)
     self._btnEndSiegeParticipant:SetShow(false)
   end
-  self._btnEndSiegeParticipant:SetText("\235\167\136\234\176\144" .. " (" .. tostring(myGuildListInfo:getSiegeParticipantCount()) .. "," .. myGuildListInfo:getMemberCount() .. ")")
 end
 function GuildListInfoPage:setGradeInfo(control, index, grade)
   if nil == control then
@@ -1634,13 +1662,11 @@ function GuildListInfoPage:setSiegeParticipant(index, guildMember, control, isMy
       control._warGradeBtn:SetShow(true)
       control._warStateBtn:SetShow(false)
       if guildMember:isSiegeParticipant() then
-        control._warGradeBtn:SetText(nonparticipantText)
-        control._warGradeBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiege( false )")
-        _PA_LOG("\237\155\132\236\167\132", "1")
-      else
         control._warGradeBtn:SetText(participantText)
+        control._warGradeBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiege( false )")
+      else
+        control._warGradeBtn:SetText(nonparticipantText)
         control._warGradeBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiege( true )")
-        _PA_LOG("\237\155\132\236\167\132", "2")
       end
     else
       control._warGradeBtn:SetShow(false)
@@ -2065,11 +2091,21 @@ if false == _ContentsGroup_RenewUI_Guild then
   registerEvent("FromClient_ResponseParticipateSiege", "FromClient_ResponseParticipateSiege")
   registerEvent("FromClient_ResponseEndToParticipationAtSiege", "FromClient_ResponseEndToParticipationAtSiege")
 end
-function FromClient_ResponseEndToParticipationAtSiege()
+function FromClient_ResponseEndToParticipationAtSiege(isEnd)
   GuildListInfoPage:UpdateData()
+  if true == isEnd then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NAKMESSAGE_ENDSIEGEPARTICIPANT"))
+  end
 end
-function FromClient_ResponseParticipateSiege()
+function FromClient_ResponseParticipateSiege(isParticipant, isSelf)
   GuildListInfoPage:UpdateData()
+  if true == isSelf then
+    if true == isParticipant then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NAKMESSAGE_PARTICIPANT"))
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NAKMESSAGE_NONPARTICIPANT"))
+    end
+  end
 end
 function FromClient_ResponseGuildMasterChange(userNo, targetNo)
   local userNum = Int64toInt32(getSelfPlayer():get():getUserNo())
@@ -2172,7 +2208,12 @@ function FGlobal_requestParticipateAtSiege(isparticipant)
   local function confirm()
     ToClient_resquestParticipateSiege(isparticipant)
   end
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_PARTICIPANT")
+  local messageBoxMemo
+  if true == isparticipant then
+    messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_PARTICIPANT")
+  else
+    messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_NONPARTICIPANT")
+  end
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
     content = messageBoxMemo,

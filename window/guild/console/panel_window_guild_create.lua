@@ -26,6 +26,7 @@ function GuildCreate:InitEvent()
   if false == _ContentsGroup_isConsolePadControl then
     self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
   end
+  self._ui._edit_GuildName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_GuildCreate_ClearFocus")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildCreate_SetFocus()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_GuildCreate_Confirm()")
 end
@@ -67,15 +68,17 @@ function PaGlobalFunc_GuildCreate_Confirm()
   PaGlobalFunc_GuildCreate_Close()
   ClearFocusEdit()
 end
-function PaGlobalFunc_GuildCreate_ClearFocus()
+function PaGlobalFunc_GuildCreate_ClearFocus(str)
   local self = GuildCreate
+  self._ui._edit_GuildName:SetEditText(str, true)
   ClearFocusEdit()
-  self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
+  self._ui._edit_GuildName:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildCreate_SetFocus()")
 end
 function PaGlobalFunc_GuildCreate_SetFocus()
   local self = GuildCreate
+  ClearFocusEdit()
   SetFocusEdit(self._ui._edit_GuildName)
-  self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_ClearFocus()")
+  self._ui._edit_GuildName:SetEditText(self._ui._edit_GuildName:GetEditText(), true)
 end
 function PaGlobalFunc_GuildCreate_Open(createGuildGrade)
   if true == PaGlobalFunc_GuildCreate_GetShow() then

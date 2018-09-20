@@ -80,6 +80,10 @@ function FGlobal_QnAWebLink_Open()
     ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_TH_REAL"), false)
   elseif isGameTypeID() then
     ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_ID_REAL"), false)
+  elseif isGameTypeJapan() then
+    local userID = ToClient_GetUserId()
+    local url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_JP_REAL", "userNo", userID)
+    ToClient_OpenChargeWebPage(url, false)
   else
     ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL"), false)
   end

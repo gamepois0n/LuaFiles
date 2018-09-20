@@ -16,8 +16,7 @@ local columnHeight = Frame_ContentImage:GetSizeY() + meshImageGap
 local contentsOffsetX = 10
 local contentsOffsetY = 10
 local texSize = 48
-local selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, wizardPrevFaceTypeIndex
-local currentclassType = -1
+local selectedListParamType, selectedListParamIndex, selectedItemIndex, wizardPrevFaceTypeIndex
 local currentuiId = -1
 registerEvent("EventOpenSelectMeshUi", "OpenSelectMeshUi")
 registerEvent("EventCloseSelectMeshUi", "CloseSelectMeshUi")
@@ -41,20 +40,16 @@ local function clearMeshUI()
   ContentImage = {}
 end
 function CloseSelectMeshUi()
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
 end
-function OpenSelectMeshUi(classType, uiId)
+function OpenSelectMeshUi(uiId)
   if true == _ContentsGroup_RenewUI_Customization then
     return
   end
   clearMeshUI()
   paramValueList = {}
-  globalcurrentclassType = classType
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
-  selectedClassType = classType
   local defaultContentsIndex = 0
   local listCount = getUiListCount(uiId, defaultContentsIndex)
   local detailListCount = getUiDetailListCount(uiId, defaultContentsIndex)
@@ -64,7 +59,7 @@ function OpenSelectMeshUi(classType, uiId)
     local listTexture = getUiListTextureName(uiId, defaultContentsIndex, listIndex)
     local listParamType = getUiListParamType(uiId, defaultContentsIndex, listIndex)
     local listParamIndex = getUiListParamIndex(uiId, defaultContentsIndex, listIndex)
-    local meshCount = getParamMax(classType, listParamType, listParamIndex) + 1
+    local meshCount = getParamMax(listParamType, listParamIndex) + 1
     local normalLastIndex = 0
     for itemIndex = 0, meshCount - 1 do
       local luaShapeIdx = itemIndex + 1
@@ -201,22 +196,14 @@ end
 function UpdateMeshIndex()
   local luaSelectedItemIndex = selectedItemIndex + 1
   local selectedParamValue = paramValueList[luaSelectedItemIndex]
-  local function wizardFaceHairCheck()
-    local wizardLastFaceHairIdx = #paramValueList - 1
-    if CppEnums.ClassType.ClassType_Wizard == selectedClassType and (wizardLastFaceHairIdx == wizardPrevFaceTypeIndex and wizardLastFaceHairIdx ~= selectedParamValue or wizardLastFaceHairIdx ~= prevFaceTypeIndex and wizardLastFaceHairIdx == selectedParamValue) then
-      faceHairCustomUpdate(false)
-      setUseFaceCustomizationHair(false)
-    end
-    wizardPrevFaceTypeIndex = selectedParamValue
-  end
   wizardFaceHairCheck()
-  setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedParamValue)
+  setParam(selectedListParamType, selectedListParamIndex, selectedParamValue)
   UpdateSelectedMark(selectedItemIndex)
   applyInitializeToGroupCustomizedBoneInfo()
 end
 function MeshHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
-  OpenSelectMeshUi(currentclassType, currentuiId)
+  OpenSelectMeshUi(currentuiId)
 end

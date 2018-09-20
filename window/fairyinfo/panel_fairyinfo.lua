@@ -532,6 +532,8 @@ function FairyInfo:Initialize()
     [4] = UI.getChildControl(self._UI._skillBG, "StaticText_SkillDesc5")
   }
   self._UI._button_LearnableSkill = UI.getChildControl(self._UI._skillBG, "Button_LearnableSkill")
+  self._UI._button_LearnableSkill:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._UI._button_LearnableSkill:SetText(self._UI._button_LearnableSkill:GetText())
   self._fairyAttrStr = {
     [1] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYINFO_ATTR_1"),
     [2] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYINFO_ATTR_2"),

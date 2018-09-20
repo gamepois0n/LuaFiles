@@ -24,13 +24,14 @@ local fishing_UI = {
 }
 fishing_UI._fishWpDesc = UI.getChildControl(fishing_UI._fishWpDesc_BG, "StaticText_OnlyFishWpDesc")
 fishing_UI._fishingCancelDesc = UI.getChildControl(fishing_UI._fishWpDesc_BG, "StaticText_FishingCancel")
-fishing_UI._fishPoolIcon = UI.getChildControl(fishing_UI._fishWpDesc_BG, "Static_Fish_Pool_Icon")
+fishing_UI._fishPoolIcon = UI.getChildControl(Panel_Fishing, "StaticText_Fish_Pool_Icon")
 if _ContentsGroup_isConsolePadControl then
   fishing_UI._fishWpDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   fishing_UI._fishWpDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBAL_MANUAL_ONLYFISHWPDESC"))
   fishing_UI._fishingCancelDesc:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_XBOX1_MINIGAME_FISHING_CANCEL"))
 else
 end
+local _fishingConditon = -1
 local fishGPoolValueUV = {
   [0] = {
     184,
@@ -92,6 +93,7 @@ function fishingGame_Initialize()
 end
 fishingGame_Initialize()
 local function FishPoolValuIconChange(index)
+  fishing_UI._fishPoolIcon:ChangeTextureInfoName("renewal/etc/minigame/console_etc_minigame_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(fishing_UI._fishPoolIcon, fishGPoolValueUV[index][1], fishGPoolValueUV[index][2], fishGPoolValueUV[index][3], fishGPoolValueUV[index][4])
   fishing_UI._fishPoolIcon:getBaseTexture():setUV(x1, y1, x2, y2)
   fishing_UI._fishPoolIcon:setRenderTexture(fishing_UI._fishPoolIcon:getBaseTexture())
@@ -120,40 +122,37 @@ function setFishingResourcePool_text()
   local fishComment_head = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_HEAD")
   local fishingPercent = math.floor(ToClient_CurrentFishingData() * 100)
   if fishingPercent >= 71 and fishingPercent <= 100 then
+    fishing_UI._fishPoolIcon:SetFontColor(UI_color.C_FF00C0D7)
     FishPoolValuIconChange(0)
+    fishComment = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_1")
   elseif fishingPercent >= 46 and fishingPercent <= 70 then
     FishPoolValuIconChange(1)
+    fishing_UI._fishPoolIcon:SetFontColor(UI_color.C_FFC8FFC8)
+    fishComment = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_2")
   elseif fishingPercent >= 15 and fishingPercent <= 45 then
     FishPoolValuIconChange(2)
+    fishing_UI._fishPoolIcon:SetFontColor(UI_color.C_FFEE7001)
+    fishComment = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_3")
   elseif fishingPercent <= 14 and fishingPercent >= 0 then
     FishPoolValuIconChange(3)
+    fishing_UI._fishPoolIcon:SetFontColor(UI_color.C_FFF26A6A)
+    fishComment = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_4")
   end
-  fishing_UI._fishPoolIcon:SetShow(true)
+  fishing_UI._fishPoolIcon:SetText(fishComment)
   if _ContentsGroup_isConsolePadControl then
   else
-    fishing_UI._fishPercent:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_FISHERY_RESOURCE", "FISHERY", fishComment))
-    fishing_UI._fishComment:SetAutoResize(true)
-    fishing_UI._fishComment:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    fishing_UI._fishComment:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_FISHERY_COMMENT"))
   end
   local itemWrapper = ToClient_getEquipmentItem(0)
   if nil == itemWrapper then
-    fishing_UI._fishWpDesc_BG:SetShow(true)
-    fishing_UI._fishingCancelDesc:SetShow(true)
-    fishing_UI._fishingCancelDesc:SetShow(true)
-    fishing_UI._fishCheckBtn:SetShow(false)
+    fishing_UI._fishPoolIcon:SetShow(true)
     return
   end
   local equipType = itemWrapper:getStaticStatus():getEquipType()
   if 44 == equipType then
-    fishing_UI._fishWpDesc:SetShow(true)
-    fishing_UI._fishWpDesc_BG:SetShow(true)
-    fishing_UI._fishingCancelDesc:SetShow(true)
     fishing_UI._fishPoolIcon:SetShow(true)
     HandleClicked_FishCheck()
   elseif 48 == equipType then
-    fishing_UI._fishWpDesc_BG:SetShow(false)
-    fishing_UI._fishCheckBtn:SetShow(false)
+    fishing_UI._fishPoolIcon:SetShow(false)
   end
   local sizeX1 = fishing_UI._fishPercent:GetTextSizeX()
   local sizeX2 = fishing_UI._fishComment:GetTextSizeX()
@@ -220,6 +219,7 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
     else
       fishing_UI._purposeText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_START", "key", actionString))
     end
+    setFishingResourcePool_text()
     fishing_UI._fishPoolIcon:SetShow(true)
     if _ContentsGroup_isConsolePadControl then
       ui_Value.isFirstTime_Manual_Fishing_Start = false
@@ -293,7 +293,6 @@ local function FishingGame_Manual_Fishing_1(actorKeyRaw, isSelf)
     if autoFishingEnalbe then
     else
     end
-    setFishingResourcePool_text()
     if _ContentsGroup_isConsolePadControl then
     else
     end

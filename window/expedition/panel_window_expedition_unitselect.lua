@@ -1,12 +1,12 @@
 local expeditionUnitSelectInfo = {
   _ui = {
     _button_close = UI.getChildControl(Panel_Subjugation_SelectArmyUnit, "Button_Win_Close"),
-    _button_select = UI.getChildControl(Panel_Subjugation_SelectArmyUnit, "Button_Select"),
     _bg_select = UI.getChildControl(Panel_Subjugation_SelectArmyUnit, "Static_ArmySelectListBG"),
     _list2_myUnitList = nil
   },
   _selectIndex = nil,
-  _selectUnitNo = nil
+  _selectUnitNo = nil,
+  _isSell = false
 }
 function expeditionUnitSelectInfo:initialize()
   ToClient_getListExpeditionaryUnits()
@@ -14,14 +14,14 @@ function expeditionUnitSelectInfo:initialize()
   Panel_Subjugation_SelectArmyUnit:SetShow(false)
 end
 function expeditionUnitSelectInfo:registEventHandler()
-  self._ui._button_select:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Select()")
   self._ui._button_close:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Close()")
   self._ui._list2_myUnitList = UI.getChildControl(self._ui._bg_select, "List2_SubNode")
   self._ui._list2_myUnitList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2")
   self._ui._list2_myUnitList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
 end
-function expeditionUnitSelectInfo:open()
+function expeditionUnitSelectInfo:open(isSell)
   local unitList = ToClient_getMyExpeditionUnitList()
+  self._isSell = isSell
   if nil ~= unitList then
     _PA_LOG("\235\176\149\234\183\156\235\130\152_\237\134\160\235\178\140", "\236\156\160\235\139\155\234\176\175\236\136\152" .. tostring(#unitList))
     self._ui._list2_myUnitList:getElementManager():clearKey()
@@ -37,39 +37,44 @@ function expeditionUnitSelectInfo:close()
   self._selectIndex = nil
   self._selectUnitNo = nil
   Panel_Subjugation_SelectArmyUnit:SetShow(false)
+  Panel_NumberPad_Close()
 end
-function PaGlobalFunc_ExpeditionUnitSelectInfo_Open(index)
+function PaGlobalFunc_ExpeditionUnitSelectInfo_Open(index, isSell)
   local self = expeditionUnitSelectInfo
-  self:open()
+  self:open(isSell)
   self._selectIndex = index
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
+  local self = expeditionUnitSelectInfo
   if true == Panel_Subjugation_SelectArmyUnit:IsShow() then
-    expeditionUnitSelectInfo:open()
+    self:open(self._isSell)
   end
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_Close()
   local self = expeditionUnitSelectInfo
   self:close()
 end
-function PaGlobalFunc_ExpeditionUnitSelectInfo_Select()
+function PaGlobalFunc_ExpeditionUnitSelectInfo_Select(unitNo)
   if false == Panel_Subjugation_SelectArmyUnit:IsShow() then
     return
   end
   local self = expeditionUnitSelectInfo
-  PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(self._selectIndex, self._selectUnitNo)
+  PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(self._selectIndex, unitNo)
   self:close()
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
   local self = expeditionUnitSelectInfo
+  local guageBG = UI.getChildControl(content, "Static_GuageBG")
   local textStatus = UI.getChildControl(content, "StaticText_Top_Status")
-  local expValue = UI.getChildControl(content, "StaticText_ExpValue")
-  local guageBar = UI.getChildControl(content, "Progress2_ExpGauge")
+  local expValue = UI.getChildControl(guageBG, "StaticText_ExpValue")
+  local guageBar = UI.getChildControl(guageBG, "Progress2_ExpGauge")
   local unitInfoBG = UI.getChildControl(content, "Static_Bg")
   local textLevel = UI.getChildControl(content, "StaticText_GradeEdge")
   local textEnergy = UI.getChildControl(content, "StaticText_Energy")
   local recoveryBtn = UI.getChildControl(content, "Button_Recover")
   local promoteBtn = UI.getChildControl(content, "Button_Promote")
+  local button_select = UI.getChildControl(content, "Button_Select")
+  local button_sell = UI.getChildControl(content, "Button_Sell")
   local myUnit = ToClient_getMyExpeditionUnitInfo(key)
   local unitNo = Int64toInt32(key)
   if nil ~= myUnit then
@@ -79,6 +84,7 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
     local maxExp = myUnit:getMaxExperience()
     local curEnergyPoint = myUnit._energyPoint
     local unitName = myUnit:getUnitName()
+    local maxEnergy = myUnit:getMaxEnergyPoint()
     textLevel:SetText("Lv." .. tostring(level))
     local expRate = curExp / maxExp * 100
     expValue:SetText(tostring(expRate) .. "%")
@@ -89,11 +95,20 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
       textStatus:SetFontColor(Defines.Color.C_FFC4BEBE)
     end
     textStatus:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNITINFO", "name", unitName, "attack", atkPoint))
-    textEnergy:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_CURRENT_ENERGY", "energy", curEnergyPoint))
+    textEnergy:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_CURRENT_ENERGY", "energy", curEnergyPoint, "maxenergy", maxEnergy))
     unitInfoBG:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(" .. unitNo .. ")")
     recoveryBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitRecoveryDetail(" .. unitNo .. ")")
     promoteBtn:SetShow(myUnit:canUpgrade())
     promoteBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitPromote(" .. unitNo .. ")")
+    button_select:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Select(" .. unitNo .. ")")
+    button_sell:addInputEvent("Mouse_LUp", "PaGlobalFunc_SellExpeditionUnit(" .. unitNo .. ")")
+    if true == self._isSell then
+      button_sell:SetShow(true)
+      button_select:SetShow(false)
+    else
+      button_sell:SetShow(false)
+      button_select:SetShow(true)
+    end
   end
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(unitNo)
@@ -118,6 +133,21 @@ function PaGlobalFunc_ExpeditionUnitPromote(unitNo)
     title = messageBoxTitle,
     content = messageBoxMemo,
     functionYes = doPromote,
+    functionNo = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData, "middle")
+end
+function PaGlobalFunc_SellExpeditionUnit(unitNo)
+  local function doSell()
+    ToClient_sellExpeditionUnit(unitNo)
+  end
+  local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
+  local messageBoxMemo = tostring("\235\182\128\235\140\128\235\165\188 \237\140\144\235\167\164 \237\149\152\236\139\156\234\178\160\236\138\181\235\139\136\234\185\140?")
+  local messageBoxData = {
+    title = messageBoxTitle,
+    content = messageBoxMemo,
+    functionYes = doSell,
     functionNo = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }

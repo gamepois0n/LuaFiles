@@ -357,6 +357,10 @@ function FGlobal_PushOpenWorldMap()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NOTOPEN_INGACTION"))
     return
   end
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(FGlobal_PushOpenWorldMapActual)
+end
+function FGlobal_PushOpenWorldMapActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
   FGlobal_HideWorkerTooltip()
   if true == _ContentsGroup_RenewUI_Dailog then
     PaGlobalFunc_MainDialog_Hide()
@@ -377,24 +381,28 @@ function FGlobal_CloseWorldmapForLuaKeyHandling()
 end
 function FGlobal_PopCloseWorldMap()
   if ToClient_WorldMapIsShow() then
-    ToClient_preCloseMap()
-    Panel_NodeSiegeTooltip:SetShow(false)
-    Panel_WorldMap_Tooltip:SetShow(false)
-    if false == _ContentsGroup_RenewUI then
-      Panel_Window_QuestNew_Show(false)
-    end
-    Panel_Tooltip_SimpleText:SetShow(false)
-    isCloseWorldMap = false
-    Panel_NaviButton:SetShow(false)
-    if true == _ContentsGroup_ForXBoxFinalCert then
-      PaGlobalFunc_WorldMapSideBar_EraseArrow()
-    else
-      WorldMapArrowEffectErase()
-    end
-    DeliveryCarriageInformationWindow_Close()
-    FGlobal_Hide_Tooltip_Work(nil, true)
-    FGlobal_HideWorkerTooltip()
+    PaGlobalFunc_FullScreenFade_RunAfterFadeIn(FGlobal_PopCloseWorldMapActual)
   end
+end
+function FGlobal_PopCloseWorldMapActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
+  ToClient_preCloseMap()
+  Panel_NodeSiegeTooltip:SetShow(false)
+  Panel_WorldMap_Tooltip:SetShow(false)
+  if false == _ContentsGroup_RenewUI then
+    Panel_Window_QuestNew_Show(false)
+  end
+  Panel_Tooltip_SimpleText:SetShow(false)
+  isCloseWorldMap = false
+  Panel_NaviButton:SetShow(false)
+  if true == _ContentsGroup_ForXBoxFinalCert then
+    PaGlobalFunc_WorldMapSideBar_EraseArrow()
+  else
+    WorldMapArrowEffectErase()
+  end
+  DeliveryCarriageInformationWindow_Close()
+  FGlobal_Hide_Tooltip_Work(nil, true)
+  FGlobal_HideWorkerTooltip()
 end
 function FromClient_WorldMapOpen()
   if isDeadInWatchingMode() then

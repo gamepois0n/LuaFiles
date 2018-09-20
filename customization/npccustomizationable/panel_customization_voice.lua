@@ -49,7 +49,7 @@ local columMaxIndex = 3
 local columIndex = 0
 local slideIndex = 0
 local markPosIndex = 0
-local selectedClassType, selectedIndex, selectedRealIndex, selectedInGameMode
+local selectedIndex, selectedRealIndex, selectedInGameMode
 local MotionImageGap = 6
 local MotionContentsOffsetX = 11
 local MotionContentsOffsetY = 10
@@ -166,10 +166,9 @@ function Initialize()
     StaticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_VOICE"))
   end
 end
-function createVoiceList(inGameMode, classType)
+function createVoiceList(inGameMode)
   clearContentList()
   selectedInGameMode = inGameMode
-  selectedClassType = classType
   local texWidth = 48
   local texHeight = 48
   local texColumCount = 4

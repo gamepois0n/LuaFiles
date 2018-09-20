@@ -3641,6 +3641,7 @@ function Itemmarket_Sort_ShowComboBox()
     return
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self.combobox_Filter_Sort1:AddItemWithKey(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_ALL"), 0)
   local count = 0
   for idx = 0, filterLineCount - 1 do
@@ -3656,6 +3657,7 @@ function Itemmarket_Sort_ShowComboBox()
 end
 function Itemmarket_Sort_SetSort()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   local self = ItemMarket
   self.combobox_Filter_Sort1:SetSelectItemIndex(self.combobox_Filter_Sort1:GetSelectIndex())
   ToClient_SelectMarketCategoryFilter(filter1, self.combobox_Filter_Sort1:GetSelectKey())
@@ -4165,6 +4167,7 @@ function FGolbal_ItemMarketNew_Close()
     return
   end
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   selectedKey = -1
   _itemMarket_ShowIconToolTip(false)
   ClearFocusEdit()

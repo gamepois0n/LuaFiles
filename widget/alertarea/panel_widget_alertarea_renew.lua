@@ -2,10 +2,11 @@ function ResetPos_WidgetButton()
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 AlwaysOpenType = {
-  eALERT_PearlShop = 0,
-  eALERT_PcRoomReward = 1,
-  eALERT_MarketPlace = 2,
-  count = 3
+  eALERT_Menu = 0,
+  eALERT_PearlShop = 1,
+  eALERT_PcRoomReward = 2,
+  eALERT_MarketPlace = 3,
+  count = 4
 }
 AlertType = {
   eALERT_Hunting = 0,
@@ -51,6 +52,7 @@ local Panel_Widget_Alert_info = {
     Button_EnduranceCarriage = nil,
     Button_EnduranceShip = nil,
     Button_BatterEquipment = nil,
+    Button_Menu = nil,
     Button_CashShop = nil,
     Button_PcRoomReward = nil,
     StaticText_PcRoomRewardTime = nil,
@@ -345,6 +347,9 @@ function Panel_Widget_Alert_info:registEventHandler()
       end
     end
   end
+  self._ui.Button_Menu:addInputEvent("Mouse_LUp", "Panel_Menu_ShowToggle()")
+  self._ui.Button_Menu:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 4 .. ")")
+  self._ui.Button_Menu:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_CashShop:addInputEvent("Mouse_LUp", "GlobalKeyBinder_MouseKeyMap(18)")
   self._ui.Button_CashShop:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 1 .. ")")
   self._ui.Button_CashShop:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
@@ -431,6 +436,7 @@ function Panel_Widget_Alert_info:childControl()
   self._ui.Button_EnduranceCarriage = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceCarriage")
   self._ui.Button_EnduranceShip = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceShip")
   self._ui.Button_BatterEquipment = UI.getChildControl(self._ui.Static_Bg, "Button_BatterEquipment")
+  self._ui.Button_Menu = UI.getChildControl(self._ui.Static_Bg, "Button_Menu")
   self._ui.Button_CashShop = UI.getChildControl(self._ui.Static_Bg, "Button_CashShop")
   self._ui.Button_PcRoomReward = UI.getChildControl(self._ui.Static_Bg, "Button_PCRoomReward")
   self._ui.StaticText_PcRoomRewardTime = UI.getChildControl(self._ui.Button_PcRoomReward, "StaticText_Desc")
@@ -670,6 +676,10 @@ function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
     uiControl = self._ui.Button_MarketPlace
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_8")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_9")
+  elseif 4 == buttonType then
+    uiControl = self._ui.Button_Menu
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_TITLE")
+    desc = nil
   else
     return
   end
@@ -752,6 +762,9 @@ function PaGlobalFunc_Widget_Alert_ClickSpread()
   TooltipSimple_Hide()
 end
 function Panel_Widget_Alert_info:AlramShow(alertType)
+  if false == ToClient_getShowRightBottomAlarm() then
+    return
+  end
   local currentTime = ""
   self._ui.MsgTime:SetText(currentTime)
   self._ui.MsgContent:SetText(self._alertMessage[alertType])
@@ -767,6 +780,8 @@ function Panel_Widget_Alert_info:AlramShow(alertType)
   moveAni1:SetDisableWhileAni(true)
   control:SetShow(true)
   self._alramTime = 0
+  self._ui.MessageBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlertMessageBg_HandleLClick(" .. alertType .. ")")
+  FGlobal_MarketAlertMsg_ResetPos(true)
 end
 function Panel_Widget_Alert_info:AlramHide()
   local control = self._ui.MessageBg
@@ -775,9 +790,17 @@ function Panel_Widget_Alert_info:AlramHide()
   moveAni2:SetEndPosition(-40, control:GetPosY())
   moveAni2:SetHideAtEnd(true)
   moveAni2:SetDisableWhileAni(true)
+  FGlobal_MarketAlertMsg_ResetPos(false)
 end
 function Panel_Widget_Alert_info_AlramHide()
   Panel_Widget_Alert_info:AlramHide()
+end
+function PaGlobalFunc_AlertMessageBg_HandleLClick(alertType)
+  Panel_Widget_Alert_info_AlramHide()
+  PaGlobalFunc_Widget_Alert_HandleLClick(alertType)
+end
+function FGlobal_AlertMsgBg_ShowCheck()
+  return Panel_Widget_Alert_info._ui.MessageBg:GetShow()
 end
 function PaGlobalFunc_Widget_Alert_Check_Hunting()
   local self = Panel_Widget_Alert_info
@@ -1220,12 +1243,23 @@ function PaGlobalFunc_Widget_Alert_CheckReal_BatterEquipment()
 end
 function PaGlobalFunc_Widget_Alert_Check_Pos()
   local self = Panel_Widget_Alert_info
-  local spanX = 40
-  if self._ui.Button_PcRoomReward:GetShow() then
+  local spanX = 0
+  if getGamePadEnable() then
+    self._ui.Button_Menu:SetShow(true)
+    spanX = spanX + 40
+  else
+    self._ui.Button_Menu:SetShow(false)
+  end
+  if self._ui.Button_CashShop:GetShow() then
+    self._ui.Button_CashShop:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
-  self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
+  if self._ui.Button_PcRoomReward:GetShow() then
+    self._ui.Button_PcRoomReward:SetSpanSize(spanX, 0)
+    spanX = spanX + 40
+  end
   if self._ui.Button_MarketPlace:GetShow() then
+    self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
   self._ui.Button_Spread:SetSpanSize(spanX, 0)
@@ -1312,20 +1346,29 @@ function HandleClicked_PcRoomReward()
   PaGlobal_CharacterInfo:showWindow(3)
   HandleClickedTapButton(5)
 end
+local marketPlaceAlertShow = false
 function FGlobal_ItemMarket_AlarmIcon_Show()
-  FGlobal_ItemMarket_SetCount()
+  local self = Panel_Widget_Alert_info
+  if nil ~= self._ui.Button_MarketPlace then
+    self._ui.Button_MarketPlace:SetShow(true)
+    FGlobal_ItemMarket_SetCount()
+  else
+    marketPlaceAlertShow = true
+  end
 end
 function FGlobal_ItemMarket_SetCount()
   local self = Panel_Widget_Alert_info
   if nil == self._ui.StaticText_MarketPlaceCount then
     return
   end
-  local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
-  self._ui.StaticText_MarketPlaceCount:SetText(alarmCount)
-  self._ui.Button_MarketPlace:SetShow(alarmCount > 0)
-  self._ui.Button_MarketPlace:EraseAllEffect()
-  if alarmCount > 0 then
-    self._ui.Button_MarketPlace:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
+  if false == _ContentsGroup_RenewUI_ItemMarketPlace then
+    local alarmCount = FGlobal_ItemMarketAlarm_UnreadCount()
+    self._ui.StaticText_MarketPlaceCount:SetText(alarmCount)
+    self._ui.StaticText_MarketPlaceCount:SetShow(alarmCount > 0)
+    self._ui.Button_MarketPlace:EraseAllEffect()
+    if alarmCount > 0 then
+      self._ui.Button_MarketPlace:AddEffect("fUI_ItemMarket_Alert_01A", true, 0, 0)
+    end
   end
 end
 function FromClient_Widget_Alert_Init()
@@ -1334,7 +1377,9 @@ function FromClient_Widget_Alert_Init()
   PaGlobalFunc_Widget_Alert_Show()
   FromClient_Widget_Alert_CompleteBenefitReward()
   PcRoomGift_TimeCheck()
-  FGlobal_ItemMarket_AlarmIcon_Show()
+  if marketPlaceAlertShow then
+    FGlobal_ItemMarket_AlarmIcon_Show()
+  end
 end
 function FromClient_Widget_Alert_Resize()
   local self = Panel_Widget_Alert_info

@@ -120,6 +120,7 @@ function PaGlobal_SearchMenuWarehouse:ClickOtherTownsWareHouse(waypointKey)
     Warehouse_OpenPanelFromWorldmap(waypointKey, CppEnums.WarehoouseFromType.eWarehoouseFromType_Worldmap)
     Panel_Window_Inventory:SetShow(false)
   end
+  PaGlobal_Warehouse_OtherWaypointKey(waypointKey)
   local beforeWaypointKey = self._selectWaypointKey
   self._selectWaypointKey = waypointKey
   if beforeWaypointKey > 0 then

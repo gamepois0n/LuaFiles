@@ -19,6 +19,7 @@ Panel_AskKnowledge:RegisterShowEventFunc(false, "AskKnowledgeHideAni()")
 function AskKnowledgeShowAni()
   UIAni.fadeInSCR_Down(Panel_AskKnowledge)
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function AskKnowledgeHideAni()
   Panel_AskKnowledge:SetShowWithFade(CppEnums.PAUI_SHOW_FADE_TYPE.PAUI_ANI_TYPE_FADE_OUT)
@@ -31,6 +32,7 @@ function AskKnowledgeHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 local askKnowledge = {}
 function askKnowledge.createSlot(index)

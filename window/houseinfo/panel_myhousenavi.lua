@@ -328,16 +328,19 @@ function Panel_MyHouseNavi_FindWay(naviType)
         worldmapNavigatorStart(tentPos, navigationGuideParam, false, false, true)
       end
       audioPostEvent_SystemUi(0, 14)
+      _AudioPostEvent_SystemUiForXBOX(0, 14)
       isCheckTentPosition = true
     end
   elseif isCheckTentPosition == true or isCheckHousePosition == true then
     ToClient_DeleteNaviGuideByGroup(0)
     audioPostEvent_SystemUi(0, 15)
+    _AudioPostEvent_SystemUiForXBOX(0, 15)
     isCheckTentPosition = false
     isCheckHousePosition = false
   elseif naviType == "selfHouse" and isCheckHousePosition == false then
     ToClient_DeleteNaviGuideByGroup(0)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
     local characterStaticStatusWrapper = ToClient_getMyDwelling(0)
     if nil == characterStaticStatusWrapper then
       _PA_ASSERT(false, "\236\163\188\234\177\176\236\167\128 \236\160\149\235\179\180\234\176\128 \236\151\134\236\138\181\235\139\136\235\139\164.")

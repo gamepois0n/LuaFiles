@@ -68,7 +68,7 @@ if false == _ContentsGroup_RenewUI_Customization then
   registerEvent("EventOpenCommonExpressionUi", "OpenCommonExpressionUi")
   registerEvent("EventCloseCommonExpressionUi", "CloseCommonExpressionUi")
 end
-local selectedClassType, selectedUiId, selectedListParamType, selectedListParamIndex, selectedItemIndex
+local selectedUiId, selectedListParamType, selectedListParamIndex, selectedItemIndex
 local ContentImage = {}
 local PayMark = {}
 local decoGroup = {}
@@ -95,7 +95,6 @@ local sliderOffset = 7
 local sliderValueOffset = 10
 local sliderHeight = SliderTextArr[1]:GetSizeY()
 local colorPickerStartY = 370
-local currentclassType = -1
 local currentuiId = -1
 checkType = -1
 local currentcontentindex = -1
@@ -137,10 +136,8 @@ local function clearContents()
   FrameTemplate:SetShow(false)
   Frame_Content:SetSize(Frame_Content:GetSizeX(), 0)
 end
-function OpenCommonDecorationUi(classType, uiId, checkType)
-  globalcurrentclassType = classType
+function OpenCommonDecorationUi(uiId, checkType)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
   if false then
     checkType = 0
@@ -151,7 +148,6 @@ function OpenCommonDecorationUi(classType, uiId, checkType)
   CheckControlArr[2]:SetShow(false)
   CheckTextArr[1]:SetShow(false)
   CheckTextArr[2]:SetShow(false)
-  selectedClassType = classType
   selectedUiId = uiId
   FrameTemplateColor:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), 0)
   FrameTemplateColor:SetShow(false)
@@ -183,22 +179,17 @@ end
 function CloseCommonDecorationUi()
   EnableDecorationSlide(true)
   clearPalette()
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
   checkType = -1
 end
 function CloseEyeDecorationUi()
   clearPalette()
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
   checkType = -1
 end
-function UpdateDecorationContents(contentsIndex, currentclassType, currentuiId)
+function UpdateDecorationContents(contentsIndex, currentuiId)
   clearContents()
   currentcontentindex = contentsIndex
-  if nil ~= currentclassType then
-    selectedClassType = currentclassType
-  end
   if nil ~= currentuiId then
     selectedUiId = currentuiId
   end
@@ -331,7 +322,7 @@ function UpdateDecorationContents(contentsIndex, currentclassType, currentuiId)
     local paletteIndex = getDecorationParamMethodValue(paletteParamType, paletteParamIndex)
     FrameTemplateColor:SetShow(true)
     FrameTemplateColor:SetPosY(controlPosY)
-    CreateCommonPalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteIndex)
+    CreateCommonPalette(FrameTemplateColor, Static_Collision, paletteParamType, paletteParamIndex, paletteIndex)
     local colorIndex = getParam(paletteParamType, paletteParamIndex)
     UpdatePaletteMarkPosition(colorIndex)
     local Frame_Content_Color = UI.getChildControl(FrameTemplateColor, "Frame_Content")
@@ -418,10 +409,8 @@ function UpdateDecorationSlider(sliderIndex)
 end
 function UpdateHairDecorationSlider(sliderIndex)
 end
-function OpenEyeDecorationUi(classType, uiId)
-  globalcurrentclassType = classType
+function OpenEyeDecorationUi(uiId)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
   checkType = 1
   clearRadioButtons()
@@ -433,7 +422,6 @@ function OpenEyeDecorationUi(classType, uiId)
   CheckTextArr[2]:SetShow(true)
   contentsStartY = 0
   contentsStartY = contentsStartY + CheckControlArr[1]:GetSizeY() + controlOffset
-  selectedClassType = classType
   selectedUiId = uiId
   FrameTemplateColor:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), 1)
   local contentsCount = getUiContentsCount(uiId) / 2
@@ -460,12 +448,9 @@ function OpenEyeDecorationUi(classType, uiId)
   end
   UpdateEyeDecorationContents(0, 0)
 end
-function UpdateEyeDecorationContents(contentsIndex, addHistory, currentclassType, currentuiId)
+function UpdateEyeDecorationContents(contentsIndex, addHistory, currentuiId)
   clearContents()
   currentcontentindex = contentsIndex
-  if nil ~= currentclassType then
-    selectedClassType = currentclassType
-  end
   if nil ~= currentuiId then
     selectedUiId = currentuiId
   end
@@ -568,7 +553,7 @@ function UpdateEyeDecorationContents(contentsIndex, addHistory, currentclassType
     local paletteIndex = getDecorationParamMethodValue(paletteParamType, paletteParamIndex)
     FrameTemplateColor:SetShow(true)
     FrameTemplateColor:SetPosY(controlPosY)
-    CreateEyePalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteParamIndex2, paletteIndex, CheckControlArr[1], CheckControlArr[2])
+    CreateEyePalette(FrameTemplateColor, Static_Collision, paletteParamType, paletteParamIndex, paletteParamIndex2, paletteIndex, CheckControlArr[1], CheckControlArr[2])
     local colorIndex = getParam(paletteParamType, paletteParamIndex)
     UpdatePaletteMarkPosition(colorIndex)
     local Frame_Content_Color = UI.getChildControl(FrameTemplateColor, "Frame_Content")
@@ -637,13 +622,11 @@ function EnableDecorationSlide(enable)
   SliderValueArr[4]:SetFontColor(color)
   SliderValueArr[5]:SetFontColor(color)
 end
-function OpenTattooDecorationUi(classType, uiId)
+function OpenTattooDecorationUi(uiId)
   isTattooMode = true
   checkType = 2
-  OpenCommonDecorationUi(classType, uiId, checkType)
-  globalcurrentclassType = classType
+  OpenCommonDecorationUi(uiId, checkType)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
   if isTattooMode then
     slideEnable = getEnableTattooSlide(selectedListParamType, selectedListParamIndex, selectedItemIndex)
@@ -656,13 +639,11 @@ function CloseTattooDecorationUi()
   CloseCommonDecorationUi()
   checkType = -1
 end
-function OpenCommonExpressionUi(classType, uiId)
+function OpenCommonExpressionUi(uiId)
   SetExpression()
   checkType = 3
-  OpenCommonDecorationUi(classType, uiId, checkType)
-  globalcurrentclassType = classType
+  OpenCommonDecorationUi(uiId, checkType)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
 end
 function CloseCommonExpressionUi()
@@ -676,17 +657,17 @@ function SetExpression()
   applyExpression(expressionIndex, expressionWeight)
 end
 function CommonDecorationHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
   if 0 == checkType then
-    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+    UpdateDecorationContents(currentcontentindex, currentuiId)
   elseif 1 == checkType then
-    UpdateEyeDecorationContents(currentcontentindex, 0, currentclassType, currentuiId)
+    UpdateEyeDecorationContents(currentcontentindex, 0, currentuiId)
   elseif 2 == checkType then
-    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+    UpdateDecorationContents(currentcontentindex, currentuiId)
   elseif 3 == checkType then
     SetExpression()
-    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+    UpdateDecorationContents(currentcontentindex, currentuiId)
   end
 end

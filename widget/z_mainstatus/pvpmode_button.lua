@@ -93,6 +93,8 @@ function FromClient_PvpMode_changeMode(where, actorKeyRaw)
     if getPvPMode() then
       audioPostEvent_SystemUi(0, 9)
       audioPostEvent_SystemUi(9, 0)
+      _AudioPostEvent_SystemUiForXBOX(0, 9)
+      _AudioPostEvent_SystemUiForXBOX(9, 0)
       _pvpButton:EraseAllEffect()
       _pvpButton:AddEffect("fUI_SkillButton02", true, 0, 0)
       _pvpButton:AddEffect("fUI_PvPButtonLoop", true, 0, 0)
@@ -102,6 +104,7 @@ function FromClient_PvpMode_changeMode(where, actorKeyRaw)
       isPvPOn = true
     elseif isPvPOn then
       audioPostEvent_SystemUi(0, 11)
+      _AudioPostEvent_SystemUiForXBOX(0, 11)
       _pvpButton:EraseAllEffect()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PVP_BUTTON_OFF"))
       isPvPOn = false

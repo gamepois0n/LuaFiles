@@ -73,7 +73,9 @@ function PaGlobal_ItemMarket_Alarm_SetCheck()
     if not Panel_ItemMarket_NewAlarm:GetShow() then
       local lastIndex = toClient_GetItemMarketFavoriteItemAlarmRecodeSize() - 1
       local info = toClient_GetItemMarketFavoriteItemAlarmRecode(lastIndex)
-      FGlobal_ItemMarket_NewAlarmShow(info:getItemEnchantKey(), info:isSoldOut(), info:getAlarmTime())
+      if nil ~= info then
+        FGlobal_ItemMarket_NewAlarmShow(info:getItemEnchantKey(), info:isSoldOut(), info:getAlarmTime())
+      end
     end
   else
     ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ItemMarketAlarm, 2, CppEnums.VariableStorageType.eVariableStorageType_User)

@@ -414,13 +414,17 @@ function Panel_Dialog_Main_Bottom_Info:hide_SubDialog()
   PaGlobalFunc_MainDialog_Intimacy_Close()
   PaGlobalFunc_MainDialog_Right_Close()
 end
-function Panel_Dialog_Main_Bottom_Info:guideButtonSetting(dialogData)
+function Panel_Dialog_Main_Bottom_Info:guideButtonSetting(dialogData, showButtonA)
   local buttonType = self._ui.btn_Func_List[self._currentTabIndex].funcButtonType
   local funcButtonCount = dialogData:getFuncButtonCount()
   if 0 == funcButtonCount then
     self._ui.btn_A:SetShow(false)
   elseif nil ~= buttonType and self._hideDialog[buttonType] == false then
-    self._ui.btn_A:SetShow(false)
+    if nil == showButtonA or false == showButtonA then
+      self._ui.btn_A:SetShow(false)
+    else
+      self._ui.btn_A:SetShow(true)
+    end
   end
   self._ui.btn_B:addInputEvent("Mouse_LUp", "PaGlobalFunc_MainDialog_Hide()")
 end
@@ -1165,6 +1169,14 @@ function PaGlobalFunc_MainDialog_Bottom_GetFuncButtonSizeXY()
   local self = Panel_Dialog_Main_Bottom_Info
   return self._size.funcButtonSizeX, self._size.funcButtonSizeY
 end
+function PaGlobalFunc_MainDialog_Bottom_resetBottomKeyguide()
+  local self = Panel_Dialog_Main_Bottom_Info
+  local dialogData = ToClient_GetCurrentDialogData()
+  if nil == dialogData then
+    return
+  end
+  self:guideButtonSetting(dialogData, true)
+end
 function Toggle_DialogMainTab_forPadEventFunc(value)
   local self = Panel_Dialog_Main_Bottom_Info
   if self._currentMaxFuncButtonCount == 1 then
@@ -1198,7 +1210,7 @@ function Toggle_DialogMainTab_forPadEventFunc(value)
       Toggle_DialogMainTab_Enter()
       self._ui.btn_A:SetShow(false)
     else
-      PaGlobalFunc_MainDialog_Right_ReOpen(false)
+      PaGlobalFunc_MainDialog_Right_ReOpen(false, true)
       self._ui.btn_A:SetShow(true)
     end
   end
@@ -1206,9 +1218,6 @@ end
 function Toggle_DialogMainTab_Enter_A()
   local self = Panel_Dialog_Main_Bottom_Info
   if self._currentMaxFuncButtonCount == 1 then
-    return
-  end
-  if nil ~= self._ui.btn_Func_List[self._currentTabIndex] and nil ~= self._ui.btn_Func_List[self._currentTabIndex].funcButtonType and self._hideDialog[self._ui.btn_Func_List[self._currentTabIndex].funcButtonType] == false then
     return
   end
   Toggle_DialogMainTab_Enter()

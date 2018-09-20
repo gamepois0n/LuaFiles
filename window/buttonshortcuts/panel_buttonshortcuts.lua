@@ -37,6 +37,7 @@ function FGlobal_ButtonShortcuts_Open()
 end
 function PaGlobal_ButtonShortcuts:Open(index)
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   self._ui._checkButtonAllVeiw:SetCheck(true)
   local isCurrentMode = nil ~= index
   if true == isCurrentMode then
@@ -157,6 +158,7 @@ function FGlobal_ButtonShortcuts_SetDefault()
 end
 function PaGlobal_ButtonShortcuts:Close()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_ButtonShortcuts:SetShow(false)
   self._openButtonsShortcuts = nil
   setKeyCustomizing(false)

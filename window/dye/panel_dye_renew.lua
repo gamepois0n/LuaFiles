@@ -1067,48 +1067,53 @@ function DyeReNew:SetAmpuleScrollSize()
   end
 end
 function FGlobal_Panel_Dye_ReNew_Open()
-  if true ~= FGlobal_Panel_DyeReNew_Show() then
+  if not FGlobal_DyeReNew_IsShowable() then
     return
   end
   if true == ToClient_getJoinGuildBattle() then
     return
   end
-  Panel_Dye_ReNew:SetShow(true)
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(FGlobal_Panel_DyeReNew_Show)
   FGlobal_Hide_Tooltip_Work(nil, true)
 end
 function FGlobal_Panel_Dye_ReNew_Close()
   Panel_Dye_ReNew:SetShow(false)
 end
-function FGlobal_Panel_DyeReNew_Show()
+function FGlobal_DyeReNew_IsShowable()
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYEOPENALERT_INDEAD"))
-    return
+    return false
   end
   if true == ToClient_getJoinGuildBattle() then
-    return
+    return false
   end
-  ToClient_SaveUiInfo(false)
   if isFlushedUI() then
-    return
+    return false
   end
   local isShow = ToClient_DyeingManagerIsShow()
   if true == isShow then
-    return
+    return false
   end
   local isShowable = ToClient_DyeingManagerIsShowable()
   if false == isShowable then
-    return
+    return false
   end
   if false == ToClient_IsAutoLevelUp() and not IsSelfPlayerWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_DYE"))
-    return
+    return false
   end
   if selfPlayerIsInCompetitionArea() then
-    return
+    return false
   end
   if true == ToClient_SniperGame_IsPlaying() then
-    return
+    return false
   end
+  return true
+end
+function FGlobal_Panel_DyeReNew_Show()
+  PaGlobalFunc_FullScreenFade_FadeOut()
+  Panel_Dye_ReNew:SetShow(true)
+  ToClient_SaveUiInfo(false)
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
@@ -1124,20 +1129,23 @@ function FGlobal_Panel_DyeReNew_Show()
   Inventory_SetFunctor(FGlobal_Panel_DyeReNew_InventoryFilter, FGlobal_Panel_DyeReNew_Interaction_FromInventory, nil, nil)
   InventoryWindow_Show()
   renderMode:set()
-  return true
 end
 function FGlobal_Panel_DyeReNew_Hide()
   if Panel_Win_System:GetShow() then
     Proc_ShowMessage_Ack("\236\149\140\235\166\188\236\176\189\236\157\132 \235\168\188\236\160\128 \235\139\171\236\149\132\236\163\188\236\132\184\236\154\148.")
     return
   end
+  if false == Panel_Dye_ReNew:GetShow() and false == Panel_DyeNew_CharacterController:GetShow() then
+    return
+  end
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(FGlobal_Panel_DyeReNew_HideActual)
+end
+function FGlobal_Panel_DyeReNew_HideActual()
   local isShow = ToClient_DyeingManagerHide()
   if false == isShow then
     return
   end
-  if false == Panel_Dye_ReNew:GetShow() and false == Panel_DyeNew_CharacterController:GetShow() then
-    return
-  end
+  PaGlobalFunc_FullScreenFade_FadeOut()
   SetUIMode(Defines.UIMode.eUIMode_Default)
   renderMode:reset()
   if false == isInventoryOpen then
@@ -1163,7 +1171,6 @@ function FGlobal_Panel_DyeReNew_Hide()
   ToClient_DyeingManagerHide()
   FGlobal_DyeNew_CharacterController_Close()
   DyeReNew:Close()
-  return true
 end
 function Dye_ReNew_IsDyeableEquipment(equipSlotNo)
   local self = DyeReNew

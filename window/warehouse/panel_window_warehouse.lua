@@ -28,6 +28,22 @@ end
 local effectScene = {
   newItem = {}
 }
+local warehouseProductWaypoint = {
+  [0] = 1,
+  61,
+  301,
+  302,
+  601,
+  602,
+  608,
+  1101,
+  1141,
+  1301,
+  1314,
+  1319,
+  1623,
+  1604
+}
 local _wareHouse_HelpMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Window_Warehouse, "Static_ClassMovie")
 local _wareHouse_HelpMovie_Btn = UI.getChildControl(Panel_Window_Warehouse, "Static_MoviePlayButton")
 local _wareHouseHelp = UI.getChildControl(Panel_Window_Warehouse, "StaticText_LoaderHelp")
@@ -95,7 +111,8 @@ local warehouse = {
   manufactureFilterFunc = nil,
   manufactureRclickFunc = nil,
   addSizeY = 30,
-  sellCheck = false
+  sellCheck = false,
+  savedWayPointKey = 0
 }
 function warehouse:init()
   _wareHouse_HelpMovie_Btn:addInputEvent("Mouse_On", "Panel_WareHouse_MovieHelpFunc( true )")
@@ -137,7 +154,6 @@ function warehouse:init()
     slot.icon:SetAutoDisableTime(0.5)
     slot.icon:addInputEvent("Mouse_RUp", "HandleClickedWarehouseItem(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_LUp", "Warehouse_DropHandler(" .. ii .. ")")
-    slot.icon:addInputEvent("Mouse_LDown", "Warehouse_LDownClick(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_PressMove", "Warehouse_SlotDrag(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_On", "Warehouse_IconOver(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_Out", "Warehouse_IconOut(" .. ii .. ")")
@@ -202,17 +218,7 @@ function warehouse:update()
     if ii < useMaxCount - useStartSlot - self._startSlotIndex then
       slot.empty:SetShow(true)
     elseif ii == useMaxCount - useStartSlot - self._startSlotIndex then
-      if isGameServiceTypeDev() then
-        if self.slots[ii].icon:GetShow() then
-          slot.onlyPlus:SetShow(true)
-        else
-          slot.plus:SetShow(true)
-        end
-        Panel_Window_Warehouse:SetChildIndex(slot.plus, 15099)
-        Panel_Window_Warehouse:SetChildIndex(slot.onlyPlus, 15100)
-      else
-        slot.lock:SetShow(true)
-      end
+      slot.lock:SetShow(true)
     else
       slot.lock:SetShow(true)
     end
@@ -869,16 +875,34 @@ function Warehouse_GroundClick(whereType, slotNo)
     Panel_NumberPad_Show(true, s64_count, slotNo, Warehouse_GroundClick_Message)
   end
 end
+function PaGlobal_Warehouse_OtherWaypointKey(isWaypointKey)
+  local self = warehouse
+  self.savedWayPointKey = isWaypointKey
+end
 function Warehouse_LDownClick(index)
   local self = warehouse
   local warehouseWrapper = self:getWarehouse()
   if nil == warehouseWrapper then
     return
   end
+  if nil == self.savedWayPointKey then
+    self.savedWayPointKey = 0
+  end
   local useStartSlot = 1
   local useMaxCount = warehouseWrapper:getUseMaxCount()
-  if index == useMaxCount - useStartSlot - self._startSlotIndex and isGameServiceTypeDev() then
-    PaGlobal_EasyBuy:Open(3, 7, 4, 1)
+  local function Execute_EasyBuy()
+    PaGlobal_EasyBuy:Open(17, self.savedWayPointKey)
+  end
+  if index == useMaxCount - useStartSlot - self._startSlotIndex and isGameTypeKorea() then
+    local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_EASYBUY")
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBJECTCONTROL_CONFIRM"),
+      content = messageContent,
+      functionYes = Execute_EasyBuy,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
   end
 end
 function Warehouse_GroundClick_Message(s64_count, slotNo)

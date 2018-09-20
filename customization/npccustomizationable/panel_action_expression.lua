@@ -9,7 +9,6 @@ local columnWidth = Frame_ContentImage:GetSizeX() + ImageGap
 local columnHeight = Frame_ContentImage:GetSizeY() + ImageGap
 local contentsOffsetX = 20
 local contentsOffsetY = 60
-local selectedClassType
 local ContentImage = {}
 local Button_Close = UI.getChildControl(Panel_CustomizationExpression, "Button_Close")
 Button_Close:addInputEvent("Mouse_LUp", "closeExpressionUI()")
@@ -66,8 +65,7 @@ function UpdateExpression(index)
   UpdateMarkPosition(index)
   applyExpression(index, 1)
 end
-function openExpressionUI(classType)
-  selectedClassType = classType
+function openExpressionUI()
   UpdateMarkPosition(-1)
   createExpressionList()
   Panel_CustomizationExpression:SetShow(true)

@@ -8,6 +8,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local isBlackSpiritAdventure = ToClient_IsContentsGroupOpen("1015")
 function BlackSpiritAdventure_ShowAni()
   audioPostEvent_SystemUi(0, 22)
+  _AudioPostEvent_SystemUiForXBOX(0, 22)
   UIAni.fadeInSCR_Down(Panel_Window_BlackSpiritAdventure)
   local aniInfo1 = Panel_Window_BlackSpiritAdventure:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -26,6 +27,7 @@ function BlackSpiritAdventure_ShowAni()
 end
 function BlackSpiritAdventure_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_BlackSpiritAdventure:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_Window_BlackSpiritAdventure, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -101,6 +103,7 @@ function BlackSpiritAd_Hide()
     return
   end
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_BlackSpiritAdventure:SetShow(false, false)
   Panel_Window_BlackSpiritAdventure:CloseUISubApp()
   checkPopUp:SetCheck(false)
@@ -125,6 +128,7 @@ function BlackSpirit_PopUp_ShowIconToolTip(isShow)
 end
 function Web_BlackSpirit_DiceSound()
   audioPostEvent_SystemUi(11, 16)
+  _AudioPostEvent_SystemUiForXBOX(11, 16)
 end
 function FromClient_openDiceGamebyNpcTalk()
   BlackSpiritAd_Show(true)

@@ -100,16 +100,16 @@ function Dialog_ExchangeItem_Update()
         local resultItemIcon = resultItemWrapperLua:getIconPath()
         local realCount = uiIndex + emptyItemCount
         slot._sourceIcon:ChangeTextureInfoName("Icon/" .. needItemIcon)
-        slot._sourceIcon:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. 0 .. ")")
+        slot._sourceIcon:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. emptyItemCount .. "," .. 0 .. ")")
         slot._sourceIcon:addInputEvent("Mouse_Out", "ExchangeItem_HideToolTip()")
         slot._sourceItemName:SetText(ExchangeItem_getGradeToColorString(needItemColorGrade) .. needItemName .. "<PAOldColor> x" .. tostring(needItemCount))
-        slot._sourceItemName:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. 0 .. ")")
+        slot._sourceItemName:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. emptyItemCount .. "," .. 0 .. ")")
         slot._sourceItemName:addInputEvent("Mouse_Out", "ExchangeItem_HideToolTip()")
         slot._resultIcon:ChangeTextureInfoName("Icon/" .. resultItemIcon)
-        slot._resultIcon:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. 1 .. ")")
+        slot._resultIcon:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. emptyItemCount .. "," .. 1 .. ")")
         slot._resultIcon:addInputEvent("Mouse_Out", "ExchangeItem_HideToolTip()")
         slot._resultItemName:SetText(ExchangeItem_getGradeToColorString(resultItemColorGrade) .. resultItemName .. "<PAOldColor> x" .. tostring(resultItemCount))
-        slot._resultItemName:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. 1 .. ")")
+        slot._resultItemName:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. emptyItemCount .. "," .. 1 .. ")")
         slot._resultItemName:addInputEvent("Mouse_Out", "ExchangeItem_HideToolTip()")
         slot._uiListBG:SetShow(true)
         slot._sourceIcon:SetShow(true)
@@ -118,6 +118,14 @@ function Dialog_ExchangeItem_Update()
         slot._resultItemName:SetShow(true)
         slot._progressArrow:SetShow(true)
         uiIndex = uiIndex + 1
+      else
+        slot._uiListBG:SetShow(false)
+        slot._sourceIcon:SetShow(false)
+        slot._sourceItemName:SetShow(false)
+        slot._resultIcon:SetShow(false)
+        slot._resultItemName:SetShow(false)
+        slot._progressArrow:SetShow(false)
+        emptyItemCount = emptyItemCount + 1
       end
     else
       slot._uiListBG:SetShow(false)
@@ -171,7 +179,7 @@ function Panel_Exchange_Item_Hide()
   self._startIndex = 0
   self._scrollCtrlBtn:SetPosY(0)
 end
-function ExchangeItem_ShowToolTip(uiIndex, itemtype)
+function ExchangeItem_ShowToolTip(uiIndex, emptyCount, itemtype)
   local self = ExchangeItem
   local startIdx = self._startIndex
   local npcIdx = uiIndex + startIdx
@@ -180,11 +188,11 @@ function ExchangeItem_ShowToolTip(uiIndex, itemtype)
   local itemWrapper, UiBase
   if 0 == itemtype then
     itemWrapper = itemInfo:getNeedItemStaticStatusWrapper()
-    UiBase = self._slots[uiIndex]._sourceIcon
+    UiBase = self._slots[uiIndex - emptyCount]._sourceIcon
     Panel_Tooltip_Item_Show(itemWrapper, UiBase, true, false, nil)
   elseif 1 == itemtype then
     itemWrapper = itemInfo:getToItemStaticStatusWrapper()
-    UiBase = self._slots[uiIndex]._resultIcon
+    UiBase = self._slots[uiIndex - emptyCount]._resultIcon
     Panel_Tooltip_Item_Show(itemWrapper, UiBase, true, false, nil)
   end
 end

@@ -11,6 +11,7 @@ Panel_BuyDrink:RegisterShowEventFunc(false, "BuyDrinkHideAni()")
 function BuyDrinkShowAni()
   UIAni.fadeInSCR_Down(Panel_BuyDrink)
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function BuyDrinkHideAni()
   Panel_BuyDrink:SetShowWithFade(CppEnums.PAUI_SHOW_FADE_TYPE.PAUI_ANI_TYPE_FADE_OUT)
@@ -23,6 +24,7 @@ function BuyDrinkHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 local ui = {
   _btn_WinClose = UI.getChildControl(Panel_BuyDrink, "Button_Close"),

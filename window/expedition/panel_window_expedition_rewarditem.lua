@@ -101,9 +101,14 @@ function PaGlobalFunc_ExpeditionRewardItemInfo_Open()
   local self = expeditionRewardItemInfo
   self:open()
 end
+function PaGlobalFunc_ExpeditionReportInfo_Open()
+  local self = expeditionRewardItemInfo
+  self:open()
+end
 function PaGlobalFunc_ExpeditionRewardItemInfo_Close()
   local self = expeditionRewardItemInfo
   self:close()
+  Panel_Tooltip_Item_hideTooltip()
 end
 function PaGlobalFunc_Expedition_SelectRewardItem(slotIndex)
   local self = expeditionRewardItemInfo

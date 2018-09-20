@@ -128,6 +128,7 @@ end
 function PaymentPassword_CheckButton()
   local self = paymentPassword
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:update()
 end
 function PaymentPassword_Input(index)

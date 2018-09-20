@@ -410,6 +410,7 @@ function HandleClicked_TownNpcIcon_NaviStart(spawnType, isAuto)
     isAuto = false
   end
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_DeleteNaviGuideByGroup(0)
   _spawnType = spawnType
   local position = player:get3DPos()
@@ -426,6 +427,7 @@ function HandleClicked_TownNpcIcon_NaviStart(spawnType, isAuto)
   local pos = nearNpcInfo:getPosition()
   local npcNaviKey = ToClient_WorldMapNaviStart(pos, NavigationGuideParam(), isAuto, isAuto)
   audioPostEvent_SystemUi(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(0, 14)
   local selfPlayer = getSelfPlayer():get()
   selfPlayer:setNavigationMovePath(npcNaviKey)
   selfPlayer:checkNaviPathUI(npcNaviKey)

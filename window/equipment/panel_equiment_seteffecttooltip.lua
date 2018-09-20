@@ -234,6 +234,7 @@ function PaGlobal_EquipmentTooltip:toggleDetail()
   self._isDetail = not self._isDetail
   self:updateUI()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function FGlobal_EquipmentTooltip_Init()
   self = PaGlobal_EquipmentTooltip

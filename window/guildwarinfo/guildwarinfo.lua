@@ -9,11 +9,13 @@ Panel_GuildWarInfo:RegisterShowEventFunc(true, "Panel_GuildWarInfo_ShowAni()")
 Panel_GuildWarInfo:RegisterShowEventFunc(false, "Panel_GuildWarInfo_HideAni()")
 function Panel_GuildWarInfo_ShowAni()
   audioPostEvent_SystemUi(1, 6)
+  _AudioPostEvent_SystemUiForXBOX(1, 6)
   Panel_GuildWarInfo:SetAlpha(0)
   UIAni.AlphaAnimation(1, Panel_GuildWarInfo, 0, 0.3)
 end
 function Panel_GuildWarInfo_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   local ani1 = UIAni.AlphaAnimation(0, Panel_GuildWarInfo, 0, 0.2)
   ani1:SetHideAtEnd(true)
 end
@@ -890,6 +892,7 @@ function Panel_GuildWarInfo_Icon_ToolTip_Show(territoryKey, index, iconType)
 end
 function HandleClicked_Territory()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   warInfo_Main.comboBox_Territory:DeleteAllItem()
   for ii = 0, siegingAreaCount - 1 do
     warInfo_Main.comboBox_Territory:AddItem(territoryName[ii], ii)
@@ -901,6 +904,7 @@ function HandleClicked_Warinfo_Refresh()
 end
 function GuildWarInfo_Set_Territory(index)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if nil == index then
     warInfo_Main.comboBox_Territory:SetSelectItemIndex(warInfo_Main.comboBox_Territory:GetSelectIndex())
   else

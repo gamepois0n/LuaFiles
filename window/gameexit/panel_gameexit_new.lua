@@ -817,16 +817,12 @@ function Panel_GameExit_Minimize()
   Panel_ExitConfirm_Old:SetShow(false)
 end
 function Panel_GameExit_MinimizeTray()
-  if false == Panel_GameExit:GetShow() then
-    if _exitConfirm_Chk_Tray_Old:IsCheck() then
-      ToClient_CheckTrayIcon()
-    else
-      ToClient_UnCheckTrayIcon()
-    end
-    Panel_ExitConfirm_Old:SetShow(false)
+  if _exitConfirm_Chk_Tray_Old:IsCheck() then
+    ToClient_CheckTrayIcon()
   else
-    Panel_GameExit_GameOff()
+    ToClient_UnCheckTrayIcon()
   end
+  Panel_ExitConfirm_Old:SetShow(false)
 end
 function Panel_GameExit_GameOff()
   Panel_ExitConfirm:SetShow(false)

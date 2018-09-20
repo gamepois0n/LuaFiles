@@ -265,6 +265,7 @@ function GuildSkillFrame_LearnButtonClick(skillNo)
     local self = GuildSkill
     local isSuccess = ToClient_RequestLearnGuildSkill(skillNo)
     audioPostEvent_SystemUi(0, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     if isSuccess then
       self.skillNoSlot[skillNo].icon:AddEffect("UI_NewSkill01", false, 0, 0)
       self.skillNoSlot[skillNo].icon:AddEffect("fUI_NewSkill01", false, 0, 0)

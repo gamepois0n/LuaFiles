@@ -188,19 +188,24 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
     if _uiNextButton:GetShow() then
       HandleClickedDialogNextButton()
       audioPostEvent_SystemUi(0, 0)
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
     elseif isShowReContactDialog() then
       HandleClickedDialogButton(0)
       audioPostEvent_SystemUi(0, 0)
+      _AudioPostEvent_SystemUiForXBOX(50, 3)
     elseif isShowDialogFunctionQuest() then
       HandleClickedFuncButton(0)
       audioPostEvent_SystemUi(0, 0)
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
       return
     elseif -1 < questDialogIndex() then
       HandleClickedDialogButton(questDialogIndex())
       audioPostEvent_SystemUi(0, 0)
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
     elseif -1 < exchangalbeButtonIndex() then
       HandleClickedDialogButton(exchangalbeButtonIndex())
       audioPostEvent_SystemUi(0, 0)
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
     end
     return
   end
@@ -281,7 +286,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       end
       if true == PaGlobalFunc_MainDialog_Quest_GetShow() then
         PaGlobalFunc_MainDialog_Quest_Close()
-        PaGlobalFunc_MainDialog_Right_ReOpen()
+        PaGlobalFunc_MainDialog_Right_ReOpen(false, true)
         return
       end
     end
@@ -559,16 +564,20 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_DeadMessage(deltaTime)
         if 0 == guildGrade then
           if false == Panel_ClanList:IsShow() then
             audioPostEvent_SystemUi(1, 36)
+            _AudioPostEvent_SystemUiForXBOX(1, 36)
             FGlobal_ClanList_Open()
           else
             audioPostEvent_SystemUi(1, 31)
+            _AudioPostEvent_SystemUiForXBOX(1, 31)
             FGlobal_ClanList_Close()
           end
         elseif false == Panel_Window_Guild:IsShow() and not Panel_DeadMessage:GetShow() then
           audioPostEvent_SystemUi(1, 36)
+          _AudioPostEvent_SystemUiForXBOX(1, 36)
           GuildManager:Show()
         else
           audioPostEvent_SystemUi(1, 31)
+          _AudioPostEvent_SystemUiForXBOX(1, 31)
           GuildManager:Hide()
         end
       else
@@ -978,6 +987,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Dye(delataTime)
       PaGlobalFunc_Dyeing_OnPadB()
     else
       audioPostEvent_SystemUi(1, 23)
+      _AudioPostEvent_SystemUiForXBOX(1, 23)
       FGlobal_Panel_DyeReNew_Hide()
       SetUIMode(Defines.UIMode.eUIMode_Default)
     end
@@ -989,6 +999,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_SkillWindow(delataTime)
   end
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Skill) then
     audioPostEvent_SystemUi(1, 23)
+    _AudioPostEvent_SystemUiForXBOX(1, 23)
     PaGlobalFunc_Skill_Close()
   end
 end
@@ -1268,7 +1279,7 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     return true
   elseif false == _ContentsGroup_RenewUI_ExitGame and Panel_ExitConfirm:GetShow() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-      Panel_GameExit_MinimizeTray()
+      Panel_GameExit_GameOff()
     elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       Panel_ExitConfirm:SetShow(false)
       Panel_Tooltip_Item_hideTooltip()
@@ -1895,11 +1906,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
     requestBlackSpritSkill()
     return
   end
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
-    Toclient_processCheckEscapeKey()
-  else
-    PaGlobal_GlobalKeyBinder.Process_CheckEscape()
-  end
+  Toclient_processCheckEscapeKey()
 end
 function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
   if true == getEscHandle() or false == GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then

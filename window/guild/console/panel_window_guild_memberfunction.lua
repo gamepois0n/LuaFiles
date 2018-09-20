@@ -53,7 +53,6 @@ function GuildMemberFunction:open()
     if memberInfo:isCollectableBenefit() and false == memberInfo:isFreeAgent() and toInt64(0, 0) < memberInfo:getContractedBenefit() then
       self:addButton(self._btnType.recvPay)
     end
-    self:addButton(self._btnType.voiceOption)
   elseif true == selfPlayer:get():isGuildMaster() then
     if 1 == memberInfo:getGrade() then
       self:addButton(self._btnType.showInfo)
@@ -67,10 +66,15 @@ function GuildMemberFunction:open()
       self:addButton(self._btnType.appointCommander)
       self:addButton(self._btnType.inviteParty)
     end
-    self:addButton(self._btnType.voiceOption)
+    if true == memberInfo:isOnline() then
+      self:addButton(self._btnType.voiceOption)
+    end
   else
     self:addButton(self._btnType.showInfo)
     self:addButton(self._btnType.inviteParty)
+    if true == memberInfo:isOnline() then
+      self:addButton(self._btnType.voiceOption)
+    end
   end
   self:addButton(self._btnType.showContract)
   _panel:SetShow(true)
@@ -198,14 +202,6 @@ function PaGlobalFunc_GuildMemberFunction_GetMemberSortIndex()
     return
   end
   return self._currentMemberSortIdx
-end
-function PaGlobalFunc_GuildMemberFunction_GetMemberInfo()
-  local self = GuildMemberFunction
-  if nil == self then
-    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberFunction")
-    return
-  end
-  return self._currentMemberInfo
 end
 function PaGlobalFunc_GuildMemberFunction_Open(index)
   local self = GuildMemberFunction

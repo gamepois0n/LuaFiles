@@ -6,7 +6,6 @@ local Static_SelectMark = UI.getChildControl(Frame_Content, "Static_SelectMark")
 local Static_Frame = UI.getChildControl(Panel_CustomizationMotion, "Static_Frame")
 local Button_Close = UI.getChildControl(Panel_CustomizationMotion, "Button_Close")
 local StaticText_Title = UI.getChildControl(Panel_CustomizationMotion, "StaticText_Title")
-local selectedClassType
 StaticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONMOTION_STATICTEXT_TITLE"))
 Button_Close:addInputEvent("Mouse_LUp", "closeMotionUi()")
 local textureColumnCount = 4
@@ -125,10 +124,9 @@ function UpdateMotion(index)
   applyMotion(index)
   UpdateMarkPosition(index)
 end
-function openMotionUi(classType)
+function openMotionUi()
   UpdateMarkPosition(-1)
   clearAllPoseBone()
-  selectedClassType = classType
   createMotionList()
   Panel_CustomizationMotion:SetShow(true)
   CameraLookEnable(false)

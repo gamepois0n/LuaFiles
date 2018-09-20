@@ -685,10 +685,14 @@ function checkedQuestWidget:setNormalQuestUi(uiIndex)
       questUi._uiConditions[index]:SetPosY(textSize)
       textSize = textSize + questUi._uiConditions[index]:GetTextSizeY() + 2
       if true == isDone then
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+        questUi._uiConditions[index]:SetLineCount(1)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FFF26A6A)
       elseif nil ~= data.demandState and data.demandState[index + 1] == self._config._questState._complete then
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FF626262)
       else
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FFC4BEBE)
       end
       questUi._uiConditions[index]:SetLineRender(isDone)
@@ -736,10 +740,14 @@ function checkedQuestWidget:setLatestQuestUi(uiIndex)
       questUi._uiConditions[index]:SetPosY(textSize)
       textSize = textSize + questUi._uiConditions[index]:GetTextSizeY() + 2
       if true == isDone then
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FFF26A6A)
+        questUi._uiConditions[index]:SetLineCount(1)
       elseif nil ~= data.demandState and data.demandState[index + 1] == self._config._questState._complete then
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FF626262)
       else
+        questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
         questUi._uiConditions[index]:SetFontColor(UI_color.C_FFC4BEBE)
       end
       questUi._uiConditions[index]:SetLineRender(isDone)
@@ -780,10 +788,14 @@ function checkedQuestWidget:setGuildQuestUi(uiIndex)
     questUi._uiConditions[index]:SetPosY(textSize)
     textSize = textSize + questUi._uiConditions[index]:GetTextSizeY() + 2
     if true == isDone then
+      questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+      questUi._uiConditions[index]:SetLineCount(1)
       questUi._uiConditions[index]:SetFontColor(UI_color.C_FFF26A6A)
     elseif nil ~= self._guildData.demandState and self._guildData.demandState[index + 1] == self._config._questState._complete then
+      questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       questUi._uiConditions[index]:SetFontColor(UI_color.C_FF626262)
     else
+      questUi._uiConditions[index]:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
       questUi._uiConditions[index]:SetFontColor(UI_color.C_FFC4BEBE)
     end
     questUi._uiConditions[index]:SetLineRender(isDone)
@@ -971,6 +983,9 @@ function checkedQuestWidget:doReleaseCheckForTutorial()
 end
 function QuestWidget_ProgressingGuildQuest_UpdateRemainTime(deltaTime)
   checkedQuestWidget:updatePerFrame(deltaTime)
+  if true == checkedQuestWidget._widgetMouseOn then
+    checkedQuestWidget:questWidget_MouseOver(false)
+  end
 end
 function checkedQuestWidget:updatePerFrame(deltaTime)
   self._elapsedTime = self._elapsedTime + deltaTime
@@ -1439,6 +1454,7 @@ function checkedQuestWidget:questWidget_MouseOver(show)
       self._uiQuestList[ii]._uiNaviBtn:SetShow(false)
       self._uiQuestList[ii]._uiGiveupBtn:SetShow(false)
       self._uiQuestList[ii]._uiHideBtn:SetShow(false)
+      self._uiQuestList[ii]._uiRewardBtn:SetShow(false)
     end
     if CppEnums.QuestWidgetType.eQuestWidgetType_Simple == widgetType then
       self._ui._frame_NormalQuest:SetShow(false)

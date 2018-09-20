@@ -37,7 +37,7 @@ function UpdatePaletteMarkPosition(index)
     Static_SelectMark:SetShow(false)
   end
 end
-function CreateCommonPalette(FrameTemplate, ftCollision, classType, paramType, paramIndex, PaletteIndex)
+function CreateCommonPalette(FrameTemplate, ftCollision, paramType, paramIndex, PaletteIndex)
   clearPalette()
   local Frame_Content = UI.getChildControl(FrameTemplate, "Frame_Content")
   Static_SelectMark = UI.getChildControl(Frame_Content, "Static_SelectMark")
@@ -57,14 +57,14 @@ function CreateCommonPalette(FrameTemplate, ftCollision, classType, paramType, p
     tempStatic:setRenderTexture(tempStatic:getBaseTexture())
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
-    tempStatic:addInputEvent("Mouse_PressMove", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-    tempStatic:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
+    tempStatic:addInputEvent("Mouse_PressMove", "UpdateCommonPalette(" .. paramType .. "," .. paramIndex .. ")")
+    tempStatic:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. paramType .. "," .. paramIndex .. ")")
     colorStatic[luaColorIndex] = tempStatic
   end
   ftCollision:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/cus_palette.dds")
   ftCollision:getBaseTexture():setUV(0, 0, 1, 1)
-  ftCollision:addInputEvent("Mouse_LPress", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-  ftCollision:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
+  ftCollision:addInputEvent("Mouse_LPress", "UpdateCommonPalette(" .. paramType .. "," .. paramIndex .. ")")
+  ftCollision:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. paramType .. "," .. paramIndex .. ")")
   ftCollision:SetShow(true)
   ftCollision:SetPosX(FrameTemplate:GetPosX())
   ftCollision:SetPosY(FrameTemplate:GetPosY())
@@ -75,7 +75,7 @@ function CreateCommonPalette(FrameTemplate, ftCollision, classType, paramType, p
   FrameTemplate:UpdateContentScroll()
   FrameTemplate:UpdateContentPos()
 end
-function UpdateCommonPalette(classType, paramType, paramIndex)
+function UpdateCommonPalette(paramType, paramIndex)
   posX = getMousePosX()
   posY = getMousePosY()
   for luaColorIndex = 1, #colorStatic do
@@ -92,7 +92,7 @@ function UpdateCommonPalette(classType, paramType, paramIndex)
   end
 end
 local CheckControlArr = {}
-function CreateEyePalette(FrameTemplate, ftCollision, classType, paramType, paramIndex, paramIndex2, PaletteIndex, CheckControl1, CheckControl2)
+function CreateEyePalette(FrameTemplate, ftCollision, paramType, paramIndex, paramIndex2, PaletteIndex, CheckControl1, CheckControl2)
   clearPalette()
   CheckControlArr[1] = CheckControl1
   CheckControlArr[2] = CheckControl2
@@ -114,13 +114,13 @@ function CreateEyePalette(FrameTemplate, ftCollision, classType, paramType, para
     tempStatic:setRenderTexture(tempStatic:getBaseTexture())
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
-    tempStatic:addInputEvent("Mouse_PressMove", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
+    tempStatic:addInputEvent("Mouse_PressMove", "UpdateEyePalette(" .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
     colorStatic[luaColorIndex] = tempStatic
   end
   ftCollision:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/cus_palette.dds")
   ftCollision:getBaseTexture():setUV(0, 0, 1, 1)
-  ftCollision:addInputEvent("Mouse_LPress", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
-  ftCollision:addInputEvent("Mouse_LUp", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
+  ftCollision:addInputEvent("Mouse_LPress", "UpdateEyePalette(" .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
+  ftCollision:addInputEvent("Mouse_LUp", "UpdateEyePalette(" .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
   ftCollision:SetShow(true)
   ftCollision:SetPosX(FrameTemplate:GetPosX())
   ftCollision:SetPosY(FrameTemplate:GetPosY())
@@ -131,7 +131,7 @@ function CreateEyePalette(FrameTemplate, ftCollision, classType, paramType, para
   FrameTemplate:UpdateContentScroll()
   FrameTemplate:UpdateContentPos()
 end
-function UpdateEyePalette(classType, paramType, paramIndex, paramIndex2)
+function UpdateEyePalette(paramType, paramIndex, paramIndex2)
   posX = getMousePosX()
   posY = getMousePosY()
   for luaColorIndex = 1, #colorStatic do

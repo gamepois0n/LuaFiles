@@ -204,6 +204,7 @@ function LoginPassword_Input_Clear()
 end
 function CheckButton_Sound()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   LoginPassword_Update()
 end
 function LoginPassword_Update()

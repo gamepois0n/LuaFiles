@@ -14,20 +14,16 @@ if false == _ContentsGroup_RenewUI then
   registerEvent("EventOpenSkinUi", "OpenSkinUi")
   registerEvent("EventCloseSkinUi", "CloseSkinUi")
 end
-local selectedClassType, selectedUiId
+local selectedUiId
 local controlOffset = 10
 local contentsStartY = 0
 local sliderOffset = 7
 local sliderValueOffset = 10
 local sliderHeight = SliderText:GetSizeY()
-local currentclassType = -1
 local currentuiId = -1
-function OpenSkinUi(classType, uiId)
-  globalcurrentclassType = classType
+function OpenSkinUi(uiId)
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
-  selectedClassType = classType
   selectedUiId = uiId
   contentsIndex = 0
   local controlPosY = contentsStartY
@@ -38,7 +34,7 @@ function OpenSkinUi(classType, uiId)
     local paletteParamIndex = getUiPaletteParamIndex(selectedUiId, contentsIndex)
     local paletteIndex = getDecorationParamMethodValue(paletteParamType, paletteParamIndex)
     FrameTemplateColor:SetPosY(controlPosY)
-    CreateCommonPalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteIndex)
+    CreateCommonPalette(FrameTemplateColor, Static_Collision, paletteParamType, paletteParamIndex, paletteIndex)
     local colorIndex = getParam(paletteParamType, paletteParamIndex)
     UpdatePaletteMarkPosition(colorIndex)
     local Frame_Content_Color = UI.getChildControl(FrameTemplateColor, "Frame_Content")
@@ -78,7 +74,6 @@ function OpenSkinUi(classType, uiId)
   FrameTemplateColor:UpdateContentPos()
 end
 function CloseSkinUi()
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
 end
 function UpdateSkinSlider()
@@ -88,8 +83,8 @@ function UpdateSkinSlider()
   setGlobalCheck(true)
 end
 function SkinHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
-  OpenSkinUi(currentclassType, currentuiId)
+  OpenSkinUi(currentuiId)
 end

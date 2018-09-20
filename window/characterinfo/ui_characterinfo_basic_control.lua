@@ -162,7 +162,7 @@ function FromClient_UI_CharacterInfo_Basic_ResistChanged()
   end
 end
 function FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
-  if Panel_Window_CharInfo_Status:IsShow() == false then
+  if Panel_Window_CharInfo_Status:GetShow() == false then
     return
   end
   local self = PaGlobal_CharacterInfoBasic
@@ -172,9 +172,13 @@ function FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
       self._ui._lifeInfo[index]._level:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(self._playerGet:getLifeExperienceLevel(craftType)))
       self._ui._lifeInfo[index]._level:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(self._playerGet:getLifeExperienceLevel(craftType)))
       self._ui._lifeInfo[index]._title:SetText(UI_LifeString[craftType])
-      local ExpRate = Int64toInt32(self._playerGet:getCurrLifeExperiencePoint(craftType) * toInt64(0, 100) / self._playerGet:getDemandLifeExperiencePoint(craftType))
-      self._ui._lifeInfo[index]._progress:SetProgressRate(ExpRate)
-      self._ui._lifeInfo[index]._percent:SetText(ExpRate .. "%")
+      local currentExp64 = self._playerGet:getCurrLifeExperiencePoint(craftType)
+      local needExp64 = self._playerGet:getDemandLifeExperiencePoint(craftType)
+      local currentExpRate = currentExp64 * toInt64(0, 10000) / needExp64
+      local divideSum = currentExpRate % toInt64(0, 100)
+      local currentExpRateString = tostring(currentExpRate / toInt64(0, 100)) .. "." .. tostring(divideSum)
+      self._ui._lifeInfo[index]._progress:SetProgressRate(Int64toInt32(currentExpRate / toInt64(0, 100)))
+      self._ui._lifeInfo[index]._percent:SetText(currentExpRateString .. "%")
     end
   end
 end
@@ -637,6 +641,7 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   if Panel_Window_CharInfo_Status:IsShow() == false then
     return
   end
+  FromClient_UI_CharacterInfo_Basic_CraftLevelChanged()
   local self = PaGlobal_Char_LifeInfo
   local isSailOpen = ToClient_IsContentsGroupOpen("83")
   local selfPlayer = getSelfPlayer()
@@ -645,13 +650,14 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   end
   for key, value in pairs(self._lifeType_Panel_Name) do
     local currentLevel = selfPlayer:get():getLifeExperienceLevel(key)
-    local currentExp = selfPlayer:get():getCurrLifeExperiencePoint(key)
-    local needExp = selfPlayer:get():getDemandLifeExperiencePoint(key)
-    local currentExpRate = Int64toInt32(currentExp * toInt64(0, 100) / needExp)
-    local currentExpRateString = string.format("%.1f", currentExpRate)
+    local currentExp64 = selfPlayer:get():getCurrLifeExperiencePoint(key)
+    local needExp64 = selfPlayer:get():getDemandLifeExperiencePoint(key)
+    local currentExpRate = currentExp64 * toInt64(0, 10000) / needExp64
+    local divideSum = currentExpRate % toInt64(0, 100)
+    local currentExpRateString = tostring(currentExpRate / toInt64(0, 100)) .. "." .. tostring(divideSum)
     self._lifeInfo[key]._ui._levelText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(currentLevel))
     self._lifeInfo[key]._ui._levelText:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(currentLevel))
-    self._lifeInfo[key]._ui._progressBar:SetProgressRate(currentExpRate)
+    self._lifeInfo[key]._ui._progressBar:SetProgressRate(Int64toInt32(currentExpRate / toInt64(0, 100)))
     self._lifeInfo[key]._ui._expText:SetText(currentExpRateString .. "%")
     if key == __ePlayerLifeStatType_Collecting or key == __ePlayerLifeStatType_Manufacture then
       local commonPoint = ToClient_GetCommonLifeStat(key)

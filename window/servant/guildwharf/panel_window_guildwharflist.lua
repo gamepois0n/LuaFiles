@@ -467,7 +467,9 @@ function GuildWharfList_Recovery()
     needMoney = Int64toInt32(servantInfo:getRecoveryCost_s64())
     confirmFunction = GuildWharfList_RecoveryXXX
   end
-  Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_CARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
+  local useLifeMsgFlag = CppEnums.VehicleType.Type_SailingBoat == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_PersonalBattleShip == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_PersonTradeShip == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_CashPersonalTradeShip == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_CashPersonalBattleShip == servantInfo:getVehicleType()
+  local msg = useLifeMsgFlag and "LUA_SERVANT_STABEL_SHIP_RECOVERY_NOTIFY_MSG" or "LUA_SERVANT_STABEL_CARRIAGE_RECOVERY_NOTIFY_MSG"
+  Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, msg, "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
 end
 function GuildWharfList_RecoveryXXX()
   audioPostEvent_SystemUi(5, 7)

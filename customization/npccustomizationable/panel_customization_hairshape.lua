@@ -126,17 +126,14 @@ local SculptingUIRect = {
   right,
   bottom
 }
-local selectedClassType = -1
 local sliderContentsStartY = 125
 local sliderTextGap = 3
 local contentsGapHeight = 10
-local selectedClassIndex = 0
 local param = {}
 local paramMin = {}
 local paramMax = {}
 local paramDefault = {}
 local iswithoutbone = true
-local currentclassType = -1
 local currentuiId = -1
 local checktransrot = 1
 local function UpdateHairBoneControls()
@@ -230,16 +227,12 @@ function UpdateHairSlider(sliderIndex)
 end
 function OpenHairShapeUi(classType, uiId)
   iswithoutbone = false
-  globalcurrentclassType = classType
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
-  selectedClassType = classType
   CameraLookEnable(false)
   CursorSelect(checktransrot)
   EnableHairSlide(false)
   startHairPickingMode()
-  selectedClassType = classType
   ShowBoneControls(true)
   local defaultContentsIndex = 0
   local sliderNum = getUiSliderCount(uiId, defaultContentsIndex)
@@ -321,13 +314,10 @@ function OpenHairShapeUi(classType, uiId)
   updateGroupFrameControls(Panel_CustomizationTransformHair:GetSizeY(), Panel_CustomizationTransformHair)
   ToggleShowHairBoneControlPart()
 end
-function OpenHairShapeUiWithoutBoneControl(classType, uiId)
+function OpenHairShapeUiWithoutBoneControl(uiId)
   iswithoutbone = true
-  globalcurrentclassType = classType
   globalcurrentuiId = uiId
-  currentclassType = classType
   currentuiId = uiId
-  selectedClassType = classType
   CameraLookEnable(false)
   ShowBoneControls(false)
   local controlPosY = 10
@@ -459,24 +449,22 @@ end
 function CloseHairShapeUi()
   endPickingMode()
   CameraLookEnable(true)
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
   globalisCustomizationPicking = false
 end
 function CloseHairShapeUiWithoutBoneControl()
   CameraLookEnable(true)
-  globalcurrentclassType = -2
   globalcurrentuiId = -2
   globalisCustomizationPicking = false
 end
 function HairShapeHistoryApplyUpdate()
-  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+  if globalcurrentuiId ~= currentuiId then
     return
   end
   if iswithoutbone then
-    OpenHairShapeUiWithoutBoneControl(currentclassType, currentuiId)
+    OpenHairShapeUiWithoutBoneControl(currentuiId)
   else
-    OpenHairShapeUi(currentclassType, currentuiId)
+    OpenHairShapeUi(currentuiId)
     PickingHairBone()
   end
 end
