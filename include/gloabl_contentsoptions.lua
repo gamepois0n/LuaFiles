@@ -108,6 +108,6 @@ _ContentsGroup_RemasterUI_QuestWidget = _ContentsGroup_RemasterUI_Main
 _ContentsGroup_RemasterUI_Main_RightTop = _ContentsGroup_RemasterUI_Main
 _ContentsGroup_EnhanceSail = ToClient_IsContentsGroupOpen("376")
 _ContentsGroup_PetFusion = false
-_ContentsGroup_IsNPCCustomizationable = false
+_ContentsGroup_IsNPCCustomizationable = isNPCCustomizationable()
 _ContentsGroup_ForXBoxClosedBeta = ToClient_isXBox() and false
 _ContentsGroup_NewSiegeRule = ToClient_IsContentsGroupOpen("471")

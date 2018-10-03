@@ -332,7 +332,7 @@ local function FishingGame_Manual_Fishing_3(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
-    audioPostEvent_SystemUi(11, 6)
+    _AudioPostEvent_SystemUiForXBOX(11, 6)
     local leftTimeForAuto = math.floor(Int64toInt32(getSelfPlayer():get():getFishingAutoLeftTime()) / 1000)
     local leftMinute
     if 0 < math.floor(leftTimeForAuto / 60) then

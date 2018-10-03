@@ -91,7 +91,6 @@ function MarketPlace:registEvent()
   registerEvent("FromClient_responseListByWorldMarket", "FromClient_MarketPlace_ResponseList")
   registerEvent("FromClient_responseDetailListByWorldMarketByGroupNo", "FromClient_MarketPlace_ResponseDetailListByCategory")
   registerEvent("FromClient_responseDetailListByWorldMarketByItemKey", "FromClient_MarketPlace_ResponseDetailListByKey")
-  registerEvent("FromClient_responseGetBiddingList", "FromClient_MarketPlace_responseGetBiddingList")
   registerEvent("FromClient_responseGetMyBiddingList", "FromClient_MarketPlace_responseGetMyBiddingList")
 end
 function MarketPlace:open(tabIdx)
@@ -415,6 +414,7 @@ function FGolbal_ItemMarketNew_Close()
     return
   end
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   if true == PaGlobalFunc_MarketWallet_GetShow() then
     PaGlobalFunc_MarketWallet_ForceClose()
   end
@@ -689,14 +689,6 @@ function FromClient_MarketPlace_responseGetMyBiddingList()
     return
   end
   self:biddingOpen(self._biddingTabIdx.sell)
-end
-function FromClient_MarketPlace_responseGetBiddingList()
-  local self = MarketPlace
-  if nil == self then
-    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
-    return
-  end
-  _PA_LOG("\236\162\133\237\152\132", "FromClient_MarketPlace_responseGetBiddingList")
 end
 function FromClient_MarketPlace_NotifyMessage(msgType, strParam1, param1, param2, param3, param4)
   local self = MarketPlace

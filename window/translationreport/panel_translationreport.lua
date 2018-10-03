@@ -22,6 +22,7 @@ function Panel_TranslationReport:Open(staticType, key1, key2, key3, textNo)
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_TranslationReport:SetShow(true, true)
   local selfPlayer = getSelfPlayer()
   if nil == selfPlayer then

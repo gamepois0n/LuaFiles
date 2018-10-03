@@ -450,6 +450,58 @@ Defines.RenderMode = {
 }
 Defines.TooltipDataType = {ItemWrapper = 1, ItemSSWrapper = 2}
 Defines.TooltipTargetType = {Item = 1, ItemWithoutCompare = 2}
+Defines.ServiceTypeToString = {
+  [0] = "DV",
+  "KR",
+  "KR",
+  "KR",
+  "JP",
+  "JP",
+  "RU",
+  "RU",
+  "CH",
+  "CH",
+  "NA",
+  "NA",
+  "TW",
+  "TW",
+  "SA",
+  "SA",
+  "TH",
+  "TH",
+  "ID",
+  "ID",
+  "TR",
+  "TR",
+  "PS",
+  "PS",
+  "XB",
+  "XB",
+  "GT",
+  "GT"
+}
+Defines.LanguageTypeToString = {
+  [0] = "DV",
+  "KR",
+  "EN",
+  "JP",
+  "CH",
+  "RU",
+  "FR",
+  "DE",
+  "ES",
+  "TW",
+  "SA",
+  "PT",
+  "TH",
+  "ID",
+  "TR",
+  "AE",
+  "PS",
+  "XB",
+  "SP",
+  "XX"
+}
 Defines.RenderMode.eRenderMode_LuaMode = Defines.RenderMode.eRenderMode_Count
 Defines.RenderMode.eRenderMode_Dye = Defines.RenderMode.eRenderMode_LuaMode + 0
 Defines.RenderMode.eRenderMode_InGameCashShop = Defines.RenderMode.eRenderMode_LuaMode + 1

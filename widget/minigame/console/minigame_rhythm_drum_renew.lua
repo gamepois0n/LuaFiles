@@ -112,7 +112,7 @@ function RhythmGame_Drum_UpdateFunc(fDeltaTime)
       getSelfPlayer():get():SetMiniGameResult(1)
       control:SetShow(false)
       if isFailed == false then
-        audioPostEvent_SystemUi(11, 2)
+        _AudioPostEvent_SystemUiForXBOX(11, 2)
         self._ui.txt_Purpose:SetShow(false)
         self._ui.stc_Result_Bad:SetShow(true)
         self._ui.stc_Result_Bad:ResetVertexAni()

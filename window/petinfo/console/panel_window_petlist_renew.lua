@@ -282,15 +282,15 @@ function petList:SetButtonPosition(isConfirmOn)
   petListUI._staticText_CheckInAll:SetPosX(xPos)
 end
 function petList:selectShowInfo()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   FGlobal_PetInfo_Open(self.selectPetNo)
 end
 function petList:selectFeed()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   FGlobal_PetFeedOpen(self.selectPetIndex)
 end
 function petList:selectSeal()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   ToClient_requestPetSeal(tonumber64(self.selectPetNo))
   self:resetData()
   self:updateHungry()
@@ -299,7 +299,7 @@ function petList:selectSeal()
   self:setSkillFrame()
 end
 function petList:selectCommand()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   if nil == self.selectPetNo or "" == self.selectPetNo then
     return
   end
@@ -309,7 +309,7 @@ function petList:selectCommand()
   FGlobal_PetCommand_Init(self.selectPetIndex)
 end
 function petList:selectUnseal()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   if self._config._maxUnsealCount <= self.unsealPetCount then
     Proc_ShowMessage_Ack_WithOut_ChattingMessage(PAGetString(Defines.StringSheet_GAME, "LUA_UNABLE_SUMMON_PET"))
     return
@@ -323,7 +323,7 @@ function petList:selectUnseal()
   self:setSkillFrame()
 end
 function petList:selectCompose()
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   PaGlobalFunc_PetExchange_Open(self.selectPetNo)
 end
 function petList:setPosition()
@@ -902,7 +902,7 @@ function petList:checkInAll()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
     return
   end
-  audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   local unsealPetCount = ToClient_getPetUnsealedList()
   if 0 == unsealPetCount then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))

@@ -4,45 +4,57 @@ local renderMode = RenderModeWrapper.new(100, {
 local gameExitPhoto = false
 local characterInfoPhoto = false
 local CharacterSlotIndex = 0
-function IngameCustomize_Show()
-  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(IngameCustomize_ShowActual)
-end
-function IngameCustomize_ShowActual()
-  PaGlobalFunc_FullScreenFade_FadeOut(2, 2)
+function IngameCustomize_isClearToShow()
   if isGameTypeGT() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOUSE_FUNCTION"))
-    return
+    return false
   end
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BEAUTYOPENALERT_INDEAD"))
-    return
+    return false
   end
-  ToClient_SaveUiInfo(false)
   if isFlushedUI() then
-    return
+    return false
   end
   local terraintype = selfPlayerNaviMaterial()
   if 8 == terraintype or 9 == terraintype then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_DONTOPEN_INWATER"))
-    return
+    return false
   end
   if not FGlobal_IsCommercialService() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTUSE"))
-    return
+    return false
   end
   if GetUIMode() == Defines.UIMode.eUIMode_Gacha_Roulette then
-    return
+    return false
   end
   if nil == getCustomizingManager() then
-    return
+    return false
   end
   if true == getCustomizingManager():isShow() then
+    return false
+  end
+  if false == getCustomizingManager():isReady() then
+    return false
+  end
+  return true
+end
+function IngameCustomize_Show()
+  if not IngameCustomize_isClearToShow() then
+    return
+  end
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(IngameCustomize_ShowActual)
+end
+function IngameCustomize_ShowActual()
+  PaGlobalFunc_FullScreenFade_FadeOut(2, 2)
+  if not IngameCustomize_isClearToShow() then
     return
   end
   local isShowSuccess = getCustomizingManager():show()
   if false == isShowSuccess then
     return
   end
+  ToClient_SaveUiInfo(false)
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end

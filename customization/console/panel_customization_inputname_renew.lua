@@ -24,7 +24,7 @@ function Customization_InputNameInfo:InitEvent()
   self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Close()")
   Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Customization_InputName_Confirm()")
   Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
-  self._ui._edit_InputName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_Customization_InputName_Confirm")
+  self._ui._edit_InputName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_Customization_InputName_KeyboardEnd")
 end
 function Customization_InputNameInfo:InitRegister()
 end
@@ -32,6 +32,11 @@ function Customization_InputNameInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+end
+function PaGlobalFunc_Customization_InputName_KeyboardEnd(str)
+  local self = Customization_InputNameInfo
+  self._ui._edit_InputName:SetEditText(str)
+  ClearFocusEdit()
 end
 function PaGlobalFunc_Customization_InputName_SetFocus()
   local self = Customization_InputNameInfo

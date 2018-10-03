@@ -61,6 +61,7 @@ function HandleOutWorkerTooltip(uiBase)
 end
 function FGlobal_ShowWorkerTooltip(workerData, uiBase)
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   local workerStaticStatus = workerData:getWorkerStaticStatus()
   controlWorkerTooltip._icon:ChangeTextureInfoName(getWorkerIcon(workerStaticStatus))
   controlWorkerTooltip._name:SetText(getWorkerName(workerStaticStatus))

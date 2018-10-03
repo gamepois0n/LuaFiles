@@ -2607,7 +2607,9 @@ end
 function PaGlobalFunc_Radar_Resize()
   controlAlign()
   radarAlert_Resize()
-  PaGlobal_WorldMiniMap:setTimebarSize()
+  if nil ~= PaGlobal_WorldMiniMap then
+    PaGlobal_WorldMiniMap:setTimebarSize()
+  end
 end
 registerEvent("FromClient_luaLoadComplete", "Radar_luaLoadComplete")
 registerEvent("FromClient_setNameOfMouseOverIcon", "FromClient_setNameOfMouseOverIcon")

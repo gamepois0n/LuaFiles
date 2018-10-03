@@ -189,6 +189,7 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:updateTryBasicSkill(deltaTime
     if true == isPressedTab then
       isPressedTab = false
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       PaGlobal_TutorialUiManager:getUiHeadlineMessage():addClearStepEffect(1)
       self._currentProgress = self._currentProgress + 1
       self:handleChangeStep(self._currentStep)
@@ -206,12 +207,14 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:updateTryBasicSkill(deltaTime
     end
     if self._updateTime > 2.25 then
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       PaGlobal_TutorialUiManager:getUiHeadlineMessage():addClearStepEffect(2)
       if true == isBlackSpiritScolding then
         isBlackSpiritScolding = false
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setShowAll(false)
       end
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       self._updateTime = 0
       self._currentProgress = self._currentProgress + 1
       self:handleChangeStep(self._currentStep)
@@ -255,6 +258,7 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:eventCallUsedSkill_TryBasicSk
   for key, value in pairs(self._skillNoList[listNo]) do
     if skillNo == value then
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       self._usedSkillCount = self._usedSkillCount + 1
       self:handleChangeStep(self._currentStep)
     end
@@ -302,6 +306,7 @@ function PaGlobal_TutorialPhase_BasicSkill_Warrior:eventCallUsedSkill_TrySkillCo
       PaGlobal_TutorialUiManager:getUiHeadlineMessage():setSkillText(2, PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_WARRIOR_COMBO_0_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_BASESKILLTUTORIAL_WARRIOR_1"))
       self._currentClearCount = self._currentClearCount + 1
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       if self._currentClearCount == self._totalClearCount then
         self._usedComboCount = self._usedComboCount + 1
         PaGlobal_TutorialUiManager:getUiHeadlineMessage():setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP6") .. " ( " .. self._usedComboCount .. " / " .. self._totalComboCount .. " )")

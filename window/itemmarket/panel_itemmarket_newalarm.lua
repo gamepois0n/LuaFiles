@@ -39,6 +39,7 @@ function PaGlobal_ItemMarket_NewAlarm:ShowAni()
   alarmMoveAni1:SetDisableWhileAni(true)
   if FGlobal_ItemMarket_AlarmList_SoundCheck() then
     audioPostEvent_SystemUi(10, 1)
+    _AudioPostEvent_SystemUiForXBOX(10, 1)
   end
   FGlobal_BossAlertMsg_ResetPos(FGlobal_AlertMsgBg_ShowCheck(), true, 1)
 end

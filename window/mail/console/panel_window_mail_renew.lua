@@ -269,7 +269,7 @@ function PaGlobalFunc_MailInfo_OnPadB()
   Mail_Close()
 end
 function Mail_Close()
-  audioPostEvent_SystemUi(1, 21)
+  _AudioPostEvent_SystemUiForXBOX(1, 21)
   if _panel:IsShow() then
     _panel:SetShow(false, true)
     PaGlobal_MailDetail_Close()

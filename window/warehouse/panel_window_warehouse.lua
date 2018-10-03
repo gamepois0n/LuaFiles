@@ -218,7 +218,31 @@ function warehouse:update()
     if ii < useMaxCount - useStartSlot - self._startSlotIndex then
       slot.empty:SetShow(true)
     elseif ii == useMaxCount - useStartSlot - self._startSlotIndex then
-      slot.lock:SetShow(true)
+      if isGameTypeKorea() then
+        if self.slots[ii].icon:GetShow() then
+          local isBuyalbe = false
+          if warehouse:isNpc() then
+            for wIndex = 0, #warehouseProductWaypoint do
+              if FGlobal_Warehouse_CurrentWaypointKey() == warehouseProductWaypoint[wIndex] then
+                isBuyalbe = true
+                break
+              end
+            end
+          end
+          if isBuyalbe then
+            slot.onlyPlus:SetShow(true)
+            slot.onlyPlus:addInputEvent("Mouse_LUp", "Warehouse_LDownClick(" .. ii .. ")")
+          else
+            slot.lock:SetShow(true)
+          end
+        else
+          slot.plus:SetShow(true)
+        end
+        Panel_Window_Warehouse:SetChildIndex(slot.plus, 15099)
+        Panel_Window_Warehouse:SetChildIndex(slot.onlyPlus, 15100)
+      else
+        slot.lock:SetShow(true)
+      end
     else
       slot.lock:SetShow(true)
     end
@@ -894,7 +918,12 @@ function Warehouse_LDownClick(index)
     PaGlobal_EasyBuy:Open(17, self.savedWayPointKey)
   end
   if index == useMaxCount - useStartSlot - self._startSlotIndex and isGameTypeKorea() then
-    local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_EASYBUY")
+    local maxCount = warehouseWrapper:getMaxCount()
+    local leftCount = maxCount - useMaxCount
+    local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_EASYBUY") .. [[
+
+
+]] .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WAREHOUSE_EXTENDABLECOUNT", "maxCount", maxCount - 1, "leftCount", leftCount)
     local messageboxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBJECTCONTROL_CONFIRM"),
       content = messageContent,

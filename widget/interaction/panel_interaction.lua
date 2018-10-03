@@ -13,6 +13,7 @@ local _circularProgressBarInteraction = UI.getChildControl(Panel_Interaction, "C
 local _circularProgressBarStaticbgInteraction = UI.getChildControl(Panel_Interaction, "Static_CircleProgress_PressBG")
 Panel_Interaction:RegisterShowEventFunc(true, "Panel_Interaction_ShowAni()")
 Panel_Interaction:RegisterShowEventFunc(false, "Panel_Interaction_HideAni()")
+local pcExchangeDisableTime = 60
 function Panel_Interaction_ShowAni()
 end
 function Panel_Interaction_HideAni()
@@ -368,6 +369,9 @@ function Interaction_Show(actor)
           FGlobal_Tutorial_RequestSitDown()
         end
       end
+      if CppEnums.InteractionType.InteractionType_ExchangeItem == ii then
+        interactionTargetUIList[ii]:SetAutoDisableTime(pcExchangeDisableTime)
+      end
       local shortcuts = SHOW_BUTTON_COUNT
       if 0 == SHOW_BUTTON_COUNT then
         if CppEnums.InteractionType.InteractionType_InvitedParty == ii or CppEnums.InteractionType.InteractionType_GuildInvite == ii or CppEnums.InteractionType.InteractionType_ExchangeItem == ii then
@@ -607,6 +611,8 @@ function Interaction_ButtonPushed(interactionType)
         end
       end
     end
+  elseif CppEnums.InteractionType.InteractionType_ExchangeItem == interactionType then
+    interactionTargetUIList[interactionType]:SetMonoTone(true)
   end
   if isTakedownCannon then
     local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
@@ -788,10 +794,19 @@ end
 function Interaction_InstallationBuff()
   toClient_RequestInstallationBuff()
 end
+function FromClient_EnablePCExChangeButton()
+  local exchagneButton = interactionTargetUIList[CppEnums.InteractionType.InteractionType_ExchangeItem]
+  if nil ~= exchagneButton then
+    exchagneButton:ClearDisableTime()
+    exchagneButton:SetAutoDisableTime(pcExchangeDisableTime)
+    exchagneButton:SetMonoTone(false)
+  end
+end
 registerEvent("FromClient_InterAction_UpdatePerFrame", "Interaction_Update")
 registerEvent("FromClient_ConfirmInstallationBuff", "FromClient_ConfirmInstallationBuff")
 registerEvent("FromClient_InteractionFail", "FromClient_InteractionFail")
 registerEvent("FromClient_NotifyObserverModeEnd", "FromClient_NotifyObserverModeEnd")
+registerEvent("FromClient_EnablePCExChangeButton", "FromClient_EnablePCExChangeButton")
 local isReloadState = true
 local function interactionReload()
   if false == isReloadState then

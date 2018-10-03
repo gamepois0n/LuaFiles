@@ -454,9 +454,11 @@ function WhaleHuntingEvent(message, noticeMsgType, noticeValue)
     if 0 == noticeValue then
       msgType = messageType.whaleShow
       audioPostEvent_SystemUi(19, 3)
+      _AudioPostEvent_SystemUiForXBOX(19, 3)
     elseif 1 == noticeValue then
       msgType = messageType.huntingLandShow
       audioPostEvent_SystemUi(19, 2)
+      _AudioPostEvent_SystemUiForXBOX(19, 2)
     end
   elseif CppEnums.EChatNoticeType.HuntingEnd == noticeMsgType then
     if 0 == noticeValue then
@@ -499,63 +501,83 @@ function FGlobal_WorldBossShow(message, noticeType, noticeValue)
   local msgType = messageType.worldBossShow
   if 11 == noticeType then
     audioPostEvent_SystemUi(19, 0)
+    _AudioPostEvent_SystemUiForXBOX(19, 0)
   elseif 12 == noticeType then
     if 0 == noticeValue then
       audioPostEvent_SystemUi(19, 1)
+      _AudioPostEvent_SystemUiForXBOX(19, 1)
       msgType = messageType.worldBossNuver
     elseif 1 == noticeValue then
       audioPostEvent_SystemUi(19, 4)
+      _AudioPostEvent_SystemUiForXBOX(19, 4)
       msgType = messageType.worldBossKaranda
     elseif 2 == noticeValue then
       audioPostEvent_SystemUi(19, 5)
+      _AudioPostEvent_SystemUiForXBOX(19, 5)
       msgType = messageType.worldBossKutum
     elseif 3 == noticeValue or 4 == noticeValue or 5 == noticeValue or 6 == noticeValue then
       audioPostEvent_SystemUi(19, 6)
+      _AudioPostEvent_SystemUiForXBOX(19, 6)
       msgType = messageType.fieldBoss
     elseif 7 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.eventBossTurking
     elseif 8 == noticeValue or 9 == noticeValue then
       audioPostEvent_SystemUi(19, 8)
+      _AudioPostEvent_SystemUiForXBOX(19, 8)
     elseif 10 == noticeValue then
       audioPostEvent_SystemUi(19, 9)
+      _AudioPostEvent_SystemUiForXBOX(19, 9)
       msgType = messageType.bellBoss
     elseif 11 == noticeValue then
       audioPostEvent_SystemUi(19, 10)
+      _AudioPostEvent_SystemUiForXBOX(19, 10)
       msgType = messageType.eventBossMamos
     elseif 12 == noticeValue then
       audioPostEvent_SystemUi(19, 11)
+      _AudioPostEvent_SystemUiForXBOX(19, 11)
       msgType = messageType.eventBossIsabella
     elseif 13 == noticeValue then
       audioPostEvent_SystemUi(19, 12)
+      _AudioPostEvent_SystemUiForXBOX(19, 12)
       msgType = messageType.fieldBossOpin
     elseif 14 == noticeValue then
       audioPostEvent_SystemUi(19, 13)
+      _AudioPostEvent_SystemUiForXBOX(19, 13)
       msgType = messageType.worldBossGamos
     elseif 15 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.wolfAppear
     elseif 16 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.wolfNotAppear
     elseif 17 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.termianNineShark
     elseif 18 == noticeValue then
       audioPostEvent_SystemUi(19, 14)
+      _AudioPostEvent_SystemUiForXBOX(19, 14)
       msgType = messageType.secrid
     elseif 100 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.termianEvent_1
     elseif noticeValue >= 101 and noticeValue <= 105 then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.termianEvent_2
     elseif 106 == noticeValue then
       audioPostEvent_SystemUi(19, 7)
+      _AudioPostEvent_SystemUiForXBOX(19, 7)
       msgType = messageType.termianEvent_3
     end
   elseif 16 == noticeType then
     audioPostEvent_SystemUi(19, 7)
+    _AudioPostEvent_SystemUiForXBOX(19, 7)
     msgType = messageType.savageDefenceBoss
   elseif 13 == noticeType then
   end
@@ -730,6 +752,7 @@ function FGlobal_TradeEvent_Npckey_Return()
 end
 function FGlobal_FitnessLevelUp(addSp, addWeight, addHp, addMp, _type)
   audioPostEvent_SystemUi(3, 15)
+  _AudioPostEvent_SystemUiForXBOX(3, 15)
   local playerWrapper = getSelfPlayer()
   local classType = playerWrapper:getClassType()
   local set_subString = ""
@@ -991,30 +1014,38 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win_Green", false, -2, 0)
         bigNakMsg:AddEffect("fui_skillawakenboom_green", false, -2, 0)
         audioPostEvent_SystemUi(15, 0)
+        _AudioPostEvent_SystemUiForXBOX(15, 0)
       elseif messageType.territoryWar_End == MessageData._Msg[processIndex].type then
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win", false, -2, 0)
         bigNakMsg:AddEffect("fUI_SkillAwakenBoom", false, -2, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif messageType.territoryWar_Add == MessageData._Msg[processIndex].type then
         bigNakMsg:AddEffect("UI_CastlePlusLight", false, 0, 0)
         audioPostEvent_SystemUi(15, 1)
+        _AudioPostEvent_SystemUiForXBOX(15, 1)
       elseif messageType.territoryWar_Destroy == MessageData._Msg[processIndex].type then
         bigNakMsg:EraseAllEffect()
         bigNakMsg:AddEffect("UI_CastleMinusLight", false, 0, 0)
         audioPostEvent_SystemUi(15, 2)
+        _AudioPostEvent_SystemUiForXBOX(15, 2)
       elseif messageType.territoryWar_Attack == MessageData._Msg[processIndex].type then
         bigNakMsg:AddEffect("UI_SiegeWarfare_Alarm", true, 3, -22)
         audioPostEvent_SystemUi(15, 3)
+        _AudioPostEvent_SystemUiForXBOX(15, 3)
       elseif messageType.guildWar_Start == MessageData._Msg[processIndex].type then
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win_Red", false, 3, 0)
         bigNakMsg:AddEffect("fui_skillawakenboom_red", false, 3, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif messageType.guildWar_End == MessageData._Msg[processIndex].type then
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win_Red", false, 3, 0)
         bigNakMsg:AddEffect("fui_skillawakenboom_red", false, 3, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif messageType.roulette == MessageData._Msg[processIndex].type then
         audioPostEvent_SystemUi(11, 11)
+        _AudioPostEvent_SystemUiForXBOX(11, 11)
         bigNakMsg:AddEffect("UI_Gacha_Message", false, 0.5, 0)
       elseif messageType.anotherPlayerGotItem == MessageData._Msg[processIndex].type then
         _text_Msg:SetFontColor(UI_color.C_FFFFEF82)
@@ -1050,16 +1081,19 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_ffff8181)
         audioPostEvent_SystemUi(8, 15)
+        _AudioPostEvent_SystemUiForXBOX(8, 15)
       elseif messageType.servantWarning == MessageData._Msg[processIndex].type then
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_ffff8181)
         audioPostEvent_SystemUi(8, 14)
+        _AudioPostEvent_SystemUiForXBOX(8, 14)
       elseif messageType.defeatBoss == MessageData._Msg[processIndex].type then
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_FFFFEF82)
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win_Red", false, 3, 0)
         bigNakMsg:AddEffect("fui_skillawakenboom_red", false, 3, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif messageType.whaleHide == MessageData._Msg[processIndex].type or messageType.huntingLandHide == MessageData._Msg[processIndex].type then
         _text_Msg:SetFontColor(UI_color.C_ffff8181)
         _text_MsgSub:SetFontColor(UI_color.C_FFFFEF82)
@@ -1070,17 +1104,22 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         bigNakMsg:AddEffect("UI_SiegeWarfare_Win_Red", false, 3, 0)
         bigNakMsg:AddEffect("fui_skillawakenboom_red", false, 3, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif messageType.localWarJoin == MessageData._Msg[processIndex].type then
         bigNakMsg:EraseAllEffect()
         bigNakMsg:AddEffect("UI_LocalWar_Start01", false, 3, -1)
         audioPostEvent_SystemUi(15, 1)
+        _AudioPostEvent_SystemUiForXBOX(15, 1)
       elseif messageType.localWarExit == MessageData._Msg[processIndex].type then
         bigNakMsg:EraseAllEffect()
         audioPostEvent_SystemUi(15, 2)
+        _AudioPostEvent_SystemUiForXBOX(15, 2)
       elseif messageType.raceFail == MessageData._Msg[processIndex].type then
         audioPostEvent_SystemUi(17, 3)
+        _AudioPostEvent_SystemUiForXBOX(17, 3)
       elseif messageType.raceStart == MessageData._Msg[processIndex].type then
         audioPostEvent_SystemUi(17, 0)
+        _AudioPostEvent_SystemUiForXBOX(17, 0)
       elseif messageType.localWarWin == MessageData._Msg[processIndex].type then
         localwarMsg:EraseAllEffect()
         localwarMsg:AddEffect("fUI_RedWar_Win01", false, 0, 195)
@@ -1088,6 +1127,7 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         _text_MsgSub:SetFontColor(UI_color.C_FF00FFFC)
         _text_MsgSub:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_WIN"))
         audioPostEvent_SystemUi(18, 0)
+        _AudioPostEvent_SystemUiForXBOX(18, 0)
       elseif messageType.localWarLose == MessageData._Msg[processIndex].type then
         localwarMsg:EraseAllEffect()
         localwarMsg:AddEffect("fUI_RedWar_Lose01", false, 0, 195)
@@ -1095,12 +1135,14 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         _text_MsgSub:SetFontColor(UI_color.C_FFD70000)
         _text_localwarMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_LOSE"))
         audioPostEvent_SystemUi(18, 1)
+        _AudioPostEvent_SystemUiForXBOX(18, 1)
       elseif messageType.localWarTurnAround == MessageData._Msg[processIndex].type then
         localwarMsgSmallBG:EraseAllEffect()
         localwarMsgSmallBG:AddEffect("fUI_RedWar_Turnaround01", false, 0, 6)
         _text_localwarMsg:SetFontColor(UI_color.C_FFD70000)
         _text_localwarMsg:SetText(MessageData._Msg[processIndex].msg.main)
         audioPostEvent_SystemUi(18, 2)
+        _AudioPostEvent_SystemUiForXBOX(18, 2)
       elseif messageType.SavageDefenceWin == MessageData._Msg[processIndex].type then
         localwarMsg:EraseAllEffect()
         localwarMsg:AddEffect("fUI_RedWar_Win01", false, 0, 195)
@@ -1108,6 +1150,7 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         _text_MsgSub:SetFontColor(UI_color.C_FF00FFFC)
         _text_MsgSub:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_WIN"))
         audioPostEvent_SystemUi(18, 0)
+        _AudioPostEvent_SystemUiForXBOX(18, 0)
       elseif messageType.SavageDefenceLose == MessageData._Msg[processIndex].type then
         localwarMsg:EraseAllEffect()
         localwarMsg:AddEffect("fUI_RedWar_Lose01", false, 0, 195)
@@ -1115,6 +1158,7 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
         _text_MsgSub:SetFontColor(UI_color.C_FFD70000)
         _text_MsgSub:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_LOSE"))
         audioPostEvent_SystemUi(18, 1)
+        _AudioPostEvent_SystemUiForXBOX(18, 1)
       elseif messageType.SavageDefenceStart == MessageData._Msg[processIndex].type then
         localwarMsg:EraseAllEffect()
         localwarMsg:AddEffect("fUI_RedWar_Win01", false, 0, 195)
@@ -1138,12 +1182,15 @@ function NakMessageUpdate_For_RewardSelect(updateTime)
       elseif messageType.goldenBell == MessageData._Msg[processIndex].type then
         if isGameTypeTaiwan() or isGameTypeKR2() then
           audioPostEvent_SystemUi(20, 1)
+          _AudioPostEvent_SystemUiForXBOX(20, 1)
         else
           audioPostEvent_SystemUi(20, 0)
+          _AudioPostEvent_SystemUiForXBOX(20, 0)
         end
         bigNakMsg:AddEffect("fUI_GoldenBell_01A", false, 0, 0)
       elseif messageType.getValenciaItem == MessageData._Msg[processIndex].type then
         audioPostEvent_SystemUi(3, 20)
+        _AudioPostEvent_SystemUiForXBOX(3, 20)
         nakItemIconBG:SetShow(false)
         nakItemIcon:SetShow(true)
         nakItemIcon:ChangeTextureInfoName(MessageData._Msg[processIndex].msg.addMsg)
@@ -1496,32 +1543,46 @@ function Proc_ShowMessage_Ack_For_RewardSelect_GuildTeamBattle(message, showRate
   local _MsgType = PaGlobal_Guild_OneOnOne_Control._msgType
   if _MsgType._preparing == msgType then
     audioPostEvent_SystemUi(22, 0)
+    _AudioPostEvent_SystemUiForXBOX(22, 0)
   elseif _MsgType._startBuliding == msgType then
     audioPostEvent_SystemUi(22, 0)
+    _AudioPostEvent_SystemUiForXBOX(22, 0)
   elseif _MsgType._startRequest == msgType then
     audioPostEvent_SystemUi(22, 7)
+    _AudioPostEvent_SystemUiForXBOX(22, 7)
   elseif _MsgType._startAccept == msgType then
     audioPostEvent_SystemUi(22, 7)
+    _AudioPostEvent_SystemUiForXBOX(22, 7)
   elseif _MsgType._battleRequested == msgType then
     audioPostEvent_SystemUi(22, 2)
+    _AudioPostEvent_SystemUiForXBOX(22, 2)
   elseif _MsgType._noBattleRequested == msgType then
     audioPostEvent_SystemUi(22, 1)
+    _AudioPostEvent_SystemUiForXBOX(22, 1)
   elseif _MsgType._battleAccepted == msgType then
     audioPostEvent_SystemUi(22, 3)
+    _AudioPostEvent_SystemUiForXBOX(22, 3)
   elseif _MsgType._battleNotAccepted == msgType then
     audioPostEvent_SystemUi(22, 5)
+    _AudioPostEvent_SystemUiForXBOX(22, 5)
   elseif _MsgType._doppingTime == msgType then
     audioPostEvent_SystemUi(22, 7)
+    _AudioPostEvent_SystemUiForXBOX(22, 7)
   elseif _MsgType._fightStarted == msgType then
     audioPostEvent_SystemUi(22, 4)
+    _AudioPostEvent_SystemUiForXBOX(22, 4)
   elseif _MsgType._battleResult == msgType then
     audioPostEvent_SystemUi(22, 6)
+    _AudioPostEvent_SystemUiForXBOX(22, 6)
   elseif _MsgType._ringout == msgType then
     audioPostEvent_SystemUi(22, 7)
+    _AudioPostEvent_SystemUiForXBOX(22, 7)
   elseif _MsgType._logout == msgType then
     audioPostEvent_SystemUi(22, 7)
+    _AudioPostEvent_SystemUiForXBOX(22, 7)
   elseif _MsgType._gulidTeamBattleIng == msgType then
     audioPostEvent_SystemUi(22, 0)
+    _AudioPostEvent_SystemUiForXBOX(22, 0)
   end
 end
 registerEvent("FromClient_NotifyVariableTradeItemMsg", "FromClient_NotifyVariableTradeItemMsg")

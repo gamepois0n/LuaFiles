@@ -46,22 +46,22 @@ function MiniGame_GaugeBarMoveCalcY(fDeltaTime)
   local controlPos = _math_lerp(7, 254, currentPos)
   if controlPos < 58 or controlPos > 184 then
     if ui._fontBad:GetShow() == false then
-      audioPostEvent_SystemUi(11, 2)
+      _AudioPostEvent_SystemUiForXBOX(11, 2)
       ui._fontBad:SetShow(true, true)
       ui._fontGood:SetShow(false, true)
       ui._fontBad:ResetVertexAni()
       ui._fontBad:SetVertexAniRun("Bad_Ani", true)
       ui._fontBad:SetVertexAniRun("Bad_ScaleAni", true)
       if controlPos < 58 then
-        audioPostEvent_SystemUi(11, 2)
+        _AudioPostEvent_SystemUiForXBOX(11, 2)
         getSelfPlayer():get():SetMiniGameResult(1)
       elseif controlPos > 184 then
-        audioPostEvent_SystemUi(11, 2)
+        _AudioPostEvent_SystemUiForXBOX(11, 2)
         getSelfPlayer():get():SetMiniGameResult(2)
       end
     end
   elseif ui._fontGood:GetShow() == false then
-    audioPostEvent_SystemUi(11, 1)
+    _AudioPostEvent_SystemUiForXBOX(11, 1)
     ui._fontBad:SetShow(false, true)
     ui._fontGood:SetShow(true, true)
     ui._fontGood:ResetVertexAni()

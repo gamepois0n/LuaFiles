@@ -171,6 +171,7 @@ function PaGlobalFunc_Customization_HairShape_PickingHairBone()
     self:SetValueSlider(self._ui._slider_Rotation[1], self._currentRotation.y, self._selectedRotMin.y, self._selectedRotMax.y)
     self:SetValueSlider(self._ui._slider_Rotation[2], self._currentRotation.z, self._selectedRotMin.z, self._selectedRotMax.z)
   end
+  PaGlobalFunc_Customization_HairShape_Update()
 end
 function PaGlobalFunc_Customization_HairShape_AdjustHairBoneTranslation(translationX, translationY, translationZ)
   local self = Customization_HairShapeInfo

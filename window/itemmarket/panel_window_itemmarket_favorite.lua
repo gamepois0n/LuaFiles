@@ -36,6 +36,7 @@ function FGlobal_ItemMarket_FavoriteItem_Open()
     self.list2:getElementManager():pushKey(toInt64(0, key))
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function ItemMarket_FavoriteItem_CloseEvent()
   FGlobal_ItemMarket_FavoriteBtn_CheckOff()
@@ -46,6 +47,7 @@ function ItemMarket_FavoriteItem_Close()
   ToClient_saveFavoritesSearchListClientData()
   Panel_Window_ItemMarket_Favorite:SetShow(false)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function FGlobal_ItemMarket_FavoriteItem_Close()
   ItemMarket_FavoriteItem_Close()

@@ -11,7 +11,7 @@ function InitIntroMoviePanel()
     return
   end
   local selfPlayerLevel = selfPlayerWrapper:get():getLevel()
-  if 1 == selfPlayerLevel and false == isSwapCharacter() and static_IntroMovie == nil then
+  if 1 == selfPlayerLevel and false == isSwapCharacter() and false == selfPlayerWrapper:isInstancePlayer() and static_IntroMovie == nil then
     ShowableFirstExperience(false)
     Panel_IntroMovie:SetShow(true, false)
     local sizeX = getResolutionSizeX()

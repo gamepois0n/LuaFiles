@@ -785,6 +785,7 @@ function PanelEscapeFunc_Guild()
   else
     GuildManager:Hide()
     audioPostEvent_SystemUi(1, 31)
+    _AudioPostEvent_SystemUiForXBOX(1, 31)
   end
 end
 function PanelEscapeFunc_AgreementGuildMaster()
@@ -793,6 +794,7 @@ end
 function PanelEscapeFunc_AgreementGuildMaster()
   CheckChattingInput()
   audioPostEvent_SystemUi(1, 31)
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
   FGlobal_AgreementGuild_Close()
 end
 function PanelEscapeFunc_GuildIncentive()

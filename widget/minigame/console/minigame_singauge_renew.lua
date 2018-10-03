@@ -49,7 +49,7 @@ local function SinGaugeBar_OnFail()
   if isFinished then
     return
   end
-  audioPostEvent_SystemUi(11, 7)
+  _AudioPostEvent_SystemUiForXBOX(11, 7)
   isFinished = true
   getSelfPlayer():get():SetMiniGameResult(0)
   _sinGauge_Result_Bad:ResetVertexAni()
@@ -132,8 +132,8 @@ function MiniGame_SinGauge_KeyPress(keyType)
     _sinGaugeBar:SetSize(gaugeBarSizeX, 16)
     sinGaugeBarStart = false
     if gaugeSize == gaugeBarSizeX then
-      audioPostEvent_SystemUi(11, 0)
-      audioPostEvent_SystemUi(11, 13)
+      _AudioPostEvent_SystemUiForXBOX(11, 0)
+      _AudioPostEvent_SystemUiForXBOX(11, 13)
       getSelfPlayer():get():SetMiniGameResult(3)
       isFinished = true
       _sinGauge_Result_Perfect:ResetVertexAni()
@@ -142,8 +142,8 @@ function MiniGame_SinGauge_KeyPress(keyType)
       _sinGauge_Result_Perfect:SetVertexAniRun("Perfect_AniEnd", true)
       _sinGauge_Result_Perfect:SetShow(true)
     elseif gaugeBarSizeX > 167 then
-      audioPostEvent_SystemUi(11, 0)
-      audioPostEvent_SystemUi(11, 13)
+      _AudioPostEvent_SystemUiForXBOX(11, 0)
+      _AudioPostEvent_SystemUiForXBOX(11, 13)
       getSelfPlayer():get():SetMiniGameResult(11)
       isFinished = true
       _sinGauge_Result_Good:ResetVertexAni()

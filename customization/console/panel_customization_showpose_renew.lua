@@ -163,7 +163,6 @@ function PaGlobalFunc_Customization_ShowPose_Close()
     return false
   end
   applyMotion(-1)
-  self:ClearContent()
   selectPoseControl(0)
   setPresetCamera(10)
   PaGlobalFunc_Customization_SetCloseFunc(nil)

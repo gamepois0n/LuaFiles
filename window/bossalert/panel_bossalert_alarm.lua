@@ -36,6 +36,7 @@ function PaGlobal_BossAlert:ShowAni()
   Panel_BossAlertV2:CalcUIAniPos(alarmMoveAni1)
   alarmMoveAni1:SetDisableWhileAni(true)
   audioPostEvent_SystemUi(19, 50)
+  _AudioPostEvent_SystemUiForXBOX(19, 50)
 end
 function PaGlobal_BossAlert:HideAni()
   local alarmMoveAni2 = Panel_BossAlertV2:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)

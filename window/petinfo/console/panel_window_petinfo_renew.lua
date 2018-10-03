@@ -242,6 +242,7 @@ function petInfo:setToolTipInfo(SkillIndex, isBase, isShow)
     return
   end
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   local skillStaticStatus
   if true == isBase then
     skillStaticStatus = ToClient_getPetBaseSkillStaticStatus(SkillIndex)

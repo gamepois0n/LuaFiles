@@ -71,27 +71,7 @@ function Window_GuildAgreementOptionInfo:InitEvent()
   end
   self._ui._edit_DailyPayment:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()")
   self._ui._edit_PenaltyCost:addInputEvent("Mouse_LUp", "PaGlobalFunc_AgreementGuild_SignOption_PenaltyEditClick()")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Confirm()")
-end
-function PaGlobal_CheckGuildAgreement_DaliyPaymentUiEdit(targetUI)
-  local self = Window_GuildAgreementOptionInfo
-  return nil ~= targetUI and targetUI:GetKey() == self._ui._edit_DailyPayment:GetKey()
-end
-function PaGlobal_CheckGuildAgreement_DaliyPaymentClearFocusEdit()
-  local self = Window_GuildAgreementOptionInfo
-  self._ui._edit_DailyPayment:SetText("", true)
-  ClearFocusEdit()
-  CheckChattingInput()
-end
-function PaGlobal_CheckGuildAgreement_PenaltyCostUiEdit(targetUI)
-  local self = Window_GuildAgreementOptionInfo
-  return nil ~= targetUI and targetUI:GetKey() == self._ui._edit_PenaltyCost:GetKey()
-end
-function PaGlobal_CheckGuildAgreement_PenaltyCostClearFocusEdit()
-  local self = Window_GuildAgreementOptionInfo
-  self._ui._edit_PenaltyCost:SetText("", true)
-  ClearFocusEdit()
-  CheckChattingInput()
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Y, "PaGlobalFunc_AgreementGuild_SignOption_Confirm()")
 end
 function PaGlobalFunc_AgreementGuild_SignOption_Open()
   local self = Window_GuildAgreementOptionInfo
@@ -123,8 +103,8 @@ function PaGlobalFunc_AgreementGuild_SignOption_Close()
   self._memberPenalty = -1
   self._maxBenefitValue = -1
   self._maxpenaltyCostValue = -1
-  self._ui._edit_DailyPayment:SetEditText("")
-  self._ui._edit_PenaltyCost:SetEditText("")
+  self._ui._edit_DailyPayment:SetText("")
+  self._ui._edit_PenaltyCost:SetText("")
   for index = 0, #self._ui._buttonList do
     self._ui._buttonList[index]:SetCheck(false)
   end
@@ -138,7 +118,6 @@ function PaGlobalFunc_AgreementGuild_SignOption_SetShow(isShow, isAni)
 end
 function PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()
   local self = Window_GuildAgreementOptionInfo
-  ClearFocusEdit()
   local maxBenefit
   if nil == self._maxBenefitValue then
     maxBenefit = 0
@@ -150,11 +129,10 @@ function PaGlobalFunc_AgreementGuild_SignOption_DailyPayEditClick()
 end
 function PaGlobalFunc_AgreementGuild_SignOption_DailyPayComfirm(inputNumber, param)
   local self = Window_GuildAgreementOptionInfo
-  self._ui._edit_DailyPayment:SetEditText(Int64toInt32(inputNumber))
+  self._ui._edit_DailyPayment:SetText(Int64toInt32(inputNumber))
 end
 function PaGlobalFunc_AgreementGuild_SignOption_PenaltyEditClick()
   local self = Window_GuildAgreementOptionInfo
-  ClearFocusEdit()
   local maxpenalty
   if nil == self._maxpenaltyCostValue then
     maxpenalty = 0
@@ -166,12 +144,12 @@ function PaGlobalFunc_AgreementGuild_SignOption_PenaltyEditClick()
 end
 function PaGlobalFunc_AgreementGuild_SignOption_PenaltyComfirm(inputNumber, param)
   local self = Window_GuildAgreementOptionInfo
-  self._ui._edit_PenaltyCost:SetEditText(Int64toInt32(inputNumber))
+  self._ui._edit_PenaltyCost:SetText(Int64toInt32(inputNumber))
 end
 function PaGlobalFunc_AgreementGuild_SignOption_Confirm()
   local self = Window_GuildAgreementOptionInfo
-  local dailyPaymentValue = tonumber(self._ui._edit_DailyPayment:GetEditText())
-  local penaltyCostValue = tonumber(self._ui._edit_PenaltyCost:GetEditText())
+  local dailyPaymentValue = tonumber(self._ui._edit_DailyPayment:GetText())
+  local penaltyCostValue = tonumber(self._ui._edit_PenaltyCost:GetText())
   if nil == dailyPaymentValue then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_AGREEMENTGUILD_MASTER_DAILYMONEY"))
     return
@@ -206,8 +184,8 @@ function PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(index)
   local self = Window_GuildAgreementOptionInfo
   self._currentContractDayIndex = index
   if true == self._isJoin then
-    self._ui._edit_DailyPayment:SetEditText(self._paymentPerDay[index])
-    self._ui._edit_PenaltyCost:SetEditText(self._cancellationCharge[index])
+    self._ui._edit_DailyPayment:SetText(self._paymentPerDay[index])
+    self._ui._edit_PenaltyCost:SetText(self._cancellationCharge[index])
     self._ui._staticText_DailyPaymentRange:SetText(makeDotMoney(toInt64(0, self._paymentPerDay[index])) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
     self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[index])) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
   else
@@ -230,8 +208,8 @@ function PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(index)
     self._maxpenaltyCostValue = usePenalty + usePenalty * (usableActivity / 100 / 100)
     self:SetMaxDailyPayment(self._paymentPerDay[index], self._maxBenefitValue)
     self._ui._staticText_PenaltyRange:SetText(makeDotMoney(toInt64(0, self._cancellationCharge[index])) .. " ~ " .. makeDotMoney(toInt64(0, self._maxpenaltyCostValue)) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_INCENTIVE_MONEY"))
-    self._ui._edit_DailyPayment:SetEditText(tostring(self._paymentPerDay[index]))
-    self._ui._edit_PenaltyCost:SetEditText(tostring(self._cancellationCharge[index]))
+    self._ui._edit_DailyPayment:SetText(tostring(self._paymentPerDay[index]))
+    self._ui._edit_PenaltyCost:SetText(tostring(self._cancellationCharge[index]))
   end
 end
 function Window_GuildAgreementOptionInfo:SetMaxDailyPayment(checkIndex, benefitMax)

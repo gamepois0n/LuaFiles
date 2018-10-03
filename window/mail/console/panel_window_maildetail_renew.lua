@@ -9,11 +9,11 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
 function Mail_Detail_ShowAni()
-  audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   UIAni.fadeInSCR_Left(_panel)
 end
 function Mail_Detail_HideAni()
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   _panel:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local mailHideAni = _panel:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   mailHideAni:SetStartColor(UI_color.C_FFFFFFFF)

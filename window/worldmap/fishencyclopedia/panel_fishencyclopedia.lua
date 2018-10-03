@@ -484,11 +484,14 @@ end
 function FGlobal_FishEncyclopedia_Open()
   audioPostEvent_SystemUi(1, 0)
   audioPostEvent_SystemUi(1, 42)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 42)
   Panel_FishEncyclopedia:SetShow(true)
 end
 function FGlobal_FishEncyclopedia_Close()
   Panel_FishEncyclopedia:SetShow(false)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 local returnTime = 0
 function FishSizeRankSetTimeCount(deltaTime)

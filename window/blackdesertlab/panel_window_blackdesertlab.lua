@@ -65,6 +65,7 @@ function PaGlobal_BlackDesertLab_Show()
 end
 function PaGlobal_BlackDesertLab_Close()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_BlackDesertLab:SetShow(false, false)
   FGlobal_ClearCandidate()
   PaGlobal_BlackDesertLab._ui._web:ResetUrl()

@@ -358,6 +358,7 @@ function FromClient_TradeGameResult(isSuccess)
   tradeGame._tradeGameState = enTradeGameState.enTradeGameState_Finish
   if true == isSuccess then
     audioPostEvent_SystemUi(11, 8)
+    _AudioPostEvent_SystemUiForXBOX(11, 8)
     resultMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEGAME_BARGAINING_SUCCESS"))
     processMsg:SetText(result_Msg.success)
     tradeGameSuccess = true
@@ -367,6 +368,7 @@ function FromClient_TradeGameResult(isSuccess)
     btnSellAll:SetShow(true)
   else
     audioPostEvent_SystemUi(11, 9)
+    _AudioPostEvent_SystemUiForXBOX(11, 9)
     resultMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEGAME_BARGAINING_FAIL"))
     processMsg:SetText(result_Msg.fail)
     tradeGameSuccess = false

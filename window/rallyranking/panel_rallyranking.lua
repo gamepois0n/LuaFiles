@@ -273,6 +273,7 @@ end
 function FromClient_ResponseMatchRank(responsed_RallyType)
   if not Panel_RallyRanking:GetShow() then
     audioPostEvent_SystemUi(1, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
     Panel_RallyRanking:SetShow(true, true)
   end
   RallyRanking:Update()

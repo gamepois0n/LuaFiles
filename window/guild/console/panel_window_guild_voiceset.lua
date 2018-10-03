@@ -16,6 +16,8 @@ function GuildVoiceSet:init()
   self._ui.check_Mic = UI.getChildControl(self._ui.stc_CenterBg, "CheckButton_Mic")
   self._ui.check_Hearing = UI.getChildControl(self._ui.stc_CenterBg, "CheckButton_Hearing")
   self._startBtnGapY = self._ui.txt_MicTitle:GetPosY()
+  self._ui.txt_MicTitle:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_MIC_PERMISSION_TITLE"))
+  self._ui.txt_HearingTitle:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_MUTE_USER_TITLE"))
   PaGlobal_registerPanelOnBlackBackground(_panel)
   self:registEventHandler()
 end
@@ -106,7 +108,6 @@ function PaGlobalFunc_GuildVoiceSet_Confirm()
   else
     ToClient_VoiceChatChangeVolume(CppEnums.VoiceChatType.eVoiceChatType_Guild, targetMemberUserNo, 0)
   end
-  PaGlobalFunc_GuildMemberList_MemberVoiceUpdate(guildListIdx, isSaying, isHearing, isForce)
   self:close()
 end
 function PaGlobalFunc_GuildVoiceSet_Init()
@@ -124,14 +125,14 @@ end
 function PaGlobalFunc_GuildVoiceSet_SetCheckText()
   local self = GuildVoiceSet
   if true == self._btnFlag[self._btnType.mic] then
-    self._ui.check_Mic:SetText("Allow")
+    self._ui.check_Mic:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_MIC_PERMISSION_ALLOW"))
   else
-    self._ui.check_Mic:SetText("Block")
+    self._ui.check_Mic:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_MIC_PERMISSION_BLOCK"))
   end
   if true == self._btnFlag[self._btnType.listen] then
-    self._ui.check_Hearing:SetText("Unmute")
+    self._ui.check_Hearing:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_LISTEN_UNMUTE"))
   else
-    self._ui.check_Hearing:SetText("Mute")
+    self._ui.check_Hearing:SetText(PAGetString(Defines.StringSheet_GAME, "VOICECHAT_LISTEN_MUTE"))
   end
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildVoiceSet_Init")

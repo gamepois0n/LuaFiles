@@ -226,7 +226,7 @@ function Panel_Minigame_Command_End()
   isCommandFinished = true
 end
 local function MiniGame_Command_OnSuccess()
-  audioPostEvent_SystemUi(11, 13)
+  _AudioPostEvent_SystemUiForXBOX(11, 13)
   for ii = 1, 10 do
     checkIconList[ii]:SetShow(false)
   end
@@ -248,7 +248,7 @@ local function MiniGame_Command_OnSuccess()
   _Result_Success:SetVertexAniRun("Ani_Color_Result_Success", true)
 end
 local function MiniGame_Command_OnFailed()
-  audioPostEvent_SystemUi(11, 7)
+  _AudioPostEvent_SystemUiForXBOX(11, 7)
   local textControl = CommandText[currentCommandIndex]
   getSelfPlayer():get():SetMiniGameResult(0)
   isCommandFinished = true
@@ -280,7 +280,7 @@ function MiniGame_Command_keyPress(keyType)
     return
   end
   if commands[currentCommandIndex] == keyType then
-    audioPostEvent_SystemUi(11, 0)
+    _AudioPostEvent_SystemUiForXBOX(11, 0)
     currentCommandIndex = currentCommandIndex + 1
     _Command_CurrentKey_Eff0:SetShow(true)
     _Command_CurrentKey_Eff0:EraseAllEffect()

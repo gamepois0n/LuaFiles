@@ -596,6 +596,7 @@ function FromClient_ShowDialog()
     setFullSizeMode(true, FullSizeMode.fullSizeModeEnum.Dialog)
   end
   SetUIMode(Defines.UIMode.eUIMode_NpcDialog)
+  warehouse_requestInfo(getCurrentWaypointKey())
   Panel_Tooltip_Item_hideTooltip()
   Panel_SkillTooltip_Hide()
   FGlobal_BuffTooltipOff()

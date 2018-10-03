@@ -802,7 +802,7 @@ PaGlobal_Menu._categoryData = {
       _isContentOpen = PaGlobal_Menu._contentsGroup._isExpeditionOpen,
       _isNew = true,
       _isHot = false,
-      _index = 64
+      _index = 65
     },
     ["_name"] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_1"),
     ["_count"] = PaGlobal_Menu._contents._count
@@ -1958,6 +1958,8 @@ end
 function Toggle_MenuTab_forPadEventFunc(value)
   local self = PaGlobal_Menu
   self._currentTabIndex = self._currentTabIndex + value
+  audioPostEvent_SystemUi(51, 6)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if self._currentTabIndex < 0 then
     self._currentTabIndex = 4
   elseif self._currentTabIndex > 4 then
@@ -1973,6 +1975,7 @@ Panel_Menu_New:registerPadEvent(__eConsoleUIPadEvent_LB, "Toggle_MenuTab_forPadE
 Panel_Menu_New:registerPadEvent(__eConsoleUIPadEvent_RB, "Toggle_MenuTab_forPadEventFunc(1)")
 function PaGlobal_Menu:SetCustomMode()
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:CustomWindow_Init()
   self._isCustomMode = not self._isCustomMode
   if self._isCustomMode then
@@ -2166,6 +2169,7 @@ function PaGlobal_Menu:CancelChangeMenu()
 end
 function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
   audioPostEvent_SystemUi(0, 0)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if nil == categoryIndex then
     categoryIndex = self._currentCategoryIndex
   end
@@ -2271,7 +2275,7 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       local player = getSelfPlayer():get()
       local maxHp = player:getMaxHp()
       local playerHp = player:getHp()
-      if player:getLevel() < 50 then
+      if 50 > player:getLevel() then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHTALERT"))
         return
       end
@@ -2300,6 +2304,7 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
           return
         end
         audioPostEvent_SystemUi(1, 18)
+        _AudioPostEvent_SystemUiForXBOX(1, 18)
         local FunctionYesJoinPvpBattle = function()
           ToClient_JoinPvpBattleGround(0)
         end
@@ -2356,6 +2361,7 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
     elseif PaGlobal_Menu._infomation._itemMarket == index then
       FGlobal_ItemMarket_Open_ForWorldMap(1, true)
       audioPostEvent_SystemUi(1, 30)
+      _AudioPostEvent_SystemUiForXBOX(1, 30)
     elseif PaGlobal_Menu._infomation._tradeInfo == index then
       if _ContentsGroup_isUsedNewTradeEventNotice then
         FGlobal_TradeEventNotice_Renewal_Show()
@@ -2638,6 +2644,7 @@ function PaGlobal_Menu:HandleClicked_Banner(isHot)
     elseif self._bannerHot._itemMarket == index then
       FGlobal_ItemMarket_Open_ForWorldMap(1, true)
       audioPostEvent_SystemUi(1, 30)
+      _AudioPostEvent_SystemUiForXBOX(1, 30)
     elseif self._bannerHot._militia == index then
       FGlobal_MercenaryOpen()
     elseif self._bannerHot._partyFind == index then
@@ -2746,6 +2753,7 @@ function Panel_Menu_Close_New()
 end
 function HandleClicked_RescueConfirm()
   audioPostEvent_SystemUi(1, 41)
+  _AudioPostEvent_SystemUiForXBOX(1, 41)
   local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MSGBOX_RESCUE")
   local messageBoxData = {

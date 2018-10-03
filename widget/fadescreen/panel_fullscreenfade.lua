@@ -5,11 +5,14 @@ _panel:SetPosY(0)
 _panel:SetShow(false)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
-local _fadeTime = 0.5
-local _fadeOutDelay = 0.3
+local _fadeTime = 0.32
+local _fadeOutDelay = 0.2
 local _isFading = false
 local function FullScreenFade_FadeIn()
   if ToClient_isXBox() then
+    return
+  end
+  if not ToClient_IsDevelopment() then
     return
   end
   _isFading = true
@@ -34,8 +37,10 @@ function PaGlobalFunc_FullScreenFade_RunAfterFadeIn(func)
     func()
     return
   end
-  func()
-  do return end
+  if not ToClient_IsDevelopment() then
+    func()
+    return
+  end
   luaTimer_AddEvent(func, _fadeTime * 1000, false, 0)
   FullScreenFade_FadeIn()
 end
@@ -50,14 +55,16 @@ function PaGlobalFunc_FullScreenFade_FadeOut(fadeTime, fadeDelay)
     _panel:SetShow(false)
     return
   end
-  _panel:SetShow(false)
-  do return end
+  if not ToClient_IsDevelopment() then
+    _panel:SetShow(false)
+    return
+  end
   if false == _panel:GetShow() then
     return
   end
   local time, delay = 0, 0
+  time = fadeTime
   if nil ~= fadeTime then
-    time = fadeTime
   else
     time = _fadeTime
   end

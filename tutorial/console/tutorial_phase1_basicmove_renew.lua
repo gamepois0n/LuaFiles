@@ -157,6 +157,7 @@ function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
       end
     else
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_3") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_2"))
       end)
@@ -174,6 +175,7 @@ function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
         getSelfPlayer():setActionChart("TUTORIAL_WAIT_STEP3")
       end
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "TUTORIAL_MOVE_STEP2_DARKSPIRIT") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIALXB_TEXT_3"))
       end)
@@ -188,6 +190,7 @@ function PaGlobal_TutorialPhase_BasicMove:updateBasicMove(deltaTime)
       end
     else
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
         PaGlobal_TutorialUiManager:getUiBlackSpirit():setSpiritUiForTutorial("", PAGetString(Defines.StringSheet_GAME, "TUTORIAL_MOVE_STEP3_DARKSPIRIT"))
       end)

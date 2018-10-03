@@ -134,7 +134,7 @@ function Window_VoiceChatInfo:SetTalkButtonByCheck(isCheck)
   local guildInfo = ToClient_GetMyGuildInfoWrapper()
   if nil ~= guildInfo then
     local myMemberInfo = guildInfo:getMemberByUserNo(getSelfPlayer():get():getUserNo())
-    if false == myMemberInfo:isVoicePermissionHas() then
+    if false == myMemberInfo:isVoicePermissionHas() and false == getSelfPlayer():get():isGuildMaster() then
       local messageboxData = {
         title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
         content = PAGetString(Defines.StringSheet_GAME, "LUA_VOICECHAT_YOUHAVENOPERMISSION"),

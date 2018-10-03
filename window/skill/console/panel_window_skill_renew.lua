@@ -128,6 +128,7 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
     _learnable = skillLevelInfo._learnable,
     _usable = skillLevelInfo._usable,
     _command = skillTypeStaticWrapper:getCommand(),
+    _mainCommand = skillTypeStaticWrapper:getMainCommand(),
     _iconPath = skillTypeStaticWrapper:getIconPath(),
     _moviePath = skillTypeStaticWrapper:getMoviePath(),
     _desc = skillTypeStaticWrapper:getDescription(),
@@ -301,50 +302,52 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
   local self = Window_SkillInfo
   local id = Int64toInt32(key)
   local skillInfo = self._currentSkillListInfo[id]
+  local right = self._ui._right
   if nil == skillInfo then
     self._ui._right._list2_Skill:getElementManager():removeKey(toInt64(0, id))
     return
   end
   local uiInfo = {
+    _content = list_content,
     _radioButton_SkillBg = UI.getChildControl(list_content, "Radio_SkillBg"),
-    _radioButton_LeftSkill = UI.getChildControl(list_content, "Radiobutton_LeftSkill"),
-    _radioButton_RightSkill = UI.getChildControl(list_content, "Radiobutton_RightSkill"),
     _static_SelectedSkillBg = UI.getChildControl(list_content, "Static_SelectedSkillBg"),
     _static_SkillIcon = UI.getChildControl(list_content, "Static_Skill_Box2"),
     _staticText_Name = UI.getChildControl(list_content, "StaticText_Skill_Name"),
     _staticText_RequireLevel = UI.getChildControl(list_content, "StaticText_Skill_Require_Level"),
     _static_LockIcon = UI.getChildControl(list_content, "Static_Skill_Lock_Icon"),
-    _progress2_ProgressBar = UI.getChildControl(list_content, "Progress2_1")
+    _progress2_ProgressBar = UI.getChildControl(list_content, "Progress2_1"),
+    _static_mainCommand = UI.getChildControl(list_content, "StaticText_SkillCommand")
   }
   local rate = 100 * self._remainSkillPoint / skillInfo._needSkillPoint
   if 1 == skillInfo._learndLevel then
     rate = 100
   end
+  uiInfo._static_LockIcon:SetShow(false)
   uiInfo._progress2_ProgressBar:SetProgressRate(rate)
   uiInfo._static_SelectedSkillBg:SetShow(self._currentSkillIndex == id)
+  uiInfo._static_mainCommand:SetText(skillInfo._mainCommand)
   uiInfo._static_SkillIcon:SetShow(true)
   uiInfo._static_SkillIcon:ChangeTextureInfoName("icon/" .. skillInfo._iconPath)
   uiInfo._static_SkillIcon:getBaseTexture():setUV(0, 0, 1, 1)
   uiInfo._static_SkillIcon:setRenderTexture(uiInfo._static_SkillIcon:getBaseTexture())
   uiInfo._staticText_Name:SetText(skillInfo._name)
   local requireDesc = self:GetRequireDesc(uiInfo._static_SelectedSkillBg, uiInfo._staticText_RequireLevel, id)
+  uiInfo._staticText_RequireLevel:SetShow(nil ~= requireDesc)
   uiInfo._staticText_RequireLevel:SetText(requireDesc)
   self._currentSkillListUI[id] = uiInfo
   if self._config._title_Learn == self._currentTitle or self._currentSkillIndex ~= id then
-    uiInfo._radioButton_LeftSkill:SetShow(false)
-    uiInfo._radioButton_RightSkill:SetShow(false)
-    uiInfo._radioButton_SkillBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_LearnButton()")
+    uiInfo._progress2_ProgressBar:addInputEvent("Mouse_LUp", "PaGlobalFunc_Skill_LearnButton()")
   else
-    uiInfo._radioButton_LeftSkill:SetShow(1 ~= self:FindSkillCount(skillInfo))
-    uiInfo._radioButton_RightSkill:SetShow(1 ~= self:FindSkillCount(skillInfo))
-    uiInfo._radioButton_SkillBg:addInputEvent("Mouse_LUp", "")
+    uiInfo._progress2_ProgressBar:addInputEvent("Mouse_LUp", "")
     if _ContentsGroup_isConsolePadControl then
       Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadLeft, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",-1)")
       Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",1)")
     end
+    right._static_SellectRight:SetShow(self._currentSkillIndex == id)
+    right._static_SellectLeft:SetShow(self._currentSkillIndex == id)
   end
   if _ContentsGroup_isConsolePadControl then
-    uiInfo._radioButton_SkillBg:addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
+    uiInfo._progress2_ProgressBar:addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
   end
 end
 function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
@@ -356,23 +359,12 @@ function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
   selectControl:SetColor(Defines.Color.C_FFEFEFEF)
   descControl:SetFontColor(Defines.Color.C_FFEFEFEF)
   if 1 == skillInfo._learndLevel then
-    desc = PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_LEARNED")
-    return desc
   elseif true == skillInfo._learnable then
-    desc = PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_TAB_LEARNABLE")
-    return desc
+  elseif 0 ~= skillInfo._needCharacterLevel and self._selfPlayerLevel < skillInfo._needCharacterLevel then
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(skillInfo._needCharacterLevel)
   end
   descControl:SetFontColor(Defines.Color.C_FF888888)
   selectControl:SetColor(Defines.Color.C_FF888888)
-  if 0 == skillInfo._needCharacterLevel then
-    desc = PAGetStringParam1(Defines.StringSheet_RESOURCE, "LUA_SKILL_LEARNCONDITION", "condition", PAGetString(Defines.StringSheet_GAME, "Lua_TooltipSkill_QuestGain"))
-  elseif self._selfPlayerLevel < skillInfo._needCharacterLevel then
-    desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_LIMIT_LEVEL")
-  elseif self._remainSkillPoint < skillInfo._needSkillPoint then
-    desc = PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_SKILLPOINTLESS")
-  else
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_NEEDSKILLTITLE")
-  end
   return desc
 end
 function Window_SkillInfo:FindSkillCount(skillInfo)
@@ -449,6 +441,7 @@ end
 function PaGlobalFunc_Skill_SelectSkill(id)
   local self = Window_SkillInfo
   local body = self._ui._body
+  local right = self._ui._right
   self:SkillDetailClear()
   local skillInfo = self._currentSkillListInfo[id]
   if nil == skillInfo then
@@ -461,6 +454,8 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   if nil ~= self._lastSelectedUI then
     self._lastSelectedUI._static_SelectedSkillBg:SetShow(false)
   end
+  right._static_SellectLeft:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
+  right._static_SellectRight:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
   skillUI._static_SelectedSkillBg:SetShow(true)
   body._static_Icon:SetShow(true)
   body._static_IconBg:SetShow(true)
@@ -472,7 +467,7 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_Desc:SetText(skillInfo._desc)
   body._staticText_Desc:SetPosY(self._ui._body._staticText_Name:GetPosY() + self._ui._body._staticText_Name:GetSizeY())
   body._staticText_EffectDesc:SetText(skillInfo._buffDesc)
-  body._staticText_EffectDesc:SetPosY(getScreenSizeY() - body._staticText_EffectDesc:GetSizeY() - 100)
+  body._staticText_EffectDesc:SetPosY(getScreenSizeY() - body._staticText_EffectDesc:GetTextSizeY() - 40)
   body._staticText_EffectTitle:SetPosY(body._staticText_EffectDesc:GetPosY() - body._staticText_EffectTitle:GetSizeY() - 5)
   local needResource = ""
   local haveResource = false
@@ -491,14 +486,17 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_NeedResource:SetPosY(self._ui._body._staticText_Desc:GetPosY() + self._ui._body._staticText_Desc:GetSizeY())
   body._staticText_NeedResource:SetText(needResource)
   body._staticText_NeedResource:SetSize(body._staticText_NeedResource:GetSizeX(), body._staticText_NeedResource:GetTextSizeY())
+  body._staticText_skillCommand:SetText(skillInfo._command)
+  body._staticText_skillCommand:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_skillCommand:GetTextSizeX() - 40)
+  body._staticText_skillCommand:SetPosY(getScreenSizeY() - body._staticText_skillCommand:GetTextSizeY() - 20)
   body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
   body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
-  body._staticText_Command:SetText(skillInfo._command)
   local yGap = 0
   if body._staticText_Command:GetSizeY() >= 90 then
     yGap = (body._staticText_Command:GetTextSizeY() - 90) / 2
   end
+  body._staticText_Command:SetText("")
   body._staticText_Command:SetPosY(body._static_Divider1:GetPosY() + dividerCenterSizeY - body._staticText_Command:GetSizeY() / 2 + yGap)
   local resourcePosY
   if true == haveResource then
@@ -700,26 +698,18 @@ function Window_SkillInfo:UpdateStat()
   self._selfPlayerLevel = selfPlayerActorProxy:getLevel()
   self._remainSkillPoint = skillPointInfo._remainPoint
   local skillPoint = PAGetString(Defines.StringSheet_RESOURCE, "SKILL_TEXT_POINT") .. "  " .. tostring(skillPointInfo._remainPoint) .. " / " .. tostring(skillPointInfo._acquirePoint)
-  local attackPoint = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BATTLEPOINT_ATTACKPOINT") .. "  " .. tostring(ToClient_getOffence())
-  local awakenAttackPoint = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BATTLEPOINT_AWAKENATTACKPOINT") .. "  " .. tostring(ToClient_getAwakenOffence())
-  local maxMp = self._mantalString .. "  " .. selfPlayerActorProxy:getMaxMp()
   self._ui._body._staticText_SkillPoint:SetText(skillPoint)
-  self._ui._body._staticText_AttackPoint:SetText(attackPoint)
-  self._ui._body._staticText_AwakenAttackPoint:SetText(awakenAttackPoint)
-  self._ui._body._staticText_Mp:SetText(maxMp)
 end
 function Window_SkillInfo:InitControl()
   local body = self._ui._body
   local right = self._ui._right
   local ui = self._ui
   body._staticText_SkillPoint = UI.getChildControl(ui._static_BodyBg, "StaticText_SkillPoint")
-  body._staticText_AttackPoint = UI.getChildControl(ui._static_BodyBg, "StaticText_AttackPoint")
-  body._staticText_AwakenAttackPoint = UI.getChildControl(ui._static_BodyBg, "StaticText_AwakenAttackPoint")
-  body._staticText_Mp = UI.getChildControl(ui._static_BodyBg, "StaticText_Mp")
   body._static_IconBg = UI.getChildControl(ui._static_BodyBg, "Static_SkillIconBg")
   body._static_Icon = UI.getChildControl(ui._body._static_IconBg, "Static_SkillIcon")
   body._staticText_Name = UI.getChildControl(ui._static_BodyBg, "StaticText_SkillName")
   body._staticText_Desc = UI.getChildControl(ui._static_BodyBg, "StaticText_SkillDesc")
+  body._staticText_skillCommand = UI.getChildControl(ui._static_BodyBg, "StaticText_Skill_CommandDesc")
   body._staticText_Desc:SetAutoResize(true)
   body._staticText_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   body._staticText_NeedResource = UI.getChildControl(ui._static_BodyBg, "StaticText_NeedMp")
@@ -734,20 +724,6 @@ function Window_SkillInfo:InitControl()
   body._staticText_Command = UI.getChildControl(ui._static_BodyBg, "StaticText_KeyGuide_Basic")
   body._staticText_Command:SetAutoResize(true)
   body._staticText_Command:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  body._static_CommandFirst = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Basic_First")
-  body._static_CommandPlus = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Basic_Plus")
-  body._static_CommandSecend = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Basic_Second")
-  body._staticText_RideCommand = UI.getChildControl(ui._static_BodyBg, "StaticText_KeyGuide_Ride")
-  body._static_RideCommandFirst = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Ride_First")
-  body._static_RideCommandPlus = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Ride_Plus")
-  body._static_RideCommandSecend = UI.getChildControl(ui._static_BodyBg, "Static_KeyGuide_Ride_Second")
-  body._static_CommandFirst:SetShow(false)
-  body._static_CommandPlus:SetShow(false)
-  body._static_CommandSecend:SetShow(false)
-  body._staticText_RideCommand:SetShow(false)
-  body._static_RideCommandFirst:SetShow(false)
-  body._static_RideCommandPlus:SetShow(false)
-  body._static_RideCommandSecend:SetShow(false)
   right._staticText_LearnableEmpty = UI.getChildControl(ui._static_RightBg, "StaticText_LearnableEmpty")
   right._staticText_LearnableEmpty:SetShow(false)
   right._radioButton_LearnSkill = UI.getChildControl(ui._static_RightBg, "RadioButton_LearnSkill")
@@ -760,6 +736,13 @@ function Window_SkillInfo:InitControl()
   right._radiobutton_ResetSkillKey = UI.getChildControl(right._static_KeyGuide, "Radiobutton_SkillPoint_Reset_Key")
   right._radioButton_SkillDemo = UI.getChildControl(right._static_KeyGuide, "Radiobutton_Demo_Key")
   right._radioButton_Close = UI.getChildControl(right._static_KeyGuide, "Radiobutton_SkillPoint_Close_Key")
+  right._static_SellectRight = UI.getChildControl(ui._static_RightBg, "Static_SkillRightBg")
+  right._static_SellectLeft = UI.getChildControl(ui._static_RightBg, "Static_SkillLeftBg")
+  if false == ToClient_IsContentsGroupOpen("901") then
+    right._radioButton_SkillAwaken:SetShow(false)
+    right._radioButton_LearnSkill:SetPosX(right._radioButton_LearnSkill:GetPosX() + 50)
+    right._radioButton_SkillBasic:SetPosX(right._radioButton_SkillBasic:GetPosX() + 50)
+  end
 end
 function Window_SkillInfo:InitEvent()
   local right = self._ui._right

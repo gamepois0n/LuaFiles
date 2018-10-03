@@ -1220,6 +1220,13 @@ function Toggle_DialogMainTab_Enter_A()
   if self._currentMaxFuncButtonCount == 1 then
     return
   end
+  if nil ~= self._ui.btn_Func_List[self._currentTabIndex] and nil ~= self._ui.btn_Func_List[self._currentTabIndex].funcButtonType then
+    if -1 == self._ui.btn_Func_List[self._currentTabIndex].funcButtonType then
+      return
+    elseif 1 == self._ui.btn_Func_List[self._currentTabIndex].funcButtonType then
+      return
+    end
+  end
   Toggle_DialogMainTab_Enter()
 end
 function Toggle_DialogMainTab_Enter()

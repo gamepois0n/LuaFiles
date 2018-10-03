@@ -678,6 +678,7 @@ function Panel_Window_Knowledge_Renew_info:setContentPage4()
 end
 function PaGlobalFunc_Window_Knowledge_Renew_ShowAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   local self = Panel_Window_Knowledge_Renew_info
   Panel_Window_Knowledge_Renew:ResetVertexAni()
   local aniInfo1 = Panel_Window_Knowledge_Renew:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
@@ -690,6 +691,7 @@ function PaGlobalFunc_Window_Knowledge_Renew_ShowAni()
 end
 function PaGlobalFunc_Window_Knowledge_Renew_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Window_Knowledge_Renew:ResetVertexAni()
   local aniInfo1 = Panel_Window_Knowledge_Renew:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartPosition(Panel_Window_Knowledge_Renew:GetPosX(), 0)

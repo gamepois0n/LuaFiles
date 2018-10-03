@@ -48,6 +48,8 @@ function GuildMain:openTab(tabIdx_)
     end
   end
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "")
   self._ui.txt_YConsoleUI:SetShow(false)
   self._ui.txt_XConsoleUI:SetShow(false)
   PaGlobalFunc_GuildMain_SetKeyGuide(1, true)
@@ -56,14 +58,23 @@ function GuildMain:openTab(tabIdx_)
     self:updateDeclareInfo()
     self:updateDeclaredByInfo()
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_GuildSettingFunction_Open()")
+    self._ui.txt_YConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_MANAGER_TEXT_TITLE"))
     self._ui.txt_YConsoleUI:SetShow(true)
   elseif tabIdx_ == self._tabIdxData.guildMember then
+    self._ui.txt_XConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_XBOX_PROFILE"))
+    self._ui.txt_XConsoleUI:SetPosX(465)
+    self._ui.txt_YConsoleUI:SetText("Toggle Name")
+    self._ui.txt_YConsoleUI:SetShow(true)
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_GuildMemberList_SwapFamilyOrCharacterName()")
     PaGlobalFunc_GuildMemberList_Open()
   elseif tabIdx_ == self._tabIdxData.guildQuest then
+    _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "InputMLUp_GuildQuestList_OpenQuestTabToLeft()")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "InputMLUp_GuildQuestList_OpenQuestTabToRight()")
     PaGlobalFunc_GuildMain_SetKeyGuide(1, false)
     PaGlobalFunc_GuildQuestList_Open()
   else
     if tabIdx_ == self._tabIdxData.guildSkill then
+      self._ui.txt_XConsoleUI:SetPosX(500)
       PaGlobalFunc_GuildSkillList_Open()
     else
     end
@@ -186,9 +197,9 @@ end
 function GuildMain:updateKeyGuide()
   local currentGuidePos = 0
   for idx = 0, self._keyGuideType.dataCount do
-    if nil ~= self._keyGuideList[idx] and true == self._keyGuideList[idx]._setShow then
+    if nil ~= self._keyGuideList[idx] and true == self._keyGuideList[idx]:GetShow() then
       self._keyGuideList[idx]:SetPosX(self._keyGuideStartPos + currentGuidePos)
-      currentGuidePos = currentGuidePos + self._keyGuideList[idx]._size
+      currentGuidePos = currentGuidePos + self._keyGuideList[idx]:GetTextSizeX()
     end
   end
 end

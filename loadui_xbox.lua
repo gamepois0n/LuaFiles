@@ -344,7 +344,7 @@ function preLoadGameUI_XB()
   loadUI("UI_Data/Window/NodeWarMenu/Panel_NodeWarMenu_Main.XML", "Panel_NodeWarMenu", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/Skill/Console/Panel_Window_Skill.XML", "Panel_Window_Skill", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/Skill/Console/Panel_Window_Skill_Renew.XML", "Panel_Window_Skill", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Default,
     RenderMode.eRenderMode_SkillWindow,
     RenderMode.eRenderMode_Dialog
@@ -1605,7 +1605,6 @@ function preLoadGameUI_XB()
 end
 function loadGameUI_XB()
   runLua("UI_Data/Script/Window/BlackBackground/Panel_Global_BlackBackground.lua")
-  runLua("UI_Data/Script/Common/Common_ConsoleConfig.lua")
   runLua("UI_Data/Script/Panel_Ime.lua")
   runLua("UI_Data/Script/Tutorial/Panel_WebControl.lua")
   runLua("UI_Data/Script/DragManager.lua")

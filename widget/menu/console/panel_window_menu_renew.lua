@@ -239,7 +239,7 @@ function PaGlobal_Menu_Renew_Renew:Init()
   self._ui._topBg:SetSize(Panel_Window_Menu_Renew:GetSizeX() - 10, self._ui._topBg:GetSizeY())
 end
 function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
-  audioPostEvent_SystemUi(52, 1)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if self._xbox._help == index then
     PaGlobal_Policy_ShowWindow(false)
   elseif self._xbox._escape == index then
@@ -290,7 +290,7 @@ function Panel_Window_Menu_ShowToggle()
   local isShow = Panel_Window_Menu_Renew:GetShow()
   Panel_Window_Menu_Renew:SetShow(not isShow)
   if not isShow then
-    audioPostEvent_SystemUi(53, 37)
+    _AudioPostEvent_SystemUiForXBOX(53, 37)
   end
 end
 function PaGlobal_Menu_Renew_Renew:ShowAni()

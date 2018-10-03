@@ -133,17 +133,17 @@ function MiniGame_GaugeBarMoveCalc(fDeltaTime)
     self._ui.stc_GaugeBar:SetShow(false)
   elseif controlPos > right_Bad_Start + redArea or controlPos < left_Bad_Start - redArea then
     if self._ui.stc_Result_Bad:GetShow() == false then
-      audioPostEvent_SystemUi(11, 2)
+      _AudioPostEvent_SystemUiForXBOX(11, 2)
       self._ui.stc_Result_Bad:SetShow(true)
       self._ui.stc_Result_Good:SetShow(false)
       self._ui.stc_Result_Bad:ResetVertexAni()
       self._ui.stc_Result_Bad:SetVertexAniRun("Bad_Ani", true)
       self._ui.stc_Result_Bad:SetVertexAniRun("Bad_ScaleAni", true)
       if controlPos < left_Bad_Start then
-        audioPostEvent_SystemUi(11, 2)
+        _AudioPostEvent_SystemUiForXBOX(11, 2)
         getSelfPlayer():get():SetMiniGameResult(1)
       else
-        audioPostEvent_SystemUi(11, 2)
+        _AudioPostEvent_SystemUiForXBOX(11, 2)
         getSelfPlayer():get():SetMiniGameResult(2)
       end
     end
@@ -153,6 +153,7 @@ function MiniGame_GaugeBarMoveCalc(fDeltaTime)
     self._ui.stc_GaugeBar:SetShow(true)
     if self._ui.stc_Result_Good:GetShow() == false then
       audioPostEvent_SystemUi(11, 1)
+      _AudioPostEvent_SystemUiForXBOX(11, 1)
       getSelfPlayer():get():SetMiniGameResult(4)
       self._ui.stc_Result_Bad:SetShow(false)
       self._ui.stc_Result_Good:SetShow(true)

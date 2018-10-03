@@ -97,7 +97,7 @@ function PaGlobalFunc_ExpeditionAreaSelectInfo_Select()
     return
   end
   local self = expeditionAreaSelectInfo
-  PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(self._selectIndex, self._selectGroupKey)
+  PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(self._selectIndex, self._selectGroupKey, nil, true)
   self:close()
 end
 function PaGlobalFunc_ExpeditionAreaSelectInfo_CreateControlList2(content, index)

@@ -129,8 +129,6 @@ function GuildQuestList:registEvent()
   self._btnCtrl[self._tabType.preOcc]:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_OpenQuestTab(" .. self._tabType.preOcc .. ")")
   self._btnCtrl[self._tabType.wide]:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_OpenQuestTab(" .. self._tabType.wide .. ")")
   self._btnCtrl[self._tabType.preOccInfo]:addInputEvent("Mouse_LUp", "InputMLUp_GuildQuestList_OpenQuestTab(" .. self._tabType.preOccInfo .. ")")
-  _parent:registerPadEvent(__eConsoleUIPadEvent_LT, "InputMLUp_GuildQuestList_OpenQuestTabToLeft()")
-  _parent:registerPadEvent(__eConsoleUIPadEvent_RT, "InputMLUp_GuildQuestList_OpenQuestTabToRight()")
   registerEvent("ResponseGuildQuestList", "FromClient_GuildQuestList_UpdateQuestList")
   registerEvent("ResponseUpdateGuildQuest", "FromClient_GuildQuestList_UpdateQuestList")
   registerEvent("ResponseAcceptGuildQuest", "PaGlobalFunc_GuildQuestList_ResponseQuest")
@@ -316,7 +314,7 @@ function InputMLUp_GuildQuestList_AcceptQuest()
       return
     else
       local messageboxData = {
-        title = "",
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
         content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_QUESTACCEPT_BYINVENTORY"),
         functionYes = PaGlobalFunc_GuildQuestList_AcceptContinue,
         functionCancel = MessageBox_Empty_function,
@@ -327,7 +325,7 @@ function InputMLUp_GuildQuestList_AcceptQuest()
     end
   end
   local messageboxData = {
-    title = "",
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
     content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_QUESTACCEPT"),
     functionYes = PaGlobalFunc_GuildQuestList_AcceptContinue,
     functionCancel = MessageBox_Empty_function,

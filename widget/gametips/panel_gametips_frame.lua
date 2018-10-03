@@ -52,6 +52,7 @@ end
 function FGlobal_GameTipsShow()
   Panel_Window_GameTips:SetShow(true)
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   gameTipsWindow.list2:moveTopIndex()
 end
 function FGlobal_GameTipsHide()

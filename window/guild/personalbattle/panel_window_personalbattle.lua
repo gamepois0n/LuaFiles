@@ -158,6 +158,7 @@ function PaGlobal_PersonalBattle:open()
     return
   end
   audioPostEvent_SystemUi(1, 18)
+  _AudioPostEvent_SystemUiForXBOX(1, 18)
   if true == ToClient_getJoinGuildBattle() then
     if false == ToClient_isPersonalBattle() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantattendGuildBattle"))
@@ -171,6 +172,7 @@ function PaGlobal_PersonalBattle:open()
 end
 function PaGlobal_PersonalBattle:close()
   audioPostEvent_SystemUi(1, 17)
+  _AudioPostEvent_SystemUiForXBOX(1, 17)
   Panel_Window_PersonalBattle:SetShow(false)
 end
 function PaGlobal_PersonalBattle:update()

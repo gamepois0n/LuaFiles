@@ -173,6 +173,7 @@ function PaGlobal_FairyUpgrade_Request()
   end
   local function FunctionYesOverExp()
     audioPostEvent_SystemUi(21, 0)
+    _AudioPostEvent_SystemUiForXBOX(21, 0)
     self._isAnimating = true
     self._UI._checkBtn:SetIgnore(true)
     self._UI._checkBtn:SetMonoTone(true)
@@ -192,6 +193,7 @@ function PaGlobal_FairyUpgrade_Request()
     local isOverExp = ToClient_isOverExpFairyFeeding(PaGlobal_FairyInfo_GetFairyNo(), self._currentItemEnchantKey, self._currentItemStackCount)
     if false == isOverExp then
       audioPostEvent_SystemUi(21, 0)
+      _AudioPostEvent_SystemUiForXBOX(21, 0)
       self._isAnimating = true
       self._UI._checkBtn:SetIgnore(true)
       self._UI._checkBtn:SetMonoTone(true)

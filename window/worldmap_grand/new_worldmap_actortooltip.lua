@@ -298,8 +298,8 @@ function FromClient_OnWorldMapNode(nodeBtn)
       local minMemberAtSiege = siegeNode:getMinMemberAtSiege()
       local maxMemberAtSiege = siegeNode:getMaxMemberAtSiege()
       if 0 ~= maxMemberAtSiege and true == _ContentsGroup_NewSiegeRule then
-        local str = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGENODE_MINMAX_PARTICIPANT") .. " : "
-        tempString = tempString .. "(" .. str .. tostring(minMemberAtSiege) .. " ~ " .. tostring(maxMemberAtSiege) .. ")"
+        local str = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SIEGENODE_MINMAX_PARTICIPANT", "MaxMember", tostring(maxMemberAtSiege))
+        tempString = tempString .. "(" .. str .. ")"
       end
       villageWar.nodeTaxGrade:SetText(tempString)
     else

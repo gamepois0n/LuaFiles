@@ -290,6 +290,7 @@ function Customization_FaceBoneInfo:InitControl()
 end
 function PaGlobalFunc_Customization_FaceBone_ClearCustomizedBoneInfo()
   clearCustomizedBoneInfo()
+  PaGlobalFunc_Customization_FaceBone_Update()
 end
 function Customization_FaceBoneInfo:InitEvent()
   for index = 0, 2 do
@@ -331,6 +332,7 @@ function Customization_FaceBoneInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+  PaGlobalFunc_CustomIzationCommon_PushClearGroupCustomizedBonInfoPostFunction(PaGlobalFunc_Customization_FaceBone_Update)
 end
 function PaGlobalFunc_FromClient_Customization_FaceBone_luaLoadComplete()
   local self = Customization_FaceBoneInfo

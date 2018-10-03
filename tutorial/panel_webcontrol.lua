@@ -104,6 +104,7 @@ function Panel_WebHelper_ShowAni()
 end
 function Panel_WebHelper_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_WebControl:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_WebControl, 0, 0.1)
   aniInfo:SetHideAtEnd(true)

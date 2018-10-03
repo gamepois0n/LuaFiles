@@ -40,6 +40,7 @@ end
 Panel_ScreenShotAlbum_Initialize()
 function ScreenshotAlbum_Open()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_ScreenShotAlbum:SetShow(true, true)
   FGlobal_SetCandidate()
   local temporaryWrapper = getTemporaryInformationWrapper()
@@ -67,6 +68,7 @@ function FGlobal_ScreenshotAlbum_Show(isCTMode)
 end
 function FGlobal_ScreenshotAlbum_ShowByScreenShotFrame()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_ScreenShotAlbum:SetShow(true, true)
 end
 function FGlobal_ScreenshotAlbum_Close()

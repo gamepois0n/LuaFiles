@@ -40,9 +40,11 @@ function FGlobal_Event_100Day_GameExitOpen()
 end
 function HandleClickedChallengeReward()
   audioPostEvent_SystemUi(0, 5)
+  _AudioPostEvent_SystemUiForXBOX(0, 5)
   if not Panel_Window_CharInfo_Status:GetShow() then
     Panel_Window_CharInfo_Status:SetShow(true)
     audioPostEvent_SystemUi(1, 34)
+    _AudioPostEvent_SystemUiForXBOX(1, 34)
   end
   if _ContentsGroup_isUsedNewCharacterInfo == false then
     HandleClicked_CharacterInfo_Tab(3)
@@ -54,6 +56,7 @@ function HandleClickedChallengeReward()
 end
 function FGlobal_Event_100Day_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_Event_100Day:SetShow(false, false)
 end
 function HandleClicked_event_100Day_Close()

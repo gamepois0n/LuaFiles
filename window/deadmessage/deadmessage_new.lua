@@ -1375,10 +1375,16 @@ function deadMessage_ButtonPushed_SiegeIng()
   deadMessage_ClearDropItems()
 end
 function deadMessage_ButtonPushed_AdvancedBase()
-  deadMessage_Revival(enRespawnType.respawnType_AdvancedBase, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
+  local selfPlayer = getSelfPlayer()
+  if nil ~= selfPlayer then
+    deadMessage_Revival(enRespawnType.respawnType_AdvancedBase, 255, 0, selfPlayer:getRegionKey(), false, toInt64(0, 0))
+  end
 end
 function deadMessage_ButtonPushed_LocalWar()
-  deadMessage_Revival(enRespawnType.respawnType_LocalWar, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0))
+  local selfPlayer = getSelfPlayer()
+  if nil ~= selfPlayer then
+    deadMessage_Revival(enRespawnType.respawnType_LocalWar, 255, 0, selfPlayer:getRegionKey(), false, toInt64(0, 0))
+  end
 end
 function deadMessage_ButtonPushed_SavageDefence()
   local executeUnjoin = function()

@@ -377,10 +377,12 @@ function FGlobal_SavegeDefenceInfo_unjoin()
 end
 function FGlobal_SavageDefenceInfo_Open()
   audioPostEvent_SystemUi(1, 18)
+  _AudioPostEvent_SystemUiForXBOX(1, 18)
   ToClient_SavageDefenceStatusRefreshReq()
 end
 function FGlobal_SavageDefenceInfo_Close()
   audioPostEvent_SystemUi(1, 17)
+  _AudioPostEvent_SystemUiForXBOX(1, 17)
   local self = PaGlobal_SavegeDefenceInfo
   self._openDesc = -1
   self._desc_Rule_Title:SetCheck(false)

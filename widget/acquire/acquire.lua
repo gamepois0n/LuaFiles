@@ -632,6 +632,7 @@ function Acquire_ProcessMessage()
       local arcType = notifyMsg._msgType
       if arcType == Acquire_Enum.GainExplorePoint then
         audioPostEvent_SystemUi(3, 17)
+        _AudioPostEvent_SystemUiForXBOX(3, 17)
       else
         local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()
         if nil ~= itemEnchantSSW then

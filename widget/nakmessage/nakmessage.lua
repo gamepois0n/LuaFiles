@@ -37,7 +37,7 @@ function Proc_ShowBigMessage_Ack_WithOut_ChattingMessage(message)
   Proc_ShowMessage_Ack_For_RewardSelect(messages, 3, 4)
 end
 function Proc_ShowMessage_Ack_WithOut_ChattingMessage(message, showRate)
-  audioPostEvent_SystemUi(8, 1)
+  _AudioPostEvent_SystemUiForXBOX(8, 1)
   if nil == showRate then
     animationEndTime = 2.3
     elapsedTime = 2.3

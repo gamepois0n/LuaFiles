@@ -1772,7 +1772,9 @@ function FGlobal_QuestWidget_Open()
   Panel_CheckedQuest:SetShow(true, true)
   Panel_MainQuest:SetShow(true, false)
   if true == _ContentsGroup_RenewUI_Chatting then
+    Panel_CheckedQuest:SetShow(false)
     PaGlobalFunc_ChattingInfo_Close()
+    return
   end
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
@@ -1784,10 +1786,10 @@ function FGlobal_QuestWidget_Close()
   Panel_MainQuest:SetShow(false, false)
   if false == _ContentsGroup_RenewUI_WorldMap then
     questInfo_TooltipShow(false)
-  end
-  TooltipSimple_Hide()
-  if ToClient_WorldMapIsShow() then
-    WorldMapPopupManager:pop()
+    TooltipSimple_Hide()
+    if ToClient_WorldMapIsShow() then
+      WorldMapPopupManager:pop()
+    end
   end
 end
 function HandleClicked_ShowQuestInfo(questGroupId, questId, questCondition_Chk, groupTitle, questGroupCount)
@@ -2502,6 +2504,10 @@ function FGlobal_QuestWindowRateSetting()
   rateValue.y = math.max(math.min(Panel_CheckedQuest:GetPosY() / sizeWithOutPanelY, 1), 0)
 end
 function FromClient_questWidget_ResetPosition()
+  if true == ToClient_isXBox() then
+    Panel_CheckedQuest:SetShow(false)
+    return
+  end
   local newEquipGap = 0
   if true == Panel_NewEquip:GetShow() then
     newEquipGap = Panel_NewEquip:GetSizeY()

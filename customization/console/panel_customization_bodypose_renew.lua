@@ -237,13 +237,14 @@ end
 function PaGlobalFunc_Customization_BodyPose_ClearPoseBone()
   local self = Customization_BodyPoseInfo
   self._ui._poseSelect:SetShow(false)
+  clearPoseBone()
   if nil == self._lastRot then
     return
   end
   self:SetRotationSlider(self._ui._slider_RotationX, self._lastRot.x, self._lastRotMin.x, self._lastRotMax.x)
   self:SetRotationSlider(self._ui._slider_RotationY, self._lastRot.y, self._lastRotMin.y, self._lastRotMax.y)
   self:SetRotationSlider(self._ui._slider_RotationZ, self._lastRot.z, self._lastRotMin.z, self._lastRotMax.z)
-  clearPoseBone()
+  PaGlobalFunc_Customization_BodyPose_Update()
 end
 function PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
   local self = Customization_BodyPoseInfo
@@ -255,6 +256,7 @@ function PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
   self:SetRotationSlider(self._ui._slider_RotationX, self._lastRot.x, self._lastRotMin.x, self._lastRotMax.x)
   self:SetRotationSlider(self._ui._slider_RotationY, self._lastRot.y, self._lastRotMin.y, self._lastRotMax.y)
   self:SetRotationSlider(self._ui._slider_RotationZ, self._lastRot.z, self._lastRotMin.z, self._lastRotMax.z)
+  PaGlobalFunc_Customization_BodyPose_Update()
 end
 function Customization_BodyPoseInfo:InitControl()
   self._ui._checkbox_ShowPart = UI.getChildControl(self._ui._static_ControlGroup, "CheckButton_ShowPart")

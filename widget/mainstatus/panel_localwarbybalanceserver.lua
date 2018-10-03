@@ -21,6 +21,7 @@ function PaGlobal_Panel_LocalwarByBalanceServer_ClickMessage()
 end
 function PaGlobal_Panel_LocalwarByBalanceServer_Click()
   audioPostEvent_SystemUi(1, 6)
+  _AudioPostEvent_SystemUiForXBOX(1, 6)
   local playerWrapper = getSelfPlayer()
   local player = playerWrapper:get()
   local hp = player:getHp()

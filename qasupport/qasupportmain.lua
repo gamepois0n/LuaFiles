@@ -3984,3 +3984,9 @@ end
 function pa_useQuickSlot(num)
   QuickSlot_DropHandler(num)
 end
+function joinBR()
+  ToClient_JoinBattleRoyale()
+end
+function classChange(type)
+  ToClient_classChange(type)
+end

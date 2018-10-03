@@ -14,6 +14,7 @@ local progressRate = UI.getChildControl(Panel_Loading, "Progress2_Loading")
 local progressHead = UI.getChildControl(progressRate, "Progress2_Bar_Head")
 local staticBack = UI.getChildControl(Panel_Loading, "Static_Progress_Back")
 local goblinRun = UI.getChildControl(Panel_Loading, "Static_GoblinRun")
+local txt_versionInfo = UI.getChildControl(Panel_Loading, "StaticText_VersionInfo")
 local backGroundEvnetImage = UI.getChildControl(Panel_Loading, "Static_BackImage")
 local stc_movieBG = UI.getChildControl(backGroundEvnetImage, "Static_MovieBG")
 local _ui_web_loadingMovie
@@ -135,6 +136,7 @@ function LoadingPanel_Resize()
   screenX = getScreenSizeX()
   screenY = getScreenSizeY()
   Panel_Loading:SetSize(screenX, screenY)
+  txt_versionInfo:ComputePos()
   _bg1:SetSize(screenX, screenY)
   _bg1:ComputePos()
   _bg2:SetSize(screenX, screenY)
@@ -185,9 +187,15 @@ function LoadingPanel_Init()
   stc_movieBG:SetShow(false)
   if _ContentsGroup_RemasterUI_Lobby then
     stc_movieBG:SetShow(true)
+    stc_fade:SetShow(true)
     _currentMovieIndex = 1
     LoadingPanel_ShuffleOrder(_movieOrder)
   end
+  if true == ToClient_isXBox() then
+    stc_movieBG:SetShow(false)
+    stc_fade:SetShow(false)
+  end
+  txt_versionInfo:SetShow(_ContentsGroup_ForXBoxClosedBeta)
 end
 function LoadingPanel_ShuffleOrder(table)
   if nil == table or nil == #table then
@@ -360,7 +368,7 @@ local function LoadingPanel_GetRandomKnowledge()
   end
 end
 function LoadingPanel_GetBackGroundImage()
-  if isBgOpen and false == _ContentsGroup_RemasterUI_Lobby then
+  if isBgOpen and nil ~= bgImageTexture and nil ~= bgImageTexture.count then
     local loadingImageIndex = math.random(0, bgImageTexture.count - 1)
     loadingImageIndex = (loadingImageIndex + 1) % bgImageTexture.count
     backGroundEvnetImage:ChangeTextureInfoName(bgImageTexture[loadingImageIndex])

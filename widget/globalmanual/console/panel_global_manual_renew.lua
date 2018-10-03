@@ -550,7 +550,7 @@ function Parking_PLZ_Update(variableName, value)
     if true == isNearMonsterCheck() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_ISNEARMONSTERCHECK"), 4)
       FGlobal_ServantIcon_IsNearMonster_Effect(true)
-      audioPostEvent_SystemUi(8, 14)
+      _AudioPostEvent_SystemUiForXBOX(8, 14)
     else
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_VEHICLE_PARKING_PLZ"))
     end

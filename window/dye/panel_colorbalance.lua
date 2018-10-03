@@ -90,6 +90,7 @@ function Panel_ColorBalance_PanelResize_ByFontSize()
 end
 function Panel_ColorBalance_Show()
   audioPostEvent_SystemUi(1, 24)
+  _AudioPostEvent_SystemUiForXBOX(1, 24)
   Panel_ColorBalance:SetShow(true, true)
   Panel_ColorBalance:SetPosX(getScreenSizeX() / 2 - Panel_ColorBalance:GetSizeX() / 2)
   Panel_ColorBalance:SetPosY(getScreenSizeY() / 2 - Panel_ColorBalance:GetSizeY() / 2)

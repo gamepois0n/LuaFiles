@@ -1,6 +1,7 @@
 function Enchant_ShowAni()
   local self = PaGlobal_Enchant
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   local aniInfo1 = Panel_Window_Enchant:addScaleAnimation(0, 0.08, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
   aniInfo1:SetEndScale(1.13)
@@ -20,4 +21,5 @@ function Enchant_HideAni()
   local enchantHide = UIAni.AlphaAnimation(0, Panel_Window_Enchant, 0, 0.2)
   enchantHide:SetHideAtEnd(true)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end

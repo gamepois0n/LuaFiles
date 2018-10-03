@@ -111,7 +111,7 @@ function PaGlobal_Enchant:didsetEnchantTarget(isMonotone, isRadioClick)
   local enchantItemClassify = itemWrapper:getStaticStatus():getItemClassify()
   local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
   local isStackLessBlackStone = itemWrapper:getStaticStatus():isNeedStackLessBlackStonForEnchant()
-  if (enchantLevel > 16 or 4 == enchantItemClassify) and false == isStackLessBlackStone then
+  if (enchantLevel > 16 or 4 == enchantItemClassify) and false == isStackLessBlackStone and toInt64(0, 0) < self._enchantInfo:ToClient_getNeedCountForProtect_s64() then
     self:setEnable_CheckboxUseCron(true)
     self:setText_NumOfCron(self._enchantInfo:ToClient_getCountProtecMaterial_s64(), self._enchantInfo:ToClient_getNeedCountForProtect_s64())
     local enduranceDesc = self:getStr_EnchantInfo(self._enchantInfo:ToClient_getCurMaxEndura(), self._enchantInfo:ToClient_getDecMaxEndura(), enchantType, true)

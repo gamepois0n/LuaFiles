@@ -542,14 +542,17 @@ function PetList:Close()
 end
 function petListNew_ShowInfo(petNoStr)
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   FGlobal_PetInfoNew_Open(tonumber64(petNoStr))
 end
 function sealPetListNew_ShowInfo(petNoStr)
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   FGlobal_PetInfoNew_Open(tonumber64(petNoStr), nil, true)
 end
 function petListNew_Seal(petNoStr, index)
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   local self = PetList
   local petNo_s64 = tonumber64(petNoStr)
   FGlobal_PetControl_SealPet(index)
@@ -562,6 +565,7 @@ function FGlobal_petListNew_Seal(petNo, index)
 end
 function petListNew_UnSeal(petNoStr, isGroup)
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   local self = PetList
   local petNo_s64 = tonumber64(petNoStr)
   if maxUnsealCount <= self.UnSealDATACount and false == isGroup then
@@ -576,6 +580,7 @@ function petListNew_UnSeal(petNoStr, isGroup)
 end
 function petListNew_UnRegister(petNoStr)
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   local self = PetList
   local petNo_s64 = tonumber64(petNoStr)
   ToClient_requestPetUnregister(petNo_s64)
@@ -756,6 +761,7 @@ function FGlobal_PetListNew_Open()
 end
 function FGlobal_PetListNew_Close()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   PetList:Close()
   PetList:showFeedUi(-1)
   PetList:showFeedAllUi(false)
@@ -775,9 +781,11 @@ function FGlobal_PetListNew_Toggle()
     PetList:Close()
     Panel_Window_PetCompose_Close()
     audioPostEvent_SystemUi(1, 1)
+    _AudioPostEvent_SystemUiForXBOX(1, 1)
   else
     PetList:Open()
     audioPostEvent_SystemUi(1, 40)
+    _AudioPostEvent_SystemUiForXBOX(1, 40)
     local regionInfoWrapper = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
     if nil == regionInfoWrapper then
       return

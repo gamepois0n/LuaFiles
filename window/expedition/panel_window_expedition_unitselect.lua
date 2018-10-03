@@ -6,7 +6,9 @@ local expeditionUnitSelectInfo = {
   },
   _selectIndex = nil,
   _selectUnitNo = nil,
-  _isSell = false
+  _isSell = false,
+  _synergyList = nil,
+  _tooltipControls = nil
 }
 function expeditionUnitSelectInfo:initialize()
   ToClient_getListExpeditionaryUnits()
@@ -20,8 +22,14 @@ function expeditionUnitSelectInfo:registEventHandler()
   self._ui._list2_myUnitList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
 end
 function expeditionUnitSelectInfo:open(isSell)
+  if nil ~= Panel_ArmyUnitSetting and Panel_ArmyUnitSetting:GetShow() then
+    Panel_Subjugation_SelectArmyUnit:SetPosX(Panel_ArmyUnitSetting:GetPosX() + Panel_ArmyUnitSetting:GetSizeX() * 0.5 - Panel_Subjugation_SelectArmyUnit:GetSizeX() * 0.5)
+    Panel_Subjugation_SelectArmyUnit:SetPosY(Panel_ArmyUnitSetting:GetPosY() + Panel_ArmyUnitSetting:GetSizeY() * 0.5 - Panel_Subjugation_SelectArmyUnit:GetSizeY() * 0.5)
+  end
   local unitList = ToClient_getMyExpeditionUnitList()
   self._isSell = isSell
+  self._synergyList = {}
+  self._tooltipControls = {}
   if nil ~= unitList then
     _PA_LOG("\235\176\149\234\183\156\235\130\152_\237\134\160\235\178\140", "\236\156\160\235\139\155\234\176\175\236\136\152" .. tostring(#unitList))
     self._ui._list2_myUnitList:getElementManager():clearKey()
@@ -75,6 +83,15 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
   local promoteBtn = UI.getChildControl(content, "Button_Promote")
   local button_select = UI.getChildControl(content, "Button_Select")
   local button_sell = UI.getChildControl(content, "Button_Sell")
+  local txt_synergy = UI.getChildControl(content, "StaticText_Synergy")
+  recoveryBtn:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  recoveryBtn:SetText(recoveryBtn:GetText())
+  promoteBtn:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  promoteBtn:SetText(promoteBtn:GetText())
+  button_select:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  button_select:SetText(button_select:GetText())
+  button_sell:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  button_sell:SetText(button_sell:GetText())
   local myUnit = ToClient_getMyExpeditionUnitInfo(key)
   local unitNo = Int64toInt32(key)
   if nil ~= myUnit then
@@ -86,7 +103,7 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
     local unitName = myUnit:getUnitName()
     local maxEnergy = myUnit:getMaxEnergyPoint()
     textLevel:SetText("Lv." .. tostring(level))
-    local expRate = curExp / maxExp * 100
+    local expRate = math.floor(Int64toInt32(curExp) * 100 / Int64toInt32(maxExp))
     expValue:SetText(tostring(expRate) .. "%")
     guageBar:SetProgressRate(expRate)
     if self._selectUnitNo == unitNo then
@@ -98,7 +115,9 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
     textEnergy:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_CURRENT_ENERGY", "energy", curEnergyPoint, "maxenergy", maxEnergy))
     unitInfoBG:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(" .. unitNo .. ")")
     recoveryBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitRecoveryDetail(" .. unitNo .. ")")
-    promoteBtn:SetShow(myUnit:canUpgrade())
+    local canUpgrade = myUnit:canUpgrade()
+    promoteBtn:SetEnable(canUpgrade)
+    promoteBtn:SetMonoTone(not canUpgrade)
     promoteBtn:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitPromote(" .. unitNo .. ")")
     button_select:addInputEvent("Mouse_LUp", "PaGlobalFunc_ExpeditionUnitSelectInfo_Select(" .. unitNo .. ")")
     button_sell:addInputEvent("Mouse_LUp", "PaGlobalFunc_SellExpeditionUnit(" .. unitNo .. ")")
@@ -109,7 +128,51 @@ function PaGlobalFunc_ExpeditionUnitSelectInfo_CreateControlList2(content, key)
       button_sell:SetShow(false)
       button_select:SetShow(true)
     end
+    self._synergyList[unitNo] = {}
+    local count = myUnit:getSynergeCount()
+    for ii = 0, count do
+      local synergeclass = getCharacterClassName(myUnit:getSynergeClass(ii))
+      local synergeType = myUnit:getSynergeType(ii)
+      local synergeName = ""
+      if __eExpeditionSynergy_AttackIncrease == synergeType then
+        synergeName = "\234\179\181\234\178\169\235\160\165 \236\166\157\234\176\128"
+      elseif __eExpeditionSynergy_ExpIncrease == synergeType then
+        synergeName = "\234\178\189\237\151\152\236\185\152 \236\166\157\234\176\128"
+      elseif __eExpeditionSynergy_UseEnergyDecrease == synergeType then
+        synergeName = "\236\151\144\235\132\136\236\167\128 \236\134\140\235\170\168 \234\176\144\236\134\140"
+      end
+      local synergeValue = myUnit:getSynergeValue(ii) / CppDefine.e1Percent
+      _PA_LOG("\237\134\160\235\178\140 \236\139\156\235\132\136\236\167\128 \236\182\156\235\160\165", "class = " .. synergeclass .. " type = " .. synergeName .. " value = " .. tostring(synergeValue))
+      self._synergyList[unitNo][ii] = " - " .. synergeclass .. " : " .. synergeName .. " ( " .. synergeValue .. " % )"
+    end
+    self._tooltipControls[unitNo] = txt_synergy
+    txt_synergy:addInputEvent("Mouse_On", "PaGlobalFunc_ExpeditionUnitSelectInfo_Tooltip(true, " .. unitNo .. ")")
+    txt_synergy:addInputEvent("Mouse_Out", "PaGlobalFunc_ExpeditionUnitSelectInfo_Tooltip(false)")
+    txt_synergy:SetIgnore(false)
   end
+end
+function PaGlobalFunc_ExpeditionUnitSelectInfo_Tooltip(isShow, unitNo)
+  local self = expeditionUnitSelectInfo
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  if nil == self._synergyList[unitNo] or nil == self._synergyList[unitNo][0] then
+    TooltipSimple_Hide()
+    return
+  end
+  local desc = "  "
+  for ii = 0, #self._synergyList[unitNo] - 1 do
+    if nil ~= self._synergyList[unitNo][ii] then
+      if "" ~= desc then
+        desc = desc .. [[
+
+  ]]
+      end
+      desc = desc .. self._synergyList[unitNo][ii]
+    end
+  end
+  TooltipSimple_Show(self._tooltipControls[unitNo], self._tooltipControls[unitNo]:GetText(), desc)
 end
 function PaGlobalFunc_ExpeditionUnitSelectInfo_ClickUnit(unitNo)
   local self = expeditionUnitSelectInfo

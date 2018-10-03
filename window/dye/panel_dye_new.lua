@@ -1362,12 +1362,14 @@ function DyeNew:Open()
   self:SetPosition()
   Panel_Dye_New:SetShow(true)
   audioPostEvent_SystemUi(1, 23)
+  _AudioPostEvent_SystemUiForXBOX(1, 23)
   Panel_Tooltip_Item_hideTooltip()
   selectedDyePart = {}
   self._dyeAlertText:SetShow(false)
 end
 function DyeNew:Close()
   audioPostEvent_SystemUi(1, 23)
+  _AudioPostEvent_SystemUiForXBOX(1, 23)
   Panel_Dye_New:SetShow(false)
   if Panel_ChangeWeapon:GetShow() then
     WeaponChange_Close()

@@ -111,6 +111,7 @@ function PersonalIcon:update()
   local blackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local memoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   local applyArshaBuff = ToClient_isAbleArshaItemDropBuffRate()
+  PaGlobalFunc_PersonalIcon_CheckGoldenBell()
   if isServerFixedCharge() then
     self._iconControl[self._iconType.RussiaMonthly]:SetShow(true)
   else
@@ -657,6 +658,18 @@ function FromClient_PersonalIcon_ResponseGoldenbellItemInfo(goldenbellPercent, g
   end
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 10, 54)
   self:updatePos()
+end
+function PaGlobalFunc_PersonalIcon_CheckGoldenBell()
+  local self = PersonalIcon
+  local player = getSelfPlayer():get()
+  local goldenBellTime_s64 = player:getGoldenbellExpirationTime_s64()
+  if goldenBellTime_s64 <= toInt64(0, 0) then
+    self._iconControl[self._iconType.GoldenBell]:SetShow(false)
+    self:updatePos()
+    return
+  else
+    self._iconControl[self._iconType.GoldenBell]:SetShow(true)
+  end
 end
 function FromClient_PersonalIcon_ResponseChangeExpAndDropPercent()
   local self = PersonalIcon

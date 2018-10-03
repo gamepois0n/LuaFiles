@@ -12,7 +12,8 @@ Widget_Function_Type = {
   SiegeWarCall = 7,
   PartySummon = 8,
   ReturnTown = 9,
-  Count = 10
+  SummonElephant = 10,
+  Count = 11
 }
 local Panel_Widget_FunctionButton_info = {
   _ui = {
@@ -25,7 +26,8 @@ local Panel_Widget_FunctionButton_info = {
     Button_BusterCall = nil,
     Button_SiegeWarCall = nil,
     Button_PartySummon = nil,
-    Button_ReturnTown = nil
+    Button_ReturnTown = nil,
+    Button_SummonElephant = nil
   },
   _pos = {buttonSpaceX = 8, buttonSizeX = 0},
   _button = {
@@ -38,7 +40,8 @@ local Panel_Widget_FunctionButton_info = {
     [Widget_Function_Type.BusterCall] = nil,
     [Widget_Function_Type.SiegeWarCall] = nil,
     [Widget_Function_Type.PartySummon] = nil,
-    [Widget_Function_Type.ReturnTown] = nil
+    [Widget_Function_Type.ReturnTown] = nil,
+    [Widget_Function_Type.SummonElephant] = nil
   },
   _buttonShow = {
     [Widget_Function_Type.FindNPC] = false,
@@ -50,7 +53,8 @@ local Panel_Widget_FunctionButton_info = {
     [Widget_Function_Type.BusterCall] = false,
     [Widget_Function_Type.SiegeWarCall] = false,
     [Widget_Function_Type.PartySummon] = false,
-    [Widget_Function_Type.ReturnTown] = false
+    [Widget_Function_Type.ReturnTown] = false,
+    [Widget_Function_Type.SummonElephant] = false
   },
   _isLeftTime = {
     [Widget_Function_Type.BusterCall] = false,
@@ -63,16 +67,19 @@ local Panel_Widget_FunctionButton_info = {
       [Widget_Function_Type.BusterCall] = "",
       [Widget_Function_Type.SiegeWarCall] = "",
       [Widget_Function_Type.PartySummon] = "",
-      [Widget_Function_Type.ReturnTown] = ""
+      [Widget_Function_Type.ReturnTown] = "",
+      [Widget_Function_Type.SummonElephant] = ""
     },
     _desc = {
       [Widget_Function_Type.BusterCall] = "",
       [Widget_Function_Type.SiegeWarCall] = "",
       [Widget_Function_Type.PartySummon] = "",
-      [Widget_Function_Type.ReturnTown] = ""
+      [Widget_Function_Type.ReturnTown] = "",
+      [Widget_Function_Type.SummonElephant] = ""
     }
   }
 }
+local elephantActorKey
 local ToggleSiege = false
 function Panel_Widget_FunctionButton_info:registEventHandler()
   for index = 0, Widget_Function_Type.Count - 1 do
@@ -115,6 +122,7 @@ function Panel_Widget_FunctionButton_info:childControl()
   self._ui.Button_SiegeWarCall = UI.getChildControl(Panel_Widget_Function, "Button_SiegeWarCall")
   self._ui.Button_PartySummon = UI.getChildControl(Panel_Widget_Function, "Button_PartySummon")
   self._ui.Button_ReturnTown = UI.getChildControl(Panel_Widget_Function, "Button_ReturnTown")
+  self._ui.Button_SummonElephant = UI.getChildControl(Panel_Widget_Function, "Button_SummonElephant")
   self._pos.buttonSizeX = self._ui.Button_FindNavi:GetSizeX()
 end
 function Panel_Widget_FunctionButton_info:setButton()
@@ -128,6 +136,7 @@ function Panel_Widget_FunctionButton_info:setButton()
   self._button[Widget_Function_Type.SiegeWarCall] = self._ui.Button_SiegeWarCall
   self._button[Widget_Function_Type.PartySummon] = self._ui.Button_PartySummon
   self._button[Widget_Function_Type.ReturnTown] = self._ui.Button_ReturnTown
+  self._button[Widget_Function_Type.SummonElephant] = self._ui.Button_SummonElephant
 end
 function Panel_Widget_FunctionButton_info:updateAllButton()
   for index = 0, Widget_Function_Type.Count - 1 do
@@ -175,6 +184,8 @@ function Panel_Widget_FunctionButton_info:checkButton(functionType)
     self._buttonShow[functionType] = self._isLeftTime[functionType]
   elseif functionType == Widget_Function_Type.ReturnTown then
     self._buttonShow[functionType] = self._isLeftTime[functionType]
+  elseif functionType == Widget_Function_Type.SummonElephant then
+    self._buttonShow[functionType] = nil ~= elephantActorKey
   end
 end
 function Panel_Widget_FunctionButton_info:updateButton(functionType)
@@ -205,6 +216,7 @@ function Panel_Widget_FunctionButton_info:updateButton(functionType)
   elseif functionType == Widget_Function_Type.SiegeWarCall then
   elseif functionType == Widget_Function_Type.PartySummon then
   elseif functionType == Widget_Function_Type.ReturnTown then
+  elseif functionType == Widget_Function_Type.SummonElephant then
   end
 end
 function Panel_Widget_FunctionButton_info:handleLClick(functionType)
@@ -256,6 +268,11 @@ function Panel_Widget_FunctionButton_info:handleLClick(functionType)
         Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
       end
     end
+  elseif functionType == Widget_Function_Type.SummonElephant then
+    if nil == elephantActorKey then
+      return
+    end
+    ToClient_RequestSummonElephantFromSiegeBuilding(elephantActorKey)
   end
 end
 function Panel_Widget_FunctionButton_info:handleRClick(functionType)
@@ -269,6 +286,7 @@ function Panel_Widget_FunctionButton_info:handleRClick(functionType)
   elseif functionType == Widget_Function_Type.SiegeWarCall then
   elseif functionType == Widget_Function_Type.PartySummon then
   elseif functionType == Widget_Function_Type.ReturnTown then
+  elseif functionType == Widget_Function_Type.SummonElephant then
   end
 end
 function Panel_Widget_FunctionButton_info:handleOver(functionType)
@@ -331,6 +349,10 @@ function Panel_Widget_FunctionButton_info:handleOver(functionType)
     showToolTip = true
     name = self._tooltip._name[Widget_Function_Type.ReturnTown]
     desc = self._tooltip._desc[Widget_Function_Type.ReturnTown]
+  elseif functionType == Widget_Function_Type.SummonElephant then
+    showToolTip = true
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_SUMMONELEPHANT_TOOLTIP_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_SUMMONELEPHANT_TOOLTIP_DESC")
   end
   if true == showToolTip and nil ~= uiControl then
     registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
@@ -588,8 +610,21 @@ function PaGlobalFunc_Widget_FunctionButton_Check_ReturnTown()
   self._tooltip._name[Widget_Function_Type.ReturnTown] = name
   self._tooltip._desc[Widget_Function_Type.ReturnTown] = desc
 end
+function FromClient_ShowElephantBarn(actorKey)
+  local self = Panel_Widget_FunctionButton_info
+  elephantActorKey = actorKey
+  self:updateAllButton()
+end
+function FromClient_HideElephantBarn()
+  local self = Panel_Widget_FunctionButton_info
+  elephantActorKey = nil
+  TooltipSimple_Hide()
+  self:updateAllButton()
+end
 registerEvent("FromClient_ResponseBustCall", "FromClient_Widget_FunctionButton_ResponseBustCall")
 registerEvent("FromClient_ResponseTeleportToSiegeTent", "FromClient_Widget_FunctionButton_ResponseTeleportToSiegeTent")
 registerEvent("FromClient_ResponseUseCompass", "FromClient_Widget_FunctionButton_ResponseUseCompass")
 registerEvent("FromClient_ResponseUseReturnStone", "FromClient_Widget_FunctionButton_ResponseUseReturnStone")
+registerEvent("FromClient_ShowElephantBarn", "FromClient_ShowElephantBarn")
+registerEvent("FromClient_HideElephantBarn", "FromClient_HideElephantBarn")
 registerEvent("FromClient_luaLoadComplete", "FromClient_Widget_FunctionButton_Init")

@@ -81,6 +81,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
       end
       if isSoundAlert and isPhotoMode() then
         audioPostEvent_SystemUi(8, 14)
+        _AudioPostEvent_SystemUiForXBOX(8, 14)
       elseif not isSoundAlert or not isFocusInChatting() then
       end
     end
@@ -442,6 +443,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
         if UI_CT.Guild == chatType and 3 == checkitemwebat and chattingMessage:getIsChattingAtSound() then
           audioPostEvent_SystemUi(100, 1)
+          _AudioPostEvent_SystemUiForXBOX(100, 1)
           chattingMessage:setIsChattingAtSound(false)
         end
         while msgDataLen > 0 do
@@ -1044,6 +1046,7 @@ function CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMe
       end
       if UI_CT.Guild == chatType and 3 == checkitemwebat and chattingMessage:getIsChattingAtSound() then
         audioPostEvent_SystemUi(100, 1)
+        _AudioPostEvent_SystemUiForXBOX(100, 1)
         chattingMessage:setIsChattingAtSound(false)
       end
       while msgDataLen > 0 do

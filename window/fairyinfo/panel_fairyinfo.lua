@@ -325,6 +325,7 @@ end
 function PaGlobal_ClickSummonButton()
   local self = FairyInfo
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   if nil == self._fairyNo then
     return
   end

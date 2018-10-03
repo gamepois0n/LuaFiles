@@ -2,6 +2,7 @@ Panel_Loading_Xbox:SetShow(true)
 local _knowledge_title = UI.getChildControl(Panel_Loading_Xbox, "StaticText_knowTitle")
 local static_LoadingCircle = UI.getChildControl(Panel_Loading_Xbox, "Static_LoadingCircle")
 local static_LoadingBlackSpirit = UI.getChildControl(Panel_Loading_Xbox, "Static_LoadingBlackSpirit")
+local txt_versionInfo = UI.getChildControl(Panel_Loading_Xbox, "StaticText_VersionInfo")
 static_LoadingCircle:SetAlpha(0)
 static_LoadingBlackSpirit:SetAlpha(0)
 static_LoadingCircle:SetShow(false)
@@ -12,6 +13,9 @@ function LoadingPanel_SetProgress_Xbox(rate)
 end
 local screenX, screenY = getScreenSizeX(), getScreenSizeY()
 local tempTime = 0
+Panel_Loading_Xbox:SetSize(screenX, screenY)
+txt_versionInfo:ComputePos()
+txt_versionInfo:SetShow(_ContentsGroup_ForXBoxClosedBeta)
 local alphaValue = 0
 function update_XboxLoadingCircle(deltaTime)
   tempTime = tempTime + deltaTime

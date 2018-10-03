@@ -20,6 +20,7 @@ local prePvp = false
 local calculateTime = 0
 function Panel_PvpMode_ChangeTexture_On()
   audioPostEvent_SystemUi(0, 10)
+  _AudioPostEvent_SystemUiForXBOX(0, 10)
   Panel_PvpMode:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_drag.dds")
   pvpText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPMODE_UI_MOVE"))
 end

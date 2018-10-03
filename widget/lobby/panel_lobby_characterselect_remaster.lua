@@ -15,7 +15,7 @@ local CharacterSelectRemaster = {
     btn_ExitToServerSelect = nil,
     txt_familyName = UI.getChildControl(_panel, "StaticText_FamilyName"),
     txt_characterName = UI.getChildControl(_panel, "StaticText_CharacterName"),
-    txt_ticketNoByRegion = UI.getChildControl(_panel, "StaticText_Ticket"),
+    txt_generalInformation = UI.getChildControl(_panel, "StaticText_Ticket"),
     rdo_tabs = {},
     btn_enterGame = {},
     stc_fade = UI.getChildControl(_panel, "Static_Fade")
@@ -87,7 +87,6 @@ function CharacterSelectRemaster:init()
   for ii = 0, _listContentsCount + 1 do
     _listContentsLaunchTimeTable[ii] = (ii - 1) * 0.03
   end
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "init, _listContentsLaunchTimeTable : " .. #_listContentsLaunchTimeTable)
   self:registEventHandler()
   self:registMessageHandler()
 end
@@ -138,7 +137,7 @@ function CharacterSelectRemaster:updateData()
     self._ui.btn_deleteCharacter:SetMonoTone(nil ~= removeTime)
   end
   if -1 ~= self._selectedCharIdx then
-    local removeTime = getCharacterDataRemoveTime(self._selectedCharIdx, isSpecialCharacter)
+    local removeTime = getCharacterDataRemoveTime(self._selectedCharIdx, self._isSpecialCharacter)
     if nil ~= removeTime then
       PaGlobal_CharacterSelect_SetUpdateTicketNo(nil, removeTime)
     else
@@ -574,7 +573,7 @@ end
 function InputMLUp_CharacterSelect_ChangeOrder()
   self:updateData()
 end
-function InputMLUp_CharacterSelect_PlayGame()
+function InputMLUp_CharacterSelect_PlayGame(characterIdx)
   if ToClient_isDataDownloadStart() then
     local isComplete = ToClient_isDataDownloadComplete()
     local percent = ToClient_getDataDownloadProgress()
@@ -603,7 +602,7 @@ function InputMLUp_CharacterSelect_PlayGame()
       return
     end
   end
-  local characterData = getCharacterDataByIndex(self._selectedCharIdx, isSpecialCharacter)
+  local characterData = getCharacterDataByIndex(characterIdx, isSpecialCharacter)
   local classType = getCharacterClassType(characterData)
   local characterCount = getCharacterDataCount()
   local serverUtc64 = getServerUtc64()
@@ -620,7 +619,8 @@ function InputMLUp_CharacterSelect_PlayGame()
   if nil ~= characterData then
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
       if 1 == characterData._level and 1 == characterCount and false == ToClient_isXBox() then
-        FGlobal_FirstLogin_Open(self._selectedCharIdx)
+        self._selectedCharIdx = characterIdx
+        FGlobal_FirstLogin_Open(characterIdx)
       else
         local pcDeliveryRegionKey = characterData._arrivalRegionKey
         if ePcWorkingType.ePcWorkType_Empty ~= characterData._pcWorkingType and ePcWorkingType.ePcWorkType_Play ~= characterData._pcWorkingType or 0 ~= pcDeliveryRegionKey:get() and serverUtc64 < characterData._arrivalTime then
@@ -631,16 +631,20 @@ function InputMLUp_CharacterSelect_PlayGame()
           elseif ePcWorkingType.ePcWorkType_RepairItem == characterData._pcWorkingType then
             contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_REPAIR")
           end
+          local function enterGame()
+            self._selectedCharIdx = characterIdx
+            PaGlobal_CharacterSelect_SelectEnterToGame()
+          end
           local messageboxData = {
             title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
             content = contentString,
-            functionYes = PaGlobal_CharacterSelect_SelectEnterToGame,
+            functionYes = enterGame,
             functionCancel = MessageBox_Empty_function,
             priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
           }
           MessageBox.showMessageBox(messageboxData)
         else
-          if false == isSpecialCharacter and true == ToClient_CheckDuelCharacterInPrison(self._selectedCharIdx) then
+          if false == isSpecialCharacter and true == ToClient_CheckDuelCharacterInPrison(characterIdx) then
             local messageboxData = {
               title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
               content = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_PRISON_CANT_LOGIN"),
@@ -661,6 +665,7 @@ function InputMLUp_CharacterSelect_PlayGame()
           else
             PaGlobalFunc_CharacterSelectRemaster_FadeOut()
             self:enableEnterButton(false)
+            self._selectedCharIdx = characterIdx
             luaTimer_AddEvent(PaGlobalFunc_CharacterSelectRemaster_TryLogin, _enteringGameFadeOutTime * 1000, false, 0)
           end
         end
@@ -754,8 +759,7 @@ function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx(characterIdx)
   if true == self._isSelectDeletingChar then
     return
   end
-  self._selectedCharIdx = characterIdx
-  InputMLUp_CharacterSelect_PlayGame()
+  InputMLUp_CharacterSelect_PlayGame(characterIdx)
   self._isCharacterSelected = true
 end
 function InputMLUp_CharacterSelect_ChangeSlotPosition(index, isUp)
@@ -821,8 +825,8 @@ function PaGlobal_CharacterSelect_SelectEnterToGame()
 end
 function PaGlobal_CharacterSelect_SetUpdateTicketNo(characterData, removeTime)
   if nil == characterData and nil ~= removeTime then
-    self._ui.txt_ticketNoByRegion:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTER_DELETE") .. " ( " .. removeTime .. " )")
-    self._ui.txt_ticketNoByRegion:SetFontColor(Defines.Color.C_FFBA2737)
+    self._ui.txt_generalInformation:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTER_DELETE") .. " ( " .. removeTime .. " )")
+    self._ui.txt_generalInformation:SetFontColor(Defines.Color.C_FFBA2737)
     return
   end
   local firstTicketNo = getFirstTicketNoByAll()
@@ -834,13 +838,13 @@ function PaGlobal_CharacterSelect_SetUpdateTicketNo(characterData, removeTime)
   local isPossibleClass = ToClient_IsCustomizeOnlyClass(classType)
   local text = ""
   if const_64.s64_m1 ~= firstTicketNo or const_64.s64_m1 ~= ticketCountByRegion then
-    self._ui.txt_ticketNoByRegion:SetFontColor(Defines.Color.C_FFD20000)
+    self._ui.txt_generalInformation:SetFontColor(Defines.Color.C_FFD20000)
     text = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NOT_ENTER_TO_FIELD")
   elseif true == isPossibleClass then
-    self._ui.txt_ticketNoByRegion:SetFontColor(Defines.Color.C_FFD20000)
+    self._ui.txt_generalInformation:SetFontColor(Defines.Color.C_FFD20000)
     text = ""
   else
-    self._ui.txt_ticketNoByRegion:SetFontColor(Defines.Color.C_FF96D4FC)
+    self._ui.txt_generalInformation:SetFontColor(Defines.Color.C_FF96D4FC)
     text = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_ENTER_TO_FIELD")
   end
   local pcDeliveryRegionKey = characterData._arrivalRegionKey
@@ -850,7 +854,7 @@ function PaGlobal_CharacterSelect_SetUpdateTicketNo(characterData, removeTime)
     local strTime = convertStringFromDatetime(remainTime)
     text = text .. "\n" .. PAGetString(Defines.StringSheet_GAME, "CHARACTER_WORKING_TEXT_DELIVERY") .. " : " .. strTime
   end
-  self._ui.txt_ticketNoByRegion:SetText(text)
+  self._ui.txt_generalInformation:SetText(text)
 end
 function PaGlobal_CharacterSelect_CancelWaitingLine()
   if true == self._playerData.isWaitLine then
@@ -866,8 +870,8 @@ function PaGlobal_CharacterSelect_ReceiveWaiting()
     UI.ASSERT(false, "\236\186\144\235\166\173\237\132\176 \236\132\160\237\131\157 \236\160\149\235\179\180\234\176\128 \236\151\134\236\138\181\235\139\136\235\139\164!")
     return
   end
-  SelectCharacter._ui.txt_ticketNoByRegion:SetFontColor(Defines.Color.C_FFD20000)
-  SelectCharacter._ui.txt_ticketNoByRegion:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NOT_ENTER_TO_FIELD"))
+  SelectCharacter._ui.txt_generalInformation:SetFontColor(Defines.Color.C_FFD20000)
+  SelectCharacter._ui.txt_generalInformation:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NOT_ENTER_TO_FIELD"))
   local strWaitingMsg = PaGlobal_CharacterSelect_MakeWaitingUserMsg(characterData._lastTicketNoByRegion)
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "CHARACTER_ENTER_WAITING_TITLE"),
@@ -1011,7 +1015,6 @@ function CharacterSelectRemaster:playListComponentsAni(deltaTime)
   _listContentsLaunchElapsed = _listContentsLaunchElapsed + deltaTime
   local content = _listContents[_listContentsLaunchedCount]
   if self._playerData.useAbleCount <= _listContentsLaunchedCount + 1 or nil == _listContentsLaunchTimeTable[_listContentsLaunchedCount] then
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "return at  : " .. _listContentsLaunchedCount .. ", " .. tostring(self._playerData.useAbleCount <= _listContentsLaunchedCount + 1) .. ", " .. tostring(nil == _listContentsLaunchTimeTable[_listContentsLaunchedCount]))
     _listContentsShowAniFlag = false
     for ii = 1, #_listContents do
       _listContents[ii]:SetShow(true)
@@ -1021,7 +1024,6 @@ function CharacterSelectRemaster:playListComponentsAni(deltaTime)
     return
   else
     if nil ~= content and nil ~= content.SetShow and _listContentsLaunchElapsed >= _listContentsLaunchTimeTable[_listContentsLaunchedCount] then
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "play at _listContentsLaunchedCount : " .. _listContentsLaunchedCount)
       content:SetShow(true)
       _listContentsAlphaFlag[_listContentsLaunchedCount] = true
       _listContentsAlphaTarget[_listContentsLaunchedCount] = 1
@@ -1085,7 +1087,7 @@ function PaGlobal_CharacterSelect_Resize()
   self._ui.stc_rightBg:SetPosX(getScreenSizeX() - self._ui.stc_rightBg:GetSizeX())
   self._ui.list2_Character:SetSize(self._ui.list2_Character:GetSizeX(), getScreenSizeY() - 248)
   self._ui.list2_Character:ComputePos()
-  self._ui.txt_ticketNoByRegion:ComputePos()
+  self._ui.txt_generalInformation:ComputePos()
   self._ui.btn_deleteCharacter:ComputePos()
   self._ui.chk_characterPosChange:ComputePos()
   self._ui.btn_ExitGame:ComputePos()

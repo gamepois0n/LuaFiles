@@ -43,6 +43,7 @@ function PaGlobalFunc_Customization_ShowCloth_ShowHelmet()
   setShowHelmet(self._ui._checkBox_ShowHelmet:IsCheck())
 end
 function PaGlobalFunc_Customization_ShowCloth_SetSelectButton(index)
+  local self = Customization_ShowClothInfo
   if self._currentContentIndex == index then
     PaGlobalFunc_Customization_SetKeyGuide(6)
   else

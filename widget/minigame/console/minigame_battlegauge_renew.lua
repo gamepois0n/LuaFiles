@@ -104,10 +104,10 @@ function BattleGauge_EndTimer(deltaTime)
     self._ui.txt_Timer:SetText(remainSec .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_TIME_SECOND"))
   elseif remainTime <= 0 then
     if currentPercent >= 50 then
-      audioPostEvent_SystemUi(11, 1)
+      _AudioPostEvent_SystemUiForXBOX(11, 1)
       getSelfPlayer():get():SetMiniGameResult(0)
     elseif currentPercent <= 50 then
-      audioPostEvent_SystemUi(11, 2)
+      _AudioPostEvent_SystemUiForXBOX(11, 2)
       getSelfPlayer():get():SetMiniGameResult(3)
     end
     Panel_Minigame_BattleGauge_End()

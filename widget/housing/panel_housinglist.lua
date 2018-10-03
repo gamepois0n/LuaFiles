@@ -238,6 +238,7 @@ function _HousingListNavigatorStart_Villa(ctrlIndex)
 end
 function FGlobal_HousingList_Open()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_HousingList_Update()
   if Panel_HousingList:IsShow() then
     Panel_HousingList:SetShow(false, true)
@@ -247,6 +248,7 @@ function FGlobal_HousingList_Open()
 end
 function HousingList_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_HousingList:SetShow(false, false)
 end
 function HandleClicked_HousingList_Close()

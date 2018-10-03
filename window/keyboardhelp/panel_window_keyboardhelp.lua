@@ -14,6 +14,7 @@ function KeyboardHelpShow()
     return
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   Panel_KeyboardHelp:SetShow(true)
 end
 function FGlobal_KeyboardHelpShow()
@@ -22,6 +23,7 @@ function FGlobal_KeyboardHelpShow()
     return false
   else
     audioPostEvent_SystemUi(1, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
     Panel_KeyboardHelp:SetShow(true)
     return true
   end
@@ -29,6 +31,7 @@ end
 function KeyboardHelpHide()
   Panel_KeyboardHelp:SetShow(false)
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function keyboardHelp:registEventHandler()
   self.btn_Close:addInputEvent("Mouse_LUp", "KeyboardHelpHide()")

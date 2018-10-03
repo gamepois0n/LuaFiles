@@ -649,6 +649,7 @@ function Servant_Navi(index)
     local position = float3(seaVehicleWrapper:getPositionX(), seaVehicleWrapper:getPositionY(), seaVehicleWrapper:getPositionZ())
     worldmapNavigatorStart(position, NavigationGuideParam(), false, true, true)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
     temporaryWrapper:refreshUnsealVehicle(seaVehicleWrapper, true)
     isCheckSeaNavi = true
     isCheckLandNavi = false
@@ -662,6 +663,7 @@ function Servant_Navi(index)
     local position = float3(servantInfo:getPositionX(), servantInfo:getPositionY(), servantInfo:getPositionZ())
     worldmapNavigatorStart(position, NavigationGuideParam(), false, true, true)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
     temporaryWrapper:refreshUnsealVehicle(servantInfo, true)
     isCheckLandNavi = true
     isCheckSeaNavi = false
@@ -675,6 +677,7 @@ function Servant_Navi(index)
     local position = float3(servantInfo:getPositionX(), servantInfo:getPositionY(), servantInfo:getPositionZ())
     worldmapNavigatorStart(position, NavigationGuideParam(), false, true, true)
     audioPostEvent_SystemUi(0, 14)
+    _AudioPostEvent_SystemUiForXBOX(0, 14)
     isCheckLandNavi = false
     isCheckSeaNavi = false
     isCheckPetNavi = true

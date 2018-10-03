@@ -188,6 +188,7 @@ function GoldenTreasureBox_Open()
   _time = 0
   ToClient_requestOpenSealItemBox(self._fromWhereType, self._fromSlotNo, materialWhereType, materialSlotNo)
   audioPostEvent_SystemUi(11, 14)
+  _AudioPostEvent_SystemUiForXBOX(11, 14)
 end
 function GoldenTreasureBox_Animation(deltaTime)
   if not isAni then
@@ -201,6 +202,7 @@ function GoldenTreasureBox_Animation(deltaTime)
     isAni = false
     _time = 0
     audioPostEvent_SystemUi(11, 15)
+    _AudioPostEvent_SystemUiForXBOX(11, 15)
     isTreasureBoxCheck()
   end
 end

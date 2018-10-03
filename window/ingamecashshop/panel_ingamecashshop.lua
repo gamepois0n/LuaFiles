@@ -1676,10 +1676,7 @@ function FGlobal_InGameShop_OpenByEventAlarm()
   local scrSizeY = getScreenSizeY()
   local categoryUrl = ""
   local promotionUrl = ""
-  if isServerFixedCharge() then
-    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_P2P")
-    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_P2P")
-  elseif isGameTypeKorea() then
+  if isGameTypeKorea() then
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
   elseif isGameTypeTaiwan() then
@@ -1717,6 +1714,12 @@ function FGlobal_InGameShop_OpenByEventAlarm()
   elseif CppEnums.CountryType.ID_REAL == getGameServiceType() then
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID")
+  elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
+    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_RUS_ALPHA")
+    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_RUS_ALPHA")
+  elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
+    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_RUS")
+    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_RUS")
   else
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
@@ -3007,11 +3010,11 @@ function InGameShop_UpdateCash()
 end
 function InGameShop_OuterEventByAttacked()
   if Panel_IngameCashShop:GetShow() then
-    InGameShop_Close()
+    InGameShop_CloseActual()
   end
 end
 function InGameShop_OuterEventForDead()
-  InGameShop_Close()
+  InGameShop_CloseActual()
 end
 function InGameShop_Resize()
   local self = inGameShop
@@ -3196,57 +3199,66 @@ function InGameCashshopDescUpdate(deltaTime)
   IngameCashShop_DescUpdate()
   self:updateSlot()
 end
-function InGameShop_Open()
-  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(InGameShop_OpenActual)
-end
-function InGameShop_OpenActual()
-  PaGlobalFunc_FullScreenFade_FadeOut()
+function inGameShop:isClearToOpen()
   if isGameTypeGT() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
-    return
-  end
-  if Panel_IngameCashShop_EasyPayment:IsShow() then
-    Panel_IngameCashShop_EasyPayment:SetShow(false, false)
+    return false
   end
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
-    return
+    return false
   end
   if true == ToClient_getJoinGuildBattle() then
-    return
+    return false
   end
   if true == ToClient_getJoinGuildBattle() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
-    return
+    return false
   end
   if true == ToClient_SniperGame_IsPlaying() then
-    return
+    return false
   end
-  ToClient_SaveUiInfo(false)
   if isFlushedUI() then
-    return
+    return false
   end
   if ToClient_IsConferenceMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTUSE"))
-    return
+    return false
   end
-  FGlobal_WebHelper_ForceClose()
   if not FGlobal_IsCommercialService() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTUSE"))
-    return
+    return false
   end
   if Panel_IngameCashShop:GetShow() then
-    return
+    return false
   end
   if nil == getIngameCashMall() then
     return false
   end
   if getIngameCashMall():isShow() then
+    return false
+  end
+  return true
+end
+function InGameShop_Open()
+  if not inGameShop:isClearToOpen() then
+    return
+  end
+  PaGlobalFunc_FullScreenFade_RunAfterFadeIn(InGameShop_OpenActual)
+end
+function InGameShop_OpenActual()
+  PaGlobalFunc_FullScreenFade_FadeOut()
+  if not inGameShop:isClearToOpen() then
     return
   end
   if not getIngameCashMall():show() then
     return
   end
+  if Panel_IngameCashShop_EasyPayment:IsShow() then
+    Panel_IngameCashShop_EasyPayment:SetShow(false, false)
+  end
+  ToClient_SaveUiInfo(false)
+  FGlobal_WebHelper_ForceClose()
   if Panel_IngameCashShop_Coupon:GetShow() then
     IngameCashShopCoupon_Close(false)
   end
@@ -3382,19 +3394,28 @@ function FGlobal_CheckPromotionTab()
   local self = inGameShop
   self._promotionTab.static:SetCheck(true)
 end
+function inGameShop:isClearToClose()
+  if not Panel_IngameCashShop:GetShow() and not Panel_IngameCashShop_BuyOrGift:GetShow() and not Panel_IngameCashShop_NewCart:GetShow() and not Panel_IngameCashShop_GoodsDetailInfo:GetShow() and not Panel_IngameCashShop_Password:GetShow() and not Panel_IngameCashShop_SetEquip:GetShow() and not Panel_IngameCashShop_Controller:GetShow() then
+    return false
+  end
+  return true
+end
 function InGameShop_Close()
+  if not inGameShop:isClearToClose() then
+    return
+  end
   PaGlobalFunc_FullScreenFade_RunAfterFadeIn(InGameShop_CloseActual)
 end
 function InGameShop_CloseActual()
   PaGlobalFunc_FullScreenFade_FadeOut()
+  if not inGameShop:isClearToClose() then
+    return
+  end
   local self = inGameShop
   if nil ~= getIngameCashMall() then
     getIngameCashMall():clearEquipViewList()
     getIngameCashMall():changeViewMyCharacter()
     getIngameCashMall():hide()
-  end
-  if not Panel_IngameCashShop:GetShow() and not Panel_IngameCashShop_BuyOrGift:GetShow() and not Panel_IngameCashShop_NewCart:GetShow() and not Panel_IngameCashShop_GoodsDetailInfo:GetShow() and not Panel_IngameCashShop_Password:GetShow() and not Panel_IngameCashShop_SetEquip:GetShow() and not Panel_IngameCashShop_Controller:GetShow() then
-    return
   end
   FGlobal_CashShop_SetEquip_Close()
   cashShop_Controller_Close()

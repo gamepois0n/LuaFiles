@@ -9,6 +9,7 @@ local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_TM = CppEnums.TextMode
 function MasterpieceAuction_ShowAni()
   audioPostEvent_SystemUi(1, 30)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   UIAni.fadeInSCR_Down(Panel_Window_MasterpieceAuction)
   local aniInfo1 = Panel_Window_MasterpieceAuction:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -27,6 +28,7 @@ function MasterpieceAuction_ShowAni()
 end
 function MasterpieceAuction_HideAni()
   audioPostEvent_SystemUi(1, 31)
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
   FGlobal_MasterPieceAuction_Reset()
   Panel_Window_MasterpieceAuction:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Window_MasterpieceAuction:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
@@ -152,6 +154,7 @@ function PaGlobal_MasterpieceAuction:open()
 end
 function PaGlobal_MasterpieceAuction:close()
   audioPostEvent_SystemUi(1, 31)
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
   Panel_Window_MasterpieceAuction:SetShow(false)
   Panel_Tooltip_Item_hideTooltip()
   FGlobal_MasterPieceAuction_Reset()

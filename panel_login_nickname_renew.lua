@@ -28,9 +28,10 @@ end
 function LoginNickname_OK()
   ClearFocusEdit()
   local self = loginNickname
-  if not lobbyNickname_createNickname(self.edit_nickname:GetEditText()) then
-    return
-  end
+  lobbyNickname_createNickname(self.edit_nickname:GetEditText())
+end
+function LoginNickname_OK_Callback()
+  local self = loginNickname
   local createFamilyName = function()
     registerNickname()
     LoginNickname_Open(false)
@@ -84,4 +85,11 @@ function LoginNickname_Close(clearStr)
     _panel:SetShow(false)
   end
 end
+function FromClient_LoginNickName_OK_End()
+  LoginNickname_OK_Callback()
+end
+function RegisterEvent()
+  registerEvent("FromClient_LoginNickName_OK_End", "FromClient_LoginNickName_OK_End")
+end
 loginNickname:init()
+RegisterEvent()

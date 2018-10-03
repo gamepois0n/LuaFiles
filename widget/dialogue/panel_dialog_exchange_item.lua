@@ -14,7 +14,9 @@ local ExchangeItem = {
   _uiBG = UI.getChildControl(Panel_Exchange_Item, "Static_Item_ExchangeBG"),
   _uiTitle = UI.getChildControl(Panel_Exchange_Item, "StaticText_Exchange_Item"),
   _scroll = UI.getChildControl(Panel_Exchange_Item, "VerticalScroll"),
-  _btnClose = UI.getChildControl(Panel_Exchange_Item, "Button_Win_Close")
+  _btnClose = UI.getChildControl(Panel_Exchange_Item, "Button_Win_Close"),
+  _actualDataCount = 0,
+  _actualDataKey = nil
 }
 ExchangeItem._scrollCtrlBtn = UI.getChildControl(ExchangeItem._scroll, "VerticalScroll_CtrlButton")
 function ExchangeItemShowAni()
@@ -69,23 +71,33 @@ function Dialog_ExchangeItem_Update()
     return
   end
   local displayExchangeWrapper = npcDialogData:getCurrentDisplayExchangeWrapper()
-  self._listCount = displayExchangeWrapper:getItemExchangeByNpcListSize()
   if nil == displayExchangeWrapper then
     Panel_Exchange_Item_Hide()
     return
   end
+  self._listCount = displayExchangeWrapper:getItemExchangeByNpcListSize()
   for ii = 0, self._slotMaxCount - 1 do
     local slot = self._slots[ii]
     slot._uiListBG:SetShow(false)
   end
+  self._actualDataKey = {}
+  self._actualDataCount = 0
+  for index = 0, self._listCount - 1 do
+    local itemWrapperLua = displayExchangeWrapper:getItemExchangeByNpcStaticStatusWrapperAtIndex(index)
+    if nil ~= itemWrapperLua then
+      self._actualDataCount = self._actualDataCount + 1
+      self._actualDataKey[#self._actualDataKey + 1] = index
+    end
+  end
   local uiIndex = 0
   local emptyItemCount = 0
-  for npcIndex = self._startIndex, self._listCount - 1 do
+  for ii = 1, #self._actualDataKey do
     if uiIndex > self._slotMaxCount - 1 then
       break
     end
     local slot = self._slots[uiIndex]
-    local itemWrapperLua = displayExchangeWrapper:getItemExchangeByNpcStaticStatusWrapperAtIndex(npcIndex)
+    local realCount = uiIndex + emptyItemCount
+    local itemWrapperLua = displayExchangeWrapper:getItemExchangeByNpcStaticStatusWrapperAtIndex(self._actualDataKey[ii + self._startIndex])
     if nil ~= itemWrapperLua then
       local needItemWrapperLua = itemWrapperLua:getNeedItemStaticStatusWrapper()
       local resultItemWrapperLua = itemWrapperLua:getToItemStaticStatusWrapper()
@@ -98,7 +110,6 @@ function Dialog_ExchangeItem_Update()
         local resultItemColorGrade = resultItemWrapperLua:getGradeType()
         local resultItemName = resultItemWrapperLua:getName()
         local resultItemIcon = resultItemWrapperLua:getIconPath()
-        local realCount = uiIndex + emptyItemCount
         slot._sourceIcon:ChangeTextureInfoName("Icon/" .. needItemIcon)
         slot._sourceIcon:addInputEvent("Mouse_On", "ExchangeItem_ShowToolTip( " .. realCount .. "," .. emptyItemCount .. "," .. 0 .. ")")
         slot._sourceIcon:addInputEvent("Mouse_Out", "ExchangeItem_HideToolTip()")
@@ -137,22 +148,14 @@ function Dialog_ExchangeItem_Update()
       emptyItemCount = emptyItemCount + 1
     end
   end
-  local realCount = 0
-  for index = 0, self._listCount - 1 do
-    local itemWrapperLua = displayExchangeWrapper:getItemExchangeByNpcStaticStatusWrapperAtIndex(index)
-    if nil ~= itemWrapperLua then
-      realCount = realCount + 1
-    end
-  end
-  self._listCount = realCount
-  UIScroll.SetButtonSize(self._scroll, self._slotMaxCount, self._listCount)
-  if uiIndex < self._listCount then
+  UIScroll.SetButtonSize(self._scroll, self._slotMaxCount, self._actualDataCount)
+  if uiIndex < self._actualDataCount then
     self._scroll:SetShow(true)
   else
     self._scroll:SetShow(false)
   end
-  if self._listCount < self._slotMaxCount then
-    local gapCount = self._slotMaxCount - self._listCount
+  if self._actualDataCount < self._slotMaxCount then
+    local gapCount = self._slotMaxCount - self._actualDataCount
     Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY - 37 * gapCount)
     Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
     self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
@@ -161,7 +164,7 @@ function Dialog_ExchangeItem_Update()
     Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
     self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
   end
-  if 0 == self._listCount then
+  if 0 == self._actualDataCount then
     Panel_Exchange_Item_Hide()
   end
 end
@@ -184,7 +187,7 @@ function ExchangeItem_ShowToolTip(uiIndex, emptyCount, itemtype)
   local startIdx = self._startIndex
   local npcIdx = uiIndex + startIdx
   local npcDialogData = ToClient_GetCurrentDialogData()
-  local itemInfo = npcDialogData:getCurrentDisplayExchangeWrapper():getItemExchangeByNpcStaticStatusWrapperAtIndex(npcIdx)
+  local itemInfo = npcDialogData:getCurrentDisplayExchangeWrapper():getItemExchangeByNpcStaticStatusWrapperAtIndex(self._actualDataKey[npcIdx + 1])
   local itemWrapper, UiBase
   if 0 == itemtype then
     itemWrapper = itemInfo:getNeedItemStaticStatusWrapper()
@@ -201,7 +204,7 @@ function ExchangeItem_HideToolTip()
 end
 function ExchangeItem_Scroll(isUp)
   local self = ExchangeItem
-  self._startIndex = UIScroll.ScrollEvent(self._scroll, isUp, self._slotMaxCount, self._listCount, self._startIndex, 1)
+  self._startIndex = UIScroll.ScrollEvent(self._scroll, isUp, self._slotMaxCount, self._actualDataCount, self._startIndex, 1)
   Dialog_ExchangeItem_Update()
 end
 function ExchangeItem_onScreenResize()

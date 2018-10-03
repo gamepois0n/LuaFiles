@@ -12,18 +12,22 @@ function PaGlobal_MovieGuide_Web:init()
   self.btn_Close:addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Close()")
 end
 function PaGlobal_MovieGuide_Web:Open()
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  local cryptKey = getSelfPlayer():get():getWebAuthenticKeyCryptString()
-  local userNo = getSelfPlayer():get():getUserNo()
-  local movieGuideWeb = PaGlobal_URL_Check(worldNo)
-  Panel_MovieGuide_Web:SetPosX(getScreenSizeX() / 2 - Panel_MovieGuide_Web:GetSizeX() / 2)
-  Panel_MovieGuide_Web:SetPosY(getScreenSizeY() / 2 - Panel_MovieGuide_Web:GetSizeY() / 2)
-  if nil ~= movieGuideWeb then
-    local url = movieGuideWeb .. "/MovieGuide/Index?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey)
-    _Web:SetUrl(320, 430, url, false, true)
-    Panel_MovieGuide_Web:SetShow(true)
+  local serviceType = getGameServiceType()
+  local languageType = ToClient_getResourceType()
+  if nil == serviceType or nil == languageType then
+    return
   end
+  local serviceTypeString = Defines.ServiceTypeToString[serviceType]
+  local languageTypeString = Defines.LanguageTypeToString[languageType]
+  if "DV" == serviceTypeString then
+    serviceTypeString = "KR"
+  end
+  if "DV" == languageTypeString then
+    languageTypeString = "KR"
+  end
+  local _guideWebURL = "https://www.playblackdesert.tv/Guide/?"
+  _guideWebURL = _guideWebURL .. "serviceType=" .. serviceTypeString .. "&languageType=" .. languageTypeString
+  ToClient_OpenChargeWebPage(_guideWebURL, false)
 end
 function PaGlobal_MovieGuide_Web:Close()
   Panel_MovieGuide_Web:SetShow(false)

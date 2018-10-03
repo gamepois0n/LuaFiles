@@ -186,6 +186,7 @@ function PaGlobal_Option:Open()
   Panel_Window_Option_Main:SetShow(true, true)
   Panel_Window_Option_Main:SetIgnore(false)
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function PaGlobal_Option:Close()
   setKeyCustomizing(false)
@@ -195,6 +196,7 @@ function PaGlobal_Option:Close()
     TooltipSimple_Hide()
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function PaGlobal_Option:ClickedCancelOption()
   for elementName, option in pairs(self._elements) do
@@ -210,6 +212,7 @@ function PaGlobal_Option:ClickedCancelOption()
     end
   end
   audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   setAudioOptionByConfig()
   keyCustom_RollBack()
   self:CompleteKeyCustomMode()

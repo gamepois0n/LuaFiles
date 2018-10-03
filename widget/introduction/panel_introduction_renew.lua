@@ -24,6 +24,7 @@ function Introduction:open(actorKey)
   local playerClass = playerActorProxyWrapper:getClassType()
   local classString = CppEnums.ClassType2String[playerClass]
   self._ui.txt_UserName:SetText(name)
+  self._ui.txt_InfoDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_InfoDesc:SetText(desc)
   self._ui.txt_Level:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTRODUCTIONMYSELF_SUBINFO", "class", classString, "level", charLevel))
   _panel:SetShow(true)

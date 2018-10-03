@@ -1095,6 +1095,7 @@ function _InGameShopBuy_Confirm_EnoughMoney(pearlStampCount)
 end
 function InGameShopBuy_ConfirmDo()
   audioPostEvent_SystemUi(16, 0)
+  _AudioPostEvent_SystemUiForXBOX(16, 0)
   local self = inGameShopBuy
   local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
   if nil == cashProduct then

@@ -3417,6 +3417,7 @@ function Panel_Tooltip_Item_ShowInfo(target, inputValue, isSSW, isItemWrapper, c
 end
 function showTooltip_Item(target, itemWrapper, isSSW, isItemWrapper, chattingLinkedItem, index, isNextEnchantInfo, invenSlotNo, itemNamingStr)
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   target.mainPanel:SetShow(true, false)
   local ret, ret2 = Panel_Tooltip_Item_ShowInfo(target, itemWrapper, isSSW, isItemWrapper, chattingLinkedItem, index, isNextEnchantInfo, invenSlotNo, itemNamingStr)
   return ret, ret2

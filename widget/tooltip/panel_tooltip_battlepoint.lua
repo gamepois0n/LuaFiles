@@ -7,7 +7,8 @@ PaGlobal_Tooltip_BattlePoint = {
   },
   _panel = Panel_Tooltip_BattlePoint,
   _isDetail = false,
-  _icon = nil
+  _icon = nil,
+  _isInit = false
 }
 local CT = CppEnums.ClassType
 local awakenWeapon = {
@@ -280,6 +281,7 @@ function Fglobal_Init_Tooltip_BattlePoint()
     ui._staticText_DefenceTitle:SetPosY(ui._staticText_DefenceTitle:GetPosY() - 20)
     ui._staticText_DefenceValue:SetPosY(ui._staticText_DefenceValue:GetPosY() - 20)
   end
+  PaGlobal_Tooltip_BattlePoint._isInit = true
 end
 function PaGlobal_Tooltip_BattlePoint:updateCurrnetTier()
   local selfPlayer = getSelfPlayer()
@@ -296,6 +298,10 @@ function PaGlobal_Tooltip_BattlePoint:updateCurrnetTier()
     end
   end
   local tier = ToClient_GetTier(totalStatValue)
+  if -1 == tier then
+    _PA_ASSERT(false, "Panel_Tooltip_BattlePoint.lua : \237\139\176\236\150\180 \236\160\149\235\179\180\234\176\128 \236\158\152\235\170\187 \235\144\152\236\151\136\236\138\181\235\139\136\235\139\164. \234\176\128\236\158\165 \235\130\174\236\157\128 \237\139\176\236\150\180\235\161\156 \235\179\128\237\153\152\237\149\169\235\139\136\235\139\164.")
+    tier = 8
+  end
   local tierName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOTALSTAT_TIERNAME_" .. tier, "totalStat", totalStatValue)
   self._ui._staticIcon_CurrentTier:SetText(tierName)
   setTierIcon(self._ui._staticIcon_CurrentTier, "new_ui_common_forlua/default/Default_Etc_04.dds", 8 - tier, 354, 99, 4, 24)
@@ -333,6 +339,10 @@ function PaGlobal_Tooltip_BattlePoint:updateCurrentHighTier(highTier, totalStatV
   alignCurrentTierBg(self._ui._currentGradeBg, self._ui._highTierTitles[highTier])
 end
 function FGlobal_EquipmentUpdate()
+  if false == PaGlobal_Tooltip_BattlePoint._isInit then
+    _PA_ASSERT(false, "Panel_Tooltip_BattlePoint.lua : \236\180\136\234\184\176\237\153\148 \236\160\132\236\151\144 \236\151\133\235\141\176\236\157\180\237\138\184\235\165\188 \237\152\184\236\182\156\237\150\136\236\138\181\235\139\136\235\139\164. \235\172\180\236\139\156\237\149\169\235\139\136\235\139\164.")
+    return
+  end
   PaGlobal_Tooltip_BattlePoint:updateCurrnetTier()
   PaGlobal_Tooltip_BattlePoint:updateData()
 end

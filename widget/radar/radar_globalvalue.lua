@@ -111,8 +111,10 @@ function FGlobal_Panel_Radar_Show(isShow, withAni)
   local worldMiniMapState = ToClient_getGameUIManagerWrapper():getLuaCacheDataListBool(CppEnums.GlobalUIOptionType.RadarSwap)
   if worldMiniMapState then
     Panel_WorldMiniMap:SetShow(isShow)
-  else
+  elseif nil ~= withAni then
     Panel_Radar:SetShow(isShow, withAni)
+  else
+    Panel_Radar:SetShow(isShow)
   end
 end
 function FGlobal_Panel_Radar_GetShow()

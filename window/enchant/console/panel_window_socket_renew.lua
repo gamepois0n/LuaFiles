@@ -239,7 +239,7 @@ function socketInfo:updateSocket()
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
-        audioPostEvent_SystemUi(5, 6)
+        _AudioPostEvent_SystemUiForXBOX(5, 6)
       elseif ii == 3 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -250,7 +250,7 @@ function socketInfo:updateSocket()
         local socketBG_3 = _onlySocketListBG[3]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
-        audioPostEvent_SystemUi(5, 6)
+        _AudioPostEvent_SystemUiForXBOX(5, 6)
       end
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false
@@ -332,7 +332,7 @@ local function Socket_Push_Confirm()
   end
   Socket_ConfirmPushJewel(true)
   if false == isItemLock then
-    audioPostEvent_SystemUi(0, 7)
+    _AudioPostEvent_SystemUiForXBOX(0, 7)
   end
 end
 local function Socket_OverWrite_Confirm()
@@ -512,12 +512,12 @@ function SocketShowAni()
   aniInfo2.AxisY = _panel:GetSizeY() / 2
   aniInfo2.ScaleType = 2
   aniInfo2.IsChangeChild = true
-  audioPostEvent_SystemUi(1, 0)
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
 end
 function SocketHideAni()
   local socketHide = UIAni.AlphaAnimation(0, _panel, 0, 0.2)
   socketHide:SetHideAtEnd(true)
-  audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function PaGlobalFunc_SocketInfo_OnScreenResize()
   local sizeX = getScreenSizeX()

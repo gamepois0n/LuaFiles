@@ -103,6 +103,7 @@ end
 function PaGlobal_TutorialPhase_BasicControl:updateLookAround(deltaTime)
   if 8 * timeRatio < self._updateTime then
     audioPostEvent_SystemUi(4, 12)
+    _AudioPostEvent_SystemUiForXBOX(4, 12)
     self._updateTime = 0
     return true
   end

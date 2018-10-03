@@ -60,8 +60,6 @@ function Slot:init(index, control)
   receiveRentButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_ServantRentPromoteMarketReceiveRent(" .. index .. ")")
   local receiveReturnButton = UI.getChildControl(control, "Button_ReceivingReturn")
   receiveReturnButton:addInputEvent("Mouse_LUp", "PaGlobalFunc_ServantRentPromoteMarketReceiveReturn(" .. index .. ")")
-  local baseInfo = UI.getChildControl(control, "StaticText_BaseInfo")
-  local skillInfo = UI.getChildControl(control, "StaticText_HaveSkill")
   self._ui = {
     icon = icon,
     male = male,
@@ -85,9 +83,7 @@ function Slot:init(index, control)
     buyRentButton = buyRentButton,
     buyReturnButton = buyReturnButton,
     receiveRentButton = receiveRentButton,
-    receiveReturnButton = receiveReturnButton,
-    baseInfo = baseInfo,
-    skillInfo = skillInfo
+    receiveReturnButton = receiveReturnButton
   }
 end
 local getValidSkillCount = function(info)

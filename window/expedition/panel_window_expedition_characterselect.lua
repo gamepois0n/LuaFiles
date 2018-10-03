@@ -51,8 +51,10 @@ function expeditionCharacterSelectInfo:createControl()
     image:addInputEvent("Mouse_DownScroll", "PaGlobalFunc_ExpeditionCharacterSelectInfo_ScrollUpdate(false)")
     slot._image = image
     local bottomText = UI.getChildControl(cloneBG, "StaticText_BottomText")
+    bottomText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     slot._bottomText = bottomText
     local topText = UI.getChildControl(cloneBG, "StaticText_TopText")
+    topText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     slot._topText = topText
     self._charListSlot[ii] = slot
   end
@@ -98,6 +100,10 @@ function expeditionCharacterSelectInfo:loadImage()
   end
 end
 function expeditionCharacterSelectInfo:open()
+  if nil ~= Panel_ArmyUnitSetting and Panel_ArmyUnitSetting:GetShow() then
+    Panel_Subjugation_SelectCharacter:SetPosX(Panel_ArmyUnitSetting:GetPosX() + Panel_ArmyUnitSetting:GetSizeX() * 0.5 - Panel_Subjugation_SelectCharacter:GetSizeX() * 0.5)
+    Panel_Subjugation_SelectCharacter:SetPosY(Panel_ArmyUnitSetting:GetPosY() + Panel_ArmyUnitSetting:GetSizeY() * 0.5 - Panel_Subjugation_SelectCharacter:GetSizeY() * 0.5)
+  end
   Panel_Subjugation_SelectCharacter:SetShow(true)
   self._startIndex = 0
   self:loadImage()
@@ -113,8 +119,13 @@ function expeditionCharacterSelectInfo:close()
 end
 function PaGlobalFunc_ExpeditionCharacterSelectInfo_Open(index)
   local self = expeditionCharacterSelectInfo
+  self._selectCharacterIndex = nil
   self:open()
   self._selectIndex = index
+  for ii = 0, self._config._maxCharacterCount - 1 do
+    self._charListSlot[ii]._topText:SetFontColor(Defines.Color.C_FFC4BEBE)
+    self._charListSlot[ii]._bottomText:SetFontColor(Defines.Color.C_FFC4BEBE)
+  end
 end
 function PaGlobalFunc_ExpeditionCharacterSelectInfo_Close()
   local self = expeditionCharacterSelectInfo
@@ -157,6 +168,18 @@ function PaGlobalFunc_ExpeditionCharacterSelectInfo_ScrollUpdate(isUp)
   end
   self:loadImage()
   self._ui._scroll:SetControlPos(self._startIndex / self._config._maxStartIndex)
+  for ii = 0, self._config._maxCharacterCount - 1 do
+    self._charListSlot[ii]._topText:SetFontColor(Defines.Color.C_FFC4BEBE)
+    self._charListSlot[ii]._bottomText:SetFontColor(Defines.Color.C_FFC4BEBE)
+  end
+  if nil == self._selectCharacterIndex then
+    return
+  end
+  local index = self._selectCharacterIndex - self._startIndex
+  if index >= 0 and index < self._config._maxCharacterCount then
+    self._charListSlot[index]._topText:SetFontColor(Defines.Color.C_FFFFEEA0)
+    self._charListSlot[index]._bottomText:SetFontColor(Defines.Color.C_FFFFEEA0)
+  end
 end
 function PaGlobalFunc_ExpeditionCharacterSelectInfo_ScrollUpdate_ByLPress()
   local self = expeditionCharacterSelectInfo

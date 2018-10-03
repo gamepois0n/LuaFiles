@@ -76,6 +76,7 @@ end
 function ExecuteFunction.ItemMarket()
   FGlobal_ItemMarket_Open_ForWorldMap(1, true)
   audioPostEvent_SystemUi(1, 30)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
 end
 function ExecuteFunction.Quest()
   GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_QuestHistory)

@@ -123,6 +123,7 @@ function DyeingMain:close()
   renderMode:reset()
   ToClient_DyeingManagerHide()
   audioPostEvent_SystemUi(1, 23)
+  _AudioPostEvent_SystemUiForXBOX(1, 23)
   Panel_Tooltip_Item_hideTooltip()
   _panel:SetShow(false)
 end

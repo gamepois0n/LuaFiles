@@ -15,7 +15,8 @@ local PanelLogin = {
     stc_BlacklineUp = UI.getChildControl(_panel, "Static_Blackline_up"),
     stc_BlacklineDown = UI.getChildControl(_panel, "Static_Blackline_down"),
     stc_CI = UI.getChildControl(_panel, "Static_CI"),
-    stc_DaumCI = UI.getChildControl(_panel, "Static_DaumCI")
+    stc_DaumCI = UI.getChildControl(_panel, "Static_DaumCI"),
+    txt_VersionInfo = UI.getChildControl(_panel, "StaticText_VersionInfo")
   }
 }
 local _ui_web_loadingMovie
@@ -364,6 +365,8 @@ function PaGlobal_PanelLogin_Resize()
   _panel:SetPosX(0)
   _panel:SetPosY(0)
   _panel:SetSize(sizeX, sizeY)
+  self._ui.txt_VersionInfo:SetShow(_ContentsGroup_ForXBoxClosedBeta)
+  self._ui.txt_VersionInfo:ComputePos()
   self._ui.btn_Login:ComputePos()
   self._ui.btn_Exit:ComputePos()
   self._ui.btn_GameOption:ComputePos()

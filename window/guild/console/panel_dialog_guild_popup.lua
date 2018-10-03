@@ -38,6 +38,7 @@ function GuildPopup:update()
   self._ui.btn_GuildMark:SetMonoTone(false)
   self._ui.btn_GuildMark:SetIgnore(false)
   self._ui.btn_GuildMark:SetAlpha(1)
+  self._ui.txt_Apply:SetShow(false)
   if false == ToClient_CanMakeGuild() then
     self._ui.btn_GuildMark:SetMonoTone(true)
     self._ui.btn_GuildMark:SetIgnore(true)
@@ -58,6 +59,7 @@ function GuildPopup:update()
         self._ui.btn_GuildMark:SetMonoTone(false)
         self._ui.btn_GuildMark:SetIgnore(false)
         self._ui.btn_GuildMark:SetAlpha(1)
+        self._ui.txt_Apply:SetShow(true)
       end
     elseif 1 == guildGrade then
       self._ui.btn_ClanMark:SetMonoTone(true)
@@ -67,6 +69,8 @@ function GuildPopup:update()
       self._ui.btn_GuildMark:SetIgnore(true)
       self._ui.btn_GuildMark:SetAlpha(0.6)
     end
+  else
+    self._ui.txt_Apply:SetShow(true)
   end
   self._currentBtn = nil
   self._ui.txt_Tip:SetText("")

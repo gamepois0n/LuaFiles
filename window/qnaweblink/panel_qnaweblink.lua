@@ -48,11 +48,13 @@ function Panel_QnAWebLink_ShowToggle()
   if isShow == true then
     _qnaWeb:ResetUrl()
     audioPostEvent_SystemUi(13, 5)
+    _AudioPostEvent_SystemUiForXBOX(13, 5)
     Panel_QnAWebLink:SetShow(false, false)
     SetUIMode(preUIMode)
     return false
   else
     audioPostEvent_SystemUi(13, 6)
+    _AudioPostEvent_SystemUiForXBOX(13, 6)
     Panel_QnAWebLink:SetShow(true, true)
     _qnaWeb:SetUrl(1015, 586, PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL"))
     _qnaWeb:SetIME(true)
@@ -91,6 +93,7 @@ end
 function FGlobal_QnAWebLink_Close()
   _qnaWeb:ResetUrl()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_QnAWebLink:SetShow(false, false)
   CheckChattingInput()
 end

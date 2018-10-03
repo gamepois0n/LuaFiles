@@ -56,6 +56,7 @@ function EventNotify_Open(isDo, isMenu)
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_EventNotify:SetPosX(getScreenSizeX() / 2 - Panel_EventNotify:GetSizeX() / 2)
   Panel_EventNotify:SetPosY(getScreenSizeY() / 2 - Panel_EventNotify:GetSizeY() / 2)
   Panel_EventNotify:SetShow(true, true)
@@ -92,6 +93,10 @@ function EventNotify_Open(isDo, isMenu)
     elseif CppEnums.CountryType.ID_REAL == getGameServiceType() then
       url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_ID")
     end
+  elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
+    url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_RUS_ALPHA")
+  elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
+    url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_RUS")
   else
     url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL")
   end
@@ -100,6 +105,7 @@ function EventNotify_Open(isDo, isMenu)
 end
 function EventNotify_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_EventNotify:SetShow(false, false)
   _Web:ResetUrl()
   FGlobal_LevelupGuide_Open()

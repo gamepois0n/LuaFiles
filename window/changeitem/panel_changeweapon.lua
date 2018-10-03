@@ -158,6 +158,7 @@ function WeaponChange_ApplyChangeItem()
     doChange = true
     isChangeDoing = true
     audioPostEvent_SystemUi(13, 15)
+    _AudioPostEvent_SystemUiForXBOX(13, 15)
     runEffect:SetShow(true)
     btn_Apply:SetMonoTone(true)
     btn_Apply:SetEnable(false)

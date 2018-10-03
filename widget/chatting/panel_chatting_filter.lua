@@ -49,6 +49,7 @@ function ChattingFilterList_ShowAni()
 end
 function ChattingFilterList_HideAni()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   local aniInfo1 = Panel_Chatting_Filter:addColorAnimation(0, 0.1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
   aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
@@ -147,6 +148,7 @@ function ChattingFilter:Open()
 end
 function ChattingFilter:Close()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_Chatting_Filter:SetShow(false, false)
   self.ui.scroll:SetControlPos(0)
   self.config.startIndex = 0

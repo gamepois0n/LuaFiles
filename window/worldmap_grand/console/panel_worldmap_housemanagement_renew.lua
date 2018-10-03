@@ -778,6 +778,7 @@ function WorldMapHouseManager:updateEmptyHouse(houseInfoSSWrapper)
   if nil == self._selected then
     Input_WorldMapHouseManager_SetUseType(1)
   end
+  self:setBuyButton(houseInfoSSWrapper)
 end
 function WorldMapHouseManager:setBuyButton(houseInfoSSWrapper)
   local isPurchasable = houseInfoSSWrapper:isPurchasable(self._useTypeData[self._selected].receipeKey)

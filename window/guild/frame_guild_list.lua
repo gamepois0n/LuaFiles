@@ -63,8 +63,8 @@ GuildListInfoPage = {
   _btnGiveIncentive,
   _btnDeposit,
   _btnPaypal,
+  _btnSiegeReward,
   _btnWelfare,
-  _btnEndSiegeParticipant,
   decoIcon_Guild,
   decoIcon_Clan,
   _frameGuildList,
@@ -311,8 +311,8 @@ function GuildListInfoPage:initialize()
   GuildListInfoPage._btnGiveIncentive = UI.getChildControl(Panel_Guild_List, "Button_Incentive")
   GuildListInfoPage._btnDeposit = UI.getChildControl(Panel_Guild_List, "Button_Deposit")
   GuildListInfoPage._btnPaypal = UI.getChildControl(Panel_Guild_List, "Button_Paypal")
+  GuildListInfoPage._btnSiegeReward = UI.getChildControl(Panel_Guild_List, "Button_SiegeReward")
   GuildListInfoPage._btnWelfare = UI.getChildControl(Panel_Guild_List, "Button_Welfare")
-  GuildListInfoPage._btnEndSiegeParticipant = UI.getChildControl(Panel_Guild_List, "Button_EndSiegeParticipant")
   GuildListInfoPage.decoIcon_Guild = UI.getChildControl(self._contentGuildList, "Static_DecoIcon_Guild")
   GuildListInfoPage.decoIcon_Clan = UI.getChildControl(self._contentGuildList, "Static_DecoIcon_Clan")
   if true == __Guild_LimitPrice then
@@ -323,15 +323,15 @@ function GuildListInfoPage:initialize()
   end
   GuildListInfoPage._btnDeposit:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Deposit()")
   GuildListInfoPage._btnPaypal:addInputEvent("Mouse_LUp", "HandleCLicked_GuildListIncentive_Paypal()")
+  GuildListInfoPage._btnSiegeReward:addInputEvent("Mouse_LUp", "HandleCLicked_GuildList_TakeSiegeReward()")
   GuildListInfoPage._btnWelfare:addInputEvent("Mouse_LUp", "HandleClicked_GuildListWelfare_Request()")
-  GuildListInfoPage._btnEndSiegeParticipant:addInputEvent("Mouse_LUp", "FGlobal_SetAttendanceWar_Open()")
   self._scrollBar = UI.getChildControl(self._frameGuildList, "VerticalScroll")
   UIScroll.InputEvent(self._scrollBar, "GuildListMouseScrollEvent")
   GuildListInfoPage._btnGiveIncentive:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnDeposit:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnPaypal:SetTextMode(UI_TM.eTextMode_LimitText)
+  GuildListInfoPage._btnSiegeReward:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnWelfare:SetTextMode(UI_TM.eTextMode_LimitText)
-  GuildListInfoPage._btnEndSiegeParticipant:SetTextMode(UI_TM.eTextMode_LimitText)
   local btnIncentiveSizeX = GuildListInfoPage._btnGiveIncentive:GetSizeX() + 20
   local btnIncentiveTextPosX = btnIncentiveSizeX - btnIncentiveSizeX / 2 - GuildListInfoPage._btnGiveIncentive:GetTextSizeX() / 2
   GuildListInfoPage._btnGiveIncentive:SetTextSpan(btnIncentiveTextPosX, 5)
@@ -344,10 +344,14 @@ function GuildListInfoPage:initialize()
   local btnWelfareSizeX = GuildListInfoPage._btnWelfare:GetSizeX() + 20
   local btnWelfareTextPosX = btnWelfareSizeX - btnWelfareSizeX / 2 - GuildListInfoPage._btnWelfare:GetTextSizeX() / 2
   GuildListInfoPage._btnWelfare:SetTextSpan(btnWelfareTextPosX, 5)
+  local btnSiegeRewardSizeX = GuildListInfoPage._btnSiegeReward:GetSizeX() + 20
+  local btnSiegeRewardTextPosX = btnSiegeRewardSizeX - btnSiegeRewardSizeX / 2 - GuildListInfoPage._btnSiegeReward:GetTextSizeX() / 2
+  GuildListInfoPage._btnSiegeReward:SetTextSpan(btnSiegeRewardTextPosX, 5)
   local isIncentiveLimit = GuildListInfoPage._btnGiveIncentive:IsLimitText()
   local isDepositLimit = GuildListInfoPage._btnDeposit:IsLimitText()
   local isPayPalLimit = GuildListInfoPage._btnPaypal:IsLimitText()
   local isWelfareLimit = GuildListInfoPage._btnWelfare:IsLimitText()
+  local isSiegeRewardLimit = GuildListInfoPage._btnSiegeReward:IsLimitText()
   if isIncentiveLimit then
     GuildListInfoPage._btnGiveIncentive:addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 0)")
     GuildListInfoPage._btnGiveIncentive:addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
@@ -363,6 +367,10 @@ function GuildListInfoPage:initialize()
   if isWelfareLimit then
     GuildListInfoPage._btnWelfare:addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 3)")
     GuildListInfoPage._btnWelfare:addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
+  end
+  if isSiegeRewardLimit then
+    GuildListInfoPage._btnSiegeReward:addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 4)")
+    GuildListInfoPage._btnSiegeReward:addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
   end
   self._contentGuildList:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
   self._contentGuildList:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
@@ -744,6 +752,9 @@ function HandleCLicked_GuildListIncentive_Paypal()
   else
     ToClient_TakeMyGuildBenefit(false)
   end
+end
+function HandleCLicked_GuildList_TakeSiegeReward()
+  ToClient_resquestTakeSiegeMedalReward()
 end
 function checkVoiceChatMicTexture(idx, onOff)
   local sayControl = GuildListInfoPage._list[idx]._saying
@@ -1472,6 +1483,7 @@ function GuildListInfoPage:UpdateData()
     tempGuildUserNolist[index] = userNo
     self:UpdateDataDetail(myGuildMemberInfo, index, dataIdx)
     if true == myGuildMemberInfo:isSelf() then
+      GuildListInfoPage._btnSiegeReward:SetMonoTone(not myGuildMemberInfo:isTakableSiegeReward())
     end
     if false == myGuildMemberInfo:isSelf() then
       contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2
@@ -1492,21 +1504,8 @@ function GuildListInfoPage:UpdateData()
   self._scrollBar:SetInterval(self._contentGuildList:GetSizeY() / 100 * 1.1)
   if (true == isGuildMaster or true == isGuildSubMaster) and 1 == guildGrade then
     self._btnWelfare:SetShow(true)
-    if _ContentsGroup_NewSiegeRule then
-      self._btnEndSiegeParticipant:SetShow(true)
-      if myGuildListInfo:isEndOfParticipationAtSiege() then
-        self._btnEndSiegeParticipant:SetMonoTone(true)
-        self._btnEndSiegeParticipant:SetIgnore(true)
-      else
-        self._btnEndSiegeParticipant:SetMonoTone(false)
-        self._btnEndSiegeParticipant:SetIgnore(false)
-      end
-    else
-      self._btnEndSiegeParticipant:SetShow(false)
-    end
   else
     self._btnWelfare:SetShow(false)
-    self._btnEndSiegeParticipant:SetShow(false)
   end
 end
 function GuildListInfoPage:setGradeInfo(control, index, grade)
@@ -1671,6 +1670,9 @@ function GuildListInfoPage:setSiegeParticipant(index, guildMember, control, isMy
     else
       control._warGradeBtn:SetShow(false)
       control._warStateBtn:SetShow(true)
+      if false == isRealServiceMode() then
+        control._warStateBtn:addInputEvent("Mouse_LUp", "FGlobal_requestParticipateAtSiegeFromMaster( " .. tostring(guildMember:getUserNo()) .. " )")
+      end
       if guildMember:isSiegeParticipant() then
         control._warStateBtn:SetText(participantText)
       else
@@ -2078,6 +2080,9 @@ function GuildList_Simpletooltips(isShow, tipType)
   elseif 3 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_WELFARE")
     control = self._btnWelfare
+  elseif 4 == tipType then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_WELFARE")
+    control = self._btnSiegeReward
   end
   TooltipSimple_Show(control, name, desc)
 end
@@ -2089,13 +2094,6 @@ if false == _ContentsGroup_RenewUI_Guild then
   registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_ResponseChangeProtectGuildMember")
   registerEvent("FromClient_ChangedSiegeGrade", "FromClient_ChangedSiegeGrade")
   registerEvent("FromClient_ResponseParticipateSiege", "FromClient_ResponseParticipateSiege")
-  registerEvent("FromClient_ResponseEndToParticipationAtSiege", "FromClient_ResponseEndToParticipationAtSiege")
-end
-function FromClient_ResponseEndToParticipationAtSiege(isEnd)
-  GuildListInfoPage:UpdateData()
-  if true == isEnd then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NAKMESSAGE_ENDSIEGEPARTICIPANT"))
-  end
 end
 function FromClient_ResponseParticipateSiege(isParticipant, isSelf)
   GuildListInfoPage:UpdateData()
@@ -2190,20 +2188,6 @@ end
 function HandleClicked_GuildListWelfare_Request()
   ToClient_RequestGuildWelfare()
 end
-function HandleClicked_GuildEndToParticipantAtSiege_Request()
-  local confirm = function()
-    ToClient_resquestEndToParticipantAtSiege()
-  end
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_MESSAGEBOX_ENDTOPARTICIPANTSIEGE")
-  local messageBoxData = {
-    title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
-    content = messageBoxMemo,
-    functionYes = confirm,
-    functionNo = MessageBox_Empty_function,
-    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-  }
-  MessageBox.showMessageBox(messageBoxData)
-end
 function FGlobal_requestParticipateAtSiege(isparticipant)
   local function confirm()
     ToClient_resquestParticipateSiege(isparticipant)
@@ -2224,6 +2208,9 @@ function FGlobal_requestParticipateAtSiege(isparticipant)
   MessageBox.showMessageBox(messageBoxData)
 end
 function FGlobal_requestParticipateAtSiegeFromMaster(userNo)
+  if true == isRealServiceMode() then
+    return
+  end
   local function confirm()
     local isGuildMaster = getSelfPlayer():get():isGuildMaster()
     local isParticipant
@@ -2233,7 +2220,7 @@ function FGlobal_requestParticipateAtSiegeFromMaster(userNo)
       local memberCount = myGuildListInfo:getMemberCount()
       local targetUserNo
       local isSiegeParticipant = not guildMember:isSiegeParticipant()
-      ToClient_resquestParticipateSiegeFromMaster(userNo, isSiegeParticipant)
+      ToClient_resquestParticipateSiegeFromMaster(myGuildListInfo:getGuildNo_s64(), userNo, isSiegeParticipant)
     end
   end
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()

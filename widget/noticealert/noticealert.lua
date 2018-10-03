@@ -33,6 +33,7 @@ end
 createNoticeMsg()
 local function MessageOpen(panel)
   audioPostEvent_SystemUi(4, 4)
+  _AudioPostEvent_SystemUiForXBOX(4, 4)
   panel:SetShow(true, false)
   panel:ResetVertexAni()
   panel:SetScaleChild(1, 1)

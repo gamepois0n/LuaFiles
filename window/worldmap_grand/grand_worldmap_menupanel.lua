@@ -186,12 +186,7 @@ function BtnEvent_WorkerList()
   end
 end
 function BtnEvent_HelpMovie()
-  if true == Panel_WorldMap_MovieGuide:GetShow() then
-    Panel_Worldmap_MovieGuide_Close()
-  else
-    GrandWorldMap_CheckPopup(popupType.helpMovie)
-    Panel_Worldmap_MovieGuide_Open()
-  end
+  PaGlobal_MovieGuide_Web:Open()
 end
 function BtnEvent_Exit()
   FGlobal_CloseWorldmapForLuaKeyHandling()

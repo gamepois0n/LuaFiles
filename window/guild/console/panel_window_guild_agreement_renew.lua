@@ -114,10 +114,10 @@ function PaGlobalFunc_AgreementGuild_Master_ContractOpen(memberIndex, requesterM
   if true == _ContentsGroup_isConsolePadControl then
     if true == isRenew then
       Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_SendReContract()")
-      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
     else
       Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
-      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+      Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Y, "")
     end
     Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
   end
@@ -153,7 +153,7 @@ function PaGlobal_AgreementGuild_InviteOpen(isJoin, hostUsername, hostname, guil
   if _ContentsGroup_isConsolePadControl then
     Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_AgreementConfirm()")
     Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Master_InviteRefuse()")
-    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Y, "")
   end
   PaGlobalFunc_AgreementGuild_Open()
 end
@@ -203,7 +203,7 @@ function PaGlobalFunc_AgreementGuild_Open_ForJoin(targetKeyRaw, targetName, preG
   if _ContentsGroup_isConsolePadControl then
     Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_AgreementGuild_SendInvite()")
     Panel_Console_Window_GuildAgreement:registerPadEvent(__eCONSOLE_UI_INPUT_TYPE_B, "PaGlobalFunc_AgreementGuild_Close()")
-    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
+    Panel_Console_Window_GuildAgreement:registerPadEvent(__eConsoleUIPadEvent_Y, "PaGlobalFunc_AgreementGuild_SignOption_Open()")
   end
   PaGlobalFunc_AgreementGuild_SignOption_Open()
   PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(4)

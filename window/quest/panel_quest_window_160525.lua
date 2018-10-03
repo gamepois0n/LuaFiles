@@ -19,7 +19,8 @@ local QuestTabType = {
   QuestTabType_Progress = 0,
   QuestTabType_Recommendation = 1,
   QuestTabType_Repetition = 2,
-  QuestTabType_Main = 3
+  QuestTabType_Main = 3,
+  QuestTabType_New = 4
 }
 local QuestWindow = {
   ui = {
@@ -356,9 +357,11 @@ function QuestWindow:init()
   local repeatitionQuestGroupCount = questListInfo:getRepetitionQuestGroupCount()
   local questGroupCount = questListInfo:getRecommendationQuestGroupCount()
   local mainQuestGroupCount = questListInfo:getMainQuestGroupCount()
+  local newQuestGroupCount = questListInfo:getNewQuestGroupCount()
   recommendationGroupOpen = {}
   repetitiveQuestGroupOpen = {}
   mainQuestGroupOpen = {}
+  newQuestGroupOpen = {}
   questArrayGroupCount = {}
   questArrayGroupCompleteCount = {}
   for groupIdx = 0, questGroupCount - 1 do
@@ -369,6 +372,9 @@ function QuestWindow:init()
   end
   for groupIdx = 0, mainQuestGroupCount - 1 do
     mainQuestGroupOpen[groupIdx] = false
+  end
+  for groupIdx = 0, newQuestGroupCount - 1 do
+    newQuestGroupOpen[groupIdx] = false
   end
   local btnTabProgressSizeX = self.ui.tabProgress:GetSizeX() + 23
   local btnTabProgressTextPosX = btnTabProgressSizeX - btnTabProgressSizeX / 2 - self.ui.tabProgress:GetTextSizeX() / 2
@@ -590,6 +596,8 @@ function QuestWindow:MakeDataArray()
     questGroupCount = questListInfo:getRecommendationQuestGroupCount()
   elseif QuestTabType.QuestTabType_Repetition == progressingActiveTab then
     questGroupCount = questListInfo:getRepetitionQuestGroupCount()
+  elseif QuestTabType.QuestTabType_New == progressingActiveTab then
+    questGroupCount = questListInfo:getNewQuestGroupCount()
   else
     questGroupCount = questListInfo:getMainQuestGroupCount()
   end
@@ -602,6 +610,8 @@ function QuestWindow:MakeDataArray()
       questGroupInfo = questListInfo:getRecommendationQuestGroupAt(questGroupIndex)
     elseif QuestTabType.QuestTabType_Repetition == progressingActiveTab then
       questGroupInfo = questListInfo:getRepetitionQuestGroupAt(questGroupIndex)
+    elseif QuestTabType.QuestTabType_New == progressingActiveTab then
+      questGroupInfo = questListInfo:getNewQuestGroupAt(questGroupIndex)
     else
       questGroupInfo = questListInfo:getMainQuestGroupAt(questGroupIndex)
     end
@@ -1123,6 +1133,122 @@ function QuestWindow:MakeDataArray()
         end
       end
     end
+  elseif QuestTabType.QuestTabType_New == progressingActiveTab then
+    do
+      local arrayIdx = 1
+      for groupIdx = 0, questGroupCount - 1 do
+        do
+          local questGroupInfo = questListInfo:getNewQuestGroupAt(groupIdx)
+          local groupTitle = questGroupInfo:getTitle()
+          local questCount = questGroupInfo:getQuestCount()
+          local completeChkCount = 0
+          local hideCount = 0
+          local sumHideCount = 0
+          local isShowQuestFromTime = questGroupInfo:checkShowQuestFromTime()
+          if true == isShowQuestFromTime then
+            for chkIdx = 0, questCount - 1 do
+              local uiQuestInfo = questGroupInfo:getQuestAt(chkIdx)
+              if false == uiQuestInfo:checkHideCondition() and true == uiQuestInfo:checkVisibleCondition() then
+                local isCleared = uiQuestInfo._isCleared
+                if true == isCleared then
+                  completeChkCount = completeChkCount + 1
+                end
+              else
+                hideCount = hideCount + 1
+              end
+            end
+            sumHideCount = questCount - hideCount
+            local function makeNewArray()
+              questArrayGroupCount[groupIdx] = 0
+              questArrayGroupCompleteCount[groupIdx] = 0
+              useArray[arrayIdx] = {
+                isQuest = false,
+                isNext = false,
+                isCleared = false,
+                questRegion = arrayIdx,
+                questType = 8,
+                title = groupTitle,
+                gruopNo = nil,
+                questNo = nil,
+                posCount = 0,
+                conditionComp = nil,
+                completeCount = 0,
+                isShowWidget = nil,
+                isGroupQuest = nil,
+                groupIdx = groupIdx,
+                groupCount = questCount,
+                resetTime = nil,
+                repeatTime = nil,
+                isSubQuest = nil
+              }
+              arrayIdx = arrayIdx + 1
+              local newCount = 0
+              local completeHide = self.ui.hideCompBtn:IsCheck()
+              for questIdx = 0, questCount - 1 do
+                do
+                  local uiQuestInfo = questGroupInfo:getQuestAt(questIdx)
+                  if false == uiQuestInfo:checkHideCondition() and true == uiQuestInfo:checkVisibleCondition() then
+                    local function setQuestData()
+                      local dataRegionIdx = uiQuestInfo:getQuestRegion()
+                      if dataRegionIdx > 8 or dataRegionIdx < 0 then
+                        dataRegionIdx = 0
+                      end
+                      if newQuestGroupOpen[groupIdx] then
+                        local questInfoResetTime = uiQuestInfo:getResetTime()
+                        local questInfoRepeatTime = uiQuestInfo:getRepeatTime()
+                        local questInfoIsNext = not uiQuestInfo._isProgressing and not uiQuestInfo._isCleared
+                        local questInfoTitle = uiQuestInfo:getTitle()
+                        local questInfoIsCleared = uiQuestInfo._isCleared
+                        if uiQuestInfo._isCleared and questInfoRepeatTime > 0 then
+                          if 0 < Int64toInt32(getLeftSecond_TTime64(questInfoResetTime)) then
+                            questInfoIsNext = false
+                          else
+                            questInfoIsCleared = false
+                            questInfoIsNext = true
+                          end
+                        end
+                        if not completeHide or questInfoRepeatTime > 0 or not questInfoIsCleared then
+                          useArray[arrayIdx] = {
+                            isQuest = true,
+                            isNext = questInfoIsNext,
+                            isCleared = questInfoIsCleared,
+                            questRegion = dataRegionIdx,
+                            questType = uiQuestInfo:getQuestType(),
+                            title = questInfoTitle,
+                            gruopNo = uiQuestInfo:getQuestNo()._group,
+                            questNo = uiQuestInfo:getQuestNo()._quest,
+                            posCount = uiQuestInfo:getQuestPositionCount(),
+                            conditionComp = uiQuestInfo:isSatisfied(),
+                            completeCount = 0,
+                            isShowWidget = uiQuestInfo:getAcceptConditionText(),
+                            isGroupQuest = true,
+                            groupIdx = groupIdx,
+                            groupCount = questGroupCount,
+                            resetTime = questInfoResetTime,
+                            repeatTime = questInfoRepeatTime,
+                            isSubQuest = uiQuestInfo._isSubQuest
+                          }
+                          arrayIdx = arrayIdx + 1
+                        end
+                      end
+                      if uiQuestInfo._isCleared then
+                        questArrayGroupCompleteCount[groupIdx] = questArrayGroupCompleteCount[groupIdx] + 1
+                      end
+                    end
+                    setQuestData()
+                    newCount = newCount + 1
+                  end
+                end
+              end
+              questArrayGroupCount[groupIdx] = newCount
+            end
+            if 0 ~= sumHideCount then
+              makeNewArray()
+            end
+          end
+        end
+      end
+    end
   else
     do
       local arrayIdx = 1
@@ -1317,11 +1443,17 @@ function QuestWindow:update()
           iconType = 8
           isBarExpand = repetitiveQuestGroupOpen[typeKey]
           self.uiPool.groupTitle[uiCount].completePercent:SetShow(false)
-        else
+        elseif QuestTabType.QuestTabType_Main == progressingActiveTab then
           isOpenTypeCheck = 4
           typeKey = useArray[questIdx].groupIdx
           iconType = 8
           isBarExpand = mainQuestGroupOpen[typeKey]
+          self.uiPool.groupTitle[uiCount].completePercent:SetShow(false)
+        elseif QuestTabType.QuestTabType_New == progressingActiveTab then
+          isOpenTypeCheck = 5
+          typeKey = useArray[questIdx].groupIdx
+          iconType = 8
+          isBarExpand = newQuestGroupOpen[typeKey]
           self.uiPool.groupTitle[uiCount].completePercent:SetShow(false)
         end
         FGlobal_ChangeOnTextureForDialogQuestIcon(self.uiPool.groupTitle[uiCount].typeIcon, iconType)
@@ -1581,8 +1713,10 @@ function HandleClick_QuestWindow_UpdateExpandBar(isRegion, Idx, uiIdx)
     recommendationGroupOpen[Idx] = not recommendationGroupOpen[Idx]
   elseif 3 == isRegion then
     repetitiveQuestGroupOpen[Idx] = not repetitiveQuestGroupOpen[Idx]
-  else
+  elseif 4 == isRegion then
     mainQuestGroupOpen[Idx] = not mainQuestGroupOpen[Idx]
+  elseif 5 == isRegion then
+    newQuestGroupOpen[Idx] = not newQuestGroupOpen[Idx]
   end
   QuestWindow:update()
 end
@@ -1678,6 +1812,11 @@ function HandleClicked_QuestWindow_ShowDetailInfo(questGroupId, questId, questCo
     groupCount = nil
   elseif QuestTabType.QuestTabType_Repetition == progressingActiveTab then
     questGroupInfo = questListInfo:getRepetitionQuestGroupAt(groupIdx)
+    isGroup = false
+    groupTitle = "nil"
+    groupCount = nil
+  elseif QuestTabType.QuestTabType_New == progressingActiveTab then
+    questGroupInfo = questListInfo:getNewQuestGroupAt(groupIdx)
     isGroup = false
     groupTitle = "nil"
     groupCount = nil

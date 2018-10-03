@@ -577,15 +577,28 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
     if itemStatic then
       if itemStatic._isStack or true == isWorldMarket then
         if true == ToClient_isXBox() then
-          if s64_stackCount > toInt64(0, 1000000) then
-            local val = tostring(s64_stackCount / toInt64(0, 1000000))
-            self.count:SetText(tostring(val) .. " M")
-          elseif s64_stackCount > toInt64(0, 1000) then
-            local count = Int64toInt32(s64_stackCount)
-            local val = count / 1000
-            self.count:SetText(string.format("%.1f", tostring(val)) .. " K")
-          else
-            self.count:SetText(tostring(s64_stackCount))
+          if "userdata" == type(s64_stackCount) then
+            if s64_stackCount > toInt64(0, 1000000) then
+              local val = tostring(s64_stackCount / toInt64(0, 1000000))
+              self.count:SetText(tostring(val) .. " M")
+            elseif s64_stackCount > toInt64(0, 1000) then
+              local count = Int64toInt32(s64_stackCount)
+              local val = count / 1000
+              self.count:SetText(string.format("%.1f", tostring(val)) .. " K")
+            else
+              self.count:SetText(tostring(s64_stackCount))
+            end
+          elseif "number" == type(s64_stackCount) then
+            if s64_stackCount > 1000000 then
+              local val = tostring(s64_stackCount / 1000000)
+              self.count:SetText(tostring(val) .. " M")
+            elseif s64_stackCount > 1000 then
+              local count = s64_stackCount
+              local val = count / 1000
+              self.count:SetText(string.format("%.1f", tostring(val)) .. " K")
+            else
+              self.count:SetText(tostring(s64_stackCount))
+            end
           end
         else
           self.count:SetText(tostring(s64_stackCount))

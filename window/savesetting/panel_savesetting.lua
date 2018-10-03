@@ -68,6 +68,7 @@ function PaGlobal_Panel_SaveSetting_PopUp()
 end
 function PaGlobal_Panel_SaveSetting_Hide()
   audioPostEvent_SystemUi(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 1)
   Panel_SaveSetting:SetShow(false, false)
   _Web:ResetUrl()
 end

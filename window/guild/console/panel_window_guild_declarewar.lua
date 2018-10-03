@@ -31,10 +31,9 @@ function WarDeclare:init()
   self:registEvent()
 end
 function WarDeclare:registEvent()
-  self._ui.edit_GuildName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_WarDeclare_ClearFocusEdit()")
+  self._ui.edit_GuildName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_WarDeclare_ClearFocusEdit")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_WarDeclare_Confirm()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WarDeclare_SetFocusEdit()")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_B, "PaGlobalFunc_WarDeclare_ClearFocusEdit()")
 end
 function PaGlobalFunc_WarDeclare_Open()
   local self = WarDeclare
@@ -70,13 +69,13 @@ function PaGlobalFunc_WarDeclare_SetFocusEdit()
   SetFocusEdit(self._ui.edit_GuildName)
   self._ui.edit_GuildName:SetEditText(self._ui.edit_GuildName:GetEditText(), true)
 end
-function PaGlobalFunc_WarDeclare_ClearFocusEdit()
+function PaGlobalFunc_WarDeclare_ClearFocusEdit(str)
   local self = WarDeclare
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
     return
   end
-  self._ui.edit_GuildName:SetEditText(self._ui.edit_GuildName:GetEditText(), true)
+  self._ui.edit_GuildName:SetEditText(str, true)
   ClearFocusEdit()
   self._ui.stc_CharacterInfoBg:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_WarDeclare_SetFocusEdit()")
 end
@@ -105,7 +104,7 @@ function InputMLUp_WarDeclare_Confirm()
   end
   if guildName == myGuildName then
     local messageboxData = {
-      title = "",
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_LETSWARFAIL"),
       functionApply = MessageBox_Empty_function,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
@@ -113,7 +112,7 @@ function InputMLUp_WarDeclare_Confirm()
     MessageBox.showMessageBox(messageboxData)
   elseif CppEnums.GuildWarType.GuildWarType_Both == ToClient_GetGuildWarType() then
     local messageboxData = {
-      title = "",
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DECLAREWAR_DECREASEMONEY"),
       functionYes = PaGlobalFunc_WarDeclare_Confirm,
       functionNo = MessageBox_Empty_function,

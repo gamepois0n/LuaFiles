@@ -177,6 +177,7 @@ function Panel_SkillTooltip_SetPosition(skillNo, slot, slotType)
 end
 function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSkill, isResetable)
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   callTooltipType = SlotType
   local skillNo = slotNo
   if SlotType == "QuickSlot" then

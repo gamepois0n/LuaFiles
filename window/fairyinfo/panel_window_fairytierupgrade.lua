@@ -347,6 +347,7 @@ function FGlobal_OnClick_Button_UpgradeConfirm()
   self._isResultAnimating = true
   self._ui._btn_TierUpgrade:SetMonoTone(true)
   audioPostEvent_SystemUi(21, 1)
+  _AudioPostEvent_SystemUiForXBOX(21, 1)
 end
 function UpdateFunc_FairyTierUpdateFunc(deltaTime)
   local self = PaGlobal_FairyTierUpgrade
@@ -439,6 +440,7 @@ function PaGlobal_FairyTierUpgrade:onResultAnimationFinish()
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoSuccessFairyUpgrade"), 1.6, Panel_Window_FairyTierUpgrade:GetPosX() + self._resultMessagePosX, Panel_Window_FairyTierUpgrade:GetPosY() + self._resultMessagePosY)
       self._ui._resultSuccessEffect:AddEffect("fUI_Fairy_TierUpgrade_Success_01A", false, 0, 4)
       audioPostEvent_SystemUi(21, 2)
+      _AudioPostEvent_SystemUiForXBOX(21, 2)
     elseif self._result == self._RESULT_TYPE.FAIL then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoFailFairyUpgrade"), 1.6, Panel_Window_FairyTierUpgrade:GetPosX() + self._resultMessagePosX, Panel_Window_FairyTierUpgrade:GetPosY() + self._resultMessagePosY)
       self._ui._resultFailEffect:AddEffect("fUI_Fairy_TierUpgrade_Fail_01A", false, 0, 4)

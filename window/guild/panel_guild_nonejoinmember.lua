@@ -24,10 +24,12 @@ end
 function PaGlobal_Guild_NoneJoinMember:Open()
   Panel_Guild_NoneJoinMember:SetShow(true)
   audioPostEvent_SystemUi(1, 30)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
 end
 function PaGlobal_Guild_NoneJoinMember:Close()
   Panel_Guild_NoneJoinMember:SetShow(false)
   audioPostEvent_SystemUi(1, 31)
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
 end
 function PaGlobal_Guild_NoneJoinMember:GuildNpcNavi()
   HandleClicked_TownNpcIcon_NaviStart(11)

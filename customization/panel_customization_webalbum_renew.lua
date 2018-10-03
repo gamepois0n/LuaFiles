@@ -23,6 +23,7 @@ function Panel_CustomizingAlbum_ShowAni()
 end
 function Panel_CustomizingAlbum_HideAni()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_CustomizingAlbum:SetAlpha(1)
   local aniInfo = UIAni.AlphaAnimation(0, Panel_CustomizingAlbum, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
@@ -67,6 +68,7 @@ function CustomizingAlbum_Open(isCTMode, isSceneState)
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_CustomizingAlbum:SetShow(true, true)
   FGlobal_SetCandidate()
   local temporaryWrapper = getTemporaryInformationWrapper()
@@ -93,6 +95,7 @@ function CustomizingAlbum_Open(isCTMode, isSceneState)
 end
 function CustomizingAlbum_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   FGlobal_ClearCandidate()
   _customizingAlbumWeb:ResetUrl()
   Panel_CustomizingAlbum:SetShow(false, false)
@@ -105,6 +108,7 @@ function FGlobal_CustomizingAlbum_ShowByScreenShotFrame()
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_CustomizingAlbum:SetShow(true, true)
 end
 function FGlobal_CustomizingAlbum_Close()

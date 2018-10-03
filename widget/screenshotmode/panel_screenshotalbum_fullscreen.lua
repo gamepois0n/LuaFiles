@@ -39,6 +39,7 @@ end
 Panel_ScreenShotAlbum_FullScreen_Initialize()
 function ScreenshotAlbum_FullScreen_Open(addUrl)
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_ScreenShotAlbum_FullScreen:SetShow(true, true)
   FGlobal_SetCandidate()
   local temporaryWrapper = getTemporaryInformationWrapper()

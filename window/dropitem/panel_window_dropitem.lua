@@ -244,10 +244,12 @@ function PaGlobal_WorldDropItem:ItemTooltip_Hide()
 end
 function PaGlobal_WorldDropItem:Open()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_Window_DropItem:SetShow(true)
 end
 function PaGlobal_WorldDropItem:Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_Window_DropItem:SetShow(false)
 end
 function FGlobal_DropItemWindow_Open(regionKey)

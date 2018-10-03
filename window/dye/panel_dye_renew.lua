@@ -830,6 +830,7 @@ function DyeReNew:Open()
 end
 function DyeReNew:Close()
   audioPostEvent_SystemUi(1, 23)
+  _AudioPostEvent_SystemUiForXBOX(1, 23)
   Panel_Dye_ReNew:SetShow(false)
   if Panel_ChangeWeapon:GetShow() then
     WeaponChange_Close()
@@ -1074,6 +1075,7 @@ function FGlobal_Panel_Dye_ReNew_Open()
     return
   end
   PaGlobalFunc_FullScreenFade_RunAfterFadeIn(FGlobal_Panel_DyeReNew_Show)
+  _AudioPostEvent_SystemUiForXBOX(1, 23)
   FGlobal_Hide_Tooltip_Work(nil, true)
 end
 function FGlobal_Panel_Dye_ReNew_Close()

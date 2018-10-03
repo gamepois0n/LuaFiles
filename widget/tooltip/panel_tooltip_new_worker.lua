@@ -106,6 +106,7 @@ function HandleOutWorkerTooltip(uiBase)
 end
 function FGlobal_ShowWorkerTooltip(workerData, uiBase, isRight, isPlant)
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   local workerStaticStatus = workerData:getWorkerStaticStatus()
   local defaultSkill = workerData:getWorkerDefaultSkillStaticStatus()
   if nil ~= defaultSkill then
@@ -258,6 +259,7 @@ function FGlobal_ShowWorkerTooltip(workerData, uiBase, isRight, isPlant)
 end
 function FGlobal_ShowWorkerTooltipByWorkerNoRaw(workerNoRaw, panel, isRight, isPlant)
   audioPostEvent_SystemUi(1, 13)
+  _AudioPostEvent_SystemUiForXBOX(1, 13)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
   local workerIcon = workerWrapperLua:getWorkerIcon()
   local defaultSkill = workerWrapperLua:getWorkerDefaultSkillStaticStatus()

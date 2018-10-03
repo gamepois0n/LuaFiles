@@ -203,6 +203,7 @@ function HandleClicked_ManufactureType(_type)
     return
   end
   audioPostEvent_SystemUi(13, 10)
+  _AudioPostEvent_SystemUiForXBOX(13, 10)
   StopManufactureAction()
   local self = remoteManufacture
   self._actionIndex = _type
@@ -303,6 +304,7 @@ function RemoteManufacture_Go()
   end
   local rv = Manufacture_Do(CppEnums.InstallationType.TypeCount, self._actionName[self._actionIndex], CppEnums.ItemWhereType.eWarehouse, _materialSlotNoList[0], _materialSlotNoList[1], _materialSlotNoList[2], _materialSlotNoList[3], _materialSlotNoList[4])
   audioPostEvent_SystemUi(13, 11)
+  _AudioPostEvent_SystemUiForXBOX(13, 11)
 end
 function FGlobal_RemoteManufactureActionIndex()
   local self = remoteManufacture

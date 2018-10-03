@@ -147,7 +147,7 @@ function expeditionSettingInfo:initSetting()
     if nil ~= expeditionInfo then
       PaGlobalFunc_ExpeditionSettingInfo_SelectCharacterSet(ii, expeditionInfo._characterNo)
       PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, expeditionInfo._unitNo)
-      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, expeditionInfo._groupKey, expeditionInfo._unitNo)
+      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, expeditionInfo._groupKey, expeditionInfo._unitNo, true)
     end
   end
 end
@@ -186,6 +186,7 @@ function PaGlobalFunc_ExpeditionSettingInfo_Close()
   PaGlobalFunc_ExpeditionRewardItemInfo_Close()
   PaGlobalFunc_ExpeditionUnitSelectInfo_Close()
   PaGlobalFunc_ExpeditionAreaSelectInfo_Close()
+  PaGlobalFunc_ExpeditionCharacterSelectInfo_Close()
 end
 function PaGlobalFunc_ExpeditionSettingInfo_Save()
   local self = expeditionSettingInfo
@@ -210,14 +211,21 @@ function PaGlobalFunc_ExpeditionSettingInfo_Save()
       return
     end
   end
-  self._isShowMessageRegistExpedition = false
+  self._isShowMessageRegisterExpedition = false
+  local notSendExpedition = 0
   for ii = 0, self._config._bgMaxCount - 1 do
     local info = self._selectInfo[ii]
-    if nil ~= info._characterNo and nil ~= info._unitNo and info._groupKey then
+    if nil ~= info._characterNo and nil ~= info._unitNo and nil ~= info._groupKey then
       ToClient_requestExpeditionSet(info._characterNo, info._unitNo, info._groupKey, ii)
     elseif true == info._reset then
       ToClient_cancelExpedition(ii)
+    else
+      notSendExpedition = notSendExpedition + 1
     end
+  end
+  if notSendExpedition == self._config._bgMaxCount then
+    self._isShowMessageRegisterExpedition = true
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_SUCCESS_SAVE"))
   end
 end
 function PaGlobalFunc_ExpeditionSettingInfo_ClickRadioButton(radioButtonType)
@@ -258,40 +266,50 @@ function PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(index, unitNo)
   local maxEnergy = myUnit:getMaxEnergyPoint()
   local unitName = myUnit:getUnitName()
   textLevel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_LEVEL", "level", level))
-  local expRate = curExp / maxExp * 100
+  local expRate = math.floor(Int64toInt32(curExp) * 100 / Int64toInt32(maxExp))
   expValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_EXP", "exp", tostring(expRate)))
-  guageBar:SetProgressRate(curExp)
+  guageBar:SetProgressRate(expRate)
   textStatus:SetShow(true)
   textStatus:SetText(PAGetStringParam4(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_ENERGY", "unitname", unitName, "attack", atkPoint, "curenergy", curEnergyPoint, "maxenergy", maxEnergy))
   self._selectInfo[index]._unitNo = myUnit._expeditionUnitNo
   self._selectInfo[index]._reset = false
 end
-function PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(index, groupKey, unitNo)
+function PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(index, groupKey, unitNo, allRefresh)
+  local self = expeditionSettingInfo
+  if nil == unitNo then
+    unitNo = self._selectInfo[index]._unitNo
+  end
   local regionWrapper = ToClient_getExpeditionRegionWrapper(groupKey)
   if nil == regionWrapper then
+    self._settingBG[index]._warningText1:SetShow(false)
+    self._settingBG[index]._warningText2:SetShow(false)
     return
   end
-  local self = expeditionSettingInfo
-  local desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_REGION_DESC", "name", regionWrapper:getGroupName(), "value", regionWrapper:getRecommendCombatPoint())
-  self._settingBG[index]._areaDesc:SetText(desc)
-  self._selectInfo[index]._groupKey = groupKey
-  self._selectInfo[index]._reset = false
+  if true == allRefresh then
+    local desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_EXPEDITION_REGION_DESC", "name", regionWrapper:getGroupName(), "value", regionWrapper:getRecommendCombatPoint())
+    self._settingBG[index]._areaDesc:SetText(desc)
+    self._selectInfo[index]._groupKey = groupKey
+    self._selectInfo[index]._reset = false
+  end
   local myUnit = ToClient_getMyExpeditionUnitInfo(unitNo)
-  if nil ~= myUnit then
+  if nil ~= myUnit and "" ~= self._settingBG[index]._areaDesc:GetText() then
     local curEnergyPoint = myUnit._energyPoint
-    if curEnergyPoint <= 0 then
+    local needEnergyPoint = regionWrapper:getUseEnergyPoint()
+    if curEnergyPoint <= needEnergyPoint then
       self._settingBG[index]._warningText1:SetShow(true)
     else
-      self._settingBG[index]._warningText1:SetShow(falses)
+      self._settingBG[index]._warningText1:SetShow(false)
     end
   else
     self._settingBG[index]._warningText1:SetShow(false)
   end
   local combatPoint = ToClient_getExpeditionTotalCombatPoint(index)
-  if false == self._settingBG[index]._warningText1:GetShow() and combatPoint < regionWrapper:getRecommendCombatPoint() then
-    self._settingBG[index]._warningText2:SetShow(true)
-  else
-    self._settingBG[index]._warningText2:SetShow(false)
+  if combatPoint > 0 then
+    if false == self._settingBG[index]._warningText1:GetShow() and combatPoint < regionWrapper:getRecommendCombatPoint() and "" ~= self._settingBG[index]._areaDesc:GetText() then
+      self._settingBG[index]._warningText2:SetShow(true)
+    else
+      self._settingBG[index]._warningText2:SetShow(false)
+    end
   end
 end
 function PaGlobalFunc_ExpeditionSettingInfo_GetMyCharacterData(characterNo)
@@ -384,6 +402,8 @@ function PaGlobalFunc_ExpeditionSettingInfo_Reset(index)
   guageBar:SetProgressRate(expRate)
   textStatus:SetShow(false)
   textStatus:SetText(PAGetStringParam4(Defines.StringSheet_GAME, "LUA_EXPEDITION_UNIT_ENERGY", "unitname", "", "attack", 0, "curenergy", 0, "maxenergy", 0))
+  self._settingBG[index]._warningText1:SetShow(false)
+  self._settingBG[index]._warningText2:SetShow(false)
 end
 function PaGlobalFunc_ExpeditionUnitRecovery(index)
   local self = expeditionSettingInfo
@@ -439,17 +459,30 @@ function PaGlobalFunc_ExpeditionUpdateSupplySetting()
   local totalPoint = ToClient_getExpeditionTotalSupplyEnergy()
   self._ui._txt_supply:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXPEDITION_SUPPLYPOINT_REMAIN", "value", tostring(totalPoint)))
 end
-function FromClient_registExpeditionSuccess()
+function FromClient_registExpeditionSuccess(slotIndex)
   local self = expeditionSettingInfo
   if false == self._isShowMessageRegisterExpedition then
     self._isShowMessageRegisterExpedition = true
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EXPEDITION_SUCCESS_SAVE"))
   end
-  expeditionSettingInfo:initSetting()
+  if nil ~= ToClient_updateExpeditionSelfPlayerTotalStatValue() then
+    ToClient_updateExpeditionSelfPlayerTotalStatValue()
+  end
+  local expeditionInfo = ToClient_getExpeditionInfo(slotIndex)
+  if nil ~= expeditionInfo then
+    PaGlobalFunc_ExpeditionSettingInfo_SelectCharacterSet(slotIndex, expeditionInfo._characterNo)
+    PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(slotIndex, expeditionInfo._unitNo)
+    PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(slotIndex, expeditionInfo._groupKey, expeditionInfo._unitNo, true)
+  end
 end
 function FromClient_fillExpeditionSuccess(unitNo)
   local self = expeditionSettingInfo
-  expeditionSettingInfo:initSetting()
+  for ii = 0, self._config._bgMaxCount - 1 do
+    if self._selectInfo[ii]._unitNo == unitNo then
+      PaGlobalFunc_ExpeditionSettingInfo_SelectUnitSet(ii, unitNo)
+      PaGlobalFunc_ExpeditionSettingInfo_SelectAreaSet(ii, self._selectInfo[ii]._groupKey, unitNo, false)
+    end
+  end
   PaGlobalFunc_ExpeditionUnitSelectInfo_reOpen()
 end
 function FromClient_sellExpeditionSuccess(unitNo)

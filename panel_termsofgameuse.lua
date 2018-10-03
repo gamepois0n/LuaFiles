@@ -51,16 +51,22 @@ function FGlobal_TermsofGameUse_Open()
     end
   elseif isGameTypeGT() then
     isTermsString = "https://game-portal.global-lab.playblackdesert.com/Policy/"
+  elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
+    isTermsString = PAGetString(Defines.StringSheet_GAME, "LUA_TERMSOFGAMEUSE_URL_RUS_ALPHA")
+  elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
+    isTermsString = PAGetString(Defines.StringSheet_GAME, "LUA_TERMSOFGAMEUSE_URL_RUS")
   else
     isTermsString = PAGetString(Defines.StringSheet_GAME, "LUA_TERMSOFGAMEUSE_URL")
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_TermsofGameUse:SetShow(true, true)
   _Web:SetUrl(900, 586, isTermsString, false, false)
 end
 function TermsofGameUse_Close()
   _Web:ResetUrl()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_TermsofGameUse:SetShow(false, false)
 end
 function HandleClicked_TermsofGameUse_Close()

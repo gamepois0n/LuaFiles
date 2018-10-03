@@ -1825,7 +1825,6 @@ function loadGameUI_PC()
   if _ContentsGroup_RenewUI then
     runLua("UI_Data/Script/Window/BlackBackground/Panel_Global_BlackBackground.lua")
   end
-  runLua("UI_Data/Script/Common/Common_ConsoleConfig.lua")
   runLua("UI_Data/Script/Panel_Ime.lua")
   runLua("UI_Data/Script/Tutorial/Panel_WebControl.lua")
   runLua("UI_Data/Script/DragManager.lua")

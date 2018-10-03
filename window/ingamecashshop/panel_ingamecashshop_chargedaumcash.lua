@@ -215,6 +215,7 @@ function IngameCashShop_ChargeComplete()
 end
 function chargeDaumCash_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_IngameCashShop_ChargeDaumCash:SetShow(false, false)
 end
 function HandleClicked_ChargeDaumCash_Close()

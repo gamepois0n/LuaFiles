@@ -512,7 +512,6 @@ function ServerSelectRemaster:startFadeOut()
 end
 local _dummyData = {}
 function ServerSelectRemaster:initTreeData()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "initTreeData")
   local tree = self._ui.tree_server
   tree = UI.getChildControl(_panel, "List2_ServerList")
   tree:changeAnimationSpeed(11)
@@ -540,26 +539,30 @@ function ServerSelectRemaster:initTreeData()
     local channelCount = getGameChannelServerDataCount(worldServerData._worldNo)
     local tempTable = {}
     local tempOlviaTable = {}
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "channelCount : " .. channelCount)
     for jj = 1, channelCount do
       local channelServerData = getGameChannelServerDataByIndex(ii - 1, jj - 1)
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "channel Name : " .. tostring(getChannelName(worldServerData._worldNo, channelServerData._serverNo)) .. ", isSpeedChannel : " .. tostring(channelServerData._isSpeedChannel))
       if true == channelServerData._isSpeedChannel then
         tempOlviaTable[#tempOlviaTable + 1] = {
           isWorldServer = false,
           worldIndex = ii,
           channelIndex = jj,
-          isSpeedChannel = channelServerData._isSpeedChannel
+          isSpeedChannel = channelServerData._isSpeedChannel,
+          serverNo = channelServerData._serverNo
         }
       else
         tempTable[#tempTable + 1] = {
           isWorldServer = false,
           worldIndex = ii,
           channelIndex = jj,
-          isSpeedChannel = channelServerData._isSpeedChannel
+          isSpeedChannel = channelServerData._isSpeedChannel,
+          serverNo = channelServerData._serverNo
         }
       end
     end
+    local sortF = function(ii, jj)
+      return ii.serverNo < jj.serverNo
+    end
+    table.sort(tempTable, sortF)
     for ii = 1, #tempOlviaTable do
       worldElement:createChild(toInt64(0, key))
       self._treeData[key] = tempOlviaTable[ii]

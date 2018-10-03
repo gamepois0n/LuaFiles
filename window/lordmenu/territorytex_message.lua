@@ -59,6 +59,7 @@ function TerrirotyTex_MessageUpdate(updateTime)
   if elapsedTime >= animationEndTime then
     if processIndex < curIndex then
       audioPostEvent_SystemUi(8, 1)
+      _AudioPostEvent_SystemUiForXBOX(8, 1)
       MessageOpen()
       processIndex = processIndex + 1
       Panel_TerritoryTex_Message:SetShow(false, true)

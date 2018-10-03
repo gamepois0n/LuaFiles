@@ -137,6 +137,7 @@ end
 function PaGlobal_TutorialPhase_InteractionSupplyBox:eventCallDeleteNavigationGuide(key)
   if 1 == self._currentProgress or 2 == self._currentProgress then
     audioPostEvent_SystemUi(4, 12)
+    _AudioPostEvent_SystemUiForXBOX(4, 12)
     self._currentProgress = self._currentProgress + 1
     self:handleChangeStep(self._currentStep)
   elseif 3 == self._currentProgress then

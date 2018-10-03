@@ -160,6 +160,7 @@ function PuriManager:RequestPuri()
       self._ui._btn_Puri:SetIgnore(true)
       self._ui._btn_Puri:SetMonoTone(true)
       audioPostEvent_SystemUi(5, 17)
+      _AudioPostEvent_SystemUiForXBOX(5, 17)
     end,
     functionNo = function()
     end,
@@ -246,6 +247,7 @@ end
 function FromClient_notifyWeakenEnchantSuccess()
   local self = PuriManager
   audioPostEvent_SystemUi(5, 16)
+  _AudioPostEvent_SystemUiForXBOX(5, 16)
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PURIFICATION_SUCCESS"))
   self._fromSlotOn = false
   self._fromSlotNo = -1

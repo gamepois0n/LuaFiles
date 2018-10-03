@@ -4,6 +4,7 @@ local _disableColor = Defines.Color.C_FF525B6D
 local _enableColor = Defines.Color.C_FFEEEEEE
 local GuildMemberList = {
   _ui = {
+    stc_TitleGroup = UI.getChildControl(_panel, "Static_TitleGroup"),
     list_MemberList = UI.getChildControl(_panel, "List2_MemberList")
   },
   _listSortFunction = {
@@ -15,9 +16,11 @@ local GuildMemberList = {
   _memberListInfo = {},
   _memberListControlData = {},
   _parentBg = nil,
-  _currentSortType = nil
+  _currentSortType = nil,
+  _showFamilyName = true
 }
 function GuildMemberList:init()
+  self._ui.txt_TitleCharName = UI.getChildControl(self._ui.stc_TitleGroup, "StaticText_Name")
   self:registEvent()
   self:setSortFunc()
 end
@@ -28,7 +31,6 @@ function GuildMemberList:SetMemberInfo()
     _PA_ASSERT(false, "\234\184\184\235\147\156 \236\160\149\235\179\180\234\176\128 \236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList:SetMemberInfo")
     return
   end
-  ToClient_updateXboxGuildUserGamerTag()
   local memberCount = guildInfo:getMemberCount()
   for memberIdx = 0, memberCount - 1 do
     local memberInfo = guildInfo:getMember(memberIdx)
@@ -124,7 +126,7 @@ function PaGlobalFunc_GuildMemberList_MemberVoiceUpdate(index, isSaying, isHeari
   end
   self._memberListControlData[index].check_Mice:SetCheck(true ~= isForce and false ~= isSaying)
   self._memberListControlData[index].check_Headphone:SetCheck(isHearing)
-  self._memberListControlData[index].stc_HasNoMicPermission:SetShow(not isForce or not isSaying)
+  self._memberListControlData[index].stc_HasNoMicPermission:SetShow(isForce and not isSaying)
 end
 function PaGlobalFunc_GuildMemberList_Init()
   local self = GuildMemberList
@@ -180,6 +182,11 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   control.stc_HasNoMicPermission = UI.getChildControl(content, "Static_Cant")
   control.check_Mice = UI.getChildControl(content, "CheckButton_Mice")
   control.check_Headphone = UI.getChildControl(content, "CheckButton_Headphone")
+  if true == self._showFamilyName then
+    self._ui.txt_TitleCharName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDMEMBERINFO_FAMILYNAME") .. " (" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FRIENDNEW_XBOXNAME") .. ")")
+  else
+    self._ui.txt_TitleCharName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDMEMBERINFO_CHARACTERNAME") .. " (" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FRIENDNEW_XBOXNAME") .. ")")
+  end
   txt_Grade:ChangeTextureInfoName("renewal/ui_icon/console_icon_guild_00.dds")
   if 0 == memberInfo._grade then
     local x1, y1, x2, y2 = setTextureUV_Func(txt_Grade, 1, 1, 37, 37)
@@ -206,7 +213,11 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Grade:SetFontColor(_enableColor)
     txt_Level:SetText(memberInfo._level)
     txt_Level:SetFontColor(_enableColor)
-    txt_Name:SetText(memberInfo._name .. " (" .. memberInfo._charName .. ") (" .. memberInfo._gamerTag .. ")")
+    if true == self._showFamilyName then
+      txt_Name:SetText(memberInfo._name .. " (" .. memberInfo._gamerTag .. ")")
+    else
+      txt_Name:SetText(memberInfo._charName .. " (" .. memberInfo._gamerTag .. ")")
+    end
     txt_Name:SetFontColor(_enableColor)
     txt_Class:SetText(CppEnums.ClassType2String[memberInfo._class])
     txt_Class:SetFontColor(_enableColor)
@@ -216,7 +227,11 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
     txt_Grade:SetFontColor(_disableColor)
     txt_Level:SetText("-")
     txt_Level:SetFontColor(_disableColor)
-    txt_Name:SetText(memberInfo._name .. " ( - )")
+    if true == self._showFamilyName then
+      txt_Name:SetText(memberInfo._name .. " ( - )")
+    else
+      txt_Name:SetText("- ( - )")
+    end
     txt_Name:SetFontColor(_disableColor)
     txt_Class:SetText("-")
     txt_Class:SetFontColor(_disableColor)
@@ -234,6 +249,8 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   control.stc_HasNoMicPermission:SetShow(not memberInfo._permissionHas)
   self._memberListControlData[memberIdx] = control
   btn_GuildSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildMemberList_MemberFunctionOpen(" .. memberIdx .. ")")
+  btn_GuildSlot:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildMemberList_ShowXBOXProfile(" .. memberIdx .. ")")
+  btn_GuildSlot:addInputEvent("Mouse_On", "InputMO_GuildMemberList_SetKeyGuide(" .. memberIdx .. ")")
 end
 function InputMLUp_GuildMemberList_MemberFunctionOpen(index)
   local self = GuildMemberList
@@ -242,6 +259,52 @@ function InputMLUp_GuildMemberList_MemberFunctionOpen(index)
     return
   end
   PaGlobalFunc_GuildMemberFunction_Open(index)
+end
+function InputMO_GuildMemberList_SetKeyGuide(index)
+  local self = GuildMemberList
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
+    return
+  end
+  local memberInfo = self._memberListInfo[index + 1]
+  if false == memberInfo._online then
+    PaGlobalFunc_GuildMain_SetKeyGuide(3, false)
+    return
+  end
+  if getSelfPlayer():get():getUserNo() == memberInfo._userNo then
+    PaGlobalFunc_GuildMain_SetKeyGuide(3, false)
+    return
+  end
+  PaGlobalFunc_GuildMain_SetKeyGuide(3, true)
+end
+function PaGlobalFunc_GuildMemberList_ShowXBOXProfile(index)
+  local self = GuildMemberList
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
+    return
+  end
+  local memberInfo = self._memberListInfo[index + 1]
+  if false == memberInfo._online then
+    return
+  end
+  if getSelfPlayer():get():getUserNo() == memberInfo._userNo then
+    return
+  end
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  if nil == guildInfo then
+    return
+  end
+  local guildMemberInfo = guildInfo:getMember(memberInfo._idx)
+  local isShow = ToClient_showXboxProfile(guildMemberInfo:getUserNo())
+  if false == isShow then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+      content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_CANNOTSHOWXBOXPROFILE", "GuildMember", guildMemberInfo:getName()),
+      functionYes = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+  end
 end
 function FromClient_GuildMemberList_GuildListUpdate(userNo)
   local self = GuildMemberList
@@ -326,6 +389,16 @@ function FromClient_GuildMemberList_ResponseGuildMasterChange(userNo, targetNo)
   elseif selfUserNo == Int64toInt32(targetNo) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_MASTERCHANGE_MESSAGE_1"))
   end
+  self:SetMemberInfo()
+  self:clearAndUpdateList()
+end
+function PaGlobalFunc_GuildMemberList_SwapFamilyOrCharacterName()
+  local self = GuildMemberList
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMemberList")
+    return
+  end
+  self._showFamilyName = not self._showFamilyName
   self:SetMemberInfo()
   self:clearAndUpdateList()
 end

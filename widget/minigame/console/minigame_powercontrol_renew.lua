@@ -81,7 +81,7 @@ function MiniGame_PowerControl:onKeyDown(keyType)
 end
 function MiniGame_PowerControl:onKeyUp(keyType)
   if MGKT.MiniGameKeyType_M0 == keyType then
-    audioPostEvent_SystemUi(11, 5)
+    _AudioPostEvent_SystemUiForXBOX(11, 5)
     isPressed_L = false
     directionType = 1
     self._ui.stc_Gauge_L_BG:SetAlpha(0.6)
@@ -91,7 +91,7 @@ function MiniGame_PowerControl:onKeyUp(keyType)
     self._ui.stc_Gauge_R:SetAlpha(1)
     self._ui.stc_GaugeDeco_R:SetAlpha(1)
   elseif MGKT.MiniGameKeyType_M1 == keyType then
-    audioPostEvent_SystemUi(11, 5)
+    _AudioPostEvent_SystemUiForXBOX(11, 5)
     isPressed_R = false
     directionType = 0
     self._ui.stc_Gauge_L_BG:SetAlpha(1)
@@ -211,7 +211,7 @@ function Panel_MiniGame_PowerControl_Success()
   else
     return
   end
-  audioPostEvent_SystemUi(11, 13)
+  _AudioPostEvent_SystemUiForXBOX(11, 13)
   isFullMilk = true
   if true == isPlayingMilky then
     ToClient_MinigameResult(1, true)
@@ -230,7 +230,7 @@ function Panel_MiniGame_PowerControl_Failed()
   self._ui.stc_PC_Control_BG:SetShow(false)
   self._ui.stc_Console_Control_BG:SetShow(false)
   self._ui.stc_Timer_BG:SetShow(false)
-  audioPostEvent_SystemUi(11, 2)
+  _AudioPostEvent_SystemUiForXBOX(11, 2)
   isPlayingMilky = false
   directionType = -1
   isPressed_L = false

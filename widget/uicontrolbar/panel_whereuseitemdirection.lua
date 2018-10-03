@@ -2,6 +2,11 @@ Panel_WhereUseItemDirection:SetShow(false, false)
 Panel_WhereUseItemDirection:SetDragAll(true)
 local whereUseItem = {
   _slot = UI.getChildControl(Panel_WhereUseItemDirection, "Static_Slot"),
+  stc_soulGroup = UI.getChildControl(Panel_WhereUseItemDirection, "Static_SoulGroup"),
+  stc_smallSoulCollector = nil,
+  stc_smallSoulCollectorFull = nil,
+  txt_soulCollector = nil,
+  txt_soulCollectorFull = nil,
   _slotConfig = {
     createIcon = true,
     createBorder = true,
@@ -11,7 +16,9 @@ local whereUseItem = {
   slotNo = nil,
   saveItemSSW = nil,
   widgetItemKey = nil,
-  slot = {}
+  slot = nil,
+  currentMonsterGroupKey = nil,
+  cachedSoulCollector = nil
 }
 local weightOver
 if false == _ContentsGroup_RemasterUI_Main_Alert then
@@ -19,8 +26,13 @@ if false == _ContentsGroup_RemasterUI_Main_Alert then
 else
   weightOver = nil
 end
+local self = whereUseItem
 function WhereUseItemDirectionInit()
-  local self = whereUseItem
+  self.stc_smallSoulCollector = UI.getChildControl(self.stc_soulGroup, "Static_SmallSoulCollector")
+  self.stc_smallSoulCollectorFull = UI.getChildControl(self.stc_soulGroup, "Static_SmallSoulCollectorFull")
+  self.txt_soulCollector = UI.getChildControl(self.stc_smallSoulCollector, "StaticText_Count")
+  self.txt_soulCollectorFull = UI.getChildControl(self.stc_smallSoulCollectorFull, "StaticText_Count")
+  self.slot = {}
   SlotItem.new(self.slot, "ItemSlot", 0, self._slot, self._slotConfig)
   self.slot:createChild()
   self.slot.icon:SetPosX(self.slot.icon:GetPosX() + 12)
@@ -47,7 +59,6 @@ function WhereUseItemDirectionInit()
   end
 end
 function WhereUseItemDirectionRestore(itemKey, slotNo, itemCount)
-  local self = whereUseItem
   self.widgetItemKey = itemKey
   WhereUseItemDirectionUpdate(self.saveItemSSW, self.slotNo)
   self.slot.count:SetHorizonCenter()
@@ -59,7 +70,6 @@ function WhereUseItemDirectionUpdate(itemSSW, slotNo, isShow)
   if nil == itemSSW or nil == slotNo then
     return
   end
-  local self = whereUseItem
   local inventory = getSelfPlayer():get():getInventory()
   local inventoryType = Inventory_GetCurrentInventoryType()
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
@@ -85,16 +95,12 @@ function WhereUseItemDirectionUpdate(itemSSW, slotNo, isShow)
     if toInt64(0, 0) == s64_inventoryItemCount then
       WhereUseItemDirectionClose()
     end
-    local countSoul
     if itemWrapper:isSoulCollector() then
-      if itemWrapper:getSoulCollectorMaxCount() < itemWrapper:getSoulCollectorCount() then
-        countSoul = itemWrapper:getSoulCollectorMaxCount()
-      else
-        countSoul = itemWrapper:getSoulCollectorCount()
-      end
-      self.slot:setItemByStaticStatus(itemWrapper:getStaticStatus(), itemWrapper:get():getCount_s64(), -1, false, false, true, itemWrapper:getSoulCollectorCount(), itemWrapper:getSoulCollectorMaxCount(), true)
+      self:UpdateSoulCollector(itemWrapper)
+      self.stc_soulGroup:SetShow(true)
     else
       self.slot:setItemByStaticStatus(itemSSW, Int64toInt32(s64_inventoryItemCount))
+      self.stc_soulGroup:SetShow(false)
     end
     if self.widgetItemKey == _key then
       self.slot.icon:EraseAllEffect()
@@ -104,6 +110,80 @@ function WhereUseItemDirectionUpdate(itemSSW, slotNo, isShow)
     self.slot.icon:addInputEvent("Mouse_On", "WhereUseItemDirectionSlotItemOn()")
     self.slot.icon:addInputEvent("Mouse_Out", "WhereUseItemDirectionSlotItemOff()")
   end
+end
+function whereUseItem:UpdateSoulCollector(itemWrapper)
+  if nil == itemWrapper then
+    return
+  end
+  local itemSSW = itemWrapper:getStaticStatus()
+  if nil == itemSSW then
+    return
+  end
+  self.currentMonsterGroupKey = itemSSW:get()._contentsEventParam1
+  local soulCount = itemWrapper:getSoulCollectorCount()
+  local soulMax = itemWrapper:getSoulCollectorMaxCount()
+  if nil == soulCount or nil == soulMax then
+    return
+  end
+  if soulCount < soulMax then
+    self.slot:setItemByStaticStatus(itemSSW, itemWrapper:get():getCount_s64(), -1, false, false, true, soulCount, soulMax, true)
+    if soulCount > soulMax * 0.9 then
+      self.cachedSoulCollector = self:countAllSoulCollector()
+    else
+      self:countAllSoulCollector()
+    end
+    return
+  end
+  local foundSoulCollector = {}
+  foundSoulCollector = self:countAllSoulCollector()
+  if nil ~= self.cachedSoulCollector and #self.cachedSoulCollector > 0 then
+    local loopCount = math.min(#foundSoulCollector, #self.cachedSoulCollector)
+    for ii = 1, loopCount do
+      if foundSoulCollector[ii].count ~= self.cachedSoulCollector[ii].count then
+        self.slotNo = foundSoulCollector[ii].slotNo
+        local nextSoulCollector = getInventoryItem(self.slotNo)
+        self.saveItemSSW = nextSoulCollector:getStaticStatus()
+        self.cachedSoulCollector = {}
+        WhereUseItemDirectionUpdate(self.saveItemSSW, self.slotNo, true)
+        break
+      end
+    end
+  else
+    self.cachedSoulCollector = self:countAllSoulCollector()
+    self.slot:setItemByStaticStatus(itemSSW, itemWrapper:get():getCount_s64(), -1, false, false, true, soulCount, soulMax, true)
+  end
+end
+function whereUseItem:countAllSoulCollector()
+  local selfPlayer = getSelfPlayer()
+  if nil == selfPlayer then
+    return
+  end
+  local invenUseSize = selfPlayer:get():getInventorySlotCount(false)
+  local countSoulCollector = 0
+  local countFullSoulCollector = 0
+  local foundSoulCollector = {}
+  for ii = __eTInventorySlotNoUseStart, invenUseSize + __eTInventorySlotNoUseStart do
+    local itemWrapper = getInventoryItem(ii)
+    if nil ~= itemWrapper and itemWrapper:isSoulCollector() then
+      local invenItemSSW = itemWrapper:getStaticStatus()
+      local monsterGroupKey = invenItemSSW:get()._contentsEventParam1
+      if self.currentMonsterGroupKey == monsterGroupKey then
+        foundSoulCollector[#foundSoulCollector + 1] = {
+          slotNo = ii,
+          count = itemWrapper:getSoulCollectorCount()
+        }
+        countSoulCollector = countSoulCollector + 1
+        local soulCount = itemWrapper:getSoulCollectorCount()
+        local soulMax = itemWrapper:getSoulCollectorMaxCount()
+        if soulCount >= soulMax then
+          countFullSoulCollector = countFullSoulCollector + 1
+        end
+      end
+    end
+  end
+  self.txt_soulCollector:SetText(tostring(countSoulCollector - countFullSoulCollector))
+  self.txt_soulCollectorFull:SetText(tostring(countFullSoulCollector))
+  return foundSoulCollector
 end
 function PcEnduranceToggle()
   if false == _ContentsGroup_RemasterUI_Main_Alert then
@@ -132,7 +212,6 @@ function whereUseItemDirectionPosition()
   end
 end
 function FGlobal_WhereUseITemDirectionOpen(itemSSW, slotNo)
-  local self = whereUseItem
   self.slotNo = slotNo
   whereUseItemDirectionPosition()
   WhereUseItemDirectionUpdate(itemSSW, slotNo, true)
@@ -146,7 +225,6 @@ function WhereUseItemDirectionClose()
   WhereUseItemDirectionSlotItemOff()
 end
 function WhereUseItemDirectionSlotItemOn()
-  local self = whereUseItem
   local itemStaticWrapper = getItemEnchantStaticStatus(self.currentItemKey)
   Panel_Tooltip_Item_Show(itemStaticWrapper, self.slot.icon, true, false)
 end

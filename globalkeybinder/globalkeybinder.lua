@@ -1733,19 +1733,6 @@ function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
     end
     return true
   end
-  if true == _ContentsGroup_RenewUI_Guild then
-    if true == PaGlobal_CheckGuildAgreement_DaliyPaymentUiEdit(uiEdit) then
-      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-        PaGlobal_CheckGuildAgreement_DaliyPaymentClearFocusEdit()
-      end
-      return true
-    elseif true == PaGlobal_CheckGuildAgreement_PenaltyCostUiEdit(uiEdit) then
-      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-        PaGlobal_CheckGuildAgreement_PenaltyCostClearFocusEdit()
-      end
-      return true
-    end
-  end
   if true == _ContentsGroup_RenewUI and true == PaGlobal_FriendNew_IsFriendAddEdit(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       PaGlobal_FriendNew:ClearAddFriendEdit()

@@ -201,11 +201,13 @@ function HarvestList_WorkManager_Open(index)
 end
 function FGlobal_HarvestList_Open()
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   Panel_HarvestList:SetShow(true, true)
   Panel_HarvestList_Update()
 end
 function HarvestList_Close()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   FGlobal_TentTooltipHide()
   Panel_HarvestList:SetShow(false, false)
 end

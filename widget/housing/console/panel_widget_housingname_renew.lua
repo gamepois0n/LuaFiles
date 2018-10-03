@@ -34,6 +34,7 @@ function Panel_Widget_HousingName_info:registerMessageHandler()
   registerEvent("FromClient_RenderModeChangeState", "PaGlobalFunc_HousingName_CheckHouseRender")
   registerEvent("EventHousingShowVisitHouse", "PaGlobalFunc_HousingName_EventHousingShowVisitHouse")
   registerEvent("FromClient_ChangeUnderwearModeInHouse", "FromClient_HousingName_ChangeUnderwearModeInHouse")
+  registerEvent("EventProcessorInputModeChange", "PaGlobalFunc_HousingName_InputModeChange")
   Panel_HouseName:RegisterUpdateFunc("PaGlobalFunc_HousingName_UpdatePerFrame")
 end
 function Panel_Widget_HousingName_info:initialize()
@@ -63,11 +64,11 @@ function Panel_Widget_HousingName_info:childControl()
   self._ui.staticText_Adress = UI.getChildControl(Panel_HouseName, "StaticText_Adress")
   self._ui.staticText_HousingPoint = UI.getChildControl(Panel_HouseName, "StaticText_HousingPoint")
   self._ui.static_InstallMode = UI.getChildControl(Panel_HouseName, "Static_InstallMode")
-  self._ui.static_Dpad_Up = UI.getChildControl(Panel_HouseName, "Static_InstallMode")
+  self._ui.static_Dpad_Up = UI.getChildControl(Panel_HouseName, "Static_Dpad_Up")
   self._ui.staticText_UnderWear = UI.getChildControl(Panel_HouseName, "StaticText_UnderWear")
-  self._ui.static_Dpad_Left = UI.getChildControl(Panel_HouseName, "Static_InstallMode")
+  self._ui.static_Dpad_Left = UI.getChildControl(Panel_HouseName, "Static_Dpad_Left")
   self._ui.static_Inventory = UI.getChildControl(Panel_HouseName, "Static_Inventory")
-  self._ui.static_DpadDown = UI.getChildControl(Panel_HouseName, "Static_InstallMode")
+  self._ui.static_DpadDown = UI.getChildControl(Panel_HouseName, "Static_DpadDown")
   self._ui.staticText_PetAndMade = UI.getChildControl(Panel_HouseName, "StaticText_PetAndMade")
   self._ui.static_DpadRight = UI.getChildControl(Panel_HouseName, "Static_DpadRight")
 end
@@ -317,5 +318,25 @@ function FromClient_HousingName_ChangeUnderwearModeInHouse(isUnderwearModeInHous
     self._ui.static_Dpad_Left:SetMonoTone(false)
     Panel_HouseName:registerPadEvent(__eConsoleUIPadEvent_Up_DpadLeft, "PaGlobalFunc_HousingName_ToggleHideWear()")
   end
+end
+function PaGlobalFunc_HousingName_InputModeChange(prevMode, currentMode)
+  local self = Panel_Widget_HousingName_info
+  if false == Panel_HouseName:GetShow() then
+    return
+  end
+  local isShow
+  if currentMode == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
+    isShow = true
+  else
+    isShow = false
+  end
+  self._ui.static_Dpad_Up:SetShow(isShow)
+  self._ui.static_Dpad_Left:SetShow(isShow)
+  self._ui.static_DpadDown:SetShow(isShow)
+  self._ui.static_DpadRight:SetShow(isShow)
+  self._ui.static_InstallMode:SetShow(isShow)
+  self._ui.staticText_UnderWear:SetShow(isShow)
+  self._ui.static_Inventory:SetShow(isShow)
+  self._ui.staticText_PetAndMade:SetShow(isShow)
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_HousingName_Init")

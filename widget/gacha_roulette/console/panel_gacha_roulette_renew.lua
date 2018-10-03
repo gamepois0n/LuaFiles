@@ -142,7 +142,7 @@ function gacha_Roulette_Ani(deltaTime)
   if self.rouletteState == RouletteState.eRoll then
     soundPlayTime = soundPlayTime + deltaTime
     if soundPlayTime > 0.076 then
-      audioPostEvent_SystemUi(11, 10)
+      _AudioPostEvent_SystemUiForXBOX(11, 10)
       soundPlayTime = 0
     end
     if self.elapsTime > 1 and not self.PressA:GetShow() then
@@ -271,7 +271,7 @@ function FGlobal_gacha_Roulette_OnPressSpace()
 end
 function FGlobal_gacha_Roulette_Stop()
   local self = gacha_Roulette
-  audioPostEvent_SystemUi(11, 12)
+  _AudioPostEvent_SystemUiForXBOX(11, 12)
   if self.rollMode == 0 and self.elapsTime < 1.2 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GACHA_ROULETTE_NOTYETFUNCTION"))
     return

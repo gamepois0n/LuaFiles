@@ -63,6 +63,7 @@ function HandleClicked_Extraction()
     self.control.effect_Arrow:SetShow(true)
     self.control.effect_Arrow:AddEffect("fUI_Extraction01", false)
     audioPostEvent_SystemUi(5, 11)
+    _AudioPostEvent_SystemUiForXBOX(5, 11)
     self._elapsTime = 0
   end
   local failCount = getSelfPlayer():get():getEnchantFailCount()

@@ -164,6 +164,7 @@ end
 function PaGlobal_TutorialPhase_InventoryAndQuickSlot:eventCallCompareInventoryBeginnerPotionItemKey(rClickedItemKey)
   if 2 == self._currentProgress and beginnerPotionItemKey == rClickedItemKey then
     audioPostEvent_SystemUi(4, 12)
+    _AudioPostEvent_SystemUiForXBOX(4, 12)
     self._currentProgress = self._currentProgress + 1
     self:handleChangeStep(self._currentStep)
   end

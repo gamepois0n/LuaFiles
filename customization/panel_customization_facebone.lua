@@ -48,6 +48,55 @@ local Button_Reset = UI.getChildControl(Panel_CustomizationTest, "Button_Reset")
 local Button_Save = UI.getChildControl(Panel_CustomizationTest, "Button_SaveXml")
 local Button_DebugRot = UI.getChildControl(Panel_CustomizationTest, "Button_DebugRot")
 local Edit_DebugRotControl = UI.getChildControl(Panel_CustomizationTest, "Edit_DebugRotControl")
+local Edit_PresetIndex = UI.getChildControl(Panel_CustomizationTest, "Edit_PresetIndex")
+function PaGlobalFunc_CustomizationForDev_SaveBodyPreset()
+  local index = Edit_PresetIndex:GetEditText()
+  if true == Edit_PresetIndex:GetFocusEdit() then
+    ClearFocusEdit()
+  end
+  local result = ToClient_CustomizationSaveBodyPreset(index)
+  if false == result then
+    _PA_LOG("Common", "\236\187\164\235\167\136 \237\148\132\235\166\172\236\133\139 \236\160\128\236\158\165 \236\139\164\237\140\168\237\150\136\236\138\181\235\139\136\235\139\164.")
+  end
+end
+function PaGlobalFunc_CustomizationForDev_LoadBodyPreset()
+  local index = Edit_PresetIndex:GetEditText()
+  if true == Edit_PresetIndex:GetFocusEdit() then
+    ClearFocusEdit()
+  end
+  local result = ToClient_CustomizationLoadBodyPreset(index)
+  if false == result then
+    _PA_LOG("Common", "\236\187\164\235\167\136 \237\148\132\235\166\172\236\133\139 \235\182\136\235\159\172\236\152\164\234\184\176 \236\139\164\237\140\168\237\150\136\236\138\181\235\139\136\235\139\164.")
+  end
+end
+function PaGlobalFunc_CustomizationForDev_SaveFacePreset()
+  local index = Edit_PresetIndex:GetEditText()
+  if true == Edit_PresetIndex:GetFocusEdit() then
+    ClearFocusEdit()
+  end
+  local result = ToClient_CustomizationSaveFacePreset(index)
+  if false == result then
+    _PA_LOG("Common", "\236\187\164\235\167\136 \237\148\132\235\166\172\236\133\139 \236\160\128\236\158\165 \236\139\164\237\140\168\237\150\136\236\138\181\235\139\136\235\139\164.")
+  end
+end
+function PaGlobalFunc_CustomizationForDev_LoadFacePreset()
+  local index = Edit_PresetIndex:GetEditText()
+  if true == Edit_PresetIndex:GetFocusEdit() then
+    ClearFocusEdit()
+  end
+  local result = ToClient_CustomizationLoadFacePreset(index)
+  if false == result then
+    _PA_LOG("Common", "\236\187\164\235\167\136 \237\148\132\235\166\172\236\133\139 \235\182\136\235\159\172\236\152\164\234\184\176 \236\139\164\237\140\168\237\150\136\236\138\181\235\139\136\235\139\164.")
+  end
+end
+local Button_AddPresetBody = UI.getChildControl(Panel_CustomizationTest, "Button_AddPresetBody")
+local Button_LoadPresetBody = UI.getChildControl(Panel_CustomizationTest, "Button_LoadPresetBody")
+Button_AddPresetBody:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomizationForDev_SaveBodyPreset()")
+Button_LoadPresetBody:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomizationForDev_LoadBodyPreset()")
+local Button_AddPresetFace = UI.getChildControl(Panel_CustomizationTest, "Button_AddPresetFace")
+local Button_LoadPresetFace = UI.getChildControl(Panel_CustomizationTest, "Button_LoadPresetFace")
+Button_AddPresetFace:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomizationForDev_SaveFacePreset()")
+Button_LoadPresetFace:addInputEvent("Mouse_LUp", "PaGlobalFunc_CustomizationForDev_LoadFacePreset()")
 local currentclassType = -1
 local currentuiId = -1
 RadioButton_Bone_Trans:SetCheck(true)

@@ -126,6 +126,7 @@ function QuickSlot_HideAni()
 end
 function QuickSlot_ItemCoolTimeEffect_HideAni()
   audioPostEvent_SystemUi(2, 4)
+  _AudioPostEvent_SystemUiForXBOX(2, 4)
   Panel_CoolTime_Effect_Item_Slot:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local coolTime_Item_Slot = Panel_CoolTime_Effect_Item_Slot:addColorAnimation(0, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   coolTime_Item_Slot:SetStartColor(UI_color.C_FFFFFFFF)
@@ -138,6 +139,7 @@ function QuickSlot_ItemCoolTimeEffect_HideAni()
 end
 function QuickSlot_SkillCoolTimeEffect_HideAni()
   audioPostEvent_SystemUi(2, 0)
+  _AudioPostEvent_SystemUiForXBOX(2, 0)
   Panel_CoolTime_Effect_Slot:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local coolTime_Slot = Panel_CoolTime_Effect_Slot:addColorAnimation(0, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   coolTime_Slot:SetStartColor(UI_color.C_FFFFFFFF)
@@ -433,6 +435,7 @@ function quickSlot:createSlot()
           Panel_Tooltip_Item_hideTooltip()
           self.item = nil
           audioPostEvent_SystemUi(0, 2)
+          _AudioPostEvent_SystemUiForXBOX(0, 2)
         elseif CppEnums.QuickSlotType.eSkill == self.slotType then
           UI.ASSERT(nil ~= self.skill)
           self.skill:destroyChild()
@@ -440,6 +443,7 @@ function quickSlot:createSlot()
           Panel_Tooltip_Item_hideTooltip()
           self.skill = nil
           audioPostEvent_SystemUi(0, 9)
+          _AudioPostEvent_SystemUiForXBOX(0, 9)
         end
         local index = self.index - 1
         if index == 0 then
@@ -522,6 +526,7 @@ function QuickSlot_DropHandler(slotIndex)
     quickSlot_Swap(slotIndex, DragManager.dragSlotInfo)
   end
   audioPostEvent_SystemUi(0, 8)
+  _AudioPostEvent_SystemUiForXBOX(0, 8)
   DragManager:clearInfo()
   return true
 end
@@ -594,11 +599,13 @@ function QuickSlot_Click(slotIndex)
   if nil ~= itemSlot then
     if nil ~= itemSlot.item and not itemSlot.item.cooltime:GetShow() then
       audioPostEvent_SystemUi(8, 2)
+      _AudioPostEvent_SystemUiForXBOX(8, 2)
       itemSlot.item.icon:AddEffect("fUI_SkillButton01", false, 0, 0)
       itemSlot.item.icon:AddEffect("UI_SkillButton01", false, 0, 0)
     end
     if nil ~= itemSlot.skill and not itemSlot.skill.cooltime:GetShow() then
       audioPostEvent_SystemUi(8, 2)
+      _AudioPostEvent_SystemUiForXBOX(8, 2)
       itemSlot.skill.icon:AddEffect("fUI_SkillButton01", false, 0, 0)
       itemSlot.skill.icon:AddEffect("UI_SkillButton01", false, 0, 0)
       local skillStaticWrapper = getSkillTypeStaticStatus(itemSlot.skill.skillNo)

@@ -25,6 +25,7 @@ function FGlobal_Panel_CompetitionGame_JoinDesc_Open()
   local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
   local isGuildLeader = isGuildMaster or isGuildSubMaster
   audioPostEvent_SystemUi(1, 18)
+  _AudioPostEvent_SystemUiForXBOX(1, 18)
   Panel_CompetitionGame_JoinDesc:SetShow(true)
   if true == isContentsArsha and true == isCanDoReservation then
     FGlobal_Panel_CompetitionGame_GuildReservation_Open()
@@ -33,6 +34,7 @@ end
 function FGlobal_Panel_CompetitionGame_JoinDesc_Close()
   local self = competitionGameJoinDesc
   audioPostEvent_SystemUi(1, 17)
+  _AudioPostEvent_SystemUiForXBOX(1, 17)
   Panel_CompetitionGame_JoinDesc:SetShow(false)
 end
 function FGlobal_Panel_CompetitionGame_JoinDesc_Join(isObserver)

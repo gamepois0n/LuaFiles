@@ -55,32 +55,40 @@ function send_WarMsgHandle(deltaTime)
       if 0 == msg[0] then
         panel_Effect:AddEffect("UI_CastleMinusLight", false, 0, 0)
         audioPostEvent_SystemUi(15, 2)
+        _AudioPostEvent_SystemUiForXBOX(15, 2)
       elseif 1 == msg[0] then
         panel_Effect:AddEffect("UI_CastlePlusLight", false, 0, 0)
         audioPostEvent_SystemUi(15, 1)
+        _AudioPostEvent_SystemUiForXBOX(15, 1)
       elseif 2 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Win", false, -19, 0)
         panel_Effect:AddEffect("fUI_SkillAwakenBoom", false, -19, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif 3 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Alarm", true, -16, -22)
         audioPostEvent_SystemUi(15, 3)
+        _AudioPostEvent_SystemUiForXBOX(15, 3)
       elseif 4 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Win", false, -19, 0)
         panel_Effect:AddEffect("fUI_SkillAwakenBoom", false, -19, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif 5 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Win_Green", false, -19, 0)
         panel_Effect:AddEffect("fui_skillawakenboom_green", false, -19, 0)
         audioPostEvent_SystemUi(15, 0)
+        _AudioPostEvent_SystemUiForXBOX(15, 0)
       elseif 6 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Win_Red", false, -19, 0)
         panel_Effect:AddEffect("fui_skillawakenboom_red", false, -19, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       elseif 7 == msg[0] then
         panel_Effect:AddEffect("UI_SiegeWarfare_Win_Red", false, -19, 0)
         panel_Effect:AddEffect("fui_skillawakenboom_red", false, -19, 0)
         audioPostEvent_SystemUi(15, 4)
+        _AudioPostEvent_SystemUiForXBOX(15, 4)
       end
       chanege_BG(panel_BG, msg[0])
       panel_MainMessage:SetText(msg[1])
@@ -460,6 +468,7 @@ end
 create_TWKScore_Panel()
 local function TWKScore_Open(panel)
   audioPostEvent_SystemUi(4, 4)
+  _AudioPostEvent_SystemUiForXBOX(4, 4)
   panel:SetShow(true, false)
   panel:ResetVertexAni()
   panel:SetScaleChild(1, 1)

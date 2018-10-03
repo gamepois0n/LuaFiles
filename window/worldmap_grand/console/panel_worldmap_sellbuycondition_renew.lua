@@ -83,7 +83,7 @@ function Window_WorldMap_SellBuyHouseInfo:AllButtonCondition()
   if true == self._isSell then
     self._ui._radiobutton_All:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_SellBuyHouse_AllSell()")
   elseif explorePoint:getRemainedPoint() < self._totalValue then
-    self._ui._radiobutton_All:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_HOUSECONTROL_BTN_LOWPOINT"))
+    self._ui._radiobutton_All:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_HOUSECONTROL_BTN_LOWPOINT"))
     self._ui._radiobutton_All:SetMonoTone(true)
     self._isMonotone = true
     self._ui._radiobutton_All:addInputEvent("Mouse_LUp", "")

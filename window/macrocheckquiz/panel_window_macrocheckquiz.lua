@@ -51,6 +51,7 @@ local PaGlobal_MacroCheckQuiz = {
 function OpenMacroCheckQuiz()
   PaGlobal_MacroCheckQuiz:reset()
   audioPostEvent_SystemUi(8, 16)
+  _AudioPostEvent_SystemUiForXBOX(8, 16)
   PaGlobal_MacroCheckQuiz:questionSetting()
   PaGlobal_MacroCheckQuiz:keyShuffle()
   Panel_Window_MacroCheckQuiz:SetShow(true, true)

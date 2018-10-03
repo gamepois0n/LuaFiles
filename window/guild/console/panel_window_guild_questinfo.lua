@@ -18,6 +18,7 @@ local GuildQuestInfo = {
   _defaultSlotCount = 12,
   _slotStartXPos = 30,
   _slotXGap = 50,
+  _descStartYPos = 0,
   _isProgressingQuest = false
 }
 function GuildQuestInfo:init()
@@ -32,6 +33,7 @@ function GuildQuestInfo:init()
   self._ui.txt_YConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y_ConsoleUI")
   self._ui.txt_AcceptConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_AcceptConsoleUI")
   self._ui.txt_AConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTACQUIRE_COMPLETE"))
+  self._descStartYPos = self._ui.txt_Desc:GetPosY()
   self:initRewardSlot()
   self:registEvent()
 end
@@ -76,6 +78,7 @@ function GuildQuestInfo:update()
   end
   self._ui.txt_QuestTitle:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_QUEST_LIMIT", "currentGuildQuestName", questInfo:getTitle(), "requireGuildRankStr", requireGuildRankStr))
   self._ui.txt_Condition:SetShow(false)
+  self._ui.txt_Desc:SetPosY(self._descStartYPos - 50)
   self._ui.txt_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_Desc:SetText(questInfo:getDesc())
   local isShowPreOcc = PaGlobalFunc_GuildQuestList_GetIsShowingPreOccInfo()
@@ -139,6 +142,7 @@ function GuildQuestInfo:updateProgressingQuest()
   end
   self._ui.txt_Condition:SetText(conditionStr)
   self._ui.txt_Condition:SetShow(true)
+  self._ui.txt_Desc:SetPosY(self._descStartYPos + (questConditionCount - 1) * 25)
   self._ui.txt_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.txt_Desc:SetText(ToClient_getCurrentGuildQuestDesc())
   self._ui.txt_Time:SetShow(false)
@@ -154,6 +158,7 @@ function GuildQuestInfo:updateProgressingQuest()
     end
   end
   self._ui.txt_AConsoleUI:SetShow(false)
+  self._ui.txt_AcceptConsoleUI:SetShow(false)
   self._ui.txt_AConsoleUI:addInputEvent("Mouse_LUp", "")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
   if true == ToClient_isSatisfyCurrentGuildQuest() and (getSelfPlayer():get():isGuildMaster() or getSelfPlayer():get():isGuildSubMaster()) then

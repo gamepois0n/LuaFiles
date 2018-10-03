@@ -86,12 +86,12 @@ function MiniGame_HerbMachine:endUIShow_HerbMachine(controlText, controlResult, 
   controlResult:SetVertexAniRun(aniText .. "_ScaleAni", true)
 end
 function MiniGame_HerbMachine:successUIShow()
-  audioPostEvent_SystemUi(11, 1)
+  _AudioPostEvent_SystemUiForXBOX(11, 1)
   self:endUIShow_HerbMachine(self._ui.txt_Result, self._ui.stc_Result_Good, UI_color.C_FF96D4FC, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_HerbMachine_0"), "Good")
 end
 function MiniGame_HerbMachine:failedUIShow_HerbMachine()
   isWin = false
-  audioPostEvent_SystemUi(11, 2)
+  _AudioPostEvent_SystemUiForXBOX(11, 2)
   self:endUIShow_HerbMachine(self._ui.txt_Result, self._ui.stc_Result_Bad, UI_color.C_FFF26A6A, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_HerbMachine_1"), "Bad")
 end
 function MiniGame_HerbMachine:timing_update_HerbMachine(deltaTime)
@@ -250,7 +250,7 @@ function Panel_Minigame_HerbMachine_Freeze(keyType)
     sumTime = 0
     isWin = minValue <= checkPos and maxValue >= checkPos
     if isWin then
-      audioPostEvent_SystemUi(11, 1)
+      _AudioPostEvent_SystemUiForXBOX(11, 1)
       self:endUIShow_HerbMachine(self._ui.txt_Result, self._ui.stc_Result_Good, UI_color.C_FF96D4FC, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_HerbMachine_0"), "Good")
       herbMachine_WinCount = herbMachine_WinCount + 1
       if herbMachine_WinCount >= 5 then
@@ -258,7 +258,7 @@ function Panel_Minigame_HerbMachine_Freeze(keyType)
       end
       getSelfPlayer():get():SetMiniGameResult(0)
     else
-      audioPostEvent_SystemUi(11, 2)
+      _AudioPostEvent_SystemUiForXBOX(11, 2)
       self:endUIShow_HerbMachine(self._ui.txt_Result, self._ui.stc_Result_Bad, UI_color.C_FFF26A6A, PAGetString(Defines.StringSheet_GAME, "Lua_Minigame_HerbMachine_1"), "Bad")
       getSelfPlayer():get():SetMiniGameResult(1)
     end

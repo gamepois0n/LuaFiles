@@ -637,6 +637,9 @@ function FGlobal_InventoryIsClosing()
   return self._isClosing
 end
 function InventoryWindow_Close()
+  if true == PaGlobalFunc_ExchangePC_GetShow() then
+    return
+  end
   local self = inven
   self:setClosingFlag(true)
   if nil ~= PaGlobalFunc_ServantIcon_MaidCoolUpdate then

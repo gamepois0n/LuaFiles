@@ -1,7 +1,7 @@
+local _cancelByAttackIsCalled = false
 function PaGlobalFunc_CancelByAttackIsCalled()
   return _cancelByAttackIsCalled
 end
-local _cancelByAttackIsCalled = false
 function FromClient_CancelByAttacked()
   if not _ContentsGroup_RenewUI_Chatting and not AllowChangeInputMode() then
     return
@@ -64,6 +64,7 @@ function FromClient_CancelByAttacked()
   end
   if isPhotoMode() then
     audioPostEvent_SystemUi(8, 14)
+    _AudioPostEvent_SystemUiForXBOX(8, 14)
   end
   HandleClicked_HouseInstallation_Exit_ByAttacked()
   FGlobal_AgreementGuild_Close()

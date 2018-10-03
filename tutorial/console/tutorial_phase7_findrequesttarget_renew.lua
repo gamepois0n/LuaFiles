@@ -147,11 +147,13 @@ function PaGlobal_TutorialPhase_FindRequestTarget:eventCallShowQuestNewWindow(is
   if true == isShow then
     if 1 == self._currentProgress then
       audioPostEvent_SystemUi(4, 12)
+      _AudioPostEvent_SystemUiForXBOX(4, 12)
       self._currentProgress = self._currentProgress + 1
       self:handleChangeStep(self._currentStep)
     end
   elseif false == isShow and 2 == self._currentProgress then
     audioPostEvent_SystemUi(4, 12)
+    _AudioPostEvent_SystemUiForXBOX(4, 12)
     self._currentProgress = self._currentProgress + 1
     self:handleChangeStep(self._currentStep)
   end

@@ -88,6 +88,7 @@ function Panel_Looting_Update(empty)
   if true == _ContentsGroup_RenewUI then
     looting_pickAllItemToPlayer()
     audioPostEvent_SystemUi(3, 9)
+    _AudioPostEvent_SystemUiForXBOX(3, 9)
     return
   end
   if 1 == empty then
@@ -135,6 +136,7 @@ function Panel_Looting_PickupBySlot(slotNo)
     Panel_NumberPad_Show(true, s64_count, slotNo, Panel_Looting_Pickup)
   end
   audioPostEvent_SystemUi(3, 6)
+  _AudioPostEvent_SystemUiForXBOX(3, 6)
 end
 function Panel_Looting_Pickup(s64_count, slotNo)
   looting_slotClick(slotNo, s64_count)
@@ -155,6 +157,7 @@ function Panel_Looting_buttonLootAll_Mouse_Click(isMouseEvent)
   looting.selectSlotNo = -1
   looting_pickAllItemToPlayer()
   audioPostEvent_SystemUi(3, 9)
+  _AudioPostEvent_SystemUiForXBOX(3, 9)
 end
 function Panel_Looting_buttonLootAllToServant_Mouse_Click()
   looting.selectSlotNo = -1

@@ -58,6 +58,7 @@ function FGlobal_GuildWebInfo_Open(listIdx)
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
   local userNo = selfPlayer:get():getUserNo()
@@ -163,6 +164,7 @@ function FGlobal_GuildWebInfoForGuildRank_Open(guildNo_string)
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local userNo = selfPlayer:get():getUserNo()
   local cryptKey = selfPlayer:get():getWebAuthenticKeyCryptString()
   local playerLevel = selfPlayer:get():getLevel()
@@ -202,6 +204,7 @@ function FGlobal_GuildWebInfoByName_Open()
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
   local userNo = selfPlayer:get():getUserNo()
@@ -314,6 +317,7 @@ function FGlobal_GuildWebInfoFromGuildMain_Open()
     return
   end
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
   local userNo = selfPlayer:get():getUserNo()
@@ -415,6 +419,7 @@ function GuildWebInfo_Close()
   _Web:ResetUrl()
   ClearFocusEdit()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_GuildWebInfo:SetShow(false, false)
 end
 function FGlobal_GuildWebInfoClose()

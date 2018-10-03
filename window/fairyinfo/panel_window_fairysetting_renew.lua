@@ -350,6 +350,7 @@ function PaGlobal_FairySetting_Open(petNoStr)
   self:Clear()
   self:SetPos()
   audioPostEvent_SystemUi(1, 40)
+  _AudioPostEvent_SystemUiForXBOX(1, 40)
   Panel_Window_FairySetting:SetShow(true)
   self:UpdateSetting(true)
 end

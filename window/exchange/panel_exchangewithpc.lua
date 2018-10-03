@@ -170,7 +170,24 @@ function exchangePC:Init()
   end
   exchangePC._EnchantText:SetShow(false)
 end
+function exchangePC:close()
+  if Panel_Window_Exchange:IsShow() then
+    Panel_Window_Exchange:SetShow(false, true)
+  end
+  InventoryWindow_Close()
+  Inventory_SetFunctor(nil, nil, nil, nil)
+  Interaction_Reset()
+end
+function PaGlobalFunc_ExchangePC_Close()
+  exchangePC:close()
+end
+function PaGlobalFunc_ExchangePC_GetShow()
+  return Panel_Window_Exchange:IsShow()
+end
 function Panel_ExchangePC_Update_Slot()
+  if true == Panel_Window_Exchange:IsShow() then
+    FromClient_EnablePCExChangeButton()
+  end
   local otherSlotCount = 0
   local _otherSlot = {}
   for ii = 1, exchangePC.MAX_SLOT_COUNT do
@@ -294,6 +311,7 @@ function ExchangePC_MessageBox_RequestConfirm()
   tradePC_Request(true)
 end
 function ExchangePC_MessageBox_RequestCancel()
+  FromClient_EnablePCExChangeButton()
   tradePC_Request(false)
 end
 function ExchangePC_MessageBox_ResponseConfirm()
@@ -330,21 +348,13 @@ function ExchangePC_InventoryRClick(slotNo, itemWrapper, itemCount, inventoryTyp
   end
 end
 function ExchangePC_MessageBox_ResponseCancel()
+  FromClient_EnablePCExChangeButton()
   tradePC_Cancel()
-  InventoryWindow_Close()
-  Inventory_SetFunctor(nil, nil, nil, nil)
-  if Panel_Window_Exchange:IsShow() then
-    Panel_Window_Exchange:SetShow(false, true)
-  end
+  exchangePC:close()
 end
 function ExchangePc_MessageBox_CloseConfirm()
   tradePC_Cancel()
-  InventoryWindow_Close()
-  Inventory_SetFunctor(nil, nil, nil, nil)
-  Interaction_Reset()
-  if Panel_Window_Exchange:IsShow() then
-    Panel_Window_Exchange:SetShow(false, true)
-  end
+  exchangePC:close()
 end
 function ExChangePC_ChangeMoney(inputNumber, param)
   tradePC_ChangeMoney(inputNumber)
@@ -388,11 +398,7 @@ function EventTradePC_ReceiveOtherPlayerRequest(actorName)
   MessageBox.showMessageBox(messageboxData)
 end
 function EventTradePC_ReceiveCancel(reason)
-  InventoryWindow_Close()
-  Inventory_SetFunctor(nil, nil, nil, nil)
-  if Panel_Window_Exchange:IsShow() then
-    Panel_Window_Exchange:SetShow(false, true)
-  end
+  exchangePC:close()
   local contentString = reason
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "EXCHANGE_TEXT_TITLE"),
@@ -401,13 +407,10 @@ function EventTradePC_ReceiveCancel(reason)
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
+  FromClient_EnablePCExChangeButton()
 end
 function Panel_ExchangePC_Complete()
-  InventoryWindow_Close()
-  Inventory_SetFunctor(nil, nil, nil, nil)
-  if Panel_Window_Exchange:IsShow() then
-    Panel_Window_Exchange:SetShow(false, true)
-  end
+  exchangePC:close()
   local contentString = PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_COMPLETE")
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "EXCHANGE_TEXT_TITLE"),
@@ -416,6 +419,7 @@ function Panel_ExchangePC_Complete()
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
+  FromClient_EnablePCExChangeButton()
 end
 function EventTradePC_IsAbleTradingWithPlayer()
   return true
@@ -426,7 +430,7 @@ function Panel_ExchangePC_BtnClose_Mouse_Click()
     title = PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_TITLE"),
     content = contentString,
     functionYes = ExchangePc_MessageBox_CloseConfirm,
-    functionCancel = MessageBox_Empty_function,
+    functionCancel = FromClient_EnablePCExChangeButton,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
@@ -475,5 +479,6 @@ registerEvent("EventTradePCReceiveOtherPlayerRequest", "EventTradePC_ReceiveOthe
 registerEvent("EventTradePCReceiveCancel", "EventTradePC_ReceiveCancel")
 registerEvent("EventTradePCUpdateSlots", "Panel_ExchangePC_Update_Slot")
 registerEvent("EventTradePCComplete", "Panel_ExchangePC_Complete")
+registerEvent("FromClient_ClosePCExChange", "PaGlobalFunc_ExchangePC_Close")
 registerEvent("Event_IsAbleTradingWithPlayer", "EventTradePC_IsAbleTradingWithPlayer")
 exchangePC:Init()

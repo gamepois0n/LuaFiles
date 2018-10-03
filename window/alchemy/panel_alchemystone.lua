@@ -505,6 +505,7 @@ function HandleClicked_AlchemyStone_Doit()
   AlchemyStone.control.btn_Doit:SetMonoTone(AlchemyStone.isPushDoit)
   AlchemyStone.control.btn_Doit:SetEnable(not AlchemyStone.isPushDoit)
   audioPostEvent_SystemUi(1, 43)
+  _AudioPostEvent_SystemUiForXBOX(1, 43)
 end
 function HandleClicked_AlchemyStone_Close()
   Panel_AlchemyStone:SetShow(false)
@@ -928,10 +929,13 @@ function Panel_AlchemyStone_updateTime(deltaTime)
       AlchemyStone.startEffectPlay = true
       if AlchemyStoneTab.Charge == doItType then
         audioPostEvent_SystemUi(13, 16)
+        _AudioPostEvent_SystemUiForXBOX(13, 16)
       elseif AlchemyStoneTab.Exp == doItType then
         audioPostEvent_SystemUi(13, 16)
+        _AudioPostEvent_SystemUiForXBOX(13, 16)
       elseif AlchemyStoneTab.Upgrade == doItType then
         audioPostEvent_SystemUi(13, 17)
+        _AudioPostEvent_SystemUiForXBOX(13, 17)
       end
       if AlchemyStoneTab.Upgrade == doItType then
         AlchemyStone.control.upgradeSlotBg:AddEffect("fUI_Alchemy_Stone_Upgrade03", false)

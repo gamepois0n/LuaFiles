@@ -1553,7 +1553,7 @@ function InventoryInfo:close()
     self._otherWindowOpenFunc = nil
     callFunc()
   end
-  Inventory_SetFunctor(nil, nil, nil, nil)
+  Inventory_SetFunctor(nil, nil, nil, nil, nil)
   _panel:SetShow(false, false)
   if Defines.UIMode.eUIMode_Default == GetUIMode() and _ContentsGroup_RenewUI_Quest and false == PaGlobalFunc_Quest_GetShow() then
     FGlobal_Panel_Radar_Show(true, false)
@@ -3945,17 +3945,20 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
       if nil ~= optionalPadEvent.keyGuideString then
         self._ui.txt_keyGuideSetFunctorAlterKey:SetText(tostring(optionalPadEvent.keyGuideString))
       end
-    else
-      if nil ~= self._optionalPadEventButton then
-        _panel:registerPadEvent(self._optionalPadEventButton, "")
-      end
-      self._optionalPadEventFunc = nil
-      self._optionalPadEventButton = nil
-      self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(false)
     end
   else
     self._ui.stc_keyGuideSetFunctor:SetShow(false)
     self._ui.stc_keyGuide:SetShow(true)
+  end
+  if nil == optionalPadEvent then
+    if nil ~= self._optionalPadEventButton then
+      _panel:registerPadEvent(self._optionalPadEventButton, "")
+      _PA_LOG("\235\176\149\235\178\148\236\164\128", "unregister pad event y")
+    end
+    _PA_LOG("\235\176\149\235\178\148\236\164\128", "set _optionalPadEventButton nil")
+    self._optionalPadEventFunc = nil
+    self._optionalPadEventButton = nil
+    self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(false)
   end
   self._otherWindowOpenFunc = otherWindowOpenFunction
   self._rClickFunc = rClickFunction

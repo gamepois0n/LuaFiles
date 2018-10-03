@@ -147,6 +147,9 @@ function PaGlobalFunc_ExpeditionRewardItemInfo_ReceiveItem(isAll)
       end
     end
   end
+  for ii = 0, self._config._rewardItemMaxCount - 1 do
+    self._selectItemEnchantKeyList[ii] = nil
+  end
 end
 function FromClient_ExpeditionRewardItemInfo_Initialize()
   expeditionRewardItemInfo:initialize()

@@ -2,11 +2,10 @@ function ResetPos_WidgetButton()
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 AlwaysOpenType = {
-  eALERT_Menu = 0,
-  eALERT_PearlShop = 1,
-  eALERT_PcRoomReward = 2,
-  eALERT_MarketPlace = 3,
-  count = 4
+  eALERT_PearlShop = 0,
+  eALERT_PcRoomReward = 1,
+  eALERT_MarketPlace = 2,
+  count = 3
 }
 AlertType = {
   eALERT_Hunting = 0,
@@ -52,7 +51,6 @@ local Panel_Widget_Alert_info = {
     Button_EnduranceCarriage = nil,
     Button_EnduranceShip = nil,
     Button_BatterEquipment = nil,
-    Button_Menu = nil,
     Button_CashShop = nil,
     Button_PcRoomReward = nil,
     StaticText_PcRoomRewardTime = nil,
@@ -347,9 +345,6 @@ function Panel_Widget_Alert_info:registEventHandler()
       end
     end
   end
-  self._ui.Button_Menu:addInputEvent("Mouse_LUp", "Panel_Menu_ShowToggle()")
-  self._ui.Button_Menu:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 4 .. ")")
-  self._ui.Button_Menu:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_CashShop:addInputEvent("Mouse_LUp", "GlobalKeyBinder_MouseKeyMap(18)")
   self._ui.Button_CashShop:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 1 .. ")")
   self._ui.Button_CashShop:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
@@ -436,7 +431,6 @@ function Panel_Widget_Alert_info:childControl()
   self._ui.Button_EnduranceCarriage = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceCarriage")
   self._ui.Button_EnduranceShip = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceShip")
   self._ui.Button_BatterEquipment = UI.getChildControl(self._ui.Static_Bg, "Button_BatterEquipment")
-  self._ui.Button_Menu = UI.getChildControl(self._ui.Static_Bg, "Button_Menu")
   self._ui.Button_CashShop = UI.getChildControl(self._ui.Static_Bg, "Button_CashShop")
   self._ui.Button_PcRoomReward = UI.getChildControl(self._ui.Static_Bg, "Button_PCRoomReward")
   self._ui.StaticText_PcRoomRewardTime = UI.getChildControl(self._ui.Button_PcRoomReward, "StaticText_Desc")
@@ -676,10 +670,6 @@ function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
     uiControl = self._ui.Button_MarketPlace
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_8")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_9")
-  elseif 4 == buttonType then
-    uiControl = self._ui.Button_Menu
-    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_TITLE")
-    desc = nil
   else
     return
   end
@@ -1243,23 +1233,12 @@ function PaGlobalFunc_Widget_Alert_CheckReal_BatterEquipment()
 end
 function PaGlobalFunc_Widget_Alert_Check_Pos()
   local self = Panel_Widget_Alert_info
-  local spanX = 0
-  if getGamePadEnable() then
-    self._ui.Button_Menu:SetShow(true)
-    spanX = spanX + 40
-  else
-    self._ui.Button_Menu:SetShow(false)
-  end
-  if self._ui.Button_CashShop:GetShow() then
-    self._ui.Button_CashShop:SetSpanSize(spanX, 0)
-    spanX = spanX + 40
-  end
+  local spanX = 40
   if self._ui.Button_PcRoomReward:GetShow() then
-    self._ui.Button_PcRoomReward:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
+  self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
   if self._ui.Button_MarketPlace:GetShow() then
-    self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
   self._ui.Button_Spread:SetSpanSize(spanX, 0)

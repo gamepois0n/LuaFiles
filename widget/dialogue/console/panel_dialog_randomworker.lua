@@ -290,7 +290,6 @@ function FGlobalFunc_NextWorker_RandomWorker()
   randomWorker:getNextWorker()
 end
 function randomWorker:changeWorkerCount()
-  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIRE_WORKER"))
 end
 function FromClient_ChangeWorkerCount()
   randomWorker:changeWorkerCount()

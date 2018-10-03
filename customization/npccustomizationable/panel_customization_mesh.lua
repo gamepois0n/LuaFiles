@@ -196,7 +196,6 @@ end
 function UpdateMeshIndex()
   local luaSelectedItemIndex = selectedItemIndex + 1
   local selectedParamValue = paramValueList[luaSelectedItemIndex]
-  wizardFaceHairCheck()
   setParam(selectedListParamType, selectedListParamIndex, selectedParamValue)
   UpdateSelectedMark(selectedItemIndex)
   applyInitializeToGroupCustomizedBoneInfo()

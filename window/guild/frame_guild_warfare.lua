@@ -306,6 +306,10 @@ function GuildWarfareInfoPage:SetGuildList()
       name = myGuildMemberInfo:getName(),
       killBySiege = myGuildMemberInfo:killBySiegeWeaponCount()
     }
+    if _ContentsGroup_NewSiegeRule then
+      local killCount = myGuildMemberInfo:guildMasterCount() + myGuildMemberInfo:squadLeaderCount() + myGuildMemberInfo:squadMemberCount()
+      tempGuildWarfareList[index].member = killCount
+    end
   end
 end
 local function guildListCompareCommandCenter(w1, w2)

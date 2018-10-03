@@ -44,6 +44,7 @@ Panel_IngameCashShop_TermsofDaumCash_Initialize()
 function termsofDaumCash_FirstUsePearl_Open(type)
   local self = termsofDaumCash
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local url = ""
   if isGameServiceTypeKorReal() then
     if 0 == type then
@@ -68,6 +69,7 @@ end
 function termsofDaumCash_Close()
   _Web:ResetUrl()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_IngameCashShop_TermsofDaumCash:SetShow(false, false)
 end
 function HandleClicked_TermsofDaumCash_Close()

@@ -36,7 +36,7 @@ function FromClient_NewMailAlarm_UpdatePerFrame(deltaTime)
   end
 end
 function FromClient_NewMailAlarm()
-  audioPostEvent_SystemUi(10, 1)
+  _AudioPostEvent_SystemUiForXBOX(10, 1)
   local self = NewMailAlarm
   self._animationTime = 0
   _panel:SetShow(true)

@@ -42,6 +42,7 @@ end
 Panel_EventNotifyContent_Initialize()
 function FGlobal_EventNotifyContent_Open(eventIndex)
   audioPostEvent_SystemUi(13, 6)
+  _AudioPostEvent_SystemUiForXBOX(13, 6)
   local url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
   if isGameTypeKorea() then
     url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
@@ -75,6 +76,10 @@ function FGlobal_EventNotifyContent_Open(eventIndex)
     elseif CppEnums.CountryType.ID_REAL == getGameServiceType() then
       url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_ID", "index", eventIndex)
     end
+  elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
+    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_RUS_ALPHA", "index", eventIndex)
+  elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
+    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_RUS", "index", eventIndex)
   else
     url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
   end
@@ -94,6 +99,7 @@ end
 function EventNotifyContent_Close()
   _Web:ResetUrl()
   audioPostEvent_SystemUi(13, 5)
+  _AudioPostEvent_SystemUiForXBOX(13, 5)
   Panel_EventNotifyContent:SetShow(false, false)
 end
 function HandleClicked_EventNotifyContent_Close()
