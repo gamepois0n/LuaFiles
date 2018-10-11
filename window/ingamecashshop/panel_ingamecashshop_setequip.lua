@@ -498,6 +498,7 @@ local CashShopController = {
   btn_Coupon = UI.getChildControl(Panel_IngameCashShop_Controller, "Button_Coupon"),
   btn_StampCoupon = UI.getChildControl(Panel_IngameCashShop_Controller, "Button_StampCoupon"),
   btn_FirstIgnore = UI.getChildControl(Panel_IngameCashShop_Controller, "Button_FirstIgnore"),
+  btn_SaleGoods = UI.getChildControl(Panel_IngameCashShop_Controller, "Button_SaleGoods"),
   btn_AllDoff = UI.getChildControl(Panel_IngameCashShop_Controller, "Button_AllDoff"),
   isLdown = false,
   isRdown = false,
@@ -633,6 +634,9 @@ function CashShopController:Initialize()
   local _btn_FirstIgnoreSizeX = self.btn_FirstIgnore:GetSizeX() + 23
   local _btn_FirstIgnoreTextSizeX = _btn_FirstIgnoreSizeX - _btn_FirstIgnoreSizeX / 2 - self.btn_FirstIgnore:GetTextSizeX() / 2
   self.btn_FirstIgnore:SetTextSpan(_btn_FirstIgnoreTextSizeX, 4)
+  local _btn_SaleGoodsSizeX = self.btn_SaleGoods:GetSizeX() + 23
+  local _btn_SaleGoodsTextSizeX = _btn_SaleGoodsSizeX - _btn_SaleGoodsSizeX / 2 - self.btn_SaleGoods:GetTextSizeX() / 2
+  self.btn_SaleGoods:SetTextSpan(_btn_SaleGoodsTextSizeX, 4)
   if isGameTypeKR2() then
     self.static_SetOptionEnduranceBG:SetShow(false)
     self.txt_Endurance:SetShow(false)
@@ -700,6 +704,7 @@ function CashShopController:Open()
   self.btn_OpenHelm:SetCheck(isHelmOpen)
   self.btn_Coupon:SetSpanSize(10, 90)
   self.btn_StampCoupon:SetSpanSize(10, 130)
+  self.btn_SaleGoods:SetSpanSize(10, 170)
   local isFirstIgnore = getIngameCashMall():isFirstIgnore()
   self.btn_FirstIgnore:SetCheck(isFirstIgnore)
   self.btn_FirstIgnore:SetSpanSize(10, 130)
@@ -868,6 +873,7 @@ function CashShopController:SetPosition()
   self.btn_Coupon:ComputePos()
   self.btn_StampCoupon:ComputePos()
   self.btn_FirstIgnore:ComputePos()
+  self.btn_SaleGoods:ComputePos()
   self.cameraControlBG:ComputePos()
   CashShopController:ResetViewCharacterPosition()
 end
@@ -907,12 +913,14 @@ function HandleClicked_CashShopController_SetSpecialMove()
     self.btn_Coupon:SetSpanSize(10, 140)
     self.btn_StampCoupon:SetSpanSize(10, 180)
     self.btn_FirstIgnore:SetSpanSize(10, 180)
+    self.btn_SaleGoods:SetSpanSize(10, 220)
     self.SunIcon:SetCheck(false)
     HandleClicked_SunShineToggle()
   else
     self.btn_Coupon:SetSpanSize(10, 90)
     self.btn_StampCoupon:SetSpanSize(10, 130)
     self.btn_FirstIgnore:SetSpanSize(10, 130)
+    self.btn_SaleGoods:SetSpanSize(10, 170)
   end
   if 1 == characterAnimationCount then
     if specialMoveCheck then
@@ -1225,10 +1233,12 @@ function HandleClicked_SunShineToggle()
     self.btn_Coupon:SetSpanSize(10, 140)
     self.btn_StampCoupon:SetSpanSize(10, 180)
     self.btn_FirstIgnore:SetSpanSize(10, 180)
+    self.btn_SaleGoods:SetSpanSize(10, 220)
   else
     self.btn_Coupon:SetSpanSize(10, 90)
     self.btn_StampCoupon:SetSpanSize(10, 130)
     self.btn_FirstIgnore:SetSpanSize(10, 130)
+    self.btn_SaleGoods:SetSpanSize(10, 170)
   end
   if self.btn_SpecialMove1:GetShow() then
     self.btn_SpecialMove1:SetShow(false)
@@ -1338,10 +1348,12 @@ function FGlobal_SpecialMoveSettingCheck()
     self.btn_Coupon:SetSpanSize(10, 140)
     self.btn_FirstIgnore:SetSpanSize(10, 180)
     self.btn_StampCoupon:SetSpanSize(10, 180)
+    self.btn_SaleGoods:SetSpanSize(10, 220)
   else
     self.btn_Coupon:SetSpanSize(10, 90)
     self.btn_FirstIgnore:SetSpanSize(10, 130)
     self.btn_StampCoupon:SetSpanSize(10, 130)
+    self.btn_SaleGoods:SetSpanSize(10, 170)
   end
 end
 function FGlobal_SpecialMoveSettingNoShow()
@@ -1448,6 +1460,7 @@ function CashShopController:registEventHandler()
   self.btn_Coupon:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_Open()")
   self.btn_StampCoupon:addInputEvent("Mouse_LUp", "FromClient_PearlStampShow()")
   self.btn_FirstIgnore:addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_FirstIgnore()")
+  self.btn_SaleGoods:addInputEvent("Mouse_LUp", "InGameShop_GotoSaleTab()")
 end
 function CashShopController:registMessageHandler()
   registerEvent("onScreenResize", "FromClient_CashShopController_Resize")

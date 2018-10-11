@@ -42,7 +42,10 @@ local warehouseProductWaypoint = {
   1314,
   1319,
   1623,
-  1604
+  1604,
+  604,
+  1380,
+  1649
 }
 local _wareHouse_HelpMovie = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Window_Warehouse, "Static_ClassMovie")
 local _wareHouse_HelpMovie_Btn = UI.getChildControl(Panel_Window_Warehouse, "Static_MoviePlayButton")
@@ -218,7 +221,7 @@ function warehouse:update()
     if ii < useMaxCount - useStartSlot - self._startSlotIndex then
       slot.empty:SetShow(true)
     elseif ii == useMaxCount - useStartSlot - self._startSlotIndex then
-      if isGameTypeKorea() then
+      if isGameTypeKorea() or isGameTypeEnglish() then
         if self.slots[ii].icon:GetShow() then
           local isBuyalbe = false
           if warehouse:isNpc() then
@@ -917,7 +920,7 @@ function Warehouse_LDownClick(index)
   local function Execute_EasyBuy()
     PaGlobal_EasyBuy:Open(17, self.savedWayPointKey)
   end
-  if index == useMaxCount - useStartSlot - self._startSlotIndex and isGameTypeKorea() then
+  if index == useMaxCount - useStartSlot - self._startSlotIndex and (isGameTypeKorea() or isGameTypeEnglish()) then
     local maxCount = warehouseWrapper:getMaxCount()
     local leftCount = maxCount - useMaxCount
     local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_EASYBUY") .. [[

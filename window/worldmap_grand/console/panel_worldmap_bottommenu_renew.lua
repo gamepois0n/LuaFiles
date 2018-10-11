@@ -50,8 +50,17 @@ local Window_WorldMap_BottomMenuInfo = {
     [15] = CppEnums.SpawnType.eSpawnType_Worker,
     [16] = CppEnums.SpawnType.eSpawnType_ItemMarket
   },
-  _currentIndex = 0
+  _colorConfig = {
+    _on = Defines.Color.C_00FFFFFF,
+    _off = Defines.Color.C_00FF0000
+  },
+  _currentNPCIndex = 0,
+  _currentBookMarkIndex = 0
 }
+function PaGlobalFunc_WorldMap_BottomMenu_GetBookMarkIndex()
+  local self = Window_WorldMap_BottomMenuInfo
+  return self._currentBookMarkIndex
+end
 function Window_WorldMap_BottomMenuInfo:InitControl()
   self._ui._staticText_BookMarkTitle = UI.getChildControl(self._ui._static_LeftBg, "StaticText_MainTitle")
   self._ui._staticText_FindTitle = UI.getChildControl(self._ui._static_LeftBg, "StaticText_FindNpcTitle")
@@ -64,7 +73,8 @@ function Window_WorldMap_BottomMenuInfo:InitControl()
   for index = 0, self._config._findCount - 1 do
     self._ui._findList[index] = UI.getChildControl(self._ui._static_FindBg, "RadioButton_" .. index + 11)
   end
-  self._ui._static_KeyGuide_Select = UI.getChildControl(self._ui._static_FindBg, "StaticText_RT_ConsoleUI")
+  self._ui._static_KeyGuide_NPCSelect = UI.getChildControl(self._ui._static_FindBg, "StaticText_RT_NPCConsoleUI")
+  self._ui._static_KeyGuide_BookMarkSelect = UI.getChildControl(self._ui._static_BookMarkBg, "StaticText_RT_BookMarkConsoleUI")
 end
 function Window_WorldMap_BottomMenuInfo:InitEvent()
 end
@@ -77,19 +87,47 @@ function Window_WorldMap_BottomMenuInfo:Initialize()
 end
 function PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(value)
   local self = Window_WorldMap_BottomMenuInfo
-  local count = #self._ui._currentList + 1
-  self._currentIndex = self._currentIndex + value
-  if self._currentIndex < 0 then
-    self._currentIndex = count - 1
+  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+    PaGlobalFunc_WorldMap_BottomMenu_UpdateNpcMenu(value)
+  else
+    PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
   end
-  if count - 1 < self._currentIndex then
-    self._currentIndex = 0
+end
+function PaGlobalFunc_WorldMap_BottomMenu_UpdateNpcMenu(value)
+  local self = Window_WorldMap_BottomMenuInfo
+  local count = #self._ui._currentList + 1
+  self._currentNPCIndex = self._currentNPCIndex + value
+  if self._currentNPCIndex < 0 then
+    self._currentNPCIndex = count - 1
+  end
+  if count - 1 < self._currentNPCIndex then
+    self._currentNPCIndex = 0
   end
   for index = 0, count - 1 do
-    self._ui._currentList[index]:SetCheck(self._currentIndex == index)
+    self._ui._currentList[index]:SetCheck(self._currentNPCIndex == index)
   end
-  self._ui._static_KeyGuide_Select:SetPosX(self._ui._currentList[self._currentIndex]:GetPosX() + 5)
-  self._ui._staticText_FindDecs:SetText(self._strConfig[self._currentIndex])
+  self._ui._static_KeyGuide_NPCSelect:SetPosX(self._ui._currentList[self._currentNPCIndex]:GetPosX() + 5)
+  self._ui._staticText_FindDecs:SetText(self._strConfig[self._currentNPCIndex])
+end
+function PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
+  local self = Window_WorldMap_BottomMenuInfo
+  local count = #self._ui._currentList + 1
+  self._currentBookMarkIndex = self._currentBookMarkIndex + value
+  if self._currentBookMarkIndex < 0 then
+    self._currentBookMarkIndex = count - 1
+  end
+  if count - 1 < self._currentBookMarkIndex then
+    self._currentBookMarkIndex = 0
+  end
+  for index = 0, count - 1 do
+    if index == self._currentBookMarkIndex then
+      self._ui._currentList[index]:SetFontColor(Defines.Color.C_FFFFAB6D)
+    else
+      self._ui._currentList[index]:SetFontColor(Defines.Color.C_FFEFEFEF)
+    end
+  end
+  self._ui._static_KeyGuide_BookMarkSelect:SetPosX(self._ui._currentList[self._currentBookMarkIndex]:GetPosX() + 5)
+  self._ui._staticText_FindDecs:SetText(self._strConfig[self._currentBookMarkIndex])
 end
 function Window_WorldMap_BottomMenuInfo:FindNPC(index)
   local spawnType = self._spawnType[index]
@@ -130,22 +168,26 @@ function Window_WorldMap_BottomMenuInfo:FindNPC(index)
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_NAVIGATIONDESCRIPTION", "npcName", tostring(self._strConfig[index])))
   PaGlobal_TutorialManager:handleClickedTownNpcIconNaviStart(spawnType, false)
 end
-function Window_WorldMap_BottomMenuInfo:UpdateWayPoint(index)
+function Window_WorldMap_BottomMenuInfo:FindBookMark(index)
+  ToClient_ApplyWorldMapBookMark(index)
 end
-function PaGlobalFunc_WorldMap_BottomMenu_FindNPC()
+function PaGlobalFunc_WorldMap_BottomMenu_StartTrigger()
   local self = Window_WorldMap_BottomMenuInfo
-  self:FindNPC(self._currentIndex)
-end
-function PaGlobalFunc_WorldMap_BottomMenu_UpdateWayPoint()
-  local self = Window_WorldMap_BottomMenuInfo
-  self:UpdateWayPoint(self._currentIndex)
+  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+    self:FindNPC(self._currentNPCIndex)
+  else
+    self:FindBookMark(self._currentBookMarkIndex)
+  end
 end
 function PaGlobalFunc_WorldMap_BottomMenu_ModeChange()
   local self = Window_WorldMap_BottomMenuInfo
+  self._ui._static_BookMarkBg:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
+  self._ui._staticText_BookMarkTitle:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._static_FindBg:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._staticText_FindTitle:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   self._ui._staticText_FindDecs:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
   if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
+    self._ui._currentList = self._ui._bookMarkList
   else
     self._ui._currentList = self._ui._findList
   end

@@ -1506,6 +1506,39 @@ function FromClient_CompetitionMatchDone(teamNo, rank, teamHpPercent)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE", "teamNo", winTeamName))
   end
 end
+function FromClient_CompetitionMatchDoneToObserver(winteamno, matchResult)
+  if __eCompetitionResult_Draw == matchResult then
+    msg = {
+      main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_DRAW_MAIN"),
+      sub = "",
+      addMsg = ""
+    }
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 46, false)
+  else
+    local teamA_Info = ToClient_GetArshaTeamInfo(1)
+    local teamB_Info = ToClient_GetArshaTeamInfo(2)
+    local teamA_Name = ""
+    local teamB_Name = ""
+    if nil ~= teamA_Info and nil ~= teamB_Info then
+      teamA_Name = teamA_Info:getTeamName()
+      teamB_Name = teamB_Info:getTeamName()
+    end
+    if "" == teamA_Name or "" == teamB_Name then
+      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
+    end
+    local winTeamName = teamB_Name
+    if 1 == winteamno then
+      winTeamName = teamA_Name
+    end
+    msg = {
+      main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE", "teamNo", winTeamName),
+      sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_MAIN"),
+      addMsg = ""
+    }
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, 45, false)
+  end
+end
 function FromClient_JoinNewPlayer(characterName, isEntryUser)
   if isEntryUser then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_JOINNEWPLAYER_ENTRY", "characterName", characterName))
@@ -1651,6 +1684,7 @@ registerEvent("FromClient_ChangeAssistant", "FromClient_ChangeAssistant")
 registerEvent("FromClient_NotifyUseSkill", "FromClient_NotifyUseSkill")
 registerEvent("FromClient_NotifyUseSkillCoolTime", "FromClient_NotifyUseSkillCoolTime")
 registerEvent("FromClient_ChangeTeamName", "FromClient_ChangeTeamName")
+registerEvent("FromClient_CompetitionMatchDoneToObserver", "FromClient_CompetitionMatchDoneToObserver")
 Panel_Window_Arsha:RegisterUpdateFunc("SkillCooltime_UpdatePerFrame")
 function ArshaDebuff(isOn)
   ToClient_ArshaDebuffOnOff(isOn)

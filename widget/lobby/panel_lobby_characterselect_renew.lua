@@ -311,12 +311,6 @@ function PaGlobal_CharacterSelect_CharacterList_ControlCreate(content, key)
       local pcDeliveryRegionKey = characterData._arrivalRegionKey
       local serverUtc64 = getServerUtc64()
       local whereIs = "-"
-      local removeTime = getCharacterDataRemoveTime(characterIdx, isSpecialCharacter)
-      if nil ~= removeTime then
-        txt_Delete:addInputEvent("Mouse_LUp", "InputMLUp_CharacterSelect_DeleteCancelCharacter(" .. characterIdx .. " )")
-        txt_Delete:SetIgnore(false)
-        txt_Delete:SetShow(true)
-      end
       if 0 ~= characterData._currentPosition.x and 0 ~= characterData._currentPosition.y and 0 ~= characterData._currentPosition.z then
         if 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
           regionInfo = getRegionInfoByRegionKey(pcDeliveryRegionKey)
@@ -339,7 +333,15 @@ function PaGlobal_CharacterSelect_CharacterList_ControlCreate(content, key)
       end
       txt_Name:SetText(characterName)
       txt_Level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. ". " .. characterLevel)
-      txt_Region:SetText(whereIs)
+      local removeTime = getCharacterDataRemoveTime(characterIdx, isSpecialCharacter)
+      if nil ~= removeTime then
+        txt_Delete:addInputEvent("Mouse_LUp", "InputMLUp_CharacterSelect_DeleteCancelCharacter(" .. characterIdx .. " )")
+        txt_Delete:SetIgnore(false)
+        txt_Delete:SetShow(true)
+      else
+        txt_Region:SetText(whereIs)
+        txt_Region:SetShow(true)
+      end
       Btn_CharSlot:addInputEvent("Mouse_On", "InputMO_CharacterSelect_SaveCurrentIdx(" .. characterIdx .. " )")
       Btn_CharSlot:addInputEvent("Mouse_LUp", "InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()")
       Btn_CharSlot:SetIgnore(false)
@@ -348,7 +350,6 @@ function PaGlobal_CharacterSelect_CharacterList_ControlCreate(content, key)
       stc_ClasIcon:SetShow(true)
       txt_Level:SetShow(true)
       txt_Name:SetShow(true)
-      txt_Region:SetShow(true)
     else
     end
   elseif characterIdx == self._playerData.haveCount then
@@ -380,7 +381,7 @@ function PaGlobal_CharacterSelect_Open(charIdx)
   self:close()
   if true == _ContentsGroup_RenewUI_Customization then
     PaGlobalFunc_Customization_Close()
-    PaGlobalFunc_Customization_InputName_Close()
+    PaGlobalFunc_Customization_InputName_ForcedClose()
   end
   if -1 == charIdx or charIdx >= self._playerData.haveCount then
     self._selectedCharIdx = 0

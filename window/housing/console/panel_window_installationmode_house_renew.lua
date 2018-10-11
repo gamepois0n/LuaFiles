@@ -1009,6 +1009,7 @@ function Panel_Window_InstallationMode_House_info:open()
   Panel_House_InstallationMode:SetShow(true)
 end
 function Panel_Window_InstallationMode_House_info:close()
+  _AudioPostEvent_SystemUiForXBOX(1, 33)
   Panel_House_InstallationMode:SetShow(false)
 end
 function PaGlobalFunc_InstallationMode_House_GetShow()

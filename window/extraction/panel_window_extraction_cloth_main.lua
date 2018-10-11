@@ -23,6 +23,7 @@ PaGlobal_ExtractionCloth = {
   _doExtracting = false,
   _extraction_TargetWhereType = nil,
   _extraction_TargetSlotNo = nil,
+  _isValksExtracted = nil,
   count = {
     [0] = 0,
     [1] = 0

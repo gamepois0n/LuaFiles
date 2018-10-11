@@ -181,12 +181,9 @@ function workerShipInfo:init()
   self._lv_Title:SetShow(false)
   self._staticLevel:SetShow(false)
   if true == _ContentsGroup_EnhanceSail then
-    self._staticGaugeBar_Hp:SetIgnore(false)
-    self._staticGaugeBar_Hp:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(1,true)")
-    self._staticGaugeBar_Hp:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(1,false)")
-    self._staticGaugeBar_Mp:SetIgnore(false)
-    self._staticGaugeBar_Mp:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(2,true)")
-    self._staticGaugeBar_Mp:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(2,false)")
+    self._staticText_Value_Def:SetIgnore(false)
+    self._staticText_Value_Def:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(1,true)")
+    self._staticText_Value_Def:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(1,false)")
     self._staticText_MaxMoveSpeedValue:SetIgnore(false)
     self._staticText_MaxMoveSpeedValue:addInputEvent("Mouse_On", "PaGlobal_SailStatToolTip(3,true)")
     self._staticText_MaxMoveSpeedValue:addInputEvent("Mouse_Out", "PaGlobal_SailStatToolTip(3,false)")
@@ -508,17 +505,7 @@ function PaGlobal_SailStatToolTip(type, isShow)
     if nil == sailStatStaticStatus then
       return
     end
-    if 1 == type then
-      data = string.format("%.1f", sailStatStaticStatus._addMaxHp)
-      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_HP")
-      control = self._staticTextValue_Hp
-      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC1", "varied", data)
-    elseif 2 == type then
-      data = string.format("%.1f", sailStatStaticStatus._addMaxMp)
-      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP")
-      control = self._staticTextValue_Mp
-      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_SAILSTAT_DESC2", "varied", data)
-    elseif 3 == type then
+    if 3 == type then
       data = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(0) / 10000)
       name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CARRIAGEINFO_MAXMOVESPEED")
       control = self._staticText_MaxMoveSpeedValue

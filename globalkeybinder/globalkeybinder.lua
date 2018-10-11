@@ -504,11 +504,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_Stable(deltaTime)
           stableCarriage_Close()
         elseif Panel_Window_Inventory:GetShow() and not Panel_Window_Inventory:IsUISubApp() then
           InventoryWindow_Close()
+        elseif PaGlobalFunc_ServantRentPromoteMarketCheckShow() then
+          PaGlobalFunc_ServantRentPromoteMarketClose()
         else
           StableFunction_Close()
           GuildStableFunction_Close()
         end
-        PaGlobalFunc_ServantRentPromoteMarketClose()
       elseif CppEnums.ServantType.Type_Ship == stable_getServantType() then
         WharfFunction_Close()
         GuildWharfFunction_Close()
@@ -1893,7 +1894,11 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
     requestBlackSpritSkill()
     return
   end
-  Toclient_processCheckEscapeKey()
+  if true == _ContentsGroup_NewCloseManager then
+    close_escape_WindowPanelList()
+  else
+    Toclient_processCheckEscapeKey()
+  end
 end
 function PaGlobal_GlobalKeyBinder.Process_CheckEscape()
   if true == getEscHandle() or false == GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then

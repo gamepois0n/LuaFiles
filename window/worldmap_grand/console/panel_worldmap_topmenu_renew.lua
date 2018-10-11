@@ -221,6 +221,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     FromClient_WorldMapSideBar_RenderStateChange(state)
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   local questShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Quest)
   local knowledgeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Knowledge)
   local fishNChipShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_FishnChip)

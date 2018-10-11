@@ -813,7 +813,7 @@ function PaGlobalFunc_Dialog_NPCShop_InvenRClick_SellItem(itemCount, slotNo)
       return
     end
     toWhereType = CppEnums.ItemWhereType.eGuildWarehouse
-  elseif self._ui.chk_invenMoney:IsCheck() or sellPrice >= 500000 and ToClient_HasWareHouseFromNpc() then
+  elseif self._ui.chk_warehouseMoney:IsCheck() or sellPrice >= 500000 and ToClient_HasWareHouseFromNpc() then
     toWhereType = CppEnums.ItemWhereType.eWarehouse
   else
     toWhereType = CppEnums.ItemWhereType.eInventory
@@ -1614,8 +1614,8 @@ function FromClient_Dialog_NPCShop_UpdateGuildPriceLimit()
     local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
     self._ui.button_Storage:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_GUILDMONEY"))
     self._ui.staticText_Storage:SetText(makeDotMoney(myGuildListInfo:getGuildBusinessFunds_s64()))
-    self._ui.button_Inventory:SetCheck(false)
-    self._ui.button_Storage:SetCheck(false)
+    self._ui.chk_invenMoney:SetCheck(false)
+    self._ui.chk_warehouseMoney:SetCheck(false)
   end
 end
 function FromClient_Dialog_NPCShop_UpdatePerFrame(deltaTime)
@@ -1632,6 +1632,7 @@ function FromClient_Dialog_NPCShop_UpdatePerFrame(deltaTime)
   end
 end
 function Toggle_NPCShopTab_forPadEventFunc(value)
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   local self = Panel_Dialog_NPCShop_Info
   if self._value.tabCount == 1 then
     return

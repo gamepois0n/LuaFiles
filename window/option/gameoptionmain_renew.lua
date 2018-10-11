@@ -509,6 +509,9 @@ function PaGlobal_Option:InitValue(gameOptionSetting)
       option._initValue = self:KeyCustomGetString(option)
     end
   end
+  setRotateRadarMode(self._elements.RotateRadarMode:get(gameOptionSetting))
+  setAutoRunCamera(self._elements.AutoRunCamera:get(gameOptionSetting))
+  setAutoRunCameraRotation(self._elements.AutoRunCameraRotation:get(gameOptionSetting))
 end
 function FGlobal_Option_InitializeOption(gameOptionSetting)
   PaGlobal_Option:InitValue(gameOptionSetting)

@@ -384,6 +384,7 @@ function PaGlobalFunc_WorldMap_NodeInfo_Open(nodeData)
   self:Update()
   PaGlobalFunc_WorldMap_RingMenu_Close()
   PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
   PaGlobalFunc_WorldMap_NodeInfo_SetShow(true, false)
 end
 function PaGlobalFunc_WorldMap_NodeInfo_Close()
@@ -392,6 +393,7 @@ function PaGlobalFunc_WorldMap_NodeInfo_Close()
   end
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_NodeInfo_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_NodeInfo_luaLoadComplete()

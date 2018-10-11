@@ -1041,11 +1041,7 @@ function GameMenu_CheckEnAble(buttonType)
       returnValue = true
     end
     if buttonType == MenuButtonId.btn_Event then
-      if isServerFixedCharge() then
-        returnValue = false
-      else
-        returnValue = true
-      end
+      returnValue = true
     end
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT then
       if buttonType == MenuButtonId.btn_Dye then

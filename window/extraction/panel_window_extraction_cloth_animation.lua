@@ -74,8 +74,21 @@ function PaGlobal_ExtractionCloth:resultShow()
   PaGlobal_ExtractionResult:resetChildControl()
   PaGlobal_ExtractionResult:resetAnimation()
   if false == PaGlobal_ExtractionResult:getShow() then
-    PaGlobal_ExtractionResult:setShow(true)
-    PaGlobal_ExtractionResult:setTextResultMsg(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_2"))
+    if true == self._isValksExtracted then
+      local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(17643))
+      if nil ~= itemSSW then
+        PaGlobal_ExtractionResult:showResultMessage(itemSSW:getName(), PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_2"), itemSSW)
+      else
+        PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_2"))
+      end
+    else
+      local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(16080))
+      if nil ~= itemSSW then
+        PaGlobal_ExtractionResult:showResultMessage(itemSSW:getName(), PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_2"), itemSSW)
+      else
+        PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_2"))
+      end
+    end
   end
   ExtractionClothResult_TimerReset()
   Panel_Window_Extraction_Result:RegisterUpdateFunc("ExtractionCloth_CheckResultMsgShowTime")

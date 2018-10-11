@@ -179,8 +179,10 @@ function PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(isShow)
   if true == isShow then
     PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
     PaGlobalFunc_WorldMap_TopMenu_Close()
+    PaGlobalFunc_WorldMap_BottomMenu_Close()
   else
     PaGlobalFunc_WorldMap_TopMenu_Open()
+    PaGlobalFunc_WorldMap_BottomMenu_Open()
     PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
   end
   self._isRingMenuOpen = isShow
@@ -247,9 +249,9 @@ function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapHouse(nodeBtn
   end
   PaGlobalFunc_WorldMapHouseManager_Open(nodeBtn, false)
   FGlobal_ClearWorldmapIconTooltip()
-  PaGlobalFunc_WorldMap_BottomMenu_Close()
   PaGlobalFunc_WorldMap_RingMenu_Close()
   PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
 end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_RClickedWorldMapHouse(houseBtn)
   local houseInfo = houseBtn:FromClient_getStaticStatus()

@@ -231,6 +231,7 @@ function socketInfo:updateSocket()
         _onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
+        _AudioPostEvent_SystemUiForXBOX(0, 16)
       elseif ii == 2 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -239,7 +240,7 @@ function socketInfo:updateSocket()
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
         _onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
-        _AudioPostEvent_SystemUiForXBOX(5, 6)
+        _AudioPostEvent_SystemUiForXBOX(0, 16)
       elseif ii == 3 then
         local socketBG_1 = _onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
@@ -332,7 +333,7 @@ local function Socket_Push_Confirm()
   end
   Socket_ConfirmPushJewel(true)
   if false == isItemLock then
-    _AudioPostEvent_SystemUiForXBOX(0, 7)
+    _AudioPostEvent_SystemUiForXBOX(0, 16)
   end
 end
 local function Socket_OverWrite_Confirm()

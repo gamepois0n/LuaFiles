@@ -728,7 +728,7 @@ function ChattingViewManager:update(chatPanel, panelIndex, isShow)
   if nil == getSelfPlayer() or nil == getSelfPlayer():get() then
     return
   end
-  if false == CheckTutorialEnd() and true == PaGlobal_TutorialManager:isDoingTutorial() then
+  if false == CheckTutorialEnd() and nil ~= PaGlobal_TutorialManager and true == PaGlobal_TutorialManager:isDoingTutorial() then
     return
   end
   local isCombinedMainPanel = chatPanel:isCombinedToMainPanel()
@@ -2465,7 +2465,7 @@ function FGlobal_MainChatPanelUpdate()
   if nil == getSelfPlayer() or nil == getSelfPlayer():get() then
     return
   end
-  if false == CheckTutorialEnd() and true == PaGlobal_TutorialManager:isDoingTutorial() then
+  if false == CheckTutorialEnd() and nil ~= PaGlobal_TutorialManager and true == PaGlobal_TutorialManager:isDoingTutorial() then
     return
   end
   targetPanel:SetColor(UI_color.C_00000000)

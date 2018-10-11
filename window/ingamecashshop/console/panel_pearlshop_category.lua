@@ -50,9 +50,6 @@ function pearlShopCategory:initSubCategory()
   end
 end
 function pearlShopCategory:getPromotionUrl()
-  if isServerFixedCharge() then
-    return PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_P2P")
-  end
   if isGameTypeKorea() then
     return PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
   elseif isGameTypeTaiwan() then

@@ -12,7 +12,8 @@ local MarketPlaceBuy = {
   _selectPrice = 0,
   _enchantLevelPrice = 0,
   _selectCount = 0,
-  _maxItemCount_s64 = 0
+  _maxItemCount_s64 = 0,
+  _selectItemSlot = nil
 }
 function MarketPlaceBuy:initialize()
   self:createControl()
@@ -35,6 +36,12 @@ function MarketPlaceBuy:createControl()
   self._ui._countBg:addInputEvent("Mouse_LUp", "PaGlobal_MarketPlaceBuy_SelectCount()")
   self._ui._button_Req:addInputEvent("Mouse_LUp", "PaGlobal_MarketPlaceBuy_Req()")
   self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobal_MarketPlaceBuy_Cancel()")
+  local slot = {}
+  slot.background = UI.getChildControl(self._ui._itemStatusBg, "Static_ItemSlotBg")
+  SlotItem.new(slot, "ItemIcon", 0, slot.background, self._slotConfig)
+  slot:createChild()
+  slot.icon:SetShow(true)
+  self._selectItemSlot = slot
 end
 function MarketPlaceBuy:updateNeedTotalPrice()
   local needTotalPrice = self._selectCount * (self._selectPrice + self._enchantLevelPrice)
@@ -75,7 +82,7 @@ function PaGlobal_MarketPlaceBuy_SetCount(inputNumber)
 end
 function PaGlobal_MarketPlaceBuy_Req()
   local self = MarketPlaceBuy
-  ToClient_requestBuyItemToWorldMarket(self._itemKey, self._itemLevel, self._selectCount, self._selectPrice, self._selectEnchantLevel)
+  ToClient_requestBuyItemToWorldMarket(self._itemKey, self._itemMinLevel, self._selectCount, self._selectPrice, self._selectEnchantLevel)
 end
 function PaGlobal_MarketPlaceBuy_Cancel()
   _panel:SetShow(false)
@@ -136,22 +143,17 @@ end
 function PaGlobalFunc_MarketPlaceBuy_Initialize()
   MarketPlaceBuy:initialize()
 end
-function FromClient_responseGetBiddingList(itemKey, minEnchantLevel, maxEnchantLevel, standardPrice_s64, itemCount_s64, biddingBuyListCount)
+function FromClient_responseGetBuyBiddingList(itemKey, minEnchantLevel, maxEnchantLevel, standardPrice_s64, itemCount_s64, biddingBuyListCount)
   local self = MarketPlaceBuy
   self._ui._list2_SelectEnchant:getElementManager():clearKey()
   self._ui._list2_SelectPrice:getElementManager():clearKey()
   for ii = minEnchantLevel, maxEnchantLevel do
     self._ui._list2_SelectEnchant:getElementManager():pushKey(ii)
   end
-  local slot = {}
-  slot.background = UI.getChildControl(self._ui._itemStatusBg, "Static_ItemSlotBg")
-  SlotItem.new(slot, "ItemIcon", 0, slot.background, self._slotConfig)
-  slot:createChild()
-  slot.icon:SetShow(true)
   local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemKey, 0))
-  slot:setItemByStaticStatus(itemSSW)
+  self._selectItemSlot:setItemByStaticStatus(itemSSW)
   self._itemKey = itemKey
-  self._itemLevel = minEnchantLevel
+  self._itemMinLevel = minEnchantLevel
   local itemName = UI.getChildControl(self._ui._itemStatusBg, "StaticText_ItemName")
   itemName:SetText(itemSSW:getName())
   local itemInfo = UI.getChildControl(self._ui._itemStatusBg, "StaticText_BasicPrice")
@@ -176,11 +178,13 @@ function FromClient_responseEnchantLevelPrice(enchantLevelPrice)
   self:updateNeedTotalPrice()
 end
 function FromClient_responseBuyItemToWorldMarket(mySilver)
+  local self = MarketPlaceBuy
   local silverInfo = getWorldMarketSilverInfo()
   self._ui._myPrice:SetText("\235\179\180\236\156\160 \234\184\136\236\149\161 : " .. makeDotMoney(silverInfo:getItemCount()))
-  _PA_LOG("\235\176\149\234\183\156\235\130\152", "FromClient_responseBuyItemToWorldMarket : " .. tostring(mySilver) .. "/" .. tostring(silverInfo:getItemCount()))
+  PaGlobalFunc_MarketPlace_UpdateMyInfo()
+  Proc_ShowMessage_Ack("\234\181\172\235\167\164 \236\132\177\234\179\181")
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_MarketPlaceBuy_Initialize")
-registerEvent("FromClient_responseGetBiddingList", "FromClient_responseGetBiddingList")
+registerEvent("FromClient_responseGetBuyBiddingList", "FromClient_responseGetBuyBiddingList")
 registerEvent("FromClient_responseEnchantLevelPrice", "FromClient_responseEnchantLevelPrice")
 registerEvent("FromClient_responseBuyItemToWorldMarket", "FromClient_responseBuyItemToWorldMarket")

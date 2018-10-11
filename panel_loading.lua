@@ -137,6 +137,7 @@ function LoadingPanel_Resize()
   screenY = getScreenSizeY()
   Panel_Loading:SetSize(screenX, screenY)
   txt_versionInfo:ComputePos()
+  txt_versionInfo:SetShow(_ContentsGroup_ForXBoxClosedBeta)
   _bg1:SetSize(screenX, screenY)
   _bg1:ComputePos()
   _bg2:SetSize(screenX, screenY)
@@ -195,7 +196,6 @@ function LoadingPanel_Init()
     stc_movieBG:SetShow(false)
     stc_fade:SetShow(false)
   end
-  txt_versionInfo:SetShow(_ContentsGroup_ForXBoxClosedBeta)
 end
 function LoadingPanel_ShuffleOrder(table)
   if nil == table or nil == #table then

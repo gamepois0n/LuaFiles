@@ -790,8 +790,10 @@ function Equipment_equipItem(slotNo)
   UpdateUnderwearSlotOnEquip(slotNo)
 end
 function Equipment_onScreenResize()
-  Panel_Equipment:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Equipment:GetSizeX())
-  Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  if Defines.UIMode.eUIMode_Extraction ~= GetUIMode() then
+    Panel_Equipment:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Equipment:GetSizeX())
+    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  end
 end
 function equip:registMessageHandler()
   registerEvent("EventEquipmentUpdate", "Equipment_updateSlotData")

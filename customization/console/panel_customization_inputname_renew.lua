@@ -4,10 +4,18 @@ local Customization_InputNameInfo = {
     _edit_InputName = UI.getChildControl(Panel_Customizing_InputName, "Edit_InputName"),
     _static_KeyGuideBg = UI.getChildControl(Panel_Customizing_InputName, "Static_BottomGroup_ConsoleUI")
   },
-  _defaultEditText = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CUSTOMIZATION_INPUTNAME_EDITTEXT")
+  _defaultEditText = "MAX " .. getGameServiceTypeCharacterNameLength() .. " Characters",
+  _createSync = true
 }
+function PaGlobalFunc_Customization_InputName_SetCreateSync(isSync)
+  local self = Customization_InputNameInfo
+  self._createSync = isSync
+end
 function PaGlobalFunc_Customization_InputName_Confirm(str)
   local self = Customization_InputNameInfo
+  if false == self._createSync then
+    return
+  end
   local nameStr = str
   if nil == nameStr then
     nameStr = self._ui._edit_InputName:GetEditText()
@@ -27,11 +35,15 @@ function Customization_InputNameInfo:InitEvent()
   self._ui._edit_InputName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_Customization_InputName_KeyboardEnd")
 end
 function Customization_InputNameInfo:InitRegister()
+  registerEvent("FromClient_CreateCharacterFail", "PaGlobalFunc_FromClient_Customization_InputName_CreateCharacterFail")
 end
 function Customization_InputNameInfo:Initialize()
   self:InitControl()
   self:InitEvent()
   self:InitRegister()
+end
+function PaGlobalFunc_FromClient_Customization_InputName_CreateCharacterFail()
+  PaGlobalFunc_Customization_InputName_SetCreateSync(true)
 end
 function PaGlobalFunc_Customization_InputName_KeyboardEnd(str)
   local self = Customization_InputNameInfo
@@ -40,12 +52,22 @@ function PaGlobalFunc_Customization_InputName_KeyboardEnd(str)
 end
 function PaGlobalFunc_Customization_InputName_SetFocus()
   local self = Customization_InputNameInfo
+  if false == self._createSync then
+    return
+  end
   self._ui._edit_InputName:SetEditText("")
   SetFocusEdit(self._ui._edit_InputName)
 end
 function PaGlobalFunc_FromClient_Customization_InputName_luaLoadComplete()
   local self = Customization_InputNameInfo
   self:Initialize()
+end
+function PaGlobalFunc_Customization_InputName_ForcedClose()
+  ClearFocusEdit()
+  PaGlobalFunc_Customization_InputName_SetCreateSync(true)
+  PaGlobalFunc_Customization_SetCloseFunc(nil)
+  PaGlobalFunc_Customization_SetBackEvent()
+  PaGlobalFunc_Customization_InputName_SetShow(false, false)
 end
 function PaGlobalFunc_Customization_InputName_Close(clearStr)
   local self = Customization_InputNameInfo
@@ -56,6 +78,7 @@ function PaGlobalFunc_Customization_InputName_Close(clearStr)
     ClearFocusEdit()
     return false
   end
+  PaGlobalFunc_Customization_InputName_SetCreateSync(true)
   if nil == clearStr or true == clearStr then
     self._ui._edit_InputName:SetEditText("")
   end

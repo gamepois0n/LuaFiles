@@ -884,6 +884,9 @@ function StableStallion_SetPos()
     Panel_Window_StableStallion:SetSize(Panel_Window_StableStallion:GetSizeX(), Panel_Window_StableStallion:GetSizeY() + stallionSizeY + protectSizeY + 10)
   end
 end
+function PaGlobaFunc_StableStallion_Close()
+  Panel_Window_StableStallion:SetShow(false)
+end
 StableStallion:init()
 StableStallion:registEventHandler()
 StableStallion_Position()

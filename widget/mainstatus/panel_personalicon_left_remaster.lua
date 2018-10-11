@@ -112,11 +112,7 @@ function PersonalIcon:update()
   local memoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   local applyArshaBuff = ToClient_isAbleArshaItemDropBuffRate()
   PaGlobalFunc_PersonalIcon_CheckGoldenBell()
-  if isServerFixedCharge() then
-    self._iconControl[self._iconType.RussiaMonthly]:SetShow(true)
-  else
-    self._iconControl[self._iconType.RussiaMonthly]:SetShow(false)
-  end
+  self._iconControl[self._iconType.RussiaMonthly]:SetShow(false)
   if applyStarter then
     if starter > 0 then
       self._iconControl[self._iconType.Kamasylvia]:SetShow(true)
@@ -409,19 +405,14 @@ function InputMO_PersonalIcon_ShowTooltip(isShow, iconType)
   elseif iconType == self._iconType.Kamasylvia then
     leftTime = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TIME", "getStarterPackageTime", convertStringFromDatetime(toInt64(0, starter)))
     if isGameTypeRussia() then
-      if isServerFixedCharge() then
+      local s64_dayCycle = toInt64(0, 86400)
+      local s64_day = toInt64(0, starter) / s64_dayCycle
+      if s64_day < toInt64(0, 3650) then
         name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE_RUS")
         desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC_RUS")
       else
-        local s64_dayCycle = toInt64(0, 86400)
-        local s64_day = toInt64(0, starter) / s64_dayCycle
-        if s64_day < toInt64(0, 3650) then
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE_RUS")
-          desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC_RUS")
-        else
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE_RUS")
-          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC_RUS_FOR_INFINITY")
-        end
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE_RUS")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC_RUS_FOR_INFINITY")
       end
     else
       name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE")
@@ -434,19 +425,14 @@ function InputMO_PersonalIcon_ShowTooltip(isShow, iconType)
       name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE")
       desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_JP")
     elseif isGameTypeRussia() then
-      if isServerFixedCharge() then
+      local s64_dayCycle = toInt64(0, 86400)
+      local s64_day = toInt64(0, premium) / s64_dayCycle
+      if s64_day < toInt64(0, 3650) then
         name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_RUS")
         desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_RUS")
       else
-        local s64_dayCycle = toInt64(0, 86400)
-        local s64_day = toInt64(0, premium) / s64_dayCycle
-        if s64_day < toInt64(0, 3650) then
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_RUS")
-          desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_RUS")
-        else
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_RUS")
-          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_RUS_FOR_INFINITY")
-        end
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_RUS")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_RUS_FOR_INFINITY")
       end
     elseif isGameTypeTaiwan() then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_TW")
@@ -557,16 +543,6 @@ function InputMO_PersonalIcon_ShowTooltip(isShow, iconType)
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC") .. "\n" .. convertStringFromDatetime(toInt64(0, russiaKamasilv))
     uiControl = self._iconControl[self._iconType.KamasylviaForRussia]
   elseif iconType == self._iconType.RussiaMonthly then
-    local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
-    local fixedChargeTime = temporaryPCRoomWrapper:getFixedChargeTime()
-    local leftTime = calculateDayFromDateDay(toInt64(0, fixedChargeTime))
-    if leftTime < toInt64(0, 365) then
-      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC", "leftTime", convertStringFromDatetime(toInt64(0, temporaryPCRoomWrapper:getFixedChargeTime())))
-    else
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC_RU_FOR_INFINITY")
-    end
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_TITLE")
-    uiControl = self._iconControl[self._iconType.RussiaMonthly]
   elseif iconType == self._iconType.GoldenBell then
     local curChannelData = getCurrentChannelServerData()
     local channelName = getChannelName(curChannelData._worldNo, curChannelData._serverNo)

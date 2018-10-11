@@ -5,9 +5,6 @@ function FGlobal_Inventory_WeightCheck()
   if Panel_Window_StableList:GetShow() or Panel_Window_WharfList:GetShow() or Panel_Window_Repair:GetShow() then
     return
   end
-  if true == _ContentsGroup_RemasterUI_Main_Alert then
-    return
-  end
   local self = PaGlobalPlayerWeightList
   local selfPlayerWrapper = getSelfPlayer()
   if nil == selfPlayerWrapper then
@@ -46,8 +43,6 @@ function FGlobal_Inventory_WeightCheck()
     if true == _ContentsGroup_RenewUI_Main then
       self.weight:SetPosY(self.panel:GetSizeY() + 50)
     end
-    UI.ASSERT(false, "FGlobal_Inventory_WeightCheck")
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "FGlobal_Inventory_WeightCheck")
     self.panel:SetShow(true)
     self.weight:SetShow(true)
     self.weightText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEIGHT_MAIN_DEFAULT_VISUAL_WITH_FAIRY", "weight", tostring(weightText)))

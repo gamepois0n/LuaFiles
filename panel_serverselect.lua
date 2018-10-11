@@ -617,15 +617,6 @@ function StartUp_Panel_SelectServer()
       tempEvent:SetShow(true)
       tempPrimiumIcon:SetPosY(14)
     end
-    local temporaryWrapper = getTemporaryInformationWrapper()
-    local isFixedCharge = temporaryWrapper:isFixedCharge()
-    if serverData._fixedCharge then
-      tempPrimiumIcon:SetShow(true)
-      tempName:SetPosX(tempPrimiumIcon:GetPosX() + tempPrimiumIcon:GetSizeX() + 2)
-    else
-      tempPrimiumIcon:SetShow(false)
-      tempName:SetPosX(20)
-    end
     tempEvent:SetText(tempEventName)
     tempEvent:SetPosX(20)
     tempEvent:SetPosY(37)
@@ -841,22 +832,6 @@ function Panel_SelectServer_ReCreateChannelCtrl(worldIndex)
         else
           tempChgChannel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_CHANGECHANNEL", "changeRealChannelTime", 0))
         end
-      end
-    end
-    if isGameTypeRussia() or CppEnums.CountryType.DEV == getGameServiceType() then
-      local temporaryWrapper = getTemporaryInformationWrapper()
-      local isFixedCharge = temporaryWrapper:isFixedCharge()
-      if serverData._fixedCharge then
-        if isFixedCharge then
-          tempBtn:SetIgnore(false)
-          tempBtn:SetMonoTone(false)
-        else
-          tempBtn:SetIgnore(true)
-          tempBtn:SetMonoTone(true)
-        end
-      else
-        tempBtn:SetIgnore(false)
-        tempBtn:SetMonoTone(false)
       end
     end
     if serverData._isSpeedChannel then

@@ -107,8 +107,13 @@ function PaGlobal_ExtractionEnchantStone:resultShow()
   PaGlobal_ExtractionResult:resetChildControl()
   PaGlobal_ExtractionResult:resetAnimation()
   if false == PaGlobal_ExtractionResult:getShow() then
-    PaGlobal_ExtractionResult:setShow(true)
-    PaGlobal_ExtractionResult:setTextResultMsg(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_ENCHANTSTONE_RESULTMSG"))
+    if self._thisIsWeapone then
+      local blackStoneSSW = getItemEnchantStaticStatus(ItemEnchantKey(16001))
+      PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_ENCHANTSTONE_RESULTMSG"), blackStoneSSW:getName(), blackStoneSSW)
+    else
+      local blackStoneSSW = getItemEnchantStaticStatus(ItemEnchantKey(16002))
+      PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_ENCHANTSTONE_RESULTMSG"), blackStoneSSW:getName(), blackStoneSSW)
+    end
   end
   ExtractionEnchantStoneResult_TimerReset()
   Panel_Window_Extraction_Result:RegisterUpdateFunc("ExtractionEnchantStone_CheckResultMsgShowTime")

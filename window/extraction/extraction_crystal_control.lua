@@ -203,6 +203,7 @@ function PaGlobal_ExtractionCrystal:updateSocket()
     end
   end
   self._save_ExtractionMateria_Slot_status = 0
+  self._crystalKeys = {}
   local classType = getSelfPlayer():getClassType()
   for ii = 1, maxCount do
     local socketSlot = self._uiSlotSocket[ii]
@@ -273,6 +274,7 @@ function PaGlobal_ExtractionCrystal:updateSocket()
         audioPostEvent_SystemUi(5, 6)
         self._onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -212, -30)
       end
+      self._crystalKeys[ii - 1] = itemStaticWrapper:get()._key:get()
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false
       local text = itemStaticWrapper:getName()
@@ -310,6 +312,7 @@ function PaGlobal_ExtractionCrystal:clearData(uiOnly)
   self._uiEquipMain.empty = true
   self._uiEquipMain.slotNo = -1
   self._uiEquipMain.icon:SetShow(false)
+  self._crystalKeys = {}
   for ii = 1, self._config.socketSlotCount do
     local socketBG_1 = self._onlySocketListBG[ii]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
     socketBG_1:SetStartColor(UI_color.C_FFFFFFFF)

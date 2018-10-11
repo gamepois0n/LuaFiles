@@ -450,8 +450,15 @@ Defines.RenderMode = {
 }
 Defines.TooltipDataType = {ItemWrapper = 1, ItemSSWrapper = 2}
 Defines.TooltipTargetType = {Item = 1, ItemWithoutCompare = 2}
+Defines.CloseType = {
+  eCloseType_CantClose = 0,
+  eCloseType_Escape = 1,
+  eCloseType_Attacked = 2,
+  eCloseType_Force = 3,
+  eCloseType_Count = 4
+}
 Defines.ServiceTypeToString = {
-  [0] = "DV",
+  "DV",
   "KR",
   "KR",
   "KR",

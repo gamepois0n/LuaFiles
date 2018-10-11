@@ -2,11 +2,15 @@ function PaGlobal_ExtractionCrystal:resultShow()
   PaGlobal_ExtractionResult:resetChildControl()
   PaGlobal_ExtractionResult:resetAnimation()
   if false == PaGlobal_ExtractionResult:getShow() then
-    PaGlobal_ExtractionResult:setShow(true)
     if 0 == self._extractionType then
-      PaGlobal_ExtractionResult:setTextResultMsg(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CRYSTAL_EXTRACT_DONE"))
+      local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(self._crystalKeys[self._indexSocket]))
+      if nil ~= itemSSW then
+        PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CRYSTAL_EXTRACT_DONE"), itemSSW:getName(), itemSSW)
+      else
+        PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CRYSTAL_EXTRACT_DONE"))
+      end
     else
-      PaGlobal_ExtractionResult:setTextResultMsg(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CRYSTAL_REMOVE_DONE"))
+      PaGlobal_ExtractionResult:showResultMessage(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_CRYSTAL_REMOVE_DONE"))
     end
   end
   ExtractionCrystalResult_TimerReset()

@@ -522,6 +522,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_Open(explorationNodeInClient)
   self:SetNodeData(explorationNodeInClient)
   PaGlobalFunc_WorldMap_RingMenu_Close()
   PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
 end
 function PaGlobalFunc_WorldMap_NodeProduct_Close()
   local self = Window_WorldMap_NodeProductInfo
@@ -531,6 +532,7 @@ function PaGlobalFunc_WorldMap_NodeProduct_Close()
   self:Clear()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_NodeProduct_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_NodeProduct_luaLoadComplete()

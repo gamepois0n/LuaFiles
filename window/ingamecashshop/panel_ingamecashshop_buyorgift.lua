@@ -1275,17 +1275,7 @@ function InGameShopBuy_ChangeMoneyIconTexture(categoryIdx, isEnableSilver)
   elseif true == isEnableSilver then
     iconType = cashIconType.silver
   else
-    local isRussia = isGameTypeRussia() or eCountryType.DEV == gameServiceType
-    local isFixedServer = isServerFixedCharge()
-    if true == isRussia and true == isFixedServer then
-      if isEnableSilver then
-        iconType = cashIconType.silver
-      else
-        iconType = cashIconType.pearl
-      end
-    else
-      iconType = cashIconType.pearl
-    end
+    iconType = cashIconType.pearl
   end
   cashIcon_changeTextureForList(icon, serviceContry, iconType)
 end
@@ -1310,7 +1300,6 @@ function FromClient_NotifyCompleteBuyProduct(productNoRaw, isGift, toCharacterNa
     end
   end
   InGameShop_UpdateCash()
-  FGlobal_InGameShop_UpdateByBuy()
   InGameShopBuy_Close()
   if isPearlBox then
     local cashProduct = getIngameCashMall():getCashProductStaticStatusByProductNoRaw(productNoRaw)

@@ -225,7 +225,7 @@ function UpdateHairSlider(sliderIndex)
     setGlobalCheck(true)
   end
 end
-function OpenHairShapeUi(classType, uiId)
+function OpenHairShapeUi(uiId)
   iswithoutbone = false
   globalcurrentuiId = uiId
   currentuiId = uiId

@@ -75,8 +75,6 @@ Panel_SkillAwaken:MoveChilds(Panel_SkillAwaken:GetID(), Panel_Frame_AwkSkillList
 Panel_SkillAwaken:MoveChilds(Panel_SkillAwaken:GetID(), Panel_Frame_AwkOptions)
 deletePanel(Panel_Frame_AwkSkillList:GetID())
 deletePanel(Panel_Frame_AwkOptions:GetID())
-Panel_Frame_AwkSkillList = nil
-Panel_Frame_AwkOptions = nil
 local listSizeY = 0
 local skillIndex = -1
 local copyIndex = -1

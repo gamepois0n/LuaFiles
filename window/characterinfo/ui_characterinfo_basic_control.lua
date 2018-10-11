@@ -769,26 +769,35 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
         return
       end
       local sailStatStaticStatus = ToClient_getSailStatStaticStatus()
-      local hp = 0
-      local mp = 0
+      local pv = 0
       local acc = 0
       local spd = 0
       local cor = 0
       local brk = 0
       if nil ~= sailStatStaticStatus then
-        hp = string.format("%.1f", sailStatStaticStatus._addMaxHp)
-        mp = string.format("%.1f", sailStatStaticStatus._addMaxMp)
         acc = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(0) / 10000)
         spd = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(1) / 10000)
         cor = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(2) / 10000)
         brk = string.format("%.1f", sailStatStaticStatus:getVariedStatByIndex(3) / 10000)
       end
-      local desc1 = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_SAILSTAT_DESC_1", "rate1", tostring(hp), "rate2", tostring(mp), "rate3", tostring(acc))
+      local desc1 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_SAILSTAT_DESC_1", "rate2", tostring(acc))
       local desc2 = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_SAILSTAT_DESC_2", "rate1", tostring(spd), "rate2", tostring(cor), "rate3", tostring(brk))
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE9")
       desc = string.format([[
 %s
 %s]], desc1, desc2)
+      control = self._lifeInfo[mainType]._ui._commonPoint
+    elseif __ePlayerLifeStatType_Fishing == mainType then
+      if false == _ContentsGroup_EnhanceFishing then
+        return
+      end
+      local fishingStatStaticStatus = ToClient_getFishingStatStaticStatus()
+      local addRate = 0
+      if nil ~= fishingStatStaticStatus then
+        addRate = string.format("%.1f", fishingStatStaticStatus._rate / 10000)
+      end
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE1")
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_FISHINGSTAT_DESC", "rate", tostring(addRate))
       control = self._lifeInfo[mainType]._ui._commonPoint
     else
       return

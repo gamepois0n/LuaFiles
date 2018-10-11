@@ -266,7 +266,7 @@ function FGlobal_GuildWarInfo_List_Content_Update(contents, guildWrapper, buildi
 end
 function FGlobal_GuildWarInfo_renew_Open()
   if false == Panel_Window_GuildWarInfo:GetShow() then
-    PAGlobal_GuildWarInfo:UpdateBasicInfo()
+    ToClient_RequestSiegeScore()
     Panel_Window_GuildWarInfo:SetShow(true)
   end
 end

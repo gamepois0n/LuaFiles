@@ -71,7 +71,8 @@ PaGlobal_ExtractionCrystal = {
     [2] = false,
     [3] = false
   },
-  _save_ExtractionMateria_Slot_status = 0
+  _save_ExtractionMateria_Slot_status = 0,
+  _crystalKeys = {}
 }
 registerEvent("FromClient_luaLoadComplete", "LoadComplete_ExtractionCrystal_Initialize")
 function LoadComplete_ExtractionCrystal_Initialize()

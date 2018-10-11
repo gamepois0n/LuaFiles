@@ -233,7 +233,7 @@ function UpdateDecorationContents(contentsIndex, currentuiId)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(listParamType, listParamIndex, itemIndex) then
         tempContentImage:SetShow(false)
-      elseif not isNormalCustomizingIndex(listParamType, listParamIndex, itemIndex) and not FGlobal_IsInGameMode() and isServerFixedCharge() then
+      elseif not isNormalCustomizingIndex(listParamType, listParamIndex, itemIndex) and not FGlobal_IsInGameMode() then
         tempContentImage:SetShow(false)
       else
         tempContentImage:SetShow(true)

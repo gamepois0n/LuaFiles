@@ -1507,6 +1507,7 @@ function PaGlobalFunc_InventoryInfo_GetShow()
 end
 function PaGlobalFunc_InventoryInfo_Open(openType)
   InventoryInfo:open(openType)
+  _AudioPostEvent_SystemUiForXBOX(1, 16)
 end
 function InventoryInfo:open(openType)
   self:setServantTabPictogram()
@@ -1544,6 +1545,9 @@ function PaGlobalFunc_InventoryInfo_Close()
   InventoryInfo:close()
 end
 function InventoryInfo:close()
+  if _panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 16)
+  end
   PaGlobalFunc_TooltipInfo_Close()
   Panel_Tooltip_Item_hideTooltip()
   PaGlobalFunc_FloatingTooltip_Close()
@@ -1574,7 +1578,7 @@ function InventoryInfo:close()
   self._slotEarringIndex = 0
 end
 function PaGlobalFunc_InventoryInfo_ShowAni()
-  _AudioPostEvent_SystemUiForXBOX(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   local self = InventoryInfo
   self._showAniIsPlaying = true
   _panel:ResetVertexAni()
@@ -1593,7 +1597,7 @@ function PaGlobalFunc_InventoryInfo_ShowAni()
   self._ui.txt_topEndTitle:SetVertexAniRun("Ani_Move_Pos_Show", true)
 end
 function PaGlobalFunc_InventoryInfo_HideAni()
-  _AudioPostEvent_SystemUiForXBOX(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 16)
   _panel:ResetVertexAni()
   local aniInfo1 = _panel:addMoveAnimation(0, 0.3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartPosition(_panel:GetPosX(), 0)
@@ -2088,7 +2092,7 @@ function InventoryInfo:updateServantInven(actorKeyRaw)
     local slot = self._ui.slot_servantInven[ii]
     slot:clearItem()
     local index = ii + self._servantInvenStartSlot
-    if capacity > index then
+    if capacity >= index then
       local itemWrapper = getServantInventoryItemBySlotNo(actorKeyRaw, index - 1 + __eTInventorySlotNoUseStart)
       if nil ~= itemWrapper then
         slot:setItem(itemWrapper)
@@ -2534,6 +2538,7 @@ function InventoryInfo:setTabTo(tabIndex)
   end
   self._ui.rdo_tabButtons[tabIndex]:SetCheck(true)
   self._ui.stc_upperGroups[tabIndex]:SetShow(true)
+  self:updateUpperTab(tabIndex)
   if tabIndex == UPPER_TAB_TYPE.INFORMATION_TAB then
     self._ui.stc_subWindowLower:SetShow(false)
     self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_TITLE"))
@@ -2553,7 +2558,6 @@ function InventoryInfo:setTabTo(tabIndex)
     Input_InventoryInfo_SetLowerTabTo(LOWER_TAB_TYPE.INVENTORY_TAB)
     self._ui.txt_topEndTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_SERVANTINVENTORY_TITLE"))
   end
-  self:updateUpperTab(tabIndex)
   self:setKeyGuideWithTab()
   if DragManager:isDragging() then
     DragManager:clearInfo()
@@ -3393,6 +3397,8 @@ end
 function Input_InventoryInfo_ShowEquipTooltip(slotNo, isShow)
   local self = InventoryInfo
   if isShow then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
+    _AudioPostEvent_SystemUiForXBOX(1, 0)
     PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, ToClient_getEquipmentItem(slotNo), Defines.TooltipTargetType.ItemWithoutCompare, _panel:GetPosX())
     PaGlobalFunc_FloatingTooltip_Close()
   else
@@ -3403,6 +3409,8 @@ function Input_InventoryInfo_ShowServantInvenTooltip(index, isShow)
   local self = InventoryInfo
   if isShow then
     if nil ~= self._servantActorKeyRaw[1] then
+      _AudioPostEvent_SystemUiForXBOX(50, 0)
+      _AudioPostEvent_SystemUiForXBOX(1, 0)
       local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index + self._servantInvenStartSlot - 1 + __eTInventorySlotNoUseStart)
       PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, _panel:GetPosX())
       PaGlobalFunc_FloatingTooltip_Close()
@@ -3931,10 +3939,7 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
   end
   if nil ~= rClickFunction and "function" == type(rClickFunction) then
     self._ui.stc_keyGuide:SetShow(false)
-    self._ui.stc_keyGuideSetFunctor:SetShow(_snappedOnThisPanel)
-    if false == _panel:GetShow() then
-      self._ui.stc_keyGuideSetFunctor:SetShow(true)
-    end
+    self._ui.stc_keyGuideSetFunctor:SetShow(true)
     if nil ~= optionalPadEvent and nil ~= optionalPadEvent.func and "function" == type(optionalPadEvent.func) then
       self._optionalPadEventFunc = optionalPadEvent.func
       self._optionalPadEventButton = __eConsoleUIPadEvent_Y
@@ -3953,9 +3958,7 @@ function Inventory_SetFunctor(filterFunction, rClickFunction, otherWindowOpenFun
   if nil == optionalPadEvent then
     if nil ~= self._optionalPadEventButton then
       _panel:registerPadEvent(self._optionalPadEventButton, "")
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "unregister pad event y")
     end
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "set _optionalPadEventButton nil")
     self._optionalPadEventFunc = nil
     self._optionalPadEventButton = nil
     self._ui.txt_keyGuideSetFunctorAlterKey:SetShow(false)
@@ -4846,11 +4849,4 @@ function PaGlobalFunc_SetKeyGuideUVTo(control, buttonIndex)
   local x1, y1, x2, y2 = setTextureUV_Func(control, _buttonUV[buttonIndex][1], _buttonUV[buttonIndex][2], _buttonUV[buttonIndex][3], _buttonUV[buttonIndex][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
-end
-function inventoryKeyGuideTest()
-  if 0 == _panel:GetPosY() then
-    _panel:SetPosY(-50)
-  else
-    _panel:SetPosY(0)
-  end
 end

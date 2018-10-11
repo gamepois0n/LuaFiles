@@ -1018,6 +1018,7 @@ function PaGlobalFunc_Widget_Alert_Check_WeightOver()
   if nil == selfPlayerWrapper then
     return false
   end
+  FGlobal_Inventory_WeightCheck()
   local selfPlayer = selfPlayerWrapper:get()
   local s64_moneyWeight = selfPlayer:getInventory():getMoneyWeight_s64()
   local s64_equipmentWeight = selfPlayer:getEquipment():getWeight_s64()

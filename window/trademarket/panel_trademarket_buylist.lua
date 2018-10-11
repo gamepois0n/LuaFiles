@@ -42,6 +42,7 @@ local tradeBuyMarket = {
   maxSellCount = 9,
   enCommerceIndex = -1,
   isOpenShop = false,
+  isInitialized = false,
   slotConfig = {
     createIcon = true,
     createBorder = true,
@@ -256,6 +257,7 @@ function createBuyItemList()
   local posY = tradeBuyMarket.ListBody[1]:GetPosY()
   _TitleName:SetPosX(posX)
   _TitleName:SetPosY(posY - 50)
+  tradeBuyMarket.isInitialized = true
 end
 function updateMarketList()
   if false == Panel_Trade_Market_BuyItemList:GetShow() then
@@ -465,7 +467,20 @@ function TradeMarket_BuyList_SimpleTooltip(isShow, index, lifeType, lifeLevel)
   control = tradeBuyMarket.buyingCondition[index]
   TooltipSimple_Show(control, name, desc)
 end
+function PaGlobalFunc_TradeMarket_ReOrderMarketList()
+  tradeBuyMarket:reorderMarketList()
+end
+function tradeBuyMarket:reorderMarketList()
+  if false == tradeBuyMarket.isInitialized then
+    return
+  end
+  if false == Panel_Trade_Market_BuyItemList:IsShow() then
+    return
+  end
+  tradeBuyMarketList_Position()
+end
 createBuyItemList()
 Panel_Trade_Market_BuyItemList:RegisterUpdateFunc("updateMarketList")
 registerEvent("EventNpcShopUpdate", "eventBuyFromNpcListRefesh")
 registerEvent("ToClient_SendTrendInfo", "ToClient_SendTrendInfo")
+registerEvent("onScreenResize", "PaGlobalFunc_TradeMarket_ReOrderMarketList")

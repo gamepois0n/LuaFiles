@@ -23,7 +23,8 @@ PaGlobal_ExtractionEnchantStone = {
   _uiButtonQuestion = UI.getChildControl(Panel_Window_Extraction_EnchantStone, "Button_Question"),
   _doExtracting = false,
   _targetWhereType = nil,
-  _targetSlotNo = nil
+  _targetSlotNo = nil,
+  _thisIsWeapone = nil
 }
 registerEvent("FromClient_luaLoadComplete", "LoadComplete_ExtractionEnchantStone_Initialize")
 function LoadComplete_ExtractionEnchantStone_Initialize()

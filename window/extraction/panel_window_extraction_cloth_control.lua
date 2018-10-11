@@ -123,6 +123,7 @@ function ExtractionCloth_Success()
 end
 function PaGlobal_ExtractionCloth:successXXX()
   local isValks = self._radioBtnValks:IsCheck()
+  self._isValksExtracted = isValks
   ToClient_RequestExtracItemFromExtractionCount(self._extraction_TargetWhereType, self._extraction_TargetSlotNo, isValks)
   self._doExtracting = false
   self._currentTime = 0

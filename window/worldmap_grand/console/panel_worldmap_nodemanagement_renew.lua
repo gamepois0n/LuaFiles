@@ -382,6 +382,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeData)
   self:SetNodeData(nodeData)
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_WORLDMAP_NODE_WITHDRAWCONFIRM")
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
@@ -393,6 +394,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeData)
   MessageBox.showMessageBox(messageBoxData, "top")
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue()
+  local self = Window_WorldMap_NodeManagementInfo
   local parentTakeAble = true
   for index = 0, self._currentSubNodeIndex - 1 do
     if true == isWithdrawablePlant(self._subNodeInfoList[index]._wayPointKey) then
@@ -406,10 +408,12 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue()
     self._deleteNodeKey = nil
   end
   PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAllCancel()
   PaGlobalFunc_WorldMap_TopMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
@@ -473,6 +477,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_Open(nodeData)
   self:SetNodeData(nodeData)
   self:Update()
   PaGlobalFunc_WorldMap_TopMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Close()
 end
 function PaGlobalFunc_WorldMap_NodeManagement_Close()
   if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
@@ -480,6 +485,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_Close()
   end
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_NodeManagement_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_NodeManagement_luaLoadComplete()

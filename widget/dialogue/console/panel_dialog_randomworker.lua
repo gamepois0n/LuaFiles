@@ -15,7 +15,8 @@ local randomWorker = {
     _coinIconGapX = 25
   },
   _selectWorkerSlotNo = -1,
-  _selectWorkerPrice = 0
+  _selectWorkerPrice = 0,
+  _prevWorkerCount = 0
 }
 function randomWorker:initialize()
   self:initControl()
@@ -64,9 +65,18 @@ function randomWorker:initControl()
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuide, RandomWorkerUI._static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   RandomWorkerUI._staticText_Energy:SetPosX(RandomWorkerUI._staticText_Energy:GetPosX() - 15)
 end
+function randomWorker:resetPrevWorkerCount()
+  local selfPlayer = getSelfPlayer()
+  local pcPosition = selfPlayer:get():getPosition()
+  local regionInfo = getRegionInfoByPosition(pcPosition)
+  local regionPlantKey = regionInfo:getPlantKeyByWaypointKey()
+  local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
+  self._prevWorkerCount = waitWorkerCount
+end
 function randomWorker:resetData()
   self._selectWorkerSlotNo = -1
   self._selectWorkerPrice = 0
+  self:resetPrevWorkerCount()
 end
 function randomWorker:open()
   if true == Panel_Dialog_RandomWorker:GetShow() then
@@ -289,9 +299,17 @@ end
 function FGlobalFunc_NextWorker_RandomWorker()
   randomWorker:getNextWorker()
 end
-function randomWorker:changeWorkerCount()
+function randomWorker:changeWorkerCount(isinitialized, workercount)
+  if self._prevWorkerCount == 0 then
+    self:resetPrevWorkerCount()
+  end
+  if workercount >= self._prevWorkerCount then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIRE_WORKER"))
+  else
+  end
+  self._prevWorkerCount = workercount
 end
-function FromClient_ChangeWorkerCount()
-  randomWorker:changeWorkerCount()
+function FromClient_ChangeWorkerCount(isinitialized, workercount)
+  randomWorker:changeWorkerCount(isinitialized, workercount)
 end
 randomWorker:registEventHandler()

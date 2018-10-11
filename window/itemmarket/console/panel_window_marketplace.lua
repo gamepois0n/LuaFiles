@@ -48,6 +48,21 @@ function MarketPlace:init()
   self._ui.list_ItemCategory = UI.getChildControl(self._ui.stc_LeftBg, "List2_Category")
   self._ui.stc_AssetBg = UI.getChildControl(self._ui.stc_LeftBg, "Static_MarketInventoryBg")
   self._ui.btn_WalletConsoleUI = UI.getChildControl(self._ui.stc_AssetBg, "Button_X_ConsoleUI")
+  local baseSlot = UI.getChildControl(self._ui.stc_AssetBg, "Static_ItemSlotBg_Template")
+  baseSlot:SetShow(false)
+  self._slot = Array.new()
+  for ii = 0, 39 do
+    local slot = {}
+    slot.background = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui.stc_AssetBg, "ItemSlotBg_" .. ii)
+    CopyBaseProperty(baseSlot, slot.background)
+    slot.background:SetPosX(15 + math.floor(ii % 5) * 48)
+    slot.background:SetPosY(95 + math.floor(ii / 5) * 48)
+    slot.background:SetShow(true)
+    SlotItem.new(slot, "ItemSlot_" .. ii, ii, slot.background, self._slotConfig)
+    slot:createChild()
+    slot.icon:SetShow(true)
+    self._slot[ii] = slot
+  end
   self._ui.list_MarketItemList = UI.getChildControl(self._ui.stc_MarketItemListBg, "List2_ItemList")
   local list2_Content = UI.getChildControl(self._ui.list_MarketItemList, "List2_1_Content")
   local slot = {}
@@ -74,6 +89,21 @@ function MarketPlace:init()
   self._ui.txt_Text1 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_1")
   self._ui.txt_Text2 = UI.getChildControl(self._ui.stc_StatusBg, "StaticText_2")
   self:registEvent()
+end
+function MarketPlace:updateWallet()
+  local walletItemCount = getWorldMarketMyWalletListCount()
+  for ii = 0, 39 do
+    local slot = self._slot[ii]
+    slot:clearItem()
+    if ii < walletItemCount then
+      local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(ii)
+      local itemWrapper = itemMyWalletInfo:getItemEnchantStaticStatusWrapper()
+      if nil ~= itemWrapper then
+        slot:setItemByStaticStatus(itemWrapper, itemMyWalletInfo:getItemCount(), -1, false, nil, false, 0, 0, nil, true)
+        slot.icon:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_SellItem(" .. ii .. ")")
+      end
+    end
+  end
 end
 function MarketPlace:registEvent()
   self._ui.btn_MarketPlace:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_OpenItemMarketTab()")
@@ -131,6 +161,7 @@ end
 function MarketPlace:biddingOpen(tabIdx)
   self._selectedBiddingTabIndex = tabIdx
   self:updateMyBiddingItemList()
+  self:updateWallet()
 end
 function MarketPlace:update()
   self._ui.list_ItemCategory:getElementManager():clearKey()
@@ -223,6 +254,9 @@ function MarketPlace:updateMyInfo()
   self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
   self._ui.txt_Count:SetText(tostring(walletItemCount))
 end
+function PaGlobalFunc_MarketPlace_UpdateMyInfo()
+  MarketPlace:updateMyInfo()
+end
 function MarketPlace:setNameColor(nameColorGrade)
   local nameColor
   if 0 == nameColorGrade then
@@ -250,6 +284,10 @@ function MarketPlace:setNameAndEnchantLevel(enchantLevel, itemType, itemName, it
     nameStr = itemName
   end
   return nameStr
+end
+function InputMLUp_MarketPlace_SellItem(slotIndex)
+  local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(slotIndex)
+  ToClient_requestDetailOneItemByWorldMarket(itemMyWalletInfo:getEnchantKey())
 end
 function PaGlobalFunc_MarketPlace_GetShow()
   return _panel:GetShow()
@@ -483,6 +521,7 @@ function PaGlobalFunc_MarketPlace_Open()
   end
   self._currentTerritoryKeyRaw = regionInfoWrapper:getTerritoryKeyRaw()
   self:open(self._tabIdx.itemMarket)
+  _PA_LOG("\235\176\149\234\183\156\235\130\152", "PaGlobalFunc_MarketPlace_Open")
 end
 function FGlobal_ItemMarket_Open_ForWorldMap(territoryKeyRaw, isEscMenu)
   local self = MarketPlace
@@ -505,10 +544,12 @@ function FGlobal_ItemMarket_Open_ForWorldMap(territoryKeyRaw, isEscMenu)
   self._isEsc = isEscMenu
   self._isWorldMapOpen = true
   self:open(self._tabIdx.itemMarket)
+  _PA_LOG("\235\176\149\234\183\156\235\130\152", "FGlobal_ItemMarket_Open_ForWorldMap")
 end
 function FGlobal_ItemMarket_OpenByMaid()
   _PA_ASSERT(false, "\237\149\180\235\139\185 \237\149\168\236\136\152\234\176\128 \236\149\132\236\167\129 \234\181\172\237\152\132\235\144\152\236\167\128 \236\149\138\236\149\152\236\138\181\235\139\136\235\139\164!! : FGlobal_ItemMarket_OpenByMaid")
   self:open(self._tabIdx.itemMarket)
+  _PA_LOG("\235\176\149\234\183\156\235\130\152", "FGlobal_ItemMarket_OpenByMaid")
 end
 function FGlobal_ItemMarket_IsOpenByMaid()
   local self = MarketPlace
@@ -541,6 +582,7 @@ function InputMLUp_MarketPlace_OpenItemMarketTab()
     return
   end
   self:open(self._tabIdx.itemMarket)
+  _PA_LOG("\235\176\149\234\183\156\235\130\152", "InputMLUp_MarketPlace_OpenItemMarketTab")
 end
 function InputMLUp_MarketPlace_OpenMyAssetTab()
   local self = MarketPlace
@@ -549,6 +591,7 @@ function InputMLUp_MarketPlace_OpenMyAssetTab()
     return
   end
   self:open(self._tabIdx.myAsset)
+  _PA_LOG("\235\176\149\234\183\156\235\130\152", "InputMLUp_MarketPlace_OpenMyAssetTab")
 end
 function InputMLUp_MarketPlace_OpenMySellTab()
   local self = MarketPlace
@@ -653,7 +696,7 @@ function InputMLUp_MarketPlace_RequestBiddingList(idx)
     return
   end
   local itemEnchantKey = itemInfo:getEnchantKey()
-  ToClient_requestGetBiddingList(itemEnchantKey)
+  ToClient_requestGetBiddingList(itemEnchantKey, true)
 end
 function FromClient_MarketPlace_ResponseList()
   local self = MarketPlace

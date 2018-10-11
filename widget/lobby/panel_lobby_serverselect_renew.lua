@@ -364,6 +364,7 @@ function InputMLUp_ServerSelect_EnterServer(channelIdx)
   if nil == self._serverIdxData[channelIdx] then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 8)
   local worldIndex = self._serverIdxData[channelIdx].worldIdx
   local serverIndex = self._serverIdxData[channelIdx].serverIdx
   if isGameServiceTypeKor() and false == ToClient_isAdultUser() and false == ToClient_CanEnterNonAdultWorld() then
@@ -493,22 +494,6 @@ function PaGlobal_ServerSelect_ServerList_ControlCreate(content, key)
   end
   serverSlotButton:addInputEvent("Mouse_LUp", "InputMLUp_ServerSelect_EnterServer(" .. channelIdx .. ")")
   serverSlotButton:SetShow(true)
-  if isGameTypeRussia() or CppEnums.CountryType.DEV == getGameServiceType() then
-    local temporaryWrapper = getTemporaryInformationWrapper()
-    local isFixedCharge = temporaryWrapper:isFixedCharge()
-    if serverData._fixedCharge then
-      if isFixedCharge then
-        serverSlotButton:SetIgnore(false)
-        serverSlotButton:SetMonoTone(false)
-      else
-        serverSlotButton:SetIgnore(true)
-        serverSlotButton:SetMonoTone(true)
-      end
-    else
-      serverSlotButton:SetIgnore(false)
-      serverSlotButton:SetMonoTone(false)
-    end
-  end
 end
 function PaGlobal_ServerSelect_EnterMemorizedChannel(channelIdx)
   local self = ServerSelect

@@ -718,7 +718,7 @@ end
 function WorldMapHouseManager:updateRentedHouse(rentHouse, houseInfoStaticStatusWrapper)
   self._rentedLevel = rentHouse:getLevel()
   self._currentGroupType = rentHouse:getHouseUseType()
-  self._rentedUseType = rentHouse:getHouseUseType()
+  self._rentedUseType = rentHouse:getType()
   self._isRentedHouse = true
   self._ui.txt_normalTimeCost:SetShow(false)
   self._ui.btn_upgradeOrChange:SetShow(true)
@@ -727,7 +727,7 @@ function WorldMapHouseManager:updateRentedHouse(rentHouse, houseInfoStaticStatus
     self._currentGroupType = eHouseUseGroupType.Count
   end
   for ii = 1, #self._useTypeData do
-    if self._rentedUseType == self._useTypeData[ii].useType then
+    if self._rentedUseType == self._useTypeData[ii].receipeKey then
       rentedIndex = ii
       self._ui.txt_tipIcon:SetText(self._useTypeData[rentedIndex].name)
       if nil == self._selected then
@@ -781,7 +781,7 @@ function WorldMapHouseManager:updateEmptyHouse(houseInfoSSWrapper)
   self:setBuyButton(houseInfoSSWrapper)
 end
 function WorldMapHouseManager:setBuyButton(houseInfoSSWrapper)
-  local isPurchasable = houseInfoSSWrapper:isPurchasable(self._useTypeData[self._selected].receipeKey)
+  local isPurchasable = houseInfoSSWrapper:isPurchasable(self._useTypeData[self._selected].useType)
   if isPurchasable and self._needExplorePoint <= ToClient_RequestGetMyExploredPoint() then
     self._ui.chk_buyOrSell:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_RENEW_RENT"))
     self._ui.chk_buyOrSell:addInputEvent("Mouse_LUp", "Input_WorldMapHouseManager_Buy()")
@@ -1118,7 +1118,7 @@ function WorldMapHouseManager:updateBottomAsNormalState()
   self:updateBottomButtons()
 end
 function WorldMapHouseManager:updateBottomButtons()
-  local selectedUseType = self._useTypeData[self._selected].useType
+  local selectedUseType = self._useTypeData[self._selected].receipeKey
   local houseInfoSSW = ToClient_GetHouseInfoStaticStatusWrapper(self._houseKey)
   local houseInfoCraftWrapper = houseInfoSSW:getHouseCraftWrapperByIndex(self._selected - 1)
   local rentHouseWrapper = ToClient_GetRentHouseWrapper(self._houseKey)

@@ -211,6 +211,13 @@ function ItemMarket_registEventHandler()
   local self = ItemMarket_FavoriteItem
   self.list2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FavoriteItem_ListControlCreate")
   self.list2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  registerEvent("onScreenResize", "ItemMarket_FavoriteItem_Resize")
+end
+function ItemMarket_FavoriteItem_Resize()
+  if true == Panel_Window_ItemMarket:GetShow() and true == Panel_Window_ItemMarket_Favorite:GetShow() then
+    Panel_Window_ItemMarket_Favorite:SetPosX(Panel_Window_ItemMarket:GetPosX() + Panel_Window_ItemMarket:GetSizeX())
+    Panel_Window_ItemMarket_Favorite:SetPosY(Panel_Window_ItemMarket:GetPosY() + 60)
+  end
 end
 ItemMarket_registEventHandler()
 ItemMarket_FavoriteItem_Init()

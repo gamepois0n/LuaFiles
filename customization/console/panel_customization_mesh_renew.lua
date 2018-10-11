@@ -118,7 +118,7 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       control:SetPosX(12 + itemIndex % self._config._meshColumnCount * self._config._columnWidth + self._config._contentsOffsetX)
       control:SetPosY(5 + math.floor(itemIndex / self._config._meshColumnCount) * self._config._columnHeight + self._config._contentsOffsetY)
       control:setRenderTexture(control:getBaseTexture())
-      if not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, listParamType, listParamIndex, itemIndex) and isServerFixedCharge() then
+      if not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, listParamType, listParamIndex, itemIndex) then
         control:SetShow(false)
       else
         control:SetShow(true)
@@ -171,7 +171,7 @@ function HandleClicked_Customization_Mesh_Open(classType, uiId)
       control:setRenderTexture(control:getBaseTexture())
       if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) then
         control:SetShow(false)
-      elseif not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) and isServerFixedCharge() then
+      elseif not PaGlobalFunc_Customization_IsInGame() and not isNormalCustomizingIndex(classType, detailListParamType, detailListParamIndex, paramValue) then
         control:SetShow(false)
       else
         control:SetShow(true)

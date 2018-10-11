@@ -244,26 +244,18 @@ function Panel_Dialog_Main_Quest_Info:Quest_InfomationSetData(dialogData)
   if realWord ~= nil and realWord ~= "" then
     local newNpcWord = ""
     local stringList = string.split(realWord, "\n")
-    local strFirst, strSecond
-    if #stringList < 2 then
-      newNpcWord = realWord
-    else
-      for line = 1, #stringList / 2 do
-        strFirst = stringList[line * 2 - 1]
-        strSecond = stringList[line * 2]
-        newNpcWord = newNpcWord .. strFirst .. "\n" .. strSecond .. "\n"
-        if line ~= #stringList / 2 then
-          newNpcWord = newNpcWord .. "\n"
-        end
+    for idx = 1, #stringList do
+      if idx % 2 == 0 then
+        newNpcWord = newNpcWord .. "\n" .. "\n"
       end
+      newNpcWord = newNpcWord .. " " .. stringList[idx]
     end
     self._ui.staticText_Quest_Npc_Words:SetAutoResize(true)
     self._ui.staticText_Quest_Npc_Words:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self._ui.staticText_Quest_Npc_Words:SetText(newNpcWord)
   end
   local preDesc = simplequestData:getQuestDesc()
-  local ignoreDesc = PaGlobalFunc_MainDialog_Right_CheckSceneChange(preDesc)
-  local questDesc = ToClient_getReplaceDialog(ignoreDesc)
+  local questDesc = ToClient_getReplaceDialog(preDesc)
   if questDesc ~= nil and questDesc ~= "" then
     self._ui.staticText_Quest_Detail:SetAutoResize(true)
     self._ui.staticText_Quest_Detail:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -279,8 +271,7 @@ function Panel_Dialog_Main_Quest_Info:Quest_InfomationSetData(dialogData)
  -]] .. desc
     end
   end
-  local ignoreCompleteDesc = PaGlobalFunc_MainDialog_Right_CheckSceneChange(completeDesc)
-  local newCompleteDesc = ToClient_getReplaceDialog(ignoreCompleteDesc)
+  local newCompleteDesc = ToClient_getReplaceDialog(completeDesc)
   self._ui.staticText_Quest_Condition:SetAutoResize(true)
   self._ui.staticText_Quest_Condition:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.staticText_Quest_Condition:SetText(newCompleteDesc)
@@ -528,6 +519,7 @@ function PaGlobalFunc_MainDialog_Quest_Open()
   if 0 == questCount then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(4, 4)
   self:openAndSetData(dialogData)
 end
 function PaGlobalFunc_MainDialog_Quest_Close()

@@ -857,14 +857,14 @@ function checkedQuestWidget:setGuildQuest()
         local currentGuildQuestInfo = ToClient_getCurrentGuildQuestConditionAt(idx)
         conditionStr = " - " .. currentGuildQuestInfo._desc .. " ( " .. currentGuildQuestInfo._currentCount .. " / " .. currentGuildQuestInfo._destCount .. " ) "
         conditionStr = ToClient_getReplaceDialog(conditionStr)
-        if currentGuildQuestInfo._currentCount == currentGuildQuestInfo._destCount then
+        if currentGuildQuestInfo._destCount <= currentGuildQuestInfo._currentCount then
           completeCount = completeCount + 1
           conditionState = self._config._questState._complete
         end
         table.insert(questData.demand, conditionStr)
         table.insert(questData.demandState, conditionState)
       end
-      if completeCount == questConditionCount then
+      if questConditionCount <= completeCount then
         questData.demand = {}
         questData.demand[1] = " " .. PAGetString(Defines.StringSheet_GAME, "GUILDQUEST_COMPLETE")
         questData.state = self._config._questState._complete

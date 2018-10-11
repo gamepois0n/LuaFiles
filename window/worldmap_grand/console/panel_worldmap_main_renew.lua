@@ -163,7 +163,7 @@ function PaGlobalFunc_FromClient_WorldMap_ReSetTownMode()
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_RightMenu_Close()
-  PaGlobalFunc_WorldMap_BottomMenu_Close()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
 end
 function PaGlobalFunc_FromClient_WorldMap_SetTownMode(waypointKey)
@@ -280,6 +280,7 @@ function PaGlobalFunc_FromClient_WorldMap_Open()
   PaGlobalFunc_WorldMap_SetIsTownMode(false)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
+  PaGlobalFunc_WorldMap_BottomMenu_Open()
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_WORLDMAP")
 end
 function PaGlobalFunc_FromClient_WorldMap_Close()
@@ -510,9 +511,11 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
   if false == PaGlobalFunc_WorldMap_RingMenu_GetShow() then
     return
   end
-  if true ~= isPadUp(__eJoyPadInputType_RightTrigger) or false == PaGlobalFunc_WorldMap_GetIsTownMode() then
-  else
-    PaGlobalFunc_WorldMap_BottomMenu_FindNPC()
+  if true == isPadUp(__eJoyPadInputType_RightTrigger) then
+    PaGlobalFunc_WorldMap_BottomMenu_StartTrigger()
+  end
+  if true == isPadUp(__eJoyPadInputType_LeftThumb) then
+    ToClient_SetWorldMapBookMark(PaGlobalFunc_WorldMap_BottomMenu_GetBookMarkIndex())
   end
   if true == isPadUp(__eJoyPadInputType_RightShoulder) then
     PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(1)
@@ -531,7 +534,6 @@ function Window_WorldMap_MainInfo:InitRegister()
   registerEvent("FromClient_SetTownMode", "PaGlobalFunc_FromClient_WorldMap_SetTownMode")
   registerEvent("FromClient_resetTownMode", "PaGlobalFunc_FromClient_WorldMap_ReSetTownMode")
   registerEvent("FromClient_WorldMapNodeUpgrade", "PaGlobalFunc_FromClient_WorldMap_UpdateWorldMapNode")
-  registerEvent("FromClint_EventChangedExplorationNode", "PaGlobalFunc_FromClient_WorldMap_ChangedExplorationNode")
   registerEvent("FromClint_EventUpdateExplorationNode", "PaGlobalFunc_FromClient_WorldMap_UpdateExplorationNode")
   registerEvent("FromClient_RClickWorldmapPanel", "FromClient_RClickWorldmapPanel")
   registerEvent("FromClient_DeleteNaviGuidOnTheWorldmapPanel", "PaGlobalFunc_FromClient_WorldMap_DeleteNaviGuidOnTheWorldmapPanel")
@@ -584,12 +586,6 @@ function PaGlobalFunc_FromClient_WorldMap_HideAutoCompletedNaviBtn(isShow)
 end
 function PaGlobalFunc_FromClient_WorldMap_DeleteNaviGuidOnTheWorldmapPanel()
   ToClient_DeleteNaviGuideByGroup(0)
-end
-function PaGlobalFunc_FromClient_WorldMap_ChangedExplorationNode()
-  if false == ToClient_WorldMapIsShow() then
-    return
-  end
-  ToClient_reloadNodeLine(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode(), CppEnums.WaypointKeyUndefined)
 end
 function PaGlobalFunc_FromClient_WorldMap_UpdateExplorationNode()
   if false == ToClient_WorldMapIsShow() then

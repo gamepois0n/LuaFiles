@@ -46,8 +46,8 @@ function ExtractionEnchantStone_InteractortionFromInventory(slotNo, itemWrapper,
   Panel_Tooltip_Item_SetPosition(slotNo, self._uiEquipItem, "inventory")
   local ItemEnchantStaticStatus = itemWrapper:getStaticStatus():get()
   local blackStone_Count = ItemEnchantStaticStatus._key:getEnchantLevel()
-  local thisIsWeapone = ItemEnchantStaticStatus:isWeapon() or ItemEnchantStaticStatus:isSubWeapon() or ItemEnchantStaticStatus:isAwakenWeapon()
-  if thisIsWeapone then
+  self._thisIsWeapone = ItemEnchantStaticStatus:isWeapon() or ItemEnchantStaticStatus:isSubWeapon() or ItemEnchantStaticStatus:isAwakenWeapon()
+  if self._thisIsWeapone then
     if blackStone_Count >= 8 then
       blackStone_Count = "?"
     end

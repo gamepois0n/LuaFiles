@@ -253,7 +253,7 @@ function Panel_Widget_FunctionButton_info:handleLClick(functionType)
       if IsSelfPlayerWaitAction() then
         ToClient_RequestTeleportPosUseCompass()
       else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT"))
       end
     end
   elseif functionType == Widget_Function_Type.ReturnTown then
@@ -265,7 +265,7 @@ function Panel_Widget_FunctionButton_info:handleLClick(functionType)
       if IsSelfPlayerWaitAction() then
         ToClient_RequestTeleportPosUseReturnStone()
       else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT"))
       end
     end
   elseif functionType == Widget_Function_Type.SummonElephant then

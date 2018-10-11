@@ -151,6 +151,8 @@ function MarketWallet:registEvent()
   self._ui.stc_RightNormalBG:addInputEvent("Mouse_On", "InputMO_MarketWallet_ShowFocus(false)")
   self._ui.btn_BConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_MarketWallet_Close()")
   registerEvent("FromClient_requestMyWalletList", "FromClient_MarketPlace_RequestMyWalletList")
+  registerEvent("FromClient_requestPush", "FromClient_MarketPlace_RequestPush")
+  registerEvent("FromClient_requestPop", "FromClient_MarketPlace_RequestPop")
 end
 function MarketWallet:open()
   self:updateInventory()
@@ -389,7 +391,7 @@ function InputMRUp_MarketWallet_MoveWalletToInven(slotIdx)
     return
   end
   local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(slotIdx)
-  requestMoveItemWalletToInventory(itemMyWalletInfo:getEnchantKey())
+  requestMoveItemWalletToInventory(itemMyWalletInfo:getEnchantKey(), 1)
 end
 function InputMO_MarketWallet_HideSlotFocus()
   local self = MarketWallet
@@ -420,5 +422,29 @@ function FromClient_MarketPlace_RequestMyWalletList()
     return
   end
   self:updateWallet()
+end
+function FromClient_MarketPlace_RequestPush()
+  PaGlobalFunc_MarketPlace_UpdateWalletInfo()
+  local self = MarketWallet
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketWallet")
+    return
+  end
+  self:updateWallet()
+  self:updateInventory()
+  local msg = "\237\134\181\237\149\169\234\177\176\235\158\152\236\134\140\236\151\144 \236\149\132\236\157\180\237\133\156 \235\147\177\235\161\157\236\157\132 \236\153\132\235\163\140\237\150\136\236\138\181\235\139\136\235\139\164."
+  Proc_ShowMessage_Ack(msg)
+end
+function FromClient_MarketPlace_RequestPop()
+  PaGlobalFunc_MarketPlace_UpdateWalletInfo()
+  local self = MarketWallet
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketWallet")
+    return
+  end
+  self:updateWallet()
+  self:updateInventory()
+  local msg = "\236\157\184\235\178\164\237\134\160\235\166\172\235\161\156 \236\149\132\236\157\180\237\133\156 \237\154\140\236\136\152\235\165\188 \236\153\132\235\163\140\237\150\136\236\138\181\235\139\136\235\139\164."
+  Proc_ShowMessage_Ack(msg)
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_MarketWallet_Init")

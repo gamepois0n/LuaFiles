@@ -72,6 +72,10 @@ function Extraction_Resize()
     self._buttonExtraction_Cloth:SetShow(false)
   end
   self._buttonExtractionExit:ComputePos()
+  if true == Panel_Equipment:IsShow() then
+    Panel_Equipment:SetPosX(10)
+    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+  end
 end
 function PaGlobal_Extraction:togglePanel()
   if false == Panel_Window_Extraction:GetShow() then

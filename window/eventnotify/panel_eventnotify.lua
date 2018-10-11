@@ -49,9 +49,6 @@ function EventNotify_Open(isDo, isMenu)
   if tempWrapper:isEventBeforeShow() and nil == isDo then
     return
   end
-  if isGameTypeRussia() and isServerFixedCharge() then
-    return
-  end
   if not TutorialQuestCompleteCheck() and not isMenu then
     return
   end

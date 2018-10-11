@@ -816,8 +816,13 @@ function Challenge_Update()
             _content[challenge_Idx].btnGetReward:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_BTNGETREWARD", "existRewardCount", existRewardCount))
             _content[challenge_Idx].btnGetReward:addInputEvent("Mouse_LUp", "HandleClicked_Reward_Show( " .. firstIndex .. ", " .. _scrollIndex .. " )")
             _content[challenge_Idx].BG:SetIgnore(false)
-            _content[challenge_Idx].btnGetReward:SetMonoTone(false)
-            _content[challenge_Idx].btnGetReward:SetIgnore(false)
+            local isAcceptAbleReward = rewardWrapper:isAcceptAbleReward()
+            if isAcceptAbleReward then
+              _content[challenge_Idx].btnGetReward:SetMonoTone(false)
+              _content[challenge_Idx].btnGetReward:SetIgnore(false)
+            else
+              _content[challenge_Idx].btnGetReward:SetMonoTone(true)
+            end
           else
           end
           ChallengeReward_Update(rewardWrapper, firstIndex, challenge_Idx)

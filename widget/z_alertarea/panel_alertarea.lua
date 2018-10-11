@@ -139,7 +139,7 @@ function PaGlobal_AlertArea:LClickFunc(index)
       if IsSelfPlayerWaitAction() then
         ToClient_RequestTeleportPosUseCompass()
       else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT"))
       end
     end
   elseif self._buttonType._returnTown == index then
@@ -151,7 +151,7 @@ function PaGlobal_AlertArea:LClickFunc(index)
       if IsSelfPlayerWaitAction() then
         ToClient_RequestTeleportPosUseReturnStone()
       else
-        Proc_ShowMessage_Ack(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALERTAREA_NOTUSEALERT"))
       end
     end
   elseif self._buttonType._coupon == index then

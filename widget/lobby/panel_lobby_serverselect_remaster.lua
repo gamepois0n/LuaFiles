@@ -803,21 +803,6 @@ function PaGlobal_ServerSelect_CreateChannelBranch(content, key)
   elseif false == stc_maintanance:GetShow() then
     txt_State:SetShow(true)
   end
-  if isGameTypeRussia() or CppEnums.CountryType.DEV == getGameServiceType() then
-    local isFixedCharge = temporaryWrapper:isFixedCharge()
-    if channelServerData._fixedCharge then
-      if isFixedCharge then
-        serverSlotButton:SetIgnore(false)
-        serverSlotButton:SetMonoTone(false)
-      else
-        serverSlotButton:SetIgnore(true)
-        serverSlotButton:SetMonoTone(true)
-      end
-    else
-      serverSlotButton:SetIgnore(false)
-      serverSlotButton:SetMonoTone(false)
-    end
-  end
   if nil ~= channelServerIdx and self._selectedChannelIndex == channelServerIdx then
     stc_highlightBG:SetShow(true)
     if not isAdmission then

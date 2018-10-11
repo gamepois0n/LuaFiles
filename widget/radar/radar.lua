@@ -2488,6 +2488,10 @@ function CalcPositionUseToTextUI(targetUIposX, targetUIposY, textUI)
   end
 end
 function FromClient_setNameOfMouseOverIcon(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
+  if true == ToClient_isXBox() then
+    radar_OverName:SetShow(false)
+    return
+  end
   local actorName = ""
   if actorProxyWrapper:get():isNpc() then
     if "" ~= actorProxyWrapper:getCharacterTitle() then

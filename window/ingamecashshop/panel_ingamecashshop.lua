@@ -37,6 +37,10 @@ local inGameShop = {
     _subButtonSize = {_BigX = 303, _SmallX = 121}
   },
   _const = {_sortTypeAsc = 1, _sortTypeDesc = 2},
+  _hotAndNewStartPosX,
+  _hotAndNew_Showable_Sale = true,
+  _hotAndNew_Showable_New = true,
+  _hotAndNew_Showable_Event = true,
   _static_TopLineBG = UI.getChildControl(Panel_IngameCashShop, "Static_TopLineBG"),
   _static_PromotionBanner = UI.getChildControl(Panel_IngameCashShop, "Static_PromotionBanner"),
   _static_GradationTop = UI.getChildControl(Panel_IngameCashShop, "Static_Gradation_Top"),
@@ -70,6 +74,9 @@ local inGameShop = {
   _btn_BuyDaum = UI.getChildControl(Panel_IngameCashShop, "Button_BuyDaum"),
   _btn_RefreshCash = UI.getChildControl(Panel_IngameCashShop, "Button_RefreshCash"),
   _btn_HowUsePearl = UI.getChildControl(Panel_IngameCashShop, "Button_PearlHowUse"),
+  _radioButton_Sale = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Sale"),
+  _radioButton_New = UI.getChildControl(Panel_IngameCashShop, "RadioButton_New"),
+  _radioButton_Event = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Event"),
   desc = {
     _static_ItemNameCombo = nil,
     _staticText_Title = nil,
@@ -145,7 +152,9 @@ local inGameShop = {
   _cashProductNoData = -1,
   _cashProductIndex = 1,
   _ViewingRecommend = false,
-  _static_EquipSlots = Array.new()
+  _static_EquipSlots = Array.new(),
+  _isSubTabShow = false,
+  _isHotAndNewOpen = false
 }
 inGameShop._scrollBTN_IngameCash = UI.getChildControl(inGameShop._scroll_IngameCash, "Scroll_CtrlButton")
 inGameShop._combo_ClassList = UI.getChildControl(inGameShop._combo_Class, "Combobox_List")
@@ -608,11 +617,13 @@ function inGameShop:init()
   _ingameCash_SetTabIconTexture(promotionTab.icon, tabId.promotionTab, 0)
   promotionTab.static:SetShow(true)
   self._promotionTab = promotionTab
+  self._hotAndNewStartPosX = self._radioButton_Sale:GetPosX()
   for ii = 0, maxSlotCount - 1 do
     local slot = {}
     slot.productNoRaw = nil
     slot.static = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Static_GoodsBG", self._static_ScrollArea, "InGameShop_Slot_" .. ii)
     slot.productIcon = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Static_ProductImage", slot.static, "InGameShop_Slot_ProductIcon_" .. ii)
+    slot.discountRate = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_StaticText_SaleValue", slot.static, "InGameShop_Slot_ProductDiscountRate_" .. ii)
     slot.tag = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Static_GoodsHighlightLine", slot.static, "InGameShop_Slot_Tag_" .. ii)
     slot.soldout = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Static_GoodsSoldout", slot.static, "InGameShop_Slot_Soldout_" .. ii)
     slot.iconBG = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Static_SlotBG", slot.static, "InGameShop_Slot_IconBG_" .. ii)
@@ -626,6 +637,8 @@ function inGameShop:init()
     slot.buttonBuy = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Button_Buy", slot.static, "InGameShop_Slot_Buy_" .. ii)
     slot.buttonGift = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Button_Gift", slot.static, "InGameShop_Slot_Gift_" .. ii)
     slot.buttonCart = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop, "TemplateList_Button_Cart", slot.static, "InGameShop_Slot_Cart_" .. ii)
+    slot.static:SetChildOrder(slot.tag:GetKey(), slot.discountRate:GetKey())
+    slot.static:SetChildOrder(slot.iconBG:GetKey(), slot.discountRate:GetKey())
     slot.static:SetPosX(0)
     slot.static:SetPosY(slotConfig._gapY * ii)
     slot.discount:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -648,6 +661,7 @@ function inGameShop:init()
     slot.tag:SetShow(true)
     slot.soldout:SetShow(false)
     slot.static:SetShow(false)
+    slot.discountRate:SetShow(false)
     self._slots[ii] = slot
   end
   self._pricePosX = self._slots[0].price:GetPosX()
@@ -839,6 +853,7 @@ function inGameShop:setElement(index, productNoRaw, slot)
   slot.originalPrice:SetShow(false)
   slot.priceArrow:SetShow(false)
   slot.discount:SetText(cashProduct:getDescription())
+  slot.discountRate:SetShow(false)
   if cashProduct:isApplyDiscount() then
     local startDiscountTimeValue = PATime(cashProduct:getStartDiscountTime():get_s64())
     local endDiscountTimeValue = PATime(cashProduct:getEndDiscountTime():get_s64())
@@ -856,6 +871,8 @@ function inGameShop:setElement(index, productNoRaw, slot)
     slot.originalPrice:SetShow(true)
     slot.priceArrow:SetPosX(slot.originalPrice:GetTextSizeX() + 3)
     slot.priceArrow:SetShow(true)
+    slot.discountRate:SetShow(0 ~= cashProduct:getDiscountPercent())
+    slot.discountRate:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CASHSHOP_DISPLAYPERCET", "percent", cashProduct:getDiscountPercent()))
   end
   local tagType = cashProduct:getTag()
   if (4 == tagType or 5 == tagType) and not cashProduct:isApplyDiscount() and cashProduct:isDefinedDiscount() then
@@ -1069,6 +1086,9 @@ function inGameShop:registMessageHandler()
   self._btn_BuyDaum:addInputEvent("Mouse_LUp", "InGameShop_BuyDaumCash()")
   self._btn_RefreshCash:addInputEvent("Mouse_LUp", "InGameShop_RefreshCash()")
   self._btn_BuyPearl:addInputEvent("Mouse_LUp", "InGameShop_BuyPearl()")
+  self._radioButton_Sale:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,4)")
+  self._radioButton_New:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,1)")
+  self._radioButton_Event:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,3)")
 end
 function inGameShop:registEventHandler()
   registerEvent("onScreenResize", "InGameShop_Resize")
@@ -1179,6 +1199,92 @@ function InGameShop_TabEvent(tab)
     PaGlobal_RecommendGoods:Open()
     self._categoryWeb:SetShow(false)
   end
+  if 1 == tab then
+    InGameShop_OpenHotAndNewList()
+    InGameShop_PosSetHotAndNewButton()
+  else
+    InGameShop_CloseHotAndNewList()
+  end
+end
+function InGameShop_OpenHotAndNewList()
+  local self = inGameShop
+  local slotConfig = self._config._slot
+  if true == self._isHotAndNewOpen then
+    return
+  end
+  self._radioButton_Sale:SetShow(true == self._hotAndNew_Showable_Sale)
+  self._radioButton_New:SetShow(true == self._hotAndNew_Showable_New)
+  self._radioButton_Event:SetShow(true == self._hotAndNew_Showable_Event)
+  self._static_ScrollArea:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 60)
+  local remainingSizeY = _ingameCashShop_SetViewListCount()
+  self._static_GradationBottom:SetPosY(self._static_ScrollArea:GetSizeY() + self._static_ScrollArea:GetPosY() - 50)
+  self._scroll_IngameCash:SetPosY(self._static_ScrollArea:GetPosY())
+  self._scroll_IngameCash:SetSize(self._scroll_IngameCash:GetSizeX(), remainingSizeY * 0.98)
+  self._static_ScrollArea:SetSize(self._static_ScrollArea:GetSizeX(), remainingSizeY * 0.98)
+  self._static_ScrollArea1:SetPosY(0)
+  self._static_ScrollArea1:SetSize(self._static_ScrollArea1:GetSizeX(), self._static_ScrollArea:GetPosY())
+  self._static_ScrollArea2:SetPosY(self._static_ScrollArea:GetPosY() + self._static_ScrollArea:GetSizeY())
+  self._static_ScrollArea2:SetSize(self._static_ScrollArea2:GetSizeX(), 1000)
+  self._static_GradationTop:SetPosY(self._static_ScrollArea:GetPosY())
+  self._static_GradationBottom:SetPosY(self._static_ScrollArea:GetSizeY() + self._static_ScrollArea:GetPosY() - self._static_GradationBottom:GetSizeY())
+  self._static_TopLineBG:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 10)
+  self._edit_Search:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 15)
+  self._button_Search:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 15)
+  self._combo_Class:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 18)
+  self._isHotAndNewOpen = true
+end
+function InGameShop_CloseHotAndNewList()
+  local self = inGameShop
+  if false == self._isHotAndNewOpen then
+    return
+  end
+  self._radioButton_Sale:SetShow(false)
+  self._radioButton_New:SetShow(false)
+  self._radioButton_Event:SetShow(false)
+  self._static_ScrollArea:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 10)
+  self._scroll_IngameCash:SetPosY(self._static_ScrollArea:GetPosY())
+  local remainingSizeY = _ingameCashShop_SetViewListCount()
+  self._static_GradationBottom:SetPosY(self._static_ScrollArea:GetSizeY() + self._static_ScrollArea:GetPosY() - 50)
+  self._scroll_IngameCash:SetPosY(self._static_ScrollArea:GetPosY())
+  self._scroll_IngameCash:SetSize(self._scroll_IngameCash:GetSizeX(), remainingSizeY * 0.98)
+  self._static_ScrollArea:SetSize(self._static_ScrollArea:GetSizeX(), remainingSizeY * 0.98)
+  self._static_ScrollArea1:SetPosY(0)
+  self._static_ScrollArea1:SetSize(self._static_ScrollArea1:GetSizeX(), self._static_ScrollArea:GetPosY())
+  self._static_ScrollArea2:SetPosY(self._static_ScrollArea:GetPosY() + self._static_ScrollArea:GetSizeY())
+  self._static_ScrollArea2:SetSize(self._static_ScrollArea2:GetSizeX(), 1000)
+  self._static_GradationTop:SetPosY(self._static_ScrollArea:GetPosY())
+  self._static_GradationBottom:SetPosY(self._static_ScrollArea:GetSizeY() + self._static_ScrollArea:GetPosY() - self._static_GradationBottom:GetSizeY())
+  self._static_TopLineBG:SetPosY(self._radioButton_Sale:GetPosY() + 1)
+  self._edit_Search:SetPosY(self._radioButton_Sale:GetPosY() + 6)
+  self._button_Search:SetPosY(self._radioButton_Sale:GetPosY() + 6)
+  self._combo_Class:SetPosY(self._radioButton_Sale:GetPosY() + 9)
+  self._isHotAndNewOpen = false
+end
+function InGameShop_CheckHotAndNewButton(isShow, index)
+  local self = inGameShop
+  if 4 == index then
+    self._hotAndNew_Showable_Sale = isShow
+  elseif 1 == index then
+    self._hotAndNew_Showable_New = isShow
+  elseif 3 == index then
+    self._hotAndNew_Showable_Event = isShow
+  end
+end
+function InGameShop_PosSetHotAndNewButton()
+  local self = inGameShop
+  local startPosX = self._hotAndNewStartPosX
+  if true == self._radioButton_Sale:GetShow() then
+    self._radioButton_Sale:SetPosX(startPosX)
+    startPosX = startPosX + self._radioButton_Sale:GetSizeX() + 11
+  end
+  if true == self._radioButton_New:GetShow() then
+    self._radioButton_New:SetPosX(startPosX)
+    startPosX = startPosX + self._radioButton_New:GetSizeX() + 11
+  end
+  if true == self._radioButton_Event:GetShow() then
+    self._radioButton_Event:SetPosX(startPosX)
+    startPosX = startPosX + self._radioButton_Event:GetSizeX() + 11
+  end
 end
 function makeSubTab(tabIndex)
   local self = inGameShop
@@ -1229,6 +1335,7 @@ function setPosOpenSubTab(tabIndex)
   end
   self._myCartTab.static:SetPosX(tabConfig._startX)
   self._myCartTab.static:SetPosY(tabConfig._startY + subTabSize + tabConfig._gapY * (tabId.cart - 1))
+  self._isSubTabShow = true
 end
 function setPosCloseSubTab()
   local self = inGameShop
@@ -1247,6 +1354,10 @@ function setPosCloseSubTab()
       end
     end
   end
+  self._isSubTabShow = false
+  self._radioButton_Sale:SetCheck(false)
+  self._radioButton_New:SetCheck(false)
+  self._radioButton_Event:SetCheck(false)
 end
 function InGameShop_SubTabEvent(mainTab, subTab)
   local self = inGameShop
@@ -1258,12 +1369,17 @@ function InGameShop_SubTabEvent(mainTab, subTab)
   local selectPosY = self._tabs[mainTab]._subTab[subTab].static:GetPosY()
   self._subTapSelect.static:SetPosX(selectPosX)
   self._subTapSelect.static:SetPosY(selectPosY)
-  self._subTapSelect.static:SetShow(true)
+  self._subTapSelect.static:SetShow(true == self._isSubTabShow)
   getIngameCashMall():setCurrentSubTab(subTab)
   audioPostEvent_SystemUi(0, 0)
   _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:initData()
   self:update()
+  if 1 == mainTab then
+    self._radioButton_Sale:SetCheck(4 == subTab)
+    self._radioButton_New:SetCheck(1 == subTab)
+    self._radioButton_Event:SetCheck(3 == subTab)
+  end
 end
 function InGameShop_SetScroll()
   local self = inGameShop
@@ -1506,6 +1622,7 @@ function InGameShop_Promotion_Open()
   IngameCashShopEventCart_Close()
   makeSubTab(tabId.promotionTab)
   PaGlobal_RecommendGoods:Close()
+  InGameShop_CloseHotAndNewList()
 end
 function InGameShop_Promotion_Close()
   local self = inGameShop
@@ -1541,17 +1658,7 @@ function InGameShop_ProductListContent_ChangeMoneyIconTexture(slot, categoryIdx,
   elseif UI_CCC.eCashProductCategory_Mileage == categoryIdx then
     iconType = cashIconType.mileage
   else
-    local isRussia = isGameTypeRussia() or eCountryType.DEV == gameServiceType
-    local isFixedServer = isServerFixedCharge()
-    if true == isRussia and true == isFixedServer then
-      if isEnableSilver then
-        iconType = cashIconType.silver
-      else
-        iconType = cashIconType.pearl
-      end
-    else
-      iconType = cashIconType.pearl
-    end
+    iconType = cashIconType.pearl
   end
   if isEnableSilver then
     iconType = cashIconType.silver
@@ -1973,6 +2080,12 @@ function IngameCashShop_DescUpdate()
       endDiscountTime = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_DISCOUNTTIME", "GetYear", tostring(endDiscountTimeValue:GetYear()), "GetMonth", tostring(endDiscountTimeValue:GetMonth()), "GetDay", tostring(endDiscountTimeValue:GetDay())) .. " " .. string.format("%.02d", endDiscountTimeValue:GetHour()) .. ":" .. string.format("%.02d", endDiscountTimeValue:GetMinute())
     end
     self._static_DiscountPeriodDesc:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_DISCOUNTPERIODDESC", "endDiscountTime", endDiscountTime))
+    local remainDay = calculateDayFromDateDay(cashProduct:getRemainDiscountTime())
+    if 0 == Int64toInt32(remainDay) and false == disCountSetUse then
+      local remainStr = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DISCOUNT_REMAINTIME", "remainTime", convertStringFromDatetime(cashProduct:getRemainDiscountTime()))
+      self._static_DiscountPeriodDesc:SetFontColor(UI_color.C_FFFF0000)
+      self._static_DiscountPeriodDesc:SetText(remainStr)
+    end
     self._static_DiscountPeriodDesc:SetPosY(optionDesc_PosY + descConfig._gapY * descCount)
     descCount = descCount + 1
   end
@@ -3312,10 +3425,7 @@ function InGameShop_OpenActual()
   end
   local categoryUrl = ""
   local promotionUrl = ""
-  if isServerFixedCharge() then
-    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_P2P")
-    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_P2P")
-  elseif isGameTypeKorea() then
+  if isGameTypeKorea() then
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
   elseif isGameTypeTaiwan() then
@@ -3383,6 +3493,9 @@ function InGameShop_OpenActual()
         getIngameCashMall():setCashProductNoRawFilterList()
         if getIngameCashMall():getCashProductFilterListCount() <= 0 then
           self._tabs[ii]._subTab[jj] = nil
+        end
+        if 1 == ii then
+          InGameShop_CheckHotAndNewButton(getIngameCashMall():getCashProductFilterListCount() > 0, jj)
         end
       end
     end
@@ -3587,4 +3700,19 @@ inGameShop:initTabPos()
 renderMode:setClosefunctor(renderMode, InGameShop_Close)
 function FromClient_ShowRecommendProductByComplete()
   PaGlobal_Recommend_PopUp._isRequestShow = true
+end
+function InGameShop_GotoSaleTab()
+  local self = inGameShop
+  self._myCartTab.static:SetCheck(false)
+  self._promotionTab.static:SetCheck(false)
+  for ii = 1, self._tabCount do
+    self._tabs[ii].static:SetCheck(1 == ii)
+  end
+  InGameShop_TabEvent(1)
+  if false == self._isSubTabShow then
+    makeSubTab(1)
+  end
+  if true == self._hotAndNew_Showable_Sale then
+    InGameShop_SubTabEvent(1, 4)
+  end
 end

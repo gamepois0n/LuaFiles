@@ -102,3 +102,6 @@ function UIScrollButton.ScrollMoveEvent(parentPanel, moveDirection)
     QuestHistory_ScrollMove(moveDirection)
   end
 end
+function UIScrollButton.Close()
+  Panel_Scroll:SetShow(false)
+end

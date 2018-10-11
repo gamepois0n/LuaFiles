@@ -2625,7 +2625,12 @@ function loadGameUI_PC()
     runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyIcon.lua")
   end
   runLua("UI_Data/Script/Widget/MainStatus/Common_MainStatus.lua")
-  runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager.lua")
+  if true == _ContentsGroup_NewCloseManager then
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_ExceptionList.lua")
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_Renew.lua")
+  else
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager.lua")
+  end
   runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderUiInputType.lua")
   runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderManager.lua")
   runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinder.lua")

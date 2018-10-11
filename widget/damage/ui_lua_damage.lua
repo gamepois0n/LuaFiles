@@ -86,6 +86,9 @@ local function createDamageControl(target)
     target.effectList[idx] = effectControl
   end
 end
+function PaGlobalFunc_GetDamagePanel(index)
+  return DamagePanel[index]
+end
 local function createDamagePanel()
   for index = 1, DamagePanel_Count do
     local panel = UI.createPanel("damagePanel_" .. tostring(index), Defines.UIGroup.PAGameUIGroup_ScreenEffect)

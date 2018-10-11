@@ -205,6 +205,7 @@ function PaGlobal_EnchantInfo_RClickTarget(slotNo, itemWrapper, count, inventory
   end
   self:setEnchantTarget(slotNo, itemWrapper, inventoryType, nil, true)
   Inventory_SetFunctor(PaGlobalFunc_EnchantInfo_FilterForSubject, PaGlobalFunc_EnchantInfo_RClickSubject, nil, nil)
+  _AudioPostEvent_SystemUiForXBOX(0, 16)
 end
 function EnchantInfo:setEnchantTarget(slotNo, itemWrapper, inventoryType, resultType, isMonotone)
   self._enchantInfo = getEnchantInformation()
@@ -316,6 +317,7 @@ function PaGlobalFunc_EnchantInfo_RClickSubject(slotNo, itemWrapper, count, inve
   end
   self._isLastEnchant = false
   self:clearItemSlot(self._ui.slot_subjectItem)
+  _AudioPostEvent_SystemUiForXBOX(0, 16)
   self:setEnchantMaterial(false)
   ToClient_padSnapSetTargetPanel(_panel)
 end

@@ -120,6 +120,9 @@ function Panel_Window_FindParty_info:updateContent()
   self:setButtonText()
 end
 function Panel_Window_FindParty_info:open()
+  if false == Panel_PartyList:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 29)
+  end
   Panel_PartyList:SetShow(true)
 end
 function Panel_Window_FindParty_info:close()

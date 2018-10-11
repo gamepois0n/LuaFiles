@@ -39,7 +39,8 @@ local Window_SkillInfo = {
   _remainSkillPoint,
   _selfPlayerLevel,
   _isDialog = false,
-  _prevScrollIndex = 0
+  _prevScrollIndex = 0,
+  _learnSync = true
 }
 function Window_SkillInfo:GetFusionSkillFromCell(cellTable)
   local cols = cellTable:capacityX()
@@ -154,6 +155,9 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
 end
 function PaGlobalFunc_Skill_LearnButton()
   local self = Window_SkillInfo
+  if false == self._learnSync then
+    return
+  end
   local skillInfo = self._currentSkillListInfo[self._currentSkillIndex]
   if nil == skillInfo then
     return
@@ -181,6 +185,7 @@ function PaGlobalFunc_Skill_LearnConfirm()
   local isSuccess = skillWindow_DoLearn(skillInfo._no)
   if true == isSuccess then
     _AudioPostEvent_SystemUiForXBOX(4, 2)
+    self._learnSync = false
   end
 end
 function PaGlobalFunc_Skill_ResetButton()
@@ -332,7 +337,7 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
   uiInfo._static_SkillIcon:setRenderTexture(uiInfo._static_SkillIcon:getBaseTexture())
   uiInfo._staticText_Name:SetText(skillInfo._name)
   local requireDesc = self:GetRequireDesc(uiInfo._static_SelectedSkillBg, uiInfo._staticText_RequireLevel, id)
-  uiInfo._staticText_RequireLevel:SetShow(nil ~= requireDesc)
+  uiInfo._staticText_RequireLevel:SetShow("" ~= requireDesc)
   uiInfo._staticText_RequireLevel:SetText(requireDesc)
   self._currentSkillListUI[id] = uiInfo
   if self._config._title_Learn == self._currentTitle or self._currentSkillIndex ~= id then
@@ -352,9 +357,9 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
 end
 function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
   local skillInfo = self._currentSkillListInfo[id]
-  local desc
+  local desc = ""
   if nil == skillInfo then
-    return
+    return desc
   end
   selectControl:SetColor(Defines.Color.C_FFEFEFEF)
   descControl:SetFontColor(Defines.Color.C_FFEFEFEF)
@@ -454,6 +459,8 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   if nil ~= self._lastSelectedUI then
     self._lastSelectedUI._static_SelectedSkillBg:SetShow(false)
   end
+  right._static_SellectLeft:SetShow(self._currentTitle == self._config._title_Basic)
+  right._static_SellectRight:SetShow(self._currentTitle == self._config._title_Basic)
   right._static_SellectLeft:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
   right._static_SellectRight:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
   skillUI._static_SelectedSkillBg:SetShow(true)
@@ -528,6 +535,7 @@ function Window_SkillInfo:SkillDetailClear()
   body._staticText_EffectTitle:SetShow(false)
   body._staticText_EffectDesc:SetText("")
   body._staticText_NeedResource:SetText("")
+  body._staticText_skillCommand:SetText("")
   body._staticText_Command:SetText("")
   body._static_Icon:SetShow(false)
   body._static_IconBg:SetShow(false)
@@ -631,6 +639,7 @@ function Window_SkillInfo:Clear()
   self._currentSkillListUI = {}
   self:SkillDetailClear()
   self._currentSkillIndex = 0
+  self._learnSync = true
   self._ui._right._radioButton_LearnSkill:SetCheck(false)
   self._ui._right._radioButton_SkillBasic:SetCheck(false)
   self._ui._right._radioButton_SkillAwaken:SetCheck(false)
@@ -908,6 +917,7 @@ function PaGlobalFunc_FromClient_Skill_WindowUpdate()
   self:Update()
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
   self._ui._right._list2_Skill:moveIndex(self._prevScrollIndex)
+  self._learnSync = true
 end
 function Toggle_SkillTab_forPadEventFunc(value)
   local self = Window_SkillInfo

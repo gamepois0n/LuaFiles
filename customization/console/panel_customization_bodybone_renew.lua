@@ -99,10 +99,8 @@ function PaGlobalFunc_Customization_BodyBone_PickingBodyBone(customizationData)
   self:SetValueSlider(self._ui._slider_ScaleY, self._currentScale.y, self._selectScaleMin.y, self._selectScaleMax.y)
   self:SetValueSlider(self._ui._slider_ScaleZ, self._currentScale.z, self._selectScaleMin.z, self._selectScaleMax.z)
   self:EnableBodySlide(true)
-  self._ui._slider_Height:SetControlPos(getCustomizationBodyHeight())
-  self._ui._slider_Weight:SetControlPos(getCustomizationBodyWeight())
-  self._ui._staticText_HeightSliderValue:SetText(getCustomizationBodyHeight())
-  self._ui._staticText_WeightSliderValue:SetText(getCustomizationBodyWeight())
+  self:SetProgressRateValue_Height()
+  self:SetProgressRateValue_Weight()
   PaGlobalFunc_Customization_BodyBone_Update()
 end
 function PaGlobalFunc_Customization_BodyBone_ShowBodyBoneEditor()
@@ -110,14 +108,36 @@ function PaGlobalFunc_Customization_BodyBone_ShowBodyBoneEditor()
   self._ui._slider_ScaleX:SetControlPos(50)
   self._ui._slider_ScaleY:SetControlPos(50)
   self._ui._slider_ScaleZ:SetControlPos(50)
-  self._ui._slider_Height:SetControlPos(getCustomizationBodyHeight())
-  self._ui._slider_Weight:SetControlPos(getCustomizationBodyWeight())
-  self._ui._staticText_HeightSliderValue:SetText(getCustomizationBodyHeight())
-  self._ui._staticText_WeightSliderValue:SetText(getCustomizationBodyWeight())
+  self:SetProgressRateValue_Height()
+  self:SetProgressRateValue_Weight()
   setSymmetryBoneTransform(true)
   PaGlobalFunc_Customization_BodyBone_CursorSelect(3)
-  PaGlobalFunc_Customization_BodyBone_UpdateBodyHeight()
-  PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()
+  self:SetHeightProgress()
+  self:SetWeightProgress()
+end
+function Customization_BodyBoneInfo:SetProgressRateValue_Height()
+  self._ui._slider_Height:SetControlPos(math.floor(getCustomizationBodyHeight() + 0.5))
+  self._ui._staticText_HeightSliderValue:SetText(math.floor(getCustomizationBodyHeight() + 0.5))
+end
+function Customization_BodyBoneInfo:SetProgressRateValue_Weight()
+  self._ui._slider_Weight:SetControlPos(math.floor(getCustomizationBodyWeight() + 0.5))
+  self._ui._staticText_WeightSliderValue:SetText(math.floor(getCustomizationBodyWeight() + 0.5))
+end
+function Customization_BodyBoneInfo:SetHeightProgress()
+  local progress = UI.getChildControl(self._ui._slider_Height, "Progress2_1")
+  local button = UI.getChildControl(self._ui._slider_Height, "Slider_DisplayButton")
+  local ratio = self._ui._slider_Height:GetControlPos()
+  button:SetPosX(self._ui._slider_Height:GetControlButton():GetPosX())
+  local offset = math.cos(ratio * math.pi) * 2
+  progress:SetProgressRate(ratio * 100 + offset)
+end
+function Customization_BodyBoneInfo:SetWeightProgress()
+  local progress = UI.getChildControl(self._ui._slider_Weight, "Progress2_1")
+  local button = UI.getChildControl(self._ui._slider_Weight, "Slider_DisplayButton")
+  local ratio = self._ui._slider_Weight:GetControlPos()
+  button:SetPosX(self._ui._slider_Weight:GetControlButton():GetPosX())
+  local offset = math.cos(ratio * math.pi) * 2
+  progress:SetProgressRate(ratio * 100 + offset)
 end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyBoneScale()
   local self = Customization_BodyBoneInfo
@@ -142,14 +162,9 @@ end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyHeight()
   local self = Customization_BodyBoneInfo
   if true == self._ui._slider_Height:IsEnable() then
-    local progress = UI.getChildControl(self._ui._slider_Height, "Progress2_1")
-    local button = UI.getChildControl(self._ui._slider_Height, "Slider_DisplayButton")
-    local ratio = self._ui._slider_Height:GetControlPos()
-    button:SetPosX(self._ui._slider_Height:GetControlButton():GetPosX())
-    local offset = math.cos(ratio * math.pi) * 2
-    progress:SetProgressRate(ratio * 100 + offset)
-    self._ui._staticText_HeightSliderValue:SetText(Int64toInt32(self._ui._slider_Height:GetControlPos() * 100))
-    applyBodyHeight(self._currentClassType, self._ui._slider_Height:GetControlPos() * 100)
+    self:SetHeightProgress()
+    self._ui._staticText_HeightSliderValue:SetText(math.floor(self._ui._slider_Height:GetControlPos() * 100 + 0.5))
+    applyBodyHeight(self._currentClassType, math.floor(self._ui._slider_Height:GetControlPos() * 100 + 0.5))
     if true == self._ui._slider_ScaleY:IsEnable() then
       local postScale = ToClient_getPickingCustomizedBoneScale()
       PaGlobalFunc_Customization_BodyBone_AdjustBodyBoneScale(postScale.x, postScale.y, postScale.z)
@@ -159,14 +174,9 @@ end
 function PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()
   local self = Customization_BodyBoneInfo
   if true == self._ui._slider_Weight:IsEnable() then
-    local progress = UI.getChildControl(self._ui._slider_Weight, "Progress2_1")
-    local button = UI.getChildControl(self._ui._slider_Weight, "Slider_DisplayButton")
-    local ratio = self._ui._slider_Weight:GetControlPos()
-    button:SetPosX(self._ui._slider_Weight:GetControlButton():GetPosX())
-    local offset = math.cos(ratio * math.pi) * 2
-    progress:SetProgressRate(ratio * 100 + offset)
-    self._ui._staticText_WeightSliderValue:SetText(Int64toInt32(self._ui._slider_Weight:GetControlPos() * 100))
-    applyBodyWeight(self._currentClassType, self._ui._slider_Weight:GetControlPos() * 100)
+    self:SetWeightProgress()
+    self._ui._staticText_WeightSliderValue:SetText(math.floor(self._ui._slider_Weight:GetControlPos() * 100 + 0.5))
+    applyBodyWeight(self._currentClassType, math.floor(self._ui._slider_Weight:GetControlPos() * 100 + 0.5))
     if true == self._ui._slider_ScaleY:IsEnable() then
       local postScale = ToClient_getPickingCustomizedBoneScale()
       PaGlobalFunc_Customization_BodyBone_AdjustBodyBoneScale(postScale.x, postScale.y, postScale.z)
@@ -206,10 +216,10 @@ function PaGlobalFunc_Customization_BodyBone_BoneInfoPostFunction()
   if false == PaGlobalFunc_Customization_BodyBone_GetShow() then
     return
   end
-  self._ui._slider_Height:SetControlPos(getCustomizationBodyHeight())
-  self._ui._slider_Weight:SetControlPos(getCustomizationBodyWeight())
-  self._ui._staticText_HeightSliderValue:SetText(getCustomizationBodyHeight())
-  self._ui._staticText_WeightSliderValue:SetText(getCustomizationBodyWeight())
+  self:SetProgressRateValue_Height()
+  self:SetProgressRateValue_Weight()
+  self:SetHeightProgress()
+  self:SetWeightProgress()
   if nil == self._lastScale then
     return
   end

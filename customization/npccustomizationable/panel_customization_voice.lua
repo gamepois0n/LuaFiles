@@ -191,7 +191,7 @@ function createVoiceList(inGameMode)
     tempContentImage:addInputEvent("Mouse_UpScroll", "Voice_Scroll( true )")
     tempContentImage:addInputEvent("Mouse_DownScroll", "Voice_Scroll( false )")
     tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
-    if not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(NoCashType.eCustomizationNoCashType_Voice, NoCashVoice.eCustoimzationNoCashVoice_Type, itemIdx) and isServerFixedCharge() then
+    if not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(NoCashType.eCustomizationNoCashType_Voice, NoCashVoice.eCustoimzationNoCashVoice_Type, itemIdx) then
       tempContentImage:SetShow(false)
     else
       tempContentImage:SetShow(true)

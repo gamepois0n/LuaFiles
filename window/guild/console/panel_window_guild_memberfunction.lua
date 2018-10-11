@@ -177,6 +177,9 @@ end
 function GuildMemberFunction:close()
   _panel:SetShow(false)
 end
+function PaGlobalFunc_GuildMemberFunction_Close()
+  GuildMemberFunction:close()
+end
 function GuildMemberFunction:registEvent()
 end
 function PaGlobalFunc_GuildMemberFunction_Init()

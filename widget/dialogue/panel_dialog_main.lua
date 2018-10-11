@@ -2997,26 +2997,37 @@ function HandleClickedBackButton()
   if Panel_Win_System:GetShow() then
     return
   end
-  if Panel_Window_Enchant:GetShow() then
+  if false == _ContentsGroup_NewCloseManager and Panel_Window_Enchant:GetShow() then
     PaGlobal_Enchant:enchantClose()
   end
   if check_ShowWindow() then
     close_WindowPanelList()
   end
-  if false == _ContentsGroup_RenewUI_Skill and Panel_Window_Skill:IsShow() then
-    HandleMLUp_SkillWindow_Close()
-  end
-  if Panel_Window_Warehouse:IsShow() then
-    Warehouse_Close()
-  end
-  if Panel_Window_NpcShop:IsShow() then
-    NpcShop_WindowClose()
-  end
-  if Panel_AskKnowledge:IsShow() then
-    Panel_AskKnowledge:SetShow(false)
-  end
-  if Panel_TerritoryAuth_Auction:IsShow() then
-    TerritoryAuth_Auction_Close()
+  if false == _ContentsGroup_NewCloseManager then
+    if false == _ContentsGroup_RenewUI_Skill and Panel_Window_Skill:IsShow() then
+      HandleMLUp_SkillWindow_Close()
+    end
+    if Panel_Window_Warehouse:IsShow() then
+      Warehouse_Close()
+    end
+    if Panel_Window_NpcShop:IsShow() then
+      NpcShop_WindowClose()
+    end
+    if Panel_AskKnowledge:IsShow() then
+      Panel_AskKnowledge:SetShow(false)
+    end
+    if Panel_TerritoryAuth_Auction:IsShow() then
+      TerritoryAuth_Auction_Close()
+    end
+    if Panel_Window_ReinforceSkill:GetShow() then
+      Panel_Window_ReinforceSkill_Close()
+    end
+    if Panel_SkillReinforce:GetShow() then
+      Panel_SkillReinforce_Close()
+    end
+    if Panel_Window_MasterpieceAuction:GetShow() then
+      PaGlobal_MasterpieceAuction:close()
+    end
   end
   if false == _ContentsGroup_RenewUI_SearchMode then
     if Panel_Dialog_Search:IsShow() then
@@ -3024,15 +3035,6 @@ function HandleClickedBackButton()
     end
   elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
-  end
-  if Panel_Window_ReinforceSkill:GetShow() then
-    Panel_Window_ReinforceSkill_Close()
-  end
-  if Panel_SkillReinforce:GetShow() then
-    Panel_SkillReinforce_Close()
-  end
-  if Panel_Window_MasterpieceAuction:GetShow() then
-    PaGlobal_MasterpieceAuction:close()
   end
   ToClient_SetFilterType(0, false)
   for index = 0, 3 do
@@ -3206,8 +3208,6 @@ function FromClient_Dialog_onScreenResize()
   _SpacebarIcon:SetPosX(_uiDialogButton[0]:GetPosX() + _uiDialogButton[0]:GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
   _uiNextButton:SetPosX(sizeX / 2 - 175)
   _SpacebarIcon:SetSize(40, 28)
-  _uiButtonExit:SetPosX(sizeX - string.format("%.0f", sizeX / 13 + 100))
-  _uiButtonBack:SetPosX(sizeX - string.format("%.0f", sizeX / 13 + 260))
   _prevPageButton:SetPosX(_uiNextButton:GetPosX() - _prevPageButton:GetSizeX() * 2)
   _nextPageButton:SetPosX(_prevPageButton:GetPosX())
   _pageValue:SetPosX(_prevPageButton:GetPosX())

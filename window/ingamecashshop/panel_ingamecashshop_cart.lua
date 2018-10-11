@@ -77,17 +77,7 @@ local function changePearIcon(pearIconUI, cashProductSSW)
   elseif UI_CCC.eCashProductCategory_Mileage == categoryIdx then
     iconType = cashIconType.mileage
   else
-    local isRussia = isGameTypeRussia() or eCountryType.DEV == gameServiceType
-    local isFixedServer = isServerFixedCharge()
-    if true == isRussia and true == isFixedServer then
-      if isEnableSilver then
-        iconType = cashIconType.silver
-      else
-        iconType = cashIconType.pearl
-      end
-    else
-      iconType = cashIconType.pearl
-    end
+    iconType = cashIconType.pearl
   end
   cashIcon_changeTextureForList(pearIconUI, serviceContry, iconType)
 end
@@ -340,18 +330,6 @@ function CashShopCart:fillSlots()
   else
     serviceContry = contry.kr
   end
-  local isRussia = isGameTypeRussia() or eCountryType.DEV == gameServiceType
-  local isFixedServer = isServerFixedCharge()
-  if true == isRussia and true == isFixedServer then
-    if isEnableSilver then
-      iconType = cashIconType.silver
-    else
-      iconType = cashIconType.pearl
-    end
-  else
-    iconType = cashIconType.pearl
-  end
-  cashIcon_changeTextureForList(self._static_NowPearlIcon, serviceContry, iconType)
   self._staticText_NowPearlCount:SetText(makeDotMoney(getSumPrice()))
 end
 function CashShopCart:pushCart(productNoRaw, count)

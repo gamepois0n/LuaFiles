@@ -264,10 +264,10 @@ function PaGlobalFunc_ClassSelect_CharacterCreate(characterName)
     return
   end
   local _edit_CharacterName = characterName
-  PaGlobalFunc_Customization_InputName_Close(false)
   local function createCharacterFunc()
     chracterCreate(self._currentSelectType, _edit_CharacterName, _isSpecialCharacter)
     PaGlobalFunc_Customization_InputName_Open(false)
+    PaGlobalFunc_Customization_InputName_SetCreateSync(false)
   end
   local cancelCharacterFunc = function()
     PaGlobalFunc_Customization_InputName_Open(false)
@@ -277,7 +277,7 @@ function PaGlobalFunc_ClassSelect_CharacterCreate(characterName)
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
       content = messageBoxMemo,
-      functionApply = cancelCharacterFunc,
+      functionApply = MessageBox_Empty_function,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -354,6 +354,7 @@ function Panel_CharacterCreateCancel()
 end
 function InputMLUp_ClassSelect_SelectClassType(classType)
   local self = ClassSelect
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ClassSelect")
     return
@@ -367,6 +368,7 @@ function InputMLUp_ClassSelect_SelectClassType(classType)
     return
   end
   if classType == self._currentSelectType then
+    _AudioPostEvent_SystemUiForXBOX(1, 2)
     changeCreateCharacterMode()
     return
   else

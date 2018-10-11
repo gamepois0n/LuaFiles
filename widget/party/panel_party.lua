@@ -1117,5 +1117,8 @@ function FGlobal_Party_ConditionalShow()
     ResponseParty_updatePartyList()
   end
 end
+function PaGlobalFunc_PartyOption_Close()
+  closePartyOption()
+end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_Party")
 changePositionBySever(Panel_Party, CppEnums.PAGameUIType.PAGameUIPanel_Party, false, true, false)

@@ -378,10 +378,12 @@ function Panel_Dialog_Main_Bottom_Info:initControl()
   Toggle_DialogMainTab_forPadEventFunc(0)
 end
 function Panel_Dialog_Main_Bottom_Info:open()
+  if false == Panel_Dialog_Main:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 19)
+  end
   self._ui.static_BottomBG:SetShow(true)
 end
 function Panel_Dialog_Main_Bottom_Info:close()
-  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self._ui.static_BottomBG:SetShow(false)
 end
 function Panel_Dialog_Main_Bottom_Info:update()
@@ -523,7 +525,6 @@ function Panel_Dialog_Main_Bottom_Info:funcButton_CreatTypeBranch(IconControl, B
   ButtonControl:SetMonoTone(false)
   ButtonControl:SetFontColor(self._UI_color.C_FFFFFFFF)
   if funcButtonType == CppEnums.ContentsType.Contents_Quest or funcButtonType == CppEnums.ContentsType.Contents_NewQuest then
-    _AudioPostEvent_SystemUiForXBOX(4, 4)
     self._value.questFuncButtonIndex = index
   elseif funcButtonType == CppEnums.ContentsType.Contents_Shop then
     FGlobal_RemoteControl_Show(5)
@@ -592,7 +593,6 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   end
   local count = 0
   local targetWindowList = {}
-  _AudioPostEvent_SystemUiForXBOX(50, 2)
   local MyWp = getSelfPlayer():getWp()
   local inventory = getSelfPlayer():get():getInventory()
   local invenSize = inventory:getFreeCount()
@@ -989,26 +989,41 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()
   if Panel_Win_System:GetShow() then
     return
   end
-  if Panel_Window_Enchant:GetShow() then
+  if false == _ContentsGroup_NewCloseManager and Panel_Window_Enchant:GetShow() then
     PaGlobal_Enchant:enchantClose()
   end
   if check_ShowWindow() then
     close_WindowPanelList()
   end
-  if false == _ContentsGroup_RenewUI_Skill and Panel_Window_Skill:IsShow() then
-    HandleMLUp_SkillWindow_Close()
-  end
-  if Panel_Window_Warehouse:IsShow() then
-    Warehouse_Close()
-  end
-  if PaGlobalFunc_Dialog_NPCShop_IsShow() then
-    PaGlobalFunc_Dialog_NPCShop_Close()
-  end
-  if Panel_AskKnowledge:IsShow() then
-    Panel_AskKnowledge:SetShow(false)
-  end
-  if Panel_TerritoryAuth_Auction:IsShow() then
-    TerritoryAuth_Auction_Close()
+  if false == _ContentsGroup_NewCloseManager then
+    if false == _ContentsGroup_RenewUI_Skill and Panel_Window_Skill:IsShow() then
+      HandleMLUp_SkillWindow_Close()
+    end
+    if Panel_Window_Warehouse:IsShow() then
+      Warehouse_Close()
+    end
+    if PaGlobalFunc_Dialog_NPCShop_IsShow() then
+      PaGlobalFunc_Dialog_NPCShop_Close()
+    end
+    if Panel_AskKnowledge:IsShow() then
+      Panel_AskKnowledge:SetShow(false)
+    end
+    if Panel_TerritoryAuth_Auction:IsShow() then
+      TerritoryAuth_Auction_Close()
+    end
+    if true == _ContentsGroup_RenewUI_ReinforceSkill then
+      PaGlobalFunc_Dialog_SkillSpecialize_Close(false)
+    else
+      if Panel_Window_ReinforceSkill:GetShow() then
+        Panel_Window_ReinforceSkill_Close()
+      end
+      if Panel_SkillReinforce:GetShow() then
+        Panel_SkillReinforce_Close()
+      end
+    end
+    if Panel_Window_MasterpieceAuction:GetShow() then
+      PaGlobal_MasterpieceAuction:close()
+    end
   end
   if false == _ContentsGroup_RenewUI_SearchMode then
     if Panel_Dialog_Search:IsShow() then
@@ -1016,19 +1031,6 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedGoFirstButton()
     end
   elseif true == PaGlobalFunc_SearchMode_IsSearchMode() then
     searchView_Close()
-  end
-  if true == _ContentsGroup_RenewUI_ReinforceSkill then
-    PaGlobalFunc_Dialog_SkillSpecialize_Close(false)
-  else
-    if Panel_Window_ReinforceSkill:GetShow() then
-      Panel_Window_ReinforceSkill_Close()
-    end
-    if Panel_SkillReinforce:GetShow() then
-      Panel_SkillReinforce_Close()
-    end
-  end
-  if Panel_Window_MasterpieceAuction:GetShow() then
-    PaGlobal_MasterpieceAuction:close()
   end
   ToClient_SetFilterType(0, false)
   local self = Panel_Dialog_Main_Bottom_Info
@@ -1094,7 +1096,6 @@ function PaGlobalFunc_MainDialog_Bottom_HandleClickedFuncButtonBottom(index)
   if Panel_Window_MasterpieceAuction:GetShow() then
     PaGlobal_MasterpieceAuction:close()
   end
-  _AudioPostEvent_SystemUiForXBOX(50, 2)
   local dialogData = ToClient_GetCurrentDialogData()
   if nil == dialogData then
     return

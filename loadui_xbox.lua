@@ -2312,10 +2312,11 @@ function loadGameUI_XB()
     runLua("UI_Data/Script/Widget/Menu/Console/Panel_Window_Menu_Renew.lua")
   end
   runLua("UI_Data/Script/Panel_PadSnapTargetEffect.lua")
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
-    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager.lua")
+  if _ContentsGroup_NewCloseManager then
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_ExceptionList.lua")
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_Renew.lua")
   else
-    runLua("UI_Data/Script/globalUIManager.lua")
+    runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager.lua")
   end
   runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderUiInputType.lua")
   runLua("UI_Data/Script/GlobalKeyBinder/globalKeyBinderManager.lua")
