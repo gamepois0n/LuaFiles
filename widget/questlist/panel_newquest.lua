@@ -50,7 +50,7 @@ function FGlobal_NewMainQuest_Alarm_Open()
     Panel_NewQuest:SetShow(false, false)
     return
   end
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     Panel_NewQuest:SetShow(false, false)
     return
   end

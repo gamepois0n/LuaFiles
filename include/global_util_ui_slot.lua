@@ -576,7 +576,7 @@ function SlotItem:setItemByStaticStatus(itemStaticWrapper, s64_stackCount, expir
     local itemStatic = itemStaticWrapper:get()
     if itemStatic then
       if itemStatic._isStack or true == isWorldMarket then
-        if true == ToClient_isXBox() then
+        if true == ToClient_isXBox() or true == ToClient_isPS4() then
           if "userdata" == type(s64_stackCount) then
             if s64_stackCount > toInt64(0, 1000000) then
               local val = tostring(s64_stackCount / toInt64(0, 1000000))

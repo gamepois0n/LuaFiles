@@ -764,6 +764,18 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
 %s]], PAGetString(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_MAIN"), tempString[0], tempString[1], tempString[2], PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COLLECTING_POWER_DESC_4", "charRate", tostring(characterCollectRate)), PAGetString(Defines.StringSheet_GAME, tostring(subStringName)))
       name = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]:GetText()
       control = self._lifeInfo[mainType]._ui._subCategoryTitle[subType]
+    elseif __ePlayerLifeStatType_Hunting == mainType then
+      if false == _ContentsGroup_EnhanceHunt then
+        return
+      end
+      local dropRate = ToClient_getHuntingRate()
+      if dropRate > 0 then
+        dropRate = dropRate / 1000
+        dropRate = math.floor(dropRate) / 10
+      end
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_HUNTING_DESC", "rate", dropRate)
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE2")
+      control = self._lifeInfo[mainType]._ui._commonPoint
     elseif __ePlayerLifeStatType_Sail == mainType then
       if false == _ContentsGroup_EnhanceSail then
         return

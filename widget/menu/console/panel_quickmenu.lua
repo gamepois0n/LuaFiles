@@ -99,7 +99,9 @@ PaGlobal_ConsoleQuickMenu = {
     Exist = 1,
     Cooltime = 2,
     Empty = 3
-  }
+  },
+  _ringMoveCheck = false,
+  _beforePositon = -1
 }
 function PaGlobal_ConsoleQuickMenu:initializeUI()
   local centerX, centerY, radius
@@ -652,6 +654,7 @@ end
 function FromClient_ConsoleQuickMenu_Execute(position)
 end
 function FromClient_ConsoleQuickMenu_Selecting(group, position)
+  local self = PaGlobal_ConsoleQuickMenu
   if __eQuickMenuStickPosition_Count == position then
     for ii = 0, __eQuickMenuStickPosition_Count do
       local control = PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[ii]
@@ -674,7 +677,13 @@ function FromClient_ConsoleQuickMenu_Selecting(group, position)
     PaGlobal_ConsoleQuickMenu._ui._staticTextIconNameDesc:SetText(name)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetMonoTone(false)
     PaGlobal_ConsoleQuickMenu._ui._quickMenuPosition[position]:SetCheck(true)
+    if false == self._ringMoveCheck and self._beforePositon ~= position then
+      _AudioPostEvent_SystemUiForXBOX(51, 6)
+      self._ringMoveCheck = true
+      self._beforePositon = position
+    end
   end
+  self._ringMoveCheck = false
   for position = 0, __eQuickMenuStickPosition_Count - 1 do
     local quickSlot = ToClient_getAtQuickMenu(group, position)
     local slot = PaGlobal_ConsoleQuickMenu._ui._quickMenuPositionSlot[position]

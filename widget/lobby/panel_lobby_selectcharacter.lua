@@ -981,7 +981,7 @@ function CharacterSelect_selected(index)
   CharacterList_Update(false)
 end
 function CharacterSelect_PlayGame(index)
-  if ToClient_isXBox() and not ToClient_IsDevelopment() then
+  if (ToClient_isXBox() or ToClient_isPS4()) and not ToClient_IsDevelopment() then
     local isComplete = ToClient_isDataDownloadComplete()
     local percent = ToClient_getDataDownloadProgress()
     if false == isComplete then
@@ -1027,7 +1027,7 @@ function CharacterSelect_PlayGame(index)
   end
   if nil ~= characterData then
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
-      if 1 == characterData._level and 1 == characterCount and false == ToClient_isXBox() then
+      if 1 == characterData._level and 1 == characterCount and (false == ToClient_isXBox() or false == ToClient_isPS4()) then
         FGlobal_FirstLogin_Open(index)
       else
         local pcDeliveryRegionKey = characterData._arrivalRegionKey

@@ -8,6 +8,7 @@ Panel_Popup_MoveItem:RegisterShowEventFunc(false, "Popup_MoveItemHideAni()")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_color = Defines.Color
+local isMoveItemMoney = false
 local popupMoveItem = {
   _config = {
     constSlotStartX = 6,
@@ -168,8 +169,11 @@ function FGlobal_PopupMoveItem_Init(whereType, slotNo, fromWindowType, fromActor
     Panel_Popup_MoveItem:SetPosY(getMousePosY() + 5)
     PopupMoveItem_Open()
   end
-  audioPostEvent_SystemUi(1, 0)
-  _AudioPostEvent_SystemUiForXBOX(1, 0)
+  if __eTInventorySlotNoMoney == self._slotNo then
+    isMoveItemMoney = true
+  else
+    isMoveItemMoney = false
+  end
   local itemWrapper
   if CppEnums.MoveItemToType.Type_Player == fromWindowType then
     itemWrapper = getInventoryItemByType(whereType, slotNo)
@@ -227,9 +231,12 @@ function HandleClickedMoveItemButtonXXX(toWhereType, toActorKeyRaw)
   else
     UI.ASSERT(false, "\236\149\132\236\157\180\237\133\156 \236\157\180\235\143\153 \237\131\128\236\158\133\236\157\180 \236\160\149\236\131\129\236\160\129\236\157\180\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!!!")
   end
+  if __eTInventorySlotNoMoney == self._slotNo then
+    isMoveItemMoney = true
+  else
+    isMoveItemMoney = false
+  end
   PopupMoveItem_Close()
-  audioPostEvent_SystemUi(1, 1)
-  _AudioPostEvent_SystemUiForXBOX(1, 1)
 end
 function PopupMoveItem_MoveInventoryItemFromActorToActor(toActorKeyRaw, s64_count, whereType, slotNo)
   local self = popupMoveItem
@@ -316,6 +323,13 @@ function PopupMoveItem_Close()
     return
   end
   Panel_Popup_MoveItem:SetShow(false)
+end
+function PaGlobalFunc_MoveMoneyCheck(isChange)
+  if false == isChange then
+    return isMoveItemMoney
+  else
+    isMoveItemMoney = not isMoveItemMoney
+  end
 end
 popupMoveItem:init()
 popupMoveItem:registEventHandler()

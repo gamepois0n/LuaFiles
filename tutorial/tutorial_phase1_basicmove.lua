@@ -313,5 +313,10 @@ PaGlobal_TutorialPhase_BasicMove._classStringData = {
     "TUTORIAL_MOVE_DARKELF_TALK1",
     "TUTORIAL_MOVE_DARKELF_TALK2",
     "TUTORIAL_MOVE_DARKELF_TALK3"
+  },
+  [CppEnums.ClassType.ClassType_ShyWomen] = {
+    "TUTORIAL_MOVE_DARKELF_TALK1",
+    "TUTORIAL_MOVE_DARKELF_TALK2",
+    "TUTORIAL_MOVE_DARKELF_TALK3"
   }
 }

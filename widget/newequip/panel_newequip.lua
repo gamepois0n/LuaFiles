@@ -165,9 +165,6 @@ function Panel_NewEquip_EffectClear()
   end
 end
 function Panel_NewEquip_EffectLastUpdate()
-  if Defines.UIMode.eUIMode_Default ~= GetUIMode() then
-    return
-  end
   local isPanelShow = false
   for key, value in pairs(equipData) do
     local control = NewEquipWidget[key]

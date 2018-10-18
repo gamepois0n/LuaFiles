@@ -36,6 +36,7 @@ local QuestWindow = {
     tabImportant = UI.getChildControl(Panel_Window_Quest_New, "RadioButton_TabImportant"),
     tabRepeat = UI.getChildControl(Panel_Window_Quest_New, "RadioButton_TabRepeat"),
     tabMain = UI.getChildControl(Panel_Window_Quest_New, "RadioButton_Main"),
+    tabNewQuest = UI.getChildControl(Panel_Window_Quest_New, "RadioButton_TabNewQuest"),
     templateGroupBG = UI.getChildControl(Panel_Window_Quest_New, "Static_GroupTitleBG"),
     templateListBG = UI.getChildControl(Panel_Window_Quest_New, "Static_ListMainBG"),
     checkPopUp = UI.getChildControl(Panel_Window_Quest_New, "CheckButton_PopUp")
@@ -388,6 +389,11 @@ function QuestWindow:init()
   local btnTabMainSizeX = self.ui.tabMain:GetSizeX() + 23
   local btnTabMainTextPosX = btnTabMainSizeX - btnTabMainSizeX / 2 - self.ui.tabMain:GetTextSizeX() / 2
   self.ui.tabMain:SetTextSpan(btnTabMainTextPosX, 5)
+  if true == _ContentsGroup_NewQuest then
+    local btnTabNewQuestSizeX = self.ui.tabNewQuest:GetSizeX() + 23
+    local btnTabNewQuestTextPosX = btnTabNewQuestSizeX - btnTabNewQuestSizeX / 2 - self.ui.tabNewQuest:GetTextSizeX() / 2
+    self.ui.tabNewQuest:SetTextSpan(btnTabNewQuestTextPosX, 5)
+  end
   self.ui.templateGroupBG:SetShow(false)
   self.ui.templateGroupBG:SetIgnore(true)
   self.ui.templateListBG:SetShow(false)
@@ -395,6 +401,9 @@ function QuestWindow:init()
   self.ui.tabImportant:SetCheck(false)
   self.ui.tabRepeat:SetCheck(false)
   self.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    self.ui.tabNewQuest:SetCheck(false)
+  end
   self.ui.groupTypeBG:SetShow(true)
   self.ui.ListFilterBG:SetShow(false)
   self.ui.radioTerritoryGroup:SetCheck(true)
@@ -581,6 +590,8 @@ function QuestWindow:GetProgressingActiveTab()
     progressingActiveTab = QuestTabType.QuestTabType_Recommendation
   elseif self.ui.tabRepeat:IsCheck() then
     progressingActiveTab = QuestTabType.QuestTabType_Repetition
+  elseif true == _ContentsGroup_NewQuest and self.ui.tabNewQuest:IsCheck() then
+    progressingActiveTab = QuestTabType.QuestTabType_New
   else
     progressingActiveTab = QuestTabType.QuestTabType_Main
   end
@@ -1965,6 +1976,9 @@ function FGlobal_QuestWindow_SetProgress()
   QuestWindow.ui.tabImportant:SetCheck(false)
   QuestWindow.ui.tabRepeat:SetCheck(false)
   QuestWindow.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(false)
+  end
 end
 function FromClient_QuestWindow_Update()
   QuestWindow:update()
@@ -1987,6 +2001,9 @@ function QuestWindow:registEventHandler()
   self.ui.tabImportant:addInputEvent("Mouse_LUp", "HandleClick_QuestWindow_Update()")
   self.ui.tabRepeat:addInputEvent("Mouse_LUp", "HandleClick_QuestWindow_Update()")
   self.ui.tabMain:addInputEvent("Mouse_LUp", "HandleClick_QuestWindow_Update()")
+  if true == _ContentsGroup_NewQuest then
+    self.ui.tabNewQuest:addInputEvent("Mouse_LUp", "HandleClick_QuestWindow_Update()")
+  end
   self.ui.radioTerritoryGroup:addInputEvent("Mouse_LUp", "HandleClick_QuestWindow_Update()")
   self.ui.radioTerritoryGroup:addInputEvent("Mouse_On", "PaGlobal_QuestNew_Simpletooltips(true, 0)")
   self.ui.radioTerritoryGroup:addInputEvent("Mouse_Out", "PaGlobal_QuestNew_Simpletooltips(false)")
@@ -2047,6 +2064,9 @@ function Toggle_QuestInfoTabProgress_forPadEventFunc()
   QuestWindow.ui.tabImportant:SetCheck(false)
   QuestWindow.ui.tabRepeat:SetCheck(false)
   QuestWindow.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(false)
+  end
   HandleClick_QuestWindow_Update()
 end
 function Toggle_QuestInfoTabMain_forPadEventFunc()
@@ -2054,6 +2074,9 @@ function Toggle_QuestInfoTabMain_forPadEventFunc()
   QuestWindow.ui.tabImportant:SetCheck(false)
   QuestWindow.ui.tabRepeat:SetCheck(false)
   QuestWindow.ui.tabMain:SetCheck(true)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(false)
+  end
   HandleClick_QuestWindow_Update()
 end
 function Toggle_QuestInfoTabImportant_forPadEventFunc()
@@ -2061,6 +2084,9 @@ function Toggle_QuestInfoTabImportant_forPadEventFunc()
   QuestWindow.ui.tabImportant:SetCheck(true)
   QuestWindow.ui.tabRepeat:SetCheck(false)
   QuestWindow.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(false)
+  end
   HandleClick_QuestWindow_Update()
 end
 function Toggle_QuestInfoTabRepeat_forPadEventFunc()
@@ -2068,6 +2094,19 @@ function Toggle_QuestInfoTabRepeat_forPadEventFunc()
   QuestWindow.ui.tabImportant:SetCheck(false)
   QuestWindow.ui.tabRepeat:SetCheck(true)
   QuestWindow.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(false)
+  end
+  HandleClick_QuestWindow_Update()
+end
+function Toggle_QuestInfoTabNewQuest_forPadEventFunc()
+  QuestWindow.ui.tabProgress:SetCheck(false)
+  QuestWindow.ui.tabImportant:SetCheck(false)
+  QuestWindow.ui.tabRepeat:SetCheck(false)
+  QuestWindow.ui.tabMain:SetCheck(false)
+  if true == _ContentsGroup_NewQuest then
+    QuestWindow.ui.tabNewQuest:SetCheck(true)
+  end
   HandleClick_QuestWindow_Update()
 end
 QuestWindow:init()

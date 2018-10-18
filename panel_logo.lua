@@ -10,7 +10,7 @@ local static_Movie
 local setDivisionTime = 6
 if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
   setDivisionTime = 14.5
-elseif ToClient_isXBox() then
+elseif ToClient_isXBox() or ToClient_isPS4() then
   setDivisionTime = 2.5
 else
   setDivisionTime = 6
@@ -32,7 +32,7 @@ function Panel_Logo_Init()
     static_Grade:setRenderTexture(static_Grade:getBaseTexture())
     static_Grade:SetShow(true)
     staticText_Warning:SetShow(false)
-  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or isGameTypeGT() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or isGameTypeGT() or ToClient_isXBox() or ToClient_isPS4() then
     static_Grade:SetSize(130, 129)
     static_Grade:ChangeTextureInfoName("GameGradeIcon18.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(static_Grade, 0, 0, 130, 129)
@@ -129,7 +129,7 @@ elseif isGameTypeEnglish() then
   local aniInfo2 = static_Grade:addColorAnimation(startAniTime + 6, startAniTime + 9, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo2:SetStartColor(Defines.Color.C_FFFFFFFF)
   aniInfo2:SetEndColor(Defines.Color.C_FFFFFFFF)
-elseif isGameTypeTaiwan() or isGameTypeGT() or ToClient_isXBox() then
+elseif isGameTypeTaiwan() or isGameTypeGT() or ToClient_isXBox() or ToClient_isPS4() then
   local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo11:SetStartColor(Defines.Color.C_00FFFFFF)
   aniInfo11:SetEndColor(Defines.Color.C_FFFFFFFF)
@@ -200,7 +200,7 @@ function Panel_Logo_Update()
   static_Movie:SetPosX(posX)
   static_Movie:SetPosY(posY)
   static_Movie:SetSize(movieSizeX, movieSizeY)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     static_XboxScreen:SetPosX(-8)
     static_XboxScreen:SetPosY(-8)
     static_XboxScreen:SetSize(sizeX + 34, sizeY + 19)
@@ -213,7 +213,7 @@ function Panel_Logo_Pause(deltaTime)
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
     setWarningText()
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       static_XboxScreen:SetShow(true)
       update_XboxLoadingCircle(deltaTime)
     end

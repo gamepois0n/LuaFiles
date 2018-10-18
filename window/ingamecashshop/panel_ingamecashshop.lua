@@ -1444,7 +1444,7 @@ function InGameShop_ReShowByHideUI()
   InGameShop_TabEvent(self._tabCount)
 end
 function InGameShop_BuyDaumCash()
-  if ToClient_isXBox() then
+  if ToClient_isXBox() or ToClient_isPS4() then
     ToClient_XboxShowStore()
   else
     FGlobal_BuyDaumCash()

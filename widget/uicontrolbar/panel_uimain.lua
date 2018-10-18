@@ -409,7 +409,7 @@ function UIMain_QuestUpdate()
     end
     blackSpritCall:SetPosY(-15)
     checkNewQuestForEffect = true
-  elseif true == ToClient_isXBox() and questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
+  elseif (true == ToClient_isXBox() or true == ToClient_isPS4()) and questList_doHaveNewQuest() == false and checkNewQuestForEffect == true then
     MenuButtons[MenuButtonId.Btn_BlackStone]:EraseAllEffect()
     buttonAni[MenuButtonId.Btn_BlackStone]:SetShow(false)
     blackSpritCall:SetShow(false)

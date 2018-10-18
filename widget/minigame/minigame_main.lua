@@ -18,10 +18,10 @@ local minigame = {
   _deltaTime = 0,
   _updateTime = 0,
   _tempFrame = 0,
-  _isShowDebugMessage = false
+  _isShowDebugMessage = true
 }
 function ActionMiniGame_Main(gameIndex)
-  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 == gameIndex or gameIndex > MGT.MiniGameType_19 or currentMiniGame == gameIndex then
+  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 == gameIndex or gameIndex > MGT.MiniGameType_20 or currentMiniGame == gameIndex then
     return
   end
   if MGT.MiniGameType_0 == gameIndex then
@@ -63,6 +63,8 @@ function ActionMiniGame_Main(gameIndex)
     Panel_Minigame_Gradient_Start(true)
   elseif MGT.MiniGameType_19 == gameIndex then
     PaGlobal_HammerGame:Start()
+  elseif MGT.MiniGameType_20 == gameIndex then
+    PaGlobalFunc_SniperReload_Open()
   end
   lastUIMode = GetUIMode()
   if false == _ContentsGroup_RenewUI_WorldMap then
@@ -74,7 +76,7 @@ function ActionMiniGame_Main(gameIndex)
   currentMiniGame = gameIndex
 end
 function ActionMiniGame_Stop()
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_20 < currentMiniGame then
     return
   end
   if MGT.MiniGameType_0 == currentMiniGame then
@@ -115,6 +117,8 @@ function ActionMiniGame_Stop()
     Panel_Minigame_Gradient_End()
   elseif MGT.MiniGameType_19 == currentMiniGame then
     PaGlobal_HammerGame:End()
+  elseif MGT.MiniGameType_20 == gameIndex then
+    PaGlobalFunc_SniperReload_Close()
   end
   SetUIMode(Defines.UIMode.eUIMode_Default)
   CheckChattingInput()
@@ -124,7 +128,7 @@ function ActionMiniGame_Stop()
 end
 local keyPressFunctorList = {}
 function Panel_Minigame_EventKeyPress(keyType)
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_20 < currentMiniGame then
     return
   end
   local pressFunction = keyPressFunctorList[currentMiniGame]
@@ -138,7 +142,7 @@ function Panel_Minigame_EventKeyPress(keyType)
 end
 registerEvent("EventActionMiniGameKeyDownOnce", "EventActionMiniGameKeyDownOnce")
 function Panel_Minigame_UpdateFunc(deltaTime)
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_19 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_20 < currentMiniGame then
     return
   end
   if false == minigame:updatePerFrame(deltaTime) then
@@ -182,6 +186,8 @@ function Panel_Minigame_UpdateFunc(deltaTime)
     MiniGame_SteeringWhellMoveCalc(deltaTime)
   elseif MGT.MiniGameType_19 == currentMiniGame then
     PaGlobal_HammerGame:Update(deltaTime)
+  elseif MGT.MiniGameType_20 == currentMiniGame then
+    PaGlobalFunc_SniperReload_UpdatePerFrame(deltaTime)
   end
   minigame._updateTime = 0
 end
@@ -228,7 +234,8 @@ function minigame:initialize()
     [MGT.MiniGameType_16] = MiniGame_Rhythm_Drum_KeyPress,
     [MGT.MiniGameType_17] = MiniGame_SteeringWheel_KeyPress,
     [MGT.MiniGameType_18] = MiniGame_Gradient_KeyPress,
-    [MGT.MiniGameType_19] = PaGlobal_HammerGame_KeyFunc
+    [MGT.MiniGameType_19] = PaGlobal_HammerGame_KeyFunc,
+    [MGT.MiniGameType_20] = PaGlobalFunc_SniperReload_KeyFunc
   }
   self:resetData()
 end

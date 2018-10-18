@@ -146,7 +146,7 @@ function UI.checkIsInMouseAndEventPanel(panel)
   return isOverEvent
 end
 function UI.checkResolution4KForXBox()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
     if nil == gameOptionSetting then
       return false

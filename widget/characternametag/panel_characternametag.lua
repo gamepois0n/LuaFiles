@@ -900,7 +900,7 @@ local function settingGuildInfo(actorKeyRaw, targetPanel, actorProxyWrapper)
         guildOccupyIcon:SetMonoTone(false)
       end
     end
-    if true == _ContentsGroup_RenewUI_Guild and true == ToClient_isXBox() then
+    if true == _ContentsGroup_RenewUI_Guild and (true == ToClient_isXBox() or true == ToClient_isPS4()) then
       PaGlobalFunc_GuildMark_SetGuildMarkControl(guildMarkXBOXBg, guildMarkXBOXIcon, actorKeyRaw)
       guildBack:SetShow(false)
       guildMark:SetShow(false)
@@ -1170,7 +1170,7 @@ function ShowUseTab_Func()
   else
     useTab:SetShow(false)
   end
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     useTab:SetShow(false)
   end
 end

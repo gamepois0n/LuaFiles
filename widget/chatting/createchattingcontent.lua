@@ -562,7 +562,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
       end
     end
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       chatting_Icon:SetPosY(PosY - deltaPosY + 4)
     else
       chatting_Icon:SetPosY(PosY - deltaPosY)
@@ -582,7 +582,7 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
       end
     end
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       chatting_Icon:SetPosY(PosY - deltaPosY + 4)
     else
       chatting_Icon:SetPosY(PosY - deltaPosY)

@@ -75,6 +75,12 @@ function FromClient_PlayCutScene(cutSceneName, isFromServer)
   Multiline_Subtitle:SetSize(getScreenSizeX(), Multiline_Subtitle:GetSizeY())
   Multiline_Subtitle:SetSpanSize(0, latterHeight + 10)
   Multiline_Subtitle:ComputePos()
+  if true == ToClient_isXBox() then
+    local txt_keyGuideB = UI.getChildControl(Panel_Cutscene, "StaticText_B_ConsoleUI")
+    if nil ~= txt_keyGuideB then
+      txt_keyGuideB:SetShow(true)
+    end
+  end
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_CUTSCENE")
 end
 function FromClient_StopCutScene(cutSceneName)
@@ -103,6 +109,24 @@ function FromClient_SetSubtitle(subtitle, Time)
 end
 function FromClient_SetScreenAlpha(value)
   Static_FadeScreen:SetAlpha(value)
+end
+function PaGlobalFunc_CutScene_ShowKeyGuide()
+  if false == ToClient_isXBox() then
+    return
+  end
+  local txt_keyGuideB = UI.getChildControl(Panel_Cutscene, "StaticText_B_ConsoleUI")
+  if nil ~= txt_keyGuideB then
+    txt_keyGuideB:SetShow(true)
+  end
+end
+function PaGlobalFunc_CutScene_HideKeyGuide()
+  if false == ToClient_isXBox() then
+    return
+  end
+  local txt_keyGuideB = UI.getChildControl(Panel_Cutscene, "StaticText_B_ConsoleUI")
+  if nil ~= txt_keyGuideB then
+    txt_keyGuideB:SetShow(isShow)
+  end
 end
 registerEvent("FromClient_PlayCutScene", "FromClient_PlayCutScene")
 registerEvent("FromClient_StopCutScene", "FromClient_StopCutScene")

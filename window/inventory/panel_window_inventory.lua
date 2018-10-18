@@ -108,6 +108,7 @@ local inven = {
   button_Puzzle = UI.getChildControl(Panel_Window_Inventory, "Button_Puzzle"),
   radioButtonNormaiInven = UI.getChildControl(Panel_Window_Inventory, "RadioButton_NormalInventory"),
   radioButtonCashInven = UI.getChildControl(Panel_Window_Inventory, "RadioButton_CashInventory"),
+  radioButtonInstanceInven = UI.getChildControl(Panel_Window_Inventory, "RadioButton_InstanceInventory"),
   radioButtonStd = UI.getChildControl(Panel_Window_Inventory, "RadioButton_Std"),
   radioButtonTransport = UI.getChildControl(Panel_Window_Inventory, "RadioButton_Transport"),
   radioButtonHousing = UI.getChildControl(Panel_Window_Inventory, "RadioButton_Housing"),
@@ -216,6 +217,33 @@ function PaGlobal_Inventory:findItemCountByEventType(targetContentsEventType, ty
               itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
             elseif nil == typeParam2 then
               itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            end
+          end
+        end
+      end
+    end
+  end
+  if true == ToClient_IsDevelopment() then
+    inventory = getSelfPlayer():get():getInventory(CppEnums.ItemWhereType.eInstanceInventory)
+    if nil ~= inventory then
+      local invenMaxSize = inventory:sizeXXX()
+      for ii = 0, invenMaxSize - 1 do
+        local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eInstanceInventory, ii)
+        if nil ~= itemWrapper then
+          local itemSSW = itemWrapper:getStaticStatus()
+          local ContentsEventType = itemSSW:get():getContentsEventType()
+          local ContentsEventParam1 = itemSSW:get()._contentsEventParam1
+          local ContentsEventParam2 = itemSSW:get()._contentsEventParam2
+          local enchantLevel = itemWrapper:get():getKey():getEnchantLevel()
+          if ContentsEventType == targetContentsEventType then
+            if nil == typeParam1 and nil == typeParam2 then
+              itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+            elseif nil ~= typeParam1 and ContentsEventParam1 == typeParam1 then
+              if nil ~= typeParam2 and ContentsEventParam2 == typeParam2 then
+                itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+              elseif nil == typeParam2 then
+                itemCount = itemCount + Int64toInt32(itemWrapper:get():getCount_s64())
+              end
             end
           end
         end
@@ -373,6 +401,7 @@ function inven:init()
   self.enchantNumber:SetShow(false)
   self.radioButtonNormaiInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
   self.radioButtonCashInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
+  self.radioButtonInstanceInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
   self.radioButtonStd:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
   self.radioButtonTransport:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
   self.radioButtonHousing:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
@@ -409,6 +438,7 @@ function inven:init()
     self.radioButtonCashInven:SetTextSpan(50, 7)
     self.radioButtonNormaiInven:SetTextSpan(60, 7)
   end
+  self.radioButtonInstanceInven:SetShow(ToClient_IsDevelopment())
   local sortBtn_sizeX = self.checkButton_Sort:GetSizeX()
   local sortBtn_TextSizeX = self.checkButton_Sort:GetTextSizeX()
   self.checkButton_Sort:SetEnableArea(0, 0, 100, self.checkButton_Sort:GetSizeY())
@@ -485,12 +515,19 @@ end
 function Toggle_InventoryTab_forPadEventFunc()
   local self = inven
   local normInvenCheck = self.radioButtonNormaiInven:IsCheck()
+  local cashInvenCheck = self.radioButtonCashInven:IsCheck()
   if true == normInvenCheck then
     self.radioButtonNormaiInven:SetCheck(false)
     self.radioButtonCashInven:SetCheck(true)
-  else
+    self.radioButtonInstanceInven:SetCheck(true)
+  elseif true == cashInvenCheck then
     self.radioButtonNormaiInven:SetCheck(true)
     self.radioButtonCashInven:SetCheck(false)
+    self.radioButtonInstanceInven:SetCheck(true)
+  else
+    self.radioButtonNormaiInven:SetCheck(true)
+    self.radioButtonCashInven:SetCheck(true)
+    self.radioButtonInstanceInven:SetCheck(false)
   end
   Inventory_TabSound()
 end
@@ -1631,12 +1668,18 @@ function Inventory_IsCurrentNormalInventoryType()
   local self = inven
   return (self.radioButtonNormaiInven:IsChecked())
 end
+function Inventory_IsCurrentCashInventoryType()
+  local self = inven
+  return (self.radioButtonCashInven:IsChecked())
+end
 function Inventory_GetCurrentInventoryType()
   local self = inven
   if Inventory_IsCurrentNormalInventoryType() then
     return CppEnums.ItemWhereType.eInventory
-  else
+  elseif Inventory_IsCurrentCashInventoryType() then
     return CppEnums.ItemWhereType.eCashInventory
+  else
+    return CppEnums.ItemWhereType.eInstanceInventory
   end
   return CppEnums.ItemWhereType.eInventory
 end

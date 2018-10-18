@@ -1483,7 +1483,9 @@ function GuildListInfoPage:UpdateData()
     tempGuildUserNolist[index] = userNo
     self:UpdateDataDetail(myGuildMemberInfo, index, dataIdx)
     if true == myGuildMemberInfo:isSelf() then
-      GuildListInfoPage._btnSiegeReward:SetMonoTone(not myGuildMemberInfo:isTakableSiegeReward())
+      local isTakableSiegeReward = myGuildMemberInfo:isTakableSiegeReward()
+      GuildListInfoPage._btnSiegeReward:SetMonoTone(not isTakableSiegeReward)
+      GuildListInfoPage._btnSiegeReward:SetEnable(isTakableSiegeReward)
     end
     if false == myGuildMemberInfo:isSelf() then
       contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2
@@ -2094,6 +2096,7 @@ if false == _ContentsGroup_RenewUI_Guild then
   registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_ResponseChangeProtectGuildMember")
   registerEvent("FromClient_ChangedSiegeGrade", "FromClient_ChangedSiegeGrade")
   registerEvent("FromClient_ResponseParticipateSiege", "FromClient_ResponseParticipateSiege")
+  registerEvent("FromClient_ResponseTakableSiegeReward", "FromClient_ResponseTakableSiegeReward")
 end
 function FromClient_ResponseParticipateSiege(isParticipant, isSelf)
   GuildListInfoPage:UpdateData()
@@ -2104,6 +2107,9 @@ function FromClient_ResponseParticipateSiege(isParticipant, isSelf)
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SIEGE_NAKMESSAGE_NONPARTICIPANT"))
     end
   end
+end
+function FromClient_ResponseTakableSiegeReward()
+  GuildListInfoPage:UpdateData()
 end
 function FromClient_ResponseGuildMasterChange(userNo, targetNo)
   local userNum = Int64toInt32(getSelfPlayer():get():getUserNo())

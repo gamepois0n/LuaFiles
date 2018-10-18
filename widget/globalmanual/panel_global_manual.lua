@@ -1011,6 +1011,8 @@ local function Panel_Global_Manual_End(actorKeyRaw, isSelf)
   end
   Panel_Fishing_End()
   HideUseTab_Func()
+  PaGlobalFunc_SniperGame_EndSniperGame()
+  PaGlobalFunc_SniperReload_Close()
   uiPress._button_Space:ComputePos()
   Panel_Global_Manual:SetShow(false)
   ui_Value.isFirstTime_Manual_Timing_0 = true

@@ -340,7 +340,7 @@ function PaGlobal_Option:Open()
   end
   tree2:getElementManager():refillKeyList()
   tree2:moveTopIndex()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     local idx = self._list2._selectedKey
     local indexMap = self._list2._tree2IndexMap[idx]
     if nil ~= idx then
@@ -474,7 +474,7 @@ function FGlobal_Option_ResetAllOption()
   resetAllOption()
   keyCustom_SetDefaultAction()
   keyCustom_SetDefaultUI()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     setConsoleKeyType(2)
     setConsoleKeySet(1)
   end

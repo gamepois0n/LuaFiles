@@ -558,7 +558,7 @@ FriendList:initialize()
 registerEvent("ResponseFriendList_updateFriends", "ResponseFriendList_updateFriends")
 registerEvent("FromClient_NoticeNewMessage", "FromClient_NoticeNewMessage")
 function ResponseFriendList_updateFriends()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     FriendList:updateListForXbox()
   else
     FriendList:updateList()
@@ -884,7 +884,7 @@ function PopupFriendMenu:initialize()
   self._uiDelete:SetShow(true)
   self._uiXboxProfile:SetShow(true)
   self._uiRecallFriend:SetShow(false)
-  if false == ToClient_isXBox() then
+  if false == ToClient_isXBox() or true == ToClient_isPS4() then
     self._uiXboxProfile:SetShow(false)
     self._uiRecallFriend:SetShow(false)
   end
@@ -1227,7 +1227,7 @@ end
 function FriendList_showAni()
   audioPostEvent_SystemUi(1, 0)
   local isNew = RequestFriendList_getFriendList()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     FriendList:updateListForXbox()
   else
     FriendList:updateList()

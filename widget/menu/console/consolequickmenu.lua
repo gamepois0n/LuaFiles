@@ -75,8 +75,6 @@ function ExecuteFunction.CharacterChallange()
 end
 function ExecuteFunction.ItemMarket()
   FGlobal_ItemMarket_Open_ForWorldMap(1, true)
-  audioPostEvent_SystemUi(1, 30)
-  _AudioPostEvent_SystemUiForXBOX(1, 30)
 end
 function ExecuteFunction.Quest()
   GlobalKeyBinder_MouseKeyMap(CppEnums.UiInputType.UiInputType_QuestHistory)
@@ -180,7 +178,7 @@ function ExecuteFunction.Manufacture()
   PaGlobalFunc_ManufactureOpen(true)
 end
 function ExecuteFunction.TogglePVP()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     local selfProxy = getSelfPlayer()
     if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))

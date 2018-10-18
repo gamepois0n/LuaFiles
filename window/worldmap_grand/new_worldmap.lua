@@ -64,7 +64,7 @@ end
 Panel_NaviButton:SetShow(false)
 local naviBtn = UI.getChildControl(Panel_NaviButton, "Button_Navi")
 naviBtn:SetShow(true)
-if true == ToClient_isXBox() then
+if true == ToClient_isXBox() or true == ToClient_isPS4() then
   naviBtn:SetShow(false)
 end
 naviBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE"))

@@ -1980,10 +1980,14 @@ function FromClient_ServantRecovery(servantNo, servantWhereType)
   end
   if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_MountainGoat then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_RECOVERY_ACK"))
-  elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
+  elseif servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Carriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Boat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_CowCarriage or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Raft or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_FishingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_SailingBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_PersonalBoat or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_PersonTradeShip or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_PersonalBattleShip or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RepairableCarriage then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_REPAIR_ACK"))
   end
-  StableList_UpdateSlotData()
+  if true == Panel_Window_WharfList:GetShow() then
+    PaGlobalFunc_WharfInfo_Update()
+  else
+    StableList_UpdateSlotData()
+  end
 end
 function FromClient_ServantChangeName(servantNo)
   local servantInfo = stable_getServantByServantNo(servantNo)

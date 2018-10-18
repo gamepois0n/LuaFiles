@@ -82,7 +82,7 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
       FGlobal_ReturnStoneCheck()
     end
   end
-  if ToClient_isXBox() then
+  if ToClient_isXBox() or ToClient_isPS4() then
     FGlobal_KeyGuideTypeCheck(deltaTime)
   end
 end

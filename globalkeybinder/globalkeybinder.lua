@@ -279,6 +279,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       PaGlobalFunc_MainDialog_ReOpen()
       return
     end
+    if true == _ContentsGroup_RenewUI_Extract and true == PaGlobalFunc_ExtractInfo_GetShow() then
+      if true == PaGlobalFunc_ExtractInfo_OnPadB() then
+        PaGlobalFunc_MainDialog_ReOpen()
+      end
+      return
+    end
     if true == _ContentsGroup_RenewUI_Dailog then
       if true == PaGlobalFunc_Reward_Select_GetShow() then
         PaGlobalFunc_Reward_Select_Exit()
@@ -837,7 +843,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_PopupItem()
   end
 end
 function PaGlobal_GlobalKeyBinder.Process_UIMode_Extraction(deltaTime)
-  if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+  if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and false == _ContentsGroup_RenewUI_Extract then
     if Panel_Window_Extraction_Cloth:GetShow() then
       ExtractionCloth_WindowClose()
       InventoryWindow_Close()
@@ -1000,7 +1006,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_SkillWindow(delataTime)
   end
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckCustomKeyPressed(CppEnums.UiInputType.UiInputType_Skill) then
     audioPostEvent_SystemUi(1, 23)
-    _AudioPostEvent_SystemUiForXBOX(1, 23)
+    _AudioPostEvent_SystemUiForXBOX(1, 17)
     PaGlobalFunc_Skill_Close()
   end
 end
@@ -1106,11 +1112,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CutSceneMode(deltaTime)
         title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
         content = messageBoxMemo,
         functionYes = ToClient_CutsceneStop,
-        functionNo = MessageBox_Empty_function,
+        functionNo = PaGlobalFunc_CutScene_ShowKeyGuide,
         exitButton = true,
         priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
       }
       MessageBox.showMessageBox(messageBoxData)
+      PaGlobalFunc_CutScene_HideKeyGuide()
     end
     Panel_MovieTheater_LowLevel_WindowClose()
     return
@@ -1877,7 +1884,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
   end
   if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_C) then
     if not isPvpEnable() then
-      if true == ToClient_isXBox() then
+      if true == ToClient_isXBox() or true == ToClient_isPS4() then
         local selfProxy = getSelfPlayer()
         if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))

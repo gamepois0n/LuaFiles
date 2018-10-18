@@ -1399,7 +1399,8 @@ CppEnums.MiniGameType = {
   MiniGameType_16 = 16,
   MiniGameType_17 = 17,
   MiniGameType_18 = 18,
-  MiniGameType_19 = 19
+  MiniGameType_19 = 19,
+  MiniGameType_20 = 20
 }
 CppEnums.MiniGameKeyType = {
   MiniGameKeyType_W = 0,
@@ -1767,7 +1768,8 @@ CppEnums.ItemWhereType = {
   eCashInventory = 17,
   eInventoryBag = 19,
   eCashInventoryBag = 20,
-  eCount = 22
+  eInstanceInventory = 22,
+  eCount = 23
 }
 CppEnums.QuickSlotType = {
   eEmpty = 0,

@@ -632,7 +632,7 @@ function Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(message, 
   if not TutorialQuestCompleteCheck() and (msgType >= 10 and msgType < 22 or msgType > 32) then
     return
   end
-  if true == ToClient_isXBox() and messageType.characterHPwarning == msgType then
+  if (true == ToClient_isXBox() or true == ToClient_isPS4()) and messageType.characterHPwarning == msgType then
     return
   end
   if Panel_Global_Manual:GetShow() or Panel_Fishing:GetShow() then

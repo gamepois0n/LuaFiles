@@ -181,6 +181,17 @@ function HandleMLUp_SkillWindow_UpdateData(tabIndex, isLearnMode, doForce)
   self.awakenDesc:SetShow(false)
   PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
 end
+function PAGlobalFunc_BlackSkillLock(skillNo)
+  local skillLevelInfo = getSkillLevelInfo(skillNo)
+  if nil ~= skillLevelInfo then
+    local isBlockSkill = ToClient_isBlockBlackSpiritSkill(skillLevelInfo._skillKey)
+    if isBlockSkill then
+      ToClient_enableblockBlackSpiritSkill(skillLevelInfo._skillKey)
+    else
+      ToClient_blockBlackSpiritSkill(skillLevelInfo._skillKey)
+    end
+  end
+end
 function Request_SkillCommandLock(skillNo)
   local skillLevelInfo = getSkillLevelInfo(skillNo)
   if nil ~= skillLevelInfo then

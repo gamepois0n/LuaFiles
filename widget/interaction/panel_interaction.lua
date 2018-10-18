@@ -290,10 +290,10 @@ function Interaction_Show(actor)
   if DESC_TEXT[firstInteractionType] == nil then
     return
   end
-  if ToClient_isXBox() and actor:get():isHouseHold() then
+  if (ToClient_isXBox() or ToClient_isPS4()) and actor:get():isHouseHold() then
     return
   end
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     for ii = 0, #interactionTargetUIList do
       local isShow = actor:isSetInteracatbleFrag(ii)
       if isShow and (ii == CppEnums.InteractionType.InteractionType_OpenDoor or ii == CppEnums.InteractionType.InteractionType_Observer or ii == CppEnums.InteractionType.InteractionType_PvPBattle or ii == CppEnums.InteractionType.InteractionType_RankerHouseList) then

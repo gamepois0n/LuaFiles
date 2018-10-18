@@ -880,7 +880,10 @@ function global_updateCurrentCommerce()
   end
   return true
 end
-function eventResetScreenSizeTrade(supplyShop)
+function onScreenResizeTrade()
+  eventResetScreenSizeTrade(nil, true)
+end
+function eventResetScreenSizeTrade(supplyShop, isResize)
   Panel_Trade_Market_Graph_Window:SetSize(Panel_Trade_Market_Graph_Window:GetSizeX(), getScreenSizeY() - Panel_Npc_Trade_Market:GetSizeY())
   tradeGraph._staticRectangle:SetPosY(80)
   local rtSizeY = Panel_Trade_Market_Graph_Window:GetSizeY() - 90
@@ -900,8 +903,10 @@ function eventResetScreenSizeTrade(supplyShop)
       break
     end
   end
-  for count = 1, tradeGraph._itemMaxCount do
-    setGraphMiniPanel(count, false)
+  if true ~= isResize then
+    for count = 1, tradeGraph._itemMaxCount do
+      setGraphMiniPanel(count, false)
+    end
   end
   tradeGraph._commerceGraph_Max = showMiniPanelCount
 end
@@ -1125,7 +1130,7 @@ function resetTrendGraphButton(isShow)
 end
 function tradeGraph:registTradeGraphEvent()
   Panel_Trade_Market_Graph_Window:RegisterUpdateFunc("updateTradeMarketGraphData")
-  registerEvent("onScreenResize", "eventResetScreenSizeTrade")
+  registerEvent("onScreenResize", "onScreenResizeTrade")
   tradeGraph._buttonExit:addInputEvent("Mouse_LUp", "closeNpcTrade_BasketByGraph()")
   local talker = dialog_getTalker()
   if nil ~= talker then

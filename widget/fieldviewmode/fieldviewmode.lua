@@ -137,7 +137,7 @@ local function initialize()
   var_UI.btn_FreeSet1:addInputEvent("Mouse_LPress", "FieldViewMode_PushFreeSet(1)")
   var_UI.btn_FreeSet2:addInputEvent("Mouse_LPress", "FieldViewMode_PushFreeSet(2)")
   var_UI.btn_FreeSet3:addInputEvent("Mouse_LPress", "FieldViewMode_PushFreeSet(3)")
-  if not ToClient_isXBox() then
+  if not ToClient_isXBox() or not ToClient_isPS4() then
     characterCameraReset()
   end
 end

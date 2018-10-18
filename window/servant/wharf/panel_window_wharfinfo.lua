@@ -45,6 +45,9 @@ local wharfInfo = {
 }
 function wharfInfo:init()
 end
+function PaGlobalFunc_WharfInfo_Update()
+  wharfInfo:update()
+end
 function wharfInfo:update()
   local servantInfo = stable_getServant(WharfList_SelectSlotNo())
   if nil == servantInfo then

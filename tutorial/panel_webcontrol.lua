@@ -18,7 +18,7 @@ local ui = {
 ui._btn_Close:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle()")
 ui._btn_CloseWin:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle()")
 function Panel_WebHelper_ShowToggle(helpType)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     return
   end
   if isDeadInWatchingMode() then
@@ -83,6 +83,9 @@ function FGlobal_WebHelper_ForceClose()
   end
 end
 function FGlobal_Panel_WebHelper_ShowToggle()
+  if true == ToClient_SniperGame_IsPlaying() then
+    return
+  end
   Panel_WebHelper_ShowToggle("GUIDE")
 end
 function Panel_WebHelper_ShowAni()
@@ -148,7 +151,7 @@ elseif isGameTypeSA() then
   end
 end
 function Panel_WebControl_TakeAndShow(helpType)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     return
   end
   Panel_WebControl:SetShow(true, true)
@@ -323,7 +326,7 @@ function Panel_WebControl_TakeAndShow(helpType)
   html_WebHelper_Control:SetShow(true)
 end
 function Panel_WebControl_LevelUpGuide(isString)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     return
   end
   if nil == isString then

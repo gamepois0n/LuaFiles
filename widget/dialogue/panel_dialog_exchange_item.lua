@@ -236,3 +236,4 @@ function ExchangeItem_getGradeToColorString(grade)
 end
 ExchangeItem:Init()
 ExchangeItem_onScreenResize()
+registerEvent("onScreenResize", "ExchangeItem_onScreenResize")

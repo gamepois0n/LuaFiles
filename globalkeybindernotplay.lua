@@ -18,7 +18,7 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
   end
   if nil ~= Panel_Login and Panel_Login:GetShow() or nil ~= Panel_Login_Renew and Panel_Login_Renew:GetShow() or nil ~= Panel_Login_Remaster and Panel_Login_Remaster:GetShow() then
     if nil ~= Panel_Window_Policy and Panel_Window_Policy:GetShow() then
-      if true == ToClient_isXBox() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+      if (true == ToClient_isXBox() or true == ToClient_isPS4()) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
         PaGlobal_Policy_Decline()
         return
       end

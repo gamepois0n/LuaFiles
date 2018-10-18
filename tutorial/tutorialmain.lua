@@ -50,7 +50,7 @@ function executeLuaFunc(funcText)
     else
       PaGlobalFunc_MainDialog_Hide()
     end
-    if false == ToClient_isXBox() then
+    if false == ToClient_isXBox() or false == ToClient_isPS4() then
       FGlobal_FirstLogin_InGameOpen()
     end
   elseif funcText == "findTargetMovieGuide" then

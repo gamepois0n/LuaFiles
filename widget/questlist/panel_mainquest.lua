@@ -220,7 +220,7 @@ function PaGlobal_MainQuest:setConditionInfo(uiQuestInfo, startPosY)
   end
   local uiQuestCondition
   if not uiQuestInfo._isCleared and not uiQuestInfo._isProgressing then
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "GAME_QUEST_BASIC_DIALOGUE_1"))
     else
       self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_MAINQUEST_ACCEPT_NOTICE"))
@@ -271,7 +271,7 @@ function PaGlobal_MainQuest:setConditionInfo(uiQuestInfo, startPosY)
     elseif 0 < uiQuestInfo:getQuestType() then
       self._uiQuestTypeIcon:AddEffect("UI_Quest_Complete_GreenAura", true, 130, 0)
     end
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "GAME_QUEST_BASIC_DIALOGUE_2"))
     else
       self._uiQuestCompleteNpc:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_QUESTCOMPLETENPC"))

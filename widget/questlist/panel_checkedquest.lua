@@ -2504,7 +2504,7 @@ function FGlobal_QuestWindowRateSetting()
   rateValue.y = math.max(math.min(Panel_CheckedQuest:GetPosY() / sizeWithOutPanelY, 1), 0)
 end
 function FromClient_questWidget_ResetPosition()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     Panel_CheckedQuest:SetShow(false)
     return
   end

@@ -1201,4 +1201,5 @@ _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelE
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelEnableSkill\", \"true\")")
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelEnableSkill\", \"false\")")
 registerEvent("EventSkillWindowUpdate", "FromClient_EventSkillWindowUpdate")
+registerEvent("onScreenResize", "Panel_EnableSkill_SetPosition")
 registerEvent("FromClient_UseSkillAskFromOtherPlayer", "FromClient_UseSkillAskFromOtherPlayer")

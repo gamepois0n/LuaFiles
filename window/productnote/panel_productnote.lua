@@ -126,10 +126,10 @@ function ProductNote_onScreenResize()
   end
   Panel_ProductNote:SetSize(panelSizeX, panelSizeY)
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
-  _productWeb:SetHorizonCenter()
-  _productWeb:SetVerticalTop()
   _productWeb:SetSpanSize(0, 62)
   _productWeb:SetSize(sizeX, sizeY)
+  _productWeb:SetHorizonCenter()
+  _productWeb:SetVerticalTop()
   Panel_ProductNote:SetPosX(math.floor((getScreenSizeX() - Panel_ProductNote:GetSizeX()) / 2))
   Panel_ProductNote:SetPosY(math.floor((getScreenSizeY() - Panel_ProductNote:GetSizeY()) / 2))
 end

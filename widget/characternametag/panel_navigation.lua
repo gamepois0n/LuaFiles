@@ -3,7 +3,7 @@ Panel_Copy_NaviPath:SetPosY(-1000)
 function FromClient_CreateNavigationPanel(targetPanel, index)
   local meterControl = UI.getChildControl(targetPanel, "StaticText_Meter")
   local naviButton = UI.getChildControl(targetPanel, "Checkbox_NaviBtn")
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     meterControl:SetShow(false)
     naviButton:SetShow(false)
   else

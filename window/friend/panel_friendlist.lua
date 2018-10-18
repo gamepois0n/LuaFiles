@@ -631,6 +631,7 @@ function PaGlobal_FriendList:Hide()
   self:ClosePopupMenu(false)
   PopupAddFriend:SetShow(false)
   FriendRequestList:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_FriendList:SetShow(false, true)
 end
 function PaGlobal_FriendList:ShowAni()

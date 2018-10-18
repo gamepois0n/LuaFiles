@@ -506,7 +506,17 @@ function InGameShop_ProductInfo_ChangeMoneyIconTexture(categoryIdx, isEnableSilv
   elseif UI_CCC.eCashProductCategory_Mileage == categoryIdx then
     iconType = cashIconType.mileage
   else
-    iconType = cashIconType.pearl
+    local isRussia = isGameTypeRussia() or eCountryType.DEV == gameServiceType
+    local isFixedServer = isServerFixedCharge()
+    if true == isRussia and true == isFixedServer then
+      if isEnableSilver then
+        iconType = cashIconType.silver
+      else
+        iconType = cashIconType.pearl
+      end
+    else
+      iconType = cashIconType.pearl
+    end
   end
   cashIcon_changeTextureForList(icon, serviceContry, iconType)
 end

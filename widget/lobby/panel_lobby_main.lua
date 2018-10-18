@@ -305,7 +305,7 @@ local function Panel_Lobby_Function_Initialize()
   Panel_Lobby_ClassUI.ClassNames[UI_Class.ClassType_Temp2]:SetText("\236\158\132\236\139\1562")
   Panel_Lobby_ClassUI.ClassNames[UI_Class.ClassType_CombattantWomen]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
   Panel_Lobby_ClassUI.ClassNames[UI_Class.ClassType_Lahn]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN"))
-  Panel_Lobby_ClassUI.ClassNames[UI_Class.ClassType_Orange]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COUNT"))
+  Panel_Lobby_ClassUI.ClassNames[UI_Class.ClassType_Orange]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_ORANGE"))
   for index = 0, UI_Class.ClassType_Count - 1 do
     if Panel_Lobby_ClassUI.ClassButtons[index] ~= nil then
       Panel_Lobby_ClassUI.ClassButtons[index]:addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. index .. ", true)")
@@ -336,7 +336,7 @@ local function Panel_Lobby_Function_Initialize()
   Panel_Lobby_UI.CC_SelectClassButton:addInputEvent("Mouse_LUp", "changeCreateCharacterMode_SelectClass()")
   Panel_Lobby_UI.CC_CreateButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateOk()")
   Panel_Lobby_UI.CC_BackButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateCancel()")
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     Panel_Lobby_UI.CCSC_ClassMovie:SetShow(false)
     Panel_Lobby_UI.CCSC_RadioNormalMovie:SetShow(false)
     Panel_Lobby_UI.CCSC_RadioAwakenMovie:SetShow(false)
@@ -445,7 +445,7 @@ function Panel_Lobby_Function_showCharacterCreate_SelectClass()
     FGlobal_CharacterSelect_Close()
   end
   Panel_Lobby_Global_Variable.currentSelectedIdx = -1
-  local isXbox = ToClient_isXBox()
+  local isXbox = ToClient_isXBox() or ToClient_isPS4()
   Panel_Lobby_UI.CCSC_LeaveConsole:SetShow(isXbox)
   Panel_Lobby_UI.CCSC_SelectConsole:SetShow(isXbox)
   Panel_Lobby_UI.CCSC_BackButton:SetShow(not isXbox)
@@ -505,7 +505,7 @@ function Panel_Lobby_function_SelectClassType(index, isOn)
     end
     Panel_Lobby_ClassUI.ClassButtons[index]:SetMonoTone(false)
     Panel_Lobby_ClassUI.ClassButtons[index]:AddEffect("UI_CharactorSelcect_Line", true, 10, 4)
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       _index = index
       viewCharacterCreateSelectClassMode(index)
       Panel_Lobby_Global_Variable.characterSelectType = index
@@ -548,7 +548,7 @@ function Panel_Lobby_SelectClass_MouseEvent(index, isOn)
   if classButton ~= nil then
     if isOn == true then
       classButton:SetVertexAniRun("Ani_Color_Bright", true)
-      if true == ToClient_isXBox() then
+      if true == ToClient_isXBox() or true == ToClient_isPS4() then
         if index == Panel_Lobby_Global_Variable.currentSelectedIdx then
           Panel_Lobby_UI.CCSC_SelectConsole:SetText("Create")
         else

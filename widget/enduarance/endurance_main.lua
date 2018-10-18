@@ -127,6 +127,9 @@ function Panel_PlayerEndurance_Position()
   if Panel_Widget_TownNpcNavi:GetShow() then
     self.panel:SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 10)
   end
+  if true == ToClient_isXBox() then
+    self.panel:SetPosY(Panel_NewEquip:GetSizeY() + Panel_NewEquip:GetPosY() + 10)
+  end
 end
 function renderModeChange_Panel_PlayerEndurance_Position(prevRenderModeList, nextRenderModeList)
   if CheckRenderModebyGameMode(nextRenderModeList) == false then

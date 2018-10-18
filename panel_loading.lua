@@ -24,7 +24,7 @@ local isDraganOpen = ToClient_IsContentsGroupOpen("6")
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 local isBgOpen = isDraganOpen
 local bgImageTexture = {}
-if true == ToClient_isXBox() then
+if true == ToClient_isXBox() or true == ToClient_isPS4() then
   isBgOpen = true
 end
 local _movieLength = {
@@ -192,7 +192,7 @@ function LoadingPanel_Init()
     _currentMovieIndex = 1
     LoadingPanel_ShuffleOrder(_movieOrder)
   end
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     stc_movieBG:SetShow(false)
     stc_fade:SetShow(false)
   end
@@ -212,7 +212,7 @@ function LoadingPanel_ShuffleOrder(table)
   end
 end
 function LoadingPanel_LoadMovie()
-  if false == _ContentsGroup_RemasterUI_Lobby or true == ToClient_isXBox() then
+  if false == _ContentsGroup_RemasterUI_Lobby or true == ToClient_isXBox() or true == ToClient_isPS4() then
     return
   end
   stc_movieBG:SetShow(true)

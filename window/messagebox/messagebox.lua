@@ -441,7 +441,7 @@ function Event_MessageBox_NotifyMessage(message)
   MessageBox.showMessageBox(messageboxData)
 end
 function Event_MessageBox_NotifyMessage_FreeButton(message)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     local messageboxData = {
       title = "",
       content = message,
