@@ -128,13 +128,11 @@ function Panel_UseItem_RepositionSlot(slotCount)
       end
     end
   end
-  _descBG:SetSize(_descBG:GetSizeX(), descBG_sizeY)
+  _descBG:SetSize(_descBG:GetSizeX(), _frame:GetSizeY() + 20)
   local desc_sizeY = GetBottomPos(_descBG)
-  _backGround:SetSize(Panel_UseItem:GetSizeX(), desc_sizeY + 40)
-  local backgroundBottom = GetBottomPos(_backGround)
-  _btn_Yes:SetPosY(backgroundBottom - _btn_Yes:GetSizeY() - 7)
-  _btn_No:SetPosY(backgroundBottom - _btn_No:GetSizeY() - 7)
-  popupItem.slotIndex = UIindex - 1
+  Panel_UseItem:SetSize(Panel_UseItem:GetSize(), _descBG:GetSizeY() + 94)
+  _btn_Yes:ComputePos()
+  _btn_No:ComputePos()
 end
 function Panel_UseBuff_RepositionSlot(buffCount)
   local remain = buffCount % baseSlotLineCount
@@ -211,15 +209,23 @@ end
 local function fillPopupUseItemData(itemEnchatWrapper)
   _desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   _desc:SetText(itemEnchatWrapper:getPopupItemDesc())
-  _frameContent:SetSize(_frameContent:GetSizeX(), _desc:GetTextSizeY() + 25)
+  _frameContent:SetSize(_frameContent:GetSizeX(), _desc:GetTextSizeY() + 20)
   _desc:SetPosY(10)
   _desc:SetSize(_desc:GetSizeX(), _desc:GetTextSizeY())
   local descSizeY = _desc:GetTextSizeY()
   if descSizeY > 180 then
     _frameScroll:SetShow(true)
+    _frame:SetSize(_frame:GetSizeX(), 180)
+    _descBG:SetSize(_descBG:GetSizeX(), 210)
+    Panel_UseItem:SetSize(Panel_UseItem:GetSizeX(), _frame:GetSizeY() + 124)
   else
     _frameScroll:SetShow(false)
+    _frame:SetSize(_frame:GetSizeX(), descSizeY + 40)
+    _descBG:SetSize(_descBG:GetSizeX(), descSizeY + 60)
+    Panel_UseItem:SetSize(Panel_UseItem:GetSizeX(), _frame:GetSizeY() + 114)
   end
+  _btn_Yes:ComputePos()
+  _btn_No:ComputePos()
   descBG_sizeY = descBG_sizeY + _desc:GetSizeY()
   local popupItemSize = itemEnchatWrapper:getPopupItemSize()
   Panel_UseItem_RepositionSlot(popupItemSize)

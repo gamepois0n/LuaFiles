@@ -1,9 +1,10 @@
 Panel_KeyboardHelp:SetShow(false, false)
 local keyboardHelp = {
-  btn_XClose = UI.getChildControl(Panel_KeyboardHelp, "Button_Close"),
+  stc_titleBg = UI.getChildControl(Panel_KeyboardHelp, "Static_TitleBG"),
   btn_Close = UI.getChildControl(Panel_KeyboardHelp, "Button_CloseWindow"),
   btn_Help = UI.getChildControl(Panel_KeyboardHelp, "Button_Help")
 }
+keyboardHelp.btn_XClose = UI.getChildControl(keyboardHelp.stc_titleBg, "Button_Close")
 function KeyBoardHelp_Init()
   if isGameTypeKR2() then
     keyboardHelp.btn_Help:SetShow(false)

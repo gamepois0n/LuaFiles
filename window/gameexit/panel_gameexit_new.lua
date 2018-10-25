@@ -41,11 +41,11 @@ local _btn_winClose = UI.getChildControl(Panel_GameExit, "Button_Win_Close")
 local _btn_selectCharacter = UI.getChildControl(Panel_GameExit, "Button_CharacterSelect")
 local _btn_gameExit = UI.getChildControl(Panel_GameExit, "Button_GameExit")
 local _btn_Tray = UI.getChildControl(Panel_GameExit, "Button_Tray")
+local _btn_ChangeChannel = UI.getChildControl(Panel_GameExit, "Button_ChangeChannel")
 local _charSlotBG = UI.getChildControl(Panel_GameExit, "Static_CharSlot_BG")
 local _btn_NoticeMsg = UI.getChildControl(Panel_GameExit, "Button_NoticeMsg")
 local _btn_PreCharPage = UI.getChildControl(Panel_GameExit, "Button_PrePage")
 local _btn_NextCharPage = UI.getChildControl(Panel_GameExit, "Button_NextPage")
-local _btn_ChangeChannel = UI.getChildControl(Panel_GameExit, "Button_ChangeChannel")
 local _btn_CharTransport = UI.getChildControl(Panel_GameExit, "Button_Transport")
 local _block_BG = UI.getChildControl(Panel_GameExit, "Static_block_BG")
 local _dailyStampBanner = UI.getChildControl(Panel_GameExit, "Static_DailyCheckBanner")
@@ -108,9 +108,10 @@ _exitConfirm_TrayString_Old:SetTextMode(UI_TM.eTextMode_AutoWrap)
 _exitConfirm_TrayString_Old:SetAutoResize(true)
 _exitConfirm_TrayString_Old:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXITTRAY_TRAYHELP"))
 _exitConfirm_Chk_Tray_Old:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXITTRAY_CHKTRAY"))
-_exitConfirm_Chk_Tray_Old:SetEnableArea(0, 0, _exitConfirm_Chk_Tray_Old:GetSizeX() + _exitConfirm_Chk_Tray_Old:GetTextSizeX(), _exitConfirm_Chk_Tray_Old:GetSizeY())
+_exitConfirm_Chk_Tray_Old:SetEnableArea(0, 0, _exitConfirm_Chk_Tray_Old:GetSizeX() + _exitConfirm_Chk_Tray_Old:GetTextSizeX() + 20, _exitConfirm_Chk_Tray_Old:GetSizeY())
+_exitConfirm_Chk_Tray_Old:SetPosX(Panel_ExitConfirm_Old:GetSizeX() / 2 - _exitConfirm_Chk_Tray_Old:GetTextSizeX() / 2 - 10)
 local totalCharacterCount = 4
-local startPosX = 4
+local startPosX = 42
 local exitMode = -1
 local logoutDelayTime = getLogoutWaitingTime()
 enum_ExitMode = {
@@ -156,16 +157,15 @@ function Panel_GameExit_Initialize()
   for idx = 0, totalCharacterCount - 1 do
     local charSlotBG2 = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _charSlotBG, "Static_CharSlotBG2_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharSlot_BG2, charSlotBG2)
-    charSlotBG2:SetShow(false)
-    charSlotBG2:SetIgnore(true)
-    charSlotBG2:SetPosX(startPosX + idx * 159)
-    charSlotBG2:SetPosY(4)
+    charSlotBG2:SetShow(true)
+    charSlotBG2:SetPosX(startPosX + idx * 175)
+    charSlotBG2:SetPosY(23)
     isCharacterSlotBG[idx] = charSlotBG2
     local charSlot = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _charSlotBG, "Static_CharSlot_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharSlot, charSlot)
     charSlot:SetShow(false)
-    charSlot:SetPosX(startPosX + idx * 159)
-    charSlot:SetPosY(4)
+    charSlot:SetPosX(startPosX + idx * 175 + 8)
+    charSlot:SetPosY(31)
     isCharacterSlot[idx] = charSlot
     local charLevel = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, charSlot, "StaticText_CharLevel_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharLevel, charLevel)
@@ -193,27 +193,24 @@ function Panel_GameExit_Initialize()
     CopyBaseProperty(Copy_UI_CharChange._copy_CharEnterWaiting, charEnterWaitingTxt)
     charEnterWaitingTxt:SetShow(false)
     charEnterWaiting[idx] = charEnterWaitingTxt
-    local charChange = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, charSlot, "Button_CharChange_" .. idx)
+    local charChange = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, charSlotBG2, "Button_CharChange_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharChange, charChange)
     charChange:SetShow(false)
     CharacterChangeButton[idx] = charChange
-    local charSelected = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _charSlotBG, "Statc_CharSelected_" .. idx)
+    local charSelected = UI.createControl(UCT.PA_UI_CONTROL_STATIC, charSlotBG2, "Static_CharSelected_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharSelect, charSelected)
     charSelected:SetShow(false)
-    charSelected:SetPosX(2 + idx * 159)
-    charSelected:SetPosY(2)
+    charSelected:ComputePos()
     isCharacterSelect[idx] = charSelected
     local normalStack = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, charSlot, "StaticText_NormalStack_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_NormalStack, normalStack)
     normalStack:SetShow(false)
-    normalStack:SetPosX(127)
-    normalStack:SetPosY(170)
+    normalStack:ComputePos()
     normalStackPool[idx] = normalStack
     local charWpCount = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, charSlot, "StaticText_charWpCount_" .. idx)
     CopyBaseProperty(Copy_UI_CharChange._copy_CharWpCount, charWpCount)
     charWpCount:SetShow(false)
-    charWpCount:SetPosX(2)
-    charWpCount:SetPosY(176)
+    charWpCount:ComputePos()
     charWpCountPool[idx] = charWpCount
   end
   for _, value in pairs(Copy_UI_CharChange) do
@@ -224,7 +221,7 @@ function Panel_GameExit_Initialize()
   _block_BG:SetHorizonCenter()
   _block_BG:SetVerticalMiddle()
   _btn_ChangeChannel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"))
-  _btn_FacePhoto:SetShow(true)
+  _btn_ChangeChannel:addInputEvent("Mouse_LUp", "FGlobal_ChannelSelect_Show()")
   _btn_FacePhoto:addInputEvent("Mouse_On", "ButtonFacePhoto_ToolTip( true )")
   _btn_FacePhoto:addInputEvent("Mouse_Out", "ButtonFacePhoto_ToolTip( false )")
   _btn_FacePhoto:addInputEvent("Mouse_LUp", "GameExit_ForFacePhoto()")
@@ -237,9 +234,11 @@ function Panel_GameExit_Initialize()
   _btn_selectCharacter:SetText(_btn_selectCharacter:GetText())
   _btn_gameExit:SetText(_btn_gameExit:GetText())
   _btn_Tray:SetText(_btn_Tray:GetText())
+  _btn_ChangeChannel:SetText(_btn_ChangeChannel:GetText())
   _btn_selectCharacter:setChangeFontAfterTransSizeValue()
   _btn_gameExit:setChangeFontAfterTransSizeValue()
   _btn_Tray:setChangeFontAfterTransSizeValue()
+  _btn_ChangeChannel:setChangeFontAfterTransSizeValue()
   Panel_GameExit:initNextReward()
 end
 function GameExit_ForFacePhoto()
@@ -262,6 +261,31 @@ function ButtonFacePhoto_ToolTip(isOn)
   registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
   TooltipSimple_Show(uiControl, name, desc, reversePosX)
 end
+local charSlotUV = {
+  {
+    442,
+    1,
+    462,
+    21
+  },
+  {
+    421,
+    1,
+    441,
+    21
+  }
+}
+local function changeCharSlotTexture(control, isCurrentCharacter)
+  local key = 1
+  if false == isCurrentCharacter then
+    key = 2
+  end
+  control:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
+  local x1, y1, x2, y2 = setTextureUV_Func(control, charSlotUV[key][1], charSlotUV[key][2], charSlotUV[key][3], charSlotUV[key][4])
+  control:getBaseTexture():setUV(x1, y1, x2, y2)
+  control:setRenderTexture(control:getBaseTexture())
+end
+local _nowPlayCharaterSlotNo
 function refreshCharacterInfoData(startIdx)
   local selfProxy = getSelfPlayer()
   local characterNo_64 = toInt64(0, 0)
@@ -280,8 +304,9 @@ function refreshCharacterInfoData(startIdx)
   local characterTicketNo
   local firstTicketNo = getFirstTicketNoByAll()
   local characterDatacount = getCharacterDataCount()
-  local nowPlayCharaterSlotNo
   local serverUtc64 = getServerUtc64()
+  _nowPlayCharaterSlotNo = nil
+  _btn_FacePhoto:SetShow(false)
   for idx = startIdx, characterDatacount - 1 do
     local characterData = getCharacterDataByIndex(idx)
     local char_Type = getCharacterClassType(characterData)
@@ -390,7 +415,7 @@ function refreshCharacterInfoData(startIdx)
         isCharacterSlot[uiCount]:setRenderTexture(isCharacterSlot[uiCount]:getBaseTexture())
       elseif char_Type == UI_Class.ClassType_Orange then
         isCharacterSlot[uiCount]:ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(isCharacterSlot[uiCount], 1, 1, 156, 201)
+        local x1, y1, x2, y2 = setTextureUV_Func(isCharacterSlot[uiCount], 157, 1, 312, 201)
         isCharacterSlot[uiCount]:getBaseTexture():setUV(x1, y1, x2, y2)
         isCharacterSlot[uiCount]:setRenderTexture(isCharacterSlot[uiCount]:getBaseTexture())
       end
@@ -403,6 +428,7 @@ function refreshCharacterInfoData(startIdx)
     isCharacterSlot[uiCount]:setRenderTexture(isCharacterSlot[uiCount]:getBaseTexture())
     charLevelPool[uiCount]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. char_Level)
     charNamePool[uiCount]:SetText(char_Name)
+    charPositionPool[uiCount]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
     if 0 == characterData._currentPosition.x and 0 == characterData._currentPosition.y and 0 == characterData._currentPosition.z then
       charPositionPool[uiCount]:SetText("")
     elseif 0 ~= pcDeliveryRegionKey:get() and serverUtc64 > characterData._arrivalTime then
@@ -419,8 +445,6 @@ function refreshCharacterInfoData(startIdx)
     else
       normalStackPool[uiCount]:SetText("-")
     end
-    normalStackPool[uiCount]:SetFontColor(UI_color.C_FFE7E7E7)
-    charWpCountPool[uiCount]:SetFontColor(UI_color.C_FFE7E7E7)
     normalStackPool[uiCount]:addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 0," .. defaultCount .. "," .. valksCount .. " )")
     normalStackPool[uiCount]:addInputEvent("Mouse_Out", "GameExit_SimpleTooltips( false, " .. uiCount .. ", 0 )")
     charWpCountPool[uiCount]:addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 1 )")
@@ -433,8 +457,10 @@ function refreshCharacterInfoData(startIdx)
     charEnterWaiting[uiCount]:SetShow(true)
     if false == _ContentsGroup_isConsolePadControl then
       isCharacterSlot[uiCount]:addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
     else
       isCharacterSlot[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
     end
     CharacterChangeButton[uiCount]:addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
     local selfProxy = getSelfPlayer()
@@ -444,35 +470,38 @@ function refreshCharacterInfoData(startIdx)
     end
     CharacterChangeButton[uiCount]:SetShow(false)
     if characterNo_64 == characterData._characterNo_s64 then
-      isCharacterSlot[uiCount]:SetMonoTone(false)
       isCharacterSlot[uiCount]:SetIgnore(true)
-      isCharacterSlotBG[uiCount]:SetShow(true)
+      changeCharSlotTexture(isCharacterSlotBG[uiCount], true)
       if startIdx + 4 <= characterDatacount - 1 then
         isCharacterSlot[uiCount]:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
+        isCharacterSlotBG[uiCount]:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
         _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. " )")
       end
       isCharacterSlot[uiCount]:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
       _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
       CharacterChangeButton[uiCount]:SetShow(false)
       CharacterChangeButton[uiCount]:SetIgnore(true)
       CharacterChangeButton[uiCount]:SetEnable(false)
-      normalStackPool[uiCount]:SetFontColor(UI_color.C_FFE7E7E7)
       charWorking[uiCount]:SetText("")
       charWorking[uiCount]:SetFontColor(UI_color.C_FF6DC6FF)
       charPositionPool[uiCount]:SetShow(false)
       charPcDeliveryRemainTime[uiCount]:SetText("")
-      nowPlayCharaterSlotNo = uiCount
+      _nowPlayCharaterSlotNo = uiCount
+      _btn_FacePhoto:SetShow(true)
+      _btn_FacePhoto:SetPosX(isCharacterSlotBG[uiCount]:GetPosX() + 7)
+      _btn_FacePhoto:SetPosY(isCharacterSlotBG[uiCount]:GetPosY() + isCharacterSlotBG[uiCount]:GetSizeY() + 11)
     else
       isCharacterSlot[uiCount]:SetIgnore(false)
-      isCharacterSlot[uiCount]:SetMonoTone(true)
       if startIdx + 4 <= characterDatacount - 1 then
         isCharacterSlot[uiCount]:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
+        isCharacterSlotBG[uiCount]:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
         _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
       end
       isCharacterSlot[uiCount]:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
       _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
-      isCharacterSlotBG[uiCount]:SetShow(false)
-      normalStackPool[uiCount]:SetFontColor(UI_color.C_FFC4BEBE)
+      changeCharSlotTexture(isCharacterSlotBG[uiCount], false)
       CharacterChangeButton[uiCount]:SetIgnore(false)
       CharacterChangeButton[uiCount]:SetEnable(true)
       charWorking[uiCount]:SetText(char_WorkTxt)
@@ -499,23 +528,12 @@ function refreshCharacterInfoData(startIdx)
       break
     end
   end
-  if nil ~= nowPlayCharaterSlotNo then
-    local basePosX = _charSlotBG:GetPosX()
-    local basePosY = _charSlotBG:GetPosY()
-    local posX = basePosX + isCharacterSlot[nowPlayCharaterSlotNo]:GetPosX() + isCharacterSlot[nowPlayCharaterSlotNo]:GetSizeX() / 2 - _btn_ChangeChannel:GetSizeX() / 2
-    local posY = basePosY + isCharacterSlot[nowPlayCharaterSlotNo]:GetPosY() + isCharacterSlot[nowPlayCharaterSlotNo]:GetSizeY() - _btn_ChangeChannel:GetSizeY() - 10
-    _btn_ChangeChannel:SetPosX(posX)
-    _btn_ChangeChannel:SetPosY(posY)
-    _btn_ChangeChannel:SetShow(true)
-    _btn_ChangeChannel:addInputEvent("Mouse_LUp", "FGlobal_ChannelSelect_Show()")
-    local posX2 = basePosX + isCharacterSlot[nowPlayCharaterSlotNo]:GetPosX() + isCharacterSlot[nowPlayCharaterSlotNo]:GetSizeX() / 2 - _btn_CharTransport:GetSizeX() / 2
-    local posY2 = basePosY + isCharacterSlot[nowPlayCharaterSlotNo]:GetPosY() + isCharacterSlot[nowPlayCharaterSlotNo]:GetSizeY() - _btn_CharTransport:GetSizeY() - 10
-    _btn_CharTransport:SetPosX(posX2)
-    _btn_CharTransport:SetPosY(posY2 + 37)
+  if nil ~= _nowPlayCharaterSlotNo then
+    _btn_CharTransport:SetPosX(isCharacterSlotBG[_nowPlayCharaterSlotNo]:GetPosX() + _btn_FacePhoto:GetSizeX() + 9)
+    _btn_CharTransport:SetPosY(isCharacterSlotBG[_nowPlayCharaterSlotNo]:GetPosY() + isCharacterSlotBG[_nowPlayCharaterSlotNo]:GetSizeY() + 11)
     _btn_CharTransport:SetShow(true)
     _btn_CharTransport:addInputEvent("Mouse_LUp", "Panel_GameExit_Transport()")
   else
-    _btn_ChangeChannel:SetShow(false)
     _btn_CharTransport:SetShow(false)
   end
   if characterDatacount - 1 < startIdx + 4 then
@@ -620,6 +638,7 @@ function Panel_GameExit_sendGameDelayExitCancel()
   _btn_selectCharacter:SetShow(true)
   _btn_gameExit:SetShow(true)
   _btn_Tray:SetShow(true)
+  _btn_ChangeChannel:SetShow(true)
   exit_Time = 0
   exitMode = -1
 end
@@ -632,7 +651,9 @@ function Panel_GameExit_ClickCharSlot(idx)
     isCharacterSlot[prevClickIndex]:SetAlpha(1)
   end
   isCharacterSelect[idx]:SetShow(true)
-  CharacterChangeButton[idx]:SetShow(true)
+  if idx ~= _nowPlayCharaterSlotNo then
+    CharacterChangeButton[idx]:SetShow(true)
+  end
   if true == _ContentsGroup_isConsolePadControl then
     isCharacterSlot[idx]:addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
   end
@@ -674,6 +695,7 @@ function Panel_GameExit_CharSelect_Yes()
   _btn_selectCharacter:SetShow(false)
   _btn_gameExit:SetShow(false)
   _btn_Tray:SetShow(false)
+  _btn_ChangeChannel:SetShow(false)
   _btn_NoticeMsg:SetShow(true)
   local regionInfo = getRegionInfoByPosition(getSelfPlayer():get():getPosition())
   if true == regionInfo:get():isSafeZone() then
@@ -788,6 +810,7 @@ function Panel_GameExit_CharChange_Confirm()
   _btn_selectCharacter:SetShow(false)
   _btn_gameExit:SetShow(false)
   _btn_Tray:SetShow(false)
+  _btn_ChangeChannel:SetShow(false)
   _btn_NoticeMsg:SetShow(true)
   _btn_NoticeMsg:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_COMMENT_TO_CHARACTER_CHANGE", "remainTime", logoutDelayTime))
   if true == PaGlobal_IsTagChange() then
@@ -844,6 +867,7 @@ function Panel_GameExit_GameOff_Yes()
   _btn_selectCharacter:SetShow(false)
   _btn_gameExit:SetShow(false)
   _btn_Tray:SetShow(false)
+  _btn_ChangeChannel:SetShow(false)
   _btn_NoticeMsg:SetShow(true)
 end
 function doGameLogOut()

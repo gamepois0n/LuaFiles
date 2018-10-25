@@ -9,12 +9,12 @@ local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
 local nodeStableList = {
   _config = {
     slot = {
-      startX = 7,
-      startY = 9,
-      gapY = 121
+      startX = 10,
+      startY = 0,
+      gapY = 130
     },
     icon = {
-      startX = 7,
+      startX = 10,
       startY = -3,
       startNameX = 8,
       startNameY = 97,
@@ -83,6 +83,8 @@ function nodeStableList:init()
     slot.registerMarket:SetPosY(iconConfig.startStateY)
     slot.grade:SetPosX(iconConfig.startGradeX)
     slot.grade:SetPosY(iconConfig.startGradeY)
+    slot.stallionIcon:SetPosX(iconConfig.startGradeX + slot.grade:GetSizeX() - slot.stallionIcon:GetSizeX())
+    slot.stallionIcon:SetPosY(iconConfig.startGradeY + slot.grade:GetSizeY())
     slot.level:SetPosX(iconConfig.startLevelX)
     slot.level:SetPosY(iconConfig.startLevelY)
     slot.coma:SetPosX(iconConfig.startStateX)

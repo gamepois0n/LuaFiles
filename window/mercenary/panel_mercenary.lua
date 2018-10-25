@@ -33,6 +33,8 @@ function mercenary:Init()
     local parent = self._control._territoryBg[index]
     temp._btnAttack = UI.getChildControl(parent, "Button_Attack")
     temp._btnDeffence = UI.getChildControl(parent, "Button_Deffence")
+    temp._StaticAttackIcon = UI.getChildControl(parent, "Static_AttackIcon")
+    temp._StaticDeffenceIcon = UI.getChildControl(parent, "Static_DeffenceIcon")
     temp._occupyGuild = UI.getChildControl(parent, "StaticText_OccupyGuild")
     temp._territoryName = UI.getChildControl(parent, "StaticText_TerritoryName")
     temp._freeDesc = UI.getChildControl(parent, "StaticText_Free")
@@ -118,6 +120,8 @@ function mercenary:SetButton(index, isEnable)
   self._control._territoryControl[index]._btnAttack:SetIgnore(not isEnable)
   self._control._territoryControl[index]._btnDeffence:SetMonoTone(not isEnable)
   self._control._territoryControl[index]._btnDeffence:SetIgnore(not isEnable)
+  self._control._territoryControl[index]._StaticAttackIcon:SetMonoTone(not isEnable)
+  self._control._territoryControl[index]._StaticDeffenceIcon:SetMonoTone(not isEnable)
 end
 function FGlobal_MercenaryOpen()
   if Panel_Window_Mercenary:GetShow() then

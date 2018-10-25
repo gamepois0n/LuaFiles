@@ -21,7 +21,7 @@ local defalut_Control = {
       _Progress = UI.getChildControl(Panel_Harvest_WorkManager, "Progress2_Worker_ActionPoint"),
       _ActionPoint = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Worker_ActionPoint"),
       _RegionName = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Worker_RegionName"),
-      _rowMax = 10,
+      _rowMax = 9,
       _row_PosY_Gap = 2
     }
   },
@@ -39,7 +39,6 @@ local defalut_Control = {
     _Time_Count = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Estimated_Time_Count"),
     _Work_Count = UI.getChildControl(Panel_Harvest_WorkManager, "Button_Estimated_Work_Count"),
     _Move_BG = UI.getChildControl(Panel_Harvest_WorkManager, "Static_Estimated_Move_BG"),
-    _Move_Line_1 = UI.getChildControl(Panel_Harvest_WorkManager, "Static_Estimated_Move_Line_1"),
     _Move_Distance_Text = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Estimated_MoveDistance_Text"),
     _Move_Distance_Value = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Estimated_MoveDistance_Value"),
     _Move_Speed_Text = UI.getChildControl(Panel_Harvest_WorkManager, "StaticText_Estimated_MoveSpeed_Text"),
@@ -74,7 +73,6 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Time_Count)
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Work_Count)
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Move_BG)
-  FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Move_Line_1)
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Text)
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Value)
   FGlobal_AddChild(Panel_Harvest_WorkManager, self._work_Info._BG, self._work_Info._Move_Speed_Text)

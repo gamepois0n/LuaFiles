@@ -247,6 +247,7 @@ end
 function PaGlobal_Option:ClickedConfirmOption()
   if isNeedGameOptionFromServer() == true then
     FGlobal_QuestWindowRateSetting()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     Panel_UIControl_SetShow(false)
   end
   self:ClickedApplyOption()
@@ -271,7 +272,7 @@ function FGlobal_Option_ResetAllOption()
   resetAllOption()
   keyCustom_SetDefaultAction()
   keyCustom_SetDefaultUI()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     setConsoleKeyType(2)
     setConsoleKeySet(1)
   end

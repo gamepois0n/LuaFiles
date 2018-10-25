@@ -39,13 +39,16 @@ function petInfo:initialize()
 end
 function petInfo:oepn()
 end
-function petInfo:close()
+function petInfo:close(closeAll)
   if Panel_Window_PetInfo_Renew:GetShow() then
     Panel_Window_PetInfo_Renew:SetShow(false)
   end
   local Panel_Tooltip = self._ui._static_skillTooltip
   if Panel_Tooltip:GetShow() then
     Panel_Tooltip:SetShow(false)
+  end
+  if false == closeAll then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
   end
   PaGlobalFunc_Petlist_TemporaryOpen()
 end
@@ -281,8 +284,8 @@ function FGlobal_PetInfo_Open(petNo)
   petInfo:update()
   Panel_Window_PetInfo_Renew:SetShow(true)
 end
-function FGlobal_PetInfo_Close()
-  petInfo:close()
+function FGlobal_PetInfo_Close(closeAll)
+  petInfo:close(closeAll)
 end
 function FGlobal_SetPetSkillTextByType(PcPetData, skillNo)
   local skillParam = PcPetData:getSkillParam(skillNo)

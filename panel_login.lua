@@ -234,14 +234,7 @@ function LogInPanel_Resize()
   end
   Static_Blackline_up:SetSize(getScreenSizeX(), getScreenSizeY() * 0.07)
   Static_Blackline_down:SetSize(getScreenSizeX(), getScreenSizeY() * 0.07)
-  if isGameTypeRussia() then
-    Static_DaumCI:SetSize(111, 29)
-    Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 168, 36)
-    Static_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
-    Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
-    Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
-  elseif isGameTypeJapan() then
+  if isGameTypeJapan() then
     Static_DaumCI:SetSize(111, 26)
     Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 111, 26)
@@ -255,7 +248,7 @@ function LogInPanel_Resize()
     Static_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
     Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
     Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
-  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() or ToClient_isPS4() or isGameTypeGT() then
+  elseif isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isConsole() or isGameTypeGT() or isGameTypeRussia() then
     Static_DaumCI:SetShow(false)
     Static_CI:SetSpanSize(10, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
   elseif isGameTypeSA() then
@@ -341,7 +334,7 @@ function Panel_Login_Update(deltaTime)
       fadeColor2:SetEndColor(Defines.Color.C_FFFFFFFF)
     end
   end
-  if (ToClient_isXBox() or ToClient_isPS4()) and isPadUp(__eJoyPadInputType_A) then
+  if ToClient_isConsole() and isPadUp(__eJoyPadInputType_A) then
     PaGlobal_Policy_Close()
   end
 end
@@ -382,6 +375,6 @@ Button_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
 Button_GameOption:addInputEvent("Mouse_LUp", "showGameOption()")
 registerEvent("onScreenResize", "LogInPanel_Resize")
 LogInPanel_Resize()
-if ToClient_isXBox() or ToClient_isPS4() then
+if ToClient_isConsole() then
   PaGlobal_Policy_ShowWindow(true)
 end

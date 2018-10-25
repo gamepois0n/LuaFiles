@@ -87,7 +87,7 @@ function petExchange:initControl()
   xPos = xPos - petExchangeUI._staticText_Exchange_ConsoleUI:GetTextSizeX() - self._config._buttonGap
   petExchangeUI._staticText_Exchange_ConsoleUI:SetPosX(xPos)
   petExchangeUI._staticText_Exchange_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_ExchangeConfirm()")
-  petExchangeUI._staticText_Cancel_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_Close()")
+  petExchangeUI._staticText_Cancel_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_Close(false)")
   petExchangeUI._staticText_ChangeName_ConsoleUI:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetExchange_ChangeName()")
   petExchangeUI._frame_Right:addInputEvent("Mouse_UpScroll", "petExchange_Scroll( true )")
   petExchangeUI._frame_Right:addInputEvent("Mouse_DownScroll", "petExchange_Scroll( false )")
@@ -102,6 +102,7 @@ function PaGlobalFunc_PetExchange_Buttoncheck(isApperance, button)
   else
     petExchange:skillButtonControl(button)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function petExchange:apperanceButtonControl(button)
   local petExchangeUI = self._ui
@@ -154,7 +155,7 @@ function petExchange:scrollEventProcess(isUp)
   if petExchange._totalPetCount <= FrameConfig._SlotCount then
     return
   end
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and petExchange._slidIndex < petExchange._totalPetCount - FrameConfig._RowCount then
+  if (ToClient_isConsole() or ToClient_IsDevelopment()) and petExchange._slidIndex < petExchange._totalPetCount - FrameConfig._RowCount then
     ToClient_padSnapIgnoreGroupMove()
   end
   petExchange._slidIndex = UIScroll.ScrollEvent(petExchangeUI._frame_VerticalScroll, isUp, FrameConfig._RowCount, petExchange._totalPetCount, petExchange._slidIndex, FrameConfig._ColumCount)
@@ -283,9 +284,12 @@ function petExchange:open()
   self:setPosition()
   Panel_Window_PetExchange_Renew:SetShow(true)
 end
-function petExchange:close()
+function petExchange:close(closeAll)
   if false == Panel_Window_PetExchange_Renew:GetShow() then
     return
+  end
+  if false == closeAll then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
   end
   Panel_Window_PetExchange_Renew:SetShow(false)
   PaGlobalFunc_Petlist_TemporaryOpen()
@@ -333,13 +337,14 @@ function petExchange:setNameEditControl()
   petExchangeUI._edit_Search:SetMaxInput(getGameServiceTypePetNameLength())
   SetFocusEdit(petExchangeUI._edit_Search)
   petExchangeUI._edit_Search:SetEditText("", true)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function petExchange:confirm()
   local petExchangeUI = self._ui
   local petName = petExchangeUI._edit_Search:GetEditText()
   if "" == petName or self._config._petComposeString == petName then
     Proc_ShowMessage_Ack(self._config._petComposeString)
-    return
+    return _AudioPostEvent_SystemUiForXBOX(50, 1)
   end
   ClearFocusEdit()
   if nil == petExchange._select_BPetNo then
@@ -399,8 +404,8 @@ function PaGlobalFunc_PetExchange_Open(selectPetNoStr)
   petExchange._select_APetNo = selectPetNoStr
   petExchange:update()
 end
-function PaGlobalFunc_PetExchange_Close()
-  petExchange:close()
+function PaGlobalFunc_PetExchange_Close(closeAll)
+  petExchange:close(closeAll)
 end
 function PaGlobalFunc_PetExchange_ChangeName()
   petExchange:setNameEditControl()
@@ -421,6 +426,7 @@ function petExchange:selectBPet(petNoStr, UIIndex)
     end
     self._BSlotContents[UIIndex]._frameContents:SetCheck(true)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_padSnapSetTargetGroup(self._ui._static_BottomBG)
 end
 function PaGlobalFunc_PetExchange_SelectBPet(petNoStr, UIIndex)

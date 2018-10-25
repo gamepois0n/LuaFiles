@@ -1,6 +1,6 @@
 local UIGroup = Defines.UIGroup
 local RenderMode = Defines.RenderMode
-local _IsXbox = ToClient_isXBox()
+local _IsXbox = ToClient_isConsole()
 runLua("UI_Data/Script/RenderMode/renderMode.lua")
 local isActionModeActive = false
 function isActionUiOpen()
@@ -72,6 +72,7 @@ function preLoadGameUI()
 end
 function loadGameUI()
   if true == _IsXbox then
+    _PA_LOG("\236\157\180\235\139\164\237\152\156", "loadGameUI")
     loadGameUI_XB()
   else
     loadGameUI_PC()

@@ -840,6 +840,7 @@ function PaGlobalFunc_Window_Knowledge_Page2_ClickButton(index, subCategory)
     self:updateTopText()
     self:setContent()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_Window_Knowledge_Page1_SelectButton(index)
   local self = Panel_Window_Knowledge_Renew_info
@@ -869,6 +870,7 @@ function PaGlobalFunc_Window_Knowledge_Page1_ClickButton(index, subCategory)
     self:updateTopText()
     self:setContent()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_Window_Knowledge_Page0_HideButtonA(hideButtonA)
   local self = Panel_Window_Knowledge_Renew_info
@@ -905,6 +907,7 @@ function PaGlobalFunc_Window_Knowledge_Page0_ClickButton(index, category)
     self:updateTopText()
     self:setContent()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function PaGlobalFunc_Window_Knowledge_Step_123List(list_content, key)
   local id = Int64toInt32(key)
@@ -1021,6 +1024,7 @@ function PaGlobalFunc_Window_Knowledge_Step_4List(list_content, key)
 end
 function PaGlobalFunc_Window_Knowledge_ToggleTooltip()
   local self = Panel_Window_Knowledge_Renew_info
+  _AudioPostEvent_SystemUiForXBOX(1, 0)
   if true == self._ui.staticText_TooltipBg:GetShow() then
     self:closeTooltip()
   else

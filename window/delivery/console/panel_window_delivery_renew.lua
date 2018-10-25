@@ -49,7 +49,7 @@ function PanelDelivery:openTab(tabIdx)
   end
   Warehouse_SetIgnoreMoneyButton(true)
   clearDeliveryPack()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   end
   if self._tabIdx.delivery == tabIdx then
@@ -134,7 +134,7 @@ function PanelDelivery:init()
     slot.base:createChild()
     slot.base.icon:SetVerticalMiddle()
     slot.base.icon:SetHorizonCenter()
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       slot.base.icon:addInputEvent("Mouse_LUp", "PaGlobalFunc_PanelDelivery_SlotRClick(" .. slotIdx .. ")")
     else
       slot.base.icon:addInputEvent("Mouse_RUp", "PaGlobalFunc_PanelDelivery_SlotRClick(" .. slotIdx .. ")")
@@ -288,7 +288,7 @@ function PanelDelivery:registEvent()
   registerEvent("FromClient_MoveDeliveryItem", "DeliveryInformation_UpdateSlotData")
   _panel:RegisterShowEventFunc(true, "PaGlobalFunc_PanelDelivery_ShowAni()")
   _panel:RegisterShowEventFunc(false, "PaGlobalFunc_PanelDelivery_HideAni()")
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     _panel:registerPadEvent(__eConsoleUIPadEvent_LT, "PaGlobalFunc_PanelDelivery_MoveTabLeft()")
     _panel:registerPadEvent(__eConsoleUIPadEvent_RT, "PaGlobalFunc_PanelDelivery_MoveTabRight()")
   end

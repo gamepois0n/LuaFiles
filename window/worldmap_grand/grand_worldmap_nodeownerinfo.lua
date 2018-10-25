@@ -157,7 +157,7 @@ function nodeOwnerInfo:Close()
 end
 function FGlobal_nodeOwnerInfo_SetPosition()
   Panel_NodeOwnerInfo:SetPosX(positionTarget:GetSpanSize().x + positionTarget:GetSizeX() + 10)
-  Panel_NodeOwnerInfo:SetPosY(positionTarget:GetSpanSize().y + 5)
+  Panel_NodeOwnerInfo:SetPosY(positionTarget:GetSpanSize().y)
 end
 function FGlobal_nodeOwnerInfo_Close()
   nodeOwnerInfo:Close()

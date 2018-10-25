@@ -185,6 +185,7 @@ function workerRestore:close()
   PaGlobalFunc_WorkerManager_TemporaryOpen()
 end
 function PaGlobalFunc_WorkerManager_Restore_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   workerRestore:close()
 end
 function workerRestore:update()
@@ -254,7 +255,9 @@ function workerRestore:restoreConfirm(isRestoreAll)
     if itemNeedCount >= 1 then
       requestRecoveryWorker(WorkerNo(workerNoRaw), slotNo, itemNeedCount)
     end
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   else
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     requestRecoveryWorker(WorkerNo(workerNoRaw), slotNo, 1)
   end
 end

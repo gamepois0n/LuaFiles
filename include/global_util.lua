@@ -911,7 +911,7 @@ function luaTimer_UpdatePerFrame(fDelta)
   for index, timer in pairs(g_Timerlist) do
     if nil ~= timer then
       if currentTickCount >= timer._endTime then
-        timer._function()
+        timer._function(timer._param0, timer._param1, timer._param2)
         if not timer._isRepeat then
           local tempIndex = timer._timerNo
           g_Timerlist[tempIndex] = nil
@@ -925,7 +925,7 @@ function luaTimer_UpdatePerFrame(fDelta)
     end
   end
 end
-function luaTimer_AddEvent(func, endTime, isRepeat, repeatTime)
+function luaTimer_AddEvent(func, endTime, isRepeat, repeatTime, param0, param1, param2)
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -933,6 +933,9 @@ function luaTimer_AddEvent(func, endTime, isRepeat, repeatTime)
   tempTimer._function = func
   tempTimer._isRepeat = isRepeat
   tempTimer._repeatTime = repeatTime
+  tempTimer._param0 = param0
+  tempTimer._param1 = param1
+  tempTimer._param2 = param2
   if nil == g_Timerlist then
     g_Timerlist = {}
   end

@@ -7,7 +7,7 @@ local deliveryForGameExit = {
   _panelBg = UI.getChildControl(Panel_Window_DeliveryForGameExit, "Static_Sample_Background"),
   _bg = UI.getChildControl(Panel_Window_DeliveryForGameExit, "Static_BG"),
   _staticText_NoticeMsg = UI.getChildControl(Panel_Window_DeliveryForGameExit, "StaticText_NoticeText"),
-  _staticText_NoticeAlert = UI.getChildControl(Panel_Window_DeliveryForGameExit, "StaticText_Alert"),
+  _staticText_NoticeAlert = nil,
   _selectDestinationWaypointKey = -1,
   _selectDestCarriageKey = -1,
   _selectCharacterIndex = -1,
@@ -17,12 +17,12 @@ local deliveryForGameExit = {
 function deliveryForGameExit:PanelResize_ByFontSize()
   self._staticText_NoticeAlert:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._staticText_NoticeAlert:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DELIVERYFORGAMEEXIT_ALERT"))
-  local descSizeY = self._staticText_NoticeAlert:GetTextSizeY()
-  local bgSize = math.max(self._staticText_NoticeAlert:GetPosY() + descSizeY - 25, 140)
-  self._bg:SetSize(self._bg:GetSizeX(), bgSize)
-  Panel_Window_DeliveryForGameExit:SetSize(Panel_Window_DeliveryForGameExit:GetSizeX(), self._bg:GetPosY() + bgSize + 65)
+  self._bg:SetSize(self._bg:GetSizeX(), self._staticText_NoticeAlert:GetTextSizeY() + 50)
+  self._staticText_NoticeAlert:ComputePos()
+  self._staticText_NoticeAlert:SetTextSpan(0, (self._staticText_NoticeAlert:GetSizeY() - self._staticText_NoticeAlert:GetTextSizeY()) * 0.5)
+  Panel_Window_DeliveryForGameExit:SetSize(Panel_Window_DeliveryForGameExit:GetSizeX(), self._bg:GetPosY() + self._bg:GetSizeY() + 90)
   self._panelBg:SetSize(Panel_Window_DeliveryForGameExit:GetSizeX(), Panel_Window_DeliveryForGameExit:GetSizeY())
-  self._buttonGetOn:SetPosY(Panel_Window_DeliveryForGameExit:GetSizeY() - self._buttonGetOn:GetSizeY() - 10)
+  self._buttonGetOn:ComputePos()
 end
 local changeDelayTime = -1
 function delivery_GameExit_UpdatePerFrame(deltaTime)
@@ -48,6 +48,7 @@ function setPlayerDeliveryDelayTime(delayTime)
   end
   deliveryForGameExit._buttonGetOn:SetShow(false)
   deliveryForGameExit._staticText_NoticeMsg:SetShow(true)
+  deliveryForGameExit._staticText_NoticeAlert:SetShow(false)
   if 0 == delayTime then
     deliveryForGameExit._staticText_NoticeMsg:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_GoChange"))
   else
@@ -119,6 +120,7 @@ function FGlobal_DeliveryForGameExit_Show(show)
       deliveryForGameExit.resetData()
     end
     deliveryForGameExit._staticText_NoticeMsg:SetShow(false)
+    deliveryForGameExit._staticText_NoticeAlert:SetShow(true)
   end
   Panel_Window_DeliveryForGameExit:SetShow(show)
 end
@@ -238,6 +240,7 @@ local function initialize()
   registerEvent("EventDeliveryForPersonChangeCharacter", "deliveryForGameExitChangeCharacter()")
   registerEvent("EventGameExitDelayTime", "setPlayerDeliveryDelayTime")
   Panel_Window_DeliveryForGameExit:RegisterUpdateFunc("delivery_GameExit_UpdatePerFrame")
+  deliveryForGameExit._staticText_NoticeAlert = UI.getChildControl(deliveryForGameExit._bg, "StaticText_Alert")
 end
 initialize()
 deliveryForGameExit:PanelResize_ByFontSize()

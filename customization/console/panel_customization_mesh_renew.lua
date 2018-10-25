@@ -63,6 +63,7 @@ function PaGlobalFunc_Customization_HairType_UpdateMeshIndex()
   local selectedParamValue = self._paramValueList[self._selectedItemIndex]
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, selectedParamValue)
   applyInitializeToGroupCustomizedBoneInfo()
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:UpdateTypeFocus(self._selectedItemIndex)
 end
 function HandleClicked_Customization_Mesh_Close()
@@ -244,6 +245,7 @@ function PaGlobalFunc_Customization_Mesh_Close()
   if true == self._isBoneControl then
     return false
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
   PaGlobalFunc_Customization_Mesh_SetShow(false, false)

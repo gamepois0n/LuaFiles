@@ -65,6 +65,7 @@ function PaGlobalFunc_CustomIzationCommon_PushClearGroupCustomizedBonInfoPostFun
 end
 function PaGlobalFunc_CustomIzationCommon_ClearGroupCustomizedBonInfoLua()
   local self = Customization_CommonInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   clearGroupCustomizedBoneInfo()
   for key, value in pairs(self._clearGroupCustomizedBonInfoPostProcessList) do
     value()

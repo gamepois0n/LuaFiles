@@ -1,13 +1,13 @@
 Panel_AlchemyStone:SetShow(false)
 local AlchemyStone = {
   control = {
+    txt_Title = UI.getChildControl(Panel_AlchemyStone, "StaticText_Title"),
     tab_Charge = UI.getChildControl(Panel_AlchemyStone, "RadioButton_Tab_Charge"),
     tab_Exp = UI.getChildControl(Panel_AlchemyStone, "RadioButton_Tab_Exp"),
     tab_Upgrade = UI.getChildControl(Panel_AlchemyStone, "RadioButton_Tab_Upgrade"),
     contentBG = UI.getChildControl(Panel_AlchemyStone, "Static_ContentTypeBG"),
     contentEffect = UI.getChildControl(Panel_AlchemyStone, "Static_ContentTypeEffect"),
     guideString = UI.getChildControl(Panel_AlchemyStone, "Static_GuideText"),
-    btn_Close = UI.getChildControl(Panel_AlchemyStone, "Button_Win_Close"),
     btn_Doit = UI.getChildControl(Panel_AlchemyStone, "Button_Doit"),
     slotBg_1 = UI.getChildControl(Panel_AlchemyStone, "Static_SlotBg_1"),
     slotBg_2 = UI.getChildControl(Panel_AlchemyStone, "Static_SlotBg_2"),
@@ -19,15 +19,9 @@ local AlchemyStone = {
     expMaterial2 = UI.getChildControl(Panel_AlchemyStone, "StaticText_ExpMaterial2"),
     btn_Plus = UI.getChildControl(Panel_AlchemyStone, "Button_CountPlus"),
     btn_Minus = UI.getChildControl(Panel_AlchemyStone, "Button_CountMinus"),
-    descBg = UI.getChildControl(Panel_AlchemyStone, "Static_DescBg"),
     desc = UI.getChildControl(Panel_AlchemyStone, "StaticText_Desc"),
     progressBg_1 = UI.getChildControl(Panel_AlchemyStone, "Static_GaugeBG_1"),
-    progress_1 = UI.getChildControl(Panel_AlchemyStone, "Progress2_Exp_Gauge_1"),
-    progress_1_Pre = UI.getChildControl(Panel_AlchemyStone, "Progress2_Exp_Gauge_1_PreView"),
-    progressText_1 = UI.getChildControl(Panel_AlchemyStone, "StaticText_Count_1"),
     progressBg_2 = UI.getChildControl(Panel_AlchemyStone, "Static_GaugeBG_2"),
-    progress_2 = UI.getChildControl(Panel_AlchemyStone, "Progress2_Exp_Gauge_2"),
-    progressText_2 = UI.getChildControl(Panel_AlchemyStone, "StaticText_Count_2"),
     resultSlot = UI.getChildControl(Panel_AlchemyStone, "Static_SlotBgTemplate"),
     resultSlotBg = UI.getChildControl(Panel_AlchemyStone, "Static_ResultSlotBg"),
     upgradeSlotBg = UI.getChildControl(Panel_AlchemyStone, "Static_UpgradeSlotBg"),
@@ -69,10 +63,6 @@ local AlchemyStone = {
   resultItemKey = {},
   resultItemIndex = -1
 }
-local _buttonQuestion = UI.getChildControl(Panel_AlchemyStone, "Button_Question")
-_buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"AlchemyStone\" )")
-_buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"AlchemyStone\", \"true\")")
-_buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"AlchemyStone\", \"false\")")
 local AlchemyStoneTab = {
   Charge = 0,
   Exp = 1,
@@ -98,7 +88,6 @@ local alchemyStoneDesc = {
   [AlchemyStoneTab.Upgrade] = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_DESC_3")
 }
 local panelSizeY = Panel_AlchemyStone:GetSizeY()
-local bgSizeY = AlchemyStone.control.descBg:GetSizeY()
 local textSizeY = AlchemyStone.control.desc:GetTextSizeY()
 AlchemyStone.control.desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 function AlchemyStone:Init()
@@ -110,6 +99,16 @@ function AlchemyStone:Init()
   self.Stone_slot:createChild()
   self.Stone_slot.Empty = true
   self.Stone_slot.icon:addInputEvent("Mouse_RUp", "HandleClicked_AlchemyStone_UnSetSlot(" .. 0 .. ")")
+  self.control.btn_Close = UI.getChildControl(self.control.txt_Title, "Button_Win_Close")
+  self.control._buttonQuestion = UI.getChildControl(self.control.txt_Title, "Button_Question")
+  self.control.progress_1 = UI.getChildControl(self.control.progressBg_1, "Progress2_Exp_Gauge_1")
+  self.control.progress_1_Pre = UI.getChildControl(self.control.progressBg_1, "Progress2_Exp_Gauge_1_PreView")
+  self.control.progressText_1 = UI.getChildControl(self.control.progressBg_1, "StaticText_Count_1")
+  self.control.progress_2 = UI.getChildControl(self.control.progressBg_2, "Progress2_Exp_Gauge_2")
+  self.control.progressText_2 = UI.getChildControl(self.control.progressBg_2, "StaticText_Count_2")
+  self.control._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"AlchemyStone\" )")
+  self.control._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"AlchemyStone\", \"true\")")
+  self.control._buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"AlchemyStone\", \"false\")")
   self.control.tab_Charge:SetCheck(true)
   self.control.tab_Exp:SetCheck(false)
   self.control.tab_Upgrade:SetCheck(false)
@@ -338,21 +337,19 @@ function HandleClicked_AlchemyStoneTab(tabIdx)
   local _descTextSizeY = AlchemyStone.control.desc:GetTextSizeY()
   if _descTextSizeY > 35 then
     Panel_AlchemyStone:SetSize(Panel_AlchemyStone:GetSizeX(), panelSizeY + _descTextSizeY - 34)
-    AlchemyStone.control.descBg:SetSize(AlchemyStone.control.descBg:GetSizeX(), bgSizeY + _descTextSizeY - 34)
   else
     Panel_AlchemyStone:SetSize(Panel_AlchemyStone:GetSizeX(), panelSizeY)
-    AlchemyStone.control.descBg:SetSize(AlchemyStone.control.descBg:GetSizeX(), bgSizeY)
   end
   AlchemyStone.control.btn_Doit:ComputePos()
   if 0 == tabIdx or 1 == tabIdx then
     AlchemyStone.control.slotBg_1:SetPosX(50)
-    AlchemyStone.control.slotBg_1:SetPosY(195)
+    AlchemyStone.control.slotBg_1:SetPosY(230)
     AlchemyStone.control.slotBg_2:SetPosX(380)
-    AlchemyStone.control.slotBg_2:SetPosY(195)
+    AlchemyStone.control.slotBg_2:SetPosY(230)
     AlchemyStone.control.Slot_1:SetPosX(440)
-    AlchemyStone.control.Slot_1:SetPosY(223)
+    AlchemyStone.control.Slot_1:SetPosY(258)
     AlchemyStone.control.Slot_2:SetPosX(112)
-    AlchemyStone.control.Slot_2:SetPosY(223)
+    AlchemyStone.control.Slot_2:SetPosY(258)
     AlchemyStone.control.slotBg_1:SetShow(true)
     AlchemyStone.control.slotBg_2:SetShow(true)
     AlchemyStone.control.resultSlotBg:SetShow(false)
@@ -361,29 +358,31 @@ function HandleClicked_AlchemyStoneTab(tabIdx)
     AlchemyStone.resultSlotBg[2]:SetShow(false)
     AlchemyStone.control.resultSlot:SetShow(true)
     AlchemyStone.control.resultSlot:SetPosX(436)
-    AlchemyStone.control.resultSlot:SetPosY(218)
+    AlchemyStone.control.resultSlot:SetPosY(252)
     AlchemyStone.control.upgradeSlotBg:SetShow(false)
+    AlchemyStone.control.btn_Plus:SetPosY(260)
+    AlchemyStone.control.btn_Minus:SetPosY(AlchemyStone.control.btn_Plus:GetPosY() + 20)
   elseif 2 == tabIdx then
     AlchemyStone.control.slotBg_1:SetPosX(50)
     AlchemyStone.control.slotBg_1:SetPosY(150)
     AlchemyStone.control.slotBg_2:SetPosX(50)
     AlchemyStone.control.slotBg_2:SetPosY(255)
     AlchemyStone.control.Slot_1:SetPosX(118)
-    AlchemyStone.control.Slot_1:SetPosY(306)
+    AlchemyStone.control.Slot_1:SetPosY(330)
     AlchemyStone.control.Slot_2:SetPosX(118)
-    AlchemyStone.control.Slot_2:SetPosY(174)
+    AlchemyStone.control.Slot_2:SetPosY(197)
     AlchemyStone.control.resultSlotBg:SetSize(AlchemyStone.control.resultSlotBg:GetSizeX(), 98)
     AlchemyStone.control.slotBg_1:SetShow(false)
     AlchemyStone.control.slotBg_2:SetShow(false)
     AlchemyStone.control.resultSlotBg:SetShow(true)
     AlchemyStone.control.resultSlotBg:SetPosX(380)
-    AlchemyStone.control.resultSlotBg:SetPosY(195)
+    AlchemyStone.control.resultSlotBg:SetPosY(230)
     AlchemyStone.resultSlotBg[0]:SetShow(true)
     AlchemyStone.resultSlotBg[1]:SetShow(false)
     AlchemyStone.resultSlotBg[2]:SetShow(false)
     AlchemyStone.control.resultSlot:SetShow(false)
     AlchemyStone.resultSlotBg[0]:SetPosX(436)
-    AlchemyStone.resultSlotBg[0]:SetPosY(218)
+    AlchemyStone.resultSlotBg[0]:SetPosY(253)
     AlchemyStone.control.upgradeSlotBg:SetShow(true)
   end
   AlchemyStone.control.progressBg_1:SetShow(false)
@@ -548,10 +547,10 @@ function HandleClicked_AlchemyStone_UnSetSlot(slotType)
       AlchemyStone.control.resultSlotBg:SetSize(AlchemyStone.control.resultSlotBg:GetSizeX(), 98)
       AlchemyStone.control.resultSlotBg:SetShow(false)
       AlchemyStone.control.resultSlotBg:SetPosX(380)
-      AlchemyStone.control.resultSlotBg:SetPosY(195)
+      AlchemyStone.control.resultSlotBg:SetPosY(230)
       AlchemyStone.resultSlotBg[0]:SetShow(false)
       AlchemyStone.resultSlotBg[0]:SetPosX(437)
-      AlchemyStone.resultSlotBg[0]:SetPosY(218)
+      AlchemyStone.resultSlotBg[0]:SetPosY(253)
       AlchemyStone.resultSlotBg[1]:SetShow(false)
       AlchemyStone.resultSlotBg[2]:SetShow(false)
       AlchemyStone.resultSlot[0]:clearItem()
@@ -760,27 +759,27 @@ function AlchemyStone_StoneRfunction(slotNo, itemWrapper, count, inventoryType)
       if 1 == resultCount then
         AlchemyStone.control.resultSlotBg:SetSize(AlchemyStone.control.resultSlotBg:GetSizeX(), 98)
         AlchemyStone.control.resultSlotBg:SetPosX(380)
-        AlchemyStone.control.resultSlotBg:SetPosY(195)
+        AlchemyStone.control.resultSlotBg:SetPosY(230)
         AlchemyStone.resultSlotBg[0]:SetPosX(437)
-        AlchemyStone.resultSlotBg[0]:SetPosY(218)
+        AlchemyStone.resultSlotBg[0]:SetPosY(253)
       elseif 2 == resultCount then
         AlchemyStone.control.resultSlotBg:SetSize(AlchemyStone.control.resultSlotBg:GetSizeX(), 158)
         AlchemyStone.control.resultSlotBg:SetPosX(380)
-        AlchemyStone.control.resultSlotBg:SetPosY(135)
+        AlchemyStone.control.resultSlotBg:SetPosY(207)
         AlchemyStone.resultSlotBg[0]:SetPosX(437)
-        AlchemyStone.resultSlotBg[0]:SetPosY(188)
+        AlchemyStone.resultSlotBg[0]:SetPosY(230)
         AlchemyStone.resultSlotBg[1]:SetPosX(437)
-        AlchemyStone.resultSlotBg[1]:SetPosY(248)
+        AlchemyStone.resultSlotBg[1]:SetPosY(290)
       elseif 3 == resultCount then
         AlchemyStone.control.resultSlotBg:SetSize(AlchemyStone.control.resultSlotBg:GetSizeX(), 218)
         AlchemyStone.control.resultSlotBg:SetPosX(380)
-        AlchemyStone.control.resultSlotBg:SetPosY(135)
+        AlchemyStone.control.resultSlotBg:SetPosY(175)
         AlchemyStone.resultSlotBg[0]:SetPosX(437)
-        AlchemyStone.resultSlotBg[0]:SetPosY(158)
+        AlchemyStone.resultSlotBg[0]:SetPosY(198)
         AlchemyStone.resultSlotBg[1]:SetPosX(437)
-        AlchemyStone.resultSlotBg[1]:SetPosY(218)
+        AlchemyStone.resultSlotBg[1]:SetPosY(258)
         AlchemyStone.resultSlotBg[2]:SetPosX(437)
-        AlchemyStone.resultSlotBg[2]:SetPosY(278)
+        AlchemyStone.resultSlotBg[2]:SetPosY(318)
       end
     else
     end

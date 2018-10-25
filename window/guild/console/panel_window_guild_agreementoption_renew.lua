@@ -91,6 +91,9 @@ function PaGlobalFunc_AgreementGuild_SignOption_Open()
   self._ui._buttonList[1]:SetCheck(true)
   PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(1)
   PaGlobalFunc_AgreementGuild_SignOption_SetShow(true, false)
+  if false == _panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(8, 14)
+  end
 end
 function PaGlobalFunc_AgreementGuild_SignOption_Close()
   local self = Window_GuildAgreementOptionInfo
@@ -107,6 +110,9 @@ function PaGlobalFunc_AgreementGuild_SignOption_Close()
   self._ui._edit_PenaltyCost:SetText("")
   for index = 0, #self._ui._buttonList do
     self._ui._buttonList[index]:SetCheck(false)
+  end
+  if _panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
   end
   PaGlobalFunc_AgreementGuild_SignOption_SetShow(false, true)
 end
@@ -177,6 +183,7 @@ function PaGlobalFunc_AgreementGuild_SignOption_Confirm()
       return
     end
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_AgreementGuild_AgreementSetData(self._periodValue[self._currentContractDayIndex], dailyPaymentValue, penaltyCostValue)
   PaGlobalFunc_AgreementGuild_SignOption_Close()
 end
@@ -211,6 +218,7 @@ function PaGlobalFunc_AgreementGuild_SignOption_ContractDaySetData(index)
     self._ui._edit_DailyPayment:SetText(tostring(self._paymentPerDay[index]))
     self._ui._edit_PenaltyCost:SetText(tostring(self._cancellationCharge[index]))
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function Window_GuildAgreementOptionInfo:SetMaxDailyPayment(checkIndex, benefitMax)
   local self = Window_GuildAgreementOptionInfo

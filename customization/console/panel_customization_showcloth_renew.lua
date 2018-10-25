@@ -40,6 +40,7 @@ function Customization_ShowClothInfo:UpdateFocus(index)
 end
 function PaGlobalFunc_Customization_ShowCloth_ShowHelmet()
   local self = Customization_ShowClothInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   setShowHelmet(self._ui._checkBox_ShowHelmet:IsCheck())
 end
 function PaGlobalFunc_Customization_ShowCloth_SetSelectButton(index)
@@ -52,6 +53,7 @@ function PaGlobalFunc_Customization_ShowCloth_SetSelectButton(index)
 end
 function PaGlobalFunc_Customization_ShowCloth_UpdateCloth(index)
   local self = Customization_ShowClothInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:UpdateFocus(index)
   applyCloth(index)
 end

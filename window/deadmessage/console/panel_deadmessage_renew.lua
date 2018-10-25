@@ -308,6 +308,7 @@ function deadMessage:close()
   if false == Panel_DeadMessage_Renew:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_DeadMessage_Renew:SetShow(false)
 end
 function deadMessage:setSize()
@@ -899,6 +900,7 @@ function deadMessage:buttonPushedEvent_Exploration(useItem)
     contentString = contentString .. "\n" .. PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_EXP_DOWN")
   end
   local function revivalExplorationConfirm()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     deadMessage_Revival(self._config._eRespawnType.respawnType_Exploration, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0), false)
     SetUIMode(Defines.UIMode.eUIMode_Default)
   end
@@ -939,6 +941,7 @@ function deadMessage:buttonPushedEvent_NearTown(useItem)
     end
   end
   local function revivalVillageConfirm()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     deadMessage_Revival(self._config._eRespawnType.respawnType_NearTown, 255, 0, getSelfPlayer():getRegionKey(), false, toInt64(0, 0), false)
     SetUIMode(Defines.UIMode.eUIMode_Default)
   end
@@ -1022,6 +1025,7 @@ function deadMessage:buttonPushedEvent_GuildSpawn(useItem)
     if 0 == servantNo then
       return
     end
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     deadMessage_Revival(self._config._eRespawnType.respawnType_GuildSpawn, 255, 0, getSelfPlayer():getRegionKey(), false, servantNo)
     SetUIMode(Defines.UIMode.eUIMode_Default)
   end
@@ -1039,6 +1043,7 @@ function PaGlobalFunc_DeadMessage_ButtonPushEvent_SavageDefence()
 end
 function deadMessage:buttonPushedEvent_SavageDefence()
   local executeSavageDefenceOut = function()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_SavageDefenceUnJoin()
   end
   local contentString = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_SAVAGEDEAD")

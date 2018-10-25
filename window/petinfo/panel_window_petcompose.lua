@@ -11,6 +11,8 @@ local petCompose = {
   icon_1 = UI.getChildControl(Panel_Window_PetCompose, "Static_Icon_1"),
   icon_2 = UI.getChildControl(Panel_Window_PetCompose, "Static_Icon_2"),
   icon_3 = UI.getChildControl(Panel_Window_PetCompose, "Static_Icon_3"),
+  defaultIcon_1 = UI.getChildControl(Panel_Window_PetCompose, "StaticText_DefautPetIcon_1"),
+  defaultIcon_2 = UI.getChildControl(Panel_Window_PetCompose, "StaticText_DefautPetIcon_2"),
   icon_question = UI.getChildControl(Panel_Window_PetCompose, "StaticText_QuestionMark"),
   editName = UI.getChildControl(Panel_Window_PetCompose, "Edit_Naming"),
   desc = UI.getChildControl(Panel_Window_PetCompose, "StaticText_Desc"),
@@ -18,6 +20,7 @@ local petCompose = {
   btn_Yes = UI.getChildControl(Panel_Window_PetCompose, "Button_Yes"),
   btn_No = UI.getChildControl(Panel_Window_PetCompose, "Button_No"),
   btn_Question = UI.getChildControl(Panel_Window_PetCompose, "Button_Question"),
+  btn_Close = UI.getChildControl(Panel_Window_PetCompose, "Button_Close"),
   radioBtn_PetSkill_1 = UI.getChildControl(Panel_Window_PetCompose, "RadioButton_Skill_1"),
   radioBtn_PetSkill_2 = UI.getChildControl(Panel_Window_PetCompose, "RadioButton_Skill_2"),
   radioBtn_PetSkill_3 = UI.getChildControl(Panel_Window_PetCompose, "RadioButton_Skill_3"),
@@ -39,6 +42,23 @@ local petCompose = {
       [1] = UI.getChildControl(Panel_Window_PetCompose, "Static_SkillSlotBg_3_1"),
       [2] = UI.getChildControl(Panel_Window_PetCompose, "Static_SkillSlotBg_3_2"),
       [3] = UI.getChildControl(Panel_Window_PetCompose, "Static_SkillSlotBg_3_3")
+    }
+  },
+  skillDefaultIcon = {
+    [1] = {
+      [1] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_1_1"),
+      [2] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_1_2"),
+      [3] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_1_3")
+    },
+    [2] = {
+      [1] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_2_1"),
+      [2] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_2_2"),
+      [3] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_2_3")
+    },
+    [3] = {
+      [1] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_3_1"),
+      [2] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_3_2"),
+      [3] = UI.getChildControl(Panel_Window_PetCompose, "Static_DefaultSkillIcon_3_3")
     }
   },
   skillSlot = {
@@ -95,6 +115,7 @@ petCompose.radioBtn_PetLook_3:addInputEvent("Mouse_Out", "PetCompose_Simpletoolt
 petCompose.btn_Question:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"Pet\" )")
 petCompose.btn_Question:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"Pet\", \"true\")")
 petCompose.btn_Question:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"Pet\", \"false\")")
+petCompose.btn_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetCompose_Close()")
 petCompose.btn_Yes:addInputEvent("Mouse_LUp", "Confirm_PetCompose()")
 petCompose.btn_No:addInputEvent("Mouse_LUp", "Panel_Window_PetCompose_Close()")
 petCompose.editName:addInputEvent("Mouse_LUp", "HandleClicked_PetCompose_ClearEdit()")
@@ -122,6 +143,9 @@ function PetCompose_Init()
   petCompose.icon_1:SetShow(false)
   petCompose.icon_2:SetShow(false)
   petCompose.icon_3:SetShow(false)
+  petCompose.defaultIcon_1:SetShow(true)
+  petCompose.defaultIcon_2:SetShow(true)
+  petCompose.icon_question:SetShow(true)
   composableCheck = false
   petCompose.preserveSkillNo = nil
   ClearFocusEdit(petCompose.editName)
@@ -137,6 +161,9 @@ function PetCompose_Init()
     petCompose.skillSlotBg[index][1]:SetShow(true)
     petCompose.skillSlotBg[index][2]:SetShow(true)
     petCompose.skillSlotBg[index][3]:SetShow(true)
+    petCompose.skillDefaultIcon[index][1]:SetShow(true)
+    petCompose.skillDefaultIcon[index][2]:SetShow(true)
+    petCompose.skillDefaultIcon[index][3]:SetShow(true)
     petCompose.skillSlot[index][1]:SetShow(false)
     petCompose.skillSlot[index][2]:SetShow(false)
     petCompose.skillSlot[index][3]:SetShow(false)
@@ -179,6 +206,7 @@ function PetCompose_UpdatePetSkillList()
                 local skillNo = skillStaticStatus:getSkillNo()
                 petCompose.skillNoList[skillLearnCount] = skill_idx
                 petCompose.skillSlot[3][skillLearnCount]:SetShow(true)
+                petCompose.skillDefaultIcon[3][skillLearnCount]:SetShow(false)
                 petCompose.skillSlot[3][skillLearnCount]:SetIgnore(false)
                 petCompose.skillSlot[3][skillLearnCount]:ChangeTextureInfoName("Icon/" .. skillTypeStaticWrapper:getIconPath())
                 petCompose.skillSlot[3][skillLearnCount]:addInputEvent("Mouse_On", "PetCompose_ShowSkillToolTip( " .. skill_idx .. ", " .. skillLearnCount .. " )")
@@ -238,6 +266,7 @@ function PetCompose_SkillSet(petIndex, uiIndex)
         local skillNo = skillStaticStatus:getSkillNo()
         petCompose.skillNoList[skillLearnCount] = skill_idx
         petCompose.skillSlot[uiIndex][skillLearnCount]:SetShow(true)
+        petCompose.skillDefaultIcon[uiIndex][skillLearnCount]:SetShow(false)
         petCompose.skillSlot[uiIndex][skillLearnCount]:SetIgnore(false)
         petCompose.skillSlot[uiIndex][skillLearnCount]:ChangeTextureInfoName("Icon/" .. skillTypeStaticWrapper:getIconPath())
         petCompose.skillSlot[uiIndex][skillLearnCount]:addInputEvent("Mouse_On", "PetCompose_ShowSkillToolTip( " .. skill_idx .. ", " .. skillLearnCount .. " )")
@@ -297,6 +326,9 @@ local composePetNo = function(petNo)
     end
   end
 end
+function PaGlobalFunc_PetCompose_Close()
+  Panel_Window_PetCompose:SetShow(false)
+end
 function petListNew_Compose_Set(petNoStr, petRace, sealPetIndex, isJokerPetUse)
   if nil == petComposeNo[0] then
     petComposeNo[0] = tonumber64(petNoStr)
@@ -324,9 +356,12 @@ function petImgChange(petNo, index)
       if 0 == index then
         petCompose.icon_1:ChangeTextureInfoName(iconPath)
         petCompose.icon_1:SetShow(true)
+        petCompose.defaultIcon_1:SetShow(false)
       elseif 1 == index then
         petCompose.icon_2:ChangeTextureInfoName(iconPath)
         petCompose.icon_2:SetShow(true)
+        petCompose.defaultIcon_2:SetShow(false)
+        petCompose.icon_question:SetShow(false)
       end
     end
   end

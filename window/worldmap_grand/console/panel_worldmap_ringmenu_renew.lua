@@ -287,8 +287,12 @@ function Window_WorldMap_RingMenuInfo:UpdateRingMenu(position)
   if false == self:ConditionCheck(position) then
     return
   end
+  if self._currentRingMenuIndex ~= position then
+    _AudioPostEvent_SystemUiForXBOX(51, 6)
+  end
   if position == __eRingMenuPosition_Default then
     if __eRingMenuPosition_Default ~= self._currentRingMenuIndex then
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
       PaGlobalFunc_WorldMap_RingMenu_RingMenuSelect(self._currentRingMenuIndex)
     end
   else
@@ -307,7 +311,7 @@ function Window_WorldMap_RingMenuInfo:UpdateRingMenu(position)
   end
   self._prevRightStickValue._x = RSX
   self._prevRightStickValue._y = RSY
-  if self._currentRingMenuIndex ~= __eRingMenuPosition_Default and math.abs(self._currentRingMenuIndex - position) >= 3 and math.abs(self._currentRingMenuIndex - position) <= 6 then
+  if self._currentRingMenuIndex ~= __eRingMenuPosition_Default and math.abs(self._currentRingMenuIndex - position) >= 3 and 6 >= math.abs(self._currentRingMenuIndex - position) then
     return
   end
   self._currentRingMenuIndex = position

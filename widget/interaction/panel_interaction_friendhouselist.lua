@@ -24,7 +24,7 @@ local FriendHouseRank = {
   _posConfig = {
     _tabStartPosX = 14,
     _tabPosXGap = 100,
-    _listStartPosY = 83,
+    _listStartPosY = 93,
     _listPosYGap = 25
   }
 }

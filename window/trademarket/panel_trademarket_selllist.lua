@@ -24,6 +24,8 @@ local _distanceBonus = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "Sta
 local _distanceBonusValue = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_DistanceBonusValue")
 local _distanceNoBonus = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_NoBonus")
 local _desertBuff = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_DesertBuff")
+local _lifePowerBuffIcon = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_LifePowerBuff")
+local _lifePowerBuffValue = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_LifePowerBuffValue")
 local _profitStatic = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_MySellPrice")
 local _profitGold = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_Profit_Value")
 local _noLink = UI.getChildControl(Panel_Trade_Market_Sell_ItemList, "StaticText_LinkedExplorationNode")
@@ -69,6 +71,8 @@ local tradeSellMarket = {
   profitGold = {},
   noLink = {},
   desertBuff = {},
+  lifePowerBuffIcon = {},
+  lifePowerBuffValue = {},
   itemEnchantKey = {},
   itemIndex = {},
   expiration = {},
@@ -475,6 +479,13 @@ function fillSellTradeItemInfo(count, indexNum, itemValueType, tradeItemWrapper,
     tradeSellMarket.profitGold[count]:SetText(makeDotMoney(sellPrice * profitRate / 100 * _displayleftPeriod / 100))
     tradeSellMarket.sellPrice[count]:SetText(makeDotMoney(sellPrice * profitRate / 100 * _displayleftPeriod / 100))
   end
+  tradeSellMarket.lifePowerBuffIcon[count]:SetShow(false)
+  tradeSellMarket.lifePowerBuffValue[count]:SetShow(false)
+  if true == isSupplyMerchant and nil ~= tradeItemWrapper:getStaticStatus():get() and 4 == tradeItemWrapper:getStaticStatus():get()._commerceType and true == _ContentsGroup_EnhanceAlchemy then
+    tradeSellMarket.lifePowerBuffIcon[count]:SetShow(true)
+    tradeSellMarket.lifePowerBuffValue[count]:SetText(makeDotMoney(tradeItemWrapper:getAlchemyBonusPrice()))
+    tradeSellMarket.lifePowerBuffValue[count]:SetShow(true)
+  end
   return realPrice
 end
 function FGlobal_MySellCount()
@@ -693,12 +704,9 @@ function tradeSellMarket:setBuyItemDataInfo(index, itemName, leftCount, price, p
     _btnTradeGame:SetIgnore(true)
     _btnTradeGame:SetMonoTone(true)
     if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
     else
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
     end
     if true == checkLinkedNode(index) then
-      tradeSellMarket.ListBody[index]:AddEffect("UI_Trade_SellRing", true, 0, 0)
       bonusText = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADEGAME")
       itemName = itemName .. " " .. bonusText
       tradeSellMarket.itemName[index]:SetText(tostring(itemName))
@@ -709,19 +717,14 @@ function tradeSellMarket:setBuyItemDataInfo(index, itemName, leftCount, price, p
     _btnTradeGame:SetIgnore(true)
     _btnTradeGame:SetMonoTone(true)
     if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
     else
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
     end
     tradeSellMarket.itemName[index]:SetText(tostring(itemName))
   else
     _btnTradeGame:SetIgnore(false)
     _btnTradeGame:SetMonoTone(false)
     if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
     else
-      _btnTradeGame:AddEffect("UI_TradeMarket_ScaleButton", true, 0, -1)
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
     end
     tradeSellMarket.itemName[index]:SetText(tostring(itemName))
   end
@@ -882,9 +885,18 @@ function getItemList(index)
   tradeSellMarket.desertBuff[index]:addInputEvent("Mouse_On", "TradeMarketSellList_SimpleToolTips( true, 7, " .. index .. " )")
   tradeSellMarket.desertBuff[index]:addInputEvent("Mouse_Out", "TradeMarketSellList_SimpleToolTips(false)")
   tradeSellMarket.desertBuff[index]:setTooltipEventRegistFunc("TradeMarketSellList_SimpleToolTips( true, 7, " .. index .. " )")
+  local tempLifePowerBuffIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, tempListBody, "StaticText_LifePowerBuffIcon_" .. index)
+  CopyBaseProperty(_lifePowerBuffIcon, tempLifePowerBuffIcon)
+  tradeSellMarket.lifePowerBuffIcon[index] = tempLifePowerBuffIcon
+  tradeSellMarket.lifePowerBuffIcon[index]:addInputEvent("Mouse_On", "TradeMarketSellList_SimpleToolTips( true, 9, " .. index .. " )")
+  tradeSellMarket.lifePowerBuffIcon[index]:addInputEvent("Mouse_Out", "TradeMarketSellList_SimpleToolTips(false)")
+  tradeSellMarket.lifePowerBuffIcon[index]:setTooltipEventRegistFunc("TradeMarketSellList_SimpleToolTips( true, 9, " .. index .. " )")
+  local tempLifePowerBuffValue = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, tempListBody, "StaticText_LifePowerBuffValue_" .. index)
+  CopyBaseProperty(_lifePowerBuffValue, tempLifePowerBuffValue)
+  tradeSellMarket.lifePowerBuffValue[index] = tempLifePowerBuffValue
   tradeSellMarket.icons[index] = slot
   local sizeY = tempListBody:GetSizeY()
-  local posY = tradeSellMarket.itemsStartPosY + (index - 1) * sizeY + tradeSellMarket.intervalPanel * index
+  local posY = tradeSellMarket.itemsStartPosY + (index - 1) * sizeY + tradeSellMarket.intervalPanel * index + 30
   tradeSellMarket.ListBody[index]:SetPosY(posY)
 end
 local selectIndex = 0
@@ -1117,7 +1129,7 @@ function eventResizeSellList()
     _btnSellAllItem:SetPosY(itemsSizeY + tradeSellMarket.itemsStartPosY + 50 + 5 + _btnTradeGame:GetSizeY())
   end
   _sellScroll:SetPosX(tradeSellMarket.ListBody[1]:GetPosX() + tradeSellMarket.ListBody[1]:GetSizeX() + 2)
-  _sellScroll:SetPosY(tradeSellMarket.itemsStartPosY)
+  _sellScroll:SetPosY(tradeSellMarket.itemsStartPosY + 40)
   _sellScroll:SetSize(_sellScroll:GetSizeX(), itemsSizeY)
 end
 function TradeMarketSellList_SimpleToolTips(isShow, tipType, index)
@@ -1152,6 +1164,13 @@ function TradeMarketSellList_SimpleToolTips(isShow, tipType, index)
     end
     name = tradeSellMarket.ItemNameTable[index]
     control = tradeSellMarket.itemName[index]
+  elseif 9 == tipType then
+    local alchemySSW = ToClient_getAlchemyStatStaticStatus()
+    if nil ~= alchemySSW then
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_DESC", "rate", string.format("%.2f", alchemySSW._addRoyalTradeBonus / 10000))
+    end
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_NAME")
+    control = tradeSellMarket.lifePowerBuffIcon[index]
   end
   if true == isShow then
     registTooltipControl(control, Panel_Tooltip_SimpleText)

@@ -393,12 +393,14 @@ function Window_GameExitInfo:SetNoticeMsg(delayTime)
 end
 function PaGlobalFunc_GameExit_UpdateCharList(value)
   local self = Window_GameExitInfo
+  if self._ui._body._button_RB:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(51, 6)
+  end
   self:Clear()
   self._currentWheelValue = self._currentWheelValue + value
   if true == self._ui._button_NoticeMsg:GetShow() then
     return
   end
-  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if self._currentWheelValue < 0 then
     self._currentWheelValue = 0
   end
@@ -411,11 +413,10 @@ function PaGlobalFunc_GameExit_UpdateCharList(value)
   for index = 0, self._config._maxCharacterSlot - 1 do
     self._characterUITable[index]._radioButton_CharBg:SetShow(false)
     local isSuccess = self:SetCharacterSlot(self._characterInfoTable[index + self._currentWheelValue], self._characterUITable[index])
-    if false == isSuccess then
-      return
+    if true == isSuccess then
+      self._characterUITable[index]._radioButton_CharBg:SetShow(true)
+      self._currentCharacterInfoTable[index] = self._characterInfoTable[index + self._currentWheelValue]
     end
-    self._characterUITable[index]._radioButton_CharBg:SetShow(true)
-    self._currentCharacterInfoTable[index] = self._characterInfoTable[index + self._currentWheelValue]
   end
 end
 function PaGlobalFunc_GameExit_ButtonClick_CharacterSwap(index)
@@ -486,6 +487,7 @@ function PaGlobalFunc_GameExit_ButtonClick_Exit(exitType)
   if true == self._ui._button_NoticeMsg:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   PaGlobalFunc_GameExitConfirm_OpenByExitType(exitType)
 end
 function PaGlobalFunc_GameExit_ButtonClick_CharacterMove()
@@ -511,6 +513,7 @@ function PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
   end
   self._exitTime = -1
   self._currentExitType = -1
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self._ui._button_NoticeMsg:SetShow(false)
 end
 function PaGlobalFunc_GameExit_ButtonClick_ChangeAccount()
@@ -525,6 +528,7 @@ function PaGlobalFunc_GameExit_ButtonClick_ChangeAccount()
   MessageBox.showMessageBox(messageBoxData, "top")
 end
 function PaGlobalFunc_GameExit_ChangeAccount_MessageBoxConfirm()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_ChangeAccount()
 end
 function PaGlobalFunc_GameExit_GetCharInfoTable()
@@ -561,7 +565,7 @@ function Window_GameExitInfo:InitControl()
   body._button_SelectCharacter = UI.getChildControl(self._ui._static_MainBg, "Button_SelectCharacter")
   body._button_CharacterMove = UI.getChildControl(self._ui._static_MainBg, "Button_CharacterMove")
   body._button_ChangeAccount = UI.getChildControl(self._ui._static_MainBg, "Button_ChangeAccount_ConsoleUI")
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     body._button_CharacterMove:SetShow(false)
   end
   body._button_Tray = UI.getChildControl(self._ui._static_MainBg, "Button_Tray")
@@ -590,7 +594,7 @@ function Window_GameExitInfo:InitControl()
   }
   local _startX = body._button_GameExit:GetPosX() - 12
   local _gapX = body._button_GameExit:GetSizeX() + 10
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     _startX = body._button_GameExit:GetPosX() - 12 + _gapX * 0.5
   end
   if _ContentsGroup_isConsolePadControl then
@@ -746,11 +750,13 @@ function PaGlobalFunc_GameExit_SetShow(isShow, isAni, isAttacked)
   end
   if true == isShow then
     SetUIMode(Defines.UIMode.eUIMode_GameExit)
+    _AudioPostEvent_SystemUiForXBOX(1, 30)
     sendWaitingListOfMyCharacters()
     self:Clear()
     self:Update()
   else
     SetUIMode(Defines.UIMode.eUIMode_Default)
+    _AudioPostEvent_SystemUiForXBOX(1, 31)
     if -1 ~= self._currentExitType then
       PaGlobalFunc_GameExit_ButtonClick_ExitCancel()
     end

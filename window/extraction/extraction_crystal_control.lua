@@ -141,9 +141,9 @@ function Click_ExtractionCrystal_Stuff(slotNo, itemWrapper, count_s64, inventory
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
   UI.ASSERT(nil ~= itemWrapper, "Item Is Null?!?!?!")
   local slotExtractionMaterial_Pos = {
-    [1] = {X = 397, Y = 58},
-    [2] = {X = 397, Y = 133},
-    [3] = {X = 397, Y = 208}
+    [1] = {X = 437, Y = 142},
+    [2] = {X = 437, Y = 217},
+    [3] = {X = 437, Y = 292}
   }
   if _IsMaterial then
     self._stuffSlotNo = slotNo

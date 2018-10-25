@@ -131,6 +131,11 @@ function PaGlobal_CharacterInfoBasic:initialize()
   else
     self._ui._staticTextPotential_Title[self._potential._attackSpeed]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CASTSPEED"))
   end
+  self._ui._staticTextPotential_Title[self._potential._moveSpeed]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_MOVESPEED"))
+  self._ui._staticTextPotential_Title[self._potential._critical]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CRITICAL"))
+  self._ui._staticTextPotential_Title[self._potential._fishTime]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_FISHING"))
+  self._ui._staticTextPotential_Title[self._potential._product]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_GATHER"))
+  self._ui._staticTextPotential_Title[self._potential._dropChance]:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_LUCK"))
   local classSymbol = UI_Symbol[classType]
   self._ui._staticClassSymbol:ChangeTextureInfoName(classSymbol[1])
   local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticClassSymbol, classSymbol[2], classSymbol[3], classSymbol[4], classSymbol[5])
@@ -210,22 +215,23 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
     self._ui._staticPotencialGradeBg[index] = {}
     self._ui._staticPotencialPlusGrade[index] = {}
     self._ui._staticPotencialMinusGrade[index] = {}
+    self._ui._staticTextPotential_Title[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
     for slotIndex = 0, 4 do
       self._ui._staticPotencialGradeBg[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_SlotBG_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialGradeBg, self._ui._staticPotencialGradeBg[index][slotIndex])
       self._ui._staticPotencialGradeBg[index][slotIndex]:SetShow(true)
-      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(1 + slotIndex * 60)
-      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(22)
+      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+      self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(11)
       self._ui._staticPotencialPlusGrade[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_PlusSlot_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialPlusGrade, self._ui._staticPotencialPlusGrade[index][slotIndex])
       self._ui._staticPotencialPlusGrade[index][slotIndex]:SetShow(false)
-      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 60)
-      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosY(23)
+      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+      self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosY(11)
       self._ui._staticPotencialMinusGrade[index][slotIndex] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._ui._staticTextPotential_Title[index], "attackSpeed_MinusSlot_" .. index .. "_" .. slotIndex)
       CopyBaseProperty(self._ui._templetePotentialMinusGrade, self._ui._staticPotencialMinusGrade[index][slotIndex])
       self._ui._staticPotencialMinusGrade[index][slotIndex]:SetShow(false)
-      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(2 + slotIndex * 60)
-      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosY(23)
+      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+      self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosY(11)
     end
   end
   for key, index in pairs(self._fitness) do
@@ -280,6 +286,27 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   PaGlobal_CharacterInfoBasic:BaseInfoShow(0 == viewType)
   self._ui._radioBtnBattle:SetCheck(0 == viewType)
   self._ui._radioBtnLife:SetCheck(0 ~= viewType)
+  self._ui._radioBtnBattle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  self._ui._radioBtnBattle:SetText(self._ui._radioBtnBattle:GetText())
+  self._ui._radioBtnLife:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  self._ui._radioBtnLife:SetText(self._ui._radioBtnLife:GetText())
+  UI.checkLimitTextAndAddTooltip(self._ui._radioBtnBattle, self._ui._radioBtnBattle:GetText())
+  UI.checkLimitTextAndAddTooltip(self._ui._radioBtnLife, self._ui._radioBtnLife:GetText())
+  if true == self._ui._radioBtnBattle:IsLimitText() then
+    self._ui._radioBtnBattle:addInputEvent("Mouse_On", "InputMOn_CharacterInfoBasic_ShowLimitedText(true)")
+    self._ui._radioBtnBattle:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+  end
+  if true == self._ui._radioBtnLife:IsLimitText() then
+    self._ui._radioBtnLife:addInputEvent("Mouse_On", "InputMOn_CharacterInfoBasic_ShowLimitedText(false)")
+    self._ui._radioBtnLife:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+  end
+end
+function InputMOn_CharacterInfoBasic_ShowLimitedText(isBattleButton)
+  if true == isBattleButton then
+    TooltipSimple_Show(PaGlobal_CharacterInfoBasic._ui._radioBtnBattle, PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_BATTLETITLE"))
+  else
+    TooltipSimple_Show(PaGlobal_CharacterInfoBasic._ui._radioBtnLife, PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHARACTERINFO_RENEW_LIFEINFO_TITLE"))
+  end
 end
 function PaGlobal_CharacterInfoBasic_ShowInfo(infoType)
   ToClient_getGameUIManagerWrapper():setLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo, infoType, CppEnums.VariableStorageType.eVariableStorageType_User)
@@ -312,6 +339,8 @@ function PaGlobal_CharacterInfoBasic:update()
   local FamiName = self._player:getUserNickname()
   local ChaName = self._player:getOriginalName()
   self._ui._staticTextPlayerName_Value:SetText(tostring(ChaName) .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_FAMILYNAME", "name", tostring(FamiName)) .. ")")
+  local xPos = self._ui._staticClassSymbol:GetTextSpan().x + self._ui._staticClassSymbol:GetTextSizeX() + self._ui._staticClassSymbol:GetPosX() + 10
+  self._ui._staticTextPlayerName_Value:SetSpanSize(xPos, self._ui._staticTextPlayerName_Value:GetSpanSize().y)
   local ZodiacName = self._player:getZodiacSignOrderStaticStatusWrapper():getZodiacName()
   self._ui._staticTextZodiac_Value:SetText(tostring(ZodiacName))
   local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
@@ -320,9 +349,7 @@ function PaGlobal_CharacterInfoBasic:update()
     if playTimePosX < self._ui._staticPlayTimeIcon:GetPosX() then
       self._ui._staticTextPlayTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
       self._ui._staticTextPlayTime:SetSize(self._ui._staticTextPlayTime:GetTextSizeX(), self._ui._staticTextPlayTime:GetSizeY())
-      self._ui._staticPlayTimeIcon:SetPosX(730 - (self._ui._staticPlayTimeIcon:GetSizeX() + self._ui._staticTextPlayTime:GetTextSizeX()))
     else
-      self._ui._staticPlayTimeIcon:SetPosX(playTimePosX)
       self._ui._staticTextPlayTime:SetText("<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
       self._ui._staticPlayTimeIcon:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:localTooltip(true)")
       self._ui._staticPlayTimeIcon:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:localTooltip(false)")
@@ -332,7 +359,6 @@ function PaGlobal_CharacterInfoBasic:update()
     self._ui._staticPlayTimeIcon:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:localTooltip(true)")
     self._ui._staticPlayTimeIcon:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:localTooltip(false)")
     self._ui._staticTextPlayTime:SetSize(self._ui._staticTextPlayTime:GetTextSizeX(), self._ui._staticTextPlayTime:GetSizeY())
-    self._ui._staticPlayTimeIcon:SetPosX(730 - (self._ui._staticPlayTimeIcon:GetSizeX() + self._ui._staticTextPlayTime:GetTextSizeX()))
   end
   local msg = ToClient_GetUserIntroduction()
   local oneLineMsg = string.gsub(msg, "\n", " ")

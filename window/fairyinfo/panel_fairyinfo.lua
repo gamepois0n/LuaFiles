@@ -220,21 +220,12 @@ function FairyInfo:Update()
       end
     end
   end
-  if true == self._isFairyMaxLevel then
-    self._UI._button_LearnableSkill:SetShow(false)
-  end
   if uiRow < 5 then
     if true == self._isFairyMaxLevel then
       self._UI._skillIconBg[uiRow]:SetShow(false)
       self._UI._skillName[uiRow]:SetShow(false)
       self._UI._skillIcon[uiRow]:SetShow(false)
     else
-      local posX = self._UI._skillBG:GetSizeX() - self._UI._button_LearnableSkill:GetSizeX() - 10
-      local posY = self._UI._skillName[uiRow]:GetPosY()
-      self._UI._button_LearnableSkill:SetShow(true)
-      self._UI._button_LearnableSkill:SetPosX(posX)
-      self._UI._button_LearnableSkill:SetPosY(posY)
-      self._UI._button_LearnableSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_fairySkill_Open()")
     end
     for index = uiRow + 1, 4 do
       self._UI._skillIconBg[index]:SetShow(false)
@@ -569,9 +560,17 @@ function FairyInfo:Initialize()
     [2] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC_3"),
     [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_INFO_DESC_4")
   }
+  self._buttonName = {
+    [0] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_FREEDOM_NAME"),
+    [1] = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_TIERUPGRADE_NAME")
+  }
+  self._UI._button_setFree:SetText(self._buttonName[0])
   self._UI._button_setFree:addInputEvent("Mouse_LUp", "PaGlobal_FairyInfo_RequestFreedom()")
   self._UI._button_setFree:addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltip(true, 0)")
   self._UI._button_setFree:addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
+  self._UI._button_LearnableSkill:addInputEvent("Mouse_LUp", "PaGlobalFunc_fairySkill_Open()")
+  self._UI._button_LearnableSkill:addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltip(true, 9)")
+  self._UI._button_LearnableSkill:addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
   self._UI._hpSetText = UI.getChildControl(self._UI._potionPositionBG, "StaticText_HpSet")
   self._UI._mpSetText = UI.getChildControl(self._UI._potionPositionBG, "StaticText_MpSet")
   self._UI._button_Lanter:addInputEvent("Mouse_LUp", "PaGlobal_FairyInfo_LanterOnOff()")
@@ -579,6 +578,7 @@ function FairyInfo:Initialize()
   self._UI._button_Lanter:addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
   self._UI._question:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle(\"Fairy\")")
   self._UI._question:SetShow(false)
+  self._UI._fairyTierUpgradeButton:SetText(self._buttonName[1])
   self._UI._fairyTierUpgradeButton:addInputEvent("Mouse_LUp", "PaGlobal_FairyTierUpgrade_Open(true)")
   self._UI._fairyTierUpgradeButton:addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltip(true, 8)")
   self._UI._fairyTierUpgradeButton:addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltip(false)")
@@ -739,6 +739,10 @@ function PaGlobal_FairyInfo_SimpleTooltip(isShow, tipType)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_TIERUPGRADE_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_TIERUPGRADE_DESC")
     control = self._UI._fairyTierUpgradeButton
+  elseif 9 == tipType then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_SHOW_SKILL_LIST")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRY_INFO_SHOW_SKILL_LIST_DESC")
+    control = self._UI._button_LearnableSkill
   end
   TooltipSimple_Show(control, name, desc)
 end

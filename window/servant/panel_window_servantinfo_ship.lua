@@ -102,7 +102,7 @@ local shipInfo = {
       startExpBGY = 47,
       startExpX = 12,
       startExpY = 50,
-      gapY = 52,
+      gapY = 51,
       count = 4
     }
   },
@@ -160,13 +160,16 @@ function shipInfo:init()
     Panel_Tooltip_Item_SetPosition(value, slot, "ServantShipEquipment")
     self._itemSlots[value] = slot
   end
+  self._staticTextValue_Hp:SetPosY(self._staticGaugeBar_Hp:GetPosY() + (self._staticGaugeBar_Hp:GetSizeY() - self._staticTextValue_Hp:GetTextSizeY()) * 0.5)
+  self._staticTextValue_Mp:SetPosY(self._staticGaugeBar_Mp:GetPosY() + (self._staticGaugeBar_Mp:GetSizeY() - self._staticTextValue_Mp:GetTextSizeY()) * 0.5)
+  self._staticTextValue_Weight:SetPosY(self._staticGaugeBar_Weight:GetPosY() + (self._staticGaugeBar_Weight:GetSizeY() - self._staticTextValue_Weight:GetTextSizeY()) * 0.5)
 end
 function shipInfo:updateHp()
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if nil == servantWrapper then
     return
   end
-  self._staticGaugeBar_Hp:SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  self._staticGaugeBar_Hp:SetSize(1.63 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 6)
   self._staticTextValue_Hp:SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
 end
 function shipInfo:updateMp()
@@ -174,7 +177,7 @@ function shipInfo:updateMp()
   if nil == servantWrapper then
     return
   end
-  self._staticGaugeBar_Mp:SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  self._staticGaugeBar_Mp:SetSize(1.63 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 6)
   self._staticTextValue_Mp:SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
 end
 function shipInfo:update()
@@ -189,9 +192,9 @@ function shipInfo:update()
   end
   self._staticName:SetText(servantWrapper:getName())
   self._staticLevel:SetText(tostring(servantWrapper:getLevel()))
-  self._staticGaugeBar_Hp:SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  self._staticGaugeBar_Hp:SetSize(1.63 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 6)
   self._staticTextValue_Hp:SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
-  self._staticGaugeBar_Mp:SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  self._staticGaugeBar_Mp:SetSize(1.63 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 6)
   self._staticTextValue_Mp:SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
   self._staticTextValue_Sus:SetText(servantWrapper:getSuspension())
   local max_weight = Int64toInt32(servantWrapper:getMaxWeight_s64() / Defines.s64_const.s64_10000)
@@ -204,7 +207,7 @@ function shipInfo:update()
   else
     weightValue = makeDotMoney(total_weight) .. " / " .. makeDotMoney(max_weight)
   end
-  self._staticGaugeBar_Weight:SetSize(weightPercent * 155 / 100, 4)
+  self._staticGaugeBar_Weight:SetSize(weightPercent * 163 / 100, 6)
   self._staticTextValue_Weight:SetText(weightValue)
   self._staticText_MaxMoveSpeedValue:SetText(string.format("%.1f", servantWrapper:getStat(CppEnums.ServantStatType.Type_MaxMoveSpeed) / 10000) .. "%")
   self._staticText_AccelerationValue:SetText(string.format("%.1f", servantWrapper:getStat(CppEnums.ServantStatType.Type_Acceleration) / 10000) .. "%")

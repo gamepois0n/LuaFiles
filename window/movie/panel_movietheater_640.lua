@@ -35,10 +35,10 @@ _movieTheater_640:addInputEvent("Mouse_Out", "Panel_MovieTheater640_HideControl(
 _movieTheater_640:addInputEvent("Mouse_On", "Panel_MovieTheater640_ShowControl()")
 function Panel_MovieTheater640_Initialize()
   _movieTheater_640:SetPosX(5)
-  _movieTheater_640:SetPosY(38)
+  _movieTheater_640:SetPosY(50)
   _movieTheater_640:SetSize(640, 480)
   _movieTheater_640:SetUrl(640, 480, "coui://UI_Data/UI_Html/UI_Guide_Movie_640.html")
-  Panel_MovieTheater_640:SetSize(Panel_MovieTheater_640:GetSizeX(), 557)
+  Panel_MovieTheater_640:SetSize(Panel_MovieTheater_640:GetSizeX(), 577)
 end
 local playedNo = 0
 local movieDesc = {

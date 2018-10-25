@@ -73,8 +73,8 @@ end
 function PaGlobal_FixEquip:fixEquip_FixHelp()
   self._uiFixHelp:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._uiFixHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_FIXHELP"))
-  self._uiFixHelp:SetSize(self._uiFixHelp:GetSizeX(), self._uiFixHelp:GetTextSizeY() + 5)
-  Panel_FixEquip:SetSize(Panel_FixEquip:GetSizeX(), self._uiFixHelp:GetTextSizeY() + 305)
+  self._uiFixHelp:SetSize(self._uiFixHelp:GetSizeX(), self._uiFixHelp:GetTextSizeY() + 10)
+  Panel_FixEquip:SetSize(Panel_FixEquip:GetSizeX(), self._uiFixHelp:GetTextSizeY() + 570)
 end
 function PaGlobal_FixEquip:fixEquip_clearData()
   self._slotMain:clearItem()
@@ -162,13 +162,10 @@ function PaGlobal_FixEquip:fixEquip_createControl()
   self._slotSubTbl.icon:addInputEvent("Mouse_Out", "PaGlobal_FixEquip:panel_FixEquipMouseOnEvent(1, \"FixEquip\", false)")
   Panel_Tooltip_Item_SetPosition(1, self._slotSubTbl, "FixEquip")
   self._slotSub = self._slotSubTbl
-  local sizeX = self._uiStreamRecovery:GetTextSizeX() + 23
   if isGameTypeEnglish() then
-    self._uiStreamRecovery:SetSpanSize(sizeX, 202)
     self._uiItemFix:SetSpanSize(-165, 220)
     self._uiMoneyItemFix:SetSpanSize(-165, 245)
   else
-    self._uiStreamRecovery:SetSpanSize(sizeX, 202)
     self._uiItemFix:SetSpanSize(-20, 210)
     self._uiMoneyItemFix:SetSpanSize(-20, 240)
   end
@@ -234,14 +231,12 @@ function PaGlobal_FixEquip:useCashBtnEffectDelete()
   local hasCashItem = doHaveContentsItem(27, 0, false)
   local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
   if isReady == true then
-    self._uiButtonApply:AddEffect("UI_Equip_Repair", true, 0, 0)
     self._uiButtonApply:SetIgnore(false)
     self._uiButtonApply:SetMonoTone(false)
     self._uiButtonApply:SetEnable(true)
     self._uiButtonApply:SetAlpha(1)
     self._uiButtonApply:addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
     if true == hasCashItem then
-      self._uiButtonApplyCash:AddEffect("UI_Equip_Repair", true, 0, 0)
       self._uiButtonApplyCash:SetMonoTone(false)
       self._uiButtonApplyCash:SetAlpha(1)
       self._uiButtonApplyCash:addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")

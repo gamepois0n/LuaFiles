@@ -137,6 +137,7 @@ function PvPBattle_AskPvPBattle(requesterName, fromInstrusion, wantTeam)
     }
     MessageBox.showMessageBox(teammessageBoxData)
   else
+    PaGlobal_Option:EventXXX("CheckButton_RefuseRequests", 1, 0)
     local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PVPBATTLE_REQUEST_MESSAGEBOX_MEMO", "characterName", requesterName)
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_REQUEST_MESSAGEBOX_TITLE"),
@@ -145,7 +146,7 @@ function PvPBattle_AskPvPBattle(requesterName, fromInstrusion, wantTeam)
       functionNo = askNoButton,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
-    MessageBox.showMessageBox(messageBoxData)
+    MessageBox.showMessageBox(messageBoxData, "top", false, true, 1)
   end
 end
 function PvPBattle_AskAcceptPvPBattle(isAutoCancle)

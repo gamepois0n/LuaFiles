@@ -61,6 +61,9 @@ function Panel_Window_FindPartyRecruite_info:open()
   Panel_PartyRecruite:SetShow(true)
 end
 function Panel_Window_FindPartyRecruite_info:close()
+  if Panel_PartyRecruite:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   Panel_PartyRecruite:SetShow(false)
 end
 function PaGlobalFunc_FindPartyRecruite_GetShow()
@@ -106,6 +109,7 @@ function PaGlobalFunc_FindPartyRecruite_SetLevel(value)
   if self._config.maxlevel < self._value.selectLevel + value then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   self._value.selectLevel = self._value.selectLevel + value
   self:setBaseLevel()
 end

@@ -152,6 +152,9 @@ function Panel_Dialog_Main_Quest_Info:open()
   self._ui.static_QuestBg:SetShow(true)
 end
 function Panel_Dialog_Main_Quest_Info:close()
+  if self._ui.static_QuestBg:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 20)
+  end
   self._ui.static_QuestBg:SetShow(false)
 end
 function Panel_Dialog_Main_Quest_Info:update()

@@ -50,7 +50,7 @@ function PaGlobal_ExtractionEnchantStone:initialize()
   self._uiGuideBG:setPadding(UI_PD.ePadding_Bottom, 5)
   self._uiGuideBG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_ENCHANTSTONE_EXTRACTIONGUIDE"))
   self._uiGuideBG:SetSize(self._uiGuideBG:GetSizeX(), self._uiGuideBG:GetTextSizeY() + 20)
-  Panel_Window_Extraction_EnchantStone:SetSize(Panel_Window_Extraction_EnchantStone:GetSizeX(), Panel_Window_Extraction_EnchantStone:GetSizeX() + self._uiGuideBG:GetTextSizeY() + 80)
+  Panel_Window_Extraction_EnchantStone:SetSize(Panel_Window_Extraction_EnchantStone:GetSizeX(), Panel_Window_Extraction_EnchantStone:GetSizeX() + self._uiGuideBG:GetTextSizeY() + 37)
   SlotItem.new(self._uiEquipItem, "Slot_0", 0, Panel_Window_Extraction_EnchantStone, self._slotConfig)
   self._uiEquipItem:createChild()
   self._uiEquipItem.empty = true

@@ -7,7 +7,8 @@ local UCT = CppEnums.PA_UI_CONTROL_TYPE
 Panel_Window_Challenge:SetShow(false)
 local shortClearCount = UI.getChildControl(Panel_Window_Challenge, "StaticText_ShortClearCount_Value")
 local dailyChallengeValue = UI.getChildControl(Panel_Window_Challenge, "StaticText_DailyChallenge_Value")
-local clearCount = UI.getChildControl(Panel_Window_Challenge, "StaticText_ClearCountValue")
+local clearCountText = UI.getChildControl(Panel_Window_Challenge, "StaticText_ClearCountText")
+local clearCountValue = UI.getChildControl(Panel_Window_Challenge, "StaticText_ClearCountValue")
 local remainRewardCountValue = UI.getChildControl(Panel_Window_Challenge, "StaticText_RemailRewardCount")
 local btnRewardShow = UI.getChildControl(Panel_Window_Challenge, "Button_ChallengeReward_Show")
 local contentBody = UI.getChildControl(Panel_Window_Challenge, "Static_CallengeBodyBG")
@@ -15,7 +16,7 @@ local contentBG = UI.getChildControl(Panel_Window_Challenge, "Static_ChallengeCo
 local contentTitle = UI.getChildControl(Panel_Window_Challenge, "StaticText_ChallengeContent_Title")
 local contentDesc = UI.getChildControl(Panel_Window_Challenge, "StaticText_ChallengeContent_Desc")
 local contentIcon = UI.getChildControl(Panel_Window_Challenge, "Static_ChallengeContent_Icon")
-local contentComplete = UI.getChildControl(Panel_Window_Challenge, "Static_ChallengeCompleteIcon")
+local contentComplete = UI.getChildControl(Panel_Window_Challenge, "StaticText_ChallengeCompleteIcon")
 local normalText = UI.getChildControl(Panel_Window_Challenge, "StaticText_NormalReward")
 local selectText = UI.getChildControl(Panel_Window_Challenge, "StaticText_SelectReward")
 local rewardBG = UI.getChildControl(Panel_Window_Challenge, "Static_RewardBG")
@@ -91,122 +92,122 @@ local tapMenu = {
 local tabTexture = {
   [0] = {
     [0] = {
-      211,
-      5,
-      311,
-      40
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      211,
-      43,
-      311,
-      78
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      211,
-      81,
-      311,
-      116
+      83,
+      63,
+      123,
+      103
     }
   },
   [1] = {
     [0] = {
-      211,
-      119,
-      311,
-      154
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      211,
-      157,
-      311,
-      192
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      211,
-      195,
-      311,
-      230
+      83,
+      63,
+      123,
+      103
     }
   },
   [2] = {
     [0] = {
-      211,
-      233,
-      311,
-      268
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      211,
-      271,
-      311,
-      306
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      211,
-      309,
-      311,
-      344
+      83,
+      63,
+      123,
+      103
     }
   },
   [3] = {
     [0] = {
-      211,
-      5,
-      311,
-      40
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      211,
-      43,
-      311,
-      78
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      211,
-      81,
-      311,
-      116
+      83,
+      63,
+      123,
+      103
     }
   },
   [4] = {
     [0] = {
-      5,
-      182,
-      105,
-      217
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      108,
-      182,
-      208,
-      217
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      211,
-      346,
-      311,
-      381
+      83,
+      63,
+      123,
+      103
     }
   },
   [5] = {
     [0] = {
-      402,
-      390,
-      502,
-      425
+      124,
+      63,
+      164,
+      103
     },
     [1] = {
-      403,
-      428,
-      502,
-      463
+      370,
+      63,
+      410,
+      103
     },
     [2] = {
-      403,
-      466,
-      502,
-      501
+      83,
+      63,
+      123,
+      103
     }
   }
 }
@@ -249,31 +250,31 @@ function Challenge_TapMenu_Create()
     if 0 == index then
       _tapMenu[0]:SetPosX(tapPosX + (tapSizeX - 4) * 0)
     elseif 1 == index then
-      _tapMenu[1]:SetPosX(tapPosX + (tapSizeX - 4) * 1)
+      _tapMenu[1]:SetPosX(tapPosX + (tapSizeX + 5) * 1)
     elseif 2 == index then
       if countrySet then
-        _tapMenu[2]:SetPosX(tapPosX + (tapSizeX - 4) * 4)
+        _tapMenu[2]:SetPosX(tapPosX + (tapSizeX + 5) * 4)
       else
         _tapMenu[2]:SetPosX(tapPosX + (tapSizeX - 4) * 3)
       end
     elseif 3 == index then
       if countrySet then
-        _tapMenu[3]:SetPosX(tapPosX + (tapSizeX - 4) * 3)
+        _tapMenu[3]:SetPosX(tapPosX + (tapSizeX + 5) * 3)
       else
         _tapMenu[3]:SetPosX(tapPosX + (tapSizeX - 4) * 2)
       end
     elseif 4 == index then
-      _tapMenu[4]:SetPosX(tapPosX + (tapSizeX - 4) * 2)
+      _tapMenu[4]:SetPosX(tapPosX + (tapSizeX + 5) * 2)
     elseif 5 == index then
       if countrySet then
-        _tapMenu[5]:SetPosX(tapPosX + (tapSizeX - 4) * 5)
+        _tapMenu[5]:SetPosX(tapPosX + (tapSizeX + 5) * 5)
       else
         _tapMenu[5]:SetPosX(tapPosX + (tapSizeX - 4) * 4)
       end
     end
-    local texturePath = "new_ui_common_forlua/window/itemmarket/itemmarket_00.dds"
+    local texturePath = "renewal/pcremaster/remaster_common_00.dds"
     if 5 == index then
-      texturePath = "new_ui_common_forlua/window/itemmarket/itemmarket_03.dds"
+      texturePath = "renewal/pcremaster/remaster_common_00.dds"
     end
     _tapMenu[index]:ChangeTextureInfoName(texturePath)
     local x1, y1, x2, y2 = setTextureUV_Func(_tapMenu[index], tabTexture[index][0][1], tabTexture[index][0][2], tabTexture[index][0][3], tabTexture[index][0][4])
@@ -304,7 +305,7 @@ end
 local _content = {}
 local _baseReward = {}
 local _selectReward = {}
-local sizeY = contentBG:GetSizeY() + 7
+local sizeY = contentBG:GetSizeY() + 10
 local controlCount = 4
 function Challenge_Initialize()
   for index = 0, controlCount - 1 do
@@ -337,7 +338,7 @@ function Challenge_Initialize()
     _content[index].selectItemIcon3 = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _content[index].BG, "Challenge_Static_SelectItemIcon3_" .. index)
     _content[index].selectItemIcon4 = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _content[index].BG, "Challenge_Static_SelectItemIcon4_" .. index)
     _content[index].selectItemIcon5 = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _content[index].BG, "Challenge_Static_SelectItemIcon5_" .. index)
-    _content[index].contentComplete = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _content[index].BG, "Challenge_content_Complete_" .. index)
+    _content[index].contentComplete = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, _content[index].BG, "Challenge_content_Complete_" .. index)
     CopyBaseProperty(contentBG, _content[index].BG)
     CopyBaseProperty(contentTitle, _content[index].Title)
     CopyBaseProperty(contentDesc, _content[index].Desc)
@@ -400,14 +401,15 @@ function Challenge_Initialize()
     _content[index].Desc:setLineCountByLimitAutoWrap(3)
     _content[index].Desc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     if 0 == index then
-      _content[index].BG:SetPosY(7)
+      _content[index].BG:SetPosY(15)
     else
       _content[index].BG:SetPosY(_content[index - 1].BG:GetPosY() + sizeY)
     end
     _content[index].Icon:SetPosY(0)
-    _content[index].contentComplete:SetPosY(5)
+    _content[index].contentComplete:SetPosX(415)
+    _content[index].contentComplete:SetPosY(15)
     _content[index].btnGetReward:SetPosX(350)
-    _content[index].btnGetReward:SetPosY(2)
+    _content[index].btnGetReward:SetPosY(15)
     _baseReward[index] = {}
     _baseReward[index][0] = _content[index].itemIcon0
     _baseReward[index][1] = _content[index].itemIcon1
@@ -449,10 +451,10 @@ function Challenge_SlotSetting(index)
     local slot = {}
     SlotItem.new(slot, "BaseReward_" .. ii, ii, _baseReward[index][ii], _challengerewardSlotConfig)
     slot:createChild()
-    slot.icon:SetSize(42, 42)
+    slot.icon:SetSize(44, 44)
     slot.icon:SetPosX(0)
     slot.icon:SetPosY(0)
-    slot.border:SetSize(42, 42)
+    slot.border:SetSize(44, 44)
     slot.border:SetPosX(1)
     slot.border:SetPosY(1)
     _listBaseRewardSlots[index][ii] = slot
@@ -551,7 +553,8 @@ function Challenge_Update()
   local totalCompleteCount = ToClient_GetCompletedChallengeCount()
   local rewardCompleteCount = ToClient_GetChallengeRewardInfoCount()
   local totalProgressCount = ToClient_GetProgressChallengeCount(1) + ToClient_GetProgressChallengeCount(2) + ToClient_GetProgressChallengeCount(3)
-  clearCount:SetText(totalCompleteCount .. " / " .. totalCompleteCount + totalProgressCount)
+  clearCountValue:SetText(totalCompleteCount .. " / " .. totalCompleteCount + totalProgressCount)
+  clearCountValue:SetPosX(clearCountText:GetPosX() + clearCountText:GetTextSizeX() + 10)
   shortClearCount:SetText("")
   dailyChallengeValue:SetText("")
   local remainRewardCount = PaGlobalFunc_Challenge_GetTotalRemainRewardCount()
@@ -634,25 +637,25 @@ function Challenge_Update()
       if baseCount > 3 then
         _content[list_Idx].itemSlotBG3:SetShow(true)
         _baseReward[list_Idx][3]:SetShow(true)
-        _content[list_Idx].itemSlotBG0:SetSpanSize(155, 8)
-        _content[list_Idx].itemSlotBG1:SetSpanSize(105, 8)
-        _content[list_Idx].itemSlotBG2:SetSpanSize(55, 8)
-        _content[list_Idx].itemSlotBG3:SetSpanSize(5, 8)
-        _baseReward[list_Idx][0]:SetSpanSize(155, 8)
-        _baseReward[list_Idx][1]:SetSpanSize(105, 8)
-        _baseReward[list_Idx][2]:SetSpanSize(55, 8)
-        _baseReward[list_Idx][3]:SetSpanSize(5, 8)
+        _content[list_Idx].itemSlotBG0:SetSpanSize(180, 10)
+        _content[list_Idx].itemSlotBG1:SetSpanSize(130, 10)
+        _content[list_Idx].itemSlotBG2:SetSpanSize(80, 10)
+        _content[list_Idx].itemSlotBG3:SetSpanSize(30, 10)
+        _baseReward[list_Idx][0]:SetSpanSize(180, 10)
+        _baseReward[list_Idx][1]:SetSpanSize(130, 10)
+        _baseReward[list_Idx][2]:SetSpanSize(80, 10)
+        _baseReward[list_Idx][3]:SetSpanSize(30, 10)
       else
         _content[list_Idx].itemSlotBG3:SetShow(false)
         _baseReward[list_Idx][3]:SetShow(false)
-        _content[list_Idx].itemSlotBG0:SetSpanSize(125, 8)
-        _content[list_Idx].itemSlotBG1:SetSpanSize(75, 8)
-        _content[list_Idx].itemSlotBG2:SetSpanSize(25, 8)
-        _content[list_Idx].itemSlotBG3:SetSpanSize(-25, 8)
-        _baseReward[list_Idx][0]:SetSpanSize(125, 8)
-        _baseReward[list_Idx][1]:SetSpanSize(75, 8)
-        _baseReward[list_Idx][2]:SetSpanSize(25, 8)
-        _baseReward[list_Idx][3]:SetSpanSize(-25, 8)
+        _content[list_Idx].itemSlotBG0:SetSpanSize(180, 10)
+        _content[list_Idx].itemSlotBG1:SetSpanSize(130, 10)
+        _content[list_Idx].itemSlotBG2:SetSpanSize(80, 10)
+        _content[list_Idx].itemSlotBG3:SetSpanSize(30, 10)
+        _baseReward[list_Idx][0]:SetSpanSize(180, 10)
+        _baseReward[list_Idx][1]:SetSpanSize(130, 10)
+        _baseReward[list_Idx][2]:SetSpanSize(80, 10)
+        _baseReward[list_Idx][3]:SetSpanSize(30, 10)
       end
       _content[list_Idx].itemSlotBG0:SetShow(true)
       _content[list_Idx].itemSlotBG1:SetShow(true)
@@ -672,8 +675,8 @@ function Challenge_Update()
       _selectReward[list_Idx][3]:SetShow(true)
       _selectReward[list_Idx][4]:SetShow(true)
       _selectReward[list_Idx][5]:SetShow(true)
-      _content[list_Idx].BG:ChangeTextureInfoName("new_ui_common_forlua/default/default_etc_01.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(_content[list_Idx].BG, 206, 1, 230, 25)
+      _content[list_Idx].BG:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(_content[list_Idx].BG, 106, 1, 126, 21)
       _content[list_Idx].BG:getBaseTexture():setUV(x1, y1, x2, y2)
       _content[list_Idx].BG:setRenderTexture(_content[list_Idx].BG:getBaseTexture())
       _content[list_Idx].BG:SetIgnore(false)
@@ -722,7 +725,7 @@ function Challenge_Update()
           _content[uiIdx].BG:SetShow(true)
           _content[uiIdx].Title:SetShow(true)
           _content[uiIdx].Desc:SetShow(true)
-          _content[uiIdx].Icon:SetShow(true)
+          _content[uiIdx].Icon:SetShow(false)
           _content[uiIdx].Icon:ChangeTextureInfoName("new_ui_common_forlua/window/itemmarket/itemmarket_00.dds")
           local x1, y1, x2, y2 = setTextureUV_Func(_content[uiIdx].Icon, 1, 386, 104, 481)
           _content[uiIdx].Icon:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -748,7 +751,7 @@ function Challenge_Update()
       local viewCount = 4
       for challenge_Idx = 0, controlValueCount - 1 do
         local completeInfo = ToClient_GetCompletedChallengeAt(challenge_Idx + _scrollIndex)
-        _content[challenge_Idx].Title:SetTextMode(CppEnums.TextMode.eTextMode_None)
+        _content[challenge_Idx].Title:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
         _content[challenge_Idx].Title:SetText(completeInfo:getName())
         _content[challenge_Idx].Desc:SetText(completeInfo:getDesc())
         _content[challenge_Idx].BG:SetShow(true)
@@ -757,8 +760,8 @@ function Challenge_Update()
         local existRewardCount = completeInfo:getExistRewardCount()
         _content[challenge_Idx].btnGetReward:SetMonoTone(true)
         _content[challenge_Idx].btnGetReward:SetIgnore(true)
-        _content[challenge_Idx].BG:ChangeTextureInfoName("new_ui_common_forlua/default/default_etc_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_content[challenge_Idx].BG, 206, 26, 230, 50)
+        _content[challenge_Idx].BG:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(_content[challenge_Idx].BG, 106, 1, 127, 21)
         _content[challenge_Idx].BG:getBaseTexture():setUV(x1, y1, x2, y2)
         _content[challenge_Idx].BG:setRenderTexture(_content[challenge_Idx].BG:getBaseTexture())
         _content[challenge_Idx].btnGetReward:SetShow(false)

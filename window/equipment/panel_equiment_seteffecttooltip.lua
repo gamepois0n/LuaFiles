@@ -174,7 +174,7 @@ function PaGlobal_EquipmentTooltip:updateInfoUI()
       if prevControl then
         groupTitle:SetPosY(prevControl:GetPosY() + prevControl:GetTextSizeY() + 15)
       else
-        groupTitle:SetPosY(35)
+        groupTitle:SetPosY(45)
       end
       prevControl = groupTitle
       local reservedpartTitlePrevControl = prevControl

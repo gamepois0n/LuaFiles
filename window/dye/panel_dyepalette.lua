@@ -8,27 +8,13 @@ Panel_DyePalette:RegisterShowEventFunc(true, "DyePalette_ShowAni()")
 Panel_DyePalette:RegisterShowEventFunc(false, "DyePalette_HideAni()")
 local DyePalette = {
   ui = {
-    _btn_Close = UI.getChildControl(Panel_DyePalette, "Button_Win_Close"),
-    _btn_Help = UI.getChildControl(Panel_DyePalette, "Button_Help"),
-    _btn_Confirm = UI.getChildControl(Panel_DyePalette, "Button_Confirm"),
-    _btn_TabAll = UI.getChildControl(Panel_DyePalette, "RadioButton_Tab_ALL"),
-    _btn_TabMy = UI.getChildControl(Panel_DyePalette, "RadioButton_Tab_My"),
+    txt_Title = UI.getChildControl(Panel_DyePalette, "StaticText_Title"),
+    _area_TopButtonArea = UI.getChildControl(Panel_DyePalette, "Static_TopButtonArea"),
+    _area_TopMaterialArea = UI.getChildControl(Panel_DyePalette, "Static_TopSelectDyeArea"),
+    _area_SelectedDyeArea = UI.getChildControl(Panel_DyePalette, "Static_BottomSelectedArea"),
     _scroll = UI.getChildControl(Panel_DyePalette, "Scroll_Ampule"),
     _panelBG = UI.getChildControl(Panel_DyePalette, "Static_BG"),
-    _btn_Material = {
-      [0] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_0"),
-      [1] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_1"),
-      [2] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_2"),
-      [3] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_3"),
-      [4] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_4"),
-      [5] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_5"),
-      [6] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_6"),
-      [7] = UI.getChildControl(Panel_DyePalette, "RadioButton_Material_7")
-    },
-    _selectMaterialName = UI.getChildControl(Panel_DyePalette, "StaticText_SelectedMaterialName"),
-    _selectAmpueColor = UI.getChildControl(Panel_DyePalette, "Static_SelectAmplueColorPart"),
-    _selectAmpueName = UI.getChildControl(Panel_DyePalette, "StaticText_SelectAmpuleName"),
-    _selectAmpueCount = UI.getChildControl(Panel_DyePalette, "Edit_SelectAmpuleCount")
+    _btn_MaterialIcon = nil
   },
   slot = {},
   config = {
@@ -71,6 +57,26 @@ function DyePalette:Initialize()
       slot.btn:addInputEvent("Mouse_DownScroll", "Scroll_DyePalette( false )")
     end
   end
+  self.ui._btn_Close = UI.getChildControl(self.ui.txt_Title, "Button_Win_Close")
+  self.ui._btn_Help = UI.getChildControl(self.ui.txt_Title, "Button_Help")
+  self.ui._btn_TabAll = UI.getChildControl(self.ui._area_TopButtonArea, "RadioButton_Tab_ALL")
+  self.ui._btn_TabMy = UI.getChildControl(self.ui._area_TopButtonArea, "RadioButton_Tab_My")
+  self.ui._selectMaterialName = UI.getChildControl(self.ui._area_TopMaterialArea, "StaticText_SelectedMaterialName")
+  self.ui._btn_Material = {
+    [0] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_0"),
+    [1] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_1"),
+    [2] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_2"),
+    [3] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_3"),
+    [4] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_4"),
+    [5] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_5"),
+    [6] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_6"),
+    [7] = UI.getChildControl(self.ui._area_TopMaterialArea, "RadioButton_Material_7")
+  }
+  self.ui._selectAmpueColorBG = UI.getChildControl(self.ui._area_SelectedDyeArea, "Static_SelectAmplueSlotBG")
+  self.ui._selectAmpueColor = UI.getChildControl(self.ui._selectAmpueColorBG, "Static_SelectAmplueColorPart")
+  self.ui._btn_Confirm = UI.getChildControl(self.ui._area_SelectedDyeArea, "Button_Confirm")
+  self.ui._selectAmpueName = UI.getChildControl(self.ui._area_SelectedDyeArea, "StaticText_SelectAmpuleName")
+  self.ui._selectAmpueCount = UI.getChildControl(self.ui._area_SelectedDyeArea, "Edit_SelectAmpuleCount")
   self.ui._selectAmpueColor:SetAlphaIgnore(true)
   self.ui._btn_TabAll:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_ALL"))
   self.ui._btn_TabMy:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MY"))

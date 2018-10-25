@@ -1,5 +1,4 @@
 local Panel_Dialog_Main_Right_Info = {
-  _initialize = false,
   _ui = {
     static_RightBg = UI.getChildControl(Panel_Dialog_Main, "Static_RightBg"),
     staticText_DialogTitle = nil,
@@ -24,9 +23,6 @@ local Panel_Dialog_Main_Right_Info = {
     staticText_Exchange_Title = nil,
     list2_Exchange_List = nil,
     list2_2_Content = nil,
-    staticText_BeforeTemplete = nil,
-    static_ArrowTemplete = nil,
-    staticText_AfterTemplete = nil,
     list2_3_VerticalScroll = nil
   },
   _config = {
@@ -55,8 +51,6 @@ local Panel_Dialog_Main_Right_Info = {
   _pos = {
     exchangeStartPosY = 0,
     exchangeArrowStartPosY = 0,
-    textstartPosY = 0,
-    liststartPosY = 0,
     exchangePosY = 0
   },
   _space = {contentsSpace = 16, exchangeTextSpace = 0},
@@ -92,11 +86,13 @@ function Panel_Dialog_Main_Right_Info:initialize()
   self:initControl()
 end
 function Panel_Dialog_Main_Right_Info:initControl()
-  self._ui.static_RightBg = UI.getChildControl(Panel_Dialog_Main, "Static_RightBg")
   self._ui.staticText_DialogTitle = UI.getChildControl(self._ui.static_RightBg, "StaticText_DialogTitle")
   self._ui.staticText_DialogTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   self._ui.static_Bg = UI.getChildControl(self._ui.static_RightBg, "Static_Bg")
-  self._ui.staticText_Dialog_Text = UI.getChildControl(self._ui.static_RightBg, "StaticText_Dialog_Text")
+  self._ui.frame_DialogText = UI.getChildControl(self._ui.static_RightBg, "Frame_Dialog_Text")
+  self._ui.frame_Content = UI.getChildControl(self._ui.frame_DialogText, "Frame_1_Content")
+  self._ui.staticText_Dialog_Text = UI.getChildControl(self._ui.frame_Content, "StaticText_Dialog_Text")
+  self._ui.frame_VScroll = UI.getChildControl(self._ui.frame_DialogText, "Frame_1_VerticalScroll")
   self._ui.list2_Dialog_List = UI.getChildControl(self._ui.static_RightBg, "List2_Dialog_List")
   self._ui.list2_Dialog_List:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_MainDialog_Right_List2EventControlCreate")
   self._ui.list2_Dialog_List:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
@@ -111,9 +107,6 @@ function Panel_Dialog_Main_Right_Info:open()
 end
 function Panel_Dialog_Main_Right_Info:close()
   self._ui.static_RightBg:SetShow(false)
-end
-function Panel_Dialog_Main_Right_Info:sizeX()
-  return self._ui.static_RightBg:GetSizeX()
 end
 function Panel_Dialog_Main_Right_Info:update()
   self:close()
@@ -324,36 +317,38 @@ function Panel_Dialog_Main_Right_Info:Resize()
 end
 function Panel_Dialog_Main_Right_Info:ResizeContents(dialogData, showDialogButton, showExchange)
   self:Resize()
-  self._pos.textstartPosY = self._ui.staticText_Dialog_Text:GetPosY()
-  local _bgSize = self._pos.textstartPosY
+  local textSize = self._ui.staticText_Dialog_Text:GetSizeY()
+  if textSize > 400 then
+    self._ui.frame_VScroll:SetShow(true)
+    textSize = 400
+  else
+    self._ui.frame_VScroll:SetShow(false)
+  end
+  local bgPos = self._ui.frame_DialogText:GetPosY()
+  local liststartPosY = bgPos
   if true == self._ui.staticText_Dialog_Text:GetShow() then
-    self._pos.liststartPosY = self._pos.textstartPosY + self._ui.staticText_Dialog_Text:GetSizeY() + self._space.contentsSpace
+    liststartPosY = bgPos + textSize + self._space.contentsSpace
     self._ui.static_Bg:SetShow(true)
-    self._ui.static_Bg:SetSize(self._ui.static_Bg:GetSizeX(), self._pos.liststartPosY - _bgSize + self._space.contentsSpace)
+    self._ui.static_Bg:SetSize(self._ui.static_Bg:GetSizeX(), liststartPosY - bgPos + self._space.contentsSpace)
   else
     self._ui.static_Bg:SetShow(false)
-    self._pos.liststartPosY = self._pos.textstartPosY
   end
   local dialogCount = 0
   if nil == showDialogButton or true == showDialogButton then
     dialogCount = dialogData:getDialogButtonCount()
-  else
-    dialogCount = 0
   end
   if dialogCount > 0 then
-    self._ui.list2_Dialog_List:SetPosY(self._pos.liststartPosY)
+    self._ui.list2_Dialog_List:SetPosY(liststartPosY)
     if dialogCount < self._enum.eDefaultDialogSize then
-      self._pos.exchangePosY = self._pos.liststartPosY + self._space.contentsSpace + self._ui.list2_Dialog_List:GetSizeY() * dialogCount / self._enum.eDefaultDialogSize
+      self._pos.exchangePosY = liststartPosY + self._space.contentsSpace + self._ui.list2_Dialog_List:GetSizeY() * dialogCount / self._enum.eDefaultDialogSize
     else
-      self._pos.exchangePosY = self._pos.liststartPosY + self._space.contentsSpace + self._ui.list2_Dialog_List:GetSizeY()
+      self._pos.exchangePosY = liststartPosY + self._space.contentsSpace + self._ui.list2_Dialog_List:GetSizeY()
     end
   else
-    self._pos.exchangePosY = self._pos.liststartPosY
+    self._pos.exchangePosY = liststartPosY
   end
   local exchangeShow = false
   if nil == showExchange or true == showExchange then
-  else
-    exchangeShow = false
   end
   if true == exchangeShow then
     self._ui.static_ExchangeBg:SetPosY(self._pos.exchangePosY)
@@ -363,6 +358,11 @@ function Panel_Dialog_Main_Right_Info:ResizeContents(dialogData, showDialogButto
   end
   self._ui.static_RightBg:SetSize(self._ui.static_RightBg:GetSizeX(), self._value.allContentsSize)
   self._ui.static_RightBg:ComputePos()
+  self._ui.frame_Content:SetSize(self._ui.staticText_Dialog_Text:GetSizeY())
+  self._ui.frame_VScroll:SetControlPos(0)
+  self._ui.frame_DialogText:UpdateContentPos()
+  self._ui.frame_DialogText:UpdateContentScroll()
+  self._ui.frame_DialogText:ComputePos()
 end
 function Panel_Dialog_Main_Right_Info:ExpirationItemCheck(itemKey)
   local selfProxy = getSelfPlayer():get()
@@ -480,7 +480,7 @@ function PaGlobalFunc_MainDialog_Right_Close()
 end
 function PaGlobalFunc_MainDialog_Right_GetSizeX()
   local self = Panel_Dialog_Main_Right_Info
-  return self:sizeX()
+  return self._ui.static_RightBg:GetSizeX()
 end
 function PaGlobalFunc_MainDialog_Right_GetShow()
   local self = Panel_Dialog_Main_Right_Info
@@ -556,7 +556,9 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
   textNeed_Dialog:SetShow(false)
   btn_Dialog:SetMonoTone(false)
   btn_Dialog:setRenderTexture(btn_Dialog:getBaseTexture())
+  text_Dialog:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   text_Dialog:SetText(dialogText)
+  text_Dialog:SetPosY(list_content:GetSizeY() * 0.5 - text_Dialog:GetTextSizeY() * 0.5)
   needItemIcon:SetShow(false)
   needWpIcon:SetShow(false)
   local linkType = dialogButton._linkType
@@ -638,6 +640,7 @@ function PaGlobalFunc_MainDialog_Right_List2EventControlCreate(list_content, key
     else
       textNeed_Dialog:SetShow(true)
       textNeed_Dialog:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PLAYER_INVENTORY_FULL"))
+      textNeed_Dialog:SetPosY(list_content:GetSizeY() * 0.5 - textNeed_Dialog:GetTextSizeY() * 0.5)
     end
   elseif CppEnums.DialogButtonType.eDialogButton_Knowledge == dialogButton._dialogButtonType then
     textNeed_Dialog:SetShow(false)

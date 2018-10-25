@@ -18,6 +18,7 @@ local buttonNo = UI.getChildControl(Panel_Win_System, "Button_No")
 local buttonIgnore = UI.getChildControl(Panel_Win_System, "Button_Ignore")
 local buttonCancel = UI.getChildControl(Panel_Win_System, "Button_Cancel")
 local buttonClose = UI.getChildControl(Panel_Win_System, "Button_Close")
+local refuseInvite = UI.getChildControl(Panel_Win_System, "CheckButton_RefuseGo")
 local blockBG = UI.getChildControl(Panel_Win_System, "Static_BlockBG")
 local static_Beginner_BG = UI.getChildControl(Panel_Win_System, "Static_Beginner_BG")
 local static_BeginnerTitleBG = UI.getChildControl(Panel_Win_System, "Static_BeginnerTitleBG")
@@ -60,7 +61,17 @@ local functionKeyUse = true
 local functionYes, list
 local elapsedTime = 0
 local _currentMessageBoxData
-function setCurrentMessageData(currentData, position)
+local function messageBox_Resize(refuseType)
+  local textSizeY = textContent:GetTextSizeY()
+  textContent:SetSize(textContent:GetSizeX(), textSizeY)
+  local refuseGap = 0
+  if nil ~= refuseType then
+    refuseGap = 30
+  end
+  textBG:SetSize(textBG:GetSizeX(), textSizeY + refuseGap + 40)
+  Panel_Win_System:SetSize(Panel_Win_System:GetSizeX(), textBG:GetSizeY() + 97)
+end
+function setCurrentMessageData(currentData, position, refuseType)
   if currentData ~= nil then
     buttonYes:SetShow(false)
     buttonApply:SetShow(false)
@@ -68,6 +79,7 @@ function setCurrentMessageData(currentData, position)
     buttonIgnore:SetShow(false)
     buttonCancel:SetShow(false)
     buttonClose:SetShow(false)
+    refuseInvite:SetShow(false)
     Panel_Win_System:SetShow(true, false)
     Panel_Win_System:SetScaleChild(1, 1)
     if currentData.title ~= nil then
@@ -76,15 +88,7 @@ function setCurrentMessageData(currentData, position)
     if currentData.content ~= nil then
       textContent:SetTextMode(UI_TM.eTextMode_AutoWrap)
       textContent:SetText(currentData.content)
-      if "top" == position then
-        textContent:SetTextVerticalTop()
-        textContent:SetSpanSize(0, 37)
-        textContent:ComputePos()
-      else
-        textContent:SetTextVerticalCenter()
-        textContent:SetSpanSize(0, 37)
-        textContent:ComputePos()
-      end
+      messageBox_Resize(refuseType)
     end
     local buttonShowCount = 0
     if currentData.functionYes ~= nil then
@@ -132,7 +136,7 @@ function setCurrentMessageData(currentData, position)
     _currentMessageBoxData = currentData
   end
 end
-function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse)
+function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse, refuseType)
   if Panel_Win_System:GetShow() and nil == MessageData.enablePriority then
     return
   end
@@ -158,7 +162,7 @@ function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse)
         data = MessageData
       }
       if list.pre == nil then
-        setCurrentMessageData(list.data, position)
+        setCurrentMessageData(list.data, position, refuseType)
         break
       end
       list.pre.next = list
@@ -172,6 +176,30 @@ function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse)
   if nil ~= MessageData.countTime then
     elapsedTime = 0
   end
+  refuseInvite:SetShow(false)
+  local optionWrapper = ToClient_getGameOptionControllerWrapper()
+  if 0 == refuseType then
+    local isRefuseRequests = optionWrapper:getRefuseRequests()
+    refuseInvite:SetCheck(isRefuseRequests)
+    refuseInvite:SetShow(true)
+    refuseInvite:addInputEvent("Mouse_LUp", "PaGlobal_MessageBox_RefuseOption(0)")
+  elseif 1 == refuseType then
+    local isRefusePvP = optionWrapper:getPvpRefuse()
+    refuseInvite:SetCheck(isRefusePvP)
+    refuseInvite:SetShow(true)
+    refuseInvite:addInputEvent("Mouse_LUp", "PaGlobal_MessageBox_RefuseOption(1)")
+  elseif 2 == refuseType then
+    local isRefusePersonTrade = optionWrapper:getIsExchangeRefuse()
+    refuseInvite:SetCheck(isRefusePersonTrade)
+    refuseInvite:SetShow(true)
+    refuseInvite:addInputEvent("Mouse_LUp", "PaGlobal_MessageBox_RefuseOption(2)")
+  else
+    refuseInvite:SetShow(false)
+  end
+  refuseInvite:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_ALWAYSREFUSE"))
+  refuseInvite:SetEnableArea(0, 0, refuseInvite:GetTextSizeX() + 20, 25)
+  refuseInvite:addInputEvent("Mouse_On", "PaGlobal_MessageBox_RefuseTip(true)")
+  refuseInvite:addInputEvent("Mouse_Out", "PaGlobal_MessageBox_RefuseTip(false)")
   if true == isGameExit and ToClient_GetUserPlayMinute() < 1440 then
     Panel_Win_System:SetSize(441, 317)
     textBG:SetSize(420, 120)
@@ -188,25 +216,38 @@ function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse)
     static_BeginnerTitleBG:SetShow(false)
     staticText_BeginnerTxt1:SetShow(false)
     staticText_BeginnerTxt2:SetShow(false)
-    Panel_Win_System:SetSize(350, 220)
-    textBG:SetSize(334, 153)
   end
   local textSizeY = textContent:GetTextSizeY()
   local textBGSizeY = textContent:GetSizeY()
   local panelSizeY = textBG:GetSizeY()
   local resizePanelY = textSizeY + 90
-  if textSizeY > textBGSizeY then
-    textContent:SetTextVerticalTop()
-    Panel_Win_System:SetSize(350, resizePanelY)
-    textBG:SetSize(334, textSizeY + 20)
-  else
-    Panel_Win_System:SetSize(350, 220)
-    textBG:SetSize(334, 153)
-  end
+  textBG:ComputePos()
   textContent:ComputePos()
+  refuseInvite:ComputePos()
+  refuseInvite:SetPosX(Panel_Win_System:GetSizeX() / 2 - (refuseInvite:GetSizeX() + refuseInvite:GetTextSizeX() / 2))
   blockBG:SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
   blockBG:ComputePos()
   messageBoxComputePos()
+end
+function PaGlobal_MessageBox_RefuseOption(refuseType)
+  if 0 == refuseType then
+    setRefuseRequests(refuseInvite:IsCheck())
+  elseif 1 == refuseType then
+    setIsPvpRefuse(refuseInvite:IsCheck())
+  elseif 2 == refuseType then
+    setIsExchangeRefuse(refuseInvite:IsCheck())
+  end
+end
+function PaGlobal_MessageBox_RefuseTip(isShow)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local name, desc, control
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_ALWAYSREFUSE")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_ALWAYSREFUSE_TIP_DESC")
+  control = refuseInvite
+  TooltipSimple_Show(control, name, desc)
 end
 function messageBoxComputePos()
   blockBG:SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
@@ -228,11 +269,11 @@ function messageBoxComputePos()
     buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonIgnore:GetSizeX() / 2)
     buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonCancel:GetSizeX() / 2)
   elseif 2 == globalButtonShowCount then
-    buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonYes:GetSizeX() + 5))
-    buttonNo:SetPosX(Panel_Win_System:GetSizeX() / 2 + 5)
-    buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonApply:GetSizeX() + 5))
-    buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 + 5)
-    buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 + 5)
+    buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonYes:GetSizeX() + 1))
+    buttonNo:SetPosX(Panel_Win_System:GetSizeX() / 2 + 1)
+    buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonApply:GetSizeX() + 1))
+    buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 + 1)
+    buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 + 1)
   elseif 3 == globalButtonShowCount then
     local buttonSize = buttonYes:GetSizeX()
     buttonYes:SetPosX(5)
@@ -441,7 +482,7 @@ function Event_MessageBox_NotifyMessage(message)
   MessageBox.showMessageBox(messageboxData)
 end
 function Event_MessageBox_NotifyMessage_FreeButton(message)
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isConsole() then
     local messageboxData = {
       title = "",
       content = message,

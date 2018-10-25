@@ -128,12 +128,13 @@ function PaGlobal_Policy:init()
   self:registEventHandler()
 end
 function PaGlobal_Policy:registEventHandler()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     Panel_Window_Policy:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobal_Policy_Confirm()")
   end
 end
 function PaGlobal_Policy_ShowWindow(isLogin)
   local self = PaGlobal_Policy
+  _AudioPostEvent_SystemUiForXBOX(1, 22)
   Panel_Window_Policy:SetShow(true)
   self._ui.btnConfirm:SetShow(isLogin)
   self._ui.btnCancel:SetShow(true)
@@ -147,6 +148,7 @@ function PaGlobal_Policy_ShowWindow(isLogin)
 end
 function PaGlobal_Policy_Close()
   local self = PaGlobal_Policy
+  _AudioPostEvent_SystemUiForXBOX(1, 21)
   Panel_Window_Policy:SetShow(false)
 end
 function PaGlobal_Policy_Confirm()

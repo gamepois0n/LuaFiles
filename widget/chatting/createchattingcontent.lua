@@ -197,20 +197,28 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
   local isWhile = false
   local checkitemwebat = 0
   local emoticonContentIndex = -1
+  local chatEmoticon = {}
   if 0 ~= emoticonCount then
     local emoNum = 1
     while emoticonCount >= emoNum do
       local emoticonindex = chattingMessage:getEmoticonIndex(emoNum - 1)
+      local emoticonKey = chattingMessage:getEmoticonKey(emoNum - 1)
+      local isItemEmoticon = PaGlobalFunc_isItemEmticon(emoticonKey)
       if msgstartindex == emoticonindex then
-        emoticonContentIndex = contentindex
-        chatting_contents[contentindex] = poolCurrentUI:newChattingEmoticon()
-        if nil ~= itemIconPath then
+        if true == isItemEmoticon then
+          emoticonContentIndex = contentindex
+          chatting_contents[contentindex] = poolCurrentUI:newChattingEmoticon()
+        else
+          chatEmoticon[contentindex] = true
+          chatting_contents[contentindex] = poolCurrentUI:newChattingNewEmoticon()
+        end
+        if isItemEmoticon and nil ~= itemIconPath then
           if false == isLinkedMentalCard then
             chatting_contents[contentindex]:ChangeTextureInfoNameAsync("Icon/" .. itemIconPath)
           else
             chatting_contents[contentindex]:ChangeTextureInfoNameAsync(itemIconPath)
           end
-        else
+        elseif isItemEmoticon then
           chatting_contents[contentindex]:ChangeTextureInfoNameAsync(chattingMessage:getEmoticonPath(emoNum - 1))
           local startX = chattingMessage:getEmoticonUV(emoNum - 1).x
           local startY = chattingMessage:getEmoticonUV(emoNum - 1).y
@@ -218,6 +226,12 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
           local sizeY = chattingMessage:getEmoticonSize(emoNum - 1).y
           chatting_contents[contentindex]:getBaseTexture():setUV(startX, startY, startX + sizeX, startY + sizeY)
           chatting_contents[contentindex]:setRenderTexture(chatting_contents[contentindex]:getBaseTexture())
+        else
+          local emoticonIndex = poolCurrentUI:getCurrentEmoticonIndex()
+          chatting_contents[contentindex]:ChangeTextureInfoNameAsync(chattingMessage:getEmoticonPath(emoNum - 1))
+          chatting_contents[contentindex]:addInputEvent("Mouse_LUp", "HandleOn_ChattingEmoticon(" .. panelIndex .. "," .. emoticonIndex .. "," .. tostring(emoticonKey) .. ", true)")
+          chatting_contents[contentindex]:addInputEvent("Mouse_On", "HandleOn_ChattingEmoticon(" .. panelIndex .. "," .. emoticonIndex .. "," .. tostring(emoticonKey) .. ", true)")
+          chatting_contents[contentindex]:addInputEvent("Mouse_Out", "HandleOn_ChattingEmoticon(" .. panelIndex .. "," .. emoticonIndex .. "," .. tostring(emoticonKey) .. ", false)")
         end
         chatting_contents[contentindex]:SetShow(true)
         j = 1
@@ -553,6 +567,10 @@ function Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, PosY, mes
         end
       elseif emoticonContentIndex > index then
         chatting_contents[index]:SetPosY(PosY - chatting_contents[index]:GetSizeY() - deltaPosY)
+        chatting_contents[index]:SetShow(true)
+      end
+      if true == chatEmoticon[index] then
+        chatting_contents[index]:SetPosY(PosY - chatting_contents[index]:GetSizeY() - deltaPosY + 2.5)
         chatting_contents[index]:SetShow(true)
       end
       if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX >= chatting_contents[index]:GetPosX() then

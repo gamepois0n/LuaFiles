@@ -33,7 +33,7 @@ function Panel_ScreenShotAlbum_Initialize()
   _screenshotAlbumWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_ScreenShotAlbum, "WebControl_ScreenshotAlbum")
   _screenshotAlbumWeb:SetShow(true)
   _screenshotAlbumWeb:SetPosX(15)
-  _screenshotAlbumWeb:SetPosY(55)
+  _screenshotAlbumWeb:SetPosY(70)
   _screenshotAlbumWeb:SetSize(875, 635)
   _screenshotAlbumWeb:ResetUrl()
 end

@@ -27,14 +27,16 @@ local wharfRegister = {
   _buttonClose = UI.getChildControl(Panel_Window_WharfRegister, "Button_No"),
   _buttonQuestion = UI.getChildControl(Panel_Window_WharfRegister, "Button_Question"),
   _staticCreateServantNameBG = UI.getChildControl(Panel_Window_WharfRegister, "Static_NamingPolicyBG"),
-  _staticCreateServantNameTitle = UI.getChildControl(Panel_Window_WharfRegister, "StaticText_NamingPolicyTitle"),
-  _staticCreateServantName = UI.getChildControl(Panel_Window_WharfRegister, "StaticText_NamingPolicy"),
+  _staticCreateServantNameTitle = nil,
+  _staticCreateServantName = nil,
   _inventoryType = nil,
   _inventorySlotNo = nil,
   _characterKey = nil,
   _level = nil,
   _type = nil
 }
+wharfRegister._staticCreateServantNameTitle = UI.getChildControl(wharfRegister._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
+wharfRegister._staticCreateServantName = UI.getChildControl(wharfRegister._staticCreateServantNameBG, "StaticText_NamingPolicy")
 function wharfRegister:init()
   self._editEditName:SetMaxInput(getGameServiceTypeServantNameLength())
   self._staticIcon:SetShow(true)

@@ -17,6 +17,7 @@ function Panel_Logo_Init()
 end
 Panel_Logo_Init()
 function Panel_LogoXbox_PressA()
+  _AudioPostEvent_SystemUiForXBOX(50, 8)
   ToClient_ActiveProcessXbox()
 end
 function Panel_LogoXbox_UpdatePerFrame()

@@ -32,16 +32,9 @@ local lifeType = {
   [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COMBAT")
 }
 local tabNumber = 99
-local btn_GuildMasterMandateBG = UI.getChildControl(Panel_Window_Guild, "Static_GuildMandateBG")
-local btn_GuildMasterMandate = UI.getChildControl(Panel_Window_Guild, "Button_GuildMandate")
 local notice_title = UI.getChildControl(Panel_Window_Guild, "StaticText_NoticeTitle")
 local notice_edit = UI.getChildControl(Panel_Window_Guild, "Edit_Notice")
 local notice_btn = UI.getChildControl(Panel_Window_Guild, "Button_Notice")
-local promote_btn = UI.getChildControl(Panel_Window_Guild, "Button_Promote")
-local introduce_btn = UI.getChildControl(Panel_Window_Guild, "Button_Introduce")
-local introduce_Reset = UI.getChildControl(Panel_Window_Guild, "Button_IntroReset")
-local introduce_edit = UI.getChildControl(Panel_Window_Guild, "MultilineEdit_Introduce")
-local introduce_edit_TW = UI.getChildControl(Panel_Window_Guild, "MultilineEdit_Introduce_TW")
 local checkPopUp = UI.getChildControl(Panel_Window_Guild, "CheckButton_PopUp")
 local _urlCache = ""
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
@@ -59,49 +52,60 @@ local keyUseCheck = true
 local guildCommentsWebUrl
 local GuildInfoPage = {}
 function GuildInfoPage:initialize()
+  self._area_MainBG = UI.getChildControl(Panel_Window_Guild, "Static_Button_BG")
   self._guildMainBG = UI.getChildControl(Panel_Window_Guild, "Static_Menu_BG_0")
   self._windowTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_Title")
-  self._textGuildInfoTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_Title_Info")
-  self._txtGuildName = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildName")
   self._iconOccupyTerritory = UI.getChildControl(Panel_Window_Guild, "Static_GuildIcon_BG")
   self._iconGuildMark = UI.getChildControl(Panel_Window_Guild, "Static_Guild_Icon")
-  self._txtMaster = UI.getChildControl(Panel_Window_Guild, "StaticText_Master")
+  self._area_Info = UI.getChildControl(Panel_Window_Guild, "Static_InfoArea")
+  self._line_Top = UI.getChildControl(Panel_Window_Guild, "Static_TopLine")
+  self._area_Introduce = UI.getChildControl(Panel_Window_Guild, "Static_IntroduceArea")
+  self._introduce_btn = UI.getChildControl(self._area_Introduce, "Button_Introduce")
+  self._introduce_Reset = UI.getChildControl(self._area_Introduce, "Button_IntroReset")
+  self._introduce_edit = UI.getChildControl(self._area_Introduce, "MultilineEdit_Introduce")
+  self._introduce_edit_TW = UI.getChildControl(self._area_Introduce, "MultilineEdit_Introduce_TW")
+  self._promote_btn = UI.getChildControl(self._area_Introduce, "Button_Promote")
   self._txtRGuildName = UI.getChildControl(Panel_Window_Guild, "StaticText_R_GuildName")
   self._txtRMaster = UI.getChildControl(Panel_Window_Guild, "StaticText_R_Master")
-  self._txtRRank_Title = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildRank")
-  self._txtRRank = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildRank_Value")
+  self._txtRRank_Title = UI.getChildControl(self._area_Info, "StaticText_GuildRank")
+  self._txtRRank = UI.getChildControl(self._area_Info, "StaticText_GuildRank_Value")
   self._txtUnpaidTax = UI.getChildControl(Panel_Window_Guild, "StaticText_UnpaidTax")
-  self._btnGuildDel = UI.getChildControl(Panel_Window_Guild, "Button_GuildDispersal")
-  self._btnChangeMark = UI.getChildControl(Panel_Window_Guild, "Button_GuildMark")
-  self._btnIncreaseMember = UI.getChildControl(Panel_Window_Guild, "Button_IncreaseMember")
+  self._btnIncreaseMember = UI.getChildControl(self._area_Info, "Button_IncreaseMember")
   self._btnTaxPayment = UI.getChildControl(Panel_Window_Guild, "Button_TaxPayment")
-  self._txtGuildPoint = UI.getChildControl(Panel_Window_Guild, "StaticText_Point")
-  self._txtGuildPointValue = UI.getChildControl(Panel_Window_Guild, "StaticText_Point_Value")
-  self._txtGuildPointPercent = UI.getChildControl(Panel_Window_Guild, "StaticText_Point_Percent")
-  self._txtGuildMpValue = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildMp_Value")
-  self._txtGuildMpPercent = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildMp_Percent")
-  self._progressMpPoint = UI.getChildControl(Panel_Window_Guild, "Progress2_GuildMp")
-  self._guildIntroduce_Title = UI.getChildControl(Panel_Window_Guild, "StaticText_Title_GuildIntroduce")
-  self._guildIntroduce_BG = UI.getChildControl(Panel_Window_Guild, "Static_GuildIntroduce_BG")
-  self._guildBbs_Title = UI.getChildControl(Panel_Window_Guild, "StaticText_Title_Bbs")
-  self._guildBbs_BG = UI.getChildControl(Panel_Window_Guild, "Static_GuildBbs_BG")
+  self._txtGuildPoint = UI.getChildControl(self._area_Info, "StaticText_Point")
+  self._txtGuildPointValue = UI.getChildControl(self._area_Info, "StaticText_Point_Value")
+  self._txtGuildPointPercent = UI.getChildControl(self._area_Info, "StaticText_Point_Percent")
   self._planning = UI.getChildControl(Panel_Window_Guild, "StaticText_1")
   self._planning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TODAY_COMMENT"))
-  self._txtProtect = UI.getChildControl(Panel_Window_Guild, "StaticText_Protect")
-  self._txtProtectValue = UI.getChildControl(Panel_Window_Guild, "StaticText_ProtectValue")
-  self._btnProtectAdd = UI.getChildControl(Panel_Window_Guild, "Button_ProtectAdd")
-  self._txtGuildMoneyTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildMoneyTitle")
-  self._txtGuildMoney = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildMoneyValue")
-  self._txtGuildTerritoryTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_TerritoryArea")
-  self._txtGuildTerritoryValue = UI.getChildControl(Panel_Window_Guild, "StaticText_TerritoryAreaValue")
+  self._txtProtect = UI.getChildControl(self._area_Info, "StaticText_Protect")
+  self._txtProtectValue = UI.getChildControl(self._area_Info, "StaticText_ProtectValue")
+  self._btnProtectAdd = UI.getChildControl(self._area_Info, "Button_ProtectAdd")
+  self._txtGuildMoneyTitle = UI.getChildControl(self._area_Info, "StaticText_GuildMoneyTitle")
+  self._txtGuildMoney = UI.getChildControl(self._area_Info, "StaticText_GuildMoneyValue")
+  self._txtGuildTerritoryTitle = UI.getChildControl(self._area_Info, "StaticText_TerritoryArea")
+  self._txtGuildTerritoryValue = UI.getChildControl(self._area_Info, "StaticText_TerritoryAreaValue")
   self._txtGuildTerritoryValue:SetTextMode(UI_TM.eTextMode_LimitText)
   self._btnEvacuation = UI.getChildControl(Panel_Window_Guild, "Button_Evacuation")
-  self._txtGuildServantTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildServant")
-  self._txtGuildServantValue = UI.getChildControl(Panel_Window_Guild, "StaticText_GuildServantValue")
+  self._txtGuildServantTitle = UI.getChildControl(self._area_Info, "StaticText_GuildServant")
+  self._txtGuildServantValue = UI.getChildControl(self._area_Info, "StaticText_GuildServantValue")
   self._txtGuildServantValue:SetTextMode(UI_TM.eTextMode_LimitText)
-  self._btnGuildWebInfo = UI.getChildControl(Panel_Window_Guild, "Button_GuildInfo_Web")
-  self._btnGuildWarehouse = UI.getChildControl(Panel_Window_Guild, "Button_GuildInfo_Warehouse")
-  self._btnGetArshaHost = UI.getChildControl(Panel_Window_Guild, "Button_GetArshaHost")
+  self._btn_GuildMasterMandateBG = UI.getChildControl(self._area_Info, "Static_GuildMandateBG")
+  self._btn_GuildMasterMandate = UI.getChildControl(self._area_Info, "Button_GuildMandate")
+  self._btnGuildDel = UI.getChildControl(self._area_Info, "Button_GuildDispersal")
+  self._btnChangeMark = UI.getChildControl(self._area_Info, "Button_GuildMark")
+  self._btnGuildWebInfo = UI.getChildControl(self._area_Info, "Button_GuildInfo_Web")
+  self._btnGuildWarehouse = UI.getChildControl(self._area_Info, "Button_GuildInfo_Warehouse")
+  self._btnGetArshaHost = UI.getChildControl(self._area_Info, "Button_GetArshaHost")
+  self._area_TodayComment = UI.getChildControl(Panel_Window_Guild, "Static_TodayCommentArea")
+  self._area_TodayComment:SetAlpha(0.5)
+  self._Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, self._area_TodayComment, "WebControl_TodayComment")
+  self._Web:SetShow(true)
+  self._Web:SetSize(474, 216)
+  self._Web:SetHorizonCenter()
+  self._Web:SetVerticalBottom()
+  self._Web:SetSpanSize(0, 10)
+  self._Web:ResetUrl()
+  Panel_Window_Guild:SetChildIndex(self._Web, 9999)
   if not isContentsGuildInfo then
     self._btnGuildWebInfo:SetShow(false)
   end
@@ -118,26 +122,13 @@ function GuildInfoPage:initialize()
   if not isContentsGuildHouse then
     self._btnGuildWarehouse:SetShow(false)
   end
-  function self:SetShow(isShow)
-  end
   function self:GetShow()
     return self._btnGuildDel:GetShow()
   end
-  if isGameTypeEnglish() then
-    self._txtGuildName:SetShow(false)
-    self._txtMaster:SetShow(false)
-  else
-    self._txtGuildName:SetShow(false)
-    self._txtMaster:SetShow(false)
-  end
-  if isGameTypeTH() or isGameTypeID() then
-    promote_btn:SetSize(115, 30)
-    promote_btn:SetSpanSize(460, 365)
-  else
-    promote_btn:SetSize(115, 30)
-    promote_btn:SetSpanSize(460, 365)
-  end
-  self:SetShow(false)
+  self._introduce_Reset:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 13)")
+  self._introduce_Reset:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
+  self._introduce_btn:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 14)")
+  self._introduce_btn:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
   self._btnGuildDel:addInputEvent("Mouse_LUp", "HandleClickedGuildDel()")
   self._btnChangeMark:addInputEvent("Mouse_LUp", "HandleClickedChangeMark()")
   self._btnTaxPayment:addInputEvent("Mouse_LUp", "HandleClicked_TaxPayment()")
@@ -162,10 +153,10 @@ function GuildInfoPage:initialize()
     self._btnGetArshaHost:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 8 )")
     self._btnGetArshaHost:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 8 )")
   end
-  btn_GuildMasterMandate:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 0 )")
-  btn_GuildMasterMandate:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 0 )")
-  btn_GuildMasterMandateBG:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 1 )")
-  btn_GuildMasterMandateBG:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 1 )")
+  self._btn_GuildMasterMandate:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 0 )")
+  self._btn_GuildMasterMandate:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 0 )")
+  self._btn_GuildMasterMandateBG:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 1 )")
+  self._btn_GuildMasterMandateBG:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 1 )")
   checkPopUp:addInputEvent("Mouse_LUp", "HandleClickedGuild_PopUp()")
   checkPopUp:addInputEvent("Mouse_On", "Guild_PopUp_ShowIconToolTip( true )")
   checkPopUp:addInputEvent("Mouse_Out", "Guild_PopUp_ShowIconToolTip( false )")
@@ -188,13 +179,6 @@ function GuildInfoPage:initialize()
   self._btnEvacuation:addInputEvent("Mouse_On", "GuildSimplTooltips( true, 11 )")
   self._btnEvacuation:addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 11 )")
 end
-local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Window_Guild, "WebControl_EventNotify_WebLink")
-_Web:SetShow(true)
-_Web:SetPosX(460)
-_Web:SetPosY(430)
-_Web:SetSize(373, 272)
-_Web:ResetUrl()
-Panel_Window_Guild:SetChildIndex(_Web, 9999)
 local HandleClickedGuildDelContinue = function()
   ToClient_RequestDestroyGuild()
   HandleClickedGuildHideButton()
@@ -360,7 +344,6 @@ end
 function GuildWarehouseOpen()
   warehouse_requestGuildWarehouseInfo()
 end
-local maxGuildMp = 1500
 function GuildInfoPage:UpdateData()
   SetDATAByGuildGrade()
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -401,27 +384,6 @@ function GuildInfoPage:UpdateData()
     self._txtGuildPointPercent:SetSpanSize(self._txtGuildPointValue:GetSpanSize().x + self._txtGuildPointValue:GetTextSizeX() + 25, self._txtGuildPointPercent:GetSpanSize().y)
     self._txtGuildPointValue:SetSpanSize(self._txtGuildPoint:GetSpanSize().x + self._txtGuildPoint:GetTextSizeX() + 10, self._txtGuildPointValue:GetSpanSize().y)
     self._txtGuildPointPercent:SetSpanSize(self._txtGuildPointValue:GetSpanSize().x + self._txtGuildPointValue:GetTextSizeX() + 20, self._txtGuildPointPercent:GetSpanSize().y)
-    local currentGuildMp = myGuildInfo:getGuildMp()
-    self._txtGuildMpValue:SetText(currentGuildMp)
-    local guildMpGrade = ""
-    if currentGuildMp < 300 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_1")
-    elseif currentGuildMp >= 300 and currentGuildMp < 600 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_2")
-    elseif currentGuildMp >= 600 and currentGuildMp < 900 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_3")
-    elseif currentGuildMp >= 900 and currentGuildMp < 1200 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_4")
-    elseif currentGuildMp >= 1200 and currentGuildMp < 1500 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_5")
-    elseif currentGuildMp >= 1500 then
-      guildMpGrade = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GULDGRADE_6")
-    end
-    self._txtGuildMpPercent:SetText(guildMpGrade)
-    if currentGuildMp < 0 then
-      currentGuildMp = 0
-    end
-    self._progressMpPoint:SetProgressRate(currentGuildMp / maxGuildMp * 100)
     local getGuildMoney = myGuildInfo:getGuildBusinessFunds_s64()
     self._txtGuildMoney:SetText(makeDotMoney(getGuildMoney))
     self._txtGuildMoney:SetSpanSize(self._txtGuildMoneyTitle:GetSpanSize().x + self._txtGuildMoneyTitle:GetTextSizeX() + 10, self._txtGuildMoney:GetSpanSize().y)
@@ -504,16 +466,12 @@ function GuildInfoPage:UpdateData()
     end
     local isGuildMaster = getSelfPlayer():get():isGuildMaster()
     if true == isGuildMaster then
-      self:SetShow(true)
       if 0 == myGuildInfo:getGuildGrade() then
       end
       local skillPointInfo = ToClient_getSkillPointInfo(3)
       local isEnable = ToClient_GetGuildSkillPointPerIncreaseMember() <= skillPointInfo._remainPoint
       self._btnIncreaseMember:SetMonoTone(not isEnable)
-    else
-      self:SetShow(false)
-      if 0 == myGuildInfo:getGuildGrade() then
-      end
+    elseif 0 == myGuildInfo:getGuildGrade() then
     end
     local isSet = setGuildTextureByGuildNo(myGuildInfo:getGuildNo_s64(), GuildInfoPage._iconGuildMark)
     if false == isSet then
@@ -570,7 +528,7 @@ function GuildLetsWarPage:initialize()
     self._txtLetsWarHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_LETSWARHELP"))
   end
   Panel_Guild_Declaration:SetSize(Panel_Guild_Declaration:GetSizeX(), self._txtLetsWarHelp:GetTextSizeY() + 10 + self._txtLetsWarTitle:GetSizeY() + self._btnLetsWarDoWar:GetSizeY() + 50)
-  self._letsWarBG:SetSize(self._letsWarBG:GetSizeX(), self._txtLetsWarHelp:GetTextSizeY() + 50)
+  self._letsWarBG:SetSize(self._letsWarBG:GetSizeX(), Panel_Guild_Declaration:GetSizeY() - self._txtLetsWarTitle:GetSizeY() - 8)
   self._txtLetsWarHelp:SetSize(self._txtLetsWarHelp:GetSizeX(), self._txtLetsWarHelp:GetTextSizeY() + 10)
   self._btnLetsWarDoWar:addInputEvent("Mouse_LUp", "HandleClickedLetsWar()")
   self._editLetsWarInputName:addInputEvent("Mouse_LUp", "HandleClickedLetsWarEditName()")
@@ -651,352 +609,321 @@ function HandleClicked_LetsWarHide()
   Panel_Guild_Declaration:SetShow(false)
 end
 local GuildWarInfoPage = {
-  _list = {},
-  _list2 = {},
   slotMaxCount = 4,
   _listCount = 0,
   _startIndex = 0
 }
 function GuildWarInfoPage:initialize()
   local constStartY = 450
-  self._txtWarInfoTitle = UI.getChildControl(Panel_Window_Guild, "StaticText_Title_WarInfo")
-  self._static_WarInfoBG = UI.getChildControl(Panel_Window_Guild, "Static_Menu_BG_1")
-  self._txtNoWar = UI.getChildControl(Panel_Window_Guild, "StaticText_NoWar")
-  self._txtWarHelp = UI.getChildControl(Panel_Window_Guild, "StaticText_WarInfo_help")
-  self._btnWarList1 = UI.getChildControl(Panel_Window_Guild, "RadioButton_WarList1")
-  self._btnWarList2 = UI.getChildControl(Panel_Window_Guild, "RadioButton_WarList2")
-  self._btnDeclaration = UI.getChildControl(Panel_Window_Guild, "Button_Declaration")
-  self._scroll = UI.getChildControl(Panel_Window_Guild, "Scroll_DeclareGuildWar")
-  local copyWarBG = UI.getChildControl(Panel_Window_Guild, "Static_C_WarBG")
-  local copyGuildIconBG = UI.getChildControl(Panel_Window_Guild, "Static_C_EnemyGuild_IconBG")
-  local copyGuildIcon = UI.getChildControl(Panel_Window_Guild, "Static_C_EnemyGuild_Icon")
-  local copyGuildName = UI.getChildControl(Panel_Window_Guild, "StaticText_C_EnemyGuild_Name")
-  local copyKill = UI.getChildControl(Panel_Window_Guild, "StaticText_C_Kill")
-  local copyDeath = UI.getChildControl(Panel_Window_Guild, "StaticText_C_Death")
-  local copyStopWar = UI.getChildControl(Panel_Window_Guild, "Button_C_WarStop")
-  local copyShowbu = UI.getChildControl(Panel_Window_Guild, "Button_C_Showbu")
-  local copyWarIcon = UI.getChildControl(Panel_Window_Guild, "Static_WarIcon")
-  Panel_Window_Guild:RemoveControl(self._static_WarInfoBG)
-  Panel_Window_Guild:RemoveControl(self._btnWarList1)
-  Panel_Window_Guild:RemoveControl(self._btnWarList2)
-  Panel_Window_Guild:RemoveControl(self._btnDeclaration)
-  self._txtWarInfoTitle:AddChild(self._static_WarInfoBG)
-  self._txtWarInfoTitle:AddChild(self._btnWarList1)
-  self._txtWarInfoTitle:AddChild(self._btnWarList2)
-  self._txtWarInfoTitle:AddChild(self._btnDeclaration)
-  self._static_WarInfoBG:SetSpanSize(0, self._txtWarInfoTitle:GetSizeY() + 25)
-  self._static_WarInfoBG:ComputePos()
-  if isGameTypeEnglish() or isGameTypeTH() or isGameTypeID() then
-    self._btnWarList1:SetSize(100, 23)
-    self._btnWarList2:SetSize(100, 23)
-    self._btnDeclaration:SetSize(120, 23)
-    self._btnDeclaration:SetSpanSize(260, 22)
-  else
-    self._btnWarList1:SetSize(70, 23)
-    self._btnWarList2:SetSize(70, 23)
-    self._btnDeclaration:SetSize(100, 23)
-    self._btnDeclaration:SetSpanSize(280, 22)
-  end
-  self._btnWarList1:SetPosX(10)
-  self._btnWarList1:SetPosY(23)
-  self._btnWarList2:SetPosX(self._btnWarList1:GetPosX() + self._btnWarList1:GetSizeX())
-  self._btnWarList2:SetPosY(23)
+  self._area_GuildWarInfo = UI.getChildControl(Panel_Window_Guild, "Static_WarArea")
+  self._area_GuildWarInfo:SetAlpha(0.5)
+  self._list2 = UI.getChildControl(self._area_GuildWarInfo, "List2_WarInfo")
+  self._list2_2 = UI.getChildControl(self._area_GuildWarInfo, "List2_WarInfo2")
+  self._list2_2:SetShow(false)
+  self._txtNoWar = UI.getChildControl(self._area_GuildWarInfo, "StaticText_NoWar")
+  self._btnWarList1 = UI.getChildControl(self._area_GuildWarInfo, "RadioButton_WarList1")
+  self._btnWarList2 = UI.getChildControl(self._area_GuildWarInfo, "RadioButton_WarList2")
+  self._btnDeclaration = UI.getChildControl(self._area_GuildWarInfo, "Button_Declaration")
+  self._txt_Title = UI.getChildControl(self._area_GuildWarInfo, "StaticText_WarInfo_Title")
+  self._list2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_GuildWarInfo_List2Event")
+  self._list2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  self._list2_2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_GuildWarInfo2_List2Event")
+  self._list2_2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._btnDeclaration:ComputePos()
-  self._static_WarInfoBG:AddChild(self._txtNoWar)
-  self._static_WarInfoBG:AddChild(self._txtWarHelp)
-  self._static_WarInfoBG:AddChild(self._scroll)
-  Panel_Window_Guild:RemoveControl(self._txtNoWar)
-  Panel_Window_Guild:RemoveControl(self._txtWarHelp)
-  Panel_Window_Guild:RemoveControl(self._scroll)
-  self._txtNoWar:SetSpanSize(30, 120)
-  self._txtNoWar:ComputePos()
-  self._txtWarHelp:SetSpanSize(5, 230)
-  self._txtWarHelp:ComputePos()
-  self._scroll:ComputePos()
   self._btnWarList1:addInputEvent("Mouse_LUp", "HandleClicked_WarInfoUpdate( " .. 1 .. " )")
   self._btnWarList2:addInputEvent("Mouse_LUp", "HandleClicked_WarInfoUpdate( " .. 2 .. " )")
   self._btnDeclaration:addInputEvent("Mouse_LUp", "HandleClicked_LetsWarShow()")
-  self._static_WarInfoBG:SetIgnore(false)
-  self._static_WarInfoBG:addInputEvent("Mouse_UpScroll", "GuildWarInfoPage_ScrollEvent( true )")
-  self._static_WarInfoBG:addInputEvent("Mouse_DownScroll", "GuildWarInfoPage_ScrollEvent( false )")
-  function createWarinfo(pIndex)
-    local rtGuildWarInfo = {}
-    rtGuildWarInfo._warBG = UI.createControl(UCT.PA_UI_CONTROL_STATIC, self._static_WarInfoBG, "Static_WarBG_" .. pIndex)
-    rtGuildWarInfo._guildIconBG = UI.createControl(UCT.PA_UI_CONTROL_STATIC, rtGuildWarInfo._warBG, "Static_GuildIconBG_" .. pIndex)
-    rtGuildWarInfo._guildIcon = UI.createControl(UCT.PA_UI_CONTROL_STATIC, rtGuildWarInfo._warBG, "Static_GuildIcon_" .. pIndex)
-    rtGuildWarInfo._txtGuildName = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, rtGuildWarInfo._warBG, "StaticText_GuildName_" .. pIndex)
-    rtGuildWarInfo._guildWarScore = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, rtGuildWarInfo._warBG, "StaticText_Kill_" .. pIndex)
-    rtGuildWarInfo._guildShowbuScore = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, rtGuildWarInfo._warBG, "StaticText_Death_" .. pIndex)
-    rtGuildWarInfo._txtStopWar = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, rtGuildWarInfo._warBG, "Button_WarStop_" .. pIndex)
-    rtGuildWarInfo._txtShowbu = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, rtGuildWarInfo._warBG, "Button_Showbu_" .. pIndex)
-    rtGuildWarInfo._WarIcon = UI.createControl(UCT.PA_UI_CONTROL_STATIC, rtGuildWarInfo._warBG, "Static_WarIcon_" .. pIndex)
-    rtGuildWarInfo._PenaltyType = 0
-    CopyBaseProperty(copyWarBG, rtGuildWarInfo._warBG)
-    CopyBaseProperty(copyGuildIconBG, rtGuildWarInfo._guildIconBG)
-    CopyBaseProperty(copyGuildIcon, rtGuildWarInfo._guildIcon)
-    CopyBaseProperty(copyGuildName, rtGuildWarInfo._txtGuildName)
-    CopyBaseProperty(copyKill, rtGuildWarInfo._guildWarScore)
-    CopyBaseProperty(copyDeath, rtGuildWarInfo._guildShowbuScore)
-    CopyBaseProperty(copyStopWar, rtGuildWarInfo._txtStopWar)
-    CopyBaseProperty(copyShowbu, rtGuildWarInfo._txtShowbu)
-    CopyBaseProperty(copyWarIcon, rtGuildWarInfo._WarIcon)
-    rtGuildWarInfo._warBG:SetSize(315, rtGuildWarInfo._warBG:GetSizeY())
-    rtGuildWarInfo._warBG:ComputePos()
-    rtGuildWarInfo._guildIconBG:ComputePos()
-    rtGuildWarInfo._guildIcon:ComputePos()
-    rtGuildWarInfo._txtGuildName:ComputePos()
-    rtGuildWarInfo._guildWarScore:ComputePos()
-    rtGuildWarInfo._guildShowbuScore:ComputePos()
-    rtGuildWarInfo._txtStopWar:ComputePos()
-    rtGuildWarInfo._txtShowbu:ComputePos()
-    rtGuildWarInfo._WarIcon:ComputePos()
-    rtGuildWarInfo._warBG:SetPosY(pIndex * 51 + 5)
-    rtGuildWarInfo._guildIconBG:SetPosY(pIndex + 4)
-    rtGuildWarInfo._guildIcon:SetPosY(pIndex + 5)
-    rtGuildWarInfo._txtGuildName:SetPosY(pIndex + 7)
-    rtGuildWarInfo._guildWarScore:SetPosY(pIndex + 25)
-    rtGuildWarInfo._guildShowbuScore:SetPosY(pIndex + 25)
-    rtGuildWarInfo._txtStopWar:SetPosY(pIndex + 5)
-    rtGuildWarInfo._WarIcon:SetPosY(pIndex + 6)
-    rtGuildWarInfo._txtStopWar:SetShow(false)
-    rtGuildWarInfo._txtShowbu:SetShow(false)
-    function rtGuildWarInfo:SetShow(isShow)
-      rtGuildWarInfo._warBG:SetShow(isShow)
-      rtGuildWarInfo._guildIconBG:SetShow(isShow)
-      rtGuildWarInfo._guildIcon:SetShow(isShow)
-      rtGuildWarInfo._txtGuildName:SetShow(isShow)
-      rtGuildWarInfo._guildWarScore:SetShow(isShow)
-      rtGuildWarInfo._txtStopWar:SetShow(isShow)
-      if isContentsGuildDuel then
-        rtGuildWarInfo._txtShowbu:SetShow(isShow)
-        rtGuildWarInfo._guildShowbuScore:SetShow(isShow)
-      end
-    end
-    function rtGuildWarInfo:GetShow()
-      return rtGuildWarInfo._warBG:GetShow()
-    end
-    function rtGuildWarInfo:SetData(pWarringGuild, gIdx)
-      local isSet = false
-      local guildNo_s64 = pWarringGuild:getGuildNo()
-      if pWarringGuild:isExist() then
-        isSet = setGuildTextureByGuildNo(guildNo_s64, rtGuildWarInfo._guildIcon)
-      end
-      if false == isSet then
-        rtGuildWarInfo._guildIcon:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(rtGuildWarInfo._guildIcon, 183, 1, 188, 6)
-        rtGuildWarInfo._guildIcon:getBaseTexture():setUV(x1, y1, x2, y2)
-        rtGuildWarInfo._guildIcon:setRenderTexture(rtGuildWarInfo._guildIcon:getBaseTexture())
-      else
-        rtGuildWarInfo._guildIcon:getBaseTexture():setUV(0, 0, 1, 1)
-        rtGuildWarInfo._guildIcon:setRenderTexture(rtGuildWarInfo._guildIcon:getBaseTexture())
-      end
-      if pWarringGuild:isExist() then
-        rtGuildWarInfo._txtGuildName:SetMonoTone(false)
-        rtGuildWarInfo._txtGuildName:SetText(pWarringGuild:getGuildName())
-      else
-        rtGuildWarInfo._txtGuildName:SetMonoTone(true)
-        rtGuildWarInfo._txtGuildName:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISSOLUTION"))
-      end
-      local guildWarKillScore = tostring(Uint64toUint32(pWarringGuild:getKillCount()))
-      local guildWarDeathScore = tostring(Uint64toUint32(pWarringGuild:getDeathCount()))
-      rtGuildWarInfo._guildWarScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDWARSCORE", "killCount", guildWarKillScore, "deathCount", guildWarDeathScore))
-      rtGuildWarInfo._guildShowbuScore:EraseAllEffect()
-      if isContentsGuildDuel then
-        if ToClient_IsGuildDuelingGuild(guildNo_s64) then
-          local guildDuelKillScore = tostring(ToClient_GetGuildDuelKillCount(guildNo_s64))
-          local guildDuelDeathScore = tostring(ToClient_GetGuildDuelDeathCount(guildNo_s64))
-          rtGuildWarInfo._guildShowbuScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUELSCORE", "killCount", guildDuelKillScore, "deathCount", guildDuelDeathScore))
-          rtGuildWarInfo._guildShowbuScore:SetPosX(rtGuildWarInfo._guildWarScore:GetPosX() + rtGuildWarInfo._guildWarScore:GetTextSizeX() + 10)
-          local deadline = ToClient_GetGuildDuelDeadline_s64(guildNo_s64)
-          if deadline < toInt64(0, 3600) then
-            rtGuildWarInfo._guildShowbuScore:AddEffect("UI_Quest_Complete_GoldAura", true, 0, 0)
-          end
-        else
-          rtGuildWarInfo._guildShowbuScore:addInputEvent("Mouse_On", "")
-          rtGuildWarInfo._guildShowbuScore:addInputEvent("Mouse_Out", "")
-          rtGuildWarInfo._guildShowbuScore:SetShow(false)
-        end
-      end
-      rtGuildWarInfo._txtShowbu:SetIgnore(false)
-      rtGuildWarInfo._txtShowbu:SetMonoTone(false)
-      rtGuildWarInfo._txtStopWar:addInputEvent("Mouse_LUp", "HandleClickedStopWar(" .. gIdx .. ")")
-      rtGuildWarInfo._txtShowbu:addInputEvent("Mouse_LUp", "HandleClickedGuildDuel(" .. gIdx .. ")")
-      if ToClient_IsGuildDuelingGuild(guildNo_s64) then
-        rtGuildWarInfo._txtShowbu:SetIgnore(true)
-        rtGuildWarInfo._txtShowbu:SetMonoTone(true)
-        rtGuildWarInfo._txtShowbu:addInputEvent("Mouse_LUp", "")
-      end
-      rtGuildWarInfo._PenaltyType = 7
-    end
-    return rtGuildWarInfo
-  end
-  for index = 0, constCreateWarInfoCount - 1 do
-    self._list[index] = createWarinfo(index)
-  end
-  function createWarinfo2(pIndex)
-    local rtGuildWarInfo = {}
-    rtGuildWarInfo._warBG = UI.createAndCopyBasePropertyControl(Panel_Window_Guild, "Static_C_WarBG", self._static_WarInfoBG, "Static_WarBG2_" .. pIndex)
-    rtGuildWarInfo._guildIconBG = UI.createAndCopyBasePropertyControl(Panel_Window_Guild, "Static_C_EnemyGuild_IconBG", rtGuildWarInfo._warBG, "Static_GuildIconBG2_" .. pIndex)
-    rtGuildWarInfo._guildIcon = UI.createAndCopyBasePropertyControl(Panel_Window_Guild, "Static_C_EnemyGuild_Icon", rtGuildWarInfo._warBG, "Static_GuildIcon2_" .. pIndex)
-    rtGuildWarInfo._txtGuildName = UI.createAndCopyBasePropertyControl(Panel_Window_Guild, "StaticText_C_EnemyGuild_Name", rtGuildWarInfo._warBG, "StaticText_GuildName2_" .. pIndex)
-    rtGuildWarInfo._txtGuildMaster = UI.createAndCopyBasePropertyControl(Panel_Window_Guild, "StaticText_C_Kill", rtGuildWarInfo._warBG, "StaticText_GuildShowbuScore2_" .. pIndex)
-    rtGuildWarInfo._warBG:ComputePos()
-    rtGuildWarInfo._guildIconBG:ComputePos()
-    rtGuildWarInfo._guildIcon:ComputePos()
-    rtGuildWarInfo._txtGuildName:ComputePos()
-    rtGuildWarInfo._txtGuildMaster:ComputePos()
-    rtGuildWarInfo._warBG:SetSize(315, rtGuildWarInfo._warBG:GetSizeY())
-    rtGuildWarInfo._warBG:SetPosY(pIndex * 51 + 5)
-    rtGuildWarInfo._guildIconBG:SetPosY(pIndex + 4)
-    rtGuildWarInfo._guildIcon:SetPosY(pIndex + 5)
-    rtGuildWarInfo._txtGuildName:SetPosY(pIndex + 7)
-    rtGuildWarInfo._txtGuildMaster:SetPosY(pIndex + 27)
-    function rtGuildWarInfo:SetShow(isShow)
-      rtGuildWarInfo._warBG:SetShow(isShow)
-      rtGuildWarInfo._guildIconBG:SetShow(isShow)
-      rtGuildWarInfo._guildIcon:SetShow(isShow)
-      rtGuildWarInfo._txtGuildName:SetShow(isShow)
-      rtGuildWarInfo._txtGuildMaster:SetShow(isShow)
-    end
-    function rtGuildWarInfo:GetShow()
-      return rtGuildWarInfo._warBG:GetShow()
-    end
-    function rtGuildWarInfo:SetData(guildWrapper)
-      if nil ~= guildWrapper then
-        local guildNo_s64 = tostring(guildWrapper:getGuildNo_s64())
-        local isSet = setGuildTextureByGuildNo(guildWrapper:getGuildNo_s64(), rtGuildWarInfo._guildIcon)
-        if false == isSet then
-          rtGuildWarInfo._guildIcon:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(rtGuildWarInfo._guildIcon, 183, 1, 188, 6)
-          rtGuildWarInfo._guildIcon:getBaseTexture():setUV(x1, y1, x2, y2)
-          rtGuildWarInfo._guildIcon:setRenderTexture(rtGuildWarInfo._guildIcon:getBaseTexture())
-        else
-          rtGuildWarInfo._guildIcon:getBaseTexture():setUV(0, 0, 1, 1)
-          rtGuildWarInfo._guildIcon:setRenderTexture(rtGuildWarInfo._guildIcon:getBaseTexture())
-        end
-        rtGuildWarInfo._txtGuildName:SetText(guildWrapper:getName())
-        rtGuildWarInfo._txtGuildMaster:SetText(guildWrapper:getGuildMasterName())
-      end
-    end
-    rtGuildWarInfo._warBG:SetIgnore(false)
-    rtGuildWarInfo._guildIconBG:SetIgnore(false)
-    rtGuildWarInfo._guildIcon:SetIgnore(false)
-    rtGuildWarInfo._txtGuildName:SetIgnore(false)
-    rtGuildWarInfo._warBG:addInputEvent("Mouse_UpScroll", "GuildWarInfoPage_ScrollEvent( true )")
-    rtGuildWarInfo._warBG:addInputEvent("Mouse_DownScroll", "GuildWarInfoPage_ScrollEvent( false )")
-    rtGuildWarInfo._guildIcon:addInputEvent("Mouse_UpScroll", "GuildWarInfoPage_ScrollEvent( true )")
-    rtGuildWarInfo._guildIcon:addInputEvent("Mouse_DownScroll", "GuildWarInfoPage_ScrollEvent( false )")
-    rtGuildWarInfo._txtGuildName:addInputEvent("Mouse_UpScroll", "GuildWarInfoPage_ScrollEvent( true )")
-    rtGuildWarInfo._txtGuildName:addInputEvent("Mouse_DownScroll", "GuildWarInfoPage_ScrollEvent( false )")
-    UIScroll.InputEvent(self._scroll, "GuildWarInfoPage_ScrollEvent")
-    return rtGuildWarInfo
-  end
-  for index = 0, constCreateWarInfoCount - 1 do
-    self._list2[index] = createWarinfo2(index)
-  end
+  self._txt_Title:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 12)")
+  self._txt_Title:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
+end
+function PaGlobal_GuildWarInfo_List2Event(contents, key)
+  local idx = Int64toInt32(key)
+  local self = GuildWarInfoPage
+  self._txtNoWar:SetSpanSize(30, 120)
+  self._txtNoWar:ComputePos()
   self._txtNoWar:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._txtNoWar:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOWAR"))
   self._txtNoWar:SetShow(false)
-  self._txtWarHelp:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self._txtWarHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_WARHELP"))
-  self._scroll:SetShow(false)
-  UI.deleteControl(copyWarBG)
-  UI.deleteControl(copyGuildIcon)
-  UI.deleteControl(copyGuildName)
-  UI.deleteControl(copyKill)
-  UI.deleteControl(copyDeath)
-  UI.deleteControl(copyStopWar)
-  UI.deleteControl(copyShowbu)
-  copyWarBG = nil
-  copyGuildIcon, copyGuildName, copyKill, copyDeath = nil, nil, nil, nil
-  copyWarBG = nil
-  self._txtWarInfoTitle:SetSpanSize(50, 395)
-  self._txtWarInfoTitle:ComputePos()
-  self._scroll:SetControlTop()
+  local isLeftIdx = 2 * idx
+  local isRightIdx = 2 * idx + 1
+  local isLeftChk = nil ~= ToClient_GetWarringGuildListAt(isLeftIdx)
+  local isRightChk = nil ~= ToClient_GetWarringGuildListAt(isRightIdx)
+  local isListCount = ToClient_GetWarringGuildListCount()
+  if isRightIdx >= isListCount then
+    isRightChk = false
+  end
+  if 0 == isListCount then
+    self._txtNoWar:SetShow(true)
+  end
+  local LeftGuildBG = UI.getChildControl(contents, "Static_Left_WarBG")
+  local LeftGuildIconBG = UI.getChildControl(contents, "Static_Left_GuildIconBG")
+  local LeftGuildIcon = UI.getChildControl(contents, "Static_Left_GuildIcon")
+  local LeftGuildName = UI.getChildControl(contents, "StaticText_Left_GuildName")
+  local LeftWarScore = UI.getChildControl(contents, "StaticText_Left_WarScore")
+  local LeftBattleScore = UI.getChildControl(contents, "StaticText_Left_GuildBattle")
+  local LeftWarIcon = UI.getChildControl(contents, "Static_Left_WarIcon")
+  local Left_Btn_WarStop = UI.getChildControl(contents, "Button_Left_WarStop")
+  local Left_Btn_GuildBattle = UI.getChildControl(contents, "Button_Left_GuildBattle")
+  LeftGuildBG:SetShow(isLeftChk)
+  LeftGuildIconBG:SetShow(isLeftChk)
+  LeftGuildIcon:SetShow(isLeftChk)
+  LeftGuildName:SetShow(isLeftChk)
+  LeftWarScore:SetShow(isLeftChk)
+  LeftBattleScore:SetShow(isLeftChk)
+  LeftWarIcon:SetShow(false)
+  Left_Btn_WarStop:SetShow(isLeftChk)
+  Left_Btn_GuildBattle:SetShow(isLeftChk)
+  local RightGuildBG = UI.getChildControl(contents, "Static_Right_WarBG")
+  local RightGuildIconBG = UI.getChildControl(contents, "Static_Right_GuildIconBG")
+  local RightGuildIcon = UI.getChildControl(contents, "Static_Right_GuildIcon")
+  local RightGuildName = UI.getChildControl(contents, "StaticText_Right_GuildName")
+  local RightWarScore = UI.getChildControl(contents, "StaticText_Right_WarScore")
+  local RightBattleScore = UI.getChildControl(contents, "StaticText_Right_GuildBattle")
+  local RightWarIcon = UI.getChildControl(contents, "Static_Right_WarIcon")
+  local Right_Btn_WarStop = UI.getChildControl(contents, "Button_Right_WarStop")
+  local Right_Btn_GuildBattle = UI.getChildControl(contents, "Button_Right_GuildBattle")
+  RightGuildBG:SetShow(isRightChk)
+  RightGuildIconBG:SetShow(isRightChk)
+  RightGuildIcon:SetShow(isRightChk)
+  RightGuildName:SetShow(isRightChk)
+  RightWarScore:SetShow(isRightChk)
+  RightBattleScore:SetShow(isRightChk)
+  RightWarIcon:SetShow(false)
+  Right_Btn_WarStop:SetShow(isRightChk)
+  Right_Btn_GuildBattle:SetShow(isRightChk)
+  if isLeftChk then
+    local isSet = false
+    local isGuildWarListInfo = ToClient_GetWarringGuildListAt(isLeftIdx)
+    local guildNo_s64 = isGuildWarListInfo:getGuildNo()
+    if isGuildWarListInfo:isExist() then
+      isSet = setGuildTextureByGuildNo(guildNo_s64, LeftGuildIcon)
+    end
+    if false == isSet then
+    else
+      LeftGuildIcon:getBaseTexture():setUV(0, 0, 1, 1)
+      LeftGuildIcon:setRenderTexture(LeftGuildIcon:getBaseTexture())
+      LeftGuildIcon:SetPosX(15)
+      LeftGuildIcon:SetPosY(11)
+    end
+    if isGuildWarListInfo:isExist() then
+      LeftGuildName:SetMonoTone(false)
+      LeftGuildName:SetText(isGuildWarListInfo:getGuildName())
+    else
+      LeftGuildName:SetMonoTone(true)
+      LeftGuildName:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISSOLUTION"))
+    end
+    local guildWarKillScore = tostring(Uint64toUint32(isGuildWarListInfo:getKillCount()))
+    local guildWarDeathScore = tostring(Uint64toUint32(isGuildWarListInfo:getDeathCount()))
+    LeftWarScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDWARSCORE", "killCount", guildWarKillScore, "deathCount", guildWarDeathScore))
+    LeftBattleScore:EraseAllEffect()
+    if isContentsGuildDuel then
+      if ToClient_IsGuildDuelingGuild(guildNo_s64) then
+        local guildDuelKillScore = tostring(ToClient_GetGuildDuelKillCount(guildNo_s64))
+        local guildDuelDeathScore = tostring(ToClient_GetGuildDuelDeathCount(guildNo_s64))
+        LeftBattleScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUELSCORE", "killCount", guildDuelKillScore, "deathCount", guildDuelDeathScore))
+        local deadline = ToClient_GetGuildDuelDeadline_s64(guildNo_s64)
+        if deadline < toInt64(0, 3600) then
+          LeftBattleScore:AddEffect("UI_Quest_Complete_GoldAura", true, 0, 0)
+        end
+      else
+        LeftBattleScore:addInputEvent("Mouse_On", "")
+        LeftBattleScore:addInputEvent("Mouse_Out", "")
+        LeftBattleScore:SetShow(false)
+      end
+    end
+    Left_Btn_WarStop:addInputEvent("Mouse_LUp", "HandleClickedStopWar(" .. isLeftIdx .. ")")
+    Left_Btn_WarStop:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. idx .. ", true )")
+    Left_Btn_WarStop:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", false, " .. idx .. ", true )")
+    Left_Btn_GuildBattle:addInputEvent("Mouse_LUp", "")
+    if isContentsGuildDuel then
+      LeftBattleScore:addInputEvent("Mouse_On", "HandleOnOut_GuildDuelInfo_Tooltip( true, " .. isLeftIdx .. ")")
+      LeftBattleScore:addInputEvent("Mouse_Out", "HandleOnOut_GuildDuelInfo_Tooltip( false, " .. isLeftIdx .. ")")
+    end
+    local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+    local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
+    if true == isGuildMaster or true == isGuildSubMaster then
+      Left_Btn_WarStop:SetShow(true)
+      Left_Btn_GuildBattle:SetShow(isContentsGuildDuel)
+    else
+      Left_Btn_WarStop:SetShow(false)
+      Left_Btn_GuildBattle:SetShow(false)
+    end
+  end
+  if isRightChk then
+    local isSet = false
+    local isGuildWarListInfo = ToClient_GetWarringGuildListAt(isRightIdx)
+    local guildNo_s64 = isGuildWarListInfo:getGuildNo()
+    if isGuildWarListInfo:isExist() then
+      isSet = setGuildTextureByGuildNo(guildNo_s64, RightGuildIcon)
+    end
+    if false == isSet then
+      RightGuildIcon:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(RightGuildIcon, 183, 1, 188, 6)
+      RightGuildIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+      RightGuildIcon:setRenderTexture(RightGuildIcon:getBaseTexture())
+    else
+      RightGuildIcon:getBaseTexture():setUV(0, 0, 1, 1)
+      RightGuildIcon:setRenderTexture(RightGuildIcon:getBaseTexture())
+    end
+    if isGuildWarListInfo:isExist() then
+      RightGuildName:SetMonoTone(false)
+      RightGuildName:SetText(isGuildWarListInfo:getGuildName())
+    else
+      RightGuildName:SetMonoTone(true)
+      RightGuildName:SetText(" " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_DISSOLUTION"))
+    end
+    local guildWarKillScore = tostring(Uint64toUint32(isGuildWarListInfo:getKillCount()))
+    local guildWarDeathScore = tostring(Uint64toUint32(isGuildWarListInfo:getDeathCount()))
+    RightWarScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDWARSCORE", "killCount", guildWarKillScore, "deathCount", guildWarDeathScore))
+    RightBattleScore:EraseAllEffect()
+    if isContentsGuildDuel then
+      if ToClient_IsGuildDuelingGuild(guildNo_s64) then
+        local guildDuelKillScore = tostring(ToClient_GetGuildDuelKillCount(guildNo_s64))
+        local guildDuelDeathScore = tostring(ToClient_GetGuildDuelDeathCount(guildNo_s64))
+        RightBattleScore:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUELSCORE", "killCount", guildDuelKillScore, "deathCount", guildDuelDeathScore))
+        RightBattleScore:SetPosX(RightWarScore:GetPosX() + RightWarScore:GetTextSizeX() + 10)
+        local deadline = ToClient_GetGuildDuelDeadline_s64(guildNo_s64)
+        if deadline < toInt64(0, 3600) then
+          RightBattleScore:AddEffect("UI_Quest_Complete_GoldAura", true, 0, 0)
+        end
+      else
+        RightBattleScore:addInputEvent("Mouse_On", "")
+        RightBattleScore:addInputEvent("Mouse_Out", "")
+        RightBattleScore:SetShow(false)
+      end
+    end
+    Right_Btn_WarStop:addInputEvent("Mouse_LUp", "HandleClickedStopWar(" .. isRightIdx .. ")")
+    Right_Btn_WarStop:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. idx .. ", false )")
+    Right_Btn_WarStop:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", false, " .. idx .. ", false )")
+    Right_Btn_GuildBattle:addInputEvent("Mouse_LUp", "")
+    if isContentsGuildDuel then
+      RightBattleScore:addInputEvent("Mouse_On", "HandleOnOut_GuildDuelInfo_Tooltip( true, " .. isRightIdx .. ")")
+      RightBattleScore:addInputEvent("Mouse_Out", "HandleOnOut_GuildDuelInfo_Tooltip( false, " .. isRightIdx .. ")")
+    end
+    local isGuildMaster = getSelfPlayer():get():isGuildMaster()
+    local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
+    if true == isGuildMaster or true == isGuildSubMaster then
+      Right_Btn_WarStop:SetShow(true)
+      Right_Btn_GuildBattle:SetShow(isContentsGuildDuel)
+    else
+      Right_Btn_WarStop:SetShow(false)
+      Right_Btn_GuildBattle:SetShow(false)
+    end
+  end
 end
-function GuildWarInfoPage_ScrollEvent(isUp)
+function PaGlobal_GuildWarInfo2_List2Event(contents, key)
+  local idx = Int64toInt32(key)
   local self = GuildWarInfoPage
-  self._startIndex = UIScroll.ScrollEvent(self._scroll, isUp, self.slotMaxCount, self._listCount, self._startIndex, 1)
-  self:UpdateData()
+  self._txtNoWar:SetSpanSize(30, 120)
+  self._txtNoWar:ComputePos()
+  self._txtNoWar:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self._txtNoWar:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOWAR"))
+  self._txtNoWar:SetShow(false)
+  local isLeftIdx = 2 * idx
+  local isRightIdx = 2 * idx + 1
+  local isLeftChk = nil ~= ToClient_GetDeclareGuildWarToMyGuild_s64(isLeftIdx)
+  local isRightChk = nil ~= ToClient_GetDeclareGuildWarToMyGuild_s64(isRightIdx)
+  local isListCount = ToClient_GetCountDeclareGuildWarToMyGuild()
+  if isRightIdx >= isListCount then
+    isRightChk = false
+  end
+  if 0 == isListCount then
+    self._txtNoWar:SetShow(true)
+  end
+  local Left_WarBG = UI.getChildControl(contents, "Static_Left_WarBG")
+  local Left_GuildIconBG = UI.getChildControl(contents, "Static_Left_EnemyGuild_IconBG")
+  local Left_GuildIcon = UI.getChildControl(contents, "Static_Left_GuildIcon")
+  local Left_GuildName = UI.getChildControl(contents, "StaticText_Left_GuildName")
+  local Left_GuildMaster = UI.getChildControl(contents, "StaticText_Left_GuildMaster")
+  Left_WarBG:SetShow(isLeftChk)
+  Left_GuildIconBG:SetShow(isLeftChk)
+  Left_GuildIcon:SetShow(isLeftChk)
+  Left_GuildName:SetShow(isLeftChk)
+  Left_GuildMaster:SetShow(isLeftChk)
+  local Right_WarBG = UI.getChildControl(contents, "Static_Right_WarBG")
+  local Right_GuildIconBG = UI.getChildControl(contents, "Static_Right_EnemyGuild_IconBG")
+  local Right_GuildIcon = UI.getChildControl(contents, "Static_Right_GuildIcon")
+  local Right_GuildName = UI.getChildControl(contents, "StaticText_Right_GuildName")
+  local Right_GuildMaster = UI.getChildControl(contents, "StaticText_Right_GuildMaster")
+  Right_WarBG:SetShow(isRightChk)
+  Right_GuildIconBG:SetShow(isRightChk)
+  Right_GuildIcon:SetShow(isRightChk)
+  Right_GuildName:SetShow(isRightChk)
+  Right_GuildMaster:SetShow(isRightChk)
+  if isLeftChk then
+    local guildNo = ToClient_GetDeclareGuildWarToMyGuild_s64(isLeftIdx)
+    local guildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildNo)
+    self._txtNoWar:SetSpanSize(30, 120)
+    self._txtNoWar:ComputePos()
+    self._txtNoWar:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    self._txtNoWar:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOWAR"))
+    self._txtNoWar:SetShow(false)
+    if nil ~= guildWrapper then
+      local guildNo_s64 = tostring(guildWrapper:getGuildNo_s64())
+      local isSet = setGuildTextureByGuildNo(guildWrapper:getGuildNo_s64(), Left_GuildIcon)
+      if false == isSet then
+        Left_GuildIcon:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(Left_GuildIcon, 183, 1, 188, 6)
+        Left_GuildIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+        Left_GuildIcon:setRenderTexture(Left_GuildIcon:getBaseTexture())
+      else
+        Left_GuildIcon:getBaseTexture():setUV(0, 0, 1, 1)
+        Left_GuildIcon:setRenderTexture(Left_GuildIcon:getBaseTexture())
+      end
+      Left_GuildName:SetText(guildWrapper:getName())
+      Left_GuildMaster:SetText(guildWrapper:getGuildMasterName())
+    end
+  end
+  if isRightChk then
+    local guildNo = ToClient_GetDeclareGuildWarToMyGuild_s64(isRightIdx)
+    local guildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildNo)
+    self._txtNoWar:SetSpanSize(30, 120)
+    self._txtNoWar:ComputePos()
+    self._txtNoWar:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    self._txtNoWar:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOWAR"))
+    self._txtNoWar:SetShow(false)
+    if nil ~= guildWrapper then
+      local guildNo_s64 = tostring(guildWrapper:getGuildNo_s64())
+      local isSet = setGuildTextureByGuildNo(guildWrapper:getGuildNo_s64(), Right_GuildIcon)
+      if false == isSet then
+        Right_GuildIcon:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(Right_GuildIcon, 183, 1, 188, 6)
+        Right_GuildIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+        Right_GuildIcon:setRenderTexture(Right_GuildIcon:getBaseTexture())
+      else
+        Right_GuildIcon:getBaseTexture():setUV(0, 0, 1, 1)
+        Right_GuildIcon:setRenderTexture(Right_GuildIcon:getBaseTexture())
+      end
+      Right_GuildName:SetText(guildWrapper:getName())
+      Right_GuildMaster:SetText(guildWrapper:getGuildMasterName())
+    end
+  end
 end
 function HandleClickedStopWar(index)
   ToClient_RequestStopGuildWar(index)
 end
 function GuildWarInfoPage:UpdateData()
-  for index = 0, constCreateWarInfoCount - 1 do
-    self._list[index]:SetShow(false)
-  end
-  for index = 0, constCreateWarInfoCount - 1 do
-    self._list2[index]:SetShow(false)
-  end
-  self._listCount = 0
-  self._scroll:SetShow(false)
   ToClient_RequestDeclareGuildWarToMyGuild()
   if self._btnWarList1:IsCheck() then
-    self._listCount = ToClient_GetWarringGuildListCount()
-    UIScroll.SetButtonSize(self._scroll, self.slotMaxCount, self._listCount)
-    if 0 == self._listCount then
+    self._list2:SetShow(true)
+    self._list2_2:SetShow(false)
+    self._list2:getElementManager():clearKey()
+    local isListCount = ToClient_GetWarringGuildListCount()
+    local isList2thCount = math.ceil(isListCount / 2)
+    for index = 0, isList2thCount - 1 do
+      self._list2:getElementManager():pushKey(index)
+    end
+    if 0 == isListCount then
       self._txtNoWar:SetShow(true)
-    else
-      if constCreateWarInfoCount < self._listCount then
-        self._scroll:SetShow(true)
-      end
-      local uiIdx = 0
-      for index = self._startIndex, self._listCount - 1 do
-        if uiIdx >= constCreateWarInfoCount then
-          break
-        end
-        if index < self._listCount then
-          self._txtNoWar:SetShow(false)
-          self._list[uiIdx]:SetShow(true)
-          self._list[uiIdx]:SetData(ToClient_GetWarringGuildListAt(index), index)
-          self._list[uiIdx]._txtStopWar:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. uiIdx .. " )")
-          self._list[uiIdx]._txtStopWar:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", false, " .. uiIdx .. " )")
-          self._list[uiIdx]._txtShowbu:addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 10 .. ", true, " .. uiIdx .. " )")
-          self._list[uiIdx]._txtShowbu:addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 10 .. ", false, " .. uiIdx .. " )")
-          if isContentsGuildDuel then
-            self._list[uiIdx]._guildShowbuScore:addInputEvent("Mouse_On", "HandleOnOut_GuildDuelInfo_Tooltip( true,\t" .. index .. ", " .. uiIdx .. " )")
-            self._list[uiIdx]._guildShowbuScore:addInputEvent("Mouse_Out", "HandleOnOut_GuildDuelInfo_Tooltip( false,\t" .. index .. ", " .. uiIdx .. " )")
-          end
-          local isGuildMaster = getSelfPlayer():get():isGuildMaster()
-          local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
-          if true == isGuildMaster or true == isGuildSubMaster then
-            self._list[uiIdx]._txtStopWar:SetShow(true)
-            self._list[uiIdx]._txtShowbu:SetShow(isContentsGuildDuel)
-          else
-            self._list[uiIdx]._txtStopWar:SetShow(false)
-            self._list[uiIdx]._txtShowbu:SetShow(false)
-          end
-        else
-          self._list[uiIdx]:SetShow(false)
-        end
-        uiIdx = uiIdx + 1
-      end
     end
   else
-    self._listCount = ToClient_GetCountDeclareGuildWarToMyGuild()
-    UIScroll.SetButtonSize(self._scroll, self.slotMaxCount, self._listCount)
-    if 0 == self._listCount then
-      self._txtNoWar:SetShow(true)
-    else
-      for index = 0, constCreateWarInfoCount - 1 do
-        self._list2[index]:SetShow(false)
-      end
-      if constCreateWarInfoCount < self._listCount then
-        self._scroll:SetShow(true)
-      end
-      local uiIdx = 0
-      for index = self._startIndex, self._listCount - 1 do
-        if uiIdx >= constCreateWarInfoCount then
-          break
-        end
-        self._txtNoWar:SetShow(false)
-        local guildNo = ToClient_GetDeclareGuildWarToMyGuild_s64(index)
-        local guildWrapper = ToClient_GetGuildInfoWrapperByGuildNo(guildNo)
-        self._list2[uiIdx]:SetShow(true)
-        self._list2[uiIdx]:SetData(guildWrapper)
-        uiIdx = uiIdx + 1
-      end
+    self._list2:SetShow(false)
+    self._list2_2:SetShow(true)
+    self._list2_2:getElementManager():clearKey()
+    local isListCount = ToClient_GetCountDeclareGuildWarToMyGuild()
+    local isList2thCount = math.ceil(isListCount / 2)
+    for index = 0, isList2thCount - 1 do
+      self._list2_2:getElementManager():pushKey(index)
     end
   end
 end
@@ -1008,22 +935,15 @@ function HandleClicked_WarInfoUpdate(typeNo)
       return
     end
     warInfoTypeIsMine = true
-    self._startIndex = 0
-    self._scroll:SetControlTop()
   else
     if false == warInfoTypeIsMine then
       return
     end
     warInfoTypeIsMine = false
-    self._startIndex = 0
-    self._scroll:SetControlTop()
   end
   self:UpdateData()
 end
-GuildManager = {
-  _mainTagName = UI.getChildControl(Panel_Window_Guild, "StaticText_MenuTag"),
-  _doHaveSeige = false
-}
+GuildManager = {_doHaveSeige = false}
 local _txt_Help_History = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_History")
 local _txt_Help_GuildMember = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_GuildMember")
 local _txt_Help_GuildQuest = UI.getChildControl(Panel_Window_Guild, "StaticText_Help_GuildQuest")
@@ -1045,7 +965,6 @@ function GuildManager:initialize()
   self.mainBtn_GuildAllianceList = UI.getChildControl(Panel_Window_Guild, "Button_Tab_AllianceList")
   self.closeButton = UI.getChildControl(Panel_Window_Guild, "Button_Close")
   self._buttonQuestion = UI.getChildControl(Panel_Window_Guild, "Button_Question")
-  self.historyBG = UI.getChildControl(Panel_Window_Guild, "Static_Frame_HistoryBG")
   self.mainBtn_Main:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 99 )")
   self.mainBtn_History:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 0 )")
   self.mainBtn_Info:addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 1 )")
@@ -1109,12 +1028,6 @@ function GuildManager:initialize()
   GuildSkillFrame_Init()
   Guild_Recruitment_Initialize()
   FGlobal_Guild_CraftInfo_Init()
-  function self:ChangeTab(pText, pX1, pY1, pX2, pY2)
-    local x1, y1, x2, y2 = setTextureUV_Func(self._mainTagName, pX1, pY1, pX2, pY2)
-    self._mainTagName:SetText(pText)
-    self._mainTagName:getBaseTexture():setUV(x1, y1, x2, y2)
-    self._mainTagName:setRenderTexture(self._mainTagName:getBaseTexture())
-  end
   guildManagerButtonPositionList[0] = self.mainBtn_Main:GetPosX()
   guildManagerButtonPositionList[1] = self.mainBtn_Info:GetPosX()
   guildManagerButtonPositionList[2] = self.mainBtn_Quest:GetPosX()
@@ -1132,7 +1045,21 @@ function HandleClickedGuildHideButton()
   checkPopUp:SetCheck(false)
   GuildManager:Hide()
 end
-function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
+function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index, isLeft)
+  local control = GuildWarInfoPage._list2
+  local contents = control:GetContentByKey(toInt64(0, inPut_index))
+  local btn_WarStop, btn_WarIcon
+  if nil ~= inPut_index then
+    if isLeft then
+      contents = control:GetContentByKey(toInt64(0, inPut_index))
+      btn_WarStop = UI.getChildControl(contents, "Button_Left_WarStop")
+      btn_WarIcon = UI.getChildControl(contents, "Static_Left_WarIcon")
+    else
+      contents = control:GetContentByKey(toInt64(0, inPut_index))
+      btn_WarStop = UI.getChildControl(contents, "Button_Right_WarStop")
+      btn_WarIcon = UI.getChildControl(contents, "Static_Right_WarIcon")
+    end
+  end
   if true == isOn then
     local uiControl, name, desc
     if 0 == tabNo then
@@ -1164,7 +1091,7 @@ function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_HELP_WARINFO")
       desc = nil
     elseif 7 == tabNo then
-      uiControl = GuildWarInfoPage._list[inPut_index]._WarIcon
+      uiControl = btn_WarIcon
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PENALTY")
       desc = nil
     elseif 8 == tabNo then
@@ -1172,11 +1099,10 @@ function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_HELP_PROTECTADD")
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROTECTADD_DESC")
     elseif 9 == tabNo then
-      uiControl = GuildWarInfoPage._list[inPut_index]._txtStopWar
+      uiControl = btn_WarStop
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_WARSTOP")
       desc = nil
     elseif 10 == tabNo then
-      uiControl = GuildWarInfoPage._list[inPut_index]._txtShowbu
       name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_WARREQUEST")
       desc = nil
     elseif 11 == tabNo then
@@ -1210,15 +1136,19 @@ function Panel_Guild_Tab_ToolTip_Func(tabNo, isOn, inPut_index)
   end
 end
 function GuildSimplTooltips(isShow, tipType)
+  if not isShow then
+    TooltipSimple_Hide()
+    return false
+  end
   local name, desc, control
   if 0 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMASTER_MANDATE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMASTER_MANDATE_TOOLTIP_DESC")
-    control = btn_GuildMasterMandate
+    control = GuildInfoPage._btn_GuildMasterMandate
   elseif 1 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMASTER_MANDATE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMASTER_MANDATE_TOOLTIP_DESC")
-    control = btn_GuildMasterMandateBG
+    control = GuildInfoPage._btn_GuildMasterMandateBG
   elseif 2 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMARK_BTN_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMARK_BTN_TOOLTIP_DESC")
@@ -1258,15 +1188,21 @@ function GuildSimplTooltips(isShow, tipType)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_REGION_EXTRICATE_TOOLTIP_DESC")
     control = GuildInfoPage._btnEvacuation
+  elseif 12 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_WARHELP")
+    control = GuildWarInfoPage._txt_Title
+  elseif 13 == tipType then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHAT_SOCIALMENU_BTN_RESET")
+    control = GuildInfoPage._introduce_Reset
+  elseif 14 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDINTRODUCE_WRITE_TOOLTIP_TITLE")
+    control = GuildInfoPage._introduce_edit
   end
-  if true == isShow then
-    TooltipSimple_Show(control, name, desc)
-  else
-    TooltipSimple_Hide()
-  end
+  TooltipSimple_Show(control, name, desc)
 end
 local _index
 function GuildManager:TabToggle(index)
+  GuildInfoPage._area_MainBG:SetSize(924, 642)
   if 10 == index then
     local _isGuildAllianceMember = getSelfPlayer():get():isGuildAllianceMember()
     if true ~= _isGuildAllianceMember then
@@ -1287,7 +1223,6 @@ function GuildManager:TabToggle(index)
       return
     end
   end
-  self._mainTagName:ChangeTextureInfoName("New_UI_Common_forLua/Window/Guild/Guild_00.dds")
   tabNumber = 99
   self.mainBtn_Main:SetCheck(index == 99)
   self.mainBtn_History:SetCheck(index == 0)
@@ -1303,11 +1238,10 @@ function GuildManager:TabToggle(index)
   self.mainBtn_GuildAllianceList:SetCheck(10 == index)
   if getSelfPlayer():get():isGuildMaster() and getSelfPlayer():get():isGuildSubMaster() then
     FGlobal_ClearCandidate()
-    _Web:ResetUrl()
+    GuildInfoPage._Web:ResetUrl()
   end
   PaGlobal_Guild_Manufacture:SetShow(false)
   if 0 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDHISTORY"), 92, 1, 104, 15)
     FGlobal_GuildHistory_Show(true)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1315,11 +1249,10 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
     GuildMainInfo_Hide()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 0
   elseif 1 == index then
@@ -1328,11 +1261,6 @@ function GuildManager:TabToggle(index)
     if nil ~= myGuildInfo then
       guildGrade = myGuildInfo:getGuildGrade()
     end
-    if 0 == guildGrade then
-      self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_CLAN_MEMBERINFO"), 107, 1, 119, 15)
-    else
-      self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDLIST"), 107, 1, 119, 15)
-    end
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Show()
     GuildQuestInfoPage:Hide()
@@ -1340,15 +1268,14 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
     GuildMainInfo_Hide()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 1
   elseif 2 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDQUEST"), 122, 1, 134, 15)
+    GuildInfoPage._area_MainBG:SetSize(924, 600)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Show()
@@ -1356,15 +1283,13 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     GuildMainInfo_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 2
   elseif 3 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDSKILL"), 137, 1, 149, 15)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1372,15 +1297,13 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Show()
     GuildMainInfo_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 3
   elseif 4 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDWARFAREINFO"), 152, 1, 164, 15)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1388,11 +1311,10 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     GuildMainInfo_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 4
   elseif 5 == index then
@@ -1415,7 +1337,6 @@ function GuildManager:TabToggle(index)
       self.mainBtn_GuildAllianceList:SetCheck(_index == 10)
       return
     end
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENTGUILD"), 152, 1, 164, 15)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1423,17 +1344,15 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     GuildMainInfo_Hide()
     Guild_Recruitment_Open()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 5
   elseif 99 == index then
     GuildMainInfo_Show()
     FGlobal_GuildHistory_Show(false)
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE"), 107, 1, 119, 15)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
     GuildWarfareInfoPage:Hide()
@@ -1441,11 +1360,9 @@ function GuildManager:TabToggle(index)
     Guild_Recruitment_Close()
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 99
   elseif 6 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE"), 107, 1, 119, 15)
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
     GuildListInfoPage:Hide()
@@ -1453,11 +1370,10 @@ function GuildManager:TabToggle(index)
     GuildWarfareInfoPage:Hide()
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 6
   elseif 7 == index then
@@ -1466,7 +1382,6 @@ function GuildManager:TabToggle(index)
       self.mainBtn_GuildBattle:SetCheck(false)
       return
     end
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE"), 107, 1, 119, 15)
     FGlobal_GuildBattle_Open()
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
@@ -1475,14 +1390,12 @@ function GuildManager:TabToggle(index)
     GuildWarfareInfoPage:Hide()
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     FGlobal_GuildAlliance_Show(false)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 7
   elseif 8 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDMANUFACTURE"), 122, 1, 134, 15)
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
     GuildListInfoPage:Hide()
@@ -1490,16 +1403,14 @@ function GuildManager:TabToggle(index)
     GuildWarfareInfoPage:Hide()
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     FGlobal_GuildBattle_Close()
     FGlobal_GuildAlliance_Show(false)
     PaGlobal_Guild_Manufacture:SetShow(true)
-    self.historyBG:SetShow(true)
     FGlobal_GuildAllianceList_Open(false)
     tabNumber = 8
   elseif 9 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCE_TITLE"), 122, 1, 134, 15)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1507,10 +1418,9 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
     GuildMainInfo_Hide()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
-    self.historyBG:SetShow(false)
     FGlobal_GuildAllianceList_Open(false)
     local guildAlliance = ToClient_GetMyGuildAllianceWrapper()
     local _isGuildMaster = getSelfPlayer():get():isGuildMaster()
@@ -1527,7 +1437,6 @@ function GuildManager:TabToggle(index)
     end
     tabNumber = 9
   elseif 10 == index then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TAB_ALLIANCELISTITLE"), 122, 1, 134, 15)
     FGlobal_GuildHistory_Show(false)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
@@ -1535,10 +1444,9 @@ function GuildManager:TabToggle(index)
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
     GuildMainInfo_Hide()
-    btn_GuildMasterMandateBG:SetShow(false)
-    btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
     PaGlobal_GuildBattle:Close()
-    self.historyBG:SetShow(false)
     FGlobal_GuildAlliance_Show(false)
     FGlobal_GuildAllianceList_Open(true)
     tabNumber = 10
@@ -1572,7 +1480,7 @@ function GuildManager:Hide()
     ClearFocusEdit()
   end
   FGlobal_ClearCandidate()
-  _Web:ResetUrl()
+  GuildInfoPage._Web:ResetUrl()
 end
 function GuildManager:Show()
   if false == Panel_Window_Guild:IsShow() then
@@ -1641,8 +1549,6 @@ function GuildManager:Show()
     self.mainBtn_CraftInfo:SetMonoTone(false)
     GuildWarInfoPage._btnWarList1:SetCheck(true)
     GuildWarInfoPage._btnWarList2:SetCheck(false)
-    GuildWarInfoPage._startIndex = 0
-    GuildWarInfoPage._scroll:SetControlPos(0)
     if isDeadInWatchingMode() and not Panel_DeadMessage:GetShow() then
       GuildManager:TabToggle(4)
       self.mainBtn_Main:SetCheck(false)
@@ -1723,9 +1629,9 @@ function GuildComment_Load()
     FGlobal_SetCandidate()
     local url = guildCommentsWebUrl .. "/guild?guildNo=" .. tostring(guildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin)
     _urlCache = url
-    _Web:ResetUrl()
-    _Web:SetUrl(373, 272, url, false, true)
-    _Web:SetIME(true)
+    GuildInfoPage._Web:ResetUrl()
+    GuildInfoPage._Web:SetUrl(474, 216, url, false, true)
+    GuildInfoPage._Web:SetIME(true)
   end
 end
 function GuildMainInfo_MandateBtn()
@@ -1740,36 +1646,36 @@ function GuildMainInfo_MandateBtn()
   local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
   if toInt64(0, -1) == myGuildInfo:getGuildMasterUserNo() then
     if not isGuildMaster then
-      btn_GuildMasterMandate:SetShow(true)
-      btn_GuildMasterMandateBG:SetShow(false)
-      btn_GuildMasterMandate:SetEnable(true)
-      btn_GuildMasterMandate:SetMonoTone(false)
-      btn_GuildMasterMandate:SetFontColor(UI_color.C_FF00C0D7)
+      GuildInfoPage._btn_GuildMasterMandate:SetShow(true)
+      GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+      GuildInfoPage._btn_GuildMasterMandate:SetEnable(true)
+      GuildInfoPage._btn_GuildMasterMandate:SetMonoTone(false)
+      GuildInfoPage._btn_GuildMasterMandate:SetFontColor(UI_color.C_FF00C0D7)
     end
   elseif isGuildSubMaster then
     if ToClient_IsAbleChangeMaster() then
       if myGuildInfo:getGuildBusinessFunds_s64() < toInt64(0, 20000000) then
-        btn_GuildMasterMandate:SetShow(true)
-        btn_GuildMasterMandateBG:SetShow(true)
-        btn_GuildMasterMandate:SetEnable(false)
-        btn_GuildMasterMandate:SetMonoTone(true)
-        btn_GuildMasterMandate:SetFontColor(UI_color.C_FFC4BEBE)
+        GuildInfoPage._btn_GuildMasterMandate:SetShow(true)
+        GuildInfoPage._btn_GuildMasterMandateBG:SetShow(true)
+        GuildInfoPage._btn_GuildMasterMandate:SetEnable(false)
+        GuildInfoPage._btn_GuildMasterMandate:SetMonoTone(true)
+        GuildInfoPage._btn_GuildMasterMandate:SetFontColor(UI_color.C_FFC4BEBE)
       else
-        btn_GuildMasterMandate:SetShow(true)
-        btn_GuildMasterMandateBG:SetShow(false)
-        btn_GuildMasterMandate:SetEnable(true)
-        btn_GuildMasterMandate:SetMonoTone(false)
-        btn_GuildMasterMandate:SetFontColor(UI_color.C_FF00C0D7)
+        GuildInfoPage._btn_GuildMasterMandate:SetShow(true)
+        GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
+        GuildInfoPage._btn_GuildMasterMandate:SetEnable(true)
+        GuildInfoPage._btn_GuildMasterMandate:SetMonoTone(false)
+        GuildInfoPage._btn_GuildMasterMandate:SetFontColor(UI_color.C_FF00C0D7)
       end
     else
-      btn_GuildMasterMandate:SetShow(true)
-      btn_GuildMasterMandate:SetEnable(false)
-      btn_GuildMasterMandateBG:SetShow(true)
-      btn_GuildMasterMandate:SetMonoTone(true)
+      GuildInfoPage._btn_GuildMasterMandate:SetShow(true)
+      GuildInfoPage._btn_GuildMasterMandate:SetEnable(false)
+      GuildInfoPage._btn_GuildMasterMandateBG:SetShow(true)
+      GuildInfoPage._btn_GuildMasterMandate:SetMonoTone(true)
     end
   else
-    btn_GuildMasterMandate:SetShow(false)
-    btn_GuildMasterMandateBG:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandate:SetShow(false)
+    GuildInfoPage._btn_GuildMasterMandateBG:SetShow(false)
     TooltipSimple_Hide()
   end
 end
@@ -1790,74 +1696,69 @@ function GuildMainInfo_Show()
       hasOccupyTerritory = myGuildAllianceChair:getHasSiegeCount()
     end
   end
-  GuildWarInfoPage._txtWarInfoTitle:SetShow(true)
   if isGuildMaster then
+    GuildWarInfoPage._area_GuildWarInfo:SetShow(true)
     GuildInfoPage._btnChangeMark:SetShow(true)
     notice_btn:SetShow(true)
-    promote_btn:SetShow(true)
-    introduce_btn:SetShow(true)
-    introduce_Reset:SetShow(true)
+    GuildInfoPage._promote_btn:SetShow(true)
+    GuildInfoPage._introduce_btn:SetShow(true)
+    GuildInfoPage._introduce_Reset:SetShow(true)
     GuildWarInfoPage._btnDeclaration:SetShow(true)
     GuildInfoPage._btnIncreaseMember:SetShow(true)
     if isProtectGuildMember then
       GuildInfoPage._btnProtectAdd:SetShow(true)
     end
     if isGameTypeTaiwan() then
-      introduce_edit_TW:SetEnable(true)
+      GuildInfoPage._introduce_edit_TW:SetEnable(true)
     else
-      introduce_edit:SetEnable(true)
+      GuildInfoPage._introduce_edit:SetEnable(true)
     end
   elseif isGuildSubMaster then
+    GuildWarInfoPage._area_GuildWarInfo:SetShow(true)
     GuildInfoPage._btnChangeMark:SetShow(false)
     notice_btn:SetShow(true)
-    promote_btn:SetShow(true)
-    introduce_btn:SetShow(true)
-    introduce_Reset:SetShow(true)
+    GuildInfoPage._promote_btn:SetShow(true)
+    GuildInfoPage._introduce_btn:SetShow(true)
+    GuildInfoPage._introduce_Reset:SetShow(true)
     GuildWarInfoPage._btnDeclaration:SetShow(true)
     GuildInfoPage._btnIncreaseMember:SetShow(false)
     GuildInfoPage._btnProtectAdd:SetShow(false)
     if isGameTypeTaiwan() then
-      introduce_edit_TW:SetEnable(true)
+      GuildInfoPage._introduce_edit_TW:SetEnable(true)
     else
-      introduce_edit:SetEnable(true)
+      GuildInfoPage._introduce_edit:SetEnable(true)
     end
   else
+    GuildWarInfoPage._area_GuildWarInfo:SetShow(true)
     GuildInfoPage._btnChangeMark:SetShow(false)
     notice_btn:SetShow(false)
-    promote_btn:SetShow(false)
-    introduce_btn:SetShow(false)
-    introduce_Reset:SetShow(false)
+    GuildInfoPage._promote_btn:SetShow(false)
+    GuildInfoPage._introduce_btn:SetShow(false)
+    GuildInfoPage._introduce_Reset:SetShow(false)
     GuildWarInfoPage._btnDeclaration:SetShow(false)
     GuildInfoPage._btnIncreaseMember:SetShow(false)
     GuildInfoPage._btnProtectAdd:SetShow(false)
     if isGameTypeTaiwan() then
-      introduce_edit_TW:SetEnable(false)
+      GuildInfoPage._introduce_edit_TW:SetEnable(false)
     else
-      introduce_edit:SetEnable(false)
+      GuildInfoPage._introduce_edit:SetEnable(false)
     end
   end
   if 0 ~= hasOccupyTerritory then
     GuildInfoPage._iconOccupyTerritory:SetShow(true)
   else
-    GuildInfoPage._iconOccupyTerritory:SetShow(false)
+    GuildInfoPage._iconOccupyTerritory:SetShow(true)
   end
   notice_title:SetShow(true)
   notice_edit:SetShow(true)
   if isGameTypeTaiwan() then
-    introduce_edit_TW:SetShow(true)
-    introduce_edit:SetShow(false)
+    GuildInfoPage._introduce_edit_TW:SetShow(true)
+    GuildInfoPage._introduce_edit:SetShow(false)
   else
-    introduce_edit:SetShow(true)
-    introduce_edit_TW:SetShow(false)
+    GuildInfoPage._introduce_edit:SetShow(true)
+    GuildInfoPage._introduce_edit_TW:SetShow(false)
   end
-  if isGameTypeEnglish() then
-    GuildInfoPage._txtMaster:SetShow(false)
-    GuildInfoPage._txtGuildName:SetShow(false)
-  else
-    GuildInfoPage._txtMaster:SetShow(true)
-    GuildInfoPage._txtGuildName:SetShow(true)
-  end
-  GuildInfoPage._textGuildInfoTitle:SetShow(true)
+  GuildInfoPage._area_Introduce:SetShow(true)
   GuildInfoPage._guildMainBG:SetShow(true)
   GuildInfoPage._iconGuildMark:SetShow(true)
   GuildInfoPage._txtRGuildName:SetShow(true)
@@ -1867,15 +1768,11 @@ function GuildMainInfo_Show()
   GuildInfoPage._txtGuildPoint:SetShow(true)
   GuildInfoPage._txtGuildPointValue:SetShow(true)
   GuildInfoPage._txtGuildPointPercent:SetShow(true)
-  GuildInfoPage._txtGuildMpValue:SetShow(false)
-  GuildInfoPage._txtGuildMpPercent:SetShow(false)
-  GuildInfoPage._progressMpPoint:SetShow(false)
   GuildInfoPage._btnGuildDel:SetShow(true)
-  GuildInfoPage._guildIntroduce_Title:SetShow(true)
-  GuildInfoPage._guildIntroduce_BG:SetShow(true)
-  GuildInfoPage._guildBbs_Title:SetShow(true)
-  GuildInfoPage._guildBbs_BG:SetShow(true)
   GuildInfoPage._planning:SetShow(true)
+  GuildInfoPage._area_TodayComment:SetShow(true)
+  GuildInfoPage._line_Top:SetShow(true)
+  GuildInfoPage._area_Info:SetShow(true)
   GuildInfoPage._txtProtect:SetShow(true)
   GuildInfoPage._txtProtectValue:SetShow(true)
   GuildInfoPage._txtGuildMoneyTitle:SetShow(true)
@@ -1906,7 +1803,7 @@ function GuildMainInfo_Show()
     GuildInfoPage._btnChangeMark:SetShow(false)
   end
   if nil ~= guildCommentsWebUrl then
-    _Web:SetShow(true)
+    GuildInfoPage._Web:SetShow(true)
   end
 end
 function guildCommentsUrlByServiceType()
@@ -1965,22 +1862,14 @@ function guildCommentsUrlByServiceType()
   return url
 end
 function GuildMainInfo_Hide()
-  GuildWarInfoPage._txtWarInfoTitle:SetShow(false)
-  _Web:SetShow(false)
+  GuildInfoPage._Web:SetShow(false)
   notice_title:SetShow(false)
   notice_edit:SetShow(false)
   notice_btn:SetShow(false)
-  promote_btn:SetShow(false)
-  introduce_btn:SetShow(false)
-  introduce_Reset:SetShow(false)
-  introduce_edit_TW:SetShow(false)
-  introduce_edit:SetShow(false)
-  GuildInfoPage._txtMaster:SetShow(false)
-  GuildInfoPage._textGuildInfoTitle:SetShow(false)
+  GuildInfoPage._area_Introduce:SetShow(false)
   GuildInfoPage._guildMainBG:SetShow(false)
   GuildInfoPage._iconOccupyTerritory:SetShow(false)
   GuildInfoPage._iconGuildMark:SetShow(false)
-  GuildInfoPage._txtGuildName:SetShow(false)
   GuildInfoPage._txtRGuildName:SetShow(false)
   GuildInfoPage._txtRMaster:SetShow(false)
   GuildInfoPage._txtRRank_Title:SetShow(false)
@@ -1989,16 +1878,10 @@ function GuildMainInfo_Hide()
   GuildInfoPage._txtGuildPoint:SetShow(false)
   GuildInfoPage._txtGuildPointValue:SetShow(false)
   GuildInfoPage._txtGuildPointPercent:SetShow(false)
-  GuildInfoPage._txtGuildMpValue:SetShow(false)
-  GuildInfoPage._txtGuildMpPercent:SetShow(false)
-  GuildInfoPage._progressMpPoint:SetShow(false)
   GuildInfoPage._btnGuildDel:SetShow(false)
   GuildInfoPage._btnChangeMark:SetShow(false)
-  GuildInfoPage._guildIntroduce_Title:SetShow(false)
-  GuildInfoPage._guildIntroduce_BG:SetShow(false)
-  GuildInfoPage._guildBbs_Title:SetShow(false)
-  GuildInfoPage._guildBbs_BG:SetShow(false)
   GuildInfoPage._planning:SetShow(false)
+  GuildInfoPage._area_Info:SetShow(false)
   GuildInfoPage._txtProtect:SetShow(false)
   GuildInfoPage._txtProtectValue:SetShow(false)
   GuildInfoPage._btnProtectAdd:SetShow(false)
@@ -2012,6 +1895,9 @@ function GuildMainInfo_Hide()
   GuildInfoPage._btnGuildWarehouse:SetShow(false)
   GuildInfoPage._btnGetArshaHost:SetShow(false)
   GuildInfoPage._btnEvacuation:SetShow(false)
+  GuildInfoPage._line_Top:SetShow(false)
+  GuildInfoPage._area_TodayComment:SetShow(false)
+  GuildWarInfoPage._area_GuildWarInfo:SetShow(false)
   GuildMainInfo_MandateBtn()
 end
 function HandleClicked_TerritoryNameOnEvent(isShow)
@@ -2653,8 +2539,6 @@ function SetDATAByGuildGrade()
     GuildListInfoPage.decoIcon_Guild:SetShow(false)
     GuildListInfoPage.decoIcon_Clan:SetShow(true)
     GuildInfoPage._windowTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_CLANNAME"))
-    GuildInfoPage._textGuildInfoTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_CLANINFO"))
-    GuildInfoPage._txtGuildName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_CLANNAMING"))
   else
     GuildManager.mainBtn_Info:SetEnable(true)
     GuildManager.mainBtn_History:SetEnable(true)
@@ -2691,7 +2575,6 @@ function SetDATAByGuildGrade()
       GuildListInfoPage._btnDeposit:SetEnable(false)
     end
     if getSelfPlayer():get():isGuildMaster() then
-      GuildWarInfoPage._txtWarInfoTitle:SetSpanSize(50, 395)
       if accumulateTax_s64 > toInt64(0, 0) or accumulateCost_s64 > toInt64(0, 0) then
         GuildInfoPage._btnTaxPayment:SetShow(true)
       else
@@ -2699,7 +2582,6 @@ function SetDATAByGuildGrade()
       end
       GuildListInfoPage._btnGiveIncentive:SetShow(true)
     elseif getSelfPlayer():get():isGuildSubMaster() then
-      GuildWarInfoPage._txtWarInfoTitle:SetSpanSize(50, 395)
       GuildInfoPage._btnIncreaseMember:SetShow(false)
       if accumulateTax_s64 > toInt64(0, 0) or accumulateCost_s64 > toInt64(0, 0) then
         GuildInfoPage._btnTaxPayment:SetShow(true)
@@ -2708,7 +2590,6 @@ function SetDATAByGuildGrade()
       end
       GuildListInfoPage._btnGiveIncentive:SetShow(false)
     else
-      GuildWarInfoPage._txtWarInfoTitle:SetSpanSize(50, 395)
       GuildInfoPage._btnIncreaseMember:SetShow(false)
       GuildInfoPage._btnTaxPayment:SetShow(false)
       GuildListInfoPage._btnGiveIncentive:SetShow(false)
@@ -2730,8 +2611,6 @@ function SetDATAByGuildGrade()
     GuildListInfoPage.decoIcon_Guild:SetShow(true)
     GuildListInfoPage.decoIcon_Clan:SetShow(false)
     GuildInfoPage._windowTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_GUILDNAME"))
-    GuildInfoPage._textGuildInfoTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_GUILDINFO"))
-    GuildInfoPage._txtGuildName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILD_GUILDNAMING"))
   end
 end
 function Guild_onScreenResize()
@@ -2776,15 +2655,15 @@ function HandleClickedGuildDuel(index)
   local guildNo_s64 = guildWrapper:getGuildNo()
   FGlobal_GuildDuel_Open(guildNo_s64)
 end
-function HandleOnOut_GuildDuelInfo_Tooltip(isShow, gIdx, uiIdx)
+function HandleOnOut_GuildDuelInfo_Tooltip(isShow, idx)
   if isShow then
-    local guildwarWrapper = ToClient_GetWarringGuildListAt(gIdx)
+    local guildwarWrapper = ToClient_GetWarringGuildListAt(idx)
     local guildNo_s64 = guildwarWrapper:getGuildNo()
     local deadline = ToClient_GetGuildDuelDeadline_s64(guildNo_s64)
     local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(deadline))
     local targetKillCount = ToClient_GetGuildDuelTargetKillByGuild(guildNo_s64)
     local fightMoney_s64 = ToClient_GetGuildDuelPrizeByGuild_s64(guildNo_s64)
-    local control = GuildWarInfoPage._list[uiIdx]._guildShowbuScore
+    local control = GuildWarInfoPage._list[idx]._guildShowbuScore
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUEL_INFOTOOLTIP_TITLE")
     local desc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUEL_INFOTOOLTIP_DESC", "targetKillCount", targetKillCount, "fightMoney", makeDotMoney(fightMoney_s64), "time", lefttimeText)
     TooltipSimple_Show(control, name, desc)
@@ -2844,27 +2723,27 @@ function FGlobal_CheckGuildNoticeUiEdit(targetUI)
 end
 function Introduce_Init()
   if isGameTypeTaiwan() then
-    introduce_edit_TW:SetMaxEditLine(7)
+    GuildInfoPage._introduce_edit_TW:SetMaxEditLine(7)
   else
-    introduce_edit:SetMaxEditLine(10)
+    GuildInfoPage._introduce_edit:SetMaxEditLine(10)
   end
-  introduce_edit:SetMaxInput(200)
-  introduce_edit_TW:SetMaxInput(200)
-  promote_btn:addInputEvent("Mouse_LUp", "Guild_Promote_Confirm()")
-  promote_btn:addInputEvent("Mouse_On", "Promote_Tooltip(true)")
-  promote_btn:addInputEvent("Mouse_Out", "Promote_Tooltip(false)")
-  introduce_btn:addInputEvent("Mouse_LUp", "Introduce_Regist()")
-  introduce_Reset:addInputEvent("Mouse_LUp", "Introduce_Reset()")
-  introduce_edit:addInputEvent("Mouse_LUp", "HandleClicked_IntroduceEditSetFocus()")
-  introduce_edit_TW:addInputEvent("Mouse_LUp", "HandleClicked_IntroduceEditSetFocus()")
+  GuildInfoPage._introduce_edit:SetMaxInput(200)
+  GuildInfoPage._introduce_edit_TW:SetMaxInput(200)
+  GuildInfoPage._promote_btn:addInputEvent("Mouse_LUp", "Guild_Promote_Confirm()")
+  GuildInfoPage._promote_btn:addInputEvent("Mouse_On", "Promote_Tooltip(true)")
+  GuildInfoPage._promote_btn:addInputEvent("Mouse_Out", "Promote_Tooltip(false)")
+  GuildInfoPage._introduce_btn:addInputEvent("Mouse_LUp", "Introduce_Regist()")
+  GuildInfoPage._introduce_Reset:addInputEvent("Mouse_LUp", "Introduce_Reset()")
+  GuildInfoPage._introduce_edit:addInputEvent("Mouse_LUp", "HandleClicked_IntroduceEditSetFocus()")
+  GuildInfoPage._introduce_edit_TW:addInputEvent("Mouse_LUp", "HandleClicked_IntroduceEditSetFocus()")
 end
 function HandleClicked_IntroduceEditSetFocus()
   if isGameTypeTaiwan() then
-    SetFocusEdit(introduce_edit_TW)
-    introduce_edit_TW:SetEditText(introduce_edit_TW:GetEditText(), true)
+    SetFocusEdit(GuildInfoPage._introduce_edit_TW)
+    GuildInfoPage._introduce_edit_TW:SetEditText(GuildInfoPage._introduce_edit_TW:GetEditText(), true)
   else
-    SetFocusEdit(introduce_edit)
-    introduce_edit:SetEditText(introduce_edit:GetEditText(), true)
+    SetFocusEdit(GuildInfoPage._introduce_edit)
+    GuildInfoPage._introduce_edit:SetEditText(GuildInfoPage._introduce_edit:GetEditText(), true)
   end
 end
 function FGlobal_GuildIntroduceClearFocusEdit()
@@ -2902,7 +2781,7 @@ function Promote_Tooltip(isShow)
   local name, desc, control
   name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROMOTE_BTN_TITLE")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROMOTE_BTN_DESC")
-  control = promote_btn
+  control = GuildInfoPage._promote_btn
   TooltipSimple_Show(control, name, desc)
 end
 function Introduce_Regist()
@@ -2915,9 +2794,9 @@ function Introduce_Regist()
     CheckChattingInput()
   end
   if isGameTypeTaiwan() then
-    ToClient_RequestSetIntrodution(tostring(introduce_edit_TW:GetEditText()))
+    ToClient_RequestSetIntrodution(tostring(GuildInfoPage._introduce_edit_TW:GetEditText()))
   else
-    ToClient_RequestSetIntrodution(tostring(introduce_edit:GetEditText()))
+    ToClient_RequestSetIntrodution(tostring(GuildInfoPage._introduce_edit:GetEditText()))
   end
   close_function()
   ClearFocusEdit()
@@ -2929,9 +2808,9 @@ function Introduce_Reset()
     return
   end
   if isGameTypeTaiwan() then
-    introduce_edit_TW:SetEditText("", true)
+    GuildInfoPage._introduce_edit_TW:SetEditText("", true)
   else
-    introduce_edit:SetEditText("", true)
+    GuildInfoPage._introduce_edit:SetEditText("", true)
   end
   ToClient_RequestSetIntrodution(tostring(""))
 end
@@ -2942,16 +2821,16 @@ function GuildIntroduce_Update()
   end
   local guildIntroduce = guildWrapper:getGuildIntrodution()
   if isGameTypeTaiwan() then
-    introduce_edit_TW:SetEditText(guildIntroduce, false)
+    GuildInfoPage._introduce_edit_TW:SetEditText(guildIntroduce, false)
   else
-    introduce_edit:SetEditText(guildIntroduce, false)
+    GuildInfoPage._introduce_edit:SetEditText(guildIntroduce, false)
   end
 end
 function FGlobal_CheckGuildIntroduceUiEdit(targetUI)
   if isGameTypeTaiwan() then
-    return nil ~= targetUI and targetUI:GetKey() == introduce_edit_TW:GetKey()
+    return nil ~= targetUI and targetUI:GetKey() == GuildInfoPage._introduce_edit_TW:GetKey()
   else
-    return nil ~= targetUI and targetUI:GetKey() == introduce_edit:GetKey()
+    return nil ~= targetUI and targetUI:GetKey() == GuildInfoPage._introduce_edit:GetKey()
   end
 end
 function FromWeb_WebPageError(url, statusCode)
@@ -2967,11 +2846,11 @@ function FromWeb_WebPageError(url, statusCode)
   if nil ~= startIndex then
     local _url = string.sub(url, 1, startIndex - 1)
     if PaGlobal_URL_Check(worldNo) == _url then
-      _Web:SetShow(true)
+      GuildInfoPage._Web:SetShow(true)
       return
     end
   end
-  _Web:SetShow(false)
+  GuildInfoPage._Web:SetShow(false)
 end
 function HandleClickedGetArshaHost()
   if false == isContentsArsha or false == isCanDoReservation then

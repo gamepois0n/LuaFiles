@@ -104,14 +104,14 @@ local servantInfo = {
       [17] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_17")
     },
     _skill = {
-      startX = 0,
-      startY = 0,
+      startX = 5,
+      startY = 10,
       startIconX = 10,
       startIconY = 5,
-      startNameX = 64,
-      startNameY = 5,
-      startDecX = 64,
-      startDecY = 27,
+      startNameX = 65,
+      startNameY = 8,
+      startDecX = 65,
+      startDecY = 32,
       startPreDecX = 64,
       startPreDecY = 42,
       startExpBGX = 4,
@@ -120,8 +120,8 @@ local servantInfo = {
       startExpY = 1,
       startExpStrX = 18,
       startExpStrY = 35,
-      gapY = 52,
-      count = 4
+      gapY = 58,
+      count = 3
     }
   },
   _buttonClose = UI.getChildControl(Panel_Window_ServantInfo, "close_button"),
@@ -225,6 +225,10 @@ function servantInfo:init()
     UIScroll.InputEventByControl(slot.button, "ServantInfo_ScrollEvent")
     self._skillSlots[ii] = slot
   end
+  self._staticTextValue_Hp:SetPosY(self._staticGaugeBar_Hp:GetPosY() + (self._staticGaugeBar_Hp:GetSizeY() - self._staticTextValue_Hp:GetTextSizeY()) * 0.5)
+  self._staticTextValue_Mp:SetPosY(self._staticGaugeBar_Mp:GetPosY() + (self._staticGaugeBar_Mp:GetSizeY() - self._staticTextValue_Mp:GetTextSizeY()) * 0.5)
+  self._staticTextValue_Exp:SetPosY(self._staticGaugeBar_Exp:GetPosY() + (self._staticGaugeBar_Exp:GetSizeY() - self._staticTextValue_Exp:GetTextSizeY()) * 0.5)
+  self._staticTextValue_Weight:SetPosY(self._staticGaugeBar_Weight:GetPosY() + (self._staticGaugeBar_Weight:GetSizeY() - self._staticTextValue_Weight:GetTextSizeY()) * 0.5)
 end
 function servantInfo:clear()
   self._skillStart = 0
@@ -249,7 +253,7 @@ function servantInfo:updateHp()
   if nil == servantWrapper then
     return
   end
-  self._staticGaugeBar_Hp:SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  self._staticGaugeBar_Hp:SetSize(1.63 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 6)
   self._staticTextValue_Hp:SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
 end
 function servantInfo:updateMp()
@@ -257,7 +261,7 @@ function servantInfo:updateMp()
   if nil == servantWrapper then
     return
   end
-  self._staticGaugeBar_Mp:SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  self._staticGaugeBar_Mp:SetSize(1.63 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 6)
   self._staticTextValue_Mp:SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
 end
 local stallionIconPosX = servantInfo._iconStallion:GetPosX()
@@ -345,11 +349,11 @@ function servantInfo:update()
   else
     self._mp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_HORSEMP_NAME"))
   end
-  self._staticGaugeBar_Hp:SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  self._staticGaugeBar_Hp:SetSize(1.63 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 6)
   self._staticTextValue_Hp:SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
-  self._staticGaugeBar_Mp:SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  self._staticGaugeBar_Mp:SetSize(1.63 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 6)
   self._staticTextValue_Mp:SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
-  self._staticGaugeBar_Exp:SetSize(155 * Int64toInt32(servantWrapper:getExp_s64()) / Int64toInt32(servantWrapper:getNeedExp_s64()), 4)
+  self._staticGaugeBar_Exp:SetSize(163 * Int64toInt32(servantWrapper:getExp_s64()) / Int64toInt32(servantWrapper:getNeedExp_s64()), 6)
   self._staticTextValue_Exp:SetText(makeDotMoney(servantWrapper:getExp_s64()) .. " / " .. makeDotMoney(servantWrapper:getNeedExp_s64()))
   local max_weight = Int64toInt32(servantWrapper:getMaxWeight_s64() / Defines.s64_const.s64_10000)
   local total_weight = Int64toInt32((servantWrapper:getInventoryWeight_s64() + servantWrapper:getEquipWeight_s64()) / Defines.s64_const.s64_10000)
@@ -361,8 +365,9 @@ function servantInfo:update()
   else
     weightValue = makeDotMoney(total_weight) .. " / " .. makeDotMoney(max_weight)
   end
-  self._staticGaugeBar_Weight:SetSize(weightPercent * 155 / 100, 4)
+  self._staticGaugeBar_Weight:SetSize(weightPercent * 155 / 100, 6)
   self._staticTextValue_Weight:SetText(weightValue)
+  self._staticTextValue_Weight:SetPosY(self._staticGaugeBar_Weight:GetPosY() + self._staticGaugeBar_Weight:GetSizeY() / 2 - self._staticTextValue_Weight:GetTextSizeY() / 2)
   local deadCount = servantWrapper:getDeadCount()
   local deadCountText = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANTINFO_DEADCOUNT")
   if CppEnums.VehicleType.Type_Elephant == servantWrapper:getVehicleType() then
@@ -377,7 +382,6 @@ function servantInfo:update()
   local matingCountTextX = self._staticMatingCount:GetTextSizeX()
   local matingCountValuePosX = self._staticMatingCountValue:GetPosX()
   if matingCountValuePosX < matingCountPosX + matingCountTextX then
-    self._staticMatingCountValue:SetPosX(matingCountValuePosX + (matingCountPosX + matingCountTextX - matingCountValuePosX) + 6)
   end
   self._staticText_MaxMoveSpeedValue:SetText(string.format("%.1f", servantWrapper:getStat(CppEnums.ServantStatType.Type_MaxMoveSpeed) / 10000) .. "%")
   self._staticText_AccelerationValue:SetText(string.format("%.1f", servantWrapper:getStat(CppEnums.ServantStatType.Type_Acceleration) / 10000) .. "%")

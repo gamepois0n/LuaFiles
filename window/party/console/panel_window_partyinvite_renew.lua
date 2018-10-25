@@ -255,9 +255,15 @@ function Panel_Window_PartyInvite_info:setIcon(control, classType)
   control:setRenderTexture(control:getBaseTexture())
 end
 function Panel_Window_PartyInvite_info:open()
+  if false == Panel_Window_PartyInvite:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
+  end
   Panel_Window_PartyInvite:SetShow(true)
 end
 function Panel_Window_PartyInvite_info:close()
+  if Panel_Window_PartyInvite:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   Panel_Window_PartyInvite:SetShow(false)
 end
 function PaGlobalFunc_PartyInvite_GetShow()
@@ -285,6 +291,7 @@ function PaGlobalFunc_PartyInvite_SelectTab(value)
   local self = Panel_Window_PartyInvite_info
   self._value.currentTabIndex = (self._value.currentTabIndex + value + self._enum.eTAB_COUNT) % self._enum.eTAB_COUNT
   self:setContent()
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
 end
 function PaGlobalFunc_PartyInvite_ListSetting(list_content, key)
   local self = Panel_Window_PartyInvite_info
@@ -318,6 +325,7 @@ function PaGlobalFunc_PartyInvite_ClickInvite(index)
     RequestParty_inviteCharacter(name)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", name))
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function FromClient_PartyInvite_Init()
   local self = Panel_Window_PartyInvite_info

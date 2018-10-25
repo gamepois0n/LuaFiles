@@ -805,7 +805,7 @@ local ChatPanelIsOpenState = {
   [5] = false
 }
 function UiSet_Initialize()
-  if (false == ToClient_isXBox() or false == ToClient_isPS4()) and true == _ContentsGroup_RemasterUI_Party then
+  if false == ToClient_isConsole() and true == _ContentsGroup_RemasterUI_Party then
     panelControl[panelID.LargeParty] = {
       control = Panel_Widget_Raid,
       posFixed = false,
@@ -1432,7 +1432,7 @@ function HandleClicked_UiSet_ConfirmSetting(isReset)
     Panel_Window_Skill:SetShow(true, true)
     PaGlobal_Window_Skill_CoolTimeSlot:showFunc()
   end
-  if false == ToClient_isXBox() or false == ToClient_isPS4() then
+  if false == ToClient_isConsole() then
     ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   end
 end
@@ -1596,7 +1596,7 @@ function FGlobal_UiSet_Open(isMenu)
   else
     _isMenu = isMenu
   end
-  if false == ToClient_isXBox() or false == ToClient_isPS4() then
+  if false == ToClient_isConsole() then
     ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_UIEDIT")
   end
 end
@@ -1629,7 +1629,7 @@ function FGlobal_UiSet_Close()
     end
     closePanelState[idx] = false
   end
-  if false == ToClient_isXBox() or false == ToClient_isPS4() then
+  if false == ToClient_isConsole() then
     ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
   end
 end
@@ -1881,7 +1881,7 @@ function HandleClicked_Reset_UiSetting_Msg()
     UiSet_update()
     ToClient_SaveUiInfo(true)
     FGlobal_MyHouseNavi_Update()
-    if false == ToClient_isXBox() or false == ToClient_isPS4() then
+    if false == ToClient_isConsole() then
       ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
     end
   end

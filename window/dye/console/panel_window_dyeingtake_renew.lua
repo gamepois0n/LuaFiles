@@ -254,6 +254,7 @@ function Input_DyeingTake_Ampule(ii)
   local itemEnchantSS = itemEnchantSSW:get()
   local itemName = getItemName(itemEnchantSS)
   local function doExportPalette()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_requestChangeDyeingPaletteToItem(categoryIndex - 1, dataIndex - 1, itemCount, isShowAll)
   end
   local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
@@ -272,8 +273,9 @@ function InputScroll_DyeingTake_Scroll(isUp)
   local self = DyeingTake
   if nil ~= self._paletteCount then
     self._currentScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_ampuleList, isUp, self._ampuleListRowCount, self._paletteCount, self._currentScrollAmount, self._ampuleListColCount)
+    _AudioPostEvent_SystemUiForXBOX(51, 4)
   end
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
+  if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:updatePalette()

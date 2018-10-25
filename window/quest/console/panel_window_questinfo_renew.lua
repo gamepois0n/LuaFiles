@@ -753,6 +753,7 @@ function PaGlobalFunc_Quest_GiveUpConfirm()
   if nil == questInfo then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_GiveupQuest(questInfo._questNo._group, questInfo._questNo._quest)
 end
 function PaGlobalFunc_Quest_SetQuestType()
@@ -946,6 +947,9 @@ end
 function PaGlobalFunc_Quest_SetShow(value)
   local self = Window_QuestInfo
   Panel_Window_QuestInfo:SetShow(value, false)
+  if true == value then
+    _AudioPostEvent_SystemUiForXBOX(1, 18)
+  end
   self._currentQuestCount = 0
   if true == value then
     if true == PaGlobalFunc_InventoryInfo_GetShow() then

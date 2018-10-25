@@ -16,7 +16,8 @@ local CharacterInfo = {
     stc_questInfo = UI.getChildControl(_panel, "Static_QuestInfoBg"),
     txt_toolTip = UI.getChildControl(_panel, "StaticText_ToolTip"),
     txt_keyGuideA = UI.getChildControl(_panel, "StaticText_A_ConsoleUI"),
-    txt_keyGuideB = UI.getChildControl(_panel, "StaticText_B_ConsoleUI")
+    txt_keyGuideB = UI.getChildControl(_panel, "StaticText_B_ConsoleUI"),
+    txt_keyGuideX = UI.getChildControl(_panel, "StaticText_Introduce_ConsoleUI")
   },
   _potentialUIData = {
     limitPotentialLevel = 5,
@@ -62,7 +63,7 @@ local CharacterInfo = {
   }
 }
 function CharacterInfo:close()
-  _AudioPostEvent_SystemUiForXBOX(1, 1)
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
   Panel_Window_CharacterInfo_Renew:SetShow(false, false)
   UI.ClearFocusEdit()
   Panel_Window_CharacterInfo_Renew:CloseUISubApp()
@@ -123,10 +124,10 @@ function CharacterInfo:init()
     self._ui.stc_TakePicBg:addInputEvent("Mouse_LUp", "InputMLUp_CharacterInfo_TakePicButton()")
   end
   self._ui.stc_FamilyInfoBg = UI.getChildControl(self._ui.stc_CharacterInfoBg, "Static_Fam_Info")
-  self._ui.txt_FamilyPoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Fam_Point")
-  self._ui.txt_BattlePoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Battle_Point")
-  self._ui.txt_LifePoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Life_Point")
-  self._ui.txt_SpecialPoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Special_Point")
+  self._ui.txt_FamilyPoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Fam_Point_Val")
+  self._ui.txt_BattlePoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Battle_Point_Val")
+  self._ui.txt_LifePoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Life_Point_Val")
+  self._ui.txt_SpecialPoint = UI.getChildControl(self._ui.stc_FamilyInfoBg, "StaticText_Special_Point_Val")
   self._ui.txt_Introduce = UI.getChildControl(self._ui.stc_ProfileImageBg, "Edit_Introduce")
   self._ui.StaticText_IntroduceSave = UI.getChildControl(self._ui.stc_ProfileImageBg, "Static_IntroduceSave")
   self._ui.stc_StatInfoBg = UI.getChildControl(self._ui.stc_CharacterInfoBg, "Static_Stat_Basic")
@@ -140,6 +141,7 @@ function CharacterInfo:init()
   self._ui.progress_Weight2 = UI.getChildControl(self._ui.stc_StatInfoBg, "Progress2_Weight2")
   self._ui.progress_Weight3 = UI.getChildControl(self._ui.stc_StatInfoBg, "Progress2_Weight3")
   self._ui.txt_Count = UI.getChildControl(self._ui.stc_StatInfoBg, "StaticText_Count")
+  self._ui.txt_CountPoint = UI.getChildControl(self._ui.stc_StatInfoBg, "StaticText_Count_Val")
   self._ui.stc_StatBattleInfoBg = UI.getChildControl(self._ui.stc_CharacterInfoBg, "Static_Stat_Battle")
   self._ui.txt_AtkPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Val")
   self._ui.txt_DefTxt = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Def")
@@ -156,7 +158,7 @@ function CharacterInfo:init()
     self._ui.txt_AwakenAtkTxt:SetShow(false)
     self._ui.txt_AwakenAtkPoint:SetShow(false)
   end
-  self._ui.txt_SKillPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Skill_Point")
+  self._ui.txt_SKillPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Skill_Point_Val")
   self._ui.txt_AtkSpeed = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Speed")
   self._ui.txt_AtkSpeedLevel = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Speed_Level")
   self._ui.txt_MoveSpeedLevel = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Move_Speed_Level")
@@ -299,10 +301,10 @@ function CharacterInfo:update()
   local lifeFP = self._playerGet:getLifeFamilyPoint()
   local etcFP = self._playerGet:getEtcFamilyPoint()
   local sumFP = battleFP + lifeFP + etcFP
-  self._ui.txt_FamilyPoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_SUM_TOOLTIP_TITLE") .. " " .. tostring(sumFP))
-  self._ui.txt_BattlePoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_COMBAT_TOOLTIP_TITLE") .. " " .. tostring(battleFP))
-  self._ui.txt_LifePoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_LIFE_TOOLTIP_TITLE") .. " " .. tostring(lifeFP))
-  self._ui.txt_SpecialPoint:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FAMILYPOINTS_ETC_TOOLTIP_TITLE") .. " " .. tostring(etcFP))
+  self._ui.txt_FamilyPoint:SetText(tostring(sumFP))
+  self._ui.txt_BattlePoint:SetText(tostring(battleFP))
+  self._ui.txt_LifePoint:SetText(tostring(lifeFP))
+  self._ui.txt_SpecialPoint:SetText(tostring(etcFP))
   local msg = ToClient_GetUserIntroduction()
   self._ui.txt_Introduce:SetEditText(msg, true)
   self._ui.txt_Introduce:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -315,7 +317,7 @@ function CharacterInfo:update()
   FromClient_CharacterInfo_Basic_WeightChanged()
   local _defaultCount = self._playerGet:getEnchantFailCount()
   local _valksCount = self._playerGet:getEnchantValuePackCount()
-  self._ui.txt_Count:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NPC_DIALOG_TUTORIALSTARTBUTTON_2") .. " " .. _defaultCount + _valksCount)
+  self._ui.txt_CountPoint:SetText(_defaultCount + _valksCount)
   FromClient_CharacterInfo_Basic_AttackChanged()
   FromClient_CharacterInfo_Basic_StaminaChanged()
   FromClient_CharacterInfo_Basic_SkillPointChanged()
@@ -454,7 +456,7 @@ function FromClient_CharacterInfo_Basic_AttackChanged()
   self._ui.txt_AwakenAtkPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Atk_Awaken_Val")
   self._ui.txt_DefPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Def_Val")
   self._ui.txt_StaminaPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Stamina_Val")
-  self._ui.txt_SKillPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Skill_Point")
+  self._ui.txt_SKillPoint = UI.getChildControl(self._ui.stc_StatBattleInfoBg, "StaticText_Skill_Point_Val")
 end
 function FromClient_CharacterInfo_Basic_SkillPointChanged()
   local self = CharacterInfo
@@ -463,7 +465,7 @@ function FromClient_CharacterInfo_Basic_SkillPointChanged()
   end
   local _skillPointInfo = ToClient_getSkillPointInfo(0)
   if nil ~= _skillPointInfo then
-    self._ui.txt_SKillPoint:SetText(PAGetString(Defines.StringSheet_RESOURCE, "SKILL_TEXT_POINT") .. " " .. tostring(_skillPointInfo._remainPoint .. " / " .. _skillPointInfo._acquirePoint))
+    self._ui.txt_SKillPoint:SetText(tostring(_skillPointInfo._remainPoint .. " / " .. _skillPointInfo._acquirePoint))
   end
 end
 function FromClient_CharacterInfo_Basic_StaminaChanged()
@@ -523,7 +525,7 @@ function FromClient_CharacterInfo_Basic_TendencyChanged()
     return
   end
   local _style = self._playerGet:getTendency()
-  self._ui.txt_Style:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_TENDENCY") .. " " .. tostring(_style))
+  self._ui.txt_Style:SetText(tostring(_style))
 end
 function FromClient_CharacterInfo_Basic_MentalChanged()
   local self = CharacterInfo
@@ -646,6 +648,7 @@ function PaGlobalFunc_Window_CharacterInfo_Open()
 end
 function CharacterInfo:open()
   _panel:SetShow(true, true)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   self:update()
   InputMLUp_TapToOpenWindow(1)
 end
@@ -736,6 +739,11 @@ function InputMLUp_TapToOpenWindow(index)
   end
   self._ui.stc_ToolTipArrow:ComputePos()
   self._ui.txt_keyGuideA:SetShow(false)
+  if 1 == index then
+    self._ui.txt_keyGuideX:SetShow(true)
+  else
+    self._ui.txt_keyGuideX:SetShow(false)
+  end
   if 1 == index then
     self:update()
   elseif 2 == index then

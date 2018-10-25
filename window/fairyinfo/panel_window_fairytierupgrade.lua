@@ -74,9 +74,10 @@ function PaGlobal_FairyTierUpgrade:initialize()
   self._ui._bottomDescText:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_TIERUPGRADE_DEC"))
   self._ui._bottomDescText:SetTextVerticalTop()
   local textYSize = self._ui._bottomDescText:GetTextSizeY()
-  local stretchAmount = textYSize - self._ui._bottomDescBG:GetSizeY() + 20
-  self._ui._bottomDescBG:SetSize(self._ui._bottomDescBG:GetSizeX(), textYSize + 20)
+  local stretchAmount = textYSize - self._ui._bottomDescBG:GetSizeY() + 40
+  self._ui._bottomDescBG:SetSize(self._ui._bottomDescBG:GetSizeX(), textYSize + 30)
   Panel_Window_FairyTierUpgrade:SetSize(Panel_Window_FairyTierUpgrade:GetSizeX(), Panel_Window_FairyTierUpgrade:GetSizeY() + stretchAmount)
+  self._ui._btn_TierUpgrade:ComputePos()
   self._ui._plusButtonEffect = UI.getChildControl(self._ui._subjectItemBG, "Static_Block_Plus")
   self._ui._minusButtonEffect = UI.getChildControl(self._ui._subjectItemBG, "Static_Block_Minus")
   for i = 1, self._rimCount do
@@ -107,7 +108,7 @@ function PaGlobal_FairyTierUpgrade_Open(PositionReset)
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYTIERUPGRADE_ONTRY_TITLE"),
       content = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYTIERUPGRADE_NOTE_STACK"),
-      functionYes = function()
+      functionApply = function()
       end,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
@@ -118,7 +119,7 @@ function PaGlobal_FairyTierUpgrade_Open(PositionReset)
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYTIERUPGRADE_ONTRY_TITLE"),
       content = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYTIERUPGRADE_NOTE_UNSEALED"),
-      functionYes = function()
+      functionApply = function()
       end,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
@@ -148,6 +149,7 @@ function PaGlobal_FairyTierUpgrade_Open(PositionReset)
     self._rim[i]._state = self._RIM_ANI_STATE.IDLE
     self:initIdleAnimation(self._rim[i])
   end
+  Panel_Window_FairyTierUpgrade:SetPosY(Panel_Window_FairyTierUpgrade:GetPosY() - 60)
   Panel_Window_FairyTierUpgrade:SetShow(true)
   self._maxSuccessRate = ToClient_getFairyTierUpgradeMaxRate(PaGlobal_FairyInfo_FairyTier())
   self._ui._btn_TierUpgrade:SetMonoTone(false)
@@ -245,7 +247,7 @@ function PaGlobal_FairyTierUpgrade:setSubjectItemCount(count)
   if self._maxSubjectCount == self._currentItemStackCount then
     self._ui._percentageText:SetText("100")
   end
-  local percentMarkPosX = self._ui._percentageText:GetPosX() + self._ui._percentageText:GetSizeX() / 2 + self._ui._percentageText:GetTextSizeX() / 2
+  local percentMarkPosX = self._ui._percentageText:GetPosX() + self._ui._percentageText:GetSizeX() / 2 + self._ui._percentageText:GetTextSizeX() / 2 + 5
   self._ui._percentMark:SetPosX(percentMarkPosX)
   self._ui._percentageText:ResetVertexAni()
   self._ui._percentageText:SetVertexAniRun("Percentage_Ani_Scale", true)

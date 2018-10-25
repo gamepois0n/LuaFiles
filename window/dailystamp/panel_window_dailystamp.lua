@@ -88,6 +88,9 @@ local dailyStamp = {
   nextDayShow = false,
   secondAttendanceCheck = false
 }
+function PaGlobalFunc_Attendance_GetIsSecondAttendance()
+  return dailyStamp.secondAttendanceCheck
+end
 function DailyStamp_DescSet()
   local _eventPeriodTitle = dailyStamp.eventPeriodTitle:GetText()
   local _eventPeriod = dailyStamp.eventPeriod:GetText()
@@ -105,23 +108,6 @@ function DailyStamp_DescSet()
   dailyStamp.acceptPeriod:SetText(_acceptPeriod)
   dailyStamp.eventDesc:SetText(_desc)
   dailyStamp.weekEndDesc:SetText(_weekendDesc)
-  if 80 < dailyStamp.eventDesc:GetTextSizeY() then
-    local addSizeY = dailyStamp.eventDesc:GetTextSizeY() - 80 + 15
-    Panel_Window_DailyStamp:SetSize(Panel_Window_DailyStamp:GetSizeX(), Panel_Window_DailyStamp:GetSizeY() + addSizeY)
-    dailyStamp.mainBg:SetSize(dailyStamp.mainBg:GetSizeX(), dailyStamp.mainBg:GetSizeY() + addSizeY)
-    dailyStamp.eventDescBg:SetSize(dailyStamp.eventDescBg:GetSizeX(), dailyStamp.eventDescBg:GetSizeY() + addSizeY)
-    dailyStamp.eventDesc:SetSpanSize(dailyStamp.eventDesc:GetSpanSize().x, dailyStamp.eventDesc:GetSpanSize().y + addSizeY)
-    dailyStamp.eventPeriodTitle:SetSpanSize(dailyStamp.eventPeriodTitle:GetSpanSize().x, dailyStamp.eventPeriodTitle:GetSpanSize().y + addSizeY)
-    dailyStamp.eventPeriod:SetSpanSize(dailyStamp.eventPeriod:GetSpanSize().x, dailyStamp.eventPeriod:GetSpanSize().y + addSizeY)
-    dailyStamp.acceptPeriodTitle:SetSpanSize(dailyStamp.acceptPeriodTitle:GetSpanSize().x, dailyStamp.acceptPeriodTitle:GetSpanSize().y + addSizeY - 20)
-    dailyStamp.acceptPeriod:SetSpanSize(dailyStamp.acceptPeriod:GetSpanSize().x, dailyStamp.acceptPeriod:GetSpanSize().y + addSizeY - 20)
-  end
-  local titleSizeX = math.max(dailyStamp.eventPeriodTitle:GetTextSizeX(), dailyStamp.acceptPeriodTitle:GetTextSizeX())
-  local baseSizeX = dailyStamp.eventPeriodTitle:GetPosX() + titleSizeX
-  if dailyStamp.eventPeriod:GetPosX() < baseSizeX + 10 then
-    dailyStamp.eventPeriod:SetPosX(baseSizeX + 10)
-    dailyStamp.acceptPeriod:SetPosX(baseSizeX + 10)
-  end
   dailyStamp.goodItemSlotConfig.createBorder = true
 end
 DailyStamp_DescSet()
@@ -167,7 +153,7 @@ function dailyStamp:TapInit()
           self.tapControl[index]:SetSize(155, 40)
         end
         self.tapControl[index]:SetPosX(self.tapControl[index]:GetPosX() + (self.tapControl[index]:GetSizeX() + 5) * (index - 1))
-        self.tapControl[index]:SetPosY(62)
+        self.tapControl[index]:SetPosY(61)
       else
         self.tapControl[index]:SetShow(false)
       end
@@ -190,7 +176,7 @@ function dailyStamp:TapInit()
         self.tapControl[index]:SetSize(155, 40)
       end
       self.tapControl[index]:SetPosX(self.tapControl[index]:GetPosX() + (self.tapControl[index]:GetSizeX() + 5) * (index - 1))
-      self.tapControl[index]:SetPosY(62)
+      self.tapControl[index]:SetPosY(61)
     end
   end
 end
@@ -206,8 +192,8 @@ function dailyStamp:TabUpdate()
     self.tapControl[index]:SetText(dailyStampTapName)
   end
 end
-local basePosX = dailyStamp.tempDailySlot:GetPosX() + 30
-local basePosY = dailyStamp.tempDailySlot:GetPosY() + 40
+local basePosX = dailyStamp.tempDailySlot:GetPosX()
+local basePosY = dailyStamp.tempDailySlot:GetPosY()
 local gapX = 10
 local gapY = 10
 function dailyStamp:Init()
@@ -323,6 +309,7 @@ function DailyStamp_SetData(rewardIndex)
   end
   self.animationdayIndex = {}
   for index = 0, totalDayCount - 1 do
+    local itemGradeType = dailyStampKeys[rewardIndex][1]:getRewardItemGradeType(index)
     local itemWrapper = dailyStampKeys[rewardIndex][1]:getRewardItem(index)
     self.dayControl[index].slot.icon:SetShow(true)
     self.dayControl[index]._dayControl:SetShow(true)
@@ -340,11 +327,11 @@ function DailyStamp_SetData(rewardIndex)
           self.animationTime = 0
           self.dayControl[index]._stamp:SetScale(1, 1)
           DailyStamp_SetAnimation(rewardIndex, index)
-          DailyStamp_ChangeTexture(index, 2)
+          DailyStamp_ChangeTexture(index, 2, itemGradeType)
           self.dayControl[index]._dayControl:addInputEvent("Mouse_On", "DailyStamp_TodayAttendance_TooltipShow(" .. index .. ")")
           self.dayControl[index]._dayControl:addInputEvent("Mouse_Out", "DailyStamp_TodayAttendance_TooltipHide()")
         else
-          DailyStamp_ChangeTexture(index, 1)
+          DailyStamp_ChangeTexture(index, 1, itemGradeType)
         end
       else
         self.dayControl[index]._dayControl:addInputEvent("Mouse_LUp", "DailyStamp_AcceptReward(" .. rewardIndex .. ")")
@@ -355,7 +342,7 @@ function DailyStamp_SetData(rewardIndex)
         self.dayControl[index].goodItemSlot.icon:addInputEvent("Mouse_RUP", "DailyStamp_AcceptReward(" .. rewardIndex .. ")")
         self.dayControl[index]._dayControl:addInputEvent("Mouse_On", "DailyStamp_AcceptReward_TooltipShow(" .. index .. ")")
         self.dayControl[index]._dayControl:addInputEvent("Mouse_Out", "DailyStamp_AcceptReward_TooltipShow()")
-        DailyStamp_ChangeTexture(index, 0)
+        DailyStamp_ChangeTexture(index, 0, itemGradeType)
         local waitingTime = 0
         local possibleAttendance = false
         if dailyStampKeys[dailyStamp.tapIndex][1]:isPossibleAttendance() then
@@ -367,7 +354,7 @@ function DailyStamp_SetData(rewardIndex)
           possibleAttendance = true
         end
         if 0 == waitingTime and not possibleAttendance and index == myAttendanceCount - 1 then
-          DailyStamp_ChangeTexture(index, 0)
+          DailyStamp_ChangeTexture(index, 0, itemGradeType)
           self.dayControl[index]._dayControl:SetVertexAniRun("Ani_Color_New", true)
           dailyStamp.attendanceTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAY_ATTENDANCE_COMPLETE"))
         end
@@ -375,11 +362,11 @@ function DailyStamp_SetData(rewardIndex)
     elseif index == myAttendanceCount then
       if dailyStampKeys[rewardIndex][1]:isPossibleAttendance() or dailyStampKeys[rewardIndex][1]:isPossibleOverlapAttendance() then
         if isPossibleAttandanceCheck() then
-          DailyStamp_ChangeTexture(index, 0)
+          DailyStamp_ChangeTexture(index, 0, itemGradeType)
           self.dayControl[index]._dayControl:addInputEvent("Mouse_On", "DailyStamp_Attendance_TooltipShow(" .. index .. ", true )")
           self.dayControl[index]._dayControl:addInputEvent("Mouse_Out", "DailyStamp_Attendance_TooltipShow()")
         else
-          DailyStamp_ChangeTexture(index, 3)
+          DailyStamp_ChangeTexture(index, 3, itemGradeType)
           self.dayControl[index]._dayControl:addInputEvent("Mouse_On", "DailyStamp_Attendance_TooltipShow(" .. index .. ")")
           self.dayControl[index]._dayControl:addInputEvent("Mouse_Out", "DailyStamp_Attendance_TooltipShow()")
           self.secondAttendanceCheck = true
@@ -391,30 +378,10 @@ function DailyStamp_SetData(rewardIndex)
         self.dayControl[index].goodItemSlot.icon:addInputEvent("Mouse_LUp", "DailyStamp_SetAttendance(" .. rewardIndex .. ")")
         self.dayControl[index].goodItemSlot.icon:addInputEvent("Mouse_RUP", "DailyStamp_SetAttendance(" .. rewardIndex .. ")")
       else
-        DailyStamp_ChangeTexture(index, 1)
+        DailyStamp_ChangeTexture(index, 1, itemGradeType)
       end
     else
-      DailyStamp_ChangeTexture(index, 1)
-    end
-    for v, gIndex in pairs(self.goodDay) do
-      if gIndex == index + 1 then
-        local goodItemWrapper = dailyStampKeys[rewardIndex][1]:getRewardItem(index)
-        self.dayControl[index].slot.icon:SetShow(false)
-        self.dayControl[index].goodItemSlot.icon:SetShow(true)
-        self.dayControl[index].goodItemSlot:setItem(dailyStampKeys[rewardIndex][1]:getRewardItem(index))
-        self.dayControl[index].goodItemSlot.icon:addInputEvent("Mouse_On", "DailyStamp_Tooltip_Show(" .. index .. "," .. rewardIndex .. ")")
-        self.dayControl[index].goodItemSlot.icon:addInputEvent("Mouse_Out", "DailyStamp_Tooltip_Show()")
-        self.dayControl[index]._rewardName:SetShow(true)
-        self.dayControl[index]._rewardName:SetText(goodItemWrapper:getStaticStatus():getName())
-        self.dayControl[index].goodItemSlot.icon:SetPosX(43)
-        self.dayControl[index].goodItemSlot.icon:SetPosY(13)
-        if isGameTypeEnglish() or isGameTypeRussia() or 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-          self.dayControl[index]._rewardName:SetShow(false)
-          self.dayControl[index].goodItemSlot.icon:SetPosX(47)
-          self.dayControl[index].goodItemSlot.icon:SetPosY(47)
-        end
-        self.dayControl[index]._dayText:SetFontColor(Defines.Color.C_FFFFCE22)
-      end
+      DailyStamp_ChangeTexture(index, 1, itemGradeType)
     end
   end
   self.eventPeriod:SetText(dailyStampKeys[rewardIndex][1]:getPeriodDate())
@@ -440,107 +407,142 @@ function DailyStamp_SetData(rewardIndex)
   end
   dailyStamp:TabUpdate()
 end
-function DailyStamp_ChangeTexture(index, recieveType)
+local function __PaFunc_DailyStamp_ChangeTexture(index, recieveType, itemGradeType)
   local self = dailyStamp
+  local dayControl = self.dayControl[index]._dayControl
+  dayControl:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_ETC_01.dds")
+  local x1, y1, x2, y2
   if 0 == recieveType then
-    self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 10, 104, 105, 199)
-    self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-    self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 108, 104, 203, 199)
-    self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 206, 104, 301, 199)
-    self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-    for v, gIndex in pairs(self.goodDay) do
-      if gIndex == index + 1 then
-        self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 407, 7, 502, 102)
-        self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-        self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 407, 104, 502, 199)
-        self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 407, 201, 502, 296)
-        self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-      end
+    if 2 == itemGradeType then
+      x1, y1, x2, y2 = setTextureUV_Func(dayControl, 394, 89, 481, 176)
+    elseif 1 == itemGradeType then
+      x1, y1, x2, y2 = setTextureUV_Func(dayControl, 306, 89, 393, 176)
+    else
+      x1, y1, x2, y2 = setTextureUV_Func(dayControl, 218, 89, 305, 176)
     end
-  elseif 1 == recieveType then
-    self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 10, 7, 105, 102)
-    self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-    self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 10, 7, 105, 102)
-    self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 10, 7, 105, 102)
-    self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-    for v, gIndex in pairs(self.goodDay) do
-      if gIndex == index + 1 then
-        self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 307, 7, 402, 102)
-        self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-        self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 307, 7, 402, 102)
-        self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 307, 7, 402, 102)
-        self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-      end
+  elseif 2 == itemGradeType then
+    x1, y1, x2, y2 = setTextureUV_Func(dayControl, 394, 1, 481, 88)
+  elseif 1 == itemGradeType then
+    x1, y1, x2, y2 = setTextureUV_Func(dayControl, 306, 1, 393, 88)
+  else
+    x1, y1, x2, y2 = setTextureUV_Func(dayControl, 218, 1, 305, 88)
+  end
+  dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+  dayControl:setRenderTexture(dayControl:getBaseTexture())
+  dayControl:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_ETC_01.dds")
+  dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+  dayControl:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_ETC_01.dds")
+  dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+end
+function DailyStamp_ChangeTexture(index, recieveType, itemGradeType)
+  local self = dailyStamp
+  local textureType1 = "Renewal/PcRemaster/Remaster_ETC_01.dds"
+  local textureType2 = "Renewal/PcRemaster/Remaster_ETC_03.dds"
+  local x1, y1, x2, y2
+  if 0 == recieveType or 1 == recieveType then
+    if 1 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 306, 1, 393, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 89, 89, 176, 176)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 89, 353, 176, 440)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    elseif 2 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 394, 1, 481, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 177, 89, 264, 176)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 177, 353, 264, 440)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    else
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 218, 1, 305, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 89, 88, 176)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 353, 88, 440)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
     end
   elseif 2 == recieveType then
-    self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 1, 96, 96)
-    self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-    self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 99, 1, 194, 96)
-    self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 197, 1, 292, 96)
-    self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-    for v, gIndex in pairs(self.goodDay) do
-      if gIndex == index + 1 then
-        self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 195, 96, 290)
-        self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-        self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 99, 195, 194, 290)
-        self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 197, 195, 292, 290)
-        self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-      end
+    if 1 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 306, 88, 393, 175)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 89, 177, 176, 264)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 353, 1, 440, 88)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    elseif 2 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 394, 89, 481, 176)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 177, 177, 264, 264)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 265, 89, 352, 176)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    else
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType1)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 218, 89, 305, 176)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 177, 88, 264)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 265, 1, 352, 88)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
     end
   elseif 3 == recieveType then
-    self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 98, 96, 193)
-    self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-    self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 99, 98, 194, 193)
-    self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-    self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 197, 98, 292, 193)
-    self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-    for v, gIndex in pairs(self.goodDay) do
-      if gIndex == index + 1 then
-        self.dayControl[index]._dayControl:ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 195, 96, 290)
-        self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
-        self.dayControl[index]._dayControl:ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 99, 195, 194, 290)
-        self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
-        self.dayControl[index]._dayControl:ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_02.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 197, 195, 292, 290)
-        self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
-      end
+    if 1 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 89, 1, 176, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 89, 265, 176, 352)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 353, 177, 440, 264)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    elseif 2 == itemGradeType then
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 177, 1, 264, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 177, 265, 264, 352)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 265, 177, 352, 264)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
+    else
+      self.dayControl[index]._dayControl:ChangeTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 1, 88, 88)
+      self.dayControl[index]._dayControl:getBaseTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:setRenderTexture(self.dayControl[index]._dayControl:getBaseTexture())
+      self.dayControl[index]._dayControl:ChangeOnTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 1, 265, 88, 352)
+      self.dayControl[index]._dayControl:getOnTexture():setUV(x1, y1, x2, y2)
+      self.dayControl[index]._dayControl:ChangeClickTextureInfoName(textureType2)
+      x1, y1, x2, y2 = setTextureUV_Func(self.dayControl[index]._dayControl, 353, 89, 440, 176)
+      self.dayControl[index]._dayControl:getClickTexture():setUV(x1, y1, x2, y2)
     end
   end
 end

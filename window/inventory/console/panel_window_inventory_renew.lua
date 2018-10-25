@@ -1127,7 +1127,7 @@ function InventoryInfo:initEquipmentUIControls()
       slot.pictogram = pictogram
       slot:createChild()
       slot.icon:SetIgnore(true)
-      if ToClient_isXBox() or ToClient_IsDevelopment() then
+      if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
         slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_EquipSlot(" .. _equipSlotNo[ii] .. ")")
         slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowEquipTooltip(" .. _equipSlotNo[ii] .. ", true)")
       end
@@ -1167,7 +1167,7 @@ function InventoryInfo:initCostumeUIControls()
     slot.costumeSlotNoList = _costumeSlotNo[ii]
     slot:createChild()
     slot.icon:SetIgnore(true)
-    if ToClient_isXBox() or ToClient_IsDevelopment() then
+    if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
       slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMRUp_InventoryInfo_EquipSlot(" .. _costumeSlotNo[ii] .. ")")
       slotBG:registerPadEvent(__eConsoleUIPadEvent_Up_X, "Input_InventoryInfo_ShowEquipTooltip(" .. _costumeSlotNo[ii] .. ", true)")
     end
@@ -1443,7 +1443,7 @@ function InventoryInfo:initInventory()
     slotBG[ii]:SetChildOrder(slot[ii].icon:GetKey(), slot[ii].stc_multipleSelect:GetKey())
     Panel_Tooltip_Item_SetPosition(ii, slot[ii], "inventory")
     self._ui.stc_lockedSlots[ii] = UI.createAndCopyBasePropertyControl(_panel, "Static_LockedSlot", slotBG[ii], "Static_LockedSlot_" .. ii)
-    if ToClient_isXBox() or ToClient_IsDevelopment() then
+    if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
       if ii <= columnMax then
         slotBG[ii]:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "InputScroll_InventoryInfo_Inventory(true)")
       elseif ii > columnMax * (self._invenSlotRowMax - 1) then
@@ -1507,11 +1507,11 @@ function PaGlobalFunc_InventoryInfo_GetShow()
 end
 function PaGlobalFunc_InventoryInfo_Open(openType)
   InventoryInfo:open(openType)
-  _AudioPostEvent_SystemUiForXBOX(1, 16)
 end
 function InventoryInfo:open(openType)
   self:setServantTabPictogram()
   _panel:SetShow(true, false)
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   if _ContentsGroup_RenewUI_Chatting then
     PaGlobalFunc_ChattingInfo_Close()
   end
@@ -1546,7 +1546,7 @@ function PaGlobalFunc_InventoryInfo_Close()
 end
 function InventoryInfo:close()
   if _panel:GetShow() then
-    _AudioPostEvent_SystemUiForXBOX(1, 16)
+    _AudioPostEvent_SystemUiForXBOX(1, 31)
   end
   PaGlobalFunc_TooltipInfo_Close()
   Panel_Tooltip_Item_hideTooltip()
@@ -1578,7 +1578,7 @@ function InventoryInfo:close()
   self._slotEarringIndex = 0
 end
 function PaGlobalFunc_InventoryInfo_ShowAni()
-  _AudioPostEvent_SystemUiForXBOX(1, 30)
+  _AudioPostEvent_SystemUiForXBOX(1, 15)
   local self = InventoryInfo
   self._showAniIsPlaying = true
   _panel:ResetVertexAni()
@@ -3096,7 +3096,7 @@ function InputScroll_InventoryInfo_Inventory(isUp)
   if prevSlotIndex == 0 and self._invenStartSlotIndex == 0 or prevSlotIndex == intervalSlotIndex and self._invenStartSlotIndex == intervalSlotIndex then
     return
   end
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
+  if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:updateInventory()
@@ -3131,7 +3131,7 @@ function InputScroll_InventoryInfo_ServantInventory(isUp)
   if prevSlotIndex == self._servantInvenStartSlot then
     return
   end
-  if ToClient_isXBox() or ToClient_IsDevelopment() then
+  if ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment() then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:updateServantInven(self._servantActorKeyRaw[1])
@@ -3388,6 +3388,7 @@ end
 function Input_InventoryInfo_ShowTooltip(index, isShow)
   local self = InventoryInfo
   if isShow then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, getInventoryItemByType(_lowerTabData[self._currentLowerTab].whereType, self._ui.slot_inven[index].slotNo), Defines.TooltipTargetType.Item, _panel:GetPosX())
     PaGlobalFunc_FloatingTooltip_Close()
   else
@@ -3396,9 +3397,8 @@ function Input_InventoryInfo_ShowTooltip(index, isShow)
 end
 function Input_InventoryInfo_ShowEquipTooltip(slotNo, isShow)
   local self = InventoryInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if isShow then
-    _AudioPostEvent_SystemUiForXBOX(50, 0)
-    _AudioPostEvent_SystemUiForXBOX(1, 0)
     PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, ToClient_getEquipmentItem(slotNo), Defines.TooltipTargetType.ItemWithoutCompare, _panel:GetPosX())
     PaGlobalFunc_FloatingTooltip_Close()
   else
@@ -3408,9 +3408,8 @@ end
 function Input_InventoryInfo_ShowServantInvenTooltip(index, isShow)
   local self = InventoryInfo
   if isShow then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     if nil ~= self._servantActorKeyRaw[1] then
-      _AudioPostEvent_SystemUiForXBOX(50, 0)
-      _AudioPostEvent_SystemUiForXBOX(1, 0)
       local itemWrapper = getServantInventoryItemBySlotNo(self._servantActorKeyRaw[1], index + self._servantInvenStartSlot - 1 + __eTInventorySlotNoUseStart)
       PaGlobalFunc_TooltipInfo_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, _panel:GetPosX())
       PaGlobalFunc_FloatingTooltip_Close()
@@ -3422,6 +3421,7 @@ end
 function Input_InventoryInfo_ShowServantEquipTooltip(isEquipment, index, isShow)
   local self = InventoryInfo
   if isShow then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     if nil ~= self._servantActorKeyRaw[1] then
       local servantWrapper = getServantInfoFromActorKey(self._servantActorKeyRaw[1])
       if nil ~= servantWrapper then
@@ -3495,6 +3495,7 @@ function Inventory_Delete_Yes()
     PaymentPassword(Inventory_Delete_YesXXX)
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   Inventory_Delete_YesXXX()
   PaGlobal_TutorialManager:handleInventoryDelete(itemWrapper, self._deleteWhereType, self._deleteSlotNo)
 end

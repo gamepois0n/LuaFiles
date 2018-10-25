@@ -245,8 +245,8 @@ local Panel_Dialog_Main_Bottom_Info = {
     [13] = false,
     [14] = true,
     [15] = true,
-    [16] = false,
-    [17] = false,
+    [16] = true,
+    [17] = true,
     [18] = false,
     [19] = true,
     [20] = true,
@@ -786,7 +786,7 @@ function Panel_Dialog_Main_Bottom_Info:button_Func_Branch(buttonType)
   elseif CppEnums.ContentsType.Contents_LordMenu == buttonType then
     LordMenu_Show()
   elseif CppEnums.ContentsType.Contents_Extract == buttonType then
-    PaGlobal_Extraction:togglePanel()
+    PaGlobalFunc_ExtractInfo_Open()
   elseif CppEnums.ContentsType.Contents_TerritoryTrade == buttonType then
     npcShop_requestList(buttonType)
   elseif CppEnums.ContentsType.Contents_TerritorySupply == buttonType then

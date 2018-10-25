@@ -67,6 +67,7 @@ function Panel_Minigame_BattleGauge_Start()
   Panel_BattleGauge:SetShow(true)
   currentPercent = 50
   self:setProgress(true)
+  Panel_ConsoleKeyGuide:SetShow(false)
 end
 function BattleGauge_UpdateGauge(deltaTime)
   local self = MiniGame_BattleGauge
@@ -128,6 +129,7 @@ function BattleGauge_Result(timer)
 end
 function Panel_Minigame_BattleGauge_End()
   PaGlobal_ConsoleQuickMenu:widgetOpen()
+  PaGlobalFunc_ConsoleKeyGuide_On()
   Panel_BattleGauge:SetShow(false)
 end
 function FromClient_luaLoadComplete_MiniGame_BattleGauge_Init()

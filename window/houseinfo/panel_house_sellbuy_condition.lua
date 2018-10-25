@@ -67,7 +67,7 @@ local default_Pos_Size = {
   _List_Button_SizeX = 0,
   _List_Button_SpanX = 0,
   _List_GapX = 10,
-  _List_GapY = 25,
+  _List_GapY = 35,
   _Btn_All_PosY = 0,
   _Guide_PosY = 0,
   _Guide_SizeY = 0,
@@ -114,7 +114,6 @@ end
 default_Pos_Size:Init()
 function default_Control:Init()
   self._Title:SetAutoResize(true)
-  self._Title:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._Desc:SetAutoResize(true)
   self._Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._Guide:SetAutoResize(true)
@@ -246,7 +245,6 @@ function default_Control:UpdateList()
       default_Control._List_Button[idx]:SetShow(true)
       Adjust = default_Pos_Size._List_Button_SizeX
     end
-    default_Control._List_Value[idx]:SetSize(default_Pos_Size._List_Value_SizeX - param_Scroll._Adjust_3 - Adjust, default_Pos_Size._List_Value_SizeY)
     default_Control._List_Value[idx]:SetTextMode(UI_TM.eTextMode_LimitText)
     default_Control._List_Value[idx]:SetText(count .. ". " .. name)
     default_Control._List_Value[idx]:SetShow(true)
@@ -313,7 +311,7 @@ end
 function set_NextHouse()
   local targetName = get_HouseName_SellBuy(nextHouse_List, 1)
   default_Control._Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SELL_CONDTION_TITLE") .. " : " .. targetName)
-  if default_Pos_Size._Title_SizeY < default_Control._Title:GetSizeY() then
+  if default_Control._Title:GetTextSizeX() > default_Control._Title:GetSizeX() then
     default_Control._Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SELL_CONDTION_TITLE") .. " :\n" .. targetName)
   end
   default_Control._Desc:SetText("[<PAColor0xFF00D8FF> " .. targetName .. "<PAOldColor> ] " .. PAGetString(Defines.StringSheet_GAME, "LUA_SELL_CONDTION_DESC"))
@@ -332,7 +330,7 @@ function set_PrevHouse()
   local targetName = get_HouseName_SellBuy(prevHouse_List, 1)
   local useTypeName = get_UseTypeName_SellBuy()
   default_Control._Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BUY_CONDTION_TITLE") .. " : " .. targetName)
-  if default_Pos_Size._Title_SizeY < default_Control._Title:GetSizeY() then
+  if default_Control._Title:GetTextSizeX() < default_Control._Title:GetSizeY() then
     default_Control._Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BUY_CONDTION_TITLE") .. " :\n" .. targetName)
   end
   default_Control._Desc:SetText("[<PAColor0xFF00D8FF> " .. targetName .. " - " .. useTypeName .. "<PAOldColor> ] " .. PAGetString(Defines.StringSheet_GAME, "LUA_BUY_CONDTION_DESC"))

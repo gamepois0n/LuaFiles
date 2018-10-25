@@ -13,7 +13,7 @@ local UI_PP = CppEnums.PAUIMB_PRIORITY
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_color = Defines.Color
-local buttonGap = 1
+local buttonGap = 5
 Panel_AskKnowledge:RegisterShowEventFunc(true, "AskKnowledgeShowAni()")
 Panel_AskKnowledge:RegisterShowEventFunc(false, "AskKnowledgeHideAni()")
 function AskKnowledgeShowAni()
@@ -41,7 +41,7 @@ function askKnowledge.createSlot(index)
   CopyBaseProperty(_styleButton, uiAskButton._base)
   uiAskButton._base:SetShow(true)
   uiAskButton._base:addInputEvent("Mouse_LUp", "clickAskKnowledge(" .. index .. ")")
-  uiAskButton._base:SetPosY(45 + index * uiAskButton._base:GetSizeY() + (index - 1) * buttonGap)
+  uiAskButton._base:SetPosY(60 + index * uiAskButton._base:GetSizeY() + (index - 1) * buttonGap)
   uiAskButton._base:addInputEvent("Mouse_UpScroll", "askKnowledge_Scroll( true )")
   uiAskButton._base:addInputEvent("Mouse_DownScroll", "askKnowledge_Scroll( false )")
   function uiAskButton:SetShow(isShow)

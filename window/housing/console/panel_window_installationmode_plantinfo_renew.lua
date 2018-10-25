@@ -329,6 +329,7 @@ function PaGlobalFunc_InstallationMode_PlantInfo_Open()
 end
 function PaGlobalFunc_InstallationMode_PlantInfo_Close()
   local self = Panel_Window_InstallationMode_Plant_info
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobalFunc_InstallationMode_PlantInfo_Show()

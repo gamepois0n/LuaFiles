@@ -13,8 +13,10 @@ local Panel_Widget_HorseRace_info = {
   _RaceInfo_txt_Stat = UI.getChildControl(Panel_Window_HorseRace, "Race_RegStatus_Text"),
   _RaceInfo_btn_Join = UI.getChildControl(Panel_Window_HorseRace, "Race_Button_JoinRace"),
   _RaceInfo_btn_Cancel = UI.getChildControl(Panel_Window_HorseRace, "Race_Button_CancelRace"),
-  _RaceInfo_txt_Desc = UI.getChildControl(Panel_Window_HorseRace, "StaticText_Desc")
+  _RaceInfo_txt_Desc = UI.getChildControl(Panel_Window_HorseRace, "StaticText_Desc"),
+  _RaceInfo_btn_Close = UI.getChildControl(Panel_Window_HorseRace, "Button_WinClose")
 }
+Panel_Widget_HorseRace_info._RaceInfo_btn_Close:addInputEvent("Mouse_LUp", "PaGlobalFunc_RaceInfo_Toggle()")
 local raceRaedy = false
 function PaGlobalFunc_RaceInfo_Toggle()
   local isRaceChannel = ToClient_IsHorseRaceChannel()

@@ -32,11 +32,11 @@ local mailDetail = {
   slotConfig = {
     createIcon = true,
     createBorder = true,
-    createMailCount = true,
+    createMailCount = false,
     createEnchant = true,
     createCash = true
   },
-  config = {slotX = 5, slotY = 5},
+  config = {slotX = 4, slotY = 4},
   _sender = UI.getChildControl(Panel_Mail_Detail, "StaticText_Sender"),
   _title = UI.getChildControl(Panel_Mail_Detail, "StaticText_Subtitle"),
   _contents = UI.getChildControl(_frameContents, "StaticText_Content"),
@@ -47,6 +47,8 @@ local mailDetail = {
   _buttonClose = UI.getChildControl(Panel_Mail_Detail, "Button_Win_Close"),
   _buttonQuestion = UI.getChildControl(Panel_Mail_Detail, "Button_Question"),
   _checkboxToWarehouse = UI.getChildControl(Panel_Mail_Detail, "CheckButton_Warehouse"),
+  _itemCount = UI.getChildControl(Panel_Mail_Detail, "StaticText_ItemCount"),
+  _bottomBG = UI.getChildControl(Panel_Mail_Detail, "Static_Content"),
   _itemSlot = {},
   openMailNo = nil
 }
@@ -67,6 +69,7 @@ function mailDetail:init()
   self._iconBase:SetShow(false)
   self._checkboxToWarehouse:SetCheck(false)
   self._checkboxToWarehouse:SetShow(false)
+  self._bottomBG:SetShow(true)
 end
 function Mail_ShowItemToolTip()
   local self = mailDetail
@@ -133,23 +136,27 @@ function Mail_Detail_Open(mailNo)
   _frameContents:SetSize(_frameContents:GetSizeX(), textSizeY)
   UIScroll.SetButtonSize(_frameScroll, frameSizeY, textSizeY)
   _frameScroll:SetControlPos(0)
+  self._bottomBG:SetShow(true)
+  self._buttonDelete:SetSpanSize(10, 14)
   if 1 == RequestMail_getMailType() then
     local mailCashProductNoRaw = RequestMail_getMailCashProductNoRaw()
     local cPSSW
     if 0 ~= mailCashProductNoRaw then
       cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(mailCashProductNoRaw)
     end
+    local itemCount_s64 = RequestMail_getMailItemCount()
+    local itemCount = Int64toInt32(itemCount_s64)
+    self._itemText:SetShow(itemCount > 1)
+    self._itemCount:SetShow(itemCount > 1)
+    local itemCountString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIL_DETAIL_ITEM_COUNT_TITLE", "count", makeDotMoney(itemCount))
+    self._itemCount:SetText(itemCountString)
     if nil ~= cPSSW then
       self._itemSlot:clearItem()
       self._itemSlot:setItemByCashProductStaticStatus(cPSSW, RequestMail_getMailItemCount())
       self._iconBase:SetShow(true)
       self._itemSlot.icon:SetShow(true)
       self._itemText:SetShow(true)
-      if isGameTypeKorea() then
-        self._itemText:SetSpanSize(30, 485)
-      else
-        self._itemText:SetSpanSize(10, 485)
-      end
+      self._itemText:SetSpanSize(80, 520)
       self._buttonReceive:SetShow(true)
       self._checkboxToWarehouse:SetCheck(false)
       self._checkboxToWarehouse:SetShow(false)
@@ -174,19 +181,34 @@ function Mail_Detail_Open(mailNo)
       self._itemText:SetShow(true)
       self._buttonReceive:SetShow(true)
       self._checkboxToWarehouse:SetCheck(false)
+      local itemKey = mailItem:get()._key:getItemKey()
+      local itemCount_s64 = RequestMail_getMailItemCount()
+      local itemCount = Int64toInt32(itemCount_s64)
+      local silverString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIL_DETAIL_SILVER_COUNT_TITLE", "value", makeDotMoney(itemCount_s64))
+      local itemCountString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIL_DETAIL_ITEM_COUNT_TITLE", "count", makeDotMoney(itemCount_s64))
+      self._itemCount:SetShow(itemCount > 1)
+      if 1 == itemKey then
+        self._itemCount:SetText(silverString)
+      else
+        self._itemCount:SetText(itemCountString)
+      end
       local isMoney = mailItem:isMoney()
       if true == isMoney then
         self._checkboxToWarehouse:SetShow(true)
       else
         self._checkboxToWarehouse:SetShow(false)
       end
+      self._bottomBG:SetShow(true)
       Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY)
     else
+      self._buttonDelete:SetSpanSize(10, 20)
+      self._bottomBG:SetShow(false)
       self._itemSlot:clearItem()
       self._iconBase:SetShow(false)
       self._itemSlot.icon:SetShow(false)
       self._itemText:SetShow(false)
       self._buttonReceive:SetShow(false)
+      self._itemCount:SetShow(false)
       self._checkboxToWarehouse:SetCheck(false)
       self._checkboxToWarehouse:SetShow(false)
       Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY - 40)

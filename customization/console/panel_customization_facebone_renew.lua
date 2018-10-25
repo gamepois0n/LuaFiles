@@ -60,6 +60,7 @@ function PaGlobalFunc_Customization_FaceBone_SetBoneControl(isSet)
 end
 function PaGlobalFunc_Customization_FaceBone_CursorSelect(luaControlModeIndex)
   local self = Customization_FaceBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   selectSculptingBoneTransformType(luaControlModeIndex - 1)
   self._controlMode = luaControlModeIndex
 end
@@ -69,14 +70,17 @@ function PaGlobalFunc_Customization_FaceBone_EnableFaceSlide(enable)
 end
 function PaGlobalFunc_Customization_FaceBone_ShowControlPart()
   local self = Customization_FaceBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   showBoneControlPart(self._ui._checkBox_ShowPart:IsCheck())
 end
 function PaGlobalFunc_Customization_FaceBone_UpperHairChecked()
   local self = Customization_FaceBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   setUseFaceCustomizationHair(self._ui._checkBox_ShowUpperHair:IsCheck())
 end
 function PaGlobalFunc_Customization_FaceBone_SymmetryChecked()
   local self = Customization_FaceBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   setSymmetryBoneTransform(self._ui._checkBox_Symmetry:IsCheck())
 end
 function PaGlobalFunc_Customization_FaceBone_UpdateSlider(updateControlMode)
@@ -289,6 +293,7 @@ function Customization_FaceBoneInfo:InitControl()
   end
 end
 function PaGlobalFunc_Customization_FaceBone_ClearCustomizedBoneInfo()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   clearCustomizedBoneInfo()
   PaGlobalFunc_Customization_FaceBone_Update()
 end

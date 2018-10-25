@@ -25,23 +25,24 @@ function WharfInfoHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
 end
+local infoBg = UI.getChildControl(Panel_Window_WharfInfo, "Stable_Info_Ability")
 local wharfInfo = {
-  _staticName = UI.getChildControl(Panel_Window_WharfInfo, "StaticText_Name"),
-  _mp = UI.getChildControl(Panel_Window_WharfInfo, "MP"),
-  _staticText_GaugeBar_Hp = UI.getChildControl(Panel_Window_WharfInfo, "HP_GaugeBar"),
-  _staticText_GaugeBar_Mp = UI.getChildControl(Panel_Window_WharfInfo, "MP_GaugeBar"),
-  _staticText_GaugeBar_Weight = UI.getChildControl(Panel_Window_WharfInfo, "Weight_GaugeBar"),
-  _staticText_Hp = UI.getChildControl(Panel_Window_WharfInfo, "HP_Value"),
-  _staticText_Mp = UI.getChildControl(Panel_Window_WharfInfo, "MP_Value"),
-  _staticText_Weight = UI.getChildControl(Panel_Window_WharfInfo, "Weight_Value"),
-  _staticText_MoveSpeed = UI.getChildControl(Panel_Window_WharfInfo, "MaxMoveSpeedValue"),
-  _staticText_Acceleration = UI.getChildControl(Panel_Window_WharfInfo, "AccelerationValue"),
-  _staticText_Cornering = UI.getChildControl(Panel_Window_WharfInfo, "CorneringSpeedValue"),
-  _staticText_BrakeSpeed = UI.getChildControl(Panel_Window_WharfInfo, "BrakeSpeedValue"),
-  _staticRegionChangingTime = UI.getChildControl(Panel_Window_WharfInfo, "Static_RegionChangingTime"),
-  _staticRegionChangingTimeValue = UI.getChildControl(Panel_Window_WharfInfo, "Static_RegionChangingTimeValue"),
-  _deadCount = UI.getChildControl(Panel_Window_WharfInfo, "StaticText_DeadCount"),
-  _deadCountValue = UI.getChildControl(Panel_Window_WharfInfo, "StaticText_DeadCountValue")
+  _staticName = UI.getChildControl(infoBg, "StaticText_Name"),
+  _mp = UI.getChildControl(infoBg, "MP"),
+  _staticText_GaugeBar_Hp = UI.getChildControl(infoBg, "HP_GaugeBar"),
+  _staticText_GaugeBar_Mp = UI.getChildControl(infoBg, "MP_GaugeBar"),
+  _staticText_GaugeBar_Weight = UI.getChildControl(infoBg, "Weight_GaugeBar"),
+  _staticText_Hp = UI.getChildControl(infoBg, "HP_Value"),
+  _staticText_Mp = UI.getChildControl(infoBg, "MP_Value"),
+  _staticText_Weight = UI.getChildControl(infoBg, "Weight_Value"),
+  _staticText_MoveSpeed = UI.getChildControl(infoBg, "MaxMoveSpeedValue"),
+  _staticText_Acceleration = UI.getChildControl(infoBg, "AccelerationValue"),
+  _staticText_Cornering = UI.getChildControl(infoBg, "CorneringSpeedValue"),
+  _staticText_BrakeSpeed = UI.getChildControl(infoBg, "BrakeSpeedValue"),
+  _staticRegionChangingTime = UI.getChildControl(infoBg, "Static_RegionChangingTime"),
+  _staticRegionChangingTimeValue = UI.getChildControl(infoBg, "Static_RegionChangingTimeValue"),
+  _deadCount = UI.getChildControl(infoBg, "StaticText_DeadCount"),
+  _deadCountValue = UI.getChildControl(infoBg, "StaticText_DeadCountValue")
 }
 function wharfInfo:init()
 end
@@ -49,6 +50,9 @@ function PaGlobalFunc_WharfInfo_Update()
   wharfInfo:update()
 end
 function wharfInfo:update()
+  if false == Panel_Window_WharfInfo:GetShow() then
+    return
+  end
   local servantInfo = stable_getServant(WharfList_SelectSlotNo())
   if nil == servantInfo then
     return
@@ -59,9 +63,9 @@ function wharfInfo:update()
   local GuageWeight = Int64toInt32(Weight)
   local GuageMaxWeight = Int64toInt32(MaxWeight)
   self._staticName:SetText(servantInfo:getName())
-  self._staticText_GaugeBar_Hp:SetSize(2.5 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
-  self._staticText_GaugeBar_Mp:SetSize(2.5 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
-  self._staticText_GaugeBar_Weight:SetSize(2.5 * (GuageWeight / GuageMaxWeight * 100), 6)
+  self._staticText_GaugeBar_Hp:SetSize(2.7 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
+  self._staticText_GaugeBar_Mp:SetSize(2.7 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
+  self._staticText_GaugeBar_Weight:SetSize(2.7 * (GuageWeight / GuageMaxWeight * 100), 6)
   self._staticText_Hp:SetText(makeDotMoney(servantInfo:getHp()) .. " / " .. makeDotMoney(servantInfo:getMaxHp()))
   self._staticText_Mp:SetText(makeDotMoney(servantInfo:getMp()) .. " / " .. makeDotMoney(servantInfo:getMaxMp()))
   self._staticText_Weight:SetText(makeDotMoney(Weight) .. " / " .. makeDotMoney(MaxWeight))
@@ -100,18 +104,17 @@ function wharfInfo:registEventHandler()
 end
 function wharfInfo:registMessageHandler()
   registerEvent("onScreenResize", "WharfInfo_Resize")
+  registerEvent("EventSelfServantUpdateOnlyHp", "PaGlobalFunc_WharfInfo_Update")
+  registerEvent("EventSelfServantUpdateOnlyMp", "PaGlobalFunc_WharfInfo_Update")
 end
 function WharfInfo_Resize()
   Panel_Window_WharfInfo:SetSpanSize(20, 30)
   Panel_Window_WharfInfo:ComputePos()
 end
 function WharfInfo_Open()
+  Panel_Window_WharfInfo:SetShow(true)
   local self = wharfInfo
   self:update()
-  if Panel_Window_WharfInfo:GetShow() then
-    return
-  end
-  Panel_Window_WharfInfo:SetShow(true)
 end
 function WharfInfo_Close()
   if not Panel_Window_WharfInfo:GetShow() then

@@ -433,12 +433,14 @@ function PaGlobalFunc_MainDialog_Hide()
   if Panel_Win_System:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(1, 20)
   Auto_NotifyChangeDialog()
   PaGlobalFunc_MainDialog_CloseIniteValues()
   ToClient_PopDialogueFlush()
   FromClient_WarehouseUpdate()
   inventory_FlushRestoreFunc()
   PaGlobal_ExtractionResult:setHide()
+  PaGlobalFunc_ExtractInfo_Close()
   local selfPlayerWrapper = getSelfPlayer()
   if nil == selfPlayerWrapper then
     return
@@ -465,7 +467,7 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     HandleClicked_CloseIngameCustomization()
     retval = true
   end
-  if Panel_Npc_Trade_Market:IsShow() then
+  if PaGlobal_GetIsTrading() then
     closeNpcTrade_Basket()
     retval = true
   end
@@ -547,6 +549,10 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     PaGlobalFunc_Skill_Close()
     retval = true
   end
+  if true == ToClient_WorldMapIsShow() then
+    PaGlobalFunc_WorldMap_CloseForLuaKeyHandling(true)
+    retval = true
+  end
   if PaGlobalFunc_MentalGame_GetShow() then
     PaGlobalFunc_MentalGame_Close(false)
     retval = true
@@ -566,6 +572,10 @@ function PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     end
   elseif true == PaGlobalFunc_Customization_GetShow() then
     IngameCustomize_Hide()
+    retval = true
+  end
+  if true == Panel_Window_DyeingMain_Renew:GetShow() then
+    PaGlobalFunc_Dyeing_Close()
     retval = true
   end
   return retval
@@ -696,6 +706,7 @@ function FromClient_ExitMainDialog(isSetWait)
   GuildServantList_Close()
   LordMenu_Hide()
   PaGlobal_MasterpieceAuction:close()
+  PaGlobalFunc_ConsoleKeyGuide_Rod_Check()
 end
 function FromClient_MainDialog_CloseDialog()
   PaGlobalFunc_MainDialog_Hide()
@@ -729,7 +740,7 @@ function FromClient_CloseAllPanelWhenNpcGoHome()
     end
   end
   if GetUIMode() == Defines.UIMode.eUIMode_Extraction then
-    PaGlobal_Extraction:openPanel(false)
+    PaGlobalFunc_ExtractInfo_Close()
   end
   if GetUIMode() == Defines.UIMode.eUIMode_MentalGame then
     MentalGame_Hide()

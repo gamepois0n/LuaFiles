@@ -255,6 +255,9 @@ function ChattingInfo:open()
   if Panel_Window_Menu_Renew:GetShow() then
     Panel_Window_Menu_ShowToggle()
   end
+  if Panel_Window_Knowledge_Renew:GetShow() then
+    PaGlobalFunc_Window_Knowledge_Exit()
+  end
   FGlobal_PetList_Close(true)
   PaGlobalFunc_WorkerManager_Close()
   if PaGlobalFunc_AlchemyKnowledgeCheckShow() then
@@ -279,11 +282,11 @@ function ChattingInfo:open()
 end
 function Input_ChattingInfo_PressedLT()
   local self = ChattingInfo
-  _AudioPostEvent_SystemUiForXBOX(51, 7)
   if false == PaGlobalFunc_ChattingHistory_GetShow() then
     PaGlobalFunc_ChattingHistory_Open(self._availableChannelList[self._currentChatTypeIndex])
     self._ui.txt_keyGuideLTForHistory:SetShow(false)
     self._ui.stc_keyGuideInHistory:SetShow(true)
+    _AudioPostEvent_SystemUiForXBOX(51, 7)
   elseif true == PaGlobalFunc_ChattingHistory_GetShow() then
     self:whisperToNick(PaGlobalFunc_ChattingHistory_GetSelectedSender(ToClient_getChatNameType()))
   end
@@ -298,6 +301,7 @@ function ChattingInfo:whisperToNick(targetName)
   end
   self:setChatTypeTo(CHAT_TYPE.Private)
   self._ui.edit_whisperTarget:SetEditText(targetName)
+  self._ui.stc_whisperBG:SetSize(self._ui.edit_whisperTarget:GetTextSizeX() + 60, self._ui.stc_whisperBG:GetSizeY())
 end
 function Input_ChattingInfo_HistoryHide()
   local self = ChattingInfo
@@ -313,6 +317,7 @@ function InputPadY_ChattingInfo_MacroShowToggle(show)
   self._ui.stc_macroBG:SetShow(show)
   if false == show then
     self:speakMacro(self._currentMacro)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   end
 end
 function ChattingInfo:speakMacro(index)
@@ -324,8 +329,10 @@ function InputPadX_ChattingInfo_MacroMoveSelect(isUp)
   local self = ChattingInfo
   if isUp then
     self._currentMacro = self._currentMacro - 1
+    _AudioPostEvent_SystemUiForXBOX(51, 4)
   else
     self._currentMacro = self._currentMacro + 1
+    _AudioPostEvent_SystemUiForXBOX(51, 4)
   end
   if self._currentMacro < 0 then
     self._currentMacro = self._macroMaxCount
@@ -343,6 +350,7 @@ function PaGlobalFunc_ChattingInfo_PressedEnter(str)
       Input_ChattingInfo_OnPadX()
       return
     end
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     PaGlobalFunc_ChattingInfo_CancelAction()
     ChattingInfo:sendMessage()
     ClearFocusEdit()
@@ -362,6 +370,7 @@ function Input_ChattingInfo_PressedRT()
   if nil ~= whisperHistory then
     self:setChatTypeTo(CHAT_TYPE.Private)
     self._ui.edit_whisperTarget:SetEditText(whisperHistory)
+    _AudioPostEvent_SystemUiForXBOX(51, 7)
   else
     local string = PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_CHATTING_NO_REPLY")
     Proc_ShowMessage_Ack(string)
@@ -479,6 +488,7 @@ function Input_ChattingInfo_SelectInHistory(isUp)
   if not PaGlobalFunc_ChattingHistory_GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   ToClient_padSnapIgnoreGroupMove()
   Input_ChatHistory_SelectInList(isUp)
 end
@@ -498,10 +508,8 @@ function ChattingInfo:setChatTypeTo(targetChatType)
   end
   if targetChatType == CHAT_TYPE.Private then
     self._ui.stc_whisperBG:SetShow(true)
-    ChattingInfo._ui.txt_keyGuideXForEdit:SetPosX(460)
   else
     self._ui.stc_whisperBG:SetShow(false)
-    ChattingInfo._ui.txt_keyGuideXForEdit:SetPosX(630)
   end
   self:updateChannelIcon()
 end
@@ -518,6 +526,7 @@ function Input_ChattingInfo_SetNextChatType(isNext)
   elseif self._currentChatTypeIndex < 1 then
     self._currentChatTypeIndex = #self._availableChannelList
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   local chatType = self._availableChannelList[self._currentChatTypeIndex]
   if CHAT_TYPE.Private == chatType then
     Input_ChattingInfo_SetNextChatType(isNext)
@@ -525,7 +534,6 @@ function Input_ChattingInfo_SetNextChatType(isNext)
   end
   if chatType ~= CHAT_TYPE.Private then
     self._ui.stc_whisperBG:SetShow(false)
-    ChattingInfo._ui.txt_keyGuideXForEdit:SetPosX(630)
   end
   self:updateChannelIcon()
 end

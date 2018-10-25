@@ -93,16 +93,18 @@ function FromClient_UI_CharacterInfo_Basic_AttackChanged()
   self._ui._staticTextAttack_Value:SetText(tostring(chaAttack))
   local isShow = 0 == ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.CharacterInfo)
   local isSetAwakenWeapon = ToClient_getEquipmentItem(CppEnums.EquipSlotNo.awakenWeapon)
+  self._ui._staticTextDefence_Title:SetVerticalTop()
+  self._ui._staticTextStamina_Title:SetVerticalTop()
   if nil ~= isSetAwakenWeapon then
     local chaAwakenAttack = ToClient_getAwakenOffence()
     self._ui._staticTextAwakenAttack_Title:SetShow(isShow)
     self._ui._staticTextAwakenAttack_Value:SetText(tostring(chaAwakenAttack))
-    self._ui._staticTextDefence_Title:SetSpanSize(207, 154)
-    self._ui._staticTextStamina_Title:SetSpanSize(207, 180)
+    self._ui._staticTextDefence_Title:SetSpanSize(207, 169)
+    self._ui._staticTextStamina_Title:SetSpanSize(207, 195)
   else
     self._ui._staticTextAwakenAttack_Title:SetShow(false)
-    self._ui._staticTextDefence_Title:SetSpanSize(207, 128)
-    self._ui._staticTextStamina_Title:SetSpanSize(207, 154)
+    self._ui._staticTextDefence_Title:SetSpanSize(207, 143)
+    self._ui._staticTextStamina_Title:SetSpanSize(207, 169)
   end
   local chaDefence = ToClient_getDefence()
   self._ui._staticTextDefence_Value:SetText(tostring(chaDefence))
@@ -236,8 +238,26 @@ function FromClient_UI_CharacterInfo_Basic_PotentialChanged()
     end
     if isGameTypeKorea() or isGameTypeTaiwan() then
       self._ui._staticTextPotential_Value[index]:SetShow(true)
+      self._ui._staticTextPotential_Title[index]:SetSize(80, 20)
+      for slotIndex = 0, 4 do
+        self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+        self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(11)
+        self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+        self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosY(11)
+        self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(90 + slotIndex * 33)
+        self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosY(11)
+      end
     else
       self._ui._staticTextPotential_Value[index]:SetShow(false)
+      self._ui._staticTextPotential_Title[index]:SetSize(145, 20)
+      for slotIndex = 0, 4 do
+        self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(150 + slotIndex * 33)
+        self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(11)
+        self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosX(150 + slotIndex * 33)
+        self._ui._staticPotencialPlusGrade[index][slotIndex]:SetPosY(11)
+        self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosX(150 + slotIndex * 33)
+        self._ui._staticPotencialMinusGrade[index][slotIndex]:SetPosY(11)
+      end
     end
   end
 end
@@ -634,8 +654,13 @@ function PaGlobal_Char_LifeInfo:Init()
         self._lifeInfo[key]._ui._subCategoryPoint[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, pointControlName)
       end
     end
-    self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",true)")
-    self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",false)")
+    if 1 == key or 2 == key or 9 == key or 4 == key then
+      self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. ")")
+      self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. ")")
+    else
+      self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",true)")
+      self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:Life_MouseOverEvent(" .. key .. ",false)")
+    end
   end
 end
 function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
@@ -657,10 +682,11 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
     local currentExpRate = Int64toInt32(currentExpRate64)
     currentExpRate = currentExpRate / 100
     local currentExpRateString = string.format("%.2f", currentExpRate)
-    self._lifeInfo[key]._ui._levelText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(currentLevel))
-    self._lifeInfo[key]._ui._levelText:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(currentLevel))
     self._lifeInfo[key]._ui._progressBar:SetProgressRate(currentExpRate)
     self._lifeInfo[key]._ui._expText:SetText(currentExpRateString .. "%")
+    self._lifeInfo[key]._ui._levelText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(currentLevel))
+    self._lifeInfo[key]._ui._levelText:SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(currentLevel))
+    self._lifeInfo[key]._ui._levelText:SetPosX(self._lifeInfo[key]._ui._expText:GetPosX() - self._lifeInfo[key]._ui._levelText:GetTextSizeX() - 15)
     if key == __ePlayerLifeStatType_Collecting or key == __ePlayerLifeStatType_Manufacture then
       local commonPoint = ToClient_GetCommonLifeStat(key)
       local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(commonPoint)
@@ -669,9 +695,7 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
       local subPoint = selfPlayer:get():getLifeStat(key, 1)
       local commonPointString = PAGetString(Defines.StringSheet_GAME, "LUA_CHARINFO_COMMONLIFESTAT") .. " " .. tostring(subPoint)
       self._lifeInfo[key]._ui._commonPoint:SetText(commonPointString)
-      self._lifeInfo[key]._ui._commonPoint:SetIgnore(false)
-      self._lifeInfo[key]._ui._commonPoint:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. ")")
-      self._lifeInfo[key]._ui._commonPoint:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. ")")
+      self._lifeInfo[key]._ui._commonPoint:SetIgnore(true)
     end
     for ii = 1, self._lifeSubTypeCount[key] - 1 do
       if nil ~= self._lifeInfo[key]._ui._subCategoryPoint[ii] then
@@ -684,6 +708,10 @@ function FromClient_UI_CharacterInfo_Basic_LifeLevelChangeNew()
   end
 end
 function PaGlobal_Char_LifeInfo:Life_MouseOverEvent(sourceType, isOn)
+  if not isOn then
+    TooltipSimple_Hide()
+    return
+  end
   if true == isOn then
     local name, desc, control
     if 0 == sourceType then
@@ -775,6 +803,35 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       end
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_HUNTING_DESC", "rate", dropRate)
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE2")
+      control = self._lifeInfo[mainType]._ui._commonPoint
+    elseif __ePlayerLifeStatType_Alchemy == mainType then
+      if false == _ContentsGroup_EnhanceAlchemy then
+        return
+      end
+      local alchemySSW = ToClient_getAlchemyStatStaticStatus()
+      if nil == alchemySSW then
+        local tempdesc1 = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_ALCHEMY_DESC_1", "rate1", 0, "rate2", 0, "rate3", 0, "rate4", 0)
+        local tempdesc2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_ALCHEMY_DESC_2", "rate1", 0)
+        desc = string.format([[
+%s
+%s]], tempdesc1, tempdesc2)
+      else
+        local rate1 = string.format("%.1f", alchemySSW._basicMaxDropRate / 10000)
+        local eventDropRate = alchemySSW._eventDropRate / 1000000
+        local dropRate1 = alchemySSW:getEventDropRateForTooltip(0) / 1000000
+        local dropRate2 = alchemySSW:getEventDropRateForTooltip(1) / 1000000
+        local dropRate3 = alchemySSW:getEventDropRateForTooltip(2) / 1000000
+        local basicRate = eventDropRate * (1 - dropRate3) * (1 - dropRate2)
+        local specialRate = eventDropRate * (1 - dropRate3) * dropRate2
+        local uniqueRate = eventDropRate * dropRate3
+        local tempdesc1 = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_ALCHEMY_DESC_1", "rate1", rate1, "rate2", string.format("%.2f", basicRate * 100), "rate3", string.format("%.2f", specialRate * 100), "rate4", string.format("%.2f", uniqueRate * 100))
+        local royalBonus = string.format("%.1f", alchemySSW._addRoyalTradeBonus / 10000)
+        local tempdesc2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_ALCHEMY_DESC_2", "rate1", royalBonus)
+        desc = string.format([[
+%s
+%s]], tempdesc1, tempdesc2)
+      end
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE4")
       control = self._lifeInfo[mainType]._ui._commonPoint
     elseif __ePlayerLifeStatType_Sail == mainType then
       if false == _ContentsGroup_EnhanceSail then

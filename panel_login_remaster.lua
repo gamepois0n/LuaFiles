@@ -37,17 +37,26 @@ local _animTable = {
 local _movieLength = {
   10000,
   10000,
+  10000,
+  10000,
+  10000,
   10000
 }
 local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_001_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
-  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+  "coui://UI_Movie/Remaster_loading_Scene_007_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_012_re.webm"
 }
 local _movieOrder = {
   1,
   2,
-  3
+  3,
+  4,
+  5,
+  6
 }
 local _currentMovieIndex
 local self = PanelLogin
@@ -91,7 +100,7 @@ function PanelLogin:registEvent()
   self._ui.btn_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
   self._ui.btn_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_ButtonClick_ChangeAccount()")
   self._ui.btn_GameOption:addInputEvent("Mouse_LUp", "showGameOption()")
-  if ToClient_isXBox() then
+  if ToClient_isConsole() then
     self._ui.btn_GameOption:SetShow(false)
   else
     self._ui.btn_ChangeAccount:SetShow(false)
@@ -125,18 +134,10 @@ function PaGlobalFunc_PanelLogin_FadeOut()
 end
 local _fadeTime = 1
 function PanelLogin:startFadeIn()
-  local ImageAni = self._ui.stc_fade:addColorAnimation(0.3, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_FF000000)
-  ImageAni:SetEndColor(Defines.Color.C_00000000)
-  ImageAni:SetHideAtEnd(true)
-  luaTimer_AddEvent(PaGlobalFunc_PanelLogin_FadeOut, _movieLength[_movieOrder[_currentMovieIndex]] - _fadeTime * 1000, false, 0)
+  self._ui.stc_fade:SetShow(false)
 end
 function PanelLogin:startFadeOut()
-  self._ui.stc_fade:SetShow(true)
-  local ImageAni = self._ui.stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_00000000)
-  ImageAni:SetEndColor(Defines.Color.C_FF000000)
-  ImageAni:SetHideAtEnd(false)
+  self._ui.stc_fade:SetShow(false)
 end
 function PanelLogin:loginEnter()
   _PA_LOG("\235\176\149\235\178\148\236\164\128", "PanelLogin:loginEnter")
@@ -231,7 +232,7 @@ function PaGlobal_PanelLogin_Resize()
     self._ui.stc_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.stc_DaumCI:setRenderTexture(self._ui.stc_DaumCI:getBaseTexture())
     self._ui.stc_CI:SetSpanSize(self._ui.stc_DaumCI:GetSizeX() + 30, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
-  elseif isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isConsole() then
     self._ui.stc_DaumCI:SetShow(false)
     self._ui.stc_CI:SetSpanSize(10, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
   elseif isGameTypeSA() then

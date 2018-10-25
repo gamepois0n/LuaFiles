@@ -80,6 +80,7 @@ function PaGlobalFunc_Dyeing_CloseAll()
   PaGlobalFunc_DyeingPalette_Close()
   PaGlobalFunc_DyeingPartList_Close()
   PaGlobalFunc_Dyeing_Close()
+  PaGlobalFunc_DyeingMenu_Close()
 end
 function PaGlobalFunc_Dyeing_OnPadB()
   if PaGlobalFunc_DyeingRegister_GetShow() then
@@ -133,7 +134,7 @@ function PaGlobalFunc_Dyeing_UpdatePerFrame(deltaTime)
   local RSY = getPadRightStickMoveY()
   if 0 ~= RSX or 0 ~= RSY then
     if true == _padLTIsPressed then
-      ToClient_RequestUpdateDyeVaryZoom(RSY * deltaTime * 400)
+      ToClient_RequestUpdateDyeVaryZoom(RSY * deltaTime * -300)
     else
       ToClient_RequestUpdateDyeVaryRotation(RSX * -0.8 * deltaTime, -(RSY * -2) * deltaTime)
     end
@@ -157,3 +158,4 @@ end
 function PaGlobalFunc_DyeingMain_MoveKeyGuide(toX)
   DyeingMain._ui.stc_bottomBG:SetPosX(toX - DyeingMain._ui.stc_bottomBG:GetSizeX())
 end
+renderMode:setClosefunctor(renderMode, PaGlobalFunc_Dyeing_CloseAll)

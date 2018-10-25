@@ -62,7 +62,7 @@ function PaGlobal_TutorialPhase_Hidel_Worker:checkPossibleForPhaseStart(stepNo)
     return false
   end
   local hasItem = true
-  if toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(64616, 1)) then
+  if toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(64616, 0)) then
     hasItem = false
   end
   if false == hasItem then

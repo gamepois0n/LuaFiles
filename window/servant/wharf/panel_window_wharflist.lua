@@ -56,10 +56,10 @@ local wharfList = {
     unseal = {
       startX = 230,
       startY = 0,
-      startButtonX = 25,
-      startButtonY = 25,
-      startIconX = 25,
-      startIconY = 35
+      startButtonX = 20,
+      startButtonY = 57,
+      startIconX = 20,
+      startIconY = 57
     },
     button = {
       startX = 180,
@@ -87,6 +87,7 @@ local wharfList = {
   _selectSceneIndex = -1,
   _unseal = {}
 }
+local _initialized = false
 function wharfList:init()
   for ii = 0, self._config.slotCount - 1 do
     local slot = {}
@@ -121,12 +122,15 @@ function wharfList:init()
     self._slots[ii] = slot
   end
   self._unseal._button = UI.createAndCopyBasePropertyControl(Panel_Window_WharfList, "Static_Button", self._staticUnsealBG, "WharfList_Unseal_Button")
+  self._unseal._bgTitle = UI.createAndCopyBasePropertyControl(Panel_Window_WharfList, "StaticText_BGTitle", self._staticUnsealBG, "StableList_Unseal_BG_Title")
   self._unseal._icon = UI.createAndCopyBasePropertyControl(Panel_Window_WharfList, "Static_Icon", self._staticUnsealBG, "WharfList_Unseal_Icon")
   local unsealConfig = self._config.unseal
   self._unseal._button:SetPosX(unsealConfig.startButtonX)
   self._unseal._button:SetPosY(unsealConfig.startButtonY)
   self._unseal._icon:SetPosX(unsealConfig.startIconX)
   self._unseal._icon:SetPosY(unsealConfig.startIconY)
+  self._unseal._bgTitle:ComputePos()
+  self._unseal._bgTitle:SetShow(true)
   self._unseal._icon:SetIgnore(true)
   self._unseal._button:addInputEvent("Mouse_LUp", "WharfList_ButtonOpen( 1, 0 )")
   self._buttonSeal = UI.createAndCopyBasePropertyControl(Panel_Window_WharfList, "Button_Seal", self._staticButtonListBG, "WharfList_Button_Seal")
@@ -146,6 +150,7 @@ function wharfList:init()
   self._maxCount:addInputEvent("Mouse_On", "wharfList_ShowCountTooltip(" .. 2 .. ")")
   self._maxCount:addInputEvent("Mouse_Out", "wharfList_HideCountTooltip()")
   Panel_Window_WharfList:SetChildIndex(self._staticButtonListBG, 9999)
+  _initialized = true
 end
 function wharfList_ShowCountTooltip(iconType)
   local self = wharfList
@@ -169,6 +174,9 @@ function wharfList_HideCountTooltip()
   TooltipSimple_Hide()
 end
 function wharfList:update()
+  if false == _initialized then
+    return
+  end
   local servantCount = stable_count()
   if 0 == servantCount then
     self._staticNoticeText:SetShow(true)
@@ -282,16 +290,16 @@ function WharfList_Resize()
   local slotCount = 4
   if screenY > 1000 then
     panelSize = 700
-    panelBGSize = 660
-    scrollSize = 660
+    panelBGSize = 645
+    scrollSize = 635
     slotCount = 4
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(true)
     end
   else
     panelSize = 540
-    panelBGSize = 500
-    scrollSize = 500
+    panelBGSize = 485
+    scrollSize = 475
     slotCount = 3
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(false)
@@ -484,14 +492,22 @@ function WharfList_Seal(isCompulsionSeal)
   else
     stable_seal(false)
   end
+  WharfInfo_Close()
+  for ii = 0, self._config.slotCount - 1 do
+    self._slots[ii].effect:SetShow(false)
+  end
 end
 function WharfList_Button_CompulsionSeal()
   stable_seal(true)
 end
 function WharfList_Unseal()
   audioPostEvent_SystemUi(0, 0)
+  local self = wharfList
   stable_unseal(WharfList_SelectSlotNo())
   WharfList_ButtonClose()
+  for ii = 0, self._config.slotCount - 1 do
+    self._slots[ii].effect:SetShow(false)
+  end
 end
 function WharfList_Recovery()
   local servantInfo = stable_getServant(WharfList_SelectSlotNo())

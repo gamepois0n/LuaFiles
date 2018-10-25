@@ -78,6 +78,7 @@ function DyeingRegister:open()
   self:updateList()
 end
 function DyeingRegister:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
   PaGlobalFunc_DyeingMain_ShowKeyGuideB(true)
 end
@@ -129,6 +130,7 @@ function PaGlobalFunc_DyeingRegister_Regist(slotNo)
   if self._waitForMessage or nil == slotNo then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   local itemWrapper = getInventoryItemByType(CppEnums.ItemWhereType.eCashInventory, slotNo)
   if nil == itemWrapper then
     UI.ASSERT(nil ~= itemWrapper, "dye itemWrapper \235\138\148 nil\236\157\180\236\150\180\236\132\160 \236\149\136\235\144\169\235\139\136\235\141\148")
@@ -137,6 +139,7 @@ function PaGlobalFunc_DyeingRegister_Regist(slotNo)
   local count_s64 = itemWrapper:get():getCount_s64()
   local function doInsertPalette()
     ToClient_requestCreateDyeingPaletteFromItem(CppEnums.ItemWhereType.eCashInventory, slotNo, count_s64)
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     self._waitForMessage = true
     self._ui.txt_keyGuideA:SetMonoTone(true)
   end

@@ -309,9 +309,11 @@ function MessageBoxCheck_ShowAni()
   aniInfo2.AxisY = Panel_Win_Check:GetSizeY() / 2
   aniInfo2.ScaleType = 2
   aniInfo2.IsChangeChild = true
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
 end
 function MessageBoxCheck_HideAni()
   Panel_Win_Check:SetShow(false, false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function messageBoxCheck_ApplyButtonUp()
   local functionApply
@@ -326,6 +328,7 @@ function messageBoxCheck_ApplyButtonUp()
   if functionApply ~= nil then
     functionApply(MessageBoxCheck.getSelectedButtonIndex())
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function messageBoxCheck_CancelButtonUp()
   local functionCancel
@@ -337,6 +340,7 @@ function messageBoxCheck_CancelButtonUp()
   if functionCancel ~= nil then
     functionCancel(MessageBoxCheck.getSelectedButtonIndex())
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function messageBoxCheck_CloseButtonUp()
   local functionCancel
@@ -349,6 +353,7 @@ function messageBoxCheck_CloseButtonUp()
   if functionCancel ~= nil then
     functionCancel(MessageBoxCheck.getSelectedButtonIndex())
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function Event_MessageBoxCheck_NotifyMessage_CashAlert(message)
   local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
@@ -428,9 +433,11 @@ end
 function PaGlobalFunc_MessageCheck_Check_Up()
   radioButton_Me:SetCheck(true)
   radioButton_All:SetCheck(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_MessageCheck_Check_Down()
   radioButton_Me:SetCheck(false)
   radioButton_All:SetCheck(true)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 Panel_Win_Check:RegisterUpdateFunc("messageBoxCheck_UpdatePerFrame")

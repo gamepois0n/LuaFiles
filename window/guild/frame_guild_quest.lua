@@ -46,23 +46,23 @@ GuildQuestInfoPage = {
   _btnPreocc = UI.getChildControl(Panel_Guild_Quest, "Button_List_Preocc"),
   _btnWide = UI.getChildControl(Panel_Guild_Quest, "Button_List_Wide"),
   _btnPreoccInfo = UI.getChildControl(Panel_Guild_Quest, "Button_List_PreoccInfo"),
-  _btnListLeft = UI.getChildControl(Panel_Guild_Quest, "Button_List_Left"),
-  _btnListRight = UI.getChildControl(Panel_Guild_Quest, "Button_List_Right"),
   _txtListNo = UI.getChildControl(Panel_Guild_Quest, "StaticText_List"),
   _txtGuildMoney = UI.getChildControl(Panel_Guild_Quest, "StaticText_GuildMoney")
 }
 function GuildQuestInfoPage:initialize()
-  local main_Progress = UI.getChildControl(Panel_Guild_Quest, "StaticText_M_ProgressQuest")
+  self.main_Progress = UI.getChildControl(Panel_Guild_Quest, "StaticText_M_ProgressQuest")
   local questList_BG = UI.getChildControl(Panel_Guild_Quest, "Static_QuestList_BG")
   local progress_BG = UI.getChildControl(Panel_Guild_Quest, "Static_Progress_BG")
+  self._btnListLeft = UI.getChildControl(self._txtListNo, "Button_List_Left")
+  self._btnListRight = UI.getChildControl(self._txtListNo, "Button_List_Right")
   local copyProgressQuestCondition = UI.getChildControl(Panel_Guild_Quest, "StaticText_Pro_Count")
   for index = 0, self._constCurrentGuildQuestMaxCount - 1 do
-    self._txtProgressQuestCondition[index] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, progress_BG, "StaticText_Pro_Count_" .. index)
+    self._txtProgressQuestCondition[index] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Guild_Quest, "StaticText_Pro_Count_" .. index)
     CopyBaseProperty(copyProgressQuestCondition, self._txtProgressQuestCondition[index])
     self._txtProgressQuestCondition[index]:SetIgnore(false)
-    self._txtProgressQuestCondition[index]:SetAutoResize(true)
     self._txtProgressQuestCondition[index]:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    self._txtProgressQuestCondition[index]:SetSize(450, self._txtProgressQuestCondition[index]:GetSizeY())
+    self._txtProgressQuestCondition[index]:SetSize(550, self._txtProgressQuestCondition[index]:GetSizeY())
+    self._txtProgressQuestCondition[index]:SetPosX(150)
   end
   deleteControl(copyProgressQuestCondition)
   copyProgressQuestCondition = nil
@@ -94,7 +94,7 @@ function GuildQuestInfoPage:initialize()
   end
   self._questCompleteAlert:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._questCompleteAlert:SetText(PAGetString(Defines.StringSheet_GAME, "UI_GUILD_GUILDQUEST_COMPLETE"))
-  self._questCompleteAlert:SetSpanSize(self._questCompleteAlert:GetSpanSize().x, 590)
+  self._questCompleteAlert:SetSpanSize(20, 600)
   self._questCompleteAlert:SetShow(true)
   local copyListBG = UI.getChildControl(Panel_Guild_Quest, "Static_List_BG")
   local copyTitle = UI.getChildControl(Panel_Guild_Quest, "StaticText_C_List_Title")
@@ -102,6 +102,7 @@ function GuildQuestInfoPage:initialize()
   local copyTime = UI.getChildControl(Panel_Guild_Quest, "StaticText_C_List_Time")
   local copyGold = UI.getChildControl(Panel_Guild_Quest, "StaticText_C_List_Gold")
   local copyAcceptBtn = UI.getChildControl(Panel_Guild_Quest, "Button_List_C_Accept")
+  self.progressPartLine = UI.getChildControl(Panel_Guild_Quest, "Static_ProgressPartLine")
   function createQuestListInfo(pIndex)
     local rtGuildQuestListInfo = {}
     rtGuildQuestListInfo._list_BG = UI.createControl(UCT.PA_UI_CONTROL_STATIC, questList_BG, "Static_List_BG_" .. pIndex)
@@ -123,14 +124,22 @@ function GuildQuestInfoPage:initialize()
     CopyBaseProperty(self._questIcon, rtGuildQuestListInfo._list_QuestIcon)
     CopyBaseProperty(self._questIconBG, rtGuildQuestListInfo._list_QuestIconBG)
     rtGuildQuestListInfo._list_BG:SetPosY(35 + pIndex * 86)
+    rtGuildQuestListInfo._list_Time:SetPosX(700)
+    rtGuildQuestListInfo._list_Time:SetPosY(5)
+    rtGuildQuestListInfo._list_Gold:SetPosX(700)
+    rtGuildQuestListInfo._list_Gold:SetPosY(27)
     rtGuildQuestListInfo._list_Title:SetSize(450, rtGuildQuestListInfo._list_Title:GetSizeY())
     rtGuildQuestListInfo._list_Title:SetIgnore(false)
+    rtGuildQuestListInfo._list_Title:SetPosX(100)
+    rtGuildQuestListInfo._list_Title:SetPosY(10)
     rtGuildQuestListInfo._list_Title:SetTextMode(UI_TM.eTextMode_LimitText)
     rtGuildQuestListInfo._list_Desc:setLineCountByLimitAutoWrap(3)
     if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
       rtGuildQuestListInfo._list_Desc:setLineCountByLimitAutoWrap(2)
     end
     rtGuildQuestListInfo._list_Desc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
+    rtGuildQuestListInfo._list_Desc:SetPosX(200)
+    rtGuildQuestListInfo._list_Desc:SetPosY(25)
     rtGuildQuestListInfo._list_AcceptBtn:addInputEvent("Mouse_LUp", "HandleClickedGuildQuest_Accept(" .. pIndex .. ")")
     rtGuildQuestListInfo._list_RewardBtn:addInputEvent("Mouse_LUp", "HandleClickedGuildQuest_Reward(" .. pIndex .. ")")
     return rtGuildQuestListInfo
@@ -138,7 +147,13 @@ function GuildQuestInfoPage:initialize()
   for index = 0, self._constGuildQuestMaxCount - 1 do
     self._list[index] = createQuestListInfo(index)
   end
-  self._txtProgressQuestName:SetSize(250, self._txtProgressQuestName:GetSizeY())
+  self.progressPartLine:SetPosX(130)
+  self.progressPartLine:SetPosY(75)
+  self.main_Progress:SetPosX(20)
+  self.main_Progress:SetPosY(50)
+  self._txtProgressQuestName:SetSize(550, 25)
+  self._txtProgressQuestName:SetPosX(150)
+  self._txtProgressQuestName:SetPosY(70)
   self._txtProgressQuestName:SetTextMode(UI_TM.eTextMode_LimitText)
   self._txtProgressDesc:SetLineCount(3)
   self._txtProgressDesc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -437,19 +452,23 @@ function GuildQuestInfoPage:UpdateData()
     else
       self._txtProgressLimitTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_REMAINTIME", "time_minute", strMinute))
     end
+    self._txtProgressLimitTime:SetColor(4294901760)
+    self._txtProgressLimitTime:SetFontColor(4294901760)
+    self._txtProgressLimitTime:SetPosX(750)
+    self._txtProgressLimitTime:SetPosY(50)
     self._txtProgressDesc:SetText(ToClient_getCurrentGuildQuestDesc())
     local stringLen = string.len(self._txtProgressQuestName:GetText())
     if stringLen > 90 then
       stringLen = 90
     end
-    self._btnProgressNavi:SetPosX(self._btnProgressNaviOriginPosX + stringLen * 4.5)
-    self._btnProgressGiveup:SetPosX(self._btnProgressGiveupOriginPosX + stringLen * 4.5)
-    self._btnProgressReward:SetPosX(self._btnProgressRewardOriginPosX + stringLen * 4.5)
+    self._btnProgressNavi:SetPosX(self._btnProgressNaviOriginPosX + self._txtProgressQuestName:GetTextSizeX() + 10)
+    self._btnProgressGiveup:SetPosX(self._btnProgressGiveupOriginPosX + self._txtProgressQuestName:GetTextSizeX() + 10)
+    self._btnProgressReward:SetPosX(self._btnProgressRewardOriginPosX + self._txtProgressQuestName:GetTextSizeX() + 10)
     self._RewardPosX = self._btnProgressReward:GetPosX()
     local questConditionCount = ToClient_getCurrentGuildQuestConditionCount()
     local conditionPosY = 0
     if 1 == questConditionCount then
-      conditionPosY = 60
+      conditionPosY = 65
     elseif 2 == questConditionCount then
       conditionPosY = 51
     elseif 3 == questConditionCount then
@@ -471,19 +490,24 @@ function GuildQuestInfoPage:UpdateData()
           self._txtProgressQuestCondition[index]:SetLineRender(false)
           self._txtProgressQuestCondition[index]:SetFontColor(UI_color.C_FFC4BEBE)
         end
-        self._txtProgressQuestCondition[index]:SetPosY(conditionPosY + index * self._txtProgressQuestCondition[index]:GetTextSizeY())
+        self._txtProgressQuestCondition[index]:SetPosY(self._txtProgressQuestName:GetPosY() + (index + 1) * self._txtProgressQuestCondition[index]:GetTextSizeY() + 10)
         self._txtProgressQuestCondition[index]:addInputEvent("Mouse_On", "guildQuest_ProgressQuestDesc( true )")
         self._txtProgressQuestCondition[index]:addInputEvent("Mouse_Out", "guildQuest_ProgressQuestDesc( false )")
       else
         self._txtProgressQuestCondition[index]:SetShow(false)
       end
     end
+    self.progressPartLine:SetShow(true)
+    self.main_Progress:SetShow(true)
     self._txtProgressQuestName:SetShow(true)
     self._txtProgressLimitTime:SetShow(true)
     self._txtProgressDesc:SetShow(false)
     self._btnProgressNavi:SetShow(false)
     self._questIcon:SetShow(true)
-    self._questIconBG:SetShow(true)
+    self._questIconBG:SetShow(false)
+    self._questIcon:SetSize(106, 106)
+    self._questIcon:SetPosX(15)
+    self._questIcon:SetPosY(75)
     self._questIcon:ChangeTextureInfoName(ToClient_getCurrentGuildQuestIconPath())
     if getSelfPlayer():get():isGuildMaster() or getSelfPlayer():get():isGuildSubMaster() then
       self._btnProgressGiveup:SetShow(true)
@@ -502,6 +526,8 @@ function GuildQuestInfoPage:UpdateData()
     for index = 0, self._constCurrentGuildQuestMaxCount - 1 do
       self._txtProgressQuestCondition[index]:SetShow(false)
     end
+    self.progressPartLine:SetShow(false)
+    self.main_Progress:SetShow(false)
     self._txtProgressQuestName:SetShow(false)
     self._txtProgressLimitTime:SetShow(false)
     self._txtProgressDesc:SetShow(false)
@@ -559,13 +585,18 @@ function GuildQuestInfoPage:UpdateData()
           requireGuildRankStr = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_QUEST_BIGGEST")
         end
         self._list[index]._list_Title:SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_QUEST_LIMIT", "currentGuildQuestName", guildQuestList:getTitle(), "requireGuildRankStr", requireGuildRankStr))
+        self._list[index]._list_Title:SetPosX(100)
+        self._list[index]._list_Title:SetPosY(10)
         self._list[index]._list_Desc:SetSize(540, self._list[index]._list_Desc:GetSizeY())
         self._list[index]._list_Desc:SetText(guildQuestList:getDesc())
-        self._list[index]._list_Desc:SetPosX(70)
-        self._list[index]._list_RewardBtn:SetPosX(self._list[index]._list_Title:GetTextSizeX() + 20)
-        self._list[index]._list_RewardBtn:SetPosY(5)
-        self._list[index]._list_QuestIcon:SetPosY(25)
-        self._list[index]._list_QuestIconBG:SetPosY(25)
+        self._list[index]._list_Desc:SetPosX(100)
+        self._list[index]._list_Desc:SetPosY(35)
+        self._list[index]._list_RewardBtn:SetPosX(self._list[index]._list_Title:GetPosX() + self._list[index]._list_Title:GetTextSizeX() + 20)
+        self._list[index]._list_RewardBtn:SetPosY(self._list[index]._list_Title:GetPosY())
+        self._list[index]._list_QuestIconBG:SetSize(61, 61)
+        self._list[index]._list_QuestIcon:SetSize(50, 50)
+        self._list[index]._list_QuestIcon:SetPosY(20)
+        self._list[index]._list_QuestIconBG:SetPosY(20)
         self._list[index]._list_QuestIcon:ChangeTextureInfoName(guildQuestList:getIconPath())
         if false == self._questListInfo then
           local remainTime = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_LIMITTIME") .. " " .. guildDisplayTime(guildQuestList:getLimitMinute())

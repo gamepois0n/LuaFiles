@@ -521,6 +521,7 @@ function PaGlobalFunc_StableMarket_TabEventXXX(isMyTab)
     self._value.currentTab = self._enum.eTAB_MARKET
     requestServantMarketListPage(self._value.openByNpc)
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
 end
 function PaGlobalFunc_StableMarket_TabEventFromRegister()
   local self = Panel_Window_StableMarket_info
@@ -637,6 +638,7 @@ function PaGlobalFunc_StableMarket_PageChange(isNext)
       RequestAuctionPrevPage(0, self._value.openByNpc)
     end
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_StableMarket_SkillEventControlCreate(list_content, key)
   local self = Panel_Window_StableMarket_info

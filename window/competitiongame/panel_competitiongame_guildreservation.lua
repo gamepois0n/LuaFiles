@@ -201,5 +201,3 @@ function Panel_CompetitionGame_GuildReservation_Event()
   registerEvent("FromClient_ChangedHost", "FromClient_ChangedHost")
   registerEvent("FromClient_ChangeAssistant", "FromClient_ChangeAssistant")
 end
-Panel_CompetitionGame_GuildReservation_Init()
-Panel_CompetitionGame_GuildReservation_Event()

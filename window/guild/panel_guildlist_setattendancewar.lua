@@ -249,6 +249,30 @@ function HandleClicked_SetAttendanceWar_Confirm()
         end
       end
     end
+    local participantCount = 0
+    local myguildInfo = ToClient_GetMyGuildInfoWrapper()
+    if nil == myguildInfo then
+      return
+    end
+    if true == myguildInfo:isAllianceGuild() then
+      local allianceWrapper = ToClient_GetMyGuildAllianceWrapper()
+      if nil == allianceWrapper then
+        return
+      end
+      for guildIndex = 0, allianceWrapper:getMemberCount() - 1 do
+        local guildWrapper = allianceWrapper:getMemberGuild(Int64toInt32(guildIndex))
+        if nil ~= guildWrapper then
+          participantCount = participantCount + guildWrapper:getSiegeParticipantCount()
+        end
+      end
+    else
+      participantCount = myguildInfo:getSiegeParticipantCount()
+    end
+    if participantCount < 10 then
+      local str = PAGetString(Defines.StringSheet_GAME, "LUA_NOTENOUGH_SIEGEPARTICIPANT")
+      Proc_ShowMessage_Ack(str)
+      return
+    end
     for index, data in pairs(SetAttendanceWar._member) do
       if true == data._newMember then
         ToClient_resquestParticipateSiegeFromMaster(data._guildNo, data._userNo, true)

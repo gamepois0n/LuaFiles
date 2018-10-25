@@ -23,7 +23,12 @@ local chatInput = {
   config = {
     startPosX = 7,
     startPosY = 7,
-    btnPosYGap = 21
+    btnPosYGap = 21,
+    toggleType = {
+      chattingMacro = 0,
+      socialAction = 1,
+      emoticon = 2
+    }
   },
   control = {
     edit = UI.getChildControl(Panel_Chatting_Input, "Edit_ChatMessage"),
@@ -35,7 +40,8 @@ local chatInput = {
     macroButton = UI.getChildControl(Panel_Chatting_Input, "RadioButton_Macro"),
     socialButton = UI.getChildControl(Panel_Chatting_Input, "RadioButton_SocialAction"),
     nameTypeButton = UI.getChildControl(Panel_Chatting_Input, "Button_ChangeNameDisplay"),
-    arabicCheckButton = UI.getChildControl(Panel_Chatting_Input, "CheckBox_DropTrash")
+    arabicCheckButton = UI.getChildControl(Panel_Chatting_Input, "CheckBox_DropTrash"),
+    radioButton_Emoticon = UI.getChildControl(Panel_Chatting_Input, "RadioButton_Emoticon")
   },
   buttonIds = {
     [0] = nil,
@@ -198,6 +204,7 @@ function chatInput:init()
     self.control.nameTypeButton:SetShow(false)
     self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
     self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+    self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
   end
   self.control.buttons[lastMemoryChatType]:SetShow(true)
   if true == ToClient_IsDevelopment() or true == isGameServiceTypeTurkey() then
@@ -258,6 +265,7 @@ function ChatInput_TypeButtonClicked(chatType)
       toChangeChatType = chatType
       self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
       self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+      self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
       if UI_CT.Private == chatType then
         self.control.whisperEdit:SetShow(true)
         self.control.whisperNotice:SetPosX(self.control.whisperEdit:GetPosX() - 50)
@@ -265,6 +273,7 @@ function ChatInput_TypeButtonClicked(chatType)
         self.control.whisperNotice:SetShow(true)
         self.control.macroButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX())
         self.control.socialButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 30)
+        self.control.radioButton_Emoticon:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 60)
         self.control.nameTypeButton:SetShow(true)
         self.control.nameTypeButton:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_" .. ToClient_getChatNameType()))
       else
@@ -273,6 +282,7 @@ function ChatInput_TypeButtonClicked(chatType)
         self.control.nameTypeButton:SetShow(false)
         self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
         self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+        self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
       end
     end
   else
@@ -317,6 +327,7 @@ function ChatInput_ChangeChatType_Immediately(chatType)
     self.lastChatType = chatType
     self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
     self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+    self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
     if UI_CT.Private == chatType then
       self.control.whisperEdit:SetShow(true)
       self.control.whisperNotice:SetPosX(self.control.whisperEdit:GetPosX() - 50)
@@ -324,6 +335,7 @@ function ChatInput_ChangeChatType_Immediately(chatType)
       self.control.whisperNotice:SetShow(true)
       self.control.macroButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX())
       self.control.socialButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 30)
+      self.control.radioButton_Emoticon:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 60)
       self.control.nameTypeButton:SetShow(true)
       self.control.nameTypeButton:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_" .. ToClient_getChatNameType()))
     else
@@ -332,6 +344,7 @@ function ChatInput_ChangeChatType_Immediately(chatType)
       self.control.nameTypeButton:SetShow(false)
       self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
       self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+      self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
     end
   end
 end
@@ -681,19 +694,28 @@ function ChatInput_Show()
   Panel_Chatting_Input:SetShow(true, true)
   self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
   self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+  self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
   if UI_CT.Private == self.lastChatType then
     self.control.macroButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX())
     self.control.socialButton:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 30)
+    self.control.radioButton_Emoticon:SetPosX(self.control.whisperEdit:GetPosX() + self.control.whisperEdit:GetSizeX() + 60)
     self.control.nameTypeButton:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_" .. ToClient_getChatNameType()))
   else
     self.control.macroButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 10)
     self.control.socialButton:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 40)
+    self.control.radioButton_Emoticon:SetPosX(self.control.edit:GetPosX() + self.control.edit:GetSizeX() + 70)
   end
   self.control.macroButton:SetCheck(false)
   if Panel_Chat_SocialMenu:GetShow() then
     self.control.socialButton:SetCheck(true)
   else
     self.control.socialButton:SetCheck(false)
+  end
+  if _ContentsGroup_Emoticon and true == ToClient_SelfPlayerIsGM() then
+    self.control.radioButton_Emoticon:SetShow(true)
+    self.control.radioButton_Emoticon:SetCheck(PaGlobalFunc_ChatEmoticon_GetShow())
+  else
+    self.control.radioButton_Emoticon:SetShow(false)
   end
   if chatting_isBlocked() then
     local blockString = convertStringFromDatetime(chatting_blockedEndDatetime())
@@ -713,6 +735,20 @@ function ChatInput_CancelAction()
     chatting_cancelAction()
   end
 end
+function ChatInput_addEmoticon(inputStr)
+  if false == Panel_Chatting_Input:IsShow() then
+    return
+  end
+  if nil == inputStr or "" == inputStr then
+    return
+  end
+  local self = chatInput
+  ReleaseImeComposition()
+  local message = self.control.edit:GetEditText()
+  if chatInput.control.edit:GetEditTextSize() + string.len(inputStr) <= chatInput.maxEditInput then
+    self.control.edit:SetEditText(message .. inputStr, true)
+  end
+end
 function ChatInput_Close()
   ClearFocusEdit()
   ToClient_ClearLinkedItemList()
@@ -721,6 +757,7 @@ function ChatInput_Close()
   if Panel_Chatting_Input:IsShow() then
     Panel_Chatting_Input:SetShow(false, true)
     Panel_Chatting_Macro:SetShow(false)
+    PaGlobalFunc_ChatEmoticon_Close()
   end
 end
 function ChatInput_CheckCurrentUiEdit(targetUI)
@@ -739,10 +776,12 @@ function ChatInput_ChangeInputFocus()
   end
 end
 function HandleClicked_ToggleChatMacro(number)
-  if 0 == number then
+  if chatInput.config.toggleType.chattingMacro == number then
     FGlobal_Chatting_Macro_ShowToggle()
-  else
+  elseif chatInput.config.toggleType.socialAction == number then
     FGlobal_SocialAction_ShowToggle()
+  elseif chatInput.config.toggleType.emoticon == number then
+    PaGlobalFunc_Emoticon_ShowToggle()
   end
 end
 function HandleClicked_clickNameType()
@@ -789,6 +828,9 @@ function FGlobal_SocialAction_SetCHK(show)
   else
     chatInput.control.socialButton:SetCheck(false)
   end
+end
+function PaGlobalFunc_ChatEmoticon_SetCheck(show)
+  chatInput.control.radioButton_Emoticon:SetCheck(show)
 end
 function FGlobal_ChattingcheckArabicType(check)
   local self = chatInput
@@ -880,6 +922,7 @@ function FromClient_Init_ChatInput()
   self:registEventHandler()
   self.control.macroButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(0)")
   self.control.socialButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(1)")
+  self.control.radioButton_Emoticon:addInputEvent("Mouse_LUp", "HandleClicked_ToggleChatMacro(2)")
   self.control.nameTypeButton:addInputEvent("Mouse_LUp", "HandleClicked_clickNameType()")
   self.control.arabicCheckButton:addInputEvent("Mouse_LUp", "HandleClicked_checkArabicType()")
   self.control.arabicCheckButton:addInputEvent("Mouse_On", "HandleOver_Tooltip(true)")

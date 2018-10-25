@@ -2332,7 +2332,7 @@ function PaGlobal_Menu:HandleClicked_MenuButton(index, categoryIndex, uiIndex)
       elseif ToClient_IsMyselfInArena() then
         FGlobal_ArshaPvP_Open()
       elseif ToClient_IsCompetitionHost() == false then
-        FGlobal_Panel_CompetitionGame_JoinDesc_Open()
+        PaGlobalFunc_CompetitionGame_JoinDesc_Open()
       else
         FGlobal_ArshaPvP_HostJoin()
       end

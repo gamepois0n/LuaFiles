@@ -215,6 +215,8 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
   self:Clear()
   Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
   Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+  self._ui._right._static_SellectLeft:SetShow(false)
+  self._ui._right._static_SellectRight:SetShow(false)
   if self._config._title_Learn == titleType then
     tooltip:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SKILL_TAB_LEARNABLE"))
     tooltip:SetPosX(learnSkill:GetPosX() + learnSkill:GetSizeX() / 2 - tooltip:GetSizeX() / 2)
@@ -243,6 +245,7 @@ function PaGlobalFunc_Skill_SelectTitle(titleType)
 end
 function Window_SkillInfo:SetLearnableSkillList()
   local index = 0
+  local body = self._ui._body
   self._ui._right._list2_Skill:getElementManager():clearKey()
   for tableIndex = 0, #self._combatTable do
     local skillCount = self._combatTable[tableIndex]._skillCount
@@ -264,6 +267,10 @@ function Window_SkillInfo:SetLearnableSkillList()
     end
   end
   self._ui._right._staticText_LearnableEmpty:SetShow(0 == index)
+  if 0 == index then
+    body._staticText_RequireLevelInfo:SetText("")
+    body._staticText_RequireSkillPointsInfo:SetText("")
+  end
   self._ui._right._radioButton_learnSkillKey:SetShow(0 ~= index)
 end
 function Window_SkillInfo:SetSkillList(table)
@@ -348,8 +355,6 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
       Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadLeft, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",-1)")
       Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_DpadRight, "PaGlobalFunc_Skill_SkillHandle(" .. tostring(id) .. ",1)")
     end
-    right._static_SellectRight:SetShow(self._currentSkillIndex == id)
-    right._static_SellectLeft:SetShow(self._currentSkillIndex == id)
   end
   if _ContentsGroup_isConsolePadControl then
     uiInfo._progress2_ProgressBar:addInputEvent("Mouse_On", "PaGlobalFunc_Skill_SelectSkill(" .. id .. ")")
@@ -357,45 +362,62 @@ function PaGlobalFunc_Skill_List2EventControlCreate(list_content, key)
 end
 function Window_SkillInfo:GetRequireDesc(selectControl, descControl, id)
   local skillInfo = self._currentSkillListInfo[id]
+  local body = self._ui._body
   local desc = ""
   if nil == skillInfo then
     return desc
   end
-  selectControl:SetColor(Defines.Color.C_FFEFEFEF)
-  descControl:SetFontColor(Defines.Color.C_FFEFEFEF)
+  body._staticText_RequireLevelInfo:SetText("")
+  body._staticText_RequireSkillPointsInfo:SetText("")
   if 1 == skillInfo._learndLevel then
   elseif true == skillInfo._learnable then
   elseif 0 ~= skillInfo._needCharacterLevel and self._selfPlayerLevel < skillInfo._needCharacterLevel then
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(skillInfo._needCharacterLevel)
   end
-  descControl:SetFontColor(Defines.Color.C_FF888888)
-  selectControl:SetColor(Defines.Color.C_FF888888)
+  if self._selfPlayerLevel >= skillInfo._needCharacterLevel then
+    body._staticText_RequireLevelInfo:SetFontColor(Defines.Color.C_FFEEEEEE)
+  else
+    body._staticText_RequireLevelInfo:SetFontColor(Defines.Color.C_FFDDA309)
+  end
+  if self._remainSkillPoint >= skillInfo._needSkillPoint then
+    body._staticText_RequireSkillPointsInfo:SetFontColor(Defines.Color.C_FFEEEEEE)
+  else
+    body._staticText_RequireSkillPointsInfo:SetFontColor(Defines.Color.C_FFDDA309)
+  end
+  body._staticText_RequireLevelInfo:SetText("Required Level " .. skillInfo._needCharacterLevel)
+  body._staticText_RequireSkillPointsInfo:SetText("Required SkillPoints " .. skillInfo._needSkillPoint)
   return desc
 end
 function Window_SkillInfo:FindSkillCount(skillInfo)
   if self._config._title_Basic == self._currentTitle then
     for tableIndex = 0, #self._combatTable do
-      local skillCount = self._combatTable[tableIndex]._skillCount
-      local skillTable = self._combatTable[tableIndex]._skillTable
-      if nil == skillTable then
-        return
-      end
-      for skillIndex = 0, skillCount - 1 do
-        if skillTable[skillIndex] == skillInfo then
-          return skillCount
+      local combatTable = self._combatTable[tableIndex]
+      if nil ~= combatTable then
+        local skillCount = combatTable._skillCount
+        local skillTable = combatTable._skillTable
+        if nil == skillTable then
+          return
+        end
+        for skillIndex = 0, skillCount - 1 do
+          if skillTable[skillIndex] == skillInfo then
+            return skillCount
+          end
         end
       end
     end
   else
     for tableIndex = 0, #self._awakenTable do
-      local skillCount = self._awakenTable[tableIndex]._skillCount
-      local skillTable = self._awakenTable[tableIndex]._skillTable
-      if nil == skillTable then
-        return
-      end
-      for skillIndex = 0, skillCount - 1 do
-        if skillTable[skillIndex] == skillInfo then
-          return skillCount
+      local awakenTable = self._awakenTable[tableIndex]
+      if nil ~= awakenTable then
+        local skillCount = awakenTable._skillCount
+        local skillTable = awakenTable._skillTable
+        if nil == skillTable then
+          return
+        end
+        for skillIndex = 0, skillCount - 1 do
+          if skillTable[skillIndex] == skillInfo then
+            return skillCount
+          end
         end
       end
     end
@@ -442,6 +464,7 @@ function PaGlobalFunc_Skill_SkillHandle(id, direction)
   self._currentSkillListInfo[id] = newSkillInfo
   self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, id))
   PaGlobalFunc_Skill_SelectSkill(id)
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
 end
 function PaGlobalFunc_Skill_SelectSkill(id)
   local self = Window_SkillInfo
@@ -459,10 +482,6 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   if nil ~= self._lastSelectedUI then
     self._lastSelectedUI._static_SelectedSkillBg:SetShow(false)
   end
-  right._static_SellectLeft:SetShow(self._currentTitle == self._config._title_Basic)
-  right._static_SellectRight:SetShow(self._currentTitle == self._config._title_Basic)
-  right._static_SellectLeft:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
-  right._static_SellectRight:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 7)
   skillUI._static_SelectedSkillBg:SetShow(true)
   body._static_Icon:SetShow(true)
   body._static_IconBg:SetShow(true)
@@ -474,8 +493,7 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_Desc:SetText(skillInfo._desc)
   body._staticText_Desc:SetPosY(self._ui._body._staticText_Name:GetPosY() + self._ui._body._staticText_Name:GetSizeY())
   body._staticText_EffectDesc:SetText(skillInfo._buffDesc)
-  body._staticText_EffectDesc:SetPosY(getScreenSizeY() - body._staticText_EffectDesc:GetTextSizeY() - 40)
-  body._staticText_EffectTitle:SetPosY(body._staticText_EffectDesc:GetPosY() - body._staticText_EffectTitle:GetSizeY() - 5)
+  body._staticText_EffectTitle:SetPosY(body._staticText_EffectDesc:GetPosY() - body._staticText_EffectDesc:GetTextSizeY() + body._staticText_EffectDesc:GetSizeY() - body._staticText_EffectTitle:GetSizeY())
   local needResource = ""
   local haveResource = false
   if 1 < skillInfo._requireHp then
@@ -493,14 +511,13 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   body._staticText_NeedResource:SetPosY(self._ui._body._staticText_Desc:GetPosY() + self._ui._body._staticText_Desc:GetSizeY())
   body._staticText_NeedResource:SetText(needResource)
   body._staticText_NeedResource:SetSize(body._staticText_NeedResource:GetSizeX(), body._staticText_NeedResource:GetTextSizeY())
+  body._staticText_skillCommand:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   body._staticText_skillCommand:SetText(skillInfo._command)
   body._staticText_skillCommand:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_skillCommand:GetTextSizeX() - 40)
-  body._staticText_skillCommand:SetPosY(getScreenSizeY() - body._staticText_skillCommand:GetTextSizeY() - 20)
-  body._staticText_Command:SetSize(body._staticText_Command:GetSizeX(), body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY())
-  body._staticText_Command:SetPosX(self._ui._static_RightBg:GetPosX() - body._staticText_Command:GetSizeX() - 20)
+  body._staticText_skillCommand:SetPosY(body._static_Divider2:GetPosY() - body._staticText_skillCommand:GetTextSizeY() - 10)
   local dividerCenterSizeY = (body._static_Divider2:GetPosY() - body._static_Divider1:GetPosY()) / 2
   local yGap = 0
-  if body._staticText_Command:GetSizeY() >= 90 then
+  if 90 <= body._staticText_Command:GetSizeY() then
     yGap = (body._staticText_Command:GetTextSizeY() - 90) / 2
   end
   body._staticText_Command:SetText("")
@@ -514,7 +531,6 @@ function PaGlobalFunc_Skill_SelectSkill(id)
   local commendPosY = body._staticText_Command:GetPosY() + body._staticText_Command:GetSizeY() + 10
   local needResourcePosY = math.max(resourcePosY, commendPosY)
   local dividerPosY = body._static_Divider2:GetPosY()
-  body._static_Divider2:SetPosY(math.max(needResourcePosY, dividerPosY))
   self._lastSelectedUI = skillUI
   local prevIndex = self._currentSkillIndex
   self._currentSkillIndex = id
@@ -525,6 +541,12 @@ function PaGlobalFunc_Skill_SelectSkill(id)
     self._ui._right._radioButton_SkillDemo:SetShow(false)
     Panel_Window_Skill:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
   end
+  local skillLinkedCount = self:FindSkillCount(skillInfo)
+  local arrowShowAble = self._currentTitle == self._config._title_Basic and skillLinkedCount > 1 and self._currentSkillIndex == id
+  right._static_SellectLeft:SetShow(arrowShowAble)
+  right._static_SellectRight:SetShow(arrowShowAble)
+  right._static_SellectLeft:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 5)
+  right._static_SellectRight:SetPosY(skillUI._content:GetPosY() + (right._list2_Skill:GetPosY() - self._ui._static_RightBg:GetPosY()) + 5)
   self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, prevIndex))
   self._ui._right._list2_Skill:requestUpdateByKey(toInt64(0, id))
 end
@@ -539,7 +561,6 @@ function Window_SkillInfo:SkillDetailClear()
   body._staticText_Command:SetText("")
   body._static_Icon:SetShow(false)
   body._static_IconBg:SetShow(false)
-  body._static_Divider2:SetPosY(self._defaultDividerPosY)
 end
 function Window_SkillInfo:UpdateSkillData()
   local selfPlayerActorProxyWrapper = getSelfPlayer()
@@ -649,10 +670,34 @@ function Window_SkillInfo:Update()
   self:UpdateSkillData()
   self._combatTable = {}
   self._awakenTable = {}
-  self:UpdateSkillTable(self._combatSkill, self._combatTable)
-  self:UpdateSkillTable(self._awakenSkill, self._awakenTable)
+  self:LinkSkillTable(self._combatSkill, self._combatTable)
+  self:LinkSkillTable(self._awakenSkill, self._awakenTable)
+  self:tableSort()
 end
-function Window_SkillInfo:UpdateSkillTable(oldTable, newTable)
+function Window_SkillInfo:tableSort()
+  local sort = function(a, b)
+    return a._needCharacterLevel < b._needCharacterLevel
+  end
+  for tableIndex = 0, #self._combatTable do
+    local combatTable = self._combatTable[tableIndex]
+    if nil ~= combatTable then
+      local skillTable = combatTable._skillTable
+      if nil ~= skillTable then
+        table.sort(skillTable, sort)
+      end
+    end
+  end
+  for tableIndex = 0, #self._awakenTable do
+    local awakenTable = self._awakenTable[tableIndex]
+    if nil ~= awakenTable then
+      local skillTable = awakenTable._skillTable
+      if nil ~= skillTable then
+        table.sort(skillTable, sort)
+      end
+    end
+  end
+end
+function Window_SkillInfo:LinkSkillTable(oldTable, newTable)
   local index = 0
   local skillName = ""
   local oldSkillTable = {}
@@ -723,10 +768,12 @@ function Window_SkillInfo:InitControl()
   body._staticText_Desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   body._staticText_NeedResource = UI.getChildControl(ui._static_BodyBg, "StaticText_NeedMp")
   body._staticText_NeedResource:SetAutoResize(true)
+  body._static_KeyGuide = UI.getChildControl(ui._static_BodyBg, "Static_Key_Guide")
   body._staticText_EffectTitle = UI.getChildControl(ui._static_BodyBg, "StaticText_Skill_Effect_Title")
   body._staticText_EffectDesc = UI.getChildControl(ui._static_BodyBg, "StaticText_Skill_EffectDesc")
   body._staticText_EffectDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  body._staticText_EffectDesc:SetAutoResize(true)
+  body._staticText_RequireLevelInfo = UI.getChildControl(ui._static_BodyBg, "StaticText_RequiredLevel")
+  body._staticText_RequireSkillPointsInfo = UI.getChildControl(ui._static_BodyBg, "StaticText_RequiredSkillPoint")
   body._static_Divider1 = UI.getChildControl(ui._static_BodyBg, "Static_Divider1")
   body._static_Divider2 = UI.getChildControl(ui._static_BodyBg, "Static_Divider2")
   self._defaultDividerPosY = body._static_Divider2:GetPosY()
@@ -873,6 +920,7 @@ function PaGlobalFunc_Skill_Open(isDialog)
   if true == Panel_Win_System:GetShow() then
     allClearMessageData()
   end
+  _AudioPostEvent_SystemUiForXBOX(1, 18)
   Panel_Window_Skill:SetShow(true)
   ToClient_LearnSkillCameraShow()
   ToClient_LearnSkillCameraLoadCharcterAndCamera()
@@ -881,7 +929,6 @@ function PaGlobalFunc_Skill_Open(isDialog)
   self:SkillDetailClear()
   self:Update()
   ToClient_LearnSkillCameraSetRotation(-0.5, 0)
-  ToClient_LearnSkillCameraSetPosition(2.5, -20)
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_SKILL")
 end
@@ -913,6 +960,9 @@ function PaGlobalFunc_FromClient_Skill_luaLoadComplete()
 end
 function PaGlobalFunc_FromClient_Skill_WindowUpdate()
   local self = Window_SkillInfo
+  if false == PaGlobalFunc_Skill_GetShow() then
+    return
+  end
   self._prevScrollIndex = self._ui._right._list2_Skill:getCurrenttoIndex()
   self:Update()
   PaGlobalFunc_Skill_SelectTitle(self._currentTitle)

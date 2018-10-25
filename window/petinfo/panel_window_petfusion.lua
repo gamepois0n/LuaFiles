@@ -54,9 +54,15 @@ local PetFusion = {
   },
   _tierEfectConfig = {
     [0] = "fUI_PetGlow_01A",
-    [1] = "fUI_PetGlow_01A_Green",
-    [2] = "fUI_PetGlow_01A_Blue",
-    [3] = "fUI_PetGlow_01A_Yellow"
+    [1] = "fUI_PetGlow_Success_02A_Green",
+    [2] = "fUI_PetGlow_Success_02A_Blue",
+    [3] = "fUI_PetGlow_Success_02A_Yellow"
+  },
+  _tierBottomEfectConfig = {
+    [0] = "fUI_PetGlow_Bot",
+    [1] = "fUI_PetGlow_Bot_Green",
+    [2] = "fUI_PetGlow_Bot_Blue",
+    [3] = "fUI_PetGlow_Bot_Yellow"
   },
   _completeTierTextureConfig = {
     ["_texture"] = "renewal/pcremaster/remaster_pet_00.dds",
@@ -86,16 +92,16 @@ local PetFusion = {
     }
   },
   _gradeStrConfig = {
-    [0] = "Grade 1\236\157\128 Grade 1 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [1] = "Grade 2\236\157\128 Grade 2 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [2] = "Grade 3\236\157\128 Grade 3 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [3] = "Grade 4\236\157\128 Grade 4 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [4] = "Grade 5\236\157\128 Grade 5 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [5] = "Grade 6\236\157\128 Grade 6 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [6] = "Grade 7\236\157\128 Grade 7 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [7] = "Grade 8\236\157\128 Grade 8 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [8] = "Grade 9\236\157\128 Grade 9 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164.",
-    [9] = "Grade 10\236\157\128 Grade 10 \235\129\188\235\166\172\235\167\140 \237\149\169\236\132\177 \237\149\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164."
+    [0] = PAGetString(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_CLASSIC_TITLE"),
+    [1] = PAGetString(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_LIMITED_TITLE"),
+    [2] = PAGetString(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_PREMIUM_TITLE"),
+    [3] = PAGetString(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_EVENT_TITLE"),
+    [4] = PAGetString(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_SPECIAL_TITLE"),
+    [5] = "",
+    [6] = "",
+    [7] = "",
+    [8] = "",
+    [9] = ""
   },
   _mainPetSlotTable = {},
   _subPetSlotTableList = {},
@@ -452,8 +458,7 @@ function PetFusion:setComplete()
   self._ui._static_CompleteIcon:ChangeTextureInfoName(self._completeDataTable._iconPath)
   self._ui._static_Effect:EraseAllEffect()
   self._ui._static_Effect_Bottom:EraseAllEffect()
-  self._ui._static_Effect:AddEffect(self._tierEfectConfig[tier - 1], true, 0, 0)
-  self._ui._static_Effect_Bottom:AddEffect("fUI_PetGlow_Bot_Green", true, 0, 0)
+  self._ui._static_Effect_Bottom:AddEffect(self._tierBottomEfectConfig[tier - 1], true, 0, 0)
   self._ui._staticText_CompleteTier:ChangeTextureInfoName(self._completeTierTextureConfig._texture)
   local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticText_CompleteTier, self._completeTierTextureConfig[tier - 1][1], self._completeTierTextureConfig[tier - 1][2], self._completeTierTextureConfig[tier - 1][3], self._completeTierTextureConfig[tier - 1][4])
   self._ui._staticText_CompleteTier:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -471,11 +476,12 @@ function PetFusion:setComplete()
   local isComplete = false
   self._ui._staticText_CompleteTierChange:SetShow(false)
   if tier > self._mainPetTier + 1 then
-    local _xx = self._mainPetTier + 1 .. "\236\132\184\235\140\128  ->  " .. tier .. "\236\132\184\235\140\128"
+    local _message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_NEXTTIER_CHECK_TEXT", "BeforePetTier", self._mainPetTier + 1, "NextPetTier", tier)
     self._ui._staticText_CompleteTierChange:SetShow(true)
     self._ui._staticText_CompleteTierChange:EraseAllEffect()
     self._ui._staticText_CompleteTierChange:AddEffect("fUI_PetGlow_Success_02A_Green", true, 0, 0)
-    self._ui._staticText_CompleteTierChange:SetText(_xx)
+    self._ui._staticText_CompleteTierChange:SetText(_message)
+    self._ui._static_Effect:AddEffect(self._tierEfectConfig[tier - 1], true, 0, 0)
   end
   if targetTier >= tier then
     isComplete = false
@@ -610,7 +616,7 @@ function PetFusion:skillSlotClear()
     control:SetShow(true)
   end
   for _, control in pairs(self._ui._staticText_SelectSkillIDesc) do
-    control:SetText("\235\172\180\236\158\145\236\156\132 \234\184\176\236\136\160 \236\132\160\237\131\157")
+    control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PET_RANDOM_SELECT_TITLE"))
   end
 end
 function petListNew_Compose_Set(petNoStr, petRace, petTier, sealPetIndex, isJokerPetUse)
@@ -619,7 +625,7 @@ function petListNew_Compose_Set(petNoStr, petRace, petTier, sealPetIndex, isJoke
     self:PetFusionInitControlSetting(false)
   end
   if true == PaGlobalFunc_PetFusion_IsFull() then
-    Proc_ShowMessage_Ack("\237\142\171 \236\138\172\235\161\175\236\157\180 \234\176\128\235\147\157 \236\176\188\236\138\181\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETFUSION_FULL_TEXT"))
     return
   end
   if false == self:checkSetAble(tonumber64(petNoStr), petRace, sealPetIndex, petTier) then
@@ -649,19 +655,19 @@ function petListNew_Compose_Set(petNoStr, petRace, petTier, sealPetIndex, isJoke
 end
 function PetFusion:checkSetAble(petNo, petRace, sealPetIndex, petTier)
   if true == PaGlobalFunc_PetFusion_IsExist(petNo) then
-    Proc_ShowMessage_Ack("\235\143\153\236\157\188\237\149\156 \237\142\171\236\157\180 \236\157\180\235\175\184 \235\147\177\235\161\157\235\144\152\236\150\180\236\158\136\236\138\181\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETFUSION_SAME_PET_WARNING_TEXT"))
     return false
   end
   if 100 <= PaGlobalFunc_PetFusion_GetRate() then
-    Proc_ShowMessage_Ack("\237\149\169\236\132\177 \237\153\149\235\165\160\236\157\180 \236\157\180\235\175\184 100%\236\158\133\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETFUSION_100PERCENT_TEXT"))
     return false
   end
   if true == PaGlobalFunc_PetFusion_IsMainPetSet() and petTier > PaGlobalFunc_PetFusion_GetMainPetTier() then
-    Proc_ShowMessage_Ack("\235\169\148\236\157\184 \237\142\171 \235\179\180\235\139\164 \237\139\176\236\150\180\234\176\128 \235\134\146\236\157\128 \237\142\171\236\157\128 \235\147\177\235\161\157 \237\149\160 \236\136\152 \236\151\134\236\138\181\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_RENEWAL_PETLIST_TEMP_3"))
     return false
   end
   if true == PaGlobalFunc_PetFusion_IsMainPetSet() and 99 == petRace and false == PaGlobalFunc_PetFusion_GetIsJokerPetUse() then
-    Proc_ShowMessage_Ack("\235\169\148\236\157\184 \237\142\171\236\157\180 \236\138\164\237\142\152\236\133\156 \237\142\171\236\157\132 \236\158\172\235\163\140\235\161\156 \236\130\172\236\154\169 \237\149\160 \236\136\152 \236\151\134\235\138\148 \237\142\171 \236\158\133\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_RENEWAL_PETLIST_TEMP_7"))
     return false
   end
   if true == PaGlobalFunc_PetFusion_IsMainPetSet() then
@@ -669,13 +675,14 @@ function PetFusion:checkSetAble(petNo, petRace, sealPetIndex, petTier)
     local subPetStaticStatus = self:getStaticStatusByPetNo(petNo)
     local mainGrade = ToClient_getGrade(mainPetStaticStatus:getPetRace(), mainPetStaticStatus:getPetKind())
     local subGrade = ToClient_getGrade(subPetStaticStatus:getPetRace(), subPetStaticStatus:getPetKind())
-    if mainGrade ~= subGrade then
-      Proc_ShowMessage_Ack(self._gradeStrConfig[mainGrade - 1])
+    if 99 ~= petRace and mainGrade ~= subGrade then
+      local message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_SAME_GRADETYPE_WARNING_TEXT", "gradeType1", self._gradeStrConfig[mainGrade - 1], "gradeType2", self._gradeStrConfig[mainGrade - 1])
+      Proc_ShowMessage_Ack(message)
       return false
     end
   end
   if false == PaGlobalFunc_PetFusion_IsMainPetSet() and 99 == petRace then
-    Proc_ShowMessage_Ack("\236\138\164\237\142\152\236\133\156 \237\142\171\236\157\132 \235\169\148\236\157\184 \237\142\171 \236\156\188\235\161\156 \235\147\177\235\161\157 \237\149\160 \236\136\152 \236\151\134\236\138\181\235\139\136\235\139\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_RENEWAL_PETLIST_TEMP_9"))
     return false
   end
   return true
@@ -880,7 +887,7 @@ function PetFusion:setMainSlot(petNo, sealPetIndex)
       slot._mark:SetShow(false)
       slot._petNo = petNo
       slot._isSet = true
-      self._ui._staticText_SelectPetLevel:SetText("\234\179\132\236\138\185" .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(petData._level))
+      self._ui._staticText_SelectPetLevel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PET_COMPOSE_FACTORIAL_LV_TITLE", "level", tostring(petData._level)))
       slot._icon:addInputEvent("Mouse_RUp", "petListNew_Compose_UnSet(" .. Int64toInt32(petNo) .. "," .. sealPetIndex .. " )")
       return
     end
@@ -902,7 +909,7 @@ function PetFusion:clear()
     slot._petNo = -1
   end
   for _, control in pairs(self._ui._staticText_SelectSkillIDesc) do
-    control:SetText("\234\184\176\236\136\160\236\157\132 \236\132\160\237\131\157 \237\149\152\236\132\184\236\154\148.")
+    control:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PET_COMPOSE_SKILLSELECT_NEW_DESC"))
   end
   self._isFourTier = false
   self._mainPetTier = -1
@@ -1128,6 +1135,7 @@ function PetFusion:PetFusionInitControlSetting(isOn)
   self._ui._edit_Naming:SetShow(not isOn)
   self._ui._button_yes:SetShow(not isOn)
   self._ui._button_no:SetShow(not isOn)
+  self._ui._static_FusionDesc:SetShow(not isOn)
 end
 function PaGlobalFunc_PetFusion_Close()
   local self = PetFusion

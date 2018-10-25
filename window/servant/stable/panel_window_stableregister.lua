@@ -24,8 +24,8 @@ local stableRegister = {
   _staticBrakeSpeed = UI.getChildControl(Panel_Window_StableRegister, "Static_BrakeSpeed"),
   _staticBrakeSpeedValue = UI.getChildControl(Panel_Window_StableRegister, "Static_BrakeSpeedValue"),
   _staticCreateServantNameBG = UI.getChildControl(Panel_Window_StableRegister, "Static_NamingPolicyBG"),
-  _staticCreateServantNameTitle = UI.getChildControl(Panel_Window_StableRegister, "StaticText_NamingPolicyTitle"),
-  _staticCreateServantName = UI.getChildControl(Panel_Window_StableRegister, "StaticText_NamingPolicy"),
+  _staticCreateServantNameTitle = nil,
+  _staticCreateServantName = nil,
   _staticMarketIcon = UI.getChildControl(Panel_Servant_Market_Input, "Static_Icon"),
   _staticMarketHp = UI.getChildControl(Panel_Servant_Market_Input, "Static_Hp"),
   _staticMarketHpValue = UI.getChildControl(Panel_Servant_Market_Input, "Static_HpValue"),
@@ -74,6 +74,8 @@ local stableRegister = {
   _minPrice = nil,
   _maxPrice = nil
 }
+stableRegister._staticCreateServantNameTitle = UI.getChildControl(stableRegister._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
+stableRegister._staticCreateServantName = UI.getChildControl(stableRegister._staticCreateServantNameBG, "StaticText_NamingPolicy")
 function stableRegister:init()
   self._editEditName:SetMaxInput(getGameServiceTypeServantNameLength())
   self._staticIcon:SetShow(true)

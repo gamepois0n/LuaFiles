@@ -53,7 +53,7 @@ function FGlobal_PowerGauge_Close()
   Panel_PowerGauge:SetShow(false)
 end
 function FromClient_PowerGauge_onScreenResize()
-  Panel_PowerGauge:SetPosX(getScreenSizeX() / 2 - Panel_PowerGauge:GetSizeX() * 2.6)
+  Panel_PowerGauge:SetPosX(getScreenSizeX() / 2 - Panel_PowerGauge:GetSizeX() * 3 - 100)
   Panel_PowerGauge:SetPosY(getScreenSizeY() / 2 - 200)
 end
 registerEvent("onScreenResize", "FromClient_PowerGauge_onScreenResize")

@@ -3,6 +3,7 @@ local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local defaultFrameBG_Skill = UI.getChildControl(Panel_Window_Guild, "Static_Frame_SkillBG")
 local _frame_GuildSkill = UI.getChildControl(Panel_Guild_Skill, "Frame_GuildSkill")
+local _staticText_GuildPoint = UI.getChildControl(Panel_Guild_Skill, "StaticText_Point")
 local _staticText_GuildPoint_Value = UI.getChildControl(Panel_Guild_Skill, "StaticText_Point_Value")
 local _staticText_GuildPoint_Percent = UI.getChildControl(Panel_Guild_Skill, "StaticText_Point_Percent")
 local isContentsEnable = ToClient_IsContentsGroupOpen("36")
@@ -24,7 +25,7 @@ local GuildSkill = {
     }
   },
   config = {
-    slotStartX = 6,
+    slotStartX = 130,
     slotStartY = 6,
     slotGapX = 42,
     slotGapY = 42,
@@ -213,6 +214,7 @@ function GuildSkillFrame_UpdateData(isLearnMode, doForce)
   end
   _staticText_GuildPoint_Percent:SetText("( " .. skillPointPercent .. "% )")
   _staticText_GuildPoint_Percent:SetPosX(_staticText_GuildPoint_Value:GetPosX() + _staticText_GuildPoint_Value:GetSizeX() + 10)
+  _staticText_GuildPoint_Value:SetPosX(_staticText_GuildPoint:GetPosX() + _staticText_GuildPoint:GetTextSizeX() + 10)
   self.lastLearnMode = isLearnMode
   GuildSkill._progressSkillPoint:SetProgressRate(skillPointInfo._currentExp / skillPointInfo._nextLevelExp * 100)
   local slots = self.slots

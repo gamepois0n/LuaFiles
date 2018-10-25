@@ -14,7 +14,8 @@ PaGlobal_Alchemy = {
     [CppEnums.ItemType.Equip] = 1
   },
   _ui = {
-    _staticTextTitle = UI.getChildControl(Panel_Alchemy, "StaticText_Title"),
+    _titleBg = UI.getChildControl(Panel_Alchemy, "Static_PartLine"),
+    _staticTextTitle = nil,
     _buttonQuestion = UI.getChildControl(Panel_Alchemy, "Button_Question"),
     _buttonClose = UI.getChildControl(Panel_Alchemy, "Button_Close"),
     _buttonStartAlchemy = UI.getChildControl(Panel_Alchemy, "Button_StartAlchemy"),
@@ -32,6 +33,7 @@ PaGlobal_Alchemy = {
     _listKnowledge = UI.getChildControl(Panel_Alchemy, "List2_AlchemyRecipe")
   }
 }
+PaGlobal_Alchemy._ui._staticTextTitle = UI.getChildControl(PaGlobal_Alchemy._ui._titleBg, "StaticText_TitleIcon")
 local InventoryFilterFunction = function(slotNo, itemWrapper, whereType)
   if CppEnums.ItemWhereType.eInventory ~= whereType then
     return true
@@ -180,6 +182,21 @@ function PaGlobal_Alchemy:showPanel(isCook, installationType)
   ui._staticCookingPotFront:SetShow(true == isCook)
   ui._staticAlchemyPotBack:SetShow(false == isCook)
   ui._staticAlchemyPotFront:SetShow(false == isCook)
+  local iconTextureUV = {
+    alchemy = {
+      287,
+      59,
+      342,
+      114
+    },
+    cook = {
+      173,
+      59,
+      228,
+      114
+    }
+  }
+  ui._staticTextTitle:ChangeTextureInfoName("renewal/ui_icon/console_icon_title.dds")
   if true == isCook then
     ui._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelCook\" )")
     ui._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelCook\", \"true\")")
@@ -187,6 +204,9 @@ function PaGlobal_Alchemy:showPanel(isCook, installationType)
     ui._staticTextTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_COOKING"))
     ui._checkButtonLearntOnly:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_SHOW_LEARNT_COOK"))
     ui._buttonStartAlchemy:SetText(PAGetString(Defines.StringSheet_RESOURCE, "COOK_LETSCOOKING"))
+    local x1, y1, x2, y2 = setTextureUV_Func(ui._staticTextTitle, iconTextureUV.cook[1], iconTextureUV.cook[2], iconTextureUV.cook[3], iconTextureUV.cook[4])
+    ui._staticTextTitle:getBaseTexture():setUV(x1, y1, x2, y2)
+    ui._staticTextTitle:setRenderTexture(ui._staticTextTitle:getBaseTexture())
   else
     ui._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelAlchemy\" )")
     ui._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelAlchemy\", \"true\")")
@@ -194,6 +214,9 @@ function PaGlobal_Alchemy:showPanel(isCook, installationType)
     ui._staticTextTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_ALCHEMY"))
     ui._checkButtonLearntOnly:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_SHOW_LEARNT_ALCHEMY"))
     ui._buttonStartAlchemy:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_REFINING"))
+    local x1, y1, x2, y2 = setTextureUV_Func(ui._staticTextTitle, iconTextureUV.alchemy[1], iconTextureUV.alchemy[2], iconTextureUV.alchemy[3], iconTextureUV.alchemy[4])
+    ui._staticTextTitle:getBaseTexture():setUV(x1, y1, x2, y2)
+    ui._staticTextTitle:setRenderTexture(ui._staticTextTitle:getBaseTexture())
   end
   audioPostEvent_SystemUi(12, 11)
   ToClient_AlchemyClearMaterialSlot()
@@ -337,7 +360,7 @@ function PaGlobal_Alchemy:selectKnowledge(knowledgeIndex)
     local isLearn = ToClient_AlchemyIsLearntMentalCard(mentalCardStaticWrapper:getKey())
     if true == isLearn then
       Panel_Alchemy:SetPosX(getScreenSizeX() - (Panel_Alchemy:GetSizeX() + 430 + 310))
-      PaGlobal_RecentCook:showPanel(knowledgeIndex, self._isCook, Panel_Alchemy:GetPosX() + Panel_Alchemy:GetSizeX() - 25, Panel_Alchemy:GetPosY() + 25)
+      PaGlobal_RecentCook:showPanel(knowledgeIndex, self._isCook, Panel_Alchemy:GetPosX() + Panel_Alchemy:GetSizeX() + 5, Panel_Alchemy:GetPosY() + 25)
       ui._staticAlchemyIcon:ChangeTextureInfoName(mentalCardStaticWrapper:getImagePath())
       self:setAlchemyDescriptionText(mentalCardStaticWrapper:getDesc())
     else

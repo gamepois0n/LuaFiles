@@ -137,7 +137,7 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_LifeRanking, closeTypeBitSet.default, "PanelCloseFunc_LifeRanking()")
   registerCloseLuaEvent(Panel_ChannelSelect, closeTypeBitSet.default, "PanelCloseFunc_ChannelSelect()")
   registerCloseLuaEvent(Panel_Window_MentalGame, closeTypeBitSet.default, "PanelCloseFunc_MentalGameClose()")
-  registerCloseLuaEvent(Panel_Dialog_SkillSpecialize, closeTypeBitSet.default, "PaGlobalFunc_Dialog_SkillSpecialize_Exit()")
+  registerCloseLuaEvent(Panel_Dialog_SkillSpecialize, closeTypeBitSet.default, "PaGlobalFunc_Dialog_SkillSpecialize_OnPadB()")
   registerCloseLuaEvent(Panel_QuickMenuCustom, closeTypeBitSet.default, "PanelCloseFunc_QuickMenuCustom()")
   registerCloseLuaEvent(Panel_Console_Window_GuildAgreement, closeTypeBitSet.default, "PanelCloseFunc_GuildAgreementClose()")
   registerCloseLuaEvent(Panel_Console_Window_SignOption, closeTypeBitSet.default, "PanelCloseFunc_GuildSignOption()")
@@ -290,7 +290,7 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_GuildHouse_Auction, closeTypeBitSet.default, "FGlobal_GuildHouseAuctionWindow_Hide()")
   registerCloseLuaEvent(Panel_Window_ReinforceSkill, closeTypeBitSet.default, "Panel_Window_ReinforceSkill_Close()")
   registerCloseLuaEvent(Panel_Guild_Incentive_Foundation, closeTypeBitSet.default, "Panel_Guild_Incentive_Foundation_Close()")
-  registerCloseLuaEvent(Panel_CompetitionGame_JoinDesc, closeTypeBitSet.default, "PanelCloseFunc_CompetitionGame()")
+  registerCloseLuaEvent(Panel_CompetitionGame_JoinDesc, closeTypeBitSet.default, "PaGlobalFunc_CompetitionGame_JoinDesc_Close()")
   registerCloseLuaEvent(Panel_CompetitionGame_GuildReservation, closeTypeBitSet.default, "PanelCloseFunc_CompetitionGame()")
   registerCloseLuaEvent(Panel_IngameCashShop_Coupon, closeTypeBitSet.default, "IngameCashShopCoupon_Close( true )")
   registerCloseLuaEvent(Panel_Window_Profile, closeTypeBitSet.default, "HandleClicked_ProfileWindow_Close()")
@@ -345,6 +345,8 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_Window_Clan_Renew, closeTypeBitSet.default, "PaGlobalFunc_ClanRenew_Close()")
   registerCloseLuaEvent(Panel_Introduction, closeTypeBitSet.default, "FGlobal_Introcution_TooltipHide()")
   registerCloseLuaEvent(Panel_LocalWarRule, closeTypeBitSet.default, "PaGlobalFunc_LocalWarRule_Close()")
+  registerCloseLuaEvent(Panel_Window_Enchant_Renew, closeTypeBitSet.attacked, "PaGlobalFunc_Enchant_Close()")
+  registerCloseLuaEvent(Panel_Window_Socket_Renew, closeTypeBitSet.attacked, "PaGlobalFunc_Socket_Close()")
   registerCloseLuaEvent(Panel_Window_Improvement_Renew, closeTypeBitSet.attacked, "PaGlobalFunc_Improvement_Close()")
   registerCloseLuaEvent(Panel_Window_MonsterRanking, closeTypeBitSet.default, "FGlobal_MonsterRanking_Close()")
   registerCloseLuaEvent(Panel_KeyboardHelp, closeTypeBitSet.default, "PaGlobalFunc_KeyboardHelpClose()")
@@ -353,9 +355,9 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_Window_StableFunction, closeTypeBitSet.attacked, "PanelCloseFunc_StableFunction_Close()")
   registerCloseLuaEvent(Panel_Repair_Renew, closeTypeBitSet.attacked, "PaGlobalFunc_RepairInfo_Close()")
   registerCloseLuaEvent(Panel_FixEquip, closeTypeBitSet.attacked, "PaGlobalFunc_FixEquip_Close()")
-  registerCloseLuaEvent(Panel_Window_ItemMarket_RegistItem, closeTypeBitSet.attacked, "PanelCloseFunc_ItemMarketRegistItem()")
-  registerCloseLuaEvent(Panel_Window_ItemMarket_BuyConfirm, closeTypeBitSet.attacked, "FGlobal_ItemMarket_BuyConfirm_Close()")
-  registerCloseLuaEvent(Panel_Window_ItemMarket_ItemSet, closeTypeBitSet.attacked, "FGlobal_ItemMarketItemSet_Close()")
+  registerCloseLuaEvent(Panel_Window_ItemMarket_RegistItem, closeTypeBitSet.default, "PanelCloseFunc_ItemMarketRegistItem()")
+  registerCloseLuaEvent(Panel_Window_ItemMarket_BuyConfirm, closeTypeBitSet.default, "FGlobal_ItemMarket_BuyConfirm_Close()")
+  registerCloseLuaEvent(Panel_Window_ItemMarket_ItemSet, closeTypeBitSet.default, "FGlobal_ItemMarketItemSet_Close()")
   registerCloseLuaEvent(Panel_Window_MarketPlace, closeTypeBitSet.attacked, "PanelCloseFunc_MarketPlace_Close()")
   registerCloseLuaEvent(Panel_DyeNew_CharacterController, closeTypeBitSet.attackedOnly, "FGlobal_Panel_DyeReNew_Hide()")
   registerCloseLuaEvent(Panel_Window_Repair, closeTypeBitSet.attackedOnly, "PaGlobalFunc_FixEquip_Close()")
@@ -380,8 +382,15 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_Gacha_Roulette, closeTypeBitSet.attacked, "FGlobal_Gacha_Roulette_Close()")
   registerCloseLuaEvent(Panel_RandomBoxSelect, closeTypeBitSet.attacked, "FGlobal_Gacha_Roulette_Close()")
   registerCloseLuaEvent(Panel_Window_GuildStableFunction, closeTypeBitSet.attacked, "GuildStableFunction_Close()")
-  registerCloseLuaEvent(MiniGame_SniperReload, closeTypeBitSet.attacked, "PaGlobalFunc_SniperReload_Close()")
-  registerCloseLuaEvent(Panel_SniperGame, closeTypeBitSet.attacked, "PaGlobal_SniperGame_Close()")
+  registerCloseLuaEvent(MiniGame_SniperReload, PAUIRenderModeBitSet({
+    Defines.CloseType.eCloseType_Attacked
+  }), "PaGlobalFunc_SniperGame_EndSniperGame()")
+  registerCloseLuaEvent(Panel_SniperGame, PAUIRenderModeBitSet({
+    Defines.CloseType.eCloseType_Attacked
+  }), "PaGlobalFunc_SniperGame_EndSniperGame()")
+  registerCloseLuaEvent(Panel_SniperGame_Result, PAUIRenderModeBitSet({
+    Defines.CloseType.eCloseType_Attacked
+  }), "PaGlobalFunc_SniperGame_EndSniperGame()")
   if true == _ContentsGroup_RenewUI_Party then
     registerCloseLuaEvent(Panel_LocalWarInfo, closeTypeBitSet.default, "PaGlobalFunc_LocalWarInfo_Exit()")
   else
@@ -389,7 +398,12 @@ function registerClosePanelList()
   end
   registerCloseLuaEvent(Panel_GuildList_SetAttendanceWar, closeTypeBitSet.default, "HandleClicked_SetAttendanceWar_Cancel()")
   registerCloseLuaEvent(Panel_Window_CharInfo_Status, closeTypeBitSet.default, "PanelEscapeFunc_CharacterInfo_Close()")
+  registerCloseLuaEvent(Panel_Window_DetectUser, closeTypeBitSet.default, "PaGlobalFunc_DetectUser_Close()")
   registerCloseLuaEvent(Panel_Stable_PromoteMarket, closeTypeBitSet.default, "PaGlobalFunc_ServantRentPromoteMarketClose()")
+  registerCloseLuaEvent(Panel_Chat_Emoticon, closeTypeBitSet.default, "PaGlobalFunc_ChatEmoticon_Close()")
+  registerCloseLuaEvent(Panel_Window_ChattingHistory_Renew, closeTypeBitSet.default, "PaGlobalFunc_ChattingHistory_Close()")
+  registerCloseLuaEvent(Panel_DetectUserButton, closeTypeBitSet.default, "PaGlobalFunc_DetectUserButton_Close()")
+  registerCloseLuaEvent(Panel_Window_GuildFunding_Renew, closeTypeBitSet.default, "PaGlobalFunc_GuildFunding_Close()")
   registerCloseLuaEvent(Panel_Chatting_Filter, closeTypeBitSet.default, "FGlobal_ChattingFilterList_Close()")
   registerCloseLuaEvent(Panel_Window_ItemMarketAlarmList_New, closeTypeBitSet.default, "PaGlobalFunc_ItemMArketAlarmListClose()")
   registerCloseLuaEvent(Panel_Window_HorseRace, closeTypeBitSet.default, "PaGlobalFunc_RaceInfo_Hide()")
@@ -422,7 +436,8 @@ local panel_MinigameList = {
   Panel_RhythmGame_ForAction,
   Panel_MiniGame_Steal,
   Panel_MiniGame_Jaksal,
-  Panel_RhythmGame_Drum
+  Panel_RhythmGame_Drum,
+  MiniGame_SniperReload
 }
 registerEvent("FromClient_luaLoadComplete", "initCloseFunction")
 function initCloseFunction()
@@ -507,6 +522,7 @@ function close_attacked_WindowPanelList()
   if 0 ~= dialog_getTalkNpcKey() then
     global_setTrading(false)
   end
+  Toclient_closeAllPanelByState(Defines.CloseType.eCloseType_Attacked, false)
   if true == _ContentsGroup_RenewUI_Dailog then
     PaGlobalFunc_MainDialog_CloseMainDialogForDetail()
     PaGlobalFunc_MainDialog_Hide()
@@ -514,7 +530,6 @@ function close_attacked_WindowPanelList()
     FGlobal_CloseNpcDialogForDetail()
     FGlobal_HideDialog()
   end
-  Toclient_closeAllPanelByState(Defines.CloseType.eCloseType_Attacked, false)
   if GameOption_GetHideWindow() then
     ResetKeyCustombyAttacked()
     close_WindowPanelList()
@@ -1076,11 +1091,20 @@ function PanelCloseFunc_WindowOption()
 end
 function PanelCloseFunc_CompetitionGame()
   if true == Panel_CompetitionGame_JoinDesc:GetShow() then
-    FGlobal_Panel_CompetitionGame_JoinDesc_Close()
+    PaGlobalFunc_CompetitionGame_JoinDesc_Close()
   end
   if true == Panel_CompetitionGame_GuildReservation:GetShow() then
     FGlobal_Panel_CompetitionGame_GuildReservation_Close()
   end
+end
+function PaGlobalFunc_Enchant_Close()
+  Panel_Window_Enchant_Renew:SetShow(false)
+end
+function PaGlobalFunc_Socket_Close()
+  Panel_Window_Socket_Renew:SetShow(false)
+end
+function PaGlobalFunc_Improvement_Close()
+  Panel_Window_Improvement_Renew:SetShow(false)
 end
 function PaGlobalFunc_ItemMArketAlarmListClose()
   if not PaGlobalFunc_ItemMarketAlarmList_IsUISubApp() then

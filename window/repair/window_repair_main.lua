@@ -411,9 +411,10 @@ function PaGlobal_Repair:cursor_PosUpdate()
 end
 function PaGlobal_Repair:Repair_Money_SetPos()
   if self._uiRepairInven:GetPosX() - self._uiRepairInvenMoney:GetPosX() - 24 < self._uiRepairTextSizeX then
-    local sizeX = self._uiRepairTextSizeX - self._uiRepairInven:GetPosX() - self._uiRepairInvenMoney:GetPosX() + 36
-    self._uiRepairInven:SetSpanSize(self._uiRepairInven:GetPosX() - sizeX, self._uiRepairInven:GetPosY())
-    self._uiRepairWareHouse:SetSpanSize(self._uiRepairWareHouse:GetPosX() - sizeX, self._uiRepairWareHouse:GetPosY())
+    self._uiRepairInven:SetPosX(self._uiRepairInvenMoney:GetPosX() + self._uiRepairInvenMoney:GetSizeX() + self._uiRepairInvenMoney:GetTextSizeX() + 20)
+    self._uiRepairInven:SetPosY(self._uiRepairInvenMoney:GetPosY())
+    self._uiRepairWareHouse:SetPosX(self._uiRepairWareHouseMoney:GetPosX() + self._uiRepairWareHouseMoney:GetSizeX() + self._uiRepairWareHouseMoney:GetTextSizeX() + 20)
+    self._uiRepairWareHouse:SetPosY(self._uiRepairWareHouseMoney:GetPosY())
   end
 end
 function PaGlobal_Repair:repair_registMessageHandler()

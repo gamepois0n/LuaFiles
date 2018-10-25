@@ -64,7 +64,7 @@ end
 Panel_NaviButton:SetShow(false)
 local naviBtn = UI.getChildControl(Panel_NaviButton, "Button_Navi")
 naviBtn:SetShow(true)
-if true == ToClient_isXBox() or true == ToClient_isPS4() then
+if true == ToClient_isConsole() then
   naviBtn:SetShow(false)
 end
 naviBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE"))
@@ -98,6 +98,13 @@ function WorldMap_ShortcutButton_RePos()
   elseif isCullingNaviBtn == false then
     Panel_NaviButton:SetShow(true)
   end
+end
+function WorldMap_DetectUserButton_RePos()
+  if false == Panel_DetectUserButton:IsShow() then
+    return
+  end
+  Panel_DetectUserButton:SetPosX(ToClient_getNaviEndPathPostion().x * getScreenSizeX() - 60)
+  Panel_DetectUserButton:SetPosY(ToClient_getNaviEndPathPostion().y * getScreenSizeY() - 60)
 end
 function HandleClicked_CompleteNode()
   if ToClient_WorldMapNaviEmpty() == true or ToClient_WorldMapNaviIsLoopPath() == true or false ~= HideAutoCompletedNaviBtn then
@@ -593,6 +600,7 @@ function FGlobal_WorldMapClose()
   if true == _ContentsGroup_RenewUI then
     PaGlobal_ConsoleWorldMapKeyGuide_SetShow(false)
   end
+  Panel_DetectUserButton:SetShow(false)
   FGlobal_Panel_MovieTheater640_WindowClose()
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_CLOSE_DEFAULT")
 end

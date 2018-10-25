@@ -41,17 +41,17 @@ end
 local stableMating = {
   _config = {
     slot = {
-      startX = 0,
+      startX = 10,
       startY = 10,
       gapY = 127
     },
     icon = {
-      startX = 15,
+      startX = 10,
       startY = 10,
       startValueX = 0,
       startValueY = 0,
-      startKindX = -15,
-      startKindY = -10,
+      startKindX = 0,
+      startKindY = 0,
       startMatingX = 0,
       startMatingY = 90,
       gapMatingX = 100,
@@ -181,8 +181,8 @@ function stableMating:init()
     slot._iconBack:SetPosY(iconConfig.startY)
     slot._icon:SetPosX(iconConfig.startValueX)
     slot._icon:SetPosY(iconConfig.startValueY)
-    slot._grade:SetPosX(iconConfig.startKindX + 70)
-    slot._grade:SetPosY(iconConfig.startKindY + 5)
+    slot._grade:SetPosX(iconConfig.startKindX + 45)
+    slot._grade:SetPosY(iconConfig.startKindY + 0)
     slot._iconMale:SetPosX(iconConfig.startKindX)
     slot._iconMale:SetPosY(iconConfig.startKindY)
     slot._iconFemale:SetPosX(iconConfig.startKindX)
@@ -208,32 +208,32 @@ function stableMating:init()
     slot._staticStaminaValue:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
     slot._staticWeightValue:SetPosX(statConfig.startValueX + statConfig.gapX * 1)
     slot._staticWeightValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
-    slot._staticMoveSpeed:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticMoveSpeed:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticMoveSpeed:SetPosY(statConfig.startValueY + statConfig.gapY * 0)
-    slot._staticAcceleration:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticAcceleration:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticAcceleration:SetPosY(statConfig.startValueY + statConfig.gapY * 1)
-    slot._staticCornering:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticCornering:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticCornering:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
-    slot._staticBrake:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticBrake:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticBrake:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
-    slot._staticMoveSpeedValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticMoveSpeedValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticMoveSpeedValue:SetPosY(statConfig.startValueY + statConfig.gapY * 0)
-    slot._staticAccelerationValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticAccelerationValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticAccelerationValue:SetPosY(statConfig.startValueY + statConfig.gapY * 1)
-    slot._staticCorneringValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticCorneringValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticCorneringValue:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
-    slot._staticBrakeValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticBrakeValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticBrakeValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
     slot._staticPrice:SetPosX(statConfig.startValueX + statConfig.gapX * 0)
-    slot._staticPrice:SetPosY(statConfig.startValueY + statConfig.gapY * 4)
+    slot._staticPrice:SetPosY(statConfig.startValueY + statConfig.gapY * 4 + 5)
     slot._staticPriceValue:SetPosX(statConfig.startValueX + statConfig.gapX * 1.6)
-    slot._staticPriceValue:SetPosY(statConfig.startValueY + statConfig.gapY * 4)
+    slot._staticPriceValue:SetPosY(statConfig.startValueY + statConfig.gapY * 4 + 5)
     slot._staticDeadCount:SetPosX(statConfig.startValueX + statConfig.gapX * 3.3)
-    slot._staticDeadCount:SetPosY(statConfig.startValueY + statConfig.gapY * 3.9)
+    slot._staticDeadCount:SetPosY(statConfig.startValueY + statConfig.gapY * 3.9 + 5)
     slot._staticDeadCountValue:SetPosX(statConfig.startValueX + statConfig.gapX * 4.8)
-    slot._staticDeadCountValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3.9)
+    slot._staticDeadCountValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3.9 + 5)
     local skillConfig = self._config.skill
-    slot._skillBack:SetPosX(skillConfig.startX)
+    slot._skillBack:SetPosX(skillConfig.startX + 20)
     slot._skillBack:SetPosY(skillConfig.startY)
     slot.skillPrevPage:SetPosX(slot._skillBack:GetSizeX())
     slot.skillPrevPage:SetPosY(skillConfig.startY)
@@ -242,29 +242,29 @@ function stableMating:init()
     slot.skillNextPage:SetPosX(slot._skillBack:GetSizeX())
     slot.skillNextPage:SetPosY(slot.skillPageValue:GetPosY() + slot.skillPageValue:GetSizeY())
     for jj = 0, self._config.skill.count - 1 do
-      slot._skill[jj]._expBG:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 5)
+      slot._skill[jj]._expBG:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 5 + 10)
       slot._skill[jj]._expBG:SetPosY(skillConfig.iconY - 13)
-      slot._skill[jj]._exp:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 3)
+      slot._skill[jj]._exp:SetPosX(skillConfig.iconX + skillConfig.gapX * jj - 3 + 10)
       slot._skill[jj]._exp:SetPosY(skillConfig.iconY - 13)
-      slot._skill[jj]._skillIcon:SetPosX(skillConfig.iconX + skillConfig.gapX * jj)
+      slot._skill[jj]._skillIcon:SetPosX(skillConfig.iconX + skillConfig.gapX * jj + 10)
       slot._skill[jj]._skillIcon:SetPosY(skillConfig.iconY - 10)
-      slot._skill[jj]._skillText:SetPosX(skillConfig.textX + skillConfig.gapX * jj)
+      slot._skill[jj]._skillText:SetPosX(skillConfig.textX + skillConfig.gapX * jj + 10)
       slot._skill[jj]._skillText:SetPosY(skillConfig.textY - 10)
-      slot._skill[jj]._expText:SetPosX(skillConfig.iconX + skillConfig.gapX * jj + 20)
+      slot._skill[jj]._expText:SetPosX(skillConfig.iconX + skillConfig.gapX * jj + 20 + 10)
       slot._skill[jj]._expText:SetPosY(skillConfig.iconY + 20)
       slot._skill[jj]._skillIcon:addInputEvent("Mouse_UpScroll", "StableMating_ScrollEvent(" .. ii .. ", true)")
       slot._skill[jj]._skillIcon:addInputEvent("Mouse_DownScroll", "StableMating_ScrollEvent(" .. ii .. ", false)")
     end
     local buttonConfig = self._config.button
-    slot._buttonStart:SetPosX(buttonConfig.startX)
+    slot._buttonStart:SetPosX(buttonConfig.startX + 20)
     slot._buttonStart:SetPosY(buttonConfig.startY)
-    slot._buttonMating:SetPosX(buttonConfig.startX)
+    slot._buttonMating:SetPosX(buttonConfig.startX + 20)
     slot._buttonMating:SetPosY(buttonConfig.startY)
-    slot._buttonCancel:SetPosX(buttonConfig.startX)
+    slot._buttonCancel:SetPosX(buttonConfig.startX + 20)
     slot._buttonCancel:SetPosY(buttonConfig.startY)
-    slot._buttonReceive:SetPosX(buttonConfig.startX)
+    slot._buttonReceive:SetPosX(buttonConfig.startX + 20)
     slot._buttonReceive:SetPosY(buttonConfig.startY)
-    slot._buttonEnd:SetPosX(buttonConfig.startX)
+    slot._buttonEnd:SetPosX(buttonConfig.startX + 20)
     slot._buttonEnd:SetPosY(buttonConfig.startY)
     slot._buttonStart:addInputEvent("Mouse_LUp", "StableMating_Mating(" .. ii .. ")")
     slot._buttonCancel:addInputEvent("Mouse_LUp", "StableMating_Cancel(" .. ii .. ")")

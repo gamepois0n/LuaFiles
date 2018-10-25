@@ -300,6 +300,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_NpcDialog(deltaTime)
       PaGlobalFunc_DetectPlayer_Exit()
       return
     end
+    if nil ~= PaGlobalFunc_Dialog_SkillSpecialize_GetShow and true == PaGlobalFunc_Dialog_SkillSpecialize_GetShow() then
+      if true == PaGlobalFunc_Dialog_SkillSpecialize_OnPadB() then
+        PaGlobalFunc_MainDialog_ReOpen()
+      end
+      return
+    end
     if Panel_Window_BlackSpiritAdventure:GetShow() then
       BlackSpiritAd_Hide()
       return
@@ -1519,6 +1525,7 @@ function PaGlobal_GlobalKeyBinder.Process_Normal(deltaTime)
     end
     return true
   end
+  FGlobal_QASupportDamageWriter_Update()
   return false
 end
 function PaGlobal_GlobalKeyBinder.Process_ChattingInputMode()
@@ -1884,7 +1891,7 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow(deltaTime)
   end
   if isKeyPressed(VCK.KeyCode_MENU) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_C) then
     if not isPvpEnable() then
-      if true == ToClient_isXBox() or true == ToClient_isPS4() then
+      if true == ToClient_isConsole() then
         local selfProxy = getSelfPlayer()
         if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))

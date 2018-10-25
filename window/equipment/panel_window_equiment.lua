@@ -12,6 +12,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local CT = CppEnums.ClassType
+local UI_TM = CppEnums.TextMode
 local isContentsEnable = ToClient_IsContentsGroupOpen("35")
 local isKR2ContentsEnable = isGameTypeKR2()
 local isSwimmingSuitContentEnable = true
@@ -43,7 +44,9 @@ local equip = {
     createCount = true,
     createCash = true,
     createEnduranceIcon = true,
-    createItemLock = true
+    createItemLock = true,
+    createBlack = true,
+    createEnchant = true
   },
   slotNoId = {
     [0] = "Static_Slot_RightHand",
@@ -144,26 +147,14 @@ local equip = {
   slotBGs = Array.new(),
   avataSlots = Array.new(),
   defaultSlots = Array.new(),
-  staticTitle = UI.getChildControl(Panel_Equipment, "Static_Text_Title"),
-  buttonClose = UI.getChildControl(Panel_Equipment, "Button_Close"),
+  txt_Title = UI.getChildControl(Panel_Equipment, "StaticText_Title"),
+  bottom_ButtonArea = UI.getChildControl(Panel_Equipment, "Static_BottomButtonArea"),
+  bottom_AbilityArea = UI.getChildControl(Panel_Equipment, "Static_AbilityArea"),
+  buttonClose = nil,
   enchantText = UI.getChildControl(Panel_Equipment, "Static_Text_Slot_Enchant_value"),
-  attackText = UI.getChildControl(Panel_Equipment, "StaticText_Attack"),
-  attackValue = UI.getChildControl(Panel_Equipment, "StaticText_Attack_Value"),
-  defenceText = UI.getChildControl(Panel_Equipment, "StaticText_Defence"),
-  defenceValue = UI.getChildControl(Panel_Equipment, "StaticText_Defence_Value"),
-  awakenText = UI.getChildControl(Panel_Equipment, "StaticText_AwakenAttack"),
-  awakenValue = UI.getChildControl(Panel_Equipment, "StaticText_AwakenAttack_Value"),
-  battlePointBG = UI.getChildControl(Panel_Equipment, "Static_BattlePointBg"),
-  effectBG = UI.getChildControl(Panel_Equipment, "Static_Effect"),
-  checkCloak = UI.getChildControl(Panel_Equipment, "CheckButton_Cloak_Invisual"),
-  checkHelm = UI.getChildControl(Panel_Equipment, "CheckButton_Helm_Invisual"),
-  checkHelmOpen = UI.getChildControl(Panel_Equipment, "CheckButton_HelmOpen"),
-  btn_PetList = UI.getChildControl(Panel_Equipment, "Button_PetInfo"),
-  checkUnderwear = UI.getChildControl(Panel_Equipment, "CheckButton_Underwear_Invisual"),
-  checkCamouflage = UI.getChildControl(Panel_Equipment, "CheckButton_ShowNameWhenCamouflage"),
-  checkPopUp = UI.getChildControl(Panel_Equipment, "CheckButton_PopUp"),
+  effectBG = UI.getChildControl(Panel_Equipment, "Static_Circle"),
+  checkPopUp = nil,
   iconSetItemTooltip = UI.getChildControl(Panel_Equipment, "StaticText_SetEffect"),
-  btn_ServantInventory = UI.getChildControl(Panel_Equipment, "Button_ServantInventory"),
   extendedSlotInfoArray = {},
   checkExtendedSlot = 0,
   checkBox_AlchemyStone = UI.getChildControl(Panel_Equipment, "CheckBox_AlchemyStone"),
@@ -177,6 +168,18 @@ equip.checkBox_AlchemyStone:SetCheck(isAlchemyStoneCheck)
 equip.checkBox_AlchemyStone:addInputEvent("Mouse_LUp", "AlchemyStone_CheckEventForSave()")
 equip.checkBox_AlchemyStone:addInputEvent("Mouse_On", "AlchemyStone_CheckButtonTooltip(true)")
 equip.checkBox_AlchemyStone:addInputEvent("Mouse_Out", "AlchemyStone_CheckButtonTooltip(false)")
+local setTierIcon = function(iconControl, textureName, iconIdx, leftX, topY, xCount, iconSize)
+  iconControl:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Etc_04.dds")
+  iconControl:SetShow(true)
+  local x1, y1, x2, y2
+  x1 = leftX + (iconSize + 1) * (iconIdx % xCount)
+  y1 = topY + (iconSize + 1) * math.floor(iconIdx / xCount)
+  x2 = x1 + iconSize
+  y2 = y1 + iconSize
+  x1, y1, x2, y2 = setTextureUV_Func(iconControl, x1, y1, x2, y2)
+  iconControl:getBaseTexture():setUV(x1, y1, x2, y2)
+  iconControl:setRenderTexture(iconControl:getBaseTexture())
+end
 function AlchemyStone_CheckEventForSave(isShow)
   local isCheck = equip.checkBox_AlchemyStone:IsCheck()
   if nil ~= isShow and isCheck then
@@ -193,17 +196,15 @@ function AlchemyStone_CheckButtonTooltip(isShow)
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_ALCHEMYSTONEDESC")
   TooltipSimple_Show(equip.checkBox_AlchemyStone, name, desc)
 end
-local _buttonQuestion = UI.getChildControl(Panel_Equipment, "Button_Question")
-local toolTip_Templete = UI.getChildControl(Panel_CheckedQuest, "StaticText_Notice_1")
-local toolTip_BlankSlot = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Equipment, "toolTip_BlankSlot_For_Equipment")
+local toolTip_Templete = UI.getChildControl(Panel_Equipment, "StaticText_Notice_1")
+local toolTip_BlankSlot = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, equip.effectBG, "toolTip_BlankSlot_For_Equipment")
 CopyBaseProperty(toolTip_Templete, toolTip_BlankSlot)
 toolTip_BlankSlot:SetColor(UI_color.C_FFFFFFFF)
 toolTip_BlankSlot:SetAlpha(1)
 toolTip_BlankSlot:SetFontColor(UI_color.C_FFC4BEBE)
-toolTip_BlankSlot:SetAutoResize(true)
 toolTip_BlankSlot:SetTextHorizonCenter()
 toolTip_BlankSlot:SetShow(false)
-toolTip_BlankSlot:SetIgnore(false)
+toolTip_BlankSlot:SetIgnore(true)
 function equip_checkUseableSlot(index)
   local returnValue = true
   if index == UnUsedEquipNo_01 or index == nUsedEquipNo_02 or index == CppEnums.EquipSlotNo.equipSlotNoCount or index == CppEnums.EquipSlotNo.explorationBonus0 or index == CppEnums.EquipSlotNo.installation4 or index == CppEnums.EquipSlotNo.body or index == CppEnums.EquipSlotNo.avatarBody then
@@ -214,7 +215,7 @@ end
 function equip:initControl()
   for v = EquipNoMin, EquipNoMax do
     if true == equip_checkUseableSlot(v) then
-      local slotBG = UI.getChildControl(Panel_Equipment, self.slotNoId[v] .. "_BG")
+      local slotBG = UI.getChildControl(self.effectBG, self.slotNoId[v] .. "_BG")
       slotBG:SetShow(false)
       self.slotBGs[v] = slotBG
       local whereType = Inventory_GetCurrentInventoryType()
@@ -267,7 +268,7 @@ function equip:initControl()
         end
       end
       local slot = {}
-      slot.icon = UI.getChildControl(Panel_Equipment, self.slotNoId[v])
+      slot.icon = UI.getChildControl(self.effectBG, self.slotNoId[v])
       slot.icon:SetPosX(slotBG:GetPosX() + 4)
       slot.icon:SetPosY(slotBG:GetPosY() - 4)
       SlotItem.new(slot, "Equipment_" .. v, v, Panel_Equipment, self.slotConfig)
@@ -278,17 +279,28 @@ function equip:initControl()
       slot.icon:addInputEvent("Mouse_Out", "Equipment_MouseOn(" .. v .. ",false)")
       Panel_Tooltip_Item_SetPosition(v, slot, "equipment")
       self.slots[v] = slot
-      local targetControl = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Equipment, "Equip_Enchant_" .. v)
-      CopyBaseProperty(equip.enchantText, targetControl)
-      targetControl:SetPosX(slot.icon:GetPosX())
-      targetControl:SetPosY(slot.icon:GetPosY() + 8)
-      targetControl:SetShow(false)
-      slot.enchantText = targetControl
+      self.battlePointBG = UI.getChildControl(self.bottom_AbilityArea, "Static_BattlePointBg")
+      self.battlePointText = UI.getChildControl(self.battlePointBG, "StaticText_BattlePointTitle")
+      self.BattlePointValue = UI.getChildControl(self.battlePointBG, "StaticText_BattlePointValue")
+      self.BonusBattlePointValue = UI.getChildControl(self.battlePointBG, "StaticText_BonusBattlePointValue")
+      self.checkCloak = UI.getChildControl(self.bottom_ButtonArea, "CheckButton_Cloak_Invisual")
+      self.checkHelm = UI.getChildControl(self.bottom_ButtonArea, "CheckButton_Helm_Invisual")
+      self.checkHelmOpen = UI.getChildControl(self.bottom_ButtonArea, "CheckButton_HelmOpen")
+      self.btn_PetList = UI.getChildControl(self.bottom_ButtonArea, "Button_PetInfo")
+      self.checkUnderwear = UI.getChildControl(self.bottom_ButtonArea, "CheckButton_Underwear_Invisual")
+      self.checkCamouflage = UI.getChildControl(self.bottom_ButtonArea, "CheckButton_ShowNameWhenCamouflage")
+      self.btn_ServantInventory = UI.getChildControl(self.bottom_ButtonArea, "Button_ServantInventory")
+      self.attackText = UI.getChildControl(self.bottom_AbilityArea, "StaticText_Attack")
+      self.attackValue = UI.getChildControl(self.bottom_AbilityArea, "StaticText_Attack_Value")
+      self.defenceText = UI.getChildControl(self.bottom_AbilityArea, "StaticText_Defence")
+      self.defenceValue = UI.getChildControl(self.bottom_AbilityArea, "StaticText_Defence_Value")
+      self.awakenText = UI.getChildControl(self.bottom_AbilityArea, "StaticText_AwakenAttack")
+      self.awakenValue = UI.getChildControl(self.bottom_AbilityArea, "StaticText_AwakenAttack_Value")
       if nil ~= self.avataEquipSlotId[v] then
-        self.avataSlots[v] = UI.getChildControl(Panel_Equipment, self.avataEquipSlotId[v])
+        self.avataSlots[v] = UI.getChildControl(self.effectBG, self.avataEquipSlotId[v])
         self.avataSlots[v]:SetShow(true)
-        self.avataSlots[v]:SetPosX(slot.icon:GetPosX() + slot.icon:GetSizeX() - self.avataSlots[v]:GetSizeX() * 2 / 3)
-        self.avataSlots[v]:SetPosY(slot.icon:GetPosY() + slot.icon:GetSizeY() - self.avataSlots[v]:GetSizeX() * 2 / 3)
+        self.avataSlots[v]:SetPosX(slot.icon:GetSpanSize().x + slot.icon:GetSizeX() - 15)
+        self.avataSlots[v]:SetPosY(slot.icon:GetSpanSize().y + slot.icon:GetSizeY() - 15)
         self.avataSlots[v]:addInputEvent("Mouse_LUp", "AvatarEquipSlot_LClick(" .. v .. ")")
         if v <= 20 or 30 == v then
           self.avataSlots[v]:addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 4, " .. v .. " )")
@@ -302,15 +314,23 @@ function equip:initControl()
         end
       end
       if nil ~= self.equipSlotId[v] then
-        self.defaultSlots[v] = UI.getChildControl(Panel_Equipment, self.equipSlotId[v])
+        self.defaultSlots[v] = UI.getChildControl(self.effectBG, self.equipSlotId[v])
         self.defaultSlots[v]:SetShow(false)
       end
     end
   end
+  self.attackText:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.defenceText:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.awakenText:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.attackText:SetText(self.attackText:GetText())
+  self.defenceText:SetText(self.defenceText:GetText())
+  self.awakenText:SetText(self.awakenText:GetText())
+  self.buttonClose = UI.getChildControl(self.txt_Title, "Button_Close")
+  self._buttonQuestion = UI.getChildControl(self.txt_Title, "Button_Question")
+  self.checkPopUp = UI.getChildControl(self.txt_Title, "CheckButton_PopUp")
   self.checkCloak:SetShow(true)
   self.checkHelm:SetShow(true)
   self.checkHelmOpen:SetShow(true)
-  self.enchantText:SetShow(false)
   if false == ToClient_isAdultUser() then
     self.checkUnderwear:SetShow(false)
   else
@@ -422,9 +442,9 @@ function Equipment_NilSlot_MouseOn(slotNo, isOn)
   local self = equip
   if true == isOn then
     toolTip_BlankSlot:SetText(self.slotNoIdToString[slotNo])
-    toolTip_BlankSlot:SetSize(toolTip_BlankSlot:GetTextSizeX() + 30, toolTip_BlankSlot:GetSizeY())
+    toolTip_BlankSlot:SetSize(toolTip_BlankSlot:GetTextSizeX() + 30, 20)
     toolTip_BlankSlot:SetPosX(self.slots[slotNo].icon:GetPosX() - toolTip_BlankSlot:GetTextSizeX())
-    toolTip_BlankSlot:SetPosY(self.slots[slotNo].icon:GetPosY() - toolTip_BlankSlot:GetSizeY())
+    toolTip_BlankSlot:SetPosY(getMousePosY() - Panel_Equipment:GetPosY() - 50)
     toolTip_BlankSlot:SetShow(true)
   else
     toolTip_BlankSlot:SetShow(false)
@@ -555,9 +575,9 @@ function equip:registEventHandler()
   self.checkPopUp:addInputEvent("Mouse_LUp", "Check_PopUI()")
   self.checkPopUp:addInputEvent("Mouse_On", "Equipment__PopUp_ShowIconToolTip(true)")
   self.checkPopUp:addInputEvent("Mouse_Out", "Equipment__PopUp_ShowIconToolTip(false)")
-  _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelWindowEquipment\" )")
-  _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelWindowEquipment\", \"true\")")
-  _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelWindowEquipment\", \"false\")")
+  self._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelWindowEquipment\" )")
+  self._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelWindowEquipment\", \"true\")")
+  self._buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelWindowEquipment\", \"false\")")
   self.btn_PetList:addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Toggle()")
   self.btn_ServantInventory:addInputEvent("Mouse_LUp", "HandleClicked_ServantInventoryOpen()")
 end
@@ -582,48 +602,6 @@ local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, sl
   slot:setItem(itemWrapper, slotNo, true)
   local itemSSW = itemWrapper:getStaticStatus()
   local enchantCount = itemSSW:get()._key:getEnchantLevel()
-  if enchantCount > 0 and enchantCount < 16 and false == isExtended then
-    slot.enchantText:SetText("+" .. tostring(enchantCount))
-    slot.enchantText:SetShow(true)
-  elseif 16 == enchantCount and false == isExtended then
-    slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
-    slot.enchantText:SetShow(true)
-  elseif 17 == enchantCount and false == isExtended then
-    slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
-    slot.enchantText:SetShow(true)
-  elseif 18 == enchantCount and false == isExtended then
-    slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
-    slot.enchantText:SetShow(true)
-  elseif 19 == enchantCount and false == isExtended then
-    slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
-    slot.enchantText:SetShow(true)
-  elseif 20 == enchantCount and false == isExtended then
-    slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
-    slot.enchantText:SetShow(true)
-  else
-    slot.enchantText:SetShow(false)
-  end
-  if itemSSW:get():isCash() then
-    slot.enchantText:SetShow(false)
-  end
-  if CppEnums.ItemClassifyType.eItemClassify_Accessory == itemWrapper:getStaticStatus():getItemClassify() then
-    if 1 == enchantCount and false == isExtended then
-      slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
-      slot.enchantText:SetShow(true)
-    elseif 2 == enchantCount and false == isExtended then
-      slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
-      slot.enchantText:SetShow(true)
-    elseif 3 == enchantCount and false == isExtended then
-      slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
-      slot.enchantText:SetShow(true)
-    elseif 4 == enchantCount and false == isExtended then
-      slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
-      slot.enchantText:SetShow(true)
-    elseif 5 == enchantCount and false == isExtended then
-      slot.enchantText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
-      slot.enchantText:SetShow(true)
-    end
-  end
   if false == isExtended then
     slot.icon:SetEnable(true)
   else
@@ -631,10 +609,8 @@ local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, sl
   end
   if true == isMono then
     slot.icon:SetMonoTone(true)
-    slot.enchantText:SetMonoTone(true)
   elseif false == isMono then
     slot.icon:SetMonoTone(false)
-    slot.enchantText:SetMonoTone(false)
   end
 end
 function Equipment_updateSlotData()
@@ -658,7 +634,6 @@ function Equipment_updateSlotData()
         local itemss = itemWrapper:getStaticStatus()
         local name = itemss:getName()
       else
-        slot.enchantText:SetShow(false)
         slot:clearItem()
         slot.icon:SetEnable(true)
         slotBG:SetShow(true)
@@ -677,24 +652,24 @@ function Equipment_updateSlotData()
     end
   end
   local isSetAwakenWeapon = ToClient_getEquipmentItem(CppEnums.EquipSlotNo.awakenWeapon)
-  local titleSpanSizeY = math.max(equip.attackText:GetSpanSize().y, 95)
+  local titleSpanSizeY = math.max(0, equip.attackText:GetSpanSize().x)
   local valueSpanSizeY = math.max(equip.attackValue:GetSpanSize().y, 70)
   if awakenWeaponContentsOpen and nil ~= isSetAwakenWeapon then
     equip.awakenText:SetShow(true)
     equip.awakenValue:SetShow(true)
-    equip.awakenText:SetSpanSize(0, titleSpanSizeY)
-    equip.awakenValue:SetSpanSize(0, valueSpanSizeY)
-    equip.attackText:SetSpanSize(35, titleSpanSizeY)
-    equip.defenceText:SetSpanSize(35, titleSpanSizeY)
-    equip.attackValue:SetSpanSize(25, valueSpanSizeY)
-    equip.defenceValue:SetSpanSize(25, valueSpanSizeY)
+    equip.attackText:SetSpanSize(186, 0)
+    equip.attackValue:SetSpanSize(30, 5)
+    equip.awakenText:SetSpanSize(186, 0)
+    equip.awakenValue:SetSpanSize(30, 0)
+    equip.defenceText:SetSpanSize(186, 0)
+    equip.defenceValue:SetSpanSize(30, 5)
   else
     equip.awakenText:SetShow(false)
     equip.awakenValue:SetShow(false)
-    equip.attackText:SetSpanSize(105, titleSpanSizeY)
-    equip.defenceText:SetSpanSize(105, titleSpanSizeY)
-    equip.attackValue:SetSpanSize(95, valueSpanSizeY)
-    equip.defenceValue:SetSpanSize(95, valueSpanSizeY)
+    equip.attackText:SetSpanSize(186, 20)
+    equip.attackValue:SetSpanSize(30, 25)
+    equip.defenceText:SetSpanSize(186, 20)
+    equip.defenceValue:SetSpanSize(30, 25)
   end
   if self.checkExtendedSlot == 1 then
     for extendSlotNo, parentSlotNo in pairs(self.extendedSlotInfoArray) do
@@ -721,13 +696,14 @@ function Equipment_updateSlotData()
   _defenceValue = ToClient_getDefence()
   local battlePointValue = math.floor(selfPlayer:get():getTotalStatValue())
   local bonusBattlePoint = ToClient_GetBonusStatBySupportPoint(ToClient_GetMaxSupportPoint())
+  local tier = ToClient_GetTier(battlePointValue)
   self.attackValue:SetText(tostring(_offenceValue))
   self.awakenValue:SetText(tostring(_awakenOffecnValue))
   self.defenceValue:SetText(tostring(_defenceValue))
+  setTierIcon(self.battlePointText, "new_ui_common_forlua/default/Default_Etc_04.dds", 8 - tier, 354, 99, 4, 24)
   if bonusBattlePoint > 0 then
     self.BattlePointValue:SetText(tostring(battlePointValue))
     self.BonusBattlePointValue:SetText("(+" .. bonusBattlePoint .. ")")
-    self.BonusBattlePointValue:SetSpanSize(self.BattlePointValue:GetSpanSize().x + (self.BattlePointValue:GetSizeX() + self.BattlePointValue:GetTextSizeX()) * 0.5 + 1, self.BonusBattlePointValue:GetSpanSize().y)
     self.BonusBattlePointValue:SetShow(true)
   else
     self.BattlePointValue:SetText(tostring(battlePointValue))
@@ -766,9 +742,9 @@ function Equipment_equipItem(slotNo)
   end
   slot.icon:AddEffect("fUI_SkillButton01", false, 0, 0)
   if slotNo < 14 or 29 == slotNo then
-    self.effectBG:AddEffect("UI_ItemInstall_BigRing", false, -0.9, -74)
+    self.effectBG:AddEffect("UI_ItemInstall_BigRing", false, -0.9, 0)
   else
-    self.effectBG:AddEffect("UI_ItemInstall_BigRing02", false, -0.9, -74)
+    self.effectBG:AddEffect("UI_ItemInstall_BigRing02", false, -0.9, 0)
   end
   ToClient_updateAttackStat()
   local itemWrapper = ToClient_getEquipmentItem(slotNo)
@@ -879,6 +855,7 @@ function FGlobal_CheckUnderwear()
   end
 end
 function Equipment_SimpleToolTips(isShow, btnType, flagControl)
+  local self = equip
   if btnType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_CHECKHELM_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_CHECKHELM_DESC")
@@ -898,11 +875,11 @@ function Equipment_SimpleToolTips(isShow, btnType, flagControl)
   elseif btnType == 4 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_BTN_CHECKFLAG_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_BTN_CHECKFLAG_DESC")
-    uiControl = UI.getChildControl(Panel_Equipment, equip.avataEquipSlotId[flagControl])
+    uiControl = UI.getChildControl(self.effectBG, equip.avataEquipSlotId[flagControl])
   elseif btnType == 5 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_BTN_CHECKFLAG_DECO_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_BTN_CHECKFLAG_DECO_DESC")
-    uiControl = UI.getChildControl(Panel_Equipment, equip.avataEquipSlotId[flagControl])
+    uiControl = UI.getChildControl(self.effectBG, equip.avataEquipSlotId[flagControl])
   elseif btnType == 6 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIP_CLOAK_DESC")
@@ -1170,9 +1147,6 @@ function EquipMent_BulletCheck()
   end
 end
 function FGlobal_Equipment_Init()
-  equip.battlePointText = UI.getChildControl(equip.battlePointBG, "StaticText_BattlePointIcon")
-  equip.BattlePointValue = UI.getChildControl(equip.battlePointBG, "StaticText_BattlePointValue")
-  equip.BonusBattlePointValue = UI.getChildControl(equip.battlePointBG, "StaticText_BonusBattlePointValue")
   equip:initControl()
   equip:registEventHandler()
   equip:registMessageHandler()
@@ -1194,7 +1168,6 @@ function FGlobal_UpdateTotalStatValue_InEquipment(actorKeyRaw)
   if bonusBattlePoint > 0 then
     self.BattlePointValue:SetText(tostring(battlePointValue))
     self.BonusBattlePointValue:SetText("(+" .. bonusBattlePoint .. ")")
-    self.BonusBattlePointValue:SetSpanSize(self.BattlePointValue:GetSpanSize().x + (self.BattlePointValue:GetSizeX() + self.BattlePointValue:GetTextSizeX()) * 0.5 + 1, self.BonusBattlePointValue:GetSpanSize().y)
     self.BonusBattlePointValue:SetShow(true)
   else
     self.BattlePointValue:SetText(tostring(battlePointValue))

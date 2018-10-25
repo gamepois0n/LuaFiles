@@ -31,6 +31,9 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
   if nil ~= WorldMap_ShortcutButton_RePos then
     WorldMap_ShortcutButton_RePos()
   end
+  if nil ~= WorldMap_DetectUserButton_RePos then
+    WorldMap_DetectUserButton_RePos()
+  end
   if nil ~= ChattingViewManager_UpdatePerFrame then
     ChattingViewManager_UpdatePerFrame(deltaTime)
   end
@@ -82,7 +85,7 @@ function Panel_OnlyPerframeUsedFunction(deltaTime)
       FGlobal_ReturnStoneCheck()
     end
   end
-  if ToClient_isXBox() or ToClient_isPS4() then
+  if ToClient_isConsole() then
     FGlobal_KeyGuideTypeCheck(deltaTime)
   end
 end

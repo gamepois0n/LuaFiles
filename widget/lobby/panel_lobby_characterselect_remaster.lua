@@ -249,8 +249,8 @@ function CharacterSelectRemaster:characterView(index, classType, isSpecialCharac
   elseif classType == UI_Class.ClassType_Orange then
     viewCharacter(index, -20, -30, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)
-    viewCharacterFov(0.8)
-    setWeatherTime(8, 1)
+    viewCharacterFov(0.75)
+    setWeatherTime(8, 8)
   else
     viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(3.14, 0)
@@ -618,7 +618,7 @@ function InputMLUp_CharacterSelect_PlayGame(characterIdx)
   end
   if nil ~= characterData then
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
-      if 1 == characterData._level and 1 == characterCount and false == ToClient_isXBox() then
+      if 1 == characterData._level and 1 == characterCount and false == ToClient_isConsole() then
         self._selectedCharIdx = characterIdx
         FGlobal_FirstLogin_Open(characterIdx)
       else

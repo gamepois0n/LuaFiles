@@ -41,11 +41,11 @@ PaGlobal_Menu_Renew_Renew._categoryData = {
   [PaGlobal_Menu_Renew_Renew._xbox._help] = {
     _string = "Policy",
     _hotKey = "",
-    _path = "Renewal/UI_Icon/Console_ESCMenuIcon.dds",
-    _x1 = 2,
-    _y1 = 2,
-    _x2 = 57,
-    _y2 = 57
+    _path = "Renewal/UI_Icon/Console_Icon_Title.dds",
+    _x1 = 59,
+    _y1 = 287,
+    _x2 = 114,
+    _y2 = 342
   },
   [PaGlobal_Menu_Renew_Renew._xbox._escape] = {
     _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_ESCAPE"),
@@ -113,7 +113,7 @@ PaGlobal_Menu_Renew_Renew._categoryData = {
   [PaGlobal_Menu_Renew_Renew._xbox._myInfo] = {
     _string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MYINFO"),
     _hotKey = "",
-    _path = "Renewal/UI_Icon/Console_ESCMenuIcon.dds",
+    _path = "Renewal/UI_Icon/Console_Icon_Title.dds",
     _x1 = 59,
     _y1 = 59,
     _x2 = 114,
@@ -249,7 +249,6 @@ function PaGlobal_Menu_Renew_Renew:Init()
   self._ui._topBg:SetSize(Panel_Window_Menu_Renew:GetSizeX() - 10, self._ui._topBg:GetSizeY())
 end
 function PaGlobal_Menu_Renew_Renew:HandleClicked_MenuButton(index)
-  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if self._xbox._help == index then
     PaGlobal_Policy_ShowWindow(false)
   elseif self._xbox._escape == index then

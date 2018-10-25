@@ -46,6 +46,7 @@ local deliveryInformation = {
   button_Close = UI.getChildControl(Panel_Window_Delivery_Information, "Button_Win_Close"),
   buttonQuestion = UI.getChildControl(Panel_Window_Delivery_Information, "Button_Question"),
   button_Request = UI.getChildControl(Panel_Window_Delivery_Information, "Button_Send"),
+  rdo_information = UI.getChildControl(Panel_Window_Delivery_Information, "RadioButton_Information"),
   button_ReceiveAll = UI.getChildControl(Panel_Window_Delivery_Information, "Button_ReceiveAll"),
   radiobutton_trans_list = UI.getChildControl(Panel_Window_Delivery_Information, "RadioButton_Tranlist"),
   radiobutton_alltrans_list = UI.getChildControl(Panel_Window_Delivery_Information, "RadioButton_AllTranlist"),
@@ -168,9 +169,10 @@ function DeliveryInformationWindow_Open()
   local self = deliveryInformation
   self.radiobutton_trans_list:SetCheck(true)
   self.radiobutton_alltrans_list:SetCheck(false)
+  self.rdo_information:SetCheck(true)
   if not Panel_Window_Delivery_Information:IsShow() then
     Panel_Window_Delivery_Information:SetAlphaExtraChild(1)
-    Panel_Window_Delivery_Information:SetShow(true, true)
+    Panel_Window_Delivery_Information:SetShow(true, false)
     delivery_requsetList()
     if ToClient_WorldMapIsShow() then
       WorldMapPopupManager:increaseLayer(true)
@@ -179,9 +181,21 @@ function DeliveryInformationWindow_Open()
   end
   self:updateSlot()
   Panel_Window_Delivery_Information:SetPosX(Panel_Window_Warehouse:GetPosX() - Panel_Window_Delivery_Information:GetSizeX())
-  Panel_Window_Delivery_Information:SetPosY(Panel_Window_Warehouse:GetPosY() - 40)
+  Panel_Window_Delivery_Information:SetPosY(Panel_Window_Warehouse:GetPosY())
   Panel_Window_Delivery_Request:SetPosX(Panel_Window_Warehouse:GetPosX() - Panel_Window_Delivery_Information:GetSizeX())
-  Panel_Window_Delivery_Request:SetPosY(Panel_Window_Warehouse:GetPosY() - 40)
+  Panel_Window_Delivery_Request:SetPosY(Panel_Window_Warehouse:GetPosY())
+  if Panel_Window_Delivery_Information:GetPosX() <= 0 then
+    Panel_Window_Delivery_Information:SetPosX(3)
+    if true == Panel_Window_Warehouse:GetShow() then
+      Panel_Window_Warehouse:SetPosX(Panel_Window_Delivery_Information:GetSizeX() + 20)
+    end
+  end
+  if Panel_Window_Delivery_Request:GetPosX() <= 0 then
+    Panel_Window_Delivery_Request:SetPosX(3)
+    if true == Panel_Window_Warehouse:GetShow() then
+      Panel_Window_Warehouse:SetPosX(Panel_Window_Delivery_Request:GetSizeX() + 20)
+    end
+  end
   self.list2:moveTopIndex()
   self.scrollIndex = 0
   FGlobal_WarehouseTownListCheck()
@@ -220,9 +234,15 @@ function DeliveryInformation_OpenPanelFromDialog()
   local self = deliveryInformation
   self.currentWaypointKey = getCurrentWaypointKey()
   Warehouse_OpenPanelFromDialogWithoutInventory(getCurrentWaypointKey(), CppEnums.WarehoouseFromType.eWarehoouseFromType_Npc)
+  local screenSizeX = getScreenSizeX()
+  local screenSizeY = getScreenSizeY()
+  local basePosY = screenSizeY / 2 - Panel_Window_Warehouse:GetSizeY() / 2
+  local posY = math.min(screenSizeY - 280, basePosY + Panel_Window_Warehouse:GetSizeY()) - Panel_Window_Warehouse:GetSizeY()
+  posY = math.max(0, posY)
+  local spanSizeY = posY - basePosY
   Panel_Window_Warehouse:SetVerticalMiddle()
   Panel_Window_Warehouse:SetHorizonCenter()
-  Panel_Window_Warehouse:SetSpanSize(100, 0)
+  Panel_Window_Warehouse:SetSpanSize(100, spanSizeY)
   DeliveryInformationWindow_Open()
 end
 function Delivery_Cancel(index)
@@ -264,13 +284,15 @@ function Delivery_ListControlCreate(content, key)
   local slot = {}
   local itemSlot = UI.getChildControl(content, "Static_List2_Slot")
   itemSlot:SetShow(true)
-  itemSlot:SetPosX(9)
-  itemSlot:SetPosY(9)
+  itemSlot:SetPosX(8)
+  itemSlot:SetPosY(8)
   itemSlot:SetSize(40, 40)
   SlotItem.reInclude(slot, "Delivery_Slot_Icon_", 0, itemSlot, self.slotConfig)
   slot:setItem(itemWrapper)
   local carriageType = UI.getChildControl(content, "StaticText_List2_CarriageType")
   carriageType:SetShow(true)
+  carriageType:SetPosX(70)
+  carriageType:SetPosY(37)
   if 1 == deliveryInfo:getCarriageType() then
     carriageType:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_carriage"))
   elseif 2 == deliveryInfo:getCarriageType() then
@@ -283,24 +305,28 @@ function Delivery_ListControlCreate(content, key)
   local departure = UI.getChildControl(content, "StaticText_List2_Departure")
   departure:SetShow(true)
   departure:SetText(deliveryInfo:getFromRegionName())
+  departure:SetPosX(70)
+  departure:SetPosY(17)
   local destination = UI.getChildControl(content, "StaticText_List2_Destination")
   destination:SetShow(true)
   destination:SetText(deliveryInfo:getToRegionName())
+  destination:SetPosX(199)
+  destination:SetPosY(17)
   local receive = UI.getChildControl(content, "Button_List2_Receive")
-  receive:SetPosX(325)
-  receive:SetPosY(14)
+  receive:SetPosX(355)
+  receive:SetPosY(17)
   local cancel = UI.getChildControl(content, "Button_List2_Cancel")
-  cancel:SetPosX(325)
-  cancel:SetPosY(14)
+  cancel:SetPosX(355)
+  cancel:SetPosY(17)
   local Ready = UI.getChildControl(content, "Button_List2_Ready")
-  Ready:SetPosX(325)
-  Ready:SetPosY(14)
+  Ready:SetPosX(355)
+  Ready:SetPosY(17)
   local Ing = UI.getChildControl(content, "Button_List2_Ing")
-  Ing:SetPosX(325)
-  Ing:SetPosY(14)
+  Ing:SetPosX(355)
+  Ing:SetPosY(17)
   local Complete = UI.getChildControl(content, "Button_List2_Complete")
-  Complete:SetPosX(325)
-  Complete:SetPosY(14)
+  Complete:SetPosX(355)
+  Complete:SetPosY(17)
   if self.radiobutton_trans_list:IsCheck() then
     Ready:SetShow(false)
     Ing:SetShow(false)
@@ -331,8 +357,8 @@ function Delivery_ListControlCreate(content, key)
   end
   local arrow = UI.getChildControl(content, "Static_List2_Arrow")
   arrow:SetShow(true)
-  arrow:SetPosX(190)
-  arrow:SetPosY(40)
+  arrow:SetPosX(160)
+  arrow:SetPosY(19)
   local itemNo = deliveryInfo:getItemNo()
   receive:addInputEvent("Mouse_LUp", "Delivery_Receive(" .. index .. " )")
   cancel:addInputEvent("Mouse_LUp", "Delivery_Cancel(" .. index .. " )")

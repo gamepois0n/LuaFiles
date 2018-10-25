@@ -21,7 +21,7 @@ local workerRestoreAll = {
   _btnWinClose = UI.getChildControl(Panel_WorkerRestoreAll, "Button_Close"),
   _btnConfirm = UI.getChildControl(Panel_WorkerRestoreAll, "Button_Restore"),
   _btnCancel = UI.getChildControl(Panel_WorkerRestoreAll, "Button_Cancel"),
-  restoreItemMaxCount = 5,
+  restoreItemMaxCount = 6,
   restoreItemHasCount = 0,
   restoreItemSlot = {},
   selectedRestoreWorkerIdx = 0,
@@ -43,12 +43,13 @@ local function workerRestoreAll_Init()
     tempItemSlot.selectIcon = UI.createAndCopyBasePropertyControl(Panel_WorkerRestoreAll, "Static_Selected_Item_Icon", tempItemSlot.slotBG, "workerManager_selectedSlot_" .. resIdx)
     tempItemSlot.itemCount = UI.createAndCopyBasePropertyControl(Panel_WorkerRestoreAll, "StaticText_Item_Count", tempItemSlot.slotIcon, "workerManager_restoreItemCount_" .. resIdx)
     tempItemSlot.restorePoint = UI.createAndCopyBasePropertyControl(Panel_WorkerRestoreAll, "StaticText_Item_Restore_Value", tempItemSlot.slotIcon, "workerManager_restorePoint_" .. resIdx)
-    tempItemSlot.slotBG:SetPosX(5 + tempItemSlot.slotBG:GetSizeX() * resIdx)
-    tempItemSlot.slotBG:SetPosY(23)
+    tempItemSlot.slotBG:SetPosX(17 + resIdx * 52)
+    tempItemSlot.slotBG:SetPosY(87)
+    tempItemSlot.slotBG:SetPosY(53)
     tempItemSlot.slotIcon:SetPosX(5)
     tempItemSlot.slotIcon:SetPosY(5)
-    tempItemSlot.selectIcon:SetPosX(2)
-    tempItemSlot.selectIcon:SetPosY(2)
+    tempItemSlot.selectIcon:SetPosX(0)
+    tempItemSlot.selectIcon:SetPosY(0)
     tempItemSlot.itemCount:SetPosX(tempItemSlot.slotIcon:GetSizeX() - 9)
     tempItemSlot.itemCount:SetPosY(tempItemSlot.slotIcon:GetSizeY() - 10)
     tempItemSlot.restorePoint:SetPosX(3)
@@ -66,8 +67,8 @@ local function workerRestoreAll_Init()
   self._itemListBG:addInputEvent("Mouse_DownScroll", "workerRestoreAll_SliderScroll( false )")
   self._btnCancel:addInputEvent("Mouse_LUp", "workerRestoreAll_Close()")
   self._btnWinClose:addInputEvent("Mouse_LUp", "workerRestoreAll_Close()")
-  self._slider:SetPosX(10)
-  self._slider:SetPosY(75)
+  self._slider:SetPosX(15)
+  self._slider:SetPosY(100)
   Panel_WorkerRestoreAll:RemoveControl(self._slider)
 end
 local function restoreItem_update()

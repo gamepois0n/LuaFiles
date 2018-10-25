@@ -16,22 +16,22 @@ npcShop = {
     slotCount = 14,
     slotCols = 2,
     slotRows = 0,
-    slotStartX = 30,
-    slotStartY = 92,
-    slotGapX = 13,
-    slotGapY = 4,
-    pricePosX = 268,
-    pricePosY = 27,
+    slotStartX = 25,
+    slotStartY = 117,
+    slotGapX = 10,
+    slotGapY = 5,
+    pricePosX = 265,
+    pricePosY = 30,
     remainCountPosX = 40,
-    remainCountPosY = 27,
+    remainCountPosY = 30,
     trendPosX = 285,
     trendPosY = 20,
-    iconPosX = 6,
-    iconPosY = 6,
-    invenCountX = 257,
-    invenCountY = 7,
+    iconPosX = 4,
+    iconPosY = 4,
+    invenCountX = 260,
+    invenCountY = 10,
     rentTimePosX = 248,
-    rentTimePosY = 7
+    rentTimePosY = 10
   },
   commandText = {
     [0] = PAGetString(Defines.StringSheet_GAME, "NPCSHOP_BUY"),
@@ -217,7 +217,7 @@ function npcShop:createSlot()
         self.icon:setItemByStaticStatus(itemStaticWrapper)
         self.icon.icon:SetMonoTone(not enable)
         self.price:SetText(makeDotMoney(s64_price))
-        self.coinIcon:SetPosX(self.price:GetPosX() - (self.price:GetTextSizeX() - self.price:GetSizeX() + self.coinIcon:GetSizeX() + 3))
+        self.coinIcon:SetPosX(self.price:GetPosX() - (self.price:GetTextSizeX() - self.price:GetSizeX() + self.coinIcon:GetSizeX() + 10))
         local strCount = string.format("%d", Int64toInt32(s64_stackCount))
         self.remainCount:SetFontColor(UI_color.C_FF3BD3FF)
         self.remainCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "NPCSHOP_REMAIN_COUNT", "count", strCount))
@@ -343,7 +343,7 @@ function SellAll_ShowToggle()
   local self = npcShop
   if self.tabIndexSell == self.lastTabIndex then
     npcShop.buttonSellAll:SetShow(true)
-    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX() - npcShop.buttonSellAll:GetSizeX() - 5)
+    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX())
   else
     npcShop.buttonSellAll:SetShow(false)
   end
@@ -354,7 +354,7 @@ function BuySome_ShowToggle()
     self.buttonBuySome:SetShow(true)
     self.buttonBuySome:SetEnable(false)
     self.buttonBuySome:SetMonoTone(true)
-    self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX() - npcShop.buttonBuySome:GetSizeX() - 5)
+    self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX())
   else
     self.buttonBuySome:SetShow(false)
   end
@@ -363,10 +363,6 @@ function npcShop:controlInit()
   self.radioButtons[self.tabIndexBuy]:SetCheck(true)
   self.radioButtons[self.tabIndexSell]:SetCheck(false)
   self.radioButtons[self.tabIndexRepurchase]:SetCheck(false)
-  self.radioButtons[self.tabIndexBuy]:EraseAllEffect()
-  self.radioButtons[self.tabIndexBuy]:AddEffect("UI_Shop_Button", true, 0, 0)
-  self.radioButtons[self.tabIndexSell]:EraseAllEffect()
-  self.radioButtons[self.tabIndexRepurchase]:EraseAllEffect()
   self.lastTabIndex = self.tabIndexBuy
   NpcShop_OnSlotClicked()
   self.lastScrollValue = 0
@@ -389,7 +385,7 @@ function npcShop:controlInit()
       else
         self.radioButtons[self.tabIndexSell]:SetShow(false)
         self.radioButtons[self.tabIndexRepurchase]:SetShow(false)
-        self.radioButtons[self.tabIndexBuy]:SetPosX(npcShop_SellBtn_PosX)
+        self.radioButtons[self.tabIndexBuy]:SetPosX(npcShop_BuyBtn_PosX)
       end
       if npcShop_isGuildShopContents() then
         _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC_GUILD"))
@@ -400,7 +396,7 @@ function npcShop:controlInit()
   elseif self._isCamping then
     self.radioButtons[self.tabIndexSell]:SetShow(false)
     self.radioButtons[self.tabIndexRepurchase]:SetShow(false)
-    self.radioButtons[self.tabIndexBuy]:SetPosX(npcShop_SellBtn_PosX)
+    self.radioButtons[self.tabIndexBuy]:SetPosX(npcShop_BuyBtn_PosX)
     _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMPNPCSHOP_HELPDESC"))
   end
   local screenSizeX = getScreenSizeX()
@@ -410,7 +406,7 @@ function npcShop:controlInit()
   else
     Panel_Window_NpcShop:SetPosY(screenSizeY / 2 - Panel_Window_NpcShop:GetSizeY() / 2 - 100)
   end
-  self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX() - npcShop.buttonBuySome:GetSizeX() - 5)
+  self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX())
 end
 function npcShop:updateContent(updateForce)
   local self = npcShop
@@ -423,7 +419,7 @@ Wrong NpcShop Tab Index!! : ]] .. self.lastTabIndex)
   end
   if npcShop.buttonSellAll:GetTextSizeX() > npcShop.buttonSellAll:GetSizeX() then
     npcShop.buttonSellAll:SetSize(npcShop.buttonSellAll:GetTextSizeX() + 10, npcShop.buttonSellAll:GetSizeY())
-    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX() - npcShop.buttonSellAll:GetSizeX() - 5)
+    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX())
   end
   Panel_Window_NpcShop:SetShow(true, false)
   if self.tabIndexBuy == self.lastTabIndex then
@@ -598,7 +594,7 @@ function NpcShop_OnSlotClicked(slotIdx)
       self.buttonSellAll:SetMonoTone(false)
     end
   end
-  self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX() - npcShop.buttonBuySome:GetSizeX() - 5)
+  self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX())
   self.selectedSlotIndex = slotIdx
 end
 function NpcShop_OnRSlotClicked(slotIdx)
@@ -611,26 +607,14 @@ function NpcShop_TabButtonClick(tabIndex)
     NpcShop_OnSlotClicked()
     self.lastTabIndex = tabIndex
     if 0 == tabIndex then
-      self.radioButtons[self.tabIndexBuy]:EraseAllEffect()
-      self.radioButtons[self.tabIndexBuy]:AddEffect("UI_Shop_Button", true, 0, 0)
-      self.radioButtons[self.tabIndexSell]:EraseAllEffect()
-      self.radioButtons[self.tabIndexRepurchase]:EraseAllEffect()
       self.scroll:SetEnable(true)
       self.scroll:SetMonoTone(false)
       self.scroll:SetShow(true)
     elseif 1 == tabIndex then
-      self.radioButtons[self.tabIndexSell]:EraseAllEffect()
-      self.radioButtons[self.tabIndexSell]:AddEffect("UI_Shop_Button", true, 0, 0)
-      self.radioButtons[self.tabIndexBuy]:EraseAllEffect()
-      self.radioButtons[self.tabIndexRepurchase]:EraseAllEffect()
       self.scroll:SetEnable(true)
       self.scroll:SetMonoTone(false)
       self.scroll:SetShow(true)
     elseif 2 == tabIndex then
-      self.radioButtons[self.tabIndexRepurchase]:EraseAllEffect()
-      self.radioButtons[self.tabIndexRepurchase]:AddEffect("UI_Shop_Button", true, 0, 0)
-      self.radioButtons[self.tabIndexBuy]:EraseAllEffect()
-      self.radioButtons[self.tabIndexSell]:EraseAllEffect()
       ToClient_NpcShop_UpdateRepurchaseList()
     end
     self.scroll:SetControlPos(0)

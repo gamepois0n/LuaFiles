@@ -204,18 +204,6 @@ local skillTypeString = {
   [13] = PAGetString(Defines.StringSheet_GAME, "LUA_PETSKILLTYPE_13"),
   [14] = PAGetString(Defines.StringSheet_GAME, "LUA_PETSKILLTYPE_14")
 }
-local gradeTypeString = {
-  [0] = "Grade 1",
-  [1] = "Grade 2",
-  [2] = "Grade 3",
-  [3] = "Grade 4",
-  [4] = "Grade 5",
-  [5] = "Grade 6",
-  [6] = "Grade 7",
-  [7] = "Grade 8",
-  [8] = "Grade 9",
-  [9] = "Grade 10"
-}
 local gradeTypeUV = {
   [0] = {
     193,
@@ -1351,9 +1339,9 @@ function PetListControlCreate(control, key)
     btnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. petTier .. ", " .. unsealPetIndex .. "," .. tostring(isJokerPetUse) .. " )")
     btnCantFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. petTier .. ", " .. unsealPetIndex .. "," .. tostring(isJokerPetUse) .. " )")
     btnUnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_UnSet( \"" .. tostring(petNo_s64) .. "\"," .. unsealPetIndex .. " )")
-    btnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 5))
-    btnCantFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 5))
-    btnUnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 5))
+    btnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
+    btnCantFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
+    btnUnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
     if true == PaGlobalFunc_PetFusion_GetShow() then
       btnUnseal:SetShow(false)
       groupIndexBtn1:SetShow(false)
@@ -1408,7 +1396,7 @@ function PaGlobalFunc_PetFusion_FusionButtonMonoTonCheck(petNo_s64, petTier, pet
   if false == PaGlobalFunc_PetFusion_IsMainPetSet() and 99 == petRace then
     return true
   end
-  if false == PaGlobalFunc_PetFusion_SetAbleByGrade(petNo_s64) then
+  if 99 ~= petRace and false == PaGlobalFunc_PetFusion_SetAbleByGrade(petNo_s64) then
     return true
   end
   if false == PaGlobalFunc_PetFusion_SetAbleByTier(petTier) then

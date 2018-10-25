@@ -382,6 +382,7 @@ function PaGlobalFunc_WorldMap_SellBuyHouse_Close()
   end
   self._targetUseType = nil
   self._ui._static_KeyGuide_All:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_WorldMap_SellBuyHouse_SetShow(false, false)
 end
 function PaGlobalFunc_FromClient_WorldMap_SellBuyHouse_luaLoadComplete()

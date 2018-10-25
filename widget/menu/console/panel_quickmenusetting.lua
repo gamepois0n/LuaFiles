@@ -226,6 +226,7 @@ function PaGlobal_ConsoleQuickMenuSetting:quitRegistRemoveQuickMenu(executePosit
   if true == rv then
     self:updateIcon(nil, executePosition)
   end
+  _AudioPostEvent_SystemUiForXBOX(52, 1)
   PaGlobal_ConsoleQuickMenu:setWidget()
   self._isRegisterQuickMenu = true
 end

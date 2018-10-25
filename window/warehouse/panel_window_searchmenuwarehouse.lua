@@ -44,7 +44,7 @@ function PaGlobal_SearchMenuWarehouse_UpdateList(contents, key)
   radioButton:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   warehouseName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   radioButton:SetPosX(5)
-  warehouseName:SetPosX(15)
+  warehouseName:SetPosX(6)
   warehouseName:SetShow(false)
   count:SetShow(false)
   if idx < self._separatorNumber then
@@ -127,6 +127,7 @@ function PaGlobal_SearchMenuWarehouse:ClickOtherTownsWareHouse(waypointKey)
     self._ui._list2:requestUpdateByKey(toInt64(0, beforeWaypointKey + self._separatorNumber))
   end
   self._ui._list2:requestUpdateByKey(toInt64(0, waypointKey + self._separatorNumber))
+  self._ui.btn_MyWarehouse:SetCheck(false)
 end
 function PaGlobal_SearchMenuWarehouse:ClickCurrentTownsWareHouse()
   self._selectIndex = -1
@@ -171,7 +172,6 @@ function PaGlobal_SearchMenuWarehouse:Open()
     end
   end
   FGlobal_SearchMenuWarehouse_TerritoryOpen(currentTerritoryKey, true)
-  self._ui.btn_MyWarehouse:SetCheck(true)
   self._ui.part_SearchMenuWarehouse:ComputePos()
 end
 function PaGlobal_SearchMenuWarehouse:Close()

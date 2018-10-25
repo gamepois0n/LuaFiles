@@ -22,7 +22,7 @@ function workerContract:initControl()
   ContractUI._staticText_Hire = UI.getChildControl(ContractUI._static_BottomBg, "StaticText_Hire")
   ContractUI._staticText_Cancel = UI.getChildControl(ContractUI._static_BottomBg, "StaticText_Cancel")
   Panel_Dialog_WorkerContract:registerPadEvent(__eConsoleUIPadEvent_Up_A, "FGlobalFunc_Hire_WorkerContract()")
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     ContractUI._button_Cancel:SetShow(true)
     ContractUI._button_Hire:SetShow(true)
     ContractUI._staticText_Cancel:SetShow(false)

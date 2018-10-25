@@ -224,7 +224,6 @@ function PaGlobal_GuildBattle:UpdateGuildBattleInfo()
     self._ui._joinBothGuild._bg:SetShow(true)
     self._ui._joinBothGuild._CompleteBG:SetShow(true)
     self._ui._backgroundMainBG:SetSize(710, 580)
-    self._ui._txt_progress:SetShow(true)
     self._ui._txt_progress:useGlowFont(true, "BaseFont_10_Glow", 4279004349)
     self._ui._txt_progress:SetShow(true)
     if __eGuildBattleState_Idle == battleState then

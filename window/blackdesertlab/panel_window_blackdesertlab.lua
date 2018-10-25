@@ -41,7 +41,7 @@ function PaGlobal_BlackDesertLab:Init()
   self._ui._web:SetShow(true)
   self._ui._web:SetSize(604, 400)
   self._ui._web:SetPosX(8)
-  self._ui._web:SetPosY(45)
+  self._ui._web:SetPosY(64)
   self._ui._web:ResetUrl()
   if serviceType.eGameServiceType_DEV == getGameServiceType() then
     self._url = "http://dev-account.global-lab.playblackdesert.com/GlobalLabRegister"

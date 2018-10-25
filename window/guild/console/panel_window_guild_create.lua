@@ -22,7 +22,7 @@ function GuildCreate:InitControl()
 end
 function GuildCreate:InitEvent()
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Confirm()")
-  self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Close()")
+  self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_Close(false)")
   if false == _ContentsGroup_isConsolePadControl then
     self._ui._button_EditGuildName:addInputEvent("Mouse_LUp", "PaGlobalFunc_GuildCreate_SetFocus()")
   end
@@ -33,7 +33,10 @@ end
 function GuildCreate:open()
   _panel:SetShow(true)
 end
-function GuildCreate:close()
+function GuildCreate:close(isConfirm)
+  if false == isConfirm then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   _panel:SetShow(false)
 end
 function PaGlobalFunc_GuildCreate_GetShow()
@@ -65,7 +68,8 @@ function PaGlobalFunc_GuildCreate_Confirm()
   else
     ToClient_RequestRaisingGuildGrade(guildGrade, businessFunds)
   end
-  PaGlobalFunc_GuildCreate_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
+  PaGlobalFunc_GuildCreate_Close(true)
   ClearFocusEdit()
 end
 function PaGlobalFunc_GuildCreate_ClearFocus(str)
@@ -78,6 +82,7 @@ function PaGlobalFunc_GuildCreate_SetFocus()
   local self = GuildCreate
   ClearFocusEdit()
   SetFocusEdit(self._ui._edit_GuildName)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._ui._edit_GuildName:SetEditText(self._ui._edit_GuildName:GetEditText(), true)
 end
 function PaGlobalFunc_GuildCreate_Open(createGuildGrade)
@@ -89,9 +94,9 @@ function PaGlobalFunc_GuildCreate_Open(createGuildGrade)
   self._ui._edit_GuildName:SetEditText("")
   self:open()
 end
-function PaGlobalFunc_GuildCreate_Close()
+function PaGlobalFunc_GuildCreate_Close(isConfirm)
   local self = GuildCreate
-  self:close()
+  self:close(isConfirm)
 end
 function FromClient_GuildCreate_luaLoadComplete()
   local self = GuildCreate

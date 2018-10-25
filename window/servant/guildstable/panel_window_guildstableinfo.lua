@@ -27,6 +27,8 @@ function GuildStableInfoHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
 end
+local infoBg = UI.getChildControl(Panel_Window_GuildStable_Info, "Stable_Info_Ability")
+local skillBg = UI.getChildControl(Panel_Window_GuildStable_Info, "Panel_Skill")
 local guildStableInfo = {
   _config = {
     slot = {
@@ -56,33 +58,32 @@ local guildStableInfo = {
       startButtonY = 4
     }
   },
-  _maleIcon = UI.getChildControl(Panel_Window_GuildStable_Info, "Static_MaleIcon"),
-  _femaleIcon = UI.getChildControl(Panel_Window_GuildStable_Info, "Static_FemaleIcon"),
-  _staticName = UI.getChildControl(Panel_Window_GuildStable_Info, "StaticText_Name"),
-  _staticLevel = UI.getChildControl(Panel_Window_GuildStable_Info, "Static_Text_Level"),
-  _staticHpGauge = UI.getChildControl(Panel_Window_GuildStable_Info, "HP_GaugeBar"),
-  _staticMpGauge = UI.getChildControl(Panel_Window_GuildStable_Info, "MP_GaugeBar"),
-  _staticExpGauge = UI.getChildControl(Panel_Window_GuildStable_Info, "EXP_GaugeBar"),
-  _staticWeightGauge = UI.getChildControl(Panel_Window_GuildStable_Info, "Weight_GaugeBar"),
-  _staticHPTitle = UI.getChildControl(Panel_Window_GuildStable_Info, "HP"),
-  _staticMPTitle = UI.getChildControl(Panel_Window_GuildStable_Info, "MP"),
-  _staticHP = UI.getChildControl(Panel_Window_GuildStable_Info, "HP_CountData"),
-  _staticMP = UI.getChildControl(Panel_Window_GuildStable_Info, "MP_CountData"),
-  _staticEXP = UI.getChildControl(Panel_Window_GuildStable_Info, "EXP_CountData"),
-  _staticWeight = UI.getChildControl(Panel_Window_GuildStable_Info, "WHT_CountData"),
-  _staticTitleMaxMoveSpeed = UI.getChildControl(Panel_Window_GuildStable_Info, "MaxMoveSpeed"),
-  _staticTitleAcceleration = UI.getChildControl(Panel_Window_GuildStable_Info, "Acceleration"),
-  _staticTitleCorneringSpeed = UI.getChildControl(Panel_Window_GuildStable_Info, "CorneringSpeed"),
-  _staticTitleBrakeSpeed = UI.getChildControl(Panel_Window_GuildStable_Info, "BrakeSpeed"),
-  _staticMoveSpeed = UI.getChildControl(Panel_Window_GuildStable_Info, "MaxMoveSpeedValue"),
-  _staticAcceleration = UI.getChildControl(Panel_Window_GuildStable_Info, "AccelerationValue"),
-  _staticCornering = UI.getChildControl(Panel_Window_GuildStable_Info, "CorneringSpeedValue"),
-  _staticBrakeSpeed = UI.getChildControl(Panel_Window_GuildStable_Info, "BrakeSpeedValue"),
-  _staticLife = UI.getChildControl(Panel_Window_GuildStable_Info, "Static_LifeCount"),
-  _staticLifeValue = UI.getChildControl(Panel_Window_GuildStable_Info, "Static_LifeCountValue"),
-  _staticSkillPanel = UI.getChildControl(Panel_Window_GuildStable_Info, "Panel_Skill"),
-  _deadCount = UI.getChildControl(Panel_Window_GuildStable_Info, "StaticText_DeadCount"),
-  _deadCountValue = UI.getChildControl(Panel_Window_GuildStable_Info, "StaticText_DeadCountValue"),
+  _maleIcon = UI.getChildControl(infoBg, "Static_MaleIcon"),
+  _femaleIcon = UI.getChildControl(infoBg, "Static_FemaleIcon"),
+  _staticName = UI.getChildControl(infoBg, "StaticText_Name"),
+  _staticLevel = UI.getChildControl(infoBg, "Static_Text_Level"),
+  _staticHpGauge = UI.getChildControl(infoBg, "HP_GaugeBar"),
+  _staticMpGauge = UI.getChildControl(infoBg, "MP_GaugeBar"),
+  _staticExpGauge = UI.getChildControl(infoBg, "EXP_GaugeBar"),
+  _staticWeightGauge = UI.getChildControl(infoBg, "Weight_GaugeBar"),
+  _staticHPTitle = UI.getChildControl(infoBg, "HP"),
+  _staticMPTitle = UI.getChildControl(infoBg, "MP"),
+  _staticHP = UI.getChildControl(infoBg, "HP_CountData"),
+  _staticMP = UI.getChildControl(infoBg, "MP_CountData"),
+  _staticEXP = UI.getChildControl(infoBg, "EXP_CountData"),
+  _staticWeight = UI.getChildControl(infoBg, "WHT_CountData"),
+  _staticTitleMaxMoveSpeed = UI.getChildControl(infoBg, "MaxMoveSpeed"),
+  _staticTitleAcceleration = UI.getChildControl(infoBg, "Acceleration"),
+  _staticTitleCorneringSpeed = UI.getChildControl(infoBg, "CorneringSpeed"),
+  _staticTitleBrakeSpeed = UI.getChildControl(infoBg, "BrakeSpeed"),
+  _staticMoveSpeed = UI.getChildControl(infoBg, "MaxMoveSpeedValue"),
+  _staticAcceleration = UI.getChildControl(infoBg, "AccelerationValue"),
+  _staticCornering = UI.getChildControl(infoBg, "CorneringSpeedValue"),
+  _staticBrakeSpeed = UI.getChildControl(infoBg, "BrakeSpeedValue"),
+  _staticLife = UI.getChildControl(infoBg, "Static_LifeCount"),
+  _staticLifeValue = UI.getChildControl(infoBg, "Static_LifeCountValue"),
+  _deadCount = UI.getChildControl(infoBg, "StaticText_DeadCount"),
+  _deadCountValue = UI.getChildControl(infoBg, "StaticText_DeadCountValue"),
   _startSlotIndex = 0,
   _temporaySlotCount = 0,
   _temporayLearnSkillCount = 0,
@@ -95,41 +96,37 @@ function guildStableInfo:clear()
   self._toSkillKey = nil
 end
 function guildStableInfo:init()
-  self._staticSkillTitle = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Skill_Title", self._staticSkillPanel, "StableInfo_SkillTitle")
-  self._staticSkillBG = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_SkillBG", self._staticSkillPanel, "StableInfo_SkillBG")
-  self._scrollSkill = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Scroll_Skill", self._staticSkillBG, "StableInfo_SkillScroll")
+  self._staticSkillTitle = UI.createAndCopyBasePropertyControl(skillBg, "Skill_Title", skillBg, "StableInfo_SkillTitle")
+  self._staticSkillBG = UI.createAndCopyBasePropertyControl(skillBg, "Static_SkillBG", skillBg, "StableInfo_SkillBG")
+  self._scrollSkill = UI.createAndCopyBasePropertyControl(skillBg, "Scroll_Skill", self._staticSkillBG, "StableInfo_SkillScroll")
   local slotConfig = self._config.slot
-  self._staticSkillBG:SetPosX(slotConfig.startBGX)
-  self._staticSkillBG:SetPosY(slotConfig.startBGY)
-  self._scrollSkill:SetPosX(slotConfig.startScrollX)
-  self._scrollSkill:SetPosY(slotConfig.startScrollY)
   self._staticSkillBG:addInputEvent("Mouse_UpScroll", "StableInfo_ScrollEvent( true )")
   self._staticSkillBG:addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
   for ii = 0, self._config.slot.count - 1 do
     local slot = {}
-    slot.base = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Button_Skill", self._staticSkillBG, "GuildStableInfo_Skill_" .. ii)
-    slot.expBG = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_SkillExpBG", slot.base, "GuildStableInfo_SkillExpBG_" .. ii)
-    slot.exp = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Gauge_SkillExp", slot.base, "GuildStableInfo_SkillExp_" .. ii)
-    slot.icon = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_SkillIcon", slot.base, "GuildStableInfo_SkillIcon" .. ii)
-    slot.expStr = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "SkillLearn_PercentString", slot.base, "GuildStableInfo_SkillExpStr_" .. ii)
-    slot.name = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_Text_SkillName", slot.base, "GuildStableInfo_SkillName_" .. ii)
-    slot.dec = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_Text_SkillCondition", slot.base, "GuildStableInfo_SkillDec_" .. ii)
-    slot.buttonLock = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Button_SkillLock", slot.base, "GuildStableIngo_SkillLock_" .. ii)
-    slot.base:SetPosX(slotConfig.startX)
-    slot.base:SetPosY(slotConfig.startY + slotConfig.gapY * ii)
+    slot.base = UI.createAndCopyBasePropertyControl(skillBg, "Button_Skill", skillBg, "GuildStableInfo_Skill_" .. ii)
+    slot.expBG = UI.createAndCopyBasePropertyControl(skillBg, "Static_SkillExpBG", slot.base, "GuildStableInfo_SkillExpBG_" .. ii)
+    slot.exp = UI.createAndCopyBasePropertyControl(skillBg, "Gauge_SkillExp", slot.base, "GuildStableInfo_SkillExp_" .. ii)
+    slot.icon = UI.createAndCopyBasePropertyControl(skillBg, "Static_SkillIcon", slot.base, "GuildStableInfo_SkillIcon" .. ii)
+    slot.expStr = UI.createAndCopyBasePropertyControl(skillBg, "SkillLearn_PercentString", slot.base, "GuildStableInfo_SkillExpStr_" .. ii)
+    slot.name = UI.createAndCopyBasePropertyControl(skillBg, "Static_Text_SkillName", slot.base, "GuildStableInfo_SkillName_" .. ii)
+    slot.dec = UI.createAndCopyBasePropertyControl(skillBg, "Static_Text_SkillCondition", slot.base, "GuildStableInfo_SkillDec_" .. ii)
+    slot.buttonLock = UI.createAndCopyBasePropertyControl(skillBg, "Button_SkillLock", slot.base, "GuildStableIngo_SkillLock_" .. ii)
+    slot.base:SetPosX(slotConfig.startX + 10)
+    slot.base:SetPosY(slotConfig.startY + slotConfig.gapY * ii + 47)
     local skillConfig = self._config.skill
-    slot.icon:SetPosX(skillConfig.startIconX)
-    slot.icon:SetPosY(skillConfig.startIconY)
+    slot.icon:SetPosX(skillConfig.startIconX + 5)
+    slot.icon:SetPosY(skillConfig.startIconY + 2)
     slot.name:SetPosX(skillConfig.startNameX)
     slot.name:SetPosY(skillConfig.startNameY)
     slot.dec:SetPosX(skillConfig.startDecX)
     slot.dec:SetPosY(skillConfig.startDecY)
-    slot.expBG:SetPosX(skillConfig.startExpBGX)
-    slot.expBG:SetPosY(skillConfig.startExpBGY)
-    slot.exp:SetPosX(skillConfig.startExpX)
-    slot.exp:SetPosY(skillConfig.startExpY)
-    slot.expStr:SetPosX(skillConfig.startIconX + 10)
-    slot.expStr:SetPosY(skillConfig.startIconY + 30)
+    slot.expBG:SetPosX(skillConfig.startExpBGX + 5)
+    slot.expBG:SetPosY(skillConfig.startExpBGY + 2)
+    slot.exp:SetPosX(skillConfig.startExpX + 5)
+    slot.exp:SetPosY(skillConfig.startExpY + 2)
+    slot.expStr:SetPosX(skillConfig.startIconX + 10 + 5)
+    slot.expStr:SetPosY(skillConfig.startIconY + 30 + 2)
     slot.buttonLock:SetPosX(skillConfig.startButtonX + 10)
     slot.buttonLock:SetPosY(skillConfig.startButtonY)
     slot.base:addInputEvent("Mouse_UpScroll", "GuildStableInfo_ScrollEvent( true )")
@@ -152,13 +149,13 @@ function guildStableInfo:update()
   self._staticMP:SetText(makeDotMoney(servantInfo:getMp()) .. " / " .. makeDotMoney(servantInfo:getMaxMp()))
   self._staticWeight:SetShow(false)
   self._staticEXP:SetShow(false)
-  self._staticHpGauge:SetSize(2.5 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
-  self._staticMpGauge:SetSize(2.5 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
+  self._staticHpGauge:SetSize(2.7 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
+  self._staticMpGauge:SetSize(2.7 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
   local s64_exp = servantInfo:getExp_s64()
   local s64_needexp = servantInfo:getNeedExp_s64()
   local s64_exp_percent = Defines.s64_const.s64_0
   if s64_exp > Defines.s64_const.s64_0 then
-    s64_exp_percent = 2.5 * (Int64toInt32(s64_exp) / Int64toInt32(s64_needexp) * 100)
+    s64_exp_percent = 2.7 * (Int64toInt32(s64_exp) / Int64toInt32(s64_needexp) * 100)
   end
   self._staticExpGauge:SetShow(false)
   self._staticMoveSpeed:SetText(string.format("%.1f", servantInfo:getStat(CppEnums.ServantStatType.Type_MaxMoveSpeed) / 10000) .. "%")
@@ -217,8 +214,8 @@ function FGlobal_GuildStableInfoUpdate()
   end
   self._staticHP:SetText(tostring(servantInfo:getHp()) .. " / " .. tostring(servantInfo:getMaxHp()))
   self._staticMP:SetText(tostring(servantInfo:getMp()) .. " / " .. tostring(servantInfo:getMaxMp()))
-  self._staticHpGauge:SetSize(2.5 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
-  self._staticMpGauge:SetSize(2.5 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
+  self._staticHpGauge:SetSize(2.7 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
+  self._staticMpGauge:SetSize(2.7 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
 end
 function guildStableInfo:updateSkill()
   local servantInfo = guildStable_getServant(GuildStableList_SelectSlotNo())
@@ -236,7 +233,7 @@ function guildStableInfo:updateSkill()
     return
   end
   if not servantInfo:doHaveVehicleSkill() then
-    self._staticSkillPanel:SetShow(true)
+    skillBg:SetShow(true)
     self._scrollSkill:SetShow(false)
     return
   end
@@ -296,13 +293,13 @@ function guildStableInfo:updateSkill()
     end
   end
   if 0 < self._temporayLearnSkillCount then
-    self._staticSkillPanel:SetShow(true)
+    skillBg:SetShow(true)
     UIScroll.SetButtonSize(self._scrollSkill, self._config.slot.count, self._temporayLearnSkillCount)
   end
 end
 function guildStableInfo:registEventHandler()
-  self._staticSkillPanel:addInputEvent("Mouse_UpScroll", "GuildStableInfo_ScrollEvent( true )")
-  self._staticSkillPanel:addInputEvent("Mouse_DownScroll", "GuildStableInfo_ScrollEvent( false )")
+  skillBg:addInputEvent("Mouse_UpScroll", "GuildStableInfo_ScrollEvent( true )")
+  skillBg:addInputEvent("Mouse_DownScroll", "GuildStableInfo_ScrollEvent( false )")
   UIScroll.InputEvent(self._scrollSkill, "GuildStableInfo_ScrollEvent")
 end
 function guildStableInfo:registMessageHandler()

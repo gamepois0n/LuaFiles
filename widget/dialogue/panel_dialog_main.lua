@@ -47,46 +47,46 @@ local warehouseIndex = -1
 local tradeIndex = -1
 local uv = {
   [0] = {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 1,
-    y1 = 1,
-    x2 = 61,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 416,
+    x2 = 194,
+    y2 = 447
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 1,
-    x2 = 122,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 195,
+    y1 = 416,
+    x2 = 226,
+    y2 = 447
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 62,
-    x2 = 122,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 448,
+    x2 = 194,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 1,
-    y1 = 62,
-    x2 = 61,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 195,
+    y1 = 448,
+    x2 = 226,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 62,
-    x2 = 122,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 448,
+    x2 = 194,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_02.dds",
-    x1 = 1,
-    y1 = 1,
-    x2 = 61,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 227,
+    y1 = 448,
+    x2 = 258,
+    y2 = 479
   }
 }
 local _shopType = {
@@ -132,10 +132,10 @@ local _SpacebarIcon = UI.getChildControl(Panel_Npc_Dialog, "StaticText_Spacebar"
 local _uiNextButton = UI.getChildControl(Panel_Npc_Dialog, "Button_Next")
 local _uiButtonExit = UI.getChildControl(Panel_Npc_Dialog, "Button_Exit")
 local _uiButtonBack = UI.getChildControl(Panel_Npc_Dialog, "Button_Back")
-local _txt_intimacy = UI.getChildControl(Panel_Npc_Dialog, "StaticText_Intimacy")
-local _intimacyFruitageValue = UI.getChildControl(Panel_Npc_Dialog, "StaticText_Fruitage_Value")
-local _intimacyCircularProgress = UI.getChildControl(Panel_Npc_Dialog, "CircularProgress_Current")
 local _intimacyProgressBG = UI.getChildControl(Panel_Npc_Dialog, "Static_ProgressBG")
+local _txt_intimacy = UI.getChildControl(_intimacyProgressBG, "StaticText_Intimacy")
+local _intimacyFruitageValue = UI.getChildControl(_intimacyProgressBG, "StaticText_Fruitage_Value")
+local _intimacyCircularProgress = UI.getChildControl(_intimacyProgressBG, "CircularProgress_Current")
 local _intimacyGiftIcon = UI.getChildControl(Panel_Npc_Dialog, "Static_GiftIcon")
 local _intimacyButtonIcon = UI.getChildControl(Panel_Npc_Dialog, "Static_Intimacy")
 local intimacyNotice = UI.getChildControl(Panel_Npc_Dialog, "Static_Notice")
@@ -369,11 +369,11 @@ function Panel_Npc_Dialog:Initialize()
   for index = 0, 3 do
     _uiDialogButton[index] = UI.getChildControl(Panel_Npc_Dialog, "Button_Dialog_" .. tostring(index))
     _uiDialogButton[index]:addInputEvent("Mouse_LUp", "HandleClickedDialogButton(" .. index .. ")")
-    _uiDialogButton[index]:SetPosX(getScrX / 2 - 175)
+    _uiDialogButton[index]:ComputePos()
     _uiDialogIcon[index] = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _uiDialogButton[index], "StaticText_DialogIcon_" .. tostring(index))
     CopyBaseProperty(_styleDialogButtonIcon, _uiDialogIcon[index])
     _uiDialogIcon[index]:SetPosX(5)
-    _uiDialogIcon[index]:SetPosY(2)
+    _uiDialogIcon[index]:SetPosY(4)
   end
   for index = 0, 5 do
     _uiFuncButton[index] = UI.getChildControl(Panel_Npc_Dialog, "Button_Menu_" .. tostring(index))
@@ -392,7 +392,7 @@ function Panel_Npc_Dialog:Initialize()
   for index = 0, 3 do
     _uiNoticeNeedInfo[index] = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, Panel_Npc_Dialog, "StaticText_Notice_" .. tostring(index))
     CopyBaseProperty(_styleNoticeNeedInfo, _uiNoticeNeedInfo[index])
-    _uiNoticeNeedInfo[index]:SetPosX(getScrX / 2 + 175)
+    _uiNoticeNeedInfo[index]:SetPosX(getScrX / 2 + 180)
     _uiNoticeNeedInfo[index]:SetPosY(_uiDialogButton[index]:GetPosY())
   end
   for index = 0, 3 do
@@ -425,7 +425,7 @@ _styleNoticeNeedInfo:SetFontAlpha(0)
 _styleNormalTalkButton:SetShow(false)
 _styleExploreTalkButton:SetShow(false)
 _uiNextButton:addInputEvent("Mouse_LUp", "HandleClickedDialogNextButton()")
-_uiNextButton:SetPosX(getScrX / 2 - 175)
+_uiNextButton:SetPosX(getScrX / 2 - _uiNextButton:GetSizeX() / 2)
 _SpacebarIcon:SetPosX(_uiDialogButton[0]:GetPosX() + _uiDialogButton[0]:GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
 _SpacebarIcon:SetSize(40, 28)
 local defaultDialogBtnSizeX = _uiDialogButton[0]:GetSizeX()
@@ -435,25 +435,11 @@ _uiButtonExit:addInputEvent("Mouse_On", "Dialog_EtcButtonToolTips( true," .. 0 .
 _uiButtonExit:addInputEvent("Mouse_Out", "Dialog_EtcButtonToolTips( false," .. 0 .. ")")
 function Button_Exit()
   _uiButtonExit:addInputEvent("Mouse_LUp", "FGlobal_HideDialog()")
-  _uiButtonExit:SetVerticalBottom()
-  _uiButtonExit:SetTextVerticalTop()
-  _uiButtonExit:SetTextHorizonLeft()
-  _uiButtonExit:SetSpanSize(10, 192)
-  _uiButtonExit:SetTextHorizonCenter()
-  _uiButtonExit:setPadding(UI_PD.ePadding_Left, 27)
-  _uiButtonExit:setPadding(UI_PD.ePadding_Right, 4)
 end
 _uiButtonBack:addInputEvent("Mouse_On", "Dialog_EtcButtonToolTips( true," .. 1 .. ")")
 _uiButtonBack:addInputEvent("Mouse_Out", "Dialog_EtcButtonToolTips( false," .. 1 .. ")")
 function Button_Back()
   _uiButtonBack:addInputEvent("Mouse_LUp", "HandleClickedBackButton()")
-  _uiButtonBack:SetVerticalBottom()
-  _uiButtonBack:SetTextVerticalTop()
-  _uiButtonBack:SetTextHorizonLeft()
-  _uiButtonBack:SetSpanSize(10, 192)
-  _uiButtonBack:SetTextHorizonCenter()
-  _uiButtonBack:setPadding(UI_PD.ePadding_Left, 27)
-  _uiButtonBack:setPadding(UI_PD.ePadding_Right, 4)
 end
 function NpcDialogShowAni()
   audioPostEvent_SystemUi(1, 19)
@@ -462,7 +448,9 @@ function NpcDialogShowAni()
   Button_Back()
   _uiNpcDialog:SetVerticalMiddle()
   if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-    _uiNpcDialog:SetPosY(80)
+    _uiNpcDialog:SetPosY(78)
+  else
+    _uiNpcDialog:SetPosY(78)
   end
   Inventory_PosSaveMemory()
 end
@@ -897,11 +885,6 @@ function Dialog_updateButtons(isVisible)
     _uiNeedWpAni[i]:SetShow(false)
     _uiIntimacyIcon[i]:SetShow(false)
   end
-  if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-    for i = 0, 3 do
-      _uiDialogButton[i]:SetSize(_uiDialogButton[i]:GetSizeX(), 28)
-    end
-  end
   if dialogButtonCount > 4 then
     _prevPageButton:SetShow(true)
     _nextPageButton:SetShow(true)
@@ -948,18 +931,8 @@ function Dialog_updateButtons(isVisible)
     end
     pos = _uiDialogButton[_dialogCount]:GetSpanSize()
     displayData = Dialog_getButtonDisplayData(i)
-    if false == displayData:empty() then
-      CopyBaseProperty(_styleExploreTalkButton, _uiDialogButton[_dialogCount])
-    else
-      CopyBaseProperty(_styleNormalTalkButton, _uiDialogButton[_dialogCount])
-    end
     dialogButton = dialogData:getDialogButtonAt(i)
     _uiDialogButton[_dialogCount]:SetText(dialogButton:getText())
-    if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-      _uiDialogButton[_dialogCount]:SetPosY(140 + _dialogCount * 29)
-    else
-      _uiDialogButton[_dialogCount]:SetSpanSize(pos.x, pos.y)
-    end
     if _dialogBtnSizeX < _uiDialogButton[_dialogCount]:GetTextSizeX() + 80 then
       _dialogBtnSizeX = _uiDialogButton[_dialogCount]:GetTextSizeX() + 80
     end
@@ -1115,22 +1088,17 @@ function Dialog_updateButtons(isVisible)
   end
   for i = 0, 3 do
     if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-      _uiDialogButton[i]:SetSize(_dialogBtnSizeX, 28)
-      _uiDialogButton[i]:SetPosY(140 + i * 29)
-      _uiNoticeNeedInfo[i]:SetPosX(getScreenSizeX() / 2 + _uiDialogButton[i]:GetSizeX() / 2)
-      _uiNoticeNeedInfo[i]:SetPosY(_uiDialogButton[i]:GetPosY())
       _uiNeedWpAni[i]:SetPosX(getScreenSizeX() / 2 + _uiDialogButton[i]:GetSizeX() / 2 - _uiNeedWpAni[i]:GetSizeX() - 5)
       _uiNeedWpAni[i]:SetPosY(_uiDialogButton[i]:GetPosY())
     else
-      _uiDialogButton[i]:SetSize(_dialogBtnSizeX, _uiDialogButton[i]:GetSizeY())
-      _uiNoticeNeedInfo[i]:SetPosY(_uiDialogButton[i]:GetPosY())
       _uiNeedWpAni[i]:SetPosY(_uiDialogButton[i]:GetPosY())
     end
-    _uiDialogButton[i]:SetPosX(getScreenSizeX() / 2 - _dialogBtnSizeX / 2)
-    _uiNoticeNeedInfo[i]:SetPosX(_uiDialogButton[i]:GetPosX() + _uiDialogButton[i]:GetSizeX())
+    _uiDialogButton[i]:ComputePos()
+    _uiNoticeNeedInfo[i]:SetPosX(_uiDialogButton[i]:GetPosX() + _uiDialogButton[i]:GetSizeX() + 10)
   end
   _rBtnPosY = _uiDialogButton[0]:GetPosY()
   _uiNextButton:SetSize(_dialogBtnSizeX, 28)
+  _uiNextButton:ComputePos()
   _uiNextButton:SetPosY(_rBtnPosY)
   _SpacebarIcon:SetPosX(_uiDialogButton[0]:GetPosX() + _uiDialogButton[0]:GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
   _SpacebarIcon:SetPosY(_rBtnPosY + 1)
@@ -1196,35 +1164,19 @@ function Dialog_updateButtons(isVisible)
       _uiFuncButton[index]:addInputEvent("Mouse_Out", "Dialog_MouseToolTips(false, " .. funcButtonType .. "," .. index .. ")")
       local tempIconSizeX = 23
       if funcButtonType == CppEnums.ContentsType.Contents_IntimacyGame then
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Left, 27)
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Right, 4)
         _uiFuncButton[index]:SetText(funcButton:getText() .. " (" .. funcButton:getNeedWp() .. "/" .. Wp .. ")")
         _uiFuncButton[index]:SetEnable(funcButton._enable)
       elseif funcButtonType == CppEnums.ContentsType.Contents_NewQuest then
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Left, 0)
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Right, 15)
         _uiFuncButton[index]:SetText(funcButton:getText())
         _uiFuncButton[index]:SetEnable(true)
       else
         _uiFuncButton[index]:SetEnable(true)
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Left, 27)
-        _uiFuncButton[index]:setPadding(UI_PD.ePadding_Right, 4)
         _uiFuncButton[index]:SetText(funcButton:getText())
         local btnTextSizeX = _uiFuncButton[index]:GetSizeX() + tempIconSizeX
         local btnTextPosX = btnTextSizeX - btnTextSizeX / 2 - _uiFuncButton[index]:GetTextSizeX() / 2
       end
       _uiFuncButton[index]:SetShow(true)
       if funcButtonType == CppEnums.ContentsType.Contents_Quest then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 430, 155, 462)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 430, 310, 462)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 430, 465, 462)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_NewQuest then
         _uiFuncBG[index]:SetPosX(_uiFuncButton[index]:GetPosX() - 6)
@@ -1232,16 +1184,6 @@ function Dialog_updateButtons(isVisible)
         audioPostEvent_SystemUi(4, 4)
         _uiFuncBG[index]:SetShow(true)
         _uiFuncBG[index]:SetVertexAniRun("Ani_Color_1", true)
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 430, 155, 462)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 430, 310, 462)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 430, 465, 462)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetFontColor(4289626129)
         _uiFuncButton[index]:SetVertexAniRun("Ani_Color_Bright", true)
         _uiFuncButton[index]:SetMonoTone(false)
@@ -1252,27 +1194,7 @@ function Dialog_updateButtons(isVisible)
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_Shop then
         if funcButton:getText() == PAGetString(Defines.StringSheet_GAME, "DIALOG_BUTTON_EXCHANGEMONEY") then
-          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_02.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 298, 155, 330)
-          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_02.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 298, 310, 330)
-          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_02.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 299, 465, 331)
-          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         else
-          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 34, 155, 66)
-          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 34, 310, 66)
-          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 34, 465, 66)
-          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         end
         _uiFuncButton[index]:SetMonoTone(false)
         if isNormalTradeMerchant() then
@@ -1280,16 +1202,6 @@ function Dialog_updateButtons(isVisible)
           tradeIndex = index
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_Skill then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 67, 155, 99)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 67, 310, 99)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 67, 465, 99)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetFontColor(4289626129)
         _uiFuncButton[index]:SetIgnore(false)
         _uiFuncButton[index]:SetVertexAniRun("Ani_Color_Bright", true)
@@ -1311,69 +1223,19 @@ function Dialog_updateButtons(isVisible)
           _uiFuncButton[index]:EraseAllEffect()
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_Repair then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 1, 155, 33)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 1, 310, 33)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 1, 465, 33)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Auction then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 100, 155, 132)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 100, 310, 132)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 100, 465, 132)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
         isAuctionDialog = true
       elseif funcButtonType == CppEnums.ContentsType.Contents_Inn then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 364, 155, 396)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 364, 310, 396)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 364, 465, 396)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Warehouse then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 133, 155, 165)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 133, 310, 165)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 133, 465, 165)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
         if not Panel_Window_Warehouse:GetShow() then
           FGlobal_RemoteControl_Show(6)
           warehouseIndex = index
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_IntimacyGame then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 232, 155, 264)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 232, 310, 264)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 232, 465, 264)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         if true == funcButton._enable then
           _uiFuncButton[index]:SetMonoTone(false)
           intimacyGame_Alert:SetShow(false)
@@ -1409,64 +1271,14 @@ function Dialog_updateButtons(isVisible)
         local NpcDialogData = ToClient_GetCurrentDialogData()
         _PA_LOG("\236\155\144\236\132\160", "test" .. tostring(NpcDialogData:isWharf()))
         if true == NpcDialogData:isWharf() then
-          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 100, 155, 132)
-          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 100, 310, 132)
-          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 100, 465, 132)
-          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         else
-          _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-          _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-          _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-          _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-          _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-          local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-          _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         end
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Transfer then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 100, 155, 132)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 100, 310, 132)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 100, 465, 132)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Guild then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Explore then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 166, 155, 198)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 166, 310, 198)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 166, 465, 198)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         if false == dialog_getIsExplorationUseableCurrentTalker() then
           investNode_Alert:SetShow(true)
           investNode_Alert_Txt:SetShow(true)
@@ -1487,27 +1299,7 @@ function Dialog_updateButtons(isVisible)
           investNode_Alert_Txt:SetShow(false)
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_DeliveryPerson then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 199, 155, 231)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 199, 310, 231)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 199, 465, 231)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Enchant then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 232, 155, 264)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 232, 310, 264)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 232, 465, 264)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         local posX = _uiFuncButton[index]:GetPosX()
         local posY = _uiFuncButton[index]:GetPosY()
         if isBlackStone_16001 or isBlackStone_16002 then
@@ -1515,16 +1307,6 @@ function Dialog_updateButtons(isVisible)
           _uiFuncButton[index]:AddEffect("fUI_EnchantButton_Dark", false, 0, 0)
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_Socket then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 265, 155, 297)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 265, 310, 297)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 265, 465, 297)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         local posX = _uiFuncButton[index]:GetPosX()
         local posY = _uiFuncButton[index]:GetPosY()
         if value_IsSocket == true then
@@ -1532,235 +1314,45 @@ function Dialog_updateButtons(isVisible)
           _uiFuncButton[index]:AddEffect("fUI_EnchantButton_Jewel", false, 0, 0)
         end
       elseif funcButtonType == CppEnums.ContentsType.Contents_Awaken then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 232, 155, 264)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 232, 310, 264)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 232, 465, 264)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:AddEffect("fUI_Skill_Up_01A", true, 0, 0)
         _uiFuncButton[index]:AddEffect("UI_Skill_Up_1", true, 0, 0)
       elseif funcButtonType == CppEnums.ContentsType.Contents_ReAwaken then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
         _uiFuncButton[index]:AddEffect("fUI_Skill_ReUp_01A", true, 0, 0)
         _uiFuncButton[index]:AddEffect("UI_Skill_ReUp_1", true, 0, 0)
       elseif funcButtonType == CppEnums.ContentsType.Contents_LordMenu then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Extract then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_TerritoryTrade then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_TerritorySupply then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_GuildShop then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 34, 155, 66)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 34, 310, 66)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 34, 465, 66)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_ItemMarket then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_03.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 166, 155, 198)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_03.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 166, 310, 198)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_03.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 166, 465, 198)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Knowledge then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_HelpDesk then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_SupplyShop then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_MinorLordMenu then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_06.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 100, 155, 132)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_06.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 100, 310, 132)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_06.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 100, 465, 132)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_FishSupplyShop then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_GuildSupplyShop then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 331, 155, 363)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 331, 310, 363)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 331, 465, 363)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Join then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_08.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 34, 155, 66)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_08.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 34, 310, 66)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_08.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 34, 465, 66)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_Improve then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 1, 155, 33)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 1, 310, 33)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_10.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 1, 465, 33)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_WeakenEnchant then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 236, 155, 268)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 236, 310, 268)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 236, 465, 268)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_NpcGift then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 133, 155, 165)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 133, 310, 165)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_13.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 133, 465, 165)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       elseif funcButtonType == CppEnums.ContentsType.Contents_DiceGame then
-        _uiFuncButton[index]:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 133, 155, 165)
-        _uiFuncButton[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:setRenderTexture(_uiFuncButton[index]:getBaseTexture())
-        _uiFuncButton[index]:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 156, 133, 310, 165)
-        _uiFuncButton[index]:getOnTexture():setUV(x1, y1, x2, y2)
-        _uiFuncButton[index]:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_14.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 311, 133, 465, 165)
-        _uiFuncButton[index]:getClickTexture():setUV(x1, y1, x2, y2)
         _uiFuncButton[index]:SetMonoTone(false)
       end
     else
@@ -1773,25 +1365,25 @@ function Dialog_updateButtons(isVisible)
   if 0 == funcButtonCount then
     _uiButtonBack:SetSize(160, 32)
     _uiButtonExit:SetSize(160, 32)
-    _uiButtonBack:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 1, 364, 155, 396)
+    _uiButtonBack:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 1, 22, 41, 62)
     _uiButtonBack:getBaseTexture():setUV(x1, y1, x2, y2)
     _uiButtonBack:setRenderTexture(_uiButtonBack:getBaseTexture())
-    _uiButtonBack:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 156, 364, 310, 396)
+    _uiButtonBack:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 42, 22, 82, 62)
     _uiButtonBack:getOnTexture():setUV(x1, y1, x2, y2)
-    _uiButtonBack:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 311, 364, 465, 396)
+    _uiButtonBack:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 83, 22, 123, 62)
     _uiButtonBack:getClickTexture():setUV(x1, y1, x2, y2)
-    _uiButtonExit:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 1, 199, 155, 231)
+    _uiButtonExit:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 124, 22, 164, 62)
     _uiButtonExit:getBaseTexture():setUV(x1, y1, x2, y2)
     _uiButtonExit:setRenderTexture(_uiButtonExit:getBaseTexture())
-    _uiButtonExit:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 156, 199, 310, 231)
+    _uiButtonExit:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 165, 22, 205, 62)
     _uiButtonExit:getOnTexture():setUV(x1, y1, x2, y2)
-    _uiButtonExit:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 311, 199, 465, 231)
+    _uiButtonExit:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 206, 22, 246, 62)
     _uiButtonExit:getClickTexture():setUV(x1, y1, x2, y2)
     _uiButtonBack:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NPC_DIALOG_BACK"))
     _uiButtonExit:SetText(PAGetString(Defines.StringSheet_RESOURCE, "DIALOGUE_BTN_EXIT"))
@@ -1800,25 +1392,25 @@ function Dialog_updateButtons(isVisible)
   elseif 0 < _uiFuncButton[0]:GetPosX() - buttonSize - buttonGap then
     _uiButtonBack:SetSize(160, 32)
     _uiButtonExit:SetSize(160, 32)
-    _uiButtonBack:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 1, 364, 155, 396)
+    _uiButtonBack:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 1, 22, 41, 62)
     _uiButtonBack:getBaseTexture():setUV(x1, y1, x2, y2)
     _uiButtonBack:setRenderTexture(_uiButtonBack:getBaseTexture())
-    _uiButtonBack:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 156, 364, 310, 396)
+    _uiButtonBack:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 42, 22, 82, 62)
     _uiButtonBack:getOnTexture():setUV(x1, y1, x2, y2)
-    _uiButtonBack:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 311, 364, 465, 396)
+    _uiButtonBack:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 83, 22, 123, 62)
     _uiButtonBack:getClickTexture():setUV(x1, y1, x2, y2)
-    _uiButtonExit:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 1, 199, 155, 231)
+    _uiButtonExit:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 124, 22, 164, 62)
     _uiButtonExit:getBaseTexture():setUV(x1, y1, x2, y2)
     _uiButtonExit:setRenderTexture(_uiButtonExit:getBaseTexture())
-    _uiButtonExit:ChangeOnTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 156, 199, 310, 231)
+    _uiButtonExit:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 165, 22, 205, 62)
     _uiButtonExit:getOnTexture():setUV(x1, y1, x2, y2)
-    _uiButtonExit:ChangeClickTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonExit, 311, 199, 465, 231)
+    _uiButtonExit:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Common_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(_uiButtonBack, 206, 22, 246, 62)
     _uiButtonExit:getClickTexture():setUV(x1, y1, x2, y2)
     _uiButtonBack:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NPC_DIALOG_BACK"))
     _uiButtonExit:SetText(PAGetString(Defines.StringSheet_RESOURCE, "DIALOGUE_BTN_EXIT"))
@@ -1868,7 +1460,7 @@ function Dialog_updateButtons(isVisible)
       _SpacebarIcon:SetPosY(_rBtnPosY + 1)
     elseif 3 == _btnPositionType then
       _SpacebarIcon:SetPosX(startPosX + buttonSize - _SpacebarIcon:GetSizeX())
-      _SpacebarIcon:SetPosY(_uiFuncButton[0]:GetPosY() + 6)
+      _SpacebarIcon:SetPosY(_uiFuncButton[0]:GetPosY() + 8)
     elseif 4 == _btnPositionType then
       _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
       _SpacebarIcon:SetPosY(_rBtnPosY + 1)
@@ -2918,6 +2510,13 @@ function FGlobal_HideDialog()
     _uiFilterRadioButton[index]:SetShow(false)
     _uiFilterRadioButton[index]:SetCheck(0 == index)
   end
+  if Panel_IngameCashShop_EasyPayment:GetShow() then
+    if Panel_IngameCashShop_BuyOrGift:GetShow() then
+      local couponOpen = Panel_IngameCashShop_Coupon:GetShow()
+      InGameShopBuy_Close(couponOpen)
+    end
+    PaGlobal_EasyBuy_Close()
+  end
 end
 function setIgnoreShowDialog(ignoreShowDialog)
   _ignoreShowDialog = ignoreShowDialog
@@ -3188,25 +2787,21 @@ function FromClient_Dialog_onScreenResize()
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   Panel_Npc_Dialog:SetSize(sizeX, Panel_Npc_Dialog:GetSizeY())
-  if getScreenSizeX() > 1200 then
-    _uiNpcDialog:SetSize(getScreenSizeX() - 300, _uiNpcDialog:GetSizeY())
-  else
-    _uiNpcDialog:SetSize(900, _uiNpcDialog:GetSizeY())
-  end
+  _uiNpcDialog:SetSize(getScreenSizeX(), _uiNpcDialog:GetSizeY())
   _scrollControl:SetSize(sizeX, sizeY)
-  _uiHalfLine:SetSize(sizeX, 6)
+  _uiHalfLine:SetSize(sizeX, 3)
   _uiHalfLine:SetVerticalMiddle()
-  _uiHalfLine:SetPosY(75)
+  _uiHalfLine:SetPosY(78)
   Panel_Npc_Quest_Reward:SetPosY(sizeY - Panel_Npc_Quest_Reward:GetSizeY() - Panel_Npc_Dialog:GetSizeY())
   for index = 0, 3 do
-    _uiDialogButton[index]:SetPosX(sizeX / 2 - _uiDialogButton[index]:GetSizeX() / 2)
-    _uiNoticeNeedInfo[index]:SetPosX(sizeX / 2 + _uiDialogButton[index]:GetSizeX() / 2)
-    _uiNoticeNeedInfo[index]:SetPosY(_uiDialogButton[index]:GetPosY())
+    _uiDialogButton[index]:ComputePos()
+    _uiNoticeNeedInfo[index]:SetPosX(sizeX / 2 + _uiDialogButton[index]:GetSizeX() / 2 + 10)
+    _uiNoticeNeedInfo[index]:SetPosY(_uiDialogButton[index]:GetPosY() + 2)
     _uiNeedWpAni[index]:SetPosX(sizeX / 2 + _uiDialogButton[index]:GetSizeX() / 2 - _uiNeedWpAni[index]:GetSizeX() - 5)
     _uiNeedWpAni[index]:SetPosY(_uiDialogButton[index]:GetPosY())
   end
   _SpacebarIcon:SetPosX(_uiDialogButton[0]:GetPosX() + _uiDialogButton[0]:GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
-  _uiNextButton:SetPosX(sizeX / 2 - 175)
+  _uiNextButton:ComputePos()
   _SpacebarIcon:SetSize(40, 28)
   _prevPageButton:SetPosX(_uiNextButton:GetPosX() - _prevPageButton:GetSizeX() * 2)
   _nextPageButton:SetPosX(_prevPageButton:GetPosX())

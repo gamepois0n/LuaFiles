@@ -218,6 +218,7 @@ function Input_DyeingPalette_DyePart(partID, slotID, uiIdx)
   for ii = 1, #self._ui.stc_partColor do
     self._ui.stc_partColor[ii]:SetShow(true)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self._currentDyePartIndex = uiIdx
   self._ui.stc_partColor[uiIdx]:SetShow(false)
   self._nowClickPartId = partID
@@ -272,6 +273,7 @@ function Input_DyeingPalette_Ampule(dataIdx)
   if -1 == self._selected_EquipSlotNo or -1 == self._nowClickPartId then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex - 1, self._paletteShowAll)
   local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex - 1, true)
   local convertCount = tostring(ampuleCount)
@@ -295,8 +297,9 @@ function InputScroll_DyeingPalette_Scroll(isUp)
   local oldAmount = self._currentScrollAmount
   if nil ~= self._paletteCount then
     self._currentScrollAmount = UIScroll.ScrollEvent(self._ui.scroll_ampuleList, isUp, self._ampuleListRowCount, self._paletteCount, self._currentScrollAmount, self._ampuleListColCount)
+    _AudioPostEvent_SystemUiForXBOX(51, 4)
   end
-  if oldAmount ~= self._currentScrollAmount and (ToClient_isXBox() or ToClient_IsDevelopment()) then
+  if oldAmount ~= self._currentScrollAmount and (ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment()) then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:updatePalette()
@@ -455,6 +458,7 @@ function Input_DyeingPalette_ApplyDye()
     return
   end
   local function doDye()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_RequestDye(self._isPearlPalette)
     PaGlobalFunc_Dyeing_CloseAll()
   end

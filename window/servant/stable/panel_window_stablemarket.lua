@@ -45,7 +45,7 @@ end
 local stableMarket = {
   _config = {
     slot = {
-      startX = 0,
+      startX = 10,
       startY = 10,
       gapY = 127
     },
@@ -54,8 +54,8 @@ local stableMarket = {
       startY = 10,
       startValueX = 0,
       startValueY = 0,
-      startKindX = -15,
-      startKindY = -10,
+      startKindX = 0,
+      startKindY = 0,
       startMatingX = 0,
       startMatingY = 90,
       gapMatingX = 100,
@@ -72,7 +72,7 @@ local stableMarket = {
       gapY = 20
     },
     skill = {
-      startX = 330,
+      startX = 350,
       startY = 10,
       iconX = 10,
       iconY = 15,
@@ -81,7 +81,7 @@ local stableMarket = {
       gapX = 69,
       count = 5
     },
-    button = {startX = 710, startY = 10},
+    button = {startX = 730, startY = 10},
     slotCount = 4
   },
   _mainBG = UI.getChildControl(Panel_Window_StableMarket, "Static_MainBG"),
@@ -207,14 +207,14 @@ function stableMarket:init()
     slot._icon:SetPosY(iconConfig.startValueY)
     slot._btnLook:SetPosX(-10)
     slot._btnLook:SetPosY(75)
-    slot._grade:SetPosX(iconConfig.startKindX + 80)
-    slot._grade:SetPosY(iconConfig.startKindY + 5)
+    slot._grade:SetPosX(iconConfig.startKindX + 45)
+    slot._grade:SetPosY(iconConfig.startKindY + 0)
     slot._iconMale:SetPosX(iconConfig.startKindX)
     slot._iconMale:SetPosY(iconConfig.startKindY)
     slot._iconFemale:SetPosX(iconConfig.startKindX)
     slot._iconFemale:SetPosY(iconConfig.startKindY)
-    slot._stallion:SetPosX(iconConfig.startX - 10)
-    slot._stallion:SetPosY(iconConfig.startY - 17)
+    slot._stallion:SetPosX(iconConfig.startKindX + 20)
+    slot._stallion:SetPosY(iconConfig.startKindY + 1)
     local statConfig = self._config.stat
     slot._statusBack:SetPosX(statConfig.startX)
     slot._statusBack:SetPosY(statConfig.startY)
@@ -234,21 +234,21 @@ function stableMarket:init()
     slot._staticStaminaValue:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
     slot._staticWeightValue:SetPosX(statConfig.startValueX + statConfig.gapX * 1)
     slot._staticWeightValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
-    slot._staticMoveSpeed:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticMoveSpeed:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticMoveSpeed:SetPosY(statConfig.startValueY + statConfig.gapY * 0)
-    slot._staticAcceleration:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticAcceleration:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticAcceleration:SetPosY(statConfig.startValueY + statConfig.gapY * 1)
-    slot._staticCornering:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticCornering:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticCornering:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
-    slot._staticBrake:SetPosX(statConfig.startValueX + statConfig.gapX * 2)
+    slot._staticBrake:SetPosX(statConfig.startValueX + statConfig.gapX * 2 + 10)
     slot._staticBrake:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
-    slot._staticMoveSpeedValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticMoveSpeedValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticMoveSpeedValue:SetPosY(statConfig.startValueY + statConfig.gapY * 0)
-    slot._staticAccelerationValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticAccelerationValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticAccelerationValue:SetPosY(statConfig.startValueY + statConfig.gapY * 1)
-    slot._staticCorneringValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticCorneringValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticCorneringValue:SetPosY(statConfig.startValueY + statConfig.gapY * 2)
-    slot._staticBrakeValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3)
+    slot._staticBrakeValue:SetPosX(statConfig.startValueX + statConfig.gapX * 3 + 10)
     slot._staticBrakeValue:SetPosY(statConfig.startValueY + statConfig.gapY * 3)
     slot._staticCountBG:SetPosX(statConfig.startValueX + statConfig.gapX * -0.2)
     slot._staticCountBG:SetPosY(statConfig.startValueY + statConfig.gapY * 4)

@@ -144,7 +144,9 @@ PaGlobal_Skill = {
   _static_SlotBG = {},
   _emptyCombiSkillIndex = 0,
   _fusionSlotMaxCount = 0,
-  _combinationSkillTitle = nil
+  _combinationSkillTitle = nil,
+  _stc_mouseL = UI.getChildControl(Panel_Window_Skill, "StaticText_MouseL_Icon"),
+  _stc_mouseR = UI.getChildControl(Panel_Window_Skill, "StaticText_MouseR_Icon")
 }
 PaGlobal_Skill._btn_CommandLock:SetShow(false)
 local beforCombatSkillNo = -1
@@ -153,6 +155,8 @@ function PaGlobal_Skill:initialize()
   if _ContentsGroup_skillOldandNew then
     self._static_CombiSkill_BG = UI.getChildControl(Panel_Window_Skill, "Static_SlotBG")
     self._combinationSkillTitle = UI.getChildControl(Panel_Window_Skill, "StaticText_SlotTitle")
+    self._combinationSkillTitle:SetText(self._combinationSkillTitle:GetText())
+    self._combinationSkillTitle:SetSize(self._combinationSkillTitle:GetTextSizeX(), self._combinationSkillTitle:GetTextSizeY())
   end
   Panel_Window_Skill:setMaskingChild(true)
   Panel_Window_Skill:ActiveMouseEventEffect(true)
@@ -185,23 +189,16 @@ function PaGlobal_Skill:initControl()
   PaGlobal_Skill._txt_ResourceSaveDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   local _btn_NewSkill = UI.getChildControl(Panel_Window_Skill, "Button_NewSkill")
   self._btn_MovieToolTip2:SetMonoTone(true)
-  local countryType = true
-  if isGameTypeJapan() then
-    self._btn_MovieToolTipDesc:SetHorizonLeft()
-    self._btn_MovieToolTipDesc:SetSpanSize(self._btn_MovieToolTip:GetPosX() + 35, 49)
-  end
   if (isGameTypeJapan() or isGameTypeEnglish()) and getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT then
     self._btn_MovieToolTip:SetShow(false)
-    self._btn_MovieToolTipBG:SetShow(false)
-    self._btn_MovieToolTipDesc:SetShow(false)
   else
     self._btn_MovieToolTip:SetShow(true)
-    self._btn_MovieToolTipBG:SetShow(true)
-    self._btn_MovieToolTipDesc:SetShow(true)
   end
   if isGameTypeKR2() then
     self._btn_MovieToolTip:SetShow(false)
   end
+  self._stc_mouseL:SetText(self._stc_mouseL:GetText())
+  self._stc_mouseR:SetSpanSize(self._stc_mouseL:GetPosX() + self._stc_mouseL:GetTextSizeX() + self._stc_mouseL:GetTextSpan().x + 10, self._stc_mouseR:GetSpanSize().y)
 end
 function PaGlobal_Skill:initCombiControl(cellTable, parent, container, isLearn)
   self._static_CombiSlotBG = UI.getChildControl(self._static_CombiSkill_BG, "Static_Slot")
@@ -210,7 +207,7 @@ function PaGlobal_Skill:initCombiControl(cellTable, parent, container, isLearn)
   local startY = self.config.slotStartY
   local index = 0
   for row = 0, rows - 1 do
-    local startX = self.config.slotStartX
+    local startX = self.config.slotStartX + self._combinationSkillTitle:GetSizeX()
     local isSlotRow = 0 == row % 2
     if isSlotRow then
     else
@@ -406,7 +403,7 @@ function PaGlobal_Skill:initTabControl_Combination(isLearn)
 end
 function PaGlobal_Skill:OnOffCombinationTab()
   local isLearnFusionSkill = ToClient_isLearnFusionSkillLevel() and ToClient_getFusionSkillListCount(0) ~= 0
-  local originFullSizeY = 775
+  local originFullSizeY = 800
   local titleSize = self._combinationSkillTitle:GetSizeY()
   local combinationSkillBG = self._static_CombiSkill_BG:GetSizeY()
   if true == isLearnFusionSkill then
@@ -416,7 +413,7 @@ function PaGlobal_Skill:OnOffCombinationTab()
   elseif false == isLearnFusionSkill then
     self._combinationSkillTitle:SetShow(false)
     self._static_CombiSkill_BG:SetShow(false)
-    Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), originFullSizeY - (titleSize + combinationSkillBG))
+    Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), originFullSizeY - (titleSize + combinationSkillBG) + 30)
   end
   local sizeY = self._txt_MentalTip:GetTextSizeY()
   local bgSizeY = self._bottomBG:GetSizeY()

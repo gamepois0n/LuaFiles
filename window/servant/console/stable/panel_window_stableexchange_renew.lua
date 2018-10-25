@@ -1013,7 +1013,7 @@ function PaGlobalFunc_StableExchange_ScrollEvent(isUpScroll, isLeft)
     if self._value.leftStartIndex < self._config.slotCol then
       self._value.leftStartIndex = self._value.leftStartIndex * self._config.slotCol
     end
-    if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.leftStartIndex then
+    if (ToClient_isConsole() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.leftStartIndex then
       ToClient_padSnapIgnoreGroupMove()
     end
     self:updateContent(self._value.currentOpenType, false, true)
@@ -1023,7 +1023,7 @@ function PaGlobalFunc_StableExchange_ScrollEvent(isUpScroll, isLeft)
     if self._value.rightStartIndex < self._config.slotCol then
       self._value.rightStartIndex = self._value.rightStartIndex * self._config.slotCol
     end
-    if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.rightStartIndex then
+    if (ToClient_isConsole() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.rightStartIndex then
       ToClient_padSnapIgnoreGroupMove()
     end
     self:updateContent(self._value.currentOpenType, false, false)

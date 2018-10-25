@@ -20,6 +20,7 @@ function PaGlobalFunc_Customization_InputName_Confirm(str)
   if nil == nameStr then
     nameStr = self._ui._edit_InputName:GetEditText()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_ClassSelect_CharacterCreate(nameStr)
 end
 function Customization_InputNameInfo:InitControl()
@@ -55,6 +56,7 @@ function PaGlobalFunc_Customization_InputName_SetFocus()
   if false == self._createSync then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self._ui._edit_InputName:SetEditText("")
   SetFocusEdit(self._ui._edit_InputName)
 end
@@ -84,6 +86,7 @@ function PaGlobalFunc_Customization_InputName_Close(clearStr)
   end
   PaGlobalFunc_Customization_SetCloseFunc(nil)
   PaGlobalFunc_Customization_SetBackEvent()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_Customization_InputName_SetShow(false, false)
   return true
 end
@@ -98,6 +101,7 @@ function PaGlobalFunc_Customization_InputName_Open(clearStr)
   end
   PaGlobalFunc_Customization_SetCloseFunc(PaGlobalFunc_Customization_InputName_Close)
   PaGlobalFunc_Customization_SetBackEvent("PaGlobalFunc_Customization_InputName_Close()")
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   PaGlobalFunc_Customization_InputName_SetShow(true, false)
 end
 function PaGlobalFunc_Customization_InputName_SetShow(isShow, isAni)

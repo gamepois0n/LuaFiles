@@ -247,9 +247,15 @@ function Panel_Window_StableMarket_Filter_info:setContentPos()
   end
 end
 function Panel_Window_StableMarket_Filter_info:open()
+  if false == Panel_Window_StableMarket_Filter:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(8, 14)
+  end
   Panel_Window_StableMarket_Filter:SetShow(true)
 end
 function Panel_Window_StableMarket_Filter_info:close()
+  if Panel_Window_StableMarket_Filter:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   Panel_Window_StableMarket_Filter:SetShow(false)
 end
 function PaGlobalFunc_StableMarket_Filter_GetShow()
@@ -332,6 +338,7 @@ function PaGlobalFunc_StableMarket_Filter_Confirm()
   string = string .. tierFilterString[filterTier] .. "/"
   string = string .. skillFilterString[self._value.step3CurrentIndex]
   PaGlobalFunc_StableMarket_SetFilterText(string)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:close()
 end
 function PaGlobalFunc_StableMarket_Filter_Exit()

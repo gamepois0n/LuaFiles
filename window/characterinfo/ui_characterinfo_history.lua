@@ -59,7 +59,7 @@ for index = 0, 11 do
   monthIndex[index] = UI.createControl(UI_PUCT.PA_UI_CONTROL_RADIOBUTTON, Panel_Window_CharInfo_HistoryInfo, "RadioButton_Month_" .. index + 1)
   CopyBaseProperty(topMonth, monthIndex[index])
   monthIndex[index]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_MONTH", "month", index + 1))
-  monthIndex[index]:SetSpanSize((monthIndex[index]:GetSizeX() + 15) * _monthCount + 20)
+  monthIndex[index]:SetSpanSize((monthIndex[index]:GetSizeX() + 32) * _monthCount + 30)
   monthIndex[index]:addInputEvent("Mouse_LUp", "HandleClicked_MyHistory_MonthCheck(" .. index .. ",true)")
   monthIndex[index]:SetShow(true)
   _monthCount = _monthCount - 1
@@ -126,12 +126,12 @@ function FromClient_MyHistoryInfo_Update()
   CopyBaseProperty(monthLine, frameContent._monthLine)
   CopyBaseProperty(verticalLine, frameContent._verticalLine)
   frameContent._monthValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_YEAR", "year", currentValue._year) .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_MONTH", "month", currentValue._month))
-  frameContent._monthValue:SetShow(true)
+  frameContent._monthValue:SetShow(false)
   frameContent._monthLine:SetShow(true)
   frameContent._verticalLine:SetShow(true)
   local sizeY = 10
-  local lineGap = 30
-  local textSizeY = 20
+  local lineGap = 50
+  local textSizeY = 23
   local _journalInfo = {}
   local emptyDay = 0
   local _dayValue = {}
@@ -190,7 +190,7 @@ function FromClient_MyHistoryInfo_Update()
       _dayValue[dayIndex]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_DAY", "day", dayIndex))
       _dayValue[dayIndex]:SetShow(true)
       _dayLine[dayIndex]:SetShow(true)
-      _dayValue[dayIndex]:SetPosY(sizeY + 30)
+      _dayValue[dayIndex]:SetPosY(sizeY + 15)
       _dayLine[dayIndex]:SetPosY(sizeY + 20)
       dayLogCount = dayLogCount + 1
       firstDay = dayIndex

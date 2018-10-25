@@ -34,7 +34,6 @@ local Template = {
   memberLevel = UI.getChildControl(clanList.frameContent, "StaticText_C_Level"),
   memberClass = UI.getChildControl(clanList.frameContent, "StaticText_C_Class"),
   memberName = UI.getChildControl(clanList.frameContent, "StaticText_C_CharName"),
-  partLine = UI.getChildControl(clanList.frameContent, "Static_C_PartLine"),
   btn_memberMenu = UI.getChildControl(Panel_ClanList, "Button_Function")
 }
 function clanList_ShowAni()
@@ -95,12 +94,14 @@ function clanList:Initialize()
     local Created_MemberLevel = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Created_MemberGrade, "ClanList_MemberLevel_" .. memberIdx)
     CopyBaseProperty(Template.memberLevel, Created_MemberLevel)
     Created_MemberLevel:SetPosY(0)
+    Created_MemberLevel:SetPosX(145)
     Created_MemberLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. memberIdx)
     Created_MemberLevel:SetShow(true)
     temSlot.MemberLevel = Created_MemberLevel
     local Created_MemberClass = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Created_MemberGrade, "ClanList_MemberClass_" .. memberIdx)
     CopyBaseProperty(Template.memberClass, Created_MemberClass)
     Created_MemberClass:SetPosY(0)
+    Created_MemberClass:SetPosX(287)
     Created_MemberClass:SetText("")
     Created_MemberClass:SetShow(true)
     temSlot.MemberClass = Created_MemberClass
@@ -110,12 +111,6 @@ function clanList:Initialize()
     Created_MemberName:SetText("")
     Created_MemberName:SetShow(true)
     temSlot.MemberName = Created_MemberName
-    local Created_PartLine = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATIC, Created_MemberGrade, "ClanList_PartLine_" .. memberIdx)
-    CopyBaseProperty(Template.partLine, Created_PartLine)
-    Created_PartLine:SetPosX(-10)
-    Created_PartLine:SetPosY(22)
-    Created_PartLine:SetShow(true)
-    temSlot.PartLine = Created_PartLine
     self.listPool[memberIdx] = temSlot
     memberList_PosY = memberList_PosY + Created_MemberGrade:GetSizeY() + 10
   end
@@ -126,7 +121,6 @@ function clanList:Initialize()
   Template.memberLevel:SetShow(false)
   Template.memberClass:SetShow(false)
   Template.memberName:SetShow(false)
-  Template.partLine:SetShow(false)
   self.btn_ClanDispersal:SetShow(true)
 end
 function clanList:Update()
@@ -199,7 +193,7 @@ function clanList:Update()
     if 12 == memberClass then
       uiPool.MemberClass:SetPosX(262)
     else
-      uiPool.MemberClass:SetPosX(257)
+      uiPool.MemberClass:SetPosX(287)
     end
     if memberData:isOnline() == true then
       uiPool.MemberLevel:SetFontColor(UI_color.C_FFC4BEBE)

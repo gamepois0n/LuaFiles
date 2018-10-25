@@ -19,7 +19,6 @@ local defalut_Control = {
     _Name = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Building_Name"),
     _Current_Count = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Building_CurrentCount"),
     _Progress_BG = UI.getChildControl(Panel_Building_WorkManager, "Static_Building_Progress_BG"),
-    _Progress_OutLine = UI.getChildControl(Panel_Building_WorkManager, "Static_Building_Progress_OutLine"),
     _Progress_OnGoing = UI.getChildControl(Panel_Building_WorkManager, "Progress2_Building_OnGoing"),
     _Progress_Complete = UI.getChildControl(Panel_Building_WorkManager, "Progress2_Building_Complete")
   },
@@ -40,7 +39,7 @@ local defalut_Control = {
       _CountText_1 = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkList_Count_1"),
       _CountText_2 = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkList_Count_2"),
       _Ani_OnGoing = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkList_OnGoingAni"),
-      _rowMax = 7,
+      _rowMax = 6,
       _row_PosY_Gap = 1
     }
   },
@@ -56,7 +55,7 @@ local defalut_Control = {
       _Button = UI.getChildControl(Panel_Building_WorkManager, "RadioButton_Worker"),
       _Progress = UI.getChildControl(Panel_Building_WorkManager, "Progress2_Worker_ActionPoint"),
       _ActionPoint = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Worker_ActionPoint"),
-      _rowMax = 7,
+      _rowMax = 6,
       _row_PosY_Gap = 1
     }
   },
@@ -71,13 +70,9 @@ local defalut_Control = {
     _Resource_Icon_Over = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkInfo_Resource_Icon_Over"),
     _Resource_Icon = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkInfo_Resource_Icon"),
     _Resource_Count = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkInfo_Resource_Count"),
-    _Resource_Line_1 = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkInfo_Resource_Line_1"),
-    _Resource_Line_2 = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkInfo_Resource_Line_2"),
     _OnGoing_BG = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkInfo_OnGoing_BG"),
     _OnGoing_Title = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkInfo_OnGoing_Title"),
     _OnGoing_Scroll = UI.getChildControl(Panel_Building_WorkManager, "Scroll_SubWorkInfo_OnGoing"),
-    _OnGoing_Line_1 = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkInfo_OnGoing_Line_1"),
-    _OnGoing_Line_2 = UI.getChildControl(Panel_Building_WorkManager, "Static_SubWorkInfo_OnGoing_Line_2"),
     _OnGoing_Guide = UI.getChildControl(Panel_Building_WorkManager, "StaticText_SubWorkInfo_OnGoing_Guide"),
     _OnGoing_Time = {},
     _OnGoing_Progress_BG = {},
@@ -99,18 +94,13 @@ local defalut_Control = {
     _Time_Text = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_Time_Text"),
     _Time_Value = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_Time_Value"),
     _Time_Count = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_Time_Count"),
-    _Time_Line = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Time_Line"),
     _Work_Count = UI.getChildControl(Panel_Building_WorkManager, "Button_Estimated_Work_Count"),
     _Work_BG = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Work_BG"),
-    _Work_Line_1 = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Work_Line_1"),
-    _Work_Line_2 = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Work_Line_2"),
     _Work_Volume_Text = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_WorkVolum_Text"),
     _Work_Volume_Value = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_WorkVolum_Value"),
     _Work_Speed_Text = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_WorkSpeed_Text"),
     _Work_Speed_Value = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_WorkSpeed_Value"),
     _Move_BG = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Move_BG"),
-    _Move_Line_1 = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Move_Line_1"),
-    _Move_Line_2 = UI.getChildControl(Panel_Building_WorkManager, "Static_Estimated_Move_Line_2"),
     _Move_Distance_Text = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_MoveDistance_Text"),
     _Move_Distance_Value = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_MoveDistance_Value"),
     _Move_Speed_Text = UI.getChildControl(Panel_Building_WorkManager, "StaticText_Estimated_MoveSpeed_Text"),
@@ -132,7 +122,6 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Name)
   FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Current_Count)
   FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Progress_BG)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Progress_OutLine)
   FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Progress_OnGoing)
   FGlobal_AddChild(Panel_Building_WorkManager, self._building_Info._BG, self._building_Info._Progress_Complete)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_List._BG, self._subWork_List._Title)
@@ -158,13 +147,9 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._Resource_Icon_Over)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._Resource_Icon)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._Resource_Count)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._Resource_Line_1)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._Resource_Line_2)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_BG)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_Title)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_Scroll)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_Line_1)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_Line_2)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Info._BG, self._subWork_Info._OnGoing_Guide)
   FGlobal_Set_Table_Control(self._subWork_Info, "_OnGoing_Time", "_OnGoing_Time", true, false)
   FGlobal_Set_Table_Control(self._subWork_Info, "_OnGoing_Progress_BG", "_OnGoing_Time", true, false)
@@ -176,17 +161,12 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Time_Value)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Time_Count)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Count)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Time_Line)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_BG)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Line_1)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Line_2)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Volume_Text)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Volume_Value)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Speed_Text)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Work_Speed_Value)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_BG)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_Line_1)
-  FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_Line_2)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_Distance_Text)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_Distance_Value)
   FGlobal_AddChild(Panel_Building_WorkManager, self._subWork_Estimated._BG, self._subWork_Estimated._Move_Speed_Text)

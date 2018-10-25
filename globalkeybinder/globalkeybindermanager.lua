@@ -133,7 +133,7 @@ function GlobalKeyBinder_CheckKeyPressed(keyCode)
 end
 function SetUIMode(uiMode)
   if uiMode >= 0 and uiMode < UIMode.eUIMode_Count then
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
     end
     _uiMode = uiMode
   end

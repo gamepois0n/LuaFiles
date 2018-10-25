@@ -66,6 +66,7 @@ function AlchemyKnowledge:close()
   if not self:checkShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self._panel:SetShow(false)
   return true
 end

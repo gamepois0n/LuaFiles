@@ -260,6 +260,7 @@ function InputMLUp_GuildQuestList_OpenQuestTabToLeft()
   local currentTab = self._currentQuestTab
   currentTab = currentTab - 1
   currentTab = currentTab % self._tabType.dataCount
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   InputMLUp_GuildQuestList_OpenQuestTab(currentTab)
 end
 function InputMLUp_GuildQuestList_OpenQuestTabToRight()
@@ -269,6 +270,7 @@ function InputMLUp_GuildQuestList_OpenQuestTabToRight()
     return
   end
   local currentTab = self._currentQuestTab
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   currentTab = currentTab + 1
   currentTab = currentTab % self._tabType.dataCount
   InputMLUp_GuildQuestList_OpenQuestTab(currentTab)
@@ -288,6 +290,7 @@ function InputMLUp_GuildQuestList_ShowCurrentProgressingQuestInfo()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildQuestList")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_GuildQuestInfo_OpenCurrentProgressingQuest()
 end
 function InputMLUp_GuildQuestList_AcceptQuest()

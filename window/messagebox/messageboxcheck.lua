@@ -40,6 +40,12 @@ local functionKeyUse = true
 local list
 local elapsedTime = 0
 local _currentMessageBoxCheckData
+local function messageBox_Resize()
+  local textSizeY = textContent:GetTextSizeY()
+  textContent:SetSize(textContent:GetSizeX(), textSizeY)
+  textBG:SetSize(textBG:GetSizeX(), textSizeY + 95)
+  Panel_Win_Check:SetSize(Panel_Win_Check:GetSizeX(), textBG:GetSizeY() + 97)
+end
 function setCurrentMessageCheckData(currentData, position)
   if currentData ~= nil then
     buttonApply:SetShow(false)
@@ -53,15 +59,7 @@ function setCurrentMessageCheckData(currentData, position)
     if currentData.content ~= nil then
       textContent:SetTextMode(UI_TM.eTextMode_AutoWrap)
       textContent:SetText(currentData.content)
-      if "top" == position then
-        textContent:SetTextVerticalTop()
-        textContent:SetSpanSize(0, 37)
-        textContent:ComputePos()
-      else
-        textContent:SetTextVerticalCenter()
-        textContent:SetSpanSize(0, 37)
-        textContent:ComputePos()
-      end
+      messageBox_Resize()
     end
     local buttonShowCount = 0
     if currentData.functionApply ~= nil then
@@ -138,18 +136,10 @@ function MessageBoxCheck.showMessageBox(MessageCheckData, position, keyUse)
   checkWarehouse:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
   iconInven:SetEnableArea(0, 0, iconInven:GetTextSizeX() + checkInven:GetTextSizeX() + 100, iconInven:GetSizeY() + 3)
   iconWarehouse:SetEnableArea(0, 0, iconWarehouse:GetTextSizeX() + checkWarehouse:GetTextSizeX() + 100, iconWarehouse:GetSizeY() + 3)
-  local textSizeY = textContent:GetTextSizeY() + 50
+  local textSizeY = textContent:GetTextSizeY() + 100 + 20
   local textBGSizeY = textContent:GetSizeY()
   local panelSizeY = textBG:GetSizeY()
-  local resizePanelY = textSizeY + 90
-  if textSizeY > textBGSizeY then
-    textContent:SetTextVerticalTop()
-    Panel_Win_Check:SetSize(350, resizePanelY)
-    textBG:SetSize(334, textSizeY + 20)
-  else
-    Panel_Win_Check:SetSize(350, 220)
-    textBG:SetSize(334, 153)
-  end
+  local resizePanelY = textSizeY + 114
   textContent:ComputePos()
   messageBoxCheckComputePos()
 end
@@ -169,8 +159,8 @@ function messageBoxCheckComputePos()
     buttonApply:SetPosX(Panel_Win_Check:GetSizeX() / 2 - buttonApply:GetSizeX() / 2)
     buttonCancel:SetPosX(Panel_Win_Check:GetSizeX() / 2 - buttonCancel:GetSizeX() / 2)
   elseif 2 == globalButtonShowCount then
-    buttonApply:SetPosX(Panel_Win_Check:GetSizeX() / 2 - 95)
-    buttonCancel:SetPosX(Panel_Win_Check:GetSizeX() / 2 + 4)
+    buttonApply:SetPosX(Panel_Win_Check:GetSizeX() / 2 - 122)
+    buttonCancel:SetPosX(Panel_Win_Check:GetSizeX() / 2 + 1)
   elseif 3 == globalButtonShowCount then
     local buttonSize = buttonApply:GetSizeX()
     buttonApply:SetPosX(5)

@@ -90,11 +90,7 @@ function blackSpiritUrlByServiceTypeForPcroom()
   elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
     url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_ALPHA")
   elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
-    if isServerFixedCharge() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_P2P")
-    else
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_F2P")
-    end
+    url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_F2P")
   elseif CppEnums.CountryType.TW_ALPHA == getGameServiceType() then
     url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TW_ALPHA")
   elseif CppEnums.CountryType.TW_REAL == getGameServiceType() then

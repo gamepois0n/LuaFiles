@@ -45,8 +45,9 @@ function PaGlobal_Panel_KickOff_Open(isType)
     connectToGameByChina()
     return
   end
-  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), self._txt_KickOffDesc:GetTextSizeY() + 20)
-  Panel_KickOff:SetSize(Panel_KickOff:GetSizeX(), self._screenShotBG:GetSizeY() + 110)
+  local textSizeY = _txt_KickOffDesc:GetTextSizeY()
+  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), textSizeY + 40)
+  Panel_KickOff:SetSize(Panel_KickOff:GetSizeX(), self._screenShotBG:GetSizeY() + 94)
   PaGlobal_Panel_KickOff_Position()
   Panel_KickOff:SetShow(true)
 end

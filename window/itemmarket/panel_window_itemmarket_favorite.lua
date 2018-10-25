@@ -61,14 +61,12 @@ function ItemMarket_FavoriteItem_Init()
   end
   self._emptyItem:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_FAVORITE_EMPTYITEM"))
   self._notifyText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_FAVORITE_NOTIFY"))
-  if self._notifyBG:GetSizeY() < self._notifyText:GetTextSizeY() + 10 then
-    local sizeY = self._notifyText:GetTextSizeY() - self._notifyBG:GetSizeY() + 15
-    Panel_Window_ItemMarket_Favorite:SetSize(Panel_Window_ItemMarket_Favorite:GetSizeX(), Panel_Window_ItemMarket_Favorite:GetSizeY() + sizeY)
-    self._notifyBG:SetSize(self._notifyBG:GetSizeX(), self._notifyBG:GetSizeY() + sizeY)
-    self._notifyText:SetPosY(self._notifyText:GetPosY() + sizeY / 2)
-    self._allResetButton:SetPosY(self._allResetButton:GetPosY() + sizeY)
-    self._registItemButton:SetPosY(self._registItemButton:GetPosY() + sizeY)
-  end
+  self._notifyText:SetSize(320, self._notifyText:GetTextSizeY() + 10)
+  Panel_Window_ItemMarket_Favorite:SetSize(Panel_Window_ItemMarket_Favorite:GetSizeX(), 54 + self._notifyText:GetTextSizeY() + self.list2:GetSizeY() + 60)
+  self.list2:SetSpanSize(0, 54 + self._notifyText:GetTextSizeY())
+  self._notifyText:ComputePos()
+  self._registItemButton:ComputePos()
+  self._allResetButton:ComputePos()
   self._closeButton:addInputEvent("Mouse_LUp", "ItemMarket_FavoriteItem_CloseEvent()")
   self._allResetButton:addInputEvent("Mouse_LUp", "ItemMarket_FavoriteItem_AllReset()")
   self._registItemButton:addInputEvent("Mouse_LUp", "ItemMarket_FavoriteItem_RegistItem()")

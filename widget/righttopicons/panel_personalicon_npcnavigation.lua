@@ -48,7 +48,7 @@ local townNavi = {
 local territoryTownData = {
   [5] = {
     _x = 8489.57,
-    _y = -7818.84,
+    _y = -818.84,
     _z = 82973.3,
     _cardKey = 3001,
     _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_1"),
@@ -133,7 +133,7 @@ local function initialize()
   UILink.btnSearch:SetShow(true)
   UILink.textSubject:SetShow(true)
   UILink.errorMessage:SetShow(false)
-  UILink.closeNpcNavi:SetShow(false)
+  UILink.closeNpcNavi:SetShow(true)
   Panel_NpcNavi:RegisterUpdateFunc("NpcNavi_OverBarUpdatePerFrame")
   registerEvent("selfPlayer_regionChanged", "NpcListUpdate_selfPlayer_regionChanged")
   registerEvent("EventMentalCardUpdate", "NpcListUpdate_EventMentalCardUpdate")
@@ -142,6 +142,7 @@ local function initialize()
   UILink.treeView:addInputEvent("Mouse_LUp", "NpcNavi_DrawLine()")
   UILink.treeView:addInputEvent("Mouse_On", "NpcNavi_TreeViewInOut(true)")
   UILink.treeView:addInputEvent("Mouse_Out", "NpcNavi_TreeViewInOut(false)")
+  UILink.closeNpcNavi:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
   UILink.btnSearch:addInputEvent("Mouse_LDown", "NpcNavi_SearchBtn()")
   UILink.editSearchText:addInputEvent("Mouse_LDown", "NpcNavi_OnInputMode()")
   UILink.editSearchText:addInputEvent("Mouse_LUp", "NpcNavi_OnInputMode()")

@@ -536,6 +536,7 @@ function workerTrade:changeTab(changeValue)
   elseif self._config._Tab._myRegistedWorkerList == tabIndex then
     requestMyWorkerList()
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   workerTrade:update()
   ToClient_padSnapResetControl()
 end
@@ -556,6 +557,7 @@ function workerTrade:changePage(changeValue)
   if self._currentPage == pageIndex then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._currentPage = pageIndex
   workerTrade:update()
   ToClient_padSnapResetControl()
@@ -570,6 +572,7 @@ function PaGlobalFunc_WorkerTrade_TemporaryOpen()
   workerTrade:temporaryOpen()
 end
 function PaGlobalFunc_WorkerTrade_TemporaryClose()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   workerTrade:temporaryClose()
 end
 function workerTrade:open()

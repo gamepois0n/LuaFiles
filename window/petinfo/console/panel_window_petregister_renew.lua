@@ -68,6 +68,7 @@ function petRegister:close()
   if not Panel_Window_PetRegister_Renew:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Window_PetRegister_Renew:SetShow(false)
   ClearFocusEdit()
 end
@@ -109,6 +110,7 @@ function PaGlobalFunc_PetRegister_Cancle()
 end
 function FGlobal_PetRegister_ChangeName()
   local petRegisterUI = petRegister._ui
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   if true == petRegisterUI._edit_Search:GetFocusEdit() then
     return
   else

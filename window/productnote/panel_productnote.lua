@@ -30,7 +30,7 @@ function Panel_ProductNote_HideAni()
 end
 local _btn_Close = UI.getChildControl(Panel_ProductNote, "Button_Close")
 local _btn_PopUp = UI.getChildControl(Panel_ProductNote, "CheckButton_PopUp")
-local _titleBar = UI.getChildControl(Panel_ProductNote, "StaticText_Title")
+local _titleBar = UI.getChildControl(Panel_ProductNote, "Static_TitleBg")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 _btn_PopUp:SetShow(isPopUpContentsEnable)
 _btn_PopUp:addInputEvent("Mouse_LUp", "HandleClicked_ProductNote_PopUp()")
@@ -108,28 +108,28 @@ function ProductNote_onScreenResize()
   if screenSizeX < 1900 then
     sizeX = 700
     sizeY = 558
-    panelSizeX = 754
+    panelSizeX = 740
     panelSizeY = 647
     titleBarSizeX = 739
   elseif screenSizeX >= 1900 and screenSizeX < 3800 then
     sizeX = 1050
     sizeY = 837
-    panelSizeX = 1104
+    panelSizeX = 1090
     panelSizeY = 928
     titleBarSizeX = 1089
   else
     sizeX = 1400
     sizeY = 1116
-    panelSizeX = 1454
+    panelSizeX = 1440
     panelSizeY = 1205
     titleBarSizeX = 1439
   end
   Panel_ProductNote:SetSize(panelSizeX, panelSizeY)
-  _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
-  _productWeb:SetSpanSize(0, 62)
+  _titleBar:SetSize(panelSizeX - 8, _titleBar:GetSizeY())
   _productWeb:SetSize(sizeX, sizeY)
   _productWeb:SetHorizonCenter()
   _productWeb:SetVerticalTop()
+  _productWeb:SetSpanSize(0, 72)
   Panel_ProductNote:SetPosX(math.floor((getScreenSizeX() - Panel_ProductNote:GetSizeX()) / 2))
   Panel_ProductNote:SetPosY(math.floor((getScreenSizeY() - Panel_ProductNote:GetSizeY()) / 2))
 end

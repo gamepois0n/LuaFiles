@@ -40,7 +40,9 @@ local COMPONENT_TYPE = {
   ENDURANCE = 10,
   WEIGHT_PRICE = 11,
   TIME_LIMIT = 12,
-  LINE_SPLIT = 13
+  PRODUCTION_REGION = 13,
+  LINE_SPLIT = 14,
+  TRADE_PRICE = 15
 }
 local SPLIT = -1
 local _slotBGUV = {
@@ -68,10 +70,12 @@ local _targetData = {
     COMPONENT_TYPE.SUB_ATTR,
     SPLIT,
     COMPONENT_TYPE.ENCHANT_TYPE,
+    COMPONENT_TYPE.TIME_LIMIT,
+    COMPONENT_TYPE.PRODUCTION_REGION,
     COMPONENT_TYPE.DESCRIPTION,
     COMPONENT_TYPE.DYEING_INFO,
-    COMPONENT_TYPE.TIME_LIMIT,
     COMPONENT_TYPE.ITEM_MARKET_INFO,
+    COMPONENT_TYPE.TRADE_PRICE,
     COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.WEIGHT_PRICE
   },
@@ -85,10 +89,12 @@ local _targetData = {
     COMPONENT_TYPE.SUB_ATTR,
     SPLIT,
     COMPONENT_TYPE.ENCHANT_TYPE,
+    COMPONENT_TYPE.TIME_LIMIT,
+    COMPONENT_TYPE.PRODUCTION_REGION,
     COMPONENT_TYPE.DESCRIPTION,
     COMPONENT_TYPE.DYEING_INFO,
-    COMPONENT_TYPE.TIME_LIMIT,
     COMPONENT_TYPE.ITEM_MARKET_INFO,
+    COMPONENT_TYPE.TRADE_PRICE,
     COMPONENT_TYPE.ENDURANCE,
     COMPONENT_TYPE.WEIGHT_PRICE
   }
@@ -127,7 +133,9 @@ function TooltipInfo:initialize()
       bottomAlign = true,
       cornerAlign = true
     },
-    [COMPONENT_TYPE.LINE_SPLIT] = {fillDataFunc = TooltipInfo_updateLINE_SPLIT}
+    [COMPONENT_TYPE.LINE_SPLIT] = {fillDataFunc = TooltipInfo_updateLINE_SPLIT},
+    [COMPONENT_TYPE.PRODUCTION_REGION] = {fillDataFunc = TooltipInfo_updatePRODUCTION_REGION},
+    [COMPONENT_TYPE.TRADE_PRICE] = {fillDataFunc = TooltipInfo_updateTRADE_PRICE}
   }
   self._ui.stc_components = {
     [1] = {
@@ -143,7 +151,9 @@ function TooltipInfo:initialize()
       [COMPONENT_TYPE.ENDURANCE] = UI.getChildControl(self._ui.stc_BG[1], "ENDURANCE"),
       [COMPONENT_TYPE.WEIGHT_PRICE] = UI.getChildControl(self._ui.stc_BG[1], "WEIGHT_PRICE"),
       [COMPONENT_TYPE.TIME_LIMIT] = UI.getChildControl(self._ui.stc_BG[1], "TIME_LIMIT"),
-      [COMPONENT_TYPE.LINE_SPLIT] = UI.getChildControl(self._ui.stc_BG[1], "LINE_SPLIT")
+      [COMPONENT_TYPE.LINE_SPLIT] = UI.getChildControl(self._ui.stc_BG[1], "LINE_SPLIT"),
+      [COMPONENT_TYPE.PRODUCTION_REGION] = UI.getChildControl(self._ui.stc_BG[1], "PRODUCTION_REGION"),
+      [COMPONENT_TYPE.TRADE_PRICE] = UI.getChildControl(self._ui.stc_BG[1], "TRADE_PRICE")
     }
   }
   socketMaxCount = ToClient_GetMaxItemSocketCount()
@@ -564,9 +574,11 @@ end
 function TooltipInfo_updateITEM_MARKET_INFO(itemWrapper, itemSSW, tooltipTargetType)
 end
 function TooltipInfo_updateENDURANCE(itemWrapper, itemSSW, tooltipTargetType)
-  local progress_endurance = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.ENDURANCE], "Progress2_Endurance")
-  local progress_dynamicEndurance = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.ENDURANCE], "Progress2_Dynamic")
-  local txt_enduranceValue = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.ENDURANCE], "StaticText_EnduranceValue")
+  local component = self._ui.stc_components[_currentPool][COMPONENT_TYPE.ENDURANCE]
+  local stc_bg = UI.getChildControl(component, "Static_EnduranceProgressBg")
+  local progress_endurance = UI.getChildControl(stc_bg, "Progress2_Endurance")
+  local progress_dynamicEndurance = UI.getChildControl(stc_bg, "Progress2_Dynamic")
+  local txt_enduranceValue = UI.getChildControl(stc_bg, "StaticText_EnduranceValue")
   local maxEndurance = 32767
   local dynamicMaxEndurance = 32767
   if false == itemSSW:get():isUnbreakable() then
@@ -606,29 +618,31 @@ function TooltipInfo_updateENDURANCE(itemWrapper, itemSSW, tooltipTargetType)
   return true
 end
 function TooltipInfo_updateWEIGHT_PRICE(itemWrapper, itemSSW, tooltipTargetType)
+  local component = self._ui.stc_components[_currentPool][COMPONENT_TYPE.WEIGHT_PRICE]
   local enchantLevel = itemSSW:get()._key:getEnchantLevel()
   local isTradeItem = itemSSW:isTradeAble()
   local s64_originalPrice = itemSSW:get()._originalPrice_s64
   local s64_sellPrice = itemSSW:get()._sellPriceToNpc_s64
-  local txt_price = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.WEIGHT_PRICE], "StaticText_Price")
+  local txt_price = UI.getChildControl(component, "StaticText_Price")
   if isTradeItem then
     if s64_originalPrice > Defines.s64_const.s64_0 and 0 == enchantLevel then
-      txt_price:SetText(tostring(makeDotMoney(s64_originalPrice)))
+      local text = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TradeMarketGraph_OriginalPrice", "OriginalPrice", makeDotMoney(s64_originalPrice))
+      txt_price:SetText(text)
       txt_price:SetFontColor(4292726146)
     else
       txt_price:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
       txt_price:SetFontColor(4290733156)
     end
   elseif s64_sellPrice > Defines.s64_const.s64_0 and 0 == enchantLevel then
-    txt_price:SetText(tostring(makeDotMoney(s64_sellPrice)))
+    txt_price:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SELLPRICE") .. " " .. makeDotMoney(s64_sellPrice))
     txt_price:SetFontColor(4292726146)
   else
     txt_price:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
     txt_price:SetFontColor(4290733156)
   end
-  txt_price:SetPosX(300 - txt_price:GetTextSizeX() - txt_price:GetTextSpan().x)
+  txt_price:SetPosX(_defaultSizeX - txt_price:GetTextSizeX() - txt_price:GetTextSpan().x)
   local weightVal = itemSSW:get()._weight
-  local txt_weight = UI.getChildControl(self._ui.stc_components[_currentPool][COMPONENT_TYPE.WEIGHT_PRICE], "StaticText_Weight")
+  local txt_weight = UI.getChildControl(component, "StaticText_Weight")
   txt_weight:SetShow(true)
   local calcWeight = weightVal / 10000
   txt_weight:SetText(string.format("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
@@ -636,6 +650,45 @@ function TooltipInfo_updateWEIGHT_PRICE(itemWrapper, itemSSW, tooltipTargetType)
   if itemSSW:get():isCash() then
     txt_weight:SetShow(false)
   end
+  return true
+end
+function TooltipInfo_updatePRODUCTION_REGION(itemWrapper, itemSSW, tooltipTargetType)
+  local component = self._ui.stc_components[_currentPool][COMPONENT_TYPE.PRODUCTION_REGION]
+  local txt = UI.getChildControl(component, "StaticText_Content")
+  txt:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  if true == itemSSW:get():isForJustTrade() and nil ~= itemWrapper then
+    local nodeLevel = ToClient_GetNodeLevel(itemWrapper:getProductionRegionKey())
+    if nodeLevel >= 1 then
+      txt:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LINK") .. ")")
+    else
+      txt:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOLINK") .. ")")
+    end
+  else
+    return false
+  end
+  component:SetSize(_defaultSizeX, txt:GetTextSizeY())
+  return true
+end
+function TooltipInfo_updateTRADE_PRICE(itemWrapper, itemSSW, tooltipTargetType)
+  local component = self._ui.stc_components[_currentPool][COMPONENT_TYPE.TRADE_PRICE]
+  local txt = UI.getChildControl(component, "StaticText_Content")
+  local isTradeItem = itemSSW:isTradeAble()
+  if true == isTradeItem and nil ~= itemWrapper then
+    local item = itemWrapper:get()
+    local text = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_BUY_PRICE")
+    if nil ~= item then
+      if item:getBuyingPrice_s64() > Defines.s64_const.s64_0 then
+        text = text .. " : <PAColor0xFFEEEEEE>" .. PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. makeDotMoney(item:getBuyingPrice_s64()) .. "<PAOldColor>"
+      else
+        text = text .. " : <PAColor0xFFBA2737>" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOTHING") .. "<PAOldColor>"
+      end
+      txt:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+      txt:SetText(text)
+    end
+  else
+    return false
+  end
+  component:SetSize(_defaultSizeX, txt:GetTextSizeY())
   return true
 end
 function TooltipInfo_updateLINE_SPLIT()

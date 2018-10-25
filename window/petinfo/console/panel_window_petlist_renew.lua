@@ -169,6 +169,9 @@ function petList:resetData()
 end
 function petList:open()
   local petListUI = self._ui
+  if false == Panel_Window_PetList_Renew:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 40)
+  end
   Panel_Window_PetList_Renew:SetShow(true)
   petListUI._static_FocusBg:SetShow(false)
   self:SetButtonPosition(true)
@@ -207,10 +210,11 @@ function petList:close(closeAll)
     petList:closeFunctionPopup()
     return
   end
-  FGlobal_PetFeedClose()
-  FGlobal_PetInfo_Close()
-  PaGlobalFunc_PetExchange_Close()
-  FGlobal_PetCommand_Close()
+  FGlobal_PetFeedClose(closeAll)
+  FGlobal_PetInfo_Close(closeAll)
+  PaGlobalFunc_PetExchange_Close(closeAll)
+  FGlobal_PetCommand_Close(closeAll)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   petListUI._static_FocusBg:SetShow(false)
   Panel_Window_PetList_Renew:SetShow(false)
 end
@@ -331,7 +335,7 @@ function petList:setPosition()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_PetList_Renew:GetSizeX()
   local panelSizeY = Panel_Window_PetList_Renew:GetSizeY()
-  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2 - 180)
+  Panel_Window_PetList_Renew:SetPosX(scrSizeX / 2 - panelSizeX / 2 - 220)
   Panel_Window_PetList_Renew:SetPosY(scrSizeY / 2 - panelSizeY / 2)
 end
 function FGlobal_PopUpButton_SetIconPosition(buttonID)
@@ -888,6 +892,7 @@ function petList:feedAll()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   FGlobal_PetFeedOpen(nil, true)
   self:tmporaryClose()
 end

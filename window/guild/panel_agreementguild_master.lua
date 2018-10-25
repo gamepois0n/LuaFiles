@@ -12,7 +12,7 @@ local AgreementGuild_Master = {
   btn_Refuse = UI.getChildControl(Panel_AgreementGuild_Master, "Button_Refuse"),
   btn_Close = UI.getChildControl(Panel_AgreementGuild_Master, "Button_Close"),
   title = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_AgreementContentTitle"),
-  content = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_AgreementContent"),
+  txt_GuildName = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_AgreementSummaryTitle"),
   radioBtnPeriod = UI.getChildControl(Panel_AgreementGuild_Master, "RadioButton_Period"),
   penaltyCostTitle = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_PenaltyCost"),
   dailyPaymentTitle = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_DailyPayment"),
@@ -26,7 +26,6 @@ local AgreementGuild_Master = {
   guildMark = UI.getChildControl(Panel_AgreementGuild_Master, "Static_GuildMark"),
   dailyPayment_edit = UI.getChildControl(Panel_AgreementGuild_Master, "Edit_Payment"),
   penaltyCost_edit = UI.getChildControl(Panel_AgreementGuild_Master, "Edit_PenaltyCost"),
-  contractPeriod_edit = UI.getChildControl(Panel_AgreementGuild_Master, "Edit_ContractPeriod"),
   memberBenefit = 0,
   memberPenalty = 0,
   maxDailyPayment = UI.getChildControl(Panel_AgreementGuild_Master, "StaticText_MaxPayment"),
@@ -71,8 +70,8 @@ for index = 0, 6 do
   AgreementGuild_Master._radioBtn_Period[index] = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, Panel_AgreementGuild_Master, "RadioButton_Period_" .. index)
   CopyBaseProperty(AgreementGuild_Master.radioBtnPeriod, AgreementGuild_Master._radioBtn_Period[index])
   AgreementGuild_Master._radioBtn_Period[index]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_DAY", "day", periodValue[index]))
-  AgreementGuild_Master._radioBtn_Period[index]:SetPosX((AgreementGuild_Master.radioBtnPeriod:GetPosX() + 75) * index)
-  AgreementGuild_Master._radioBtn_Period[index]:SetPosY(480)
+  AgreementGuild_Master._radioBtn_Period[index]:SetPosX((AgreementGuild_Master.radioBtnPeriod:GetPosX() + 90) * index)
+  AgreementGuild_Master._radioBtn_Period[index]:SetPosY(700)
   AgreementGuild_Master._radioBtn_Period[index]:SetShow(false)
   AgreementGuild_Master._radioBtn_Period[index]:addInputEvent("Mouse_LUp", "HandleClicked_AgreementGuild_Master_SetData(" .. index .. ")")
 end
@@ -126,10 +125,8 @@ end
 function AgreementGuild_Master:Update()
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   local guildName = guildWrapper:getName()
-  self.title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_MASTER_CONTRACT", "guildName", guildName))
-  self.content:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self.content:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_3"))
-  self.content:SetShow(false)
+  self.title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_AGREEMENT_2"))
+  self.txt_GuildName:SetText("[" .. tostring(guildName) .. "]")
   local isSet = setGuildTextureByGuildNo(guildWrapper:getGuildNo_s64(), self.guildMark)
   if false == isSet then
     self.guildMark:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Buttons.dds")
@@ -183,7 +180,6 @@ function AgreementGuild_Master:SetShowContractPreSet(isShow)
   self.penaltyCost_edit:SetShow(not isShow)
   self.maxDailyPayment:SetShow(not isShow)
   self.maxpenaltyCost:SetShow(not isShow)
-  self.contractPeriod_edit:SetShow(false)
 end
 function AgreementGuild_Master:SetHideContractControl()
   local self = AgreementGuild_Master
@@ -193,7 +189,6 @@ function AgreementGuild_Master:SetHideContractControl()
   end
   self.dailyPayment_edit:SetShow(false)
   self.penaltyCost_edit:SetShow(false)
-  self.contractPeriod_edit:SetShow(false)
   self.maxDailyPayment:SetShow(false)
   self.maxpenaltyCost:SetShow(false)
 end
@@ -206,10 +201,10 @@ function FGlobal_AgreementGuild_Master_Open_ForJoin(targetKeyRaw, targetName, pr
   self.to:SetText(textTemp)
   self.btn_Send:SetShow(true)
   self.btn_Refuse:SetShow(true)
-  self.btn_Close:SetShow(false)
   self.remainPeriod:SetShow(false)
   self:SetShowContractPreSet(true)
   self.btnRenew:SetShow(false)
+  self.btn_Close:SetShow(false)
   AgreementGuild_Master:Update()
   AgreementGuild_Master:SetPosition()
   Panel_AgreementGuild_Master:SetShow(true)
@@ -360,7 +355,6 @@ function HandleClicked_AgreementGuild_Master_SetEditBox(type)
   elseif 1 == type then
     control = self.penaltyCost_edit
   elseif 2 == type then
-    control = self.contractPeriod_edit
   end
   control:SetEditText("", true)
 end
@@ -416,10 +410,10 @@ function HandleClicked_AgreementGuild_Master_Renew()
   AgreementGuild_SetMaxPenalty(cancellationCharge[checkedIndex], self.maxpenaltyCostValue)
   self.dailyPayment:SetShow(false)
   self.penaltyCost:SetShow(false)
-  self.btn_Close:SetShow(false)
   self.btnRenew:SetShow(false)
   self.btn_Send:SetShow(true)
   self.btn_Refuse:SetShow(true)
+  self.btn_Close:SetShow(false)
   HandleClicked_AgreementGuild_Master_SetData(4)
 end
 function AgreementGuild_Master:registEventHandler()
@@ -429,7 +423,6 @@ function AgreementGuild_Master:registEventHandler()
   self.btnRenew:addInputEvent("Mouse_LUp", "HandleClicked_AgreementGuild_Master_Renew()")
   self.dailyPayment_edit:addInputEvent("Mouse_LUp", "HandleClicked_AgreementGuild_Master_SetEditBox(" .. 0 .. ")")
   self.penaltyCost_edit:addInputEvent("Mouse_LUp", "HandleClicked_AgreementGuild_Master_SetEditBox(" .. 1 .. ")")
-  self.contractPeriod_edit:addInputEvent("Mouse_LUp", "HandleClicked_AgreementGuild_Master_SetEditBox(" .. 2 .. ")")
 end
 function AgreementGuild_Master:registMessageHandler()
 end

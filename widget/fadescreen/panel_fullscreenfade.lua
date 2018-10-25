@@ -9,7 +9,7 @@ local _fadeTime = 0.32
 local _fadeOutDelay = 0.2
 local _isFading = false
 local function FullScreenFade_FadeIn()
-  if ToClient_isXBox() then
+  if ToClient_isConsole() then
     return
   end
   if not ToClient_IsDevelopment() then
@@ -29,7 +29,7 @@ function PaGlobalFunc_FullScreenFade_RunAfterFadeIn(func)
   if nil == func or "function" ~= type(func) then
     return
   end
-  if ToClient_isXBox() then
+  if ToClient_isConsole() then
     func()
     return
   end
@@ -47,7 +47,7 @@ end
 function PaGlobalFunc_FullScreenFade_FadeOut(fadeTime, fadeDelay)
   _isFading = false
   _panel:SetIgnore(true)
-  if ToClient_isXBox() then
+  if ToClient_isConsole() then
     _panel:SetShow(false)
     return
   end

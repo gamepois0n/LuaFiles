@@ -7,6 +7,7 @@ local GuildIntro = {
     stc_BottomBg = UI.getChildControl(_panel, "Static_BottomBg")
   },
   _editTextType = {introduce = 1, notice = 2},
+  _currentMaxInput = 0,
   _currentTextType = nil
 }
 function GuildIntro:open(editType)
@@ -24,6 +25,7 @@ function GuildIntro:updateNotice()
     self:close()
     return
   end
+  self._currentMaxInput = 40
   self._ui.txt_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_LIST_NOTICE_TITLE"))
   self._ui.txt_EditInfoTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_LIST_NOTICE_EDITBOX"))
   self._ui.edit_Text:SetMaxInput(40)
@@ -37,6 +39,7 @@ function GuildIntro:updateIntroduce()
     self:close()
     return
   end
+  self._currentMaxInput = 200
   self._ui.txt_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_INTRODUCETITLE"))
   self._ui.txt_EditInfoTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDINTRODUCE_DESC"))
   self._ui.edit_Text:SetMaxInput(200)
@@ -44,7 +47,10 @@ function GuildIntro:updateIntroduce()
   self._ui.edit_Text:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.edit_Text:SetEditText(guildInfo:getGuildIntrodution())
 end
-function GuildIntro:close()
+function GuildIntro:close(isConfirm)
+  if false == isConfirm then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   _panel:SetShow(false)
 end
 function GuildIntro:init()
@@ -54,6 +60,7 @@ function GuildIntro:init()
   self._ui.txt_AConsoleUI = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_GuildIntro_ConfirmEdit()")
   _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_GuildIntro_SetFocusEdit()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_B, "PaGlobalFunc_GuildIntro_Close(false)")
   self._ui.edit_Text:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_GuildIntro_EndVirtualKeyboard")
   PaGlobal_registerPanelOnBlackBackground(_panel)
 end
@@ -75,13 +82,15 @@ function PaGlobalFunc_GuildIntro_OpenNotice()
   local textType = self._editTextType.notice
   self:open(textType)
 end
-function PaGlobalFunc_GuildIntro_Close()
+function PaGlobalFunc_GuildIntro_Close(isConfirm)
   local self = GuildIntro
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildIntro")
     return
   end
-  self:close()
+  if _panel:GetShow() then
+    self:close(isConfirm)
+  end
 end
 function PaGlobalFunc_GuildIntro_SetFocusEdit()
   local self = GuildIntro
@@ -89,6 +98,7 @@ function PaGlobalFunc_GuildIntro_SetFocusEdit()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildIntro")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   SetFocusEdit(self._ui.edit_Text)
 end
 function PaGlobalFunc_GuildIntro_EndFocusEdit()
@@ -106,6 +116,9 @@ function PaGlobalFunc_GuildIntro_EndVirtualKeyboard(str)
   if nil == self then
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildIntro")
     return
+  end
+  if self._currentMaxInput < string.len(str) then
+    str = string.sub(str, 1, self._currentMaxInput)
   end
   ClearFocusEdit()
   self._ui.edit_Text:SetEditText(str, true)
@@ -136,7 +149,8 @@ function InputMLUp_GuildIntro_ConfirmEdit()
   elseif self._editTextType.notice == self._currentTextType then
     ToClient_RequestSetGuildNotice(tostring(self._ui.edit_Text:GetEditText()))
   end
-  self:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
+  self:close(true)
 end
 function PaGlobalFunc_GuildIntro_Init()
   local self = GuildIntro

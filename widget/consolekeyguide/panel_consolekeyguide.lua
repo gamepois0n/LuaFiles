@@ -1,4 +1,4 @@
-Panel_ConsoleKeyGuide:SetShow(ToClient_isXBox())
+Panel_ConsoleKeyGuide:SetShow(ToClient_isConsole())
 local _panel = Panel_ConsoleKeyGuide
 local _actionType = CppEnums.ActionInputType
 local ConsoleKeyGuide = {
@@ -25,6 +25,7 @@ local ConsoleKeyGuide = {
     swimmingMode = 16,
     swimWaitMode = 17,
     swimRestMode = 18,
+    miniGameMode = 19,
     undefined = 999
   },
   _actionStringTable = {},
@@ -181,6 +182,17 @@ local _consoleUIIconUV = {
     y2 = 45
   }
 }
+local _miniGamePanel = {
+  ["panelCount"] = 7,
+  [1] = Panel_Global_Manual,
+  [2] = Panel_MiniGame_Timing,
+  [3] = Panel_Minigame_Gradient,
+  [4] = Panel_RhythmGame,
+  [5] = Panel_RhythmGame_Drum,
+  [6] = Panel_BattleGauge,
+  [7] = Panel_MiniGame_Gradient_Y
+}
+local _isplayingMiniGame = false
 function ConsoleKeyGuide:init()
   self:initActionString()
   self._ui.guideBg = UI.getChildControl(_panel, "Static_KeyGuideBg")
@@ -590,8 +602,24 @@ function ConsoleKeyGuide:getState()
   end
   return self._guideState.undefined
 end
+function FGlobal_KeyGuideTypeCheck(isPlaying)
+  _isplayingMiniGame = isPlaying
+end
 function FGlobal_KeyGuideTypeCheck(deltaTime)
   if false == _ContentsGroup_RenewUI then
+    return
+  else
+    for ii = 1, _miniGamePanel.panelCount do
+      if _miniGamePanel[ii]:GetShow() then
+        _isplayingMiniGame = true
+        break
+      else
+        _isplayingMiniGame = false
+      end
+    end
+  end
+  if true == _isplayingMiniGame then
+    ConsoleKeyGuide:hideAllGuide()
     return
   end
   if true == PaGlobal_TutorialManager:isDoingTutorial() then
@@ -623,7 +651,7 @@ function FGlobal_KeyGuideTypeCheck(deltaTime)
   self:setGuide(currentState)
 end
 function PaGlobalFunc_ConsoleKeyGuide_Init()
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   local self = ConsoleKeyGuide
@@ -703,7 +731,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
   end
 end
 function ConsoleKeyGuide:setSearchState()
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -719,7 +747,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
     return
   end
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -732,7 +760,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetFishingWaitHookMode()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
     return
   end
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -745,7 +773,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetfishingStartHook()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
     return
   end
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -758,7 +786,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini1()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
     return
   end
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -771,7 +799,7 @@ function PaGlobalFunc_ConsoleKeyGuide_SetfishingHookMini2()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
     return
   end
-  if false == ToClient_isXBox() then
+  if false == ToClient_isConsole() then
     return
   end
   PaGlobalFunc_ConsoleKeyGuide_SetPos()
@@ -815,6 +843,20 @@ CONSOLEKEYGUID_ALIGN_TYPE = {
   eALIGN_TYPE_BOTTOM = 5,
   eALIGN_TYPE_COUNT = 6
 }
+function PaGlobalFunc_ConsoleKeyGuide_Rod_Check()
+  local rightHandItemWrapper = ToClient_getEquipmentItem(0)
+  local primWeaponIsFishingRod
+  if nil ~= rightHandItemWrapper then
+    primWeaponIsFishingRod = 44 == rightHandItemWrapper:getStaticStatus():getEquipType()
+  end
+  if true == primWeaponIsFishingRod then
+    PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
+  else
+    Panel_ConsoleKeyGuide:SetShow(true)
+    PaGlobalFunc_ConsoleKeyGuide_SetState()
+    PaGlobalFunc_ConsoleKeyGuide_On()
+  end
+end
 function PaGlobalFunc_ConsoleKeyGuide_SetAlign(listKeyGuid, parentControl, alignType, keySize, keySpace)
   local defualtKeySize = 44
   local defualtKeySpace = 20

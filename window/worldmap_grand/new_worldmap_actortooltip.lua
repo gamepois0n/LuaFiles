@@ -273,9 +273,9 @@ function FromClient_OnWorldMapNode(nodeBtn)
   nodeHelpBG:SetPosX(nodeBtn:GetSizeX())
   nodeHelpBG:SetPosY(nodeBtn:GetSizeY())
   nodeHelpMouseL:SetPosX(nodeHelpBG:GetPosX())
-  nodeHelpMouseL:SetPosY(nodeHelpBG:GetPosY() + 2)
+  nodeHelpMouseL:SetPosY(nodeHelpBG:GetPosY() + 5)
   nodeHelpMouseR:SetPosX(nodeHelpBG:GetPosX())
-  nodeHelpMouseR:SetPosY(nodeHelpMouseL:GetPosY() + nodeHelpMouseL:GetSizeY() + 2)
+  nodeHelpMouseR:SetPosY(nodeHelpMouseL:GetPosY() + nodeHelpMouseL:GetSizeY() + 10)
   local txtSizeMouseL = nodeHelpMouseL:GetTextSizeX()
   local txtSizeMouseR = nodeHelpMouseR:GetTextSizeX()
   if txtSizeMouseL < txtSizeMouseR then
@@ -701,7 +701,7 @@ function FromClient_PartyIcon(partyMemberIcon, partyMemberProxy, index, isValid)
   elseif partyMemberProxy:classType() == UI_Class.ClassType_Orange then
     classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
     partyMember[partyCount].ClassIcon:ChangeTextureInfoName(classTypeTexture)
-    local x1, y1, x2, y2 = setTextureUV_Func(partyMember[partyCount].ClassIcon, 33, 236, 62, 265)
+    local x1, y1, x2, y2 = setTextureUV_Func(partyMember[partyCount].ClassIcon, 33, 267, 62, 296)
     partyMember[partyCount].ClassIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     partyMember[partyCount].ClassIcon:setRenderTexture(partyMember[partyCount].ClassIcon:getBaseTexture())
   end

@@ -32,8 +32,8 @@ end
 function Panel_EventNotify_Initialize()
   _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_EventNotify, "WebControl_EventNotify_WebLink")
   _Web:SetShow(true)
-  _Web:SetPosX(42)
-  _Web:SetPosY(68)
+  _Web:SetPosX(32)
+  _Web:SetPosY(83)
   _Web:SetSize(636, 494)
   _Web:ResetUrl()
 end

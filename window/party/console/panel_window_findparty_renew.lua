@@ -327,6 +327,7 @@ function PaGlobalFunc_FindParty_RecruiteShow()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_FAVORITE_ALREADYREGIST"))
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_FindPartyRecruite_Show()
 end
 function PaGlobalFunc_FindParty_Update()
@@ -335,6 +336,9 @@ function PaGlobalFunc_FindParty_Update()
   end
 end
 function PaGlobalFunc_FindParty_ReLoad()
+  if Panel_PartyList:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
+  end
   ToClient_RequestListPartyRecruitment()
 end
 function PaGlobalFunc_FindParty_OnSelectButton(id, eType)
@@ -456,6 +460,7 @@ function FromClientw_FindParty_RecruitmentInfo(param1)
 end
 function FromClientw_FindParty_Join(guestActorKey, characterName, level, classType)
   local function partyJoin()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     RequestParty_inviteCharacter(characterName)
   end
   local className = getClassName(classType)

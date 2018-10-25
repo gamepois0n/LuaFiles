@@ -19,27 +19,7 @@ local socket = {
   },
   config = {socketSlotCount = 3, curSlotCount = 3},
   control = {
-    staticEnchantItem = UI.getChildControl(Panel_Window_Socket, "Static_Equip_Socket"),
-    staticSocket = {
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_1"),
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_2"),
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_3")
-    },
-    staticSocketName = {
-      UI.getChildControl(Panel_Window_Socket, "StaticText_NameTag_1"),
-      UI.getChildControl(Panel_Window_Socket, "StaticText_NameTag_2"),
-      UI.getChildControl(Panel_Window_Socket, "StaticText_NameTag_3")
-    },
-    staticSocketDesc = {
-      UI.getChildControl(Panel_Window_Socket, "StaticText_List_1"),
-      UI.getChildControl(Panel_Window_Socket, "StaticText_List_2"),
-      UI.getChildControl(Panel_Window_Socket, "StaticText_List_3")
-    },
-    staticSocketBackground = {
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_1_Background"),
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_2_Background"),
-      UI.getChildControl(Panel_Window_Socket, "Static_Socket_3_Background")
-    }
+    textureArea = UI.getChildControl(Panel_Window_Socket, "Static_1")
   },
   text = {
     [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SOCKET_EMPTYSLOT")
@@ -60,14 +40,35 @@ local _buttonQuestion = UI.getChildControl(Panel_Window_Socket, "Button_Question
 _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"Socket\" )")
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"Socket\", \"true\")")
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"Socket\", \"false\")")
-local onlySocketListBG = {
-  [1] = UI.getChildControl(Panel_Window_Socket, "Static_SocketBG_0"),
-  [2] = UI.getChildControl(Panel_Window_Socket, "Static_SocketBG_1"),
-  [3] = UI.getChildControl(Panel_Window_Socket, "Static_SocketBG_2")
-}
 socket._posX = Panel_Window_Socket:GetPosX()
 socket._posY = Panel_Window_Socket:GetPosY()
 function socket:init()
+  self.control.staticEnchantItem = UI.getChildControl(self.control.textureArea, "Static_Equip_Socket")
+  self.control.onlySocketListBG = {
+    [1] = UI.getChildControl(self.control.textureArea, "Static_SocketBG_0"),
+    [2] = UI.getChildControl(self.control.textureArea, "Static_SocketBG_1"),
+    [3] = UI.getChildControl(self.control.textureArea, "Static_SocketBG_2")
+  }
+  self.control.staticSocketDesc = {
+    UI.getChildControl(self.control.textureArea, "StaticText_List_1"),
+    UI.getChildControl(self.control.textureArea, "StaticText_List_2"),
+    UI.getChildControl(self.control.textureArea, "StaticText_List_3")
+  }
+  self.control.staticSocketName = {
+    UI.getChildControl(self.control.textureArea, "StaticText_NameTag_1"),
+    UI.getChildControl(self.control.textureArea, "StaticText_NameTag_2"),
+    UI.getChildControl(self.control.textureArea, "StaticText_NameTag_3")
+  }
+  self.control.staticSocket = {
+    UI.getChildControl(self.control.textureArea, "Static_Socket_1"),
+    UI.getChildControl(self.control.textureArea, "Static_Socket_2"),
+    UI.getChildControl(self.control.textureArea, "Static_Socket_3")
+  }
+  self.control.staticSocketBackground = {
+    UI.getChildControl(self.control.textureArea, "Static_Socket_1_Background"),
+    UI.getChildControl(self.control.textureArea, "Static_Socket_2_Background"),
+    UI.getChildControl(self.control.textureArea, "Static_Socket_3_Background")
+  }
   for _, control in ipairs(self.control.staticSocketName) do
     control:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   end
@@ -104,7 +105,7 @@ function socket:createControl()
       self.name:SetShow(bShow)
       self.desc:SetShow(bShow)
     end
-    onlySocketListBG[ii]:SetShow(true)
+    self.control.onlySocketListBG[ii]:SetShow(true)
     local indexSocket = ii - 1
     SlotItem.new(slotSocket, "Socket_" .. ii, ii, Panel_Window_Socket, self.slotConfig)
     slotSocket:createChild()
@@ -125,10 +126,10 @@ function socket:clearData(uiOnly)
   self.slotMain.slotNo = nil
   self.slotMain.icon:SetShow(false)
   for ii = 1, self.config.socketSlotCount do
-    local socketBG_1 = onlySocketListBG[ii]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+    local socketBG_1 = self.control.onlySocketListBG[ii]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
     socketBG_1:SetStartColor(UI_color.C_FFFFFFFF)
     socketBG_1:SetEndColor(UI_color.C_FF626262)
-    onlySocketListBG[ii]:EraseAllEffect()
+    self.control.onlySocketListBG[ii]:EraseAllEffect()
     self.slotSocket[ii]:setShow(false)
     self.slotSocket[ii].empty = true
   end
@@ -151,30 +152,30 @@ function socket:updateSocket()
     local socketSlot = self.slotSocket[ii]
     local itemStaticWrapper = invenItemWrapper:getPushedItem(ii - 1)
     socketSlot:setShow(true)
-    onlySocketListBG[ii]:EraseAllEffect()
+    self.control.onlySocketListBG[ii]:EraseAllEffect()
     if nil == itemStaticWrapper then
       if ii == 1 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
-        onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
       elseif ii == 2 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_2 = onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_2 = self.control.onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
-        onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
       elseif ii == 3 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_2 = onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_2 = self.control.onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_3 = onlySocketListBG[3]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_3 = self.control.onlySocketListBG[3]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
       end
@@ -185,35 +186,35 @@ function socket:updateSocket()
       self.slotMain.icon:AddEffect("UI_ItemJewel", false, 0, 0)
     else
       if ii == 1 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
-        onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[2]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -222, 40)
+        self.control.onlySocketListBG[1]:AddEffect("UI_LimitMetastasis_TopLoop", true, -200, 40)
       elseif ii == 2 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_2 = onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_2 = self.control.onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
-        onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
+        self.control.onlySocketListBG[3]:SetColor(UI_color.C_FF626262)
         audioPostEvent_SystemUi(5, 6)
-        onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -217, 0)
+        self.control.onlySocketListBG[2]:AddEffect("UI_LimitMetastasis_MidLoop", true, -190, 0)
       elseif ii == 3 then
-        local socketBG_1 = onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_1 = self.control.onlySocketListBG[1]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_1:SetStartColor(UI_color.C_FF626262)
         socketBG_1:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_2 = onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_2 = self.control.onlySocketListBG[2]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_2:SetStartColor(UI_color.C_FF626262)
         socketBG_2:SetEndColor(UI_color.C_FFFFFFFF)
-        local socketBG_3 = onlySocketListBG[3]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+        local socketBG_3 = self.control.onlySocketListBG[3]:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
         socketBG_3:SetStartColor(UI_color.C_FF626262)
         socketBG_3:SetEndColor(UI_color.C_FFFFFFFF)
         audioPostEvent_SystemUi(5, 6)
-        onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -212, -30)
+        self.control.onlySocketListBG[3]:AddEffect("UI_LimitMetastasis_BotLoop", true, -200, -30)
       end
       socketSlot:setItemByStaticStatus(itemStaticWrapper, 0)
       socketSlot.empty = false
@@ -444,7 +445,7 @@ local function Socket_fadeInSCR_Down(panel)
   local aniInfo3 = panel:addColorAnimation(0, 0.2, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo3:SetStartColor(UI_color.C_00FFFFFF)
   aniInfo3:SetEndColor(UI_color.C_FFFFFFFF)
-  for key, value in pairs(onlySocketListBG) do
+  for key, value in pairs(self.control.onlySocketListBG) do
     local socketBG_1 = value:addColorAnimation(0, 0.5, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
     socketBG_1:SetStartColor(UI_color.C_00626262)
     socketBG_1:SetEndColor(UI_color.C_FF626262)

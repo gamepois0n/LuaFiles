@@ -410,9 +410,11 @@ function Panel_Window_WharfList_info:readyToShow()
   self:setWharfListButton()
 end
 function Panel_Window_WharfList_info:open()
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   Panel_Window_WharfList:SetShow(true)
 end
 function Panel_Window_WharfList_info:close()
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   Panel_Window_WharfList:SetShow(false)
 end
 function PaGlobalFunc_WharfList_GetShow()
@@ -448,7 +450,7 @@ function PaGlobalFunc_WharfList_ScrollEvent(isUpScroll)
   local self = Panel_Window_WharfList_info
   local beforeSlotIndex = self._value.startButtonIndex
   self._value.startButtonIndex = UIScroll_Horizontal_ScrollEvent(self._ui.wharf_List_HorizontalScroll, isUpScroll, self._config.slotRows, self._value.stableSlotCount, self._value.startButtonIndex, self._config.nowSlotCount)
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and 0 ~= self._value.startButtonIndex then
+  if (ToClient_isConsole() or ToClient_IsDevelopment()) and 0 ~= self._value.startButtonIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   if beforeSlotIndex ~= self._value.startButtonIndex then

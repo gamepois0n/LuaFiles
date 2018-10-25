@@ -208,12 +208,9 @@ local petSkillList = {
   window = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillListWindow"),
   title = UI.getChildControl(Panel_Window_PetListNew, "StaticText_SkillListTitle"),
   baseSkillTitle = UI.getChildControl(Panel_Window_PetListNew, "StaticText_BaseSkillListTitle"),
-  baseSkillBg = UI.getChildControl(Panel_Window_PetListNew, "Static_BaseSkillListBG"),
   baseSkillText = UI.getChildControl(Panel_Window_PetListNew, "StaticText_BaseSkillList"),
   subTitle = UI.getChildControl(Panel_Window_PetListNew, "StaticText_SkillList_Title"),
-  bg1 = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillListBG"),
   textList = UI.getChildControl(Panel_Window_PetListNew, "StaticText_SkillList"),
-  bg2 = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillListBG2"),
   desc = UI.getChildControl(Panel_Window_PetListNew, "StaticText_SkillListDesc")
 }
 function petSkillList_Show()
@@ -271,11 +268,28 @@ local baseSkillMultiplePoint = {
   [11] = 5,
   [12] = 10
 }
+local defaultSizeX = Panel_Window_PetListNew:GetSizeX()
+function PaGlobalFunc_PetList_SetPanel(count)
+  local titleBg = UI.getChildControl(Panel_Window_PetListNew, "Static_TitleBG")
+  if 0 == count then
+    petSkillList.window:SetShow(false)
+    Panel_Window_PetListNew:SetSize(defaultSizeX - petSkillList.window:GetSizeX(), Panel_Window_PetListNew:GetSizeY())
+    titleBg:SetSize(defaultSizeX - petSkillList.window:GetSizeX() - 10, titleBg:GetSizeY())
+  else
+    petSkillList.window:SetShow(true)
+    Panel_Window_PetListNew:SetSize(defaultSizeX, Panel_Window_PetListNew:GetSizeY())
+    titleBg:SetSize(defaultSizeX - 10, titleBg:GetSizeY())
+  end
+  PetList.BTN_Close:ComputePos()
+  _buttonQuestion:ComputePos()
+end
 function AmountPetSkill_Attribute(count)
+  PaGlobalFunc_PetList_SetPanel(count)
   if 0 == count then
     petSkillList_Close()
     return
   end
+  _PA_LOG("\236\155\144\236\132\160", "count" .. count)
   petSkillList_Show()
   local self = petSkillList
   local baseSkillPoint = {}
@@ -312,10 +326,6 @@ function AmountPetSkill_Attribute(count)
   end
   self.baseSkillText:SetText(baseSkillString)
   local textSizeY = self.baseSkillText:GetTextSizeY()
-  self.baseSkillBg:SetSize(self.baseSkillBg:GetSizeX(), textSizeY + 10)
-  self.bg2:SetPosY(self.baseSkillBg:GetPosY() + textSizeY + 15)
-  self.desc:SetPosY(self.bg2:GetPosY() + 15)
-  self.window:SetSize(self.window:GetSizeX(), self.bg2:GetPosY() + 60)
   local skillMaxCount = ToClient_getPetEquipSkillMax()
   for index = 0, count - 1 do
     local PcPetData = ToClient_getPetUnsealedDataByIndex(index)
@@ -353,17 +363,13 @@ function AmountPetSkill_Attribute(count)
   end
   if hasSkill then
     self.textList:SetText(petSkillGradeText)
-    local textSizeY = self.textList:GetTextSizeY()
-    self.subTitle:SetPosY(self.baseSkillBg:GetPosY() + self.baseSkillBg:GetSizeY() + 5)
-    self.bg1:SetSize(self.bg1:GetSizeX(), textSizeY + 10)
-    self.bg1:SetPosY(self.subTitle:GetPosY() + 25)
-    self.textList:SetPosY(self.bg1:GetPosY() + 5)
-    self.bg2:SetPosY(self.bg1:GetPosY() + textSizeY + 15)
-    self.desc:SetPosY(self.bg2:GetPosY() + 15)
-    self.window:SetSize(self.window:GetSizeX(), self.bg2:GetPosY() + 60)
+    local textSizeY = self.baseSkillText:GetTextSizeY() + self.baseSkillText:GetTextSizeY()
+    if textSizeY >= self.subTitle:GetPosY() then
+      self.subTitle:SetPosY(textSizeY + 10)
+      self.textList:SetPosY(self.subTitle:GetPosY() + 40)
+    end
   else
     self.subTitle:SetShow(false)
-    self.bg1:SetShow(false)
     self.textList:SetShow(false)
   end
 end
@@ -456,8 +462,8 @@ function PetList:SetPosition()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_Window_PetListNew:GetSizeX()
   local panelSizeY = Panel_Window_PetListNew:GetSizeY()
-  Panel_Window_PetListNew:SetPosX(scrSizeX / 2 - panelSizeX - 50)
-  Panel_Window_PetListNew:SetPosY(scrSizeY / 2 - panelSizeY / 2 - 100)
+  Panel_Window_PetListNew:SetPosX(scrSizeX / 2 - panelSizeX / 2)
+  Panel_Window_PetListNew:SetPosY(math.max(0, scrSizeY / 2 - panelSizeY / 2))
 end
 function PetList:Open()
   self:SetPosition()
@@ -586,6 +592,7 @@ function petListNew_UnRegister(petNoStr)
   ToClient_requestPetUnregister(petNo_s64)
 end
 function PetListNew_Compose()
+  PaGlobalFunc_PetList_SetPanel(0)
   PetCompose_Open()
   PetListNew_IgnoreAllSealButton(true)
   PetList:SetPetList()
@@ -766,6 +773,7 @@ function FGlobal_PetListNew_Close()
   PetList:showFeedUi(-1)
   PetList:showFeedAllUi(false)
   Panel_Window_PetCompose_Close()
+  PetList_HideSkillToolTip()
   PetListNew_IgnoreAllSealButton(false)
 end
 function PetListNew_IgnoreAllSealButton(isShow)
@@ -1129,6 +1137,9 @@ function PetListControlCreate(control, key)
     btnInfo:SetShow(true)
     btnUnseal:SetShow(false)
     btnSeal:SetShow(true)
+    btnSeal:SetPosX(btnUp:GetPosX() - 2)
+    btnInfo:SetPosX(btnSeal:GetPosX() - 45)
+    btnFeed:SetPosX(btnInfo:GetPosX() - 45)
     btnFusion:SetShow(false)
     btnUnsealAll:SetShow(false)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
@@ -1247,6 +1258,7 @@ function PetListControlCreate(control, key)
   level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(petLevel))
   tier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
   property:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_SPECIALSKILL", "paramText", PetList_SkillTypeString(skillType)))
+  property:SetPosX(math.max(property:GetPosX(), tier:GetPosX() + tier:GetTextSizeX() + 10))
 end
 function PetList_BaseSkill_ShowTooltip(baseskillindex, uiIx)
   local skillStaticStatus = ToClient_getPetBaseSkillStaticStatus(baseskillindex)

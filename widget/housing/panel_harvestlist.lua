@@ -31,17 +31,17 @@ function Panel_HarvestList_HideAni()
   aniInfo:SetHideAtEnd(true)
 end
 local HarvestList = {
-  _Static_BG = UI.getChildControl(Panel_HarvestList, "Static_BG"),
+  _txt_Title = UI.getChildControl(Panel_HarvestList, "StaticText_Title"),
   _Territory = UI.getChildControl(Panel_HarvestList, "StaticText_Territory"),
   _TownName = UI.getChildControl(Panel_HarvestList, "StaticText_TownName"),
   _Address = UI.getChildControl(Panel_HarvestList, "StaticText_Address"),
   _doWork = UI.getChildControl(Panel_HarvestList, "Button_doWork"),
   _info = UI.getChildControl(Panel_HarvestList, "RadioButton_Info"),
   _Navi = UI.getChildControl(Panel_HarvestList, "Button_Navi"),
-  _btn_Close = UI.getChildControl(Panel_HarvestList, "Button_Close"),
   _frame = UI.getChildControl(Panel_HarvestList, "Frame_HarvestList"),
   _tentPos = {}
 }
+HarvestList._btn_Close = UI.getChildControl(HarvestList._txt_Title, "Button_Close")
 HarvestList.frameContent = UI.getChildControl(HarvestList._frame, "Frame_1_Content")
 HarvestList.frameScroll = UI.getChildControl(HarvestList._frame, "Frame_1_VerticalScroll")
 HarvestList.frameScroll:SetIgnore(false)
@@ -102,7 +102,7 @@ function Panel_HarvestList_Update()
   local self = HarvestList
   local temporaryWrapper = getTemporaryInformationWrapper()
   local myTentCount = temporaryWrapper:getSelfTentCount()
-  local _PosY = 0
+  local _PosY = 20
   if myTentCount > 0 then
     for idx = 0, myTentCount - 1 do
       local householdDataWithInstallationWrapper = temporaryWrapper:getSelfTentWrapperByIndex(idx)
@@ -127,17 +127,17 @@ function Panel_HarvestList_Update()
         self.listArray[idx]._TownName:SetPosY(_PosY)
         self.listArray[idx]._TownName:SetShow(true)
         self.listArray[idx]._Address:SetText(characterStaticStatusWrapper:getName())
-        self.listArray[idx]._Address:SetPosX(405)
+        self.listArray[idx]._Address:SetPosX(400)
         self.listArray[idx]._Address:SetPosY(_PosY)
         self.listArray[idx]._Address:SetShow(true)
-        self.listArray[idx]._Navi:SetPosX(640)
+        self.listArray[idx]._doWork:SetPosX(570)
+        self.listArray[idx]._doWork:SetPosY(_PosY)
+        self.listArray[idx]._doWork:SetShow(true)
+        self.listArray[idx]._Navi:SetPosX(680)
         self.listArray[idx]._Navi:SetPosY(_PosY + 2)
         self.listArray[idx]._Navi:SetShow(true)
         self.listArray[idx]._Navi:addInputEvent("Mouse_LUp", "_HarvestListNavigatorStart(" .. idx .. ")")
-        self.listArray[idx]._doWork:SetPosX(555)
-        self.listArray[idx]._doWork:SetPosY(_PosY)
-        self.listArray[idx]._doWork:SetShow(true)
-        self.listArray[idx]._info:SetPosX(698)
+        self.listArray[idx]._info:SetPosX(735)
         self.listArray[idx]._info:SetPosY(_PosY)
         self.listArray[idx]._info:SetShow(true)
         if self.listArray[idx]._info:IsCheck() and Panel_HarvestList:GetShow() then

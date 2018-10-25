@@ -34,9 +34,7 @@ function LifeRankingHideAni()
 end
 PaGlobal_LifeRanking = {
   _ui = {
-    _txtTitle = UI.getChildControl(Panel_LifeRanking, "StaticText_Title"),
-    _btnClose = UI.getChildControl(Panel_LifeRanking, "Button_Win_Close"),
-    _btnHelp = UI.getChildControl(Panel_LifeRanking, "Button_Question"),
+    _titleBg = UI.getChildControl(Panel_LifeRanking, "Static_TitleBG"),
     _scroll = UI.getChildControl(Panel_LifeRanking, "Scroll_RankingList"),
     _listBg = UI.getChildControl(Panel_LifeRanking, "Static_BG"),
     _myRanking = UI.getChildControl(Panel_LifeRanking, "StaticText_MyRanking"),
@@ -51,6 +49,7 @@ PaGlobal_LifeRanking = {
     thirdRankerName = UI.getChildControl(Panel_LifeRanking, "StaticText_ThirdCharacterName"),
     thirdRankerGuild = UI.getChildControl(Panel_LifeRanking, "StaticText_ThirdGuildName"),
     myAllRankBG = UI.getChildControl(Panel_LifeRanking, "Static_MyRankingBG"),
+    txt_comment = UI.getChildControl(Panel_LifeRanking, "StaticText_Comment"),
     _topGrade = {
       UI.getChildControl(Panel_LifeRanking, "StaticText_Grade_First"),
       UI.getChildControl(Panel_LifeRanking, "StaticText_Grade_Second"),
@@ -105,8 +104,8 @@ PaGlobal_LifeRanking = {
   _posConfig = {
     _tabStartPosX = 14,
     _tabPosXGap = 100,
-    _listStartPosY = 265,
-    _listPosYGap = 15.5
+    _listStartPosY = 290,
+    _listPosYGap = 16
   },
   _serverChange = true,
   _listUpdate = {
@@ -126,6 +125,9 @@ PaGlobal_LifeRanking = {
     [13] = false
   }
 }
+PaGlobal_LifeRanking._ui._txtTitle = UI.getChildControl(PaGlobal_LifeRanking._ui._titleBg, "StaticText_Title")
+PaGlobal_LifeRanking._ui._btnClose = UI.getChildControl(PaGlobal_LifeRanking._ui._titleBg, "Button_Win_Close")
+PaGlobal_LifeRanking._ui._btnHelp = UI.getChildControl(PaGlobal_LifeRanking._ui._titleBg, "Button_Question")
 PaGlobal_LifeRanking._ui._tabMyRank = {
   [0] = UI.getChildControl(PaGlobal_LifeRanking._ui.myAllRankBG, "StaticText_MyALLRanking_Text_Gathering"),
   [1] = UI.getChildControl(PaGlobal_LifeRanking._ui.myAllRankBG, "StaticText_MyALLRanking_Text_Fishing"),
@@ -178,16 +180,16 @@ function PaGlobal_LifeRanking:Initialize()
   for listIdx = 0, self._createListCount - 1 do
     local rankList = {}
     rankList.rank = UI.createAndCopyBasePropertyControl(Panel_LifeRanking, "StaticText_PlayerRank", Panel_LifeRanking, "LifeRanking_Rank_" .. listIdx)
-    rankList.rank:SetPosX(174)
+    rankList.rank:SetPosX(172)
     rankList.rank:SetPosY(self._posConfig._listStartPosY + self._posConfig._listPosYGap * listIdx)
     rankList.name = UI.createAndCopyBasePropertyControl(Panel_LifeRanking, "StaticText_PlayerName", Panel_LifeRanking, "LifeRanking_Name_" .. listIdx)
-    rankList.name:SetPosX(211)
+    rankList.name:SetPosX(221)
     rankList.name:SetPosY(self._posConfig._listStartPosY + self._posConfig._listPosYGap * listIdx)
     rankList.guild = UI.createAndCopyBasePropertyControl(Panel_LifeRanking, "StaticText_AnotherGuildName", Panel_LifeRanking, "LifeRanking_Guild_" .. listIdx)
-    rankList.guild:SetPosX(491)
+    rankList.guild:SetPosX(501)
     rankList.guild:SetPosY(self._posConfig._listStartPosY + self._posConfig._listPosYGap * listIdx)
     rankList.grade = UI.createAndCopyBasePropertyControl(Panel_LifeRanking, "StaticText_MyLifeGrade", Panel_LifeRanking, "LifeRanking_GradeList_" .. listIdx)
-    rankList.grade:SetPosX(673)
+    rankList.grade:SetPosX(764)
     rankList.grade:SetPosY(self._posConfig._listStartPosY + self._posConfig._listPosYGap * listIdx)
     self._listPool[listIdx] = rankList
   end
@@ -202,7 +204,7 @@ function PaGlobal_LifeRanking:Initialize()
   for index = 0, self._createTabCount - 1 do
     if FGlobal_LifeRanking_CheckEnAble(index) then
       self._ui._tab[index]:SetShow(true)
-      self._ui._tab[index]:SetSpanSize(40, 37 * setShowCount + 183)
+      self._ui._tab[index]:SetSpanSize(14, 33 * setShowCount + 205)
       self._ui._tabMyTitle[index]:SetTextMode(UI_TM.eTextMode_LimitText)
       setShowCount = setShowCount + 1
     else
@@ -306,6 +308,11 @@ function PaGlobal_LifeRanking:Update()
     self._ui._inMyRankRate:SetControlPos(myLifeRankerRate)
   end
   self._ui._myRanking:SetText(myLifeRankGroup)
+  if self._ui._myRanking:GetTextSizeX() > self._ui._myRanking:GetSizeX() then
+    self._ui.txt_comment:SetShow(false)
+  else
+    self._ui.txt_comment:SetShow(true)
+  end
   if true == self._serverChange then
     PaGlobal_LifeRanking:MyLifeRankingText_Refresh()
     self._serverChange = false

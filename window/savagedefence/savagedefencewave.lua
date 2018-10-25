@@ -17,7 +17,7 @@ function SavageDefenceWave_Open()
   SavageDefenceWave:SetPosition()
 end
 function SavageDefenceWave:SetPosition()
-  local pivotY = Panel_SavageDefenceShop:GetSizeX() / 2
+  local pivotY = Panel_SavageDefenceShop:GetSizeX() / 2 - 20
 end
 function SavageDefenceWave_UpdateWaveData(wavecount)
   SavageDefenceWave._wavecount:SetText(tostring(wavecount))

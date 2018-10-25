@@ -178,7 +178,7 @@ function ExecuteFunction.Manufacture()
   PaGlobalFunc_ManufactureOpen(true)
 end
 function ExecuteFunction.TogglePVP()
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isConsole() then
     local selfProxy = getSelfPlayer()
     if nil ~= selfProxy and selfProxy:get():getLevel() < 50 then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
@@ -494,9 +494,9 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
     [Type.BeautyAlbum] = {
       _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
       _x1 = 358,
-      _y1 = 241,
+      _y1 = 292,
       _x2 = 408,
-      _y2 = 291
+      _y2 = 342
     },
     [Type.PhotoGallery] = {
       _path = "Renewal/Button/Console_Btn_ESCMenu.dds",
@@ -529,9 +529,9 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
     [Type.Manufacture] = {
       _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
       _x1 = 358,
-      _y1 = 292,
+      _y1 = 241,
       _x2 = 408,
-      _y2 = 342
+      _y2 = 291
     },
     [Type.TogglePVP] = {
       _path = "Renewal/Function/Console_Function_RingMenu.dds",
@@ -549,10 +549,10 @@ PaGlobal_ConsoleQuickMenu._functionTypeList._icon = {
     },
     [Type.Dyeing] = {
       _path = "Renewal/Function/Console_Function_RingMenu_01.dds",
-      _x1 = 256,
-      _y1 = 241,
-      _x2 = 306,
-      _y2 = 291
+      _x1 = 358,
+      _y1 = 343,
+      _x2 = 408,
+      _y2 = 393
     }
   }
 }

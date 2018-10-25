@@ -230,7 +230,6 @@ function Panel_MiniGame_PowerControl_Failed()
   self._ui.stc_PC_Control_BG:SetShow(false)
   self._ui.stc_Console_Control_BG:SetShow(false)
   self._ui.stc_Timer_BG:SetShow(false)
-  _AudioPostEvent_SystemUiForXBOX(11, 2)
   isPlayingMilky = false
   directionType = -1
   isPressed_L = false
@@ -244,6 +243,7 @@ function Panel_MiniGame_PowerControl_Failed()
   self._ui.txt_Purpose:SetShow(false)
   if true == isPlayingMilky then
     ToClient_MinigameResult(1, false)
+    _AudioPostEvent_SystemUiForXBOX(11, 2)
   end
 end
 local leftMilkyRate_Timer = 0

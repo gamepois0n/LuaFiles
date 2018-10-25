@@ -158,10 +158,10 @@ function PetInfo:Update(isSealed)
         uiIdx = 0
         if uiIdx > 0 then
           Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 410)
-          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 355)
+          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 349)
         else
           Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 335)
-          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 280)
+          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 274)
           PetInfo_SkillSlot_Show(false)
         end
         if nil == self.currentPetLv[petNum_S32] then
@@ -270,11 +270,11 @@ function PetInfo:Update(isSealed)
           end
         end
         if uiIdx > 0 then
-          Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 410)
-          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 355)
+          Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 430)
+          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 369)
         else
-          Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 335)
-          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 280)
+          Panel_Window_PetInfoNew:SetSize(Panel_Window_PetInfoNew:GetSizeX(), 355)
+          self.petInfoBg:SetSize(self.petInfoBg:GetSizeX(), 294)
           PetInfo_SkillSlot_Show(false)
         end
         if nil == self.currentPetLv[petNum_S32] then
@@ -302,7 +302,7 @@ function PetInfo:Update(isSealed)
 end
 function PetInfo_SkillSlot_Show(isShow)
   local self = PetInfo
-  self.skillBg:SetShow(isShow)
+  self.skillBg:SetShow(false)
   for v, control in pairs(self.skillSlotBg) do
     control:SetShow(isShow)
   end

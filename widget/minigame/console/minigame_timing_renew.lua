@@ -175,6 +175,7 @@ function Panel_Minigame_Timing_Start()
   Mingame_Panel_Timing_Value_isPressed = false
   self._isGameStart = true
   Panel_MiniGame_Timing:SetShow(true, false)
+  Panel_ConsoleKeyGuide:SetShow(false)
 end
 function Panel_Minigame_Timing_End()
   local self = MiniGame_Timing

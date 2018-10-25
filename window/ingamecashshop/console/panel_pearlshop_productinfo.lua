@@ -87,6 +87,9 @@ function pearlShopProductInfo:close()
   self._panel:SetShow(false)
 end
 function PaGlobalFunc_PearlShopProductInfoClose()
+  if pearlShopProductInfo._panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   pearlShopProductInfo:close()
 end
 function pearlShopProductInfo:focus(controlIndex)

@@ -83,6 +83,7 @@ function PaGlobalFunc_GuildVoiceSet_Open()
 end
 function PaGlobalFunc_GuildVoiceSet_Close()
   local self = GuildVoiceSet
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobalFunc_GuildVoiceSet_Confirm()
@@ -108,6 +109,7 @@ function PaGlobalFunc_GuildVoiceSet_Confirm()
   else
     ToClient_VoiceChatChangeVolume(CppEnums.VoiceChatType.eVoiceChatType_Guild, targetMemberUserNo, 0)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:close()
 end
 function PaGlobalFunc_GuildVoiceSet_Init()
@@ -120,6 +122,7 @@ function InputMLUp_GuildVoiceSet_SetCheckToggle(btnType)
     return
   end
   self._btnFlag[btnType] = not self._btnFlag[btnType]
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_GuildVoiceSet_SetCheckText()
 end
 function PaGlobalFunc_GuildVoiceSet_SetCheckText()

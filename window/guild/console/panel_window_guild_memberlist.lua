@@ -51,6 +51,7 @@ function GuildMemberList:SetMemberInfo()
         _contractable = memberInfo:getContractableUtc(),
         _saying = memberInfo:isVoiceChatSpeak(),
         _permissionHas = memberInfo:isVoicePermissionHas(),
+        _isProtected = memberInfo:isProtectable(),
         _gamerTag = ToClient_getXboxGuildUserGamerTag(memberInfo:getUserNo())
       }
       if memberInfo:getUserNo() == getSelfPlayer():get():getUserNo() then
@@ -175,6 +176,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   local control = {}
   local btn_GuildSlot = UI.getChildControl(content, "Button_GuildSlot")
   local txt_Grade = UI.getChildControl(content, "StaticText_Grade")
+  local stc_protected = UI.getChildControl(txt_Grade, "Static_Protection")
   local txt_Level = UI.getChildControl(content, "StaticText_Level")
   local txt_Name = UI.getChildControl(content, "StaticText_Name")
   local txt_Class = UI.getChildControl(content, "StaticText_Class")
@@ -246,6 +248,7 @@ function PaGlobalFunc_GuildMemberList_CreateControl(content, key)
   else
     stc_Contract:SetColor(Defines.Color.C_FF309BF5)
   end
+  stc_protected:SetShow(memberInfo._isProtected)
   control.stc_HasNoMicPermission:SetShow(not memberInfo._permissionHas)
   self._memberListControlData[memberIdx] = control
   btn_GuildSlot:addInputEvent("Mouse_LUp", "InputMLUp_GuildMemberList_MemberFunctionOpen(" .. memberIdx .. ")")

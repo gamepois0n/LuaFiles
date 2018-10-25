@@ -20,8 +20,10 @@ function FromClient_UI_CharacterInfo_Title_CreateList(content, key)
     titleName:SetText(titleWrapper:getName())
     titleSet:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoTitle:handleClicked_Title(" .. self._currentCategoryIdx .. ", " .. titleIndex .. ")")
     if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
+      titleSet:SetFontColor(4294294074)
       titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_RELEASE"))
     else
+      titleSet:SetFontColor(4293848814)
       titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
     end
     titleSet:SetShow(true)
@@ -76,11 +78,13 @@ function PaGlobal_CharacterInfoTitle:handleClicked_Description(categoryIdx, titl
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   self._ui._staticText_PartDesc:SetText(titleWrapper:getDescription())
+  self._ui._staticText_PartName:SetText(titleWrapper:getName())
 end
 function PaGlobal_CharacterInfoTitle:handleClicked_Title(categoryIdx, titleIdx)
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   self._ui._staticText_PartDesc:SetText(titleWrapper:getDescription())
+  self._ui._staticText_PartName:SetText(titleWrapper:getName())
   ToClient_TitleSetRequest(categoryIdx, titleIdx)
 end
 function PaGlobal_CharacterInfoTitle:handleMouseOver_Category(isShow, tipType)

@@ -9,7 +9,7 @@ local ExchangeItem = {
   _startIndex = 0,
   _listCount = 0,
   startPosY = 4,
-  panelSizeY = 260,
+  panelSizeY = 274,
   _slots = {},
   _uiBG = UI.getChildControl(Panel_Exchange_Item, "Static_Item_ExchangeBG"),
   _uiTitle = UI.getChildControl(Panel_Exchange_Item, "StaticText_Exchange_Item"),
@@ -34,16 +34,16 @@ function ExchangeItem:Init()
     slot._resultItemName = UI.createAndCopyBasePropertyControl(Panel_Exchange_Item, "StaticText_Result_ItemName", slot._uiListBG, "resultItemName" .. ii)
     slot._progressArrow = UI.createAndCopyBasePropertyControl(Panel_Exchange_Item, "Static_Progress_Arrow", slot._uiListBG, "progressArrow" .. ii)
     slot._uiListBG:SetPosX(4)
-    slot._uiListBG:SetPosY(self.startPosY + (slot._uiListBG:GetSizeY() + 3) * ii)
+    slot._uiListBG:SetPosY(self.startPosY + (slot._uiListBG:GetSizeY() - 1) * ii + 2)
     slot._sourceIcon:SetPosX(3)
-    slot._sourceIcon:SetPosY(4)
+    slot._sourceIcon:SetPosY(9)
     slot._sourceItemName:SetPosX(34)
-    slot._sourceItemName:SetPosY(1)
-    slot._resultIcon:SetPosX(295)
-    slot._resultIcon:SetPosY(4)
-    slot._resultItemName:SetPosX(326)
-    slot._resultItemName:SetPosY(1)
-    slot._progressArrow:SetPosX(260)
+    slot._sourceItemName:SetPosY(6)
+    slot._resultIcon:SetPosX(290)
+    slot._resultIcon:SetPosY(9)
+    slot._resultItemName:SetPosX(321)
+    slot._resultItemName:SetPosY(6)
+    slot._progressArrow:SetPosX(255)
     slot._progressArrow:SetPosY(slot._sourceIcon:GetPosY() - 2)
     slot._resultItemName:SetTextMode(UI_TM.eTextMode_AutoWrap)
     slot._sourceItemName:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -156,13 +156,13 @@ function Dialog_ExchangeItem_Update()
   end
   if self._actualDataCount < self._slotMaxCount then
     local gapCount = self._slotMaxCount - self._actualDataCount
-    Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY - 37 * gapCount)
+    Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY - 40 * gapCount + 2)
     Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
-    self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
+    self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 52)
   else
-    Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY)
+    Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY + 12)
     Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
-    self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
+    self._uiBG:SetSize(self._uiBG:GetSizeX(), Panel_Exchange_Item:GetSizeY() - 52)
   end
   if 0 == self._actualDataCount then
     Panel_Exchange_Item_Hide()

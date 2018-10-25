@@ -254,6 +254,7 @@ function CharacterTitleInfo:ShowNextTab(isLeft)
     end
     self:titleListCheck(self._currentTitleListType)
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
 end
 function PaGlobalFunc_CharacterTitleInfoTab_PadControl(index)
   self = CharacterTitleInfo

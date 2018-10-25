@@ -510,12 +510,13 @@ function PanelInteraction:init()
     _interactionTargetUIList[ii] = UI.createAndCopyBasePropertyControl(_panel, "Button_Interaction_Template", _panel, "Button_Interaction_" .. ii)
     self:getButtonIcon(_interactionTargetUIList[ii], ii)
   end
+  self._ui.txt_TargetName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   _panel:SetChildIndex(self._ui.needCollectTool, _panel:getChildControlCount() + 1)
   self:registEvent()
   self:tooltipResize_ByFontSize()
 end
 function PanelInteraction:show(actor)
-  _AudioPostEvent_SystemUiForXBOX(1, 5)
+  _AudioPostEvent_SystemUiForXBOX(53, 5)
   local firstInteractionType = actor:getSettedFirstInteractionType()
   self._basicInteractionType = firstInteractionType
   self._focusInteractionType = firstInteractionType
@@ -523,7 +524,6 @@ function PanelInteraction:show(actor)
     return
   end
   _panel:SetShow(true)
-  _AudioPostEvent_SystemUiForXBOX(53, 5)
   local actor = interaction_getInteractable()
   local actorKey = 0
   local interactableFrag = 0
@@ -561,7 +561,7 @@ function PanelInteraction:show(actor)
   self._SHOW_BUTTON_COUNT = 0
   for ii = 0, #_interactionTargetUIList do
     local isShow = actor:isSetInteracatbleFrag(ii)
-    if true == ToClient_isXBox() and (CppEnums.InteractionType.InteractionType_PvPBattle == ii or CppEnums.InteractionType.InteractionType_WaitComment == ii) then
+    if true == ToClient_isConsole() and (CppEnums.InteractionType.InteractionType_PvPBattle == ii or CppEnums.InteractionType.InteractionType_WaitComment == ii) then
       isShow = false
     end
     _interactionTargetUIList[ii]:SetShow(isShow)
@@ -905,7 +905,7 @@ function PaGlobalFunc_PanelInteraction_ButtonPushed(interactionType)
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_INTERACTION_IN_WATER"))
     return
   elseif CppEnums.InteractionType.InteractionType_PvPBattle == interactionType then
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
       return
     end
     local actor = interaction_getInteractable()
@@ -1026,7 +1026,7 @@ function PaGlobalFunc_PanelInteraction_ChangeString(index)
 end
 function PaGlobalFunc_PanelInteraction_TypeCheck(interactionType)
   if interactionType == CppEnums.InteractionType.InteractionType_ExchangeItem or interactionType == CppEnums.InteractionType.InteractionType_InvitedParty or interactionType == CppEnums.InteractionType.InteractionType_GuildInvite then
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
       return false
     else
       return true
@@ -1038,7 +1038,7 @@ function PaGlobal_Interaction_GetShow()
   return _panel:GetShow()
 end
 function FGlobal_Interaction_CheckAndGetPressedKeyCode()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     return
   end
   local keyCode = CppEnums.ActionInputType.ActionInputType_Interaction
@@ -1330,6 +1330,7 @@ local _currentInteractionKeyPressedTime = 0
 local _xboxInteractionAvailable = false
 local _isInteractionRolling = false
 local _roleCheckTimeAcc = 0
+local _isPressingY = false
 local _rollingTime = 0.2
 function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
   local self = PanelInteraction
@@ -1349,6 +1350,10 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
     self:updatePressedInteractionKey(0)
     _currentInteractionKeyPressedTime = 0
     _xboxInteractionAvailable = true
+    if deltaTime > 0.01 then
+      _AudioPostEvent_SystemUiForXBOX(50, 0)
+      _isPressingY = true
+    end
     self._ui.txt_HoldToInteract:SetShow(false)
   elseif keyCustom_IsPressed_Action(CppEnums.ActionInputType.ActionInputType_Interaction) then
     _currentInteractionKeyPressedTime = _currentInteractionKeyPressedTime + deltaTime
@@ -1367,7 +1372,6 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
         [6] = CppEnums.VirtualKeyCode.KeyCode_F10
       }
       local keycode = keyCodeTable[_currentInteractionSelectIndex]
-      _AudioPostEvent_SystemUiForXBOX(50, 4)
       self:updatePressedInteractionKey(0)
       self._ui.txt_HoldToInteract:SetShow(true)
       return keycode
@@ -1375,7 +1379,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
       self:updatePressedInteractionKey(_currentInteractionKeyPressedTime)
     end
   elseif keyCustom_IsUp_Action(CppEnums.ActionInputType.ActionInputType_Interaction) then
-    if _currentInteractionKeyPressedTime < 0.2 and 1 < self._SHOW_BUTTON_COUNT then
+    if _currentInteractionKeyPressedTime < 0.1 and 1 < self._SHOW_BUTTON_COUNT then
       _isInteractionRolling = true
     end
     _currentInteractionKeyPressedTime = 0
@@ -1384,6 +1388,7 @@ function FGlobal_Interaction_CheckAndGetPressedKeyCode_Xbox(deltaTime)
     self._ui.txt_HoldToInteract:SetShow(true)
   end
   if true == _isInteractionRolling then
+    _AudioPostEvent_SystemUiForXBOX(50, 4)
     _currentInteractionKeyPressedTime = 0
     PanelInteraction:RollingAnimation(deltaTime)
   end

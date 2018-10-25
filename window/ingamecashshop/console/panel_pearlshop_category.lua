@@ -122,6 +122,7 @@ function pearlShopCategory:focusMainCategory(index)
   return true
 end
 function PaGlobalFunc_PearlShopCategorySelectMainCategory(index)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   pearlShopCategory:selectMainCategory(index)
 end
 function pearlShopCategory:selectMainCategory(index)
@@ -146,6 +147,7 @@ function pearlShopCategory:focusSubCategory(index)
   return true
 end
 function PaGlobalFunc_PearlShopCategorySelectSubCategory(selectedIndex)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   pearlShopCategory:selectSubCategory(selectedIndex)
 end
 function pearlShopCategory:checkValidSubCategory(subCategoryIndex)
@@ -174,7 +176,7 @@ function pearlShopCategory:gotoNextStep()
   else
     getIngameCashMall():setCurrentSubTab(CppEnums.CashProductCategoryNo_Undefined)
   end
-  if ToClient_isXBox() and 0 == self._selectedMainCategoryIndex then
+  if ToClient_isConsole() and 0 == self._selectedMainCategoryIndex then
     return ToClient_XboxShowStore()
   end
   PaGlobalFunc_PearlShopOpen()
@@ -296,6 +298,7 @@ function pearlShopCategory:close()
   self._panel:SetShow(false)
 end
 function PaGlobalFunc_PearlShopCategoryClose()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   pearlShopCategory:close()
 end
 function pearlShopCategory:changePlatformSpecKey()

@@ -589,7 +589,6 @@ function PaGlobalFunc_WorldMapHouseManager_Close()
     PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
   else
     PaGlobalFunc_WorldMap_TopMenu_Open()
-    PaGlobalFunc_WorldMap_BottomMenu_Open()
     PaGlobalFunc_WorldMap_RingMenu_Open()
   end
   _panel:SetShow(false)

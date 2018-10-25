@@ -111,7 +111,7 @@ function socketInfo:createControl()
   self.slotMain.whereType = nil
   self.slotMain.slotNo = nil
   for ii = 1, self.config.socketSlotCount do
-    slotSocket = {
+    local slotSocket = {
       icon = self._ui.staticSocket[ii],
       iconBg = self._ui.staticSocketBackground[ii],
       name = self._ui.staticSocketName[ii],
@@ -469,7 +469,7 @@ function PaGlobalFunc_SocketInfo_Result()
   if _panel:GetShow() then
     socketInfo:updateSocket()
   else
-    PaGlobal_ExtractionCrystal:result()
+    PaGlobalFunc_ExtractCrystal_Result()
   end
 end
 local function Socket_fadeInSCR_Down(panel)

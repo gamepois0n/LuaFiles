@@ -89,8 +89,8 @@ function PaGlobal_SkillCombination:initalizeList(index)
   end
 end
 function PaGlobal_SkillCombination:setPosition()
-  Panel_SkillCombination:SetPosX(Panel_Window_Skill:GetPosX() + Panel_Window_Skill:GetSizeX() - 25)
-  Panel_SkillCombination:SetPosY(Panel_Window_Skill:GetPosY() + 40)
+  Panel_SkillCombination:SetPosX(Panel_Window_Skill:GetPosX() + Panel_Window_Skill:GetSizeX() - 0)
+  Panel_SkillCombination:SetPosY(Panel_Window_Skill:GetPosY() + 0)
 end
 function PaGlobal_SkillCombination:open(index)
   Panel_SkillCombination:SetShow(true)

@@ -660,7 +660,7 @@ function SelfCharacterInfo_UpdateMainStatus()
   local hpRate = hp / maxHp * 100
   CharacterInfo._hpvalue:SetText(makeDotMoney(hp) .. " / " .. makeDotMoney(maxHp))
   CharacterInfo._progress2_hp:SetProgressRate(hpRate)
-  if UI_classType.ClassType_Ranger == player:getClassType() then
+  if UI_classType.ClassType_Ranger == player:getClassType() or UI_classType.ClassType_Orange == player:getClassType() then
     CharacterInfo._mpTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EP"))
     CharacterInfo._progress2_mp:ChangeTextureInfoNameAsync("new_ui_common_forlua/default/Default_Gauges.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(CharacterInfo._progress2_mp, 2, 71, 232, 76)
@@ -739,7 +739,7 @@ function SelfCharacterInfo_UpdateMainStatusRegen()
   local UI_classType = CppEnums.ClassType
   CharacterInfo._hpRegen:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_HPREGEN") .. " : " .. tostring(playerGet:getRegenHp()))
   CharacterInfo._hpRegen:SetSize(CharacterInfo._hpRegen:GetTextSizeX() + 10, 30)
-  if UI_classType.ClassType_Ranger == player:getClassType() or UI_classType.ClassType_DarkElf == player:getClassType() then
+  if UI_classType.ClassType_Ranger == player:getClassType() or UI_classType.ClassType_DarkElf == player:getClassType() or UI_classType.ClassType_Orange == player:getClassType() then
     CharacterInfo._mpRegen:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))
   elseif UI_classType.ClassType_Sorcerer == player:getClassType() or UI_classType.ClassType_Tamer == player:getClassType() or UI_classType.ClassType_Wizard == player:getClassType() or UI_classType.ClassType_WizardWomen == player:getClassType() then
     CharacterInfo._mpRegen:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))

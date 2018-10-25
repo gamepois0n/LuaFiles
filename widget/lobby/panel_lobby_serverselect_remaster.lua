@@ -54,17 +54,26 @@ local _channelButtonsState = 0
 local _movieLength = {
   10000,
   10000,
+  10000,
+  10000,
+  10000,
   10000
 }
 local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_001_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
-  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+  "coui://UI_Movie/Remaster_loading_Scene_007_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_012_re.webm"
 }
 local _movieOrder = {
   1,
   2,
-  3
+  3,
+  4,
+  5,
+  6
 }
 local _currentMovieIndex, _currentMovieIndex, _ui_web_loadingMovie
 local BUTTON_STATE = {
@@ -426,7 +435,6 @@ function ServerSelectRemaster:registEventHandler()
   registerEvent("onScreenResize", "PaGlobal_ServerSelect_Resize")
   unregisterEvent("ToClient_EndGuideMovie", "FromClient_LoginRemaster_OnMovieEvent")
   registerEvent("ToClient_EndGuideMovie", "FromClient_ServerSelect_OnMovieEvent")
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelectRemaster:registEventHandler")
   _panel:RegisterUpdateFunc("PaGlobal_ServerSelect_PerFrameUpdate")
 end
 function ServerSelectRemaster:open()
@@ -441,7 +449,6 @@ function ServerSelectRemaster:open()
   self:updateTextOnButtons()
 end
 function ServerSelectRemaster:PlayMovie()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelectRemaster:PlayMovie")
   self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
   self._ui.stc_movieBG:SetSize(getScreenSizeX(), getScreenSizeY())
   if nil == _ui_web_loadingMovie then
@@ -477,7 +484,6 @@ end
 local _moviePlayed = false
 local _fadeTime = 1
 function FromClient_ServerSelect_OnMovieEvent(param)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_ServerSelect_OnMovieEvent param " .. param)
   if 1 == param then
     self:startFadeIn()
     if nil ~= _ui_web_loadingMovie then
@@ -495,20 +501,13 @@ function FromClient_ServerSelect_OnMovieEvent(param)
   end
 end
 function ServerSelectRemaster:startFadeIn()
-  local ImageAni = self._ui.stc_fade:addColorAnimation(0.3, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_FF000000)
-  ImageAni:SetEndColor(Defines.Color.C_00000000)
-  ImageAni:SetHideAtEnd(true)
+  self._ui.stc_fade:SetShow(false)
 end
 function PaGlobalFunc_ServerSelectRemaster_FadeOut()
   self:startFadeOut()
 end
 function ServerSelectRemaster:startFadeOut()
-  self._ui.stc_fade:SetShow(true)
-  local ImageAni = self._ui.stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_00000000)
-  ImageAni:SetEndColor(Defines.Color.C_FF000000)
-  ImageAni:SetHideAtEnd(false)
+  self._ui.stc_fade:SetShow(false)
 end
 local _dummyData = {}
 function ServerSelectRemaster:initTreeData()
@@ -520,7 +519,7 @@ function ServerSelectRemaster:initTreeData()
   tree:getElementManager():clearKey()
   local mainElement = tree:getElementManager():getMainElement()
   self._worldServerCount = getGameWorldServerDataCount()
-  local teenWorldIndex
+  local teenWorldIndex, adultWorldIndex
   local key = 1
   _dummyData[1] = {}
   for ii = 1, self._worldServerCount do
@@ -534,6 +533,8 @@ function ServerSelectRemaster:initTreeData()
       local channelServerData = getGameChannelServerDataByIndex(ii - 1, 0)
       if nil ~= channelServerData and false == channelServerData._isAdultWorld then
         teenWorldIndex = ii
+      else
+        adultWorldIndex = ii
       end
     end
     local channelCount = getGameChannelServerDataCount(worldServerData._worldNo)
@@ -559,10 +560,6 @@ function ServerSelectRemaster:initTreeData()
         }
       end
     end
-    local sortF = function(ii, jj)
-      return ii.serverNo < jj.serverNo
-    end
-    table.sort(tempTable, sortF)
     for ii = 1, #tempOlviaTable do
       worldElement:createChild(toInt64(0, key))
       self._treeData[key] = tempOlviaTable[ii]
@@ -587,8 +584,16 @@ function ServerSelectRemaster:initTreeData()
     self:updateSingleWorldDesc(false)
   end
   if openAdultWorld then
-    local firstWorld = tree:getElementManager():getByKey(toInt64(0, 1))
-    firstWorld:setIsOpen(true)
+    if nil == adultWorldIndex then
+      local firstWorld = tree:getElementManager():getByKey(toInt64(0, 1))
+      firstWorld:setIsOpen(true)
+    else
+      local firstWorld = tree:getElementManager():getByKey(toInt64(0, adultWorldIndex))
+      firstWorld:setIsOpen(true)
+    end
+  elseif nil == teenWorldIndex then
+    local teenWorld = tree:getElementManager():getByKey(toInt64(0, 2))
+    teenWorld:setIsOpen(true)
   else
     local teenWorld = tree:getElementManager():getByKey(toInt64(0, teenWorldIndex))
     teenWorld:setIsOpen(true)
@@ -599,7 +604,6 @@ function ServerSelectRemaster:initTreeData()
 end
 local _lateUpdateFlag = false
 function ServerSelectRemaster:initTreeLateUpdate()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "initTreeLateUpdate(")
   if true == _lateUpdateFlag then
     return
   end
@@ -644,7 +648,6 @@ function PaGlobal_ServerSelect_CreateWorldBranch(content, key)
   local btn = UI.getChildControl(worldButtonBG, "Button_NormalServerSlot")
   local worldIdx = self._treeData[key32].worldIndex
   if nil == worldIdx then
-    _PA_LOG("\235\176\149\235\178\148\236\164\128", "CreateWorldBranch FAILED, worldIdx is nil!")
     return
   end
   local worldServerData = getGameWorldServerDataByIndex(worldIdx - 1)
@@ -776,7 +779,7 @@ function PaGlobal_ServerSelect_CreateChannelBranch(content, key)
   if channelServerData._isSpeedChannel then
     self:showChannelIcon(channelButtonBG, CHANNEL_TYPE.OLVIA_CHANNEL)
     serverSlotButton = btn_OlviaSlot
-    if 0 ~= temporaryWrapper:getMyAdmissionToSpeedServer() then
+    if 0 ~= temporaryWrapper:getMyAdmissionToSpeedServer() or ToClient_IsDevelopment() then
       serverSlotButton:SetIgnore(false)
       serverSlotButton:SetMonoTone(false)
     else

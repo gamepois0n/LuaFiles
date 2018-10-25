@@ -8,7 +8,10 @@ local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
 local nodeStaticStatus, _wayPointKey
 local isProgressReset = false
 local _currentNodeLv
-local Txt_Node_Title = UI.getChildControl(Panel_NodeMenu, "MainMenu_Title")
+local static_TitleBG = UI.getChildControl(Panel_NodeMenu, "Static_TitleBG")
+local Txt_Node_Name = UI.getChildControl(static_TitleBG, "MainMenu_Title")
+local static_MainMenuBG = UI.getChildControl(Panel_NodeMenu, "MainMenu_Bg")
+local Txt_Node_Title = UI.getChildControl(static_MainMenuBG, "MainMenu_Title")
 local Txt_NodeManager = UI.getChildControl(Panel_NodeMenu, "MainMenu_StaticText_NodeManager")
 local static_NodeManagerBG = UI.getChildControl(Panel_NodeMenu, "MainMenu_Bg")
 local Txt_NodeManager_Name = UI.getChildControl(Panel_NodeMenu, "MainMenu_StaticText_NodeManager_Value")
@@ -18,8 +21,10 @@ local Txt_NeedExplorePoint = UI.getChildControl(Panel_NodeMenu, "MainMenu_NeedEx
 local Btn_NodeLink = UI.getChildControl(Panel_NodeMenu, "MainMenu_Button_NodeLink")
 local Btn_NearNode = UI.getChildControl(Panel_NodeMenu, "MainMenu_Button_NearNode")
 local Btn_NodeUnlink = UI.getChildControl(Panel_NodeMenu, "MainMenu_Button_NodeUnLink")
+local Tex_ExplorePoint_BG = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Bg")
+local Stc_ExplorePoint_Icon = UI.getChildControl(Tex_ExplorePoint_BG, "MainMenu_ExplorePoint_Icon")
+local Txt_ExplorePoint_Value = UI.getChildControl(Tex_ExplorePoint_BG, "MainMenu_ExplorePoint_Value")
 local NodeLevelGroup = {
-  Tex_NodeLevBG = UI.getChildControl(Panel_NodeMenu, "MainMenu_Static_NodeLev_Bg"),
   Btn_NodeLev = UI.getChildControl(Panel_NodeMenu, "MainMenu_Button_NodeLev"),
   Txt_NodeLevel = UI.getChildControl(Panel_NodeMenu, "MainMenu_CurrentNodeLevel"),
   Tex_ProgressBG = UI.getChildControl(Panel_NodeMenu, "MainMenu_ProgressBg_NodeLev"),
@@ -28,22 +33,12 @@ local NodeLevelGroup = {
 }
 local savedisMaxLevel = false
 local NodeWarGroup = {}
-local SelfExplorePointGroup = {
-  Tex_Explore_Partline = UI.getChildControl(Panel_NodeMenu, "MainMenu_Static_Partline"),
-  Tex_ExplorePoint_BG = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Bg"),
-  Tex_ExplorePoint_Icon = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Icon"),
-  Txt_ExplorePoint_Value = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Value"),
-  Tex_ExplorePoint_PrgressBG = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Progress_BG"),
-  Progress_ExplorePoint = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Progress"),
-  Btn_ExplorePoint_Help = UI.getChildControl(Panel_NodeMenu, "MainMenu_ExplorePoint_Help")
-}
 local function nodeMenu_init()
   NodeLevelGroup.Btn_NodeLevHelp:addInputEvent("Mouse_On", "HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( true, " .. 0 .. " )")
   NodeLevelGroup.Btn_NodeLevHelp:addInputEvent("Mouse_Out", "HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( false, " .. 0 .. " )")
   NodeLevelGroup.Btn_NodeLevHelp:setTooltipEventRegistFunc("HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( true, " .. 0 .. " )")
-  SelfExplorePointGroup.Btn_ExplorePoint_Help:addInputEvent("Mouse_On", "HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( true, " .. 1 .. " )")
-  SelfExplorePointGroup.Btn_ExplorePoint_Help:addInputEvent("Mouse_Out", "HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( false, " .. 1 .. " )")
-  SelfExplorePointGroup.Btn_ExplorePoint_Help:setTooltipEventRegistFunc("HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp( true, " .. 1 .. " )")
+  static_TitleBG:SetSize(getScreenSizeX(), static_TitleBG:GetSizeY())
+  static_TitleBG:ComputePos()
 end
 local IconType = {
   Country = 0,
@@ -263,11 +258,7 @@ local function FillExploreUpgradeAble(nodeStaticStatus, nodeKey)
   local needPoint = getPlantNeedPoint()
   if needPoint > 0 then
     local contributeText = NodeTextString[NodeTextType.NODE_POINT_TEXT] .. " : " .. tostring(needPoint)
-    if requestCheckExplorationNodeExplorePoint(nodeKey) then
-      SetFontColorAndText(Txt_NeedExplorePoint, contributeText, NodeTextColor[NodeTextType.NODE_MONEY_TEXT])
-    else
-      SetFontColorAndText(Txt_NeedExplorePoint, contributeText, NodeTextColor[NodeTextType.NODE_POINT_TEXT])
-    end
+    Txt_NeedExplorePoint:SetText(contributeText)
   end
   local recipeItems = getPlantInvestItemList(nodeStaticStatus)
   local needPoint = getPlantNeedPoint()
@@ -281,7 +272,6 @@ local function FillExploreUpgradeAble(nodeStaticStatus, nodeKey)
   else
     Txt_Node_Desc:SetAutoResize(true)
     Txt_Node_Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    Txt_Node_Desc:SetFontColor(NodeTextColor[NodeTextType.NODE_FINDMANGER_TEXT])
     Txt_Node_Desc:SetText(NodeTextString[NodeTextType.NODE_FINDMANGER_TEXT])
     Txt_Node_Desc:SetShow(true)
   end
@@ -390,8 +380,9 @@ local function GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLe
   SetWeatherAndNodeTypeIcon(nodeKey)
   SetNodeType(nodeStaticStatus._nodeType)
   Txt_Node_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_NODE_LV_TITLE"))
+  Txt_Node_Name:SetText(PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_NODE_LV_TITLE"))
   local nodeManagerName = requestNodeManagerName(nodeKey)
-  Txt_NodeManager:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_NODE_MANAGER") .. " : ")
+  Txt_NodeManager:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_NODE_MANAGER"))
   if "" ~= nodeManagerName then
     Txt_NodeManager:SetShow(true)
     Txt_NodeManager_Name:SetShow(true)
@@ -403,72 +394,58 @@ local function GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLe
   end
 end
 local function Align_NodeControls()
-  local nextSpanY = 115
+  local nextSpanY = 241
   if Txt_NodeManager:GetShow() then
     Txt_NodeManager:SetSpanSize(Txt_NodeManager:GetSpanSize().x, nextSpanY)
-    nextSpanY = Txt_NodeManager:GetSpanSize().y + Txt_NodeManager:GetSizeY() + 5
+    nextSpanY = Txt_NodeManager:GetSpanSize().y + Txt_NodeManager:GetSizeY() + 10
   end
   if Txt_NodeManager_Name:GetShow() then
     Txt_NodeManager_Name:SetSpanSize(Txt_NodeManager_Name:GetSpanSize().x, nextSpanY)
-    nextSpanY = Txt_NodeManager_Name:GetSpanSize().y + Txt_NodeManager_Name:GetSizeY() + 5
+    nextSpanY = Txt_NodeManager_Name:GetSpanSize().y + Txt_NodeManager_Name:GetSizeY() + 10
   end
   if Txt_Node_Desc:GetShow() then
     Txt_Node_Desc:SetSpanSize(Txt_Node_Desc:GetSpanSize().x, nextSpanY)
-    nextSpanY = Txt_Node_Desc:GetSpanSize().y + Txt_Node_Desc:GetSizeY() + 5
+    nextSpanY = Txt_Node_Desc:GetSpanSize().y + Txt_Node_Desc:GetSizeY() + 10
   end
   if Tex_NeedExplorePoint:GetShow() then
-    Tex_NeedExplorePoint:SetSpanSize(Tex_NeedExplorePoint:GetSpanSize().x, nextSpanY + 8)
-    Txt_NeedExplorePoint:SetSpanSize(Txt_NeedExplorePoint:GetSpanSize().x, nextSpanY + 8)
-    nextSpanY = Tex_NeedExplorePoint:GetSpanSize().y + Tex_NeedExplorePoint:GetSizeY() + 5
+    Tex_NeedExplorePoint:SetSpanSize(Tex_NeedExplorePoint:GetSpanSize().x, nextSpanY + 5)
+    Txt_NeedExplorePoint:SetSpanSize(Txt_NeedExplorePoint:GetSpanSize().x, nextSpanY + 5)
+    nextSpanY = Tex_NeedExplorePoint:GetSpanSize().y + Tex_NeedExplorePoint:GetSizeY() + 10
   end
   if Btn_NodeLink:GetShow() then
     Btn_NodeLink:SetSpanSize(Btn_NodeLink:GetSpanSize().x, nextSpanY)
-    nextSpanY = Btn_NodeLink:GetSpanSize().y + Btn_NodeLink:GetSizeY() + 5
+    nextSpanY = Btn_NodeLink:GetSpanSize().y + Btn_NodeLink:GetSizeY() + 10
   end
   if Btn_NodeUnlink:GetShow() then
     Btn_NodeUnlink:SetSpanSize(Btn_NodeUnlink:GetSpanSize().x, nextSpanY)
-    nextSpanY = Btn_NodeUnlink:GetSpanSize().y + Btn_NodeUnlink:GetSizeY() + 5
+    nextSpanY = Btn_NodeUnlink:GetSpanSize().y + Btn_NodeUnlink:GetSizeY() + 10
   end
   if Btn_NearNode:GetShow() then
     Btn_NearNode:SetSpanSize(Btn_NearNode:GetSpanSize().x, nextSpanY)
     nextSpanY = Btn_NearNode:GetSpanSize().y + Btn_NearNode:GetSizeY() + 5
-  end
-  if NodeLevelGroup.Tex_NodeLevBG:GetShow() then
-    NodeLevelGroup.Tex_NodeLevBG:SetSpanSize(NodeLevelGroup.Tex_NodeLevBG:GetSpanSize().x, nextSpanY)
-    nextSpanY = NodeLevelGroup.Tex_NodeLevBG:GetSpanSize().y + 5
   end
   if NodeLevelGroup.Txt_NodeLevel:GetShow() then
     NodeLevelGroup.Txt_NodeLevel:SetSpanSize(NodeLevelGroup.Txt_NodeLevel:GetSpanSize().x, nextSpanY)
     NodeLevelGroup.Tex_ProgressBG:SetSpanSize(NodeLevelGroup.Tex_ProgressBG:GetSpanSize().x, nextSpanY + 7)
     NodeLevelGroup.Progress_NodeLevel:SetSpanSize(NodeLevelGroup.Progress_NodeLevel:GetSpanSize().x, nextSpanY + 7)
     NodeLevelGroup.Btn_NodeLevHelp:SetSpanSize(NodeLevelGroup.Btn_NodeLevHelp:GetSpanSize().x, nextSpanY)
-    nextSpanY = NodeLevelGroup.Txt_NodeLevel:GetSpanSize().y + NodeLevelGroup.Txt_NodeLevel:GetSizeY() + 5
+    nextSpanY = NodeLevelGroup.Txt_NodeLevel:GetSpanSize().y + NodeLevelGroup.Txt_NodeLevel:GetSizeY() + 10
   end
   if NodeLevelGroup.Btn_NodeLev:GetShow() then
     NodeLevelGroup.Btn_NodeLev:SetSpanSize(NodeLevelGroup.Btn_NodeLev:GetSpanSize().x, nextSpanY)
-    nextSpanY = NodeLevelGroup.Btn_NodeLev:GetSpanSize().y + NodeLevelGroup.Btn_NodeLev:GetSizeY() + 15
+    nextSpanY = NodeLevelGroup.Btn_NodeLev:GetSpanSize().y + NodeLevelGroup.Btn_NodeLev:GetSizeY() + 10
   end
-  if SelfExplorePointGroup.Tex_Explore_Partline:GetShow() then
-    SelfExplorePointGroup.Tex_Explore_Partline:SetSpanSize(SelfExplorePointGroup.Tex_Explore_Partline:GetSpanSize().x, nextSpanY)
-    nextSpanY = SelfExplorePointGroup.Tex_Explore_Partline:GetSpanSize().y + SelfExplorePointGroup.Tex_Explore_Partline:GetSizeY() + 5
+  static_NodeManagerBG:SetSize(static_NodeManagerBG:GetSizeX(), nextSpanY - 81)
+  if Tex_ExplorePoint_BG:GetShow() then
+    Tex_ExplorePoint_BG:SetSpanSize(Tex_ExplorePoint_BG:GetSpanSize().x, nextSpanY + 3)
   end
-  if SelfExplorePointGroup.Tex_ExplorePoint_BG:GetShow() then
-    SelfExplorePointGroup.Tex_ExplorePoint_BG:SetSpanSize(SelfExplorePointGroup.Tex_ExplorePoint_BG:GetSpanSize().x, nextSpanY)
-    SelfExplorePointGroup.Tex_ExplorePoint_Icon:SetSpanSize(SelfExplorePointGroup.Tex_ExplorePoint_Icon:GetSpanSize().x, nextSpanY + 8)
-    SelfExplorePointGroup.Txt_ExplorePoint_Value:SetSpanSize(SelfExplorePointGroup.Txt_ExplorePoint_Value:GetSpanSize().x, nextSpanY + 8)
-    SelfExplorePointGroup.Tex_ExplorePoint_PrgressBG:SetSpanSize(SelfExplorePointGroup.Tex_ExplorePoint_PrgressBG:GetSpanSize().x, nextSpanY + 15)
-    SelfExplorePointGroup.Progress_ExplorePoint:SetSpanSize(SelfExplorePointGroup.Progress_ExplorePoint:GetSpanSize().x, nextSpanY + 15)
-    SelfExplorePointGroup.Btn_ExplorePoint_Help:SetSpanSize(SelfExplorePointGroup.Btn_ExplorePoint_Help:GetSpanSize().x, nextSpanY + 8)
-    nextSpanY = SelfExplorePointGroup.Tex_ExplorePoint_BG:GetSpanSize().y + SelfExplorePointGroup.Tex_ExplorePoint_BG:GetSizeY() + 5
-  end
-  static_NodeManagerBG:SetSize(static_NodeManagerBG:GetSizeX(), nextSpanY)
 end
 local function update_ExplorePoint()
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
-  SelfExplorePointGroup.Txt_ExplorePoint_Value:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
-  SelfExplorePointGroup.Progress_ExplorePoint:SetProgressRate(cont_expRate * 100)
+  Stc_ExplorePoint_Icon:SetText(NodeTextString[NodeTextType.NODE_POINT_TEXT])
+  Txt_ExplorePoint_Value:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
 end
 local function FillNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
   GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
@@ -499,7 +476,6 @@ local function FillNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
         TooltipSimple_Hide()
       elseif needPoint > 0 or supportPoint > 0 or needMoney > 0 or recipeItems > 0 then
         if workerManager_CheckWorkingOtherChannel() then
-          SetFontColorAndText(Txt_Node_Desc, workerManager_getWorkingOtherChannelMsg(), NodeTextColor[NodeTextType.NODE_UNWITHDRAW_TEXT])
         else
           SetFontColorAndText(Txt_Node_Desc, PAGetString(Defines.StringSheet_GAME, "PANEL_WORLDMAP_NODENOTWITHDRAW"), NodeTextColor[NodeTextType.NODE_UNWITHDRAW_TEXT])
         end
@@ -553,7 +529,6 @@ function NodeLevelGroup:SetNodeLevel(nodeKey)
   end
 end
 function NodeLevelGroup:SetShow(isShow)
-  self.Tex_NodeLevBG:SetShow(isShow)
   self.Btn_NodeLev:SetShow(isShow)
   self.Txt_NodeLevel:SetShow(isShow)
   self.Tex_ProgressBG:SetShow(isShow)
@@ -575,8 +550,6 @@ function FGlobal_ShowInfoNodeMenuPanel(node)
   if nil ~= wayPlant then
     affiliatedTownKey = ToClinet_getPlantAffiliatedWaypointKey(wayPlant)
   end
-  Panel_NodeMenu:SetPosX(5)
-  Panel_NodeMenu:SetPosY(5)
   ClearNodeInfo()
   FillNodeInfo(node:getStaticStatus(), _wayPointKey, _wayPointKey == affiliatedTownKey, node:isMaxLevel())
   FGlobal_nodeOwnerInfo_SetInfo(node:getStaticStatus())

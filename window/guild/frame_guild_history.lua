@@ -59,7 +59,7 @@ for index = 0, 11 do
   monthIndex[index] = UI.createControl(UI_PUCT.PA_UI_CONTROL_RADIOBUTTON, Panel_Guild_Journal, "RadioButton_Month_" .. index + 1)
   CopyBaseProperty(topMonth, monthIndex[index])
   monthIndex[index]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_MONTH", "month", index + 1))
-  monthIndex[index]:SetSpanSize((monthIndex[index]:GetSizeX() + 15) * _monthCount + 20)
+  monthIndex[index]:SetSpanSize((monthIndex[index]:GetSizeX() + 20) * _monthCount + 40, 65)
   monthIndex[index]:addInputEvent("Mouse_LUp", "HandleClicked_GuildHistory_MonthCheck(" .. index .. ")")
   monthIndex[index]:SetShow(true)
   _monthCount = _monthCount - 1
@@ -127,7 +127,7 @@ function FromClient_GuildHistoryInfo_Update()
   CopyBaseProperty(verticalLine, frameContent._verticalLine)
   frameContent._monthValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_MAP_SIEGE_YEAR", "year", currentValue._year) .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_MONTH", "month", currentValue._month))
   frameContent._monthValue:SetShow(true)
-  frameContent._monthLine:SetShow(true)
+  frameContent._monthLine:SetShow(false)
   frameContent._verticalLine:SetShow(true)
   local sizeY = 10
   local lineGap = 30
@@ -181,7 +181,7 @@ function FromClient_GuildHistoryInfo_Update()
           _dayHistoryValue[i]:addInputEvent("Mouse_Out", "GuildHistory_HelpWidget_Show(false)")
         end
         _dayHistoryValue[i]:SetAutoResize(true)
-        _dayHistoryValue[i]:SetPosY(sizeY + 30)
+        _dayHistoryValue[i]:SetPosY(sizeY + 20)
         _dayHistoryValue[i]:SetShow(true)
         _dayHistoryValue[i]:SetIgnore(false)
       end
@@ -191,7 +191,7 @@ function FromClient_GuildHistoryInfo_Update()
       _dayValue[dayIndex]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_DAY", "day", dayIndex))
       _dayValue[dayIndex]:SetShow(true)
       _dayLine[dayIndex]:SetShow(true)
-      _dayValue[dayIndex]:SetPosY(sizeY + 30)
+      _dayValue[dayIndex]:SetPosY(sizeY + 15)
       _dayLine[dayIndex]:SetPosY(sizeY + 20)
       dayLogCount = dayLogCount + 1
       firstDay = dayIndex
@@ -199,7 +199,7 @@ function FromClient_GuildHistoryInfo_Update()
   end
   if firstDay > 0 then
     _contentHistoryList:SetSize(_contentHistoryList:GetSizeX(), _dayLine[firstDay]:GetPosY() + 50)
-    frameContent._verticalLine:SetSize(frameContent._verticalLine:GetSizeX(), _dayLine[firstDay]:GetPosY() - 20)
+    frameContent._verticalLine:SetSize(frameContent._verticalLine:GetSizeX(), _dayLine[firstDay]:GetPosY())
     frameContent._verticalLine:SetShow(true)
     if noScroll_FrameSize < _dayLine[firstDay]:GetPosY() + 50 then
       _scroll:SetShow(true)

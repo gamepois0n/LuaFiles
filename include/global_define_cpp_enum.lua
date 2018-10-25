@@ -2145,7 +2145,8 @@ CppEnums.WorldMapCheckState = {
   eCheck_Trade = 6,
   eCheck_Wagon = 7,
   eCheck_Monster = 8,
-  eCheck_MAX = 9
+  eCHECK_BOOKMARK = 9,
+  eCheck_MAX = 10
 }
 CppEnums.worldmapRenderState = {
   NOT_RENDER = 0,

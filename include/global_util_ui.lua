@@ -146,7 +146,7 @@ function UI.checkIsInMouseAndEventPanel(panel)
   return isOverEvent
 end
 function UI.checkResolution4KForXBox()
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isConsole() then
     local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
     if nil == gameOptionSetting then
       return false
@@ -162,4 +162,29 @@ function UI.checkResolution4KForXBox()
     end
   end
   return false
+end
+local _tooltipControlRefTable = {}
+function UI.checkLimitTextAndAddTooltip(control, title, desc)
+  if nil == control or nil == title and nil == desc then
+    return
+  end
+  UI.ASSERT(nil ~= control.IsLimitText, "control does not contain key <IsLimitText>")
+  if control:IsLimitText() then
+    local key = #_tooltipControlRefTable + 1
+    control:SetIgnore(false)
+    _tooltipControlRefTable[key] = {}
+    _tooltipControlRefTable[key].control = control
+    _tooltipControlRefTable[key].title = title
+    _tooltipControlRefTable[key].desc = desc
+    control:addInputEvent("Mouse_On", "PaGlobalFunc_GlobalUtil_limitTextTooltip(" .. key .. ")")
+    control:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+  end
+end
+function PaGlobalFunc_GlobalUtil_limitTextTooltip(key)
+  if key > #_tooltipControlRefTable then
+    return
+  end
+  local data = _tooltipControlRefTable[key]
+  registTooltipControl(data.control, Panel_Tooltip_SimpleText)
+  TooltipSimple_Show(data.control, data.title, data.desc)
 end

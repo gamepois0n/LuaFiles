@@ -37,10 +37,7 @@ local defalut_Control = {
   _work_Info = {
     _BG = UI.getChildControl(Panel_Finance_WorkManager, "Static_WorkDetail_BG"),
     _Title = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_WorkDetail_Title"),
-    _Resource_BG = UI.getChildControl(Panel_Finance_WorkManager, "Static_WorkDetail_Resource_BG"),
     _Resource_Title = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_WorkDetail_Resource_Title"),
-    _Resource_Line_1 = UI.getChildControl(Panel_Finance_WorkManager, "Static_WorkDetail_Resource_Line_1"),
-    _Resource_Line_2 = UI.getChildControl(Panel_Finance_WorkManager, "Static_WorkDetail_Resource_Line_2"),
     _Resource_Icon_BG = {},
     _Resource_Icon_Border = {},
     _Resource_Icon_Over = {},
@@ -57,23 +54,14 @@ local defalut_Control = {
     },
     _Time_BG = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_Time_BG"),
     _Time_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_Time_Value"),
-    _Time_Line = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Time_Line"),
-    _Work_BG = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Work_BG"),
-    _Work_Line_1 = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Work_Line_1"),
-    _Work_Line_2 = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Work_Line_2"),
     _Work_Volume_Text = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_WorkVolum_Text"),
     _Work_Volume_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_WorkVolum_Value"),
     _Work_Speed_Text = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_WorkSpeed_Text"),
     _Work_Speed_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_WorkSpeed_Value"),
-    _Move_BG = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Move_BG"),
-    _Move_Line_1 = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Move_Line_1"),
-    _Move_Line_2 = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Move_Line_2"),
     _Move_Distance_Text = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_MoveDistance_Text"),
     _Move_Distance_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_MoveDistance_Value"),
     _Move_Speed_Text = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_MoveSpeed_Text"),
     _Move_Speed_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_MoveSpeed_Value"),
-    _Luck_BG = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Luck_BG"),
-    _Luck_Line = UI.getChildControl(Panel_Finance_WorkManager, "Static_Estimated_Luck_Line"),
     _Luck_Text = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_Luck_Text"),
     _Luck_Value = UI.getChildControl(Panel_Finance_WorkManager, "StaticText_Estimated_Luck_Value")
   }
@@ -92,10 +80,7 @@ function defalut_Control:Init_Control()
   FGlobal_Set_Table_Control(self._worker_List, "_Button", "_Button", true, false)
   FGlobal_Set_Table_Control(self._worker_List, "_Progress", "_Button", true, false)
   FGlobal_Set_Table_Control(self._worker_List, "_ActionPoint", "_Button", true, false)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Resource_BG)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Resource_Title)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Resource_Line_1)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Resource_Line_2)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_BG", "_Resource_Icon_BG", false, true)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_Border", "_Resource_Icon_BG", false, true)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_Over", "_Resource_Icon_BG", false, true)
@@ -103,23 +88,14 @@ function defalut_Control:Init_Control()
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Count", "_Resource_Icon_BG", false, true)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Time_BG)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Time_Value)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Time_Line)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_BG)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Line_1)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Line_2)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Volume_Text)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Volume_Value)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Speed_Text)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Work_Speed_Value)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_BG)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Line_1)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Line_2)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Text)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Value)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Speed_Text)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Move_Speed_Value)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Luck_BG)
-  FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Luck_Line)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Luck_Text)
   FGlobal_AddChild(Panel_Finance_WorkManager, self._work_Info._BG, self._work_Info._Luck_Value)
   defalut_Control._workInfo_Default._Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)

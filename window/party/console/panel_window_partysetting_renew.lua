@@ -781,6 +781,7 @@ function PaGlobalFunc_PartySetting_OutSelectLargeParty(index)
   self:clearSmallButton(index)
 end
 function PaGlobalFunc_PartySetting_ChangeLeader(index)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   RequestParty_changeLeader(index)
   local self = Panel_Window_PartySetting_info
   self:updatePartySettingList()
@@ -795,6 +796,7 @@ function PaGlobalFunc_PartySetting_KickOrOutParty(index)
   local function partyOut()
     RequestParty_withdrawMember(index)
     PaGlobalFunc_PartySetting_Exit()
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   end
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PARTY_DISTRIBUTION_GETOUTPARTY")
   local messageBoxData = {
@@ -815,6 +817,7 @@ function PaGlobalFunc_PartySetting_BanishMember(index)
   local titleForceOut = ""
   local function partyBanish()
     RequestParty_withdrawMember(index)
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
   end
   if 0 == self._value.partyType then
     contentString = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION", "member_name", withdrawMemberData:name())

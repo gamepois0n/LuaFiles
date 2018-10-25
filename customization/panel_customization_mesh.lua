@@ -91,7 +91,7 @@ function OpenSelectMeshUi(classType, uiId)
       tempContentImage:SetPosX(itemIndex % meshColumnCount * columnWidth + contentsOffsetX)
       tempContentImage:SetPosY(math.floor(itemIndex / meshColumnCount) * columnHeight + contentsOffsetY)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
-      if not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) and isServerFixedCharge() then
+      if not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) then
         tempContentImage:SetShow(false)
       else
         tempContentImage:SetShow(true)
@@ -150,7 +150,7 @@ function OpenSelectMeshUi(classType, uiId)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(selectedClassType, detailListParamType, detailListParamIndex, paramValue) then
         tempContentImage:SetShow(false)
-      elseif not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(selectedClassType, detailListParamType, detailListParamIndex, paramValue) and isServerFixedCharge() then
+      elseif not FGlobal_IsInGameMode() and not isNormalCustomizingIndex(selectedClassType, detailListParamType, detailListParamIndex, paramValue) then
         tempContentImage:SetShow(false)
       else
         tempContentImage:SetShow(true)

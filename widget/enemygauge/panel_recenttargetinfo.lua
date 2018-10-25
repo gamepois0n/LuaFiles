@@ -34,7 +34,7 @@ local appliedBuff_UIPool_Last = 0
 local appliedBuff_DATAPool = {}
 local targetActorKey = 0
 isMonsterBarShow = false
-local isXbox = ToClient_isXBox() or ToClient_isPS4()
+local isXbox = ToClient_isConsole()
 lua_TargetInfo_NormalEnemyGauge:SetShow(false)
 lua_TargetInfo_NormalHpRate:SetShow(false)
 lua_TargetInfo_NormalHpRate_Later:SetShow(false)

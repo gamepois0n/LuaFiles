@@ -87,9 +87,11 @@ function pearlShopProductBuy:back()
   self:close()
 end
 function PaGlobalFunc_PearlShopProductBuyUp()
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   pearlShopProductBuy:changeAmount(1)
 end
 function PaGlobalFunc_PearlShopProductBuyDown()
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   pearlShopProductBuy:changeAmount(-1)
 end
 function pearlShopProductBuy:changeAmount(diff)
@@ -110,6 +112,7 @@ function pearlShopProductBuy:open(productInfo)
   self._productNoRaw = productInfo:getNoRaw()
   self._amount = 1
   self:update()
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   self._panel:SetShow(true)
 end
 function pearlShopProductBuy:getProductInfo()
@@ -128,12 +131,14 @@ function pearlShopProductBuy:buy()
   if not productInfo then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   getIngameCashMall():requestBuyItem(productInfo:getNoRaw(), self._amount, productInfo:getPrice(), false, toInt64(0, -1), 0, 0, CppEnums.ItemWhereType.eInventory)
 end
 function pearlShopProductBuy:close()
   self._panel:SetShow(false)
 end
 function PaGlobalFunc_PearlShopProductBuyClose()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   pearlShopProductBuy:close()
 end
 function pearlShopProductBuy:update()

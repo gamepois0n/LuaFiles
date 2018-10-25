@@ -125,12 +125,14 @@ function Customization_VoiceInfo:UpdateVoice()
 end
 function PaGlobalFunc_Customization_Voice_UpdateVoiceMessage(index)
   local self = Customization_VoiceInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:UpdateVoiceFocus(index)
   self:UpdateVoice()
   applyMotion(self._selectMotionIndex)
 end
 function PaGlobalFunc_Customization_Voice_Update_Motion(index)
   local self = Customization_VoiceInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:UpdateMotionFocus(index)
   applyMotion(index)
 end

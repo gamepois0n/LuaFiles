@@ -100,6 +100,7 @@ function PaGlobalFunc_DyeingMenu_Open()
 end
 function DyeingMenu:open()
   _panel:SetShow(true)
+  _AudioPostEvent_SystemUiForXBOX(1, 24)
   self:setVisibleMenu(true)
   self._ui.rdo_rootMenu[2]:SetColor(Defines.Color.C_FF525B6D)
   self._ui.rdo_rootMenu[2]:SetFontColor(Defines.Color.C_FF525B6D)

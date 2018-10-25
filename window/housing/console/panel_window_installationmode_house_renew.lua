@@ -790,7 +790,7 @@ function Panel_Window_InstallationMode_House_info:updateItemScroll(isUpScroll)
   local beforeSlotIndex = self._value.startItemIndex
   self._value.startItemIndex = UIScroll.ScrollEvent(self._ui.scroll_HousingItemList, isUpScroll, self._config.itemSlotRow, self._value.itemDataCount, self._value.startItemIndex, self._config.itemSlotCol)
   self._value.lastStartItemIndex = beforeSlotIndex
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startItemIndex then
+  if (ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startItemIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:setItemSlot()
@@ -897,7 +897,7 @@ function Panel_Window_InstallationMode_House_info:updateWishScroll(isUpScroll)
   local beforeSlotIndex = self._value.startWishIndex
   self._value.startWishIndex = UIScroll.ScrollEvent(self._ui.scroll_WishItemList, isUpScroll, self._config.wishSlotRow, self._value.wishDataCount, self._value.startWishIndex, self._config.wishSlotCol)
   self._value.lastStartWishIndex = beforeSlotIndex
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startWishIndex then
+  if (ToClient_isXBox() or ToClient_isPS4() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startWishIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:setWishSlot()
@@ -1092,6 +1092,7 @@ function PaGlobalFunc_InstallationMode_House_installFurniture(invenType, invenSl
   if Panel_Win_System:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   if false == iscash then
     housing_selectInstallationItem(invenType, invenSlotNo)
   else
@@ -1108,6 +1109,7 @@ function PaGlobalFunc_InstallationMode_House_showToolTip(showFlating, invenType,
     PaGlobalFunc_FloatingTooltip_Close()
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_FloatingTooltip_Open(Defines.TooltipDataType.ItemWrapper, itemWrapper, Defines.TooltipTargetType.Item, slotBGControl)
   self:setKeyGuideBottom(stringNum)
 end
@@ -1154,6 +1156,7 @@ function PaGlobalFunc_InstallationMode_House_SelectInstalledObject(idx)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_DELETEOBJECT_ACK"))
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_Select_FromInstallationList(idx)
 end
 function PaGlobalFunc_InstallationMode_House_ScrollItem(isUpScroll)
@@ -1202,6 +1205,7 @@ function PaGlobalFunc_InstallationMode_House_ClickConfirm()
         return
       end
     end
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     doit()
   else
     PaGlobalFunc_InstallationMode_Manager_Exit()
@@ -1229,6 +1233,7 @@ function PaGlobalFunc_InstallationMode_House_CanGetInput()
 end
 function PaGlobalFunc_InstallationMode_House_BuyItemAll()
   local buyCartDo = function()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     housing_buyShoppinBasketItems()
   end
   local messageBoxMemo = ""
@@ -1240,7 +1245,7 @@ function PaGlobalFunc_InstallationMode_House_BuyItemAll()
   local messageBoxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"),
     content = messageBoxMemo,
-    functionYes = housing_buyShoppinBasketItems,
+    functionYes = buyCartDo,
     functionNo = MessageBox_Empty_function,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }

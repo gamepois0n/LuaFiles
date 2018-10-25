@@ -8,10 +8,10 @@ local UI_TM = CppEnums.TextMode
 local auctionInfo = RequestGetAuctionInfo()
 local MyworkerList = {
   plantKey = nil,
-  _slotMaxCount = 4,
+  _slotMaxCount = 5,
   _listCount = 0,
   _startIndex = 0,
-  startPosY = 5,
+  startPosY = 7,
   _slots = {},
   _btnWinClose = UI.getChildControl(Panel_WorkerList_Auction, "Button_Close"),
   _btnWinQuestion = UI.getChildControl(Panel_WorkerList_Auction, "Button_Question"),
@@ -33,7 +33,7 @@ function MyworkerList:Init()
     slot._upgradeChance = UI.createAndCopyBasePropertyControl(Panel_WorkerList_Auction, "Static_UpgradeChance", slot._workerBG, "upgradeChance_" .. ii)
     slot._workerPrice = UI.createAndCopyBasePropertyControl(Panel_WorkerList_Auction, "StaticText_WorkerPrice", slot._workerBG, "maxPriceIcon_" .. ii)
     slot._btnResist = UI.createAndCopyBasePropertyControl(Panel_WorkerList_Auction, "Button_WorkerResist", slot._workerBG, "button_Resist_" .. ii)
-    slot._workerBG:SetPosX(5)
+    slot._workerBG:SetPosX(10)
     slot._workerBG:SetPosY(self.startPosY + (slot._workerBG:GetSizeY() + 5) * ii)
     slot._workerIconBG:SetPosX(5)
     slot._workerIconBG:SetPosY(10)
@@ -47,8 +47,8 @@ function MyworkerList:Init()
     slot._upgradeChance:SetPosY(slot._workerName:GetPosY() + slot._workerName:GetSizeY() + 3)
     slot._workerPrice:SetPosX(slot._workerIconBG:GetPosX() + slot._workerIconBG:GetSizeX() + 10)
     slot._workerPrice:SetPosY(slot._workerName:GetPosY() + slot._workerName:GetSizeY() + 28)
-    slot._btnResist:SetPosX(slot._workerBG:GetSizeX() - slot._btnResist:GetSizeX() - 3)
-    slot._btnResist:SetPosY(slot._workerName:GetPosY() + 27)
+    slot._btnResist:SetPosX(slot._workerBG:GetSizeX() - slot._btnResist:GetSizeX() - 10)
+    slot._btnResist:SetPosY(slot._workerName:GetPosY() + 35)
     slot._workerBG:addInputEvent("Mouse_UpScroll", "MyworkerList_ScrollEvent( true )")
     slot._workerBG:addInputEvent("Mouse_DownScroll", "MyworkerList_ScrollEvent( false )")
     slot._workerIcon:addInputEvent("Mouse_UpScroll", "MyworkerList_ScrollEvent( true )")
@@ -198,7 +198,7 @@ function FGlobal_AuctionResist_WorkerList()
   if self._listCount > 0 then
     local totalSize = Panel_WorkerList_Auction:GetSizeX() * 2 + Panel_Worker_Auction:GetSizeX()
     if totalSize < getScreenSizeX() then
-      Panel_WorkerList_Auction:SetPosX(getScreenSizeX() / 2 + Panel_Worker_Auction:GetSizeX() / 2 - 25)
+      Panel_WorkerList_Auction:SetPosX(getScreenSizeX() / 2 + Panel_Worker_Auction:GetSizeX() / 2 + 5)
     else
       Panel_WorkerList_Auction:SetPosX(getScreenSizeX() - Panel_WorkerList_Auction:GetSizeX() * 1.1)
     end

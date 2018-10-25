@@ -30,7 +30,7 @@ function NpcGift:init()
   self._ui._presentConsoleTxt = UI.getChildControl(self._ui._bottomBG, "StaticText_Present_ConsoleUI")
   self._ui._confessionConsoleTxt = UI.getChildControl(self._ui._bottomBG, "StaticText_Confession_ConsoleUI")
   self._ui._detailConsoleTxt = UI.getChildControl(self._ui._bottomBG, "StaticText_Detail_ConsoleUI")
-  local isXbox = ToClient_isXBox()
+  local isXbox = ToClient_isConsole()
   self._ui._presentBtn:SetShow(not isXbox)
   self._ui._confessionBtn:SetShow(not isXbox)
   self._ui._presentConsoleTxt:SetShow(isXbox)
@@ -218,7 +218,7 @@ function NpcGift:registEventHandler()
   end
   ui._iconDetail:addInputEvent("Mouse_On", "FGlobal_NpcGift_TooltipShow(true)")
   ui._iconDetail:addInputEvent("Mouse_Out", "FGlobal_NpcGift_TooltipShow(false)")
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobal_NpcGift_Propose()")
   end
 end

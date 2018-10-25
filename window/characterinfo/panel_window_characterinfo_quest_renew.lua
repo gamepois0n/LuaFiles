@@ -66,7 +66,6 @@ function CharacterQuestInfo:initialize()
     [QUEST_TYPE.ADVENTURE] = UI.getChildControl(self._ui.stc_deco, "CheckButton_Adventure"),
     [QUEST_TYPE.ETC] = UI.getChildControl(self._ui.stc_deco, "CheckButton_Etc")
   }
-  self._ui.chk_quest[QUEST_TYPE.ADVENTURE]:SetShow(false)
   for ii = 1, #self._ui.chk_quest do
     self._ui.chk_quest[ii]:addInputEvent("Mouse_LUp", "Input_CharacterQuestInfo_CheckButton(" .. ii .. ")")
     self._ui.chk_quest[ii]:addInputEvent("Mouse_On", "Input_CharacterQuestInfo_ShowDescription(" .. ii .. ")")

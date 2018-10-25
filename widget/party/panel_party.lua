@@ -458,7 +458,7 @@ function ResponseParty_PartyMemberTextureSet(partyData, partyMemberCount, index)
       _uiPartyMemberList[index]._stylePartyOptionBtn:SetShow(false)
     end
     classTypeTexture = "new_ui_common_forlua/widget/party/portrait_" .. CT2S[_partyData[index]._class] .. ".dds"
-    if _partyData[index]._class == 4 then
+    if _partyData[index]._class == 4 or _partyData[index]._class == 29 then
       classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
       _uiPartyMemberList[index]._mp:ChangeTextureInfoNameAsync(classMP)
       local x1, y1, x2, y2 = setTextureUV_Func(_uiPartyMemberList[index]._mp, 1, 70, 233, 76)
@@ -588,7 +588,7 @@ function ResponseParty_PartyMemberTextureSet(partyData, partyMemberCount, index)
     elseif _partyData[index]._class == UI_Class.ClassType_Orange then
       classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
       _uiPartyMemberList[index]._class:ChangeTextureInfoNameAsync(classTypeTexture)
-      local x1, y1, x2, y2 = setTextureUV_Func(_uiPartyMemberList[index]._class, 57, 216, 87, 246)
+      local x1, y1, x2, y2 = setTextureUV_Func(_uiPartyMemberList[index]._class, 89, 216, 119, 246)
       _uiPartyMemberList[index]._class:getBaseTexture():setUV(x1, y1, x2, y2)
       _uiPartyMemberList[index]._class:setRenderTexture(_uiPartyMemberList[index]._class:getBaseTexture())
     end
@@ -843,7 +843,7 @@ function ResponseParty_invite(hostName, invitePartyType)
       priority = PP.PAUIMB_PRIORITY_LOW
     }
   end
-  MessageBox.showMessageBox(messageboxData)
+  MessageBox.showMessageBox(messageboxData, "top", false, true, 0)
 end
 function PartyPop_clickChangeLeader(index)
   RequestParty_changeLeader(index)

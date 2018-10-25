@@ -10,10 +10,10 @@ PaGlobal_CharacterInfoTitle = {
     _fish = 3
   },
   _categoryStirng = {
-    [0] = "LUA_CHARACTERINFO_TITLE_LISTALL",
-    [1] = "LUA_CHARACTERINFO_TITLE_LISTCOMBAT",
-    [2] = "LUA_CHARACTERINFO_TITLE_LISTPRODUCT",
-    [3] = "LUA_CHARACTERINFO_TITLE_LISTFISH"
+    [0] = "PANEL_CHARACTERINFO_TITLE_RDOBTN_ALLROUND",
+    [1] = "PANEL_CHARACTERINFO_TITLE_RDOBTN_COMBAT",
+    [2] = "PANEL_CHARACTERINFO_TITLE_RDOBTN_PRODUCT",
+    [3] = "PANEL_CHARACTERINFO_TITLE_RDOBTN_FISH"
   },
   _comboBoxList = {
     _all = 0,
@@ -40,6 +40,7 @@ PaGlobal_CharacterInfoTitle = {
     },
     _Progress2Total_Progress = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Static_TotalProgress_Progress"),
     _staticTextTotal_Value = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgress_Percent"),
+    _txt_totalProgress = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgress"),
     _staticTextTitle_Value = {
       [0] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_CountValue"),
       [1] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_Combat_CountValue"),
@@ -53,13 +54,14 @@ PaGlobal_CharacterInfoTitle = {
       [3] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_Fishing_PercentValue")
     },
     _circularProgressTitle = {
-      [0] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "CircularProgress_AllRound"),
-      [1] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Combat"),
-      [2] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Product"),
-      [3] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Fishing")
+      [0] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Progress_AllRound"),
+      [1] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Progress_Combat"),
+      [2] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Progress_Product"),
+      [3] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Progress_Fishing")
     },
     _staticText_TotalReward = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward"),
     _staticText_TotalReward_Value = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward_Value"),
+    _staticText_PartName = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_SelectedTitle"),
     _staticText_PartDesc = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_SelectedType"),
     _staticText_SubTitleBar = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_LeftSubTitle"),
     _staticText_LastUpdateTime = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_AcceptCooltime"),
@@ -73,6 +75,7 @@ PaGlobal_CharacterInfoTitle = {
 function PaGlobal_CharacterInfoTitle:initialize()
   self._ui._list2Title:setMinScrollBtnSize(float2(10, 50))
   self._ui._list2Title:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  self._ui._staticText_PartName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._comboBoxSort:DeleteAllItem(0)
   self._ui._comboBoxSort:setListTextHorizonCenter()
   for index = 0, #self._comboBoxString do
@@ -104,6 +107,7 @@ function PaGlobal_CharacterInfoTitle:update()
     local totalPercent = acquiredTitleCountByAll / titleCountByAll * 100
     self._ui._Progress2Total_Progress:SetProgressRate(totalPercent)
     self._ui._staticTextTotal_Value:SetText(string.format("%.1f", totalPercent) .. "%")
+    self._ui._staticTextTotal_Value:SetPosX(self._ui._txt_totalProgress:GetPosX() + self._ui._txt_totalProgress:GetTextSizeX() + 10)
     for index = 0, titleTotalCount - 1 do
       local titleBuffWrapper = ToClient_GetTitleBuffWrapper(index)
       if nil ~= titleBuffWrapper then
@@ -119,9 +123,11 @@ function PaGlobal_CharacterInfoTitle:update()
       break
     end
     local titleCurrentPercent = titleCurrentGetCount / titleCurrentCount * 100
-    self._ui._staticTextTitle_Value[index]:SetText(titleCurrentGetCount .. "/" .. titleCurrentCount)
+    self._ui._staticTextTitle_Value[index]:SetText(string.format("%.1f", titleCurrentPercent) .. "%")
     self._ui._circularProgressTitle[index]:SetProgressRate(titleCurrentPercent)
-    self._ui._staticTextTitle_Percent[index]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, self._categoryStirng[index], "percent", string.format("%.1f", titleCurrentPercent)))
+    self._ui._staticTextTitle_Percent[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+    self._ui._staticTextTitle_Percent[index]:SetText(PAGetString(Defines.StringSheet_RESOURCE, self._categoryStirng[index]))
+    UI.checkLimitTextAndAddTooltip(self._ui._staticTextTitle_Percent[index], PAGetString(Defines.StringSheet_RESOURCE, self._categoryStirng[index]))
   end
   self:updateList()
 end

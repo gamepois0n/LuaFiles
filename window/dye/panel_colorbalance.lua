@@ -10,6 +10,7 @@ Panel_ColorBalance:RegisterShowEventFunc(false, "Panel_ColorBalance_HideAni()")
 local ui = {
   _btn_Close = UI.getChildControl(Panel_ColorBalance, "Button_Close"),
   _btn_Question = UI.getChildControl(Panel_ColorBalance, "Button_Question"),
+  _static_MainBg = UI.getChildControl(Panel_ColorBalance, "Static_MainBg"),
   _static_colorArrow = UI.getChildControl(Panel_ColorBalance, "Static_ColorArrow"),
   _static_slot1 = UI.getChildControl(Panel_ColorBalance, "Static_Mix1_Slot"),
   _static_slot2 = UI.getChildControl(Panel_ColorBalance, "Static_Mix2_Slot"),
@@ -81,11 +82,12 @@ end
 function Panel_ColorBalance_PanelResize_ByFontSize()
   ui._txt_HelpDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   ui._txt_HelpDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_COLORBAL_DESC"))
-  if 50 < ui._txt_HelpDesc:GetTextSizeY() then
-    ui._colorBalanceDescBg:SetSize(ui._colorBalanceDescBg:GetSizeX(), ui._txt_HelpDesc:GetTextSizeY() + 8)
-    Panel_ColorBalance:SetSize(Panel_ColorBalance:GetSizeX(), ui._colorBalanceDescBg:GetPosY() + ui._colorBalanceDescBg:GetSizeY() + 47)
-    ui._btn_StartMix:ComputePos()
-  end
+  local _yGap = ui._txt_HelpDesc:GetTextSizeY() - ui._txt_HelpDesc:GetSizeY()
+  ui._colorBalanceDescBg:SetSize(ui._colorBalanceDescBg:GetSizeX(), ui._colorBalanceDescBg:GetSizeY() + _yGap)
+  ui._static_MainBg:SetSize(ui._static_MainBg:GetSizeX(), ui._static_MainBg:GetSizeY() + _yGap)
+  Panel_ColorBalance:SetSize(Panel_ColorBalance:GetSizeX(), Panel_ColorBalance:GetSizeY() + _yGap)
+  ui._static_MainBg:ComputePos()
+  ui._btn_StartMix:ComputePos()
   Panel_ColorBalance_ClearSlot()
 end
 function Panel_ColorBalance_Show()

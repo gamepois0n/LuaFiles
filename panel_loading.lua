@@ -24,23 +24,32 @@ local isDraganOpen = ToClient_IsContentsGroupOpen("6")
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 local isBgOpen = isDraganOpen
 local bgImageTexture = {}
-if true == ToClient_isXBox() or true == ToClient_isPS4() then
+if true == ToClient_isConsole() then
   isBgOpen = true
 end
 local _movieLength = {
   10000,
   10000,
+  10000,
+  10000,
+  10000,
   10000
 }
 local _movieURL = {
+  "coui://UI_Movie/Remaster_loading_Scene_001_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_003_re.webm",
   "coui://UI_Movie/Remaster_loading_Scene_004_re.webm",
-  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm"
+  "coui://UI_Movie/Remaster_loading_Scene_007_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_011_re.webm",
+  "coui://UI_Movie/Remaster_loading_Scene_012_re.webm"
 }
 local _movieOrder = {
   1,
   2,
-  3
+  3,
+  4,
+  5,
+  6
 }
 local _currentMovieIndex
 if isBgOpen then
@@ -188,11 +197,11 @@ function LoadingPanel_Init()
   stc_movieBG:SetShow(false)
   if _ContentsGroup_RemasterUI_Lobby then
     stc_movieBG:SetShow(true)
-    stc_fade:SetShow(true)
+    stc_fade:SetShow(false)
     _currentMovieIndex = 1
     LoadingPanel_ShuffleOrder(_movieOrder)
   end
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isConsole() then
     stc_movieBG:SetShow(false)
     stc_fade:SetShow(false)
   end
@@ -212,7 +221,7 @@ function LoadingPanel_ShuffleOrder(table)
   end
 end
 function LoadingPanel_LoadMovie()
-  if false == _ContentsGroup_RemasterUI_Lobby or true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if false == _ContentsGroup_RemasterUI_Lobby or true == ToClient_isConsole() then
     return
   end
   stc_movieBG:SetShow(true)
@@ -262,18 +271,10 @@ function FromClient_LoadingPanel_OnMovieEvent(param)
 end
 local _fadeTime = 1
 function LoadingPanel_StartFadeIn()
-  local ImageAni = stc_fade:addColorAnimation(0.3, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_FF000000)
-  ImageAni:SetEndColor(Defines.Color.C_00000000)
-  ImageAni:SetHideAtEnd(true)
-  luaTimer_AddEvent(LoadingPanel_StartFadeOut, _movieLength[_movieOrder[_currentMovieIndex]] - _fadeTime * 1000, false, 0)
+  stc_fade:SetShow(false)
 end
 function LoadingPanel_StartFadeOut()
-  stc_fade:SetShow(true)
-  local ImageAni = stc_fade:addColorAnimation(0, _fadeTime, CppEnums.PAUI_ANIM_ADVANCE_TYPE.PAUI_ANIM_ADVANCE_LINEAR)
-  ImageAni:SetStartColor(Defines.Color.C_00000000)
-  ImageAni:SetEndColor(Defines.Color.C_FF000000)
-  ImageAni:SetHideAtEnd(false)
+  stc_fade:SetShow(false)
 end
 function LoadingPanel_SetProgress(rate)
   progressRate:SetProgressRate(rate)

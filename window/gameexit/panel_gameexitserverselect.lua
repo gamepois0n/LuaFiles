@@ -8,6 +8,7 @@ local channelSelect = {
   _question_btn = UI.getChildControl(Panel_ChannelSelect, "Button_Question"),
   _allBG = UI.getChildControl(Panel_ChannelSelect, "Static_AllBG"),
   _title = UI.getChildControl(Panel_ChannelSelect, "StaticText_Title"),
+  _subframe = UI.getChildControl(Panel_ChannelSelect, "Static_SubFrame"),
   _channelBg = UI.getChildControl(Panel_ChannelSelect, "Static_Channel_BG"),
   _currentChBg = UI.getChildControl(Panel_ChannelSelect, "Static_CurrentChannel_BG"),
   _selectedChBg = UI.getChildControl(Panel_ChannelSelect, "StaticText_SelectedChannelBg"),
@@ -17,7 +18,10 @@ local channelSelect = {
   _expIcon = UI.getChildControl(Panel_ChannelSelect, "StaticText_ExpEvent"),
   _PremiumIcon = UI.getChildControl(Panel_ChannelSelect, "StaticText_Preminum"),
   _PKIcon = UI.getChildControl(Panel_ChannelSelect, "StaticText_PK"),
+  _CheckDescIcon = UI.getChildControl(Panel_ChannelSelect, "CheckButton_Desc"),
   _mainDesc = UI.getChildControl(Panel_ChannelSelect, "Static_ChannelSelectDescPanel"),
+  _txt_timeIcon = UI.getChildControl(Panel_ChannelSelect, "StaticText_TimeIcon"),
+  _txt_timeDesc = UI.getChildControl(Panel_ChannelSelect, "StaticText_Desc"),
   channelSelectData = {},
   isSpeedServer = {},
   isNotSpeedServer = {},
@@ -251,8 +255,8 @@ function ChannelSelect_Init()
       self.channelSelectUIPool[index] = channelList
     end
   end
-  channelMainDesc._serverTitle:SetPosY(10)
-  channelMainDesc._serverDesc:SetPosY(30)
+  channelMainDesc._serverTitle:SetPosY(20)
+  channelMainDesc._serverDesc:SetPosY(45)
   channelMainDesc._serverDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   channelMainDesc._serverDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_CHANNELSELECTDESC"))
   channelMainDesc._pkTitle:SetShow(false)
@@ -318,7 +322,7 @@ function ChannelSelect_Init()
       channelMainDesc._siegeValencia:SetShow(false)
     end
   end
-  channelMainDesc._speedTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
+  channelMainDesc._speedTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 20)
   channelMainDesc._speedTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_TITLE"))
   channelMainDesc._speedDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   if isGameTypeTaiwan() then
@@ -326,7 +330,7 @@ function ChannelSelect_Init()
   else
     channelMainDesc._speedDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_DESC"))
   end
-  channelMainDesc._speedDesc:SetPosY(channelMainDesc._speedTitle:GetPosY() + 20)
+  channelMainDesc._speedDesc:SetPosY(channelMainDesc._speedTitle:GetPosY() + 25)
   channelMainDesc._pkTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK"))
   channelMainDesc._pkDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   if isGameTypeKorea() then
@@ -334,17 +338,17 @@ function ChannelSelect_Init()
   else
     channelMainDesc._pkDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_PVPDESC"))
   end
-  channelMainDesc._pkTitle:SetPosY(channelMainDesc._speedDesc:GetPosY() + channelMainDesc._speedDesc:GetTextSizeY() + 15)
-  channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 20)
+  channelMainDesc._pkTitle:SetPosY(channelMainDesc._speedDesc:GetPosY() + channelMainDesc._speedDesc:GetTextSizeY() + 20)
+  channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 25)
   if isGameTypeTH() or isGameTypeID() then
-    channelMainDesc._pkTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
-    channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 20)
+    channelMainDesc._pkTitle:SetPosY(channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 20)
+    channelMainDesc._pkDesc:SetPosY(channelMainDesc._pkTitle:GetPosY() + 25)
     channelMainDesc._pkTitle:SetShow(true)
     channelMainDesc._pkDesc:SetShow(true)
     sizeControl = channelMainDesc._pkDesc
   end
-  channelMainDesc._siegeTitle:SetPosY(sizeControl:GetPosY() + sizeControl:GetTextSizeY() + 15)
-  channelMainDesc._siegeBalenos:SetPosY(channelMainDesc._siegeTitle:GetPosY() + 20)
+  channelMainDesc._siegeTitle:SetPosY(sizeControl:GetPosY() + sizeControl:GetTextSizeY() + 20)
+  channelMainDesc._siegeBalenos:SetPosY(channelMainDesc._siegeTitle:GetPosY() + 25)
   channelMainDesc._siegeSerendia:SetPosY(channelMainDesc._siegeBalenos:GetPosY() + 20)
   channelMainDesc._siegeCalpheon:SetPosY(channelMainDesc._siegeSerendia:GetPosY() + 20)
   channelMainDesc._siegeMedia:SetPosY(channelMainDesc._siegeCalpheon:GetPosY() + 20)
@@ -377,15 +381,15 @@ function ChannelSelect_Init()
     channelMainDesc._scheduleNodeWar:SetShow(false)
   end
   if isGameTypeKR2() or isGameTypeGT() then
-    self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY())
+    self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
   elseif isGameTypeKorea() then
     if isAdult then
-      self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._scheduleNodeWar:GetPosY() + channelMainDesc._scheduleNodeWar:GetTextSizeY())
+      self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._scheduleNodeWar:GetPosY() + channelMainDesc._scheduleNodeWar:GetTextSizeY() + 15)
     else
-      self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY())
+      self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._serverDesc:GetPosY() + channelMainDesc._serverDesc:GetTextSizeY() + 15)
     end
   else
-    self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._scheduleNodeWar:GetPosY() + channelMainDesc._scheduleNodeWar:GetTextSizeY())
+    self._mainDescBg:SetSize(self._mainDescBg:GetSizeX(), channelMainDesc._scheduleNodeWar:GetPosY() + channelMainDesc._scheduleNodeWar:GetTextSizeY() + 15)
   end
   self._mainDesc:SetSize(self._mainDesc:GetSizeX(), self._mainDescBg:GetSizeY() + 15)
   self._warIcon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHANNELSELECTE_WARICON"))
@@ -400,7 +404,7 @@ function ChannelSelect_Init()
     else
       Panel_ChannelSelect:SetSize(410, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 70)
     end
-    self._title:SetSize(406, self._title:GetSizeY())
+    self._title:SetSize(400, self._title:GetSizeY())
     self._warIcon:ComputePos()
     self._noEnteranceIcon:ComputePos()
     self._maintenanceIcon:ComputePos()
@@ -425,7 +429,7 @@ function ChannelSelect_Init()
     else
       Panel_ChannelSelect:SetSize(796, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() + 50)
     end
-    self._title:SetSize(792, self._title:GetSizeY())
+    self._title:SetSize(786, self._title:GetSizeY())
     self._warIcon:ComputePos()
     self._noEnteranceIcon:ComputePos()
     self._maintenanceIcon:ComputePos()
@@ -461,6 +465,9 @@ function ChannelSelect_Init()
     channelSelect._PremiumIcon:SetShow(false)
     channelSelect._PKIcon:SetShow(false)
   end
+  self._txt_timeIcon:ComputePos()
+  self._txt_timeDesc:ComputePos()
+  self:registerEventHandler()
 end
 local oneTimeChange = false
 function ChannelSelect_Update()
@@ -477,6 +484,8 @@ function ChannelSelect_Update()
   local channelMoveableRemainTime = getChannelMoveableRemainTime(curWorldData._worldNo)
   local _worldServerCount = getGameWorldServerDataCount()
   local _serverData
+  self._txt_timeDesc:SetShow(false)
+  self._txt_timeIcon:SetShow(false)
   isSpeedServer = {}
   isNotSpeedServer = {}
   local index1 = 0
@@ -583,6 +592,13 @@ function ChannelSelect_Update()
           isAdmission = true
         elseif channelMoveableRemainTime > toInt64(0, 0) then
           isAdmission = false
+          if false == self._txt_timeIcon:GetShow() then
+            self._txt_timeDesc:SetShow(true)
+            self._txt_timeIcon:SetShow(true)
+            local changeRealChannelTime = convertStringFromDatetime(channelMoveableRemainTime)
+            self._txt_timeIcon:SetText(changeRealChannelTime)
+            self._txt_timeIcon:SetSpanSize(self._txt_timeIcon:GetTextSizeX() + 10, self._txt_timeIcon:GetSpanSize().y)
+          end
         else
           isAdmission = true
         end
@@ -668,13 +684,21 @@ function ChannelSelect_Update()
     end
   end
   Panel_ChannelSelect:SetSize(self.groupBg[bgIndex]:GetPosX() + self.groupBg[bgIndex]:GetSizeX() + 20, Panel_ChannelSelect:GetSizeY())
-  self._title:SetSize(Panel_ChannelSelect:GetSizeX() - 4, self._title:GetSizeY())
+  self._title:SetSize(Panel_ChannelSelect:GetSizeX() - 10, self._title:GetSizeY())
+  self._subframe:SetSize(Panel_ChannelSelect:GetSizeX() - 10, self.groupBg[0]:GetPosY() + self.groupBg[0]:GetSizeY() - 15)
   self._close_btn:ComputePos()
   self._question_btn:ComputePos()
   self._question_btn:SetShow(false)
   if not oneTimeChange then
     FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge(Panel_ChannelSelect:GetSizeX())
     oneTimeChange = true
+  end
+  Panel_ChannelSelect:ComputePos()
+  self._txt_timeDesc:ComputePos()
+  self._txt_timeIcon:SetSpanSize(self._txt_timeIcon:GetTextSizeX() + 30, self._txt_timeIcon:GetSpanSize().y)
+  local exceedingY = self._mainDesc:GetParentPosY() + self._mainDesc:GetSizeY() - getScreenSizeY()
+  if exceedingY > 0 then
+    self._mainDesc:SetPosY(self._mainDesc:GetPosY() - exceedingY - 15)
   end
 end
 local tooltipCheck = false
@@ -894,12 +918,38 @@ function ChannelSelect_onScreenResize()
   self._BlockBG:SetVerticalMiddle()
   Panel_ChannelSelect:ComputePos()
 end
-function ChannelSelect_EventHandler()
-  local self = channelSelect
+function channelSelect:registerEventHandler()
   self._close_btn:addInputEvent("Mouse_LUp", "FGlobal_ChannelSelect_Hide()")
-end
-function ChannelSelect_RegisterEventHandler()
+  self._CheckDescIcon:addInputEvent("Mouse_LUp", "Input_ChannelSelect_ToggleDesc()")
+  Panel_ChannelSelect:RegisterUpdateFunc("PaGlobalFunc_ChannelSelect_UpdatePerFrame")
   registerEvent("onScreenResize", "ChannelSelect_onScreenResize")
 end
-ChannelSelect_Init()
-ChannelSelect_EventHandler()
+local elapsedTime = 0
+function PaGlobalFunc_ChannelSelect_UpdatePerFrame(deltaTime)
+  local self = channelSelect
+  if true == self._txt_timeIcon:GetShow() then
+    elapsedTime = elapsedTime + deltaTime
+    if elapsedTime > 1 then
+      elapsedTime = 0
+      local curChannelData = getCurrentChannelServerData()
+      local curWorldData = getGameWorldServerDataByWorldNo(curChannelData._worldNo)
+      local channelMoveableRemainTime = getChannelMoveableRemainTime(curWorldData._worldNo)
+      local changeRealChannelTime = convertStringFromDatetime(channelMoveableRemainTime)
+      if "" ~= changeRealChannelTime then
+        self._txt_timeIcon:SetText(changeRealChannelTime)
+      else
+        self._txt_timeIcon:SetShow(false)
+        self._txt_timeDesc:SetShow(false)
+      end
+    end
+  end
+end
+function Input_ChannelSelect_ToggleDesc()
+  local self = channelSelect
+  if true == self._mainDesc:GetShow() then
+    self._mainDesc:SetShow(false)
+  else
+    self._mainDesc:SetShow(true)
+  end
+end
+registerEvent("FromClient_luaLoadComplete", "ChannelSelect_Init")

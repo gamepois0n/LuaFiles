@@ -17,9 +17,7 @@ function LocalWarInfoHideAni()
 end
 local localWarInfo = {
   _blackBG = UI.getChildControl(Panel_LocalWarInfo, "Static_BlackBG"),
-  _txtTitle = UI.getChildControl(Panel_LocalWarInfo, "StaticText_Title"),
-  _btnClose = UI.getChildControl(Panel_LocalWarInfo, "Button_Win_Close"),
-  _btnHelp = UI.getChildControl(Panel_LocalWarInfo, "Button_Question"),
+  _titleBg = UI.getChildControl(Panel_LocalWarInfo, "Static_TitleBG"),
   _listBg = UI.getChildControl(Panel_LocalWarInfo, "Static_LocalWarListBG"),
   _scroll = UI.getChildControl(Panel_LocalWarInfo, "Scroll_LocalWarList"),
   _txtRule = UI.getChildControl(Panel_LocalWarInfo, "StaticText_RuleContent"),
@@ -100,9 +98,9 @@ local localWarInfo = {
   _maxDescRewardSize = 20,
   _maxDescExplanationSize = 30,
   _posConfig = {
-    _listStartPosY = 25,
+    _listStartPosY = 5,
     _iconStartPosY = 88,
-    _listPosYGap = 31
+    _listPosYGap = 45
   }
 }
 local localWarServerCountLimit = 0
@@ -115,38 +113,40 @@ else
 end
 function LocalWarInfo_Initionalize()
   local self = localWarInfo
+  self._btnClose = UI.getChildControl(self._titleBg, "Button_Win_Close")
+  self._btnHelp = UI.getChildControl(self._titleBg, "Button_Question")
   for listIdx = 0, self._createListCount - 1 do
     local localWar = {}
     localWar.BG = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_ListBG", self._listBg, "LocalWarInfo_BG_" .. listIdx)
-    localWar.BG:SetPosX(5)
+    localWar.BG:SetPosX(0)
     localWar.BG:SetPosY(self._posConfig._listStartPosY + self._posConfig._listPosYGap * listIdx)
     localWar.level = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Limit_Level", localWar.BG, "localWarInfo_Level_" .. listIdx)
-    localWar.level:SetPosX(10)
-    localWar.level:SetPosY(4)
+    localWar.level:SetPosX(25)
+    localWar.level:SetPosY(0)
     localWar.ap = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Limit_AP", localWar.BG, "localWarInfo_AP_" .. listIdx)
-    localWar.ap:SetPosX(35)
-    localWar.ap:SetPosY(4)
+    localWar.ap:SetPosX(65)
+    localWar.ap:SetPosY(0)
     localWar.dp = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Limit_DP", localWar.BG, "localWarInfo_DP_" .. listIdx)
-    localWar.dp:SetPosX(60)
-    localWar.dp:SetPosY(4)
+    localWar.dp:SetPosX(105)
+    localWar.dp:SetPosY(0)
     localWar.adSum = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Limit_ADSum", localWar.BG, "localWarInfo_ADSum_" .. listIdx)
-    localWar.adSum:SetPosX(85)
-    localWar.adSum:SetPosY(4)
+    localWar.adSum:SetPosX(145)
+    localWar.adSum:SetPosY(0)
     localWar.unLimit = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Limit_Unlimit", localWar.BG, "localWarInfo_Unlimit_" .. listIdx)
-    localWar.unLimit:SetPosX(45)
-    localWar.unLimit:SetPosY(5)
+    localWar.unLimit:SetPosX(65)
+    localWar.unLimit:SetPosY(0)
     localWar.channel = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_Channel", localWar.BG, "localWarInfo_Channel_" .. listIdx)
-    localWar.channel:SetPosX(140)
-    localWar.channel:SetPosY(5)
+    localWar.channel:SetPosX(215)
+    localWar.channel:SetPosY(0)
     localWar.joinMember = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_JoinMemberCount", localWar.BG, "localWarInfo_JoinMember_" .. listIdx)
-    localWar.joinMember:SetPosX(278)
-    localWar.joinMember:SetPosY(5)
+    localWar.joinMember:SetPosX(361)
+    localWar.joinMember:SetPosY(0)
     localWar.remainTime = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "StaticText_RemainTime", localWar.BG, "localWarInfo_RemainTime_" .. listIdx)
-    localWar.remainTime:SetPosX(340)
-    localWar.remainTime:SetPosY(5)
+    localWar.remainTime:SetPosX(463)
+    localWar.remainTime:SetPosY(0)
     localWar.join = UI.createAndCopyBasePropertyControl(Panel_LocalWarInfo, "Button_Join", localWar.BG, "localWarInfo_Join_" .. listIdx)
-    localWar.join:SetPosX(440)
-    localWar.join:SetPosY(5)
+    localWar.join:SetPosX(570)
+    localWar.join:SetPosY(4)
     self._listPool[listIdx] = localWar
     localWar.BG:addInputEvent("Mouse_UpScroll", "LocalWarInfo_ScrollEvent( true )")
     localWar.BG:addInputEvent("Mouse_DownScroll", "LocalWarInfo_ScrollEvent( false )")
@@ -265,15 +265,15 @@ function LocalWarInfo_Initionalize()
   self._blackBG:SetVerticalMiddle()
   if isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() then
     self._icon_Level:SetShow(true)
-    self._icon_Level:SetSpanSize(60, 62)
-    self._icon_AP:SetSpanSize(87, 62)
-    self._icon_DP:SetSpanSize(115, 62)
-    self._icon_AD:SetSpanSize(145, 62)
+    self._icon_Level:SetSpanSize(40, 70)
+    self._icon_AP:SetSpanSize(80, 70)
+    self._icon_DP:SetSpanSize(120, 70)
+    self._icon_AD:SetSpanSize(160, 70)
   else
     self._icon_Level:SetShow(false)
-    self._icon_AP:SetSpanSize(60, 62)
-    self._icon_DP:SetSpanSize(100, 62)
-    self._icon_AD:SetSpanSize(145, 62)
+    self._icon_AP:SetSpanSize(40, 70)
+    self._icon_DP:SetSpanSize(80, 70)
+    self._icon_AD:SetSpanSize(120, 70)
   end
   self._scroll:SetControlTop()
 end
@@ -320,15 +320,15 @@ function localWarInfo:Update()
       local list = self._listPool[count]
       if isGameTypeKorea() or isGameTypeJapan() then
         list.level:SetShow(true)
-        list.level:SetPosX(0)
-        list.ap:SetPosX(25)
-        list.dp:SetPosX(55)
-        list.adSum:SetPosX(85)
+        list.level:SetPosX(25)
+        list.ap:SetPosX(65)
+        list.dp:SetPosX(105)
+        list.adSum:SetPosX(145)
       else
         list.level:SetShow(false)
-        list.ap:SetPosX(0)
-        list.dp:SetPosX(40)
-        list.adSum:SetPosX(85)
+        list.ap:SetPosX(25)
+        list.dp:SetPosX(65)
+        list.adSum:SetPosX(105)
       end
       if isLimitLocalWar then
         list.unLimit:SetShow(false)
@@ -346,31 +346,26 @@ function localWarInfo:Update()
       if 0 == getCurrentState then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
         isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
-        list.join:SetFontColor(Defines.Color.C_FF3B8BBE)
         list.join:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
         list.join:SetIgnore(false)
       elseif 1 == getCurrentState then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
         isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
         if warTimeMinute >= 10 then
-          list.join:SetFontColor(Defines.Color.C_FF3B8BBE)
           list.join:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
           list.join:SetIgnore(false)
         else
-          list.join:SetFontColor(Defines.Color.C_FFF26A6A)
           list.join:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
           list.join:SetIgnore(true)
         end
       elseif 2 == getCurrentState then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
         isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
-        list.join:SetFontColor(Defines.Color.C_FFF26A6A)
         list.join:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
         list.join:SetIgnore(true)
       elseif 3 == getCurrentState then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
         isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
-        list.join:SetFontColor(Defines.Color.C_FFF26A6A)
         list.join:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
         list.join:SetIgnore(true)
       end

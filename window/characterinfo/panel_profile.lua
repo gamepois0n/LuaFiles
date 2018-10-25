@@ -52,31 +52,31 @@ local myProfile = {
     [CppEnums.ProfileIndex.eUserProfileValueType_ProductSuccessCount] = -1,
     [CppEnums.ProfileIndex.eUserProfileValueType_Count] = 4
   },
-  _iconPath = "New_UI_Common_forLua/Window/CharacterInfo/my_info_achievement_00.dds",
+  _iconPath = "renewal/ui_icon/console_icon_myinfo_00.dds",
   _iconCoordinate = {
     [CppEnums.ProfileIndex.eUserProfileValueType_MonsterKillCount] = {
-      x1 = 72,
-      y1 = 109,
-      x2 = 142,
-      y2 = 179
+      x1 = 2,
+      y1 = 56,
+      x2 = 72,
+      y2 = 126
     },
     [CppEnums.ProfileIndex.eUserProfileValueType_FishingSuccessCount] = {
-      x1 = 1,
-      y1 = 180,
-      x2 = 71,
-      y2 = 250
+      x1 = 74,
+      y1 = 56,
+      x2 = 144,
+      y2 = 126
     },
     [CppEnums.ProfileIndex.eUserProfileValueType_ItemGainCount] = {
-      x1 = 72,
-      y1 = 180,
-      x2 = 142,
-      y2 = 250
+      x1 = 146,
+      y1 = 56,
+      x2 = 216,
+      y2 = 126
     },
     [CppEnums.ProfileIndex.eUserProfileValueType_ProductSuccessCount] = {
-      x1 = 1,
-      y1 = 109,
-      x2 = 71,
-      y2 = 179
+      x1 = 2,
+      y1 = 128,
+      x2 = 72,
+      y2 = 198
     }
   },
   slotConfig = {
@@ -173,8 +173,11 @@ function Profile_DataSet(content, key)
   local _key = Int64toInt32(key)
   local _count = ToClient_GetProfileInfo(self._termIndex[self._radioBtnIndex], _key)
   contentBg:addInputEvent("Mouse_LUp", "Profile_RightDataSet(" .. _key .. ")")
+  contentBg:SetPosX(7)
+  local contentBgStartY = 1
   if CppEnums.ProfileIndex.eUserProfileValueType_MonsterKillCount == _key then
     _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_MONSTERCOUNT", "count", makeDotMoney(_count))
+    contentBg:SetPosY(contentBgStartY)
   elseif CppEnums.ProfileIndex.eUserProfileValueType_FishingSuccessCount == _key then
     _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_ITEMCOUNT", "count", makeDotMoney(_count))
   elseif CppEnums.ProfileIndex.eUserProfileValueType_ItemGainCount == _key then
@@ -202,11 +205,11 @@ function Profile_TimeSet()
   local totalPlayTime = Util.Time.timeFormatting_Minute(Int64toInt32(ToClient_GetCharacterPlayTime()))
   control._playTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TODAYPLAYTIME") .. "<PAColor0xFFFFC730>" .. tostring(userPlayTime) .. "<PAOldColor> | " .. PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
   if isPremiumPcRoom and (isGameTypeKorea() or isGameTypeJapan()) then
-    control._playTime:SetPosY(5)
+    control._playTime:SetPosY(23)
     control._pcRoolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_PCROOMPLAYTIME") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_PCROOMTIME", "getPcRoomPlayTime", convertStringFromDatetime(ToClient_GetPcRoomPlayTime())))
     control._pcRoolTime:SetShow(true)
   else
-    control._playTime:SetPosY(20)
+    control._playTime:SetPosY(23)
     control._pcRoolTime:SetShow(false)
   end
 end
@@ -222,7 +225,7 @@ function Profile_RightDataSet(index)
   control._period:SetText(self._termDesc[self._radioBtnIndex])
   control._desc:SetText(self._desc[index])
   if ToClient_IsDevelopment() then
-    control._slotBG:SetShow(true)
+    control._slotBG:SetShow(false)
     local profilerewardwrapper = ToClient_getProfileRewardItem(self._periodType, index)
     if profilerewardwrapper ~= nil then
       local userProfileValue = profilerewardwrapper:getUserProfileValue()

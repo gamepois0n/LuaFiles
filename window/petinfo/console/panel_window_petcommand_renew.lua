@@ -26,11 +26,15 @@ function petCommand:open()
     return
   end
   self:setPosition()
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   Panel_Window_PetCommand_Renew:SetShow(true)
 end
-function petCommand:close()
+function petCommand:close(closeAll)
   if not Panel_Window_PetCommand_Renew:GetShow() then
     return
+  end
+  if false == closeAll then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
   end
   Panel_Window_PetCommand_Renew:SetShow(false)
   PaGlobalFunc_Petlist_TemporaryOpen()
@@ -96,7 +100,7 @@ function petCommand:initControl()
   petCommandUI._staticText_Cancle = UI.getChildControl(petCommandUI._static_BottomKeyBG, "StaticText_Cansel_ConsoleUI")
   petCommandUI._ExitButton = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, petCommandUI._static_BottomKeyBG, "_exit_Button")
   CopyBaseProperty(petCommandUI._staticText_Cancle, petCommandUI._ExitButton)
-  petCommandUI._ExitButton:addInputEvent("Mouse_LUp", "FGlobal_PetCommand_Close()")
+  petCommandUI._ExitButton:addInputEvent("Mouse_LUp", "FGlobal_PetCommand_Close(false)")
 end
 function petCommand:initialize()
   petCommand._selectPetIndex = -1
@@ -357,12 +361,13 @@ function FGlobal_PetCommand_Init(petIndex)
   petCommand:update()
   petCommand:updateButtonIcon()
 end
-function FGlobal_PetCommand_Close()
-  petCommand:close()
+function FGlobal_PetCommand_Close(closeAll)
+  petCommand:close(closeAll)
 end
 function PetCommand_SelectOrder(orderType, value)
   petCommand:selectOrder(orderType, value)
   petCommand:changeIconOff(orderType, value)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function PetCommand_ChangeIcon_On(orderType, value)
   petCommand:changeIconOn(orderType, value)

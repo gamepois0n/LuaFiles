@@ -63,7 +63,7 @@ function petList:Init()
     local temp = {}
     temp._bg = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_Window_PetLookChange, "Static_PetListBg_" .. index)
     CopyBaseProperty(template._bg, temp._bg)
-    temp._bg:SetPosY(50 + (temp._bg:GetSizeY() + 5) * index)
+    temp._bg:SetPosY(55 + (temp._bg:GetSizeY() + 5) * index)
     temp._bg:SetShow(false)
     temp._iconBg = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATIC, temp._bg, "Static_PetListIconBg_" .. index)
     CopyBaseProperty(template._iconBg, temp._iconBg)

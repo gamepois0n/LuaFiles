@@ -1,8 +1,8 @@
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
 Panel_Window_ItemMarket_RegistItem:SetShow(false)
-Panel_Window_ItemMarket_RegistItem:setGlassBackground(true)
-Panel_Window_ItemMarket_RegistItem:ActiveMouseEventEffect(true)
+Panel_Window_ItemMarket_RegistItem:setGlassBackground(false)
+Panel_Window_ItemMarket_RegistItem:ActiveMouseEventEffect(false)
 local ItemMarketRegistItem = {
   slotConfig = {
     createIcon = true,
@@ -43,6 +43,7 @@ local ItemMarketRegistItem = {
   _buttonQuestion = UI.getChildControl(Panel_Window_ItemMarket_RegistItem, "Button_Question"),
   _buttonPassword = UI.getChildControl(Panel_Window_ItemMarket_RegistItem, "Button_Pass"),
   _staticTextPassword = UI.getChildControl(Panel_Window_ItemMarket_RegistItem, "StaticText_PassState"),
+  _Bottom_BG = UI.getChildControl(Panel_Window_ItemMarket_RegistItem, "Static_HelpBG"),
   itemSlot = {},
   _invenWhereType = 0,
   _invenSlotNo = 0,
@@ -67,13 +68,21 @@ local territoryKey = {
   [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6")),
   [7] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_7"))
 }
-function ItemMarketRegistItem_ShowAni()
-end
-function ItemMarketRegistItem_HideAni()
-end
 function ItemMarketRegistItem:Initialize()
   self.priceEdit:SetNumberMode()
   self.priceEdit:SetMaxInput(13)
+  self._txt_RegistItemCount = UI.getChildControl(self._Bottom_BG, "StaticText_RegistItemCount_Help")
+  self._txt_RegistHighPrice = UI.getChildControl(self._Bottom_BG, "StaticText_RegistHighPrice_Help")
+  self._txt_RegistLowPrice = UI.getChildControl(self._Bottom_BG, "StaticText_RegistLowPrice_Help")
+  self._txt_RegistListCount = UI.getChildControl(self._Bottom_BG, "StaticText_RegistListCount_Help")
+  self._txt_MaxPrice = UI.getChildControl(self._Bottom_BG, "StaticText_MaxPrice_Help")
+  self._txt_MinPrice = UI.getChildControl(self._Bottom_BG, "StaticText_MinPrice_Help")
+  self._txt_RegistItemCount:SetMonoTone(true)
+  self._txt_RegistHighPrice:SetMonoTone(true)
+  self._txt_RegistLowPrice:SetMonoTone(true)
+  self._txt_RegistListCount:SetMonoTone(true)
+  self._txt_MaxPrice:SetMonoTone(true)
+  self._txt_MinPrice:SetMonoTone(true)
   SlotItem.new(self.itemSlot, "ItemMarketRegistItem_Icon", 0, self.slotBG, self.slotConfig)
   self.itemSlot:createChild()
   self._isAblePearlProduct = requestCanRegisterPearlItemOnMarket()
@@ -118,6 +127,14 @@ function ItemMarketRegistItem:getTargetItem()
     local warehouseWrapper = warehouse_get(self._waypointKey)
     return warehouseWrapper:getItem(self._invenSlotNo)
   end
+end
+function PaGlobal_ItemmarketRegistItem_Update()
+  if not Panel_Window_ItemMarket_RegistItem:GetShow() then
+    return
+  end
+  local self = ItemMarketRegistItem
+  local registedItemCount = getItemMarketMyItemsCount()
+  self.sellItemTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ENABLE_REGISTCOUNT", "itemCount", 30 - registedItemCount))
 end
 function ItemMarketRegistItem:Update()
   local self = ItemMarketRegistItem

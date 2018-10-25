@@ -234,13 +234,16 @@ function HandleClicked_Customization_HairShape_SliderFocusOut()
 end
 function HandleClicked_Customization_HairShape_ToggleShowHairBoneControlPart()
   local self = Customization_HairShapeInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   showBoneControlPart(self._ui._checkBox_ShowPart:IsCheck())
 end
 function HandleClicked_Customization_HairShape_ClearCustomizedBoneInfo()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   clearCustomizedBoneInfo()
 end
 function HandleClicked_Customization_HairShape_CursorSelect(luaControlModeIndex)
   local self = Customization_HairShapeInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   selectSculptingBoneTransformType(luaControlModeIndex - 1)
   self._controlMode = luaControlModeIndex
 end

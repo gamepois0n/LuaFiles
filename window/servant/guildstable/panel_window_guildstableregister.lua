@@ -187,18 +187,10 @@ function GuildStableRegister_Open()
     self._editEditName:SetShow(false)
     self._desc:SetShow(true)
     GuildStableRegister_RegisterType(false)
-    Panel_Window_GuildStableRegister:SetSize(425, 210)
-    self._buttonOk:SetSpanSize(-50, 10)
-    self._buttonClose:SetSpanSize(50, 10)
-    self._statusBack:SetSize(290, 110)
   else
     self._editEditName:SetShow(true)
     self._desc:SetShow(false)
     GuildStableRegister_RegisterType(true)
-    Panel_Window_GuildStableRegister:SetSize(425, 255)
-    self._buttonOk:SetSpanSize(-50, 10)
-    self._buttonClose:SetSpanSize(50, 10)
-    self._statusBack:SetSize(290, 140)
   end
   Panel_Window_GuildStableRegister:SetShow(true)
 end

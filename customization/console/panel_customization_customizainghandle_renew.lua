@@ -24,6 +24,7 @@ function PaGlobalFunc_FromClient_Customization_Open(classType, uiGroupIndex)
   end
 end
 function PaGlobalFunc_Customization_ClickLeafTree(index)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   selectCustomizationControlPart(index)
 end
 function PaGlobalFunc_CustomizingHandle_luaLoadComplete()

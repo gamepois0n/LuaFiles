@@ -41,6 +41,7 @@ function workerChangeSkill:open()
   if true == Panel_Window_WorkerManager_ChangeSkill_Renew:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   Panel_Window_WorkerManager_ChangeSkill_Renew:SetShow(true)
   self:update()
 end
@@ -72,10 +73,12 @@ function workerChangeSkill:confirm()
   ToClient_requestChangeSkillNoOne(workerNoRaw, prevWorkerSkillKeyRaw)
 end
 function PaGlobalFunc_WorkerManager_ChangeSkill_Confirm()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   workerChangeSkill:confirm()
   workerChangeSkill:close()
 end
 function PaGlobalFunc_WorkerManager_ChangeSkill_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   workerChangeSkill:close()
 end
 function workerChangeSkill:update()

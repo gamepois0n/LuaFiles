@@ -35,7 +35,7 @@ function Panel_CustomizingAlbum_Initialize()
   _customizingAlbumWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_CustomizingAlbum, "WebControl_CustomizingAlbum")
   _customizingAlbumWeb:SetShow(true)
   _customizingAlbumWeb:SetPosX(15)
-  _customizingAlbumWeb:SetPosY(55)
+  _customizingAlbumWeb:SetPosY(70)
   _customizingAlbumWeb:SetSize(870, 630)
   _customizingAlbumWeb:ResetUrl()
 end
@@ -98,25 +98,25 @@ function CustomizingAlbum_Resize()
     sizeX = 870
     sizeY = 630
     panelSizeX = 900
-    panelSizeY = 700
-    titleBarSizeX = 887
+    panelSizeY = 715
+    titleBarSizeX = 890
   elseif screenSizeX >= 1900 and screenSizeX < 3800 then
     sizeX = 1305
     sizeY = 945
     panelSizeX = 1335
-    panelSizeY = 1015
-    titleBarSizeX = 1322
+    panelSizeY = 1030
+    titleBarSizeX = 1325
   else
     sizeX = 1740
     sizeY = 1260
     panelSizeX = 1770
-    panelSizeY = 1330
-    titleBarSizeX = 1757
+    panelSizeY = 1345
+    titleBarSizeX = 1760
   end
   Panel_CustomizingAlbum:SetSize(panelSizeX, panelSizeY)
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
   _customizingAlbumWeb:SetPosX(15)
-  _customizingAlbumWeb:SetPosY(55)
+  _customizingAlbumWeb:SetPosY(70)
   _customizingAlbumWeb:SetSize(sizeX, sizeY)
 end
 registerEvent("onScreenResize", "CustomizingAlbum_Resize")

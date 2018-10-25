@@ -983,9 +983,8 @@ function checkedQuestWidget:doReleaseCheckForTutorial()
 end
 function QuestWidget_ProgressingGuildQuest_UpdateRemainTime(deltaTime)
   checkedQuestWidget:updatePerFrame(deltaTime)
-  if true == checkedQuestWidget._widgetMouseOn then
-    checkedQuestWidget:questWidget_MouseOver(false)
-  end
+  checkedQuestWidget:questWidget_MouseOver(false)
+  PaGlobalFunc_MainQuestWidget_MouseOutEvent()
 end
 function checkedQuestWidget:updatePerFrame(deltaTime)
   self._elapsedTime = self._elapsedTime + deltaTime
@@ -1007,7 +1006,6 @@ function checkedQuestWidget:updatePerFrame(deltaTime)
   end
   self:setGuildQuest()
   self:setGuildQuestUi(0)
-  self:questWidget_MouseOver(self._widgetMouseOn)
   self._elapsedTime = 0
 end
 function checkedQuestWidget:groupQuestInfo(questGroupInfo, questGroupIndex, questType)

@@ -166,7 +166,14 @@ function BtnEvent_Transport()
   end
 end
 function BtnEvent_ItemMarket()
-  if Panel_Window_ItemMarket:IsShow() then
+  if true == _ContentsGroup_RenewUI_ItemMarketPlace then
+    if true == Panel_Window_MarketPlace:IsShow() then
+      FGolbal_ItemMarketNew_Close()
+    else
+      GrandWorldMap_CheckPopup(popupType.itemMarket)
+      FGlobal_ItemMarket_Open_ForWorldMap(1, false)
+    end
+  elseif Panel_Window_ItemMarket:IsShow() then
     FGolbal_ItemMarketNew_Close()
   else
     GrandWorldMap_CheckPopup(popupType.itemMarket)

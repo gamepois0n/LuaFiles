@@ -8,6 +8,7 @@ local GuildReceivePay = {
 }
 function GuildReceivePay:open()
   self:update()
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   _panel:SetShow(true)
 end
 function GuildReceivePay:update()
@@ -49,6 +50,7 @@ function PaGlobalFunc_GuildReceivePay_Close()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildReceivePay")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobalFunc_GuildReceivePay_Init()
@@ -66,6 +68,7 @@ function InputMLUp_GuildReceivePay_PayIntoInventory()
     return
   end
   _PA_LOG("\236\162\133\237\152\132", "inin")
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_TakeMyGuildBenefit(false)
   self:close()
 end
@@ -76,6 +79,7 @@ function InputMLUp_GuildReceivePay_PayIntoWarehouse()
     return
   end
   _PA_LOG("\236\162\133\237\152\132", "wareawra")
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_TakeMyGuildBenefit(true)
   self:close()
 end

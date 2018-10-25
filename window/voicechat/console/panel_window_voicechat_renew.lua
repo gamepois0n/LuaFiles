@@ -75,11 +75,13 @@ end
 function PaGlobalFunc_VoiceChat_LClick_SetTalk(isCheck)
   local self = Window_VoiceChatInfo
   self:SetTalkButtonByCheck(isCheck)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_VoiceChat_EnableSlider()
 end
 function PaGlobalFunc_VoiceChat_LClick_SetListen(isCheck)
   local self = Window_VoiceChatInfo
   self:SetListenButtonByCheck(isCheck)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_VoiceChat_EnableSlider()
 end
 function PaGlobalFunc_VoiceChat_LClick_SetPressTalk(isCheck)
@@ -300,6 +302,9 @@ function PaGlobalFunc_VoiceChat_Open()
   end
   PaGlobalFunc_VoiceChat_EnableSlider()
   Panel_Window_VoiceChat:SetShow(true)
+  if Panel_Window_VoiceChat:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(8, 14)
+  end
 end
 function PaGlobalFunc_VoiceChat_Confirm()
   local self = Window_VoiceChatInfo
@@ -310,6 +315,7 @@ function PaGlobalFunc_VoiceChat_Confirm()
   self._prevOpenHeadphoneVolume = self._openHeadphoneVolume
   self._prevOpenMicSensitivity = self._openMicSensitivity
   self._prevOpenMicAmplification = self._openMicAmplification
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_VoiceChat_Close()
   local selfPlayer = getSelfPlayer()
   if selfPlayer then
@@ -343,6 +349,7 @@ function PaGlobalFunc_VoiceChat_Close()
     isForce = true
   end
   ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, selfPlayer:getUserNo(), isMicOn, isHeadphoneOn, isForce)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Window_VoiceChat:SetShow(false)
 end
 function PaGlobalFunc_VoiceChat_GetShow()

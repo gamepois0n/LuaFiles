@@ -72,6 +72,7 @@ local function MiniGame_Manual_Timing_0(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
+    Panel_ConsoleKeyGuide:SetShow(false)
     Panel_Global_Manual:SetShow(true)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
@@ -92,7 +93,7 @@ local function MiniGame_Manual_Timing_1(actorKeyRaw, isSelf)
       v:SetShow(false)
       v:ComputePos()
     end
-    Panel_Global_Manual:SetShow(true)
+    Panel_ConsoleKeyGuide:SetShow(false)
     _ui.txt_Purpose:SetShow(false)
     _ui.stc_Taming_Info:SetShow(true)
     _ui.txt_HorseInfo:SetShow(true)
@@ -145,6 +146,7 @@ local function MiniGame_Manual_Horse_Rope_0(actorKeyRaw, isSelf)
     else
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_HORSEROPE_0"))
     end
+    PaGlobalFunc_ConsoleKeyGuide_On()
     ui_Value.isFirstTime_Manual_Horse_Rope_0 = false
   end
 end
@@ -228,6 +230,7 @@ end
 local function MiniGame_Manual_Drum_0(actorKeyRaw, isSelf)
   if ui_Value.isFirstTime_Manual_Drum_0 == true and not IsHideMiniGameManual() then
     ControlResetPosition()
+    Panel_ConsoleKeyGuide:SetShow(false)
     Panel_Global_Manual:SetShow(true)
     Panel_Global_Manual:SetAlpha(0)
     UIAni.AlphaAnimation(1, Panel_Global_Manual, 0, 0.22)
@@ -236,6 +239,7 @@ local function MiniGame_Manual_Drum_0(actorKeyRaw, isSelf)
     else
       _ui.txt_Purpose:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DRUM_0"))
     end
+    Panel_ConsoleKeyGuide:SetShow(false)
     _ui.txt_Purpose:SetShow(true)
     _ui.txt_Purpose:AddEffect("UI_QustComplete01", false, 0, 0)
     ui_Value.isFirstTime_Manual_Drum_0 = false
@@ -709,7 +713,7 @@ local KeyGuide_Squat = function()
   useTab:SetPosY(y)
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_SQUAT"))
   useTab:SetShow(true)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     PaGlobalFunc_ConsoleKeyGuide_SetState(3)
     useTab:SetShow(false)
   end
@@ -733,7 +737,7 @@ local KeyGuide_Down = function()
   useTab:SetPosY(y)
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_DOWN"))
   useTab:SetShow(true)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     PaGlobalFunc_ConsoleKeyGuide_SetState(4)
     useTab:SetShow(false)
   end

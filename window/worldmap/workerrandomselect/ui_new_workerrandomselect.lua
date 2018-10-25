@@ -19,11 +19,15 @@ local _workerWorkingSpeed = UI.getChildControl(Panel_Window_WorkerRandomSelect, 
 local _workerLucky = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_LuckyValue")
 local _workerRandomName = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WokerRandomSelectName1")
 local _workerLevel = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_Lev")
+local _btnClose = UI.getChildControl(Panel_Window_WorkerRandomSelect, "Button_Close")
 local _workerPriceNameTag = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_EmploymentPriceTitle")
-local _workerPrice = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_Gold_Icon3")
+local _workerPriceIcon = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_Gold_Icon3")
+local _workerPrice = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerPriceValue")
 local _workerCountEmployment = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerEmployment")
 local _workerCountValue = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerEmploymentValue")
+local _workerInventoryMoneyIcon = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyMoney_Icon")
 local _workerInventoryMoney = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyMoney")
+local _workerWareHouseInventoryMoneyIcon = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyWareHouseMoney_Icon")
 local _workerWareHouseInventoryMoney = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyWareHouseMoney")
 local _workerButtonReSelect = UI.getChildControl(Panel_Window_WorkerRandomSelect, "Button_WorkerReSelect")
 local _workerButtonSelect = UI.getChildControl(Panel_Window_WorkerRandomSelect, "Button_WorkerSelect")
@@ -80,7 +84,7 @@ function workerRandomShopShow(workerShopSlotNo)
       end
     end
   end
-  _workerPrice:SetPosX(_workerPriceNameTag:GetPosX() + _workerPriceNameTag:GetTextSizeX() + 5)
+  _workerPriceIcon:SetPosX(_workerPrice:GetPosX() + _workerPrice:GetSizeX() - _workerPrice:GetTextSizeX() - _workerPriceIcon:GetSizeX() - 5)
   _workerCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERRANDOMSELECT_WORKERCOUNTVALUE", "value", maxWorkerCount - waitWorkerCount))
   if MyWp < 10 then
     _workerButtonReSelect:SetEnable(false)
@@ -107,8 +111,8 @@ function workerRandomShopShow(workerShopSlotNo)
   local btnSelectSizeX = _workerButtonSelect:GetSizeX() + 23
   local btnSelectTextPosX = btnSelectSizeX - btnSelectSizeX / 2 - _workerButtonSelect:GetTextSizeX() / 2
   _workerButtonSelect:SetTextSpan(btnSelectTextPosX, 5)
-  _workerInventoryMoney:SetPosX(_workerInventoryMoneyButton:GetPosX() + _workerInventoryMoneyButton:GetTextSizeX() + 35)
-  _workerWareHouseInventoryMoney:SetPosX(_workerWareHouseInventoryMoneyButton:GetPosX() + _workerWareHouseInventoryMoneyButton:GetTextSizeX() + 35)
+  _workerInventoryMoneyIcon:SetPosX(_workerInventoryMoney:GetPosX() + _workerInventoryMoney:GetSizeX() - _workerInventoryMoney:GetTextSizeX() - _workerInventoryMoneyIcon:GetSizeX() - 5)
+  _workerWareHouseInventoryMoneyIcon:SetPosX(_workerWareHouseInventoryMoney:GetPosX() + _workerWareHouseInventoryMoney:GetSizeX() - _workerWareHouseInventoryMoney:GetTextSizeX() - _workerWareHouseInventoryMoneyIcon:GetSizeX() - 5)
   _workerCountValue:SetPosX(_workerCountEmployment:GetPosX() + _workerCountEmployment:GetTextSizeX() + 5)
   workerRandomSelectShow()
 end
@@ -219,6 +223,7 @@ function workerShop_registEventHandler()
   _workerWareHouseInventoryMoneyButton:addInputEvent("Mouse_Out", "workerShop_SimpleTooltips( false )")
   _workerInventoryMoneyButton:setTooltipEventRegistFunc("workerShop_SimpleTooltips( 0, true )")
   _workerWareHouseInventoryMoneyButton:setTooltipEventRegistFunc("workerShop_SimpleTooltips( 1, true )")
+  _btnClose:addInputEvent("Mouse_LUp", "workerRandomSelectHide()")
 end
 function WorkerShop_CheckFromMoney(check)
   if 0 == check then

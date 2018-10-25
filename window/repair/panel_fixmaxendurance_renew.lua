@@ -116,6 +116,7 @@ function PaGlobalFunc_FixMaxEnduranceInfo_Close()
   FixMaxEnduranceInfo:close()
 end
 function FixMaxEnduranceInfo:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
   Inventory_SetFunctor(nil, nil, nil, nil)
   self._ui.slot_targetItem:clearItem()
@@ -139,6 +140,7 @@ function FixMaxEnduranceInfo:updateMoneyDisplay()
 end
 function PaGlobalFunc_FixMaxEnduranceInfo_OnPadB()
   local self = FixMaxEnduranceInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   if nil ~= self._ui.slot_subjectItem.slotNo then
     InputMRUp_FixMaxEndurance_SubjectSlot()
     return
@@ -163,6 +165,7 @@ function PaGlobalFunc_FixMaxEnduranceInfo_PickTargetOrSubject(slotNo, itemWrappe
   if nil == itemWrapper then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   if _panel:GetShow() and false == self._checkHasItemJewel and nil ~= self._ui.slot_targetItem.slotNo and nil == self._ui.slot_subjectItem.slotNo and true == self:checkJewel(slotNo, itemWrapper, count, inventoryType) then
     self._checkHasItemJewel = false
     return
@@ -326,6 +329,7 @@ function FixMaxEnduranceInfo:fixEquip_ApplyButton(isHelpRepair)
   end
   local moneyWhereType = CppEnums.ItemWhereType.eInventory
   local function funcYesExe()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     self._fixEquipData.slotNoMain = self._ui.slot_targetItem.slotNo
     self._fixEquipData.whereTypeMain = self._ui.slot_targetItem.whereType
     self._fixEquipData.whereTypeSub = self._ui.slot_subjectItem.whereType
@@ -363,6 +367,7 @@ function FixMaxEnduranceInfo:fixEquip_ApplyButton(isHelpRepair)
     if true == isHelpRepair and maxEndurance - currentEndurance < 15 then
       contentString = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_DURABILITY_SHORTAGE") .. contentString
     end
+    _AudioPostEvent_SystemUiForXBOX(8, 14)
     local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
     local messageboxData = {
       title = titleString,

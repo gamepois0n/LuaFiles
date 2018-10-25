@@ -23,9 +23,11 @@ function GuildSkillInfo:init()
 end
 function GuildSkillInfo:open()
   self:update()
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   _panel:SetShow(true)
 end
 function GuildSkillInfo:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
 end
 function GuildSkillInfo:update()

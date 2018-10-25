@@ -209,6 +209,7 @@ function FromClient_ShowHousingModeUI_Manager_Renew(isShow)
 end
 function FromClient_CancelInstallModeMessageBox_Manager_Renew()
   local messageBox_HouseInstallation_Exit_DO = function()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     PaGlobalFunc_InstallationMode_Manager_Exit()
   end
   local messageBox_HouseInstallaion_Default_Cancel_function = function()

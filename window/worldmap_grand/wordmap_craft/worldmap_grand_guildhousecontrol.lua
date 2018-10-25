@@ -55,7 +55,7 @@ local WorkList_Control = {
   _selecthouseKeyRaw = nil,
   _selectRecipeKeyRaw = nil,
   maxPoolNo = 4,
-  maxIconRow = 5,
+  maxIconRow = 6,
   titlePool = {},
   iconPool = {}
 }

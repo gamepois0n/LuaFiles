@@ -690,7 +690,7 @@ function PaGlobalFunc_StableChangeSkill_ScrollEvent(isScrollUp)
   local self = Panel_Window_StableChangeSkill_info
   local beforeSlotIndex = self._value.startSlotIndex
   self._value.startSlotIndex = UIScroll.ScrollEvent(self._ui.skill_VerticalScroll, isScrollUp, self._config.slotRow, self._value.learnSkillCount, self._value.startSlotIndex, self._config.slotCol)
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startSlotIndex then
+  if (ToClient_isConsole() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startSlotIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   if beforeSlotIndex ~= self._value.startSlotIndex then

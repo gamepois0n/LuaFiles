@@ -195,6 +195,7 @@ function PaGlobalFunc_Mail_GetDetail()
     _sender_Name = _mail_Data._Data[pageNo][index]._sender_Name,
     _mail_Title = _mail_Data._Data[pageNo][index]._mail_Title
   }
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   RequestMail_getMailDetail(realIndex)
 end
 function MailList_Change_Page(isNext)
@@ -214,6 +215,7 @@ function MailList_Change_Page(isNext)
     end
   end
   MailInfo._ui.isSelectAll = false
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   _mail_Data:Update_MailPage()
 end
 function MailList_SelectMailWithIndex(index)
@@ -238,6 +240,7 @@ function MailList_SelectDelete()
 end
 function MailList_ReceiveAll()
   local recievemail = function()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     RequestMail_receiveAllMailItem()
   end
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_MAIL_GETALL_MESSAGEBOX_MEMO")

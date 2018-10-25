@@ -146,6 +146,8 @@ function calculateText(GroupIndex, PartIndex)
         text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TATTOO")
       elseif 8 == PartIndex then
         text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_WRINKLE")
+      elseif 9 == PartIndex then
+        text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EXPRESSION")
       end
     elseif 0 == PartIndex then
       text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_FACETYPE")
@@ -163,6 +165,8 @@ function calculateText(GroupIndex, PartIndex)
       text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TATTOO")
     elseif 7 == PartIndex then
       text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_WRINKLE")
+    elseif 8 == PartIndex then
+      text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EXPRESSION")
     end
   elseif 2 == GroupIndex then
     text = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_FORM") .. " - "

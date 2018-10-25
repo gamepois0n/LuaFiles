@@ -8,23 +8,23 @@ GuildWarfareInfoPage = {
   _frameDefaultBG_Warfare = UI.getChildControl(Panel_Window_Guild, "Static_Frame_WarfareBG"),
   _scrollBar,
   _list = {},
-  _initComplete = false
+  _initComplete = false,
+  ui_Icons = {
+    [0] = nil,
+    [1] = nil,
+    [2] = nil,
+    [3] = nil,
+    [4] = nil,
+    [5] = nil,
+    [6] = nil,
+    [7] = nil,
+    [8] = nil,
+    [9] = nil,
+    [10] = nil,
+    [11] = nil
+  }
 }
 local _iconHelper = UI.getChildControl(Panel_Guild_Warfare, "StaticText_IconHelper")
-local ui_Icons = {
-  [0] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_CommandCenter"),
-  [1] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Tower"),
-  [2] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_CastleGate"),
-  [3] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Help"),
-  [4] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Summons"),
-  [5] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Installation"),
-  [6] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Master"),
-  [7] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Commander"),
-  [8] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Member"),
-  [9] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_Death"),
-  [10] = UI.getChildControl(Panel_Guild_Warfare, "StaticText_M_CharName"),
-  [11] = UI.getChildControl(Panel_Guild_Warfare, "Static_M_KillBySiege")
-}
 local staticText_CommandCenter = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_CommandCenter")
 local staticText_Tower = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_Tower")
 local staticText_CastleGate = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_CastleGate")
@@ -37,6 +37,7 @@ local staticText_Member = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_
 local staticText_Death = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_Death")
 local staticText_KillBySiege = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_KillBySiege")
 local staticText_CharName = UI.getChildControl(Panel_Guild_Warfare, "StaticText_S_CharName")
+local txt_Title = UI.getChildControl(Panel_Guild_Warfare, "StaticText_Title")
 local _selectSortType = 11
 local _listSort = {
   command = false,
@@ -53,14 +54,7 @@ local _listSort = {
   killBySiege = false
 }
 local tempGuildWarfareList = {}
-for iconidx = 0, 11 do
-  ui_Icons[iconidx]:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarfareListSort( " .. iconidx .. " )")
-end
 function Panel_Guild_Warfare_Icon_ToolTip_Func()
-  for idx = 0, 11 do
-    ui_Icons[idx]:addInputEvent("Mouse_On", "Panel_Guild_Warfare_Icon_ToolTip_Show(" .. idx .. ", true )")
-    ui_Icons[idx]:addInputEvent("Mouse_Out", "Panel_Guild_Warfare_Icon_ToolTip_Show(" .. idx .. ", false )")
-  end
 end
 function Panel_Guild_Warfare_Icon_ToolTip_Show(iconNo, isOn)
   local mouse_posX = getMousePosX()
@@ -113,7 +107,6 @@ end
 local frameSizeY = 0
 local contentSizeY = 0
 function GuildWarfareInfoPage:initialize()
-  Panel_Guild_Warfare_Icon_ToolTip_Func()
   local constStartY = 5
   frame_Warfare = UI.getChildControl(Panel_Guild_Warfare, "Frame_GuildWarfare")
   content_Warfare = UI.getChildControl(frame_Warfare, "Frame_1_Content")
@@ -130,7 +123,6 @@ function GuildWarfareInfoPage:initialize()
   local copyMember = UI.getChildControl(content_Warfare, "StaticText_C_Member")
   local copyDeath = UI.getChildControl(content_Warfare, "StaticText_C_Death")
   local copyKillBySiege = UI.getChildControl(content_Warfare, "StaticText_C_KillBySiege")
-  local copyPartline = UI.getChildControl(content_Warfare, "Static_C_PartLine")
   self._scrollBar = UI.getChildControl(frame_Warfare, "VerticalScroll")
   UIScroll.InputEvent(self._scrollBar, "GuildWarfareMouseScrollEvent")
   content_Warfare:addInputEvent("Mouse_UpScroll", "GuildWarfareMouseScrollEvent( true )")
@@ -149,7 +141,6 @@ function GuildWarfareInfoPage:initialize()
     rtGuildWarfareInfo._txtMember = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, content_Warfare, "StaticText_C_Member_" .. pIndex)
     rtGuildWarfareInfo._txtDeath = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, content_Warfare, "StaticText_C_Death_" .. pIndex)
     rtGuildWarfareInfo._txtKillBySiege = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, content_Warfare, "StaticText_C_KillBySiege_" .. pIndex)
-    rtGuildWarfareInfo._Partline = UI.createControl(UCT.PA_UI_CONTROL_STATIC, content_Warfare, "Static_C_PartLine_" .. pIndex)
     CopyBaseProperty(copyCharName, rtGuildWarfareInfo._txtCharName)
     CopyBaseProperty(copyTower, rtGuildWarfareInfo._txtTower)
     CopyBaseProperty(copyCommandCenter, rtGuildWarfareInfo._txtCommandCenter)
@@ -162,7 +153,6 @@ function GuildWarfareInfoPage:initialize()
     CopyBaseProperty(copyMember, rtGuildWarfareInfo._txtMember)
     CopyBaseProperty(copyDeath, rtGuildWarfareInfo._txtDeath)
     CopyBaseProperty(copyKillBySiege, rtGuildWarfareInfo._txtKillBySiege)
-    CopyBaseProperty(copyPartline, rtGuildWarfareInfo._Partline)
     rtGuildWarfareInfo._txtCharName:SetPosY(constStartY + pIndex * 25)
     rtGuildWarfareInfo._txtTower:SetPosY(constStartY + pIndex * 25)
     rtGuildWarfareInfo._txtCommandCenter:SetPosY(constStartY + pIndex * 25)
@@ -175,7 +165,6 @@ function GuildWarfareInfoPage:initialize()
     rtGuildWarfareInfo._txtMember:SetPosY(constStartY + pIndex * 25)
     rtGuildWarfareInfo._txtDeath:SetPosY(constStartY + pIndex * 25)
     rtGuildWarfareInfo._txtKillBySiege:SetPosY(constStartY + pIndex * 25)
-    rtGuildWarfareInfo._Partline:SetPosY(pIndex * 25)
     rtGuildWarfareInfo._txtCharName:SetIgnore(false)
     rtGuildWarfareInfo._txtTower:SetIgnore(false)
     rtGuildWarfareInfo._txtCommandCenter:SetIgnore(false)
@@ -188,7 +177,6 @@ function GuildWarfareInfoPage:initialize()
     rtGuildWarfareInfo._txtMember:SetIgnore(false)
     rtGuildWarfareInfo._txtDeath:SetIgnore(false)
     rtGuildWarfareInfo._txtKillBySiege:SetIgnore(false)
-    rtGuildWarfareInfo._Partline:SetIgnore(false)
     rtGuildWarfareInfo._txtCharName:addInputEvent("Mouse_UpScroll", "GuildWarfareMouseScrollEvent(true)")
     rtGuildWarfareInfo._txtTower:addInputEvent("Mouse_UpScroll", "GuildWarfareMouseScrollEvent(true)")
     rtGuildWarfareInfo._txtCommandCenter:addInputEvent("Mouse_UpScroll", "GuildWarfareMouseScrollEvent(true)")
@@ -226,7 +214,6 @@ function GuildWarfareInfoPage:initialize()
       rtGuildWarfareInfo._txtMember:SetShow(isShow)
       rtGuildWarfareInfo._txtDeath:SetShow(isShow)
       rtGuildWarfareInfo._txtKillBySiege:SetShow(isShow)
-      rtGuildWarfareInfo._Partline:SetShow(isShow)
       if _ContentsGroup_NewSiegeRule then
         rtGuildWarfareInfo._txtHelp:SetShow(false)
         rtGuildWarfareInfo._txtMaster:SetShow(false)
@@ -250,14 +237,37 @@ function GuildWarfareInfoPage:initialize()
   UI.deleteControl(copyMember)
   UI.deleteControl(copyDeath)
   UI.deleteControl(copyKillBySiege)
-  UI.deleteControl(copyPartline)
-  copyCharName, copyTower, copyCommandCenter, copyCastleGate, copyHelp, copySummons, copyInstallation, copyMaster, copyCommander, copyMember, copyDeath, copyKillBySiege, copyPartline = nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
+  copyCharName, copyTower, copyCommandCenter, copyCastleGate, copyHelp, copySummons, copyInstallation, copyMaster, copyCommander, copyMember, copyDeath, copyKillBySiege = nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
   frameSizeY = frame_Warfare:GetSizeY()
   frame_Warfare:UpdateContentScroll()
   frame_Warfare:UpdateContentPos()
+  self.area_WarfareTitle = UI.getChildControl(Panel_Guild_Warfare, "Static_Warfare_BG")
+  self.ui_Icons = {
+    [0] = UI.getChildControl(self.area_WarfareTitle, "Static_M_CommandCenter"),
+    [1] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Tower"),
+    [2] = UI.getChildControl(self.area_WarfareTitle, "Static_M_CastleGate"),
+    [3] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Help"),
+    [4] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Summons"),
+    [5] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Installation"),
+    [6] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Master"),
+    [7] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Commander"),
+    [8] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Member"),
+    [9] = UI.getChildControl(self.area_WarfareTitle, "Static_M_Death"),
+    [10] = UI.getChildControl(self.area_WarfareTitle, "StaticText_M_CharName"),
+    [11] = UI.getChildControl(self.area_WarfareTitle, "Static_M_KillBySiege")
+  }
+  self.ui_Icons[10]:SetText(self.ui_Icons[10]:GetText())
+  self.ui_Icons[10]:SetSize(self.ui_Icons[10]:GetTextSizeX(), self.ui_Icons[10]:GetSizeY())
+  self.ui_Icons[10]:SetPosX(165 - self.ui_Icons[10]:GetTextSizeX() / 2)
+  for iconidx = 0, 11 do
+    self.ui_Icons[iconidx]:addInputEvent("Mouse_LUp", "HandleClicked_GuildWarfareListSort( " .. iconidx .. ")")
+    self.ui_Icons[iconidx]:addInputEvent("Mouse_On", "Panel_Guild_Warfare_Icon_ToolTip_Show(" .. iconidx .. ", true)")
+    self.ui_Icons[iconidx]:addInputEvent("Mouse_Out", "Panel_Guild_Warfare_Icon_ToolTip_Show(" .. iconidx .. ", false)")
+  end
   self._frameDefaultBG_Warfare:MoveChilds(self._frameDefaultBG_Warfare:GetID(), Panel_Guild_Warfare)
   UI.deletePanel(Panel_Guild_Warfare:GetID())
   Panel_Guild_Warfare = nil
+  txt_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDWARFAREINFO"))
   self._initComplete = true
 end
 function GuildWarfareMouseScrollEvent(isUpScroll)
@@ -421,6 +431,7 @@ local function guildListCompareKillBySiege(w1, w2)
   end
 end
 function HandleClicked_GuildWarfareListSort(sortType)
+  local self = GuildWarfareInfoPage
   _selectSortType = sortType
   GuildWarfareInfoPage:TitleLineReset()
   if 0 == sortType then
@@ -532,7 +543,7 @@ function HandleClicked_GuildWarfareListSort(sortType)
       _listSort.name = false
     end
     staticText_CharName:SetShow(true)
-    staticText_CharName:SetPosX(ui_Icons[sortType]:GetPosX() + ui_Icons[sortType]:GetSizeX() / 2 + ui_Icons[sortType]:GetTextSizeX() / 2 + 10)
+    staticText_CharName:SetPosX(self.ui_Icons[10]:GetPosX() + self.ui_Icons[10]:GetTextSizeX())
     table.sort(tempGuildWarfareList, guildListCompareCharName)
   elseif 11 == sortType then
     if false == _listSort.killBySiege then
@@ -553,7 +564,7 @@ function GuildWarfareInfoPage:GuildListSortSet()
   _listSort.name = true
   staticText_CharName:SetShow(true)
   table.sort(tempGuildWarfareList, guildListCompareCharName)
-  staticText_CharName:SetPosX(ui_Icons[10]:GetPosX() + ui_Icons[10]:GetSizeX() / 2 + ui_Icons[10]:GetTextSizeX() / 2 + 10)
+  staticText_CharName:SetPosX(self.ui_Icons[10]:GetPosX() + self.ui_Icons[10]:GetTextSizeX())
 end
 function GuildWarfareInfoPage:updateSort()
   if 0 == _selectSortType then

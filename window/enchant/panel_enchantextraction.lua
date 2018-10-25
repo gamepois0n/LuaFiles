@@ -18,8 +18,7 @@ local enchantExtraction = {
     slot_1 = UI.getChildControl(Panel_EnchantExtraction, "equipIcon_1"),
     slot_2 = UI.getChildControl(Panel_EnchantExtraction, "equipIcon_2"),
     enchantCount = UI.getChildControl(Panel_EnchantExtraction, "StaticText_Slot2"),
-    descBg = UI.getChildControl(Panel_EnchantExtraction, "Static_CommentBG"),
-    desc = UI.getChildControl(Panel_EnchantExtraction, "StaticText_Desc")
+    descBg = UI.getChildControl(Panel_EnchantExtraction, "Static_CommentBG")
   },
   slotConfig = {createIcon = true, createBorder = true},
   _elapsTime = 4,
@@ -32,6 +31,7 @@ local enchantExtraction = {
   _inventoryOpen = false
 }
 function enchantExtraction:Init()
+  self.control.desc = UI.getChildControl(self.control.descBg, "StaticText_Desc")
   SlotItem.new(self._blacksmithIcon, "Static_Icon_1", 0, self.control.slot_1, self.slotConfig)
   self._blacksmithIcon:createChild()
   self._blacksmithIcon.icon:SetPosX(0)
@@ -48,6 +48,7 @@ function enchantExtraction:Init()
     self.control.descBg:ComputePos()
     self.control.desc:ComputePos()
   end
+  self.control.btn_Extraction:ComputePos()
 end
 function HandleClicked_Extraction()
   local self = enchantExtraction

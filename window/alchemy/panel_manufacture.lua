@@ -24,7 +24,7 @@ manufacture_Init()
 function manufacture_Repos()
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
-  Panel_Manufacture:SetPosX((screenSizeX - Panel_Manufacture:GetSizeX()) / 2)
+  Panel_Manufacture:SetPosX((screenSizeX - Panel_Manufacture:GetSizeX()) / 2 - 100)
   Panel_Manufacture:SetPosY((screenSizeY - Panel_Manufacture:GetSizeY()) / 2)
 end
 local noneStackItemList = Array.new()
@@ -118,7 +118,7 @@ local manufactureListName = {
   [13] = "LUA_MANUFACTURE_CRAFT_NAME"
 }
 local _usingItemSlotCount = 0
-local _whiteCircle = UI.getChildControl(Panel_Manufacture, "Static_WhiteCircle")
+local _whiteCircle = UI.getChildControl(Panel_Manufacture, "Static_Circle")
 local _slotConfig = {
   createIcon = true,
   createBorder = false,
@@ -155,32 +155,40 @@ for index = 0, _slotCount - 1 do
 end
 local SLOT_POSITION = {}
 SLOT_POSITION[0] = {
-  [0] = {106, 66}
+  [0] = {206, 76}
 }
 SLOT_POSITION[1] = {
-  [0] = {32, 139},
-  [1] = {180, 139}
+  [0] = {84, 198},
+  [1] = {327, 198}
 }
 SLOT_POSITION[2] = {
-  [0] = {106, 66},
-  [1] = {35, 165},
-  [2] = {177, 165}
+  [0] = {206, 76},
+  [1] = {90, 236},
+  [2] = {313, 236}
 }
 SLOT_POSITION[3] = {
-  [0] = {39, 110},
-  [1] = {174, 110},
-  [2] = {60, 200},
-  [3] = {151, 200}
+  [0] = {124, 112},
+  [1] = {287, 112},
+  [2] = {124, 283},
+  [3] = {287, 283}
 }
 SLOT_POSITION[4] = {
-  [0] = {106, 66},
-  [1] = {39, 110},
-  [2] = {174, 110},
-  [3] = {60, 200},
-  [4] = {151, 200}
+  [0] = {206, 76},
+  [1] = {94, 156},
+  [2] = {317, 156},
+  [3] = {124, 283},
+  [4] = {287, 283}
 }
-local _manufactureText = UI.getChildControl(Panel_Manufacture, "StaticText_CircleName")
+local _manufactureText = UI.getChildControl(_whiteCircle, "StaticText_CircleName")
 _manufactureText:SetShow(false)
+local _title_BG = UI.getChildControl(Panel_Manufacture, "Static_TitleBG")
+local _circle_BG = UI.getChildControl(Panel_Manufacture, "Static_Circle")
+local _uiButtonClose = UI.getChildControl(_title_BG, "Button_Close")
+_uiButtonClose:addInputEvent("Mouse_LUp", "Manufacture_Close()")
+local _buttonQuestion = UI.getChildControl(_title_BG, "Button_Question")
+_buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelManufacture\" )")
+_buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelManufacture\", \"true\")")
+_buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelManufacture\", \"false\")")
 local _uiButtonManufacture = UI.getChildControl(Panel_Manufacture, "Button_Manufacture")
 _uiButtonManufacture:addInputEvent("Mouse_LUp", "Manufacture_RepeatAction(false)")
 _uiButtonManufacture:addInputEvent("Mouse_On", "Manufacture_Mouse_On()")
@@ -188,23 +196,6 @@ local _uiButtonMassManufacture = UI.getChildControl(Panel_Manufacture, "Button_M
 _uiButtonMassManufacture:addInputEvent("Mouse_LUp", "Manufacture_RepeatAction(true)")
 _uiButtonMassManufacture:addInputEvent("Mouse_On", "Manufacture_Mouse_On()")
 _uiButtonMassManufacture:SetShow(false)
-local _uiButtonClose = UI.getChildControl(Panel_Manufacture, "Button_Close")
-_uiButtonClose:addInputEvent("Mouse_LUp", "Manufacture_Close()")
-local _buttonQuestion = UI.getChildControl(Panel_Manufacture, "Button_Question")
-_buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelManufacture\" )")
-_buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelManufacture\", \"true\")")
-_buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelManufacture\", \"false\")")
-local _currentActionIcon = UI.getChildControl(Panel_Manufacture, "Static_CurrentActionIcon")
-_currentActionIcon:SetShow(false)
-_currentActionIcon:SetIgnore(true)
-local _manufactureName = UI.getChildControl(Panel_Manufacture, "StaticText_ManufactureName")
-_manufactureName:SetShow(false)
-_manufactureName:SetIgnore(true)
-_manufactureName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-local _textTemp = UI.getChildControl(Panel_Manufacture, "StaticText_Template")
-_textTemp:SetShow(false)
-_textTemp:SetIgnore(true)
-_textTemp:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 local _textDescBG = UI.getChildControl(Panel_Manufacture, "Static_DescBG")
 _textDescBG:SetIgnore(true)
 local _textDesc = UI.getChildControl(Panel_Manufacture, "StaticText_Desc")
@@ -276,11 +267,8 @@ local ROYALALCHEMY_MENTALTHEMEKEY = 31012
 local GUILDMANUFACTURE_MENTALTHEMEKEY = 31013
 local CRAFT_MENTALTHEMEKEY = 30800
 local RAINWATER_MENTALTHEMEKEY = 30800
-local iconPosY = _currentActionIcon:GetPosY()
-local textTempPosY = _textTemp:GetPosY()
-local textDescPosY = _textDesc:GetPosY()
-local manufactureNamePosY = _manufactureName:GetPosY()
 function ManufactureControlInit()
+  _frameScroll:SetShow(false)
   local manufactureAction1 = {}
   manufactureAction1._actionName = _ACTIONNAME_SHAKE
   manufactureAction1._radioBtn = UI.getChildControl(Panel_Manufacture, "RadioButton_Action1")
@@ -357,15 +345,9 @@ function ManufactureControlInit()
     manufactureAction14._radioBtn = UI.getChildControl(Panel_Manufacture, "RadioButton_Action14")
     manufactureAction14._radioBtn:addInputEvent("Mouse_LUp", "Manufacture_Button_LUp_Craft(true)")
     _listAction[13] = manufactureAction14
-    _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 195)
-    list2:SetSize(list2:GetSizeX(), 360)
-    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 600)
   else
     manufactureAction14._radioBtn = UI.getChildControl(Panel_Manufacture, "RadioButton_Action14")
     manufactureAction14._radioBtn:SetShow(false)
-    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 543)
-    _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 133)
-    list2:SetSize(list2:GetSizeX(), 300)
   end
 end
 function ManufactureControlEnable(control, isEnable)
@@ -543,7 +525,7 @@ function Manufacture_Show(installationType, materialWhereType, isClear, showType
     elseif installationType == CppEnums.InstallationType.eType_Anvil then
       isEnable = isEnableManufactureAction(_listAction[7]._actionName)
       _listAction[7]._radioBtn:SetCheck(true)
-      Manufacture_Button_LUp_RepairItem(false)
+      Manufacture_Button_LUp_RepairItem(true)
       if not isEnable then
         _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_NEED_KNOWLEDGE_ANVIL"))
       end
@@ -573,6 +555,8 @@ function Manufacture_Show(installationType, materialWhereType, isClear, showType
     Manufacture_UpdateCheckRadioButton(true)
     ManufactureKnowledge_ShowList(true)
     _uiButtonManufacture:SetShow(false)
+    _listAction[0]._radioBtn:SetCheck(true)
+    Manufacture_Button_LUp_Shake(true)
   end
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   if contentsOption then
@@ -613,9 +597,6 @@ function Manufacture_Close()
     HelpMessageQuestion_Out()
   end
   TooltipSimple_Hide()
-  _manufactureName:SetShow(false)
-  _textTemp:SetShow(false)
-  _currentActionIcon:SetShow(false)
   audioPostEvent_SystemUi(1, 25)
 end
 function Manufacture_ClearMaterial()
@@ -680,7 +661,7 @@ function Manufacture_PushItemFromInventory(slotNo, itemWrapper, count, inventory
       local itemWrapper = getInventoryItemByType(inventoryType, ii)
       if nil ~= itemWrapper then
         local itemKey = itemWrapper:get():getKey():getItemKey()
-        if selectedItemKey == itemKey and not selectedItemWrapper:getStaticStatus():isStackable() and slotNo ~= ii then
+        if selectedItemKey == itemKey and not selectedItemWrapper:getStaticStatus():isStackable() and not itemWrapper:isEnchanted() and slotNo ~= ii then
           noneStackItemList:push_back(ii)
         end
       end
@@ -767,10 +748,10 @@ function Manufacture_UpdateSlotPos()
   local posArray = SLOT_POSITION[posIndex]
   for ii = 0, posIndex do
     local pos = posArray[ii]
-    _slotList[ii].icon:SetPosX(pos[1] + 14)
-    _slotList[ii].icon:SetPosY(pos[2] + 9)
-    _pointList[ii]:SetPosX(pos[1] + 28)
-    _pointList[ii]:SetPosY(pos[2] + 18)
+    _slotList[ii].icon:SetPosX(pos[1])
+    _slotList[ii].icon:SetPosY(pos[2])
+    _pointList[ii]:SetPosX(pos[1])
+    _pointList[ii]:SetPosY(pos[2])
   end
 end
 function Manufacture_UpdateSlotWarehouse()
@@ -1309,23 +1290,16 @@ function Manufacture_Button_LUp_Shake(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 172, 58, 228, 114, 0)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SHAKE"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SHAKE"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_SHAKE"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_SHAKE"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(SHAKE_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1354,23 +1328,16 @@ function Manufacture_Button_LUp_Grind(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 115, 1, 171, 57, 1)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_GRIND"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_GRIND"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_GRIND"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_GRIND"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(GRIND_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1399,23 +1366,16 @@ function Manufacture_Button_LUp_FireWood(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 1, 58, 57, 114, 2)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_WOODSPLITTING"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_WOODSPLITTING"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_FIREWOOD"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_FIREWOOD"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(FIREWOOD_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1444,23 +1404,16 @@ function Manufacture_Button_LUp_Dry(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 286, 1, 342, 58, 3)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_DRY"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_DRY"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_DRY"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_DRY"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(DRY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1489,23 +1442,16 @@ function Manufacture_Button_LUp_Thinning(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 58, 115, 114, 171, 4)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_THINNING"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_THINNING"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_THINNING"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_THINNING"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(THINNING_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1534,23 +1480,16 @@ function Manufacture_Button_LUp_Heat(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 343, 58, 399, 114, 5)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_HEATING"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_HEATING"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_HEAT"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_HEAT"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(HEAT_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_KNOWLEDGE_DESC"))
   Material_Update(_usingItemSlotCount)
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
@@ -1579,23 +1518,16 @@ function Manufacture_Button_LUp_Rainwater(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171, 6)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_RAINWATER"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_RAINWATER"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_RAINWATER"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_RAINWATER"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(RAINWATER_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1623,21 +1555,15 @@ function Manufacture_Button_LUp_RepairItem(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.eType_Anvil
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 229, 115, 285, 171, 7)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_REPAIR"))
+  _PA_LOG("\236\155\144\236\132\160", "\235\170\168\235\163\168!")
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_REPAIR"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC2_REPAIR"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_DESC_REPAIR"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_REPAIR"))
   Manufacture_UpdateCheckRadioButton()
   ManufactureKnowledge_ClearList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1665,23 +1591,16 @@ function Manufacture_Button_LUp_Alchemy(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171, 8)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ALCHEMY"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ALCHEMY"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAME_MANUFACTURE_DESC2_ALCHEMY"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAME_MANUFACTURE_DESC_ALCHEMY"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(ALCHEMY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1715,23 +1634,16 @@ function Manufacture_Button_LUp_Cook(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 115, 172, 171, 228, 9)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_COOK"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_COOK"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAME_MANUFACTURE_DESC2_COOK"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAME_MANUFACTURE_DESC_COOK"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(COOK_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1759,23 +1671,16 @@ function Manufacture_Button_LUp_RGCook(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 345, 456, 401, 512, 10)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GAME_MANUFACTURE_DESC_ROYALGIFT_COOK"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_GAME_MANUFACTURE_DESC2_ROYALGIFT_COOK"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(ROYALCOOK_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1803,23 +1708,16 @@ function Manufacture_Button_LUp_RGAlchemy(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 172, 456, 228, 11)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GAME_MANUFACTURE_DESC_ROYALGIFT_ALCHEMY"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_GAME_MANUFACTURE_DESC2_ROYALGIFT_ALCHEMY"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(ROYALALCHEMY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1852,23 +1750,16 @@ function Manufacture_Button_LUp_GuildManufacture(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 3, 116, 59, 172, 12)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANUFACTURE_DESC"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANUFACTURE_SUBDESC"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(GUILDMANUFACTURE_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1899,23 +1790,16 @@ function Manufacture_Button_LUp_Craft(isClear)
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = CppEnums.InstallationType.TypeCount
-  _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 64, 117, 120, 173, 13)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_NAME"))
   _manufactureText:SetShow(true)
-  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_NAME"))
-  _manufactureName:SetShow(true)
   _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_DESC"))
-  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_SUBDESC"))
-  _textTemp:SetShow(true)
-  FontSize_SetPos()
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
   ReconstructionAlchemyKnowledge(CRAFT_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
-  _defaultMSG2:SetShow(false)
+  _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_DEFAULT_DESC"))
   if CppEnums.ItemWhereType.eInventory == materialItemWhereType or CppEnums.ItemWhereType.eCashInventory == materialItemWhereType then
     Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
     Inventory_updateSlotData()
@@ -1941,10 +1825,17 @@ function Manufacture_KnowledgeList_SelectKnowledge(index)
       local x1, y1, x2, y2 = setTextureUV_Func(_uiKnowledgeIcon, 0, 0, 360, 360)
       _uiKnowledgeIcon:getBaseTexture():setUV(x1, y1, x2, y2)
       _uiKnowledgeIcon:setRenderTexture(_uiKnowledgeIcon:getBaseTexture())
+      _defaultMSG2:SetShow(false)
     else
-      _uiKnowledgeDesc:SetText(" ")
+      _uiKnowledgeDesc:SetText("")
+      _defaultMSG2:SetShow(true)
+      _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_WARNING_KNOWLEDGE_DESC"))
       _uiKnowledgeIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
       _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
+    end
+    _frameScroll:SetShow(false)
+    if _frameManufactureDesc:GetSizeY() < _uiKnowledgeDesc:GetTextSizeY() then
+      _frameScroll:SetShow(true)
     end
     _frameScroll:SetControlTop()
     _frameManufactureDesc:UpdateContentScroll()
@@ -1989,17 +1880,15 @@ function ManufactureKnowledge_ShowList(isShow)
   end
   _uiKnowledgeIcon:ComputePos()
   _uiKnowledgeIcon:ReleaseTexture()
-  _uiKnowledgeIcon:SetShow(isShow)
   _uiKnowledgeDesc:SetText("")
   _uiKnowledgeDesc:SetShow(isShow)
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
-  UI.getChildControl(Panel_Manufacture, "Button_Close"):ComputePos()
-  UI.getChildControl(Panel_Manufacture, "Button_Question"):ComputePos()
-  UI.getChildControl(Panel_Manufacture, "StaticText_Title"):ComputePos()
+  UI.getChildControl(_title_BG, "Button_Close"):ComputePos()
+  UI.getChildControl(_title_BG, "Button_Question"):ComputePos()
+  UI.getChildControl(_title_BG, "StaticText_Title"):ComputePos()
 end
 function ManufactureKnowledge_ClearList()
   _uiKnowledgeIcon:ReleaseTexture()
-  _uiKnowledgeIcon:SetShow(true)
   _uiKnowledgeDesc:SetText("")
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
   _uiKnowledgeDesc:SetShow(true)
@@ -2346,19 +2235,6 @@ function registEventHandler()
     _listAction[i]._radioBtn:addInputEvent("Mouse_Out", "manufacture_ShowIconToolTip( false )")
   end
 end
-function FontSize_SetPos()
-  if 0 ~= getUiFontSize() then
-    _currentActionIcon:SetPosY(iconPosY - 5)
-    _textDesc:SetPosY(textDescPosY - 8)
-    _textTemp:SetPosY(textTempPosY - 5)
-    _manufactureName:SetPosY(manufactureNamePosY - 5)
-  else
-    _currentActionIcon:SetPosY(iconPosY)
-    _textDesc:SetPosY(textDescPosY)
-    _textTemp:SetPosY(textTempPosY)
-    _manufactureName:SetPosY(manufactureNamePosY)
-  end
-end
 function Manufacture_ListControlCreate(content, key)
   local index = Int64toInt32(key)
   local recipe = UI.getChildControl(content, "StaticText_List2_AlchemyRecipe")
@@ -2378,7 +2254,7 @@ function Manufacture_ListControlCreate(content, key)
       recipe:SetText(mentalCardStaticWrapper:getName())
       limitTextTooltip[index] = mentalCardStaticWrapper:getName()
     else
-      recipe:SetFontColor(UI_color.C_FF888888)
+      recipe:SetFontColor(UI_color.C_FF9397A7)
       recipe:SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
       limitTextTooltip[index] = mentalCardStaticWrapper:getKeyword()
     end
@@ -2408,13 +2284,6 @@ function Manufacture_SetShowMassManufacture(isShow)
     isShow = false
   end
   _uiButtonMassManufacture:SetShow(isShow)
-  if true == isShow then
-    _uiButtonManufacture:SetPosY(141)
-    noneStackItem_ChkBtn:SetPosY(109)
-  else
-    _uiButtonManufacture:SetPosY(178)
-    noneStackItem_ChkBtn:SetPosY(146)
-  end
 end
 function Manufacture_SetEnableMassManufacture(isEnable)
 end

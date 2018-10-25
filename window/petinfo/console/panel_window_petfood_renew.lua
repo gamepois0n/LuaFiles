@@ -44,7 +44,7 @@ function petFood:initControl()
   petInfoUI._static_FeedFull:SetPosX(xPos)
   local UCT = CppEnums.PA_UI_CONTROL_TYPE
   petInfoUI._static_Feed:addInputEvent("Mouse_LUp", "FromClient_FeedItem()")
-  petInfoUI._static_Cancle:addInputEvent("Mouse_LUp", "FGlobal_PetFeedClose()")
+  petInfoUI._static_Cancle:addInputEvent("Mouse_LUp", "FGlobal_PetFeedClose(false)")
   petInfoUI._static_FeedFull:addInputEvent("Mouse_LUp", "FromClient_FeedItem_Full()")
   Panel_Window_PetFood_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FromClient_FeedItem_Full()")
   Panel_Window_PetFood_Renew:registerPadEvent(__eConsoleUIPadEvent_Up_A, "FromClient_FeedItem()")
@@ -132,6 +132,7 @@ function petFood:useFeedOneItem()
   end
   local petData = ToClient_getPetUnsealedDataByIndex(self._feedingPetIndex)
   local petNo = petData:getPcPetNo()
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ToClient_Pet_UseFeedItemByIndex(self._selectItemIndex, petNo)
 end
 function petFood:useFeedFullItem()
@@ -144,6 +145,7 @@ function petFood:useFeedFullItem()
   end
   local petData = ToClient_getPetUnsealedDataByIndex(self._feedingPetIndex)
   local petNo = petData:getPcPetNo()
+  _AudioPostEvent_SystemUiForXBOX(5, 0)
   ToClient_Pet_UseFeedItemFullByIndex(self._selectItemIndex, petNo)
 end
 function petFood:useFeedItemToAll()
@@ -184,12 +186,13 @@ function petFood:open(isFeedAll)
   end
   petFood:update()
 end
-function petFood:close()
+function petFood:close(closeAll)
   self._selectItemIndex = -1
   self._feedingPetIndex = -1
   if not Panel_Window_PetFood_Renew:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Window_PetFood_Renew:SetShow(false)
   PaGlobalFunc_Petlist_TemporaryOpen()
 end
@@ -201,8 +204,8 @@ function FGlobal_PetFeedOpen(feedingPetIndex, isFeedAll)
   petFood._feedingPetIndex = feedingPetIndex
   petFood:open(isFeedAll)
 end
-function FGlobal_PetFeedClose()
-  petFood:close()
+function FGlobal_PetFeedClose(closeAll)
+  petFood:close(closeAll)
 end
 function FromClient_luaLoadComplete_PetFood()
   petFood:initialize()

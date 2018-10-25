@@ -2,6 +2,7 @@ local UI_TM = CppEnums.TextMode
 local UI_classType = CppEnums.ClassType
 local ToolTipSkillUI = {
   main = Panel_Tooltip_Skill,
+  btmbg = UI.getChildControl(Panel_Tooltip_Skill, "Static_BtmBg"),
   skillName = UI.getChildControl(Panel_Tooltip_Skill, "Tooltip_Skill_Name"),
   skillIcon = UI.getChildControl(Panel_Tooltip_Skill, "Tooltip_Skill_Icon"),
   skillLevel = UI.getChildControl(Panel_Tooltip_Skill, "Tooltip_Skill_Level"),
@@ -30,6 +31,7 @@ local ToolTipSkillUI = {
 }
 local ToolTipSkillUI_learning = {
   main = Panel_Tooltip_Skill_forLearning,
+  btmbg = UI.getChildControl(Panel_Tooltip_Skill_forLearning, "Static_BtmBg"),
   nextLvTag = UI.getChildControl(Panel_Tooltip_Skill_forLearning, "Tooltip_Skill_NextLevel_tag"),
   skillName = UI.getChildControl(Panel_Tooltip_Skill_forLearning, "Tooltip_Skill_Name"),
   skillIcon = UI.getChildControl(Panel_Tooltip_Skill_forLearning, "Tooltip_Skill_Icon"),
@@ -68,6 +70,7 @@ local ToolTipSkillUI_learning = {
 }
 local ToolTipSkillUI_blackSpirit = {
   main = Panel_Tooltip_Skill_forBlackSpirit,
+  btmbg = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Static_BtmBg"),
   skillName = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Name"),
   skillIcon = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Icon"),
   skillLevel = UI.getChildControl(Panel_Tooltip_Skill_forBlackSpirit, "Tooltip_Skill_Level"),
@@ -110,7 +113,7 @@ local function initialize()
   ToolTipSkillUI.main:setGlassBackground(true)
   ToolTipSkillUI.skill_Movie:SetHorizonCenter()
   ToolTipSkillUI.skill_Movie:SetSize(320, 240)
-  ToolTipSkillUI.skill_Movie:SetSpanSize(-1, 0)
+  ToolTipSkillUI.skill_Movie:SetSpanSize(0, 0)
   ToolTipSkillUI.skill_Movie:SetShow(false)
   ToolTipSkillUI_learning.main:SetShow(false, false)
   ToolTipSkillUI_learning.main:setMaskingChild(true)
@@ -120,7 +123,7 @@ local function initialize()
   ToolTipSkillUI_learning.skill_Movie:SetHorizonCenter()
   ToolTipSkillUI_learning.skill_Movie:ResetUrl()
   ToolTipSkillUI_learning.skill_Movie:SetSize(320, 240)
-  ToolTipSkillUI_learning.skill_Movie:SetSpanSize(-1, 0)
+  ToolTipSkillUI_learning.skill_Movie:SetSpanSize(0, 0)
   ToolTipSkillUI_learning.skill_Movie:SetShow(false)
   ToolTipSkillUI_blackSpirit.main:SetShow(false, false)
   ToolTipSkillUI_blackSpirit.main:setMaskingChild(true)
@@ -128,7 +131,7 @@ local function initialize()
   ToolTipSkillUI_blackSpirit.main:setGlassBackground(true)
   ToolTipSkillUI_blackSpirit.skill_Movie:SetHorizonCenter()
   ToolTipSkillUI_blackSpirit.skill_Movie:SetSize(320, 240)
-  ToolTipSkillUI_blackSpirit.skill_Movie:SetSpanSize(-1, 0)
+  ToolTipSkillUI_blackSpirit.skill_Movie:SetSpanSize(0, 0)
   ToolTipSkillUI_blackSpirit.skill_Movie:SetShow(false)
 end
 function Panel_SkillTooltip_Hide()
@@ -347,6 +350,8 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
   local skillStatic, nextLevelStatic
   if isNextLvWidget then
     level = level + 1
+    target.requireLevel:SetShow(false)
+    target.requireLevel_value:SetShow(false)
     if isReserveSkillOn then
       target.nextLvTag:SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_RESERVATIONSKILL"))
       ToolTipSkillUI_learning.reservation_helpMsg:SetShow(true)
@@ -382,8 +387,14 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
     target.skillLevel:SetText(": " .. PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TooltipSkill_Level", "level", level))
   end
   target.skillIcon:ChangeTextureInfoName("icon/" .. skillTypeSSW:getIconPath())
+  local x1, y1, x2, y2 = setTextureUV_Func(target.skillIcon, 0, 0, 43, 43)
+  target.skillIcon:getBaseTexture():setUV(x1, y1, x2, y2)
+  target.skillIcon:setRenderTexture(target.skillIcon:getBaseTexture())
   target.skillName:SetTextMode(UI_TM.eTextMode_AutoWrap)
   target.skillName:SetText(skillTypeSSW:getName())
+  target.skillName:SetTextVerticalBottom()
+  target.skillName:SetSize(target.skillName:GetSizeX(), target.skillName:GetTextSizeY())
+  target.skillName:SetPosY(target.skillIcon:GetPosY() + (target.skillIcon:GetSizeY() - target.skillName:GetSizeY()) * 0.5 - 2)
   local needLvLearning = skillStatic:get()._needCharacterLevelForLearning
   local needSkillLearning = skillStatic:get()._needSkillPointForLearning
   local needItemLearning
@@ -428,7 +439,7 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
     target.requireSP_value:SetAutoResize(true)
     if needSkillLearning > getSelfPlayer():get():getRemainSkillPoint() then
       local requireSP_valueText = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedSP", "needSkillLearning", needSkillLearning)
-      target.requireSP_value:SetText(": " .. "<PAColor0xFFDB2B2B>" .. requireSP_valueText .. "<PAOldColor>")
+      target.requireSP_value:SetText(": <PAColor0xFFDB2B2B>" .. requireSP_valueText .. "<PAOldColor>")
     else
       target.requireSP_value:SetText(": " .. PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TooltipSkill_NeedSP", "needSkillLearning", needSkillLearning))
     end
@@ -533,38 +544,25 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
   else
     target.skill_Movie:SetMonoTone(true)
   end
-  target.skillIcon:SetPosY(target.skillName:GetPosY() + target.skillName:GetTextSizeY() + 5)
   target.skillLevel:SetPosY(6)
   local iconBottom = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap
   local levelBottom = Tooltip_SkillData:GetBottomPos(target.skillLevel) + elementgap
-  target.skillName:SetPosY(5)
   local nameBottom = Tooltip_SkillData:GetBottomPos(target.skillName) + elementgap
   if iconBottom < nameBottom then
     TooltipYPos = nameBottom
   else
     TooltipYPos = iconBottom
   end
-  local skillIconPosY = target.skillIcon:GetPosY()
-  local skillIconSizeY = target.skillIcon:GetSizeY()
-  target.skillDescription:SetPosY(skillIconPosY)
-  local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
-  if iconBottom < skillDescriptionBottom then
-    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
-  else
-    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap
-  end
-  target.useMethod:SetPosY(TooltipYPos + 9)
-  TooltipYPos = Tooltip_SkillData:GetBottomPos(target.useMethod) + elementgap
+  TooltipYPos = TooltipYPos + elementBiggap + elementBiggap
   if isNextLvWidget then
-    target.learnRequirement_category:SetPosY(TooltipYPos - 5)
-    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_category) + elementgap - elementBiggap
     target.learnRequirement_panel:SetPosY(TooltipYPos)
-    TooltipYPos = TooltipYPos + elementBiggap / 2
+    TooltipYPos = TooltipYPos + elementBiggap
     local isLevelShow = isNeedLvLearning
     target.requireLevel:SetShow(isLevelShow)
     target.requireLevel_value:SetShow(isLevelShow)
     if isLevelShow then
       target.requireLevel:SetPosY(TooltipYPos)
+      target.requireLevel_value:SetPosX(target.requireLevel:GetPosX() + target.requireLevel:GetTextSizeX() + 5)
       target.requireLevel_value:SetPosY(TooltipYPos)
       TooltipYPos = Tooltip_SkillData:GetBottomPos(target.requireLevel_value) + elementgap
     end
@@ -573,6 +571,7 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
     target.requireSP_value:SetShow(isSpShow)
     if isSpShow then
       target.requireSP:SetPosY(TooltipYPos)
+      target.requireSP_value:SetPosX(target.requireSP:GetPosX() + target.requireSP:GetTextSizeX() + 5)
       target.requireSP_value:SetPosY(TooltipYPos)
       TooltipYPos = Tooltip_SkillData:GetBottomPos(target.requireSP_value) + elementgap
     end
@@ -584,8 +583,22 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
       target.requireItem_value:SetPosY(TooltipYPos)
       TooltipYPos = Tooltip_SkillData:GetBottomPos(target.requireItem_value) + elementgap
     end
-    target.learnRequirement_panel:SetSize(target.learnRequirement_panel:GetSizeX(), TooltipYPos - target.learnRequirement_panel:GetPosY() + elementBiggap)
-    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_panel)
+    TooltipYPos = TooltipYPos + elementBiggap
+    target.learnRequirement_panel:SetSize(target.learnRequirement_panel:GetSizeX(), TooltipYPos - target.learnRequirement_panel:GetPosY())
+    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_panel) + 5
+  else
+    TooltipYPos = TooltipYPos + elementBiggap
+  end
+  target.skillDescription:SetPosY(TooltipYPos)
+  local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
+  if iconBottom < skillDescriptionBottom then
+    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
+  else
+    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap + 15
+  end
+  if isShowCommand then
+    target.useMethod:SetPosY(TooltipYPos + elementBiggap)
+    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.useMethod) + elementgap
   end
   if isShowNeedHp or isShowNeedMp or isShowNeedSp or isShowNeedItem or isShowReuseCycle then
     target.useCondition_category:SetPosY(TooltipYPos - 5)
@@ -673,9 +686,10 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
   if target.skill_Movie:GetShow() then
     TooltipYPos = TooltipYPos + elementBiggap
     target.skill_Movie:SetPosY(TooltipYPos)
-    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skill_Movie) + elementgap
+    TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skill_Movie) + elementgap + 5
   end
   target.main:SetSize(target.main:GetSizeX(), TooltipYPos + elementBiggap)
+  target.btmbg:SetSize(target.main:GetSizeX() - 10, target.main:GetSizeY() - 87)
   target.main:SetShow(true, false)
   target.skill_Movie:ComputePos()
   ToolTipSkillUI_learning.reservation_helpMsg:SetPosY(TooltipYPos + 10)

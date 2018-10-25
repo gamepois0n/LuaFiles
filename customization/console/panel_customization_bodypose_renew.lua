@@ -84,6 +84,7 @@ end
 function PaGlobalFunc_Customization_BodyPose_SelectPoseEditorControl(customizationData)
   local self = Customization_BodyPoseInfo
   self._currentData = customizationData
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_Customization_BodyPose_EnablePoseEditSlide(true)
   self._selectedRotMin = customizationData:getSelectedBoneRotationMin()
   self._lastRotMin = customizationData:getSelectedBoneRotationMin()
@@ -106,6 +107,7 @@ function PaGlobalFunc_Customization_BodyPose_ToggleShowPosePreCheck()
 end
 function PaGlobalFunc_Customization_BodyPose_SavePose()
   local self = Customization_BodyPoseInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   savePoseInfo()
   self:UpdateSavedPose()
 end
@@ -117,6 +119,7 @@ function PaGlobalFunc_Customization_BodyPose_DeletePose()
     self._ui._poseSelect:SetShow(false)
     self._selectedImageIndex = -1
     PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
   end
 end
 function PaGlobalFunc_Customization_BodyPose_SelectPose(imageIndex)
@@ -133,10 +136,12 @@ function PaGlobalFunc_Customization_BodyPose_SelectPose(imageIndex)
 end
 function PaGlobalFunc_Customization_BodyPose_PoseEditSymmetryChecked()
   local self = Customization_BodyPoseInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   setSymmetryBoneTransform(self._ui._checkbox_Symmetry:IsCheck())
 end
 function PaGlobalFunc_Customization_BodyPose_ToggleShowPoseBoneControlPart()
   local self = Customization_BodyPoseInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   showBoneControlPart(self._ui._checkbox_ShowPart:IsCheck())
 end
 function PaGlobalFunc_Customization_BodyPose_EnablePoseEditSlide(enable)
@@ -237,6 +242,7 @@ end
 function PaGlobalFunc_Customization_BodyPose_ClearPoseBone()
   local self = Customization_BodyPoseInfo
   self._ui._poseSelect:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   clearPoseBone()
   if nil == self._lastRot then
     return
@@ -249,6 +255,7 @@ end
 function PaGlobalFunc_Customization_BodyPose_ClearAllPoseBone()
   local self = Customization_BodyPoseInfo
   self._ui._poseSelect:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   clearAllPoseBone()
   if nil == self._lastRot then
     return

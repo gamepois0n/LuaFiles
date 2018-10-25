@@ -36,11 +36,17 @@ local inGameShop = {
     _subButton = {_startY = 87, _gapY = 38},
     _subButtonSize = {_BigX = 303, _SmallX = 121}
   },
-  _const = {_sortTypeAsc = 1, _sortTypeDesc = 2},
+  _const = {
+    _sortTypeAsc = 1,
+    _sortTypeDesc = 2,
+    _cashProductCategoryNo_Undefined = -1
+  },
   _hotAndNewStartPosX,
-  _hotAndNew_Showable_Sale = true,
   _hotAndNew_Showable_New = true,
+  _hotAndNew_Showable_Hot = true,
   _hotAndNew_Showable_Event = true,
+  _hotAndNew_Showable_Sale = true,
+  _hotAndNew_Showable_Limited = true,
   _static_TopLineBG = UI.getChildControl(Panel_IngameCashShop, "Static_TopLineBG"),
   _static_PromotionBanner = UI.getChildControl(Panel_IngameCashShop, "Static_PromotionBanner"),
   _static_GradationTop = UI.getChildControl(Panel_IngameCashShop, "Static_Gradation_Top"),
@@ -74,9 +80,11 @@ local inGameShop = {
   _btn_BuyDaum = UI.getChildControl(Panel_IngameCashShop, "Button_BuyDaum"),
   _btn_RefreshCash = UI.getChildControl(Panel_IngameCashShop, "Button_RefreshCash"),
   _btn_HowUsePearl = UI.getChildControl(Panel_IngameCashShop, "Button_PearlHowUse"),
-  _radioButton_Sale = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Sale"),
   _radioButton_New = UI.getChildControl(Panel_IngameCashShop, "RadioButton_New"),
+  _radioButton_Hot = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Hot"),
   _radioButton_Event = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Event"),
+  _radioButton_Sale = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Sale"),
+  _radioButton_Limited = UI.getChildControl(Panel_IngameCashShop, "RadioButton_Limited"),
   desc = {
     _static_ItemNameCombo = nil,
     _staticText_Title = nil,
@@ -161,6 +169,20 @@ inGameShop._combo_ClassList = UI.getChildControl(inGameShop._combo_Class, "Combo
 inGameShop._combo_SubFilterList = UI.getChildControl(inGameShop._combo_SubFilter, "Combobox_List")
 inGameShop._combo_SortList = UI.getChildControl(inGameShop._combo_Sort, "Combobox_List")
 inGameShop._goodDescBG = UI.getChildControl(inGameShop._static_ScrollArea, "Static_GoodsDescBG")
+inGameShop._hotAndNewControlList = {
+  [0] = inGameShop._radioButton_New,
+  [1] = inGameShop._radioButton_Hot,
+  [2] = inGameShop._radioButton_Event,
+  [3] = inGameShop._radioButton_Sale,
+  [4] = inGameShop._radioButton_Limited
+}
+inGameShop._hotAndNewShowableList = {
+  [0] = inGameShop._hotAndNew_Showable_New,
+  [1] = inGameShop._hotAndNew_Showable_Hot,
+  [2] = inGameShop._hotAndNew_Showable_Event,
+  [3] = inGameShop._hotAndNew_Showable_Sale,
+  [4] = inGameShop._hotAndNew_Showable_Limited
+}
 local _AllBG = UI.getChildControl(Panel_IngameCashShop, "Static_AllBG")
 local tabId = {
   promotionTab = 0,
@@ -617,7 +639,7 @@ function inGameShop:init()
   _ingameCash_SetTabIconTexture(promotionTab.icon, tabId.promotionTab, 0)
   promotionTab.static:SetShow(true)
   self._promotionTab = promotionTab
-  self._hotAndNewStartPosX = self._radioButton_Sale:GetPosX()
+  self._hotAndNewStartPosX = self._radioButton_New:GetPosX()
   for ii = 0, maxSlotCount - 1 do
     local slot = {}
     slot.productNoRaw = nil
@@ -1086,9 +1108,9 @@ function inGameShop:registMessageHandler()
   self._btn_BuyDaum:addInputEvent("Mouse_LUp", "InGameShop_BuyDaumCash()")
   self._btn_RefreshCash:addInputEvent("Mouse_LUp", "InGameShop_RefreshCash()")
   self._btn_BuyPearl:addInputEvent("Mouse_LUp", "InGameShop_BuyPearl()")
-  self._radioButton_Sale:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,4)")
-  self._radioButton_New:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,1)")
-  self._radioButton_Event:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1,3)")
+  for index = 0, #self._hotAndNewControlList do
+    self._hotAndNewControlList[index]:addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(1, " .. index + 1 .. ")")
+  end
 end
 function inGameShop:registEventHandler()
   registerEvent("onScreenResize", "InGameShop_Resize")
@@ -1205,6 +1227,13 @@ function InGameShop_TabEvent(tab)
   else
     InGameShop_CloseHotAndNewList()
   end
+  if true == self._isSubTabShow then
+    local highlightCategoryNo = getHighLightCategoryNo(tabIndexList[self._currentTab][2])
+    local isExist = nil ~= self._tabs[self._currentTab]._subTab[highlightCategoryNo]
+    if true == isExist then
+      InGameShop_SubTabEvent(tab, highlightCategoryNo)
+    end
+  end
 end
 function InGameShop_OpenHotAndNewList()
   local self = inGameShop
@@ -1212,9 +1241,9 @@ function InGameShop_OpenHotAndNewList()
   if true == self._isHotAndNewOpen then
     return
   end
-  self._radioButton_Sale:SetShow(true == self._hotAndNew_Showable_Sale)
-  self._radioButton_New:SetShow(true == self._hotAndNew_Showable_New)
-  self._radioButton_Event:SetShow(true == self._hotAndNew_Showable_Event)
+  for index = 0, #self._hotAndNewControlList do
+    self._hotAndNewControlList[index]:SetShow(self._hotAndNewShowableList[index])
+  end
   self._static_ScrollArea:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 60)
   local remainingSizeY = _ingameCashShop_SetViewListCount()
   self._static_GradationBottom:SetPosY(self._static_ScrollArea:GetSizeY() + self._static_ScrollArea:GetPosY() - 50)
@@ -1238,9 +1267,9 @@ function InGameShop_CloseHotAndNewList()
   if false == self._isHotAndNewOpen then
     return
   end
-  self._radioButton_Sale:SetShow(false)
-  self._radioButton_New:SetShow(false)
-  self._radioButton_Event:SetShow(false)
+  for index = 0, #self._hotAndNewControlList do
+    self._hotAndNewControlList[index]:SetShow(false)
+  end
   self._static_ScrollArea:SetPosY(self._radioButton_Sale:GetPosY() + self._radioButton_Sale:GetSizeY() + 10)
   self._scroll_IngameCash:SetPosY(self._static_ScrollArea:GetPosY())
   local remainingSizeY = _ingameCashShop_SetViewListCount()
@@ -1262,28 +1291,16 @@ function InGameShop_CloseHotAndNewList()
 end
 function InGameShop_CheckHotAndNewButton(isShow, index)
   local self = inGameShop
-  if 4 == index then
-    self._hotAndNew_Showable_Sale = isShow
-  elseif 1 == index then
-    self._hotAndNew_Showable_New = isShow
-  elseif 3 == index then
-    self._hotAndNew_Showable_Event = isShow
-  end
+  self._hotAndNewShowableList[index - 1] = isShow
 end
 function InGameShop_PosSetHotAndNewButton()
   local self = inGameShop
   local startPosX = self._hotAndNewStartPosX
-  if true == self._radioButton_Sale:GetShow() then
-    self._radioButton_Sale:SetPosX(startPosX)
-    startPosX = startPosX + self._radioButton_Sale:GetSizeX() + 11
-  end
-  if true == self._radioButton_New:GetShow() then
-    self._radioButton_New:SetPosX(startPosX)
-    startPosX = startPosX + self._radioButton_New:GetSizeX() + 11
-  end
-  if true == self._radioButton_Event:GetShow() then
-    self._radioButton_Event:SetPosX(startPosX)
-    startPosX = startPosX + self._radioButton_Event:GetSizeX() + 11
+  for index = 0, #self._hotAndNewControlList do
+    if true == self._hotAndNewControlList[index]:GetShow() then
+      self._hotAndNewControlList[index]:SetPosX(startPosX)
+      startPosX = startPosX + self._hotAndNewControlList[index]:GetSizeX() + 5
+    end
   end
 end
 function makeSubTab(tabIndex)
@@ -1355,9 +1372,9 @@ function setPosCloseSubTab()
     end
   end
   self._isSubTabShow = false
-  self._radioButton_Sale:SetCheck(false)
-  self._radioButton_New:SetCheck(false)
-  self._radioButton_Event:SetCheck(false)
+  for index = 0, #self._hotAndNewControlList do
+    self._hotAndNewControlList[index]:SetCheck(false)
+  end
 end
 function InGameShop_SubTabEvent(mainTab, subTab)
   local self = inGameShop
@@ -1376,9 +1393,9 @@ function InGameShop_SubTabEvent(mainTab, subTab)
   self:initData()
   self:update()
   if 1 == mainTab then
-    self._radioButton_Sale:SetCheck(4 == subTab)
-    self._radioButton_New:SetCheck(1 == subTab)
-    self._radioButton_Event:SetCheck(3 == subTab)
+    for index = 0, #self._hotAndNewControlList do
+      self._hotAndNewControlList[index]:SetCheck(index + 1 == subTab)
+    end
   end
 end
 function InGameShop_SetScroll()
@@ -1545,6 +1562,7 @@ function InGameShop_CartToggle()
     Panel_IngameCashShop:SetChildIndex(self._myCartTab.static, 9900)
     self._scroll_IngameCash:SetShow(false)
   end
+  InGameShop_CloseHotAndNewList()
   IngameCashShopEventCart_Close()
   makeSubTab(tabId.cart)
 end
@@ -3463,6 +3481,12 @@ function InGameShop_OpenActual()
   elseif CppEnums.CountryType.ID_REAL == getGameServiceType() then
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID")
+  elseif CppEnums.CountryType.RUS_ALPHA == getGameServiceType() then
+    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_RUS_ALPHA")
+    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_RUS_ALPHA")
+  elseif CppEnums.CountryType.RUS_REAL == getGameServiceType() then
+    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_RUS")
+    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_RUS")
   else
     promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
     categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
@@ -3712,7 +3736,7 @@ function InGameShop_GotoSaleTab()
   if false == self._isSubTabShow then
     makeSubTab(1)
   end
-  if true == self._hotAndNew_Showable_Sale then
+  if true == self._hotAndNewShowableList[3] then
     InGameShop_SubTabEvent(1, 4)
   end
 end

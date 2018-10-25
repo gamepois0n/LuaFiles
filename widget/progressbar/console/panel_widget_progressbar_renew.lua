@@ -1,14 +1,10 @@
-local _collect_100per = UI.getChildControl(Panel_Collect_Bar, "Static_100per")
-local _product_100per = UI.getChildControl(Panel_Product_Bar, "Static_100per")
-local _enchant_100per = UI.getChildControl(Panel_Enchant_Bar, "Static_100per")
-local _casting_100per = UI.getChildControl(Panel_Casting_Bar, "Static_Effect_BG")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_AV = CppEnums.PA_UI_ALIGNVERTICAL
 local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_color = Defines.Color
 local _collectText = UI.getChildControl(Panel_Collect_Bar, "StaticText_CollectingNow")
-if true == ToClient_isXBox() then
+if true == ToClient_isConsole() then
 end
 function DrawWater_Check()
 end
@@ -189,7 +185,7 @@ function productBar:Update(fDeltaTime)
     if nil ~= productBar._endEventFunction then
       productBar._endEventFunction()
     end
-    Panel_Product_Bar:SetShow(false, true)
+    Panel_Product_Bar:SetShow(false, false)
     productBar:Stop()
   else
     local remainTime = productBar._progressTime - productBar._currentTime
@@ -203,7 +199,7 @@ function productBar:Stop()
   productBar._endEventFunction = nil
   productBar._progressControl:SetShow(false)
   if true == Panel_Product_Bar:IsShow() then
-    Panel_Product_Bar:SetShow(false, true)
+    Panel_Product_Bar:SetShow(false, false)
   end
 end
 function enchantBar:Init()

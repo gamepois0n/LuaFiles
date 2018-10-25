@@ -155,6 +155,12 @@ local partyWidget = {
         [3] = 504,
         [4] = 294
       },
+      [CppEnums.ClassType.ClassType_Orange] = {
+        [1] = 331,
+        [2] = 290,
+        [3] = 504,
+        [4] = 294
+      },
       [CppEnums.ClassType.ClassType_Sorcerer] = {
         [1] = 331,
         [2] = 296,
@@ -900,7 +906,7 @@ function partyWidget:invite(hostName, invitePartyType)
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
   end
-  MessageBox.showMessageBox(messageboxData)
+  MessageBox.showMessageBox(messageboxData, "top", false, true, 0)
 end
 function ResponseParty_refuse(reason)
   partyWidget:refuse(reason)

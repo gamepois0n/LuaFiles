@@ -113,6 +113,7 @@ function serverSelect:close()
   if false == Panel_ServerSelect_Renew:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_ServerSelect_Renew:SetShow(false)
 end
 function PaGlobalFunc_ServerSelect_Update()
@@ -224,6 +225,7 @@ function serverSelect:update()
   end
 end
 function PaGlobalFunc_ChannelSelect(chIndex)
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   serverSelect:channelSelect(chIndex)
 end
 function serverSelect:channelSelect(chIndex)

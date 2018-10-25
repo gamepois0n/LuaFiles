@@ -30,11 +30,18 @@ function mainQuestWidget:createControl()
     self._uiQuestConditions[index]:SetIgnore(true)
     self._uiQuestConditions[index]:SetShow(false)
     self._uiQuestConditions[index]:SetPosX(2)
+    self._uiQuestConditions[index]:addInputEvent("Mouse_Out", "PaGlobalFunc_MainQuestWidget_MouseOutEvent()")
   end
 end
 function mainQuestWidget:initControl()
   Panel_MainQuest:SetChildIndex(self._ui._checkbox_Quest_Navi, 9999)
   Panel_MainQuest:SetChildIndex(self._ui._checkButton_AutoNavi, 9999)
+  Panel_MainQuest:addInputEvent("Mouse_Out", "PaGlobalFunc_MainQuestWidget_MouseOutEvent()")
+  for _key, _value in pairs(self._ui) do
+    if nil ~= _value then
+      _value:addInputEvent("Mouse_Out", "PaGlobalFunc_MainQuestWidget_MouseOutEvent()")
+    end
+  end
   self._ui._checkButton_AutoNavi:addInputEvent("Mouse_On", "HandleMouseOver_Button( true , 1 )")
   self._ui._checkButton_AutoNavi:addInputEvent("Mouse_Out", "HandleMouseOver_Button( false ,1 )")
   self._ui._checkbox_Quest_Navi:addInputEvent("Mouse_On", "HandleMouseOver_Button( true , 2 )")
@@ -194,6 +201,8 @@ function mainQuestWidget:setQuestTitleInfo(uiQuestInfo)
   self._ui._static_TitleBG:addInputEvent("Mouse_Out", "HandleMouseOver_MainQuestWidget( false," .. isAccepted .. ")")
   self._ui._staticText_Quest_ClearNpc:addInputEvent("Mouse_On", "HandleMouseOver_MainQuestWidget( true," .. isAccepted .. ")")
   self._ui._staticText_Quest_ClearNpc:addInputEvent("Mouse_Out", "HandleMouseOver_MainQuestWidget( false," .. isAccepted .. ")")
+  Panel_MainQuest:addInputEvent("Mouse_On", "HandleMouseOver_MainQuestWidget( true," .. isAccepted .. ")")
+  Panel_MainQuest:addInputEvent("Mouse_Out", "HandleMouseOver_MainQuestWidget( false," .. isAccepted .. ")")
   local posCount = questStaticStatus:getQuestPositionCount()
   local enable = false == uiQuestInfo:isSatisfied() and 0 ~= posCount
   enable = true
@@ -376,6 +385,31 @@ function mainQuestWidget:mouseOverToButton(show, target)
   else
     TooltipSimple_Hide()
     self._isButtonOn = false
+  end
+end
+function mainQuestWidget:Common_WidgetMouseOut()
+  if CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode ~= UI.Get_ProcessorInputMode() then
+    local panelPosX = Panel_MainQuest:GetPosX()
+    local panelPosY = Panel_MainQuest:GetPosY()
+    local panelSizeX = Panel_MainQuest:GetSizeX()
+    local panelSizeY = Panel_MainQuest:GetSizeY()
+    local mousePosX = getMousePosX()
+    local mousePosY = getMousePosY()
+    if panelPosX < mousePosX and mousePosX < panelPosX + panelSizeX and panelPosY < mousePosY and mousePosY < panelPosY + panelSizeY then
+      return false
+    end
+  end
+  return true
+end
+function PaGlobalFunc_MainQuestWidget_MouseOutEvent()
+  mainQuestWidget:Common_HideTooltip()
+end
+function mainQuestWidget:Common_HideTooltip()
+  if false == Panel_MainQuest:GetShow() then
+    return
+  end
+  if true == self:Common_WidgetMouseOut() and true == self._isButtonOn then
+    self:mouseOverToButton(false)
   end
 end
 local isMouseOnWidget = false

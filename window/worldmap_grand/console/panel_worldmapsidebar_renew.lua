@@ -307,6 +307,7 @@ function Input_WorldMapSideBar_SetStateTo(state)
     self._isBlackFog = false
     self._isGuildWarMode = false
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_SetGuildMode(self._isGuildWarMode)
   ToClient_reloadNodeLine(self._isGuildWarMode, CppEnums.WaypointKeyUndefined)
   ToClient_WorldmapStateChange(renderState)

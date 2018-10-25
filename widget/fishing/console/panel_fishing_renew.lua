@@ -214,6 +214,7 @@ local function FishingGame_Manual_Fishing_Start(actorKeyRaw, isSelf)
     else
       actionString = keyCustom_GetString_ActionKey(gameOptionActionKey.Jump)
     end
+    PaGlobalFunc_ConsoleKeyGuide_On()
     if _ContentsGroup_isConsolePadControl then
       fishing_UI._purposeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX1_GLOBALMANUAL_FISHING_START"))
     else
@@ -358,7 +359,7 @@ local function FishingGame_Manual_Fishing_3(actorKeyRaw, isSelf)
     else
       fishing_UI._fishWpDesc_BG:SetShow(false)
     end
-    ui_Value.isFirstTime_Manual_Fishing_3 = false
+    ui_Value.isFirstTime_Manual_Fishing_2 = false
   end
 end
 local function FishingGame_Manual_Fishing_Auto()
@@ -559,12 +560,12 @@ function Panel_Fishing_End(actorKeyRaw, isSelf)
   if false == isSelf then
     return
   end
+  PaGlobalFunc_ConsoleKeyGuide_Rod_Check()
   if false == ui_Value.isFirstTime_Manual_Fishing_Start then
-    PaGlobalFunc_ConsoleKeyGuide_SetState()
+    PaGlobalFunc_ConsoleKeyGuide_SetFishingIdleMode()
   end
-  Panel_Fishing:SetShow(false)
-  Panel_ConsoleKeyGuide:SetShow(true)
   FGlobal_EquipFishingToolCheck()
+  Panel_Fishing:SetShow(false)
   ui_Value.isFirstTime_Manual_Fishing_Start = true
   ui_Value.isFirstTime_Manual_Fishing_0 = true
   ui_Value.isFirstTime_Manual_Fishing_1 = true

@@ -8,8 +8,6 @@ local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
 local nodeStableInfo = {
   _Info_Title = UI.getChildControl(Panel_NodeStableInfo, "Info_Title"),
   _Info_DefaultInfoTitle = UI.getChildControl(Panel_NodeStableInfo, "Info_DefaultInfoTitle"),
-  _Info_DefaultInfoBG = UI.getChildControl(Panel_NodeStableInfo, "Info_DefaultInfoBG"),
-  _Info_StatBG = UI.getChildControl(Panel_NodeStableInfo, "Info_StatBG"),
   _Info_Level_Text = UI.getChildControl(Panel_NodeStableInfo, "Info_Level_Text"),
   _Info_Def_Text = UI.getChildControl(Panel_NodeStableInfo, "Info_Def_Text"),
   _Info_HP_Text = UI.getChildControl(Panel_NodeStableInfo, "Info_HP_Text"),
@@ -158,7 +156,7 @@ function nodeStableInfo:update()
   self._SkillBG:SetShow(true)
   self._Info_StallionIcon:SetShow(false)
   self._Info_Grade_Value:SetShow(false)
-  Panel_NodeStableInfo:SetSize(Panel_NodeStableInfo:GetSizeX(), 415)
+  Panel_NodeStableInfo:SetSize(Panel_NodeStableInfo:GetSizeX(), 465)
   if CppEnums.VehicleType.Type_Horse == servantInfo:getVehicleType() or CppEnums.VehicleType.Type_RidableBabyElephant == servantInfo:getVehicleType() then
     self._SkillTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODESTABLEINFO_SKILL"))
     self._Info_Grade_Value:SetShow(true)

@@ -1,6 +1,7 @@
 Panel_AlchemyFigureHead:SetShow(false)
 local AlchemyFigureHead = {
   control = {
+    txt_Title = UI.getChildControl(Panel_AlchemyFigureHead, "StaticText_Title"),
     contentBG = UI.getChildControl(Panel_AlchemyFigureHead, "Static_ContentTypeBG"),
     contentEffect = UI.getChildControl(Panel_AlchemyFigureHead, "Static_ContentTypeEffect"),
     guideString = UI.getChildControl(Panel_AlchemyFigureHead, "Static_GuideText"),
@@ -51,15 +52,13 @@ local panelSizeY = Panel_AlchemyFigureHead:GetSizeY()
 local bgSizeY = AlchemyFigureHead.control.descBg:GetSizeY()
 local textSizeY = AlchemyFigureHead.control.desc:GetTextSizeY()
 if textSizeY > 70 then
-  Panel_AlchemyFigureHead:SetSize(Panel_AlchemyFigureHead:GetSizeX(), panelSizeY + textSizeY - 68)
-  AlchemyFigureHead.control.descBg:SetSize(AlchemyFigureHead.control.descBg:GetSizeX(), bgSizeY + textSizeY - 68)
+  Panel_AlchemyFigureHead:SetSize(Panel_AlchemyFigureHead:GetSizeX(), panelSizeY + textSizeY - 82)
+  AlchemyFigureHead.control.descBg:SetSize(AlchemyFigureHead.control.descBg:GetSizeX(), bgSizeY + textSizeY - 82)
 else
   Panel_AlchemyFigureHead:SetSize(Panel_AlchemyFigureHead:GetSizeX(), panelSizeY)
   AlchemyFigureHead.control.descBg:SetSize(AlchemyFigureHead.control.descBg:GetSizeX(), bgSizeY)
 end
 AlchemyFigureHead.control.btn_Doit:ComputePos()
-local btn_Question = UI.getChildControl(Panel_AlchemyFigureHead, "Button_Question")
-btn_Question:SetShow(false)
 local AlchemyFigureHeadTab = {Upgrade = 2}
 local AlchemyFigureHeadTabTexture = {
   [AlchemyFigureHeadTab.Upgrade] = {
@@ -78,6 +77,9 @@ function AlchemyFigureHead:Init()
   self.FigureHead_slot.icon:addInputEvent("Mouse_RUp", "HandleClicked_AlchemyFigureHead_UnSetSlot(" .. 0 .. ")")
   self.control.contentBG:ChangeTextureInfoName(AlchemyFigureHeadTabTexture[2].bg)
   self.control.contentEffect:SetShow(false)
+  self.control.btn_Close = UI.getChildControl(self.control.txt_Title, "Button_Win_Close")
+  self.control.btn_Question = UI.getChildControl(self.control.txt_Title, "Button_Question")
+  self.control.btn_Question:SetShow(false)
 end
 function AlchemyFigureHead:registEventHandler()
   self.control.btn_Doit:addInputEvent("Mouse_LUp", "HandleClicked_AlchemyFigureHead_Doit()")

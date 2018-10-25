@@ -278,16 +278,16 @@ function GuildWharfList_Resize()
   local slotCount = 4
   if screenY > 1000 then
     panelSize = 700
-    panelBGSize = 660
-    scrollSize = 660
+    panelBGSize = 648
+    scrollSize = 635
     slotCount = 4
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(true)
     end
   else
     panelSize = 540
-    panelBGSize = 500
-    scrollSize = 500
+    panelBGSize = 488
+    scrollSize = 475
     slotCount = 3
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(false)

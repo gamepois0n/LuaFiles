@@ -53,7 +53,8 @@ local ui_Ter = {
   _happyBG = UI.getChildControl(Panel_LordMenu_Territory, "Static_HappyGaugeBG"),
   _happyGauge = UI.getChildControl(Panel_LordMenu_Territory, "Progress2_HappyGauge"),
   _happyComment = UI.getChildControl(Panel_LordMenu_Territory, "StaticText_HappyComment"),
-  _happy_Help = UI.getChildControl(Panel_LordMenu_Territory, "StaticText_HappyRate_Help")
+  _happy_Help = UI.getChildControl(Panel_LordMenu_Territory, "StaticText_HappyRate_Help"),
+  _TerLine = UI.getChildControl(Panel_LordMenu_Territory, "Static_Line")
 }
 local ui_Pay = {
   _title_0 = UI.getChildControl(Panel_LordMenu_PayInfo, "StaticText_Pay_Title_0"),
@@ -74,7 +75,8 @@ local ui_Pay = {
   _txt_PolicingCost = UI.getChildControl(Panel_LordMenu_PayInfo, "StaticText_PolicingCost"),
   _txt_PolicingCost_Gold = UI.getChildControl(Panel_LordMenu_PayInfo, "StaticText_PolicingCostValue"),
   _btn_GetMoney = UI.getChildControl(Panel_LordMenu_PayInfo, "Button_GetMoney"),
-  _txt_Balance_Help = UI.getChildControl(Panel_LordMenu_PayInfo, "StaticText_Balance_Help")
+  _txt_Balance_Help = UI.getChildControl(Panel_LordMenu_PayInfo, "StaticText_Balance_Help"),
+  _payLine = UI.getChildControl(Panel_LordMenu_PayInfo, "Static_Pay_Line")
 }
 local ui_Tax = {
   _title_0 = UI.getChildControl(Panel_LordMenu_TaxControl, "StaticText_Tax_Title_0"),
@@ -120,7 +122,8 @@ local ui_Tax = {
   _btn_Tax_Accpet = UI.getChildControl(Panel_LordMenu_TaxControl, "Button_Title_0_Accept"),
   _btn_Duty_Reset = UI.getChildControl(Panel_LordMenu_TaxControl, "Button_Title_1_Reset"),
   _btn_Duty_Accpet = UI.getChildControl(Panel_LordMenu_TaxControl, "Button_Title_1_Accept"),
-  _noTax = UI.getChildControl(Panel_LordMenu_TaxControl, "StaticText_NoTax")
+  _noTax = UI.getChildControl(Panel_LordMenu_TaxControl, "StaticText_NoTax"),
+  _taxLine = UI.getChildControl(Panel_LordMenu_TaxControl, "Static_Tax_Line")
 }
 local tapIndex = 0
 local function Panel_LordMenu_Initialize()
@@ -331,7 +334,7 @@ function Panel_LordMenu_PayInfoUpdate()
     if 3 == territoryKeyInNational or 4 == territoryKeyInNational then
       ui_Pay._txt_LocalTax_Gold:SetShow(false)
       ui_Pay._txt_LocalTax:SetShow(false)
-      ui_Pay._txt_Balance:SetSpanSize(15, 371)
+      ui_Pay._txt_Balance:SetSpanSize(20, 371)
       ui_Pay._txt_Balance_Help:SetTextMode(UI_TM.eTextMode_AutoWrap)
       ui_Pay._txt_Balance_Help:SetText("")
       ui_Main._txt_Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -343,7 +346,7 @@ function Panel_LordMenu_PayInfoUpdate()
         ui_Pay._txt_PolicingCost:SetShow(true)
         ui_Pay._txt_PolicingCost_Gold:SetShow(true)
       end
-      ui_Pay._txt_Balance:SetSpanSize(15, 355)
+      ui_Pay._txt_Balance:SetSpanSize(20, 355)
       ui_Pay._txt_Balance_Help:SetTextMode(UI_TM.eTextMode_AutoWrap)
       ui_Pay._txt_Balance_Help:SetText("")
       ui_Main._txt_Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -365,8 +368,8 @@ function Panel_LordMenu_PayInfoUpdate()
   ui_Pay._tax_Help:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LORDMENU_TAX_HELP"))
   local settingSizeY = ui_Pay._tax_Help:GetTextSizeY() + ui_Pay._btn_GetMoney:GetSizeY()
   Panel_LordMenu:SetSize(Panel_LordMenu:GetSizeX(), settingSizeY + 570)
-  ui_Main._FrameBG:SetSize(ui_Main._FrameBG:GetSizeX(), settingSizeY + 480)
-  ui_Main.panel_desc:SetSize(ui_Main.panel_desc:GetSizeX(), ui_Main._txt_Desc:GetTextSizeY() + 60)
+  ui_Main._FrameBG:SetSize(ui_Main._FrameBG:GetSizeX(), 558)
+  ui_Main.panel_desc:SetSize(ui_Main.panel_desc:GetSizeX(), ui_Main._txt_Desc:GetTextSizeY() + 80)
   if Panel_Window_Exchange_Number:IsShow() then
     Panel_NumberPad_Show(false, Defines.s64_const.s64_0, 0, nil)
   end

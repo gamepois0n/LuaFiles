@@ -41,6 +41,7 @@ HousePanel_Default_PosY = {
 HouseControlManager = {
   _win_Close = UI.getChildControl(Panel_HouseControl, "Button_Win_Close"),
   _buttonQuestion = UI.getChildControl(Panel_HouseControl, "Button_Question"),
+  _insideBg = UI.getChildControl(Panel_HouseControl, "Static_InsideBG"),
   _txt_House_Title = UI.getChildControl(Panel_HouseControl, "StaticText_Title"),
   _txt_UseType_Title = UI.getChildControl(Panel_HouseControl, "StaticText_UseType_Title"),
   _controlBG = UI.getChildControl(Panel_HouseControl, "Static_HouseControl_BG"),
@@ -85,7 +86,7 @@ HouseWorkListSection = {
   viewCount_nonCraft = 8,
   viewIndex = 0,
   contentCount = 0,
-  collumMax = 5,
+  collumMax = 6,
   currentHouseUseType = 0,
   currentReceipeKey = 0,
   currentLevel = 0,
@@ -207,7 +208,8 @@ function HousePanel_Default_PosY:SetPosition()
   HouseImageSection._BG:SetPosY(self._Image_Frame + self._Adjust_Size)
   HouseProgressSection._Title:SetPosY(self._Progress_Title + self._Adjust_Size)
   HouseProgressSection._BG:SetPosY(self._Progress_Frame + self._Adjust_Size)
-  Panel_HouseControl:SetSize(Panel_HouseControl:GetSizeX(), HouseImageSection._BG:GetPosY() + HouseImageSection._BG:GetSizeY() + 20)
+  Panel_HouseControl:SetSize(Panel_HouseControl:GetSizeX(), HouseImageSection._BG:GetPosY() + HouseImageSection._BG:GetSizeY() + 30)
+  HouseControlManager._insideBg:SetSize(HouseControlManager._insideBg:GetSizeX(), Panel_HouseControl:GetSizeY() - 150)
   Panel_HouseControl:SetEnableArea(3, 3, 640, Panel_HouseControl:GetSizeY() - 4)
 end
 function FGlobal_Reset_HousePanelPos()
@@ -330,19 +332,14 @@ function HouseInfoSection:init()
     HouseControlManager._UseType_Desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_USETYPE_DESC_" .. tostring(HouseControlManager._currentUseType))
   end
   self._UseType_Desc:SetText(HouseControlManager._UseType_Desc)
-  Set_HouseUseType_Texture_BG(HouseInfoSection._BG)
   HousePanel_Default_PosY._Adjust_Size = self._BG:GetSizeY() - HousePanel_Default_PosY._Info_Size
   HousePanel_Default_PosY:SetPosition()
 end
 function HouseImageSection:init()
-  self._BG:AddChild(self._Image)
-  Panel_HouseControl:RemoveControl(self._Image)
 end
 HouseImageSection:init()
 function HouseImageSection:setImage(houseInfo)
   self._Image:ChangeTextureInfoName(HouseControlManager._screenShotPath)
-  self._Image:SetPosX((self._BG:GetSizeX() - self._Image:GetSizeX()) / 2)
-  self._Image:SetPosY((self._BG:GetSizeY() - self._Image:GetSizeY()) / 2)
   self._Image:SetShow(true)
 end
 function FGlobal_AddChild(_panel, _parent, _child)
@@ -525,12 +522,12 @@ function HouseControlManager:initialize()
     function uigroup:uiTextureControl(currentLevel, isSameReceipe)
       for key, value in pairs(self.ui._grade) do
         if value:GetShow() then
-          value:ChangeTextureInfoName("new_ui_common_forlua/window/houseinfo/housecontrol_00.dds")
+          value:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_WorldMap_00.dds")
           local x1, y1, x2, y2
           if key <= currentLevel and isSameReceipe then
-            x1, y1, x2, y2 = setTextureUV_Func(value, 1, 52, 19, 70)
+            x1, y1, x2, y2 = setTextureUV_Func(value, 126, 187, 139, 205)
           else
-            x1, y1, x2, y2 = setTextureUV_Func(value, 1, 33, 19, 51)
+            x1, y1, x2, y2 = setTextureUV_Func(value, 112, 187, 125, 205)
           end
           value:getBaseTexture():setUV(x1, y1, x2, y2)
           value:setRenderTexture(value:getBaseTexture())
@@ -1408,7 +1405,7 @@ function HouseWorkListSection:initialize()
     self.overList[index]:SetPosY(bgPosY + 2)
     self.overList[index]:SetPosX(bgPosX + 3)
     coloumCount = coloumCount + 1
-    if 5 == coloumCount then
+    if 6 == coloumCount then
       bgPosY = bgPosY + self.icon:GetSizeY() + gapY
       bgPosX = bgPosX_Deafault
     else
@@ -1419,7 +1416,7 @@ function HouseWorkListSection:initialize()
       CopyBaseProperty(self.level, self.levelList[rowCount])
       self.levelList[rowCount]:SetPosY(iconPosY + (self.icon:GetSizeY() - self.level:GetSizeY()) / 2)
     end
-    if 5 == coloumCount then
+    if 6 == coloumCount then
       coloumCount = 0
       iconPosY = iconPosY + self.icon:GetSizeY() + gapY
       iconPosX = iconPosX_Deafault

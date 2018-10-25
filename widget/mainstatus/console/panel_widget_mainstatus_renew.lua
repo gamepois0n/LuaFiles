@@ -71,6 +71,12 @@ local _mpBarUV = {
     288,
     328
   },
+  [CppEnums.ClassType.ClassType_Orange] = {
+    1,
+    307,
+    288,
+    328
+  },
   [CppEnums.ClassType.ClassType_Sorcerer] = {
     1,
     285,
@@ -725,9 +731,6 @@ function FromClient_MainStatusInfo_checkHpAlertPostEvent(prevRenderModeList, nex
   end
 end
 function MainStatusInfo:CheckHpAlertPostEvent()
-  if Defines.UIMode.eUIMode_Default ~= GetUIMode() then
-    return
-  end
   if self._alertHpValue < self._percentHP then
     _alertDanger:SetShow(false)
     Panel_Danger:SetShow(false)

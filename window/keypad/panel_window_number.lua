@@ -49,7 +49,8 @@ local realNumber
 local _textNumber = UI.getChildControl(Panel_Window_Exchange_Number, "Static_DisplayNumber")
 _textNumber:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _textNumber:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
-local _buttonClose = UI.getChildControl(Panel_Window_Exchange_Number, "Button_Close")
+local _txt_Title = UI.getChildControl(Panel_Window_Exchange_Number, "Static_Text_Title")
+local _buttonClose = UI.getChildControl(_txt_Title, "Button_Close")
 _buttonClose:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonCancel_Mouse_Click()")
 _buttonClose:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _buttonClose:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
@@ -92,22 +93,22 @@ function numberPad:init()
 end
 function Panel_NumberPad_CheckButtonShow(isShow)
   if isShow then
-    numberPad._buttonNumber[1]:SetPosY(180)
-    numberPad._buttonNumber[2]:SetPosY(148)
-    numberPad._buttonNumber[3]:SetPosY(148)
-    numberPad._buttonNumber[4]:SetPosY(148)
-    numberPad._buttonNumber[5]:SetPosY(116)
-    numberPad._buttonNumber[6]:SetPosY(116)
-    numberPad._buttonNumber[7]:SetPosY(116)
-    numberPad._buttonNumber[8]:SetPosY(84)
-    numberPad._buttonNumber[9]:SetPosY(84)
-    numberPad._buttonNumber[10]:SetPosY(84)
-    _buttonBackSpace:SetPosY(180)
-    _buttonClear:SetPosY(180)
-    _buttonMoneyAllSelect:SetPosY(216)
-    _buttonWeightAllSelect:SetPosY(216)
-    _buttonConfirm:SetPosY(237)
-    _buttonCancel:SetPosY(237)
+    numberPad._buttonNumber[1]:SetPosY(241)
+    numberPad._buttonNumber[2]:SetPosY(203)
+    numberPad._buttonNumber[3]:SetPosY(203)
+    numberPad._buttonNumber[4]:SetPosY(203)
+    numberPad._buttonNumber[5]:SetPosY(165)
+    numberPad._buttonNumber[6]:SetPosY(165)
+    numberPad._buttonNumber[7]:SetPosY(165)
+    numberPad._buttonNumber[8]:SetPosY(127)
+    numberPad._buttonNumber[9]:SetPosY(127)
+    numberPad._buttonNumber[10]:SetPosY(127)
+    _buttonBackSpace:SetPosY(241)
+    _buttonClear:SetPosY(241)
+    _buttonMoneyAllSelect:SetPosY(279)
+    _buttonWeightAllSelect:SetPosY(279)
+    _buttonConfirm:ComputePos()
+    _buttonCancel:ComputePos()
   else
     numberPad._buttonNumber[1]:SetPosY(160)
     numberPad._buttonNumber[2]:SetPosY(128)
@@ -123,8 +124,8 @@ function Panel_NumberPad_CheckButtonShow(isShow)
     _buttonClear:SetPosY(160)
     _buttonMoneyAllSelect:SetPosY(196)
     _buttonWeightAllSelect:SetPosY(196)
-    _buttonConfirm:SetPosY(217)
-    _buttonCancel:SetPosY(217)
+    _buttonConfirm:ComputePos()
+    _buttonCancel:ComputePos()
   end
   _checkButtonMaxCount:SetShow(isShow)
 end
@@ -203,15 +204,20 @@ function Panel_NumberPad_Show_Min(isShow, s64_minNumber, param0, confirmFunction
 end
 local _isExchange
 function Panel_NumberPad_Show(isShow, s64_moneyMaxNumber, param0, confirmFunction, isExchange, param1, isItemMarket, param2, s64_weightMaxNumber)
+  _buttonWeightAllSelect:SetShow(false)
   if nil ~= s64_weightMaxNumber then
     numberPad.s64_weightMaxNumber = s64_weightMaxNumber
-    _buttonMoneyAllSelect:SetSize(90, 20)
-    _buttonMoneyAllSelect:SetEnableArea(0, 0, 90, 20)
+    _buttonMoneyAllSelect:SetSize(185, 36)
+    _buttonMoneyAllSelect:SetEnableArea(0, 0, 185, 36)
+    _buttonMoneyAllSelect:ComputePos()
+    Panel_Window_Exchange_Number:SetSize(205, 361)
     _buttonWeightAllSelect:SetShow(true)
   else
     numberPad.s64_weightMaxNumber = Defines.s64_const.s64_0
-    _buttonMoneyAllSelect:SetSize(187, 20)
-    _buttonMoneyAllSelect:SetEnableArea(0, 0, 187, 20)
+    _buttonMoneyAllSelect:SetSize(185, 36)
+    _buttonMoneyAllSelect:SetEnableArea(0, 0, 185, 36)
+    _buttonMoneyAllSelect:ComputePos()
+    Panel_Window_Exchange_Number:SetSize(205, 361)
     _buttonWeightAllSelect:SetShow(false)
   end
   _isExchange = isExchange
@@ -248,7 +254,6 @@ function Panel_NumberPad_Show(isShow, s64_moneyMaxNumber, param0, confirmFunctio
       end
     end
   end
-  Panel_Window_Exchange_Number:SetSize(200, 260)
   Panel_NumberPad_CheckButtonShow(true)
 end
 local slotNo, whereType
@@ -256,6 +261,7 @@ function Panel_NumberPad_Show_MaxCount(isShow, s64_maxNumber, param0, confirmFun
   _isExchange = isExchange
   local maxLength = string.len(tostring(s64_maxNumber))
   _textNumber:SetMaxInput(maxLength + 1)
+  _buttonWeightAllSelect:SetShow(false)
   if not isShow then
     Panel_NumberPad_Close()
     ClearFocusEdit()
@@ -283,7 +289,7 @@ function Panel_NumberPad_Show_MaxCount(isShow, s64_maxNumber, param0, confirmFun
   end
   slotNo = param0
   whereType = param1
-  Panel_Window_Exchange_Number:SetSize(200, 260)
+  Panel_Window_Exchange_Number:SetSize(205, 361)
   Panel_NumberPad_CheckButtonShow(true)
 end
 function Panel_NumberPad_SetMaxCount()

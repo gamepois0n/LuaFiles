@@ -6,14 +6,16 @@ local PaGlobal_SavegeDefenceResult = {
   _list2 = UI.getChildControl(Panel_SavageDefence_Result, "List2_Result"),
   _buttonExit = UI.getChildControl(Panel_SavageDefence_Result, "Button_Exit"),
   _buttonClose = UI.getChildControl(Panel_SavageDefence_Result, "Button_Win_Close"),
-  _descBg = UI.getChildControl(Panel_SavageDefence_Result, "Static_DescBg")
+  _descBg = UI.getChildControl(Panel_SavageDefence_Result, "Static_DescBg"),
+  _centerBg = UI.getChildControl(Panel_SavageDefence_Result, "Static_InsideBg")
 }
 function PaGlobal_SavegeDefenceResult:initialize()
   self._desc = UI.getChildControl(self._descBg, "StaticText_Desc")
   self._desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._desc:SetText(self._desc:GetText())
   local descSizeY = self._desc:GetTextSizeY()
-  Panel_SavageDefence_Result:SetSize(Panel_SavageDefence_Result:GetSizeX(), 445 + descSizeY)
+  Panel_SavageDefence_Result:SetSize(Panel_SavageDefence_Result:GetSizeX(), 535 + descSizeY)
+  self._centerBg:SetSize(self._centerBg:GetSizeX(), 421 + descSizeY)
   self._descBg:SetSize(self._descBg:GetSizeX(), descSizeY + 5)
   self._descBg:ComputePos()
   self._desc:ComputePos()

@@ -6,7 +6,6 @@ local PaGlobal_Guild_InvitationGuildAlliance = {
     contentTitle = UI.getChildControl(Panel_GuildAlliance_Invitation, "StaticText_AgreementContentTitle"),
     from = UI.getChildControl(Panel_GuildAlliance_Invitation, "StaticText_From"),
     allianceInfo_BG = UI.getChildControl(Panel_GuildAlliance_Invitation, "Static_AllianceInfo_BG"),
-    guildMark_Wax = UI.getChildControl(Panel_GuildAlliance_Invitation, "Static_Wax"),
     guildMark = UI.getChildControl(Panel_GuildAlliance_Invitation, "Static_GuildMark"),
     frame = UI.getChildControl(Panel_GuildAlliance_Invitation, "Frame_1"),
     frame2 = UI.getChildControl(Panel_GuildAlliance_Invitation, "Frame_2")
@@ -33,8 +32,6 @@ function PaGlobal_Guild_InvitationGuildAlliance:initialize()
     _tax[ii] = ToClient_getJoinAllianceGuildPercent(ii)
     _limitCount[ii] = ToClient_getJoinAllianceGuildLimitCount(ii)
   end
-  self._ui.content:SetAutoResize(true)
-  self._ui.content:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.frame_Summary:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui.frame_Summary:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDALLIANCE_RULES"))
   self._ui.frame_Content:SetSize(self._ui.frame_Content:GetSizeX(), self._ui.frame_Summary:GetTextSizeY())
@@ -63,7 +60,8 @@ function PaGlobal_Guild_InvitationGuildAlliance:initialize()
     self._ui.guildtaxRate[ii]:SetPosY(self._listConfig.startY + self._listConfig.gapY * ii)
     self._ui.guildtaxRate[ii]:SetShow(false)
   end
-  self._ui.contentTitle:SetText("[" .. _allianceName .. "] " .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDALLIANCE_COTRACT_TITLE"))
+  self._ui.contentTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDALLIANCE_COTRACT_TITLE"))
+  self._ui.content:SetText("[" .. _allianceName .. "]")
   for ii = 0, _count do
     self._ui.guildName[ii]:SetText(_guildName[ii])
     self._ui.guildName[ii]:SetShow(true)

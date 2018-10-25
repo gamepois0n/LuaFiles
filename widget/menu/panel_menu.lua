@@ -861,7 +861,7 @@ function TargetWindow_ShowToggle(index)
     elseif ToClient_IsMyselfInArena() then
       FGlobal_ArshaPvP_Open()
     elseif ToClient_IsCompetitionHost() == false then
-      FGlobal_Panel_CompetitionGame_JoinDesc_Open()
+      PaGlobalFunc_CompetitionGame_JoinDesc_Open()
     else
       FGlobal_ArshaPvP_HostJoin()
     end
@@ -1457,17 +1457,19 @@ function _Panel_Menu_OpenLimit()
     local buttonGapX = 7
     local bgSizeX = buttonSizeX * columnCountByRaw
     if isActionUiOpen or isGameTypeKorea() then
-      menu_Bg:SetSize(bgSizeX + buttonGapX * 1.6, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
-      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 5, menu_Bg:GetSizeY() + 110)
-      menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
+      menu_Bg:SetSize(bgSizeX + 10, countrySizeNum * totalRaw + 10)
+      Panel_Menu:SetSize(menu_Bg:GetSizeX() + 10, menu_Bg:GetSizeY() + 105)
+      menuTitleBar:SetSize(menu_Bg:GetSizeX(), menuTitleBar:GetSizeY())
       menu_Bg:ComputePos()
+      menuTitleBar:ComputePos()
       changeMenu:ComputePos()
       changeMenu:SetShow(true)
     else
-      menu_Bg:SetSize(bgSizeX + buttonGapX * 2, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
-      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 10, menu_Bg:GetSizeY() + 75)
-      menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
+      menu_Bg:SetSize(bgSizeX + 10, countrySizeNum * totalRaw + 10)
+      Panel_Menu:SetSize(menu_Bg:GetSizeX() + 10, menu_Bg:GetSizeY() + 70)
+      menuTitleBar:SetSize(menu_Bg:GetSizeX(), menuTitleBar:GetSizeY())
       menu_Bg:ComputePos()
+      menuTitleBar:ComputePos()
       changeMenu:SetShow(false)
     end
     if CheckTutorialEnd() == false then

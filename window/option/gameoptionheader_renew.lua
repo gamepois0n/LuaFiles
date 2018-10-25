@@ -1498,7 +1498,7 @@ PaGlobal_Option._frames = {
     }
   }
 }
-if true == ToClient_isXBox() then
+if true == ToClient_isXBox() or true == ToClient_isPS4() then
   PaGlobal_Option._elements.TextureQuality._defaultValue = 0
   PaGlobal_Option._elements.ConsolePadKeyType._defaultValue = 2
 end

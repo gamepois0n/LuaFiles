@@ -26,6 +26,7 @@ function Window_WorldMap_RightMenuInfo:InitControl()
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()
   local self = Window_WorldMap_RightMenuInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobalFunc_WorldMap_HouseFilter_SetCurrentNodeInfo(self._currentNodeInfo)
   PaGlobalFunc_WorldMap_HouseFilter_Open()
 end
@@ -45,6 +46,7 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenStable()
       return
     end
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenWareHouse()
   local self = Window_WorldMap_RightMenuInfo
@@ -57,6 +59,7 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenWareHouse()
     PaGlobalFunc_WorldMap_RightMenu_Close()
     PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()
   local self = Window_WorldMap_RightMenuInfo
@@ -70,6 +73,7 @@ function PaGlobalFunc_WorldMap_RightMenu_OpenDelivery()
     PaGlobalFunc_WorldMap_RightMenu_Close()
     PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function Window_WorldMap_RightMenuInfo:InitEvent()
   self._ui._button_BuyHouse:addInputEvent("Mouse_LUp", "PaGlobalFunc_WorldMap_RightMenu_OpenHouseFilter()")

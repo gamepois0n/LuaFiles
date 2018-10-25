@@ -146,7 +146,7 @@ function Warehouse:init()
     slot.lock:SetPosXY(slot.base:GetPosX() + lockGapX, slot.base:GetPosY() + lockGapY)
     slot.base:SetShow(true)
     slot.lock:SetShow(false)
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
       if 0 == row then
         slot.base:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_Warehouse_Scroll(true)")
       elseif self._maxSlotRow == row then
@@ -168,14 +168,14 @@ function Warehouse:init()
     slot.icon:SetPosY(self._config.slotStartY + self._config.slotGapY * row + 2)
     slot.icon:SetEnableDragAndDrop(true)
     slot.icon:SetAutoDisableTime(0.5)
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
       slot.icon:addInputEvent("Mouse_LUp", "InputMRUp_Warehouse_WarehouseItemClicked(" .. slotIdx .. ")")
     else
       slot.icon:addInputEvent("Mouse_RUp", "InputMRUp_Warehouse_WarehouseItemClicked(" .. slotIdx .. ")")
     end
     slot.icon:addInputEvent("Mouse_On", "InputMO_Warehouse_IconOver(" .. slotIdx .. ")")
     slot.icon:addInputEvent("Mouse_Out", "InputMOut_Warehouse_IconOut(" .. slotIdx .. ")")
-    if true == ToClient_isXBox() then
+    if true == ToClient_isConsole() then
       if 0 == row then
         slot.icon:registerPadEvent(__eConsoleUIPadEvent_DpadUp, "PaGlobalFunc_Warehouse_Scroll(true)")
       elseif self._maxSlotRow == row then
@@ -415,7 +415,7 @@ function Warehouse:update()
   local showCheck = true == self:isGuildHouse() or true == self:isFurnitureWareHouse()
   self._ui.txt_AssetTitle:SetShow(not showCheck)
   self._ui.txt_AssetValue:SetShow(not showCheck)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     self._ui.txt_AssetTitle:SetShow(false)
     self._ui.txt_AssetValue:SetShow(false)
   end
@@ -480,6 +480,7 @@ function WarehouseListMenu:ClickOtherTown(waypointKey)
       Inventory_SetFunctor(filterFunc, FGlobal_PopupMoveItem_InitByInventory, nil, nil, optionalEvent)
       PaGlobalFunc_InventoryInfo_SetMoneyButton(false)
       PaGlobalFunc_InventoryInfo_Close()
+      _AudioPostEvent_SystemUiForXBOX(3, 12)
     end
     if true == Warehouse:isDeliveryWindow() then
       DeliveryRequestWindow_Close()
@@ -588,7 +589,7 @@ function Warehouse_Close()
         DeliveryRequestWindow_Close()
       end
     end
-    if true == Panel_Window_Inventory:GetShow() and eWarehouseTypeInstallation ~= self._fromType and eWarehouseTypeMaid ~= self._fromType then
+    if true == Panel_Window_Inventory:GetShow() then
       PaGlobalFunc_InventoryInfo_SetMoneyButton(false)
       InventoryWindow_Close()
     end

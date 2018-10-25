@@ -75,8 +75,11 @@ function CharacterTag:Initialize()
   local mainBg = UI.getChildControl(Panel_CharacterTag, "Static_MainBg")
   mainBg:addInputEvent("Mouse_UpScroll", "PaGlobal_CharacterTag_ScrollEvent(true)")
   mainBg:addInputEvent("Mouse_DownScroll", "PaGlobal_CharacterTag_ScrollEvent(false)")
+  local listBg = UI.getChildControl(Panel_CharacterTag, "Static_MidBg")
+  listBg:addInputEvent("Mouse_UpScroll", "PaGlobal_CharacterTag_ScrollEvent(true)")
+  listBg:addInputEvent("Mouse_DownScroll", "PaGlobal_CharacterTag_ScrollEvent(false)")
   self._maxCharacterCount = getCharacterDataCount()
-  for index = 0, 11 do
+  for index = 0, 5 do
     selfUI._Static_CharacterList[index] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_CharacterTag, "Static_CharacterList_" .. index)
     CopyBaseProperty(templateCharacterList, selfUI._Static_CharacterList[index])
     local Static_Image = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, selfUI._Static_CharacterList[index], "Static_Image")
@@ -96,7 +99,7 @@ function CharacterTag:Initialize()
   selfUI._Scroll_Tag = UI.getChildControl(Panel_CharacterTag, "Scroll_Tag")
   selfUI._Scroll_CtrlButton = UI.getChildControl(selfUI._Scroll_Tag, "Scroll_CtrlButton")
   selfUI._StaticText_TagState = UI.getChildControl(Panel_CharacterTag, "StaticText_TagState")
-  UIScroll.SetButtonSize(selfUI._Scroll_Tag, 2, math.ceil(self._maxCharacterCount / 6))
+  UIScroll.SetButtonSize(selfUI._Scroll_Tag, 1, math.ceil(self._maxCharacterCount / 6))
   UIScroll.InputEvent(selfUI._Scroll_Tag, "PaGlobal_CharacterTag_ScrollEvent")
 end
 function PaGlobal_Request_TagCharacter(characterKey)
@@ -354,10 +357,10 @@ function CharacterTag:LoadList()
   local selfPlayerRegionInfoKey = getRegionInfoByPosition(selfPos):getRegionKey()
   local duelCharIndex = ToClient_GetMyDuelCharacterIndex()
   local characterListMax = getCharacterDataCount()
-  for jj = 0, 11 do
+  for jj = 0, 5 do
     self._UI._Static_CharacterList[jj]:SetShow(false)
   end
-  for idx = 0, 11 do
+  for idx = 0, 5 do
     local ii = idx + self._pageIndex * 6
     if ii > characterListMax - 1 then
       return
@@ -379,8 +382,8 @@ function CharacterTag:LoadList()
     local currentChar_Tag = false
     targetUI:SetShow(true)
     self:SetMonotoneIgnore(targetUI, targetImage, false)
-    targetUI:SetPosX(32 + 108 * (idx % localDefine.CHARSLOTCOLMAX))
-    targetUI:SetPosY(363 + math.floor(idx / localDefine.CHARSLOTCOLMAX) * 138)
+    targetUI:SetPosX(30 + 108 * (idx % localDefine.CHARSLOTCOLMAX))
+    targetUI:SetPosY(414 + math.floor(idx / localDefine.CHARSLOTCOLMAX) * 138)
     targetState:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANDO"))
     local isCaptureExist = targetImage:ChangeTextureInfoNameNotDDS(char_TextureName, char_Type, PaGlobal_getIsExitPhoto())
@@ -451,7 +454,7 @@ function CharacterTag:Clear()
   self._UI._Static_MainImage_2:ChangeTextureInfoName("")
   self._UI._Static_MainImage_2:setRenderTexture(self._UI._Static_MainImage_2:getBaseTexture())
   self._requestCharacterKey = -1
-  for ii = 0, 11 do
+  for ii = 0, 5 do
     self._UI._Static_CharacterList[ii]:SetShow(false)
   end
 end
@@ -500,7 +503,7 @@ function PaGlobal_CharacterTag_Close()
 end
 function PaGlobal_CharacterTag_ScrollEvent(isUp)
   local self = CharacterTag
-  self._pageIndex = UIScroll.ScrollEvent(self._UI._Scroll_Tag, isUp, 2, math.ceil(self._maxCharacterCount / 6), self._pageIndex, 1)
+  self._pageIndex = UIScroll.ScrollEvent(self._UI._Scroll_Tag, isUp, 1, math.ceil(self._maxCharacterCount / 6), self._pageIndex, 1)
   self:LoadList()
 end
 registerEvent("FromClient_luaLoadComplete", "InitializeCharacterTag")

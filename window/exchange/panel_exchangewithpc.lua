@@ -227,14 +227,14 @@ function Panel_ExchangePC_Update_Slot()
   for ii = 1, exchangePC.MAX_SLOT_COUNT do
     if true == isOtherLock then
       if 0 == _otherSlot[ii] then
-        exchangePC._otherSlotsBG[ii - 1].BG:ChangeTextureInfoName("new_ui_common_forlua/default/useless_slot.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._otherSlotsBG[ii - 1].BG, 5, 5, 36, 36)
+        exchangePC._otherSlotsBG[ii - 1].BG:ChangeTextureInfoName("renewal/frame/console_frame_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._otherSlotsBG[ii - 1].BG, 413, 240, 457, 284)
         exchangePC._otherSlotsBG[ii - 1].BG:getBaseTexture():setUV(x1, y1, x2, y2)
         exchangePC._otherSlotsBG[ii - 1].BG:setRenderTexture(exchangePC._otherSlotsBG[ii - 1].BG:getBaseTexture())
       end
     else
-      exchangePC._otherSlotsBG[ii - 1].BG:ChangeTextureInfoName("new_ui_common_forlua/default/UI_Item_LootingWin_Slot.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._otherSlotsBG[ii - 1].BG, 0, 0, 47, 47)
+      exchangePC._otherSlotsBG[ii - 1].BG:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._otherSlotsBG[ii - 1].BG, 179, 104, 225, 150)
       exchangePC._otherSlotsBG[ii - 1].BG:getBaseTexture():setUV(x1, y1, x2, y2)
       exchangePC._otherSlotsBG[ii - 1].BG:setRenderTexture(exchangePC._otherSlotsBG[ii - 1].BG:getBaseTexture())
     end
@@ -280,14 +280,14 @@ function Panel_ExchangePC_Update_Slot()
   for ii = 1, exchangePC.MAX_SLOT_COUNT do
     if true == isMyLock then
       if 0 == _mySlot[ii] then
-        exchangePC._mySlotsBG[ii - 1].BG:ChangeTextureInfoName("new_ui_common_forlua/default/useless_slot.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._mySlotsBG[ii - 1].BG, 5, 5, 36, 36)
+        exchangePC._mySlotsBG[ii - 1].BG:ChangeTextureInfoName("renewal/frame/console_frame_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._mySlotsBG[ii - 1].BG, 413, 240, 457, 284)
         exchangePC._mySlotsBG[ii - 1].BG:getBaseTexture():setUV(x1, y1, x2, y2)
         exchangePC._mySlotsBG[ii - 1].BG:setRenderTexture(exchangePC._mySlotsBG[ii - 1].BG:getBaseTexture())
       end
     else
-      exchangePC._mySlotsBG[ii - 1].BG:ChangeTextureInfoName("new_ui_common_forlua/default/UI_Item_LootingWin_Slot.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._mySlotsBG[ii - 1].BG, 0, 0, 47, 47)
+      exchangePC._mySlotsBG[ii - 1].BG:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(exchangePC._mySlotsBG[ii - 1].BG, 179, 104, 225, 150)
       exchangePC._mySlotsBG[ii - 1].BG:getBaseTexture():setUV(x1, y1, x2, y2)
       exchangePC._mySlotsBG[ii - 1].BG:setRenderTexture(exchangePC._mySlotsBG[ii - 1].BG:getBaseTexture())
     end
@@ -395,7 +395,7 @@ function EventTradePC_ReceiveOtherPlayerRequest(actorName)
     functionCancel = ExchangePC_MessageBox_ResponseCancel,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
-  MessageBox.showMessageBox(messageboxData)
+  MessageBox.showMessageBox(messageboxData, "top", false, true, 2)
 end
 function EventTradePC_ReceiveCancel(reason)
   exchangePC:close()

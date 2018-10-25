@@ -374,6 +374,7 @@ function PaGlobal_CharacterSelect_BackToServerSelect()
 end
 function PaGlobal_CharacterSelect_Close()
   local self = CharacterSelect
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobal_CharacterSelect_Open(charIdx)
@@ -450,6 +451,7 @@ function InputMLUp_CharacterSelect_DeleteCharacter()
       return
     end
     local function do_Delete()
+      _AudioPostEvent_SystemUiForXBOX(50, 1)
       deleteCharacter(self._selectedCharIdx, isSpecialCharacter)
     end
     local removeTimeCheckLevel = getCharacterRemoveTimeCheckLevel()
@@ -525,7 +527,7 @@ function InputMLUp_CharacterSelect_PlayGame()
   end
   if nil ~= characterData then
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
-      if 1 == characterData._level and 1 == characterCount and false == ToClient_isXBox() then
+      if 1 == characterData._level and 1 == characterCount and false == ToClient_isConsole() then
         FGlobal_FirstLogin_Open(self._selectedCharIdx)
       else
         local pcDeliveryRegionKey = characterData._arrivalRegionKey
@@ -626,6 +628,7 @@ function InputMLUp_CharacterSelect_SelectCharacterWithSavedIdx()
     PaGlobal_CharacterSelect_SelectCharacter(self._currentOveredCharIdx)
     self._isCharacterSelected = true
     self._ui.txt_Select_ConsoleUI:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTER_SELECT_BTN_CONNECT"))
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
   end
   self:SetKeyGuidePos()
 end

@@ -23,9 +23,9 @@ local looting = {
     slotCols = 4,
     slotRows = 0,
     slotBGStartX = 11,
-    slotBGStartY = 40,
+    slotBGStartY = 57,
     slotStartX = 13,
-    slotStartY = 42,
+    slotStartY = 59,
     slotGapX = 47,
     slotGapY = 47
   },
@@ -100,9 +100,17 @@ function Panel_Looting_Update(empty)
     Panel_Looting_Value_isCloseLooting = false
   end
   if looting_isPickItemToServant() then
+    Panel_Looting:SetSize(210, 288)
     _buttonLootAllToServant:SetShow(true)
+    _buttonLootAllToServant:SetPosY(215)
+    _buttonCancel:SetPosY(248)
+    _buttonLootAll:SetPosY(248)
   else
+    Panel_Looting:SetSize(210, 255)
     _buttonLootAllToServant:SetShow(false)
+    _buttonLootAllToServant:ComputePos()
+    _buttonCancel:ComputePos()
+    _buttonLootAll:ComputePos()
   end
   local lootingCount = looting_getItemCount()
   looting.remainItemCnt = 0

@@ -522,7 +522,7 @@ function FGlobal_Option_luaLoadComplete()
   if isNeedGameOptionFromServer() == true then
     keyCustom_StartEdit()
   end
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     setConsoleKeySet(1)
   end
 end

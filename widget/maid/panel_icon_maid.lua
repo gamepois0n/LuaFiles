@@ -17,6 +17,7 @@ Panel_Window_MaidList:setGlassBackground(true)
 Panel_Window_MaidList:ActiveMouseEventEffect(true)
 local maidList = {
   contentBg = UI.getChildControl(Panel_Window_MaidList, "Static_MaidListContentBG"),
+  title = UI.getChildControl(Panel_Window_MaidList, "StaticText_MaidTitle"),
   name = UI.getChildControl(Panel_Window_MaidList, "StaticText_Name"),
   town = UI.getChildControl(Panel_Window_MaidList, "StaticText_Town"),
   func = UI.getChildControl(Panel_Window_MaidList, "StaticText_Func"),
@@ -26,21 +27,29 @@ local maidList = {
   albeCount = UI.getChildControl(Panel_Window_MaidList, "StaticText_LeftMaidCount"),
   albeCountValue = UI.getChildControl(Panel_Window_MaidList, "StaticText_LeftMaidCountValue"),
   scroll = UI.getChildControl(Panel_Window_MaidList, "Scroll_MaidList"),
-  btnClose = UI.getChildControl(Panel_Window_MaidList, "Button_Close"),
+  radioAll = UI.getChildControl(Panel_Window_MaidList, "RadioButton_All"),
+  radioWarehouse = UI.getChildControl(Panel_Window_MaidList, "RadioButton_Warehouse"),
+  radioMarket = UI.getChildControl(Panel_Window_MaidList, "RadioButton_Itemmarket"),
   config = {gapY = 25, normalSizeY = 155},
   maidInfo = {},
-  maxShowCount = 5,
+  maxShowCount = 9,
   startIndex = 0,
   scrollInterval = 0
 }
+local warehouseMaidCount = 0
+local marketMaidCount = 0
 local albeWarehouseMaidCount = 0
 local albeMarketMaidCount = 0
+maidList.btnClose = UI.getChildControl(maidList.title, "Button_Close")
 maidList.scrollCtrlBtn = UI.getChildControl(maidList.scroll, "Scroll_CtrlButton")
 maidList.scrollCtrlBtn:addInputEvent("Mouse_LPress", "HandleClicked_MaidList_ScrollBtn()")
 maidList.btnClose:addInputEvent("Mouse_LUp", "MaidList_Close()")
 maidList.contentBg:addInputEvent("Mouse_DownScroll", "MaidList_ScrollEvent( true )")
 maidList.contentBg:addInputEvent("Mouse_UpScroll", "MaidList_ScrollEvent( false )")
 maidList.scroll:addInputEvent("Mouse_LPress", "HandleClicked_MaidList_ScrollBtn()")
+maidList.radioAll:addInputEvent("Mouse_LUp", "MaidListUpdate()")
+maidList.radioWarehouse:addInputEvent("Mouse_LUp", "MaidListUpdate()")
+maidList.radioMarket:addInputEvent("Mouse_LUp", "MaidListUpdate()")
 function maidList:Init()
   for maidIndex = 0, self.maxShowCount - 1 do
     local temp = {}
@@ -68,6 +77,9 @@ function maidList:Init()
     self.btnWarehouse:setButtonShortcuts("PANEL_MAIDLIST_OPEN_WAREHOUSE")
     self.btnMarket:setButtonShortcuts("PANEL_MAIDLIST_OPEN_ITEMMARKET")
   end
+  self.radioAll:SetCheck(true)
+  self.radioWarehouse:SetCheck(false)
+  self.radioMarket:SetCheck(false)
 end
 maidList:Init()
 function MaidList_Open()
@@ -104,56 +116,145 @@ function MaidList_Set(startIndex)
     Panel_Window_MaidList:SetShow(false)
     return
   end
-  if self.maxShowCount < getTotalMaidList() then
+  local currentMaidCount = 0
+  for index = 0, getTotalMaidList() - 1 do
+    local maidInfoWrapper = getMaidDataByIndex(index)
+    if self.radioWarehouse:IsCheck() then
+      if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+        currentMaidCount = currentMaidCount + 1
+      end
+    elseif self.radioMarket:IsCheck() then
+      if maidInfoWrapper:isAbleSubmitMarket() then
+        currentMaidCount = currentMaidCount + 1
+      end
+    elseif maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() or maidInfoWrapper:isAbleSubmitMarket() then
+      currentMaidCount = currentMaidCount + 1
+    end
+  end
+  if currentMaidCount > self.maxShowCount then
     self.scroll:SetShow(true)
   else
     self.scroll:SetShow(false)
   end
-  if nil == startIndex or getTotalMaidList() <= self.maxShowCount then
+  if nil == startIndex or currentMaidCount <= self.maxShowCount then
     self.startIndex = 0
   end
   if 0 == self.startIndex then
     self.scroll:SetControlPos(0)
   end
 end
+function MaidListUpdate()
+  MaidList_Set(0)
+  FGlobal_MaidIcon_SetPos(true)
+end
 function MaidCoolTime_Update()
   local self = maidList
+  local isWarehouse = self.radioWarehouse:IsCheck()
+  local isMarket = self.radioMarket:IsCheck()
   if nil == getSelfPlayer() then
     return
   end
-  for index = 0, self.maxShowCount - 1 do
-    if index < getTotalMaidList() then
-      local maidInfoWrapper = getMaidDataByIndex(index + self.startIndex)
-      if nil ~= maidInfoWrapper then
-        self.maidInfo[index].name:SetText(maidInfoWrapper:getName())
-        self.maidInfo[index].name:SetShow(true)
-        self.maidInfo[index].town:SetShow(false)
-        if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
-          self.maidInfo[index].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE"))
-        elseif maidInfoWrapper:isAbleSubmitMarket() then
-          self.maidInfo[index].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET"))
-        end
-        self.maidInfo[index].func:SetShow(true)
-        self.maidInfo[index].coolTime:SetShow(true)
-        local coolTime = maidInfoWrapper:getCoolTime()
-        if coolTime > 0 then
-          self.maidInfo[index].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
-          local oneMinute = 60
-          if coolTime < oneMinute then
-            self.maidInfo[index].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
-          else
-            self.maidInfo[index].coolTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
-          end
-        else
-          self.maidInfo[index].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
-          self.maidInfo[index].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
-        end
-      end
-    else
+  local realIndex = 0
+  for index = 0, getTotalMaidList() - 1 do
+    if nil ~= self.maidInfo[index] then
       self.maidInfo[index].name:SetShow(false)
       self.maidInfo[index].town:SetShow(false)
       self.maidInfo[index].func:SetShow(false)
       self.maidInfo[index].coolTime:SetShow(false)
+    end
+    if index < getTotalMaidList() and realIndex < self.maxShowCount then
+      local maidInfoWrapper = getMaidDataByIndex(index + self.startIndex)
+      if nil ~= maidInfoWrapper then
+        if isWarehouse then
+          if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+            self.maidInfo[realIndex].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE"))
+            self.maidInfo[realIndex].name:SetText(maidInfoWrapper:getName())
+            self.maidInfo[realIndex].name:SetShow(true)
+            self.maidInfo[realIndex].town:SetShow(false)
+            self.maidInfo[realIndex].func:SetShow(true)
+            self.maidInfo[realIndex].coolTime:SetShow(true)
+            local coolTime = maidInfoWrapper:getCoolTime()
+            if coolTime > 0 then
+              self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+              local oneMinute = 60
+              if coolTime < oneMinute then
+                self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+              else
+                self.maidInfo[realIndex].coolTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+              end
+            else
+              self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
+              self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+            end
+            realIndex = realIndex + 1
+          end
+        elseif isMarket then
+          if maidInfoWrapper:isAbleSubmitMarket() then
+            self.maidInfo[realIndex].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET"))
+            self.maidInfo[realIndex].name:SetText(maidInfoWrapper:getName())
+            self.maidInfo[realIndex].name:SetShow(true)
+            self.maidInfo[realIndex].town:SetShow(false)
+            self.maidInfo[realIndex].func:SetShow(true)
+            self.maidInfo[realIndex].coolTime:SetShow(true)
+            local coolTime = maidInfoWrapper:getCoolTime()
+            if coolTime > 0 then
+              self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+              local oneMinute = 60
+              if coolTime < oneMinute then
+                self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+              else
+                self.maidInfo[realIndex].coolTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+              end
+            else
+              self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
+              self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+            end
+            realIndex = realIndex + 1
+          end
+        elseif maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+          self.maidInfo[realIndex].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_WAREHOUSE"))
+          self.maidInfo[realIndex].name:SetText(maidInfoWrapper:getName())
+          self.maidInfo[realIndex].name:SetShow(true)
+          self.maidInfo[realIndex].town:SetShow(false)
+          self.maidInfo[realIndex].func:SetShow(true)
+          self.maidInfo[realIndex].coolTime:SetShow(true)
+          local coolTime = maidInfoWrapper:getCoolTime()
+          if coolTime > 0 then
+            self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+            local oneMinute = 60
+            if coolTime < oneMinute then
+              self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+            else
+              self.maidInfo[realIndex].coolTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+            end
+          else
+            self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
+            self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+          end
+          realIndex = realIndex + 1
+        elseif maidInfoWrapper:isAbleSubmitMarket() then
+          self.maidInfo[realIndex].func:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET"))
+          self.maidInfo[realIndex].name:SetText(maidInfoWrapper:getName())
+          self.maidInfo[realIndex].name:SetShow(true)
+          self.maidInfo[realIndex].town:SetShow(false)
+          self.maidInfo[realIndex].func:SetShow(true)
+          self.maidInfo[realIndex].coolTime:SetShow(true)
+          local coolTime = maidInfoWrapper:getCoolTime()
+          if coolTime > 0 then
+            self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+            local oneMinute = 60
+            if coolTime < oneMinute then
+              self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ONEMINUTELEFT"))
+            else
+              self.maidInfo[realIndex].coolTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_LEFTTIME", "minute", coolTime / oneMinute - coolTime / oneMinute % 1))
+            end
+          else
+            self.maidInfo[realIndex].coolTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_POSSIBLE"))
+            self.maidInfo[realIndex].coolTime:SetFontColor(Defines.Color.C_FFC4BEBE)
+          end
+          realIndex = realIndex + 1
+        end
+      end
     end
   end
   albeWarehouseMaidCount = 0
@@ -169,32 +270,92 @@ function MaidCoolTime_Update()
       end
     end
   end
-  if albeWarehouseMaidCount > 0 then
-    self.btnWarehouse:SetIgnore(false)
-    self.btnWarehouse:SetMonoTone(false)
-    self.btnWarehouse:SetFontColor(Defines.Color.C_FFEFEFEF)
+  if isWarehouse then
+    self.btnWarehouse:SetShow(true)
+    self.btnWarehouse:SetSpanSize(10, 8)
+    self.btnMarket:SetShow(false)
+    if albeWarehouseMaidCount > 0 then
+      self.btnWarehouse:SetIgnore(false)
+      self.btnWarehouse:SetMonoTone(false)
+      self.btnWarehouse:SetFontColor(Defines.Color.C_FFEFEFEF)
+    else
+      self.btnWarehouse:SetIgnore(true)
+      self.btnWarehouse:SetMonoTone(true)
+      self.btnWarehouse:SetFontColor(Defines.Color.C_FFC4BEBE)
+    end
+    local countValuePos = self.albeCount:GetTextSizeX()
+    local ableMaidCount = albeWarehouseMaidCount
+    self.albeCountValue:SetPosX(countValuePos)
+    self.albeCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
+  elseif isMarket then
+    self.btnWarehouse:SetShow(false)
+    self.btnMarket:SetShow(true)
+    if albeMarketMaidCount > 0 then
+      self.btnMarket:SetIgnore(false)
+      self.btnMarket:SetMonoTone(false)
+      self.btnMarket:SetFontColor(Defines.Color.C_FFEFEFEF)
+    else
+      self.btnMarket:SetIgnore(true)
+      self.btnMarket:SetMonoTone(true)
+      self.btnMarket:SetFontColor(Defines.Color.C_FFC4BEBE)
+    end
+    local countValuePos = self.albeCount:GetTextSizeX()
+    local ableMaidCount = albeMarketMaidCount
+    self.albeCountValue:SetPosX(countValuePos)
+    self.albeCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
   else
-    self.btnWarehouse:SetIgnore(true)
-    self.btnWarehouse:SetMonoTone(true)
-    self.btnWarehouse:SetFontColor(Defines.Color.C_FFC4BEBE)
+    self.btnWarehouse:SetShow(true)
+    self.btnWarehouse:SetSpanSize(165, 8)
+    self.btnMarket:SetShow(true)
+    if albeWarehouseMaidCount > 0 then
+      self.btnWarehouse:SetIgnore(false)
+      self.btnWarehouse:SetMonoTone(false)
+      self.btnWarehouse:SetFontColor(Defines.Color.C_FFEFEFEF)
+    else
+      self.btnWarehouse:SetIgnore(true)
+      self.btnWarehouse:SetMonoTone(true)
+      self.btnWarehouse:SetFontColor(Defines.Color.C_FFC4BEBE)
+    end
+    if albeMarketMaidCount > 0 then
+      self.btnMarket:SetIgnore(false)
+      self.btnMarket:SetMonoTone(false)
+      self.btnMarket:SetFontColor(Defines.Color.C_FFEFEFEF)
+    else
+      self.btnMarket:SetIgnore(true)
+      self.btnMarket:SetMonoTone(true)
+      self.btnMarket:SetFontColor(Defines.Color.C_FFC4BEBE)
+    end
+    local countValuePos = self.albeCount:GetTextSizeX()
+    local ableMaidCount = albeWarehouseMaidCount + albeMarketMaidCount
+    self.albeCountValue:SetPosX(countValuePos)
+    self.albeCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
   end
-  if albeMarketMaidCount > 0 then
-    self.btnMarket:SetIgnore(false)
-    self.btnMarket:SetMonoTone(false)
-    self.btnMarket:SetFontColor(Defines.Color.C_FFEFEFEF)
+end
+function MaidList_MaidCount()
+  local self = maidList
+  warehouseMaidCount = 0
+  marketMaidCount = 0
+  for index = 0, getTotalMaidList() - 1 do
+    local maidInfoWrapper = getMaidDataByIndex(index)
+    if nil ~= maidInfoWrapper then
+      if maidInfoWrapper:isAbleInWarehouse() or maidInfoWrapper:isAbleOutWarehouse() then
+        warehouseMaidCount = warehouseMaidCount + 1
+      elseif maidInfoWrapper:isAbleSubmitMarket() then
+        marketMaidCount = marketMaidCount + 1
+      end
+    end
+  end
+  if self.radioWarehouse:IsCheck() then
+    return warehouseMaidCount
+  elseif self.radioMarket:IsCheck() then
+    return marketMaidCount
   else
-    self.btnMarket:SetIgnore(true)
-    self.btnMarket:SetMonoTone(true)
-    self.btnMarket:SetFontColor(Defines.Color.C_FFC4BEBE)
+    return warehouseMaidCount + marketMaidCount
   end
-  local countValuePos = self.albeCount:GetTextSizeX()
-  local ableMaidCount = albeWarehouseMaidCount + albeMarketMaidCount
-  self.albeCountValue:SetPosX(countValuePos)
-  self.albeCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
 end
 function MaidList_SetScroll()
   local self = maidList
-  local maidCount = getTotalMaidList()
+  local maidCount = MaidList_MaidCount()
   local pagePercent = self.maxShowCount / maidCount * 100
   local scroll_Interval = maidCount - self.maxShowCount
   local scrollSizeY = self.scroll:GetSizeY()
@@ -211,7 +372,7 @@ function MaidList_SetScroll()
 end
 function MaidList_ScrollEvent(isDown)
   local self = maidList
-  local maidCount = getTotalMaidList()
+  local maidCount = MaidList_MaidCount()
   if maidCount <= self.maxShowCount then
     return
   end
@@ -237,7 +398,7 @@ function MaidList_ScrollEvent(isDown)
 end
 function HandleClicked_MaidList_ScrollBtn()
   local self = maidList
-  local maidCount = getTotalMaidList()
+  local maidCount = MaidList_MaidCount()
   local posByIndex = 1 / (maidCount - self.maxShowCount)
   local currentIndex = math.floor(self.scroll:GetControlPos() / posByIndex)
   self.startIndex = currentIndex
@@ -457,7 +618,7 @@ function MaidFunc_ShowTooltip(isShow)
       desc = desc .. ", <" .. PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_MARKET") .. ">"
     end
   end
-  local maidCount = getTotalMaidList()
+  local maidCount = MaidList_MaidCount()
   local cooltimeText = ""
   local maidAffiliatedTownName = ""
   local areaName = {}

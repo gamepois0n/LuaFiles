@@ -8,8 +8,8 @@ PaGlobal_Guild_ManufactureSelect = {
   },
   _config = {
     _col = 6,
-    _startPosX = 0,
-    _startPosY = 0,
+    _startPosX = 10,
+    _startPosY = 10,
     _gapX = 60,
     _gapY = 60,
     _titleSizeY = 30
@@ -96,7 +96,7 @@ function PaGlobal_Guild_ManufactureSelect:initialize()
   self._ui._closeButton:addInputEvent("Mouse_LUp", "PaGlobal_Guild_ManufactureSelect:close()")
   local width = 410
   local height = startPosY + 20
-  self._ui._staticBG:SetSize(width - 28, height - 80)
+  self._ui._staticBG:SetSize(width - 10, height - 80)
   self._ui._notice:SetPosY(self._ui._staticBG:GetPosY() + self._ui._staticBG:GetSizeY() + 5)
   Panel_Guild_ManufactureSelect:SetSize(width, height + self._ui._notice:GetTextSizeY() + 5)
 end

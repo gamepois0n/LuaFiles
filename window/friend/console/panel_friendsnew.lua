@@ -39,16 +39,24 @@ function PaGlobal_FriendNew:Open()
   _panel:setMaskingChild(true)
   _panel:ActiveMouseEventEffect(true)
   _panel:setGlassBackground(true)
+  self._ui._Static_AddFriendBg:SetShow(false)
   self:Clear()
   self:Update()
   RequestFriendList_getFriendList()
   RequestFriendList_getAddFriendList()
+  local keyGuideList = {
+    self._ui._StaticText_KeyGuideInviteParty,
+    self._ui._StaticText_KeyGuideDeleteFriend,
+    self._ui._StaticText_KeyGuideClose
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
 function PaGlobal_FriendNew:Close()
   if true == self._ui._Static_AddFriendBg:GetShow() then
     PaGlobal_FriendNew:CloseAddFriendEdit()
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
   _panel:SetMonoTone(false)
   self._ui._Static_AddFriendBg:SetShow(false)
@@ -59,16 +67,16 @@ function PaGlobal_FriendNew:UpdatePcFriendTab()
     self._ui._Static_FriendBg:SetShow(true)
     self._ui._List2_FriendBg:SetShow(true)
     self._ui._List2_OfferBg:SetShow(false)
-    self._ui._StaticText_InviteParty:SetShow(true)
-    self._ui._StaticText_DeleteFriend:SetShow(true)
-    self._ui._StaticText_AddFriend:SetShow(true)
-    self._ui._StaticText_InviteParty:SetText(self._STRING._GUILD_INVITE)
-    self._ui._StaticText_DeleteFriend:SetText(self._STRING._DELETE_FRIEND)
+    self._ui._StaticText_KeyGuideInviteParty:SetShow(true)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(true)
+    self._ui._StaticText_KeyGuideAddFriend:SetShow(true)
+    self._ui._StaticText_KeyGuideInviteParty:SetText(self._STRING._GUILD_INVITE)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetText(self._STRING._DELETE_FRIEND)
     self._ui._StaticText_CharactorNameTitle:SetText(self._STRING._CHARACTERNAME)
     local keyGuideList = {
-      self._ui._StaticText_InviteParty,
-      self._ui._StaticText_DeleteFriend,
-      self._ui._StaticText_Close
+      self._ui._StaticText_KeyGuideInviteParty,
+      self._ui._StaticText_KeyGuideDeleteFriend,
+      self._ui._StaticText_KeyGuideClose
     }
     PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
     self:UpdatePCFriendList()
@@ -76,14 +84,13 @@ function PaGlobal_FriendNew:UpdatePcFriendTab()
     self._ui._Static_FriendBg:SetShow(false)
     self._ui._List2_FriendBg:SetShow(false)
     self._ui._List2_OfferBg:SetShow(true)
-    self._ui._StaticText_InviteParty:SetShow(true)
-    self._ui._StaticText_DeleteFriend:SetShow(true)
-    self._ui._StaticText_InviteParty:SetText(self._STRING._ACCEPT_ADDREQUEST)
-    self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
+    self._ui._StaticText_KeyGuideInviteParty:SetShow(true)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(true)
+    self._ui._StaticText_KeyGuideClose:SetShow(true)
     local keyGuideList = {
-      self._ui._StaticText_InviteParty,
-      self._ui._StaticText_DeleteFriend,
-      self._ui._StaticText_Close
+      self._ui._StaticText_KeyGuideInviteParty,
+      self._ui._StaticText_KeyGuideDeleteFriend,
+      self._ui._StaticText_KeyGuideClose
     }
     PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
     self:UpdateOfferList()
@@ -95,16 +102,16 @@ function PaGlobal_FriendNew:UpdateXboxFriendTab()
   self._ui._Static_FriendBg:SetShow(true)
   self._ui._List2_FriendBg:SetShow(true)
   self._ui._List2_OfferBg:SetShow(false)
-  self._ui._StaticText_InviteParty:SetShow(true)
-  self._ui._StaticText_DeleteFriend:SetShow(true)
-  self._ui._StaticText_AddFriend:SetShow(false)
-  self._ui._StaticText_InviteParty:SetText(self._STRING._XBOX_PROFILE)
-  self._ui._StaticText_DeleteFriend:SetText(self._STRING._XBOX_INVITE)
+  self._ui._StaticText_KeyGuideInviteParty:SetShow(true)
+  self._ui._StaticText_KeyGuideDeleteFriend:SetShow(true)
+  self._ui._StaticText_KeyGuideAddFriend:SetShow(false)
+  self._ui._StaticText_KeyGuideInviteParty:SetText(self._STRING._XBOX_PROFILE)
+  self._ui._StaticText_KeyGuideDeleteFriend:SetText(self._STRING._XBOX_INVITE)
   self._ui._StaticText_CharactorNameTitle:SetText(self._STRING._XBOX_GAMERTAG)
   local keyGuideList = {
-    self._ui._StaticText_InviteParty,
-    self._ui._StaticText_DeleteFriend,
-    self._ui._StaticText_Close
+    self._ui._StaticText_KeyGuideInviteParty,
+    self._ui._StaticText_KeyGuideDeleteFriend,
+    self._ui._StaticText_KeyGuideClose
   }
   PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuideList, self._ui._Static_BottomBg, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
   self:UpdateXboxFriendList()
@@ -123,18 +130,18 @@ function PaGlobal_FriendNew:UpdatePCFriendList()
   for friendIndex = 0, friendCount - 1 do
     self._ui._List2_FriendBg:getElementManager():pushKey(friendIndex)
   end
-  self._ui._StaticText_InviteParty:SetShow(false)
+  self._ui._StaticText_KeyGuideInviteParty:SetShow(false)
   if friendCount < 1 then
-    self._ui._StaticText_DeleteFriend:SetShow(false)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(false)
   else
-    self._ui._StaticText_DeleteFriend:SetShow(true)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(true)
   end
   local selfPlayer = getSelfPlayer()
   if nil ~= selfPlayer then
     local selfActorKeyRaw = selfPlayer:getActorKey()
     local isGuildMaster = selfPlayer:isSpecialGuildMember(selfActorKeyRaw)
     if true == isGuildMaster and friendCount > 0 then
-      self._ui._StaticText_InviteParty:SetShow(true)
+      self._ui._StaticText_KeyGuideInviteParty:SetShow(true)
     end
   end
 end
@@ -145,11 +152,11 @@ function PaGlobal_FriendNew:UpdateXboxFriendList()
     self._ui._List2_FriendBg:getElementManager():pushKey(i)
   end
   if xboxFriendSize < 1 then
-    self._ui._StaticText_InviteParty:SetShow(false)
-    self._ui._StaticText_DeleteFriend:SetShow(false)
+    self._ui._StaticText_KeyGuideInviteParty:SetShow(false)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(false)
   else
-    self._ui._StaticText_InviteParty:SetShow(true)
-    self._ui._StaticText_DeleteFriend:SetShow(true)
+    self._ui._StaticText_KeyGuideInviteParty:SetShow(true)
+    self._ui._StaticText_KeyGuideDeleteFriend:SetShow(true)
   end
 end
 function FriendNew_CreateOfferList(control, key)
@@ -308,6 +315,9 @@ function PaGlobal_FriendNew:ClickRB()
   PaGlobal_FriendNew:Update()
 end
 function PaGlobal_FriendNew:AddFriendAccept(index)
+  if true == self._ui._Static_AddFriendBg:GetShow() then
+    return
+  end
   if ToClient_isAddFriendAllowed() then
     requestFriendList_acceptFriend(index)
   else
@@ -324,6 +334,9 @@ function PaGlobal_FriendNew:AddFriendAccept(index)
   end
 end
 function PaGlobal_FriendNew:AddFriendDecline(index)
+  if true == self._ui._Static_AddFriendBg:GetShow() then
+    return
+  end
   requestFriendList_refuseFriend(index)
 end
 function isSelectFriendBlocked(groupNo, userNo)
@@ -386,15 +399,15 @@ function PaGlobal_FriendNew:Init()
   self._ui._List2_FriendBg:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FriendNew_CreateFriendList")
   self._ui._List2_OfferBg:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui._List2_OfferBg:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FriendNew_CreateOfferList")
-  self._ui._StaticText_InviteParty = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_InviteParty")
-  self._ui._StaticText_DeleteFriend = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_DeleteFriend")
-  self._ui._StaticText_Close = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_Close")
-  self._ui._Button_InviteParty = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_InviteParty")
-  self._ui._Button_Delete = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_Delete")
-  self._ui._Button_Close = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "Button_Close")
-  self._ui._StaticText_AddFriend = UI.getChildControl(PaGlobal_FriendNew._ui._Static_BottomBg, "StaticText_AddFriend")
-  self._ui._Static_CenterBG = UI.getChildControl(PaGlobal_FriendNew._ui._Static_AddFriendBg, "Static_CenterBg")
-  self._ui._Edit_Nickname = UI.getChildControl(PaGlobal_FriendNew._ui._Static_CenterBG, "Edit_Nickname")
+  self._ui._StaticText_KeyGuideInviteParty = UI.getChildControl(self._ui._Static_BottomBg, "StaticText_InviteParty")
+  self._ui._StaticText_KeyGuideDeleteFriend = UI.getChildControl(self._ui._Static_BottomBg, "StaticText_DeleteFriend")
+  self._ui._StaticText_KeyGuideClose = UI.getChildControl(self._ui._Static_BottomBg, "StaticText_Close")
+  self._ui._Button_InviteParty = UI.getChildControl(self._ui._Static_BottomBg, "Button_InviteParty")
+  self._ui._Button_Delete = UI.getChildControl(self._ui._Static_BottomBg, "Button_Delete")
+  self._ui._Button_Close = UI.getChildControl(self._ui._Static_BottomBg, "Button_Close")
+  self._ui._StaticText_KeyGuideAddFriend = UI.getChildControl(self._ui._Static_BottomBg, "StaticText_AddFriend")
+  self._ui._Static_CenterBG = UI.getChildControl(self._ui._Static_AddFriendBg, "Static_CenterBg")
+  self._ui._Edit_Nickname = UI.getChildControl(self._ui._Static_CenterBG, "Edit_Nickname")
   self._ui._Edit_Nickname:setXboxVirtualKeyBoardEndEvent("PaGlobal_FriendNew_EnterAddFriendEdit")
   self._ui._Edit_Nickname:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_FriendNew:OpenAddFriendEdit()")
   self._ui._Button_Delete:addInputEvent("Mouse_LUp", "PaGlobal_FriendNew:DeleteFriend()")
@@ -414,6 +427,7 @@ function PaGlobal_FriendNew:ClearAddFriendEdit()
   self._ui._Edit_Nickname:SetEditText("", true)
   self._ui._Static_AddFriendBg:SetShow(false)
   ClearFocusEdit()
+  self:UpdatePcFriendTab()
 end
 function PaGlobal_FriendNew_EnterAddFriendEdit(str)
   PaGlobal_FriendNew:EnterAddFriendEdit(str)
@@ -438,6 +452,7 @@ function PaGlobal_FriendNew:CloseAddFriendEdit()
   self._ui._Static_BottomBg:SetShow(true)
   self._ui._Edit_Nickname:SetEditText("", true)
   self._ui._Static_AddFriendBg:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   ClearFocusEdit()
 end
 function PaGlobal_FriendNew_EnterAddFriendFunctionYes()

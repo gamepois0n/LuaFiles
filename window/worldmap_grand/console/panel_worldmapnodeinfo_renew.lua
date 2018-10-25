@@ -458,6 +458,7 @@ function Input_WorldMapNodeInfo_OnInvestment()
     return
   end
   _isProgressReset = true
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_WorldMapRequestUpgradeExplorationNode(self._wayPointKey)
   PaGlobal_TutorialManager:handleOnNodeUpgradeClick(self._wayPointKey)
 end
@@ -467,6 +468,7 @@ function Input_WorldMapNodeInfo_OnDisInvestment()
     return
   end
   local function NodeWithdrawExecute()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_WorldMapRequestWithdrawPlant(self._wayPointKey)
   end
   if Panel_Plant_WorkManager:GetShow() then
@@ -501,6 +503,7 @@ function Input_WorldMapNodeInfo_OnEnergyInvest()
   if maxWp > wpCalc then
     s64_maxNumber = tonumber64(wpCalc)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   Panel_NumberPad_Show(true, s64_maxNumber, self._wayPointKey, PaGlobalFunc_WorldMapNodeInfo_EnergyInvest)
 end
 function PaGlobalFunc_WorldMapNodeInfo_EnergyInvest(inputNumber, param)
@@ -519,8 +522,7 @@ function Input_WorldMapNodeInfo_OnNearNode()
   end
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(self._wayPointKey, NavigationGuideParam())
-  audioPostEvent_SystemUi(0, 14)
-  _AudioPostEvent_SystemUiForXBOX(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   FGlobal_WorldMapWindowEscape()
 end
 function FromClient_WorldMapNodeInfo_CreateNodeIcon(nodeBtn)

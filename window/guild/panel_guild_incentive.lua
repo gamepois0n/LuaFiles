@@ -50,9 +50,7 @@ local Guild_Incentive = {
   _radio_All = UI.getChildControl(Panel_Guild_IncentiveOption, "RadioButton_All"),
   _radio_Personal = UI.getChildControl(Panel_Guild_IncentiveOption, "RadioButton_Personal"),
   _btn_IncentiveLevel = UI.getChildControl(Panel_Guild_IncentiveOption, "StaticText_Grade"),
-  _title_CharName = UI.getChildControl(Panel_Guild_IncentiveOption, "StaticText_M_CharName"),
-  _title_Ap = UI.getChildControl(Panel_Guild_IncentiveOption, "StaticText_M_ContributedTendency"),
-  _static_Line = UI.getChildControl(Panel_Guild_IncentiveOption, "Static_PartLine")
+  _listTitleBG = UI.getChildControl(Panel_Guild_IncentiveOption, "Static_List_BG")
 }
 Guild_Incentive._memberGrade:SetShow(false)
 Guild_Incentive._memberName:SetShow(false)
@@ -85,8 +83,7 @@ function Guild_Incentive:ResetControl()
     _guildList[index]._comboboxRank = UI.createControl(UCT.PA_UI_CONTROL_COMBOBOX, _contentGuildList, "Combobox_Rank_" .. i)
     _guildList[index]._radio_All = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, _contentGuildList, "Radiobutton_All_" .. i)
     _guildList[index]._radio_Personal = UI.createControl(UCT.PA_UI_CONTROL_RADIOBUTTON, _contentGuildList, "Radiobutton_Personal_" .. i)
-    _guildList[index]._btn_IncentiveLevel = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, _contentGuildList, "Button_InventiveLevel_" .. i)
-    _guildList[index]._static_Line = UI.createControl(UCT.PA_UI_CONTROL_STATIC, _contentGuildList, "Static_Line_" .. i)
+    _guildList[index]._btn_IncentiveLevel = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, _contentGuildList, "Button_IncentiveLevel_" .. i)
     CopyBaseProperty(Guild_Incentive._memberGrade, _guildList[index]._memberGrade)
     CopyBaseProperty(Guild_Incentive._memberName, _guildList[index]._memberName)
     CopyBaseProperty(Guild_Incentive._memberContribution, _guildList[index]._memberContribution)
@@ -95,7 +92,6 @@ function Guild_Incentive:ResetControl()
     CopyBaseProperty(Guild_Incentive._radio_All, _guildList[index]._radio_All)
     CopyBaseProperty(Guild_Incentive._radio_Personal, _guildList[index]._radio_Personal)
     CopyBaseProperty(Guild_Incentive._btn_IncentiveLevel, _guildList[index]._btn_IncentiveLevel)
-    CopyBaseProperty(Guild_Incentive._static_Line, _guildList[index]._static_Line)
     _guildList[index]._radio_All:SetGroup(i)
     _guildList[index]._radio_Personal:SetGroup(i)
     local guildMemberInfo = myGuildListInfo:getMember(i - 1)
@@ -135,8 +131,6 @@ function Guild_Incentive:ResetControl()
     _guildList[index]._btn_IncentiveLevel:SetPosY(posY)
     _guildList[index]._btn_IncentiveLevel:SetShow(true)
     _guildList[index]._btn_IncentiveLevel:addInputEvent("Mouse_LUp", "PaGlobal_SetInventive_Grade(" .. index .. ")")
-    _guildList[index]._static_Line:SetShow(index > 0)
-    _guildList[index]._static_Line:SetPosY(posY - 7)
     _guildList[index]._comboboxRank:DeleteAllItem()
     for i = 1, maxIncentiveGrade do
       _guildList[index]._comboboxRank:AddItem(i)
@@ -145,6 +139,10 @@ function Guild_Incentive:ResetControl()
     _guildList[index]._comboboxRank:addInputEvent("Mouse_LUp", "click_Incentive_GradeList(" .. index .. ")")
     _guildList[index]._comboboxRank:GetListControl():addInputEvent("Mouse_LUp", "Set_Incentive_Grade(" .. index .. ")")
   end
+  Guild_Incentive._title_CharName = UI.getChildControl(Guild_Incentive._listTitleBG, "StaticText_M_CharName")
+  Guild_Incentive._title_Ap = UI.getChildControl(Guild_Incentive._listTitleBG, "StaticText_M_ContributedTendency")
+  Guild_Incentive._title_CharName:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentiveSort(0)")
+  Guild_Incentive._title_Ap:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentiveSort(1)")
   Panel_Guild_IncentiveOption:SetChildIndex(Guild_Incentive._title_CharName, 9999)
   Panel_Guild_IncentiveOption:SetChildIndex(Guild_Incentive._title_Ap, 9999)
   _frameGuildList:UpdateContentScroll()
@@ -321,8 +319,6 @@ function Panel_Guild_Incentive_Foundation_Init()
   self._edit_MoneyValue:SetEditText("", true)
   self._btn_Close:addInputEvent("Mouse_LUp", "Panel_Guild_Incentive_Foundation_Close()")
   self._edit_MoneyValue:addInputEvent("Mouse_LUp", "Panel_Guild_Incentive_Foundation_Editing()")
-  Guild_Incentive._title_CharName:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentiveSort(0)")
-  Guild_Incentive._title_Ap:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentiveSort(1)")
 end
 function Panel_Guild_Incentive_Foundation_Update()
   local self = guildIncentiveMoneyValue

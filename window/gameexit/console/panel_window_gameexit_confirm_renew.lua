@@ -46,15 +46,18 @@ function Window_GameExit_ConfirmInfo:SetButtonEventByExitType(exitType)
 end
 function PaGlobalFunc_GameExitConfirm_ExitButton()
   local self = Window_GameExit_ConfirmInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_GameExit_ExitHandler(0)
   PaGlobalFunc_GameExitConfirm_SetShow(false, false)
 end
 function PaGlobalFunc_GameExitConfirm_TrayButton()
   local self = Window_GameExit_ConfirmInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_GameExitConfirm_SetShow(false, false)
 end
 function PaGlobalFunc_GameExitConfirm_CharacterSelectButton()
   PaGlobalFunc_GameExit_ExitHandler(1)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_GameExitConfirm_SetShow(false, false)
 end
 function Window_GameExit_ConfirmInfo:Initialize()
@@ -85,6 +88,7 @@ function PaGlobalFunc_GameExitConfirm_OpenByExitType(exitType)
   PaGlobalFunc_GameExitConfirm_SetShow(true, true)
 end
 function PaGlobalFunc_GameExitConfirm_SetShow(isShow, isAni)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Window_GameExit_Confirm:SetShow(isShow, isAni)
 end
 function PaGlobalFunc_GameExitConfirm_GetShow()

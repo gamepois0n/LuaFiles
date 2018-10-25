@@ -1,4 +1,5 @@
-local Panel_Dialog_SkillSpecialize_info = {
+local _panel = Panel_Dialog_SkillSpecialize
+local SkillSpecialize = {
   _initialize = false,
   _ui = {
     static_Skill_Specialize1 = nil,
@@ -54,9 +55,9 @@ local Panel_Dialog_SkillSpecialize_info = {
     list2_1_SelectSkill = nil,
     list2_2_SelectEffect1 = nil,
     static_BottomArea = nil,
-    staticText_DoSpecialize = nil,
-    staticText_Select = nil,
-    staticText_Cancel = nil,
+    txt_keyGuideY = nil,
+    txt_keyGuideA = nil,
+    txt_keyGuideB = nil,
     btn_DoSpecialize = nil
   },
   _config = {
@@ -140,40 +141,42 @@ local result = {
   _awakenTitle = UI.getChildControl(Panel_SkillAwaken_ResultOption, "StaticText_AwakenTitle"),
   _awakenOption = UI.getChildControl(Panel_SkillAwaken_ResultOption, "StaticText_AwakenOption")
 }
-function Panel_Dialog_SkillSpecialize_info:registerMessageHandler()
-end
-function Panel_Dialog_SkillSpecialize_info:registEventHandler()
-  Panel_Dialog_SkillSpecialize:RegisterShowEventFunc(true, "PaGlobalFunc_Dialog_SkillAwakenResult_ShowAni()")
-  Panel_Dialog_SkillSpecialize:RegisterShowEventFunc(false, "PaGlobalFunc_Dialog_SkillAwakenResult_HideAni()")
+local self = Panel_Dialog_SkillSpecialize
+function SkillSpecialize:registerMessageHandler()
+  _panel:RegisterShowEventFunc(true, "PaGlobalFunc_Dialog_SkillAwakenResult_ShowAni()")
+  _panel:RegisterShowEventFunc(false, "PaGlobalFunc_Dialog_SkillAwakenResult_HideAni()")
   registerEvent("EventShowAwakenSkill", "FromClient_Dialog_SkillSpecialize_Show")
   registerEvent("FromClient_SuccessSkillAwaken", "FromClient_SuccessSkillSpecialize")
   registerEvent("FromClient_ChangeSkillAwakeningBitFlag", "FromClient_SuccessSkillSpecialize")
   registerEvent("FromClient_ChangeAwakenSkill", "FromClient_SuccessSkillSpecialize")
-  Panel_Dialog_SkillSpecialize:RegisterUpdateFunc("SkillReinforceResult_Hide")
+  _panel:RegisterUpdateFunc("SkillReinforceResult_Hide")
 end
-function Panel_Dialog_SkillSpecialize_info:initialize()
+function SkillSpecialize:registEventHandler()
+end
+function SkillSpecialize:initialize()
   self:childControl()
   self:registEventHandler()
+  self:registerMessageHandler()
   self:setDefaultPos()
   self:createControlPage1()
   self:setPosControlPage1()
 end
-function Panel_Dialog_SkillSpecialize_info:initValue()
+function SkillSpecialize:initValue()
   self._value.currentPage = 0
   self._value.lastSpecializeIndex = nil
   self._value.currentSpecializeIndex = nil
   self._value.currnetReinforceIndex = nil
   self:initValuePage2()
 end
-function Panel_Dialog_SkillSpecialize_info:initValuePage2()
+function SkillSpecialize:initValuePage2()
   self._value.currentReinforceSkillNo = nil
   self._value.currentReinforceSkillNo = nil
   self._value.currentSelectSkillIndex = nil
   self._value.currentEffectIndex = nil
   self._value.currentEffectIndex2 = nil
 end
-function Panel_Dialog_SkillSpecialize_info:childControl()
-  self._ui.static_Skill_Specialize1 = UI.getChildControl(Panel_Dialog_SkillSpecialize, "Static_Skill_Specialize1")
+function SkillSpecialize:childControl()
+  self._ui.static_Skill_Specialize1 = UI.getChildControl(_panel, "Static_Skill_Specialize1")
   self._ui.staticText_Skill_Special_Title = UI.getChildControl(self._ui.static_Skill_Specialize1, "StaticText_Skill_Special_Title")
   self._ui.staticText_Skill_Awaken_Special_Title = UI.getChildControl(self._ui.static_Skill_Specialize1, "StaticText_Skill_Awaken_Special_Title")
   self._ui.rbtn_ChangeSkill_Template = UI.getChildControl(self._ui.static_Skill_Specialize1, "Radiobutton_ChangeSkill_Template")
@@ -186,7 +189,10 @@ function Panel_Dialog_SkillSpecialize_info:childControl()
   self._ui.rbtn_ChangeNotyet_Template = UI.getChildControl(self._ui.static_Skill_Specialize1, "RadioButton_ChangeNotyet_Template")
   self._ui.staticText_Level = UI.getChildControl(self._ui.rbtn_ChangeNotyet_Template, "StaticText_Level")
   self._ui.staticText_EnableSpecialize = UI.getChildControl(self._ui.rbtn_ChangeNotyet_Template, "StaticText_EnableSpecialize")
-  self._ui.static_Skill_Specialize2 = UI.getChildControl(Panel_Dialog_SkillSpecialize, "Static_Skill_Specialize2")
+  self._ui.txt_tip = UI.getChildControl(self._ui.static_Skill_Specialize1, "StaticText_Tip")
+  self._ui.txt_tip:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.txt_tip:SetText(self._ui.txt_tip:GetText())
+  self._ui.static_Skill_Specialize2 = UI.getChildControl(_panel, "Static_Skill_Specialize2")
   self._ui.static_Specialize_Img = UI.getChildControl(self._ui.static_Skill_Specialize2, "Static_Specialize_Img")
   self._ui.static_SelectedSkillIcon = UI.getChildControl(self._ui.static_Specialize_Img, "Static_SelectedSkillIcon")
   self._ui.static_Content = UI.getChildControl(self._ui.static_Skill_Specialize2, "Static_Content")
@@ -203,12 +209,22 @@ function Panel_Dialog_SkillSpecialize_info:childControl()
   self._ui.list2_2_SelectEffect1:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.staticText_EffectBg1 = UI.getChildControl(self._ui.static_Content, "StaticText_EffectBg1")
   self._ui.staticText_EffectBg2 = UI.getChildControl(self._ui.static_Content, "StaticText_EffectBg2")
-  self._ui.static_BottomArea = UI.getChildControl(Panel_Dialog_SkillSpecialize, "Static_BottomArea")
-  self._ui.staticText_DoSpecialize = UI.getChildControl(self._ui.static_BottomArea, "StaticText_DoSpecialize")
-  self._ui.staticText_Select = UI.getChildControl(self._ui.static_BottomArea, "StaticText_Select")
-  self._ui.staticText_Cancel = UI.getChildControl(self._ui.static_BottomArea, "StaticText_Cancel")
+  self._ui.staticText_EffectBg1:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.staticText_EffectBg2:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._ui.static_BottomArea = UI.getChildControl(_panel, "Static_BottomArea")
+  self._ui.txt_keyGuideY = UI.getChildControl(self._ui.static_BottomArea, "StaticText_ChangeEffect")
+  self._ui.txt_keyGuideA = UI.getChildControl(self._ui.static_BottomArea, "StaticText_Select")
+  self._ui.txt_keyGuideB = UI.getChildControl(self._ui.static_BottomArea, "StaticText_Cancel")
+  self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GENERIC_KEYGUIDE_XBOX_SELECT"))
+  self._ui.txt_keyGuideB:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GENERIC_KEYGUIDE_XBOX_DISCARD"))
+  local keyGuides = {
+    self._ui.txt_keyGuideY,
+    self._ui.txt_keyGuideA,
+    self._ui.txt_keyGuideB
+  }
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.static_BottomArea, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
 end
-function Panel_Dialog_SkillSpecialize_info:setDefaultPos()
+function SkillSpecialize:setDefaultPos()
   self._pos.page1StartPos1Y = self._ui.staticText_Skill_Special_Title:GetPosY() + self._ui.staticText_Skill_Special_Title:GetSizeY() + 10
   self._pos.page1StartPos2Y = self._ui.staticText_Skill_Awaken_Special_Title:GetPosY() + self._ui.staticText_Skill_Awaken_Special_Title:GetSizeY() + 10
   self._pos.page1SpaceY = self._ui.rbtn_ChangeSkill_Template:GetSizeY()
@@ -220,7 +236,7 @@ function Panel_Dialog_SkillSpecialize_info:setDefaultPos()
   self._pos.page2Pos5 = self._ui.staticText_EffectBg1:GetPosY()
   self._pos.page2Pos6 = self._ui.staticText_EffectBg2:GetPosY()
 end
-function Panel_Dialog_SkillSpecialize_info:createControlPage1()
+function SkillSpecialize:createControlPage1()
   for index = 0, self._config.reinforceSkillViewCount - 1 do
     local rbtn_ChangeSkill = {}
     rbtn_ChangeSkill.state = self._enum.eButtonStateAlready
@@ -244,7 +260,7 @@ function Panel_Dialog_SkillSpecialize_info:createControlPage1()
     self._ui.rbtn_List_ChangeNotyet[index] = rbtn_ChangeNotyet
   end
 end
-function Panel_Dialog_SkillSpecialize_info:setPosControlPage1()
+function SkillSpecialize:setPosControlPage1()
   for index = 0, self._config.reinforceSkillViewCount - 1 do
     if index < self._config.reinforceSkillCount then
       self._ui.rbtn_List_ChangeSkill[index].radiobutton:SetPosY(self._pos.page1StartPos1Y + index * self._pos.page1SpaceY)
@@ -255,30 +271,30 @@ function Panel_Dialog_SkillSpecialize_info:setPosControlPage1()
     end
   end
 end
-function Panel_Dialog_SkillSpecialize_info:open(showAni)
+function SkillSpecialize:open(showAni)
   if nil == showAni then
-    Panel_Dialog_SkillSpecialize:SetShow(true, true)
+    _panel:SetShow(true, true)
     return
   else
-    Panel_Dialog_SkillSpecialize:SetShow(true, showAni)
+    _panel:SetShow(true, showAni)
   end
 end
-function Panel_Dialog_SkillSpecialize_info:close(showAni)
+function SkillSpecialize:close(showAni)
   if nil == showAni then
-    Panel_Dialog_SkillSpecialize:SetShow(false, true)
+    _panel:SetShow(false, true)
     return
   else
-    Panel_Dialog_SkillSpecialize:SetShow(false, showAni)
+    _panel:SetShow(false, showAni)
   end
 end
-function Panel_Dialog_SkillSpecialize_info:resize()
-  Panel_Dialog_SkillSpecialize:ComputePos()
+function SkillSpecialize:resize()
+  _panel:ComputePos()
 end
-function Panel_Dialog_SkillSpecialize_info:preOpen()
+function SkillSpecialize:preOpen()
   self:initValue()
   self:resize()
 end
-function Panel_Dialog_SkillSpecialize_info:setContent()
+function SkillSpecialize:setContent()
   if self._value.currentPage == 0 then
     self:clearContentPage1()
     self:setContentPage1()
@@ -288,7 +304,7 @@ function Panel_Dialog_SkillSpecialize_info:setContent()
   end
   self:showPage()
 end
-function Panel_Dialog_SkillSpecialize_info:showPage()
+function SkillSpecialize:showPage()
   local currentPage = self._value.currentPage
   if currentPage == 0 then
     self._ui.static_Skill_Specialize1:SetShow(true)
@@ -298,7 +314,7 @@ function Panel_Dialog_SkillSpecialize_info:showPage()
     self._ui.static_Skill_Specialize2:SetShow(true)
   end
 end
-function Panel_Dialog_SkillSpecialize_info:clearContentPage1()
+function SkillSpecialize:clearContentPage1()
   for index = 0, self._config.reinforceSkillViewCount - 1 do
     self._ui.rbtn_List_ChangeSkill[index].radiobutton:SetShow(false)
     self._ui.rbtn_List_ChangeSkill[index].radiobutton:SetCheck(false)
@@ -311,7 +327,8 @@ function Panel_Dialog_SkillSpecialize_info:clearContentPage1()
   end
   self:initValue()
 end
-function Panel_Dialog_SkillSpecialize_info:setContentPage1()
+function SkillSpecialize:setContentPage1()
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "SkillSpecialize:setContentPage1")
   local selfPlayLevel = getSelfPlayer():get():getLevel()
   local reinforcableSkillCount = 0
   if selfPlayLevel < 50 then
@@ -347,21 +364,23 @@ function Panel_Dialog_SkillSpecialize_info:setContentPage1()
       control.staticText_Level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. normalSkillreinforceableLv[index])
       if totalReinforceCount == reinforcableSkillCount then
         control.state = self._enum.eButtonStateLock
-        control.radiobutton:SetEnable(false)
         control.staticText_EnableSpecialize:SetShow(false)
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateLock)
+        control.radiobutton:SetEnable(false)
       else
         control.state = self._enum.eButtonStateBase
-        control.radiobutton:SetEnable(true)
         control.staticText_EnableSpecialize:SetShow(true)
         control.staticText_EnableSpecialize:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_NORMAL_1"))
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateBase)
+        control.radiobutton:SetEnable(true)
         totalReinforceCount = totalReinforceCount + 1
       end
     end
     self._ui.rbtn_List[index] = control
     self._ui.rbtn_List[index].radiobutton:SetShow(true)
-    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton(" .. index .. ")")
+    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_ChangeSkill()")
+    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton(" .. index .. ")")
+    self._ui.rbtn_List[index].radiobutton:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Dialog_SkillSpecialize_ChangeEffect()")
   end
   for index = self._config.reinforceSkillCount, self._config.reinforceSkillViewCount - 1 do
     local control
@@ -376,30 +395,140 @@ function Panel_Dialog_SkillSpecialize_info:setContentPage1()
       control.staticText_Level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. awakenSkillreinforceableLv[index - 3])
       if totalReinforceCount == reinforcableSkillCount then
         control.state = self._enum.eButtonStateLock
-        control.radiobutton:SetEnable(false)
         control.staticText_EnableSpecialize:SetShow(false)
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateLock)
+        control.radiobutton:SetEnable(false)
       else
         control.state = self._enum.eButtonStateBase
-        control.radiobutton:SetEnable(true)
         control.staticText_EnableSpecialize:SetShow(true)
         control.staticText_EnableSpecialize:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_AWAKEN_1"))
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateBase)
+        control.radiobutton:SetEnable(true)
         totalReinforceCount = totalReinforceCount + 1
       end
     end
     self._ui.rbtn_List[index] = control
     self._ui.rbtn_List[index].radiobutton:SetShow(true)
-    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton(" .. index .. ")")
+    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_ChangeSkill()")
+    self._ui.rbtn_List[index].radiobutton:addInputEvent("Mouse_On", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton(" .. index .. ")")
+    self._ui.rbtn_List[index].radiobutton:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobalFunc_Dialog_SkillSpecialize_ChangeEffect()")
   end
-  self._ui.staticText_DoSpecialize:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_ChangeSkill()")
-  self._ui.staticText_Select:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_ChangeEffect()")
-  self._ui.staticText_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_Exit()")
-  if nil ~= self._value.currentSpecializeIndex then
-    PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton(self._value.currentSpecializeIndex)
-  end
+  self._value.currentSpecializeIndex = 0
+  PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton(self._value.currentSpecializeIndex)
+  self:updateKeyGuide(0)
+  PaGlobalFunc_Dialog_SkillSpecialize_OnPadB = PaGlobalFunc_Dialog_SkillSpecialize_Exit
 end
-function Panel_Dialog_SkillSpecialize_info:setSkillButtonData(buttonIndex, control)
+function SkillSpecialize:updateKeyGuide(page, step)
+  if nil == page then
+    return
+  end
+  local keyGuides = {}
+  if 0 == page then
+    self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILLREINFORCE_CHANGESKILL"))
+    self._ui.txt_keyGuideA:SetMonoTone(not self:isSkillChangePossible())
+    self._ui.txt_keyGuideY:SetShow(true)
+    self._ui.txt_keyGuideY:SetMonoTone(not self:isEffectChangePossible())
+    self._ui.txt_keyGuideY:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DIALOG_SKILLSPECIALIZE_CHANGE_EFFECT"))
+    keyGuides = {
+      self._ui.txt_keyGuideY,
+      self._ui.txt_keyGuideA,
+      self._ui.txt_keyGuideB
+    }
+  else
+    if step == self._enum.eStepBase then
+      self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GENERIC_KEYGUIDE_XBOX_SELECT"))
+    elseif step == self._enum.eStepSelectSkill then
+      self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GENERIC_KEYGUIDE_XBOX_SELECT"))
+    elseif step == self._enum.eStepSelectEffect1 then
+      self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILLREINFORCE_TITLE"))
+    elseif step == self._enum.eStepSelectEffect2 then
+      self._ui.txt_keyGuideA:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILLREINFORCE_TITLE"))
+    end
+    self._ui.txt_keyGuideY:SetShow(false)
+    keyGuides = {
+      self._ui.txt_keyGuideA,
+      self._ui.txt_keyGuideB
+    }
+  end
+  PaGlobalFunc_ConsoleKeyGuide_SetAlign(keyGuides, self._ui.static_BottomArea, CONSOLEKEYGUID_ALIGN_TYPE.eALIGN_TYPE_RIGHT)
+end
+function SkillSpecialize:isSkillChangePossible()
+  if nil == self._value.currentSpecializeIndex then
+    return false
+  end
+  local control = self._ui.rbtn_List[self._value.currentSpecializeIndex]
+  if nil ~= control.reinforceIndex then
+    local skillSSW = ToClient_GetReAwakeningListAt(control.reinforceIndex)
+    local skillNo = skillSSW:getSkillNo()
+    if nil ~= skillNo then
+      local selfPlayer = getSelfPlayer()
+      if nil == selfPlayer then
+        return false
+      end
+      local applyAwakenSkillReset = selfPlayer:get():isApplyChargeSkill(CppEnums.UserChargeType.eUserChargeType_UnlimitedSkillAwakening)
+      local inventory = selfPlayer:get():getInventory()
+      local hasMemoryFlag = inventory:getItemCount_s64(ItemEnchantKey(44195, 0))
+      if toInt64(0, 0) == hasMemoryFlag and not applyAwakenSkillReset then
+        return false
+      end
+    end
+  else
+    return false
+  end
+  local _type = self:getSkillAwakeningType(self._value.currentSpecializeIndex)
+  local reinforcableCount = ToClient_GetAwakeningListCount()
+  local count = 0
+  for index = 0, reinforcableCount - 1 do
+    local skillSSW = ToClient_GetAwakeningListAt(index)
+    if _type == skillSSW:getSkillAwakeningType() then
+      count = count + 1
+    end
+  end
+  if 0 == count then
+    return false
+  end
+  return true
+end
+function SkillSpecialize:isEffectChangePossible()
+  if nil == self._value.currentSpecializeIndex then
+    return false
+  end
+  local control = self._ui.rbtn_List[self._value.currentSpecializeIndex]
+  if nil ~= control.reinforceIndex then
+    local skillSSW = ToClient_GetReAwakeningListAt(control.reinforceIndex)
+    if nil == skillSSW then
+      return false
+    end
+    local skillNo = skillSSW:getSkillNo()
+    if nil ~= skillNo then
+      local selfPlayer = getSelfPlayer()
+      if nil == selfPlayer then
+        return false
+      end
+      local applyAwakenSkillReset = selfPlayer:get():isApplyChargeSkill(CppEnums.UserChargeType.eUserChargeType_UnlimitedSkillAwakening)
+      local inventory = selfPlayer:get():getInventory()
+      local hasMemoryFlag = inventory:getItemCount_s64(ItemEnchantKey(44195, 0))
+      _PA_LOG("\235\176\149\235\178\148\236\164\128", "hasMemoryFlag : " .. tostring(hasMemoryFlag))
+      if toInt64(0, 0) == hasMemoryFlag and not applyAwakenSkillReset then
+        return false
+      end
+      local SkillSSW = getSkillStaticStatus(skillNo, 1)
+      if nil == SkillSSW then
+        return false
+      end
+      local ActiveSkillWrapper = SkillSSW:getActiveSkillStatus()
+      if nil == ActiveSkillWrapper then
+        return false
+      end
+    else
+      return false
+    end
+  else
+    return false
+  end
+  return true
+end
+function SkillSpecialize:setSkillButtonData(buttonIndex, control)
   local _type = self:getSkillAwakeningType(buttonIndex)
   if nil == control then
     return
@@ -451,10 +580,10 @@ function Panel_Dialog_SkillSpecialize_info:setSkillButtonData(buttonIndex, contr
   control.static_Icon:getBaseTexture():setUV(x1, y1, x2, y2)
   control.static_Icon:setRenderTexture(control.static_Icon:getBaseTexture())
 end
-function Panel_Dialog_SkillSpecialize_info:clearContentPage2()
+function SkillSpecialize:clearContentPage2()
   self:initValuePage2()
 end
-function Panel_Dialog_SkillSpecialize_info:setContentPage2(step)
+function SkillSpecialize:setContentPage2(step)
   if nil == self._value.currentReinforceSkillNo then
     local ReinforceIndex = self._ui.rbtn_List[self._value.currentSpecializeIndex].reinforceIndex
     local skillSSW = ToClient_GetReAwakeningListAt(ReinforceIndex)
@@ -475,14 +604,14 @@ function Panel_Dialog_SkillSpecialize_info:setContentPage2(step)
     else
     end
   end
-  self._ui.staticText_DoSpecialize:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_Doit()")
-  self._ui.staticText_Select:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_GoNextStepPage2()")
-  self._ui.staticText_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_GoBackStepPage2()")
+  self:updateKeyGuide(1, self._value.currentStep)
+  PaGlobalFunc_Dialog_SkillSpecialize_OnPadB = PaGlobalFunc_Dialog_SkillSpecialize_GoBackStepPage2
 end
-function Panel_Dialog_SkillSpecialize_info:setPage2_0Step(skillNo)
+function SkillSpecialize:setPage2_0Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
-  self._ui.list2_1_SelectSkill:SetShow(true)
+  self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
   self._ui.list2_2_SelectEffect1:SetShow(false)
+  self._ui.list2_1_SelectSkill:SetShow(true)
   self._ui.list2_1_SelectSkill:SetPosY(self._pos.page2Pos2)
   self._ui.list2_1_SelectSkill:getElementManager():clearKey()
   for k in pairs(self._skillList) do
@@ -496,22 +625,30 @@ function Panel_Dialog_SkillSpecialize_info:setPage2_0Step(skillNo)
   for key = 0, count - 1 do
     self._skillList[key] = key
     self._ui.list2_1_SelectSkill:getElementManager():pushKey(toInt64(0, self._skillList[key]))
-    self._ui.list2_1_SelectSkill:requestUpdateByKey(toInt64(0, self._skillList[key]))
   end
   local text = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION")
   self._ui.staticText_EffectBg1:SetText(text)
   self._ui.staticText_EffectBg2:SetText(text)
+  self._ui.staticText_EffectBg1:SetTextSpan(10, (self._ui.staticText_EffectBg1:GetSizeY() - self._ui.staticText_EffectBg1:GetTextSizeY()) * 0.5)
+  self._ui.staticText_EffectBg2:SetTextSpan(10, (self._ui.staticText_EffectBg2:GetSizeY() - self._ui.staticText_EffectBg2:GetTextSizeY()) * 0.5)
+  self._ui.staticText_EffectBg1:SetFontColor(Defines.Color.C_FF525B6D)
+  self._ui.staticText_EffectBg2:SetFontColor(Defines.Color.C_FF525B6D)
   self._ui.staticText_EffectBg1:SetPosY(self._pos.page2Pos5)
   self._ui.staticText_EffectBg2:SetPosY(self._pos.page2Pos6)
 end
-function Panel_Dialog_SkillSpecialize_info:setPage2_1Step(skillNo)
+function SkillSpecialize:setPage2_1Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
+  self._ui.list2_1_SelectSkill:getElementManager():clearKey()
   self._ui.list2_1_SelectSkill:SetShow(false)
   self._ui.list2_2_SelectEffect1:SetShow(true)
   self._ui.list2_2_SelectEffect1:SetPosY(self._pos.page2Pos3)
   local text = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION")
   self._ui.staticText_EffectBg1:SetText(text)
   self._ui.staticText_EffectBg2:SetText(text)
+  self._ui.staticText_EffectBg1:SetTextSpan(10, (self._ui.staticText_EffectBg1:GetSizeY() - self._ui.staticText_EffectBg1:GetTextSizeY()) * 0.5)
+  self._ui.staticText_EffectBg2:SetTextSpan(10, (self._ui.staticText_EffectBg2:GetSizeY() - self._ui.staticText_EffectBg2:GetTextSizeY()) * 0.5)
+  self._ui.staticText_EffectBg1:SetFontColor(Defines.Color.C_FFEEEEEE)
+  self._ui.staticText_EffectBg2:SetFontColor(Defines.Color.C_FF525B6D)
   self._ui.staticText_EffectBg1:SetPosY(self._pos.page2Pos2)
   self._ui.staticText_EffectBg2:SetPosY(self._pos.page2Pos6)
   self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
@@ -525,19 +662,22 @@ function Panel_Dialog_SkillSpecialize_info:setPage2_1Step(skillNo)
     for key = 0, optionCount - 1 do
       self._effectList[key] = key
       self._ui.list2_2_SelectEffect1:getElementManager():pushKey(toInt64(0, self._effectList[key]))
-      self._ui.list2_2_SelectEffect1:requestUpdateByKey(toInt64(0, self._effectList[key]))
     end
   end
 end
-function Panel_Dialog_SkillSpecialize_info:setPage2_2Step(skillNo)
+function SkillSpecialize:setPage2_2Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
   self._ui.list2_1_SelectSkill:SetShow(false)
   self._ui.list2_2_SelectEffect1:SetShow(true)
   self._ui.list2_2_SelectEffect1:SetPosY(self._pos.page2Pos4)
   local text = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION")
   self._ui.staticText_EffectBg2:SetText(text)
+  self._ui.staticText_EffectBg1:SetFontColor(Defines.Color.C_FF525B6D)
+  self._ui.staticText_EffectBg2:SetFontColor(Defines.Color.C_FFEEEEEE)
   self._ui.staticText_EffectBg1:SetPosY(self._pos.page2Pos2)
   self._ui.staticText_EffectBg2:SetPosY(self._pos.page2Pos3)
+  self._ui.staticText_EffectBg1:SetTextSpan(10, (self._ui.staticText_EffectBg1:GetSizeY() - self._ui.staticText_EffectBg1:GetTextSizeY()) * 0.5)
+  self._ui.staticText_EffectBg2:SetTextSpan(10, (self._ui.staticText_EffectBg2:GetSizeY() - self._ui.staticText_EffectBg2:GetTextSizeY()) * 0.5)
   self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
   for k in pairs(self._effectList) do
     self._effectList[k] = nil
@@ -550,29 +690,20 @@ function Panel_Dialog_SkillSpecialize_info:setPage2_2Step(skillNo)
       if nil ~= self._value.currentEffectIndex and self._value.currentEffectIndex ~= key then
         self._effectList[key] = key
         self._ui.list2_2_SelectEffect1:getElementManager():pushKey(toInt64(0, self._effectList[key]))
-        self._ui.list2_2_SelectEffect1:requestUpdateByKey(toInt64(0, self._effectList[key]))
       end
     end
   end
   self._ui.staticText_EffectBg1:SetText(tostring(activeSkillSS:getSkillAwakenDescription(self._value.currentEffectIndex)))
 end
-function Panel_Dialog_SkillSpecialize_info:setPage2_3Step(skillNo)
+function SkillSpecialize:setPage2_3Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
-  self._ui.list2_1_SelectSkill:SetShow(false)
-  self._ui.list2_2_SelectEffect1:SetShow(false)
-  self._ui.staticText_EffectBg1:SetPosY(self._pos.page2Pos2)
-  self._ui.staticText_EffectBg2:SetPosY(self._pos.page2Pos3)
-  local skillSSW = getSkillStaticStatus(self._value.currentReinforceSkillNo, 1)
-  local activeSkillSS = skillSSW:getActiveSkillStatus()
-  self._ui.staticText_EffectBg1:SetText(tostring(activeSkillSS:getSkillAwakenDescription(self._value.currentEffectIndex)))
-  self._ui.staticText_EffectBg2:SetText(tostring(activeSkillSS:getSkillAwakenDescription(self._value.currentEffectIndex2)))
 end
-function Panel_Dialog_SkillSpecialize_info:goPage1()
+function SkillSpecialize:goPage1()
   self._value.currentPage = 0
   self:initValuePage2()
   self:setContent()
 end
-function Panel_Dialog_SkillSpecialize_info:setPage2SelectedSkill(skillNo)
+function SkillSpecialize:setPage2SelectedSkill(skillNo)
   if nil == skillNo then
     self._ui.staticText_NonSelect:SetShow(true)
     self._ui.staticText_NonSelect:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTSKILL_2"))
@@ -599,16 +730,13 @@ function Panel_Dialog_SkillSpecialize_info:setPage2SelectedSkill(skillNo)
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.static_SkilllIcon, 0, 0, 44, 44)
     self._ui.static_SkilllIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.static_SkilllIcon:setRenderTexture(self._ui.static_SkilllIcon:getBaseTexture())
-    Panel_SkillTooltip_SetPosition(skillNo, self._ui.static_SelectedSkillIcon, "SkillAwaken")
     self._ui.static_SelectedSkillIcon:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.static_SelectedSkillIcon, 0, 0, 44, 44)
     self._ui.static_SelectedSkillIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.static_SelectedSkillIcon:setRenderTexture(self._ui.static_SelectedSkillIcon:getBaseTexture())
-    self._ui.static_SelectedSkillIcon:addInputEvent("Mouse_On", "Panel_SkillTooltip_Show(" .. skillNo .. ", false, \"SkillAwaken\")")
-    self._ui.static_SelectedSkillIcon:addInputEvent("Mouse_Out", "Panel_SkillTooltip_Hide()")
   end
 end
-function Panel_Dialog_SkillSpecialize_info:goPage2(step)
+function SkillSpecialize:goPage2(step)
   if nil == step then
     self._value.currentStep = self._enum.eStepBase
   elseif step <= self._enum.eStepSelectEffect2 and step >= self._enum.eStepBase then
@@ -617,14 +745,14 @@ function Panel_Dialog_SkillSpecialize_info:goPage2(step)
   self._value.currentPage = 1
   self:setContent()
 end
-function Panel_Dialog_SkillSpecialize_info:changeTexturePage1Button(button, _type)
+function SkillSpecialize:changeTexturePage1Button(button, _type)
   local IconType = self._texture[_type]
   button:ChangeTextureInfoName(self._texture.page1ButtonTexture)
   local x1, y1, x2, y2 = setTextureUV_Func(button, IconType.x1, IconType.y1, IconType.x2, IconType.y2)
   button:getBaseTexture():setUV(x1, y1, x2, y2)
   button:setRenderTexture(button:getBaseTexture())
 end
-function Panel_Dialog_SkillSpecialize_info:getSkillAwakeningType(buttonIndex)
+function SkillSpecialize:getSkillAwakeningType(buttonIndex)
   local _type = 0
   if buttonIndex >= 3 then
     _type = 1
@@ -632,28 +760,29 @@ function Panel_Dialog_SkillSpecialize_info:getSkillAwakeningType(buttonIndex)
   return _type
 end
 function PaGlobalFunc_Dialog_SkillAwakenResult_ShowAni()
-  Panel_Dialog_SkillSpecialize:SetAlpha(0)
-  UIAni.AlphaAnimation(1, Panel_Dialog_SkillSpecialize, 0, 0.3)
 end
 function PaGlobalFunc_Dialog_SkillAwakenResult_HideAni()
-  local ani1 = UIAni.AlphaAnimation(0, Panel_Dialog_SkillSpecialize, 0, 0.2)
-  ani1:SetHideAtEnd(true)
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Open(showAni)
 end
+function PaGlobalFunc_Dialog_SkillSpecialize_OnPadB()
+end
 function PaGlobalFunc_Dialog_SkillSpecialize_Close(showAni)
-  Panel_Dialog_SkillSpecialize:SetShow(false, showAni)
+  _panel:SetShow(false)
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_GetShow()
-  return Panel_Dialog_SkillSpecialize:GetShow()
+  return _panel:GetShow()
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Exit()
   if true == PaGlobalFunc_Dialog_SkillSpecialize_GetShow() then
     PaGlobalFunc_Dialog_SkillSpecialize_Close(true)
+    return true
   end
+  return false
 end
-function PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton(buttonIndex)
-  local self = Panel_Dialog_SkillSpecialize_info
+function PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton(buttonIndex)
+  local self = SkillSpecialize
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton : " .. buttonIndex)
   if self._value.currentSpecializeIndex == buttonIndex then
     return
   end
@@ -665,15 +794,10 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Page1_ClickSkillButton(buttonIndex)
   if nil ~= self._value.currentSpecializeIndex then
     self._ui.rbtn_List[self._value.currentSpecializeIndex].radiobutton:SetCheck(true)
   end
-  if self._enum.eButtonStateAlready == self._ui.rbtn_List[self._value.currentSpecializeIndex].state then
-    self._ui.rbtn_List[self._value.currentSpecializeIndex].staticText_Key_Guide:SetShow(true)
-  end
-  if nil ~= self._value.lastSpecializeIndex and nil ~= self._ui.rbtn_List[self._value.lastSpecializeIndex].staticText_Key_Guide then
-    self._ui.rbtn_List[self._value.lastSpecializeIndex].staticText_Key_Guide:SetShow(false)
-  end
+  self:updateKeyGuide(0)
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_ChangeSkill()
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   if nil == self._value.currentSpecializeIndex then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_NOSKILL"))
     return
@@ -714,7 +838,7 @@ function PaGlobalFunc_Dialog_SkillSpecialize_ChangeSkill()
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_ChangeEffect()
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   if nil == self._value.currentSpecializeIndex then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_NOSKILL"))
     return
@@ -754,20 +878,14 @@ function PaGlobalFunc_Dialog_SkillSpecialize_ChangeEffect()
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Page2SkillListCreate(list_content, key)
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   local _key = Int64toInt32(key)
   local radioButton_Skill = UI.getChildControl(list_content, "RadioButton_Skill_Template")
   local static_SkilllIcon = UI.getChildControl(radioButton_Skill, "Static_SkilllIcon_Template")
   local staticText_SkillName = UI.getChildControl(radioButton_Skill, "StaticText_SkillName_Template")
   local staticText_SkillDesc = UI.getChildControl(radioButton_Skill, "StaticText_SkillDesc_Template")
   radioButton_Skill:SetCheck(_key == self._value.currentSelectSkillIndex)
-  if 0 == ToClient_getGameOptionControllerWrapper():getUIFontSizeType() then
-    staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
-    staticText_SkillDesc:setLineCountByLimitAutoWrap(2)
-  else
-    staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-    staticText_SkillDesc:setLineCountByLimitAutoWrap(1)
-  end
+  staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   local _type = self:getSkillAwakeningType(self._value.currentSpecializeIndex)
   local reinforcableCount = ToClient_GetAwakeningListCount()
   local count = 0
@@ -780,9 +898,6 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Page2SkillListCreate(list_content, 
         staticText_SkillName:SetText(tostring(skillSSW:getName()))
         staticText_SkillDesc:SetText(tostring(skillTypeSSW:getDescription()))
         static_SkilllIcon:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
-        Panel_SkillTooltip_SetPosition(skillNo, static_SkilllIcon, "SkillAwaken")
-        static_SkilllIcon:addInputEvent("Mouse_On", "Panel_SkillTooltip_Show(" .. skillNo .. ", false, \"SkillAwaken\")")
-        static_SkilllIcon:addInputEvent("Mouse_Out", "Panel_SkillTooltip_Hide()")
         radioButton_Skill:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_SelectSkill(" .. skillNo .. ", " .. index .. ")")
         break
       end
@@ -791,7 +906,7 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Page2SkillListCreate(list_content, 
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Page2EffectListCreate(list_content, key)
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   local _key = Int64toInt32(key)
   local radioButton_Effect = UI.getChildControl(list_content, "RadioButton_Effect1_Template")
   if self._value.currentStep == self._enum.eStepSelectSkill then
@@ -802,6 +917,7 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Page2EffectListCreate(list_content,
   local skillSSW = getSkillStaticStatus(self._value.currentReinforceSkillNo, 1)
   local activeSkillSS = skillSSW:getActiveSkillStatus()
   radioButton_Effect:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
+  radioButton_Effect:setLineCountByLimitAutoWrap(2)
   if nil ~= activeSkillSS then
     local optionCount = activeSkillSS:getSkillAwakenInfoCount()
     local count = 0
@@ -809,30 +925,33 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Page2EffectListCreate(list_content,
     for index = 0, optionCount - 1 do
       if index == _key then
         radioButton_Effect:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
+        radioButton_Effect:SetTextSpan(10, (radioButton_Effect:GetSizeY() - radioButton_Effect:GetTextSizeY()) * 0.5)
         radioButton_Effect:addInputEvent("Mouse_LUp", "PaGlobalFunc_Dialog_SkillSpecialize_SelectEffect(" .. index .. ")")
       end
     end
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_SelectSkill(skillNo, index)
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   if self._value.currentStep ~= self._enum.eStepBase then
     return
   end
   self._value.currentSelectSkillIndex = index
   self._value.currentReinforceSkillNo = skillNo
   self:setPage2SelectedSkill(skillNo)
+  PaGlobalFunc_Dialog_SkillSpecialize_GoNextStepPage2()
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_SelectEffect(index)
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   if self._value.currentStep == self._enum.eStepSelectSkill then
     self._value.currentEffectIndex = index
   elseif self._value.currentStep == self._enum.eStepSelectEffect1 then
     self._value.currentEffectIndex2 = index
   end
+  PaGlobalFunc_Dialog_SkillSpecialize_GoNextStepPage2()
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_GoNextStepPage2()
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   local nextStep
   if self._value.currentStep == self._enum.eStepBase then
     if nil == self._value.currentReinforceSkillNo then
@@ -859,47 +978,47 @@ function PaGlobalFunc_Dialog_SkillSpecialize_GoNextStepPage2()
     end
     self._value.currentStep = self._enum.eStepSelectEffect2
     self:setContentPage2(self._value.currentStep)
+    PaGlobalFunc_Dialog_SkillSpecialize_Doit()
     return
   end
   if self._value.currentStep == self._enum.eStepSelectEffect2 then
-    PaGlobalFunc_Dialog_SkillSpecialize_Doit()
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_GoBackStepPage2()
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   if self._value.currentStep == self._enum.eStepBase then
     self:initValuePage2()
     self:goPage1()
-    return
+    return false
   end
   if self._value.currentStep == self._enum.eStepSelectSkill then
     if nil == self._value.currentSelectSkillIndex then
       self:initValuePage2()
       self:goPage1()
-      return
+      return false
     end
     self._value.currentSelectSkillIndex = nil
     self._value.currentReinforceSkillNo = nil
     self._value.currentStep = self._enum.eStepBase
     self:setContentPage2(self._value.currentStep)
-    return
+    return false
   end
   if self._value.currentStep == self._enum.eStepSelectEffect1 then
     self._value.currentEffectIndex = nil
     self._value.currentStep = self._enum.eStepSelectSkill
     self:setContentPage2(self._value.currentStep)
-    return
+    return false
   end
   if self._value.currentStep == self._enum.eStepSelectEffect2 then
     self._value.currentEffectIndex2 = nil
     self._value.currentStep = self._enum.eStepSelectEffect1
     self:setContentPage2(self._value.currentStep)
-    return
+    return false
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Doit()
-  local self = Panel_Dialog_SkillSpecialize_info
-  local branch
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "PaGlobalFunc_Dialog_SkillSpecialize_Doittest")
+  local self = SkillSpecialize
   if nil == self._value.currnetReinforceIndex then
     if nil == self._value.currentSelectSkillIndex then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTSKILL"))
@@ -952,7 +1071,7 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Reinforcable_SkillCount(_type)
   end
 end
 function FromClient_Init_Dialog_SkillSpecialize()
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   self:initialize()
   self:resize()
 end
@@ -960,7 +1079,7 @@ function FromClient_Dialog_SkillSpecialize_Show()
   if not ToClient_IsContentsGroupOpen("203") then
     return
   end
-  local self = Panel_Dialog_SkillSpecialize_info
+  local self = SkillSpecialize
   self:preOpen()
   self:setContent()
   self:open(true)

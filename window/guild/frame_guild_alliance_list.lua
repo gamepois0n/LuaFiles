@@ -9,19 +9,19 @@ function PaGlobal_GuildAllianceList:initialize()
     _basic_GuildAllianceInfo = UI.getChildControl(Panel_Guild_Alliance_List, "Static_AllianceInfo_BG"),
     _todayBoard = UI.getChildControl(Panel_Guild_Alliance_List, "StaticText_TodayBd"),
     _static_GuildAllianceMember = UI.getChildControl(Panel_Guild_Alliance_List, "Static_List_BG"),
-    _guildAllianceMember_list2 = UI.getChildControl(Panel_Guild_Alliance_List, "List2_GuildList")
+    _guildAllianceMember_list2 = UI.getChildControl(Panel_Guild_Alliance_List, "List2_GuildList"),
+    _guildAllianceMember_Title = UI.getChildControl(Panel_Guild_Alliance_List, "StaticText_JoinGuild_Title")
   }
+  self._ui_main._guildAllianceMember_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TAB_ALLIANCELISTITLE"))
   local listMember = self._ui_main._guildAllianceMember_list2
   listMember:changeAnimationSpeed(10)
   listMember:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FGlobal_GuildAllianceMember_ListUpdate")
   listMember:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   local memberListBg = UI.getChildControl(Panel_Guild_Alliance_List, "Static_List_BG")
-  local static_Grade = UI.getChildControl(memberListBg, "StaticText_Grade")
   local static_Level = UI.getChildControl(memberListBg, "StaticText_Level")
   local static_Class = UI.getChildControl(memberListBg, "StaticText_Class")
   local static_Name = UI.getChildControl(memberListBg, "StaticText_CharName")
   local static_Guild = UI.getChildControl(memberListBg, "StaticText_GuildName")
-  static_Grade:addInputEvent("Mouse_LUp", "HandleClicked_AllianceListSort( " .. 0 .. " )")
   static_Level:addInputEvent("Mouse_LUp", "HandleClicked_AllianceListSort( " .. 1 .. " )")
   static_Class:addInputEvent("Mouse_LUp", "HandleClicked_AllianceListSort( " .. 2 .. " )")
   static_Name:addInputEvent("Mouse_LUp", "HandleClicked_AllianceListSort( " .. 3 .. " )")
@@ -29,12 +29,13 @@ function PaGlobal_GuildAllianceList:initialize()
   local basicInfo = self._ui_main._basic_GuildAllianceInfo
   local iconBg = UI.getChildControl(basicInfo, "Static_AllyIcon_BG")
   self._ui_info = {
-    _allianceMark = UI.getChildControl(iconBg, "Static_Ally_Icon"),
+    _allianceMark = UI.getChildControl(basicInfo, "Static_Ally_Icon"),
     _allianceName = UI.getChildControl(basicInfo, "StaticText_R_GuildAlliacneName"),
     _memberCount = UI.getChildControl(basicInfo, "StaticText_MemberCountValue"),
+    _occupyingAreaTitle = UI.getChildControl(basicInfo, "StaticText_Area"),
     _occupyingArea = UI.getChildControl(basicInfo, "StaticText_AreaName"),
     _guild_list2 = UI.getChildControl(basicInfo, "List2_AllianceList"),
-    _buttonShowAll = UI.getChildControl(basicInfo, "Button_ShowAll")
+    _buttonShowAll = UI.getChildControl(memberListBg, "Button_ShowAll")
   }
   self._ui_info._occupyingArea:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   local listGuild = self._ui_info._guild_list2
@@ -42,13 +43,11 @@ function PaGlobal_GuildAllianceList:initialize()
   listGuild:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "FGlobal_GuildAllianceGuild_ListUpdate")
   listGuild:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui_info._buttonShowAll:addInputEvent("Mouse_LUp", "HandleClicked_GuildAllianceList_ShowAll()")
+  self._ui_info._Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, self._ui_main._todayBoard, "WebControl_Alliance_WebLink")
+  self._ui_info._Web:SetShow(true)
+  self._ui_info._Web:SetSize(423, 216)
+  self._ui_info._Web:ResetUrl()
 end
-local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Guild_Alliance_List, "WebControl_EventNotify_WebLink")
-_Web:SetShow(true)
-_Web:SetPosX(0)
-_Web:SetPosY(350)
-_Web:SetSize(315, 250)
-_Web:ResetUrl()
 function PaGlobal_GuildAllianceList:Update()
   local myAllianceWrapper = ToClient_GetMyGuildAllianceWrapper()
   if nil == myAllianceWrapper then
@@ -65,6 +64,8 @@ function PaGlobal_GuildAllianceList:Update()
     self._ui_info._allianceMark:setRenderTexture(self._ui_info._allianceMark:getBaseTexture())
   end
   self._ui_info._allianceName:SetText(myAllianceWrapper:getRepresentativeName())
+  self._ui_info._memberCount:SetPosX(self._ui_info._allianceName:GetPosX() + self._ui_info._allianceName:GetSizeX() + 20)
+  self._ui_info._memberCount:SetPosY(self._ui_info._allianceName:GetPosY() + self._ui_info._allianceName:GetSizeY() / 2)
   local memberCount = tostring(myAllianceWrapper:getUserCount()) .. " / 100"
   self._ui_info._memberCount:SetText(memberCount)
   local myGuildAllianceCache = ToClient_GetMyGuildAlliancChairGuild()
@@ -113,6 +114,8 @@ function PaGlobal_GuildAllianceList:Update()
     self._ui_info._occupyingArea:addInputEvent("Mouse_On", "PaGlobal_GuildAllianceList_HandleClicked_TerritoryNameOnEvent( true )")
     self._ui_info._occupyingArea:addInputEvent("Mouse_Out", "PaGlobal_GuildAllianceList_HandleClicked_TerritoryNameOnEvent( false )")
   end
+  self._ui_info._occupyingAreaTitle:SetText(self._ui_info._occupyingAreaTitle:GetText())
+  self._ui_info._occupyingArea:SetPosX(self._ui_info._occupyingAreaTitle:GetPosX() + self._ui_info._occupyingAreaTitle:GetTextSizeX() + 10)
   local guildCount = myAllianceWrapper:getMemberCount()
   self._ui_info._guild_list2:getElementManager():clearKey()
   for index = 0, guildCount - 1 do
@@ -162,8 +165,16 @@ function FGlobal_GuildAllianceGuild_ListUpdate(contents, index)
     static_MemberCount = UI.getChildControl(contents, "StaticText_Guild_MemNum"),
     btn_ShowMember = UI.getChildControl(contents, "Button_Confirm")
   }
-  guildInfo.radio_IsLeader:SetCheck(guildWrapper:isAllianceChair())
-  guildInfo.radio_IsLeader:SetShow(guildWrapper:isAllianceChair())
+  local isAllianceChairman = guildWrapper:isAllianceChair()
+  guildInfo.radio_IsLeader:SetCheck(isAllianceChairman)
+  guildInfo.radio_IsLeader:SetShow(isAllianceChairman)
+  if isAllianceChairman then
+    guildInfo.static_GuildName:SetFontColor(4294294074)
+    guildInfo.static_MemberCount:SetFontColor(4294294074)
+  else
+    guildInfo.static_GuildName:SetFontColor(Defines.Color.C_FFEFEFEF)
+    guildInfo.static_MemberCount:SetFontColor(Defines.Color.C_FFEFEFEF)
+  end
   guildInfo.static_GuildName:SetText(guildWrapper:getName())
   local memberCount = tostring(guildWrapper:getMemberCount())
   guildInfo.static_MemberCount:SetText(memberCount)
@@ -201,11 +212,13 @@ function PaGlobal_GuildAllianceList:WebCommentLoad()
   if myGuildNo_s64 == guildNo_s64 and (isGuildMaster or isGuildSubMaster) then
     isAdmin = 1
   end
+  self._ui_info._Web:ResetUrl()
   if nil ~= guildCommentsWebUrl then
     FGlobal_SetCandidate()
     local url = guildCommentsWebUrl .. "/guild?guildNo=" .. tostring(myGuildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin) .. "&chairGuildNo=" .. tostring(guildNo_s64)
-    _Web:SetUrl(315, 250, url, false, true)
-    _Web:SetIME(true)
+    _PA_LOG("\236\160\149\237\131\156\234\179\164", "\236\151\172\234\184\180 \236\151\176\235\167\185 \235\166\172\236\138\164\237\138\184 url : " .. tostring(url))
+    self._ui_info._Web:SetUrl(423, 216, url, false, true)
+    self._ui_info._Web:SetIME(true)
   end
   self._ui_main._todayBoard:SetText("")
 end
@@ -219,14 +232,13 @@ function FGlobal_GuildAllianceList_Open(isShow)
   else
     self._defaultFrameBG_AllianceList:SetShow(false)
     FGlobal_ClearCandidate()
-    _Web:ResetUrl()
+    self._ui_info._Web:ResetUrl()
   end
 end
 function FGlobal_GuildAllianceMember_ListUpdate(contents, key)
   local info = PaGlobal_GuildAllianceList
   local memberInfo_ui = {
     static_GradeIcon = UI.getChildControl(contents, "Static_GradeIcon"),
-    static_GradeText = UI.getChildControl(contents, "StaticText_Grade"),
     static_Level = UI.getChildControl(contents, "StaticText_Level"),
     static_Class = UI.getChildControl(contents, "StaticText_Class"),
     static_Name = UI.getChildControl(contents, "StaticText_CharName"),
@@ -291,7 +303,6 @@ function FGlobal_GuildAllianceMember_ListUpdate(contents, key)
     memberInfo_ui.static_GradeIcon:setRenderTexture(memberInfo_ui.static_GradeIcon:getBaseTexture())
     gradeValue = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDMEMBER")
   end
-  memberInfo_ui.static_GradeText:SetText(gradeValue)
   memberInfo_ui.static_Level:SetText(level)
   memberInfo_ui.static_Class:SetText(class)
   memberInfo_ui.static_Name:SetText(name)

@@ -59,6 +59,7 @@ function Window_GameExit_CharMoveInfo:Update()
   self:SetDeliveryRegion()
 end
 function PaGlobalFunc_GameExitCharMove_ButtonClick_Cancel()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_GameExitCharMove_SetShow(false, false)
   PaGlobalFunc_GameExit_SetShow(true, false)
 end
@@ -117,6 +118,7 @@ function PaGlobalFunc_GameExitCharMove_ChacacterMoveConfirm()
   local deliveryPersonInfoList = ToClient_DeliveryPersonInfo()
   local deliveryPersonInfo = deliveryPersonInfoList:atPointer(self._currentRegionIndex)
   local destRegionInfo = deliveryPersonInfo:getRegionInfo()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   deliveryPerson_SendReserve(destRegionInfo._regionKey:get())
 end
 function PaGlobalFunc_FromClient_GameExitCharMove_luaLoadComplete()
@@ -130,6 +132,7 @@ function Window_GameExit_CharMoveInfo:Initialize()
 end
 function PaGlobalFunc_GameExitCharMove_ButtonClick_CharacterSlot(index)
   local self = Window_GameExit_CharMoveInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self._currentCharacterIndex = self._characterWheelValue + index
 end
 function PaGlobalFunc_GameExitCharMove_UpdateRegionList(value)
@@ -342,6 +345,7 @@ function PaGlobalFunc_GameExitCharMove_UpdatePerFrame(deltaTime)
 end
 function PaGlobalFunc_GameExitCharMove_ButtonClick_ExitCancel()
   local self = Window_GameExit_CharMoveInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   if false == self._ui._button_NoticeMsg:GetShow() then
     return
   end

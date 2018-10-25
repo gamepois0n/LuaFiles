@@ -23,7 +23,10 @@ local GuildMemberFunction = {
     disperseGuild = 14,
     showContract = 15,
     clanDeportation = 16,
-    voiceOption = 17
+    voiceOption = 17,
+    funding = 18,
+    protection = 19,
+    cancelProtection = 20
   },
   _btnControl = {},
   _startBtnPos = 20,
@@ -65,7 +68,13 @@ function GuildMemberFunction:open()
       self:addButton(self._btnType.deportation)
       self:addButton(self._btnType.appointCommander)
       self:addButton(self._btnType.inviteParty)
+      if memberInfo:isProtectable() then
+        self:addButton(self._btnType.cancelProtection)
+      else
+        self:addButton(self._btnType.protection)
+      end
     end
+    self:addButton(self._btnType.funding)
     if true == memberInfo:isOnline() then
       self:addButton(self._btnType.voiceOption)
     end
@@ -158,6 +167,12 @@ function GuildMemberFunction:addButton(btnType)
     btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GULD_BUTTON1"))
   elseif btnType == self._btnType.voiceOption then
     btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDFUNCTION_SOUNDBTN"))
+  elseif btnType == self._btnType.funding then
+    btnTemplate:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_USEGUILDFUNDS_TITLE"))
+  elseif btnType == self._btnType.protection then
+    btnTemplate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_4"))
+  elseif btnType == self._btnType.cancelProtection then
+    btnTemplate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_5"))
   end
   btnTemplate:SetPosY(self._currentBtnPos)
   self._currentBtnPos = self._currentBtnPos + self._btnYGap
@@ -175,6 +190,7 @@ function GuildMemberFunction:clearButton()
   self._btnControl = {}
 end
 function GuildMemberFunction:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
 end
 function PaGlobalFunc_GuildMemberFunction_Close()
@@ -242,6 +258,7 @@ function PaGlobalFunc_GuildMemberFunction_ClanOpen(index)
     return
   end
   self._currentMemberInfo = guildMemberInfo
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   self:openClanMemberSetting()
 end
 function PaGlobalFunc_GuildSettingFunction_Open()
@@ -253,6 +270,7 @@ function PaGlobalFunc_GuildSettingFunction_Open()
   self._currentMemberIdx = nil
   self._currentMemberInfo = nil
   self:openGuildSetting()
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
 end
 function InputMLUp_GuildMemberFunction_PressButton(btnType)
   local self = GuildMemberFunction
@@ -294,7 +312,14 @@ function InputMLUp_GuildMemberFunction_PressButton(btnType)
     PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
   elseif btnType == self._btnType.voiceOption then
     PaGlobalFunc_GuildVoiceSet_Open()
+  elseif btnType == self._btnType.funding then
+    PaGlobalFunc_GuildFunding_Open(self._currentMemberIdx)
+  elseif btnType == self._btnType.protection then
+    PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
+  elseif btnType == self._btnType.cancelProtection then
+    PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:close()
 end
 function PaGlobalFunc_GuildMemberInfo_TakeGuildBenefit()
@@ -467,6 +492,24 @@ function PaGlobalFunc_GuildMemberInfo_MessageboxFunction(btnType)
     messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_EXPEL_CLANMEMBER")
     messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CLAN_TEXT_EXPEL_CLANMEMBER_QUESTION", "name", targetName)
     yesFunction = MessageBoxYesFunction_GuildMemberFunction_ExpelMember
+  elseif btnType == self._btnType.protection then
+    messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_PROTECT_GUILDMEMBER")
+    messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_PROTECT_GUILDMEMBER_DESC")
+    yesFunction = MessageBoxYesFunction_ProtectMember
+    GuildListInfoPage._buttonListBG:SetShow(false)
+    local messageboxData = {
+      title = messageTitle,
+      content = messageContent,
+      functionYes = yesFunction,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData, "top")
+    return
+  elseif btnType == self._btnType.cancelProtection then
+    messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_CANCEL_PROTECT_GUILDMEMBER")
+    messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_CANCEL_PROTECT_GUILDMEMBER_DESC")
+    yesFunction = MessageBoxYesFunction_CancelProtectMember
   else
     UI.ASSERT(false, "\236\152\172\235\176\148\235\165\180\236\167\128 \236\149\138\236\157\128 \237\131\128\236\158\133\236\158\133\235\139\136\235\139\164!! : PaGlobalFunc_GuildMemberInfo_MessageboxFunction")
     return
@@ -514,5 +557,11 @@ function MessageBoxYesFunction_GuildMemberFunction_CancelAppoint()
   end
   ToClient_RequestChangeGuildMemberGrade(self._currentMemberIdx, 2)
   FGlobal_Notice_AuthorizationUpdate()
+end
+function MessageBoxYesFunction_ProtectMember()
+  ToClient_RequestChangeProtectMember(GuildMemberFunction._currentMemberIdx, true)
+end
+function MessageBoxYesFunction_CancelProtectMember()
+  ToClient_RequestChangeProtectMember(GuildMemberFunction._currentMemberIdx, false)
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildMemberFunction_Init")

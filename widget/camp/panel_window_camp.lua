@@ -5,6 +5,7 @@ Panel_Icon_Camp:ActiveMouseEventEffect(true)
 PaGlobal_Camp = {
   _ui = {
     _btn_UnSealTent = UI.getChildControl(Panel_Window_Camp, "Button_UnsealTent"),
+    _unsealBG = UI.getChildControl(Panel_Window_Camp, "Static_UnsealCampBg"),
     _btn_InvenOpen = UI.getChildControl(Panel_Window_Camp, "Button_Warehouse"),
     _btn_Repair = UI.getChildControl(Panel_Window_Camp, "Button_Repair"),
     _btn_ShopOpen = UI.getChildControl(Panel_Window_Camp, "Button_Shop"),
@@ -100,6 +101,7 @@ function PaGlobal_Camp:open()
   end
   ToClient_openCampingInfo()
   PaGlobal_Camp:setBtnPos()
+  self:update()
 end
 function PaGlobal_Camp:close()
   if Panel_Window_Inventory:GetShow() then
@@ -225,10 +227,14 @@ function PaGlobal_Camp:update()
     end
     self._ui._btn_RemoteSeal:SetShow(true)
     self._ui._btn_UnSealTent:SetShow(false)
+    self._ui._unsealBG:SetShow(false)
+    self._ui._unsealBG:SetSize(self._ui._unsealBG:GetSizeX(), 222)
     self._ui._txtTentTitle:SetShow(true)
     self._ui._btn_Seal:addInputEvent("Mouse_LUp", "PaGlobal_Camp:sealTent()")
   else
     self._ui._btn_UnSealTent:SetShow(true)
+    self._ui._unsealBG:SetShow(true)
+    self._ui._unsealBG:SetSize(self._ui._unsealBG:GetSizeX(), 252)
     self._ui._btn_Seal:SetShow(false)
     self._ui._btn_RemoteSeal:SetShow(false)
     self._ui._txtTentTitle:SetShow(false)
@@ -388,9 +394,9 @@ function PaGlobal_Camp:setBtnPos()
   local isUnseal = ToClient_isCampingUnseal()
   PaGlobal_Camp:isUnsealShow(isUnseal)
   if false == isUnseal then
-    Panel_Window_Camp:SetSize(Panel_Window_Camp:GetSizeX(), self._panelSizeY - 180)
+    Panel_Window_Camp:SetSize(Panel_Window_Camp:GetSizeX(), self._panelSizeY - 151)
     self._ui._titleBG:SetSize(self._ui._titleBG:GetSizeX(), self._panelSizeY - 244)
-    self._ui._btn_UnSealTent:SetSpanSize(self._ui._btn_UnSealTent:GetPosX() / 2 - 24, 20)
+    self._ui._btn_UnSealTent:SetSpanSize(self._ui._btn_UnSealTent:GetPosX() / 2 - 50, 10)
   else
     Panel_Window_Camp:SetSize(Panel_Window_Camp:GetSizeX(), self._panelSizeY)
     self._ui._titleBG:SetSize(self._ui._titleBG:GetSizeX(), self._panelSizeY - 64)
@@ -411,11 +417,11 @@ function PaGlobal_Camp:setBtnPos()
     else
       self._ui._slotBg[value]:SetPosY(self._defaultSlotPosY + 55 * self._btnCount)
       btn:SetPosY(self._defaultBtnPosY + 55 * self._btnCount)
-      self._ui._contentBG:SetSize(self._ui._contentBG:GetSizeX(), 55 * (self._btnCount + 1) + 5)
+      self._ui._contentBG:SetSize(self._ui._contentBG:GetSizeX(), 55 * (self._btnCount + 1) + 25)
       self._ui._titleBG:SetSize(self._ui._titleBG:GetSizeX(), 190 + 55 * (self._btnCount + 1) + 5)
-      Panel_Window_Camp:SetSize(Panel_Window_Camp:GetSizeX(), 290 + 55 * (self._btnCount + 1) + 5)
-      self._ui._btn_Seal:SetPosY(Panel_Window_Camp:GetSizeY() - self._ui._btn_Seal:GetSizeY() - 13)
-      self._ui._btn_RemoteSeal:SetPosY(Panel_Window_Camp:GetSizeY() - self._ui._btn_RemoteSeal:GetSizeY() - 13)
+      Panel_Window_Camp:SetSize(Panel_Window_Camp:GetSizeX(), 290 + 55 * (self._btnCount + 1) + 70)
+      self._ui._btn_Seal:SetPosY(Panel_Window_Camp:GetSizeY() - self._ui._btn_Seal:GetSizeY() - 10)
+      self._ui._btn_RemoteSeal:SetPosY(Panel_Window_Camp:GetSizeY() - self._ui._btn_RemoteSeal:GetSizeY() - 10)
       self._btnCount = self._btnCount + 1
     end
   end

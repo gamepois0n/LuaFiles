@@ -433,7 +433,7 @@ function FGlobal_MasterpieceAuction_OpenAuctionItemNotNpc()
   isOpenEscMenu = true
   if isOpenEscMenu then
     self._ui._txt_BottomDesc:SetShow(true)
-    Panel_Window_MasterpieceAuction:SetSize(580, 590 + self._ui._txt_BottomDesc:GetTextSizeY() + 20)
+    Panel_Window_MasterpieceAuction:SetSize(682, 640 + self._ui._txt_BottomDesc:GetTextSizeY() + 20)
   end
   EventWarehouseUpdate()
   ToClient_getAuctionItemFromNoNpc(1001, 0, 0)
@@ -455,7 +455,7 @@ function FGlobal_MasterPieceAuction_Reset()
   self._ui._staticTextMoney:SetText(makeDotMoney(wareHouseMoney))
   isOpenEscMenu = false
   self._ui._txt_BottomDesc:SetShow(false)
-  Panel_Window_MasterpieceAuction:SetSize(580, 590)
+  Panel_Window_MasterpieceAuction:SetSize(682, 640)
 end
 function PaGlobal_MasterpieceAuction:itemTooptip(isShow, index)
   if isShow == false then
@@ -514,7 +514,7 @@ function PaGlobal_MasterpieceAuction:showList_Left(isShow)
   self._ui._staticTextDescBG:SetShow(false)
   if isOpenEscMenu then
     self._ui._txt_BottomDesc:SetShow(true)
-    Panel_Window_MasterpieceAuction:SetSize(580, 590 + self._ui._txt_BottomDesc:GetTextSizeY() + 20)
+    Panel_Window_MasterpieceAuction:SetSize(682, 640 + self._ui._txt_BottomDesc:GetTextSizeY() + 20)
   else
     self._ui._staticTextMoney:SetShow(true)
     self._ui._staticMoneyBG:SetShow(true)
@@ -538,7 +538,7 @@ function PaGlobal_MasterpieceAuction:showList_Right(isShow)
   self._ui._staticCenterBG:SetShow(false)
   self._ui._staticTextReady:SetShow(false)
   self._ui._txt_BottomDesc:SetShow(false)
-  Panel_Window_MasterpieceAuction:SetSize(580, 590)
+  Panel_Window_MasterpieceAuction:SetSize(682, 640)
   self._ui._txt_BottomDesc:ComputePos()
   self._ui._staticTextDescBG:ComputePos()
 end

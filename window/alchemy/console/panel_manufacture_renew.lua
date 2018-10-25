@@ -831,8 +831,10 @@ end
 function manufacture:rightClickInventory(slotNo, itemWrapper, count, inventoryType)
   local material = self:getMaterialBySlotNoAndItemWhereType(slotNo, inventoryType)
   if material then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     return self:removeMaterialByIndex(material.index)
   else
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
     return self:insertMaterial(slotNo, itemWrapper, count, inventoryType)
   end
 end
@@ -1009,6 +1011,7 @@ function manufacture:checkToPop()
 end
 function manufacture:popMaterial()
   if self:checkToPop() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
     return self:removeMaterialByIndex(self:getInsertedMaterialCount())
   end
 end
@@ -1026,6 +1029,7 @@ function manufacture:back()
   self:close()
 end
 function PaGlobalFunc_ManufactureBack()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   if manufacture:back() then
     return manufacture:update()
   end
@@ -1033,6 +1037,7 @@ end
 function manufacture:close()
   Inventory_SetFunctor(nil, nil, nil, nil)
   Warehouse_SetFunctor(nil, nil)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self._panel:SetShow(false)
 end
 function PaGlobalFunc_ManufactureClose()

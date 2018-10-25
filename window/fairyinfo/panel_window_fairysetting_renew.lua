@@ -157,6 +157,7 @@ local FairySetting_ReNew = {
     _Static_HPItemSlotBigBG = UI.getChildControl(_Static_MainBG, "Static_HPItemSlotBGBig"),
     _Static_MPItemSlotBigBG = UI.getChildControl(_Static_MainBG, "Static_MPItemSlotBGBig"),
     _Static_SkillListBG2 = UI.getChildControl(Panel_Window_FairySetting, "Static_SkillListBG2"),
+    _Static_InsideBg = UI.getChildControl(Panel_Window_FairySetting, "Static_InsideBg"),
     _Button_Yes = UI.getChildControl(Panel_Window_FairySetting, "Button_Yes"),
     _Button_No = UI.getChildControl(Panel_Window_FairySetting, "Button_No"),
     _Button_Close = UI.getChildControl(Panel_Window_FairySetting, "Button_Win_Close"),
@@ -214,9 +215,15 @@ function FairySetting_ReNew:Initialize()
   self._UI._txt_BottomDesc = UI.getChildControl(self._UI._Static_SkillListBG2, "StaticText_SkillListDesc")
   self._UI._txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._UI._txt_BottomDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_FAIRY_SETTING_BOTTOM_DESC"))
-  self._UI._Static_SkillListBG2:SetSize(self._UI._Static_SkillListBG2:GetSizeX(), self._UI._txt_BottomDesc:GetTextSizeY() + 10)
-  self._UI._txt_BottomDesc:SetSpanSize(0, 0)
-  Panel_Window_FairySetting:SetSize(Panel_Window_FairySetting:GetSizeX(), 300 + self._UI._Static_SkillListBG2:GetSizeY())
+  local _sizeUp = self._UI._txt_BottomDesc:GetTextSizeY() - self._UI._Static_SkillListBG2:GetSizeY() + 20
+  if _sizeUp > 0 then
+    Panel_Window_FairySetting:SetSize(Panel_Window_FairySetting:GetSizeX(), Panel_Window_FairySetting:GetSizeY() + _sizeUp)
+    self._UI._Static_InsideBg:SetSize(self._UI._Static_InsideBg:GetSizeX(), Panel_Window_FairySetting:GetSizeY() - 114)
+    self._UI._Static_InsideBg:SetSpanSize(0, 0)
+    self._UI._Static_InsideBg:ComputePos()
+    self._UI._Static_SkillListBG2:SetSize(self._UI._Static_SkillListBG2:GetSizeX(), self._UI._Static_SkillListBG2:GetSizeY() + _sizeUp + 10)
+    self._UI._txt_BottomDesc:SetSpanSize(0, 0)
+  end
   self._UI._Button_Yes:ComputePos()
   self._UI._Button_No:ComputePos()
   self:RegistEvent()

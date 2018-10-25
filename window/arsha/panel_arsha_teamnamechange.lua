@@ -5,12 +5,16 @@ local arshaTeamNameSet = {
   _txt_Edit_A = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "Edit_TeamA_Name"),
   _txt_Edit_B = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "Edit_TeamB_Name"),
   _btn_Change = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "Button_Admin"),
-  _btn_Close = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "Button_Close")
+  _btn_Close = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "Button_Close"),
+  txt_teamA = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "StaticText_ATeam"),
+  txt_teamB = UI.getChildControl(Panel_Window_ArshaTeamNameChange, "StaticText_BTeam")
 }
 function Panel_Window_TeamNameChangeControl_Init()
   local self = arshaTeamNameSet
   self._btn_Change:addInputEvent("Mouse_LUp", "ArshaPvP_TeamNameChangeControl_Confirm()")
   self._btn_Close:addInputEvent("Mouse_LUp", "FGlobal_TeamNameChangeControl_Close()")
+  self.txt_teamA:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM"))
+  self.txt_teamB:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM"))
 end
 function ArshaPvP_TeamNameChangeControl_Confirm()
   local self = arshaTeamNameSet

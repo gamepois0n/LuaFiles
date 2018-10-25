@@ -32,7 +32,8 @@ local Window_WorldMap_TopMenuInfo = {
       true,
       false,
       false,
-      false
+      false,
+      true
     },
     [1] = {
       false,
@@ -43,7 +44,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     },
     [2] = {
       false,
@@ -54,7 +56,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     },
     [3] = {
       false,
@@ -65,7 +68,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     },
     [4] = {
       false,
@@ -76,7 +80,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     },
     [5] = {
       false,
@@ -87,7 +92,8 @@ local Window_WorldMap_TopMenuInfo = {
       true,
       false,
       false,
-      false
+      false,
+      true
     },
     [6] = {
       false,
@@ -98,7 +104,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     },
     [7] = {
       false,
@@ -109,6 +116,7 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
+      true,
       true
     },
     [8] = {
@@ -120,7 +128,8 @@ local Window_WorldMap_TopMenuInfo = {
       false,
       false,
       false,
-      false
+      false,
+      true
     }
   },
   _currentMenuIndex = 0,
@@ -194,11 +203,7 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   ToClient_SetGuildMode(self._isGuildWarMode)
   ToClient_reloadNodeLine(self._isGuildWarMode, CppEnums.WaypointKeyUndefined)
   ToClient_WorldmapStateChange(renderState)
-  if index >= 7 then
-    self:UpdateFilder(index)
-  else
-    self:UpdateFilder(renderState - 1)
-  end
+  self:UpdateFilder(index)
   ToClient_setDoTerrainHide(self._isBlackFog)
 end
 function Window_WorldMap_TopMenuInfo:InitGuildWarFilter()
@@ -221,7 +226,6 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     FromClient_WorldMapSideBar_RenderStateChange(state)
     return
   end
-  _AudioPostEvent_SystemUiForXBOX(51, 7)
   local questShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Quest)
   local knowledgeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Knowledge)
   local fishNChipShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_FishnChip)
@@ -245,6 +249,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     ToClient_worldmapTradeNpcSetShow(tradeShow, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
     ToClient_SetGuildMode(PaGlobalFunc_WorldMap_TopMenu_GetIsGuildMode())
+    ToClient_WorldmapBookMarkInfoSetShow(true)
   elseif eState.eWMS_REGION == state then
     ToClient_worldmapNodeMangerSetShow(false)
     ToClient_worldmapBuildingManagerSetShow(false)
@@ -257,6 +262,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapLifeKnowledgeSetShow(fishNChipShow, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapExceptionLifeKnowledgeSetShow(knowledgeShow, CppEnums.WaypointKeyUndefined)
+    ToClient_WorldmapBookMarkInfoSetShow(true)
   elseif eState.eWMS_LOCATION_INFO_WATER == state then
     ToClient_worldmapNodeMangerSetShow(false)
     ToClient_worldmapBuildingManagerSetShow(false)
@@ -269,6 +275,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapLifeKnowledgeSetShow(fishNChipShow, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapExceptionLifeKnowledgeSetShow(knowledgeShow, CppEnums.WaypointKeyUndefined)
+    ToClient_WorldmapBookMarkInfoSetShow(true)
   elseif eState.eWMS_LOCATION_INFO_CELCIUS == state then
     ToClient_worldmapNodeMangerSetShow(false)
     ToClient_worldmapBuildingManagerSetShow(false)
@@ -281,6 +288,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapLifeKnowledgeSetShow(fishNChipShow, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapExceptionLifeKnowledgeSetShow(knowledgeShow, CppEnums.WaypointKeyUndefined)
+    ToClient_WorldmapBookMarkInfoSetShow(true)
   elseif eState.eWMS_LOCATION_INFO_HUMIDITY == state then
     ToClient_worldmapNodeMangerSetShow(false)
     ToClient_worldmapBuildingManagerSetShow(false)
@@ -293,6 +301,7 @@ function PaGlobalFunc_FromClient_WorldMap_TopMenu_RenderStateChange(state)
     ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapLifeKnowledgeSetShow(fishNChipShow, CppEnums.WaypointKeyUndefined)
     ToClient_worldmapExceptionLifeKnowledgeSetShow(knowledgeShow, CppEnums.WaypointKeyUndefined)
+    ToClient_WorldmapBookMarkInfoSetShow(true)
   else
     _PA_LOG("\236\157\180\237\152\184\236\132\156", "\236\131\129\237\131\156 \236\157\184\235\141\177\236\138\164\234\176\128 \236\158\152\235\170\187 \235\147\164\236\150\180\236\153\148\236\138\181\235\139\136\235\139\164.")
   end

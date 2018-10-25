@@ -329,6 +329,7 @@ function PaGlobalFunc_ClassSelect_Close()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ClassSelect")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobalFunc_ClassSelect_showCustomization(customizationData)

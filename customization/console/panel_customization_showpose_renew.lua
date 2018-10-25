@@ -81,6 +81,7 @@ function Customization_ShowPoseInfo:UpdateFocus(index)
 end
 function PaGlobalFunc_Customization_ShowPose_UpdateMotion(index)
   local self = Customization_ShowPoseInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   applyMotion(index)
   self:UpdateFocus(index)
 end

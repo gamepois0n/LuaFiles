@@ -706,7 +706,7 @@ function Panel_Window_InstallationMode_Farm_info:updateItemScroll(isUpScroll)
   local beforeSlotIndex = self._value.startItemIndex
   self._value.startItemIndex = UIScroll.ScrollEvent(self._ui.scroll_Plant, isUpScroll, self._config.itemSlotRow, self._value.itemDataCount, self._value.startItemIndex, self._config.itemSlotCol)
   self._value.lastStartItemIndex = beforeSlotIndex
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startItemIndex then
+  if (ToClient_isConsole() or ToClient_IsDevelopment()) and beforeSlotIndex ~= self._value.startItemIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   self:setItemSlot()
@@ -1002,6 +1002,7 @@ function PaGlobalFunc_InstallationMode_Farm_DeleteInstalledObject(idx)
     messageContent = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_DELETE_MESSAGEBOX_MEMO")
   end
   local function messageBox_HouseInstallation_Delete_InstalledObjectDo()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     housing_deleteObject_InstalledObjectList(idx)
   end
   local messageBoxData = {
@@ -1015,6 +1016,7 @@ function PaGlobalFunc_InstallationMode_Farm_DeleteInstalledObject(idx)
 end
 function PaGlobalFunc_InstallationMode_Farm_ScrollItem(isUpScroll)
   local self = Panel_Window_InstallationMode_Farm_info
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   self:updateItemScroll(isUpScroll)
 end
 function PaGlobalFunc_InstallationMode_Farm_ClickConfirm()
@@ -1073,6 +1075,7 @@ function PaGlobalFunc_InstallationMode_Farm_installFurniture(invenType, invenSlo
   if Panel_Win_System:GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   if false == iscash then
     housing_selectInstallationItem(invenType, invenSlotNo)
   else

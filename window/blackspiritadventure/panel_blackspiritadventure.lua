@@ -45,8 +45,8 @@ checkPopUp:addInputEvent("Mouse_Out", "BlackSpirit_PopUp_ShowIconToolTip( false 
 local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_Window_BlackSpiritAdventure, "WebControl_EventNotify_WebLink")
 _Web:SetShow(true)
 _Web:SetPosX(11)
-_Web:SetPosY(50)
-_Web:SetSize(918, 655)
+_Web:SetPosY(64)
+_Web:SetSize(918, 658)
 _Web:ResetUrl()
 function BlackSpiritAd_Show(cooltimeOff)
   if isBlackSpiritAdventure then

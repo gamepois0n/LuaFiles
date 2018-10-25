@@ -174,6 +174,12 @@ local Panel_Widget_Party_info = {
       379,
       53
     },
+    [CppEnums.ClassType.ClassType_Orange] = {
+      149,
+      47,
+      379,
+      53
+    },
     [CppEnums.ClassType.ClassType_Sorcerer] = {
       149,
       19,

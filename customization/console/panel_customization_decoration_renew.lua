@@ -188,6 +188,7 @@ function PaGlobalFunc_Customization_Deco_UpdateDecorationPose()
   setParam(self._currentClassType, self._selectedListParamType, self._selectedListParamIndex, self._selectedItemIndex)
   self:UpdateTypeFocus(self._selectedItemIndex)
   PaGlobalFunc_Customization_SetKeyGuide(0)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   Panel_Win_System:SetShow(false)
 end
 function PaGlobalFunc_Customization_Deco_UpdateDecorationContents(contentsIndex, currentClassType, currentuiId)
@@ -783,7 +784,6 @@ function PaGlobalFunc_Customization_Deco_UpdateSlider(sliderIndex)
 end
 function PaGlobalFunc_Customization_Deco_MoveTab(isLeft)
   local self = Customization_DecoInfo
-  _AudioPostEvent_SystemUiForXBOX(51, 6)
   if 0 >= self._currentTabCount then
     return
   end

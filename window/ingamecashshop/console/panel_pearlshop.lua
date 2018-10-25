@@ -104,6 +104,7 @@ function pearlShop:checkShow()
 end
 function PaGlobalFunc_PearlShopBack()
   pearlShop._ui._bottomKeyGuideA:SetShow(true)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   if pearlShop:back() then
     return pearlShop:update()
   end
@@ -167,6 +168,7 @@ function pearlShop:addContentSize(sizeOffset)
 end
 function pearlShop:close()
   self._panel:SetShow(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   FGlobal_Panel_Radar_Show(true, false)
   Panel_TimeBar:SetShow(true, false)
   FGlobal_QuestWidget_Open()

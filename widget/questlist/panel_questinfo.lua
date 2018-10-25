@@ -44,6 +44,7 @@ local questInfoWindow_completeNpc = UI.getChildControl(Panel_CheckedQuestInfo, "
 local questInfoWindow_naviButton = UI.getChildControl(Panel_CheckedQuestInfo, "Checkbox_Quest_Navi")
 local questInfoWindow_giveupButton = UI.getChildControl(Panel_CheckedQuestInfo, "Checkbox_Quest_Giveup")
 local questInfoWindow_questButtonClose = UI.getChildControl(Panel_CheckedQuestInfo, "Button_Win_Close")
+local subBg = UI.getChildControl(Panel_CheckedQuestInfo, "Static_SubBg")
 questInfoWindow_questButtonClose:addInputEvent("Mouse_LUp", "FGlobal_QuestInfoDetail_Close()")
 local button_Giveup_QuestInfoWindow = UI.getChildControl(Panel_CheckedQuestInfo, "Button_Quest_GiveUp")
 local button_CallSpirit_QuestInfoWindow = UI.getChildControl(Panel_CheckedQuestInfo, "Button_Quest_CallSpirit")
@@ -182,7 +183,7 @@ function FGlobal_QuestInfoDetail(groupId, questId, uiCondition, groupTitle, ques
   else
     isNext = isNextQuest
   end
-  local PosY = 45
+  local PosY = 70
   questInfoWindow_groupTitle:SetShow(true)
   questInfoWindow_groupTitle:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
   if "nil" ~= groupTitle then
@@ -284,30 +285,6 @@ function FGlobal_QuestInfoDetail(groupId, questId, uiCondition, groupTitle, ques
   questInfoWindow_questDesc:SetPosY(PosY)
   questInfoWindow_questDesc:ComputePos()
   PosY = PosY + questInfoWindow_questDesc:GetSizeY()
-  if 10 > getSelfPlayer():get():getLevel() then
-    button_Giveup_QuestInfoWindow:SetShow(false)
-    questInfoWindow_giveupButton:SetShow(false)
-    if 0 == uiCondition and 0 == questInfo:getQuestType() then
-      button_CallSpirit_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_CallSpirit_QuestInfoWindow:GetSizeX() / 2)
-    else
-      button_Navi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Navi_QuestInfoWindow:GetSizeX() - 20)
-      button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - 20)
-    end
-  else
-    button_Giveup_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Giveup_QuestInfoWindow:GetSizeX() * 1.5 - 30)
-    if 0 == uiCondition and 0 == questInfo:getQuestType() then
-      button_CallSpirit_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + 5)
-    else
-      button_Navi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Navi_QuestInfoWindow:GetSizeX() / 2 - 20)
-      button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + button_AutoNavi_QuestInfoWindow:GetSizeX() / 2 - 20)
-    end
-  end
-  local rewardPosY = _QuestDetail_ShowReward(questInfo, PosY)
-  Panel_CheckedQuestInfo:SetSize(Panel_CheckedQuestInfo:GetSizeX(), rewardPosY + 40)
-  if nil == checkedQuestInfo_PosX then
-    checkedQuestInfo_PosX = Panel_CheckedQuest:GetPosX() - Panel_CheckedQuestInfo:GetSizeX() - 10
-    checkedQuestInfo_PosY = getMousePosY() - Panel_CheckedQuestInfo:GetSizeY()
-  end
   if Panel_Window_Quest_New:GetShow() then
     if Panel_Window_Quest_New:IsUISubApp() then
       Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetScreenParentPosX() + Panel_Window_Quest_New:GetSizeX())
@@ -320,27 +297,57 @@ function FGlobal_QuestInfoDetail(groupId, questId, uiCondition, groupTitle, ques
     Panel_CheckedQuestInfo:SetPosX(getScreenSizeX() - getScreenSizeX() / 2 - Panel_CheckedQuestInfo:GetSizeX() / 2)
     Panel_CheckedQuestInfo:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_CheckedQuestInfo:GetSizeY() / 2)
   end
+  if 10 > getSelfPlayer():get():getLevel() then
+    button_Giveup_QuestInfoWindow:SetShow(false)
+    questInfoWindow_giveupButton:SetShow(false)
+    if 0 == uiCondition and 0 == questInfo:getQuestType() then
+      button_CallSpirit_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_CallSpirit_QuestInfoWindow:GetSizeX() / 2)
+    else
+      button_Navi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - (button_Navi_QuestInfoWindow:GetSizeX() / 2 + 30))
+      button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + (button_Navi_QuestInfoWindow:GetSizeX() / 2 + 30))
+    end
+  else
+    button_Giveup_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - (button_Giveup_QuestInfoWindow:GetSizeX() * 1.5 + 10))
+    if 0 == uiCondition and 0 == questInfo:getQuestType() then
+      button_CallSpirit_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + 5)
+    else
+      button_Navi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Navi_QuestInfoWindow:GetSizeX() / 2)
+      button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + button_AutoNavi_QuestInfoWindow:GetSizeX() / 2 + 10)
+    end
+  end
+  local rewardPosY = _QuestDetail_ShowReward(questInfo, PosY)
+  Panel_CheckedQuestInfo:SetSize(Panel_CheckedQuestInfo:GetSizeX(), rewardPosY + 50)
+  subBg:SetSize(subBg:GetSizeX(), Panel_CheckedQuestInfo:GetSizeY() - 94)
+  subBg:ComputePos()
+  button_Giveup_QuestInfoWindow:ComputePos()
+  button_CallSpirit_QuestInfoWindow:ComputePos()
+  button_Navi_QuestInfoWindow:ComputePos()
+  button_AutoNavi_QuestInfoWindow:ComputePos()
+  if nil == checkedQuestInfo_PosX then
+    checkedQuestInfo_PosX = Panel_CheckedQuest:GetPosX() - Panel_CheckedQuestInfo:GetSizeX() - 10
+    checkedQuestInfo_PosY = getMousePosY() - Panel_CheckedQuestInfo:GetSizeY()
+  end
   FGlobal_SetUrl_Tooltip_SkillForLearning()
   Panel_CheckedQuestInfo:SetShow(true, true)
   if Panel_Window_Quest_New:IsUISubApp() then
     Panel_CheckedQuestInfo:OpenUISubApp()
   end
-  local btnGiveupSizeX = button_Giveup_QuestInfoWindow:GetSizeX() + 20
+  local btnGiveupSizeX = button_Giveup_QuestInfoWindow:GetSizeX()
   local btnGiveupTextPosX = btnGiveupSizeX - btnGiveupSizeX / 2 - button_Giveup_QuestInfoWindow:GetTextSizeX() / 2
   button_Giveup_QuestInfoWindow:SetTextSpan(btnGiveupTextPosX, 5)
-  local btnNaviSizeX = button_Navi_QuestInfoWindow:GetSizeX() + 20
+  local btnNaviSizeX = button_Navi_QuestInfoWindow:GetSizeX()
   local btnNaviTextPosX = btnNaviSizeX - btnNaviSizeX / 2 - button_Navi_QuestInfoWindow:GetTextSizeX() / 2
   button_Navi_QuestInfoWindow:SetTextSpan(btnNaviTextPosX, 5)
-  local btnAutoNaviSizeX = button_AutoNavi_QuestInfoWindow:GetSizeX() + 20
+  local btnAutoNaviSizeX = button_AutoNavi_QuestInfoWindow:GetSizeX()
   local btnAutoNaviTextPosX = btnAutoNaviSizeX - btnAutoNaviSizeX / 2 - button_AutoNavi_QuestInfoWindow:GetTextSizeX() / 2
   button_AutoNavi_QuestInfoWindow:SetTextSpan(btnAutoNaviTextPosX, 5)
-  local btnCallSpiritSizeX = button_CallSpirit_QuestInfoWindow:GetSizeX() + 20
+  local btnCallSpiritSizeX = button_CallSpirit_QuestInfoWindow:GetSizeX()
   local btnCallSpiritTextPosX = btnCallSpiritSizeX - btnCallSpiritSizeX / 2 - button_CallSpirit_QuestInfoWindow:GetTextSizeX() / 2
   button_CallSpirit_QuestInfoWindow:SetTextSpan(btnCallSpiritTextPosX, 5)
-  button_Giveup_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_Giveup_QuestInfoWindow:GetSizeY() - 5)
-  button_CallSpirit_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_CallSpirit_QuestInfoWindow:GetSizeY() - 5)
-  button_Navi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_Navi_QuestInfoWindow:GetSizeY() - 5)
-  button_AutoNavi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_AutoNavi_QuestInfoWindow:GetSizeY() - 5)
+  button_Giveup_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_Giveup_QuestInfoWindow:GetSizeY() - 15)
+  button_CallSpirit_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_CallSpirit_QuestInfoWindow:GetSizeY() - 15)
+  button_Navi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_Navi_QuestInfoWindow:GetSizeY() - 15)
+  button_AutoNavi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_AutoNavi_QuestInfoWindow:GetSizeY() - 15)
 end
 function HandleClicked_CallSpirit()
   if not IsSelfPlayerWaitAction() then

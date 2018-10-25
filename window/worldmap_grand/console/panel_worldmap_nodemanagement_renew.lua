@@ -336,6 +336,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_ShowReason()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORLDMAP_CANTRETURN_CONT_NODE"))
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   displayCantWithdrawReason()
   PaGlobalFunc_WorldMap_NodeManagement_Update()
 end
@@ -364,6 +365,7 @@ end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeContribute(nodeKey)
   local self = Window_WorldMap_NodeManagementInfo
   local function NodeWithdrawExecute()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_WorldMapRequestWithdrawPlant(nodeKey)
   end
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_WORLDMAP_NODE_WITHDRAWCONFIRM")
@@ -419,7 +421,7 @@ end
 function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(nodeKey, NavigationGuideParam())
-  _AudioPostEvent_SystemUiForXBOX(0, 14)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(nodeKey)
   local self = Window_WorldMap_NodeManagementInfo
@@ -427,6 +429,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_NodeUpgradeClick(nodeKey)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_WORLDMAP_FINDNODEMANAGER"))
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   ToClient_WorldMapRequestUpgradeExplorationNode(nodeKey)
   PaGlobalFunc_WorldMap_NodeManagement_Update()
 end
@@ -483,6 +486,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_Close()
   if false == PaGlobalFunc_WorldMap_NodeManagement_GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()

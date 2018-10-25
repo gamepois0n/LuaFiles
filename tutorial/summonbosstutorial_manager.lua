@@ -29,10 +29,10 @@ function PaGlobal_SummonBossTutorial_Manager:checkPossibleTutorial(index)
   end
   local hasSummonItem = true
   if 0 == index then
-    if toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(42000, 1)) then
+    if toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(42000, 0)) then
       hasSummonItem = false
     end
-  elseif 1 == index and toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(42001, 1)) then
+  elseif 1 == index and toInt64(0, 0) == inventory:getItemCount_s64(ItemEnchantKey(42001, 0)) then
     hasSummonItem = false
   end
   if false == hasSummonItem then

@@ -63,7 +63,6 @@ function PaGlobal_RecentCook:showPanel(knowledgeIndex, isCook, posX, posY)
   self._isCook = isCook
   Panel_RecentCook:SetShow(true)
   Panel_RecentCook:SetPosXY(posX, posY)
-  Panel_RecentCook:ComputePos()
   if isCook then
     self._ui._title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_RECENTCOOKTITLE"))
   else

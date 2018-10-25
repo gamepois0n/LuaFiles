@@ -712,9 +712,11 @@ function Panel_Window_StableList_info:readyToShow()
   self:setStableListButton()
 end
 function Panel_Window_StableList_info:open()
+  _AudioPostEvent_SystemUiForXBOX(1, 30)
   Panel_Window_StableList:SetShow(true)
 end
 function Panel_Window_StableList_info:close()
+  _AudioPostEvent_SystemUiForXBOX(1, 31)
   Panel_Window_StableList:SetShow(false)
 end
 function Panel_Window_StableList_info:findPossibleToggle(value)
@@ -788,7 +790,7 @@ function PaGlobalFunc_StableList_ScrollEvent(isUpScroll)
   local self = Panel_Window_StableList_info
   local beforeSlotIndex = self._value.startButtonIndex
   self._value.startButtonIndex = UIScroll_Horizontal_ScrollEvent(self._ui.horse_List_HorizontalScroll, isUpScroll, self._config.slotRows, self._value.stableSlotCount, self._value.startButtonIndex, self._config.nowSlotCount)
-  if (ToClient_isXBox() or ToClient_IsDevelopment()) and 0 ~= self._value.startButtonIndex then
+  if (ToClient_isConsole() or ToClient_IsDevelopment()) and 0 ~= self._value.startButtonIndex then
     ToClient_padSnapIgnoreGroupMove()
   end
   if beforeSlotIndex ~= self._value.startButtonIndex then

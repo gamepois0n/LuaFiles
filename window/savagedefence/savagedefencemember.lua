@@ -19,10 +19,8 @@ function SavageDefenceMember_Init(listSize, BGSize)
   self.chk_Shop:AddEffect("UI_Panel_Savage_Shop_01", true, 0, 0)
   local btnListSizeX = self.chk_List:GetSizeX() + 23
   local btnListTextPosX = btnListSizeX - btnListSizeX / 2 - self.chk_List:GetTextSizeX() / 2
-  self.chk_List:SetTextSpan(btnListTextPosX, 5)
   local btnShopSizeX = self.chk_Shop:GetSizeX() + 23
   local btnShopTextPosX = btnShopSizeX - btnShopSizeX / 2 - self.chk_Shop:GetTextSizeX() / 2
-  self.chk_Shop:SetTextSpan(btnShopTextPosX, 5)
   self._list2:changeAnimationSpeed(10)
   self._list2:SetSize(self._list2:GetSizeX(), listSize)
   self._list2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_SavegeDefenceMember_ListUpdate")
@@ -107,9 +105,9 @@ function PaGlobal_SavegeDefenceMember_ListUpdate(contents, key)
   txt_PointCount:SetText(makeDotMoney(memberCoin))
   txt_PointCount:SetShow(true)
   txt_PointCount:SetPosX(150)
-  txt_PointCount:SetPosY(5)
+  txt_PointCount:SetPosY(10)
   txt_DeadInfo:SetPosX(100)
-  txt_DeadInfo:SetPosY(5)
+  txt_DeadInfo:SetPosY(10)
   txt_DeadInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEGAME_DEAD"))
   txt_DeadInfo:SetFontColor(Defines.Color.C_FFFF0000)
   if ToClient_getSavageDefencePlayerDead(idx) then

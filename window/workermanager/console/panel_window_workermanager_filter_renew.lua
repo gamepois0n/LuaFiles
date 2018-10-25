@@ -143,6 +143,7 @@ function PaGlobalFunc_WorkerManager_Filter_Create(control, key)
   workerSortFilter:listCreate(control, key)
 end
 function PaGlobalFunc_WorkerManager_FilterSetData(selectedType)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   workerSortFilter:setList(selectedType)
   workerSortFilter:setPosition(selectedType)
   ToClient_padSnapResetControl()
@@ -168,6 +169,7 @@ function workerSortFilter:close()
   Panel_Window_WorkerManager_Filter_Renew:SetShow(false)
 end
 function PaGlobalFunc_WorkerManager_Filter_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   workerSortFilter:close()
 end
 function workerSortFilter:update()
@@ -177,6 +179,7 @@ function workerSortFilter:confirm()
   workerSortFilter:close()
 end
 function PaGlobalFunc_WorkerManager_FilterConfirm()
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   workerSortFilter:confirm()
 end
 function PaGlobalFunc_WorkerManager_FilterlistCreat()

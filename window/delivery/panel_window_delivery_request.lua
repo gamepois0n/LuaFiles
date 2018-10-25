@@ -35,16 +35,17 @@ local deliveryRequest = {
     slotCount = 40,
     slotCols = 8,
     slotRows = 0,
-    slotStartX = 9,
-    slotStartY = 189,
-    slotGapX = 48,
-    slotGapY = 48,
+    slotStartX = 25,
+    slotStartY = 280,
+    slotGapX = 55,
+    slotGapY = 55,
     fontColor = UI_color.C_FFFFFFFF
   },
   slotBG = UI.getChildControl(Panel_Window_Delivery_Request, "Static_SlotBG"),
   staticText_RequestTitle = UI.getChildControl(Panel_Window_Delivery_Request, "StaticText_Title"),
   button_Close = UI.getChildControl(Panel_Window_Delivery_Request, "Button_Close"),
   _buttonQuestion = UI.getChildControl(Panel_Window_Delivery_Request, "Button_Question"),
+  rdo_send = UI.getChildControl(Panel_Window_Delivery_Request, "RadioButton_Send"),
   button_Information = UI.getChildControl(Panel_Window_Delivery_Request, "Button_Cancel_Recieve"),
   static_RequestBakcground = UI.getChildControl(Panel_Window_Delivery_Request, "Static_Sample_Background"),
   staticGoldIcon = UI.getChildControl(Panel_Window_Delivery_Request, "StaticText_Gold_Icon_Total_Charge"),
@@ -141,7 +142,6 @@ function deliveryRequest:update()
   else
     self.staticText_WayPointPenalty:SetShow(false)
   end
-  self.staticGoldIcon:ComputePos()
   self.staticText_Total_Title:ComputePos()
   self.staticText_TotalCount:ComputePos()
   self.staticText_TotalFee:ComputePos()
@@ -298,13 +298,12 @@ function DeliveryRequestWindow_Open()
   deliveryRequest.staticText_TotalCount:SetPosY(deliveryRequest.deliveryHelpBG:GetPosY() + deliveryRequest.deliveryHelpBG:GetSizeY() + 5)
   deliveryRequest.staticText_TotalFee:SetPosY(deliveryRequest.staticText_Total_Title:GetPosY() + deliveryRequest.staticText_Total_Title:GetSizeY())
   deliveryRequest.staticGoldIcon:SetPosY(deliveryRequest.staticText_Total_Title:GetPosY() + deliveryRequest.staticText_Total_Title:GetSizeY() + 3)
-  deliveryRequest.button_Send:SetPosY(deliveryRequest.deliveryHelpBG:GetPosY() + deliveryRequest.deliveryHelpBG:GetSizeY() + 5)
-  Panel_Window_Delivery_Request:SetSize(Panel_Window_Delivery_Request:GetSizeX(), deliveryRequest.button_Send:GetPosY() + deliveryRequest.button_Send:GetSizeY() + 7)
+  deliveryRequest.rdo_send:SetCheck(true)
   DeliveryInformationWindow_Close()
   if not Panel_Window_Delivery_Request:IsShow() then
     Panel_Window_Delivery_Request:ChangeSpecialTextureInfoName("")
     Panel_Window_Delivery_Request:SetAlphaExtraChild(1)
-    Panel_Window_Delivery_Request:SetShow(true, IsAniUse())
+    Panel_Window_Delivery_Request:SetShow(true, false)
     if ToClient_WorldMapIsShow() then
       WorldMapPopupManager:increaseLayer(true)
       WorldMapPopupManager:push(Panel_Window_Delivery_Request, true)
@@ -333,7 +332,7 @@ function DeliveryRequestWindow_Close()
     end
   elseif Panel_Window_Delivery_Request:GetShow() then
     Panel_Window_Delivery_Request:ChangeSpecialTextureInfoName("")
-    Panel_Window_Delivery_Request:SetShow(false, IsAniUse())
+    Panel_Window_Delivery_Request:SetShow(false, false)
     FromClient_WarehouseUpdate()
   end
   FGlobal_WarehouseTownListCheck()

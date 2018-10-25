@@ -7,7 +7,7 @@ local VCK = CppEnums.VirtualKeyCode
 local _constGuildListMaxCount = 150
 local _startMemberIndex = 0
 local _constStartY = 5
-local _constStartButtonX = 8
+local _constStartButtonX = 5
 local _constStartButtonY = 5
 local _constStartButtonGapY = 30
 local _constCollectionX = 120
@@ -57,6 +57,22 @@ local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
 GuildListInfoPage = {
   _frameDefaultBG = UI.getChildControl(Panel_Window_Guild, "Static_Frame_ListBG"),
   _buttonListBG = UI.getChildControl(Panel_Guild_List, "Static_FunctionBG"),
+  listInfoTitleBG = nil,
+  staticText_Grade = nil,
+  staticText_Level = nil,
+  staticText_Class = nil,
+  staticText_activity = nil,
+  staticText_contributedTendency = nil,
+  staticText_contract = nil,
+  staticText_charName = nil,
+  staticText_Voice = nil,
+  staticText_WarGrade = nil,
+  listening_Volume = nil,
+  listening_VolumeSlider = nil,
+  listening_VolumeSliderBtn = nil,
+  listening_VolumeClose = nil,
+  listening_VolumeButton = nil,
+  listening_VolumeValue = nil,
   _scrollBar,
   _list = {},
   _buttonList = {},
@@ -74,6 +90,7 @@ GuildListInfoPage = {
 }
 local tempGuildList = {}
 local tempGuildUserNolist = {}
+local text_contributedTendency
 local siegeGradeCount = {
   grade1 = 0,
   grade2 = 0,
@@ -96,25 +113,8 @@ btn_incentive_Send:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentive_Send
 btn_incentive_Cancle:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentive_Close()")
 btn_incentive_Help:addInputEvent("Mouse_LUp", "")
 incentive_InputMoney:RegistReturnKeyEvent("FGlobal_SaveGuildMoney_Send()")
-local btn_GuildMasterMandateBG = UI.getChildControl(Panel_Window_Guild, "Static_GuildMandateBG")
-local btn_GuildMasterMandate = UI.getChildControl(Panel_Window_Guild, "Button_GuildMandate")
 local frameSizeY = 0
 local contentSizeY = 0
-local staticText_Grade = UI.getChildControl(Panel_Guild_List, "StaticText_M_Grade")
-local staticText_Level = UI.getChildControl(Panel_Guild_List, "StaticText_M_Level")
-local staticText_Class = UI.getChildControl(Panel_Guild_List, "StaticText_M_Class")
-local staticText_activity = UI.getChildControl(Panel_Guild_List, "StaticText_M_Activity")
-local staticText_contributedTendency = UI.getChildControl(Panel_Guild_List, "StaticText_M_ContributedTendency")
-local staticText_contract = UI.getChildControl(Panel_Guild_List, "StaticText_M_Contract")
-local staticText_charName = UI.getChildControl(Panel_Guild_List, "StaticText_M_CharName")
-local staticText_Voice = UI.getChildControl(Panel_Guild_List, "StaticText_M_Voice")
-local staticText_WarGrade = UI.getChildControl(Panel_Guild_List, "StaticText_WarGrade")
-local listening_Volume = UI.getChildControl(Panel_Guild_List, "Static_Listening_VolumeBG")
-local listening_VolumeSlider = UI.getChildControl(listening_Volume, "Slider_ListeningVolume")
-local listening_VolumeSliderBtn = UI.getChildControl(listening_VolumeSlider, "Slider_MicVol_Button")
-local listening_VolumeClose = UI.getChildControl(listening_Volume, "Button_VolumeSetClose")
-local listening_VolumeButton = UI.getChildControl(listening_Volume, "Checkbox_SpeakerIcon")
-local listening_VolumeValue = UI.getChildControl(listening_Volume, "StaticText_SpeakerVolumeValue")
 local _incentivePanelType = 0
 local _selectSortType = -1
 local _listSort = {
@@ -128,89 +128,44 @@ local _listSort = {
   kp = false,
   siegegrade = false
 }
-staticText_Grade:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 0 .. " )")
-staticText_Level:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 1 .. " )")
-staticText_Class:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 2 .. " )")
-staticText_charName:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 3 .. " )")
-staticText_activity:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 4 .. " )")
-staticText_contract:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 5 .. " )")
-staticText_contributedTendency:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 6 .. " )")
-staticText_activity:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 0 .. " )")
-staticText_activity:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 0 .. " )")
-staticText_activity:setTooltipEventRegistFunc("_guildListInfoPage_titleTooltipShow( true,\t\t" .. 0 .. " )")
-staticText_contract:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 2 .. " )")
-staticText_contract:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 2 .. " )")
-staticText_contract:setTooltipEventRegistFunc("_guildListInfoPage_titleTooltipShow( true,\t\t" .. 2 .. " )")
-staticText_contributedTendency:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 3 .. " )")
-staticText_contributedTendency:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 3 .. " )")
-staticText_contributedTendency:setTooltipEventRegistFunc("_guildListInfoPage_titleTooltipShow( true,\t\t" .. 3 .. " )")
-staticText_Voice:SetShow(false)
-listening_Volume:SetShow(false)
-staticText_contributedTendency:SetSpanSize(535, 50)
-if true == isVoiceOpen then
-  listening_VolumeClose:addInputEvent("Mouse_LUp", "HandleOnOut_GuildMemberList_VolumeClose()")
-  listening_VolumeButton:addInputEvent("Mouse_LUp", "HandleClicked_VoiceChatListening()")
-  listening_VolumeSlider:addInputEvent("Mouse_LUp", "HandleClicked_VoiceChatListeningVolume()")
-  listening_VolumeSliderBtn:addInputEvent("Mouse_LPress", "HandleClicked_VoiceChatListeningVolume()")
-  staticText_Voice:SetShow(true)
-  staticText_Voice:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 4 .. " )")
-  staticText_Voice:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 4 .. " )")
-  staticText_Voice:setTooltipEventRegistFunc("_guildListInfoPage_titleTooltipShow( true,\t\t" .. 4 .. " )")
-  staticText_contributedTendency:SetSpanSize(495, 50)
-end
 local isSiegeSeason5 = ToClient_IsContentsGroupOpen("388")
 local isWarGradeOpen = isSiegeSeason5
-staticText_WarGrade:SetShow(false)
-if isWarGradeOpen then
-  staticText_WarGrade:SetShow(true)
-  staticText_WarGrade:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 7 .. " )")
-  staticText_WarGrade:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true,\t\t" .. 5 .. " )")
-  staticText_WarGrade:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false,\t" .. 5 .. " )")
-  if true == _ContentsGroup_NewSiegeRule then
-    staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE"))
-  else
-    staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE"))
-  end
-end
 local setVol_selectedMemberIdx = 0
 local setVol_selectedMemberVol = 0
-local text_contributedTendency = staticText_contributedTendency:GetText()
 function _guildListInfoPage_titleTooltipShow(isShow, titleType)
-  local control
-  local name = ""
-  local desc = ""
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local self = GuildListInfoPage
+  local control, name, desc
   if 0 == titleType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_ACTIVITY_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_ACTIVITY_CONTENTS")
-    control = staticText_activity
+    control = self.staticText_activity
   elseif 1 == titleType then
-    control = staticText_contributedTendency
+    control = self.staticText_contributedTendency
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_CONTRIBUTEDTENDENCY_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_CONTRIBUTEDTENDENCY_CONTENTS")
   elseif 2 == titleType then
-    control = staticText_contract
+    control = self.staticText_contract
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_CONTRACT_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_CONTRACT_CONTENTS")
   elseif 3 == titleType then
-    control = staticText_contributedTendency
+    control = self.staticText_contributedTendency
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_CONTRIBUTEDTENDENCY_TOOLTIP_TITLE")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_CONTRIBUTEDTENDENCY_TOOLTIP_DESC")
   elseif 4 == titleType then
-    control = staticText_Voice
+    control = self.staticText_Voice
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_VOICECHAT_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_VOICECHAT_TOOLTIP_DESC")
   elseif 5 == titleType then
-    control = staticText_WarGrade
+    control = self.staticText_WarGrade
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_NAME")
     local desc2 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC_2", "grade5", tostring(siegeGradeCount.grade5))
     desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SIEGEGRADE_TOOLTIP_DESC", "grade1", tostring(siegeGradeCount.grade1), "grade2", tostring(siegeGradeCount.grade2), "grade3", tostring(siegeGradeCount.grade3), "grade4", tostring(siegeGradeCount.grade4))
   end
-  if true == isShow then
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
-    TooltipSimple_Show(control, name, desc)
-  else
-    TooltipSimple_Hide()
-  end
+  TooltipSimple_Show(control, name, desc)
 end
 function _guildListInfoPage_MandateTooltipShow(isShow, titleType, controlIdx)
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -260,7 +215,6 @@ function _guildListInfoPage_MandateTooltipShow(isShow, titleType, controlIdx)
     end
   end
   if true == isShow then
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(control, name, desc)
   else
     TooltipSimple_Hide()
@@ -289,6 +243,61 @@ function GuildLogoutTimeConvert(s64_datetime)
   return strDate
 end
 function GuildListInfoPage:initialize()
+  self.listInfoTitleBG = UI.getChildControl(Panel_Guild_List, "Static_List_BG")
+  self.staticText_Grade = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Grade")
+  self.staticText_Level = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Level")
+  self.staticText_Class = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Class")
+  self.staticText_activity = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Activity")
+  self.staticText_contributedTendency = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_ContributedTendency")
+  self.staticText_contract = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Contract")
+  self.staticText_charName = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_CharName")
+  self.staticText_Voice = UI.getChildControl(self.listInfoTitleBG, "StaticText_M_Voice")
+  self.staticText_WarGrade = UI.getChildControl(self.listInfoTitleBG, "StaticText_WarGrade")
+  self.listening_Volume = UI.getChildControl(Panel_Guild_List, "Static_Listening_VolumeBG")
+  self.listening_VolumeSlider = UI.getChildControl(self.listening_Volume, "Slider_ListeningVolume")
+  self.listening_VolumeSliderBtn = UI.getChildControl(self.listening_VolumeSlider, "Slider_MicVol_Button")
+  self.listening_VolumeClose = UI.getChildControl(self.listening_Volume, "Button_VolumeSetClose")
+  self.listening_VolumeButton = UI.getChildControl(self.listening_Volume, "Checkbox_SpeakerIcon")
+  self.listening_VolumeValue = UI.getChildControl(self.listening_Volume, "StaticText_SpeakerVolumeValue")
+  self.staticText_Grade:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 0 .. " )")
+  self.staticText_Level:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 1 .. " )")
+  self.staticText_Class:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 2 .. " )")
+  self.staticText_charName:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 3 .. " )")
+  self.staticText_activity:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 4 .. " )")
+  self.staticText_contract:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 5 .. " )")
+  self.staticText_contributedTendency:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort( " .. 6 .. " )")
+  self.staticText_activity:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true, " .. 0 .. " )")
+  self.staticText_activity:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false," .. 0 .. " )")
+  self.staticText_contract:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true, " .. 2 .. " )")
+  self.staticText_contract:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false," .. 2 .. " )")
+  self.staticText_contributedTendency:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true, " .. 3 .. " )")
+  self.staticText_contributedTendency:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false, " .. 3 .. " )")
+  self.staticText_Voice:SetShow(false)
+  self.listening_Volume:SetShow(false)
+  self.staticText_contributedTendency:SetSpanSize(535, 0)
+  if true == isVoiceOpen then
+    self.listening_VolumeClose:addInputEvent("Mouse_LUp", "HandleOnOut_GuildMemberList_VolumeClose()")
+    self.listening_VolumeButton:addInputEvent("Mouse_LUp", "HandleClicked_VoiceChatListening()")
+    self.listening_VolumeSlider:addInputEvent("Mouse_LUp", "HandleClicked_VoiceChatListeningVolume()")
+    self.listening_VolumeSliderBtn:addInputEvent("Mouse_LPress", "HandleClicked_VoiceChatListeningVolume()")
+    self.staticText_Voice:SetShow(true)
+    self.staticText_Voice:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow( true, " .. 4 .. " )")
+    self.staticText_Voice:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow( false, " .. 4 .. " )")
+    self.staticText_contributedTendency:SetSpanSize(495, 0)
+  end
+  self.staticText_WarGrade:SetShow(false)
+  if isWarGradeOpen then
+    self.staticText_WarGrade:SetShow(true)
+    self.staticText_WarGrade:addInputEvent("Mouse_LUp", "HandleClicked_GuildListSort(" .. 7 .. ")")
+    self.staticText_WarGrade:addInputEvent("Mouse_On", "_guildListInfoPage_titleTooltipShow(true, " .. 5 .. " )")
+    self.staticText_WarGrade:addInputEvent("Mouse_Out", "_guildListInfoPage_titleTooltipShow(false, " .. 5 .. " )")
+    if true == _ContentsGroup_NewSiegeRule then
+      self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE"))
+    else
+      self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE"))
+    end
+  end
+  text_contributedTendency = self.staticText_contributedTendency:GetText()
   self._frameGuildList = UI.getChildControl(Panel_Guild_List, "Frame_GuildList")
   self._contentGuildList = UI.getChildControl(self._frameGuildList, "Frame_1_Content")
   local _copyGrade = UI.getChildControl(self._contentGuildList, "StaticText_C_Grade")
@@ -299,7 +308,6 @@ function GuildListInfoPage:initialize()
   local _copySaying = UI.getChildControl(self._contentGuildList, "StaticText_C_Voice_Saying")
   local _copyListening = UI.getChildControl(self._contentGuildList, "StaticText_C_Voice_Listening")
   local _copyActivity = UI.getChildControl(self._contentGuildList, "StaticText_C_Activity")
-  local _copyPartLine = UI.getChildControl(self._contentGuildList, "Static_C_PartLine")
   local _copyContractButton = UI.getChildControl(self._contentGuildList, "Button_C_Contract")
   local _copyGuardHim = UI.getChildControl(self._contentGuildList, "Static_C_GuardHim")
   local _copyWarGradeButton = UI.getChildControl(self._contentGuildList, "Button_WarGrade")
@@ -382,7 +390,6 @@ function GuildListInfoPage:initialize()
     rtGuildListInfo._charName = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, self._contentGuildList, "StaticText_CharName_" .. pIndex)
     rtGuildListInfo._contributedTendency = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, self._contentGuildList, "StaticText_ContributedTendency_" .. pIndex)
     rtGuildListInfo._activity = UI.createControl(UCT.PA_UI_CONTROL_STATICTEXT, self._contentGuildList, "StaticText_Activity_" .. pIndex)
-    rtGuildListInfo._partLine = UI.createControl(UCT.PA_UI_CONTROL_STATIC, self._contentGuildList, "Static_C_PartLine_" .. pIndex)
     rtGuildListInfo._contractBtn = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, self._contentGuildList, "Button_C_Contract_" .. pIndex)
     rtGuildListInfo._guardHim = UI.createControl(UCT.PA_UI_CONTROL_STATIC, self._contentGuildList, "Static_C_GuardHim_" .. pIndex)
     CopyBaseProperty(_copyGrade, rtGuildListInfo._grade)
@@ -391,7 +398,6 @@ function GuildListInfoPage:initialize()
     CopyBaseProperty(_copyCharName, rtGuildListInfo._charName)
     CopyBaseProperty(_copyContributedTendency, rtGuildListInfo._contributedTendency)
     CopyBaseProperty(_copyActivity, rtGuildListInfo._activity)
-    CopyBaseProperty(_copyPartLine, rtGuildListInfo._partLine)
     CopyBaseProperty(_copyContractButton, rtGuildListInfo._contractBtn)
     CopyBaseProperty(_copyGuardHim, rtGuildListInfo._guardHim)
     rtGuildListInfo._grade:SetPosY(_constStartY + pIndex * 30)
@@ -400,7 +406,6 @@ function GuildListInfoPage:initialize()
     rtGuildListInfo._charName:SetPosY(_constStartY + pIndex * 30)
     rtGuildListInfo._contributedTendency:SetPosY(_constStartY + pIndex * 30)
     rtGuildListInfo._activity:SetPosY(_constStartY + pIndex * 30)
-    rtGuildListInfo._partLine:SetPosY(pIndex * 30)
     rtGuildListInfo._contractBtn:SetPosY(pIndex * 30 + 6)
     rtGuildListInfo._guardHim:SetPosY(pIndex * 30 + 8)
     rtGuildListInfo._guardHim:SetPosX(rtGuildListInfo._grade:GetTextSizeX() + 20)
@@ -411,7 +416,6 @@ function GuildListInfoPage:initialize()
     rtGuildListInfo._charName:SetIgnore(false)
     rtGuildListInfo._contributedTendency:SetIgnore(false)
     rtGuildListInfo._activity:SetIgnore(false)
-    rtGuildListInfo._partLine:SetIgnore(false)
     rtGuildListInfo._charName:addInputEvent("Mouse_LUp", "HandleClickedGuildMemberMenuButton(" .. pIndex .. ")")
     rtGuildListInfo._charName:addInputEvent("Mouse_On", "HandleToolTipChannelName( true,\t" .. pIndex .. ")")
     rtGuildListInfo._charName:addInputEvent("Mouse_Out", "HandleToolTipChannelName( false,\t" .. pIndex .. ")")
@@ -423,7 +427,6 @@ function GuildListInfoPage:initialize()
     rtGuildListInfo._charName:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
     rtGuildListInfo._contributedTendency:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
     rtGuildListInfo._activity:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
-    rtGuildListInfo._partLine:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
     rtGuildListInfo._contractBtn:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
     rtGuildListInfo._guardHim:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
     rtGuildListInfo._grade:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
@@ -432,7 +435,6 @@ function GuildListInfoPage:initialize()
     rtGuildListInfo._charName:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
     rtGuildListInfo._contributedTendency:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
     rtGuildListInfo._activity:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
-    rtGuildListInfo._partLine:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
     rtGuildListInfo._contractBtn:addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
     rtGuildListInfo._guardHim:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(false)")
     if true == isVoiceOpen then
@@ -453,13 +455,11 @@ function GuildListInfoPage:initialize()
       rtGuildListInfo._saying:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
       rtGuildListInfo._listening:addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
       rtGuildListInfo._saying:addInputEvent("Mouse_LUp", "HandleClickedVoiceChatSaying(" .. pIndex .. ")")
-      rtGuildListInfo._saying:addInputEvent("Mouse_On", "HandleToolTipVoiceIcon( true,\t" .. pIndex .. "," .. 0 .. ")")
-      rtGuildListInfo._saying:addInputEvent("Mouse_Out", "HandleToolTipVoiceIcon( false,\t" .. pIndex .. "," .. 0 .. ")")
-      rtGuildListInfo._saying:setTooltipEventRegistFunc("HandleToolTipVoiceIcon( true,\t" .. pIndex .. "," .. 0 .. ")")
+      rtGuildListInfo._saying:addInputEvent("Mouse_On", "HandleToolTipVoiceIcon( true, " .. pIndex .. "," .. 0 .. ")")
+      rtGuildListInfo._saying:addInputEvent("Mouse_Out", "HandleToolTipVoiceIcon( false, " .. pIndex .. "," .. 0 .. ")")
       rtGuildListInfo._listening:addInputEvent("Mouse_LUp", "HandleClick_GuildMemberList_Listening(" .. pIndex .. ")")
-      rtGuildListInfo._listening:addInputEvent("Mouse_On", "HandleToolTipVoiceIcon( true,\t" .. pIndex .. "," .. 1 .. ")")
-      rtGuildListInfo._listening:addInputEvent("Mouse_Out", "HandleToolTipVoiceIcon( false,\t" .. pIndex .. "," .. 1 .. ")")
-      rtGuildListInfo._listening:setTooltipEventRegistFunc("HandleToolTipVoiceIcon( true,\t" .. pIndex .. "," .. 1 .. ")")
+      rtGuildListInfo._listening:addInputEvent("Mouse_On", "HandleToolTipVoiceIcon( true, " .. pIndex .. "," .. 1 .. ")")
+      rtGuildListInfo._listening:addInputEvent("Mouse_Out", "HandleToolTipVoiceIcon( false, " .. pIndex .. "," .. 1 .. ")")
     end
     if isWarGradeOpen then
       rtGuildListInfo._warGradeBtn = UI.createControl(UCT.PA_UI_CONTROL_BUTTON, self._contentGuildList, "Button_C_WarGrade_" .. pIndex)
@@ -485,7 +485,6 @@ function GuildListInfoPage:initialize()
         rtGuildListInfo._warStateBtn:SetShow(isShow)
       end
       rtGuildListInfo._activity:SetShow(isShow)
-      rtGuildListInfo._partLine:SetShow(isShow)
       rtGuildListInfo._contractBtn:SetShow(isShow)
       rtGuildListInfo._guardHim:SetShow(isShow)
     end
@@ -504,7 +503,6 @@ function GuildListInfoPage:initialize()
         rtGuildListInfo._warStateBtn:SetIgnore(false)
       end
       rtGuildListInfo._activity:SetIgnore(isIgnore)
-      rtGuildListInfo._partLine:SetIgnore(isIgnore)
       rtGuildListInfo._guardHim:SetIgnore(isIgnore)
     end
     return rtGuildListInfo
@@ -531,12 +529,12 @@ function GuildListInfoPage:initialize()
     self._buttonList[index] = createListInfoButton(index)
     self._buttonList[index]:addInputEvent("Mouse_Out", "MouseOutGuildMenuButton()")
   end
-  Panel_Guild_List:SetChildIndex(staticText_Grade, 9999)
-  Panel_Guild_List:SetChildIndex(staticText_Level, 9999)
-  Panel_Guild_List:SetChildIndex(staticText_Class, 9999)
-  Panel_Guild_List:SetChildIndex(staticText_charName, 9999)
-  Panel_Guild_List:SetChildIndex(staticText_activity, 9999)
-  Panel_Guild_List:SetChildIndex(staticText_contract, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_Grade, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_Level, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_Class, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_charName, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_activity, 9999)
+  Panel_Guild_List:SetChildIndex(self.staticText_contract, 9999)
   GuildListInfoPage._buttonList[0]:SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WHISPER"))
   GuildListInfoPage._buttonList[1]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_2"))
   GuildListInfoPage._buttonList[2]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_3"))
@@ -555,14 +553,13 @@ function GuildListInfoPage:initialize()
   UI.deleteControl(_copySaying)
   UI.deleteControl(_copyListening)
   UI.deleteControl(_copyActivity)
-  UI.deleteControl(_copyPartLine)
   UI.deleteControl(_copyContractButton)
   UI.deleteControl(_copyButton)
   UI.deleteControl(_copyGuardHim)
   UI.deleteControl(_copyWarGradeButton)
   UI.deleteControl(_copyWarStateButton)
   _copyGrade, _copyLevel, _copyClass, _copyCharName, _copyContributedTendency, _copySaying, _copyListening = nil, nil, nil, nil, nil, nil, nil
-  _copyPartLine, _copyContractButton = nil, nil
+  _copyContractButton = nil
   _copyButton = nil
   _copyGuardHim, _copyWarGradeButton, _copyWarStateButton = nil, nil, nil
   frameSizeY = self._frameGuildList:GetSizeY()
@@ -759,11 +756,11 @@ end
 function checkVoiceChatMicTexture(idx, onOff)
   local sayControl = GuildListInfoPage._list[idx]._saying
   if onOff then
-    local x1, y1, x2, y2 = setTextureUV_Func(sayControl, 452, 70, 481, 93)
+    local x1, y1, x2, y2 = setTextureUV_Func(sayControl, 105, 169, 133, 197)
     sayControl:getBaseTexture():setUV(x1, y1, x2, y2)
     sayControl:setRenderTexture(sayControl:getBaseTexture())
   else
-    local x1, y1, x2, y2 = setTextureUV_Func(sayControl, 482, 70, 511, 93)
+    local x1, y1, x2, y2 = setTextureUV_Func(sayControl, 105, 198, 133, 226)
     sayControl:getBaseTexture():setUV(x1, y1, x2, y2)
     sayControl:setRenderTexture(sayControl:getBaseTexture())
   end
@@ -771,25 +768,26 @@ end
 function checkVoiceChatListenTexture(idx, onOff)
   local listenControl = GuildListInfoPage._list[idx]._listening
   if onOff then
-    local x1, y1, x2, y2 = setTextureUV_Func(listenControl, 422, 94, 451, 117)
+    local x1, y1, x2, y2 = setTextureUV_Func(listenControl, 134, 169, 162, 197)
     listenControl:getBaseTexture():setUV(x1, y1, x2, y2)
     listenControl:setRenderTexture(listenControl:getBaseTexture())
   else
-    local x1, y1, x2, y2 = setTextureUV_Func(listenControl, 452, 94, 481, 117)
+    local x1, y1, x2, y2 = setTextureUV_Func(listenControl, 134, 198, 162, 226)
     listenControl:getBaseTexture():setUV(x1, y1, x2, y2)
     listenControl:setRenderTexture(listenControl:getBaseTexture())
   end
 end
 function checkVoiceChatListenOtherTexture(onOff)
-  listening_VolumeButton:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+  local self = GuildListInfoPage
+  self.listening_VolumeButton:ChangeTextureInfoName("renewal/ui_icon/console_icon_01.dds")
   if onOff then
-    local x1, y1, x2, y2 = setTextureUV_Func(listening_VolumeButton, 422, 94, 451, 117)
-    listening_VolumeButton:getBaseTexture():setUV(x1, y1, x2, y2)
-    listening_VolumeButton:setRenderTexture(listening_VolumeButton:getBaseTexture())
+    local x1, y1, x2, y2 = setTextureUV_Func(self.listening_VolumeButton, 134, 169, 162, 197)
+    self.listening_VolumeButton:getBaseTexture():setUV(x1, y1, x2, y2)
+    self.listening_VolumeButton:setRenderTexture(self.listening_VolumeButton:getBaseTexture())
   else
-    local x1, y1, x2, y2 = setTextureUV_Func(listening_VolumeButton, 452, 94, 481, 117)
-    listening_VolumeButton:getBaseTexture():setUV(x1, y1, x2, y2)
-    listening_VolumeButton:setRenderTexture(listening_VolumeButton:getBaseTexture())
+    local x1, y1, x2, y2 = setTextureUV_Func(self.listening_VolumeButton, 134, 198, 162, 226)
+    self.listening_VolumeButton:getBaseTexture():setUV(x1, y1, x2, y2)
+    self.listening_VolumeButton:setRenderTexture(self.listening_VolumeButton:getBaseTexture())
   end
 end
 function checkIsBlockedPlayer(selectIndex)
@@ -824,7 +822,7 @@ function HandleClickedVoiceChatSaying(index)
       ToClient_StartVoiceChat()
     end
     if false == ToClient_IsConnectedMic() then
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._saying, 482, 70, 511, 93)
+      local x1, y1, x2, y2 = setTextureUV_Func(self._list[index]._saying, 105, 198, 133, 226)
       self._list[index]._saying:getBaseTexture():setUV(x1, y1, x2, y2)
       self._list[index]._saying:setRenderTexture(self._list[index]._saying:getBaseTexture())
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_Guild_List_NotConnectedMic"))
@@ -871,14 +869,14 @@ function HandleClicked_VoiceChatListening()
   checkVoiceChatListenTexture(memberIndex, isListening)
   checkVoiceChatListenOtherTexture(isListening)
   if not isListening then
-    listening_VolumeSlider:SetControlPos(0)
+    self.listening_VolumeSlider:SetControlPos(0)
     ToClient_setSpeakerVolume(0)
   else
-    listening_VolumeSlider:SetControlPos(100)
+    self.listening_VolumeSlider:SetControlPos(100)
     ToClient_setSpeakerVolume(100)
   end
-  listeningVol = math.ceil(listening_VolumeSlider:GetControlPos() * 100)
-  listening_VolumeValue:SetText(listeningVol .. "%")
+  listeningVol = math.ceil(self.listening_VolumeSlider:GetControlPos() * 100)
+  self.listening_VolumeValue:SetText(listeningVol .. "%")
   ToClient_VoiceChatChangeState(CppEnums.VoiceChatType.eVoiceChatType_Guild, myGuildMemberInfo:getUserNo(), isSaying, isListening, not isSelf)
   if false == _ContentsGroup_RemasterUI_Main_RightTop then
     FGlobal_VoiceChatState()
@@ -888,14 +886,15 @@ function HandleClicked_VoiceChatListening()
 end
 local prevVoiceChatListen = false
 function HandleClicked_VoiceChatListeningVolume()
+  local self = GuildListInfoPage
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   local dataIdx = tempGuildList[setVol_selectedMemberIdx + 1].idx
   local myGuildMemberInfo = myGuildListInfo:getMember(dataIdx)
   local isSaying = myGuildMemberInfo:isVoiceChatSpeak()
   local isListening = myGuildMemberInfo:isVoiceChatListen()
   prevVoiceChatListen = isListening
-  local volume = math.ceil(listening_VolumeSlider:GetControlPos() * 100)
-  listening_VolumeValue:SetText(volume .. "%")
+  local volume = math.ceil(self.listening_VolumeSlider:GetControlPos() * 100)
+  self.listening_VolumeValue:SetText(volume .. "%")
   if volume > 0 then
     isListening = true
     checkVoiceChatListenOtherTexture(true)
@@ -1082,7 +1081,6 @@ function HandleToolTipChannelName(isShow, index)
     name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_JOINCHANNEL_FOR", "guildMemberName", guildMemberName)
     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_CHANNEL_MEMBER", "channelName", channelName)
     control = self._list[index]._charName
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
     if isShow == true then
       TooltipSimple_Show(control, name, desc)
     else
@@ -1101,7 +1099,6 @@ function HandleToolTipVoiceIcon(isShow, index, tipType)
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_VOICECHATICON_TOOLTIP_SPEAKER_DESC")
     control = self._list[index]._listening
   end
-  registTooltipControl(control, Panel_Tooltip_SimpleText)
   if isShow == true then
     TooltipSimple_Show(control, name, desc)
   else
@@ -1113,31 +1110,33 @@ function HandleClick_GuildMemberList_Listening(index)
   if nil == myGuildListInfo then
     return
   end
+  local self = GuildListInfoPage
   local dataIdx = tempGuildList[index + 1].idx
   local myGuildMemberInfo = myGuildListInfo:getMember(dataIdx)
   if nil == myGuildMemberInfo then
     return
   end
-  listening_Volume:SetShow(true)
+  self.listening_Volume:SetShow(true)
   if myGuildMemberInfo:isSelf() then
     setVol_selectedMemberVol = ToClient_getSpeakerVolume()
   else
     setVol_selectedMemberVol = myGuildMemberInfo:getVoiceVolume()
   end
-  listening_VolumeSlider:SetControlPos(setVol_selectedMemberVol)
+  self.listening_VolumeSlider:SetControlPos(setVol_selectedMemberVol)
   if setVol_selectedMemberVol > 0 then
     checkVoiceChatListenOtherTexture(true)
   else
     checkVoiceChatListenOtherTexture(false)
   end
-  listening_VolumeValue:SetText(setVol_selectedMemberVol .. "%")
+  self.listening_VolumeValue:SetText(setVol_selectedMemberVol .. "%")
   setVol_selectedMemberIdx = index
   local targetControl = GuildListInfoPage._list[index]._listening
-  listening_Volume:SetPosX(targetControl:GetPosX() - listening_Volume:GetSizeX() / 2)
-  listening_Volume:SetPosY(targetControl:GetPosY() + targetControl:GetSizeY() * 2 + 45)
+  self.listening_Volume:SetPosX(targetControl:GetPosX() - self.listening_Volume:GetSizeX() / 2)
+  self.listening_Volume:SetPosY(targetControl:GetPosY() + targetControl:GetSizeY() * 2 + 45)
 end
 function HandleOnOut_GuildMemberList_VolumeClose()
-  listening_Volume:SetShow(false)
+  local self = GuildListInfoPage
+  self.listening_Volume:SetShow(false)
   setVol_selectedMemberIdx = 0
 end
 function HandleClickedWarGrade(index)
@@ -1194,13 +1193,13 @@ function GuildListMouseScrollEvent(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 function GuildListInfoPage:TitleLineReset()
-  staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION"))
-  staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL"))
-  staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS"))
-  staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME"))
-  staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY"))
-  staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE"))
-  staticText_contributedTendency:SetText(text_contributedTendency)
+  self.staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION"))
+  self.staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL"))
+  self.staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS"))
+  self.staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME"))
+  self.staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY"))
+  self.staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE"))
+  self.staticText_contributedTendency:SetText(text_contributedTendency)
 end
 function GuildListInfoPage:SetGuildList()
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -1336,69 +1335,70 @@ end
 function HandleClicked_GuildListSort(sortType)
   _selectSortType = sortType
   GuildListInfoPage:TitleLineReset()
+  local self = GuildListInfoPage
   if 0 == sortType then
     if false == _listSort.grade then
-      staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\178")
+      self.staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\178")
       _listSort.grade = true
     else
-      staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\188")
+      self.staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\188")
       _listSort.grade = false
     end
     table.sort(tempGuildList, guildListCompareGrade)
   elseif 1 == sortType then
     if false == _listSort.level then
-      staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL") .. "\226\150\178")
+      self.staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL") .. "\226\150\178")
       _listSort.level = true
     else
-      staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL") .. "\226\150\188")
+      self.staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL") .. "\226\150\188")
       _listSort.level = false
     end
     table.sort(tempGuildList, guildListCompareLev)
   elseif 2 == sortType then
     if false == _listSort.class then
-      staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS") .. "\226\150\178")
+      self.staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS") .. "\226\150\178")
       _listSort.class = true
     else
-      staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS") .. "\226\150\188")
+      self.staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS") .. "\226\150\188")
       _listSort.class = false
     end
     table.sort(tempGuildList, guildListCompareClass)
   elseif 3 == sortType then
     if false == _listSort.name then
-      staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME") .. "\226\150\178")
+      self.staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME") .. "\226\150\178")
       _listSort.name = true
     else
-      staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME") .. "\226\150\188")
+      self.staticText_charName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CHARNAME") .. "\226\150\188")
       _listSort.name = false
     end
     table.sort(tempGuildList, guildListCompareName)
   elseif 4 == sortType then
     if false == _listSort.ap then
-      staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY") .. "\226\150\178")
+      self.staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY") .. "\226\150\178")
       _listSort.ap = true
     else
-      staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY") .. "\226\150\188")
+      self.staticText_activity:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_ACTIVITY") .. "\226\150\188")
       _listSort.ap = false
     end
     table.sort(tempGuildList, guildListCompareAp)
   elseif 5 == sortType then
     if false == _listSort.expiration then
-      staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE") .. "\226\150\178")
+      self.staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE") .. "\226\150\178")
       _listSort.expiration = true
     else
-      staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE") .. "\226\150\188")
+      self.staticText_contract:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_HIRE") .. "\226\150\188")
       _listSort.expiration = false
     end
     table.sort(tempGuildList, guildListCompareExpiration)
   elseif 6 == sortType then
     if false == _listSort.wp then
-      staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\178")
+      self.staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\178")
       _listSort.wp = true
     elseif false == _listSort.kp then
-      staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\178")
+      self.staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\178")
       _listSort.kp = true
     else
-      staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\188")
+      self.staticText_contributedTendency:SetText(text_contributedTendency .. "\226\150\188")
       _listSort.wp = false
       _listSort.kp = false
     end
@@ -1406,17 +1406,17 @@ function HandleClicked_GuildListSort(sortType)
   elseif 7 == sortType then
     if true == _ContentsGroup_NewSiegeRule then
       if false == _listSort.siegegrade then
-        staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\178")
+        self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\178")
         _listSort.siegegrade = true
       else
-        staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\188")
+        self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARPARTICIPANT_TITLE") .. "\226\150\188")
         _listSort.siegegrade = false
       end
     elseif false == _listSort.siegegrade then
-      staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE") .. "\226\150\178")
+      self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE") .. "\226\150\178")
       _listSort.siegegrade = true
     else
-      staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE") .. "\226\150\188")
+      self.staticText_WarGrade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDLIST_WARGRADETITLE") .. "\226\150\188")
       _listSort.siegegrade = false
     end
     table.sort(tempGuildList, guildListSiegeGrade)
@@ -1425,7 +1425,7 @@ function HandleClicked_GuildListSort(sortType)
 end
 function GuildListInfoPage:GuildListSortSet()
   GuildListInfoPage:TitleLineReset()
-  staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\178")
+  self.staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "\226\150\178")
   _listSort.grade = true
   table.sort(tempGuildList, guildListCompareGrade)
 end
@@ -1457,7 +1457,7 @@ function GuildListInfoPage:UpdateData()
   end
   local businessFunds_s64 = myGuildListInfo:getGuildBusinessFunds_s64()
   local guildGrade = myGuildListInfo:getGuildGrade()
-  GuildListInfoPage._textBusinessFundsBG:SetText("<PAColor0xffffebbc>" .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
+  GuildListInfoPage._textBusinessFundsBG:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_QUEST_GUILDMONEY", "getGuildMoney", makeDotMoney(businessFunds_s64)))
   local memberCount = myGuildListInfo:getMemberCount()
   local isGuildMaster = getSelfPlayer():get():isGuildMaster()
   local isGuildSubMaster = getSelfPlayer():get():isGuildSubMaster()
@@ -1490,7 +1490,6 @@ function GuildListInfoPage:UpdateData()
     if false == myGuildMemberInfo:isSelf() then
       contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2
     end
-    btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
   end
   self._contentGuildList:SetSize(self._frameGuildList:GetSizeX(), contentSizeY)
   if contentSizeY <= frameSizeY then
@@ -1516,27 +1515,21 @@ function GuildListInfoPage:setGradeInfo(control, index, grade)
   end
   control:SetText("")
   control:SetSize(43, 26)
+  control:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_ETC_Guild.dds")
   if 0 == grade then
-    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 424, 159, 467, 185)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 224, 227, 267, 253)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
-    control:setRenderTexture(control:getBaseTexture())
   elseif 1 == grade then
-    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 468, 159, 511, 185)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 224, 200, 267, 226)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
-    control:setRenderTexture(control:getBaseTexture())
   elseif 2 == grade then
-    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 468, 219, 511, 245)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 224, 146, 267, 172)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
-    control:setRenderTexture(control:getBaseTexture())
   elseif 3 == grade then
-    control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 424, 219, 467, 245)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 224, 173, 267, 199)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
-    control:setRenderTexture(control:getBaseTexture())
   end
+  control:setRenderTexture(control:getBaseTexture())
   control:addInputEvent("Mouse_On", "GuildListInfoTooltip_Grade( true, " .. index .. ", " .. grade .. " )")
   control:addInputEvent("Mouse_Out", "GuildListInfoTooltip_Grade( false, " .. index .. ", " .. grade .. " )")
 end
@@ -1576,7 +1569,7 @@ function GuildListInfoPage:getClassText(classType)
   elseif UI_Class.ClassType_Lahn == classType then
     return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN")
   elseif UI_Class.ClassType_Orange == classType then
-    return PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN") .. "\235\143\153\235\172\152"
+    return PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_ELFMAN")
   else
     return "-"
   end
@@ -1724,7 +1717,7 @@ function GuildListInfoPage:setVoiceButton(index, guildMember, control, isMyInfo)
   if true == isVoiceOpen then
     if guildMember:isVoiceChatSpeak() then
       if guildMember:isVoiceSpeaking() then
-        local x1, y1, x2, y2 = setTextureUV_Func(control._saying, 422, 70, 451, 93)
+        local x1, y1, x2, y2 = setTextureUV_Func(control._saying, 105, 169, 133, 197)
         control._saying:getBaseTexture():setUV(x1, y1, x2, y2)
         control._saying:setRenderTexture(control._saying:getBaseTexture())
       else
@@ -1821,11 +1814,11 @@ function GuildListInfoPage:UpdateVoiceDataByUserNo(userNo)
   end
   if myGuildMemberInfo:isVoiceChatSpeak() then
     if myGuildMemberInfo:isVoiceSpeaking() then
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[uiIndex]._saying, 422, 70, 451, 93)
+      local x1, y1, x2, y2 = setTextureUV_Func(self._list[uiIndex]._saying, 105, 169, 133, 197)
       self._list[uiIndex]._saying:getBaseTexture():setUV(x1, y1, x2, y2)
       self._list[uiIndex]._saying:setRenderTexture(self._list[uiIndex]._saying:getBaseTexture())
     else
-      local x1, y1, x2, y2 = setTextureUV_Func(self._list[uiIndex]._saying, 452, 70, 481, 93)
+      local x1, y1, x2, y2 = setTextureUV_Func(self._list[uiIndex]._saying, 105, 198, 133, 226)
       self._list[uiIndex]._saying:getBaseTexture():setUV(x1, y1, x2, y2)
       self._list[uiIndex]._saying:setRenderTexture(self._list[uiIndex]._saying:getBaseTexture())
     end
@@ -1858,30 +1851,30 @@ function HandleClicked_GuildMasterMandate(index)
   self:UpdateData()
 end
 function GuildListControl_ChangeTexture_Expiration(control, state)
-  control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
+  control:ChangeTextureInfoName("renewal/pcremaster/remaster_etc_guild.dds")
   if 2 == state then
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 376, 24, 398, 46)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 116, 223, 138)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
     control:setRenderTexture(control:getBaseTexture())
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 399, 24, 421, 46)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 139, 223, 161)
     control:getOnTexture():setUV(x1, y1, x2, y2)
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 422, 24, 444, 46)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 162, 223, 184)
     control:getClickTexture():setUV(x1, y1, x2, y2)
   elseif 0 == state then
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 422, 47, 444, 69)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 47, 223, 69)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
     control:setRenderTexture(control:getBaseTexture())
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 445, 47, 467, 69)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 70, 223, 92)
     control:getOnTexture():setUV(x1, y1, x2, y2)
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 468, 47, 490, 69)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 93, 223, 115)
     control:getClickTexture():setUV(x1, y1, x2, y2)
   elseif 1 == state then
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 376, 1, 398, 23)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 185, 223, 207)
     control:getBaseTexture():setUV(x1, y1, x2, y2)
     control:setRenderTexture(control:getBaseTexture())
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 399, 1, 421, 23)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 208, 223, 230)
     control:getOnTexture():setUV(x1, y1, x2, y2)
-    local x1, y1, x2, y2 = setTextureUV_Func(control, 422, 1, 444, 23)
+    local x1, y1, x2, y2 = setTextureUV_Func(control, 201, 231, 223, 253)
     control:getClickTexture():setUV(x1, y1, x2, y2)
   end
 end
@@ -1894,7 +1887,7 @@ function GuildListInfoPage:Show()
     self:GuildListSortSet()
     self:UpdateData()
     FGlobal_Notice_Update()
-    listening_Volume:SetShow(false)
+    self.listening_Volume:SetShow(false)
     ToClient_RequestWarehouseInfo()
     GuildList_PanelResize_ByFontSize()
   end
@@ -1995,33 +1988,34 @@ function FGlobal_GuildMenuButtonHide()
   GuildListInfoPage._buttonListBG:SetShow(false)
 end
 function GuildList_PanelResize_ByFontSize()
+  local self = GuildListInfoPage
   if 0 < ToClient_getGameOptionControllerWrapper():getUIFontSizeType() and isVoiceOpen then
-    staticText_charName:SetSize(135, 20)
-    staticText_charName:SetPosX(210)
-    staticText_activity:SetPosX(400)
-    staticText_contributedTendency:SetPosX(490)
-    staticText_Voice:SetPosX(570)
+    self.staticText_charName:SetSize(135, 20)
+    self.staticText_charName:SetPosX(240)
+    self.staticText_activity:SetPosX(500)
+    self.staticText_contributedTendency:SetPosX(590)
+    self.staticText_Voice:SetPosX(670)
     if isWarGradeOpen then
-      staticText_WarGrade:SetPosX(650)
-      staticText_contract:SetPosX(730)
+      self.staticText_WarGrade:SetPosX(760)
+      self.staticText_contract:SetPosX(830)
     else
-      staticText_contract:SetPosX(680)
+      self.staticText_contract:SetPosX(680)
     end
   else
-    staticText_charName:SetSize(200, 20)
-    staticText_charName:SetPosX(215)
-    staticText_activity:SetPosX(419)
+    self.staticText_charName:SetSize(240, 20)
+    self.staticText_charName:SetPosX(240)
+    self.staticText_activity:SetPosX(500)
     if isVoiceOpen then
-      staticText_contributedTendency:SetPosX(495)
+      self.staticText_contributedTendency:SetPosX(590)
     else
-      staticText_contributedTendency:SetPosX(535)
+      self.staticText_contributedTendency:SetPosX(535)
     end
-    staticText_Voice:SetPosX(580)
+    self.staticText_Voice:SetPosX(670)
     if isWarGradeOpen then
-      staticText_WarGrade:SetPosX(660)
-      staticText_contract:SetPosX(730)
+      self.staticText_WarGrade:SetPosX(760)
+      self.staticText_contract:SetPosX(830)
     else
-      staticText_contract:SetPosX(680)
+      self.staticText_contract:SetPosX(680)
     end
   end
   if isVoiceOpen then
@@ -2032,15 +2026,15 @@ function GuildList_PanelResize_ByFontSize()
         rtGuildListInfo._charName:SetPosX(210)
         rtGuildListInfo._activity:SetPosX(370)
         rtGuildListInfo._contributedTendency:SetPosX(470)
-        rtGuildListInfo._saying:SetPosX(575)
-        rtGuildListInfo._listening:SetPosX(597)
+        rtGuildListInfo._saying:SetPosX(668)
+        rtGuildListInfo._listening:SetPosX(690)
       else
         rtGuildListInfo._charName:SetSize(240, 20)
-        rtGuildListInfo._charName:SetPosX(180)
-        rtGuildListInfo._activity:SetPosX(390)
-        rtGuildListInfo._contributedTendency:SetPosX(480)
-        rtGuildListInfo._saying:SetPosX(585)
-        rtGuildListInfo._listening:SetPosX(607)
+        rtGuildListInfo._charName:SetPosX(230)
+        rtGuildListInfo._activity:SetPosX(470)
+        rtGuildListInfo._contributedTendency:SetPosX(570)
+        rtGuildListInfo._saying:SetPosX(668)
+        rtGuildListInfo._listening:SetPosX(690)
       end
     end
   else
@@ -2055,9 +2049,9 @@ function GuildList_PanelResize_ByFontSize()
   for index = 0, _constGuildListMaxCount - 1 do
     local rtGuildListInfo = GuildListInfoPage._list[index]
     if isWarGradeOpen then
-      rtGuildListInfo._warGradeBtn:SetPosX(660)
-      rtGuildListInfo._warStateBtn:SetPosX(660)
-      rtGuildListInfo._contractBtn:SetPosX(755)
+      rtGuildListInfo._warGradeBtn:SetPosX(760)
+      rtGuildListInfo._warStateBtn:SetPosX(760)
+      rtGuildListInfo._contractBtn:SetPosX(850)
     else
       rtGuildListInfo._contractBtn:SetPosX(705)
     end

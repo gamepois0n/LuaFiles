@@ -254,6 +254,7 @@ function InputMLUp_GuildMark_Close()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMark")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function InputMLUp_GuildMark_Confirm()
@@ -285,6 +286,7 @@ function PaGlobalFunc_GuildMark_ChangeMarkContinue()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMark")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   guildMarkUpdateForXBox(self._currentBgIdx, self._currentIconIdx, false)
   self:close()
 end
@@ -307,6 +309,7 @@ function InputMLUp_GuildMark_SelectMarkBackground(idx)
   self._ui.stc_CurrentBg:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.stc_CurrentBg:setRenderTexture(self._ui.stc_CurrentBg:getBaseTexture())
   self._currentBgIdx = idx
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:isCanRegistMark()
 end
 function InputMLUp_GuildMark_SelectMarkIcon(idx)
@@ -328,6 +331,7 @@ function InputMLUp_GuildMark_SelectMarkIcon(idx)
   self._ui.stc_CurrentIcon:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.stc_CurrentIcon:setRenderTexture(self._ui.stc_CurrentIcon:getBaseTexture())
   self._currentIconIdx = idx
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   self:isCanRegistMark()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_GuildMark_Init")

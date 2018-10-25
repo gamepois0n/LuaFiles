@@ -27,7 +27,6 @@ local QuestWindow = {
     btn_Close = UI.getChildControl(Panel_Window_Quest_New, "Button_Win_Close"),
     btn_Question = UI.getChildControl(Panel_Window_Quest_New, "Button_Question"),
     favorTitle_BG = UI.getChildControl(Panel_Window_Quest_New, "Static_FavorLineBG"),
-    questListWindow_BG = UI.getChildControl(Panel_Window_Quest_New, "Static_BG"),
     contentBG = UI.getChildControl(Panel_Window_Quest_New, "Static_LineBG"),
     scroll = UI.getChildControl(Panel_Window_Quest_New, "Scroll_CheckQuestList"),
     groupTypeBG = UI.getChildControl(Panel_Window_Quest_New, "Static_GroupTypeBG"),
@@ -71,8 +70,6 @@ QuestWindow.ui.chkEmptyGroupHide = UI.getChildControl(QuestWindow.ui.groupTypeBG
 QuestWindow.ui.favorTitle_BG:SetNotAbleMasking(true)
 QuestWindow.ui.hideCompBtn = UI.getChildControl(QuestWindow.ui.ListFilterBG, "CheckButton_Complete")
 QuestWindow.ui.favorTitle:SetNotAbleMasking(true)
-QuestWindow.ui.questListWindow_BG:SetNotAbleMasking(true)
-QuestWindow.ui.questListWindow_BG:setGlassBackground(true)
 QuestWindow.ui.contentBG:SetNotAbleMasking(true)
 QuestWindow.ui.contentBG:SetAlpha(0.8)
 QuestWindow.ui.contentBG:SetIgnore(false)
@@ -274,11 +271,8 @@ function QuestWindow:init()
     control:addInputEvent("Mouse_LUp", "QuestWindow_SelectQuestFavorType(" .. ii .. ")")
     control:SetNotAbleMasking(true)
     if 5 == controlIdNumber then
-      control:SetTextMode(UI_TM.eTextMode_LimitText)
     else
-      control:SetTextMode(UI_TM.eTextMode_None)
     end
-    control:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUEST_NEW_FAVORTYPE" .. controlIdNumber))
     control:addInputEvent("Mouse_On", "QUestWindow_SelectQuestFavorTypeSimpleTooltip( true, " .. ii .. " )")
     control:addInputEvent("Mouse_Out", "QUestWindow_SelectQuestFavorTypeSimpleTooltip( false, " .. ii .. " )")
     self.uiPool.questFavorType[ii] = control
@@ -293,8 +287,8 @@ function QuestWindow:init()
     groupSlot.name = UI.createAndCopyBasePropertyControl(baseGroupControl, "StaticText_QuestName", groupSlot.bg, "QuestWindow_GroupName_" .. slotIdx)
     groupSlot.expandIcon = UI.createAndCopyBasePropertyControl(baseGroupControl, "Static_QuestExpanded", groupSlot.bg, "QuestWindow_GroupQuestExpanded_" .. slotIdx)
     groupSlot.completePercent = UI.createAndCopyBasePropertyControl(baseGroupControl, "StaticText_CompletePercent", groupSlot.bg, "QuestWindow_GroupCompletePercent_" .. slotIdx)
-    groupSlot.bg:SetPosX(5)
-    groupSlot.bg:SetPosY(slotIdx * (groupSlot.bg:GetSizeY() + 5) + 5)
+    groupSlot.bg:SetPosX(10)
+    groupSlot.bg:SetPosY(slotIdx * (groupSlot.bg:GetSizeY() + 5) + 45)
     groupSlot.bg:SetShow(false)
     groupSlot.bg:addInputEvent("Mouse_UpScroll", "HandleWheel_QuestWindow( true )")
     groupSlot.bg:addInputEvent("Mouse_DownScroll", "HandleWheel_QuestWindow( false )")
@@ -320,8 +314,8 @@ function QuestWindow:init()
     listSlot.btnGiveup = UI.createAndCopyBasePropertyControl(baseListControl, "Checkbox_ListMain_QuestGiveup", listSlot.bg, "QuestWindow_ListGiveup_" .. slotIdx)
     listSlot.btnReward = UI.createAndCopyBasePropertyControl(baseListControl, "Checkbox_ListMain_QuestReward", listSlot.bg, "QuestWindow_ListReward_" .. slotIdx)
     listSlot.completeCount = UI.createAndCopyBasePropertyControl(baseListControl, "StaticText_ListMain_GroupCompleteCount", listSlot.bg, "QuestWindow_ListCompleteCount_" .. slotIdx)
-    listSlot.bg:SetPosX(5)
-    listSlot.bg:SetPosY(slotIdx * (listSlot.bg:GetSizeY() + 5) + 5)
+    listSlot.bg:SetPosX(10)
+    listSlot.bg:SetPosY(slotIdx * (listSlot.bg:GetSizeY() + 5) + 45)
     listSlot.bg:SetShow(false)
     listSlot.name:SetTextMode(UI_TM.eTextMode_LimitText)
     listSlot.bg:addInputEvent("Mouse_UpScroll", "HandleWheel_QuestWindow( true )")
@@ -1486,8 +1480,23 @@ function QuestWindow:update()
             418
           }
         }
+        local textureArray = {
+          [0] = {
+            215,
+            164,
+            235,
+            184
+          },
+          [1] = {
+            194,
+            164,
+            214,
+            184
+          }
+        }
         local expandIcon = self.uiPool.groupTitle[uiCount].expandIcon
         expandIcon:ChangeTextureInfoName("new_ui_common_forlua/default/default_buttons_03.dds")
+        expandIcon:ChangeTextureInfoName("renewal/pcremaster/remaster_common_00.dds")
         local x1, y1, x2, y2 = setTextureUV_Func(expandIcon, textureArray[expandCheckKey][1], textureArray[expandCheckKey][2], textureArray[expandCheckKey][3], textureArray[expandCheckKey][4])
         expandIcon:getBaseTexture():setUV(x1, y1, x2, y2)
         expandIcon:setRenderTexture(expandIcon:getBaseTexture())

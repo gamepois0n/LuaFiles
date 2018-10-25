@@ -117,8 +117,8 @@ function Panel_WebControl_Initialize()
   Panel_WebControl:SetShow(false, false)
   html_WebHelper_Control:SetHorizonCenter()
   html_WebHelper_Control:ResetUrl()
-  html_WebHelper_Control:SetSize(960, 600)
-  html_WebHelper_Control:SetSpanSize(0, 5)
+  html_WebHelper_Control:SetSize(956, 600)
+  html_WebHelper_Control:SetSpanSize(0, 35)
   html_WebHelper_Control:SetShow(false)
   local btnHelpSizeX = self._btn_KeyHelp:GetSizeX() + 23
   local btnHelpTextPosX = btnHelpSizeX - btnHelpSizeX / 2 - self._btn_KeyHelp:GetTextSizeX() / 2
@@ -320,8 +320,8 @@ function Panel_WebControl_TakeAndShow(helpType)
   if isGameTypeTaiwan() or isGameTypeEnglish() or isGameTypeKorea() or isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
     html_WebHelper_Control:SetIME(true)
   end
-  html_WebHelper_Control:SetSize(960, 600)
-  html_WebHelper_Control:SetPosY(40)
+  html_WebHelper_Control:SetSize(956, 600)
+  html_WebHelper_Control:SetPosY(65)
   html_WebHelper_Control:SetSpanSize(0, 5)
   html_WebHelper_Control:SetShow(true)
 end

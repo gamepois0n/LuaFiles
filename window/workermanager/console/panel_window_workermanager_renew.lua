@@ -120,9 +120,9 @@ function workerManager:initContorl()
     control._static_SkillSlotBg = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "Static_SkillSlotBg" .. index)
     control._static_SkillSlot = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "Static_SkillSlot" .. index)
     control._staticText_SkillTitle = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "StaticText_SkillTitle" .. index)
-    control._staticText_SkillTitle:SetSize(240, 20)
+    control._staticText_SkillTitle:SetSize(300, 20)
     control._staticText_SkillDesc = UI.getChildControl(workerManagerUI._static_WorkerSkillBg, "StaticText_SkillDesc" .. index)
-    control._staticText_SkillDesc:SetSize(240, 47)
+    control._staticText_SkillDesc:SetSize(300, 47)
     workerManagerUI._skillSlot[index] = control
   end
   workerManagerUI._upgradeSlot = {}
@@ -163,7 +163,7 @@ function workerManager:initContorl()
   workerManagerUI._list2_Worker:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
 end
 function workerManager:registInputEvent()
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_LB, "PaGlobalFunc_WorkerManager_ChangeTab(-1)")
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_RB, "PaGlobalFunc_WorkerManager_ChangeTab(1)")
     Panel_Window_WorkerManager_Renew:registerPadEvent(__eConsoleUIPadEvent_RTPress_A, "PaGlobalFunc_WorkerManager_WorkerRestore(true)")
@@ -177,7 +177,7 @@ function workerManager:registInputEvent()
 end
 function workerManager:setButtonString()
   local workerManagerUI = self._ui
-  if true == ToClient_isXBox() then
+  if true == ToClient_isConsole() then
     workerManagerUI._xboxUI._staticText_Restore_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_RESTORE"))
     workerManagerUI._xboxUI._staticText_Redo_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_TOOLTIP_REPEAT_NAME"))
     workerManagerUI._xboxUI._staticText_DoFire_ConsoleUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_BUTTONFIRE"))
@@ -329,7 +329,7 @@ function workerManager:open()
     return
   end
   Panel_Window_WorkerManager_Renew:SetShow(true)
-  local isConsole = ToClient_isXBox()
+  local isConsole = ToClient_isConsole()
   self:setShowUI(self._ui._pcUI, not isConsole)
   self:setShowUI(self._ui._xboxUI, isConsole)
 end
@@ -357,6 +357,7 @@ function workerManager:close()
   Panel_Window_WorkerManager_Renew:SetShow(false)
 end
 function PaGlobalFunc_WorkerManager_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   workerManager:close()
 end
 function workerManager:changeTab(changeValue)
@@ -406,6 +407,7 @@ function workerManager:workerRestore(isRestoreAll)
   PaGlobalFunc_WorkerManager_Restore_Open(isRestoreAll)
 end
 function PaGlobalFunc_WorkerManager_WorkerRestore(isRestoreAll)
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   workerManager:workerRestore(isRestoreAll)
 end
 function workerManager:workerRepeat(workerNoRaw)
@@ -482,6 +484,7 @@ function workerManager:workerFire()
   local function do_CheckedWorker_Fire()
     PaGlobalFunc_WorkerManager_TemporaryOpen()
     local workerNo_64 = tonumber64(self._selectedWorker)
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     ToClient_requestDeleteMyWorker(WorkerNo(workerNo_64))
     self._selectedWorker = nil
     self:update()
@@ -712,7 +715,7 @@ function workerManager:setWorkerBaseInfo(workerNoRawStr)
   workerManagerUI._static_WorkerImage:ChangeTextureInfoName(workerWrapperLua:getWorkerIcon())
   local uiScale = ToClient_getGameOptionControllerWrapper():getUIScale()
   local radius = workerManagerUI._static_WorkerImage:GetSizeX() * 0.5 * uiScale
-  local position = float2(workerManagerUI._static_WorkerImage:GetPosX() + radius / 2 / uiScale - 3, workerManagerUI._static_WorkerImage:GetPosY() + radius / 2 / uiScale - 3)
+  local position = float2(30 + radius / 2 / uiScale - 3, workerManagerUI._static_WorkerImage:GetPosY() + radius / 2 / uiScale - 3)
   workerManagerUI._static_WorkerImage:SetCircularClip(radius, position)
   workerManagerUI._staticText_WorkerTitle:SetText(titleText)
   workerManagerUI._staticText_Node:SetText(ToClient_GetNodeNameByWaypointKey(workerWrapperLua:getHomeWaypoint()))
@@ -762,8 +765,7 @@ function workerManager:setSkillInfoToSlot(skillIdx, skillStaticStatusWrapper)
   slotControl._static_SkillSlot:ChangeTextureInfoNameAsync(skillStaticStatusWrapper:getIconPath())
   slotControl._staticText_SkillTitle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
   slotControl._staticText_SkillTitle:SetText(skillStaticStatusWrapper:getName())
-  slotControl._staticText_SkillDesc:setLineCountByLimitAutoWrap(2)
-  slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
+  slotControl._staticText_SkillDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   slotControl._staticText_SkillDesc:SetText(skillStaticStatusWrapper:getDescription())
   return true
 end

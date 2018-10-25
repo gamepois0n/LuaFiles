@@ -25,20 +25,21 @@ function GuildWharfInfoHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
 end
+local infoBg = UI.getChildControl(Panel_Window_GuildWharfInfo, "Wharf_Info_Ability")
 local guildWharfInfo = {
-  _staticName = UI.getChildControl(Panel_Window_GuildWharfInfo, "StaticText_Name"),
-  _staticText_GaugeBar_Hp = UI.getChildControl(Panel_Window_GuildWharfInfo, "HP_GaugeBar"),
-  _staticText_GaugeBar_Mp = UI.getChildControl(Panel_Window_GuildWharfInfo, "MP_GaugeBar"),
-  _staticText_GaugeBar_Weight = UI.getChildControl(Panel_Window_GuildWharfInfo, "Weight_GaugeBar"),
-  _staticText_Hp = UI.getChildControl(Panel_Window_GuildWharfInfo, "HP_Value"),
-  _staticText_Mp = UI.getChildControl(Panel_Window_GuildWharfInfo, "MP_Value"),
-  _staticText_Weight = UI.getChildControl(Panel_Window_GuildWharfInfo, "Weight_Value"),
-  _staticText_MoveSpeed = UI.getChildControl(Panel_Window_GuildWharfInfo, "MaxMoveSpeedValue"),
-  _staticText_Acceleration = UI.getChildControl(Panel_Window_GuildWharfInfo, "AccelerationValue"),
-  _staticText_Cornering = UI.getChildControl(Panel_Window_GuildWharfInfo, "CorneringSpeedValue"),
-  _staticText_BrakeSpeed = UI.getChildControl(Panel_Window_GuildWharfInfo, "BrakeSpeedValue"),
-  _deadCount = UI.getChildControl(Panel_Window_GuildWharfInfo, "StaticText_DeadCount"),
-  _deadCountValue = UI.getChildControl(Panel_Window_GuildWharfInfo, "StaticText_DeadCountValue")
+  _staticName = UI.getChildControl(infoBg, "StaticText_Name"),
+  _staticText_GaugeBar_Hp = UI.getChildControl(infoBg, "HP_GaugeBar"),
+  _staticText_GaugeBar_Mp = UI.getChildControl(infoBg, "MP_GaugeBar"),
+  _staticText_GaugeBar_Weight = UI.getChildControl(infoBg, "Weight_GaugeBar"),
+  _staticText_Hp = UI.getChildControl(infoBg, "HP_Value"),
+  _staticText_Mp = UI.getChildControl(infoBg, "MP_Value"),
+  _staticText_Weight = UI.getChildControl(infoBg, "Weight_Value"),
+  _staticText_MoveSpeed = UI.getChildControl(infoBg, "MaxMoveSpeedValue"),
+  _staticText_Acceleration = UI.getChildControl(infoBg, "AccelerationValue"),
+  _staticText_Cornering = UI.getChildControl(infoBg, "CorneringSpeedValue"),
+  _staticText_BrakeSpeed = UI.getChildControl(infoBg, "BrakeSpeedValue"),
+  _deadCount = UI.getChildControl(infoBg, "StaticText_DeadCount"),
+  _deadCountValue = UI.getChildControl(infoBg, "StaticText_DeadCountValue")
 }
 function guildWharfInfo:init()
 end
@@ -53,9 +54,9 @@ function guildWharfInfo:update()
   local GuageWeight = Int64toInt32(Weight)
   local GuageMaxWeight = Int64toInt32(MaxWeight)
   self._staticName:SetText(servantInfo:getName())
-  self._staticText_GaugeBar_Hp:SetSize(2.5 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
-  self._staticText_GaugeBar_Mp:SetSize(2.5 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
-  self._staticText_GaugeBar_Weight:SetSize(2.5 * (GuageWeight / GuageMaxWeight * 100), 6)
+  self._staticText_GaugeBar_Hp:SetSize(2.7 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
+  self._staticText_GaugeBar_Mp:SetSize(2.7 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
+  self._staticText_GaugeBar_Weight:SetSize(2.7 * (GuageWeight / GuageMaxWeight * 100), 6)
   self._staticText_Hp:SetText(makeDotMoney(servantInfo:getHp()) .. " / " .. makeDotMoney(servantInfo:getMaxHp()))
   self._staticText_Mp:SetText(makeDotMoney(servantInfo:getMp()) .. " / " .. makeDotMoney(servantInfo:getMaxMp()))
   self._staticText_Weight:SetText(makeDotMoney(Weight) .. " / " .. makeDotMoney(MaxWeight))

@@ -101,9 +101,9 @@ local classPicture = {
     145
   },
   [UI_classType.ClassType_Orange] = {
-    97,
+    193,
     1,
-    192,
+    288,
     145
   }
 }

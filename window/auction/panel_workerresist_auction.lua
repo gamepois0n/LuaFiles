@@ -9,7 +9,6 @@ local resistWorker = {
   _btnCancel = UI.getChildControl(Panel_WorkerResist_Auction, "Button_Cancel"),
   _iconBG = UI.getChildControl(Panel_WorkerResist_Auction, "Static_IconBG"),
   _icon = UI.getChildControl(Panel_WorkerResist_Auction, "Static_Icon"),
-  _statusBG = UI.getChildControl(Panel_WorkerResist_Auction, "Static_StatusBack"),
   _workerName = UI.getChildControl(Panel_WorkerResist_Auction, "StaticText_WorkerName"),
   _workSpeed = UI.getChildControl(Panel_WorkerResist_Auction, "Static_WorkSpeed"),
   _workSpeedValue = UI.getChildControl(Panel_WorkerResist_Auction, "Static_WorkSpeedValue"),
@@ -19,7 +18,6 @@ local resistWorker = {
   _luckValue = UI.getChildControl(Panel_WorkerResist_Auction, "Static_LuckValue"),
   _actionPoint = UI.getChildControl(Panel_WorkerResist_Auction, "Static_ActionPoint"),
   _actionPointValue = UI.getChildControl(Panel_WorkerResist_Auction, "Static_ActionPointValue"),
-  _priceBG = UI.getChildControl(Panel_WorkerResist_Auction, "Static_PriceBG"),
   _workerPrice = UI.getChildControl(Panel_WorkerResist_Auction, "StaticText_WorkerPrice"),
   _taxhelp = UI.getChildControl(Panel_WorkerResist_Auction, "StaticText_TaxHelp"),
   _workerNoRaw = nil
@@ -29,7 +27,6 @@ function resistWorker:Init()
   self._btnCancel:SetShow(true)
   self._iconBG:SetShow(true)
   self._icon:SetShow(true)
-  self._statusBG:SetShow(true)
   self._workerName:SetShow(true)
   self._workSpeed:SetShow(true)
   self._workSpeedValue:SetShow(true)
@@ -39,7 +36,6 @@ function resistWorker:Init()
   self._luckValue:SetShow(true)
   self._actionPoint:SetShow(true)
   self._actionPointValue:SetShow(true)
-  self._priceBG:SetShow(true)
   self._workerPrice:SetShow(true)
   local percent = 30
   self._taxhelp:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PANEL_WORKERRESIST_AUCTION_DESC", "per", percent))
@@ -71,6 +67,7 @@ function resistWorker:Update()
   self._luckValue:SetText(string.format("%.2f", workerWrapperLua:getLuck() / 10000))
   self._actionPointValue:SetText(tostring(workerWrapperLua:getActionPoint()))
   self._workerPrice:SetText(makeDotMoney(workerWrapperLua:getWorkerMaxPrice()))
+  self._workerPrice:SetPosX(Panel_WorkerResist_Auction:GetSizeX() / 2 - (self._workerPrice:GetSizeX() + 30 + self._workerPrice:GetTextSizeX()) / 2)
 end
 function resistWorker:registEventHandler()
   self._btnConfirm:addInputEvent("Mouse_LUp", "HandleClicked_ResistWorker_BuyConfirm()")

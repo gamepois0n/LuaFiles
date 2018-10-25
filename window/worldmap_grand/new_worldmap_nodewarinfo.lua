@@ -3,16 +3,17 @@ local UI_color = Defines.Color
 Panel_Win_Worldmap_NodeWarInfo:SetShow(false)
 local nodeWarInfoUIPool = {}
 local toolTip = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "StaticText_Help")
-local ingTentIcon = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "Static_NodeWar_Ing_Icon")
-local endTentIcon = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "Static_NodeWar_EndCount_Icon")
+local ing
+local duringWarTitle = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "StaticText_DuringTheWar")
+local endTheWarTitle = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "StaticText_EndTheWar")
 local closeBTN = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "Button_Win_Close")
 toolTip:SetShow(false)
 toolTip:SetAutoResize(true)
 toolTip:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-ingTentIcon:addInputEvent("Mouse_On", "NodeWarScoreIconToolTip( true, \"find\")")
-ingTentIcon:addInputEvent("Mouse_Out", "NodeWarScoreIconToolTip( false )")
-endTentIcon:addInputEvent("Mouse_On", "NodeWarScoreIconToolTip( true, \"all\" )")
-endTentIcon:addInputEvent("Mouse_Out", "NodeWarScoreIconToolTip( false )")
+duringWarTitle:addInputEvent("Mouse_On", "NodeWarScoreIconToolTip( true, \"find\")")
+duringWarTitle:addInputEvent("Mouse_Out", "NodeWarScoreIconToolTip( false )")
+endTheWarTitle:addInputEvent("Mouse_On", "NodeWarScoreIconToolTip( true, \"all\" )")
+endTheWarTitle:addInputEvent("Mouse_Out", "NodeWarScoreIconToolTip( false )")
 local _buttonQuestion = UI.getChildControl(Panel_Win_Worldmap_NodeWarInfo, "Button_Question")
 _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"WarInfo\" )")
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"WarInfo\", \"true\")")
@@ -21,13 +22,13 @@ function NodeWarScoreIconToolTip(show, value)
   if true == show then
     if "find" == value then
       toolTip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_NODEWARINFO_TOOLTIP_ING"))
-      toolTip:SetPosX(ingTentIcon:GetPosX() - toolTip:GetTextSizeX())
-      toolTip:SetPosY(ingTentIcon:GetPosY() - toolTip:GetSizeY())
+      toolTip:SetPosX(duringWarTitle:GetPosX() - toolTip:GetTextSizeX())
+      toolTip:SetPosY(duringWarTitle:GetPosY() - toolTip:GetSizeY())
       toolTip:SetShow(true)
     else
       toolTip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_NODEWARINFO_TOOLTIP_END"))
-      toolTip:SetPosX(endTentIcon:GetPosX() - toolTip:GetTextSizeX())
-      toolTip:SetPosY(endTentIcon:GetPosY() - toolTip:GetSizeY())
+      toolTip:SetPosX(endTheWarTitle:GetPosX() - toolTip:GetTextSizeX())
+      toolTip:SetPosY(endTheWarTitle:GetPosY() - toolTip:GetSizeY())
       toolTip:SetShow(true)
     end
   else
@@ -92,7 +93,7 @@ local function NodeWarInfo_Init()
       territoryDATA.EndCount:SetShow(true)
       territoryDATA.EndCount:SetPosY(nodeWar_CountPosY)
       nodeWar_NamePosY = nodeWar_NamePosY + territoryDATA.Name:GetSizeY() + 5 + line_gap
-      nodeWar_CountPosY = nodeWar_CountPosY + territoryDATA.IngCount:GetSizeY() + line_gap
+      nodeWar_CountPosY = nodeWar_CountPosY + territoryDATA.IngCount:GetSizeY() + 5 + line_gap
       nodeWarInfoUIPool[territory_idx] = territoryDATA
     end
   end

@@ -28,6 +28,7 @@ function GuildPopup:open()
   Panel_Console_Dialog_GuildPopup:SetShow(true)
 end
 function GuildPopup:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Console_Dialog_GuildPopup:SetShow(false)
   ClearFocusEdit()
 end

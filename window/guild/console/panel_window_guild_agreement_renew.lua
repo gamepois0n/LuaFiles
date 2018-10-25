@@ -256,6 +256,7 @@ function PaGlobalFunc_AgreementGuild_Close()
   self._period = nil
   self._dailyPayment = nil
   self._penaltyCost = nil
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_AgreementGuild_Master_SetShow(false, false)
 end
 function PaGlobalFunc_AgreementGuild_Master_SetShow(isShow, isAni)

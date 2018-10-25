@@ -165,7 +165,7 @@ function randomWorker:update(workerShopSlotNo)
     end
   end
   if MyWp < self._config._needWP then
-    if true == ToClient_isXBox() then
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
       RandomWorkerUI._staticText_Change_Worker:SetShow(false)
       RandomWorkerUI._staticText_Energy:SetShow(false)
       Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
@@ -173,7 +173,7 @@ function randomWorker:update(workerShopSlotNo)
       RandomWorkerUI._button_NextWorker:SetEnable(false)
       RandomWorkerUI._button_NextWorker:SetMonoTone(true)
     end
-  elseif true == ToClient_isXBox() then
+  elseif true == ToClient_isXBox() or true == ToClient_isPS4() then
     RandomWorkerUI._staticText_Change_Worker:SetShow(true)
     RandomWorkerUI._staticText_Energy:SetShow(true)
     Panel_Dialog_RandomWorker:registerPadEvent(__eConsoleUIPadEvent_Up_X, "FGlobalFunc_NextWorker_RandomWorker()")
@@ -273,7 +273,7 @@ end
 function randomWorker:registEventHandler()
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_RandomWorker")
   registerEvent("FromClient_EventRandomShopShow", "FGlobalFunc_Open_RandomWorker")
-  registerEvent("FromClient_ChangeWorkerCount", "FromClient_ChangeWorkerCount")
+  registerEvent("FromClient_AddWorkerCount", "FromClient_AddWorkerCount")
 end
 function Input_RandomWorker_MouseOverMoneyCheck(isInventyroy)
   randomWorker:moneyButtonOn(isInventyroy)
@@ -299,17 +299,10 @@ end
 function FGlobalFunc_NextWorker_RandomWorker()
   randomWorker:getNextWorker()
 end
-function randomWorker:changeWorkerCount(isinitialized, workercount)
-  if self._prevWorkerCount == 0 then
-    self:resetPrevWorkerCount()
-  end
-  if workercount >= self._prevWorkerCount then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIRE_WORKER"))
-  else
-  end
-  self._prevWorkerCount = workercount
+function randomWorker:changeWorkerCount()
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_XBOX_WORKERMANAGER_HIRE_WORKER"))
 end
-function FromClient_ChangeWorkerCount(isinitialized, workercount)
-  randomWorker:changeWorkerCount(isinitialized, workercount)
+function FromClient_AddWorkerCount()
+  randomWorker:changeWorkerCount()
 end
 randomWorker:registEventHandler()

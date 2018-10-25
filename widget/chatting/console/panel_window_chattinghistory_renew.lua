@@ -666,13 +666,11 @@ end
 function ChattingHistory:open(chatType)
   _panel:SetShow(true)
   if true == _openByParty then
-    self._ui.stc_keyGuideGroup:SetShow(true)
     for ii = 1, self._tabCount do
       self._ui.scroll_list[ii]:SetSize(self._ui.scroll_list[ii]:GetSizeX(), 910)
       self._listPanel[ii]:SetSize(self._listPanel[ii]:GetSizeX(), 923)
     end
   else
-    self._ui.stc_keyGuideGroup:SetShow(false)
     for ii = 1, self._tabCount do
       self._ui.scroll_list[ii]:SetSize(self._ui.scroll_list[ii]:GetSizeX(), 950)
       self._listPanel[ii]:SetSize(self._listPanel[ii]:GetSizeX(), 963)
@@ -696,6 +694,7 @@ function PaGlobalFunc_ChattingHistory_Close()
   end
 end
 function ChattingHistory:close()
+  UI.ASSERT(false, "ChattingHistory:close")
   _panel:SetShow(false)
 end
 function FromClient_ChatHistory_Update()
@@ -1272,6 +1271,7 @@ function Input_ChatHistory_SelectInList_InParty(isUp)
   if false == PaGlobalFunc_PartySetting_GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 4)
   Input_ChatHistory_SelectInList(isUp)
 end
 function PaGlobalFunc_ChattingInfo_InviteParty_InParty()
@@ -1423,9 +1423,14 @@ function FromClient_ChattingHistory_PrivateChat()
 end
 function FromClient_ChattingHistory_PadSnapChangePanel(fromPanel, toPanel)
   if nil ~= toPanel and _panel:GetKey() == toPanel:GetKey() then
+    if false == _snappedOnThisPanel then
+      _AudioPostEvent_SystemUiForXBOX(51, 7)
+    end
     _snappedOnThisPanel = true
+    ChattingHistory._ui.stc_keyGuideGroup:SetShow(true)
   else
     _snappedOnThisPanel = false
+    ChattingHistory._ui.stc_keyGuideGroup:SetShow(false)
   end
   ChattingHistory:updateSelectionBox()
 end
@@ -1467,4 +1472,7 @@ function ChattingHistory:addPosCalc(panelIndex)
     _scroll_Interval_AddPos[panelIndex] = 0
   end
   _scroll_Interval_AddPos[panelIndex] = self._scrollPosition[panelIndex]
+end
+function PaGlobalFunc_isItemEmticon(EmoticonKey)
+  return true
 end

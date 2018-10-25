@@ -7,10 +7,13 @@ local MarketPlaceBuy = {
     _button_Req = UI.getChildControl(_panel, "StaticText_A_ConsoleUI"),
     _button_Cancel = UI.getChildControl(_panel, "StaticText_B_ConsoleUI")
   },
-  _slotConfig = {createIcon = true, createBorder = true},
+  _slotConfig = {
+    createIcon = true,
+    createBorder = true,
+    createEnchant = true
+  },
   _selectEnchantLevel = 0,
-  _selectPrice = 0,
-  _enchantLevelPrice = 0,
+  _selectPriceInfo = {_price = 0, _index = 0},
   _selectCount = 0,
   _maxItemCount_s64 = 0,
   _selectItemSlot = nil
@@ -44,7 +47,7 @@ function MarketPlaceBuy:createControl()
   self._selectItemSlot = slot
 end
 function MarketPlaceBuy:updateNeedTotalPrice()
-  local needTotalPrice = self._selectCount * (self._selectPrice + self._enchantLevelPrice)
+  local needTotalPrice = self._selectCount * (self._selectPriceInfo._price + self._enchantLevelPrice)
   self._ui._totalPrice:SetText("\237\149\132\236\154\148 \234\184\136\236\149\161 : " .. makeDotMoney(needTotalPrice))
 end
 function PaGlobal_MarketPlaceBuy_SelectItemPrice()
@@ -77,12 +80,12 @@ function PaGlobal_MarketPlaceBuy_SetCount(inputNumber)
   local self = MarketPlaceBuy
   local itemCount = UI.getChildControl(self._ui._countBg, "StaticText_CountValue")
   itemCount:SetText(tostring(inputNumber) .. "\234\176\156")
-  self._selectCount = Int64toInt32(inputNumber)
+  self._selectCount = inputNumber
   self:updateNeedTotalPrice()
 end
 function PaGlobal_MarketPlaceBuy_Req()
   local self = MarketPlaceBuy
-  ToClient_requestBuyItemToWorldMarket(self._itemKey, self._itemMinLevel, self._selectCount, self._selectPrice, self._selectEnchantLevel)
+  ToClient_requestBuyItemToWorldMarket(self._itemKey, self._itemMinLevel, self._selectCount, self._selectPriceInfo._price, self._selectEnchantLevel)
 end
 function PaGlobal_MarketPlaceBuy_Cancel()
   _panel:SetShow(false)
@@ -104,14 +107,15 @@ function PaGlobalFunc_MarketPlaceBuy_List2PriceCreateControl(content, value)
   local self = MarketPlaceBuy
   local buttonPrice = UI.getChildControl(content, "Button_Price")
   buttonPrice:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  local itemPrice = Int64toInt32(value)
-  if self._selectPrice == itemPrice then
+  local index = Int64toInt32(value)
+  local price_s64 = ToClient_getWorldMarketBuyBiddingLstPrice(index)
+  if self._selectPriceInfo._price == price_s64 then
     buttonPrice:SetFontColor(Defines.Color.C_FFFFEEA0)
   else
     buttonPrice:SetFontColor(Defines.Color.C_FFC4BEBE)
   end
-  buttonPrice:SetText(tostring(itemPrice))
-  buttonPrice:addInputEvent("Mouse_LUp", "PaGlobalFunc_MarketPlaceBuy_SelectPrice(" .. itemPrice .. ")")
+  buttonPrice:SetText(makeDotMoney(price_s64))
+  buttonPrice:addInputEvent("Mouse_LUp", "PaGlobalFunc_MarketPlaceBuy_SelectPriceByIndex(" .. index .. ")")
 end
 function PaGlobalFunc_MarketPlaceBuy_SelectEnchantLevel(enchantLevel)
   local self = MarketPlaceBuy
@@ -127,15 +131,20 @@ function PaGlobalFunc_MarketPlaceBuy_SelectEnchantLevel(enchantLevel)
   _PA_LOG("\235\176\149\234\183\156\235\130\152", tostring(self._itemKey) .. "/" .. tostring(enchantLevel) .. "/" .. type(enchantLevel))
   ToClient_requestGetAddEnchantLevelPrice(self._itemKey, self._selectEnchantLevel)
 end
-function PaGlobalFunc_MarketPlaceBuy_SelectPrice(itemPrice)
+function PaGlobalFunc_MarketPlaceBuy_SelectPriceByIndex(index)
+  local price_s64 = ToClient_getWorldMarketBuyBiddingLstPrice(index)
+  PaGlobalFunc_MarketPlaceBuy_SelectPrice(index, price_s64)
+end
+function PaGlobalFunc_MarketPlaceBuy_SelectPrice(index, itemPrice)
   local self = MarketPlaceBuy
   local text_price = UI.getChildControl(self._ui._itemStatusBg, "StaticText_SelectPriceValue")
   text_price:SetText(makeDotMoney(itemPrice))
-  local prevSelectPrice = self._selectPrice
-  self._selectPrice = itemPrice
-  self._ui._list2_SelectPrice:requestUpdateByKey(self._selectPrice)
-  if nil ~= prevSelectPrice then
-    self._ui._list2_SelectPrice:requestUpdateByKey(prevSelectPrice)
+  local prevSelectPriceIndex = self._selectPriceInfo._index
+  self._selectPriceInfo._index = index
+  self._selectPriceInfo._price = itemPrice
+  self._ui._list2_SelectPrice:requestUpdateByKey(self._selectPriceInfo._index)
+  if nil ~= prevSelectPriceIndex then
+    self._ui._list2_SelectPrice:requestUpdateByKey(prevSelectPriceIndex)
   end
   self._ui._selectItemPriceBg:SetShow(false)
   self:updateNeedTotalPrice()
@@ -150,7 +159,7 @@ function FromClient_responseGetBuyBiddingList(itemKey, minEnchantLevel, maxEncha
   for ii = minEnchantLevel, maxEnchantLevel do
     self._ui._list2_SelectEnchant:getElementManager():pushKey(ii)
   end
-  local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemKey, 0))
+  local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemKey, minEnchantLevel))
   self._selectItemSlot:setItemByStaticStatus(itemSSW)
   self._itemKey = itemKey
   self._itemMinLevel = minEnchantLevel
@@ -160,12 +169,11 @@ function FromClient_responseGetBuyBiddingList(itemKey, minEnchantLevel, maxEncha
   itemInfo:SetText(string.format("\237\152\132\236\158\172 \234\184\176\236\164\128\234\176\128 : %s / \236\180\157 \235\167\164\235\172\188 : %s", makeDotMoney(standardPrice_s64), tostring(itemCount_s64)))
   self._maxItemCount_s64 = itemCount_s64
   for ii = 0, biddingBuyListCount - 1 do
-    local price_s64 = ToClient_getWorldMarketBuyBiddingLstPrice(ii)
-    self._ui._list2_SelectPrice:getElementManager():pushKey(price_s64)
+    self._ui._list2_SelectPrice:getElementManager():pushKey(ii)
   end
   self._ui._selectItemEnchantBg:SetShow(false)
   self._ui._selectItemPriceBg:SetShow(false)
-  PaGlobalFunc_MarketPlaceBuy_SelectPrice(Int64toInt32(standardPrice_s64))
+  PaGlobalFunc_MarketPlaceBuy_SelectPrice(biddingBuyListCount - 1, standardPrice_s64)
   PaGlobal_MarketPlaceBuy_SetCount(0)
   PaGlobalFunc_MarketPlaceBuy_SelectEnchantLevel(minEnchantLevel)
   local silverInfo = getWorldMarketSilverInfo()
@@ -174,7 +182,7 @@ function FromClient_responseGetBuyBiddingList(itemKey, minEnchantLevel, maxEncha
 end
 function FromClient_responseEnchantLevelPrice(enchantLevelPrice)
   local self = MarketPlaceBuy
-  self._enchantLevelPrice = Int64toInt32(enchantLevelPrice)
+  self._enchantLevelPrice = enchantLevelPrice
   self:updateNeedTotalPrice()
 end
 function FromClient_responseBuyItemToWorldMarket(mySilver)

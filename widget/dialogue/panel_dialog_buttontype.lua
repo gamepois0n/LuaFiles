@@ -1,63 +1,63 @@
 local dialogQuestButtonIcon = {
   [0] = {
-    380,
+    63,
+    291,
+    93,
+    321
+  },
+  {
+    187,
+    260,
+    217,
+    290
+  },
+  {
+    32,
+    291,
+    62,
+    321
+  },
+  {
+    32,
+    229,
+    62,
+    259
+  },
+  {
+    63,
+    229,
+    62,
+    259
+  },
+  {
+    1,
+    291,
     31,
-    398,
-    50
+    321
   },
   {
-    475,
     1,
-    493,
-    20
+    229,
+    31,
+    259
   },
   {
-    380,
-    11,
-    398,
-    30
+    156,
+    229,
+    186,
+    259
   },
   {
-    418,
-    1,
-    436,
-    20
+    94,
+    229,
+    124,
+    259
   },
   {
-    437,
-    1,
-    455,
-    20
-  },
-  {
-    456,
-    1,
-    474,
-    20
-  },
-  {
-    399,
-    1,
-    417,
-    20
-  },
-  {
-    380,
-    11,
-    398,
-    30
-  },
-  {
-    399,
-    21,
-    417,
-    40
-  },
-  {
-    456,
-    21,
-    474,
-    40
+    125,
+    229,
+    155,
+    259
   }
 }
 local consoleDialogQuestButtonIcon = {
@@ -130,34 +130,34 @@ local dialogButtonIcon = {
     0
   },
   {
-    494,
-    41,
-    512,
-    59
+    125,
+    1,
+    153,
+    31
   },
   {
-    475,
-    41,
-    493,
-    60
+    156,
+    1,
+    186,
+    31
   },
   {
-    418,
-    21,
-    436,
-    40
+    94,
+    1,
+    124,
+    31
   },
   {
-    494,
-    21,
-    512,
-    40
+    63,
+    1,
+    93,
+    31
   },
   {
-    494,
-    21,
-    512,
-    40
+    63,
+    1,
+    93,
+    31
   }
 }
 function FGlobal_ChangeOnTextureForConsoleDialogQuestIcon(control, iconType)
@@ -167,13 +167,13 @@ function FGlobal_ChangeOnTextureForConsoleDialogQuestIcon(control, iconType)
   control:setRenderTexture(control:getBaseTexture())
 end
 function FGlobal_ChangeOnTextureForDialogQuestIcon(control, iconType)
-  control:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+  control:ChangeTextureInfoNameAsync("Renewal/UI_Icon/Console_Icon_02.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, dialogQuestButtonIcon[iconType][1], dialogQuestButtonIcon[iconType][2], dialogQuestButtonIcon[iconType][3], dialogQuestButtonIcon[iconType][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
 end
 function FGlobal_ChangeOnTextureForDialogIcon(control, iconType)
-  control:ChangeTextureInfoNameAsync("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Etc_00.dds")
+  control:ChangeTextureInfoNameAsync("Renewal/UI_Icon/Console_DialogueIcon_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, dialogButtonIcon[iconType][1], dialogButtonIcon[iconType][2], dialogButtonIcon[iconType][3], dialogButtonIcon[iconType][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())

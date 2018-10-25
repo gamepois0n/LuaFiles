@@ -55,8 +55,13 @@ local Window_WorldMap_BottomMenuInfo = {
     _off = Defines.Color.C_00FF0000
   },
   _currentNPCIndex = 0,
-  _currentBookMarkIndex = 0
+  _currentBookMarkIndex = 0,
+  _currentMode = 0
 }
+function PaGlobalFunc_WorldMap_BottomMenu_GetMode()
+  local self = Window_WorldMap_BottomMenuInfo
+  return self._currentMode
+end
 function PaGlobalFunc_WorldMap_BottomMenu_GetBookMarkIndex()
   local self = Window_WorldMap_BottomMenuInfo
   return self._currentBookMarkIndex
@@ -87,7 +92,7 @@ function Window_WorldMap_BottomMenuInfo:Initialize()
 end
 function PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(value)
   local self = Window_WorldMap_BottomMenuInfo
-  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+  if self._config._findMode == self._currentMode then
     PaGlobalFunc_WorldMap_BottomMenu_UpdateNpcMenu(value)
   else
     PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
@@ -111,7 +116,7 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateNpcMenu(value)
 end
 function PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
   local self = Window_WorldMap_BottomMenuInfo
-  local count = #self._ui._currentList + 1
+  local count = self._config._bookMarkCount
   self._currentBookMarkIndex = self._currentBookMarkIndex + value
   if self._currentBookMarkIndex < 0 then
     self._currentBookMarkIndex = count - 1
@@ -119,9 +124,13 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
   if count - 1 < self._currentBookMarkIndex then
     self._currentBookMarkIndex = 0
   end
+  local defaultPos = float3(0, 0, 0)
   for index = 0, count - 1 do
+    local pos = ToClient_GetWorldMapBookMark(index)
     if index == self._currentBookMarkIndex then
       self._ui._currentList[index]:SetFontColor(Defines.Color.C_FFFFAB6D)
+    elseif 0 == pos.x and 0 == pos.y and 0 == pos.z then
+      self._ui._currentList[index]:SetFontColor(Defines.Color.C_70FFFFFF)
     else
       self._ui._currentList[index]:SetFontColor(Defines.Color.C_FFEFEFEF)
     end
@@ -173,24 +182,29 @@ function Window_WorldMap_BottomMenuInfo:FindBookMark(index)
 end
 function PaGlobalFunc_WorldMap_BottomMenu_StartTrigger()
   local self = Window_WorldMap_BottomMenuInfo
-  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+  if self._config._findMode == self._currentMode then
     self:FindNPC(self._currentNPCIndex)
   else
     self:FindBookMark(self._currentBookMarkIndex)
   end
 end
-function PaGlobalFunc_WorldMap_BottomMenu_ModeChange()
+function PaGlobalFunc_WorldMap_BottomMenu_ModeChange(type)
   local self = Window_WorldMap_BottomMenuInfo
-  self._ui._static_BookMarkBg:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
-  self._ui._staticText_BookMarkTitle:SetShow(not PaGlobalFunc_WorldMap_GetIsTownMode())
-  self._ui._static_FindBg:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
-  self._ui._staticText_FindTitle:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
-  self._ui._staticText_FindDecs:SetShow(PaGlobalFunc_WorldMap_GetIsTownMode())
-  if false == PaGlobalFunc_WorldMap_GetIsTownMode() then
+  local isBookMarkMode = self._config._bookMarkMode == type
+  self._ui._static_BookMarkBg:SetShow(isBookMarkMode)
+  self._ui._staticText_BookMarkTitle:SetShow(isBookMarkMode)
+  self._ui._static_FindBg:SetShow(not isBookMarkMode)
+  self._ui._staticText_FindTitle:SetShow(not isBookMarkMode)
+  self._ui._staticText_FindDecs:SetShow(not isBookMarkMode)
+  if true == isBookMarkMode then
     self._ui._currentList = self._ui._bookMarkList
   else
     self._ui._currentList = self._ui._findList
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
+  self._currentMode = type
+  PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(0)
+  PaGlobal_ConsoleWorldMapKeyGuide_Update()
 end
 function PaGlobalFunc_WorldMap_BottomMenu_GetShow()
   return Panel_Worldmap_BottomMenu:GetShow()
@@ -200,20 +214,22 @@ function PaGlobalFunc_WorldMap_BottomMenu_SetShow(isShow, isAni)
 end
 function PaGlobalFunc_WorldMap_BottomMenu_Open()
   local self = Window_WorldMap_BottomMenuInfo
-  PaGlobalFunc_WorldMap_BottomMenu_ModeChange()
-  PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(0)
+  if true == PaGlobalFunc_WorldMap_GetIsTownMode() then
+    return
+  end
+  PaGlobalFunc_WorldMap_BottomMenu_ModeChange(self._currentMode)
   if true == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
     return
   end
-  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(true)
   PaGlobalFunc_WorldMap_BottomMenu_SetShow(true, false)
+  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(true)
 end
 function PaGlobalFunc_WorldMap_BottomMenu_Close()
   if false == PaGlobalFunc_WorldMap_BottomMenu_GetShow() then
     return
   end
-  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(false)
   PaGlobalFunc_WorldMap_BottomMenu_SetShow(false, false)
+  PaGlobal_ConsoleWorldMapKeyGuide_SetPos(false)
 end
 function PaGlobalFunc_FromClient_WorldMap_BottomMenu_luaLoadComplete()
   local self = Window_WorldMap_BottomMenuInfo

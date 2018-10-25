@@ -309,6 +309,7 @@ function PaGlobalFunc_Customization_ClickedZodiac(index)
   end
   local zodiacKey = zodiacInfo:getZodiacKey()
   applyZodiac(zodiacKey)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self._currentZodiacIndex = index
 end
 function PaGlobalFunc_Customization_ClickedCustomizing(index)
@@ -323,6 +324,7 @@ function PaGlobalFunc_Customization_ClickedCustomizing(index)
   self:MainMenuClose()
   self:SubMenuClose(self._currentMainIndex)
   self:SetSubTitlePos()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   selectCustomizationControlGroup(index)
   closeExplorer()
 end
@@ -330,8 +332,9 @@ function PaGlobalFunc_Customization_ClickedAction(index)
   local self = CustomizationMain
   self._currentSubIndex = index
   selectPoseControl(index + 1)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
-function aGlobalFunc_Customization_RandomBeautyComfirm()
+function PaGlobalFunc_Customization_RandomBeautyComfirm()
   local self = CustomizationMain
   self._ui._web_RandomBeauty:SetIgnore(true)
   self._ui._web_RandomBeauty:SetPosX(-1500)
@@ -355,10 +358,12 @@ function aGlobalFunc_Customization_RandomBeautyComfirm()
   url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true) .. "&isGm=" .. tostring(isGm) .. "&isRandom=" .. tostring(true)
   self._ui._web_RandomBeauty:SetUrl(1, 1, url, false, true)
   self._ui._mainMenu[4]:SetCheck(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
-function aGlobalFunc_Customization_RandomBeautyCancel()
+function PaGlobalFunc_Customization_RandomBeautyCancel()
   local self = CustomizationMain
   self._ui._mainMenu[4]:SetCheck(false)
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function PaGlobalFunc_Customization_RandomBeauty()
   if ToClient_isUserCreateContentsAllowed() then
@@ -366,8 +371,8 @@ function PaGlobalFunc_Customization_RandomBeauty()
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
-      functionYes = aGlobalFunc_Customization_RandomBeautyComfirm,
-      functionNo = aGlobalFunc_Customization_RandomBeautyCancel,
+      functionYes = PaGlobalFunc_Customization_RandomBeautyComfirm,
+      functionNo = PaGlobalFunc_Customization_RandomBeautyCancel,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -376,8 +381,8 @@ function PaGlobalFunc_Customization_RandomBeauty()
     local messageBoxData = {
       title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
       content = messageBoxMemo,
-      functionYes = aGlobalFunc_Customization_RandomBeautyCancel,
-      functionNo = aGlobalFunc_Customization_RandomBeautyCancel,
+      functionYes = PaGlobalFunc_Customization_RandomBeautyCancel,
+      functionNo = PaGlobalFunc_Customization_RandomBeautyCancel,
       priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
     }
     MessageBox.showMessageBox(messageBoxData)
@@ -400,6 +405,7 @@ function PaGlobalFunc_Customization_ClickedMainMenu(index)
   self:SubMenuOpen(index)
   self._currentMainIndex = index
   self._currentDepth = 1
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   self:SetPadXButton(false)
 end
 function CustomizationMain:SetPadXButton(isShow)
@@ -719,6 +725,7 @@ function CustomizationMain:SubMenuClose(mainIndex)
 end
 function PaGlobalFunc_Customization_Back()
   local self = CustomizationMain
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   if true == FGlobal_CustomizingAlbum_GetShow() then
     self._ui._mainMenu[3]:SetCheck(false)
     self:SetPadXButton(true)
@@ -863,6 +870,8 @@ function PaGlobalFunc_Customization_Close()
   if false == PaGlobalFunc_Customization_GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
+  _AudioPostEvent_SystemUiForXBOX(1, 3)
   PaGlobalFunc_Customization_SetShow(false, false)
 end
 function PaGlobalFunc_Customization_KeyGuideGetShow()

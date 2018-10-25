@@ -51,7 +51,7 @@ local stableList = {
   _config = {
     slot = {
       startX = 15,
-      startY = 15,
+      startY = 10,
       gapY = 158
     },
     icon = {
@@ -72,10 +72,10 @@ local stableList = {
       startY = 0,
       startTitleX = -15,
       startTitleY = 0,
-      startButtonX = 25,
-      startButtonY = 25,
+      startButtonX = 20,
+      startButtonY = 57,
       startIconX = 25,
-      startIconY = 35,
+      startIconY = 62,
       startEffectX = -1,
       startEffectY = -1
     },
@@ -84,17 +84,17 @@ local stableList = {
       startY = 50,
       startTitleX = 30,
       startTitleY = 0,
-      startButtonX = 25,
-      startButtonY = 25,
+      startButtonX = 20,
+      startButtonY = 57,
       startIconX = 25,
-      startIconY = 35,
+      startIconY = 62,
       startEffectX = -1,
       startEffectY = -1
     },
     button = {
       startX = 180,
-      startY = 0,
-      startButtonX = 15,
+      startY = 5,
+      startButtonX = 10,
       startButtonY = 10,
       gapY = 40,
       sizeY = 40,
@@ -205,24 +205,29 @@ function stableList:init()
     self._slots[ii] = slot
   end
   self._unseal._bg = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_BG", Panel_Window_StableList, "StableList_Unseal_BG")
-  self._unseal._stallion = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_unsealStallion", Panel_Window_StableList, "StableList_Unseal_Stallion")
+  self._unseal._bgTitle = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_BGTitle", self._unseal._bg, "StableList_Unseal_BG_Title")
   self._unseal._title = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_SubTitle", self._unseal._bg, "StableList_Unseal_Title")
   self._unseal._button = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Button", self._unseal._bg, "StableList_Unseal_Button")
   self._unseal._icon = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Icon", self._unseal._bg, "StableList_Unseal_Icon")
   self._unseal._pcroomIcon = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_PCRoom", self._unseal._bg, "StableList_Unseal_PcRoomIcon")
   self._unseal._effect = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Button_UnSeal_Effect", self._unseal._bg, "StableList_Unseal_Effect")
   self._unseal._grade = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_HorseGrade", self._unseal._bg, "ServantList_Slot_Grade")
+  self._unseal._stallion = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_unsealStallion", self._unseal._bg, "StableList_Unseal_Stallion")
+  self._unseal._bgTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_NOW_VEHICLE"))
+  self._unseal._bgTitle:SetShow(true)
   self._unseal._title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_NOW_VEHICLE"))
+  self._unseal._title:SetShow(false)
   local unsealConfig = self._config.unseal
   self._unseal._bg:SetPosX(unsealConfig.startX)
   self._unseal._bg:SetPosY(unsealConfig.startY)
+  self._unseal._bgTitle:ComputePos()
   self._unseal._title:SetPosX(unsealConfig.startTitleX)
   self._unseal._title:SetPosY(unsealConfig.startTitleY)
-  self._unseal._stallion:SetPosX(unsealConfig.startTitleX + 390)
-  self._unseal._stallion:SetPosY(unsealConfig.startTitleY + 48)
+  self._unseal._stallion:SetPosX(unsealConfig.startTitleX + 50)
+  self._unseal._stallion:SetPosY(unsealConfig.startTitleY + 57)
   self._unseal._button:SetPosX(unsealConfig.startButtonX)
   self._unseal._button:SetPosY(unsealConfig.startButtonY)
-  self._unseal._grade:SetPosX(120)
+  self._unseal._grade:SetPosX(110)
   self._unseal._grade:SetPosY(unsealConfig.startButtonY + 5)
   self._unseal._icon:SetPosX(unsealConfig.startIconX)
   self._unseal._icon:SetPosY(unsealConfig.startIconY)
@@ -232,11 +237,15 @@ function stableList:init()
   self._unseal._effect:SetPosY(unsealConfig.startButtonY - 2)
   self._unseal._button:addInputEvent("Mouse_LUp", "StableList_ButtonOpen( 1, 0 )")
   self._taming._bg = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_BG", Panel_Window_StableList, "StableList_Taming_BG")
+  self._taming._bgTitle = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_BGTitle", self._taming._bg, "StableList_Unseal_BG_Title")
   self._taming._title = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_SubTitle", self._taming._bg, "StableList_Taming_Title")
   self._taming._button = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Button", self._taming._bg, "StableList_Taming_Button")
   self._taming._icon = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Icon", self._taming._bg, "StableList_Taming_Icon")
   self._taming._effect = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_Button_Taming_Effect", self._taming._bg, "StableList_Taming_Effect")
+  self._taming._bgTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_TAME_VEHICLE"))
+  self._taming._bgTitle:SetShow(true)
   self._taming._title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_TAME_VEHICLE"))
+  self._taming._title:SetShow(false)
   local taminglConfig = self._config.taming
   self._taming._bg:SetPosX(taminglConfig.startX)
   self._taming._bg:SetPosY(taminglConfig.startY)
@@ -336,7 +345,11 @@ function stableList:update()
     local unsealedCount = stable_currentRegionSlotCountAll() - sealedCount + Int64toInt32(stable_currentRegionSlotCountOfOtherCharacter())
     self._sealedCount:SetText(sealedCount)
     self._unsealedCount:SetText(unsealedCount)
-    self._maxCount:SetText(sealedCount + unsealedCount .. " / " .. stable_maxSlotCount())
+    if isGameTypeJapan() then
+      self._maxCount:SetText(sealedCount + unsealedCount .. "/" .. stable_maxSlotCount())
+    else
+      self._maxCount:SetText(sealedCount + unsealedCount .. " / " .. stable_maxSlotCount())
+    end
   end
   for ii = 0, self._config.slotCount - 1 do
     local slot = self._slots[ii]
@@ -585,6 +598,8 @@ function stableList:registMessageHandler()
   registerEvent("FromClient_ServantRegisterToAuction", "StableList_UpdateSlotData")
   registerEvent("FromClient_ServantUpdate", "StableList_UpdateSlotData")
   registerEvent("FromClient_ServantTaming", "StableList_UpdateSlotData")
+  registerEvent("EventSelfServantUpdateOnlyHp", "StableList_UpdateSlotData")
+  registerEvent("EventSelfServantUpdateOnlyMp", "StableList_UpdateSlotData")
   registerEvent("FromClient_GroundMouseClick", "StableList_ButtonClose")
   registerEvent("FromClient_RegisterServantFail", "StableList_PopMessageBox")
   registerEvent("FromClient_ServantSeal", "FromClient_ServantSeal")
@@ -619,16 +634,16 @@ function StableList_Resize()
   local slotCount = 4
   if screenY > 1000 then
     panelSize = 700
-    panelBGSize = 660
-    scrollSize = 660
+    panelBGSize = 645
+    scrollSize = 635
     slotCount = 4
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(true)
     end
   else
     panelSize = 540
-    panelBGSize = 500
-    scrollSize = 500
+    panelBGSize = 485
+    scrollSize = 475
     slotCount = 3
     if nil ~= self._slots[3] then
       self._slots[3].button:SetShow(false)
@@ -877,7 +892,7 @@ function StableList_ButtonOpen(eType, slotNo)
       self._buttonTrainingFinish:addInputEvent("Mouse_LUp", "StableList_StallionTrainFinish(" .. index .. ")")
       buttonSlotNo = buttonSlotNo + 1
     end
-    if showChangeRegionButtonFlag and changeServantRegion:isEnabled() then
+    if showChangeRegionButtonFlag and changeServantRegion:isEnabled() and false == isPcroomOnly then
       buttonList[buttonSlotNo] = self._buttonMove
       buttonSlotNo = buttonSlotNo + 1
     end

@@ -17,12 +17,14 @@ local occupyGuildSection = {
   guildOwner = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupationOwner"),
   occupyDate = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupationDate"),
   occupyWeek = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupationWeek"),
+  line_2 = UI.getChildControl(Panel_Worldmap_Territory, "Static_TerritoryInfoLine_2"),
   sectionBG = UI.getChildControl(Panel_Worldmap_Territory, "Static_OccupiersInfoBG")
 }
 local occupyBenefit = {
   sectionBG = UI.getChildControl(Panel_Worldmap_Territory, "Static_OccupyBenefitBg"),
   sectionTitle = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupyTitle"),
-  sectionDesc = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupyDesc")
+  sectionDesc = UI.getChildControl(Panel_Worldmap_Territory, "StaticText_OccupyDesc"),
+  line_3 = UI.getChildControl(Panel_Worldmap_Territory, "Static_TerritoryInfoLine_3")
 }
 occupyBenefit.sectionDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 local commonInfoSection = {
@@ -75,6 +77,7 @@ function occupyGuildSection:SetShow(isShow)
   self.guildOwner:SetShow(isShow)
   self.occupyDate:SetShow(isShow)
   self.occupyWeek:SetShow(isShow)
+  self.line_2:SetShow(isShow)
   self.sectionBG:SetShow(isShow)
 end
 function occupyGuildSection:SetInfo(territoryInfo, territoryKeyRaw)
@@ -106,6 +109,7 @@ function occupyBenefit:SetInfo(territoryKeyRaw)
   self.sectionBG:SetShow(isShow)
   self.sectionTitle:SetShow(isShow)
   self.sectionDesc:SetShow(isShow)
+  self.line_3:SetShow(isShow)
   if false == isShow then
     return
   end
@@ -119,15 +123,18 @@ function occupyBenefit:SetInfo(territoryKeyRaw)
   local siegeWrapper = ToClient_GetSiegeWrapper(territoryKeyRaw)
   if nil ~= siegeWrapper and siegeWrapper:doOccupantExist() then
     self.sectionBG:SetSize(self.sectionBG:GetSizeX(), self.sectionDesc:GetTextSizeY() + 50)
-    self.sectionBG:SetSpanSize(0, 400)
-    self.sectionTitle:SetSpanSize(0, 410)
-    self.sectionDesc:SetSpanSize(30, 440)
+    self.sectionBG:SetSpanSize(20, 390)
+    self.sectionTitle:SetSpanSize(20, 400)
+    self.sectionDesc:SetSpanSize(30, 430)
   else
     self.sectionBG:SetSize(self.sectionBG:GetSizeX(), self.sectionDesc:GetTextSizeY() + 50)
-    self.sectionBG:SetSpanSize(0, 240)
-    self.sectionTitle:SetSpanSize(0, 250)
-    self.sectionDesc:SetSpanSize(30, 280)
+    self.sectionBG:SetSpanSize(20, 230)
+    self.sectionTitle:SetSpanSize(20, 240)
+    self.sectionDesc:SetSpanSize(30, 270)
+    self.line_3:SetSpanSize(0, lineY)
   end
+  local lineY = self.sectionDesc:GetPosY() + self.sectionDesc:GetTextSizeY() + 20
+  self.line_3:SetSpanSize(0, lineY)
 end
 function commonInfoSection:SetShow(isShow)
   self.playerInfoTitle:SetShow(isShow)
@@ -164,17 +171,17 @@ function commonInfoSection:SetInfo(territoryInfo, territoryKeyRaw)
     occupyBenefitSizeY = math.max(100, occupyBenefit.sectionBG:GetSizeY() + 10)
   end
   if nil ~= siegeWrapper and siegeWrapper:doOccupantExist() then
-    self.sectionBG:SetSpanSize(0, 400 + occupyBenefitSizeY)
-    self.playerInfoTitle:SetSpanSize(0, 410 + occupyBenefitSizeY)
-    self.playerPopular:SetSpanSize(30, 440 + occupyBenefitSizeY)
-    self.warInfoTitle:SetSpanSize(0, 480 + occupyBenefitSizeY)
-    self.warInfo:SetSpanSize(30, 510 + occupyBenefitSizeY)
+    self.sectionBG:SetSpanSize(0, 390 + occupyBenefitSizeY)
+    self.playerInfoTitle:SetSpanSize(20, 400 + occupyBenefitSizeY)
+    self.playerPopular:SetSpanSize(30, 430 + occupyBenefitSizeY)
+    self.warInfoTitle:SetSpanSize(20, 470 + occupyBenefitSizeY)
+    self.warInfo:SetSpanSize(30, 500 + occupyBenefitSizeY)
   else
-    self.sectionBG:SetSpanSize(0, 240 + occupyBenefitSizeY)
-    self.playerInfoTitle:SetSpanSize(0, 250 + occupyBenefitSizeY)
-    self.playerPopular:SetSpanSize(30, 280 + occupyBenefitSizeY)
-    self.warInfoTitle:SetSpanSize(0, 320 + occupyBenefitSizeY)
-    self.warInfo:SetSpanSize(30, 350 + occupyBenefitSizeY)
+    self.sectionBG:SetSpanSize(0, 230 + occupyBenefitSizeY)
+    self.playerInfoTitle:SetSpanSize(20, 240 + occupyBenefitSizeY)
+    self.playerPopular:SetSpanSize(30, 270 + occupyBenefitSizeY)
+    self.warInfoTitle:SetSpanSize(20, 310 + occupyBenefitSizeY)
+    self.warInfo:SetSpanSize(30, 340 + occupyBenefitSizeY)
   end
 end
 function FromClient_TerritoryUICreate(territoryUI)
@@ -229,7 +236,7 @@ function FromClient_OnTerritoryTooltipShow(territoryUI, territoryInfo, territory
   occupyBenefit:SetInfo(territoryKeyRaw)
   commonInfoSection:SetShow(true)
   commonInfoSection:SetInfo(territoryInfo, territoryKeyRaw)
-  Panel_Worldmap_Territory:SetSize(Panel_Worldmap_Territory:GetSizeX(), commonInfoSection.sectionBG:GetPosY() + commonInfoSection.sectionBG:GetSizeY() + 20)
+  Panel_Worldmap_Territory:SetSize(Panel_Worldmap_Territory:GetSizeX(), commonInfoSection.sectionBG:GetPosY() + commonInfoSection.sectionBG:GetSizeY() + 10)
   local posX = territoryUI:GetPosX()
   local posY = territoryUI:GetPosY()
   local screenSizeX = getScreenSizeX()

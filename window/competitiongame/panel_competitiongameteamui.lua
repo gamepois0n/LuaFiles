@@ -129,9 +129,9 @@ local controlTexture = {
       },
       [CppEnums.ClassType.ClassType_Orange] = {
         481,
-        251,
+        283,
         510,
-        280
+        312
       }
     },
     [team2] = {
@@ -233,9 +233,9 @@ local controlTexture = {
       },
       [CppEnums.ClassType.ClassType_Orange] = {
         481,
-        219,
+        314,
         510,
-        248
+        343
       }
     }
   },

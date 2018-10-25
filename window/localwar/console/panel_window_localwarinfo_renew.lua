@@ -59,9 +59,13 @@ function Panel_Window_LocalWarInfo_info:setContent()
   end
 end
 function Panel_Window_LocalWarInfo_info:open()
+  if false == Panel_LocalWarInfo:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(1, 18)
+  end
   Panel_LocalWarInfo:SetShow(true)
 end
 function Panel_Window_LocalWarInfo_info:close()
+  _AudioPostEvent_SystemUiForXBOX(1, 17)
   Panel_LocalWarInfo:SetShow(false)
 end
 function PaGlobalFunc_LocalWarInfo_GetShow()
@@ -73,6 +77,7 @@ function PaGlobalFunc_LocalWarInfo_Open()
 end
 function PaGlobalFunc_LocalWarInfo_Close()
   local self = Panel_Window_LocalWarInfo_info
+  _AudioPostEvent_SystemUiForXBOX(1, 17)
   self:close()
 end
 function PaGlobalFunc_LocalWarInfo_Show()
@@ -236,6 +241,7 @@ function PaGlobalFunc_LocalWarInfo_GoLocalWar(index, isLimitLocalWar)
     local player = playerWrapper:get()
     local hp = player:getHp()
     local maxHp = player:getMaxHp()
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     if player:doRideMyVehicle() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_NOT_RIDEHORSE"))
     elseif ToClient_IsMyselfInArena() then

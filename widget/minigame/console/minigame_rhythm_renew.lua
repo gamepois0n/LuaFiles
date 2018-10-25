@@ -45,8 +45,8 @@ function MiniGame_Rhythm:init()
   self._ui.stc_Console_Control_BG = UI.getChildControl(self._ui.stc_RhythmBG, "Static_Console_Control_BG")
   self._ui.stc_PC_Control_BG = UI.getChildControl(self._ui.stc_RhythmBG, "Static_PC_Control_BG")
   if _ContentsGroup_isConsolePadControl then
-    self._ui.stc_LTButton = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_LT")
-    self._ui.stc_RTButton = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_RT")
+    self._ui.stc_LBButton = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_LB")
+    self._ui.stc_RBButton = UI.getChildControl(self._ui.stc_Console_Control_BG, "Static_RB")
     self._ui.stc_Console_Control_BG:SetShow(true)
     self._ui.stc_PC_Control_BG:SetShow(false)
   else
@@ -233,9 +233,9 @@ function MiniGame_Rhythm_PadKeyPress(keyType)
   if isFailed == true or false == Panel_RhythmGame:GetShow() then
     return
   end
-  if __eQuickTimeEventPadType_LT == keyType then
+  if __eQuickTimeEventPadType_LB == keyType then
     self:Panel_Minigame_Rhythm_GaugeMove_Left()
-  elseif __eQuickTimeEventPadType_RT == keyType then
+  elseif __eQuickTimeEventPadType_RB == keyType then
     self:Panel_Minigame_Rhythm_GaugeMove_Right()
   end
 end

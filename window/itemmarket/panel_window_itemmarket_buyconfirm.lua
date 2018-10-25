@@ -23,9 +23,7 @@ local ItemMarketBuyConfirm = {
   buyItemTotalPrice = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "StaticText_ItemBuyTotalPrice"),
   buyItemBG = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Static_BuyItemBG"),
   btn_Buy = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Button_Yes"),
-  btn_Close = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Button_No"),
-  btn_Min = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Button_Min"),
-  btn_Max = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Button_Max")
+  btn_Close = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Button_No")
 }
 if true == isItemMarketSecureCode() then
   ItemMarketBuyConfirm.buyItemSecureCodeBG = UI.getChildControl(Panel_Window_ItemMarket_BuyConfirm, "Static_BuySecureCodeBG")
@@ -49,6 +47,8 @@ function ItemMarketBuyConfirmHideAni()
   ani1:SetHideAtEnd(true)
 end
 function ItemMarketBuyConfirm:init()
+  self.btn_Min = UI.getChildControl(self.buyItemCount, "Button_Min")
+  self.btn_Max = UI.getChildControl(self.buyItemCount, "Button_Max")
   self.buyItemCount:SetNumberMode(true)
   self.buyItemCount:SetMaxInput(4)
 end
@@ -102,6 +102,7 @@ function ItemMarketBuyConfirm:Update()
     local totalPrice = buyItemPrice * marketItemBuyCount
     self.buyItemTotalPrice:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_BUYCONFIRM_BUYPRICE", "totalPrice", makeDotMoney(totalPrice)))
   end
+  self.txt_ItemBuyCountQuestion:SetPosY(self.txt_ItemBuyQuestion:GetPosY() + self.txt_ItemBuyQuestion:GetTextSizeY() + 5)
 end
 function HandleClicked_ItemMarket_BuyCountInput()
   local currentNumber = toInt64(0, ItemMarketBuyConfirm.buyItemCount:GetEditText())

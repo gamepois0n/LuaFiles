@@ -336,7 +336,7 @@ local function Panel_Lobby_Function_Initialize()
   Panel_Lobby_UI.CC_SelectClassButton:addInputEvent("Mouse_LUp", "changeCreateCharacterMode_SelectClass()")
   Panel_Lobby_UI.CC_CreateButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateOk()")
   Panel_Lobby_UI.CC_BackButton:addInputEvent("Mouse_LUp", "Panel_CharacterCreateCancel()")
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isConsole() then
     Panel_Lobby_UI.CCSC_ClassMovie:SetShow(false)
     Panel_Lobby_UI.CCSC_RadioNormalMovie:SetShow(false)
     Panel_Lobby_UI.CCSC_RadioAwakenMovie:SetShow(false)
@@ -445,7 +445,7 @@ function Panel_Lobby_Function_showCharacterCreate_SelectClass()
     FGlobal_CharacterSelect_Close()
   end
   Panel_Lobby_Global_Variable.currentSelectedIdx = -1
-  local isXbox = ToClient_isXBox() or ToClient_isPS4()
+  local isXbox = ToClient_isConsole()
   Panel_Lobby_UI.CCSC_LeaveConsole:SetShow(isXbox)
   Panel_Lobby_UI.CCSC_SelectConsole:SetShow(isXbox)
   Panel_Lobby_UI.CCSC_BackButton:SetShow(not isXbox)
@@ -505,7 +505,7 @@ function Panel_Lobby_function_SelectClassType(index, isOn)
     end
     Panel_Lobby_ClassUI.ClassButtons[index]:SetMonoTone(false)
     Panel_Lobby_ClassUI.ClassButtons[index]:AddEffect("UI_CharactorSelcect_Line", true, 10, 4)
-    if true == ToClient_isXBox() or true == ToClient_isPS4() then
+    if true == ToClient_isConsole() then
       _index = index
       viewCharacterCreateSelectClassMode(index)
       Panel_Lobby_Global_Variable.characterSelectType = index
@@ -548,7 +548,7 @@ function Panel_Lobby_SelectClass_MouseEvent(index, isOn)
   if classButton ~= nil then
     if isOn == true then
       classButton:SetVertexAniRun("Ani_Color_Bright", true)
-      if true == ToClient_isXBox() or true == ToClient_isPS4() then
+      if true == ToClient_isConsole() then
         if index == Panel_Lobby_Global_Variable.currentSelectedIdx then
           Panel_Lobby_UI.CCSC_SelectConsole:SetText("Create")
         else

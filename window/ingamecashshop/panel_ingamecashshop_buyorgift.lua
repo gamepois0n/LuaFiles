@@ -13,12 +13,12 @@ local inGameShopBuy = {
   _config = {
     _slot = {
       _startX = 17,
-      _startY = 130,
+      _startY = 150,
       _gapX = 36
     },
     _buy = {
       _startX = 17,
-      _startY = 130,
+      _startY = 150,
       _gapX = 30
     },
     _sizeGift = 35,
@@ -165,13 +165,13 @@ function inGameShopBuy:init()
   self._txt_CouponApplyIcon = UI.createAndCopyBasePropertyControl(Panel_IngameCashShop_BuyOrGift, "StaticText_CouponApplyIcon", self._static_CouponApplyBG, "InGameShopBuy_CouponIcon")
   self._txt_CouponApplyIcon:SetPosX(0)
   self._txt_CouponApplyIcon:SetPosY(0)
-  self._static_GiftListBG:SetPosY(180)
+  self._static_GiftListBG:SetPosY(200)
   self._static_GiftListBG:SetSize(self._static_GiftListBG:GetSizeX(), 375)
-  self._static_GiftListTopBG:SetPosY(185)
+  self._static_GiftListTopBG:SetPosY(205)
   self._static_GiftListTopBG:SetSize(self._static_GiftListTopBG:GetSizeX(), 90)
   self._static_GiftListTopBG:addInputEvent("Mouse_UpScroll", "Scroll_GiftTopList( true )")
   self._static_GiftListTopBG:addInputEvent("Mouse_DownScroll", "Scroll_GiftTopList( false )")
-  self._static_GiftListMiddleBG:SetPosY(280)
+  self._static_GiftListMiddleBG:SetPosY(300)
   self._static_GiftListMiddleBG:SetSize(self._static_GiftListMiddleBG:GetSizeX(), 50)
   self.icon_Pearl:SetText("0")
   for giftIdx = 0, self._config._giftTopListMaxCount - 1 do
@@ -210,7 +210,7 @@ function inGameShopBuy:init()
   self._static_GiftList_NonUser:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_BUYORGIFT_NONUSER"))
   self._scroll_GiftTopList:SetSize(self._scroll_GiftTopList:GetSizeX(), self._static_GiftListTopBG:GetSizeY() - 10)
   self._scroll_GiftTopList:ComputePos()
-  self._static_GiftListBotBG:SetPosY(335)
+  self._static_GiftListBotBG:SetPosY(355)
   self._static_GiftListBotBG:SetSize(self._static_GiftListBotBG:GetSizeX(), 175)
   self._static_GiftListBotBG:addInputEvent("Mouse_UpScroll", "Scroll_GiftBotList( true )")
   self._static_GiftListBotBG:addInputEvent("Mouse_DownScroll", "Scroll_GiftBotList( false )")
@@ -243,6 +243,8 @@ function inGameShopBuy:init()
   self._pearlStampCount = UI.getChildControl(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStamp")
   self._pearlStampCount:SetShow(false)
   self._static_Caution:SetShow(false)
+  UIScroll.InputEvent(inGameShopBuy._scroll_GiftBotList, "Scroll_GiftBotList")
+  UIScroll.InputEvent(inGameShopBuy._scroll_GiftTopList, "Scroll_GiftTopList")
   self.savedProductCount = 1
 end
 function inGameShopBuy:registMessageHandler()
@@ -335,15 +337,15 @@ function inGameShopBuy:updateByEventCart()
   end
   local buyConfig = self._config._buy
   self._static_BuyLineBG:SetPosX(buyConfig._startX)
-  self._static_BuyLineBG:SetPosY(buyConfig._startY + buyConfig._gapX + 10)
+  self._static_BuyLineBG:SetPosY(buyConfig._startY + buyConfig._gapX + 30)
   if self._isGift then
     self._static_BuyLineBG:SetShow(false)
     self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 600 + buyConfig._gapX)
-    self._static_GiftListBG:SetPosY(180 + buyConfig._gapX)
-    self._static_GiftListTopBG:SetPosY(185 + buyConfig._gapX)
-    self._static_GiftListMiddleBG:SetPosY(280 + buyConfig._gapX)
-    self._static_GiftListBotBG:SetPosY(335 + buyConfig._gapX)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 620 + buyConfig._gapX)
+    self._static_GiftListBG:SetPosY(200 + buyConfig._gapX)
+    self._static_GiftListTopBG:SetPosY(205 + buyConfig._gapX)
+    self._static_GiftListMiddleBG:SetPosY(300 + buyConfig._gapX)
+    self._static_GiftListBotBG:SetPosY(355 + buyConfig._gapX)
     self._static_GiftListBG:SetShow(true)
     self._static_GiftListTopBG:SetShow(true)
     self._static_GiftListMiddleBG:SetShow(true)
@@ -357,12 +359,12 @@ function inGameShopBuy:updateByEventCart()
     inGameShopBuy:UserListUpdate()
   else
     self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
-    self._static_PearlBG:SetPosY(210)
+    self._static_PearlBG:SetPosY(250)
     self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 30)
     self._static_CouponApplyBG:SetPosY(self._static_PearlBG:GetPosY() + 10)
     self._txt_CouponApplyIcon:ComputePos()
     local couponBGSizeX = self._static_CouponApplyBG:GetSizeX()
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 40)
     local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
     self._static_PearlBG:SetShow(true)
     self._static_GiftListBG:SetShow(false)
@@ -497,15 +499,15 @@ function inGameShopBuy:update(isCouponApply)
   end
   local buyConfig = self._config._buy
   self._static_BuyLineBG:SetPosX(buyConfig._startX)
-  self._static_BuyLineBG:SetPosY(buyConfig._startY + buyConfig._gapX + 10)
+  self._static_BuyLineBG:SetPosY(buyConfig._startY + buyConfig._gapX + 30)
   if self._isGift then
     self._static_BuyLineBG:SetShow(false)
     self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), 130)
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 600)
-    self._static_GiftListBG:SetPosY(180)
-    self._static_GiftListTopBG:SetPosY(185)
-    self._static_GiftListMiddleBG:SetPosY(280)
-    self._static_GiftListBotBG:SetPosY(335)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), 620)
+    self._static_GiftListBG:SetPosY(200)
+    self._static_GiftListTopBG:SetPosY(205)
+    self._static_GiftListMiddleBG:SetPosY(300)
+    self._static_GiftListBotBG:SetPosY(355)
     self._static_GiftListBG:SetShow(true)
     self._static_GiftListTopBG:SetShow(true)
     self._static_GiftListMiddleBG:SetShow(true)
@@ -520,7 +522,7 @@ function inGameShopBuy:update(isCouponApply)
   else
     self._static_BuyLineBG:SetShow(true)
     self._static_LeftBG:SetSize(self._static_LeftBG:GetSizeX(), buyConfig._startY + buyConfig._gapX)
-    self._static_PearlBG:SetPosY(210)
+    self._static_PearlBG:SetPosY(250)
     if isCouponApply then
       self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 70)
     else
@@ -529,7 +531,7 @@ function inGameShopBuy:update(isCouponApply)
     self._static_CouponApplyBG:SetPosY(self._static_PearlBG:GetPosY() + 10)
     self._txt_CouponApplyIcon:ComputePos()
     local couponBGSizeX = self._static_CouponApplyBG:GetSizeX()
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + giftGap + 20)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + giftGap + 40)
     local pearlIconPriceByCoupon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
     self._static_PearlBG:SetShow(true)
     self._static_GiftListBG:SetShow(false)
@@ -556,7 +558,7 @@ function inGameShopBuy:update(isCouponApply)
       if not couponCategoryCheck and Panel_IngameCashShop_BuyOrGift:GetShow() then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_UNABLECOUPON"))
         self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 30)
-        Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + giftGap + 20)
+        Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + giftGap + 40)
         local pearIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - self._txt_PearlIconPrice:GetTextSizeX() / 2
         self._txt_PearlIconPrice:SetPosX(pearIconTextPosX)
         local couponCheckPearlIcon = self._static_PearlBG:GetPosY() + self._static_PearlBG:GetSizeY() / 2 - self._txt_PearlIconPrice:GetSizeY() / 2
@@ -621,7 +623,7 @@ function inGameShopBuy:update(isCouponApply)
     local waypointKey = territoryKeyToWaypointKey[territoryKeyRaw]
     local warehouseWrapper = warehouse_get(waypointKey)
     self._static_PearlBG:SetSize(self._static_PearlBG:GetSizeX(), self._static_PearlBG:GetSizeY() + 50)
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), Panel_IngameCashShop_BuyOrGift:GetSizeY() + 50)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), Panel_IngameCashShop_BuyOrGift:GetSizeY() + 70)
     self._radio_PayInven:ComputePos()
     self._radio_PayWarehouse:ComputePos()
     self._staticText_PayInven:ComputePos()
@@ -661,7 +663,7 @@ function FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(price, moneyType)
     self._radioButtonSelectStamp:SetCheck(false)
     self._static_selectStampBG:SetShow(false)
     self._pearlStampCount:SetShow(false)
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 40)
     return
   end
   if false == self._static_CouponApplyBG:GetShow() and stampCount <= userStampCount and true == isOpenPearlStamp and moneyType ~= UI_CCC.eCashProductCategory_Pearl and moneyType ~= UI_CCC.eCashProductCategory_Mileage then
@@ -684,7 +686,7 @@ function FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(price, moneyType)
     self._static_StampIcon:SetShow(true)
     self._static_StampIcon:SetPosY(stampBgPosY + 7)
     self._static_StampIcon:SetPosX(self._txt_PearlIconPrice:GetPosX())
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20 + self._static_selectStampBG:GetSizeY())
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 40 + self._static_selectStampBG:GetSizeY())
     self._usePearlStampCount = stampCount
   else
     self._static_StampIcon:SetShow(false)
@@ -693,7 +695,7 @@ function FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(price, moneyType)
     self._pearlStampCount:SetShow(false)
     self._radioButtonSelectPearl:SetCheck(false)
     self._radioButtonSelectStamp:SetCheck(false)
-    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
+    Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 40)
     self._usePearlStampCount = -1
   end
   self._static_Gift:ComputePos()
@@ -1198,7 +1200,7 @@ function InGameShopBuy_Count(isUp)
   self.savedProductCount = count
   local sumPrice = Int64toInt32(price) * count
   self._static_PearlBG:SetSize(self._static_GiftListBG:GetSizeX(), 30)
-  Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), self._config._buy._startY + self._config._buy._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 20)
+  Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), self._config._buy._startY + self._config._buy._gapX + self._config._sizePanel + self._static_PearlBG:GetSizeY() + 40)
   self._static_Price:SetLineRender(false)
   self._txt_PearlIconPrice:SetLineRender(false)
   self._txt_PearlIconPrice:SetFontColor(UI_color.C_FFEFEFEF)

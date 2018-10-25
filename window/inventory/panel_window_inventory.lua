@@ -30,24 +30,11 @@ local radioButtonManu = UI.getChildControl(Panel_Invertory_Manufacture_BG, "Butt
 local radioButtonNote = UI.getChildControl(Panel_Invertory_Manufacture_BG, "Button_Note")
 local _btn_WayPoint = UI.getChildControl(Panel_Invertory_ExchangeButton, "Button_WayPoint")
 local _btn_Widget = UI.getChildControl(Panel_Invertory_ExchangeButton, "Button_Widget")
-local btn_AlchemyStone = UI.getChildControl(Panel_Window_Inventory, "Button_AlchemyStone")
-local btn_AlchemyFigureHead = UI.getChildControl(Panel_Window_Inventory, "Button_AlchemyFigureHead")
-local btn_DyePalette = UI.getChildControl(Panel_Window_Inventory, "Button_Palette")
-local btn_BuyWeight = UI.getChildControl(Panel_Window_Inventory, "Button_BuyWeight")
 local icon_TrashOn = UI.getChildControl(Panel_Window_Inventory, "Button_TrashOn")
 local icon_TrashSequence = UI.getChildControl(Panel_Window_Inventory, "Button_TrashAlert")
+local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 local isAlchemyStoneEnble = ToClient_IsContentsGroupOpen("35")
-if isAlchemyStoneEnble then
-  btn_AlchemyStone:SetShow(true)
-else
-  btn_AlchemyStone:SetShow(false)
-end
 local isAlchemyFigureHeadEnble = ToClient_IsContentsGroupOpen("44")
-if isAlchemyFigureHeadEnble then
-  btn_AlchemyFigureHead:SetShow(true)
-else
-  btn_AlchemyFigureHead:SetShow(false)
-end
 local isItemLock = ToClient_IsContentsGroupOpen("219")
 local burnItemTime = -1
 local effectScene = {
@@ -75,10 +62,10 @@ local inven = {
     slotCount = 64,
     slotCols = 8,
     slotRows = 0,
-    slotStartX = 19,
-    slotStartY = 93,
-    slotGapX = 48,
-    slotGapY = 47,
+    slotStartX = 21,
+    slotStartY = 140,
+    slotGapX = 54,
+    slotGapY = 54,
     slotEnchantX = 13,
     slotEnchantY = 76
   },
@@ -86,23 +73,14 @@ local inven = {
   _slotsBackground = Array.new(),
   slots = Array.new(),
   slotEtcData = {},
-  staticTitle = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Title"),
-  staticCapacity = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Capacity"),
-  buttonClose = UI.getChildControl(Panel_Window_Inventory, "Button_Win_Close"),
-  staticMoney = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Money"),
-  buttonMoney = UI.getChildControl(Panel_Window_Inventory, "Button_Money"),
-  buttonPearl = UI.getChildControl(Panel_Window_Inventory, "Static_PearlIcon"),
-  valuePearl = UI.getChildControl(Panel_Window_Inventory, "StaticText_PearlValue"),
-  buttonMileage = UI.getChildControl(Panel_Window_Inventory, "Static_MileageIcon"),
-  valueMileage = UI.getChildControl(Panel_Window_Inventory, "StaticText_MileageValue"),
-  checkButton_Sort = UI.getChildControl(Panel_Window_Inventory, "CheckButton_ItemSort"),
-  staticTxtWeight = UI.getChildControl(Panel_Window_Inventory, "StaticText_Weight"),
-  staticWeight = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Weight"),
+  staticTitle = UI.getChildControl(Panel_Window_Inventory, "StaticText_Title"),
+  buttonClose = nil,
+  _buttonQuestion = nil,
+  checkPopUp = nil,
+  moneyTypeBG = UI.getChildControl(Panel_Window_Inventory, "Static_MoneyTypeBG"),
+  buttonTypeBG = UI.getChildControl(Panel_Window_Inventory, "Static_ButtonTypeBG"),
+  topItemSortBG = UI.getChildControl(Panel_Window_Inventory, "Static_TopItemSortBG"),
   weightGaugeBG = UI.getChildControl(Panel_Window_Inventory, "Static_Texture_Weight_Background"),
-  weightItem = UI.getChildControl(Panel_Window_Inventory, "Progress2_Weight"),
-  weightEquipment = UI.getChildControl(Panel_Window_Inventory, "Progress2_Equipment"),
-  weightMoney = UI.getChildControl(Panel_Window_Inventory, "Progress2_Money"),
-  weightIcon = UI.getChildControl(Panel_Window_Inventory, "Static_WeightIcon"),
   enchantNumber = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Slot_Enchant_value"),
   slotBackground = UI.getChildControl(Panel_Window_Inventory, "Static_Slot_BG"),
   button_Puzzle = UI.getChildControl(Panel_Window_Inventory, "Button_Puzzle"),
@@ -134,17 +112,6 @@ function FGlobal_Inventory_GetInven()
   return inven
 end
 local whereUseItemSlotNo, whereUseItemSSW
-local btn_Manufacture = UI.getChildControl(Panel_Window_Inventory, "Button_Manufacture")
-local _buttonQuestion = UI.getChildControl(Panel_Window_Inventory, "Button_Question")
-_buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelWindowInventory\" )")
-_buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelWindowInventory\", \"true\")")
-_buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelWindiowInventory\", \"false\")")
-local checkPopUp = UI.getChildControl(Panel_Window_Inventory, "CheckButton_PopUp")
-checkPopUp:addInputEvent("Mouse_LUp", "InventoryWindow_CheckPopUpUI()")
-checkPopUp:addInputEvent("Mouse_On", "Inventory_PopUp_ShowIconToolTip(true)")
-checkPopUp:addInputEvent("Mouse_Out", "Inventory_PopUp_ShowIconToolTip(false)")
-local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
-checkPopUp:SetShow(isPopUpContentsEnable)
 local helpWidgetBase = UI.getChildControl(Panel_CheckedQuest, "StaticText_Notice_1")
 local FilterRadioTooltip = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_Inventory, "HelpWindow_For_InvenFilterRadio")
 CopyBaseProperty(helpWidgetBase, FilterRadioTooltip)
@@ -274,20 +241,6 @@ function PaGlobal_Inventory:findItemWrapper(itemWhereType, targetItemKey, target
   end
   return nil
 end
-inven.staticTxtWeight:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelpFunc( true )")
-inven.staticTxtWeight:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelpFunc( false )")
-inven.staticWeight:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelpFunc( true )")
-inven.staticWeight:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelpFunc( false )")
-inven.weightGaugeBG:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelpFunc( true )")
-inven.weightGaugeBG:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelpFunc( false )")
-inven.staticCapacity:addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 5 )")
-inven.staticCapacity:addInputEvent("Mouse_On", "Panel_Inventory_SlotText_SimpleTooltip( true )")
-inven.staticCapacity:addInputEvent("Mouse_Out", "Panel_Inventory_SlotText_SimpleTooltip( false )")
-btn_BuyWeight:addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 4 )")
-btn_BuyWeight:addInputEvent("Mouse_On", "Panel_Inventory_SimpleTooltip(true, 0)")
-btn_BuyWeight:addInputEvent("Mouse_Out", "Panel_Inventory_SimpleTooltip(false)")
-inven.weightIcon:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelp( true )")
-inven.weightIcon:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelp( false )")
 local weightHelp = {
   _weightHelp_BG = UI.getChildControl(Panel_Window_Inventory, "Static_WeightHelp_BG"),
   _weightHelp = UI.getChildControl(Panel_Window_Inventory, "StaticText_Weight_Help"),
@@ -399,9 +352,46 @@ end
 function inven:init()
   self.config.slotRows = self.config.slotCount / self.config.slotCols
   self.enchantNumber:SetShow(false)
+  self.buttonClose = UI.getChildControl(self.staticTitle, "Button_Win_Close")
+  self._buttonQuestion = UI.getChildControl(self.staticTitle, "Button_Question")
+  self.checkPopUp = UI.getChildControl(self.staticTitle, "CheckButton_PopUp")
+  self.radioButtonInstanceInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
+  self.weightItem = UI.getChildControl(self.weightGaugeBG, "Progress2_Weight")
+  self.weightEquipment = UI.getChildControl(self.weightGaugeBG, "Progress2_Equipment")
+  self.weightMoney = UI.getChildControl(self.weightGaugeBG, "Progress2_Money")
+  self.weightIcon = UI.getChildControl(self.weightGaugeBG, "Static_WeightIcon")
+  self.staticWeight = UI.getChildControl(self.weightGaugeBG, "StaticText_Weight")
+  self.btn_BuyWeight = UI.getChildControl(self.weightGaugeBG, "Button_BuyWeight")
+  self.btn_BuyWeight:SetShow(true)
+  self.staticCapacity = UI.getChildControl(self.topItemSortBG, "Static_Text_Capacity")
+  self.staticMoney = UI.getChildControl(self.moneyTypeBG, "Static_Text_Money")
+  self.buttonMoney = UI.getChildControl(self.moneyTypeBG, "Button_Money")
+  self.buttonPearl = UI.getChildControl(self.moneyTypeBG, "Static_PearlIcon")
+  self.valuePearl = UI.getChildControl(self.moneyTypeBG, "StaticText_PearlValue")
+  self.buttonMileage = UI.getChildControl(self.moneyTypeBG, "Static_MileageIcon")
+  self.valueMileage = UI.getChildControl(self.moneyTypeBG, "StaticText_MileageValue")
+  self.btn_Manufacture = UI.getChildControl(self.buttonTypeBG, "Button_Manufacture")
+  self.btn_AlchemyStone = UI.getChildControl(self.buttonTypeBG, "Button_AlchemyStone")
+  self.btn_AlchemyFigureHead = UI.getChildControl(self.buttonTypeBG, "Button_AlchemyFigureHead")
+  self.btn_DyePalette = UI.getChildControl(self.buttonTypeBG, "Button_Palette")
+  self.staticWeight:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelpFunc( true )")
+  self.staticWeight:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelpFunc( false )")
+  self.weightGaugeBG:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelpFunc( true )")
+  self.weightGaugeBG:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelpFunc( false )")
+  self.weightIcon:addInputEvent("Mouse_On", "Panel_Inventory_WeightHelp( true )")
+  self.weightIcon:addInputEvent("Mouse_Out", "Panel_Inventory_WeightHelp( false )")
+  self.btn_BuyWeight:addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 4 )")
+  self.btn_BuyWeight:addInputEvent("Mouse_On", "Panel_Inventory_SimpleTooltip(true, 0)")
+  self.btn_BuyWeight:addInputEvent("Mouse_Out", "Panel_Inventory_SimpleTooltip(false)")
+  self.checkPopUp:addInputEvent("Mouse_LUp", "InventoryWindow_CheckPopUpUI()")
+  self.checkPopUp:addInputEvent("Mouse_On", "Inventory_PopUp_ShowIconToolTip(true)")
+  self.checkPopUp:addInputEvent("Mouse_Out", "Inventory_PopUp_ShowIconToolTip(false)")
+  self.checkPopUp:SetShow(isPopUpContentsEnable)
+  self.staticCapacity:addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 5 )")
+  self.staticCapacity:addInputEvent("Mouse_On", "Panel_Inventory_SlotText_SimpleTooltip( true )")
+  self.staticCapacity:addInputEvent("Mouse_Out", "Panel_Inventory_SlotText_SimpleTooltip( false )")
   self.radioButtonNormaiInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
   self.radioButtonCashInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
-  self.radioButtonInstanceInven:addInputEvent("Mouse_LUp", "Inventory_Tab()")
   self.radioButtonStd:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
   self.radioButtonTransport:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
   self.radioButtonHousing:addInputEvent("Mouse_LUp", "Inventory_TabSound()")
@@ -411,20 +401,36 @@ function inven:init()
   self.radioButtonStd:addInputEvent("Mouse_Out", "Inventory_FilterRadioTooltip_Show( false )")
   self.radioButtonTransport:addInputEvent("Mouse_Out", "Inventory_FilterRadioTooltip_Show( false )")
   self.radioButtonHousing:addInputEvent("Mouse_Out", "Inventory_FilterRadioTooltip_Show( false )")
-  btn_AlchemyStone:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 0 .. " )")
-  btn_AlchemyStone:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 0 .. " )")
-  btn_AlchemyStone:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 0 .. " )")
-  btn_AlchemyFigureHead:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 1 .. " )")
-  btn_AlchemyFigureHead:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 1 .. " )")
-  btn_AlchemyFigureHead:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 1 .. " )")
-  btn_DyePalette:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 2 .. " )")
-  btn_DyePalette:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 2 .. " )")
-  btn_DyePalette:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false,  " .. 2 .. " )")
-  btn_Manufacture:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 3 .. " )")
-  btn_Manufacture:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 3 .. " )")
-  btn_Manufacture:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 3 .. " )")
+  self.radioButtonStd:SetShow(false)
+  self.radioButtonTransport:SetShow(false)
+  self.radioButtonHousing:SetShow(false)
+  self._buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelWindowInventory\" )")
+  self._buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelWindowInventory\", \"true\")")
+  self._buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelWindiowInventory\", \"false\")")
+  self.btn_AlchemyStone:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 0 .. " )")
+  self.btn_AlchemyStone:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 0 .. " )")
+  self.btn_AlchemyStone:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 0 .. " )")
+  self.btn_AlchemyFigureHead:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 1 .. " )")
+  self.btn_AlchemyFigureHead:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 1 .. " )")
+  self.btn_AlchemyFigureHead:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 1 .. " )")
+  self.btn_DyePalette:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 2 .. " )")
+  self.btn_DyePalette:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 2 .. " )")
+  self.btn_DyePalette:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false,  " .. 2 .. " )")
+  self.btn_Manufacture:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_Function( " .. 3 .. " )")
+  self.btn_Manufacture:addInputEvent("Mouse_On", "Inventory_Btn_SimpleTooltip( true, " .. 3 .. " )")
+  self.btn_Manufacture:addInputEvent("Mouse_Out", "Inventory_Btn_SimpleTooltip( false, " .. 3 .. " )")
   if isAlchemyStoneEnble then
-    btn_AlchemyStone:setButtonShortcuts("PANEL_SIMPLESHORTCUT_ALCHEMY_RECHARGE")
+    self.btn_AlchemyStone:setButtonShortcuts("PANEL_SIMPLESHORTCUT_ALCHEMY_RECHARGE")
+  end
+  if isAlchemyStoneEnble then
+    self.btn_AlchemyStone:SetShow(true)
+  else
+    self.btn_AlchemyStone:SetShow(false)
+  end
+  if isAlchemyFigureHeadEnble then
+    self.btn_AlchemyFigureHead:SetShow(true)
+  else
+    self.btn_AlchemyFigureHead:SetShow(false)
   end
   self.trashArea:addInputEvent("Mouse_LUp", "HandleClicked_Inventory_ItemDelete()")
   self.trashArea:addInputEvent("Mouse_On", "Inventory_TrashToolTip( true )")
@@ -439,6 +445,7 @@ function inven:init()
     self.radioButtonNormaiInven:SetTextSpan(60, 7)
   end
   self.radioButtonInstanceInven:SetShow(ToClient_IsDevelopment())
+  self.checkButton_Sort = UI.getChildControl(self.topItemSortBG, "CheckButton_ItemSort")
   local sortBtn_sizeX = self.checkButton_Sort:GetSizeX()
   local sortBtn_TextSizeX = self.checkButton_Sort:GetTextSizeX()
   self.checkButton_Sort:SetEnableArea(0, 0, 100, self.checkButton_Sort:GetSizeY())
@@ -446,42 +453,44 @@ function inven:init()
   local btnNormalTextPosX = btnNormalSizeX - btnNormalSizeX / 2 - self.radioButtonNormaiInven:GetTextSizeX() / 2
   local btnCashSizeX = self.radioButtonCashInven:GetSizeX() + 23
   local btnCashTextPosX = btnCashSizeX - btnCashSizeX / 2 - self.radioButtonCashInven:GetTextSizeX() / 2
-  local btnManufactureSizeX = btn_Manufacture:GetSizeX() + 23
-  local btnManufactureTextPosX = btnManufactureSizeX - btnManufactureSizeX / 2 - btn_Manufacture:GetTextSizeX() / 2
-  local btnAlchemyStoneSizeX = btn_AlchemyStone:GetSizeX() + 23
-  local btnAlchemyStoneTextPosX = btnAlchemyStoneSizeX - btnAlchemyStoneSizeX / 2 - btn_AlchemyStone:GetTextSizeX() / 2
-  local btnAlchemyFigureSizeX = btn_AlchemyFigureHead:GetSizeX() + 23
-  local btnAlchemyFigureTextPosX = btnAlchemyFigureSizeX - btnAlchemyFigureSizeX / 2 - btn_AlchemyFigureHead:GetTextSizeX() / 2
-  local btnDyePaletteSizeX = btn_DyePalette:GetSizeX() + 23
-  local btnDyePaletteTextPosX = btnDyePaletteSizeX - btnDyePaletteSizeX / 2 - btn_DyePalette:GetTextSizeX() / 2
+  local btnManufactureSizeX = self.btn_Manufacture:GetSizeX() + 23
+  local btnManufactureTextPosX = btnManufactureSizeX - btnManufactureSizeX / 2 - self.btn_Manufacture:GetTextSizeX() / 2
+  local btnAlchemyStoneSizeX = self.btn_AlchemyStone:GetSizeX() + 23
+  local btnAlchemyStoneTextPosX = btnAlchemyStoneSizeX - btnAlchemyStoneSizeX / 2 - self.btn_AlchemyStone:GetTextSizeX() / 2
+  local btnAlchemyFigureSizeX = self.btn_AlchemyFigureHead:GetSizeX() + 23
+  local btnAlchemyFigureTextPosX = btnAlchemyFigureSizeX - btnAlchemyFigureSizeX / 2 - self.btn_AlchemyFigureHead:GetTextSizeX() / 2
+  local btnDyePaletteSizeX = self.btn_DyePalette:GetSizeX() + 23
+  local btnDyePaletteTextPosX = btnDyePaletteSizeX - btnDyePaletteSizeX / 2 - self.btn_DyePalette:GetTextSizeX() / 2
   self.radioButtonNormaiInven:SetTextSpan(btnNormalTextPosX, 5)
   self.radioButtonCashInven:SetTextSpan(btnCashTextPosX, 5)
-  btn_Manufacture:SetTextSpan(btnManufactureTextPosX, 5)
-  btn_AlchemyStone:SetTextSpan(btnAlchemyStoneTextPosX, 5)
-  btn_AlchemyFigureHead:SetTextSpan(btnAlchemyFigureTextPosX, 5)
-  btn_DyePalette:SetTextSpan(btnDyePaletteTextPosX, 5)
+  self.btn_Manufacture:SetTextSpan(btnManufactureTextPosX, 5)
+  self.btn_AlchemyStone:SetTextSpan(btnAlchemyStoneTextPosX, 5)
+  self.btn_AlchemyFigureHead:SetTextSpan(btnAlchemyFigureTextPosX, 5)
+  self.btn_DyePalette:SetTextSpan(btnDyePaletteTextPosX, 5)
+  PaGlobal_Inventory_ChangeMileage()
 end
 function Inventory_Btn_SimpleTooltip(isShow, tipType)
   if not isShow then
     return TooltipSimple_Hide()
   end
+  local self = inven
   local name, desc, control
   if 0 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYSTONE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYSTONE_TOOLTIP_DESC")
-    control = btn_AlchemyStone
+    control = self.btn_AlchemyStone
   elseif 1 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYFIGUREHEAD_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYFIGUREHEAD_TOOLTIP_DESC")
-    control = btn_AlchemyFigureHead
+    control = self.btn_AlchemyFigureHead
   elseif 2 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_DYEPALETTE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_DYEPALETTE_TOOLTIP_DESC")
-    control = btn_DyePalette
+    control = self.btn_DyePalette
   elseif 3 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_MANUFACTURE_TOOLTIP_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_MANUFACTURE_TOOLTIP_DESC")
-    control = btn_Manufacture
+    control = self.btn_Manufacture
   end
   TooltipSimple_Show(control, name, desc)
 end
@@ -583,12 +592,14 @@ function inven:createSlot()
     local slot = {}
     SlotItem.new(slot, "ItemIcon_" .. ii, ii, Panel_Window_Inventory, self.slotConfig)
     slot:createChild()
-    CopyBaseProperty(self.enchantNumber, slot.enchantText)
-    slot.enchantText:SetSize(slot.icon:GetSizeX(), slot.icon:GetSizeY())
-    slot.enchantText:SetPosX(0)
-    slot.enchantText:SetPosY(0)
-    slot.enchantText:SetTextHorizonCenter()
-    slot.enchantText:SetTextVerticalCenter()
+    slot.icon:SetSize(44, 44)
+    slot.border:SetSize(46, 46)
+    slot.border:SetPosX(0.5)
+    slot.border:SetPosY(0.5)
+    slot.expiration2h:SetSize(46, 46)
+    slot.expiration2h:SetPosX(5)
+    slot.expiration2h:SetPosY(5)
+    slot.expirationBG:SetSize(46, 46)
     slot.icon:addInputEvent("Mouse_RUp", "Inventory_SlotRClick(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_LDown", "Inventory_SlotLClick(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_LUp", "Inventory_DropHandler(" .. ii .. ")")
@@ -653,7 +664,7 @@ function inven:createSlot()
   end
 end
 function InventoryWindow_CheckPopUpUI()
-  if checkPopUp:IsCheck() then
+  if inven.checkPopUp:IsCheck() then
     Panel_Window_Inventory:OpenUISubApp()
   else
     Panel_Window_Inventory:CloseUISubApp()
@@ -663,7 +674,7 @@ end
 function HandleClicked_InventoryWindow_Close()
   audioPostEvent_SystemUi(1, 1)
   Panel_Window_Inventory:CloseUISubApp()
-  checkPopUp:SetCheck(false)
+  inven.checkPopUp:SetCheck(false)
   InventoryWindow_Close()
 end
 function inven:setClosingFlag(flag)
@@ -795,36 +806,36 @@ function InventoryWindow_Show(uiType, isCashInven, isMarket)
     inven.buttonMoney:SetEnable(true)
   end
   if isGameTypeRussia() and (getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT) then
-    btn_DyePalette:SetMonoTone(true)
-    btn_DyePalette:SetIgnore(true)
-    btn_DyePalette:SetEnable(false)
+    self.btn_DyePalette:SetMonoTone(true)
+    self.btn_DyePalette:SetIgnore(true)
+    self.btn_DyePalette:SetEnable(false)
   else
-    btn_DyePalette:SetMonoTone(false)
-    btn_DyePalette:SetIgnore(false)
-    btn_DyePalette:SetEnable(true)
+    self.btn_DyePalette:SetMonoTone(false)
+    self.btn_DyePalette:SetIgnore(false)
+    self.btn_DyePalette:SetEnable(true)
   end
   if isFlushedUI() then
-    btn_Manufacture:SetEnable(false)
-    btn_Manufacture:SetMonoTone(true)
-    btn_AlchemyStone:SetEnable(false)
-    btn_AlchemyStone:SetMonoTone(true)
-    btn_AlchemyFigureHead:SetEnable(false)
-    btn_AlchemyFigureHead:SetMonoTone(true)
-    btn_DyePalette:SetEnable(false)
-    btn_DyePalette:SetMonoTone(true)
+    self.btn_Manufacture:SetEnable(false)
+    self.btn_Manufacture:SetMonoTone(true)
+    self.btn_AlchemyStone:SetEnable(false)
+    self.btn_AlchemyStone:SetMonoTone(true)
+    self.btn_AlchemyFigureHead:SetEnable(false)
+    self.btn_AlchemyFigureHead:SetMonoTone(true)
+    self.btn_DyePalette:SetEnable(false)
+    self.btn_DyePalette:SetMonoTone(true)
   else
-    btn_Manufacture:SetEnable(true)
-    btn_Manufacture:SetMonoTone(false)
-    btn_AlchemyStone:SetEnable(true)
-    btn_AlchemyStone:SetMonoTone(false)
-    btn_AlchemyFigureHead:SetEnable(true)
-    btn_AlchemyFigureHead:SetMonoTone(false)
+    self.btn_Manufacture:SetEnable(true)
+    self.btn_Manufacture:SetMonoTone(false)
+    self.btn_AlchemyStone:SetEnable(true)
+    self.btn_AlchemyStone:SetMonoTone(false)
+    self.btn_AlchemyFigureHead:SetEnable(true)
+    self.btn_AlchemyFigureHead:SetMonoTone(false)
     if isGameTypeRussia() and (getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT) then
-      btn_DyePalette:SetEnable(false)
-      btn_DyePalette:SetMonoTone(true)
+      self.btn_DyePalette:SetEnable(false)
+      self.btn_DyePalette:SetMonoTone(true)
     else
-      btn_DyePalette:SetEnable(true)
-      btn_DyePalette:SetMonoTone(false)
+      self.btn_DyePalette:SetEnable(true)
+      self.btn_DyePalette:SetMonoTone(false)
     end
   end
   _PA_LOG("cylee", "InventoryWindow_Show() end")
@@ -947,6 +958,7 @@ function Inventory_SlotRClickXXX(slotNo, equipSlotNo, index)
       return
     end
     if nil ~= self.rClickFunc then
+      _PA_LOG("\236\160\149\237\131\156\234\179\164", "self.rClickFunc \236\151\172\234\184\176\236\151\144 \235\147\164\236\150\180\236\152\164\235\138\148\234\177\180\234\176\132?")
       self.rClickFunc(slotNo, itemWrapper, itemWrapper:get():getCount_s64(), inventoryType)
       return
     end
@@ -1351,7 +1363,7 @@ function Inventory_IconOver(index)
   if nil ~= over_SlotEffect then
     self.slots[index].icon:EraseEffect(over_SlotEffect)
   end
-  over_SlotEffect = self.slots[index].icon:AddEffect("UI_Inventory_EmptySlot", false, 0, 0)
+  over_SlotEffect = self.slots[index].icon:AddEffect("UI_Inventory_EmptySlot", false, 1, 1)
   self._tooltipWhereType = Inventory_GetCurrentInventoryType()
   self._tooltipSlotNo = slotNo
   Panel_Tooltip_Item_Show_GeneralNormal(index, "inventory", true, false)
@@ -1500,7 +1512,6 @@ function Inventory_SlotDrag(index)
   if Panel_Win_System:GetShow() then
     return
   end
-  icon_TrashOn:SetShow(true)
   local whereType = Inventory_GetCurrentInventoryType()
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
   if nil == itemWrapper then
@@ -1698,7 +1709,6 @@ function Inventory_updateSlotData(isLoad)
   if true == _ContentsGroup_InvenUpdateCheck and nil == isLoad and false == Panel_Window_Inventory:GetShow() then
     return
   end
-  local stdBackGround = UI.getChildControl(Panel_Window_Inventory, "Static_Texture_Slot_Background")
   local self = inven
   local selfPlayerWrapper = getSelfPlayer()
   local classType = selfPlayerWrapper:getClassType()
@@ -1760,12 +1770,13 @@ function Inventory_updateSlotData(isLoad)
       slot.empty:SetShow(true)
     elseif ii == invenUseSize - useStartSlot - self.startSlotIndex then
       if not isGameTypeGT() then
+        slot.lock:SetShow(true)
         if self.slots[ii].icon:GetShow() then
           slot.onlyPlus:SetShow(true)
+          slot.lock:SetShow(false)
         else
           slot.plus:SetShow(true)
         end
-        slot.lock:SetShow(true)
         Panel_Window_Inventory:SetChildIndex(slot.plus, 15099)
         Panel_Window_Inventory:SetChildIndex(slot.onlyPlus, 15100)
       else
@@ -1808,11 +1819,6 @@ function Inventory_updateSlotData(isLoad)
       slot.isEmpty = false
       if nil ~= self.filterFunc then
         isFiltered = self.filterFunc(slotNo, itemWrapper, currentWhereType)
-      else
-        isFiltered = _Inventory_updateSlotData_ChangeFilterBtnTexture(isFiltered, slotNo, stdBackGround)
-        if nil ~= Panel_Housing_ConsignmentSale and Panel_Housing_ConsignmentSale:GetShow() and false == isFiltered then
-          isFiltered = _filter_for_HousingConsignmentSaleManager(slotNo, itemWrapper)
-        end
       end
       slot.icon:SetEnable(not isFiltered)
       slot.icon:SetMonoTone(isFiltered)
@@ -2119,75 +2125,75 @@ end
 function isNormalInvenCheck()
   return isNormalInven
 end
+function PaGlobal_Inventory_ChangeMileage()
+  local self = inven
+  self.buttonMileage:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Cashshop_00.dds")
+  if isGameTypeEnglish() or isGameTypeID() then
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMileage, 32, 1, 62, 31)
+    self.buttonMileage:getBaseTexture():setUV(x1, y1, x2, y2)
+  elseif isGameTypeTR() then
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMileage, 63, 1, 93, 31)
+    self.buttonMileage:getBaseTexture():setUV(x1, y1, x2, y2)
+  elseif isGameTypeKR2() then
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMileage, 94, 1, 124, 31)
+    self.buttonMileage:getBaseTexture():setUV(x1, y1, x2, y2)
+  else
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMileage, 1, 1, 31, 31)
+    self.buttonMileage:getBaseTexture():setUV(x1, y1, x2, y2)
+  end
+  self.buttonMileage:setRenderTexture(self.buttonMileage:getBaseTexture())
+end
 function _Inventory_updateSlotData_ChangeSilverIcon(money)
   local self = inven
+  self.buttonMoney:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
+  self.buttonMoney:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
+  self.buttonMoney:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
   if 100000 <= Int64toInt32(money) then
-    self.buttonMoney:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Silver4.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 0, 0, 30, 30)
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 258, 124, 288, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.buttonMoney:setRenderTexture(self.buttonMoney:getBaseTexture())
-    self.buttonMoney:ChangeOnTextureInfoName("new_ui_common_forlua/window/inventory/Silver4_Over.dds")
-    self.buttonMoney:ChangeClickTextureInfoName("new_ui_common_forlua/window/inventory/Silver4_Over.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 261, 155, 291, 185)
+    self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
+    local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 261, 155, 291, 185)
+    self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
   elseif Int64toInt32(money) >= 20000 then
-    self.buttonMoney:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Silver3.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 0, 0, 30, 30)
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 227, 124, 257, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.buttonMoney:setRenderTexture(self.buttonMoney:getBaseTexture())
-    self.buttonMoney:ChangeOnTextureInfoName("new_ui_common_forlua/window/inventory/Silver3_Over.dds")
-    self.buttonMoney:ChangeClickTextureInfoName("new_ui_common_forlua/window/inventory/Silver3_Over.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 230, 155, 260, 185)
+    self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
+    local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 230, 155, 260, 185)
+    self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
   elseif Int64toInt32(money) >= 5000 then
-    self.buttonMoney:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Silver2.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 0, 0, 30, 30)
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 196, 124, 226, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.buttonMoney:setRenderTexture(self.buttonMoney:getBaseTexture())
-    self.buttonMoney:ChangeOnTextureInfoName("new_ui_common_forlua/window/inventory/Silver2_Over.dds")
-    self.buttonMoney:ChangeClickTextureInfoName("new_ui_common_forlua/window/inventory/Silver2_Over.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 199, 155, 229, 185)
+    self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
+    local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 199, 155, 229, 185)
+    self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
   else
-    self.buttonMoney:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Silver1.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 0, 0, 30, 30)
+    local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 165, 124, 195, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
-    self.buttonMoney:setRenderTexture(self.buttonMoney:getBaseTexture())
-    self.buttonMoney:ChangeOnTextureInfoName("new_ui_common_forlua/window/inventory/Silver1_Over.dds")
-    self.buttonMoney:ChangeClickTextureInfoName("new_ui_common_forlua/window/inventory/Silver1_Over.dds")
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 168, 155, 198, 185)
+    self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
+    local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 168, 155, 198, 185)
+    self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
   end
+  self.buttonMoney:setRenderTexture(self.buttonMoney:getBaseTexture())
+  self.buttonMoney:setRenderTexture(self.buttonMoney:getOnTexture())
+  self.buttonMoney:setRenderTexture(self.buttonMoney:getClickTexture())
 end
 function _Inventory_updateSlotData_ChangeWeightIcon(s64_allWeight, s64_maxWeight_div)
   local self = inven
   if 80 <= Int64toInt32(s64_allWeight / s64_maxWeight_div) then
-    self.weightIcon:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/WeightOver.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.weightIcon, 0, 0, 30, 30)
+    self.weightIcon:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self.weightIcon, 135, 1, 153, 20)
     self.weightIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     self.weightIcon:setRenderTexture(self.weightIcon:getBaseTexture())
   else
-    self.weightIcon:ChangeTextureInfoName("new_ui_common_forlua/window/inventory/weight.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(self.weightIcon, 0, 0, 30, 30)
+    self.weightIcon:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
+    local x1, y1, x2, y2 = setTextureUV_Func(self.weightIcon, 97, 1, 115, 20)
     self.weightIcon:getBaseTexture():setUV(x1, y1, x2, y2)
     self.weightIcon:setRenderTexture(self.weightIcon:getBaseTexture())
   end
-end
-function _Inventory_updateSlotData_ChangeFilterBtnTexture(isFiltered, slotNo, stdBackGround)
-  local self = inven
-  local itemWrapper = getInventoryItemByType(Inventory_GetCurrentInventoryType(), slotNo)
-  if self.radioButtonStd:IsChecked() then
-    isFiltered = _filter_for_NormalTab(slotNo, itemWrapper)
-    stdBackGround:ChangeTextureInfoName("New_UI_Common_forLua/Window/Inventory/Inventory_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(stdBackGround, 0, 1, 256, 129)
-    stdBackGround:getBaseTexture():setUV(x1, y1, x2, y2)
-    stdBackGround:setRenderTexture(stdBackGround:getBaseTexture())
-  elseif self.radioButtonTransport:IsChecked() then
-    isFiltered = _filter_for_TradeTab(slotNo, itemWrapper)
-    stdBackGround:ChangeTextureInfoName("New_UI_Common_forLua/Window/Inventory/Inventory_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(stdBackGround, 256, 1, 512, 129)
-    stdBackGround:getBaseTexture():setUV(x1, y1, x2, y2)
-    stdBackGround:setRenderTexture(stdBackGround:getBaseTexture())
-  elseif self.radioButtonHousing:IsChecked() then
-    isFiltered = _filter_for_HousingTab(slotNo, itemWrapper)
-    stdBackGround:ChangeTextureInfoName("New_UI_Common_forLua/Window/Inventory/Inventory_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(stdBackGround, 0, 130, 256, 258)
-    stdBackGround:getBaseTexture():setUV(x1, y1, x2, y2)
-    stdBackGround:setRenderTexture(stdBackGround:getBaseTexture())
-  end
-  return isFiltered
 end
 function _Inventory_updateSlotData_AutoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
   if playerLevel <= 10 then
@@ -2360,9 +2366,13 @@ function Inventory_RePosition()
   local invenSizeX = Panel_Window_Inventory:GetSizeX()
   local invenSizeY = Panel_Window_Inventory:GetSizeY()
   Panel_Window_Inventory:SetPosX(scrSizeX - invenSizeX)
-  Panel_Window_Inventory:SetPosY((scrSizeY - invenSizeY) / 2)
+  Panel_Window_Inventory:SetPosY(math.max(0, (scrSizeY - invenSizeY) / 2))
   inven.orgPosX = Panel_Window_Inventory:GetPosX()
   inven.orgPosY = Panel_Window_Inventory:GetPosY()
+end
+function FGlobal_InventorySetPos_WithWarehouse()
+  Panel_Window_Inventory:SetPosX(getScreenSizeX() - Panel_Window_Inventory:GetSizeX())
+  Panel_Window_Inventory:SetPosY(Panel_Window_Warehouse:GetPosY())
 end
 function Inventory_GetStartIndex()
   local self = inven
@@ -2423,7 +2433,7 @@ function Inventory_DropHandler(index)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM"))
     return false
   end
-  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() or FGlobal_Enchant_SetTargetItem() then
+  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() or FGlobal_Enchant_SetTargetItem() or Panel_Window_DetectUser:IsShow() then
     DragManager:clearInfo()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM_WHILE_UI"))
     return false
@@ -2446,7 +2456,6 @@ function Inventory_DropEscape()
 end
 function Inventory_DropEscapeAlert()
   icon_TrashOn:SetShow(false)
-  icon_TrashSequence:SetShow(true)
 end
 function Inventory_DropOnTrashButton(isShow)
   if not isShow then
@@ -2454,7 +2463,6 @@ function Inventory_DropOnTrashButton(isShow)
     icon_TrashSequence:SetShow(false)
   end
   icon_TrashOn:SetShow(false)
-  icon_TrashSequence:SetShow(true)
 end
 function Inventory_UnequipItem(whereType, slotNo)
   local self = inven
@@ -2580,16 +2588,16 @@ function Panel_Inventory_SimpleTooltip(isShow, tipType)
     return TooltipSimple_Hide()
   end
   local name, desc, control
+  local self = inven
   name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BUYWEIGHT_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BUYWEIGHT_TOOLTIP_DESC")
-  control = btn_BuyWeight
+  control = self.btn_BuyWeight
   TooltipSimple_Show(control, name, desc)
 end
 function Inventory_TrashToolTip(isShow)
   if not isShow then
     TooltipSimple_Hide()
     if DragManager:isDragging() then
-      icon_TrashOn:SetShow(true)
     else
       icon_TrashOn:SetShow(false)
     end
@@ -2602,7 +2610,6 @@ function Inventory_TrashToolTip(isShow)
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRASH_TOOLTIP_DESC")
   if DragManager:isDragging() then
     icon_TrashOn:SetShow(false)
-    icon_TrashSequence:SetShow(true)
   end
   control = self.trashArea
   TooltipSimple_Show(control, name, desc)
@@ -2675,26 +2682,39 @@ function FGlobal_RecentCookItemCheck(itemKey, itemCount)
   return returnSlotNo
 end
 function inventory_FlushRestoreFunc()
-  btn_Manufacture:SetEnable(true)
-  btn_Manufacture:SetMonoTone(false)
-  btn_AlchemyStone:SetEnable(true)
-  btn_AlchemyStone:SetMonoTone(false)
-  btn_AlchemyFigureHead:SetEnable(true)
-  btn_AlchemyFigureHead:SetMonoTone(false)
-  btn_DyePalette:SetEnable(true)
-  btn_DyePalette:SetMonoTone(false)
+  local self = inven
+  self.btn_Manufacture:SetEnable(true)
+  self.btn_Manufacture:SetMonoTone(false)
+  self.btn_AlchemyStone:SetEnable(true)
+  self.btn_AlchemyStone:SetMonoTone(false)
+  self.btn_AlchemyFigureHead:SetEnable(true)
+  self.btn_AlchemyFigureHead:SetMonoTone(false)
+  self.btn_DyePalette:SetEnable(true)
+  self.btn_DyePalette:SetMonoTone(false)
+  Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 712)
+  self.buttonTypeBG:SetShow(true)
+  self.buttonTypeBG:ComputePos()
+  self.trashArea:ComputePos()
+  self.moneyTypeBG:ComputePos()
+  self.weightGaugeBG:ComputePos()
 end
 function renderModeChange_inventory_FlushRestoreFunc(prevRenderModeList, nextRenderModeList)
+  local self = inven
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     if isFlushedUI() then
-      btn_Manufacture:SetEnable(false)
-      btn_Manufacture:SetMonoTone(true)
-      btn_AlchemyStone:SetEnable(false)
-      btn_AlchemyStone:SetMonoTone(true)
-      btn_AlchemyFigureHead:SetEnable(false)
-      btn_AlchemyFigureHead:SetMonoTone(true)
-      btn_DyePalette:SetEnable(false)
-      btn_DyePalette:SetMonoTone(true)
+      self.btn_Manufacture:SetEnable(false)
+      self.btn_Manufacture:SetMonoTone(true)
+      self.btn_AlchemyStone:SetEnable(false)
+      self.btn_AlchemyStone:SetMonoTone(true)
+      self.btn_AlchemyFigureHead:SetEnable(false)
+      self.btn_AlchemyFigureHead:SetMonoTone(true)
+      self.btn_DyePalette:SetEnable(false)
+      self.btn_DyePalette:SetMonoTone(true)
+      Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 662)
+      self.buttonTypeBG:SetShow(false)
+      self.trashArea:ComputePos()
+      self.moneyTypeBG:ComputePos()
+      self.weightGaugeBG:ComputePos()
     end
     return
   end
@@ -2732,20 +2752,18 @@ function FGlobal_UpdateInventoryWeight()
     self.weightItem:SetProgressRate(Int64toInt32(s64_allWeight / s64_allWeight_div))
   end
   self.staticWeight:SetText(str_AllWeight .. " / " .. str_MaxWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
-  btn_BuyWeight:SetPosX(self.staticWeight:GetPosX() + self.staticWeight:GetTextSizeX() + 2)
-  btn_BuyWeight:SetPosY(self.staticWeight:GetPosY() + 1)
   _Inventory_updateSlotData_ChangeWeightIcon(s64_allWeight, s64_maxWeight_div)
 end
 function Inventory_PopUp_ShowIconToolTip(isShow)
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
-    if checkPopUp:IsCheck() then
+    if inven.checkPopUp:IsCheck() then
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
     else
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
     end
-    TooltipSimple_Show(checkPopUp, name, desc)
+    TooltipSimple_Show(inven.checkPopUp, name, desc)
   else
     TooltipSimple_Hide()
   end

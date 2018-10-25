@@ -21,8 +21,8 @@ local defalut_Control = {
       _Progress = UI.getChildControl(Panel_Plant_WorkManager, "Progress2_Worker_ActionPoint"),
       _ActionPoint = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Worker_ActionPoint"),
       _RegionName = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Worker_RegionName"),
-      _rowMax = 7,
-      _row_PosY_Gap = 2
+      _rowMax = 12,
+      _row_PosY_Gap = 3
     }
   },
   _work_Info = {
@@ -30,32 +30,25 @@ local defalut_Control = {
     _Title = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_WorkInfo_Title"),
     _Result_BG = UI.getChildControl(Panel_Plant_WorkManager, "Static_WorkInfo_Result_BG"),
     _Result_Title = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_WorkInfo_Result_Title"),
-    _Result_Line = UI.getChildControl(Panel_Plant_WorkManager, "Static_WorkInfo_Result_Line"),
     _Result_Icon_BG_1 = UI.getChildControl(Panel_Plant_WorkManager, "Static_WorkInfo_Result_Icon_BG_1"),
     _Result_Icon_BG_2 = UI.getChildControl(Panel_Plant_WorkManager, "Static_WorkInfo_Result_Icon_BG_2"),
     _Result_Icon = UI.getChildControl(Panel_Plant_WorkManager, "Static_WorkInfo_Result_Icon"),
     _Result_Name = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_WorkInfo_Result_Name"),
     _Time_BG = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_Time_BG"),
     _Time_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_Time_Value"),
-    _Time_Line = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Time_Line"),
     _Time_Count = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_Time_Count"),
     _Work_Count = UI.getChildControl(Panel_Plant_WorkManager, "Button_Estimated_Work_Count"),
     _Work_BG = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Work_BG"),
-    _Work_Line_1 = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Work_Line_1"),
-    _Work_Line_2 = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Work_Line_2"),
     _Work_Volume_Text = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_WorkVolum_Text"),
     _Work_Volume_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_WorkVolum_Value"),
     _Work_Speed_Text = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_WorkSpeed_Text"),
     _Work_Speed_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_WorkSpeed_Value"),
     _Move_BG = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Move_BG"),
-    _Move_Line_1 = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Move_Line_1"),
-    _Move_Line_2 = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Move_Line_2"),
     _Move_Distance_Text = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_MoveDistance_Text"),
     _Move_Distance_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_MoveDistance_Value"),
     _Move_Speed_Text = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_MoveSpeed_Text"),
     _Move_Speed_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_MoveSpeed_Value"),
     _Luck_BG = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Luck_BG"),
-    _Luck_Line = UI.getChildControl(Panel_Plant_WorkManager, "Static_Estimated_Luck_Line"),
     _Luck_Text = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_Luck_Text"),
     _Luck_Value = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Estimated_Luck_Value")
   }
@@ -64,7 +57,6 @@ defalut_Control._btn_Question:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowTo
 defalut_Control._btn_Question:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"HouseManageWork\", \"true\")")
 defalut_Control._btn_Question:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"HouseManageWork\", \"false\")")
 function defalut_Control:Init_Control()
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._worker_List._BG, self._worker_List._Title)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._worker_List._BG, self._worker_List._Scroll)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._worker_List._BG, self._worker_List._No_Worker)
   FGlobal_Set_Table_Control(self._worker_List, "_Button", "_Button", true, false)
@@ -74,32 +66,25 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Title)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_BG)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Title)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Line)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon_BG_1)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon_BG_2)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Result_Name)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Time_BG)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Time_Value)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Time_Line)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Time_Count)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Count)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_BG)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Line_1)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Line_2)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Volume_Text)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Volume_Value)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Speed_Text)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Work_Speed_Value)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_BG)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Line_1)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Line_2)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Text)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Distance_Value)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Speed_Text)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Move_Speed_Value)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Luck_BG)
-  FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Luck_Line)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Luck_Text)
   FGlobal_AddChild(Panel_Plant_WorkManager, self._work_Info._BG, self._work_Info._Luck_Value)
 end
@@ -424,14 +409,12 @@ function Worker_List:_updateSlot()
     local workerGrade = data._workerGrade
     defalut_Control._worker_List._Button[index]:SetFontColor(ConvertFromGradeToColor(workerGrade))
     defalut_Control._worker_List._Button[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-    defalut_Control._worker_List._Button[index]:SetText(name)
-    defalut_Control._worker_List._RegionName[index]:SetText(regionName)
+    defalut_Control._worker_List._Button[index]:SetText(name .. " " .. regionName)
     defalut_Control._worker_List._Button[index]:addInputEvent("Mouse_LUp", "Plant_Worker_List_Select(" .. index .. ")")
     defalut_Control._worker_List._ActionPoint[index]:SetText(actionPoint)
     defalut_Control._worker_List._Progress[index]:SetProgressRate(preogressRate)
     defalut_Control._worker_List._Button[index]:SetShow(true)
     defalut_Control._worker_List._Progress[index]:SetShow(true)
-    defalut_Control._worker_List._RegionName[index]:SetShow(true)
     if Worker_List._selected_WorkerKey == data._workerNoChar then
       defalut_Control._worker_List._Button[index]:SetCheck(true)
       defalut_Control._worker_List._ActionPoint[index]:SetShow(true)

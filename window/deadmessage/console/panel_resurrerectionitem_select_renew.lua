@@ -86,6 +86,7 @@ function resurrectionItem:close()
   Panel_Resurrection_ItemSelect:SetShow(false)
 end
 function PaGlobalFunc_ResurrerectionItem_Close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   resurrectionItem:close()
 end
 function resurrectionItem:update()

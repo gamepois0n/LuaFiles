@@ -41,7 +41,7 @@ local servantInventory = {
       count = 41,
       column = 8,
       row = 0,
-      startX = 9,
+      startX = 12,
       startY = 40,
       gapX = 47,
       gapY = 47
@@ -119,8 +119,6 @@ function servantInventory:init()
       Panel_Tooltip_Item_SetPosition(slotNo, slot, "servant_inventory")
       inventory._slot[jj] = slot
     end
-    inventory._staticBG:SetPosX(inventoryConfig.startX)
-    inventory._staticBG:SetPosY(inventoryConfig.startY + inventoryConfig.gapY * ii)
     inventory._staticBG:SetShow(true)
     inventory._staticTitle:SetShow(true)
     inventory._staticTitle:SetText(ii)
@@ -137,13 +135,11 @@ function servantInventory:update()
   for ii = 0, self._config.inventoryCount do
     local data = self._inventory[ii]
     if nil ~= data._actorKeyRaw then
-      data._staticBG:SetPosY(inventoryConfig.startY + sizeY)
       sizeY = sizeY + data._staticBG:GetSizeY() + 10
     end
   end
-  sizeY = sizeY + 70
+  sizeY = sizeY + 42
   Panel_Window_ServantInventory:SetSize(Panel_Window_ServantInventory:GetSizeX(), sizeY)
-  Panel_Window_ServantInventory:SetEnableArea(10, 10, 400, Panel_Window_ServantInventory:GetSizeY() - 10)
 end
 function servantInventory:updateByIndex(index)
   local data = self._inventory[index]

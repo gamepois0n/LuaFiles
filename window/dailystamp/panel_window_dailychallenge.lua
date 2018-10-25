@@ -203,6 +203,7 @@ function dailyChallenge:setButtonState(control, challnegeType, dataIndex, existR
     control:SetMonoTone(true)
   end
 end
+local tempTable
 function dailyChallenge:update()
   local eChallengeType = self._config._challengeType
   local dataIndex = 0
@@ -274,6 +275,7 @@ function dailyChallenge:update()
   end
   table.sort(self._dataList, sortFunction)
   local UiIndex = 0
+  tempTable = {}
   for index = 1, self._config._maxShowChallengeCount do
     self._challengeList[UiIndex].slotBG:SetShow(true)
     if nil == self._dataList[index] then
@@ -319,8 +321,21 @@ function dailyChallenge:createList(UiIndex, dataIndex)
   local baseCount = rewardInfo:getBaseRewardCount()
   local selectCount = rewardInfo:getSelectRewardCount()
   _staticText_RewardTitle:SetText(rewardInfo:getName())
-  _staticText_RewardDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  _staticText_RewardDesc:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
+  _staticText_RewardDesc:setLineCountByLimitAutoWrap(3)
   _staticText_RewardDesc:SetText(rewardInfo:getDesc())
+  _staticText_RewardDesc:SetTextSpan(_staticText_RewardDesc:GetTextSpan().x, (_staticText_RewardDesc:GetSizeY() - _staticText_RewardDesc:GetTextSizeY()) * 0.5)
+  if _staticText_RewardDesc:IsLimitText() then
+    _staticText_RewardDesc:SetIgnore(false)
+    tempTable[UiIndex] = {}
+    tempTable[UiIndex].control = _static_Check
+    tempTable[UiIndex].name = rewardInfo:getName()
+    tempTable[UiIndex].desc = rewardInfo:getDesc()
+    _staticText_RewardDesc:addInputEvent("Mouse_On", "PaGlobalFunc_DailyChallenge_RewardTooltipLimitedText(" .. UiIndex .. ", true)")
+    _staticText_RewardDesc:addInputEvent("Mouse_Out", "PaGlobalFunc_DailyChallenge_RewardTooltipLimitedText(" .. UiIndex .. ", false)")
+  else
+    _staticText_RewardDesc:SetIgnore(true)
+  end
   local itemSlotBG = self._static_ItemSlotBg[UiIndex]
   for index = 0, self._config._maxItemSlotCount - 1 do
     if baseCount > index then
@@ -344,6 +359,16 @@ function dailyChallenge:createList(UiIndex, dataIndex)
       selectItemSlotBG[index].slot.icon:addInputEvent("Mouse_LUp", "")
     end
   end
+end
+function PaGlobalFunc_DailyChallenge_RewardTooltipLimitedText(UiIndex, isShow)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  if nil == tempTable or nil == UiIndex or nil == tempTable[UiIndex] then
+    return
+  end
+  TooltipSimple_Show(tempTable[UiIndex].control, tempTable[UiIndex].name, tempTable[UiIndex].desc)
 end
 function PaGlobalFunc_DailyChallenge_RewardTooltip()
   dailyChallenge:showTooltip()

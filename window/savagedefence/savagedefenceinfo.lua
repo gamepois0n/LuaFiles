@@ -18,6 +18,7 @@ local PaGlobal_SavegeDefenceInfo = {
   _btnInmy = UI.getChildControl(Panel_SavageDefenceInfo, "Button_InmyChannel"),
   _list2 = UI.getChildControl(Panel_SavageDefenceInfo, "List2_SavageDefenceList"),
   _desc_Rule_Title = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"),
+  _desc_Rule_Title_Check = UI.getChildControl(Panel_SavageDefenceInfo, "RadioButton_SavageDefence_Rule"),
   _desc_rule = UI.getChildControl(Panel_SavageDefenceInfo, "Static_BG_1"),
   desc_Rule = {
     [0] = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1"),
@@ -44,6 +45,7 @@ local PaGlobal_SavegeDefenceInfo = {
     PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_10")
   },
   _desc_Reward_Title = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Reward"),
+  _desc_Reward_Title_Check = UI.getChildControl(Panel_SavageDefenceInfo, "RadioButton_SavageDefence_Reward"),
   _desc_Reward = UI.getChildControl(Panel_SavageDefenceInfo, "Static_BG_2"),
   desc_Reward = {
     [0] = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_1"),
@@ -62,6 +64,7 @@ local PaGlobal_SavegeDefenceInfo = {
     PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_6")
   },
   _desc_Explanation_Title = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Explanation"),
+  _desc_Explanation_Title_Check = UI.getChildControl(Panel_SavageDefenceInfo, "RadioButton_SavageDefence_Explanation"),
   _desc_Explanation = UI.getChildControl(Panel_SavageDefenceInfo, "Static_BG_3"),
   desc_Explanation = {
     [0] = UI.getChildControl(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_1"),
@@ -138,7 +141,9 @@ function FGlobal_SavegeDefenceInfo_Initionalize()
   self._txtReward:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_REWARD"))
   self._txtInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_INFO"))
   self._desc_Reward_Title:SetPosY(85)
+  self._desc_Reward_Title_Check:SetPosY(self._desc_Reward_Title:GetPosY() + 4)
   self._desc_Explanation_Title:SetPosY(110)
+  self._desc_Explanation_Title_Check:SetPosY(self._desc_Explanation_Title:GetPosY() + 4)
   for index = 0, #self.desc_RuleText do
     self.desc_Rule[index]:SetPosX(5)
   end
@@ -219,9 +224,6 @@ function FGlobal_SavegeDefenceInfo_ListUpdate(contents, key)
     end
     if 0 == getCurrentState then
       isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
-      savageDefenceListJoinBtn:SetFontColor(Defines.Color.C_FF3B8BBE)
-      savageDefenceListJoinBtn:SetOverFontColor(Defines.Color.C_FF3B8BBE)
-      savageDefenceListJoinBtn:SetClickFontColor(Defines.Color.C_FF3B8BBE)
       savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
       savageDefenceListJoinBtn:SetIgnore(false)
       getWave = 0
@@ -386,8 +388,11 @@ function FGlobal_SavageDefenceInfo_Close()
   local self = PaGlobal_SavegeDefenceInfo
   self._openDesc = -1
   self._desc_Rule_Title:SetCheck(false)
+  self._desc_Rule_Title_Check:SetCheck(false)
   self._desc_Reward_Title:SetCheck(false)
+  self._desc_Reward_Title_Check:SetCheck(false)
   self._desc_Explanation_Title:SetCheck(false)
+  self._desc_Explanation_Title_Check:SetCheck(false)
   self._desc_rule:SetShow(false)
   self._desc_Reward:SetShow(false)
   self._desc_Explanation:SetShow(false)
@@ -412,7 +417,9 @@ local rule_ani_SpeedTime = 5
 local _desc_Rule_TitleSize = 0
 function FGlobal_SavegeDefenceInfo_InformationOpen(deltaTime)
   local self = PaGlobal_SavegeDefenceInfo
-  if self._desc_Rule_Title:IsCheck() then
+  if self._desc_Rule_Title:IsCheck() or self._desc_Rule_Title_Check:IsCheck() then
+    self._desc_Rule_Title:SetCheck(true)
+    self._desc_Rule_Title_Check:SetCheck(true)
     local value = self._desc_rule:GetSizeY() + (self._maxDescRuleSize - self._desc_rule:GetSizeY()) * deltaTime * rule_ani_SpeedTime
     if value < 10 then
       value = 10
@@ -429,7 +436,9 @@ function FGlobal_SavegeDefenceInfo_InformationOpen(deltaTime)
       self._desc_rule:SetShow(false)
     end
   end
-  if self._desc_Reward_Title:IsCheck() then
+  if self._desc_Reward_Title:IsCheck() or self._desc_Reward_Title_Check:IsCheck() then
+    self._desc_Reward_Title:SetCheck(true)
+    self._desc_Reward_Title_Check:SetCheck(true)
     local value = self._desc_Reward:GetSizeY() + (self._maxDescRewardSize - self._desc_Reward:GetSizeY()) * deltaTime * rule_ani_SpeedTime
     if value < 10 then
       value = 10
@@ -446,7 +455,9 @@ function FGlobal_SavegeDefenceInfo_InformationOpen(deltaTime)
       self._desc_Reward:SetShow(false)
     end
   end
-  if self._desc_Explanation_Title:IsCheck() then
+  if self._desc_Explanation_Title:IsCheck() or self._desc_Explanation_Title_Check:IsCheck() then
+    self._desc_Explanation_Title:SetCheck(true)
+    self._desc_Explanation_Title_Check:SetCheck(true)
     local value = self._desc_Explanation:GetSizeY() + (self._maxDescExplanationSize - self._desc_Explanation:GetSizeY()) * deltaTime * rule_ani_SpeedTime
     if value < 10 then
       value = 10
@@ -466,14 +477,18 @@ function FGlobal_SavegeDefenceInfo_InformationOpen(deltaTime)
   self._desc_rule:SetPosY(self._desc_Rule_Title:GetPosY() + self._desc_Rule_Title:GetSizeY())
   if self._desc_rule:GetShow() then
     self._desc_Reward_Title:SetPosY(self._desc_rule:GetPosY() + self._desc_rule:GetSizeY() + 10)
+    self._desc_Reward_Title_Check:SetPosY(self._desc_Reward_Title:GetPosY() + 4)
   else
     self._desc_Reward_Title:SetPosY(self._desc_Rule_Title:GetPosY() + self._desc_Rule_Title:GetSizeY() + 5)
+    self._desc_Reward_Title_Check:SetPosY(self._desc_Reward_Title:GetPosY() + 4)
   end
   self._desc_Reward:SetPosY(self._desc_Reward_Title:GetPosY() + self._desc_Reward_Title:GetSizeY())
   if self._desc_Reward:GetShow() then
     self._desc_Explanation_Title:SetPosY(self._desc_Reward:GetPosY() + self._desc_Reward:GetSizeY() + 10)
+    self._desc_Explanation_Title_Check:SetPosY(self._desc_Explanation_Title:GetPosY() + 4)
   else
     self._desc_Explanation_Title:SetPosY(self._desc_Reward_Title:GetPosY() + self._desc_Reward_Title:GetSizeY() + 5)
+    self._desc_Explanation_Title_Check:SetPosY(self._desc_Explanation_Title:GetPosY() + 4)
   end
   self._desc_Explanation:SetPosY(self._desc_Explanation_Title:GetPosY() + self._desc_Explanation_Title:GetSizeY())
   for _, control in pairs(self.desc_Rule) do
@@ -490,8 +505,11 @@ function FromClient_UpdateSavageDefenceStatus()
   local self = PaGlobal_SavegeDefenceInfo
   Panel_SavageDefenceInfo:SetShow(true)
   self._desc_Rule_Title:SetCheck(true)
+  self._desc_Rule_Title_Check:SetCheck(true)
   self._desc_Reward_Title:SetCheck(false)
+  self._desc_Reward_Title_Check:SetCheck(false)
   self._desc_Explanation_Title:SetCheck(false)
+  self._desc_Explanation_Title_Check:SetCheck(false)
   self._desc_rule:SetShow(false)
   self._desc_Reward:SetShow(false)
   self._desc_Explanation:SetShow(false)

@@ -508,6 +508,7 @@ function PaGlobalFunc_StableMating_TabEvent(tab)
   if PaGlobalFunc_StableMating_GetCurrentTab() == tab then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 7)
   self._value.currentTab = tab
   self:closeSkill()
   PaGlobalFunc_StableMating_TabEventXXX(tab)
@@ -552,6 +553,7 @@ function PaGlobalFunc_StableMating_PageChange(isNext)
       RequestAuctionPrevPage(PaGlobalFunc_StableMating_TransferType(PaGlobalFunc_StableMating_GetCurrentTab()))
     end
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
 end
 function PaGlobalFunc_StableMating_OutList(index)
   local self = Panel_Window_StableMating_info

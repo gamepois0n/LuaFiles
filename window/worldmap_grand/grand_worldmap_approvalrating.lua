@@ -63,6 +63,7 @@ end
 function FGlobal_ApprovalRating_SetShow(isShow)
   PaGlobal_ApprovalRating.ui.approvalRatingBg:SetShow(isShow)
   if true == isShow then
+    PaGlobal_ApprovalRating.ui.approvalRatingBg:ComputePos()
     ToClient_requestApprovalRating()
   end
 end

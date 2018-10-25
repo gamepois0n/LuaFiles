@@ -34,6 +34,7 @@ local GuildMain = {
   _targetGuildName = nil
 }
 function GuildMain:open()
+  ToClient_updateXboxGuildUserGamerTag()
   _panel:SetShow(true)
   self:openTab(self._tabIdxData.guildInfo)
 end
@@ -224,8 +225,10 @@ function GuildMain:registEvent()
   registerEvent("FromClient_ResponseDeclareGuildWarToMyGuild", "FromClient_GuildMain_ResponseDeclareWarToMyGuild")
   registerEvent("FromClient_UpdateGuildContract", "FromClient_GuildMain_ResponseUpdateGuildContract")
   registerEvent("FromClient_ResponseGuildNotice", "FromClient_GuildMain_ResponseGuildNotice")
+  registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_GuildMain_ResponseProtectMember")
 end
 function GuildMain:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false)
 end
 function PaGlobalFunc_GuildMain_GetShow()
@@ -294,6 +297,7 @@ function InputMLUp_GuildMain_MoveTabToRight()
   self._currentTabIdx = self._currentTabIdx + 1
   self._currentTabIdx = self._currentTabIdx % self._tabIdxData.dataCount
   self:openTab(self._currentTabIdx)
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
 end
 function InputMLUp_GuildMain_MoveTabToLeft()
   local self = GuildMain
@@ -301,6 +305,7 @@ function InputMLUp_GuildMain_MoveTabToLeft()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMain")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(51, 6)
   self._currentTabIdx = self._currentTabIdx - 1
   self._currentTabIdx = self._currentTabIdx % self._tabIdxData.dataCount
   self:openTab(self._currentTabIdx)
@@ -888,6 +893,24 @@ function FromClient_GuildMain_ResponseGuildNotice()
   end
   local guildNotice = guildWrapper:getGuildNotice()
   self._ui.txt_GuildNotice:SetText(guildNotice)
+end
+function FromClient_GuildMain_ResponseProtectMember(targetNo, isProtectable)
+  local userNum = Int64toInt32(getSelfPlayer():get():getUserNo())
+  if userNum == Int64toInt32(targetNo) then
+    if true == isProtectable then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROTECT_GUILDMEMBER_MESSAGE_0"))
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROTECT_GUILDMEMBER_MESSAGE_1"))
+    end
+  end
+  local self = GuildMain
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : GuildMain")
+    return
+  end
+  if self._tabIdxData.guildMember == self._currentTabIdx then
+    FromClient_GuildMemberList_GuildListUpdate(userNum)
+  end
 end
 function FromClient_GuildMain_ResponseDeclareWarToMyGuild()
   local self = GuildMain

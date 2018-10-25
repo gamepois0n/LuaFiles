@@ -49,6 +49,7 @@ function PaGlobalFunc_WarDeclare_Close()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   self:close()
 end
 function PaGlobalFunc_WarDeclare_Init()
@@ -65,6 +66,7 @@ function PaGlobalFunc_WarDeclare_SetFocusEdit()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   ClearFocusEdit()
   SetFocusEdit(self._ui.edit_GuildName)
   self._ui.edit_GuildName:SetEditText(self._ui.edit_GuildName:GetEditText(), true)
@@ -96,6 +98,7 @@ function InputMLUp_WarDeclare_Confirm()
   local function close_function()
     self:close()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   if accumulateTax_s32 > 0 or accumulateCost_s32 > 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_TAXFIRST"))
     ClearFocusEdit()
@@ -131,6 +134,7 @@ function PaGlobalFunc_WarDeclare_Confirm()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : WarDeclare")
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   local guildName = self._ui.edit_GuildName:GetEditText()
   ToClient_RequestDeclareGuildWar(0, guildName, false)
   self._ui.edit_GuildName:SetEditText("", true)

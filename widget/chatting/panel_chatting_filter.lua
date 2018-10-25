@@ -10,6 +10,7 @@ Panel_Chatting_Filter:setGlassBackground(true)
 local ChattingFilter = {
   ui = {
     title = UI.getChildControl(Panel_Chatting_Filter, "StaticText_Title"),
+    main_BG = UI.getChildControl(Panel_Chatting_Filter, "Static_MainBg"),
     btn_Close = UI.getChildControl(Panel_Chatting_Filter, "Button_Win_Close"),
     bg = UI.getChildControl(Panel_Chatting_Filter, "Static_BG"),
     edit_Filter = UI.getChildControl(Panel_Chatting_Filter, "Edit_Filter"),
@@ -23,7 +24,7 @@ local ChattingFilter = {
     scroll = UI.getChildControl(Panel_Chatting_Filter, "Scroll_List")
   },
   config = {
-    maxFilterCount = 9,
+    maxFilterCount = 8,
     totalFilterCount = 0,
     startIndex = 0
   },
@@ -66,10 +67,10 @@ function ChattingFilter:Init()
     slot.FilterNameBG = UI.createAndCopyBasePropertyControl(Panel_Chatting_Filter, "Static_SlotBG", self.ui.bg, "ChattingFilter_BG_" .. slotIdx)
     slot.FilterName = UI.createAndCopyBasePropertyControl(Panel_Chatting_Filter, "StaticText_FilterName", slot.FilterNameBG, "ChattingFilter_FilterItemName_" .. slotIdx)
     slot.Delete = UI.createAndCopyBasePropertyControl(Panel_Chatting_Filter, "Button_Delete", slot.FilterNameBG, "ChattingFilter_FilterDeleteBtn_" .. slotIdx)
-    slot.FilterNameBG:SetPosX(5)
+    slot.FilterNameBG:SetPosX(8)
     slot.FilterNameBG:SetPosY(5 + (slot.FilterNameBG:GetSizeY() + 5) * slotIdx)
-    slot.FilterName:SetPosX(10)
-    slot.FilterName:SetPosY(7)
+    slot.FilterName:SetPosX(12)
+    slot.FilterName:SetPosY(12)
     slot.Delete:SetPosX(300)
     slot.Delete:SetPosY(5)
     slot.FilterNameBG:SetShow(false)
@@ -89,10 +90,15 @@ function ChattingFilter:Init()
     self.ui.scroll:SetShow(false)
     self.ui.desc_Txt:SetTextMode(UI_TM.eTextMode_AutoWrap)
     self.ui.desc_Txt:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_FILTER_DESC"))
-    self.ui.desc_BG:SetSize(self.ui.desc_BG:GetSizeX(), self.ui.desc_Txt:GetTextSizeY() + 20)
     self.ui.edit_Filter:SetMaxInput(50)
-    self.ui.desc_Txt:SetSize(self.ui.desc_Txt:GetSizeX(), self.ui.desc_Txt:GetTextSizeY() + 10)
-    Panel_Chatting_Filter:SetSize(Panel_Chatting_Filter:GetSizeX(), self.ui.bg:GetSizeY() + self.ui.title:GetSizeY() + self.ui.edit_Filter:GetSizeY() + self.ui.btn_Reset:GetSizeY() + self.ui.desc_Txt:GetTextSizeY() + 70)
+  end
+  local descSizeY = self.ui.desc_Txt:GetTextSizeY() - self.ui.desc_Txt:GetSizeY() + 10
+  if descSizeY > 0 then
+    self.ui.main_BG:SetSize(self.ui.main_BG:GetSizeX(), self.ui.main_BG:GetSizeY() + descSizeY)
+    self.ui.main_BG:ComputePos()
+    Panel_Chatting_Filter:SetSize(Panel_Chatting_Filter:GetSizeX(), Panel_Chatting_Filter:GetSizeY() + descSizeY)
+    self.ui.btn_Reset:ComputePos()
+    self.ui.btn_Filter:ComputePos()
   end
 end
 ChattingFilter:Init()

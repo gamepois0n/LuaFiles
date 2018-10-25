@@ -1513,8 +1513,8 @@ function Panel_Tooltip_Item_Set_Position(positionData, parent, inven, targetX, t
   local posX = positionData:GetParentPosX()
   local posY = positionData:GetParentPosY()
   if parent and inven then
-    posX = positionData:getParent():GetPosX() + 7
-    posY = positionData:getParent():GetPosY() + 10
+    posX = positionData:getParent():GetParentPosX() + 7
+    posY = positionData:getParent():GetParentPosY() + 10
   elseif parent then
     posX = positionData:getParent():GetParentPosX()
     posY = positionData:getParent():GetParentPosY() - 500

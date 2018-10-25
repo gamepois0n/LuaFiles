@@ -71,14 +71,12 @@ function Panel_FixEquip_InteractortionFromInventory(slotNo, itemWrapper, count, 
   end
   local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
   if isReady == true then
-    self._uiButtonApply:AddEffect("UI_Equip_Repair", true, 0, 0)
     self._uiButtonApply:SetIgnore(false)
     self._uiButtonApply:SetMonoTone(false)
     self._uiButtonApply:SetEnable(true)
     self._uiButtonApply:SetAlpha(1)
     self._uiButtonApply:addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
     if true == hasCashItem then
-      self._uiButtonApplyCash:AddEffect("UI_Equip_Repair", true, 0, 0)
       self._uiButtonApplyCash:SetMonoTone(false)
       self._uiButtonApplyCash:SetAlpha(1)
       self._uiButtonApplyCash:addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")

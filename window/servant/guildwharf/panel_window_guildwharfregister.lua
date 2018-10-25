@@ -27,14 +27,16 @@ local guildWharfRegister = {
   _buttonClose = UI.getChildControl(Panel_Window_GuildShipNaming_Input, "Button_No"),
   _buttonQuestion = UI.getChildControl(Panel_Window_GuildShipNaming_Input, "Button_Question"),
   _staticCreateServantNameBG = UI.getChildControl(Panel_Window_GuildShipNaming_Input, "Static_NamingPolicyBG"),
-  _staticCreateServantNameTitle = UI.getChildControl(Panel_Window_GuildShipNaming_Input, "StaticText_NamingPolicyTitle"),
-  _staticCreateServantName = UI.getChildControl(Panel_Window_GuildShipNaming_Input, "StaticText_NamingPolicy"),
+  _staticCreateServantNameTitle = nil,
+  _staticCreateServantName = nil,
   _inventoryType = nil,
   _inventorySlotNo = nil,
   _characterKey = nil,
   _level = nil,
   _type = nil
 }
+guildWharfRegister._staticCreateServantNameTitle = UI.getChildControl(guildWharfRegister._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
+guildWharfRegister._staticCreateServantName = UI.getChildControl(guildWharfRegister._staticCreateServantNameBG, "StaticText_NamingPolicy")
 function guildWharfRegister:init()
   self._editEditName:SetMaxInput(getGameServiceTypeServantNameLength())
   self._staticIcon:SetShow(true)

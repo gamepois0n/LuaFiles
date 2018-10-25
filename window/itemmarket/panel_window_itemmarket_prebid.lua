@@ -25,7 +25,6 @@ local ItemMarketPreBid = {
     value_02_Edit = UI.getChildControl(Panel_ItemMarket_PreBid, "Edit_Value_02"),
     title_03 = UI.getChildControl(Panel_ItemMarket_PreBid, "StaticText_Title_03"),
     value_03_Edit = UI.getChildControl(Panel_ItemMarket_PreBid, "Edit_Value_03"),
-    notify = UI.getChildControl(Panel_ItemMarket_PreBid, "StaticText_Notify"),
     sumPriceText = UI.getChildControl(Panel_ItemMarket_PreBid, "StaticText_SumPrice"),
     button_PayInven = UI.getChildControl(Panel_ItemMarket_PreBid, "RadioButton_Icon_Money"),
     button_PayWarehouse = UI.getChildControl(Panel_ItemMarket_PreBid, "RadioButton_Icon_Money2"),
@@ -33,7 +32,6 @@ local ItemMarketPreBid = {
     hasSilver_Warehouse = UI.getChildControl(Panel_ItemMarket_PreBid, "Static_Text_Money2"),
     itemIconBG = UI.getChildControl(Panel_ItemMarket_PreBid, "Static_Slot_IconBG"),
     itemIcon = UI.getChildControl(Panel_ItemMarket_PreBid, "Static_Slot_Icon"),
-    itemIconBorder = UI.getChildControl(Panel_ItemMarket_PreBid, "Static_Slot_Border"),
     itemName = UI.getChildControl(Panel_ItemMarket_PreBid, "StaticText_Slot_ItemName"),
     enchantLevel = UI.getChildControl(Panel_ItemMarket_PreBid, "StaticText_EnchantLevel")
   },
@@ -57,6 +55,7 @@ local penelOpenType = {
   alarm = 2
 }
 function ItemMarketPreBid:Init()
+  self.ui.notify = UI.getChildControl(self.ui.bg, "StaticText_Notify")
   self.ui.itemName:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.ui.notify:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self.ui.notify:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_PREBID_REGIST_NOTIFY"))
@@ -95,13 +94,14 @@ function ItemMarketPreBid:updateControl()
   self.ui.button_PayInven:SetCheck(not isRegist)
   self.ui.button_PayWarehouse:SetCheck(isRegist)
   self.ui.value_02_Edit:SetIgnore(not isRegist)
-  self.ui.btn_Cancel:SetSpanSize(45, 10)
   if penelOpenType.alarm ~= self.config.openType then
-    local notifyGap = self.ui.notify:GetTextSizeY() - self.value.notifyBGDefaultSize - 10
+    local notifyGap = self.ui.notify:GetTextSizeY() - self.value.notifyBGDefaultSize + 15
     self.ui.notify:SetSize(self.ui.notify:GetSizeX(), self.ui.notify:GetTextSizeY())
-    Panel_ItemMarket_PreBid:SetSize(320, 415 + notifyGap)
-    self.ui.bg:SetSize(290, 260 + notifyGap)
+    Panel_ItemMarket_PreBid:SetSize(342, 415 + notifyGap)
+    self.ui.bg:SetSize(334, self.ui.notify:GetTextSizeY() + 10)
     self.ui.title_01:SetSize(80, 20)
+    self.ui.button_PayInven:SetEnableArea(0, 0, self.ui.button_PayInven:GetTextSizeX() + 25, 20)
+    self.ui.button_PayWarehouse:SetEnableArea(0, 0, self.ui.button_PayWarehouse:GetTextSizeX() + 25, 20)
     self.ui.button_PayInven:ComputePos()
     self.ui.button_PayWarehouse:ComputePos()
     self.ui.hasSilver_Inven:ComputePos()
@@ -110,17 +110,18 @@ function ItemMarketPreBid:updateControl()
     Panel_ItemMarket_PreBid:SetVerticalMiddle()
     Panel_ItemMarket_PreBid:SetSpanSize(0, -120)
   else
-    Panel_ItemMarket_PreBid:SetSize(320, 240)
-    self.ui.bg:SetSize(290, 135)
-    self.ui.btn_Cancel:SetSpanSize(0, 10)
+    Panel_ItemMarket_PreBid:SetSize(342, 240)
+    self.ui.bg:SetSize(334, self.ui.notify:GetTextSizeY() + 10)
     self.ui.title_01:SetSize(250, 40)
     Panel_ItemMarket_PreBid:SetHorizonRight()
     Panel_ItemMarket_PreBid:SetVerticalBottom()
     Panel_ItemMarket_PreBid:SetSpanSize(10, 10)
   end
+  self.ui.bg:ComputePos()
   Panel_ItemMarket_PreBid:ComputePos()
   self.ui.btn_Confirm:ComputePos()
   self.ui.btn_Cancel:ComputePos()
+  self.ui.notify:ComputePos()
   if penelOpenType.regist == self.config.openType then
     self.ui.title_01:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_RESERVATION_MIN_PRICE"))
     self.ui.btn_Confirm:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_RESERVATION"))
@@ -208,7 +209,6 @@ function ItemMarketPreBid:Update()
     self.ui.enchantLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
   end
   self.ui.itemIcon:ChangeTextureInfoName("Icon/" .. iconPath)
-  self.ui.itemIconBorder:ChangeTextureInfoName("")
 end
 function HandleClicked_ItemMarketPreBid_InputMoney()
   local maxMoney = ItemMarketPreBid.value.invenMoney

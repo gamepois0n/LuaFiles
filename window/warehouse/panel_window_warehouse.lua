@@ -71,16 +71,16 @@ local warehouse = {
     slotCount = 64,
     slotCols = 8,
     slotRows = 0,
-    slotStartX = 19,
-    slotStartY = 64,
-    slotGapX = 47,
-    slotGapY = 47
+    slotStartX = 25,
+    slotStartY = 100,
+    slotGapX = 54,
+    slotGapY = 54
   },
   blankSlots = Array.new(),
   slots = Array.new(),
   slotNilEffect = {},
   slotFilterEffect = {},
-  staticTitle = UI.getChildControl(Panel_Window_Warehouse, "Static_Text_Title"),
+  staticTitle = UI.getChildControl(Panel_Window_Warehouse, "StaticText_VillageNameValue"),
   staticCapacity = UI.getChildControl(Panel_Window_Warehouse, "Static_Text_Capacity"),
   staticWeight = UI.getChildControl(Panel_Window_Warehouse, "Static_Text_Weight"),
   staticMoney = UI.getChildControl(Panel_Window_Warehouse, "Static_Text_Money"),
@@ -113,7 +113,7 @@ local warehouse = {
   itemMarketRclickFunc = nil,
   manufactureFilterFunc = nil,
   manufactureRclickFunc = nil,
-  addSizeY = 30,
+  addSizeY = 0,
   sellCheck = false,
   savedWayPointKey = 0
 }
@@ -627,11 +627,6 @@ function WareHouse_PanelSize_Change(isNpc)
   if isNpc then
     bigSizeY = self.addSizeY
     self.moneyTitle:SetShow(true)
-    if self.BtnManufacture:GetShow() or self.BtnMarketRegist:GetShow() then
-      self.staticCapacity:SetPosY(staticCapacityPosY - 14)
-    else
-      self.staticCapacity:SetPosY(staticCapacityPosY + bigSizeY)
-    end
   else
     bigSizeY = 0
     self.moneyTitle:SetShow(false)
@@ -649,7 +644,7 @@ function WareHouse_PanelSize_Change(isNpc)
   self.assetValue:SetPosY(assetValuePosY + bigSizeY)
   self.staticMoney:SetPosY(moneyValuePosY + bigSizeY)
   self.buttonMoney:SetSpanSize(self.staticMoney:GetTextSizeX() + self.buttonMoney:GetSizeX() + 2, self.staticMoney:GetSpanSize().y - 7)
-  self.buttonMoney2:SetSpanSize(self.assetValue:GetTextSizeX() + self.buttonMoney2:GetSizeX() + 5, self.assetValue:GetSpanSize().y - 7)
+  self.buttonMoney2:SetSpanSize(self.assetValue:GetTextSizeX() + self.buttonMoney2:GetSizeX() + 2, self.assetValue:GetSpanSize().y - 7)
 end
 function Warehouse_ItemComparer(ii, jj)
   return Global_ItemComparer(ii, jj, Warehouse_GetItem)
@@ -1056,7 +1051,7 @@ function FromClient_WarehouseOpenByInstallation(actorKeyRaw, waypointKey)
   Warehouse_SetIgnoreMoneyButton(false)
   Warehouse_OpenWithInventory()
 end
-local invenSizeX = 430
+local invenSizeX = 477
 function Warehouse_OpenPanelFromDialog()
   local self = warehouse
   self.sellCheck = false
@@ -1071,7 +1066,11 @@ function Warehouse_OpenPanelFromDialog()
   if not ToClient_WorldMapIsShow() then
     Panel_Window_Warehouse:SetVerticalMiddle()
     Panel_Window_Warehouse:SetHorizonRight()
-    Panel_Window_Warehouse:SetSpanSize(invenSizeX, 0)
+    local basePosY = screenSizeY / 2 - Panel_Window_Warehouse:GetSizeY() / 2
+    local posY = math.min(screenSizeY - 280, basePosY + Panel_Window_Warehouse:GetSizeY()) - Panel_Window_Warehouse:GetSizeY()
+    posY = math.max(0, posY)
+    local spanSizeY = posY - basePosY
+    Panel_Window_Warehouse:SetSpanSize(invenSizeX, spanSizeY)
   end
   Warehouse_OpenWithInventory()
   if PaGlobalFunc_ItemMarketRegistItem_GetShow() then
@@ -1084,8 +1083,8 @@ function Warehouse_OpenPanelFromDialogWithoutInventory(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)
   if ToClient_WorldMapIsShow() then
     Panel_Window_Warehouse:SetVerticalMiddle()
-    Panel_Window_Warehouse:SetHorizonCenter()
-    Panel_Window_Warehouse:SetSpanSize(100, 0)
+    Panel_Window_Warehouse:SetHorizonRight()
+    Panel_Window_Warehouse:SetSpanSize(10, 0)
   end
 end
 function Warehouse_OpenPanelFromWorldmap(waypointKey, fromType)
@@ -1095,6 +1094,7 @@ function Warehouse_OpenPanelFromWorldmap(waypointKey, fromType)
     WorldMapPopupManager:push(Panel_Window_Warehouse, true)
     Panel_Window_Warehouse:SetHorizonRight()
     Panel_Window_Warehouse:SetVerticalMiddle()
+    Panel_Window_Warehouse:SetSpanSize(10, 0)
   end
   Warehouse_OpenPanel(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)
@@ -1209,6 +1209,7 @@ function Warehouse_OpenWithInventory()
   self._startSlotIndex = 0
   self._scroll:SetControlTop()
   ServantInventory_OpenAll()
+  FGlobal_InventorySetPos_WithWarehouse()
 end
 function Warehouse_Close()
   local self = warehouse
@@ -1225,8 +1226,12 @@ function Warehouse_Close()
         DeliveryRequestWindow_Close()
       end
     end
-    if Panel_Window_Inventory:GetShow() and CppEnums.WarehoouseFromType.eWarehoouseFromType_Installation ~= self._fromType and CppEnums.WarehoouseFromType.eWarehoouseFromType_Maid ~= self._fromType then
-      InventoryWindow_Close()
+    if Panel_Window_Inventory:GetShow() then
+      if CppEnums.WarehoouseFromType.eWarehoouseFromType_Installation ~= self._fromType and CppEnums.WarehoouseFromType.eWarehoouseFromType_Maid ~= self._fromType then
+        InventoryWindow_Close()
+      else
+        Inventory_SetFunctor(nil, nil, nil, nil)
+      end
     end
     if true == _ContentsGroup_isAllWarehouse then
       PaGlobal_SearchMenuWarehouse:Close()

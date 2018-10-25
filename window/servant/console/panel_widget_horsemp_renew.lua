@@ -89,7 +89,7 @@ function HorseMP_Update()
   end
   if not getSelfPlayer():isNavigationLoop() or not getSelfPlayer():isNavigationMoving() or UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
   else
-    if staminaPercent <= 10 and ToClient_isXBox() then
+    if staminaPercent <= 10 and ToClient_isConsole() then
       if UI_VT.Type_Horse == vehicleType or UI_VT.Type_Donkey == vehicleType or UI_VT.Type_RidableBabyElephant == vehicleType then
         HorseAutoCarrotFunc(horseCarrotItemKey)
       elseif UI_VT.Type_Camel == vehicleType then

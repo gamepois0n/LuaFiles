@@ -34,8 +34,8 @@ local isShowPcRoomNotify = false
 function Panel_PcRoomNotify_Initialize()
   _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_PcRoomNotify, "WebControl_PcRoomNotify_WebLink")
   _Web:SetShow(true)
-  _Web:SetPosX(43)
-  _Web:SetPosY(62)
+  _Web:SetPosY(68)
+  _Web:SetHorizonCenter()
   _Web:SetSize(870, 600)
   _Web:ResetUrl()
 end

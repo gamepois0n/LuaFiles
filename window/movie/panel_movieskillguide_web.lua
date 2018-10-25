@@ -5,7 +5,7 @@ PaGlobal_MovieSkillGuide_Web = {
 local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_MovieSkillGuide_Web, "WebControl_MovieSkillGuideWeb_WebLink")
 _Web:SetShow(true)
 _Web:SetPosX(12)
-_Web:SetPosY(50)
+_Web:SetPosY(68)
 _Web:SetSize(320, 430)
 _Web:ResetUrl()
 function PaGlobal_MovieSkillGuide_Web:init()

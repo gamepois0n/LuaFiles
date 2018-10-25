@@ -375,7 +375,7 @@ function InputMLUp_GuildSkillList_LearnSkill(skillNo)
     local self = GuildSkillList
     local isSuccess = ToClient_RequestLearnGuildSkill(skillNo)
     audioPostEvent_SystemUi(0, 0)
-    _AudioPostEvent_SystemUiForXBOX(50, 0)
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
     if true == isSuccess then
       PaGlobalFunc_GuildSkill_UpdateData()
     end

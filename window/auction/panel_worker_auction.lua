@@ -9,7 +9,7 @@ local workerList = {}
 local workerAuction = {
   _config = {
     slot = {
-      startX = 5,
+      startX = 20,
       startY = 5,
       gapY = 115
     },
@@ -18,7 +18,6 @@ local workerAuction = {
   },
   _mainBG = UI.getChildControl(Panel_Worker_Auction, "Static_BG"),
   _listBG = UI.getChildControl(Panel_Worker_Auction, "Static_BG_1"),
-  _topBG = UI.getChildControl(Panel_Worker_Auction, "Static_BG_Top"),
   _btnWinQuestion = UI.getChildControl(Panel_Worker_Auction, "Button_Question"),
   _btnWinClose = UI.getChildControl(Panel_Worker_Auction, "Button_Win_Close"),
   _btnTabMarket = UI.getChildControl(Panel_Worker_Auction, "radioButton_MarketList"),
@@ -35,9 +34,9 @@ local workerAuction = {
   _btnEnd = UI.getChildControl(Panel_Worker_Auction, "Button_End"),
   _radioInvenMoney = UI.getChildControl(Panel_Worker_Auction, "RadioButton_Inventory"),
   _radioWareHouseMoney = UI.getChildControl(Panel_Worker_Auction, "RadioButton_Warehouse"),
-  _textInvenMoney = UI.getChildControl(Panel_Worker_Auction, "Static_Text_Money1"),
-  _textWareHouseMoney = UI.getChildControl(Panel_Worker_Auction, "Static_Text_Money2"),
+  _staticInvenMoneyIcon = UI.getChildControl(Panel_Worker_Auction, "StaticText_MyMoney_Icon"),
   _staticInvenMoney = UI.getChildControl(Panel_Worker_Auction, "StaticText_InventoryMoney"),
+  _staticWareHouseMoneyIcon = UI.getChildControl(Panel_Worker_Auction, "StaticText_MyWareHouseMoney_Icon"),
   _staticWareHouseMoney = UI.getChildControl(Panel_Worker_Auction, "StaticText_WareHouseMoney"),
   _btnPrev = UI.getChildControl(Panel_Worker_Auction, "Button_Prev"),
   _staticPageNo = UI.getChildControl(Panel_Worker_Auction, "Static_PageNo"),
@@ -76,6 +75,9 @@ function workerAuction:Init()
     slot._workerIcon = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_workerIcon", slot._workerIconBG, "workerMarket_Slot_workerIcon" .. ii, "Static_WorkerIconBG")
     slot._workerLv = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_WorkerLevel", slot._workerIconBG, "workerMarket_Slot_workerLv" .. ii, "Static_WorkerIconBG")
     slot._workerName = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_Name", slot._baseSlotBG, "workerMarket_Slot_workerName" .. ii, "Static_LineBG_1")
+    slot._upgradeChance = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_UpgradeChance", slot._baseSlotBG, "workerMarket_Slot_upgradeChance" .. ii, "Static_LineBG_1")
+    slot._upgradeChanceValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_UpgradeChanceValue", slot._baseSlotBG, "workerMarket_Slot_upgradeChanceValue" .. ii, "Static_LineBG_1")
+    slot._line_1 = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_Line_1", slot._baseSlotBG, "Static_Line_1_" .. ii, "Static_LineBG_1")
     slot._workerZone = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_Zone", slot._baseSlotBG, "workerMarket_Slot_workerZone" .. ii, "Static_LineBG_1")
     slot._workSpeed = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_WorkSpeed", slot._baseSlotBG, "workerMarket_Slot_workSpeed" .. ii, "Static_LineBG_1")
     slot._workSpeedValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_WorkSpeedValue", slot._baseSlotBG, "workerMarket_Slot_workSpeedValue" .. ii, "Static_LineBG_1")
@@ -85,8 +87,7 @@ function workerAuction:Init()
     slot._luckValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_LuckValue", slot._baseSlotBG, "workerMarket_Slot_luckValue" .. ii, "Static_LineBG_1")
     slot._actionPoint = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_ActionPoint", slot._baseSlotBG, "workerMarket_Slot_actionPoint" .. ii, "Static_LineBG_1")
     slot._actionPointValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_ActionPointValue", slot._baseSlotBG, "workerMarket_Slot_actionPointValue" .. ii, "Static_LineBG_1")
-    slot._upgradeChance = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_UpgradeChance", slot._baseSlotBG, "workerMarket_Slot_upgradeChance" .. ii, "Static_LineBG_1")
-    slot._upgradeChanceValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_UpgradeChanceValue", slot._baseSlotBG, "workerMarket_Slot_upgradeChanceValue" .. ii, "Static_LineBG_1")
+    slot._line_2 = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_Line_2", slot._baseSlotBG, "Static_Line_2_" .. ii, "Static_LineBG_1")
     slot._workerPrice = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_Price", slot._baseSlotBG, "workerMarket_Slot_workerPrice" .. ii, "Static_LineBG_1")
     slot._workerPriceValue = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_PriceValue", slot._baseSlotBG, "workerMarket_Slot_workerPriceValue" .. ii, "Static_LineBG_1")
     slot._SkillBG = createAndCopyBasePropertyControlSetPosition(Panel_Worker_Auction, "Static_WorkerSkillSlotBG", slot._baseSlotBG, "workerMarket_Slot_SkillBG" .. ii, "Static_LineBG_1")
@@ -120,16 +121,12 @@ function workerAuction:Init()
   self._comboFilterTribe:SetShow(false)
   self._comboFilterSkill:SetShow(false)
   self._btnResist:SetShow(true)
-  Panel_Worker_Auction:SetSize(Panel_Worker_Auction:GetSizeX(), Panel_Worker_Auction:GetSizeY() - 35)
-  self._mainBG:SetSize(self._mainBG:GetSizeX(), 515)
-  self._listBG:SetSize(self._listBG:GetSizeX(), 465)
-  self._listBG:SetPosY(self._topBG:GetPosY() + self._topBG:GetSizeY() + 5)
   self._radioInvenMoney:ComputePos()
   self._radioWareHouseMoney:ComputePos()
-  self._textInvenMoney:ComputePos()
-  self._textWareHouseMoney:ComputePos()
   self._staticInvenMoney:ComputePos()
+  self._staticInvenMoneyIcon:SetPosX(self._staticInvenMoney:GetPosX() + self._staticInvenMoney:GetSizeX() - self._staticInvenMoney:GetTextSizeX() - self._staticInvenMoneyIcon:GetSizeX() - 5)
   self._staticWareHouseMoney:ComputePos()
+  self._staticWareHouseMoneyIcon:SetPosX(self._staticWareHouseMoney:GetPosX() + self._staticWareHouseMoney:GetSizeX() - self._staticWareHouseMoney:GetTextSizeX() - self._staticWareHouseMoneyIcon:GetSizeX() - 15)
   self._btnPrev:ComputePos()
   self._staticPageNo:ComputePos()
   self._btnNext:ComputePos()
@@ -209,7 +206,7 @@ function workerAuction:Update()
           slot._luckValue:SetText(string.format("%.2f", luckValue / 10000))
           slot._actionPointValue:SetText(tostring(actionPointValue))
           slot._workerPriceValue:SetText(makeDotMoney(workerPrice))
-          slot._upgradeChanceValue:SetPosX(slot._upgradeChance:GetPosX() + slot._upgradeChance:GetTextSizeX() + 10)
+          slot._workerPrice:SetPosX(slot._workerPriceValue:GetPosX() + slot._workerPriceValue:GetSizeX() - slot._workerPriceValue:GetTextSizeX() - slot._workerPrice:GetSizeX() - 10)
           slot._baseSlotBG:SetShow(true)
           slot._workerIcon:SetShow(true)
           slot._workerLv:SetShow(true)
@@ -431,6 +428,8 @@ function WorkerAuction_UpdateMoney()
   local self = workerAuction
   self._staticInvenMoney:SetText(makeDotMoney(getSelfPlayer():get():getInventory():getMoney_s64()))
   self._staticWareHouseMoney:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  self._staticWareHouseMoneyIcon:SetPosX(self._staticWareHouseMoney:GetPosX() + self._staticWareHouseMoney:GetSizeX() - self._staticWareHouseMoney:GetTextSizeX() - self._staticWareHouseMoneyIcon:GetSizeX() - 15)
+  self._staticInvenMoneyIcon:SetPosX(self._staticInvenMoney:GetPosX() + self._staticInvenMoney:GetSizeX() - self._staticInvenMoney:GetTextSizeX() - self._staticInvenMoneyIcon:GetSizeX() - 5)
 end
 function FromClient_ResponseWorkerAuction()
   if Panel_Window_WorkerRandomSelect:IsShow() then

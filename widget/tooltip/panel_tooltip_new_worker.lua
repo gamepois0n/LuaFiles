@@ -54,9 +54,9 @@ local function makeSkillUi()
   self._defaultSkillIcon:SetPosX(0)
   self._defaultSkillIcon:SetPosY(0)
   self._defaultSkillName:SetPosX(self._defaultSkillIcon:GetSizeX() + 5)
-  self._defaultSkillName:SetPosY(2)
+  self._defaultSkillName:SetPosY(5)
   self._defaultSkillDesc:SetPosX(self._defaultSkillIcon:GetSizeX() + 5)
-  self._defaultSkillDesc:SetPosY(20)
+  self._defaultSkillDesc:SetPosY(25)
   self._skilBox:AddChild(self._skillTitle)
   Panel_Worker_Tooltip:RemoveControl(self._skillTitle)
   self._skilBox:ComputePos()
@@ -76,16 +76,16 @@ local function makeSkillUi()
     self._skill[idx].icon = UI.createAndCopyBasePropertyControl(Panel_Worker_Tooltip, "Static_SkillSlot_01", self._skill[idx].iconBg, "WorkerSkill_SlotIcon_" .. idx)
     self._skill[idx].name = UI.createAndCopyBasePropertyControl(Panel_Worker_Tooltip, "StaticText_SkillName_01", self._skill[idx].iconBg, "WorkerSkill_SlotName_" .. idx)
     self._skill[idx].desc = UI.createAndCopyBasePropertyControl(Panel_Worker_Tooltip, "StaticText_SkillDesc_01", self._skill[idx].iconBg, "WorkerSkill_SlotDesc_" .. idx)
-    self._skill[idx].iconBg:SetPosX(10)
-    self._skill[idx].iconBg:SetPosY(slotGapY * idx + 26)
+    self._skill[idx].iconBg:SetPosX(20)
+    self._skill[idx].iconBg:SetPosY(slotGapY * idx + 24)
     self._skill[idx].icon:SetPosX(0)
     self._skill[idx].icon:SetPosY(0)
     self._skill[idx].name:SetPosX(self._skill[idx].icon:GetSizeX() + 5)
-    self._skill[idx].name:SetPosY(0)
+    self._skill[idx].name:SetPosY(5)
     self._skill[idx].desc:SetPosX(self._skill[idx].icon:GetSizeX() + 5)
-    self._skill[idx].desc:SetPosY(20)
+    self._skill[idx].desc:SetPosY(25)
   end
-  self._skillTitle:SetPosY(0)
+  self._skillTitle:SetPosY(2)
 end
 makeSkillUi()
 function HandleOnWorkerTooltip(workerData, uiBase)
@@ -273,14 +273,14 @@ function FGlobal_ShowWorkerTooltipByWorkerNoRaw(workerNoRaw, panel, isRight, isP
     controlWorkerTooltip._defaultSkillDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
     controlWorkerTooltip._defaultSkillDesc:SetText(defaultSkill:getDescription())
     controlWorkerTooltip._workerBg:SetSize(controlWorkerTooltip._workerBg:GetSizeX(), 650)
-    tempPenelSizeY = controlWorkerTooltip._panel_Size + 170
+    tempPenelSizeY = controlWorkerTooltip._panel_Size + 170 + 40
   else
     controlWorkerTooltip._defaultSkillBox:SetShow(false)
     controlWorkerTooltip._defaultSkillBox:ComputePos()
     controlWorkerTooltip._skilBox:SetSpanSize(0, 185)
     controlWorkerTooltip._skilBox:ComputePos()
     controlWorkerTooltip._workerBg:SetSize(controlWorkerTooltip._workerBg:GetSizeX(), 570)
-    tempPenelSizeY = controlWorkerTooltip._panel_Size + 85
+    tempPenelSizeY = controlWorkerTooltip._panel_Size + 85 + 40
   end
   if true == workerWrapperLua:isWorking() then
     local workName = workerWrapperLua:getWorkString()

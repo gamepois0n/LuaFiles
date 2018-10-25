@@ -113,7 +113,7 @@ function VillageTent_SetText(count)
 end
 function VillageTent_SetSize(count)
   bg:SetSize(bg:GetSizeX(), 70 + (count - 1) * textGap)
-  joinDesc:SetPosY(dayControl[count - 1]._day:GetPosY() + 30)
+  joinDesc:SetPosY(dayControl[count - 1]._day:GetPosY() + 45)
   bottomDesc:SetPosY(joinDesc:GetPosY() + joinDesc:GetTextSizeY() + 15)
   bottomBg:SetSize(bottomBg:GetSizeX(), bottomDesc:GetTextSizeY() + 15)
   Panel_House_InstallationMode_VillageTent:SetSize(Panel_House_InstallationMode_VillageTent:GetSizeX(), joinDesc:GetPosY() + joinDesc:GetTextSizeY() + bottomBg:GetSizeY() + 70)

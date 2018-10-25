@@ -153,7 +153,4 @@ function ItemMarketAlarm:registEventHandler()
   self.ui.btn_Close:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketAlarm_Close()")
   self.ui.btn_AlarmCancel:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketAlarm_Cancel()")
 end
-function ItemMarketAlarm:registMessageHandler()
-end
 ItemMarketAlarm:registEventHandler()
-ItemMarketAlarm:registMessageHandler()

@@ -266,7 +266,8 @@ function FGlobal_GuildWarInfo_List_Content_Update(contents, guildWrapper, buildi
 end
 function FGlobal_GuildWarInfo_renew_Open()
   if false == Panel_Window_GuildWarInfo:GetShow() then
-    ToClient_RequestSiegeScore()
+    PAGlobal_GuildWarInfo:UpdateBasicInfo()
+    ToClient_RequestSiegeScore(PAGlobal_GuildWarInfo._selectedTerritoryKey)
     Panel_Window_GuildWarInfo:SetShow(true)
   end
 end
@@ -452,7 +453,7 @@ end
 function HandleClicked_GuildWarInfo_renew_Refresh()
   local self = PAGlobal_GuildWarInfo
   if 5 < self._guildWarInfo_renew_UpdateTimer then
-    ToClient_RequestSiegeScore()
+    ToClient_RequestSiegeScore(PAGlobal_GuildWarInfo._selectedTerritoryKey)
     self._guildWarInfo_renew_UpdateTimer = 0
   end
 end
@@ -464,7 +465,7 @@ function GuildWarInfo_renew_UpdatePerFrame(deltaTime)
   local self = PAGlobal_GuildWarInfo
   self._guildWarInfo_renew_UpdateTimer = self._guildWarInfo_renew_UpdateTimer + deltaTime
   if self._guildWarInfo_renew_UpdateTimer > 30 then
-    ToClient_RequestSiegeScore()
+    ToClient_RequestSiegeScore(PAGlobal_GuildWarInfo._selectedTerritoryKey)
     self._guildWarInfo_renew_UpdateTimer = 0
   end
 end

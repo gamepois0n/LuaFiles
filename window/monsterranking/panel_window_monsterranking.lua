@@ -1,14 +1,14 @@
 Panel_Window_MonsterRanking:SetShow(false)
 PaGlobal_MonsterRanking = {
   _ui = {
-    _btn_ListBtn = UI.getChildControl(Panel_Window_MonsterRanking, "RadioButton_Tab"),
+    _titleBg = UI.getChildControl(Panel_Window_MonsterRanking, "Static_TitleBG"),
     _titleList2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingTitleList"),
     _list2 = UI.getChildControl(Panel_Window_MonsterRanking, "List2_MonsterRankingList"),
-    _nameTitle = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_NameTitle"),
-    _btn_Close = UI.getChildControl(Panel_Window_MonsterRanking, "Button_Win_Close")
+    _nameTitle = UI.getChildControl(Panel_Window_MonsterRanking, "StaticText_NameTitle")
   },
   _listIndex = 0
 }
+PaGlobal_MonsterRanking._ui._btn_Close = UI.getChildControl(PaGlobal_MonsterRanking._ui._titleBg, "Button_Win_Close")
 function PaGlobal_MonsterRanking:MonsterRanking_Initialize()
   local minSize = float2()
   minSize.x = 100
@@ -74,8 +74,8 @@ function PaGlobal_MonsterRanking:MonsterRanking_Title_ListControlCreate(content,
   if nil == titleInfo then
     return
   end
-  buttonName:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  buttonName:SetText(titleInfo:getGroupName())
+  title:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  title:SetText(titleInfo:getGroupName())
   if index == self._listIndex then
     title:SetCheck(true)
   else

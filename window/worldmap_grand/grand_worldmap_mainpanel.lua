@@ -14,6 +14,7 @@ local isEnablePlunderGame = ToClient_IsContentsGroupOpen("360")
 local worldmapGrand = {
   ui = {
     ModeBG = UI.getChildControl(Panel_WorldMap_Main, "Mode_Bg"),
+    TitleBG = UI.getChildControl(Panel_WorldMap_Main, "Static_TitleBG"),
     filterBg = UI.getChildControl(Panel_WorldMap_Main, "Static_FilterBg"),
     filterArrow = UI.getChildControl(Panel_WorldMap_Main, "Static_FilterArrow"),
     filterTitle = UI.getChildControl(Panel_WorldMap_Main, "StaticText_FilterTitle"),
@@ -34,9 +35,6 @@ local worldmapGrand = {
     explorePointBG = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Bg"),
     explorePointIcon = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_ExplorePoint_Icon"),
     explorePointValue = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_StaticText_ExplorePoint_Value"),
-    explorePointProgressBG = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Progress_BG"),
-    explorePointProgress = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Progress"),
-    explorePointHelp = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Help"),
     ListBG = UI.getChildControl(Panel_WorldMap_Main, "List_Bg"),
     list_Title = UI.getChildControl(Panel_WorldMap_Main, "List_Title"),
     list_KeyWord = UI.getChildControl(Panel_WorldMap_Main, "List_KeyWord"),
@@ -80,6 +78,8 @@ worldmapGrand.ui.comboBox_DaySelect:addInputEvent("Mouse_LUp", "WorldMap_GuildWa
 worldmapGrand.ui.comboBox_DaySelect:GetListControl():addInputEvent("Mouse_LUp", "GuildWar_SetDay()")
 worldmapGrand.ui.comboBox_TaxGrade:addInputEvent("Mouse_LUp", "WorldMap_GuildWar_TaxGradeFilterShow()")
 worldmapGrand.ui.comboBox_TaxGrade:GetListControl():addInputEvent("Mouse_LUp", "GuildWar_SetGrade()")
+worldmapGrand.ui.comboBox_DaySelect:setListTextHorizonCenter()
+worldmapGrand.ui.comboBox_TaxGrade:setListTextHorizonCenter()
 worldmapGrand.ui.nodeSelectBg:SetShow(false)
 worldmapGrand.ui.nodeSelectTitle:SetShow(false)
 worldmapGrand.ui.comboBox_TerritorySelect:setListTextHorizonCenter()
@@ -211,7 +211,7 @@ function FGlobal_WorldmapMain_InitTutorialButton()
   end
   local wui = worldmapGrand.ui
   local blackSpiritButtonPosX = getScreenSizeX() - wui.buttonBlackSpirit:GetSizeX() - 20
-  local blackSpiritButtonPosY = wui.ModeBG:GetPosY() + wui.ModeBG:GetSizeY() + 5
+  local blackSpiritButtonPosY = worldmapGrand.ui.nodeSelectBg:GetPosY() + worldmapGrand.ui.nodeSelectBg:GetSizeY() + 30
   wui.buttonBlackSpirit:SetPosX(blackSpiritButtonPosX)
   wui.buttonBlackSpirit:SetPosY(blackSpiritButtonPosY)
   wui.buttonTutorial_1:SetShow(false, false)
@@ -253,9 +253,6 @@ function FGlobal_SetShow_WorldmapExplorePoint(bShow)
   worldmapGrand.ui.explorePointBG:SetShow(bShow)
   worldmapGrand.ui.explorePointIcon:SetShow(bShow)
   worldmapGrand.ui.explorePointValue:SetShow(false)
-  worldmapGrand.ui.explorePointProgressBG:SetShow(bShow)
-  worldmapGrand.ui.explorePointProgress:SetShow(bShow)
-  worldmapGrand.ui.explorePointHelp:SetShow(bShow)
 end
 function FGlobal_SetShow_WorldmapSearchMenu(bShow)
   worldmapGrand.ui.MainMenuBG:SetShow(bShow)
@@ -352,153 +349,155 @@ local worldMapCheckStateInMode = {
 local modeTexture = {
   [eWorldmapState.eWMS_EXPLORE_PLANT] = {
     [0] = {
-      2,
-      2,
-      40,
-      40
+      1,
+      375,
+      41,
+      415
     },
     [1] = {
-      42,
-      2,
-      80,
-      40
+      1,
+      375,
+      41,
+      415
     },
     [2] = {
-      82,
-      2,
-      120,
-      40
+      1,
+      416,
+      41,
+      456
     }
   },
   [eWorldmapState.eWMS_REGION] = {
     [0] = {
-      2,
       42,
-      40,
-      80
+      375,
+      82,
+      415
     },
     [1] = {
       42,
-      42,
-      80,
-      80
+      375,
+      82,
+      415
     },
     [2] = {
-      82,
       42,
-      120,
-      80
+      416,
+      82,
+      456
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_WATER] = {
     [0] = {
-      2,
-      82,
-      40,
-      120
+      83,
+      375,
+      123,
+      415
     },
     [1] = {
-      42,
-      82,
-      80,
-      120
+      83,
+      375,
+      123,
+      415
     },
     [2] = {
-      82,
-      82,
-      120,
-      120
+      83,
+      416,
+      123,
+      456
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_CELCIUS] = {
     [0] = {
-      2,
-      122,
-      40,
-      160
+      124,
+      375,
+      164,
+      415
     },
     [1] = {
-      42,
-      122,
-      80,
-      160
+      124,
+      375,
+      164,
+      415
     },
     [2] = {
-      82,
-      122,
-      120,
-      160
+      124,
+      416,
+      164,
+      456
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_HUMIDITY] = {
     [0] = {
-      2,
-      162,
-      40,
-      200
+      165,
+      375,
+      205,
+      415
     },
     [1] = {
-      42,
-      162,
-      80,
-      200
+      165,
+      375,
+      205,
+      415
     },
     [2] = {
-      82,
-      162,
-      120,
-      200
+      165,
+      416,
+      205,
+      456
     }
   },
   [eWorldmapState.eWMS_GUILD_WAR] = {
     [0] = {
-      2,
-      202,
-      40,
-      240
+      206,
+      375,
+      246,
+      415
     },
     [1] = {
-      42,
-      202,
-      80,
-      240
+      206,
+      375,
+      246,
+      415
     },
     [2] = {
-      82,
-      202,
-      120,
-      240
+      206,
+      416,
+      246,
+      456
     }
   },
   [eWorldmapState.eWMS_PRODUCT_NODE] = {
     [0] = {
-      2,
-      242,
-      40,
-      280
+      247,
+      375,
+      287,
+      415
     },
     [1] = {
-      42,
-      242,
-      80,
-      280
+      247,
+      375,
+      287,
+      415
     },
     [2] = {
-      82,
-      242,
-      120,
-      280
+      247,
+      416,
+      287,
+      456
     }
   }
 }
 local function changeModeTexture(modeType)
   local control = worldMapState[modeType]
   local posArray = modeTexture[modeType]
-  control:ChangeTextureInfoName("New_UI_Common_forLua/Widget/WorldMap/WorldmapFilterNew_00.dds")
+  control:ChangeTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[0][1], posArray[0][2], posArray[0][3], posArray[0][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
+  control:ChangeOnTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[1][1], posArray[1][2], posArray[1][3], posArray[1][4])
   control:getOnTexture():setUV(x1, y1, x2, y2)
+  control:ChangeClickTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[2][1], posArray[2][2], posArray[2][3], posArray[2][4])
   control:getClickTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
@@ -506,193 +505,195 @@ end
 local modeFilterTexture = {
   [eCheckState.eCheck_Quest] = {
     [0] = {
-      123,
-      2,
-      149,
-      28
+      32,
+      1,
+      62,
+      31
     },
     [1] = {
-      152,
-      2,
-      178,
-      28
+      32,
+      63,
+      62,
+      93
     },
     [2] = {
-      181,
-      2,
-      207,
-      28
+      32,
+      125,
+      62,
+      155
     }
   },
   [eCheckState.eCheck_Knowledge] = {
     [0] = {
-      123,
-      30,
-      149,
-      56
+      1,
+      1,
+      31,
+      31
     },
     [1] = {
-      152,
-      30,
-      178,
-      56
+      1,
+      63,
+      31,
+      93
     },
     [2] = {
-      181,
-      30,
-      207,
-      56
+      1,
+      125,
+      31,
+      155
     }
   },
   [eCheckState.eCheck_FishnChip] = {
     [0] = {
-      123,
-      58,
-      149,
-      84
+      63,
+      32,
+      93,
+      62
     },
     [1] = {
-      152,
-      58,
-      178,
-      84
+      63,
+      94,
+      93,
+      124
     },
     [2] = {
-      181,
-      58,
-      207,
-      84
+      63,
+      156,
+      93,
+      186
     }
   },
   [eCheckState.eCheck_Node] = {
     [0] = {
-      123,
-      170,
-      149,
-      196
+      32,
+      32,
+      62,
+      62
     },
     [1] = {
-      152,
-      170,
-      178,
-      196
+      32,
+      94,
+      62,
+      124
     },
     [2] = {
-      181,
-      170,
-      207,
-      196
+      32,
+      156,
+      62,
+      186
     }
   },
   [eCheckState.eCheck_Way] = {
     [0] = {
-      123,
-      86,
-      149,
-      112
+      94,
+      1,
+      124,
+      31
     },
     [1] = {
-      152,
-      86,
-      178,
-      112
+      94,
+      63,
+      124,
+      93
     },
     [2] = {
-      181,
-      86,
-      207,
-      112
+      94,
+      125,
+      124,
+      155
     }
   },
   [eCheckState.eCheck_Postions] = {
     [0] = {
-      123,
-      114,
-      149,
-      140
+      1,
+      32,
+      31,
+      62
     },
     [1] = {
-      152,
-      114,
-      178,
-      140
+      1,
+      94,
+      31,
+      124
     },
     [2] = {
-      181,
-      114,
-      207,
-      140
+      1,
+      156,
+      31,
+      186
     }
   },
   [eCheckState.eCheck_Trade] = {
     [0] = {
-      123,
-      198,
-      149,
-      224
+      94,
+      32,
+      124,
+      62
     },
     [1] = {
-      152,
-      198,
-      178,
-      224
+      94,
+      94,
+      124,
+      124
     },
     [2] = {
-      181,
-      198,
-      207,
-      224
+      94,
+      156,
+      124,
+      186
     }
   },
   [eCheckState.eCheck_Wagon] = {
     [0] = {
-      123,
-      142,
-      149,
-      168
+      125,
+      1,
+      155,
+      31
     },
     [1] = {
-      152,
-      142,
-      178,
-      168
+      125,
+      63,
+      155,
+      93
     },
     [2] = {
-      181,
-      142,
-      207,
-      168
+      125,
+      125,
+      155,
+      155
     }
   },
   [eCheckState.eCheck_Monster] = {
     [0] = {
-      123,
-      226,
-      149,
-      252
+      63,
+      1,
+      93,
+      31
     },
     [1] = {
-      152,
-      226,
-      178,
-      252
+      63,
+      63,
+      93,
+      93
     },
     [2] = {
-      181,
-      226,
-      207,
-      252
+      63,
+      125,
+      93,
+      155
     }
   }
 }
 local function changeModeFilterTexture(modeFilterType)
   local control = worldMapCheckState[modeFilterType]
   local posArray = modeFilterTexture[modeFilterType]
-  control:ChangeTextureInfoName("New_UI_Common_forLua/Widget/WorldMap/WorldmapFilterNew_00.dds")
+  control:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[0][1], posArray[0][2], posArray[0][3], posArray[0][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
+  control:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[1][1], posArray[1][2], posArray[1][3], posArray[1][4])
   control:getOnTexture():setUV(x1, y1, x2, y2)
+  control:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[2][1], posArray[2][2], posArray[2][3], posArray[2][4])
   control:getClickTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
@@ -720,122 +721,122 @@ local nodeListCount = 6
 local nodeTexture = {
   [worldMapNodeType.normal] = {
     [0] = {
-      6,
-      6,
-      35,
-      35
+      2,
+      2,
+      42,
+      42
     },
     [1] = {
-      36,
-      6,
-      65,
-      35
+      2,
+      2,
+      42,
+      42
     },
     [2] = {
-      66,
-      6,
-      95,
-      35
+      2,
+      43,
+      42,
+      83
     }
   },
   [worldMapNodeType.viliage] = {
     [0] = {
-      6,
-      36,
-      35,
-      65
+      43,
+      2,
+      83,
+      42
     },
     [1] = {
-      36,
-      36,
-      65,
-      65
+      43,
+      2,
+      83,
+      42
     },
     [2] = {
-      66,
-      36,
-      95,
-      65
+      43,
+      43,
+      83,
+      83
     }
   },
   [worldMapNodeType.city] = {
     [0] = {
-      6,
-      66,
-      35,
-      95
+      84,
+      2,
+      124,
+      42
     },
     [1] = {
-      36,
-      66,
-      65,
-      95
+      84,
+      2,
+      124,
+      42
     },
     [2] = {
-      66,
-      66,
-      95,
-      95
+      84,
+      43,
+      124,
+      83
     }
   },
   [worldMapNodeType.gate] = {
     [0] = {
-      6,
-      96,
-      35,
-      125
+      125,
+      2,
+      165,
+      42
     },
     [1] = {
-      36,
-      96,
-      65,
-      125
+      125,
+      2,
+      165,
+      42
     },
     [2] = {
-      66,
-      96,
-      95,
-      125
+      125,
+      43,
+      165,
+      83
     }
   },
   [worldMapNodeType.trade] = {
     [0] = {
-      6,
-      126,
-      35,
-      155
+      166,
+      2,
+      206,
+      42
     },
     [1] = {
-      36,
-      126,
-      65,
-      155
+      166,
+      2,
+      206,
+      42
     },
     [2] = {
-      66,
-      126,
-      95,
-      155
+      166,
+      43,
+      206,
+      83
     }
   },
   [worldMapNodeType.dangerous] = {
     [0] = {
-      6,
-      156,
-      35,
-      185
+      207,
+      2,
+      247,
+      42
     },
     [1] = {
-      36,
-      156,
-      65,
-      185
+      207,
+      2,
+      247,
+      42
     },
     [2] = {
-      66,
-      156,
-      95,
-      185
+      207,
+      43,
+      247,
+      83
     }
   }
 }
@@ -986,11 +987,13 @@ end
 local function changeNodeTexture(nodeType)
   local control = worldMapNodeListType[nodeType]
   local posArray = nodeTexture[nodeType]
-  control:ChangeTextureInfoName("New_UI_Common_forLua/Widget/WorldMap/WorldMap_Etc_05.dds")
+  control:ChangeTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[0][1], posArray[0][2], posArray[0][3], posArray[0][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
+  control:ChangeOnTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[1][1], posArray[1][2], posArray[1][3], posArray[1][4])
   control:getOnTexture():setUV(x1, y1, x2, y2)
+  control:ChangeClickTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[2][1], posArray[2][2], posArray[2][3], posArray[2][4])
   control:getClickTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
@@ -1043,78 +1046,53 @@ function FGlobal_WorldmapMain_GetSearchingResultCount()
   return worldmapGrand.config.searchingResultCount
 end
 local function AlignButtonPosition()
-  local offsetX = worldmapGrand.ui.ModeBG:GetPosX() + 10
-  local offsetY = worldmapGrand.ui.ModeBG:GetPosY()
+  local offsetX = getScreenSizeX() - 450
   for modeIndex, value in pairs(worldMapState) do
-    value:SetPosX(offsetX + (value:GetSizeX() + 2) * (modeIndex - 1))
-    value:SetPosY(offsetY + 40)
+    value:SetPosX(offsetX + (value:GetSizeX() + 25) * (modeIndex - 1))
+    value:SetPosY(15)
   end
   for checkIndex, value in pairs(worldMapCheckState) do
-    worldMapCheckState[checkIndex]:SetPosX(offsetX + (worldMapCheckState[checkIndex]:GetSizeX() + 5) * checkIndex)
-    worldMapCheckState[checkIndex]:SetPosY(110)
+    worldMapCheckState[checkIndex]:SetPosX(offsetX + 40 + (worldMapCheckState[checkIndex]:GetSizeX() + 10) * checkIndex)
+    worldMapCheckState[checkIndex]:SetPosY(76)
   end
-  worldmapGrand.ui.filterTitle:SetPosX(worldmapGrand.ui.ModeBG:GetPosX() + worldmapGrand.ui.ModeBG:GetSizeX() / 2 - worldmapGrand.ui.filterTitle:GetSizeX() / 2)
-  worldmapGrand.ui.filterTitle:SetPosY(40)
-  worldmapGrand.ui.filterBg:SetPosX(worldMapCheckState[0]:GetPosX() - 5)
-  worldmapGrand.ui.filterBg:SetPosY(worldMapCheckState[0]:GetPosY() - 5)
+  worldmapGrand.ui.filterBg:SetPosX(worldMapCheckState[0]:GetPosX() - 30)
+  worldmapGrand.ui.filterBg:SetPosY(worldMapCheckState[0]:GetPosY() - 2)
   worldmapGrand.ui.filterArrow:SetPosX(worldMapState[_currentRenderMode]:GetPosX() + worldMapState[_currentRenderMode]:GetSizeX() / 2 - worldmapGrand.ui.filterArrow:GetSizeX() / 2)
   worldmapGrand.ui.filterArrow:SetPosY(worldMapCheckState[0]:GetPosY() - worldmapGrand.ui.filterArrow:GetSizeY() - 3)
-  worldmapGrand.ui.daySelectBg:SetPosX(worldMapCheckState[eCheckState.eCheck_Quest]:GetPosX() - worldmapGrand.ui.daySelectBg:GetSizeX() - 10)
+  worldmapGrand.ui.daySelectBg:SetPosX(worldmapGrand.ui.filterBg:GetPosX() + worldmapGrand.ui.filterBg:GetSizeX() - worldmapGrand.ui.daySelectBg:GetSizeX())
+  worldmapGrand.ui.daySelectBg:SetPosY(worldmapGrand.ui.filterBg:GetPosY() + worldmapGrand.ui.filterBg:GetSizeY() + 10)
   worldmapGrand.ui.daySelectTitle:SetPosX(worldmapGrand.ui.daySelectBg:GetPosX() + worldmapGrand.ui.daySelectBg:GetSizeX() / 2 - worldmapGrand.ui.daySelectTitle:GetSizeX() / 2)
-  worldmapGrand.ui.daySelectTitle:SetPosY(20)
-  worldmapGrand.ui.comboBox_DaySelect:SetPosX(worldMapCheckState[eCheckState.eCheck_Quest]:GetPosX() - worldmapGrand.ui.comboBox_DaySelect:GetSizeX() - 20)
-  worldmapGrand.ui.comboBox_DaySelect:SetPosY(45)
-  worldmapGrand.ui.comboBox_TaxGrade:SetPosX(worldmapGrand.ui.daySelectBg:GetPosX() + 10)
-  worldmapGrand.ui.comboBox_TaxGrade:SetPosY(45)
-  worldmapGrand.ui.nodeSelectBg:SetPosX(worldMapCheckState[eCheckState.eCheck_Quest]:GetPosX() - worldmapGrand.ui.nodeSelectBg:GetSizeX() - 20)
+  worldmapGrand.ui.daySelectTitle:SetPosY(worldmapGrand.ui.daySelectBg:GetPosY() + 5)
+  worldmapGrand.ui.comboBox_DaySelect:SetPosX(worldmapGrand.ui.daySelectBg:GetPosX() + worldmapGrand.ui.daySelectBg:GetSizeX() - worldmapGrand.ui.comboBox_DaySelect:GetSizeX())
+  worldmapGrand.ui.comboBox_DaySelect:SetPosY(worldmapGrand.ui.daySelectBg:GetPosY() + 35)
+  worldmapGrand.ui.comboBox_TaxGrade:SetPosX(worldmapGrand.ui.daySelectBg:GetPosX())
+  worldmapGrand.ui.comboBox_TaxGrade:SetPosY(worldmapGrand.ui.daySelectBg:GetPosY() + 35)
+  worldmapGrand.ui.nodeSelectBg:SetPosX(worldmapGrand.ui.filterBg:GetPosX() + worldmapGrand.ui.filterBg:GetSizeX() - worldmapGrand.ui.nodeSelectBg:GetSizeX())
+  worldmapGrand.ui.nodeSelectBg:SetPosY(worldmapGrand.ui.filterBg:GetPosY() + worldmapGrand.ui.filterBg:GetSizeY() + 10)
   worldmapGrand.ui.nodeSelectTitle:SetPosX(worldmapGrand.ui.nodeSelectBg:GetPosX() + worldmapGrand.ui.nodeSelectBg:GetSizeX() / 2 - worldmapGrand.ui.nodeSelectTitle:GetSizeX() / 2)
-  worldmapGrand.ui.nodeSelectTitle:SetPosY(20)
-  worldmapGrand.ui.comboBox_NodeType:SetPosX(worldMapCheckState[eCheckState.eCheck_Quest]:GetPosX() - worldmapGrand.ui.comboBox_DaySelect:GetSizeX() - 30)
-  worldmapGrand.ui.comboBox_NodeType:SetPosY(45)
-  worldmapGrand.ui.comboBox_TerritorySelect:SetPosX(worldmapGrand.ui.nodeSelectBg:GetPosX() + 10)
-  worldmapGrand.ui.comboBox_TerritorySelect:SetPosY(45)
+  worldmapGrand.ui.nodeSelectTitle:SetPosY(worldmapGrand.ui.nodeSelectBg:GetPosY() + 5)
+  worldmapGrand.ui.comboBox_NodeType:SetPosX(worldmapGrand.ui.nodeSelectBg:GetPosX() + worldmapGrand.ui.nodeSelectBg:GetSizeX() - worldmapGrand.ui.comboBox_NodeType:GetSizeX())
+  worldmapGrand.ui.comboBox_NodeType:SetPosY(worldmapGrand.ui.nodeSelectBg:GetPosY() + 35)
+  worldmapGrand.ui.comboBox_TerritorySelect:SetPosX(worldmapGrand.ui.nodeSelectBg:GetPosX())
+  worldmapGrand.ui.comboBox_TerritorySelect:SetPosY(worldmapGrand.ui.nodeSelectBg:GetPosY() + 35)
   local colsCount = 6
-  local xGap = 8
-  local yGap = 45
+  local xGap = 10
+  local yGap = 37
   for checkIndex = 0, nodeListCount - 1 do
     local value = nodeList[checkIndex]
-    worldMapNodeListType[value]:SetPosX(xGap + checkIndex % colsCount * worldMapNodeListType[value]:GetSizeX())
-    worldMapNodeListType[value]:SetPosY(yGap + worldMapNodeListType[value]:GetSizeY() * math.floor(checkIndex / colsCount))
+    worldMapNodeListType[value]:SetPosX(xGap + checkIndex % colsCount * worldMapNodeListType[value]:GetSizeX() + (checkIndex - 1) * 7)
+    worldMapNodeListType[value]:SetPosY(yGap + worldMapNodeListType[value]:GetSizeY() * math.floor(checkIndex / colsCount) + 10)
   end
   local uiControl = worldmapGrand.ui
-  local seachBoxStartPosY = worldMapNodeListType[nodeList[nodeListCount - 1]]:GetPosY() + worldMapNodeListType[nodeList[nodeListCount - 1]]:GetSizeY() + 15
+  local seachBoxStartPosY = worldMapNodeListType[nodeList[nodeListCount - 1]]:GetPosY() + worldMapNodeListType[nodeList[nodeListCount - 1]]:GetSizeY() + 15 + 78
   uiControl.edit_NodeName:SetPosY(seachBoxStartPosY)
   uiControl.btn_SearchNodeName:SetPosY(seachBoxStartPosY)
-  uiControl.edit_ItemName:SetPosY(uiControl.edit_NodeName:GetPosY() + uiControl.edit_NodeName:GetSizeY() + 3)
-  uiControl.btn_SearchItemName:SetPosY(uiControl.edit_NodeName:GetPosY() + uiControl.edit_NodeName:GetSizeY() + 3)
-  uiControl.edit_UseType:SetPosY(uiControl.edit_ItemName:GetPosY() + uiControl.edit_ItemName:GetSizeY() + 3)
-  uiControl.btn_SearchUseType:SetPosY(uiControl.edit_ItemName:GetPosY() + uiControl.edit_ItemName:GetSizeY() + 3)
-  uiControl.edit_GuildName:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 3)
-  uiControl.btn_SearchGuildName:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 3)
-  if isEnableBattle then
-    uiControl.searchPartLine:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 32)
-    uiControl.explorePointBG:SetPosY(uiControl.searchPartLine:GetPosY() + uiControl.searchPartLine:GetSizeY() + 3)
-    uiControl.explorePointIcon:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-    uiControl.explorePointIcon:SetPosX(20)
-    uiControl.explorePointValue:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-    uiControl.explorePointProgressBG:SetPosY(uiControl.explorePointBG:GetPosY() + 14)
-    uiControl.explorePointProgress:SetPosY(uiControl.explorePointBG:GetPosY() + 15)
-    uiControl.explorePointProgressBG:SetPosX(118)
-    uiControl.explorePointProgress:SetPosX(119)
-    uiControl.explorePointHelp:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-  else
-    uiControl.searchPartLine:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 3)
-    uiControl.explorePointBG:SetPosY(uiControl.searchPartLine:GetPosY() + uiControl.searchPartLine:GetSizeY() + 3)
-    uiControl.explorePointIcon:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-    uiControl.explorePointIcon:SetPosX(20)
-    uiControl.explorePointValue:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-    uiControl.explorePointProgressBG:SetPosY(uiControl.explorePointBG:GetPosY() + 14)
-    uiControl.explorePointProgress:SetPosY(uiControl.explorePointBG:GetPosY() + 15)
-    uiControl.explorePointProgressBG:SetPosX(118)
-    uiControl.explorePointProgress:SetPosX(119)
-    uiControl.explorePointHelp:SetPosY(uiControl.explorePointBG:GetPosY() + 8)
-  end
-  uiControl.MainMenuBG:SetSize(uiControl.MainMenuBG:GetSizeX(), uiControl.explorePointBG:GetPosY() + uiControl.explorePointBG:GetSizeY())
+  uiControl.edit_ItemName:SetPosY(uiControl.edit_NodeName:GetPosY() + uiControl.edit_NodeName:GetSizeY() + 4)
+  uiControl.btn_SearchItemName:SetPosY(uiControl.edit_NodeName:GetPosY() + uiControl.edit_NodeName:GetSizeY() + 4)
+  uiControl.edit_UseType:SetPosY(uiControl.edit_ItemName:GetPosY() + uiControl.edit_ItemName:GetSizeY() + 4)
+  uiControl.btn_SearchUseType:SetPosY(uiControl.edit_ItemName:GetPosY() + uiControl.edit_ItemName:GetSizeY() + 4)
+  uiControl.edit_GuildName:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 4)
+  uiControl.btn_SearchGuildName:SetPosY(uiControl.edit_UseType:GetPosY() + uiControl.edit_UseType:GetSizeY() + 4)
 end
 local function worldmapGrand_OpenSet()
   local uiControl = worldmapGrand.ui
@@ -1125,6 +1103,8 @@ local function worldmapGrand_OpenSet()
     worldmapGrand.ui.edit_GuildName:SetShow(false)
     worldmapGrand.ui.btn_SearchGuildName:SetShow(false)
   end
+  worldmapGrand.ui.TitleBG:SetSize(getScreenSizeX(), worldmapGrand.ui.TitleBG:GetSizeY())
+  worldmapGrand.ui.TitleBG:ComputePos()
   uiControl.edit_NodeName:SetEditText(worldmapGrand.config.searchDefaultNodeName, true)
   uiControl.edit_ItemName:SetEditText(worldmapGrand.config.searchDefaultItemName, true)
   uiControl.edit_UseType:SetEditText(worldmapGrand.config.searchDefaultUseType, true)
@@ -1212,8 +1192,8 @@ function worldmapGrand:UpdateExplorePoint()
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
-  self.ui.explorePointIcon:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
-  self.ui.explorePointProgress:SetProgressRate(cont_expRate * 100)
+  self.ui.explorePointIcon:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CONTRIBUTION"))
+  self.ui.explorePointValue:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
 end
 local function guildWar_Filter_Init()
   worldmapGrand.ui.daySelectBg:SetShow(false)
@@ -1707,9 +1687,6 @@ function worldmapGrand:registEventHandler()
   ui.edit_UseType:RegistReturnKeyEvent("HandleClicked_GrandWorldMap_SearchUseType()")
   ui.list_scrollBtn:addInputEvent("Mouse_LPress", "HandleClicked_GrandWorldMap_ScrollPress()")
   ui.list_scroll:addInputEvent("Mouse_LUp", "HandleClicked_GrandWorldMap_ScrollPress()")
-  ui.explorePointHelp:addInputEvent("Mouse_On", "HandleOnout_GrandWorldMap_explorePointHelp( true )")
-  ui.explorePointHelp:addInputEvent("Mouse_Out", "HandleOnout_GrandWorldMap_explorePointHelp( false )")
-  ui.explorePointHelp:setTooltipEventRegistFunc("HandleOnout_GrandWorldMap_explorePointHelp( true )")
 end
 MakeModeButton()
 MakeModeChekcState()

@@ -174,6 +174,7 @@ function PaGlobalFunc_RepairInfo_Close()
   RepairInfo:close()
 end
 function RepairInfo:close()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   _panel:SetShow(false, false)
   repair_SetRepairMode(false)
   if self._isCamping then
@@ -284,6 +285,7 @@ end
 function PaGlobalFunc_RepairInfo_InvenRClickConfirm()
   local self = RepairInfo
   local moneyWhereType = CppEnums.ItemWhereType.eInventory
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   if PaGlobal_Camp:getIsCamping() then
     repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, CppEnums.ServantType.Type_Count)
   else

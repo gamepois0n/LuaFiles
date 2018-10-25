@@ -30,15 +30,15 @@ function Panel_HousingList_HideAni()
   aniInfo:SetHideAtEnd(true)
 end
 local HousingList = {
-  _Static_BG = UI.getChildControl(Panel_HousingList, "Static_BG"),
   _Territory = UI.getChildControl(Panel_HousingList, "StaticText_Territory"),
   _TownName = UI.getChildControl(Panel_HousingList, "StaticText_TownName"),
   _Address = UI.getChildControl(Panel_HousingList, "StaticText_Address"),
   _Navi = UI.getChildControl(Panel_HousingList, "Button_Navi"),
-  _btn_Close = UI.getChildControl(Panel_HousingList, "Button_Close"),
+  _txt_Title = UI.getChildControl(Panel_HousingList, "StaticText_Title"),
   _frame = UI.getChildControl(Panel_HousingList, "Frame_HousingList"),
   _housePos = {}
 }
+HousingList._btn_Close = UI.getChildControl(HousingList._txt_Title, "Button_Close")
 HousingList.frameContent = UI.getChildControl(HousingList._frame, "Frame_1_Content")
 HousingList.frameScroll = UI.getChildControl(HousingList._frame, "Frame_1_VerticalScroll")
 HousingList.frameScroll:SetIgnore(false)
@@ -85,7 +85,7 @@ function Panel_HousingList_Update()
   HousingList:Panel_HousingList_Initialize()
   local self = HousingList
   local _myDwellingCount = ToClient_getMyDwellingCount()
-  local _PosY = 0
+  local _PosY = 10
   if _myDwellingCount > 0 then
     for idx = 0, _myDwellingCount - 1 do
       local characterStaticStatusWrapper = ToClient_getMyDwelling(idx)
@@ -100,18 +100,18 @@ function Panel_HousingList_Update()
           _PosY = self._Territory:GetSizeY() + 7 + _PosY
         end
         self.listArray[idx]._Territory:SetText(regionWrapper:getTerritoryName())
-        self.listArray[idx]._Territory:SetPosX(18)
+        self.listArray[idx]._Territory:SetPosX(50)
         self.listArray[idx]._Territory:SetPosY(_PosY)
         self.listArray[idx]._Territory:SetShow(true)
         self.listArray[idx]._TownName:SetText(regionWrapper:getAreaName())
-        self.listArray[idx]._TownName:SetPosX(150)
+        self.listArray[idx]._TownName:SetPosX(180)
         self.listArray[idx]._TownName:SetPosY(_PosY)
         self.listArray[idx]._TownName:SetShow(true)
         self.listArray[idx]._Address:SetText(characterStaticStatusWrapper:getName())
-        self.listArray[idx]._Address:SetPosX(310)
+        self.listArray[idx]._Address:SetPosX(350)
         self.listArray[idx]._Address:SetPosY(_PosY)
         self.listArray[idx]._Address:SetShow(true)
-        self.listArray[idx]._Navi:SetPosX(520)
+        self.listArray[idx]._Navi:SetPosX(615)
         self.listArray[idx]._Navi:SetPosY(_PosY + 2)
         self.listArray[idx]._Navi:SetShow(true)
         self.listArray[idx]._Navi:addInputEvent("Mouse_LUp", "_HousingListNavigatorStart(" .. idx .. "," .. _myDwellingCount .. ")")
@@ -142,7 +142,7 @@ function Panel_HousingList_Update()
     self.listArray[idx]._Address:SetPosX(310)
     self.listArray[idx]._Address:SetPosY(_PosY)
     self.listArray[idx]._Address:SetShow(true)
-    self.listArray[idx]._Navi:SetPosX(520)
+    self.listArray[idx]._Navi:SetPosX(615)
     self.listArray[idx]._Navi:SetPosY(_PosY + 2)
     self.listArray[idx]._Navi:SetShow(true)
     self.listArray[idx]._Navi:addInputEvent("Mouse_LUp", "_HousingListNavigatorStart_GuildHouse(" .. idx .. ")")
@@ -174,7 +174,7 @@ function Panel_HousingList_Update()
         self.listArray[idx]._Address:SetPosX(310)
         self.listArray[idx]._Address:SetPosY(_PosY)
         self.listArray[idx]._Address:SetShow(true)
-        self.listArray[idx]._Navi:SetPosX(520)
+        self.listArray[idx]._Navi:SetPosX(615)
         self.listArray[idx]._Navi:SetPosY(_PosY + 2)
         self.listArray[idx]._Navi:SetShow(true)
         self.listArray[idx]._Navi:addInputEvent("Mouse_LUp", "_HousingListNavigatorStart_Villa(" .. villaIdx .. ")")

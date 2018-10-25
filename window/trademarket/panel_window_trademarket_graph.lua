@@ -130,10 +130,8 @@ local territoryCount = 8
 for countIndex = 1, territoryCount do
   tradeGraph._buttonTerritory[countIndex] = UI.getChildControl(Panel_Trade_Market_Graph_Window, "Button_category_Territory_" .. countIndex - 1)
   tradeGraph._buttonTerritory[countIndex]:addInputEvent("Mouse_LUp", "buttonLupTradeGraph_Territory(" .. countIndex .. ")")
-  tradeGraph._buttonTerritory[countIndex]:SetSize(200, 32)
 end
 tradeGraph._buttonGoBackGraph:addInputEvent("Mouse_LUp", "buttonLupGoBackTradeGraph()")
-tradeGraph._buttonGoBackGraph:AddEffect("UI_Trade_Button", true, 0, 0)
 tradeGraph._buttonGoBackGraph:SetShow(false)
 local _miniPanel = {}
 local _byWorldmapForGraph = false
@@ -158,7 +156,7 @@ function tradeGraph:registUIControl()
     local miniPanel = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Trade_Market_Graph_Window, "static_MiniPanel_" .. count)
     CopyBaseProperty(tradeGraph._staticMiniPanel, miniPanel)
     _miniPanel[count] = miniPanel
-    miniPanel:SetPosX(tradeGraph._staticRectangle:GetPosX() + 3)
+    miniPanel:SetPosX(tradeGraph._staticRectangle:GetPosX() + 183)
     local staticSizeInterval = tradeGraph._staticRectangle:GetPosY() + sizeCol * (count - 1)
     local posY = staticSizeInterval + tradeGraph._intervalValue * (count - 1)
     miniPanel:SetPosY(posY + 3)
@@ -173,7 +171,7 @@ function tradeGraph:registUIControl()
     tradeGraph._staticCommerceGraphs[count]:addInputEvent("Mouse_Out", "NpcTradeGraph_StaticMouseOut(" .. count .. ")")
     tradeGraph._staticCommerceGraphs[count]:addInputEvent("Mouse_UpScroll", "NpcTradeGraph_ScrollEvent(true)")
     tradeGraph._staticCommerceGraphs[count]:addInputEvent("Mouse_DownScroll", "NpcTradeGraph_ScrollEvent(false)")
-    staticGraph:SetPosX(graphPanelPosX)
+    staticGraph:SetPosX(graphPanelPosX - 2)
     staticGraph:SetPosY(graphPanelPosY)
     local slot = {}
     slot.icon = {}
@@ -207,7 +205,7 @@ function tradeGraph:registUIControl()
     local static_PriceIcon = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, miniPanel, "item_sellPrice_goldIcon_" .. count)
     CopyBaseProperty(tradeGraph._static_BasePriceIcon, static_PriceIcon)
     tradeGraph._static_PriceIcon[count] = static_PriceIcon
-    static_PriceIcon:SetPosX(ratePosX - 10)
+    static_PriceIcon:SetPosX(ratePosX + 110)
     static_PriceIcon:SetPosY(ratePosY - 5)
     static_PriceIcon:SetShow(false)
     local static_OriginalPrice = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, miniPanel, "item_Original_goldIcon_" .. count)
@@ -251,12 +249,10 @@ function tradeGraph:registUIControl()
     position.y = tradeGraph._buttonTradeList[btnIndex]:GetPosY()
     tradeGraph._buttonTradePosition[btnIndex] = position
   end
-  tradeGraph._scroll:SetPosX(tradeGraph._staticRectangle:GetPosX() + tradeGraph._staticRectangle:GetSizeX())
+  tradeGraph._scroll:SetPosX(tradeGraph._staticRectangle:GetPosX() + tradeGraph._staticRectangle:GetSizeX() - 10)
   tradeGraph._scroll:SetPosY(tradeGraph._staticRectangle:GetPosY())
   tradeGraph._scroll:SetControlPos(0)
   tradeGraph._staticGraph:SetShow(false)
-  tradeGraph._button_SellToNPC:AddEffect("UI_Trade_Button", true, 0, 0)
-  tradeGraph._button_BuyFromNPC:EraseAllEffect()
   Panel_Trade_Market_Graph_Window:SetChildIndex(tradeGraph._graphInfoText, 9999)
 end
 local function setGraphMiniPanel(index, isShow)
@@ -402,7 +398,6 @@ function tradeGraph.updateCommerceInfo(commerceIndex)
   tradeGraph._currentCommerceIndex = commerceIndex
   tradeGraph._currentCommerceSize = commerceItemSize
   setCommerceButtonClick(tradeGraph._currentCommerceIndex)
-  tradeGraph._staticLines[tradeGraph._currentCommerceIndex]:SetShow(true)
   tradeGraph.updateTradeProduct()
 end
 local territorySupplyCheck = false
@@ -480,7 +475,6 @@ function global_CommerceGraphDataInit(byWorldmap)
   Panel_Trade_Market_Graph_Window:ResetRadiobutton(tradeGraph._buttonTradeList[1]:GetGroupNumber())
   Panel_Trade_Market_Graph_Window:ResetRadiobutton(tradeGraph._button_BuyFromNPC:GetGroupNumber())
   setCommerceButtonClick(tradeGraph._currentCommerceIndex)
-  tradeGraph._staticLines[tradeGraph._currentCommerceIndex]:SetShow(true)
   setBuySellButtonClick()
   local typeIndex = tradeGraph._dialogSceneIndex[tradeGraph._currentCommerceIndex]
   if 0 ~= typeIndex and false == byWorldmap and true == tradeGraph._isNodeLinked and not characterStaticStatus:isTerritorySupplyMerchant() then
@@ -571,7 +565,7 @@ function tradeGraph.tradeMarket_DrawGraph(commerceIndexForGraph, itemKey, UIInde
   local tradeItemWrapper = npcShop_getTradeItem(itemKey)
   local sellPrice = tradeItemWrapper:getTradeSellPrice()
   tradeGraph._static_PriceIcon[UIIndex]:SetText(makeDotMoney(sellPrice))
-  tradeGraph._static_PriceIcon[UIIndex]:SetPosX(tradeGraph._staticBasePriceRate:GetPosX() - tradeGraph._staticMiniPanel:GetPosX() + tradeGraph._static_PriceIcon[UIIndex]:GetTextSizeX() - 2)
+  tradeGraph._static_PriceIcon[UIIndex]:SetPosX(tradeGraph._staticBasePriceRate:GetPosX() - tradeGraph._staticMiniPanel:GetPosX() + tradeGraph._static_PriceIcon[UIIndex]:GetTextSizeX() - 2 + 150)
   if true == territorySupplyCheck then
     local _s64_leftCount = tradeItemWrapper:getLeftCount()
     if Defines.s64_const.s64_0 == _s64_leftCount then
@@ -649,14 +643,14 @@ function tradeGraph.tradeMarket_DrawGraph(commerceIndexForGraph, itemKey, UIInde
   else
     local priceRate_Value = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_TradeMarketGraph_SellRate", "Percent", tostring(sellRate))
     if 100 < tonumber(tostring(sellRate)) then
-      priceRate_Value = "(<PAColor0xFFFFCE22>" .. priceRate_Value .. "\226\150\178<PAOldColor>/" .. makeDotMoney(sellPrice) .. ")"
+      priceRate_Value = "<PAColor0xFFFFCE22>" .. priceRate_Value .. "\226\150\178<PAOldColor> / " .. makeDotMoney(sellPrice) .. ""
     else
-      priceRate_Value = "(<PAColor0xFFF26A6A>" .. priceRate_Value .. "\226\150\188<PAOldColor>/" .. makeDotMoney(sellPrice) .. ")"
+      priceRate_Value = "<PAColor0xFFF26A6A>" .. priceRate_Value .. "\226\150\188<PAOldColor> / " .. makeDotMoney(sellPrice) .. ""
     end
     tradeGraph._staticPriceRate[UIIndex]:addInputEvent("Mouse_On", "NpcTradeGraph_SimpleToolTip( true, " .. UIIndex .. " )")
     tradeGraph._staticPriceRate[UIIndex]:addInputEvent("Mouse_Out", "NpcTradeGraph_SimpleToolTip( false, " .. UIIndex .. " )")
     tradeGraph._staticPriceRate[UIIndex]:SetText(priceRate_Value)
-    tradeGraph._staticPriceRate[UIIndex]:SetPosX(tradeGraph._static_PriceIcon[UIIndex]:GetPosX() + 15)
+    tradeGraph._staticPriceRate[UIIndex]:SetPosX(tradeGraph._staticBasePriceRate:GetPosX() - tradeGraph._staticMiniPanel:GetPosX() + tradeGraph._static_PriceIcon[UIIndex]:GetTextSizeX() - 30)
   end
   tradeGraph._static_GraphBaseLine[UIIndex]:SetPosX(commerceUI:GetPosX())
   tradeGraph._static_GraphBaseLine[UIIndex]:SetPosY(commerceUI:GetPosY() + commerceUI:GetSizeY() / 2)
@@ -885,8 +879,8 @@ function onScreenResizeTrade()
 end
 function eventResetScreenSizeTrade(supplyShop, isResize)
   Panel_Trade_Market_Graph_Window:SetSize(Panel_Trade_Market_Graph_Window:GetSizeX(), getScreenSizeY() - Panel_Npc_Trade_Market:GetSizeY())
-  tradeGraph._staticRectangle:SetPosY(80)
-  local rtSizeY = Panel_Trade_Market_Graph_Window:GetSizeY() - 90
+  tradeGraph._staticRectangle:SetPosY(93)
+  local rtSizeY = Panel_Trade_Market_Graph_Window:GetSizeY() - 105
   tradeGraph._staticRectangle:SetSize(tradeGraph._staticRectangle:GetSizeX(), rtSizeY)
   tradeGraph._scroll:SetSize(tradeGraph._scroll:GetSizeX(), rtSizeY)
   local _gap = tradeGraph._static_SupplyCount[1]:GetSizeY() + tradeGraph._static_SupplyCount[1]:GetPosY() - tradeGraph._static_OriginalPrice[1]:GetPosY()
@@ -920,7 +914,6 @@ function refreshGraphData()
   end
   Panel_Trade_Market_Graph_Window:ResetRadiobutton(tradeGraph._buttonTradeList[1]:GetGroupNumber())
   setCommerceButtonClick(tradeGraph._currentCommerceIndex)
-  tradeGraph._staticLines[tradeGraph._currentCommerceIndex]:SetShow(true)
 end
 function setBuySellButtonClick()
   local buttonBaseTexture = tradeGraph._button_BuyFromNPC:getBaseTexture()
@@ -939,20 +932,9 @@ function setCommerceButtonClick(buttonIndex)
   local buttonUI = tradeGraph._buttonTradeList[buttonIndex]
   local btnClickTexture = buttonUI:getClickTexture()
   buttonUI:setRenderTexture(btnClickTexture)
-  if 1 == tradeGraph._buyFromNPCOrSellToNPCOrAll then
-    tradeGraph._button_BuyFromNPC:EraseAllEffect()
-    tradeGraph._button_BuyFromNPC:AddEffect("UI_Trade_Button", true, 0, 0)
-    tradeGraph._button_SellToNPC:EraseAllEffect()
-  elseif 2 == tradeGraph._buyFromNPCOrSellToNPCOrAll then
-    tradeGraph._button_SellToNPC:EraseAllEffect()
-    tradeGraph._button_SellToNPC:AddEffect("UI_Trade_Button", true, 0, 0)
-    tradeGraph._button_BuyFromNPC:EraseAllEffect()
-  end
 end
 function click_BuyFromNPC()
   tradeGraph._buyFromNPCOrSellToNPCOrAll = 1
-  tradeGraph._button_BuyFromNPC:AddEffect("UI_Trade_Button", true, 0, 0)
-  tradeGraph._button_SellToNPC:EraseAllEffect()
   refreshGraphData()
   local typeIndex = tradeGraph._dialogSceneIndex[tradeGraph._currentCommerceIndex]
   if 0 ~= typeIndex and false == _byWorldmap and true == tradeGraph._isNodeLinked then
@@ -963,8 +945,6 @@ function click_BuyFromNPC()
 end
 function click_SellToNPC()
   tradeGraph._buyFromNPCOrSellToNPCOrAll = 2
-  tradeGraph._button_SellToNPC:AddEffect("UI_Trade_Button", true, 0, 0)
-  tradeGraph._button_BuyFromNPC:EraseAllEffect()
   Panel_Trade_Market_BuyItemList:SetShow(false)
   refreshGraphData()
   commerceGraphInitialize()
@@ -1028,7 +1008,7 @@ function tradeGraph.updateTrendTradeItem()
         priceRate_Value = "(<PAColor0xFFF26A6A>" .. priceRate_Value .. "\226\150\188<PAOldColor>)"
       end
       tradeGraph._staticPriceRate[UIIndex]:SetText(priceRate_Value)
-      tradeGraph._staticPriceRate[UIIndex]:SetPosX(tradeGraph._static_PriceIcon[UIIndex]:GetPosX() + 15)
+      tradeGraph._staticPriceRate[UIIndex]:SetPosX(tradeGraph._static_PriceIcon[UIIndex]:GetPosX() + 30)
       tradeGraph._staticPriceRate[UIIndex]:SetShow(false)
       tradeGraph._static_GraphBaseLine[UIIndex]:SetPosX(commerceUI:GetPosX())
       tradeGraph._static_GraphBaseLine[UIIndex]:SetPosY(commerceUI:GetPosY() + commerceUI:GetSizeY() / 2)
@@ -1085,7 +1065,6 @@ function buttonLupTradeGraph_Territory(buttonIndex)
   for lineCount = 1, enCommerceType.enCommerceType_Max - 1 do
     tradeGraph._staticLines[lineCount]:SetShow(false)
   end
-  tradeGraph._staticLines[buttonIndex]:SetShow(true)
   tradeGraph.updateTrendTradeItem()
   tradeGraph._scroll:SetControlPos(0)
 end
@@ -1106,7 +1085,6 @@ function resetTrendGraphButton(isShow)
         tradeGraph._buttonTerritory[countIndex]:SetText(territoryInfoWrapper:getTerritoryName())
         local btnTradeTerritorySizeX = tradeGraph._buttonTerritory[countIndex]:GetSizeX() + 23
         local btnTradeTerritoryTextPosX = btnTradeTerritorySizeX - btnTradeTerritorySizeX / 2 - tradeGraph._buttonTerritory[countIndex]:GetTextSizeX() / 2
-        tradeGraph._buttonTerritory[countIndex]:SetTextSpan(btnTradeTerritoryTextPosX, 5)
         tradeGraph._buttonTerritory[countIndex]:SetShow(true)
       else
         tradeGraph._buttonTerritory[countIndex]:SetShow(false)

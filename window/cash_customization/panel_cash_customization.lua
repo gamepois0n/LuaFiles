@@ -78,7 +78,7 @@ function CashCustomization:Update()
   for idx, itemUi in pairs(self.ItemUiPOOL) do
     itemUi.ItemBG:SetShow(false)
   end
-  local startPosY = 40
+  local startPosY = 47
   local slotYGap = 75
   local sizeY = 0
   local idx = 0
@@ -190,7 +190,7 @@ function CashCustomization:Update()
     end
     startPosY = startPosY + slotYGap
     sizeY = sizeY + UiBase.ItemBG:GetSizeY() + 5
-    self.myProduct_panelBG:SetSize(self.myProduct_panelBG:GetSizeX(), sizeY + 80)
+    self.myProduct_panelBG:SetSize(self.myProduct_panelBG:GetSizeX(), sizeY + 85)
   end
 end
 function FGlobal_CashCustom_CashBgSizeY()
@@ -371,7 +371,7 @@ function CashCustomization_SetPosition()
   Panel_Cash_Customization:SetSize(panelSizeX, scrSizeY - TemplateUI.ItemBG:GetSizeY())
   Panel_Cash_Customization:SetPosX(scrSizeX - panelSizeX)
   Panel_Cash_Customization:SetPosY(TemplateUI.ItemBG:GetSizeY() - 10)
-  self.BTN_BuyGoods:SetPosX(5)
+  self.BTN_BuyGoods:SetPosX(10)
   self.BTN_BuyGoods:SetPosY(self.myProduct_panelBG:GetSizeY() - 30)
   self.PearlBox:SetPosX(panelSizeX - self.PearlBox:GetSizeX() - 5)
   self.PearlBox:SetPosY(self.myProduct_panelBG:GetSizeY() - 30)

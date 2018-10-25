@@ -12,7 +12,10 @@ function GuildMemberInfo:open()
   _panel:SetShow(true)
 end
 function GuildMemberInfo:close()
-  _panel:SetShow(false)
+  if _panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
+    _panel:SetShow(false)
+  end
 end
 function GuildMemberInfo:update()
   local memberIdx = PaGlobalFunc_GuildMemberFunction_GetMemberIndex()

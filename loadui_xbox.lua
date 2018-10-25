@@ -182,12 +182,14 @@ function preLoadGameUI_XB()
   basicLoadUI("UI_Data/Widget/Damage/CounterAttack.XML", "Panel_CounterAttack", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/GlobalManual/Console/Panel_Global_Manual_Renew.xml", "Panel_Global_Manual", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/Fishing/Console/Panel_Fishing_Renew.xml", "Panel_Fishing", UIGroup.PAGameUIGroup_MiniGameUI)
-  loadUI("UI_Data/Widget/SniperGame/Panel_SniperGame.xml", "Panel_SniperGame", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_SniperGame
-  }))
-  loadUI("UI_Data/Widget/SniperGame/Panel_SniperGame_Result.xml", "Panel_SniperGame_Result", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_SniperGame
-  }))
+  if true == _ContentsGroup_EnhanceHunt then
+    loadUI("UI_Data/Widget/SniperGame/Panel_SniperGame.xml", "Panel_SniperGame", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_SniperGame
+    }))
+    loadUI("UI_Data/Widget/SniperGame/Panel_SniperGame_Result.xml", "Panel_SniperGame_Result", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
+      RenderMode.eRenderMode_SniperGame
+    }))
+  end
   basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_GuildWarInfo.XML", "Panel_GuildWarInfo", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_GuildWarScore.XML", "Panel_GuildWarScore", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/GuildWarInfo/Panel_GuildWarInfo_Renew.XML", "Panel_Window_GuildWarInfo", UIGroup.PAGameUIGroup_Windows)
@@ -642,6 +644,7 @@ function preLoadGameUI_XB()
     basicLoadUI("UI_Data/Window/Guild/Console/Panel_Window_GuildWarDeclare_Renew.XML", "Panel_Window_Guild_WarDeclare", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/Guild/Console/Panel_Window_GuildIntroduction_Renew.XML", "Panel_Window_Guild_Introduction", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/Guild/Console/Panel_Window_GuildVoiceSet_Renew.XML", "Panel_Window_Guild_VoiceSet", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Guild/Console/Panel_Window_GuildFunding_Renew.XML", "Panel_Window_GuildFunding_Renew", UIGroup.PAGameUIGroup_Windows)
     loadUI("UI_Data/Widget/QuestList/Console/Panel_GuildQuest_Renew.XML", "Panel_Widget_GuildQuest", UIGroup.PAGameUIGroup_Widget, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
       RenderMode.eRenderMode_WorldMap
@@ -743,16 +746,16 @@ function preLoadGameUI_XB()
     RenderMode.eRenderMode_Default,
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/Extraction/UI_Window_Extraction_Function.XML", "Panel_Window_Extraction", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/Extraction/Console/Panel_Window_Extract_Renew.XML", "Panel_Window_Extract_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/Extraction/UI_Window_Extraction_Crystal.XML", "Panel_Window_Extraction_Crystal", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/Extraction/Console/Panel_Tab_ExtractOutfit_Renew.XML", "Panel_Tab_ExtractOutfit_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/Extraction/UI_Window_Extraction_EnchantStone.XML", "Panel_Window_Extraction_EnchantStone", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/Extraction/Console/Panel_Tab_ExtractCrystal_Renew.XML", "Panel_Tab_ExtractCrystal_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/Extraction/UI_Window_Extraction_Cloth.XML", "Panel_Window_Extraction_Cloth", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/Extraction/Console/Panel_Tab_ExtractBlackStone_Renew.XML", "Panel_Tab_ExtractBlackStone_Renew", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
   loadUI("UI_Data/Window/Extraction/UI_Window_Extraction_Result.XML", "Panel_Window_Extraction_Result", UIGroup.PAGameUIGroup_Alert, PAUIRenderModeBitSet({
@@ -772,8 +775,9 @@ function preLoadGameUI_XB()
   else
     basicLoadUI("UI_Data/Widget/MainStatus/UI_SelfPlayer_Main_Slot_User_Bar.XML", "Panel_MainStatus_User_Bar", UIGroup.PAGameUIGroup_MainUI)
     basicLoadUI("UI_Data/Widget/MainStatus/Console/Panel_Widget_MainStatus_Renew.XML", "Panel_SelfPlayerExpGage", UIGroup.PAGameUIGroup_MainUI)
-    basicLoadUI("UI_Data/Widget/MainStatus/Panel_PersonalIcon_Left.XML", "Panel_PersonalIcon_Left", UIGroup.PAGameUIGroup_MainUI)
+    basicLoadUI("UI_Data/Widget/MainStatus/Panel_Widget_FamilyBuff_New.XML", "Panel_PersonalIcon_Left", UIGroup.PAGameUIGroup_MainUI)
   end
+  basicLoadUI("UI_Data/Widget/MainStatus/Panel_Widget_MainStatus_New.XML", "Panel_MainStatus_Remaster", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/MainStatus/Console/Panel_Widget_CastingBar_Renew.XML", "Panel_Casting_Bar", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/MainStatus/PvpMode_Button.XML", "Panel_PvpMode", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/MainStatus/Panel_ClassResource.XML", "Panel_ClassResource", UIGroup.PAGameUIGroup_MainUI)
@@ -1148,20 +1152,20 @@ function preLoadGameUI_XB()
   }))
   basicLoadUI("UI_Data/Window/DeadMessage/Console/Panel_ResurrectionItem_Select_Renew.XML", "Panel_Resurrection_ItemSelect", UIGroup.PAGameUIGroup_FadeScreen)
   basicLoadUI("UI_Data/Window/DeadMessage/DangerAlert.XML", "Panel_Danger", UIGroup.PAGameUIGroup_ScreenEffect)
-  loadUI("UI_Data/Window/TradeMarket/UI_Win_Npc_TradeMarket.xml", "Panel_Npc_Trade_Market", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/TradeMarket/Console/Panel_TradeMarket_BiddingGame.xml", "Panel_TradeMarket_BiddingGame", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
-  loadUI("UI_Data/Window/TradeMarket/UI_Win_Npc_TradeMarket_BuyItemList_Panel.xml", "Panel_Trade_Market_BuyItemList", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_Dialog
-  }))
-  loadUI("UI_Data/Window/TradeMarket/UI_Win_Npc_TradeMarket_SellItemList_Panel.xml", "Panel_Trade_Market_Sell_ItemList", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-    RenderMode.eRenderMode_Dialog
-  }))
-  loadUI("UI_Data/Window/TradeMarket/UI_Win_Npc_TradeMarket_GraphPanel.xml", "Panel_Trade_Market_Graph_Window", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/TradeMarket/Console/Panel_TradeMarket_Graph.xml", "Panel_TradeMarket_Graph", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog,
     RenderMode.eRenderMode_WorldMap
   }))
-  loadUI("UI_Data/Window/TradeMarket/UI_Win_Npc_TradeGame.xml", "Panel_TradeGame", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
+  loadUI("UI_Data/Window/TradeMarket/Console/Panel_TradeMarket_In.xml", "Panel_TradeMarket_In", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
+    RenderMode.eRenderMode_Dialog
+  }))
+  loadUI("UI_Data/Window/TradeMarket/Console/Panel_TradeMarket_Basket.xml", "Panel_TradeMarket_Basket", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
+    RenderMode.eRenderMode_Dialog
+  }))
+  loadUI("UI_Data/Window/TradeMarket/Console/Panel_TradeMarket_Goods.xml", "Panel_TradeMarket_Goods", UIGroup.PAGameUIGroup_WorldMap_Popups, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
   if true == _ContentsGroup_isUsedNewTradeEventNotice then
@@ -1613,9 +1617,11 @@ function loadGameUI_XB()
   runLua("UI_Data/Script/global_fromActionChart_LuaEvent.lua")
   runLua("UI_Data/Script/Widget/GlobalManual/Console/Panel_Global_Manual_Renew.lua")
   runLua("UI_Data/Script/Widget/Fishing/Console/Panel_Fishing_Renew.lua")
-  runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame.lua")
-  runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame_Result.lua")
-  runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame_Control.lua")
+  if true == _ContentsGroup_EnhanceHunt then
+    runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame.lua")
+    runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame_Result.lua")
+    runLua("UI_Data/Script/Widget/SniperGame/Panel_SniperGame_Control.lua")
+  end
   runLua("UI_Data/Script/Window/ButtonShortcuts/Panel_ButtonShortcuts.lua")
   runLua("UI_Data/Script/Window/FirstLogin/Panel_FirstLogin.lua")
   runLua("UI_Data/Script/NpcWorker/workerLuaWrapper.lua")
@@ -1838,12 +1844,12 @@ function loadGameUI_XB()
     runLua("UI_Data/Script/Widget/Z_MainStatus/Panel_SelfPlayerExpGage.lua")
     runLua("UI_Data/Script/Widget/Z_MainStatus/PvpMode_Button.lua")
   else
-    runLua("UI_Data/Script/Widget/MainStatus/Console/Panel_Widget_MainStatus_Renew.lua")
+    runLua("UI_Data/Script/Widget/MainStatus/Panel_MainStatus_Remaster.lua")
   end
   runLua("UI_Data/Script/Widget/MainStatus/SelfPlayer_HpCheck.lua")
   runLua("UI_Data/Script/Widget/MainStatus/Panel_GuardGauge.lua")
   if not isActionModeActive then
-    runLua("UI_Data/Script/Widget/MainStatus/Panel_PersonalIcon_Left.lua")
+    runLua("UI_Data/Script/Widget/MainStatus/Panel_PersonalIcon_Left_Remaster.lua")
   end
   runLua("UI_Data/Script/Window/voiceChat/Console/Panel_Window_VoiceChat_Renew.lua")
   if not isActionModeActive then
@@ -1981,6 +1987,7 @@ function loadGameUI_XB()
   runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_SkillInfo.lua")
   runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_Introduction.lua")
   runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_VoiceSet.lua")
+  runLua("UI_Data/Script/Window/Guild/Console/Panel_Window_Guild_Funding.lua")
   runLua("UI_Data/Script/Widget/QuestList/Console/Panel_Widget_GuildQuest.lua")
   runLua("UI_Data/Script/Widget/LevelUpMessage/Panel_Levelup_Reward.lua")
   runLua("UI_Data/Script/Widget/FadeScreen/Panel_Fade_Screen.lua")
@@ -2019,11 +2026,12 @@ function loadGameUI_XB()
   runLua("UI_Data/Script/Window/MessageBox/Panel_Window_MessageBoxCheck_Renew.lua")
   runLua("UI_Data/Script/Window/MessageBox/Panel_ScreenShot_For_Desktop.lua")
   runLua("UI_Data/Script/Window/MessageBox/Panel_KickOff.lua")
-  runLua("UI_Data/Script/Window/TradeMarket/Panel_Window_TradeMarket.lua")
-  runLua("UI_Data/Script/Window/TradeMarket/Panel_TradeMarket_BuyList.lua")
-  runLua("UI_Data/Script/Window/TradeMarket/Panel_TradeMarket_SellList.lua")
-  runLua("UI_Data/Script/Window/TradeMarket/Panel_Window_TradeMarket_Graph.lua")
-  runLua("UI_Data/Script/Window/TradeMarket/Panel_TradeGame.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Common_TradeMarket_Console.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Panel_TradeMarket_In.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Panel_TradeMarketBasket_Console.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Panel_TradeMarketBiddingGame_Console.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Panel_TradeMarketGoods_Console.lua")
+  runLua("UI_Data/Script/Window/TradeMarket/Console/Panel_TradeMarketGraph_Console.lua")
   if true == _ContentsGroup_isUsedNewTradeEventNotice then
     runLua("UI_Data/Script/Window/TradeMarket/Panel_TradeEventNotice_Renewal.lua")
   else
@@ -2093,11 +2101,11 @@ function loadGameUI_XB()
   runLua("UI_Data/Script/Widget/BreathGauge/Panel_BreathGauge.lua")
   runLua("UI_Data/Script/Window/Repair/Panel_Repair_Renew.lua")
   runLua("UI_Data/Script/Window/Repair/Panel_FixMaxEndurance_Renew.lua")
-  runLua("UI_Data/Script/Window/Extraction/Panel_Window_Extraction.lua")
+  runLua("UI_Data/Script/Window/Extraction/Console/Panel_Window_Extract_Renew.lua")
+  runLua("UI_Data/Script/Window/Extraction/Console/Panel_Tab_ExtractBlackStone_Renew.lua")
+  runLua("UI_Data/Script/Window/Extraction/Console/Panel_Tab_ExtractCrystal_Renew.lua")
+  runLua("UI_Data/Script/Window/Extraction/Console/Panel_Tab_ExtractOutfit_Renew.lua")
   runLua("UI_Data/Script/Window/Extraction/Panel_Window_Extraction_Result.lua")
-  runLua("UI_Data/Script/Window/Extraction/Panel_Window_Extraction_Crystal.lua")
-  runLua("UI_Data/Script/Window/Extraction/Panel_Window_Extraction_EnchantStone.lua")
-  runLua("UI_Data/Script/Window/Extraction/Panel_Window_Extraction_Cloth.lua")
   runLua("UI_Data/Script/Window/Enchant/Panel_EnchantExtraction.lua")
   runLua("UI_Data/Script/Widget/Scroll/Panel_Scroll.lua")
   runLua("UI_Data/Script/Tutorial/TutorialMain.lua")
@@ -2274,6 +2282,7 @@ function loadGameUI_XB()
   loadCustomizationUI_XB()
   runLua("UI_Data/Script/QASupport/QASupportMain.lua")
   runLua("UI_Data/Script/QASupport/QADontSpawn.lua")
+  runLua("UI_Data/Script/QASupport/QASupportDamageWriter.lua")
   runLua("UI_Data/Script/Window/TranslationReport/Panel_TranslationReport.lua")
   runLua("UI_Data/Script/Window/TranslationReport/Panel_Window_TranslationText.lua")
   runLua("UI_Data/Script/Window/IngameCashShop/Panel_Window_StampCoupon.lua")
@@ -2311,6 +2320,7 @@ function loadGameUI_XB()
   if _ContentsGroup_Menu_Xbox then
     runLua("UI_Data/Script/Widget/Menu/Console/Panel_Window_Menu_Renew.lua")
   end
+  runLua("UI_Data/Script/Widget/MainStatus/Common_MainStatus_Console.lua")
   runLua("UI_Data/Script/Panel_PadSnapTargetEffect.lua")
   if _ContentsGroup_NewCloseManager then
     runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_ExceptionList.lua")

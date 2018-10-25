@@ -176,7 +176,7 @@ function MainStatus:setMPBarTexture()
     self._ui.progress_MP:AddEffect("UI_Mp_B_Bar02A", true, 0, 0)
     self._ui.progress_MP:AddEffect("UI_Mp_B_Bar02B", true, 0, 0)
     self._ui.progress_MP:AddEffect("fUI_Mp_B_Bar01", true, 0, 0)
-  elseif classType == CppEnums.ClassType.ClassType_Ranger then
+  elseif classType == CppEnums.ClassType.ClassType_Ranger or classType == CppEnums.ClassType.ClassType_Orange then
     local x1, y1, x2, y2 = setTextureUV_Func(self._ui.progress_MP, 5, 402, 161, 426)
     self._ui.progress_MP:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.progress_MP:setRenderTexture(self._ui.progress_MP:getBaseTexture())
@@ -554,6 +554,10 @@ function MainStatus:updatePvP()
     self._ui.btn_PVP:SetShow(false)
     return
   end
+  if true == ToClient_isConsole() then
+    self._ui.btn_PVP:SetShow(false)
+    return
+  end
   self._ui.btn_PVP:SetShow(true)
   if true == getPvPMode() and false == self._ui.btn_PVP:IsCheck() then
     self._ui.btn_PVP:EraseAllEffect()
@@ -608,6 +612,10 @@ function MainStatus:setPVP(where, actorKeyRaw)
 end
 function MainStatus:showPVPBtn(isShow)
   if false == ToClient_isAdultUser() then
+    self._ui.btn_PVP:SetShow(false)
+    return
+  end
+  if true == ToClient_isConsole() then
     self._ui.btn_PVP:SetShow(false)
     return
   end
@@ -803,16 +811,20 @@ end
 function PaGlobalFunc_MainStatus_SetShow(isShow, isAni)
   local self = MainStatus
   local isGetUIInfo = false
-  if true == PaGlobalFunc_IsRemasterUIOption() then
-    isGetUIInfo = true
-    if true == isShow and 0 == ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
-      isGetUIInfo = false
-    end
-  end
-  if nil == isAni then
-    _panel:SetShow(isGetUIInfo)
+  if true == ToClient_isConsole() then
+    _panel:SetShow(isShow)
   else
-    _panel:SetShow(isGetUIInfo, isAni)
+    if true == PaGlobalFunc_IsRemasterUIOption() then
+      isGetUIInfo = true
+      if true == isShow and 0 == ToClient_GetUiInfo(CppEnums.PAGameUIType.PAGameUIPanel_MainStatusRemaster, 0, CppEnums.PanelSaveType.PanelSaveType_IsShow) then
+        isGetUIInfo = false
+      end
+    end
+    if nil == isAni then
+      _panel:SetShow(isGetUIInfo)
+    else
+      _panel:SetShow(isGetUIInfo, isAni)
+    end
   end
   self:updateAll()
 end
@@ -835,5 +847,8 @@ function PaGlobalFunc_MainStatus_ShowPVPButton(isShow)
 end
 function PaGlobalFunc_MainStatus_ShowFromTutorial()
   _panel:SetShow(true)
+end
+function PaGlobalFunc_MainStatus_GetShow()
+  return _panel:GetShow()
 end
 registerEvent("FromClient_luaLoadComplete", "PaGlobalFunc_MainStatus_Init")

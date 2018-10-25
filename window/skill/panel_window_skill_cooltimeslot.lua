@@ -38,7 +38,7 @@ PaGlobal_Window_Skill_CoolTimeSlot = {
   _initButton = UI.getChildControl(Panel_SkillCoolTimeSlot, "BtnInit"),
   _uiSettingButton = UI.getChildControl(Panel_SkillCoolTimeSlot, "Button_UISetting"),
   _desc = UI.getChildControl(Panel_SkillCoolTimeSlot, "StaticText_BottomDesc"),
-  _skillCoolTimeSlotList_MaxCount = 10,
+  _skillCoolTimeSlotList_MaxCount = 7,
   _uiData = {},
   _slideIndex = 0,
   _panel_SkillCoolTimeSlot_Value_elementCount = 1,
@@ -46,8 +46,8 @@ PaGlobal_Window_Skill_CoolTimeSlot = {
   _usableSkillCount = 1
 }
 function PaGlobal_Window_Skill_CoolTimeSlot:setPosition()
-  Panel_SkillCoolTimeSlot:SetPosX(Panel_Window_Skill:GetPosX() + Panel_Window_Skill:GetSizeX() - 25)
-  Panel_SkillCoolTimeSlot:SetPosY(getScreenSizeY() / 2 - Panel_SkillCoolTimeSlot:GetSizeY() / 2)
+  Panel_SkillCoolTimeSlot:SetPosX(Panel_Window_Skill:GetPosX() + Panel_Window_Skill:GetSizeX())
+  Panel_SkillCoolTimeSlot:SetPosY(Panel_Window_Skill:GetPosY())
 end
 local sortSkillCoolTime = function(table1, table2)
   local arg1 = table1._coolTimeIndex
@@ -112,21 +112,21 @@ function PaGlobal_Window_Skill_CoolTimeSlot:skillCoolTimeSlot_MakeControl(index)
   CopyBaseProperty(self._copyUI._base_SkillBG, ui._IconBG)
   ui._IconBG:SetShow(false)
   ui._IconBG:SetIgnore(false)
-  ui._IconBG:SetPosY(92 + index * (ui._IconBG:GetSizeY() + 3))
+  ui._IconBG:SetPosY(118 + index * (ui._IconBG:GetSizeY() + 9))
   ui._skillIcon = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_SkillCoolTimeSlot, "Static_SkillIcon_" .. index)
   CopyBaseProperty(self._copyUI._base_SkillIcon, ui._skillIcon)
   ui._skillIcon:SetShow(false)
-  ui._skillIcon:SetPosY(94 + index * (ui._IconBG:GetSizeY() + 3))
+  ui._skillIcon:SetPosY(130 + index * (ui._IconBG:GetSizeY() + 9))
   ui._skillName = UI.createControl(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Panel_SkillCoolTimeSlot, "StaticText_SkillName_" .. index)
   CopyBaseProperty(self._copyUI._base_SkillName, ui._skillName)
   ui._skillName:SetShow(false)
   ui._skillName:SetIgnore(true)
-  ui._skillName:SetPosY(107 + index * (ui._IconBG:GetSizeY() + 3))
+  ui._skillName:SetPosY(139 + index * (ui._IconBG:GetSizeY() + 9))
   ui._ComboBox = UI.createControl(UI_PUCT.PA_UI_CONTROL_COMBOBOX, Panel_SkillCoolTimeSlot, "Combobox_SkillCoolTimeQuickSlot_" .. index)
   CopyBaseProperty(self._copyUI._base_ComboBox, ui._ComboBox)
   ui._ComboBox:setListTextHorizonCenter()
   ui._ComboBox:SetShow(false)
-  ui._ComboBox:SetPosY(97 + index * (ui._IconBG:GetSizeY() + 3))
+  ui._ComboBox:SetPosY(132 + index * (ui._IconBG:GetSizeY() + 9))
   for comboindex = 0, #self._comboBoxString do
     ui._ComboBox:AddItem(self._comboBoxString[comboindex])
   end

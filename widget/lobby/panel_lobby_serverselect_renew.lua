@@ -239,7 +239,7 @@ function ServerSelect:initListData()
     return
   end
   local worldName = getWorldNameByWorldNo(worldServerData._worldNo)
-  if true == ToClient_isXBox() then
+  if true == ToClient_isXBox() or true == ToClient_isPS4() then
     worldName = "BlackDesert World"
   end
   self._ui.txt_WorldName:SetText(worldName)

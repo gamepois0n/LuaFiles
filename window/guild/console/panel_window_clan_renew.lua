@@ -29,6 +29,9 @@ function PaGlobalFunc_ClanRenew_Close()
   ClanRenew:close()
 end
 function ClanRenew:close()
+  if _panel:GetShow() then
+    _AudioPostEvent_SystemUiForXBOX(50, 3)
+  end
   _panel:SetShow(false)
 end
 function ClanRenew:update()
@@ -166,10 +169,12 @@ end
 function _ClanList_LeaveClanContinue()
   FGlobal_ClanList_Close()
   ToClient_RequestDestroyGuild()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function _ClanList_DisJoinContinue()
   FGlobal_ClanList_Close()
   ToClient_RequestDisjoinGuild()
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function InputMO_ClanRenew_ShowKeyGuide(isShow)
   local self = ClanRenew

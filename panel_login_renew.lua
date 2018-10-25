@@ -261,7 +261,7 @@ function PanelLogin:registEvent()
   self._ui.btn_Exit:addInputEvent("Mouse_LUp", "GlobalExitGameClient()")
   self._ui.btn_ChangeAccount:addInputEvent("Mouse_LUp", "PaGlobal_PanelLogin_ButtonClick_ChangeAccount()")
   self._ui.btn_GameOption:addInputEvent("Mouse_LUp", "showGameOption()")
-  if ToClient_isXBox() then
+  if ToClient_isConsole() then
     self._ui.btn_GameOption:SetShow(false)
   else
     self._ui.btn_ChangeAccount:SetShow(false)
@@ -400,7 +400,7 @@ function PaGlobal_PanelLogin_Resize()
     self._ui.stc_DaumCI:getBaseTexture():setUV(x1, y1, x2, y2)
     self._ui.stc_DaumCI:setRenderTexture(self._ui.stc_DaumCI:getBaseTexture())
     self._ui.stc_CI:SetSpanSize(self._ui.stc_DaumCI:GetSizeX() + 30, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
-  elseif isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isXBox() then
+  elseif isGameTypeTaiwan() or isGameTypeGT() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() or ToClient_isConsole() then
     self._ui.stc_DaumCI:SetShow(false)
     self._ui.stc_CI:SetSpanSize(10, (self._ui.stc_BlacklineDown:GetSizeY() - self._ui.stc_CI:GetSizeY()) / 2)
   elseif isGameTypeSA() then

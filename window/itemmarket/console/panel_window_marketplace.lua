@@ -13,6 +13,13 @@ local MarketPlace = {
   _slotConfig = {
     createIcon = true,
     createBorder = true,
+    createEnchant = true,
+    createCash = true,
+    createEnduranceIcon = true
+  },
+  _slotConfigWallet = {
+    createIcon = true,
+    createBorder = true,
     createCount = true,
     createEnchant = true,
     createCash = true,
@@ -58,7 +65,7 @@ function MarketPlace:init()
     slot.background:SetPosX(15 + math.floor(ii % 5) * 48)
     slot.background:SetPosY(95 + math.floor(ii / 5) * 48)
     slot.background:SetShow(true)
-    SlotItem.new(slot, "ItemSlot_" .. ii, ii, slot.background, self._slotConfig)
+    SlotItem.new(slot, "ItemSlot_" .. ii, ii, slot.background, self._slotConfigWallet)
     slot:createChild()
     slot.icon:SetShow(true)
     self._slot[ii] = slot
@@ -122,6 +129,10 @@ function MarketPlace:registEvent()
   registerEvent("FromClient_responseDetailListByWorldMarketByGroupNo", "FromClient_MarketPlace_ResponseDetailListByCategory")
   registerEvent("FromClient_responseDetailListByWorldMarketByItemKey", "FromClient_MarketPlace_ResponseDetailListByKey")
   registerEvent("FromClient_responseGetMyBiddingList", "FromClient_MarketPlace_responseGetMyBiddingList")
+  registerEvent("FromClient_responseWithdrawBuyBidding", "FromClient_MarketPlace_responseWithdrawBuyBidding")
+  registerEvent("FromClient_responseCalculateBuyBidding", "FromClient_MarketPlace_responseCalculateBuyBidding")
+  registerEvent("FromClient_responseWithdrawSellBidding", "FromClient_MarketPlace_responseWithdrawSellBidding")
+  registerEvent("FromClient_responseCalculateSellBidding", "FromClient_MarketPlace_responseCalculateSellBidding")
 end
 function MarketPlace:open(tabIdx)
   self._currentTabIdx = tabIdx
@@ -244,18 +255,18 @@ function MarketPlace:updateMyInfo()
   local maxWeight = getWorldMarketMaxWeight()
   local silverInfo = getWorldMarketSilverInfo()
   local walletItemCount = getWorldMarketMyWalletListCount()
-  if 0 ~= currentWeight then
-    currentWeight = makeDotMoney(toInt64(0, currentWeight / 100))
-  end
-  if 0 ~= maxWeight then
-    maxWeight = makeDotMoney(toInt64(0, maxWeight / 100))
-  end
+  local _const = Defines.s64_const
+  local s64_allWeight_div = toInt64(0, currentWeight) / _const.s64_100
+  local s64_maxWeight_div = toInt64(0, maxWeight) / _const.s64_100
+  local str_AllWeight = string.format("%.1f", Int64toInt32(s64_allWeight_div) / 100)
+  local str_MaxWeight = string.format("%.0f", Int64toInt32(s64_maxWeight_div) / 100)
   self._ui.txt_MoneyValue:SetText(makeDotMoney(silverInfo:getItemCount()))
-  self._ui.txt_Weight:SetText(tostring(currentWeight .. "/" .. maxWeight .. "LT"))
+  self._ui.txt_Weight:SetText(str_AllWeight .. " / " .. str_MaxWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   self._ui.txt_Count:SetText(tostring(walletItemCount))
 end
 function PaGlobalFunc_MarketPlace_UpdateMyInfo()
   MarketPlace:updateMyInfo()
+  MarketPlace:updateWallet()
 end
 function MarketPlace:setNameColor(nameColorGrade)
   local nameColor
@@ -287,7 +298,9 @@ function MarketPlace:setNameAndEnchantLevel(enchantLevel, itemType, itemName, it
 end
 function InputMLUp_MarketPlace_SellItem(slotIndex)
   local itemMyWalletInfo = getWorldMarketMyWalletListByIdx(slotIndex)
-  ToClient_requestDetailOneItemByWorldMarket(itemMyWalletInfo:getEnchantKey())
+  if nil ~= itemMyWalletInfo then
+    ToClient_requestDetailOneItemByWorldMarket(itemMyWalletInfo:getEnchantKey())
+  end
 end
 function PaGlobalFunc_MarketPlace_GetShow()
   return _panel:GetShow()
@@ -356,14 +369,14 @@ function PaGlobalFunc_MarketPlace_CreateControlMarketItemList(contents, key)
     local enchantLevel = itemSSW:get()._key:getEnchantLevel()
     local nameColorGrade = itemSSW:getGradeType()
     local itemCount = itemInfo:getItemCount()
-    local itemBaseCount = Int64toInt32(itemInfo:getPricePerOne())
+    local itemBasePrice = itemInfo:getPricePerOne()
     slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
     txt_ItemName:SetFontColor(nameColor)
     local itemNameStr = self:setNameAndEnchantLevel(enchantLevel, itemSSW:getItemType(), itemSSW:getName(), itemSSW:getItemClassify())
     txt_ItemName:SetText(itemNameStr)
-    txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. makeDotMoney(toInt64(0, itemBaseCount)))
+    txt_ItemBasePrice:SetText("\234\184\176\236\164\128\234\176\128 : " .. makeDotMoney(itemBasePrice))
     txt_ItemCount:SetText("\236\180\157 \235\167\164\235\172\188 : " .. tostring(itemCount) .. "\234\176\156")
     btn_ButtonBg:addInputEvent("Mouse_LUp", "InputMLUp_MarketPlace_RequestBiddingList(" .. idx .. ")")
   elseif self._itemListType.categoryList == self._currentListType then
@@ -403,7 +416,8 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
   local txt_ItemName = UI.getChildControl(contents, "StaticText_ItemName")
   local txt_ItemPrice = UI.getChildControl(contents, "StaticText_Price")
   local txt_ItemCount = UI.getChildControl(contents, "StaticText_Count")
-  local btn_ButtonBg = UI.getChildControl(contents, "Button_Bg")
+  local btn_Calculate = UI.getChildControl(contents, "Button_Calculate")
+  local btn_Withdraw = UI.getChildControl(contents, "Button_Withdraw")
   if self._selectedBiddingTabIndex == self._biddingTabIdx.sell then
     local itemInfo = getWorldMarketSellBiddingListByIdx(idx)
     if nil == itemInfo then
@@ -416,6 +430,7 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     local nameColorGrade = itemSSW:getGradeType()
     local pricePerOne = itemInfo:getPricePerOne()
     local leftCount = itemInfo:getLeftCount()
+    local sellNo = itemInfo:getSellNo()
     slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
@@ -424,6 +439,8 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     txt_ItemName:SetText(itemNameStr)
     txt_ItemPrice:SetText("\237\140\144\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. makeDotMoney(pricePerOne))
     txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
+    btn_Calculate:addInputEvent("Mouse_LUp", "PaGlobal_SellBidding_Calculate(" .. idx .. ")")
+    btn_Withdraw:addInputEvent("Mouse_LUp", "PaGlobal_SellBidding_WithdrawSetCount(" .. idx .. ")")
   elseif self._selectedBiddingTabIndex == self._biddingTabIdx.buy then
     local itemInfo = getWorldMarketBuyBiddingListByIdx(idx)
     local itemSSW = itemInfo:getItemEnchantStaticStatusWrapper()
@@ -432,6 +449,7 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     local nameColorGrade = itemSSW:getGradeType()
     local pricePerOne = itemInfo:getPricePerOne()
     local leftCount = itemInfo:getLeftCount()
+    local buyNo = itemInfo:getBuyNo()
     slot:setItemByStaticStatus(itemSSW, 0, -1, false, nil, false, 0, 0, nil)
     slot.isEmpty = false
     local nameColor = self:setNameColor(nameColorGrade)
@@ -440,7 +458,57 @@ function PaGlobalFunc_MarketPlace_CreateControlMyBiddingList(contents, key)
     txt_ItemName:SetText(itemNameStr)
     txt_ItemPrice:SetText("\234\181\172\235\167\164 \237\157\172\235\167\157 \234\176\128\234\178\169 : " .. makeDotMoney(pricePerOne))
     txt_ItemCount:SetText("\236\136\152\235\159\137 : " .. tostring(leftCount) .. "\234\176\156")
+    btn_Calculate:addInputEvent("Mouse_LUp", "PaGlobal_BuyBidding_Calculate(" .. idx .. ")")
+    btn_Withdraw:addInputEvent("Mouse_LUp", "PaGlobal_BuyBidding_WithdrawSetCount(" .. idx .. ")")
   end
+end
+function PaGlobal_SellBidding_Calculate(idx)
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  local itemInfo = getWorldMarketSellBiddingListByIdx(idx)
+  ToClient_requestCalculateSellBiddingToWorldMarket(itemInfo:getSellNo())
+end
+function PaGlobal_SellBidding_WithdrawSetCount(idx)
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  local itemInfo = getWorldMarketSellBiddingListByIdx(idx)
+  local leftCount = itemInfo:getLeftCount()
+  local sellNo = itemInfo:getSellNo()
+  Panel_NumberPad_Show(true, leftCount, sellNo, PaGlobal_SellBidding_Withdraw)
+end
+function PaGlobal_SellBidding_Withdraw(inputNumber, sellNo)
+  ToClient_requestWithdrawSellBiddingToWorldMarket(sellNo, inputNumber)
+end
+function PaGlobal_BuyBidding_Calculate(idx)
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  local itemInfo = getWorldMarketBuyBiddingListByIdx(idx)
+  local leftCount = itemInfo:getLeftCount()
+  local buyNo = itemInfo:getBuyNo()
+  ToClient_requestCalculateBuyBiddingToWorldMarket(buyNo)
+end
+function PaGlobal_BuyBidding_WithdrawSetCount(idx)
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  local itemInfo = getWorldMarketBuyBiddingListByIdx(idx)
+  local leftCount = itemInfo:getLeftCount()
+  local buyNo = itemInfo:getBuyNo()
+  Panel_NumberPad_Show(true, leftCount, buyNo, PaGlobal_BuyBidding_Withdraw)
+end
+function PaGlobal_BuyBidding_Withdraw(inputNumber, buyNo)
+  ToClient_requestWithdrawBuyBiddingToWorldMarket(buyNo, inputNumber)
 end
 function FGolbal_ItemMarketNew_Close()
   local self = MarketPlace
@@ -567,6 +635,15 @@ function PaGlobalFunc_MarketPlace_UpdateWalletInfo()
   end
   self:updateMyInfo()
 end
+function PaGlobalFunc_MarketPlace_UpdateWalletList()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:updateMyInfo()
+  self:updateWallet()
+end
 function PaGlobalFunc_MarketPlace_Init()
   local self = MarketPlace
   if nil == self then
@@ -656,6 +733,7 @@ function InputMLUp_MarketPlace_SubCategoryList(index)
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
     return
   end
+  self._ui.list_MarketItemList:moveTopIndex()
   local indexMap = self._categoryIdxMap[index]
   local categoryInfo = ToClient_GetItemMarketCategoryAt(indexMap._index)
   local filterLineCount = categoryInfo:getFilterListCount(0)
@@ -732,6 +810,50 @@ function FromClient_MarketPlace_responseGetMyBiddingList()
     return
   end
   self:biddingOpen(self._biddingTabIdx.sell)
+end
+function FromClient_MarketPlace_responseCalculateBuyBidding()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.buy)
+  self:updateWallet()
+  self:updateMyInfo()
+  Proc_ShowMessage_Ack("\234\181\172\235\167\164 \236\160\149\236\130\176\236\151\144 \236\132\177\234\179\181\237\150\136\236\138\181\235\139\136\235\139\164.")
+end
+function FromClient_MarketPlace_responseWithdrawBuyBidding()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.buy)
+  self:updateWallet()
+  self:updateMyInfo()
+  Proc_ShowMessage_Ack("\234\181\172\235\167\164 \237\154\140\236\136\152\236\151\144 \236\132\177\234\179\181\237\150\136\236\138\181\235\139\136\235\139\164.")
+end
+function FromClient_MarketPlace_responseCalculateSellBidding()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.sell)
+  self:updateWallet()
+  self:updateMyInfo()
+  Proc_ShowMessage_Ack("\237\140\144\235\167\164 \236\160\149\236\130\176\236\151\144 \236\132\177\234\179\181\237\150\136\236\138\181\235\139\136\235\139\164.")
+end
+function FromClient_MarketPlace_responseWithdrawSellBidding()
+  local self = MarketPlace
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : MarketPlace")
+    return
+  end
+  self:biddingOpen(self._biddingTabIdx.sell)
+  self:updateWallet()
+  self:updateMyInfo()
+  Proc_ShowMessage_Ack("\237\140\144\235\167\164 \237\154\140\236\136\152\236\151\144 \236\132\177\234\179\181\237\150\136\236\138\181\235\139\136\235\139\164.")
 end
 function FromClient_MarketPlace_NotifyMessage(msgType, strParam1, param1, param2, param3, param4)
   local self = MarketPlace

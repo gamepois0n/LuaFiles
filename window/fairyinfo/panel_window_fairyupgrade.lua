@@ -310,6 +310,7 @@ function FairyUpgrade:Initialize()
   Panel_Window_FairyUpgrade:SetSize(Panel_Window_FairyUpgrade:GetSizeX(), 490 + self._UI._bottomDescBG:GetSizeY())
   self._UI._checkBtn:SetEnableArea(0, 0, self._UI._checkBtn:GetTextSizeX() + self._UI._checkBtn:GetSizeX() + 10, self._UI._checkBtn:GetSizeY())
   self._UI._checkBtn:SetPosX(self._UI._mainBG:GetSizeX() / 2 - (self._UI._checkBtn:GetTextSizeX() + self._UI._checkBtn:GetSizeX()) / 2)
+  self._UI._upgrade:ComputePos()
 end
 function PaGlobal_FairyUpgrade_OnlyUpdate()
   local self = FairyUpgrade

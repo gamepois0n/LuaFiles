@@ -1,6 +1,7 @@
 local UI_TYPE = CppEnums.PA_UI_CONTROL_TYPE
 local UI_INSTALL = CppEnums.InstallationType
 local _tentTitle = UI.getChildControl(Panel_Worldmap_TentInfo, "StaticText_Title")
+local _tentTitleBG = UI.getChildControl(Panel_Worldmap_TentInfo, "Static_TitleBG")
 local _remainTime = UI.getChildControl(Panel_Worldmap_TentInfo, "StaticText_V_RemainTime")
 local _workingDataBg = UI.getChildControl(Panel_Worldmap_TentInfo, "Static_HouseControl_BG")
 local _workingListBg = UI.getChildControl(Panel_Worldmap_TentInfo, "Static_C_BG")
@@ -186,6 +187,8 @@ function FromClient_TentTooltipShow(tentIcon, householdDataWithInstallationWrapp
   _workingDataBg:SetSize(defalutWorkingDataBGSizeX + nameSizeX, _workingDataBg:GetSizeY())
   Panel_Worldmap_TentInfo:SetSize(defalutPanelSizeX + nameSizeX, Panel_Worldmap_TentInfo:GetSizeY())
   tooltipTentUI = tentIcon:GetID()
+  _tentTitleBG:SetSize(Panel_Worldmap_TentInfo:GetSizeX() - 10, _tentTitleBG:GetSizeY())
+  _tentTitleBG:ComputePos()
   Panel_Worldmap_TentInfo:SetShow(true)
 end
 function FromClient_TentTooltipHide(tentIcon, householdDataWithInstallationWrapper)

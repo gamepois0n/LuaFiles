@@ -56,7 +56,6 @@ local npcTradeShop = {
   _button_ClearList,
   _button_Confirm_EnterVihicle,
   _currentWeightText,
-  _buttonTradeGameStart,
   _currentWeightLT,
   _vehicleWeightLT,
   _vehicleWeightText,
@@ -206,8 +205,6 @@ function npcTradeShop:registUiControl()
   npcTradeShop._alertpanel = UI.getChildControl(Panel_Npc_Trade_Market, "Static_AlertPanel")
   npcTradeShop._alerttext = UI.getChildControl(Panel_Npc_Trade_Market, "StaticText_Alert_NoticeText")
   npcTradeShop._btnInvestNode = UI.getChildControl(Panel_Npc_Trade_Market, "Button_Node_Invest")
-  npcTradeShop._buttonTradeGameStart = UI.getChildControl(Panel_Npc_Trade_Market, "Button_TradeGameStart")
-  npcTradeShop._buttonTradeGameStart:SetShow(false)
   npcTradeShop.preLoadUI = {
     _static_Icon = UI.getChildControl(npcTradeShop.buyListFrameContent, "list_icon"),
     _static_TextItemName = UI.getChildControl(npcTradeShop.buyListFrameContent, "list_name"),
@@ -570,7 +567,6 @@ function npcTradeShop:setSizeBuyListControl(index, posX, posY)
   npcTradeShop._button_ClearList:ComputePos()
   npcTradeShop._button_Confirm_EnterVihicle:ComputePos()
   npcTradeShop._currentWeightText:ComputePos()
-  npcTradeShop._buttonTradeGameStart:ComputePos()
   local basePosX = resizeControl.icon.icon:GetPosX()
   local basePosY = resizeControl.icon.icon:GetPosY()
   resizeControl.static_TextItemName:SetTextMode(UI_TM.eTextMode_AutoWrap)

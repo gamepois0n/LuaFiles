@@ -5,6 +5,7 @@ PaGlobal_FairyRegister = {
     fairyRegister = UI.getChildControl(Panel_Window_FairyRegister, "Button_Yes"),
     fairyRegisterCancel = UI.getChildControl(Panel_Window_FairyRegister, "Button_No"),
     fairyQuestion = UI.getChildControl(Panel_Window_FairyRegister, "Button_Question"),
+    petNaming = UI.getChildControl(Panel_Window_FairyRegister, "Edit_WriteName"),
     fairyNamingBG = UI.getChildControl(Panel_Window_FairyRegister, "Static_NamingPolicyBG"),
     fairyNamingPolicyTitle = UI.getChildControl(Panel_Window_FairyRegister, "StaticText_NamingPolicyTitle"),
     fairyNamingPolicyDesc = UI.getChildControl(Panel_Window_FairyRegister, "StaticText_NamingPolicy"),
@@ -16,9 +17,9 @@ PaGlobal_FairyRegister = {
 }
 function PaGlobal_FairyRegister:init()
   self._ui.fairyIconBG = UI.getChildControl(self._ui.fairyRegisterBG, "Static_IconBack")
-  self._ui.petNaming = UI.getChildControl(self._ui.fairyRegisterBG, "Edit_WriteName")
   self._ui.fairyIcon = UI.getChildControl(self._ui.fairyIconBG, "Static_Icon")
   self._ui.petNaming:SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT"), true)
+  self._ui.fairyNamingPolicyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     self._ui.fairyNamingPolicyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
     self._ui.fairyNamingPolicyDesc:SetShow(true)
@@ -65,9 +66,6 @@ function FromClient_InputFairyName(fromWhereType, fromSlotNo)
   self._ui.fairyIcon:ChangeTextureInfoName(petIconPath)
   self._ui.petNaming:SetEditText("", true)
   self._ui.petNaming:SetMaxInput(getGameServiceTypePetNameLength())
-  self._ui.fairyRegisterDesc:SetSize(self._ui.fairyRegisterDesc:GetSizeX(), self._ui.fairyRegisterDesc:GetTextSizeY() + 10)
-  self._ui.fairyRegisterBG:SetSize(self._ui.fairyRegisterBG:GetSizeX(), self._ui.fairyRegisterDesc:GetTextSizeY() + self._ui.petNaming:GetSizeY() + 50)
-  Panel_Window_FairyRegister:SetSize(Panel_Window_FairyRegister:GetSizeX(), self._ui.fairyRegisterDesc:GetTextSizeY() + self._ui.petNaming:GetSizeY() + self._ui.fairyRegister:GetSizeY() + 110)
   self._ui.fairyRegister:ComputePos()
   self._ui.fairyRegisterCancel:ComputePos()
   PaGlobal_FairyRegister:MClick_ClearEdit()

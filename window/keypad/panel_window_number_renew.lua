@@ -315,6 +315,7 @@ function Panel_NumberPad_ButtonClose_Mouse_Click()
   Panel_NumberPad_Show(false, Defines.s64_const.s64_0, 0, nil)
 end
 function Panel_NumberPad_ButtonCancel_Mouse_Click()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_NumberPad_Show(false, Defines.s64_const.s64_0, 0, nil)
 end
 function numberPad:checkConfirmEnable()
@@ -398,6 +399,12 @@ function Panel_NumberPad_ButtonConfirm_Mouse_Click()
   if numberPad:checkConfirmEnable() or _isExchange == true then
     if nil ~= numberPad.confirmFunction then
       numberPad.confirmFunction(numberPad.s64_inputNumber, numberPad.param0, numberPad.param1, numberPad.param2)
+    end
+    if true == PaGlobalFunc_MoveMoneyCheck(false) then
+      _AudioPostEvent_SystemUiForXBOX(6, 4)
+      PaGlobalFunc_MoveMoneyCheck(true)
+    else
+      _AudioPostEvent_SystemUiForXBOX(1, 1)
     end
     Panel_NumberPad_Show(false, Defines.s64_const.s64_0, 0, nil)
   end

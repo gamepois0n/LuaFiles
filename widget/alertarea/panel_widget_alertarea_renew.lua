@@ -2,10 +2,12 @@ function ResetPos_WidgetButton()
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 AlwaysOpenType = {
-  eALERT_PearlShop = 0,
-  eALERT_PcRoomReward = 1,
-  eALERT_MarketPlace = 2,
-  count = 3
+  eALERT_Menu = 0,
+  eALERT_Setting = 1,
+  eALERT_PearlShop = 2,
+  eALERT_PcRoomReward = 3,
+  eALERT_MarketPlace = 4,
+  count = 5
 }
 AlertType = {
   eALERT_Hunting = 0,
@@ -23,7 +25,8 @@ AlertType = {
   eALERT_EnduranceCarriage = 12,
   eALERT_EnduranceShip = 13,
   eALERT_BatterEquipment = 14,
-  eALERT_Count = 15
+  eALERT_Count = 15,
+  eALERT_CashProductDiscount = 16
 }
 local Panel_Widget_Alert_info = {
   _ui = {
@@ -51,6 +54,7 @@ local Panel_Widget_Alert_info = {
     Button_EnduranceCarriage = nil,
     Button_EnduranceShip = nil,
     Button_BatterEquipment = nil,
+    Button_Menu = nil,
     Button_CashShop = nil,
     Button_PcRoomReward = nil,
     StaticText_PcRoomRewardTime = nil,
@@ -84,7 +88,8 @@ local Panel_Widget_Alert_info = {
     [AlertType.eALERT_EnduranceHorse] = false,
     [AlertType.eALERT_EnduranceCarriage] = false,
     [AlertType.eALERT_EnduranceShip] = false,
-    [AlertType.eALERT_BatterEquipment] = false
+    [AlertType.eALERT_BatterEquipment] = false,
+    [AlertType.eALERT_CashProductDiscount] = false
   },
   _alertNeedUpdate = {
     [AlertType.eALERT_Hunting] = false,
@@ -101,7 +106,8 @@ local Panel_Widget_Alert_info = {
     [AlertType.eALERT_EnduranceHorse] = false,
     [AlertType.eALERT_EnduranceCarriage] = false,
     [AlertType.eALERT_EnduranceShip] = false,
-    [AlertType.eALERT_BatterEquipment] = false
+    [AlertType.eALERT_BatterEquipment] = false,
+    [AlertType.eALERT_CashProductDiscount] = false
   },
   _alertButton = {
     [AlertType.eALERT_Hunting] = nil,
@@ -118,7 +124,8 @@ local Panel_Widget_Alert_info = {
     [AlertType.eALERT_EnduranceHorse] = nil,
     [AlertType.eALERT_EnduranceCarriage] = nil,
     [AlertType.eALERT_EnduranceShip] = nil,
-    [AlertType.eALERT_BatterEquipment] = nil
+    [AlertType.eALERT_BatterEquipment] = nil,
+    [AlertType.eALERT_CashProductDiscount] = nil
   },
   _alertClosedButton = {
     [AlertType.eALERT_Hunting] = nil,
@@ -135,7 +142,8 @@ local Panel_Widget_Alert_info = {
     [AlertType.eALERT_EnduranceHorse] = nil,
     [AlertType.eALERT_EnduranceCarriage] = nil,
     [AlertType.eALERT_EnduranceShip] = nil,
-    [AlertType.eALERT_BatterEquipment] = nil
+    [AlertType.eALERT_BatterEquipment] = nil,
+    [AlertType.eALERT_CashProductDiscount] = nil
   },
   _alertData = {
     [AlertType.eALERT_Hunting] = {
@@ -209,6 +217,11 @@ local Panel_Widget_Alert_info = {
       count = 0
     },
     [AlertType.eALERT_BatterEquipment] = {
+      name = "",
+      desc = "",
+      count = 0
+    },
+    [AlertType.eALERT_CashProductDiscount] = {
       name = "",
       desc = "",
       count = 0
@@ -304,6 +317,12 @@ local Panel_Widget_Alert_info = {
       _y1 = 301,
       _x2 = 468,
       _y2 = 336
+    },
+    [AlertType.eALERT_CashProductDiscount] = {
+      _x1 = 132,
+      _y1 = 1,
+      _x2 = 174,
+      _y2 = 43
     }
   },
   _alertMessage = {
@@ -321,8 +340,11 @@ local Panel_Widget_Alert_info = {
     [AlertType.eALERT_EnduranceHorse] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_11"),
     [AlertType.eALERT_EnduranceCarriage] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_12"),
     [AlertType.eALERT_EnduranceShip] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_13"),
-    [AlertType.eALERT_BatterEquipment] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_14")
-  }
+    [AlertType.eALERT_BatterEquipment] = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_14"),
+    [AlertType.eALERT_CashProductDiscount] = ""
+  },
+  _currentAlertType = AlertType.eALERT_Count,
+  _isDiscountPeriodFirstAlert = false
 }
 local cardListNormal = {}
 local cardListImportant = {}
@@ -345,14 +367,20 @@ function Panel_Widget_Alert_info:registEventHandler()
       end
     end
   end
+  self._ui.Button_Menu:addInputEvent("Mouse_LUp", "Panel_Menu_ShowToggle()")
+  self._ui.Button_Menu:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.count .. ")")
+  self._ui.Button_Menu:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
+  self._ui.Button_Setting:addInputEvent("Mouse_LUp", "showGameOption()")
+  self._ui.Button_Setting:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_Setting .. ")")
+  self._ui.Button_Setting:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_CashShop:addInputEvent("Mouse_LUp", "GlobalKeyBinder_MouseKeyMap(18)")
-  self._ui.Button_CashShop:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 1 .. ")")
+  self._ui.Button_CashShop:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_PearlShop .. ")")
   self._ui.Button_CashShop:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_PcRoomReward:addInputEvent("Mouse_LUp", "HandleClicked_PcRoomReward()")
-  self._ui.Button_PcRoomReward:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 2 .. ")")
+  self._ui.Button_PcRoomReward:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_PcRoomReward .. ")")
   self._ui.Button_PcRoomReward:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_MarketPlace:addInputEvent("Mouse_LUp", "FGlobal_ItemMarketAlarmList_New_Open()")
-  self._ui.Button_MarketPlace:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 3 .. ")")
+  self._ui.Button_MarketPlace:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_MarketPlace .. ")")
   self._ui.Button_MarketPlace:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.MsgCloseButton:addInputEvent("Mouse_LUp", "Panel_Widget_Alert_info_AlramHide()")
 end
@@ -378,6 +406,8 @@ function Panel_Widget_Alert_info:registerMessageHandler()
   registerEvent("EventServantEquipmentUpdate", "FromClient_Widget_Alert_ServantEnduranceUpdate")
   registerEvent("EventSelfServantClose", "FromClient_Widget_Alert_ServantSeal")
   registerEvent("FromClient_InventoryUpdate", "FromClient_Widget_Alert_BatterEquipment")
+  registerEvent("FromClient_AttendanceUpdate", "FromClient_Widget_Alert_AttendanceUpdate")
+  registerEvent("FromClient_AttendanceUpdateAll", "FromClient_Widget_Alert_AttendanceUpdateAll")
 end
 function Panel_Widget_Alert_info:initialize()
   self:childControl()
@@ -405,6 +435,7 @@ function Panel_Widget_Alert_info:setButton()
   self._alertButton[AlertType.eALERT_EnduranceCarriage] = self._ui.Button_EnduranceCarriage
   self._alertButton[AlertType.eALERT_EnduranceShip] = self._ui.Button_EnduranceShip
   self._alertButton[AlertType.eALERT_BatterEquipment] = self._ui.Button_BatterEquipment
+  self._alertButton[AlertType.eALERT_CashProductDiscount] = self._ui.Button_CashShop
 end
 function Panel_Widget_Alert_info:childControl()
   self._ui.Static_Bg = UI.getChildControl(Panel_UIMain, "Static_Bg")
@@ -431,6 +462,8 @@ function Panel_Widget_Alert_info:childControl()
   self._ui.Button_EnduranceCarriage = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceCarriage")
   self._ui.Button_EnduranceShip = UI.getChildControl(self._ui.Static_Bg, "Button_EnduranceShip")
   self._ui.Button_BatterEquipment = UI.getChildControl(self._ui.Static_Bg, "Button_BatterEquipment")
+  self._ui.Button_Menu = UI.getChildControl(self._ui.Static_Bg, "Button_Menu")
+  self._ui.Button_Setting = UI.getChildControl(self._ui.Static_Bg, "Button_Setting")
   self._ui.Button_CashShop = UI.getChildControl(self._ui.Static_Bg, "Button_CashShop")
   self._ui.Button_PcRoomReward = UI.getChildControl(self._ui.Static_Bg, "Button_PCRoomReward")
   self._ui.StaticText_PcRoomRewardTime = UI.getChildControl(self._ui.Button_PcRoomReward, "StaticText_Desc")
@@ -658,18 +691,32 @@ function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
       name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_2")
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_3", "count", count)
     end
-  elseif 1 == buttonType then
+  elseif AlwaysOpenType.eALERT_PearlShop == buttonType then
     uiControl = self._ui.Button_CashShop
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_4")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_5")
-  elseif 2 == buttonType then
+    local timeData = getDiscountPeriodRemainDiscountTime()
+    local remainTime = convertStringFromDatetime(timeData)
+    local remainDay = calculateDayFromDateDay(timeData)
+    if 0 < Int64toInt32(timeData) and Int64toInt32(remainDay) < 3 then
+      desc = desc .. "\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALERT_CASHPRODUCTDISCOUNT_REMAINTIME", "remainTime", remainTime)
+    end
+  elseif AlwaysOpenType.eALERT_PcRoomReward == buttonType then
     uiControl = self._ui.Button_PcRoomReward
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_6")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_7")
-  elseif 3 == buttonType then
+  elseif AlwaysOpenType.eALERT_MarketPlace == buttonType then
     uiControl = self._ui.Button_MarketPlace
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_8")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_9")
+  elseif AlwaysOpenType.count == buttonType then
+    uiControl = self._ui.Button_Setting
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_TITLE")
+    desc = nil
+  elseif AlwaysOpenType.eALERT_Setting == buttonType then
+    uiControl = self._ui.Button_Setting
+    name = PAGetString(Defines.StringSheet_RESOURCE, "OPTION_TEXT_TITLE")
+    desc = nil
   else
     return
   end
@@ -755,11 +802,21 @@ function Panel_Widget_Alert_info:AlramShow(alertType)
   if false == ToClient_getShowRightBottomAlarm() then
     return
   end
+  if self._currentAlertType == AlertType.eALERT_CashProductDiscount then
+    return
+  end
+  self._currentAlertType = alertType
   local currentTime = ""
   self._ui.MsgTime:SetText(currentTime)
   self._ui.MsgContent:SetText(self._alertMessage[alertType])
   local texture = self._alertIconPath[alertType]
-  self._ui.MsgIcon:ChangeTextureInfoNameAsync("renewal/button/console_btn_main.dds")
+  if alertType == AlertType.eALERT_CashProductDiscount then
+    self._ui.MsgIcon:ChangeTextureInfoNameAsync("renewal/button/pc_btn_alert00.dds")
+    self._ui.Button_CashShop:ResetVertexAni()
+    self._ui.Button_CashShop:SetVertexAniRun("Ani_Color_New", true)
+  else
+    self._ui.MsgIcon:ChangeTextureInfoNameAsync("renewal/button/console_btn_main.dds")
+  end
   local x1, y1, x2, y2 = setTextureUV_Func(self._ui.MsgIcon, texture._x1, texture._y1, texture._x2, texture._y2)
   self._ui.MsgIcon:getBaseTexture():setUV(x1, y1, x2, y2)
   self._ui.MsgIcon:setRenderTexture(self._ui.MsgIcon:getBaseTexture())
@@ -771,7 +828,9 @@ function Panel_Widget_Alert_info:AlramShow(alertType)
   control:SetShow(true)
   self._alramTime = 0
   self._ui.MessageBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_AlertMessageBg_HandleLClick(" .. alertType .. ")")
-  FGlobal_MarketAlertMsg_ResetPos(true)
+  if false == _ContentsGroup_RenewUI_ItemMarketPlace then
+    FGlobal_MarketAlertMsg_ResetPos(true)
+  end
 end
 function Panel_Widget_Alert_info:AlramHide()
   local control = self._ui.MessageBg
@@ -780,7 +839,12 @@ function Panel_Widget_Alert_info:AlramHide()
   moveAni2:SetEndPosition(-40, control:GetPosY())
   moveAni2:SetHideAtEnd(true)
   moveAni2:SetDisableWhileAni(true)
-  FGlobal_MarketAlertMsg_ResetPos(false)
+  if false == _ContentsGroup_RenewUI_ItemMarketPlace then
+    FGlobal_MarketAlertMsg_ResetPos(false)
+  end
+  self._ui.Button_CashShop:ResetVertexAni()
+  self._ui.Button_CashShop:SetVertexAniRun("Ani_Colo_Reset", true)
+  self._currentAlertType = AlertType.eALERT_Count
 end
 function Panel_Widget_Alert_info_AlramHide()
   Panel_Widget_Alert_info:AlramHide()
@@ -863,6 +927,20 @@ function PaGlobalFunc_Widget_Alert_Check_Hunting()
   end
   self:setButtonShow(AlertType.eALERT_Hunting, isHuntingButtonShow, true)
   self._ui.StaticText_HuntingCount:SetText(totalCount)
+end
+function PaGlobalFunc_Widget_Alert_Check_CashProductDiscount()
+  local self = Panel_Widget_Alert_info
+  if false == self._isDiscountPeriodFirstAlert then
+    return
+  end
+  local timeData = getDiscountPeriodRemainDiscountTime()
+  local remainTime = convertStringFromDatetime(timeData)
+  local remainDay = calculateDayFromDateDay(timeData)
+  if 0 < Int64toInt32(timeData) and Int64toInt32(remainDay) < 3 then
+    self._isDiscountPeriodFirstAlert = false
+    Panel_Widget_Alert_info:AlramShow(AlertType.eALERT_CashProductDiscount)
+    self._ui.MsgContent:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALERT_CASHPRODUCTDISCOUNT_REMAINTIME", "remainTime", remainTime))
+  end
 end
 function PaGlobalFunc_Widget_Alert_Check_Coupon()
   local self = Panel_Widget_Alert_info
@@ -1234,12 +1312,27 @@ function PaGlobalFunc_Widget_Alert_CheckReal_BatterEquipment()
 end
 function PaGlobalFunc_Widget_Alert_Check_Pos()
   local self = Panel_Widget_Alert_info
-  local spanX = 40
-  if self._ui.Button_PcRoomReward:GetShow() then
+  local spanX = 0
+  if getGamePadEnable() then
+    self._ui.Button_Menu:SetShow(true)
+    spanX = spanX + 40
+  else
+    self._ui.Button_Menu:SetShow(false)
+  end
+  if self._ui.Button_Setting:GetShow() then
+    self._ui.Button_Setting:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
-  self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
+  if self._ui.Button_CashShop:GetShow() then
+    self._ui.Button_CashShop:SetSpanSize(spanX, 0)
+    spanX = spanX + 40
+  end
+  if self._ui.Button_PcRoomReward:GetShow() then
+    self._ui.Button_PcRoomReward:SetSpanSize(spanX, 0)
+    spanX = spanX + 40
+  end
   if self._ui.Button_MarketPlace:GetShow() then
+    self._ui.Button_MarketPlace:SetSpanSize(spanX, 0)
     spanX = spanX + 40
   end
   self._ui.Button_Spread:SetSpanSize(spanX, 0)
@@ -1256,6 +1349,7 @@ function FromClient_Widget_Alert_UpdatePerFrame(deltaTime)
   if updateTime < currentTime then
     self:updateIconPos()
     currentTime = 0
+    PaGlobalFunc_Widget_Alert_Check_CashProductDiscount()
   end
   if pcroomTime > 1 then
     nextPcRoomGiftRewardTime = nextPcRoomGiftRewardTime - toInt64(0, pcroomTime)
@@ -1636,6 +1730,20 @@ function FromClient_Widget_Alert_BatterEquipment()
   local self = Panel_Widget_Alert_info
   PaGlobalFunc_Widget_Alert_CheckReal_BatterEquipment()
   self:updateIcons(false, AlertType.eALERT_BatterEquipment)
+end
+function FromClient_Widget_Alert_AttendanceUpdate(attendanceKey)
+  local self = Panel_Widget_Alert_info
+  if true == PaGlobalFunc_Attendance_GetIsSecondAttendance() then
+    return
+  end
+  self._isDiscountPeriodFirstAlert = true
+end
+function FromClient_Widget_Alert_AttendanceUpdateAll(isNextDay)
+  local self = Panel_Widget_Alert_info
+  if false == isNextDay then
+    return
+  end
+  self._isDiscountPeriodFirstAlert = true
 end
 changePositionBySever(Panel_UIMain, CppEnums.PAGameUIType.PAGameUIPanel_UIMenu, true, false, false)
 PaGlobalFunc_UiMain_SetShow(true)

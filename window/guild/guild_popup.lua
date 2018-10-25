@@ -12,11 +12,8 @@ local CreateClan = {
   selectedGuild = UI.getChildControl(Panel_CreateClan, "RadioButton_Guild"),
   create = UI.getChildControl(Panel_CreateClan, "Button_Confirm"),
   createConsole = UI.getChildControl(Panel_CreateClan, "StaticText_Create_ConsoleUI"),
-  createDescBG = UI.getChildControl(Panel_CreateClan, "Static_CreateClanDescBG"),
-  guideMainBaseBG = UI.getChildControl(Panel_CreateClan, "Static_BaseBG"),
-  guideMainBG = UI.getChildControl(Panel_CreateClan, "Static_SelectedTypeDescBG"),
-  guideTitle = UI.getChildControl(Panel_CreateClan, "StaticText_SelectedTypeTitle"),
-  guideDesc = UI.getChildControl(Panel_CreateClan, "StaticText_SelectedTypeDesc"),
+  guideMainBaseBG = UI.getChildControl(Panel_CreateClan, "Static_TopBG"),
+  guideMainBG = UI.getChildControl(Panel_CreateClan, "StaticText_SelectedTypeDescBG"),
   help = UI.getChildControl(Panel_CreateClan, "Button_Question"),
   close = UI.getChildControl(Panel_CreateClan, "Button_Win_Close")
 }
@@ -36,57 +33,59 @@ local GuildCreateManager = {
   _staticCreateServantName = UI.getChildControl(Panel_CreateGuild, "StaticText_NamingPolicy")
 }
 function GuildCreateManager:initialize()
+  self.createNamePolicyTitle = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
+  self.createNamePolicyDesc = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicy")
   GuildCreateManager._buttonApply:addInputEvent("Mouse_LUp", "handleClicked_GuildCreateApply()")
   GuildCreateManager._buttonCancel:addInputEvent("Mouse_LUp", "handleClicked_GuildCreateCancel()")
   GuildCreateManager._editGuildNameInput:RegistReturnKeyEvent("handleClicked_GuildCreateApply()")
-  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-    GuildCreateManager._staticCreateServantName:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    GuildCreateManager._staticCreateServantName:SetShow(true)
+  if ToClient_IsDevelopment() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+    GuildCreateManager.createNamePolicyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
     GuildCreateManager._staticCreateServantNameBG:SetShow(true)
-    GuildCreateManager._staticCreateServantNameTitle:SetShow(true)
   else
-    GuildCreateManager._staticCreateServantName:SetShow(false)
     GuildCreateManager._staticCreateServantNameBG:SetShow(false)
-    GuildCreateManager._staticCreateServantNameTitle:SetShow(false)
   end
   if isGameTypeEnglish() or isGameTypeTaiwan() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
   elseif isGameTypeTR() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
   elseif isGameTypeTH() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
   elseif isGameTypeID() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+  else
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
   end
+  CreateClan.createDescBG = UI.getChildControl(CreateClan.guideMainBaseBG, "MultilineText_CreateClanDesc")
+  CreateClan.selectedClan:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
+  CreateClan.selectedGuild:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
+  CreateClan.guideMainBG:ComputePos()
 end
 function CreateClan:initialize()
   self.createConsole:SetShow(false)
-  self.guideDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self.guideTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
-  self.guideDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
-  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-    GuildCreateManager._staticCreateServantName:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    GuildCreateManager._staticCreateServantName:SetShow(true)
+  self.guideMainBG:SetTextMode(UI_TM.eTextMode_AutoWrap)
+  self.guideMainBG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
+  self.guideMainBG:ComputePos()
+  if ToClient_IsDevelopment() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+    GuildCreateManager.createNamePolicyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
     GuildCreateManager._staticCreateServantNameBG:SetShow(true)
-    GuildCreateManager._staticCreateServantNameTitle:SetShow(true)
   else
-    GuildCreateManager._staticCreateServantName:SetShow(false)
     GuildCreateManager._staticCreateServantNameBG:SetShow(false)
-    GuildCreateManager._staticCreateServantNameTitle:SetShow(false)
   end
   if isGameTypeEnglish() or isGameTypeTaiwan() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
   elseif isGameTypeTR() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
   elseif isGameTypeTH() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
   elseif isGameTypeID() then
-    GuildCreateManager._staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+  else
+    GuildCreateManager.createNamePolicyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
   end
   if _ContentsGroup_isConsolePadControl then
     self.selectedGuild:addInputEvent("Mouse_On", "selectclaned2()")
-    self.guideTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
-    self.guideDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+    self.guideMainBG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+    self.guideMainBG:ComputePos()
     self.createConsole:SetShow(true)
   end
 end
@@ -132,9 +131,7 @@ function Guild_PopupCreate(guildGrade)
       GuildCreateManager._buttonApply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_APPLY_WITHOUT_KEY"))
       GuildCreateManager._buttonCancel:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MESSAGEBOX_BTN_CANCEL_WITHOUT_KEY"))
     end
-    GuildCreateManager._staticCreateServantName:ComputePos()
     GuildCreateManager._staticCreateServantNameBG:ComputePos()
-    GuildCreateManager._staticCreateServantNameTitle:ComputePos()
   end
   if nil ~= myGuildListInfo then
     local myGuildGrade = myGuildListInfo:getGuildGrade()
@@ -237,12 +234,12 @@ function CreateClan_SelectGroupType()
     title = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD")
   end
-  self.guideTitle:SetText(title)
-  self.guideDesc:SetText(desc)
-  self.guideMainBaseBG:SetSize(self.guideMainBaseBG:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + self.createDescBG:GetSizeY() + self.selectedClan:GetSizeY() + 100)
-  self.guideMainBG:SetSize(self.guideMainBG:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + 20)
-  Panel_CreateClan:SetSize(Panel_CreateClan:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + self.selectedClan:GetSizeY() + 260)
-  self.create:SetSpanSize(self.create:GetSpanSize().x, 20)
+  self.guideMainBG:SetText(desc)
+  self.guideMainBaseBG:SetSize(self.guideMainBaseBG:GetSizeX(), self.createDescBG:GetTextSizeY() + 100)
+  self.guideMainBG:SetSize(self.guideMainBG:GetSizeX(), self.guideMainBG:GetTextSizeY() + 10)
+  Panel_CreateClan:SetSize(Panel_CreateClan:GetSizeX(), self.guideMainBaseBG:GetSizeY() + self.guideMainBG:GetTextSizeY() + self.selectedClan:GetSizeY() + 150)
+  self.guideMainBG:ComputePos()
+  self.create:ComputePos()
 end
 function CreateClan_Open()
   local self = CreateClan
@@ -295,7 +292,6 @@ function CreateClan_Open()
   end
   local title = ""
   local desc = ""
-  self.guideDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   if self.selectedClan:IsCheck() then
     title = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN")
@@ -303,16 +299,16 @@ function CreateClan_Open()
     title = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD")
   end
-  self.guideTitle:SetText(title)
-  self.guideDesc:SetText(desc)
-  self.guideMainBaseBG:SetSize(self.guideMainBaseBG:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + self.createDescBG:GetSizeY() + self.selectedClan:GetSizeY() + 100)
-  self.guideMainBG:SetSize(self.guideMainBG:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + 20)
-  Panel_CreateClan:SetSize(Panel_CreateClan:GetSizeX(), self.guideDesc:GetTextSizeY() + self.guideTitle:GetTextSizeY() + self.selectedClan:GetSizeY() + 260)
-  self.create:SetSpanSize(self.create:GetSpanSize().x, 20)
+  self.guideMainBG:SetText(desc)
+  self.guideMainBaseBG:SetSize(self.guideMainBaseBG:GetSizeX(), self.createDescBG:GetTextSizeY() + 100)
+  self.guideMainBG:SetSize(self.guideMainBG:GetSizeX(), self.guideMainBG:GetTextSizeY() + 10)
+  Panel_CreateClan:SetSize(Panel_CreateClan:GetSizeX(), self.guideMainBaseBG:GetSizeY() + self.guideMainBG:GetTextSizeY() + self.selectedClan:GetSizeY() + 150)
+  self.guideMainBG:ComputePos()
+  self.create:ComputePos()
   Panel_CreateClan:SetShow(true)
   if _ContentsGroup_isConsolePadControl then
     selectclaned2()
-    self.create:SetShow(false)
+    self.create:ComputePos()
   end
 end
 function CreateClan_Close()
@@ -333,8 +329,8 @@ function CreateClan:registEventHandler()
   registerEvent("onScreenResize", "FromClient_CreateGuild_onScreenResize")
   if _ContentsGroup_isConsolePadControl then
     self.selectedGuild:addInputEvent("Mouse_LUp", "CreateClan_PressCreate()")
-    self.guideTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_GUILD"))
-    self.guideDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+    self.guideMainBG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_GUILD"))
+    self.guideMainBG:ComputePos()
   end
 end
 function selectclaned()

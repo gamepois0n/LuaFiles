@@ -6,6 +6,7 @@ Panel_Chat_SocialMenu:SetDragAll(true)
 Panel_Chat_SocialMenu:SetPosX(getScreenSizeX() / 2 + Panel_Chat_SocialMenu:GetSizeX() / 2)
 Panel_Chat_SocialMenu:SetPosY(getScreenSizeY() / 2 - Panel_Chat_SocialMenu:GetSizeY() / 2)
 local btn_winClose = UI.getChildControl(Panel_Chat_SocialMenu, "Button_WinClose")
+local mainBg = UI.getChildControl(Panel_Chat_SocialMenu, "Static_MainBg")
 local socialIconSlotBG = UI.getChildControl(Panel_Chat_SocialMenu, "Static_C_IconBG")
 local socialIconSlot = UI.getChildControl(Panel_Chat_SocialMenu, "Static_C_SocialIcon")
 local selectedSlotBG = UI.getChildControl(Panel_Chat_SocialMenu, "Static_C_IconSelect")
@@ -125,7 +126,9 @@ local Control_Location_Save = {
   _keyTitlePosY = SocialAction._keyTitle:GetPosY(),
   _keywordPosY = SocialAction._keyword_1:GetPosY(),
   _descPosY = SocialAction._desc:GetPosY(),
-  _bottomBtnPosY = SocialAction._btnApply:GetPosY()
+  _bottomBtnPosY = SocialAction._btnApply:GetPosY(),
+  _mainBgSizeX = mainBg:GetSizeX(),
+  _mainBgSizeY = mainBg:GetSizeY()
 }
 local isConditionGap = 25
 function HandleClicked_Apply(index)
@@ -178,14 +181,18 @@ function SocialAction:Description_Setting(index)
     self._btnApply:SetPosY(cls._bottomBtnPosY)
     self._btnReset:SetPosY(cls._bottomBtnPosY)
     self._btnCancel:SetPosY(cls._bottomBtnPosY)
+    mainBg:SetSize(cls._mainBgSizeX, cls._mainBgSizeY)
+    mainBg:ComputePos()
   else
     self._conditionText:SetShow(true)
     if self._conditionText:GetSizeY() < self._conditionText:GetTextSizeY() then
       isConditionGap = self._conditionText:GetTextSizeY() + 10
     else
-      isConditionGap = 35
+      isConditionGap = 30
     end
     Panel_Chat_SocialMenu:SetSize(cls._panelSizeX, cls._panelSizeY + isConditionGap)
+    mainBg:SetSize(cls._mainBgSizeX, cls._mainBgSizeY + isConditionGap)
+    mainBg:ComputePos()
     self._descBG:SetSize(cls._descBGSizeX, cls._descBGSizeY + isConditionGap)
     self._keyTitle:SetPosY(cls._keyTitlePosY + isConditionGap)
     self._keyword_1:SetPosY(cls._keywordPosY + isConditionGap)

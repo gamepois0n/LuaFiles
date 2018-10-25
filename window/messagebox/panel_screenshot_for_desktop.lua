@@ -11,8 +11,12 @@ function PaGlobal_Panel_ScreenShot_For_Desktop_Init()
   local self = ScreenShotSize
   local screenShotFileName = getRecentScreenShotFileName()
   self._txt_ScreenShotDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self._txt_ScreenShotDesc:SetText(tostring(screenShotFileName) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
-  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), self._txt_ScreenShotDesc:GetTextSizeY() + 20)
+  if nil == screenShotFileName or "" == screenShotFileName then
+    self._txt_ScreenShotDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
+  else
+    self._txt_ScreenShotDesc:SetText(tostring(screenShotFileName) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
+  end
+  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), self._txt_ScreenShotDesc:GetTextSizeY() + 40)
   Panel_ScreenShot_For_Desktop:SetSize(Panel_ScreenShot_For_Desktop:GetSizeX(), self._screenShotBG:GetSizeY() + 110)
   self._btn_ScreenShot_Win_Close:addInputEvent("Mouse_LUp", "PaGlobal_Panel_ScreenShot_For_Desktop_Close()")
   self._btn_ScreenShotApply:addInputEvent("Mouse_LUp", "PaGlobal_Panel_ScreenShot_For_Desktop_Apply()")
@@ -28,9 +32,14 @@ function PaGlobal_Panel_ScreenShot_For_Desktop_Open()
   local self = ScreenShotSize
   local screenShotFileName = getRecentScreenShotFileName()
   self._txt_ScreenShotDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  self._txt_ScreenShotDesc:SetText(tostring(screenShotFileName) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
-  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), self._txt_ScreenShotDesc:GetTextSizeY() + 20)
-  Panel_ScreenShot_For_Desktop:SetSize(Panel_ScreenShot_For_Desktop:GetSizeX(), self._screenShotBG:GetSizeY() + 110)
+  if nil == screenShotFileName or "" == screenShotFileName then
+    self._txt_ScreenShotDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
+  else
+    self._txt_ScreenShotDesc:SetText(tostring(screenShotFileName) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOTFORDESKTOP_DESC"))
+  end
+  local textSizeY = self._txt_ScreenShotDesc:GetTextSizeY()
+  self._screenShotBG:SetSize(self._screenShotBG:GetSizeX(), textSizeY + 40)
+  Panel_ScreenShot_For_Desktop:SetSize(Panel_ScreenShot_For_Desktop:GetSizeX(), self._screenShotBG:GetSizeY() + 104)
   Panel_ScreenShot_For_Desktop:SetShow(true)
 end
 function PaGlobal_Panel_ScreenShot_For_Desktop_Close()

@@ -1,4 +1,4 @@
-Panel_Window_MercenaryDesc:SetShow(false)
+Panel_Window_Mercenary:SetShow(false)
 local mercenaryGuide = {
   _control = {
     _radioBtn = {},
@@ -17,9 +17,9 @@ local mercenaryGuide = {
 function mercenaryGuide:Init()
   local control = self._control
   for index = 0, self._descTypeCount - 1 do
-    control._radioBtn[index] = UI.getChildControl(Panel_Window_MercenaryDesc, "RadioButton_Mercenary_Title" .. index + 1)
+    control._radioBtn[index] = UI.getChildControl(Panel_Window_Mercenary, "RadioButton_Mercenary_Title" .. index + 1)
     control._radioBtn[index]:addInputEvent("Mouse_LUp", "HandleClicked_MercenaryRadioBtn(" .. index .. ")")
-    control._bg[index] = UI.getChildControl(Panel_Window_MercenaryDesc, "Static_BG_" .. index + 1)
+    control._bg[index] = UI.getChildControl(Panel_Window_Mercenary, "Static_BG_" .. index + 1)
     control._desc[index] = {}
     for descIndex = 1, self._descCount[index + 1] do
       control._desc[index][descIndex] = UI.createAndCopyBasePropertyControl(control._bg[index], "StaticText_Desc" .. index + 1, control._bg[index], "StaticText_Mercenary_Desc_" .. index .. "_" .. descIndex)
@@ -105,9 +105,6 @@ function MercenaryDesc_ShowDesc(deltaTime)
   end
 end
 function FGlobal_MercenaryDesc_Open()
-  Panel_Window_MercenaryDesc:SetShow(true)
-  Panel_Window_MercenaryDesc:SetPosX(Panel_Window_Mercenary:GetPosX() - Panel_Window_MercenaryDesc:GetSizeX() - 5)
-  Panel_Window_MercenaryDesc:SetPosY(Panel_Window_Mercenary:GetPosY() + 5)
   mercenaryGuide._control._radioBtn[0]:SetCheck(true)
   mercenaryGuide._control._radioBtn[1]:SetCheck(false)
   mercenaryGuide._control._radioBtn[2]:SetCheck(false)
@@ -115,14 +112,13 @@ function FGlobal_MercenaryDesc_Open()
   HandleClicked_MercenaryRadioBtn(0)
 end
 function FGlobal_MercenaryDesc_Close()
-  Panel_Window_MercenaryDesc:SetShow(false)
 end
 function FGlobal_MercenaryDesc_ShowToggle()
-  if Panel_Window_MercenaryDesc:GetShow() then
+  if Panel_Window_Mercenary:GetShow() then
     FGlobal_MercenaryDesc_Close()
   else
     FGlobal_MercenaryDesc_Open()
   end
 end
 mercenaryGuide:Init()
-Panel_Window_MercenaryDesc:RegisterUpdateFunc("MercenaryDesc_ShowDesc")
+Panel_Window_Mercenary:RegisterUpdateFunc("MercenaryDesc_ShowDesc")

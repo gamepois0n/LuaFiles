@@ -73,8 +73,8 @@ function PaGlobal_Guild_AllianceInfo:InviteInitialize()
   self._inviteUi = {}
   self._inviteUi = {
     edit_AllianceName = UI.getChildControl(self._mainUi.allianceInviteBg, "Edit_AllianceName"),
-    button_AllianceName = UI.getChildControl(self._mainUi.allianceInviteBg, "Button_AllianceName"),
     button_AddAlliances = UI.getChildControl(self._mainUi.allianceInviteBg, "Button_AddAlliances"),
+    button_DeleteGuild = UI.getChildControl(self._mainUi.allianceInviteBg, "Button_DeleteGuild"),
     guild_ListBg = UI.getChildControl(self._mainUi.allianceInviteBg, "Static_AddGuildListBG"),
     total_InfoUi = UI.getChildControl(self._mainUi.allianceInviteBg, "StaticText_Total_Info"),
     button_Invite = UI.getChildControl(self._mainUi.allianceInviteBg, "Button_Invite"),
@@ -84,24 +84,25 @@ function PaGlobal_Guild_AllianceInfo:InviteInitialize()
     addGuildTitle = UI.getChildControl(self._mainUi.allianceInviteBg, "StaticText_AddGuildName"),
     frame = UI.getChildControl(self._mainUi.allianceInviteBg, "Frame_1")
   }
+  self._inviteUi.button_AllianceName = UI.getChildControl(self._inviteUi.edit_AllianceName, "Button_AllianceName")
   self._inviteUi.guildList = {}
   self._inviteUi.guildList = {
     guild_TitleListBg = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_Name_ListBG"),
+    guildBGTemplete = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_GuildBGTemplete"),
     guildNameTemplete = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_GuildNameTemplete"),
     guildMemberCountTemplete = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_GuildMemberTemplete"),
-    taxConstRateTemplete = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_TaxConstRateTemplete"),
-    button_DeleteGuild = UI.getChildControl(self._inviteUi.guild_ListBg, "Button_DeleteGuild")
+    taxConstRateTemplete = UI.getChildControl(self._inviteUi.guild_ListBg, "Static_TaxConstRateTemplete")
   }
   self._inviteUi.guildList.limitGuildCountUi = UI.getChildControl(self._inviteUi.guildList.guild_TitleListBg, "StaticText_GuildMemberCountName")
   self._inviteUi.guildList.limitTaxConstUi = UI.getChildControl(self._inviteUi.guildList.guild_TitleListBg, "StaticText_TaxConstName")
   self._inviteUi.inputUi = {}
   self._inviteUi.inputUi = {
     listNo = {},
+    guildBGUi = {},
     guildNameUi = {},
     button_confirmGuildNameUi = {},
     guildMemeberCountUi = {},
-    taxConstRateUi = {},
-    button_DeleteGuild = {}
+    taxConstRateUi = {}
   }
   self._inviteUi.button_AllianceName:SetShow(false)
   self._inviteUi.frame1_Content = UI.getChildControl(self._inviteUi.frame, "Frame_1_Content")
@@ -123,23 +124,25 @@ function PaGlobal_Guild_AllianceInfo:InviteInitialize()
   self._guildLimitMemeberCount[0] = 10
   self._leaderDefaultMemeberCount = self._guildLimitMemeberCount[0]
   self._taxConstRate[0] = 100
+  self._inviteUi.guildList.leaderNameUi:SetFontColor(4294294074)
   self._inviteUi.guildList.leaderNameUi:SetText(self._allianceMemberName[0])
   self._inviteUi.guildList.leaderMemberCountUi:SetText(self._guildLimitMemeberCount[0] .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCEINFO_INFO_MEMBERCOUNT_TEXT"))
   self._inviteUi.guildList.leaderTaxConstCountUi:SetText(self._taxConstRate[0] .. "%")
   self._inviteUi.guildList.leaderMemberCountUi:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:GuildLimitMemberCheck(0)")
   self._inviteUi.guildList.leaderTaxConstCountUi:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:taxConstCheck(0)")
-  self._inviteUi.guildList.button_DeleteGuild:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:deleteGuildInput()")
+  self._inviteUi.button_DeleteGuild:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:deleteGuildInput()")
   self._inviteUi.button_AddAlliances:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:OpenAllianceList()")
   self._inviteUi.button_AddAlliances:addInputEvent("Mouse_On", "PaGlobal_Guild_AllianceInfo:AllianceTooltips(true, 10)")
   self._inviteUi.button_AddAlliances:addInputEvent("Mouse_Out", "PaGlobal_Guild_AllianceInfo:AllianceTooltips(false)")
-  self._inviteUi.button_AddAlliances:SetPosX(self._inviteUi.addGuildTitle:GetTextSizeX() + 30)
   self._inviteUi.button_Invite:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:HandleClickedButtonConfirm()")
   self._inviteUi.button_Initialize:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:Alliance_AllInputInitialize()")
   self._inviteUi.button_Cancel_Invite:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:confirm_CancelInvite()")
+  self._inviteUi.guildList.guildBGTemplete:SetShow(false)
   self._inviteUi.guildList.guildNameTemplete:SetShow(false)
   self._inviteUi.guildList.guildMemberCountTemplete:SetShow(false)
   self._inviteUi.guildList.taxConstRateTemplete:SetShow(false)
-  self._inviteUi.guildList.button_DeleteGuild:SetShow(false)
+  self._inviteUi.button_DeleteGuild:SetShow(false)
+  self._inviteUi.button_AddAlliances:SetSpanSize(0, 110)
   self._inviteUi.text_Wait:SetShow(false)
   self:InviteListCreate()
   self:totalGuildLimitMemberCheck()
@@ -152,14 +155,19 @@ function PaGlobal_Guild_AllianceInfo:InviteListCreate()
   local plusSizeX = 0
   for ii = 1, 9 do
     if ii % 2 == 1 then
-      plusSizeX = 398
+      plusSizeX = 460
     else
       plusSizeX = 0
     end
+    self._inviteUi.inputUi.guildBGUi[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_EDIT, self._inviteUi.frame1_List, "StaticText_GuildBG" .. ii)
+    CopyBaseProperty(self._inviteUi.guildList.guildBGTemplete, self._inviteUi.inputUi.guildBGUi[ii])
+    self._inviteUi.inputUi.guildBGUi[ii]:SetPosX(plusSizeX)
+    self._inviteUi.inputUi.guildBGUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2))
+    self._inviteUi.inputUi.guildBGUi[ii]:SetShow(false)
     self._inviteUi.inputUi.guildNameUi[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_EDIT, self._inviteUi.frame1_List, "StaticText_GuildName" .. ii)
     CopyBaseProperty(self._inviteUi.guildList.guildNameTemplete, self._inviteUi.inputUi.guildNameUi[ii])
-    self._inviteUi.inputUi.guildNameUi[ii]:SetPosX(10 + plusSizeX)
-    self._inviteUi.inputUi.guildNameUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2))
+    self._inviteUi.inputUi.guildNameUi[ii]:SetPosX(plusSizeX + 10)
+    self._inviteUi.inputUi.guildNameUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2) + 5)
     self._inviteUi.inputUi.guildNameUi[ii]:SetMaxInput(getGameServiceTypeGuildNameLength())
     self._inviteUi.inputUi.guildNameUi[ii]:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:HandleClicked_AllianceGulildNameEditSetFocus(" .. self._inviteUi.inputUi.listNo[ii] .. ")")
     self._inviteUi.inputUi.guildNameUi[ii]:RegistReturnKeyEvent("PaGlobal_Guild_AllianceInfo:AllianceMemberName_Regist(" .. self._inviteUi.inputUi.listNo[ii] .. ")")
@@ -169,14 +177,14 @@ function PaGlobal_Guild_AllianceInfo:InviteListCreate()
     self._inviteUi.inputUi.guildNameUi[ii]:SetShow(false)
     self._inviteUi.inputUi.guildMemeberCountUi[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._inviteUi.frame1_List, "StaticText_GuildMemberCount" .. ii)
     CopyBaseProperty(self._inviteUi.guildList.guildMemberCountTemplete, self._inviteUi.inputUi.guildMemeberCountUi[ii])
-    self._inviteUi.inputUi.guildMemeberCountUi[ii]:SetPosX(190 + plusSizeX)
-    self._inviteUi.inputUi.guildMemeberCountUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2))
+    self._inviteUi.inputUi.guildMemeberCountUi[ii]:SetPosX(250 + plusSizeX)
+    self._inviteUi.inputUi.guildMemeberCountUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2) + 5)
     self._inviteUi.inputUi.guildMemeberCountUi[ii]:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:GuildLimitMemberCheck(" .. self._inviteUi.inputUi.listNo[ii] .. ")")
     self._inviteUi.inputUi.guildMemeberCountUi[ii]:SetShow(false)
     self._inviteUi.inputUi.taxConstRateUi[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._inviteUi.frame1_List, "StaticText_TaxConstRate" .. ii)
     CopyBaseProperty(self._inviteUi.guildList.taxConstRateTemplete, self._inviteUi.inputUi.taxConstRateUi[ii])
-    self._inviteUi.inputUi.taxConstRateUi[ii]:SetPosX(295 + plusSizeX)
-    self._inviteUi.inputUi.taxConstRateUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2))
+    self._inviteUi.inputUi.taxConstRateUi[ii]:SetPosX(350 + plusSizeX)
+    self._inviteUi.inputUi.taxConstRateUi[ii]:SetPosY(self._inviteListConfig.startY + self._inviteListConfig.gapY * math.floor(ii / 2) + 5)
     self._inviteUi.inputUi.taxConstRateUi[ii]:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:taxConstCheck(" .. self._inviteUi.inputUi.listNo[ii] .. ")")
     self._inviteUi.inputUi.taxConstRateUi[ii]:SetShow(false)
   end
@@ -251,10 +259,12 @@ function PaGlobal_Guild_AllianceInfo:OpenAllianceList()
       self._inviteUi.inputUi.guildNameUi[self._createdCount]:SetTextHorizonCenter()
       self._inviteUi.inputUi.guildNameUi[self._createdCount]:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCEINFO_INPUTMEMBERNAME_TEXT"))
       self._inviteUi.inputUi.guildMemeberCountUi[self._createdCount]:SetText(self._guildLimitMemeberCount[self._createdCount] .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCEINFO_INFO_MEMBERCOUNT_TEXT"))
+      self._inviteUi.inputUi.guildBGUi[self._createdCount]:SetShow(true)
       self._inviteUi.inputUi.guildNameUi[self._createdCount]:SetShow(true)
       self._inviteUi.inputUi.guildMemeberCountUi[self._createdCount]:SetShow(true)
       self._inviteUi.inputUi.taxConstRateUi[self._createdCount]:SetShow(true)
-      self._inviteUi.guildList.button_DeleteGuild:SetShow(true)
+      self._inviteUi.button_DeleteGuild:SetShow(true)
+      self._inviteUi.button_AddAlliances:SetSpanSize(85, 110)
       self._inviteUi.button_Invite:SetShow(true)
       self._inviteUi.button_Initialize:SetShow(true)
       self._inviteUi.button_Cancel_Invite:SetShow(true)
@@ -377,7 +387,8 @@ function PaGlobal_Guild_AllianceInfo:deleteGuildInput()
       self._createdCount = self._createdCount - 1
       if self._createdCount <= 0 then
         self._createdCount = 0
-        self._inviteUi.guildList.button_DeleteGuild:SetShow(false)
+        self._inviteUi.button_DeleteGuild:SetShow(false)
+        self._inviteUi.button_AddAlliances:SetSpanSize(0, 110)
       end
       self:taxConstDefaultCheck(self._createdCount)
       self:totalGuildLimitMemberCheck()
@@ -391,6 +402,7 @@ function PaGlobal_Guild_AllianceInfo:deleteGuildInput()
 end
 function PaGlobal_Guild_AllianceInfo:inputInitialize(index)
   if 0 < self._createdCount then
+    self._inviteUi.inputUi.guildBGUi[index]:SetShow(false)
     self._inviteUi.inputUi.guildNameUi[index]:SetShow(false)
     self._inviteUi.inputUi.guildMemeberCountUi[index]:SetShow(false)
     self._inviteUi.inputUi.taxConstRateUi[index]:SetShow(false)
@@ -469,7 +481,8 @@ function PaGlobal_Guild_AllianceInfo:Alliance_AllInputInitialize()
     self._createdCount = 0
     self._allianceName = ""
     self._inviteUi.edit_AllianceName:SetEditText("")
-    self._inviteUi.guildList.button_DeleteGuild:SetShow(false)
+    self._inviteUi.button_DeleteGuild:SetShow(false)
+    self._inviteUi.button_AddAlliances:SetSpanSize(0, 110)
     self._taxConstRate[0] = self._taxRate_Default[1]
     self._inviteUi.edit_AllianceName:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILDALLIANCEINFO_ALLIANCENAMETIP_TEXT"))
   end
@@ -529,18 +542,19 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   end
   self._infoUi = {
     infoBg = UI.getChildControl(self._mainUi.allianceInfoBg, "Static_AllianceInfo_BG"),
-    noticeBg = UI.getChildControl(self._mainUi.allianceInfoBg, "Static_AllianceNotice_BG"),
-    button_Disband = UI.getChildControl(self._mainUi.allianceInfoBg, "Button_Disband")
+    noticeBg = UI.getChildControl(self._mainUi.allianceInfoBg, "Static_AllianceNotice_BG")
   }
   self._infoUi.allyIconBG = UI.getChildControl(self._infoUi.infoBg, "Static_AllyIcon_BG")
   self._infoUi.allianceMark = UI.getChildControl(self._infoUi.infoBg, "Static_Ally_Icon")
   self._infoUi.btnGuildAllianceMark = UI.getChildControl(self._infoUi.infoBg, "Button_GuildAllianceMark")
+  self._infoUi.btnGuildAllianceSecession = UI.getChildControl(self._infoUi.infoBg, "Button_GuildDispersal")
   self._infoUi.allinaceNameUi = UI.getChildControl(self._infoUi.infoBg, "StaticText_R_GuildAlliacneName")
   self._infoUi.allMemeberCount = UI.getChildControl(self._infoUi.infoBg, "StaticText_MemberCountValue")
-  self._infoUi.leaderCheck = UI.getChildControl(self._infoUi.infoBg, "RadioButton_LeaderCheck")
+  self._infoUi.leaderCheck = UI.getChildControl(self._infoUi.infoBg, "Static_LeaderCheck")
   self._infoUi.gulidNameTemplete = UI.getChildControl(self._infoUi.infoBg, "StaticText_GuildNameTemplete")
   self._infoUi.guildMemberCountTemplete = UI.getChildControl(self._infoUi.infoBg, "Static_GuildMemberTemplete")
   self._infoUi.guildtaxConstTemplete = UI.getChildControl(self._infoUi.infoBg, "StaticText_TaxConstRateTemplete")
+  self._infoUi.guildAllianceMaster = {}
   self._infoUi.guildName = {}
   self._infoUi.guildMemberCount = {}
   self._infoUi.guildtaxConst = {}
@@ -548,13 +562,20 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   self._infoUi.guildMemberCountTemplete:SetShow(false)
   self._infoUi.guildtaxConstTemplete:SetShow(false)
   local _guildListConfig = {
-    startX = 86,
-    startY = 180,
-    gapY = 21
+    startX = 150,
+    startY = 175,
+    gapY = 25
   }
   self._infoUi.allinaceNameUi:SetText(tostring(_allianceNameInfo))
   self._infoUi.allMemeberCount:SetText(_totalGuildMemberCount .. " / 100")
+  self._infoUi.allMemeberCount:SetPosX(self._infoUi.allinaceNameUi:GetPosX() + self._infoUi.allinaceNameUi:GetTextSizeX() + 10)
+  self._infoUi.allMemeberCount:SetPosY(self._infoUi.allinaceNameUi:GetPosY())
   for ii = 0, 9 do
+    self._infoUi.guildAllianceMaster[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, self._mainUi.allianceInfoBg, "StaticText_InfoGuildMasterIcon_" .. ii)
+    CopyBaseProperty(self._infoUi.leaderCheck, self._infoUi.guildAllianceMaster[ii])
+    self._infoUi.guildAllianceMaster[ii]:SetPosX(30)
+    self._infoUi.guildAllianceMaster[ii]:SetPosY(_guildListConfig.startY + _guildListConfig.gapY * ii)
+    self._infoUi.guildAllianceMaster[ii]:SetShow(false)
     self._infoUi.guildName[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._mainUi.allianceInfoBg, "StaticText_InfoGuildName" .. ii)
     CopyBaseProperty(self._infoUi.gulidNameTemplete, self._infoUi.guildName[ii])
     self._infoUi.guildName[ii]:SetPosX(_guildListConfig.startX)
@@ -562,12 +583,12 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
     self._infoUi.guildName[ii]:SetShow(false)
     self._infoUi.guildMemberCount[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._mainUi.allianceInfoBg, "StaticText_InfoGuildMemberCount" .. ii)
     CopyBaseProperty(self._infoUi.guildMemberCountTemplete, self._infoUi.guildMemberCount[ii])
-    self._infoUi.guildMemberCount[ii]:SetPosX(_guildListConfig.startX + 144)
+    self._infoUi.guildMemberCount[ii]:SetPosX(_guildListConfig.startX + 190)
     self._infoUi.guildMemberCount[ii]:SetPosY(_guildListConfig.startY + _guildListConfig.gapY * ii)
     self._infoUi.guildMemberCount[ii]:SetShow(false)
     self._infoUi.guildtaxConst[ii] = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, self._mainUi.allianceInfoBg, "StaticText_InfoGuildTaxConst" .. ii)
     CopyBaseProperty(self._infoUi.guildtaxConstTemplete, self._infoUi.guildtaxConst[ii])
-    self._infoUi.guildtaxConst[ii]:SetPosX(_guildListConfig.startX + 242)
+    self._infoUi.guildtaxConst[ii]:SetPosX(_guildListConfig.startX + 290)
     self._infoUi.guildtaxConst[ii]:SetPosY(_guildListConfig.startY + _guildListConfig.gapY * ii)
     self._infoUi.guildtaxConst[ii]:SetShow(false)
   end
@@ -586,15 +607,7 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   self._infoUi.button_NoticeInitialize = UI.getChildControl(self._infoUi.noticeBg, "Button_NoticeInitialize")
   self._infoUi.button_NoticeInitialize:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:AllianceNotice_Initialize()")
   self._infoUi.button_NoticeInitialize:SetShow(false)
-  local _isGuildMaster = getSelfPlayer():get():isGuildMaster()
-  if true == _isGuildMaster then
-    self._infoUi.button_Disband:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:DisbandAlliance()")
-  else
-    self._infoUi.button_Disband:SetShow(false)
-    self._infoUi.button_Disband:SetIgnore(true)
-  end
-  self._infoUi.leaderCheck:SetPosY(_guildListConfig.startY + _guildListConfig.gapY * _leaderNo - 80)
-  self._infoUi.leaderCheck:SetCheck(true)
+  self._infoUi.guildAllianceMaster[_leaderNo]:SetShow(true)
   self._infoUi.allianceMark:SetIgnore(true)
   self._infoUi.btnGuildAllianceMark:SetShow(false)
   local _notice = guildAlliance:getNotice()
@@ -602,9 +615,13 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   if selfPlayer:isGuildAllianceChair() then
     self._infoUi.allianceMark:SetIgnore(false)
     self._infoUi.btnGuildAllianceMark:SetShow(true)
+    self._infoUi.btnGuildAllianceSecession:SetShow(true)
     self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_LUp", "FGlobal_Guild_AllianceInfo_ChangeMark()")
-    self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip()")
+    self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip(0)")
     self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:DisbandAlliance()")
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip(1)")
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
     self._infoUi.editAllianceNoticeUi:SetIgnore(false)
     self._infoUi.editAllianceNoticeUi:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:HandleClicked_AllianceNoticeEditSetFocus()")
     self._infoUi.editAllianceNoticeUi:SetMaxInput(300)
@@ -642,11 +659,17 @@ end
 function FGlobal_GuildAllianceInfo_ChangeMarkContinue()
   guildMarkUpdate(true)
 end
-function FGlobal_Guild_AllianceInfo_MarkToolTip()
+function FGlobal_Guild_AllianceInfo_MarkToolTip(tipType)
   local self = PaGlobal_Guild_AllianceInfo
-  local name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDALLIANCEMARK_BTN_TOOLTIP_NAME")
-  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDALLIANCEMARK_BTN_TOOLTIP_DESC")
-  local control = self._infoUi.btnGuildAllianceMark
+  local name, desc, control
+  if 0 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDALLIANCEMARK_BTN_TOOLTIP_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDALLIANCEMARK_BTN_TOOLTIP_DESC")
+    control = self._infoUi.btnGuildAllianceMark
+  elseif 1 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDALLIANCEINFO_MESSAGE_DISBAND_TITLE")
+    control = self._infoUi.btnGuildAllianceSecession
+  end
   TooltipSimple_Show(control, name, desc)
 end
 function FGlobal_GuildAllianceInfoOnMarkChanged()

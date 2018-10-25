@@ -459,9 +459,9 @@ local slotConfig = {
   slotCount = 20,
   slotCols = 3,
   slotRows = 0,
-  slotStartX = 20,
-  slotStartY = 40,
-  slotGapX = 125,
+  slotStartX = 25,
+  slotStartY = 60,
+  slotGapX = 130,
   slotGapY = 38
 }
 Panel_Widget_TownNpcNavi:SetShow(not isRecordMode, true)

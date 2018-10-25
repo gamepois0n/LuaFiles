@@ -187,6 +187,7 @@ function PaGlobal_MailDetail_Delete()
     RequestMail_removeMail(mailDetail.openMailNo, true)
     mailDetail.openMailNo = nil
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   PaGlobal_MailDetail_Close()
 end
 function Mail_Detail_GetItem(toWarehouse)
@@ -198,6 +199,9 @@ function Mail_Detail_GetItem(toWarehouse)
   local itemWhereType = CppEnums.ItemWhereType.eInventory
   if true == toWarehouse then
     itemWhereType = CppEnums.ItemWhereType.eWarehouse
+    _AudioPostEvent_SystemUiForXBOX(50, 0)
+  else
+    _AudioPostEvent_SystemUiForXBOX(50, 1)
   end
   local giftCount_s64 = RequestMail_getMailItemCount()
   local function getMygift(count_s64)

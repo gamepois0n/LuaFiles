@@ -91,7 +91,7 @@ local defalut_Control = {
       _Button = UI.getChildControl(Panel_RentHouse_WorkManager, "RadioButton_Worker"),
       _Progress = UI.getChildControl(Panel_RentHouse_WorkManager, "Progress2_Worker_ActionPoint"),
       _ActionPoint = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Worker_ActionPoint"),
-      _rowMax = 7,
+      _rowMax = 6,
       _row_PosY_Gap = 1
     }
   },
@@ -100,16 +100,12 @@ local defalut_Control = {
     _Title = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_WorkInfo_Title"),
     _Result_BG = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_BG"),
     _Result_Title = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_WorkInfo_Result_Title"),
-    _Result_Line_1 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_Line_1"),
-    _Result_Line_2 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_Line_2"),
     _Result_Icon = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_Icon"),
     _Result_Icon_BG_1 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_Icon_BG_1"),
     _Result_Icon_BG_2 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Result_Icon_BG_2"),
     _Result_Name = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_WorkInfo_Result_Name"),
     _Resource_BG = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Resource_BG"),
     _Resource_Title = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_WorkInfo_Resource_Title"),
-    _Resource_Line_1 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Resource_Line_1"),
-    _Resource_Line_2 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_WorkInfo_Resource_Line_2"),
     _Resource_Icon = {},
     _Resource_Icon_BG = {},
     _Resource_Icon_Boder = {},
@@ -132,19 +128,14 @@ local defalut_Control = {
     _Title = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_Title"),
     _Time_BG = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_Time_BG"),
     _Time_Value = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_Time_Value"),
-    _Time_Line = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Time_Line"),
     _Time_Count = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_Time_Count"),
     _Work_Count = UI.getChildControl(Panel_RentHouse_WorkManager, "Button_Estimated_Work_Count"),
     _Work_BG = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Work_BG"),
-    _Work_Line_1 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Work_Line_1"),
-    _Work_Line_2 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Work_Line_2"),
     _Work_Volume_Text = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_WorkVolum_Text"),
     _Work_Volume_Value = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_WorkVolum_Value"),
     _Work_Speed_Text = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_WorkSpeed_Text"),
     _Work_Speed_Value = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_WorkSpeed_Value"),
     _Move_BG = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Move_BG"),
-    _Move_Line_1 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Move_Line_1"),
-    _Move_Line_2 = UI.getChildControl(Panel_RentHouse_WorkManager, "Static_Estimated_Move_Line_2"),
     _Move_Distance_Text = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_MoveDistance_Text"),
     _Move_Distance_Value = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_MoveDistance_Value"),
     _Move_Speed_Text = UI.getChildControl(Panel_RentHouse_WorkManager, "StaticText_Estimated_MoveSpeed_Text"),
@@ -158,8 +149,6 @@ local defalut_Control = {
     _Btn_Close = UI.getChildControl(Panel_Select_Inherit, "Button_Select_Inherit_Close"),
     _Desc = UI.getChildControl(Panel_Select_Inherit, "StaticText_Select_Inherit_Desc"),
     _Slider = UI.getChildControl(Panel_Select_Inherit, "Slider_Inherit"),
-    _Line_1 = UI.getChildControl(Panel_Select_Inherit, "StaticText_Select_Inherit_Line_1"),
-    _Line_2 = UI.getChildControl(Panel_Select_Inherit, "StaticText_Select_Inherit_Line_2"),
     _Icon_BG = {},
     _Icon_Border = {},
     _Icon_Over = {},
@@ -200,16 +189,12 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Title)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_BG)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Title)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Line_1)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Line_2)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon_BG_1)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon_BG_2)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Icon)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Result_Name)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Resource_BG)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Resource_Title)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Resource_Line_1)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Info._BG, self._work_Info._Resource_Line_2)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_BG", "_Resource_Icon_BG", false, true)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_Boder", "_Resource_Icon_BG", false, true)
   FGlobal_Set_Table_Control(self._work_Info, "_Resource_Icon_Over", "_Resource_Icon_BG", false, true)
@@ -219,19 +204,14 @@ function defalut_Control:Init_Control()
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Title)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Time_BG)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Time_Value)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Time_Line)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Time_Count)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Count)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_BG)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Line_1)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Line_2)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Volume_Text)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Volume_Value)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Speed_Text)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Work_Speed_Value)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_BG)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_Line_1)
-  FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_Line_2)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_Distance_Text)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_Distance_Value)
   FGlobal_AddChild(Panel_RentHouse_WorkManager, self._work_Estimated._BG, self._work_Estimated._Move_Speed_Text)

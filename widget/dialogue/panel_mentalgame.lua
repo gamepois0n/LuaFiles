@@ -1132,46 +1132,46 @@ local function gameStartInit()
 end
 local uv = {
   [0] = {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 1,
-    y1 = 1,
-    x2 = 61,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 416,
+    x2 = 194,
+    y2 = 447
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 1,
-    x2 = 122,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 195,
+    y1 = 416,
+    x2 = 226,
+    y2 = 447
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 62,
-    x2 = 122,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 448,
+    x2 = 194,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 1,
-    y1 = 62,
-    x2 = 61,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 195,
+    y1 = 448,
+    x2 = 226,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds",
-    x1 = 62,
-    y1 = 62,
-    x2 = 122,
-    y2 = 122
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 163,
+    y1 = 448,
+    x2 = 194,
+    y2 = 479
   },
   {
-    _fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_02.dds",
-    x1 = 1,
-    y1 = 1,
-    x2 = 61,
-    y2 = 61
+    _fileName = "Renewal/Progress/Console_Progressbar_02.dds",
+    x1 = 227,
+    y1 = 448,
+    x2 = 258,
+    y2 = 479
   }
 }
 local hasMentalCardText = PAGetString(Defines.StringSheet_GAME, "LUA_INTIMACY_INFORMATION_HASMENTALCARD")

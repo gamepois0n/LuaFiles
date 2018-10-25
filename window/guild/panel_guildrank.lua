@@ -35,9 +35,10 @@ function GuildRankingHideAni()
   aniInfo1:SetDisableWhileAni(true)
 end
 local guildRanking = {
-  _txtTitle = UI.getChildControl(Panel_Guild_Rank, "StaticText_Title"),
+  _titleBG = UI.getChildControl(Panel_Guild_Rank, "Static_TitleBG"),
   _btnClose = UI.getChildControl(Panel_Guild_Rank, "Button_Win_Close"),
   _btnHelp = UI.getChildControl(Panel_Guild_Rank, "Button_Question"),
+  _txtTitle = UI.getChildControl(Panel_Guild_Rank, "StaticText_Title"),
   _scroll = UI.getChildControl(Panel_Guild_Rank, "Scroll_RankingList"),
   _listBg = UI.getChildControl(Panel_Guild_Rank, "Static_RankListBG"),
   guildRankNum = UI.getChildControl(Panel_Guild_Rank, "StaticText_RankNum"),
@@ -491,15 +492,16 @@ function WebGuildRankingHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
 end
+local titleBG = UI.getChildControl(Panel_GuildRank_Web, "Static_TitleBG")
+local webClose = UI.getChildControl(titleBG, "Button_Win_Close")
+local webHelp = UI.getChildControl(titleBG, "Button_Question")
 local rankBg = UI.getChildControl(Panel_GuildRank_Web, "Static_RankListBG")
-local webClose = UI.getChildControl(Panel_GuildRank_Web, "Button_Win_Close")
-local webHelp = UI.getChildControl(Panel_GuildRank_Web, "Button_Question")
 rankBg:SetShow(false)
 webHelp:SetShow(false)
 local _Web = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_GuildRank_Web, "WebControl_GuildRank_WebLink")
 _Web:SetShow(true)
-_Web:SetPosX(40)
-_Web:SetPosY(60)
+_Web:SetPosX(20)
+_Web:SetPosY(67)
 _Web:SetSize(890, 645)
 _Web:ResetUrl()
 webClose:addInputEvent("Mouse_LUp", "GuildRank_Web_Close()")

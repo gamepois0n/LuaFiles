@@ -12,7 +12,6 @@ local uiText = {}
 local scrollIndex = 0
 local Panel_Interest_Knowledge_Value_elementCount = 0
 needKnowledgeText:SetTextMode(UI_TM.eTextMode_AutoWrap)
-needKnowledgeText:SetAutoResize(true)
 needKnowledgeText:SetFontColor(Defines.Color.C_FF96D4FC)
 function InterestKnowledgeShowAni()
 end
@@ -41,7 +40,7 @@ local uiBG_PosY = uiBackGround:GetPosY()
 local _scroll_PosY = _scroll:GetPosY()
 local _needKnowledgeTextSize = needKnowledgeText:GetSizeY()
 local _needKnowledgeTextGap = 19
-local _knowledgeMaxCount = 9
+local _knowledgeMaxCount = 8
 function InterestKnowledge_SetText(theme, npcActorProxyWrapper)
   local _needKnowledge = npcActorProxyWrapper:getNpcTheme()
   local _needCount = npcActorProxyWrapper:getNeedCount()

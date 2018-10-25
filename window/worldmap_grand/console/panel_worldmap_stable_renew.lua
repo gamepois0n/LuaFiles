@@ -109,7 +109,6 @@ function PaGlobalFunc_WorldMap_Stable_Open()
     PaGlobalFunc_WorldMap_TopMenu_Close()
     PaGlobalFunc_WorldMap_RightMenu_Close()
     PaGlobalFunc_WorldMap_RingMenu_Close()
-    PaGlobalFunc_WorldMap_BottomMenu_Close()
   end
   PaGlobalFunc_WorldMap_Stable_SetShow(true, false)
 end
@@ -117,8 +116,8 @@ function PaGlobalFunc_WorldMap_Stable_Close()
   if false == PaGlobalFunc_WorldMap_Stable_GetShow() then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   PaGlobalFunc_WorldMap_TopMenu_Open()
-  PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobalFunc_WorldMap_RingMenu_Open()
   PaGlobalFunc_WorldMap_Stable_SetShow(false, false)
 end

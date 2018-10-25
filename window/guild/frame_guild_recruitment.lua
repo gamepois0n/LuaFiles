@@ -116,18 +116,18 @@ local classPicture = {
     145
   },
   [UI_classType.ClassType_Orange] = {
-    97,
+    193,
     1,
-    192,
+    288,
     145
   }
 }
 function Guild_Recruitment_Initialize()
   local self = GuildRecruitment
-  local slotStartY = 47
+  local slotStartY = 60
   local slotGapY = 145
   for slotIdx = 0, self.maxSlotCount - 1 do
-    local posX = 10 + 400 * (slotIdx % 2)
+    local posX = 15 + 450 * (slotIdx % 2)
     local posY = slotStartY + slotGapY * math.floor(slotIdx / 2)
     local slot = {}
     slot.bg = UI.createAndCopyBasePropertyControl(Panel_Guild_Recruitment, "Static_SampleBg", Panel_Guild_Recruitment, "GuildRecruitment_BG_" .. slotIdx)
@@ -150,8 +150,8 @@ function Guild_Recruitment_Initialize()
     slot.intro:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     slot.intro:setLineCountByLimitAutoWrap(3)
     slot.btnRecruit = UI.createAndCopyBasePropertyControl(Panel_Guild_Recruitment, "Button_Recruit", slot.bg, "GuildRecruitment_Recruit_" .. slotIdx)
-    slot.btnRecruit:SetPosX(150)
-    slot.btnRecruit:SetPosY(105)
+    slot.btnRecruit:SetPosX(320)
+    slot.btnRecruit:SetPosY(100)
     slot.btnRecruit:addInputEvent("Mouse_UpScroll", "GuildRecuit_ScrollEvent( true )")
     slot.btnRecruit:addInputEvent("Mouse_DownScroll", "GuildRecuit_ScrollEvent( false )")
     self.slotPool[slotIdx] = slot
@@ -173,7 +173,6 @@ function GuildRecruitment:Update()
   local guildUnjoinedCount = ToClient_GetGuildUnjoinedPlayerCount()
   local playerCount = math.min(guildUnjoinedCount, self.maxPlayerList)
   local viewCount = math.min(playerCount, self.maxSlotCount)
-  _PA_LOG("\236\160\149\237\131\156\234\179\164", "self.maxSlotCount : " .. tostring(self.maxSlotCount) .. " / playerCount : " .. tostring(playerCount))
   if playerCount > self.maxSlotCount then
     self.scroll:SetShow(true)
   else

@@ -32,6 +32,8 @@ function StableInfoHideAni()
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
 end
+local panel_abillity = UI.getChildControl(Panel_Window_StableInfo, "Stable_Info_Ability")
+local _staticSkillPanel = UI.getChildControl(Panel_Window_StableInfo, "Panel_Skill")
 local stableInfo = {
   _config = {
     slot = {
@@ -57,53 +59,51 @@ local stableInfo = {
       startExpBGY = 5,
       startExpX = 2,
       startExpY = 7,
-      startButtonX = 251,
-      startButtonY = 1
+      startButtonX = 248,
+      startButtonY = 6
     }
   },
-  _maleIcon = UI.getChildControl(Panel_Window_StableInfo, "Static_MaleIcon"),
-  _femaleIcon = UI.getChildControl(Panel_Window_StableInfo, "Static_FemaleIcon"),
-  _iconStallion = UI.getChildControl(Panel_Window_StableInfo, "Static_iconStallion"),
-  _staticName = UI.getChildControl(Panel_Window_StableInfo, "StaticText_Name"),
-  _staticLevel = UI.getChildControl(Panel_Window_StableInfo, "Static_Text_Level"),
-  _staticHpGauge = UI.getChildControl(Panel_Window_StableInfo, "HP_GaugeBar"),
-  _staticMpGauge = UI.getChildControl(Panel_Window_StableInfo, "MP_GaugeBar"),
-  _staticExpGauge = UI.getChildControl(Panel_Window_StableInfo, "EXP_GaugeBar"),
-  _staticWeightGauge = UI.getChildControl(Panel_Window_StableInfo, "Weight_GaugeBar"),
-  _staticHPTitle = UI.getChildControl(Panel_Window_StableInfo, "HP"),
-  _staticMPTitle = UI.getChildControl(Panel_Window_StableInfo, "MP"),
-  _staticHP = UI.getChildControl(Panel_Window_StableInfo, "HP_CountData"),
-  _staticMP = UI.getChildControl(Panel_Window_StableInfo, "MP_CountData"),
-  _staticEXP = UI.getChildControl(Panel_Window_StableInfo, "EXP_CountData"),
-  _staticWeight = UI.getChildControl(Panel_Window_StableInfo, "WHT_CountData"),
-  _staticTitleMaxMoveSpeed = UI.getChildControl(Panel_Window_StableInfo, "MaxMoveSpeed"),
-  _staticTitleAcceleration = UI.getChildControl(Panel_Window_StableInfo, "Acceleration"),
-  _staticTitleCorneringSpeed = UI.getChildControl(Panel_Window_StableInfo, "CorneringSpeed"),
-  _staticTitleBrakeSpeed = UI.getChildControl(Panel_Window_StableInfo, "BrakeSpeed"),
-  _staticMoveSpeed = UI.getChildControl(Panel_Window_StableInfo, "MaxMoveSpeedValue"),
-  _staticAcceleration = UI.getChildControl(Panel_Window_StableInfo, "AccelerationValue"),
-  _staticCornering = UI.getChildControl(Panel_Window_StableInfo, "CorneringSpeedValue"),
-  _staticBrakeSpeed = UI.getChildControl(Panel_Window_StableInfo, "BrakeSpeedValue"),
-  _staticMatingCount = UI.getChildControl(Panel_Window_StableInfo, "Static_MatingCount"),
-  _staticMatingCountValue = UI.getChildControl(Panel_Window_StableInfo, "Static_MatingCountValue"),
-  _staticMatingtime = UI.getChildControl(Panel_Window_StableInfo, "Static_MatingTime"),
-  _staticMatingtimeValue = UI.getChildControl(Panel_Window_StableInfo, "Static_MatingTimeValue"),
-  _staticTrainingTime = UI.getChildControl(Panel_Window_StableInfo, "Static_TrainingTime"),
-  _staticTrainingTimeValue = UI.getChildControl(Panel_Window_StableInfo, "Static_TrainingTimeValue"),
-  _staticRegionChangingTime = UI.getChildControl(Panel_Window_StableInfo, "Static_RegionChangingTime"),
-  _staticRegionChangingTimeValue = UI.getChildControl(Panel_Window_StableInfo, "Static_RegionChangingTimeValue"),
-  _btnMatingImmediately = UI.getChildControl(Panel_Window_StableInfo, "Button_MatingImmediately"),
-  _staticLife = UI.getChildControl(Panel_Window_StableInfo, "Static_LifeCount"),
-  _staticLifeValue = UI.getChildControl(Panel_Window_StableInfo, "Static_LifeCountValue"),
-  _staticImprint = UI.getChildControl(Panel_Window_StableInfo, "Static_Imprint"),
-  _staticImprintValue = UI.getChildControl(Panel_Window_StableInfo, "Static_ImprintValue"),
-  _staticSkillPanel = UI.getChildControl(Panel_Window_StableInfo, "Panel_Skill"),
-  _deadCount = UI.getChildControl(Panel_Window_StableInfo, "StaticText_DeadCount"),
-  _deadCountValue = UI.getChildControl(Panel_Window_StableInfo, "StaticText_DeadCountValue"),
-  panel_abillity = UI.getChildControl(Panel_Window_StableInfo, "Stable_Info_Ability"),
-  _staticWantSkillBG = UI.getChildControl(Panel_Window_StableInfo, "Static_WantSkillBG"),
-  _staticSkillHelpBG = UI.getChildControl(Panel_Window_StableInfo, "Static_SkillHelpBG"),
-  _buttonAllSkillTraining = UI.getChildControl(Panel_Window_StableInfo, "Button_AllSkillTraining"),
+  _maleIcon = UI.getChildControl(panel_abillity, "Static_MaleIcon"),
+  _femaleIcon = UI.getChildControl(panel_abillity, "Static_FemaleIcon"),
+  _iconStallion = UI.getChildControl(panel_abillity, "Static_iconStallion"),
+  _staticName = UI.getChildControl(panel_abillity, "StaticText_Name"),
+  _staticLevel = UI.getChildControl(panel_abillity, "Static_Text_Level"),
+  _staticHpGauge = UI.getChildControl(panel_abillity, "HP_GaugeBar"),
+  _staticMpGauge = UI.getChildControl(panel_abillity, "MP_GaugeBar"),
+  _staticExpGauge = UI.getChildControl(panel_abillity, "EXP_GaugeBar"),
+  _staticWeightGauge = UI.getChildControl(panel_abillity, "Weight_GaugeBar"),
+  _staticHPTitle = UI.getChildControl(panel_abillity, "HP"),
+  _staticMPTitle = UI.getChildControl(panel_abillity, "MP"),
+  _staticHP = UI.getChildControl(panel_abillity, "HP_CountData"),
+  _staticMP = UI.getChildControl(panel_abillity, "MP_CountData"),
+  _staticEXP = UI.getChildControl(panel_abillity, "EXP_CountData"),
+  _staticWeight = UI.getChildControl(panel_abillity, "WHT_CountData"),
+  _staticTitleMaxMoveSpeed = UI.getChildControl(panel_abillity, "MaxMoveSpeed"),
+  _staticTitleAcceleration = UI.getChildControl(panel_abillity, "Acceleration"),
+  _staticTitleCorneringSpeed = UI.getChildControl(panel_abillity, "CorneringSpeed"),
+  _staticTitleBrakeSpeed = UI.getChildControl(panel_abillity, "BrakeSpeed"),
+  _staticMoveSpeed = UI.getChildControl(panel_abillity, "MaxMoveSpeedValue"),
+  _staticAcceleration = UI.getChildControl(panel_abillity, "AccelerationValue"),
+  _staticCornering = UI.getChildControl(panel_abillity, "CorneringSpeedValue"),
+  _staticBrakeSpeed = UI.getChildControl(panel_abillity, "BrakeSpeedValue"),
+  _staticMatingCount = UI.getChildControl(panel_abillity, "Static_MatingCount"),
+  _staticMatingCountValue = UI.getChildControl(panel_abillity, "Static_MatingCountValue"),
+  _staticMatingtime = UI.getChildControl(panel_abillity, "Static_MatingTime"),
+  _staticMatingtimeValue = UI.getChildControl(panel_abillity, "Static_MatingTimeValue"),
+  _staticRegionChangingTime = UI.getChildControl(panel_abillity, "Static_RegionChangingTime"),
+  _staticRegionChangingTimeValue = UI.getChildControl(panel_abillity, "Static_RegionChangingTimeValue"),
+  _btnMatingImmediately = UI.getChildControl(panel_abillity, "Button_MatingImmediately"),
+  _staticLife = UI.getChildControl(panel_abillity, "Static_LifeCount"),
+  _staticLifeValue = UI.getChildControl(panel_abillity, "Static_LifeCountValue"),
+  _staticImprint = UI.getChildControl(panel_abillity, "Static_Imprint"),
+  _staticImprintValue = UI.getChildControl(panel_abillity, "Static_ImprintValue"),
+  _deadCount = UI.getChildControl(panel_abillity, "StaticText_DeadCount"),
+  _deadCountValue = UI.getChildControl(panel_abillity, "StaticText_DeadCountValue"),
+  _staticWantSkillBG = UI.getChildControl(_staticSkillPanel, "Static_WantSkillBG"),
+  _staticSkillHelpBG = UI.getChildControl(_staticSkillPanel, "Static_SkillHelpBG"),
+  _buttonAllSkillTraining = UI.getChildControl(_staticSkillPanel, "Button_AllSkillTraining"),
+  _staticTrainingTime = UI.getChildControl(_staticSkillPanel, "Static_TrainingTime"),
+  _staticTrainingTimeValue = UI.getChildControl(_staticSkillPanel, "Static_TrainingTimeValue"),
   _startSlotIndex = 0,
   _temporaySlotCount = 0,
   _temporayLearnSkillCount = 0,
@@ -113,19 +113,19 @@ local stableInfo = {
   _toSkillKey = nil,
   _isTargetSkillOn = false
 }
+local carriagePanel = UI.getChildControl(Panel_Window_StableInfo, "Carriage_Info")
 local carrageInfo = {
-  _panel = UI.getChildControl(Panel_Window_StableInfo, "Carriage_Info"),
-  _title = UI.getChildControl(Panel_Window_StableInfo, "Static_CarriageInfo_Title"),
-  _bg = UI.getChildControl(Panel_Window_StableInfo, "Static_AddHorseBG"),
-  _maxCount = UI.getChildControl(Panel_Window_StableInfo, "StaticText_CarriageSlotMaxCount"),
-  _maxCountValue = UI.getChildControl(Panel_Window_StableInfo, "StaticText_MaxCountValue"),
-  _horseSlot = UI.getChildControl(Panel_Window_StableInfo, "Static_CarriageHorse"),
-  _name = UI.getChildControl(Panel_Window_StableInfo, "StaticText_CarriageHorse_Name"),
-  _level = UI.getChildControl(Panel_Window_StableInfo, "StaticText_Horse_Level"),
-  _btnRelease = UI.getChildControl(Panel_Window_StableInfo, "Button_ReleaseHorse"),
-  _expText = UI.getChildControl(Panel_Window_StableInfo, "Horse_EXP_CountData"),
-  _expBg = UI.getChildControl(Panel_Window_StableInfo, "Horse_EXP_Bg"),
-  _expGauge = UI.getChildControl(Panel_Window_StableInfo, "Horse_EXP_GaugeBar"),
+  _title = UI.getChildControl(carriagePanel, "Static_CarriageInfo_Title"),
+  _bg = UI.getChildControl(carriagePanel, "Static_AddHorseBG"),
+  _maxCount = UI.getChildControl(carriagePanel, "StaticText_CarriageSlotMaxCount"),
+  _maxCountValue = UI.getChildControl(carriagePanel, "StaticText_MaxCountValue"),
+  _horseSlot = UI.getChildControl(carriagePanel, "Static_CarriageHorse"),
+  _name = UI.getChildControl(carriagePanel, "StaticText_CarriageHorse_Name"),
+  _level = UI.getChildControl(carriagePanel, "StaticText_Horse_Level"),
+  _btnRelease = UI.getChildControl(carriagePanel, "Button_ReleaseHorse"),
+  _expText = UI.getChildControl(carriagePanel, "Horse_EXP_CountData"),
+  _expBg = UI.getChildControl(carriagePanel, "Horse_EXP_Bg"),
+  _expGauge = UI.getChildControl(carriagePanel, "Horse_EXP_GaugeBar"),
   slotCount = 4,
   gapY = 68,
   baseSlot = {}
@@ -134,25 +134,25 @@ function carrageInfo:init()
   stableInfo._iconStallion:SetShow(false)
   for index = 0, self.slotCount - 1 do
     local temp = {}
-    temp._horseSlot = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Window_StableInfo, "Static_HorseSlot_" .. index)
+    temp._horseSlot = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, carriagePanel, "Static_HorseSlot_" .. index)
     CopyBaseProperty(self._horseSlot, temp._horseSlot)
     temp._horseSlot:SetPosY(self._horseSlot:GetPosY() + self.gapY * index)
-    temp._name = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_StableInfo, "StaticText_CarriageHorse_Name_" .. index)
+    temp._name = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, carriagePanel, "StaticText_CarriageHorse_Name_" .. index)
     CopyBaseProperty(self._name, temp._name)
     temp._name:SetPosY(self._name:GetPosY() + self.gapY * index)
-    temp._level = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_StableInfo, "StaticText_Horse_Level_" .. index)
+    temp._level = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, carriagePanel, "StaticText_Horse_Level_" .. index)
     CopyBaseProperty(self._level, temp._level)
     temp._level:SetPosY(self._level:GetPosY() + self.gapY * index)
-    temp._btnRelease = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, Panel_Window_StableInfo, "Button_ReleaseHorse_" .. index)
+    temp._btnRelease = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_BUTTON, carriagePanel, "Button_ReleaseHorse_" .. index)
     CopyBaseProperty(self._btnRelease, temp._btnRelease)
     temp._btnRelease:SetPosY(self._btnRelease:GetPosY() + self.gapY * index)
-    temp._expText = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, Panel_Window_StableInfo, "Horse_EXP_CountData_" .. index)
+    temp._expText = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, carriagePanel, "Horse_EXP_CountData_" .. index)
     CopyBaseProperty(self._expText, temp._expText)
     temp._expText:SetPosY(self._expText:GetPosY() + self.gapY * index)
-    temp._expBg = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Window_StableInfo, "Horse_EXP_Bg_" .. index)
+    temp._expBg = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, carriagePanel, "Horse_EXP_Bg_" .. index)
     CopyBaseProperty(self._expBg, temp._expBg)
     temp._expBg:SetPosY(self._expBg:GetPosY() + self.gapY * index)
-    temp._expGauge = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_Window_StableInfo, "Horse_EXP_GaugeBar_" .. index)
+    temp._expGauge = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, carriagePanel, "Horse_EXP_GaugeBar_" .. index)
     CopyBaseProperty(self._expGauge, temp._expGauge)
     temp._expGauge:SetPosY(self._expGauge:GetPosY() + self.gapY * index)
     self.baseSlot[index] = temp
@@ -166,7 +166,7 @@ function carrageInfo:init()
 end
 carrageInfo:init()
 function carrageInfo_Check(carriageNo)
-  stableInfo._staticSkillPanel:SetShow(false)
+  _staticSkillPanel:SetShow(false)
   carrageInfo:open()
   local servantInfo = stable_getServantByServantNo(carriageNo)
   if nil == servantInfo then
@@ -222,20 +222,20 @@ function ReleaseFromCarriage(servantSlotNo, CarriageSlotNo)
   MessageBox.showMessageBox(messageBoxData)
 end
 function carrageInfo:open()
-  if self._panel:GetShow() then
+  if carriagePanel:GetShow() then
     return
   end
-  self._panel:SetShow(true)
+  carriagePanel:SetShow(true)
   self._title:SetShow(true)
   self._bg:SetShow(true)
   self._maxCount:SetShow(true)
   self._maxCountValue:SetShow(true)
 end
 function carrageInfo:close()
-  if not self._panel:GetShow() then
+  if not carriagePanel:GetShow() then
     return
   end
-  self._panel:SetShow(false)
+  carriagePanel:SetShow(false)
   self._title:SetShow(false)
   self._bg:SetShow(false)
   self._maxCount:SetShow(false)
@@ -261,26 +261,21 @@ function stableInfo:init()
   self._checkBtnHelpChange = UI.getChildControl(self._staticSkillHelpBG, "CheckButton_HelpCategoryChange")
   self._checkBtnHelpDelete = UI.getChildControl(self._staticSkillHelpBG, "CheckButton_HelpCategoryDelete")
   self._staticDescBGTemp = UI.getChildControl(self._staticSkillHelpBG, "Static_DescBG")
-  self._staticSkillTitle = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Skill_Title", self._staticSkillPanel, "StableInfo_SkillTitle")
-  self._staticSkillBG = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillBG", self._staticSkillPanel, "StableInfo_SkillBG")
-  self._scrollSkill = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Scroll_Skill", self._staticSkillBG, "StableInfo_SkillScroll")
+  self._staticSkillTitle = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Skill_Title", _staticSkillPanel, "StableInfo_SkillTitle")
+  self._staticSkillBG = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_SkillBG", _staticSkillPanel, "StableInfo_SkillBG")
+  self._scrollSkill = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Scroll_Skill", self._staticSkillBG, "StableInfo_SkillScroll")
   self._staticHelpChangeDescBG = UI.cloneControl(self._staticDescBGTemp, self._staticSkillHelpBG, "Static_ChangeDescBG")
   self._staticTextHelpChangeDesc = UI.getChildControl(self._staticHelpChangeDescBG, "StaticText_SkillDesc")
   self._staticHelpDeleteDescBG = UI.cloneControl(self._staticDescBGTemp, self._staticSkillHelpBG, "Static_DeleteDescBG")
   self._staticTextHelpDeleteDesc = UI.getChildControl(self._staticHelpDeleteDescBG, "StaticText_SkillDesc")
   local slotConfig = self._config.slot
-  self._staticSkillBG:SetPosX(slotConfig.startBGX)
-  self._staticSkillBG:SetPosY(slotConfig.startBGY)
-  self._scrollSkill:SetPosX(slotConfig.startScrollX)
-  self._scrollSkill:SetPosY(slotConfig.startScrollY)
   self._checkBtnHelpChange:addInputEvent("Mouse_LUp", "StableInfo_ShowHelpDesc(0)")
   self._checkBtnHelpDelete:addInputEvent("Mouse_LUp", "StableInfo_ShowHelpDesc(1)")
   self._staticSkillBG:addInputEvent("Mouse_UpScroll", "StableInfo_ScrollEvent( true )")
   self._staticSkillBG:addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
   self._iconStallion:addInputEvent("Mouse_On", "StableServantInfo_StallionToolTip( true )")
   self._iconStallion:addInputEvent("Mouse_Out", "StableServantInfo_StallionToolTip( false )")
-  self._staticSkillPanel:SetSize(self._staticSkillPanel:GetSizeX(), self._staticSkillPanel:GetSizeY() + 5)
-  self._staticWantSkillBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._staticWantSkillBG:SetPosY(_staticSkillPanel:GetPosY() + _staticSkillPanel:GetSizeY() + 5)
   self._staticTextChangeDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._staticTextHelpChangeDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   self._staticTextHelpDeleteDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -292,26 +287,26 @@ function stableInfo:init()
   self._staticHelpChangeDescBG:ComputePos()
   self._staticHelpDeleteDescBG:ComputePos()
   self._staticWantSkillBG:SetSize(self._staticWantSkillBG:GetSizeX(), self._staticWantSkillBG:GetSizeY() + self._staticTextChangeDesc:GetTextSizeY() + 10)
-  self._staticSkillHelpBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._staticSkillHelpBG:SetPosY(_staticSkillPanel:GetPosY() + _staticSkillPanel:GetSizeY() + 5)
   self._buttonAllSkillTraining:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   self._staticTrainingTime:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   self._staticTrainingTimeValue:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   for ii = 0, self._config.slot.count - 1 do
     local slot = {}
-    slot.base = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_Skill", self._staticSkillBG, "StableInfo_Skill_" .. ii)
-    slot.expBG = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillExpBG", slot.base, "StableInfo_SkillExpBG_" .. ii)
-    slot.exp = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Gauge_SkillExp", slot.base, "StableInfo_SkillExp_" .. ii)
-    slot.icon = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillIcon", slot.base, "StableInfo_SkillIcon" .. ii)
-    slot.expStr = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "SkillLearn_PercentString", slot.base, "StableInfo_SkillExpStr_" .. ii)
-    slot.name = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_Text_SkillName", slot.base, "StableInfo_SkillName_" .. ii)
-    slot.dec = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_Text_SkillCondition", slot.base, "StableInfo_SkillDec_" .. ii)
-    slot.button = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillChange", slot.base, "StableInfo_SkillButton_" .. ii)
-    slot.buttonDel = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillDelete", slot.base, "StableInfo_SkillDelButton_" .. ii)
-    slot.buttonLock = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillLock", slot.base, "StableInfo_SkillLock_" .. ii)
-    slot.buttonTarget = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillTarget", slot.base, "StableInfo_SkillTarget_" .. ii)
-    slot.buttonTargetRelease = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillTargetRelease", slot.base, "StableInfo_SkillTargetRelease_" .. ii)
-    slot.buttonTraining = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Button_SkillTraining", slot.base, "StableInfo_SkillTraining_" .. ii)
-    slot.base:SetPosX(slotConfig.startX)
+    slot.base = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_Skill", self._staticSkillBG, "StableInfo_Skill_" .. ii)
+    slot.expBG = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_SkillExpBG", slot.base, "StableInfo_SkillExpBG_" .. ii)
+    slot.exp = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Gauge_SkillExp", slot.base, "StableInfo_SkillExp_" .. ii)
+    slot.icon = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_SkillIcon", slot.base, "StableInfo_SkillIcon" .. ii)
+    slot.expStr = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "SkillLearn_PercentString", slot.base, "StableInfo_SkillExpStr_" .. ii)
+    slot.name = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_Text_SkillName", slot.base, "StableInfo_SkillName_" .. ii)
+    slot.dec = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_Text_SkillCondition", slot.base, "StableInfo_SkillDec_" .. ii)
+    slot.button = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillChange", slot.base, "StableInfo_SkillButton_" .. ii)
+    slot.buttonDel = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillDelete", slot.base, "StableInfo_SkillDelButton_" .. ii)
+    slot.buttonLock = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillLock", slot.base, "StableInfo_SkillLock_" .. ii)
+    slot.buttonTarget = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillTarget", slot.base, "StableInfo_SkillTarget_" .. ii)
+    slot.buttonTargetRelease = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillTargetRelease", slot.base, "StableInfo_SkillTargetRelease_" .. ii)
+    slot.buttonTraining = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Button_SkillTraining", slot.base, "StableInfo_SkillTraining_" .. ii)
+    slot.base:SetPosX(slotConfig.startX + 5)
     slot.base:SetPosY(slotConfig.startY + slotConfig.gapY * ii)
     local skillConfig = self._config.skill
     slot.icon:SetPosX(skillConfig.startIconX)
@@ -351,7 +346,7 @@ function stableInfo:init()
     slot.key = 0
     self._skill[ii] = slot
   end
-  self._staticSkillEffect = UI.createAndCopyBasePropertyControl(Panel_Window_StableInfo, "Static_SkillIChange_EffectPanel", self._staticSkillBG, "StableInfo_SkillEffect")
+  self._staticSkillEffect = UI.createAndCopyBasePropertyControl(_staticSkillPanel, "Static_SkillIChange_EffectPanel", self._staticSkillBG, "StableInfo_SkillEffect")
 end
 function StableInfo_ShowHelpDesc(helpType, closeAll)
   local width = 0
@@ -555,13 +550,13 @@ function stableInfo:update(unsealType)
         self._btnMatingImmediately:SetShow(true)
       end
     end
-    self._staticImprint:SetSpanSize(3, 220)
+    self._staticImprint:SetSpanSize(240, 260)
     self._staticImprintValue:SetTextHorizonRight()
-    self._staticImprintValue:SetSpanSize(80, 220)
+    self._staticImprintValue:SetSpanSize(10, 260)
   else
-    self._staticImprint:SetSpanSize(-195, 220)
+    self._staticImprint:SetSpanSize(15, 260)
     self._staticImprintValue:SetTextHorizonLeft()
-    self._staticImprintValue:SetSpanSize(-97, 220)
+    self._staticImprintValue:SetSpanSize(200, 260)
   end
   if servantInfo:isChangingRegion() then
     self._staticRegionChangingTime:SetShow(true)
@@ -570,9 +565,9 @@ function stableInfo:update(unsealType)
     self._staticRegionChangingTimeValue:SetShow(true)
   end
   if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Camel or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Donkey or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Elephant or servantInfo:getVehicleType() == CppEnums.VehicleType.Type_RidableBabyElephant then
-    stableInfo.panel_abillity:SetSize(370, 250)
+    panel_abillity:SetSize(370, 295)
   else
-    stableInfo.panel_abillity:SetSize(370, 225)
+    panel_abillity:SetSize(370, 275)
   end
   self._staticImprint:SetShow(false)
   self._staticImprintValue:SetShow(false)
@@ -596,8 +591,8 @@ function FGlobal_StableInfoUpdate()
   end
   self._staticHP:SetText(tostring(servantInfo:getHp()) .. " / " .. tostring(servantInfo:getMaxHp()))
   self._staticMP:SetText(tostring(servantInfo:getMp()) .. " / " .. tostring(servantInfo:getMaxMp()))
-  self._staticHpGauge:SetSize(2.5 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
-  self._staticMpGauge:SetSize(2.5 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
+  self._staticHpGauge:SetSize(2.7 * (servantInfo:getHp() / servantInfo:getMaxHp() * 100), 6)
+  self._staticMpGauge:SetSize(2.7 * (servantInfo:getMp() / servantInfo:getMaxMp() * 100), 6)
 end
 function stableInfo:updateSkill(unsealType)
   self.currentServantType = unsealType
@@ -631,7 +626,7 @@ function stableInfo:updateSkill(unsealType)
       local carriageNo = servantInfo:getServantNo()
       carrageInfo_Check(carriageNo)
     else
-      self._staticSkillPanel:SetShow(true)
+      _staticSkillPanel:SetShow(true)
       self._scrollSkill:SetShow(false)
     end
     return
@@ -759,7 +754,7 @@ function stableInfo:updateSkill(unsealType)
     end
   end
   self._staticWantSkillBG:SetShow(false)
-  self._staticSkillHelpBG:SetPosY(self._staticSkillPanel:GetPosY() + self._staticSkillPanel:GetSizeY() + 5)
+  self._staticSkillHelpBG:SetPosY(_staticSkillPanel:GetPosY() + _staticSkillPanel:GetSizeY() + 5)
   self._buttonAllSkillTraining:SetPosY(self._staticSkillHelpBG:GetPosY() + self._staticSkillHelpBG:GetSizeY() + 5)
   self._staticChangeBG:SetShow(false)
   self._staticChangeTitle:SetShow(false)
@@ -786,13 +781,13 @@ function stableInfo:updateSkill(unsealType)
     end
   end
   if 0 < self._temporayLearnSkillCount then
-    self._staticSkillPanel:SetShow(true)
+    _staticSkillPanel:SetShow(true)
     UIScroll.SetButtonSize(self._scrollSkill, self._config.slot.count, self._temporayLearnSkillCount)
   end
 end
 function stableInfo:registEventHandler()
-  self._staticSkillPanel:addInputEvent("Mouse_UpScroll", "StableInfo_ScrollEvent( true )")
-  self._staticSkillPanel:addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
+  _staticSkillPanel:addInputEvent("Mouse_UpScroll", "StableInfo_ScrollEvent( true )")
+  _staticSkillPanel:addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
   self._btnMatingImmediately:addInputEvent("Mouse_LUp", "StableInfo_MatingImmediately_Confirm()")
   self._buttonAllSkillTraining:addInputEvent("Mouse_LUp", "Button_AllSkillTraining()")
   UIScroll.InputEvent(self._scrollSkill, "StableInfo_ScrollEvent")

@@ -271,6 +271,8 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
     _list_MoreList = {},
     _list_Emoticon = {},
     _list_At = {},
+    _list_ChatEmoticon = {},
+    _list_EmoticonAni = {},
     _list_SenderMessageIndex = {},
     _list_LinkedItemMessageIndex = {},
     _list_LinkedGuildMessageIndex = {},
@@ -319,7 +321,9 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
     _count_Emoticon = 0,
     _maxcount_Emoticon = self._maxListCount * 4,
     _count_At = 0,
-    _maxcount_At = self._maxListCount
+    _maxcount_At = self._maxListCount,
+    _count_EmoticonAni = 0,
+    _maxcount_EmoticonAni = 1
   }
   function ChatUIPool:prepareControl(Panel, parentControl, createdCotrolList, controlType, controlName, createCount)
     local styleUI = UI.getChildControl(Panel, controlName)
@@ -351,7 +355,9 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ScrollReset, UI_PUCT.PA_UI_CONTROL_BUTTON, "Button_ScrollReset", self._maxcount_ScrollReset)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_MoreList, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_MoreList", self._maxcount_MoreList)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_Emoticon, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_Emoticon", self._maxcount_Emoticon)
+    ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ChatEmoticon, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_ChatEmoticon", self._maxcount_Emoticon)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_At, UI_PUCT.PA_UI_CONTROL_STATICTEXT, "Static_At", self._maxcount_At)
+    ChatUIPool:prepareControl(stylePanel, parentControl, self._list_EmoticonAni, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_ChatEmoticon_SequenceAni", self._maxcount_EmoticonAni)
     for index = 0, self._maxcount_ChattingLinkedItem do
       self._list_ChattingLinkedItem[index]:addInputEvent("Mouse_On", "HandleOn_ChattingLinkedItem(" .. poolIndex .. ", " .. index .. ", false)")
       self._list_ChattingLinkedItem[index]:addInputEvent("Mouse_Out", "Chatting_PanelTransparency(" .. poolIndex .. ", false, true )")
@@ -419,6 +425,9 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
   function ChatUIPool:getCurrentChattingIconIndex()
     return self._count_ChattingIcon - 1
   end
+  function ChatUIPool:getCurrentEmoticonIndex()
+    return self._count_Emoticon - 1
+  end
   function PaGlobal_getChattingIconByIndex(index)
     return ChatUIPool:getChattingIconByIndex(index)
   end
@@ -463,6 +472,10 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
   function ChatUIPool:newChattingEmoticon()
     self._count_Emoticon = self._count_Emoticon + 1
     return self._list_Emoticon[self._count_Emoticon - 1]
+  end
+  function ChatUIPool:newChattingNewEmoticon()
+    self._count_Emoticon = self._count_Emoticon + 1
+    return self._list_ChatEmoticon[self._count_Emoticon - 1]
   end
   function ChatUIPool:newChattingLinkedWebSite(messageIndex)
     self._count_ChattingLinkedWebSite = self._count_ChattingLinkedWebSite + 1
@@ -540,6 +553,8 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
     self._count_MoreList = 0
     self._count_Emoticon = 0
     self._count_At = 0
+    self._count_ChatEmoticon = 0
+    self._count_ChatEmoticonAni = 0
     self._list_SenderMessageIndex = {}
     self._list_LinkedItemMessageIndex = {}
     self._list_LinkedGuildMessageIndex = {}
@@ -625,6 +640,12 @@ function ChatUIPoolManager:createPool(poolIndex, poolStylePanel, poolParentPanel
     end
     for index = self._count_At, self._maxcount_At do
       self._list_At[index]:SetShow(false)
+    end
+    for index = self._count_ChatEmoticon, self._maxcount_Emoticon do
+      self._list_ChatEmoticon[index]:SetShow(false)
+    end
+    for index = self._count_ChatEmoticonAni, self._maxcount_EmoticonAni do
+      self._list_EmoticonAni[index]:SetShow(false)
     end
   end
   ChatUIPool:initialize(poolStylePanel, poolParentPanel, poolIndex)
@@ -2140,6 +2161,53 @@ function HandleOn_ChattingAddTabToolTip(isShow, poolIndex, tipType)
   end
   if nil ~= control then
     TooltipSimple_Show(control, name, desc)
+  end
+end
+function PaGlobalFunc_isItemEmticon(EmoticonKey)
+  local EmoticonSS = ToClient_getEmoticonInfoByKey(EmoticonKey)
+  if nil == EmoticonSS then
+    return false
+  end
+  if 0 == EmoticonSS:getGroup() then
+    return true
+  end
+  return false
+end
+function HandleOn_ChattingEmoticon(poolIndex, emoticonIndex, EmoticonKey, isShow)
+  FromClient_ChatUpdate()
+  local EmoticonSS = ToClient_getEmoticonInfoByKey(EmoticonKey)
+  if nil ~= EmoticonSS then
+    local ImagePath = EmoticonSS:getSequenceImagePath()
+    if nil == ImagePath then
+      return
+    end
+    local panel = ChatUIPoolManager:getPanel(poolIndex)
+    if false == panel:GetShow() then
+      poolIndex = 0
+      panel = ChatUIPoolManager:getPanel(poolIndex)
+    end
+    local poolCurrentUI = ChatUIPoolManager:getPool(poolIndex)
+    local emoticonUI = poolCurrentUI._list_ChatEmoticon[emoticonIndex]
+    local emoticonAniUi = poolCurrentUI._list_EmoticonAni[0]
+    if nil ~= emoticonAniUi then
+      if true == isShow then
+        emoticonAniUi:ChangeTextureInfoNameAsync(ImagePath)
+        local orgPanelPosX = panel:GetPosX()
+        local orgPanelPosY = panel:GetPosY()
+        if nil == emoticonUI then
+          emoticonAniUi:SetPosX(getMousePosX() - emoticonAniUi:GetSizeX() - orgPanelPosX)
+          emoticonAniUi:SetPosY(getMousePosY() - emoticonAniUi:GetSizeY() * 0.65 - orgPanelPosY)
+        else
+          emoticonAniUi:SetPosX(emoticonUI:GetPosX() - emoticonAniUi:GetSizeX() * 0.65)
+          if 0 > emoticonUI:GetPosY() - emoticonAniUi:GetSizeY() then
+            emoticonAniUi:SetPosY(emoticonAniUi:GetSizeY() * 0.2)
+          else
+            emoticonAniUi:SetPosY(emoticonUI:GetPosY() - emoticonAniUi:GetSizeY() * 0.7)
+          end
+        end
+      end
+      emoticonAniUi:SetShow(isShow)
+    end
   end
 end
 function HandleClicked_ChattingSender(poolIndex, senderStaticIndex)

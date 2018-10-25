@@ -123,7 +123,7 @@ function Process_UIMode_CommonWindow_PlayerInfo()
       local inventory = unsealCacheData:getInventory()
       local invenSize = inventory:size()
       if 0 ~= actorKeyRaw then
-        if true == ToClient_isXBox() then
+        if true == ToClient_isConsole() then
           return
         end
         if Panel_Window_ServantInfo:GetShow() or Panel_CarriageInfo:GetShow() or Panel_ShipInfo:GetShow() then
@@ -149,7 +149,6 @@ function Process_UIMode_CommonWindow_Skill()
         HandleMLUp_SkillWindow_Close()
       else
         audioPostEvent_SystemUi(1, 18)
-        _AudioPostEvent_SystemUiForXBOX(1, 18)
         PaGlobal_Skill:SkillWindow_Show()
       end
     end

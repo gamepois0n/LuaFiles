@@ -185,6 +185,7 @@ function PaGlobalFunc_Customization_BodyBone_UpdateBodyWeight()
 end
 function PaGlobalFunc_Customization_BodyBone_ToggleShowBodyBoneControlPart()
   local self = Customization_BodyBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 0)
   showBoneControlPart(self._ui._checkBox_ShowPart:IsCheck())
 end
 function PaGlobalFunc_Customization_BodyBone_CursorSelect(luaControlModeIndex)
@@ -236,9 +237,11 @@ function PaGlobalFunc_Customization_BodyBone_ClearCustomizedBoneInfo()
   self:SetValueSlider(self._ui._slider_ScaleX, self._lastScale.x, self._lastScaleMin.x, self._lastScaleMax.x)
   self:SetValueSlider(self._ui._slider_ScaleY, self._lastScale.y, self._lastScaleMin.y, self._lastScaleMax.y)
   self:SetValueSlider(self._ui._slider_ScaleZ, self._lastScale.z, self._lastScaleMin.z, self._lastScaleMax.z)
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function PaGlobalFunc_Customization_BodyBone_ClearGroupCustomizedBonInfoLua()
   local self = Customization_BodyBoneInfo
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_CustomIzationCommon_ClearGroupCustomizedBonInfoLua()
 end
 function Customization_BodyBoneInfo:InitControl()

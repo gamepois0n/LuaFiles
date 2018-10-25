@@ -851,7 +851,7 @@ function DyeReNew:Reset_Position()
     local UIEquipBG = UI.getChildControl(UIStaticBG, "Static_EquipSlotBG_" .. ii)
     UIEquipBG:SetShow(true)
   end
-  UIPartTitle:SetPosY(275)
+  UIPartTitle:SetPosY(285)
   UIPartBG:SetPosY(311)
   UIAmpuleTitle:SetPosY(380)
   UIAmpuleBG:SetPosY(413)

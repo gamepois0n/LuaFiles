@@ -54,6 +54,7 @@ function Panel_Window_MessageBox_Info:open(showAni)
   else
     Panel_Win_System:SetShow(true, showAni)
   end
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
 end
 function Panel_Window_MessageBox_Info:close(showAni)
   if nil == showAni then
@@ -61,6 +62,7 @@ function Panel_Window_MessageBox_Info:close(showAni)
   else
     Panel_Win_System:SetShow(false, showAni)
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function setCurrentMessageData(currentData, position)
   local self = Panel_Window_MessageBox_Info
@@ -209,6 +211,7 @@ function MessageBox.showMessageBox(MessageData, position, isGameExit, keyUse)
   if Panel_Win_System:GetShow() and nil == MessageData.enablePriority then
     return
   end
+  _AudioPostEvent_SystemUiForXBOX(8, 14)
   local Front = list
   local preList
   functionKeyUse = keyUse
@@ -322,6 +325,7 @@ function MessageBox_ShowAni()
   aniInfo2.IsChangeChild = true
 end
 function MessageBox_HideAni()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
   Panel_Win_System:SetShow(false, false)
 end
 function messageBox_YesButtonUp()
@@ -337,6 +341,7 @@ function messageBox_YesButtonUp()
   if functionYes ~= nil then
     functionYes()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function messageBox_ApplyButtonUp()
   local functionApply
@@ -351,6 +356,7 @@ function messageBox_ApplyButtonUp()
   if functionApply ~= nil then
     functionApply()
   end
+  _AudioPostEvent_SystemUiForXBOX(50, 1)
 end
 function messageBox_NoButtonUp()
   local functionNo
@@ -458,6 +464,7 @@ function Event_MessageBox_NotifyMessage_With_ClientMessage(message, gameMessageT
   MessageBox.showMessageBox(messageboxData)
 end
 function MessageBox_Empty_function()
+  _AudioPostEvent_SystemUiForXBOX(50, 3)
 end
 function messageBox_UpdatePerFrame(deltaTime)
   if nil == list or nil == list.data or nil == list.data.isTimeCount or false == list.data.isStartTimer then

@@ -186,17 +186,7 @@ function _mail_Data:Update_MailPage()
         defalut_Control._mail._Sender_Name[index]:SetShow(true)
         defalut_Control._mail._Mail_Title[index]:SetShow(true)
         defalut_Control._mail._Mail_Num[index]:SetShow(true)
-        defalut_Control._mail._mail_GetItem[index]:SetShow(true)
-        defalut_Control._mail._mail_GetItem[index]:ChangeTextureInfoName("New_UI_Common_forLua/Window/Dye/Dye_New_01.dds")
-        if true == _getItem then
-          local x1, y1, x2, y2 = setTextureUV_Func(defalut_Control._mail._mail_GetItem[index], 1, 433, 22, 455)
-          defalut_Control._mail._mail_GetItem[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          defalut_Control._mail._mail_GetItem[index]:setRenderTexture(defalut_Control._mail._mail_GetItem[index]:getBaseTexture())
-        else
-          local x1, y1, x2, y2 = setTextureUV_Func(defalut_Control._mail._mail_GetItem[index], 1, 457, 22, 479)
-          defalut_Control._mail._mail_GetItem[index]:getBaseTexture():setUV(x1, y1, x2, y2)
-          defalut_Control._mail._mail_GetItem[index]:setRenderTexture(defalut_Control._mail._mail_GetItem[index]:getBaseTexture())
-        end
+        defalut_Control._mail._mail_GetItem[index]:SetShow(_getItem)
       end
     else
       defalut_Control._mail._List_BG[index]:SetShow(false)
