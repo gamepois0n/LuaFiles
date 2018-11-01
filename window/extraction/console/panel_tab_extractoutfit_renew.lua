@@ -160,6 +160,9 @@ function PaLocalFunc_ExtractOutfit_rClickTarget(slotNo, itemWrapper, count_s64, 
   ToClient_padSnapSetTargetPanel(_mainPanel)
 end
 function PaGlobalFunc_ExtractOutfit_OnPadB()
+  if true == self._doExtracting then
+    return
+  end
   if false == self._equipItem.empty then
     self:clear()
     PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(true)
@@ -178,6 +181,7 @@ function ExtractOutfit:clear()
   self._stc_output1:SetShow(false)
   self._stc_output2:SetShow(false)
   self._valks:SetAlpha(0)
+  PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(false)
   getEnchantInformation():ToClient_clearData()
 end
 function Input_ExtractOutfit_Apply(isValksExtract)
@@ -187,11 +191,14 @@ function Input_ExtractOutfit_Apply(isValksExtract)
   if isValksExtract and not isEnableValksCry then
     return
   end
-  local tempFilter = function()
-    return true
-  end
   if true == self._equipItem.empty then
     return
+  end
+  if true == self._doExtracting then
+    return
+  end
+  local tempFilter = function()
+    return true
   end
   Inventory_SetFunctor(tempFilter, tempFilter, nil, nil, nil)
   self._currentTime = 0
@@ -204,6 +211,7 @@ function Input_ExtractOutfit_Apply(isValksExtract)
   else
     resultItem = "<" .. getItemEnchantStaticStatus(ItemEnchantKey(16080)):getName() .. ">"
   end
+  PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(false)
   local messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_3", "resultItem", resultItem)
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_RESOURCE, "UI_WINDOW_EXTRACTION_CLOTH_TITLE"),
@@ -211,7 +219,9 @@ function Input_ExtractOutfit_Apply(isValksExtract)
     functionYes = function()
       PaLocalFunc_ExtractOutfit_Success()
     end,
-    functionNo = MessageBox_Empty_function,
+    functionNo = function()
+      PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(true)
+    end,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
@@ -241,6 +251,7 @@ function PaLocalFunc_ExtractOutfit_Success()
   extractionEffect.equipItem_Effect = nil
   extractionEffect.cloth_Effect = nil
   self._extracting_Effect_Step1:EraseAllEffect()
+  PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(false)
 end
 function PaGlobalFunc_ExtractOutfit_UpdatePerFrame(DeltaTime)
   if self._doExtracting then
@@ -300,6 +311,7 @@ function ExtractOutfit:successXXX()
   Inventory_SetFunctor(PaLocalFunc_ExtractOutfit_FilterTarget, PaLocalFunc_ExtractOutfit_rClickTarget, nil, nil)
 end
 function PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(snappedOnMainPanel)
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "UpdateKeyGuide snappedOnMainPanel : " .. tostring(snappedOnMainPanel) .. ", " .. tostring(false == self._equipItem.empty))
   self._keyGuideLeft:SetMonoTone(not snappedOnMainPanel or false ~= self._equipItem.empty)
   self._keyGuideRight:SetMonoTone(not snappedOnMainPanel or false ~= self._equipItem.empty)
 end

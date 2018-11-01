@@ -54,6 +54,7 @@ local SkillSpecialize = {
     staticText_EffectBg2 = nil,
     list2_1_SelectSkill = nil,
     list2_2_SelectEffect1 = nil,
+    list2_2_SelectEffect2 = nil,
     static_BottomArea = nil,
     txt_keyGuideY = nil,
     txt_keyGuideA = nil,
@@ -207,6 +208,9 @@ function SkillSpecialize:childControl()
   self._ui.list2_2_SelectEffect1 = UI.getChildControl(self._ui.static_Content, "List2_2_SelectEffect1")
   self._ui.list2_2_SelectEffect1:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Dialog_SkillSpecialize_Page2EffectListCreate")
   self._ui.list2_2_SelectEffect1:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
+  self._ui.list2_2_SelectEffect2 = UI.getChildControl(self._ui.static_Content, "List2_2_SelectEffect2")
+  self._ui.list2_2_SelectEffect2:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobalFunc_Dialog_SkillSpecialize_Page2EffectListCreate")
+  self._ui.list2_2_SelectEffect2:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   self._ui.staticText_EffectBg1 = UI.getChildControl(self._ui.static_Content, "StaticText_EffectBg1")
   self._ui.staticText_EffectBg2 = UI.getChildControl(self._ui.static_Content, "StaticText_EffectBg2")
   self._ui.staticText_EffectBg1:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -272,17 +276,17 @@ function SkillSpecialize:setPosControlPage1()
   end
 end
 function SkillSpecialize:open(showAni)
+  ToClient_padSnapResetControl()
   if nil == showAni then
     _panel:SetShow(true, true)
-    return
   else
     _panel:SetShow(true, showAni)
   end
 end
 function SkillSpecialize:close(showAni)
+  Panel_SkillAwaken_ResultOption:SetShow(false)
   if nil == showAni then
     _panel:SetShow(false, true)
-    return
   else
     _panel:SetShow(false, showAni)
   end
@@ -328,7 +332,6 @@ function SkillSpecialize:clearContentPage1()
   self:initValue()
 end
 function SkillSpecialize:setContentPage1()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "SkillSpecialize:setContentPage1")
   local selfPlayLevel = getSelfPlayer():get():getLevel()
   local reinforcableSkillCount = 0
   if selfPlayLevel < 50 then
@@ -367,12 +370,14 @@ function SkillSpecialize:setContentPage1()
         control.staticText_EnableSpecialize:SetShow(false)
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateLock)
         control.radiobutton:SetEnable(false)
+        control.radiobutton:SetIgnore(true)
       else
         control.state = self._enum.eButtonStateBase
         control.staticText_EnableSpecialize:SetShow(true)
         control.staticText_EnableSpecialize:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_NORMAL_1"))
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateBase)
         control.radiobutton:SetEnable(true)
+        control.radiobutton:SetIgnore(false)
         totalReinforceCount = totalReinforceCount + 1
       end
     end
@@ -398,12 +403,14 @@ function SkillSpecialize:setContentPage1()
         control.staticText_EnableSpecialize:SetShow(false)
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateLock)
         control.radiobutton:SetEnable(false)
+        control.radiobutton:SetIgnore(true)
       else
         control.state = self._enum.eButtonStateBase
         control.staticText_EnableSpecialize:SetShow(true)
         control.staticText_EnableSpecialize:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_AWAKEN_1"))
         self:changeTexturePage1Button(control.radiobutton, self._enum.eButtonStateBase)
         control.radiobutton:SetEnable(true)
+        control.radiobutton:SetIgnore(false)
         totalReinforceCount = totalReinforceCount + 1
       end
     end
@@ -472,8 +479,10 @@ function SkillSpecialize:isSkillChangePossible()
         return false
       end
     end
-  else
+  elseif self._enum.eButtonStateLock == control.state then
     return false
+  else
+    return true
   end
   local _type = self:getSkillAwakeningType(self._value.currentSpecializeIndex)
   local reinforcableCount = ToClient_GetAwakeningListCount()
@@ -508,7 +517,6 @@ function SkillSpecialize:isEffectChangePossible()
       local applyAwakenSkillReset = selfPlayer:get():isApplyChargeSkill(CppEnums.UserChargeType.eUserChargeType_UnlimitedSkillAwakening)
       local inventory = selfPlayer:get():getInventory()
       local hasMemoryFlag = inventory:getItemCount_s64(ItemEnchantKey(44195, 0))
-      _PA_LOG("\235\176\149\235\178\148\236\164\128", "hasMemoryFlag : " .. tostring(hasMemoryFlag))
       if toInt64(0, 0) == hasMemoryFlag and not applyAwakenSkillReset then
         return false
       end
@@ -556,6 +564,7 @@ function SkillSpecialize:setSkillButtonData(buttonIndex, control)
   end
   local skillSSW = ToClient_GetReAwakeningListAt(reinforceIndex)
   if nil == skillSSW then
+    _PA_LOG("\235\176\149\235\178\148\236\164\128", "setSkillButtonData return 2, index : : " .. reinforceIndex)
     return
   end
   control.reinforceIndex = reinforceIndex
@@ -574,7 +583,11 @@ function SkillSpecialize:setSkillButtonData(buttonIndex, control)
       skillEffectText = skillEffectText .. "\n"
     end
   end
-  control.staticText_Skill_Effect:SetText(skillEffectText)
+  local txt = control.staticText_Skill_Effect
+  txt:SetTextMode(CppEnums.TextMode.eTextMode_Limit_AutoWrap)
+  txt:setLineCountByLimitAutoWrap(3)
+  txt:SetText(skillEffectText)
+  txt:SetTextSpan(0, (txt:GetSizeY() - txt:GetTextSizeY()) * 0.5)
   control.static_Icon:ChangeTextureInfoName("Icon/" .. skillTypeSSW:getIconPath())
   local x1, y1, x2, y2 = setTextureUV_Func(control.static_Icon, 0, 0, 44, 44)
   control.static_Icon:getBaseTexture():setUV(x1, y1, x2, y2)
@@ -611,6 +624,8 @@ function SkillSpecialize:setPage2_0Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
   self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
   self._ui.list2_2_SelectEffect1:SetShow(false)
+  self._ui.list2_2_SelectEffect2:getElementManager():clearKey()
+  self._ui.list2_2_SelectEffect2:SetShow(false)
   self._ui.list2_1_SelectSkill:SetShow(true)
   self._ui.list2_1_SelectSkill:SetPosY(self._pos.page2Pos2)
   self._ui.list2_1_SelectSkill:getElementManager():clearKey()
@@ -642,6 +657,8 @@ function SkillSpecialize:setPage2_1Step(skillNo)
   self._ui.list2_1_SelectSkill:SetShow(false)
   self._ui.list2_2_SelectEffect1:SetShow(true)
   self._ui.list2_2_SelectEffect1:SetPosY(self._pos.page2Pos3)
+  self._ui.list2_2_SelectEffect2:getElementManager():clearKey()
+  self._ui.list2_2_SelectEffect2:SetShow(false)
   local text = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION")
   self._ui.staticText_EffectBg1:SetText(text)
   self._ui.staticText_EffectBg2:SetText(text)
@@ -668,8 +685,10 @@ end
 function SkillSpecialize:setPage2_2Step(skillNo)
   self:setPage2SelectedSkill(skillNo)
   self._ui.list2_1_SelectSkill:SetShow(false)
-  self._ui.list2_2_SelectEffect1:SetShow(true)
-  self._ui.list2_2_SelectEffect1:SetPosY(self._pos.page2Pos4)
+  self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
+  self._ui.list2_2_SelectEffect1:SetShow(false)
+  self._ui.list2_2_SelectEffect2:SetPosY(self._pos.page2Pos4)
+  self._ui.list2_2_SelectEffect2:SetShow(true)
   local text = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTOPTION")
   self._ui.staticText_EffectBg2:SetText(text)
   self._ui.staticText_EffectBg1:SetFontColor(Defines.Color.C_FF525B6D)
@@ -678,7 +697,7 @@ function SkillSpecialize:setPage2_2Step(skillNo)
   self._ui.staticText_EffectBg2:SetPosY(self._pos.page2Pos3)
   self._ui.staticText_EffectBg1:SetTextSpan(10, (self._ui.staticText_EffectBg1:GetSizeY() - self._ui.staticText_EffectBg1:GetTextSizeY()) * 0.5)
   self._ui.staticText_EffectBg2:SetTextSpan(10, (self._ui.staticText_EffectBg2:GetSizeY() - self._ui.staticText_EffectBg2:GetTextSizeY()) * 0.5)
-  self._ui.list2_2_SelectEffect1:getElementManager():clearKey()
+  self._ui.list2_2_SelectEffect2:getElementManager():clearKey()
   for k in pairs(self._effectList) do
     self._effectList[k] = nil
   end
@@ -689,7 +708,7 @@ function SkillSpecialize:setPage2_2Step(skillNo)
     for key = 0, optionCount - 1 do
       if nil ~= self._value.currentEffectIndex and self._value.currentEffectIndex ~= key then
         self._effectList[key] = key
-        self._ui.list2_2_SelectEffect1:getElementManager():pushKey(toInt64(0, self._effectList[key]))
+        self._ui.list2_2_SelectEffect2:getElementManager():pushKey(toInt64(0, self._effectList[key]))
       end
     end
   end
@@ -775,6 +794,7 @@ function PaGlobalFunc_Dialog_SkillSpecialize_GetShow()
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Exit()
   if true == PaGlobalFunc_Dialog_SkillSpecialize_GetShow() then
+    Panel_SkillAwaken_ResultOption:SetShow(false, true)
     PaGlobalFunc_Dialog_SkillSpecialize_Close(true)
     return true
   end
@@ -782,7 +802,6 @@ function PaGlobalFunc_Dialog_SkillSpecialize_Exit()
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton(buttonIndex)
   local self = SkillSpecialize
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "PaGlobalFunc_Dialog_SkillSpecialize_Page1_OverSkillButton : " .. buttonIndex)
   if self._value.currentSpecializeIndex == buttonIndex then
     return
   end
@@ -1017,7 +1036,6 @@ function PaGlobalFunc_Dialog_SkillSpecialize_GoBackStepPage2()
   end
 end
 function PaGlobalFunc_Dialog_SkillSpecialize_Doit()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "PaGlobalFunc_Dialog_SkillSpecialize_Doittest")
   local self = SkillSpecialize
   if nil == self._value.currnetReinforceIndex then
     if nil == self._value.currentSelectSkillIndex then

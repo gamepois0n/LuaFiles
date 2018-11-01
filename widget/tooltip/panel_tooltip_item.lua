@@ -843,6 +843,7 @@ function Panel_Tooltip_Item_Show_GeneralNormal(slotNo, slotType, isOn, index, ta
       actorKey = ServantInventory_GetActorKeyRawFromIndex(index)
     end
     itemWrapper = getServantInventoryItemBySlotNo(actorKey, slotNo)
+    inven = true
   elseif "QuickSlot" == slotType then
     local quickSlotInfo = getQuickSlotItem(slotNo)
     if nil == quickSlotInfo then
@@ -1512,6 +1513,7 @@ function Panel_Tooltip_Item_Set_Position(positionData, parent, inven, targetX, t
   local itemEquipPosY = Panel_Tooltip_Item_equipped:GetSizeY()
   local posX = positionData:GetParentPosX()
   local posY = positionData:GetParentPosY()
+  _PA_LOG("\236\157\180\235\172\184\236\162\133", "posX : " .. posX .. " / posY : " .. posY .. " / inven : " .. tostring(inven))
   if parent and inven then
     posX = positionData:getParent():GetParentPosX() + 7
     posY = positionData:getParent():GetParentPosY() + 10

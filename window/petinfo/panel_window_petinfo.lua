@@ -367,6 +367,13 @@ function FGlobal_PetInfoNew_Open(petNo, isShow, isSealed)
 end
 function FGlobal_PetInfoNew_Close()
   Panel_Window_PetInfoNew:SetShow(false)
+  local actionMaxCount = ToClient_getPetActionMax()
+  for ii = 0, actionMaxCount - 1 do
+    _PA_LOG("\236\155\144\236\132\160", "ii = =" .. ii)
+    _PetInfo_HideActionToolTip(ii)
+  end
+  PetInfo_HideSkillToolTip()
+  PetInfo_BaseSkill_HideTooltip()
   if true ~= petIcon then
     FGlobal_PetListNew_Open()
     petIcon = false

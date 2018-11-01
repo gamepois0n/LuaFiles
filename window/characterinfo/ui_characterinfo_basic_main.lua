@@ -256,6 +256,10 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   for key, index in pairs(self._familyPoint) do
     self._ui._staticTextFamilyPoints[index] = UI.getChildControl(staticFamily, "StaticText_FamilyPoint_" .. index)
   end
+  self._ui._staticTextFamilyPointsWithIcon = {}
+  for index = 1, 3 do
+    self._ui._staticTextFamilyPointsWithIcon[index] = UI.getChildControl(staticFamily, "StaticText_FamilyPointIcon_" .. index)
+  end
   for index = 1, 10 do
     self._ui._lifeInfo[index] = {
       _bg = {},
@@ -286,12 +290,8 @@ function PaGlobal_CharacterInfoBasic:initializeControl()
   PaGlobal_CharacterInfoBasic:BaseInfoShow(0 == viewType)
   self._ui._radioBtnBattle:SetCheck(0 == viewType)
   self._ui._radioBtnLife:SetCheck(0 ~= viewType)
-  self._ui._radioBtnBattle:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-  self._ui._radioBtnBattle:SetText(self._ui._radioBtnBattle:GetText())
-  self._ui._radioBtnLife:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
-  self._ui._radioBtnLife:SetText(self._ui._radioBtnLife:GetText())
-  UI.checkLimitTextAndAddTooltip(self._ui._radioBtnBattle, self._ui._radioBtnBattle:GetText())
-  UI.checkLimitTextAndAddTooltip(self._ui._radioBtnLife, self._ui._radioBtnLife:GetText())
+  UI.setLimitTextAndAddTooltip(self._ui._radioBtnBattle, self._ui._radioBtnBattle:GetText())
+  UI.setLimitTextAndAddTooltip(self._ui._radioBtnLife, self._ui._radioBtnLife:GetText())
   if true == self._ui._radioBtnBattle:IsLimitText() then
     self._ui._radioBtnBattle:addInputEvent("Mouse_On", "InputMOn_CharacterInfoBasic_ShowLimitedText(true)")
     self._ui._radioBtnBattle:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
@@ -413,6 +413,10 @@ function PaGlobal_CharacterInfoBasic:registEventHandler()
   for key, index in pairs(self._familyPoint) do
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(true, " .. index .. ")")
     self._ui._staticTextFamilyPoints[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(false)")
+  end
+  for index = 1, 3 do
+    self._ui._staticTextFamilyPointsWithIcon[index]:addInputEvent("Mouse_On", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(true, " .. index .. ")")
+    self._ui._staticTextFamilyPointsWithIcon[index]:addInputEvent("Mouse_Out", "PaGlobal_CharacterInfoBasic:handleMouseOver_FamilyPoints(false)")
   end
   self._ui._lifeRankButton:addInputEvent("Mouse_LUp", "FGlobal_LifeRanking_Open()")
   self._ui._buttonIntroduce:addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfoBasic:showIntroduce(true)")

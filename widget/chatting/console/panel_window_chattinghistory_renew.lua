@@ -694,7 +694,6 @@ function PaGlobalFunc_ChattingHistory_Close()
   end
 end
 function ChattingHistory:close()
-  UI.ASSERT(false, "ChattingHistory:close")
   _panel:SetShow(false)
 end
 function FromClient_ChatHistory_Update()

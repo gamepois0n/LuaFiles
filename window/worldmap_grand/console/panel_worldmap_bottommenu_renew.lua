@@ -40,7 +40,7 @@ local Window_WorldMap_BottomMenuInfo = {
     [5] = CppEnums.SpawnType.eSpawnType_Wharf,
     [6] = CppEnums.SpawnType.eSpawnType_guild,
     [7] = CppEnums.SpawnType.eSpawnType_TradeMerchant,
-    [8] = CppEnums.SpawnType.eSpawnType_Grocery,
+    [8] = CppEnums.SpawnType.eSpawnType_Potion,
     [9] = CppEnums.SpawnType.eSpawnType_Weapon,
     [10] = CppEnums.SpawnType.eSpawnType_Jewel,
     [11] = CppEnums.SpawnType.eSpawnType_Furniture,
@@ -124,7 +124,6 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
   if count - 1 < self._currentBookMarkIndex then
     self._currentBookMarkIndex = 0
   end
-  local defaultPos = float3(0, 0, 0)
   for index = 0, count - 1 do
     local pos = ToClient_GetWorldMapBookMark(index)
     if index == self._currentBookMarkIndex then
@@ -135,6 +134,9 @@ function PaGlobalFunc_WorldMap_BottomMenu_UpdateBookMarkMenu(value)
       self._ui._currentList[index]:SetFontColor(Defines.Color.C_FFEFEFEF)
     end
   end
+  local selectBookMarkPos = ToClient_GetWorldMapBookMark(self._currentBookMarkIndex)
+  local isBookMarkSet = 0 ~= selectBookMarkPos.x and 0 ~= selectBookMarkPos.y and 0 ~= selectBookMarkPos.z
+  self._ui._static_KeyGuide_BookMarkSelect:SetShow(true == isBookMarkSet)
   self._ui._static_KeyGuide_BookMarkSelect:SetPosX(self._ui._currentList[self._currentBookMarkIndex]:GetPosX() + 5)
   self._ui._staticText_FindDecs:SetText(self._strConfig[self._currentBookMarkIndex])
 end

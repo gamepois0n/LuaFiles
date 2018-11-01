@@ -212,7 +212,7 @@ function FairyInfo:Update()
           end
           if true == isUnseal and 19 == key then
             self._UI._button_Lanter:SetShow(true)
-            self._UI._button_Lanter:SetCheck(false == ToClient_isFairyLanternOnOff())
+            self._UI._button_Lanter:SetCheck(ToClient_isFairyLanternOnOff())
             self._UI._button_Lanter:SetPosY(362 + uiRow * 50)
           end
           uiRow = uiRow + 1

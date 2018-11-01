@@ -394,7 +394,7 @@ local function GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLe
   end
 end
 local function Align_NodeControls()
-  local nextSpanY = 241
+  local nextSpanY = 160
   if Txt_NodeManager:GetShow() then
     Txt_NodeManager:SetSpanSize(Txt_NodeManager:GetSpanSize().x, nextSpanY)
     nextSpanY = Txt_NodeManager:GetSpanSize().y + Txt_NodeManager:GetSizeY() + 10
@@ -435,7 +435,7 @@ local function Align_NodeControls()
     NodeLevelGroup.Btn_NodeLev:SetSpanSize(NodeLevelGroup.Btn_NodeLev:GetSpanSize().x, nextSpanY)
     nextSpanY = NodeLevelGroup.Btn_NodeLev:GetSpanSize().y + NodeLevelGroup.Btn_NodeLev:GetSizeY() + 10
   end
-  static_NodeManagerBG:SetSize(static_NodeManagerBG:GetSizeX(), nextSpanY - 81)
+  static_NodeManagerBG:SetSize(static_NodeManagerBG:GetSizeX(), nextSpanY)
   if Tex_ExplorePoint_BG:GetShow() then
     Tex_ExplorePoint_BG:SetSpanSize(Tex_ExplorePoint_BG:GetSpanSize().x, nextSpanY + 3)
   end

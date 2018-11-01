@@ -79,6 +79,8 @@ function improvement:Init()
   self._chk_Skip:SetCheck(false)
   self._chk_Skip:addInputEvent("Mouse_On", "Improvement_SimpleTooltip(true, 0)")
   self._chk_Skip:addInputEvent("Mouse_Out", "Improvement_SimpleTooltip(false)")
+  self._chk_Skip:SetText(self._chk_Skip:GetText())
+  self._chk_Skip:SetEnableArea(0, 0, self._chk_Skip:GetTextSizeX() + 30, 25)
 end
 improvement:Init()
 function Panel_Improvement_Show()

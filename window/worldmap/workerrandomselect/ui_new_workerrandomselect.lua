@@ -24,6 +24,7 @@ local _workerPriceNameTag = UI.getChildControl(Panel_Window_WorkerRandomSelect, 
 local _workerPriceIcon = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_Gold_Icon3")
 local _workerPrice = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerPriceValue")
 local _workerCountEmployment = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerEmployment")
+local _Buy_Slot = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_BuySlot")
 local _workerCountValue = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_WorkerEmploymentValue")
 local _workerInventoryMoneyIcon = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyMoney_Icon")
 local _workerInventoryMoney = UI.getChildControl(Panel_Window_WorkerRandomSelect, "StaticText_MyMoney")
@@ -113,8 +114,45 @@ function workerRandomShopShow(workerShopSlotNo)
   _workerButtonSelect:SetTextSpan(btnSelectTextPosX, 5)
   _workerInventoryMoneyIcon:SetPosX(_workerInventoryMoney:GetPosX() + _workerInventoryMoney:GetSizeX() - _workerInventoryMoney:GetTextSizeX() - _workerInventoryMoneyIcon:GetSizeX() - 5)
   _workerWareHouseInventoryMoneyIcon:SetPosX(_workerWareHouseInventoryMoney:GetPosX() + _workerWareHouseInventoryMoney:GetSizeX() - _workerWareHouseInventoryMoney:GetTextSizeX() - _workerWareHouseInventoryMoneyIcon:GetSizeX() - 5)
-  _workerCountValue:SetPosX(_workerCountEmployment:GetPosX() + _workerCountEmployment:GetTextSizeX() + 5)
+  if not isGameTypeKorea() then
+    _workerCountEmployment:SetPosX(0)
+  end
+  _workerCountValue:SetPosX(_workerCountEmployment:GetPosX() + _workerCountEmployment:GetSizeX() + _workerCountEmployment:GetTextSizeX() + 10)
+  if isGameTypeKorea() then
+    _Buy_Slot:SetShow(true)
+  else
+    _Buy_Slot:SetShow(false)
+  end
+  _Buy_Slot:addInputEvent("Mouse_LUp", "PaGlobal_RandomWorker_Go()")
+  _Buy_Slot:addInputEvent("Mouse_On", "PaGlobal_RandomWorker_Tooltip( true )")
+  _Buy_Slot:addInputEvent("Mouse_Out", "PaGlobal_RandomWorker_Tooltip( false )")
   workerRandomSelectShow()
+end
+function PaGlobal_RandomWorker_Go()
+  local buyGo = function()
+    PaGlobal_EasyBuy:Open(16, getCurrentWaypointKey())
+  end
+  if isGameTypeKorea() then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBJECTCONTROL_CONFIRM"),
+      content = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERHOUSE_EASYBUY"),
+      functionYes = buyGo,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+  end
+end
+function PaGlobal_RandomWorker_Tooltip(isShow)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local name, desc, control
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_RANDOMWORKER_ADD_BUY_SLOT_TITLE")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_RANDOMWORKER_ADD_BUY_SLOT_DESC")
+  control = _workerCountEmployment
+  TooltipSimple_Show(control, name, desc)
 end
 function workerRandomSelectShow()
   Panel_Window_WorkerRandomSelect:SetShow(true)
@@ -130,13 +168,30 @@ function click_WorkerReSelect()
   local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
   local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
   if waitWorkerCount == maxWorkerCount then
-    local messageboxData = {
-      title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
-      content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
-      functionApply = MessageBox_Empty_function,
-      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-    }
-    MessageBox.showMessageBox(messageboxData)
+    local buyCash = function()
+      PaGlobal_EasyBuy:Open(16, getCurrentWaypointKey())
+    end
+    if isGameTypeKorea() then
+      local messageboxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+        content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ") .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_WORKERHOUSE_EASYBUY"),
+        functionYes = buyCash,
+        functionNo = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageboxData)
+    else
+      local messageboxData = {
+        title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+        content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
+        functionApply = MessageBox_Empty_function,
+        priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+      }
+      MessageBox.showMessageBox(messageboxData)
+    end
     return
   end
   local contentString = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect_Question") .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERRANDOMSELECT_NOWWP", "getWp", getSelfPlayer():getWp())

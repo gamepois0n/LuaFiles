@@ -477,7 +477,7 @@ function HandleClick_LargCraft_Cancel_Btn()
     return
   end
   local workName = LargCraft_List._data_Table[LargCraft_List._currentIndex]._workName
-  local cancelContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LARGECRAFT_WORKMANAGER_CANCELALL_CONTENT", "workName", workName)
+  local cancelContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TOWN_WORKERMANAGE_CONFIRM_WORKCANCEL", "workName", "<PAColor0xFFFFD543>" .. workName .. "<PAOldColor>")
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_LARGECRAFT_WORKMANAGER_CANCELALL_TITLE"),
     content = cancelContent,

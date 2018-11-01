@@ -176,6 +176,9 @@ function FriendNew_CreateOfferList(control, key)
   end
 end
 function FriendNew_InviteGuild(targetName, value)
+  if true == self._ui._Static_AddFriendBg:GetShow() then
+    return
+  end
   if false == value then
     local messageBoxMemo = PAGetString(Defines.StringSheet_SymbolNo, "eErrNoGuildTeamBattleAttendCantAttach")
     local messageBoxData = {
@@ -263,6 +266,9 @@ function FriendNew_CreateFriendList(control, key)
   end
 end
 function PaGlobal_FriendNew:ShowXBoxProfile(index)
+  if true == self._ui._Static_AddFriendBg:GetShow() then
+    return
+  end
   local xboxFriendInfo = ToClient_getXboxFriendInfoByIndex(Int64toInt32(index))
   ToClient_showXboxFriendProfile(xboxFriendInfo:getXuid())
 end

@@ -18,6 +18,7 @@ Panel_Window_ItemMarket:setGlassBackground(false)
 Panel_Window_ItemMarket:ActiveMouseEventEffect(false)
 Panel_Window_ItemMarket:SetShow(false)
 local splitWindow = ToClient_IsContentsGroupOpen("240")
+local isOpenByMaid = false
 local shopType = {
   eShopType_Potion = 1,
   eShopType_Weapon = 2,
@@ -799,9 +800,12 @@ function HandleClicked_ItemMarket_AllCategory()
       keyElement:setIsOpen(false)
     end
   end
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "(not ItemMarket.escMenuSaveValue) and (not isOpenByMaid) and (not self.isWorldMapOpen) : " .. tostring(not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen))
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "(not ItemMarket.escMenuSaveValue) : " .. tostring(not ItemMarket.escMenuSaveValue) .. " / (not isOpenByMaid) : " .. tostring(not isOpenByMaid))
   self.btn_InMarketRegist:SetShow(not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen)
   self.btn_InMarketRegist:SetPosX(715)
   self.btn_BidDesc:SetShow(true)
+  self.btn_BidDesc:SetPosX(855)
   tree2:getElementManager():refillKeyList()
   tree2:moveTopIndex()
   self._list2:moveTopIndex()
@@ -854,9 +858,12 @@ function HandleClicked_ItemMarket_MainCategory(index)
     self.isSpecialInside = false
     ItemMarket:Update()
   end
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "\235\161\156\234\183\184\234\176\128 \236\149\136\236\176\141\237\152\148\235\139\164.44444444444444444444444444444444444444")
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "ItemMarket.escMenuSaveValue : " .. tostring(not ItemMarket.escMenuSaveValue) .. " / (not isOpenByMaid) : " .. tostring(not isOpenByMaid) .. " / not self.isWorldMapOpen : " .. tostring(not self.isWorldMapOpen))
   self.btn_InMarketRegist:SetShow(not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen)
-  self.btn_InMarketRegist:SetPosX(715)
   self.btn_BidDesc:SetShow(true)
+  self.btn_InMarketRegist:SetPosX(715)
+  self.btn_BidDesc:SetPosX(855)
   self.txt_ItemNameBackPage = ""
   self.txt_SpecialItemNameBackPage = ""
   self.edit_ItemName:SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
@@ -894,8 +901,10 @@ function HandleClicked_ItemMarket_SubCategory(index)
   if -1 ~= prevSelectedSubKey then
     tree2:requestUpdateByKey(toInt64(0, prevSelectedSubKey))
   end
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "\235\161\156\234\183\184 \236\149\136\236\176\141\237\158\140 \236\151\172\234\184\180 \235\172\180\236\151\135\236\157\188\234\185\140?55555555555555555555555555")
   self.btn_InMarketRegist:SetShow(not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen)
   self.btn_InMarketRegist:SetPosX(715)
+  self.btn_BidDesc:SetPosX(855)
   self.btn_BidDesc:SetShow(true)
   tree2:requestUpdateByKey(toInt64(0, index))
   self._list2:moveTopIndex()
@@ -3074,8 +3083,8 @@ end
 function ItemMarket_SingleItemBuy()
   FGlobal_HandleClicked_ItemMarket_SingleItem_Do(1)
 end
-local isOpenByMaid = false
 function PaGlobalFunc_ItemMarkey_isOpenByMaid()
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "isOpenByMaid : " .. tostring(isOpenByMaid))
   return isOpenByMaid
 end
 function ItemMarket_UpdateMoneyByWarehouse()
@@ -3450,8 +3459,11 @@ function HandleClicked_ItemMarket_UnSetGroupItem()
     self:Update()
   end
   if not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen then
+    _PA_LOG("\236\160\149\237\131\156\234\179\164", "\236\151\172\234\184\176\235\165\188 \235\147\164\236\150\180\236\153\128\236\147\176\234\185\140?22222222222222222222222222222222222222222222222222222222222222222222")
     self.btn_InMarketRegist:SetShow(true)
-    self.btn_BidDesc:SetPosX(715)
+    self.btn_InMarketRegist:SetPosX(715)
+    self.btn_BidDesc:SetPosX(855)
+    self.btn_BidDesc:SetShow(true)
     if isRussiaArea then
       self.btn_BidDesc:SetSize(235, 32)
       self.btn_BidDesc:SetPosX(600)
@@ -3742,6 +3754,7 @@ function FGlobal_ItemMarketNew_Open()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGIONINFO_NIL"))
     return
   end
+  _PA_LOG("\236\160\149\237\131\156\234\179\164", "\236\151\172\234\184\176\235\138\148 \236\150\180\235\150\168\234\185\140?33333333333333333333333333333333333333")
   self.btn_InMarketRegist:SetShow(true)
   self.btn_InMarketRegist:SetPosX(855)
   self.btn_InMarketRegist:SetPosY(650)
@@ -4143,8 +4156,10 @@ function FGlobal_HandleClicked_ItemMarketBackPage()
     ClearFocusEdit()
   end
   if not ItemMarket.escMenuSaveValue and not isOpenByMaid and not self.isWorldMapOpen then
+    _PA_LOG("\236\160\149\237\131\156\234\179\164", "\236\151\172\234\184\176\235\165\188 \235\147\164\236\150\180\236\153\148\235\130\152\236\154\148?111111111")
     self.btn_InMarketRegist:SetShow(true)
-    self.btn_BidDesc:SetPosX(715)
+    self.btn_InMarketRegist:SetPosX(715)
+    self.btn_BidDesc:SetPosX(855)
     if isRussiaArea then
       self.btn_BidDesc:SetSize(235, 32)
       self.btn_BidDesc:SetPosX(600)

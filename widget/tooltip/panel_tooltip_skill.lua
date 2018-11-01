@@ -289,9 +289,9 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
     if isLeft then
       posX = posX - tooltipSize.width
     end
-    local yTmp = posY
+    local yTmp = math.max(0, posY)
     if isTop then
-      yTmp = yTmp - tooltipSize.height
+      yTmp = math.max(0, yTmp - tooltipSize.height)
     end
     Panel_Tooltip_Skill:SetPosX(posX)
     Panel_Tooltip_Skill:SetPosY(yTmp)
@@ -307,9 +307,9 @@ function Panel_SkillTooltip_Show(slotNo, isShowNextLevel, SlotType, isReserveSki
     if isLeft then
       posX = posX - tooltipLearningSize.width
     end
-    local yTmp = posY
+    local yTmp = math.max(0, posY)
     if isTop then
-      yTmp = yTmp - tooltipLearningSize.height
+      yTmp = math.max(0, yTmp - tooltipLearningSize.height)
     end
     Panel_Tooltip_Skill_forLearning:SetPosX(posX)
     Panel_Tooltip_Skill_forLearning:SetPosY(yTmp)
@@ -525,25 +525,6 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
   target.skillDescription:SetTextMode(UI_TM.eTextMode_AutoWrap)
   target.skillDescription:SetAutoResize(true)
   target.skillDescription:SetText(skillTypeSSW:getDescription())
-  local movieName = skillTypeSS:getMoviePath()
-  local movieShow = true
-  if false == isShowNextLevel and nil ~= movieName and "" ~= movieName then
-    target.skill_Movie:SetShow(true)
-    if currMovieName ~= movieName then
-      target.skill_Movie:TriggerEvent("PlayMovie", "coui://" .. movieName)
-      currMovieName = movieName
-    end
-  else
-    currMovieName = nil
-    target.skill_Movie:SetShow(false)
-    movieShow = false
-  end
-  local checkAgeType = ToClient_isAdultUser()
-  if checkAgeType then
-    target.skill_Movie:SetMonoTone(false)
-  else
-    target.skill_Movie:SetMonoTone(true)
-  end
   target.skillLevel:SetPosY(6)
   local iconBottom = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap
   local levelBottom = Tooltip_SkillData:GetBottomPos(target.skillLevel) + elementgap
@@ -682,6 +663,29 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
     TooltipYPos = target.awakeningeffect:GetSizeY()
     target.awakeningEffect_panel:SetSize(target.awakeningEffect_panel:GetSizeX(), target.awakeningeffect:GetSizeY() + elementBiggap + 30)
     TooltipYPos = Tooltip_SkillData:GetBottomPos(target.awakeningEffect_panel) + elementgap
+  end
+  local movieName = skillTypeSS:getMoviePath()
+  local movieShow = true
+  if "QuickSlot" == callTooltipType then
+    currMovieName = nil
+    target.skill_Movie:SetShow(false)
+    movieShow = false
+  elseif false == isShowNextLevel and nil ~= movieName and "" ~= movieName then
+    target.skill_Movie:SetShow(true)
+    if currMovieName ~= movieName then
+      target.skill_Movie:TriggerEvent("PlayMovie", "coui://" .. movieName)
+      currMovieName = movieName
+    end
+  else
+    currMovieName = nil
+    target.skill_Movie:SetShow(false)
+    movieShow = false
+  end
+  local checkAgeType = ToClient_isAdultUser()
+  if checkAgeType then
+    target.skill_Movie:SetMonoTone(false)
+  else
+    target.skill_Movie:SetMonoTone(true)
   end
   if target.skill_Movie:GetShow() then
     TooltipYPos = TooltipYPos + elementBiggap

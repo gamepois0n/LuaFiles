@@ -15,6 +15,7 @@ local worldmapGrand = {
   ui = {
     ModeBG = UI.getChildControl(Panel_WorldMap_Main, "Mode_Bg"),
     TitleBG = UI.getChildControl(Panel_WorldMap_Main, "Static_TitleBG"),
+    TopIconBG = UI.getChildControl(Panel_WorldMap_Main, "Static_TopIconBG"),
     filterBg = UI.getChildControl(Panel_WorldMap_Main, "Static_FilterBg"),
     filterArrow = UI.getChildControl(Panel_WorldMap_Main, "Static_FilterArrow"),
     filterTitle = UI.getChildControl(Panel_WorldMap_Main, "StaticText_FilterTitle"),
@@ -350,154 +351,154 @@ local modeTexture = {
   [eWorldmapState.eWMS_EXPLORE_PLANT] = {
     [0] = {
       1,
-      375,
-      41,
-      415
+      34,
+      53,
+      86
     },
     [1] = {
       1,
-      375,
-      41,
-      415
+      87,
+      53,
+      139
     },
     [2] = {
       1,
-      416,
-      41,
-      456
+      140,
+      53,
+      192
     }
   },
   [eWorldmapState.eWMS_REGION] = {
     [0] = {
-      42,
-      375,
-      82,
-      415
+      54,
+      34,
+      106,
+      86
     },
     [1] = {
-      42,
-      375,
-      82,
-      415
+      54,
+      87,
+      106,
+      139
     },
     [2] = {
-      42,
-      416,
-      82,
-      456
+      54,
+      140,
+      106,
+      192
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_WATER] = {
     [0] = {
-      83,
-      375,
-      123,
-      415
+      107,
+      34,
+      159,
+      86
     },
     [1] = {
-      83,
-      375,
-      123,
-      415
+      107,
+      87,
+      159,
+      139
     },
     [2] = {
-      83,
-      416,
-      123,
-      456
+      107,
+      140,
+      159,
+      192
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_CELCIUS] = {
     [0] = {
-      124,
-      375,
-      164,
-      415
+      160,
+      34,
+      212,
+      86
     },
     [1] = {
-      124,
-      375,
-      164,
-      415
+      160,
+      87,
+      212,
+      139
     },
     [2] = {
-      124,
-      416,
-      164,
-      456
+      107,
+      140,
+      159,
+      192
     }
   },
   [eWorldmapState.eWMS_LOCATION_INFO_HUMIDITY] = {
     [0] = {
-      165,
-      375,
-      205,
-      415
+      213,
+      34,
+      265,
+      86
     },
     [1] = {
-      165,
-      375,
-      205,
-      415
+      213,
+      87,
+      265,
+      139
     },
     [2] = {
-      165,
-      416,
-      205,
-      456
+      213,
+      140,
+      265,
+      192
     }
   },
   [eWorldmapState.eWMS_GUILD_WAR] = {
     [0] = {
-      206,
-      375,
-      246,
-      415
+      266,
+      34,
+      318,
+      86
     },
     [1] = {
-      206,
-      375,
-      246,
-      415
+      266,
+      87,
+      318,
+      139
     },
     [2] = {
-      206,
-      416,
-      246,
-      456
+      266,
+      140,
+      318,
+      192
     }
   },
   [eWorldmapState.eWMS_PRODUCT_NODE] = {
     [0] = {
-      247,
-      375,
-      287,
-      415
+      319,
+      34,
+      371,
+      86
     },
     [1] = {
-      247,
-      375,
-      287,
-      415
+      319,
+      87,
+      371,
+      139
     },
     [2] = {
-      247,
-      416,
-      287,
-      456
+      319,
+      140,
+      371,
+      192
     }
   }
 }
 local function changeModeTexture(modeType)
   local control = worldMapState[modeType]
   local posArray = modeTexture[modeType]
-  control:ChangeTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
+  control:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Btn_01.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[0][1], posArray[0][2], posArray[0][3], posArray[0][4])
   control:getBaseTexture():setUV(x1, y1, x2, y2)
-  control:ChangeOnTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
+  control:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Btn_01.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[1][1], posArray[1][2], posArray[1][3], posArray[1][4])
   control:getOnTexture():setUV(x1, y1, x2, y2)
-  control:ChangeClickTextureInfoName("Renewal/UI_Icon/Console_Icon_WorldMap_00.dds")
+  control:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Btn_01.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, posArray[2][1], posArray[2][2], posArray[2][3], posArray[2][4])
   control:getClickTexture():setUV(x1, y1, x2, y2)
   control:setRenderTexture(control:getBaseTexture())
@@ -1048,7 +1049,7 @@ end
 local function AlignButtonPosition()
   local offsetX = getScreenSizeX() - 450
   for modeIndex, value in pairs(worldMapState) do
-    value:SetPosX(offsetX + (value:GetSizeX() + 25) * (modeIndex - 1))
+    value:SetPosX(offsetX + (value:GetSizeX() + 7) * (modeIndex - 1))
     value:SetPosY(15)
   end
   for checkIndex, value in pairs(worldMapCheckState) do
@@ -1084,7 +1085,7 @@ local function AlignButtonPosition()
     worldMapNodeListType[value]:SetPosY(yGap + worldMapNodeListType[value]:GetSizeY() * math.floor(checkIndex / colsCount) + 10)
   end
   local uiControl = worldmapGrand.ui
-  local seachBoxStartPosY = worldMapNodeListType[nodeList[nodeListCount - 1]]:GetPosY() + worldMapNodeListType[nodeList[nodeListCount - 1]]:GetSizeY() + 15 + 78
+  local seachBoxStartPosY = worldMapNodeListType[nodeList[nodeListCount - 1]]:GetPosY() + worldMapNodeListType[nodeList[nodeListCount - 1]]:GetSizeY() + 22
   uiControl.edit_NodeName:SetPosY(seachBoxStartPosY)
   uiControl.btn_SearchNodeName:SetPosY(seachBoxStartPosY)
   uiControl.edit_ItemName:SetPosY(uiControl.edit_NodeName:GetPosY() + uiControl.edit_NodeName:GetSizeY() + 4)
@@ -1104,6 +1105,7 @@ local function worldmapGrand_OpenSet()
     worldmapGrand.ui.btn_SearchGuildName:SetShow(false)
   end
   worldmapGrand.ui.TitleBG:SetSize(getScreenSizeX(), worldmapGrand.ui.TitleBG:GetSizeY())
+  worldmapGrand.ui.TopIconBG:ComputePos()
   worldmapGrand.ui.TitleBG:ComputePos()
   uiControl.edit_NodeName:SetEditText(worldmapGrand.config.searchDefaultNodeName, true)
   uiControl.edit_ItemName:SetEditText(worldmapGrand.config.searchDefaultItemName, true)

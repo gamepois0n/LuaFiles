@@ -153,6 +153,10 @@ function PaGlobal_Repair:initialize()
   else
     self._uiRepairTextSizeX = self._uiRepairWareHouseMoneyTextSizeX
   end
+  self._uiRepairInvenMoney:SetText(self._uiRepairInvenMoney:GetText())
+  self._uiRepairWareHouseMoney:SetText(self._uiRepairWareHouseMoney:GetText())
+  self._uiRepairInvenMoney:SetEnableArea(0, 0, self._uiRepairInvenMoney:GetTextSizeX() + 30, 25)
+  self._uiRepairWareHouseMoney:SetEnableArea(0, 0, self._uiRepairWareHouseMoney:GetTextSizeX() + 30, 25)
 end
 function PaGlobal_Repair:luckyRepair_Set()
   Panel_LuckyRepair_Result:SetSize(getScreenSizeX(), getScreenSizeY())

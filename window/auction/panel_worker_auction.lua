@@ -434,6 +434,9 @@ end
 function FromClient_ResponseWorkerAuction()
   if Panel_Window_WorkerRandomSelect:IsShow() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_COMPLETE_WORKERCONTRACT"))
+    return
+  end
+  if Panel_Worker_Auction:GetShow() then
   else
     local totalSizeY, subSizeY
     if true == _ContentsGroup_RenewUI_Dailog then
@@ -448,31 +451,27 @@ function FromClient_ResponseWorkerAuction()
         Panel_Worker_Auction:SetPosY(getScreenSizeY() / 2 - Panel_Worker_Auction:GetSizeY() / 2)
       end
     else
-      totalSizeY = Panel_Npc_Dialog:GetSizeY() * 2 + Panel_Worker_Auction:GetSizeY()
-      subSizeY = Panel_Npc_Dialog:GetSizeY() + Panel_Worker_Auction:GetSizeY()
-      Panel_Worker_Auction:SetPosX(getScreenSizeX() / 2 - Panel_Worker_Auction:GetSizeX() / 2)
-      if totalSizeY < getScreenSizeY() then
-        Panel_Worker_Auction:SetPosY(getScreenSizeY() - Panel_Npc_Dialog:GetSizeY() - Panel_Worker_Auction:GetSizeY())
-      elseif subSizeY > getScreenSizeY() then
-        Panel_Worker_Auction:SetPosY(5)
-      else
-        Panel_Worker_Auction:SetPosY(getScreenSizeY() / 2 - Panel_Worker_Auction:GetSizeY() / 2)
-      end
+      local screenSizeX = getScreenSizeX()
+      local screenSizeY = getScreenSizeY()
+      local basePosY = screenSizeY / 2 - Panel_Worker_Auction:GetSizeY() / 2
+      local posY = math.min(screenSizeY - Panel_Npc_Dialog:GetSizeY(), basePosY + Panel_Worker_Auction:GetSizeY()) - Panel_Worker_Auction:GetSizeY()
+      posY = math.max(0, posY)
+      Panel_Worker_Auction:SetSpanSize(0, posY)
     end
     Panel_Worker_Auction:SetShow(true)
-    local self = workerAuction
-    self._btnTabMarket:SetCheck(true)
-    self._btnTabMine:SetCheck(false)
-    if true ~= self._isPaging then
-      self._selectPage = 0
-    end
-    self._isTabMine = false
-    workerAuction:Update()
-    self._isPaging = false
-    self._btnPrev:SetEnable(true)
-    self._btnNext:SetEnable(true)
-    warehouse_requestInfoFromNpc()
   end
+  local self = workerAuction
+  self._btnTabMarket:SetCheck(true)
+  self._btnTabMine:SetCheck(false)
+  if true ~= self._isPaging then
+    self._selectPage = 0
+  end
+  self._isTabMine = false
+  workerAuction:Update()
+  self._isPaging = false
+  self._btnPrev:SetEnable(true)
+  self._btnNext:SetEnable(true)
+  warehouse_requestInfoFromNpc()
 end
 function FromClient_ResponseMyWorkerAuction()
   self = workerAuction

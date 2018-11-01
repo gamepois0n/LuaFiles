@@ -21,8 +21,8 @@ local defalut_Control = {
       _Progress = UI.getChildControl(Panel_Plant_WorkManager, "Progress2_Worker_ActionPoint"),
       _ActionPoint = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Worker_ActionPoint"),
       _RegionName = UI.getChildControl(Panel_Plant_WorkManager, "StaticText_Worker_RegionName"),
-      _rowMax = 12,
-      _row_PosY_Gap = 3
+      _rowMax = 13,
+      _row_PosY_Gap = 5
     }
   },
   _work_Info = {

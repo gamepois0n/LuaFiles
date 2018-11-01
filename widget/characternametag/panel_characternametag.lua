@@ -471,6 +471,9 @@ local function settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
       nameTag:SetMonoTone(false)
     end
     local level = playerActorProxyWrapper:get():getLevel()
+    if nil == getSelfPlayer() then
+      return
+    end
     local selfPlayerLevel = getSelfPlayer():get():getLevel()
     textName = actorProxyWrapper:getName()
   elseif actorProxy:isInstanceObject() then
@@ -948,6 +951,9 @@ local function settingMonsterName(actorKeyRaw, targetPanel, actorProxyWrapper)
     return
   end
   local selfPlayerActorProxyWrapper = getSelfPlayer()
+  if nil == selfPlayerActorProxyWrapper then
+    return
+  end
   if true == ToClient_IsDevelopment() then
     local selfPlayerAttackAwakenValue = ToClient_getAwakenOffence()
     local selfPlayerAttackOffenceValue = ToClient_getOffence()
@@ -1343,19 +1349,22 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
     return
   end
   local isColorBlindMode = ToClient_getGameUIManagerWrapper():getLuaCacheDataListNumber(CppEnums.GlobalUIOptionType.ColorBlindMode)
-  local hpBack, hpLater, hpMain
+  local hpBack, hpLater, hpMain, hpName
   if actorProxy:isKingOrLordTent() then
     hpBack = UI.getChildControl(targetPanel, "KingOrLordTentProgressBack")
     hpLater = UI.getChildControl(targetPanel, "KingOrLordTentProgress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "KingOrLordTentHPGageProgress")
+    hpName = UI.getChildControl(targetPanel, "CharacterName")
   elseif actorProxy:isLargeHpBarCharacter() then
     hpBack = UI.getChildControl(targetPanel, "KingOrLordTentProgressBack")
     hpLater = UI.getChildControl(targetPanel, "KingOrLordTentProgress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "KingOrLordTentHPGageProgress")
+    hpName = UI.getChildControl(targetPanel, "CharacterName")
   else
     hpBack = UI.getChildControl(targetPanel, "ProgressBack")
     hpLater = UI.getChildControl(targetPanel, "Progress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "CharacterHPGageProgress")
+    hpName = UI.getChildControl(targetPanel, "CharacterName")
   end
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
   if nil == hpBack or nil == hpLater or nil == hpMain or nil == characterStaticStatus then
@@ -1436,6 +1445,7 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
           hpBack:SetShow(true)
           hpLater:SetShow(true)
           hpMain:SetShow(true)
+          hpName:SetText(actorProxy:getStaticStatusName() .. " (" .. tostring(curEndurance) .. "/" .. tostring(maxEndurance) .. ")")
         else
           hpBack:SetShow(false)
           hpLater:SetShow(false)

@@ -527,6 +527,13 @@ function SkillEvent_SkillWindow_ClearSkillMessage()
   HandleMLUp_SkillWindow_UpdateData()
   PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
 end
+function SkillEvent_SkillWindow_InitForBattleRoyaleClassChange()
+  local self = PaGlobal_Skill
+  self.controlInitialize = false
+  LoadComplete_SkillWindow_Initialize()
+  SkillEvent_SkillWindow_ControlInitialize()
+  HandleMLUp_SkillWindow_UpdateData()
+end
 function Skill_RegistMessageHandler()
   registerEvent("FromClient_luaLoadComplete", "LoadComplete_SkillWindow_Initialize")
   registerEvent("EventSkillWindowInit", "SkillEvent_SkillWindow_ControlInitialize")
@@ -537,5 +544,6 @@ function Skill_RegistMessageHandler()
   registerEvent("EventSkillWindowUpdate", "HandleMLUp_SkillWindow_UpdateData")
   registerEvent("EventSkillWindowShowForLearn", "HandleMLUp_SkillWindow_OpenForLearn")
   registerEvent("FromClient_SkillWindowClose", "HandleMLUp_SkillWindow_UpdateData")
+  registerEvent("FromClient_ClassChangeBattleRoyale", "SkillEvent_SkillWindow_InitForBattleRoyaleClassChange")
 end
 Skill_RegistMessageHandler()

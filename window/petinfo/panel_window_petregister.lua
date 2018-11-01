@@ -17,7 +17,7 @@ function petRegister_init()
     _staticCreateServantName:SetShow(true)
     _staticCreateServantNameBG:SetShow(true)
     _staticCreateServantNameTitle:SetShow(true)
-    _staticCreateServantName:SetText("\226\128\187 Allowed characters:\nA-Z, a-z, 0-9, _ (underscore)\n\n\226\128\187 Rules:\n1. Length: 3-16 characters\n2. You can't use a letter more than 2 times consecutively\n3. A maximum of 4 numbers are allowed at the end \nof your name\n4. Underscore (_) is allowed only once and can only occur \nbetween a minimum of 2 characters")
+    _staticCreateServantName:SetText("\161\216 Allowed characters:\nA-Z, a-z, 0-9, _ (underscore)\n\n\161\216 Rules:\n1. Length: 3-16 characters\n2. You can't use a letter more than 2 times consecutively\n3. A maximum of 4 numbers are allowed at the end \nof your name\n4. Underscore (_) is allowed only once and can only occur \nbetween a minimum of 2 characters")
     _staticCreateServantName:SetTextMode(UI_TM.eTextMode_AutoWrap)
   else
     _staticCreateServantName:SetShow(false)
@@ -103,6 +103,9 @@ end
 function petRegister_registMessageHandler()
   registerEvent("FromClient_InputPetName", "FromClient_InputPetName")
   registerEvent("FromClient_PetAddSealedList", "FromClient_PetAddSealedList")
+end
+function PaGlobalFunc_PetRegister_GetShow()
+  return Panel_Window_PetRegister:GetShow()
 end
 petRegister_init()
 petRegister_registEventHandler()

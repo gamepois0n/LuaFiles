@@ -456,8 +456,8 @@ function refreshCharacterInfoData(startIdx)
     charPositionPool[uiCount]:SetShow(true)
     charEnterWaiting[uiCount]:SetShow(true)
     if false == _ContentsGroup_isConsolePadControl then
-      isCharacterSlot[uiCount]:addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
-      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+      isCharacterSlot[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+      isCharacterSlotBG[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
     else
       isCharacterSlot[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
       isCharacterSlotBG[uiCount]:addInputEvent("Mouse_On", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
@@ -961,6 +961,7 @@ function GameExitShowToggle(isAttacked)
     questWrapper = ToClient_getQuestWrapper(questNo0)
     if nil ~= questWrapper then
       _completeQuest:SetText(questWrapper:getTitle())
+      UI.setLimitTextAndAddTooltip(_completeQuest)
     else
       _completeQuest:SetText("-")
     end
@@ -968,6 +969,7 @@ function GameExitShowToggle(isAttacked)
     questWrapper = ToClient_getQuestWrapper(questNo1)
     if nil ~= questWrapper then
       _progressingQuest:SetText(questWrapper:getTitle())
+      UI.setLimitTextAndAddTooltip(_progressingQuest)
     else
       _progressingQuest:SetText("-")
     end
@@ -1228,14 +1230,14 @@ function FromClient_RecentJournal_Update()
       if nil ~= journalWrapper then
         local stringData = "[" .. string.format("%.02d", journalWrapper:getJournalHour()) .. ":" .. string.format("%.02d", journalWrapper:getJournalMinute()) .. "] " .. journalWrapper:getName()
         if 0 == journal_Idx then
-          journalContents:SetTextMode(UI_TM.eTextMode_LimitText)
+          journalContents:SetTextMode(UI_TM.eTextMode_AutoWrap)
           journalContents:SetText(stringData)
         else
-          journalContents:SetTextMode(UI_TM.eTextMode_LimitText)
+          journalContents:SetTextMode(UI_TM.eTextMode_AutoWrap)
           journalContents:SetText(journalContents:GetText() .. "\n" .. stringData)
         end
       else
-        journalContents:SetTextMode(UI_TM.eTextMode_LimitText)
+        journalContents:SetTextMode(UI_TM.eTextMode_AutoWrap)
         journalContents:SetText(journalContents:GetText() .. "\n" .. stringData)
       end
       journalFrameContents:SetSize(journalFrameContents:GetSizeX(), journalContents:GetTextSizeY())

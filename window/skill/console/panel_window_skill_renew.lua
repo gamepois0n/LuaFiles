@@ -123,6 +123,34 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
     return
   end
   local havePrevActionHashKey = ToClient_LearnSkillCameraHavePrevActionHashKey(skillStatic)
+  local skillAwakenStr = ""
+  local activeSkillSS
+  local isAwakeningData = false
+  if true == skillStaticWrapper:isActiveSkillHas() and false == skillStaticWrapper:isFusionSkill() then
+    activeSkillSS = getActiveSkillStatus(skillStaticWrapper)
+    if nil ~= activeSkillSS then
+      local awakeInfo = ""
+      local awakeningDataCount = activeSkillSS:getSkillAwakenInfoCount() - 1
+      local realCount = 0
+      for idx = 0, awakeningDataCount do
+        local skillInfo = activeSkillSS:getSkillAwakenInfo(idx)
+        if "" ~= skillInfo then
+          awakeInfo = awakeInfo .. "\n" .. skillInfo
+          realCount = realCount + 1
+        end
+      end
+      skillAwakenStr = awakeInfo
+      isAwakeningData = realCount > 0
+    end
+  end
+  local skillAwakenTitleStr = PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_SKILL_TXT_AWAKEN")
+  local buffStr = skillStaticWrapper:getDescription()
+  if true == skillLevelInfo._usable and true == isAwakeningData then
+    buffStr = buffStr .. [[
+
+
+]] .. skillAwakenTitleStr .. skillAwakenStr
+  end
   local skillInfo = {
     _name = skillTypeStaticWrapper:getName(),
     _learndLevel = skillLearndLevel,
@@ -131,22 +159,14 @@ function Window_SkillInfo:SetSkillInfo(skillNo)
     _command = skillTypeStaticWrapper:getCommand(),
     _mainCommand = skillTypeStaticWrapper:getMainCommand(),
     _iconPath = skillTypeStaticWrapper:getIconPath(),
-    _moviePath = skillTypeStaticWrapper:getMoviePath(),
     _desc = skillTypeStaticWrapper:getDescription(),
-    _buffDesc = skillStaticWrapper:getDescription(),
+    _buffDesc = buffStr,
     _requireHp = skillStatic._requireHp,
     _requireMp = skillStatic._requireMp,
     _requireSp = skillStatic._requireSp,
-    _reuseCycle = skillStatic._reuseCycle,
     _needCharacterLevel = skillStatic._needCharacterLevelForLearning,
     _needSkillPoint = skillStatic._needSkillPointForLearning,
-    _key = skillStaticWrapper:getKey(),
     _no = skillNo,
-    _isActive = skillTypeStaticWrapper:isActiveSkill(),
-    _isPassive = skillTypeStaticWrapper:isPassiveSkill(),
-    _isCommand = skillTypeStaticWrapper:isSkillCommandCheck(),
-    _isLock = ToClient_isBlockSkillCommand(skillLevelInfo._skillKey),
-    _isFusion = skillStaticWrapper:isFusionSkill(),
     _learndLevelMainSkill = 0,
     _learndLevelSubSkill = 0,
     _havePrevActionHashKey = havePrevActionHashKey

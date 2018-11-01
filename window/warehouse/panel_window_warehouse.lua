@@ -174,9 +174,8 @@ function warehouse:init()
   _wareHouse_HelpMovie:SetShow(false)
   self.BtnManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_BTNTEXT_1"))
   self.BtnMarketRegist:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WAREHOUSE_BTNTEXT_2"))
-  local btnDeliverySizeX = self._buttonDelivery:GetSizeX() + 23
-  local btnDeliveryTextPosX = btnDeliverySizeX - btnDeliverySizeX / 2 - self._buttonDelivery:GetTextSizeX() / 2
-  self._buttonDelivery:SetTextSpan(btnDeliveryTextPosX, 5)
+  self.checkSort:SetText(self.checkSort:GetText())
+  self.checkSort:SetEnableArea(0, 0, self.checkSort:GetTextSizeX() + 30, 25)
 end
 local btnMarketRegSpanSizeY = warehouse.BtnMarketRegist:GetSpanSize().y
 function warehouse:update()
@@ -1067,7 +1066,7 @@ function Warehouse_OpenPanelFromDialog()
     Panel_Window_Warehouse:SetVerticalMiddle()
     Panel_Window_Warehouse:SetHorizonRight()
     local basePosY = screenSizeY / 2 - Panel_Window_Warehouse:GetSizeY() / 2
-    local posY = math.min(screenSizeY - 280, basePosY + Panel_Window_Warehouse:GetSizeY()) - Panel_Window_Warehouse:GetSizeY()
+    local posY = math.min(screenSizeY - Panel_Npc_Dialog:GetSizeY(), basePosY + Panel_Window_Warehouse:GetSizeY()) - Panel_Window_Warehouse:GetSizeY()
     posY = math.max(0, posY)
     local spanSizeY = posY - basePosY
     Panel_Window_Warehouse:SetSpanSize(invenSizeX, spanSizeY)

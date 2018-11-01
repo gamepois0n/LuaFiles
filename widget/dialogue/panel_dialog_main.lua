@@ -1664,14 +1664,30 @@ function ClickFunctionButtonByType(type)
         return
       end
       if waitWorkerCount == maxWorkerCount then
-        local messageboxData = {
-          title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
-          content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
-          functionApply = MessageBox_Empty_function,
-          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-        }
-        MessageBox.showMessageBox(messageboxData)
-        return
+        local buyCash = function()
+          PaGlobal_EasyBuy:Open(16, getCurrentWaypointKey())
+        end
+        if isGameTypeKorea() then
+          local messageboxData = {
+            title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+            content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ") .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_WORKERHOUSE_EASYBUY"),
+            functionYes = buyCash,
+            functionNo = MessageBox_Empty_function,
+            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+          }
+          MessageBox.showMessageBox(messageboxData)
+        else
+          local messageboxData = {
+            title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+            content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
+            functionApply = MessageBox_Empty_function,
+            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+          }
+          MessageBox.showMessageBox(messageboxData)
+        end
       end
       if MyWp >= 5 then
         local messageboxData2 = {
@@ -2001,14 +2017,30 @@ function HandleClickedFuncButton(index)
         return
       end
       if waitWorkerCount == maxWorkerCount then
-        local messageboxData = {
-          title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
-          content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
-          functionApply = MessageBox_Empty_function,
-          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-        }
-        MessageBox.showMessageBox(messageboxData)
-        return
+        local buyCash = function()
+          PaGlobal_EasyBuy:Open(16, getCurrentWaypointKey())
+        end
+        if isGameTypeKorea() then
+          local messageboxData = {
+            title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+            content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ") .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_WORKERHOUSE_EASYBUY"),
+            functionYes = buyCash,
+            functionNo = MessageBox_Empty_function,
+            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+          }
+          MessageBox.showMessageBox(messageboxData)
+        else
+          local messageboxData = {
+            title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"),
+            content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"),
+            functionApply = MessageBox_Empty_function,
+            priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+          }
+          MessageBox.showMessageBox(messageboxData)
+        end
       end
       if MyWp >= 5 then
         local messageboxData2 = {

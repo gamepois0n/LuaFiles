@@ -947,7 +947,11 @@ function Worker_List_Select(index)
     defalut_Control._worker_List._No_Worker:SetShow(true)
   end
   Work_List._workingCount = 1
-  defalut_Control._work_Estimated._Time_Count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_BUILDING_ONGOING", "getWorkingCount", Work_List._workingCount))
+  if Work_List._workingCount > 1 then
+    defalut_Control._work_Estimated._Time_Count:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_BUILDING_ONGOING", "getWorkingCount", Work_List._workingCount))
+  else
+    defalut_Control._work_Estimated._Time_Count:SetText("")
+  end
   Worker_List:_updateSlot()
   Work_Estimated_Update()
 end

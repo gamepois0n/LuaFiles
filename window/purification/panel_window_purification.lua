@@ -44,6 +44,8 @@ function PuriManager:Open()
   Inventory_SetFunctor(PaGlobal_Purification_Filter, PaGlobal_Purification_RClick, PaGlobal_Purification_Close, nil)
   self._ui._text_InvenMoney:SetText(makeDotMoney(getSelfPlayer():get():getInventory():getMoney_s64()))
   self._ui._text_WareHouseMoney:SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  self._ui._radio_Inven:SetEnableArea(0, 0, self._ui._radio_Inven:GetTextSizeX() + 30, 25)
+  self._ui._radio_Warehouse:SetEnableArea(0, 0, self._ui._radio_Warehouse:GetTextSizeX() + 30, 25)
   if false == Panel_Purification:GetShow() then
     PuriManager:SetPosition()
   end

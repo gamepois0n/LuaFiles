@@ -615,6 +615,16 @@ function Panel_Dialog_NPCShop_Info:controlInit()
           self._ui.staticText_Inventory:SetShow(true)
           self._ui.staticText_Storage:SetShow(true)
         end
+        _PA_LOG("\235\176\149\235\178\148\236\164\128", "npcShop_isGuildShopContents")
+        self._ui.button_Inventory:SetEnable(false)
+        self._ui.button_Inventory:SetIgnore(true)
+        self._ui.button_Storage:SetEnable(false)
+        self._ui.button_Storage:SetIgnore(true)
+      else
+        self._ui.button_Inventory:SetEnable(true)
+        self._ui.button_Inventory:SetIgnore(false)
+        self._ui.button_Storage:SetEnable(true)
+        self._ui.button_Storage:SetIgnore(false)
       end
     elseif self._value.isCamping then
       self._value.enableSell = false

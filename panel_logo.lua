@@ -5,6 +5,10 @@ local static_Daum = UI.getChildControl(Panel_Logo, "Static_Daum")
 local static_Grade = UI.getChildControl(Panel_Logo, "Static_Grade")
 local staticText_Warning = UI.getChildControl(Panel_Logo, "MultilineText_Warning")
 local static_XboxScreen = UI.getChildControl(Panel_Logo, "Static_XboxScreen")
+local txt_betaWarning = UI.getChildControl(Panel_Logo, "StaticText_BetaWarning")
+txt_betaWarning:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+txt_betaWarning:SetText(txt_betaWarning:GetText())
+txt_betaWarning:SetShow(ToClient_isConsole() and _ContentsGroup_ForXBoxClosedBeta)
 static_XboxScreen:SetShow(false)
 local static_Movie
 local setDivisionTime = 6
@@ -196,6 +200,7 @@ function Panel_Logo_Update()
     static_XboxScreen:SetPosX(-8)
     static_XboxScreen:SetPosY(-8)
     static_XboxScreen:SetSize(sizeX + 34, sizeY + 19)
+    txt_betaWarning:ComputePos()
   end
   static_Movie:SetUrl(1920, 1080, "coui://UI_Movie/CI_Play_NoSound.html", false, true)
 end

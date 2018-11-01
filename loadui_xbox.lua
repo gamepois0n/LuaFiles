@@ -2322,6 +2322,7 @@ function loadGameUI_XB()
   end
   runLua("UI_Data/Script/Widget/MainStatus/Common_MainStatus_Console.lua")
   runLua("UI_Data/Script/Panel_PadSnapTargetEffect.lua")
+  runLua("UI_Data/Script/Window/StoryInstanceDungeon/Panel_Window_StoryInstanceDungeon.lua")
   if _ContentsGroup_NewCloseManager then
     runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_ExceptionList.lua")
     runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_Renew.lua")

@@ -113,6 +113,8 @@ btn_incentive_Send:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentive_Send
 btn_incentive_Cancle:addInputEvent("Mouse_LUp", "HandleClicked_GuildIncentive_Close()")
 btn_incentive_Help:addInputEvent("Mouse_LUp", "")
 incentive_InputMoney:RegistReturnKeyEvent("FGlobal_SaveGuildMoney_Send()")
+local btn_GuildMasterMandateBG = UI.getChildControl(Panel_Window_Guild, "Static_InfoArea")
+local btn_GuildMasterMandate = UI.getChildControl(btn_GuildMasterMandateBG, "Button_GuildMandate")
 local frameSizeY = 0
 local contentSizeY = 0
 local _incentivePanelType = 0
@@ -340,21 +342,6 @@ function GuildListInfoPage:initialize()
   GuildListInfoPage._btnPaypal:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnSiegeReward:SetTextMode(UI_TM.eTextMode_LimitText)
   GuildListInfoPage._btnWelfare:SetTextMode(UI_TM.eTextMode_LimitText)
-  local btnIncentiveSizeX = GuildListInfoPage._btnGiveIncentive:GetSizeX() + 20
-  local btnIncentiveTextPosX = btnIncentiveSizeX - btnIncentiveSizeX / 2 - GuildListInfoPage._btnGiveIncentive:GetTextSizeX() / 2
-  GuildListInfoPage._btnGiveIncentive:SetTextSpan(btnIncentiveTextPosX, 5)
-  local btnDepositSizeX = GuildListInfoPage._btnDeposit:GetSizeX() + 20
-  local btnDepositTextPosX = btnDepositSizeX - btnDepositSizeX / 2 - GuildListInfoPage._btnDeposit:GetTextSizeX() / 2
-  GuildListInfoPage._btnDeposit:SetTextSpan(btnDepositTextPosX, 5)
-  local btnPaypalSizeX = GuildListInfoPage._btnPaypal:GetSizeX() + 20
-  local btnPaypalTextPosX = btnPaypalSizeX - btnPaypalSizeX / 2 - GuildListInfoPage._btnPaypal:GetTextSizeX() / 2
-  GuildListInfoPage._btnPaypal:SetTextSpan(btnPaypalTextPosX, 5)
-  local btnWelfareSizeX = GuildListInfoPage._btnWelfare:GetSizeX() + 20
-  local btnWelfareTextPosX = btnWelfareSizeX - btnWelfareSizeX / 2 - GuildListInfoPage._btnWelfare:GetTextSizeX() / 2
-  GuildListInfoPage._btnWelfare:SetTextSpan(btnWelfareTextPosX, 5)
-  local btnSiegeRewardSizeX = GuildListInfoPage._btnSiegeReward:GetSizeX() + 20
-  local btnSiegeRewardTextPosX = btnSiegeRewardSizeX - btnSiegeRewardSizeX / 2 - GuildListInfoPage._btnSiegeReward:GetTextSizeX() / 2
-  GuildListInfoPage._btnSiegeReward:SetTextSpan(btnSiegeRewardTextPosX, 5)
   local isIncentiveLimit = GuildListInfoPage._btnGiveIncentive:IsLimitText()
   local isDepositLimit = GuildListInfoPage._btnDeposit:IsLimitText()
   local isPayPalLimit = GuildListInfoPage._btnPaypal:IsLimitText()
@@ -1486,6 +1473,7 @@ function GuildListInfoPage:UpdateData()
       local isTakableSiegeReward = myGuildMemberInfo:isTakableSiegeReward()
       GuildListInfoPage._btnSiegeReward:SetMonoTone(not isTakableSiegeReward)
       GuildListInfoPage._btnSiegeReward:SetEnable(isTakableSiegeReward)
+      btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
     end
     if false == myGuildMemberInfo:isSelf() then
       contentSizeY = contentSizeY + self._list[index]._charName:GetSizeY() + 2

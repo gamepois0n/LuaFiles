@@ -70,6 +70,8 @@ function mailDetail:init()
   self._checkboxToWarehouse:SetCheck(false)
   self._checkboxToWarehouse:SetShow(false)
   self._bottomBG:SetShow(true)
+  self._checkboxToWarehouse:SetText(self._checkboxToWarehouse:GetText())
+  self._checkboxToWarehouse:SetEnableArea(0, 0, self._checkboxToWarehouse:GetTextSizeX() + 30, 25)
 end
 function Mail_ShowItemToolTip()
   local self = mailDetail
@@ -169,7 +171,7 @@ function Mail_Detail_Open(mailNo)
       self._buttonReceive:SetShow(false)
       self._checkboxToWarehouse:SetCheck(false)
       self._checkboxToWarehouse:SetShow(false)
-      Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY - 40)
+      Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY)
     end
   else
     local mailItem = mail_getMailItemStatic()
@@ -201,7 +203,6 @@ function Mail_Detail_Open(mailNo)
       self._bottomBG:SetShow(true)
       Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY)
     else
-      self._buttonDelete:SetSpanSize(10, 20)
       self._bottomBG:SetShow(false)
       self._itemSlot:clearItem()
       self._iconBase:SetShow(false)
@@ -211,7 +212,7 @@ function Mail_Detail_Open(mailNo)
       self._itemCount:SetShow(false)
       self._checkboxToWarehouse:SetCheck(false)
       self._checkboxToWarehouse:SetShow(false)
-      Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY - 40)
+      Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY)
     end
   end
   mailDetail._buttonDelete:ComputePos()

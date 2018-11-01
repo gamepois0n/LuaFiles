@@ -56,8 +56,18 @@ local Window_WorldMap_RingMenuInfo = {
   _prevRightStickValue = {_x = 0, _y = 0},
   _currentHousekey = nil,
   _currentQuestKey = nil,
-  _currentFocusedNodeCount = 0
+  _currentFocusedNodeCount = 0,
+  _focusedBookMarkIndex = -1
 }
+function PaGlobalFunc_WorldMap_GetFocusedBookMarkIndex()
+  local self = Window_WorldMap_RingMenuInfo
+  return self._focusedBookMarkIndex
+end
+function PaGlobalFunc_WorldMap_ClearFocusedBookMarkIndex()
+  local self = Window_WorldMap_RingMenuInfo
+  self._focusedBookMarkIndex = -1
+  PaGlobal_ConsoleWorldMapKeyGuide_CheckShow()
+end
 function Window_WorldMap_RingMenuInfo:ClickableCheck()
   if true == PaGlobalFunc_WorldMap_NodeInfo_GetShow() then
     return false
@@ -72,6 +82,7 @@ function Window_WorldMap_RingMenuInfo:RingMenuClear()
   self._isRingMenuOpen = false
   self._currentRingMenuIndex = __eRingMenuPosition_Default
   PaGlobalFunc_WorldMap_RingMenu_SetShowRingMenu(false)
+  PaGlobalFunc_WorldMap_ClearFocusedBookMarkIndex()
   for index = 0, self._config._count - 1 do
     if nil ~= self._ui._ringMenu[index] then
       self._ui._ringMenu[index]._button:SetCheck(false)
@@ -243,6 +254,19 @@ function PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapQuestInfo()
     self:FocusOut()
   end
 end
+function FromClient_MouseOnWorldmapBookMark(index)
+  local self = Window_WorldMap_RingMenuInfo
+  self._focusedBookMarkIndex = index
+  PaGlobal_ConsoleWorldMapKeyGuide_CheckShow()
+end
+function FromClient_MouseOutWorldmapBookMark(index)
+  local self = Window_WorldMap_RingMenuInfo
+  if self._focusedBookMarkIndex ~= index then
+    return
+  end
+  self._focusedBookMarkIndex = -1
+  PaGlobal_ConsoleWorldMapKeyGuide_CheckShow()
+end
 function PaGlobalFunc_FromClient_WorldMap_RingMenu_LClickedWorldMapHouse(nodeBtn)
   if nil == nodeBtn then
     return
@@ -343,6 +367,8 @@ function Window_WorldMap_RingMenuInfo:InitRegister()
   registerEvent("onScreenResize", "PaGlobalFunc_FromClient_WorldMap_RingMenu_ScreenResize")
   registerEvent("FromClient_OnWorldMapQuestInfo", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OnWorldMapQuestInfo")
   registerEvent("FromClient_OutWorldMapQuestInfo", "PaGlobalFunc_FromClient_WorldMap_RingMenu_OutWorldMapQuestInfo")
+  registerEvent("FromClient_MouseOnWorldmapBookMark", "FromClient_MouseOnWorldmapBookMark")
+  registerEvent("FromClient_MouseOutWorldmapBookMark", "FromClient_MouseOutWorldmapBookMark")
 end
 function Window_WorldMap_RingMenuInfo:Initialize()
   self:InitControl()

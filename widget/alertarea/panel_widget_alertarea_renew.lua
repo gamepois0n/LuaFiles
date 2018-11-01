@@ -1,15 +1,16 @@
 function ResetPos_WidgetButton()
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-AlwaysOpenType = {
+local AlwaysOpenType = {
   eALERT_Menu = 0,
   eALERT_Setting = 1,
   eALERT_PearlShop = 2,
   eALERT_PcRoomReward = 3,
   eALERT_MarketPlace = 4,
-  count = 5
+  eALERT_Spread = 5,
+  count = 6
 }
-AlertType = {
+local AlertType = {
   eALERT_Hunting = 0,
   eALERT_Coupon = 1,
   eALERT_LearnSkill = 2,
@@ -351,7 +352,7 @@ local cardListImportant = {}
 local haveBatterEquip = false
 function Panel_Widget_Alert_info:registEventHandler()
   self._ui.Button_Spread:addInputEvent("Mouse_LUp", "PaGlobalFunc_Widget_Alert_ClickSpread()")
-  self._ui.Button_Spread:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. 0 .. ")")
+  self._ui.Button_Spread:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_Spread .. ")")
   self._ui.Button_Spread:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   for index = 0, AlertType.eALERT_Count - 1 do
     if nil ~= self._alertButton[index] then
@@ -368,7 +369,7 @@ function Panel_Widget_Alert_info:registEventHandler()
     end
   end
   self._ui.Button_Menu:addInputEvent("Mouse_LUp", "Panel_Menu_ShowToggle()")
-  self._ui.Button_Menu:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.count .. ")")
+  self._ui.Button_Menu:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_Menu .. ")")
   self._ui.Button_Menu:addInputEvent("Mouse_Out", "PaGlobalFunc_Widget_Alert_ButtonTooltipHide()")
   self._ui.Button_Setting:addInputEvent("Mouse_LUp", "showGameOption()")
   self._ui.Button_Setting:addInputEvent("Mouse_On", "PaGlobalFunc_Widget_Alert_ButtonTooltipShow(" .. AlwaysOpenType.eALERT_Setting .. ")")
@@ -681,7 +682,7 @@ end
 function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
   local self = Panel_Widget_Alert_info
   local name, desc, uiControl
-  if 0 == buttonType then
+  if AlwaysOpenType.eALERT_Spread == buttonType then
     uiControl = self._ui.Button_Spread
     local count = self._ui.StaticText_SpreadCount:GetText()
     if not self._ui.Button_Spread:IsCheck() then
@@ -709,14 +710,14 @@ function PaGlobalFunc_Widget_Alert_ButtonTooltipShow(buttonType)
     uiControl = self._ui.Button_MarketPlace
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_8")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_9")
-  elseif AlwaysOpenType.count == buttonType then
+  elseif AlwaysOpenType.eALERT_Menu == buttonType then
     uiControl = self._ui.Button_Setting
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_TITLE")
     desc = nil
   elseif AlwaysOpenType.eALERT_Setting == buttonType then
     uiControl = self._ui.Button_Setting
     name = PAGetString(Defines.StringSheet_RESOURCE, "OPTION_TEXT_TITLE")
-    desc = nil
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_TOOLTIP_10")
   else
     return
   end

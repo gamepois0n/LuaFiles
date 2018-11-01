@@ -363,7 +363,7 @@ function inven:init()
   self.staticWeight = UI.getChildControl(self.weightGaugeBG, "StaticText_Weight")
   self.btn_BuyWeight = UI.getChildControl(self.weightGaugeBG, "Button_BuyWeight")
   self.btn_BuyWeight:SetShow(true)
-  self.staticCapacity = UI.getChildControl(self.topItemSortBG, "Static_Text_Capacity")
+  self.staticCapacity = UI.getChildControl(Panel_Window_Inventory, "Static_Text_Capacity")
   self.staticMoney = UI.getChildControl(self.moneyTypeBG, "Static_Text_Money")
   self.buttonMoney = UI.getChildControl(self.moneyTypeBG, "Button_Money")
   self.buttonPearl = UI.getChildControl(self.moneyTypeBG, "Static_PearlIcon")
@@ -592,14 +592,6 @@ function inven:createSlot()
     local slot = {}
     SlotItem.new(slot, "ItemIcon_" .. ii, ii, Panel_Window_Inventory, self.slotConfig)
     slot:createChild()
-    slot.icon:SetSize(44, 44)
-    slot.border:SetSize(46, 46)
-    slot.border:SetPosX(0.5)
-    slot.border:SetPosY(0.5)
-    slot.expiration2h:SetSize(46, 46)
-    slot.expiration2h:SetPosX(5)
-    slot.expiration2h:SetPosY(5)
-    slot.expirationBG:SetSize(46, 46)
     slot.icon:addInputEvent("Mouse_RUp", "Inventory_SlotRClick(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_LDown", "Inventory_SlotLClick(" .. ii .. ")")
     slot.icon:addInputEvent("Mouse_LUp", "Inventory_DropHandler(" .. ii .. ")")
@@ -621,6 +613,17 @@ function inven:createSlot()
     slot.background:SetPosX(slot.icon:GetPosX())
     slot.background:SetPosY(slot.icon:GetPosY())
     slot.background:SetShow(false)
+    slot.icon:SetSize(44, 44)
+    slot.border:SetSize(46, 46)
+    slot.border:SetPosX(0.5)
+    slot.border:SetPosY(0.5)
+    slot.expiration2h:SetSize(46, 46)
+    slot.expiration2h:SetPosX(5)
+    slot.expiration2h:SetPosY(5)
+    slot.expirationBG:SetSize(46, 46)
+    slot.cooltime:SetSize(46, 46)
+    slot.cooltime:SetPosX(0)
+    slot.cooltime:SetPosY(0)
     self.slots[ii] = slot
     local effectSlot = {}
     local puzzle = UI.createControl(UI_PUCT.PA_UI_CONTROL_BUTTON, slot.icon, "Puzzle_Control_" .. ii)
@@ -1749,7 +1752,16 @@ function Inventory_updateSlotData(isLoad)
   UIScroll.SetButtonSize(self._scroll, self.config.slotCount, invenMaxSize - useStartSlot)
   self._scroll:SetShow(true)
   local freeCount = inventory:getFreeCount()
-  self.staticCapacity:SetText(tostring(invenUseSize - freeCount - useStartSlot) .. "/" .. tostring(invenUseSize - useStartSlot))
+  local fontColor
+  local leftCountPercent = (invenUseSize - freeCount - useStartSlot) / (invenUseSize - useStartSlot) * 100
+  if leftCountPercent >= 100 then
+    fontColor = "<PAColor0xFFF03838>"
+  elseif leftCountPercent > 90 then
+    fontColor = "<PAColor0xFFFF8957>"
+  else
+    fontColor = "<PAColor0xFFFFF3AF>"
+  end
+  self.staticCapacity:SetText(fontColor .. tostring(invenUseSize - freeCount - useStartSlot) .. "/" .. tostring(invenUseSize - useStartSlot) .. "<PAOldColor>")
   local slotNoList = Array.new()
   slotNoList:fill(useStartSlot, invenMaxSize - 1)
   if self.checkButton_Sort:IsCheck() then
@@ -2433,7 +2445,7 @@ function Inventory_DropHandler(index)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM"))
     return false
   end
-  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() or FGlobal_Enchant_SetTargetItem() or Panel_Window_DetectUser:IsShow() then
+  if Panel_Window_Exchange:IsShow() or Panel_Manufacture:IsShow() or Panel_Alchemy:IsShow() or Panel_Win_System:IsShow() or FGlobal_Enchant_SetTargetItem() or Panel_Window_DetectUser:IsShow() or PaGlobalFunc_PetRegister_GetShow() then
     DragManager:clearInfo()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_CANT_REPOSITIONITEM_WHILE_UI"))
     return false
@@ -2691,7 +2703,7 @@ function inventory_FlushRestoreFunc()
   self.btn_AlchemyFigureHead:SetMonoTone(false)
   self.btn_DyePalette:SetEnable(true)
   self.btn_DyePalette:SetMonoTone(false)
-  Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 712)
+  Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 702)
   self.buttonTypeBG:SetShow(true)
   self.buttonTypeBG:ComputePos()
   self.trashArea:ComputePos()
@@ -2710,7 +2722,7 @@ function renderModeChange_inventory_FlushRestoreFunc(prevRenderModeList, nextRen
       self.btn_AlchemyFigureHead:SetMonoTone(true)
       self.btn_DyePalette:SetEnable(false)
       self.btn_DyePalette:SetMonoTone(true)
-      Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 662)
+      Panel_Window_Inventory:SetSize(Panel_Window_Inventory:GetSizeX(), 652)
       self.buttonTypeBG:SetShow(false)
       self.trashArea:ComputePos()
       self.moneyTypeBG:ComputePos()

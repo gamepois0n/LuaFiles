@@ -10,7 +10,8 @@ local PetFusion = {
     _skillSlotList = {},
     _skillRandomSlotList = {},
     _completeSkillTableList = {},
-    _staticText_SelectSkillIDesc = {}
+    _staticText_SelectSkillIDesc = {},
+    _selectSkillList = {}
   },
   _config = {
     _subPetMaxTableCount = 4,
@@ -117,7 +118,13 @@ local PetFusion = {
   _lookDataTableList = {},
   _skillDataTableList = {},
   _completeDataTable = {},
-  _currentRate = 0
+  _currentRate = 0,
+  _isFusion = false,
+  _completeDelayTime = 0,
+  _isFusionStart = false,
+  _fusionStartDelayTime = 0,
+  _isComplete = false,
+  _petName = nil
 }
 function PaGlobalFunc_PetFusion_GetRate()
   local self = PetFusion
@@ -171,25 +178,26 @@ function FGlobal_EscapeEditBox_PetCompose(bool)
   local self = PetFusion
   ClearFocusEdit(self._ui._edit_Naming)
 end
-function PaGlobalFunc_PetFusion_LookSelect(petNo)
+function PaGlobalFunc_PetFusion_LookSelect(petNoStr)
   local self = PetFusion
+  local petNo = tonumber64(petNoStr)
   local function confirm_look()
     self._currentLookIndex = self:findPetIndex(petNo) + 1
     self:updateLookSlot()
     PaGlobalFunc_PetFusion_CloseLook()
   end
-  if nil == petNo then
+  if nil == petNoStr then
     self._currentLookIndex = 0
     self:updateLookSlot()
     PaGlobalFunc_PetFusion_CloseLook()
   else
     local mainPetStaticStatus = self:getStaticStatusByPetNo(self._petNoList[0])
-    local subPetStaticStatus = self:getStaticStatusByPetNo(tonumber64(petNo))
+    local subPetStaticStatus = self:getStaticStatusByPetNo(petNo)
     if nil == mainPetStaticStatus or nil == subPetStaticStatus then
       return
     end
     if mainPetStaticStatus:getPetRace() ~= subPetStaticStatus:getPetRace() then
-      local messageBoxMemo = "\235\140\128\237\145\156 \235\176\152\235\160\164 \235\143\153\235\172\188\234\179\188 \235\139\164\235\165\184 \236\162\133\236\157\132 \236\153\184\237\152\149\236\156\188\235\161\156 \236\132\160\237\131\157\237\149\152\235\169\180 \237\138\185\234\184\176\234\176\128 \235\179\128\234\178\189 \235\144\160 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164. \236\167\132\237\150\137 \237\149\152\236\139\156\234\178\160\236\138\181\235\139\136\234\185\140?"
+      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PETFUSION_CAUTION_MESSAGE_DESC")
       local messageBoxData = {
         title = PAGetString(Defines.StringSheet_GAME, "PANEL_SERVANTMIX_TITLE"),
         content = messageBoxMemo,
@@ -337,7 +345,7 @@ function PaGlobalFunc_PetFusion_CreateLookList(content, key)
     leftIcon:SetShow(true)
     leftIcon:ChangeTextureInfoName(leftData._iconPath)
     leftIconBg:SetShow(true)
-    leftIconBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_LookSelect( " .. tostring(leftData._petNo) .. " )")
+    leftIconBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_LookSelect( \"" .. tostring(leftData._petNo) .. "\")")
   end
   rightIconBg:SetShow(false)
   rightIcon:SetShow(false)
@@ -345,7 +353,7 @@ function PaGlobalFunc_PetFusion_CreateLookList(content, key)
     rightIcon:SetShow(true)
     rightIcon:ChangeTextureInfoName(rightData._iconPath)
     rightIconBg:SetShow(true)
-    rightIconBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_LookSelect( " .. tostring(rightData._petNo) .. " )")
+    rightIconBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_LookSelect( \"" .. tostring(rightData._petNo) .. "\")")
   end
 end
 function PaGlobalFunc_PetFusion_CreateSkillList(content, key)
@@ -356,6 +364,7 @@ function PaGlobalFunc_PetFusion_CreateSkillList(content, key)
   local skillIconBg = {}
   local randomIcon = {}
   local skillBg = UI.getChildControl(content, "Static_SelectSkillIconsBg")
+  self._ui._selectSkillList[key] = UI.getChildControl(content, "Static_SkillSlot_Select")
   for index = 0, 2 do
     skillIcon[index] = UI.getChildControl(content, "Static_SelectSkillIcon_" .. index + 1)
     skillIconBg[index] = UI.getChildControl(content, "Static_SkillIconBg_" .. index + 1)
@@ -363,9 +372,9 @@ function PaGlobalFunc_PetFusion_CreateSkillList(content, key)
     skillIcon[index]:ChangeTextureInfoName("")
     skillIconBg[index]:SetShow(true)
     randomIcon[index]:SetShow(false)
+    skillIcon[index]:addInputEvent("Mouse_LUp", "")
     skillIcon[index]:addInputEvent("Mouse_On", "")
     skillIcon[index]:addInputEvent("Mouse_Out", "")
-    skillIcon[index]:addInputEvent("Mouse_LUp", "")
   end
   local skillCount = 0
   for index = 0, 2 do
@@ -378,34 +387,72 @@ function PaGlobalFunc_PetFusion_CreateSkillList(content, key)
         skillIcon[index]:ChangeTextureInfoName(skillData._iconPath[index])
         skillIcon[index]:setRenderTexture(skillIcon[index]:getBaseTexture())
         skillIcon[index]:SetShow(true)
-        skillIconBg[index]:SetShow(false)
-        skillIcon[index]:addInputEvent("Mouse_On", "PetList_ShowSkillToolTip( " .. skillData._skillIndex[index] .. ", \"petFusion_Slot_" .. key .. "\" )")
-        skillIcon[index]:addInputEvent("Mouse_Out", "PetList_HideSkillToolTip()")
+        skillIconBg[index]:SetIgnore(false)
+        skillIconBg[index]:addInputEvent("Mouse_On", "PetList_ShowSkillToolTip( " .. skillData._skillIndex[index] .. ", \"petFusion_Slot_" .. key .. "\" )")
+        skillIconBg[index]:addInputEvent("Mouse_Out", "PetList_HideSkillToolTip()")
         local str = "petFusion_Slot_" .. key
         local skillStaticStatus = ToClient_getPetEquipSkillStaticStatus(skillData._skillIndex[index])
         Panel_SkillTooltip_SetPosition(skillStaticStatus:getSkillNo(), skillIcon[index], str)
         skillCount = skillCount + 1
+      else
+        skillIconBg[index]:SetIgnore(true)
       end
-      skillIcon[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_SkillSelect( " .. key .. " )")
+      skillIconBg[index]:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_SkillSelect( " .. key .. " )")
     end
   end
   skillBg:addInputEvent("Mouse_LUp", "PaGlobalFunc_PetFusion_SkillSelect( " .. key .. " )")
+  skillBg:addInputEvent("Mouse_On", "PaGlobalFunc_PetFusion_SkillSelectOn( " .. key .. " )")
+  skillBg:addInputEvent("Mouse_Out", "PaGlobalFunc_PetFusion_SkillSelectOff( " .. key .. " )")
   if 0 == skillCount and 0 ~= key then
     self._ui._list2_Skill:getElementManager():removeKey(toInt64(0, key))
   end
 end
-function PaGlobalFunc_PetFusion_CompleteOpen(isComplete)
+function PaGlobalFunc_PetFusion_SkillSelectOn(key)
   local self = PetFusion
-  self._ui._static_fusionBg:SetShow(false)
-  self._ui._static_completeBg:SetShow(true)
+  self._ui._selectSkillList[key]:SetShow(true)
+end
+function PaGlobalFunc_PetFusion_SkillSelectOff(key)
+  local self = PetFusion
+  self._ui._selectSkillList[key]:SetShow(false)
+end
+function PaGlobalFunc_PetFusion_CompleteOpen()
+  local self = PetFusion
+  local tier = self._completeDataTable._tier
   self._ui._static_CompleteEffectBg:EraseAllEffect()
-  if true == isComplete then
-    self._ui._static_CompleteEffectBg:AddEffect("fUI_PetFusion_GreatSuccess", false, 0, -220)
-  else
-    self._ui._static_CompleteEffectBg:AddEffect("fUI_PetFusion_Success", false, 0, -220)
+  self._ui._static_CompleteIcon:ChangeTextureInfoName(self._completeDataTable._iconPath)
+  self._ui._static_Effect:EraseAllEffect()
+  self._ui._static_Effect_Bottom:EraseAllEffect()
+  self._ui._static_Effect_Bottom:AddEffect(self._tierBottomEfectConfig[tier - 1], true, 0, 0)
+  self._ui._staticText_CompleteTier:SetShow(true)
+  self._ui._staticText_CompleteTier:ChangeTextureInfoName(self._completeTierTextureConfig._texture)
+  local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticText_CompleteTier, self._completeTierTextureConfig[tier - 1][1], self._completeTierTextureConfig[tier - 1][2], self._completeTierTextureConfig[tier - 1][3], self._completeTierTextureConfig[tier - 1][4])
+  self._ui._staticText_CompleteTier:getBaseTexture():setUV(x1, y1, x2, y2)
+  self._ui._staticText_CompleteTier:ChangeTextureInfoName(self._completeTierTextureConfig._texture)
+  local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticText_CompleteTier, self._completeTierTextureConfig[tier - 1][1], self._completeTierTextureConfig[tier - 1][2], self._completeTierTextureConfig[tier - 1][3], self._completeTierTextureConfig[tier - 1][4])
+  self._ui._staticText_CompleteTier:getBaseTexture():setUV(x1, y1, x2, y2)
+  self._ui._staticText_CompleteTier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", tier))
+  self._ui._staticText_PetNameLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(self._completeDataTable._level) .. " " .. self._completeDataTable._name)
+  self._ui._staticText_SpecialSkill:SetText(self._completeDataTable._specialSkill)
+  self._ui._static_Grade:SetColor(self._gradeColorConfig[tier - 1])
+  for index = 0, self._config._skillSlotMaxCount - 1 do
+    self._ui._completeSkillTableList[index]._icon:ChangeTextureInfoName(self._completeDataTable._skillIconPathList[index])
+    self._ui._completeSkillTableList[index]._desc:SetText(self._completeDataTable._skillDescList[index])
   end
-  local aniInfo = UIAni.AlphaAnimation(0, self._ui._static_CompleteEffectBg, 2.5, 3)
-  aniInfo:SetHideAtEnd(true)
+  self._ui._staticText_CompleteTierChange:SetShow(false)
+  if true == self._isComplete then
+    local _message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_NEXTTIER_CHECK_TEXT", "BeforePetTier", self._mainPetTier + 1, "NextPetTier", tier)
+    self._ui._staticText_CompleteTierChange:SetShow(true)
+    self._ui._staticText_CompleteTierChange:EraseAllEffect()
+    self._ui._staticText_CompleteTierChange:AddEffect("fUI_PetGlow_Success_02A_Green", true, 0, 0)
+    self._ui._staticText_CompleteTierChange:SetText(_message)
+    self._ui._static_Effect:AddEffect(self._tierEfectConfig[tier - 1], true, 0, 0)
+    audioPostEvent_SystemUi(3, 22)
+    self._isComplete = false
+  else
+    audioPostEvent_SystemUi(3, 23)
+  end
+  self:loadCompleteData(petNo)
+  self._ui._button_Close:SetShow(true)
 end
 function PetFusion:loadCompleteData(petNo)
   local newPetData
@@ -451,44 +498,26 @@ function PetFusion:loadCompleteData(petNo)
     end
   end
 end
+function PetFusion:fusionStartEffect()
+  self._ui._static_fusionBg:SetShow(false)
+  self._ui._static_completeBg:SetShow(true)
+  self._ui._static_CompleteEffectBg:SetAlpha(1)
+  self._ui._static_CompleteEffectBg:SetShow(true)
+  self._ui._static_CompleteEffectBg:AddEffect("fUI_PetFusion_GreatSuccess", false, 0, -120)
+  audioPostEvent_SystemUi(3, 21)
+  self._ui._static_CompleteEffectMessage:SetShow(true)
+end
 function PetFusion:setComplete()
   local targetTier = self:setTargetTier(self._mainPetTier + 1)
   local tier = self._completeDataTable._tier
-  local isComplete = false
-  self._ui._static_CompleteIcon:ChangeTextureInfoName(self._completeDataTable._iconPath)
-  self._ui._static_Effect:EraseAllEffect()
-  self._ui._static_Effect_Bottom:EraseAllEffect()
-  self._ui._static_Effect_Bottom:AddEffect(self._tierBottomEfectConfig[tier - 1], true, 0, 0)
-  self._ui._staticText_CompleteTier:ChangeTextureInfoName(self._completeTierTextureConfig._texture)
-  local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticText_CompleteTier, self._completeTierTextureConfig[tier - 1][1], self._completeTierTextureConfig[tier - 1][2], self._completeTierTextureConfig[tier - 1][3], self._completeTierTextureConfig[tier - 1][4])
-  self._ui._staticText_CompleteTier:getBaseTexture():setUV(x1, y1, x2, y2)
-  self._ui._staticText_CompleteTier:ChangeTextureInfoName(self._completeTierTextureConfig._texture)
-  local x1, y1, x2, y2 = setTextureUV_Func(self._ui._staticText_CompleteTier, self._completeTierTextureConfig[tier - 1][1], self._completeTierTextureConfig[tier - 1][2], self._completeTierTextureConfig[tier - 1][3], self._completeTierTextureConfig[tier - 1][4])
-  self._ui._staticText_CompleteTier:getBaseTexture():setUV(x1, y1, x2, y2)
-  self._ui._staticText_CompleteTier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", tier))
-  self._ui._staticText_PetNameLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(self._completeDataTable._level) .. " " .. self._completeDataTable._name)
-  self._ui._staticText_SpecialSkill:SetText(self._completeDataTable._specialSkill)
-  self._ui._static_Grade:SetColor(self._gradeColorConfig[tier - 1])
-  for index = 0, self._config._skillSlotMaxCount - 1 do
-    self._ui._completeSkillTableList[index]._icon:ChangeTextureInfoName(self._completeDataTable._skillIconPathList[index])
-    self._ui._completeSkillTableList[index]._desc:SetText(self._completeDataTable._skillDescList[index])
-  end
-  local isComplete = false
-  self._ui._staticText_CompleteTierChange:SetShow(false)
+  self._isComplete = false
   if tier > self._mainPetTier + 1 then
-    local _message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_PETCOMPOSE_NEXTTIER_CHECK_TEXT", "BeforePetTier", self._mainPetTier + 1, "NextPetTier", tier)
-    self._ui._staticText_CompleteTierChange:SetShow(true)
-    self._ui._staticText_CompleteTierChange:EraseAllEffect()
-    self._ui._staticText_CompleteTierChange:AddEffect("fUI_PetGlow_Success_02A_Green", true, 0, 0)
-    self._ui._staticText_CompleteTierChange:SetText(_message)
-    self._ui._static_Effect:AddEffect(self._tierEfectConfig[tier - 1], true, 0, 0)
-  end
-  if targetTier >= tier then
-    isComplete = false
+    self._isComplete = true
   else
-    isComplete = true
+    self._isComplete = false
   end
-  PaGlobalFunc_PetFusion_CompleteOpen(isComplete)
+  self._isFusion = true
+  Panel_Window_PetFusion:RegisterUpdateFunc("PaGlobal_SetCompleteDelay_PerFrameUpdate")
 end
 function PetFusion:getPetNoCount()
   local count = 0
@@ -534,7 +563,7 @@ function PetFusion:findPetNo(index)
 end
 function PetFusion:findPetIndex(petNo)
   for i = 0, self._config._petMaxTableCount - 1 do
-    if petNo == Int64toInt32(self._petNoList[i]) then
+    if petNo == self._petNoList[i] then
       return i
     end
   end
@@ -555,6 +584,9 @@ function PetFusion:updateSkillSlot()
   local skillLearnCount = 0
   local skillMaxCount = ToClient_getPetEquipSkillMax()
   local petSkillCheck = {}
+  for ii = 0, 2 do
+    self._ui._staticText_SelectSkillIDesc[ii]:SetText("")
+  end
   for sealPetIndex = 0, ToClient_getPetSealedList() - 1 do
     local petData = ToClient_getPetSealedDataByIndex(sealPetIndex)
     local _petNo = petData._petNo
@@ -667,7 +699,7 @@ function PetFusion:checkSetAble(petNo, petRace, sealPetIndex, petTier)
     return false
   end
   if true == PaGlobalFunc_PetFusion_IsMainPetSet() and 99 == petRace and false == PaGlobalFunc_PetFusion_GetIsJokerPetUse() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_RENEWAL_PETLIST_TEMP_7"))
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_RENEWAL_PETLIST_TEMP_8"))
     return false
   end
   if true == PaGlobalFunc_PetFusion_IsMainPetSet() then
@@ -776,6 +808,9 @@ function PetFusion:setRate()
     return
   end
   local mainPetData = ToClient_getPetSealedDataByIndex(self._sealPetIndexList[0])
+  if nil == mainPetData then
+    return
+  end
   local mainStaticStatus = mainPetData:getPetStaticStatus()
   if nil == mainStaticStatus then
     return
@@ -787,11 +822,13 @@ function PetFusion:setRate()
   for index = 1, self._config._petMaxTableCount - 1 do
     if -1 ~= self._sealPetIndexList[index] then
       local subPetData = ToClient_getPetSealedDataByIndex(self._sealPetIndexList[index])
-      local subStaticStatus = subPetData:getPetStaticStatus()
-      if nil ~= subStaticStatus then
-        local subTier = subStaticStatus:getPetTier()
-        local subRace = subStaticStatus:getPetRace()
-        addRate = addRate + Int64toInt32(ToClient_getAddFusionRate(self._mainPetTier, subTier, subRace)) / 10000
+      if nil ~= subPetData then
+        local subStaticStatus = subPetData:getPetStaticStatus()
+        if nil ~= subStaticStatus then
+          local subTier = subStaticStatus:getPetTier()
+          local subRace = subStaticStatus:getPetRace()
+          addRate = addRate + Int64toInt32(ToClient_getAddFusionRate(self._mainPetTier, subTier, subRace)) / 10000
+        end
       end
     end
   end
@@ -855,7 +892,7 @@ function PetFusion:setSubSlot(petNo, sealPetIndex)
       slot._icon:SetShow(true)
       slot._isSet = true
       slot._petNo = petNo
-      slot._icon:addInputEvent("Mouse_RUp", "petListNew_Compose_UnSet(" .. Int64toInt32(petNo) .. "," .. sealPetIndex .. " )")
+      slot._icon:addInputEvent("Mouse_RUp", "petListNew_Compose_UnSet(\"" .. tostring(petNo) .. "\"," .. sealPetIndex .. " )")
       return
     end
   end
@@ -888,7 +925,7 @@ function PetFusion:setMainSlot(petNo, sealPetIndex)
       slot._petNo = petNo
       slot._isSet = true
       self._ui._staticText_SelectPetLevel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PET_COMPOSE_FACTORIAL_LV_TITLE", "level", tostring(petData._level)))
-      slot._icon:addInputEvent("Mouse_RUp", "petListNew_Compose_UnSet(" .. Int64toInt32(petNo) .. "," .. sealPetIndex .. " )")
+      slot._icon:addInputEvent("Mouse_RUp", "petListNew_Compose_UnSet(\"" .. tostring(petNo) .. "\"," .. sealPetIndex .. " )")
       return
     end
   end
@@ -932,6 +969,26 @@ function PetFusion:clear()
   self._ui._static_completeBg:SetShow(false)
   PaGlobalFunc_PetFusion_CloseSkill()
   PaGlobalFunc_PetFusion_CloseLook()
+  self._fusionStartDelayTime = 0
+  self._isFusionStart = false
+  self._completeDelayTime = 0
+  self._isFusion = false
+  self._ui._staticText_CompleteTier:SetText("")
+  self._ui._staticText_PetNameLevel:SetText("")
+  self._ui._staticText_SpecialSkill:SetText("")
+  for index = 0, self._config._skillSlotMaxCount - 1 do
+    self._ui._completeSkillTableList[index]._icon:ChangeTextureInfoName("")
+    self._ui._completeSkillTableList[index]._desc:SetText("")
+  end
+  self._ui._static_CompleteEffectBg:EraseAllEffect()
+  self._ui._static_CompleteIcon:ChangeTextureInfoName("")
+  self._ui._static_Effect:EraseAllEffect()
+  self._ui._static_Effect_Bottom:EraseAllEffect()
+  self._ui._staticText_CompleteTier:ChangeTextureInfoName("")
+  self._ui._staticText_CompleteTierChange:EraseAllEffect()
+  self._ui._staticText_CompleteTierChange:SetText("")
+  self._ui._static_CompleteEffectBg:SetAlpha(1)
+  self._ui._static_CompleteEffectBg:SetShow(true)
 end
 function PetFusion:rateClear()
   self._ui._staticText_N1Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", 0))
@@ -965,7 +1022,7 @@ function PetFusion:createControl()
   self._ui._staticText_SelectDesc = UI.getChildControl(self._ui._static_SelectDescBg, "StaticText_SelectDesc")
   self._ui._staticText_CompleteTierCheck = UI.getChildControl(self._ui._static_fusionBg, "StaticText_CompleteTier")
   self._ui._staticText_SelectDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-  self._ui._staticText_SelectDesc:SetText("\234\184\176\236\164\128\236\157\180 \235\144\152\235\138\148 \235\176\152\235\160\164 \235\143\153\235\172\188\236\157\128 \235\147\177\234\184\137 \236\131\129\236\138\185\236\157\152 \234\184\176\236\164\128\234\179\188 \234\178\189\237\151\152\236\185\152 \234\179\132\236\138\185\236\157\152 \234\184\176\236\164\128\236\157\180 \235\144\169\235\139\136\235\139\164.\n\234\184\176\236\164\128\236\157\180 \235\144\152\235\138\148 \235\176\152\235\160\164 \235\143\153\235\172\188 \236\157\180\237\155\132 \236\132\160\237\131\157\237\149\152\235\138\148 \235\176\152\235\160\164\235\143\153\235\172\188\236\157\180 \234\184\176\236\164\128 \235\176\152\235\160\164 \235\143\153\235\172\188 \235\179\180\235\139\164 \236\132\184\235\140\128\234\176\128 \235\134\146\234\177\176\235\130\152 \234\176\153\236\149\132\236\149\188 \237\149\169\235\139\136\235\139\164.")
+  self._ui._staticText_SelectDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETFUSION_FIRSTSELECT_INFO_DESC"))
   self._mainPetSlotTable._bg = UI.getChildControl(self._ui._static_fusionBg, "Static_Leader_PetIconBg")
   self._ui._staticText_SelectSkillIDesc = {
     [0] = UI.getChildControl(self._ui._static_SelectBg, "StaticText_SelectSkillIDesc_1"),
@@ -978,6 +1035,7 @@ function PetFusion:createControl()
   self._mainPetSlotTable._tier = UI.getChildControl(self._mainPetSlotTable._bg, "StaticText_Tier")
   self._mainPetSlotTable._level = UI.getChildControl(self._mainPetSlotTable._bg, "StaticText_Level")
   self._ui._static_CompleteEffectBg = UI.getChildControl(self._ui._static_completeBg, "Static_CompleteEffectBg")
+  self._ui._static_CompleteEffectMessage = UI.getChildControl(self._ui._static_CompleteEffectBg, "StaticText_CompleteMessage")
   self._ui._static_slotTemplete._bg = UI.getChildControl(self._ui._static_fusionBg, "Static_PetIconBg_Template")
   self._ui._static_slotTemplete._grade = UI.getChildControl(self._ui._static_slotTemplete._bg, "Static_GradeLine_Template")
   self._ui._static_slotTemplete._icon = UI.getChildControl(self._ui._static_slotTemplete._bg, "Static_PetIcon")
@@ -991,7 +1049,7 @@ function PetFusion:createControl()
     CopyBaseProperty(self._ui._static_slotTemplete._icon, icon)
     local tier = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, bg, "StaticText_Tier_" .. ii)
     CopyBaseProperty(self._ui._static_slotTemplete._tier, tier)
-    bg:SetPosX(bg:GetPosX() + (bg:GetSizeX() + 15) * ii)
+    bg:SetPosX(bg:GetPosX() + (bg:GetSizeX() + 10) * ii)
     self._subPetSlotTableList[ii] = {}
     self._subPetSlotTableList[ii]._bg = bg
     self._subPetSlotTableList[ii]._grade = grade
@@ -1079,8 +1137,10 @@ end
 function PaGlobalFunc_PetFusion_Fusion()
   local self = PetFusion
   ClearFocusEdit(self._ui._edit_Naming)
-  local petName = self._ui._edit_Naming:GetEditText()
-  if "" == petName or self._config._defaultName == petName then
+  PaGlobalFunc_PetFusion_CloseSkill()
+  PaGlobalFunc_PetFusion_CloseLook()
+  self._petName = self._ui._edit_Naming:GetEditText()
+  if "" == self._petName or self._config._defaultName == self._petName then
     Proc_ShowMessage_Ack(self._config._defaultName)
     return
   end
@@ -1092,8 +1152,11 @@ function PaGlobalFunc_PetFusion_Fusion()
           ToClient_pushFusionPetList(self._petNoList[index], count)
           count = count + 1
         end
+        self._ui._button_Close:SetShow(false)
       end
-      ToClient_requestPetFusion(petName, self._currentSkillIndex - 1, self._currentLookIndex - 1)
+      self:fusionStartEffect()
+      self._isFusionStart = true
+      Panel_Window_PetFusion:RegisterUpdateFunc("PaGlobal_FusionStartDelay_PerFrameUpdate")
     end
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "PANEL_PETLIST_PETCOMPOSE_MSGCONTENT")
     local messageBoxData = {
@@ -1106,6 +1169,19 @@ function PaGlobalFunc_PetFusion_Fusion()
     MessageBox.showMessageBox(messageBoxData)
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "PANEL_PETLIST_PETCOMPOSE_REGIST"))
+  end
+end
+function PaGlobal_FusionStartDelay_PerFrameUpdate(deltaTime)
+  local self = PetFusion
+  if false == self._isFusionStart then
+    return
+  end
+  self._fusionStartDelayTime = self._fusionStartDelayTime + deltaTime
+  if self._fusionStartDelayTime >= 2.5 then
+    self._isFusionStart = false
+    self._fusionStartDelayTime = 0
+    ToClient_requestPetFusion(self._petName, self._currentSkillIndex - 1, self._currentLookIndex - 1)
+    return
   end
 end
 function PaGlobalFunc_PetFusion_GetShow()
@@ -1139,10 +1215,16 @@ function PetFusion:PetFusionInitControlSetting(isOn)
 end
 function PaGlobalFunc_PetFusion_Close()
   local self = PetFusion
+  if self._isFusionStart then
+  end
   self:clear()
+  self._ui._button_Close:SetShow(true)
+  self._ui._staticText_CompleteTier:SetShow(false)
   FGlobal_PetList_Set(false)
   PetList_HideSkillToolTip()
   self._ui._static_CompleteEffectBg:SetAlpha(1)
+  self._ui._static_CompleteEffectMessage:SetAlpha(1)
+  self._ui._static_CompleteEffectMessage:SetShow(true)
   self._ui._static_CompleteEffectBg:SetShow(true)
   PaGlobalFunc_PetFusion_CloseSkill()
   PaGlobalFunc_PetFusion_CloseLook()
@@ -1151,8 +1233,22 @@ function PaGlobalFunc_PetFusion_Close()
 end
 function FromClient_FusionComplete(petNo)
   local self = PetFusion
+  self._ui._static_CompleteEffectBg:SetShow(false)
   self:loadCompleteData(petNo)
   self:setComplete()
+  PaGlobalFunc_PetFusion_CompleteOpen()
+end
+function PaGlobal_SetCompleteDelay_PerFrameUpdate(deltaTime)
+  local self = PetFusion
+  if false == self._isFusion then
+    return
+  else
+    self._completeDelayTime = self._completeDelayTime + deltaTime
+  end
+  if self._completeDelayTime >= 0.5 then
+    self._completeDelayTime = 0
+    self._isFusion = false
+  end
 end
 function FromClient_luaLoadComplete_PetFusion()
   PetFusion:initialize()

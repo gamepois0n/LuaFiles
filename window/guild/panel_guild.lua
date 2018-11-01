@@ -2600,7 +2600,7 @@ function SetDATAByGuildGrade()
       if toInt64(0, 0) == businessFunds_s64 then
         GuildListInfoPage._btnPaypal:SetFontColor(UI_color.C_FFF26A6A)
       else
-        GuildListInfoPage._btnPaypal:SetFontColor(UI_color.C_FFC4A68A)
+        GuildListInfoPage._btnPaypal:SetFontColor(UI_color.C_FFEDEDEE)
       end
     else
       GuildListInfoPage._btnPaypal:SetEnable(false)

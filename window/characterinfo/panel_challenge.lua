@@ -751,8 +751,8 @@ function Challenge_Update()
       local viewCount = 4
       for challenge_Idx = 0, controlValueCount - 1 do
         local completeInfo = ToClient_GetCompletedChallengeAt(challenge_Idx + _scrollIndex)
-        _content[challenge_Idx].Title:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
         _content[challenge_Idx].Title:SetText(completeInfo:getName())
+        UI.setLimitTextAndAddTooltip(_content[challenge_Idx].Title)
         _content[challenge_Idx].Desc:SetText(completeInfo:getDesc())
         _content[challenge_Idx].BG:SetShow(true)
         _content[challenge_Idx].Title:SetShow(true)

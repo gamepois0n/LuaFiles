@@ -2638,6 +2638,7 @@ function loadGameUI_PC()
   end
   runLua("UI_Data/Script/Window/DetectUser/Panel_Window_DetectUser.lua")
   runLua("UI_Data/Script/Widget/MainStatus/Common_MainStatus.lua")
+  runLua("UI_Data/Script/Window/StoryInstanceDungeon/Panel_Window_StoryInstanceDungeon.lua")
   if true == _ContentsGroup_NewCloseManager then
     runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_ExceptionList.lua")
     runLua("UI_Data/Script/GlobalKeyBinder/globalCloseManager_Renew.lua")

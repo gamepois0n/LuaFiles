@@ -586,7 +586,13 @@ function PaGlobalFunc_WorldMap_UpdatePerFrame(deltaTime)
       self._xPressedCheck = true
     end
     if endPressTime <= currentPressTime and 0 ~= startPressTime and 0 ~= endPressTime then
-      ToClient_SetWorldMapBookMark(PaGlobalFunc_WorldMap_BottomMenu_GetBookMarkIndex())
+      if -1 == PaGlobalFunc_WorldMap_GetFocusedBookMarkIndex() then
+        ToClient_SetWorldMapBookMark(PaGlobalFunc_WorldMap_BottomMenu_GetBookMarkIndex())
+      else
+        ToClient_UnSetWorldMapBookMark(PaGlobalFunc_WorldMap_GetFocusedBookMarkIndex())
+        PaGlobalFunc_WorldMap_ClearFocusedBookMarkIndex()
+      end
+      PaGlobalFunc_WorldMap_BottomMenu_UpdateMenu(0)
       startPressTime = 0
       endPressTime = 0
       currentPressTime = 0

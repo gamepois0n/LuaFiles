@@ -71,6 +71,7 @@ function DyeingTake:initialize()
     [PALETTE_CATEGORY.MEDIAH] = UI.getChildControl(self._ui.stc_paletteCategoryBG, "RadioButton_Mediah"),
     [PALETTE_CATEGORY.VALENCIA] = UI.getChildControl(self._ui.stc_paletteCategoryBG, "RadioButton_ValenCia")
   }
+  self._ui.txt_categoryName = UI.getChildControl(self._ui.stc_bodyBG, "StaticText_CategoryName")
   if not ToClient_IsContentsGroupOpen("3") then
     self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH]:SetShow(false)
     self._ui.rdo_categoryTypes[PALETTE_CATEGORY.MEDIAH] = nil
@@ -141,11 +142,10 @@ function PaGlobalFunc_DyeingTake_Open()
 end
 function DyeingTake:open()
   _panel:SetShow(true)
-  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
   self._nowPaletteIndex = PALETTE_TYPE.MINE
   self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
-  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
-  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self:setPalette(self._nowPaletteIndex)
+  self:setCategory(self._nowPaletteCategoryIndex)
   self._currentScrollAmount = 0
   self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
@@ -195,7 +195,21 @@ end
 function Input_DyeingTake_NextPalette(nextPaletteIndex)
   local self = DyeingTake
   _AudioPostEvent_SystemUiForXBOX(51, 6)
-  self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(false)
+  self:setPalette(nextPaletteIndex)
+  self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
+  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
+  self._currentScrollAmount = 0
+  self._ui.scroll_ampuleList:SetControlPos(0)
+  self:updatePalette()
+end
+local _paletteStringTable = {
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_ALL"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MY")
+}
+function DyeingTake:setPalette(nextPaletteIndex)
+  for ii = 1, #self._ui.rdo_paletteTypes do
+    self._ui.rdo_paletteTypes[ii]:SetCheck(false)
+  end
   local targetPalette = self._nowPaletteIndex + nextPaletteIndex
   if targetPalette < 1 then
     targetPalette = #self._ui.rdo_paletteTypes
@@ -206,12 +220,8 @@ function Input_DyeingTake_NextPalette(nextPaletteIndex)
     targetPalette = self._nowPaletteIndex
   end
   self._nowPaletteIndex = targetPalette
-  self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex
-  self._paletteShowAll = PALETTE_TYPE.ALL == self._nowPaletteIndex
+  self._ui.txt_title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DYE_EJECT_TITLE") .. " - " .. _paletteStringTable[self._nowPaletteIndex])
   self._ui.rdo_paletteTypes[self._nowPaletteIndex]:SetCheck(true)
-  self._currentScrollAmount = 0
-  self._ui.scroll_ampuleList:SetControlPos(0)
-  self:updatePalette()
 end
 function DyeingTake:isPlayerHaveActivedMerv()
   local selfPlayer = getSelfPlayer()
@@ -220,10 +230,19 @@ function DyeingTake:isPlayerHaveActivedMerv()
   end
   return selfPlayer:get():isApplyChargeSkill(CppEnums.UserChargeType.eUserChargeType_DyeingPackage)
 end
+local _categoryStringTable = {
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_0"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_1"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_2"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_3"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_4"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_5"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_6"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_7")
+}
 function Input_DyeingTake_NextCategory(nextCategoryIndex)
   local self = DyeingTake
   _AudioPostEvent_SystemUiForXBOX(51, 7)
-  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(false)
   local targetCategory = self._nowPaletteCategoryIndex + nextCategoryIndex
   if targetCategory < 1 then
     targetCategory = #self._ui.rdo_categoryTypes
@@ -231,10 +250,18 @@ function Input_DyeingTake_NextCategory(nextCategoryIndex)
     targetCategory = 1
   end
   self._nowPaletteCategoryIndex = targetCategory
-  self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]:SetCheck(true)
+  self:setCategory(self._nowPaletteCategoryIndex)
   self._currentScrollAmount = 0
   self._ui.scroll_ampuleList:SetControlPos(0)
   self:updatePalette()
+end
+function DyeingTake:setCategory(index)
+  for ii = 1, #self._ui.rdo_categoryTypes do
+    self._ui.rdo_categoryTypes[ii]:SetCheck(false)
+  end
+  local rdo = self._ui.rdo_categoryTypes[self._nowPaletteCategoryIndex]
+  self._ui.txt_categoryName:SetText(_categoryStringTable[self._nowPaletteCategoryIndex])
+  rdo:SetCheck(true)
 end
 function Input_DyeingTake_Ampule(ii)
   local self = DyeingTake

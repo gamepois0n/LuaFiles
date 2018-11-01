@@ -343,7 +343,7 @@ function SellAll_ShowToggle()
   local self = npcShop
   if self.tabIndexSell == self.lastTabIndex then
     npcShop.buttonSellAll:SetShow(true)
-    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX())
+    npcShop.buttonSellAll:ComputePos()
   else
     npcShop.buttonSellAll:SetShow(false)
   end
@@ -354,7 +354,7 @@ function BuySome_ShowToggle()
     self.buttonBuySome:SetShow(true)
     self.buttonBuySome:SetEnable(false)
     self.buttonBuySome:SetMonoTone(true)
-    self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX())
+    self.buttonBuySome:ComputePos()
   else
     self.buttonBuySome:SetShow(false)
   end
@@ -406,7 +406,7 @@ function npcShop:controlInit()
   else
     Panel_Window_NpcShop:SetPosY(screenSizeY / 2 - Panel_Window_NpcShop:GetSizeY() / 2 - 100)
   end
-  self.buttonBuySome:SetPosX(npcShop.buttonBuy:GetPosX())
+  self.buttonBuySome:ComputePos()
 end
 function npcShop:updateContent(updateForce)
   local self = npcShop
@@ -419,7 +419,7 @@ Wrong NpcShop Tab Index!! : ]] .. self.lastTabIndex)
   end
   if npcShop.buttonSellAll:GetTextSizeX() > npcShop.buttonSellAll:GetSizeX() then
     npcShop.buttonSellAll:SetSize(npcShop.buttonSellAll:GetTextSizeX() + 10, npcShop.buttonSellAll:GetSizeY())
-    npcShop.buttonSellAll:SetPosX(npcShop.buttonBuy:GetPosX())
+    npcShop.buttonSellAll:ComputePos()
   end
   Panel_Window_NpcShop:SetShow(true, false)
   if self.tabIndexBuy == self.lastTabIndex then

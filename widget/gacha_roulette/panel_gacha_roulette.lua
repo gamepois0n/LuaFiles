@@ -64,7 +64,9 @@ function gacha_Roulette:Initialize()
   self.coverThis:SetIgnore(true)
   self.notify:SetNotAbleMasking(true)
   Panel_Gacha_Roulette:SetChildIndex(self.coverThis, 9999)
-  self.rollMode = 0
+  self.radioModeNormal:SetCheck(false)
+  self.radioModeSpeedy:SetCheck(true)
+  self.rollMode = 1
   self.radioModeNormal:addInputEvent("Mouse_LUp", "PanelRandomBoxSelect_UpdateMode()")
   self.radioModeSpeedy:addInputEvent("Mouse_LUp", "PanelRandomBoxSelect_UpdateMode()")
   self.buttonStartRoll:addInputEvent("Mouse_LUp", "PanelRandomBoxSelect_StartRoulette()")

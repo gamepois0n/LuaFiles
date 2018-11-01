@@ -47,6 +47,8 @@ function mercenary:Init()
     end
     self._control._territoryControl[index] = temp
   end
+  self._control._topGuideText:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
+  self._control._topGuideText:SetText(self._control._topGuideText:GetText())
 end
 function Mercenary_Request(isAttack)
   local currentSiegeTerrytoryKey = ToClient_GetStartSiegeTerritoryKey()

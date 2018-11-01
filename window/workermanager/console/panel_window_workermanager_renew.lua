@@ -1150,8 +1150,16 @@ function workerManager:registEventHandler()
   registerEvent("WorldMap_WorkerDataUpdateByHouse", "FromClient_WorkerDataUpdate_HeadingHouse")
   registerEvent("WorldMap_WorkerDataUpdateByBuilding", "FromClient_WorkerDataUpdate_HeadingBuilding")
   registerEvent("WorldMap_WorkerDataUpdateByRegionManaging", "FromClient_WorkerDataUpdate_HeadingRegionManaging")
+  registerEvent("FromClient_ChangeWorkerCount", "PaGlobalFunc_WorkerManager_ChangeWorkerCount()")
   registerEvent("FromClient_UpdateLastestWorkingResult", "Push_Work_ResultItem_Message")
   Panel_Window_WorkerManager_Renew:RegisterUpdateFunc("PaGlobalFunc_WorkerManager_PerFrameUpdate")
+end
+function PaGlobalFunc_WorkerManager_ChangeWorkerCount()
+  workerManager:changeWorkerCount()
+end
+function workerManager:changeWorkerCount()
+  self:update()
+  ToClient_padSnapResetControl()
 end
 function FGlobal_WorkerManger_ShowToggle()
   PaGlobalFunc_WorkerManager_Open()

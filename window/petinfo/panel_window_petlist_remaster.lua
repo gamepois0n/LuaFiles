@@ -316,19 +316,11 @@ local baseSkillMultiplePoint = {
 local defaultSizeX = Panel_Window_PetListNew:GetSizeX()
 function PaGlobalFunc_PetList_SetPanel(count)
   local skillInfoBg = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillInfoBg")
-  local titleBg = UI.getChildControl(Panel_Window_PetListNew, "Static_TitleBG")
   if 0 == count then
     skillInfoBg:SetShow(false)
-    Panel_Window_PetListNew:SetSize(defaultSizeX - skillInfoBg:GetSizeX(), Panel_Window_PetListNew:GetSizeY())
-    titleBg:SetSize(defaultSizeX - skillInfoBg:GetSizeX() - 8, titleBg:GetSizeY())
   else
     skillInfoBg:SetShow(true)
-    Panel_Window_PetListNew:SetSize(defaultSizeX, Panel_Window_PetListNew:GetSizeY())
-    titleBg:SetSize(defaultSizeX - 8, titleBg:GetSizeY())
   end
-  PetList.BTN_Close:ComputePos()
-  _buttonQuestion:ComputePos()
-  _checkButtonPopup:ComputePos()
 end
 function AmountPetSkill_Attribute(count)
   PaGlobalFunc_PetList_SetPanel(count)
@@ -939,9 +931,9 @@ function FGlobal_PetListNew_NoPet()
     Panel_Window_PetIcon:SetShow(false)
   end
 end
-local defaultBtnFeedPosX = 314
-local defaultBtnInfoPosX = 360
-local defaultBtnSealPosX = 405
+local defaultBtnFeedPosX = 331
+local defaultBtnInfoPosX = 369
+local defaultBtnSealPosX = 407
 function PetListControlCreate(control, key)
   local bg = UI.getChildControl(control, "Template_Static_ListContentBG")
   local iconBg = UI.getChildControl(control, "Template_Static_IconPetBG")
@@ -1199,9 +1191,9 @@ function PetListControlCreate(control, key)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
     local uiIndex = 0
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. ")")
-    btnFeed:SetPosX(defaultBtnFeedPosX + 40)
-    btnInfo:SetPosX(defaultBtnInfoPosX + 40)
-    btnSeal:SetPosX(defaultBtnSealPosX + 40)
+    btnFeed:SetPosX(defaultBtnFeedPosX + 38)
+    btnInfo:SetPosX(defaultBtnInfoPosX + 38)
+    btnSeal:SetPosX(defaultBtnSealPosX + 38)
   else
     local unsealPetIndex = -1
     for index = 0, sealPetCount - 1 do
@@ -1339,9 +1331,9 @@ function PetListControlCreate(control, key)
     btnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. petTier .. ", " .. unsealPetIndex .. "," .. tostring(isJokerPetUse) .. " )")
     btnCantFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. petTier .. ", " .. unsealPetIndex .. "," .. tostring(isJokerPetUse) .. " )")
     btnUnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_UnSet( \"" .. tostring(petNo_s64) .. "\"," .. unsealPetIndex .. " )")
-    btnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
-    btnCantFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
-    btnUnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() + 2))
+    btnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() - 10))
+    btnCantFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() - 4))
+    btnUnFusion:SetPosX(btnUnseal:GetPosX() - (btnFusion:GetSizeX() - 4))
     if true == PaGlobalFunc_PetFusion_GetShow() then
       btnUnseal:SetShow(false)
       groupIndexBtn1:SetShow(false)
@@ -1349,9 +1341,9 @@ function PetListControlCreate(control, key)
       groupIndexBtn3:SetShow(false)
       btnUp:SetShow(false)
       btnDown:SetShow(false)
-      btnFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX() + 5)
-      btnCantFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX() + 5)
-      btnUnFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX() + 5)
+      btnFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX())
+      btnCantFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX())
+      btnUnFusion:SetPosX(btnUnseal:GetPosX() + btnFusion:GetSizeX())
     end
   end
   btnSeal:setNotImpactScrollEvent(true)
@@ -1374,7 +1366,7 @@ function PetListControlCreate(control, key)
     local x1, y1, x2, y2 = setTextureUV_Func(gradeMark, gradeTypeUV[grade - 1][1], gradeTypeUV[grade - 1][2], gradeTypeUV[grade - 1][3], gradeTypeUV[grade - 1][4])
     gradeMark:getBaseTexture():setUV(x1, y1, x2, y2)
     gradeMark:setRenderTexture(gradeMark:getBaseTexture())
-    gradeMark:SetShow(true)
+    gradeMark:SetShow(99 ~= petStaticStatus:getPetRace())
   end
 end
 function PaGlobalFunc_PetFusion_FusionButtonShowCheck(petNo_s64, petTier, petRace)
@@ -1586,8 +1578,8 @@ function petListNew_OrderTooltip(orderType, index)
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_TOOLTIP_BTN_FUSION_DESC")
     uiControl = btnFusion
   elseif 11 == orderType then
-    name = "\235\168\185\236\157\180\236\163\188\234\184\176"
-    desc = "\235\176\152\235\160\164 \235\143\153\235\172\188\236\151\144\234\178\140 \235\168\185\236\157\180\235\165\188 \236\164\132 \236\136\152 \236\158\136\236\138\181\235\139\136\235\139\164."
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_TOOLTIP_BTN_FEED_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_TOOLTIP_BTN_FEED_DESC")
     uiControl = btnFeed
   end
   TooltipSimple_Show(uiControl, name, desc)
@@ -1697,14 +1689,14 @@ function PetList:initializeFeedAllUi()
   local originalSlot = UI.getChildControl(self.feedAllUi, "Static_Restore_Item_Icon")
   local slotGap = originalSlot:GetSizeX() + 5
   for i = 0, self.feedStaticItemCount - 1 do
-    local slotBg = UI.createAndCopyBasePropertyControl(self.feedAllUi, "Static_Restore_Item_Icon", self.feedAllUi, "Static_Restore_Item_Icon" .. tostring(i))
+    local slotBg = UI.createAndCopyBasePropertyControl(self.feedAllUi, "Static_Restore_Item_Icon_BG", self.feedAllUi, "Static_Restore_Item_Icon" .. tostring(i))
     slotBg:SetPosX(originalSlot:GetPosX() + slotGap * i)
     slotBg:SetShow(false)
     self.feedAllSlot[i] = {}
     SlotItem.new(self.feedAllSlot[i], "FeedAllItem_", i, slotBg, self.config)
     self.feedAllSlot[i]:createChild()
-    self.feedAllSlot[i].border:SetSize(33, 33)
-    self.feedAllSlot[i].icon:SetSize(33, 33)
+    self.feedAllSlot[i].border:SetSize(34, 34)
+    self.feedAllSlot[i].icon:SetSize(34, 34)
     self.feedAllSlot[i].count:ComputePos()
   end
 end
@@ -1726,8 +1718,8 @@ function PetList:initializeFeedUi()
     self.feedSlot[i] = {}
     SlotItem.new(self.feedSlot[i], "FeedItem_", i, additionalSlot, self.config)
     self.feedSlot[i]:createChild()
-    self.feedSlot[i].border:SetSize(32, 32)
-    self.feedSlot[i].icon:SetSize(32, 32)
+    self.feedSlot[i].border:SetSize(34, 34)
+    self.feedSlot[i].icon:SetSize(34, 34)
     self.feedSlot[i].count:ComputePos()
   end
 end
@@ -1999,12 +1991,12 @@ end
 function HandleClicked_PetList_FeedItem(index)
   PetList.selectItemIndex = index
   PetList.selectSlotBg:SetShow(true)
-  PetList.selectSlotBg:SetPosX(12 + 35 * index)
+  PetList.selectSlotBg:SetPosX(15 + 39 * index)
 end
 function HandleClicked_PetList_FeedItemToAll(index)
   PetList.selectItemIndex = index
   PetList.selectAllSlotBg:SetShow(true)
-  PetList.selectAllSlotBg:SetPosX(18 + 38 * index)
+  PetList.selectAllSlotBg:SetPosX(15 + 39 * index)
 end
 function PaGlobal_PetList_GroupClear()
   checkUnSealGroupList[1] = {}

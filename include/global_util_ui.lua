@@ -164,11 +164,16 @@ function UI.checkResolution4KForXBox()
   return false
 end
 local _tooltipControlRefTable = {}
-function UI.checkLimitTextAndAddTooltip(control, title, desc)
-  if nil == control or nil == title and nil == desc then
+function UI.setLimitTextAndAddTooltip(control, title, desc)
+  if nil == control then
     return
   end
-  UI.ASSERT(nil ~= control.IsLimitText, "control does not contain key <IsLimitText>")
+  if nil == control.IsLimitText or nil == control.SetTextMode then
+    UI.ASSERT(nil ~= control.IsLimitText, "control does not contain key <IsLimitText>")
+    return
+  end
+  control:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
+  control:SetText(control:GetText())
   if control:IsLimitText() then
     local key = #_tooltipControlRefTable + 1
     control:SetIgnore(false)
@@ -185,6 +190,17 @@ function PaGlobalFunc_GlobalUtil_limitTextTooltip(key)
     return
   end
   local data = _tooltipControlRefTable[key]
+  if nil == data.control then
+    return
+  end
+  if not data.control:IsLimitText() then
+    TooltipSimple_Hide()
+    return
+  end
   registTooltipControl(data.control, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(data.control, data.title, data.desc)
+  if nil == data.title then
+    TooltipSimple_Show(data.control, data.control:GetText(), data.desc)
+  else
+    TooltipSimple_Show(data.control, data.title, data.desc)
+  end
 end

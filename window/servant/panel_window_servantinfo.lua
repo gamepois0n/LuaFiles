@@ -365,7 +365,7 @@ function servantInfo:update()
   else
     weightValue = makeDotMoney(total_weight) .. " / " .. makeDotMoney(max_weight)
   end
-  self._staticGaugeBar_Weight:SetSize(weightPercent * 155 / 100, 6)
+  self._staticGaugeBar_Weight:SetSize(weightPercent * 163 / 100, 6)
   self._staticTextValue_Weight:SetText(weightValue)
   self._staticTextValue_Weight:SetPosY(self._staticGaugeBar_Weight:GetPosY() + self._staticGaugeBar_Weight:GetSizeY() / 2 - self._staticTextValue_Weight:GetTextSizeY() / 2)
   local deadCount = servantWrapper:getDeadCount()

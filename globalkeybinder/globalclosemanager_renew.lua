@@ -243,7 +243,6 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_EnableSkill, closeTypeBitSet.default, "PanelCloseFunc_Skill()")
   registerCloseLuaEvent(Panel_HelpMessage, closeTypeBitSet.default, "HelpMessageQuestion_Out()")
   registerCloseLuaEvent(Panel_Window_Quest_History, closeTypeBitSet.default, "FGlobal_QuestHistoryClose()")
-  registerCloseLuaEvent(Panel_Tooltip_Common, closeTypeBitSet.default, "TooltipCommon_Hide()")
   registerCloseLuaEvent(Panel_Window_PetListNew, closeTypeBitSet.default, "FGlobal_PetListNew_Close()")
   registerCloseLuaEvent(Panel_Housing_FarmInfo_New, closeTypeBitSet.default, "PAHousing_FarmInfo_Close()")
   registerCloseLuaEvent(Panel_ClanList, closeTypeBitSet.default, "_ClanList_Close()")
@@ -662,7 +661,7 @@ function PanelCloseFunc_GuildCreate()
   PaGlobalFunc_GuildCreate_Close()
 end
 function PanelCloseFunc_MenuRenew()
-  Panel_Window_Menu_ShowToggle()
+  Panel_Window_Menu_Close()
 end
 function PanelCloseFunc_GuildSignOption()
   if true == PaGlobalFunc_AgreementGuild_SignOption_GetShow() then
@@ -1098,13 +1097,13 @@ function PanelCloseFunc_CompetitionGame()
   end
 end
 function PaGlobalFunc_Enchant_Close()
-  Panel_Window_Enchant_Renew:SetShow(false)
+  PaGlobalFunc_EnchantInfo_Close()
 end
 function PaGlobalFunc_Socket_Close()
-  Panel_Window_Socket_Renew:SetShow(false)
+  PaGlobalFunc_SocketInfo_Close()
 end
 function PaGlobalFunc_Improvement_Close()
-  Panel_Window_Improvement_Renew:SetShow(false)
+  PaGlobalFunc_ImprovementInfo_Discard()
 end
 function PaGlobalFunc_ItemMArketAlarmListClose()
   if not PaGlobalFunc_ItemMarketAlarmList_IsUISubApp() then

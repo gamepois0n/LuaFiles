@@ -725,10 +725,10 @@ CppEnums.ClassType_Symbol = {
   },
   [CppEnums.ClassType.ClassType_Orange] = {
     "Renewal/UI_Icon/Console_ClassSymbol.dds",
-    400,
-    58,
-    456,
-    114
+    1,
+    457,
+    57,
+    513
   },
   [CppEnums.ClassType.ClassType_Count] = {
     "Renewal/UI_Icon/Console_ClassSymbol.dds",
@@ -894,11 +894,11 @@ CppEnums.ClassType_DefaultFaceTexture = {
     402
   },
   [CppEnums.ClassType.ClassType_Orange] = {
-    "New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_01.dds",
+    "New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds",
+    157,
     1,
-    202,
-    156,
-    402
+    312,
+    201
   },
   [CppEnums.ClassType.ClassType_Count] = {
     "New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds",

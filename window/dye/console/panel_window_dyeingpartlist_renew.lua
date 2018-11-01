@@ -465,6 +465,9 @@ end
 function DyeingPartList:open(index)
   self._ui.txt_keyGuideA:SetShow(false == PaGlobalFunc_DyeingPalette_GetShow())
   _panel:SetShow(true)
+  if self._currentTargetIndex ~= index then
+    PaGlobalFunc_DyeingPalette_CleanData()
+  end
   self._currentTargetIndex = index
   self:update()
 end

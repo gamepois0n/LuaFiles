@@ -54,6 +54,9 @@ function Input_loginNickname_Edit()
   SetFocusEdit(loginNickname.edit_nickname)
 end
 function Input_LoginNickname_KeyboardEnd(str)
+  if getGameServiceTypeUserNickNameLength() < string.len(str) then
+    str = string.sub(str, 1, getGameServiceTypeUserNickNameLength())
+  end
   loginNickname.edit_nickname:SetEditText(str)
   ClearFocusEdit()
 end

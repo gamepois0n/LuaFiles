@@ -190,7 +190,7 @@ function GuildRecruitment:Update()
       local isWant = unjoinPlayerWrapper:doWant()
       local playerIntro = unjoinPlayerWrapper:getUserIntroduction()
       if nil == playerIntro or "" == playerIntro then
-        playerIntro = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_PLAYERINTRO_NODATA")
+        playerIntro = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_PLAYERINTRO_NODATA", "player_name", playerName)
       end
       local slot = self.slotPool[realIndex]
       slot.bg:SetShow(true)

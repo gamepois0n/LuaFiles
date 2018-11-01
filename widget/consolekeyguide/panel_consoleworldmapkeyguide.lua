@@ -77,6 +77,11 @@ function PaGlobal_ConsoleWorldMapKeyGuide_CheckShow()
     self._showableCheck[config._DpadUp] = false
     self._showableCheck[config._DpadDown] = false
   end
+  if -1 == PaGlobalFunc_WorldMap_GetFocusedBookMarkIndex() then
+    self._controlList[config._X_Hold]:SetText("(Hold) BookMark Set")
+  else
+    self._controlList[config._X_Hold]:SetText("(Hold) BookMark UnSet")
+  end
 end
 function PaGlobal_ConsoleWorldMapKeyGuide_SetPos(isBottomPanelShow)
   local self = Panel_WorldmapKeyGuideInfo

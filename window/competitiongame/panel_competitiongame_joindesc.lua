@@ -1,23 +1,31 @@
+local _panel = Panel_CompetitionGame_JoinDesc
 local UI_TM = CppEnums.TextMode
 local UI_VT = CppEnums.VillageSiegeType
 local isContentsArsha = ToClient_IsContentsGroupOpen("227")
 local isCanDoReservation = ToClient_IsCanDoReservationArsha()
 local reservationSlotArr = {}
-Panel_CompetitionGame_JoinDesc:SetShow(false)
+_panel:SetShow(false)
 local competitionGameJoinDesc = {
-  btn_CloseX = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Button_Close"),
-  descBG = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Static_AllBG"),
-  btn_Join = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Button_Join"),
-  btn_ObserverJoin = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Button_ObserverJoin"),
-  btn_Refresh = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Button_Refresh"),
-  frame_Desc = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Frame_Desc")
+  btn_CloseX = UI.getChildControl(_panel, "Button_Close"),
+  descBG = UI.getChildControl(_panel, "Static_AllBG"),
+  btn_Join = UI.getChildControl(_panel, "Button_Join"),
+  btn_ObserverJoin = UI.getChildControl(_panel, "Button_ObserverJoin"),
+  btn_Refresh = UI.getChildControl(_panel, "Button_Refresh"),
+  frame_Desc = UI.getChildControl(_panel, "Frame_Desc")
+}
+local reservationMisc = {
+  UI.getChildControl(_panel, "Static_LeftMidbg"),
+  UI.getChildControl(_panel, "StaticText_DayOfWeek_Title"),
+  UI.getChildControl(_panel, "StaticText_Date_Title"),
+  UI.getChildControl(_panel, "StaticText_ReserveGuildName_Title"),
+  UI.getChildControl(_panel, "StaticText_Reserve_Title")
 }
 local reservationSlot = {
-  _slot_BG = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Static_DayControlBg"),
-  _slot_txt_DayOfWeek = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "StaticText_DayOfWeek"),
-  _slot_txt_Date = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "StaticText_Date"),
-  _slot_txt_GuildName = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "StaticText_ReserveGuildName"),
-  _slot_btn_Reserve = UI.getChildControl(Panel_CompetitionGame_JoinDesc, "Button_Reserve")
+  _slot_BG = UI.getChildControl(_panel, "Static_DayControlBg"),
+  _slot_txt_DayOfWeek = UI.getChildControl(_panel, "StaticText_DayOfWeek"),
+  _slot_txt_Date = UI.getChildControl(_panel, "StaticText_Date"),
+  _slot_txt_GuildName = UI.getChildControl(_panel, "StaticText_ReserveGuildName"),
+  _slot_btn_Reserve = UI.getChildControl(_panel, "Button_Reserve")
 }
 local dayOfWeekString = {
   [UI_VT.eVillageSiegeType_Sunday] = PAGetString(Defines.StringSheet_GAME, "LUA_DAYOFWEEK_SUNDAY"),
@@ -40,7 +48,7 @@ function Panel_CompetitionGame_JoinDesc_Init()
   for Index = 0, 6 do
     reservationSlotArr[Index] = {}
     local temp = {}
-    temp._slot_BG = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, Panel_CompetitionGame_JoinDesc, "CompetitionReservation_SlotBg_" .. Index)
+    temp._slot_BG = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATIC, _panel, "CompetitionReservation_SlotBg_" .. Index)
     CopyBaseProperty(reservationSlot._slot_BG, temp._slot_BG)
     temp._slot_BG:SetPosY(98 + (reservationSlot._slot_BG:GetSizeY() + 5) * Index)
     temp._slot_txt_DayOfWeek = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, temp._slot_BG, "CompetitionReservation_SlotDayOfWeek_" .. Index)
@@ -97,10 +105,21 @@ function PaGlobalFunc_CompetitionGame_JoinDesc_Open()
   local isGuildLeader = isGuildMaster or isGuildSubMaster
   audioPostEvent_SystemUi(1, 18)
   _AudioPostEvent_SystemUiForXBOX(1, 18)
-  Panel_CompetitionGame_JoinDesc:SetShow(true)
-  if true == isContentsArsha and true == isCanDoReservation then
+  _panel:SetShow(true)
+  local arshaAvailable = true == isContentsArsha and true == isCanDoReservation
+  self:doShitWhenArhaIsAvailable(arshaAvailable)
+  if arshaAvailable then
     FGlobal_RefreshReservationInfo()
   end
+end
+function competitionGameJoinDesc:doShitWhenArhaIsAvailable(arshaAvailable)
+  for ii = 1, #reservationMisc do
+    reservationMisc[ii]:SetShow(arshaAvailable)
+  end
+  for ii = 0, 6 do
+    reservationSlotArr[ii]._slot_btn_Reserve:SetShow(arshaAvailable)
+  end
+  UI.getChildControl(_panel, "StaticText_Unavailable"):SetShow(not arshaAvailable)
 end
 function FGlobal_RefreshReservationInfo()
   ToClient_RequestArshaReservationList()
@@ -109,7 +128,7 @@ function PaGlobalFunc_CompetitionGame_JoinDesc_Close()
   local self = competitionGameJoinDesc
   audioPostEvent_SystemUi(1, 17)
   _AudioPostEvent_SystemUiForXBOX(1, 17)
-  Panel_CompetitionGame_JoinDesc:SetShow(false)
+  _panel:SetShow(false)
 end
 function FGlobal_Panel_CompetitionGame_JoinDesc_Join(isObserver)
   local selfProxy = getSelfPlayer():get()

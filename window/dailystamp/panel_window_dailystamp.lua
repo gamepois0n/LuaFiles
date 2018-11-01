@@ -108,6 +108,14 @@ function DailyStamp_DescSet()
   dailyStamp.acceptPeriod:SetText(_acceptPeriod)
   dailyStamp.eventDesc:SetText(_desc)
   dailyStamp.weekEndDesc:SetText(_weekendDesc)
+  if dailyStamp.eventDesc:GetPosY() + dailyStamp.eventDesc:GetTextSizeY() + 5 > dailyStamp.weekEndDesc:GetPosY() then
+    dailyStamp.weekEndDesc:SetPosY(dailyStamp.eventDesc:GetPosY() + dailyStamp.eventDesc:GetTextSizeY() + 5)
+  else
+    dailyStamp.eventDesc:ComputePos()
+    dailyStamp.weekEndDesc:ComputePos()
+  end
+  Panel_Window_DailyStamp:SetSize(dailyStamp.mainBg:GetSizeX() + 10, dailyStamp.weekEndDesc:GetPosY() + dailyStamp.weekEndDesc:GetTextSizeY() + 20)
+  dailyStamp.mainBg:SetSize(dailyStamp.mainBg:GetSizeX(), dailyStamp.weekEndDesc:GetPosY() + dailyStamp.weekEndDesc:GetTextSizeY() - 31)
   dailyStamp.goodItemSlotConfig.createBorder = true
 end
 DailyStamp_DescSet()

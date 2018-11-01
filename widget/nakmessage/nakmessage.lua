@@ -38,6 +38,7 @@ function Proc_ShowBigMessage_Ack_WithOut_ChattingMessage(message)
 end
 function Proc_ShowMessage_Ack_WithOut_ChattingMessage(message, showRate)
   _AudioPostEvent_SystemUiForXBOX(8, 1)
+  audioPostEvent_SystemUi(8, 1)
   if nil == showRate then
     animationEndTime = 2.3
     elapsedTime = 2.3

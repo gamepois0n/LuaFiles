@@ -72,6 +72,7 @@ function DyeingMain:open()
   Panel_Tooltip_Item_hideTooltip()
   _panel:SetShow(true)
   PaGlobalFunc_DyeingMenu_Open()
+  PaGlobalFunc_InventoryInfo_Close()
   renderMode:set()
   ToClient_AudioPostEvent_UIAudioStateEvent("UISTATE_OPEN_DYEING")
 end
@@ -81,6 +82,7 @@ function PaGlobalFunc_Dyeing_CloseAll()
   PaGlobalFunc_DyeingPartList_Close()
   PaGlobalFunc_Dyeing_Close()
   PaGlobalFunc_DyeingMenu_Close()
+  PaGlobalFunc_DyeingRegister_Close()
 end
 function PaGlobalFunc_Dyeing_OnPadB()
   if PaGlobalFunc_DyeingRegister_GetShow() then

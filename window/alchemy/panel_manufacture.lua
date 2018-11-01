@@ -18,14 +18,14 @@ local manufacture_Init = function()
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_Manufacture:SetPosX((screenSizeX - Panel_Manufacture:GetSizeX()) / 2)
-  Panel_Manufacture:SetPosY((screenSizeY - Panel_Manufacture:GetSizeY()) / 2)
+  Panel_Manufacture:SetPosY((screenSizeY - Panel_Window_Inventory:GetSizeY()) / 2)
 end
 manufacture_Init()
 function manufacture_Repos()
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
-  Panel_Manufacture:SetPosX((screenSizeX - Panel_Manufacture:GetSizeX()) / 2 - 100)
-  Panel_Manufacture:SetPosY((screenSizeY - Panel_Manufacture:GetSizeY()) / 2)
+  Panel_Manufacture:SetPosX((screenSizeX - Panel_Manufacture:GetSizeX()) / 2)
+  Panel_Manufacture:SetPosY((screenSizeY - Panel_Window_Inventory:GetSizeY()) / 2)
 end
 local noneStackItemList = Array.new()
 local noneStackItemCheck = false
@@ -148,8 +148,10 @@ end
 local _slotList = {}
 for index = 0, _slotCount - 1 do
   local createdSlot = {}
-  SlotItem.new(createdSlot, "ItemIconSlot" .. index, 0, Panel_Manufacture, _slotConfig)
+  SlotItem.new(createdSlot, "ItemIconSlot" .. index, 0, _pointList[index], _slotConfig)
   createdSlot:createChild()
+  createdSlot.icon:SetPosX(1)
+  createdSlot.icon:SetPosY(1)
   createdSlot.icon:addInputEvent("Mouse_RUp", "Material_Mouse_RUp(" .. index .. ")")
   _slotList[index] = createdSlot
 end
@@ -202,8 +204,10 @@ local _textDesc = UI.getChildControl(Panel_Manufacture, "StaticText_Desc")
 _textDesc:SetIgnore(true)
 _textDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
 _textDesc:SetText("")
+local checkBtn_ShowDetail = UI.getChildControl(Panel_Manufacture, "CheckButton_ShowDetail")
+checkBtn_ShowDetail:addInputEvent("Mouse_LUp", "Manufacture_ShowKnowledgeList()")
 local _btn_funcBG = UI.getChildControl(Panel_Manufacture, "Static_FrameBG")
-local list2 = UI.getChildControl(Panel_Manufacture, "List2_Manufacture")
+local list2 = UI.getChildControl(_btn_funcBG, "List2_Manufacture")
 local limitTextTooltip = {}
 local IsLimitText = {}
 local selectIndex = -1
@@ -235,10 +239,10 @@ local Manufacture_Notify = {
   _failCount = 0,
   _successCount = 0
 }
-local _defaultMSG1 = UI.getChildControl(Panel_Manufacture, "StaticText_DefaultMSG1")
+local _defaultMSG1 = UI.getChildControl(_btn_funcBG, "StaticText_DefaultMSG1")
 _defaultMSG1:SetShow(false)
 _defaultMSG1:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
-local _defaultMSG2 = UI.getChildControl(Panel_Manufacture, "StaticText_DefaultMSG2")
+local _defaultMSG2 = UI.getChildControl(_btn_funcBG, "StaticText_DefaultMSG2")
 _defaultMSG2:SetShow(false)
 local _uiButtonNote = UI.getChildControl(Panel_Manufacture, "Button_Note")
 if isGameTypeKR2() then
@@ -246,12 +250,12 @@ if isGameTypeKR2() then
 end
 _uiButtonNote:addInputEvent("Mouse_LUp", "Note_Mouse_LUp()")
 _uiButtonNote:addInputEvent("Mouse_On", "Note_Mouse_On()")
-local _frameManufactureDesc = UI.getChildControl(Panel_Manufacture, "Frame_ManufactureDesc")
+local _frameManufactureDesc = UI.getChildControl(_btn_funcBG, "Frame_ManufactureDesc")
 local _frameContent = UI.getChildControl(_frameManufactureDesc, "Frame_1_Content")
 local _frameScroll = UI.getChildControl(_frameManufactureDesc, "VerticalScroll")
 local _uiKnowledgeDesc = UI.getChildControl(_frameContent, "StaticText_KnowledgeDesc")
 _uiKnowledgeDesc:SetAutoResize(true)
-local _uiKnowledgeIcon = UI.getChildControl(Panel_Manufacture, "Static_KnoeledgeIcon")
+local _uiKnowledgeIcon = UI.getChildControl(_btn_funcBG, "Static_KnoeledgeIcon")
 local _startKnowledgeIndex = 0
 local _isMassManufacture = false
 local SHAKE_MENTALTHEMEKEY = 30200
@@ -748,8 +752,6 @@ function Manufacture_UpdateSlotPos()
   local posArray = SLOT_POSITION[posIndex]
   for ii = 0, posIndex do
     local pos = posArray[ii]
-    _slotList[ii].icon:SetPosX(pos[1])
-    _slotList[ii].icon:SetPosY(pos[2])
     _pointList[ii]:SetPosX(pos[1])
     _pointList[ii]:SetPosY(pos[2])
   end
@@ -2287,6 +2289,10 @@ function Manufacture_SetShowMassManufacture(isShow)
 end
 function Manufacture_SetEnableMassManufacture(isEnable)
 end
+function Manufacture_ShowKnowledgeList()
+  _btn_funcBG:SetShow(checkBtn_ShowDetail:IsCheck())
+end
+Manufacture_ShowKnowledgeList()
 registerEvent("onScreenResize", "manufacture_Repos")
 registerEvent("EventChangedSelfPlayerActionVariable", "IsManufacture_Chk")
 list2:changeAnimationSpeed(10)

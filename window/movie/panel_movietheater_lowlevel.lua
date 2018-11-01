@@ -44,10 +44,10 @@ _movieTheater_640:addInputEvent("Mouse_On", "Panel_MovieTheater_LowLevel_ShowCon
 local isMoviePlay = false
 function Panel_MovieTheater_LowLevel_Initialize()
   _movieTheater_640:SetPosX(5)
-  _movieTheater_640:SetPosY(38)
+  _movieTheater_640:SetPosY(47)
   _movieTheater_640:SetSize(450, 338)
   _movieTheater_640:ResetUrl()
-  Panel_MovieTheater_LowLevel:SetSize(Panel_MovieTheater_LowLevel:GetSizeX(), 417)
+  Panel_MovieTheater_LowLevel:SetSize(Panel_MovieTheater_LowLevel:GetSizeX(), 431)
   Panel_MovieTheater_LowLevel_OnScreenResize()
 end
 local playedNo = 0

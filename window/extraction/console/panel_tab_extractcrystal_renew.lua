@@ -81,8 +81,6 @@ function ExtractCrystal:updateHighlightPos()
   self._ui.txt_keyGuideExtract:SetPosY((self._currentIndex - 1) * 130 + 62)
   self._ui.txt_keyGuideRemove:SetPosY((self._currentIndex - 1) * 130 + 102)
 end
-function ExtractCrystal:updateKeyGuidePos()
-end
 function PaGlobalFunc_ExtractCrystal_Close()
   self:removeSubject()
   self:removeTarget()
@@ -134,6 +132,9 @@ function PaGlobalFunc_ExtractCrystal_rClickTarget(slotNo, itemWrapper, count_s64
   end
 end
 function ExtractCrystal:updateSocket()
+  if nil == self._targetWhereType or nil == self._targetSlotNo then
+    return
+  end
   local invenItemWrapper = getInventoryItemByType(self._targetWhereType, self._targetSlotNo)
   local maxCount = invenItemWrapper:get():getUsableItemSocketCount()
   local classType = getSelfPlayer():getClassType()
@@ -352,5 +353,5 @@ function PaGlobalFunc_ExtractCrystal_UpdateKeyGuide()
   local socketIsFilled = false == self.slotSocket[self._currentIndex].empty
   local stuffIsReady = nil ~= self._stuffSlotNo
   self._ui.txt_keyGuideExtract:SetMonoTone(not snappedOnMainPanel or not socketIsFilled or not stuffIsReady)
-  self._ui.txt_keyGuideRemove:SetMonoTone(not snappedOnMainPanel or not socketIsFilled or not stuffIsReady)
+  self._ui.txt_keyGuideRemove:SetMonoTone(not snappedOnMainPanel or not socketIsFilled)
 end

@@ -253,6 +253,17 @@ function Window_VoiceChatInfo:Update()
   end
 end
 function PaGlobalFunc_VoiceChat_Open()
+  local guildInfo = ToClient_GetMyGuildInfoWrapper()
+  if nil == guildInfo then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+      content = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"),
+      functionYes = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+    return
+  end
   local self = Window_VoiceChatInfo
   self._prevOpenIsMicOn = ToClient_isVoiceChatMic(self._enumVoiceType._enVoiceChatType_Guild)
   self._prevOpenIsHeadphoneOn = ToClient_isVoiceChatListen(self._enumVoiceType._enVoiceChatType_Guild)

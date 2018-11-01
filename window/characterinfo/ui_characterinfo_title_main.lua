@@ -40,6 +40,7 @@ PaGlobal_CharacterInfoTitle = {
     },
     _Progress2Total_Progress = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "Static_TotalProgress_Progress"),
     _staticTextTotal_Value = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgress_Percent"),
+    _staticText_TotalCount = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalCount"),
     _txt_totalProgress = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgress"),
     _staticTextTitle_Value = {
       [0] = UI.getChildControl(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_CountValue"),
@@ -107,6 +108,7 @@ function PaGlobal_CharacterInfoTitle:update()
     local totalPercent = acquiredTitleCountByAll / titleCountByAll * 100
     self._ui._Progress2Total_Progress:SetProgressRate(totalPercent)
     self._ui._staticTextTotal_Value:SetText(string.format("%.1f", totalPercent) .. "%")
+    self._ui._staticText_TotalCount:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_SUBTITLEBAR_COUNT", "count", acquiredTitleCountByAll))
     self._ui._staticTextTotal_Value:SetPosX(self._ui._txt_totalProgress:GetPosX() + self._ui._txt_totalProgress:GetTextSizeX() + 10)
     for index = 0, titleTotalCount - 1 do
       local titleBuffWrapper = ToClient_GetTitleBuffWrapper(index)
@@ -125,9 +127,8 @@ function PaGlobal_CharacterInfoTitle:update()
     local titleCurrentPercent = titleCurrentGetCount / titleCurrentCount * 100
     self._ui._staticTextTitle_Value[index]:SetText(string.format("%.1f", titleCurrentPercent) .. "%")
     self._ui._circularProgressTitle[index]:SetProgressRate(titleCurrentPercent)
-    self._ui._staticTextTitle_Percent[index]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
     self._ui._staticTextTitle_Percent[index]:SetText(PAGetString(Defines.StringSheet_RESOURCE, self._categoryStirng[index]))
-    UI.checkLimitTextAndAddTooltip(self._ui._staticTextTitle_Percent[index], PAGetString(Defines.StringSheet_RESOURCE, self._categoryStirng[index]))
+    UI.setLimitTextAndAddTooltip(self._ui._staticTextTitle_Percent[index], PAGetString(Defines.StringSheet_RESOURCE, self._categoryStirng[index]))
   end
   self:updateList()
 end

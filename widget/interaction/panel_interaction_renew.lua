@@ -1148,6 +1148,10 @@ function FromClient_PanelInteraction_Fail()
     _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : PanelInteraction")
     return
   end
+  if Defines.UIMode.eUIMode_DeadMessage == GetUIMode() then
+    sself._preUIMode = nil
+    return
+  end
   if nil == self._preUIMode then
     return
   end

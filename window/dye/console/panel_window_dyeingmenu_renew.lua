@@ -13,7 +13,7 @@ local DYEING_SUBMENU = {
   CAMEL = 4,
   TENT = 5
 }
-local TARGET_NUM = {
+local _targetNumTable = {
   [DYEING_SUBMENU.CHARACTER] = 0,
   [DYEING_SUBMENU.HORSE] = 1,
   [DYEING_SUBMENU.CARRIAGE] = 2,
@@ -167,7 +167,7 @@ function Input_DyeingMenu_SubMenu(rootIndex, subIndex)
     end
     self:setVisibleMenu(false)
   elseif ROOT_MENU.DYEING == rootIndex then
-    local dyeAvailable = ToClient_RequestSetTargetType(TARGET_NUM[subIndex])
+    local dyeAvailable = ToClient_RequestSetTargetType(_targetNumTable[subIndex])
     if dyeAvailable then
       DyeingMenu:close()
       PaGlobalFunc_DyeingPartList_Open(subIndex)

@@ -1069,7 +1069,7 @@ end
 function CustomizationMessage(message)
   if message ~= nil then
     StaticText_CustomizationMessage:SetText(message)
-    StaticText_CustomizationMessage:SetSize(StaticText_CustomizationMessage:GetTextSizeX() + 10 + StaticText_CustomizationMessage:GetSpanSize().x, 30)
+    StaticText_CustomizationMessage:SetSize(StaticText_CustomizationMessage:GetTextSizeX() + 10 + StaticText_CustomizationMessage:GetSpanSize().x, StaticText_CustomizationMessage:GetTextSizeY() + 5)
     StaticText_CustomizationMessage:SetSpanSize(0, 0)
     StaticText_CustomizationMessage:SetShow(true)
   else

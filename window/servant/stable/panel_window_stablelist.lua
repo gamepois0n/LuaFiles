@@ -109,6 +109,7 @@ local stableList = {
   _sealedCount = UI.getChildControl(Panel_Window_StableList, "StaticText_SealedCount"),
   _unsealedCount = UI.getChildControl(Panel_Window_StableList, "StaticText_UnsealedCount"),
   _maxCount = UI.getChildControl(Panel_Window_StableList, "StaticText_MaxCount"),
+  _buySlot = UI.getChildControl(Panel_Window_StableList, "Button_BuySlot"),
   _scroll = UI.getChildControl(Panel_Window_StableList, "Scroll_Slot_List"),
   _slots = Array.new(),
   _selectSlotNo = nil,
@@ -141,6 +142,7 @@ function stableList:init()
     slot.regionChanging = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RegionChanging", slot.button, "ServantList_Slot_RegionChanging_" .. ii)
     slot.registerForRentTag = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RegisterForRentTag", slot.button, "ServantList_Slot_RegisterForRentTag_" .. ii)
     slot.rentTag = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_RentTag", slot.button, "ServantList_Slot_RentTag_" .. ii)
+    slot.returnTag = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_ReturnTag", slot.button, "ServantList_Slot_ReturnTag_" .. ii)
     slot.training = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_Training", slot.button, "ServantList_Slot_Training_" .. ii)
     slot.isSeized = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "StaticText_Attachment", slot.button, "ServantList_Slot_Seized" .. ii)
     slot.stallion = UI.createAndCopyBasePropertyControl(Panel_Window_StableList, "Static_iconStallion", slot.button, "ServantList_Slot_Stallion" .. ii)
@@ -191,6 +193,8 @@ function stableList:init()
     slot.registerForRentTag:SetPosY(iconConfig.startStateY)
     slot.rentTag:SetPosX(iconConfig.startStateX)
     slot.rentTag:SetPosY(iconConfig.startStateY)
+    slot.returnTag:SetPosX(iconConfig.startStateX)
+    slot.returnTag:SetPosY(iconConfig.startStateY)
     slot.training:SetPosX(iconConfig.startStateX)
     slot.training:SetPosY(iconConfig.startStateY)
     slot.isSeized:SetPosX(iconConfig.startStateX)
@@ -296,6 +300,28 @@ function stableList:init()
   self._maxCount:addInputEvent("Mouse_On", "stableList_ShowCountTooltip(" .. 2 .. ")")
   self._maxCount:addInputEvent("Mouse_Out", "stableList_HideCountTooltip()")
   Panel_Window_StableList:SetChildIndex(self._staticButtonListBG, 9999)
+  if isGameTypeKorea() then
+    self._buySlot:SetShow(true)
+  else
+    self._buySlot:SetShow(false)
+  end
+  self._buySlot:addInputEvent("Mouse_LUp", "PaGlobal_ClickEvent_StableSlotBuy()")
+end
+function PaGlobal_ClickEvent_StableSlotBuy()
+  local self = stableList
+  local easyBuySlot = function()
+    PaGlobal_EasyBuy:Open(15, getCurrentWaypointKey())
+  end
+  if isGameTypeKorea() then
+    local messageboxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_OBJECTCONTROL_CONFIRM"),
+      content = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_EASYBUY"),
+      functionYes = easyBuySlot,
+      functionNo = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageboxData)
+  end
 end
 function stableList_ShowCountTooltip(iconType)
   local self = stableList
@@ -390,6 +416,7 @@ function stableList:update()
         slot.regionChanging:SetShow(false)
         slot.registerForRentTag:SetShow(false)
         slot.rentTag:SetShow(false)
+        slot.returnTag:SetShow(false)
         slot.stallion:SetShow(false)
         slot.training:SetShow(false)
         if isLinkedHorse then
@@ -448,7 +475,9 @@ function stableList:update()
           slot.registerForRentTag:SetShow(true)
         end
         local hasRentOwnerFlag = Defines.s64_const.s64_0 < servantInfo:getRentOwnerNo()
-        if hasRentOwnerFlag then
+        if CppEnums.ServantStateType.Type_Return == servantInfo:getStateType() then
+          slot.returnTag:SetShow(true)
+        elseif hasRentOwnerFlag then
           slot.rentTag:SetShow(true)
         end
         if servantInfo:getVehicleType() == CppEnums.VehicleType.Type_Horse then
@@ -566,6 +595,11 @@ function stableList:update()
   UIScroll.SetButtonSize(self._scroll, self._config.slotCount, servantCount)
   FGlobal_NeedStableRegistItem_Print()
 end
+function FromClient_VaryExtendSlot(type, region, count)
+  if Panel_Window_StableList:GetShow() then
+    stableList:update()
+  end
+end
 function stableList:registEventHandler()
   UIScroll.InputEvent(self._scroll, "StableList_ScrollEvent")
   Panel_Window_StableList:addInputEvent("Mouse_UpScroll", "StableList_ScrollEvent( true )")
@@ -623,6 +657,7 @@ function stableList:registMessageHandler()
   registerEvent("FromClient_EndStallionSkillTraining", "FromClient_EndStallionSkillTraining")
   registerEvent("FromClient_IncreaseStallionSkillExpAck", "FromClient_IncreaseStallionSkillExpAck")
   registerEvent("FromClient_OnChangeServantRegion", "ChangeServantRegion_HandleUpdate")
+  registerEvent("FromClient_VaryExtendSlot", "FromClient_VaryExtendSlot")
 end
 function StableList_Resize()
   local screenX = getScreenSizeX()
@@ -756,6 +791,10 @@ function StableList_ButtonOpen(eType, slotNo)
     if nil == servantInfo then
       return
     elseif servantInfo:isChangingRegion() then
+      StableList_ButtonClose()
+      return
+    end
+    if CppEnums.ServantStateType.Type_Return == servantInfo:getStateType() then
       StableList_ButtonClose()
       return
     end

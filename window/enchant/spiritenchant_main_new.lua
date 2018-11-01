@@ -1878,6 +1878,8 @@ function PaGlobal_Enchant:setEnchantFailCount()
   self._ui._statictext_EnchantFailCount:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RENEW_BONUS1"))
   self._ui._statictext_EnchantFailCountValue:SetText("+" .. failCount)
   self._ui._statictext_ValksCount:SetShow(true)
+  self._screctExtractIvenType = self._enchantInfo:ToClient_getVaildSecretExtractionIvenType()
+  self:showScretExtractButton(self._screctExtractIvenType ~= CppEnums.ItemWhereType.eCount)
   self._ui._statictext_ValksCount:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_RENEW_BONUS2"))
   self._ui._statictext_ValksCountValue:SetText("+" .. valksCount)
   self._ui._statictext_TotalEnchantCount:SetText("<PAColor0xffffbc1a>+" .. failCount + valksCount)
@@ -2210,6 +2212,8 @@ function PaGlobal_Enchant:didsetEnchantTarget(isMonotone, isRadioClick)
   if nil == isRadioClick then
     self:setEnchantMaterial(isMonotone)
   end
+  self._screctExtractIvenType = self._enchantInfo:ToClient_getVaildSecretExtractionIvenType()
+  self:showScretExtractButton(self._screctExtractIvenType ~= CppEnums.ItemWhereType.eCount)
   self:showDifficulty(self._grantItemWhereType, self._grantItemSlotNo)
 end
 function PaGlobal_Enchant:setEnchantMaterial(isMonotone)
@@ -2859,6 +2863,7 @@ function PaGlobal_Enchant:handleLUpEnchantApplyButton()
   else
     self:willStartCronEnchant()
   end
+  FGlobal_EnchantExtraction_JustClose()
   self._resultShowTime = 0
   self._ui._radiobutton_EnchantTab:SetIgnore(false)
   self._ui._radiobutton_CronEnchantTab:SetIgnore(false)

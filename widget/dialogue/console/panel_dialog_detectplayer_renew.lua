@@ -130,7 +130,7 @@ function FromClient_DetectPlayer_OpenDetectPlayer()
   PaGlobalFunc_DetectPlayer_Show()
 end
 function FromClient_DetectPlayer_CompleteDetectPlayer(position)
-  FGlobal_PushOpenWorldMap()
+  PaGlobalFunc_WorldMap_Open()
   FromClient_RClickWorldmapPanel(position, true, false)
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_DetectPlayer_Init")

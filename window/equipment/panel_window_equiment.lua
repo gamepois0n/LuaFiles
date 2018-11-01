@@ -768,7 +768,7 @@ end
 function Equipment_onScreenResize()
   if Defines.UIMode.eUIMode_Extraction ~= GetUIMode() then
     Panel_Equipment:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Equipment:GetSizeX())
-    Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
+    Panel_Equipment:SetPosY(Panel_Window_Inventory:GetPosY())
   end
 end
 function equip:registMessageHandler()
@@ -1182,7 +1182,14 @@ function PaGlobalFunc_Equipment_IsReuseTime(deltaTime)
   equip.reuseAlchemyStoneCheckTime = equip.reuseAlchemyStoneCheckTime + deltaTime
   return false
 end
+function FGlobal_UIReloadForBattleRoyale()
+  classType = getSelfPlayer():getClassType()
+  awakenWeaponContentsOpen = awakenWeapon[classType]
+  posXDefault = 345
+  FGlobal_Equipment_Init()
+end
 registerEvent("FromClient_luaLoadComplete", "FGlobal_Equipment_Init")
 registerEvent("FromClient_ChangeUnderwearModeInHouse", "FromClient_ChangeUnderwearMode_Equipment")
 registerEvent("FromClient_ChangeSwimmingSuitShowMode", "FromClient_ChangeSwimmingSuitMode_Equipment")
 registerEvent("FromClient_ShowTotalStatTierChanged", "FGlobal_UpdateTotalStatValue_InEquipment")
+registerEvent("FromClient_ClassChangeBattleRoyale", "FGlobal_UIReloadForBattleRoyale")

@@ -615,13 +615,9 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   if selfPlayer:isGuildAllianceChair() then
     self._infoUi.allianceMark:SetIgnore(false)
     self._infoUi.btnGuildAllianceMark:SetShow(true)
-    self._infoUi.btnGuildAllianceSecession:SetShow(true)
     self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_LUp", "FGlobal_Guild_AllianceInfo_ChangeMark()")
     self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip(0)")
     self._infoUi.btnGuildAllianceMark:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
-    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:DisbandAlliance()")
-    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip(1)")
-    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
     self._infoUi.editAllianceNoticeUi:SetIgnore(false)
     self._infoUi.editAllianceNoticeUi:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:HandleClicked_AllianceNoticeEditSetFocus()")
     self._infoUi.editAllianceNoticeUi:SetMaxInput(300)
@@ -633,6 +629,14 @@ function PaGlobal_Guild_AllianceInfo:InfoInitialize()
   else
     self._infoUi.editAllianceNoticeUi:SetIgnore(true)
     self._infoUi.allyIconBG:SetIgnore(true)
+  end
+  if selfPlayer:isGuildMaster() then
+    self._infoUi.btnGuildAllianceSecession:SetShow(true)
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_LUp", "PaGlobal_Guild_AllianceInfo:DisbandAlliance()")
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_On", "FGlobal_Guild_AllianceInfo_MarkToolTip(1)")
+    self._infoUi.btnGuildAllianceSecession:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+  else
+    self._infoUi.btnGuildAllianceSecession:SetShow(false)
   end
   self._infoUi.editAllianceNoticeUi:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   local isSet = setGuildTextureByAllianceNo(_allianceNo, self._infoUi.allianceMark)

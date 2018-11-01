@@ -179,6 +179,7 @@ function FromClient_MyHistoryInfo_Update()
           _dayHistoryValue[i]:addInputEvent("Mouse_Out", "MyHistory_HelpWidget_Show(false)")
         end
         _dayHistoryValue[i]:SetAutoResize(true)
+        _dayHistoryValue[i]:SetTextMode(CppEnums.TextMode.eTextMode_LimitText)
         _dayHistoryValue[i]:SetText(tostring(_journalInfo[i]:getName()))
         _dayHistoryValue[i]:SetPosY(sizeY + 30)
         _dayHistoryValue[i]:SetShow(true)

@@ -135,10 +135,11 @@ function servantInventory:update()
   for ii = 0, self._config.inventoryCount do
     local data = self._inventory[ii]
     if nil ~= data._actorKeyRaw then
+      data._staticBG:SetPosY(inventoryConfig.startY + sizeY)
       sizeY = sizeY + data._staticBG:GetSizeY() + 10
     end
   end
-  sizeY = sizeY + 42
+  sizeY = sizeY + 55
   Panel_Window_ServantInventory:SetSize(Panel_Window_ServantInventory:GetSizeX(), sizeY)
 end
 function servantInventory:updateByIndex(index)
@@ -212,11 +213,8 @@ function servantInventory:updateByIndex(index)
       slot:setItem(itemWrapper)
     end
   end
-  local row = fullCount / 8
-  if 0 <= fullCount % 8 then
-    row = row + 1
-  end
-  data._staticBG:SetSize(data._staticBG:GetSizeX(), 60 + 50 * row)
+  local row = math.floor((fullCount - 1) / 8) + 1
+  data._staticBG:SetSize(data._staticBG:GetSizeX(), 70 + 50 * row)
   data._staticTitle:ComputePos()
   data._staticCapacity:ComputePos()
   data._staticMoney:ComputePos()
@@ -393,10 +391,10 @@ function ServantInventoryOpenWithInventory(actorKeyRaw)
     self._inventory[0]._type = CppEnums.MoveItemToType.Type_Vehicle
     ServantInventory_Open()
   end
-  Panel_Window_ServantInventory:SetHorizonCenter()
-  Panel_Window_ServantInventory:SetSpanSize(200, Panel_Window_ServantInventory:GetSpanSize().y)
   Inventory_SetFunctor(nil, FGlobal_PopupMoveItem_InitByInventory, ServantInventory_Close, nil)
   InventoryWindow_Show()
+  Panel_Window_ServantInventory:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Window_ServantInventory:GetSizeX() - 10)
+  Panel_Window_ServantInventory:SetPosY(Panel_Window_Inventory:GetPosY())
 end
 function ServantInventory_updateSlotData()
   local self = servantInventory
@@ -434,7 +432,8 @@ end
 function ServantInventory_Open()
   Inventory_SetIgnoreMoneyButton(true)
   if GetUIMode() == Defines.UIMode.eUIMode_NpcDialog then
-    Panel_Window_ServantInventory:SetPosX(getScreenSizeY() / 2 - Panel_Window_Warehouse:GetSizeY() / 2)
+    Panel_Window_ServantInventory:SetPosX(math.max(0, Panel_Window_Warehouse:GetPosX() - Panel_Window_ServantInventory:GetSizeX() - 250 - 10))
+    Panel_Window_ServantInventory:SetPosY(Panel_Window_Warehouse:GetPosY())
   end
   servantInventory:update()
   if not Panel_Window_ServantInventory:GetShow() then

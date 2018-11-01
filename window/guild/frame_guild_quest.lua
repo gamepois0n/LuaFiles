@@ -547,6 +547,15 @@ function GuildQuestInfoPage:UpdateData()
       else
         self._txtProgressNoQuest:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_PROGRESSNOQUEST_ANOTHERCHANNEL", "channel", channelName))
       end
+      self._btnProgressGiveup:SetPosX(self._btnProgressGiveupOriginPosX + 225)
+      self._btnProgressReward:SetPosX(self._btnProgressRewardOriginPosX + 225)
+      if getSelfPlayer():get():isGuildMaster() or getSelfPlayer():get():isGuildSubMaster() then
+        self._btnProgressGiveup:SetShow(true)
+        self._btnProgressReward:SetPosX(self._RewardPosX + 100)
+      else
+        self._btnProgressGiveup:SetShow(false)
+        self._btnProgressReward:SetPosX(self._btnProgressGiveup:GetPosX())
+      end
     else
       self._txtProgressNoQuest:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOCURRENT"))
       self._txtProgresshelpAccept:SetShow(true)

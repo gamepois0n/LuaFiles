@@ -1142,7 +1142,7 @@ function FromClient_StableList_StableList_ServantLink(horseNo, carriageNo, isLin
     if nil == horseInfo or nil == carriageInfo then
       return
     end
-    Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_LINK", "carriageName", stable_getServantByServantNo(carriageNo):getName(), "horseName", stable_getServantByServantNo(horseNo):getName()))
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_LINK_XBOX"))
   else
     if nil == horseInfo then
       return

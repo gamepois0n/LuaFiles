@@ -133,19 +133,36 @@ function FromClient_UI_CharacterInfo_Basic_FamilyPointsChanged()
   local lifeFP = self._playerGet:getLifeFamilyPoint()
   local etcFP = self._playerGet:getEtcFamilyPoint()
   local sumFP = battleFP + lifeFP + etcFP
-  self._ui._staticTextFamilyPoints[self._familyPoint._family]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FAMILYPOINT_TITLE", "familyPoint", tostring(sumFP)))
-  if isGameTypeKorea() or isGameTypeJapan() or isGameTypeTaiwan() then
-    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_BATTLEPOINT", "value", tostring(battleFP)))
-    self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_LIFEPOINT", "value", tostring(lifeFP)))
-    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_ETCPOINT", "value", tostring(etcFP)))
+  local controls = self._ui._staticTextFamilyPoints
+  local iconControls = self._ui._staticTextFamilyPointsWithIcon
+  controls[self._familyPoint._family]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_FAMILYPOINT_TITLE", "familyPoint", tostring(sumFP)))
+  controls[self._familyPoint._combat]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_BATTLEPOINT", "value", tostring(battleFP)))
+  controls[self._familyPoint._life]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_LIFEPOINT", "value", tostring(lifeFP)))
+  controls[self._familyPoint._etc]:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARINFO_ETCPOINT", "value", tostring(etcFP)))
+  iconControls[self._familyPoint._combat]:SetText(tostring(battleFP))
+  iconControls[self._familyPoint._life]:SetText(tostring(lifeFP))
+  iconControls[self._familyPoint._etc]:SetText(tostring(etcFP))
+  local useIcon = not isGameTypeKorea() and not isGameTypeTaiwan() and not isGameTypeJapan()
+  for ii = 1, 3 do
+    if useIcon then
+      controls[ii]:SetShow(false)
+      iconControls[ii]:SetShow(true)
+    else
+      iconControls[ii]:SetShow(false)
+      controls[ii]:SetShow(true)
+      controls[ii]:SetSize(controls[ii]:GetTextSizeX(), controls[ii]:GetSizeY())
+    end
+  end
+  local gap = 40
+  local parent = controls[self._familyPoint._etc]:getParent()
+  if useIcon then
+    iconControls[self._familyPoint._etc]:SetSpanSize(parent:GetSizeX() - iconControls[self._familyPoint._etc]:GetTextSizeX() - 15 - 30)
+    iconControls[self._familyPoint._life]:SetSpanSize(iconControls[self._familyPoint._etc]:GetPosX() - iconControls[self._familyPoint._life]:GetTextSizeX() - gap - 30)
+    iconControls[self._familyPoint._combat]:SetSpanSize(iconControls[self._familyPoint._life]:GetPosX() - iconControls[self._familyPoint._combat]:GetTextSizeX() - gap - 30)
   else
-    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetText(tostring(battleFP))
-    self._ui._staticTextFamilyPoints[self._familyPoint._life]:SetText(tostring(lifeFP))
-    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetText(tostring(etcFP))
-    local _combatPosX = self._ui._staticTextFamilyPoints[self._familyPoint._life]:GetPosX() - 120
-    local _etcPosX = self._ui._staticTextFamilyPoints[self._familyPoint._life]:GetPosX() + 120
-    self._ui._staticTextFamilyPoints[self._familyPoint._combat]:SetSpanSize(_combatPosX, 0)
-    self._ui._staticTextFamilyPoints[self._familyPoint._etc]:SetSpanSize(_etcPosX, 0)
+    controls[self._familyPoint._etc]:SetSpanSize(parent:GetSizeX() - controls[self._familyPoint._etc]:GetSizeX() - 15)
+    controls[self._familyPoint._life]:SetSpanSize(controls[self._familyPoint._etc]:GetPosX() - controls[self._familyPoint._life]:GetSizeX() - gap)
+    controls[self._familyPoint._combat]:SetSpanSize(controls[self._familyPoint._life]:GetPosX() - controls[self._familyPoint._combat]:GetSizeX() - gap)
   end
 end
 function FromClient_UI_CharacterInfo_Basic_ResistChanged()
@@ -239,6 +256,7 @@ function FromClient_UI_CharacterInfo_Basic_PotentialChanged()
     if isGameTypeKorea() or isGameTypeTaiwan() then
       self._ui._staticTextPotential_Value[index]:SetShow(true)
       self._ui._staticTextPotential_Title[index]:SetSize(80, 20)
+      self._ui._staticTextPotential_Title[index]:SetText(self._ui._staticTextPotential_Title[index]:GetText())
       for slotIndex = 0, 4 do
         self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(90 + slotIndex * 33)
         self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(11)
@@ -250,6 +268,7 @@ function FromClient_UI_CharacterInfo_Basic_PotentialChanged()
     else
       self._ui._staticTextPotential_Value[index]:SetShow(false)
       self._ui._staticTextPotential_Title[index]:SetSize(145, 20)
+      self._ui._staticTextPotential_Title[index]:SetText(self._ui._staticTextPotential_Title[index]:GetText())
       for slotIndex = 0, 4 do
         self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosX(150 + slotIndex * 33)
         self._ui._staticPotencialGradeBg[index][slotIndex]:SetPosY(11)
@@ -654,7 +673,7 @@ function PaGlobal_Char_LifeInfo:Init()
         self._lifeInfo[key]._ui._subCategoryPoint[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, pointControlName)
       end
     end
-    if 1 == key or 2 == key or 9 == key or 4 == key then
+    if 1 == key or 2 == key or 9 == key or 4 == key or 6 == key then
       self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. ")")
       self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. ")")
     else
@@ -867,6 +886,30 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       end
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE1")
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_FISHINGSTAT_DESC", "rate", tostring(addRate))
+      control = self._lifeInfo[mainType]._ui._commonPoint
+    elseif __ePlayerLifeStatType_Cooking == mainType then
+      if false == _ContentsGroup_EnhanceCooking then
+        return
+      end
+    elseif __ePlayerLifeStatType_Training == mainType then
+      if false == _ContentsGroup_EnhanceTraining then
+        return
+      end
+      local trainingStatStaticStatus = ToClient_getTrainingStatStaticStatus()
+      local captureRate = 0
+      local skillRate = 0
+      local expRate = 0
+      local matingRate = 0
+      local statRate = 0
+      if nil ~= trainingStatStaticStatus then
+        captureRate = string.format("%.1f", trainingStatStaticStatus._addHorseCaptureRate / 10000)
+        skillRate = string.format("%.1f", trainingStatStaticStatus._addVehicleSkillOwnerRate / 10000)
+        expRate = string.format("%.1f", trainingStatStaticStatus._addVehicleExperienceRate / 10000)
+        matingRate = string.format("%.1f", trainingStatStaticStatus._addMatingRate / 10000)
+        statRate = string.format("%.1f", trainingStatStaticStatus._addServantStatRate / 10000)
+      end
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE6")
+      desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_TRAINING_DESC_1", "rate1", tostring(captureRate), "rate2", tostring(skillRate), "rate3", tostring(expRate), "rate4", tostring(matingRate))
       control = self._lifeInfo[mainType]._ui._commonPoint
     else
       return

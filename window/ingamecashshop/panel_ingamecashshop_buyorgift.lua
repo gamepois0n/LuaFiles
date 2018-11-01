@@ -1295,7 +1295,7 @@ function FromClient_NotifyCompleteBuyProduct(productNoRaw, isGift, toCharacterNa
       local chooseCashProduct = cashProduct:getChooseCashByIndex(0)
       itemWrapper = chooseCashProduct:getItemByIndex(0)
     end
-    if itemWrapper:get():isCash() then
+    if nil == itemWrapper or itemWrapper:get():isCash() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_CONFIRM_PEARLBAG"))
     else
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_CONFIRM_NORMALBAG"))

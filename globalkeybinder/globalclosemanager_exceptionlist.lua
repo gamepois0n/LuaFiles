@@ -1077,6 +1077,8 @@ function CloseManager_RegisterExeptionList()
     Panel_TradeMarket_BiddingGame,
     Panel_TradeMarket_Graph,
     Panel_TradeMarket_In,
-    Panel_TradeMarket_Goods
+    Panel_TradeMarket_Goods,
+    Panel_Test_SkillView_Control,
+    Panel_Tooltip_Common
   }
 end

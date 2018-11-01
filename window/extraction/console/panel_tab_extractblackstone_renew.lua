@@ -8,7 +8,8 @@ local ExtractBlackStone = {
   _targetSlotNo = nil,
   _currentTime = 0,
   _doExtracting = false,
-  _targetIsWeapon = false
+  _targetIsWeapon = false,
+  _fending = false
 }
 local extractingEffect = {
   _step1 = nil,
@@ -79,6 +80,9 @@ function PaGlobalFunc_ExtractBlackStone_Close()
   Inventory_SetFunctor(nil)
 end
 function PaGlobalFunc_ExtractBlackStone_OnPadB()
+  if true == self._doExtracting or true == self._fending then
+    return
+  end
   if nil ~= self._targetSlotNo or false == self._uiEquipItem.empty then
     self:clear()
     ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
@@ -114,6 +118,9 @@ function ExtractBlackStone_FilterTarget(slotNo, itemWrapper, whereType)
 end
 function ExtractBlackStone_rClickedTarget(slotNo, itemWrapper, count_s64, inventoryType)
   if nil == slotNo or nil == itemWrapper then
+    return
+  end
+  if true == self._doExtracting or true == self._fending then
     return
   end
   if self._uiEquipItem.icon then
@@ -155,22 +162,35 @@ function ExtractBlackStone_rClickedTarget(slotNo, itemWrapper, count_s64, invent
   Inventory_SetFunctor(ExtractBlackStone_FilterTarget, ExtractBlackStone_rClickedTarget, PaGlobalFunc_ExtractBlackStone_Close, nil)
 end
 function PaGlobalFunc_ExtractBlackStone_ApplyExtract()
+  if true == self._doExtracting or true == self._fending then
+    return
+  end
+  if nil == self._targetSlotNo or true == self._uiEquipItem.empty then
+    return
+  end
+  self._ui.txt_keyGuide:SetMonoTone(true)
   local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_EXTRACTION_ENCHANTSTONE_APPLYREADY")
   local messageboxData = {
     title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
     content = messageContent,
     functionYes = function()
+      self._fending = true
       ToClient_ExtractBlackStone(self._targetWhereType, self._targetSlotNo)
       audioPostEvent_SystemUi(5, 10)
       FGlobal_MiniGame_RequestExtraction()
       PaGlobal_TutorialManager:handleApplyExtractionEnchantStone()
     end,
-    functionNo = MessageBox_Empty_function,
+    functionNo = function()
+      self._ui.txt_keyGuide:SetMonoTone(false)
+      _PA_LOG("\235\176\149\235\178\148\236\164\128", "txt_keyGuide:SetMonoTone(false)_____1")
+    end,
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageboxData)
 end
 function FromClient_ExtractBlackStone_Success()
+  self._fending = false
+  self._ui.txt_keyGuide:SetMonoTone(true)
   self._currentTime = 0
   self._doExtracting = true
   Panel_Tooltip_Item_hideTooltip()
@@ -251,6 +271,7 @@ function ExtractBlackStone:successXXX()
   self:clear()
 end
 function ExtractBlackStone:clear()
+  self._fending = false
   self._targetSlotNo = nil
   self._uiEquipItem.slotNo = nil
   self._uiEquipItem:clearItem()
@@ -277,4 +298,5 @@ function ExtractBlackStone:resultShow()
 end
 function PaGlobalFunc_ExtractBlackStone_UpdateKeyGuide(isSnappedOnThisPanel)
   self._ui.txt_keyGuide:SetMonoTone(false == isSnappedOnThisPanel or true == self._uiEquipItem.empty)
+  _PA_LOG("\235\176\149\235\178\148\236\164\128", "txt_keyGuide:SetMonoTone(false)_____2")
 end
