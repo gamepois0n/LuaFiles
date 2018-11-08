@@ -1,6 +1,5 @@
 local fairySkill = {
   _ui = {
-    _static_Title_BG = UI.getChildControl(Panel_Window_FaIryTierUpgrade, "Static_Title_BG"),
     _button_Win_Close = UI.getChildControl(Panel_Window_FaIryTierUpgrade, "Button_Win_Close"),
     _static_MainBG = UI.getChildControl(Panel_Window_FaIryTierUpgrade, "Static_MainBG"),
     _button_Close = UI.getChildControl(Panel_Window_FaIryTierUpgrade, "Button_Close"),

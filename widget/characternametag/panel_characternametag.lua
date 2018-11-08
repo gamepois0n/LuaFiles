@@ -494,11 +494,6 @@ local function settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
       end
     end
   elseif actorProxy:isVehicle() then
-    local charWrapper = actorProxyWrapper:getCharacterStaticStatusWrapper()
-    if nil ~= charWrapper and true == charWrapper:isAttrSet(__eGuildTeamBattleWoodenFence) then
-      nameTag:SetShow(false)
-      return
-    end
     textName = actorProxyWrapper:getName()
   else
     textName = actorProxyWrapper:getName()
@@ -1354,17 +1349,14 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
     hpBack = UI.getChildControl(targetPanel, "KingOrLordTentProgressBack")
     hpLater = UI.getChildControl(targetPanel, "KingOrLordTentProgress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "KingOrLordTentHPGageProgress")
-    hpName = UI.getChildControl(targetPanel, "CharacterName")
   elseif actorProxy:isLargeHpBarCharacter() then
     hpBack = UI.getChildControl(targetPanel, "KingOrLordTentProgressBack")
     hpLater = UI.getChildControl(targetPanel, "KingOrLordTentProgress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "KingOrLordTentHPGageProgress")
-    hpName = UI.getChildControl(targetPanel, "CharacterName")
   else
     hpBack = UI.getChildControl(targetPanel, "ProgressBack")
     hpLater = UI.getChildControl(targetPanel, "Progress2_HpLater")
     hpMain = UI.getChildControl(targetPanel, "CharacterHPGageProgress")
-    hpName = UI.getChildControl(targetPanel, "CharacterName")
   end
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
   if nil == hpBack or nil == hpLater or nil == hpMain or nil == characterStaticStatus then
@@ -1445,6 +1437,7 @@ local function settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
           hpBack:SetShow(true)
           hpLater:SetShow(true)
           hpMain:SetShow(true)
+          local hpName = UI.getChildControl(targetPanel, "CharacterName")
           hpName:SetText(actorProxy:getStaticStatusName() .. " (" .. tostring(curEndurance) .. "/" .. tostring(maxEndurance) .. ")")
         else
           hpBack:SetShow(false)

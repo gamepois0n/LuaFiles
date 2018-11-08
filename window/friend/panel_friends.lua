@@ -412,6 +412,12 @@ function FriendList:initialize()
   self._uiTreeFriend:SetItemQuantity(15)
   self._uiTreeFriendScroll:SetSize(self._uiTreeFriendScroll:GetSizeX(), ySize)
 end
+function FriendList:loadOption()
+  local noticeSound = ToClient_RoadToggleSoundNotice() or false
+  local noticeEffect = ToClient_RoadToggleEffectNotice() or false
+  self._checkButtonSound:SetCheck(noticeSound)
+  self._checkButtonEffect:SetCheck(noticeEffect)
+end
 function FriendList:updateList()
   self._uiTreeFriend:ClearTree()
   self._uiTreeFriend:SetAlpha(1)
@@ -1210,6 +1216,7 @@ function FriendList_show()
     friendsBTN:EraseAllEffect()
   end
   Panel_FriendList:SetShow(true, true)
+  FriendList:loadOption()
 end
 function FriendList_hide()
   PopupAddFriend:SetShow(false)

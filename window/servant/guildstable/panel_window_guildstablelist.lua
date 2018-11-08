@@ -745,6 +745,13 @@ function GuildStableList_UpdateSlotData()
     return
   end
   local self = guildStableList
+  if true == guildWharfFunction._isOpen then
+    guildWharfFunction._isOpen = false
+    return
+  elseif true == guildStableFunction._isOpen then
+    guildStableFunction._isOpen = false
+    return
+  end
   self:update()
   for ii = 0, self._config.slotCount - 1 do
     self._slots[ii].effect:SetShow(false)

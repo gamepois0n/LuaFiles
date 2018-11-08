@@ -205,6 +205,15 @@ function Window_WorldMap_TopMenuInfo:UpdateInfo(index)
   ToClient_WorldmapStateChange(renderState)
   self:UpdateFilder(index)
   ToClient_setDoTerrainHide(self._isBlackFog)
+  if renderState == eState.eWMS_EXPLORE_PLANT then
+    if true == self._stateFilterConfig[index][CppEnums.WorldMapCheckState.eCheck_Postions] then
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+    else
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+    end
+  else
+    FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+  end
 end
 function Window_WorldMap_TopMenuInfo:InitGuildWarFilter()
 end

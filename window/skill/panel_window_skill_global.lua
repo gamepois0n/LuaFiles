@@ -124,6 +124,7 @@ PaGlobal_Skill = {
   _btn_MovieToolTipDesc = UI.getChildControl(Panel_Window_Skill, "StaticText_MovieToolTip"),
   _btn_MovieToolTip = UI.getChildControl(Panel_Window_Skill, "Button_MovieTooltip"),
   _btn_MovieToolTip2 = UI.getChildControl(Panel_Window_Skill, "Button_MovieTooltip_SpacialCombo"),
+  _btn_BlackSpiritLock = UI.getChildControl(Panel_Window_Skill, "Button_BlackSpiritLock"),
   learnedSkillList = Array.new(),
   isPartsSkillReset = false,
   saved_isLearnMode = true,
@@ -201,6 +202,9 @@ function PaGlobal_Skill:initControl()
   self._stc_mouseR:SetSpanSize(self._stc_mouseL:GetPosX() + self._stc_mouseL:GetTextSizeX() + self._stc_mouseL:GetTextSpan().x + 10, self._stc_mouseR:GetSpanSize().y)
 end
 function PaGlobal_Skill:initCombiControl(cellTable, parent, container, isLearn)
+  if nil == self._static_CombiSkill_BG then
+    return
+  end
   self._static_CombiSlotBG = UI.getChildControl(self._static_CombiSkill_BG, "Static_Slot")
   local cols = cellTable:capacityX()
   local rows = cellTable:capacityY()
@@ -402,6 +406,9 @@ function PaGlobal_Skill:initTabControl_Combination(isLearn)
   self:initCombiControl(cellTable, self._static_CombiSkill_BG, self._slot_CombiSkill, isLearn)
 end
 function PaGlobal_Skill:OnOffCombinationTab()
+  if nil == self._combinationSkillTitle then
+    return
+  end
   local isLearnFusionSkill = ToClient_isLearnFusionSkillLevel() and ToClient_getFusionSkillListCount(0) ~= 0
   local originFullSizeY = 800
   local titleSize = self._combinationSkillTitle:GetSizeY()
@@ -422,11 +429,26 @@ function PaGlobal_Skill:OnOffCombinationTab()
     Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), Panel_Window_Skill:GetSizeY() + size + 10)
     self._bottomBG:SetSize(self._bottomBG:GetSizeX(), self._bottomBG:GetSizeY() + size + 10)
   end
+  local skillCombinationBg = UI.getChildControl(Panel_Window_Skill, "Static_SlotBG")
+  local combinationBgSizeY = skillCombinationBg:GetSizeY()
+  if skillCombinationBg:GetShow() then
+    self._stc_mouseL:SetSpanSize(self._stc_mouseL:GetSpanSize().x, 665)
+    self._stc_mouseR:SetSpanSize(self._stc_mouseR:GetSpanSize().x, 665)
+    self._btn_BlackSpiritLock:SetSpanSize(self._btn_BlackSpiritLock:GetSpanSize().x, 658)
+    self._btn_MovieToolTip:SetSpanSize(self._btn_MovieToolTip:GetSpanSize().x, 658)
+  else
+    self._stc_mouseL:SetSpanSize(self._stc_mouseL:GetSpanSize().x, 665 - combinationBgSizeY)
+    self._stc_mouseR:SetSpanSize(self._stc_mouseR:GetSpanSize().x, 665 - combinationBgSizeY)
+    self._btn_BlackSpiritLock:SetSpanSize(self._btn_BlackSpiritLock:GetSpanSize().x, 658 - combinationBgSizeY)
+    self._btn_MovieToolTip:SetSpanSize(self._btn_MovieToolTip:GetSpanSize().x, 658 - combinationBgSizeY)
+  end
   Panel_Window_Skill:ComputePos()
   self._bottomBG:ComputePos()
   self._btn_MovieToolTipBG:ComputePos()
   self._btn_MovieToolTipDesc:ComputePos()
   self._btn_MovieToolTip:ComputePos()
+  self._btn_BlackSpiritLock:ComputePos()
+  self._btn_BlackSpiritLock:SetShow(_ContentsGroup_BlackSpiritLock and getSelfPlayer():isEnableAdrenalin())
   self._txt_MentalTip:SetPosX(self._bottomBG:GetPosX() + 4)
   self._txt_MentalTip:SetPosY(self._bottomBG:GetPosY() + 4)
   return isLearnFusionSkill
@@ -738,3 +760,4 @@ end
 registerEvent("FromClient_responseLearnFusionSkill", "FromClient_responseLearnFusionSkill")
 registerEvent("FromClient_responseClearFusionSkill", "FromClient_responseClearFusionSkill")
 registerEvent("EventSelfPlayerLevelUp", "FromClient_OnOffCombinationTab")
+registerEvent("FromClient_ChangeAdrenalinMode", "FromClient_OnOffCombinationTab")

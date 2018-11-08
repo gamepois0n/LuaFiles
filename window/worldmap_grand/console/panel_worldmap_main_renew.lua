@@ -643,8 +643,8 @@ function FromClient_RClickWorldmapPanel(pos3D, immediately, isTopPicking)
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TUTORIAL_ACK"))
       return
     end
-    if isKeyPressed(CppEnums.VirtualKeyCode.KeyCode_MENU) then
-      ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
+    if isPadPressed(__eJoyPadInputType_LeftTrigger) then
+      ToClient_WorldMapNaviStartFromConsole(pos3D, NavigationGuideParam(), false, isTopPicking)
     else
       ToClient_DeleteNaviGuideByGroup(0)
       _AudioPostEvent_SystemUiForXBOX(0, 15)
@@ -662,7 +662,7 @@ function FromClient_RClickWorldmapPanel(pos3D, immediately, isTopPicking)
   if false == isKeyPressed(CppEnums.VirtualKeyCode.KeyCode_MENU) then
     ToClient_DeleteNaviGuideByGroup(0)
   end
-  ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, isTopPicking)
+  ToClient_WorldMapNaviStartFromConsole(pos3D, NavigationGuideParam(), false, isTopPicking)
   _AudioPostEvent_SystemUiForXBOX(0, 14)
 end
 function PaGlobalFunc_FromClient_WorldMap_HideAutoCompletedNaviBtn(isShow)

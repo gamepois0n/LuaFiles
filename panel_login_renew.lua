@@ -488,7 +488,6 @@ function PaGlobal_PanelLogin_BeforeOpen()
   end
 end
 function Panel_Login_BeforOpen()
-  PaGlobal_PanelLogin_BeforeOpen()
 end
 function FGlobal_Panel_Login_Enter()
   _AudioPostEvent_SystemUiForXBOX(50, 8)

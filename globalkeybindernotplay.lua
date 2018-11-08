@@ -39,11 +39,7 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
     elseif nil ~= Panel_Login_Nickname_Renew and Panel_Login_Nickname_Renew:GetShow() then
       return
     elseif GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-      if true == _ContentsGroup_RenewUI then
-        PaGlobal_PanelLogin_BeforeOpen()
-      else
-        Panel_Login_BeforOpen()
-      end
+      Panel_Login_BeforOpen()
     end
   end
   if nil ~= Panel_CharacterCreateSelectClass and Panel_CharacterCreateSelectClass:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
@@ -65,8 +61,12 @@ function GlobalKeyBinder_UpdateNotPlay(deltaTime)
     Panel_Window_cOption:SetShow(false, true)
   end
   if true == _ContentsGroup_RenewUI_Customization then
-    if nil ~= Panel_Customizing and true == PaGlobalFunc_Customization_GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-      PaGlobalFunc_Customization_Back()
+    if nil ~= Panel_Customizing and true == PaGlobalFunc_Customization_GetShow() then
+      if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+        PaGlobalFunc_Customization_Back()
+      elseif true == Panel_CustomizingAlbum:GetShow() and isPadUp(__eJoyPadInputType_X) then
+        showXboxUserProfile()
+      end
     end
     if nil ~= Panel_Widget_ScreenShotFrame and Panel_Widget_ScreenShotFrame:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       local screenShotFrame_Close = function()

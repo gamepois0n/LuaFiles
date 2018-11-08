@@ -408,6 +408,7 @@ function registerClosePanelList()
   registerCloseLuaEvent(Panel_Window_HorseRace, closeTypeBitSet.default, "PaGlobalFunc_RaceInfo_Hide()")
   registerCloseLuaEvent(Panel_Chat_SocialMenu, closeTypeBitSet.default, "FGlobal_SocialAction_ShowToggle()")
   registerCloseLuaEvent(Panel_SavageDefenceInfo, closeTypeBitSet.default, "FGlobal_SavageDefenceInfo_Close()")
+  registerCloseLuaEvent(Panel_Window_Skill_BlackSpiritLock, closeTypeBitSet.default, "FGlobal_BlackSpiritSkillLock_Close()")
 end
 function PaGlobalFunc_KeyboardHelpClose()
   Panel_KeyboardHelp:SetShow(false)

@@ -34,8 +34,6 @@ local worldmapGrand = {
     btn_SearchGuildName = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Button_GuildTypeSearch"),
     searchPartLine = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_Partline"),
     explorePointBG = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Bg"),
-    explorePointIcon = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_ExplorePoint_Icon"),
-    explorePointValue = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_StaticText_ExplorePoint_Value"),
     ListBG = UI.getChildControl(Panel_WorldMap_Main, "List_Bg"),
     list_Title = UI.getChildControl(Panel_WorldMap_Main, "List_Title"),
     list_KeyWord = UI.getChildControl(Panel_WorldMap_Main, "List_KeyWord"),
@@ -101,6 +99,13 @@ local dayString = {
   [UI_VT.eVillageSiegeType_Friday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_FRIDAY_COLOR"),
   [UI_VT.eVillageSiegeType_Saturday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SATURDAY_COLOR")
 }
+function WorldMap_ContributorPoint_Init()
+  local self = worldmapGrand
+  self.ui.explorePointBG = UI.getChildControl(Panel_WorldMap_Main, "MainMenu_Static_ExplorePoint_Bg")
+  self.ui.explorePointIcon = UI.getChildControl(self.ui.explorePointBG, "MainMenu_ExplorePoint_Icon")
+  self.ui.explorePointValue = UI.getChildControl(self.ui.explorePointBG, "MainMenu_StaticText_ExplorePoint_Value")
+end
+WorldMap_ContributorPoint_Init()
 function WorldMap_GuildWar_DayFilterShow()
   worldmapGrand.ui.comboBox_DaySelect:DeleteAllItem()
   local count = 0
@@ -1196,6 +1201,16 @@ function worldmapGrand:UpdateExplorePoint()
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
   self.ui.explorePointIcon:SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CONTRIBUTION"))
   self.ui.explorePointValue:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
+  if isGameTypeEnglish() or isGameTypeSA() or isGameTypeTH() or isGameTypeID() or isGameTypeTR() then
+    worldmapGrand.ui.explorePointIcon:SetVerticalTop()
+    worldmapGrand.ui.explorePointValue:SetPosY(worldmapGrand.ui.explorePointIcon:GetPosY() + worldmapGrand.ui.explorePointIcon:GetTextSizeY() + 10)
+    worldmapGrand.ui.explorePointBG:SetSize(229, worldmapGrand.ui.explorePointIcon:GetTextSizeY() + worldmapGrand.ui.explorePointValue:GetTextSizeY() + 25)
+  else
+    worldmapGrand.ui.explorePointBG:SetSize(229, 40)
+    worldmapGrand.ui.explorePointIcon:SetVerticalTop()
+    worldmapGrand.ui.explorePointValue:SetTextVerticalTop()
+    worldmapGrand.ui.explorePointValue:SetSpanSize(10, 12)
+  end
 end
 local function guildWar_Filter_Init()
   worldmapGrand.ui.daySelectBg:SetShow(false)

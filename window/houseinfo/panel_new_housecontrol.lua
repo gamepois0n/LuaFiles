@@ -1665,9 +1665,6 @@ function HouseWorkListSection:ScrollOnClick()
   self:updateFirstShow(self.currentHouseUseType, self.currentReceipeKey, self.currentLevel, false)
 end
 function HouseWorkListSection:Scroll(isUp)
-  if 0 == self.workCount then
-    return
-  end
   if false == isUp then
     self.viewIndex = math.min(self.minCount, self.viewIndex + 1)
   else

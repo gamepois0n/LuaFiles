@@ -258,6 +258,24 @@ function PaGlobal_Camp:guideTooltipShow(isShow)
     TooltipSimple_Hide()
   end
 end
+function PaGlobal_Camp:remoteSealTooltipShow(isShow)
+  if isShow then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_CAMP_REMOTEBUTTON_TOOLTIP")
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_NPCNAVI_BUTTON_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
+    TooltipSimple_Show(self._ui._btn_RemoteSeal, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
+end
+function PaGlobal_Camp:UnSealTooltipShow(isShow)
+  if isShow then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_SETUP")
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_CAMP_INSTALL_BUTTON_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
+    TooltipSimple_Show(self._ui._btn_UnSealTent, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
+end
 function PaGlobal_Camp:equipItemTooltipShow(slotNo, isShow)
   local slot = self._itemSlots[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "CampEquip")
@@ -441,7 +459,11 @@ function PaGlobal_Camp:registMessageHandler()
   self._ui._guideIcon:addInputEvent("Mouse_On", "PaGlobal_Camp:guideTooltipShow( true )")
   self._ui._guideIcon:addInputEvent("Mouse_Out", "PaGlobal_Camp:guideTooltipShow( false )")
   self._ui._btn_RemoteSeal:addInputEvent("Mouse_LUp", "PaGlobal_Camp:remoteSeal()")
+  self._ui._btn_RemoteSeal:addInputEvent("Mouse_On", "PaGlobal_Camp:remoteSealTooltipShow( true )")
+  self._ui._btn_RemoteSeal:addInputEvent("Mouse_Out", "PaGlobal_Camp:remoteSealTooltipShow( false )")
   self._ui._btn_UnSealTent:addInputEvent("Mouse_LUp", "PaGlobal_Camp:unSealTent()")
+  self._ui._btn_UnSealTent:addInputEvent("Mouse_On", "PaGlobal_Camp:UnSealTooltipShow( true )")
+  self._ui._btn_UnSealTent:addInputEvent("Mouse_Out", "PaGlobal_Camp:UnSealTooltipShow( false )")
   if _ContentsGroup_isCamp then
     self._ui._btn_RemoteSeal:setButtonShortcuts("PANEL_SIMPLESHORTCUT_TENT_UNINSTALL")
     self._ui._btn_UnSealTent:setButtonShortcuts("PANEL_SIMPLESHORTCUT_TENT_INSTALL")

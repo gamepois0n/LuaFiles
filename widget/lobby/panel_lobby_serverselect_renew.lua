@@ -221,6 +221,28 @@ function ServerSelect:init()
   self:initListData()
 end
 function ServerSelect:updateListData()
+  if true == ToClient_IsDevelopment() then
+    self:developUpdateListData_XXX()
+  else
+    self:updateListData_XXX()
+  end
+end
+function ServerSelect:developUpdateListData_XXX()
+  local channelIdx = 0
+  self._maxWorldIndex = getGameWorldServerDataCount()
+  for worldIdx = 0, self._maxWorldIndex do
+    local worldServerData = getGameWorldServerDataByIndex(worldIdx)
+    if nil == worldServerData then
+      return
+    end
+    local serverCount = getGameChannelServerDataCount(worldServerData._worldNo)
+    for serverIndex = 0, serverCount - 1 do
+      self._ui.list_Server:requestUpdateByKey(toInt64(0, channelIdx))
+      channelIdx = channelIdx + 1
+    end
+  end
+end
+function ServerSelect:updateListData_XXX()
   local channelIdx = 0
   local worldServerData = getGameWorldServerDataByIndex(self._selectedWorldIndex)
   local serverCount = getGameChannelServerDataCount(worldServerData._worldNo)
@@ -230,6 +252,64 @@ function ServerSelect:updateListData()
   end
 end
 function ServerSelect:initListData()
+  if true == ToClient_IsDevelopment() then
+    self:developInitListData_XXX()
+  else
+    self:initListData_XXX()
+  end
+  PaGlobal_CheckGamerTag()
+end
+function ServerSelect:developInitListData_XXX()
+  local worldServerCount = getGameWorldServerDataCount()
+  local channelIdx = 0
+  self._maxWorldIndex = getGameWorldServerDataCount()
+  self._ui.list_Server:getElementManager():clearKey()
+  for worldIdx = 0, self._maxWorldIndex do
+    local worldServerData = getGameWorldServerDataByIndex(worldIdx)
+    if nil == worldServerData then
+      return
+    end
+    local worldName = getWorldNameByWorldNo(worldServerData._worldNo)
+    if true == ToClient_isXBox() or true == ToClient_isPS4() then
+      worldName = "BlackDesert World"
+    end
+    self._ui.txt_WorldName:SetText(worldName)
+    if isGameServiceTypeKor() and false == ToClient_IsDevelopment() then
+      local serverData = getGameChannelServerDataByIndex(worldIdx, 0)
+      local isAdultWorld
+      if serverData == nil then
+        isAdultWorld = true
+      else
+        isAdultWorld = serverData._isAdultWorld
+      end
+      local isAdultUser = ToClient_isAdultUser()
+      if isAdultUser ~= isAdultWorld then
+        local msg = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ADULT_CANT_CONNECT")
+        if false == isAdultWorld then
+          msg = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_NONADULT_CANT_CONNECT")
+        end
+        local messageBoxData = {
+          title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"),
+          content = msg,
+          functionApply = MessageBox_Empty_function,
+          priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+        }
+        MessageBox.showMessageBox(messageBoxData)
+        return
+      end
+    end
+    local serverCount = getGameChannelServerDataCount(worldServerData._worldNo)
+    for serverIndex = 0, serverCount - 1 do
+      local serverIdxData = {}
+      serverIdxData.worldIdx = worldIdx
+      serverIdxData.serverIdx = serverIndex
+      self._serverIdxData[channelIdx] = serverIdxData
+      self._ui.list_Server:getElementManager():pushKey(toInt64(0, channelIdx))
+      channelIdx = channelIdx + 1
+    end
+  end
+end
+function ServerSelect:initListData_XXX()
   local worldServerCount = getGameWorldServerDataCount()
   local channelIdx = 0
   self._maxWorldIndex = getGameWorldServerDataCount()
@@ -239,7 +319,7 @@ function ServerSelect:initListData()
     return
   end
   local worldName = getWorldNameByWorldNo(worldServerData._worldNo)
-  if true == ToClient_isXBox() or true == ToClient_isPS4() then
+  if true == ToClient_isXBox() then
     worldName = "BlackDesert World"
   end
   self._ui.txt_WorldName:SetText(worldName)
@@ -276,7 +356,6 @@ function ServerSelect:initListData()
     self._ui.list_Server:getElementManager():pushKey(toInt64(0, channelIdx))
     channelIdx = channelIdx + 1
   end
-  PaGlobal_CheckGamerTag()
 end
 function ServerSelect:registEventHandler()
   if true == ToClient_IsDevelopment() then
@@ -290,7 +369,6 @@ function PaGlobalFunc_ServerSelect_LateUpdate()
   self:startFadeIn()
 end
 function ServerSelect:playWebMovie()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "ServerSelect:playWebMovie")
   self._ui.stc_fade:SetSize(getScreenSizeX(), getScreenSizeY())
   self._ui.stc_movieBG:SetSize(getScreenSizeX(), getScreenSizeY())
   if nil == _ui_web_loadingMovie then
@@ -326,7 +404,6 @@ end
 local _moviePlayed = false
 local _fadeTime = 0.2
 function FromClient_ServerSelect_OnMovieEvent(param)
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "FromClient_ServerSelect_OnMovieEvent param " .. param)
   if 1 == param then
     self:startFadeIn()
     if nil ~= _ui_web_loadingMovie then

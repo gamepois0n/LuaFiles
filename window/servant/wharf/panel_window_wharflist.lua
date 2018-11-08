@@ -914,6 +914,7 @@ function WharfList_Open()
     Panel_Window_WharfList:SetShow(true)
   end
   self._selectSceneIndex = -1
+  WharfList_SlotSelect(0)
 end
 function WharfList_Close()
   if not Panel_Window_WharfList:GetShow() then

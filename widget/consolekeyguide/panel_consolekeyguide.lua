@@ -26,6 +26,8 @@ local ConsoleKeyGuide = {
     swimWaitMode = 17,
     swimRestMode = 18,
     miniGameMode = 19,
+    matchlock = 20,
+    packing = 21,
     undefined = 999
   },
   _actionStringTable = {},
@@ -36,7 +38,8 @@ local ConsoleKeyGuide = {
   _gapY = 40,
   _gapX = 45,
   _gapIconX = 15,
-  _specifyGuideState = nil
+  _specifyGuideState = nil,
+  _manualGuideState = nil
 }
 local _consoleUIIconName = {
   buttonA = 0,
@@ -183,7 +186,6 @@ local _consoleUIIconUV = {
   }
 }
 local _miniGamePanel = {
-  ["panelCount"] = 7,
   [1] = Panel_Global_Manual,
   [2] = Panel_MiniGame_Timing,
   [3] = Panel_Minigame_Gradient,
@@ -192,7 +194,6 @@ local _miniGamePanel = {
   [6] = Panel_BattleGauge,
   [7] = Panel_MiniGame_Gradient_Y
 }
-local _isplayingMiniGame = false
 function ConsoleKeyGuide:init()
   self:initActionString()
   self._ui.guideBg = UI.getChildControl(_panel, "Static_KeyGuideBg")
@@ -222,6 +223,8 @@ function ConsoleKeyGuide:updateGuide()
   self._ui._keyGuide[self._guideState.swimmingMode] = self:makeNewGuide(self._guideState.swimmingMode)
   self._ui._keyGuide[self._guideState.swimWaitMode] = self:makeNewGuide(self._guideState.swimWaitMode)
   self._ui._keyGuide[self._guideState.swimRestMode] = self:makeNewGuide(self._guideState.swimRestMode)
+  self._ui._keyGuide[self._guideState.matchlock] = self:makeNewGuide(self._guideState.matchlock)
+  self._ui._keyGuide[self._guideState.packing] = self:makeNewGuide(self._guideState.packing)
   self._ui._keyGuide[self._guideState.undefined] = self:makeNewGuide(self._guideState.undefined)
 end
 function ConsoleKeyGuide:initActionString()
@@ -281,11 +284,8 @@ function ConsoleKeyGuide:makeNewGuide(state_)
       _consoleUIIconName.buttonStart
     }, "Menu")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Attack2, "Secondary attack")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_GrabOrGuard, "Grapple(Combat Action 3)")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Attack1, "Main attack")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Kick, "Kick(Combat Action 1)")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Interaction, "Interact")
-    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_CrouchOrSkill, "Block(Combat Action 2)")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Jump")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
     self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "Put Away Weapon")
@@ -465,11 +465,20 @@ function ConsoleKeyGuide:makeNewGuide(state_)
     self:addGuide(newGuide, {
       _consoleUIIconName.buttonLB
     }, "Rest Mode")
+  elseif state_ == self._guideState.swimRestMode then
+    self:addGuide(newGuide, {
+      _consoleUIIconName.buttonLB
+    }, "Swim Mode")
+  elseif state_ == self._guideState.matchlock then
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Attack1, "Fire")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Jump, "Crouch / Stand up")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_Dash, "Sprint")
+    self:addCustomizableGuide(newGuide, _actionType.ActionInputType_WeaponInOut, "(hold) Adjust Camera")
   else
-    if state_ == self._guideState.swimRestMode then
+    if state_ == self._guideState.packing then
       self:addGuide(newGuide, {
-        _consoleUIIconName.buttonLB
-      }, "Swim Mode")
+        _consoleUIIconName.buttonY
+      }, "Put down")
     else
     end
   end
@@ -561,27 +570,11 @@ function ConsoleKeyGuide:getState()
     return self._guideState._undefined
   end
   if getInputMode() == CppEnums.EProcessorInputMode.eProcessorInputMode_GameMode then
-    if nil ~= self._specifyGuideState then
-      if self._specifyGuideState ~= self._guideState.crouch and self._specifyGuideState ~= self._guideState.creep then
-        return self._specifyGuideState
-      end
-      local actionIdx = 1
-      local actionChecker = false
-      for actionIdx = 1, #crouchActionString do
-        if true == ToClient_SelfPlayerCheckAction(crouchActionString[actionIdx]) then
-          actionChecker = true
-        end
-      end
-      for actionIdx = 1, #creepActionString do
-        if true == ToClient_SelfPlayerCheckAction(creepActionString[actionIdx]) then
-          actionChecker = true
-        end
-      end
-      if false == actionChecker then
-        self._specifyGuideState = nil
-      else
-        return self._specifyGuideState
-      end
+    if nil ~= self._manualGuideState then
+      return self._manualGuideState
+    end
+    if nil ~= self._specifyGuideState and self._specifyGuideState ~= self._guideState.crouch and self._specifyGuideState ~= self._guideState.creep then
+      return self._specifyGuideState
     end
     if true == IsSelfPlayerSwimmingAction() then
       if true == ToClient_SelfPlayerCheckAction("Swimming_Recovery") then
@@ -602,43 +595,11 @@ function ConsoleKeyGuide:getState()
   end
   return self._guideState.undefined
 end
-function FGlobal_KeyGuideTypeCheck(isPlaying)
-  _isplayingMiniGame = isPlaying
-end
 function FGlobal_KeyGuideTypeCheck(deltaTime)
   if false == _ContentsGroup_RenewUI then
     return
-  else
-    for ii = 1, _miniGamePanel.panelCount do
-      if _miniGamePanel[ii]:GetShow() then
-        _isplayingMiniGame = true
-        break
-      else
-        _isplayingMiniGame = false
-      end
-    end
   end
-  if true == _isplayingMiniGame then
-    ConsoleKeyGuide:hideAllGuide()
-    return
-  end
-  if true == PaGlobal_TutorialManager:isDoingTutorial() then
-    ConsoleKeyGuide:hideAllGuide()
-    return
-  end
-  if nil ~= Panel_QuickMenuCustom and true == PaGlobal_QuickMenuSetting_GetShow() then
-    ConsoleKeyGuide:hideAllGuide()
-    return
-  end
-  if nil ~= Panel_Window_Menu_Renew and true == Panel_Window_Menu_Renew:GetShow() then
-    ConsoleKeyGuide:hideAllGuide()
-    return
-  end
-  if nil ~= Panel_Widget_Chatting_Renew and true == Panel_Widget_Chatting_Renew:GetShow() then
-    ConsoleKeyGuide:hideAllGuide()
-    return
-  end
-  if Defines.UIMode.eUIMode_NpcDialog_Dummy == GetUIMode() then
+  if true == PaGlobalFunc_ConsoleKeyGuide_IsHideGuideException() then
     ConsoleKeyGuide:hideAllGuide()
     return
   end
@@ -649,6 +610,29 @@ function FGlobal_KeyGuideTypeCheck(deltaTime)
   end
   local currentState = ConsoleKeyGuide:getState()
   self:setGuide(currentState)
+end
+function PaGlobalFunc_ConsoleKeyGuide_IsHideGuideException()
+  for ii = 1, #_miniGamePanel do
+    if true == _miniGamePanel[ii]:GetShow() then
+      return true
+    end
+  end
+  if true == PaGlobal_TutorialManager:isDoingTutorial() then
+    return true
+  end
+  if nil ~= Panel_QuickMenuCustom and true == PaGlobal_QuickMenuSetting_GetShow() then
+    return true
+  end
+  if nil ~= Panel_Window_Menu_Renew and true == Panel_Window_Menu_Renew:GetShow() then
+    return true
+  end
+  if nil ~= Panel_Widget_Chatting_Renew and true == Panel_Widget_Chatting_Renew:GetShow() then
+    return true
+  end
+  if Defines.UIMode.eUIMode_NpcDialog_Dummy == GetUIMode() then
+    return true
+  end
+  return false
 end
 function PaGlobalFunc_ConsoleKeyGuide_Init()
   if false == ToClient_isConsole() then
@@ -702,6 +686,14 @@ function PaGlobalFunc_ConsoleKeyGuide_SetState(state_)
     return
   end
   self._specifyGuideState = state_
+end
+function PaGlobalFunc_ConsoleKeyGuide_SetManualState(state_)
+  local self = ConsoleKeyGuide
+  if nil == self then
+    _PA_ASSERT(false, "\237\140\168\235\132\144\236\157\180 \236\161\180\236\158\172\237\149\152\236\167\128 \236\149\138\236\138\181\235\139\136\235\139\164!! : ConsoleKeyGuide")
+    return
+  end
+  self._manualGuideState = state_
 end
 function PaGlobalFunc_ConsoleKeyGuide_SetRideState()
   local self = ConsoleKeyGuide

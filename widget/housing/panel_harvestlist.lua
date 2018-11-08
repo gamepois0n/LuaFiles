@@ -39,6 +39,7 @@ local HarvestList = {
   _info = UI.getChildControl(Panel_HarvestList, "RadioButton_Info"),
   _Navi = UI.getChildControl(Panel_HarvestList, "Button_Navi"),
   _frame = UI.getChildControl(Panel_HarvestList, "Frame_HarvestList"),
+  _titleBG = UI.getChildControl(Panel_HarvestList, "Static_List_BG"),
   _tentPos = {}
 }
 HarvestList._btn_Close = UI.getChildControl(HarvestList._txt_Title, "Button_Close")
@@ -46,15 +47,11 @@ HarvestList.frameContent = UI.getChildControl(HarvestList._frame, "Frame_1_Conte
 HarvestList.frameScroll = UI.getChildControl(HarvestList._frame, "Frame_1_VerticalScroll")
 HarvestList.frameScroll:SetIgnore(false)
 local HarvestList_ContentGroup = {
-  _workerTitle = UI.getChildControl(Panel_HarvestList, "StaticText_M_Worker"),
-  _border = UI.getChildControl(Panel_HarvestList, "Static_TitleBorder_4"),
-  _border5 = UI.getChildControl(Panel_HarvestList, "Static_TitleBorder_5"),
-  _naviTitle = UI.getChildControl(Panel_HarvestList, "StaticText_M_Navi")
+  _workerTitle = UI.getChildControl(HarvestList._titleBG, "StaticText_M_Worker"),
+  _naviTitle = UI.getChildControl(HarvestList._titleBG, "StaticText_M_Navi")
 }
 if not isharvestManagement then
   HarvestList_ContentGroup._workerTitle:SetShow(false)
-  HarvestList_ContentGroup._border:SetShow(true)
-  HarvestList_ContentGroup._border5:SetShow(false)
   HarvestList_ContentGroup._naviTitle:SetSpanSize(580, 46)
 end
 function HarvestList:Panel_HarvestList_Initialize()
@@ -119,25 +116,25 @@ function Panel_HarvestList_Update()
           _PosY = self._Territory:GetSizeY() + 7 + _PosY
         end
         self.listArray[idx]._Territory:SetText(regionWrapper:getTerritoryName())
-        self.listArray[idx]._Territory:SetPosX(10)
+        self.listArray[idx]._Territory:SetPosX(55)
         self.listArray[idx]._Territory:SetPosY(_PosY)
         self.listArray[idx]._Territory:SetShow(true)
         self.listArray[idx]._TownName:SetText(regionWrapper:getAreaName())
-        self.listArray[idx]._TownName:SetPosX(195)
+        self.listArray[idx]._TownName:SetPosX(240)
         self.listArray[idx]._TownName:SetPosY(_PosY)
         self.listArray[idx]._TownName:SetShow(true)
         self.listArray[idx]._Address:SetText(characterStaticStatusWrapper:getName())
-        self.listArray[idx]._Address:SetPosX(400)
+        self.listArray[idx]._Address:SetPosX(445)
         self.listArray[idx]._Address:SetPosY(_PosY)
         self.listArray[idx]._Address:SetShow(true)
-        self.listArray[idx]._doWork:SetPosX(570)
+        self.listArray[idx]._doWork:SetPosX(615)
         self.listArray[idx]._doWork:SetPosY(_PosY)
         self.listArray[idx]._doWork:SetShow(true)
-        self.listArray[idx]._Navi:SetPosX(680)
+        self.listArray[idx]._Navi:SetPosX(725)
         self.listArray[idx]._Navi:SetPosY(_PosY + 2)
         self.listArray[idx]._Navi:SetShow(true)
         self.listArray[idx]._Navi:addInputEvent("Mouse_LUp", "_HarvestListNavigatorStart(" .. idx .. ")")
-        self.listArray[idx]._info:SetPosX(735)
+        self.listArray[idx]._info:SetPosX(780)
         self.listArray[idx]._info:SetPosY(_PosY)
         self.listArray[idx]._info:SetShow(true)
         if self.listArray[idx]._info:IsCheck() and Panel_HarvestList:GetShow() then

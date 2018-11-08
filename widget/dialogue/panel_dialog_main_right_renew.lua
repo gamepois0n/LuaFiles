@@ -152,6 +152,18 @@ function Panel_Dialog_Main_Right_Info:update()
     end
   end
 end
+function Panel_Dialog_Main_Right_Info:makeNewLineInTwoColumn(realDialog)
+  local newNpcWord = ""
+  local stringList = string.split(realDialog, "\n")
+  local strFirst, strSecond
+  for line = 1, #stringList do
+    if 1 == line % 2 and 1 ~= line then
+      newNpcWord = newNpcWord .. "\n"
+    end
+    newNpcWord = newNpcWord .. stringList[line] .. "\n"
+  end
+  return newNpcWord
+end
 function Panel_Dialog_Main_Right_Info:setData(dialogData, realDialog, showButton, showExchange)
   local npcName = dialogData:getContactNpcName()
   local talkerNpcKey = dialog_getTalkNpcKey()
@@ -163,21 +175,7 @@ function Panel_Dialog_Main_Right_Info:setData(dialogData, realDialog, showButton
   if "" == realDialog or nil == realDialog then
     self._ui.staticText_Dialog_Text:SetShow(false)
   else
-    local newNpcWord = ""
-    local stringList = string.split(realDialog, "\n")
-    local strFirst, strSecond
-    if #stringList < 2 then
-      newNpcWord = realDialog
-    else
-      for line = 1, #stringList / 2 do
-        strFirst = stringList[line * 2 - 1]
-        strSecond = stringList[line * 2]
-        newNpcWord = newNpcWord .. strFirst .. "\n" .. strSecond .. "\n"
-        if line ~= #stringList / 2 then
-          newNpcWord = newNpcWord .. "\n"
-        end
-      end
-    end
+    local newNpcWord = self:makeNewLineInTwoColumn(realDialog)
     self._ui.staticText_Dialog_Text:SetShow(true)
     self._ui.staticText_Dialog_Text:SetAutoResize(true)
     self._ui.staticText_Dialog_Text:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
@@ -198,21 +196,7 @@ function Panel_Dialog_Main_Right_Info:setDataOnlyMent(dialogData, realDialog)
   if "" == realDialog or nil == realDialog then
     self._ui.staticText_Dialog_Text:SetShow(false)
   else
-    local newNpcWord = ""
-    local stringList = string.split(realDialog, "\n")
-    local strFirst, strSecond
-    if #stringList < 2 then
-      newNpcWord = realDialog
-    else
-      for line = 1, #stringList / 2 do
-        strFirst = stringList[line * 2 - 1]
-        strSecond = stringList[line * 2]
-        newNpcWord = newNpcWord .. strFirst .. "\n" .. strSecond .. "\n"
-        if line ~= #stringList / 2 then
-          newNpcWord = newNpcWord .. "\n"
-        end
-      end
-    end
+    local newNpcWord = self:makeNewLineInTwoColumn(realDialog)
     self._ui.staticText_Dialog_Text:SetShow(true)
     self._ui.staticText_Dialog_Text:SetAutoResize(true)
     self._ui.staticText_Dialog_Text:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)

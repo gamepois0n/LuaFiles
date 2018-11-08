@@ -92,7 +92,11 @@ function MainStatus:registEventHandler()
   self._ui.btn_PVP:addInputEvent("Mouse_LUp", "requestTogglePvP()")
   self._ui.btn_PVP:addInputEvent("Mouse_On", "InputMO_MainStatus_TooltipShow(true, " .. self._statusTooltipType.pvp .. ")")
   self._ui.btn_PVP:addInputEvent("Mouse_Out", "InputMO_MainStatus_TooltipShow(false)")
-  self._ui.stc_RageBG:addInputEvent("Mouse_LUp", "requestBlackSpritSkill()")
+  if _ContentsGroup_BlackSpiritLock then
+    self._ui.stc_RageBG:addInputEvent("Mouse_LUp", "FGlobal_BlackSpiritSkillLock_Open(1)")
+  else
+    self._ui.stc_RageBG:addInputEvent("Mouse_LUp", "requestBlackSpritSkill()")
+  end
   self._ui.stc_RageBG:addInputEvent("Mouse_On", "InputMO_MainStatus_TooltipShow(true, " .. self._statusTooltipType.blackSpirit .. ")")
   self._ui.stc_RageBG:addInputEvent("Mouse_Out", "InputMO_MainStatus_TooltipShow(false)")
   self._ui.stc_ClassType0:addInputEvent("Mouse_On", "InputMO_MainStatus_TooltipShow(true, " .. self._statusTooltipType.resource0 .. ")")
@@ -740,7 +744,11 @@ function InputMO_MainStatus_TooltipShow(isShow, tooltipType)
     local count = ToClient_GetApRegenAmount()
     local countString = string.format("%.2f", count / 100)
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_TITLE")
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC", "count", tostring(countString))
+    if _ContentsGroup_BlackSpiritLock then
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC_2", "count", tostring(countString))
+    else
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC", "count", tostring(countString))
+    end
     uiControl = self._ui.progress_Rage
   elseif tooltipType == self._statusTooltipType.resource0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_PHANTOMCOUNT_MESSAGE")

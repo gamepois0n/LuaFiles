@@ -174,7 +174,7 @@ function _mail_Data:Update_MailPage()
         local _getDate = self._Data[pageNo][index]._mail_GetDate
         local _mail_num = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_NO") .. "." .. tostring(_indx + 1)
         defalut_Control._mail._Sender_Name[index]:SetText(_sender_Name .. "(" .. _getDate .. ")")
-        defalut_Control._mail._Mail_Title[index]:SetText("<PAColor0xFFFFC832>" .. _mail_Title .. "<PAOldColor>")
+        defalut_Control._mail._Mail_Title[index]:SetText("<PAColor0xFFf3d900>" .. _mail_Title .. "<PAOldColor>")
         defalut_Control._mail._Mail_Num[index]:SetText(_mail_num)
         if self._Selected._indx == _indx and self._Selected._sender_Name == _sender_Name and self._Selected._mail_Title == _mail_Title then
           defalut_Control._mail._List_BG[index]:SetCheck(true)

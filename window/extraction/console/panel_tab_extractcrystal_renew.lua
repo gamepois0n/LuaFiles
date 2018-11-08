@@ -57,6 +57,7 @@ function ExtractCrystal:initialize()
     self.slotSocket[ii].frame = self._ui.stc_socketFrame[ii]
     self.slotSocket[ii].name = UI.getChildControl(self._ui.stc_socketFrame[ii], "StaticText_GemTitle1")
     self.slotSocket[ii].desc = UI.getChildControl(self._ui.stc_socketFrame[ii], "StaticText_GemInfo1")
+    self.slotSocket[ii].desc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
     self.slotSocket[ii].empty = true
     self._ui.stc_socketFrame[ii]:addInputEvent("Mouse_On", "InputMOn_ExtractCrystal_HoverOnSocket(" .. ii .. ")")
     self._ui.stc_socketFrame[ii]:addInputEvent("Mouse_LUp", "InputMLUp_ExtractCrystal_SelectSocket(" .. ii .. ")")

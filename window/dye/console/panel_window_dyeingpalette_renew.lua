@@ -322,7 +322,8 @@ function Input_DyeingPalette_NextPalette(nextPaletteIndex)
 end
 local _paletteStringTable = {
   PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_ALL"),
-  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MY")
+  PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MY"),
+  PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE")
 }
 function DyeingPalette:setPalette(nextPaletteIndex)
   for ii = 1, #self._ui.rdo_paletteTypes do
@@ -334,13 +335,14 @@ function DyeingPalette:setPalette(nextPaletteIndex)
   elseif targetPalette > #self._ui.rdo_paletteTypes then
     targetPalette = 1
   end
-  if PALETTE_TYPE.MERV == targetPalette and not self:isPlayerHaveActivedMerv() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_MUST_ACTIVE_PEARLCOLOR"))
-    targetPalette = self._nowPaletteIndex
-  end
-  if PALETTE_TYPE.MERV == targetPalettethen then
-    ToClient_RequestClearDyeingSlot(self._slotNo)
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_PALETTE_PREVIEW_ACK"))
+  if PALETTE_TYPE.MERV == targetPalette then
+    if not self:isPlayerHaveActivedMerv() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_MUST_ACTIVE_PEARLCOLOR"))
+      targetPalette = self._nowPaletteIndex
+    else
+      ToClient_RequestClearDyeingSlot(self._slotNo)
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_PALETTE_PREVIEW_ACK"))
+    end
   end
   self._nowPaletteIndex = targetPalette
   self._isPearlPalette = PALETTE_TYPE.MERV == self._nowPaletteIndex

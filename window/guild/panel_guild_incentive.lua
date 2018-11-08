@@ -29,6 +29,17 @@ local _leftTimeValue = UI.getChildControl(Panel_Guild_IncentiveOption, "StaticTe
 local _btnIncentive = UI.getChildControl(Panel_Guild_IncentiveOption, "Button_Incentive")
 local _btnClose = UI.getChildControl(Panel_Guild_IncentiveOption, "Button_WinClose")
 local _btnQuestion = UI.getChildControl(Panel_Guild_IncentiveOption, "Button_Question")
+local _desc = UI.getChildControl(Panel_Guild_IncentiveOption, "StaticText_Incentive_Explain")
+_desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+_desc:SetText(_desc:GetText())
+local sizeY = math.max(16, _desc:GetTextSizeY()) - 16
+Panel_Guild_IncentiveOption:SetSize(Panel_Guild_IncentiveOption:GetSizeX(), Panel_Guild_IncentiveOption:GetSizeY() + sizeY)
+_btnIncentive:SetSize(_btnIncentive:GetSizeX(), _btnIncentive:GetSizeY() + sizeY)
+_btnIncentive:ComputePos()
+_desc:ComputePos()
+_guildMoney:ComputePos()
+_guildFoundationValue:ComputePos()
+_totalIncentiveValue:ComputePos()
 local guildIncentiveMoneyValue = {
   _btn_Apply = UI.getChildControl(Panel_Guild_Incentive_Foundation, "Button_Apply"),
   _btn_Close = UI.getChildControl(Panel_Guild_Incentive_Foundation, "Button_Cancel"),
@@ -150,6 +161,17 @@ function Guild_Incentive:ResetControl()
   _frameGuildList:UpdateContentPos()
   _isAllButton = {}
 end
+function Guild_IncentiveTax_SimpleTooltip(isShow, index)
+  if not isShow then
+    TooltipSimple_Hide()
+    return
+  end
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK")
+  local dataIdx = tempGuildIncentive[index + 1].idx
+  local incentive = ToClient_getGuildMemberIncentiveMoney_s64(dataIdx)
+  local incentiveAfterTax = ToClient_getGuildMemberIncentiveMoneyAfterTax_s64(dataIdx)
+  TooltipSimple_Show(_guildList[index]._memberIncentiveValue, "", PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_INCENTIVE_MONEY") .. " " .. makeDotMoney(incentiveAfterTax))
+end
 function Guild_Incentive:UpdateData()
   GuildIncentive_SetGuildIncentive()
   GuildIncentive_updateSort()
@@ -194,7 +216,20 @@ function Guild_Incentive:UpdateData()
     local grade = ToClient_getGuildMemberIncentiveGrade(dataIdx)
     _guildList[index]._btn_IncentiveLevel:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_GRADE_FOR_WHAT", "grade", tostring(grade)))
     local incentive = ToClient_getGuildMemberIncentiveMoney_s64(dataIdx)
-    _guildList[index]._memberIncentiveValue:SetText(makeDotMoney(incentive))
+    local incentiveAfterTax = ToClient_getGuildMemberIncentiveMoneyAfterTax_s64(dataIdx)
+    local rate = ToClient_GetCalculateRate(incentiveAfterTax, incentive)
+    rate = 1 - rate
+    rate = rate * 100
+    rate = math.ceil(rate)
+    if rate > 1.0E-5 then
+      _guildList[index]._memberIncentiveValue:SetText(makeDotMoney(incentive) .. "(<PAColor0xFFD20000>-" .. tostring(rate) .. "%<PAOldColor>)")
+      _guildList[index]._memberIncentiveValue:SetIgnore(false)
+      _guildList[index]._memberIncentiveValue:addInputEvent("Mouse_On", "Guild_IncentiveTax_SimpleTooltip(true ," .. tostring(index) .. ")")
+      _guildList[index]._memberIncentiveValue:addInputEvent("Mouse_Out", "Guild_IncentiveTax_SimpleTooltip(false ," .. tostring(index) .. ")")
+    else
+      _guildList[index]._memberIncentiveValue:SetText(makeDotMoney(incentive))
+      _guildList[index]._memberIncentiveValue:SetIgnore(true)
+    end
     _guildList[index]._comboboxRank:SetText(tostring(grade))
     local isAll = tempGuildIncentive[index + 1].isAll
     if true == isAll then

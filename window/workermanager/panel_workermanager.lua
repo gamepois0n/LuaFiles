@@ -135,6 +135,7 @@ local function workerManager_Initiallize()
     tempSlot.btn_ReloadIcon = UI.createAndCopyBasePropertyControl(Panel_WorkerManager, "Static_ReloadIcon", tempSlot.bg, "workerManager_WorkerSlot_BTN_Reload_" .. slotIdx)
     tempSlot.Time = UI.createAndCopyBasePropertyControl(Panel_WorkerManager, "StaticText_Time", tempSlot.bg, "workerManager_WorkerSlot_Time_" .. slotIdx)
     tempSlot.APValue = UI.createAndCopyBasePropertyControl(Panel_WorkerManager, "StaticText_ActionPointValue", tempSlot.bg, "workerManager_WorkerSlot_ActionPoint_" .. slotIdx)
+    tempSlot.upgradeComplete = UI.createAndCopyBasePropertyControl(Panel_WorkerManager, "Button_ImmediatlyComplete", tempSlot.bg, "workerManager_WorkerSlot_CompleteBtn_" .. slotIdx)
     tempSlot.bg:SetPosX(5)
     tempSlot.bg:SetPosY(self.startPosY + (tempSlot.bg:GetSizeY() + 5) * slotIdx)
     tempSlot.workerCheck:SetPosX(5)
@@ -154,6 +155,8 @@ local function workerManager_Initiallize()
     tempSlot.workerCurrentPT:SetPosY(56)
     tempSlot.APValue:SetPosX(12)
     tempSlot.APValue:SetPosY(48)
+    tempSlot.upgradeComplete:SetPosX(228)
+    tempSlot.upgradeComplete:SetPosY(20)
     tempSlot.progressBg:SetPosX(83)
     tempSlot.progressBg:SetPosY(46)
     tempSlot.progress:SetPosX(84)
@@ -464,6 +467,7 @@ local function workerManager_UpdateMain()
         slot.btn_Upgrade:SetShow(true)
         slot.btn_Repeat:SetShow(true)
         slot.btn_ReloadIcon:SetShow(true)
+        slot.upgradeComplete:SetShow(false)
         slot.btn_UnRepeat:SetShow(true)
         slot.btn_Stop:SetShow(true)
         slot.btn_ChangeSkill:SetShow(true)
@@ -580,14 +584,26 @@ local function workerManager_UpdateMain()
         else
           slot.workingName:SetPosY(46)
         end
+        if CppEnums.NpcWorkingType.eNpcWorkingType_Upgrade == workerWrapperLua:getWorkingType() then
+          slot.workingName:SetPosY(46)
+          slot.btn_Stop:SetShow(false)
+          if isGameTypeKorea() or isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_JAP) then
+            slot.upgradeComplete:SetShow(true)
+            slot.upgradeComplete:addInputEvent("Mouse_LUp", "HandleClicked_workerManager_WorkerUpgradeNow()")
+          end
+        end
         slot.picture:ChangeTextureInfoName(workerWrapperLua:getWorkerIcon())
         slot.bg:SetShow(true)
         slot.workerName:SetShow(true)
         slot.workingName:SetShow(true)
         if true == hasUpgradeWoker then
-          self._btnUpgradeNow:SetIgnore(false)
-          self._btnUpgradeNow:SetMonoTone(false)
-          self._btnUpgradeNow:SetShow(isContentOpen)
+          if isGameTypeKorea() or isGameTypeThisCountry(CppEnums.ContryCode.eContryCode_JAP) then
+            self._btnUpgradeNow:SetIgnore(false)
+            self._btnUpgradeNow:SetMonoTone(false)
+            self._btnUpgradeNow:SetShow(isContentOpen)
+          else
+            self._btnUpgradeNow:SetShow(false)
+          end
           slot.btn_Upgrade:SetMonoTone(true)
           slot.btn_Upgrade:addInputEvent("Mouse_LUp", "")
         end
@@ -668,6 +684,7 @@ local function workerManager_Update()
     slot.workingName:SetShow(false)
     slot.progressBg:SetShow(true)
     slot.progress:SetShow(false)
+    slot.upgradeComplete:SetShow(false)
   end
   workerManager_UpdateMain()
   self.workerListBg:SetSize(self.workerListBg:GetSizeX(), (self.slot[0].bg:GetSizeY() + 6) * self.slotMaxCount)

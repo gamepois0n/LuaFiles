@@ -3,7 +3,8 @@ local Panel_WorldmapKeyGuideInfo = {
   _staticText_B = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_B"),
   _staticText_X_Hold = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_X_Hold"),
   _staticText_X = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_X"),
-  _staticText_LT = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_LT"),
+  _staticText_LTPlusStick = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_LTPlusStick"),
+  _staticText_LTPlusX = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_LTPlusX"),
   _staticText_RS = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_RS"),
   _staticText_LS = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_LS"),
   _staticText_DpadDown = UI.getChildControl(Panel_WorldmapKeyGuide, "StaticText_DpadDown"),
@@ -16,30 +17,33 @@ local Panel_WorldmapKeyGuideInfo = {
     [4] = true,
     [5] = true,
     [6] = true,
-    [7] = true
+    [7] = true,
+    [8] = true
   },
   _config = {
-    _keyGuideCount = 8,
+    _keyGuideCount = 9,
     _yGap = 40,
     _B = 0,
     _X_Hold = 1,
     _X = 2,
-    _LT = 3,
-    _RS = 4,
-    _LS = 5,
-    _DpadDown = 6,
-    _DpadUp = 7
+    _LTPlusX = 3,
+    _LTPlusStick = 4,
+    _RS = 5,
+    _LS = 6,
+    _DpadDown = 7,
+    _DpadUp = 8
   }
 }
 Panel_WorldmapKeyGuideInfo._controlList = {
   [0] = Panel_WorldmapKeyGuideInfo._staticText_B,
   [1] = Panel_WorldmapKeyGuideInfo._staticText_X_Hold,
   [2] = Panel_WorldmapKeyGuideInfo._staticText_X,
-  [3] = Panel_WorldmapKeyGuideInfo._staticText_LT,
-  [4] = Panel_WorldmapKeyGuideInfo._staticText_RS,
-  [5] = Panel_WorldmapKeyGuideInfo._staticText_LS,
-  [6] = Panel_WorldmapKeyGuideInfo._staticText_DpadDown,
-  [7] = Panel_WorldmapKeyGuideInfo._staticText_DpadUp
+  [3] = Panel_WorldmapKeyGuideInfo._staticText_LTPlusX,
+  [4] = Panel_WorldmapKeyGuideInfo._staticText_LTPlusStick,
+  [5] = Panel_WorldmapKeyGuideInfo._staticText_RS,
+  [6] = Panel_WorldmapKeyGuideInfo._staticText_LS,
+  [7] = Panel_WorldmapKeyGuideInfo._staticText_DpadDown,
+  [8] = Panel_WorldmapKeyGuideInfo._staticText_DpadUp
 }
 function PaGlobal_ConsoleWorldMapKeyGuide_Update()
   local self = Panel_WorldmapKeyGuideInfo

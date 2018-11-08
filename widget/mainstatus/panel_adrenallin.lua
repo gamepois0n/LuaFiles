@@ -7,7 +7,11 @@ local _close_Adrenallin = UI.getChildControl(Panel_Adrenallin, "Button_Win_Close
 _close_Adrenallin:SetShow(false)
 local prevAdrenallin = 0
 _transLockButton = UI.getChildControl(Panel_Adrenallin, "Button_TransLock")
-_transLockButton:addInputEvent("Mouse_LUp", "requestBlackSpritSkill()")
+if _ContentsGroup_BlackSpiritLock then
+  _transLockButton:addInputEvent("Mouse_LUp", "FGlobal_BlackSpiritSkillLock_Open(0)")
+else
+  _transLockButton:addInputEvent("Mouse_LUp", "requestBlackSpritSkill()")
+end
 _staticLockButton = UI.getChildControl(Panel_Adrenallin, "Static_Lock")
 _staticLockButton:SetShow(false)
 function UseableBlackSpritSkill()
@@ -105,7 +109,11 @@ function Adrenallin_ShowSimpleToolTip(isShow)
   local count = ToClient_GetApRegenAmount()
   local countString = string.format("%.2f", count / 100)
   name = PAGetString(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_TITLE")
-  desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC", "count", tostring(countString))
+  if _ContentsGroup_BlackSpiritLock then
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC_2", "count", tostring(countString))
+  else
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ADRENALLIN_TOOLTIP_DESC", "count", tostring(countString))
+  end
   uiControl = Panel_Adrenallin
   registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
   if isShow == true then

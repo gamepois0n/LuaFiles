@@ -35,7 +35,6 @@ function GuildRankingHideAni()
   aniInfo1:SetDisableWhileAni(true)
 end
 local guildRanking = {
-  _titleBG = UI.getChildControl(Panel_Guild_Rank, "Static_TitleBG"),
   _btnClose = UI.getChildControl(Panel_Guild_Rank, "Button_Win_Close"),
   _btnHelp = UI.getChildControl(Panel_Guild_Rank, "Button_Question"),
   _txtTitle = UI.getChildControl(Panel_Guild_Rank, "StaticText_Title"),

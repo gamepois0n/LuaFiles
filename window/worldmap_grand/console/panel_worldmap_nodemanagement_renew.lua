@@ -394,6 +394,7 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeAll(nodeData)
     priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
   }
   MessageBox.showMessageBox(messageBoxData, "top")
+  ToClient_SetIsIgnoreLStick(true)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue()
   local self = Window_WorldMap_NodeManagementInfo
@@ -412,11 +413,13 @@ function PaGlobalFunc_WorldMap_NodeManagement_TakeAllContinue()
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+  ToClient_SetIsIgnoreLStick(false)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_TakeAllCancel()
   PaGlobalFunc_WorldMap_TopMenu_Open()
   PaGlobalFunc_WorldMap_BottomMenu_Open()
   PaGlobal_ConsoleWorldMapKeyGuide_SetShow(true)
+  ToClient_SetIsIgnoreLStick(false)
 end
 function PaGlobalFunc_WorldMap_NodeManagement_NearNodeClick(nodeKey)
   ToClient_DeleteNaviGuideByGroup(0)

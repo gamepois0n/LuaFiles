@@ -134,7 +134,6 @@ function guildStableInfo:init()
     slot.key = 0
     self._skill[ii] = slot
   end
-  self._staticSkillEffect = UI.createAndCopyBasePropertyControl(Panel_Window_GuildStable_Info, "Static_SkillIChange_EffectPanel", self._staticSkillBG, "StableInfo_SkillEffect")
 end
 function guildStableInfo:update()
   local servantInfo = guildStable_getServant(GuildStableList_SelectSlotNo())

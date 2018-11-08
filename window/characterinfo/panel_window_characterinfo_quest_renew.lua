@@ -82,7 +82,6 @@ function PaGlobalFunc_CharacterQuestInfo_Open()
 end
 function CharacterQuestInfo:open()
   self:update()
-  _PA_LOG("\235\176\149\235\178\148\236\164\128", "open, self._ui.txt_keyGuideSelect : " .. self._ui.txt_keyGuideSelect:GetID())
   self._ui.txt_keyGuideSelect:SetShow(false)
 end
 function CharacterQuestInfo:update()

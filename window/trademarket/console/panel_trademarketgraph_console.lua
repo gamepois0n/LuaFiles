@@ -45,12 +45,14 @@ local _dialogSceneIndex = {
 function TradeMarketGraph:init()
   self._ui.txt_AConsole = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
   self._ui.txt_YConsole = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y_ConsoleUI")
+  self._ui.txt_YConsole:SetShow(false)
   for idx = 1, enCommerceType.enCommerceType_Max - 1 do
     local commerceBtn = {}
     commerceBtn = UI.createAndCopyBasePropertyControl(self._ui.stc_LeftBg, "RadioButton_Template", self._ui.stc_LeftBg, "CommerceButton_" .. idx)
     commerceBtn:SetText(_commerceStringTable[idx])
     commerceBtn:SetPosY(commerceBtn:GetPosY() + (idx - 1) * self._commerceBtnGapY)
     commerceBtn:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobal_TradeMarketGraph_ShowCommerceType(" .. idx .. ")")
+    commerceBtn:addInputEvent("Mouse_On", "InputMO_TradeMarketGraph_SetKeyGuide(true)")
     self._commerceBtnTable[idx] = commerceBtn
   end
   self:registEvent()
@@ -60,6 +62,7 @@ function TradeMarketGraph:registEvent()
   self._ui.list_TradeItem:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_TradeMarketGraph_CreateList")
   self._ui.list_TradeItem:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
   registerEvent("onScreenResize", "PaGlobal_TradeMarketGraph_OnScreenResize")
+  registerEvent("EventNpcTradeShopGraphRefresh", "PaGlobal_TradeMarketGraph_GraphRefresh")
 end
 function TradeMarketGraph:open()
   PaGlobal_TradeMarketGraph_ShowCommerceType(1)
@@ -77,12 +80,8 @@ function TradeMarketGraph:update()
   local commerceCount = 0
   if 1 == self._currentNPCType then
     commerceCount = PaGlobal_TradeMarketGraph_CheckEmptyData(self._currentCommerceIdx)
-    self._ui.txt_AConsole:SetShow(true)
-    self._ui.txt_YConsole:SetShow(true)
   else
     commerceCount = npcShop_getCommerceItemSize(self._currentCommerceIdx)
-    self._ui.txt_AConsole:SetShow(false)
-    self._ui.txt_YConsole:SetShow(false)
   end
   self._ui.list_TradeItem:getElementManager():clearKey()
   for itemIdx = 0, commerceCount - 1 do
@@ -128,6 +127,10 @@ function InputMLUp_TradeMarketGraph_BasketItem(index)
     return
   end
   Panel_NumberPad_Show(true, buyableStack, param, PaGlobal_TradeMarketBasket_AddConfirm)
+end
+function PaGlobal_TradeMarketGraph_GraphRefresh()
+  local self = TradeMarketGraph
+  PaGlobal_TradeMarketGraph_ShowCommerceType(self._currentCommerceIdx)
 end
 function PaGlobal_TradeMarketGraph_OnScreenResize()
   local self = TradeMarketGraph
@@ -288,6 +291,15 @@ function PaGlobal_TradeMarketGraph_CreateList(content, key)
     stc_Bg:registerPadEvent(__eConsoleUIPadEvent_Up_A, "InputMLUp_TradeMarketGraph_BasketItem(" .. itemIdx .. ")")
   else
     stc_Bg:registerPadEvent(__eConsoleUIPadEvent_Up_A, "")
+  end
+  stc_Bg:addInputEvent("Mouse_On", "InputMO_TradeMarketGraph_SetKeyGuide(false)")
+end
+function InputMO_TradeMarketGraph_SetKeyGuide(isSelectShow)
+  local self = TradeMarketGraph
+  if false == isSelectShow and 2 == self._currentNPCType then
+    self._ui.txt_AConsole:SetShow(false)
+  else
+    self._ui.txt_AConsole:SetShow(true)
   end
 end
 function PaGlobal_TradeMarketGraph_CalculateY(src, dest)

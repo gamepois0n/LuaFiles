@@ -907,8 +907,12 @@ function PaGlobal_GlobalKeyBinder.Process_UIMode_InGameCustomize(deltaTime)
       end
     end
   else
-    if true == PaGlobalFunc_Customization_GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
-      PaGlobalFunc_Customization_Back()
+    if true == PaGlobalFunc_Customization_GetShow() then
+      if not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
+        PaGlobalFunc_Customization_Back()
+      elseif true == Panel_CustomizingAlbum:GetShow() and isPadUp(__eJoyPadInputType_X) then
+        showXboxUserProfile()
+      end
     end
     if Panel_Widget_ScreenShotFrame:GetShow() and not getEscHandle() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
       local screenShotFrame_Close = function()

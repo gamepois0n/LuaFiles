@@ -16,7 +16,6 @@ local ChattingFilter = {
     edit_Filter = UI.getChildControl(Panel_Chatting_Filter, "Edit_Filter"),
     btn_Filter = UI.getChildControl(Panel_Chatting_Filter, "Button_Yes"),
     btn_Reset = UI.getChildControl(Panel_Chatting_Filter, "Button_Reset"),
-    desc_BG = UI.getChildControl(Panel_Chatting_Filter, "Static_DescBG"),
     desc_Txt = UI.getChildControl(Panel_Chatting_Filter, "StaticText_Desc"),
     temp_FilterBG = UI.getChildControl(Panel_Chatting_Filter, "Static_SlotBG"),
     temp_Filter_ItemName = UI.getChildControl(Panel_Chatting_Filter, "StaticText_FilterName"),

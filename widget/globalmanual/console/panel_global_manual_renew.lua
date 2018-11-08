@@ -714,7 +714,6 @@ local KeyGuide_Squat = function()
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_SQUAT"))
   useTab:SetShow(true)
   if true == ToClient_isConsole() then
-    PaGlobalFunc_ConsoleKeyGuide_SetState(3)
     useTab:SetShow(false)
   end
 end
@@ -738,7 +737,6 @@ local KeyGuide_Down = function()
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_DOWN"))
   useTab:SetShow(true)
   if true == ToClient_isConsole() then
-    PaGlobalFunc_ConsoleKeyGuide_SetState(4)
     useTab:SetShow(false)
   end
 end
@@ -792,6 +790,21 @@ local KeyGuide_Walk = function()
   useTab:SetPosY(y)
   useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_WALK"))
   useTab:SetShow(true)
+end
+local ConsoleKeyGuide_Packing = function()
+  PaGlobalFunc_ConsoleKeyGuide_SetManualState(21)
+end
+local ConsoleKeyGuide_Matchlock = function()
+  PaGlobalFunc_ConsoleKeyGuide_SetManualState(20)
+end
+local ConsoleKeyGuide_Crouch = function()
+  PaGlobalFunc_ConsoleKeyGuide_SetManualState(3)
+end
+local ConsoleKeyGuide_Creep = function()
+  PaGlobalFunc_ConsoleKeyGuide_SetManualState(4)
+end
+local ConsoleKeyGuide_End = function()
+  PaGlobalFunc_ConsoleKeyGuide_SetManualState(nil)
 end
 local function Panel_Global_Manual_End(actorKeyRaw, isSelf)
   if false == isSelf then
@@ -888,6 +901,11 @@ ActionChartEventBindFunction(413, KeyGuide_Walk)
 ActionChartEventBindFunction(414, KeyGuide_InWaterUnset)
 ActionChartEventBindFunction(501, Tutorial_Ilezra_0)
 ActionChartEventBindFunction(502, Tutorial_Ilezra_1)
+ActionChartEventBindFunction(701, ConsoleKeyGuide_Packing)
+ActionChartEventBindFunction(705, ConsoleKeyGuide_Matchlock)
+ActionChartEventBindFunction(708, ConsoleKeyGuide_Crouch)
+ActionChartEventBindFunction(709, ConsoleKeyGuide_Creep)
+ActionChartEventBindFunction(799, ConsoleKeyGuide_End)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

@@ -481,10 +481,25 @@ function fillSellTradeItemInfo(count, indexNum, itemValueType, tradeItemWrapper,
   end
   tradeSellMarket.lifePowerBuffIcon[count]:SetShow(false)
   tradeSellMarket.lifePowerBuffValue[count]:SetShow(false)
-  if true == isSupplyMerchant and nil ~= tradeItemWrapper:getStaticStatus():get() and 4 == tradeItemWrapper:getStaticStatus():get()._commerceType and true == _ContentsGroup_EnhanceAlchemy then
-    tradeSellMarket.lifePowerBuffIcon[count]:SetShow(true)
-    tradeSellMarket.lifePowerBuffValue[count]:SetText(makeDotMoney(tradeItemWrapper:getAlchemyBonusPrice()))
-    tradeSellMarket.lifePowerBuffValue[count]:SetShow(true)
+  if true == isSupplyMerchant and nil ~= tradeItemWrapper:getStaticStatus():get() then
+    local commerceType = tradeItemWrapper:getStaticStatus():get()._commerceType
+    if 4 == commerceType then
+      if true == _ContentsGroup_EnhanceAlchemy then
+        tradeSellMarket.lifePowerBuffIcon[count]:SetShow(true)
+        tradeSellMarket.lifePowerBuffValue[count]:SetShow(true)
+        tradeSellMarket.lifePowerBuffValue[count]:SetText(makeDotMoney(tradeItemWrapper:getAlchemyBonusPrice()))
+        tradeSellMarket.lifePowerBuffIcon[count]:addInputEvent("Mouse_On", "TradeMarketSellList_SimpleToolTips( true, 9, " .. count .. " )")
+        tradeSellMarket.lifePowerBuffIcon[count]:addInputEvent("Mouse_Out", "TradeMarketSellList_SimpleToolTips(false)")
+        tradeSellMarket.lifePowerBuffIcon[count]:setTooltipEventRegistFunc("TradeMarketSellList_SimpleToolTips( true, 9, " .. count .. " )")
+      end
+    elseif 3 == commerceType and true == _ContentsGroup_EnhanceCooking then
+      tradeSellMarket.lifePowerBuffIcon[count]:SetShow(true)
+      tradeSellMarket.lifePowerBuffValue[count]:SetShow(true)
+      tradeSellMarket.lifePowerBuffValue[count]:SetText(makeDotMoney(tradeItemWrapper:getCookingBonusPrice()))
+      tradeSellMarket.lifePowerBuffIcon[count]:addInputEvent("Mouse_On", "TradeMarketSellList_SimpleToolTips( true, 10, " .. count .. " )")
+      tradeSellMarket.lifePowerBuffIcon[count]:addInputEvent("Mouse_Out", "TradeMarketSellList_SimpleToolTips(false)")
+      tradeSellMarket.lifePowerBuffIcon[count]:setTooltipEventRegistFunc("TradeMarketSellList_SimpleToolTips( true, 10, " .. count .. " )")
+    end
   end
   return realPrice
 end
@@ -1168,6 +1183,13 @@ function TradeMarketSellList_SimpleToolTips(isShow, tipType, index)
     local alchemySSW = ToClient_getAlchemyStatStaticStatus()
     if nil ~= alchemySSW then
       desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_DESC", "rate", string.format("%.2f", alchemySSW._addRoyalTradeBonus / 10000))
+    end
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_NAME")
+    control = tradeSellMarket.lifePowerBuffIcon[index]
+  elseif 10 == tipType then
+    local cookingSSW = ToClient_getCookingStatStaticStatus()
+    if nil ~= cookingSSW then
+      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_DESC", "rate", string.format("%.2f", cookingSSW._addRoyalTradeBonus / 10000))
     end
     name = PAGetString(Defines.StringSheet_GAME, "LUA_MARKETLIST_LIFEPOWER_TOOLTIP_NAME")
     control = tradeSellMarket.lifePowerBuffIcon[index]

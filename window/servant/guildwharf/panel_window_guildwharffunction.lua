@@ -7,11 +7,12 @@ _wharfBG:setGlassBackground(true)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
-local guildWharfFunction = {
+guildWharfFunction = {
   _config = {},
   _buttonRegister = UI.getChildControl(Panel_Window_GuildWharfFunction, "Button_Register"),
   _buttonExit = UI.getChildControl(Panel_Window_GuildWharfFunction, "Button_Exit"),
-  _descBG = UI.getChildControl(Panel_Window_GuildWharfFunction, "StaticText_DescBg")
+  _descBG = UI.getChildControl(Panel_Window_GuildWharfFunction, "StaticText_DescBg"),
+  _isOpen = false
 }
 function guildWharfFunction:init()
   self._descBG:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -65,13 +66,14 @@ function GuildWharfFunction_RegisterAck()
   local self = guildWharfFunction
 end
 function GuildWharfFunction_Open()
+  local self = guildWharfFunction
   if Panel_Window_GuildWharfFunction:GetShow() then
     return
   end
+  self._isOpen = true
   guildstable_listGuildServant()
   Servant_SceneOpen(Panel_Window_GuildWharfFunction)
   GuildWharfList_Open()
-  local self = guildWharfFunction
   if stable_doHaveRegisterItem() then
     local messageboxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
     local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_WHARF_REGISTERITEM_MSG")

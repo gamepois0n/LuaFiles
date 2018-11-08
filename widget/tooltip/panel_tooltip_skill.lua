@@ -670,6 +670,10 @@ function Tooltip_SkillData:showTooltip_Skill_Real(target, skillNo, skillTypeSS, 
     currMovieName = nil
     target.skill_Movie:SetShow(false)
     movieShow = false
+  elseif "blackSpiritLock" == callTooltipType then
+    currMovieName = nil
+    target.skill_Movie:SetShow(false)
+    movieShow = false
   elseif false == isShowNextLevel and nil ~= movieName and "" ~= movieName then
     target.skill_Movie:SetShow(true)
     if currMovieName ~= movieName then

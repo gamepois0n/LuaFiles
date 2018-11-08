@@ -42,7 +42,6 @@ local deliveryRequest = {
     fontColor = UI_color.C_FFFFFFFF
   },
   slotBG = UI.getChildControl(Panel_Window_Delivery_Request, "Static_SlotBG"),
-  staticText_RequestTitle = UI.getChildControl(Panel_Window_Delivery_Request, "StaticText_Title"),
   button_Close = UI.getChildControl(Panel_Window_Delivery_Request, "Button_Close"),
   _buttonQuestion = UI.getChildControl(Panel_Window_Delivery_Request, "Button_Question"),
   rdo_send = UI.getChildControl(Panel_Window_Delivery_Request, "RadioButton_Send"),
@@ -80,7 +79,6 @@ function deliveryRequest:registEventHandler()
   self.button_Send:addInputEvent("Mouse_LUp", "DeliveryRequest_Send_CheckNode()")
 end
 function deliveryRequest:init()
-  UI.ASSERT(nil ~= self.staticText_RequestTitle and "number" ~= type(self.staticText_RequestTitle), "StaticText_Title")
   UI.ASSERT(nil ~= self.button_Close and "number" ~= type(self.button_Close), "Button_Close")
   UI.ASSERT(nil ~= self.button_Information and "number" ~= type(self.button_Information), "Button_Cancel_Recieve")
   UI.ASSERT(nil ~= self.static_RequestBakcground and "number" ~= type(self.static_RequestBakcground), "Static_Sample_Background")

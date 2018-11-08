@@ -59,6 +59,7 @@ function mainQuestWidget:initControl()
   if true == Panel_MainQuest:GetShow() then
     self:update()
   end
+  self._ui._static_TitleBG:SetIgnore(true)
 end
 function PaGlobalFunc_MainQuestWidget_Open()
   mainQuestWidget:open()

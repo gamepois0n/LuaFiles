@@ -7,7 +7,6 @@ local AlchemyFigureHead = {
     guideString = UI.getChildControl(Panel_AlchemyFigureHead, "Static_GuideText"),
     descBg = UI.getChildControl(Panel_AlchemyFigureHead, "Static_DescBg"),
     desc = UI.getChildControl(Panel_AlchemyFigureHead, "StaticText_Desc"),
-    btn_Close = UI.getChildControl(Panel_AlchemyFigureHead, "Button_Win_Close"),
     btn_Doit = UI.getChildControl(Panel_AlchemyFigureHead, "Button_Doit"),
     Slot_1 = UI.getChildControl(Panel_AlchemyFigureHead, "Static_Slot_1"),
     Slot_2 = UI.getChildControl(Panel_AlchemyFigureHead, "Static_Slot_2")

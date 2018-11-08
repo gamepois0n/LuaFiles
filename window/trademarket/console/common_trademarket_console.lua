@@ -12,7 +12,6 @@ gDialogSceneIndex = {
 }
 function TradeMarketConsole:init()
   registerEvent("EventNpcTradeShopUpdate", "PaGlobal_TradeMarket_OpenTradeMarket")
-  registerEvent("EventNpcTradeShopGraphRefresh", "PaGlobal_TradeMarket_GraphRefresh")
 end
 global_IsTrading = false
 function global_setTrading(istrading)
@@ -105,8 +104,6 @@ function PaGlobal_TradeMarket_CheckServant()
   else
     return nil, 0, 0
   end
-end
-function PaGlobal_TradeMarket_GraphRefresh()
 end
 function PaGlobal_TradeMarket_init()
   local self = TradeMarketConsole

@@ -297,7 +297,7 @@ function Panel_Widget_FunctionButton_info:handleOver(functionType)
   if functionType == Widget_Function_Type.FindNPC then
     showToolTip = true
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NPCNAVI_NPCNAVITEXT")
-    desc = ""
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_CAMP_REMOTE_BUTTON_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
   elseif functionType == Widget_Function_Type.MovieToolTip then
     showToolTip = true
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MOVIEGUIDE_TITLE")

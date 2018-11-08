@@ -496,7 +496,18 @@ function PaGlobal_CharacterInfoBasic:Life_MouseOverEvent(sourceType, isOn)
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_2")
     elseif 7 == sourceType then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE6")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_3")
+      if true == _ContentsGroup_EnhanceTraining then
+        local trainingSKillStatStaticStatus = ToClient_getTrainingLevelSkillStatStaticStatus()
+        local skillRate = 0
+        local statRate = 0
+        if nil ~= trainingSKillStatStaticStatus then
+          skillRate = string.format("%.1f", trainingSKillStatStaticStatus._addVehicleSkillOwnerRate / 10000)
+          statRate = string.format("%.1f", trainingSKillStatStaticStatus._addServantStatRate / 10000)
+        end
+        desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_TRAINING_DESC_2", "rate1", tostring(skillRate), "rate2", tostring(statRate))
+      else
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_3")
+      end
     elseif 8 == sourceType then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE7")
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFT_DESC_4")

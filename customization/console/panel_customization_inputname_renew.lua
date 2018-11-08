@@ -1,8 +1,9 @@
-Panel_Customizing_InputName:ignorePadSnapMoveToOtherPanel()
+local _panel = Panel_Customizing_InputName
+_panel:ignorePadSnapMoveToOtherPanel()
 local Customization_InputNameInfo = {
   _ui = {
-    _edit_InputName = UI.getChildControl(Panel_Customizing_InputName, "Edit_InputName"),
-    _static_KeyGuideBg = UI.getChildControl(Panel_Customizing_InputName, "Static_BottomGroup_ConsoleUI")
+    _edit_InputName = UI.getChildControl(_panel, "Edit_InputName"),
+    _static_KeyGuideBg = UI.getChildControl(_panel, "Static_BottomGroup_ConsoleUI")
   },
   _defaultEditText = "MAX " .. getGameServiceTypeCharacterNameLength() .. " Characters",
   _createSync = true
@@ -23,6 +24,11 @@ function PaGlobalFunc_Customization_InputName_Confirm(str)
   _AudioPostEvent_SystemUiForXBOX(50, 1)
   PaGlobalFunc_ClassSelect_CharacterCreate(nameStr)
 end
+function Customization_InputNameInfo:Initialize()
+  self:InitControl()
+  self:InitEvent()
+  self:InitRegister()
+end
 function Customization_InputNameInfo:InitControl()
   self._ui._button_Confirm = UI.getChildControl(self._ui._static_KeyGuideBg, "Button_OK_ConsoleUI")
   self._ui._button_Cancel = UI.getChildControl(self._ui._static_KeyGuideBg, "Button_NO_ConsoleUI")
@@ -31,17 +37,13 @@ end
 function Customization_InputNameInfo:InitEvent()
   self._ui._button_Confirm:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Confirm()")
   self._ui._button_Cancel:addInputEvent("Mouse_LUp", "PaGlobalFunc_Customization_InputName_Close()")
-  Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Customization_InputName_Confirm()")
-  Panel_Customizing_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_A, "PaGlobalFunc_Customization_InputName_Confirm()")
+  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
   self._ui._edit_InputName:setXboxVirtualKeyBoardEndEvent("PaGlobalFunc_Customization_InputName_KeyboardEnd")
+  PaGlobal_registerPanelOnBlackBackground(_panel)
 end
 function Customization_InputNameInfo:InitRegister()
   registerEvent("FromClient_CreateCharacterFail", "PaGlobalFunc_FromClient_Customization_InputName_CreateCharacterFail")
-end
-function Customization_InputNameInfo:Initialize()
-  self:InitControl()
-  self:InitEvent()
-  self:InitRegister()
 end
 function PaGlobalFunc_FromClient_Customization_InputName_CreateCharacterFail()
   PaGlobalFunc_Customization_InputName_SetCreateSync(true)
@@ -50,6 +52,7 @@ function PaGlobalFunc_Customization_InputName_KeyboardEnd(str)
   local self = Customization_InputNameInfo
   self._ui._edit_InputName:SetEditText(str)
   ClearFocusEdit()
+  self._ui._edit_InputName:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobalFunc_Customization_InputName_SetFocus()")
 end
 function PaGlobalFunc_Customization_InputName_SetFocus()
   local self = Customization_InputNameInfo

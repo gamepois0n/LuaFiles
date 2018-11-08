@@ -444,8 +444,19 @@ local function update_ExplorePoint()
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
+  Stc_ExplorePoint_Icon:SetTextMode(UI_TM.eTextMode_AutoWrap)
   Stc_ExplorePoint_Icon:SetText(NodeTextString[NodeTextType.NODE_POINT_TEXT])
   Txt_ExplorePoint_Value:SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
+  if isGameTypeEnglish() or isGameTypeSA() or isGameTypeTH() or isGameTypeID() or isGameTypeTR() then
+    Stc_ExplorePoint_Icon:SetVerticalTop()
+    Txt_ExplorePoint_Value:SetPosY(Stc_ExplorePoint_Icon:GetPosY() + Stc_ExplorePoint_Icon:GetTextSizeY() + 10)
+    Tex_ExplorePoint_BG:SetSize(229, Stc_ExplorePoint_Icon:GetTextSizeY() + Txt_ExplorePoint_Value:GetTextSizeY() + 25)
+  else
+    Tex_ExplorePoint_BG:SetSize(229, 40)
+    Stc_ExplorePoint_Icon:SetVerticalTop()
+    Txt_ExplorePoint_Value:SetTextVerticalTop()
+    Txt_ExplorePoint_Value:SetSpanSize(10, 12)
+  end
 end
 local function FillNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
   GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)

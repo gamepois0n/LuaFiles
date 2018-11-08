@@ -72,7 +72,11 @@ function maidList:Init()
     self.maidInfo[maidIndex] = temp
   end
   self.btnWarehouse:addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 1 .. ")")
+  self.btnWarehouse:addInputEvent("Mouse_On", "ButtonOpenByMaid_SimpleTooltip( true, " .. 0 .. " )")
+  self.btnWarehouse:addInputEvent("Mouse_Out", "ButtonOpenByMaid_SimpleTooltip( false, " .. 0 .. " )")
   self.btnMarket:addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 0 .. ")")
+  self.btnMarket:addInputEvent("Mouse_On", "ButtonOpenByMaid_SimpleTooltip( true, " .. 1 .. " )")
+  self.btnMarket:addInputEvent("Mouse_Out", "ButtonOpenByMaid_SimpleTooltip( false, " .. 1 .. " )")
   if isEnableMaid then
     self.btnWarehouse:setButtonShortcuts("PANEL_MAIDLIST_OPEN_WAREHOUSE")
     self.btnMarket:setButtonShortcuts("PANEL_MAIDLIST_OPEN_ITEMMARKET")
@@ -395,6 +399,23 @@ function MaidList_ScrollEvent(isDown)
   end
   self.startIndex = index
   MaidList_Set(self.startIndex)
+end
+function ButtonOpenByMaid_SimpleTooltip(isShow, tipType)
+  if not isShow then
+    return TooltipSimple_Hide()
+  end
+  local self = maidList
+  local name, desc, control
+  if 0 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU10")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_OPENWAREHOUSEBYMAID_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
+    control = self.btnWarehouse
+  elseif 1 == tipType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_WIDGET_MAID_MARKETOPENBYMAID_BUTTON_TOOLTIP")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_OPENMARKETBYMAID_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
+    control = self.btnMarket
+  end
+  TooltipSimple_Show(control, name, desc)
 end
 function HandleClicked_MaidList_ScrollBtn()
   local self = maidList

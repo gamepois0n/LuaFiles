@@ -703,6 +703,7 @@ function GuildWharfList_Open()
   for ii = 0, self._config.slotCount - 1 do
     self._slots[ii].effect:SetShow(false)
   end
+  GuildWharfList_SlotSelect(0)
   if not Panel_Window_GuildWharf_List:GetShow() then
     Panel_Window_GuildWharf_List:SetShow(true)
   end

@@ -451,6 +451,7 @@ function InputMLUp_CharacterSelect_DeleteCharacter()
       return
     end
     local function do_Delete()
+      self._isCharacterSelected = false
       _AudioPostEvent_SystemUiForXBOX(50, 1)
       deleteCharacter(self._selectedCharIdx, isSpecialCharacter)
     end
@@ -527,7 +528,7 @@ function InputMLUp_CharacterSelect_PlayGame()
   end
   if nil ~= characterData then
     if getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_CBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_OBT or getContentsServiceType() == CppEnums.ContentsServiceType.eContentsServiceType_Commercial then
-      if 1 == characterData._level and 1 == characterCount and false == ToClient_isConsole() then
+      if 1 == characterData._level and 1 == characterCount and false == ToClient_isXBox() and false == ToClient_isPS4() then
         FGlobal_FirstLogin_Open(self._selectedCharIdx)
       else
         local pcDeliveryRegionKey = characterData._arrivalRegionKey

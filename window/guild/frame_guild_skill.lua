@@ -213,8 +213,8 @@ function GuildSkillFrame_UpdateData(isLearnMode, doForce)
     skillPointPercent = 100
   end
   _staticText_GuildPoint_Percent:SetText("( " .. skillPointPercent .. "% )")
-  _staticText_GuildPoint_Percent:SetPosX(_staticText_GuildPoint_Value:GetPosX() + _staticText_GuildPoint_Value:GetSizeX() + 10)
   _staticText_GuildPoint_Value:SetPosX(_staticText_GuildPoint:GetPosX() + _staticText_GuildPoint:GetTextSizeX() + 10)
+  _staticText_GuildPoint_Percent:SetPosX(_staticText_GuildPoint_Value:GetPosX() + _staticText_GuildPoint_Value:GetTextSizeX() + 10)
   self.lastLearnMode = isLearnMode
   GuildSkill._progressSkillPoint:SetProgressRate(skillPointInfo._currentExp / skillPointInfo._nextLevelExp * 100)
   local slots = self.slots

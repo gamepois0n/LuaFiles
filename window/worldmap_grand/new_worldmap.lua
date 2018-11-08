@@ -135,7 +135,7 @@ function SimpleTooltip_NodeBtn(isShow, tipType)
   end
   if 0 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVIDESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVIDESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = naviBtn
   end
   TooltipSimple_Show(control, name, desc)

@@ -31,6 +31,7 @@ end
 local _titleBar = UI.getChildControl(Panel_CustomizingAlbum, "StaticText_TitleBg")
 local _stc_keyGuide = UI.getChildControl(Panel_CustomizingAlbum, "Static_BottomBg")
 local _customizingAlbumWeb, sizeX, sizeY, panelSizeX, panelSizeY, titleBarSizeX
+local _stc_keyGuide_Profile = UI.getChildControl(_stc_keyGuide, "StaticText_X_ConsoleUI")
 function Panel_CustomizingAlbum_Initialize()
   local screenSizeX = getScreenSizeX()
   sizeX = 870
@@ -42,6 +43,7 @@ function Panel_CustomizingAlbum_Initialize()
   _titleBar:SetSize(titleBarSizeX, _titleBar:GetSizeY())
   _stc_keyGuide:SetSize(panelSizeX, _stc_keyGuide:GetSizeY())
   _stc_keyGuide:ComputePos()
+  _stc_keyGuide_Profile:SetShow(false)
   _customizingAlbumWeb = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_WEBCONTROL, Panel_CustomizingAlbum, "WebControl_CustomizingAlbum")
   _customizingAlbumWeb:SetShow(true)
   _customizingAlbumWeb:SetPosX(15)
@@ -53,18 +55,6 @@ Panel_CustomizingAlbum_Initialize()
 local isCustomizationMode
 function CustomizingAlbum_Open(isCTMode, isSceneState)
   if false == _ContentsGroup_RenewUI_BeautyAlbum then
-    return
-  end
-  if false == ToClient_isUserCreateContentsAllowed() then
-    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE")
-    local messageBoxData = {
-      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
-      content = messageBoxMemo,
-      functionYes = MessageBox_Empty_function,
-      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
-    }
-    MessageBox.showMessageBox(messageBoxData)
-    ToClient_showPrivilegeError()
     return
   end
   audioPostEvent_SystemUi(13, 6)
@@ -86,7 +76,11 @@ function CustomizingAlbum_Open(isCTMode, isSceneState)
     userNickName = getSelfPlayer():getUserNickname()
     userNo = getSelfPlayer():get():getUserNo()
   end
-  url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true == isCTMode) .. "&isGm=" .. tostring(isGm)
+  url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true == isCTMode)
+  if true == isGm then
+    url = url .. "&isGm=" .. tostring(isGm)
+  end
+  url = url .. "&isEveryone=" .. tostring(true == ToClient_isUserCreateContentsAllowed())
   _customizingAlbumWeb:SetUrl(sizeX, sizeY, url, false, true)
   _customizingAlbumWeb:SetIME(true)
   isCustomizationMode = isCTMode
@@ -96,6 +90,7 @@ end
 function CustomizingAlbum_Close()
   audioPostEvent_SystemUi(13, 5)
   _AudioPostEvent_SystemUiForXBOX(13, 5)
+  _PA_LOG("\236\157\180\235\139\164\237\152\156", "CustomizingAlbum_Close")
   FGlobal_ClearCandidate()
   _customizingAlbumWeb:ResetUrl()
   Panel_CustomizingAlbum:SetShow(false, false)
@@ -117,3 +112,45 @@ end
 function FGlobal_CustomizingAlbum_GetShow()
   return Panel_CustomizingAlbum:GetShow()
 end
+function FromClient_LeaveDetailCustomView()
+  Panel_CustomizingAlbum:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+  _stc_keyGuide_Profile:SetShow(false)
+end
+function FromClient_EnterDetailCustomView()
+  local xuid = ToClient_getXboxCustomAuthorXuid()
+  if nil ~= xuid and xuid ~= "" then
+    _stc_keyGuide_Profile:SetShow(true)
+  end
+end
+function FromClient_ErrorDoNotHaveEveryonePrivilege()
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DONOTHAVE_PRIVILEGE_FOR_BEAUTY")
+  local messageBoxData = {
+    title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+    content = messageBoxMemo,
+    functionYes = MessageBox_Empty_function,
+    priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+  }
+  MessageBox.showMessageBox(messageBoxData)
+  ToClient_showPrivilegeError(true)
+end
+function showXboxUserProfile(xuid)
+  if true ~= _stc_keyGuide_Profile:GetShow() then
+    return
+  end
+  local xuid = ToClient_getXboxCustomAuthorXuid()
+  if nil ~= xuid and xuid ~= "" then
+    ToClient_showXboxFriendProfile(xuid)
+  else
+    local messageBoxMemo = PAGetString(Defines.StringSheet_SymbolNo, "eErrCantFindFriendForXbox")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"),
+      content = messageBoxMemo,
+      functionYes = MessageBox_Empty_function,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+  end
+end
+registerEvent("FromClient_LeaveDetailCustomView", "FromClient_LeaveDetailCustomView")
+registerEvent("FromClient_EnterDetailCustomView", "FromClient_EnterDetailCustomView")
+registerEvent("FromClient_ErrorDoNotHaveEveryonePrivilege", "FromClient_ErrorDoNotHaveEveryonePrivilege")

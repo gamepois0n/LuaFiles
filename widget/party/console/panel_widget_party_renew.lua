@@ -494,11 +494,6 @@ function Panel_Widget_Party_info:updatePartyList()
   end
   self._value.lootType = lootType
 end
-function Panel_Widget_Party_info:partyAccept()
-  self._requestPlayerList = {}
-  RequestParty_acceptInvite(self._value.invitePartyType)
-  self._value.invitePartyType = CppEnums.PartyType.ePartyType_Normal
-end
 function Panel_Widget_Party_info:partyRefuse()
   RequestParty_refuseInvite()
   for ii = 0, #self._requestPlayerList do
@@ -668,6 +663,7 @@ function FromClient_ResponseParty_invite(hostName, invitePartyType)
     end
   end
   self._value.invitePartyType = invitePartyType
+  self._value.partyType = invitePartyType
   self._value.inviteName = hostName
   self._requestPlayerList[#self._requestPlayerList] = self._value.inviteName
   local messageboxMemo = ""

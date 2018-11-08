@@ -8,13 +8,14 @@ _stableBG:setGlassBackground(true)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
-local guildStableFunction = {
+guildStableFunction = {
   config = {},
   _buttonRegister = UI.getChildControl(Panel_Window_GuildStableFunction, "Button_RegisterByItem"),
   _textRegist = UI.getChildControl(Panel_Window_GuildStableFunction, "StaticText_Purpose"),
   _buttonExit = UI.getChildControl(Panel_Window_GuildStableFunction, "Button_Exit"),
   _funcBtnCount = 0,
-  _funcBtnRePos = {}
+  _funcBtnRePos = {},
+  _isOpen = false
 }
 function guildStableFunction:init()
   guildStableFunction._textRegist:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEFUNCTION_TEXTREGIST"))
@@ -63,6 +64,7 @@ function GuildStableFunction_RegisterAck()
 end
 function GuildStableFunction_Open()
   local self = guildStableFunction
+  self._isOpen = true
   guildstable_listGuildServant()
   Servant_SceneOpen(Panel_Window_GuildStableFunction)
   GuildStableList_Open()

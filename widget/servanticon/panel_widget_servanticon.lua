@@ -984,7 +984,7 @@ function PaGlobalFunc_ServantIcon_SimpleTooltip(isShow, tipType)
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYICON_DESC")
   elseif tipType == self._iconType.tag then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_TAG")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_TAGCHAR_ICON_TOOLTIP_DESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_TAGCHAR_ICON_TOOLTIP_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
   else
     TooltipSimple_Hide()
     return

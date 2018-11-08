@@ -606,6 +606,12 @@ function IngameCashShopEventCart_ChangeTab(index, isOpen)
 end
 function IngameCashShopEventCart_UpdatePrice()
   local self = EventCart
+  if nil == self.currentTab then
+    return
+  end
+  if nil == self.eventKey[self.currentTab] then
+    return
+  end
   local eventWrapper = ToClient_GetEventCategoryStaticStatusWrapperByKeyRaw(self.eventKey[self.currentTab])
   if nil == eventWrapper then
     return

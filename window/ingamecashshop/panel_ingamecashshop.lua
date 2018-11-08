@@ -1120,6 +1120,7 @@ function inGameShop:registEventHandler()
   registerEvent("ToClient_RequestShowProduct", "ToClient_RequestShowProduct")
   registerEvent("FromClient_InventoryUpdate", "InGameShop_UpdateCash")
   registerEvent("FromClient_ShowRecommendProductByComplete", "FromClient_ShowRecommendProductByComplete")
+  registerEvent("FromClient_BlockCashShop", "FromClient_BlockCashShop")
 end
 function inGameShop:initData()
   self._list = Array.new()
@@ -1743,6 +1744,10 @@ function FGlobal_InGameShop_OpenByEventAlarm()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TESTSERVER_CAUTION"))
     return
   end
+  if true == ToClient_isBlockedCashShop() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoChangeCashProduct"))
+    return
+  end
   ToClient_SaveUiInfo(false)
   if isFlushedUI() then
     return
@@ -2268,6 +2273,7 @@ function IngameCashShop_DescUpdate()
   for _, slotIcon in pairs(inGameShop._static_EquipSlots) do
     slotIcon:SetPosY(optionDesc_PosY)
   end
+  self._btn_BigGift:SetShow(_ContentsGroup_PearlShopGift)
   self._btn_BigGift:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigCart:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedCartItem(" .. inGameShop._openProductKeyRaw .. ")")
   self._btn_BigBuy:addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedBuyItem(" .. inGameShop._openProductKeyRaw .. ")")
@@ -2862,19 +2868,17 @@ function IngameCashShop_CheckGiftLevel()
   end
   local limitLevel = 50
   local myLevel = selfplayer:get():getLevel()
-  if myLevel < 50 and (isGameTypeEnglish() or isGameTypeTH() or isGameTypeID()) then
+  if myLevel < 50 and (isGameTypeTH() or isGameTypeID()) then
     limitLevel = 50
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
-    return false
-  end
-  if myLevel < 56 and (isGameTypeSA() or isGameTypeTR()) then
-    limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return false
   end
   if myLevel < 56 and isGameTypeTaiwan() then
     limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return false
+  end
+  if _ContentsGroup_PearlShopGift then
     return false
   end
   return true
@@ -3372,6 +3376,10 @@ function inGameShop:isClearToOpen()
   return true
 end
 function InGameShop_Open()
+  if true == ToClient_isBlockedCashShop() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoChangeCashProduct"))
+    return
+  end
   if not inGameShop:isClearToOpen() then
     return
   end
@@ -3724,6 +3732,18 @@ inGameShop:initTabPos()
 renderMode:setClosefunctor(renderMode, InGameShop_Close)
 function FromClient_ShowRecommendProductByComplete()
   PaGlobal_Recommend_PopUp._isRequestShow = true
+end
+function FromClient_BlockCashShop(isBlock)
+  if Panel_IngameCashShop:GetShow() and true == isBlock then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_SymbolNo, "eErrNoChangeCashProduct")
+    local messageBoxData = {
+      title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"),
+      content = messageBoxMemo,
+      functionYes = InGameShop_Close,
+      priority = CppEnums.PAUIMB_PRIORITY.PAUIMB_PRIORITY_LOW
+    }
+    MessageBox.showMessageBox(messageBoxData)
+  end
 end
 function InGameShop_GotoSaleTab()
   local self = inGameShop

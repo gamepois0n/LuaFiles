@@ -161,11 +161,12 @@ function PaLocalFunc_ExtractOutfit_rClickTarget(slotNo, itemWrapper, count_s64, 
 end
 function PaGlobalFunc_ExtractOutfit_OnPadB()
   if true == self._doExtracting then
-    return
+    return false
   end
   if false == self._equipItem.empty then
     self:clear()
     PaGlobalFunc_ExtractOutfit_UpdateKeyGuide(true)
+    Inventory_SetFunctor(PaLocalFunc_ExtractOutfit_FilterTarget, PaLocalFunc_ExtractOutfit_rClickTarget, nil, nil)
     ToClient_padSnapSetTargetPanel(Panel_Window_Inventory)
     return false
   end

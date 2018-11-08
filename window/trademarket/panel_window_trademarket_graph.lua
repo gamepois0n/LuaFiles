@@ -208,6 +208,10 @@ function tradeGraph:registUIControl()
     static_PriceIcon:SetPosX(ratePosX + 110)
     static_PriceIcon:SetPosY(ratePosY - 5)
     static_PriceIcon:SetShow(false)
+    if isGameTypeSA() then
+      static_PriceIcon:ChangeTextureInfoName("")
+      static_PriceIcon:SetTextSpan(0, 0)
+    end
     local static_OriginalPrice = UI.createControl(CppEnums.PA_UI_CONTROL_TYPE.PA_UI_CONTROL_STATICTEXT, miniPanel, "item_Original_goldIcon_" .. count)
     CopyBaseProperty(tradeGraph._static_OriginalPriceIcon, static_OriginalPrice)
     tradeGraph._static_OriginalPrice[count] = static_OriginalPrice

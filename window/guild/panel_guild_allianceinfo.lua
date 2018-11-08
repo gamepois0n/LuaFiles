@@ -197,12 +197,15 @@ function PaGlobal_Guild_AllianceInfo:gulidalliance_CautionInitialize()
   self.gulidalliance_Caution:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._mainUi.frame2:GetVScroll():ControlButtonUp()
   self._mainUi.frame2:UpdateContentPos()
-  self._mainUi.frame2:GetFrameContent():SetSize(self._mainUi.frame2:GetFrameContent():GetSizeX(), self.gulidalliance_Caution:GetTextSizeY())
   self.gulidalliance_Caution:SetText(self.gulidalliance_Caution:GetText())
+  self.gulidalliance_Caution:SetSize(self.gulidalliance_Caution:GetSizeX(), self._mainUi.frame2:GetFrameContent():GetSizeY() + 10)
   local _contentSizeY = self.gulidalliance_Caution:GetTextSizeY()
-  local _limitSize = self._mainUi.frame2:GetFrameContent():GetSizeY()
+  local _limitSize = self._mainUi.frame2:GetSizeY()
+  self.gulidalliance_Caution:SetTextVerticalCenter()
   if _contentSizeY > _limitSize then
+    self.gulidalliance_Caution:SetTextVerticalTop()
     self._mainUi.frame2:GetVScroll():SetShow(true)
+    self._mainUi.frame2:GetFrameContent():SetSize(self._mainUi.frame2:GetFrameContent():GetSizeX(), self.gulidalliance_Caution:GetTextSizeY() + 10)
   end
 end
 function PaGlobal_Guild_AllianceInfo:AllianceName_Init()

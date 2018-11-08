@@ -4929,9 +4929,6 @@ end
 function joinBR()
   ToClient_JoinBattleRoyale()
 end
-function classChange(type)
-  ToClient_classChange(type)
-end
-function brChange(no, index, state)
-  ToClient_BattleRoyaleStateChange(no, index, state)
+function joinbroc()
+  ToClient_RequestBattleRoyaleJoinToAnotherChannel()
 end

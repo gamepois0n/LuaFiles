@@ -3756,9 +3756,9 @@ function FGlobal_ItemMarketNew_Open()
   end
   _PA_LOG("\236\160\149\237\131\156\234\179\164", "\236\151\172\234\184\176\235\138\148 \236\150\180\235\150\168\234\185\140?33333333333333333333333333333333333333")
   self.btn_InMarketRegist:SetShow(true)
-  self.btn_InMarketRegist:SetPosX(855)
+  self.btn_InMarketRegist:SetPosX(715)
   self.btn_InMarketRegist:SetPosY(650)
-  self.btn_BidDesc:SetPosX(715)
+  self.btn_BidDesc:SetPosX(855)
   self.btn_BidDesc:SetPosY(650)
   if isRussiaArea then
     self.btn_BidDesc:SetPosX(600)

@@ -147,6 +147,7 @@ local PetList = {
   list2_PetList = UI.getChildControl(Panel_Window_PetListNew, "List2_PetList"),
   feedUi = UI.getChildControl(Panel_Window_PetListNew, "Static_FeedingBg"),
   feedAllUi = Panel_PetRestoreAll,
+  skillInfoBg = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillInfoBg"),
   listMaxCount = 5,
   listUIPool = {},
   SealDATACount = 0,
@@ -247,16 +248,13 @@ local skillInfo = {
   skillTypeCount = {}
 }
 local petSkillList = {}
-function createPetSkillListControl()
-  local skillInfoBg = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillInfoBg")
-  local frameInfoList = UI.getChildControl(skillInfoBg, "Frame_SkillInfoList")
-  local frame_1_Content = UI.getChildControl(frameInfoList, "Frame_1_Content")
-  petSkillList.desc = UI.getChildControl(skillInfoBg, "StaticText_SkillListDesc")
-  petSkillList.baseSkillTitle = UI.getChildControl(frame_1_Content, "StaticText_BaseSkillListTitle")
-  petSkillList.baseSkillText = UI.getChildControl(frame_1_Content, "StaticText_BaseSkillList")
-  petSkillList.subTitle = UI.getChildControl(frame_1_Content, "StaticText_SkillList_Title")
-  petSkillList.textList = UI.getChildControl(frame_1_Content, "StaticText_SkillList")
-  petSkillList.title = UI.getChildControl(skillInfoBg, "StaticText_SkillListTitle")
+function PetList:SkillInfoInit()
+  petSkillList.desc = UI.getChildControl(self.skillInfoBg, "StaticText_SkillListDesc")
+  petSkillList.baseSkillTitle = UI.getChildControl(self.skillInfoBg, "StaticText_BaseSkillListTitle")
+  petSkillList.baseSkillText = UI.getChildControl(self.skillInfoBg, "StaticText_BaseSkillList")
+  petSkillList.subTitle = UI.getChildControl(self.skillInfoBg, "StaticText_SkillList_Title")
+  petSkillList.textList = UI.getChildControl(self.skillInfoBg, "StaticText_SkillList")
+  petSkillList.title = UI.getChildControl(self.skillInfoBg, "StaticText_SkillListTitle")
 end
 function petSkillList_Show()
   if not petSkillPlus then
@@ -313,17 +311,12 @@ local baseSkillMultiplePoint = {
   [11] = 5,
   [12] = 10
 }
-local defaultSizeX = Panel_Window_PetListNew:GetSizeX()
-function PaGlobalFunc_PetList_SetPanel(count)
-  local skillInfoBg = UI.getChildControl(Panel_Window_PetListNew, "Static_SkillInfoBg")
-  if 0 == count then
-    skillInfoBg:SetShow(false)
-  else
-    skillInfoBg:SetShow(true)
-  end
-end
 function AmountPetSkill_Attribute(count)
-  PaGlobalFunc_PetList_SetPanel(count)
+  if 0 == count then
+    PetList.skillInfoBg:SetShow(false)
+    return
+  end
+  PetList.skillInfoBg:SetShow(true)
   petSkillList_Show()
   local self = petSkillList
   local baseSkillPoint = {}
@@ -360,6 +353,7 @@ function AmountPetSkill_Attribute(count)
   end
   self.baseSkillText:SetText(baseSkillString)
   local textSizeY = self.baseSkillText:GetTextSizeY()
+  local infgBgSizeY = self.baseSkillText:GetPosY() + textSizeY + 20
   local skillMaxCount = ToClient_getPetEquipSkillMax()
   for index = 0, count - 1 do
     local PcPetData = ToClient_getPetUnsealedDataByIndex(index)
@@ -396,12 +390,16 @@ function AmountPetSkill_Attribute(count)
     end
   end
   if hasSkill then
+    self.subTitle:SetPosY(self.baseSkillText:GetPosY() + textSizeY + 25)
+    self.textList:SetPosY(self.subTitle:GetPosY() + 40)
     self.textList:SetText(petSkillGradeText)
     local textSizeY = self.textList:GetTextSizeY()
+    infgBgSizeY = self.textList:GetPosY() + textSizeY + 20
   else
     self.subTitle:SetShow(false)
     self.textList:SetShow(false)
   end
+  PetList.skillInfoBg:SetSize(PetList.skillInfoBg:GetSizeX(), infgBgSizeY)
 end
 local maxPercentage = ToClient_MaxPetSkillRate() / 10000
 local maxGrade = 5
@@ -626,6 +624,10 @@ function petListNew_UnRegister(petNoStr)
   ToClient_requestPetUnregister(petNo_s64)
 end
 function PetListNew_Compose()
+  if Panel_Window_PetFusion:GetShow() then
+    return
+  end
+  Panel_Window_PetListNew:SetPosX(getScreenSizeX() / 2 - Panel_Window_PetListNew:GetSizeX() / 2 - Panel_Window_PetFusion:GetSizeX() / 2)
   PaGlobalFunc_PetFusion_Open()
   PetListNew_IgnoreAllSealButton(true)
   PetList:SetPetList()
@@ -747,15 +749,24 @@ function PetListNew_SimpleTooltip(isShow, tipType)
   local name, desc, control
   if 0 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETLISTNEW_ALLSEAL")
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_MAX4_DESC", "count", maxUnsealCount)
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_MAX4_DESC", "count", maxUnsealCount) .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = PetList.BTN_GroupSeal1
   elseif 1 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETLISTNEW_ALLSEAL")
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_GROUP_SEAL2", "count", maxUnsealCount)
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_GROUP_SEAL2", "count", maxUnsealCount) .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = PetList.BTN_GroupSeal2
   elseif 2 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETLISTNEW_ALLSEAL")
-    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_GROUP_SEAL3", "count", maxUnsealCount)
+    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_ALLSEAL_GROUP_SEAL3", "count", maxUnsealCount) .. [[
+
+
+]] .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = PetList.BTN_GroupSeal3
   elseif 3 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETLISTNEW_ALLCLEARSET")
@@ -767,7 +778,7 @@ function PetListNew_SimpleTooltip(isShow, tipType)
     control = PetList.BTN_Compose
   elseif 5 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_PETCONTROL_BTN_ALLSEAL")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_TOOLTIP_BTN_ALLSEAL_DESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_TOOLTIP_BTN_ALLSEAL_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = PetList.BTN_AllUnSeal
   end
   TooltipSimple_Show(control, name, desc)
@@ -807,12 +818,21 @@ function FGlobal_PetListNew_Close()
   PetListNew_IgnoreAllSealButton(false)
 end
 function PetListNew_IgnoreAllSealButton(isShow)
-  PetList.BTN_GroupSeal1:SetIgnore(isShow)
-  PetList.BTN_GroupSeal1:SetMonoTone(isShow)
-  PetList.BTN_GroupSeal2:SetIgnore(isShow)
-  PetList.BTN_GroupSeal2:SetMonoTone(isShow)
-  PetList.BTN_GroupSeal3:SetIgnore(isShow)
-  PetList.BTN_GroupSeal3:SetMonoTone(isShow)
+  local self = PetList
+  self.BTN_GroupSeal1:SetIgnore(isShow)
+  self.BTN_GroupSeal1:SetMonoTone(isShow)
+  self.BTN_GroupSeal2:SetIgnore(isShow)
+  self.BTN_GroupSeal2:SetMonoTone(isShow)
+  self.BTN_GroupSeal3:SetIgnore(isShow)
+  self.BTN_GroupSeal3:SetMonoTone(isShow)
+  self.BTN_Compose:SetIgnore(isShow)
+  self.BTN_Compose:SetMonoTone(isShow)
+  self.BTN_FeedAll:SetIgnore(isShow)
+  self.BTN_FeedAll:SetMonoTone(isShow)
+  self.BTN_AllUnSeal:SetIgnore(isShow)
+  self.BTN_AllUnSeal:SetMonoTone(isShow)
+  self.BTN_ClearGroup:SetIgnore(isShow)
+  self.BTN_ClearGroup:SetMonoTone(isShow)
 end
 function FGlobal_PetListNew_Toggle()
   if Panel_Window_PetListNew:GetShow() then
@@ -841,6 +861,9 @@ function FGlobal_HandleClicked_PetMarket_Show()
   end
 end
 function FGlobal_HandleClicked_petControl_AllSeal(groupIndex)
+  if Panel_Window_PetFusion:GetShow() then
+    return
+  end
   local sealPetCount = ToClient_getPetSealedList()
   local unSealPetCount = ToClient_getPetUnsealedList()
   FGlobal_HandleClicked_petControl_AllUnSeal(groupIndex)
@@ -936,6 +959,7 @@ local defaultBtnInfoPosX = 369
 local defaultBtnSealPosX = 407
 function PetListControlCreate(control, key)
   local bg = UI.getChildControl(control, "Template_Static_ListContentBG")
+  local unsealBg = UI.getChildControl(control, "Template_Static_ListContentUnsealBG")
   local iconBg = UI.getChildControl(control, "Template_Static_IconPetBG")
   local icon = UI.getChildControl(control, "Template_Static_IconPet")
   local name = UI.getChildControl(control, "Template_StaticText_PetName")
@@ -1062,6 +1086,7 @@ function PetListControlCreate(control, key)
         local hungryPercent = pethungry / petMaxHungry * 100
         hungryProgress:SetProgressRate(hungryPercent)
         hungryPercentText:SetText(string.format("%.1f", hungryPercent) .. "%")
+        unsealBg:SetShow(true)
         groupIndexBtn1:SetShow(false)
         groupIndexBtn2:SetShow(false)
         groupIndexBtn3:SetShow(false)
@@ -1111,7 +1136,6 @@ function PetListControlCreate(control, key)
         else
           orderGetItem:SetMonoTone(true)
         end
-        btnFeed:SetShow(true)
         local petLootingType = pcPetData:getPetLootingType()
         orderPlay:ChangeTextureInfoName("new_ui_common_forlua/window/servant/pet_00.dds")
         local x1, y1, x2, y2
@@ -1181,9 +1205,11 @@ function PetListControlCreate(control, key)
         end
       end
     end
-    btnInfo:SetShow(true)
+    local isFusion = Panel_Window_PetFusion:GetShow()
+    btnInfo:SetShow(not isFusion)
+    btnSeal:SetShow(not isFusion)
+    btnFeed:SetShow(not isFusion)
     btnUnseal:SetShow(false)
-    btnSeal:SetShow(true)
     btnFusion:SetShow(false)
     btnUnFusion:SetShow(false)
     btnCantFusion:SetShow(false)
@@ -1220,6 +1246,7 @@ function PetListControlCreate(control, key)
         local hungryPercent = pethungry / petMaxHungry * 100
         hungryProgress:SetProgressRate(hungryPercent)
         hungryPercentText:SetText(string.format("%.1f", hungryPercent) .. "%")
+        unsealBg:SetShow(false)
         groupIndexBtn1:SetShow(true)
         groupIndexBtn2:SetShow(true)
         groupIndexBtn3:SetShow(true)
@@ -1766,6 +1793,16 @@ function PetList:updateFeedAllUi()
       targetSlot:removeInputEvent("Mouse_LUp")
     end
   end
+  if userFeedItemCount > 6 then
+    self.feedAllUi:SetSize(userFeedItemCount * 39 + 30, self.feedAllUi:GetSizeY())
+    UI.getChildControl(self.feedAllUi, "Static_ItemList_BG"):SetSize(self.feedAllUi:GetSizeX() - 10, 128)
+  else
+    self.feedAllUi:SetSize(260, self.feedAllUi:GetSizeY())
+    UI.getChildControl(self.feedAllUi, "Static_ItemList_BG"):SetSize(self.feedAllUi:GetSizeX() - 10, 128)
+  end
+  UI.getChildControl(self.feedAllUi, "Button_Close"):ComputePos()
+  UI.getChildControl(self.feedAllUi, "Button_Cancel"):ComputePos()
+  UI.getChildControl(self.feedAllUi, "Button_Restore"):ComputePos()
 end
 function PetList:updateFeedUi()
   if not self.feedUi:GetShow() then
@@ -1790,6 +1827,18 @@ function PetList:updateFeedUi()
       targetSlot:removeInputEvent("Mouse_LUp")
     end
   end
+  local subFrameTitle = UI.getChildControl(self.feedUi, "Static_subframetitle")
+  if userFeedItemCount > 5 then
+    local targetSlot = UI.getChildControl(self.feedUi, "Static_IconBg" .. tostring(userFeedItemCount - 1))
+    self.feedUi:SetSize(targetSlot:GetPosX() + targetSlot:GetSizeX() + 16, self.feedUi:GetSizeY())
+    subFrameTitle:SetSize(self.feedUi:GetSizeX() - 8, subFrameTitle:GetSizeY())
+  else
+    self.feedUi:SetSize(225, self.feedUi:GetSizeY())
+    subFrameTitle:SetSize(self.feedUi:GetSizeX() - 8, subFrameTitle:GetSizeY())
+  end
+  UI.getChildControl(self.feedUi, "Button_Close"):ComputePos()
+  UI.getChildControl(self.feedUi, "Button_FeedOne"):ComputePos()
+  UI.getChildControl(self.feedUi, "Button_FeedFull"):ComputePos()
 end
 function PetList:showFeedUi(targetPetIndex)
   if self.feedingPetIndex == targetPetIndex then
@@ -1908,7 +1957,7 @@ function PetList:registMessageHandler()
 end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetList")
 function FromClient_luaLoadComplete_PetList()
-  createPetSkillListControl()
+  PetList:SkillInfoInit()
   PetList:Initialize()
   PetList:initializeFeedUi()
   PetList:initializeFeedAllUi()

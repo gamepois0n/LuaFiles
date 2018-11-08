@@ -673,7 +673,7 @@ function PaGlobal_Char_LifeInfo:Init()
         self._lifeInfo[key]._ui._subCategoryPoint[ii] = UI.getChildControl(self._lifeInfo[key]._ui._parent, pointControlName)
       end
     end
-    if 1 == key or 2 == key or 9 == key or 4 == key or 6 == key then
+    if 1 == key or 2 == key or 9 == key or 4 == key or 6 == key or 3 == key then
       self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_On", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(true," .. key .. ")")
       self._lifeInfo[key]._ui._progressBG:addInputEvent("Mouse_Out", "PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(false," .. key .. ")")
     else
@@ -891,25 +891,37 @@ function PaGlobal_Char_LifeInfo:LifePower_MouseOverEvent(isShow, mainType, subTy
       if false == _ContentsGroup_EnhanceCooking then
         return
       end
+      local cookingStatStaticStatus = ToClient_getCookingStatStaticStatus()
+      local speedCookRate = 0
+      local basicMaxDropRate = 0
+      local addCriticalDropRate = 0
+      local addCriticalMaxDropRate = 0
+      local addRoyalTradeBonus = 0
+      if nil ~= cookingStatStaticStatus then
+        speedCookRate = string.format("%.1f", cookingStatStaticStatus._speedCookRate / 10000)
+        basicMaxDropRate = string.format("%.1f", cookingStatStaticStatus._basicMaxDropRate / 10000)
+        addCriticalDropRate = string.format("%.1f", cookingStatStaticStatus._addCriticalDropRate / 10000)
+        addCriticalMaxDropRate = string.format("%.1f", cookingStatStaticStatus._addCriticalMaxDropRate / 10000)
+        addRoyalTradeBonus = string.format("%.1f", cookingStatStaticStatus._addRoyalTradeBonus / 10000)
+      end
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE3")
+      desc = string.format("%s%s", PAGetStringParam4(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_COOK_DESC_1", "rate1", tostring(speedCookRate), "rate2", tostring(basicMaxDropRate), "rate3", tostring(addCriticalDropRate), "rate4", tostring(addCriticalMaxDropRate)), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_COOK_DESC_2", "rate1", tostring(addRoyalTradeBonus)))
+      control = self._lifeInfo[mainType]._ui._commonPoint
     elseif __ePlayerLifeStatType_Training == mainType then
       if false == _ContentsGroup_EnhanceTraining then
         return
       end
       local trainingStatStaticStatus = ToClient_getTrainingStatStaticStatus()
       local captureRate = 0
-      local skillRate = 0
       local expRate = 0
       local matingRate = 0
-      local statRate = 0
       if nil ~= trainingStatStaticStatus then
         captureRate = string.format("%.1f", trainingStatStaticStatus._addHorseCaptureRate / 10000)
-        skillRate = string.format("%.1f", trainingStatStaticStatus._addVehicleSkillOwnerRate / 10000)
         expRate = string.format("%.1f", trainingStatStaticStatus._addVehicleExperienceRate / 10000)
         matingRate = string.format("%.1f", trainingStatStaticStatus._addMatingRate / 10000)
-        statRate = string.format("%.1f", trainingStatStaticStatus._addServantStatRate / 10000)
       end
       name = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE6")
-      desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_TRAINING_DESC_1", "rate1", tostring(captureRate), "rate2", tostring(skillRate), "rate3", tostring(expRate), "rate4", tostring(matingRate))
+      desc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_LIFE_TRAINING_DESC_1", "rate1", tostring(captureRate), "rate2", tostring(expRate), "rate3", tostring(matingRate))
       control = self._lifeInfo[mainType]._ui._commonPoint
     else
       return

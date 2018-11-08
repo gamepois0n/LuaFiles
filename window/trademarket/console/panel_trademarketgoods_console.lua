@@ -27,6 +27,7 @@ function TradeMarketGoods:init()
   self._ui.txt_XConsole = UI.getChildControl(self._ui.stc_BottomBG, "StaticText_X_ConsoleUI")
   self._ui.txt_XConsole:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADLESELLMARKETALL"))
   self._ui.txt_YConsole = UI.getChildControl(self._ui.stc_BottomBG, "StaticText_Y_ConsoleUI")
+  self._ui.txt_AConsole = UI.getChildControl(self._ui.stc_BottomBG, "StaticText_A_ConsoleUI")
   self._ui.stc_MarketCondition = UI.getChildControl(self._ui.stc_InfoBg, "StaticText_MarketCondition")
   self._ui.stc_Guarantee = UI.getChildControl(self._ui.stc_InfoBg, "StaticText_PriceGuarantee")
   self._ui.stc_Origin = UI.getChildControl(self._ui.stc_InfoBg, "StaticText_Origin")
@@ -45,8 +46,6 @@ end
 function TradeMarketGoods:registEvent()
   self._ui.list_GoodsList:registEvent(CppEnums.PAUIList2EventType.luaChangeContent, "PaGlobal_TradeMarketGoods_CreateList")
   self._ui.list_GoodsList:createChildContent(CppEnums.PAUIList2ElementManagerType.list)
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_TradeMarketGoods_SellAllItem()")
-  _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_TradeMarketGoods_BiddingGameStart()")
   registerEvent("FromClient_ServantInventoryUpdate", "PaGlobal_TradeMarketGoods_Update")
   registerEvent("EventNpcShopUpdate", "PaGlobal_TradeMarketGoods_Update")
   registerEvent("onScreenResize", "PaGlobal_TradeMarketGoods_OnResize")
@@ -81,6 +80,25 @@ function TradeMarketGoods:update()
   end
   local sellCount = mySellCount + vehicleSellCount
   self._currentSellCount = sellCount
+  local guideMonotone = true
+  if sellCount > 0 then
+    guideMonotone = false
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "PaGlobal_TradeMarketGoods_SellAllItem()")
+    if true == PaGlobal_BiddingGame_GetSuccess() then
+      self._ui.txt_YConsole:SetShow(false)
+      _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+    else
+      self._ui.txt_YConsole:SetShow(true)
+      _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_TradeMarketGoods_BiddingGameStart()")
+    end
+  else
+    guideMonotone = true
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_X, "")
+    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
+  end
+  self._ui.txt_XConsole:SetMonoTone(guideMonotone)
+  self._ui.txt_YConsole:SetMonoTone(guideMonotone)
+  self._ui.txt_AConsole:SetMonoTone(guideMonotone)
   local totalGoodsCount = 0
   local totalGoodsTable = {}
   local charInvenIdx = 0
@@ -223,13 +241,6 @@ function TradeMarketGoods:update()
     itemData.inventoryType = invenType
     self._goodsItemList[goodsIdx] = itemData
     self._realPriceList[goodsIdx] = Int64toInt32(realPrice)
-  end
-  if true == PaGlobal_BiddingGame_GetSuccess() then
-    self._ui.txt_YConsole:SetShow(false)
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "")
-  else
-    self._ui.txt_YConsole:SetShow(true)
-    _panel:registerPadEvent(__eConsoleUIPadEvent_Up_Y, "PaGlobal_TradeMarketGoods_BiddingGameStart()")
   end
   self._ui.list_GoodsList:getElementManager():clearKey()
   for index = 0, sellCount - 1 do

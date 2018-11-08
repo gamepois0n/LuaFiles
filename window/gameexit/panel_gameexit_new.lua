@@ -1079,7 +1079,7 @@ function GameExit_SimpleTooltips(isShow, index, tipType, defaultCount, valksCoun
     control = charWpCountPool[index]
   elseif 2 == tipType then
     name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEEXIT_TRAYWINDOW")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_TOOLTIP_TRAYFORBLACKDESERT_DESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_TOOLTIP_TRAYFORBLACKDESERT_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = _btn_Tray
   end
   if isShow == true then

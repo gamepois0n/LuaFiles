@@ -1002,10 +1002,6 @@ function PetFusion:rateClear()
   self._currentRate = 0
 end
 function PaGlobalFunc_PetFusion_SetPos()
-  if 0 > Panel_Window_PetListNew:GetPosX() or getScreenSizeX() <= Panel_Window_PetListNew:GetPosX() + Panel_Window_PetListNew:GetSizeX() + Panel_Window_PetFusion:GetSizeX() + 5 then
-    Panel_Window_PetListNew:SetPosX(getScreenSizeX() / 2 - Panel_Window_PetListNew:GetSizeX() / 2)
-  end
-  Panel_Window_PetListNew:SetPosX((getScreenSizeX() - Panel_Window_PetListNew:GetSizeX() - Panel_Window_PetFusion:GetSizeX()) / 2)
   Panel_Window_PetFusion:SetPosX(Panel_Window_PetListNew:GetPosX() + Panel_Window_PetListNew:GetSizeX() + 5)
   Panel_Window_PetFusion:SetPosY(Panel_Window_PetListNew:GetPosY())
 end
@@ -1020,7 +1016,6 @@ function PetFusion:createControl()
   self._ui._static_SelectBg = UI.getChildControl(self._ui._static_fusionBg, "Static_SelectBg")
   self._ui._static_SelectDescBg = UI.getChildControl(self._ui._static_fusionBg, "Static_SelectDescBg")
   self._ui._staticText_SelectDesc = UI.getChildControl(self._ui._static_SelectDescBg, "StaticText_SelectDesc")
-  self._ui._staticText_CompleteTierCheck = UI.getChildControl(self._ui._static_fusionBg, "StaticText_CompleteTier")
   self._ui._staticText_SelectDesc:SetTextMode(CppEnums.TextMode.eTextMode_AutoWrap)
   self._ui._staticText_SelectDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WINDOW_PETFUSION_FIRSTSELECT_INFO_DESC"))
   self._mainPetSlotTable._bg = UI.getChildControl(self._ui._static_fusionBg, "Static_Leader_PetIconBg")
@@ -1197,9 +1192,6 @@ function PaGlobalFunc_PetFusion_SetShow(isShow, isAni)
 end
 function PaGlobalFunc_PetFusion_Open()
   local self = PetFusion
-  if true == PaGlobalFunc_PetFusion_GetShow() then
-    return
-  end
   self:clear()
   PaGlobalFunc_PetFusion_SetPos()
   self:PetFusionInitControlSetting(true)
@@ -1238,6 +1230,13 @@ function FromClient_FusionComplete(petNo)
   self:setComplete()
   PaGlobalFunc_PetFusion_CompleteOpen()
 end
+function FromClient_PetFusionResult(rv)
+  if 0 ~= rv then
+    PaGlobalFunc_PetFusion_Close()
+    local str = PAGetStringSymNo(rv)
+    Proc_ShowMessage_Ack(str)
+  end
+end
 function PaGlobal_SetCompleteDelay_PerFrameUpdate(deltaTime)
   local self = PetFusion
   if false == self._isFusion then
@@ -1253,5 +1252,6 @@ end
 function FromClient_luaLoadComplete_PetFusion()
   PetFusion:initialize()
 end
+registerEvent("FromClient_PetFusionResult", "FromClient_PetFusionResult")
 registerEvent("FromClient_FusionComplete", "FromClient_FusionComplete")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetFusion")

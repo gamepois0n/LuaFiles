@@ -730,7 +730,7 @@ function PaGlobalFunc_Customization_Back()
     self._ui._mainMenu[3]:SetCheck(false)
     self:SetPadXButton(true)
     PaGlobalFunc_Customization_SetKeyGuide(0)
-    FGlobal_CustomizingAlbum_Close()
+    CustomizingAlbum_Close()
     return
   end
   if true == self._isCameraMode then

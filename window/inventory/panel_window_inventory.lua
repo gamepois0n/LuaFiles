@@ -477,7 +477,7 @@ function Inventory_Btn_SimpleTooltip(isShow, tipType)
   local name, desc, control
   if 0 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYSTONE_TOOLTIP_NAME")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYSTONE_TOOLTIP_DESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYSTONE_TOOLTIP_DESC") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SHORTBUTTON_HOWTOUSE_TOOLTIP_DESC")
     control = self.btn_AlchemyStone
   elseif 1 == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ALCHEMYFIGUREHEAD_TOOLTIP_NAME")
@@ -2160,21 +2160,21 @@ function _Inventory_updateSlotData_ChangeSilverIcon(money)
   self.buttonMoney:ChangeTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
   self.buttonMoney:ChangeOnTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
   self.buttonMoney:ChangeClickTextureInfoName("Renewal/PcRemaster/Remaster_Icon_00.dds")
-  if 100000 <= Int64toInt32(money) then
+  if money >= toInt64(0, 100000) then
     local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 258, 124, 288, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
     local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 261, 155, 291, 185)
     self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
     local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 261, 155, 291, 185)
     self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
-  elseif Int64toInt32(money) >= 20000 then
+  elseif money >= toInt64(0, 20000) then
     local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 227, 124, 257, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
     local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 230, 155, 260, 185)
     self.buttonMoney:getOnTexture():setUV(xx1, yy1, xx2, yy2)
     local xxx1, yyy1, xxx2, yyy2 = setTextureUV_Func(self.buttonMoney, 230, 155, 260, 185)
     self.buttonMoney:getClickTexture():setUV(xxx1, yyy1, xxx2, yyy2)
-  elseif Int64toInt32(money) >= 5000 then
+  elseif money >= toInt64(0, 5000) then
     local x1, y1, x2, y2 = setTextureUV_Func(self.buttonMoney, 196, 124, 226, 154)
     self.buttonMoney:getBaseTexture():setUV(x1, y1, x2, y2)
     local xx1, yy1, xx2, yy2 = setTextureUV_Func(self.buttonMoney, 199, 155, 229, 185)

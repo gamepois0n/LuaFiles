@@ -398,6 +398,7 @@ function Panel_Widget_Alert_info:registerMessageHandler()
   registerEvent("FromClient_ChallengeReward_UpdateText", "FromClient_Widget_Alert_CompleteBenefitReward")
   registerEvent("FromClient_NewFriend", "FromClient_Widget_Alert_NewFriendAlert")
   registerEvent("ResponseFriendList_updateAddFriends", "FromClient_Widget_Alert_Update_NewFriend")
+  registerEvent("FromClient_NoticeNewMessage", "FromClient_Widget_Alert_NoticeNewMessage")
   registerEvent("FromClient_UpdateQuestList", "FromClient_Widget_Alert_BlackSpiritQuest")
   registerEvent("FromClient_WeightChanged", "FromClient_Widget_Alert_WeightOver")
   registerEvent("FromClient_InventoryUpdate", "FromClient_Widget_Alert_WeightOver")
@@ -514,7 +515,7 @@ function Panel_Widget_Alert_info:showAllButton()
   self:updateIcons(true)
   self._ui.Button_Spread:SetCheck(false)
 end
-function Panel_Widget_Alert_info:setButtonShow(alertType, value, needUpdate)
+function Panel_Widget_Alert_info:setButtonShow(alertType, value, alertOtherText)
   if nil == alertType then
     return
   end
@@ -525,7 +526,7 @@ function Panel_Widget_Alert_info:setButtonShow(alertType, value, needUpdate)
     return
   end
   if not self._alertShow[alertType] and value then
-    Panel_Widget_Alert_info:AlramShow(alertType)
+    Panel_Widget_Alert_info:AlramShow(alertType, alertOtherText)
   end
   self._alertShow[alertType] = value
 end
@@ -799,7 +800,7 @@ function PaGlobalFunc_Widget_Alert_ClickSpread()
   self._speadCount = showIndex
   TooltipSimple_Hide()
 end
-function Panel_Widget_Alert_info:AlramShow(alertType)
+function Panel_Widget_Alert_info:AlramShow(alertType, alertOtherText)
   if false == ToClient_getShowRightBottomAlarm() then
     return
   end
@@ -809,7 +810,11 @@ function Panel_Widget_Alert_info:AlramShow(alertType)
   self._currentAlertType = alertType
   local currentTime = ""
   self._ui.MsgTime:SetText(currentTime)
-  self._ui.MsgContent:SetText(self._alertMessage[alertType])
+  if nil == alertOtherText then
+    self._ui.MsgContent:SetText(self._alertMessage[alertType])
+  else
+    self._ui.MsgContent:SetText(alertOtherText)
+  end
   local texture = self._alertIconPath[alertType]
   if alertType == AlertType.eALERT_CashProductDiscount then
     self._ui.MsgIcon:ChangeTextureInfoNameAsync("renewal/button/pc_btn_alert00.dds")
@@ -1645,6 +1650,14 @@ function FromClient_Widget_Alert_CompleteBenefitReward()
   PaGlobalFunc_Widget_Alert_Check_ChallengeReward()
   PaGlobalFunc_Widget_Alert_Check_PcRoomReward()
   self:updateIcons(false, AlertType.eALERT_ChallengeReward)
+end
+function FromClient_Widget_Alert_NoticeNewMessage(isSoundNotice, isEffectNotice)
+  local self = Panel_Widget_Alert_info
+  if isEffectNotice and false == Panel_FriendList:GetShow() then
+    local message = PAGetString(Defines.StringSheet_GAME, "LUA_ALERTWIDGET_MESSAGE_7_1")
+    self:setButtonShow(AlertType.eALERT_NewFriend, true, message)
+    self:updateIcons(false, AlertType.eALERT_NewFriend)
+  end
 end
 function FromClient_Widget_Alert_NewFriendAlert(param)
   local self = Panel_Widget_Alert_info

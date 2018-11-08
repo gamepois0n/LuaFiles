@@ -514,6 +514,7 @@ function preLoadGameUI_PC()
   loadUI("UI_Data/Window/Skill/UI_Window_SkillReinforce.xml", "Panel_SkillReinforce", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
     RenderMode.eRenderMode_Dialog
   }))
+  basicLoadUI("UI_Data/Window/Skill/Panel_Window_Skill_BlackSpiritLock.xml", "Panel_Window_Skill_BlackSpiritLock", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/DailyStamp/UI_Window_DailyStamp.XML", "Panel_Window_DailyStamp", UIGroup.PAGameUIGroup_WorldMap_Contents)
   basicLoadUI("UI_Data/Window/DailyStamp/Panel_Window_DailyChallenge.XML", "Panel_Window_DailyChallenge", UIGroup.PAGameUIGroup_WorldMap_Contents)
   loadUI("UI_Data/Window/BlackSpiritAdventure/Panel_Window_BlackSpiritAdventure.XML", "Panel_Window_BlackSpiritAdventure", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
@@ -1563,31 +1564,79 @@ function preLoadGameUI_PC()
     RenderMode.eRenderMode_IngameCustomize
   }))
   if true == _ContentsGroup_RenewUI_ItemMarketPlace then
-    loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceMain_Renew.XML", "Panel_Window_MarketPlace", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-      RenderMode.eRenderMode_Default,
-      RenderMode.eRenderMode_WorldMap,
-      RenderMode.eRenderMode_Dialog
-    }))
-    loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceWallet_Renew.XML", "Panel_Window_MarketPlaceWallet", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
-      RenderMode.eRenderMode_Default,
-      RenderMode.eRenderMode_WorldMap,
-      RenderMode.eRenderMode_Dialog
-    }))
-    loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlace_SellConfirm_Renew.XML", "Panel_Window_MarketPlace_SellConfirm", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
-      RenderMode.eRenderMode_Default,
-      RenderMode.eRenderMode_WorldMap,
-      RenderMode.eRenderMode_Dialog
-    }))
-    loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlace_BuyConfirm_Renew.XML", "Panel_Window_MarketPlace_BuyConfirm", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
-      RenderMode.eRenderMode_Default,
-      RenderMode.eRenderMode_WorldMap,
-      RenderMode.eRenderMode_Dialog
-    }))
-    loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceFilter_Renew.XML", "Panel_Window_MarketPlace_Filter", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
-      RenderMode.eRenderMode_Default,
-      RenderMode.eRenderMode_WorldMap,
-      RenderMode.eRenderMode_Dialog
-    }))
+    if true == _ContentsGroup_RenewUI_ItemMarketPlaceNew then
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_BuyManagement.XML", "Panel_Window_MarketPlace_BuyManagement", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_Favorite.XML", "Panel_Window_MarketPlace_Favorite", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_Function.XML", "Panel_Window_MarketPlace_Function", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_Main.XML", "Panel_Window_MarketPlace_Main", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_MiniWallet.XML", "Panel_Window_MarketPlace_MiniWallet", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_MyInventory.XML", "Panel_Window_MarketPlace_MyInventory", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_SelectList.XML", "Panel_Window_MarketPlace_SelectList", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_SellManagement.XML", "Panel_Window_MarketPlace_SellManagement", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/MarketPlace/Panel_Window_MarketPlace_WalletInventory.XML", "Panel_Window_MarketPlace_WalletInventory", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+    else
+      loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceMain_Renew.XML", "Panel_Window_MarketPlace", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceWallet_Renew.XML", "Panel_Window_MarketPlaceWallet", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlace_SellConfirm_Renew.XML", "Panel_Window_MarketPlace_SellConfirm", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlace_BuyConfirm_Renew.XML", "Panel_Window_MarketPlace_BuyConfirm", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+      loadUI("UI_Data/Window/ItemMarket/Console/Panel_Window_MarketPlaceFilter_Renew.XML", "Panel_Window_MarketPlace_Filter", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({
+        RenderMode.eRenderMode_Default,
+        RenderMode.eRenderMode_WorldMap,
+        RenderMode.eRenderMode_Dialog
+      }))
+    end
   else
     loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarket_Function.XML", "Panel_Window_ItemMarket_Function", UIGroup.PAGameUIGroup_WorldMap_Contents, PAUIRenderModeBitSet({
       RenderMode.eRenderMode_Default,
@@ -2001,6 +2050,7 @@ function loadGameUI_PC()
   runLua("UI_Data/Script/Window/Skill/Panel_Window_Skill_CoolTimeSlot.lua")
   runLua("UI_Data/Script/Window/Skill/Panel_Window_ReinforceSkill.lua")
   runLua("UI_Data/Script/Window/Skill/Panel_Window_Skill_Reinforce.lua")
+  runLua("UI_Data/Script/Window/Skill/Panel_Window_Skill_BlackSpiritLock.lua")
   runLua("UI_Data/Script/Window/WareHouse/Panel_Window_Warehouse.lua")
   runLua("UI_Data/Script/Window/WareHouse/Panel_Window_SearchMenuWarehouse.lua")
   runLua("UI_Data/Script/Window/Servant/Stable/ServantRent.lua")
@@ -2489,11 +2539,21 @@ function loadGameUI_PC()
   runLua("UI_Data/Script/Widget/Coupon/Coupon.lua")
   runLua("UI_Data/Script/Window/Cash_Customization/Panel_Cash_Customization.lua")
   if true == _ContentsGroup_RenewUI_ItemMarketPlace then
-    runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace.lua")
-    runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlaceWallet.lua")
-    runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Sell.lua")
-    runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Buy.lua")
-    runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Filter.lua")
+    if true == _ContentsGroup_RenewUI_ItemMarketPlaceNew then
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_Main.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_ItemMarket.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_Wallet.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlaceWallet.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_Sell.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_Buy.lua")
+      runLua("UI_Data/Script/Window/MarketPlace/Panel_Window_MarketPlace_Filter.lua")
+    else
+      runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace.lua")
+      runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlaceWallet.lua")
+      runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Sell.lua")
+      runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Buy.lua")
+      runLua("UI_Data/Script/Window/ItemMarket/Console/Panel_Window_MarketPlace_Filter.lua")
+    end
   else
     runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_Function.lua")
     runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_ItemSet.lua")

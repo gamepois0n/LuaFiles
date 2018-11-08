@@ -192,6 +192,10 @@ function PaGlobal_EasyBuy:Open(uniqueNo, waypointKey)
   if isGameTypeGT() then
     return
   end
+  if true == ToClient_isBlockedCashShop() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoChangeCashProduct"))
+    return
+  end
   if Panel_IngameCashShop_EasyPayment:GetShow() and false == Panel_Window_StableInfo:GetShow() then
     PaGlobal_EasyBuy:Close()
     return

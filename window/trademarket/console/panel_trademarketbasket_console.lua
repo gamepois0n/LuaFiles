@@ -26,6 +26,9 @@ function TradeMarketBasket:init()
   self._ui.txt_NeedMoney = UI.getChildControl(self._ui.stc_StateBg, "StaticText_NeedMoney")
   self._ui.txt_CurrentWeight = UI.getChildControl(self._ui.stc_StateBg, "StaticText_CurrentWeight")
   self._ui.txt_NeedWeight = UI.getChildControl(self._ui.stc_StateBg, "StaticText_NeedWeight")
+  self._ui.txt_AConsole = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_A_ConsoleUI")
+  self._ui.txt_XConsole = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_X_ConsoleUI")
+  self._ui.txt_YConsole = UI.getChildControl(self._ui.stc_BottomBg, "StaticText_Y_ConsoleUI")
   self:registEvent()
   self._invenTabStartX = self._ui.btn_MyInven:GetPosX()
   PaGlobal_TradeMarketBasket_OnResize()
@@ -94,6 +97,9 @@ function TradeMarketBasket:freeBasket()
   self._currentTradeSlot = 0
   self._totalCost = 0
   self._totalWeight = 0
+  self._ui.txt_AConsole:SetMonoTone(true)
+  self._ui.txt_XConsole:SetMonoTone(true)
+  self._ui.txt_YConsole:SetMonoTone(true)
   self._ui.list_BasketList:getElementManager():clearKey()
 end
 function PaGlobal_TradeMarketBasket_Open()
@@ -158,6 +164,9 @@ function PaGlobal_TradeMarketBasket_AddBasket(slotItemKey, index, itemCount)
   self._selectClickIndex = self._currentTradeSlot
   self._ui.list_BasketList:getElementManager():pushKey(toInt64(0, self._currentTradeSlot))
   self._currentTradeSlot = self._currentTradeSlot + 1
+  self._ui.txt_AConsole:SetMonoTone(false)
+  self._ui.txt_XConsole:SetMonoTone(false)
+  self._ui.txt_YConsole:SetMonoTone(false)
   PaGlobal_TradeMarketBasket_TotalCalculateMoney()
   return 1
 end

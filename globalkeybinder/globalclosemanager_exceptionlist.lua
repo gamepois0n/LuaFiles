@@ -1078,6 +1078,15 @@ function CloseManager_RegisterExeptionList()
     Panel_TradeMarket_Graph,
     Panel_TradeMarket_In,
     Panel_TradeMarket_Goods,
+    Panel_Window_MarketPlace_BuyManagement,
+    Panel_Window_MarketPlace_Favorite,
+    Panel_Window_MarketPlace_Function,
+    Panel_Window_MarketPlace_Main,
+    Panel_Window_MarketPlace_MiniWallet,
+    Panel_Window_MarketPlace_MyInventory,
+    Panel_Window_MarketPlace_SelectList,
+    Panel_Window_MarketPlace_SellManagement,
+    Panel_Window_MarketPlace_WalletInventory,
     Panel_Test_SkillView_Control,
     Panel_Tooltip_Common
   }

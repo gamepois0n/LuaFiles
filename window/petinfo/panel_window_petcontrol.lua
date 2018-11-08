@@ -524,6 +524,9 @@ function HandleClicked_petControl_Seal(index)
   FGlobal_AllSealButtonPosition(unSealPetInfo, false)
 end
 function HandleClicked_petControl_AllUnSeal(groupIndex)
+  if Panel_Window_PetFusion:GetShow() then
+    return
+  end
   for index = 0, maxUnsealCount - 1 do
     local self = petIcon[index]
     local unSealPetInfo = ToClient_getPetUnsealedList()

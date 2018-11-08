@@ -28,11 +28,11 @@ local GuildCreateManager = {
   _buttonCancel = UI.getChildControl(Panel_CreateGuild, "Button_Cancel"),
   _editGuildNameInput = UI.getChildControl(Panel_CreateGuild, "Edit_GuildName"),
   _txt_NameDesc = UI.getChildControl(Panel_CreateGuild, "StaticText_NameDesc"),
-  _staticCreateServantNameBG = UI.getChildControl(Panel_CreateGuild, "Static_NamingPolicyBG"),
-  _staticCreateServantNameTitle = UI.getChildControl(Panel_CreateGuild, "StaticText_NamingPolicyTitle"),
-  _staticCreateServantName = UI.getChildControl(Panel_CreateGuild, "StaticText_NamingPolicy")
+  _staticCreateServantNameBG = UI.getChildControl(Panel_CreateGuild, "Static_NamingPolicyBG")
 }
 function GuildCreateManager:initialize()
+  self._staticCreateServantNameTitle = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
+  self._staticCreateServantName = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicy")
   self.createNamePolicyTitle = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicyTitle")
   self.createNamePolicyDesc = UI.getChildControl(self._staticCreateServantNameBG, "StaticText_NamingPolicy")
   GuildCreateManager._buttonApply:addInputEvent("Mouse_LUp", "handleClicked_GuildCreateApply()")

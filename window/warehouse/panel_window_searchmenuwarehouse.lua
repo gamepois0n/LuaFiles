@@ -21,7 +21,6 @@ function PaGlobal_SearchMenuWarehouse_UpdateWarehouse(waypointKey)
   self._ui._list2:requestUpdateByKey(toInt64(0, waypointKey + self._separatorNumber))
 end
 function PaGlobal_SearchMenuWarehouse:Init()
-  self._ui.list_Title = UI.getChildControl(self._ui.part_SearchMenuWarehouse, "List_Title")
   self._ui.btn_MyWarehouse = UI.getChildControl(self._ui.part_SearchMenuWarehouse, "RadioButton_Tab_MyWarehouse")
   self._ui.list_KeyWord = UI.getChildControl(self._ui.part_SearchMenuWarehouse, "List_KeyWord")
   self._ui._list2 = UI.getChildControl(self._ui.part_SearchMenuWarehouse, "List2_Warehouse")
